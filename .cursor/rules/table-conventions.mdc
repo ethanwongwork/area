@@ -1,0 +1,33 @@
+---
+description: Table and grid styling conventions for the design system playground
+globs: code/index.html
+alwaysApply: false
+---
+
+# Table & Grid Conventions
+
+## Headers
+- Single-row headers only. Never use multi-row/nested header structures (no `rowspan`/sub-header rows).
+- When a column subdivides (e.g., duration + easing), use `colspan` on one header cell. The token names inside badges are self-labeling — no sub-header labels needed.
+- Header text is left-aligned (`text-align: left`). Never center header text.
+- Headers use the base `ds-table th` style (`font: 500 12px/18px`). No extra bold or special styling on any header.
+
+## Cell Content
+- All cell content aligns top-left (`vertical-align: top; text-align: left`).
+- All values that reference global tokens must render as badges (e.g., `duration/200`, `easing/ease-out`, `spacing/48`). Never display raw unit strings like "600ms" or "48px" when a token exists.
+- Empty cells (no value) should be left blank — no "—" or "none" placeholder.
+
+## Column Widths
+- Use `table-layout: fixed` when columns need equal subdivision widths (e.g., movement/transition tables).
+- Token name column gets a fixed width (e.g., `200px`); remaining columns share space equally.
+
+## Grid Gaps
+- Color palette grids (`.pal-grid`) use `gap: 2px` for tight, cohesive color blocks.
+- All other grids (`.type-grid`, `.comp-row`) use `gap: 16px`.
+- A `section-gap` (16px) separates each section heading from the content below it, and between consecutive grid rows within the same section.
+
+## Spacing Hierarchy
+- Heading-to-content: always insert a `section-gap` (16px) between a heading and the grid/table below it.
+- Section-to-section: `section-gap` + `section-gap` (32px) between sibling sections.
+- Group-to-group: `group-gap` (48px).
+- Axis-to-axis: `axis-gap` (64px).
