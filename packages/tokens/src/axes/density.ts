@@ -22,8 +22,10 @@ interface TierSpec {
   icon: number;
   /** Gap between icon and label. */
   gap: number;
-  /** Which typography step the control's label uses. */
-  text: string;
+  /** Label size, as a stop on the primitive size ramp. */
+  size: number;
+  /** Label leading, as a stop on the primitive leading ramp. */
+  leading: number;
 }
 
 function ladder(tiers: Record<Tier, TierSpec>) {
@@ -33,9 +35,20 @@ function ladder(tiers: Record<Tier, TierSpec>) {
     out[`gutter-${name}`] = `${tier.gutter}px`;
     out[`icon-${name}`] = `${tier.icon}px`;
     out[`gap-${name}`] = `${tier.gap}px`;
-    out[`control-${name}-text`] = `var(--area-text-${tier.text}-size)`;
-    out[`control-${name}-leading`] = `var(--area-text-${tier.text}-leading)`;
+    // Straight to the primitive ramp, not through a composite. The chrome scale needs a
+    // 13px step that the content ramp deliberately does not carry, and the primitives are
+    // exactly what a case like this is for.
+    out[`control-${name}-text`] = `var(--area-size-${tier.size})`;
+    out[`control-${name}-leading`] = `var(--area-leading-${tier.leading})`;
   }
+
+  // The chrome type size for this density: the medium tier's, exposed once so anything
+  // that is UI rather than prose -- a table, a menu, a caption in a toolbar -- can follow
+  // the density without reaching into a specific control tier.
+  const medium = tiers.md;
+  out["ui-size"] = `var(--area-size-${medium.size})`;
+  out["ui-leading"] = `var(--area-leading-${medium.leading})`;
+
   return out;
 }
 
@@ -57,11 +70,11 @@ function ladder(tiers: Record<Tier, TierSpec>) {
  * the step between.
  */
 const DEFAULT_TIERS: Record<Tier, TierSpec> = {
-  xs: { height: 24, gutter: 8, icon: 12, gap: 4, text: "xs" },
-  sm: { height: 28, gutter: 10, icon: 16, gap: 4, text: "sm" },
-  md: { height: 32, gutter: 12, icon: 16, gap: 6, text: "sm" },
-  lg: { height: 40, gutter: 16, icon: 16, gap: 8, text: "sm" },
-  xl: { height: 48, gutter: 20, icon: 24, gap: 8, text: "md" },
+  xs: { height: 24, gutter: 8, icon: 12, gap: 4, size: 12, leading: 16 },
+  sm: { height: 28, gutter: 10, icon: 16, gap: 4, size: 13, leading: 18 },
+  md: { height: 32, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
+  lg: { height: 40, gutter: 16, icon: 16, gap: 8, size: 14, leading: 20 },
+  xl: { height: 48, gutter: 20, icon: 24, gap: 8, size: 16, leading: 24 },
 };
 
 /**
@@ -77,11 +90,11 @@ const DEFAULT_TIERS: Record<Tier, TierSpec> = {
  * box at all.
  */
 const COMPACT_TIERS: Record<Tier, TierSpec> = {
-  xs: { height: 20, gutter: 6, icon: 12, gap: 4, text: "xs" },
-  sm: { height: 24, gutter: 8, icon: 12, gap: 4, text: "xs" },
-  md: { height: 28, gutter: 10, icon: 16, gap: 6, text: "sm" },
-  lg: { height: 32, gutter: 12, icon: 16, gap: 6, text: "sm" },
-  xl: { height: 36, gutter: 14, icon: 16, gap: 8, text: "sm" },
+  xs: { height: 20, gutter: 6, icon: 12, gap: 4, size: 11, leading: 14 },
+  sm: { height: 24, gutter: 8, icon: 12, gap: 4, size: 12, leading: 16 },
+  md: { height: 28, gutter: 10, icon: 16, gap: 6, size: 13, leading: 18 },
+  lg: { height: 32, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
+  xl: { height: 36, gutter: 14, icon: 16, gap: 8, size: 14, leading: 20 },
 };
 
 export const DENSITY_AXIS: AxisDefinition = {
@@ -89,7 +102,7 @@ export const DENSITY_AXIS: AxisDefinition = {
   label: "Density",
   description: "How tall controls are, and how much room they leave inside themselves. The type size holds; only the box moves.",
   defaultPreset: "default",
-  namespaces: ["--area-control-", "--area-gutter-", "--area-icon-", "--area-gap-"],
+  namespaces: ["--area-control-", "--area-gutter-", "--area-icon-", "--area-gap-", "--area-ui-"],
   presets: [
     {
       id: "compact",

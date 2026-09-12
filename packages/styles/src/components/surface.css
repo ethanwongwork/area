@@ -216,8 +216,8 @@
     border-radius: calc(var(--area-radius-container) - var(--_inset));
     background: transparent;
     color: inherit;
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     text-align: start;
     cursor: pointer;
     transition: var(--area-transition);

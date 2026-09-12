@@ -103,8 +103,12 @@
   .area-table {
     inline-size: 100%;
     border-collapse: collapse;
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    /*
+     * The density scale, not the content ramp. A table is scanned rather than read, so it
+     * is chrome: it compresses with the interface instead of holding at prose size.
+     */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
   }
 
   .area-table th,

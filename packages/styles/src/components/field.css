@@ -16,8 +16,8 @@
     display: inline-flex;
     align-items: center;
     gap: var(--area-space-4);
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     font-weight: var(--area-weight-strong);
     color: var(--area-fg-default);
   }

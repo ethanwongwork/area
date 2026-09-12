@@ -524,6 +524,7 @@ function densityRows(presetId) {
     gutter: preset.tokens[`--area-gutter-${tier}`],
     icon: preset.tokens[`--area-icon-${tier}`],
     gap: preset.tokens[`--area-gap-${tier}`],
+    text: (preset.tokens[`--area-control-${tier}-text`] ?? "").replace(/var\(--area-size-|\)/g, "") + "px",
   }));
 }
 
@@ -534,17 +535,20 @@ function densityPage() {
   const body = `<div class="docs-prose">
 <p>The default tier is 32px — the most common default across every system measured. The ladder 24/28/32/40/48 is Primer's exact scale.</p>
 <p>Two presets, each calibrated to real products. <strong>Default</strong> puts medium at 32px, which Primer, OpenAI and Vercel all agree on. <strong>Compact</strong> puts it at 28px, which is Notion's measured in-app row height.</p>
-<p><strong>The type size does not move with the box.</strong> Notion renders 14px text inside its 28px rows, and that is the point of a dense preset: the box tightens while the text stays readable. A preset that shrank the text too would just be the same interface further away. Only the two smallest tiers drop to 12px, because 14/20 text cannot fit a 20px box at all.</p>
+<p><strong>The type steps down with the box.</strong> Each compact tier sits exactly one stop below its default counterpart on the size ramp, so medium goes from 14px to 13px — the UI font size VS&nbsp;Code, Cursor and Linear all ship.</p>
+<p>The two references genuinely disagree here. VS&nbsp;Code's own density layer contains no <code class='area-code'>font-size</code> declarations at all: it swaps 24px for 20px and 8px for 4px and leaves type alone, because its base is already 13px and has nowhere to go. Ant Design, starting from a roomier 14px, drops a step. Area starts at 14, so it follows Ant Design.</p>
+<p>Chrome follows the density; content does not. <code class='area-code'>--area-ui-size</code> carries the medium tier's size to anything that is scanned rather than read — tables, menu items, field labels — while prose stays on the typography axis at 16px. That is the same split Notion uses between its 14px interface and its 16px documents.</p>
 </div>
 ${tokenSection({
   id: "tiers",
   title: "Control tiers",
-  description: "Every dimension a control needs, at each of the five tiers.",
+  description: "Every dimension a control needs, at each of the five tiers, in both presets.",
   rows,
   columns: [
     { header: "Token", cell: (r) => tokenChip(`control/${r.tier}`) },
     { header: "Compact", cell: (r) => `<span class="docs-mono">${compact.find((c) => c.tier === r.tier).height}</span>` },
     { header: "Default", cell: (r) => `<span class="docs-mono">${r.height}</span>` },
+    { header: "Type", cell: (r) => `<span class="docs-mono">${compact.find((c) => c.tier === r.tier).text} / ${r.text}</span>` },
     { header: "Padding", cell: (r) => `<span class="docs-mono">${r.gutter}</span>` },
     { header: "Icon", cell: (r) => `<span class="docs-mono">${r.icon}</span>` },
     { header: "Gap", cell: (r) => `<span class="docs-mono">${r.gap}</span>` },
@@ -557,7 +561,7 @@ ${tokenSection({
   card: (r) =>
     tokenCard({
       name: `control/${r.tier}`,
-      meta: [`${r.height} tall`, `${r.gutter} padding · ${r.icon} icon · ${r.gap} gap`],
+      meta: [`${r.height} tall · ${r.text} type`, `${r.gutter} padding · ${r.icon} icon · ${r.gap} gap`],
       figure: `<div class="docs-specimen__box" style="inline-size:100%;block-size:var(--area-control-${r.tier});border-radius:var(--area-radius-control)"></div>`,
     }),
 })}

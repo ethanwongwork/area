@@ -89,10 +89,20 @@ Two presets, each calibrated to a real product. **Default** puts medium at 32px,
 Primer, OpenAI and Vercel all agree on. **Compact** puts it at 28px, which is Notion's
 measured in-app row height.
 
-**The type size does not move with the box.** Notion renders 14px text inside its 28px
-rows; that is the point of a dense preset. A preset that shrank the text too would just be
-the same interface further away. Only the two smallest tiers drop to 12px, because 14/20
-text cannot fit a 20px box at all.
+**The type steps down with the box.** Each compact tier sits exactly one stop below its
+default counterpart on the size ramp, so medium goes 14px to 13px — the UI font size
+VS Code, Cursor and Linear all ship. The two references disagree: VS Code's density layer
+has zero `font-size` declarations because its base is already 13px, while Ant Design,
+starting from 14, drops a step. Area starts at 14 and follows Ant Design.
+
+**Chrome follows the density; content does not.** `--area-ui-size` / `--area-ui-leading`
+carry the medium tier's type to anything scanned rather than read — tables, menu items,
+field labels. Prose stays on the typography axis at 16px. That is Notion's split between
+its 14px interface and its 16px documents. A component that renders UI chrome should use
+`--area-ui-*`, not `--area-text-*`.
+
+Control tiers point straight at the primitive size ramp rather than through a composite,
+because the chrome scale needs a 13px step the content ramp deliberately does not carry.
 
 Icon sizes are 12, 16 or 24 and nothing else. VS Code's design-token linter permits
 exactly {16, 12} and comments that "a codicon at 13/14/15px is always a mistake for 12 or
