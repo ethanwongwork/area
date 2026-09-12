@@ -1,150 +1,147 @@
 /**
  * The shape of every Area colour scale.
  *
- * Twelve steps, with the role of each step fixed across every scale and both themes.
- * A component asks for "step 4" and gets a hover background whether the scale is gray,
- * blue, or amber -- that invariance is what lets the colour axis swap a whole palette
- * without touching a single component rule.
+ * Sixteen steps, named by their own lightness. `blue-58` is the blue at OKLCh L 0.58, in
+ * every theme, for every scale. That is the same reasoning spacing uses -- `--area-space-16`
+ * is sixteen pixels -- and it buys three things an ordinal 1..12 cannot:
  *
- * Role map (shared with Radix's scale, which is the de facto vocabulary):
+ *   The name is checkable. `assertLadder()` re-reads the emitted lightness and compares it
+ *   to the name, so a scale whose generator drifts fails the build instead of shipping a
+ *   token that lies about itself.
  *
- *    1  page background            7  border, default
- *    2  subtle background          8  border, strong / focus ring
- *    3  component background       9  solid fill
- *    4  component background hover 10  solid fill hover
- *    5  component background active 11 text, secondary
- *    6  border, subtle             12 text, primary
+ *   Lightness is consistent across hues by construction. `yellow-58` and `blue-58` are the
+ *   same lightness, so two tones can be swapped without changing the weight of a layout.
+ *   The previous ordinal scale could not promise this and did not deliver it: its step 9
+ *   ranged from L 0.548 to L 0.910 across the twelve hues.
+ *
+ *   Dark mode is the same ramp read from the other end. There is one set of colours, not
+ *   two; `semantic/aliases.ts` points each token at one level for light and another for
+ *   dark. See `INVERSION` below.
+ *
+ * What the name does *not* encode is role. A step is a colour, not a job. Which level is a
+ * background and which is a border is a decision the semantic layer makes, per theme, and
+ * it is written down in one table rather than implied by an ordinal.
  */
 
-export type Twelve<T> = readonly [T, T, T, T, T, T, T, T, T, T, T, T];
+/**
+ * The ladder.
+ *
+ * Spacing is even through the middle at 7 points of lightness and tightens toward both
+ * ends -- 2 points at the top, 4 at the bottom. That is not decoration. Interfaces stack
+ * many near-white surfaces (page, card, table header, input) and many near-black ones in
+ * dark mode, and those need to be separable; the middle of the ramp holds one or two
+ * colours per interface and can afford to move in bigger jumps.
+ *
+ * The ratio between the largest and smallest gap is 3.5. The ordinal scale this replaced
+ * ran to 20.2, with a single 0.252 cliff between its last two steps.
+ */
+export const LEVELS = [
+  99, 97, 94, 90, 85, 79, 72, 65, 58, 51, 44, 37, 31, 26, 21, 17,
+] as const;
 
-export const STEPS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const;
-export type Step = (typeof STEPS)[number];
+export type Level = (typeof LEVELS)[number];
 
-/** What each step is for. Rendered into the docs so the contract is visible, not folklore. */
-export const STEP_ROLES: Twelve<string> = [
-  "Page background",
-  "Subtle background",
-  "Component background",
-  "Component background, hover",
-  "Component background, active",
-  "Border, subtle",
-  "Border, default",
-  "Border, strong and focus ring",
-  "Solid fill",
-  "Solid fill, hover",
-  "Text, secondary",
-  "Text, primary",
+/** A value per level, in ladder order (lightest first). */
+export type Ramp<T> = readonly T[];
+
+/** Lightness of a level, as OKLCh L. The name *is* the value; this is the decoder. */
+export const levelLightness = (level: Level): number => level / 100;
+
+/**
+ * How much of the reachable chroma each level claims.
+ *
+ * This is deliberately flat. The sRGB gamut already has a strong shape -- at L 0.95 a
+ * yellow can reach C 0.107 while a blue can reach only 0.024 -- so multiplying by a second
+ * bell curve, as the previous generator did, desaturates twice and is what made the old
+ * teal and cyan peak at C 0.09 against violet's 0.24.
+ *
+ * Holding the fraction near the ceiling instead means every hue is as vivid as the gamut
+ * permits at every lightness, which is the only definition of "as bright as possible" that
+ * survives contact with a gamut boundary. The ends ease off: the top because a page
+ * background should be a tint and not a wash, the bottom harder because a very dark,
+ * very saturated colour quantises badly in 8 bits and reads as muddy rather than rich.
+ */
+export const CHROMA_FRACTION: Ramp<number> = [
+  0.85, 0.88, 0.9, 0.92, 0.93, 0.94, 0.95, 0.95, 0.95, 0.94, 0.92, 0.9, 0.87, 0.84, 0.8, 0.74,
 ];
 
 /**
- * Lightness curves.
+ * Chroma shape for the neutrals, as a fraction of the scale's absolute tint cap.
  *
- * Deliberately not a formula. The step spacing encodes where UI needs resolution:
- * an even, quiet 2.4-point cadence through the background band (3 -> 5) so hover and
- * active read as equal increments, widening through the borders, then a large jump at
- * 8 -> 9 because that is where the scale stops being chrome and becomes a fill.
- *
- * Neutrals and chromatics need different curves. A chromatic tint at a given lightness
- * reads lighter than a grey at the same lightness, so the chromatic light-end steps sit
- * slightly lower to keep apparent weight matched across scales.
- *
- * Step 9 is a placeholder here: `buildScale` replaces it with a value snapped toward the
- * hue's own gamut cusp, which is what puts peak chroma in the right place per hue.
+ * Neutrals cannot use the gamut ceiling -- at L 0.5 that would be a fully saturated colour,
+ * not a grey -- so they carry an absolute cap and this shape distributes it. The tint peaks
+ * through the middle and eases at both ends, because a near-white and a near-black read as
+ * colour-cast far more readily than a mid grey does.
  */
-export const L_LIGHT_NEUTRAL: Twelve<number> = [
-  0.9925, 0.98, 0.956, 0.932, 0.908, 0.882, 0.846, 0.782, 0.615, 0.565, 0.492, 0.24,
-];
-
-export const L_LIGHT_CHROMATIC: Twelve<number> = [
-  0.9915, 0.978, 0.951, 0.925, 0.899, 0.871, 0.833, 0.766, 0.64, 0.595, 0.52, 0.286,
+export const NEUTRAL_CHROMA_SHAPE: Ramp<number> = [
+  0.34, 0.45, 0.6, 0.72, 0.82, 0.9, 0.96, 1.0, 1.0, 1.0, 0.96, 0.9, 0.82, 0.72, 0.6, 0.45,
 ];
 
 /**
- * Dark curves are not inversions. Step 9 holds the same lightness as in light mode --
- * the brand fill stays recognisably the same colour across themes -- while the text and
- * background ends are re-derived, because the eye needs more separation near black than
- * near white to read the same contrast.
+ * Hue is constant down a scale. There is no drift table.
+ *
+ * The previous generator rotated hue with lightness, carrying Tailwind's measured
+ * end-to-end drift (amber -49.6 degrees, yellow -48.4). That compensates for the Abney
+ * effect, which is real -- but it was built for palettes defined in CIELCh, where the
+ * uncorrected error is large. OKLab was fit specifically to hold perceived hue constant
+ * under lightness change, and it is the reason this system chose OKLCh in the first place;
+ * layering a CIELCh-era correction on top of it double-corrects.
+ *
+ * It also broke a promise the scale ought to keep. With drift, `yellow-31` was not the same
+ * hue as `yellow-85`, so dark yellow text on a light yellow ground was two different
+ * colours that happened to share a token prefix. Constant hue means any two steps of a
+ * scale harmonise by construction.
+ *
+ * The honest cost: a dark yellow is olive, because a dark yellow *is* olive. Rotating it
+ * toward orange would make it a dark orange wearing a yellow name.
  */
-export const L_DARK_NEUTRAL: Twelve<number> = [
-  0.1755, 0.2125, 0.2515, 0.2825, 0.3115, 0.348, 0.408, 0.51, 0.665, 0.72, 0.806, 0.949,
-];
-
-export const L_DARK_CHROMATIC: Twelve<number> = [
-  0.1885, 0.2245, 0.2695, 0.3045, 0.3375, 0.3775, 0.4395, 0.539, 0.64, 0.694, 0.806, 0.951,
-];
+export const HUE_IS_CONSTANT = true;
 
 /**
- * Chroma shape: a 0..1 multiplier against the scale's peak chroma, peaking at step 9.
+ * Where each semantic slot sits in light and in dark.
  *
- * The peak itself is supplied per scale -- for a chromatic scale it is the hue's own
- * gamut cusp chroma, for a neutral it is a small absolute cap (0 for a true grey, ~0.014
- * for a tinted one). Keeping the *shape* separate from the *peak* is what lets one curve
- * serve both a pure grey and a saturated amber.
+ * This is the inversion, stated once. It is close to a mirror but deliberately not an exact
+ * one: the dark column is compressed at the background end (17 -> 21 -> 26 -> 31 spans 14
+ * points where light's 99 -> 97 -> 94 -> 90 spans 9) because separation near black needs
+ * more lightness distance to read as the same visual step.
  *
- * The taper is a skewed bell -- rising steeply, falling gently -- because a solid fill and
- * its hover (9, 10) must stay saturated while page and component backgrounds (1-3) must
- * stay near-neutral or they tint the entire interface.
+ * `semantic/aliases.ts` consumes this; it is exported here so the documentation can render
+ * the two columns side by side rather than describing them.
  */
-export const C_SHAPE_NEUTRAL: Twelve<number> = [
-  0.3, 0.45, 0.62, 0.72, 0.82, 0.9, 0.96, 1.0, 1.0, 1.0, 0.86, 0.55,
-];
-
-export const C_SHAPE_CHROMATIC_LIGHT: Twelve<number> = [
-  0.05, 0.09, 0.16, 0.23, 0.3, 0.38, 0.48, 0.63, 1.0, 0.97, 0.82, 0.45,
-];
-
-export const C_SHAPE_CHROMATIC_DARK: Twelve<number> = [
-  0.09, 0.13, 0.2, 0.27, 0.33, 0.4, 0.5, 0.64, 1.0, 0.95, 0.72, 0.32,
-];
-
-/**
- * Hue drift, expressed as degrees of rotation per unit of lightness distance from step 9.
- *
- * A constant hue angle does not read as a constant hue across a lightness range -- the
- * Abney effect. Every serious palette compensates; Tailwind v4's shipped values drift
- * amber by 49.6 degrees, yellow by 48.4, orange by 37.4, blue by 13.3, while green and
- * violet move less than 3.
- *
- * Anchoring at step 9 rather than tabulating per step matters: step 9 is the hue the user
- * actually chose, and the drift stays correct if the lightness curve is later retuned.
- */
-export interface HueDrift {
-  /** Total degrees of rotation accumulated from step 9 to the darkest step in the scale. */
-  darkward: number;
-  /** Total degrees of rotation accumulated from step 9 to the lightest step in the scale. */
-  lightward: number;
+export interface Inversion {
+  light: Level;
+  dark: Level;
 }
 
-export const NO_DRIFT: HueDrift = { darkward: 0, lightward: 0 };
+export const INVERSION = {
+  /** The page, and panels raised off it. */
+  page: { light: 99, dark: 17 },
+  surface: { light: 99, dark: 21 },
+  subtle: { light: 97, dark: 26 },
+  /** A control's own fill, at rest, hover, and active. */
+  component: { light: 97, dark: 26 },
+  componentHover: { light: 94, dark: 31 },
+  componentActive: { light: 90, dark: 37 },
+  /** Strokes, quietest to loudest. */
+  borderSubtle: { light: 90, dark: 37 },
+  border: { light: 79, dark: 44 },
+  borderStrong: { light: 72, dark: 51 },
+  /** Text, from the least emphatic that is still content to the most. */
+  textDisabled: { light: 72, dark: 51 },
+  textPlaceholder: { light: 58, dark: 65 },
+  textSubtle: { light: 51, dark: 72 },
+  textMuted: { light: 44, dark: 79 },
+  textTonal: { light: 44, dark: 85 },
+  textTonalStrong: { light: 37, dark: 90 },
+  textDefault: { light: 26, dark: 94 },
+  /** A filled neutral that carries inverted text: tooltip, toast, primary button. */
+  inverseFill: { light: 21, dark: 97 },
+  inverseFillHover: { light: 17, dark: 99 },
+  inverseText: { light: 99, dark: 17 },
+  secondaryFill: { light: 31, dark: 90 },
+  secondaryFillHover: { light: 26, dark: 94 },
+  /** The level a translucent scrim is solved from. */
+  scrim: { light: 44, dark: 21 },
+} as const satisfies Record<string, Inversion>;
 
-/**
- * Hue at one step, given how far it sits from step 9 as a fraction of the scale's span.
- *
- * Normalising by the span rather than by raw lightness is load-bearing. Step 9 does not sit
- * at a fixed lightness -- a dark-foreground hue such as yellow puts it near L 0.91 while
- * blue puts it near L 0.57 -- so a raw degrees-per-lightness rate over-rotates badly for
- * exactly the hues that need drift most. Normalised, `darkward` means "degrees of rotation
- * by the darkest step", which is directly comparable to the measured end-to-end drift in
- * shipping palettes and cannot be thrown off by retuning a lightness curve.
- */
-export function driftedHue(
-  baseHue: number,
-  L: number,
-  L9: number,
-  drift: HueDrift,
-  span: { darkest: number; lightest: number },
-): number {
-  const dL = L9 - L;
-  let rotation = 0;
-
-  if (dL > 0) {
-    const range = L9 - span.darkest;
-    if (range > 1e-6) rotation = drift.darkward * (dL / range);
-  } else if (dL < 0) {
-    const range = span.lightest - L9;
-    if (range > 1e-6) rotation = drift.lightward * (-dL / range);
-  }
-
-  return (((baseHue + rotation) % 360) + 360) % 360;
-}
+export type Slot = keyof typeof INVERSION;

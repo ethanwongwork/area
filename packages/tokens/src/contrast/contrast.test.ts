@@ -5,6 +5,7 @@
  * `npm run build` depends on this passing, so a colour that fails here cannot be published.
  */
 import { describe, expect, it } from "vitest";
+import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "../color/presets.ts";
 import { ASSERTIONS } from "./assertions.ts";
 import { EXCEPTIONS, isWaived } from "./exceptions.ts";
 import { formatFailure } from "./suggest.ts";
@@ -31,8 +32,10 @@ function pair(t: ResolvedTheme, fg: string, bg: string): { fgHex: string; bgHex:
 
 describe("contrast gate", () => {
   it("covers every shipped theme", () => {
-    // 2 themes x 3 neutrals x 12 accents.
-    expect(THEMES).toHaveLength(72);
+    // 2 themes x every neutral x every accent. Derived rather than typed, because the
+    // hardcoded 72 went stale the moment the palette grew from three neutrals to six and
+    // the failure said nothing about what had actually changed.
+    expect(THEMES).toHaveLength(2 * NEUTRAL_SCALES.length * CHROMATIC_SCALES.length);
     expect(ASSERTIONS.length).toBeGreaterThan(50);
   });
 

@@ -47,8 +47,10 @@ const FOUNDATION_PAGES = [
  * The axis panel.
  *
  * Every picker is a real segmented control from the system. The accent picker renders its
- * twelve options as swatches of each scale's own step 9, which is both the clearest way to
- * choose a hue and a working demonstration that the scales are addressable as tokens.
+ * twelve options as swatches of each scale's own solid fill, which is both the clearest way
+ * to choose a hue and a working demonstration that the scales are addressable as tokens.
+ * The solid level differs per hue -- blue's is 51, yellow's is 90 -- so the swatch has to
+ * ask the scale rather than assume a fixed rung.
  */
 function axisGroups() {
   return tokens.axes
@@ -58,7 +60,7 @@ function axisGroups() {
           const selected = preset.id === axis.defaultPreset;
           const body =
             axis.id === "accent"
-              ? `<span class="area-segmented__icon" aria-hidden="true"><span class="docs-swatch" style="background:var(--area-${preset.id}-9)"></span></span>`
+              ? `<span class="area-segmented__icon" aria-hidden="true"><span class="docs-swatch" style="background:var(--area-${preset.id}-${tokens.scales[preset.id].solid.level})"></span></span>`
               : escapeHtml(preset.label);
           return `<button type="button" role="radio" class="area-segmented__item" data-value="${preset.id}" aria-checked="${selected}" aria-label="${escapeHtml(preset.label)}"${selected ? " data-selected" : ""}>${body}</button>`;
         })
@@ -242,70 +244,109 @@ ${codeBlock(demos[spec.examples[0].demo].html, { title: "index.html" })}`;
 
 /** One colour scale, as a table of stops and a grid of cards printed on the colour itself. */
 function scaleSection(name) {
-  const light = tokens.scales[name].light;
+  const scale = tokens.scales[name];
 
-  const rows = light.steps.map((step) => ({
-    step: step.step,
-    name: `${name}/${step.step}`,
+  const rows = scale.steps.map((step) => ({
+    level: step.level,
+    name: `${name}/${step.level}`,
     hex: step.hex,
     oklch: step.oklch,
     // Retained: it decides whether the card's own label is legible on the swatch.
     onColor: step.contrast.fg,
   }));
 
+  // Role and contrast are deliberately absent. This is the global ramp -- raw colour,
+  // nothing else. A level's role is a decision the semantic layer makes per theme and is
+  // shown once, in the inversion table; contrast is a property of a *pairing*, so quoting
+  // a number against an assumed foreground would describe something this table does not
+  // show.
+  const columns = [
+    { header: "Token", cell: (r) => tokenChip(r.name, { swatch: `var(--area-${name}-${r.level})` }) },
+    { header: "Hex", cell: (r) => `<span class="docs-mono">${r.hex}</span>` },
+    { header: "OKLCH", cell: (r) => `<span class="docs-mono">${escapeHtml(r.oklch)}</span>` },
+    {
+      header: "Preview",
+      cell: (r) =>
+        `<div class="docs-preview-cell"><span class="docs-token-chip" style="background:var(--area-${name}-${r.level})"></span></div>`,
+    },
+  ];
+
   return tokenSection({
     id: `scale-${name}`,
     title: name,
     description: tokens.scaleDescriptions[name],
     rows,
-    // Role and contrast are deliberately absent. This is the global ramp -- raw colour,
-    // nothing else. A step's role belongs to the semantic layer and is stated once above;
-    // contrast is a property of a *pairing*, so quoting a number against an assumed
-    // foreground here would be describing something this table does not show.
-    columns: [
-      { header: "Token", cell: (r) => tokenChip(r.name, { swatch: `var(--area-${name}-${r.step})` }) },
-      { header: "Hex", cell: (r) => `<span class="docs-mono">${r.hex}</span>` },
-      { header: "OKLCH", cell: (r) => `<span class="docs-mono">${escapeHtml(r.oklch)}</span>` },
-      {
-        header: "Preview",
-        cell: (r) =>
-          `<div class="docs-preview-cell"><span class="docs-token-chip" style="background:var(--area-${name}-${r.step})"></span></div>`,
-      },
-    ],
+    columns,
     card: (r) =>
       tokenCard({
         name: r.name,
         onColor: true,
-        style: `background:var(--area-${name}-${r.step});color:var(--area-${r.onColor === "#ffffff" ? "white" : "black"})`,
-        // Unlabelled: a hex and an oklch() are each self-identifying by shape.
+        style: `background:var(--area-${name}-${r.level});color:var(--area-${r.onColor === "#ffffff" ? "white" : "black"})`,
         meta: [r.hex, escapeHtml(r.oklch)],
       }),
   });
 }
 
-function colorPage() {
-  const stepRoles = table(
-    ["Step", "Role"],
-    tokens.stepRoles.map((role, i) => [`<span class="docs-mono">${i + 1}</span>`, escapeHtml(role)]),
-  );
-
-  const semanticRows = Object.entries(tokens.semantics).map(([name, meta]) => ({
-    name,
-    resolves: meta.step ? `${meta.role} ${meta.step}` : (meta.role ?? meta.kind),
+/** The slot -> level map, which is the whole of what a theme change does. */
+function inversionSection() {
+  const rows = Object.entries(tokens.inversion).map(([slot, pair]) => ({
+    slot,
+    light: pair.light,
+    dark: pair.dark,
   }));
 
+  const swatch = (level) =>
+    `<span class="docs-token-chip" style="background:var(--area-neutral-${level})"></span>`;
+
+  return tokenSection({
+    id: "inversion",
+    title: "The inversion",
+    description:
+      "Each slot reads one level in light and another in dark. This table is the only difference between the two themes.",
+    rows,
+    columns: [
+      { header: "Slot", cell: (r) => `<span class="docs-mono">${escapeHtml(r.slot)}</span>` },
+      { header: "Light", cell: (r) => tokenChip(String(r.light), { swatch: `var(--area-neutral-${r.light})` }) },
+      { header: "Dark", cell: (r) => tokenChip(String(r.dark), { swatch: `var(--area-neutral-${r.dark})` }) },
+      {
+        header: "Preview",
+        cell: (r) => `<div class="docs-preview-cell">${swatch(r.light)}${swatch(r.dark)}</div>`,
+      },
+    ],
+    card: (r) =>
+      tokenCard({
+        name: r.slot,
+        meta: [`light ${r.light}`, `dark ${r.dark}`],
+        figure: `<div style="display:flex;inline-size:100%">${swatch(r.light)}${swatch(r.dark)}</div>`,
+      }),
+  });
+}
+
+function colorPage() {
+  const semanticRows = Object.entries(tokens.semantics).map(([name, meta]) => ({
+    name,
+    resolves:
+      meta.light !== undefined
+        ? `${meta.role} ${meta.light} / ${meta.dark}`
+        : (meta.role ? `${meta.role} ${meta.kind}` : meta.kind),
+  }));
+
+  const levels = tokens.levels.join(", ");
+
   const body = `<div class="docs-prose">
-<p>Every scale has twelve steps, and step <em>n</em> means the same thing in every scale and both themes. A component asks for step 4 and gets a hover background whether the scale is gray, blue or amber — which is what lets the accent axis repaint an interface without touching a single component rule.</p>
-<p>Everything below renders from the tokens themselves, so switching the theme above re-renders every ramp.</p>
+<p>Every scale is one ramp of ${tokens.levels.length} levels, and a level <em>is</em> its lightness: <code class="docs-code-inline">blue-58</code> is the blue at OKLCh L&nbsp;0.58. Spacing is named the same way, for the same reason — the name is a measurement, so it can be checked, and the build fails if a colour does not come back at the lightness its token claims.</p>
+<p>Because lightness is fixed by the name, it is identical across every hue: <code class="docs-code-inline">yellow-58</code> and <code class="docs-code-inline">blue-58</code> weigh the same. What differs is chroma, which takes as much as the sRGB gamut allows at that lightness — so each hue is at its most vivid at a different level, which is a fact about the gamut rather than a choice.</p>
+<p>Hue is constant down a scale. There is no drift table: any two steps of <code class="docs-code-inline">red</code> are the same hue and harmonise by construction.</p>
+<p>The levels are ${levels}. They step evenly through the middle and tighten at both ends, where interfaces stack the most surfaces.</p>
+<p>Dark mode is the same ramp read from the other end. There is one set of colours, not two.</p>
 </div>
-<h2 class="docs-h2" id="steps">Step roles</h2>
-${stepRoles}
+${inversionSection()}
 ${Object.keys(tokens.scales).map(scaleSection).join("\n")}
 ${tokenSection({
   id: "semantic",
   title: "Semantic tokens",
   description:
-    "The only colour vocabulary a component may use. Each one points at a role and a step, never at a literal.",
+    "The only colour vocabulary a component may use. Each one points at a role and a level per theme, never at a literal.",
   rows: semanticRows,
   columns: [
     { header: "Token", cell: (r) => tokenChip(`--area-${r.name}`, { swatch: `var(--area-${r.name})` }) },
@@ -325,17 +366,17 @@ ${tokenSection({
 })}
 <h2 class="docs-h2" id="contrast">Contrast</h2>
 <div class="docs-prose">
-<p>Colour pairings are a build gate, not a review-time opinion. Every pairing a component can render is asserted under WCAG 2.2 and APCA across all 72 shipped theme combinations, and a failing colour cannot be published.</p>
+<p>Colour pairings are a build gate, not a review-time opinion. Every pairing a component can render is asserted under WCAG 2.2 and APCA across all 144 shipped theme combinations, and a failing colour cannot be published.</p>
 <p>APCA is enforced as a hard gate in dark themes specifically, because the WCAG 2.x formula overstates contrast near black — a dark theme can clear 4.5:1 and still be unreadable.</p>
 </div>`;
 
   return page({
     slug: "color",
     title: "Color",
-    lede: "Twelve steps, generated in OKLCH, with a fixed role per step.",
+    lede: "One ramp per scale, generated in OKLCH, with every level named by its own lightness.",
     body,
     toc: [
-      { id: "steps", title: "Step roles" },
+      { id: "inversion", title: "The inversion" },
       ...Object.keys(tokens.scales).map((n) => ({ id: `scale-${n}`, title: n, nested: true })),
       { id: "semantic", title: "Semantic tokens" },
       { id: "contrast", title: "Contrast" },

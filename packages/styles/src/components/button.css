@@ -164,28 +164,34 @@
    * to -- which is exactly why it is not tied to the accent.
    */
   .area-button--primary {
-    --_solid: var(--area-neutral-12);
-    --_solid-hover: var(--area-neutral-11);
+    --_solid: var(--area-bg-primary-solid);
+    --_solid-hover: var(--area-bg-primary-solid-hover);
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
     --_line: var(--area-border);
     --_line-hover: var(--area-border-hover);
     --_tone-fg: var(--area-fg-default);
-    --_on-solid: var(--area-bg-page);
+    --_on-solid: var(--area-fg-on-neutral-solid);
   }
 
-  /* Secondary: the same neutral family, one step of emphasis down. */
+  /*
+   * Secondary: the same neutral family, one step of emphasis down.
+   *
+   * Both fills come from the semantic layer rather than from a numbered level of the
+   * neutral scale. That is what makes them flip with the theme: on a dark page the primary
+   * button is near-white, because "furthest from the page" is what reads as primary.
+   */
   .area-button--secondary {
-    --_solid: var(--area-neutral-11);
-    --_solid-hover: var(--area-neutral-12);
+    --_solid: var(--area-bg-secondary-solid);
+    --_solid-hover: var(--area-bg-secondary-solid-hover);
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
     --_line: var(--area-border);
     --_line-hover: var(--area-border-hover);
     --_tone-fg: var(--area-fg-muted);
-    --_on-solid: var(--area-bg-page);
+    --_on-solid: var(--area-fg-on-neutral-solid);
   }
 
   /* The brand hue. Follows the accent axis. */

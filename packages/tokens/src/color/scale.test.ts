@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { ALL_SCALES, CHROMATIC_SCALES } from "./presets.ts";
-import { type Theme, buildScale } from "./scale.ts";
+import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
+import { type Theme, assertLadder, buildScale } from "./scale.ts";
+import { LEVELS, levelLightness } from "./curves.ts";
 import { SRGB, oklchToRgb, parseHex, rgbInGamut } from "./oklab.ts";
+import { maxChromaAt } from "./gamut.ts";
 import { WCAG, wcagContrastHex } from "./contrast.ts";
 
 const THEMES: Theme[] = ["light", "dark"];
@@ -10,38 +12,113 @@ const CASES = THEMES.flatMap((theme) => ALL_SCALES.map((spec) => ({ theme, spec 
 describe.each(CASES)("$spec.id / $theme", ({ theme, spec }) => {
   const scale = buildScale(spec, theme);
 
-  it("has twelve steps, all inside sRGB", () => {
-    expect(scale.steps).toHaveLength(12);
+  it("has one step per level, all inside sRGB", () => {
+    expect(scale.steps).toHaveLength(LEVELS.length);
     for (const step of scale.steps) {
-      expect(rgbInGamut(parseHex(step.hex), 0), `step ${step.step}`).toBe(true);
-      expect(rgbInGamut(oklchToRgb(step.oklch, SRGB), 0), `step ${step.step}`).toBe(true);
+      expect(rgbInGamut(parseHex(step.hex), 0), `${spec.id}-${step.level}`).toBe(true);
+      expect(rgbInGamut(oklchToRgb(step.oklch, SRGB), 0), `${spec.id}-${step.level}`).toBe(true);
     }
   });
 
-  it("moves monotonically through the chrome band, so hover and active are always distinct", () => {
-    // Steps 1-8 are backgrounds and borders; they must march in one direction with no
-    // repeats, or a hover state becomes invisible.
-    const chrome = scale.steps.slice(0, 8).map((s) => s.oklch.L);
-    for (let i = 1; i < chrome.length; i++) {
-      const delta = chrome[i]! - chrome[i - 1]!;
-      if (theme === "light") expect(delta, `step ${i} -> ${i + 1}`).toBeLessThan(-0.005);
-      else expect(delta, `step ${i} -> ${i + 1}`).toBeGreaterThan(0.005);
+  it("is named by its own lightness", () => {
+    // The whole premise of the ladder. `blue-58` must be L 0.58, or the token lies.
+    expect(() => assertLadder(scale)).not.toThrow();
+    for (const step of scale.steps) {
+      expect(step.oklch.L, `${spec.id}-${step.level}`).toBeCloseTo(levelLightness(step.level), 2);
+    }
+  });
+
+  it("descends monotonically from end to end", () => {
+    // The ordinal scale this replaced was non-monotonic in twelve places -- green, teal,
+    // cyan and blue all had a step 11 lighter than their step 10, which meant "secondary
+    // text" was lighter than "solid hover" and nobody noticed. Assert the whole ramp, not
+    // a band of it.
+    for (let i = 1; i < scale.steps.length; i++) {
+      const delta = scale.steps[i]!.oklch.L - scale.steps[i - 1]!.oklch.L;
+      expect(delta, `${spec.id} ${scale.steps[i - 1]!.level} -> ${scale.steps[i]!.level}`).toBeLessThan(
+        -0.005,
+      );
     }
   });
 
   it("keeps every step distinguishable from its neighbour", () => {
-    for (let i = 1; i < 12; i++) {
+    for (let i = 1; i < scale.steps.length; i++) {
       const a = scale.steps[i - 1]!;
       const b = scale.steps[i]!;
-      expect(a.hex, `steps ${i} and ${i + 1} are identical`).not.toBe(b.hex);
+      expect(a.hex, `${spec.id}-${a.level} and -${b.level} are identical`).not.toBe(b.hex);
     }
   });
 
-  it("solves alpha steps that composite back to the solid step", () => {
+  it("holds one hue for the whole scale", () => {
+    // There is no drift table. Any rotation here would be the gamut mapper moving hue,
+    // which it is not supposed to do. Near-achromatic steps are skipped: hue is
+    // meaningless below the chroma floor and quantisation dominates it.
+    const chromatic = scale.steps.filter((s) => s.oklch.C > 0.01);
+    for (const step of chromatic) {
+      const delta = Math.abs(((step.oklch.h - spec.hue + 540) % 360) - 180);
+      expect(delta, `${spec.id}-${step.level} hue`).toBeLessThan(1);
+    }
+  });
+
+  it("solves alpha steps that composite back to the opaque step", () => {
     for (const alpha of scale.alphas) {
       // Quantising the foreground to 8 bits is where alpha ramps visibly drift.
-      expect(alpha.residual, `alpha step ${alpha.step}`).toBeLessThan(0.01);
+      expect(alpha.residual, `${spec.id}-a${alpha.level}`).toBeLessThan(0.01);
     }
+  });
+});
+
+describe("the ladder", () => {
+  it("is even through the middle and tightens at both ends", () => {
+    const gaps = LEVELS.slice(1).map((l, i) => LEVELS[i]! - l);
+    // No cliff. The ordinal scale ran to a 20.2x spread with a 0.252 jump at the end.
+    expect(Math.max(...gaps) / Math.min(...gaps)).toBeLessThanOrEqual(4);
+    // Ends are finer than the middle, which is where the surfaces stack up.
+    expect(gaps[0]!).toBeLessThan(Math.max(...gaps));
+    expect(gaps.at(-1)!).toBeLessThan(Math.max(...gaps));
+  });
+
+  it("gives every hue the same lightness at the same level", () => {
+    // The property the ordinal scale could not promise: its step 9 ranged L 0.548 to 0.910.
+    for (const level of LEVELS) {
+      const lightnesses = ALL_SCALES.map(
+        (spec) => buildScale(spec, "light").steps.find((s) => s.level === level)!.oklch.L,
+      );
+      const spread = Math.max(...lightnesses) - Math.min(...lightnesses);
+      expect(spread, `level ${level} spread`).toBeLessThan(0.01);
+    }
+  });
+
+  it("is one ramp, read from both ends rather than two ramps", () => {
+    for (const spec of ALL_SCALES) {
+      const light = buildScale(spec, "light");
+      const dark = buildScale(spec, "dark");
+      expect(dark.steps.map((s) => s.hex), spec.id).toEqual(light.steps.map((s) => s.hex));
+    }
+  });
+});
+
+describe("chroma", () => {
+  it("claims most of what the gamut allows at every level", () => {
+    // "As bright as possible" is only meaningful against the boundary. The previous
+    // generator multiplied a bell curve by the gamut's own falloff and desaturated twice:
+    // teal and cyan peaked at C 0.09 where violet reached 0.24.
+    for (const spec of CHROMATIC_SCALES) {
+      for (const step of buildScale(spec, "light").steps) {
+        const ceiling = maxChromaAt(step.oklch.L, spec.hue, SRGB);
+        expect(step.oklch.C / ceiling, `${spec.id}-${step.level}`).toBeGreaterThan(0.7);
+        expect(step.oklch.C, `${spec.id}-${step.level}`).toBeLessThanOrEqual(ceiling + 1e-6);
+      }
+    }
+  });
+
+  it("reaches a comparable peak for every hue", () => {
+    const peaks = CHROMATIC_SCALES.map((spec) =>
+      Math.max(...buildScale(spec, "light").steps.map((s) => s.oklch.C)),
+    );
+    // sRGB will not give cyan what it gives violet, but the gap should be the gamut's
+    // doing and not the generator's. Before, the weakest hue reached 36% of the strongest.
+    expect(Math.min(...peaks) / Math.max(...peaks)).toBeGreaterThan(0.5);
   });
 });
 
@@ -49,31 +126,51 @@ describe("solid fill", () => {
   it.each(THEMES)("carries its declared foreground at AA in %s", (theme) => {
     for (const spec of CHROMATIC_SCALES) {
       const scale = buildScale(spec, theme);
-      expect(scale.contrast.wcag, `${spec.id} solid on ${scale.contrast.hex}`).toBeGreaterThanOrEqual(
-        WCAG.TEXT,
-      );
+      expect(
+        scale.contrast.wcag,
+        `${spec.id} solid (${spec.id}-${scale.solid.level}) on ${scale.contrast.hex}`,
+      ).toBeGreaterThanOrEqual(WCAG.TEXT);
     }
   });
 
-  it.each(THEMES)("keeps the hover step visibly distinct from rest in %s", (theme) => {
+  it("sits on the ladder rather than beside it", () => {
+    // The binary search this replaced produced a lightness that was not any level of the
+    // scale -- a colour smuggled in next to the ramp rather than drawn from it.
     for (const spec of CHROMATIC_SCALES) {
-      const scale = buildScale(spec, theme);
-      const rest = scale.steps[8]!;
-      const hover = scale.steps[9]!;
-      const delta = Math.abs(hover.oklch.L - rest.oklch.L);
-      expect(delta, `${spec.id} 9 -> 10`).toBeGreaterThan(0.02);
-      // and still readable with the same foreground
-      expect(wcagContrastHex(scale.contrast.hex, hover.hex), `${spec.id} hover`).toBeGreaterThanOrEqual(
-        WCAG.LARGE_TEXT,
-      );
+      const scale = buildScale(spec, "light");
+      expect(LEVELS, spec.id).toContain(scale.solid.level);
+      expect(LEVELS, spec.id).toContain(scale.solid.hover.light);
+      expect(LEVELS, spec.id).toContain(scale.solid.hover.dark);
+    }
+  });
+
+  it("moves its hover away from each theme's own page background", () => {
+    for (const spec of CHROMATIC_SCALES) {
+      const scale = buildScale(spec, "light");
+      // Light page: hover is darker. Dark page: hover is lighter. Levels *are* lightness.
+      expect(scale.solid.hover.light, spec.id).toBeLessThan(scale.solid.level);
+      expect(scale.solid.hover.dark, spec.id).toBeGreaterThan(scale.solid.level);
+    }
+  });
+
+  it("keeps the hover readable with the same foreground", () => {
+    for (const theme of THEMES) {
+      for (const spec of CHROMATIC_SCALES) {
+        const scale = buildScale(spec, theme);
+        const hover = scale.steps.find((s) => s.level === scale.solid.hover[theme])!;
+        expect(
+          wcagContrastHex(scale.contrast.hex, hover.hex),
+          `${spec.id} hover in ${theme}`,
+        ).toBeGreaterThanOrEqual(WCAG.LARGE_TEXT);
+      }
     }
   });
 
   it("holds its identity across themes, so a brand colour is one colour", () => {
     for (const spec of CHROMATIC_SCALES) {
-      const light = buildScale(spec, "light").steps[8]!;
-      const dark = buildScale(spec, "dark").steps[8]!;
-      expect(dark.hex, spec.id).toBe(light.hex);
+      const light = buildScale(spec, "light");
+      const dark = buildScale(spec, "dark");
+      expect(dark.solid.level, spec.id).toBe(light.solid.level);
     }
   });
 });
@@ -81,24 +178,32 @@ describe("solid fill", () => {
 describe("neutrals", () => {
   it("differ only in temperature, never in lightness", () => {
     // Swapping gray for slate must not move a single contrast ratio.
-    for (const theme of THEMES) {
-      const gray = buildScale(ALL_SCALES.find((s) => s.id === "gray")!, theme);
-      for (const id of ["slate", "sand"]) {
-        const other = buildScale(ALL_SCALES.find((s) => s.id === id)!, theme);
-        for (let i = 0; i < 12; i++) {
-          expect(other.steps[i]!.oklch.L, `${id} step ${i + 1}`).toBeCloseTo(gray.steps[i]!.oklch.L, 2);
-        }
+    const gray = buildScale(NEUTRAL_SCALES.find((s) => s.id === "gray")!, "light");
+    for (const spec of NEUTRAL_SCALES) {
+      const other = buildScale(spec, "light");
+      for (let i = 0; i < LEVELS.length; i++) {
+        expect(other.steps[i]!.oklch.L, `${spec.id}-${LEVELS[i]}`).toBeCloseTo(
+          gray.steps[i]!.oklch.L,
+          2,
+        );
       }
     }
   });
 
   it("keeps gray truly achromatic", () => {
-    for (const theme of THEMES) {
-      const gray = buildScale(ALL_SCALES.find((s) => s.id === "gray")!, theme);
-      for (const step of gray.steps) {
-        const [r, g, b] = parseHex(step.hex);
-        expect(r, `step ${step.step}`).toBe(g);
-        expect(g, `step ${step.step}`).toBe(b);
+    const gray = buildScale(NEUTRAL_SCALES.find((s) => s.id === "gray")!, "light");
+    for (const step of gray.steps) {
+      const [r, g, b] = parseHex(step.hex);
+      expect(r, `gray-${step.level}`).toBe(g);
+      expect(g, `gray-${step.level}`).toBe(b);
+    }
+  });
+
+  it("keeps every tinted neutral a neutral", () => {
+    // A tint that climbs past this stops reading as grey and starts reading as a colour.
+    for (const spec of NEUTRAL_SCALES) {
+      for (const step of buildScale(spec, "light").steps) {
+        expect(step.oklch.C, `${spec.id}-${step.level}`).toBeLessThan(0.02);
       }
     }
   });

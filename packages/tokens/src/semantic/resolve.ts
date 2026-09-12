@@ -64,18 +64,21 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
     discovery: scaleFor(ROLE_SCALES.discovery, theme),
   };
 
+  // Keyed by level rather than by position, so a semantic entry says which *colour* it
+  // wants and cannot silently follow an index if the ladder ever gains or loses a rung.
   const lookup = Object.fromEntries(
     Object.entries(roles).map(([role, scale]) => [
       role,
       {
-        steps: scale.steps.map((s) => ({ hex: s.hex })),
-        alphas: scale.alphas.map((a) => ({ hex8: a.hex8 })),
+        byLevel: Object.fromEntries(scale.steps.map((s) => [s.level, s.hex])),
+        alphaByLevel: Object.fromEntries(scale.alphas.map((a) => [a.level, a.hex8])),
+        solid: { level: scale.solid.level, hover: scale.solid.hover },
         contrast: { hex: scale.contrast.hex },
       },
     ]),
   ) as unknown as ScaleLookup;
 
-  return { theme, neutral, accent, scales, roles, tokens: resolveAliases(lookup) };
+  return { theme, neutral, accent, scales, roles, tokens: resolveAliases(lookup, theme) };
 }
 
 /** The selection Area ships as its default. */

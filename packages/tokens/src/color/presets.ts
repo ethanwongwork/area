@@ -1,55 +1,66 @@
 /**
  * The scales Area ships.
  *
- * Twelve chromatic hues and three neutrals. The colour axis lets a consumer point the
- * accent role at any chromatic scale and the neutral role at any of the three, so these
- * are the granular ramps the axis chooses between.
+ * Twelve chromatic hues and six neutrals. The colour axis points the accent role at any
+ * chromatic scale and the neutral role at any neutral, so these are the granular ramps the
+ * axis chooses between.
  *
- * Hue angles are OKLCh degrees, chosen for even perceptual spacing.
+ * Hue angles are OKLCh degrees and are constant down each scale -- `red-99` and `red-17`
+ * are both hue 25. There is no drift table; `curves.ts` records why.
  *
  * The semantic roles are: danger 25, warning 55, caution 100, success 150, info/accent 258,
  * discovery 300. Three warm roles is more than hue separation alone can carry -- danger to
  * warning is 30 degrees, short of the 50 that keeps two tones from reading as the same
- * signal. They stay distinguishable because their solid fills differ sharply in lightness
- * as well as hue (orange L 0.77, yellow L 0.91), and because caution's fill is far lighter
- * than anything else in the set. This is the real cost of shipping eight tones, and it is
- * recorded here rather than discovered later.
- *
- * Drift values are total degrees of hue rotation from step 9 to the end of the scale, taken
- * from the measured end-to-end drift of the shipped Tailwind v4 palette: amber -49.6,
- * yellow -48.4, orange -37.4, cyan +28.8, blue +13.3, red +8.7, green -2.9, violet -2.7.
- * Yellows swing hard toward orange as they darken because a dark yellow at constant hue
- * reads as olive; greens and violets are hue-stable and are left alone.
+ * signal. What separates them now is where each one's solid fill lands on the ladder: red
+ * can stay saturated at L 0.58 and carry white text, while yellow cannot be both saturated
+ * and dark, so its fill sits at L 0.85 with black text. A red button and a caution button
+ * differ in weight, not only in hue. That is the real cost of shipping eight tones, and it
+ * is recorded here rather than discovered later.
  */
 import type { ScaleSpec } from "./scale.ts";
 
 /**
- * `solidForeground: "dark"` marks the hues whose solid fill carries black text. These are
- * the intrinsically light hues -- the same exception list Radix maintains -- which cannot
- * be both saturated and dark enough for white text at once.
+ * `solidForeground: "dark"` marks the hues whose solid fill carries black text -- the
+ * intrinsically light ones, the same exception list Radix maintains. A hue whose gamut cusp
+ * sits above roughly L 0.8 cannot be simultaneously saturated and dark enough for white
+ * text; forcing it down the ladder until white passes is what turned the old yellow and
+ * lime solids into mud.
  */
 export const CHROMATIC_SCALES: readonly ScaleSpec[] = [
-  { id: "red", kind: "chromatic", hue: 25, drift: { darkward: 9, lightward: 3 } },
-  { solidForeground: "dark", id: "orange", kind: "chromatic", hue: 55, drift: { darkward: -37, lightward: -6 } },
-  { solidForeground: "dark", id: "amber", kind: "chromatic", hue: 75, drift: { darkward: -50, lightward: -8 } },
-  { solidForeground: "dark", id: "yellow", kind: "chromatic", hue: 100, drift: { darkward: -48, lightward: -8 } },
-  { solidForeground: "dark", id: "lime", kind: "chromatic", hue: 130, drift: { darkward: -30, lightward: -5 } },
-  { id: "green", kind: "chromatic", hue: 150, drift: { darkward: -3, lightward: 0 } },
-  { id: "teal", kind: "chromatic", hue: 178, drift: { darkward: 10, lightward: 0 } },
-  { id: "cyan", kind: "chromatic", hue: 205, drift: { darkward: 29, lightward: 0 } },
-  { id: "blue", kind: "chromatic", hue: 258, drift: { darkward: 13, lightward: -3 } },
-  { id: "indigo", kind: "chromatic", hue: 275, drift: { darkward: 8, lightward: -2 } },
-  { id: "violet", kind: "chromatic", hue: 300, drift: { darkward: -3, lightward: 0 } },
-  { id: "pink", kind: "chromatic", hue: 350, drift: { darkward: 6, lightward: 2 } },
+  { id: "red", kind: "chromatic", hue: 25 },
+  { id: "orange", kind: "chromatic", hue: 55, solidForeground: "dark" },
+  { id: "amber", kind: "chromatic", hue: 75, solidForeground: "dark" },
+  { id: "yellow", kind: "chromatic", hue: 100, solidForeground: "dark" },
+  { id: "lime", kind: "chromatic", hue: 130, solidForeground: "dark" },
+  { id: "green", kind: "chromatic", hue: 150 },
+  { id: "teal", kind: "chromatic", hue: 178 },
+  { id: "cyan", kind: "chromatic", hue: 205 },
+  { id: "blue", kind: "chromatic", hue: 258 },
+  { id: "indigo", kind: "chromatic", hue: 275 },
+  { id: "violet", kind: "chromatic", hue: 300 },
+  { id: "pink", kind: "chromatic", hue: 350 },
 ];
 
 /**
  * Neutrals differ only in chroma and hue, never in lightness -- so swapping grey for slate
- * changes the temperature of an interface without moving a single contrast ratio.
+ * changes the temperature of an interface without moving a single contrast ratio. Every
+ * neutral shares the ladder, so every one of them also shares its entire contrast table.
+ *
+ * Six rather than three, so a neutral can be chosen to sit *under* the accent rather than
+ * beside it: a violet accent on a mauve page reads as one considered palette, where the
+ * same accent on a blue-tinted slate reads as two. That pairing is the whole reason Radix
+ * ships six, and three was not enough to cover the twelve accents this system offers.
+ *
+ * Chroma caps differ by hue because equal chroma is not equal tint: a blue cast at C 0.011
+ * is barely visible where a green one at the same chroma reads clearly, so the cool hues
+ * carry more to land at the same apparent strength.
  */
 export const NEUTRAL_SCALES: readonly ScaleSpec[] = [
   { id: "gray", kind: "neutral", hue: 0, neutralChroma: 0 },
-  { id: "slate", kind: "neutral", hue: 258, neutralChroma: 0.014 },
+  { id: "slate", kind: "neutral", hue: 258, neutralChroma: 0.015 },
+  { id: "mauve", kind: "neutral", hue: 310, neutralChroma: 0.014 },
+  { id: "sage", kind: "neutral", hue: 175, neutralChroma: 0.011 },
+  { id: "olive", kind: "neutral", hue: 130, neutralChroma: 0.011 },
   { id: "sand", kind: "neutral", hue: 75, neutralChroma: 0.012 },
 ];
 
@@ -58,8 +69,11 @@ export const ALL_SCALES: readonly ScaleSpec[] = [...NEUTRAL_SCALES, ...CHROMATIC
 /** One sentence per scale, rendered above its ramp in the documentation. */
 export const SCALE_DESCRIPTIONS: Record<string, string> = {
   gray: "A true neutral with no chroma at all. Works with any accent.",
-  slate: "A neutral carrying a trace of blue, for cooler interfaces.",
-  sand: "A neutral carrying a trace of amber, for softer, warmer interfaces.",
+  slate: "Cool, tinted toward blue. Pairs with blue, indigo, and cyan accents.",
+  mauve: "Cool, tinted toward violet. Pairs with violet, pink, and red accents.",
+  sage: "Quiet, tinted toward teal. Pairs with teal, green, and cyan accents.",
+  olive: "Quiet, tinted toward green. Pairs with green and lime accents.",
+  sand: "Warm, tinted toward amber. Pairs with amber, orange, and yellow accents.",
   red: "The danger tone. Errors, destructive actions, and failed states.",
   orange: "The warning tone. Conditions that need attention but are not failures.",
   amber: "Between warning and caution. Not bound to a semantic role.",

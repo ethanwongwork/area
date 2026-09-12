@@ -25,16 +25,18 @@ function tokensForRole(theme: ResolvedTheme, role: string): Record<string, strin
   return out;
 }
 
-/** A scale's full primitive ramp: twelve steps, twelve alphas, and its declared foreground. */
+/**
+ * A scale's full primitive ramp: every level, its translucent twin, and the foreground the
+ * scale measured against its own solid fill.
+ *
+ * Keyed by level, not by position. `--area-blue-58` names the lightness it carries, so a
+ * change to the ladder renames the tokens it affects instead of silently repointing them.
+ */
 function primitiveRamp(theme: ResolvedTheme, scaleId: string, as = scaleId): Record<string, string> {
   const scale = theme.scales[scaleId]!;
   const out: Record<string, string> = {};
-  scale.steps.forEach((s, i) => {
-    out[`${as}-${i + 1}`] = s.hex;
-  });
-  scale.alphas.forEach((a, i) => {
-    out[`${as}-a${i + 1}`] = a.hex8;
-  });
+  for (const step of scale.steps) out[`${as}-${step.level}`] = step.hex;
+  for (const alpha of scale.alphas) out[`${as}-a${alpha.level}`] = alpha.hex8;
   out[`${as}-contrast`] = scale.contrast.hex;
   return out;
 }

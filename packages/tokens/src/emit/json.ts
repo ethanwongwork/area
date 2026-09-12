@@ -17,7 +17,7 @@ import {
   baseTokens,
   derivedTokens,
 } from "./base.ts";
-import { STEP_ROLES } from "../color/curves.ts";
+import { INVERSION, LEVELS } from "../color/curves.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 import { ALL_SCALES, SCALE_DESCRIPTIONS } from "../color/presets.ts";
 import { buildScale } from "../color/scale.ts";
@@ -43,32 +43,34 @@ export interface TokensJson {
       darkTokens?: Record<string, string>;
     }>;
   }>;
-  /** Step roles, so the docs render the contract rather than a caption someone typed. */
-  stepRoles: readonly string[];
+  /** The ladder itself: every level, lightest first. A level *is* its lightness. */
+  levels: readonly number[];
+  /** Which level each semantic slot reads in each theme -- the inversion, as data. */
+  inversion: Record<string, { light: number; dark: number }>;
   /** One sentence per scale. */
   scaleDescriptions: Record<string, string>;
-  /** Semantic token -> the role and step it resolves to. */
-  semantics: Record<string, { role?: string; step?: number; kind: string }>;
-  /** Every scale, both themes, for the ramp pages. */
+  /** Semantic token -> the role it reads and the level it lands on in each theme. */
+  semantics: Record<string, { kind: string; role?: string; light?: number; dark?: number }>;
+  /**
+   * Every scale. One ramp, not two: the steps are theme-independent, and only the alphas
+   * differ, because those are composited over a page background that the theme decides.
+   */
   scales: Record<
     string,
-    Record<
-      "light" | "dark",
-      {
-        hue: number;
-        cusp: { L: number; C: number };
-        contrast: string;
-        steps: Array<{
-          step: number;
-          hex: string;
-          p3: string;
-          oklch: string;
-          role: string;
-          contrast: { fg: string; ratio: number; grade: string };
-        }>;
-        alphas: Array<{ step: number; hex8: string; alpha: number }>;
-      }
-    >
+    {
+      hue: number;
+      cusp: { L: number; C: number };
+      solid: { level: number; hover: { light: number; dark: number }; foreground: string; wcag: number; apca: number; retreat: number };
+      steps: Array<{
+        level: number;
+        hex: string;
+        p3: string;
+        oklch: string;
+        chromaUsed: number;
+        contrast: { fg: string; ratio: number; grade: string };
+      }>;
+      alphas: Record<"light" | "dark", Array<{ level: number; hex8: string; alpha: number }>>;
+    }
   >;
   spaceRamp: readonly number[];
   sizeRamp: readonly number[];
@@ -81,10 +83,7 @@ export interface TokensJson {
 export function buildTokensJson(): TokensJson {
   const scales: TokensJson["scales"] = {};
   for (const spec of ALL_SCALES) {
-    scales[spec.id] = {
-      light: serialiseScale(spec.id, "light"),
-      dark: serialiseScale(spec.id, "dark"),
-    };
+    scales[spec.id] = serialiseScale(spec.id);
   }
 
   const semantics: TokensJson["semantics"] = {};
@@ -94,7 +93,14 @@ export function buildTokensJson(): TokensJson {
         ? { kind: alias.kind }
         : alias.kind === "contrast"
           ? { kind: alias.kind, role: alias.role }
-          : { kind: alias.kind, role: alias.role, step: alias.step };
+          : alias.kind === "solid" || alias.kind === "solidHover"
+            ? { kind: alias.kind, role: alias.role }
+            : {
+                kind: alias.kind,
+                role: alias.role,
+                light: INVERSION[alias.slot].light,
+                dark: INVERSION[alias.slot].dark,
+              };
   }
 
   return {
@@ -118,7 +124,8 @@ export function buildTokensJson(): TokensJson {
         ...(p.darkTokens ? { darkTokens: { ...p.darkTokens } } : {}),
       })),
     })),
-    stepRoles: STEP_ROLES,
+    levels: LEVELS,
+    inversion: INVERSION,
     scaleDescriptions: SCALE_DESCRIPTIONS,
     semantics,
     scales,
@@ -131,22 +138,33 @@ export function buildTokensJson(): TokensJson {
   };
 }
 
-function serialiseScale(id: string, theme: "light" | "dark") {
+function serialiseScale(id: string) {
   const spec = ALL_SCALES.find((s) => s.id === id)!;
-  const built = buildScale(spec, theme);
+  const light = buildScale(spec, "light");
+  const dark = buildScale(spec, "dark");
+  const alphas = (built: typeof light) =>
+    built.alphas.map((a) => ({ level: a.level, hex8: a.hex8, alpha: round(a.alpha) }));
+
   return {
-    hue: built.hue,
-    cusp: { L: round(built.cusp.L), C: round(built.cusp.C) },
-    contrast: built.contrast.hex,
-    steps: built.steps.map((s) => ({
-      step: s.step,
+    hue: light.hue,
+    cusp: { L: round(light.cusp.L), C: round(light.cusp.C) },
+    solid: {
+      level: light.solid.level,
+      hover: light.solid.hover,
+      foreground: light.solid.foreground,
+      wcag: light.solid.wcag,
+      apca: light.solid.apca,
+      retreat: light.solid.retreat,
+    },
+    steps: light.steps.map((s) => ({
+      level: s.level,
       hex: s.hex,
       p3: s.p3,
       oklch: s.oklchCss,
-      role: STEP_ROLES[s.step - 1]!,
+      chromaUsed: round(s.chromaUsed),
       contrast: s.contrast,
     })),
-    alphas: built.alphas.map((a) => ({ step: a.step, hex8: a.hex8, alpha: round(a.alpha) })),
+    alphas: { light: alphas(light), dark: alphas(dark) },
   };
 }
 
