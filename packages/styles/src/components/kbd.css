@@ -35,8 +35,14 @@
     /* Keys never wrap, and never inherit italics from surrounding prose. */
     white-space: nowrap;
     font-style: normal;
-    /* Lifts the key off the surface the way a physical key sits above its plate. */
-    box-shadow: var(--area-shadow-1);
+    /*
+     * A weighted bottom edge, which is what makes this read as a key rather than as a
+     * badge. VS Code, Primer and Radix all arrive at the same `inset 0 -1px 0`
+     * independently -- it is the cheapest possible suggestion of a keycap's depth.
+     */
+    box-shadow:
+      inset 0 -1px 0 var(--area-border-subtle),
+      var(--area-shadow-1);
   }
 
   /* A sequence of keys: Cmd then K, rather than one key labelled "⌘K". */

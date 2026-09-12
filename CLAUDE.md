@@ -94,6 +94,11 @@ rows; that is the point of a dense preset. A preset that shrank the text too wou
 the same interface further away. Only the two smallest tiers drop to 12px, because 14/20
 text cannot fit a 20px box at all.
 
+Icon sizes are 12, 16 or 24 and nothing else. VS Code's design-token linter permits
+exactly {16, 12} and comments that "a codicon at 13/14/15px is always a mistake for 12 or
+16"; Octicons says the same with 24 for the large tier. Gap follows the tier: Primer ties
+4px to xsmall and small, 8px to medium and large, with 6px as the step between.
+
 Radius does *not* move with density. An earlier version derived it as a proportion of
 control height, which quietly made a compact button 5px — but Primer at 32, Vercel at 32,
 Linear at 32 and Notion at 28 all ship exactly 6px. Radius is owned entirely by the radius

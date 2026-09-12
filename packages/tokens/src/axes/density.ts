@@ -46,15 +46,21 @@ function ladder(tiers: Record<Tier, TierSpec>) {
  * OpenAI's `--control-size-md`, and Vercel's small button all land there. The 24/28/32/40/48
  * ladder is Primer's exact scale.
  *
- * Icon holds at 16px through the middle of the range rather than scaling with the box,
- * because 16px is the near-universal inline icon size and growing it with the control
- * makes a small control look cluttered.
+ * Icon sizes are 12, 16 or 24 and nothing else. VS Code's own design-token linter is
+ * blunt about this -- it permits exactly {16, 12} for its icons and comments that "a
+ * codicon at 13/14/15px is always a mistake for 12 or 16" -- and Octicons' guidelines say
+ * the same with 24 added for the large tier. An earlier version of this ladder used 14
+ * and 20; both are off every published ramp.
+ *
+ * Gap follows the tier rather than holding constant: Primer ties 4px to its xsmall and
+ * small controls and 8px to medium and large, and 6px sits on VS Code's spacing ramp as
+ * the step between.
  */
 const DEFAULT_TIERS: Record<Tier, TierSpec> = {
-  xs: { height: 24, gutter: 8, icon: 14, gap: 4, text: "xs" },
-  sm: { height: 28, gutter: 10, icon: 16, gap: 6, text: "sm" },
+  xs: { height: 24, gutter: 8, icon: 12, gap: 4, text: "xs" },
+  sm: { height: 28, gutter: 10, icon: 16, gap: 4, text: "sm" },
   md: { height: 32, gutter: 12, icon: 16, gap: 6, text: "sm" },
-  lg: { height: 40, gutter: 16, icon: 20, gap: 6, text: "sm" },
+  lg: { height: 40, gutter: 16, icon: 16, gap: 8, text: "sm" },
   xl: { height: 48, gutter: 20, icon: 24, gap: 8, text: "md" },
 };
 
@@ -72,10 +78,10 @@ const DEFAULT_TIERS: Record<Tier, TierSpec> = {
  */
 const COMPACT_TIERS: Record<Tier, TierSpec> = {
   xs: { height: 20, gutter: 6, icon: 12, gap: 4, text: "xs" },
-  sm: { height: 24, gutter: 8, icon: 14, gap: 4, text: "xs" },
+  sm: { height: 24, gutter: 8, icon: 12, gap: 4, text: "xs" },
   md: { height: 28, gutter: 10, icon: 16, gap: 6, text: "sm" },
   lg: { height: 32, gutter: 12, icon: 16, gap: 6, text: "sm" },
-  xl: { height: 36, gutter: 14, icon: 20, gap: 8, text: "sm" },
+  xl: { height: 36, gutter: 14, icon: 16, gap: 8, text: "sm" },
 };
 
 export const DENSITY_AXIS: AxisDefinition = {
