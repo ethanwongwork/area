@@ -4,42 +4,60 @@
  * Names a design token inline: in documentation, in a spec, in a comment thread.
  *
  * Distinct from Code because a token reference is a *name*, not a fragment of source.
- * It gets a pill shape and an outline rather than a fill, so a row of them reads as a
- * list of identifiers rather than as inline code, and it can carry a swatch showing what
- * the token actually resolves to.
+ * It gets an outline and a surface fill rather than a tinted block, and it can carry a
+ * swatch showing what the token actually resolves to.
+ *
+ * Geometry is ported from the original playground's token badge: a surface fill, a
+ * hairline, 12/16 mono at the regular weight, and a 10px swatch with the small radius.
+ * Two values are mapped onto Area's ramps rather than copied literally -- 5px of inline
+ * padding becomes 6, and the fixed 8px radius becomes the radius axis's control step --
+ * because a component that hardcodes a number stops responding to the axis that owns it.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-token {
     display: inline-flex;
     align-items: center;
-    gap: var(--area-space-6);
+    gap: var(--area-space-4);
+
+    inline-size: fit-content;
     max-inline-size: 100%;
     padding: var(--area-space-2) var(--area-space-6);
+
     border: var(--area-border-width) solid var(--area-border-subtle);
-    /*
-     * A rounded rectangle, not a pill. A pill reads as a status chip -- something with a
-     * state -- where a token reference is a name. Vercel's inline code mentions use 6px on
-     * a ~20px box, which is the same proportion.
-     */
-    border-radius: var(--area-radius-small);
-    background-color: var(--area-bg-component);
-    color: var(--area-fg-muted);
+    border-radius: var(--area-radius-control);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+
     font-family: var(--area-font-mono);
     font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-sm-leading);
+    line-height: var(--area-text-xs-leading);
+    font-weight: var(--area-weight-regular);
     white-space: nowrap;
   }
 
   /*
-   * The swatch is inset with a ring rather than a border so a fully transparent token
-   * still reads as a swatch rather than as a gap.
+   * A rounded square, never a circle. A circle reads as a status dot -- something with a
+   * state -- where this is a sample of a colour. It takes the same small radius as any
+   * other nested shape, so it tracks the radius axis with everything else.
+   *
+   * The ring is a translucent foreground rather than a border colour, and that choice is
+   * load-bearing: a fixed light stroke is invisible on a pale swatch, which is the one
+   * case the ring exists for, while a fixed dark stroke draws a hard line around a dark
+   * one. Mixing from the foreground gives a stroke that is always slightly darker than
+   * whatever it encloses. It is inset, so it never changes the swatch's box.
    */
   .area-token__swatch {
     inline-size: var(--area-space-10);
     block-size: var(--area-space-10);
     flex-shrink: 0;
-    border-radius: var(--area-radius-full);
-    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle);
+    border-radius: var(--area-radius-small);
+    box-shadow: inset 0 0 0 var(--area-border-width)
+      color-mix(in oklab, var(--area-fg-default) 15%, transparent);
+  }
+
+  /* For a token that names something derived rather than primitive. */
+  .area-token--subtle {
+    background-color: var(--area-bg-subtle);
   }
 
   /* On a coloured ground: inherits the surrounding foreground instead of the page's. */

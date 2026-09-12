@@ -284,7 +284,7 @@ export const codeBlock: ComponentManifest = {
 export const tokenChip: ComponentManifest = {
   block: "area-token",
   description: "Names a design token inline.",
-  variants: { ground: ["on-color"] },
+  variants: { ground: ["on-color", "subtle"] },
   elements: ["swatch"],
   defaults: {},
 };

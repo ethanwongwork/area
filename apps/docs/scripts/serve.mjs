@@ -31,7 +31,12 @@ createServer(async (req, res) => {
 
   try {
     const body = await readFile(target);
-    res.writeHead(200, { "content-type": TYPES[extname(target)] ?? "application/octet-stream" });
+    res.writeHead(200, {
+      "content-type": TYPES[extname(target)] ?? "application/octet-stream",
+      // Never cache: the whole site is rebuilt in place, and a cached stylesheet makes a
+      // rebuild look like it silently did nothing.
+      "cache-control": "no-store, must-revalidate",
+    });
     res.end(body);
   } catch {
     res.writeHead(404, { "content-type": "text/html; charset=utf-8" });
