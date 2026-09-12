@@ -18,6 +18,7 @@ import {
   tokenCard,
   tokenChip,
   tokenSection,
+  customizer,
   viewToggle,
 } from "./layout.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
@@ -49,8 +50,8 @@ const FOUNDATION_PAGES = [
  * twelve options as swatches of each scale's own step 9, which is both the clearest way to
  * choose a hue and a working demonstration that the scales are addressable as tokens.
  */
-function axisPanel() {
-  const groups = tokens.axes
+function axisGroups() {
+  return tokens.axes
     .map((axis) => {
       const items = axis.presets
         .map((preset) => {
@@ -64,14 +65,16 @@ function axisPanel() {
         .join("");
 
       return `<div class="docs-axis">
-      <span class="docs-axis__name" id="axis-label-${axis.id}">${escapeHtml(axis.label)}</span>
-      <div class="area-segmented area-segmented--sm" role="radiogroup" aria-labelledby="axis-label-${axis.id}" data-axis="${axis.id}" data-default="${axis.defaultPreset}" style="flex-wrap:wrap">${items}</div>
+      <span class="docs-axis__name">${escapeHtml(axis.label)}</span>
+      <div class="area-segmented area-segmented--sm" role="radiogroup" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}" style="flex-wrap:wrap">${items}</div>
     </div>`;
     })
     .join("");
+}
 
+function axisPanel() {
   return `<div class="docs-axes" id="docs-axes" hidden>
-    <div class="docs-axes__inner">${groups}</div>
+    <div class="docs-axes__inner">${axisGroups()}</div>
   </div>`;
 }
 
@@ -138,6 +141,7 @@ function page({ slug, title, lede, body, toc = [] }) {
   ${topbarControls()}
 </header>
 ${axisPanel()}
+${customizer(axisGroups())}
 <div class="docs-shell">
   ${sidebar(slug)}
   <main class="docs-main">
@@ -166,7 +170,7 @@ function exampleBlock(example) {
 ${example.note ? `<p class="docs-note">${escapeHtml(example.note)}</p>` : ""}
 <div class="docs-example">
   <div class="docs-example__preview${column ? " docs-example__preview--column" : ""}">${demo.html}</div>
-  ${codeBlock(demo.code, { flush: true })}
+  ${codeBlock(demo.code, { flush: true, live: true })}
 </div>`;
 }
 

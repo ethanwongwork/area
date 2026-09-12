@@ -26,8 +26,26 @@ export function highlight(code) {
     .replace(/(\{)([^{}]*)(\})/g, '<span class="area-syntax-punct">$1</span>$2<span class="area-syntax-punct">$3</span>');
 }
 
+/**
+ * Toolbar icons. 16px, 1.5px stroke, sized from CSS and never from font-size.
+ */
+const ICONS = {
+  copy: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5a1.5 1.5 0 0 0-1.5-1.5H3a1.5 1.5 0 0 0-1.5 1.5v6A1.5 1.5 0 0 0 3 10.5h.5"/></svg>`,
+  reset: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.1"/><path d="M2 2.5V6h3.5"/></svg>`,
+  expand: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5h4v4"/><path d="M13.5 2.5 9 7"/><path d="M6.5 13.5h-4v-4"/><path d="m2.5 13.5 4.5-4.5"/></svg>`,
+  close: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4 4 8 8M12 4l-8 8"/></svg>`,
+};
+
+/** A toolbar button, in the outline treatment the reference uses. */
+function toolbarButton(icon, label, attr) {
+  return `<button type="button" class="area-button area-button--outline area-button--secondary area-button--sm" ${attr}>
+      <span class="area-button__icon" aria-hidden="true">${ICONS[icon]}</span>
+      <span class="area-button__label">${escapeHtml(label)}</span>
+    </button>`;
+}
+
 /** A code block with a copy button, in the shape the design system defines. */
-export function codeBlock(code, { title, flush = false, wrap = true } = {}) {
+export function codeBlock(code, { title, flush = false, wrap = true, live = false } = {}) {
   const cls = [
     "area-code-block",
     flush && "area-code-block--flush",
@@ -35,17 +53,51 @@ export function codeBlock(code, { title, flush = false, wrap = true } = {}) {
   ]
     .filter(Boolean)
     .join(" ");
+
+  // Reset and Customize both act on a preview, so they only appear where there is one.
+  const leading = live
+    ? toolbarButton("copy", "Copy", "data-copy") + toolbarButton("reset", "Reset", "data-reset")
+    : toolbarButton("copy", "Copy", "data-copy");
+
+  const trailing = live
+    ? `<span class="area-code-block__actions">${toolbarButton("expand", "Customize", "data-customize")}</span>`
+    : "";
+
   return `<div class="${cls}">
   <div class="area-code-block__toolbar">
     ${title ? `<span class="area-code-block__title">${escapeHtml(title)}</span>` : ""}
-    <span class="area-code-block__actions">
-      <button type="button" class="area-button area-button--ghost area-button--neutral area-button--xs" data-copy>
-        <span class="area-button__label">Copy</span>
-      </button>
-    </span>
+    ${leading}
+    ${trailing}
   </div>
   <pre class="area-code-block__pre"><code>${highlight(code)}</code></pre>
 </div>`;
+}
+
+/**
+ * The fullscreen customizer.
+ *
+ * One per page, reused by every example. Opening it copies that example's rendered preview
+ * onto a stage and puts every axis beside it, so a component can be pushed through the
+ * whole system at a size worth looking at.
+ *
+ * The axis controls carry the same `data-axis` attributes as the ones in the header, so
+ * the existing delegated handler drives them without knowing this exists -- and because
+ * custom properties inherit into the top layer, a change here repaints the page behind it.
+ */
+export function customizer(axisPanelHtml) {
+  return `<dialog class="docs-customizer" id="docs-customizer" aria-label="Customize">
+  <header class="docs-customizer__bar">
+    <span class="docs-customizer__title">Customize</span>
+    <span class="docs-customizer__name" id="docs-customizer-name"></span>
+    <button type="button" class="area-button area-button--ghost area-button--secondary area-button--sm area-button--icon-only" data-customizer-close aria-label="Close">
+      <span class="area-button__icon" aria-hidden="true">${ICONS.close}</span>
+    </button>
+  </header>
+  <div class="docs-customizer__body">
+    <div class="docs-customizer__stage" id="docs-customizer-stage"></div>
+    <aside class="docs-customizer__panel">${axisPanelHtml}</aside>
+  </div>
+</dialog>`;
 }
 
 /** Names a token, optionally with a swatch of what it resolves to. */
@@ -143,6 +195,7 @@ export const DOCS_CSS = `
     --docs-specimen: 150px;
     --docs-figure: 72px;
     --docs-card: 230px;
+    --docs-customizer-panel: 280px;
   }
 
   html { scroll-behavior: smooth; scroll-padding-block-start: calc(var(--docs-topbar) + var(--area-space-24)); }
@@ -267,6 +320,72 @@ export const DOCS_CSS = `
     min-block-size: var(--docs-preview-min);
   }
   .docs-example__preview--column { flex-direction: column; align-items: flex-start; justify-content: flex-start; }
+
+  /* --- Customizer --------------------------------------------------------- */
+
+  .docs-customizer {
+    inline-size: 100vw;
+    max-inline-size: 100vw;
+    block-size: 100vh;
+    max-block-size: 100vh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: var(--area-bg-page);
+    color: var(--area-fg-default);
+    overflow: hidden;
+  }
+  .docs-customizer::backdrop { background-color: var(--area-bg-overlay); }
+
+  .docs-customizer__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    block-size: var(--docs-topbar);
+    padding-inline: var(--area-space-16);
+    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
+  }
+  .docs-customizer__title { font-weight: var(--area-weight-strong); }
+  .docs-customizer__name { color: var(--area-fg-muted); font-family: var(--area-font-mono); font-size: var(--area-ui-size); }
+  .docs-customizer__bar .area-button:last-child { margin-inline-start: auto; }
+
+  .docs-customizer__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--docs-customizer-panel);
+    block-size: calc(100vh - var(--docs-topbar));
+  }
+
+  /*
+   * The stage is where the component is actually judged, so it gets the page surface and
+   * nothing else -- no card, no border. A frame around a component being evaluated for its
+   * own borders and elevation is exactly the wrong context.
+   */
+  .docs-customizer__stage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--area-space-16);
+    padding: var(--area-space-48);
+    overflow: auto;
+  }
+
+  .docs-customizer__panel {
+    border-inline-start: var(--area-border-width) solid var(--area-border-subtle);
+    background-color: var(--area-bg-subtle);
+    padding: var(--area-space-16);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-16);
+  }
+  .docs-customizer__panel .docs-axis { gap: var(--area-space-6); }
+  .docs-customizer__panel .area-segmented { flex-wrap: wrap; }
+
+  @media (max-width: 820px) {
+    .docs-customizer__body { grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr auto; }
+    .docs-customizer__panel { border-inline-start: 0; border-block-start: var(--area-border-width) solid var(--area-border-subtle); }
+  }
 
   /* --- Paired views ------------------------------------------------------ */
 
@@ -423,6 +542,38 @@ export const DOCS_SCRIPT = `
         if (on) button.setAttribute("data-selected", ""); else button.removeAttribute("data-selected");
         button.setAttribute("aria-checked", on ? "true" : "false");
       });
+      return;
+    }
+
+    var reset = event.target.closest("[data-reset]");
+    if (reset) {
+      // Re-parsing the markup is what actually resets a demo: the previews contain real
+      // inputs, and their checked/value state lives in the DOM, not in the markup.
+      var frame = reset.closest(".docs-example");
+      var preview = frame && frame.querySelector(".docs-example__preview");
+      if (preview) preview.innerHTML = preview.innerHTML;
+      return;
+    }
+
+    var customize = event.target.closest("[data-customize]");
+    if (customize) {
+      var host = customize.closest(".docs-example");
+      var source = host && host.querySelector(".docs-example__preview");
+      var modal = document.getElementById("docs-customizer");
+      if (source && modal) {
+        document.getElementById("docs-customizer-stage").innerHTML = source.innerHTML;
+        var heading = host.previousElementSibling;
+        while (heading && heading.tagName !== "H3") heading = heading.previousElementSibling;
+        document.getElementById("docs-customizer-name").textContent =
+          (document.querySelector(".docs-title") || {}).textContent + (heading ? " / " + heading.textContent : "");
+        modal.showModal();
+      }
+      return;
+    }
+
+    var closeCustomizer = event.target.closest("[data-customizer-close]");
+    if (closeCustomizer) {
+      document.getElementById("docs-customizer").close();
       return;
     }
 
