@@ -29,9 +29,10 @@ it is a hairline (`1px`) or a mask geometry. If a value is not on a ramp, derive
 `calc()` from values that are — or change the ramp.
 
 **Contrast is a build gate.** `packages/tokens/src/contrast/` asserts every pairing a
-component can render, across all 72 shipped themes, under WCAG 2.2 always and APCA as a
-hard gate in dark themes. To change a colour, change the curve in `color/curves.ts` and let
-the gate tell you what broke; `contrast/report.ts` groups failures by assertion.
+component can render, across all 144 shipped themes, under WCAG 2.2 always and APCA as a
+hard gate in dark themes. To change a colour, change `LEVELS` or `INVERSION` in
+`color/curves.ts` and let the gate tell you what broke; `contrast/report.ts` groups
+failures by assertion rather than printing them one theme at a time.
 
 **The CSS and the React API cannot drift.** Both derive from `packages/styles/src/manifest.ts`.
 `check-manifest-parity.mjs` fails if a declared variant has no selector, or a selector
@@ -126,9 +127,42 @@ is thirteen CSS blocks, not thirty-six, and adding a tone costs one block. Never
 `.area-button--{tone}.area-button--{variant}` pair.
 
 Three warm roles is more than hue separation alone can carry — danger to warning is 30
-degrees, short of the 50 that keeps two tones from reading as one signal. They stay
-distinguishable on lightness instead (orange L 0.77, yellow L 0.91). That is the cost of
-eight tones and it is recorded in `color/presets.ts` rather than left to be rediscovered.
+degrees, short of the 50 that keeps two tones from reading as one signal. What separates
+them is where each solid lands on the ladder: red can stay saturated at L 0.58 and carry
+white text, while yellow cannot be both saturated and dark, so its fill sits at L 0.90 with
+black text. A danger button and a caution button differ in weight, not only in hue. That is
+the cost of eight tones and it is recorded in `color/presets.ts` rather than rediscovered.
+
+## Colour
+
+**A level name is a lightness.** `blue-58` is the blue at OKLCh L 0.58 — in every scale, in
+both themes. `assertLadder()` re-reads the emitted colour and fails the build if it comes
+back at a different lightness, so the name cannot quietly become a lie. This is the same
+reasoning spacing uses, and it buys the property an ordinal scale cannot promise: two hues
+at the same level weigh the same, so swapping a tone does not change the weight of a layout.
+
+**A level is a colour, not a job.** Which level is a background and which is a border is a
+decision the semantic layer makes, per theme, in one table — `INVERSION`. Never reach for a
+numbered level from component CSS; that is what the semantic tokens are for. The one
+previous exception, the primary button reaching for `--area-neutral-12`, is exactly the bug
+this rule prevents: it could not flip with the theme.
+
+**Dark mode is the same ramp read from the other end.** There is one set of colours per
+scale, not two. `--area-blue-58` is byte-identical in both themes; only the level each slot
+reads changes. The dark column is deliberately not an exact mirror — separation near black
+needs more lightness distance to read as the same visual step.
+
+**Chroma takes what the gamut allows.** `CHROMA_FRACTION` is near-flat at 0.85–0.95 because
+the sRGB boundary already has a strong shape: at L 0.95 a yellow reaches C 0.107 where a
+blue reaches 0.024. Multiplying that by a second bell curve desaturates twice, which is what
+made the previous teal and cyan peak at C 0.09 against violet's 0.24. Each hue therefore
+peaks at a *different level*, which is a fact about the gamut and not a choice.
+
+**Hue is constant down a scale.** There is no drift table. OKLab was fit to hold perceived
+hue under lightness change, which is why this system chose it; layering CIELCh-era Abney
+compensation on top double-corrects, and it broke a promise worth keeping — any two steps of
+`red` are now the same hue and harmonise by construction. The honest cost is that a dark
+yellow is olive, because a dark yellow is olive.
 
 ## Documentation sections
 

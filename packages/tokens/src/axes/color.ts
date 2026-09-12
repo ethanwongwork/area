@@ -3,8 +3,8 @@
  *
  * Three separate axes rather than one, because their token namespaces are disjoint and
  * therefore compose. `--area-neutral-*` and everything derived from it belongs to the
- * neutral axis; `--area-accent-*` to the accent axis. Twelve accents times three neutrals
- * is thirty-six looks from fifteen CSS blocks rather than thirty-six.
+ * neutral axis; `--area-accent-*` to the accent axis. Twelve accents times six neutrals is
+ * seventy-two looks from eighteen CSS blocks rather than seventy-two.
  *
  * The theme axis carries what neither of the others owns: every scale's primitive ramp,
  * the fixed semantic tones (danger, warning, success, info), and the shadow colour.

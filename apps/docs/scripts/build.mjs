@@ -923,7 +923,7 @@ ${table(
 <h2 class="docs-h2" id="principles">Principles</h2>
 <div class="docs-prose">
 <p><strong>Every number is derived.</strong> A control's corner radius is a proportion of its height; a menu item's radius is its panel's radius less the panel's padding. Those relationships are expressed once, in <code class='area-code'>calc()</code>, so they stay true under every combination of axes.</p>
-<p><strong>Contrast is a build gate.</strong> Every colour pairing a component can render is asserted under WCAG 2.2 and APCA across all 72 shipped themes. A failing colour cannot be published.</p>
+<p><strong>Contrast is a build gate.</strong> Every colour pairing a component can render is asserted under WCAG 2.2 and APCA across all 144 shipped themes. A failing colour cannot be published.</p>
 <p><strong>The CSS and the React API cannot drift.</strong> Both are generated from one manifest per component, and a script fails the build if a declared variant has no selector, or a selector exists that was never declared.</p>
 <p><strong>Documentation cannot lie.</strong> Every preview on this site is the real component rendered, and every snippet is that same demo's source.</p>
 </div>`;
