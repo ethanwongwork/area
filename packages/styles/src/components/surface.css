@@ -1,0 +1,280 @@
+/* ---------------------------------------------------------------------------
+ * Card, Alert, Dialog, Popover, Menu, Tooltip, Toast
+ *
+ * Every floating surface in the system, grouped because they share one geometry rule:
+ * concentric corners. A container's inner radius is its outer radius less its own
+ * padding. Applying that rule is why a 32px control inside a 12px panel with 6px of
+ * padding takes a 6px radius and looks nested rather than pasted on.
+ *
+ * The rule is applied per component rather than through one global token because the
+ * inset differs per component -- a menu pads 6px, a card pads 16px -- so there is no
+ * single correct value for a shared token to hold.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* --- Card --------------------------------------------------------------- */
+  .area-card {
+    --_inset: var(--area-space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-12);
+    padding: var(--_inset);
+    border: var(--area-border-width) solid var(--area-border-subtle);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    box-shadow: var(--area-shadow-1);
+  }
+
+  .area-card__title {
+    font-size: var(--area-heading-xs-size);
+    line-height: var(--area-heading-xs-leading);
+    letter-spacing: var(--area-heading-xs-tracking);
+    font-weight: var(--area-weight-semibold);
+  }
+
+  .area-card__description {
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    color: var(--area-fg-muted);
+  }
+
+  .area-card__footer {
+    display: flex;
+    gap: var(--area-space-8);
+    justify-content: flex-end;
+  }
+
+  /* Concentric: a media block bleeds to the card's edge and inherits the inner radius. */
+  .area-card__media {
+    margin: calc(var(--_inset) * -1) calc(var(--_inset) * -1) 0;
+    border-start-start-radius: calc(var(--area-radius-container) - var(--area-border-width));
+    border-start-end-radius: calc(var(--area-radius-container) - var(--area-border-width));
+    overflow: hidden;
+  }
+
+  /* --- Alert -------------------------------------------------------------- */
+  .area-alert {
+    --_bg: var(--area-bg-component);
+    --_fg: var(--area-fg-default);
+    --_border: var(--area-border-subtle);
+
+    display: flex;
+    gap: var(--area-space-10);
+    padding: var(--area-space-12);
+    border: var(--area-border-width) solid var(--_border);
+    border-radius: var(--area-radius-container);
+    background-color: var(--_bg);
+    color: var(--_fg);
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+  }
+
+  .area-alert__icon {
+    flex-shrink: 0;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+  }
+
+  .area-alert__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-2);
+    min-inline-size: 0;
+  }
+
+  .area-alert__title { font-weight: var(--area-weight-medium); }
+  .area-alert__description { color: var(--area-fg-muted); }
+
+  .area-alert--info    { --_bg: var(--area-info-surface);    --_fg: var(--area-fg-info);    --_border: var(--area-info-border); }
+  .area-alert--danger  { --_bg: var(--area-danger-surface);  --_fg: var(--area-fg-danger);  --_border: var(--area-danger-border); }
+  .area-alert--warning { --_bg: var(--area-warning-surface); --_fg: var(--area-fg-warning); --_border: var(--area-warning-border); }
+  .area-alert--success { --_bg: var(--area-success-surface); --_fg: var(--area-fg-success); --_border: var(--area-success-border); }
+
+  /* The body text stays readable rather than taking the tone colour. */
+  .area-alert--info .area-alert__description,
+  .area-alert--danger .area-alert__description,
+  .area-alert--warning .area-alert__description,
+  .area-alert--success .area-alert__description {
+    color: inherit;
+    opacity: 0.85;
+  }
+
+  /* --- Dialog ------------------------------------------------------------- */
+  .area-dialog {
+    inline-size: min(calc(100vw - var(--area-space-32)), 480px);
+    max-block-size: calc(100vh - var(--area-space-64));
+    padding: 0;
+    border: var(--area-border-width) solid var(--area-border-subtle);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    box-shadow: var(--area-shadow-4);
+    overflow: hidden;
+  }
+
+  .area-dialog::backdrop {
+    background-color: var(--area-bg-overlay);
+    backdrop-filter: blur(2px);
+  }
+
+  .area-dialog__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--area-space-12);
+    padding: var(--area-space-16);
+    padding-block-end: var(--area-space-8);
+  }
+
+  .area-dialog__title {
+    font-size: var(--area-heading-xs-size);
+    line-height: var(--area-heading-xs-leading);
+    letter-spacing: var(--area-heading-xs-tracking);
+    font-weight: var(--area-weight-semibold);
+  }
+
+  .area-dialog__description {
+    margin-block-start: var(--area-space-4);
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    color: var(--area-fg-muted);
+  }
+
+  /* flex-basis 0 with overflow hidden is what lets the body scroll inside a flex column. */
+  .area-dialog__body {
+    flex: 1 1 0;
+    padding-inline: var(--area-space-16);
+    overflow-y: auto;
+  }
+
+  .area-dialog__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--area-space-8);
+    padding: var(--area-space-16);
+  }
+
+  /* --- Popover and Menu --------------------------------------------------- */
+  .area-popover,
+  .area-menu {
+    --_inset: var(--area-space-6);
+    padding: var(--_inset);
+    border: var(--area-border-width) solid var(--area-border-subtle);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    box-shadow: var(--area-shadow-3);
+  }
+
+  .area-popover {
+    --_inset: var(--area-space-12);
+    min-inline-size: 200px;
+  }
+
+  .area-menu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-2);
+    min-inline-size: 180px;
+  }
+
+  /*
+   * Concentric corners, applied. The panel is 12px with 6px of padding, so an item is
+   * 6px -- which is exactly where OpenAI (12 less 6) and Notion (10 less 4) both land.
+   */
+  .area-menu__item {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    block-size: var(--area-control-md);
+    padding-inline: var(--area-space-8);
+    border: 0;
+    border-radius: calc(var(--area-radius-container) - var(--_inset));
+    background: transparent;
+    color: inherit;
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    text-align: start;
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+
+  .area-menu__item:hover:not([data-disabled]),
+  .area-menu__item[data-highlighted] {
+    background-color: var(--area-bg-hover);
+  }
+
+  .area-menu__item[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .area-menu__item--danger { color: var(--area-fg-danger); }
+  .area-menu__item--danger:hover:not([data-disabled]) { background-color: var(--area-danger-surface); }
+
+  .area-menu__label {
+    padding: var(--area-space-6) var(--area-space-8) var(--area-space-2);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    color: var(--area-fg-muted);
+  }
+
+  /* Negative inline margin so the rule spans the panel, not just the item column. */
+  .area-menu__separator {
+    block-size: 1px;
+    margin: var(--area-space-4) calc(var(--_inset) * -1);
+    background-color: var(--area-border-subtle);
+  }
+
+  .area-menu__shortcut {
+    margin-inline-start: auto;
+    padding-inline-start: var(--area-space-12);
+    color: var(--area-fg-subtle);
+    font-size: var(--area-text-xs-size);
+    font-family: var(--area-font-mono);
+  }
+
+  /* --- Tooltip ------------------------------------------------------------ */
+  /*
+   * Inverted rather than tinted, so it reads as an annotation on the interface rather
+   * than as another surface within it.
+   */
+  .area-tooltip {
+    padding: var(--area-space-6) var(--area-space-8);
+    border-radius: var(--area-radius-small);
+    background-color: var(--area-bg-inverse);
+    color: var(--area-fg-on-inverse);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    max-inline-size: 260px;
+    box-shadow: var(--area-shadow-2);
+  }
+
+  /* --- Toast -------------------------------------------------------------- */
+  .area-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--area-space-10);
+    padding: var(--area-space-12);
+    border: var(--area-border-width) solid var(--area-border-subtle);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    box-shadow: var(--area-shadow-3);
+    min-inline-size: 280px;
+    max-inline-size: 380px;
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+  }
+
+  .area-toast__icon {
+    flex-shrink: 0;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+  }
+
+  .area-toast--danger .area-toast__icon  { color: var(--area-fg-danger); }
+  .area-toast--warning .area-toast__icon { color: var(--area-fg-warning); }
+  .area-toast--success .area-toast__icon { color: var(--area-fg-success); }
+  .area-toast--info .area-toast__icon    { color: var(--area-fg-info); }
+}

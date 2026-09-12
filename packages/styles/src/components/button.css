@@ -1,0 +1,291 @@
+/* ---------------------------------------------------------------------------
+ * Button
+ *
+ * The template every other component follows. Three things are worth reading here
+ * before writing the next one:
+ *
+ * 1. A variant sets local custom properties; the base rule is the only place that
+ *    consumes them. So a variant is three lines, not a re-declaration of the whole
+ *    component, and a new tone costs one block.
+ *
+ * 2. Size tiers set nothing but the tier tokens. Every dimension -- height, padding,
+ *    type, icon, gap -- comes from the density axis, so changing density moves all
+ *    five tiers at once and no component needs editing.
+ *
+ * 3. Foreground does not change on hover. Only background and border move. A label
+ *    that shifts colour under the cursor reads as a different control; it also makes
+ *    contrast unverifiable, because the pair being measured is no longer the pair
+ *    being rendered.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-button {
+    /* Tier: everything dimensional, resolved from the density axis. */
+    --_height: var(--area-control-md);
+    --_gutter: var(--area-gutter-md);
+    --_icon: var(--area-icon-md);
+    --_gap: var(--area-gap-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+
+    /* Skin: what a variant repoints. */
+    --_bg: transparent;
+    --_bg-hover: transparent;
+    --_bg-active: transparent;
+    --_fg: var(--area-fg-default);
+    --_border: transparent;
+    --_border-hover: transparent;
+    --_shadow: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--_gap);
+
+    block-size: var(--_height);
+    padding-inline: var(--_gutter);
+    border: var(--area-border-width) solid var(--_border);
+    border-radius: var(--area-radius-control);
+
+    font-family: inherit;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    font-weight: var(--area-weight-medium);
+    white-space: nowrap;
+    text-decoration: none;
+
+    background-color: var(--_bg);
+    color: var(--_fg);
+    box-shadow: var(--_shadow);
+    cursor: pointer;
+    user-select: none;
+    transition: var(--area-transition);
+  }
+
+  /* Icons are sized independently of the label, and never inherit font-size. */
+  .area-button__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+    flex-shrink: 0;
+  }
+
+  .area-button__icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /*
+   * The label is its own element so it can truncate without dragging the icon with it,
+   * and so `min-inline-size: 0` applies to the text rather than the flex container.
+   */
+  .area-button__label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /*
+   * Optical padding. A leading icon is a hard-edged shape where a label is not, so an
+   * equal padding either side reads as too much space on the icon side. Setting the
+   * icon-side padding to (height - icon) / 2 centres the icon in the same square the
+   * control's own corner radius is cut from, which is what makes it look even.
+   */
+  .area-button:has(> .area-button__icon:first-child) {
+    padding-inline-start: calc((var(--_height) - var(--_icon)) / 2);
+  }
+
+  .area-button:has(> .area-button__icon:last-child) {
+    padding-inline-end: calc((var(--_height) - var(--_icon)) / 2);
+  }
+
+  .area-button--icon-only {
+    padding-inline: 0;
+    inline-size: var(--_height);
+  }
+
+  .area-button--full-width {
+    inline-size: 100%;
+  }
+
+  /* --- States ------------------------------------------------------------- */
+
+  .area-button:hover:not(:disabled):not([data-loading]) {
+    background-color: var(--_bg-hover);
+    border-color: var(--_border-hover);
+  }
+
+  .area-button:active:not(:disabled):not([data-loading]) {
+    background-color: var(--_bg-active);
+  }
+
+  .area-button:focus-visible {
+    outline: none;
+    box-shadow: var(--_shadow), var(--area-ring);
+  }
+
+  .area-button:disabled,
+  .area-button[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .area-button[data-loading] {
+    cursor: progress;
+  }
+
+  /* --- Variants ----------------------------------------------------------- */
+
+  .area-button--solid {
+    --_bg: var(--area-accent-solid);
+    --_bg-hover: var(--area-accent-solid-hover);
+    --_bg-active: var(--area-accent-solid-hover);
+    --_fg: var(--area-fg-on-accent);
+    --_shadow: var(--area-shadow-1);
+  }
+
+  .area-button--soft {
+    --_bg: var(--area-accent-surface);
+    --_bg-hover: var(--area-accent-surface-hover);
+    --_bg-active: var(--area-accent-surface-active);
+    --_fg: var(--area-fg-accent);
+  }
+
+  .area-button--outline {
+    --_bg: var(--area-bg-surface);
+    --_bg-hover: var(--area-bg-component);
+    --_bg-active: var(--area-bg-component-hover);
+    --_fg: var(--area-fg-default);
+    --_border: var(--area-border);
+    --_border-hover: var(--area-border-hover);
+    --_shadow: var(--area-shadow-1);
+  }
+
+  .area-button--ghost {
+    --_bg: transparent;
+    --_bg-hover: var(--area-bg-hover);
+    --_bg-active: var(--area-bg-active);
+    --_fg: var(--area-fg-default);
+  }
+
+  /* --- Tones -------------------------------------------------------------- */
+  /*
+   * A tone repoints the same four slots at a different scale. Because every scale has
+   * the same twelve roles, the block is identical for every tone -- which is the
+   * property that makes adding one a copy-paste rather than a design exercise.
+   */
+
+  .area-button--neutral.area-button--solid {
+    --_bg: var(--area-fg-default);
+    --_bg-hover: var(--area-neutral-11);
+    --_bg-active: var(--area-neutral-11);
+    --_fg: var(--area-bg-surface);
+  }
+
+  .area-button--neutral.area-button--soft {
+    --_bg: var(--area-bg-component);
+    --_bg-hover: var(--area-bg-component-hover);
+    --_bg-active: var(--area-bg-component-active);
+    --_fg: var(--area-fg-default);
+  }
+
+  .area-button--neutral.area-button--outline,
+  .area-button--neutral.area-button--ghost {
+    --_fg: var(--area-fg-default);
+  }
+
+  .area-button--danger.area-button--solid {
+    --_bg: var(--area-danger-solid);
+    --_bg-hover: var(--area-danger-solid-hover);
+    --_bg-active: var(--area-danger-solid-hover);
+    --_fg: var(--area-fg-on-danger);
+  }
+
+  .area-button--danger.area-button--soft {
+    --_bg: var(--area-danger-surface);
+    --_bg-hover: var(--area-danger-surface-hover);
+    --_bg-active: var(--area-danger-surface-active);
+    --_fg: var(--area-fg-danger);
+  }
+
+  .area-button--danger.area-button--outline {
+    --_fg: var(--area-fg-danger);
+    --_border: var(--area-danger-border);
+    --_border-hover: var(--area-danger-border-strong);
+    --_bg-hover: var(--area-danger-surface);
+    --_bg-active: var(--area-danger-surface-hover);
+  }
+
+  .area-button--danger.area-button--ghost {
+    --_fg: var(--area-fg-danger);
+    --_bg-hover: var(--area-danger-surface);
+    --_bg-active: var(--area-danger-surface-hover);
+  }
+
+  .area-button--accent.area-button--outline {
+    --_fg: var(--area-fg-accent);
+    --_border: var(--area-accent-border);
+    --_border-hover: var(--area-accent-border-strong);
+    --_bg-hover: var(--area-accent-surface);
+    --_bg-active: var(--area-accent-surface-hover);
+  }
+
+  .area-button--accent.area-button--ghost {
+    --_fg: var(--area-fg-accent);
+    --_bg-hover: var(--area-accent-surface);
+    --_bg-active: var(--area-accent-surface-hover);
+  }
+
+  /* --- Sizes -------------------------------------------------------------- */
+  /*
+   * A tier sets only tier tokens. Nothing here is a pixel value: every one of these
+   * resolves through the density axis, so all five tiers move together when density
+   * changes and no size block ever needs editing.
+   */
+
+  .area-button--xs {
+    --_height: var(--area-control-xs);
+    --_gutter: var(--area-gutter-xs);
+    --_icon: var(--area-icon-xs);
+    --_gap: var(--area-gap-xs);
+    --_text: var(--area-control-xs-text);
+    --_leading: var(--area-control-xs-leading);
+  }
+
+  .area-button--sm {
+    --_height: var(--area-control-sm);
+    --_gutter: var(--area-gutter-sm);
+    --_icon: var(--area-icon-sm);
+    --_gap: var(--area-gap-sm);
+    --_text: var(--area-control-sm-text);
+    --_leading: var(--area-control-sm-leading);
+  }
+
+  .area-button--md {
+    --_height: var(--area-control-md);
+    --_gutter: var(--area-gutter-md);
+    --_icon: var(--area-icon-md);
+    --_gap: var(--area-gap-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+  }
+
+  .area-button--lg {
+    --_height: var(--area-control-lg);
+    --_gutter: var(--area-gutter-lg);
+    --_icon: var(--area-icon-lg);
+    --_gap: var(--area-gap-lg);
+    --_text: var(--area-control-lg-text);
+    --_leading: var(--area-control-lg-leading);
+  }
+
+  .area-button--xl {
+    --_height: var(--area-control-xl);
+    --_gutter: var(--area-gutter-xl);
+    --_icon: var(--area-icon-xl);
+    --_gap: var(--area-gap-xl);
+    --_text: var(--area-control-xl-text);
+    --_leading: var(--area-control-xl-leading);
+  }
+}

@@ -1,0 +1,198 @@
+/* ---------------------------------------------------------------------------
+ * Badge, Avatar, Separator, Skeleton, Spinner, Progress
+ *
+ * The non-interactive primitives. Grouped because none of them has states, so none
+ * needs the hover/focus/disabled machinery the controls carry.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* --- Badge -------------------------------------------------------------- */
+  /*
+   * A badge is distinguished from a button by the absence of a stroke, not by its
+   * corner radius. Giving it a pill shape would make it read as an interactive chip.
+   */
+  .area-badge {
+    --_bg: var(--area-bg-component);
+    --_fg: var(--area-fg-default);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    padding-inline: var(--area-space-6);
+    block-size: var(--area-control-xs);
+    border-radius: var(--area-radius-small);
+    background-color: var(--_bg);
+    color: var(--_fg);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-weight: var(--area-weight-medium);
+    white-space: nowrap;
+  }
+
+  .area-badge__dot {
+    inline-size: var(--area-space-6);
+    block-size: var(--area-space-6);
+    border-radius: var(--area-radius-full);
+    background-color: currentcolor;
+    flex-shrink: 0;
+  }
+
+  .area-badge--neutral { --_bg: var(--area-bg-component); --_fg: var(--area-fg-muted); }
+  .area-badge--accent  { --_bg: var(--area-accent-surface); --_fg: var(--area-fg-accent); }
+  .area-badge--danger  { --_bg: var(--area-danger-surface); --_fg: var(--area-fg-danger); }
+  .area-badge--warning { --_bg: var(--area-warning-surface); --_fg: var(--area-fg-warning); }
+  .area-badge--success { --_bg: var(--area-success-surface); --_fg: var(--area-fg-success); }
+
+  .area-badge--solid.area-badge--neutral { --_bg: var(--area-fg-default); --_fg: var(--area-bg-surface); }
+  .area-badge--solid.area-badge--accent  { --_bg: var(--area-accent-solid); --_fg: var(--area-fg-on-accent); }
+  .area-badge--solid.area-badge--danger  { --_bg: var(--area-danger-solid); --_fg: var(--area-fg-on-danger); }
+  .area-badge--solid.area-badge--warning { --_bg: var(--area-warning-solid); --_fg: var(--area-fg-on-warning); }
+  .area-badge--solid.area-badge--success { --_bg: var(--area-success-solid); --_fg: var(--area-fg-on-success); }
+
+  .area-badge--outline {
+    --_bg: transparent;
+    border: var(--area-border-width) solid var(--area-border);
+  }
+
+  /* --- Avatar ------------------------------------------------------------- */
+  .area-avatar {
+    --_size: var(--area-control-md);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    flex-shrink: 0;
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-bg-component-active);
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    font-weight: var(--area-weight-medium);
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .area-avatar__image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .area-avatar--square { border-radius: var(--area-radius-control); }
+
+  .area-avatar--xs { --_size: var(--area-control-xs); }
+  .area-avatar--sm { --_size: var(--area-control-sm); }
+  .area-avatar--md { --_size: var(--area-control-md); }
+  .area-avatar--lg { --_size: var(--area-control-lg); }
+  .area-avatar--xl { --_size: var(--area-control-xl); }
+
+  /* --- Separator ---------------------------------------------------------- */
+  .area-separator {
+    border: 0;
+    background-color: var(--area-border-subtle);
+    flex-shrink: 0;
+  }
+
+  .area-separator--horizontal {
+    inline-size: 100%;
+    block-size: 1px;
+  }
+
+  .area-separator--vertical {
+    inline-size: 1px;
+    block-size: 100%;
+    align-self: stretch;
+  }
+
+  /* --- Skeleton ----------------------------------------------------------- */
+  /*
+   * The shimmer travels rather than pulsing, because a pulse reads as a state change
+   * while a travelling highlight reads as loading. It is suppressed entirely when the
+   * motion axis is off.
+   */
+  .area-skeleton {
+    display: block;
+    border-radius: var(--area-radius-small);
+    background-color: var(--area-bg-component);
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      var(--area-bg-component-active),
+      transparent
+    );
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: area-shimmer 1.4s ease-in-out infinite;
+  }
+
+  .area-skeleton--text {
+    block-size: var(--area-text-md-leading);
+    border-radius: var(--area-radius-2);
+  }
+
+  .area-skeleton--circle { border-radius: var(--area-radius-full); }
+
+  @keyframes area-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -100% 0; }
+  }
+
+  /* --- Spinner ------------------------------------------------------------ */
+  .area-spinner {
+    --_size: var(--area-icon-md);
+    display: inline-block;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    border: 2px solid var(--area-bg-component-active);
+    border-top-color: var(--area-accent-solid);
+    border-radius: var(--area-radius-full);
+    animation: area-spin 0.7s linear infinite;
+  }
+
+  .area-spinner--sm { --_size: var(--area-icon-sm); }
+  .area-spinner--md { --_size: var(--area-icon-md); }
+  .area-spinner--lg { --_size: var(--area-icon-lg); }
+
+  @keyframes area-spin {
+    to { rotate: 360deg; }
+  }
+
+  /* --- Progress ----------------------------------------------------------- */
+  .area-progress {
+    inline-size: 100%;
+    block-size: var(--area-space-6);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-bg-component-active);
+    overflow: hidden;
+  }
+
+  .area-progress__bar {
+    block-size: 100%;
+    border-radius: inherit;
+    background-color: var(--area-accent-solid);
+    transition: inline-size var(--area-duration-slow) var(--area-ease-out);
+  }
+
+  /*
+   * Indeterminate is a travelling segment rather than a full-width pulse, so it cannot
+   * be mistaken for a determinate bar sitting at 100%.
+   */
+  .area-progress[data-indeterminate] .area-progress__bar {
+    inline-size: 35%;
+    animation: area-progress-indeterminate 1.1s var(--area-ease-in-out) infinite;
+  }
+
+  @keyframes area-progress-indeterminate {
+    from { translate: -100% 0; }
+    to { translate: 340% 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .area-skeleton,
+    .area-spinner,
+    .area-progress[data-indeterminate] .area-progress__bar {
+      animation: none;
+    }
+    .area-skeleton { background-image: none; }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@area/docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs && node scripts/serve.mjs"
+  },
+  "dependencies": {
+    "@area/react": "*",
+    "@area/styles": "*",
+    "@area/tokens": "*"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "react": "^19",
+    "react-dom": "^19"
+  }
+}

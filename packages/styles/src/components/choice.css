@@ -1,0 +1,204 @@
+/* ---------------------------------------------------------------------------
+ * Checkbox, Radio, Switch
+ *
+ * One file, because the three share a single interaction contract and diverge only in
+ * shape. Keeping them together is what stops their checked, focus and disabled states
+ * drifting apart.
+ *
+ * Shape is the semantic signal and is never decorative: a checkbox is a rounded square
+ * because it is independent, a radio is a circle because it is exclusive, a switch is a
+ * track because it is immediate. Those three shapes are the only round-by-identity
+ * exceptions to the system's rounded-rectangle default.
+ *
+ * All three are built on a real input that stays in the DOM and keeps its native
+ * semantics and keyboard behaviour; `appearance: none` removes only the painting.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-checkbox,
+  .area-radio,
+  .area-switch {
+    --_size: var(--area-icon-md);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    cursor: pointer;
+  }
+
+  .area-checkbox[data-disabled],
+  .area-radio[data-disabled],
+  .area-switch[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .area-checkbox__control,
+  .area-radio__control {
+    appearance: none;
+    margin: 0;
+    flex-shrink: 0;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    border: var(--area-border-width) solid var(--area-border-hover);
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-1);
+    cursor: inherit;
+    transition: var(--area-transition);
+    display: grid;
+    place-content: center;
+  }
+
+  .area-checkbox__control {
+    border-radius: var(--area-radius-small);
+  }
+
+  .area-radio__control {
+    border-radius: var(--area-radius-full);
+  }
+
+  /*
+   * The mark is drawn with a mask rather than a pseudo-element glyph, so it inherits the
+   * checked foreground and scales exactly with the control instead of depending on a
+   * font metric.
+   */
+  .area-checkbox__control::after,
+  .area-radio__control::after {
+    content: "";
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    background-color: var(--area-fg-on-accent);
+    transform: scale(0);
+    transition: transform var(--area-duration-fast) var(--area-ease-spring);
+  }
+
+  .area-checkbox__control::after {
+    -webkit-mask: var(--_check) center / 68% no-repeat;
+    mask: var(--_check) center / 68% no-repeat;
+    --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round' d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+  }
+
+  .area-checkbox__control:indeterminate::after {
+    -webkit-mask: var(--_dash) center / 68% no-repeat;
+    mask: var(--_dash) center / 68% no-repeat;
+    --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2.25' stroke-linecap='round' d='M4 8h8'/%3E%3C/svg%3E");
+    transform: scale(1);
+  }
+
+  .area-radio__control::after {
+    border-radius: var(--area-radius-full);
+    inline-size: 40%;
+    block-size: 40%;
+  }
+
+  .area-checkbox__control:checked,
+  .area-checkbox__control:indeterminate,
+  .area-radio__control:checked {
+    background-color: var(--area-accent-solid);
+    border-color: var(--area-accent-solid);
+  }
+
+  .area-checkbox__control:checked::after,
+  .area-radio__control:checked::after {
+    transform: scale(1);
+  }
+
+  /* Checked controls darken on hover. Lightening washes the fill out. */
+  .area-checkbox__control:checked:hover,
+  .area-radio__control:checked:hover {
+    background-color: var(--area-accent-solid-hover);
+    border-color: var(--area-accent-solid-hover);
+  }
+
+  .area-checkbox__control:not(:checked):hover,
+  .area-radio__control:not(:checked):hover {
+    border-color: var(--area-fg-subtle);
+  }
+
+  .area-checkbox__control:focus-visible,
+  .area-radio__control:focus-visible,
+  .area-switch__control:focus-visible {
+    outline: none;
+    box-shadow: var(--area-shadow-1), var(--area-ring);
+  }
+
+  /* --- Switch ------------------------------------------------------------- */
+
+  .area-switch {
+    --_track-inline: calc(var(--area-control-md) - var(--area-space-4));
+    --_track-block: var(--area-icon-md);
+    --_thumb-inset: 2px;
+  }
+
+  .area-switch__control {
+    appearance: none;
+    margin: 0;
+    flex-shrink: 0;
+    position: relative;
+    inline-size: var(--_track-inline);
+    block-size: var(--_track-block);
+    border: 0;
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-bg-component-active);
+    cursor: inherit;
+    transition: var(--area-transition);
+  }
+
+  .area-switch__control::after {
+    content: "";
+    position: absolute;
+    inset-block-start: var(--_thumb-inset);
+    inset-inline-start: var(--_thumb-inset);
+    inline-size: calc(var(--_track-block) - var(--_thumb-inset) * 2);
+    block-size: calc(var(--_track-block) - var(--_thumb-inset) * 2);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-2);
+    transition: translate var(--area-duration-fast) var(--area-ease-out);
+  }
+
+  .area-switch__control:checked {
+    background-color: var(--area-accent-solid);
+  }
+
+  .area-switch__control:checked::after {
+    translate: calc(var(--_track-inline) - var(--_track-block)) 0;
+  }
+
+  .area-switch__control:hover:not(:disabled) {
+    background-color: var(--area-bg-component-hover);
+  }
+
+  .area-switch__control:checked:hover:not(:disabled) {
+    background-color: var(--area-accent-solid-hover);
+  }
+
+  /* --- Labels ------------------------------------------------------------- */
+
+  .area-choice-label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-2);
+  }
+
+  .area-choice-label__title {
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    color: var(--area-fg-default);
+  }
+
+  .area-choice-label__description {
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    color: var(--area-fg-muted);
+  }
+
+  /* --- Sizes -------------------------------------------------------------- */
+
+  .area-checkbox--sm, .area-radio--sm { --_size: var(--area-icon-sm); }
+  .area-checkbox--md, .area-radio--md { --_size: var(--area-icon-md); }
+  .area-checkbox--lg, .area-radio--lg { --_size: var(--area-icon-lg); }
+
+  .area-switch--sm { --_track-inline: calc(var(--area-control-sm) - var(--area-space-4)); --_track-block: var(--area-icon-sm); }
+  .area-switch--md { --_track-inline: calc(var(--area-control-md) - var(--area-space-4)); --_track-block: var(--area-icon-md); }
+  .area-switch--lg { --_track-inline: calc(var(--area-control-lg) - var(--area-space-4)); --_track-block: var(--area-icon-lg); }
+}

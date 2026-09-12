@@ -1,0 +1,58 @@
+/* ---------------------------------------------------------------------------
+ * Textarea
+ *
+ * Block padding rather than a fixed height, since the control grows. The native resize
+ * handle is kept -- hiding it removes a real affordance, and the component is still
+ * resizable either way.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-textarea {
+    --_gutter: var(--area-gutter-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+
+    display: block;
+    inline-size: 100%;
+    min-block-size: calc(var(--area-control-md) * 2);
+    padding: var(--area-space-8) var(--_gutter);
+
+    border: var(--area-border-width) solid var(--area-border);
+    border-radius: var(--area-radius-control);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    font-family: inherit;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    box-shadow: var(--area-shadow-1);
+    resize: vertical;
+    outline: none;
+    transition: var(--area-transition);
+  }
+
+  .area-textarea::placeholder {
+    color: var(--area-fg-placeholder);
+  }
+
+  .area-textarea:hover:not(:disabled):not(:focus) {
+    border-color: var(--area-border-hover);
+  }
+
+  .area-textarea:focus {
+    border-color: var(--area-border-focus);
+    box-shadow: var(--area-shadow-1), var(--area-ring);
+  }
+
+  .area-textarea[data-invalid] {
+    border-color: var(--area-danger-border-strong);
+  }
+
+  .area-textarea:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    resize: none;
+  }
+
+  .area-textarea--sm { --_gutter: var(--area-gutter-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-textarea--md { --_gutter: var(--area-gutter-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-textarea--lg { --_gutter: var(--area-gutter-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+}

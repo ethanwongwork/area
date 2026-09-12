@@ -1,3 +1,9 @@
 node_modules/
+dist/
+.turbo/
 *.log
 .DS_Store
+.astro/
+test-results/
+playwright-report/
+.cache/

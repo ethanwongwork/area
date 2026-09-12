@@ -1,0 +1,29 @@
+{
+  "name": "area",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Area — an axis-driven design system.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @area/tokens && npm run build -w @area/styles && npm run build -w @area/react",
+    "build:docs": "npm run build && npm run build -w @area/docs",
+    "test": "npm run test -w @area/tokens",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint:manifest": "npm run lint:manifest -w @area/styles",
+    "dev": "npm run dev -w @area/docs",
+    "clean": "rm -rf packages/*/dist apps/*/dist"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

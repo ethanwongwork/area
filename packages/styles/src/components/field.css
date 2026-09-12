@@ -1,0 +1,48 @@
+/* ---------------------------------------------------------------------------
+ * Field — the label, description and error wrapper every form control shares.
+ *
+ * Kept separate from the controls so that Input, Select, Textarea and the choice
+ * controls all get identical label geometry and identical error presentation, rather
+ * than four near-identical implementations that drift.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-6);
+  }
+
+  .area-field__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    font-weight: var(--area-weight-medium);
+    color: var(--area-fg-default);
+  }
+
+  /* Marked aria-hidden in the markup; the accessible name carries `required` instead. */
+  .area-field__required {
+    color: var(--area-fg-danger);
+  }
+
+  .area-field__description {
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    color: var(--area-fg-muted);
+  }
+
+  .area-field__error {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--area-space-4);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    color: var(--area-fg-danger);
+  }
+
+  .area-field[data-disabled] {
+    opacity: 0.5;
+  }
+}

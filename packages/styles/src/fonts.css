@@ -1,0 +1,40 @@
+/* ---------------------------------------------------------------------------
+ * Geist Sans and Geist Mono.
+ *
+ * Self-hosted from jsDelivr rather than Google Fonts. The Google build is subset to
+ * 288 glyphs with every stylistic set stripped -- including ss11, which is the one
+ * vercel.com itself enables. The npm build carries all 975.
+ *
+ * The fallback face is metric-adjusted. Geist's own metrics are unitsPerEm 1000,
+ * cap-height 710, x-height 530, giving a natural line-height of 1.30. Without the
+ * override, controls visibly resize when the webfont lands, and a 32px control with
+ * 14/20 text is tight enough that the jump is obvious.
+ * ------------------------------------------------------------------------- */
+@layer area.base {
+  @font-face {
+    font-family: "Geist";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("https://cdn.jsdelivr.net/npm/geist@1.7.2/dist/fonts/geist-sans/Geist-Variable.woff2")
+      format("woff2");
+  }
+
+  @font-face {
+    font-family: "Geist Mono";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("https://cdn.jsdelivr.net/npm/geist@1.7.2/dist/fonts/geist-mono/GeistMono-Variable.woff2")
+      format("woff2");
+  }
+
+  @font-face {
+    font-family: "Geist Fallback";
+    src: local("Helvetica Neue"), local("Arial"), local("Segoe UI");
+    size-adjust: 100%;
+    ascent-override: 100.5%;
+    descent-override: 29.5%;
+    line-gap-override: 0%;
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "@area/react",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "description": "Area React components. Contains no CSS.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./variants": "./src/variants.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "echo '  @area/react — source-only package, nothing to build.'",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^18.3 || ^19",
+    "react-dom": "^18.3 || ^19"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@area/styles": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "typescript": "^5.7.0"
+  }
+}

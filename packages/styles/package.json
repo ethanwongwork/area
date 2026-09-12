@@ -1,0 +1,24 @@
+{
+  "name": "@area/styles",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": ["*.css"],
+  "description": "Area component CSS. Framework-agnostic.",
+  "exports": {
+    ".": "./dist/area.css",
+    "./area.css": "./dist/area.css",
+    "./manifest": "./src/manifest.ts"
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "node scripts/build.mjs && node scripts/check-manifest-parity.mjs",
+    "lint:manifest": "node scripts/check-manifest-parity.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@area/tokens": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

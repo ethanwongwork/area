@@ -1,0 +1,174 @@
+/* ---------------------------------------------------------------------------
+ * Tabs, Table, Select
+ *
+ * Tabs use an underbar rather than a filled pill, so that Tabs and a segmented control
+ * stay visually distinguishable: one navigates between views, the other picks a value.
+ * Giving both a fill is the most common way those two end up looking identical.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* --- Tabs --------------------------------------------------------------- */
+  .area-tabs {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .area-tabs__list {
+    display: flex;
+    gap: var(--area-space-4);
+    border-block-end: 1px solid var(--area-border-subtle);
+  }
+
+  .area-tabs__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-6);
+    block-size: var(--area-control-lg);
+    padding-inline: var(--area-space-10);
+    border: 0;
+    background: transparent;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    font-weight: var(--area-weight-medium);
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+
+  .area-tabs__tab::after {
+    content: "";
+    position: absolute;
+    inset-inline: var(--area-space-4);
+    inset-block-end: -1px;
+    block-size: 2px;
+    border-radius: var(--area-radius-full) var(--area-radius-full) 0 0;
+    background-color: transparent;
+    transition: var(--area-transition);
+  }
+
+  .area-tabs__tab:hover:not([data-disabled]) { color: var(--area-fg-default); }
+
+  /*
+   * The active indicator is the foreground colour, not the accent. Reserving accent for
+   * things that are genuinely actionable keeps a page of tabs from reading as a page of
+   * buttons -- and it means the accent axis cannot accidentally recolour navigation.
+   */
+  .area-tabs__tab[data-selected] {
+    color: var(--area-fg-default);
+  }
+
+  .area-tabs__tab[data-selected]::after {
+    background-color: var(--area-fg-default);
+  }
+
+  .area-tabs__tab:focus-visible {
+    outline: none;
+    border-radius: var(--area-radius-control);
+    box-shadow: var(--area-ring);
+  }
+
+  .area-tabs__tab[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .area-tabs__panel {
+    padding-block-start: var(--area-space-16);
+  }
+
+  /* --- Table -------------------------------------------------------------- */
+  .area-table-wrapper {
+    inline-size: 100%;
+    overflow-x: auto;
+    border: var(--area-border-width) solid var(--area-border-subtle);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+  }
+
+  .area-table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+  }
+
+  .area-table th,
+  .area-table td {
+    padding: var(--area-space-10) var(--area-space-12);
+    text-align: start;
+    vertical-align: middle;
+  }
+
+  .area-table th {
+    background-color: var(--area-bg-subtle);
+    color: var(--area-fg-muted);
+    font-weight: var(--area-weight-medium);
+    white-space: nowrap;
+  }
+
+  .area-table thead th { border-block-end: 1px solid var(--area-border-subtle); }
+  .area-table tbody tr + tr td { border-block-start: 1px solid var(--area-border-subtle); }
+
+  .area-table--interactive tbody tr:hover td { background-color: var(--area-bg-hover); }
+
+  /* Tabular figures so columns of numbers align on the decimal. */
+  .area-table__cell--numeric {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Select ------------------------------------------------------------- */
+  /*
+   * A native <select> with its own chevron. The chevron is a background image rather
+   * than a sibling element so the control stays a single focusable node with native
+   * keyboard behaviour intact.
+   */
+  .area-select {
+    --_height: var(--area-control-md);
+    --_gutter: var(--area-gutter-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    inline-size: 100%;
+    block-size: var(--_height);
+    padding-inline: var(--_gutter);
+    padding-inline-end: calc(var(--_gutter) + var(--area-icon-md) + var(--area-space-4));
+
+    border: var(--area-border-width) solid var(--area-border);
+    border-radius: var(--area-radius-control);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    box-shadow: var(--area-shadow-1);
+    cursor: pointer;
+    outline: none;
+    transition: var(--area-transition);
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--_gutter) center;
+    background-size: var(--area-icon-md);
+  }
+
+  [dir="rtl"] .area-select { background-position: left var(--_gutter) center; }
+
+  .area-select:hover:not(:disabled):not(:focus) { border-color: var(--area-border-hover); }
+
+  .area-select:focus-visible {
+    border-color: var(--area-border-focus);
+    box-shadow: var(--area-shadow-1), var(--area-ring);
+  }
+
+  .area-select:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .area-select--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-select--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-select--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+}

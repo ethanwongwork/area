@@ -1,0 +1,176 @@
+/**
+ * The colour axes: theme, neutral, and accent.
+ *
+ * Three separate axes rather than one, because their token namespaces are disjoint and
+ * therefore compose. `--area-neutral-*` and everything derived from it belongs to the
+ * neutral axis; `--area-accent-*` to the accent axis. Twelve accents times three neutrals
+ * is thirty-six looks from fifteen CSS blocks rather than thirty-six.
+ *
+ * The theme axis carries what neither of the others owns: every scale's primitive ramp,
+ * the fixed semantic tones (danger, warning, success, info), and the shadow colour.
+ */
+import { type AxisDefinition, type AxisPreset, type TokenMap, tokens } from "./schema.ts";
+import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "../color/presets.ts";
+import { type Theme } from "../color/scale.ts";
+import { type ResolvedTheme, DEFAULT_SELECTION, resolveTheme } from "../semantic/resolve.ts";
+import { SEMANTIC_ALIASES, type Alias } from "../semantic/aliases.ts";
+
+/** Semantic tokens whose alias points at a given role. */
+function tokensForRole(theme: ResolvedTheme, role: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [name, alias] of Object.entries(SEMANTIC_ALIASES) as Array<[string, Alias]>) {
+    if (alias.kind === "literal" || alias.role !== role) continue;
+    out[name] = theme.tokens[name]!;
+  }
+  return out;
+}
+
+/** A scale's full primitive ramp: twelve steps, twelve alphas, and its declared foreground. */
+function primitiveRamp(theme: ResolvedTheme, scaleId: string, as = scaleId): Record<string, string> {
+  const scale = theme.scales[scaleId]!;
+  const out: Record<string, string> = {};
+  scale.steps.forEach((s, i) => {
+    out[`${as}-${i + 1}`] = s.hex;
+  });
+  scale.alphas.forEach((a, i) => {
+    out[`${as}-a${i + 1}`] = a.hex8;
+  });
+  out[`${as}-contrast`] = scale.contrast.hex;
+  return out;
+}
+
+function themeFor(t: Theme, accent: string, neutral: string): ResolvedTheme {
+  return resolveTheme({ theme: t, accent, neutral });
+}
+
+// ---------------------------------------------------------------------------
+// Theme axis
+// ---------------------------------------------------------------------------
+
+/**
+ * Shadows are a colour, not a constant. `rgba(0,0,0,.06)` vanishes on a dark surface --
+ * the most common elevation bug there is -- so the tone lives in a token the theme owns.
+ */
+const SHADOW_COLOR: Record<Theme, string> = {
+  light: "rgb(0 0 0 / 0.10)",
+  dark: "rgb(0 0 0 / 0.45)",
+};
+
+function themePreset(t: Theme): AxisPreset {
+  const resolved = themeFor(t, DEFAULT_SELECTION.accent, DEFAULT_SELECTION.neutral);
+
+  const ramps: Record<string, string> = {};
+  for (const spec of [...NEUTRAL_SCALES, ...CHROMATIC_SCALES]) {
+    Object.assign(ramps, primitiveRamp(resolved, spec.id));
+  }
+
+  const fixedTones: Record<string, string> = {};
+  for (const role of ["danger", "warning", "success", "info"]) {
+    Object.assign(fixedTones, tokensForRole(resolved, role));
+  }
+
+  return {
+    id: t,
+    label: t === "light" ? "Light" : "Dark",
+    description:
+      t === "light"
+        ? "The default theme."
+        : "Re-derived rather than inverted; solid fills hold their identity across both.",
+    tokens: tokens({ ...ramps, ...fixedTones, "shadow-color": SHADOW_COLOR[t] }),
+  };
+}
+
+export const THEME_AXIS: AxisDefinition = {
+  id: "theme",
+  label: "Theme",
+  description: "Light or dark.",
+  defaultPreset: "light",
+  namespaces: [
+    ...[...NEUTRAL_SCALES, ...CHROMATIC_SCALES].map((s) => `--area-${s.id}-`),
+    "--area-danger-",
+    "--area-warning-",
+    "--area-success-",
+    "--area-info-",
+    "--area-fg-danger",
+    "--area-fg-warning",
+    "--area-fg-success",
+    "--area-fg-info",
+    "--area-fg-on-danger",
+    "--area-fg-on-warning",
+    "--area-fg-on-success",
+    "--area-fg-on-info",
+    "--area-shadow-color",
+  ],
+  presets: [themePreset("light"), themePreset("dark")],
+};
+
+// ---------------------------------------------------------------------------
+// Neutral axis
+// ---------------------------------------------------------------------------
+
+function neutralTokens(t: Theme, neutral: string): TokenMap {
+  const resolved = themeFor(t, DEFAULT_SELECTION.accent, neutral);
+  return tokens({
+    ...primitiveRamp(resolved, neutral, "neutral"),
+    ...tokensForRole(resolved, "neutral"),
+  });
+}
+
+export const NEUTRAL_AXIS: AxisDefinition = {
+  id: "neutral",
+  label: "Neutral",
+  description: "The grey the whole interface is built from.",
+  defaultPreset: DEFAULT_SELECTION.neutral,
+  namespaces: [
+    "--area-neutral-",
+    "--area-bg-",
+    "--area-fg-default",
+    "--area-fg-muted",
+    "--area-fg-subtle",
+    "--area-fg-placeholder",
+    "--area-fg-disabled",
+    "--area-fg-on-inverse",
+    "--area-border-subtle",
+    "--area-border-hover",
+    "--area-border:",
+  ],
+  presets: NEUTRAL_SCALES.map((spec) => ({
+    id: spec.id,
+    label: spec.id[0]!.toUpperCase() + spec.id.slice(1),
+    description:
+      spec.id === "gray"
+        ? "Achromatic. Works with any accent."
+        : spec.id === "slate"
+          ? "Cool, tinted toward blue."
+          : "Warm, tinted toward amber.",
+    tokens: neutralTokens("light", spec.id),
+    darkTokens: neutralTokens("dark", spec.id),
+  })),
+};
+
+// ---------------------------------------------------------------------------
+// Accent axis
+// ---------------------------------------------------------------------------
+
+function accentTokens(t: Theme, accent: string): TokenMap {
+  const resolved = themeFor(t, accent, DEFAULT_SELECTION.neutral);
+  return tokens({
+    ...primitiveRamp(resolved, accent, "accent"),
+    ...tokensForRole(resolved, "accent"),
+  });
+}
+
+export const ACCENT_AXIS: AxisDefinition = {
+  id: "accent",
+  label: "Accent",
+  description: "The brand hue. Drives fills, links, and the focus ring.",
+  defaultPreset: DEFAULT_SELECTION.accent,
+  namespaces: ["--area-accent-", "--area-fg-accent", "--area-fg-on-accent", "--area-border-focus"],
+  presets: CHROMATIC_SCALES.map((spec) => ({
+    id: spec.id,
+    label: spec.id[0]!.toUpperCase() + spec.id.slice(1),
+    description: `Hue ${spec.hue} degrees.`,
+    tokens: accentTokens("light", spec.id),
+    darkTokens: accentTokens("dark", spec.id),
+  })),
+};

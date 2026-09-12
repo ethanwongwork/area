@@ -1,0 +1,41 @@
+/* ---------------------------------------------------------------------------
+ * Area
+ *
+ * The one place layer order is declared. Everything Area ships is wrapped in an
+ * explicit @layer, so if a downstream tool ever strips this statement the result
+ * degrades to declaration order rather than to chaos.
+ *
+ * Order, and why:
+ *   reset       first, so everything overrides it
+ *   tokens      base primitives and axis defaults
+ *   axes        axis presets -- must beat tokens regardless of selector weight,
+ *               which is precisely what layers guarantee and specificity does not
+ *   base        element defaults, focus-visible, typography
+ *   components  the components themselves
+ *   utilities   after components, so a utility beats a component's own rule
+ *   overrides   a documented slot for consumers who want to stay inside the tree
+ *
+ * The most useful consequence is one Area does not have to implement: unlayered CSS
+ * beats every layer. A consumer writing `:root { --area-radius-control: 10px }` in
+ * their own stylesheet wins over all of this, with no !important and no specificity
+ * war.
+ * ------------------------------------------------------------------------- */
+
+@layer area.reset, area.tokens, area.axes, area.base, area.components, area.utilities, area.overrides;
+
+@import "@area/tokens/css/properties.css";
+@import "@area/tokens/css/tokens.css";
+@import "@area/tokens/css/axes.css";
+
+@import "./reset.css";
+@import "./fonts.css";
+@import "./base.css";
+
+@import "./components/button.css";
+@import "./components/field.css";
+@import "./components/input.css";
+@import "./components/textarea.css";
+@import "./components/choice.css";
+@import "./components/display.css";
+@import "./components/surface.css";
+@import "./components/navigation.css";

@@ -1,0 +1,122 @@
+/* ---------------------------------------------------------------------------
+ * Input
+ *
+ * The field shell is the flex container, and the <input> inside it is stripped bare.
+ * Doing it the other way round -- styling the input directly -- makes leading icons,
+ * affixes and trailing actions impossible to place without absolute positioning, and
+ * absolute positioning is what makes a field stop responding to the density axis.
+ *
+ * Icons inside a field are chrome, not content: they categorise the field rather than
+ * carrying its value, so they take the subtle foreground and do not change on hover.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-input {
+    --_height: var(--area-control-md);
+    --_gutter: var(--area-gutter-md);
+    --_icon: var(--area-icon-md);
+    --_gap: var(--area-gap-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+    --_border: var(--area-border);
+    --_border-hover: var(--area-border-hover);
+    --_bg: var(--area-bg-surface);
+
+    display: flex;
+    align-items: center;
+    gap: var(--_gap);
+
+    block-size: var(--_height);
+    inline-size: 100%;
+    padding-inline: var(--_gutter);
+    border: var(--area-border-width) solid var(--_border);
+    border-radius: var(--area-radius-control);
+
+    background-color: var(--_bg);
+    color: var(--area-fg-default);
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    box-shadow: var(--area-shadow-1);
+    transition: var(--area-transition);
+  }
+
+  .area-input:hover:not([data-disabled]):not(:focus-within) {
+    border-color: var(--_border-hover);
+  }
+
+  .area-input:focus-within {
+    border-color: var(--area-border-focus);
+    box-shadow: var(--area-shadow-1), var(--area-ring);
+  }
+
+  .area-input[data-invalid] {
+    --_border: var(--area-danger-border-strong);
+    --_border-hover: var(--area-danger-border-strong);
+  }
+
+  .area-input[data-invalid]:focus-within {
+    border-color: var(--area-danger-solid);
+    box-shadow:
+      var(--area-shadow-1),
+      0 0 0 var(--area-ring-width) color-mix(in oklab, var(--area-danger-solid) 45%, transparent);
+  }
+
+  .area-input[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* The control itself carries no chrome; the shell owns all of it. */
+  .area-input__control {
+    flex: 1;
+    min-inline-size: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    outline: none;
+  }
+
+  .area-input__control::placeholder {
+    color: var(--area-fg-placeholder);
+  }
+
+  .area-input__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+    flex-shrink: 0;
+    color: var(--area-fg-subtle);
+  }
+
+  .area-input__icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* An affix is a unit or symbol, not a control: never selectable, never focusable. */
+  .area-input__affix {
+    flex-shrink: 0;
+    color: var(--area-fg-subtle);
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  /* Same optical inset as Button, for the same reason. */
+  .area-input:has(> .area-input__icon:first-child) {
+    padding-inline-start: calc((var(--_height) - var(--_icon)) / 2);
+  }
+
+  .area-input:has(> .area-input__icon:last-child) {
+    padding-inline-end: calc((var(--_height) - var(--_icon)) / 2);
+  }
+
+  .area-input--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_icon: var(--area-icon-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
+  .area-input--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-input--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-input--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-input--xl { --_height: var(--area-control-xl); --_gutter: var(--area-gutter-xl); --_icon: var(--area-icon-xl); --_gap: var(--area-gap-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
+}
