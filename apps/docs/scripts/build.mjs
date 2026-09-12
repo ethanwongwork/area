@@ -334,10 +334,10 @@ function colorPage() {
   const levels = tokens.levels.join(", ");
 
   const body = `<div class="docs-prose">
-<p>Every scale is one ramp of ${tokens.levels.length} levels, and a level <em>is</em> its lightness: <code class="docs-code-inline">blue-58</code> is the blue at OKLCh L&nbsp;0.58. Spacing is named the same way, for the same reason — the name is a measurement, so it can be checked, and the build fails if a colour does not come back at the lightness its token claims.</p>
-<p>Because lightness is fixed by the name, it is identical across every hue: <code class="docs-code-inline">yellow-58</code> and <code class="docs-code-inline">blue-58</code> weigh the same. What differs is chroma, which takes as much as the sRGB gamut allows at that lightness — so each hue is at its most vivid at a different level, which is a fact about the gamut rather than a choice.</p>
+<p>Every scale is one ramp of ${tokens.levels.length} levels, and a level <em>is</em> its lightness: <code class="docs-code-inline">blue-55</code> is the blue at OKLCh L&nbsp;0.55. Every primitive ramp in Area is named by its value — <code class="docs-code-inline">space-16</code> is 16px, <code class="docs-code-inline">wght-400</code> is weight 400 — so the name is a measurement, it can be checked, and the build fails if a colour does not come back at the lightness its token claims.</p>
+<p>Because lightness is fixed by the name, it is identical across every hue: <code class="docs-code-inline">yellow-55</code> and <code class="docs-code-inline">blue-55</code> weigh the same. What differs is chroma, which takes as much as the sRGB gamut allows at that lightness — so each hue is at its most vivid at a different level, which is a fact about the gamut rather than a choice.</p>
 <p>Hue is constant down a scale. There is no drift table: any two steps of <code class="docs-code-inline">red</code> are the same hue and harmonise by construction.</p>
-<p>The levels are ${levels}. They step evenly through the middle and tighten at both ends, where interfaces stack the most surfaces.</p>
+<p>The levels are ${levels} — a uniform five-point grid, so a level's neighbour can be named without consulting the list. Level 100 is pure white, which is the honest consequence of naming a level after its lightness.</p>
 <p>Dark mode is the same ramp read from the other end. There is one set of colours, not two.</p>
 </div>
 ${inversionSection()}

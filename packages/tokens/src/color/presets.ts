@@ -12,8 +12,8 @@
  * discovery 300. Three warm roles is more than hue separation alone can carry -- danger to
  * warning is 30 degrees, short of the 50 that keeps two tones from reading as the same
  * signal. What separates them now is where each one's solid fill lands on the ladder: red
- * can stay saturated at L 0.58 and carry white text, while yellow cannot be both saturated
- * and dark, so its fill sits at L 0.85 with black text. A red button and a caution button
+ * can stay saturated at L 0.55 and carry white text, while yellow cannot be both saturated
+ * and dark, so its fill sits at L 0.90 with black text. A red button and a caution button
  * differ in weight, not only in hue. That is the real cost of shipping eight tones, and it
  * is recorded here rather than discovered later.
  */

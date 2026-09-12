@@ -1,7 +1,7 @@
 /**
  * The shape of every Area colour scale.
  *
- * Sixteen steps, named by their own lightness. `blue-58` is the blue at OKLCh L 0.58, in
+ * Nineteen steps, named by their own lightness. `blue-55` is the blue at OKLCh L 0.55, in
  * every theme, for every scale. That is the same reasoning spacing uses -- `--area-space-16`
  * is sixteen pixels -- and it buys three things an ordinal 1..12 cannot:
  *
@@ -9,7 +9,7 @@
  *   to the name, so a scale whose generator drifts fails the build instead of shipping a
  *   token that lies about itself.
  *
- *   Lightness is consistent across hues by construction. `yellow-58` and `blue-58` are the
+ *   Lightness is consistent across hues by construction. `yellow-55` and `blue-55` are the
  *   same lightness, so two tones can be swapped without changing the weight of a layout.
  *   The previous ordinal scale could not promise this and did not deliver it: its step 9
  *   ranged from L 0.548 to L 0.910 across the twelve hues.
@@ -24,19 +24,26 @@
  */
 
 /**
- * The ladder.
+ * The ladder: every five points of lightness, from white to near-black.
  *
- * Spacing is even through the middle at 7 points of lightness and tightens toward both
- * ends -- 2 points at the top, 4 at the bottom. That is not decoration. Interfaces stack
- * many near-white surfaces (page, card, table header, input) and many near-black ones in
- * dark mode, and those need to be separable; the middle of the ramp holds one or two
- * colours per interface and can afford to move in bigger jumps.
+ * Uniform on purpose. An earlier version tightened the ends -- 99, 97, 94, 90, 85, 79 --
+ * on the reasoning that interfaces stack many near-white surfaces. The rungs were right
+ * and the *names* were not: nothing distinguished 99 from 98, the gaps carried all the
+ * meaning, and the numbers implied a 1% resolution that was never real. You could not
+ * name a neighbour without consulting the list.
  *
- * The ratio between the largest and smallest gap is 3.5. The ordinal scale this replaced
- * ran to 20.2, with a single 0.252 cliff between its last two steps.
+ * A round grid fixes that without giving up the property that makes the name worth having.
+ * `WGHT_RAMP` is the same shape of decision: 100, 200, 300 are real font weights on a round
+ * grid, not indices. Five points is also roughly the smallest lightness step that stays
+ * reliably distinguishable as a flat surface, so the grid is not merely tidy.
+ *
+ * The cost is subtlety at the top: page to subtle is now 100 -> 95 rather than 99 -> 97.
+ * That is GitHub's gap (#ffffff to #f6f8fa) and Notion's, so it is a normal amount of
+ * separation rather than a compromise. The number of usable near-white rungs is unchanged
+ * at four, and level 100 buys a pure white page, which the old ladder could not reach.
  */
 export const LEVELS = [
-  99, 97, 94, 90, 85, 79, 72, 65, 58, 51, 44, 37, 31, 26, 21, 17,
+  100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10,
 ] as const;
 
 export type Level = (typeof LEVELS)[number];
@@ -62,7 +69,8 @@ export const levelLightness = (level: Level): number => level / 100;
  * very saturated colour quantises badly in 8 bits and reads as muddy rather than rich.
  */
 export const CHROMA_FRACTION: Ramp<number> = [
-  0.85, 0.88, 0.9, 0.92, 0.93, 0.94, 0.95, 0.95, 0.95, 0.94, 0.92, 0.9, 0.87, 0.84, 0.8, 0.74,
+  0.85, 0.88, 0.9, 0.92, 0.93, 0.94, 0.95, 0.95, 0.95, 0.95, 0.94, 0.93, 0.91, 0.89, 0.86, 0.83,
+  0.79, 0.75, 0.7,
 ];
 
 /**
@@ -74,7 +82,8 @@ export const CHROMA_FRACTION: Ramp<number> = [
  * colour-cast far more readily than a mid grey does.
  */
 export const NEUTRAL_CHROMA_SHAPE: Ramp<number> = [
-  0.34, 0.45, 0.6, 0.72, 0.82, 0.9, 0.96, 1.0, 1.0, 1.0, 0.96, 0.9, 0.82, 0.72, 0.6, 0.45,
+  0.3, 0.42, 0.55, 0.68, 0.78, 0.86, 0.93, 0.97, 1.0, 1.0, 1.0, 0.97, 0.93, 0.86, 0.78, 0.68,
+  0.55, 0.42, 0.3,
 ];
 
 /**
@@ -87,7 +96,7 @@ export const NEUTRAL_CHROMA_SHAPE: Ramp<number> = [
  * under lightness change, and it is the reason this system chose OKLCh in the first place;
  * layering a CIELCh-era correction on top of it double-corrects.
  *
- * It also broke a promise the scale ought to keep. With drift, `yellow-31` was not the same
+ * It also broke a promise the scale ought to keep. With drift, `yellow-30` was not the same
  * hue as `yellow-85`, so dark yellow text on a light yellow ground was two different
  * colours that happened to share a token prefix. Constant hue means any two steps of a
  * scale harmonise by construction.
@@ -115,33 +124,33 @@ export interface Inversion {
 
 export const INVERSION = {
   /** The page, and panels raised off it. */
-  page: { light: 99, dark: 17 },
-  surface: { light: 99, dark: 21 },
-  subtle: { light: 97, dark: 26 },
+  page: { light: 100, dark: 15 },
+  surface: { light: 100, dark: 20 },
+  subtle: { light: 95, dark: 25 },
   /** A control's own fill, at rest, hover, and active. */
-  component: { light: 97, dark: 26 },
-  componentHover: { light: 94, dark: 31 },
-  componentActive: { light: 90, dark: 37 },
+  component: { light: 95, dark: 25 },
+  componentHover: { light: 90, dark: 30 },
+  componentActive: { light: 85, dark: 35 },
   /** Strokes, quietest to loudest. */
-  borderSubtle: { light: 90, dark: 37 },
-  border: { light: 79, dark: 44 },
-  borderStrong: { light: 72, dark: 51 },
+  borderSubtle: { light: 90, dark: 35 },
+  border: { light: 80, dark: 45 },
+  borderStrong: { light: 70, dark: 50 },
   /** Text, from the least emphatic that is still content to the most. */
-  textDisabled: { light: 72, dark: 51 },
-  textPlaceholder: { light: 58, dark: 65 },
-  textSubtle: { light: 51, dark: 72 },
-  textMuted: { light: 44, dark: 79 },
-  textTonal: { light: 44, dark: 85 },
-  textTonalStrong: { light: 37, dark: 90 },
-  textDefault: { light: 26, dark: 94 },
+  textDisabled: { light: 70, dark: 50 },
+  textPlaceholder: { light: 60, dark: 65 },
+  textSubtle: { light: 50, dark: 70 },
+  textMuted: { light: 45, dark: 80 },
+  textTonal: { light: 45, dark: 85 },
+  textTonalStrong: { light: 35, dark: 90 },
+  textDefault: { light: 25, dark: 95 },
   /** A filled neutral that carries inverted text: tooltip, toast, primary button. */
-  inverseFill: { light: 21, dark: 97 },
-  inverseFillHover: { light: 17, dark: 99 },
-  inverseText: { light: 99, dark: 17 },
-  secondaryFill: { light: 31, dark: 90 },
-  secondaryFillHover: { light: 26, dark: 94 },
+  inverseFill: { light: 20, dark: 95 },
+  inverseFillHover: { light: 15, dark: 100 },
+  inverseText: { light: 100, dark: 15 },
+  secondaryFill: { light: 30, dark: 90 },
+  secondaryFillHover: { light: 25, dark: 95 },
   /** The level a translucent scrim is solved from. */
-  scrim: { light: 44, dark: 21 },
+  scrim: { light: 45, dark: 20 },
 } as const satisfies Record<string, Inversion>;
 
 export type Slot = keyof typeof INVERSION;

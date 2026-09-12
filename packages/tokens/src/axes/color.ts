@@ -29,7 +29,7 @@ function tokensForRole(theme: ResolvedTheme, role: string): Record<string, strin
  * A scale's full primitive ramp: every level, its translucent twin, and the foreground the
  * scale measured against its own solid fill.
  *
- * Keyed by level, not by position. `--area-blue-58` names the lightness it carries, so a
+ * Keyed by level, not by position. `--area-blue-55` names the lightness it carries, so a
  * change to the ladder renames the tokens it affects instead of silently repointing them.
  */
 function primitiveRamp(theme: ResolvedTheme, scaleId: string, as = scaleId): Record<string, string> {

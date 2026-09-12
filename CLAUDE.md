@@ -128,18 +128,25 @@ is thirteen CSS blocks, not thirty-six, and adding a tone costs one block. Never
 
 Three warm roles is more than hue separation alone can carry — danger to warning is 30
 degrees, short of the 50 that keeps two tones from reading as one signal. What separates
-them is where each solid lands on the ladder: red can stay saturated at L 0.58 and carry
+them is where each solid lands on the ladder: red can stay saturated at L 0.55 and carry
 white text, while yellow cannot be both saturated and dark, so its fill sits at L 0.90 with
 black text. A danger button and a caution button differ in weight, not only in hue. That is
 the cost of eight tones and it is recorded in `color/presets.ts` rather than rediscovered.
 
 ## Colour
 
-**A level name is a lightness.** `blue-58` is the blue at OKLCh L 0.58 — in every scale, in
-both themes. `assertLadder()` re-reads the emitted colour and fails the build if it comes
-back at a different lightness, so the name cannot quietly become a lie. This is the same
-reasoning spacing uses, and it buys the property an ordinal scale cannot promise: two hues
-at the same level weigh the same, so swapping a tone does not change the weight of a layout.
+**A level name is a lightness, on a round grid.** `blue-55` is the blue at OKLCh L 0.55 —
+in every scale, in both themes. `assertLadder()` re-reads the emitted colour and fails the
+build if it comes back at a different lightness, so the name cannot quietly become a lie.
+This is the same decision `WGHT_RAMP` makes: 100, 200, 300 are real font weights on a round
+grid, not indices, and every primitive ramp in Area is named by its value for the same
+reason. It buys a property an ordinal scale cannot promise — two hues at the same level
+weigh the same, so swapping a tone does not change the weight of a layout.
+
+The grid is uniform at five points. An earlier ladder tightened the ends (99, 97, 94, 90,
+85, 79) and the rungs were right, but the names were not: nothing distinguished 99 from 98,
+and you could not name a neighbour without consulting the list. If a level name is going to
+be a measurement, the measurement has to be one worth quoting.
 
 **A level is a colour, not a job.** Which level is a background and which is a border is a
 decision the semantic layer makes, per theme, in one table — `INVERSION`. Never reach for a
@@ -148,7 +155,7 @@ previous exception, the primary button reaching for `--area-neutral-12`, is exac
 this rule prevents: it could not flip with the theme.
 
 **Dark mode is the same ramp read from the other end.** There is one set of colours per
-scale, not two. `--area-blue-58` is byte-identical in both themes; only the level each slot
+scale, not two. `--area-blue-55` is byte-identical in both themes; only the level each slot
 reads changes. The dark column is deliberately not an exact mirror — separation near black
 needs more lightness distance to read as the same visual step.
 

@@ -3,7 +3,7 @@
  *
  * One ramp per scale, shared by both themes. The generation order is:
  *
- *   1. Take each level's lightness from its own name. `blue-58` is L 0.58; there is no
+ *   1. Take each level's lightness from its own name. `blue-55` is L 0.55; there is no
  *      lightness curve to tune and nothing for a theme to override.
  *   2. Ask the gamut how much chroma is reachable at that lightness for this hue, and take
  *      the declared fraction of it. This is where vibrancy comes from: the sRGB boundary
@@ -246,12 +246,12 @@ function chooseSolid(
 /**
  * The neutral solid: the primary button fill.
  *
- * Level 21 rather than the darkest, so `bg-inverse` at 17 stays distinguishable from a
+ * Level 20 rather than the darkest, so `bg-inverse` at 15 stays distinguishable from a
  * primary button sitting on top of it. Near-black is the strongest call to action a neutral
  * palette can make, and it stays strongest whatever the accent axis is set to.
  */
 function neutralSolid(steps: readonly ScaleStep[]): SolidChoice {
-  const index = steps.findIndex((s) => s.level === 21);
+  const index = steps.findIndex((s) => s.level === 20);
   const chosen = steps[index]!;
   return {
     level: chosen.level,
