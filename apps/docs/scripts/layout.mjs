@@ -174,6 +174,7 @@ export const DOCS_CSS = `
     background-color: var(--area-accent-solid);
   }
   .docs-topbar__spacer { margin-inline-start: auto; }
+  .docs-topbar .area-segmented { flex-shrink: 0; }
 
   .docs-shell { display: grid; grid-template-columns: var(--docs-sidebar) minmax(0, 1fr); max-inline-size: var(--docs-max); margin-inline: auto; }
 
@@ -237,6 +238,9 @@ export const DOCS_CSS = `
   .docs-prose p { margin-block: var(--area-space-12); color: var(--area-fg-muted); }
   .docs-prose p strong { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
   .docs-stack { display: flex; flex-direction: column; gap: var(--area-space-8); }
+  .docs-list { margin: 0; padding-inline-start: var(--area-space-20); display: flex; flex-direction: column; gap: var(--area-space-12); }
+  .docs-list li { color: var(--area-fg-muted); }
+  .docs-list li::marker { color: var(--area-fg-subtle); }
 
   /*
    * The example frame: a clipped container holding a preview on the page surface and a

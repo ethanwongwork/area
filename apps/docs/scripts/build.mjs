@@ -21,6 +21,7 @@ import {
   viewToggle,
 } from "./layout.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
+import { PRACTICES } from "../src/practices.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = resolve(root, "..", "..");
@@ -74,17 +75,23 @@ function axisPanel() {
   </div>`;
 }
 
-function topbarControls() {
-  const theme = tokens.axes.find((a) => a.id === "theme");
-  const themeItems = theme.presets
+/** A compact segmented control for one axis, for the topbar. */
+function axisSwitch(axisId, label) {
+  const axis = tokens.axes.find((a) => a.id === axisId);
+  const items = axis.presets
     .map(
       (p) =>
-        `<button type="button" role="radio" class="area-segmented__item" data-value="${p.id}" aria-checked="${p.id === theme.defaultPreset}" ${p.id === theme.defaultPreset ? "data-selected" : ""}>${escapeHtml(p.label)}</button>`,
+        `<button type="button" role="radio" class="area-segmented__item" data-value="${p.id}" aria-checked="${p.id === axis.defaultPreset}"${p.id === axis.defaultPreset ? " data-selected" : ""}>${escapeHtml(p.label)}</button>`,
     )
     .join("");
 
-  return `<div class="area-segmented area-segmented--xs" role="radiogroup" aria-label="Theme" data-axis="theme" data-default="${theme.defaultPreset}">${themeItems}</div>
-  <button type="button" class="area-button area-button--outline area-button--neutral area-button--sm" data-toggle-axes aria-expanded="false" aria-controls="docs-axes">
+  return `<div class="area-segmented area-segmented--xs" role="radiogroup" aria-label="${escapeHtml(label)}" data-axis="${axisId}" data-default="${axis.defaultPreset}">${items}</div>`;
+}
+
+function topbarControls() {
+  return `${axisSwitch("density", "Density")}
+  ${axisSwitch("theme", "Theme")}
+  <button type="button" class="area-button area-button--outline area-button--secondary area-button--sm" data-toggle-axes aria-expanded="false" aria-controls="docs-axes">
     <span class="area-button__label">Customize</span>
   </button>`;
 }
@@ -204,6 +211,12 @@ ${table(
   ]),
 )}`;
 
+  const guidance = PRACTICES[spec.slug] ?? [];
+  const practices = guidance.length
+    ? `<h2 class="docs-h2" id="practices">Best practices</h2>
+<ul class="docs-list">${guidance.map((item) => `<li>${item}</li>`).join("")}</ul>`
+    : "";
+
   const cssNote = `<h2 class="docs-h2" id="css">Without React</h2>
 <p class="docs-note">Every component is plain CSS. Use the classes directly when you are not using React.</p>
 ${codeBlock(demos[spec.examples[0].demo].html, { title: "index.html" })}`;
@@ -213,11 +226,12 @@ ${codeBlock(demos[spec.examples[0].demo].html, { title: "index.html" })}`;
     { id: "usage", title: "Usage" },
     { id: "examples", title: "Examples" },
     ...spec.examples.map((e) => ({ id: e.id, title: e.title, nested: true })),
+    ...(guidance.length ? [{ id: "practices", title: "Best practices" }] : []),
     { id: "api", title: "API reference" },
     { id: "css", title: "Without React" },
   ];
 
-  return page({ slug: spec.slug, title: spec.name, lede, body: install + examples + api + cssNote, toc });
+  return page({ slug: spec.slug, title: spec.name, lede, body: install + examples + practices + api + cssNote, toc });
 }
 
 /* --- Foundation pages ------------------------------------------------------- */
@@ -515,10 +529,12 @@ function densityRows(presetId) {
 
 function densityPage() {
   const rows = densityRows("default");
+  const compact = densityRows("compact");
 
   const body = `<div class="docs-prose">
 <p>The default tier is 32px — the most common default across every system measured. The ladder 24/28/32/40/48 is Primer's exact scale.</p>
-<p>Presets shift which rung is medium; they do not rescale the spacing primitives. Compact means components pick smaller steps, not that 12px quietly becomes 10px.</p>
+<p>Two presets, each calibrated to real products. <strong>Default</strong> puts medium at 32px, which Primer, OpenAI and Vercel all agree on. <strong>Compact</strong> puts it at 28px, which is Notion's measured in-app row height.</p>
+<p><strong>The type size does not move with the box.</strong> Notion renders 14px text inside its 28px rows, and that is the point of a dense preset: the box tightens while the text stays readable. A preset that shrank the text too would just be the same interface further away. Only the two smallest tiers drop to 12px, because 14/20 text cannot fit a 20px box at all.</p>
 </div>
 ${tokenSection({
   id: "tiers",
@@ -527,7 +543,8 @@ ${tokenSection({
   rows,
   columns: [
     { header: "Token", cell: (r) => tokenChip(`control/${r.tier}`) },
-    { header: "Height", cell: (r) => `<span class="docs-mono">${r.height}</span>` },
+    { header: "Compact", cell: (r) => `<span class="docs-mono">${compact.find((c) => c.tier === r.tier).height}</span>` },
+    { header: "Default", cell: (r) => `<span class="docs-mono">${r.height}</span>` },
     { header: "Padding", cell: (r) => `<span class="docs-mono">${r.gutter}</span>` },
     { header: "Icon", cell: (r) => `<span class="docs-mono">${r.icon}</span>` },
     { header: "Gap", cell: (r) => `<span class="docs-mono">${r.gap}</span>` },
@@ -608,25 +625,23 @@ function radiusPage() {
   const axis = tokens.axes.find((a) => a.id === "radius");
 
   const body = `<div class="docs-prose">
-<p>Controls take a unitless multiplier of their own height rather than a fixed pixel value. That is what keeps this axis independent of density — otherwise every radius preset would need a variant for every density preset.</p>
-<p>The default resolves to 6px on a 32px control, which is what Primer, Vercel, Linear and Notion all ship. Containers sit at 12px, the single most agreed-upon number in the survey.</p>
+<p>Flat per preset, and the same at every control tier. An earlier version derived radius as a proportion of control height, but the evidence does not support it: Primer at 32px, Vercel at 32px, Linear at 32px and Notion at 28px all ship exactly 6px. Nobody moves control radius when density changes.</p>
+<p>Containers sit at 12px — the single most agreed-upon number in the survey: Primer overlays, OpenAI's popover, dialog and alert, and Linear's cards all use it.</p>
 </div>
 ${tokenSection({
   id: "presets",
   title: "Presets",
-  description: "Each preset sets one multiplier and two absolute radii; everything else derives.",
+  description: "Each preset sets three radii: controls, containers, and small nested shapes.",
   rows: axis.presets.map((p) => ({
     id: p.id,
     label: p.label,
-    scale: p.tokens["--area-radius-scale"],
-    control: `${Math.round(32 * parseFloat(p.tokens["--area-radius-scale"]))}px`,
+    control: p.tokens["--area-radius-control"],
     container: p.tokens["--area-radius-container"],
     small: p.tokens["--area-radius-small"],
     isDefault: p.id === axis.defaultPreset,
   })),
   columns: [
     { header: "Preset", cell: (r) => tokenChip(`radius/${r.id}`) },
-    { header: "Scale", cell: (r) => `<span class="docs-mono">${r.scale}</span>` },
     { header: "Control", cell: (r) => `<span class="docs-mono">${r.control}</span>` },
     { header: "Container", cell: (r) => `<span class="docs-mono">${r.container}</span>` },
     { header: "Small", cell: (r) => `<span class="docs-mono">${r.small}</span>` },

@@ -95,11 +95,16 @@
     background-color: var(--area-bg-surface);
   }
 
+  /*
+   * Tables read one step below prose. A table is scanned rather than read, and 16px --
+   * correct for a paragraph -- puts too few columns on screen and makes a row of short
+   * values look sparse. Primer, OpenAI and shadcn all set tables at 14.
+   */
   .area-table {
     inline-size: 100%;
     border-collapse: collapse;
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
   }
 
   .area-table th,

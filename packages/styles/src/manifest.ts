@@ -289,6 +289,22 @@ export const tokenChip: ComponentManifest = {
   defaults: {},
 };
 
+export const kbd: ComponentManifest = {
+  block: "area-kbd",
+  description: "Marks a keyboard key.",
+  variants: { tone: ["quiet"] },
+  elements: [],
+  defaults: {},
+};
+
+export const kbdGroup: ComponentManifest = {
+  block: "area-kbd-group",
+  description: "Groups a sequence of keys into one shortcut.",
+  variants: {},
+  elements: [],
+  defaults: {},
+};
+
 export const MANIFESTS: Record<string, ComponentManifest> = {
   button,
   field,
@@ -319,4 +335,6 @@ export const MANIFESTS: Record<string, ComponentManifest> = {
   code,
   codeBlock,
   tokenChip,
+  kbd,
+  kbdGroup,
 };

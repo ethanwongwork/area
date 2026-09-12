@@ -14,14 +14,19 @@
     align-items: center;
     gap: var(--area-space-6);
     max-inline-size: 100%;
-    padding: var(--area-space-2) var(--area-space-8);
+    padding: var(--area-space-2) var(--area-space-6);
     border: var(--area-border-width) solid var(--area-border-subtle);
-    border-radius: var(--area-radius-full);
-    background-color: var(--area-bg-surface);
-    color: var(--area-fg-default);
+    /*
+     * A rounded rectangle, not a pill. A pill reads as a status chip -- something with a
+     * state -- where a token reference is a name. Vercel's inline code mentions use 6px on
+     * a ~20px box, which is the same proportion.
+     */
+    border-radius: var(--area-radius-small);
+    background-color: var(--area-bg-component);
+    color: var(--area-fg-muted);
     font-family: var(--area-font-mono);
     font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    line-height: var(--area-text-sm-leading);
     white-space: nowrap;
   }
 

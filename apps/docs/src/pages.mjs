@@ -295,7 +295,10 @@ export const COMPONENT_PAGES = [
       ["shortcut", "string", "—"],
       ["disabled", "boolean", "false"],
     ],
-    examples: [{ id: "default", title: "Default", demo: "MenuDefault" }],
+    examples: [
+      { id: "default", title: "Default", demo: "MenuDefault" },
+      { id: "shortcuts", title: "With shortcuts", demo: "MenuWithShortcuts" },
+    ],
   },
   {
     slug: "popover",
@@ -347,6 +350,26 @@ export const COMPONENT_PAGES = [
         note: "In an application, render this inside a native dialog and open it with showModal().",
         demo: "DialogDefault",
       },
+    ],
+  },
+  {
+    slug: "kbd",
+    name: "Kbd",
+    manifest: "kbd",
+    api: [
+      ["keys", "string[]", "—"],
+      ["quiet", "boolean", "false"],
+    ],
+    practices: [
+      "Pass <code class='area-code'>keys</code> as names, not glyphs. <code class='area-code'>cmd</code>, <code class='area-code'>shift</code>, <code class='area-code'>alt</code>, <code class='area-code'>ctrl</code> and the arrows render as symbols automatically.",
+      "One element per key, never one element reading <code class='area-code'>⌘K</code>. A shortcut is a sequence of physical keys, and a screen reader reads a bare glyph as nothing at all — the component supplies a spoken label for the whole group.",
+      "Use <code class='area-code'>quiet</code> inside a menu item, where the key is chrome rather than content. The filled form is for running text and empty states.",
+      "A key is a rounded rectangle, never a pill. The shape is most of what makes it read as a key.",
+    ],
+    examples: [
+      { id: "default", title: "Default", demo: "KbdDefault" },
+      { id: "sequence", title: "Sequences", note: "Modifier names become glyphs; everything else is uppercased.", demo: "KbdSequence" },
+      { id: "in-menu", title: "In a menu", note: "Use the quiet form where the key labels an action rather than standing alone.", demo: "MenuWithShortcuts" },
     ],
   },
   {

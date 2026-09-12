@@ -88,11 +88,6 @@ export function baseTokens(): Record<string, string> {
  */
 export function derivedTokens(): Record<string, string> {
   return {
-    // Control radius is a proportion of control height, clamped so it can never exceed a
-    // half-round, and snapped to whole pixels -- 28 x 0.1875 = 5.25px renders soft.
-    [`${PREFIX}radius-control`]:
-      `round(nearest, clamp(0px, calc(var(${PREFIX}control-md) * var(${PREFIX}radius-scale)), calc(var(${PREFIX}control-md) / 2)), 1px)`,
-
     // A control nested inside a container keeps concentric corners: the inner radius is the
     // outer radius less the inset. This is the forward form of the concentric rule; the
     // inset varies per component, so components apply it themselves against this token.
@@ -129,7 +124,6 @@ export function derivedTokens(): Record<string, string> {
 export const REGISTERED_PROPERTIES = [
   { name: `${PREFIX}radius-container`, syntax: "<length>", initial: "12px" },
   { name: `${PREFIX}radius-small`, syntax: "<length>", initial: "4px" },
-  { name: `${PREFIX}radius-scale`, syntax: "<number>", initial: "0.1875" },
   { name: `${PREFIX}ring-width`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}ring-offset`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}border-width`, syntax: "<length>", initial: "1px" },

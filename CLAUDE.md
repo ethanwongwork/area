@@ -83,6 +83,22 @@ Names are relative (xs..xl), unlike spacing and radius, because the type axis re
 whole ramp — `--area-text-14` would become a lie the moment someone picked the compact
 preset. Spacing does not rescale, so there the pixel value is the honest name.
 
+## Density
+
+Two presets, each calibrated to a real product. **Default** puts medium at 32px, which
+Primer, OpenAI and Vercel all agree on. **Compact** puts it at 28px, which is Notion's
+measured in-app row height.
+
+**The type size does not move with the box.** Notion renders 14px text inside its 28px
+rows; that is the point of a dense preset. A preset that shrank the text too would just be
+the same interface further away. Only the two smallest tiers drop to 12px, because 14/20
+text cannot fit a 20px box at all.
+
+Radius does *not* move with density. An earlier version derived it as a proportion of
+control height, which quietly made a compact button 5px — but Primer at 32, Vercel at 32,
+Linear at 32 and Notion at 28 all ship exactly 6px. Radius is owned entirely by the radius
+axis, flat at every tier.
+
 ## Tones
 
 Nine, following OpenAI's vocabulary: primary, secondary, accent, info, success, warning,

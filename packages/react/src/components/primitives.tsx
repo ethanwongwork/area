@@ -382,7 +382,7 @@ export const Menu = forwardRef<HTMLDivElement, Div>(function Menu({ className, .
 
 export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
   tone?: "danger";
-  shortcut?: string;
+  shortcut?: ReactNode;
   disabled?: boolean;
 }
 
@@ -600,5 +600,76 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(function Cod
         {html ? <code dangerouslySetInnerHTML={{ __html: html }} /> : <code>{code}</code>}
       </pre>
     </div>
+  );
+});
+
+/* --- Kbd ------------------------------------------------------------------ */
+
+/** Symbols for the modifier keys, so callers write names rather than glyphs. */
+const KEY_GLYPHS: Record<string, string> = {
+  cmd: "⌘",
+  meta: "⌘",
+  shift: "⇧",
+  alt: "⌥",
+  option: "⌥",
+  ctrl: "⌃",
+  control: "⌃",
+  enter: "↵",
+  backspace: "⌫",
+  delete: "⌦",
+  escape: "Esc",
+  esc: "Esc",
+  tab: "⇥",
+  up: "↑",
+  down: "↓",
+  left: "←",
+  right: "→",
+};
+
+/** Spoken names, since a screen reader reads "⌘" as nothing useful. */
+const KEY_LABELS: Record<string, string> = {
+  "⌘": "Command",
+  "⇧": "Shift",
+  "⌥": "Option",
+  "⌃": "Control",
+  "↵": "Enter",
+  "⌫": "Backspace",
+  "⌦": "Delete",
+  "⇥": "Tab",
+  "↑": "Up arrow",
+  "↓": "Down arrow",
+  "←": "Left arrow",
+  "→": "Right arrow",
+};
+
+export interface KbdProps extends HTMLAttributes<HTMLElement> {
+  /** Key names, in order. `cmd`, `shift`, `alt`, `ctrl` and the arrows become glyphs. */
+  keys: string[];
+  /** Drops the fill and border. For keys rendered inside a menu item. */
+  quiet?: boolean;
+}
+
+/**
+ * Marks a keyboard shortcut.
+ *
+ * Renders one element per key rather than one element reading "⌘K", because a shortcut is
+ * a sequence of physical keys and screen readers need each one named — the glyphs alone
+ * are read as nothing useful.
+ */
+export const Kbd = forwardRef<HTMLElement, KbdProps>(function Kbd(
+  { keys, quiet, className, ...rest },
+  ref,
+) {
+  const rendered = keys.map((key) => KEY_GLYPHS[key.toLowerCase()] ?? key.toUpperCase());
+  const spoken = rendered.map((glyph) => KEY_LABELS[glyph] ?? glyph).join(" plus ");
+
+  return (
+    <span ref={ref} className={cx("area-kbd-group", className)} aria-label={spoken} {...rest}>
+      {rendered.map((glyph, i) => (
+        <kbd key={i} className={cx("area-kbd", quiet && "area-kbd--quiet")} aria-hidden="true">
+          {glyph}
+        </kbd>
+      ))}
+    </span>
   );
 });

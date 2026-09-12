@@ -80,7 +80,7 @@ window.areaProbe = function (el) {
   return {
     loaded: v("--area-loaded"),
     controlMd: v("--area-control-md"),
-    radiusScale: v("--area-radius-scale"),
+    radiusControl: v("--area-radius-control"),
     radiusControl: v("--area-radius-control"),
     radiusContainer: v("--area-radius-container"),
     gutterMd: v("--area-gutter-md"),
