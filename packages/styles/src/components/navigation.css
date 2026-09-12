@@ -30,7 +30,7 @@
     color: var(--area-fg-muted);
     font-size: var(--area-text-md-size);
     line-height: var(--area-text-md-leading);
-    font-weight: var(--area-weight-medium);
+    font-weight: var(--area-weight-strong);
     cursor: pointer;
     transition: var(--area-transition);
   }
@@ -78,10 +78,10 @@
 
   /* --- Table -------------------------------------------------------------- */
   /*
-   * A fully ruled grid inside a clipped, rounded container: every cell carries a rule on
-   * two sides, and the rules on the outer edges are removed so the container's own border
-   * is the only thing that meets the corner radius. Without that removal you get a
-   * doubled line along each edge and a rule that visibly crosses the rounded corner.
+   * Horizontal rules only, inside a clipped, rounded container. Column rules are left
+   * out deliberately: the eye already groups a column by alignment, so a vertical line
+   * adds ink without adding structure, and it fights the container's corner radius at
+   * the top and bottom edges. The last row drops its rule so nothing crosses the curve.
    *
    * Cells align to the top, not the middle. In a data table the rows are rarely the same
    * height, and top alignment is what keeps a wrapped cell from pushing its neighbours
@@ -108,13 +108,7 @@
     text-align: start;
     vertical-align: top;
     border-block-end: var(--area-border-width) solid var(--area-border-subtle);
-    border-inline-end: var(--area-border-width) solid var(--area-border-subtle);
     overflow-wrap: break-word;
-  }
-
-  .area-table th:last-child,
-  .area-table td:last-child {
-    border-inline-end: 0;
   }
 
   .area-table tbody tr:last-child td {
@@ -124,7 +118,7 @@
   .area-table th {
     background-color: var(--area-bg-subtle);
     color: var(--area-fg-muted);
-    font-weight: var(--area-weight-medium);
+    font-weight: var(--area-weight-strong);
     white-space: nowrap;
   }
 

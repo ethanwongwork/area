@@ -5,10 +5,15 @@
  * accent role at any chromatic scale and the neutral role at any of the three, so these
  * are the granular ramps the axis chooses between.
  *
- * Hue angles are OKLCh degrees, chosen for even perceptual spacing with the semantic
- * roles kept far apart: danger 25, warning 75, success 150, info/accent 258. The 50-degree
- * minimum between any two tones sharing a surface is deliberate -- a warning that sits
- * 20 degrees from danger reads as a second error state.
+ * Hue angles are OKLCh degrees, chosen for even perceptual spacing.
+ *
+ * The semantic roles are: danger 25, warning 55, caution 100, success 150, info/accent 258,
+ * discovery 300. Three warm roles is more than hue separation alone can carry -- danger to
+ * warning is 30 degrees, short of the 50 that keeps two tones from reading as the same
+ * signal. They stay distinguishable because their solid fills differ sharply in lightness
+ * as well as hue (orange L 0.77, yellow L 0.91), and because caution's fill is far lighter
+ * than anything else in the set. This is the real cost of shipping eight tones, and it is
+ * recorded here rather than discovered later.
  *
  * Drift values are total degrees of hue rotation from step 9 to the end of the scale, taken
  * from the measured end-to-end drift of the shipped Tailwind v4 palette: amber -49.6,
@@ -57,7 +62,9 @@ export type NeutralScaleId = (typeof NEUTRAL_SCALES)[number]["id"];
 export const ROLE_SCALES = {
   accent: "blue",
   danger: "red",
-  warning: "amber",
+  warning: "orange",
+  caution: "yellow",
   success: "green",
   info: "blue",
+  discovery: "violet",
 } as const;

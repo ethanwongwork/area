@@ -45,13 +45,13 @@ function ladder(tiers: Record<"xs" | "sm" | "md" | "lg" | "xl", Tier>) {
 const DEFAULT_TIERS: Record<"xs" | "sm" | "md" | "lg" | "xl", Tier> = {
   xs: { height: 24, gutter: 8, icon: 14, gap: 4, text: "xs" },
   sm: { height: 28, gutter: 10, icon: 16, gap: 6, text: "sm" },
-  md: { height: 32, gutter: 12, icon: 16, gap: 6, text: "md" },
+  md: { height: 32, gutter: 12, icon: 16, gap: 6, text: "sm" },
   lg: { height: 40, gutter: 16, icon: 20, gap: 6, text: "md" },
-  xl: { height: 48, gutter: 20, icon: 24, gap: 8, text: "lg" },
+  xl: { height: 48, gutter: 20, icon: 24, gap: 8, text: "md" },
 };
 
 const COMPACT_TIERS: Record<"xs" | "sm" | "md" | "lg" | "xl", Tier> = {
-  xs: { height: 20, gutter: 6, icon: 12, gap: 4, text: "2xs" },
+  xs: { height: 20, gutter: 6, icon: 12, gap: 4, text: "xs" },
   sm: { height: 24, gutter: 8, icon: 14, gap: 4, text: "xs" },
   md: { height: 28, gutter: 10, icon: 16, gap: 6, text: "sm" },
   lg: { height: 32, gutter: 12, icon: 16, gap: 6, text: "md" },
@@ -59,19 +59,19 @@ const COMPACT_TIERS: Record<"xs" | "sm" | "md" | "lg" | "xl", Tier> = {
 };
 
 const COMFORTABLE_TIERS: Record<"xs" | "sm" | "md" | "lg" | "xl", Tier> = {
-  xs: { height: 28, gutter: 10, icon: 16, gap: 6, text: "sm" },
-  sm: { height: 32, gutter: 12, icon: 16, gap: 6, text: "md" },
-  md: { height: 36, gutter: 14, icon: 16, gap: 8, text: "md" },
-  lg: { height: 44, gutter: 18, icon: 20, gap: 8, text: "lg" },
-  xl: { height: 52, gutter: 22, icon: 24, gap: 8, text: "lg" },
+  xs: { height: 28, gutter: 10, icon: 16, gap: 6, text: "xs" },
+  sm: { height: 32, gutter: 12, icon: 16, gap: 6, text: "sm" },
+  md: { height: 36, gutter: 14, icon: 16, gap: 8, text: "sm" },
+  lg: { height: 44, gutter: 18, icon: 20, gap: 8, text: "md" },
+  xl: { height: 52, gutter: 22, icon: 24, gap: 8, text: "md" },
 };
 
 const SPACIOUS_TIERS: Record<"xs" | "sm" | "md" | "lg" | "xl", Tier> = {
-  xs: { height: 32, gutter: 12, icon: 16, gap: 6, text: "md" },
-  sm: { height: 36, gutter: 14, icon: 16, gap: 8, text: "md" },
+  xs: { height: 32, gutter: 12, icon: 16, gap: 6, text: "sm" },
+  sm: { height: 36, gutter: 14, icon: 16, gap: 8, text: "sm" },
   md: { height: 40, gutter: 16, icon: 20, gap: 8, text: "md" },
-  lg: { height: 48, gutter: 20, icon: 24, gap: 8, text: "lg" },
-  xl: { height: 56, gutter: 24, icon: 24, gap: 10, text: "xl" },
+  lg: { height: 48, gutter: 20, icon: 24, gap: 8, text: "md" },
+  xl: { height: 56, gutter: 24, icon: 24, gap: 10, text: "lg" },
 };
 
 export const DENSITY_AXIS: AxisDefinition = {

@@ -67,6 +67,38 @@ Follow `packages/styles/src/components/button.css`. Three rules:
 State goes on `data-*` attributes, not classes, so the CSS works with plain HTML and with
 headless primitives unchanged.
 
+## Type
+
+Weight is orthogonal to role. A role sets size, leading and tracking; it never sets
+weight. That is what makes large text at a regular weight possible — a 20px paragraph
+rather than a 20px heading — which a ramp with weight baked into the role cannot express.
+
+Two weights only: regular 400, strong 550 (600 on the system preset, whose platform fonts
+ship discrete weights). Material's `emphasized` scale is the same idea with a second full
+ramp instead of one token; it is a uniform one-step increase on the variable weight axis,
+400→500 for large roles and 500→600 for small. 550 sits between those, which only works
+because Geist is variable.
+
+Names are relative (xs..xl), unlike spacing and radius, because the type axis rescales the
+whole ramp — `--area-text-14` would become a lie the moment someone picked the compact
+preset. Spacing does not rescale, so there the pixel value is the honest name.
+
+## Tones
+
+Nine, following OpenAI's vocabulary: primary, secondary, accent, info, success, warning,
+caution, danger, discovery. `primary` and `secondary` are neutral rather than brand — a
+near-black button is the strongest call to action a neutral palette can make, and it stays
+strongest whatever the accent axis is set to.
+
+A tone repoints nine slots; a variant decides which it reads. Nine tones and four variants
+is thirteen CSS blocks, not thirty-six, and adding a tone costs one block. Never write a
+`.area-button--{tone}.area-button--{variant}` pair.
+
+Three warm roles is more than hue separation alone can carry — danger to warning is 30
+degrees, short of the 50 that keeps two tones from reading as one signal. They stay
+distinguishable on lightness instead (orange L 0.77, yellow L 0.91). That is the cost of
+eight tones and it is recorded in `color/presets.ts` rather than left to be rediscovered.
+
 ## Reference style
 
 Tables, code containers and segmented controls carry the original playground's visual

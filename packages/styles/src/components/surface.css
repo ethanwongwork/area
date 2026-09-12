@@ -26,10 +26,10 @@
   }
 
   .area-card__title {
-    font-size: var(--area-heading-xs-size);
-    line-height: var(--area-heading-xs-leading);
-    letter-spacing: var(--area-heading-xs-tracking);
-    font-weight: var(--area-weight-semibold);
+    font-size: var(--area-title-xs-size);
+    line-height: var(--area-title-xs-leading);
+    letter-spacing: var(--area-title-xs-tracking);
+    font-weight: var(--area-weight-strong);
   }
 
   .area-card__description {
@@ -82,7 +82,7 @@
     min-inline-size: 0;
   }
 
-  .area-alert__title { font-weight: var(--area-weight-medium); }
+  .area-alert__title { font-weight: var(--area-weight-strong); }
   .area-alert__description { color: var(--area-fg-muted); }
 
   .area-alert--info    { --_bg: var(--area-info-surface);    --_fg: var(--area-fg-info);    --_border: var(--area-info-border); }
@@ -127,10 +127,10 @@
   }
 
   .area-dialog__title {
-    font-size: var(--area-heading-xs-size);
-    line-height: var(--area-heading-xs-leading);
-    letter-spacing: var(--area-heading-xs-tracking);
-    font-weight: var(--area-weight-semibold);
+    font-size: var(--area-title-xs-size);
+    line-height: var(--area-title-xs-leading);
+    letter-spacing: var(--area-title-xs-tracking);
+    font-weight: var(--area-weight-strong);
   }
 
   .area-dialog__description {
@@ -237,7 +237,7 @@
   .area-menu__item[data-selected] {
     background-color: var(--area-bg-component);
     color: var(--area-fg-default);
-    font-weight: var(--area-weight-medium);
+    font-weight: var(--area-weight-strong);
   }
 
   .area-menu__item--danger { color: var(--area-fg-danger); }

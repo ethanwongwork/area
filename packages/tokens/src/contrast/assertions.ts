@@ -24,7 +24,7 @@ export interface ContrastAssertion {
   note: string;
 }
 
-const TONES = ["accent", "danger", "warning", "success", "info"] as const;
+const TONES = ["accent", "danger", "warning", "caution", "success", "info", "discovery"] as const;
 
 /**
  * Resting strokes: a deliberate, documented departure from a flat 3:1 reading of
@@ -135,6 +135,23 @@ function chromeAssertions(): ContrastAssertion[] {
     { fg: "border-focus", bg: "bg-surface", ...STROKE.focus, note: "focus ring on surface" },
     { fg: "border-focus", bg: "bg-component", ...STROKE.focus, note: "focus ring on control" },
     { fg: "border-focus", bg: "bg-subtle", ...STROKE.focus, note: "focus ring on inset" },
+
+    // The neutral button fills. Primary is the strongest call to action a neutral palette
+    // can make, so its label has to clear body-text contrast, not merely large-text.
+    {
+      fg: "fg-on-neutral-solid",
+      bg: "bg-primary-solid",
+      wcag: WCAG.TEXT,
+      apca: APCA.CONTENT,
+      note: "primary button label",
+    },
+    {
+      fg: "fg-on-neutral-solid",
+      bg: "bg-secondary-solid",
+      wcag: WCAG.TEXT,
+      apca: APCA.CONTENT,
+      note: "secondary button label",
+    },
 
     // Inverted surfaces: tooltips and toasts.
     { fg: "fg-on-inverse", bg: "bg-inverse", wcag: WCAG.TEXT, apca: APCA.BODY, note: "tooltip and toast text" },

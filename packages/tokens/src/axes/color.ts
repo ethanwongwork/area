@@ -65,7 +65,7 @@ function themePreset(t: Theme): AxisPreset {
   }
 
   const fixedTones: Record<string, string> = {};
-  for (const role of ["danger", "warning", "success", "info"]) {
+  for (const role of ["danger", "warning", "caution", "success", "info", "discovery"]) {
     Object.assign(fixedTones, tokensForRole(resolved, role));
   }
 
@@ -89,16 +89,22 @@ export const THEME_AXIS: AxisDefinition = {
     ...[...NEUTRAL_SCALES, ...CHROMATIC_SCALES].map((s) => `--area-${s.id}-`),
     "--area-danger-",
     "--area-warning-",
+    "--area-caution-",
     "--area-success-",
     "--area-info-",
+    "--area-discovery-",
     "--area-fg-danger",
     "--area-fg-warning",
+    "--area-fg-caution",
     "--area-fg-success",
     "--area-fg-info",
+    "--area-fg-discovery",
     "--area-fg-on-danger",
     "--area-fg-on-warning",
+    "--area-fg-on-caution",
     "--area-fg-on-success",
     "--area-fg-on-info",
+    "--area-fg-on-discovery",
     "--area-shadow-color",
   ],
   presets: [themePreset("light"), themePreset("dark")],
@@ -130,6 +136,7 @@ export const NEUTRAL_AXIS: AxisDefinition = {
     "--area-fg-placeholder",
     "--area-fg-disabled",
     "--area-fg-on-inverse",
+    "--area-fg-on-neutral-solid",
     "--area-border-subtle",
     "--area-border-hover",
     "--area-border:",

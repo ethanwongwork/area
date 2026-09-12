@@ -17,7 +17,16 @@
 import type { Twelve } from "../color/curves.ts";
 
 /** The roles the semantic layer addresses. The colour axis repoints `accent`. */
-export const ROLES = ["neutral", "accent", "danger", "warning", "success", "info"] as const;
+export const ROLES = [
+  "neutral",
+  "accent",
+  "danger",
+  "warning",
+  "caution",
+  "success",
+  "info",
+  "discovery",
+] as const;
 export type Role = (typeof ROLES)[number];
 
 export type Alias =
@@ -62,6 +71,14 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   /** A filled neutral surface that carries inverted text -- tooltips, toasts. */
   "bg-inverse": step("neutral", 12),
   "fg-on-inverse": step("neutral", 1),
+  /**
+   * The two neutral button fills. Primary is the near-black call to action, secondary one
+   * step of emphasis down. Both are named here so the contrast gate can assert on them --
+   * they are not part of a tonal block, so nothing else would have covered them.
+   */
+  "bg-primary-solid": step("neutral", 12),
+  "bg-secondary-solid": step("neutral", 11),
+  "fg-on-neutral-solid": step("neutral", 1),
   /** Translucent tints, for hover on an unknown background. */
   "bg-hover": alpha("neutral", 4),
   "bg-active": alpha("neutral", 5),
@@ -103,8 +120,10 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   ...tonalBlock("accent", "accent"),
   ...tonalBlock("danger", "danger"),
   ...tonalBlock("warning", "warning"),
+  ...tonalBlock("caution", "caution"),
   ...tonalBlock("success", "success"),
   ...tonalBlock("info", "info"),
+  ...tonalBlock("discovery", "discovery"),
 };
 
 export type SemanticTokenName = keyof typeof SEMANTIC_ALIASES;

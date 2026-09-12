@@ -28,6 +28,8 @@ const ALLOWED = new Map([
   ["--docs-blur", "Backdrop blur on this site's header. No Area surface uses blur."],
   ["--docs-axis-col", "Minimum column width in the axis panel."],
   ["--docs-preview-min", "Minimum height of an example preview."],
+  ["--docs-specimen", "Minimum width of a specimen tile in a foundation grid."],
+  ["--docs-figure", "Height of the figure area inside a specimen tile."],
 ]);
 
 /** Structural values that carry no visual identity. */

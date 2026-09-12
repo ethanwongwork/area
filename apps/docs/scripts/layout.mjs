@@ -48,6 +48,28 @@ export function codeBlock(code, { title, flush = false, wrap = true } = {}) {
 </div>`;
 }
 
+/**
+ * A pair of views over the same data, with a segmented control to switch between them.
+ *
+ * Every foundation page offers both: a grid, which is how you judge a scale by eye, and a
+ * table, which is how you read the values. Neither is a substitute for the other, so the
+ * page ships both rather than choosing.
+ */
+export function viewToggle(id, { grid, table: tableHtml, initial = "grid" }) {
+  const option = (value, label) =>
+    `<button type="button" role="radio" class="area-segmented__item" data-view-value="${value}" aria-checked="${value === initial}"${value === initial ? " data-selected" : ""}>${label}</button>`;
+
+  return `<div class="docs-view" data-view="${initial}" id="view-${id}">
+  <div class="docs-view__bar">
+    <div class="area-segmented area-segmented--xs" role="radiogroup" aria-label="View as" data-view-toggle>
+      ${option("grid", "Grid")}${option("table", "Table")}
+    </div>
+  </div>
+  <div class="docs-view__pane" data-pane="grid">${grid}</div>
+  <div class="docs-view__pane" data-pane="table">${tableHtml}</div>
+</div>`;
+}
+
 /** A ruled table, in the shape the design system defines. */
 export function table(headers, rows, { className = "" } = {}) {
   return `<div class="area-table-wrapper">
@@ -79,6 +101,8 @@ export const DOCS_CSS = `
     --docs-blur: 8px;
     --docs-axis-col: 260px;
     --docs-preview-min: 140px;
+    --docs-specimen: 150px;
+    --docs-figure: 72px;
   }
 
   html { scroll-behavior: smooth; scroll-padding-block-start: calc(var(--docs-topbar) + var(--area-space-24)); }
@@ -101,7 +125,7 @@ export const DOCS_CSS = `
     backdrop-filter: blur(var(--docs-blur));
   }
 
-  .docs-brand { display: flex; align-items: center; gap: var(--area-space-8); font-weight: var(--area-weight-semibold); }
+  .docs-brand { display: flex; align-items: center; gap: var(--area-space-8); font-weight: var(--area-weight-strong); }
   .docs-brand__mark {
     inline-size: var(--area-icon-md);
     block-size: var(--area-icon-md);
@@ -163,14 +187,14 @@ export const DOCS_CSS = `
 
   /* --- Content ----------------------------------------------------------- */
 
-  .docs-title { font-size: var(--area-heading-xl-size); line-height: var(--area-heading-xl-leading); letter-spacing: var(--area-heading-xl-tracking); font-weight: var(--area-weight-semibold); }
+  .docs-title { font-size: var(--area-title-lg-size); line-height: var(--area-title-lg-leading); letter-spacing: var(--area-title-lg-tracking); font-weight: var(--area-weight-strong); }
   .docs-lede { margin-block-start: var(--area-space-8); font-size: var(--area-text-lg-size); line-height: var(--area-text-lg-leading); color: var(--area-fg-muted); }
 
-  .docs-h2 { margin-block: var(--area-space-40) var(--area-space-12); font-size: var(--area-heading-md-size); line-height: var(--area-heading-md-leading); letter-spacing: var(--area-heading-md-tracking); font-weight: var(--area-weight-semibold); }
-  .docs-h3 { margin-block: var(--area-space-32) var(--area-space-8); font-size: var(--area-heading-xs-size); line-height: var(--area-heading-xs-leading); letter-spacing: var(--area-heading-xs-tracking); font-weight: var(--area-weight-semibold); }
+  .docs-h2 { margin-block: var(--area-space-40) var(--area-space-12); font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); letter-spacing: var(--area-title-md-tracking); font-weight: var(--area-weight-strong); }
+  .docs-h3 { margin-block: var(--area-space-32) var(--area-space-8); font-size: var(--area-title-xs-size); line-height: var(--area-title-xs-leading); letter-spacing: var(--area-title-xs-tracking); font-weight: var(--area-weight-strong); }
   .docs-note { margin-block-end: var(--area-space-12); color: var(--area-fg-muted); }
   .docs-prose p { margin-block: var(--area-space-12); color: var(--area-fg-muted); }
-  .docs-prose p strong { color: var(--area-fg-default); font-weight: var(--area-weight-medium); }
+  .docs-prose p strong { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
   .docs-stack { display: flex; flex-direction: column; gap: var(--area-space-8); }
 
   /*
@@ -195,17 +219,38 @@ export const DOCS_CSS = `
   }
   .docs-example__preview--column { flex-direction: column; align-items: flex-start; justify-content: flex-start; }
 
+  /* --- Paired views ------------------------------------------------------ */
+
+  .docs-view { margin-block: var(--area-space-12); }
+  .docs-view__bar { display: flex; justify-content: flex-end; margin-block-end: var(--area-space-8); }
+  .docs-view[data-view="grid"] .docs-view__pane[data-pane="table"] { display: none; }
+  .docs-view[data-view="table"] .docs-view__pane[data-pane="grid"] { display: none; }
+
   /* --- Foundations ------------------------------------------------------- */
 
   .docs-swatch-row { margin-block-end: var(--area-space-16); }
   .docs-swatch-row__name { font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); margin-block-end: var(--area-space-4); }
   .docs-swatch-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--area-space-2); }
   .docs-swatch-grid > div { aspect-ratio: 1 / 1.5; border-radius: var(--area-radius-small); }
-  .docs-step-legend { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--area-space-2); text-align: center; font-size: var(--area-text-2xs-size); line-height: var(--area-text-2xs-leading); color: var(--area-fg-subtle); }
+  .docs-step-legend { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--area-space-2); text-align: center; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-subtle); }
 
-  .docs-type-row { display: flex; align-items: baseline; gap: var(--area-space-24); padding-block: var(--area-space-12); border-block-end: var(--area-border-width) solid var(--area-border-subtle); }
+  .docs-type-row { display: grid; grid-template-columns: 150px 1fr 1fr; align-items: baseline; gap: var(--area-space-16); padding-block: var(--area-space-12); border-block-end: var(--area-border-width) solid var(--area-border-subtle); }
   .docs-type-row__meta { flex-shrink: 0; inline-size: 150px; font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
   .docs-type-row__sample { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .docs-specimen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--docs-specimen), 1fr)); gap: var(--area-space-12); }
+  .docs-specimen {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-8);
+    padding: var(--area-space-12);
+    border: var(--area-border-width) solid var(--area-border-subtle);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+  }
+  .docs-specimen__name { font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
+  .docs-specimen__figure { display: flex; align-items: center; justify-content: center; min-block-size: var(--docs-figure); }
+  .docs-specimen__box { background-color: var(--area-accent-surface-active); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-accent-border); }
 
   .docs-token-chip { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: var(--area-radius-small); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle); }
   .docs-mono { font-family: var(--area-font-mono); }
@@ -265,6 +310,18 @@ export const DOCS_SCRIPT = `
       return;
     }
 
+    var view = event.target.closest("[data-view-value]");
+    if (view) {
+      var host = view.closest(".docs-view");
+      host.setAttribute("data-view", view.getAttribute("data-view-value"));
+      host.querySelectorAll("[data-view-value]").forEach(function (button) {
+        var on = button === view;
+        if (on) button.setAttribute("data-selected", ""); else button.removeAttribute("data-selected");
+        button.setAttribute("aria-checked", on ? "true" : "false");
+      });
+      return;
+    }
+
     var copy = event.target.closest("[data-copy]");
     if (copy) {
       var block = copy.closest(".area-code-block");
@@ -276,6 +333,19 @@ export const DOCS_SCRIPT = `
         setTimeout(function () { label.textContent = original; }, 1200);
       });
     }
+  });
+
+  // Arrow keys move between options in a radiogroup, which is what the role promises.
+  document.addEventListener("keydown", function (event) {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    var item = event.target.closest(".area-segmented__item");
+    if (!item) return;
+    var group = item.parentElement;
+    var items = Array.prototype.slice.call(group.querySelectorAll(".area-segmented__item"));
+    var next = items[(items.indexOf(item) + (event.key === "ArrowRight" ? 1 : -1) + items.length) % items.length];
+    next.focus();
+    next.click();
+    event.preventDefault();
   });
 
   // Scrollspy for the on-this-page list.

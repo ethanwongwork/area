@@ -8,7 +8,7 @@ import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderDemos } from "./render.mjs";
-import { DOCS_CSS, DOCS_SCRIPT, codeBlock, escapeHtml, highlight, table } from "./layout.mjs";
+import { DOCS_CSS, DOCS_SCRIPT, codeBlock, escapeHtml, highlight, table, viewToggle } from "./layout.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -166,6 +166,7 @@ const COLUMN_DEMOS = new Set([
   "TextareaDefault",
   "SelectDefault",
   "CheckboxDescription",
+  "ButtonToneMatrix",
 ]);
 
 function componentPage(spec) {
@@ -237,9 +238,23 @@ function colorPage() {
 ${steps}
 
 <h2 class="docs-h2" id="scales">Scales</h2>
-<p class="docs-note">Rendered from the tokens themselves, so these react to the theme and neutral axes. Switch the theme above to see the dark ramps. Hover a swatch for both values.</p>
-<div class="docs-step-legend">${tokens.stepRoles.map((_, i) => `<span>${i + 1}</span>`).join("")}</div>
-${Object.keys(tokens.scales).map((n) => swatchRow(n)).join("")}
+<p class="docs-note">Rendered from the tokens themselves, so these react to the theme and neutral axes. Switch the theme above to see the dark ramps.</p>
+${viewToggle("scales", {
+  grid: `<div class="docs-step-legend">${tokens.stepRoles.map((_, i) => `<span>${i + 1}</span>`).join("")}</div>
+${Object.keys(tokens.scales).map((n) => swatchRow(n)).join("")}`,
+  table: table(
+    ["Scale", "Step", "Role", "Light", "Dark"],
+    Object.keys(tokens.scales).flatMap((name) =>
+      tokens.scales[name].light.steps.map((step, i) => [
+        `<span class="docs-mono">${name}</span>`,
+        `<span class="docs-mono">${step.step}</span>`,
+        escapeHtml(step.role),
+        `<span class="docs-mono">${step.hex}</span>`,
+        `<span class="docs-mono">${tokens.scales[name].dark.steps[i].hex}</span>`,
+      ]),
+    ),
+  ),
+})}
 
 <h2 class="docs-h2" id="semantic">Semantic tokens</h2>
 <p class="docs-note">The only colour vocabulary a component may use. Each one points at a role and a step, never at a literal.</p>
@@ -274,13 +289,14 @@ ${table(
 
 function typographyPage() {
   const preset = tokens.axes.find((a) => a.id === "type").presets.find((p) => p.id === "geist");
-  const groups = { text: [], heading: [], display: [] };
+  const groups = { text: [], title: [], display: [] };
 
   for (const [name, value] of Object.entries(preset.tokens)) {
-    const m = name.match(/^--area-(text|heading|display)-([\w]+)-size$/);
+    const m = name.match(/^--area-(text|title|display)-([\w]+)-size$/);
     if (!m) continue;
     const [, group, step] = m;
     groups[group].push({
+      group,
       step,
       size: value,
       leading: preset.tokens[`--area-${group}-${step}-leading`],
@@ -288,32 +304,80 @@ function typographyPage() {
     });
   }
 
-  const rows = (group, weight) =>
+  for (const key of Object.keys(groups)) {
+    groups[key].sort((a, b) => parseFloat(a.size) - parseFloat(b.size));
+  }
+
+  const style = (r, weight) =>
+    `font-size:var(--area-${r.group}-${r.step}-size);line-height:var(--area-${r.group}-${r.step}-leading);letter-spacing:var(--area-${r.group}-${r.step}-tracking);font-weight:var(--area-weight-${weight})`;
+
+  const specimens = (group) =>
     groups[group]
-      .sort((a, b) => parseFloat(a.size) - parseFloat(b.size))
       .map(
         (r) =>
-          `<div class="docs-type-row"><div class="docs-type-row__meta">${group}-${r.step}<br>${r.size} / ${r.leading} / ${r.tracking}</div><div class="docs-type-row__sample" style="font-size:var(--area-${group}-${r.step}-size);line-height:var(--area-${group}-${r.step}-leading);letter-spacing:var(--area-${group}-${r.step}-tracking);font-weight:var(--area-weight-${weight})">The quick brown fox</div></div>`,
+          `<div class="docs-type-row">
+      <div class="docs-type-row__meta">${group}-${r.step}<br>${r.size} / ${r.leading} / ${r.tracking}</div>
+      <div class="docs-type-row__sample" style="${style(r, "regular")}">Regular</div>
+      <div class="docs-type-row__sample" style="${style(r, "strong")}">Strong</div>
+    </div>`,
       )
       .join("");
 
+  const rows = (group) =>
+    table(
+      ["Token", "Size", "Leading", "Ratio", "Tracking"],
+      groups[group].map((r) => [
+        `<span class="docs-mono">--area-${r.group}-${r.step}</span>`,
+        `<span class="docs-mono">${r.size}</span>`,
+        `<span class="docs-mono">${r.leading}</span>`,
+        `<span class="docs-mono">${(parseFloat(r.leading) / parseFloat(r.size)).toFixed(2)}</span>`,
+        `<span class="docs-mono">${r.tracking}</span>`,
+      ]),
+    );
+
+  const section = (id, name, note) =>
+    `<h2 class="docs-h2" id="${id}">${name}</h2>
+<p class="docs-note">${note}</p>
+${viewToggle(`type-${id}`, { grid: specimens(id), table: rows(id) })}`;
+
   const body = `<div class="docs-prose">
-<p>Geist Sans and Geist Mono, self-hosted. Geist has a single weight axis and no optical-size axis, so tracking is built by hand — when a face carries optical sizing the font already adjusts its own spacing, and manual tracking double-corrects.</p>
-<p>Negative tracking follows the convergent practice of systems built on faces without optical sizing. Line heights land on the 4px grid and the ratio falls as size rises: 1.43 at the 14px default, 1.5 at 16px body, 1.0 at display.</p>
+<p><strong>Weight is orthogonal to role.</strong> A role sets size, leading and tracking — it does not set weight. That is what makes large text at a regular weight possible: a 20px paragraph rather than a 20px heading. A ramp with weight baked into the role cannot express that at all.</p>
+<p><strong>Two weights, not three.</strong> Regular at 400 and strong at 550. Every style below exists in both, which is why each row shows both.</p>
+<p>Geist has a single weight axis and no optical-size axis, so tracking is built by hand. When a face carries optical sizing the font already adjusts its own spacing and manual tracking double-corrects — which is why Apple's SF Pro tracking table reverses direction above 20pt and must not be copied onto a face like this one.</p>
 </div>
-<h2 class="docs-h2" id="text">Text</h2><p class="docs-note">Weight 400. The 14px step is the default for all UI.</p>${rows("text", "regular")}
-<h2 class="docs-h2" id="heading">Heading</h2><p class="docs-note">Weight 600.</p>${rows("heading", "semibold")}
-<h2 class="docs-h2" id="display">Display</h2><p class="docs-note">Weight 600. Marketing scale.</p>${rows("display", "semibold")}`;
+${section("text", "Text", "Anything read as prose or rendered inside a control. Leading runs 1.33 to 1.5, rising with size. The 16px step is the size this ramp is meant to be read at; controls take 14px, which is the split Notion uses between content and chrome.")}
+${section("title", "Title", "Headings, from a card's to a page's. The same sizes as the upper half of the text ramp, but with tighter leading and real negative tracking, because a title is one or two lines and a paragraph is not.")}
+${section("display", "Display", "Hero type. Tracking stops at -0.03em: Inter's published dynamic-metrics curve asymptotes at -0.0223em, which makes anything past roughly -0.03em a stylistic choice rather than an optical correction.")}
+<h2 class="docs-h2" id="weights">Weights</h2>
+<p class="docs-note">Two, and only two. Material ships a parallel "emphasized" scale that is a uniform one-step increase on the variable weight axis; this is the same idea with one token instead of a second ramp.</p>
+${table(
+  ["Token", "Geist", "System", "Use"],
+  [
+    [
+      `<span class="docs-mono">--area-weight-regular</span>`,
+      `<span class="docs-mono">400</span>`,
+      `<span class="docs-mono">400</span>`,
+      "Body copy, and any text that is being read rather than scanned.",
+    ],
+    [
+      `<span class="docs-mono">--area-weight-strong</span>`,
+      `<span class="docs-mono">550</span>`,
+      `<span class="docs-mono">600</span>`,
+      "Titles, control labels, and emphasis within text. Not long-form copy.",
+    ],
+  ],
+)}`;
 
   return page({
     slug: "typography",
     title: "Typography",
-    lede: "One ramp for text, one for headings, one for display.",
+    lede: "Three roles, two weights, and every size available in both.",
     body,
     toc: [
       { id: "text", title: "Text" },
-      { id: "heading", title: "Heading" },
+      { id: "title", title: "Title" },
       { id: "display", title: "Display" },
+      { id: "weights", title: "Weights" },
     ],
   });
 }
@@ -330,12 +394,225 @@ function axisPresetTable(axisId) {
   );
 }
 
-function simpleAxisPage(axisId, slug, title, lede, prose, extra = "") {
-  const body = `<div class="docs-prose">${prose}</div>
+function specimen(name, figure, meta) {
+  return `<div class="docs-specimen">
+  <span class="docs-specimen__name">${escapeHtml(name)}</span>
+  <div class="docs-specimen__figure">${figure}</div>
+  ${meta ? `<span class="docs-specimen__name">${escapeHtml(meta)}</span>` : ""}
+</div>`;
+}
+
+function specimenGrid(items) {
+  return `<div class="docs-specimen-grid">${items.join("")}</div>`;
+}
+
+/** Tier values for the current density preset, read from the token data. */
+function densityRows(presetId) {
+  const axis = tokens.axes.find((a) => a.id === "density");
+  const preset = axis.presets.find((p) => p.id === presetId);
+  return ["xs", "sm", "md", "lg", "xl"].map((tier) => ({
+    tier,
+    height: preset.tokens[`--area-control-${tier}`],
+    gutter: preset.tokens[`--area-gutter-${tier}`],
+    icon: preset.tokens[`--area-icon-${tier}`],
+    gap: preset.tokens[`--area-gap-${tier}`],
+  }));
+}
+
+function densityPage() {
+  const rows = densityRows("default");
+  const grid = specimenGrid(
+    rows.map((r) =>
+      specimen(
+        `control-${r.tier}`,
+        `<div class="docs-specimen__box" style="inline-size:100%;block-size:var(--area-control-${r.tier});border-radius:var(--area-radius-control)"></div>`,
+        `${r.height} · pad ${r.gutter} · icon ${r.icon}`,
+      ),
+    ),
+  );
+
+  const body = `<div class="docs-prose">
+<p>The default tier is 32px — the most common default across every system measured. The ladder 24/28/32/40/48 is Primer's exact scale.</p>
+<p>Presets shift which rung is medium; they do not rescale the spacing primitives. Compact means components pick smaller steps, not that 12px quietly becomes 10px.</p>
+</div>
+<h2 class="docs-h2" id="tiers">Control tiers</h2>
+${viewToggle("density-tiers", {
+  grid,
+  table: table(
+    ["Tier", "Height", "Padding", "Icon", "Gap"],
+    rows.map((r) => [
+      `<span class="docs-mono">${r.tier}</span>`,
+      `<span class="docs-mono">${r.height}</span>`,
+      `<span class="docs-mono">${r.gutter}</span>`,
+      `<span class="docs-mono">${r.icon}</span>`,
+      `<span class="docs-mono">${r.gap}</span>`,
+    ]),
+  ),
+})}
+<h2 class="docs-h2" id="spacing">Spacing ramp</h2>
+<p class="docs-note">Fixed primitives, named by their pixel value. The density axis moves which step a component reaches for; it never rescales the ramp.</p>
+${viewToggle("density-space", {
+  grid: specimenGrid(
+    tokens.spaceRamp.filter((n) => n > 0).map((n) =>
+      specimen(
+        `space-${n}`,
+        `<div class="docs-specimen__box" style="inline-size:var(--area-space-${n});block-size:var(--area-space-${n});border-radius:var(--area-radius-2)"></div>`,
+        `${n}px`,
+      ),
+    ),
+  ),
+  table: table(
+    ["Token", "Value"],
+    tokens.spaceRamp.map((n) => [`<span class="docs-mono">--area-space-${n}</span>`, `<span class="docs-mono">${n}px</span>`]),
+  ),
+})}
 <h2 class="docs-h2" id="presets">Presets</h2>
-${axisPresetTable(axisId)}
-${extra}`;
-  return page({ slug, title, lede, body, toc: [{ id: "presets", title: "Presets" }] });
+${axisPresetTable("density")}`;
+
+  return page({
+    slug: "density",
+    title: "Density",
+    lede: "Control heights and the room inside them.",
+    body,
+    toc: [
+      { id: "tiers", title: "Control tiers" },
+      { id: "spacing", title: "Spacing ramp" },
+      { id: "presets", title: "Presets" },
+    ],
+  });
+}
+
+function radiusPage() {
+  const axis = tokens.axes.find((a) => a.id === "radius");
+  const grid = specimenGrid(
+    axis.presets.map((p) =>
+      specimen(
+        p.id,
+        `<div class="docs-specimen__box" data-area-radius="${p.id}" style="inline-size:var(--area-control-xl);block-size:var(--area-control-xl);border-radius:var(--area-radius-control)"></div>`,
+        `${Math.round(32 * parseFloat(p.tokens["--area-radius-scale"]))}px control · ${p.tokens["--area-radius-container"]} container`,
+      ),
+    ),
+  );
+
+  const body = `<div class="docs-prose">
+<p>Controls take a unitless multiplier of their own height rather than a fixed pixel value. That is what keeps this axis independent of density — otherwise every radius preset would need a variant for every density preset.</p>
+<p>The default resolves to 6px on a 32px control, which is what Primer, Vercel, Linear and Notion all ship. Containers sit at 12px, the single most agreed-upon number in the survey.</p>
+</div>
+<h2 class="docs-h2" id="presets">Presets</h2>
+${viewToggle("radius-presets", {
+  grid,
+  table: table(
+    ["Preset", "Scale", "Control at 32px", "Container", "Small"],
+    axis.presets.map((p) => [
+      escapeHtml(p.label) + (p.id === axis.defaultPreset ? " (default)" : ""),
+      `<span class="docs-mono">${p.tokens["--area-radius-scale"]}</span>`,
+      `<span class="docs-mono">${Math.round(32 * parseFloat(p.tokens["--area-radius-scale"]))}px</span>`,
+      `<span class="docs-mono">${p.tokens["--area-radius-container"]}</span>`,
+      `<span class="docs-mono">${p.tokens["--area-radius-small"]}</span>`,
+    ]),
+  ),
+})}`;
+
+  return page({
+    slug: "radius",
+    title: "Radius",
+    lede: "How rounded controls and containers are.",
+    body,
+    toc: [{ id: "presets", title: "Presets" }],
+  });
+}
+
+function surfacePage() {
+  const axis = tokens.axes.find((a) => a.id === "surface");
+  const grid = specimenGrid(
+    [1, 2, 3, 4].map((level) =>
+      specimen(
+        `shadow-${level}`,
+        `<div style="inline-size:var(--area-control-xl);block-size:var(--area-control-xl);border-radius:var(--area-radius-container);background:var(--area-bg-surface);box-shadow:var(--area-shadow-${level})"></div>`,
+        level === 1 ? "resting" : level === 2 ? "raised" : level === 3 ? "floating" : "modal",
+      ),
+    ),
+  );
+
+  const body = `<div class="docs-prose">
+<p>Elevation uses negative spread so a shadow reads as lift rather than as a grey halo. Shadow colour is its own token, so a dark theme can deepen it — a shadow authored as flat black disappears on a dark surface.</p>
+</div>
+<h2 class="docs-h2" id="elevation">Elevation</h2>
+${viewToggle("surface-elevation", {
+  grid,
+  table: table(
+    ["Token", "Value"],
+    [1, 2, 3, 4].map((level) => [
+      `<span class="docs-mono">--area-shadow-${level}</span>`,
+      `<span class="docs-mono">${escapeHtml(axis.presets.find((p) => p.id === axis.defaultPreset).tokens[`--area-shadow-${level}`])}</span>`,
+    ]),
+  ),
+})}
+<h2 class="docs-h2" id="presets">Presets</h2>
+${axisPresetTable("surface")}`;
+
+  return page({
+    slug: "surface",
+    title: "Surface",
+    lede: "Stroke weight and elevation.",
+    body,
+    toc: [
+      { id: "elevation", title: "Elevation" },
+      { id: "presets", title: "Presets" },
+    ],
+  });
+}
+
+function motionPage() {
+  const axis = tokens.axes.find((a) => a.id === "motion");
+  const preset = axis.presets.find((p) => p.id === axis.defaultPreset);
+  const durations = Object.keys(preset.tokens).filter((k) => k.includes("-duration-"));
+  const easings = Object.keys(preset.tokens).filter((k) => k.includes("-ease-"));
+
+  const body = `<div class="docs-prose">
+<p>Every preset keeps the same token names, so no component ever branches on motion. The <code class='area-code'>none</code> preset sets durations to zero rather than removing transitions, which lets it double as the target for <code class='area-code'>prefers-reduced-motion</code>.</p>
+</div>
+<h2 class="docs-h2" id="durations">Durations</h2>
+${viewToggle("motion-durations", {
+  grid: specimenGrid(
+    durations.map((token) =>
+      specimen(
+        token.replace("--area-", ""),
+        `<div class="docs-specimen__box" style="inline-size:100%;block-size:var(--area-space-8);border-radius:var(--area-radius-full)"></div>`,
+        preset.tokens[token],
+      ),
+    ),
+  ),
+  table: table(
+    ["Token", ...axis.presets.map((p) => p.label)],
+    durations.map((token) => [
+      `<span class="docs-mono">${token}</span>`,
+      ...axis.presets.map((p) => `<span class="docs-mono">${p.tokens[token]}</span>`),
+    ]),
+  ),
+})}
+<h2 class="docs-h2" id="easings">Easings</h2>
+${table(
+  ["Token", "Value"],
+  easings.map((token) => [
+    `<span class="docs-mono">${token}</span>`,
+    `<span class="docs-mono">${escapeHtml(preset.tokens[token])}</span>`,
+  ]),
+)}
+<h2 class="docs-h2" id="presets">Presets</h2>
+${axisPresetTable("motion")}`;
+
+  return page({
+    slug: "motion",
+    title: "Motion",
+    lede: "How long transitions take.",
+    body,
+    toc: [
+      { id: "durations", title: "Durations" },
+      { id: "easings", title: "Easings" },
+      { id: "presets", title: "Presets" },
+    ],
+  });
 }
 
 function axesPage() {
@@ -404,46 +681,10 @@ const pages = [
   ["axes.html", axesPage()],
   ["color.html", colorPage()],
   ["typography.html", typographyPage()],
-  [
-    "density.html",
-    simpleAxisPage(
-      "density",
-      "density",
-      "Density",
-      "Control heights and the room inside them.",
-      "<p>The default tier is 32px — the most common default across every system measured. The ladder 24/28/32/40/48 is Primer's exact scale.</p><p>Presets shift which rung is medium; they do not rescale the spacing primitives. Compact means components pick smaller steps, not that 12px quietly becomes 10px.</p>",
-    ),
-  ],
-  [
-    "radius.html",
-    simpleAxisPage(
-      "radius",
-      "radius",
-      "Radius",
-      "How rounded controls and containers are.",
-      "<p>Controls take a unitless multiplier of their own height rather than a fixed pixel value. That is what keeps this axis independent of density — otherwise every radius preset would need a variant for every density preset.</p><p>The default resolves to 6px on a 32px control, which is what Primer, Vercel, Linear and Notion all ship. Containers sit at 12px, the single most agreed-upon number in the survey.</p>",
-    ),
-  ],
-  [
-    "surface.html",
-    simpleAxisPage(
-      "surface",
-      "surface",
-      "Surface",
-      "Stroke weight and elevation.",
-      "<p>Elevation uses negative spread so a shadow reads as lift rather than as a grey halo. Shadow colour is its own token, so a dark theme can deepen it — a shadow authored as flat black disappears on a dark surface.</p>",
-    ),
-  ],
-  [
-    "motion.html",
-    simpleAxisPage(
-      "motion",
-      "motion",
-      "Motion",
-      "How long transitions take.",
-      "<p>Every preset keeps the same token names, so no component ever branches on motion. The <code class='area-code'>none</code> preset sets durations to zero rather than removing transitions, which lets it double as the target for <code class='area-code'>prefers-reduced-motion</code>.</p>",
-    ),
-  ],
+  ["density.html", densityPage()],
+  ["radius.html", radiusPage()],
+  ["surface.html", surfacePage()],
+  ["motion.html", motionPage()],
   ...COMPONENT_PAGES.map((spec) => [`${spec.slug}.html`, componentPage(spec)]),
 ];
 

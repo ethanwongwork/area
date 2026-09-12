@@ -27,7 +27,18 @@
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
 
-    /* Skin: what a variant repoints. */
+    /* Tone: nine slots a tone repoints, and a variant reads. */
+    --_solid: var(--area-accent-solid);
+    --_solid-hover: var(--area-accent-solid-hover);
+    --_surface: var(--area-accent-surface);
+    --_surface-hover: var(--area-accent-surface-hover);
+    --_surface-active: var(--area-accent-surface-active);
+    --_line: var(--area-accent-border);
+    --_line-hover: var(--area-accent-border-strong);
+    --_tone-fg: var(--area-fg-accent);
+    --_on-solid: var(--area-fg-on-accent);
+
+    /* Skin: what a variant resolves the tone into. */
     --_bg: transparent;
     --_bg-hover: transparent;
     --_bg-active: transparent;
@@ -49,7 +60,7 @@
     font-family: inherit;
     font-size: var(--_text);
     line-height: var(--_leading);
-    font-weight: var(--area-weight-medium);
+    font-weight: var(--area-weight-strong);
     white-space: nowrap;
     text-decoration: none;
 
@@ -135,106 +146,208 @@
     cursor: progress;
   }
 
-  /* --- Variants ----------------------------------------------------------- */
+  /* --- Tones ---------------------------------------------------------------- */
+  /*
+   * A tone repoints nine slots; a variant decides which of them it reads. Nine tones and
+   * four variants is thirteen blocks rather than thirty-six, and adding a tone costs one
+   * block rather than four.
+   *
+   * The vocabulary follows OpenAI's: primary is the near-black button, secondary the
+   * quiet grey, info a fixed blue that is deliberately not the brand, discovery a violet
+   * for AI and newly-introduced surfaces, and caution and warning are distinct steps
+   * rather than synonyms.
+   */
+
+  /*
+   * Primary is neutral, not brand. A near-black button is the strongest call to action a
+   * neutral palette can make, and it stays the strongest whatever the accent axis is set
+   * to -- which is exactly why it is not tied to the accent.
+   */
+  .area-button--primary {
+    --_solid: var(--area-neutral-12);
+    --_solid-hover: var(--area-neutral-11);
+    --_surface: var(--area-bg-component);
+    --_surface-hover: var(--area-bg-component-hover);
+    --_surface-active: var(--area-bg-component-active);
+    --_line: var(--area-border);
+    --_line-hover: var(--area-border-hover);
+    --_tone-fg: var(--area-fg-default);
+    --_on-solid: var(--area-bg-page);
+  }
+
+  /* Secondary: the same neutral family, one step of emphasis down. */
+  .area-button--secondary {
+    --_solid: var(--area-neutral-11);
+    --_solid-hover: var(--area-neutral-12);
+    --_surface: var(--area-bg-component);
+    --_surface-hover: var(--area-bg-component-hover);
+    --_surface-active: var(--area-bg-component-active);
+    --_line: var(--area-border);
+    --_line-hover: var(--area-border-hover);
+    --_tone-fg: var(--area-fg-muted);
+    --_on-solid: var(--area-bg-page);
+  }
+
+  /* The brand hue. Follows the accent axis. */
+  .area-button--accent {
+    --_solid: var(--area-accent-solid);
+    --_solid-hover: var(--area-accent-solid-hover);
+    --_surface: var(--area-accent-surface);
+    --_surface-hover: var(--area-accent-surface-hover);
+    --_surface-active: var(--area-accent-surface-active);
+    --_line: var(--area-accent-border);
+    --_line-hover: var(--area-accent-border-strong);
+    --_tone-fg: var(--area-fg-accent);
+    --_on-solid: var(--area-fg-on-accent);
+  }
+
+  /* Fixed blue. Informational, never the primary action. */
+  .area-button--info {
+    --_solid: var(--area-info-solid);
+    --_solid-hover: var(--area-info-solid-hover);
+    --_surface: var(--area-info-surface);
+    --_surface-hover: var(--area-info-surface-hover);
+    --_surface-active: var(--area-info-surface-active);
+    --_line: var(--area-info-border);
+    --_line-hover: var(--area-info-border-strong);
+    --_tone-fg: var(--area-fg-info);
+    --_on-solid: var(--area-fg-on-info);
+  }
+
+  .area-button--success {
+    --_solid: var(--area-success-solid);
+    --_solid-hover: var(--area-success-solid-hover);
+    --_surface: var(--area-success-surface);
+    --_surface-hover: var(--area-success-surface-hover);
+    --_surface-active: var(--area-success-surface-active);
+    --_line: var(--area-success-border);
+    --_line-hover: var(--area-success-border-strong);
+    --_tone-fg: var(--area-fg-success);
+    --_on-solid: var(--area-fg-on-success);
+  }
+
+  .area-button--warning {
+    --_solid: var(--area-warning-solid);
+    --_solid-hover: var(--area-warning-solid-hover);
+    --_surface: var(--area-warning-surface);
+    --_surface-hover: var(--area-warning-surface-hover);
+    --_surface-active: var(--area-warning-surface-active);
+    --_line: var(--area-warning-border);
+    --_line-hover: var(--area-warning-border-strong);
+    --_tone-fg: var(--area-fg-warning);
+    --_on-solid: var(--area-fg-on-warning);
+  }
+
+  .area-button--caution {
+    --_solid: var(--area-caution-solid);
+    --_solid-hover: var(--area-caution-solid-hover);
+    --_surface: var(--area-caution-surface);
+    --_surface-hover: var(--area-caution-surface-hover);
+    --_surface-active: var(--area-caution-surface-active);
+    --_line: var(--area-caution-border);
+    --_line-hover: var(--area-caution-border-strong);
+    --_tone-fg: var(--area-fg-caution);
+    --_on-solid: var(--area-fg-on-caution);
+  }
+
+  .area-button--danger {
+    --_solid: var(--area-danger-solid);
+    --_solid-hover: var(--area-danger-solid-hover);
+    --_surface: var(--area-danger-surface);
+    --_surface-hover: var(--area-danger-surface-hover);
+    --_surface-active: var(--area-danger-surface-active);
+    --_line: var(--area-danger-border);
+    --_line-hover: var(--area-danger-border-strong);
+    --_tone-fg: var(--area-fg-danger);
+    --_on-solid: var(--area-fg-on-danger);
+  }
+
+  /* Violet. Marks AI and newly-introduced surfaces. */
+  .area-button--discovery {
+    --_solid: var(--area-discovery-solid);
+    --_solid-hover: var(--area-discovery-solid-hover);
+    --_surface: var(--area-discovery-surface);
+    --_surface-hover: var(--area-discovery-surface-hover);
+    --_surface-active: var(--area-discovery-surface-active);
+    --_line: var(--area-discovery-border);
+    --_line-hover: var(--area-discovery-border-strong);
+    --_tone-fg: var(--area-fg-discovery);
+    --_on-solid: var(--area-fg-on-discovery);
+  }
+
+  /* --- Variants ------------------------------------------------------------- */
+  /*
+   * Each variant reads a different subset of the tone's slots. Nothing here names a
+   * colour, which is what lets a tone be added without touching a variant.
+   */
 
   .area-button--solid {
-    --_bg: var(--area-accent-solid);
-    --_bg-hover: var(--area-accent-solid-hover);
-    --_bg-active: var(--area-accent-solid-hover);
-    --_fg: var(--area-fg-on-accent);
+    --_bg: var(--_solid);
+    --_bg-hover: var(--_solid-hover);
+    --_bg-active: var(--_solid-hover);
+    --_fg: var(--_on-solid);
     --_shadow: var(--area-shadow-1);
   }
 
   .area-button--soft {
-    --_bg: var(--area-accent-surface);
-    --_bg-hover: var(--area-accent-surface-hover);
-    --_bg-active: var(--area-accent-surface-active);
-    --_fg: var(--area-fg-accent);
+    --_bg: var(--_surface);
+    --_bg-hover: var(--_surface-hover);
+    --_bg-active: var(--_surface-active);
+    --_fg: var(--_tone-fg);
   }
 
   .area-button--outline {
     --_bg: var(--area-bg-surface);
-    --_bg-hover: var(--area-bg-component);
-    --_bg-active: var(--area-bg-component-hover);
-    --_fg: var(--area-fg-default);
-    --_border: var(--area-border);
-    --_border-hover: var(--area-border-hover);
+    --_bg-hover: var(--_surface);
+    --_bg-active: var(--_surface-hover);
+    --_fg: var(--_tone-fg);
+    --_border: var(--_line);
+    --_border-hover: var(--_line-hover);
     --_shadow: var(--area-shadow-1);
   }
 
   .area-button--ghost {
     --_bg: transparent;
-    --_bg-hover: var(--area-bg-hover);
-    --_bg-active: var(--area-bg-active);
-    --_fg: var(--area-fg-default);
+    --_bg-hover: var(--_surface);
+    --_bg-active: var(--_surface-hover);
+    --_fg: var(--_tone-fg);
   }
 
-  /* --- Tones -------------------------------------------------------------- */
   /*
-   * A tone repoints the same four slots at a different scale. Because every scale has
-   * the same twelve roles, the block is identical for every tone -- which is the
-   * property that makes adding one a copy-paste rather than a design exercise.
+   * An outline or ghost button in the neutral family reads better with body-text
+   * foreground than with the muted tone colour, since there is no hue to carry meaning.
    */
-
-  .area-button--neutral.area-button--solid {
-    --_bg: var(--area-fg-default);
-    --_bg-hover: var(--area-neutral-11);
-    --_bg-active: var(--area-neutral-11);
-    --_fg: var(--area-bg-surface);
-  }
-
-  .area-button--neutral.area-button--soft {
-    --_bg: var(--area-bg-component);
-    --_bg-hover: var(--area-bg-component-hover);
-    --_bg-active: var(--area-bg-component-active);
+  .area-button--secondary.area-button--outline,
+  .area-button--secondary.area-button--ghost,
+  .area-button--primary.area-button--outline,
+  .area-button--primary.area-button--ghost {
     --_fg: var(--area-fg-default);
   }
 
-  .area-button--neutral.area-button--outline,
-  .area-button--neutral.area-button--ghost {
-    --_fg: var(--area-fg-default);
+  /* --- Shape and alignment ---------------------------------------------------- */
+
+  /* Fully round. OpenAI ships this as the default button shape; Area makes it opt-in. */
+  .area-button--pill {
+    border-radius: var(--area-radius-full);
   }
 
-  .area-button--danger.area-button--solid {
-    --_bg: var(--area-danger-solid);
-    --_bg-hover: var(--area-danger-solid-hover);
-    --_bg-active: var(--area-danger-solid-hover);
-    --_fg: var(--area-fg-on-danger);
+  /*
+   * Pulls a button back by its own padding so its *label* lines up with the text above
+   * it rather than its box. Only correct on ghost and other unfilled variants, where
+   * there is no visible edge for the padding to belong to.
+   */
+  .area-button--align-start { margin-inline-start: calc(var(--_gutter) * -1); }
+  .area-button--align-end { margin-inline-end: calc(var(--_gutter) * -1); }
+
+  /* A toggle that is currently on. Distinct from hover, and it persists. */
+  .area-button[data-selected] {
+    --_bg: var(--_surface-active);
+    --_fg: var(--_tone-fg);
   }
 
-  .area-button--danger.area-button--soft {
-    --_bg: var(--area-danger-surface);
-    --_bg-hover: var(--area-danger-surface-hover);
-    --_bg-active: var(--area-danger-surface-active);
-    --_fg: var(--area-fg-danger);
-  }
-
-  .area-button--danger.area-button--outline {
-    --_fg: var(--area-fg-danger);
-    --_border: var(--area-danger-border);
-    --_border-hover: var(--area-danger-border-strong);
-    --_bg-hover: var(--area-danger-surface);
-    --_bg-active: var(--area-danger-surface-hover);
-  }
-
-  .area-button--danger.area-button--ghost {
-    --_fg: var(--area-fg-danger);
-    --_bg-hover: var(--area-danger-surface);
-    --_bg-active: var(--area-danger-surface-hover);
-  }
-
-  .area-button--accent.area-button--outline {
-    --_fg: var(--area-fg-accent);
-    --_border: var(--area-accent-border);
-    --_border-hover: var(--area-accent-border-strong);
-    --_bg-hover: var(--area-accent-surface);
-    --_bg-active: var(--area-accent-surface-hover);
-  }
-
-  .area-button--accent.area-button--ghost {
-    --_fg: var(--area-fg-accent);
-    --_bg-hover: var(--area-accent-surface);
-    --_bg-active: var(--area-accent-surface-hover);
+  .area-button--solid[data-selected] {
+    --_bg: var(--_solid-hover);
+    --_fg: var(--_on-solid);
   }
 
   /* --- Sizes -------------------------------------------------------------- */

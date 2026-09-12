@@ -58,8 +58,10 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
     accent: scaleFor(accent, theme),
     danger: scaleFor(ROLE_SCALES.danger, theme),
     warning: scaleFor(ROLE_SCALES.warning, theme),
+    caution: scaleFor(ROLE_SCALES.caution, theme),
     success: scaleFor(ROLE_SCALES.success, theme),
     info: scaleFor(ROLE_SCALES.info, theme),
+    discovery: scaleFor(ROLE_SCALES.discovery, theme),
   };
 
   const lookup = Object.fromEntries(

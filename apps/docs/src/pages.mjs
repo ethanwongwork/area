@@ -13,10 +13,13 @@ export const COMPONENT_PAGES = [
     manifest: "button",
     api: [
       ["variant", '"solid" | "soft" | "outline" | "ghost"', '"solid"'],
-      ["tone", '"neutral" | "accent" | "danger"', '"accent"'],
+      ["tone", "ButtonTone (9 values)", '"accent"'],
       ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
       ["icon", "ReactNode", "—"],
       ["trailingIcon", "ReactNode", "—"],
+      ["pill", "boolean", "false"],
+      ["align", '"start" | "end"', "—"],
+      ["selected", "boolean", "false"],
       ["loading", "boolean", "false"],
       ["iconOnly", "boolean", "false"],
       ["fullWidth", "boolean", "false"],
@@ -33,8 +36,26 @@ export const COMPONENT_PAGES = [
       {
         id: "tones",
         title: "Tones",
-        note: "Use the tone prop to change which semantic scale the button draws from.",
+        note: "Nine tones. Primary and secondary are neutral rather than brand, so a near-black button stays the strongest call to action whatever the accent axis is set to.",
         demo: "ButtonTones",
+      },
+      {
+        id: "matrix",
+        title: "Tones and variants",
+        note: "Every tone works with every variant, because a tone repoints slots and a variant decides which it reads.",
+        demo: "ButtonToneMatrix",
+      },
+      {
+        id: "pill",
+        title: "Pill",
+        note: "Set pill for a fully round button.",
+        demo: "ButtonPill",
+      },
+      {
+        id: "selected",
+        title: "Selected",
+        note: "Set selected for a toggle that is currently on. It sets aria-pressed.",
+        demo: "ButtonSelected",
       },
       { id: "sizes", title: "Sizes", note: "Use the size prop to change the size of the button.", demo: "ButtonSizes" },
       {

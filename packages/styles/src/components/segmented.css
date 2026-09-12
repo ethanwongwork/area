@@ -48,7 +48,7 @@
     font-family: inherit;
     font-size: var(--_text);
     line-height: var(--_leading);
-    font-weight: var(--area-weight-medium);
+    font-weight: var(--area-weight-strong);
     white-space: nowrap;
     cursor: pointer;
     transition: var(--area-transition);

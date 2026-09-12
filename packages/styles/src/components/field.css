@@ -18,7 +18,7 @@
     gap: var(--area-space-4);
     font-size: var(--area-text-md-size);
     line-height: var(--area-text-md-leading);
-    font-weight: var(--area-weight-medium);
+    font-weight: var(--area-weight-strong);
     color: var(--area-fg-default);
   }
 
