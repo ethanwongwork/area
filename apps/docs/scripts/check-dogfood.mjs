@@ -31,7 +31,6 @@ const ALLOWED = new Map([
   ["--docs-specimen", "Minimum width of a specimen tile in a foundation grid."],
   ["--docs-figure", "Height of the figure area inside a specimen tile."],
   ["--docs-card", "Minimum width of a token card in a grid view."],
-  ["--docs-card-min", "Minimum height of a token card."],
 ]);
 
 /** Structural values that carry no visual identity. */

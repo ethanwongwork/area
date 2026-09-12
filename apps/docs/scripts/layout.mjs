@@ -143,7 +143,6 @@ export const DOCS_CSS = `
     --docs-specimen: 150px;
     --docs-figure: 72px;
     --docs-card: 230px;
-    --docs-card-min: 120px;
   }
 
   html { scroll-behavior: smooth; scroll-padding-block-start: calc(var(--docs-topbar) + var(--area-space-24)); }
@@ -230,7 +229,12 @@ export const DOCS_CSS = `
   /* --- Content ----------------------------------------------------------- */
 
   .docs-title { font-size: var(--area-title-lg-size); line-height: var(--area-title-lg-leading); letter-spacing: var(--area-title-lg-tracking); font-weight: var(--area-weight-strong); }
-  .docs-lede { margin-block-start: var(--area-space-8); font-size: var(--area-text-lg-size); line-height: var(--area-text-lg-leading); color: var(--area-fg-muted); }
+  /*
+   * The lede reads at body size, not a step above it. One prose size per page: the lede is
+   * already set apart by sitting under the title and taking the muted foreground, and a
+   * second size buys a distinction the reader has to resolve for no gain.
+   */
+  .docs-lede { margin-block-start: var(--area-space-8); color: var(--area-fg-muted); }
 
   .docs-h2 { margin-block: var(--area-space-40) var(--area-space-12); font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); letter-spacing: var(--area-title-md-tracking); font-weight: var(--area-weight-strong); }
   .docs-h3 { margin-block: var(--area-space-32) var(--area-space-8); font-size: var(--area-title-xs-size); line-height: var(--area-title-xs-leading); letter-spacing: var(--area-title-xs-tracking); font-weight: var(--area-weight-strong); }
@@ -271,20 +275,56 @@ export const DOCS_CSS = `
   .docs-view[data-view="grid"] .docs-view__pane[data-pane="table"] { display: none; }
   .docs-view[data-view="table"] .docs-view__pane[data-pane="grid"] { display: none; }
 
-  .docs-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--docs-card), 1fr)); gap: var(--area-space-12); }
+  /*
+   * Tight. The cards are a scale being read across, not a set of independent objects, so
+   * the gap is just enough to separate two borders -- the original playground put colour
+   * swatches at 2px for the same reason. A comfortable gap here reads as a gallery.
+   */
+  .docs-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--docs-card), 1fr));
+    gap: var(--area-space-4);
+  }
+
+  /*
+   * The card hugs its content: no minimum height, and the figure -- when there is one --
+   * is pushed to the bottom rather than the card being padded out to meet it.
+   */
   .docs-card {
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-10);
-    padding: var(--area-space-12);
+    padding: var(--area-space-16);
     border: var(--area-border-width) solid var(--area-border-subtle);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
-    min-block-size: var(--docs-card-min);
     overflow: hidden;
   }
-  .docs-card__meta { font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); word-break: break-word; }
-  .docs-card__figure { margin-block-start: auto; display: flex; align-items: center; }
+
+  /*
+   * One line of text between the token and its values. Using the text's own line-height
+   * rather than a spacing step keeps the gap on the same rhythm as the lines below it,
+   * so the block reads as four lines rather than as two stacked elements.
+   */
+  .docs-card__meta {
+    margin-block-start: var(--area-text-xs-leading);
+    font-family: var(--area-font-mono);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    word-break: break-word;
+  }
+
+  .docs-card__figure {
+    margin-block-start: auto;
+    padding-block-start: var(--area-space-8);
+    display: flex;
+    align-items: center;
+  }
+
+  /* A card with a figure and no values still needs the line of separation. */
+  .docs-card > .area-token + .docs-card__figure {
+    margin-block-start: var(--area-text-xs-leading);
+  }
+
   .docs-card > .area-token { align-self: flex-start; }
 
   /* Table previews sit in a fixed column, so a tall specimen cannot stretch the row. */
