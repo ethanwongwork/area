@@ -243,17 +243,13 @@ ${codeBlock(demos[spec.examples[0].demo].html, { title: "index.html" })}`;
 /** One colour scale, as a table of stops and a grid of cards printed on the colour itself. */
 function scaleSection(name) {
   const light = tokens.scales[name].light;
-  const dark = tokens.scales[name].dark;
 
-  const rows = light.steps.map((step, i) => ({
+  const rows = light.steps.map((step) => ({
     step: step.step,
     name: `${name}/${step.step}`,
-    role: step.role,
     hex: step.hex,
-    darkHex: dark.steps[i].hex,
     oklch: step.oklch,
-    grade: step.contrast.grade,
-    ratio: step.contrast.ratio,
+    // Retained: it decides whether the card's own label is legible on the swatch.
     onColor: step.contrast.fg,
   }));
 
@@ -262,12 +258,14 @@ function scaleSection(name) {
     title: name,
     description: tokens.scaleDescriptions[name],
     rows,
+    // Role and contrast are deliberately absent. This is the global ramp -- raw colour,
+    // nothing else. A step's role belongs to the semantic layer and is stated once above;
+    // contrast is a property of a *pairing*, so quoting a number against an assumed
+    // foreground here would be describing something this table does not show.
     columns: [
       { header: "Token", cell: (r) => tokenChip(r.name, { swatch: `var(--area-${name}-${r.step})` }) },
-      { header: "Role", cell: (r) => escapeHtml(r.role) },
       { header: "Hex", cell: (r) => `<span class="docs-mono">${r.hex}</span>` },
       { header: "OKLCH", cell: (r) => `<span class="docs-mono">${escapeHtml(r.oklch)}</span>` },
-      { header: "Contrast", cell: (r) => `<span class="docs-mono">${escapeHtml(r.grade)} ${r.ratio}:1</span>` },
       {
         header: "Preview",
         cell: (r) =>
@@ -279,11 +277,7 @@ function scaleSection(name) {
         name: r.name,
         onColor: true,
         style: `background:var(--area-${name}-${r.step});color:var(--area-${r.onColor === "#ffffff" ? "white" : "black"})`,
-        meta: [
-          `Hex: ${r.hex}`,
-          `OKLCH: ${escapeHtml(r.oklch)}`,
-          `Contrast: ${escapeHtml(r.grade)} ${r.ratio}:1`,
-        ],
+        meta: [`Hex: ${r.hex}`, `OKLCH: ${escapeHtml(r.oklch)}`],
       }),
   });
 }
