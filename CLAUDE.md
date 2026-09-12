@@ -41,6 +41,17 @@ exists that was never declared. Add the manifest entry in the same commit as the
 `react-dom/server`; every snippet is that demo's own source text. Never hand-write a code
 sample.
 
+**The documentation is built from the system.** `apps/docs/scripts/check-dogfood.mjs`
+fails the build on a raw length, colour or font size in the docs stylesheet, and on any
+inline style carrying a literal beyond a demo's own framing width. Five site-layout values
+are allowlisted by name, each with a stated reason. If the docs need something the system
+does not have, add it to the system.
+
+**Docs CSS must never target an `.area-*` class.** `DOCS_CSS` lives in `area.base`, which
+the cascade resolves *before* `area.components` — so such a rule silently does nothing.
+The audit catches it. The fix is always a documented variant on the component
+(`--inline`, `--flush`, `--wrap`), never an override.
+
 ## Component CSS shape
 
 Follow `packages/styles/src/components/button.css`. Three rules:
@@ -55,6 +66,14 @@ Follow `packages/styles/src/components/button.css`. Three rules:
 
 State goes on `data-*` attributes, not classes, so the CSS works with plain HTML and with
 headless primitives unchanged.
+
+## Reference style
+
+Tables, code containers and segmented controls carry the original playground's visual
+language deliberately: a fully ruled grid in a clipped rounded container; a code block
+with a toolbar above it on a surface one step quieter than the page; a segmented track
+whose radius is `inner + inset` with an inset ring rather than a border. The shapes are
+the original's, the density and tokens are the current system's.
 
 ## Concentric corners
 

@@ -179,6 +179,30 @@
   }
 
   /*
+   * Rendered in place rather than floating: a sidebar, a settings list, a table of
+   * contents. Sheds the surface, the outline and the elevation, because those exist to
+   * separate a floating panel from the page -- inline, they read as a stray card.
+   * Item geometry is untouched, so a menu item is the same control either way.
+   */
+  .area-menu--inline {
+    --_inset: 0px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    min-inline-size: 0;
+  }
+
+  /* With no panel padding, items take the small radius directly. */
+  .area-menu--inline .area-menu__item {
+    border-radius: var(--area-radius-small);
+  }
+
+  .area-menu--inline .area-menu__separator {
+    margin-inline: 0;
+  }
+
+  /*
    * Concentric corners, applied. The panel is 12px with 6px of padding, so an item is
    * 6px -- which is exactly where OpenAI (12 less 6) and Notion (10 less 4) both land.
    */
@@ -207,6 +231,13 @@
   .area-menu__item[data-disabled] {
     cursor: not-allowed;
     opacity: 0.5;
+  }
+
+  /* The current item in an inline menu. Selection, not hover. */
+  .area-menu__item[data-selected] {
+    background-color: var(--area-bg-component);
+    color: var(--area-fg-default);
+    font-weight: var(--area-weight-medium);
   }
 
   .area-menu__item--danger { color: var(--area-fg-danger); }

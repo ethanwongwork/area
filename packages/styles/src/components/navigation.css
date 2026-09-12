@@ -77,6 +77,16 @@
   }
 
   /* --- Table -------------------------------------------------------------- */
+  /*
+   * A fully ruled grid inside a clipped, rounded container: every cell carries a rule on
+   * two sides, and the rules on the outer edges are removed so the container's own border
+   * is the only thing that meets the corner radius. Without that removal you get a
+   * doubled line along each edge and a rule that visibly crosses the rounded corner.
+   *
+   * Cells align to the top, not the middle. In a data table the rows are rarely the same
+   * height, and top alignment is what keeps a wrapped cell from pushing its neighbours
+   * off the reading line.
+   */
   .area-table-wrapper {
     inline-size: 100%;
     overflow-x: auto;
@@ -96,7 +106,19 @@
   .area-table td {
     padding: var(--area-space-10) var(--area-space-12);
     text-align: start;
-    vertical-align: middle;
+    vertical-align: top;
+    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
+    border-inline-end: var(--area-border-width) solid var(--area-border-subtle);
+    overflow-wrap: break-word;
+  }
+
+  .area-table th:last-child,
+  .area-table td:last-child {
+    border-inline-end: 0;
+  }
+
+  .area-table tbody tr:last-child td {
+    border-block-end: 0;
   }
 
   .area-table th {
@@ -106,15 +128,24 @@
     white-space: nowrap;
   }
 
-  .area-table thead th { border-block-end: 1px solid var(--area-border-subtle); }
-  .area-table tbody tr + tr td { border-block-start: 1px solid var(--area-border-subtle); }
+  .area-table tbody tr {
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
 
-  .area-table--interactive tbody tr:hover td { background-color: var(--area-bg-hover); }
+  .area-table--interactive tbody tr:hover td {
+    background-color: var(--area-bg-hover);
+  }
 
   /* Tabular figures so columns of numbers align on the decimal. */
   .area-table__cell--numeric {
     text-align: end;
     font-variant-numeric: tabular-nums;
+  }
+
+  /* Shrink-to-fit column, for a cell holding only controls. */
+  .area-table__cell--fit {
+    inline-size: 1%;
+    white-space: nowrap;
   }
 
   /* --- Select ------------------------------------------------------------- */

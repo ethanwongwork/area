@@ -8,7 +8,7 @@ import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderDemos } from "./render.mjs";
-import { AXIS_SCRIPT, DOCS_CSS, escapeHtml, highlight } from "./layout.mjs";
+import { DOCS_CSS, DOCS_SCRIPT, codeBlock, escapeHtml, highlight, table } from "./layout.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -30,46 +30,77 @@ const FOUNDATION_PAGES = [
 
 /* --- Chrome ---------------------------------------------------------------- */
 
-function axisBar() {
-  const wanted = ["theme", "accent", "neutral", "type", "density", "radius", "surface", "motion"];
-  return `<div class="axis-bar">${wanted
-    .map((id) => {
-      const axis = tokens.axes.find((a) => a.id === id);
-      if (!axis) return "";
-      const options = axis.presets
-        .map((p) => `<option value="${p.id}"${p.id === axis.defaultPreset ? " selected" : ""}>${escapeHtml(p.label)}</option>`)
+/**
+ * The axis panel.
+ *
+ * Every picker is a real segmented control from the system. The accent picker renders its
+ * twelve options as swatches of each scale's own step 9, which is both the clearest way to
+ * choose a hue and a working demonstration that the scales are addressable as tokens.
+ */
+function axisPanel() {
+  const groups = tokens.axes
+    .map((axis) => {
+      const items = axis.presets
+        .map((preset) => {
+          const selected = preset.id === axis.defaultPreset;
+          const body =
+            axis.id === "accent"
+              ? `<span class="area-segmented__icon" aria-hidden="true"><span class="docs-swatch" style="background:var(--area-${preset.id}-9)"></span></span>`
+              : escapeHtml(preset.label);
+          return `<button type="button" role="radio" class="area-segmented__item" data-value="${preset.id}" aria-checked="${selected}" aria-label="${escapeHtml(preset.label)}"${selected ? " data-selected" : ""}>${body}</button>`;
+        })
         .join("");
-      return `<span class="axis-control"><label for="axis-${id}">${escapeHtml(axis.label)}</label><select id="axis-${id}" class="area-select area-select--sm" data-axis="${id}" style="inline-size:auto">${options}</select></span>`;
+
+      return `<div class="docs-axis">
+      <span class="docs-axis__name" id="axis-label-${axis.id}">${escapeHtml(axis.label)}</span>
+      <div class="area-segmented area-segmented--sm" role="radiogroup" aria-labelledby="axis-label-${axis.id}" data-axis="${axis.id}" data-default="${axis.defaultPreset}" style="flex-wrap:wrap">${items}</div>
+    </div>`;
     })
-    .join("")}</div>`;
+    .join("");
+
+  return `<div class="docs-axes" id="docs-axes" hidden>
+    <div class="docs-axes__inner">${groups}</div>
+  </div>`;
+}
+
+function topbarControls() {
+  const theme = tokens.axes.find((a) => a.id === "theme");
+  const themeItems = theme.presets
+    .map(
+      (p) =>
+        `<button type="button" role="radio" class="area-segmented__item" data-value="${p.id}" aria-checked="${p.id === theme.defaultPreset}" ${p.id === theme.defaultPreset ? "data-selected" : ""}>${escapeHtml(p.label)}</button>`,
+    )
+    .join("");
+
+  return `<div class="area-segmented area-segmented--xs" role="radiogroup" aria-label="Theme" data-axis="theme" data-default="${theme.defaultPreset}">${themeItems}</div>
+  <button type="button" class="area-button area-button--outline area-button--neutral area-button--sm" data-toggle-axes aria-expanded="false" aria-controls="docs-axes">
+    <span class="area-button__label">Customize</span>
+  </button>`;
 }
 
 function sidebar(activeSlug) {
-  const link = (href, label, slug) =>
-    `<a class="sidebar__link" href="${href}"${slug === activeSlug ? ' aria-current="page"' : ""}>${escapeHtml(label)}</a>`;
+  const item = (href, label, slug) =>
+    `<a class="area-menu__item" href="${href}"${slug === activeSlug ? ' data-selected aria-current="page"' : ""}>${escapeHtml(label)}</a>`;
 
-  return `<aside class="sidebar">
-  <div class="sidebar__group">
-    <div class="sidebar__title">Getting started</div>
-    ${link("./index.html", "Introduction", "index")}
-    ${link("./axes.html", "Axes", "axes")}
-  </div>
-  <div class="sidebar__group">
-    <div class="sidebar__title">Foundations</div>
-    ${FOUNDATION_PAGES.map((p) => link(`./${p.slug}.html`, p.name, p.slug)).join("\n    ")}
-  </div>
-  <div class="sidebar__group">
-    <div class="sidebar__title">Components</div>
-    ${COMPONENT_PAGES.map((p) => link(`./${p.slug}.html`, p.name, p.slug)).join("\n    ")}
-  </div>
+  const group = (title, links) =>
+    `<nav class="area-menu area-menu--inline" aria-label="${escapeHtml(title)}">
+      <div class="area-menu__label">${escapeHtml(title)}</div>
+      ${links}
+    </nav>`;
+
+  return `<aside class="docs-sidebar">
+  ${group("Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes")].join("\n      "))}
+  ${group("Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
+  ${group("Components", COMPONENT_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
 </aside>`;
 }
 
 function page({ slug, title, lede, body, toc = [] }) {
   const tocHtml = toc.length
-    ? `<nav class="toc"><div class="toc__title">On this page</div>${toc
-        .map((t) => `<a href="#${t.id}">${escapeHtml(t.title)}</a>`)
-        .join("")}</nav>`
+    ? `<nav class="docs-toc area-menu area-menu--inline" aria-label="On this page">
+      <div class="area-menu__label">On this page</div>
+      ${toc.map((t) => `<a class="area-menu__item" href="#${t.id}"${t.nested ? ' style="padding-inline-start:var(--area-space-16)"' : ""}>${escapeHtml(t.title)}</a>`).join("")}
+    </nav>`
     : "<div></div>";
 
   return `<!doctype html>
@@ -83,23 +114,24 @@ function page({ slug, title, lede, body, toc = [] }) {
 <style>${DOCS_CSS}</style>
 </head>
 <body>
-<header class="topbar">
-  <a class="brand" href="./index.html"><span class="brand__mark"></span> Area</a>
-  <span class="topbar__spacer"></span>
-  ${axisBar()}
+<header class="docs-topbar">
+  <a class="docs-brand" href="./index.html"><span class="docs-brand__mark"></span> Area</a>
+  <span class="docs-topbar__spacer"></span>
+  ${topbarControls()}
 </header>
-<div class="shell">
+${axisPanel()}
+<div class="docs-shell">
   ${sidebar(slug)}
-  <main class="main">
-    <div class="content">
-      <h1 class="page-title">${escapeHtml(title)}</h1>
-      <p class="page-lede">${escapeHtml(lede)}</p>
+  <main class="docs-main">
+    <div class="docs-content">
+      <h1 class="docs-title">${escapeHtml(title)}</h1>
+      <p class="docs-lede">${escapeHtml(lede)}</p>
       ${body}
     </div>
     ${tocHtml}
   </main>
 </div>
-<script>${AXIS_SCRIPT}</script>
+<script>${DOCS_SCRIPT}</script>
 </body>
 </html>`;
 }
@@ -110,52 +142,65 @@ function exampleBlock(example) {
   const demo = demos[example.demo];
   if (!demo) throw new Error(`Page references demo "${example.demo}", which does not exist.`);
 
-  const column = /column/.test(example.demo) || ["InputSizes", "FieldDefault", "FieldError", "RadioDefault", "AlertTones"].includes(example.demo);
+  const column = COLUMN_DEMOS.has(example.demo);
 
-  return `<h3 class="example" id="${example.id}">${escapeHtml(example.title)}</h3>
-${example.note ? `<p class="note">${escapeHtml(example.note)}</p>` : ""}
-<div class="example-block">
-  <div class="preview${column ? " preview--column" : ""}">${demo.html}</div>
-  <details class="code">
-    <summary>View code</summary>
-    <pre class="code-block"><code>${highlight(demo.code)}</code></pre>
-  </details>
+  return `<h3 class="docs-h3" id="${example.id}">${escapeHtml(example.title)}</h3>
+${example.note ? `<p class="docs-note">${escapeHtml(example.note)}</p>` : ""}
+<div class="docs-example">
+  <div class="docs-example__preview${column ? " docs-example__preview--column" : ""}">${demo.html}</div>
+  ${codeBlock(demo.code, { flush: true })}
 </div>`;
 }
+
+/** Demos whose instances stack rather than sit in a row. */
+const COLUMN_DEMOS = new Set([
+  "InputSizes",
+  "FieldDefault",
+  "FieldError",
+  "RadioDefault",
+  "AlertTones",
+  "InputDefault",
+  "InputWithIcon",
+  "InputWithAffix",
+  "InputInvalid",
+  "TextareaDefault",
+  "SelectDefault",
+  "CheckboxDescription",
+]);
 
 function componentPage(spec) {
   const manifest = MANIFESTS[spec.manifest];
   const lede = manifest?.description ?? "";
 
-  const install = `<h2 class="section" id="installation">Installation</h2>
-<div class="example-block"><pre class="code-block"><code>${highlight(`npm install @area/react @area/styles`)}</code></pre></div>
-<h2 class="section" id="usage">Usage</h2>
-<div class="example-block"><pre class="code-block"><code>${highlight(
-    `import { ${spec.name} } from "@area/react";\nimport "@area/styles/area.css";`,
-  )}</code></pre></div>
-<div class="example-block" style="margin-block-start:8px"><pre class="code-block"><code>${highlight(
-    demos[spec.examples[0].demo].code,
-  )}</code></pre></div>`;
+  const install = `<h2 class="docs-h2" id="installation">Installation</h2>
+${codeBlock("npm install @area/react @area/styles", { title: "terminal" })}
+<h2 class="docs-h2" id="usage">Usage</h2>
+<div class="docs-stack">
+${codeBlock(`import { ${spec.name} } from "@area/react";\nimport "@area/styles/area.css";`, { title: "app.tsx" })}
+${codeBlock(demos[spec.examples[0].demo].code, { title: "app.tsx" })}
+</div>`;
 
-  const examples = `<h2 class="section" id="examples">Examples</h2>${spec.examples.map(exampleBlock).join("\n")}`;
+  const examples = `<h2 class="docs-h2" id="examples">Examples</h2>${spec.examples.map(exampleBlock).join("\n")}`;
 
-  const api = `<h2 class="section" id="api">API reference</h2>
-<table class="api-table">
-  <thead><tr><th>Prop</th><th>Type</th><th>Default</th></tr></thead>
-  <tbody>${spec.api
-    .map(([name, type, dflt]) => `<tr><td>${escapeHtml(name)}</td><td>${escapeHtml(type)}</td><td>${escapeHtml(dflt)}</td></tr>`)
-    .join("")}</tbody>
-</table>`;
+  const api = `<h2 class="docs-h2" id="api">API reference</h2>
+${table(
+  ["Prop", "Type", "Default"],
+  spec.api.map(([name, type, dflt]) => [
+    `<span class="docs-mono">${escapeHtml(name)}</span>`,
+    `<span class="docs-mono" style="color:var(--area-fg-accent)">${escapeHtml(type)}</span>`,
+    `<span class="docs-mono" style="color:var(--area-fg-muted)">${escapeHtml(dflt)}</span>`,
+  ]),
+)}`;
 
-  const cssNote = `<h2 class="section" id="css">Without React</h2>
-<p class="note">Every component is plain CSS. Use the classes directly when you are not using React.</p>
-<div class="example-block"><pre class="code-block"><code>${highlight(demos[spec.examples[0].demo].html)}</code></pre></div>`;
+  const cssNote = `<h2 class="docs-h2" id="css">Without React</h2>
+<p class="docs-note">Every component is plain CSS. Use the classes directly when you are not using React.</p>
+${codeBlock(demos[spec.examples[0].demo].html, { title: "index.html" })}`;
 
   const toc = [
     { id: "installation", title: "Installation" },
     { id: "usage", title: "Usage" },
     { id: "examples", title: "Examples" },
-    ...spec.examples.map((e) => ({ id: e.id, title: "  " + e.title })),
+    ...spec.examples.map((e) => ({ id: e.id, title: e.title, nested: true })),
     { id: "api", title: "API reference" },
     { id: "css", title: "Without React" },
   ];
@@ -165,48 +210,50 @@ function componentPage(spec) {
 
 /* --- Foundation pages ------------------------------------------------------- */
 
-function swatchRow(name, theme) {
-  const scale = tokens.scales[name][theme];
-  return `<div class="swatch-row">
-  <div class="swatch-row__name">${name}</div>
-  <div class="swatch-grid">${scale.steps
-    .map((s) => `<div class="swatch" style="background:${s.hex}" title="${name}-${s.step} ${s.hex} — ${s.role}"></div>`)
+function swatchRow(name) {
+  const light = tokens.scales[name].light;
+  const dark = tokens.scales[name].dark;
+  return `<div class="docs-swatch-row">
+  <div class="docs-swatch-row__name">${name}</div>
+  <div class="docs-swatch-grid">${light.steps
+    .map(
+      (s, i) =>
+        `<div style="background:var(--area-${name}-${s.step})" title="${name}-${s.step} — ${s.role} — light ${s.hex} / dark ${dark.steps[i].hex}"></div>`,
+    )
     .join("")}</div>
 </div>`;
 }
 
 function colorPage() {
-  const steps = tokens.stepRoles
-    .map((role, i) => `<tr><td>${i + 1}</td><td>${escapeHtml(role)}</td></tr>`)
-    .join("");
+  const steps = table(
+    ["Step", "Role"],
+    tokens.stepRoles.map((role, i) => [`<span class="docs-mono">${i + 1}</span>`, escapeHtml(role)]),
+  );
 
-  const body = `<div class="prose">
+  const body = `<div class="docs-prose">
 <p>Every scale has twelve steps, and step <em>n</em> means the same thing in every scale and both themes. A component asks for step 4 and gets a hover background whether the scale is gray, blue or amber — which is what lets the accent axis repaint an interface without touching a single component rule.</p>
 </div>
-<h2 class="section" id="steps">Step roles</h2>
-<table class="api-table api-table--prose"><thead><tr><th>Step</th><th>Role</th></tr></thead><tbody>${steps}</tbody></table>
+<h2 class="docs-h2" id="steps">Step roles</h2>
+${steps}
 
-<h2 class="section" id="light">Scales, light</h2>
-<div class="step-legend">${tokens.stepRoles.map((_, i) => `<span>${i + 1}</span>`).join("")}</div>
-${Object.keys(tokens.scales).map((n) => swatchRow(n, "light")).join("")}
+<h2 class="docs-h2" id="scales">Scales</h2>
+<p class="docs-note">Rendered from the tokens themselves, so these react to the theme and neutral axes. Switch the theme above to see the dark ramps. Hover a swatch for both values.</p>
+<div class="docs-step-legend">${tokens.stepRoles.map((_, i) => `<span>${i + 1}</span>`).join("")}</div>
+${Object.keys(tokens.scales).map((n) => swatchRow(n)).join("")}
 
-<h2 class="section" id="dark">Scales, dark</h2>
-<div class="step-legend">${tokens.stepRoles.map((_, i) => `<span>${i + 1}</span>`).join("")}</div>
-${Object.keys(tokens.scales).map((n) => swatchRow(n, "dark")).join("")}
+<h2 class="docs-h2" id="semantic">Semantic tokens</h2>
+<p class="docs-note">The only colour vocabulary a component may use. Each one points at a role and a step, never at a literal.</p>
+${table(
+  ["Token", "Resolves to", ""],
+  Object.entries(tokens.semantics).map(([name, meta]) => [
+    `<span class="docs-mono">--area-${escapeHtml(name)}</span>`,
+    `<span class="docs-mono" style="color:var(--area-fg-muted)">${escapeHtml(meta.step ? `${meta.role} ${meta.step}` : (meta.role ?? meta.kind))}</span>`,
+    `<span class="docs-token-chip" style="background:var(--area-${escapeHtml(name)})"></span>`,
+  ]),
+)}
 
-<h2 class="section" id="semantic">Semantic tokens</h2>
-<p class="note">The only colour vocabulary a component may use. Each one points at a role and a step, never at a literal.</p>
-<div class="token-list">${Object.entries(tokens.semantics)
-    .map(
-      ([name, meta]) =>
-        `<div class="token-row"><span class="token-row__name">--area-${escapeHtml(name)}</span><span class="token-row__value">${escapeHtml(
-          meta.step ? `${meta.role} ${meta.step}` : (meta.role ?? meta.kind),
-        )}</span><span class="token-row__chip" style="background:var(--area-${escapeHtml(name)})"></span></div>`,
-    )
-    .join("")}</div>
-
-<h2 class="section" id="contrast">Contrast</h2>
-<div class="prose">
+<h2 class="docs-h2" id="contrast">Contrast</h2>
+<div class="docs-prose">
 <p>Colour pairings are a build gate, not a review-time opinion. Every pairing a component can render is asserted under WCAG 2.2 and APCA across all 72 shipped theme combinations, and a failing colour cannot be published.</p>
 <p>APCA is enforced as a hard gate in dark themes specifically, because the WCAG 2.x formula overstates contrast near black — a dark theme can clear 4.5:1 and still be unreadable.</p>
 </div>`;
@@ -218,8 +265,7 @@ ${Object.keys(tokens.scales).map((n) => swatchRow(n, "dark")).join("")}
     body,
     toc: [
       { id: "steps", title: "Step roles" },
-      { id: "light", title: "Scales, light" },
-      { id: "dark", title: "Scales, dark" },
+      { id: "scales", title: "Scales" },
       { id: "semantic", title: "Semantic tokens" },
       { id: "contrast", title: "Contrast" },
     ],
@@ -247,17 +293,17 @@ function typographyPage() {
       .sort((a, b) => parseFloat(a.size) - parseFloat(b.size))
       .map(
         (r) =>
-          `<div class="type-row"><div class="type-row__meta">${group}-${r.step}<br>${r.size} / ${r.leading} / ${r.tracking}</div><div class="type-row__sample" style="font-size:${r.size};line-height:${r.leading};letter-spacing:${r.tracking};font-weight:${weight}">The quick brown fox</div></div>`,
+          `<div class="docs-type-row"><div class="docs-type-row__meta">${group}-${r.step}<br>${r.size} / ${r.leading} / ${r.tracking}</div><div class="docs-type-row__sample" style="font-size:var(--area-${group}-${r.step}-size);line-height:var(--area-${group}-${r.step}-leading);letter-spacing:var(--area-${group}-${r.step}-tracking);font-weight:var(--area-weight-${weight})">The quick brown fox</div></div>`,
       )
       .join("");
 
-  const body = `<div class="prose">
+  const body = `<div class="docs-prose">
 <p>Geist Sans and Geist Mono, self-hosted. Geist has a single weight axis and no optical-size axis, so tracking is built by hand — when a face carries optical sizing the font already adjusts its own spacing, and manual tracking double-corrects.</p>
 <p>Negative tracking follows the convergent practice of systems built on faces without optical sizing. Line heights land on the 4px grid and the ratio falls as size rises: 1.43 at the 14px default, 1.5 at 16px body, 1.0 at display.</p>
 </div>
-<h2 class="section" id="text">Text</h2><p class="note">Weight 400. The 14px step is the default for all UI.</p>${rows("text", 400)}
-<h2 class="section" id="heading">Heading</h2><p class="note">Weight 600.</p>${rows("heading", 600)}
-<h2 class="section" id="display">Display</h2><p class="note">Weight 600. Marketing scale.</p>${rows("display", 600)}`;
+<h2 class="docs-h2" id="text">Text</h2><p class="docs-note">Weight 400. The 14px step is the default for all UI.</p>${rows("text", "regular")}
+<h2 class="docs-h2" id="heading">Heading</h2><p class="docs-note">Weight 600.</p>${rows("heading", "semibold")}
+<h2 class="docs-h2" id="display">Display</h2><p class="docs-note">Weight 600. Marketing scale.</p>${rows("display", "semibold")}`;
 
   return page({
     slug: "typography",
@@ -274,39 +320,36 @@ function typographyPage() {
 
 function axisPresetTable(axisId) {
   const axis = tokens.axes.find((a) => a.id === axisId);
-  return `<table class="api-table api-table--prose">
-  <thead><tr><th>Preset</th><th>Attribute</th><th>Description</th></tr></thead>
-  <tbody>${axis.presets
-    .map(
-      (p) =>
-        `<tr><td>${escapeHtml(p.label)}${p.id === axis.defaultPreset ? " (default)" : ""}</td><td>${axis.attribute}="${p.id}"</td><td style="font-family:var(--area-font-sans)">${escapeHtml(p.description)}</td></tr>`,
-    )
-    .join("")}</tbody>
-</table>`;
+  return table(
+    ["Preset", "Attribute", "Description"],
+    axis.presets.map((p) => [
+      escapeHtml(p.label) + (p.id === axis.defaultPreset ? " (default)" : ""),
+      `<span class="docs-mono" style="color:var(--area-fg-accent)">${axis.attribute}="${p.id}"</span>`,
+      escapeHtml(p.description),
+    ]),
+  );
 }
 
 function simpleAxisPage(axisId, slug, title, lede, prose, extra = "") {
-  const body = `<div class="prose">${prose}</div>
-<h2 class="section" id="presets">Presets</h2>
+  const body = `<div class="docs-prose">${prose}</div>
+<h2 class="docs-h2" id="presets">Presets</h2>
 ${axisPresetTable(axisId)}
 ${extra}`;
   return page({ slug, title, lede, body, toc: [{ id: "presets", title: "Presets" }] });
 }
 
 function axesPage() {
-  const body = `<div class="prose">
+  const body = `<div class="docs-prose">
 <p>Area is built around eight axes. Each one is a dimension you can retune, each ships a small set of presets, and choosing one is a single data attribute on the root element.</p>
 <p>The rule that makes eight axes composable rather than a matrix of thousands of combinations is that no two axes write the same custom property. That is checked mechanically on every build — if two axes ever collide, the build stops.</p>
-<p>Because custom properties inherit, a subtree can carry its own axis values. A sidebar marked <code>data-area-density="compact"</code> gets shorter controls <em>and</em> correctly re-derived corner radii, without any component knowing it happened.</p>
+<p>Because custom properties inherit, a subtree can carry its own axis values. A sidebar marked <code class='area-code'>data-area-density="compact"</code> gets shorter controls <em>and</em> correctly re-derived corner radii, without any component knowing it happened.</p>
 </div>
-<h2 class="section" id="usage">Usage</h2>
-<div class="example-block"><pre class="code-block"><code>${highlight(
-    `<html data-area-theme="dark" data-area-accent="violet" data-area-density="compact">`,
-  )}</code></pre></div>
+<h2 class="docs-h2" id="usage">Usage</h2>
+${codeBlock(`<html data-area-theme="dark" data-area-accent="violet" data-area-density="compact">`, { title: "index.html" })}
 ${tokens.axes
   .map(
-    (a) => `<h2 class="section" id="${a.id}">${escapeHtml(a.label)}</h2>
-<p class="note">${escapeHtml(a.description)} Owns ${a.namespaces.length} namespace${a.namespaces.length === 1 ? "" : "s"}, ${a.presets.length} preset${a.presets.length === 1 ? "" : "s"}.</p>
+    (a) => `<h2 class="docs-h2" id="${a.id}">${escapeHtml(a.label)}</h2>
+<p class="docs-note">${escapeHtml(a.description)} Owns ${a.namespaces.length} namespace${a.namespaces.length === 1 ? "" : "s"}, ${a.presets.length} preset${a.presets.length === 1 ? "" : "s"}.</p>
 ${axisPresetTable(a.id)}`,
   )
   .join("")}`;
@@ -321,19 +364,17 @@ ${axisPresetTable(a.id)}`,
 }
 
 function indexPage() {
-  const body = `<div class="prose">
+  const body = `<div class="docs-prose">
 <p>Area is a design system whose defining feature is that it is tunable along eight independent axes: theme, neutral, accent, typography, density, radius, surface and motion. Components consume only semantic tokens, so changing an axis reflows the whole system without touching a single component.</p>
 <p>Defaults are not taste. The 32px control, 6px control radius, 12px container radius and 14/20 text are the values that GitHub Primer, OpenAI, Vercel, Linear and Notion converge on, measured from their shipped code rather than inferred.</p>
 </div>
-<h2 class="section" id="install">Installation</h2>
-<div class="example-block"><pre class="code-block"><code>${highlight("npm install @area/react @area/styles")}</code></pre></div>
-<h2 class="section" id="start">Getting started</h2>
-<div class="example-block"><pre class="code-block"><code>${highlight(
-    `import { Button } from "@area/react";\nimport "@area/styles/area.css";\n\nexport default function App() {\n  return <Button>Get started</Button>;\n}`,
-  )}</code></pre></div>
-<h2 class="section" id="principles">Principles</h2>
-<div class="prose">
-<p><strong>Every number is derived.</strong> A control's corner radius is a proportion of its height; a menu item's radius is its panel's radius less the panel's padding. Those relationships are expressed once, in <code>calc()</code>, so they stay true under every combination of axes.</p>
+<h2 class="docs-h2" id="install">Installation</h2>
+${codeBlock("npm install @area/react @area/styles", { title: "terminal" })}
+<h2 class="docs-h2" id="start">Getting started</h2>
+${codeBlock(`import { Button } from "@area/react";\nimport "@area/styles/area.css";\n\nexport default function App() {\n  return <Button>Get started</Button>;\n}`, { title: "app.tsx" })}
+<h2 class="docs-h2" id="principles">Principles</h2>
+<div class="docs-prose">
+<p><strong>Every number is derived.</strong> A control's corner radius is a proportion of its height; a menu item's radius is its panel's radius less the panel's padding. Those relationships are expressed once, in <code class='area-code'>calc()</code>, so they stay true under every combination of axes.</p>
 <p><strong>Contrast is a build gate.</strong> Every colour pairing a component can render is asserted under WCAG 2.2 and APCA across all 72 shipped themes. A failing colour cannot be published.</p>
 <p><strong>The CSS and the React API cannot drift.</strong> Both are generated from one manifest per component, and a script fails the build if a declared variant has no selector, or a selector exists that was never declared.</p>
 <p><strong>Documentation cannot lie.</strong> Every preview on this site is the real component rendered, and every snippet is that same demo's source.</p>
@@ -400,7 +441,7 @@ const pages = [
       "motion",
       "Motion",
       "How long transitions take.",
-      "<p>Every preset keeps the same token names, so no component ever branches on motion. The <code>none</code> preset sets durations to zero rather than removing transitions, which lets it double as the target for <code>prefers-reduced-motion</code>.</p>",
+      "<p>Every preset keeps the same token names, so no component ever branches on motion. The <code class='area-code'>none</code> preset sets durations to zero rather than removing transitions, which lets it double as the target for <code class='area-code'>prefers-reduced-motion</code>.</p>",
     ),
   ],
   ...COMPONENT_PAGES.map((spec) => [`${spec.slug}.html`, componentPage(spec)]),

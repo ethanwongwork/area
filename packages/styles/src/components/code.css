@@ -1,0 +1,92 @@
+/* ---------------------------------------------------------------------------
+ * Code
+ *
+ * Inline code, and the block form with its toolbar.
+ *
+ * The block is two stacked regions inside one clipped, rounded container: an optional
+ * toolbar and the code itself, on a surface one step quieter than the page so the block
+ * reads as a distinct material rather than as a bordered paragraph.
+ *
+ * Syntax colours are existing semantic tokens, not a new palette. That keeps them
+ * theme-reactive and, more usefully, keeps them inside the contrast gate -- a bespoke
+ * syntax palette is exactly the kind of thing that ships unreadable in dark mode.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-code {
+    display: inline;
+    padding: 2px var(--area-space-4);
+    border-radius: var(--area-radius-small);
+    background-color: var(--area-bg-component);
+    color: var(--area-fg-default);
+    font-family: var(--area-font-mono);
+    font-size: 0.9em;
+  }
+
+  .area-code-block {
+    display: flex;
+    flex-direction: column;
+    border: var(--area-border-width) solid var(--area-border-subtle);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-subtle);
+    overflow: hidden;
+  }
+
+  /*
+   * Embedded inside another bordered container -- a documentation example, a card. Keeps
+   * only the rule that separates it from whatever sits above, since the host container
+   * already owns the outline and the corner radius.
+   */
+  .area-code-block--flush {
+    border-inline: 0;
+    border-block-end: 0;
+    border-radius: 0;
+  }
+
+  .area-code-block__toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    padding: var(--area-space-8);
+    padding-block-end: 0;
+  }
+
+  .area-code-block__title {
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    color: var(--area-fg-muted);
+    font-family: var(--area-font-mono);
+  }
+
+  .area-code-block__actions {
+    margin-inline-start: auto;
+    display: flex;
+    gap: var(--area-space-4);
+  }
+
+  /*
+   * Wraps instead of scrolling. For a code block inside a fixed measure -- documentation,
+   * a narrow panel -- where a horizontal scrollbar hides the end of the line.
+   */
+  .area-code-block--wrap .area-code-block__pre {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .area-code-block__pre {
+    margin: 0;
+    padding: var(--area-space-12);
+    overflow-x: auto;
+    font-family: var(--area-font-mono);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    color: var(--area-fg-default);
+    white-space: pre;
+    tab-size: 2;
+  }
+
+  /* Three hues, all already gated for contrast on this surface. */
+  .area-code-block__pre .area-syntax-tag { color: var(--area-fg-accent); }
+  .area-code-block__pre .area-syntax-attr { color: var(--area-fg-warning); }
+  .area-code-block__pre .area-syntax-string { color: var(--area-fg-success); }
+  .area-code-block__pre .area-syntax-punct { color: var(--area-fg-subtle); }
+}

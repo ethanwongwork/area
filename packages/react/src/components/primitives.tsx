@@ -23,6 +23,7 @@ import {
   cx,
   radioVariants,
   selectVariants,
+  segmentedVariants,
   separatorVariants,
   skeletonVariants,
   spinnerVariants,
@@ -508,6 +509,96 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
       ) : null}
       {children ? <div className="area-dialog__body">{children}</div> : null}
       {footer ? <div className="area-dialog__footer">{footer}</div> : null}
+    </div>
+  );
+});
+
+/* --- Segmented control ---------------------------------------------------- */
+
+export interface SegmentedProps extends Omit<Div, "onChange" | "onSelect"> {
+  size?: "xs" | "sm" | "md" | "lg";
+  options: Array<{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }>;
+  value: string;
+  /** Accessible name for the group. */
+  label?: string;
+  onSelect?: (value: string) => void;
+}
+
+/**
+ * Picks one value from a small set.
+ *
+ * Uses `role="radiogroup"` rather than a list of toggle buttons, because the choice is
+ * exclusive — which is the distinction a screen reader needs and `aria-pressed` does not
+ * convey.
+ */
+export const Segmented = forwardRef<HTMLDivElement, SegmentedProps>(function Segmented(
+  { size, options, value, label, onSelect, className, ...rest },
+  ref,
+) {
+  return (
+    <div
+      ref={ref}
+      role="radiogroup"
+      aria-label={label}
+      className={segmentedVariants({ size }, className)}
+      {...rest}
+    >
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          role="radio"
+          aria-checked={option.value === value}
+          disabled={option.disabled}
+          className="area-segmented__item"
+          onClick={onSelect ? () => onSelect(option.value) : undefined}
+          {...(option.value === value ? { "data-selected": "" } : {})}
+        >
+          {option.icon ? (
+            <span className="area-segmented__icon" aria-hidden="true">
+              {option.icon}
+            </span>
+          ) : null}
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+});
+
+/* --- Code ----------------------------------------------------------------- */
+
+export type CodeProps = HTMLAttributes<HTMLElement>;
+
+export const Code = forwardRef<HTMLElement, CodeProps>(function Code({ className, ...rest }, ref) {
+  return <code ref={ref} className={cx("area-code", className)} {...rest} />;
+});
+
+export interface CodeBlockProps extends Omit<Div, "title"> {
+  /** Shown at the left of the toolbar, usually a filename or language. */
+  title?: ReactNode;
+  /** Buttons at the right of the toolbar. */
+  actions?: ReactNode;
+  /** Pre-highlighted HTML. Use `code` instead for plain text. */
+  html?: string;
+  code?: string;
+}
+
+export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(function CodeBlock(
+  { title, actions, html, code, className, ...rest },
+  ref,
+) {
+  return (
+    <div ref={ref} className={cx("area-code-block", className)} {...rest}>
+      {title || actions ? (
+        <div className="area-code-block__toolbar">
+          {title ? <span className="area-code-block__title">{title}</span> : null}
+          {actions ? <span className="area-code-block__actions">{actions}</span> : null}
+        </div>
+      ) : null}
+      <pre className="area-code-block__pre">
+        {html ? <code dangerouslySetInnerHTML={{ __html: html }} /> : <code>{code}</code>}
+      </pre>
     </div>
   );
 });

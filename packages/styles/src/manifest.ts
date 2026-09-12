@@ -198,8 +198,8 @@ export const popover: ComponentManifest = {
 export const menu: ComponentManifest = {
   block: "area-menu",
   description: "Lists actions triggered from a button.",
-  variants: {},
-  states: ["disabled", "highlighted"],
+  variants: { layout: ["inline"] },
+  states: ["disabled", "highlighted", "selected"],
   elements: ["item", "label", "separator", "shortcut"],
   defaults: {},
 };
@@ -245,6 +245,31 @@ export const tableWrapper: ComponentManifest = {
   defaults: {},
 };
 
+export const segmented: ComponentManifest = {
+  block: "area-segmented",
+  description: "Picks one value from a small set of options.",
+  variants: { size: ["xs", "sm", "md", "lg"] },
+  states: ["selected"],
+  elements: ["item", "icon"],
+  defaults: { size: "md" },
+};
+
+export const code: ComponentManifest = {
+  block: "area-code",
+  description: "Marks a fragment of code inline.",
+  variants: {},
+  elements: [],
+  defaults: {},
+};
+
+export const codeBlock: ComponentManifest = {
+  block: "area-code-block",
+  description: "Shows a block of code with an optional toolbar.",
+  variants: { layout: ["flush", "wrap"] },
+  elements: ["toolbar", "title", "actions", "pre"],
+  defaults: {},
+};
+
 export const MANIFESTS: Record<string, ComponentManifest> = {
   button,
   field,
@@ -271,4 +296,7 @@ export const MANIFESTS: Record<string, ComponentManifest> = {
   tabs,
   table,
   tableWrapper,
+  segmented,
+  code,
+  codeBlock,
 };

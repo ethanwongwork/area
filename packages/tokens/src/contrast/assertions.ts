@@ -82,8 +82,10 @@ function textAssertions(): ContrastAssertion[] {
 function tonalAssertions(): ContrastAssertion[] {
   const out: ContrastAssertion[] = [];
   for (const tone of TONES) {
-    // Tonal text on the page, and on its own tinted surface -- the two places it appears.
-    for (const bg of ["bg-page", "bg-surface", `${tone}-surface`]) {
+    // Tonal text on the page, on a quiet surface, and on its own tint. `bg-subtle` is in
+    // this list because syntax highlighting puts tonal foregrounds on a code block, which
+    // is the one place tonal text lands on a surface that is not its own.
+    for (const bg of ["bg-page", "bg-surface", "bg-subtle", `${tone}-surface`]) {
       out.push({ fg: `fg-${tone}`, bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: `${tone} text` });
     }
     // The solid fill and its hover must both carry the foreground the scale declared.

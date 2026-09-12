@@ -39,3 +39,5 @@
 @import "./components/display.css";
 @import "./components/surface.css";
 @import "./components/navigation.css";
+@import "./components/segmented.css";
+@import "./components/code.css";

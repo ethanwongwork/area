@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Area — an axis-driven design system.",
+  "description": "Area \u2014 an axis-driven design system.",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -15,7 +15,8 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint:manifest": "npm run lint:manifest -w @area/styles",
     "dev": "npm run dev -w @area/docs",
-    "clean": "rm -rf packages/*/dist apps/*/dist"
+    "clean": "rm -rf packages/*/dist apps/*/dist",
+    "audit": "npm run audit -w @area/docs"
   },
   "engines": {
     "node": ">=20"

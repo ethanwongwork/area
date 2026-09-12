@@ -1,0 +1,111 @@
+/* ---------------------------------------------------------------------------
+ * Segmented control
+ *
+ * Picks one value from a small set. Distinguished from Tabs deliberately: Tabs
+ * navigate between views and mark the active one with an underbar, a segmented control
+ * picks a value and marks it with a raised fill. Giving both a fill is the most common
+ * way those two end up indistinguishable.
+ *
+ * The track's radius is the inverse concentric rule: outer = inner + inset. Because the
+ * item radius is itself derived from control height, the whole control stays correct
+ * under every density and radius combination without a single fixed value.
+ *
+ * The track's outline is an inset box-shadow rather than a border, so the 1px does not
+ * participate in layout -- the items sit flush against the padding box and the track
+ * height stays exactly control height plus twice the inset.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-segmented {
+    --_inset: var(--area-space-4);
+    --_height: var(--area-control-md);
+    --_gutter: var(--area-gutter-md);
+    --_icon: var(--area-icon-md);
+    --_gap: var(--area-gap-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+
+    display: inline-flex;
+    gap: var(--area-space-2);
+    padding: var(--_inset);
+    border-radius: calc(var(--area-radius-control) + var(--_inset));
+    background-color: var(--area-bg-subtle);
+    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle);
+  }
+
+  .area-segmented__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--_gap);
+
+    block-size: var(--_height);
+    padding-inline: var(--_gutter);
+    border: 0;
+    border-radius: var(--area-radius-control);
+
+    background: transparent;
+    color: var(--area-fg-muted);
+    font-family: inherit;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    font-weight: var(--area-weight-medium);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+
+  .area-segmented__item:hover:not([data-selected]):not(:disabled) {
+    background-color: var(--area-bg-hover);
+    color: var(--area-fg-default);
+  }
+
+  /*
+   * The selected item lifts off the track: a surface fill, a hairline of its own, and the
+   * lightest elevation. That is what reads as "raised out of the groove" rather than
+   * merely tinted.
+   */
+  .area-segmented__item[data-selected] {
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    box-shadow:
+      var(--area-shadow-1),
+      inset 0 0 0 var(--area-border-width) var(--area-border-subtle);
+  }
+
+  .area-segmented__item:focus-visible {
+    outline: none;
+    box-shadow: var(--area-ring);
+  }
+
+  .area-segmented__item:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .area-segmented__icon {
+    display: inline-flex;
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+    flex-shrink: 0;
+  }
+
+  .area-segmented__icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Optical inset, matching Button: an icon centres in the square its radius is cut from. */
+  .area-segmented__item:has(> .area-segmented__icon:first-child) {
+    padding-inline-start: calc((var(--_height) - var(--_icon)) / 2);
+  }
+
+  .area-segmented__item:has(> .area-segmented__icon:only-child) {
+    padding-inline: 0;
+    inline-size: var(--_height);
+  }
+
+  .area-segmented--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_icon: var(--area-icon-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); --_inset: var(--area-space-2); }
+  .area-segmented--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_inset: var(--area-space-2); }
+  .area-segmented--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-segmented--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+}

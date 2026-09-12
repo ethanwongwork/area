@@ -78,7 +78,7 @@ export const AlertDefault = () => (
 );
 
 export const AlertTones = () => (
-  <div style={{ display: "flex", flexDirection: "column", gap: 12, inlineSize: 380 }}>
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-12)", inlineSize: 380 }}>
     <Alert tone="success" icon={<CheckIcon />} title="Deployed" />
     <Alert tone="warning" icon={<AlertIcon />} title="Usage is at 90%" />
     <Alert tone="danger" icon={<AlertIcon />} title="Build failed" />
@@ -92,7 +92,7 @@ export const SeparatorDefault = () => (
 );
 
 export const SkeletonDefault = () => (
-  <div style={{ display: "flex", flexDirection: "column", gap: 8, inlineSize: 280 }}>
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-8)", inlineSize: 280 }}>
     <Skeleton shape="text" style={{ inlineSize: "60%" }} />
     <Skeleton shape="text" />
     <Skeleton shape="text" style={{ inlineSize: "80%" }} />
@@ -132,7 +132,7 @@ export const MenuDefault = () => (
 
 export const PopoverDefault = () => (
   <Popover>
-    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-4)" }}>
       <strong>Dimensions</strong>
       <span style={{ color: "var(--area-fg-muted)" }}>Set the size of the layer.</span>
     </div>
