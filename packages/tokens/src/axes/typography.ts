@@ -28,6 +28,7 @@
  * value is the honest name.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
+import { LEADING_RAMP, SIZE_RAMP } from "../emit/base.ts";
 
 interface Step {
   size: number;
@@ -60,11 +61,11 @@ const TEXT: Record<string, Step> = {
  * author's rather than the ramp's.
  */
 const TITLE: Record<string, Step> = {
-  xs: { size: 16, leading: 22, tracking: "-0.011em" },
+  xs: { size: 16, leading: 22, tracking: "-0.01em" },
   sm: { size: 20, leading: 26, tracking: "-0.015em" },
-  md: { size: 24, leading: 30, tracking: "-0.019em" },
-  lg: { size: 32, leading: 38, tracking: "-0.023em" },
-  xl: { size: 40, leading: 46, tracking: "-0.027em" },
+  md: { size: 24, leading: 30, tracking: "-0.02em" },
+  lg: { size: 32, leading: 40, tracking: "-0.025em" },
+  xl: { size: 40, leading: 48, tracking: "-0.03em" },
 };
 
 /**
@@ -76,29 +77,49 @@ const TITLE: Record<string, Step> = {
  * -0.03em at 64px.
  */
 const DISPLAY: Record<string, Step> = {
-  sm: { size: 56, leading: 60, tracking: "-0.03em" },
-  lg: { size: 72, leading: 76, tracking: "-0.03em" },
+  sm: { size: 56, leading: 56, tracking: "-0.03em" },
+  lg: { size: 72, leading: 72, tracking: "-0.03em" },
 };
 
-function ramp(prefix: string, steps: Record<string, Step>, scale: number) {
+/**
+ * Move a size to a neighbouring stop on the primitive ramp.
+ *
+ * The scale presets step rather than multiply. A multiplier puts 16 x 14/16 at 14px but
+ * 24 x 14/16 at 21px -- a leading on no ramp, which renders softly and pairs with nothing.
+ * Stepping keeps every preset on the ramp by construction.
+ */
+function shift(ramp: readonly number[], value: number, steps: number): number {
+  if (!Number.isInteger(steps)) throw new Error(`shift() takes whole steps, not ${steps}`);
+  const index = ramp.indexOf(value);
+  if (index === -1) throw new Error(`${value} is not a stop on the ramp [${ramp.join(", ")}]`);
+  return ramp[Math.min(ramp.length - 1, Math.max(0, index + steps))]!;
+}
+
+/** Nearest stop to a target, breaking ties toward the tighter value. */
+function nearest(ramp: readonly number[], target: number): number {
+  return ramp.reduce((best, stop) =>
+    Math.abs(stop - target) < Math.abs(best - target) ? stop : best,
+  );
+}
+
+function ramp(prefix: string, steps: Record<string, Step>, offset: number) {
   const out: Record<string, string> = {};
   for (const [name, step] of Object.entries(steps)) {
-    out[`${prefix}-${name}-size`] = `${round(step.size * scale)}px`;
-    out[`${prefix}-${name}-leading`] = `${round(step.leading * scale)}px`;
+    const size = shift(SIZE_RAMP, step.size, offset);
+    // Leading follows the size by ratio, not by step count: the two ramps have different
+    // densities, so shifting both by one index would quietly change every ratio.
+    const leading = offset === 0 ? step.leading : nearest(LEADING_RAMP, size * (step.leading / step.size));
+    out[`${prefix}-${name}-size`] = `var(--area-size-${size})`;
+    out[`${prefix}-${name}-leading`] = `var(--area-leading-${leading})`;
     out[`${prefix}-${name}-tracking`] = step.tracking;
   }
   return out;
 }
 
-/** Keep derived sizes on whole or half pixels; sub-pixel type renders softly. */
-function round(value: number): number {
-  return Math.round(value * 2) / 2;
-}
-
-const RAMPS = (scale: number) => ({
-  ...ramp("text", TEXT, scale),
-  ...ramp("title", TITLE, scale),
-  ...ramp("display", DISPLAY, scale),
+const RAMPS = (offset: number) => ({
+  ...ramp("text", TEXT, offset),
+  ...ramp("title", TITLE, offset),
+  ...ramp("display", DISPLAY, offset),
 });
 
 /**
@@ -110,18 +131,18 @@ const GEIST = {
   "font-sans": `"Geist", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`,
   "font-mono": `"Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace`,
   "font-feature-settings": `"rlig" 1, "calt" 0, "ss11" 1`,
-  "weight-regular": "400",
+  "weight-regular": "var(--area-wght-400)",
   /** Geist's own emphasis weight, as shipped by Vercel. Needs the variable font. */
-  "weight-strong": "550",
+  "weight-strong": "var(--area-wght-550)",
 };
 
 const SYSTEM = {
   "font-sans": `ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`,
   "font-mono": `ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace`,
   "font-feature-settings": `normal`,
-  "weight-regular": "400",
+  "weight-regular": "var(--area-wght-400)",
   /** Platform fonts ship discrete weights, so 550 would snap unpredictably. */
-  "weight-strong": "600",
+  "weight-strong": "var(--area-wght-600)",
 };
 
 export const TYPOGRAPHY_AXIS: AxisDefinition = {
@@ -141,25 +162,25 @@ export const TYPOGRAPHY_AXIS: AxisDefinition = {
       id: "geist",
       label: "Geist",
       description: "Geist Sans and Geist Mono. 16px body, 14px controls.",
-      tokens: tokens({ ...GEIST, ...RAMPS(1) }),
+      tokens: tokens({ ...GEIST, ...RAMPS(0) }),
     },
     {
       id: "geist-compact",
       label: "Compact",
       description: "Geist one step down, for dense tools.",
-      tokens: tokens({ ...GEIST, ...RAMPS(14 / 16) }),
+      tokens: tokens({ ...GEIST, ...RAMPS(-1) }),
     },
     {
       id: "geist-large",
       label: "Large",
       description: "Geist one step up, for reading-heavy products.",
-      tokens: tokens({ ...GEIST, ...RAMPS(18 / 16) }),
+      tokens: tokens({ ...GEIST, ...RAMPS(1) }),
     },
     {
       id: "system",
       label: "System",
       description: "The platform UI font. No webfont, no layout shift.",
-      tokens: tokens({ ...SYSTEM, ...RAMPS(1) }),
+      tokens: tokens({ ...SYSTEM, ...RAMPS(0) }),
     },
   ],
 };

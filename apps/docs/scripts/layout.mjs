@@ -48,25 +48,64 @@ export function codeBlock(code, { title, flush = false, wrap = true } = {}) {
 </div>`;
 }
 
+/** Names a token, optionally with a swatch of what it resolves to. */
+export function tokenChip(name, { swatch, onColor = false } = {}) {
+  return `<span class="area-token${onColor ? " area-token--on-color" : ""}">${
+    swatch ? `<span class="area-token__swatch" style="background:${swatch}"></span>` : ""
+  }${escapeHtml(name)}</span>`;
+}
+
 /**
  * A pair of views over the same data, with a segmented control to switch between them.
  *
- * Every foundation page offers both: a grid, which is how you judge a scale by eye, and a
- * table, which is how you read the values. Neither is a substitute for the other, so the
- * page ships both rather than choosing.
+ * Every foundation page offers both. The table is how you read values and compare a
+ * column; the grid is how you judge a scale by eye, and it gives each entry enough room
+ * to show the thing itself rather than a thumbnail of it. Neither substitutes for the
+ * other, so the page ships both rather than choosing.
+ *
+ * The control sits at the left, above the content, where the eye already is after the
+ * section heading.
  */
-export function viewToggle(id, { grid, table: tableHtml, initial = "grid" }) {
+export function viewToggle(id, { grid, table: tableHtml, initial = "table" }) {
   const option = (value, label) =>
     `<button type="button" role="radio" class="area-segmented__item" data-view-value="${value}" aria-checked="${value === initial}"${value === initial ? " data-selected" : ""}>${label}</button>`;
 
   return `<div class="docs-view" data-view="${initial}" id="view-${id}">
   <div class="docs-view__bar">
     <div class="area-segmented area-segmented--xs" role="radiogroup" aria-label="View as" data-view-toggle>
-      ${option("grid", "Grid")}${option("table", "Table")}
+      ${option("table", "Table")}${option("grid", "Grid")}
     </div>
   </div>
-  <div class="docs-view__pane" data-pane="grid">${grid}</div>
   <div class="docs-view__pane" data-pane="table">${tableHtml}</div>
+  <div class="docs-view__pane" data-pane="grid">${grid}</div>
+</div>`;
+}
+
+/**
+ * The shape every foundation section takes: a heading, one sentence, and a pair of views
+ * built from one list of rows.
+ *
+ * `columns` describes the table; `card` renders one grid tile. Both read the same row
+ * objects, so the two views cannot describe different data.
+ */
+export function tokenSection({ id, title, description, rows, columns, card }) {
+  return `<h2 class="docs-h2" id="${id}">${escapeHtml(title)}</h2>
+<p class="docs-note">${escapeHtml(description)}</p>
+${viewToggle(id, {
+  table: table(
+    columns.map((c) => c.header),
+    rows.map((row) => columns.map((c) => c.cell(row))),
+  ),
+  grid: `<div class="docs-card-grid">${rows.map(card).join("")}</div>`,
+})}`;
+}
+
+/** One grid tile: a token chip, then metadata lines, then an optional figure. */
+export function tokenCard({ name, swatch, meta = [], figure, style = "", onColor = false }) {
+  return `<div class="docs-card"${style ? ` style="${style}"` : ""}>
+  ${tokenChip(name, { swatch, onColor })}
+  ${meta.length ? `<div class="docs-card__meta">${meta.map((m) => `<div>${m}</div>`).join("")}</div>` : ""}
+  ${figure ? `<div class="docs-card__figure">${figure}</div>` : ""}
 </div>`;
 }
 
@@ -103,6 +142,8 @@ export const DOCS_CSS = `
     --docs-preview-min: 140px;
     --docs-specimen: 150px;
     --docs-figure: 72px;
+    --docs-card: 230px;
+    --docs-card-min: 120px;
   }
 
   html { scroll-behavior: smooth; scroll-padding-block-start: calc(var(--docs-topbar) + var(--area-space-24)); }
@@ -222,9 +263,28 @@ export const DOCS_CSS = `
   /* --- Paired views ------------------------------------------------------ */
 
   .docs-view { margin-block: var(--area-space-12); }
-  .docs-view__bar { display: flex; justify-content: flex-end; margin-block-end: var(--area-space-8); }
+  .docs-view__bar { display: flex; justify-content: flex-start; margin-block-end: var(--area-space-12); }
   .docs-view[data-view="grid"] .docs-view__pane[data-pane="table"] { display: none; }
   .docs-view[data-view="table"] .docs-view__pane[data-pane="grid"] { display: none; }
+
+  .docs-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--docs-card), 1fr)); gap: var(--area-space-12); }
+  .docs-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-10);
+    padding: var(--area-space-12);
+    border: var(--area-border-width) solid var(--area-border-subtle);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+    min-block-size: var(--docs-card-min);
+    overflow: hidden;
+  }
+  .docs-card__meta { font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); word-break: break-word; }
+  .docs-card__figure { margin-block-start: auto; display: flex; align-items: center; }
+  .docs-card > .area-token { align-self: flex-start; }
+
+  /* Table previews sit in a fixed column, so a tall specimen cannot stretch the row. */
+  .docs-preview-cell { display: flex; align-items: center; min-block-size: var(--area-space-24); }
 
   /* --- Foundations ------------------------------------------------------- */
 

@@ -72,6 +72,15 @@ export interface ScaleSpec {
   solidForeground?: "light" | "dark";
 }
 
+export interface StepContrast {
+  /** Whichever of black or white reads better on this step. */
+  fg: "#ffffff" | "#000000";
+  /** WCAG 2.2 ratio against that foreground. */
+  ratio: number;
+  /** AAA at 7, AA at 4.5, AA Large at 3, otherwise a dash. */
+  grade: "AAA" | "AA" | "AA Large" | "—";
+}
+
 export interface ScaleStep {
   step: number;
   /** OKLCh as requested, before gamut mapping. Documentation only. */
@@ -83,6 +92,8 @@ export interface ScaleStep {
   oklchCss: string;
   /** OKLab distance introduced by gamut mapping. 0 when already in gamut. */
   gamutDelta: number;
+  /** How readable this step is, and with which foreground. */
+  contrast: StepContrast;
 }
 
 export interface BuiltScale {
@@ -183,6 +194,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
 
     return {
       step: index + 1,
+      contrast: stepContrast(toHex(srgb.rgb)),
       requested,
       oklch: srgb.oklch,
       hex: toHex(srgb.rgb),
@@ -274,6 +286,22 @@ function solidLightness(hue: number, foreground: "light" | "dark", cuspL: number
 function measureContrast(solidHex: string, foreground: "light" | "dark"): BuiltScale["contrast"] {
   const hex = foreground === "light" ? "#ffffff" : "#000000";
   return { hex, wcag: wcagContrastHex(hex, solidHex), apca: apcaMagnitude(hex, solidHex) };
+}
+
+/**
+ * How readable a step is: the better of black or white on it, the ratio, and the grade.
+ *
+ * Reported for the *better* foreground rather than a fixed one, because a light step and
+ * a dark step are readable with opposite foregrounds and quoting one of them against both
+ * makes half the scale look broken when it is not.
+ */
+function stepContrast(hex: string): StepContrast {
+  const onWhite = wcagContrastHex("#ffffff", hex);
+  const onBlack = wcagContrastHex("#000000", hex);
+  const fg = onWhite >= onBlack ? "#ffffff" : "#000000";
+  const ratio = Math.max(onWhite, onBlack);
+  const grade = ratio >= 7 ? "AAA" : ratio >= 4.5 ? "AA" : ratio >= 3 ? "AA Large" : "—";
+  return { fg, ratio: Number(ratio.toFixed(2)), grade };
 }
 
 /** Every scale, for one theme. */

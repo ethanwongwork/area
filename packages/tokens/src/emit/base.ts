@@ -15,6 +15,29 @@ import { PREFIX } from "../axes/schema.ts";
 /** 4px base with 2px, 6px and 10px half-steps for tight control interiors. */
 export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96] as const;
 
+/**
+ * Type primitives.
+ *
+ * The same two-tier shape colour uses: a fixed ramp of raw stops, and a semantic layer
+ * that points at them. A composite such as `--area-text-md-size` resolves to
+ * `var(--area-size-16)` rather than to a literal, so the typography axis picks different
+ * stops rather than multiplying arbitrary numbers -- which is what keeps every derived
+ * size on the ramp instead of landing on 12.25px.
+ */
+export const SIZE_RAMP = [
+  10, 11, 12, 13, 14, 16, 18, 20, 24, 28, 32, 40, 48, 56, 64, 72, 96, 128,
+] as const;
+
+export const LEADING_RAMP = [
+  12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 36, 40, 44, 48, 56, 64, 72, 80, 96, 112, 136,
+] as const;
+
+/**
+ * Weight stops, named by their OpenType `wght` value. The half-steps exist because Geist
+ * is variable: 450 and 550 are reachable in it and not in a platform font.
+ */
+export const WGHT_RAMP = [100, 200, 300, 400, 450, 500, 550, 600, 700, 800, 900] as const;
+
 /** Every radius the system can express. Components use the semantic radius tokens instead. */
 export const RADIUS_RAMP = [0, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 32] as const;
 
@@ -33,7 +56,16 @@ export const Z_LAYERS = {
 export function baseTokens(): Record<string, string> {
   const out: Record<string, string> = {};
 
+  // Pure black and white. Named because they are real answers, not placeholders: every
+  // `fg-on-*` token resolves to one of these two after the scale measures which is
+  // readable on its own solid fill.
+  out[`${PREFIX}white`] = "#ffffff";
+  out[`${PREFIX}black`] = "#000000";
+
   for (const step of SPACE_RAMP) out[`${PREFIX}space-${step}`] = `${step}px`;
+  for (const step of SIZE_RAMP) out[`${PREFIX}size-${step}`] = `${step}px`;
+  for (const step of LEADING_RAMP) out[`${PREFIX}leading-${step}`] = `${step}px`;
+  for (const step of WGHT_RAMP) out[`${PREFIX}wght-${step}`] = String(step);
   for (const step of RADIUS_RAMP) out[`${PREFIX}radius-${step}`] = `${step}px`;
   out[`${PREFIX}radius-full`] = "9999px";
 

@@ -55,6 +55,25 @@ export const NEUTRAL_SCALES: readonly ScaleSpec[] = [
 
 export const ALL_SCALES: readonly ScaleSpec[] = [...NEUTRAL_SCALES, ...CHROMATIC_SCALES];
 
+/** One sentence per scale, rendered above its ramp in the documentation. */
+export const SCALE_DESCRIPTIONS: Record<string, string> = {
+  gray: "A true neutral with no chroma at all. Works with any accent.",
+  slate: "A neutral carrying a trace of blue, for cooler interfaces.",
+  sand: "A neutral carrying a trace of amber, for softer, warmer interfaces.",
+  red: "The danger tone. Errors, destructive actions, and failed states.",
+  orange: "The warning tone. Conditions that need attention but are not failures.",
+  amber: "Between warning and caution. Not bound to a semantic role.",
+  yellow: "The caution tone. The lightest solid in the system, so it takes dark text.",
+  lime: "A bright green-yellow. Not bound to a semantic role.",
+  green: "The success tone. Completion, health, and positive confirmation.",
+  teal: "A blue-green, distinct from both success and info.",
+  cyan: "A light blue, distinct from the accent and info tones.",
+  blue: "The default accent, and the fixed info tone.",
+  indigo: "A deep blue-violet, between the accent and discovery tones.",
+  violet: "The discovery tone. Marks AI features and newly-introduced surfaces.",
+  pink: "A warm magenta. Not bound to a semantic role.",
+};
+
 export type ChromaticScaleId = (typeof CHROMATIC_SCALES)[number]["id"];
 export type NeutralScaleId = (typeof NEUTRAL_SCALES)[number]["id"];
 

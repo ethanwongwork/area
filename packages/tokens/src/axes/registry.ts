@@ -49,7 +49,7 @@ export function defaultPresetOf(axis: AxisDefinition) {
 }
 
 export interface IntegrityProblem {
-  kind: "collision" | "namespace" | "inconsistent-preset" | "missing-default";
+  kind: "collision" | "namespace" | "inconsistent-preset" | "missing-default" | "invalid-value";
   message: string;
 }
 
@@ -94,6 +94,18 @@ export function checkAxisIntegrity(axes: AxisDefinition[] = AXES): IntegrityProb
           problems.push({
             kind: "inconsistent-preset",
             message: `Axis "${axis.id}" preset "${preset.id}" sets tokens in light that its dark variant omits: ${mismatched.slice(0, 6).join(", ")}`,
+          });
+        }
+      }
+
+      // Key parity does not imply valid values. A token whose value contains `undefined`
+      // or `NaN` still has the right name, so every structural check passes while the
+      // stylesheet ships something the browser silently drops. Caught exactly that once.
+      for (const [key, value] of Object.entries(preset.tokens)) {
+        if (/undefined|NaN/.test(value)) {
+          problems.push({
+            kind: "invalid-value",
+            message: `Axis "${axis.id}" preset "${preset.id}" emits "${key}: ${value}".`,
           });
         }
       }

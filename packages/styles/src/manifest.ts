@@ -281,6 +281,14 @@ export const codeBlock: ComponentManifest = {
   defaults: {},
 };
 
+export const tokenChip: ComponentManifest = {
+  block: "area-token",
+  description: "Names a design token inline.",
+  variants: { ground: ["on-color"] },
+  elements: ["swatch"],
+  defaults: {},
+};
+
 export const MANIFESTS: Record<string, ComponentManifest> = {
   button,
   field,
@@ -310,4 +318,5 @@ export const MANIFESTS: Record<string, ComponentManifest> = {
   segmented,
   code,
   codeBlock,
+  tokenChip,
 };

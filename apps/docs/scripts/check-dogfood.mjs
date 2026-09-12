@@ -30,6 +30,8 @@ const ALLOWED = new Map([
   ["--docs-preview-min", "Minimum height of an example preview."],
   ["--docs-specimen", "Minimum width of a specimen tile in a foundation grid."],
   ["--docs-figure", "Height of the figure area inside a specimen tile."],
+  ["--docs-card", "Minimum width of a token card in a grid view."],
+  ["--docs-card-min", "Minimum height of a token card."],
 ]);
 
 /** Structural values that carry no visual identity. */
@@ -100,7 +102,7 @@ for (const [index, line] of lines.entries()) {
  * Properties the component layer never sets (margins, grid placement) are still safe to
  * apply from outside, so those are allowed through.
  */
-const LAYERABLE = /^(margin|grid-area|grid-column|grid-row|order|position|inset|z-index|flex)$/;
+const LAYERABLE = /^(margin|grid-area|grid-column|grid-row|order|position|inset|z-index|flex|align|justify)$/;
 
 for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
   const selector = match[1].trim().replace(/\s+/g, " ");

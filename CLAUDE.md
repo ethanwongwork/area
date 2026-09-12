@@ -99,6 +99,20 @@ degrees, short of the 50 that keeps two tones from reading as one signal. They s
 distinguishable on lightness instead (orange L 0.77, yellow L 0.91). That is the cost of
 eight tones and it is recorded in `color/presets.ts` rather than left to be rediscovered.
 
+## Documentation sections
+
+Every foundation section is built with `tokenSection()` in `apps/docs/scripts/layout.mjs`:
+a heading, one sentence, and a table/grid pair generated from **one** list of rows. The
+table is how you read values and compare a column; the grid is how you judge a scale by
+eye and gives each entry room to show the thing itself. Because both views read the same
+row objects, they cannot describe different data.
+
+The segmented control sits at the left, above the content. Token names render as
+`.area-token` chips, with a swatch where the token resolves to a colour.
+
+Do not hand-write a `<table>` in the docs. Use `tokenSection()`, or `table()` for a
+one-off that has no useful grid form.
+
 ## Reference style
 
 Tables, code containers and segmented controls carry the original playground's visual
