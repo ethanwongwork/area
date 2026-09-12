@@ -412,7 +412,7 @@ export const DOCS_CSS = `
   .docs-card {
     display: flex;
     flex-direction: column;
-    padding: var(--area-space-16);
+    padding: var(--area-space-8);
     border: var(--area-border-width) solid var(--area-border-subtle);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
@@ -423,12 +423,16 @@ export const DOCS_CSS = `
    * One line of text between the token and its values. Using the text's own line-height
    * rather than a spacing step keeps the gap on the same rhythm as the lines below it,
    * so the block reads as four lines rather than as two stacked elements.
+   *
+   * These values are read, not decorated -- they are the content of the card. So they sit
+   * on the UI size, which tracks density, rather than on the caption step, which is for
+   * text that annotates something else.
    */
   .docs-card__meta {
-    margin-block-start: var(--area-text-xs-leading);
+    margin-block-start: var(--area-ui-leading);
     font-family: var(--area-font-mono);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     word-break: break-word;
   }
 

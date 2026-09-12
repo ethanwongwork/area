@@ -277,7 +277,8 @@ function scaleSection(name) {
         name: r.name,
         onColor: true,
         style: `background:var(--area-${name}-${r.step});color:var(--area-${r.onColor === "#ffffff" ? "white" : "black"})`,
-        meta: [`Hex: ${r.hex}`, `OKLCH: ${escapeHtml(r.oklch)}`],
+        // Unlabelled: a hex and an oklch() are each self-identifying by shape.
+        meta: [r.hex, escapeHtml(r.oklch)],
       }),
   });
 }

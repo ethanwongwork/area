@@ -8,7 +8,7 @@
  * swatch showing what the token actually resolves to.
  *
  * Geometry is ported from the original playground's token badge: a surface fill, a
- * hairline, 12/16 mono at the regular weight, and a 10px swatch with the small radius.
+ * hairline, 12/16 mono at the regular weight, and a swatch with the small radius.
  * Two values are mapped onto Area's ramps rather than copied literally -- 5px of inline
  * padding becomes 6, and the fixed 8px radius becomes the radius axis's control step --
  * because a component that hardcodes a number stops responding to the axis that owns it.
@@ -47,8 +47,8 @@
    * whatever it encloses. It is inset, so it never changes the swatch's box.
    */
   .area-token__swatch {
-    inline-size: var(--area-space-10);
-    block-size: var(--area-space-10);
+    inline-size: var(--area-space-12);
+    block-size: var(--area-space-12);
     flex-shrink: 0;
     border-radius: var(--area-radius-small);
     box-shadow: inset 0 0 0 var(--area-border-width)
