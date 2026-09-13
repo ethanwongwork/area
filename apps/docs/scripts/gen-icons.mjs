@@ -11,11 +11,26 @@ const MAP = {
   ChevronIcon: "chevron_down_16_regular",
   DismissIcon: "dismiss_16_regular",
 };
+// Inline SVG for the documentation's own chrome: toolbars, and the sidebar's section
+// icons. Keyed by the page slug where it names one, so a new foundation page gets an icon
+// by adding one line here rather than by editing markup.
 const TOOLBAR = {
   copy: "copy_16_regular",
   reset: "arrow_counterclockwise_16_regular",
   expand: "arrow_expand_16_regular",
   close: "dismiss_16_regular",
+  // Getting started
+  // Keyed by page slug; the Introduction page ships as index.html.
+  index: "book_open_16_regular",
+  axes: "options_16_regular",
+  // Foundations
+  color: "color_16_regular",
+  typography: "text_font_16_regular",
+  iconography: "shapes_16_regular",
+  density: "line_horizontal_4_16_regular",
+  radius: "square_hint_16_regular",
+  surface: "layer_diagonal_16_regular",
+  motion: "flash_16_regular",
 };
 const path = (id) => {
   const svg = readFileSync(`${DIR}/${id}.svg`, "utf8");

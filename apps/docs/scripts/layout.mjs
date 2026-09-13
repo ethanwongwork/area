@@ -258,7 +258,8 @@ export const DOCS_CSS = `
     padding: var(--area-space-20) var(--area-space-12);
     border-inline-end: var(--area-border-width) solid var(--area-border-subtle);
   }
-  .docs-sidebar .area-menu + .area-menu { margin-block-start: var(--area-space-20); }
+  /* The measured group separation: 2px of item gap plus 12. See nav.css. */
+  .docs-sidebar .area-menu + .area-menu { margin-block-start: var(--area-space-12); }
 
   .docs-main {
     display: grid;

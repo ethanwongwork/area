@@ -21,6 +21,7 @@ import {
   customizer,
   viewToggle,
 } from "./layout.mjs";
+import { ICONS } from "./icons.generated.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
 import { PRACTICES } from "../src/practices.mjs";
 
@@ -103,8 +104,13 @@ function topbarControls() {
 }
 
 function sidebar(activeSlug) {
+  // An icon where the slug has one. Components have none deliberately: there are
+  // twenty-odd of them and a column of near-identical glyphs is noise, where nine
+  // foundations each have a distinct thing to depict.
   const item = (href, label, slug) =>
-    `<a class="area-menu__item" href="${href}"${slug === activeSlug ? ' data-selected aria-current="page"' : ""}>${escapeHtml(label)}</a>`;
+    `<a class="area-menu__item" href="${href}"${slug === activeSlug ? ' data-selected aria-current="page"' : ""}>${
+      ICONS[slug] ? `<span class="area-menu__icon" aria-hidden="true">${ICONS[slug]}</span>` : ""
+    }<span class="area-menu__text">${escapeHtml(label)}</span></a>`;
 
   const group = (title, links) =>
     `<nav class="area-menu area-menu--inline" aria-label="${escapeHtml(title)}">

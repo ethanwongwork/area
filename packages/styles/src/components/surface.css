@@ -255,11 +255,45 @@
   .area-menu__item--danger { color: var(--area-fg-danger); }
   .area-menu__item--danger:hover:not([data-disabled]) { background-color: var(--area-danger-surface); }
 
+  /*
+   * The icon and text slots of a menu item. The icon holds its size; the label takes what
+   * is left and truncates, so a long page title shortens rather than wrapping the row.
+   */
+  .area-menu__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    flex-shrink: 0;
+  }
+
+  .area-menu__icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .area-menu__text {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /*
+   * A group heading, in an inline menu the same shape as a nav's: the item's size and row
+   * height, strong weight, and a foreground a rung quieter than the items it names. See
+   * `nav.css` for the measurement this follows.
+   */
   .area-menu__label {
-    padding: var(--area-space-6) var(--area-space-8) var(--area-space-2);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
-    color: var(--area-fg-muted);
+    display: flex;
+    align-items: center;
+    block-size: var(--area-control-md);
+    padding-inline: var(--area-space-8);
+    color: var(--area-fg-subtle);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-strong);
   }
 
   /* Negative inline margin so the rule spans the panel, not just the item column. */

@@ -210,7 +210,7 @@ export const menu: ComponentManifest = {
   description: "Lists actions triggered from a button.",
   variants: { layout: ["inline"] },
   states: ["disabled", "highlighted", "selected"],
-  elements: ["item", "label", "separator", "shortcut"],
+  elements: ["item", "icon", "text", "label", "separator", "shortcut"],
   defaults: {},
 };
 
