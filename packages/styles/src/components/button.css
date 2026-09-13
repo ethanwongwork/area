@@ -148,14 +148,15 @@
 
   /* --- Tones ---------------------------------------------------------------- */
   /*
-   * A tone repoints nine slots; a variant decides which of them it reads. Nine tones and
-   * four variants is thirteen blocks rather than thirty-six, and adding a tone costs one
+   * A tone repoints nine slots; a variant decides which of them it reads. Eight tones and
+   * four variants is twelve blocks rather than thirty-two, and adding a tone costs one
    * block rather than four.
    *
-   * The vocabulary follows OpenAI's: primary is the near-black button, secondary the
-   * quiet grey, info a fixed blue that is deliberately not the brand, discovery a violet
-   * for AI and newly-introduced surfaces, and caution and warning are distinct steps
-   * rather than synonyms.
+   * The vocabulary follows OpenAI's: neutral is the near-black button, info a fixed blue
+   * that is deliberately not the brand, discovery a purple for AI and newly-introduced
+   * surfaces, and caution and warning are distinct steps rather than synonyms. Theirs also
+   * carries a `secondary`; Area's collapsed into `neutral`, because emphasis is what the
+   * variant axis is for.
    */
 
   /*

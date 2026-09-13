@@ -127,9 +127,9 @@ function sidebar(activeSlug) {
 
 function page({ slug, title, lede, body, toc = [] }) {
   const tocHtml = toc.length
-    ? `<nav class="docs-toc area-menu area-menu--inline" aria-label="On this page">
+    ? `<nav class="docs-toc area-menu area-menu--inline area-menu--marker" aria-label="On this page">
       <div class="area-menu__label">On this page</div>
-      ${toc.map((t) => `<a class="area-menu__item" href="#${t.id}"${t.nested ? ' style="padding-inline-start:var(--area-space-16)"' : ""}>${escapeHtml(t.title)}</a>`).join("")}
+      ${toc.map((t) => `<a class="area-menu__item" href="#${t.id}"${t.nested ? ' style="padding-inline-start:var(--area-space-24)"' : ""}>${escapeHtml(t.title)}</a>`).join("")}
     </nav>`
     : "<div></div>";
 

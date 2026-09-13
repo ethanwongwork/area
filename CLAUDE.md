@@ -146,8 +146,8 @@ plus the strength of an outline's label. Area already spans that on the variant 
 **Emphasis is the variant's job; the tone carries meaning.** A second neutral tone
 re-expressed what solid / outline / ghost already said.
 
-A tone repoints nine slots; a variant decides which it reads. Nine tones and four variants
-is thirteen CSS blocks, not thirty-six, and adding a tone costs one block. Never write a
+A tone repoints nine slots; a variant decides which it reads. Eight tones and four variants
+is twelve CSS blocks, not thirty-two, and adding a tone costs one block. Never write a
 `.area-button--{tone}.area-button--{variant}` pair.
 
 Three warm roles is more than hue separation alone can carry — danger to warning is 30

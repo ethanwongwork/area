@@ -203,6 +203,49 @@
     border-radius: var(--area-radius-row);
   }
 
+  /*
+   * The marker variant: selection shown as a rail beside the label rather than a plate
+   * under it.
+   *
+   * For a list that is read down rather than clicked across -- a table of contents, an
+   * outline -- where a filled plate on every visited item turns the column into a stack of
+   * blocks. Fluent's documentation nav is the reference: a short coloured rail, the label
+   * at full strength and strong weight, everything else one step back.
+   *
+   * The rail is sized to the *ink*, not to the row. `1cap` is the font's own cap height, so
+   * a 14px label gets a 10px cap and a 12px rail -- barely taller than the letterforms
+   * beside it, at any type scale, without a magic number. The fallback above it covers
+   * browsers without `cap` units, where a fixed 12px is right for the default scale.
+   *
+   * Its width is 3px, which is not on the spacing ramp: at 2px the rail reads as a hairline
+   * and at 4px it competes with the text. Derived rather than hardcoded, per the rule for
+   * values the ramps do not carry.
+   */
+  .area-menu--marker .area-menu__item {
+    position: relative;
+    padding-inline-start: var(--area-space-12);
+    color: var(--area-fg-muted);
+  }
+
+  .area-menu--marker .area-menu__item[data-selected] {
+    background-color: transparent;
+    color: var(--area-fg-default);
+    font-weight: var(--area-weight-strong);
+  }
+
+  .area-menu--marker .area-menu__item[data-selected]::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 50%;
+    translate: 0 -50%;
+    inline-size: calc(var(--area-space-2) + var(--area-border-width));
+    block-size: var(--area-space-12);
+    block-size: calc(1cap + var(--area-space-2));
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-accent-solid);
+  }
+
   .area-menu--inline .area-menu__separator {
     margin-inline: 0;
   }

@@ -208,7 +208,9 @@ export const popover: ComponentManifest = {
 export const menu: ComponentManifest = {
   block: "area-menu",
   description: "Lists actions triggered from a button.",
-  variants: { layout: ["inline"] },
+  // `selection` is how a current item is marked: a plate by default, or a rail beside
+  // the label for a list read down rather than clicked across.
+  variants: { layout: ["inline"], selection: ["marker"] },
   states: ["disabled", "highlighted", "selected"],
   elements: ["item", "icon", "text", "label", "separator", "shortcut"],
   defaults: {},

@@ -36,7 +36,7 @@ export const COMPONENT_PAGES = [
       {
         id: "tones",
         title: "Tones",
-        note: "Nine tones. Primary and secondary are neutral rather than brand, so a near-black button stays the strongest call to action whatever the accent axis is set to.",
+        note: "Eight tones. Neutral carries no hue, so a near-black button stays the strongest call to action whatever the accent axis is set to. Emphasis is the variant's job, not the tone's.",
         demo: "ButtonTones",
       },
       {
