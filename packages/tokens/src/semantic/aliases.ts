@@ -84,10 +84,8 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "bg-surface": at("neutral", "surface"),
   /** A quieter region within a surface: table header, inset well, code block. */
   "bg-subtle": at("neutral", "subtle"),
-  /** A code block's chrome. White in light, so the palette's 500 rungs stay legible. */
+  /** A code block. White in light, so the palette's 500 rungs stay legible. */
   "bg-code": at("neutral", "code"),
-  /** The code region itself, one step back from that chrome. */
-  "bg-code-body": at("neutral", "codeBody"),
   /** A control's own resting fill, and its hover and active states. */
   "bg-component": at("neutral", "component"),
   "bg-component-hover": at("neutral", "componentHover"),
@@ -130,6 +128,8 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   // --- Borders ------------------------------------------------------------------
   /** Ambient definition: card edges, separators, table rules. Never escalates. */
   "border-subtle": at("neutral", "borderSubtle"),
+  /** For a container whose fill already separates it from its ground. See `borderFaint`. */
+  "border-faint": at("neutral", "borderFaint"),
   /** An interactive control at rest. */
   border: at("neutral", "border"),
   /** That control on hover. */
@@ -171,12 +171,18 @@ export const SLOT_BANDS = {
     "surface",
     "subtle",
     "code",
-    "codeBody",
     "component",
     "componentHover",
     "componentActive",
   ],
-  border: ["borderSubtle", "border", "borderStrong", "tonalBorder", "tonalBorderStrong"],
+  border: [
+    "borderFaint",
+    "borderSubtle",
+    "border",
+    "borderStrong",
+    "tonalBorder",
+    "tonalBorderStrong",
+  ],
   text: [
     "textDisabled",
     "textPlaceholder",

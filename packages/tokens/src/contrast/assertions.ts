@@ -64,6 +64,13 @@ const STROKE = {
    * perfectly well at 1.4:1.
    */
   ambient: { wcag: 1.3, apca: 0 },
+  /**
+   * A container edge that supplements a fill difference rather than replacing one -- a
+   * white code block on a grey page. Held lower than `ambient` because the stroke is not
+   * the only thing separating the two surfaces, and 1.2 is where Tailwind, shadcn and
+   * Vercel all put exactly this edge.
+   */
+  faint: { wcag: 1.2, apca: 0 },
   /** Resting definition on an interactive control. Must be visible; not a state indicator. */
   resting: { wcag: 1.5, apca: 10 },
   /** Hover. Carries state, so it is held higher than rest. */
@@ -103,7 +110,7 @@ function tonalAssertions(): ContrastAssertion[] {
     if (SYNTAX_ROLES.includes(tone)) {
       out.push({
         fg: `fg-${tone}-vivid`,
-        bg: "bg-code-body",
+        bg: "bg-code",
         wcag: WCAG.TEXT,
         apca: APCA.CONTENT,
         note: `${tone} vivid text on a code block`,
@@ -147,6 +154,8 @@ function chromeAssertions(): ContrastAssertion[] {
     { fg: "border", bg: "bg-surface", ...STROKE.resting, note: "control border on surface" },
     { fg: "border-subtle", bg: "bg-surface", ...STROKE.ambient, note: "separator and card edge" },
     { fg: "border-subtle", bg: "bg-page", ...STROKE.ambient, note: "separator on page" },
+    { fg: "border-faint", bg: "bg-page", ...STROKE.faint, note: "container edge on page" },
+    { fg: "border-faint", bg: "bg-surface", ...STROKE.faint, note: "container edge on a panel" },
     { fg: "border-hover", bg: "bg-surface", ...STROKE.hover, note: "control border, hover" },
 
     // The focus ring is checked against every surface it can land on. Checking only the

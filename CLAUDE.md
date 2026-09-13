@@ -211,13 +211,22 @@ modest — 17 degrees and an OKLab distance of 0.068, about three and a half JND
 separates twice as well and is already `discovery`, so taking it would move the collision
 rather than remove it.
 
-**Syntax highlighting is pinned to level 500 in light themes, and that is a waiver.** It is
-below AA: red 4.35–4.42, purple 4.42–4.48, and green 2.89 because green's 500 is a
-glyph-wall rung the palette pins to 3:1. All four are in `contrast/exceptions.ts` with their
-measured numbers, the gate still counts them, and `report.ts` prints them in their own
-section rather than folding them into the pass count. Dark themes are *not* pinned — there
-500 measures APCA Lc 28–31 against a floor of 60, which is unreadable rather than marginal,
-so `chooseVivid` keeps walking.
+**Syntax highlighting is pinned to level 500 in light themes.** The code block is white, and
+white is exactly what the palette pins 500 against, so red, purple, blue and the default
+indigo all clear AA there on their own. What remains waived is the glyph wall: green at
+3.06, and whatever a consumer points the accent axis at. Both are in
+`contrast/exceptions.ts` with their measured numbers, the gate still counts them, and
+`report.ts` prints them in their own section rather than folding them into the pass count.
+Dark themes are *not* pinned — there 500 measures APCA Lc 28–31 against a floor of 60,
+which is unreadable rather than marginal, so `chooseVivid` keeps walking.
+
+**A code block is one ground with no rules through it.** Toolbar and code share
+`--area-bg-code`; a line between them makes one object read as two stacked ones, and what
+marks the toolbar is that it holds buttons. Its edge takes `--area-border-faint`, a fainter
+stroke than `border-subtle`, because a white block on a grey page is already separated by
+its fill and the stroke only resolves the edge — 1.24 on the page, which is where Tailwind,
+shadcn and Vercel all put a container edge. In dark it lands on the same rung as
+`border-subtle`: near black the ladder has no room for a fainter tier that is still a tier.
 
 **A level is a colour, not a job.** Which rung is a background and which is a border is a
 decision the semantic layer makes, per theme, in one table — `INVERSION`. Never reach for a

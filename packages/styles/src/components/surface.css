@@ -220,6 +220,10 @@
    * Its width is 3px, which is not on the spacing ramp: at 2px the rail reads as a hairline
    * and at 4px it competes with the text. Derived rather than hardcoded, per the rule for
    * values the ramps do not carry.
+   *
+   * It is inset from the row's leading edge rather than flush with it, which puts it nearer
+   * the label than the boundary. Flush, it read as an edge treatment on the row; inset, it
+   * reads as a mark on the text -- which is what it is.
    */
   .area-menu--marker .area-menu__item {
     position: relative;
@@ -236,7 +240,7 @@
   .area-menu--marker .area-menu__item[data-selected]::before {
     content: "";
     position: absolute;
-    inset-inline-start: 0;
+    inset-inline-start: var(--area-space-6);
     inset-block-start: 50%;
     translate: 0 -50%;
     inline-size: calc(var(--area-space-2) + var(--area-border-width));

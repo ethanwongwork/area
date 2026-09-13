@@ -277,12 +277,9 @@ export const code: ComponentManifest = {
 export const codeBlock: ComponentManifest = {
   block: "area-code-block",
   description: "Shows a block of code with an optional toolbar.",
-  // `shape` is how the block presents its actions: a header row carrying a filename
-  // (`titled`), or none at all with a single action riding on the code (`bare`). A block
-  // with neither modifier gets the full toolbar, which is what a live example needs.
-  variants: { shape: ["titled", "bare"], layout: ["flush", "wrap"] },
+  variants: { layout: ["flush", "wrap"] },
   states: ["collapsed"],
-  elements: ["toolbar", "title", "actions", "body", "pre", "toggle"],
+  elements: ["toolbar", "actions", "body", "pre", "toggle"],
   defaults: {},
 };
 

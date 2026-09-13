@@ -87,6 +87,21 @@ export const INVERSION = {
   /** Neutral strokes, quietest to loudest. */
   borderSubtle: { light: 200, dark: 750 },
   border: { light: 250, dark: 650 },
+  /**
+   * The faintest stroke in the system, for a container that is already offset in value from
+   * its ground -- a white code block on a grey page.
+   *
+   * Lighter than `borderSubtle` because it is not doing the separating on its own: the fill
+   * difference is, and the stroke only resolves the edge. Measured at 1.24 on the page,
+   * which is where Tailwind (1.24), shadcn (1.23) and Vercel (1.20) all put a container
+   * edge; `borderSubtle` stays at 1.5 for the case where a stroke is the only separation.
+   *
+   * In dark it lands on the same rung as `borderSubtle`, and deliberately. The first attempt
+   * put it at 800, which is the rung a code block is *filled* with -- a border invisible
+   * against the thing it borders. Near black the ladder has no room for a fainter tier that
+   * is still a tier, so the two coincide rather than one of them becoming a lie.
+   */
+  borderFaint: { light: 150, dark: 750 },
   borderStrong: { light: 350, dark: 550 },
   /**
    * Tonal strokes, which sit deeper on the ladder than neutral ones.
@@ -123,14 +138,14 @@ export const INVERSION = {
   secondaryFill: { light: 700, dark: 200 },
   secondaryFillHover: { light: 750, dark: 100 },
   /**
-   * A code block's chrome -- its toolbar and header row. White in light; see `Position`.
+   * A code block, toolbar and code alike. One ground, not two: a rule or a change of fill
+   * between the toolbar and the code draws a line through a thing that is one object.
+   *
+   * White in light -- see `Position` -- and that is not only a look. The palette pins its
+   * 500 rung to clear AA against white specifically, and syntax highlighting is set in 500,
+   * so a code block on any other ground costs contrast for nothing.
    */
   code: { light: "white", dark: 800 },
-  /**
-   * The code itself, one step back from that chrome so the two regions read as separate
-   * materials inside one container rather than as a single flat panel.
-   */
-  codeBody: { light: 25, dark: 850 },
   /** The level a translucent scrim is solved from. */
   scrim: { light: 600, dark: 950 },
 } as const satisfies Record<string, Inversion>;

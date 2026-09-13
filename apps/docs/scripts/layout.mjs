@@ -48,65 +48,40 @@ function toolbarButton(icon, label, attr, variant = "outline") {
 }
 
 /** A code block with a copy button, in the shape the design system defines. */
-export function codeBlock(code, { title, flush = false, wrap = true, live = false } = {}) {
-  // Three shapes, chosen by what the block has to say rather than by a flag at the call site.
-  //
-  //   live    a preview sits above it, so it gets the full toolbar: Copy and Reset act on
-  //           the preview, Customize opens the axis panel.
-  //   titled  it names a file, so the name and its Copy share a header row.
-  //   bare    it is an install line or an import, where a toolbar would be taller than the
-  //           code. One Copy rides at the top-right of the block itself.
-  const shape = live ? "live" : title ? "titled" : "bare";
-
-  const cls = [
-    "area-code-block",
-    shape === "titled" && "area-code-block--titled",
-    shape === "bare" && "area-code-block--bare",
-    flush && "area-code-block--flush",
-    wrap && "area-code-block--wrap",
-  ]
+export function codeBlock(code, { flush = false, wrap = true, live = false } = {}) {
+  const cls = ["area-code-block", flush && "area-code-block--flush", wrap && "area-code-block--wrap"]
     .filter(Boolean)
     .join(" ");
-
-  const copy = (variant) => toolbarButton("copy", "Copy", "data-copy", variant);
 
   // Only a block long enough to need it gets the control; wrapping a three-line import in
   // "Show code" would cost a row to hide nothing.
   const COLLAPSE_AFTER = 8;
-  const lines = code.split("\n").length;
-  const collapsible = lines > COLLAPSE_AFTER;
+  const collapsible = code.split("\n").length > COLLAPSE_AFTER;
+  const collapsed = collapsible ? " data-collapsed" : "";
 
-  const body = (inner) =>
-    collapsible
-      ? `<div class="area-code-block__body">${inner}
+  const pre = `<pre class="area-code-block__pre"><code>${highlight(code)}</code></pre>`;
+  const body = collapsible
+    ? `<div class="area-code-block__body">${pre}
     <button type="button" class="area-code-block__toggle" data-code-toggle aria-expanded="false">
       <span data-code-toggle-label>Show code</span>
     </button>
   </div>`
-      : `<div class="area-code-block__body">${inner}</div>`;
+    : `<div class="area-code-block__body">${pre}</div>`;
 
-  const pre = `<pre class="area-code-block__pre"><code>${highlight(code)}</code></pre>`;
-  const collapsed = collapsible ? " data-collapsed" : "";
-
-  if (shape === "bare") {
-    return `<div class="${cls}"${collapsed}>
-  <span class="area-code-block__actions">${copy("ghost")}</span>
-  ${body(pre)}
-</div>`;
-  }
-
-  const leading = live ? copy("outline") + toolbarButton("reset", "Reset", "data-reset") : "";
-  const trailing = live
-    ? `<span class="area-code-block__actions">${toolbarButton("expand", "Customize", "data-customize")}</span>`
-    : `<span class="area-code-block__actions">${copy("ghost")}</span>`;
+  // Copy is the same button everywhere -- a live example's toolbar and an install line both
+  // get the outline treatment, because it is the same action and inventing a quieter one
+  // for the quieter block only made the two look unrelated.
+  //
+  // Reset and Customize act on a preview, so they appear only where there is one.
+  const actions = live
+    ? toolbarButton("copy", "Copy", "data-copy") +
+      toolbarButton("reset", "Reset", "data-reset") +
+      `<span class="area-code-block__actions">${toolbarButton("expand", "Customize", "data-customize")}</span>`
+    : `<span class="area-code-block__actions">${toolbarButton("copy", "Copy", "data-copy")}</span>`;
 
   return `<div class="${cls}"${collapsed}>
-  <div class="area-code-block__toolbar">
-    ${title ? `<span class="area-code-block__title">${escapeHtml(title)}</span>` : ""}
-    ${leading}
-    ${trailing}
-  </div>
-  ${body(pre)}
+  <div class="area-code-block__toolbar">${actions}</div>
+  ${body}
 </div>`;
 }
 
@@ -343,10 +318,10 @@ export const DOCS_CSS = `
    * the tokens are the current system's.
    */
   .docs-example {
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-border-width) solid var(--area-border-faint);
     border-radius: var(--area-radius-container);
     overflow: hidden;
-    background-color: var(--area-bg-surface);
+    background-color: var(--area-bg-code);
   }
   .docs-example__preview {
     display: flex;

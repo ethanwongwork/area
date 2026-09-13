@@ -129,7 +129,7 @@ function page({ slug, title, lede, body, toc = [] }) {
   const tocHtml = toc.length
     ? `<nav class="docs-toc area-menu area-menu--inline area-menu--marker" aria-label="On this page">
       <div class="area-menu__label">On this page</div>
-      ${toc.map((t) => `<a class="area-menu__item" href="#${t.id}"${t.nested ? ' style="padding-inline-start:var(--area-space-24)"' : ""}>${escapeHtml(t.title)}</a>`).join("")}
+      ${toc.map((t) => `<a class="area-menu__item" href="#${t.id}"${t.nested ? ' style="margin-inline-start:var(--area-space-12)"' : ""}>${escapeHtml(t.title)}</a>`).join("")}
     </nav>`
     : "<div></div>";
 
@@ -205,11 +205,11 @@ function componentPage(spec) {
   const lede = manifest?.description ?? "";
 
   const install = `<h2 class="docs-h2" id="installation">Installation</h2>
-${codeBlock("npm install @area/react @area/styles", { title: "terminal" })}
+${codeBlock("npm install @area/react @area/styles")}
 <h2 class="docs-h2" id="usage">Usage</h2>
 <div class="docs-stack">
-${codeBlock(`import { ${spec.name} } from "@area/react";\nimport "@area/styles/area.css";`, { title: "app.tsx" })}
-${codeBlock(demos[spec.examples[0].demo].code, { title: "app.tsx" })}
+${codeBlock(`import { ${spec.name} } from "@area/react";\nimport "@area/styles/area.css";`)}
+${codeBlock(demos[spec.examples[0].demo].code)}
 </div>`;
 
   const examples = `<h2 class="docs-h2" id="examples">Examples</h2>${spec.examples.map(exampleBlock).join("\n")}`;
@@ -232,7 +232,7 @@ ${table(
 
   const cssNote = `<h2 class="docs-h2" id="css">Without React</h2>
 <p class="docs-note">Every component is plain CSS. Use the classes directly when you are not using React.</p>
-${codeBlock(demos[spec.examples[0].demo].html, { title: "index.html" })}`;
+${codeBlock(demos[spec.examples[0].demo].html)}`;
 
   const toc = [
     { id: "installation", title: "Installation" },
@@ -478,7 +478,7 @@ ${tokenSection({
 <div class="docs-prose">
 <p>Add the export name and its Fluent identifier to the map in <code class="area-code">gen-icons.mjs</code>, then run it. Nothing else is edited by hand — the module below is generated output, and editing it directly is how the set drifts from Fluent.</p>
 </div>
-${codeBlock(`const MAP = {\n  PlusIcon: "add_16_regular",\n  // ...\n};`, { title: "gen-icons.mjs" })}`;
+${codeBlock(`const MAP = {\n  PlusIcon: "add_16_regular",\n  // ...\n};`)}`;
 
   return page({
     slug: "iconography",
@@ -992,7 +992,7 @@ function axesPage() {
 <p>Because custom properties inherit, a subtree can carry its own axis values. A sidebar marked <code class='area-code'>data-area-density="compact"</code> gets shorter controls <em>and</em> correctly re-derived corner radii, without any component knowing it happened.</p>
 </div>
 <h2 class="docs-h2" id="usage">Usage</h2>
-${codeBlock(`<html data-area-theme="dark" data-area-accent="purple" data-area-density="compact">`, { title: "index.html" })}
+${codeBlock(`<html data-area-theme="dark" data-area-accent="purple" data-area-density="compact">`)}
 ${tokens.axes
   .map(
     (a) => `<h2 class="docs-h2" id="${a.id}">${escapeHtml(a.label)}</h2>
@@ -1016,9 +1016,9 @@ function indexPage() {
 <p>Defaults are not taste. The 32px control, 6px control radius, 12px container radius and 14/20 text are the values that GitHub Primer, OpenAI, Vercel, Linear and Notion converge on, measured from their shipped code rather than inferred.</p>
 </div>
 <h2 class="docs-h2" id="install">Installation</h2>
-${codeBlock("npm install @area/react @area/styles", { title: "terminal" })}
+${codeBlock("npm install @area/react @area/styles")}
 <h2 class="docs-h2" id="start">Getting started</h2>
-${codeBlock(`import { Button } from "@area/react";\nimport "@area/styles/area.css";\n\nexport default function App() {\n  return <Button>Get started</Button>;\n}`, { title: "app.tsx" })}
+${codeBlock(`import { Button } from "@area/react";\nimport "@area/styles/area.css";\n\nexport default function App() {\n  return <Button>Get started</Button>;\n}`)}
 <h2 class="docs-h2" id="defaults">Defaults</h2>
 <p class="docs-note">Measured from shipped code, not chosen. Where the systems disagree, Area follows the majority.</p>
 ${table(

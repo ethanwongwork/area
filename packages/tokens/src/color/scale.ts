@@ -240,8 +240,8 @@ function chooseVivid(steps: readonly ScaleStep[], theme: Theme): Level {
   // walk.
   if (theme === "light") return 500;
 
-  // Measured against the body, which is the ground the code actually sits on.
-  const page = groundHex(INVERSION.codeBody[theme]);
+  // Measured against the block's own ground.
+  const page = groundHex(INVERSION.code[theme]);
   const start = steps.findIndex((s) => s.level === 500);
   // A dark ground needs the text lighter, which is a lower rung.
   const direction = -1;
