@@ -98,6 +98,9 @@ export interface BuiltScale {
   contrast: { hex: "#ffffff" | "#000000"; wcag: number; apca: number };
 }
 
+/** The palette ships white as a constant because its ladder stops at 25. */
+export const WHITE: string = (PALETTE.constants as { white: string }).white;
+
 const PAGE_BACKGROUND: Record<Theme, string> = { light: "#ffffff", dark: "#000000" };
 
 /** AA plus a margin, so 8-bit quantisation cannot drop a shipped fill below 4.5:1. */
@@ -213,10 +216,11 @@ function chooseSolid(
  * colourful legible text is the rung closest to the page *before* contrast runs out.
  * Walking outward from 500 and stopping at the first pass finds it.
  *
- * The walk measures against `bg-subtle` rather than against the page, because that is the
- * quietest ground this token can land on -- a code block -- and therefore the worst case of
- * the three surfaces the gate asserts. Measuring against pure white instead stopped the
- * walk one rung short for six families, and the gate said so.
+ * The walk measures against `bg-code`, because a code block is the only place this token is
+ * used and its ground is the one that decides legibility. That ground is white in light,
+ * which is exactly what the palette pins its 500 rung to -- so on the label ladder the walk
+ * returns 500 unchanged. Measured against a grey ground instead it returned 550, a rung the
+ * palette never calibrated for anything.
  *
  * This is what "use 500" has to mean in a palette with two walls. On the label ladder --
  * blue, red, indigo, purple, pink -- 500 clears AA on the page and is returned unchanged.
@@ -225,7 +229,7 @@ function chooseSolid(
  * everywhere would have shipped illegible syntax highlighting in exactly six hues.
  */
 function chooseVivid(steps: readonly ScaleStep[], theme: Theme): Level {
-  const page = FAMILIES.neutral![String(INVERSION.subtle[theme])]!.hex;
+  const page = groundHex(INVERSION.code[theme]);
   const start = steps.findIndex((s) => s.level === 500);
   // Light pages need the text darker; dark pages need it lighter.
   const direction = theme === "light" ? 1 : -1;
@@ -237,6 +241,13 @@ function chooseVivid(steps: readonly ScaleStep[], theme: Theme): Level {
     if (wcagContrastHex(hex, page) >= 4.6 && apcaMagnitude(hex, page) >= 61) return steps[i]!.level;
   }
   return steps[start]!.level;
+}
+
+/** A ground's hex, where the ground may be a rung or the palette's white constant. */
+function groundHex(position: Level | "white"): string {
+  return position === "white"
+    ? (PALETTE.constants as { white: string }).white
+    : FAMILIES.neutral![String(position)]!.hex;
 }
 
 function formatAlphaHex({ alpha, rgb }: AlphaSolution): string {

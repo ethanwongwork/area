@@ -5,7 +5,7 @@
  * with light or dark. The contrast gate asserts against these resolved objects rather
  * than against source data, because what ships is what has to be readable.
  */
-import { type BuiltScale, type Theme, buildScale } from "../color/scale.ts";
+import { type BuiltScale, type Theme, WHITE, buildScale } from "../color/scale.ts";
 import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES, ROLE_SCALES } from "../color/presets.ts";
 import { type Role, type ScaleLookup, resolveAliases } from "./aliases.ts";
 
@@ -70,7 +70,10 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
     Object.entries(roles).map(([role, scale]) => [
       role,
       {
-        byLevel: Object.fromEntries(scale.steps.map((s) => [s.level, s.hex])),
+        byLevel: {
+          ...Object.fromEntries(scale.steps.map((s) => [s.level, s.hex])),
+          white: WHITE,
+        },
         alphaByLevel: Object.fromEntries(scale.alphas.map((a) => [a.level, a.hex8])),
         solid: { level: scale.solid.level, hover: scale.solid.hover },
         vivid: scale.vivid,

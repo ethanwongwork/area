@@ -12,10 +12,11 @@
  * and never goes above; Material's base scale uses only 400 and 500. A third weight buys
  * a distinction most readers cannot name and every author has to decide about.
  *
- * **Strong is deliberately soft.** Vercel ships `font-weight: 550` as Geist's own
- * emphasis weight, precisely because 400 -> 500 reads too weakly in this face while
- * 400 -> 600 reads as shouting. Non-integer weights need a variable font, so the system
- * preset -- which gets whatever the platform provides -- steps up to 600 instead.
+ * **Strong is deliberately soft.** 500, not 600 and not Geist's own 550. The two-weight
+ * rule exists to make the step between regular and strong *small*, and at UI sizes 550
+ * against 400 is already most of the way to a semibold -- which is the contrast the rule
+ * was written to avoid. 500 is also the one weight every platform font ships, so the
+ * variable and non-variable presets no longer disagree about what strong means.
  *
  * Geist has a single weight axis and no optical-size axis, so tracking is built by hand.
  * When a face carries optical sizing the font already adjusts its own spacing and manual
@@ -133,7 +134,7 @@ const GEIST = {
   "font-feature-settings": `"rlig" 1, "calt" 0, "ss11" 1`,
   "weight-regular": "var(--area-wght-400)",
   /** Geist's own emphasis weight, as shipped by Vercel. Needs the variable font. */
-  "weight-strong": "var(--area-wght-550)",
+  "weight-strong": "var(--area-wght-500)",
 };
 
 const SYSTEM = {
@@ -141,8 +142,8 @@ const SYSTEM = {
   "font-mono": `ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace`,
   "font-feature-settings": `normal`,
   "weight-regular": "var(--area-wght-400)",
-  /** Platform fonts ship discrete weights, so 550 would snap unpredictably. */
-  "weight-strong": "var(--area-wght-600)",
+  /** Platform fonts ship discrete weights; 500 is one every UI stack actually has. */
+  "weight-strong": "var(--area-wght-500)",
 };
 
 export const TYPOGRAPHY_AXIS: AxisDefinition = {

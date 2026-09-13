@@ -31,8 +31,18 @@ interface RadiusPreset {
    * 4px reads as a rectangle with the corners filed off, and `control` at 6px is tuned for
    * a box roughly as wide as it is tall.
    *
-   * The number is a ratio, not a taste. OpenAI's sidebar row is 10px on a 40px row --
-   * exactly a quarter of its height -- and a quarter of Area's 32px row is 8.
+   * An earlier version of this comment derived 8 as "a quarter of OpenAI's 40px row". That
+   * was wrong twice over, and the correction is worth keeping. Their row is not 40px: the
+   * shipped tokens give `--menu-item-padding` as 6px 8px on 14/20 type, which is a 32px row
+   * -- the same height Area already uses. The 40 was read off a screenshot rather than
+   * measured, and the ratio was then built on it.
+   *
+   * What is actually measurable: OpenAI's radius scale carries an 8px step (`--radius-md`)
+   * between 6 and 10, their menu *panel* is 12px, and an item nested in that panel resolves
+   * concentrically to 12 less its 6px gutter, which is 6. A sidebar row sits in no panel, so
+   * nothing constrains it concentrically and the choice is free. 8 is one step rounder than
+   * a control, which is the amount that stops a full-width plate reading as a filed-off
+   * rectangle without turning it into a pill.
    */
   row: number;
 }
@@ -46,53 +56,71 @@ function radiusTokens({ control, container, small, row }: RadiusPreset) {
   };
 }
 
+/**
+ * The presets, named by the one number a reader already has in their head: the radius of a
+ * button.
+ *
+ * `sharp` / `subtle` / `default` / `rounded` / `soft` was a ladder that needed a lookup
+ * table to read, and which of `subtle` and `default` was rounder was a thing you had to
+ * remember rather than something the name told you. Every other primitive ramp in Area is
+ * named by its value -- `space-16` is 16px, `wght-400` is weight 400 -- and a radius preset
+ * is no different: `data-area-radius="8"` says what it does.
+ *
+ * The steps are 2px apart, which is the smallest difference that reads on a 32px control,
+ * and the low end is denser than it was: 0, 2 and 4 are three distinguishable near-square
+ * treatments where `sharp` and `subtle` were two.
+ *
+ * Within a preset every semantic radius takes a distinct value, so nothing collapses into
+ * anything else. The single exception is 0, where square is square and uniqueness is not
+ * available -- which is the point of that preset rather than a gap in it.
+ */
+const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
+  { id: "0", control: 0, small: 0, row: 0, container: 0, note: "Square corners throughout." },
+  { id: "2", control: 2, small: 0, row: 4, container: 6, note: "Barely softened." },
+  { id: "4", control: 4, small: 2, row: 6, container: 10, note: "Restrained. Close to Material 3." },
+  {
+    id: "6",
+    control: 6,
+    small: 4,
+    row: 8,
+    container: 12,
+    note: "Matches Primer, Vercel, Linear and Notion, which all ship a 6px control.",
+  },
+  {
+    id: "8",
+    control: 8,
+    small: 6,
+    row: 10,
+    container: 14,
+    note: "The default. Matches shadcn/ui.",
+  },
+  { id: "10", control: 10, small: 8, row: 12, container: 16, note: "Soft." },
+  { id: "12", control: 12, small: 10, row: 14, container: 20, note: "Very soft." },
+  {
+    id: "pill",
+    control: 9999,
+    small: 9999,
+    row: 9999,
+    container: 24,
+    note: "Fully round controls. Containers stay finite, since a pill card is a lozenge.",
+  },
+];
+
 export const RADIUS_AXIS: AxisDefinition = {
   id: "radius",
   label: "Radius",
-  description: "How rounded controls and containers are.",
-  defaultPreset: "default",
+  description: "How rounded controls and containers are, named by the button's own radius.",
+  defaultPreset: "8",
   namespaces: [
     "--area-radius-control",
     "--area-radius-container",
     "--area-radius-small",
     "--area-radius-row",
   ],
-  presets: [
-    {
-      id: "sharp",
-      label: "Sharp",
-      description: "Square corners throughout.",
-      tokens: tokens(radiusTokens({ control: 0, container: 0, small: 0, row: 0 })),
-    },
-    {
-      id: "subtle",
-      label: "Subtle",
-      description: "4px controls, 6px containers.",
-      tokens: tokens(radiusTokens({ control: 4, container: 6, small: 2, row: 6 })),
-    },
-    {
-      id: "default",
-      label: "Default",
-      description: "6px controls, 12px containers, 8px rows. Matches Primer, Vercel, Linear and Notion.",
-      tokens: tokens(radiusTokens({ control: 6, container: 12, small: 4, row: 8 })),
-    },
-    {
-      id: "rounded",
-      label: "Rounded",
-      description: "8px controls, 14px containers. Matches shadcn/ui.",
-      tokens: tokens(radiusTokens({ control: 8, container: 14, small: 6, row: 10 })),
-    },
-    {
-      id: "soft",
-      label: "Soft",
-      description: "12px controls, 20px containers.",
-      tokens: tokens(radiusTokens({ control: 12, container: 20, small: 8, row: 14 })),
-    },
-    {
-      id: "pill",
-      label: "Pill",
-      description: "Fully round controls, 24px containers.",
-      tokens: tokens(radiusTokens({ control: 9999, container: 24, small: 9999, row: 9999 })),
-    },
-  ],
+  presets: PRESETS.map(({ id, note, ...preset }) => ({
+    id,
+    label: id === "pill" ? "Pill" : `${id}px`,
+    description: note,
+    tokens: tokens(radiusTokens(preset)),
+  })),
 };

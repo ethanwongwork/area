@@ -40,6 +40,17 @@ export const LEVELS = [
 
 export type Level = (typeof LEVELS)[number];
 
+/**
+ * A position on the ladder, or pure white.
+ *
+ * The rungs stop at 25 (#fafafa), which is why the palette ships white as a constant
+ * alongside them rather than as a rung. One surface needs it: a code block, whose syntax
+ * colours are the palette's 500 rungs, and 500 is pinned to clear AA against *white*
+ * specifically. On #fafafa the same colours measure 4.42 and on #f7f7f7 they measure 4.30
+ * -- under the bar by a margin small enough to be invisible and large enough to fail.
+ */
+export type Position = Level | "white";
+
 /** A value per level, in ladder order (lightest first). */
 export type Ramp<T> = readonly T[];
 
@@ -54,8 +65,8 @@ export type Ramp<T> = readonly T[];
  * the two columns side by side rather than describing them.
  */
 export interface Inversion {
-  light: Level;
-  dark: Level;
+  light: Position;
+  dark: Position;
 }
 
 export const INVERSION = {
@@ -103,6 +114,8 @@ export const INVERSION = {
   inverseText: { light: 25, dark: 900 },
   secondaryFill: { light: 700, dark: 200 },
   secondaryFillHover: { light: 750, dark: 100 },
+  /** The ground a code block sits on. See `Position` for why light is white and not a rung. */
+  code: { light: "white", dark: 800 },
   /** The level a translucent scrim is solved from. */
   scrim: { light: 600, dark: 950 },
 } as const satisfies Record<string, Inversion>;

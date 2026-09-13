@@ -46,11 +46,11 @@ export interface TokensJson {
   /** The ladder itself: every level, lightest first. A level *is* its lightness. */
   levels: readonly number[];
   /** Which level each semantic slot reads in each theme -- the inversion, as data. */
-  inversion: Record<string, { light: number; dark: number }>;
+  inversion: Record<string, { light: number | string; dark: number | string }>;
   /** One sentence per scale. */
   scaleDescriptions: Record<string, string>;
   /** Semantic token -> the role it reads and the level it lands on in each theme. */
-  semantics: Record<string, { kind: string; role?: string; light?: number; dark?: number }>;
+  semantics: Record<string, { kind: string; role?: string; light?: number | string; dark?: number | string }>;
   /**
    * Every scale. One ramp, not two: the steps are theme-independent, and only the alphas
    * differ, because those are composited over a page background that the theme decides.

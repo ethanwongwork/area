@@ -74,11 +74,15 @@ Weight is orthogonal to role. A role sets size, leading and tracking; it never s
 weight. That is what makes large text at a regular weight possible — a 20px paragraph
 rather than a 20px heading — which a ramp with weight baked into the role cannot express.
 
-Two weights only: regular 400, strong 550 (600 on the system preset, whose platform fonts
-ship discrete weights). Material's `emphasized` scale is the same idea with a second full
-ramp instead of one token; it is a uniform one-step increase on the variable weight axis,
-400→500 for large roles and 500→600 for small. 550 sits between those, which only works
-because Geist is variable.
+Two weights only: regular 400, strong **500**, in every preset. Material's `emphasized`
+scale is the same idea with a second full ramp instead of one token, and it is a uniform
+one-step increase on the variable weight axis: 400→500 for large roles.
+
+Strong was 550 on Geist and 600 on the system preset. Both read as heavier than the
+contrast this system wants — the whole point of the two-weight rule is a *soft* step, and
+550 against 400 is already most of the way to a semibold at UI sizes. 500 is also the one
+value every platform font actually ships, so the variable and non-variable presets stop
+disagreeing about what "strong" means.
 
 Names are relative (xs..xl), unlike spacing and radius, because the type axis rescales the
 whole ramp — `--area-text-14` would become a lie the moment someone picked the compact
@@ -110,16 +114,23 @@ exactly {16, 12} and comments that "a codicon at 13/14/15px is always a mistake 
 16"; Octicons says the same with 24 for the large tier. Gap follows the tier: Primer ties
 4px to xsmall and small, 8px to medium and large, with 6px as the step between.
 
-Radius has four steps, not three. `row` sits between `control` and `container` for a
-full-width backplate — a sidebar item, a table-of-contents entry, a nav link — because a row
-has a control's height and a container's width and neither of the others fits it. The number
-is a ratio: OpenAI's sidebar row is 10px on 40px, a quarter of its height, and a quarter of
-Area's 32px row is 8.
+**Radius presets are named by the button's own radius.** `data-area-radius="8"`, not
+`="default"`. The old `sharp / subtle / default / rounded / soft` ladder needed a lookup
+table to read and never said which of two names was rounder; every other primitive ramp in
+Area is named by its value, and this is no different. Steps are 2px apart — the smallest
+difference that reads on a 32px control — and the low end carries 0, 2 and 4 where it used
+to carry two names. Within a preset every semantic radius is distinct; at `0` they are all
+0, which is the point of that preset rather than a gap in it.
+
+Radius has four semantic steps, not three. `row` sits between `control` and `container` for
+a full-width backplate — a sidebar item, a table-of-contents entry, a nav link — because a
+row has a control's height and a container's width and neither of the others fits it.
 
 Radius does *not* move with density. An earlier version derived it as a proportion of
 control height, which quietly made a compact button 5px — but Primer at 32, Vercel at 32,
 Linear at 32 and Notion at 28 all ship exactly 6px. Radius is owned entirely by the radius
-axis, flat at every tier.
+axis, flat at every tier. Area's default is one step rounder than that group at 8px, which
+is shadcn/ui's number; the 6px preset is still there for anyone who wants the Primer look.
 
 ## Tones
 

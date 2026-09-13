@@ -565,7 +565,7 @@ function typographyPage() {
 
   const body = `<div class="docs-prose">
 <p><strong>Weight is orthogonal to role.</strong> A role sets size, leading and tracking — it does not set weight. That is what makes large text at a regular weight possible: a 20px paragraph rather than a 20px heading. A ramp with weight baked into the role cannot express that at all.</p>
-<p><strong>Two weights, not three.</strong> Regular at 400 and strong at 550. Every composite below exists in both, which is why each row shows both.</p>
+<p><strong>Two weights, not three.</strong> Regular at 400 and strong at 500, in every preset. Every composite below exists in both, which is why each row shows both.</p>
 <p>Composites point at the primitive ramps rather than at literals, so the scale presets move by whole steps rather than multiplying — which is what keeps every preset on the ramp instead of landing on 12.25px.</p>
 </div>
 ${composite("text", "Text", "Anything read as prose or rendered inside a control. Leading runs 1.33 to 1.5, rising with size. The 16px step is the size this ramp is meant to be read at; controls take 14px, the split Notion uses between content and chrome.")}
@@ -602,7 +602,7 @@ ${tokenSection({
     "Two, and only two. Material ships a parallel emphasized scale that is a uniform one-step increase on the variable weight axis; this is the same idea with one token instead of a second ramp.",
   rows: [
     { name: "weight/regular", geist: 400, system: 400, use: "Body copy, and any text being read rather than scanned." },
-    { name: "weight/strong", geist: 550, system: 600, use: "Titles, control labels, and emphasis within text. Not long-form copy." },
+    { name: "weight/strong", geist: 500, system: 500, use: "Titles, control labels, and emphasis within text. Not long-form copy." },
   ],
   columns: [
     { header: "Token", cell: (r) => tokenChip(r.name) },

@@ -20,7 +20,7 @@
  *   Nothing here is a raw colour. The one exception is `fg-on-*`, which resolves to the
  *   black or white each scale measured against its own solid fill.
  */
-import { type Level, type Slot, INVERSION } from "../color/curves.ts";
+import { type Level, type Position, type Slot, INVERSION } from "../color/curves.ts";
 import type { Theme } from "../color/scale.ts";
 
 /** The roles the semantic layer addresses. The colour axis repoints `accent`. */
@@ -84,6 +84,8 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "bg-surface": at("neutral", "surface"),
   /** A quieter region within a surface: table header, inset well, code block. */
   "bg-subtle": at("neutral", "subtle"),
+  /** A code block's own ground. White in light, so the palette's 500 rungs stay legible. */
+  "bg-code": at("neutral", "code"),
   /** A control's own resting fill, and its hover and active states. */
   "bg-component": at("neutral", "component"),
   "bg-component-hover": at("neutral", "componentHover"),
@@ -164,7 +166,15 @@ export type SemanticTokenName = keyof typeof SEMANTIC_ALIASES;
  * token may not quietly start reading a border level.
  */
 export const SLOT_BANDS = {
-  background: ["page", "surface", "subtle", "component", "componentHover", "componentActive"],
+  background: [
+    "page",
+    "surface",
+    "subtle",
+    "code",
+    "component",
+    "componentHover",
+    "componentActive",
+  ],
   border: ["borderSubtle", "border", "borderStrong", "tonalBorder", "tonalBorderStrong"],
   text: [
     "textDisabled",
@@ -186,8 +196,8 @@ export const SLOT_BANDS = {
 } as const;
 
 export interface ScaleView {
-  /** Level -> colour, for every level of the ramp. */
-  byLevel: Record<number, string>;
+  /** Level -> colour, for every level of the ramp, plus "white". */
+  byLevel: Record<Position, string>;
   alphaByLevel: Record<number, string>;
   solid: { level: Level; hover: { light: Level; dark: Level } };
   vivid: { light: Level; dark: Level };
@@ -209,8 +219,19 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
   switch (aliasValue.kind) {
     case "slot":
       return scales[aliasValue.role].byLevel[INVERSION[aliasValue.slot][theme]]!;
-    case "alphaSlot":
-      return scales[aliasValue.role].alphaByLevel[INVERSION[aliasValue.slot][theme]]!;
+    case "alphaSlot": {
+      const position = INVERSION[aliasValue.slot][theme];
+      // White has no translucent twin: solving an alpha for white over a white page is
+      // either fully transparent or undefined depending on which way you round it. A slot
+      // that resolves to white is therefore a background slot only.
+      if (position === "white") {
+        throw new Error(
+          `"${aliasValue.slot}" resolves to white in ${theme}, which has no alpha form. ` +
+            `Point the alias at a rung, or use the opaque slot.`,
+        );
+      }
+      return scales[aliasValue.role].alphaByLevel[position]!;
+    }
     case "solid":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.level]!;
     case "solidHover":
@@ -225,7 +246,7 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
 }
 
 /** The level an alias resolves to in a theme, for documentation and for the gate's messages. */
-export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme): Level | null {
+export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme): Position | null {
   switch (aliasValue.kind) {
     case "slot":
     case "alphaSlot":

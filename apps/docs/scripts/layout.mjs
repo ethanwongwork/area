@@ -15,13 +15,23 @@
 export const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
-/** Minimal JSX highlighting, at build time. Emits Area's own syntax classes. */
+/**
+ * Minimal JSX highlighting, at build time. Emits Area's own syntax classes.
+ *
+ * Keywords are matched last and only outside a tag, so `import` in prose stays prose and an
+ * attribute named `for` is not recoloured as a statement.
+ */
 export function highlight(code) {
   return escapeHtml(code)
     .replace(/(&lt;\/?)([A-Za-z][\w.]*)/g, '$1<span class="area-syntax-tag">$2</span>')
     .replace(
       /([a-zA-Z-]+)(=)(&quot;[^&]*?&quot;)/g,
       '<span class="area-syntax-attr">$1</span>$2<span class="area-syntax-string">$3</span>',
+    )
+    .replace(/(&quot;[^&]*?&quot;)/g, (m, q) => (m.includes("area-syntax") ? m : `<span class="area-syntax-string">${q}</span>`))
+    .replace(
+      /\b(import|from|export|const|let|return|default|new|await|async)\b/g,
+      '<span class="area-syntax-keyword">$1</span>',
     )
     .replace(/(\{)([^{}]*)(\})/g, '<span class="area-syntax-punct">$1</span>$2<span class="area-syntax-punct">$3</span>');
 }

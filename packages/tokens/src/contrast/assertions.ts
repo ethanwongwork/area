@@ -89,18 +89,17 @@ function tonalAssertions(): ContrastAssertion[] {
       out.push({ fg: `fg-${tone}`, bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: `${tone} text` });
     }
     // The vivid rung is the loudest a tone gets as text, and it is *computed* per family
-    // rather than chosen, so it needs asserting on every surface it can land on -- the
-    // page, a panel, and the quiet ground a code block sits on. Without this the syntax
-    // colours would be the one foreground in the system nobody had measured.
-    for (const bg of ["bg-page", "bg-surface", "bg-subtle"]) {
-      out.push({
-        fg: `fg-${tone}-vivid`,
-        bg,
-        wcag: WCAG.TEXT,
-        apca: APCA.CONTENT,
-        note: `${tone} vivid text`,
-      });
-    }
+    // rather than chosen. It is asserted on `bg-code` and nowhere else, because that is the
+    // only ground it is used on -- syntax highlighting -- and the ground is what decides
+    // whether the palette's 500 rung is legible. Asserting it against every surface in the
+    // system would force it a rung deeper than 500 to satisfy a pairing nothing renders.
+    out.push({
+      fg: `fg-${tone}-vivid`,
+      bg: "bg-code",
+      wcag: WCAG.TEXT,
+      apca: APCA.CONTENT,
+      note: `${tone} vivid text on a code block`,
+    });
     // The solid fill and its hover must both carry the foreground the scale declared.
     out.push({
       fg: `fg-on-${tone}`,

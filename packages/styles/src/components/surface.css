@@ -238,9 +238,16 @@
     opacity: 0.5;
   }
 
-  /* The current item in an inline menu. Selection, not hover. */
+  /*
+   * The current item in an inline menu. Selection, not hover.
+   *
+   * Reads the *active* fill rather than the resting one. When the component band moved down
+   * to the softest rungs, a selected plate at the resting fill landed 0.009 of lightness
+   * from the page behind it -- present in the DOM and invisible on screen. The active fill
+   * is four times that separation, which is where OpenAI's sidebar sits.
+   */
   .area-menu__item[data-selected] {
-    background-color: var(--area-bg-component);
+    background-color: var(--area-bg-component-active);
     color: var(--area-fg-default);
     font-weight: var(--area-weight-strong);
   }

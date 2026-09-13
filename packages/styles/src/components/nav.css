@@ -101,7 +101,7 @@
    * intensities rather than as two unrelated treatments.
    */
   .area-nav__item[aria-current]:not([aria-current="false"]) {
-    background-color: var(--area-bg-active);
+    background-color: var(--area-bg-component-active);
     color: var(--area-fg-default);
     font-weight: var(--area-weight-strong);
   }
