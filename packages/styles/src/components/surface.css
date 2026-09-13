@@ -198,8 +198,14 @@
    * rule has nothing to subtract from and the row radius applies directly. It is rounder
    * than the small radius these used to take, which made a full-width backplate read as a
    * rectangle with its corners filed off rather than as a soft row.
+   *
+   * A row is also a tier shorter than a menu item. An inline menu is a list read down --
+   * navigation, an outline -- where a column of full-height rows wastes the height it takes;
+   * a floating menu is a pointer target and keeps the medium tier.
    */
-  .area-menu--inline .area-menu__item {
+  .area-menu--inline .area-menu__item,
+  .area-menu--inline .area-menu__label {
+    block-size: var(--area-control-sm);
     border-radius: var(--area-radius-row);
   }
 

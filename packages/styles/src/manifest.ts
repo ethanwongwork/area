@@ -279,7 +279,7 @@ export const codeBlock: ComponentManifest = {
   description: "Shows a block of code with an optional toolbar.",
   variants: { layout: ["flush", "wrap"] },
   states: ["collapsed"],
-  elements: ["toolbar", "actions", "body", "pre", "toggle"],
+  elements: ["actions", "body", "pre", "toggle"],
   defaults: {},
 };
 

@@ -3,13 +3,14 @@
  *
  * Inline code, and the block form with its toolbar.
  *
- * One ground and no rules. The toolbar and the code share `--area-bg-code` and nothing is
- * drawn between them, because a line through the middle of a single object makes it read as
- * two stacked ones. What separates the toolbar is that it holds buttons.
+ * No toolbar. One action -- Copy -- rides at the top right of the code itself, aligned to the
+ * first line rather than to the block, so it reads as belonging to the code and costs no
+ * row. A block that named a file and stacked a bar above it spent a whole row on a label
+ * that said nothing the code did not.
  *
- * The outer stroke is `--area-border-faint` rather than `--area-border-subtle`: the block is
- * white on a grey page, so the fill is already doing the separating and the stroke only has
- * to resolve the edge.
+ * Embedded in an example, the block takes a rule along its top edge. That is the one line
+ * worth drawing: above it is a rendered component, below it the source, and they are two
+ * different kinds of thing sharing a container.
  *
  * Syntax colours are existing semantic tokens, not a new palette. That keeps them
  * theme-reactive and, more usefully, keeps them inside the contrast gate -- a bespoke
@@ -27,6 +28,7 @@
   }
 
   .area-code-block {
+    position: relative;
     display: flex;
     flex-direction: column;
     border: var(--area-border-width) solid var(--area-border-faint);
@@ -43,19 +45,24 @@
   .area-code-block--flush {
     border: 0;
     border-radius: 0;
+    /* The one rule: what is above it is rendered, what is below it is source. */
+    border-block-start: var(--area-border-width) solid var(--area-border-faint);
   }
 
-  .area-code-block__toolbar {
-    display: flex;
-    align-items: center;
-    gap: var(--area-space-8);
-    padding: var(--area-space-12);
-    padding-block-end: var(--area-space-12);
-  }
-
-  /* Pushed to the trailing end of the toolbar: Customize, or a lone Copy. */
+  /*
+   * Copy, riding on the first line of code rather than above it.
+   *
+   * Centred on that line, not on the block's padding: the offset is the padding plus half
+   * the difference between the line's leading and the control's height, so the button's
+   * midline and the first line's midline coincide at any density.
+   */
   .area-code-block__actions {
-    margin-inline-start: auto;
+    position: absolute;
+    inset-block-start: calc(
+      var(--area-space-16) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2
+    );
+    inset-inline-end: var(--area-space-12);
+    z-index: 1;
     display: flex;
     gap: var(--area-space-4);
   }
@@ -72,7 +79,8 @@
   .area-code-block__pre {
     margin: 0;
     padding: var(--area-space-16);
-    padding-block-start: 0;
+    /* Room for the floating Copy, so a long first line cannot slide under it. */
+    padding-inline-end: var(--area-space-48);
     overflow-x: auto;
     font-family: var(--area-font-mono);
     font-size: var(--area-text-sm-size);

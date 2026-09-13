@@ -220,13 +220,18 @@ indigo all clear AA there on their own. What remains waived is the glyph wall: g
 Dark themes are *not* pinned — there 500 measures APCA Lc 28–31 against a floor of 60,
 which is unreadable rather than marginal, so `chooseVivid` keeps walking.
 
-**A code block is one ground with no rules through it.** Toolbar and code share
-`--area-bg-code`; a line between them makes one object read as two stacked ones, and what
-marks the toolbar is that it holds buttons. Its edge takes `--area-border-faint`, a fainter
-stroke than `border-subtle`, because a white block on a grey page is already separated by
-its fill and the stroke only resolves the edge — 1.24 on the page, which is where Tailwind,
-shadcn and Vercel all put a container edge. In dark it lands on the same rung as
-`border-subtle`: near black the ladder has no room for a fainter tier that is still a tier.
+**The page is white; a code block is one rung back from it.** That is what lets the block
+read as a block without a stroke doing the work. Its edge still takes `--area-border-faint`,
+a fainter stroke than `border-subtle`, measured at 1.24 on the page — where Tailwind, shadcn
+and Vercel all put a container edge. In dark it lands on the same rung as `border-subtle`:
+near black the ladder has no room for a fainter tier that is still a tier.
+
+**A code block has no toolbar.** Copy rides at the top right of the code itself, centred on
+the first line rather than on the block, so it belongs to the code and costs no row. The one
+rule worth drawing is the line where an example's rendered component ends and its source
+begins — two different kinds of thing sharing a container. Customize sits on the preview it
+acts on; in a shared toolbar it was equidistant from the thing it changed and the thing it
+did not.
 
 **A level is a colour, not a job.** Which rung is a background and which is a border is a
 decision the semantic layer makes, per theme, in one table — `INVERSION`. Never reach for a
@@ -240,6 +245,14 @@ changes.
 Stadium overloads the name — `neutral` is both its achromatic cast and the alias a consumer
 writes — and Area cannot, because two axes writing one property is what `checkAxisIntegrity`
 forbids. The role wins the namespace; `cool` and `warm` keep their own primitive ramps.
+
+**The documentation's own spacing comes from the density axis.** `--docs-pad` is
+`--area-gutter-sm` and `--docs-gutter` is `--area-gutter-xl`, so the site tightens with the
+system it documents instead of standing still while the components inside it shrink. The
+header's height is derived from them too — control plus inset twice plus the hairline — which
+is what makes its padding even on all four sides rather than merely close. Beware that a
+segmented control's outer height is one tier above its name: its track adds a 2px inset at
+each end, so an `xs` segmented and an `sm` button are both 28px.
 
 ## Documentation sections
 

@@ -22,7 +22,6 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ALLOWED = new Map([
   ["--docs-sidebar", "Width of this site's navigation. Not a system concern."],
   ["--docs-toc", "Width of this site's on-this-page list."],
-  ["--docs-topbar", "Height of this site's header."],
   ["--docs-measure", "Reading measure for long-form documentation."],
   ["--docs-max", "Maximum width of this site's shell."],
   ["--docs-blur", "Backdrop blur on this site's header. No Area surface uses blur."],

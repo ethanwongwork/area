@@ -39,16 +39,26 @@ export function highlight(code) {
 // Fluent System Icons, generated. See `gen-icons.mjs`.
 import { ICONS } from "./icons.generated.mjs";
 
-/** A toolbar button. Outline where it sits in a toolbar, ghost where it rides on the code. */
+/**
+ * A chrome button: icon only, with the label carried by `aria-label` instead of a span.
+ *
+ * These sit on top of content rather than in a bar of their own -- Copy on the code,
+ * Customize on a preview -- and at that size a word beside the glyph is what makes a
+ * floating control read as an obstruction.
+ */
 function toolbarButton(icon, label, attr, variant = "outline") {
-  return `<button type="button" class="area-button area-button--${variant} area-button--neutral area-button--sm" ${attr}>
+  return `<button type="button" class="area-button area-button--${variant} area-button--neutral area-button--sm area-button--icon-only" aria-label="${escapeHtml(label)}" ${attr}>
       <span class="area-button__icon" aria-hidden="true">${ICONS[icon]}</span>
-      <span class="area-button__label">${escapeHtml(label)}</span>
     </button>`;
 }
 
 /** A code block with a copy button, in the shape the design system defines. */
-export function codeBlock(code, { flush = false, wrap = true, live = false } = {}) {
+/** Opens the fullscreen axis panel. Ghost, because it floats on the preview it acts on. */
+export function customizeButton() {
+  return toolbarButton("expand", "Customize", "data-customize", "ghost");
+}
+
+export function codeBlock(code, { flush = false, wrap = true } = {}) {
   const cls = ["area-code-block", flush && "area-code-block--flush", wrap && "area-code-block--wrap"]
     .filter(Boolean)
     .join(" ");
@@ -68,19 +78,11 @@ export function codeBlock(code, { flush = false, wrap = true, live = false } = {
   </div>`
     : `<div class="area-code-block__body">${pre}</div>`;
 
-  // Copy is the same button everywhere -- a live example's toolbar and an install line both
-  // get the outline treatment, because it is the same action and inventing a quieter one
-  // for the quieter block only made the two look unrelated.
-  //
-  // Reset and Customize act on a preview, so they appear only where there is one.
-  const actions = live
-    ? toolbarButton("copy", "Copy", "data-copy") +
-      toolbarButton("reset", "Reset", "data-reset") +
-      `<span class="area-code-block__actions">${toolbarButton("expand", "Customize", "data-customize")}</span>`
-    : `<span class="area-code-block__actions">${toolbarButton("copy", "Copy", "data-copy")}</span>`;
-
+  // Copy is the block's only action. Reset is gone -- it undid a customisation the axis
+  // panel already reverts, from a button most readers never had reason to press -- and
+  // Customize moved onto the preview it acts on.
   return `<div class="${cls}"${collapsed}>
-  <div class="area-code-block__toolbar">${actions}</div>
+  <span class="area-code-block__actions">${toolbarButton("copy", "Copy code", "data-copy")}</span>
   ${body}
 </div>`;
 }
@@ -196,9 +198,29 @@ export const DOCS_CSS = `
 @layer area.base {
   :root {
     /* Site layout. Not design-system tokens: these describe this documentation site. */
-    --docs-sidebar: 232px;
-    --docs-toc: 200px;
-    --docs-topbar: 52px;
+    --docs-sidebar: 216px;
+    --docs-toc: 192px;
+    /*
+     * The site's own spacing, derived from the density axis rather than fixed, so the
+     * documentation tightens with the system it documents instead of staying put while the
+     * components around it shrink.
+     *
+     * --docs-pad is the chrome inset: the space around everything in the header and
+     * inside the sidebar. --docs-gutter is the page's, one tier up.
+     */
+    --docs-pad: var(--area-gutter-sm);
+    --docs-gutter: var(--area-gutter-xl);
+    /*
+     * Header height is its control plus that inset twice, so the space above and below a
+     * control equals the space at the edge beside it -- which is what makes the padding read
+     * as even rather than merely being it.
+     *
+     * Everything in the bar renders at that one height, which is not the same as everything
+     * carrying the same size class: a segmented control wraps its items in a track with a
+     * 2px inset at each end, so an xs segmented and an sm button are both 28px while an sm
+     * segmented is 32.
+     */
+    --docs-topbar: calc(var(--area-control-sm) + var(--docs-pad) * 2 + var(--area-border-width));
     --docs-measure: 720px;
     --docs-max: 1400px;
     --docs-blur: 8px;
@@ -210,7 +232,7 @@ export const DOCS_CSS = `
     --docs-customizer-panel: 280px;
   }
 
-  html { scroll-behavior: smooth; scroll-padding-block-start: calc(var(--docs-topbar) + var(--area-space-24)); }
+  html { scroll-behavior: smooth; scroll-padding-block-start: calc(var(--docs-topbar) + var(--docs-gutter)); }
   body { margin: 0; }
   a { color: inherit; text-decoration: none; }
 
@@ -222,20 +244,32 @@ export const DOCS_CSS = `
     z-index: var(--area-z-sticky);
     display: flex;
     align-items: center;
-    gap: var(--area-space-12);
+    gap: var(--docs-pad);
     block-size: var(--docs-topbar);
-    padding-inline: var(--area-space-20);
+    padding-inline: var(--docs-pad);
     border-block-end: var(--area-border-width) solid var(--area-border-subtle);
     background-color: color-mix(in oklab, var(--area-bg-page) 88%, transparent);
     backdrop-filter: blur(var(--docs-blur));
   }
 
-  .docs-brand { display: flex; align-items: center; gap: var(--area-space-8); font-weight: var(--area-weight-strong); }
-  .docs-brand__mark {
-    inline-size: var(--area-icon-md);
-    block-size: var(--area-icon-md);
-    border-radius: var(--area-radius-small);
-    background-color: var(--area-accent-solid);
+  /*
+   * The wordmark is set in the mono face and lower case. A mono wordmark sits on the
+   * system's own grid rather than beside it, and lower case keeps it from competing with
+   * the page title directly beneath it.
+   *
+   * It sits on the bar's own inset with no adjustment. A glyph does not begin at the edge
+   * of its box, so the wordmark reads a hair further in than the bordered control opposite
+   * it -- a side bearing, roughly a pixel at this size, and not worth a negative margin to
+   * chase.
+   */
+  .docs-brand {
+    display: flex;
+    align-items: center;
+    font-family: var(--area-font-mono);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-strong);
+    text-transform: lowercase;
   }
   .docs-topbar__spacer { margin-inline-start: auto; }
   .docs-topbar .area-segmented { flex-shrink: 0; }
@@ -248,7 +282,7 @@ export const DOCS_CSS = `
     align-self: start;
     block-size: calc(100vh - var(--docs-topbar));
     overflow-y: auto;
-    padding: var(--area-space-20) var(--area-space-12);
+    padding: var(--docs-pad);
     border-inline-end: var(--area-border-width) solid var(--area-border-subtle);
   }
   /* The measured group separation: 2px of item gap plus 12. See nav.css. */
@@ -257,14 +291,14 @@ export const DOCS_CSS = `
   .docs-main {
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--docs-toc);
-    gap: var(--area-space-40);
-    padding: var(--area-space-32) var(--area-space-32) var(--area-space-96);
+    gap: calc(var(--docs-gutter) * 1.5);
+    padding: var(--docs-gutter) var(--docs-gutter) calc(var(--docs-gutter) * 4);
   }
   .docs-content { min-inline-size: 0; max-inline-size: var(--docs-measure); }
 
   .docs-toc {
     position: sticky;
-    inset-block-start: calc(var(--docs-topbar) + var(--area-space-24));
+    inset-block-start: calc(var(--docs-topbar) + var(--docs-gutter));
     align-self: start;
     display: flex;
     flex-direction: column;
@@ -278,7 +312,7 @@ export const DOCS_CSS = `
   .docs-axes__inner {
     max-inline-size: var(--docs-max);
     margin-inline: auto;
-    padding: var(--area-space-16) var(--area-space-20);
+    padding: var(--docs-gutter) var(--docs-pad);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--docs-axis-col), 1fr));
     gap: var(--area-space-16);
@@ -321,9 +355,14 @@ export const DOCS_CSS = `
     border: var(--area-border-width) solid var(--area-border-faint);
     border-radius: var(--area-radius-container);
     overflow: hidden;
-    background-color: var(--area-bg-code);
+    background-color: var(--area-bg-surface);
   }
+  /*
+   * Customize acts on the preview, so it sits on the preview. In a shared toolbar below it
+   * was equidistant from the thing it changed and the thing it did not.
+   */
   .docs-example__preview {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -333,6 +372,11 @@ export const DOCS_CSS = `
     min-block-size: var(--docs-preview-min);
   }
   .docs-example__preview--column { flex-direction: column; align-items: flex-start; justify-content: flex-start; }
+  .docs-example__actions {
+    position: absolute;
+    inset-block-start: var(--docs-pad);
+    inset-inline-end: var(--docs-pad);
+  }
 
   /* --- Customizer --------------------------------------------------------- */
 

@@ -21,20 +21,22 @@ export interface ContrastException {
 /**
  * Syntax highlighting is pinned to the palette's 500 rung in light themes.
  *
- * A deliberate, instructed trade -- but a much smaller one than it was. 500 is the rung the
- * palette calibrates against white, and the code block now *is* white, so red, purple, blue
- * and the default indigo all clear AA there on their own and need no waiver at all. What
- * remains is the glyph wall: green measures 3.06, because its 500 is pinned to 3:1 by
- * construction. That is a real accessibility cost and is written down here as one.
+ * A deliberate, instructed trade. 500 is the rung the palette calibrates against *white*,
+ * and a code block sits one rung back from the page so that it reads as a block -- so the
+ * label-wall hues land just under the bar there, by margins too small to see and large
+ * enough to fail. Green is the exception to that: at 3.06 it is not a rounding, because its
+ * 500 is a glyph-wall rung pinned by the palette to 3:1 rather than to AA.
  *
  * Dark themes are not waived. There, 500 measures APCA Lc 28-31 against a floor of 60, and
  * `chooseVivid` keeps walking for a readable rung.
  */
 const SYNTAX_500: ContrastException[] = (
   [
+    ["danger", "red measures 4.35-4.42 against 4.5, depending on the neutral cast"],
+    ["discovery", "purple measures 4.42-4.48 against 4.5"],
     [
       "accent",
-      "the default indigo measures 4.72 on white and passes; the axis can point accent at a glyph-wall hue such as orange or green, where 500 is pinned to 3:1, so the waiver covers a consumer's choice rather than the default",
+      "the default indigo measures 4.45 against 4.5; the axis can also point accent at a glyph-wall hue such as orange or green, where 500 is pinned to 3:1, and the worst case here is that consumer choice rather than the default",
     ],
     [
       "success",

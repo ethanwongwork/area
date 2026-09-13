@@ -71,8 +71,8 @@ export interface Inversion {
 
 export const INVERSION = {
   /** The page, and panels raised off it. */
-  page: { light: 25, dark: 900 },
-  surface: { light: 25, dark: 850 },
+  page: { light: "white", dark: 900 },
+  surface: { light: "white", dark: 850 },
   subtle: { light: 50, dark: 800 },
   /**
    * A control's own fill, at rest, hover, and active.
@@ -138,14 +138,15 @@ export const INVERSION = {
   secondaryFill: { light: 700, dark: 200 },
   secondaryFillHover: { light: 750, dark: 100 },
   /**
-   * A code block, toolbar and code alike. One ground, not two: a rule or a change of fill
-   * between the toolbar and the code draws a line through a thing that is one object.
+   * A code block: the code and anything riding on it.
    *
-   * White in light -- see `Position` -- and that is not only a look. The palette pins its
-   * 500 rung to clear AA against white specifically, and syntax highlighting is set in 500,
-   * so a code block on any other ground costs contrast for nothing.
+   * One rung back from the page, which is now white, so the block reads as a block without
+   * needing a stroke to say so. It costs a little contrast -- the palette pins its 500 rung
+   * against white specifically, and syntax is set in 500, so on neutral-25 the label-wall
+   * hues land just under AA. That is recorded in `contrast/exceptions.ts` rather than
+   * absorbed, and it is the price of the block having a ground of its own.
    */
-  code: { light: "white", dark: 800 },
+  code: { light: 25, dark: 800 },
   /** The level a translucent scrim is solved from. */
   scrim: { light: 600, dark: 950 },
 } as const satisfies Record<string, Inversion>;

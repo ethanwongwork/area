@@ -12,6 +12,7 @@ import {
   DOCS_CSS,
   DOCS_SCRIPT,
   codeBlock,
+  customizeButton,
   escapeHtml,
   highlight,
   table,
@@ -92,6 +93,9 @@ function axisSwitch(axisId, label) {
     )
     .join("");
 
+  // xs, which renders the same 28px the sm button beside it does: a segmented control wraps
+  // its items in a track with a 2px inset at each end, so its outer height is one tier up
+  // from its name. Matching the class names here would have left the bar uneven.
   return `<div class="area-segmented area-segmented--xs" role="radiogroup" aria-label="${escapeHtml(label)}" data-axis="${axisId}" data-default="${axis.defaultPreset}">${items}</div>`;
 }
 
@@ -138,14 +142,14 @@ function page({ slug, title, lede, body, toc = [] }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escapeHtml(title)} — Area</title>
+<title>${escapeHtml(title)} — aerea</title>
 <meta name="description" content="${escapeHtml(lede)}">
 <link rel="stylesheet" href="./area.css">
 <style>${DOCS_CSS}</style>
 </head>
 <body>
 <header class="docs-topbar">
-  <a class="docs-brand" href="./index.html"><span class="docs-brand__mark"></span> Area</a>
+  <a class="docs-brand" href="./index.html">aerea</a>
   <span class="docs-topbar__spacer"></span>
   ${topbarControls()}
 </header>
@@ -178,8 +182,11 @@ function exampleBlock(example) {
   return `<h3 class="docs-h3" id="${example.id}">${escapeHtml(example.title)}</h3>
 ${example.note ? `<p class="docs-note">${escapeHtml(example.note)}</p>` : ""}
 <div class="docs-example">
-  <div class="docs-example__preview${column ? " docs-example__preview--column" : ""}">${demo.html}</div>
-  ${codeBlock(demo.code, { flush: true, live: true })}
+  <div class="docs-example__preview${column ? " docs-example__preview--column" : ""}">
+    <span class="docs-example__actions">${customizeButton()}</span>
+    ${demo.html}
+  </div>
+  ${codeBlock(demo.code, { flush: true })}
 </div>`;
 }
 
