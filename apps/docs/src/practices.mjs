@@ -10,8 +10,8 @@ const code = (text) => `<code class="area-code">${text}</code>`;
 
 export const PRACTICES = {
   button: [
-    `Use one ${code("primary")} button per view. It is the strongest call to action a neutral palette can make, and a second one halves the value of the first.`,
-    `Reach for ${code("accent")} when the action should follow the brand, and ${code("primary")} when it should stay the strongest thing on the page whatever the accent axis is set to.`,
+    `Use one solid ${code("neutral")} button per view. It is the strongest call to action a neutral palette can make, and a second one halves the value of the first.`,
+    `Reach for ${code("accent")} when the action should follow the brand, and ${code("neutral")} when it should stay the strongest thing on the page whatever the accent axis is set to. Emphasis is the variant\u2019s job, not the tone\u2019s: solid, outline and ghost span it on every tone.`,
     `${code("danger")} is for actions that destroy data, not for actions that merely cancel. A cancel button is ${code("ghost")}.`,
     `Give every ${code("iconOnly")} button an ${code("aria-label")}. The glyph is decorative and hidden from assistive tech.`,
     `Set ${code("loading")} rather than disabling by hand. It disables the button, swaps the leading icon for a spinner, and sets ${code("aria-busy")} — which ${code("disabled")} alone does not communicate.`,

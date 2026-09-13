@@ -29,8 +29,16 @@
     color: var(--area-fg-default);
 
     font-family: var(--area-font-mono);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    /*
+     * The UI size, not the caption step.
+     *
+     * A token chip is chrome -- something scanned rather than read -- so it belongs on
+     * `--area-ui-*` with table cells and menu items, and it tracks density with them. It
+     * previously carried the caption step, which made it the only 12px thing in a table of
+     * 14px cells: three type sizes in one row where the design calls for one.
+     */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     font-weight: var(--area-weight-regular);
     white-space: nowrap;
   }

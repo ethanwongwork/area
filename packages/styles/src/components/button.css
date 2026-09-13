@@ -159,38 +159,30 @@
    */
 
   /*
-   * Primary is neutral, not brand. A near-black button is the strongest call to action a
-   * neutral palette can make, and it stays the strongest whatever the accent axis is set
-   * to -- which is exactly why it is not tied to the accent.
+   * Neutral: the tone with no hue.
+   *
+   * One tone, not two. This shipped as `primary` and `secondary` -- OpenAI's vocabulary --
+   * but Area's implementation put their solid fills one rung apart, near-black against
+   * near-black, which delivered none of the distinction the names promised. OpenAI's own
+   * tokens separate them properly: `primary-solid` is gray-900 and `secondary-solid` is
+   * gray-500, a mid grey carrying white, while their *soft* variants are literally the same
+   * tokens. So the real difference there is one fill and the strength of an outline's label.
+   *
+   * Area already spans that range on the variant axis: solid is the near-black call to
+   * action, outline and ghost are the quieter neighbours beside it, and every one of them
+   * is available on every tone. A second neutral tone re-expressed what the variant already
+   * said, which is why it collapsed to a near-duplicate the moment it was built. Emphasis
+   * is the variant's job; the tone carries meaning, and this is the one that carries none.
    */
-  .area-button--primary {
-    --_solid: var(--area-bg-primary-solid);
-    --_solid-hover: var(--area-bg-primary-solid-hover);
+  .area-button--neutral {
+    --_solid: var(--area-bg-neutral-solid);
+    --_solid-hover: var(--area-bg-neutral-solid-hover);
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
     --_line: var(--area-border);
     --_line-hover: var(--area-border-hover);
     --_tone-fg: var(--area-fg-default);
-    --_on-solid: var(--area-fg-on-neutral-solid);
-  }
-
-  /*
-   * Secondary: the same neutral family, one step of emphasis down.
-   *
-   * Both fills come from the semantic layer rather than from a numbered level of the
-   * neutral scale. That is what makes them flip with the theme: on a dark page the primary
-   * button is near-white, because "furthest from the page" is what reads as primary.
-   */
-  .area-button--secondary {
-    --_solid: var(--area-bg-secondary-solid);
-    --_solid-hover: var(--area-bg-secondary-solid-hover);
-    --_surface: var(--area-bg-component);
-    --_surface-hover: var(--area-bg-component-hover);
-    --_surface-active: var(--area-bg-component-active);
-    --_line: var(--area-border);
-    --_line-hover: var(--area-border-hover);
-    --_tone-fg: var(--area-fg-muted);
     --_on-solid: var(--area-fg-on-neutral-solid);
   }
 
@@ -295,11 +287,26 @@
     --_shadow: var(--area-shadow-1);
   }
 
+  /*
+   * Soft carries a hairline one rung above its own fill, at every state.
+   *
+   * It needs an edge -- a tinted fill on a near-white page has almost no boundary of its
+   * own -- but not the outline variant's stroke, which is four rungs up and turns soft into
+   * a second outline. One rung is the smallest separation the ladder can express, which is
+   * exactly the amount that reads as a defined edge rather than as a border.
+   *
+   * The border moves with the fill instead of standing still, because the two are only one
+   * rung apart: a fixed stroke would be swallowed the moment hover raised the fill to meet
+   * it. Each state therefore borrows the fill of the state above it, which keeps the
+   * relationship constant and costs no new tokens.
+   */
   .area-button--soft {
     --_bg: var(--_surface);
     --_bg-hover: var(--_surface-hover);
     --_bg-active: var(--_surface-active);
     --_fg: var(--_tone-fg);
+    --_border: var(--_surface-hover);
+    --_border-hover: var(--_surface-active);
   }
 
   .area-button--outline {
@@ -323,10 +330,8 @@
    * An outline or ghost button in the neutral family reads better with body-text
    * foreground than with the muted tone colour, since there is no hue to carry meaning.
    */
-  .area-button--secondary.area-button--outline,
-  .area-button--secondary.area-button--ghost,
-  .area-button--primary.area-button--outline,
-  .area-button--primary.area-button--ghost {
+  .area-button--neutral.area-button--outline,
+  .area-button--neutral.area-button--ghost {
     --_fg: var(--area-fg-default);
   }
 

@@ -84,9 +84,15 @@
     tab-size: 2;
   }
 
-  /* Three hues, all already gated for contrast on this surface. */
-  .area-code-block__pre .area-syntax-tag { color: var(--area-fg-accent); }
-  .area-code-block__pre .area-syntax-attr { color: var(--area-fg-warning); }
-  .area-code-block__pre .area-syntax-string { color: var(--area-fg-success); }
+  /*
+   * Three hues at their vivid rung -- the most saturated each family gets while still
+   * clearing body-text contrast on this surface, which the gate asserts on all three
+   * grounds a block can sit on. For the label-wall hues that resolves to level 500
+   * exactly; the glyph-wall hues measure barely 3:1 there and walk deeper, which is why
+   * this reads a computed token instead of naming a rung.
+   */
+  .area-code-block__pre .area-syntax-tag { color: var(--area-fg-accent-vivid); }
+  .area-code-block__pre .area-syntax-attr { color: var(--area-fg-warning-vivid); }
+  .area-code-block__pre .area-syntax-string { color: var(--area-fg-success-vivid); }
   .area-code-block__pre .area-syntax-punct { color: var(--area-fg-subtle); }
 }

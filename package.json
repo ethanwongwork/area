@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Area \u2014 an axis-driven design system.",
+  "description": "Area — an axis-driven design system.",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -25,6 +25,7 @@
     "esbuild@0.25.12": true
   },
   "devDependencies": {
+    "@fluentui/svg-icons": "^1.1.341",
     "esbuild": "^0.28.2"
   }
 }

@@ -96,7 +96,7 @@ function axisSwitch(axisId, label) {
 function topbarControls() {
   return `${axisSwitch("density", "Density")}
   ${axisSwitch("theme", "Theme")}
-  <button type="button" class="area-button area-button--outline area-button--secondary area-button--sm" data-toggle-axes aria-expanded="false" aria-controls="docs-axes">
+  <button type="button" class="area-button area-button--outline area-button--neutral area-button--sm" data-toggle-axes aria-expanded="false" aria-controls="docs-axes">
     <span class="area-button__label">Customize</span>
   </button>`;
 }

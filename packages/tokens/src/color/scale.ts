@@ -15,7 +15,7 @@
  *   Which rung is the solid fill, and its hover -- see `chooseSolid`.
  */
 import { type Oklch, parseHex, toOklchCss } from "./oklab.ts";
-import { type Level, type Ramp, LEVELS } from "./curves.ts";
+import { type Level, type Ramp, INVERSION, LEVELS } from "./curves.ts";
 import { apcaMagnitude, wcagContrastHex } from "./contrast.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
 import PALETTE from "./palette.json" with { type: "json" };
@@ -77,6 +77,12 @@ export interface SolidChoice {
   retreat: number;
 }
 
+export interface VividChoice {
+  /** The most saturated rung that is still readable as body text on each theme's page. */
+  light: Level;
+  dark: Level;
+}
+
 export interface BuiltScale {
   id: string;
   kind: ScaleKind;
@@ -88,6 +94,7 @@ export interface BuiltScale {
   steps: Ramp<ScaleStep>;
   alphas: Ramp<{ level: Level; hex8: string; alpha: number; residual: number }>;
   solid: SolidChoice;
+  vivid: VividChoice;
   contrast: { hex: "#ffffff" | "#000000"; wcag: number; apca: number };
 }
 
@@ -123,6 +130,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     };
   });
 
+  const vivid = { light: chooseVivid(steps, "light"), dark: chooseVivid(steps, "dark") };
   const peakStep = steps.reduce((a, s) => (s.oklch.C > a.oklch.C ? s : a), steps[0]!);
   const peak = { level: peakStep.level, C: peakStep.oklch.C };
   const solid = chooseSolid(steps, peakStep.level, spec.solidForeground ?? "light");
@@ -147,6 +155,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     steps,
     alphas,
     solid,
+    vivid,
     contrast: { hex: solid.foreground, wcag: solid.wcag, apca: solid.apca },
   };
 }
@@ -195,6 +204,39 @@ function chooseSolid(
     apca: Number(apcaMagnitude(fg, chosen.hex).toFixed(1)),
     retreat: Math.abs(index - start),
   };
+}
+
+/**
+ * The most saturated rung of a family that is still readable as body text.
+ *
+ * Chroma peaks in the middle of every ramp and falls away toward both ends, so the most
+ * colourful legible text is the rung closest to the page *before* contrast runs out.
+ * Walking outward from 500 and stopping at the first pass finds it.
+ *
+ * The walk measures against `bg-subtle` rather than against the page, because that is the
+ * quietest ground this token can land on -- a code block -- and therefore the worst case of
+ * the three surfaces the gate asserts. Measuring against pure white instead stopped the
+ * walk one rung short for six families, and the gate said so.
+ *
+ * This is what "use 500" has to mean in a palette with two walls. On the label ladder --
+ * blue, red, indigo, purple, pink -- 500 clears AA on the page and is returned unchanged.
+ * On the glyph ladder it measures barely 3:1, which is fine for a status dot and unusable
+ * for a string literal, so those families walk one or two rungs deeper. Hardcoding 500
+ * everywhere would have shipped illegible syntax highlighting in exactly six hues.
+ */
+function chooseVivid(steps: readonly ScaleStep[], theme: Theme): Level {
+  const page = FAMILIES.neutral![String(INVERSION.subtle[theme])]!.hex;
+  const start = steps.findIndex((s) => s.level === 500);
+  // Light pages need the text darker; dark pages need it lighter.
+  const direction = theme === "light" ? 1 : -1;
+  // Both standards, as everywhere else. WCAG alone let six families through in dark mode
+  // at APCA Lc 41-46 against a floor of 60 -- the exact overstatement near black that is
+  // the reason this system gates on APCA in dark themes at all.
+  for (let i = start; i >= 0 && i < steps.length; i += direction) {
+    const hex = steps[i]!.hex;
+    if (wcagContrastHex(hex, page) >= 4.6 && apcaMagnitude(hex, page) >= 61) return steps[i]!.level;
+  }
+  return steps[start]!.level;
 }
 
 function formatAlphaHex({ alpha, rgb }: AlphaSolution): string {

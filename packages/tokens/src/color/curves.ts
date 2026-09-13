@@ -63,10 +63,16 @@ export const INVERSION = {
   page: { light: 25, dark: 900 },
   surface: { light: 25, dark: 850 },
   subtle: { light: 50, dark: 800 },
-  /** A control's own fill, at rest, hover, and active. */
-  component: { light: 75, dark: 800 },
-  componentHover: { light: 100, dark: 750 },
-  componentActive: { light: 150, dark: 700 },
+  /**
+   * A control's own fill, at rest, hover, and active.
+   *
+   * These sit on the softest rungs the ladder has. A tinted surface is a whisper -- it
+   * marks a region without competing with what is written on it -- and the palette's
+   * 25/50/75 exist precisely so three of them can stack and stay separable.
+   */
+  component: { light: 50, dark: 800 },
+  componentHover: { light: 75, dark: 750 },
+  componentActive: { light: 100, dark: 700 },
   /** Neutral strokes, quietest to loudest. */
   borderSubtle: { light: 200, dark: 750 },
   border: { light: 250, dark: 650 },
@@ -87,6 +93,7 @@ export const INVERSION = {
   textPlaceholder: { light: 450, dark: 450 },
   textSubtle: { light: 500, dark: 350 },
   textMuted: { light: 550, dark: 250 },
+  /** Tonal text, and the most saturated rung of a family that is still readable as it. */
   textTonal: { light: 650, dark: 200 },
   textTonalStrong: { light: 750, dark: 100 },
   textDefault: { light: 800, dark: 100 },

@@ -26,19 +26,12 @@ export function highlight(code) {
     .replace(/(\{)([^{}]*)(\})/g, '<span class="area-syntax-punct">$1</span>$2<span class="area-syntax-punct">$3</span>');
 }
 
-/**
- * Toolbar icons. 16px, 1.5px stroke, sized from CSS and never from font-size.
- */
-const ICONS = {
-  copy: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5a1.5 1.5 0 0 0-1.5-1.5H3a1.5 1.5 0 0 0-1.5 1.5v6A1.5 1.5 0 0 0 3 10.5h.5"/></svg>`,
-  reset: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.1"/><path d="M2 2.5V6h3.5"/></svg>`,
-  expand: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5h4v4"/><path d="M13.5 2.5 9 7"/><path d="M6.5 13.5h-4v-4"/><path d="m2.5 13.5 4.5-4.5"/></svg>`,
-  close: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4 4 8 8M12 4l-8 8"/></svg>`,
-};
+// Fluent System Icons, generated. See `gen-icons.mjs`.
+import { ICONS } from "./icons.generated.mjs";
 
 /** A toolbar button, in the outline treatment the reference uses. */
 function toolbarButton(icon, label, attr) {
-  return `<button type="button" class="area-button area-button--outline area-button--secondary area-button--sm" ${attr}>
+  return `<button type="button" class="area-button area-button--outline area-button--neutral area-button--sm" ${attr}>
       <span class="area-button__icon" aria-hidden="true">${ICONS[icon]}</span>
       <span class="area-button__label">${escapeHtml(label)}</span>
     </button>`;
@@ -89,7 +82,7 @@ export function customizer(axisPanelHtml) {
   <header class="docs-customizer__bar">
     <span class="docs-customizer__title">Customize</span>
     <span class="docs-customizer__name" id="docs-customizer-name"></span>
-    <button type="button" class="area-button area-button--ghost area-button--secondary area-button--sm area-button--icon-only" data-customizer-close aria-label="Close">
+    <button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm area-button--icon-only" data-customizer-close aria-label="Close">
       <span class="area-button__icon" aria-hidden="true">${ICONS.close}</span>
     </button>
   </header>

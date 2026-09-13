@@ -3,13 +3,12 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { buttonVariants, cx } from "../variants.ts";
 
 /**
- * The nine tones. `primary` and `secondary` are neutral rather than brand -- a near-black
+ * The eight tones. `neutral` is not a brand colour -- a near-black
  * button is the strongest call to action a neutral palette can make, and it stays the
  * strongest whatever the accent axis is set to.
  */
 export type ButtonTone =
-  | "primary"
-  | "secondary"
+  | "neutral"
   | "accent"
   | "info"
   | "success"

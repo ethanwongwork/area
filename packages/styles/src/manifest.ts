@@ -32,8 +32,7 @@ export const button: ComponentManifest = {
   variants: {
     variant: ["solid", "soft", "outline", "ghost"],
     tone: [
-      "primary",
-      "secondary",
+      "neutral",
       "accent",
       "info",
       "success",

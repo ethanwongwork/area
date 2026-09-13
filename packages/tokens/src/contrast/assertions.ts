@@ -88,6 +88,19 @@ function tonalAssertions(): ContrastAssertion[] {
     for (const bg of ["bg-page", "bg-surface", "bg-subtle", `${tone}-surface`]) {
       out.push({ fg: `fg-${tone}`, bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: `${tone} text` });
     }
+    // The vivid rung is the loudest a tone gets as text, and it is *computed* per family
+    // rather than chosen, so it needs asserting on every surface it can land on -- the
+    // page, a panel, and the quiet ground a code block sits on. Without this the syntax
+    // colours would be the one foreground in the system nobody had measured.
+    for (const bg of ["bg-page", "bg-surface", "bg-subtle"]) {
+      out.push({
+        fg: `fg-${tone}-vivid`,
+        bg,
+        wcag: WCAG.TEXT,
+        apca: APCA.CONTENT,
+        note: `${tone} vivid text`,
+      });
+    }
     // The solid fill and its hover must both carry the foreground the scale declared.
     out.push({
       fg: `fg-on-${tone}`,
@@ -140,19 +153,11 @@ function chromeAssertions(): ContrastAssertion[] {
     // can make, so its label has to clear body-text contrast, not merely large-text.
     {
       fg: "fg-on-neutral-solid",
-      bg: "bg-primary-solid",
+      bg: "bg-neutral-solid",
       wcag: WCAG.TEXT,
       apca: APCA.CONTENT,
-      note: "primary button label",
+      note: "neutral button label",
     },
-    {
-      fg: "fg-on-neutral-solid",
-      bg: "bg-secondary-solid",
-      wcag: WCAG.TEXT,
-      apca: APCA.CONTENT,
-      note: "secondary button label",
-    },
-
     // Inverted surfaces: tooltips and toasts.
     { fg: "fg-on-inverse", bg: "bg-inverse", wcag: WCAG.TEXT, apca: APCA.BODY, note: "tooltip and toast text" },
 

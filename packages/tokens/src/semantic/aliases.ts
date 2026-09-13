@@ -42,6 +42,8 @@ export type Alias =
   /** The scale's own solid fill -- the level is computed per hue, not chosen here. */
   | { kind: "solid"; role: Role }
   | { kind: "solidHover"; role: Role }
+  /** The family's most saturated readable rung -- computed per scale, not chosen here. */
+  | { kind: "vivid"; role: Role }
   | { kind: "contrast"; role: Role }
   | { kind: "literal"; value: string };
 
@@ -49,6 +51,7 @@ const at = (role: Role, slot: Slot): Alias => ({ kind: "slot", role, slot });
 const alphaAt = (role: Role, slot: Slot): Alias => ({ kind: "alphaSlot", role, slot });
 const solid = (role: Role): Alias => ({ kind: "solid", role });
 const solidHover = (role: Role): Alias => ({ kind: "solidHover", role });
+const vivid = (role: Role): Alias => ({ kind: "vivid", role });
 const contrast = (role: Role): Alias => ({ kind: "contrast", role });
 
 /** The tonal block every role repeats, so `danger` and `accent` are structurally identical. */
@@ -63,6 +66,11 @@ function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
     [`${prefix}-solid`]: solid(role),
     [`${prefix}-solid-hover`]: solidHover(role),
     [`fg-${prefix}`]: at(role, "textTonal"),
+    /**
+     * The loudest this tone gets as text. Syntax highlighting and inline emphasis use it;
+     * body copy does not, because a paragraph set in it reads as a link.
+     */
+    [`fg-${prefix}-vivid`]: vivid(role),
     [`fg-${prefix}-strong`]: at(role, "textTonalStrong"),
     [`fg-on-${prefix}`]: contrast(role),
   };
@@ -84,16 +92,13 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "bg-inverse": at("neutral", "inverseFill"),
   "fg-on-inverse": at("neutral", "inverseText"),
   /**
-   * The two neutral button fills. Primary is the near-black call to action, secondary one
-   * step of emphasis down. Both flip with the theme: a dark page turns the primary button
-   * near-white, because "furthest from the page" is what makes it read as primary, not
-   * "black". Named here so the contrast gate can assert on them -- they are not part of a
-   * tonal block, so nothing else would have covered them.
+   * The neutral button fill. It flips with the theme: a dark page turns it near-white,
+   * because "furthest from the page" is what reads as the strongest call to action, not
+   * "black". Named here so the contrast gate can assert on it -- it is not part of a tonal
+   * block, so nothing else would have covered it.
    */
-  "bg-primary-solid": at("neutral", "inverseFill"),
-  "bg-primary-solid-hover": at("neutral", "inverseFillHover"),
-  "bg-secondary-solid": at("neutral", "secondaryFill"),
-  "bg-secondary-solid-hover": at("neutral", "secondaryFillHover"),
+  "bg-neutral-solid": at("neutral", "inverseFill"),
+  "bg-neutral-solid-hover": at("neutral", "inverseFillHover"),
   "fg-on-neutral-solid": at("neutral", "inverseText"),
   /** Translucent tints, for hover on an unknown background. */
   "bg-hover": alphaAt("neutral", "componentHover"),
@@ -185,6 +190,7 @@ export interface ScaleView {
   byLevel: Record<number, string>;
   alphaByLevel: Record<number, string>;
   solid: { level: Level; hover: { light: Level; dark: Level } };
+  vivid: { light: Level; dark: Level };
   contrast: { hex: string };
 }
 
@@ -209,6 +215,8 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.level]!;
     case "solidHover":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.hover[theme]]!;
+    case "vivid":
+      return scales[aliasValue.role].byLevel[scales[aliasValue.role].vivid[theme]]!;
     case "contrast":
       return scales[aliasValue.role].contrast.hex;
     case "literal":
@@ -226,6 +234,8 @@ export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme)
       return scales[aliasValue.role].solid.level;
     case "solidHover":
       return scales[aliasValue.role].solid.hover[theme];
+    case "vivid":
+      return scales[aliasValue.role].vivid[theme];
     default:
       return null;
   }
