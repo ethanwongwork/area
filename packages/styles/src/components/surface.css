@@ -213,9 +213,10 @@
    * at full strength and strong weight, everything else one step back.
    *
    * The rail is sized to the *ink*, not to the row. `1cap` is the font's own cap height, so
-   * a 14px label gets a 10px cap and a 12px rail -- barely taller than the letterforms
-   * beside it, at any type scale, without a magic number. The fallback above it covers
-   * browsers without `cap` units, where a fixed 12px is right for the default scale.
+   * a 14px label gets a 10px cap and a 14px rail -- 2px of overhang at each end, which is
+   * enough to read as deliberate rather than as a rail that fell short of its own text. It
+   * tracks any type scale without a magic number. The fallback above it covers browsers
+   * without `cap` units, where a fixed 14px is right for the default scale.
    *
    * Its width is 3px, which is not on the spacing ramp: at 2px the rail reads as a hairline
    * and at 4px it competes with the text. Derived rather than hardcoded, per the rule for
@@ -227,7 +228,12 @@
    */
   .area-menu--marker .area-menu__item {
     position: relative;
-    padding-inline-start: var(--area-space-12);
+    /*
+     * Wider than the default inline padding, because the rail is sitting inside it: at the
+     * standard 12 the label began 3px after the rail ended, close enough to look attached
+     * to the letterforms rather than set beside them.
+     */
+    padding-inline-start: var(--area-space-16);
     color: var(--area-fg-muted);
   }
 
@@ -244,8 +250,8 @@
     inset-block-start: 50%;
     translate: 0 -50%;
     inline-size: calc(var(--area-space-2) + var(--area-border-width));
-    block-size: var(--area-space-12);
-    block-size: calc(1cap + var(--area-space-2));
+    block-size: var(--area-space-16);
+    block-size: calc(1cap + var(--area-space-4));
     border-radius: var(--area-radius-full);
     background-color: var(--area-accent-solid);
   }
