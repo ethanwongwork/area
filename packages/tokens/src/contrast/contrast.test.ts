@@ -106,7 +106,7 @@ describe("gate integrity", () => {
   it("actually fails when a colour goes bad", () => {
     // A gate that has never failed is not a gate. Deliberately break a theme and confirm
     // the failure is both detected and explained.
-    const theme = resolveTheme({ theme: "light", neutral: "gray", accent: "blue" });
+    const theme = resolveTheme({ theme: "light", neutral: "neutral", accent: "blue" });
     const brokenTokens: Record<string, string> = { ...theme.tokens, "fg-default": "#b0b0b0" };
 
     const actual = wcagContrastHex(brokenTokens["fg-default"]!, brokenTokens["bg-page"]!);

@@ -59,14 +59,12 @@ export interface TokensJson {
     string,
     {
       hue: number;
-      cusp: { L: number; C: number };
+      peak: { level: number; C: number };
       solid: { level: number; hover: { light: number; dark: number }; foreground: string; wcag: number; apca: number; retreat: number };
       steps: Array<{
         level: number;
         hex: string;
-        p3: string;
         oklch: string;
-        chromaUsed: number;
         contrast: { fg: string; ratio: number; grade: string };
       }>;
       alphas: Record<"light" | "dark", Array<{ level: number; hex8: string; alpha: number }>>;
@@ -147,7 +145,7 @@ function serialiseScale(id: string) {
 
   return {
     hue: light.hue,
-    cusp: { L: round(light.cusp.L), C: round(light.cusp.C) },
+    peak: { level: light.peak.level, C: round(light.peak.C) },
     solid: {
       level: light.solid.level,
       hover: light.solid.hover,
@@ -159,9 +157,7 @@ function serialiseScale(id: string) {
     steps: light.steps.map((s) => ({
       level: s.level,
       hex: s.hex,
-      p3: s.p3,
       oklch: s.oklchCss,
-      chromaUsed: round(s.chromaUsed),
       contrast: s.contrast,
     })),
     alphas: { light: alphas(light), dark: alphas(dark) },

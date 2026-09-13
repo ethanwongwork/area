@@ -57,9 +57,9 @@ function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
     [`${prefix}-surface`]: at(role, "component"),
     [`${prefix}-surface-hover`]: at(role, "componentHover"),
     [`${prefix}-surface-active`]: at(role, "componentActive"),
-    [`${prefix}-border-subtle`]: at(role, "borderSubtle"),
-    [`${prefix}-border`]: at(role, "border"),
-    [`${prefix}-border-strong`]: at(role, "borderStrong"),
+    [`${prefix}-border-subtle`]: at(role, "componentActive"),
+    [`${prefix}-border`]: at(role, "tonalBorder"),
+    [`${prefix}-border-strong`]: at(role, "tonalBorderStrong"),
     [`${prefix}-solid`]: solid(role),
     [`${prefix}-solid-hover`]: solidHover(role),
     [`fg-${prefix}`]: at(role, "textTonal"),
@@ -160,7 +160,7 @@ export type SemanticTokenName = keyof typeof SEMANTIC_ALIASES;
  */
 export const SLOT_BANDS = {
   background: ["page", "surface", "subtle", "component", "componentHover", "componentActive"],
-  border: ["borderSubtle", "border", "borderStrong"],
+  border: ["borderSubtle", "border", "borderStrong", "tonalBorder", "tonalBorderStrong"],
   text: [
     "textDisabled",
     "textPlaceholder",

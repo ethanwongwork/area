@@ -10,7 +10,7 @@
  * the fixed semantic tones (danger, warning, success, info), and the shadow colour.
  */
 import { type AxisDefinition, type AxisPreset, type TokenMap, tokens } from "./schema.ts";
-import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "../color/presets.ts";
+import { CHROMATIC_SCALES, NEUTRAL_SCALES, SCALE_DESCRIPTIONS } from "../color/presets.ts";
 import { type Theme } from "../color/scale.ts";
 import { type ResolvedTheme, DEFAULT_SELECTION, resolveTheme } from "../semantic/resolve.ts";
 import { SEMANTIC_ALIASES, type Alias } from "../semantic/aliases.ts";
@@ -61,8 +61,18 @@ const SHADOW_COLOR: Record<Theme, string> = {
 function themePreset(t: Theme): AxisPreset {
   const resolved = themeFor(t, DEFAULT_SELECTION.accent, DEFAULT_SELECTION.neutral);
 
+  // Every family except the one the neutral axis aliases.
+  //
+  // The vendored palette names its achromatic cast `neutral`, and that is also the name of
+  // the role the neutral axis owns -- Stadium overloads the two deliberately, so that
+  // `neutral-500` means "the active cast" and nothing downstream has to know a tone exists.
+  // Area cannot overload it: two axes writing one property is precisely what
+  // `checkAxisIntegrity` forbids, because it makes the pair untestable. So the role wins
+  // the namespace, the achromatic cast is reached through it, and `cool` and `warm` keep
+  // their own primitive ramps for anything that needs to name a specific cast.
   const ramps: Record<string, string> = {};
   for (const spec of [...NEUTRAL_SCALES, ...CHROMATIC_SCALES]) {
+    if (spec.id === NEUTRAL_ALIAS) continue;
     Object.assign(ramps, primitiveRamp(resolved, spec.id));
   }
 
@@ -82,13 +92,18 @@ function themePreset(t: Theme): AxisPreset {
   };
 }
 
+/** The role namespace the neutral axis owns, and therefore the family the theme axis skips. */
+const NEUTRAL_ALIAS = "neutral";
+
 export const THEME_AXIS: AxisDefinition = {
   id: "theme",
   label: "Theme",
   description: "Light or dark.",
   defaultPreset: "light",
   namespaces: [
-    ...[...NEUTRAL_SCALES, ...CHROMATIC_SCALES].map((s) => `--area-${s.id}-`),
+    ...[...NEUTRAL_SCALES, ...CHROMATIC_SCALES]
+      .filter((s) => s.id !== NEUTRAL_ALIAS)
+      .map((s) => `--area-${s.id}-`),
     "--area-danger-",
     "--area-warning-",
     "--area-caution-",
@@ -146,12 +161,7 @@ export const NEUTRAL_AXIS: AxisDefinition = {
   presets: NEUTRAL_SCALES.map((spec) => ({
     id: spec.id,
     label: spec.id[0]!.toUpperCase() + spec.id.slice(1),
-    description:
-      spec.id === "gray"
-        ? "Achromatic. Works with any accent."
-        : spec.id === "slate"
-          ? "Cool, tinted toward blue."
-          : "Warm, tinted toward amber.",
+    description: SCALE_DESCRIPTIONS[spec.id]!,
     tokens: neutralTokens("light", spec.id),
     darkTokens: neutralTokens("dark", spec.id),
   })),
@@ -178,7 +188,7 @@ export const ACCENT_AXIS: AxisDefinition = {
   presets: CHROMATIC_SCALES.map((spec) => ({
     id: spec.id,
     label: spec.id[0]!.toUpperCase() + spec.id.slice(1),
-    description: `Hue ${spec.hue} degrees.`,
+    description: SCALE_DESCRIPTIONS[spec.id]!,
     tokens: accentTokens("light", spec.id),
     darkTokens: accentTokens("dark", spec.id),
   })),

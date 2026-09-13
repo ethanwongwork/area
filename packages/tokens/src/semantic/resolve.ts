@@ -82,7 +82,7 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
 }
 
 /** The selection Area ships as its default. */
-export const DEFAULT_SELECTION = { neutral: "gray", accent: "blue" } as const;
+export const DEFAULT_SELECTION = { neutral: "neutral", accent: "blue" } as const;
 
 /** Every theme the contrast gate has to clear: both themes x every axis choice. */
 export function shippedThemes(): ResolvedTheme[] {

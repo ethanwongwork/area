@@ -135,41 +135,46 @@ the cost of eight tones and it is recorded in `color/presets.ts` rather than red
 
 ## Colour
 
-**A level name is a lightness, on a round grid.** `blue-55` is the blue at OKLCh L 0.55 —
-in every scale, in both themes. `assertLadder()` re-reads the emitted colour and fails the
-build if it comes back at a different lightness, so the name cannot quietly become a lie.
-This is the same decision `WGHT_RAMP` makes: 100, 200, 300 are real font weights on a round
-grid, not indices, and every primitive ramp in Area is named by its value for the same
-reason. It buys a property an ordinal scale cannot promise — two hues at the same level
-weigh the same, so swapping a tone does not change the weight of a layout.
+**The palette is vendored, not generated.** `packages/tokens/src/color/palette.json` is the
+Stadium palette exported verbatim: 14 families x 23 rungs. `scale.ts` reads that table and
+computes only what the table does not carry — the translucent twin of each rung, which
+foreground each rung takes, and which rung is the solid fill. Do not "fix" a hex here. If a
+colour is wrong, it is wrong in the export, and the fix is a new export.
 
-The grid is uniform at five points. An earlier ladder tightened the ends (99, 97, 94, 90,
-85, 79) and the rungs were right, but the names were not: nothing distinguished 99 from 98,
-and you could not name a neighbour without consulting the list. If a level name is going to
-be a measurement, the measurement has to be one worth quoting.
+**A rung is an ordinal, not a measurement.** Higher is darker. An earlier ladder named each
+level after its own lightness and asserted it; this one cannot, because Stadium anchors to
+contrast instead — each family's 500 is pinned so a label clears its wall, which means the
+hues deliberately sit at different lightnesses at a shared rung (spread peaks at 0.217 at
+rung 350, closing to 0.007 at the ends). Both anchors are defensible and mutually exclusive.
+Contrast is the one that is externally binding, so the ramp's guarantee is now the same
+guarantee the gate checks. The cost is that swapping a tone can shift a layout's weight
+slightly; `scale.test.ts` measures that rather than leaving it as a claim.
 
-**A level is a colour, not a job.** Which level is a background and which is a border is a
+**There are two solid ladders and the code must find them by measuring.** blue, indigo,
+pink, purple, red and the neutrals clear AA with white at 500 — the *label* wall. cyan,
+green, lime, orange, teal and yellow are pinned at 3:1 there and only reach AA at 600 — the
+*glyph* wall. Those six take a dark foreground at their chromatic peak instead, because
+walking them down to 600 for white arrives somewhere muddy (yellow-600 is `#936b02`).
+Nothing hardcodes the split: `chooseSolid` walks from peak chroma and measures.
+
+**Tonal strokes sit deeper than neutral ones.** `tonalBorder` is a separate `INVERSION` slot
+from `border`, and that is a luminance fact rather than a preference: at a shared rung a
+luminous hue carries far more luminance than a grey, so green-250 measures 1.35:1 on the
+light page where neutral-250 measures 1.57. One slot for both forces a choice between an
+invisible green border and a neutral border heavy enough to read as a focus ring.
+
+**A level is a colour, not a job.** Which rung is a background and which is a border is a
 decision the semantic layer makes, per theme, in one table — `INVERSION`. Never reach for a
-numbered level from component CSS; that is what the semantic tokens are for. The one
-previous exception, the primary button reaching for `--area-neutral-12`, is exactly the bug
-this rule prevents: it could not flip with the theme.
+numbered rung from component CSS; that is what the semantic tokens are for.
 
-**Dark mode is the same ramp read from the other end.** There is one set of colours per
-scale, not two. `--area-blue-55` is byte-identical in both themes; only the level each slot
-reads changes. The dark column is deliberately not an exact mirror — separation near black
-needs more lightness distance to read as the same visual step.
+**Dark mode is the same ramp read from the other end.** One set of colours per family, not
+two. `--area-blue-500` is byte-identical in both themes; only the rung each slot reads
+changes.
 
-**Chroma takes what the gamut allows.** `CHROMA_FRACTION` is near-flat at 0.85–0.95 because
-the sRGB boundary already has a strong shape: at L 0.95 a yellow reaches C 0.107 where a
-blue reaches 0.024. Multiplying that by a second bell curve desaturates twice, which is what
-made the previous teal and cyan peak at C 0.09 against violet's 0.24. Each hue therefore
-peaks at a *different level*, which is a fact about the gamut and not a choice.
-
-**Hue is constant down a scale.** There is no drift table. OKLab was fit to hold perceived
-hue under lightness change, which is why this system chose it; layering CIELCh-era Abney
-compensation on top double-corrects, and it broke a promise worth keeping — any two steps of
-`red` are now the same hue and harmonise by construction. The honest cost is that a dark
-yellow is olive, because a dark yellow is olive.
+**The neutral role owns `--area-neutral-*`, so the theme axis does not emit that family.**
+Stadium overloads the name — `neutral` is both its achromatic cast and the alias a consumer
+writes — and Area cannot, because two axes writing one property is what `checkAxisIntegrity`
+forbids. The role wins the namespace; `cool` and `warm` keep their own primitive ramps.
 
 ## Documentation sections
 

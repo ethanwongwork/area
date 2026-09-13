@@ -1,56 +1,39 @@
 /**
- * Builds an Area colour scale from a hue.
+ * Loads an Area colour scale from the vendored Stadium palette.
  *
- * One ramp per scale, shared by both themes. The generation order is:
+ * This file used to generate colours from a hue: find the gamut cusp, take a fraction of
+ * the reachable chroma at each lightness, map into sRGB. It now reads a table. The palette
+ * was wall-anchored rather than formula-generated -- per-hue splines, chroma-consensus
+ * levels, hue held in IPT -- and reproducing that from a curve was never going to be
+ * closer to it than using it.
  *
- *   1. Take each level's lightness from its own name. `blue-55` is L 0.55; there is no
- *      lightness curve to tune and nothing for a theme to override.
- *   2. Ask the gamut how much chroma is reachable at that lightness for this hue, and take
- *      the declared fraction of it. This is where vibrancy comes from: the sRGB boundary
- *      is the only thing limiting saturation, not a second curve stacked on top of it.
- *   3. Gamut-map into sRGB and, separately, into Display P3.
- *   4. Choose the solid fill: the level nearest the hue's cusp, walked away from the cusp
- *      only as far as the contrast contract demands.
+ * What is still computed here, because the palette does not carry it:
  *
- * Hue is constant down the scale and does not depend on lightness. See `curves.ts`.
+ *   The translucent twin of every rung, solved against each theme's page background so a
+ *   hover tint composites back to the opaque colour it names.
+ *   Which of black or white each rung carries, by measurement.
+ *   Which rung is the solid fill, and its hover -- see `chooseSolid`.
  */
-import {
-  type Gamut,
-  type Oklch,
-  DISPLAY_P3,
-  SRGB,
-  toHex,
-  toOklchCss,
-  toP3Css,
-  parseHex,
-} from "./oklab.ts";
-import { findCusp, gamutMap, maxChromaAt } from "./gamut.ts";
-import {
-  type Level,
-  type Ramp,
-  CHROMA_FRACTION,
-  LEVELS,
-  NEUTRAL_CHROMA_SHAPE,
-  levelLightness,
-} from "./curves.ts";
+import { type Oklch, parseHex, toOklchCss } from "./oklab.ts";
+import { type Level, type Ramp, LEVELS } from "./curves.ts";
 import { apcaMagnitude, wcagContrastHex } from "./contrast.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
+import PALETTE from "./palette.json" with { type: "json" };
 
 export type Theme = "light" | "dark";
 export type ScaleKind = "neutral" | "chromatic";
 
+interface PaletteRung {
+  hex: string;
+  oklch: { L: number; C: number; H: number };
+}
+
+const FAMILIES = PALETTE.families as unknown as Record<string, Record<string, PaletteRung>>;
+
 export interface ScaleSpec {
-  /** Token name, e.g. "blue" or "gray". */
+  /** Token name, and the palette family it reads. */
   id: string;
   kind: ScaleKind;
-  /** Hue angle in OKLCh degrees. Constant for every level of the scale. */
-  hue: number;
-  /**
-   * Neutrals only: absolute chroma cap at the peak of `NEUTRAL_CHROMA_SHAPE`. 0 yields a
-   * true grey; ~0.014 a perceptibly tinted one. Chromatic scales take the gamut ceiling
-   * instead, so this is ignored for them.
-   */
-  neutralChroma?: number;
   /**
    * Which foreground the solid fill is designed to carry.
    *
@@ -58,15 +41,15 @@ export interface ScaleSpec {
    * explicit list. Inferring it gets blue wrong: black technically out-scores white on a
    * mid blue under WCAG, yet every shipping system puts white on a blue button.
    *
-   * It also decides which way the solid level is allowed to move. White text needs the
-   * fill darker, black text needs it lighter, and both start from the hue's cusp -- the
-   * most chromatic point available -- and give ground only as far as the gate requires.
+   * It also decides which way the solid rung may move. White text needs the fill darker,
+   * black text needs it lighter, and both start from the family's most chromatic rung and
+   * give ground only as far as the gate requires.
    */
   solidForeground?: "light" | "dark";
 }
 
 export interface StepContrast {
-  /** Whichever of black or white reads better on this level. */
+  /** Whichever of black or white reads better on this rung. */
   fg: "#ffffff" | "#000000";
   /** WCAG 2.2 ratio against that foreground. */
   ratio: number;
@@ -75,33 +58,22 @@ export interface StepContrast {
 }
 
 export interface ScaleStep {
-  /** The level, which is also this step's lightness in hundredths. */
   level: Level;
-  /** OKLCh as requested, before gamut mapping. Documentation only. */
-  requested: Oklch;
-  /** OKLCh after mapping into sRGB. */
   oklch: Oklch;
   hex: string;
-  p3: string;
   oklchCss: string;
-  /** OKLab distance introduced by gamut mapping. 0 when already in gamut. */
-  gamutDelta: number;
-  /** Fraction of the reachable chroma this step actually claims, after mapping. */
-  chromaUsed: number;
-  /** How readable this level is, and with which foreground. */
   contrast: StepContrast;
 }
 
 export interface SolidChoice {
-  /** The level the fill sits at. Identical in both themes: the brand does not move. */
+  /** The rung the fill sits at. Identical in both themes: the brand does not move. */
   level: Level;
-  /** The hover level, per theme -- always one step *away* from that theme's page. */
+  /** The hover rung, per theme -- always one step *away* from that theme's page. */
   hover: { light: Level; dark: Level };
-  /** The foreground measured onto the fill. */
   foreground: "#ffffff" | "#000000";
   wcag: number;
   apca: number;
-  /** How far the fill had to retreat from the cusp to clear the gate, in levels. */
+  /** How far the fill had to retreat from peak chroma to clear the gate, in rungs. */
   retreat: number;
 }
 
@@ -109,17 +81,17 @@ export interface BuiltScale {
   id: string;
   kind: ScaleKind;
   theme: Theme;
+  /** The family's hue at its solid rung. Documentation only; hue is not held constant. */
   hue: number;
-  cusp: { L: number; C: number };
+  /** The rung carrying the most chroma, and how much. Replaces the generated cusp. */
+  peak: { level: Level; C: number };
   steps: Ramp<ScaleStep>;
-  /** Translucent twins of each level, composited over this theme's page background. */
   alphas: Ramp<{ level: Level; hex8: string; alpha: number; residual: number }>;
   solid: SolidChoice;
-  /** The foreground for this scale's solid fill. Kept at this name for the token emitter. */
   contrast: { hex: "#ffffff" | "#000000"; wcag: number; apca: number };
 }
 
-const PAGE_BACKGROUND: Record<Theme, string> = { light: "#ffffff", dark: "#0a0a0a" };
+const PAGE_BACKGROUND: Record<Theme, string> = { light: "#ffffff", dark: "#000000" };
 
 /** AA plus a margin, so 8-bit quantisation cannot drop a shipped fill below 4.5:1. */
 const SOLID_CONTRAST_TARGET = 4.6;
@@ -131,40 +103,29 @@ const SOLID_CONTRAST_TARGET = 4.6;
 const SOLID_APCA_TARGET = 61;
 
 export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
-  const neutral = spec.kind === "neutral";
-  const cusp = findCusp(spec.hue, SRGB);
+  const family = FAMILIES[spec.id];
+  if (!family) {
+    throw new Error(
+      `"${spec.id}" is not a family in the vendored palette. Known: ${Object.keys(FAMILIES).join(", ")}`,
+    );
+  }
 
-  const steps: ScaleStep[] = LEVELS.map((level, index) => {
-    const L = levelLightness(level);
-    const reachable = maxChromaAt(L, spec.hue, SRGB);
-    const C = neutral
-      ? (spec.neutralChroma ?? 0) * NEUTRAL_CHROMA_SHAPE[index]!
-      : reachable * CHROMA_FRACTION[index]!;
-
-    const requested: Oklch = { L, C: Math.min(C, reachable), h: spec.hue };
-    const srgb = gamutMap(requested, SRGB);
-    const p3 = gamutMap(requested, DISPLAY_P3);
-    const hex = toHex(srgb.rgb);
-
+  const steps: ScaleStep[] = LEVELS.map((level) => {
+    const rung = family[String(level)];
+    if (!rung) throw new Error(`${spec.id} is missing rung ${level}.`);
+    const oklch: Oklch = { L: rung.oklch.L, C: rung.oklch.C, h: rung.oklch.H };
     return {
       level,
-      requested,
-      oklch: srgb.oklch,
-      hex,
-      p3: toP3Css(p3.rgb),
-      oklchCss: toOklchCss(srgb.oklch),
-      gamutDelta: srgb.deltaE,
-      chromaUsed: reachable > 0 ? srgb.oklch.C / reachable : 0,
-      contrast: stepContrast(hex),
+      oklch,
+      hex: rung.hex,
+      oklchCss: toOklchCss(oklch),
+      contrast: stepContrast(rung.hex),
     };
   });
 
-  // A neutral has no cusp worth seeking -- its chroma is a fixed cap, so every level is
-  // equally "saturated" and the search would wander. Its solid is the near-black primary
-  // button fill, which is a stated design decision rather than a derived one.
-  const solid = neutral
-    ? neutralSolid(steps)
-    : chooseSolid(steps, cusp.L, spec.solidForeground ?? "light");
+  const peakStep = steps.reduce((a, s) => (s.oklch.C > a.oklch.C ? s : a), steps[0]!);
+  const peak = { level: peakStep.level, C: peakStep.oklch.C };
+  const solid = chooseSolid(steps, peakStep.level, spec.solidForeground ?? "light");
 
   const background = parseHex(PAGE_BACKGROUND[theme]);
   const alphas = steps.map((s) => {
@@ -181,8 +142,8 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     id: spec.id,
     kind: spec.kind,
     theme,
-    hue: spec.hue,
-    cusp,
+    hue: steps.find((s) => s.level === solid.level)!.oklch.h,
+    peak,
     steps,
     alphas,
     solid,
@@ -193,19 +154,20 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
 /**
  * Pick the solid fill.
  *
- * Start at the level nearest the hue's cusp, because that is the most chromatic colour the
- * scale contains and therefore the one that looks most like itself. Then move only if the
- * declared foreground does not clear the contract, and only in the direction that helps:
- * darker for white text, lighter for black text. The distance travelled is recorded as
- * `retreat` so the documentation can show which hues pay for readability and how much.
+ * Start at the family's most chromatic rung, because that is the colour that looks most
+ * like itself, then move only if the declared foreground does not clear the contract, and
+ * only in the direction that helps: darker for white text, lighter for black.
  *
- * This replaces a binary search over continuous lightness. The search produced a step 9
- * whose lightness ranged from 0.548 to 0.910 across the twelve hues and sat off the ramp
- * entirely -- it was not a level of the scale, it was a colour smuggled in beside it.
+ * This is where the palette's two ladders show up. Its 500 rung is pinned to a wall, but
+ * not the same wall for every hue: blue, indigo, pink, purple, red and the three neutrals
+ * clear AA with white at 500, while cyan, green, lime, orange, teal and yellow only reach
+ * 3:1 there and need 600. The palette's own README calls these the label ladder and the
+ * glyph ladder. Nothing here hardcodes which is which -- the walk finds it by measuring,
+ * so a family that moves in a future export moves its solid with it.
  */
 function chooseSolid(
   steps: readonly ScaleStep[],
-  cuspL: number,
+  peakLevel: Level,
   foreground: "light" | "dark",
 ): SolidChoice {
   const fg = foreground === "light" ? "#ffffff" : "#000000";
@@ -213,20 +175,12 @@ function chooseSolid(
     wcagContrastHex(fg, hex) >= SOLID_CONTRAST_TARGET &&
     apcaMagnitude(fg, hex) >= SOLID_APCA_TARGET;
 
-  // Nearest level to the cusp. LEVELS runs lightest to darkest.
-  let index = 0;
-  for (let i = 1; i < steps.length; i++) {
-    if (Math.abs(levelLightness(steps[i]!.level) - cuspL) < Math.abs(levelLightness(steps[index]!.level) - cuspL)) {
-      index = i;
-    }
-  }
-
-  const start = index;
+  const start = steps.findIndex((s) => s.level === peakLevel);
+  let index = start;
   const direction = foreground === "light" ? 1 : -1; // darker : lighter
   while (index >= 0 && index < steps.length && !passes(steps[index]!.hex)) {
     index += direction;
   }
-  // A hue with no passing level in that direction keeps the cusp level; the gate will say so.
   if (index < 0 || index >= steps.length) index = start;
 
   const chosen = steps[index]!;
@@ -243,28 +197,6 @@ function chooseSolid(
   };
 }
 
-/**
- * The neutral solid: the primary button fill.
- *
- * Level 20 rather than the darkest, so `bg-inverse` at 15 stays distinguishable from a
- * primary button sitting on top of it. Near-black is the strongest call to action a neutral
- * palette can make, and it stays strongest whatever the accent axis is set to.
- */
-function neutralSolid(steps: readonly ScaleStep[]): SolidChoice {
-  const index = steps.findIndex((s) => s.level === 20);
-  const chosen = steps[index]!;
-  return {
-    level: chosen.level,
-    // Away from the page in each theme: darker on a light page, lighter on a dark one.
-    // LEVELS runs lightest first, so a *higher* index is a darker colour.
-    hover: { light: steps[index + 1]!.level, dark: steps[index - 1]!.level },
-    foreground: "#ffffff",
-    wcag: Number(wcagContrastHex("#ffffff", chosen.hex).toFixed(2)),
-    apca: Number(apcaMagnitude("#ffffff", chosen.hex).toFixed(1)),
-    retreat: 0,
-  };
-}
-
 function formatAlphaHex({ alpha, rgb }: AlphaSolution): string {
   const hex = (v: number) =>
     Math.round(Math.min(1, Math.max(0, v)) * 255)
@@ -274,10 +206,10 @@ function formatAlphaHex({ alpha, rgb }: AlphaSolution): string {
 }
 
 /**
- * How readable a level is: the better of black or white on it, the ratio, and the grade.
+ * How readable a rung is: the better of black or white on it, the ratio, and the grade.
  *
- * Reported for the *better* foreground rather than a fixed one, because a light level and
- * a dark level are readable with opposite foregrounds and quoting one of them against both
+ * Reported for the *better* foreground rather than a fixed one, because a light rung and a
+ * dark rung are readable with opposite foregrounds and quoting one of them against both
  * makes half the scale look broken when it is not.
  */
 function stepContrast(hex: string): StepContrast {
@@ -290,19 +222,27 @@ function stepContrast(hex: string): StepContrast {
 }
 
 /**
- * The name-is-the-value check.
+ * The palette is data, so it is checked on load rather than trusted.
  *
- * Gamut mapping holds lightness and reduces chroma, so a mapped colour must come back at
- * the lightness its name claims. If it does not, either the mapper has regressed or a step
- * was written by something other than the ladder -- both of which used to be invisible.
+ * A vendored table cannot be re-derived, which means a transcription error would be
+ * invisible: the wrong hex still parses, still renders, and still passes every structural
+ * check. These two properties would not survive one.
  */
-export function assertLadder(scale: BuiltScale, tolerance = 0.002): void {
+export function assertScale(scale: BuiltScale): void {
   for (const step of scale.steps) {
-    const expected = levelLightness(step.level);
-    if (Math.abs(step.oklch.L - expected) > tolerance) {
+    const rung = FAMILIES[scale.id]![String(step.level)]!;
+    const parsed = parseHex(rung.hex);
+    if (parsed.some((c) => Number.isNaN(c))) {
+      throw new Error(`${scale.id}-${step.level}: "${rung.hex}" is not a colour.`);
+    }
+  }
+  for (let i = 1; i < scale.steps.length; i++) {
+    const prev = scale.steps[i - 1]!;
+    const next = scale.steps[i]!;
+    if (next.oklch.L >= prev.oklch.L) {
       throw new Error(
-        `${scale.id}-${step.level}: name claims L ${expected.toFixed(3)} but the emitted ` +
-          `colour is L ${step.oklch.L.toFixed(3)}. A level name must equal its lightness.`,
+        `${scale.id}: rung ${next.level} (L ${next.oklch.L.toFixed(3)}) is not darker than ` +
+          `rung ${prev.level} (L ${prev.oklch.L.toFixed(3)}). The ladder must descend.`,
       );
     }
   }
@@ -312,7 +252,7 @@ export function assertLadder(scale: BuiltScale, tolerance = 0.002): void {
 export function buildScales(specs: readonly ScaleSpec[], theme: Theme): BuiltScale[] {
   return specs.map((spec) => {
     const scale = buildScale(spec, theme);
-    assertLadder(scale);
+    assertScale(scale);
     return scale;
   });
 }

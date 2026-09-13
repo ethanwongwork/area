@@ -34,7 +34,7 @@ for (const spec of ALL_SCALES) {
   console.log(
     `  ${spec.id.padEnd(8)} ${swatch(nine.hex, `  ${s.contrast.hex === "#ffffff" ? "white" : "black"} text  `)}` +
       `  ${nine.hex}  L=${nine.oklch.L.toFixed(3)} C=${nine.oklch.C.toFixed(3)} h=${nine.oklch.h.toFixed(1)}` +
-      `  cusp L=${s.cusp.L.toFixed(3)}  WCAG ${s.contrast.wcag.toFixed(2)}  Lc ${s.contrast.apca.toFixed(0)}  ${flag}`,
+      `  peak ${s.peak.level} C=${s.peak.C.toFixed(3)}  solid ${s.solid.level}  WCAG ${s.contrast.wcag.toFixed(2)}  Lc ${s.contrast.apca.toFixed(0)}  ${flag}`,
   );
 }
 console.log();

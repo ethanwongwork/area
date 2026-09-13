@@ -334,10 +334,10 @@ function colorPage() {
   const levels = tokens.levels.join(", ");
 
   const body = `<div class="docs-prose">
-<p>Every scale is one ramp of ${tokens.levels.length} levels, and a level <em>is</em> its lightness: <code class="docs-code-inline">blue-55</code> is the blue at OKLCh L&nbsp;0.55. Every primitive ramp in Area is named by its value — <code class="docs-code-inline">space-16</code> is 16px, <code class="docs-code-inline">wght-400</code> is weight 400 — so the name is a measurement, it can be checked, and the build fails if a colour does not come back at the lightness its token claims.</p>
-<p>Because lightness is fixed by the name, it is identical across every hue: <code class="docs-code-inline">yellow-55</code> and <code class="docs-code-inline">blue-55</code> weigh the same. What differs is chroma, which takes as much as the sRGB gamut allows at that lightness — so each hue is at its most vivid at a different level, which is a fact about the gamut rather than a choice.</p>
-<p>Hue is constant down a scale. There is no drift table: any two steps of <code class="docs-code-inline">red</code> are the same hue and harmonise by construction.</p>
-<p>The levels are ${levels} — a uniform five-point grid, so a level's neighbour can be named without consulting the list. Level 100 is pure white, which is the honest consequence of naming a level after its lightness.</p>
+<p>The colours are the <strong>Stadium palette</strong>, vendored verbatim — ${Object.keys(tokens.scales).length} families of ${tokens.levels.length} rungs. Area does not generate them. The palette was wall-anchored rather than formula-generated, with per-hue splines and hue held in IPT, and reproducing that from a curve was never going to land closer to it than using it.</p>
+<p>A rung is an ordinal position, not a measurement: <strong>higher is darker</strong>, the direction Tailwind, Material and Radix all read. The ladder is ${levels} — finer at the ends than through the middle, because that is where an interface spends its steps. 25/50/75 are three distinguishable page grounds and 925/950/975 three distinguishable dark ones, while the middle, where text and fills live, runs in 50s.</p>
+<p>Each family's <code class="docs-code-inline">500</code> is pinned to a contrast wall rather than to a lightness, which is why the hues do not share a lightness at a shared rung — yellow's 500 sits lighter than indigo's because yellow has to. There are two walls: a <em>label</em> ladder that clears AA with white at 500, and a <em>glyph</em> ladder pinned at 3:1 that only reaches AA at 600. Area finds each family's solid fill by measuring, so nothing here hardcodes which family is on which wall.</p>
+<p>The three neutrals are one grey at three temperatures. <code class="docs-code-inline">neutral</code> is chroma 0 at every rung; <code class="docs-code-inline">cool</code> carries hue 248 and <code class="docs-code-inline">warm</code> is cool mirrored exactly — 180° away in OKLCh — so neither can drift from the other. Only chroma differs, so contrast is near-invariant across all three: measured, lightness deviates by at most 0.0055 and a white-contrast ratio by at most 0.23:1.</p>
 <p>Dark mode is the same ramp read from the other end. There is one set of colours, not two.</p>
 </div>
 ${inversionSection()}
@@ -366,14 +366,14 @@ ${tokenSection({
 })}
 <h2 class="docs-h2" id="contrast">Contrast</h2>
 <div class="docs-prose">
-<p>Colour pairings are a build gate, not a review-time opinion. Every pairing a component can render is asserted under WCAG 2.2 and APCA across all 144 shipped theme combinations, and a failing colour cannot be published.</p>
+<p>Colour pairings are a build gate, not a review-time opinion. Every pairing a component can render is asserted under WCAG 2.2 and APCA across all 66 shipped theme combinations, and a failing colour cannot be published.</p>
 <p>APCA is enforced as a hard gate in dark themes specifically, because the WCAG 2.x formula overstates contrast near black — a dark theme can clear 4.5:1 and still be unreadable.</p>
 </div>`;
 
   return page({
     slug: "color",
     title: "Color",
-    lede: "One ramp per scale, generated in OKLCH, with every level named by its own lightness.",
+    lede: "The Stadium palette, vendored: fourteen families of twenty-three rungs, anchored to contrast.",
     body,
     toc: [
       { id: "inversion", title: "The inversion" },
@@ -877,7 +877,7 @@ function axesPage() {
 <p>Because custom properties inherit, a subtree can carry its own axis values. A sidebar marked <code class='area-code'>data-area-density="compact"</code> gets shorter controls <em>and</em> correctly re-derived corner radii, without any component knowing it happened.</p>
 </div>
 <h2 class="docs-h2" id="usage">Usage</h2>
-${codeBlock(`<html data-area-theme="dark" data-area-accent="violet" data-area-density="compact">`, { title: "index.html" })}
+${codeBlock(`<html data-area-theme="dark" data-area-accent="purple" data-area-density="compact">`, { title: "index.html" })}
 ${tokens.axes
   .map(
     (a) => `<h2 class="docs-h2" id="${a.id}">${escapeHtml(a.label)}</h2>
@@ -923,7 +923,7 @@ ${table(
 <h2 class="docs-h2" id="principles">Principles</h2>
 <div class="docs-prose">
 <p><strong>Every number is derived.</strong> A control's corner radius is a proportion of its height; a menu item's radius is its panel's radius less the panel's padding. Those relationships are expressed once, in <code class='area-code'>calc()</code>, so they stay true under every combination of axes.</p>
-<p><strong>Contrast is a build gate.</strong> Every colour pairing a component can render is asserted under WCAG 2.2 and APCA across all 144 shipped themes. A failing colour cannot be published.</p>
+<p><strong>Contrast is a build gate.</strong> Every colour pairing a component can render is asserted under WCAG 2.2 and APCA across all 66 shipped themes. A failing colour cannot be published.</p>
 <p><strong>The CSS and the React API cannot drift.</strong> Both are generated from one manifest per component, and a script fails the build if a declared variant has no selector, or a selector exists that was never declared.</p>
 <p><strong>Documentation cannot lie.</strong> Every preview on this site is the real component rendered, and every snippet is that same demo's source.</p>
 </div>`;
