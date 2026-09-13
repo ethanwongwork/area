@@ -125,9 +125,15 @@
     animation: area-shimmer 1.4s ease-in-out infinite;
   }
 
+  /*
+   * The small radius, not a rung of the ramp. This read `--area-radius-2` -- the only one
+   * of the system's radius declarations that named a primitive directly, which meant a
+   * skeleton kept its 2px round even at the sharp preset while everything around it went
+   * square.
+   */
   .area-skeleton--text {
     block-size: var(--area-text-md-leading);
-    border-radius: var(--area-radius-2);
+    border-radius: var(--area-radius-small);
   }
 
   .area-skeleton--circle { border-radius: var(--area-radius-full); }

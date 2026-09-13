@@ -55,7 +55,13 @@
     block-size: var(--_height);
     padding-inline: var(--_gutter);
     border: var(--area-border-width) solid var(--_border);
-    border-radius: var(--area-radius-control);
+    /*
+     * Capped against this tier's own height. A radius is an absolute length and a control
+     * is not: the same 12px is a gentle round at 48px and a pill at 20px, because the
+     * browser clamps border-radius to half the shorter side. The cap keeps the smallest
+     * tier a rounded rectangle rather than a lozenge. See axes/radius.ts for why 0.4.
+     */
+    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
 
     font-family: inherit;
     font-size: var(--_text);

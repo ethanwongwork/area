@@ -45,14 +45,38 @@ interface RadiusPreset {
    * rectangle without turning it into a pill.
    */
   row: number;
+  /**
+   * The most of a box's height a radius may claim, as a fraction.
+   *
+   * A radius is an absolute length and the boxes it lands on are not: the same 12px reads
+   * as a gentle round on a 48px control and as a pill on a 20px one, because the browser
+   * clamps `border-radius` to half the shorter side. Measured across the ladder, presets
+   * 10, 12 and pill all painted the same 10px on a compact extra-small control -- three
+   * distinct choices, one result, and that result a pill.
+   *
+   * 0.4 keeps the smallest control visibly a rounded rectangle. The top preset is the
+   * exception at 0.5, because a pill is the one case where reaching half the height is the
+   * intent rather than an accident.
+   *
+   * This does not make every preset distinct on every box. Nothing can, short of scaling
+   * radius with height, which this system deliberately does not do -- Primer, Vercel,
+   * Linear and Notion all ship one flat radius. What it does is bound the failure: on a box
+   * too small to tell 10 from 12, both render as the same rounded rectangle rather than as
+   * the same pill.
+   */
+  cap: number;
 }
 
-function radiusTokens({ control, container, small, row }: RadiusPreset) {
+function radiusTokens({ control, container, small, row, cap }: RadiusPreset) {
   return {
     "radius-control": `${control}px`,
     "radius-container": `${container}px`,
     "radius-small": `${small}px`,
     "radius-row": `${row}px`,
+    // Unitless, because the box it applies to is only known where it is used. This is the
+    // same shape as the density/radius interaction: the dependent axis emits a multiplier
+    // and the relationship is written in calc() at the point of use.
+    "radius-cap": String(cap),
   };
 }
 
@@ -75,15 +99,16 @@ function radiusTokens({ control, container, small, row }: RadiusPreset) {
  * available -- which is the point of that preset rather than a gap in it.
  */
 const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
-  { id: "0", control: 0, small: 0, row: 0, container: 0, note: "Square corners throughout." },
-  { id: "2", control: 2, small: 0, row: 4, container: 6, note: "Barely softened." },
-  { id: "4", control: 4, small: 2, row: 6, container: 10, note: "Restrained. Close to Material 3." },
+  { id: "0", control: 0, small: 0, row: 0, container: 0, cap: 0.4, note: "Square corners throughout." },
+  { id: "2", control: 2, small: 0, row: 4, container: 6, cap: 0.4, note: "Barely softened." },
+  { id: "4", control: 4, small: 2, row: 6, container: 10, cap: 0.4, note: "Restrained. Close to Material 3." },
   {
     id: "6",
     control: 6,
     small: 4,
     row: 8,
     container: 12,
+    cap: 0.4,
     note: "Matches Primer, Vercel, Linear and Notion, which all ship a 6px control.",
   },
   {
@@ -92,16 +117,18 @@ const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
     small: 6,
     row: 10,
     container: 14,
+    cap: 0.4,
     note: "The default. Matches shadcn/ui.",
   },
-  { id: "10", control: 10, small: 8, row: 12, container: 16, note: "Soft." },
-  { id: "12", control: 12, small: 10, row: 14, container: 20, note: "Very soft." },
+  { id: "10", control: 10, small: 8, row: 12, container: 16, cap: 0.4, note: "Soft." },
+  { id: "12", control: 12, small: 10, row: 14, container: 18, cap: 0.4, note: "Very soft." },
   {
     id: "pill",
     control: 9999,
     small: 9999,
     row: 9999,
     container: 24,
+    cap: 0.5,
     note: "Fully round controls. Containers stay finite, since a pill card is a lozenge.",
   },
 ];
@@ -116,6 +143,7 @@ export const RADIUS_AXIS: AxisDefinition = {
     "--area-radius-container",
     "--area-radius-small",
     "--area-radius-row",
+    "--area-radius-cap",
   ],
   presets: PRESETS.map(({ id, note, ...preset }) => ({
     id,

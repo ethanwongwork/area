@@ -29,7 +29,8 @@
     inline-size: 100%;
     padding-inline: var(--_gutter);
     border: var(--area-border-width) solid var(--_border);
-    border-radius: var(--area-radius-control);
+    /* Capped against this tier's own height; see button.css. */
+    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
 
     background-color: var(--_bg);
     color: var(--area-fg-default);

@@ -47,8 +47,8 @@
   /* Concentric: a media block bleeds to the card's edge and inherits the inner radius. */
   .area-card__media {
     margin: calc(var(--_inset) * -1) calc(var(--_inset) * -1) 0;
-    border-start-start-radius: calc(var(--area-radius-container) - var(--area-border-width));
-    border-start-end-radius: calc(var(--area-radius-container) - var(--area-border-width));
+    border-start-start-radius: max(0px, calc(var(--area-radius-container) - var(--area-border-width)));
+    border-start-end-radius: max(0px, calc(var(--area-radius-container) - var(--area-border-width)));
     overflow: hidden;
   }
 
@@ -206,7 +206,10 @@
   .area-menu--inline .area-menu__item,
   .area-menu--inline .area-menu__label {
     block-size: var(--area-control-sm);
-    border-radius: var(--area-radius-row);
+    border-radius: min(
+      var(--area-radius-row),
+      calc(var(--area-control-sm) * var(--area-radius-cap))
+    );
   }
 
   /*
@@ -277,7 +280,16 @@
     block-size: var(--area-control-md);
     padding-inline: var(--area-space-8);
     border: 0;
-    border-radius: calc(var(--area-radius-container) - var(--_inset));
+    /*
+     * Concentric, inward: the panel's radius less the padding it insets by. Guarded at both
+     * ends -- `max(0px, ...)` because the sharp preset makes the subtraction negative, and
+     * the cap because the pill preset makes it larger than the row can carry, leaving a
+     * "pill" menu whose items were the only rectangles in it.
+     */
+    border-radius: min(
+      max(0px, calc(var(--area-radius-container) - var(--_inset))),
+      calc(var(--area-control-md) * var(--area-radius-cap))
+    );
     background: transparent;
     color: inherit;
     font-size: var(--area-ui-size);

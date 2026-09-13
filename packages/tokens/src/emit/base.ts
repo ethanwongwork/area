@@ -39,7 +39,7 @@ export const LEADING_RAMP = [
 export const WGHT_RAMP = [100, 200, 300, 400, 450, 500, 550, 600, 700, 800, 900] as const;
 
 /** Every radius the system can express. Components use the semantic radius tokens instead. */
-export const RADIUS_RAMP = [0, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 32] as const;
+export const RADIUS_RAMP = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 32] as const;
 
 export const Z_LAYERS = {
   base: 0,

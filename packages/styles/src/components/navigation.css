@@ -63,7 +63,8 @@
 
   .area-tabs__tab:focus-visible {
     outline: none;
-    border-radius: var(--area-radius-control);
+    /* Capped against this tier's own height; see button.css. */
+    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
     box-shadow: var(--area-ring);
   }
 
@@ -172,7 +173,8 @@
     padding-inline-end: calc(var(--_gutter) + var(--area-icon-md) + var(--area-space-4));
 
     border: var(--area-border-width) solid var(--area-border);
-    border-radius: var(--area-radius-control);
+    /* Capped against this tier's own height; see button.css. */
+    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
     font-size: var(--_text);

@@ -93,7 +93,11 @@
     block-size: var(--area-control-md);
     padding-inline: var(--area-space-8);
     border: 0;
-    border-radius: var(--area-radius-row);
+    /* Capped against the row's own height; see button.css. */
+    border-radius: min(
+      var(--area-radius-row),
+      calc(var(--area-control-md) * var(--area-radius-cap))
+    );
     background: transparent;
     color: var(--area-fg-muted);
     font-family: inherit;

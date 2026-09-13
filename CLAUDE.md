@@ -122,6 +122,29 @@ difference that reads on a 32px control — and the low end carries 0, 2 and 4 w
 to carry two names. Within a preset every semantic radius is distinct; at `0` they are all
 0, which is the point of that preset rather than a gap in it.
 
+**A radius is capped against the box it lands on.** `--area-radius-cap` is a unitless 0.4
+(0.5 at the pill preset) and every control-height radius reads
+`min(radius, calc(height * cap))`. A radius is an absolute length and a control is not: the
+browser clamps `border-radius` to half the shorter side, so the same 12px is a gentle round
+at 48px and a pill at 20px. Measured before the cap, presets 10, 12 and pill all painted the
+same 10px pill on a compact extra-small control — three choices, one result.
+
+The cap does not make every preset distinct on every box, and nothing can short of scaling
+radius with height, which this system deliberately does not do. What it does is bound the
+failure: where a box is too small to tell 10 from 12, both render as the same rounded
+rectangle rather than as the same lozenge. `pill` stays the one preset that reaches half.
+
+**Concentric derivations are guarded at both ends.** `max(0px, outer - inset)` because the
+sharp preset makes the subtraction negative, and the cap because the pill preset makes it
+larger than the row can carry — which used to leave a "pill" menu whose items were the only
+rectangles in it.
+
+**`--area-radius-full` does not follow the axis, on purpose.** Every use is either
+shape-defining — a radio that is not a circle is a checkbox, a switch that is not a pill is
+not a switch, and the same goes for the status dot, the spinner and the selection rail — or
+an explicit opt-in (`--pill`, `--circle`). An avatar wanting corners asks for
+`.area-avatar--square`, which does follow the axis.
+
 Radius has four semantic steps, not three. `row` sits between `control` and `container` for
 a full-width backplate — a sidebar item, a table-of-contents entry, a nav link — because a
 row has a control's height and a container's width and neither of the others fits it.
