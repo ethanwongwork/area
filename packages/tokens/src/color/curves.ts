@@ -84,7 +84,15 @@ export const INVERSION = {
   component: { light: 50, dark: 800 },
   componentHover: { light: 75, dark: 750 },
   componentActive: { light: 100, dark: 700 },
-  /** Neutral strokes, quietest to loudest. */
+  /**
+   * Neutral strokes, quietest to loudest.
+   *
+   * Every one sits on the least assertive rung its assertions permit -- solved rather than
+   * chosen, by walking the ladder toward the page until the gate stops passing. In light
+   * that means the lightest rung; in dark it means the darkest, since "quiet" is proximity
+   * to the page in both. Four of the six were already at their floor; `borderStrong` and
+   * `tonalBorderStrong` had a rung of slack each and no longer do.
+   */
   borderSubtle: { light: 200, dark: 750 },
   border: { light: 250, dark: 650 },
   /**
@@ -102,7 +110,7 @@ export const INVERSION = {
    * is still a tier, so the two coincide rather than one of them becoming a lie.
    */
   borderFaint: { light: 150, dark: 750 },
-  borderStrong: { light: 350, dark: 550 },
+  borderStrong: { light: 300, dark: 600 },
   /**
    * Tonal strokes, which sit deeper on the ladder than neutral ones.
    *
@@ -112,8 +120,8 @@ export const INVERSION = {
    * forces a choice between an invisible green border and a neutral border heavy enough to
    * look like a focus ring, so tonal strokes get their own rungs.
    */
-  tonalBorder: { light: 400, dark: 600 },
-  tonalBorderStrong: { light: 500, dark: 500 },
+  tonalBorder: { light: 400, dark: 650 },
+  tonalBorderStrong: { light: 450, dark: 600 },
   /**
    * Text, from the least emphatic that is still content to the most.
    *
