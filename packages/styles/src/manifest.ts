@@ -275,8 +275,21 @@ export const code: ComponentManifest = {
 export const codeBlock: ComponentManifest = {
   block: "area-code-block",
   description: "Shows a block of code with an optional toolbar.",
-  variants: { layout: ["flush", "wrap"] },
+  // `shape` is how the block presents its actions: a header row carrying a filename
+  // (`titled`), or none at all with a single action riding on the code (`bare`). A block
+  // with neither modifier gets the full toolbar, which is what a live example needs.
+  variants: { shape: ["titled", "bare"], layout: ["flush", "wrap"] },
   elements: ["toolbar", "title", "actions", "pre"],
+  defaults: {},
+};
+
+export const nav: ComponentManifest = {
+  block: "area-nav",
+  description: "Site navigation, vertical or horizontal.",
+  // `orientation` is the axis; `tone` decides what a current item's plate carries. A nav
+  // with neither modifier is vertical and neutral, which is the sidebar case.
+  variants: { orientation: ["horizontal"], tone: ["accent"] },
+  elements: ["group", "label", "item", "icon", "text", "trailing", "separator"],
   defaults: {},
 };
 
@@ -333,6 +346,7 @@ export const MANIFESTS: Record<string, ComponentManifest> = {
   segmented,
   code,
   codeBlock,
+  nav,
   tokenChip,
   kbd,
   kbdGroup,

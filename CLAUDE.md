@@ -110,6 +110,12 @@ exactly {16, 12} and comments that "a codicon at 13/14/15px is always a mistake 
 16"; Octicons says the same with 24 for the large tier. Gap follows the tier: Primer ties
 4px to xsmall and small, 8px to medium and large, with 6px as the step between.
 
+Radius has four steps, not three. `row` sits between `control` and `container` for a
+full-width backplate — a sidebar item, a table-of-contents entry, a nav link — because a row
+has a control's height and a container's width and neither of the others fits it. The number
+is a ratio: OpenAI's sidebar row is 10px on 40px, a quarter of its height, and a quarter of
+Area's 32px row is 8.
+
 Radius does *not* move with density. An earlier version derived it as a proportion of
 control height, which quietly made a compact button 5px — but Primer at 32, Vercel at 32,
 Linear at 32 and Notion at 28 all ship exactly 6px. Radius is owned entirely by the radius
@@ -117,10 +123,17 @@ axis, flat at every tier.
 
 ## Tones
 
-Nine, following OpenAI's vocabulary: primary, secondary, accent, info, success, warning,
-caution, danger, discovery. `primary` and `secondary` are neutral rather than brand — a
-near-black button is the strongest call to action a neutral palette can make, and it stays
-strongest whatever the accent axis is set to.
+Eight: neutral, accent, info, success, warning, caution, danger, discovery. `neutral` is not
+a brand colour — a near-black button is the strongest call to action a neutral palette can
+make, and it stays strongest whatever the accent axis is set to.
+
+There were nine. `primary` and `secondary` shipped one rung apart, near-black against
+near-black, which delivered none of the distinction the names promised. OpenAI separates
+them properly — `primary-solid` is gray-900, `secondary-solid` is gray-500 carrying white —
+but their *soft* variants are literally the same tokens, so the real difference is one fill
+plus the strength of an outline's label. Area already spans that on the variant axis.
+**Emphasis is the variant's job; the tone carries meaning.** A second neutral tone
+re-expressed what solid / outline / ghost already said.
 
 A tone repoints nine slots; a variant decides which it reads. Nine tones and four variants
 is thirteen CSS blocks, not thirty-six, and adding a tone costs one block. Never write a
@@ -132,6 +145,16 @@ them is where each solid lands on the ladder: red can stay saturated at L 0.55 a
 white text, while yellow cannot be both saturated and dark, so its fill sits at L 0.90 with
 black text. A danger button and a caution button differ in weight, not only in hue. That is
 the cost of eight tones and it is recorded in `color/presets.ts` rather than rediscovered.
+
+## Icons
+
+**Fluent System Icons, generated.** `apps/docs/src/icons.tsx` and
+`apps/docs/scripts/icons.generated.mjs` are both output of `gen-icons.mjs`, which reads
+`@fluentui/svg-icons`. Never hand-edit either, and never hand-draw a path: add the export
+name and its Fluent id to the map and re-run. Fluent's icons are *filled* paths, so they
+take `fill` and never `stroke-width` — a stroke-based icon dropped in beside them will not
+match at any weight. Use the 16px cut at 16px rather than scaling the 20 or 24, because they
+are optically corrected per size.
 
 ## Colour
 

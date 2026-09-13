@@ -50,6 +50,39 @@
     padding-block-end: 0;
   }
 
+  /*
+   * The header form: a filename on the left, its actions on the right, and a rule between
+   * the header and the code. Used where the block names a file, so the name and the action
+   * that copies it sit on one line instead of stacking a toolbar above a caption.
+   */
+  .area-code-block--titled .area-code-block__toolbar {
+    padding: var(--area-space-6) var(--area-space-6) var(--area-space-6) var(--area-space-12);
+    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
+  }
+
+  /*
+   * The bare form: no toolbar at all, one action riding at the top-right of the code.
+   *
+   * For a block short enough that a toolbar would be taller than the thing it labels -- an
+   * install command, a single import. The action is positioned rather than stacked so it
+   * sits on the first line's own baseline band, and the code reserves room for it so a long
+   * line cannot slide underneath.
+   */
+  .area-code-block--bare {
+    position: relative;
+  }
+
+  .area-code-block--bare .area-code-block__actions {
+    position: absolute;
+    inset-block-start: var(--area-space-6);
+    inset-inline-end: var(--area-space-6);
+    margin-inline-start: 0;
+  }
+
+  .area-code-block--bare .area-code-block__pre {
+    padding-inline-end: var(--area-space-40);
+  }
+
   .area-code-block__title {
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);

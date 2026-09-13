@@ -193,9 +193,14 @@
     min-inline-size: 0;
   }
 
-  /* With no panel padding, items take the small radius directly. */
+  /*
+   * With no panel around them, items are not nested inside anything, so the concentric
+   * rule has nothing to subtract from and the row radius applies directly. It is rounder
+   * than the small radius these used to take, which made a full-width backplate read as a
+   * rectangle with its corners filed off rather than as a soft row.
+   */
   .area-menu--inline .area-menu__item {
-    border-radius: var(--area-radius-small);
+    border-radius: var(--area-radius-row);
   }
 
   .area-menu--inline .area-menu__separator {

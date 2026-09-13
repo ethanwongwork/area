@@ -373,6 +373,48 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "nav",
+    name: "Nav",
+    manifest: "nav",
+    api: [
+      ["orientation", '"vertical" | "horizontal"', '"vertical"'],
+      ["tone", '"neutral" | "accent"', '"neutral"'],
+      ["current", "boolean", "false"],
+      ["icon", "ReactNode", "\u2014"],
+      ["trailing", "ReactNode", "\u2014"],
+      ["disabled", "boolean", "false"],
+    ],
+    practices: [
+      "Mark the current page with <code class='area-code'>current</code>, not with a class. It renders <code class='area-code'>aria-current=\"page\"</code>, which is both what the CSS selects on and what a screen reader announces \u2014 so an item cannot look current without being current.",
+      "Label every nav. Two or three <code class='area-code'>&lt;nav&gt;</code> landmarks on one page are indistinguishable without <code class='area-code'>aria-label</code>, and a sidebar plus a top bar is the common case.",
+      "Group vertically, never horizontally. A group label needs a line of its own, which a horizontal nav does not have.",
+      "Let long labels truncate. The row reserves space for the icon and anything trailing and gives the rest to the label, so a long document title shortens instead of wrapping the row to two lines.",
+      "Reach for <code class='area-code'>tone=\"accent\"</code> only where the nav is the page's primary structure. On a sidebar beside accented content it competes.",
+    ],
+    examples: [
+      { id: "default", title: "Default", demo: "NavDefault" },
+      {
+        id: "vertical",
+        title: "Vertical",
+        note: "The sidebar case: labelled groups, leading icons, and a trailing slot for a count or a shortcut.",
+        demo: "NavVertical",
+      },
+      {
+        id: "horizontal",
+        title: "Horizontal",
+        note: "Use the orientation prop to lay the same markup along the inline axis. It scrolls rather than wraps, so the chrome cannot change height.",
+        demo: "NavHorizontal",
+      },
+      {
+        id: "accent",
+        title: "Accent",
+        note: "Use the tone prop to carry the brand on the current item instead of the neutral.",
+        demo: "NavAccent",
+      },
+      { id: "disabled", title: "Disabled", demo: "NavDisabled" },
+    ],
+  },
+  {
     slug: "table",
     name: "Table",
     manifest: "table",

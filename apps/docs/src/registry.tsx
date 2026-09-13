@@ -10,11 +10,13 @@
 import * as button from "./demos/button.tsx";
 import * as form from "./demos/form.tsx";
 import * as display from "./demos/display.tsx";
+import * as nav from "./demos/nav.tsx";
 
-export const DEMOS = { ...button, ...form, ...display } as Record<string, () => unknown>;
+export const DEMOS = { ...button, ...form, ...display, ...nav } as Record<string, () => unknown>;
 
 export const SOURCES = {
   button: "src/demos/button.tsx",
   form: "src/demos/form.tsx",
   display: "src/demos/display.tsx",
+  nav: "src/demos/nav.tsx",
 };

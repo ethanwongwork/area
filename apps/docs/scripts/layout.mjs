@@ -29,9 +29,9 @@ export function highlight(code) {
 // Fluent System Icons, generated. See `gen-icons.mjs`.
 import { ICONS } from "./icons.generated.mjs";
 
-/** A toolbar button, in the outline treatment the reference uses. */
-function toolbarButton(icon, label, attr) {
-  return `<button type="button" class="area-button area-button--outline area-button--neutral area-button--sm" ${attr}>
+/** A toolbar button. Outline where it sits in a toolbar, ghost where it rides on the code. */
+function toolbarButton(icon, label, attr, variant = "outline") {
+  return `<button type="button" class="area-button area-button--${variant} area-button--neutral area-button--sm" ${attr}>
       <span class="area-button__icon" aria-hidden="true">${ICONS[icon]}</span>
       <span class="area-button__label">${escapeHtml(label)}</span>
     </button>`;
@@ -39,22 +39,38 @@ function toolbarButton(icon, label, attr) {
 
 /** A code block with a copy button, in the shape the design system defines. */
 export function codeBlock(code, { title, flush = false, wrap = true, live = false } = {}) {
+  // Three shapes, chosen by what the block has to say rather than by a flag at the call site.
+  //
+  //   live    a preview sits above it, so it gets the full toolbar: Copy and Reset act on
+  //           the preview, Customize opens the axis panel.
+  //   titled  it names a file, so the name and its Copy share a header row.
+  //   bare    it is an install line or an import, where a toolbar would be taller than the
+  //           code. One Copy rides at the top-right of the block itself.
+  const shape = live ? "live" : title ? "titled" : "bare";
+
   const cls = [
     "area-code-block",
+    shape === "titled" && "area-code-block--titled",
+    shape === "bare" && "area-code-block--bare",
     flush && "area-code-block--flush",
     wrap && "area-code-block--wrap",
   ]
     .filter(Boolean)
     .join(" ");
 
-  // Reset and Customize both act on a preview, so they only appear where there is one.
-  const leading = live
-    ? toolbarButton("copy", "Copy", "data-copy") + toolbarButton("reset", "Reset", "data-reset")
-    : toolbarButton("copy", "Copy", "data-copy");
+  const copy = (variant) => toolbarButton("copy", "Copy", "data-copy", variant);
 
+  if (shape === "bare") {
+    return `<div class="${cls}">
+  <span class="area-code-block__actions">${copy("ghost")}</span>
+  <pre class="area-code-block__pre"><code>${highlight(code)}</code></pre>
+</div>`;
+  }
+
+  const leading = live ? copy("outline") + toolbarButton("reset", "Reset", "data-reset") : "";
   const trailing = live
     ? `<span class="area-code-block__actions">${toolbarButton("expand", "Customize", "data-customize")}</span>`
-    : "";
+    : `<span class="area-code-block__actions">${copy("ghost")}</span>`;
 
   return `<div class="${cls}">
   <div class="area-code-block__toolbar">

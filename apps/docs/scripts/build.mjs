@@ -35,6 +35,7 @@ const demos = await renderDemos();
 const FOUNDATION_PAGES = [
   { slug: "color", name: "Color" },
   { slug: "typography", name: "Typography" },
+  { slug: "iconography", name: "Iconography" },
   { slug: "density", name: "Density" },
   { slug: "radius", name: "Radius" },
   { slug: "surface", name: "Surface" },
@@ -386,6 +387,114 @@ ${tokenSection({
 
 /** A specimen rendered at the value being documented. */
 const AG = "Ag";
+
+/**
+ * Iconography.
+ *
+ * Reads the generated icon module rather than a hand-kept list, so the page cannot drift
+ * from what the system actually ships -- the same rule every other foundation page follows.
+ */
+function iconographyPage() {
+  const source = readFileSync(new URL("../src/icons.tsx", import.meta.url), "utf8");
+  const rows = [...source.matchAll(/\/\*\* Fluent `([a-z0-9_]+)`\. \*\/\s*export const (\w+)/g)].map(
+    ([, fluent, name]) => ({ name, fluent, svg: extractIcon(source, name) }),
+  );
+
+  // Read from the density axis rather than typed out. Hand-listing them named
+  // `--area-icon-sm` as 12px when it is 16, which is the failure mode the whole
+  // generate-the-docs rule exists to prevent.
+  const USE = {
+    "12px": "Dense chrome: a table row affordance, a chip dismiss.",
+    "16px": "The default. Every inline icon beside a label.",
+    "24px": "Standalone, where the icon is the whole affordance.",
+  };
+  const density = tokens.axes.find((a) => a.id === "density").presets.find((p) => p.id === "default");
+  const seen = new Map();
+  for (const [token, value] of Object.entries(density.tokens)) {
+    if (!/^--area-icon-/.test(token)) continue;
+    if (!seen.has(value)) seen.set(value, token);
+  }
+  const sizes = [...seen.entries()]
+    .map(([px, token]) => ({ token, px, use: USE[px] ?? "" }))
+    .sort((a, b) => parseInt(a.px) - parseInt(b.px));
+
+  const body = `<div class="docs-prose">
+<p>Icons are <strong>Fluent System Icons</strong>, Microsoft's set, used at the 16px Regular cut. The path data is generated from <code class="area-code">@fluentui/svg-icons</code> by <code class="area-code">gen-icons.mjs</code> and is never drawn by hand, so an icon here is the same glyph Fluent ships rather than an approximation of it.</p>
+<p>Two consequences worth knowing. Fluent icons are <em>filled</em> paths, not strokes, so they take <code class="area-code">fill</code> and never <code class="area-code">stroke-width</code> — a stroke-based icon dropped in beside them will not match at any weight. And they are optically corrected per size, which is why the 16px cut is used at 16px instead of scaling the 20 or 24 down to fit.</p>
+<p>An icon never sets its own size. It fills the slot it sits in, and the slot takes its size from the density axis, so every icon in the system moves when density does.</p>
+</div>
+${tokenSection({
+  id: "sizes",
+  title: "Sizes",
+  description:
+    "Three, and nothing between them. VS Code's own token linter permits exactly 16 and 12 and notes that a codicon at 13, 14 or 15px is always a mistake for one of them; Octicons adds 24 for the standalone tier.",
+  rows: sizes,
+  columns: [
+    { header: "Token", cell: (r) => tokenChip(r.token) },
+    { header: "Size", cell: (r) => `<span class="docs-mono">${r.px}</span>` },
+    { header: "Use", cell: (r) => escapeHtml(r.use) },
+    {
+      header: "Preview",
+      cell: (r) =>
+        `<div class="docs-preview-cell"><span style="display:inline-flex;inline-size:var(${r.token});block-size:var(${r.token})">${rows[0].svg}</span></div>`,
+    },
+  ],
+  card: (r) =>
+    tokenCard({
+      name: r.token,
+      meta: [r.px],
+      figure: `<span style="display:inline-flex;inline-size:var(${r.token});block-size:var(${r.token})">${rows[0].svg}</span>`,
+    }),
+})}
+${tokenSection({
+  id: "set",
+  title: "The set",
+  description:
+    "Every icon the documentation and demos use, with the Fluent identifier each one is generated from.",
+  rows,
+  columns: [
+    { header: "Export", cell: (r) => tokenChip(r.name) },
+    { header: "Fluent", cell: (r) => `<span class="docs-mono">${escapeHtml(r.fluent)}</span>` },
+    {
+      header: "Preview",
+      cell: (r) =>
+        `<div class="docs-preview-cell"><span style="display:inline-flex;inline-size:var(--area-icon-md);block-size:var(--area-icon-md)">${r.svg}</span></div>`,
+    },
+  ],
+  card: (r) =>
+    tokenCard({
+      name: r.name,
+      meta: [r.fluent],
+      figure: `<span style="display:inline-flex;inline-size:var(--area-icon-lg);block-size:var(--area-icon-lg)">${r.svg}</span>`,
+    }),
+})}
+<h2 class="docs-h2" id="adding">Adding one</h2>
+<div class="docs-prose">
+<p>Add the export name and its Fluent identifier to the map in <code class="area-code">gen-icons.mjs</code>, then run it. Nothing else is edited by hand — the module below is generated output, and editing it directly is how the set drifts from Fluent.</p>
+</div>
+${codeBlock(`const MAP = {\n  PlusIcon: "add_16_regular",\n  // ...\n};`, { title: "gen-icons.mjs" })}`;
+
+  return page({
+    slug: "iconography",
+    title: "Iconography",
+    lede: "Fluent System Icons at 16px, generated rather than drawn, sized by the density axis.",
+    body,
+    toc: [
+      { id: "sizes", title: "Sizes" },
+      { id: "set", title: "The set" },
+      { id: "adding", title: "Adding one" },
+    ],
+  });
+}
+
+/** Pull one icon's inline SVG out of the generated module, for rendering in the docs. */
+function extractIcon(source, name) {
+  const block = source.slice(source.indexOf(`export const ${name}`));
+  const paths = [...block.slice(0, block.indexOf("</svg>")).matchAll(/<path d="([^"]+)"/g)];
+  return `<svg viewBox="0 0 16 16" width="100%" height="100%" fill="currentColor" aria-hidden="true">${paths
+    .map(([, d]) => `<path d="${d}"/>`)
+    .join("")}</svg>`;
+}
 
 function typographyPage() {
   const preset = tokens.axes.find((a) => a.id === "type").presets.find((p) => p.id === "geist");
@@ -953,6 +1062,7 @@ const pages = [
   ["axes.html", axesPage()],
   ["color.html", colorPage()],
   ["typography.html", typographyPage()],
+  ["iconography.html", iconographyPage()],
   ["density.html", densityPage()],
   ["radius.html", radiusPage()],
   ["surface.html", surfacePage()],

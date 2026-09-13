@@ -1,0 +1,177 @@
+/* ---------------------------------------------------------------------------
+ * Nav
+ *
+ * Site navigation, in two orientations from one set of rules.
+ *
+ * Modelled on OpenAI's: a stack of full-width rows, each a soft backplate that fills on
+ * hover and stays filled when current, grouped under quiet labels. What carries the state
+ * is the plate, not a rule or an arrow -- so the same markup works horizontally by
+ * changing the axis and nothing else.
+ *
+ * A row takes `--area-radius-row`, which is its own step on the radius axis rather than
+ * the small or control radius. A full-width plate at 4px reads as a rectangle with its
+ * corners filed off; OpenAI's sits at a quarter of the row's height and reads as a row.
+ *
+ * `aria-current` is the selector, not a class. The attribute that makes the current page
+ * announceable is the same one that draws it, so a nav cannot look current without being
+ * current.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-2);
+    min-inline-size: 0;
+  }
+
+  /*
+   * Horizontal: a row of plates. Scrolls rather than wraps, because a nav that reflows to
+   * a second line moves every item below it and changes the height of the page chrome.
+   */
+  .area-nav--horizontal {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--area-space-4);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .area-nav--horizontal::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* A labelled run of items. Vertical only; a horizontal nav has no room to head a group. */
+  .area-nav__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-2);
+    min-inline-size: 0;
+  }
+
+  .area-nav__group + .area-nav__group {
+    margin-block-start: var(--area-space-16);
+  }
+
+  /*
+   * The group heading. Deliberately not a control: it sits at the item's inline padding so
+   * its text lines up with the labels beneath it rather than with their plates.
+   */
+  .area-nav__label {
+    padding-inline: var(--area-space-8);
+    padding-block: var(--area-space-4);
+    color: var(--area-fg-muted);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-strong);
+  }
+
+  .area-nav__item {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    min-inline-size: 0;
+    block-size: var(--area-control-md);
+    padding-inline: var(--area-space-8);
+    border: 0;
+    border-radius: var(--area-radius-row);
+    background: transparent;
+    color: var(--area-fg-muted);
+    font-family: inherit;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+
+  /* Horizontal items hug their label instead of filling the axis. */
+  .area-nav--horizontal .area-nav__item {
+    flex: 0 0 auto;
+  }
+
+  .area-nav__item:hover:not([data-disabled]) {
+    background-color: var(--area-bg-hover);
+    color: var(--area-fg-default);
+  }
+
+  /*
+   * Current. The foreground goes to full strength and the plate fills -- the same pair of
+   * moves hover makes, one step further, so the two read as the same gesture at different
+   * intensities rather than as two unrelated treatments.
+   */
+  .area-nav__item[aria-current]:not([aria-current="false"]) {
+    background-color: var(--area-bg-active);
+    color: var(--area-fg-default);
+    font-weight: var(--area-weight-strong);
+  }
+
+  .area-nav__item:focus-visible {
+    outline: var(--area-ring-width) solid var(--area-border-focus);
+    outline-offset: var(--area-ring-offset);
+  }
+
+  .area-nav__item[data-disabled] {
+    color: var(--area-fg-disabled);
+    cursor: not-allowed;
+  }
+
+  /* The accent variant: current items carry the brand rather than the neutral. */
+  .area-nav--accent .area-nav__item[aria-current]:not([aria-current="false"]) {
+    background-color: var(--area-accent-surface);
+    color: var(--area-fg-accent);
+  }
+
+  .area-nav__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    flex-shrink: 0;
+  }
+
+  .area-nav__icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* The label truncates; the icon and anything trailing do not. */
+  .area-nav__text {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /*
+   * Pushed to the end of the row: a count, a shortcut, a status dot. Muted even when the
+   * item is current, because it annotates the row rather than naming it.
+   */
+  .area-nav__trailing {
+    margin-inline-start: auto;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    color: var(--area-fg-subtle);
+    font-weight: var(--area-weight-regular);
+  }
+
+  .area-nav--horizontal .area-nav__trailing {
+    margin-inline-start: 0;
+  }
+
+  .area-nav__separator {
+    block-size: var(--area-border-width);
+    margin-block: var(--area-space-8);
+    background-color: var(--area-border-subtle);
+  }
+
+  .area-nav--horizontal .area-nav__separator {
+    inline-size: var(--area-border-width);
+    block-size: var(--area-space-20);
+    margin-block: 0;
+    margin-inline: var(--area-space-4);
+  }
+}

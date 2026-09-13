@@ -11,5 +11,14 @@
  */
 export { Button, type ButtonProps } from "./components/Button.tsx";
 export { Input, type InputProps } from "./components/Input.tsx";
+export {
+  Nav,
+  NavGroup,
+  NavItem,
+  NavSeparator,
+  type NavProps,
+  type NavGroupProps,
+  type NavItemProps,
+} from "./components/Nav.tsx";
 export * from "./components/primitives.tsx";
 export * from "./variants.ts";
