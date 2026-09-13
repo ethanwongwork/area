@@ -70,10 +70,28 @@ export function codeBlock(code, { title, flush = false, wrap = true, live = fals
 
   const copy = (variant) => toolbarButton("copy", "Copy", "data-copy", variant);
 
+  // Only a block long enough to need it gets the control; wrapping a three-line import in
+  // "Show code" would cost a row to hide nothing.
+  const COLLAPSE_AFTER = 8;
+  const lines = code.split("\n").length;
+  const collapsible = lines > COLLAPSE_AFTER;
+
+  const body = (inner) =>
+    collapsible
+      ? `<div class="area-code-block__body">${inner}
+    <button type="button" class="area-code-block__toggle" data-code-toggle aria-expanded="false">
+      <span data-code-toggle-label>Show code</span>
+    </button>
+  </div>`
+      : `<div class="area-code-block__body">${inner}</div>`;
+
+  const pre = `<pre class="area-code-block__pre"><code>${highlight(code)}</code></pre>`;
+  const collapsed = collapsible ? " data-collapsed" : "";
+
   if (shape === "bare") {
-    return `<div class="${cls}">
+    return `<div class="${cls}"${collapsed}>
   <span class="area-code-block__actions">${copy("ghost")}</span>
-  <pre class="area-code-block__pre"><code>${highlight(code)}</code></pre>
+  ${body(pre)}
 </div>`;
   }
 
@@ -82,13 +100,13 @@ export function codeBlock(code, { title, flush = false, wrap = true, live = fals
     ? `<span class="area-code-block__actions">${toolbarButton("expand", "Customize", "data-customize")}</span>`
     : `<span class="area-code-block__actions">${copy("ghost")}</span>`;
 
-  return `<div class="${cls}">
+  return `<div class="${cls}"${collapsed}>
   <div class="area-code-block__toolbar">
     ${title ? `<span class="area-code-block__title">${escapeHtml(title)}</span>` : ""}
     ${leading}
     ${trailing}
   </div>
-  <pre class="area-code-block__pre"><code>${highlight(code)}</code></pre>
+  ${body(pre)}
 </div>`;
 }
 
@@ -210,7 +228,7 @@ export const DOCS_CSS = `
     --docs-max: 1400px;
     --docs-blur: 8px;
     --docs-axis-col: 260px;
-    --docs-preview-min: 140px;
+    --docs-preview-min: 200px;
     --docs-specimen: 150px;
     --docs-figure: 72px;
     --docs-card: 230px;
@@ -317,7 +335,7 @@ export const DOCS_CSS = `
   .docs-stack { display: flex; flex-direction: column; gap: var(--area-space-8); }
   .docs-list { margin: 0; padding-inline-start: var(--area-space-20); display: flex; flex-direction: column; gap: var(--area-space-12); }
   .docs-list li { color: var(--area-fg-muted); }
-  .docs-list li::marker { color: var(--area-fg-subtle); }
+  .docs-list li::marker { color: var(--area-fg-muted); }
 
   /*
    * The example frame: a clipped container holding a preview on the page surface and a
@@ -479,7 +497,7 @@ export const DOCS_CSS = `
   .docs-swatch-row__name { font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); margin-block-end: var(--area-space-4); }
   .docs-swatch-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--area-space-2); }
   .docs-swatch-grid > div { aspect-ratio: 1 / 1.5; border-radius: var(--area-radius-small); }
-  .docs-step-legend { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--area-space-2); text-align: center; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-subtle); }
+  .docs-step-legend { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--area-space-2); text-align: center; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
 
   .docs-type-row { display: grid; grid-template-columns: 150px 1fr 1fr; align-items: baseline; gap: var(--area-space-16); padding-block: var(--area-space-12); border-block-end: var(--area-border-width) solid var(--area-border-subtle); }
   .docs-type-row__meta { flex-shrink: 0; inline-size: 150px; font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
@@ -508,6 +526,22 @@ export const DOCS_CSS = `
 `;
 
 export const DOCS_SCRIPT = `
+  // Show / hide code. Collapsed is the server-rendered state, so a block is never briefly
+  // full-height before the script runs.
+  document.querySelectorAll("[data-code-toggle]").forEach(function (button) {
+    var block = button.closest(".area-code-block");
+    var label = button.querySelector("[data-code-toggle-label]");
+    button.addEventListener("click", function () {
+      var collapsed = block.hasAttribute("data-collapsed");
+      if (collapsed) block.removeAttribute("data-collapsed");
+      else block.setAttribute("data-collapsed", "");
+      button.setAttribute("aria-expanded", String(collapsed));
+      label.textContent = collapsed ? "Hide code" : "Show code";
+      // Re-collapsing from below the fold would otherwise leave the viewport mid-page.
+      if (!collapsed) block.scrollIntoView({ block: "nearest" });
+    });
+  });
+
 (function () {
   var KEY = "area-docs-axes";
   var root = document.documentElement;

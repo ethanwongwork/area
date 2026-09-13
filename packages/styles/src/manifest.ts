@@ -279,7 +279,8 @@ export const codeBlock: ComponentManifest = {
   // (`titled`), or none at all with a single action riding on the code (`bare`). A block
   // with neither modifier gets the full toolbar, which is what a live example needs.
   variants: { shape: ["titled", "bare"], layout: ["flush", "wrap"] },
-  elements: ["toolbar", "title", "actions", "pre"],
+  states: ["collapsed"],
+  elements: ["toolbar", "title", "actions", "body", "pre", "toggle"],
   defaults: {},
 };
 

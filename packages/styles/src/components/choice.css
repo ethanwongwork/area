@@ -111,7 +111,7 @@
 
   .area-checkbox__control:not(:checked):hover,
   .area-radio__control:not(:checked):hover {
-    border-color: var(--area-fg-subtle);
+    border-color: var(--area-fg-muted);
   }
 
   .area-checkbox__control:focus-visible,

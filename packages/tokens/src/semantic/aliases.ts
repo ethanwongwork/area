@@ -84,8 +84,10 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "bg-surface": at("neutral", "surface"),
   /** A quieter region within a surface: table header, inset well, code block. */
   "bg-subtle": at("neutral", "subtle"),
-  /** A code block's own ground. White in light, so the palette's 500 rungs stay legible. */
+  /** A code block's chrome. White in light, so the palette's 500 rungs stay legible. */
   "bg-code": at("neutral", "code"),
+  /** The code region itself, one step back from that chrome. */
+  "bg-code-body": at("neutral", "codeBody"),
   /** A control's own resting fill, and its hover and active states. */
   "bg-component": at("neutral", "component"),
   "bg-component-hover": at("neutral", "componentHover"),
@@ -113,8 +115,6 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "fg-default": at("neutral", "textDefault"),
   /** Supporting copy: captions, helper text, secondary labels. */
   "fg-muted": at("neutral", "textMuted"),
-  /** Chrome that categorises rather than informs: field icons, affixes. */
-  "fg-subtle": at("neutral", "textSubtle"),
   /**
    * Placeholder text.
    *
@@ -171,6 +171,7 @@ export const SLOT_BANDS = {
     "surface",
     "subtle",
     "code",
+    "codeBody",
     "component",
     "componentHover",
     "componentActive",
@@ -179,7 +180,6 @@ export const SLOT_BANDS = {
   text: [
     "textDisabled",
     "textPlaceholder",
-    "textSubtle",
     "textMuted",
     "textTonal",
     "textTonalStrong",

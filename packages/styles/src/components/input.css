@@ -7,7 +7,7 @@
  * absolute positioning is what makes a field stop responding to the density axis.
  *
  * Icons inside a field are chrome, not content: they categorise the field rather than
- * carrying its value, so they take the subtle foreground and do not change on hover.
+ * carrying its value, so they take the muted foreground and do not change on hover.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-input {
@@ -89,7 +89,7 @@
     inline-size: var(--_icon);
     block-size: var(--_icon);
     flex-shrink: 0;
-    color: var(--area-fg-subtle);
+    color: var(--area-fg-muted);
   }
 
   .area-input__icon > svg {
@@ -100,7 +100,7 @@
   /* An affix is a unit or symbol, not a control: never selectable, never focusable. */
   .area-input__affix {
     flex-shrink: 0;
-    color: var(--area-fg-subtle);
+    color: var(--area-fg-muted);
     user-select: none;
     white-space: nowrap;
   }

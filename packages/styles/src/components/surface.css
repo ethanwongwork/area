@@ -290,7 +290,7 @@
     align-items: center;
     block-size: var(--area-control-md);
     padding-inline: var(--area-space-8);
-    color: var(--area-fg-subtle);
+    color: var(--area-fg-muted);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     font-weight: var(--area-weight-strong);
@@ -306,7 +306,7 @@
   .area-menu__shortcut {
     margin-inline-start: auto;
     padding-inline-start: var(--area-space-12);
-    color: var(--area-fg-subtle);
+    color: var(--area-fg-muted);
     font-size: var(--area-text-xs-size);
     font-family: var(--area-font-mono);
   }

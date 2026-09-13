@@ -197,6 +197,28 @@ luminous hue carries far more luminance than a grey, so green-250 measures 1.35:
 light page where neutral-250 measures 1.57. One slot for both forces a choice between an
 invisible green border and a neutral border heavy enough to read as a focus ring.
 
+**Four neutral foregrounds, not five.** `fg-default`, `fg-muted`, `fg-placeholder`,
+`fg-disabled`. There was a fifth, `fg-subtle`, sitting one rung from muted and one from
+placeholder — which put three tokens inside a 1.9:1 band on the light page (3.63, 4.48,
+5.50) and earned the middle one 0.85:1 of separation from its neighbour. Everything that
+used it wanted "quieter than body copy", which is what muted already means.
+
+**Accent defaults to indigo, not blue.** `info` is pinned to blue, so an accent that also
+defaulted to blue made the axis look like it did nothing. OpenAI never has this problem
+because they have no accent hue at all: their brand is the neutral near-black button and
+blue is reserved for info, links and the focus ring. The separation indigo buys is real but
+modest — 17 degrees and an OKLab distance of 0.068, about three and a half JND. Purple
+separates twice as well and is already `discovery`, so taking it would move the collision
+rather than remove it.
+
+**Syntax highlighting is pinned to level 500 in light themes, and that is a waiver.** It is
+below AA: red 4.35–4.42, purple 4.42–4.48, and green 2.89 because green's 500 is a
+glyph-wall rung the palette pins to 3:1. All four are in `contrast/exceptions.ts` with their
+measured numbers, the gate still counts them, and `report.ts` prints them in their own
+section rather than folding them into the pass count. Dark themes are *not* pinned — there
+500 measures APCA Lc 28–31 against a floor of 60, which is unreadable rather than marginal,
+so `chooseVivid` keeps walking.
+
 **A level is a colour, not a job.** Which rung is a background and which is a border is a
 decision the semantic layer makes, per theme, in one table — `INVERSION`. Never reach for a
 numbered rung from component CSS; that is what the semantic tokens are for.

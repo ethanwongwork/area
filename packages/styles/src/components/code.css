@@ -3,11 +3,10 @@
  *
  * Inline code, and the block form with its toolbar.
  *
- * The block is two stacked regions inside one clipped, rounded container: an optional
- * toolbar and the code itself, on `--area-bg-code`. That ground is white in light rather
- * than a rung of the ladder, and the reason is contrast, not taste: the syntax colours are
- * the palette's 500 rungs, and 500 is pinned to clear AA against white specifically. On the
- * quiet grey this block used to sit on, the same colours measure 4.30 against a bar of 4.5.
+ * The block is two stacked regions inside one clipped, rounded container, each with its own
+ * ground: the chrome -- toolbar, header, the show/hide control -- on `--area-bg-code`, and
+ * the code itself one step back on `--area-bg-code-body`. Two grounds rather than one is
+ * what lets a toolbar read as a toolbar without needing a rule under it.
  *
  * Syntax colours are existing semantic tokens, not a new palette. That keeps them
  * theme-reactive and, more usefully, keeps them inside the contrast gate -- a bespoke
@@ -48,8 +47,8 @@
     display: flex;
     align-items: center;
     gap: var(--area-space-8);
-    padding: var(--area-space-8);
-    padding-block-end: 0;
+    padding: var(--area-space-12);
+    padding-block-end: var(--area-space-12);
   }
 
   /*
@@ -58,7 +57,7 @@
    * that copies it sit on one line instead of stacking a toolbar above a caption.
    */
   .area-code-block--titled .area-code-block__toolbar {
-    padding: var(--area-space-6) var(--area-space-6) var(--area-space-6) var(--area-space-12);
+    padding: var(--area-space-8) var(--area-space-8) var(--area-space-8) var(--area-space-16);
     border-block-end: var(--area-border-width) solid var(--area-border-subtle);
   }
 
@@ -76,13 +75,14 @@
 
   .area-code-block--bare .area-code-block__actions {
     position: absolute;
-    inset-block-start: var(--area-space-6);
-    inset-inline-end: var(--area-space-6);
+    inset-block-start: var(--area-space-8);
+    inset-inline-end: var(--area-space-8);
     margin-inline-start: 0;
+    z-index: 1;
   }
 
   .area-code-block--bare .area-code-block__pre {
-    padding-inline-end: var(--area-space-40);
+    padding-inline-end: var(--area-space-48);
   }
 
   .area-code-block__title {
@@ -109,7 +109,8 @@
 
   .area-code-block__pre {
     margin: 0;
-    padding: var(--area-space-12);
+    padding: var(--area-space-16);
+    background-color: var(--area-bg-code-body);
     overflow-x: auto;
     font-family: var(--area-font-mono);
     font-size: var(--area-text-sm-size);
@@ -132,7 +133,86 @@
    */
   .area-code-block__pre .area-syntax-keyword { color: var(--area-fg-discovery-vivid); }
   .area-code-block__pre .area-syntax-tag { color: var(--area-fg-danger-vivid); }
-  .area-code-block__pre .area-syntax-attr { color: var(--area-fg-warning-vivid); }
+  .area-code-block__pre .area-syntax-attr { color: var(--area-fg-success-vivid); }
   .area-code-block__pre .area-syntax-string { color: var(--area-fg-accent-vivid); }
-  .area-code-block__pre .area-syntax-punct { color: var(--area-fg-subtle); }
+  .area-code-block__pre .area-syntax-punct { color: var(--area-fg-muted); }
+
+  /* --- Collapsing ------------------------------------------------------------ */
+
+  /*
+   * A long block shows eight lines and offers the rest.
+   *
+   * Eight is enough to carry a whole component example -- an import, a wrapper and a few
+   * props -- so the common case never needs opening, while a fifty-line demo stops pushing
+   * the next section off the page.
+   *
+   * The body is the positioning context rather than the block, so the control can sit over
+   * the code when collapsed and below it when open without either state needing its own
+   * markup. The height is computed from the line-height the code is actually set in, not
+   * from a guessed pixel count, so it stays exactly eight lines at any type scale.
+   */
+  .area-code-block__body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .area-code-block[data-collapsed] .area-code-block__pre {
+    max-block-size: calc(var(--area-text-sm-leading) * 8 + var(--area-space-16) * 2);
+    overflow: hidden;
+  }
+
+  .area-code-block__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--area-space-6);
+    inline-size: 100%;
+    block-size: var(--area-control-md);
+    padding: 0;
+    border: 0;
+    border-block-start: var(--area-border-width) solid var(--area-border-subtle);
+    background-color: var(--area-bg-code);
+    color: var(--area-fg-muted);
+    font-family: inherit;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-strong);
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+
+  .area-code-block__toggle:hover {
+    color: var(--area-fg-default);
+  }
+
+  .area-code-block__toggle:focus-visible {
+    outline: var(--area-ring-width) solid var(--area-border-focus);
+    outline-offset: calc(var(--area-ring-offset) * -1);
+  }
+
+  /*
+   * Collapsed, the control floats over the last visible lines and carries the fade with it.
+   *
+   * The gradient is the body's own ground rather than a shadow, so the code appears to run
+   * out rather than to be covered -- and it has no border, because a rule would contradict
+   * the fade by drawing a hard edge exactly where the softness is meant to be.
+   */
+  .area-code-block[data-collapsed] .area-code-block__toggle {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: calc(var(--area-control-md) * 2);
+    align-items: flex-end;
+    padding-block-end: var(--area-space-8);
+    border-block-start: 0;
+    background-image: linear-gradient(
+      to bottom,
+      transparent,
+      var(--area-bg-code-body) 55%,
+      var(--area-bg-code-body)
+    );
+    background-color: transparent;
+  }
 }

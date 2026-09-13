@@ -99,10 +99,18 @@ export const INVERSION = {
    */
   tonalBorder: { light: 400, dark: 600 },
   tonalBorderStrong: { light: 500, dark: 500 },
-  /** Text, from the least emphatic that is still content to the most. */
+  /**
+   * Text, from the least emphatic that is still content to the most.
+   *
+   * Four neutral foregrounds, not five. `textSubtle` sat at 500 between placeholder at 450
+   * and muted at 550 -- one rung from each, which is the smallest step this ladder can
+   * express. Measured on the light page that put three tokens inside a 1.9:1 band (3.63,
+   * 4.48, 5.50), and the middle one earned 0.85:1 of separation from the token below it.
+   * Its consumers -- field affixes, syntax punctuation, a nav's trailing slot, group
+   * headings -- all wanted "quieter than body copy", which is what muted already means.
+   */
   textDisabled: { light: 350, dark: 550 },
   textPlaceholder: { light: 450, dark: 450 },
-  textSubtle: { light: 500, dark: 350 },
   textMuted: { light: 550, dark: 250 },
   /** Tonal text, and the most saturated rung of a family that is still readable as it. */
   textTonal: { light: 650, dark: 200 },
@@ -114,8 +122,15 @@ export const INVERSION = {
   inverseText: { light: 25, dark: 900 },
   secondaryFill: { light: 700, dark: 200 },
   secondaryFillHover: { light: 750, dark: 100 },
-  /** The ground a code block sits on. See `Position` for why light is white and not a rung. */
+  /**
+   * A code block's chrome -- its toolbar and header row. White in light; see `Position`.
+   */
   code: { light: "white", dark: 800 },
+  /**
+   * The code itself, one step back from that chrome so the two regions read as separate
+   * materials inside one container rather than as a single flat panel.
+   */
+  codeBody: { light: 25, dark: 850 },
   /** The level a translucent scrim is solved from. */
   scrim: { light: 600, dark: 950 },
 } as const satisfies Record<string, Inversion>;

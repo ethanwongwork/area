@@ -58,6 +58,6 @@
     background-color: transparent;
     border-color: transparent;
     box-shadow: none;
-    color: var(--area-fg-subtle);
+    color: var(--area-fg-muted);
   }
 }

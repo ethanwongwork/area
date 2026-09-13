@@ -69,16 +69,17 @@
    * pitch), so it is a row that happens not to be interactive rather than a caption
    * squeezed between two.
    *
-   * The colour is `fg-subtle`, a rung lighter than `fg-muted`. A heading that names a run
-   * of links should recede behind them; muted is for text being read, not for a label on
-   * something else.
+   * The colour is `fg-muted`, which is what "quieter than body copy" means now that the
+   * foreground ladder is four tokens rather than five. A heading that names a run of links
+   * should recede behind them, and against `fg-default` items at 14.13:1 a muted heading at
+   * 5.50:1 is a clear step back.
    */
   .area-nav__label {
     display: flex;
     align-items: center;
     block-size: var(--area-control-md);
     padding-inline: var(--area-space-8);
-    color: var(--area-fg-subtle);
+    color: var(--area-fg-muted);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     font-weight: var(--area-weight-strong);
@@ -173,7 +174,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--area-space-4);
-    color: var(--area-fg-subtle);
+    color: var(--area-fg-muted);
     font-weight: var(--area-weight-regular);
   }
 

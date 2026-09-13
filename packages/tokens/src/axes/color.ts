@@ -149,7 +149,6 @@ export const NEUTRAL_AXIS: AxisDefinition = {
     "--area-bg-",
     "--area-fg-default",
     "--area-fg-muted",
-    "--area-fg-subtle",
     "--area-fg-placeholder",
     "--area-fg-disabled",
     "--area-fg-on-inverse",

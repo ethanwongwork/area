@@ -27,6 +27,15 @@ export interface ContrastAssertion {
 const TONES = ["accent", "danger", "warning", "caution", "success", "info", "discovery"] as const;
 
 /**
+ * The four tones a code block paints with: tags, strings, attributes and keywords.
+ *
+ * Named here rather than inferred, because `code.css` is where they are chosen and this is
+ * where they are checked, and the two have to agree. Adding a fifth syntax colour without
+ * adding it here would ship an unmeasured foreground.
+ */
+const SYNTAX_ROLES: readonly string[] = ["danger", "success", "accent", "discovery"];
+
+/**
  * Resting strokes: a deliberate, documented departure from a flat 3:1 reading of
  * WCAG 1.4.11, and the one place in this file where Area asserts less than the headline
  * number. It is stated here rather than buried in an allowlist.
@@ -74,7 +83,6 @@ function textAssertions(): ContrastAssertion[] {
     // Placeholders are not content, and APCA's own conformance table names Lc 30 as the
     // level for exactly this case. WCAG's non-text 3:1 still applies.
     out.push({ fg: "fg-placeholder", bg, wcag: 3, apca: APCA.PLACEHOLDER, note: "placeholder" });
-    out.push({ fg: "fg-subtle", bg, wcag: 3, apca: APCA.LARGE, note: "field chrome and icons" });
   }
   return out;
 }
@@ -88,18 +96,19 @@ function tonalAssertions(): ContrastAssertion[] {
     for (const bg of ["bg-page", "bg-surface", "bg-subtle", `${tone}-surface`]) {
       out.push({ fg: `fg-${tone}`, bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: `${tone} text` });
     }
-    // The vivid rung is the loudest a tone gets as text, and it is *computed* per family
-    // rather than chosen. It is asserted on `bg-code` and nowhere else, because that is the
-    // only ground it is used on -- syntax highlighting -- and the ground is what decides
-    // whether the palette's 500 rung is legible. Asserting it against every surface in the
-    // system would force it a rung deeper than 500 to satisfy a pairing nothing renders.
-    out.push({
-      fg: `fg-${tone}-vivid`,
-      bg: "bg-code",
-      wcag: WCAG.TEXT,
-      apca: APCA.CONTENT,
-      note: `${tone} vivid text on a code block`,
-    });
+    // The vivid rung is asserted for the four tones a code block actually paints with, on
+    // the ground it paints them on. Asserting the other three would be asserting pairings
+    // nothing renders -- and, since vivid is pinned to 500 in light, would have meant three
+    // more waivers for colours that never appear.
+    if (SYNTAX_ROLES.includes(tone)) {
+      out.push({
+        fg: `fg-${tone}-vivid`,
+        bg: "bg-code-body",
+        wcag: WCAG.TEXT,
+        apca: APCA.CONTENT,
+        note: `${tone} vivid text on a code block`,
+      });
+    }
     // The solid fill and its hover must both carry the foreground the scale declared.
     out.push({
       fg: `fg-on-${tone}`,

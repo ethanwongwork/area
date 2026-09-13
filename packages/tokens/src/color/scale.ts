@@ -229,10 +229,22 @@ function chooseSolid(
  * everywhere would have shipped illegible syntax highlighting in exactly six hues.
  */
 function chooseVivid(steps: readonly ScaleStep[], theme: Theme): Level {
-  const page = groundHex(INVERSION.code[theme]);
+  // Light is pinned to 500, by instruction, accepting a measured shortfall: red lands at
+  // 4.42 against a 4.5 bar, purple 4.48, blue 4.47 -- and green 2.93, which is not
+  // marginal. Every one of those is recorded in `contrast/exceptions.ts` with its number,
+  // so the gate still reports them rather than passing them in silence.
+  //
+  // Dark is *not* pinned, and that is not the same decision made twice. 500 is calibrated
+  // against white, so on a dark ground the same hexes measure APCA Lc 28-31 against a floor
+  // of 60 -- roughly half, which is unreadable rather than slightly under. Dark keeps the
+  // walk.
+  if (theme === "light") return 500;
+
+  // Measured against the body, which is the ground the code actually sits on.
+  const page = groundHex(INVERSION.codeBody[theme]);
   const start = steps.findIndex((s) => s.level === 500);
-  // Light pages need the text darker; dark pages need it lighter.
-  const direction = theme === "light" ? 1 : -1;
+  // A dark ground needs the text lighter, which is a lower rung.
+  const direction = -1;
   // Both standards, as everywhere else. WCAG alone let six families through in dark mode
   // at APCA Lc 41-46 against a floor of 60 -- the exact overstatement near black that is
   // the reason this system gates on APCA in dark themes at all.
