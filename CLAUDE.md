@@ -35,6 +35,19 @@ substituted where it is declared and then inherits already-resolved, so a deriva
 `:root` bakes in `:root`'s inputs. The `[data-area-density], [data-area-radius], ...`
 selector block in `emit/css.ts` is what makes subtree scoping correct.
 
+**A size tier is the control's outer height, on every component that has one.**
+`--sm` is 28px whether it is a button, an input, a select, a slider, a chip or a segmented
+control. Segmented broke this for a while by naming its *item* instead, which made the
+track a tier taller than its own class said -- an `xs` segmented rendered 28px beside a
+24px `xs` select -- and every call site had to know the offset and pick one tier down. The
+item is derived now (`--_item`), and its inset is a flat 2px because scaling it put the
+`sm` and `md` items at the same 24px once the track carried the tier.
+
+Checkbox, radio and switch are the documented exceptions: they sit on the *icon* ramp, not
+the control ramp, because they are glyphs rather than boxes. At the default density that
+ramp is {12, 16, 16, 16, 24}, so their `sm`, `md` and `lg` are all 16px tall and differ
+only in the switch's track width.
+
 **Every number in component CSS traces to a token.** A literal pixel value is a bug unless
 it is a hairline (`1px`) or a mask geometry. If a value is not on a ramp, derive it with
 `calc()` from values that are — or change the ramp.
@@ -152,7 +165,8 @@ rectangles in it.
 
 **`--area-radius-full` does not follow the axis, on purpose.** Every use is either
 shape-defining — a radio that is not a circle is a checkbox, a switch that is not a pill is
-not a switch, and the same goes for the status dot, the spinner and the selection rail — or
+not a switch, a slider handle that is not a circle reads as a segment of its own track, and
+the same goes for the status dot, the spinner, the chip's swatch and the selection rail — or
 an explicit opt-in (`--pill`, `--circle`). An avatar wanting corners asks for
 `.area-avatar--square`, which does follow the axis.
 
@@ -193,13 +207,29 @@ the cost of eight tones and it is recorded in `color/presets.ts` rather than red
 
 ## Icons
 
-**Fluent System Icons, generated.** `apps/docs/src/icons.tsx` and
-`apps/docs/scripts/icons.generated.mjs` are both output of `gen-icons.mjs`, which reads
-`@fluentui/svg-icons`. Never hand-edit either, and never hand-draw a path: add the export
-name and its Fluent id to the map and re-run. Fluent's icons are *filled* paths, so they
-take `fill` and never `stroke-width` — a stroke-based icon dropped in beside them will not
-match at any weight. Use the 16px cut at 16px rather than scaling the 20 or 24, because they
-are optically corrected per size.
+**Fluent System Icons, generated, with Stadium's marks vendored beside them.**
+`apps/docs/src/icons.tsx`, `apps/docs/scripts/icons.generated.mjs`,
+`apps/docs/scripts/icons.catalog.mjs` and the two sprites in `apps/docs/assets` are all
+output of `gen-icons.mjs`, which reads `@fluentui/svg-icons` and the vendored files in
+`assets/stadium-icons`. Never hand-edit any of them and never hand-draw a path: add the
+export name and its Fluent id to the map, or drop the file in the directory, and re-run.
+Use the 16px cut at 16px rather than scaling the 20 or 24, because they are optically
+corrected per size.
+
+**The rule is optical weight, not fill-versus-stroke.** This used to read "a stroke-based
+icon dropped in beside them will not match at any weight", which was the right warning
+attached to the wrong property. Fluent's marks are filled paths and Stadium's twenty-nine
+are stroked, and they match — because Stadium fitted them by measurement: a 1-unit rule at
+16, round terminals, and an ink box of 12 units for a rectilinear mark or 14 for a round
+one, which is where Fluent's own square and round marks land. What will not match is a mark
+that skipped that fitting, stroked or filled. Stadium's inner markup is therefore vendored
+verbatim, stroke attributes and all; reducing it to a path list is what would break the fit.
+
+**The browser documents the whole set, from sprites.** 1,739 marks is 711 KB of path data in
+one style, which cannot be inlined per page, so `assets/icons.svg` and
+`assets/icons-filled.svg` carry the geometry and a grid cell is a `<use>` reference.
+Switching style rewrites one href prefix across the grid; the two files hold the same ids
+under the same names.
 
 ## Colour
 
@@ -209,18 +239,42 @@ and C are what make contrast predictable, so they are never touched. `scale.ts` 
 table and computes what it does not carry: each rung's translucent twin, which foreground it
 takes, which rung is the solid fill, and which is the family's own quietest stroke.
 
-The one thing Area does change is hue, through `HUE_ROTATION` in `curves.ts`. A rotation moves
-character without moving contrast — the gamut map afterwards holds L and gives back at most
-0.0003 of chroma — and a family with no entry ships its exported hex byte for byte. Still do
-not edit a hex. If a lightness or a chroma is wrong it is wrong in the export; if a hue is
-wrong, rotate it.
+The one thing Area may change is hue, through `HUE_ROTATION` in `curves.ts`. A family with no
+entry ships its exported hex byte for byte. Still do not edit a hex: if a lightness or a
+chroma is wrong it is wrong in the export; if a hue is wrong, rotate it.
+
+**A rotation is not free, and how expensive it is depends entirely on where the family sits
+in the gamut.** −4 on red cost 0.0003 of chroma and nothing else, which is where the old
+claim that rotation is "close to free" came from. +14 on green costs **0.043 of chroma** at
+the peak rungs and moves L by **0.009**, because green at hue 150 sits in a wide part of
+sRGB and hue 161 does not — the mapper holds what it can and gives back the rest. Measure
+the cost of a rotation against `palette.json` rather than assuming it; `contrast/report.ts`
+then says what the luminance change did.
 
 **Rotations are checked against adjacent-hue separation, never copied.** Matching a reference
 exactly (red +10, orange −11) would have pulled red and orange to 14 degrees apart, half the
-roughly 30 that keeps danger and warning from reading as one signal. Red rotates the other
-way instead: −4 degrees toward pink, which widens red-to-orange from 35 to 39 and narrows
-red-to-pink from 20 to 16 — the right trade, since orange is the warning tone and pink is
-bound to no role at all.
+roughly 30 that keeps danger and warning from reading as one signal. `HUE_ROTATION` is empty
+today — every family ships its export unchanged. Red carried −4 degrees toward pink for a
+while and was reverted; the trade to weigh if it is tried again is red-to-orange widening from
+35 to 39 against red-to-pink narrowing from 20 to 16.
+
+**Chroma is trimmed at the light end, and only there.** `CHROMA_TRIM` in `curves.ts` is the
+one place Area touches chroma, and it exists because Stadium's anchor and this one answer
+different questions. The export pins a rung against *white* — a statement about one family,
+which says nothing about that family beside its ten siblings at the same rung. At the dark
+end that does not matter, because the gamut squeezes every hue into the same narrow band. At
+the light end it does: sRGB holds far more chroma in a pale green than in a pale blue, so
+the families that can be bright, are. Measured at rung 150, chroma ran 0.051 (orange) to
+0.138 (lime) around a mean of 0.079 — lime and green at nearly twice their peers, which is
+what makes a green tint read as a wash where a blue one reads as a tint.
+
+Three families are trimmed: **lime 0.72, green 0.78, yellow 0.88**, and the trim tapers —
+full strength at rung 200 and below, gone by 400. That taper is the whole argument: the
+divergence is a light-end effect, and trimming the mid rungs would take the fill and the
+solid down with the tint, which are the rungs the palette anchored deliberately. L is never
+touched, so no wall moves; the spread at rung 150 closes from 0.087 to 0.054 and at 200 from
+0.086 to 0.049. `scale.test.ts` bounds all four light rungs, so the trim cannot be dropped
+quietly — remove it and four assertions fail.
 
 **A rung is an ordinal, not a measurement.** Higher is darker. An earlier ladder named each
 level after its own lightness and asserted it; this one cannot, because Stadium anchors to
@@ -270,7 +324,7 @@ rather than remove it.
 **Syntax highlighting is pinned to level 500 in light themes.** The code block is white, and
 white is exactly what the palette pins 500 against, so red, purple, blue and the default
 indigo all clear AA there on their own. What remains waived is the glyph wall: green at
-3.06, and whatever a consumer points the brand axis at. Both are in
+2.80 — 3.06 before its hue rotation — and whatever a consumer points the brand axis at. Both are in
 `contrast/exceptions.ts` with their measured numbers, the gate still counts them, and
 `report.ts` prints them in their own section rather than folding them into the pass count.
 Dark themes are *not* pinned — there 500 measures APCA Lc 28–31 against a floor of 60,
@@ -304,11 +358,14 @@ forbids. The role wins the namespace; `cool` and `warm` keep their own primitive
 
 **The documentation's own spacing comes from the density axis.** `--docs-pad` is
 `--area-gutter-sm` and `--docs-gutter` is `--area-gutter-xl`, so the site tightens with the
-system it documents instead of standing still while the components inside it shrink. The
-header's height is derived from them too — control plus inset twice plus the hairline — which
-is what makes its padding even on all four sides rather than merely close. Beware that a
-segmented control's outer height is one tier above its name: its track adds a 2px inset at
-each end, so an `xs` segmented and an `sm` button are both 28px.
+system it documents instead of standing still while the components inside it shrink.
+
+There is no page header. The two rails are each an `area-panel --xs --flush` carrying their
+own bar, so the wordmark on the left and the panel title on the right derive the same height
+from the same formula and sit on one line with the document between them. `--docs-chrome`
+was retired with the header: a component's inset has to come from its own ramp, which is why
+the panel's size tiers step on the *gutter* ramp rather than the flat spacing ramp — a
+compact panel has to tighten like the controls inside it.
 
 ## Token badges
 
@@ -324,6 +381,82 @@ The swatch is a rounded square, never a circle, and its radius is concentric wit
 the badge's corner less the padding it is inset by, floored at 0 for the sharp preset. Its
 ring is a translucent foreground rather than a border colour, because a fixed light stroke is
 invisible on a pale swatch — the one case the ring exists for.
+
+## Panel
+
+**The inspector is a component, not a page layout.** `area-panel` is a titled surface of
+rows that act on something beside it: Card presents content, Dialog interrupts, Panel sits
+next to its subject and stays. It was `.docs-inspector` first, and everything in it turned
+out to be a system decision rather than a site one — how a section is separated, how a bar
+relates to a body, where a footer action sits — so it moved into the system and the docs
+now use it like any other consumer. Both rails are `area-panel --flush`.
+
+**A panel does not own its rows.** A row is `area-field --inline`, which is what gives every
+control one left edge; the panel owns the container, the grouping and the seams. A control
+that can fill its column does (`area-segmented --full-width` is the opt-in that puts a
+segmented track's right edge on the select's above it); a switch or checkbox cannot fill and
+sits at the column's start, so the left edge still holds.
+
+**A section is a rule and a name, not a box.** Every inspector worth copying separates its
+groups with a hairline rather than nesting each in a panel of its own, which is what keeps
+eight groups from reading as eight cards inside one card. The last section drops its rule.
+
+**Select is called Select.** A combobox is a text input with a list attached — filterable,
+typeahead, `role="combobox"` — and this has no text entry, so the name would promise
+behaviour that is not there. "Dropdown" names the popup's behaviour rather than the control,
+and Menu already drops down. Radix, shadcn, Material, Primer, Ant, Chakra, Carbon and
+Polaris all land on Select. If a searchable one is ever needed it is a *second* component
+called Combobox, not a rename of this one.
+
+## Docs CSS and the cascade
+
+**`DOCS_CSS` lives in `area.base`, which loses to `area.components`.** The audit catches a
+docs rule that names an `.area-*` class. It cannot catch one that names only a docs class on
+an element that *also* carries an Area class — `.docs-sidebar` is an `area-panel`, and a
+corner toggle is an `area-button`, so a `display` rule on either is just as dead. Both were
+written that way first and both silently did nothing.
+
+The sanctioned door is **`@layer area.utilities`**, which the layer order puts after
+components precisely so a rule like this can win without `!important`. `DOCS_CSS` closes its
+base layer and opens a small utilities block for exactly the rules that must beat a
+component: rail visibility, and nothing else.
+
+**A backtick anywhere inside `DOCS_CSS` or `DOCS_SCRIPT` ends the template literal** — a
+comment quoting a class name is enough. Node then reports a syntax error on whatever word
+follows, which says nothing about the cause. The dogfood audit now checks for this as text,
+before it imports the file, because a file with this fault cannot be imported at all.
+
+## The inspector
+
+The docs' right rail is a persistent inspector, the way Figma and Framer both put controls
+beside the thing they act on rather than in a drawer over it. It replaced a drop-down strip
+of eight identical segmented controls, and it replaced the on-this-page column — an outline
+is read once on arrival, where a panel of controls is returned to, so the outline became a
+wrapping strip under the lede (`area-menu--inline --row`) and the rail went to the controls.
+
+**Which control an axis gets is decided by the shape of its values, never by uniformity.**
+
+| shape of the set | control | axes |
+| --- | --- | --- |
+| two states, one of them "on" | Switch | theme |
+| short, unordered, tiny labels | Segmented | neutral, density |
+| long and unordered | Chip | accent — eleven hues |
+| labels that will not fit a track | Select | typography, surface, motion |
+| an ordered ramp with a direction | Slider | radius — 0 to pill |
+
+Eight segmented controls said every axis was the same kind of choice. They are not: radius
+is a ramp you scrub, accent is a palette you pick from, and dark mode is a thing you turn on.
+
+**Every control declares `data-axis` and every option `data-value`**, so one delegated
+listener drives all five shapes and the shape is read off the markup — a `<select>`, an
+input with `data-on`, one with `data-values`, or a group with `[data-value]` children. A
+control can be swapped for another without touching the script. The customizer dialog is
+handed the docked inspector's own body rather than a second set of controls, so an axis with
+two controls on screen stays in sync through one `sync()`.
+
+**The radius slider runs over preset indices, not over radius values.** The ramp ends in
+`pill`, which is not a number, and the numeric steps are not evenly spaced either. An index
+keeps every stop one notch apart, which is what a scrub should feel like.
 
 ## Documentation sections
 
