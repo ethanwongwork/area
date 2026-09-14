@@ -1,6 +1,6 @@
 ---
 name: checkpoint
-description: Close out a working session cleanly so the next one can resume without compacting. Runs the verification suite, commits and pushes, rewrites .claude/HANDOFF.md, and appends to .claude/JOURNAL.md. Use this whenever the user says checkpoint, handoff, "wrap up", "I'm going to close this session", "save your progress", "context is getting full", or asks how to continue tomorrow — and offer it unprompted when the session is long enough that context pressure is likely.
+description: Close out a working session cleanly so the next one can resume without compacting. Runs the verification suite, commits and pushes, rewrites .Codex/HANDOFF.md, and appends to .Codex/JOURNAL.md. Use this whenever the user says checkpoint, handoff, "wrap up", "I'm going to close this session", "save your progress", "context is getting full", or asks how to continue tomorrow — and offer it unprompted when the session is long enough that context pressure is likely.
 ---
 
 # Checkpoint
@@ -69,7 +69,7 @@ outward-facing action and the user may not want one yet.
 
 ## Write the handoff
 
-Overwrite `.claude/HANDOFF.md`. It describes **one** state: the current one. History
+Overwrite `.Codex/HANDOFF.md`. It describes **one** state: the current one. History
 belongs in the journal and in the git log, and a handoff that accretes becomes a thing
 nobody reads.
 
@@ -108,7 +108,7 @@ path. Quote the numbers. Do not write "as discussed".
 
 ## Append to the journal
 
-Add one entry to the top of `.claude/JOURNAL.md`, under the heading, newest first:
+Add one entry to the top of `.Codex/JOURNAL.md`, under the heading, newest first:
 
 ```markdown
 ## <date> — <short title>
@@ -132,7 +132,7 @@ the one thing that makes the handoff wrong.
 
 ## Resuming
 
-At the start of a session that continues previous work, read `.claude/HANDOFF.md` first.
-It is written to be the only file you need. Reach for `.claude/JOURNAL.md` only when you
+At the start of a session that continues previous work, read `.Codex/HANDOFF.md` first.
+It is written to be the only file you need. Reach for `.Codex/JOURNAL.md` only when you
 need to know *why* something is the way it is and the handoff does not say — it is a
 reference, not a briefing, and reading it has a cost.

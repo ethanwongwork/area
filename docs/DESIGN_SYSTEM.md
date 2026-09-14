@@ -1,22 +1,12 @@
-# Area — working conventions
+# Area design-system conventions
 
-Area is a design system tuned along eight axes. Read this before changing anything in
-`packages/`.
-
-**Resuming work: read `.claude/HANDOFF.md` first.** It is written to be the only file you
-need to pick up where the last session stopped — current state, what is in flight, what is
-next, and the traps that session hit. `.claude/JOURNAL.md` is a reference rather than a
-briefing: reach for it when a decision looks arbitrary and the handoff does not say why.
-
-**Ending a session: run the `checkpoint` skill** rather than letting the context compact.
-Compaction keeps the shape of a session and drops the specifics, which are the expensive
-part. Offer a checkpoint unprompted once a session has run long enough that context pressure
-is likely — a good signal is when you have stopped being able to recall earlier decisions
-without re-reading files.
+Detailed rules and rationale migrated from the prior project instructions. Read the relevant
+sections before changing tokens, components, or documentation. Start with [AGENTS.md](../AGENTS.md)
+for orientation and commands. Source code and measured checks resolve stale historical claims.
 
 ## The invariants
 
-These are not preferences. Each one is enforced by a check that fails the build, and each
+These are not preferences. Some are mechanically checked by tests or build audits; others require code review. Each
 was arrived at by a specific failure — breaking one silently reintroduces that failure.
 
 **Axes own disjoint custom-property namespaces.** No two axes may write the same property.
@@ -52,10 +42,11 @@ only in the switch's track width.
 it is a hairline (`1px`) or a mask geometry. If a value is not on a ramp, derive it with
 `calc()` from values that are — or change the ramp.
 
-**Contrast is a build gate.** `packages/tokens/src/contrast/` asserts every pairing a
-component can render, across all 144 shipped themes, under WCAG 2.2 always and APCA as a
-hard gate in dark themes. To change a colour, change `LEVELS` or `INVERSION` in
-`color/curves.ts` and let the gate tell you what broke; `contrast/report.ts` groups
+**Contrast is a test gate.** `packages/tokens/src/contrast/` asserts every pairing a
+component can render, across all 66 shipped themes, under WCAG 2.2 always and APCA as a
+hard gate in dark themes. For semantic changes, edit `INVERSION` in
+`color/curves.ts`; for hue and light-end chroma, use the documented adjustment tables.
+Keep the vendored palette and its ladder intact, and let the gate tell you what broke; `contrast/report.ts` groups
 failures by assertion rather than printing them one theme at a time.
 
 **The CSS and the React API cannot drift.** Both derive from `packages/styles/src/manifest.ts`.
@@ -68,7 +59,7 @@ sample.
 
 **The documentation is built from the system.** `apps/docs/scripts/check-dogfood.mjs`
 fails the build on a raw length, colour or font size in the docs stylesheet, and on any
-inline style carrying a literal beyond a demo's own framing width. Five site-layout values
+inline style carrying a literal beyond a demo's own framing width. Site-layout exceptions
 are allowlisted by name, each with a stated reason. If the docs need something the system
 does not have, add it to the system.
 
@@ -182,7 +173,9 @@ is shadcn/ui's number; the 6px preset is still there for anyone who wants the Pr
 
 ## Tones
 
-Eight: neutral, accent, info, success, warning, caution, danger, discovery. `neutral` is not
+Eight public tone values: `primary`, `brand`, `info`, `success`, `warning`, `caution`,
+`danger`, `discovery`. The older rationale below calls primary “neutral” and brand “accent”;
+those are conceptual descriptions, not current Button prop values. `primary` is not
 a brand colour — a near-black button is the strongest call to action a neutral palette can
 make, and it stays strongest whatever the brand axis is set to.
 
@@ -253,8 +246,8 @@ then says what the luminance change did.
 
 **Rotations are checked against adjacent-hue separation, never copied.** Matching a reference
 exactly (red +10, orange −11) would have pulled red and orange to 14 degrees apart, half the
-roughly 30 that keeps danger and warning from reading as one signal. `HUE_ROTATION` is empty
-today — every family ships its export unchanged. Red carried −4 degrees toward pink for a
+roughly 30 that keeps danger and warning from reading as one signal. `HUE_ROTATION` currently contains `green: 14`; all other families have no hue rotation.
+The light-end chroma trims described below also apply. Red carried −4 degrees toward pink for a
 while and was reverted; the trade to weigh if it is tried again is red-to-orange widening from
 35 to 39 against red-to-pink narrowing from 20 to 16.
 
@@ -432,7 +425,7 @@ The docs' right rail is a persistent inspector, the way Figma and Framer both pu
 beside the thing they act on rather than in a drawer over it. It replaced a drop-down strip
 of eight identical segmented controls, and it replaced the on-this-page column — an outline
 is read once on arrival, where a panel of controls is returned to, so the outline became a
-wrapping strip under the lede (`area-menu--inline --row`) and the rail went to the controls.
+wrapping strip under the lede (`area-menu--inline`) and the rail went to the controls.
 
 **Which control an axis gets is decided by the shape of its values, never by uniformity.**
 
@@ -476,7 +469,7 @@ one-off that has no useful grid form.
 
 Tables, code containers and segmented controls carry the original playground's visual
 language deliberately: a fully ruled grid in a clipped rounded container; a code block
-with a toolbar above it on a surface one step quieter than the page; a segmented track
+with copy inside the code on a surface one step quieter than the page; a segmented track
 whose radius is `inner + inset` with an inset ring rather than a border. The shapes are
 the original's, the density and tokens are the current system's.
 
@@ -504,5 +497,6 @@ checked in a real browser.
 
 ## What is not here
 
-The previous system (`index.html`, `figma-sync.js`) is superseded. Its design rationale is
-preserved in git at commit `c35ac15`. Figma sync was dropped deliberately.
+The previous system is archived under `archive/playground/`, with its design rationale
+also preserved in git at commit `c35ac15`. Figma sync was dropped deliberately.
+See [the archive guide](../archive/playground/README.md) before consulting it.

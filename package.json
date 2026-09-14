@@ -19,7 +19,7 @@
     "audit": "npm run audit -w @area/docs"
   },
   "engines": {
-    "node": ">=20"
+    "node": "^22.18.0 || ^24.0.0 || >=26.0.0"
   },
   "allowScripts": {
     "esbuild@0.25.12": true

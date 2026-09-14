@@ -3,7 +3,7 @@
 A design system you tune along eight axes.
 
 ```bash
-npm install
+npm ci
 npm run build
 npm run dev -w @area/docs     # http://localhost:4321
 ```
@@ -77,17 +77,18 @@ primitives unchanged.
 
 ## Guarantees
 
-Each of these is a check that fails the build, not a claim.
+These guarantees are covered by tests, build audits, and the review conventions in
+[AGENTS.md](AGENTS.md). Run the full verification sequence below; the build alone does not run tests.
 
 - **The colour maths is proven, not assumed.** OKLab conversions are checked against
   `colorjs.io` to 1e-12 per channel across both gamuts, and the gamut mapper matches the
   CSS Color 4 reference to a fifth of a JND.
-- **Contrast is a build gate.** 172 assertions across 66 shipped themes, under WCAG 2.2
+- **Contrast is a test gate.** 172 assertions across 66 shipped themes, under WCAG 2.2
   always and APCA as a hard gate in dark themes, because the WCAG 2.x formula overstates
   contrast near black. Four exceptions are waived — each measured, recorded with its
   number, and counted separately rather than folded into the pass count.
 - **Axes cannot collide.** The registry throws if two axes write one property.
-- **The CSS and the React API cannot drift.** Both derive from one manifest per component
+- **The CSS and the React API cannot drift.** Variant helpers and the parity audit use one manifest per component
   (36 of them), checked in both directions: a declared variant with no selector fails, and
   so does a selector no manifest declares.
 - **A size tier means the same thing everywhere.** `--sm` is 28px on a button, an input, a
@@ -124,6 +125,21 @@ node packages/tokens/src/contrast/report.ts       # gate failures grouped by ass
 preset of every axis and returns the computed values — that is how axis orthogonality is
 checked in a real browser rather than asserted.
 
-See [CLAUDE.md](CLAUDE.md) for the working conventions and the reasoning behind each
-invariant, and [.claude/HANDOFF.md](.claude/HANDOFF.md) to pick up where the last session
-stopped.
+## Development and project knowledge
+
+Use Node 22.18+ on the 22.x line, 24.x, or 26+ (see `package.json`). The scripts execute
+TypeScript directly in Node; Node 20 is not supported by this workflow or installed Vitest.
+Dependencies are locked by `package-lock.json`; use `npm ci` for a fresh checkout.
+
+The dev command builds docs once and starts a static server. After editing sources, run
+`npm run build:docs` and refresh the preview. `PORT=4322 npm run dev` uses a different port.
+No environment secrets are needed. The docs use externally hosted Geist fonts.
+
+- [AGENTS.md](AGENTS.md): orientation, commands and essential rules.
+- [Architecture](docs/ARCHITECTURE.md): source boundaries and build flow.
+- [Design system](docs/DESIGN_SYSTEM.md): detailed conventions and rationale.
+- [Maintenance](docs/MAINTENANCE.md): checks, regeneration and known limitations.
+- [Current handoff](.Codex/HANDOFF.md) and [journal](.Codex/JOURNAL.md): session state and decisions.
+- [Migration report](docs/MIGRATION.md): cleanup evidence and validation.
+- [Archived playground](archive/playground/README.md): old prototype and Figma utilities;
+  these are separate from the current application.

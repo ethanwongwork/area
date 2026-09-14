@@ -1,6 +1,12 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
-const DIR = "/Users/ethanwong/Desktop/area/node_modules/@fluentui/svg-icons/icons";
-const ASSETS = "/Users/ethanwong/Desktop/area/apps/docs/assets";
+import { createRequire } from "node:module";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const require = createRequire(import.meta.url);
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const DIR = join(dirname(require.resolve("@fluentui/svg-icons/package.json")), "icons");
+const ASSETS = join(ROOT, "assets");
 
 /*
  * Stadium's own marks, vendored.
@@ -146,7 +152,7 @@ ${Object.entries(STADIUM)
   )
   .join("\n\n")}
 `;
-writeFileSync("/Users/ethanwong/Desktop/area/apps/docs/src/icons.tsx", tsx);
+writeFileSync(join(ROOT, "src/icons.tsx"), tsx);
 
 const js = `/**
  * Toolbar icons: Fluent System Icons, 16px Regular, generated from \`@fluentui/svg-icons\`.
@@ -162,7 +168,7 @@ ${Object.entries(TOOLBAR)
   )
   .join("\n")}
 };`;
-writeFileSync("/Users/ethanwong/Desktop/area/apps/docs/scripts/icons.generated.mjs", js);
+writeFileSync(join(ROOT, "scripts/icons.generated.mjs"), js);
 
 /* --- The catalogue and its sprites ---------------------------------------- */
 
@@ -220,7 +226,7 @@ const catalog = [
 ].map((entry) => ({ ...entry, terms: entry.name.split("-").join(" ") }));
 
 writeFileSync(
-  "/Users/ethanwong/Desktop/area/apps/docs/scripts/icons.catalog.mjs",
+  join(ROOT, "scripts/icons.catalog.mjs"),
   `/**
  * The icon catalogue: every mark the browser lists, by name and sprite id.
  *

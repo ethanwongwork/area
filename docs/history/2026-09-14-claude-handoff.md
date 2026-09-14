@@ -1,3 +1,7 @@
+> Historical snapshot from before the Codex migration. Its paths and next steps are not
+> current instructions. See [the current handoff](../../.Codex/HANDOFF.md) and the
+> [preserved proposal](../plans/proposed/contrast-policy.md).
+
 # Handoff — 2026-09-14
 
 **Branch** `main` · **Last commit** `8281d09` `docs: rewrite the README, and record what this session changed and why`

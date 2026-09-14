@@ -1200,20 +1200,20 @@ ${axisPresetTable(a.id)}`,
 function indexPage() {
   const body = `<div class="docs-prose">
 <p>Area is a design system whose defining feature is that it is tunable along eight independent axes: theme, neutral, accent, typography, density, radius, surface and motion. Components consume only semantic tokens, so changing an axis reflows the whole system without touching a single component.</p>
-<p>Defaults are not taste. The 32px control, 6px control radius, 12px container radius and 14/20 text are the values that GitHub Primer, OpenAI, Vercel, Linear and Notion converge on, measured from their shipped code rather than inferred.</p>
+<p>The default medium control is 32px with 14/20 text. Radius preset 8 gives controls an 8px radius and containers a 14px radius; preset 6 provides the tighter 6px/12px pairing. Radius stays flat across density presets and is capped against the control's height.</p>
 </div>
 <h2 class="docs-h2" id="install">Installation</h2>
 ${codeBlock("npm install @area/react @area/styles")}
 <h2 class="docs-h2" id="start">Getting started</h2>
 ${codeBlock(`import { Button } from "@area/react";\nimport "@area/styles/area.css";\n\nexport default function App() {\n  return <Button>Get started</Button>;\n}`)}
 <h2 class="docs-h2" id="defaults">Defaults</h2>
-<p class="docs-note">Measured from shipped code, not chosen. Where the systems disagree, Area follows the majority.</p>
+<p class="docs-note">Area's current defaults beside the reference measurements used when designing the system.</p>
 ${table(
   ["", "Area", "Primer", "OpenAI", "Vercel", "shadcn", "Notion"],
   [
     ["Control height", "<strong>32</strong>", "32", "32", "40", "36", "28–32"],
-    ["Control radius", "<strong>6</strong>", "6", "6–8", "6", "8", "6"],
-    ["Container radius", "<strong>12</strong>", "12", "12", "8–12", "10–14", "10"],
+    ["Control radius", "<strong>8</strong>", "6", "6–8", "6", "8", "6"],
+    ["Container radius", "<strong>14</strong>", "12", "12", "8–12", "10–14", "10"],
     ["Control text", "<strong>14/20</strong>", "14/21", "14/20", "14/20", "14/20", "14/16.8"],
     ["Inline icon", "<strong>16</strong>", "16", "18", "—", "16", "20"],
     ["Spacing base", "<strong>4</strong>", "4", "4", "4", "4", "2"],
@@ -1224,8 +1224,8 @@ ${table(
 )}
 <h2 class="docs-h2" id="principles">Principles</h2>
 <div class="docs-prose">
-<p><strong>Every number is derived.</strong> A control's corner radius is a proportion of its height; a menu item's radius is its panel's radius less the panel's padding. Those relationships are expressed once, in <code class='area-code'>calc()</code>, so they stay true under every combination of axes.</p>
-<p><strong>Contrast is a build gate.</strong> Every colour pairing a component can render is asserted under WCAG 2.2 and APCA across all 66 shipped themes. A failing colour cannot be published.</p>
+<p><strong>Every number traces to a token.</strong> A control's corner radius comes from the radius preset and is capped against its height; a menu item's radius is its panel's radius less the panel's padding, floored at zero and capped against the row. These relationships stay true under every combination of axes.</p>
+<p><strong>Contrast is a test gate.</strong> The test suite checks colour pairings under WCAG 2.2 across all 66 shipped themes, with APCA also enforced in dark themes. Documented exceptions are tracked separately. Run the tests as well as the build before releasing.</p>
 <p><strong>The CSS and the React API cannot drift.</strong> Both are generated from one manifest per component, and a script fails the build if a declared variant has no selector, or a selector exists that was never declared.</p>
 <p><strong>Documentation cannot lie.</strong> Every preview on this site is the real component rendered, and every snippet is that same demo's source.</p>
 </div>`;
