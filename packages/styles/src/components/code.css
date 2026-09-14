@@ -30,13 +30,26 @@
     display: inline;
     white-space: normal;
     padding: var(--area-space-2) var(--area-space-6);
+    margin-inline: var(--area-space-2);
     border: var(--area-border-width) solid var(--area-border-faint);
     border-radius: var(--area-radius-small);
     background-color: var(--area-bg-code);
     color: var(--area-fg-default);
     font-family: var(--area-font-mono);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    /*
+     * Sized relative to whatever it is set in, not to an absolute step.
+     *
+     * This is the one place a ratio beats a token. The badge has to sit inside 14px table
+     * chrome and inside 16px running prose, and an absolute size can only be right for one
+     * of them: at 14 it filled a table row, at 12 it read as a footnote in a paragraph.
+     * 0.875em keeps it a consistent step below its surroundings in both -- which is the
+     * relationship the eye actually reads, and what Vercel and GitHub both do here.
+     *
+     * The leading is unitless and tighter than body copy on purpose: an inline badge that
+     * inherits a 1.5 line-height pushes the lines around it apart.
+     */
+    font-size: 0.875em;
+    line-height: 1.35;
   }
 
   .area-code-block {
