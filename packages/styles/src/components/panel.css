@@ -28,7 +28,7 @@
     flex-direction: column;
     min-block-size: 0;
 
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -61,7 +61,7 @@
 
     block-size: var(--_bar);
     padding-inline: var(--_inset);
-    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
   }
 
   /*
@@ -114,7 +114,7 @@
     margin-inline: calc(var(--_inset) * -1);
     padding-inline: var(--_inset);
     padding-block-end: var(--area-space-16);
-    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
   }
 
   .area-panel__section:last-child {
@@ -145,7 +145,7 @@
   .area-panel__footer {
     flex-shrink: 0;
     padding: var(--_inset);
-    border-block-start: var(--area-border-width) solid var(--area-border-subtle);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
   }
 
   /* --- Sizes -------------------------------------------------------------- */

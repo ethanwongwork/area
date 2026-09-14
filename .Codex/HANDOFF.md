@@ -1,72 +1,76 @@
 # Handoff — 2026-09-14
 
-**Branch** `main` · **Last implementation commit** `8530721`
-`chore: migrate project guidance to Codex and archive legacy tooling`
-**State** Verification green; migration complete. This handoff is committed in the
-following checkpoint commit. Confirm the current push state with `git status -sb`.
+**Branch** `main` · **Previous checkpoint** `15f8c99` (Codex migration).
+**State** Naming and divider changes verified and saved with this handoff. Push is pending:
+automatic approval review rejected `git push origin main` without explicit authorization.
+No remote update was made. Read `git log -3 --oneline` and `git status -sb` for current commits.
 
 ## Where things stand
 
-Area remains the same eight-axis token/CSS/React system and 38-page static docs site.
-The repository is now oriented around [AGENTS.md](../AGENTS.md), with detailed design
-rules and architecture under `docs/`. GitHub origin is the canonical repository.
+Area remains the eight-axis token/CSS/React design system with a 38-page static docs site.
+[AGENTS.md](../AGENTS.md) is the concise entrypoint; detailed rules are under `docs/`.
+The migration was committed as `8530721`, followed by checkpoint `15f8c99`.
+The user's subsequent request made Area the sole current name and lightened decorative strokes.
 
 ## What happened this session
 
-- Condensed the previously duplicated agent instructions into an orientation guide.
-  Preserved detailed rationale in `docs/DESIGN_SYSTEM.md`, correcting stale claims.
-- Migrated the journal here, retained the Codex checkpoint skill, and removed redundant
-  Claude launch/instruction files and an inert Cursor hook for nonexistent ds-builder paths.
-- Archived the old playground, its Figma scripts, Cursor rules and Composer prompt under
-  `archive/playground/`, preserving all seven files byte-for-byte.
-- Removed the unreferenced handwritten Button demo script; real component demos cover it.
-- Fixed the icon generator's machine-specific paths; output remained byte-identical.
-  Updated Node compatibility metadata without changing dependencies.
-- Corrected docs introduction radius defaults and explained that contrast tests run
-  separately from the build. No component CSS, tokens or public API were changed.
-- Preserved the prior external contrast-policy proposal in `docs/plans/proposed/`,
-  clearly labeled historical and unapproved. Do not automatically execute its next steps.
+- Migrated useful agent knowledge into repository docs and retained the Codex checkpoint
+  skill. Archived the old playground and Figma tooling; removed redundant instructions,
+  disconnected preview hooks, and a redundant handwritten Button demo script.
+- Made icon generation independent of the checkout path; corrected Node engine metadata
+  and stale documentation about radius defaults, tone names and verification commands.
+- Renamed current custom icon assets to `area-icons` / `area-icons-filled`, their catalog
+  source to `area`, sprite IDs to `area-*`, and palette identifying metadata to Area.
+  Current docs and comments use Area. Palette colors and icon geometry are unchanged.
+- Moved historical journal, handoff and research into `archive/history/` and `archive/plans/`.
+  Fluent's literal glyph names are upstream vocabulary, not project aliases.
+- Added `--area-border-decorative`: neutral 50 (#f7f7f7) in light, neutral 800 (#282828)
+  in dark. Panels, cards, code containers, tables, nav/menu dividers and docs framing
+  use it. Control outlines, selected states, swatches and focus indicators retain their
+  existing contrast tokens. No existing contrast threshold was lowered.
 
 ## In flight
 
-No unfinished implementation. The preview uses the existing server at
-http://localhost:4321; the dev server builds once and does not watch files.
-Full migration evidence and validation are in [docs/MIGRATION.md](../docs/MIGRATION.md).
+No unfinished implementation. Explicit approval is needed before pushing the local commits
+to GitHub origin/main; do not retry or bypass the rejected push without authorization.
+The preview at http://localhost:4321 uses the existing static docs server.
 
 ## Next
 
-1. Continue from the user's next requested product change; no redesign is queued.
-2. If package publishing/root imports are needed, decide the intended token package API:
-   its root export currently points to nonexistent `src/index.ts` (pre-existing).
-3. Revisit the contrast-policy proposal only with an explicit scope decision and fresh
-   measurements. No ninth axis was implemented.
+1. Obtain explicit push authorization if the user wants the commits on GitHub.
+2. Continue with the user's next requested change. No redesign is queued.
+3. If publishing/root imports are needed, decide the token package's intended public API:
+   its root export points to missing `src/index.ts` (pre-existing, documented).
+4. The [contrast-policy proposal](../archive/plans/contrast-policy.md) is unapproved
+   historical research. Do not automatically implement it or apply its old measurements.
 
 ## Traps
 
-- Actual Button tone props are `primary` and `brand`; older prose called these neutral
-  and accent. Do not rename the API based on a historical document.
-- `npm run build` does not run tests. Run `npm test` separately for the contrast gate.
-- Four contrast waivers remain; they are recorded exceptions, not migration failures.
-- Node 20 is insufficient. See package.json engines; this session used Node 26.7.0.
-- Docs CSS layering, nested custom-property substitution, icon generation and template
-  literal backticks remain critical: read `docs/DESIGN_SYSTEM.md` before editing.
-- Legacy archive instructions are historical and must not govern active Area code.
-- `.Codex/` and `.agents/` may need filesystem approval for writes in Codex's sandbox.
+- `npm run build` does not run contrast tests. Run `npm test` separately.
+- The dev server does not watch files; rebuild with `npm run build:docs` and refresh.
+- Actual Button tone props are `primary` and `brand` for neutral/accent intent.
+- Never apply decorative borders to controls that rely on a stroke to identify them.
+- Preserve color values in `palette.json` and icon geometry; generate icon outputs.
+- Historical archive instructions do not govern active Area code.
+- `.Codex/` and `.agents/` writes may need sandbox approval.
+- Four contrast waivers remain. See the maintenance guide for inherited limitations.
 
 ## Verify
 
 ```sh
-npm test                                      # 8,678 tests, 6 files
+npm test                                      # 8,876 passing tests, 6 files
 npm run build                                 # axis integrity; 36-component parity
 npm run lint:manifest                         # 36 components
 npm run build:docs                            # 38 pages, 64 demos; 36/36 used; audit clean
-node packages/tokens/src/contrast/report.ts    # 0 failing, 172 passing, 4 waived; 66 themes
+node packages/tokens/src/contrast/report.ts    # 0 failing, 176 passing, 4 waived; 66 themes
 npm run typecheck                             # all three packages pass
 npm run dev                                   # http://localhost:4321
 ```
 
-Additional checks this session: 3,545 local site references resolved; all seven archived
-files matched Git bytes; icon regeneration from /tmp produced no diffs. Browser verified
-Button and Iconography pages, inspector visibility, theme switching and compact density.
-No baseline test/build/typecheck/lint failure was found. Known limitations are recorded
-in [docs/MAINTENANCE.md](../docs/MAINTENANCE.md).
+All checks above passed. 3,545 local site references, including SVG symbol targets, resolve.
+Markdown file links resolve. Palette colors and both sprites' geometry match the pre-rename
+versions. Browser checks cover the light border color, theme/density interaction, and Area
+icon filtering (29 of 1,739) with Filled sprite references. No baseline test/build failures.
+
+See [migration report](../docs/MIGRATION.md), [maintenance](../docs/MAINTENANCE.md), and
+[journal](JOURNAL.md) for details and decisions.

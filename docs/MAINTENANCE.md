@@ -28,10 +28,10 @@ for browser inspection of axis presets.
 Keep generated icon files checked in: the docs builder imports them directly.
 Regenerate from any working directory using the path to `apps/docs/scripts/gen-icons.mjs`.
 The generator resolves its source package through Node and its outputs relative to itself.
-Changing the Fluent dependency or Stadium sources requires regeneration and visual review.
+Changing the Fluent dependency or Area sources requires regeneration and visual review.
 Do not hand-edit the generated TSX, catalog, markup helpers or SVG sprites.
 
-Keep both `apps/docs/assets/stadium-icons/` and `stadium-icons-filled/`: they are inputs,
+Keep both `apps/docs/assets/area-icons/` and `area-icons-filled/`: they are inputs,
 not duplicate output. Likewise, the Regular and Filled sprites intentionally share IDs
 with different geometry. `navigation.css` and `nav.css` also serve different components;
 both are imported by the stylesheet entrypoint.
@@ -50,7 +50,7 @@ There are no checked-in environment templates or CI workflows.
   token tables, manifest and passing checks take precedence over historical prose.
 - The input invalid-focus ring uses its own recipe, as recorded by the previous handoff.
   Revisit it when changing focus geometry; it was not changed by this migration.
-- The [contrast-policy proposal](plans/proposed/contrast-policy.md) is a historical research
+- The [contrast-policy proposal](../archive/plans/contrast-policy.md) is a historical research
   snapshot, not an active ninth axis. It must be remeasured and explicitly scoped before work.
 - Figma utilities are archived. Their usefulness to external Figma documents cannot be
   established from this repository; no current sync workflow is wired to the application.

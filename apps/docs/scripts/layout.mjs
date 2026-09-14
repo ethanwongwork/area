@@ -280,7 +280,7 @@ export const DOCS_CSS = `
     position: absolute;
     inset-block: 0;
     inline-size: var(--area-border-width);
-    background-color: var(--area-border-subtle);
+    background-color: var(--area-border-decorative);
   }
 
   .docs-sidebar { position: sticky; }
@@ -384,7 +384,7 @@ export const DOCS_CSS = `
     display: flex;
     flex-direction: column;
     min-block-size: 0;
-    border-inline-end: var(--area-border-width) solid var(--area-border-subtle);
+    border-inline-end: var(--area-border-width) solid var(--area-border-decorative);
   }
 
 
@@ -531,7 +531,7 @@ export const DOCS_CSS = `
    * the tokens are the current system's.
    */
   .docs-example {
-    border: var(--area-border-width) solid var(--area-border-faint);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     overflow: hidden;
     background-color: var(--area-bg-surface);
@@ -579,7 +579,7 @@ export const DOCS_CSS = `
     gap: var(--area-space-8);
     block-size: var(--docs-topbar);
     padding-inline: var(--area-space-16);
-    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
   }
   .docs-customizer__title { font-weight: var(--area-weight-strong); }
   .docs-customizer__name { color: var(--area-fg-muted); font-family: var(--area-font-mono); font-size: var(--area-ui-size); }
@@ -616,14 +616,14 @@ export const DOCS_CSS = `
     display: flex;
     flex-direction: column;
     min-block-size: 0;
-    border-inline-start: var(--area-border-width) solid var(--area-border-subtle);
+    border-inline-start: var(--area-border-width) solid var(--area-border-decorative);
     background-color: var(--area-bg-subtle);
   }
 
 
   @media (max-width: 820px) {
     .docs-customizer__body { grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr auto; }
-    .docs-customizer__panel { border-inline-start: 0; border-block-start: var(--area-border-width) solid var(--area-border-subtle); }
+    .docs-customizer__panel { border-inline-start: 0; border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
   }
 
   /* --- Paired views ------------------------------------------------------ */
@@ -661,7 +661,7 @@ export const DOCS_CSS = `
     display: flex;
     flex-direction: column;
     padding: var(--area-space-10) var(--area-space-12);
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     font-size: var(--area-ui-size);
@@ -708,7 +708,7 @@ export const DOCS_CSS = `
   .docs-swatch-grid > div { aspect-ratio: 1 / 1.5; border-radius: var(--area-radius-small); }
   .docs-step-legend { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--area-space-2); text-align: center; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
 
-  .docs-type-row { display: grid; grid-template-columns: 150px 1fr 1fr; align-items: baseline; gap: var(--area-space-16); padding-block: var(--area-space-12); border-block-end: var(--area-border-width) solid var(--area-border-subtle); }
+  .docs-type-row { display: grid; grid-template-columns: 150px 1fr 1fr; align-items: baseline; gap: var(--area-space-16); padding-block: var(--area-space-12); border-block-end: var(--area-border-width) solid var(--area-border-decorative); }
   .docs-type-row__meta { flex-shrink: 0; inline-size: 150px; font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
   .docs-type-row__sample { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -718,7 +718,7 @@ export const DOCS_CSS = `
     flex-direction: column;
     gap: var(--area-space-8);
     padding: var(--area-space-12);
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
   }

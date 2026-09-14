@@ -15,7 +15,7 @@
   .area-tabs__list {
     display: flex;
     gap: var(--area-space-4);
-    border-block-end: 1px solid var(--area-border-subtle);
+    border-block-end: 1px solid var(--area-border-decorative);
   }
 
   .area-tabs__tab {
@@ -91,7 +91,7 @@
   .area-table-wrapper {
     inline-size: 100%;
     overflow-x: auto;
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
   }
@@ -117,7 +117,7 @@
     padding: var(--area-space-10) var(--area-space-12);
     text-align: start;
     vertical-align: top;
-    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
     overflow-wrap: break-word;
   }
 

@@ -27,9 +27,9 @@ conventions, testing and session continuity. Detailed rationale lives in
 - **Migrated:** `CLAUDE.md` knowledge into AGENTS and DESIGN_SYSTEM; `.claude/JOURNAL.md`
   into `.Codex/JOURNAL.md`; session continuity into `.Codex/HANDOFF.md`.
 - **Archived:** original `.claude/HANDOFF.md` at
-  `docs/history/2026-09-14-claude-handoff.md`, explicitly labeled historical.
+  `archive/history/2026-09-14-claude-handoff.md`, explicitly labeled historical.
 - **Preserved research:** the exact external plan referenced by the handoff was copied
-  into `docs/plans/proposed/contrast-policy.md`, with a status note explaining its stale
+  into `archive/plans/contrast-policy.md`, with a status note explaining its stale
   measurements and unapproved scope. No other private session history was imported.
 - **Removed:** redundant root CLAUDE, duplicate Claude checkpoint skill and Claude launch
   configuration. The launch configuration only ran the documented docs npm command.
@@ -79,7 +79,7 @@ out of the active root rules directory prevents conflicting instructions while p
 all reasoning. Archived instructions are explicitly non-authoritative.
 
 Current application directories remain in place. Generated icon sources and both sprites,
-original Stadium SVGs, the token fixture emitter, and all active tests were retained.
+original Area SVGs, the token fixture emitter, and all active tests were retained.
 No new dependencies or product architecture were introduced.
 
 ## Documentation and portability fixes
@@ -125,3 +125,25 @@ There is no standalone docs typecheck or checked-in CI, and existing contrast wa
 Some historical source comments still contain older measurements. The contrast-policy plan
 is preserved but not implemented, and external uses of the Figma utilities remain unknown.
 See [maintenance](MAINTENANCE.md) for the ongoing list.
+
+## Follow-up — Area naming and decorative strokes
+
+At the user's request, current palette metadata, custom icon directories, source labels,
+generated identifiers, comments and current documentation now use Area. Previous names
+and research snapshots are preserved in `archive/history/` and `archive/plans/`;
+[the archived naming audit](../archive/NAMING.md) records the inventory and exceptions.
+Fluent's literal shape and venue glyph names remain upstream vocabulary.
+
+The new `--area-border-decorative` token maps to neutral 50 (`#f7f7f7`) in light themes
+and neutral 800 (`#282828`) in dark themes. Panels, cards, dialogs, popovers, menus,
+table rules, navigation dividers, code containers and docs preview edges use it.
+Interactive control outlines, focus rings and their contrast thresholds remain unchanged.
+
+Follow-up validation: 8,876 passing tests; 176 passing contrast assertions across 66 themes,
+4 existing waivers, no failures; typechecks and 36-component parity pass; 38 pages and
+64 demos build with a clean docs audit. Both icon sprites preserve their original geometry,
+and every palette color value is unchanged. The browser confirms the new light border
+color and the Area source filter returns 29 icons with valid Filled sprite references.
+
+The migration commits are local. Automatic approval review blocked pushing to origin/main
+pending explicit user authorization; no remote update was made.

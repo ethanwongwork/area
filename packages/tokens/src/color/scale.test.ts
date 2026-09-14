@@ -70,7 +70,7 @@ describe("the vendored palette", () => {
 
   it("does not claim a rung is a lightness", () => {
     // The property the previous, self-generated ladder had and this one deliberately does
-    // not. Stadium pins each family's 500 to a contrast wall instead, so the hues sit at
+    // not. Area pins each family's 500 to a contrast wall instead, so the hues sit at
     // different lightnesses at a shared rung -- by design, and by a wide enough margin
     // that treating a rung as a measurement would be wrong.
     const at350 = ALL_SCALES.map((s) => buildScale(s, "light").steps.find((x) => x.level === 350)!.oklch.L);

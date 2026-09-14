@@ -189,7 +189,7 @@
   .area-nav__separator {
     block-size: var(--area-border-width);
     margin-block: var(--area-space-8);
-    background-color: var(--area-border-subtle);
+    background-color: var(--area-border-decorative);
   }
 
   .area-nav--horizontal .area-nav__separator {

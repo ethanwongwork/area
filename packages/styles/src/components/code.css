@@ -31,7 +31,7 @@
     white-space: normal;
     padding: var(--area-space-2) var(--area-space-6);
     margin-inline: var(--area-space-2);
-    border: var(--area-border-width) solid var(--area-border-faint);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-small);
     background-color: var(--area-bg-code);
     color: var(--area-fg-default);
@@ -56,7 +56,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    border: var(--area-border-width) solid var(--area-border-faint);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-code);
     overflow: hidden;
@@ -71,7 +71,7 @@
     border: 0;
     border-radius: 0;
     /* The one rule: what is above it is rendered, what is below it is source. */
-    border-block-start: var(--area-border-width) solid var(--area-border-faint);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
   }
 
   /*
@@ -167,7 +167,7 @@
     block-size: var(--area-control-md);
     padding: 0;
     border: 0;
-    border-block-start: var(--area-border-width) solid var(--area-border-faint);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
     background-color: var(--area-bg-code);
     color: var(--area-fg-muted);
     font-family: inherit;

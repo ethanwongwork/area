@@ -1,5 +1,5 @@
 /**
- * Loads an Area colour scale from the vendored Stadium palette.
+ * Loads an Area colour scale from the vendored Area palette.
  *
  * This file used to generate colours from a hue: find the gamut cusp, take a fraction of
  * the reachable chroma at each lightness, map into sRGB. It now reads a table. The palette

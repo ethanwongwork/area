@@ -18,7 +18,7 @@
     flex-direction: column;
     gap: var(--area-space-12);
     padding: var(--_inset);
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -56,7 +56,7 @@
   .area-alert {
     --_bg: var(--area-bg-component);
     --_fg: var(--area-fg-default);
-    --_border: var(--area-border-subtle);
+    --_border: var(--area-border-decorative);
 
     display: flex;
     gap: var(--area-space-10);
@@ -104,7 +104,7 @@
     inline-size: min(calc(100vw - var(--area-space-32)), 480px);
     max-block-size: calc(100vh - var(--area-space-64));
     padding: 0;
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -159,7 +159,7 @@
   .area-menu {
     --_inset: var(--area-space-6);
     padding: var(--_inset);
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -371,7 +371,7 @@
   .area-menu__separator {
     block-size: 1px;
     margin: var(--area-space-4) calc(var(--_inset) * -1);
-    background-color: var(--area-border-subtle);
+    background-color: var(--area-border-decorative);
   }
 
   .area-menu__shortcut {
@@ -404,7 +404,7 @@
     align-items: flex-start;
     gap: var(--area-space-10);
     padding: var(--area-space-12);
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);

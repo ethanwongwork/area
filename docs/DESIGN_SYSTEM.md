@@ -200,22 +200,22 @@ the cost of eight tones and it is recorded in `color/presets.ts` rather than red
 
 ## Icons
 
-**Fluent System Icons, generated, with Stadium's marks vendored beside them.**
+**Fluent System Icons, generated, with Area's marks vendored beside them.**
 `apps/docs/src/icons.tsx`, `apps/docs/scripts/icons.generated.mjs`,
 `apps/docs/scripts/icons.catalog.mjs` and the two sprites in `apps/docs/assets` are all
 output of `gen-icons.mjs`, which reads `@fluentui/svg-icons` and the vendored files in
-`assets/stadium-icons`. Never hand-edit any of them and never hand-draw a path: add the
+`assets/area-icons`. Never hand-edit any of them and never hand-draw a path: add the
 export name and its Fluent id to the map, or drop the file in the directory, and re-run.
 Use the 16px cut at 16px rather than scaling the 20 or 24, because they are optically
 corrected per size.
 
 **The rule is optical weight, not fill-versus-stroke.** This used to read "a stroke-based
 icon dropped in beside them will not match at any weight", which was the right warning
-attached to the wrong property. Fluent's marks are filled paths and Stadium's twenty-nine
-are stroked, and they match — because Stadium fitted them by measurement: a 1-unit rule at
+attached to the wrong property. Fluent's marks are filled paths and Area's twenty-nine
+are stroked, and they match — because Area fitted them by measurement: a 1-unit rule at
 16, round terminals, and an ink box of 12 units for a rectilinear mark or 14 for a round
 one, which is where Fluent's own square and round marks land. What will not match is a mark
-that skipped that fitting, stroked or filled. Stadium's inner markup is therefore vendored
+that skipped that fitting, stroked or filled. Area's inner markup is therefore vendored
 verbatim, stroke attributes and all; reducing it to a path list is what would break the fit.
 
 **The browser documents the whole set, from sprites.** 1,739 marks is 711 KB of path data in
@@ -226,8 +226,8 @@ under the same names.
 
 ## Colour
 
-**Stadium owns lightness and chroma; Area owns hue.** `packages/tokens/src/color/palette.json`
-is the Stadium palette exported verbatim — 14 families x 23 rungs — and its wall-anchored L
+**Palette anchors stay fixed; adjustments are explicit.** `packages/tokens/src/color/palette.json`
+is the Area palette exported verbatim — 14 families x 23 rungs — and its wall-anchored L
 and C are what make contrast predictable, so they are never touched. `scale.ts` reads that
 table and computes what it does not carry: each rung's translucent twin, which foreground it
 takes, which rung is the solid fill, and which is the family's own quietest stroke.
@@ -252,7 +252,7 @@ while and was reverted; the trade to weigh if it is tried again is red-to-orange
 35 to 39 against red-to-pink narrowing from 20 to 16.
 
 **Chroma is trimmed at the light end, and only there.** `CHROMA_TRIM` in `curves.ts` is the
-one place Area touches chroma, and it exists because Stadium's anchor and this one answer
+one place Area touches chroma, and it exists because Area's anchor and this one answer
 different questions. The export pins a rung against *white* — a statement about one family,
 which says nothing about that family beside its ten siblings at the same rung. At the dark
 end that does not matter, because the gamut squeezes every hue into the same narrow band. At
@@ -270,7 +270,7 @@ touched, so no wall moves; the spread at rung 150 closes from 0.087 to 0.054 and
 quietly — remove it and four assertions fail.
 
 **A rung is an ordinal, not a measurement.** Higher is darker. An earlier ladder named each
-level after its own lightness and asserted it; this one cannot, because Stadium anchors to
+level after its own lightness and asserted it; this one cannot, because Area anchors to
 contrast instead — each family's 500 is pinned so a label clears its wall, which means the
 hues deliberately sit at different lightnesses at a shared rung (spread peaks at 0.217 at
 rung 350, closing to 0.007 at the ends). Both anchors are defensible and mutually exclusive.
@@ -324,10 +324,12 @@ Dark themes are *not* pinned — there 500 measures APCA Lc 28–31 against a fl
 which is unreadable rather than marginal, so `chooseVivid` keeps walking.
 
 **The page is white; a code block is one rung back from it.** That is what lets the block
-read as a block without a stroke doing the work. Its edge still takes `--area-border-faint`,
-a fainter stroke than `border-subtle`, measured at 1.24 on the page — where Tailwind, shadcn
-and Vercel all put a container edge. In dark it lands on the same rung as `border-subtle`:
-near black the ladder has no room for a fainter tier that is still a tier.
+read as a block without a stroke doing the work. Its edge uses `--area-border-decorative`,
+which maps to neutral 50 in light themes and neutral 800 in dark themes. Panels, cards,
+table rules, navigation dividers and example containers share that quiet decorative token.
+Control outlines, swatch rings and focus indicators retain their stronger tokens.
+The decorative tier has its own 1.05 design floor; it never identifies an interactive
+control or state. Existing text, control and focus contrast thresholds are unchanged.
 
 **A code block has no toolbar.** Copy rides at the top right of the code itself, centred on
 the first line rather than on the block, so it belongs to the code and costs no row. The one
@@ -345,7 +347,7 @@ two. `--area-blue-500` is byte-identical in both themes; only the rung each slot
 changes.
 
 **The neutral role owns `--area-neutral-*`, so the theme axis does not emit that family.**
-Stadium overloads the name — `neutral` is both its achromatic cast and the alias a consumer
+Area overloads the name — `neutral` is both its achromatic cast and the alias a consumer
 writes — and Area cannot, because two axes writing one property is what `checkAxisIntegrity`
 forbids. The role wins the namespace; `cool` and `warm` keep their own primitive ramps.
 

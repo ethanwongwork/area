@@ -101,93 +101,93 @@ export const AlignBottomIcon = () => (
 );
 
 /*
- * Stadium's marks. They are stroked rather than filled, so they take their own base: the
+ * Area's marks. They are stroked rather than filled, so they take their own base: the
  * fill is off and the colour rides on the stroke. Fitted to Fluent's optical weight by
  * measurement -- see the note in gen-icons.mjs.
  */
-const stadiumBase = { ...base, fill: "none" };
+const areaBase = { ...base, fill: "none" };
 
-/** Stadium `angle`. */
+/** Area `angle`. */
 export const AngleIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2.5 2.5V13.5H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M2.5 8C5.5 8 8 10.5 8 13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `aspect-ratio`. */
+/** Area `aspect-ratio`. */
 export const AspectRatioIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="11" height="11" rx="1.75" fill="none" stroke="currentColor" strokeWidth="1"/>
     <path d="M5.5 8V5.5H8" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M10.5 8V10.5H8" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `auto-layout`. */
+/** Area `auto-layout`. */
 export const AutoLayoutIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="4.5" height="11" rx="1.125" fill="none" stroke="currentColor" strokeWidth="1"/>
     <rect x="9.5" y="3" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
     <path d="M9.5 11 11 12.5 13.5 9.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `auto-position`. */
+/** Area `auto-position`. */
 export const AutoPositionIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2.5 2.5H10.4C13.4 2.5 13.4 7 10.4 7H5.6C2.6 7 2.6 11.5 5.6 11.5H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M11.5 9.5 13.5 11.5 11.5 13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `bars-three`. */
+/** Area `bars-three`. */
 export const BarsThreeIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2" y="4" width="2" height="8" rx="1" fill="currentColor"/>
     <rect x="7" y="2" width="2" height="12" rx="1" fill="currentColor"/>
     <rect x="12" y="4" width="2" height="8" rx="1" fill="currentColor"/>
   </svg>
 );
 
-/** Stadium `corner-bottom-left`. */
+/** Area `corner-bottom-left`. */
 export const CornerBottomLeftIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2.5 2.5V9.5C2.5 11.71 4.29 13.5 6.5 13.5H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `corner-bottom-right`. */
+/** Area `corner-bottom-right`. */
 export const CornerBottomRightIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M13.5 2.5V9.5C13.5 11.71 11.71 13.5 9.5 13.5H2.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `corner-radius`. */
+/** Area `corner-radius`. */
 export const CornerRadiusIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2.5 13.5V6.5C2.5 4.29 4.29 2.5 6.5 2.5H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `corner-top-left`. */
+/** Area `corner-top-left`. */
 export const CornerTopLeftIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2.5 13.5V6.5C2.5 4.29 4.29 2.5 6.5 2.5H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `corner-top-right`. */
+/** Area `corner-top-right`. */
 export const CornerTopRightIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M13.5 13.5V6.5C13.5 4.29 11.71 2.5 9.5 2.5H2.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `corners`. */
+/** Area `corners`. */
 export const CornersIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M6 2.5H5C3.62 2.5 2.5 3.62 2.5 5V6" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M10 2.5H11C12.38 2.5 13.5 3.62 13.5 5V6" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M13.5 10V11C13.5 12.38 12.38 13.5 11 13.5H10" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
@@ -195,9 +195,9 @@ export const CornersIcon = () => (
   </svg>
 );
 
-/** Stadium `dots-four`. */
+/** Area `dots-four`. */
 export const DotsFourIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <circle cx="4.25" cy="4.25" r="2.25" fill="none" stroke="currentColor" strokeWidth="1"/>
     <circle cx="11.75" cy="4.25" r="2.25" fill="none" stroke="currentColor" strokeWidth="1"/>
     <circle cx="4.25" cy="11.75" r="2.25" fill="none" stroke="currentColor" strokeWidth="1"/>
@@ -205,53 +205,53 @@ export const DotsFourIcon = () => (
   </svg>
 );
 
-/** Stadium `eye-slash`. */
+/** Area `eye-slash`. */
 export const EyeSlashIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2 8C4 4.44 5.9 3 8 3C10.1 3 12 4.44 14 8C12 11.56 10.1 13 8 13C5.9 13 4 11.56 2 8Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" strokeWidth="1"/>
     <path d="M3.3 12.7 12.7 3.3" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `eye`. */
+/** Area `eye`. */
 export const EyeIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2 8C4 4.44 5.9 3 8 3C10.1 3 12 4.44 14 8C12 11.56 10.1 13 8 13C5.9 13 4 11.56 2 8Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" strokeWidth="1"/>
   </svg>
 );
 
-/** Stadium `flip-horizontal`. */
+/** Area `flip-horizontal`. */
 export const FlipHorizontalIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M8 2.5V13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M3.723 4.876L6.087 7.535Q6.5 8 6.087 8.465L3.723 11.124Q2.5 12.5 2.5 10.659L2.5 5.341Q2.5 3.5 3.723 4.876Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M12.277 4.876L9.913 7.535Q9.5 8 9.913 8.465L12.277 11.124Q13.5 12.5 13.5 10.659L13.5 5.341Q13.5 3.5 12.277 4.876Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `flip-vertical`. */
+/** Area `flip-vertical`. */
 export const FlipVerticalIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2.5 8H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M4.876 3.723L7.535 6.087Q8 6.5 8.465 6.087L11.124 3.723Q12.5 2.5 10.659 2.5L5.341 2.5Q3.5 2.5 4.876 3.723Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M4.876 12.277L7.535 9.913Q8 9.5 8.465 9.913L11.124 12.277Q12.5 13.5 10.659 13.5L5.341 13.5Q3.5 13.5 4.876 12.277Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `flow-free`. */
+/** Area `flow-free`. */
 export const FlowFreeIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="4.25" height="4.25" rx="1.0625" fill="none" stroke="currentColor" strokeWidth="1"/>
     <rect x="9.25" y="5.25" width="4.25" height="4.25" rx="1.0625" fill="none" stroke="currentColor" strokeWidth="1"/>
     <rect x="3.5" y="9.25" width="4.25" height="4.25" rx="1.0625" fill="none" stroke="currentColor" strokeWidth="1"/>
   </svg>
 );
 
-/** Stadium `flow-horizontal`. */
+/** Area `flow-horizontal`. */
 export const FlowHorizontalIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
     <rect x="9.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
     <path d="M2.5 11.25H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
@@ -259,9 +259,9 @@ export const FlowHorizontalIcon = () => (
   </svg>
 );
 
-/** Stadium `flow-vertical`. */
+/** Area `flow-vertical`. */
 export const FlowVerticalIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
     <rect x="2.5" y="9.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
     <path d="M11.25 2.5V13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
@@ -269,9 +269,9 @@ export const FlowVerticalIcon = () => (
   </svg>
 );
 
-/** Stadium `flow-wrap`. */
+/** Area `flow-wrap`. */
 export const FlowWrapIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
     <rect x="9.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
     <rect x="2.5" y="9.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
@@ -279,27 +279,27 @@ export const FlowWrapIcon = () => (
   </svg>
 );
 
-/** Stadium `gap-horizontal`. */
+/** Area `gap-horizontal`. */
 export const GapHorizontalIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2.75 2.75H4C4.55 2.75 5 3.2 5 3.75V12.25C5 12.8 4.55 13.25 4 13.25H2.75" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <circle cx="8" cy="8" r="0.9" fill="currentColor"/>
     <path d="M13.25 2.75H12C11.45 2.75 11 3.2 11 3.75V12.25C11 12.8 11.45 13.25 12 13.25H13.25" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `gap-vertical`. */
+/** Area `gap-vertical`. */
 export const GapVerticalIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M2.75 2.75V4C2.75 4.55 3.2 5 3.75 5H12.25C12.8 5 13.25 4.55 13.25 4V2.75" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <circle cx="8" cy="8" r="0.9" fill="currentColor"/>
     <path d="M2.75 13.25V12C2.75 11.45 3.2 11 3.75 11H12.25C12.8 11 13.25 11.45 13.25 12V13.25" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `opacity`. */
+/** Area `opacity`. */
 export const OpacityIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="11" height="11" rx="1.75" fill="none" stroke="currentColor" strokeWidth="1"/>
     <circle cx="10.5" cy="5.5" r="0.55" fill="currentColor"/>
     <circle cx="8" cy="8" r="0.55" fill="currentColor"/>
@@ -310,27 +310,27 @@ export const OpacityIcon = () => (
   </svg>
 );
 
-/** Stadium `padding-horizontal`. */
+/** Area `padding-horizontal`. */
 export const PaddingHorizontalIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="11" height="11" rx="1.75" fill="none" stroke="currentColor" strokeWidth="1"/>
     <path d="M5.5 5.2V10.8" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M10.5 5.2V10.8" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `padding-vertical`. */
+/** Area `padding-vertical`. */
 export const PaddingVerticalIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="11" height="11" rx="1.75" fill="none" stroke="currentColor" strokeWidth="1"/>
     <path d="M5.2 5.5H10.8" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M5.2 10.5H10.8" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `padding`. */
+/** Area `padding`. */
 export const PaddingIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <rect x="2.5" y="2.5" width="11" height="11" rx="1.75" fill="none" stroke="currentColor" strokeWidth="1"/>
     <path d="M4.5 6V10" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M11.5 6V10" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
@@ -339,18 +339,18 @@ export const PaddingIcon = () => (
   </svg>
 );
 
-/** Stadium `rotate`. */
+/** Area `rotate`. */
 export const RotateIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M8.75 7.48L10.96 9.69Q11.71 10.44 10.96 11.19L8.75 13.4Q8 14.15 7.25 13.4L5.04 11.19Q4.29 10.44 5.04 9.69L7.25 7.48Q8 6.73 8.75 7.48Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M2.18 6.84C2.83 4.59 4.8 2.95 7.13 2.73C9.47 2.5 11.71 3.73 12.78 5.83" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M9.43 5.48 12.78 5.83 13.13 2.48" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-/** Stadium `sliders`. */
+/** Area `sliders`. */
 export const SlidersIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <path d="M4.5 2.5V7.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M4.5 11.5V13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
     <circle cx="4.5" cy="9.5" r="2" fill="none" stroke="currentColor" strokeWidth="1"/>
@@ -360,9 +360,9 @@ export const SlidersIcon = () => (
   </svg>
 );
 
-/** Stadium `token`. */
+/** Area `token`. */
 export const TokenIcon = () => (
-  <svg {...stadiumBase}>
+  <svg {...areaBase}>
     <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" strokeWidth="1"/>
     <circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" strokeWidth="1"/>
   </svg>

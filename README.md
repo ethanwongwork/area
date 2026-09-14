@@ -58,9 +58,9 @@ packages/react     React components. Contains no CSS, by construction.
 apps/docs          the site, built from the system it documents
 ```
 
-**Colour.** `packages/tokens/src/color/palette.json` is the Stadium palette vendored
+**Colour.** `packages/tokens/src/color/palette.json` is the Area palette vendored
 verbatim — 14 families × 23 rungs, each rung anchored to a contrast wall rather than to a
-lightness. Stadium owns lightness and chroma; Area owns hue, through `HUE_ROTATION`, plus
+lightness. The exported lightness and chroma anchors stay fixed. `HUE_ROTATION` tunes hue, with
 one narrow chroma adjustment at the light end (`CHROMA_TRIM`) where the palette's
 per-family anchoring leaves families visibly uneven against each other. Never edit a hex.
 
@@ -83,7 +83,7 @@ These guarantees are covered by tests, build audits, and the review conventions 
 - **The colour maths is proven, not assumed.** OKLab conversions are checked against
   `colorjs.io` to 1e-12 per channel across both gamuts, and the gamut mapper matches the
   CSS Color 4 reference to a fifth of a JND.
-- **Contrast is a test gate.** 172 assertions across 66 shipped themes, under WCAG 2.2
+- **Contrast is a test gate.** 176 assertions across 66 shipped themes, under WCAG 2.2
   always and APCA as a hard gate in dark themes, because the WCAG 2.x formula overstates
   contrast near black. Four exceptions are waived — each measured, recorded with its
   number, and counted separately rather than folded into the pass count.

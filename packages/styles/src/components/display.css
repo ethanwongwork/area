@@ -89,7 +89,7 @@
   /* --- Separator ---------------------------------------------------------- */
   .area-separator {
     border: 0;
-    background-color: var(--area-border-subtle);
+    background-color: var(--area-border-decorative);
     flex-shrink: 0;
   }
 

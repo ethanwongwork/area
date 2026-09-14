@@ -135,8 +135,10 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "fg-disabled": at("neutral", "textDisabled"),
 
   // --- Borders ------------------------------------------------------------------
-  /** Ambient definition: card edges, separators, table rules. Never escalates. */
+  /** Quiet control definition and swatch edges. Never escalates. */
   "border-subtle": at("neutral", "borderSubtle"),
+  /** Decorative dividers and container edges; never an interactive affordance. */
+  "border-decorative": at("neutral", "borderDecorative"),
   /** For a container whose fill already separates it from its ground. See `borderFaint`. */
   "border-faint": at("neutral", "borderFaint"),
   /** An interactive control at rest. */

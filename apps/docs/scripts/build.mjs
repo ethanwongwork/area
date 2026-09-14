@@ -30,7 +30,7 @@ import { PRACTICES } from "../src/practices.mjs";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = resolve(root, "..", "..");
 const out = join(root, "dist");
-const STADIUM_COUNT = CATALOG.filter((i) => i.source === "stadium").length;
+const AREA_COUNT = CATALOG.filter((i) => i.source === "area").length;
 
 const tokens = JSON.parse(readFileSync(join(repo, "packages/tokens/dist/tokens.json"), "utf8"));
 const { MANIFESTS } = await import(join(repo, "packages/styles/src/manifest.ts"));
@@ -491,7 +491,7 @@ function colorPage() {
   const levels = tokens.levels.join(", ");
 
   const body = `<div class="docs-prose">
-<p>The colours are the <strong>Stadium palette</strong>, vendored verbatim — ${Object.keys(tokens.scales).length} families of ${tokens.levels.length} rungs. Area does not generate them. The palette was wall-anchored rather than formula-generated, with per-hue splines and hue held in IPT, and reproducing that from a curve was never going to land closer to it than using it.</p>
+<p>The colours are the <strong>Area palette</strong>, vendored verbatim — ${Object.keys(tokens.scales).length} families of ${tokens.levels.length} rungs. Area does not generate them. The palette was wall-anchored rather than formula-generated, with per-hue splines and hue held in IPT, and reproducing that from a curve was never going to land closer to it than using it.</p>
 <p>A rung is an ordinal position, not a measurement: <strong>higher is darker</strong>, the direction Tailwind, Material and Radix all read. The ladder is ${levels} — finer at the ends than through the middle, because that is where an interface spends its steps. 25/50/75 are three distinguishable page grounds and 925/950/975 three distinguishable dark ones, while the middle, where text and fills live, runs in 50s.</p>
 <p>Each family's <code class="docs-code-inline">500</code> is pinned to a contrast wall rather than to a lightness, which is why the hues do not share a lightness at a shared rung — yellow's 500 sits lighter than indigo's because yellow has to. There are two walls: a <em>label</em> ladder that clears AA with white at 500, and a <em>glyph</em> ladder pinned at 3:1 that only reaches AA at 600. Area finds each family's solid fill by measuring, so nothing here hardcodes which family is on which wall.</p>
 <p>The three neutrals are one grey at three temperatures. <code class="docs-code-inline">neutral</code> is chroma 0 at every rung; <code class="docs-code-inline">cool</code> carries hue 248 and <code class="docs-code-inline">warm</code> is cool mirrored exactly — 180° away in OKLCh — so neither can drift from the other. Only chroma differs, so contrast is near-invariant across all three: measured, lightness deviates by at most 0.0055 and a white-contrast ratio by at most 0.23:1.</p>
@@ -530,7 +530,7 @@ ${tokenSection({
   return page({
     slug: "color",
     title: "Color",
-    lede: "The Stadium palette, vendored: fourteen families of twenty-three rungs, anchored to contrast.",
+    lede: "The Area palette, vendored: fourteen families of twenty-three rungs, anchored to contrast.",
     body,
     toc: [
       { id: "inversion", title: "The inversion" },
@@ -588,7 +588,7 @@ function iconBrowser() {
       ${styleItem("regular", "Regular", true)}${styleItem("filled", "Filled", false)}
     </div>
     <div class="area-chip-group" role="group" aria-label="Source">
-      ${sourceChip("all", "All", true)}${sourceChip("stadium", "Stadium", false)}${sourceChip("fluent", "Fluent", false)}
+      ${sourceChip("all", "All", true)}${sourceChip("area", "Area", false)}${sourceChip("fluent", "Fluent", false)}
     </div>
     <label class="docs-iconbrowser__size">
       <span class="area-field__label">Size</span>
@@ -629,8 +629,8 @@ function iconographyPage() {
     .sort((a, b) => parseInt(a.px) - parseInt(b.px));
 
   const body = `<div class="docs-prose">
-<p>Icons are <strong>Fluent System Icons</strong>, Microsoft's set, used at the 16px Regular cut, with twenty-nine marks drawn by <strong>Stadium</strong> for the panel vocabulary Fluent has no glyph for. Neither is drawn by hand here: <code class="area-code">gen-icons.mjs</code> generates the path data from <code class="area-code">@fluentui/svg-icons</code> and vendors Stadium's files verbatim, so an icon is the glyph its source ships rather than an approximation of it.</p>
-<p>Fluent's marks are <em>filled</em> paths; Stadium's are <em>stroked</em>. That sounds like a contradiction and is not, because the rule the distinction stands in for is about <em>optical weight</em>, not about which SVG attribute carries the colour. An icon that has not been fitted to the set will not match it at any size. Stadium's were fitted by measurement — a 1-unit rule at 16, round terminals, and an ink box of 12 units for a rectilinear mark or 14 for a round one, which is exactly where Fluent's own square and round marks land. Draw a new stroked mark without that fitting and it will read a size wrong beside everything around it.</p>
+<p>Icons are <strong>Fluent System Icons</strong>, Microsoft's set, used at the 16px Regular cut, with twenty-nine marks drawn by <strong>Area</strong> for the panel vocabulary Fluent has no glyph for. Neither is drawn by hand here: <code class="area-code">gen-icons.mjs</code> generates the path data from <code class="area-code">@fluentui/svg-icons</code> and vendors Area's files verbatim, so an icon is the glyph its source ships rather than an approximation of it.</p>
+<p>Fluent's marks are <em>filled</em> paths; Area's are <em>stroked</em>. That sounds like a contradiction and is not, because the rule the distinction stands in for is about <em>optical weight</em>, not about which SVG attribute carries the colour. An icon that has not been fitted to the set will not match it at any size. Area's were fitted by measurement — a 1-unit rule at 16, round terminals, and an ink box of 12 units for a rectilinear mark or 14 for a round one, which is exactly where Fluent's own square and round marks land. Draw a new stroked mark without that fitting and it will read a size wrong beside everything around it.</p>
 <p>Both sets are optically corrected per size, which is why the 16px cut is used at 16px rather than scaling the 20 or 24 down to fit. And an icon never sets its own size: it fills the slot it sits in, and the slot takes its size from the density axis, so every icon in the system moves when density does.</p>
 </div>
 ${tokenSection({
@@ -658,19 +658,19 @@ ${tokenSection({
 })}
 <h2 class="docs-h2" id="set">The set</h2>
 <div class="docs-prose">
-<p>Every mark in the system, ${CATALOG.length.toLocaleString("en-US")} of them: Fluent's whole 16px cut, plus ${STADIUM_COUNT} Stadium draws for the panel vocabulary Fluent has no glyph for. Search by name, and switch style, source or size without leaving the grid.</p>
+<p>Every mark in the system, ${CATALOG.length.toLocaleString("en-US")} of them: Fluent's whole 16px cut, plus ${AREA_COUNT} Area marks for the panel vocabulary Fluent has no glyph for. Search by name, and switch style, source or size without leaving the grid.</p>
 </div>
 ${iconBrowser()}
 <h2 class="docs-h2" id="adding">Adding one</h2>
 <div class="docs-prose">
-<p>A Fluent mark needs an export name and its Fluent identifier in the map in <code class="area-code">gen-icons.mjs</code>, then a run of it. A Stadium mark needs its file dropped into <code class="area-code">assets/stadium-icons</code> and the same run — the generator reads the directory, so there is no list to keep in step. Nothing else is edited by hand: <code class="area-code">icons.tsx</code>, <code class="area-code">icons.catalog.mjs</code> and the two sprites are all generated output, and editing one directly is how the set drifts from its source.</p>
+<p>A Fluent mark needs an export name and its Fluent identifier in the map in <code class="area-code">gen-icons.mjs</code>, then a run of it. An Area mark needs its file dropped into <code class="area-code">assets/area-icons</code> and the same run — the generator reads the directory, so there is no list to keep in step. Nothing else is edited by hand: <code class="area-code">icons.tsx</code>, <code class="area-code">icons.catalog.mjs</code> and the two sprites are all generated output, and editing one directly is how the set drifts from its source.</p>
 </div>
 ${codeBlock(`const MAP = {\n  PlusIcon: "add_16_regular",\n  // ...\n};`)}`;
 
   return page({
     slug: "iconography",
     title: "Iconography",
-    lede: "Fluent System Icons at 16px with Stadium's panel marks beside them, generated rather than drawn, sized by the density axis.",
+    lede: "Fluent System Icons at 16px with Area's panel marks beside them, generated rather than drawn, sized by the density axis.",
     body,
     toc: [
       { id: "sizes", title: "Sizes" },

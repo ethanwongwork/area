@@ -1,5 +1,5 @@
 /**
- * The scales Area ships: the Stadium palette's fourteen families, unchanged.
+ * The scales Area ships: the Area palette's fourteen families, unchanged.
  *
  * Eleven hues and three casts of one grey. The colour axis points the brand role at any
  * hue and the neutral role at any cast.

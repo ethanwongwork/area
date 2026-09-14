@@ -1,6 +1,0 @@
-<svg data-set="stadium" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="2.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1"/>
-<rect x="9.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1"/>
-<path d="M2.5 11.25H13.5" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M11.25 9 13.5 11.25 11.25 13.5" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>

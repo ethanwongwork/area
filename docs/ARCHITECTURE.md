@@ -38,7 +38,7 @@ There is no checked-in CI workflow or automatic publish gate.
   `src/registry.tsx` registers demos. `scripts/layout.mjs` contains styles and delegated
   browser handlers. Inspector controls declare `data-axis` and `data-value` so one
   handler can synchronize the persistent rail and customizer.
-- **Icons:** `gen-icons.mjs` reads Fluent's installed SVG package plus both Stadium
+- **Icons:** `gen-icons.mjs` reads Fluent's installed SVG package plus both Area
   directories. Generated TSX, markup helpers, catalog and sprites are checked in
   because the docs build consumes them directly. They are not disposable clutter.
 

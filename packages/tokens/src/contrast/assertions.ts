@@ -56,8 +56,8 @@ const SYNTAX_ROLES: readonly string[] = ["danger", "success", "brand", "discover
  */
 const STROKE = {
   /**
-   * Ambient definition: separators, card edges, table rules. The weakest stroke in the
-   * system by design, and never a state indicator.
+   * Ambient control definition and swatch edges. Decorative container rules have a
+   * separate, fainter token; neither tier is a state indicator.
    *
    * APCA is not asserted here. It models text legibility and clamps very low values to
    * zero, which makes it the wrong instrument for a hairline rule that is doing its job
@@ -156,12 +156,17 @@ function tonalAssertions(): ContrastAssertion[] {
 
 function chromeAssertions(): ContrastAssertion[] {
   return [
+    // Deliberately faint visual grouping, requested at neutral 50 in light themes.
+    // This is a design floor, not a control-contrast threshold. Existing control,
+    // focus, text and ambient thresholds remain unchanged.
+    { fg: "border-decorative", bg: "bg-page", wcag: 1.05, apca: 0, note: "decorative divider on page" },
+    { fg: "border-decorative", bg: "bg-surface", wcag: 1.05, apca: 0, note: "decorative container edge" },
     { fg: "border", bg: "bg-page", ...STROKE.resting, note: "control border on page" },
     { fg: "border", bg: "bg-surface", ...STROKE.resting, note: "control border on surface" },
-    { fg: "border-subtle", bg: "bg-surface", ...STROKE.ambient, note: "separator and card edge" },
-    { fg: "border-subtle", bg: "bg-page", ...STROKE.ambient, note: "separator on page" },
-    { fg: "border-faint", bg: "bg-page", ...STROKE.faint, note: "container edge on page" },
-    { fg: "border-faint", bg: "bg-surface", ...STROKE.faint, note: "container edge on a panel" },
+    { fg: "border-subtle", bg: "bg-surface", ...STROKE.ambient, note: "quiet control outline" },
+    { fg: "border-subtle", bg: "bg-page", ...STROKE.ambient, note: "quiet outline on page" },
+    { fg: "border-faint", bg: "bg-page", ...STROKE.faint, note: "token badge edge on page" },
+    { fg: "border-faint", bg: "bg-surface", ...STROKE.faint, note: "token badge edge on a panel" },
     { fg: "border-hover", bg: "bg-surface", ...STROKE.hover, note: "control border, hover" },
 
     // The focus ring is checked against every surface it can land on. Checking only the

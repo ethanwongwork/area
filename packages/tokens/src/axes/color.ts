@@ -64,7 +64,7 @@ function themePreset(t: Theme): AxisPreset {
   // Every family except the one the neutral axis aliases.
   //
   // The vendored palette names its achromatic cast `neutral`, and that is also the name of
-  // the role the neutral axis owns -- Stadium overloads the two deliberately, so that
+  // the role the neutral axis owns -- Area overloads the two deliberately, so that
   // `neutral-500` means "the active cast" and nothing downstream has to know a tone exists.
   // Area cannot overload it: two axes writing one property is precisely what
   // `checkAxisIntegrity` forbids, because it makes the pair untestable. So the role wins

@@ -9,11 +9,11 @@ const DIR = join(dirname(require.resolve("@fluentui/svg-icons/package.json")), "
 const ASSETS = join(ROOT, "assets");
 
 /*
- * Stadium's own marks, vendored.
+ * Area's own marks, vendored.
  *
  * Twenty-nine glyphs Fluent does not draw, or draws differently: the inspector-panel
  * vocabulary -- gap, padding, flow, corner radius, opacity, aspect ratio, the corner marks.
- * Stadium authored them on the 16 grid to sit beside the Fluent set, and twenty-eight of
+ * Area authored them on the 16 grid to sit beside the Fluent set, and twenty-eight of
  * them are *stroked* rather than filled, which is the one place Area's "Fluent icons are
  * filled paths, never strokes" rule has to be read as what it actually protects: an icon
  * that has not been fitted to the set's optical weight will not match it. These were
@@ -22,7 +22,7 @@ const ASSETS = join(ROOT, "assets");
  * marks land. Their inner markup is taken verbatim, stroke attributes and all, because
  * reducing them to a path list is exactly what would break that fit.
  */
-const stadium = (dir) =>
+const area = (dir) =>
   Object.fromEntries(
     readdirSync(`${ASSETS}/${dir}`)
       .filter((f) => f.endsWith(".svg"))
@@ -33,8 +33,8 @@ const stadium = (dir) =>
       }),
   );
 
-const STADIUM = stadium("stadium-icons");
-const STADIUM_FILLED = stadium("stadium-icons-filled");
+const AREA = area("area-icons");
+const AREA_FILLED = area("area-icons-filled");
 // name -> Fluent icon id. 16px Regular throughout: that is Fluent's own inline size.
 const MAP = {
   PlusIcon: "add_16_regular",
@@ -139,16 +139,16 @@ ${Object.entries(MAP)
   .join("\n\n")}
 
 /*
- * Stadium's marks. They are stroked rather than filled, so they take their own base: the
+ * Area's marks. They are stroked rather than filled, so they take their own base: the
  * fill is off and the colour rides on the stroke. Fitted to Fluent's optical weight by
  * measurement -- see the note in gen-icons.mjs.
  */
-const stadiumBase = { ...base, fill: "none" };
+const areaBase = { ...base, fill: "none" };
 
-${Object.entries(STADIUM)
+${Object.entries(AREA)
   .map(
     ([name, inner]) =>
-      `/** Stadium \`${name}\`. */\nexport const ${pascal(name)}Icon = () => (\n  <svg {...stadiumBase}>\n    ${jsx(inner)}\n  </svg>\n);`,
+      `/** Area \`${name}\`. */\nexport const ${pascal(name)}Icon = () => (\n  <svg {...areaBase}>\n    ${jsx(inner)}\n  </svg>\n);`,
   )
   .join("\n\n")}
 `;
@@ -174,7 +174,7 @@ writeFileSync(join(ROOT, "scripts/icons.generated.mjs"), js);
 
 /*
  * The browser documents the whole set, not a curated corner of it, which is 1,710 Fluent
- * glyphs on the 16 grid plus Stadium's 29 -- 711 KB of path data in one style alone. Inlined
+ * glyphs on the 16 grid plus Area's 29 -- 711 KB of path data in one style alone. Inlined
  * per page that is unservable, so the marks ship as two SVG sprites and the page carries
  * `<use>` references: one element per cell, and the sprite cached once for the whole site.
  *
@@ -195,8 +195,8 @@ const kebab = (id) => id.replace(/_/g, "-");
 
 function sprite(style) {
   const symbols = [];
-  for (const [name, inner] of Object.entries(style === "filled" ? STADIUM_FILLED : STADIUM)) {
-    symbols.push(`<symbol id="st-${name}" viewBox="0 0 16 16" fill="none">${inner}</symbol>`);
+  for (const [name, inner] of Object.entries(style === "filled" ? AREA_FILLED : AREA)) {
+    symbols.push(`<symbol id="area-${name}" viewBox="0 0 16 16" fill="none">${inner}</symbol>`);
   }
   for (const id of REGULAR) {
     // A Fluent glyph with no filled cut falls back to its regular one, so every cell in the
@@ -221,7 +221,7 @@ writeFileSync(`${ASSETS}/icons-filled.svg`, sprite("filled"));
  * a build can do once.
  */
 const catalog = [
-  ...Object.keys(STADIUM).sort().map((name) => ({ id: `st-${name}`, name, source: "stadium" })),
+  ...Object.keys(AREA).sort().map((name) => ({ id: `area-${name}`, name, source: "area" })),
   ...REGULAR.map((id) => ({ id: `fl-${kebab(id)}`, name: kebab(id), source: "fluent", filled: FILLED.has(id) })),
 ].map((entry) => ({ ...entry, terms: entry.name.split("-").join(" ") }));
 
@@ -244,5 +244,5 @@ console.log(
   Object.keys(TOOLBAR).length,
   "toolbar icons,",
   catalog.length,
-  `catalogued (${Object.keys(STADIUM).length} Stadium + ${REGULAR.length} Fluent)`,
+  `catalogued (${Object.keys(AREA).length} Area + ${REGULAR.length} Fluent)`,
 );

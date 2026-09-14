@@ -1,12 +1,12 @@
 /**
  * The shape of every Area colour scale.
  *
- * Area no longer generates its own ramps. The colours are the Stadium palette, vendored
+ * Area no longer generates its own ramps. The colours are the Area palette, vendored
  * verbatim as `palette.json` -- 14 families x 23 rungs, exported from the system that
  * shipped them. `scale.ts` reads that table; nothing here computes a colour.
  *
  * That is a deliberate reversal of the previous model, in which a level name *was* its
- * lightness and `assertLadder()` enforced it. Stadium is anchored to contrast instead:
+ * lightness and `assertLadder()` enforced it. Area is anchored to contrast instead:
  * every family's 500 rung is pinned so a label clears AA on white, which means the hues
  * deliberately do *not* share a lightness at a shared rung -- yellow's 500 sits at L 0.68
  * where indigo's sits at L 0.56, because matching them would push one of the two below
@@ -94,6 +94,12 @@ export const INVERSION = {
    * `tonalBorderStrong` had a rung of slack each and no longer do.
    */
   borderSubtle: { light: 200, dark: 750 },
+  /**
+   * Decorative dividers and container seams. The light theme deliberately uses rung 50
+   * for a near-white rule; dark uses 800 so the rule stays close to its ground.
+   * Never use this token to identify an input, a selected state, or keyboard focus.
+   */
+  borderDecorative: { light: 50, dark: 800 },
   border: { light: 250, dark: 650 },
   /**
    * The faintest stroke in the system, for a container that is already offset in value from
@@ -164,11 +170,9 @@ export type Slot = keyof typeof INVERSION;
 /**
  * Area's own hue adjustment, in OKLCh degrees, applied per family where the palette loads.
  *
- * The division of labour: **Stadium owns lightness and chroma, Area owns hue.** The export's
- * wall-anchored L and C are the part that makes contrast predictable and are left untouched;
- * hue is the part that gives a palette its character, and a rotation changes it without
- * disturbing either. Gamut mapping after the rotation costs at most 0.0003 of chroma, so it
- * is very nearly free.
+ * The exported L and C anchors stay fixed; this table tunes hue at load time.
+ * Gamut mapping may then change chroma and lightness. Green at +14 costs up to 0.043
+ * chroma and moves L by 0.009, so measure every adjustment against the base palette.
  *
  * Rotations are deliberately small and are checked against adjacent-hue separation, not
  * copied from a reference. The obvious move -- matching OpenAI, which sits at red +10 and
@@ -181,7 +185,7 @@ export type Slot = keyof typeof INVERSION;
  */
 export const HUE_ROTATION: Record<string, number> = {
   /**
-   * Toward teal, to an emerald rather than a pure green. Stadium's green is pinned flat at
+   * Toward teal, to an emerald rather than a pure green. Area's green is pinned flat at
    * hue 150 across the whole family; the reference this matches sits at 164 at its solid
    * rung, and +14 lands Area's 500 on that number exactly.
    *
@@ -202,7 +206,7 @@ export const HUE_ROTATION: Record<string, number> = {
 /**
  * Area's chroma trim, per family, applied to the light end of a ramp.
  *
- * **This is the one place Area touches chroma, and it exists because Stadium's anchor and
+ * **This is the one place Area touches chroma, and it exists because Area's anchor and
  * this one are answering different questions.** The export pins each rung to a contrast
  * wall, which is a statement about a family against *white* -- it says nothing about that
  * family against its eleven siblings at the same rung. At the dark end that does not

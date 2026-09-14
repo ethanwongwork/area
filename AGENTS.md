@@ -19,7 +19,7 @@ are context, not authorization to implement them.
 - `packages/react/src/`: source-only React wrappers and manifest-derived variant helpers.
 - `apps/docs/src/`: component page metadata, practices, and real React demos.
 - `apps/docs/scripts/`: static build, layout and browser behavior, audits, icon generation.
-- `apps/docs/assets/`: generated sprites and original vendored Stadium marks; keep both.
+- `apps/docs/assets/`: generated sprites and original vendored Area marks; keep both.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): build flow and source boundaries.
 - [docs/MAINTENANCE.md](docs/MAINTENANCE.md): verification, regeneration, known limitations.
 - [.Codex/JOURNAL.md](.Codex/JOURNAL.md): decision history, consulted when needed.
@@ -51,7 +51,7 @@ Run tests separately: `build` does not execute the contrast test gate.
 - Axes own disjoint custom-property namespaces. Express interactions once in
   `packages/tokens/src/emit/base.ts`; re-emit derived values on every axis-bearing element.
   Never register derived tokens with `@property`.
-- Keep `palette.json` verbatim. Hue and light-end chroma adjustments belong in
+- Keep the color values in `palette.json` verbatim. Hue and light-end chroma adjustments belong in
   `HUE_ROTATION` and `CHROMA_TRIM`; semantic rung choices belong in `INVERSION`.
   Run contrast tests for color changes; never weaken thresholds to obtain a pass.
 - Components consume semantic tokens. Every CSS dimension traces to a token, except
@@ -59,6 +59,8 @@ Run tests separately: `build` does not execute the contrast test gate.
   local `--_*` properties; base rules consume them; size tiers set density tokens only.
 - A size tier is the outer control height. Checkbox, radio and switch use the icon ramp.
   Radius is flat per preset and capped against the box; density also changes UI type.
+- Decorative dividers and container edges use `--area-border-decorative` (light neutral 50).
+  Never use it for control affordances or state indicators.
 - Foreground does not change on hover. State belongs on `data-*` attributes.
   Tone conveys meaning; variant conveys emphasis. Current Button props use `primary` and
   `brand` for neutral and accent intent. Type role never implies weight (400/500).
@@ -71,7 +73,7 @@ Run tests separately: `build` does not execute the contrast test gate.
   variants; the utilities-layer exception is for rail visibility.
 - Never put a backtick inside the `DOCS_CSS` or `DOCS_SCRIPT` template literals.
 - Generate icons with `gen-icons.mjs`; never hand-edit generated icons or draw replacements.
-  Preserve vendored Stadium markup and Fluent's size-specific cuts.
+  Preserve vendored Area markup and Fluent's size-specific cuts.
 
 ## Finish
 
