@@ -23,12 +23,14 @@ import {
   viewToggle,
 } from "./layout.mjs";
 import { ICONS } from "./icons.generated.mjs";
+import { CATALOG } from "./icons.catalog.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
 import { PRACTICES } from "../src/practices.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = resolve(root, "..", "..");
 const out = join(root, "dist");
+const STADIUM_COUNT = CATALOG.filter((i) => i.source === "stadium").length;
 
 const tokens = JSON.parse(readFileSync(join(repo, "packages/tokens/dist/tokens.json"), "utf8"));
 const { MANIFESTS } = await import(join(repo, "packages/styles/src/manifest.ts"));
@@ -47,64 +49,192 @@ const FOUNDATION_PAGES = [
 /* --- Chrome ---------------------------------------------------------------- */
 
 /**
- * The axis panel.
+ * The inspector.
  *
- * Every picker is a real segmented control from the system. The accent picker renders its
- * twelve options as swatches of each scale's own solid fill, which is both the clearest way
- * to choose a hue and a working demonstration that the scales are addressable as tokens.
- * The solid level differs per hue -- blue's is 500, yellow's is 350 -- so the swatch has to
- * ask the scale rather than assume a fixed rung.
+ * Every axis is a real control from the system, and which control an axis gets is decided
+ * by the shape of its values rather than by uniformity:
+ *
+ *   two states, one of them the "on" one   -> Switch     (theme)
+ *   a short unordered set, all labels tiny -> Segmented  (neutral, density)
+ *   a long unordered set                   -> Chip       (accent: eleven hues)
+ *   a set whose labels do not fit a track  -> Select     (typography, surface, motion)
+ *   an ordered ramp with a direction       -> Slider     (radius: 0 to pill)
+ *
+ * A panel of eight identical segmented controls -- which is what this was -- says every
+ * axis is the same kind of choice. They are not: radius is a ramp you scrub, accent is a
+ * palette you pick from, and dark mode is a thing you turn on.
+ *
+ * Every control carries `data-axis`, and every option `data-value`, so one delegated
+ * listener drives all of them and a control can be swapped for another without touching
+ * the script.
  */
-function axisGroups() {
-  return tokens.axes
-    .map((axis) => {
-      const items = axis.presets
-        .map((preset) => {
-          const selected = preset.id === axis.defaultPreset;
-          const body =
-            axis.id === "brand"
-              ? `<span class="area-segmented__icon" aria-hidden="true"><span class="docs-swatch" style="background:var(--area-${preset.id}-${tokens.scales[preset.id].solid.level.light})"></span></span>`
-              : escapeHtml(preset.label);
-          return `<button type="button" role="radio" class="area-segmented__item" data-value="${preset.id}" aria-checked="${selected}" aria-label="${escapeHtml(preset.label)}"${selected ? " data-selected" : ""}>${body}</button>`;
-        })
-        .join("");
-
-      return `<div class="docs-axis">
-      <span class="docs-axis__name">${escapeHtml(axis.label)}</span>
-      <div class="area-segmented area-segmented--sm" role="radiogroup" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}" style="flex-wrap:wrap">${items}</div>
+function axisRow(label, control) {
+  return `<div class="area-field area-field--inline">
+      <span class="area-field__label">${escapeHtml(label)}</span>
+      ${control}
     </div>`;
-    })
-    .join("");
 }
 
-function axisPanel() {
-  return `<div class="docs-axes" id="docs-axes" hidden>
-    <div class="docs-axes__inner">${axisGroups()}</div>
-  </div>`;
-}
-
-/** A compact segmented control for one axis, for the topbar. */
-function axisSwitch(axisId, label) {
-  const axis = tokens.axes.find((a) => a.id === axisId);
+function axisSegmented(axis, size = "xs") {
   const items = axis.presets
     .map(
       (p) =>
         `<button type="button" role="radio" class="area-segmented__item" data-value="${p.id}" aria-checked="${p.id === axis.defaultPreset}"${p.id === axis.defaultPreset ? " data-selected" : ""}>${escapeHtml(p.label)}</button>`,
     )
     .join("");
-
-  // xs, which renders the same 28px the sm button beside it does: a segmented control wraps
-  // its items in a track with a 2px inset at each end, so its outer height is one tier up
-  // from its name. Matching the class names here would have left the bar uneven.
-  return `<div class="area-segmented area-segmented--xs" role="radiogroup" aria-label="${escapeHtml(label)}" data-axis="${axisId}" data-default="${axis.defaultPreset}">${items}</div>`;
+  return `<div class="area-segmented area-segmented--${size} area-segmented--full-width" role="radiogroup" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}">${items}</div>`;
 }
 
-function topbarControls() {
-  return `${axisSwitch("density", "Density")}
-  ${axisSwitch("theme", "Theme")}
-  <button type="button" class="area-button area-button--outline area-button--primary area-button--sm" data-toggle-axes aria-expanded="false" aria-controls="docs-axes">
-    <span class="area-button__label">Customize</span>
-  </button>`;
+function axisSelect(axis) {
+  const options = axis.presets
+    .map(
+      (p) =>
+        `<option value="${p.id}"${p.id === axis.defaultPreset ? " selected" : ""}>${escapeHtml(p.label)}</option>`,
+    )
+    .join("");
+  return `<select class="area-select area-select--xs" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}">${options}</select>`;
+}
+
+/*
+ * The switch reports one preset when on and another when off, which is the whole reason
+ * an axis with exactly two presets can be a switch at all. Both are named in the markup
+ * so the script never has to know that "theme" means light and dark.
+ */
+function axisSwitch(axis, onPreset) {
+  const off = axis.presets.find((p) => p.id !== onPreset).id;
+  const on = axis.defaultPreset === onPreset;
+  return `<label class="area-switch area-switch--xs docs-inspector__switch">
+      <input type="checkbox" class="area-switch__control" role="switch" aria-label="${escapeHtml(axis.label)}"
+             data-axis="${axis.id}" data-default="${axis.defaultPreset}" data-on="${onPreset}" data-off="${off}"${on ? " checked" : ""}>
+    </label>`;
+}
+
+/*
+ * The slider runs over preset *indices*, not over the radius values themselves -- the
+ * ramp ends in `pill`, which is not a number, and the steps are not evenly spaced in any
+ * case. An index keeps every stop one notch apart, which is what a scrub should feel like.
+ */
+function axisSlider(axis) {
+  const index = axis.presets.findIndex((p) => p.id === axis.defaultPreset);
+  const pct = (index / (axis.presets.length - 1)) * 100;
+  const values = axis.presets.map((p) => p.id).join(" ");
+  const labels = axis.presets.map((p) => p.label).join("|");
+
+  return `<div class="area-slider area-slider--xs" style="--_pct:${pct}%" data-axis="${axis.id}" data-default="${axis.defaultPreset}" data-values="${values}" data-labels="${escapeHtml(labels)}">
+      <input type="range" class="area-slider__control" min="0" max="${axis.presets.length - 1}" step="1" value="${index}" aria-label="${escapeHtml(axis.label)}">
+      <span class="area-slider__value">${escapeHtml(axis.presets[index].label)}</span>
+    </div>`;
+}
+
+/*
+ * The accent chips carry a swatch of each scale's own solid fill, which is both the
+ * clearest way to choose a hue and a working demonstration that the scales are addressable
+ * as tokens. The solid level differs per hue -- blue's is 500, yellow's is 350 -- so the
+ * swatch asks the scale rather than assuming a fixed rung.
+ */
+function axisChips(axis) {
+  const chips = axis.presets
+    .map((preset) => {
+      const selected = preset.id === axis.defaultPreset;
+      const swatch = `var(--area-${preset.id}-${tokens.scales[preset.id].solid.level.light})`;
+      return `<button type="button" class="area-chip area-chip--xs" data-value="${preset.id}" aria-pressed="${selected}"${selected ? " data-selected" : ""}>
+        <span class="area-chip__swatch" style="background:${swatch}" aria-hidden="true"></span>${escapeHtml(preset.label)}
+      </button>`;
+    })
+    .join("");
+
+  return `<div class="area-chip-group" role="group" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}">${chips}</div>`;
+}
+
+const AXIS_SECTIONS = [
+  { title: "Appearance", axes: ["theme", "neutral", "brand"] },
+  { title: "Type", axes: ["type"] },
+  { title: "Layout", axes: ["density", "radius", "surface"] },
+  { title: "Motion", axes: ["motion"] },
+];
+
+/** The control an axis gets, and the label it goes under. */
+function axisControl(axis) {
+  switch (axis.id) {
+    case "theme":
+      return { label: "Dark mode", control: axisSwitch(axis, "dark") };
+    case "brand":
+      return { label: "Accent", control: axisChips(axis), full: true };
+    case "radius":
+      return { label: "Radius", control: axisSlider(axis) };
+    case "neutral":
+    case "density":
+      return { label: axis.label, control: axisSegmented(axis) };
+    default:
+      return { label: axis.label, control: axisSelect(axis) };
+  }
+}
+
+function inspectorBody() {
+  const byId = Object.fromEntries(tokens.axes.map((axis) => [axis.id, axis]));
+
+  return AXIS_SECTIONS.map((section) => {
+    const rows = section.axes
+      .map((id) => {
+        const { label, control, full } = axisControl(byId[id]);
+        // A chip group is given the row's full width: eleven chips in the control column
+        // of a 280px panel wrap to five lines and stop reading as one set.
+        return full
+          ? `<div class="area-panel__stack">
+      <span class="area-field__label">${escapeHtml(label)}</span>
+      ${control}
+    </div>`
+          : axisRow(label, control);
+      })
+      .join("\n      ");
+
+    return `<section class="area-panel__section">
+      <h2 class="area-panel__heading">${escapeHtml(section.title)}</h2>
+      ${rows}
+    </section>`;
+  }).join("\n    ");
+}
+
+/**
+ * The panel itself: a persistent right rail, the way Figma and Framer both put an
+ * inspector beside the thing it acts on rather than in a drawer over it.
+ *
+ * It is `position: sticky` with its own scroll, so a long page scrolls under a panel that
+ * stays put -- the controls are for the whole document, not for the part of it currently
+ * on screen.
+ */
+function inspector() {
+  return `<aside class="docs-inspector area-panel area-panel--md area-panel--flush" id="docs-inspector" aria-label="Customize">
+  <div class="area-panel__bar">
+    <span class="area-panel__title">Customize</span>
+    <span class="docs-inspector__actions">
+      <button type="button" class="area-button area-button--ghost area-button--primary area-button--xs" data-reset-axes>
+        <span class="area-button__label">Reset</span>
+      </button>
+      ${railToggle("panel", "Hide customize panel")}
+    </span>
+  </div>
+  <div class="area-panel__body">
+    ${inspectorBody()}
+  </div>
+</aside>`;
+}
+
+/*
+ * A rail toggle. One markup, two homes: it rides in its rail's own bar while the rail is
+ * open, and a second copy waits in the page corner for when the rail is closed -- which is
+ * where every editor puts it, because a control that disappears with the thing it reopens
+ * is not a toggle.
+ *
+ * Both copies carry `data-rail`, so one handler drives them and neither needs to know the
+ * other exists. Which copy is visible is decided by the shell's state attribute in CSS,
+ * never by the script, so the server-rendered page is already correct.
+ */
+function railToggle(rail, label, { corner = false } = {}) {
+  const icon = rail === "nav" ? ICONS.panelLeft : ICONS.panelRight;
+  return `<button type="button" class="area-button area-button--ghost area-button--primary area-button--sm area-button--icon-only${corner ? " docs-rail-toggle" : ""}" data-rail="${rail}" aria-label="${escapeHtml(label)}" aria-expanded="true">
+      <span class="area-button__icon" aria-hidden="true">${icon}</span>
+    </button>`;
 }
 
 function sidebar(activeSlug) {
@@ -122,40 +252,46 @@ function sidebar(activeSlug) {
       ${links}
     </nav>`;
 
-  return `<aside class="docs-sidebar">
+  return `<aside class="docs-sidebar area-panel area-panel--md area-panel--flush area-panel--bare-bar">
+  <div class="area-panel__bar">
+    <a class="docs-brand" href="./index.html">area</a>
+    ${railToggle("nav", "Hide navigation")}
+  </div>
+  <div class="area-panel__body docs-sidebar__body">
   ${group("Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes")].join("\n      "))}
   ${group("Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   ${group("Components", COMPONENT_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
+  </div>
 </aside>`;
 }
 
 function page({ slug, title, lede, body, toc = [] }) {
+  /*
+   * On this page keeps the right rail as its home. The inspector shares that column, and
+   * the two never show at once -- when the panel is open the outline is hidden rather than
+   * relocated, because an outline moved to the top of the document stops being a rail you
+   * glance at and becomes a block you read past.
+   */
   const tocHtml = toc.length
     ? `<nav class="docs-toc area-menu area-menu--inline area-menu--marker" aria-label="On this page">
       <div class="area-menu__label">On this page</div>
-      ${toc.map((t) => `<a class="area-menu__item" href="#${t.id}"${t.nested ? ' style="margin-inline-start:var(--area-space-12)"' : ""}>${escapeHtml(t.title)}</a>`).join("")}
+      ${toc.map((t) => `<a class="area-menu__item" href="#${t.id}"${t.nested ? ' data-nested' : ""}>${escapeHtml(t.title)}</a>`).join("")}
     </nav>`
-    : "<div></div>";
+    : "";
 
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escapeHtml(title)} — aerea</title>
+<title>${escapeHtml(title)} — area</title>
 <meta name="description" content="${escapeHtml(lede)}">
 <link rel="stylesheet" href="./area.css">
 <style>${DOCS_CSS}</style>
 </head>
 <body>
-<header class="docs-topbar">
-  <a class="docs-brand" href="./index.html">aerea</a>
-  <span class="docs-topbar__spacer"></span>
-  ${topbarControls()}
-</header>
-${axisPanel()}
-${customizer(axisGroups())}
-<div class="docs-shell">
+${customizer(inspectorBody())}
+<div class="docs-shell" data-nav="open" data-panel="open"${toc.length ? "" : ' data-toc="none"'}>
   ${sidebar(slug)}
   <main class="docs-main">
     <div class="docs-content">
@@ -163,9 +299,12 @@ ${customizer(axisGroups())}
       <p class="docs-lede">${escapeHtml(lede)}</p>
       ${body}
     </div>
-    ${tocHtml}
   </main>
+  ${tocHtml}
+  ${inspector()}
 </div>
+${railToggle("nav", "Show navigation", { corner: true })}
+${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 </body>
 </html>`;
@@ -194,6 +333,10 @@ ${example.note ? `<p class="docs-note">${escapeHtml(example.note)}</p>` : ""}
 const COLUMN_DEMOS = new Set([
   "InputSizes",
   "FieldDefault",
+  "FieldInline",
+  "SliderSizes",
+  "SliderDefault",
+  "SliderBare",
   "FieldError",
   "RadioDefault",
   "AlertTones",
@@ -407,6 +550,60 @@ const AG = "Ag";
  * Reads the generated icon module rather than a hand-kept list, so the page cannot drift
  * from what the system actually ships -- the same rule every other foundation page follows.
  */
+/**
+ * The icon browser.
+ *
+ * A grid of every mark with the controls above it, the shape Phosphor's browser settled on
+ * and the one a reader actually uses -- you arrive knowing roughly what you want and need to
+ * see the field to find it, which a table of names cannot give you.
+ *
+ * Geometry comes from two sprites rather than inlined paths: 1,739 marks is 711 KB of path
+ * data in one style, which is unservable per page and is cached once as a file. A cell is
+ * therefore a `<use>` reference, and switching style swaps the href prefix rather than
+ * loading both sets.
+ *
+ * Every cell is server-rendered. Filtering hides rather than builds, so the grid is complete
+ * before the script runs and a reader with no JavaScript still gets the whole set.
+ */
+function iconBrowser() {
+  const cell = (icon) =>
+    `<button type="button" class="docs-icon" data-icon="${icon.name}" data-terms="${escapeHtml(icon.terms)}" data-source="${icon.source}" title="${escapeHtml(icon.name)}">
+      <span class="docs-icon__mark" aria-hidden="true"><svg><use href="./icons.svg#${icon.id}"></use></svg></span>
+      <span class="docs-icon__name">${escapeHtml(icon.name)}</span>
+    </button>`;
+
+  const styleItem = (value, label, selected) =>
+    `<button type="button" role="radio" class="area-segmented__item" data-icon-style="${value}" aria-checked="${selected}"${selected ? " data-selected" : ""}>${label}</button>`;
+
+  const sourceChip = (value, label, selected) =>
+    `<button type="button" class="area-chip area-chip--xs" data-icon-source="${value}" aria-pressed="${selected}"${selected ? " data-selected" : ""}>${label}</button>`;
+
+  return `<div class="docs-iconbrowser" id="icon-browser" data-style="regular" data-source="all">
+  <div class="docs-iconbrowser__bar">
+    <div class="area-input area-input--sm docs-iconbrowser__search">
+      <span class="area-input__icon" aria-hidden="true">${ICONS.search ?? ""}</span>
+      <input class="area-input__control" type="search" placeholder="Search ${CATALOG.length.toLocaleString("en-US")} icons" aria-label="Search icons" data-icon-search>
+    </div>
+    <div class="area-segmented area-segmented--sm" role="radiogroup" aria-label="Style">
+      ${styleItem("regular", "Regular", true)}${styleItem("filled", "Filled", false)}
+    </div>
+    <div class="area-chip-group" role="group" aria-label="Source">
+      ${sourceChip("all", "All", true)}${sourceChip("stadium", "Stadium", false)}${sourceChip("fluent", "Fluent", false)}
+    </div>
+    <label class="docs-iconbrowser__size">
+      <span class="area-field__label">Size</span>
+      <span class="area-slider area-slider--sm" data-icon-size>
+        <input type="range" class="area-slider__control" min="16" max="48" step="4" value="24" aria-label="Icon size">
+        <span class="area-slider__value" data-icon-size-value>24</span>
+      </span>
+    </label>
+    <span class="docs-iconbrowser__count" data-icon-count aria-live="polite"></span>
+  </div>
+  <div class="docs-iconbrowser__grid" data-icon-grid>${CATALOG.map(cell).join("")}</div>
+  <p class="docs-iconbrowser__empty" data-icon-empty hidden>No icon matches that name.</p>
+</div>`;
+}
+
 function iconographyPage() {
   const source = readFileSync(new URL("../src/icons.tsx", import.meta.url), "utf8");
   const rows = [...source.matchAll(/\/\*\* Fluent `([a-z0-9_]+)`\. \*\/\s*export const (\w+)/g)].map(
@@ -432,9 +629,9 @@ function iconographyPage() {
     .sort((a, b) => parseInt(a.px) - parseInt(b.px));
 
   const body = `<div class="docs-prose">
-<p>Icons are <strong>Fluent System Icons</strong>, Microsoft's set, used at the 16px Regular cut. The path data is generated from <code class="area-code">@fluentui/svg-icons</code> by <code class="area-code">gen-icons.mjs</code> and is never drawn by hand, so an icon here is the same glyph Fluent ships rather than an approximation of it.</p>
-<p>Two consequences worth knowing. Fluent icons are <em>filled</em> paths, not strokes, so they take <code class="area-code">fill</code> and never <code class="area-code">stroke-width</code> — a stroke-based icon dropped in beside them will not match at any weight. And they are optically corrected per size, which is why the 16px cut is used at 16px instead of scaling the 20 or 24 down to fit.</p>
-<p>An icon never sets its own size. It fills the slot it sits in, and the slot takes its size from the density axis, so every icon in the system moves when density does.</p>
+<p>Icons are <strong>Fluent System Icons</strong>, Microsoft's set, used at the 16px Regular cut, with twenty-nine marks drawn by <strong>Stadium</strong> for the panel vocabulary Fluent has no glyph for. Neither is drawn by hand here: <code class="area-code">gen-icons.mjs</code> generates the path data from <code class="area-code">@fluentui/svg-icons</code> and vendors Stadium's files verbatim, so an icon is the glyph its source ships rather than an approximation of it.</p>
+<p>Fluent's marks are <em>filled</em> paths; Stadium's are <em>stroked</em>. That sounds like a contradiction and is not, because the rule the distinction stands in for is about <em>optical weight</em>, not about which SVG attribute carries the colour. An icon that has not been fitted to the set will not match it at any size. Stadium's were fitted by measurement — a 1-unit rule at 16, round terminals, and an ink box of 12 units for a rectilinear mark or 14 for a round one, which is exactly where Fluent's own square and round marks land. Draw a new stroked mark without that fitting and it will read a size wrong beside everything around it.</p>
+<p>Both sets are optically corrected per size, which is why the 16px cut is used at 16px rather than scaling the 20 or 24 down to fit. And an icon never sets its own size: it fills the slot it sits in, and the slot takes its size from the density axis, so every icon in the system moves when density does.</p>
 </div>
 ${tokenSection({
   id: "sizes",
@@ -459,38 +656,21 @@ ${tokenSection({
       figure: `<span style="display:inline-flex;inline-size:var(${r.token});block-size:var(${r.token})">${rows[0].svg}</span>`,
     }),
 })}
-${tokenSection({
-  id: "set",
-  title: "The set",
-  description:
-    "Every icon the documentation and demos use, with the Fluent identifier each one is generated from.",
-  rows,
-  columns: [
-    { header: "Export", cell: (r) => tokenChip(r.name) },
-    { header: "Fluent", cell: (r) => `<span class="docs-mono">${escapeHtml(r.fluent)}</span>` },
-    {
-      header: "Preview",
-      cell: (r) =>
-        `<div class="docs-preview-cell"><span style="display:inline-flex;inline-size:var(--area-icon-md);block-size:var(--area-icon-md)">${r.svg}</span></div>`,
-    },
-  ],
-  card: (r) =>
-    tokenCard({
-      name: r.name,
-      meta: [r.fluent],
-      figure: `<span style="display:inline-flex;inline-size:var(--area-icon-lg);block-size:var(--area-icon-lg)">${r.svg}</span>`,
-    }),
-})}
+<h2 class="docs-h2" id="set">The set</h2>
+<div class="docs-prose">
+<p>Every mark in the system, ${CATALOG.length.toLocaleString("en-US")} of them: Fluent's whole 16px cut, plus ${STADIUM_COUNT} Stadium draws for the panel vocabulary Fluent has no glyph for. Search by name, and switch style, source or size without leaving the grid.</p>
+</div>
+${iconBrowser()}
 <h2 class="docs-h2" id="adding">Adding one</h2>
 <div class="docs-prose">
-<p>Add the export name and its Fluent identifier to the map in <code class="area-code">gen-icons.mjs</code>, then run it. Nothing else is edited by hand — the module below is generated output, and editing it directly is how the set drifts from Fluent.</p>
+<p>A Fluent mark needs an export name and its Fluent identifier in the map in <code class="area-code">gen-icons.mjs</code>, then a run of it. A Stadium mark needs its file dropped into <code class="area-code">assets/stadium-icons</code> and the same run — the generator reads the directory, so there is no list to keep in step. Nothing else is edited by hand: <code class="area-code">icons.tsx</code>, <code class="area-code">icons.catalog.mjs</code> and the two sprites are all generated output, and editing one directly is how the set drifts from its source.</p>
 </div>
 ${codeBlock(`const MAP = {\n  PlusIcon: "add_16_regular",\n  // ...\n};`)}`;
 
   return page({
     slug: "iconography",
     title: "Iconography",
-    lede: "Fluent System Icons at 16px, generated rather than drawn, sized by the density axis.",
+    lede: "Fluent System Icons at 16px with Stadium's panel marks beside them, generated rather than drawn, sized by the density axis.",
     body,
     toc: [
       { id: "sizes", title: "Sizes" },
@@ -1069,6 +1249,10 @@ ${table(
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 cpSync(join(repo, "packages/styles/dist/area.css"), join(out, "area.css"));
+// The two sprites the icon browser references. Assets rather than inlined markup; see
+// iconBrowser() for why.
+cpSync(join(root, "assets/icons.svg"), join(out, "icons.svg"));
+cpSync(join(root, "assets/icons-filled.svg"), join(out, "icons-filled.svg"));
 
 const pages = [
   ["index.html", indexPage()],

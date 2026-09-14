@@ -114,9 +114,11 @@ export const COMPONENT_PAGES = [
       ["error", "ReactNode", "—"],
       ["required", "boolean", "false"],
       ["htmlFor", "string", "—"],
+      ["inline", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", demo: "FieldDefault" },
+      { id: "inline", title: "Inline", demo: "FieldInline" },
       {
         id: "error",
         title: "Error",
@@ -140,7 +142,7 @@ export const COMPONENT_PAGES = [
     slug: "select",
     name: "Select",
     manifest: "select",
-    api: [["size", '"sm" | "md" | "lg"', '"md"']],
+    api: [["size", '"xs" | "sm" | "md" | "lg"', '"md"']],
     examples: [{ id: "default", title: "Default", demo: "SelectDefault" }],
   },
   {
@@ -174,11 +176,47 @@ export const COMPONENT_PAGES = [
     name: "Switch",
     manifest: "switch",
     api: [
-      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["size", '"xs" | "sm" | "md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
       ["defaultChecked", "boolean", "false"],
     ],
     examples: [{ id: "default", title: "Default", demo: "SwitchDefault" }],
+  },
+
+  {
+    slug: "slider",
+    name: "Slider",
+    manifest: "slider",
+    api: [
+      ["size", '"xs" | "sm" | "md" | "lg"', '"md"'],
+      ["min", "number", "0"],
+      ["max", "number", "100"],
+      ["readout", "ReactNode", "—"],
+      ["disabled", "boolean", "false"],
+    ],
+    examples: [
+      { id: "default", title: "Default", demo: "SliderDefault" },
+      { id: "sizes", title: "Sizes", demo: "SliderSizes" },
+      { id: "bare", title: "Without a readout", demo: "SliderBare" },
+    ],
+  },
+  {
+    slug: "chip",
+    name: "Chip",
+    manifest: "chip",
+    api: [
+      ["size", '"xs" | "sm" | "md"', '"sm"'],
+      ["selected", "boolean", "false"],
+      ["swatch", "string", "—"],
+      ["swatchOnly", "boolean", "false"],
+      ["pill", "boolean", "false"],
+      ["icon", "ReactNode", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", demo: "ChipDefault" },
+      { id: "swatches", title: "With swatches", demo: "ChipSwatches" },
+      { id: "sizes", title: "Sizes", demo: "ChipSizes" },
+    ],
   },
   {
     slug: "badge",
@@ -208,6 +246,26 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "AvatarDefault" },
       { id: "sizes", title: "Sizes", demo: "AvatarSizes" },
+    ],
+  },
+  {
+    slug: "panel",
+    name: "Panel",
+    manifest: "panel",
+    api: [
+      ["size", '"xs" | "sm" | "md" | "lg"', '"md"'],
+      ["title", "ReactNode", "—"],
+      ["action", "ReactNode", "—"],
+      ["footer", "ReactNode", "—"],
+      ["flush", "boolean", "false"],
+    ],
+    examples: [
+      {
+        id: "default",
+        title: "Every control",
+        note: "One panel, one tier. Select, segmented, chip, slider and input all sit on sm, so any one of them rendering at a different height shows up as a ragged edge rather than as a number in a table.",
+        demo: "PanelEverything",
+      },
     ],
   },
   {

@@ -105,3 +105,6 @@ export const skeletonVariants = createVariants(MANIFESTS.skeleton!);
 export const separatorVariants = createVariants(MANIFESTS.separator!);
 export const tableVariants = createVariants(MANIFESTS.table!);
 export const segmentedVariants = createVariants(MANIFESTS.segmented!);
+export const sliderVariants = createVariants(MANIFESTS.slider!);
+export const chipVariants = createVariants(MANIFESTS.chip!);
+export const panelVariants = createVariants(MANIFESTS.panel!);

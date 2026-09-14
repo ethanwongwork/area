@@ -12,12 +12,24 @@
  *
  * The track's outline is an inset box-shadow rather than a border, so the 1px does not
  * participate in layout -- the items sit flush against the padding box and the track
- * height stays exactly control height plus twice the inset.
+ * height is exactly the tier's height.
+ *
+ * **A size tier is the OUTER height, as it is on every other control.** It used to name
+ * the item instead, which made the track a tier taller than its own class said: an `xs`
+ * segmented rendered 28px beside a 24px `xs` select. Every call site then had to know the
+ * offset and pick the class one tier down, which is not a rule anyone can hold. The item
+ * is now derived -- height less the inset it is padded by -- so `--sm` is 28px here and
+ * 28px everywhere.
+ *
+ * The inset is 2px at every tier for the same reason. Scaling it (2 at the low tiers, 4 at
+ * the high ones) put the `sm` and `md` items at the same 24px once the track carried the
+ * tier, which left two sizes apart only by their text.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-segmented {
-    --_inset: var(--area-space-4);
+    --_inset: var(--area-space-2);
     --_height: var(--area-control-md);
+    --_item: calc(var(--_height) - var(--_inset) * 2);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
     --_gap: var(--area-gap-md);
@@ -25,16 +37,17 @@
     --_leading: var(--area-control-md-leading);
 
     display: inline-flex;
+    align-items: center;
     gap: var(--area-space-2);
+    block-size: var(--_height);
     padding: var(--_inset);
     /*
      * Concentric, outward: the track is the item's radius plus the inset it pads by, so the
-     * two curves stay parallel. Capped against the track's own height -- the item plus that
-     * inset twice -- rather than against the item's.
+     * two curves stay parallel. Capped against the track's own height, which is the tier.
      */
     border-radius: min(
       calc(var(--area-radius-control) + var(--_inset)),
-      calc((var(--_height) + var(--_inset) * 2) * var(--area-radius-cap))
+      calc(var(--_height) * var(--area-radius-cap))
     );
     background-color: var(--area-bg-subtle);
     box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle);
@@ -46,11 +59,11 @@
     justify-content: center;
     gap: var(--_gap);
 
-    block-size: var(--_height);
+    block-size: var(--_item);
     padding-inline: var(--_gutter);
     border: 0;
-    /* Capped against this tier's own height; see button.css. */
-    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
+    /* Capped against the item's own height; see button.css. */
+    border-radius: min(var(--area-radius-control), calc(var(--_item) * var(--area-radius-cap)));
 
     background: transparent;
     color: var(--area-fg-muted);
@@ -105,16 +118,28 @@
 
   /* Optical inset, matching Button: an icon centres in the square its radius is cut from. */
   .area-segmented__item:has(> .area-segmented__icon:first-child) {
-    padding-inline-start: calc((var(--_height) - var(--_icon)) / 2);
+    padding-inline-start: calc((var(--_item) - var(--_icon)) / 2);
   }
 
   .area-segmented__item:has(> .area-segmented__icon:only-child) {
     padding-inline: 0;
-    inline-size: var(--_height);
+    inline-size: var(--_item);
   }
 
-  .area-segmented--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_icon: var(--area-icon-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); --_inset: var(--area-space-2); }
-  .area-segmented--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_inset: var(--area-space-2); }
-  .area-segmented--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-segmented--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  /*
+   * Stretched to its container, with the items sharing the width equally. On a panel row
+   * this is what puts a segmented control's right edge on the select's right edge above
+   * it -- without it the track shrink-wraps its labels and every row ends somewhere else.
+   *
+   * Opt-in, and named as Button names it, because a segmented control on its own should
+   * still be the width of its options.
+   */
+  .area-segmented--full-width { display: flex; }
+  .area-segmented--full-width .area-segmented__item { flex: 1; min-inline-size: 0; }
+
+  .area-segmented--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_icon: var(--area-icon-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
+  .area-segmented--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-xs); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-segmented--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-segmented--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-segmented--xl { --_height: var(--area-control-xl); --_gutter: var(--area-gutter-xl); --_icon: var(--area-icon-md); --_gap: var(--area-gap-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
 }

@@ -36,8 +36,11 @@
 @import "./components/input.css";
 @import "./components/textarea.css";
 @import "./components/choice.css";
+@import "./components/slider.css";
+@import "./components/chip.css";
 @import "./components/display.css";
 @import "./components/surface.css";
+@import "./components/panel.css";
 @import "./components/navigation.css";
 @import "./components/nav.css";
 @import "./components/segmented.css";

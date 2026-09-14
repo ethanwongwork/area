@@ -1,5 +1,5 @@
-import { Alert, Avatar, Badge, Button, Card, CardDescription, CardFooter, CardTitle, Dialog, Kbd, Menu, MenuItem, Popover, Progress, Separator, Skeleton, Spinner, Table, Tabs, Toast, Token, Tooltip } from "@area/react";
-import { AlertIcon, CheckIcon, InfoIcon } from "../icons.tsx";
+import { Alert, Avatar, Badge, Button, Card, CardDescription, CardFooter, CardTitle, Checkbox, Chip, ChipGroup, Dialog, Field, Input, Kbd, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
+import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, CheckIcon, DismissIcon, InfoIcon } from "../icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
 
@@ -229,4 +229,94 @@ export const TokenSubtle = () => (
     <Token>--area-blue-500</Token>
     <Token subtle>--area-brand-solid</Token>
   </>
+);
+
+/*
+ * Every control the system has, in one panel, at one tier.
+ *
+ * It is the size audit made visible as much as it is a demo: a select, a segmented
+ * control, a chip, a slider and an input all sit on `sm`, so any one of them rendering at
+ * a different height is visible as a ragged right edge rather than as a number in a table.
+ */
+export const PanelEverything = () => (
+  <Panel
+    size="md"
+    title="Scroll Variant"
+    action={
+      <Button variant="ghost" tone="primary" size="xs" iconOnly aria-label="Close" icon={<DismissIcon />} />
+    }
+    footer={<Button variant="soft" tone="primary" size="sm" fullWidth>Add Section</Button>}
+    style={{ inlineSize: 320, blockSize: 560 }}
+  >
+    <PanelSection heading="Trigger">
+      <Field inline label="Trigger" htmlFor="panel-trigger">
+        <Select size="sm" id="panel-trigger" defaultValue="view">
+          <option value="view">Section in View</option>
+          <option value="click">On Click</option>
+          <option value="load">On Load</option>
+        </Select>
+      </Field>
+      <Field inline label="Viewport">
+        <Segmented
+          size="sm"
+          fullWidth
+          label="Viewport"
+          value="bottom"
+          options={[
+            { value: "top", label: "", icon: <AlignTopIcon /> },
+            { value: "middle", label: "", icon: <AlignMiddleIcon /> },
+            { value: "bottom", label: "", icon: <AlignBottomIcon /> },
+          ]}
+        />
+      </Field>
+      <Field inline label="Replay">
+        <Segmented
+          size="sm"
+          fullWidth
+          label="Replay"
+          value="yes"
+          options={[
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+          ]}
+        />
+      </Field>
+      <Field inline label="Enabled" htmlFor="panel-enabled">
+        <Switch size="sm" id="panel-enabled" defaultChecked />
+      </Field>
+    </PanelSection>
+
+    <PanelSection heading="Style">
+      <Field inline label="Opacity">
+        <Slider size="sm" min={0} max={100} defaultValue={80} readout="80" />
+      </Field>
+      <Field inline label="Radius" htmlFor="panel-radius">
+        <Input size="sm" id="panel-radius" defaultValue="22" suffix="px" />
+      </Field>
+      <PanelStack>
+        <Label>Accent</Label>
+        <ChipGroup>
+          <Chip size="xs" swatch="var(--area-red-500)">Red</Chip>
+          <Chip size="xs" selected swatch="var(--area-indigo-500)">Indigo</Chip>
+          <Chip size="xs" swatch="var(--area-teal-600)">Teal</Chip>
+        </ChipGroup>
+      </PanelStack>
+    </PanelSection>
+
+    <PanelSection heading="Content">
+      <PanelStack>
+        <Label htmlFor="panel-note">Note</Label>
+        <Textarea size="sm" id="panel-note" rows={2} placeholder="Describe this variant" />
+      </PanelStack>
+      <Field inline label="Loop" htmlFor="panel-loop">
+        <Checkbox id="panel-loop" defaultChecked />
+      </Field>
+      <Field inline label="Easing" htmlFor="panel-ease">
+        <Select size="sm" id="panel-ease" defaultValue="out">
+          <option value="out">Ease out</option>
+          <option value="linear">Linear</option>
+        </Select>
+      </Field>
+    </PanelSection>
+  </Panel>
 );

@@ -14,22 +14,23 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { DOCS_CSS } from "./layout.mjs";
+
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** Values a design system has no opinion on. Each must be justified here to be allowed. */
 const ALLOWED = new Map([
   ["--docs-sidebar", "Width of this site's navigation. Not a system concern."],
-  ["--docs-toc", "Width of this site's on-this-page list."],
   ["--docs-measure", "Reading measure for long-form documentation."],
   ["--docs-max", "Maximum width of this site's shell."],
   ["--docs-blur", "Backdrop blur on this site's header. No Area surface uses blur."],
-  ["--docs-axis-col", "Minimum column width in the axis panel."],
+  ["--docs-inspector", "Width of this site's right-hand inspector rail."],
+  ["--docs-toc", "Width of this site's on-this-page list, which shares that rail."],
   ["--docs-preview-min", "Minimum height of an example preview."],
   ["--docs-specimen", "Minimum width of a specimen tile in a foundation grid."],
   ["--docs-figure", "Height of the figure area inside a specimen tile."],
   ["--docs-card", "Minimum width of a token card in a grid view."],
+  ["--docs-card-sm", "Minimum width of a cell in the icon browser's grid."],
   ["--docs-customizer-panel", "Width of the customizer's axis panel."],
 ]);
 
@@ -40,6 +41,42 @@ const STRUCTURAL = new Set([
 ]);
 
 const findings = [];
+
+/* --- 0. Backticks inside the template literals ---------------------------- */
+
+/*
+ * DOCS_CSS and DOCS_SCRIPT are JS template literals, so a backtick anywhere inside one --
+ * including in a CSS or JS comment quoting a class name -- ends the string. The result is
+ * a parse error pointing at whatever word follows, which says nothing about the cause.
+ * Caught by hand three times before this check existed.
+ *
+ * Read as text rather than through the import, because a file with this fault cannot be
+ * imported at all.
+ */
+{
+  const source = readFileSync(join(root, "scripts", "layout.mjs"), "utf8");
+  let fatal = false;
+  for (const name of ["DOCS_CSS", "DOCS_SCRIPT"]) {
+    const marker = `export const ${name} = \``;
+    const start = source.indexOf(marker);
+    if (start < 0) continue;
+    const body = source.slice(start + marker.length);
+    const end = body.indexOf("\n`;");
+    const inner = end < 0 ? body : body.slice(0, end);
+    if (!inner.includes("`")) continue;
+    fatal = true;
+    console.error(
+      `\n  Dogfood audit: ${name} contains a backtick.\n` +
+        `  It is a template literal, so a backtick inside it -- including inside a comment\n` +
+        `  quoting a class name -- ends the string. Node reports this as a syntax error on\n` +
+        `  whatever word follows, which says nothing about the cause. Drop the backticks.\n`,
+    );
+  }
+  // The import below would throw on such a file, so stop before reaching it.
+  if (fatal) process.exit(1);
+}
+
+const { DOCS_CSS } = await import("./layout.mjs");
 
 /* --- 1. Raw values in the docs stylesheet --------------------------------- */
 

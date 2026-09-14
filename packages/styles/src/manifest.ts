@@ -54,6 +54,7 @@ export const field: ComponentManifest = {
   block: "area-field",
   description: "Wraps a control with its label, description and error message.",
   variants: {},
+  booleans: ["inline"],
   states: ["disabled"],
   elements: ["label", "required", "description", "error"],
   defaults: {},
@@ -80,7 +81,7 @@ export const textarea: ComponentManifest = {
 export const select: ComponentManifest = {
   block: "area-select",
   description: "Picks one value from a list.",
-  variants: { size: ["sm", "md", "lg"] },
+  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
   states: [],
   elements: [],
   defaults: { size: "md" },
@@ -107,10 +108,36 @@ export const radio: ComponentManifest = {
 export const switchControl: ComponentManifest = {
   block: "area-switch",
   description: "Toggles a setting that takes effect immediately.",
-  variants: { size: ["sm", "md", "lg"] },
+  variants: { size: ["xs", "sm", "md", "lg"] },
   states: ["disabled"],
   elements: ["control"],
   defaults: { size: "md" },
+};
+
+export const slider: ComponentManifest = {
+  block: "area-slider",
+  description: "Picks a value from an ordered range.",
+  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
+  states: ["disabled"],
+  elements: ["control", "value"],
+  defaults: { size: "md" },
+};
+
+export const chip: ComponentManifest = {
+  block: "area-chip",
+  description: "Selects one value from a set too long for a segmented track.",
+  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
+  booleans: ["pill", "swatch-only"],
+  states: ["selected", "disabled"],
+  elements: ["swatch", "icon"],
+  defaults: { size: "sm" },
+};
+
+export const chipGroup: ComponentManifest = {
+  block: "area-chip-group",
+  description: "Lays out a set of chips, wrapping onto as many lines as it needs.",
+  variants: {},
+  defaults: {},
 };
 
 export const choiceLabel: ComponentManifest = {
@@ -171,6 +198,15 @@ export const progress: ComponentManifest = {
   states: ["indeterminate"],
   elements: ["bar"],
   defaults: {},
+};
+
+export const panel: ComponentManifest = {
+  block: "area-panel",
+  description: "A titled surface of rows that act on something beside it.",
+  variants: { size: ["xs", "sm", "md", "lg"] },
+  booleans: ["flush", "bare-bar"],
+  elements: ["bar", "title", "body", "section", "heading", "stack", "footer"],
+  defaults: { size: "md" },
 };
 
 export const card: ComponentManifest = {
@@ -260,7 +296,8 @@ export const tableWrapper: ComponentManifest = {
 export const segmented: ComponentManifest = {
   block: "area-segmented",
   description: "Picks one value from a small set of options.",
-  variants: { size: ["xs", "sm", "md", "lg"] },
+  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
+  booleans: ["full-width"],
   states: ["selected"],
   elements: ["item", "icon"],
   defaults: { size: "md" },
@@ -326,6 +363,9 @@ export const MANIFESTS: Record<string, ComponentManifest> = {
   checkbox,
   radio,
   switch: switchControl,
+  slider,
+  chip,
+  chipGroup,
   choiceLabel,
   badge,
   avatar,
@@ -333,6 +373,7 @@ export const MANIFESTS: Record<string, ComponentManifest> = {
   skeleton,
   spinner,
   progress,
+  panel,
   card,
   alert,
   dialog,

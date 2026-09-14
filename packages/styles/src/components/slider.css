@@ -1,0 +1,148 @@
+/* ---------------------------------------------------------------------------
+ * Slider
+ *
+ * A native <input type="range"> with its painting replaced. The input stays in the DOM
+ * and keeps its keyboard behaviour, its value semantics and its screen-reader output;
+ * `appearance: none` removes only the chrome, exactly as the choice controls do.
+ *
+ * The one thing a range input cannot express in CSS is how far along it is, so the fill
+ * is a gradient whose stop reads `--_pct`. The host sets that -- server-rendered for the
+ * initial value, updated on input -- which is a percentage rather than a length, so it
+ * carries no geometry of its own and survives a density change unchanged.
+ *
+ * A slider is for an ordered ramp that has a direction: radius, opacity, a gap. For an
+ * unordered set use Segmented or Chip, where the options are named rather than implied
+ * by position.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-slider {
+    --_height: var(--area-control-md);
+    --_thumb: var(--area-icon-md);
+    --_track: var(--area-space-4);
+    --_gap: var(--area-gap-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+    --_pct: 0%;
+
+    display: flex;
+    align-items: center;
+    gap: var(--_gap);
+    inline-size: 100%;
+    block-size: var(--_height);
+  }
+
+  .area-slider[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /*
+   * The control is the full height of its tier rather than the height of its track, so
+   * the pointer target matches every other control on the row. The track is painted as
+   * the input's own background and the thumb is centred on it.
+   */
+  .area-slider__control {
+    appearance: none;
+    flex: 1;
+    min-inline-size: 0;
+    margin: 0;
+    block-size: var(--_height);
+    background: transparent;
+    cursor: inherit;
+    outline: none;
+  }
+
+  .area-slider__control::-webkit-slider-runnable-track {
+    block-size: var(--_track);
+    border-radius: var(--area-radius-full);
+    background: linear-gradient(
+      to right,
+      var(--area-brand-solid) 0 var(--_pct),
+      var(--area-bg-component-active) var(--_pct) 100%
+    );
+  }
+
+  .area-slider__control::-moz-range-track {
+    block-size: var(--_track);
+    border-radius: var(--area-radius-full);
+    background: linear-gradient(
+      to right,
+      var(--area-brand-solid) 0 var(--_pct),
+      var(--area-bg-component-active) var(--_pct) 100%
+    );
+  }
+
+  [dir="rtl"] .area-slider__control::-webkit-slider-runnable-track,
+  [dir="rtl"] .area-slider__control::-moz-range-track {
+    scale: -1 1;
+  }
+
+  /*
+   * Round by identity, like the switch thumb: a slider handle that is not a circle reads
+   * as a segment of the track rather than as the thing you drag. It does not follow the
+   * radius axis.
+   *
+   * WebKit gives the thumb no automatic centring, so it is offset by half the difference
+   * between the thumb and the track. Firefox centres it, which is why the -moz rule has
+   * no margin.
+   */
+  .area-slider__control::-webkit-slider-thumb {
+    appearance: none;
+    inline-size: var(--_thumb);
+    block-size: var(--_thumb);
+    margin-block-start: calc((var(--_track) - var(--_thumb)) / 2);
+    border: var(--area-border-width) solid var(--area-border);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-2);
+    transition: var(--area-transition);
+  }
+
+  .area-slider__control::-moz-range-thumb {
+    appearance: none;
+    inline-size: var(--_thumb);
+    block-size: var(--_thumb);
+    border: var(--area-border-width) solid var(--area-border);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-2);
+    transition: var(--area-transition);
+  }
+
+  .area-slider__control:hover:not(:disabled)::-webkit-slider-thumb { border-color: var(--area-border-hover); }
+  .area-slider__control:hover:not(:disabled)::-moz-range-thumb { border-color: var(--area-border-hover); }
+
+  .area-slider__control:focus-visible::-webkit-slider-thumb {
+    border-color: var(--area-border-focus);
+    box-shadow: var(--area-shadow-2), var(--area-ring);
+  }
+  .area-slider__control:focus-visible::-moz-range-thumb {
+    border-color: var(--area-border-focus);
+    box-shadow: var(--area-shadow-2), var(--area-ring);
+  }
+
+  /*
+   * The readout is a value, not a label, so it takes the muted foreground and tabular
+   * figures -- without them the row twitches sideways as the digits change width. Its
+   * width is four figures: a content measure rather than a design decision, which is why
+   * it is in `ch` and not on the spacing ramp.
+   */
+  .area-slider__value {
+    flex-shrink: 0;
+    min-inline-size: 4ch;
+    text-align: end;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    font-variant-numeric: tabular-nums;
+    color: var(--area-fg-muted);
+    user-select: none;
+  }
+
+  /* --- Sizes -------------------------------------------------------------- */
+
+  .area-slider--xs { --_height: var(--area-control-xs); --_thumb: var(--area-icon-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
+  .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-slider--lg { --_height: var(--area-control-lg); --_thumb: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-slider--xl { --_height: var(--area-control-xl); --_thumb: var(--area-icon-xl); --_gap: var(--area-gap-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
+}

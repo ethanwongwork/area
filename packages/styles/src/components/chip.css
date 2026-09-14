@@ -1,0 +1,135 @@
+/* ---------------------------------------------------------------------------
+ * Chip
+ *
+ * A selectable token in a set. Badge is the display counterpart -- it states a value and
+ * cannot be pressed -- and Segmented is the counterpart for a set small enough to lay out
+ * in one track. Chip is what the two leave uncovered: a set too long to fit a track, whose
+ * members are still chosen rather than read.
+ *
+ * Eleven accent hues are the case that produced it. In a segmented control they wrapped
+ * onto three lines and kept the track's shared border, which made two rows read as two
+ * controls; as chips they read as one set that happens to wrap.
+ *
+ * A chip is a real <button> with `aria-pressed`, or a radio in a group. Selection is a
+ * `data-selected` attribute so the CSS works with plain HTML and with headless primitives
+ * unchanged, the same contract every other stateful component here uses.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-chip {
+    --_height: var(--area-control-sm);
+    --_gutter: var(--area-gutter-sm);
+    --_gap: var(--area-gap-sm);
+    --_dot: var(--area-icon-xs);
+    --_text: var(--area-control-sm-text);
+    --_leading: var(--area-control-sm-leading);
+
+    --_bg: var(--area-bg-surface);
+    --_bg-hover: var(--area-bg-component-hover);
+    --_border: var(--area-border);
+    --_fg: var(--area-fg-default);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_gap);
+    flex-shrink: 0;
+
+    block-size: var(--_height);
+    padding-inline: var(--_gutter);
+    border: var(--area-border-width) solid var(--_border);
+    /* Capped against this tier's own height; see button.css. */
+    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
+
+    background-color: var(--_bg);
+    color: var(--_fg);
+    font-family: inherit;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--area-transition);
+  }
+
+  /* Background and border move; the label does not. See button.css. */
+  .area-chip:hover:not([data-disabled]) {
+    background-color: var(--_bg-hover);
+    border-color: var(--area-border-hover);
+  }
+
+  .area-chip:focus-visible {
+    outline: none;
+    border-color: var(--area-border-focus);
+    box-shadow: var(--area-ring);
+  }
+
+  /*
+   * Selected is a tonal fill rather than a solid one. A row of chips is scanned as a set,
+   * and a solid fill on one member turns it into the only thing on the row with weight --
+   * which reads as a call to action rather than as the current choice.
+   */
+  .area-chip[data-selected] {
+    --_bg: var(--area-brand-surface);
+    --_bg-hover: var(--area-brand-surface-hover);
+    --_border: var(--area-brand-border);
+    --_fg: var(--area-fg-brand);
+  }
+
+  .area-chip[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /*
+   * A swatch, not an icon: it shows the value rather than categorising it, so it keeps
+   * its own colour on every state. Its ring is a translucent foreground for the same
+   * reason the token badge's is -- a fixed light stroke disappears on a pale swatch.
+   */
+  .area-chip__swatch {
+    flex-shrink: 0;
+    inline-size: var(--_dot);
+    block-size: var(--_dot);
+    border-radius: var(--area-radius-full);
+    box-shadow: inset 0 0 0 var(--area-border-width) color-mix(in oklab, var(--area-fg-default) 20%, transparent);
+  }
+
+  .area-chip__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    inline-size: var(--_dot);
+    block-size: var(--_dot);
+    color: var(--area-fg-muted);
+  }
+
+  .area-chip__icon > svg { inline-size: 100%; block-size: 100%; }
+
+  /* A chip carrying nothing but a swatch is square: there is no label to set its width. */
+  .area-chip--swatch-only {
+    padding-inline: 0;
+    inline-size: var(--_height);
+    justify-content: center;
+  }
+
+  .area-chip--pill { border-radius: var(--area-radius-full); }
+
+  /* --- Sizes -------------------------------------------------------------- */
+
+  .area-chip--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
+  .area-chip--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-chip--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_gap: var(--area-gap-md); --_dot: var(--area-icon-sm); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-chip--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_gap: var(--area-gap-lg); --_dot: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-chip--xl { --_height: var(--area-control-xl); --_gutter: var(--area-gutter-xl); --_gap: var(--area-gap-xl); --_dot: var(--area-icon-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
+
+  /* --- Group -------------------------------------------------------------- */
+
+  /*
+   * Chips wrap; that is the whole reason the component exists. The group owns the gap so
+   * a chip never carries a margin, which is what keeps a single chip usable on its own.
+   */
+  .area-chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--area-space-4);
+  }
+}

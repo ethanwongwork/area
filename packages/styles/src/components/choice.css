@@ -198,6 +198,7 @@
   .area-checkbox--md, .area-radio--md { --_size: var(--area-icon-md); }
   .area-checkbox--lg, .area-radio--lg { --_size: var(--area-icon-lg); }
 
+  .area-switch--xs { --_track-inline: calc(var(--area-control-xs) - var(--area-space-4)); --_track-block: var(--area-icon-xs); }
   .area-switch--sm { --_track-inline: calc(var(--area-control-sm) - var(--area-space-4)); --_track-block: var(--area-icon-sm); }
   .area-switch--md { --_track-inline: calc(var(--area-control-md) - var(--area-space-4)); --_track-block: var(--area-icon-md); }
   .area-switch--lg { --_track-inline: calc(var(--area-control-lg) - var(--area-space-4)); --_track-block: var(--area-icon-lg); }

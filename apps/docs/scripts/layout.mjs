@@ -94,11 +94,12 @@ export function codeBlock(code, { flush = false, wrap = true } = {}) {
  * onto a stage and puts every axis beside it, so a component can be pushed through the
  * whole system at a size worth looking at.
  *
- * The axis controls carry the same `data-axis` attributes as the ones in the header, so
- * the existing delegated handler drives them without knowing this exists -- and because
- * custom properties inherit into the top layer, a change here repaints the page behind it.
+ * It is handed the docked inspector's own body rather than a second set of controls, so
+ * the two cannot drift: every control carries `data-axis`, one delegated handler drives
+ * both, and one sync writes both. Because custom properties inherit into the top layer, a
+ * change made here repaints the page behind it as well.
  */
-export function customizer(axisPanelHtml) {
+export function customizer(inspectorHtml) {
   return `<dialog class="docs-customizer" id="docs-customizer" aria-label="Customize">
   <header class="docs-customizer__bar">
     <span class="docs-customizer__title">Customize</span>
@@ -109,7 +110,7 @@ export function customizer(axisPanelHtml) {
   </header>
   <div class="docs-customizer__body">
     <div class="docs-customizer__stage" id="docs-customizer-stage"></div>
-    <aside class="docs-customizer__panel">${axisPanelHtml}</aside>
+    <aside class="docs-customizer__panel"><div class="docs-inspector__body">${inspectorHtml}</div></aside>
   </div>
 </dialog>`;
 }
@@ -199,126 +200,304 @@ export const DOCS_CSS = `
   :root {
     /* Site layout. Not design-system tokens: these describe this documentation site. */
     --docs-sidebar: 216px;
-    --docs-toc: 192px;
     /*
      * The site's own spacing, derived from the density axis rather than fixed, so the
      * documentation tightens with the system it documents instead of staying put while the
      * components around it shrink.
      *
-     * --docs-pad is the chrome inset: the space around everything in the header and
-     * inside the sidebar. --docs-gutter is the page's, one tier up.
+     * --docs-pad is the interior inset -- the Customize button's offset inside a preview,
+     * the customizer dialog's own chrome. --docs-gutter is the page's, one tier up.
+     *
+     * The two rails do not read either of these. They are area-panel --xs, so their inset
+     * is the panel's own tier on the gutter ramp, which is what a component's padding has
+     * to come from if a compact panel is to tighten like the controls inside it.
      */
     --docs-pad: var(--area-gutter-sm);
-    --docs-gutter: var(--area-gutter-xl);
     /*
-     * Header height is its control plus that inset twice, so the space above and below a
-     * control equals the space at the edge beside it -- which is what makes the padding read
-     * as even rather than merely being it.
-     *
-     * Everything in the bar renders at that one height, which is not the same as everything
-     * carrying the same size class: a segmented control wraps its items in a track with a
-     * 2px inset at each end, so an xs segmented and an sm button are both 28px while an sm
-     * segmented is 32.
+     * One 4px step above the widest gutter. The page had the density ramp's own top stop,
+     * which is the right inset for a control's interior and slightly tight as the margin
+     * of a document; the step keeps it on the ramp and still moving with density.
      */
-    --docs-topbar: calc(var(--area-control-sm) + var(--docs-pad) * 2 + var(--area-border-width));
+    --docs-gutter: calc(var(--area-gutter-xl) + var(--area-space-4));
+    /*
+     * The customizer dialog's own bar. The rails derive theirs from area-panel instead;
+     * this one is a dialog, not a panel, and is the only bar left that is neither.
+     */
+    --docs-topbar: calc(var(--area-control-sm) + var(--area-gutter-md) * 2 + var(--area-border-width));
     --docs-measure: 720px;
     --docs-max: 1400px;
     --docs-blur: 8px;
-    --docs-axis-col: 260px;
+    --docs-inspector: 264px;
+    --docs-toc: 192px;
     --docs-preview-min: 200px;
     --docs-specimen: 150px;
     --docs-figure: 72px;
     --docs-card: 230px;
+    --docs-card-sm: 88px;
     --docs-customizer-panel: 280px;
   }
 
-  html { scroll-behavior: smooth; scroll-padding-block-start: calc(var(--docs-topbar) + var(--docs-gutter)); }
+  html { scroll-behavior: smooth; scroll-padding-block-start: var(--docs-gutter); }
   body { margin: 0; }
   a { color: inherit; text-decoration: none; }
 
   /* --- Shell ------------------------------------------------------------- */
 
-  .docs-topbar {
+  /* --- Rails -------------------------------------------------------------- */
+
+  /*
+   * There is no page header. Each rail is an area-panel --flush carrying its own bar, and
+   * because both are panels at the same tier their bars derive the same height -- so the
+   * wordmark on the left and the panel title on the right sit on one line with the
+   * document between them. That is the shape Figma, Framer and ChatGPT converge on once
+   * the chrome is rails rather than a strip across the top.
+   *
+   * The seam is a pseudo-element rather than a border. A docked panel has no border by
+   * design, and a docs rule adding one back would be written in area.base and lose to
+   * area.components without saying so -- the exact failure the audit exists to catch.
+   */
+  /*
+   * Placed explicitly, not auto-placed. A closed rail is display:none, which takes it out
+   * of the grid altogether rather than leaving an empty track -- so with auto-placement the
+   * document slid left into the collapsed column and rendered one character wide. Naming
+   * each child's column makes a hidden rail cost its track and nothing else.
+   */
+  .docs-sidebar { grid-column: 1; }
+  .docs-main { grid-column: 2; }
+  .docs-inspector { grid-column: 3; }
+
+  .docs-sidebar,
+  .docs-inspector {
     position: sticky;
     inset-block-start: 0;
-    z-index: var(--area-z-sticky);
-    display: flex;
-    align-items: center;
-    gap: var(--docs-pad);
-    block-size: var(--docs-topbar);
-    padding-inline: var(--docs-pad);
-    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
-    background-color: color-mix(in oklab, var(--area-bg-page) 88%, transparent);
-    backdrop-filter: blur(var(--docs-blur));
+    align-self: start;
+    block-size: 100vh;
   }
+
+  .docs-sidebar::after,
+  .docs-inspector::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inline-size: var(--area-border-width);
+    background-color: var(--area-border-subtle);
+  }
+
+  .docs-sidebar { position: sticky; }
+  .docs-sidebar::after { inset-inline-end: 0; }
+  .docs-inspector::after { inset-inline-start: 0; }
+
+  .docs-sidebar__body { padding-block-start: var(--area-space-8); }
+
+  /*
+   * The seam between nav groups. Each group already opens with a label that occupies a full
+   * item row, so the label is doing most of the separating on its own -- 12 on top of that
+   * read as a gap between three lists rather than as one list with headings.
+   */
+  .docs-sidebar .area-menu + .area-menu { margin-block-start: var(--area-space-6); }
+
+  .docs-inspector__actions { display: flex; align-items: center; gap: var(--area-space-2); }
 
   /*
    * The wordmark is set in the mono face and lower case. A mono wordmark sits on the
    * system's own grid rather than beside it, and lower case keeps it from competing with
-   * the page title directly beneath it.
+   * the page title.
    *
-   * It sits on the bar's own inset with no adjustment. A glyph does not begin at the edge
-   * of its box, so the wordmark reads a hair further in than the bordered control opposite
-   * it -- a side bearing, roughly a pixel at this size, and not worth a negative margin to
-   * chase.
+   * One role above the UI size, not two: sharing a bar with a 28px icon button, a large
+   * role out-measured the control beside it and the pair stopped reading as one bar.
    */
   .docs-brand {
     display: flex;
     align-items: center;
+    /*
+     * A menu item pads its own label by 8 inside the body's inset, so the nav's text ink
+     * begins 8px further in than the bar's edge. The wordmark takes the same offset, which
+     * puts it on the column the section labels and the item icons already sit on -- the
+     * bar's padding aligns boxes, and what reads here is ink.
+     */
+    margin-inline-start: var(--area-space-8);
     font-family: var(--area-font-mono);
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
+    font-size: var(--area-text-md-size);
+    /* One line, centred by the bar: it takes the cap height it needs, the bar the leading. */
+    line-height: 1;
     font-weight: var(--area-weight-strong);
+    letter-spacing: var(--area-text-md-tracking);
     text-transform: lowercase;
   }
-  .docs-topbar__spacer { margin-inline-start: auto; }
-  .docs-topbar .area-segmented { flex-shrink: 0; }
 
-  .docs-shell { display: grid; grid-template-columns: var(--docs-sidebar) minmax(0, 1fr); max-inline-size: var(--docs-max); margin-inline: auto; }
+  /*
+   * The corner copy of a rail toggle. It waits at the page corner for when its rail is
+   * closed, which is where the control has to be -- a toggle that leaves with the thing it
+   * reopens cannot bring it back. Fixed rather than in the grid, so a closed rail costs no
+   * column and the document takes the width back.
+   */
+  .docs-rail-toggle {
+    position: fixed;
+    inset-block-start: var(--area-gutter-xs);
+    z-index: var(--area-z-sticky);
+  }
+
+  .docs-rail-toggle[data-rail="nav"] { inset-inline-start: var(--area-gutter-xs); }
+  .docs-rail-toggle[data-rail="panel"] { inset-inline-end: var(--area-gutter-xs); }
+
+  .docs-shell[data-nav="closed"] { --docs-col-nav: 0px; }
+  /* Closing the panel hands the column to the outline, which is the rail's other occupant. */
+  .docs-shell[data-panel="closed"] { --docs-col-side: var(--docs-toc); }
+  .docs-shell[data-panel="closed"][data-toc="none"] { --docs-col-side: 0px; }
+
+  /*
+   * With no rail on that side, the document would start under the corner toggle.
+   *
+   * Symmetric when the nav is closed, even though only one side has a toggle to clear:
+   * auto margins centre within the *padding* box, so clearing one side alone put the
+   * measure 28px left of centre -- centred by the box and visibly not by the window.
+   */
+  .docs-shell[data-nav="closed"] .docs-main { padding-inline: calc(var(--docs-gutter) + var(--area-control-sm)); }
+  .docs-shell[data-nav="open"][data-panel="closed"][data-toc="none"] .docs-main { padding-inline-end: calc(var(--docs-gutter) + var(--area-control-sm)); }
+
+  /*
+   * Centred once the nav is gone. With a rail on the left the measure is read against it
+   * and belongs at the start of its column; with nothing there, a column of text pinned to
+   * the left of a wide window reads as a layout that failed rather than one that chose.
+   */
+  .docs-shell[data-nav="closed"] .docs-content { margin-inline: auto; }
+
+  /*
+   * Two of the three columns vary, so each is a variable and every state sets one of them.
+   * Written as four full grid-template-columns declarations it needed a rule per
+   * combination, and the nav-closed-and-panel-closed case had to repeat both.
+   */
+  .docs-shell {
+    display: grid;
+    grid-template-columns: var(--docs-col-nav) minmax(0, 1fr) var(--docs-col-side);
+    --docs-col-nav: var(--docs-sidebar);
+    --docs-col-side: var(--docs-inspector);
+    max-inline-size: var(--docs-max);
+    margin-inline: auto;
+  }
 
   .docs-sidebar {
     position: sticky;
-    inset-block-start: var(--docs-topbar);
+    inset-block-start: 0;
     align-self: start;
-    block-size: calc(100vh - var(--docs-topbar));
-    overflow-y: auto;
-    padding: var(--docs-pad);
+    block-size: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
     border-inline-end: var(--area-border-width) solid var(--area-border-subtle);
   }
-  /* The measured group separation: 2px of item gap plus 12. See nav.css. */
-  .docs-sidebar .area-menu + .area-menu { margin-block-start: var(--area-space-12); }
+
 
   .docs-main {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--docs-toc);
-    gap: calc(var(--docs-gutter) * 1.5);
     padding: var(--docs-gutter) var(--docs-gutter) calc(var(--docs-gutter) * 4);
   }
   .docs-content { min-inline-size: 0; max-inline-size: var(--docs-measure); }
 
+  /*
+   * Layout only -- area-menu owns the list's geometry. The outline shares column three with
+   * the inspector and the two never show together, so both are sticky from the same edge.
+   */
   .docs-toc {
+    grid-column: 3;
     position: sticky;
-    inset-block-start: calc(var(--docs-topbar) + var(--docs-gutter));
+    inset-block-start: var(--docs-gutter);
     align-self: start;
+    margin-block: var(--docs-gutter);
+    margin-inline-end: var(--docs-gutter);
+  }
+
+  /* --- Icon browser ------------------------------------------------------- */
+
+  /*
+   * A field of marks with its controls above it. The cell is square because the mark is:
+   * every glyph is authored on a 16 grid and a square cell is the only one that gives the
+   * wide ones and the tall ones the same room, which is what lets the eye sweep a column
+   * without re-centring on each row.
+   *
+   * The grid auto-fills rather than fixing a column count, so the same page works beside an
+   * open inspector and with both rails closed.
+   */
+  .docs-iconbrowser {
+    --docs-icon-size: var(--area-icon-lg);
+    margin-block-end: var(--docs-gutter);
+  }
+
+  .docs-iconbrowser__bar {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--area-z-sticky);
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--area-space-8);
+    padding-block: var(--area-space-12);
+    background-color: var(--area-bg-page);
+  }
+
+  .docs-iconbrowser__search { flex: 1 1 var(--docs-specimen); }
+  .docs-iconbrowser__size { display: flex; align-items: center; gap: var(--area-space-8); }
+  /*
+   * flex-basis, not inline-size. The slider sets inline-size: 100% in area.components so it
+   * fills a panel row, and a width written here would lose to it silently -- but a flex item
+   * takes its main size from flex-basis, which the component does not set. The audit allows
+   * the property for exactly this reason.
+   */
+  .docs-iconbrowser__size .area-slider { flex: 0 0 var(--docs-figure); }
+  .docs-iconbrowser__count { color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+
+  .docs-iconbrowser__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--docs-card-sm), 1fr));
     gap: var(--area-space-2);
   }
 
-  /* --- Axis panel -------------------------------------------------------- */
-
-  .docs-axes { border-block-end: var(--area-border-width) solid var(--area-border-subtle); background-color: var(--area-bg-subtle); }
-  .docs-axes[hidden] { display: none; }
-  .docs-axes__inner {
-    max-inline-size: var(--docs-max);
-    margin-inline: auto;
-    padding: var(--docs-gutter) var(--docs-pad);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--docs-axis-col), 1fr));
-    gap: var(--area-space-16);
+  .docs-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--area-space-6);
+    aspect-ratio: 1;
+    padding: var(--area-space-6);
+    border: 0;
+    border-radius: var(--area-radius-container);
+    background: transparent;
+    color: var(--area-fg-default);
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--area-transition);
   }
-  .docs-axis { display: flex; flex-direction: column; gap: var(--area-space-6); }
-  .docs-axis__name { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
+
+  .docs-icon:hover { background-color: var(--area-bg-hover); }
+  .docs-icon:focus-visible { outline: none; box-shadow: var(--area-ring); }
+  .docs-icon[data-copied] { background-color: var(--area-brand-surface); color: var(--area-fg-brand); }
+
+  .docs-icon__mark {
+    display: inline-flex;
+    inline-size: var(--docs-icon-size);
+    block-size: var(--docs-icon-size);
+    transition: var(--area-transition);
+  }
+  .docs-icon__mark > svg { inline-size: 100%; block-size: 100%; fill: currentColor; }
+
+  /*
+   * The name is the smallest step the type ramp has and still clips on the long end --
+   * text-align-distribute-vertical is 33 characters against a cell built for a 16px mark.
+   * Truncated rather than wrapped: two lines would make the cell the tallest thing in its
+   * row and break the square the grid is built on.
+   */
+  .docs-icon__name {
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    color: var(--area-fg-muted);
+  }
+
+  .docs-iconbrowser__empty { color: var(--area-fg-muted); }
+
   .docs-swatch {
     inline-size: var(--area-icon-sm);
     block-size: var(--area-icon-sm);
@@ -427,17 +606,20 @@ export const DOCS_CSS = `
     overflow: auto;
   }
 
+  /*
+   * The dialog's panel is the same inspector, so it owns only the seam between itself and
+   * the stage. Everything inside it -- inset, section rules, row geometry -- comes from
+   * .docs-inspector__body, which is what keeps the docked panel and this one from
+   * drifting apart as controls are added.
+   */
   .docs-customizer__panel {
-    border-inline-start: var(--area-border-width) solid var(--area-border-subtle);
-    background-color: var(--area-bg-subtle);
-    padding: var(--area-space-16);
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-16);
+    min-block-size: 0;
+    border-inline-start: var(--area-border-width) solid var(--area-border-subtle);
+    background-color: var(--area-bg-subtle);
   }
-  .docs-customizer__panel .docs-axis { gap: var(--area-space-6); }
-  .docs-customizer__panel .area-segmented { flex-wrap: wrap; }
+
 
   @media (max-width: 820px) {
     .docs-customizer__body { grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr auto; }
@@ -553,9 +735,38 @@ export const DOCS_CSS = `
   .docs-token-chip { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: max(0px, calc(var(--area-radius-small) - var(--area-space-2))); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle); }
   .docs-mono { font-family: var(--area-font-mono); }
 
-  @media (max-width: 1100px) { .docs-main { grid-template-columns: minmax(0, 1fr); } .docs-toc { display: none; } }
+  @media (max-width: 1100px) { .docs-shell { grid-template-columns: var(--docs-sidebar) minmax(0, 1fr); } .docs-inspector { display: none; } }
   @media (max-width: 820px) { .docs-shell { grid-template-columns: minmax(0, 1fr); } .docs-sidebar { display: none; } }
 }
+/*
+ * Rail visibility, in area.utilities rather than area.base.
+ *
+ * Both targets carry an Area class -- the corner toggle is an area-button, each rail is an
+ * area-panel -- and both of those set display in area.components. A display rule written
+ * in area.base loses to them silently, which is the exact failure the dogfood audit was
+ * built to catch; it did not catch this one only because these selectors name no .area-
+ * class themselves. The layer order declares utilities after components precisely so a
+ * rule like this can win without !important, so this is the sanctioned door, not a
+ * workaround.
+ *
+ * Which copy of a toggle shows is therefore a function of a server-rendered attribute: the
+ * page is correct before the script runs, and the script only ever writes that attribute.
+ * The corner copies are rendered after the shell because ~ is a following-sibling
+ * combinator -- written before it, the rule matched nothing and both copies painted at
+ * once, the corner one sitting on top of the wordmark.
+ */
+@layer area.utilities {
+  .docs-shell[data-nav="open"] ~ .docs-rail-toggle[data-rail="nav"],
+  .docs-shell[data-panel="open"] ~ .docs-rail-toggle[data-rail="panel"] { display: none; }
+
+  .docs-shell[data-nav="closed"] .docs-sidebar,
+  .docs-shell[data-panel="closed"] .docs-inspector,
+  .docs-shell[data-panel="open"] .docs-toc { display: none; }
+
+  /* A filtered-out cell. Here because .docs-icon is a button, and area.components sets its display. */
+  .docs-icon[hidden] { display: none; }
+}
+
 `;
 
 export const DOCS_SCRIPT = `
@@ -575,6 +786,143 @@ export const DOCS_SCRIPT = `
     });
   });
 
+/*
+ * Rail collapse.
+ *
+ * The state lives on the shell as data-nav / data-panel, which CSS reads to decide both
+ * the grid columns and which copy of each toggle is on screen -- so this handler only ever
+ * writes one attribute. The server renders both rails open, and the stored state is
+ * applied before paint by the inline script rather than after, so a reader who closed the
+ * nav does not watch it close again on every navigation.
+ */
+/*
+ * The icon browser.
+ *
+ * Every cell is server-rendered and filtering only hides, so the grid is whole before this
+ * runs. Three filters compose -- a search term, a source, and a style -- and each writes the
+ * browser's own state rather than touching cells directly, so adding a fourth is one line
+ * here and one in the predicate.
+ *
+ * Style swaps the sprite the whole grid points at. The two files hold the same ids under
+ * the same names, which is what lets one href rewrite change 1,739 marks at once.
+ */
+(function () {
+  var browser = document.getElementById("icon-browser");
+  if (!browser) return;
+
+  var grid = browser.querySelector("[data-icon-grid]");
+  var cells = Array.prototype.slice.call(grid.querySelectorAll(".docs-icon"));
+  var countEl = browser.querySelector("[data-icon-count]");
+  var emptyEl = browser.querySelector("[data-icon-empty]");
+  var term = "";
+
+  function render() {
+    var source = browser.getAttribute("data-source");
+    var shown = 0;
+    for (var i = 0; i < cells.length; i++) {
+      var cell = cells[i];
+      var ok =
+        (source === "all" || cell.getAttribute("data-source") === source) &&
+        (term === "" || cell.getAttribute("data-terms").indexOf(term) >= 0);
+      // Only touch the attribute when it actually changes: writing all 1,739 on every
+      // keystroke is what makes a grid this size feel slow.
+      if (ok === cell.hasAttribute("hidden")) {
+        if (ok) cell.removeAttribute("hidden");
+        else cell.setAttribute("hidden", "");
+      }
+      if (ok) shown++;
+    }
+    countEl.textContent = shown === cells.length ? shown + " icons" : shown + " of " + cells.length;
+    if (shown === 0) emptyEl.removeAttribute("hidden");
+    else emptyEl.setAttribute("hidden", "");
+  }
+  render();
+
+  browser.addEventListener("input", function (event) {
+    var target = event.target;
+
+    if (target.hasAttribute("data-icon-search")) {
+      term = target.value.trim().toLowerCase();
+      return render();
+    }
+
+    var slider = target.closest("[data-icon-size]");
+    if (slider) {
+      browser.style.setProperty("--docs-icon-size", target.value + "px");
+      browser.querySelector("[data-icon-size-value]").textContent = target.value;
+      slider.style.setProperty("--_pct", ((target.value - 16) / 32) * 100 + "%");
+    }
+  });
+
+  browser.addEventListener("click", function (event) {
+    var style = event.target.closest("[data-icon-style]");
+    if (style) {
+      var value = style.getAttribute("data-icon-style");
+      browser.setAttribute("data-style", value);
+      var file = value === "filled" ? "./icons-filled.svg" : "./icons.svg";
+      grid.querySelectorAll("use").forEach(function (use) {
+        use.setAttribute("href", file + use.getAttribute("href").replace(/^[^#]*/, ""));
+      });
+      style.parentElement.querySelectorAll("[data-icon-style]").forEach(function (item) {
+        var on = item === style;
+        if (on) item.setAttribute("data-selected", ""); else item.removeAttribute("data-selected");
+        item.setAttribute("aria-checked", on ? "true" : "false");
+      });
+      return;
+    }
+
+    var source = event.target.closest("[data-icon-source]");
+    if (source) {
+      browser.setAttribute("data-source", source.getAttribute("data-icon-source"));
+      source.parentElement.querySelectorAll("[data-icon-source]").forEach(function (chip) {
+        var on = chip === source;
+        if (on) chip.setAttribute("data-selected", ""); else chip.removeAttribute("data-selected");
+        chip.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      return render();
+    }
+
+    // A cell copies its own name, which is what you came for.
+    var cell = event.target.closest(".docs-icon");
+    if (cell) {
+      navigator.clipboard.writeText(cell.getAttribute("data-icon")).then(function () {
+        cell.setAttribute("data-copied", "");
+        setTimeout(function () { cell.removeAttribute("data-copied"); }, 900);
+      });
+    }
+  });
+})();
+
+(function () {
+  var KEY = "area-docs-rails";
+  var shell = document.querySelector(".docs-shell");
+  if (!shell) return;
+
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
+
+  function write(rail, open) {
+    shell.setAttribute("data-" + rail, open ? "open" : "closed");
+    document.querySelectorAll('[data-rail="' + rail + '"]').forEach(function (button) {
+      button.setAttribute("aria-expanded", String(open));
+    });
+  }
+
+  ["nav", "panel"].forEach(function (rail) {
+    if (state[rail] === "closed") write(rail, false);
+  });
+
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest("[data-rail]");
+    if (!button) return;
+    var rail = button.getAttribute("data-rail");
+    var open = shell.getAttribute("data-" + rail) !== "open";
+    write(rail, open);
+    state[rail] = open ? "open" : "closed";
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  });
+})();
+
 (function () {
   var KEY = "area-docs-axes";
   var root = document.documentElement;
@@ -587,18 +935,87 @@ export const DOCS_SCRIPT = `
   }
   Object.keys(saved).forEach(function (axis) { apply(axis, saved[axis]); });
 
+  /*
+   * One sync for four control shapes. Each axis control declares data-axis and its own
+   * default, and the shape is read off the markup rather than configured: a group with
+   * [data-value] children is a segmented or a chip set, a <select> is a select, an
+   * input with data-on is a switch, and one with data-values is a slider over presets.
+   *
+   * There may be several controls for one axis on a page -- the docked panel and the
+   * dialog's copy of it -- so every one is written on every sync.
+   */
   function sync() {
     document.querySelectorAll("[data-axis]").forEach(function (group) {
       var axis = group.getAttribute("data-axis");
       var current = saved[axis] || group.getAttribute("data-default");
+
+      if (group.tagName === "SELECT") {
+        group.value = current;
+        return;
+      }
+
+      var values = group.getAttribute("data-values");
+      if (values) {
+        var list = values.split(" ");
+        var labels = (group.getAttribute("data-labels") || "").split("|");
+        var index = list.indexOf(current);
+        if (index < 0) index = 0;
+        var range = group.querySelector("input");
+        var readout = group.querySelector(".area-slider__value");
+        range.value = String(index);
+        group.style.setProperty("--_pct", (index / (list.length - 1)) * 100 + "%");
+        if (readout) readout.textContent = labels[index] || current;
+        return;
+      }
+
+      var on = group.getAttribute("data-on");
+      if (on) {
+        group.checked = current === on;
+        return;
+      }
+
       group.querySelectorAll("[data-value]").forEach(function (item) {
-        var on = item.getAttribute("data-value") === current;
-        if (on) item.setAttribute("data-selected", "");
+        var isOn = item.getAttribute("data-value") === current;
+        if (isOn) item.setAttribute("data-selected", "");
         else item.removeAttribute("data-selected");
-        item.setAttribute("aria-checked", on ? "true" : "false");
+        // Chips are buttons in a group and report aria-pressed; segmented items are
+        // radios and report aria-checked. Write whichever the markup already declares.
+        if (item.hasAttribute("aria-pressed")) item.setAttribute("aria-pressed", isOn ? "true" : "false");
+        else item.setAttribute("aria-checked", isOn ? "true" : "false");
       });
     });
   }
+
+  function choose(axis, value) {
+    saved[axis] = value;
+    apply(axis, value);
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    sync();
+  }
+
+  /*
+   * A select fires change, a slider and a switch fire input. All three are listened
+   * for on the document so a control added later -- the dialog clones the whole panel --
+   * needs no wiring of its own.
+   */
+  document.addEventListener("input", function (event) {
+    var group = event.target.closest("[data-axis]");
+    if (!group) return;
+
+    if (group.tagName === "SELECT") return choose(group.getAttribute("data-axis"), group.value);
+
+    var values = group.getAttribute("data-values");
+    if (values) {
+      var list = values.split(" ");
+      return choose(group.getAttribute("data-axis"), list[Number(group.querySelector("input").value)]);
+    }
+
+    var on = group.getAttribute("data-on");
+    if (on) {
+      return choose(group.getAttribute("data-axis"), group.checked ? on : group.getAttribute("data-off"));
+    }
+  });
+
   sync();
 
   document.addEventListener("click", function (event) {
@@ -606,21 +1023,19 @@ export const DOCS_SCRIPT = `
     if (item) {
       var group = item.closest("[data-axis]");
       if (group) {
-        var axis = group.getAttribute("data-axis");
-        saved[axis] = item.getAttribute("data-value");
-        apply(axis, saved[axis]);
-        try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
-        sync();
+        choose(group.getAttribute("data-axis"), item.getAttribute("data-value"));
         return;
       }
     }
 
-    var toggle = event.target.closest("[data-toggle-axes]");
-    if (toggle) {
-      var panel = document.getElementById("docs-axes");
-      var open = panel.hasAttribute("hidden");
-      if (open) panel.removeAttribute("hidden"); else panel.setAttribute("hidden", "");
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    // Reset returns every axis to its declared default rather than to whatever the last
+    // control touched was, which is why it clears the store instead of replaying values.
+    var resetAxes = event.target.closest("[data-reset-axes]");
+    if (resetAxes) {
+      Object.keys(saved).forEach(function (axis) { apply(axis, null); });
+      saved = {};
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      sync();
       return;
     }
 

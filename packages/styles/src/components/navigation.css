@@ -161,6 +161,7 @@
   .area-select {
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
+    --_icon: var(--area-icon-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
 
@@ -170,7 +171,7 @@
     inline-size: 100%;
     block-size: var(--_height);
     padding-inline: var(--_gutter);
-    padding-inline-end: calc(var(--_gutter) + var(--area-icon-md) + var(--area-space-4));
+    padding-inline-end: calc(var(--_gutter) + var(--_icon) + var(--area-space-4));
 
     border: var(--area-border-width) solid var(--area-border);
     /* Capped against this tier's own height; see button.css. */
@@ -187,7 +188,7 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right var(--_gutter) center;
-    background-size: var(--area-icon-md);
+    background-size: var(--_icon);
   }
 
   [dir="rtl"] .area-select { background-position: left var(--_gutter) center; }
@@ -204,7 +205,9 @@
     opacity: 0.5;
   }
 
-  .area-select--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-select--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-select--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-select--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_icon: var(--area-icon-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
+  .area-select--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-select--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-select--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-select--xl { --_height: var(--area-control-xl); --_gutter: var(--area-gutter-xl); --_icon: var(--area-icon-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
 }

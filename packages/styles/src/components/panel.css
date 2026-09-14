@@ -1,0 +1,163 @@
+/* ---------------------------------------------------------------------------
+ * Panel
+ *
+ * An inspector: a titled surface of rows that act on something else. Card is the display
+ * counterpart -- it presents content -- and Dialog is the counterpart that interrupts.
+ * A panel does neither. It sits beside its subject and stays there.
+ *
+ * It was `.docs-inspector` first, written for this site's right rail. Everything in it
+ * turned out to be a system decision rather than a site one -- how a section is separated,
+ * how a bar relates to a body, where a footer action sits -- so it moved into the system
+ * and the site now uses it like any other consumer.
+ *
+ * The rows themselves are not the panel's business. A row is `area-field --inline`, which
+ * is what gives every control in a panel one left edge; the panel owns the container, the
+ * grouping and the seams.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-panel {
+    --_inset: var(--area-gutter-md);
+    /*
+     * The bar's height, published so a docked panel's bar and whatever sits beside it can
+     * agree without either restating the formula: a control, the inset above and below it,
+     * and the hairline under it.
+     */
+    --_bar: calc(var(--area-control-sm) + var(--_inset) * 2 + var(--area-border-width));
+
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+
+    border: var(--area-border-width) solid var(--area-border-subtle);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    box-shadow: var(--area-shadow-3);
+  }
+
+  /*
+   * Docked: the panel is a region of the page rather than an object on it, so it sheds the
+   * radius, the elevation and three of its four edges, keeping only the seam against what
+   * it sits beside. Same reasoning as `area-menu--inline`, and the rows are untouched, so
+   * a docked panel and a floating one are the same panel.
+   */
+  .area-panel--flush {
+    border: 0;
+    border-radius: 0;
+    background-color: var(--area-bg-page);
+    box-shadow: none;
+  }
+
+  /*
+   * The bar is a control tall plus its inset twice, the same derivation the page header
+   * uses, so a title in a panel and a title in a header sit on the same line.
+   */
+  .area-panel__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--area-space-8);
+    flex-shrink: 0;
+
+    block-size: var(--_bar);
+    padding-inline: var(--_inset);
+    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
+  }
+
+  /*
+   * A bar that *names* the panel rather than heading it needs no rule under it: a wordmark
+   * and its toggle are the panel's identity, and a hairline there reads as a section
+   * boundary between the name and the thing named. A bar that heads a list of controls
+   * keeps its rule, which is why this is opt-in rather than the default.
+   */
+  .area-panel--bare-bar > .area-panel__bar {
+    border-block-end: 0;
+  }
+
+  .area-panel__title {
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-strong);
+  }
+
+  .area-panel__body {
+    flex: 1;
+    min-block-size: 0;
+    overflow-y: auto;
+    padding: var(--_inset);
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-16);
+  }
+
+  /*
+   * A section is a rule and a name, not a box. Every inspector worth copying separates its
+   * groups with a hairline rather than nesting each one in a panel of its own -- which is
+   * what keeps eight groups from reading as eight cards inside one card.
+   *
+   * The last section drops its rule: a seam before the body's own edge reads as a section
+   * that lost its contents.
+   */
+  /*
+   * The rule runs the full width of the panel, not the width of the body's text column:
+   * it is pulled out by the body's own inset and the inset is given back as padding, so the
+   * content stays on its column while the line reaches both edges.
+   *
+   * A divider that stops short of the edge reads as belonging to the block above it. One
+   * that reaches the edge reads as dividing the panel, which is what it is doing -- and it
+   * is what every inspector worth copying draws.
+   */
+  .area-panel__section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-6);
+    margin-inline: calc(var(--_inset) * -1);
+    padding-inline: var(--_inset);
+    padding-block-end: var(--area-space-16);
+    border-block-end: var(--area-border-width) solid var(--area-border-subtle);
+  }
+
+  .area-panel__section:last-child {
+    padding-block-end: 0;
+    border-block-end: 0;
+  }
+
+  .area-panel__heading {
+    margin: 0;
+    margin-block-end: var(--area-space-2);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-weight: var(--area-weight-strong);
+    color: var(--area-fg-muted);
+  }
+
+  /* A row whose control needs the whole width: the label sits above it, not beside it. */
+  .area-panel__stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-6);
+  }
+
+  /*
+   * The footer is pinned, not scrolled: its action applies to the panel as a whole, and an
+   * action that scrolls out of a list of rows reads as belonging to the last row.
+   */
+  .area-panel__footer {
+    flex-shrink: 0;
+    padding: var(--_inset);
+    border-block-start: var(--area-border-width) solid var(--area-border-subtle);
+  }
+
+  /* --- Sizes -------------------------------------------------------------- */
+
+  /*
+   * A panel's tier is its inset, not a control height -- the controls inside carry their
+   * own. It steps on the *gutter* ramp, which is the density axis's own inset ramp, so a
+   * panel tightens with the system exactly as the controls in it do. The spacing ramp is
+   * flat under density and would have left a compact panel padded like a default one.
+   */
+  .area-panel--xs { --_inset: var(--area-gutter-xs); }
+  .area-panel--sm { --_inset: var(--area-gutter-sm); }
+  .area-panel--md { --_inset: var(--area-gutter-md); }
+  .area-panel--lg { --_inset: var(--area-gutter-lg); }
+}

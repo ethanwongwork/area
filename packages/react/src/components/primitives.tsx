@@ -7,6 +7,7 @@
  */
 import { forwardRef } from "react";
 import type {
+  ButtonHTMLAttributes,
   HTMLAttributes,
   ImgHTMLAttributes,
   InputHTMLAttributes,
@@ -23,8 +24,11 @@ import {
   cx,
   radioVariants,
   selectVariants,
+  chipVariants,
+  panelVariants,
   segmentedVariants,
   separatorVariants,
+  sliderVariants,
   skeletonVariants,
   spinnerVariants,
   switchVariants,
@@ -35,6 +39,15 @@ import {
 type Div = HTMLAttributes<HTMLDivElement>;
 type Tone = "neutral" | "brand" | "danger" | "warning" | "success";
 type Size = "sm" | "md" | "lg";
+
+/*
+ * Two controls carry a tier the others do not. Select and Switch have an `xs`, because a
+ * dense inspector row needs one and a checkbox at that size stops being a reliable target.
+ * The unions are separate rather than widened for everything, so a prop that has no CSS
+ * behind it cannot be typed as valid.
+ */
+type SelectSize = "xs" | Size;
+type SwitchSize = "xs" | Size;
 
 /* --- Badge ---------------------------------------------------------------- */
 
@@ -232,7 +245,7 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(function Progr
 /* --- Select / Textarea ---------------------------------------------------- */
 
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> {
-  size?: Size;
+  size?: SelectSize;
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
@@ -270,11 +283,11 @@ interface ChoiceProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"
   description?: ReactNode;
 }
 
-function choice(kind: "checkbox" | "radio" | "switch") {
+function choice<S extends string = Size>(kind: "checkbox" | "radio" | "switch") {
   const variants = kind === "checkbox" ? checkboxVariants : kind === "radio" ? radioVariants : switchVariants;
   const block = `area-${kind}`;
 
-  return forwardRef<HTMLInputElement, ChoiceProps>(function Choice(
+  return forwardRef<HTMLInputElement, Omit<ChoiceProps, "size"> & { size?: S }>(function Choice(
     { size, label, description, className, disabled, ...rest },
     ref,
   ) {
@@ -303,7 +316,170 @@ function choice(kind: "checkbox" | "radio" | "switch") {
 
 export const Checkbox = choice("checkbox");
 export const Radio = choice("radio");
-export const Switch = choice("switch");
+export const Switch = choice<SwitchSize>("switch");
+
+/* --- Panel ---------------------------------------------------------------- */
+
+/*
+ * Composed rather than configured. A panel takes a title and an optional footer because
+ * those are structural, and everything between them is children -- `Panel.Section` and
+ * `Field inline` rows. A props API for the rows would have to grow a case for every
+ * control the system has, which is the API the CSS deliberately does not have either.
+ */
+export interface PanelProps extends Omit<Div, "title"> {
+  size?: "sm" | "md" | "lg";
+  /** Shadows the DOM `title` attribute deliberately: a panel's title is content, not a tooltip. */
+  title?: ReactNode;
+  /** Sits beside the title, at the end of the bar: a close, a reset, a toggle. */
+  action?: ReactNode;
+  /** Pinned below the body, outside its scroll. */
+  footer?: ReactNode;
+  /** Docked to an edge: no radius, no elevation, one seam instead of four. */
+  flush?: boolean;
+  /** The bar names the panel rather than heading it, so it carries no rule under it. */
+  bareBar?: boolean;
+}
+
+export const Panel = forwardRef<HTMLDivElement, PanelProps>(function Panel(
+  { size, title, action, footer, flush, bareBar, className, children, ...rest },
+  ref,
+) {
+  return (
+    <div ref={ref} className={panelVariants({ size, flush, "bare-bar": bareBar }, className)} {...rest}>
+      {title || action ? (
+        <header className="area-panel__bar">
+          <span className="area-panel__title">{title}</span>
+          {action}
+        </header>
+      ) : null}
+      <div className="area-panel__body">{children}</div>
+      {footer ? <footer className="area-panel__footer">{footer}</footer> : null}
+    </div>
+  );
+});
+
+export interface PanelSectionProps extends Div {
+  heading?: ReactNode;
+}
+
+export const PanelSection = forwardRef<HTMLDivElement, PanelSectionProps>(function PanelSection(
+  { heading, className, children, ...rest },
+  ref,
+) {
+  return (
+    <section ref={ref} className={cx("area-panel__section", className)} {...rest}>
+      {heading ? <h3 className="area-panel__heading">{heading}</h3> : null}
+      {children}
+    </section>
+  );
+});
+
+/** A row whose control needs the whole width, with its label above rather than beside. */
+export const PanelStack = forwardRef<HTMLDivElement, Div>(function PanelStack(
+  { className, ...rest },
+  ref,
+) {
+  return <div ref={ref} className={cx("area-panel__stack", className)} {...rest} />;
+});
+
+/* --- Slider --------------------------------------------------------------- */
+
+/*
+ * The fill is a percentage the component computes from min/max/value and hands to the CSS
+ * as `--_pct`. Controlled or not, it is derived from the same numbers the input already
+ * carries, so the paint cannot disagree with the value -- and because it is a ratio rather
+ * than a length it survives a density change without recomputing.
+ */
+export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
+  size?: SliderSize;
+  /** Rendered to the right of the track. Pass `false` for a track on its own. */
+  readout?: ReactNode;
+  disabled?: boolean;
+}
+
+type SliderSize = "xs" | "sm" | "md" | "lg";
+
+export const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
+  { size, readout, className, disabled, min = 0, max = 100, value, defaultValue, style, ...rest },
+  ref,
+) {
+  const current = Number(value ?? defaultValue ?? min);
+  const span = Number(max) - Number(min);
+  const pct = span > 0 ? ((current - Number(min)) / span) * 100 : 0;
+
+  return (
+    <div
+      className={sliderVariants({ size }, className)}
+      style={{ ["--_pct" as string]: `${pct}%`, ...style }}
+      {...(disabled ? { "data-disabled": "" } : {})}
+    >
+      <input
+        ref={ref}
+        type="range"
+        className="area-slider__control"
+        min={min}
+        max={max}
+        value={value}
+        defaultValue={defaultValue}
+        disabled={disabled}
+        {...rest}
+      />
+      {readout === false || readout === undefined ? null : (
+        <span className="area-slider__value">{readout}</span>
+      )}
+    </div>
+  );
+});
+
+/* --- Chip ----------------------------------------------------------------- */
+
+export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+  size?: "xs" | "sm" | "md";
+  pill?: boolean;
+  /** A colour this chip stands for, shown as a dot before the label. */
+  swatch?: string;
+  icon?: ReactNode;
+  selected?: boolean;
+  /** No label: the swatch is the whole chip, and the box goes square. */
+  swatchOnly?: boolean;
+}
+
+export const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
+  { size, pill, swatch, icon, selected, swatchOnly, className, children, disabled, ...rest },
+  ref,
+) {
+  return (
+    <button
+      ref={ref}
+      type="button"
+      aria-pressed={selected}
+      disabled={disabled}
+      className={chipVariants({ size, pill, "swatch-only": swatchOnly }, className)}
+      {...(selected ? { "data-selected": "" } : {})}
+      {...(disabled ? { "data-disabled": "" } : {})}
+      {...rest}
+    >
+      {swatch ? (
+        <span className="area-chip__swatch" style={{ background: swatch }} aria-hidden="true" />
+      ) : null}
+      {icon ? (
+        <span className="area-chip__icon" aria-hidden="true">
+          {icon}
+        </span>
+      ) : null}
+      {swatchOnly ? null : children}
+    </button>
+  );
+});
+
+export type ChipGroupProps = Div;
+
+export const ChipGroup = forwardRef<HTMLDivElement, ChipGroupProps>(function ChipGroup(
+  { className, ...rest },
+  ref,
+) {
+  return <div ref={ref} className={cx("area-chip-group", className)} {...rest} />;
+});
 
 /* --- Field ---------------------------------------------------------------- */
 
@@ -313,14 +489,20 @@ export interface FieldProps extends Div {
   error?: ReactNode;
   required?: boolean;
   htmlFor?: string;
+  /** Label left, control right, on columns shared with every other inline field. */
+  inline?: boolean;
 }
 
 export const Field = forwardRef<HTMLDivElement, FieldProps>(function Field(
-  { label, description, error, required, htmlFor, className, children, ...rest },
+  { label, description, error, required, htmlFor, inline, className, children, ...rest },
   ref,
 ) {
   return (
-    <div ref={ref} className={cx("area-field", className)} {...rest}>
+    <div
+      ref={ref}
+      className={cx("area-field", inline && "area-field--inline", className)}
+      {...rest}
+    >
       {label ? (
         <label className="area-field__label" htmlFor={htmlFor}>
           {label}
@@ -516,7 +698,9 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog(
 /* --- Segmented control ---------------------------------------------------- */
 
 export interface SegmentedProps extends Omit<Div, "onChange" | "onSelect"> {
-  size?: "xs" | "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  /** Stretch to the container, items sharing the width. For a panel row. */
+  fullWidth?: boolean;
   options: Array<{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }>;
   value: string;
   /** Accessible name for the group. */
@@ -532,7 +716,7 @@ export interface SegmentedProps extends Omit<Div, "onChange" | "onSelect"> {
  * convey.
  */
 export const Segmented = forwardRef<HTMLDivElement, SegmentedProps>(function Segmented(
-  { size, options, value, label, onSelect, className, ...rest },
+  { size, fullWidth, options, value, label, onSelect, className, ...rest },
   ref,
 ) {
   return (
@@ -540,7 +724,7 @@ export const Segmented = forwardRef<HTMLDivElement, SegmentedProps>(function Seg
       ref={ref}
       role="radiogroup"
       aria-label={label}
-      className={segmentedVariants({ size }, className)}
+      className={segmentedVariants({ size, fullWidth }, className)}
       {...rest}
     >
       {options.map((option) => (
