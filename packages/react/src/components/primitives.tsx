@@ -33,7 +33,7 @@ import {
 } from "../variants.ts";
 
 type Div = HTMLAttributes<HTMLDivElement>;
-type Tone = "neutral" | "accent" | "danger" | "warning" | "success";
+type Tone = "neutral" | "brand" | "danger" | "warning" | "success";
 type Size = "sm" | "md" | "lg";
 
 /* --- Badge ---------------------------------------------------------------- */

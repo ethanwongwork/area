@@ -22,7 +22,7 @@
   }
 
   ::selection {
-    background-color: var(--area-accent-surface-active);
+    background-color: var(--area-brand-surface-active);
     color: var(--area-fg-default);
   }
 

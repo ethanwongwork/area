@@ -62,7 +62,7 @@ function axisGroups() {
         .map((preset) => {
           const selected = preset.id === axis.defaultPreset;
           const body =
-            axis.id === "accent"
+            axis.id === "brand"
               ? `<span class="area-segmented__icon" aria-hidden="true"><span class="docs-swatch" style="background:var(--area-${preset.id}-${tokens.scales[preset.id].solid.level.light})"></span></span>`
               : escapeHtml(preset.label);
           return `<button type="button" role="radio" class="area-segmented__item" data-value="${preset.id}" aria-checked="${selected}" aria-label="${escapeHtml(preset.label)}"${selected ? " data-selected" : ""}>${body}</button>`;
@@ -102,7 +102,7 @@ function axisSwitch(axisId, label) {
 function topbarControls() {
   return `${axisSwitch("density", "Density")}
   ${axisSwitch("theme", "Theme")}
-  <button type="button" class="area-button area-button--outline area-button--neutral area-button--sm" data-toggle-axes aria-expanded="false" aria-controls="docs-axes">
+  <button type="button" class="area-button area-button--outline area-button--primary area-button--sm" data-toggle-axes aria-expanded="false" aria-controls="docs-axes">
     <span class="area-button__label">Customize</span>
   </button>`;
 }
@@ -226,7 +226,7 @@ ${table(
   ["Prop", "Type", "Default"],
   spec.api.map(([name, type, dflt]) => [
     `<span class="docs-mono">${escapeHtml(name)}</span>`,
-    `<span class="docs-mono" style="color:var(--area-fg-accent)">${escapeHtml(type)}</span>`,
+    `<span class="docs-mono" style="color:var(--area-fg-brand)">${escapeHtml(type)}</span>`,
     `<span class="docs-mono" style="color:var(--area-fg-muted)">${escapeHtml(dflt)}</span>`,
   ]),
 )}`;
@@ -598,7 +598,7 @@ ${primitive(
   `${tokens.leadingRamp.length} pixel stops from ${tokens.leadingRamp[0]} to ${tokens.leadingRamp.at(-1)}, which composites pair with a size by ratio.`,
   tokens.leadingRamp,
   "px",
-  (v) => `line-height:var(--area-leading-${v});background:var(--area-accent-surface);display:inline-block`,
+  (v) => `line-height:var(--area-leading-${v});background:var(--area-brand-surface);display:inline-block`,
 )}
 ${primitive(
   "wght",
@@ -658,7 +658,7 @@ function axisPresetTable(axisId) {
     ["Preset", "Attribute", "Description"],
     axis.presets.map((p) => [
       escapeHtml(p.label) + (p.id === axis.defaultPreset ? " (default)" : ""),
-      `<span class="docs-mono" style="color:var(--area-fg-accent)">${axis.attribute}="${p.id}"</span>`,
+      `<span class="docs-mono" style="color:var(--area-fg-brand)">${axis.attribute}="${p.id}"</span>`,
       escapeHtml(p.description),
     ]),
   );
@@ -999,7 +999,7 @@ function axesPage() {
 <p>Because custom properties inherit, a subtree can carry its own axis values. A sidebar marked <code class='area-code'>data-area-density="compact"</code> gets shorter controls <em>and</em> correctly re-derived corner radii, without any component knowing it happened.</p>
 </div>
 <h2 class="docs-h2" id="usage">Usage</h2>
-${codeBlock(`<html data-area-theme="dark" data-area-accent="purple" data-area-density="compact">`)}
+${codeBlock(`<html data-area-theme="dark" data-area-brand="purple" data-area-density="compact">`)}
 ${tokens.axes
   .map(
     (a) => `<h2 class="docs-h2" id="${a.id}">${escapeHtml(a.label)}</h2>

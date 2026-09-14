@@ -13,7 +13,7 @@ export const COMPONENT_PAGES = [
     manifest: "button",
     api: [
       ["variant", '"solid" | "soft" | "outline" | "ghost"', '"solid"'],
-      ["tone", "ButtonTone (9 values)", '"accent"'],
+      ["tone", "ButtonTone (8 values)", '"primary"'],
       ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
       ["icon", "ReactNode", "—"],
       ["trailingIcon", "ReactNode", "—"],
@@ -36,7 +36,7 @@ export const COMPONENT_PAGES = [
       {
         id: "tones",
         title: "Tones",
-        note: "Eight tones. Neutral carries no hue, so a near-black button stays the strongest call to action whatever the accent axis is set to. Emphasis is the variant's job, not the tone's.",
+        note: "Eight tones. Primary carries no hue and is the default \u2014 a near-black button is the strongest call to action a neutral palette can make, and it stays strongest whatever the brand axis is set to. Brand is reserved for moments that are genuinely about identity.",
         demo: "ButtonTones",
       },
       {
@@ -185,7 +185,7 @@ export const COMPONENT_PAGES = [
     name: "Badge",
     manifest: "badge",
     api: [
-      ["tone", '"neutral" | "accent" | "danger" | "warning" | "success"', '"neutral"'],
+      ["tone", '"neutral" | "brand" | "danger" | "warning" | "success"', '"neutral"'],
       ["variant", '"solid" | "outline"', "—"],
       ["dot", "boolean", "false"],
     ],
@@ -329,7 +329,7 @@ export const COMPONENT_PAGES = [
       {
         id: "default",
         title: "Default",
-        note: "The active indicator is the foreground colour, not the accent, so tabs never read as buttons.",
+        note: "The active indicator is the foreground colour, not the brand, so tabs never read as buttons.",
         demo: "TabsDefault",
       },
     ],
@@ -416,7 +416,7 @@ export const COMPONENT_PAGES = [
     manifest: "nav",
     api: [
       ["orientation", '"vertical" | "horizontal"', '"vertical"'],
-      ["tone", '"neutral" | "accent"', '"neutral"'],
+      ["tone", '"neutral" | "brand"', '"neutral"'],
       ["current", "boolean", "false"],
       ["icon", "ReactNode", "\u2014"],
       ["trailing", "ReactNode", "\u2014"],
@@ -427,7 +427,7 @@ export const COMPONENT_PAGES = [
       "Label every nav. Two or three <code class='area-code'>&lt;nav&gt;</code> landmarks on one page are indistinguishable without <code class='area-code'>aria-label</code>, and a sidebar plus a top bar is the common case.",
       "Group vertically, never horizontally. A group label needs a line of its own, which a horizontal nav does not have.",
       "Let long labels truncate. The row reserves space for the icon and anything trailing and gives the rest to the label, so a long document title shortens instead of wrapping the row to two lines.",
-      "Reach for <code class='area-code'>tone=\"accent\"</code> only where the nav is the page's primary structure. On a sidebar beside accented content it competes.",
+      "Reach for <code class='area-code'>tone=\"brand\"</code> only where the nav is the page's primary structure. On a sidebar beside brand-coloured content it competes.",
     ],
     examples: [
       { id: "default", title: "Default", demo: "NavDefault" },
@@ -444,10 +444,10 @@ export const COMPONENT_PAGES = [
         demo: "NavHorizontal",
       },
       {
-        id: "accent",
-        title: "Accent",
-        note: "Use the tone prop to carry the brand on the current item instead of the neutral.",
-        demo: "NavAccent",
+        id: "brand",
+        title: "Brand",
+        note: "Use the tone prop to carry the brand hue on the current item instead of the neutral.",
+        demo: "NavBrand",
       },
       { id: "disabled", title: "Disabled", demo: "NavDisabled" },
     ],

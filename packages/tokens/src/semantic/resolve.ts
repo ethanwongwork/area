@@ -1,7 +1,7 @@
 /**
  * Builds a complete resolved theme: every scale, plus the semantic layer on top.
  *
- * A theme is the cross-product of the colour axis choices (which neutral, which accent)
+ * A theme is the cross-product of the colour axis choices (which neutral, which brand)
  * with light or dark. The contrast gate asserts against these resolved objects rather
  * than against source data, because what ships is what has to be readable.
  */
@@ -13,8 +13,8 @@ export interface ThemeSelection {
   theme: Theme;
   /** Which neutral scale the interface is built from. */
   neutral: string;
-  /** Which chromatic scale fills the accent role. */
-  accent: string;
+  /** Which chromatic scale fills the brand role. */
+  brand: string;
 }
 
 export interface ResolvedTheme extends ThemeSelection {
@@ -42,20 +42,20 @@ function scaleFor(id: string, theme: Theme): BuiltScale {
 }
 
 export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
-  const { theme, neutral, accent } = selection;
+  const { theme, neutral, brand } = selection;
 
   if (!NEUTRAL_SCALES.some((s) => s.id === neutral)) {
     throw new Error(`"${neutral}" is not a neutral scale.`);
   }
-  if (!CHROMATIC_SCALES.some((s) => s.id === accent)) {
-    throw new Error(`"${accent}" is not a chromatic scale.`);
+  if (!CHROMATIC_SCALES.some((s) => s.id === brand)) {
+    throw new Error(`"${brand}" is not a chromatic scale.`);
   }
 
   const scales = Object.fromEntries(ALL_SCALES.map((s) => [s.id, scaleFor(s.id, theme)]));
 
   const roles: Record<Role, BuiltScale> = {
     neutral: scaleFor(neutral, theme),
-    accent: scaleFor(accent, theme),
+    brand: scaleFor(brand, theme),
     danger: scaleFor(ROLE_SCALES.danger, theme),
     warning: scaleFor(ROLE_SCALES.warning, theme),
     caution: scaleFor(ROLE_SCALES.caution, theme),
@@ -82,19 +82,19 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
     ]),
   ) as unknown as ScaleLookup;
 
-  return { theme, neutral, accent, scales, roles, tokens: resolveAliases(lookup, theme) };
+  return { theme, neutral, brand, scales, roles, tokens: resolveAliases(lookup, theme) };
 }
 
 /** The selection Area ships as its default. */
-export const DEFAULT_SELECTION = { neutral: "neutral", accent: "indigo" } as const;
+export const DEFAULT_SELECTION = { neutral: "neutral", brand: "indigo" } as const;
 
 /** Every theme the contrast gate has to clear: both themes x every axis choice. */
 export function shippedThemes(): ResolvedTheme[] {
   const out: ResolvedTheme[] = [];
   for (const theme of ["light", "dark"] as const) {
     for (const neutral of NEUTRAL_SCALES) {
-      for (const accent of CHROMATIC_SCALES) {
-        out.push(resolveTheme({ theme, neutral: neutral.id, accent: accent.id }));
+      for (const brand of CHROMATIC_SCALES) {
+        out.push(resolveTheme({ theme, neutral: neutral.id, brand: brand.id }));
       }
     }
   }

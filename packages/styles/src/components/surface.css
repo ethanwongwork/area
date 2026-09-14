@@ -262,7 +262,7 @@
     block-size: var(--area-space-16);
     block-size: calc(1cap + var(--area-space-4));
     border-radius: var(--area-radius-full);
-    background-color: var(--area-accent-solid);
+    background-color: var(--area-brand-solid);
   }
 
   .area-menu--inline .area-menu__separator {

@@ -47,7 +47,7 @@ import { ICONS } from "./icons.generated.mjs";
  * floating control read as an obstruction.
  */
 function toolbarButton(icon, label, attr, variant = "outline") {
-  return `<button type="button" class="area-button area-button--${variant} area-button--neutral area-button--sm area-button--icon-only" aria-label="${escapeHtml(label)}" ${attr}>
+  return `<button type="button" class="area-button area-button--${variant} area-button--primary area-button--sm area-button--icon-only" aria-label="${escapeHtml(label)}" ${attr}>
       <span class="area-button__icon" aria-hidden="true">${ICONS[icon]}</span>
     </button>`;
 }
@@ -103,7 +103,7 @@ export function customizer(axisPanelHtml) {
   <header class="docs-customizer__bar">
     <span class="docs-customizer__title">Customize</span>
     <span class="docs-customizer__name" id="docs-customizer-name"></span>
-    <button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm area-button--icon-only" data-customizer-close aria-label="Close">
+    <button type="button" class="area-button area-button--ghost area-button--primary area-button--sm area-button--icon-only" data-customizer-close aria-label="Close">
       <span class="area-button__icon" aria-hidden="true">${ICONS.close}</span>
     </button>
   </header>
@@ -534,7 +534,7 @@ export const DOCS_CSS = `
   }
   .docs-specimen__name { font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
   .docs-specimen__figure { display: flex; align-items: center; justify-content: center; min-block-size: var(--docs-figure); }
-  .docs-specimen__box { background-color: var(--area-accent-surface-active); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-accent-border); }
+  .docs-specimen__box { background-color: var(--area-brand-surface-active); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-brand-border); }
 
   .docs-token-chip { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: var(--area-radius-small); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle); }
   .docs-mono { font-family: var(--area-font-mono); }

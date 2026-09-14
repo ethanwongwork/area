@@ -1,9 +1,9 @@
 /**
- * The colour axes: theme, neutral, and accent.
+ * The colour axes: theme, neutral, and brand.
  *
  * Three separate axes rather than one, because their token namespaces are disjoint and
  * therefore compose. `--area-neutral-*` and everything derived from it belongs to the
- * neutral axis; `--area-accent-*` to the accent axis. Twelve accents times six neutrals is
+ * neutral axis; `--area-brand-*` to the brand axis. Twelve accents times six neutrals is
  * seventy-two looks from eighteen CSS blocks rather than seventy-two.
  *
  * The theme axis carries what neither of the others owns: every scale's primitive ramp,
@@ -41,8 +41,8 @@ function primitiveRamp(theme: ResolvedTheme, scaleId: string, as = scaleId): Rec
   return out;
 }
 
-function themeFor(t: Theme, accent: string, neutral: string): ResolvedTheme {
-  return resolveTheme({ theme: t, accent, neutral });
+function themeFor(t: Theme, brand: string, neutral: string): ResolvedTheme {
+  return resolveTheme({ theme: t, brand, neutral });
 }
 
 // ---------------------------------------------------------------------------
@@ -59,7 +59,7 @@ const SHADOW_COLOR: Record<Theme, string> = {
 };
 
 function themePreset(t: Theme): AxisPreset {
-  const resolved = themeFor(t, DEFAULT_SELECTION.accent, DEFAULT_SELECTION.neutral);
+  const resolved = themeFor(t, DEFAULT_SELECTION.brand, DEFAULT_SELECTION.neutral);
 
   // Every family except the one the neutral axis aliases.
   //
@@ -132,7 +132,7 @@ export const THEME_AXIS: AxisDefinition = {
 // ---------------------------------------------------------------------------
 
 function neutralTokens(t: Theme, neutral: string): TokenMap {
-  const resolved = themeFor(t, DEFAULT_SELECTION.accent, neutral);
+  const resolved = themeFor(t, DEFAULT_SELECTION.brand, neutral);
   return tokens({
     ...primitiveRamp(resolved, neutral, "neutral"),
     ...tokensForRole(resolved, "neutral"),
@@ -152,7 +152,7 @@ export const NEUTRAL_AXIS: AxisDefinition = {
     "--area-fg-placeholder",
     "--area-fg-disabled",
     "--area-fg-on-inverse",
-    "--area-fg-on-neutral-solid",
+    "--area-fg-on-primary",
     "--area-border-subtle",
     "--area-border-hover",
     "--area-border:",
@@ -167,28 +167,28 @@ export const NEUTRAL_AXIS: AxisDefinition = {
 };
 
 // ---------------------------------------------------------------------------
-// Accent axis
+// Brand axis
 // ---------------------------------------------------------------------------
 
-function accentTokens(t: Theme, accent: string): TokenMap {
-  const resolved = themeFor(t, accent, DEFAULT_SELECTION.neutral);
+function brandTokens(t: Theme, brand: string): TokenMap {
+  const resolved = themeFor(t, brand, DEFAULT_SELECTION.neutral);
   return tokens({
-    ...primitiveRamp(resolved, accent, "accent"),
-    ...tokensForRole(resolved, "accent"),
+    ...primitiveRamp(resolved, brand, "brand"),
+    ...tokensForRole(resolved, "brand"),
   });
 }
 
-export const ACCENT_AXIS: AxisDefinition = {
-  id: "accent",
+export const BRAND_AXIS: AxisDefinition = {
+  id: "brand",
   label: "Accent",
   description: "The brand hue. Drives fills, links, and the focus ring.",
-  defaultPreset: DEFAULT_SELECTION.accent,
-  namespaces: ["--area-accent-", "--area-fg-accent", "--area-fg-on-accent", "--area-border-focus"],
+  defaultPreset: DEFAULT_SELECTION.brand,
+  namespaces: ["--area-brand-", "--area-fg-brand", "--area-fg-on-brand", "--area-border-focus"],
   presets: CHROMATIC_SCALES.map((spec) => ({
     id: spec.id,
     label: spec.id[0]!.toUpperCase() + spec.id.slice(1),
     description: SCALE_DESCRIPTIONS[spec.id]!,
-    tokens: accentTokens("light", spec.id),
-    darkTokens: accentTokens("dark", spec.id),
+    tokens: brandTokens("light", spec.id),
+    darkTokens: brandTokens("dark", spec.id),
   })),
 };

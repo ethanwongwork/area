@@ -14,8 +14,8 @@ export const ButtonVariants = () => (
 
 export const ButtonTones = () => (
   <>
-    <Button tone="neutral">Neutral</Button>
-    <Button tone="accent">Accent</Button>
+    <Button tone="primary">Primary</Button>
+    <Button tone="brand">Brand</Button>
     <Button tone="info">Info</Button>
     <Button tone="success">Success</Button>
     <Button tone="warning">Warning</Button>
@@ -27,7 +27,7 @@ export const ButtonTones = () => (
 
 export const ButtonToneMatrix = () => (
   <>
-    {(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery"] as const).map(
+    {(["primary", "brand", "info", "success", "warning", "caution", "danger", "discovery"] as const).map(
       (tone) => (
         <div key={tone} style={{ display: "flex", gap: "var(--area-space-8)" }}>
           <Button tone={tone} variant="solid" size="sm">
@@ -51,7 +51,7 @@ export const ButtonToneMatrix = () => (
 export const ButtonPill = () => (
   <>
     <Button pill>Pill</Button>
-    <Button pill variant="outline" tone="neutral">
+    <Button pill variant="outline" tone="primary">
       Pill
     </Button>
     <Button pill variant="soft" tone="discovery">
@@ -62,10 +62,10 @@ export const ButtonPill = () => (
 
 export const ButtonSelected = () => (
   <>
-    <Button variant="ghost" tone="neutral" selected>
+    <Button variant="ghost" tone="primary" selected>
       Selected
     </Button>
-    <Button variant="ghost" tone="neutral">
+    <Button variant="ghost" tone="primary">
       Not selected
     </Button>
   </>
@@ -83,17 +83,17 @@ export const ButtonSizes = () => (
 
 export const ButtonWithIcon = () => (
   <>
-    <Button variant="outline" tone="neutral" icon={<PlusIcon />}>
+    <Button variant="outline" tone="primary" icon={<PlusIcon />}>
       Add item
     </Button>
-    <Button variant="outline" tone="neutral" trailingIcon={<ArrowIcon />}>
+    <Button variant="outline" tone="primary" trailingIcon={<ArrowIcon />}>
       Continue
     </Button>
   </>
 );
 
 export const ButtonIconOnly = () => (
-  <Button variant="outline" tone="neutral" iconOnly icon={<PlusIcon />} aria-label="Add item" />
+  <Button variant="outline" tone="primary" iconOnly icon={<PlusIcon />} aria-label="Add item" />
 );
 
 export const ButtonLoading = () => <Button loading>Saving</Button>;
@@ -101,7 +101,7 @@ export const ButtonLoading = () => <Button loading>Saving</Button>;
 export const ButtonDisabled = () => (
   <>
     <Button disabled>Solid</Button>
-    <Button variant="outline" tone="neutral" disabled>
+    <Button variant="outline" tone="primary" disabled>
       Outline
     </Button>
   </>

@@ -36,14 +36,14 @@
     flex-shrink: 0;
   }
 
-  .area-badge--neutral { --_bg: var(--area-bg-component); --_fg: var(--area-fg-muted); }
-  .area-badge--accent  { --_bg: var(--area-accent-surface); --_fg: var(--area-fg-accent); }
+  .area-badge--primary { --_bg: var(--area-bg-component); --_fg: var(--area-fg-muted); }
+  .area-badge--brand  { --_bg: var(--area-brand-surface); --_fg: var(--area-fg-brand); }
   .area-badge--danger  { --_bg: var(--area-danger-surface); --_fg: var(--area-fg-danger); }
   .area-badge--warning { --_bg: var(--area-warning-surface); --_fg: var(--area-fg-warning); }
   .area-badge--success { --_bg: var(--area-success-surface); --_fg: var(--area-fg-success); }
 
-  .area-badge--solid.area-badge--neutral { --_bg: var(--area-fg-default); --_fg: var(--area-bg-surface); }
-  .area-badge--solid.area-badge--accent  { --_bg: var(--area-accent-solid); --_fg: var(--area-fg-on-accent); }
+  .area-badge--solid.area-badge--primary { --_bg: var(--area-fg-default); --_fg: var(--area-bg-surface); }
+  .area-badge--solid.area-badge--brand  { --_bg: var(--area-brand-solid); --_fg: var(--area-fg-on-brand); }
   .area-badge--solid.area-badge--danger  { --_bg: var(--area-danger-solid); --_fg: var(--area-fg-on-danger); }
   .area-badge--solid.area-badge--warning { --_bg: var(--area-warning-solid); --_fg: var(--area-fg-on-warning); }
   .area-badge--solid.area-badge--success { --_bg: var(--area-success-solid); --_fg: var(--area-fg-on-success); }
@@ -150,7 +150,7 @@
     inline-size: var(--_size);
     block-size: var(--_size);
     border: 2px solid var(--area-bg-component-active);
-    border-top-color: var(--area-accent-solid);
+    border-top-color: var(--area-brand-solid);
     border-radius: var(--area-radius-full);
     animation: area-spin 0.7s linear infinite;
   }
@@ -175,7 +175,7 @@
   .area-progress__bar {
     block-size: 100%;
     border-radius: inherit;
-    background-color: var(--area-accent-solid);
+    background-color: var(--area-brand-solid);
     transition: inline-size var(--area-duration-slow) var(--area-ease-out);
   }
 

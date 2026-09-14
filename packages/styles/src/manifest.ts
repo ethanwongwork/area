@@ -32,8 +32,8 @@ export const button: ComponentManifest = {
   variants: {
     variant: ["solid", "soft", "outline", "ghost"],
     tone: [
-      "neutral",
-      "accent",
+      "primary",
+      "brand",
       "info",
       "success",
       "warning",
@@ -47,7 +47,7 @@ export const button: ComponentManifest = {
   booleans: ["full-width", "icon-only", "pill"],
   states: ["disabled", "loading", "selected"],
   elements: ["icon", "label"],
-  defaults: { variant: "solid", tone: "accent", size: "md" },
+  defaults: { variant: "solid", tone: "primary", size: "md" },
 };
 
 export const field: ComponentManifest = {
@@ -126,10 +126,10 @@ export const badge: ComponentManifest = {
   description: "Labels an item with a short status.",
   variants: {
     variant: ["solid", "outline"],
-    tone: ["neutral", "accent", "danger", "warning", "success"],
+    tone: ["primary", "brand", "danger", "warning", "success"],
   },
   elements: ["dot"],
-  defaults: { tone: "neutral" },
+  defaults: { tone: "primary" },
 };
 
 export const avatar: ComponentManifest = {
@@ -288,7 +288,7 @@ export const nav: ComponentManifest = {
   description: "Site navigation, vertical or horizontal.",
   // `orientation` is the axis; `tone` decides what a current item's plate carries. A nav
   // with neither modifier is vertical and neutral, which is the sidebar case.
-  variants: { orientation: ["horizontal"], tone: ["accent"] },
+  variants: { orientation: ["horizontal"], tone: ["brand"] },
   elements: ["group", "label", "item", "icon", "text", "trailing", "separator"],
   defaults: {},
 };

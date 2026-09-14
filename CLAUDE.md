@@ -159,10 +159,10 @@ is shadcn/ui's number; the 6px preset is still there for anyone who wants the Pr
 
 Eight: neutral, accent, info, success, warning, caution, danger, discovery. `neutral` is not
 a brand colour — a near-black button is the strongest call to action a neutral palette can
-make, and it stays strongest whatever the accent axis is set to.
+make, and it stays strongest whatever the brand axis is set to.
 
-There were nine. `primary` and `secondary` shipped one rung apart, near-black against
-near-black, which delivered none of the distinction the names promised. OpenAI separates
+There were nine, and two of them were `primary` and `secondary` in an earlier sense: both
+near-black, one rung apart, delivering none of the distinction the names promised. OpenAI separates
 them properly — `primary-solid` is gray-900, `secondary-solid` is gray-500 carrying white —
 but their *soft* variants are literally the same tokens, so the real difference is one fill
 plus the strength of an outline's label. Area already spans that on the variant axis.
@@ -226,9 +226,9 @@ placeholder — which put three tokens inside a 1.9:1 band on the light page (3.
 5.50) and earned the middle one 0.85:1 of separation from its neighbour. Everything that
 used it wanted "quieter than body copy", which is what muted already means.
 
-**Accent defaults to indigo, not blue.** `info` is pinned to blue, so an accent that also
+**Brand defaults to indigo, not blue.** `info` is pinned to blue, so a brand that also
 defaulted to blue made the axis look like it did nothing. OpenAI never has this problem
-because they have no accent hue at all: their brand is the neutral near-black button and
+because they have no brand hue at all: their brand is the neutral near-black button and
 blue is reserved for info, links and the focus ring. The separation indigo buys is real but
 modest — 17 degrees and an OKLab distance of 0.068, about three and a half JND. Purple
 separates twice as well and is already `discovery`, so taking it would move the collision
@@ -237,7 +237,7 @@ rather than remove it.
 **Syntax highlighting is pinned to level 500 in light themes.** The code block is white, and
 white is exactly what the palette pins 500 against, so red, purple, blue and the default
 indigo all clear AA there on their own. What remains waived is the glyph wall: green at
-3.06, and whatever a consumer points the accent axis at. Both are in
+3.06, and whatever a consumer points the brand axis at. Both are in
 `contrast/exceptions.ts` with their measured numbers, the gate still counts them, and
 `report.ts` prints them in their own section rather than folding them into the pass count.
 Dark themes are *not* pinned — there 500 measures APCA Lc 28–31 against a floor of 60,

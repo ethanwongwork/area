@@ -7,9 +7,9 @@
 export interface ContrastException {
   fg: string;
   bg: string;
-  /** Restrict the waiver to specific themes or accents; omit to waive everywhere. */
+  /** Restrict the waiver to specific themes or brands; omit to waive everywhere. */
   theme?: "light" | "dark";
-  accent?: string;
+  brand?: string;
   neutral?: string;
   /** Which standard is waived. */
   standard: "wcag" | "apca";
@@ -35,8 +35,8 @@ const SYNTAX_500: ContrastException[] = (
     ["danger", "red measures 4.35-4.42 against 4.5, depending on the neutral cast"],
     ["discovery", "purple measures 4.42-4.48 against 4.5"],
     [
-      "accent",
-      "the default indigo measures 4.45 against 4.5; the axis can also point accent at a glyph-wall hue such as orange or green, where 500 is pinned to 3:1, and the worst case here is that consumer choice rather than the default",
+      "brand",
+      "the default indigo measures 4.45 against 4.5; the axis can also point brand at a glyph-wall hue such as orange or green, where 500 is pinned to 3:1, and the worst case here is that consumer choice rather than the default",
     ],
     [
       "success",
@@ -58,7 +58,7 @@ export const EXCEPTIONS: ContrastException[] = [...SYNTAX_500];
 
 export function isWaived(
   exception: { fg: string; bg: string; standard: "wcag" | "apca" },
-  context: { theme: string; accent: string; neutral: string },
+  context: { theme: string; brand: string; neutral: string },
 ): ContrastException | undefined {
   return EXCEPTIONS.find(
     (e) =>
@@ -66,7 +66,7 @@ export function isWaived(
       e.bg === exception.bg &&
       e.standard === exception.standard &&
       (e.theme === undefined || e.theme === context.theme) &&
-      (e.accent === undefined || e.accent === context.accent) &&
+      (e.brand === undefined || e.brand === context.brand) &&
       (e.neutral === undefined || e.neutral === context.neutral),
   );
 }

@@ -1,7 +1,7 @@
 /**
  * The scales Area ships: the Stadium palette's fourteen families, unchanged.
  *
- * Eleven hues and three casts of one grey. The colour axis points the accent role at any
+ * Eleven hues and three casts of one grey. The colour axis points the brand role at any
  * hue and the neutral role at any cast.
  *
  * The neutral trio is the part worth understanding. `neutral` is chroma 0 at every rung;
@@ -62,7 +62,7 @@ export const ALL_SCALES: readonly ScaleSpec[] = [...NEUTRAL_SCALES, ...CHROMATIC
 
 /** One sentence per scale, rendered above its ramp in the documentation. */
 export const SCALE_DESCRIPTIONS: Record<string, string> = {
-  neutral: "A true grey with no chroma at all. Works with any accent.",
+  neutral: "A true grey with no chroma at all. Works with any brand hue.",
   cool: "The same grey carrying a trace of blue, for cooler interfaces.",
   warm: "Cool mirrored exactly: the same grey, tinted the opposite way.",
   red: "The danger tone. Errors, destructive actions, and failed states.",
@@ -71,9 +71,9 @@ export const SCALE_DESCRIPTIONS: Record<string, string> = {
   lime: "A bright green-yellow. Not bound to a semantic role.",
   green: "The success tone. Completion, health, and positive confirmation.",
   teal: "A blue-green, distinct from both success and info.",
-  cyan: "A light blue, distinct from the accent and info tones.",
+  cyan: "A light blue, distinct from the brand and info tones.",
   blue: "The fixed info tone. Links and the focus ring draw from it.",
-  indigo: "The default accent. A blue-violet, set apart from the fixed blue of info.",
+  indigo: "The default brand hue. A blue-violet, set apart from the fixed blue of info.",
   purple: "The discovery tone. Marks AI features and newly-introduced surfaces.",
   pink: "A warm magenta. Not bound to a semantic role.",
 };
@@ -82,21 +82,21 @@ export type ChromaticScaleId = (typeof CHROMATIC_SCALES)[number]["id"];
 export type NeutralScaleId = (typeof NEUTRAL_SCALES)[number]["id"];
 
 /**
- * Semantic role -> scale. The colour axis repoints `accent`; the rest are fixed.
+ * Semantic role -> scale. The colour axis repoints `brand`; the rest are fixed.
  *
- * Accent defaults to indigo rather than blue so it does not ship identical to `info`, which
- * is pinned to blue. OpenAI never has this collision because they have no accent hue at all:
+ * Brand defaults to indigo rather than blue so it does not ship identical to `info`, which
+ * is pinned to blue. OpenAI never has this collision because they have no brand hue at all:
  * their brand is the neutral near-black button, and blue is reserved for info, links and the
- * focus ring. Area does have one, because the accent is an axis a consumer chooses -- and a
+ * focus ring. Area does have one, because the brand is an axis a consumer chooses -- and a
  * default that happens to equal a fixed tone makes the axis look like it does nothing.
  *
  * The separation is real but modest: indigo's solid sits 17 degrees from blue's at a
  * measured OKLab distance of 0.068, about three and a half times the 0.02 JND. Purple
  * separates twice as well and is the obvious alternative, but it is already `discovery`, so
- * taking it for accent would move the collision rather than remove it.
+ * taking it for brand would move the collision rather than remove it.
  */
 export const ROLE_SCALES = {
-  accent: "indigo",
+  brand: "indigo",
   danger: "red",
   warning: "orange",
   caution: "yellow",

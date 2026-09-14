@@ -24,7 +24,7 @@ export interface ContrastAssertion {
   note: string;
 }
 
-const TONES = ["accent", "danger", "warning", "caution", "success", "info", "discovery"] as const;
+const TONES = ["brand", "danger", "warning", "caution", "success", "info", "discovery"] as const;
 
 /**
  * The four tones a code block paints with: tags, strings, attributes and keywords.
@@ -33,7 +33,7 @@ const TONES = ["accent", "danger", "warning", "caution", "success", "info", "dis
  * where they are checked, and the two have to agree. Adding a fifth syntax colour without
  * adding it here would ship an unmeasured foreground.
  */
-const SYNTAX_ROLES: readonly string[] = ["danger", "success", "accent", "discovery"];
+const SYNTAX_ROLES: readonly string[] = ["danger", "success", "brand", "discovery"];
 
 /**
  * Resting strokes: a deliberate, documented departure from a flat 3:1 reading of
@@ -169,8 +169,8 @@ function chromeAssertions(): ContrastAssertion[] {
     // The neutral button fills. Primary is the strongest call to action a neutral palette
     // can make, so its label has to clear body-text contrast, not merely large-text.
     {
-      fg: "fg-on-neutral-solid",
-      bg: "bg-neutral-solid",
+      fg: "fg-on-primary",
+      bg: "bg-primary-solid",
       wcag: WCAG.TEXT,
       apca: APCA.CONTENT,
       note: "neutral button label",

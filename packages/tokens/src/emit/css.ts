@@ -13,7 +13,7 @@ import { type AxisDefinition, type TokenMap } from "../axes/schema.ts";
 import { AXES, assertAxisIntegrity, attributeFor, defaultPresetOf } from "../axes/registry.ts";
 import { baseTokens, derivedTokens } from "./base.ts";
 import { REGISTERED_PROPERTIES } from "./base.ts";
-import { ACCENT_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "../axes/color.ts";
+import { BRAND_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "../axes/color.ts";
 
 const INDENT = "  ";
 
@@ -103,8 +103,8 @@ function presetSelector(axis: AxisDefinition, presetId: string, dark = false): s
  *
  * Specificity does the work here rather than `:where()`, because the colour axes need
  * theme-qualified variants to beat their unqualified ones. A compound selector such as
- * `[data-area-theme="dark"][data-area-accent="blue"]` scores (0,2,0) and so reliably wins
- * over the plain `[data-area-accent="blue"]` that carries the light values. Using
+ * `[data-area-theme="dark"][data-area-brand="blue"]` scores (0,2,0) and so reliably wins
+ * over the plain `[data-area-brand="blue"]` that carries the light values. Using
  * `:where()` here would zero both and leave the outcome to source order.
  *
  * Layer placement still guarantees the whole file beats the defaults, and unlayered
@@ -132,12 +132,12 @@ export function emitAxes(): string {
 
     for (const preset of axis.presets) {
       // The theme axis additionally carries the dark values of the *default* neutral and
-      // accent, so `data-area-theme="dark"` alone produces a complete dark theme.
+      // brand, so `data-area-theme="dark"` alone produces a complete dark theme.
       const extra =
         axis === THEME_AXIS && preset.id === "dark"
           ? {
               ...(defaultPresetOf(NEUTRAL_AXIS).darkTokens ?? {}),
-              ...(defaultPresetOf(ACCENT_AXIS).darkTokens ?? {}),
+              ...(defaultPresetOf(BRAND_AXIS).darkTokens ?? {}),
             }
           : {};
 

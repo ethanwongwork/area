@@ -11,7 +11,7 @@
  * calc() over both axes' tokens, never by one axis reaching into another's namespace.
  */
 import type { AxisDefinition } from "./schema.ts";
-import { ACCENT_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "./color.ts";
+import { BRAND_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "./color.ts";
 import { DENSITY_AXIS } from "./density.ts";
 import { MOTION_AXIS } from "./motion.ts";
 import { RADIUS_AXIS } from "./radius.ts";
@@ -21,7 +21,7 @@ import { TYPOGRAPHY_AXIS } from "./typography.ts";
 export const AXES: AxisDefinition[] = [
   THEME_AXIS,
   NEUTRAL_AXIS,
-  ACCENT_AXIS,
+  BRAND_AXIS,
   TYPOGRAPHY_AXIS,
   DENSITY_AXIS,
   RADIUS_AXIS,

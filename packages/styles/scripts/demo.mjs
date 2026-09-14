@@ -13,7 +13,7 @@ const btn = (cls, content, attrs = "") =>
   `<button type="button" class="area-button ${cls}"${attrs}>${content}</button>`;
 
 const VARIANTS = ["solid", "soft", "outline", "ghost"];
-const TONES = ["accent", "neutral", "danger"];
+const TONES = ["brand", "primary", "danger"];
 const SIZES = ["xs", "sm", "md", "lg", "xl"];
 
 function section(title, body) {
@@ -23,7 +23,7 @@ function section(title, body) {
 const body = [
   section(
     "Variants",
-    VARIANTS.map((v) => btn(`area-button--${v} area-button--accent area-button--md`, label(v))).join(""),
+    VARIANTS.map((v) => btn(`area-button--${v} area-button--brand area-button--md`, label(v))).join(""),
   ),
   ...TONES.map((tone) =>
     section(
@@ -33,19 +33,19 @@ const body = [
   ),
   section(
     "Sizes",
-    SIZES.map((s) => btn(`area-button--solid area-button--accent area-button--${s}`, label(s))).join(""),
+    SIZES.map((s) => btn(`area-button--solid area-button--brand area-button--${s}`, label(s))).join(""),
   ),
   section(
     "With icon",
     SIZES.map((s) =>
-      btn(`area-button--outline area-button--neutral area-button--${s}`, icon + label("Add")),
+      btn(`area-button--outline area-button--primary area-button--${s}`, icon + label("Add")),
     ).join(""),
   ),
   section(
     "Icon only",
     SIZES.map((s) =>
       btn(
-        `area-button--outline area-button--neutral area-button--${s} area-button--icon-only`,
+        `area-button--outline area-button--primary area-button--${s} area-button--icon-only`,
         icon,
         ' aria-label="Add"',
       ),
@@ -54,10 +54,10 @@ const body = [
   section(
     "States",
     [
-      btn("area-button--solid area-button--accent area-button--md", label("Default")),
-      btn("area-button--solid area-button--accent area-button--md", label("Disabled"), " disabled"),
-      btn("area-button--outline area-button--neutral area-button--md", label("Disabled"), " disabled"),
-      btn("area-button--solid area-button--accent area-button--md", label("Focus"), ' id="focusme"'),
+      btn("area-button--solid area-button--brand area-button--md", label("Default")),
+      btn("area-button--solid area-button--brand area-button--md", label("Disabled"), " disabled"),
+      btn("area-button--outline area-button--primary area-button--md", label("Disabled"), " disabled"),
+      btn("area-button--solid area-button--brand area-button--md", label("Focus"), ' id="focusme"'),
     ].join(""),
   ),
 ].join("\n");

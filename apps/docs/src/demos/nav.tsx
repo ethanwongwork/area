@@ -53,8 +53,8 @@ export const NavHorizontal = () => (
   </Nav>
 );
 
-export const NavAccent = () => (
-  <Nav tone="accent" aria-label="Accent example" style={sidebar}>
+export const NavBrand = () => (
+  <Nav tone="brand" aria-label="Brand example" style={sidebar}>
     <NavItem href="#" current>
       Current
     </NavItem>

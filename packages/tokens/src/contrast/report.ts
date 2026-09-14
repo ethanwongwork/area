@@ -27,7 +27,7 @@ for (const t of themes) {
   for (const a of ASSERTIONS) {
     const fg = t.tokens[a.fg]!;
     const bg = t.tokens[a.bg]!;
-    const ctx = `${t.theme}/${t.neutral}/${t.accent}`;
+    const ctx = `${t.theme}/${t.neutral}/${t.brand}`;
 
     const checks: Array<[string, number, number]> = [["wcag", wcagContrastHex(fg, bg), a.wcag]];
     if (t.theme === "dark") checks.push(["apca", apcaMagnitude(fg, bg), a.apca]);
@@ -39,7 +39,7 @@ for (const t of themes) {
       // direction that flatters the system.
       const waiver = isWaived(
         { fg: a.fg, bg: a.bg, standard: standard as "wcag" | "apca" },
-        { theme: t.theme, accent: t.accent, neutral: t.neutral },
+        { theme: t.theme, brand: t.brand, neutral: t.neutral },
       );
       const key = `${waiver ? "waived|" : ""}${standard}|${a.fg}|${a.bg}`;
       const row = rows.get(key) ?? {

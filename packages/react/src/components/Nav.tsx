@@ -14,7 +14,7 @@ export interface NavProps extends HTMLAttributes<HTMLElement> {
   /** The axis. Vertical is the sidebar case and the default. */
   orientation?: "vertical" | "horizontal";
   /** What a current item's plate carries. Neutral by default. */
-  tone?: "neutral" | "accent";
+  tone?: "neutral" | "brand";
 }
 
 export const Nav = forwardRef<HTMLElement, NavProps>(function Nav(
@@ -27,7 +27,7 @@ export const Nav = forwardRef<HTMLElement, NavProps>(function Nav(
       className={cx(
         "area-nav",
         orientation === "horizontal" && "area-nav--horizontal",
-        tone === "accent" && "area-nav--accent",
+        tone === "brand" && "area-nav--accent",
         className,
       )}
       {...rest}

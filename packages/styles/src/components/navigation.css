@@ -49,9 +49,9 @@
   .area-tabs__tab:hover:not([data-disabled]) { color: var(--area-fg-default); }
 
   /*
-   * The active indicator is the foreground colour, not the accent. Reserving accent for
+   * The active indicator is the foreground colour, not the brand. Reserving brand for
    * things that are genuinely actionable keeps a page of tabs from reading as a page of
-   * buttons -- and it means the accent axis cannot accidentally recolour navigation.
+   * buttons -- and it means the brand axis cannot accidentally recolour navigation.
    */
   .area-tabs__tab[data-selected] {
     color: var(--area-fg-default);
