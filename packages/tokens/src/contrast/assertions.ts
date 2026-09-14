@@ -131,11 +131,17 @@ function tonalAssertions(): ContrastAssertion[] {
       apca: APCA.LARGE,
       note: `${tone} solid button label, hover`,
     });
-    // Tonal borders are resting definition on a tinted surface.
+    // Tonal borders are held to the ambient tier, not the resting one.
+    //
+    // Same reading the neutral outline button already gets: an outline control is identified
+    // by its label and its shape, and the stroke is definition rather than the affordance.
+    // Holding a tinted stroke to the resting tier forced it down to rung 400, where an indigo
+    // measured 3.68:1 on white against a green's 1.80 -- one token, twice the weight, and the
+    // loud end two and a half times heavier than the neutral outline beside it.
     out.push({
       fg: `${tone}-border`,
       bg: "bg-surface",
-      ...STROKE.resting,
+      ...STROKE.ambient,
       note: `${tone} control border`,
     });
     out.push({

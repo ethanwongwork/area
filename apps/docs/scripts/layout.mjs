@@ -466,13 +466,24 @@ export const DOCS_CSS = `
    * The card hugs its content: no minimum height, and the figure -- when there is one --
    * is pushed to the bottom rather than the card being padded out to meet it.
    */
+  /*
+   * A card is a table row in another shape, so it is set like one.
+   *
+   * It carried no font-size of its own and inherited the page's 16px, which made every badge
+   * inside it resolve its 0.875em against the wrong number -- 14px in a card against 12.25px
+   * in a cell, for the same token. The padding matches a cell's for the same reason: the two
+   * views show identical rows and the toggle between them should change the arrangement, not
+   * the type.
+   */
   .docs-card {
     display: flex;
     flex-direction: column;
-    padding: var(--area-space-8);
+    padding: var(--area-space-10) var(--area-space-12);
     border: var(--area-border-width) solid var(--area-border-subtle);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     overflow: hidden;
   }
 
@@ -481,15 +492,12 @@ export const DOCS_CSS = `
    * rather than a spacing step keeps the gap on the same rhythm as the lines below it,
    * so the block reads as four lines rather than as two stacked elements.
    *
-   * These values are read, not decorated -- they are the content of the card. So they sit
-   * on the UI size, which tracks density, rather than on the caption step, which is for
-   * text that annotates something else.
+   * The size comes from the card now rather than being restated here, so a cell and a card
+   * cannot drift apart.
    */
   .docs-card__meta {
     margin-block-start: var(--area-ui-leading);
     font-family: var(--area-font-mono);
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
     word-break: break-word;
   }
 
@@ -536,7 +544,13 @@ export const DOCS_CSS = `
   .docs-specimen__figure { display: flex; align-items: center; justify-content: center; min-block-size: var(--docs-figure); }
   .docs-specimen__box { background-color: var(--area-brand-surface-active); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-brand-border); }
 
-  .docs-token-chip { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: var(--area-radius-small); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle); }
+  /*
+   * The preview swatch. Deliberately the same radius expression as the badge's own swatch --
+   * the small radius less the padding it would be inset by -- so a colour shown beside a
+   * token name and the same colour shown in a preview column read as one object. At the bare
+   * small radius it was 75% of the way to a circle, which reads as a status dot.
+   */
+  .docs-token-chip { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: max(0px, calc(var(--area-radius-small) - var(--area-space-2))); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle); }
   .docs-mono { font-family: var(--area-font-mono); }
 
   @media (max-width: 1100px) { .docs-main { grid-template-columns: minmax(0, 1fr); } .docs-toc { display: none; } }

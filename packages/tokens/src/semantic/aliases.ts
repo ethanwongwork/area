@@ -42,6 +42,9 @@ export type Alias =
   /** The scale's own solid fill -- the level is computed per hue, not chosen here. */
   | { kind: "solid"; role: Role }
   | { kind: "solidHover"; role: Role }
+  /** The family's own quietest readable stroke -- computed per family, not per rung. */
+  | { kind: "stroke"; role: Role }
+  | { kind: "strokeHover"; role: Role }
   /** The family's most saturated readable rung -- computed per scale, not chosen here. */
   | { kind: "vivid"; role: Role }
   | { kind: "contrast"; role: Role }
@@ -51,6 +54,8 @@ const at = (role: Role, slot: Slot): Alias => ({ kind: "slot", role, slot });
 const alphaAt = (role: Role, slot: Slot): Alias => ({ kind: "alphaSlot", role, slot });
 const solid = (role: Role): Alias => ({ kind: "solid", role });
 const solidHover = (role: Role): Alias => ({ kind: "solidHover", role });
+const stroke = (role: Role): Alias => ({ kind: "stroke", role });
+const strokeHover = (role: Role): Alias => ({ kind: "strokeHover", role });
 const vivid = (role: Role): Alias => ({ kind: "vivid", role });
 const contrast = (role: Role): Alias => ({ kind: "contrast", role });
 
@@ -61,8 +66,12 @@ function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
     [`${prefix}-surface-hover`]: at(role, "componentHover"),
     [`${prefix}-surface-active`]: at(role, "componentActive"),
     [`${prefix}-border-subtle`]: at(role, "componentActive"),
-    [`${prefix}-border`]: at(role, "tonalBorder"),
-    [`${prefix}-border-strong`]: at(role, "tonalBorderStrong"),
+    /*
+     * Computed per family rather than read from a shared rung. At one rung the same token
+     * was 3.68:1 on white for indigo and 1.80 for green -- twice the weight from one name.
+     */
+    [`${prefix}-border`]: stroke(role),
+    [`${prefix}-border-strong`]: strokeHover(role),
     [`${prefix}-solid`]: solid(role),
     [`${prefix}-solid-hover`]: solidHover(role),
     [`fg-${prefix}`]: at(role, "textTonal"),
@@ -206,6 +215,7 @@ export interface ScaleView {
   byLevel: Record<Position, string>;
   alphaByLevel: Record<number, string>;
   solid: { level: { light: Level; dark: Level }; hover: { light: Level; dark: Level } };
+  stroke: { rest: { light: Level; dark: Level }; hover: { light: Level; dark: Level } };
   vivid: { light: Level; dark: Level };
   contrast: { hex: string };
 }
@@ -242,6 +252,10 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.level[theme]]!;
     case "solidHover":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.hover[theme]]!;
+    case "stroke":
+      return scales[aliasValue.role].byLevel[scales[aliasValue.role].stroke.rest[theme]]!;
+    case "strokeHover":
+      return scales[aliasValue.role].byLevel[scales[aliasValue.role].stroke.hover[theme]]!;
     case "vivid":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].vivid[theme]]!;
     case "contrast":
@@ -261,6 +275,10 @@ export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme)
       return scales[aliasValue.role].solid.level[theme];
     case "solidHover":
       return scales[aliasValue.role].solid.hover[theme];
+    case "stroke":
+      return scales[aliasValue.role].stroke.rest[theme];
+    case "strokeHover":
+      return scales[aliasValue.role].stroke.hover[theme];
     case "vivid":
       return scales[aliasValue.role].vivid[theme];
     default:

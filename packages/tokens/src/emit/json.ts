@@ -91,7 +91,11 @@ export function buildTokensJson(): TokensJson {
         ? { kind: alias.kind }
         : alias.kind === "contrast"
           ? { kind: alias.kind, role: alias.role }
-          : alias.kind === "solid" || alias.kind === "solidHover" || alias.kind === "vivid"
+          : alias.kind === "solid" ||
+              alias.kind === "solidHover" ||
+              alias.kind === "stroke" ||
+              alias.kind === "strokeHover" ||
+              alias.kind === "vivid"
             ? { kind: alias.kind, role: alias.role }
             : {
                 kind: alias.kind,

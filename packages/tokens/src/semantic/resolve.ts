@@ -76,6 +76,7 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
         },
         alphaByLevel: Object.fromEntries(scale.alphas.map((a) => [a.level, a.hex8])),
         solid: { level: scale.solid.level, hover: scale.solid.hover },
+        stroke: scale.stroke,
         vivid: scale.vivid,
         contrast: { hex: scale.contrast.hex },
       },

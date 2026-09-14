@@ -90,6 +90,13 @@ export interface VividChoice {
   dark: Level;
 }
 
+export interface StrokeChoice {
+  /** Resting stroke, per theme. */
+  rest: { light: Level; dark: Level };
+  /** Hover, one tier louder. */
+  hover: { light: Level; dark: Level };
+}
+
 export interface BuiltScale {
   id: string;
   kind: ScaleKind;
@@ -101,6 +108,7 @@ export interface BuiltScale {
   steps: Ramp<ScaleStep>;
   alphas: Ramp<{ level: Level; hex8: string; alpha: number; residual: number }>;
   solid: SolidChoice;
+  stroke: StrokeChoice;
   /** This theme's solid fill, resolved. */
   solidHex: string;
   vivid: VividChoice;
@@ -149,6 +157,17 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     ? neutralSolid(steps)
     : chooseSolid(steps, peakStep.level, spec.solidForeground ?? "light");
   const solidHex = steps.find((x) => x.level === solid.level[theme])!.hex;
+  const stroke: StrokeChoice = {
+    // The bars are the gate's own ambient and hover stroke tiers; see contrast/assertions.ts.
+    rest: {
+      light: quietestStroke(steps, "light", 1.3, 0),
+      dark: quietestStroke(steps, "dark", 1.3, 0),
+    },
+    hover: {
+      light: quietestStroke(steps, "light", 1.9, 15),
+      dark: quietestStroke(steps, "dark", 1.9, 15),
+    },
+  };
 
   const background = parseHex(PAGE_BACKGROUND[theme]);
   const alphas = steps.map((s) => {
@@ -170,6 +189,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     steps,
     alphas,
     solid,
+    stroke,
     vivid,
     contrast: { hex: solid.foreground, wcag: solid.wcag, apca: solid.apca },
     solidHex,
@@ -296,6 +316,37 @@ function chooseVivid(steps: readonly ScaleStep[], theme: Theme): Level {
     if (wcagContrastHex(hex, page) >= 4.6 && apcaMagnitude(hex, page) >= 61) return steps[i]!.level;
   }
   return steps[start]!.level;
+}
+
+/**
+ * The quietest rung whose stroke still reads against the surface it is drawn on.
+ *
+ * Per family, not per ladder position, and that is the whole point. A rung is a lightness and
+ * hues do not share a luminance at one: at rung 400 an indigo stroke measured 3.68:1 on white
+ * while a green one measured 1.80 -- the same token, twice the weight, and the loud end two
+ * and a half times heavier than the neutral outline beside it. Walking each family to its own
+ * quietest passing rung lands all eleven between 1.30 and 1.45, which is what "the same
+ * stroke" actually means to the eye.
+ *
+ * This is the inverse of the rule foregrounds follow. There a shared rung is right, because
+ * the goal is comparable *chroma*; here the goal is comparable *weight*, and a shared rung
+ * cannot deliver it.
+ */
+function quietestStroke(
+  steps: readonly ScaleStep[],
+  theme: Theme,
+  bar: number,
+  apcaBar: number,
+): Level {
+  const ground = groundHex(INVERSION.surface[theme]);
+  // Quiet means close to the surface: the lightest rung in light, the darkest in dark.
+  const order = theme === "light" ? steps : [...steps].reverse();
+  // Both standards, as everywhere else. WCAG alone put every dark hover stroke at APCA
+  // Lc 13 against a floor of 15 -- the near-black overstatement APCA exists to catch.
+  const found = order.find(
+    (s) => wcagContrastHex(s.hex, ground) >= bar && apcaMagnitude(s.hex, ground) >= apcaBar,
+  );
+  return (found ?? order[order.length - 1]!).level;
 }
 
 /** A ground's hex, where the ground may be a rung or the palette's white constant. */

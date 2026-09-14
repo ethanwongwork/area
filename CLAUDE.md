@@ -214,11 +214,20 @@ green, lime, orange, teal and yellow are pinned at 3:1 there and only reach AA a
 walking them down to 600 for white arrives somewhere muddy (yellow-600 is `#936b02`).
 Nothing hardcodes the split: `chooseSolid` walks from peak chroma and measures.
 
-**Tonal strokes sit deeper than neutral ones.** `tonalBorder` is a separate `INVERSION` slot
-from `border`, and that is a luminance fact rather than a preference: at a shared rung a
-luminous hue carries far more luminance than a grey, so green-250 measures 1.35:1 on the
-light page where neutral-250 measures 1.57. One slot for both forces a choice between an
-invisible green border and a neutral border heavy enough to read as a focus ring.
+**Tonal strokes are computed per family, not read from a shared rung.** `quietestStroke` in
+`scale.ts` walks each family to the quietest rung that still clears the stroke tier, the same
+shape `chooseSolid` and `chooseVivid` use. A rung is a lightness and hues do not share a
+luminance at one: at rung 400 an indigo stroke measured 3.68:1 on white against a green's
+1.80 — one token, twice the weight, and the loud end two and a half times heavier than the
+neutral outline beside it. Walking per family lands all eleven between 1.30 and 1.45.
+
+**This is the inverse of the foreground rule.** A foreground wants a shared rung, because the
+goal there is comparable *chroma*. A stroke wants comparable *weight*, and a shared rung
+cannot deliver it.
+
+Tonal strokes are held to the **ambient** tier, not the resting one — the same reading the
+neutral outline button gets. An outline control is identified by its label and its shape; the
+stroke is definition, not the affordance.
 
 **Four neutral foregrounds, not five.** `fg-default`, `fg-muted`, `fg-placeholder`,
 `fg-disabled`. There was a fifth, `fg-subtle`, sitting one rung from muted and one from
