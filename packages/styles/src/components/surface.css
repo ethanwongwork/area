@@ -159,7 +159,7 @@
   .area-menu {
     --_inset: var(--area-space-6);
     padding: var(--_inset);
-    border: var(--area-border-width) solid var(--area-border-decorative);
+    border: var(--area-border-width) solid var(--area-border-faint);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);

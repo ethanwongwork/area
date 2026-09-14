@@ -83,7 +83,7 @@ These guarantees are covered by tests, build audits, and the review conventions 
 - **The colour maths is proven, not assumed.** OKLab conversions are checked against
   `colorjs.io` to 1e-12 per channel across both gamuts, and the gamut mapper matches the
   CSS Color 4 reference to a fifth of a JND.
-- **Contrast is a test gate.** 176 assertions across 66 shipped themes, under WCAG 2.2
+- **Contrast is a test gate.** 178 assertions across 66 shipped themes, under WCAG 2.2
   always and APCA as a hard gate in dark themes, because the WCAG 2.x formula overstates
   contrast near black. Four exceptions are waived — each measured, recorded with its
   number, and counted separately rather than folded into the pass count.

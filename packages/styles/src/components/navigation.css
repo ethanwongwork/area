@@ -173,7 +173,7 @@
     padding-inline: var(--_gutter);
     padding-inline-end: calc(var(--_gutter) + var(--_icon) + var(--area-space-4));
 
-    border: var(--area-border-width) solid var(--area-border);
+    border: var(--area-border-width) solid var(--area-border-subtle);
     /* Capped against this tier's own height; see button.css. */
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
     background-color: var(--area-bg-surface);

@@ -156,17 +156,19 @@ function tonalAssertions(): ContrastAssertion[] {
 
 function chromeAssertions(): ContrastAssertion[] {
   return [
-    // Deliberately faint visual grouping, requested at neutral 50 in light themes.
+    // Deliberately faint visual grouping, requested at neutral 100 in light themes.
     // This is a design floor, not a control-contrast threshold. Existing control,
     // focus, text and ambient thresholds remain unchanged.
-    { fg: "border-decorative", bg: "bg-page", wcag: 1.05, apca: 0, note: "decorative divider on page" },
-    { fg: "border-decorative", bg: "bg-surface", wcag: 1.05, apca: 0, note: "decorative container edge" },
+    { fg: "border-decorative", bg: "bg-page", wcag: 1.1, apca: 0, note: "decorative divider on page" },
+    { fg: "border-decorative", bg: "bg-surface", wcag: 1.1, apca: 0, note: "decorative container edge" },
     { fg: "border", bg: "bg-page", ...STROKE.resting, note: "control border on page" },
     { fg: "border", bg: "bg-surface", ...STROKE.resting, note: "control border on surface" },
     { fg: "border-subtle", bg: "bg-surface", ...STROKE.ambient, note: "quiet control outline" },
     { fg: "border-subtle", bg: "bg-page", ...STROKE.ambient, note: "quiet outline on page" },
     { fg: "border-faint", bg: "bg-page", ...STROKE.faint, note: "token badge edge on page" },
     { fg: "border-faint", bg: "bg-surface", ...STROKE.faint, note: "token badge edge on a panel" },
+    // The segmented track has an inset fill as well as an outline; check the actual pair.
+    { fg: "border-faint", bg: "bg-subtle", wcag: 1.1, apca: 0, note: "segmented track outline" },
     { fg: "border-hover", bg: "bg-surface", ...STROKE.hover, note: "control border, hover" },
 
     // The focus ring is checked against every surface it can land on. Checking only the

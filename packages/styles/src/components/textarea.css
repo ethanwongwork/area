@@ -16,7 +16,7 @@
     min-block-size: calc(var(--area-control-md) * 2);
     padding: var(--area-space-8) var(--_gutter);
 
-    border: var(--area-border-width) solid var(--area-border);
+    border: var(--area-border-width) solid var(--area-border-subtle);
     border-radius: var(--area-radius-control);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);

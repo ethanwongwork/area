@@ -325,10 +325,10 @@ which is unreadable rather than marginal, so `chooseVivid` keeps walking.
 
 **The page is white; a code block is one rung back from it.** That is what lets the block
 read as a block without a stroke doing the work. Its edge uses `--area-border-decorative`,
-which maps to neutral 50 in light themes and neutral 800 in dark themes. Panels, cards,
+which maps to neutral 100 in light themes and neutral 800 in dark themes. Panels, cards,
 table rules, navigation dividers and example containers share that quiet decorative token.
 Control outlines, swatch rings and focus indicators retain their stronger tokens.
-The decorative tier has its own 1.05 design floor; it never identifies an interactive
+The decorative tier has its own 1.1 design floor; it never identifies an interactive
 control or state. Existing text, control and focus contrast thresholds are unchanged.
 
 **A code block has no toolbar.** Copy rides at the top right of the code itself, centred on
@@ -502,3 +502,17 @@ checked in a real browser.
 The previous system is archived under `archive/playground/`, with its design rationale
 also preserved in git at commit `c35ac15`. Figma sync was dropped deliberately.
 See [the archive guide](../archive/playground/README.md) before consulting it.
+
+## Stroke hierarchy
+
+In light themes, decorative dividers and container seams use `border-decorative` at
+neutral 100. Floating Menu/Popover frames and segmented tracks use `border-faint` at 150.
+Inputs, Select, Textarea, unselected Chip, neutral outline Button and selected segmented
+items use `border-subtle` at 200. This keeps fields recognizable without the old jump
+from an almost invisible divider to the stronger 250 outline. `border` remains available
+for stronger resting definition; hover and focus keep their existing tokens.
+
+Dark values follow the same semantic roles, with decorative at 800 and faint/subtle at
+750 where the palette compresses the quiet end. Checkbox/radio glyph outlines keep their
+stronger stroke, since their shape identifies the control. A native Select popup is drawn
+by the platform; Menu/Popover frames are styled by Area. There is no separate Combobox yet.

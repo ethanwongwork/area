@@ -50,7 +50,7 @@
       calc(var(--_height) * var(--area-radius-cap))
     );
     background-color: var(--area-bg-subtle);
-    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle);
+    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-faint);
   }
 
   .area-segmented__item {

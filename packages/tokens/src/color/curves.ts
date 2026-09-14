@@ -95,11 +95,11 @@ export const INVERSION = {
    */
   borderSubtle: { light: 200, dark: 750 },
   /**
-   * Decorative dividers and container seams. The light theme deliberately uses rung 50
-   * for a near-white rule; dark uses 800 so the rule stays close to its ground.
+   * Decorative dividers and container seams. The light theme deliberately uses rung 100
+   * for a quiet but visible rule; dark uses 800 so the rule stays close to its ground.
    * Never use this token to identify an input, a selected state, or keyboard focus.
    */
-  borderDecorative: { light: 50, dark: 800 },
+  borderDecorative: { light: 100, dark: 800 },
   border: { light: 250, dark: 650 },
   /**
    * The faintest stroke in the system, for a container that is already offset in value from

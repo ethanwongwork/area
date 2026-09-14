@@ -1,6 +1,6 @@
 # Handoff — 2026-09-14
 
-**Branch** `main` · **Previous checkpoint** `15f8c99` (Codex migration).
+**Branch** `main` · **Previous checkpoint** `8e42e3b` (Area naming and initial decorative borders).
 **State** Naming and divider changes verified and saved with this handoff. Push is pending:
 automatic approval review rejected `git push origin main` without explicit authorization.
 No remote update was made. Read `git log -3 --oneline` and `git status -sb` for current commits.
@@ -24,12 +24,19 @@ The user's subsequent request made Area the sole current name and lightened deco
   Current docs and comments use Area. Palette colors and icon geometry are unchanged.
 - Moved historical journal, handoff and research into `archive/history/` and `archive/plans/`.
   Fluent's literal glyph names are upstream vocabulary, not project aliases.
-- Added `--area-border-decorative`: neutral 50 (#f7f7f7) in light, neutral 800 (#282828)
+- Added `--area-border-decorative`: neutral 100 (#eeeeee) in light, neutral 800 (#282828)
   in dark. Panels, cards, code containers, tables, nav/menu dividers and docs framing
-  use it. Control outlines, selected states, swatches and focus indicators retain their
-  existing contrast tokens. No existing contrast threshold was lowered.
+  use it. Menu/Popover outer frames and segmented tracks now use border-faint (150);
+  Input, Select, Textarea and unselected Chip use border-subtle (200), matching neutral
+  outline buttons. Selected segmented items keep the 200 stroke. Hover/focus retain
+  their existing tokens. No existing contrast threshold was lowered.
 
 ## In flight
+
+Latest refinement: decorative borders rose two ladder stops (50 → 75 → 100).
+Related controls now follow the shared 100/150/200 light-theme stroke hierarchy.
+There is no separate Combobox; native Select popup rendering remains platform-owned.
+The new segmented-track contrast pairing passes across all shipped themes.
 
 No unfinished implementation. Explicit approval is needed before pushing the local commits
 to GitHub origin/main; do not retry or bypass the rejected push without authorization.
@@ -58,11 +65,11 @@ The preview at http://localhost:4321 uses the existing static docs server.
 ## Verify
 
 ```sh
-npm test                                      # 8,876 passing tests, 6 files
+npm test                                      # 8,975 passing tests, 6 files
 npm run build                                 # axis integrity; 36-component parity
 npm run lint:manifest                         # 36 components
 npm run build:docs                            # 38 pages, 64 demos; 36/36 used; audit clean
-node packages/tokens/src/contrast/report.ts    # 0 failing, 176 passing, 4 waived; 66 themes
+node packages/tokens/src/contrast/report.ts    # 0 failing, 178 passing, 4 waived; 66 themes
 npm run typecheck                             # all three packages pass
 npm run dev                                   # http://localhost:4321
 ```

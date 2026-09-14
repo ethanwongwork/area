@@ -3,6 +3,16 @@
 Current Area decisions, newest first. Earlier records are preserved in
 [the historical journal](../archive/history/journal-before-area-name.md).
 
+## 2026-09-14 — A coordinated stroke hierarchy
+
+Neutral 50 made dividers too faint beside controls that still used stronger outlines.
+Dividers now use 100; floating menu/popover frames and segmented tracks use 150; field
+outlines use 200, shared with neutral outline buttons and selected segmented items.
+The changes reuse existing semantic roles, leave hover/focus distinct, and add a gate
+for the segmented track against its actual inset background. Dark roles remain quieter
+than interactive state indicators. Verification: 8,975 tests and 178 passing contrast
+assertions across 66 themes, with the same four existing waivers.
+
 ## 2026-09-14 — Area naming and decorative borders
 
 The current product, custom icon source, generated icon namespace and palette metadata

@@ -25,7 +25,7 @@
 
     --_bg: var(--area-bg-surface);
     --_bg-hover: var(--area-bg-component-hover);
-    --_border: var(--area-border);
+    --_border: var(--area-border-subtle);
     --_fg: var(--area-fg-default);
 
     display: inline-flex;
