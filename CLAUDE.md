@@ -3,6 +3,17 @@
 Area is a design system tuned along eight axes. Read this before changing anything in
 `packages/`.
 
+**Resuming work: read `.claude/HANDOFF.md` first.** It is written to be the only file you
+need to pick up where the last session stopped — current state, what is in flight, what is
+next, and the traps that session hit. `.claude/JOURNAL.md` is a reference rather than a
+briefing: reach for it when a decision looks arbitrary and the handoff does not say why.
+
+**Ending a session: run the `checkpoint` skill** rather than letting the context compact.
+Compaction keeps the shape of a session and drops the specifics, which are the expensive
+part. Offer a checkpoint unprompted once a session has run long enough that context pressure
+is likely — a good signal is when you have stopped being able to recall earlier decisions
+without re-reading files.
+
 ## The invariants
 
 These are not preferences. Each one is enforced by a check that fails the build, and each
