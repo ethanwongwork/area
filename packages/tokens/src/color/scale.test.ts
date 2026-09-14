@@ -106,11 +106,11 @@ describe("solid fill", () => {
     const GLYPH_WALL_WHITE = ["green", "teal", "cyan"];
     for (const id of LABEL_WALL) {
       const spec = CHROMATIC_SCALES.find((s) => s.id === id)!;
-      expect(buildScale(spec, "light").solid.level, id).toBe(500);
+      expect(buildScale(spec, "light").solid.level.light, id).toBe(500);
     }
     for (const id of GLYPH_WALL_WHITE) {
       const spec = CHROMATIC_SCALES.find((s) => s.id === id)!;
-      expect(buildScale(spec, "light").solid.level, id).toBe(600);
+      expect(buildScale(spec, "light").solid.level.light, id).toBe(600);
     }
     // Every family named above takes white; the remaining three are the warm hues with no
     // readable dark end, which take black at their chromatic peak instead.
@@ -129,7 +129,8 @@ describe("solid fill", () => {
   it("sits on the ladder rather than beside it", () => {
     for (const spec of CHROMATIC_SCALES) {
       const scale = buildScale(spec, "light");
-      expect(LEVELS, spec.id).toContain(scale.solid.level);
+      expect(LEVELS, spec.id).toContain(scale.solid.level.light);
+      expect(LEVELS, spec.id).toContain(scale.solid.level.dark);
       expect(LEVELS, spec.id).toContain(scale.solid.hover.light);
       expect(LEVELS, spec.id).toContain(scale.solid.hover.dark);
     }
@@ -139,8 +140,8 @@ describe("solid fill", () => {
     for (const spec of CHROMATIC_SCALES) {
       const scale = buildScale(spec, "light");
       // A higher rung is darker, so light darkens and dark lightens.
-      expect(scale.solid.hover.light, spec.id).toBeGreaterThan(scale.solid.level);
-      expect(scale.solid.hover.dark, spec.id).toBeLessThan(scale.solid.level);
+      expect(scale.solid.hover.light, spec.id).toBeGreaterThan(scale.solid.level.light);
+      expect(scale.solid.hover.dark, spec.id).toBeLessThan(scale.solid.level.dark);
     }
   });
 
@@ -159,7 +160,10 @@ describe("solid fill", () => {
 
   it("holds its identity across themes, so a brand colour is one colour", () => {
     for (const spec of CHROMATIC_SCALES) {
-      expect(buildScale(spec, "dark").solid.level, spec.id).toBe(buildScale(spec, "light").solid.level);
+      // Chromatic only: a neutral's solid crosses the ladder with the theme, by design.
+      const light = buildScale(spec, "light").solid.level;
+      expect(buildScale(spec, "dark").solid.level, spec.id).toEqual(light);
+      expect(light.light, spec.id).toBe(light.dark);
     }
   });
 });

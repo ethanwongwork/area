@@ -17,14 +17,26 @@
  * syntax palette is exactly the kind of thing that ships unreadable in dark mode.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /*
+   * Inline code is the token badge without a swatch.
+   *
+   * They were two styles for one thing: a `tone="neutral"` written in running prose and the
+   * same name written in a table were a different size, ground and stroke, so the page read
+   * as though the two were different kinds of reference. They are not. The badge is defined
+   * in token.css; this only declines the flex box, since inline code has to break across
+   * lines and a badge with a swatch must not.
+   */
   .area-code {
     display: inline;
-    padding: 2px var(--area-space-4);
+    white-space: normal;
+    padding: var(--area-space-2) var(--area-space-6);
+    border: var(--area-border-width) solid var(--area-border-faint);
     border-radius: var(--area-radius-small);
-    background-color: var(--area-bg-component);
+    background-color: var(--area-bg-code);
     color: var(--area-fg-default);
     font-family: var(--area-font-mono);
-    font-size: 0.9em;
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
   }
 
   .area-code-block {

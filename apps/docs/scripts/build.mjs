@@ -52,7 +52,7 @@ const FOUNDATION_PAGES = [
  * Every picker is a real segmented control from the system. The accent picker renders its
  * twelve options as swatches of each scale's own solid fill, which is both the clearest way
  * to choose a hue and a working demonstration that the scales are addressable as tokens.
- * The solid level differs per hue -- blue's is 51, yellow's is 90 -- so the swatch has to
+ * The solid level differs per hue -- blue's is 500, yellow's is 350 -- so the swatch has to
  * ask the scale rather than assume a fixed rung.
  */
 function axisGroups() {
@@ -63,7 +63,7 @@ function axisGroups() {
           const selected = preset.id === axis.defaultPreset;
           const body =
             axis.id === "accent"
-              ? `<span class="area-segmented__icon" aria-hidden="true"><span class="docs-swatch" style="background:var(--area-${preset.id}-${tokens.scales[preset.id].solid.level})"></span></span>`
+              ? `<span class="area-segmented__icon" aria-hidden="true"><span class="docs-swatch" style="background:var(--area-${preset.id}-${tokens.scales[preset.id].solid.level.light})"></span></span>`
               : escapeHtml(preset.label);
           return `<button type="button" role="radio" class="area-segmented__item" data-value="${preset.id}" aria-checked="${selected}" aria-label="${escapeHtml(preset.label)}"${selected ? " data-selected" : ""}>${body}</button>`;
         })

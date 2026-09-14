@@ -673,3 +673,53 @@ export const Kbd = forwardRef<HTMLElement, KbdProps>(function Kbd(
     </span>
   );
 });
+
+export interface TokenProps extends HTMLAttributes<HTMLElement> {
+  /** The token's name, as it would be typed. */
+  children: ReactNode;
+  /**
+   * A CSS colour the token resolves to. Renders a swatch ahead of the name.
+   *
+   * Pass the `var()` rather than a literal, so the swatch tracks the axes like everything
+   * else does; a hex here would show what the token meant when the page was written.
+   */
+  swatch?: string;
+  /** For a token naming something derived rather than primitive. */
+  subtle?: boolean;
+  /** On a coloured ground: takes the surrounding foreground instead of the page's. */
+  onColor?: boolean;
+}
+
+/**
+ * Names a design token inline — in documentation, in a spec, in a comment thread.
+ *
+ * Distinct from `Code` because a token reference is a *name*, not a fragment of source, and
+ * it can carry a swatch showing what the name currently resolves to. The two share a size,
+ * ground and stroke deliberately: they are both text you could type, and a page that styles
+ * them differently implies a distinction that is not there.
+ *
+ * One size, and no size prop. The badge has to sit inside 14px table chrome and inside 16px
+ * running prose without having been set for either.
+ */
+export const Token = forwardRef<HTMLElement, TokenProps>(function Token(
+  { children, swatch, subtle, onColor, className, ...rest },
+  ref,
+) {
+  return (
+    <span
+      ref={ref}
+      className={cx(
+        "area-token",
+        subtle && "area-token--subtle",
+        onColor && "area-token--on-color",
+        className,
+      )}
+      {...rest}
+    >
+      {swatch ? (
+        <span className="area-token__swatch" style={{ background: swatch }} aria-hidden="true" />
+      ) : null}
+      {children}
+    </span>
+  );
+});

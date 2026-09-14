@@ -66,8 +66,15 @@ export interface ScaleStep {
 }
 
 export interface SolidChoice {
-  /** The rung the fill sits at. Identical in both themes: the brand does not move. */
-  level: Level;
+  /**
+   * The rung the fill sits at, per theme.
+   *
+   * For a chromatic family the two are identical -- a brand colour does not move when the
+   * lights go out. A neutral family is the exception and has to be: its solid is the
+   * near-black button, and near-black on a near-black page is not a button. There the fill
+   * crosses the ladder with the theme.
+   */
+  level: { light: Level; dark: Level };
   /** The hover rung, per theme -- always one step *away* from that theme's page. */
   hover: { light: Level; dark: Level };
   foreground: "#ffffff" | "#000000";
@@ -94,6 +101,8 @@ export interface BuiltScale {
   steps: Ramp<ScaleStep>;
   alphas: Ramp<{ level: Level; hex8: string; alpha: number; residual: number }>;
   solid: SolidChoice;
+  /** This theme's solid fill, resolved. */
+  solidHex: string;
   vivid: VividChoice;
   contrast: { hex: "#ffffff" | "#000000"; wcag: number; apca: number };
 }
@@ -136,7 +145,10 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
   const vivid = { light: chooseVivid(steps, "light"), dark: chooseVivid(steps, "dark") };
   const peakStep = steps.reduce((a, s) => (s.oklch.C > a.oklch.C ? s : a), steps[0]!);
   const peak = { level: peakStep.level, C: peakStep.oklch.C };
-  const solid = chooseSolid(steps, peakStep.level, spec.solidForeground ?? "light");
+  const solid = spec.kind === "neutral"
+    ? neutralSolid(steps)
+    : chooseSolid(steps, peakStep.level, spec.solidForeground ?? "light");
+  const solidHex = steps.find((x) => x.level === solid.level[theme])!.hex;
 
   const background = parseHex(PAGE_BACKGROUND[theme]);
   const alphas = steps.map((s) => {
@@ -153,13 +165,44 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     id: spec.id,
     kind: spec.kind,
     theme,
-    hue: steps.find((s) => s.level === solid.level)!.oklch.h,
+    hue: steps.find((s) => s.level === solid.level[theme])!.oklch.h,
     peak,
     steps,
     alphas,
     solid,
     vivid,
     contrast: { hex: solid.foreground, wcag: solid.wcag, apca: solid.apca },
+    solidHex,
+  };
+}
+
+/**
+ * A neutral family's solid: the near-black button, and its near-white twin in dark.
+ *
+ * Not something `chooseSolid` can find. It walks from peak chroma, and a neutral has none --
+ * every rung is equally unsaturated, so the walk starts at whichever end the reduce happened
+ * to land on and stops at the first rung that carries white, around 500. A mid grey is a
+ * perfectly readable button and completely the wrong one.
+ *
+ * The rungs are `INVERSION.inverseFill`, so the primary button and `bg-inverse` cannot drift
+ * apart -- they are the same decision, and one of them is allowed to be a button.
+ */
+function neutralSolid(steps: readonly ScaleStep[]): SolidChoice {
+  const dark = steps.findIndex((s) => s.level === INVERSION.inverseFill.light);
+  const light = steps.findIndex((s) => s.level === INVERSION.inverseFill.dark);
+  const fg = "#ffffff";
+  return {
+    level: { light: steps[dark]!.level, dark: steps[light]!.level },
+    // Away from the page in each theme. LEVELS runs lightest first, so a higher index is
+    // darker: light deepens, dark lifts.
+    hover: {
+      light: steps.find((x) => x.level === INVERSION.inverseFillHover.light)!.level,
+      dark: steps.find((x) => x.level === INVERSION.inverseFillHover.dark)!.level,
+    },
+    foreground: fg,
+    wcag: Number(wcagContrastHex(fg, steps[dark]!.hex).toFixed(2)),
+    apca: Number(apcaMagnitude(fg, steps[dark]!.hex).toFixed(1)),
+    retreat: 0,
   };
 }
 
@@ -199,7 +242,7 @@ function chooseSolid(
   const at = (i: number) => steps[Math.min(steps.length - 1, Math.max(0, i))]!.level;
 
   return {
-    level: chosen.level,
+    level: { light: chosen.level, dark: chosen.level },
     // Away from the page background in both themes: darker on light, lighter on dark.
     hover: { light: at(index + 1), dark: at(index - 1) },
     foreground: fg,

@@ -14,6 +14,21 @@
  * because a component that hardcodes a number stops responding to the axis that owns it.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /*
+   * One badge, one size, everywhere a token name appears.
+   *
+   * It carries the caption size rather than the UI size, and that is the point: a badge has
+   * to sit inside 14px table chrome *and* inside 16px running prose without looking like it
+   * was set for one of them. At the UI size it matched the table and swelled in the copy; at
+   * 12/16 it reads as a badge in both, which is what it is. There is deliberately no size
+   * variant -- a second size is a second decision at every call site.
+   *
+   * Ground is `--area-bg-code`, the same quiet fill a code block uses, because a token name
+   * and a line of source are the same kind of thing: text you could type. The stroke is the
+   * lightest the system has. The literal next rung -- neutral-50 on a neutral-25 fill --
+   * measures 1.03:1, which is not a hairline, it is a rounding error; `border-faint` is
+   * 1.21:1 and is the faintest edge that survives being looked at.
+   */
   .area-token {
     display: inline-flex;
     align-items: center;
@@ -23,42 +38,34 @@
     max-inline-size: 100%;
     padding: var(--area-space-2) var(--area-space-6);
 
-    border: var(--area-border-width) solid var(--area-border-subtle);
-    border-radius: var(--area-radius-control);
-    background-color: var(--area-bg-surface);
+    border: var(--area-border-width) solid var(--area-border-faint);
+    border-radius: var(--area-radius-small);
+    background-color: var(--area-bg-code);
     color: var(--area-fg-default);
 
     font-family: var(--area-font-mono);
-    /*
-     * The UI size, not the caption step.
-     *
-     * A token chip is chrome -- something scanned rather than read -- so it belongs on
-     * `--area-ui-*` with table cells and menu items, and it tracks density with them. It
-     * previously carried the caption step, which made it the only 12px thing in a table of
-     * 14px cells: three type sizes in one row where the design calls for one.
-     */
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
     font-weight: var(--area-weight-regular);
     white-space: nowrap;
   }
 
   /*
    * A rounded square, never a circle. A circle reads as a status dot -- something with a
-   * state -- where this is a sample of a colour. It takes the same small radius as any
-   * other nested shape, so it tracks the radius axis with everything else.
+   * state -- where this is a sample of a colour.
    *
-   * The ring is a translucent foreground rather than a border colour, and that choice is
-   * load-bearing: a fixed light stroke is invisible on a pale swatch, which is the one
-   * case the ring exists for, while a fixed dark stroke draws a hard line around a dark
-   * one. Mixing from the foreground gives a stroke that is always slightly darker than
-   * whatever it encloses. It is inset, so it never changes the swatch's box.
+   * Its radius is concentric with the badge's: the badge's corner less the padding the
+   * swatch is inset by. `max(0px, ...)` because the sharp preset takes the subtraction
+   * negative. The ring is a translucent foreground rather than a border colour, which is
+   * load-bearing: a fixed light stroke is invisible on a pale swatch -- the one case the
+   * ring exists for -- while a fixed dark one draws a hard line around a dark swatch.
+   * Mixing from the foreground gives a stroke always slightly darker than what it encloses.
    */
   .area-token__swatch {
-    inline-size: var(--area-space-12);
-    block-size: var(--area-space-12);
+    inline-size: var(--area-text-xs-size);
+    block-size: var(--area-text-xs-size);
     flex-shrink: 0;
-    border-radius: var(--area-radius-small);
+    border-radius: max(0px, calc(var(--area-radius-small) - var(--area-space-2)));
     box-shadow: inset 0 0 0 var(--area-border-width)
       color-mix(in oklab, var(--area-fg-default) 15%, transparent);
   }

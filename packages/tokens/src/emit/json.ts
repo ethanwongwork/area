@@ -60,7 +60,7 @@ export interface TokensJson {
     {
       hue: number;
       peak: { level: number; C: number };
-      solid: { level: number; hover: { light: number; dark: number }; foreground: string; wcag: number; apca: number; retreat: number };
+      solid: { level: { light: number; dark: number }; hover: { light: number; dark: number }; foreground: string; wcag: number; apca: number; retreat: number };
       steps: Array<{
         level: number;
         hex: string;

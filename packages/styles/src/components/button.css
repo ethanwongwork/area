@@ -187,8 +187,16 @@
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
-    --_line: var(--area-border);
-    --_line-hover: var(--area-border-hover);
+    /*
+     * A step lighter than the control border, at rest and on hover alike.
+     *
+     * An outline button is identified by its label and its shape; the stroke is definition,
+     * not the affordance, and at the resting border's weight it read as a field. The pair
+     * still moves one rung on hover, so the state change is unchanged -- only the weight of
+     * both ends came down.
+     */
+    --_line: var(--area-border-subtle);
+    --_line-hover: var(--area-border);
     --_tone-fg: var(--area-fg-default);
     --_on-solid: var(--area-fg-on-neutral-solid);
   }

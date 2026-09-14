@@ -353,6 +353,44 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "token",
+    name: "Token",
+    manifest: "tokenChip",
+    api: [
+      ["swatch", "string", "\u2014"],
+      ["subtle", "boolean", "false"],
+      ["onColor", "boolean", "false"],
+    ],
+    practices: [
+      "One size, everywhere. The badge carries the caption size rather than the UI size so it sits inside 14px table chrome and 16px running prose without having been set for either \u2014 which is why there is no size prop.",
+      "Inline code shares the badge's ground, stroke and size. A tone name written in a paragraph and the same name written in a table are the same kind of reference, and styling them differently implies a distinction that is not there.",
+      "Pass <code class='area-code'>swatch</code> a <code class='area-code'>var()</code>, never a hex. A literal shows what the token meant when the page was written; the variable tracks the axes like everything else.",
+      "The swatch is a rounded square, never a circle. A circle reads as a status dot \u2014 something with a state \u2014 where this is a sample of a colour. Its radius is concentric with the badge's: the badge's corner less the padding it is inset by.",
+      "Reach for <code class='area-code'>subtle</code> when the token names something derived rather than primitive, so a semantic alias and the rung it resolves to are told apart at a glance.",
+    ],
+    examples: [
+      { id: "default", title: "Default", demo: "TokenDefault" },
+      {
+        id: "swatch",
+        title: "With a swatch",
+        note: "Use the swatch prop where the token resolves to a colour.",
+        demo: "TokenSwatch",
+      },
+      {
+        id: "prose",
+        title: "In prose",
+        note: "The badge is sized to read the same inside running copy as it does inside a table.",
+        demo: "TokenInProse",
+      },
+      {
+        id: "subtle",
+        title: "Subtle",
+        note: "Use the subtle prop for a token that names something derived rather than primitive.",
+        demo: "TokenSubtle",
+      },
+    ],
+  },
+  {
     slug: "kbd",
     name: "Kbd",
     manifest: "kbd",

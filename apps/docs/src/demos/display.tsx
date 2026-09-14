@@ -1,26 +1,4 @@
-import {
-  Alert,
-  Avatar,
-  Badge,
-  Button,
-  Card,
-  CardDescription,
-  CardFooter,
-  CardTitle,
-  Menu,
-  MenuItem,
-  Popover,
-  Progress,
-  Separator,
-  Skeleton,
-  Spinner,
-  Table,
-  Tabs,
-  Dialog,
-  Kbd,
-  Toast,
-  Tooltip,
-} from "@area/react";
+import { Alert, Avatar, Badge, Button, Card, CardDescription, CardFooter, CardTitle, Dialog, Kbd, Menu, MenuItem, Popover, Progress, Separator, Skeleton, Spinner, Table, Tabs, Toast, Token, Tooltip } from "@area/react";
 import { AlertIcon, CheckIcon, InfoIcon } from "../icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
@@ -228,4 +206,27 @@ export const MenuWithShortcuts = () => (
       Delete
     </MenuItem>
   </Menu>
+);
+
+export const TokenDefault = () => <Token>--area-space-16</Token>;
+
+export const TokenSwatch = () => (
+  <>
+    <Token swatch="var(--area-accent-solid)">--area-accent-solid</Token>
+    <Token swatch="var(--area-danger-solid)">--area-danger-solid</Token>
+  </>
+);
+
+export const TokenInProse = () => (
+  <div style={{ inlineSize: 380 }}>
+    Set <Token>--area-radius-control</Token> to change how rounded a control is. It reads the
+    same here as it does in a table.
+  </div>
+);
+
+export const TokenSubtle = () => (
+  <>
+    <Token>--area-blue-500</Token>
+    <Token subtle>--area-accent-solid</Token>
+  </>
 );

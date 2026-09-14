@@ -205,7 +205,7 @@ export interface ScaleView {
   /** Level -> colour, for every level of the ramp, plus "white". */
   byLevel: Record<Position, string>;
   alphaByLevel: Record<number, string>;
-  solid: { level: Level; hover: { light: Level; dark: Level } };
+  solid: { level: { light: Level; dark: Level }; hover: { light: Level; dark: Level } };
   vivid: { light: Level; dark: Level };
   contrast: { hex: string };
 }
@@ -239,7 +239,7 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
       return scales[aliasValue.role].alphaByLevel[position]!;
     }
     case "solid":
-      return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.level]!;
+      return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.level[theme]]!;
     case "solidHover":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.hover[theme]]!;
     case "vivid":
@@ -258,7 +258,7 @@ export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme)
     case "alphaSlot":
       return INVERSION[aliasValue.slot][theme];
     case "solid":
-      return scales[aliasValue.role].solid.level;
+      return scales[aliasValue.role].solid.level[theme];
     case "solidHover":
       return scales[aliasValue.role].solid.hover[theme];
     case "vivid":

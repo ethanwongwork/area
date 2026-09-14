@@ -277,6 +277,21 @@ is what makes its padding even on all four sides rather than merely close. Bewar
 segmented control's outer height is one tier above its name: its track adds a 2px inset at
 each end, so an `xs` segmented and an `sm` button are both 28px.
 
+## Token badges
+
+**One badge, one size, everywhere a token name appears** — and inline code is the same badge
+without a swatch. A tone name written in a paragraph and the same name written in a table are
+the same kind of reference; styling them differently implies a distinction that is not there.
+
+The size is the caption step, not the UI size, and that is the point: the badge has to sit
+inside 14px table chrome *and* inside 16px running prose without having been set for either.
+There is deliberately no size variant — a second size is a second decision at every call site.
+
+The swatch is a rounded square, never a circle, and its radius is concentric with the badge's:
+the badge's corner less the padding it is inset by, floored at 0 for the sharp preset. Its
+ring is a translucent foreground rather than a border colour, because a fixed light stroke is
+invisible on a pale swatch — the one case the ring exists for.
+
 ## Documentation sections
 
 Every foundation section is built with `tokenSection()` in `apps/docs/scripts/layout.mjs`:
