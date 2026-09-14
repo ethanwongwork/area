@@ -1,86 +1,98 @@
 # Handoff — 2026-09-14
 
-**Branch** `area` · **Last commit** `dbdbce4` `feat(color): Area owns hue; red rotates 4 degrees toward pink`
-**State** Green. 8,673 tests, 172 contrast assertions + 4 documented waivers across 66 themes, axis integrity ok, manifest parity ok (32 components), dogfood audit clean, 35 docs pages / 56 demos.
+**Branch** `main` · **Last commit** `8281d09` `docs: rewrite the README, and record what this session changed and why`
+**State** Green, tree clean, pushed. 8,678 tests · axis integrity ok · manifest parity ok (36 components) · 172 contrast assertions + 4 documented waivers across 66 themes · 38 docs pages / 64 demos · components used 36/36 · dogfood audit clean · typecheck silent.
 
 ## Where things stand
 
-Area is a design system tuned along eight axes, built from scratch in this branch to replace
-the old `index.html` playground (preserved at `c35ac15`). The colour system is the Stadium
-palette vendored at `packages/tokens/src/color/palette.json` — 14 families × 23 rungs — with
-Area owning only hue on top of it. Read `CLAUDE.md` before touching `packages/`; it holds the
-invariants and each one records the failure that produced it.
+Area is a design system tuned along eight axes. The colour system is the Stadium palette
+vendored at `packages/tokens/src/color/palette.json` — 14 families × 23 rungs — with Area
+owning hue (`HUE_ROTATION`) and, as of this session, one narrow chroma adjustment at the
+light end (`CHROMA_TRIM`). Read `CLAUDE.md` before touching `packages/`; every invariant
+there records the failure that produced it.
 
-The last several sessions have been visual refinement against OpenAI/ChatGPT and Vercel
-references: tone vocabulary, radius, strokes, token badges, docs chrome.
+This session was the largest so far: it moved the repo to a new home, fixed a size-contract
+bug that had been papered over at call sites, added four components, rebuilt the docs shell
+around collapsible rails instead of a header, and imported Stadium's icon set.
+
+**The repo moved.** `origin` is now `github.com/ethanwongwork/area` (private), default branch
+`main`, all 37 prior commits plus this session's four. The old public
+`visual-language-playground` repo is back to its single original commit — its `area` branch
+was deleted. Work on `main` now; the `area` branch is gone locally and remotely.
 
 ## What happened this session
 
-- **Tones renamed** to `primary` (neutral, and now the *default* tone) and `brand` (the hue,
-  opt-in). `secondary` was rejected deliberately — it would have named the hue, which is the
-  louder of the two. Axis is `data-area-brand`, tokens `--area-brand-*`.
-- **Token badges unified.** One badge at `0.875em` — a ratio, not a step, because it must sit
-  in 14px table chrome *and* 16px prose. Inline code is the same badge without a swatch.
-  Shipped as a React `Token` with its own docs page.
-- **Tonal strokes are computed per family** (`quietestStroke` in `scale.ts`). A shared rung
-  gave indigo 3.68:1 and green 1.80:1 — one token, twice the weight. Now all eleven land
-  between 1.30 and 1.45.
-- **Radius capped against its box** via `--area-radius-cap` (0.4; 0.5 at pill), after presets
-  10/12/pill all painted the same pill on a compact xs control.
-- **Hue rotation layer added.** `HUE_ROTATION` in `curves.ts`; red is −4° toward pink. Costs
-  at most 0.0003 chroma and the gate passed unchanged.
-- **Docs chrome** now derives its spacing from the density axis (`--docs-pad`, `--docs-gutter`),
-  wordmark is "aerea" in mono lowercase, page is white, code blocks have no toolbar.
+- **Red's hue rotation was reverted** at the user's request; `--area-red-500` is byte-identical
+  to the export again. The `HUE_ROTATION` layer was kept — it is what the queued rotations need.
+- **Green rotates +14 toward emerald.** Rung 500 lands at hue 160.9, `#00ab72`. This retired the
+  documented claim that rotation is "close to free": it costs 0.043 of chroma and 0.009 of L
+  here, verified by comparing against the unrotated family (which matches the export exactly).
+  Green's waived code-block contrast moved 3.06 → 2.80 and `exceptions.ts` records the new number.
+- **`CHROMA_TRIM` added** — lime 0.72, green 0.78, yellow 0.88, tapering from rung 200 to 400.
+  At rung 150 the families ran 0.051–0.138 around a mean of 0.079; the spread now closes to
+  0.054. Five tests bound it, verified to fail without it.
+- **A size tier is now the outer height everywhere.** Segmented named its *item*, so every tier
+  rendered one tier tall. Six components measured at 24/28/32/40/48 with zero mismatches.
+- **Panel, Slider, Chip, `Field --inline`** added; `area-menu--row` added then removed when its
+  only user went away. Manifest is 32 → 36 components.
+- **The docs lost their header.** Wordmark moved into the nav's own bar; both rails are
+  `area-panel --md --flush` and collapse to corner toggles, state persisted.
+- **Stadium's 29 marks vendored** and an icon browser built over 1,739 icons from two sprites.
+- **README rewritten** — it had drifted to documenting `data-area-accent`, four density presets
+  and the old named radius ladder, none of which exist.
 
 ## In flight
 
-Nothing uncommitted except this checkpoint system itself. But one substantial piece of work is
-**planned and not started**:
+Nothing — the tree is clean and pushed.
 
+Not started, and still the most substantial open piece:
 `~/.claude/plans/i-want-to-create-sequential-thompson.md` holds a researched plan for a
-**contrast-policy axis** (`wcag` / `hybrid` / `apca`) plus the remaining hue rotations. The
-research is done and the numbers are in the plan. The headline finding: rung 500 is *already*
-at each family's chroma peak, so the vibrancy ceiling is the contrast gate, not the palette.
-OpenAI's vivid warm buttons measure 3.0–3.8:1 with white text — they would fail Area's WCAG
-gate while passing APCA at Lc 62–70.
-
-The user last asked for red to be pinker, which is done. The plan's other rotations
-(`orange: -11`, `yellow: +4`, `blue: -4`) are one line each in `HUE_ROTATION` now that the
-layer exists. Green and purple need nothing — they are within 2° of the reference.
+**contrast-policy axis** (`wcag` / `hybrid` / `apca`). The research is done and the numbers are
+in the plan. Headline: rung 500 is already at each family's chroma peak, so the vibrancy ceiling
+is the contrast gate, not the palette.
 
 ## Next
 
-1. Ask whether to proceed with the contrast-policy axis from the plan, or just apply the
-   remaining hue rotations.
-2. If the axis: it is scoped to **three tones only** — warning, caution, success. The others
-   measure 0–1% apart under either policy, and brand's solid is owned by the brand axis so a
-   contrast axis must not also write it. `shippedThemes()` must vary the new axis **one at a
+1. The remaining hue rotations from the plan (`orange: -11`, `yellow: +4`, `blue: -4`) are one
+   line each now the layer exists — but measure each one's chroma cost rather than assuming it
+   is free, which is the lesson green taught.
+2. Ask whether to proceed with the contrast-policy axis. If yes, it is scoped to **three tones
+   only** — warning, caution, success — and `shippedThemes()` must vary the new axis **one at a
    time**, not as a cross-product, or the theme count triples.
+3. Offer a PR. Nothing has been opened; the user has not asked.
 
 ## Traps
 
-- **`packages/tokens/src/color/palette.json` is vendored.** Stadium owns lightness and chroma;
-  Area owns hue only, through `HUE_ROTATION`. Do not edit a hex.
-- **Manifest parity catches renames that greps miss.** The tone rename left `--accent`
-  modifiers in `badge` and `nav` against already-renamed declarations. Trust the check.
-- **The contrast gate has caught four real errors in my own colour walks**, every time by
-  checking WCAG without APCA, or measuring against the wrong ground. When adding a walk, gate
-  it on both standards and measure against the surface the thing actually renders on.
-- **`--area-border-focus` is brand-derived**, so every focus ring in the library moves if brand
-  changes.
+- **`DOCS_CSS` and `DOCS_SCRIPT` are template literals.** A backtick inside one — including in a
+  comment quoting a class name — ends the string, and Node reports a syntax error on whatever
+  word follows. This cost four debugging rounds before `check-dogfood.mjs` grew a text-level
+  guard that runs *before* importing the file, because a file with this fault cannot be imported.
+- **Docs CSS loses to the component layer even when the selector names no `.area-` class.**
+  `.docs-sidebar` is an `area-panel` and a corner toggle is an `area-button`; both set `display`
+  in `area.components`, so a `display` rule in `area.base` is dead. The audit cannot catch this
+  case. Use `@layer area.utilities`.
+- **`display: none` removes a grid child entirely** rather than leaving an empty track, so
+  auto-placement shifts. Name each shell child's `grid-column` explicitly.
+- **`~` is a *following*-sibling combinator.** The corner toggles had to move after the shell.
+- **Auto margins centre within the padding box**, so one-sided padding decentres visibly. The
+  nav-closed clearance is symmetric for this reason.
+- **A rotation's cost depends entirely on where the family sits in the gamut.** Measure against
+  `palette.json`; do not assume the red figure generalises.
+- **The contrast gate's waiver prose carries measured numbers.** Change a colour and those
+  numbers go stale — which is documentation lying, and the invariant forbids it.
+- **`packages/tokens/src/color/palette.json` is vendored.** Do not edit a hex.
 - **`input.css:61` hard-codes the focus-ring recipe** rather than deriving it, so the
   invalid-input ring will not track a change to the ring formula.
-- **Docs CSS must never target `.area-*`** — `DOCS_CSS` lives in `area.base`, which loses to
-  `area.components`. The fix is always a documented variant.
-- **`DOCS_CSS` is a JS template literal.** A backtick in a CSS comment there ends the string.
+- **iCloud duplicates.** Five `* 2.ts` files appeared in `packages/tokens/src/axes/` mid-session,
+  byte-identical to their originals; deleted. The repo lives on Desktop, so expect more.
 
 ## Verify
 
 ```bash
-npm test                                        # 8,673 passing
-npm run build                                   # "axis integrity ok", "manifest parity ok  (32 components)"
-npm run build:docs                              # 35 pages, 56 demos, no raw values, no inline literals
-node packages/tokens/src/contrast/report.ts     # 0 failing, 172 passing, 4 waived
+npm test                                        # 8,678 passing
+npm run build                                   # "axis integrity ok", "manifest parity ok  (36 components)"
+npm run build:docs                              # 38 pages, 64 demos, 36/36 components used, no raw values
+node packages/tokens/src/contrast/report.ts     # 0 failing, 172 passing, 4 waived across 66 themes
 npm run typecheck                               # silent
 npm run dev -w @area/docs                       # http://localhost:4321
 ```

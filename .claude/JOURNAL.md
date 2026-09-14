@@ -4,6 +4,51 @@ Why the system is the way it is, newest first. The handoff says what to do now; 
 why things ended up like this. Consult it when a decision looks arbitrary and the handoff
 does not explain it.
 
+## 2026-09-14 — A size class has to mean one height
+
+Segmented named its *item* height with its size class, so the track came out a tier taller
+than the class said and an `xs` segmented rendered 28px beside a 24px `xs` select. The
+workaround had been to pick one tier down at each call site, which is a rule nobody can
+hold and which was already written down as a caveat rather than treated as a bug. Naming
+the outer height and deriving the item fixed it everywhere at once. Worth remembering that
+the caveat had been in CLAUDE.md for weeks: a documented workaround is still a bug, and
+writing it down made it look settled.
+
+## 2026-09-14 — The stroke-versus-fill icon rule was the wrong abstraction
+
+"Fluent icons are filled paths, so a stroke-based icon beside them will not match at any
+weight" was true in effect and wrong in its reasoning, which only showed up when Stadium's
+marks arrived — twenty-eight of twenty-nine stroked, and matching perfectly. What actually
+governs is optical weight: a 1-unit rule, round terminals, and an ink box of 12 units for a
+rectilinear mark or 14 for a round one, which is where Fluent's own marks land. The rule
+was standing in for a property that correlates with the thing that matters rather than
+being it. Their markup is vendored verbatim because reducing it to a path list is what
+would break the fit.
+
+## 2026-09-14 — A hue rotation is not free, and red was a misleading sample
+
+The rotation layer was introduced with red at -4 degrees, which cost 0.0003 of chroma, and
+that number went into CLAUDE.md as though it characterised rotations in general. Green at
++14 costs 0.043 of chroma and moves L by 0.009, because green at hue 150 sits in a wide
+part of sRGB and 161 does not. One sample from the cheap end of a range was generalised
+into an invariant. The cost is real and visible downstream: green's waived code-block
+contrast fell from 3.06 to 2.80.
+
+Separately, `CHROMA_TRIM` exists because Stadium's anchor answers a different question than
+cross-family evenness does — a rung is pinned against white, which says nothing about a
+family beside its ten siblings. At the light end sRGB holds far more chroma in a pale green
+than a pale blue, so the families that *can* be bright, are.
+
+## 2026-09-14 — The audit cannot see every dead override
+
+`DOCS_CSS` lives in `area.base` and the dogfood audit fails any docs rule naming an
+`.area-*` class, because such a rule loses to `area.components` silently. It cannot catch
+the other shape of the same bug: a selector naming only docs classes on an element that
+*also* carries an Area class. `.docs-sidebar` is an `area-panel`; a corner toggle is an
+`area-button`. Both `display` rules were dead and looked fine. The layer order already had
+the answer — `area.utilities` sits after components precisely so a rule can win without
+`!important` — so the fix was to use the door rather than widen the check.
+
 ## 2026-09-14 — Vibrancy is capped by the gate, not the palette
 
 Chased "make the colours more vibrant like ChatGPT" to its root and found rung 500 is already
