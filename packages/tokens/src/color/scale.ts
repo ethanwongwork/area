@@ -14,8 +14,9 @@
  *   Which of black or white each rung carries, by measurement.
  *   Which rung is the solid fill, and its hover -- see `chooseSolid`.
  */
-import { type Oklch, parseHex, toOklchCss } from "./oklab.ts";
-import { type Level, type Ramp, INVERSION, LEVELS } from "./curves.ts";
+import { type Oklch, SRGB, parseHex, toHex, toOklchCss } from "./oklab.ts";
+import { gamutMap } from "./gamut.ts";
+import { type Level, type Ramp, HUE_ROTATION, INVERSION, LEVELS } from "./curves.ts";
 import { apcaMagnitude, wcagContrastHex } from "./contrast.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
 import PALETTE from "./palette.json" with { type: "json" };
@@ -137,16 +138,31 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     );
   }
 
+  // Area's hue rotation, if this family has one. Lightness and chroma come through from the
+  // export untouched; only hue moves, and the gamut map afterwards holds L and gives back at
+  // most 0.0003 of C. A family with no entry keeps its exported hex byte for byte.
+  const rotation = HUE_ROTATION[spec.id] ?? 0;
+
   const steps: ScaleStep[] = LEVELS.map((level) => {
     const rung = family[String(level)];
     if (!rung) throw new Error(`${spec.id} is missing rung ${level}.`);
-    const oklch: Oklch = { L: rung.oklch.L, C: rung.oklch.C, h: rung.oklch.H };
+
+    if (rotation === 0) {
+      const oklch: Oklch = { L: rung.oklch.L, C: rung.oklch.C, h: rung.oklch.H };
+      return { level, oklch, hex: rung.hex, oklchCss: toOklchCss(oklch), contrast: stepContrast(rung.hex) };
+    }
+
+    const mapped = gamutMap(
+      { L: rung.oklch.L, C: rung.oklch.C, h: (rung.oklch.H + rotation + 360) % 360 },
+      SRGB,
+    );
+    const hex = toHex(mapped.rgb);
     return {
       level,
-      oklch,
-      hex: rung.hex,
-      oklchCss: toOklchCss(oklch),
-      contrast: stepContrast(rung.hex),
+      oklch: mapped.oklch,
+      hex,
+      oklchCss: toOklchCss(mapped.oklch),
+      contrast: stepContrast(hex),
     };
   });
 

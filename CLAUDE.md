@@ -192,11 +192,24 @@ are optically corrected per size.
 
 ## Colour
 
-**The palette is vendored, not generated.** `packages/tokens/src/color/palette.json` is the
-Stadium palette exported verbatim: 14 families x 23 rungs. `scale.ts` reads that table and
-computes only what the table does not carry — the translucent twin of each rung, which
-foreground each rung takes, and which rung is the solid fill. Do not "fix" a hex here. If a
-colour is wrong, it is wrong in the export, and the fix is a new export.
+**Stadium owns lightness and chroma; Area owns hue.** `packages/tokens/src/color/palette.json`
+is the Stadium palette exported verbatim — 14 families x 23 rungs — and its wall-anchored L
+and C are what make contrast predictable, so they are never touched. `scale.ts` reads that
+table and computes what it does not carry: each rung's translucent twin, which foreground it
+takes, which rung is the solid fill, and which is the family's own quietest stroke.
+
+The one thing Area does change is hue, through `HUE_ROTATION` in `curves.ts`. A rotation moves
+character without moving contrast — the gamut map afterwards holds L and gives back at most
+0.0003 of chroma — and a family with no entry ships its exported hex byte for byte. Still do
+not edit a hex. If a lightness or a chroma is wrong it is wrong in the export; if a hue is
+wrong, rotate it.
+
+**Rotations are checked against adjacent-hue separation, never copied.** Matching a reference
+exactly (red +10, orange −11) would have pulled red and orange to 14 degrees apart, half the
+roughly 30 that keeps danger and warning from reading as one signal. Red rotates the other
+way instead: −4 degrees toward pink, which widens red-to-orange from 35 to 39 and narrows
+red-to-pink from 20 to 16 — the right trade, since orange is the warning tone and pink is
+bound to no role at all.
 
 **A rung is an ordinal, not a measurement.** Higher is darker. An earlier ladder named each
 level after its own lightness and asserted it; this one cannot, because Stadium anchors to

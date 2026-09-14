@@ -160,3 +160,30 @@ export const INVERSION = {
 } as const satisfies Record<string, Inversion>;
 
 export type Slot = keyof typeof INVERSION;
+
+/**
+ * Area's own hue adjustment, in OKLCh degrees, applied per family where the palette loads.
+ *
+ * The division of labour: **Stadium owns lightness and chroma, Area owns hue.** The export's
+ * wall-anchored L and C are the part that makes contrast predictable and are left untouched;
+ * hue is the part that gives a palette its character, and a rotation changes it without
+ * disturbing either. Gamut mapping after the rotation costs at most 0.0003 of chroma, so it
+ * is very nearly free.
+ *
+ * Rotations are deliberately small and are checked against adjacent-hue separation, not
+ * copied from a reference. The obvious move -- matching OpenAI, which sits at red +10 and
+ * orange -11 -- would have pulled red and orange to 14 degrees apart, half the roughly 30
+ * that keeps danger and warning from reading as one signal. Rotating red the *other* way
+ * moves them apart instead.
+ */
+export const HUE_ROTATION: Record<string, number> = {
+  /**
+   * Toward pink. Stadium's red already leans rose at 18 degrees -- a true red is nearer 29 --
+   * and this takes it a little further, to a crimson rather than a pillarbox red.
+   *
+   * -4 and not more because the cost lands on the other side: red to pink narrows from 20
+   * degrees to 16, while red to orange widens from 35 to 39. That is the right trade, since
+   * orange is the warning tone and pink is bound to no role at all, but it is a trade.
+   */
+  red: -4,
+};
