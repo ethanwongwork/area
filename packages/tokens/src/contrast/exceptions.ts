@@ -24,8 +24,10 @@ export interface ContrastException {
  * A deliberate, instructed trade. 500 is the rung the palette calibrates against *white*,
  * and a code block sits one rung back from the page so that it reads as a block -- so the
  * label-wall hues land just under the bar there, by margins too small to see and large
- * enough to fail. Green is the exception to that: at 3.06 it is not a rounding, because its
- * 500 is a glyph-wall rung pinned by the palette to 3:1 rather than to AA.
+ * enough to fail. Green is the exception to that: at 2.80 it is not a rounding, because its
+ * 500 is a glyph-wall rung pinned by the palette to 3:1 rather than to AA. It was 3.06 until
+ * green took its hue rotation -- +14 degrees toward teal costs chroma at the peak rungs,
+ * which costs luminance against white, which shows up here.
  *
  * Dark themes are not waived. There, 500 measures APCA Lc 28-31 against a floor of 60, and
  * `chooseVivid` keeps walking for a readable rung.
@@ -40,7 +42,7 @@ const SYNTAX_500: ContrastException[] = (
     ],
     [
       "success",
-      "green measures 3.06 against 4.5. Its 500 is a glyph-wall rung, pinned by the palette to 3:1 rather than to AA, so this one is a real accessibility cost and not a rounding",
+      "green measures 2.80 against 4.5 -- 3.06 before its hue rotation. Its 500 is a glyph-wall rung, pinned by the palette to 3:1 rather than to AA, so this one is a real accessibility cost and not a rounding",
     ],
   ] as const
 ).flatMap(([role, measured]) =>

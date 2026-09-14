@@ -4,6 +4,7 @@ import { type Theme, assertScale, buildScale } from "./scale.ts";
 import { LEVELS } from "./curves.ts";
 import { parseHex } from "./oklab.ts";
 import { WCAG, wcagContrastHex } from "./contrast.ts";
+import PALETTE from "./palette.json" with { type: "json" };
 
 const THEMES: Theme[] = ["light", "dark"];
 const CASES = THEMES.flatMap((theme) => ALL_SCALES.map((spec) => ({ theme, spec })));
@@ -217,6 +218,57 @@ describe("the three neutral casts", () => {
     for (const spec of NEUTRAL_SCALES) {
       for (const step of buildScale(spec, "light").steps) {
         expect(step.oklch.C, `${spec.id}-${step.level}`).toBeLessThan(0.02);
+      }
+    }
+  });
+});
+
+describe("chroma across families", () => {
+  /*
+   * The light end is the one place the palette's own anchor leaves families free to
+   * diverge. A rung is pinned against *white*, which says nothing about that family beside
+   * its ten siblings at the same rung -- and sRGB will hold far more chroma in a pale green
+   * than in a pale blue, so the families that can be bright, are.
+   *
+   * Measured before `CHROMA_TRIM` existed, rung 150 ran 0.051 to 0.138 -- lime and green at
+   * nearly twice their peers, which is what makes a green tint read as a wash where a blue
+   * one reads as a tint. This is the bound that keeps it closed, and the reason the trim
+   * cannot quietly be dropped.
+   */
+  const LIGHT_END: Array<[number, number]> = [
+    [100, 0.035],
+    [150, 0.06],
+    [200, 0.055],
+    [250, 0.05],
+  ];
+
+  it.each(LIGHT_END)("holds the spread at rung %i under %f", (level, bound) => {
+    const index = LEVELS.indexOf(level as (typeof LEVELS)[number]);
+    const chromas = CHROMATIC_SCALES.map((spec) => ({
+      id: spec.id,
+      C: buildScale(spec, "light").steps[index]!.oklch.C,
+    }));
+    const lo = chromas.reduce((a, b) => (b.C < a.C ? b : a));
+    const hi = chromas.reduce((a, b) => (b.C > a.C ? b : a));
+    expect(
+      hi.C - lo.C,
+      `rung ${level}: ${hi.id} ${hi.C.toFixed(3)} against ${lo.id} ${lo.C.toFixed(3)}`,
+    ).toBeLessThan(bound);
+  });
+
+  it("leaves the mid and dark rungs to the palette", () => {
+    // The trim tapers to nothing by 400, so from there down every family is the export's
+    // own chroma. If this fails, the taper has been widened past what it was argued for.
+    for (const spec of CHROMATIC_SCALES) {
+      const built = buildScale(spec, "light");
+      for (const step of built.steps) {
+        if (step.level < 400) continue;
+        const families = PALETTE.families as Record<string, Record<string, { oklch: { C: number } }>>;
+        const rung = families[spec.id]?.[String(step.level)];
+        if (!rung) continue;
+        // Rotation still moves chroma at these rungs; only untrimmed families are exact.
+        if (spec.id === "green") continue;
+        expect(step.oklch.C, `${spec.id}-${step.level}`).toBeCloseTo(rung.oklch.C, 3);
       }
     }
   });

@@ -173,17 +173,67 @@ export type Slot = keyof typeof INVERSION;
  * Rotations are deliberately small and are checked against adjacent-hue separation, not
  * copied from a reference. The obvious move -- matching OpenAI, which sits at red +10 and
  * orange -11 -- would have pulled red and orange to 14 degrees apart, half the roughly 30
- * that keeps danger and warning from reading as one signal. Rotating red the *other* way
- * moves them apart instead.
+ * that keeps danger and warning from reading as one signal.
+ *
+ * Red carried -4 for a while -- a crimson rather than a pillarbox red -- and was reverted.
+ * The measurement is kept here because it is the trade to weigh if it is tried again: -4
+ * widens red to orange from 35 degrees to 39, and narrows red to pink from 20 to 16.
  */
 export const HUE_ROTATION: Record<string, number> = {
   /**
-   * Toward pink. Stadium's red already leans rose at 18 degrees -- a true red is nearer 29 --
-   * and this takes it a little further, to a crimson rather than a pillarbox red.
+   * Toward teal, to an emerald rather than a pure green. Stadium's green is pinned flat at
+   * hue 150 across the whole family; the reference this matches sits at 164 at its solid
+   * rung, and +14 lands Area's 500 on that number exactly.
    *
-   * -4 and not more because the cost lands on the other side: red to pink narrows from 20
-   * degrees to 16, while red to orange widens from 35 to 39. That is the right trade, since
-   * orange is the warning tone and pink is bound to no role at all, but it is a trade.
+   * The reference's own ramp sweeps its hue from 156 at the light end to 190 at the dark,
+   * which is a different technique than this one -- a family here carries one hue and one
+   * rotation, because two rungs of one family at different hues is what makes a tonal
+   * stroke and its fill stop looking related. The mid rungs are what a green button and a
+   * success badge actually render, so those are what this is fitted to.
+   *
+   * The cost is separation, and it lands on the right side: green to lime widens from 22
+   * degrees to 36, green to teal narrows from 33 to 19. Green is the success tone and both
+   * neighbours are bound to no role at all, so the pair that narrowed carries no meaning
+   * between them -- the same trade, in the same direction, that -4 on red did not.
    */
-  red: -4,
+  green: 14,
 };
+
+/**
+ * Area's chroma trim, per family, applied to the light end of a ramp.
+ *
+ * **This is the one place Area touches chroma, and it exists because Stadium's anchor and
+ * this one are answering different questions.** The export pins each rung to a contrast
+ * wall, which is a statement about a family against *white* -- it says nothing about that
+ * family against its eleven siblings at the same rung. At the dark end that does not
+ * matter, because the gamut squeezes every hue toward the same narrow band. At the light
+ * end it does: sRGB will hold far more chroma in a pale green than in a pale blue, so the
+ * families that can be bright, are.
+ *
+ * Measured across the eleven chromatic families at rung 150, chroma runs 0.051 (orange) to
+ * 0.138 (lime) around a mean of 0.079 -- lime and green nearly twice their peers, which is
+ * what makes a green tint read as a wash where a blue one reads as a tint.
+ *
+ * The trim is a multiplier on chroma alone. L is never touched, so the wall each rung is
+ * pinned against is not moved, and the contrast gate measures the result either way.
+ *
+ * It tapers rather than applying flat, because the divergence is a light-end effect: full
+ * strength at rung 200 and below, gone by 400, linear between. Trimming the mid rungs would
+ * take the fill and the solid down with the tint, and those are the rungs the palette
+ * anchored deliberately.
+ */
+export const CHROMA_TRIM: Record<string, number> = {
+  /** 0.138 at rung 150 against a 0.079 mean -- the widest divergence in the palette. */
+  lime: 0.72,
+  /** 0.130 at 150. Trimmed a little less than lime, which starts higher still. */
+  green: 0.78,
+  /** +0.021 at 150. Third and much milder; included so the warm light end matches too. */
+  yellow: 0.88,
+};
+
+/** Full strength at 200 and below, none from 400 up, linear between. */
+export function chromaTrimWeight(level: number): number {
+  if (level <= 200) return 1;
+  if (level >= 400) return 0;
+  return (400 - level) / 200;
+}

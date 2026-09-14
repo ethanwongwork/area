@@ -16,7 +16,7 @@
  */
 import { type Oklch, SRGB, parseHex, toHex, toOklchCss } from "./oklab.ts";
 import { gamutMap } from "./gamut.ts";
-import { type Level, type Ramp, HUE_ROTATION, INVERSION, LEVELS } from "./curves.ts";
+import { type Level, type Ramp, CHROMA_TRIM, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight } from "./curves.ts";
 import { apcaMagnitude, wcagContrastHex } from "./contrast.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
 import PALETTE from "./palette.json" with { type: "json" };
@@ -138,22 +138,28 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     );
   }
 
-  // Area's hue rotation, if this family has one. Lightness and chroma come through from the
-  // export untouched; only hue moves, and the gamut map afterwards holds L and gives back at
-  // most 0.0003 of C. A family with no entry keeps its exported hex byte for byte.
+  // Area's two adjustments to the export, both per family and both optional: a hue rotation
+  // that moves character, and a chroma trim that evens the light end against the other ten
+  // families. Lightness is never touched by either, so the wall each rung is pinned against
+  // stays where the palette put it. A family with no entry in either table keeps its
+  // exported hex byte for byte.
   const rotation = HUE_ROTATION[spec.id] ?? 0;
+  const trim = CHROMA_TRIM[spec.id] ?? 1;
 
   const steps: ScaleStep[] = LEVELS.map((level) => {
     const rung = family[String(level)];
     if (!rung) throw new Error(`${spec.id} is missing rung ${level}.`);
 
-    if (rotation === 0) {
+    // Tapered: full strength at the light end, none by rung 400. See curves.ts.
+    const factor = trim === 1 ? 1 : 1 - (1 - trim) * chromaTrimWeight(level);
+
+    if (rotation === 0 && factor === 1) {
       const oklch: Oklch = { L: rung.oklch.L, C: rung.oklch.C, h: rung.oklch.H };
       return { level, oklch, hex: rung.hex, oklchCss: toOklchCss(oklch), contrast: stepContrast(rung.hex) };
     }
 
     const mapped = gamutMap(
-      { L: rung.oklch.L, C: rung.oklch.C, h: (rung.oklch.H + rotation + 360) % 360 },
+      { L: rung.oklch.L, C: rung.oklch.C * factor, h: (rung.oklch.H + rotation + 360) % 360 },
       SRGB,
     );
     const hex = toHex(mapped.rgb);
