@@ -4,6 +4,16 @@ Why the system is the way it is, newest first. The handoff says what to do now; 
 why things ended up like this. Consult it when a decision looks arbitrary and the handoff
 does not explain it.
 
+## 2026-09-14 — Codex migration preserves history without activating it
+
+The original instructions and the partial AGENTS migration pointed at different handoff
+locations, while root Cursor rules still described the superseded single-file playground.
+Current guidance now has a concise entrypoint and deeper repository documentation; the
+old rules and Figma scripts live together in an explicit archive. Keeping the Figma scripts
+preserves potentially useful external-document tooling without claiming they export Area.
+The audit also exposed stale documentation about radius, tone names and build gates, plus
+machine-specific icon-generator paths; correcting those avoids misleading the next session.
+
 ## 2026-09-14 — A size class has to mean one height
 
 Segmented named its *item* height with its size class, so the track came out a tier taller
