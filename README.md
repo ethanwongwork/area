@@ -83,12 +83,12 @@ These guarantees are covered by tests, build audits, and the review conventions 
 - **The colour maths is proven, not assumed.** OKLab conversions are checked against
   `colorjs.io` to 1e-12 per channel across both gamuts, and the gamut mapper matches the
   CSS Color 4 reference to a fifth of a JND.
-- **Contrast is a test gate.** 178 assertions across 66 shipped themes, under WCAG 2.2
-  always and APCA as a hard gate in dark themes, because the WCAG 2.x formula overstates
-  contrast near black. Four exceptions are waived — each measured, recorded with its
-  number, and counted separately rather than folded into the pass count.
+- **Contrast is a test gate.** 178 unwaived assertion groups across 66 color themes,
+  using contrast ratios and supplementary APCA checks. Four syntax groups are waived.
+  The current 75/100/150 stroke trial fails five groups; the audit also identifies gaps
+  between token checks and rendered accessibility. See [the audit](docs/SYSTEM_AUDIT.md).
 - **Axes cannot collide.** The registry throws if two axes write one property.
-- **The CSS and the React API cannot drift.** Variant helpers and the parity audit use one manifest per component
+- **CSS variants are checked against a shared manifest.** Variant helpers and the parity audit use one manifest per component
   (36 of them), checked in both directions: a declared variant with no selector fails, and
   so does a selector no manifest declares.
 - **A size tier means the same thing everywhere.** `--sm` is 28px on a button, an input, a
@@ -143,3 +143,10 @@ No environment secrets are needed. The docs use externally hosted Geist fonts.
 - [Migration report](docs/MIGRATION.md): cleanup evidence and validation.
 - [Archived playground](archive/playground/README.md): old prototype and Figma utilities;
   these are separate from the current application.
+
+## Current audit and completion plan
+
+The [system audit](docs/SYSTEM_AUDIT.md) records measured gaps, axis priorities, customization
+options and research. The [roadmap](docs/ROADMAP.md) defines a first release and its acceptance
+checks. The current stroke trial is intentionally recorded as a red test state; do not
+interpret a successful build as release readiness.

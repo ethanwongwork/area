@@ -56,3 +56,11 @@ The root-level prototype was superseded when the workspace system was introduced
 [Archive guide](../archive/playground/README.md) explains its files.
 Do not mix its `ds-*` classes, palette, DM fonts or `.is-*` state conventions into Area.
 Detailed current design rules are in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
+
+## Audit boundary
+
+The [system audit](SYSTEM_AUDIT.md) distinguishes intended architecture from verified
+behavior. In particular, the CSS emitter currently fails independently nested color
+selections and light resets; namespace checks do not prove DOM scope correctness.
+React wrappers include presentation-only composite widgets and handwritten prop unions.
+[ROADMAP.md](ROADMAP.md) defines the completion checks for those boundaries.

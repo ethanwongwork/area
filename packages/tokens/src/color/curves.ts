@@ -87,35 +87,24 @@ export const INVERSION = {
   /**
    * Neutral strokes, quietest to loudest.
    *
-   * Every one sits on the least assertive rung its assertions permit -- solved rather than
-   * chosen, by walking the ladder toward the page until the gate stops passing. In light
-   * that means the lightest rung; in dark it means the darkest, since "quiet" is proximity
-   * to the page in both. Four of the six were already at their floor; `borderStrong` and
-   * `tonalBorderStrong` had a rung of slack each and no longer do.
+   * The light 75/100/150 progression is a visual trial requested on 2026-09-14.
+   * Existing contrast thresholds remain unchanged so the audit exposes the cost of
+   * the quieter edges. See docs/SYSTEM_AUDIT.md before treating it as release-ready.
    */
-  borderSubtle: { light: 200, dark: 750 },
+  borderSubtle: { light: 150, dark: 750 },
   /**
-   * Decorative dividers and container seams. The light theme deliberately uses rung 100
+   * Decorative dividers and container seams. The light theme deliberately uses rung 75
    * for a quiet but visible rule; dark uses 800 so the rule stays close to its ground.
    * Never use this token to identify an input, a selected state, or keyboard focus.
    */
-  borderDecorative: { light: 100, dark: 800 },
+  borderDecorative: { light: 75, dark: 800 },
   border: { light: 250, dark: 650 },
   /**
-   * The faintest stroke in the system, for a container that is already offset in value from
-   * its ground -- a white code block on a grey page.
-   *
-   * Lighter than `borderSubtle` because it is not doing the separating on its own: the fill
-   * difference is, and the stroke only resolves the edge. Measured at 1.24 on the page,
-   * which is where Tailwind (1.24), shadcn (1.23) and Vercel (1.20) all put a container
-   * edge; `borderSubtle` stays at 1.5 for the case where a stroke is the only separation.
-   *
-   * In dark it lands on the same rung as `borderSubtle`, and deliberately. The first attempt
-   * put it at 800, which is the rung a code block is *filled* with -- a border invisible
-   * against the thing it borders. Near black the ladder has no room for a fainter tier that
-   * is still a tier, so the two coincide rather than one of them becoming a lie.
+   * Floating container frames, token badges and segmented tracks. Lighter than
+   * `borderSubtle`, stronger than purely decorative seams. Dark keeps its existing
+   * rung: 800 would disappear against the subtle surface itself.
    */
-  borderFaint: { light: 150, dark: 750 },
+  borderFaint: { light: 100, dark: 750 },
   borderStrong: { light: 300, dark: 600 },
   /**
    * Tonal strokes, which sit deeper on the ladder than neutral ones.

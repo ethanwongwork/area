@@ -1,5 +1,21 @@
 # Project journal
 
+## 2026-09-14 — Stroke trial and system completion audit
+
+Tried the user's 75/100/150 light stroke progression across the shared decorative/faint/subtle
+roles; dark, hover and focus stayed unchanged. Five existing stroke assertion groups now
+fail across all 33 light color themes (165 tests); the thresholds were preserved so a visual
+trial cannot silently redefine the contrast policy. Decorative 75 still passes its floor;
+faint 150/subtle 200 are the immediate route back to the existing stroke checks.
+
+The [system audit](../docs/SYSTEM_AUDIT.md) and [roadmap](../docs/ROADMAP.md) record source,
+browser and measured evidence, with 17 primary research sources and reproducible probes.
+The strongest next work is nested theme resolution, accurate rendered text/focus contrast,
+and complete component behavior; motion-none and public-package/API parity also have
+confirmed gaps. The eight-axis concept remains useful, but 50,688 choices and disjoint
+namespaces do not prove all rendered combinations work. No roadmap fixes or external
+primitive dependencies were adopted. This checkpoint is local; push remains unauthorized.
+
 Current Area decisions, newest first. Earlier records are preserved in
 [the historical journal](../archive/history/journal-before-area-name.md).
 

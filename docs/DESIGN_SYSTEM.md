@@ -42,14 +42,16 @@ only in the switch's track width.
 it is a hairline (`1px`) or a mask geometry. If a value is not on a ramp, derive it with
 `calc()` from values that are — or change the ramp.
 
-**Contrast is a test gate.** `packages/tokens/src/contrast/` asserts every pairing a
-component can render, across all 66 shipped themes, under WCAG 2.2 always and APCA as a
-hard gate in dark themes. For semantic changes, edit `INVERSION` in
+**Contrast is a test gate.** `packages/tokens/src/contrast/` checks declared token
+pairings across 66 color themes, with supplementary APCA checks in dark themes. The
+[2026-09-14 audit](SYSTEM_AUDIT.md) identifies missing rendered pairings and incorrect
+text thresholds; passing this suite alone does not establish accessibility. For semantic changes, edit `INVERSION` in
 `color/curves.ts`; for hue and light-end chroma, use the documented adjustment tables.
 Keep the vendored palette and its ladder intact, and let the gate tell you what broke; `contrast/report.ts` groups
 failures by assertion rather than printing them one theme at a time.
 
-**The CSS and the React API cannot drift.** Both derive from `packages/styles/src/manifest.ts`.
+**CSS variants share a manifest.** Variant helpers derive from `packages/styles/src/manifest.ts`;
+React prop interfaces remain handwritten and need the parity work recorded in the audit.
 `check-manifest-parity.mjs` fails if a declared variant has no selector, or a selector
 exists that was never declared. Add the manifest entry in the same commit as the CSS.
 
@@ -325,13 +327,14 @@ which is unreadable rather than marginal, so `chooseVivid` keeps walking.
 
 **The page is white; a code block is one rung back from it.** That is what lets the block
 read as a block without a stroke doing the work. Its edge uses `--area-border-decorative`,
-which maps to neutral 100 in light themes and neutral 800 in dark themes. Panels, cards,
+which maps to neutral 75 in the current light-theme trial and neutral 800 in dark themes. Panels, cards,
 table rules, navigation dividers and example containers share that quiet decorative token.
 Control outlines, swatch rings and focus indicators retain their stronger tokens.
 The decorative tier has its own 1.1 design floor; it never identifies an interactive
 control or state. Existing text, control and focus contrast thresholds are unchanged.
 
-**A code block has no toolbar.** Copy rides at the top right of the code itself, centred on
+**The docs code block has no toolbar.** The React CodeBlock wrapper still exposes an
+optional toolbar; unifying that contract remains part of the audit roadmap. Copy rides at the top right of the code itself, centred on
 the first line rather than on the block, so it belongs to the code and costs no row. The one
 rule worth drawing is the line where an example's rendered component ends and its source
 begins — two different kinds of thing sharing a container. Customize sits on the preview it
@@ -506,10 +509,11 @@ See [the archive guide](../archive/playground/README.md) before consulting it.
 ## Stroke hierarchy
 
 In light themes, decorative dividers and container seams use `border-decorative` at
-neutral 100. Floating Menu/Popover frames and segmented tracks use `border-faint` at 150.
+neutral 75. Floating Menu/Popover frames and segmented tracks use `border-faint` at 100.
 Inputs, Select, Textarea, unselected Chip, neutral outline Button and selected segmented
-items use `border-subtle` at 200. This keeps fields recognizable without the old jump
-from an almost invisible divider to the stronger 250 outline. `border` remains available
+items use `border-subtle` at 150. This is a requested visual trial, not a release-ready
+contrast policy: five existing stroke assertions fail in all light color themes. Thresholds
+remain unchanged. See [the system audit](SYSTEM_AUDIT.md) for measurements and next steps. `border` remains available
 for stronger resting definition; hover and focus keep their existing tokens.
 
 Dark values follow the same semantic roles, with decorative at 800 and faint/subtle at

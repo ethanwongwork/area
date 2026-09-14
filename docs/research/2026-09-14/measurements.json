@@ -1,0 +1,296 @@
+{
+  "date": "2026-09-14",
+  "baseline": "e07ec11",
+  "note": "75/100/150 trial. Ratios are computed from resolved tokens, not a whole-site conformance audit.",
+  "axes": [
+    {
+      "id": "theme",
+      "presets": [
+        "light",
+        "dark"
+      ],
+      "default": "light"
+    },
+    {
+      "id": "neutral",
+      "presets": [
+        "neutral",
+        "cool",
+        "warm"
+      ],
+      "default": "neutral"
+    },
+    {
+      "id": "brand",
+      "presets": [
+        "red",
+        "orange",
+        "yellow",
+        "lime",
+        "green",
+        "teal",
+        "cyan",
+        "blue",
+        "indigo",
+        "purple",
+        "pink"
+      ],
+      "default": "indigo"
+    },
+    {
+      "id": "type",
+      "presets": [
+        "geist",
+        "geist-compact",
+        "geist-large",
+        "system"
+      ],
+      "default": "geist"
+    },
+    {
+      "id": "density",
+      "presets": [
+        "compact",
+        "default"
+      ],
+      "default": "default"
+    },
+    {
+      "id": "radius",
+      "presets": [
+        "0",
+        "2",
+        "4",
+        "6",
+        "8",
+        "10",
+        "12",
+        "pill"
+      ],
+      "default": "8"
+    },
+    {
+      "id": "surface",
+      "presets": [
+        "flat",
+        "outlined",
+        "raised",
+        "elevated"
+      ],
+      "default": "outlined"
+    },
+    {
+      "id": "motion",
+      "presets": [
+        "none",
+        "subtle",
+        "expressive"
+      ],
+      "default": "subtle"
+    }
+  ],
+  "combinations": 50688,
+  "colorThemes": 66,
+  "neutralLight": [
+    {
+      "neutral": "neutral",
+      "strokes": {
+        "border-decorative": {
+          "hex": "#f3f3f3",
+          "ratio": 1.109620634183961
+        },
+        "border-faint": {
+          "hex": "#eeeeee",
+          "ratio": 1.1602304710270739
+        },
+        "border-subtle": {
+          "hex": "#e2e2e2",
+          "ratio": 1.295457440143213
+        }
+      }
+    },
+    {
+      "neutral": "cool",
+      "strokes": {
+        "border-decorative": {
+          "hex": "#f0f2f4",
+          "ratio": 1.122260321779331
+        },
+        "border-faint": {
+          "hex": "#eceff2",
+          "ratio": 1.1541419717599188
+        },
+        "border-subtle": {
+          "hex": "#e0e3e6",
+          "ratio": 1.2883651415572441
+        }
+      }
+    },
+    {
+      "neutral": "warm",
+      "strokes": {
+        "border-decorative": {
+          "hex": "#f3f1ef",
+          "ratio": 1.126642378709088
+        },
+        "border-faint": {
+          "hex": "#f1eeeb",
+          "ratio": 1.1557766564708882
+        },
+        "border-subtle": {
+          "hex": "#e5e2df",
+          "ratio": 1.290268049698733
+        }
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "fg": "border-subtle",
+      "bg": "bg-surface",
+      "threshold": 1.3,
+      "failures": 33,
+      "total": 66,
+      "worst": {
+        "theme": "light/cool/red",
+        "fg": "#e0e3e6",
+        "bg": "#ffffff",
+        "ratio": 1.2883651415572441
+      }
+    },
+    {
+      "fg": "border-faint",
+      "bg": "bg-page",
+      "threshold": 1.2,
+      "failures": 33,
+      "total": 66,
+      "worst": {
+        "theme": "light/cool/red",
+        "fg": "#eceff2",
+        "bg": "#ffffff",
+        "ratio": 1.1541419717599188
+      }
+    },
+    {
+      "fg": "border-faint",
+      "bg": "bg-subtle",
+      "threshold": 1.1,
+      "failures": 33,
+      "total": 66,
+      "worst": {
+        "theme": "light/warm/red",
+        "fg": "#f1eeeb",
+        "bg": "#f7f5f3",
+        "ratio": 1.06276456311522
+      }
+    },
+    {
+      "fg": "fg-placeholder",
+      "bg": "bg-surface",
+      "threshold": 4.5,
+      "failures": 44,
+      "total": 66,
+      "worst": {
+        "theme": "light/cool/red",
+        "fg": "#818589",
+        "bg": "#ffffff",
+        "ratio": 3.7170342263824043
+      }
+    },
+    {
+      "fg": "fg-on-brand",
+      "bg": "brand-solid-hover",
+      "threshold": 4.5,
+      "failures": 24,
+      "total": 66,
+      "worst": {
+        "theme": "dark/neutral/green",
+        "fg": "#ffffff",
+        "bg": "#009764",
+        "ratio": 3.7428728465689143
+      }
+    },
+    {
+      "fg": "fg-on-danger",
+      "bg": "danger-solid-hover",
+      "threshold": 4.5,
+      "failures": 33,
+      "total": 66,
+      "worst": {
+        "theme": "dark/neutral/red",
+        "fg": "#ffffff",
+        "bg": "#f5244f",
+        "ratio": 4.001716071899189
+      }
+    },
+    {
+      "fg": "fg-on-warning",
+      "bg": "warning-solid-hover",
+      "threshold": 4.5,
+      "failures": 0,
+      "total": 66,
+      "worst": {
+        "theme": "light/neutral/red",
+        "fg": "#000000",
+        "bg": "#fe8c30",
+        "ratio": 9.008079591160975
+      }
+    },
+    {
+      "fg": "fg-on-caution",
+      "bg": "caution-solid-hover",
+      "threshold": 4.5,
+      "failures": 0,
+      "total": 66,
+      "worst": {
+        "theme": "light/neutral/red",
+        "fg": "#000000",
+        "bg": "#dba102",
+        "ratio": 9.110838063891515
+      }
+    },
+    {
+      "fg": "fg-on-success",
+      "bg": "success-solid-hover",
+      "threshold": 4.5,
+      "failures": 33,
+      "total": 66,
+      "worst": {
+        "theme": "dark/neutral/red",
+        "fg": "#ffffff",
+        "bg": "#009764",
+        "ratio": 3.7428728465689143
+      }
+    },
+    {
+      "fg": "fg-on-info",
+      "bg": "info-solid-hover",
+      "threshold": 4.5,
+      "failures": 33,
+      "total": 66,
+      "worst": {
+        "theme": "dark/neutral/red",
+        "fg": "#ffffff",
+        "bg": "#0f75fe",
+        "ratio": 4.203380411773797
+      }
+    },
+    {
+      "fg": "fg-on-discovery",
+      "bg": "discovery-solid-hover",
+      "threshold": 4.5,
+      "failures": 33,
+      "total": 66,
+      "worst": {
+        "theme": "dark/neutral/red",
+        "fg": "#ffffff",
+        "bg": "#9657ff",
+        "ratio": 4.114352299930637
+      }
+    }
+  ],
+  "integrity": {
+    "unmodified": 0,
+    "extraInvalidDarkToken": 0
+  }
+}

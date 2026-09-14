@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Area audit — scope probes</title>
+<link rel="stylesheet" href="./area.css">
+<body>
+<h1>Area scope probes — internal audit fixture</h1>
+<p>Copy beside the built area.css to reproduce. Probe selectors are for inspection, not new component APIs.</p>
+<section data-area-theme="dark">
+  <h2>Inherited dark theme</h2>
+  <div id="nested-brand" data-area-brand="green">Brand-only child in dark parent</div>
+  <div id="explicit-brand" data-area-theme="dark" data-area-brand="green">Explicit dark + brand reference</div>
+  <div id="nested-neutral" data-area-neutral="warm">Neutral-only child in dark parent</div>
+  <div id="explicit-neutral" data-area-theme="dark" data-area-neutral="warm">Explicit dark + neutral reference</div>
+  <div id="light-reset" data-area-theme="light">Light child in dark parent <select aria-label="Light island"><option>Native control</option></select></div>
+</section>
+<section id="motion-none" data-area-motion="none"><h2>Motion none</h2><span class="area-spinner" aria-label="Loading" role="status"></span></section>
+<section data-area-surface="elevated"><h2>Elevated outline</h2><button id="elevated-outline" class="area-button area-button--outline">Outline action</button></section>
+</body></html>

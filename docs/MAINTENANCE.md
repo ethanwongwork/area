@@ -61,3 +61,15 @@ Start with [the handoff](../.Codex/HANDOFF.md); consult
 [the journal](../.Codex/JOURNAL.md) for reasoning. Use the project checkpoint skill to
 verify, commit, push and update both. Keep plans, rationale and current state in Git,
 not only in a private assistant session. Historical snapshots are not active instructions.
+
+## Audit status — 2026-09-14
+
+See [SYSTEM_AUDIT.md](SYSTEM_AUDIT.md) and [ROADMAP.md](ROADMAP.md). The current stroke trial
+has 165 failing / 8,810 passing tests (five light-theme stroke assertion groups), with
+four existing syntax groups waived. Build/typecheck/parity/docs checks pass. The contrast
+report prints failures but exits zero; `npm test` is the actual blocking command.
+
+Confirmed pre-existing gaps include nested color scope/reset, motion-none animations,
+composite widget behavior, rendered contrast coverage, and token root exports. The audit
+includes source evidence and reproducible probes. Do not claim a complete accessibility
+check from the existing token suite.

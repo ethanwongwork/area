@@ -59,11 +59,11 @@ Run tests separately: `build` does not execute the contrast test gate.
   local `--_*` properties; base rules consume them; size tiers set density tokens only.
 - A size tier is the outer control height. Checkbox, radio and switch use the icon ramp.
   Radius is flat per preset and capped against the box; density also changes UI type.
-- Decorative dividers and container edges use `--area-border-decorative` (light neutral 100).
+- Decorative dividers and container edges use `--area-border-decorative` (light neutral 75, current visual trial).
   Never use it for control affordances or state indicators.
 - Foreground does not change on hover. State belongs on `data-*` attributes.
-  Tone conveys meaning; variant conveys emphasis. Current Button props use `primary` and
-  `brand` for neutral and accent intent. Type role never implies weight (400/500).
+  Tone conveys meaning; variant conveys emphasis. Current Button props use `neutral` and
+  `brand`; the manifest still calls neutral `primary` (audit F06). Type role never implies weight (400/500).
 - Update CSS and `manifest.ts` together. React wrappers forward native props and refs;
   add behavior only when it belongs to the component contract.
 - Docs previews and snippets come from the same demo source. Use `tokenSection()` or
@@ -74,6 +74,12 @@ Run tests separately: `build` does not execute the contrast test gate.
 - Never put a backtick inside the `DOCS_CSS` or `DOCS_SCRIPT` template literals.
 - Generate icons with `gen-icons.mjs`; never hand-edit generated icons or draw replacements.
   Preserve vendored Area markup and Fluent's size-specific cuts.
+
+## Current audit
+
+Read [docs/SYSTEM_AUDIT.md](docs/SYSTEM_AUDIT.md) and [docs/ROADMAP.md](docs/ROADMAP.md) before
+expanding the system. The 75/100/150 stroke trial leaves five contrast assertion groups
+failing; do not lower thresholds to hide this. Audit recommendations are not implemented.
 
 ## Finish
 

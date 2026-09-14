@@ -1,0 +1,19 @@
+
+  5 failing assertion(s), 173 passing, across 66 themes
+
+  assertion                                std   req    worst    fail/total  worst case
+  border-subtle on bg-surface              wcag  1.3    1.29      33/66    light/cool/red  (quiet control outline)
+  border-subtle on bg-page                 wcag  1.3    1.29      33/66    light/cool/red  (quiet outline on page)
+  border-faint on bg-page                  wcag  1.2    1.15      33/66    light/cool/red  (token badge edge on page)
+  border-faint on bg-surface               wcag  1.2    1.15      33/66    light/cool/red  (token badge edge on a panel)
+  border-faint on bg-subtle                wcag  1.1    1.06      33/66    light/warm/red  (segmented track outline)
+  4 waived assertion(s) -- measured, below the bar, and recorded:
+
+  fg-danger-vivid on bg-code               wcag  4.5    4.35      33/33    light/warm/red
+    Syntax highlighting is pinned to level 500 by instruction -- red measures 4.35-4.42 against 4.5, depending on the neutral cast.
+  fg-success-vivid on bg-code              wcag  4.5    2.80      33/33    light/warm/red
+    Syntax highlighting is pinned to level 500 by instruction -- green measures 2.80 against 4.5 -- 3.06 before its hue rotation. Its 500 is a glyph-wall rung, pinned by the palette to 3:1 rather than to AA, so this one is a real accessibility cost and not a rounding.
+  fg-discovery-vivid on bg-code            wcag  4.5    4.42      33/33    light/warm/red
+    Syntax highlighting is pinned to level 500 by instruction -- purple measures 4.42-4.48 against 4.5.
+  fg-brand-vivid on bg-code                wcag  4.5    2.80      32/33    light/warm/green
+    Syntax highlighting is pinned to level 500 by instruction -- the default indigo measures 4.45 against 4.5; the axis can also point brand at a glyph-wall hue such as orange or green, where 500 is pinned to 3:1, and the worst case here is that consumer choice rather than the default.
