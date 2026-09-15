@@ -7,8 +7,8 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-textarea {
-    --_border: var(--area-stroke-control);
-    --_border-hover: var(--area-stroke-control-hover);
+    --_border: var(--area-edge-control);
+    --_border-hover: var(--area-edge-control-hover);
     --_gutter: var(--area-gutter-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);

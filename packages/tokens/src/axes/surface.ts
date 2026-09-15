@@ -33,10 +33,10 @@ export const SURFACE_AXIS: AxisDefinition = {
       description: "1px strokes with restrained lift on floating surfaces.",
       tokens: tokens({
         "border-width": "1px",
-        "shadow-1": "0 1px 2px -1px var(--area-shadow-color)",
-        "shadow-2": "0 2px 4px -1px var(--area-shadow-color)",
-        "shadow-3": "0 4px 8px -2px var(--area-shadow-color)",
-        "shadow-4": "0 8px 16px -4px var(--area-shadow-color)",
+        "shadow-1": "0 1px 1px 0 var(--area-shadow-color)",
+        "shadow-2": "0 2px 4px 0 var(--area-shadow-color)",
+        "shadow-3": "0 4px 8px -1px var(--area-shadow-color)",
+        "shadow-4": "0 8px 16px -2px var(--area-shadow-color)",
       }),
     },
     {

@@ -1,0 +1,123 @@
+{
+  "mode": "standard",
+  "passed": 17424,
+  "failed": 3696,
+  "failuresByCheck": {
+    "input/edge-outside": 264,
+    "input/edge-inside": 264,
+    "textarea/edge-outside": 264,
+    "textarea/edge-inside": 264,
+    "select/edge-outside": 264,
+    "select/edge-inside": 264,
+    "unchecked/boundary": 264,
+    "checked/boundary": 264,
+    "radio/boundary": 264,
+    "switch/boundary": 264,
+    "switch/mark": 264,
+    "switch-on/boundary": 264,
+    "segment/selected-edge": 264,
+    "chip/selected-edge": 264
+  },
+  "examples": [
+    {
+      "id": "light/neutral/red/flat/input/edge-outside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/input/edge-inside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/textarea/edge-outside",
+      "pass": false,
+      "actual": "1.2092:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(247, 247, 247))"
+    },
+    {
+      "id": "light/neutral/red/flat/textarea/edge-inside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/select/edge-outside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/select/edge-inside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/unchecked/boundary",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/checked/boundary",
+      "pass": false,
+      "actual": "1.4514:1 (color(srgb 1 0.788235 0.796078) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/radio/boundary",
+      "pass": false,
+      "actual": "1.4514:1 (color(srgb 1 0.788235 0.796078) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/switch/boundary",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/switch/mark",
+      "pass": false,
+      "actual": "1.4823:1 (rgb(255, 255, 255) / color(srgb 0.831373 0.831373 0.831373))"
+    },
+    {
+      "id": "light/neutral/red/flat/switch-on/boundary",
+      "pass": false,
+      "actual": "1.4514:1 (color(srgb 1 0.788235 0.796078) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/flat/segment/selected-edge",
+      "pass": false,
+      "actual": "1.2092:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(247, 247, 247))"
+    },
+    {
+      "id": "light/neutral/red/flat/chip/selected-edge",
+      "pass": false,
+      "actual": "1.3464:1 (color(srgb 1 0.788235 0.796078) / rgb(251, 245, 245))"
+    },
+    {
+      "id": "light/neutral/red/outlined/input/edge-outside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/outlined/input/edge-inside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/outlined/textarea/edge-outside",
+      "pass": false,
+      "actual": "1.2092:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(247, 247, 247))"
+    },
+    {
+      "id": "light/neutral/red/outlined/textarea/edge-inside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/outlined/select/edge-outside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    },
+    {
+      "id": "light/neutral/red/outlined/select/edge-inside",
+      "pass": false,
+      "actual": "1.2955:1 (color(srgb 0.886275 0.886275 0.886275) / rgb(255, 255, 255))"
+    }
+  ]
+}

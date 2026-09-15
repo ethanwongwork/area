@@ -1,0 +1,77 @@
+
+> area@0.0.0 build:docs
+> npm run build && npm run build -w @area/docs
+
+
+> area@0.0.0 build
+> npm run build -w @area/tokens && npm run build -w @area/styles && npm run build -w @area/react
+
+
+> @area/tokens@0.0.0 build
+> node src/build.ts
+
+
+  @area/tokens
+
+  axis integrity ok
+
+  css/properties.css               1.2 kB
+  css/tokens.css                  44.1 kB
+  css/axes.css                   120.0 kB
+  tokens.json                    342.4 kB
+  tokens.d.ts                     25.3 kB
+  config.js                        1.6 kB
+  config.d.ts                      0.9 kB
+  fixture/axes.html              169.5 kB
+
+
+> @area/styles@0.0.0 build
+> node scripts/build.mjs && node ../../scripts/build-modules.mjs . && node scripts/check-manifest-parity.mjs
+
+
+  @area/styles
+
+  dist/area.css      281.3 kB   (24 files)
+
+  compiled modules + declarations: dist/modules
+  manifest parity ok (36 components; scoped states, modifiers and elements)
+
+> @area/react@0.0.0 build
+> node ../../scripts/build-modules.mjs .
+
+  compiled modules + declarations: dist/modules
+
+> @area/docs@0.0.0 build
+> node scripts/build.mjs && node scripts/check-dogfood.mjs
+
+
+  @area/docs
+
+  42 pages, 65 demos
+  dist/ -> /Users/ethanwong/Desktop/area/apps/docs/dist
+
+
+  Dogfood audit
+
+  components used in docs     36/36
+  allowlisted site variables  12
+    --docs-sidebar   Width of this site's navigation. Not a system concern.
+    --docs-measure   Reading measure for long-form documentation.
+    --docs-max       Maximum width of this site's shell.
+    --docs-blur      Backdrop blur on this site's header. No Area surface uses blur.
+    --docs-inspector Width of this site's right-hand inspector rail.
+    --docs-toc       Width of this site's on-this-page list, which shares that rail.
+    --docs-preview-min Minimum height of an example preview.
+    --docs-specimen  Minimum width of a specimen tile in a foundation grid.
+    --docs-figure    Height of the figure area inside a specimen tile.
+    --docs-card      Minimum width of a token card in a grid view.
+    --docs-card-sm   Minimum width of a cell in the icon browser's grid.
+    --docs-customizer-panel Width of the customizer's axis panel.
+
+  no raw values in the docs stylesheet
+
+  9 demo framing width(s) — example layout, not a system concern:
+    260px, 280px, 320px, 380px, 400px, 560px
+
+  no inline styles carrying literal values beyond demo framing
+

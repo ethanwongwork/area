@@ -38,7 +38,7 @@
     flex-shrink: 0;
     inline-size: var(--_size);
     block-size: var(--_size);
-    border: var(--area-stroke-width) solid var(--area-stroke-control);
+    border: var(--area-stroke-width) solid var(--area-edge-control);
     background-color: var(--area-bg-surface);
     box-shadow: var(--area-shadow-1);
     cursor: inherit;
@@ -92,7 +92,7 @@
   .area-checkbox__control:indeterminate,
   .area-radio__control:checked {
     background-color: var(--area-accent-solid);
-    border-color: var(--area-stroke-selected);
+    border-color: var(--area-edge-accent);
   }
 
   .area-checkbox__control:checked::after,
@@ -104,12 +104,12 @@
   .area-checkbox__control:checked:hover,
   .area-radio__control:checked:hover {
     background-color: var(--area-accent-solid-hover);
-    border-color: var(--area-stroke-selected);
+    border-color: var(--area-edge-accent);
   }
 
   .area-checkbox__control:not(:checked):not(:indeterminate):hover:not(:disabled),
   .area-radio__control:not(:checked):hover:not(:disabled) {
-    border-color: var(--area-stroke-control-hover);
+    border-color: var(--area-edge-control-hover);
   }
 
   .area-checkbox__control:focus-visible,
@@ -135,9 +135,9 @@
     position: relative;
     inline-size: var(--_track-inline);
     block-size: var(--_track-block);
-    border: var(--area-stroke-width) solid var(--area-stroke-control);
+    border: var(--area-stroke-width) solid var(--area-edge-control);
     border-radius: var(--area-radius-full);
-    background-color: var(--area-stroke-control);
+    background-color: var(--area-fill-toggle);
     cursor: inherit;
     transition: var(--area-transition);
   }
@@ -156,7 +156,7 @@
   }
 
   .area-switch__control:checked {
-    border-color: var(--area-stroke-selected);
+    border-color: var(--area-edge-accent);
     background-color: var(--area-accent-solid);
   }
 
@@ -166,7 +166,7 @@
   }
 
   .area-switch__control:hover:not(:disabled) {
-    background-color: var(--area-stroke-control-hover);
+    background-color: var(--area-fill-toggle-hover);
   }
 
   .area-switch__control:checked:hover:not(:disabled) {

@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 import { colorPairs } from './colors.ts';
 import { emitAxes, emitTokens } from './css.ts';
 import { ACCENT_AXIS, NEUTRAL_AXIS } from '../axes/color.ts';
-import { REGISTERED_PROPERTIES } from './base.ts';
+import { derivedTokens, REGISTERED_PROPERTIES } from './base.ts';
 
 it('emits both polarities without a theme axis writing another role', () => {
   const css=emitAxes();
@@ -33,5 +33,23 @@ it('rejects transformed declarations outside the emitting owner', async()=>{
   expect(()=>assertEmittedTokens(ACCENT_AXIS,{...ACCENT_AXIS.presets[0]!.tokens,'--area-accent-solid':'Infinity'})).toThrow();
 });
 it('keeps inherited shadow recipes responsive to theme boundaries',()=>{
-  expect(emitTokens()).toContain('--area-shadow-color: light-dark(rgb(0 0 0 / 0.10), rgb(0 0 0 / 0.45));');
+  expect(emitTokens()).toContain('--area-shadow-color: light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.08));');
+});
+
+it('re-emits contrast presentation aliases at every axis and preference boundary',()=>{
+  const css=emitAxes();
+  const boundary=css.slice(css.lastIndexOf('[data-area-theme],'));
+  for(const axis of ['theme','neutral','accent','density','radius','type','surface','motion','contrast']) expect(boundary).toContain(`[data-area-${axis}]`);
+  for(const name of Object.keys(derivedTokens()).filter(k=>k.startsWith('--area-edge-')||k.startsWith('--area-fill-toggle'))) {
+    expect(boundary).toContain(`${name}:`);
+    expect(REGISTERED_PROPERTIES.some(p=>p.name===name)).toBe(false);
+  }
+});
+it('honors explicit contrast preferences and only applies the OS fallback to an unconfigured root',()=>{
+  const css=emitAxes();
+  expect(css).toContain('[data-area-contrast="more"] {\n    --area-contrast-more: 1;');
+  expect(css).toContain('[data-area-contrast="standard"] {\n    --area-contrast-more: 0;');
+  expect(css).toContain('@media (prefers-contrast: more)');
+  expect(css).toContain(':root:not([data-area-contrast])');
+  expect(emitTokens()).toContain('--area-contrast-more: 0;');
 });

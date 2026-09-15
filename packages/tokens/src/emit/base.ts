@@ -54,7 +54,7 @@ export const Z_LAYERS = {
 } as const;
 
 export function baseTokens(): Record<string, string> {
-  const out: Record<string, string> = { "--area-focus-width": "2px", "--area-focus-offset": "2px", "--area-stroke-width": "1px" };
+  const out: Record<string, string> = { "--area-contrast-more": "0", "--area-focus-width": "2px", "--area-focus-offset": "2px", "--area-stroke-width": "1px" };
 
   // Pure black and white. Named because they are real answers, not placeholders: every
   // `fg-on-*` token resolves to one of these two after the scale measures which is
@@ -88,6 +88,14 @@ export function baseTokens(): Record<string, string> {
  */
 export function derivedTokens(): Record<string, string> {
   return {
+    // Presentation aliases choose existing palette endpoints. A preference is not a color
+    // axis: it changes emphasis while all eight creative axes keep their own namespaces.
+    [`${PREFIX}edge-control`]: `color-mix(in srgb, var(${PREFIX}border-faint), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}edge-control-hover`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}edge-selected`]: `color-mix(in srgb, var(${PREFIX}border-faint), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}fill-toggle`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}fill-toggle-hover`]: `color-mix(in srgb, var(${PREFIX}border), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
     // A control nested inside a container keeps concentric corners: the inner radius is the
     // outer radius less the inset. This is the forward form of the concentric rule; the
     // inset varies per component, so components apply it themselves against this token.

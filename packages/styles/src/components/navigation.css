@@ -115,7 +115,7 @@
   .area-table th,
   .area-table td,
   .area-table__cell {
-    padding: var(--area-space-10) var(--area-space-12);
+    padding: var(--area-gutter-sm) var(--area-gutter-md);
     text-align: start;
     vertical-align: top;
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
@@ -160,8 +160,8 @@
    * keyboard behaviour intact.
    */
   .area-select {
-    --_border: var(--area-stroke-control);
-    --_border-hover: var(--area-stroke-control-hover);
+    --_border: var(--area-edge-control);
+    --_border-hover: var(--area-edge-control-hover);
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);

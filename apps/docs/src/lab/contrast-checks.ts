@@ -1,5 +1,5 @@
 export interface PaintCheck { id:string; pass:boolean; actual:string; }
-export interface PaintReport { passed:number; failed:number; checks:PaintCheck[]; }
+export interface PaintReport { mode?:string; passed:number; failed:number; checks:PaintCheck[]; }
 
 /** App-owned probe: measure painted properties, including alpha, instead of token strings. */
 export async function runPaintChecks(): Promise<PaintReport> {
@@ -12,6 +12,8 @@ export async function runPaintChecks(): Promise<PaintReport> {
   const el=(id:string)=>document.getElementById(`contrast-${id}`)!;
   const css=(node:Element,pseudo?:string)=>getComputedStyle(node,pseudo);
   const rgba=(value:string):number[]=>{
+    const srgb=value.match(/^color\(srgb\s+(.+)\)$/);
+    if(srgb){const parts=srgb[1]!.split(/[\s/]+/).filter(Boolean).map(Number);return [parts[0]!,parts[1]!,parts[2]!,parts[3]??1];}
     const match=value.match(/^rgba?\((.+)\)$/);
     if(!match)throw new Error(`Unmeasured color format: ${value}`);
     const parts=match[1]!.split(/[,\s/]+/).filter(Boolean).map(Number);
@@ -89,5 +91,5 @@ export async function runPaintChecks(): Promise<PaintReport> {
     for(const [axis,value] of Object.entries(original))stage.setAttribute(`data-area-${axis}`,value);
     previous?.focus({preventScroll:true});
   }
-  return {passed:checks.filter(c=>c.pass).length,failed:checks.filter(c=>!c.pass).length,checks};
+  return {mode:stage.getAttribute('data-area-contrast')??'system',passed:checks.filter(c=>c.pass).length,failed:checks.filter(c=>!c.pass).length,checks};
 }

@@ -1,7 +1,7 @@
 # Color, stroke and focus contracts
 
-Implemented in E03. See [the batch report](batches/E03/README.md) for matched visuals,
-measurements and validation limits. The original 75/100/150 trial remains in dated research.
+Revised in V01 after the user rejected E03’s heavy default outlines. See [V01](batches/V01/README.md)
+for the current visual direction, matched captures and measured limits. E03 remains dated evidence.
 
 ## Readability and identification
 
@@ -11,8 +11,10 @@ mode. These are separate policies; APCA is not a WCAG conformance standard.
 [WCAG contrast minimum](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
 
 Quiet borders may supplement text-identified buttons and visual grouping. Fields with no
-value, unchecked controls and required state indicators need a distinct signal. Area gives
-these required boundaries at least 3:1 against the documented adjacent surfaces. A hover
+value, unchecked controls and required state indicators need a distinct signal. Area’s increased-contrast preference gives
+these required boundaries at least 3:1 against the documented adjacent surfaces. The standard
+soft appearance deliberately falls below that threshold for several boundaries and states;
+it is not represented as universally conforming. A hover
 color does not need to contrast with its resting color; the control must remain legible.
 [WCAG non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html).
 
@@ -22,24 +24,41 @@ Existing supplementary tokens remain distinct from required indicators:
 
 - `border-decorative`: section/table rules and container seams. Light 75 / dark 800.
   Existing 1.1 aesthetic floor retained. This is decoration, never the only field/state cue.
-- `border-faint`: floating frames, token badges and segmented tracks. Light 150 / dark 750.
+- `border-faint`: floating frames, token badges and standard control edges. Light 150 / dark 750.
   Existing 1.2 floor retained, plus the segmented track's own adjacent fill check.
 - `border-subtle`: quiet text-identified outlines and swatch edges. Light 200 / dark 750.
   Existing 1.3 floor retained. A swatch's exact color is not inferred solely from its outline.
 - `border` and `border-hover`: supplementary stronger definition, 250/650 and 300/600.
   Existing 1.5 and 1.9 aesthetic floors retained; they are not required-indicator tokens.
-- `stroke-control`: fields, unchecked glyphs and neutral selection boundaries. 450/400.
+- `stroke-control`: increased-contrast fields, unchecked glyphs and neutral selection boundaries. 450/400.
   The faint filled backgrounds alone do not reliably identify an empty input.
 - `stroke-control-hover`: one stronger neutral step, 500/350. Invalid fields keep their
   danger edge across hover and focus.
-- `stroke-selected`: accent text rung, 650/150. Selected chips and choice boundaries use
+- `stroke-selected`: accent text rung, 650/150. In increased contrast, selected chips and choice boundaries use
   this independently of bright solid fills, which may carry black marks.
 - `stroke-width`: a constant 1px required edge. Surface's `border-width` remains decorative;
   Elevated can remove container frames without erasing a field or selection boundary.
 
 No duplicate divider/container aliases were introduced: their current consumers share one
-purpose and treatment. New tokens exist only where the old supplementary contract was wrong.
+purpose and treatment. V01 adds presentation aliases so soft and increased-contrast appearances share the same endpoints.
 Tonal `*-border` recipes remain quiet outline definitions; required danger edges use `fg-danger`.
+
+## Soft presentation and increased contrast
+
+`edge-control` reads `border-faint` by default; `edge-control-hover` reads `border-subtle`.
+`edge-selected` reads `border-faint`, `edge-accent` reads `accent-border`, and `fill-toggle`
+reads `border-subtle` (`fill-toggle-hover` reads `border`). Set `data-area-contrast="more"` to select their strong counterparts:
+`stroke-control`, `stroke-control-hover`, `stroke-control`, `stroke-selected`, `stroke-control`
+(and `stroke-control-hover` for the toggle hover).
+Set `data-area-contrast="standard"` to explicitly reset a subtree. Without a root preference,
+CSS follows `prefers-contrast: more`. This preference is separate from the eight axes.
+
+The aliases are unregistered derivations re-emitted on axis and preference boundaries.
+Text, focus and invalid colors do not depend on this preference. Decorative seams stay quiet.
+The browser audit retains the same 3:1 requirement in both modes: standard has **3,696
+shortfalls / 21,120 checks**, more has **0 / 21,120**. These are fixture measurements,
+not overall conformance claims or individual counts of WCAG violations. The build gate
+continues validating the strong endpoint tokens; it does not certify the default soft edges.
 
 ## Focus
 
@@ -95,5 +114,5 @@ focus (Tab, then Enter); a pointer click cannot prove focus-visible styling.
 
 These checks cover the fixtures and named surfaces, not every possible consumer composition.
 Do not place these controls directly on arbitrary images or solid-tone backgrounds and assume
-this contract applies. E04–E10 still own package contracts, component behavior and release
+this contract applies. E05–E10 still own component behavior and release
 accessibility validation; the separate System lab keeps those known defects visible.

@@ -58,7 +58,7 @@
     background: linear-gradient(
       to right,
       var(--area-stroke-selected) 0 var(--_pct),
-      var(--area-stroke-control) var(--_pct) 100%
+      var(--area-fill-toggle) var(--_pct) 100%
     );
   }
 
@@ -68,7 +68,7 @@
     background: linear-gradient(
       to right,
       var(--area-stroke-selected) 0 var(--_pct),
-      var(--area-stroke-control) var(--_pct) 100%
+      var(--area-fill-toggle) var(--_pct) 100%
     );
   }
 
@@ -94,7 +94,7 @@
     border: var(--area-stroke-width) solid var(--area-stroke-selected);
     border-radius: var(--area-radius-full);
     background-color: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-2);
+    box-shadow: var(--area-shadow-1);
     transition: var(--area-transition);
   }
 
@@ -105,7 +105,7 @@
     border: var(--area-stroke-width) solid var(--area-stroke-selected);
     border-radius: var(--area-radius-full);
     background-color: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-2);
+    box-shadow: var(--area-shadow-1);
     transition: var(--area-transition);
   }
 
@@ -114,13 +114,13 @@
 
   .area-slider__control:focus-visible::-webkit-slider-thumb {
     border-color: var(--area-focus-color);
-    box-shadow: var(--area-shadow-2);
+    box-shadow: var(--area-shadow-1);
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
   .area-slider__control:focus-visible::-moz-range-thumb {
     border-color: var(--area-focus-color);
-    box-shadow: var(--area-shadow-2);
+    box-shadow: var(--area-shadow-1);
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }

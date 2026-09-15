@@ -30,7 +30,7 @@ export async function runScopeChecks(): Promise<ScopeResult> {
     const native=document.createElement('select'); node.append(native);
     check(`${id}/native-scheme`,getComputedStyle(native).colorScheme,ref.theme);
     probe.style.boxShadow='var(--area-shadow-1)';
-    expected.style.boxShadow=`0 1px 2px -1px rgb(0 0 0 / ${ref.theme==='dark'?0.45:0.1})`;
+    expected.style.boxShadow=`0 1px 1px 0 rgb(0 0 0 / ${ref.theme==='dark'?0.08:0.06})`;
     check(`${id}/inherited-shadow`,getComputedStyle(probe).boxShadow,getComputedStyle(expected).boxShadow);
     probe.remove();expected.remove();native.remove();
   }

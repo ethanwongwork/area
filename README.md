@@ -84,8 +84,9 @@ These guarantees are covered by tests, build audits, and the review conventions 
   `colorjs.io` to 1e-12 per channel across both gamuts, and the gamut mapper matches the
   CSS Color 4 reference to a fifth of a JND.
 - **Contrast is a test gate.** 308 passing WCAG/APCA groups across 66 color themes,
-  with no active waivers. E03 distinguishes supplementary edges from required control/state
-  indicators and verifies actual rendered focus. Native forced-colors and full release
+  with no active token waivers. V01 defaults to soft control edges with documented non-text
+  contrast shortfalls; the increased-contrast preference passes the rendered indicator matrix.
+  Token passes do not certify the default soft appearance. Native forced-colors and full release
   accessibility checks remain pending. See [the contrast contract](docs/CONTRAST.md).
 - **Axes cannot collide.** The registry throws if two axes write one property.
 - **CSS variants are checked against a shared manifest.** Variant helpers and the parity audit use one manifest per component
@@ -182,3 +183,10 @@ saved-settings migration, build requirements and verification limits.
 `npm run test:contracts` checks selector ownership and preference migration. After building,
 `npm run test:consumer` verifies actual local tarballs, strict types, SSR, browser bundling
 and CSS/tree-shaking in isolation.
+
+
+### Quiet visual direction
+
+[V01 research, decisions and before/after captures](docs/batches/V01/README.md) document the
+soft presentation. Open [the compact workspace](http://localhost:4321/workbench.html) to try
+filters, card/list views, themes, density and the increased-contrast preference.

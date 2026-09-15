@@ -11,7 +11,9 @@ Its E01–E12 batches refine the order of the milestone checklist below.
 
 E03 resolves the 75/100/150 trial's failures: decoration remains quiet at 75, supplementary
 frames/outlines return to 150/200, and required control/state edges gain explicit 3:1 contracts.
-See [the final contrast policy](CONTRAST.md). E04 completes API/package consistency. The next milestone is **interaction architecture**,
+V01 subsequently softens default presentation and preserves those strong endpoints in an
+increased-contrast preference; standard-mode limitations remain explicit. See [the current contrast policy](CONTRAST.md)
+and [V01 visual study](batches/V01/README.md). E04 completes API/package consistency. The next milestone is **interaction architecture**,
 then **working interaction primitives**. Further palette expansion is not the priority.
 
 Effort bands describe uncertainty and scope, not calendar commitments: **small** is one focused change; **medium** spans several modules and a focused test suite; **large** needs a design/API decision, implementation and browser/assistive-technology validation. Dependencies matter more than the bands.

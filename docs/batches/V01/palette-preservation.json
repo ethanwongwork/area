@@ -1,0 +1,22 @@
+[
+  {
+    "path": "packages/tokens/src/color/palette.json",
+    "unchanged": true,
+    "sha256": "8035be3c95f72da6dc95ec407e6ca27be794cefdcf376b50dd9f9f0be5bed64c"
+  },
+  {
+    "path": "packages/tokens/src/color/curves.ts",
+    "unchanged": true,
+    "sha256": "d85f91e99275c1d66c3799a3cff91a04852c3ddd2c5462f6c7d81ac08f030e39"
+  },
+  {
+    "path": "packages/tokens/src/color/scale.ts",
+    "unchanged": true,
+    "sha256": "cc4f464feb9ced0f2b8614650c5d0ebd574315676d7e851f824b992e3944f6a5"
+  },
+  {
+    "path": "packages/tokens/src/semantic/aliases.ts",
+    "unchanged": true,
+    "sha256": "44698ca00c6a169cc8e3fbd07b2f9c25d895b45c359028b12f7e170be8528956"
+  }
+]

@@ -116,13 +116,11 @@
 
   .area-nav__item:hover:not([data-disabled]) {
     background-color: var(--area-bg-hover);
-    color: var(--area-fg-default);
   }
 
   /*
-   * Current. The foreground goes to full strength and the plate fills -- the same pair of
-   * moves hover makes, one step further, so the two read as the same gesture at different
-   * intensities rather than as two unrelated treatments.
+   * Current. The foreground goes to full strength and the plate fills. Hover changes
+   * only the plate, keeping each label stable under the pointer.
    */
   .area-nav__item[aria-current]:not([aria-current="false"]) {
     background-color: var(--area-bg-component-active);

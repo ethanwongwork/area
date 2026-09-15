@@ -83,11 +83,8 @@ const DEFAULT_TIERS: Record<Tier, TierSpec> = {
  * Notion's measured in-app ladder is 24 for an icon-only button, 28 for a menu row or a
  * standard button, and 32 for a filled call to action -- so 28 is the medium here.
  *
- * The type size does not move with it. Notion renders 14px text inside those 28px rows,
- * and that is the point of a dense preset: the box gets tighter while the text stays
- * readable. A preset that shrank the text too would just be the same interface further
- * away. Only the two smallest tiers drop to 12px, because 14/20 text cannot fit a 20px
- * box at all.
+ * Chrome steps down with the box: medium is 13/18 rather than 14/20. Content type
+ * remains on the independent typography axis, so a compact interface keeps readable prose.
  */
 const COMPACT_TIERS: Record<Tier, TierSpec> = {
   xs: { height: 20, gutter: 6, icon: 12, gap: 4, size: 11, leading: 14 },
@@ -100,7 +97,7 @@ const COMPACT_TIERS: Record<Tier, TierSpec> = {
 export const DENSITY_AXIS: AxisDefinition = {
   id: "density",
   label: "Density",
-  description: "How tall controls are, and how much room they leave inside themselves. The type size holds; only the box moves.",
+  description: "How tall controls are, and how much room they leave inside themselves. Interface type steps down with the box; content type stays independent.",
   defaultPreset: "default",
   namespaces: ["--area-control-", "--area-gutter-", "--area-icon-", "--area-gap-", "--area-ui-"],
   presets: [

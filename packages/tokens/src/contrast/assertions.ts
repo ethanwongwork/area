@@ -186,7 +186,7 @@ export const ASSERTIONS: ContrastAssertion[] = [
   ...stateAssertions(),
 ];
 
-/** Required indicators are separate from supplementary decorative stroke floors. */
+/** Strong indicator endpoints. V01 soft presentation is audited separately in the browser. */
 function stateAssertions(): ContrastAssertion[] {
   const out: ContrastAssertion[] = [];
   const surfaces = [...TEXT_SURFACES, "bg-component-hover", "bg-component-active"];
@@ -198,13 +198,13 @@ function stateAssertions(): ContrastAssertion[] {
     out.push({fg:"fg-default",bg,wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"UI label in interactive state"});
   }
   for (const bg of ["accent-solid", "accent-solid-hover"]) out.push({fg:"fg-on-accent",bg,wcag:WCAG.NON_TEXT,apca:0,note:"checked mark or switch thumb"});
-  out.push({fg:"bg-surface",bg:"stroke-control",wcag:WCAG.NON_TEXT,apca:0,note:"unchecked switch thumb"});
+  out.push({fg:"bg-surface",bg:"stroke-control",wcag:WCAG.NON_TEXT,apca:0,note:"increased-contrast unchecked switch thumb"});
   out.push({fg:"fg-on-neutral",bg:"neutral-solid-hover",wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"neutral button hover label"});
   for (const tone of TONES) for (const state of ["", "-hover", "-active"]) {
     const bg = `${tone}-surface${state}`;
     out.push({fg:"focus-color",bg,wcag:WCAG.NON_TEXT,apca:0,note:"opaque focus on a tinted surface"});
     if(state) out.push({fg:`fg-${tone}`,bg,wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"tonal UI label in interactive state"});
   }
-  for (const state of ["", "-hover", "-active"]) out.push({fg:"stroke-selected",bg:`accent-surface${state}`,wcag:WCAG.NON_TEXT,apca:0,note:"selected chip border on its tint"});
+  for (const state of ["", "-hover", "-active"]) out.push({fg:"stroke-selected",bg:`accent-surface${state}`,wcag:WCAG.NON_TEXT,apca:0,note:"increased-contrast selected chip border on its tint"});
   return out;
 }

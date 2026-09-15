@@ -17,8 +17,8 @@
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
-    --_border: var(--area-stroke-control);
-    --_border-hover: var(--area-stroke-control-hover);
+    --_border: var(--area-edge-control);
+    --_border-hover: var(--area-edge-control-hover);
     --_bg: var(--area-bg-surface);
 
     display: flex;

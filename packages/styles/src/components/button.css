@@ -38,8 +38,8 @@
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
-    --_line: var(--area-border-subtle);
-    --_line-hover: var(--area-border);
+    --_line: var(--area-edge-control);
+    --_line-hover: var(--area-edge-control-hover);
     --_tone-fg: var(--area-fg-default);
     --_on-solid: var(--area-fg-on-neutral);
 
@@ -206,8 +206,8 @@
      * still moves one rung on hover, so the state change is unchanged -- only the weight of
      * both ends came down.
      */
-    --_line: var(--area-border-subtle);
-    --_line-hover: var(--area-border);
+    --_line: var(--area-edge-control);
+    --_line-hover: var(--area-edge-control-hover);
     --_tone-fg: var(--area-fg-default);
     --_on-solid: var(--area-fg-on-neutral);
   }

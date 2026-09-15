@@ -1,0 +1,1446 @@
+{
+  "passed": 288,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "standard/inherit/theme/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "standard/inherit/theme/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "standard/inherit/theme/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "standard/inherit/theme/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.207843 0.101961 0.690196) = rgb(53, 26, 176)"
+    },
+    {
+      "id": "standard/inherit/theme/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "standard/inherit/theme/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.294118 0.294118 0.294118) = rgb(75, 75, 75)"
+    },
+    {
+      "id": "standard/inherit/neutral/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.898039 0.886275 0.87451) = rgb(229, 226, 223)"
+    },
+    {
+      "id": "standard/inherit/neutral/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.843137 0.831373 0.819608) = rgb(215, 212, 209)"
+    },
+    {
+      "id": "standard/inherit/neutral/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.898039 0.886275 0.87451) = rgb(229, 226, 223)"
+    },
+    {
+      "id": "standard/inherit/neutral/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/inherit/neutral/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.843137 0.831373 0.819608) = rgb(215, 212, 209)"
+    },
+    {
+      "id": "standard/inherit/neutral/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.776471 0.764706 0.752941) = rgb(198, 195, 192)"
+    },
+    {
+      "id": "standard/inherit/accent/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/accent/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/accent/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/accent/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.976471 0.819608 0.478431) = rgb(249, 209, 122)"
+    },
+    {
+      "id": "standard/inherit/accent/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/accent/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/inherit/density/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/density/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/density/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/density/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/inherit/density/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/density/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/inherit/radius/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/radius/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/radius/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/radius/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/inherit/radius/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/radius/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/inherit/type/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/type/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/type/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/type/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/inherit/type/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/type/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/inherit/surface/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/surface/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/surface/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/surface/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/inherit/surface/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/surface/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/inherit/motion/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/motion/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/motion/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/inherit/motion/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/inherit/motion/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/inherit/motion/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/standard/theme/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "standard/standard/theme/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "standard/standard/theme/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "standard/standard/theme/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.207843 0.101961 0.690196) = rgb(53, 26, 176)"
+    },
+    {
+      "id": "standard/standard/theme/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "standard/standard/theme/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.294118 0.294118 0.294118) = rgb(75, 75, 75)"
+    },
+    {
+      "id": "standard/standard/neutral/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.898039 0.886275 0.87451) = rgb(229, 226, 223)"
+    },
+    {
+      "id": "standard/standard/neutral/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.843137 0.831373 0.819608) = rgb(215, 212, 209)"
+    },
+    {
+      "id": "standard/standard/neutral/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.898039 0.886275 0.87451) = rgb(229, 226, 223)"
+    },
+    {
+      "id": "standard/standard/neutral/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/standard/neutral/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.843137 0.831373 0.819608) = rgb(215, 212, 209)"
+    },
+    {
+      "id": "standard/standard/neutral/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.776471 0.764706 0.752941) = rgb(198, 195, 192)"
+    },
+    {
+      "id": "standard/standard/accent/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/accent/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/accent/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/accent/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.976471 0.819608 0.478431) = rgb(249, 209, 122)"
+    },
+    {
+      "id": "standard/standard/accent/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/accent/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/standard/density/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/density/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/density/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/density/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/standard/density/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/density/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/standard/radius/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/radius/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/radius/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/radius/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/standard/radius/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/radius/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/standard/type/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/type/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/type/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/type/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/standard/type/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/type/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/standard/surface/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/surface/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/surface/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/surface/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/standard/surface/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/surface/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/standard/motion/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/motion/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/motion/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "standard/standard/motion/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/standard/motion/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "standard/standard/motion/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "standard/more/theme/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.576471 0.576471 0.576471) = rgb(147, 147, 147)"
+    },
+    {
+      "id": "standard/more/theme/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.643137 0.643137 0.643137) = rgb(164, 164, 164)"
+    },
+    {
+      "id": "standard/more/theme/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.576471 0.576471 0.576471) = rgb(147, 147, 147)"
+    },
+    {
+      "id": "standard/more/theme/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "standard/more/theme/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.576471 0.576471 0.576471) = rgb(147, 147, 147)"
+    },
+    {
+      "id": "standard/more/theme/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.643137 0.643137 0.643137) = rgb(164, 164, 164)"
+    },
+    {
+      "id": "standard/more/neutral/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.529412 0.513726 0.498039) = rgb(135, 131, 127)"
+    },
+    {
+      "id": "standard/more/neutral/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.470588 0.454902 0.439216) = rgb(120, 116, 112)"
+    },
+    {
+      "id": "standard/more/neutral/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.529412 0.513726 0.498039) = rgb(135, 131, 127)"
+    },
+    {
+      "id": "standard/more/neutral/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "standard/more/neutral/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.529412 0.513726 0.498039) = rgb(135, 131, 127)"
+    },
+    {
+      "id": "standard/more/neutral/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.470588 0.454902 0.439216) = rgb(120, 116, 112)"
+    },
+    {
+      "id": "standard/more/accent/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/accent/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/accent/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/accent/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.498039 0.360784 0.00784314) = rgb(127, 92, 2)"
+    },
+    {
+      "id": "standard/more/accent/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/accent/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/density/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/density/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/density/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/density/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "standard/more/density/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/density/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/radius/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/radius/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/radius/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/radius/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "standard/more/radius/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/radius/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/type/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/type/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/type/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/type/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "standard/more/type/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/type/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/surface/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/surface/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/surface/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/surface/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "standard/more/surface/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/surface/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/motion/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/motion/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "standard/more/motion/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/motion/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "standard/more/motion/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "standard/more/motion/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/theme/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.576471 0.576471 0.576471) = rgb(147, 147, 147)"
+    },
+    {
+      "id": "more/inherit/theme/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.643137 0.643137 0.643137) = rgb(164, 164, 164)"
+    },
+    {
+      "id": "more/inherit/theme/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.576471 0.576471 0.576471) = rgb(147, 147, 147)"
+    },
+    {
+      "id": "more/inherit/theme/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "more/inherit/theme/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.576471 0.576471 0.576471) = rgb(147, 147, 147)"
+    },
+    {
+      "id": "more/inherit/theme/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.643137 0.643137 0.643137) = rgb(164, 164, 164)"
+    },
+    {
+      "id": "more/inherit/neutral/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.529412 0.513726 0.498039) = rgb(135, 131, 127)"
+    },
+    {
+      "id": "more/inherit/neutral/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.470588 0.454902 0.439216) = rgb(120, 116, 112)"
+    },
+    {
+      "id": "more/inherit/neutral/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.529412 0.513726 0.498039) = rgb(135, 131, 127)"
+    },
+    {
+      "id": "more/inherit/neutral/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/inherit/neutral/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.529412 0.513726 0.498039) = rgb(135, 131, 127)"
+    },
+    {
+      "id": "more/inherit/neutral/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.470588 0.454902 0.439216) = rgb(120, 116, 112)"
+    },
+    {
+      "id": "more/inherit/accent/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/accent/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/accent/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/accent/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.498039 0.360784 0.00784314) = rgb(127, 92, 2)"
+    },
+    {
+      "id": "more/inherit/accent/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/accent/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/density/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/density/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/density/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/density/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/inherit/density/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/density/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/radius/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/radius/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/radius/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/radius/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/inherit/radius/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/radius/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/type/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/type/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/type/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/type/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/inherit/type/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/type/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/surface/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/surface/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/surface/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/surface/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/inherit/surface/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/surface/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/motion/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/motion/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/inherit/motion/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/motion/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/inherit/motion/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/inherit/motion/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/standard/theme/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "more/standard/theme/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "more/standard/theme/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "more/standard/theme/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.207843 0.101961 0.690196) = rgb(53, 26, 176)"
+    },
+    {
+      "id": "more/standard/theme/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.2 0.2 0.2) = rgb(51, 51, 51)"
+    },
+    {
+      "id": "more/standard/theme/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.294118 0.294118 0.294118) = rgb(75, 75, 75)"
+    },
+    {
+      "id": "more/standard/neutral/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.898039 0.886275 0.87451) = rgb(229, 226, 223)"
+    },
+    {
+      "id": "more/standard/neutral/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.843137 0.831373 0.819608) = rgb(215, 212, 209)"
+    },
+    {
+      "id": "more/standard/neutral/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.898039 0.886275 0.87451) = rgb(229, 226, 223)"
+    },
+    {
+      "id": "more/standard/neutral/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "more/standard/neutral/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.843137 0.831373 0.819608) = rgb(215, 212, 209)"
+    },
+    {
+      "id": "more/standard/neutral/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.776471 0.764706 0.752941) = rgb(198, 195, 192)"
+    },
+    {
+      "id": "more/standard/accent/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/accent/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/accent/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/accent/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.976471 0.819608 0.478431) = rgb(249, 209, 122)"
+    },
+    {
+      "id": "more/standard/accent/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/accent/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "more/standard/density/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/density/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/density/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/density/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "more/standard/density/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/density/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "more/standard/radius/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/radius/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/radius/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/radius/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "more/standard/radius/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/radius/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "more/standard/type/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/type/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/type/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/type/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "more/standard/type/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/type/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "more/standard/surface/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/surface/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/surface/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/surface/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "more/standard/surface/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/surface/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "more/standard/motion/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/motion/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/motion/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.886275 0.886275 0.886275) = rgb(226, 226, 226)"
+    },
+    {
+      "id": "more/standard/motion/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "more/standard/motion/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.831373 0.831373 0.831373) = rgb(212, 212, 212)"
+    },
+    {
+      "id": "more/standard/motion/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.772549 0.772549 0.772549) = rgb(197, 197, 197)"
+    },
+    {
+      "id": "more/more/theme/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.576471 0.576471 0.576471) = rgb(147, 147, 147)"
+    },
+    {
+      "id": "more/more/theme/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.643137 0.643137 0.643137) = rgb(164, 164, 164)"
+    },
+    {
+      "id": "more/more/theme/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.576471 0.576471 0.576471) = rgb(147, 147, 147)"
+    },
+    {
+      "id": "more/more/theme/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.8 0.839216 0.992157) = rgb(204, 214, 253)"
+    },
+    {
+      "id": "more/more/theme/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.576471 0.576471 0.576471) = rgb(147, 147, 147)"
+    },
+    {
+      "id": "more/more/theme/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.643137 0.643137 0.643137) = rgb(164, 164, 164)"
+    },
+    {
+      "id": "more/more/neutral/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.529412 0.513726 0.498039) = rgb(135, 131, 127)"
+    },
+    {
+      "id": "more/more/neutral/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.470588 0.454902 0.439216) = rgb(120, 116, 112)"
+    },
+    {
+      "id": "more/more/neutral/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.529412 0.513726 0.498039) = rgb(135, 131, 127)"
+    },
+    {
+      "id": "more/more/neutral/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/more/neutral/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.529412 0.513726 0.498039) = rgb(135, 131, 127)"
+    },
+    {
+      "id": "more/more/neutral/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.470588 0.454902 0.439216) = rgb(120, 116, 112)"
+    },
+    {
+      "id": "more/more/accent/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/accent/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/accent/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/accent/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.498039 0.360784 0.00784314) = rgb(127, 92, 2)"
+    },
+    {
+      "id": "more/more/accent/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/accent/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/density/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/density/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/density/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/density/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/more/density/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/density/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/radius/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/radius/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/radius/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/radius/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/more/radius/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/radius/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/type/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/type/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/type/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/type/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/more/type/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/type/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/surface/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/surface/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/surface/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/surface/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/more/surface/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/surface/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/motion/edge-control",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/motion/edge-control-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    },
+    {
+      "id": "more/more/motion/edge-selected",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/motion/edge-accent",
+      "pass": true,
+      "actual": "color(srgb 0.235294 0.180392 0.745098) = rgb(60, 46, 190)"
+    },
+    {
+      "id": "more/more/motion/fill-toggle",
+      "pass": true,
+      "actual": "color(srgb 0.513726 0.513726 0.513726) = rgb(131, 131, 131)"
+    },
+    {
+      "id": "more/more/motion/fill-toggle-hover",
+      "pass": true,
+      "actual": "color(srgb 0.454902 0.454902 0.454902) = rgb(116, 116, 116)"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # Area — implementation plan
 
 **Updated:** 2026-09-14. **Planning baseline:** `59ea987`.
-**Status:** E01–E04 implementation completed; E05 is next. Cross-engine and native forced-colors execution remain release-validation items. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
+**Status:** E01–E04 and V01 visual calibration implemented; E05 is next. Cross-engine and native forced-colors execution remain release-validation items. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
 The system remains red: 165 existing token failures and the newly visible browser/package regressions.
 **Inputs:** [system audit](SYSTEM_AUDIT.md), [milestone checklist](ROADMAP.md), and the user's subsequent authorization to rename/add tokens, reorganize structure, build components and make system-wide improvements.
 
@@ -30,7 +30,7 @@ This document is the execution sequence. `SYSTEM_AUDIT.md` is dated evidence; `R
 
 The main path is:
 
-**E01 baseline → E02 theme resolution → E03 semantic color/strokes → E04 API and package boundary → E05 behavior proof → E06–E07 component completion → E08–E09 axis and visual refinement → E10 core release validation → E11 customization → E12 new components.**
+**E01 baseline → E02 theme resolution → E03 semantic color/strokes → E04 API and package boundary → V01 quiet visual calibration → E05 behavior proof → E06–E07 component completion → E08–E09 axis and visual refinement → E10 core release validation → E11 customization → E12 new components.**
 
 Some work can be interleaved without changing that order:
 
@@ -176,6 +176,14 @@ Do not create tokens that have no distinct consumer or contract. Divider and con
 **Commit units:** canonical names and persisted-config migration; typed contracts/parity; module extraction; exports/distribution and consumer test.
 
 **Exit:** public props and classes agree, a clean consumer can import the packages, package output does not depend on internal workspace paths, and active terminology is consistent. Before removing compatibility aliases, search known consumers and document the migration. The user has authorized internal breaking cleanup; publishing those changes remains a separate action.
+
+### V01 — Quiet visual calibration · implemented
+
+The user’s seven new references revise the default visual direction before behavior expansion.
+[V01](batches/V01/README.md) records the research, shared presentation aliases, 6%/8% shadows,
+compact workspace, matched captures and explicit low-contrast limitations. The palette is
+unchanged. Standard softness and the stronger preference are audited separately against
+unchanged requirements. Remaining platform/behavior checks stay open.
 
 ### E05 — Prove the interaction architecture
 

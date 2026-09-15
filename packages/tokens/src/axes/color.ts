@@ -54,8 +54,8 @@ function themeFor(t: Theme, accent: string, neutral: string): ResolvedTheme {
  * the most common elevation bug there is -- so the tone lives in a token the theme owns.
  */
 const SHADOW_COLOR: Record<Theme, string> = {
-  light: "rgb(0 0 0 / 0.10)",
-  dark: "rgb(0 0 0 / 0.45)",
+  light: "rgb(0 0 0 / 0.06)",
+  dark: "rgb(0 0 0 / 0.08)",
 };
 
 function themePreset(t: Theme): AxisPreset {

@@ -205,7 +205,7 @@ for (const file of htmlFiles) {
 /* --- 3. Component coverage ------------------------------------------------- */
 
 const { MANIFESTS } = await import(join(root, "..", "..", "packages/styles/src/manifest.ts"));
-const allHtml = htmlFiles.map((f) => readFileSync(join(root, "dist", f), "utf8")).join("\n");
+const allHtml = htmlFiles.map((f) => readFileSync(join(docsOutput(root), f), "utf8")).join("\n");
 const unused = Object.entries(MANIFESTS)
   .filter(([, m]) => !new RegExp(`class="[^"]*\\b${m.block}\\b`).test(allHtml))
   .map(([name]) => name);

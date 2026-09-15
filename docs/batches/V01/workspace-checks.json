@@ -1,0 +1,30 @@
+{
+  "browser": "Codex Chromium in-app browser",
+  "results": {
+    "search_empty_state": "0 resources; no-match message and Clear filters action",
+    "clear_filters": "restores all four resources",
+    "category_Design": "two matching resources",
+    "published_only": "three published resources; toggles back to four",
+    "card_list_views": "both rendered and inspected",
+    "theme": "light and dark rendered and inspected",
+    "accent": "indigo \u2192 blue DOM selection confirmed",
+    "contrast": "standard \u2192 more \u2192 standard confirmed",
+    "compact_toolbar_heights_px": [
+      28,
+      28,
+      28
+    ],
+    "default_toolbar_heights_px": [
+      32,
+      32,
+      32
+    ],
+    "mobile_width_px": 390,
+    "mobile_document_width_px": 390,
+    "viewport_override": "reset after verification"
+  },
+  "limits": [
+    "Segmented arrow-key navigation remains a known E06\u2013E07 defect",
+    "No simulated OS preference or native Windows forced-color result claimed"
+  ]
+}

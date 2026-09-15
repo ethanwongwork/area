@@ -145,6 +145,13 @@ export function emitAxes(): string {
     }
   }
 
+  // OS preference by default; an explicit scoped value can opt in or restore standard.
+  out.push(rule('[data-area-contrast="more"]', { "--area-contrast-more": "1" }));
+  out.push(rule('[data-area-contrast="standard"]', { "--area-contrast-more": "0" }));
+  out.push('@media (prefers-contrast: more) {');
+  out.push(rule(':root:not([data-area-contrast])', { "--area-contrast-more": "1", ...derivedTokens() }));
+  out.push('}');
+
   // Re-derivation.
   //
   // A custom property is substituted where it is *declared*, and the result inherits as an
@@ -153,7 +160,7 @@ export function emitAxes(): string {
   // would get a 28px control with a 6px radius derived from 32. Repeating the derivations on
   // any element that carries an axis attribute makes them resolve against that element's own
   // values, which is exactly where they need to change and nowhere else.
-  const axisBearing = AXES.map((a) => `[${attributeFor(a)}]`).join(",\n" + INDENT);
+  const axisBearing = [...AXES.map((a) => `[${attributeFor(a)}]`), "[data-area-contrast]"].join(",\n" + INDENT);
   out.push("");
   out.push(`${INDENT}/* Re-derive cross-axis values wherever an axis is redeclared. */`);
   out.push(rule(axisBearing, derivedTokens()));

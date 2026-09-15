@@ -1,5 +1,9 @@
 # Project journal
 
+## 2026-09-14 — V01 quiet presentation without a palette rewrite
+
+The user's seven new references exposed that E03 had made required-indicator contrast the default visual language everywhere. V01 separates quiet control presentation from an explicit/OS increased-contrast preference using existing palette endpoints, and coordinates 6%/8% shadows, selection plates, compact table spacing and stable navigation labels. The distinction remains measurable: standard has 3,696 non-text audit shortfalls, more passes 21,120 checks, and neither result is presented as overall accessibility conformance. [The V01 study](../docs/batches/V01/README.md) preserves the references, matched captures, live workspace composition, palette hashes and next priorities; behavior and platform release work remain open.
+
 ## 2026-09-14 — E04 public vocabulary and compiled contracts
 
 Accent and neutral now name the public axis/tones consistently, with a one-time docs preference migration preserving saved choices. Literal manifest types and component-scoped positive state checks found hidden size tiers, a Nav class mismatch, undeclared table slots and dead CodeBlock toolbar markup. Packed ESM/declarations now pass strict isolated NodeNext, Node SSR and browser CSS/tree-shaking checks; Theme alone keeps a client directive. The matched contrast specimen is byte-identical and both browser matrices remain green; behavior failures and unverified RSC/peer/browser combinations stay explicit in the [E04 report](../docs/batches/E04/README.md).

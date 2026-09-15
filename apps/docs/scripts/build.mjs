@@ -1276,8 +1276,8 @@ const pages = [
 
 for (const [name, html] of pages) writeFileSync(join(out, name), html, "utf8");
 
-await buildLab(root, out, DOCS_CSS);
+const labPageCount = await buildLab(root, out, DOCS_CSS);
 
 console.log(`\n  @area/docs\n`);
-console.log(`  ${pages.length + 3} pages, ${Object.keys(demos).length} demos`);
+console.log(`  ${pages.length + labPageCount} pages, ${Object.keys(demos).length} demos`);
 console.log(`  dist/ -> ${out}\n`);

@@ -332,12 +332,11 @@ remain unchanged; the semantic foreground chooses the rung that can do the job.
 read as a block without a stroke doing the work. Its edge uses `--area-border-decorative`,
 which maps to neutral 75 in the current light-theme trial and neutral 800 in dark themes. Panels, cards,
 table rules, navigation dividers and example containers share that quiet decorative token.
-Control outlines, swatch rings and focus indicators retain their stronger tokens.
+V01 control presentation uses faint framing by default and strong indicators under the increased-contrast preference. Swatch rings and focus keep their own roles.
 The decorative tier has its own 1.1 design floor; it never identifies an interactive
 control or state. E03 strengthens normal-text and required-indicator coverage; supplementary stroke floors remain unchanged.
 
-**The docs code block has no toolbar.** The React CodeBlock wrapper still exposes an
-optional toolbar; unifying that contract remains part of the audit roadmap. Copy rides at the top right of the code itself, centred on
+**A code block has no toolbar.** E04 aligned the React wrapper with the real action slot. Copy rides at the top right of the code itself, centred on
 the first line rather than on the block, so it belongs to the code and costs no row. The one
 rule worth drawing is the line where an example's rendered component ends and its source
 begins — two different kinds of thing sharing a container. Customize sits on the preview it
@@ -512,8 +511,8 @@ See [the archive guide](../archive/playground/README.md) before consulting it.
 ## Stroke hierarchy
 
 The [current contrast contract](CONTRAST.md) defines roles, values, migration and coverage.
-Decoration remains 75/800; faint framing is 150/750 and quiet outlines are 200/750. Required
-fields use stroke-control at 450/400, with one stronger hover step. Selected controls retain
+Decoration remains 75/800; faint framing is 150/750 and quiet outlines are 200/750. V01 fields read edge-control: faint framing by default, or stroke-control at 450/400 under
+`data-area-contrast="more"`, with a corresponding hover step. Selected controls retain
 a real edge even when elevation removes decorative borders. Focus is an opaque 2px outline
 with a 2px offset and is independent of the Surface axis.
 
@@ -522,3 +521,13 @@ E03 resolves those five failures without lowering their existing aesthetic thres
 strengthens small-text, active-state and focus coverage. No syntax waiver remains.
 A native Select popup is drawn by the platform; Menu/Popover frames are styled by Area.
 There is no separate Combobox yet.
+
+
+## Quiet presentation · V01
+
+[V01](batches/V01/README.md) supersedes E03’s default strong control appearance. Shared shadows
+use 6% black in light / 8% in dark; outlined contact elevation is 0 1px 1px 0. Soft control
+edges, selected plates and pale neutral layers are a coherent presentation, with the explicit
+non-text contrast limitations recorded in [CONTRAST.md](CONTRAST.md). Text/focus gates and
+palette values remain unchanged. The [workspace specimen](http://localhost:4321/workbench.html)
+shows compact composition, working filters and all-theme presentation controls.
