@@ -1,0 +1,39 @@
+
+> area@0.0.0 test:consumer
+> node scripts/check-consumer.mjs
+
+PASS @area/tokens ./types → ./dist/config.d.ts
+PASS @area/tokens ./import → ./dist/config.js
+PASS @area/tokens ./default → ./dist/config.js
+PASS @area/tokens ./tokens.json → ./dist/tokens.json
+PASS @area/tokens ./css/tokens.css → ./dist/css/tokens.css
+PASS @area/tokens ./css/axes.css → ./dist/css/axes.css
+PASS @area/tokens ./css/properties.css → ./dist/css/properties.css
+PASS @area/tokens ./config/types → ./dist/config.d.ts
+PASS @area/tokens ./config/default → ./dist/config.js
+PASS @area/tokens ./types/types → ./dist/tokens.d.ts
+PASS @area/styles . → ./dist/area.css
+PASS @area/styles ./area.css → ./dist/area.css
+PASS @area/styles ./manifest/types → ./dist/modules/manifest.d.ts
+PASS @area/styles ./manifest/import → ./dist/modules/manifest.js
+PASS @area/styles ./manifest/default → ./dist/modules/manifest.js
+PASS @area/react ./types → ./dist/modules/index.d.ts
+PASS @area/react ./import → ./dist/modules/index.js
+PASS @area/react ./default → ./dist/modules/index.js
+PASS @area/react ./variants/types → ./dist/modules/variants.d.ts
+PASS @area/react ./variants/import → ./dist/modules/variants.js
+PASS @area/react ./variants/default → ./dist/modules/variants.js
+PASS @area/react ./theme/types → ./dist/modules/components/Theme.d.ts
+PASS @area/react ./theme/import → ./dist/modules/components/Theme.js
+PASS @area/react ./theme/default → ./dist/modules/components/Theme.js
+PASS isolated strict NodeNext declarations + expected compile errors
+{
+  "imports": "pass (tokens root/config/types, React root/theme/variants, manifest, CSS)",
+  "runtime": "all manifest variants and invalid values pass",
+  "ssr": "pass, no DOM globals, nested Theme inherits",
+  "browser": "JS + CSS bundle passes",
+  "helperBytes": 1417,
+  "buttonBytes": 2236,
+  "treeShaking": "unused components and manifests removed",
+  "boundary": "Theme directive preserved; RSC framework integration remains unverified"
+}

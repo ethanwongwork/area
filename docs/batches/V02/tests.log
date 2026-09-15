@@ -1,0 +1,26 @@
+
+> area@0.0.0 test
+> npm run test -w @area/tokens
+
+
+> @area/tokens@0.0.0 test
+> vitest run
+
+
+ RUN  v5.0.0 /Users/ethanwong/Desktop/area/packages/tokens
+
+ ✓ src/color/apca.test.ts (4 tests) 3ms
+ ✓ src/semantic/stroke.test.ts (4 tests) 16ms
+ ✓ src/color/gamut.test.ts (7 tests) 41ms
+ ✓ src/color/scale.test.ts (133 tests) 44ms
+ ✓ src/emit/config.test.ts (2 tests) 8ms
+ ✓ src/axes/registry.test.ts (17 tests) 22ms
+ ✓ src/emit/colors.test.ts (7 tests) 40ms
+ ✓ src/color/oklab.oracle.test.ts (8 tests) 159ms
+ ✓ src/contrast/contrast.test.ts (16140 tests) 6395ms
+
+ Test Files  9 passed (9)
+      Tests  16322 passed (16322)
+   Start at  23:46:05
+   Duration  6.78s (tests 87%, transform 8%, import 5%)
+

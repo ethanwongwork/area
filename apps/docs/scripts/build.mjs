@@ -261,14 +261,14 @@ function sidebar(activeSlug) {
     ${railToggle("nav", "Hide navigation")}
   </div>
   <div class="area-panel__body docs-sidebar__body">
-  ${group("Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes"), item("./lab.html", "System lab", "lab")].join("\n      "))}
+  ${group("Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes"), item("./gallery.html", "Component gallery", "gallery"), item("./lab.html", "System lab", "lab")].join("\n      "))}
   ${group("Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   ${group("Components", COMPONENT_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   </div>
 </aside>`;
 }
 
-function page({ slug, title, lede, body, toc = [] }) {
+function page({ slug, title, lede, body, toc = [], wide = false }) {
   /*
    * On this page keeps the right rail as its home. The inspector shares that column, and
    * the two never show at once -- when the panel is open the outline is hidden rather than
@@ -297,7 +297,7 @@ ${customizer(inspectorBody())}
 <div class="docs-shell" data-nav="open" data-panel="open"${toc.length ? "" : ' data-toc="none"'}>
   ${sidebar(slug)}
   <main class="docs-main">
-    <div class="docs-content">
+    <div class="docs-content${wide ? " docs-content--wide" : ""}">
       <h1 class="docs-title">${escapeHtml(title)}</h1>
       <p class="docs-lede">${escapeHtml(lede)}</p>
       ${body}
@@ -311,6 +311,34 @@ ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 </body>
 </html>`;
+}
+
+/* One tile per public component family. Compound pieces appear inside their parent. */
+function galleryPage() {
+  const specs = [
+    ...COMPONENT_PAGES.map((spec) => ({
+      slug: spec.slug,
+      name: spec.name,
+      href: `./${spec.slug}.html`,
+      demo: `Gallery${spec.exportName ?? spec.name}`,
+    })),
+  ].sort((a, b) => a.name.localeCompare(b.name, "en"));
+  const tiles = specs.map((spec) => {
+    const demo = demos[spec.demo];
+    if (!demo) throw new Error(`Gallery specimen missing: ${spec.demo}`);
+    return `<article class="docs-gallery-tile" id="gallery-${spec.slug}" aria-labelledby="gallery-title-${spec.slug}">
+      <header class="docs-gallery-tile__header">
+        <h2 class="docs-gallery-tile__title" id="gallery-title-${spec.slug}">${escapeHtml(spec.name)}</h2>
+        <a class="area-button area-button--ghost area-button--neutral area-button--xs" href="${spec.href}" aria-label="${escapeHtml(spec.name)} documentation"><span class="area-button__label">Docs</span></a>
+      </header>
+      <div class="docs-gallery-tile__preview"><div class="docs-gallery-tile__specimen">${demo.html}</div></div>
+    </article>`;
+  }).join("\n");
+  return page({
+    slug: "gallery", title: "Component gallery", wide: true,
+    lede: "The building blocks of Area, from A to Z. Real components, a few useful variants, and room to see how they fit together.",
+    body: `<p class="docs-note">Use Customize to compare themes and density. These are presentation specimens; open Docs for the component’s API and interaction guidance.</p><div class="docs-gallery">${tiles}</div>`,
+  });
 }
 
 /* --- Component pages -------------------------------------------------------- */
@@ -361,7 +389,7 @@ function componentPage(spec) {
 ${codeBlock("npm install @area/react @area/styles")}
 <h2 class="docs-h2" id="usage">Usage</h2>
 <div class="docs-stack">
-${codeBlock(`import { ${spec.name} } from "@area/react";\nimport "@area/styles/area.css";`)}
+${codeBlock(`import { ${spec.exportName ?? spec.name} } from "@area/react";\nimport "@area/styles/area.css";`)}
 ${codeBlock(demos[spec.examples[0].demo].code)}
 </div>`;
 
@@ -1264,6 +1292,7 @@ cpSync(join(root, "assets/icons-filled.svg"), join(out, "icons-filled.svg"));
 const pages = [
   ["index.html", indexPage()],
   ["axes.html", axesPage()],
+  ["gallery.html", galleryPage()],
   ["color.html", colorPage()],
   ["typography.html", typographyPage()],
   ["iconography.html", iconographyPage()],

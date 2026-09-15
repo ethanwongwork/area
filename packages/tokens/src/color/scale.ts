@@ -92,7 +92,7 @@ export interface VividChoice {
 }
 
 export interface StrokeChoice {
-  /** Resting stroke, per theme. */
+  /** Raw palette stroke candidate, per theme. Semantic outlines use measured ink tints. */
   rest: { light: Level; dark: Level };
   /** Hover, one tier louder. */
   hover: { light: Level; dark: Level };
@@ -332,7 +332,8 @@ function chooseVivid(steps: readonly ScaleStep[], theme: Theme): Level {
  * while a green one measured 1.80 -- the same token, twice the weight, and the loud end two
  * and a half times heavier than the neutral outline beside it. Walking each family to its own
  * quietest passing rung lands all eleven between 1.30 and 1.45, which is what "the same
- * stroke" actually means to the eye.
+ * stroke" means in luminance. These remain raw-ramp diagnostics; semantic/stroke.ts
+ * additionally controls chroma, because equal luminance did not make green/teal quiet.
  *
  * This is the inverse of the rule foregrounds follow. There a shared rung is right, because
  * the goal is comparable *chroma*; here the goal is comparable *weight*, and a shared rung

@@ -1,0 +1,835 @@
+{
+  "recipe": "Existing textTonal ink composited in sRGB on canonical neutral surface, at minimum 8-bit opacity passing unchanged floors plus quantization margin. No palette, hue or chroma edits.",
+  "summary": [
+    {
+      "theme": "light",
+      "state": "rest",
+      "beforeChromaMax": 0.15720697810327694,
+      "afterChromaMax": 0.032722054328730245,
+      "afterContrastMin": 1.3102074044196728,
+      "afterContrastMax": 1.3210794516198847,
+      "afterApcaMin": 15.352826368758782
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "beforeChromaMax": 0.18925570511437748,
+      "afterChromaMax": 0.07626895147527693,
+      "afterContrastMin": 1.9100692162731643,
+      "afterContrastMax": 1.9293987837539675,
+      "afterApcaMin": 36.40258250087777
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "beforeChromaMax": 0.2131106751855815,
+      "afterChromaMax": 0.015119845561490106,
+      "afterContrastMin": 1.312453225359333,
+      "afterContrastMax": 1.3278497832046694,
+      "afterApcaMin": 0
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "beforeChromaMax": 0.20283150342608194,
+      "afterChromaMax": 0.036888211956087054,
+      "afterContrastMin": 2.3247343152049864,
+      "afterContrastMax": 2.3599859979009343,
+      "afterApcaMin": 15.110905163995907
+    }
+  ],
+  "rows": [
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "red",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#ffc9cb",
+        "chroma": 0.061593968635187,
+        "wcag": 1.4513770973956188,
+        "apca": 21.46399334146459
+      },
+      "after": {
+        "hex": "#f1dbe1",
+        "chroma": 0.02545744546565545,
+        "wcag": 1.315788637040302,
+        "apca": 15.612578622777326
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "orange",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#fedbc2",
+        "chroma": 0.0513347078795107,
+        "wcag": 1.3022624546058945,
+        "apca": 14.950100328346808
+      },
+      "after": {
+        "hex": "#edded0",
+        "chroma": 0.025049201871379555,
+        "wcag": 1.315770618302441,
+        "apca": 15.614231793882304
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "yellow",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#f9d17a",
+        "chroma": 0.1151206296423731,
+        "wcag": 1.4553860525701194,
+        "apca": 21.587906123302965
+      },
+      "after": {
+        "hex": "#e7e0cf",
+        "chroma": 0.023977858467782904,
+        "wcag": 1.3157032884511213,
+        "apca": 15.614222495110786
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "lime",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#bee783",
+        "chroma": 0.13490932195366373,
+        "wcag": 1.404913995867075,
+        "apca": 19.515762161695843
+      },
+      "after": {
+        "hex": "#dde3cf",
+        "chroma": 0.027489866767973648,
+        "wcag": 1.3155369809253776,
+        "apca": 15.60715145333806
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "green",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#82f7c4",
+        "chroma": 0.12961330470804233,
+        "wcag": 1.3083643048760762,
+        "apca": 15.051305144374153
+      },
+      "after": {
+        "hex": "#d0e5dd",
+        "chroma": 0.02476705403639709,
+        "wcag": 1.3179534012329712,
+        "apca": 15.716670986824974
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "teal",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#03fae3",
+        "chroma": 0.15720697810327694,
+        "wcag": 1.3301810245910253,
+        "apca": 15.533638058596102
+      },
+      "after": {
+        "hex": "#d1e5e3",
+        "chroma": 0.021421099468164343,
+        "wcag": 1.3102074044196728,
+        "apca": 15.352826368758782
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "cyan",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#b4e9ff",
+        "chroma": 0.06194702846505791,
+        "wcag": 1.3092085646074805,
+        "apca": 15.258572625440717
+      },
+      "after": {
+        "hex": "#d2e4e9",
+        "chroma": 0.020400402292218657,
+        "wcag": 1.311325784076947,
+        "apca": 15.40646416392547
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "blue",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#c1d9fd",
+        "chroma": 0.05626241090751124,
+        "wcag": 1.4372730179090012,
+        "apca": 20.92806599112545
+      },
+      "after": {
+        "hex": "#d6e1f1",
+        "chroma": 0.024901926914746794,
+        "wcag": 1.320797205676941,
+        "apca": 15.852781664681478
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "indigo",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#ccd6fd",
+        "chroma": 0.054968793263440466,
+        "wcag": 1.4379158709375996,
+        "apca": 20.96269392132394
+      },
+      "after": {
+        "hex": "#e0def5",
+        "chroma": 0.031206897808731513,
+        "wcag": 1.317731097746849,
+        "apca": 15.709704002491321
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "purple",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#dbd2fe",
+        "chroma": 0.0606884947204137,
+        "wcag": 1.4322931873447295,
+        "apca": 20.73102327391782
+      },
+      "after": {
+        "hex": "#e6dcf3",
+        "chroma": 0.032722054328730245,
+        "wcag": 1.3210794516198847,
+        "apca": 15.864891845464927
+      }
+    },
+    {
+      "theme": "light",
+      "state": "rest",
+      "family": "pink",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#fec8d9",
+        "chroma": 0.06484364047103745,
+        "wcag": 1.4504938612349283,
+        "apca": 21.429447251262964
+      },
+      "after": {
+        "hex": "#f0dbe7",
+        "chroma": 0.027922967325684087,
+        "wcag": 1.3131923396158585,
+        "apca": 15.490974581491118
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "red",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#ff8c93",
+        "chroma": 0.13916104427476475,
+        "wcag": 2.228223045310101,
+        "apca": 43.53415914186687
+      },
+      "after": {
+        "hex": "#dfaebb",
+        "chroma": 0.05945400898522546,
+        "wcag": 1.9249124549983336,
+        "apca": 36.791175450903424
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "orange",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#fe9c51",
+        "chroma": 0.14735700776977395,
+        "wcag": 2.081605039051641,
+        "apca": 40.35217384890781
+      },
+      "after": {
+        "hex": "#d6b596",
+        "chroma": 0.05681661266823705,
+        "wcag": 1.924984387293269,
+        "apca": 36.81143370323737
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "yellow",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#dba102",
+        "chroma": 0.15283459870135044,
+        "wcag": 2.304947124812606,
+        "apca": 45.157982779398424
+      },
+      "after": {
+        "hex": "#c9ba94",
+        "chroma": 0.053951293175818746,
+        "wcag": 1.9204938707571084,
+        "apca": 36.71373637464343
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "lime",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#86bc01",
+        "chroma": 0.18925570511437748,
+        "wcag": 2.280775975015624,
+        "apca": 44.69712314826468
+      },
+      "after": {
+        "hex": "#b3c094",
+        "chroma": 0.06165261353160954,
+        "wcag": 1.9293987837539675,
+        "apca": 36.948793857883906
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "green",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#00c787",
+        "chroma": 0.1624454355914367,
+        "wcag": 2.2060622903410243,
+        "apca": 42.71171560347348
+      },
+      "after": {
+        "hex": "#97c5b5",
+        "chroma": 0.05365004487162961,
+        "wcag": 1.914381217936994,
+        "apca": 36.5288675687426
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "teal",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#03c1af",
+        "chroma": 0.12927320691124855,
+        "wcag": 2.2700527009886304,
+        "apca": 44.09313728794713
+      },
+      "after": {
+        "hex": "#98c4c0",
+        "chroma": 0.04684616563442048,
+        "wcag": 1.9104446609420718,
+        "apca": 36.429329137152784
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "cyan",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#01c6f7",
+        "chroma": 0.14412511614522197,
+        "wcag": 2.0149675524526125,
+        "apca": 38.38733247667005
+      },
+      "after": {
+        "hex": "#99c2cd",
+        "chroma": 0.046234777673626035,
+        "wcag": 1.9173300045654966,
+        "apca": 36.612676843030826
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "blue",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#79aeff",
+        "chroma": 0.13056164365928055,
+        "wcag": 2.2552974585764645,
+        "apca": 44.30930231729702
+      },
+      "after": {
+        "hex": "#a4bddf",
+        "chroma": 0.055763929059661876,
+        "wcag": 1.9225340253215228,
+        "apca": 36.760657485109554
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "indigo",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#98a9fe",
+        "chroma": 0.12388721460217972,
+        "wcag": 2.224242102889484,
+        "apca": 43.73773084417776
+      },
+      "after": {
+        "hex": "#bbb6e8",
+        "chroma": 0.07038906476246579,
+        "wcag": 1.914420381381389,
+        "apca": 36.552347327967006
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "purple",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#b89fff",
+        "chroma": 0.13670059179512975,
+        "wcag": 2.2242642519986977,
+        "apca": 43.724821757234736
+      },
+      "after": {
+        "hex": "#c9b2e6",
+        "chroma": 0.07626895147527693,
+        "wcag": 1.9100817996086428,
+        "apca": 36.427636055521965
+      }
+    },
+    {
+      "theme": "light",
+      "state": "hover",
+      "family": "pink",
+      "ground": "#ffffff",
+      "before": {
+        "hex": "#ff87b3",
+        "chroma": 0.15223980624193123,
+        "wcag": 2.2415484386683597,
+        "apca": 43.7795171286239
+      },
+      "after": {
+        "hex": "#deaec8",
+        "chroma": 0.065267279005307,
+        "wcag": 1.9100692162731643,
+        "apca": 36.40258250087777
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "red",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#6d001b",
+        "chroma": 0.13578510326879015,
+        "wcag": 1.3374235873485478,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#373131",
+        "chroma": 0.008627484478949612,
+        "wcag": 1.3214104241179483,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "orange",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#532603",
+        "chroma": 0.08017178710607077,
+        "wcag": 1.3216029495563553,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#36322f",
+        "chroma": 0.0077713802598425126,
+        "wcag": 1.3278497832046694,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "yellow",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#432f01",
+        "chroma": 0.06502280174631744,
+        "wcag": 1.3210752003677948,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#35322b",
+        "chroma": 0.012807286880383403,
+        "wcag": 1.3185052749873096,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "lime",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#263900",
+        "chroma": 0.08208879181407003,
+        "wcag": 1.3387050862366945,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#30332c",
+        "chroma": 0.01286231270240073,
+        "wcag": 1.3129461216284877,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "green",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#003d24",
+        "chroma": 0.07309236297049936,
+        "wcag": 1.359020569230713,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#2b342f",
+        "chroma": 0.015119845561490106,
+        "wcag": 1.312453225359333,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "teal",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#033a34",
+        "chroma": 0.05402313740118125,
+        "wcag": 1.3314933402966351,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#2a3433",
+        "chroma": 0.013668691436598693,
+        "wcag": 1.3144487959620719,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "cyan",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#013848",
+        "chroma": 0.05883092383306451,
+        "wcag": 1.3329824068116831,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#2d3335",
+        "chroma": 0.009029494672502155,
+        "wcag": 1.3137010918232823,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "blue",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#003075",
+        "chroma": 0.12809079313622052,
+        "wcag": 1.3483276042582357,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#303236",
+        "chroma": 0.007638836660156967,
+        "wcag": 1.3126321025798757,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "indigo",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#351ab0",
+        "chroma": 0.2131106751855815,
+        "wcag": 1.5461237909769332,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#313236",
+        "chroma": 0.007210711140677716,
+        "wcag": 1.3165799112080852,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "purple",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#5500a3",
+        "chroma": 0.2101167573907489,
+        "wcag": 1.5373540510282522,
+        "apca": 7.642660341361093
+      },
+      "after": {
+        "hex": "#333237",
+        "chroma": 0.008867780573435572,
+        "wcag": 1.3262663225225755,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "rest",
+      "family": "pink",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#6a0138",
+        "chroma": 0.13806645577158697,
+        "wcag": 1.3440159462889718,
+        "apca": 0
+      },
+      "after": {
+        "hex": "#373133",
+        "chroma": 0.009222391748621848,
+        "wcag": 1.3241823496743614,
+        "apca": 0
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "red",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#b40233",
+        "chroma": 0.1948654336443592,
+        "wcag": 2.4059361287655747,
+        "apca": 18.442894879166975
+      },
+      "after": {
+        "hex": "#645354",
+        "chroma": 0.0226293147074781,
+        "wcag": 2.333721461483743,
+        "apca": 15.220187592542228
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "orange",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#9c4b00",
+        "chroma": 0.12921808041337382,
+        "wcag": 2.745390558695967,
+        "apca": 20.080045042512072
+      },
+      "after": {
+        "hex": "#5f554e",
+        "chroma": 0.017283146716201358,
+        "wcag": 2.3247343152049864,
+        "apca": 15.110905163995907
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "yellow",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#7f5c02",
+        "chroma": 0.10183297863220861,
+        "wcag": 2.7567296873246248,
+        "apca": 19.831880140065103
+      },
+      "after": {
+        "hex": "#5f5643",
+        "chroma": 0.031627180085636974,
+        "wcag": 2.3269445991981947,
+        "apca": 15.143450859777987
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "lime",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#4a6a01",
+        "chroma": 0.12446260885284567,
+        "wcag": 2.691772490914535,
+        "apca": 19.165394398601386
+      },
+      "after": {
+        "hex": "#515a45",
+        "chroma": 0.03493006813181149,
+        "wcag": 2.3265608040926864,
+        "apca": 15.136315175609209
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "green",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#007249",
+        "chroma": 0.11049099958507798,
+        "wcag": 2.8121133877713467,
+        "apca": 20.72146806864604
+      },
+      "after": {
+        "hex": "#435d51",
+        "chroma": 0.036888211956087054,
+        "wcag": 2.3465882865385295,
+        "apca": 15.384109003878594
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "teal",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#026f64",
+        "chroma": 0.08617723626803173,
+        "wcag": 2.7777910426569994,
+        "apca": 20.32783187361494
+      },
+      "after": {
+        "hex": "#425c58",
+        "chroma": 0.03184177944944905,
+        "wcag": 2.330701895626195,
+        "apca": 15.21136696651367
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "cyan",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#036883",
+        "chroma": 0.08944945070042647,
+        "wcag": 2.658470898213038,
+        "apca": 19.1298375251974
+      },
+      "after": {
+        "hex": "#4a5a60",
+        "chroma": 0.022074235552079935,
+        "wcag": 2.3460469915778943,
+        "apca": 15.351367780977359
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "blue",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#0254bf",
+        "chroma": 0.18185860972032,
+        "wcag": 2.4267127487459534,
+        "apca": 17.05329310011878
+      },
+      "after": {
+        "hex": "#505863",
+        "chroma": 0.02061762391474204,
+        "wcag": 2.3417234387467527,
+        "apca": 15.293750973360076
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "indigo",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#4644cb",
+        "chroma": 0.20223611958274962,
+        "wcag": 2.3677899944696685,
+        "apca": 16.224745764931516
+      },
+      "after": {
+        "hex": "#545763",
+        "chroma": 0.01982779279306139,
+        "wcag": 2.344338344618023,
+        "apca": 15.318145380259246
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "purple",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#6e37c2",
+        "chroma": 0.20283150342608194,
+        "wcag": 2.3989817984233657,
+        "apca": 16.671825433095382
+      },
+      "after": {
+        "hex": "#595664",
+        "chroma": 0.022736920718380547,
+        "wcag": 2.3599859979009343,
+        "apca": 15.487454378744975
+      }
+    },
+    {
+      "theme": "dark",
+      "state": "hover",
+      "family": "pink",
+      "ground": "#1d1d1d",
+      "before": {
+        "hex": "#af0160",
+        "chroma": 0.1992037652462547,
+        "wcag": 2.405047519014325,
+        "apca": 18.33364016521004
+      },
+      "after": {
+        "hex": "#645358",
+        "chroma": 0.023711580369859753,
+        "wcag": 2.3440748005596976,
+        "apca": 15.331744806166803
+      }
+    }
+  ]
+}

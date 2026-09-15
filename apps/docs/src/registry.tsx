@@ -12,8 +12,9 @@ import * as form from "./demos/form.tsx";
 import * as display from "./demos/display.tsx";
 import * as theme from "./demos/theme.tsx";
 import * as nav from "./demos/nav.tsx";
+import * as gallery from "./demos/gallery.tsx";
 
-export const DEMOS = { ...button, ...form, ...display, ...nav, ...theme } as Record<string, () => unknown>;
+export const DEMOS = { ...button, ...form, ...display, ...nav, ...theme, ...gallery } as Record<string, () => unknown>;
 
 export const SOURCES = {
   theme: "src/demos/theme.tsx",
@@ -21,4 +22,5 @@ export const SOURCES = {
   form: "src/demos/form.tsx",
   display: "src/demos/display.tsx",
   nav: "src/demos/nav.tsx",
+  gallery: "src/demos/gallery.tsx",
 };

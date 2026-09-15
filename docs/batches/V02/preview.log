@@ -1,0 +1,20 @@
+
+> area@0.0.0 test:preview
+> npm run test -w @area/docs
+
+
+> @area/docs@0.0.0 test
+> node --test scripts/preview.test.mjs
+
+✔ snapshot publication is atomic; invalid builds retain the last successful page (20.628084ms)
+✔ build queue serializes bursts and recovers after failure (0.407208ms)
+✔ staged output rejects paths outside the disposable docs cache (0.570416ms)
+✔ duplicate notifications and unchanged writes do not rebuild; edits and deletion do (4.981375ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 80.222792

@@ -1,7 +1,7 @@
 # Area — implementation plan
 
 **Updated:** 2026-09-14. **Planning baseline:** `59ea987`.
-**Status:** E01–E04 and V01 visual calibration implemented; E05 is next. Cross-engine and native forced-colors execution remain release-validation items. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
+**Status:** E01–E04 and V01–V02 visual calibration implemented; E05 is next. Cross-engine and native forced-colors execution remain release-validation items. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
 The system remains red: 165 existing token failures and the newly visible browser/package regressions.
 **Inputs:** [system audit](SYSTEM_AUDIT.md), [milestone checklist](ROADMAP.md), and the user's subsequent authorization to rename/add tokens, reorganize structure, build components and make system-wide improvements.
 
@@ -30,7 +30,7 @@ This document is the execution sequence. `SYSTEM_AUDIT.md` is dated evidence; `R
 
 The main path is:
 
-**E01 baseline → E02 theme resolution → E03 semantic color/strokes → E04 API and package boundary → V01 quiet visual calibration → E05 behavior proof → E06–E07 component completion → E08–E09 axis and visual refinement → E10 core release validation → E11 customization → E12 new components.**
+**E01 baseline → E02 theme resolution → E03 semantic color/strokes → E04 API and package boundary → V01–V02 quiet visual calibration and gallery → E05 behavior proof → E06–E07 component completion → E08–E09 axis and visual refinement → E10 core release validation → E11 customization → E12 new components.**
 
 Some work can be interleaved without changing that order:
 
@@ -184,6 +184,15 @@ The user’s seven new references revise the default visual direction before beh
 compact workspace, matched captures and explicit low-contrast limitations. The palette is
 unchanged. Standard softness and the stronger preference are audited separately against
 unchanged requirements. Remaining platform/behavior checks stay open.
+
+### V02 — Tonal harmony, tighter shadows and component gallery · implemented
+
+[V02](batches/V02/README.md) reduces the green outline’s excess chroma through a shared
+semantic tint recipe, preserving palette inputs and the existing contrast floors. All
+shadow tiers become shorter and fainter (4% light /6% dark), with one contact shadow shared
+by boxed button variants. The gallery presents 32 alphabetical component families in square
+tiles, covering all 36 manifest blocks; Code, Code block and Segmented gain dedicated docs.
+Responsive rails now open in flow without overlapping content. Behavior work remains E05.
 
 ### E05 — Prove the interaction architecture
 

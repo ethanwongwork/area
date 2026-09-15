@@ -1,0 +1,533 @@
+{
+  "desktop": {
+    "overflow": false,
+    "tiles": [
+      {
+        "height": 318.6640625,
+        "id": "gallery-alert",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-avatar",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-badge",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-button",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-card",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-checkbox",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-chip",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-code",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-code-block",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-dialog",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-field",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-input",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-kbd",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-menu",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-nav",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-panel",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-popover",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-progress",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-radio",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-segmented",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-select",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-separator",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-skeleton",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-slider",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-spinner",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-switch",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-table",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-tabs",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-textarea",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-toast",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-token",
+        "overflow": [],
+        "width": 318.6640625
+      },
+      {
+        "height": 318.6640625,
+        "id": "gallery-tooltip",
+        "overflow": [],
+        "width": 318.6640625
+      }
+    ],
+    "width": 1280
+  },
+  "mobile": {
+    "overflow": false,
+    "tiles": [
+      {
+        "height": 342,
+        "id": "gallery-alert",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-avatar",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-badge",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-button",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-card",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-checkbox",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-chip",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-code",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-code-block",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-dialog",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-field",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-input",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-kbd",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-menu",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-nav",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-panel",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-popover",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-progress",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-radio",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-segmented",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-select",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-separator",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-skeleton",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-slider",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-spinner",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-switch",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-table",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-tabs",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-textarea",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-toast",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-token",
+        "width": 342
+      },
+      {
+        "height": 342,
+        "id": "gallery-tooltip",
+        "width": 342
+      }
+    ],
+    "width": 390
+  },
+  "darkCompact": {
+    "overflow": false,
+    "tiles": [
+      {
+        "h": 374,
+        "id": "gallery-alert",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-avatar",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-badge",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-button",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-card",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-checkbox",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-chip",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-code",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-code-block",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-dialog",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-field",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-input",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-kbd",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-menu",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-nav",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-panel",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-popover",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-progress",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-radio",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-segmented",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-select",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-separator",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-skeleton",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-slider",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-spinner",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-switch",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-table",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-tabs",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-textarea",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-toast",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-token",
+        "w": 374
+      },
+      {
+        "h": 374,
+        "id": "gallery-tooltip",
+        "w": 374
+      }
+    ],
+    "width": 1280
+  },
+  "mobileRails": "open in flow, focus on close; closing restores corner focus; desktop nav restored"
+}

@@ -1,5 +1,9 @@
 # Project journal
 
+## 2026-09-14 — V02 tonal harmony and component gallery
+
+Matching outline luminance alone left green visibly neon beside other tones. V02 derives all chromatic strokes as measured tints of existing readable ink, cutting green rest chroma from 0.1296 to 0.0248 while preserving palette inputs and contrast floors; shadows now use 4%/6% ink with much shorter offset/blur and a shared boxed-button contact shadow. The new alphabetical gallery exposes 32 component families in native-sized square specimens, including dedicated Code, Code block and Segmented docs; mobile review also fixed a rail cascade overlap and preserved desktop preferences across resizing. [V02 evidence](../docs/batches/V02/README.md) records captures, palette hashes and checks; E05 behavior architecture remains next, with soft-mode limitations explicit.
+
 ## 2026-09-14 — V01 quiet presentation without a palette rewrite
 
 The user's seven new references exposed that E03 had made required-indicator contrast the default visual language everywhere. V01 separates quiet control presentation from an explicit/OS increased-contrast preference using existing palette endpoints, and coordinates 6%/8% shadows, selection plates, compact table spacing and stable navigation labels. The distinction remains measurable: standard has 3,696 non-text audit shortfalls, more passes 21,120 checks, and neither result is presented as overall accessibility conformance. [The V01 study](../docs/batches/V01/README.md) preserves the references, matched captures, live workspace composition, palette hashes and next priorities; behavior and platform release work remain open.

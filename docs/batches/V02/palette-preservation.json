@@ -1,0 +1,12 @@
+[
+  {
+    "path": "packages/tokens/src/color/palette.json",
+    "unchanged": true,
+    "sha256": "8035be3c95f72da6dc95ec407e6ca27be794cefdcf376b50dd9f9f0be5bed64c"
+  },
+  {
+    "path": "packages/tokens/src/color/curves.ts",
+    "unchanged": true,
+    "sha256": "d85f91e99275c1d66c3799a3cff91a04852c3ddd2c5462f6c7d81ac08f030e39"
+  }
+]

@@ -41,7 +41,10 @@ Existing supplementary tokens remain distinct from required indicators:
 
 No duplicate divider/container aliases were introduced: their current consumers share one
 purpose and treatment. V01 adds presentation aliases so soft and increased-contrast appearances share the same endpoints.
-Tonal `*-border` recipes remain quiet outline definitions; required danger edges use `fg-danger`.
+V02 tonal `*-border` recipes blend existing readable family ink onto the canonical neutral
+surface and measure unchanged 1.3/1.9 floors (plus dark hover APCA 15). This avoids saturated
+green/teal raw-rung outlines without editing the palette. These semantic colors have no raw
+rung number. They remain quiet outline definitions; required danger edges use `fg-danger`.
 
 ## Soft presentation and increased contrast
 

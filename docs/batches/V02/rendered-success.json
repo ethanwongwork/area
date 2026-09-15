@@ -1,0 +1,37 @@
+[
+  {
+    "background": "rgb(0, 131, 86)",
+    "border": "rgba(0, 0, 0, 0)",
+    "classes": "area-button area-button--solid area-button--success area-button--md",
+    "shadow": "rgba(0, 0, 0, 0.04) 0px 0.5px 1px -0.5px",
+    "text": "Success"
+  },
+  {
+    "background": "rgb(0, 131, 86)",
+    "border": "rgba(0, 0, 0, 0)",
+    "classes": "area-button area-button--solid area-button--success area-button--sm",
+    "shadow": "rgba(0, 0, 0, 0.04) 0px 0.5px 1px -0.5px",
+    "text": "success"
+  },
+  {
+    "background": "rgb(241, 251, 245)",
+    "border": "rgb(235, 246, 240)",
+    "classes": "area-button area-button--soft area-button--success area-button--sm",
+    "shadow": "rgba(0, 0, 0, 0.04) 0px 0.5px 1px -0.5px",
+    "text": "success"
+  },
+  {
+    "background": "rgb(255, 255, 255)",
+    "border": "rgb(208, 229, 221)",
+    "classes": "area-button area-button--outline area-button--success area-button--sm",
+    "shadow": "rgba(0, 0, 0, 0.04) 0px 0.5px 1px -0.5px",
+    "text": "success"
+  },
+  {
+    "background": "rgba(0, 0, 0, 0)",
+    "border": "rgba(0, 0, 0, 0)",
+    "classes": "area-button area-button--ghost area-button--success area-button--sm",
+    "shadow": "none",
+    "text": "success"
+  }
+]

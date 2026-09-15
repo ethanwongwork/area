@@ -294,20 +294,17 @@ green, lime, orange, teal and yellow are pinned at 3:1 there and only reach AA a
 walking them down to 600 for white arrives somewhere muddy (yellow-600 is `#936b02`).
 Nothing hardcodes the split: `chooseSolid` walks from peak chroma and measures.
 
-**Tonal strokes are computed per family, not read from a shared rung.** `quietestStroke` in
-`scale.ts` walks each family to the quietest rung that still clears the stroke tier, the same
-shape `chooseSolid` and `chooseVivid` use. A rung is a lightness and hues do not share a
-luminance at one: at rung 400 an indigo stroke measured 3.68:1 on white against a green's
-1.80 — one token, twice the weight, and the loud end two and a half times heavier than the
-neutral outline beside it. Walking per family lands all eleven between 1.30 and 1.45.
+**Tonal strokes balance chroma as well as luminance.** The old raw-rung walk made green
+and teal much more saturated than neighboring outlines, even when brightness contrast was
+similar. V02 derives a tint from each family's existing readable ink and the canonical
+neutral surface. It measures the faintest quantized blend that preserves the existing
+1.3 resting / 1.9 hover floors and the dark hover APCA floor of 15.
 
-**This is the inverse of the foreground rule.** A foreground wants a shared rung, because the
-goal there is comparable *chroma*. A stroke wants comparable *weight*, and a shared rung
-cannot deliver it.
-
-Tonal strokes are held to the **ambient** tier, not the resting one — the same reading the
-neutral outline button gets. An outline control is identified by its label and its shape; the
-stroke is definition, not the affordance.
+The palette itself stays unchanged. A semantic stroke is now a derived color, so it has no
+numbered rung; raw palette stroke candidates remain diagnostic. The canonical ground is
+fixed per theme rather than following the neutral axis, keeping axis ownership disjoint.
+[The V02 measurements](batches/V02/tonal-strokes.json) include all eleven hues, both states
+and both themes. Foregrounds still use their existing readable shared rungs.
 
 **Four neutral foregrounds, not five.** `fg-default`, `fg-muted`, `fg-placeholder`,
 `fg-disabled`. There was a fifth, `fg-subtle`, sitting one rung from muted and one from
@@ -531,3 +528,13 @@ edges, selected plates and pale neutral layers are a coherent presentation, with
 non-text contrast limitations recorded in [CONTRAST.md](CONTRAST.md). Text/focus gates and
 palette values remain unchanged. The [workspace specimen](http://localhost:4321/workbench.html)
 shows compact composition, working filters and all-theme presentation controls.
+
+
+## Tighter elevation and component overview · V02
+
+[V02](batches/V02/README.md) refines the quiet direction further. Shadow ink is now 4% black
+in light / 6% in dark, with short offsets and negative spread at every non-flat tier. The
+default contact shadow is 0 0.5px 1px -0.5px. Solid, soft and outline buttons share it;
+ghost buttons remain unboxed and shadowless. Container/overlay tiers retain a restrained
+hierarchy. The component gallery presents real components in square tiles, alphabetically,
+with direct documentation links.

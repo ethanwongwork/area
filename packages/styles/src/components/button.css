@@ -327,6 +327,7 @@
    * relationship constant and costs no new tokens.
    */
   .area-button--soft {
+    --_shadow: var(--area-shadow-1);
     --_bg: var(--_surface);
     --_bg-hover: var(--_surface-hover);
     --_bg-active: var(--_surface-active);

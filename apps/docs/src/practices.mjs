@@ -9,6 +9,21 @@
 const code = (text) => `<code class="area-code">${text}</code>`;
 
 export const PRACTICES = {
+  code: [
+    `Use Code for short commands, identifiers and literal values inside a sentence. Use CodeBlock for multiple lines.`,
+    `Use Token when a reference should include a semantic color swatch. Code uses the same compact visual language without the swatch.`,
+  ],
+  "code-block": [
+    `Pass plain text through code. The html prop inserts pre-highlighted markup directly; only supply trusted or sanitized HTML.`,
+    `Actions belong in the actions slot at the upper right. The component does not implement copying; the consumer owns that behavior.`,
+    `Use flush only inside an existing frame. The standard treatment supplies the surface and decorative edge.`,
+  ],
+  segmented: [
+    `Use a segmented control for a short, exclusive set of choices. Use Select for longer labels or larger sets.`,
+    `Supply an accessible label for the group and a readable label for every option. Connect onSelect to the controlled value in an application.`,
+    `Current limitation: the component exposes radio semantics and click selection callbacks, but arrow-key navigation and a single tab stop are not yet implemented. The static previews do not change their controlled selection.`,
+    `The size tier describes the outer track height, so it aligns with the same tier on Button, Input and Select.`,
+  ],
   button: [
     `Use one solid ${code("neutral")} button per view. It is the strongest call to action a neutral palette can make, and a second one halves the value of the first.`,
     `Reach for ${code("accent")} when the action should follow the accent, and ${code("neutral")} when it should stay the strongest thing on the page whatever the accent axis is set to. Emphasis is the variant\u2019s job, not the tone\u2019s: solid, outline and ghost span it on every tone.`,

@@ -22,6 +22,7 @@
  */
 import { type Level, type Position, type Slot, INVERSION } from "../color/curves.ts";
 import type { Theme } from "../color/scale.ts";
+import { tonalStroke } from "./stroke.ts";
 
 /** The roles the semantic layer addresses. The colour axis repoints `accent`. */
 export const ROLES = [
@@ -42,7 +43,7 @@ export type Alias =
   /** The scale's own solid fill -- the level is computed per hue, not chosen here. */
   | { kind: "solid"; role: Role }
   | { kind: "solidHover"; role: Role }
-  /** The family's own quietest readable stroke -- computed per family, not per rung. */
+  /** A measured tint of the family's readable ink, without changing its palette. */
   | { kind: "stroke"; role: Role }
   | { kind: "strokeHover"; role: Role }
   /** The family's most saturated readable rung -- computed per scale, not chosen here. */
@@ -67,8 +68,8 @@ function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
     [`${prefix}-surface-active`]: at(role, "componentActive"),
     [`${prefix}-border-subtle`]: at(role, "componentActive"),
     /*
-     * Computed per family rather than read from a shared rung. At one rung the same token
-     * was 3.68:1 on white for indigo and 1.80 for green -- twice the weight from one name.
+     * Measured tints of existing readable ink. Choosing raw rungs by luminance alone
+     * left green and teal neon beside equally visible but much quieter blue outlines.
      */
     [`${prefix}-border`]: stroke(role),
     [`${prefix}-border-strong`]: strokeHover(role),
@@ -258,9 +259,9 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
     case "solidHover":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.hover[theme]]!;
     case "stroke":
-      return scales[aliasValue.role].byLevel[scales[aliasValue.role].stroke.rest[theme]]!;
+      return tonalStroke(scales[aliasValue.role].byLevel[INVERSION.textTonal[theme]]!, theme, false);
     case "strokeHover":
-      return scales[aliasValue.role].byLevel[scales[aliasValue.role].stroke.hover[theme]]!;
+      return tonalStroke(scales[aliasValue.role].byLevel[INVERSION.textTonal[theme]]!, theme, true);
     case "vivid":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].vivid[theme]]!;
     case "contrast":
@@ -281,9 +282,9 @@ export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme)
     case "solidHover":
       return scales[aliasValue.role].solid.hover[theme];
     case "stroke":
-      return scales[aliasValue.role].stroke.rest[theme];
     case "strokeHover":
-      return scales[aliasValue.role].stroke.hover[theme];
+      // A semantic tint is not a numbered palette rung.
+      return null;
     case "vivid":
       return scales[aliasValue.role].vivid[theme];
     default:

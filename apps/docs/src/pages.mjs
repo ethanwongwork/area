@@ -8,6 +8,31 @@
 
 export const COMPONENT_PAGES = [
   {
+    slug: "code", name: "Code", manifest: "code",
+    api: [["children", "ReactNode", "—"], ["…props", "HTMLAttributes<HTMLElement>", "—"]],
+    examples: [
+      { id: "default", title: "Default", demo: "GalleryCode" },
+      { id: "prose", title: "In prose", demo: "CodeInProse" },
+    ],
+  },
+  {
+    slug: "code-block", name: "Code block", exportName: "CodeBlock", manifest: "codeBlock",
+    api: [["code", "string", "—"], ["html", "string (trusted, pre-highlighted HTML)", "—"], ["actions", "ReactNode", "—"], ["layout", '"flush"', "—"], ["…props", "HTMLAttributes<HTMLDivElement>", "—"]],
+    examples: [
+      { id: "default", title: "Plain text", demo: "CodeBlockPlain" },
+      { id: "flush", title: "Flush", note: "Use flush when the block is already framed by a parent example container.", demo: "CodeBlockFlush" },
+    ],
+  },
+  {
+    slug: "segmented", name: "Segmented", manifest: "segmented",
+    api: [["options", "{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }[]", "—"], ["value", "string", "—"], ["label", "string (accessible group name)", "—"], ["onSelect", "(value: string) => void", "—"], ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'], ["fullWidth", "boolean", "false"]],
+    examples: [
+      { id: "default", title: "Default", note: "A controlled presentation. In an application, update value from onSelect. Complete radio-group arrow-key navigation is still pending.", demo: "GallerySegmented" },
+      { id: "sizes", title: "Sizes", demo: "SegmentedSizes" },
+      { id: "full-width", title: "Full width and disabled option", demo: "SegmentedFullWidth" },
+    ],
+  },
+  {
     slug: "button",
     name: "Button",
     manifest: "button",
@@ -519,4 +544,4 @@ export const COMPONENT_PAGES = [
     api: [["interactive", "boolean", "false"]],
     examples: [{ id: "default", title: "Default", demo: "TableDefault" }],
   },
-];
+].sort((a, b) => a.name.localeCompare(b.name, "en"));

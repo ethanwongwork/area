@@ -13,7 +13,8 @@ E03 resolves the 75/100/150 trial's failures: decoration remains quiet at 75, su
 frames/outlines return to 150/200, and required control/state edges gain explicit 3:1 contracts.
 V01 subsequently softens default presentation and preserves those strong endpoints in an
 increased-contrast preference; standard-mode limitations remain explicit. See [the current contrast policy](CONTRAST.md)
-and [V01 visual study](batches/V01/README.md). E04 completes API/package consistency. The next milestone is **interaction architecture**,
+and [V01 visual study](batches/V01/README.md). [V02](batches/V02/README.md) adds quieter tonal
+outlines, tighter 4%/6% shadows and a 32-family alphabetical gallery, preserving the palette. E04 completes API/package consistency. The next milestone is **interaction architecture**,
 then **working interaction primitives**. Further palette expansion is not the priority.
 
 Effort bands describe uncertainty and scope, not calendar commitments: **small** is one focused change; **medium** spans several modules and a focused test suite; **large** needs a design/API decision, implementation and browser/assistive-technology validation. Dependencies matter more than the bands.

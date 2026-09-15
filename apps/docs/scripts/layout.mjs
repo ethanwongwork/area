@@ -408,6 +408,73 @@ export const DOCS_CSS = `
     margin-inline-end: var(--docs-gutter);
   }
 
+  /* Gallery frames are document layout, never component skins. */
+  .docs-content--wide { max-inline-size: none; }
+  .docs-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--area-space-64) * 4 + var(--area-space-32))), 1fr));
+    gap: var(--area-space-16);
+    margin-block-start: var(--area-space-24);
+  }
+  .docs-gallery-tile {
+    aspect-ratio: 1;
+    min-inline-size: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    border: 1px solid var(--area-border-decorative);
+    border-radius: var(--area-radius-container);
+    background: var(--area-bg-surface);
+  }
+  .docs-gallery-tile__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--area-space-8);
+    padding: var(--area-gutter-md);
+    padding-block-end: 0;
+  }
+  .docs-gallery-tile__title {
+    margin: 0;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-regular);
+  }
+  .docs-gallery-tile__preview {
+    min-inline-size: 0;
+    min-block-size: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--area-gutter-xl);
+  }
+  .docs-gallery-tile__specimen {
+    min-inline-size: 0;
+    inline-size: 100%;
+    max-inline-size: calc(var(--area-space-64) * 4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .docs-gallery-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-12);
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+  .docs-gallery-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--area-space-8);
+  }
+  .docs-gallery-caption {
+    color: var(--area-fg-muted);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+
   /* --- Icon browser ------------------------------------------------------- */
 
   /*
@@ -737,8 +804,39 @@ export const DOCS_CSS = `
   .docs-token-chip { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: max(0px, calc(var(--area-radius-small) - var(--area-space-2))); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle); }
   .docs-mono { font-family: var(--area-font-mono); }
 
-  @media (max-width: 1100px) { .docs-shell { grid-template-columns: var(--docs-sidebar) minmax(0, 1fr); } .docs-inspector { display: none; } }
-  @media (max-width: 820px) { .docs-shell { grid-template-columns: minmax(0, 1fr); } .docs-sidebar { display: none; } }
+  /* Narrow rails open in document flow. No overlaid content or modal behavior is implied. */
+  @media (max-width: 1100px) {
+    .docs-shell { grid-template-columns: var(--docs-col-nav) minmax(0, 1fr); }
+    .docs-main { grid-column: 2; padding-block-start: calc(var(--docs-gutter) + var(--area-control-sm)); }
+    .docs-sidebar { grid-column: 1; }
+    .docs-inspector {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      position: relative;
+      block-size: auto;
+      max-block-size: 60vh;
+    }
+    .docs-shell[data-panel="open"] .docs-main,
+    .docs-shell[data-panel="open"] .docs-sidebar { grid-row: 2; }
+  }
+  @media (max-width: 820px) {
+    .docs-shell { grid-template-columns: minmax(0, 1fr); }
+    .docs-shell .docs-sidebar {
+      grid-column: 1;
+      grid-row: 1;
+      position: relative;
+      block-size: auto;
+      max-block-size: 60vh;
+    }
+    .docs-shell .docs-inspector { grid-row: 2; }
+    .docs-shell[data-nav="closed"] .docs-main,
+    .docs-shell[data-nav="open"] .docs-main,
+    .docs-shell[data-nav="open"][data-panel="closed"][data-toc="none"] .docs-main {
+      grid-column: 1;
+      grid-row: 3;
+      padding-inline: var(--docs-gutter);
+    }
+  }
 }
 /*
  * Rail visibility, in area.utilities rather than area.base.
@@ -767,6 +865,8 @@ export const DOCS_CSS = `
 
   /* A filtered-out cell. Here because .docs-icon is a button, and area.components sets its display. */
   .docs-icon[hidden] { display: none; }
+  /* The outline has no independent column at these widths. */
+  @media (max-width: 1100px) { .docs-toc { display: none; } }
 }
 
 `;
@@ -910,9 +1010,19 @@ export const DOCS_SCRIPT = `
     });
   }
 
+  // Desktop preferences survive a narrow viewport. Mobile opens are temporary and
+  // never overwrite the reader's saved desktop arrangement.
+  var narrow = { nav: matchMedia("(max-width: 820px)"), panel: matchMedia("(max-width: 1100px)") };
+  var narrowState = { nav: false, panel: false };
+  function syncViewport() {
+    ["nav", "panel"].forEach(function (rail) {
+      write(rail, narrow[rail].matches ? narrowState[rail] : state[rail] !== "closed");
+    });
+  }
   ["nav", "panel"].forEach(function (rail) {
-    if (state[rail] === "closed") write(rail, false);
+    narrow[rail].addEventListener("change", syncViewport);
   });
+  syncViewport();
 
   document.addEventListener("click", function (event) {
     var button = event.target.closest("[data-rail]");
@@ -920,8 +1030,27 @@ export const DOCS_SCRIPT = `
     var rail = button.getAttribute("data-rail");
     var open = shell.getAttribute("data-" + rail) !== "open";
     write(rail, open);
-    state[rail] = open ? "open" : "closed";
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    if (narrow[rail].matches) {
+      narrowState[rail] = open;
+      // The compact page has one working rail at a time.
+      var other = rail === "nav" ? "panel" : "nav";
+      if (open && narrow[other].matches) {
+        narrowState[other] = false;
+        write(other, false);
+      }
+    } else {
+      state[rail] = open ? "open" : "closed";
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    }
+    if (open && narrow[rail].matches) {
+      var target = shell.querySelector(rail === "nav" ? ".docs-sidebar" : ".docs-inspector");
+      target.scrollIntoView({ block: "start" });
+      var close = target.querySelector("[data-rail]");
+      if (close) close.focus({ preventScroll: true });
+    } else if (!open) {
+      var corner = document.querySelector('.docs-rail-toggle[data-rail="' + rail + '"]');
+      if (corner) corner.focus({ preventScroll: true });
+    }
   });
 })();
 

@@ -190,3 +190,7 @@ and CSS/tree-shaking in isolation.
 [V01 research, decisions and before/after captures](docs/batches/V01/README.md) document the
 soft presentation. Open [the compact workspace](http://localhost:4321/workbench.html) to try
 filters, card/list views, themes, density and the increased-contrast preference.
+
+[V02 visual refinements and gallery](docs/batches/V02/README.md) soften tonal outlines and all
+shadow tiers, with the palette preserved. Open the [component gallery](http://localhost:4321/gallery.html)
+for 32 alphabetical component families, useful variants and dedicated documentation links.

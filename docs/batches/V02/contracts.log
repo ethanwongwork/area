@@ -1,0 +1,24 @@
+
+> area@0.0.0 test:contracts
+> node --test packages/styles/scripts/manifest-parity.test.mjs apps/docs/scripts/axis-preferences.test.mjs
+
+✔ migrates accent once while retaining other selections (0.761458ms)
+✔ new accent selection wins and stale values are removed (0.08475ms)
+✔ corrupt and blocked storage remain usable (0.1135ms)
+✔ native state belongs to the component (1.15275ms)
+✔ another component cannot satisfy a state (0.713416ms)
+✔ comma-separated neighbor cannot satisfy a state (0.177792ms)
+✔ a negated state cannot satisfy positive state coverage (0.1185ms)
+✔ comments and declaration strings are not selectors (0.0805ms)
+✔ prefix collisions do not satisfy exact classes (0.061625ms)
+✔ undeclared elements and defaults fail (0.080416ms)
+✔ duplicate modifier values fail (0.06525ms)
+✔ descendant component cannot satisfy parent state (0.08925ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 63.128125

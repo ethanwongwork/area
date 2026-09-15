@@ -1,10 +1,9 @@
 /**
  * Surface: decorative stroke weight and elevation. Required edges and focus are independent.
  *
- * The elevation recipes use negative spread so a shadow reads as lift rather than as a
- * grey halo -- the shape OpenAI's own elevation tokens use. Shadow colour is a token in
- * its own right so a dark theme can deepen it; a shadow authored as flat `rgba(0,0,0,.06)`
- * disappears on a dark surface, which is the single most common elevation bug.
+ * Tight negative spreads keep the shadow close to its object. Even the largest tier
+ * uses a short offset: depth should not turn into a detached grey shelf. Shadow ink is
+ * theme-owned; the same recipe remains restrained on both light and dark surfaces.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
@@ -33,22 +32,22 @@ export const SURFACE_AXIS: AxisDefinition = {
       description: "1px strokes with restrained lift on floating surfaces.",
       tokens: tokens({
         "border-width": "1px",
-        "shadow-1": "0 1px 1px 0 var(--area-shadow-color)",
-        "shadow-2": "0 2px 4px 0 var(--area-shadow-color)",
-        "shadow-3": "0 4px 8px -1px var(--area-shadow-color)",
-        "shadow-4": "0 8px 16px -2px var(--area-shadow-color)",
+        "shadow-1": "0 0.5px 1px -0.5px var(--area-shadow-color)",
+        "shadow-2": "0 1px 2px -0.5px var(--area-shadow-color)",
+        "shadow-3": "0 2px 4px -1px var(--area-shadow-color)",
+        "shadow-4": "0 3px 6px -2px var(--area-shadow-color)",
       }),
     },
     {
       id: "raised",
       label: "Raised",
-      description: "Stronger, softer shadows. Controls lift too, not just overlays.",
+      description: "A little more diffusion on floating surfaces, with the same quiet contact shadow.",
       tokens: tokens({
         "border-width": "1px",
-        "shadow-1": "0 1px 2px 0 var(--area-shadow-color)",
-        "shadow-2": "0 2px 8px -1px var(--area-shadow-color)",
-        "shadow-3": "0 8px 20px -4px var(--area-shadow-color)",
-        "shadow-4": "0 16px 32px -8px var(--area-shadow-color)",
+        "shadow-1": "0 0.5px 1px -0.5px var(--area-shadow-color)",
+        "shadow-2": "0 1px 3px -1px var(--area-shadow-color)",
+        "shadow-3": "0 2px 6px -2px var(--area-shadow-color)",
+        "shadow-4": "0 4px 10px -3px var(--area-shadow-color)",
       }),
     },
     {
@@ -57,10 +56,10 @@ export const SURFACE_AXIS: AxisDefinition = {
       description: "Shadow-led containers. Required control and selection strokes remain.",
       tokens: tokens({
         "border-width": "0px",
-        "shadow-1": "0 1px 3px 0 var(--area-shadow-color)",
-        "shadow-2": "0 4px 12px -2px var(--area-shadow-color)",
-        "shadow-3": "0 12px 28px -6px var(--area-shadow-color)",
-        "shadow-4": "0 24px 48px -12px var(--area-shadow-color)",
+        "shadow-1": "0 0.5px 2px -0.5px var(--area-shadow-color)",
+        "shadow-2": "0 1px 4px -1px var(--area-shadow-color)",
+        "shadow-3": "0 3px 8px -2px var(--area-shadow-color)",
+        "shadow-4": "0 5px 12px -3px var(--area-shadow-color)",
       }),
     },
   ],
