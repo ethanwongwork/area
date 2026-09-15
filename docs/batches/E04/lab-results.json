@@ -1,0 +1,74 @@
+[
+  {
+    "profile": "0",
+    "status": "16 passed / 6 failed / 22 checks",
+    "failures": [
+      "FAIL · F07/description Input references its rendered descriptionActual: false; expected: true",
+      "FAIL · F07/required Required field exposes native required stateActual: false; expected: true",
+      "FAIL · F04/tab-ids Multiple Tabs instances have unique relationshipsActual: 3; expected: 6",
+      "FAIL · F04/segmented-tabstops Segmented has one tab stopActual: 2; expected: 1",
+      "FAIL · F05/motion-none Explicit motion none stops the spinnerActual: false; expected: true",
+      "FAIL · F04/tab-arrow Right arrow moves focus to the next tabActual: false; expected: true"
+    ]
+  },
+  {
+    "profile": "1",
+    "status": "16 passed / 6 failed / 22 checks",
+    "failures": [
+      "FAIL · F07/description Input references its rendered descriptionActual: false; expected: true",
+      "FAIL · F07/required Required field exposes native required stateActual: false; expected: true",
+      "FAIL · F04/tab-ids Multiple Tabs instances have unique relationshipsActual: 3; expected: 6",
+      "FAIL · F04/segmented-tabstops Segmented has one tab stopActual: 2; expected: 1",
+      "FAIL · F05/motion-none Explicit motion none stops the spinnerActual: false; expected: true",
+      "FAIL · F04/tab-arrow Right arrow moves focus to the next tabActual: false; expected: true"
+    ]
+  },
+  {
+    "profile": "2",
+    "status": "16 passed / 6 failed / 22 checks",
+    "failures": [
+      "FAIL · F07/description Input references its rendered descriptionActual: false; expected: true",
+      "FAIL · F07/required Required field exposes native required stateActual: false; expected: true",
+      "FAIL · F04/tab-ids Multiple Tabs instances have unique relationshipsActual: 3; expected: 6",
+      "FAIL · F04/segmented-tabstops Segmented has one tab stopActual: 2; expected: 1",
+      "FAIL · F05/motion-none Explicit motion none stops the spinnerActual: false; expected: true",
+      "FAIL · F04/tab-arrow Right arrow moves focus to the next tabActual: false; expected: true"
+    ]
+  },
+  {
+    "profile": "3",
+    "status": "16 passed / 6 failed / 22 checks",
+    "failures": [
+      "FAIL · F07/description Input references its rendered descriptionActual: false; expected: true",
+      "FAIL · F07/required Required field exposes native required stateActual: false; expected: true",
+      "FAIL · F04/tab-ids Multiple Tabs instances have unique relationshipsActual: 3; expected: 6",
+      "FAIL · F04/segmented-tabstops Segmented has one tab stopActual: 2; expected: 1",
+      "FAIL · F05/motion-none Explicit motion none stops the spinnerActual: false; expected: true",
+      "FAIL · F04/tab-arrow Right arrow moves focus to the next tabActual: false; expected: true"
+    ]
+  },
+  {
+    "profile": "4",
+    "status": "16 passed / 6 failed / 22 checks",
+    "failures": [
+      "FAIL · F07/description Input references its rendered descriptionActual: false; expected: true",
+      "FAIL · F07/required Required field exposes native required stateActual: false; expected: true",
+      "FAIL · F04/tab-ids Multiple Tabs instances have unique relationshipsActual: 3; expected: 6",
+      "FAIL · F04/segmented-tabstops Segmented has one tab stopActual: 2; expected: 1",
+      "FAIL · F05/motion-none Explicit motion none stops the spinnerActual: false; expected: true",
+      "FAIL · F04/tab-arrow Right arrow moves focus to the next tabActual: false; expected: true"
+    ]
+  },
+  {
+    "profile": "5",
+    "status": "16 passed / 6 failed / 22 checks",
+    "failures": [
+      "FAIL · F07/description Input references its rendered descriptionActual: false; expected: true",
+      "FAIL · F07/required Required field exposes native required stateActual: false; expected: true",
+      "FAIL · F04/tab-ids Multiple Tabs instances have unique relationshipsActual: 3; expected: 6",
+      "FAIL · F04/segmented-tabstops Segmented has one tab stopActual: 2; expected: 1",
+      "FAIL · F05/motion-none Explicit motion none stops the spinnerActual: false; expected: true",
+      "FAIL · F04/tab-arrow Right arrow moves focus to the next tabActual: false; expected: true"
+    ]
+  }
+]

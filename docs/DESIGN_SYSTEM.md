@@ -183,11 +183,10 @@ is shadcn/ui's number; the 6px preset is still there for anyone who wants the Pr
 
 ## Tones
 
-Eight public tone values: `primary`, `brand`, `info`, `success`, `warning`, `caution`,
-`danger`, `discovery`. The older rationale below calls primary “neutral” and brand “accent”;
-those are conceptual descriptions, not current Button prop values. `primary` is not
-a brand colour — a near-black button is the strongest call to action a neutral palette can
-make, and it stays strongest whatever the brand axis is set to.
+Eight public tone values: `neutral`, `accent`, `info`, `success`, `warning`, `caution`,
+`danger`, `discovery`. Neutral is the near-black (near-white in dark) action; accent follows
+its configurable hue. Emphasis belongs to the variant. The E04 migration removes the old
+public synonyms; see [API migration](API_MIGRATION.md).
 
 There were nine, and two of them were `primary` and `secondary` in an earlier sense: both
 near-black, one rung apart, delivering none of the distinction the names promised. OpenAI separates
@@ -316,9 +315,9 @@ placeholder — which put three tokens inside a 1.9:1 band on the light page (3.
 5.50) and earned the middle one 0.85:1 of separation from its neighbour. Everything that
 used it wanted "quieter than body copy", which is what muted already means.
 
-**Brand defaults to indigo, not blue.** `info` is pinned to blue, so a brand that also
+**Accent defaults to indigo, not blue.** `info` is pinned to blue, so a brand that also
 defaulted to blue made the axis look like it did nothing. OpenAI never has this problem
-because they have no brand hue at all: their brand is the neutral near-black button and
+because they have no accent hue at all: their brand is the neutral near-black button and
 blue is reserved for info, links and the focus ring. The separation indigo buys is real but
 modest — 17 degrees and an OKLab distance of 0.068, about three and a half JND. Purple
 separates twice as well and is already `discovery`, so taking it would move the collision

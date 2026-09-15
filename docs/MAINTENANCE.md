@@ -11,12 +11,15 @@ npm run lint:manifest
 npm run build:docs
 node packages/tokens/src/contrast/report.ts
 npm run typecheck
+npm run test:contracts
+npm run test:consumer
+npm run test:preview
 ```
 
 The build checks axis integrity and CSS/manifest parity. The docs build also renders
 all examples and runs the dogfood audit. Contrast is enforced by Vitest, not by `build`.
 There is no general ESLint script; manifest parity and the docs audit are the existing
-lint checks. The docs MJS/TSX pipeline is bundled and rendered; the hydrated lab also has a tsc task.
+lint checks. The docs MJS/TSX pipeline is bundled and rendered; all demos and the hydrated lab also have a tsc task.
 
 For runtime checks, use `npm run dev`, open the site, follow component links, and change
 inspector controls. The dev server watches source edits, publishes only successful builds, and reloads the
@@ -43,9 +46,8 @@ There are no checked-in environment templates or CI workflows.
 
 ## Known limitations inherited from before migration
 
-- `@area/tokens` declares a root export to `src/index.ts`, but that file does not exist.
-  Current workspaces use its CSS/JSON exports or direct source imports. A public root API
-  needs a deliberate contract; this cleanup does not invent one.
+- E04 repairs public exports with compiled ESM and declarations. Run the build first, then
+  `test:consumer`; see [API migration and troubleshooting](API_MIGRATION.md).
 - E03 removes the four syntax waiver groups through readable color selection. No active
   exception remains. Preserve explicit reporting if a future exception is proposed.
 - Some old source comments retain historical measurements or old names. The current
@@ -64,7 +66,7 @@ Start with [the handoff](../.Codex/HANDOFF.md); consult
 verify, commit, push and update both. Keep plans, rationale and current state in Git,
 not only in a private assistant session. Historical snapshots are not active instructions.
 
-## Current status — E03
+## Current status — E04
 
 [The dated audit](SYSTEM_AUDIT.md) preserves the original failures. E02 repairs nested color
 scope/reset. E03 passes 16,316 token tests and 308 contrast groups with zero waivers, and adds
@@ -72,7 +74,9 @@ rendered contrast evidence. Build/typecheck/parity/docs checks pass. The contras
 exits nonzero on an unwaived failure; build alone still does not run the token gate.
 
 Remaining defects include motion-none animation, composite widget behavior, slider keyboard
-fill and package root/distribution contracts. Safari revalidation of E03 was unavailable
+fill. E04 verifies the packed API, native state selectors, strict declarations, SSR and
+browser bundling. RSC framework integration and the React 18 peer range remain unverified.
+Safari revalidation of E03 was unavailable
 because the host Mac was locked; Gecko and native Windows forced-colors were not tested.
-See [ROADMAP.md](ROADMAP.md) and [the E03 report](batches/E03/README.md). Do not infer a complete
+See [ROADMAP.md](ROADMAP.md) and [the E04 report](batches/E04/README.md). Do not infer a complete
 accessibility or release-readiness claim from passing token and local fixture checks.

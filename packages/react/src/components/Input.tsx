@@ -1,9 +1,11 @@
+import type { VariantProps } from "../variants.ts";
+import { MANIFESTS } from "../variants.ts";
 import { forwardRef } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { cx, inputVariants } from "../variants.ts";
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: VariantProps<typeof MANIFESTS.input>["size"];
   /** Leading icon. Decorative: it categorises the field, it does not label it. */
   icon?: ReactNode;
   /** Static text before the value, such as a currency symbol. */
@@ -21,7 +23,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * The shell carries the chrome and the input inside it is stripped bare, which is what
  * lets icons, affixes and the focus ring share one border box.
  */
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(function Input(
   { size, icon, prefix, suffix, invalid, disabled, className, ...rest },
   ref,
 ) {

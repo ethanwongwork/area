@@ -20,7 +20,7 @@
   /*
    * Inline code is the token badge without a swatch.
    *
-   * They were two styles for one thing: a `tone="primary"` written in running prose and the
+   * They were two styles for one thing: a `tone="neutral"` written in running prose and the
    * same name written in a table were a different size, ground and stroke, so the page read
    * as though the two were different kinds of reference. They are not. The badge is defined
    * in token.css; this only declines the flex box, since inline code has to break across
@@ -129,7 +129,7 @@
   .area-code-block__pre .area-syntax-keyword { color: var(--area-fg-discovery-vivid); }
   .area-code-block__pre .area-syntax-tag { color: var(--area-fg-danger-vivid); }
   .area-code-block__pre .area-syntax-attr { color: var(--area-fg-success-vivid); }
-  .area-code-block__pre .area-syntax-string { color: var(--area-fg-brand-vivid); }
+  .area-code-block__pre .area-syntax-string { color: var(--area-fg-accent-vivid); }
   .area-code-block__pre .area-syntax-punct { color: var(--area-fg-muted); }
 
   /* --- Collapsing ------------------------------------------------------------ */

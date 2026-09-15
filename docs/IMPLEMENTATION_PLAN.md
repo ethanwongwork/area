@@ -1,7 +1,7 @@
 # Area — implementation plan
 
 **Updated:** 2026-09-14. **Planning baseline:** `59ea987`.
-**Status:** E01–E03 implementation completed; E04 is next. Cross-engine and native forced-colors execution remain release-validation items. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
+**Status:** E01–E04 implementation completed; E05 is next. Cross-engine and native forced-colors execution remain release-validation items. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
 The system remains red: 165 existing token failures and the newly visible browser/package regressions.
 **Inputs:** [system audit](SYSTEM_AUDIT.md), [milestone checklist](ROADMAP.md), and the user's subsequent authorization to rename/add tokens, reorganize structure, build components and make system-wide improvements.
 
@@ -155,6 +155,8 @@ Do not create tokens that have no distinct consumer or contract. Divider and con
 ## Component contracts and behavior
 
 ### E04 — Unify names, contracts, files and package exports
+
+**Completed:** [E04 results](batches/E04/README.md), [public migration and package contract](API_MIGRATION.md).
 
 **Scope:** manifest schema, component prop types, module boundaries, exports, docs persistence. **Effort:** medium–large. **Maps to:** R09 and API parts of R10.
 

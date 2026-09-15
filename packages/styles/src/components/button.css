@@ -28,20 +28,20 @@
     --_leading: var(--area-control-md-leading);
 
     /*
-     * Tone: nine slots a tone repoints, and a variant reads. The base is `primary`, which
+     * Tone: nine slots a tone repoints, and a variant reads. The base is `neutral`, which
      * is the neutral one -- almost every button in a product should be one, and a button
-     * that names no tone should be the one you reach for without thinking. `brand` is
+     * that names no tone should be the one you reach for without thinking. `accent` is
      * opt-in, for a moment that is genuinely about identity.
      */
-    --_solid: var(--area-bg-primary-solid);
-    --_solid-hover: var(--area-bg-primary-solid-hover);
+    --_solid: var(--area-neutral-solid);
+    --_solid-hover: var(--area-neutral-solid-hover);
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
     --_line: var(--area-border-subtle);
     --_line-hover: var(--area-border);
     --_tone-fg: var(--area-fg-default);
-    --_on-solid: var(--area-fg-on-primary);
+    --_on-solid: var(--area-fg-on-neutral);
 
     /* Skin: what a variant resolves the tone into. */
     --_bg: transparent;
@@ -165,7 +165,7 @@
    * block rather than four.
    *
    * The vocabulary follows OpenAI's: neutral is the near-black button, info a fixed blue
-   * that is deliberately not the brand, discovery a purple for AI and newly-introduced
+   * that is deliberately not the accent, discovery a purple for AI and newly-introduced
    * surfaces, and caution and warning are distinct steps rather than synonyms. Theirs also
    * carries a `secondary`; Area's collapsed into `neutral`, because emphasis is what the
    * variant axis is for.
@@ -188,13 +188,13 @@
    * is the variant's job; the tone carries meaning, and this is the one that carries none.
    */
   /*
-   * Restates the base deliberately. `primary` is the default tone, so this block is
-   * redundant today -- and it is what keeps `tone="primary"` from becoming a silent no-op if
+   * Restates the base deliberately. `neutral` is the default tone, so this block is
+   * redundant today -- and it is what keeps `tone="neutral"` from becoming a silent no-op if
    * the base default ever moves. The manifest declares it; the parity check requires it.
    */
-  .area-button--primary {
-    --_solid: var(--area-bg-primary-solid);
-    --_solid-hover: var(--area-bg-primary-solid-hover);
+  .area-button--neutral {
+    --_solid: var(--area-neutral-solid);
+    --_solid-hover: var(--area-neutral-solid-hover);
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
@@ -209,20 +209,20 @@
     --_line: var(--area-border-subtle);
     --_line-hover: var(--area-border);
     --_tone-fg: var(--area-fg-default);
-    --_on-solid: var(--area-fg-on-primary);
+    --_on-solid: var(--area-fg-on-neutral);
   }
 
-  /* The brand hue. Follows the brand axis. */
-  .area-button--brand {
-    --_solid: var(--area-brand-solid);
-    --_solid-hover: var(--area-brand-solid-hover);
-    --_surface: var(--area-brand-surface);
-    --_surface-hover: var(--area-brand-surface-hover);
-    --_surface-active: var(--area-brand-surface-active);
-    --_line: var(--area-brand-border);
-    --_line-hover: var(--area-brand-border-strong);
-    --_tone-fg: var(--area-fg-brand);
-    --_on-solid: var(--area-fg-on-brand);
+  /* The accent hue. Follows the accent axis. */
+  .area-button--accent {
+    --_solid: var(--area-accent-solid);
+    --_solid-hover: var(--area-accent-solid-hover);
+    --_surface: var(--area-accent-surface);
+    --_surface-hover: var(--area-accent-surface-hover);
+    --_surface-active: var(--area-accent-surface-active);
+    --_line: var(--area-accent-border);
+    --_line-hover: var(--area-accent-border-strong);
+    --_tone-fg: var(--area-fg-accent);
+    --_on-solid: var(--area-fg-on-accent);
   }
 
   /* Fixed blue. Informational, never the primary action. */
@@ -356,8 +356,8 @@
    * An outline or ghost button in the neutral family reads better with body-text
    * foreground than with the muted tone colour, since there is no hue to carry meaning.
    */
-  .area-button--primary.area-button--outline,
-  .area-button--primary.area-button--ghost {
+  .area-button--neutral.area-button--outline,
+  .area-button--neutral.area-button--ghost {
     --_fg: var(--area-fg-default);
   }
 

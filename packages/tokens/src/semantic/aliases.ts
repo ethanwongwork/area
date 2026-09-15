@@ -23,10 +23,10 @@
 import { type Level, type Position, type Slot, INVERSION } from "../color/curves.ts";
 import type { Theme } from "../color/scale.ts";
 
-/** The roles the semantic layer addresses. The colour axis repoints `brand`. */
+/** The roles the semantic layer addresses. The colour axis repoints `accent`. */
 export const ROLES = [
   "neutral",
-  "brand",
+  "accent",
   "danger",
   "warning",
   "caution",
@@ -59,7 +59,7 @@ const strokeHover = (role: Role): Alias => ({ kind: "strokeHover", role });
 const vivid = (role: Role): Alias => ({ kind: "vivid", role });
 const contrast = (role: Role): Alias => ({ kind: "contrast", role });
 
-/** The tonal block every role repeats, so `danger` and `brand` are structurally identical. */
+/** The tonal block every role repeats, so `danger` and `accent` are structurally identical. */
 function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
   return {
     [`${prefix}-surface`]: at(role, "component"),
@@ -108,9 +108,9 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
    * "black". Named here so the contrast gate can assert on it -- it is not part of a tonal
    * block, so nothing else would have covered it.
    */
-  "bg-primary-solid": at("neutral", "inverseFill"),
-  "bg-primary-solid-hover": at("neutral", "inverseFillHover"),
-  "fg-on-primary": at("neutral", "inverseText"),
+  "neutral-solid": at("neutral", "inverseFill"),
+  "neutral-solid-hover": at("neutral", "inverseFillHover"),
+  "fg-on-neutral": at("neutral", "inverseText"),
   /** Translucent tints, for hover on an unknown background. */
   "bg-hover": alphaAt("neutral", "componentHover"),
   "bg-active": alphaAt("neutral", "componentActive"),
@@ -149,19 +149,19 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
    * The focus ring -- the one stroke WCAG 1.4.11 unambiguously requires at 3:1, so it is
    * held to the full threshold (see `contrast/assertions.ts`).
    *
-   * Drawn from the brand's text level, not its solid. The solid is tuned to contrast with
+   * Drawn from the accent's text level, not its solid. The solid is tuned to contrast with
    * its own label, which says nothing about contrast with the page: a lime or amber solid
    * is very light, and a ring made from it measures 1.2:1 on white -- effectively invisible.
    * A text level is tuned against the page by definition and flips with the theme
-   * automatically, so one rule stays conformant for every brand hue in both themes.
+   * automatically, so one rule stays conformant for every accent hue in both themes.
    */
   "stroke-control": at("neutral", "strokeControl"),
   "stroke-control-hover": at("neutral", "strokeControlHover"),
-  "stroke-selected": at("brand", "textTonal"),
-  "focus-color": at("brand", "textTonal"),
+  "stroke-selected": at("accent", "textTonal"),
+  "focus-color": at("accent", "textTonal"),
 
   // --- Tonal blocks -------------------------------------------------------------
-  ...tonalBlock("brand", "brand"),
+  ...tonalBlock("accent", "accent"),
   ...tonalBlock("danger", "danger"),
   ...tonalBlock("warning", "warning"),
   ...tonalBlock("caution", "caution"),

@@ -140,10 +140,10 @@
     cursor: not-allowed;
   }
 
-  /* The accent variant: current items carry the brand rather than the neutral. */
-  .area-nav--brand .area-nav__item[aria-current]:not([aria-current="false"]) {
-    background-color: var(--area-brand-surface);
-    color: var(--area-fg-brand);
+  /* The accent variant: current items carry the accent rather than the neutral. */
+  .area-nav--accent .area-nav__item[aria-current]:not([aria-current="false"]) {
+    background-color: var(--area-accent-surface);
+    color: var(--area-fg-accent);
   }
 
   .area-nav__icon {

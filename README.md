@@ -15,14 +15,14 @@ itself is a set of **independent dimensions** — eight of them — each retuned
 data attribute, at any depth in the tree:
 
 ```html
-<html data-area-theme="dark" data-area-brand="teal" data-area-density="compact" data-area-radius="12">
+<html data-area-theme="dark" data-area-accent="teal" data-area-density="compact" data-area-radius="12">
 ```
 
 | Axis | Attribute | Presets | Owns |
 |---|---|---|---|
 | Theme | `data-area-theme` | `light`, `dark` | which rung each semantic slot reads |
 | Neutral | `data-area-neutral` | `neutral`, `cool`, `warm` | the grey the interface is built from |
-| Brand | `data-area-brand` | 11 hues, default `indigo` | fills, links, focus ring |
+| Accent | `data-area-accent` | 11 hues, default `indigo` | fills, links, focus ring |
 | Typography | `data-area-type` | `geist`, `geist-compact`, `geist-large`, `system` | families and the size / leading / tracking ramp |
 | Density | `data-area-density` | `compact`, `default` | control heights, gutters, icons, gaps |
 | Radius | `data-area-radius` | `0`, `2`, `4`, `6`, `8`, `10`, `12`, `pill` | corner geometry |
@@ -66,7 +66,7 @@ per-family anchoring leaves families visibly uneven against each other. Never ed
 
 **Semantics.** A numbered rung is never referenced from component CSS. `INVERSION` maps
 slots to rungs once, per theme, and components read `--area-bg-surface`,
-`--area-fg-muted`, `--area-brand-solid` and so on. Dark mode is the same ramp read from the
+`--area-fg-muted`, `--area-accent-solid` and so on. Dark mode is the same ramp read from the
 other end — `--area-blue-500` is byte-identical in both themes; only the rung each slot
 reads changes.
 
@@ -172,3 +172,13 @@ and the [live theme-boundary lab](http://localhost:4321/scopes.html).
 
 E03 adds [the stroke and contrast report](docs/batches/E03/README.md) and a
 [live control comparison](http://localhost:4321/contrast.html).
+
+## Public packages
+
+Area ships compiled ESM and declarations. Import CSS separately. See the
+[API migration and consumer guide](docs/API_MIGRATION.md) for entry points, renamed tokens,
+saved-settings migration, build requirements and verification limits.
+
+`npm run test:contracts` checks selector ownership and preference migration. After building,
+`npm run test:consumer` verifies actual local tarballs, strict types, SSR, browser bundling
+and CSS/tree-shaking in isolation.

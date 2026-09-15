@@ -30,7 +30,7 @@ background and type tokens as the existing components do.
 `Theme`, `useTheme` and `AxisSelection` are exported from `@area/react`.
 
 - `Theme.value` is a partial selection of the eight current axis IDs: `theme`, `neutral`,
-  `brand`, `type`, `density`, `radius`, `surface`, `motion`.
+  `accent`, `type`, `density`, `radius`, `surface`, `motion`.
 - Omitted or undefined values inherit from the nearest **React Theme**. The root starts at
   registry defaults. Passing an invalid axis or preset is a runtime error as well as a type error.
 - `Theme` renders a div, forwards its ref and ordinary HTML attributes, and writes the
@@ -47,8 +47,8 @@ When introducing a React root inside a CSS-only themed host, pass the same compl
 selection to its root Theme. Do not expect a raw `data-area-neutral` between two React Theme
 components to update their context. The independent CSS-attribute path remains supported.
 
-The current accent ID is still `brand` and typography ID is `type`. E04 owns the public
-vocabulary migration. E02 does not introduce a second `accent` alias with unclear precedence.
+E04 standardizes the public axis ID as `accent`. Typography retains `type`. The docs migrate
+saved preferences without resetting other valid choices; see [API migration](API_MIGRATION.md).
 
 Executable examples: [nested theme demo](../apps/docs/src/demos/theme.tsx), rendered with its
 own source snippet on the docs Axes page; [portal and live updates](../apps/docs/src/lab/react-scopes.tsx).
@@ -60,9 +60,10 @@ with generated declarations. They come from the axis registry, not a second hand
 preset list. `mergeAxes` validates and combines selections; `themeAttributes` materializes a
 full attribute map. These helpers import no palette, React, DOM globals or browser APIs.
 
-Run the token build before typechecking or packing from a fresh checkout. The config subpath
-is emitted JavaScript and imports successfully from the packed clean-consumer fixture. Other
-package distribution issues remain E04 work, including the missing token root entry point.
+Run the package build before typechecking or packing from a fresh checkout. The token root
+and config subpath export the same compiled helpers. All public package imports are covered
+by the isolated packed-consumer fixture. Theme has an explicit client boundary; Node SSR is
+verified, while RSC framework integration remains a release check.
 
 ## Ownership checks
 

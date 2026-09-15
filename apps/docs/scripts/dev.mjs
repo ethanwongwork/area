@@ -27,7 +27,7 @@ const request = buildQueue(async () => {
     console.log('Area preview updated.');
   } finally { child = undefined; await rm(stage, { recursive: true, force: true }); }
 });
-const directories = ['packages', 'apps/docs'].map(path => join(root, path));
+const directories = ['packages', 'apps/docs', 'scripts'].map(path => join(root, path));
 const config = join(root, 'package.json');
 const changed = sourceChanges(directories, [config]);
 function onChange(path) {

@@ -23,7 +23,7 @@ export interface ContrastAssertion {
   note: string;
 }
 
-const TONES = ["brand", "danger", "warning", "caution", "success", "info", "discovery"] as const;
+const TONES = ["accent", "danger", "warning", "caution", "success", "info", "discovery"] as const;
 
 /**
  * The four tones a code block paints with: tags, strings, attributes and keywords.
@@ -32,7 +32,7 @@ const TONES = ["brand", "danger", "warning", "caution", "success", "info", "disc
  * where they are checked, and the two have to agree. Adding a fifth syntax colour without
  * adding it here would ship an unmeasured foreground.
  */
-const SYNTAX_ROLES: readonly string[] = ["danger", "success", "brand", "discovery"];
+const SYNTAX_ROLES: readonly string[] = ["danger", "success", "accent", "discovery"];
 
 /** Supplementary stroke floors are aesthetic policy, not WCAG conformance thresholds.
  * Text-identified buttons may use quiet outlines. Editable fields, unchecked glyphs,
@@ -162,11 +162,11 @@ function chromeAssertions(): ContrastAssertion[] {
     { fg: "focus-color", bg: "bg-component", ...STROKE.focus, note: "focus ring on control" },
     { fg: "focus-color", bg: "bg-subtle", ...STROKE.focus, note: "focus ring on inset" },
 
-    // The neutral button fills. Primary is the strongest call to action a neutral palette
+    // The neutral button fills. Neutral solid is the strongest call to action a neutral palette
     // can make, so its label has to clear body-text contrast, not merely large-text.
     {
-      fg: "fg-on-primary",
-      bg: "bg-primary-solid",
+      fg: "fg-on-neutral",
+      bg: "neutral-solid",
       wcag: WCAG.TEXT,
       apca: APCA.CONTENT,
       note: "neutral button label",
@@ -197,14 +197,14 @@ function stateAssertions(): ContrastAssertion[] {
     }
     out.push({fg:"fg-default",bg,wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"UI label in interactive state"});
   }
-  for (const bg of ["brand-solid", "brand-solid-hover"]) out.push({fg:"fg-on-brand",bg,wcag:WCAG.NON_TEXT,apca:0,note:"checked mark or switch thumb"});
+  for (const bg of ["accent-solid", "accent-solid-hover"]) out.push({fg:"fg-on-accent",bg,wcag:WCAG.NON_TEXT,apca:0,note:"checked mark or switch thumb"});
   out.push({fg:"bg-surface",bg:"stroke-control",wcag:WCAG.NON_TEXT,apca:0,note:"unchecked switch thumb"});
-  out.push({fg:"fg-on-primary",bg:"bg-primary-solid-hover",wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"neutral button hover label"});
+  out.push({fg:"fg-on-neutral",bg:"neutral-solid-hover",wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"neutral button hover label"});
   for (const tone of TONES) for (const state of ["", "-hover", "-active"]) {
     const bg = `${tone}-surface${state}`;
     out.push({fg:"focus-color",bg,wcag:WCAG.NON_TEXT,apca:0,note:"opaque focus on a tinted surface"});
     if(state) out.push({fg:`fg-${tone}`,bg,wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"tonal UI label in interactive state"});
   }
-  for (const state of ["", "-hover", "-active"]) out.push({fg:"stroke-selected",bg:`brand-surface${state}`,wcag:WCAG.NON_TEXT,apca:0,note:"selected chip border on its tint"});
+  for (const state of ["", "-hover", "-active"]) out.push({fg:"stroke-selected",bg:`accent-surface${state}`,wcag:WCAG.NON_TEXT,apca:0,note:"selected chip border on its tint"});
   return out;
 }

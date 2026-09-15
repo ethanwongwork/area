@@ -1,15 +1,15 @@
 export type ScopeCheck = { id: string; pass: boolean; detail: string };
 export type ScopeResult = { passed: number; failed: number; checks: ScopeCheck[]; engine?: string };
-type Reference = {theme:'light'|'dark';neutral:string;brand:string;tokens:Record<string,string>};
+type Reference = {theme:'light'|'dark';neutral:string;accent:string;tokens:Record<string,string>};
 export async function runScopeChecks(): Promise<ScopeResult> {
   if(!CSS.supports('color','light-dark(white, black)')) throw new Error('This fixture requires CSS light-dark() support.');
   const response = await fetch('./scope-reference.json');
   if (!response.ok) throw new Error('Could not load scope-reference.json');
   const references: Reference[] = await response.json();
   const checks: ScopeCheck[] = [];
-  const find = (theme:string,neutral:string,brand:string) => {
-    const ref=references.find(r=>r.theme===theme&&r.neutral===neutral&&r.brand===brand);
-    if(!ref) throw new Error(`Missing resolver reference ${theme}/${neutral}/${brand}`);
+  const find = (theme:string,neutral:string,accent:string) => {
+    const ref=references.find(r=>r.theme===theme&&r.neutral===neutral&&r.accent===accent);
+    if(!ref) throw new Error(`Missing resolver reference ${theme}/${neutral}/${accent}`);
     return ref;
   };
   const host = document.createElement('div');
@@ -17,7 +17,7 @@ export async function runScopeChecks(): Promise<ScopeResult> {
   host.setAttribute('aria-hidden','true'); document.body.append(host);
   const check = (id:string,actual:string,expected:string) => checks.push({id,pass:actual===expected,detail:`${actual} → ${expected}`});
   const attrs = (node:HTMLElement, values:Partial<Reference>) => {
-    for (const name of ['theme','neutral','brand'] as const) if(values[name]) node.setAttribute(`data-area-${name}`,values[name]);
+    for (const name of ['theme','neutral','accent'] as const) if(values[name]) node.setAttribute(`data-area-${name}`,values[name]);
   };
   function compare(id:string, node:HTMLElement, ref:Reference) {
     const probe=document.createElement('span'); node.append(probe);
@@ -39,28 +39,28 @@ export async function runScopeChecks(): Promise<ScopeResult> {
       host.replaceChildren();
       const parent=document.createElement('div'), child=document.createElement('div');
       host.append(parent);parent.append(child);
-      const id=`${ref.theme}/${ref.neutral}/${ref.brand}`;
-      attrs(parent,{theme:ref.theme});attrs(child,{neutral:ref.neutral,brand:ref.brand});
+      const id=`${ref.theme}/${ref.neutral}/${ref.accent}`;
+      attrs(parent,{theme:ref.theme});attrs(child,{neutral:ref.neutral,accent:ref.accent});
       compare(`${id}/inherited`,child,ref);
-      attrs(parent,{theme:ref.theme==='dark'?'light':'dark',neutral:ref.neutral,brand:ref.brand});
-      child.removeAttribute('data-area-neutral');child.removeAttribute('data-area-brand');attrs(child,{theme:ref.theme});
+      attrs(parent,{theme:ref.theme==='dark'?'light':'dark',neutral:ref.neutral,accent:ref.accent});
+      child.removeAttribute('data-area-neutral');child.removeAttribute('data-area-accent');attrs(child,{theme:ref.theme});
       compare(`${id}/boundary`,child,ref);
       child.removeAttribute('data-area-theme');attrs(parent,{theme:ref.theme});
       compare(`${id}/removed`,child,ref);
       // Axis mutation order and an unrelated density/radius/type change must not alter colors.
-      attrs(child,{brand:ref.brand});attrs(child,{neutral:ref.neutral});attrs(child,{theme:ref.theme});
+      attrs(child,{accent:ref.accent});attrs(child,{neutral:ref.neutral});attrs(child,{theme:ref.theme});
       child.dataset.areaDensity='compact';child.dataset.areaRadius='pill';child.dataset.areaType='system';
       compare(`${id}/layout`,child,ref);
       // Override with genuinely different choices, then remove one attribute at a time.
       const otherTheme=ref.theme==='dark'?'light':'dark';
       const otherNeutral=ref.neutral==='warm'?'cool':'warm';
-      const otherBrand=ref.brand==='red'?'green':'red';
-      attrs(child,{theme:otherTheme,neutral:otherNeutral,brand:otherBrand});
-      compare(`${id}/changed`,child,find(otherTheme,otherNeutral,otherBrand));
-      child.removeAttribute('data-area-brand');
-      compare(`${id}/remove-brand`,child,find(otherTheme,otherNeutral,ref.brand));
+      const otherAccent=ref.accent==='red'?'green':'red';
+      attrs(child,{theme:otherTheme,neutral:otherNeutral,accent:otherAccent});
+      compare(`${id}/changed`,child,find(otherTheme,otherNeutral,otherAccent));
+      child.removeAttribute('data-area-accent');
+      compare(`${id}/remove-accent`,child,find(otherTheme,otherNeutral,ref.accent));
       child.removeAttribute('data-area-neutral');
-      compare(`${id}/remove-neutral`,child,find(otherTheme,ref.neutral,ref.brand));
+      compare(`${id}/remove-neutral`,child,find(otherTheme,ref.neutral,ref.accent));
       child.removeAttribute('data-area-theme');
       compare(`${id}/remove-theme`,child,ref);
       // Opposite intermediate boundary, then another explicit boundary back to the root mode.
@@ -69,8 +69,8 @@ export async function runScopeChecks(): Promise<ScopeResult> {
       compare(`${id}/three-level`,grandchild,ref);
       // Set theme last after clearing all selections: final output cannot depend on order.
       child.replaceChildren();
-      for(const name of ['theme','neutral','brand']) child.removeAttribute(`data-area-${name}`);
-      attrs(child,{brand:ref.brand});attrs(child,{neutral:ref.neutral});attrs(child,{theme:ref.theme});
+      for(const name of ['theme','neutral','accent']) child.removeAttribute(`data-area-${name}`);
+      attrs(child,{accent:ref.accent});attrs(child,{neutral:ref.neutral});attrs(child,{theme:ref.theme});
       compare(`${id}/reverse-order`,child,ref);
     }
     const child=document.getElementById('react-child');
@@ -79,7 +79,7 @@ export async function runScopeChecks(): Promise<ScopeResult> {
     if(!child || !portal || !parent) throw new Error('React portal fixture is not mounted');
     const selection=JSON.parse(document.getElementById('react-requested')!.dataset.expected!);
     const context=JSON.parse(portal.dataset.selection!);
-    const ref=find(selection.theme,selection.neutral,selection.brand);
+    const ref=find(selection.theme,selection.neutral,selection.accent);
     compare('react/child',child,ref);compare('react/portal',portal,ref);
     check('react/portal-outside-parent',String(parent.contains(portal)),'false');
     for(const [axis,value] of Object.entries(selection)) {

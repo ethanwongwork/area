@@ -10,8 +10,8 @@ const code = (text) => `<code class="area-code">${text}</code>`;
 
 export const PRACTICES = {
   button: [
-    `Use one solid ${code("primary")} button per view. It is the strongest call to action a neutral palette can make, and a second one halves the value of the first.`,
-    `Reach for ${code("brand")} when the action should follow the brand, and ${code("neutral")} when it should stay the strongest thing on the page whatever the brand axis is set to. Emphasis is the variant\u2019s job, not the tone\u2019s: solid, outline and ghost span it on every tone.`,
+    `Use one solid ${code("neutral")} button per view. It is the strongest call to action a neutral palette can make, and a second one halves the value of the first.`,
+    `Reach for ${code("accent")} when the action should follow the accent, and ${code("neutral")} when it should stay the strongest thing on the page whatever the accent axis is set to. Emphasis is the variant\u2019s job, not the tone\u2019s: solid, outline and ghost span it on every tone.`,
     `${code("danger")} is for actions that destroy data, not for actions that merely cancel. A cancel button is ${code("ghost")}.`,
     `Give every ${code("iconOnly")} button an ${code("aria-label")}. The glyph is decorative and hidden from assistive tech.`,
     `Set ${code("loading")} rather than disabling by hand. It disables the button, swaps the leading icon for a spinner, and sets ${code("aria-busy")} — which ${code("disabled")} alone does not communicate.`,
@@ -61,7 +61,7 @@ export const PRACTICES = {
     `Put the confirming action last in the footer, and make a destructive one ${code("danger")}.`,
   ],
   tabs: [
-    `The active indicator is the foreground colour, not the brand. Reserving brand for genuinely actionable things keeps a row of tabs from reading as a row of buttons.`,
+    `The active indicator is the foreground colour, not the accent. Reserving accent for genuinely actionable things keeps a row of tabs from reading as a row of buttons.`,
     `Tabs switch between views of the same thing. To pick a value, use a Segmented control — giving both a filled indicator is how the two end up indistinguishable.`,
     `Only the selected tab is in the tab order; arrow keys move between them. That is what ${code("role=tablist")} promises.`,
   ],

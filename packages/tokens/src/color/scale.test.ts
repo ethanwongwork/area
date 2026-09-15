@@ -159,7 +159,7 @@ describe("solid fill", () => {
     }
   });
 
-  it("holds its identity across themes, so a brand colour is one colour", () => {
+  it("holds its identity across themes, so a accent colour is one colour", () => {
     for (const spec of CHROMATIC_SCALES) {
       // Chromatic only: a neutral's solid crosses the ladder with the theme, by design.
       const light = buildScale(spec, "light").solid.level;

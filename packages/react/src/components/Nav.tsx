@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
-import { cx } from "../variants.ts";
+import { cx, navVariants, MANIFESTS, type VariantProps } from "../variants.ts";
 
 /**
  * Site navigation, vertical or horizontal.
@@ -12,24 +12,19 @@ import { cx } from "../variants.ts";
  */
 export interface NavProps extends HTMLAttributes<HTMLElement> {
   /** The axis. Vertical is the sidebar case and the default. */
-  orientation?: "vertical" | "horizontal";
+  orientation?: "vertical" | VariantProps<typeof MANIFESTS.nav>["orientation"];
   /** What a current item's plate carries. Neutral by default. */
-  tone?: "neutral" | "brand";
+  tone?: "neutral" | VariantProps<typeof MANIFESTS.nav>["tone"];
 }
 
-export const Nav = forwardRef<HTMLElement, NavProps>(function Nav(
+export const Nav = /* @__PURE__ */ forwardRef<HTMLElement, NavProps>(function Nav(
   { orientation = "vertical", tone = "neutral", className, children, ...rest },
   ref,
 ) {
   return (
     <nav
       ref={ref}
-      className={cx(
-        "area-nav",
-        orientation === "horizontal" && "area-nav--horizontal",
-        tone === "brand" && "area-nav--accent",
-        className,
-      )}
+      className={navVariants({ orientation: orientation === "vertical" ? undefined : orientation, tone: tone === "neutral" ? undefined : tone }, className)}
       {...rest}
     >
       {children}
@@ -42,7 +37,7 @@ export interface NavGroupProps extends HTMLAttributes<HTMLDivElement> {
   label?: ReactNode;
 }
 
-export const NavGroup = forwardRef<HTMLDivElement, NavGroupProps>(function NavGroup(
+export const NavGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, NavGroupProps>(function NavGroup(
   { label, className, children, ...rest },
   ref,
 ) {
@@ -65,7 +60,7 @@ export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
   children?: ReactNode;
 }
 
-export const NavItem = forwardRef<HTMLAnchorElement, NavItemProps>(function NavItem(
+export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProps>(function NavItem(
   { current, icon, trailing, disabled, className, children, ...rest },
   ref,
 ) {

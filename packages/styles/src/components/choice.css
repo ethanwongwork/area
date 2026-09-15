@@ -65,7 +65,7 @@
     display: block;
     position: absolute;
     inset: 0;
-    background-color: var(--area-fg-on-brand);
+    background-color: var(--area-fg-on-accent);
     transform: scale(0);
     transition: transform var(--area-duration-fast) var(--area-ease-spring);
   }
@@ -91,7 +91,7 @@
   .area-checkbox__control:checked,
   .area-checkbox__control:indeterminate,
   .area-radio__control:checked {
-    background-color: var(--area-brand-solid);
+    background-color: var(--area-accent-solid);
     border-color: var(--area-stroke-selected);
   }
 
@@ -103,7 +103,7 @@
   /* Checked controls darken on hover. Lightening washes the fill out. */
   .area-checkbox__control:checked:hover,
   .area-radio__control:checked:hover {
-    background-color: var(--area-brand-solid-hover);
+    background-color: var(--area-accent-solid-hover);
     border-color: var(--area-stroke-selected);
   }
 
@@ -157,11 +157,11 @@
 
   .area-switch__control:checked {
     border-color: var(--area-stroke-selected);
-    background-color: var(--area-brand-solid);
+    background-color: var(--area-accent-solid);
   }
 
   .area-switch__control:checked::after {
-    background-color: var(--area-fg-on-brand);
+    background-color: var(--area-fg-on-accent);
     translate: calc(var(--_track-inline) - var(--_track-block)) 0;
   }
 
@@ -170,7 +170,7 @@
   }
 
   .area-switch__control:checked:hover:not(:disabled) {
-    background-color: var(--area-brand-solid-hover);
+    background-color: var(--area-accent-solid-hover);
   }
 
   /* --- Labels ------------------------------------------------------------- */

@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, forwardRef, useContext, useMemo } from 'react';
 import type { HTMLAttributes } from 'react';
 import { DEFAULT_AXES, mergeAxes, themeAttributes } from '@area/tokens/config';
@@ -9,7 +11,7 @@ export interface ThemeProps extends HTMLAttributes<HTMLDivElement> {
   value?: Partial<AxisSelection>;
 }
 /** Complete attribute boundary, including when mounted through a React portal. */
-export const Theme = forwardRef<HTMLDivElement, ThemeProps>(function Theme(
+export const Theme = /* @__PURE__ */ forwardRef<HTMLDivElement, ThemeProps>(function Theme(
   {value, children, ...props}, ref,
 ) {
   const parent=useContext(ThemeContext);

@@ -1,9 +1,9 @@
 /**
- * The colour axes: theme, neutral, and brand.
+ * The colour axes: theme, neutral, and accent.
  *
  * Three separate axes rather than one, because their token namespaces are disjoint and
  * therefore compose. `--area-neutral-*` and everything derived from it belongs to the
- * neutral axis; `--area-brand-*` to the brand axis. Eleven accents and three neutral casts give
+ * neutral axis; `--area-accent-*` to the accent axis. Eleven accents and three neutral casts give
  * thirty-three selections, each retaining both light and dark polarity.
  *
  * The theme axis carries what neither of the others owns: every scale's primitive ramp,
@@ -41,8 +41,8 @@ function primitiveRamp(theme: ResolvedTheme, scaleId: string, as = scaleId): Rec
   return out;
 }
 
-function themeFor(t: Theme, brand: string, neutral: string): ResolvedTheme {
-  return resolveTheme({ theme: t, brand, neutral });
+function themeFor(t: Theme, accent: string, neutral: string): ResolvedTheme {
+  return resolveTheme({ theme: t, accent, neutral });
 }
 
 // ---------------------------------------------------------------------------
@@ -59,7 +59,7 @@ const SHADOW_COLOR: Record<Theme, string> = {
 };
 
 function themePreset(t: Theme): AxisPreset {
-  const resolved = themeFor(t, DEFAULT_SELECTION.brand, DEFAULT_SELECTION.neutral);
+  const resolved = themeFor(t, DEFAULT_SELECTION.accent, DEFAULT_SELECTION.neutral);
 
   // Every family except the one the neutral axis aliases.
   //
@@ -132,7 +132,7 @@ export const THEME_AXIS: AxisDefinition = {
 // ---------------------------------------------------------------------------
 
 function neutralTokens(t: Theme, neutral: string): TokenMap {
-  const resolved = themeFor(t, DEFAULT_SELECTION.brand, neutral);
+  const resolved = themeFor(t, DEFAULT_SELECTION.accent, neutral);
   return tokens({
     ...primitiveRamp(resolved, neutral, "neutral"),
     ...tokensForRole(resolved, "neutral"),
@@ -146,7 +146,7 @@ export const NEUTRAL_AXIS: AxisDefinition = {
   defaultPreset: DEFAULT_SELECTION.neutral,
   namespaces: [
     "--area-neutral-",
-    ...Object.keys(tokensForRole(themeFor("light", DEFAULT_SELECTION.brand, DEFAULT_SELECTION.neutral), "neutral"))
+    ...Object.keys(tokensForRole(themeFor("light", DEFAULT_SELECTION.accent, DEFAULT_SELECTION.neutral), "neutral"))
       .map(name => `--area-${name}:`),
   ],
   presets: NEUTRAL_SCALES.map((spec) => ({
@@ -159,28 +159,28 @@ export const NEUTRAL_AXIS: AxisDefinition = {
 };
 
 // ---------------------------------------------------------------------------
-// Brand axis
+// Accent axis
 // ---------------------------------------------------------------------------
 
-function brandTokens(t: Theme, brand: string): TokenMap {
-  const resolved = themeFor(t, brand, DEFAULT_SELECTION.neutral);
+function accentTokens(t: Theme, accent: string): TokenMap {
+  const resolved = themeFor(t, accent, DEFAULT_SELECTION.neutral);
   return tokens({
-    ...primitiveRamp(resolved, brand, "brand"),
-    ...tokensForRole(resolved, "brand"),
+    ...primitiveRamp(resolved, accent, "accent"),
+    ...tokensForRole(resolved, "accent"),
   });
 }
 
-export const BRAND_AXIS: AxisDefinition = {
-  id: "brand",
+export const ACCENT_AXIS: AxisDefinition = {
+  id: "accent",
   label: "Accent",
-  description: "The brand hue. Drives fills, links, and the focus ring.",
-  defaultPreset: DEFAULT_SELECTION.brand,
-  namespaces: ["--area-brand-", "--area-fg-brand", "--area-fg-on-brand", "--area-focus-color:", "--area-stroke-selected:"],
+  description: "The accent hue. Drives fills, links, and the focus ring.",
+  defaultPreset: DEFAULT_SELECTION.accent,
+  namespaces: ["--area-accent-", "--area-fg-accent", "--area-fg-on-accent", "--area-focus-color:", "--area-stroke-selected:"],
   presets: CHROMATIC_SCALES.map((spec) => ({
     id: spec.id,
     label: spec.id[0]!.toUpperCase() + spec.id.slice(1),
     description: SCALE_DESCRIPTIONS[spec.id]!,
-    tokens: brandTokens("light", spec.id),
-    darkTokens: brandTokens("dark", spec.id),
+    tokens: accentTokens("light", spec.id),
+    darkTokens: accentTokens("dark", spec.id),
   })),
 };

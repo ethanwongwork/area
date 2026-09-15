@@ -68,11 +68,11 @@
    * which reads as a call to action rather than as the current choice.
    */
   .area-chip[data-selected] {
-    --_bg: var(--area-brand-surface);
-    --_bg-hover: var(--area-brand-surface-hover);
+    --_bg: var(--area-accent-surface);
+    --_bg-hover: var(--area-accent-surface-hover);
     --_border: var(--area-stroke-selected);
     --_border-hover: var(--area-stroke-selected);
-    --_fg: var(--area-fg-brand);
+    --_fg: var(--area-fg-accent);
   }
 
   .area-chip[data-disabled] {

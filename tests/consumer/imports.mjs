@@ -1,8 +1,43 @@
-// Run from a temporary directory populated only by the three npm tarballs.
-const checks = [];
-for (const name of ['@area/tokens/config', '@area/tokens', '@area/react', '@area/styles/manifest']) {
-  try { await import(name); checks.push({ name, pass: true }); }
-  catch (error) { checks.push({ name, pass: false, code: error.code, message: error.message }); }
-}
-console.log(JSON.stringify(checks, null, 2));
-process.exitCode = checks.some(check => !check.pass) ? 1 : 0;
+import assert from 'node:assert/strict';
+import { readFile, writeFile } from 'node:fs/promises';
+import { createElement as h } from 'react';
+import { renderToString } from 'react-dom/server';
+import * as Area from '@area/react';
+import { MANIFESTS } from '@area/styles/manifest';
+import { DEFAULT_AXES, mergeAxes } from '@area/tokens';
+import { buttonVariants, selectVariants, checkboxVariants, classesFor, stateAttributes } from '@area/react/variants';
+import { build } from 'esbuild';
+assert.equal(typeof window,'undefined');
+assert.equal(DEFAULT_AXES.accent,'indigo');
+assert.ok(!Object.hasOwn(DEFAULT_AXES,'brand'));
+assert.equal((await import('@area/react/theme')).Theme,Area.Theme);
+assert.equal((await import('@area/tokens/config')).mergeAxes,mergeAxes);
+assert.match(buttonVariants({tone:'neutral'}),/area-button--neutral/);
+assert.match(selectVariants({size:'xl'}),/area-select--xl/);
+for(const props of [{tone:'brand'},{tone:'primary'},{size:'xxl'},{fullWidth:'yes'},{typo:true}])assert.throws(()=>buttonVariants(props));
+assert.deepEqual(stateAttributes(MANIFESTS.select,{disabled:true,invalid:true}),{disabled:true,'aria-invalid':'true'});
+assert.deepEqual(stateAttributes(MANIFESTS.textarea,{disabled:true}),{disabled:true});
+assert.throws(()=>checkboxVariants({size:'xs'}));
+assert.throws(()=>stateAttributes(MANIFESTS.button,{invalid:true}));
+for(const manifest of Object.values(MANIFESTS))for(const [key,values] of Object.entries(manifest.variants))for(const value of values)assert.ok(classesFor(manifest,{[key]:value}).includes(manifest.block+'--'+value));
+const html=renderToString(h(Area.Theme,{value:{theme:'dark',accent:'green'}},h(Area.Theme,{value:{density:'compact'}},
+ h(Area.Button,{tone:'neutral'},'Save'),h(Area.Nav,{tone:'accent'}),h(Area.Select,{size:'xl'},h('option',{},'One')),h(Area.Panel,{size:'xs',title:'Settings'}),h(Area.Chip,{size:'lg'},'Design'),h(Area.Slider,{size:'xl'}),h(Area.CodeBlock,{code:'const area = true;',actions:h(Area.Button,{},'Copy')}))));
+assert.equal((html.match(/data-area-accent="green"/g)??[]).length,2);
+for(const c of ['area-button--neutral','area-nav--accent','area-select--xl','area-panel--xs','area-chip--lg','area-slider--xl','area-code-block__actions'])assert.ok(html.includes(c),c);
+assert.ok(!html.includes('__toolbar'));
+const cssPath=import.meta.resolve('@area/styles/area.css');
+const css=await readFile(new URL(cssPath),'utf8');assert.ok(!/@import\s/.test(css));assert.ok(css.includes('--area-accent-solid'));
+const browser=await build({stdin:{contents:`import {createElement} from 'react'; import {createRoot} from 'react-dom/client'; import {Button,Theme} from '@area/react'; import '@area/styles/area.css'; createRoot(document.getElementById('root')).render(createElement(Theme,{value:{accent:'green'}},createElement(Button,{tone:'accent'},'Save')));`,resolveDir:process.cwd(),loader:'js'},bundle:true,platform:'browser',format:'esm',write:false,outfile:'out/app.js',metafile:true,minify:true});
+assert.ok(browser.outputFiles.some(f=>f.path.endsWith('.css')&&f.text.includes('--area-accent-solid')),'CSS survives tree shaking');
+assert.ok(browser.outputFiles.some(f=>f.path.endsWith('.js')));
+const helpers=await build({stdin:{contents:`export {buttonVariants} from '@area/react/variants';`,resolveDir:process.cwd()},bundle:true,platform:'browser',format:'esm',write:false,metafile:true,minify:true});
+assert.ok(!Object.keys(helpers.metafile.inputs).some(p=>p.includes('node_modules/react/')),'helpers have no React dependency');
+assert.ok(!helpers.outputFiles[0].text.includes('area-slider'),'unused manifests are removed');
+const button=await build({stdin:{contents:`export {Button} from '@area/react';`,resolveDir:process.cwd()},bundle:true,platform:'browser',format:'esm',write:false,metafile:true,external:['react','react/jsx-runtime'],minify:true});
+assert.ok(!button.outputFiles[0].text.includes('area-slider'),'unused components are removed');
+const selectBundle=await build({stdin:{contents:`export {Select} from '@area/react';`,resolveDir:process.cwd()},bundle:true,platform:'browser',format:'esm',write:false,external:['react','react/jsx-runtime'],minify:true});
+assert.ok(!selectBundle.outputFiles[0].text.includes('area-checkbox'),'unused choice controls are removed');
+const themeSource=await readFile(new URL(import.meta.resolve('@area/react/theme')),'utf8');assert.match(themeSource,/^"use client";/);
+const rootSource=await readFile(new URL(import.meta.resolve('@area/react')),'utf8');assert.ok(!rootSource.startsWith('"use client"'));
+await writeFile('ssr.html',html);
+console.log(JSON.stringify({imports:'pass (tokens root/config/types, React root/theme/variants, manifest, CSS)',runtime:'all manifest variants and invalid values pass',ssr:'pass, no DOM globals, nested Theme inherits',browser:'JS + CSS bundle passes',helperBytes:helpers.outputFiles[0].contents.length,buttonBytes:button.outputFiles[0].contents.length,treeShaking:'unused components and manifests removed',boundary:'Theme directive preserved; RSC framework integration remains unverified'},null,2));

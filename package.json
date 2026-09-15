@@ -18,7 +18,8 @@
     "clean": "rm -rf packages/*/dist apps/*/dist",
     "audit": "npm run audit -w @area/docs",
     "test:preview": "npm run test -w @area/docs",
-    "test:consumer": "node scripts/check-consumer.mjs"
+    "test:consumer": "node scripts/check-consumer.mjs",
+    "test:contracts": "node --test packages/styles/scripts/manifest-parity.test.mjs apps/docs/scripts/axis-preferences.test.mjs"
   },
   "engines": {
     "node": "^22.18.0 || ^24.0.0 || >=26.0.0"

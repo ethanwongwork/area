@@ -13,7 +13,7 @@ export const COMPONENT_PAGES = [
     manifest: "button",
     api: [
       ["variant", '"solid" | "soft" | "outline" | "ghost"', '"solid"'],
-      ["tone", "ButtonTone (8 values)", '"primary"'],
+      ["tone", "ButtonTone (8 values)", '"neutral"'],
       ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
       ["icon", "ReactNode", "—"],
       ["trailingIcon", "ReactNode", "—"],
@@ -36,7 +36,7 @@ export const COMPONENT_PAGES = [
       {
         id: "tones",
         title: "Tones",
-        note: "Eight tones. Primary carries no hue and is the default \u2014 a near-black button is the strongest call to action a neutral palette can make, and it stays strongest whatever the brand axis is set to. Brand is reserved for moments that are genuinely about identity.",
+        note: "Eight tones. Neutral carries no hue and is the default \u2014 a near-black button is the strongest call to action a neutral palette can make, and it stays strongest whatever the accent axis is set to. Accent is reserved for moments that are genuinely about identity.",
         demo: "ButtonTones",
       },
       {
@@ -142,7 +142,7 @@ export const COMPONENT_PAGES = [
     slug: "select",
     name: "Select",
     manifest: "select",
-    api: [["size", '"xs" | "sm" | "md" | "lg"', '"md"']],
+    api: [["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"']],
     examples: [{ id: "default", title: "Default", demo: "SelectDefault" }],
   },
   {
@@ -188,7 +188,7 @@ export const COMPONENT_PAGES = [
     name: "Slider",
     manifest: "slider",
     api: [
-      ["size", '"xs" | "sm" | "md" | "lg"', '"md"'],
+      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
       ["min", "number", "0"],
       ["max", "number", "100"],
       ["readout", "ReactNode", "—"],
@@ -205,7 +205,7 @@ export const COMPONENT_PAGES = [
     name: "Chip",
     manifest: "chip",
     api: [
-      ["size", '"xs" | "sm" | "md"', '"sm"'],
+      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"sm"'],
       ["selected", "boolean", "false"],
       ["swatch", "string", "—"],
       ["swatchOnly", "boolean", "false"],
@@ -223,7 +223,7 @@ export const COMPONENT_PAGES = [
     name: "Badge",
     manifest: "badge",
     api: [
-      ["tone", '"neutral" | "brand" | "danger" | "warning" | "success"', '"neutral"'],
+      ["tone", '"neutral" | "accent" | "danger" | "warning" | "success"', '"neutral"'],
       ["variant", '"solid" | "outline"', "—"],
       ["dot", "boolean", "false"],
     ],
@@ -349,9 +349,11 @@ export const COMPONENT_PAGES = [
     name: "Menu",
     manifest: "menu",
     api: [
-      ["tone", '"danger"', "—"],
-      ["shortcut", "string", "—"],
-      ["disabled", "boolean", "false"],
+      ["layout", '"inline"', "—"],
+      ["selection", '"marker"', "—"],
+      ["MenuItem.tone", '"danger"', "—"],
+      ["MenuItem.shortcut", "ReactNode", "—"],
+      ["MenuItem.disabled", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", demo: "MenuDefault" },
@@ -387,7 +389,7 @@ export const COMPONENT_PAGES = [
       {
         id: "default",
         title: "Default",
-        note: "The active indicator is the foreground colour, not the brand, so tabs never read as buttons.",
+        note: "The active indicator is the foreground colour, not the accent, so tabs never read as buttons.",
         demo: "TabsDefault",
       },
     ],
@@ -474,7 +476,7 @@ export const COMPONENT_PAGES = [
     manifest: "nav",
     api: [
       ["orientation", '"vertical" | "horizontal"', '"vertical"'],
-      ["tone", '"neutral" | "brand"', '"neutral"'],
+      ["tone", '"neutral" | "accent"', '"neutral"'],
       ["current", "boolean", "false"],
       ["icon", "ReactNode", "\u2014"],
       ["trailing", "ReactNode", "\u2014"],
@@ -485,7 +487,7 @@ export const COMPONENT_PAGES = [
       "Label every nav. Two or three <code class='area-code'>&lt;nav&gt;</code> landmarks on one page are indistinguishable without <code class='area-code'>aria-label</code>, and a sidebar plus a top bar is the common case.",
       "Group vertically, never horizontally. A group label needs a line of its own, which a horizontal nav does not have.",
       "Let long labels truncate. The row reserves space for the icon and anything trailing and gives the rest to the label, so a long document title shortens instead of wrapping the row to two lines.",
-      "Reach for <code class='area-code'>tone=\"brand\"</code> only where the nav is the page's primary structure. On a sidebar beside brand-coloured content it competes.",
+      "Reach for <code class='area-code'>tone=\"accent\"</code> only where the nav is the page's primary structure. On a sidebar beside accent-coloured content it competes.",
     ],
     examples: [
       { id: "default", title: "Default", demo: "NavDefault" },
@@ -502,10 +504,10 @@ export const COMPONENT_PAGES = [
         demo: "NavHorizontal",
       },
       {
-        id: "brand",
-        title: "Brand",
-        note: "Use the tone prop to carry the brand hue on the current item instead of the neutral.",
-        demo: "NavBrand",
+        id: "accent",
+        title: "Accent",
+        note: "Use the tone prop to carry the accent hue on the current item instead of the neutral.",
+        demo: "NavAccent",
       },
       { id: "disabled", title: "Disabled", demo: "NavDisabled" },
     ],

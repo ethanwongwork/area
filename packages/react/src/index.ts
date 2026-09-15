@@ -21,6 +21,7 @@ export {
   type NavItemProps,
 } from "./components/Nav.tsx";
 export * from "./components/primitives.tsx";
+export * from "./components/forms.tsx";
 export * from "./variants.ts";
 
 export { Theme, useTheme, type ThemeProps, type AxisSelection } from "./components/Theme.tsx";

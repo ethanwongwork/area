@@ -9,7 +9,7 @@ function Sample({ name }: { name: string }) {
     <span>Project settings</span>
     <Input aria-label={`${name} project`} defaultValue="Area" />
     <Select aria-label={`${name} access`} defaultValue="team"><option value="team">Workspace members</option></Select>
-    <Button tone="brand" variant="outline">Save changes</Button>
+    <Button tone="accent" variant="outline">Save changes</Button>
   </div>;
 }
 export function ScopeBoard() {
@@ -28,20 +28,20 @@ export function ScopeBoard() {
       }}>{busy?'Checking…':'Run scope checks'}</Button>
     </header>
     <main>
-      <section className="lab-stage" data-area-theme="dark" data-area-neutral="neutral" data-area-brand="indigo">
+      <section className="lab-stage" data-area-theme="dark" data-area-neutral="neutral" data-area-accent="indigo">
         <h2>Inside a dark section</h2>
         <div className="scope-grid">
           <div data-area-neutral="warm"><Sample name="Inherited dark · warm"/></div>
           <div data-area-theme="dark" data-area-neutral="warm"><Sample name="Explicit dark · warm"/></div>
-          <div data-area-brand="green"><Sample name="Inherited dark · green"/></div>
-          <div data-area-theme="dark" data-area-brand="green"><Sample name="Explicit dark · green"/></div>
+          <div data-area-accent="green"><Sample name="Inherited dark · green"/></div>
+          <div data-area-theme="dark" data-area-accent="green"><Sample name="Explicit dark · green"/></div>
         </div>
       </section>
-      <section className="lab-stage" data-area-theme="dark" data-area-neutral="warm" data-area-brand="green">
+      <section className="lab-stage" data-area-theme="dark" data-area-neutral="warm" data-area-accent="green">
         <h2>A light island inside dark</h2>
         <div className="scope-grid">
           <div data-area-theme="light"><Sample name="Inherited warm + green · light"/></div>
-          <div data-area-theme="light" data-area-neutral="warm" data-area-brand="green"><Sample name="Explicit warm + green · light"/></div>
+          <div data-area-theme="light" data-area-neutral="warm" data-area-accent="green"><Sample name="Explicit warm + green · light"/></div>
         </div>
       </section>
       <ReactScopes onChange={()=>setResult(null)}/>

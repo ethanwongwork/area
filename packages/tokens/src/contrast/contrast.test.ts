@@ -15,7 +15,7 @@ import { type ResolvedTheme, resolveTheme, shippedThemes } from "../semantic/res
 const THEMES = shippedThemes();
 
 function label(t: ResolvedTheme): string {
-  return `theme=${t.theme} neutral=${t.neutral} accent=${t.brand}`;
+  return `theme=${t.theme} neutral=${t.neutral} accent=${t.accent}`;
 }
 
 function pair(t: ResolvedTheme, fg: string, bg: string): { fgHex: string; bgHex: string } {
@@ -32,7 +32,7 @@ function pair(t: ResolvedTheme, fg: string, bg: string): { fgHex: string; bgHex:
 
 describe("contrast gate", () => {
   it("covers every shipped theme", () => {
-    // 2 themes x every neutral x every brand hue. Derived rather than typed, because the
+    // 2 themes x every neutral x every accent hue. Derived rather than typed, because the
     // hardcoded 72 went stale the moment the palette grew from three neutrals to six and
     // the failure said nothing about what had actually changed.
     expect(THEMES).toHaveLength(2 * NEUTRAL_SCALES.length * CHROMATIC_SCALES.length);
@@ -106,7 +106,7 @@ describe("gate integrity", () => {
   it("actually fails when a colour goes bad", () => {
     // A gate that has never failed is not a gate. Deliberately break a theme and confirm
     // the failure is both detected and explained.
-    const theme = resolveTheme({ theme: "light", neutral: "neutral", brand: "blue" });
+    const theme = resolveTheme({ theme: "light", neutral: "neutral", accent: "blue" });
     const brokenTokens: Record<string, string> = { ...theme.tokens, "fg-default": "#b0b0b0" };
 
     const actual = wcagContrastHex(brokenTokens["fg-default"]!, brokenTokens["bg-page"]!);

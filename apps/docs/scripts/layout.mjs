@@ -1,3 +1,5 @@
+import { restoreAxisPreferences } from "./axis-preferences.mjs";
+import { AXIS_PRESETS } from "@area/tokens/config";
 /**
  * Documentation chrome.
  *
@@ -47,7 +49,7 @@ import { ICONS } from "./icons.generated.mjs";
  * floating control read as an obstruction.
  */
 function toolbarButton(icon, label, attr, variant = "outline") {
-  return `<button type="button" class="area-button area-button--${variant} area-button--primary area-button--sm area-button--icon-only" aria-label="${escapeHtml(label)}" ${attr}>
+  return `<button type="button" class="area-button area-button--${variant} area-button--neutral area-button--sm area-button--icon-only" aria-label="${escapeHtml(label)}" ${attr}>
       <span class="area-button__icon" aria-hidden="true">${ICONS[icon]}</span>
     </button>`;
 }
@@ -104,7 +106,7 @@ export function customizer(inspectorHtml) {
   <header class="docs-customizer__bar">
     <span class="docs-customizer__title">Customize</span>
     <span class="docs-customizer__name" id="docs-customizer-name"></span>
-    <button type="button" class="area-button area-button--ghost area-button--primary area-button--sm area-button--icon-only" data-customizer-close aria-label="Close">
+    <button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm area-button--icon-only" data-customizer-close aria-label="Close">
       <span class="area-button__icon" aria-hidden="true">${ICONS.close}</span>
     </button>
   </header>
@@ -306,7 +308,7 @@ export const DOCS_CSS = `
    * One role above the UI size, not two: sharing a bar with a 28px icon button, a large
    * role out-measured the control beside it and the pair stopped reading as one bar.
    */
-  .docs-brand {
+  .docs-wordmark {
     display: flex;
     align-items: center;
     /*
@@ -470,7 +472,7 @@ export const DOCS_CSS = `
 
   .docs-icon:hover { background-color: var(--area-bg-hover); }
   .docs-icon:focus-visible { outline: none; outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
-  .docs-icon[data-copied] { background-color: var(--area-brand-surface); color: var(--area-fg-brand); }
+  .docs-icon[data-copied] { background-color: var(--area-accent-surface); color: var(--area-fg-accent); }
 
   .docs-icon__mark {
     display: inline-flex;
@@ -724,7 +726,7 @@ export const DOCS_CSS = `
   }
   .docs-specimen__name { font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
   .docs-specimen__figure { display: flex; align-items: center; justify-content: center; min-block-size: var(--docs-figure); }
-  .docs-specimen__box { background-color: var(--area-brand-surface-active); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-brand-border); }
+  .docs-specimen__box { background-color: var(--area-accent-surface-active); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-accent-border); }
 
   /*
    * The preview swatch. Deliberately the same radius expression as the badge's own swatch --
@@ -927,7 +929,7 @@ export const DOCS_SCRIPT = `
   var KEY = "area-docs-axes";
   var root = document.documentElement;
   var saved = {};
-  try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
+  try { saved = (${restoreAxisPreferences.toString()})(localStorage, ${JSON.stringify(AXIS_PRESETS)}); } catch (e) {}
 
   function apply(axis, value) {
     if (value) root.setAttribute("data-area-" + axis, value);

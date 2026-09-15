@@ -30,7 +30,7 @@ export async function buildLab(root, out, docsCSS) {
   await mkdir(cache,{recursive:true});
   const temporary = await mkdtemp(join(cache,'lab-'));
   const pages = [["lab", "board", "Board", "System lab"], ["scopes", "scopes", "ScopeBoard", "Theme boundaries"], ["contrast", "contrast", "ContrastBoard", "Edges and contrast"]];
-  await writeFile(join(out,"scope-reference.json"),JSON.stringify(shippedThemes().map(({theme,neutral,brand,tokens})=>({theme,neutral,brand,tokens}))));
+  await writeFile(join(out,"scope-reference.json"),JSON.stringify(shippedThemes().map(({theme,neutral,accent,tokens})=>({theme,neutral,accent,tokens}))));
   try {
   for(const [slug,source,exportName,title] of pages) {
   let html;

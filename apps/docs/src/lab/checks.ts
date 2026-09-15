@@ -10,7 +10,7 @@ export function runChecks(): Check[] {
     const value=getComputedStyle(probe).color;probe.remove();return value;
   };
   const check = (id: string, label: string, actual: unknown, expected: unknown) => result.push({id,label,pass:actual===expected,detail:`Actual: ${JSON.stringify(actual)}; expected: ${JSON.stringify(expected)}`});
-  for (const name of ['--area-brand-surface','--area-fg-brand','--area-brand-solid-hover']) check('F01/brand/'+name,'Brand-only child inherits dark polarity',token('nested-brand',name),token('explicit-brand',name));
+  for (const name of ['--area-accent-surface','--area-fg-accent','--area-accent-solid-hover']) check('F01/accent/'+name,'Accent-only child inherits dark polarity',token('nested-accent',name),token('explicit-accent',name));
   for (const name of ['--area-bg-page','--area-fg-default']) check('F01/neutral/'+name,'Neutral-only child inherits dark polarity',token('nested-neutral',name),token('explicit-neutral',name));
   for (const name of ['--area-bg-page','--area-fg-default','color-scheme']) check('F01/light/'+name,'Light boundary resets inherited dark values',token('light-reset',name),token('explicit-light',name));
   const input = el('lab-name') as HTMLInputElement;

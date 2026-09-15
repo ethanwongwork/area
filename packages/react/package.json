@@ -5,27 +5,31 @@
   "sideEffects": false,
   "description": "Area React components. Contains no CSS.",
   "exports": {
-    ".": "./src/index.ts",
-    "./variants": "./src/variants.ts"
+    ".": {
+      "types": "./dist/modules/index.d.ts",
+      "import": "./dist/modules/index.js",
+      "default": "./dist/modules/index.js"
+    },
+    "./variants": {
+      "types": "./dist/modules/variants.d.ts",
+      "import": "./dist/modules/variants.js",
+      "default": "./dist/modules/variants.js"
+    },
+    "./theme": {
+      "types": "./dist/modules/components/Theme.d.ts",
+      "import": "./dist/modules/components/Theme.js",
+      "default": "./dist/modules/components/Theme.js"
+    }
   },
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
-    "build": "echo '  @area/react \u2014 source-only package, nothing to build.'",
+    "build": "node ../../scripts/build-modules.mjs .",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "react": "^18.3 || ^19",
-    "react-dom": "^18.3 || ^19"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    }
+    "react": "^18.3 || ^19"
   },
   "dependencies": {
     "@area/styles": "*",

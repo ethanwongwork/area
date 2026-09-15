@@ -1,28 +1,22 @@
+import type { VariantProps } from "../variants.ts";
+import { MANIFESTS } from "../variants.ts";
 import { forwardRef } from "react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { buttonVariants, cx } from "../variants.ts";
 
 /**
- * The eight tones. `neutral` is not a brand colour -- a near-black
+ * The eight tones. `neutral` is not an accent colour -- a near-black
  * button is the strongest call to action a neutral palette can make, and it stays the
- * strongest whatever the brand axis is set to.
+ * strongest whatever the accent axis is set to.
  */
-export type ButtonTone =
-  | "neutral"
-  | "brand"
-  | "info"
-  | "success"
-  | "warning"
-  | "caution"
-  | "danger"
-  | "discovery";
+export type ButtonTone = VariantProps<typeof MANIFESTS.button>["tone"];
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   /** Fill treatment. */
-  variant?: "solid" | "soft" | "outline" | "ghost";
+  variant?: VariantProps<typeof MANIFESTS.button>["variant"];
   /** Which semantic scale the button draws from. */
   tone?: ButtonTone;
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: VariantProps<typeof MANIFESTS.button>["size"];
   /** Stretch to the width of the container. */
   fullWidth?: boolean;
   /** Square button with no label. Requires `aria-label`. */
@@ -51,7 +45,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
  * Defaults to `type="button"`. The HTML default is `submit`, which silently submits the
  * nearest form -- a bug that only appears once a button is placed inside one.
  */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     variant,
     tone,

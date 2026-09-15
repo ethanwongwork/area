@@ -51,8 +51,8 @@ ${css}
     transition: var(--area-transition);
   }
   .solid {
-    background: var(--area-brand-solid);
-    color: var(--area-fg-on-brand);
+    background: var(--area-accent-solid);
+    color: var(--area-fg-on-accent);
     border-color: transparent;
   }
   .panel {
@@ -95,7 +95,7 @@ window.areaProbe = function (el) {
     fontSans: v("--area-font-sans").slice(0, 24),
     bgPage: color("--area-bg-page"),
     fgDefault: color("--area-fg-default"),
-    accentSolid: color("--area-brand-solid"),
+    accentSolid: color("--area-accent-solid"),
     borderFocus: color("--area-focus-color"),
     borderWidth: v("--area-border-width"),
     shadow2: v("--area-shadow-2").slice(0, 20),

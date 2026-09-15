@@ -18,7 +18,7 @@ describe("axis registry", () => {
 
   it("ships the axes the system promises", () => {
     expect(AXES.map((a) => a.id).sort()).toEqual(
-      ["brand", "density", "motion", "neutral", "radius", "surface", "theme", "type"].sort(),
+      ["accent", "density", "motion", "neutral", "radius", "surface", "theme", "type"].sort(),
     );
   });
 });
@@ -111,7 +111,7 @@ it('rejects a dark-only collision with another axis', () => {
   const axes = structuredClone(AXES);
   axes.find(a => a.id === 'neutral')!.presets[0]!.darkTokens = {
     ...axes.find(a => a.id === 'neutral')!.presets[0]!.darkTokens,
-    '--area-brand-solid': '#ffffff',
+    '--area-accent-solid': '#ffffff',
   };
   expect(checkAxisIntegrity(axes).some(p => p.kind === 'collision')).toBe(true);
 });

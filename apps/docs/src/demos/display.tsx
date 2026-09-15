@@ -5,8 +5,8 @@ export const BadgeDefault = () => <Badge>Badge</Badge>;
 
 export const BadgeTones = () => (
   <>
-    <Badge tone="primary">Neutral</Badge>
-    <Badge tone="brand">Accent</Badge>
+    <Badge tone="neutral">Neutral</Badge>
+    <Badge tone="accent">Accent</Badge>
     <Badge tone="success">Success</Badge>
     <Badge tone="warning">Warning</Badge>
     <Badge tone="danger">Danger</Badge>
@@ -15,7 +15,7 @@ export const BadgeTones = () => (
 
 export const BadgeVariants = () => (
   <>
-    <Badge variant="solid" tone="brand">
+    <Badge variant="solid" tone="accent">
       Solid
     </Badge>
     <Badge variant="outline">Outline</Badge>
@@ -42,7 +42,7 @@ export const CardDefault = () => (
     <CardTitle>Deploy to production</CardTitle>
     <CardDescription>This will make your changes live for everyone.</CardDescription>
     <CardFooter>
-      <Button variant="ghost" tone="primary" size="sm">
+      <Button variant="ghost" tone="neutral" size="sm">
         Cancel
       </Button>
       <Button size="sm">Deploy</Button>
@@ -174,7 +174,7 @@ export const DialogDefault = () => (
     description="This permanently removes the project and everything in it."
     footer={
       <>
-        <Button variant="ghost" tone="primary" size="sm">
+        <Button variant="ghost" tone="neutral" size="sm">
           Cancel
         </Button>
         <Button tone="danger" size="sm">
@@ -212,7 +212,7 @@ export const TokenDefault = () => <Token>--area-space-16</Token>;
 
 export const TokenSwatch = () => (
   <>
-    <Token swatch="var(--area-brand-solid)">--area-brand-solid</Token>
+    <Token swatch="var(--area-accent-solid)">--area-accent-solid</Token>
     <Token swatch="var(--area-danger-solid)">--area-danger-solid</Token>
   </>
 );
@@ -227,7 +227,7 @@ export const TokenInProse = () => (
 export const TokenSubtle = () => (
   <>
     <Token>--area-blue-500</Token>
-    <Token subtle>--area-brand-solid</Token>
+    <Token subtle>--area-accent-solid</Token>
   </>
 );
 
@@ -243,9 +243,9 @@ export const PanelEverything = () => (
     size="md"
     title="Scroll Variant"
     action={
-      <Button variant="ghost" tone="primary" size="xs" iconOnly aria-label="Close" icon={<DismissIcon />} />
+      <Button variant="ghost" tone="neutral" size="xs" iconOnly aria-label="Close" icon={<DismissIcon />} />
     }
-    footer={<Button variant="soft" tone="primary" size="sm" fullWidth>Add Section</Button>}
+    footer={<Button variant="soft" tone="neutral" size="sm" fullWidth>Add Section</Button>}
     style={{ inlineSize: 320, blockSize: 560 }}
   >
     <PanelSection heading="Trigger">

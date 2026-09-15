@@ -1,6 +1,6 @@
 # Architecture
 
-Area lets consumers tune theme, neutral, brand, typography, density, radius, surface,
+Area lets consumers tune theme, neutral, accent, typography, density, radius, surface,
 and motion using inherited `data-area-*` attributes. The documentation site is both
 the component catalog and a consumer of the same system.
 
@@ -11,8 +11,10 @@ the component catalog and a consumer of the same system.
 2. `packages/styles/scripts/build.mjs` follows CSS imports, respecting package exports,
    and bundles them into `packages/styles/dist/area.css`. The parity script checks
    component selectors against `src/manifest.ts`.
-3. `packages/react` exports TypeScript source. Its build is intentionally a no-op;
-   consumers need a TS/TSX-capable bundler. Variant helpers read the styles manifest.
+3. `scripts/build-modules.mjs` emits module-preserving ESM and declarations for the styles
+   manifest and React package. Public imports resolve built files; React and CSS remain
+   separate. Strict variant helpers read literal manifest data. Theme alone declares a
+   client boundary. [Package contract and migration](API_MIGRATION.md).
 4. `apps/docs/scripts/render.mjs` bundles the demo registry with esbuild and renders it
    with React's server renderer. Snippets are extracted from the same demo files.
 5. `apps/docs/scripts/build.mjs` combines demos, page metadata, token JSON and the shared

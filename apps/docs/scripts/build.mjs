@@ -150,7 +150,7 @@ function axisChips(axis) {
 }
 
 const AXIS_SECTIONS = [
-  { title: "Appearance", axes: ["theme", "neutral", "brand"] },
+  { title: "Appearance", axes: ["theme", "neutral", "accent"] },
   { title: "Type", axes: ["type"] },
   { title: "Layout", axes: ["density", "radius", "surface"] },
   { title: "Motion", axes: ["motion"] },
@@ -161,7 +161,7 @@ function axisControl(axis) {
   switch (axis.id) {
     case "theme":
       return { label: "Dark mode", control: axisSwitch(axis, "dark") };
-    case "brand":
+    case "accent":
       return { label: "Accent", control: axisChips(axis), full: true };
     case "radius":
       return { label: "Radius", control: axisSlider(axis) };
@@ -211,7 +211,7 @@ function inspector() {
   <div class="area-panel__bar">
     <span class="area-panel__title">Customize</span>
     <span class="docs-inspector__actions">
-      <button type="button" class="area-button area-button--ghost area-button--primary area-button--xs" data-reset-axes>
+      <button type="button" class="area-button area-button--ghost area-button--neutral area-button--xs" data-reset-axes>
         <span class="area-button__label">Reset</span>
       </button>
       ${railToggle("panel", "Hide customize panel")}
@@ -235,7 +235,7 @@ function inspector() {
  */
 function railToggle(rail, label, { corner = false } = {}) {
   const icon = rail === "nav" ? ICONS.panelLeft : ICONS.panelRight;
-  return `<button type="button" class="area-button area-button--ghost area-button--primary area-button--sm area-button--icon-only${corner ? " docs-rail-toggle" : ""}" data-rail="${rail}" aria-label="${escapeHtml(label)}" aria-expanded="true">
+  return `<button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm area-button--icon-only${corner ? " docs-rail-toggle" : ""}" data-rail="${rail}" aria-label="${escapeHtml(label)}" aria-expanded="true">
       <span class="area-button__icon" aria-hidden="true">${icon}</span>
     </button>`;
 }
@@ -257,7 +257,7 @@ function sidebar(activeSlug) {
 
   return `<aside class="docs-sidebar area-panel area-panel--md area-panel--flush area-panel--bare-bar">
   <div class="area-panel__bar">
-    <a class="docs-brand" href="./index.html">area</a>
+    <a class="docs-wordmark" href="./index.html">area</a>
     ${railToggle("nav", "Hide navigation")}
   </div>
   <div class="area-panel__body docs-sidebar__body">
@@ -372,7 +372,7 @@ ${table(
   ["Prop", "Type", "Default"],
   spec.api.map(([name, type, dflt]) => [
     `<span class="docs-mono">${escapeHtml(name)}</span>`,
-    `<span class="docs-mono" style="color:var(--area-fg-brand)">${escapeHtml(type)}</span>`,
+    `<span class="docs-mono" style="color:var(--area-fg-accent)">${escapeHtml(type)}</span>`,
     `<span class="docs-mono" style="color:var(--area-fg-muted)">${escapeHtml(dflt)}</span>`,
   ]),
 )}`;
@@ -781,7 +781,7 @@ ${primitive(
   `${tokens.leadingRamp.length} pixel stops from ${tokens.leadingRamp[0]} to ${tokens.leadingRamp.at(-1)}, which composites pair with a size by ratio.`,
   tokens.leadingRamp,
   "px",
-  (v) => `line-height:var(--area-leading-${v});background:var(--area-brand-surface);display:inline-block`,
+  (v) => `line-height:var(--area-leading-${v});background:var(--area-accent-surface);display:inline-block`,
 )}
 ${primitive(
   "wght",
@@ -841,7 +841,7 @@ function axisPresetTable(axisId) {
     ["Preset", "Attribute", "Description"],
     axis.presets.map((p) => [
       escapeHtml(p.label) + (p.id === axis.defaultPreset ? " (default)" : ""),
-      `<span class="docs-mono" style="color:var(--area-fg-brand)">${axis.attribute}="${p.id}"</span>`,
+      `<span class="docs-mono" style="color:var(--area-fg-accent)">${axis.attribute}="${p.id}"</span>`,
       escapeHtml(p.description),
     ]),
   );
@@ -1182,7 +1182,7 @@ function axesPage() {
 <p>Because custom properties inherit, a subtree can carry its own axis values. A sidebar marked <code class='area-code'>data-area-density="compact"</code> gets shorter controls <em>and</em> correctly re-derived corner radii, without any component knowing it happened.</p>
 </div>
 <h2 class="docs-h2" id="usage">Usage</h2>
-${codeBlock(`<html data-area-theme="dark" data-area-brand="purple" data-area-density="compact">`)}
+${codeBlock(`<html data-area-theme="dark" data-area-accent="purple" data-area-density="compact">`)}
 <h2 class="docs-h2" id="scopes">Nested themes</h2>
 <p class="docs-note">CSS attributes inherit independently. A light boundary keeps its inherited neutral and accent; changing either role inside dark keeps the dark scheme. Color pairs require CSS light-dark() support. <a href="./scopes.html">Inspect the browser scope checks.</a></p>
 <p class="docs-note">React Theme inherits from the nearest React Theme and emits all eight attributes, including inside a portal. Its root starts at Area defaults. Pass the host selection explicitly when integrating with a surrounding CSS-only theme.</p>

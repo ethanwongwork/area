@@ -2,10 +2,16 @@
   "name": "@area/tokens",
   "version": "0.0.0",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "description": "Area design tokens \u2014 OKLCH scale generator, axis registry, and CSS emitter.",
   "exports": {
-    ".": "./src/index.ts",
+    ".": {
+      "types": "./dist/config.d.ts",
+      "import": "./dist/config.js",
+      "default": "./dist/config.js"
+    },
     "./tokens.json": "./dist/tokens.json",
     "./css/tokens.css": "./dist/css/tokens.css",
     "./css/axes.css": "./dist/css/axes.css",
@@ -14,11 +20,13 @@
     "./config": {
       "types": "./dist/config.d.ts",
       "default": "./dist/config.js"
+    },
+    "./types": {
+      "types": "./dist/tokens.d.ts"
     }
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "build": "node src/build.ts",
@@ -27,13 +35,11 @@
     "typecheck": "tsc --noEmit",
     "preview": "node src/color/preview.ts"
   },
-  "dependencies": {
-    "apca-w3": "0.1.9"
-  },
   "devDependencies": {
     "@types/node": "^22.20.2",
     "colorjs.io": "^0.7.1",
     "typescript": "^5.7.0",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.0",
+    "apca-w3": "0.1.9"
   }
 }

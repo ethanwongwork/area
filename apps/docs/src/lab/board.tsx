@@ -30,7 +30,7 @@ export function Board() {
       </div>
     </header>
     <main>
-      <section id="comparison" className="lab-stage" aria-label={p.name} data-area-theme={p.theme} data-area-neutral={p.neutral} data-area-brand="indigo" data-area-density={p.density} data-area-radius={p.radius} data-area-surface={p.surface} data-area-motion="subtle">
+      <section id="comparison" className="lab-stage" aria-label={p.name} data-area-theme={p.theme} data-area-neutral={p.neutral} data-area-accent="indigo" data-area-density={p.density} data-area-radius={p.radius} data-area-surface={p.surface} data-area-motion="subtle">
         <div className="lab-row lab-between"><h2>{p.name}</h2><Badge tone="success" dot>Baseline E01</Badge></div>
         <div className="lab-row">
           <Button id="lab-button">Create project</Button><Button variant="outline">Invite people</Button><Button variant="ghost">View activity</Button><Button disabled>Unavailable</Button><Chip selected>Design</Chip><Chip>Engineering</Chip>
@@ -60,7 +60,7 @@ export function Board() {
         <details id="lab-fixtures"><summary>Scope and behavior fixtures</summary>
           <p>Keyboard probes: focus Account and press Right. Focus Overview and press Right. Move Allocation with Right and rerun checks. These are real hydrated wrappers; the fixture does not add missing component behavior.</p>
           <div data-area-theme="dark">
-            <div id="nested-brand" data-area-brand="green">Inherited dark + green</div><div id="explicit-brand" data-area-theme="dark" data-area-brand="green">Explicit dark + green</div>
+            <div id="nested-accent" data-area-accent="green">Inherited dark + green</div><div id="explicit-accent" data-area-theme="dark" data-area-accent="green">Explicit dark + green</div>
             <div id="nested-neutral" data-area-neutral="warm">Inherited dark + warm</div><div id="explicit-neutral" data-area-theme="dark" data-area-neutral="warm">Explicit dark + warm</div>
             <div id="light-reset" data-area-theme="light">Light island</div>
           </div>

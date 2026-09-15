@@ -7,9 +7,9 @@
 export interface ContrastException {
   fg: string;
   bg: string;
-  /** Restrict the waiver to specific themes or brands; omit to waive everywhere. */
+  /** Restrict the waiver to specific themes or accents; omit to waive everywhere. */
   theme?: "light" | "dark";
-  brand?: string;
+  accent?: string;
   neutral?: string;
   /** Which standard is waived. */
   standard: "wcag" | "apca";
@@ -23,7 +23,7 @@ export const EXCEPTIONS: ContrastException[] = [];
 
 export function isWaived(
   exception: { fg: string; bg: string; standard: "wcag" | "apca" },
-  context: { theme: string; brand: string; neutral: string },
+  context: { theme: string; accent: string; neutral: string },
 ): ContrastException | undefined {
   return EXCEPTIONS.find(
     (e) =>
@@ -31,7 +31,7 @@ export function isWaived(
       e.bg === exception.bg &&
       e.standard === exception.standard &&
       (e.theme === undefined || e.theme === context.theme) &&
-      (e.brand === undefined || e.brand === context.brand) &&
+      (e.accent === undefined || e.accent === context.accent) &&
       (e.neutral === undefined || e.neutral === context.neutral),
   );
 }

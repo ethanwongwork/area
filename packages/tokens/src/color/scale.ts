@@ -70,7 +70,7 @@ export interface SolidChoice {
   /**
    * The rung the fill sits at, per theme.
    *
-   * For a chromatic family the two are identical -- a brand colour does not move when the
+   * For a chromatic family the two are identical -- a accent colour does not move when the
    * lights go out. A neutral family is the exception and has to be: its solid is the
    * near-black button, and near-black on a near-black page is not a button. There the fill
    * crosses the ladder with the theme.

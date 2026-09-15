@@ -8,18 +8,18 @@ export function ContrastBoard() {
   const [report,setReport]=useState<PaintReport|null>(null);
   const [theme,setTheme]=useState('light');
   const [surface,setSurface]=useState('outlined');
-  const [brand,setBrand]=useState('indigo');
+  const [accent,setAccent]=useState('indigo');
   const [selection,setSelection]=useState('design');
   return <>
     <header className="lab-header"><a href="./lab.html">Area / System lab</a><h1>Edges, states and readable text</h1><p>Real components on the page and an inset surface. Use Tab to inspect keyboard focus.</p>
       <div className="contrast-controls">
         <Select aria-label="Theme" value={theme} onChange={e=>{setTheme(e.target.value);setReport(null);}}><option>light</option><option>dark</option></Select>
         <Select aria-label="Surface" value={surface} onChange={e=>{setSurface(e.target.value);setReport(null);}}>{['flat','outlined','raised','elevated'].map(v=><option key={v}>{v}</option>)}</Select>
-        <Select aria-label="Accent" value={brand} onChange={e=>{setBrand(e.target.value);setReport(null);}}>{['blue','cyan','green','indigo','lime','orange','pink','purple','red','teal','yellow'].map(v=><option key={v}>{v}</option>)}</Select>
+        <Select aria-label="Accent" value={accent} onChange={e=>{setAccent(e.target.value);setReport(null);}}>{['blue','cyan','green','indigo','lime','orange','pink','purple','red','teal','yellow'].map(v=><option key={v}>{v}</option>)}</Select>
       </div>
     </header>
-    <main id="contrast-stage" className="lab-stage" data-area-theme={theme} data-area-neutral="neutral" data-area-brand={brand} data-area-surface={surface} data-area-motion="none">
-      <div className="lab-row"><Button id="contrast-solid" tone="brand">Save changes</Button><Button id="contrast-outline" variant="outline">Invite people</Button><Chip selected>Design</Chip><Chip>Engineering</Chip><Button disabled>Unavailable</Button></div>
+    <main id="contrast-stage" className="lab-stage" data-area-theme={theme} data-area-neutral="neutral" data-area-accent={accent} data-area-surface={surface} data-area-motion="none">
+      <div className="lab-row"><Button id="contrast-solid" tone="accent">Save changes</Button><Button id="contrast-outline" variant="outline">Invite people</Button><Chip selected>Design</Chip><Chip>Engineering</Chip><Button disabled>Unavailable</Button></div>
       <div className="lab-grid">
         <Card><div className="lab-stack"><h2>Project settings</h2><Field label="Project name" htmlFor="contrast-input"><Input id="contrast-input" placeholder="Enter a project name"/></Field><Field label="Access" htmlFor="contrast-select"><Select id="contrast-select"><option>Workspace members</option><option>Only invited people</option></Select></Field><Field label="Email" htmlFor="contrast-invalid" error="Enter a valid email address."><Input id="contrast-invalid" invalid defaultValue="area@"/></Field><Segmented id="contrast-segmented" fullWidth label="Team" options={[{value:'design',label:'Design'},{value:'engineering',label:'Engineering'}]} value={selection} onSelect={setSelection}/><div className="lab-row"><Checkbox id="contrast-unchecked" label="Updates"/><Checkbox id="contrast-checked" label="Mentions" defaultChecked/><Radio id="contrast-radio" label="Daily" defaultChecked name="frequency"/><Switch id="contrast-switch" label="Sync"/><Switch id="contrast-switch-on" label="Live" defaultChecked/></div></div></Card>
         <div className="lab-stack contrast-inset"><h2>On an inset surface</h2><Textarea id="contrast-textarea" aria-label="Notes" placeholder="Add context for your team"/><Slider id="contrast-slider" aria-label="Allocation" defaultValue={40}/><CodeBlock html={highlight('const project = "Area";\nconst enabled = true;\nexport { project, enabled };')}/><p>Container seams stay quiet. Field boundaries and selected states carry their own contrast.</p><Button variant="outline" onClick={()=>document.getElementById('contrast-input')?.focus()}>Focus project name</Button></div>

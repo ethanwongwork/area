@@ -11,14 +11,14 @@ Its E01–E12 batches refine the order of the milestone checklist below.
 
 E03 resolves the 75/100/150 trial's failures: decoration remains quiet at 75, supplementary
 frames/outlines return to 150/200, and required control/state edges gain explicit 3:1 contracts.
-See [the final contrast policy](CONTRAST.md). The next milestone is **API/package consistency**,
+See [the final contrast policy](CONTRAST.md). E04 completes API/package consistency. The next milestone is **interaction architecture**,
 then **working interaction primitives**. Further palette expansion is not the priority.
 
 Effort bands describe uncertainty and scope, not calendar commitments: **small** is one focused change; **medium** spans several modules and a focused test suite; **large** needs a design/API decision, implementation and browser/assistive-technology validation. Dependencies matter more than the bands.
 
 E01 tooling and visual baseline is complete: [results and screenshots](batches/E01/README.md).
 E02 scope implementation is complete: [contract and browser evidence](batches/E02/README.md).
-Gecko validation remains pending. E03 is implemented; E04 is next; the foundation and release milestones remain open.
+Gecko validation remains pending. E01–E04 are implemented; E05 is next; the foundation and release milestones remain open.
 
 ## Milestone 1 — Trust the rendered foundation
 
@@ -113,10 +113,10 @@ Gecko validation remains pending. E03 is implemented; E04 is next; the foundatio
 
 ### R09 · P0 · Public package and API contract · medium
 
-- [ ] Fix or remove the missing token root export deliberately.
-- [ ] Decide source-only versus compiled distribution; verify a clean external consumer.
-- [ ] Align neutral/primary terminology and size unions across React/manifest/CSS.
-- [ ] Validate export paths, declaration output, peer dependencies, styles and package contents.
+- [x] Fix the token root export deliberately (E04 configuration helpers).
+- [x] Compile ESM/declarations; verify isolated local tarball consumption (E04).
+- [x] Align neutral/accent terminology and size unions across React/manifest/CSS (E04).
+- [x] Validate export paths, declarations, installed peers, CSS and package contents (E04; peer-version matrix remains release work).
 - [ ] Define versioning, deprecation, changelog, project license and asset attribution.
 
 **Exit:** a clean consumer installs a local package tarball, renders representative components and builds without workspace-only paths or undocumented transpilation. Audit: F06.
@@ -124,7 +124,7 @@ Gecko validation remains pending. E03 is implemented; E04 is next; the foundatio
 ### R10 · P1 · CI, browser coverage and truthful documentation · medium
 
 - [ ] CI runs tests, typecheck, builds, manifest parity and dogfood audit on a clean checkout.
-- [ ] Add component-scoped selector/state checks and public-prop parity checks.
+- [x] Add component-scoped selector/state checks and typed public-prop fixtures (E04).
 - [ ] Add interaction tests and selected cross-axis visual regressions.
 - [ ] Publish a supported browser/React/runtime matrix and test it.
 - [ ] Add manual VoiceOver/NVDA and Windows forced-color checks; record results and limits.

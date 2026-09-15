@@ -6,9 +6,9 @@ export async function runPaintChecks(): Promise<PaintReport> {
   if (!document.activeElement?.matches(":focus-visible")) throw new Error("Use Tab to focus Run painted checks, then press Enter. Keyboard focus must be active before measuring :focus-visible.");
   const stage=document.getElementById('contrast-stage')!;
   const checks:PaintCheck[]=[];
-  const original=Object.fromEntries(['theme','neutral','brand','surface'].map(k=>[k,stage.getAttribute(`data-area-${k}`)!]));
+  const original=Object.fromEntries(['theme','neutral','accent','surface'].map(k=>[k,stage.getAttribute(`data-area-${k}`)!]));
   const previous=document.activeElement as HTMLElement|null;
-  const themes=await (await fetch('./scope-reference.json')).json() as {theme:string;neutral:string;brand:string}[];
+  const themes=await (await fetch('./scope-reference.json')).json() as {theme:string;neutral:string;accent:string}[];
   const el=(id:string)=>document.getElementById(`contrast-${id}`)!;
   const css=(node:Element,pseudo?:string)=>getComputedStyle(node,pseudo);
   const rgba=(value:string):number[]=>{
@@ -36,8 +36,8 @@ export async function runPaintChecks(): Promise<PaintReport> {
   const contrast=(name:string,fg:string,bg:string,min=3)=>{const r=ratio(fg,bg);check(name,r>=min,`${r.toFixed(4)}:1 (${fg} / ${bg})`);};
   try {
     for(const theme of themes)for(const surface of ['flat','outlined','raised','elevated']) {
-      context=`${theme.theme}/${theme.neutral}/${theme.brand}/${surface}`;
-      for(const [axis,value] of Object.entries({theme:theme.theme,neutral:theme.neutral,brand:theme.brand,surface}))stage.setAttribute(`data-area-${axis}`,value);
+      context=`${theme.theme}/${theme.neutral}/${theme.accent}/${surface}`;
+      for(const [axis,value] of Object.entries({theme:theme.theme,neutral:theme.neutral,accent:theme.accent,surface}))stage.setAttribute(`data-area-${axis}`,value);
       // Layout forces the current scope to resolve; this specimen uses motion=none.
       const input=el('input'),shell=input.parentElement!;
       const textarea=el('textarea'),select=el('select'),invalid=el('invalid').parentElement!;

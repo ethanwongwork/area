@@ -1,5 +1,9 @@
 # Project journal
 
+## 2026-09-14 — E04 public vocabulary and compiled contracts
+
+Accent and neutral now name the public axis/tones consistently, with a one-time docs preference migration preserving saved choices. Literal manifest types and component-scoped positive state checks found hidden size tiers, a Nav class mismatch, undeclared table slots and dead CodeBlock toolbar markup. Packed ESM/declarations now pass strict isolated NodeNext, Node SSR and browser CSS/tree-shaking checks; Theme alone keeps a client directive. The matched contrast specimen is byte-identical and both browser matrices remain green; behavior failures and unverified RSC/peer/browser combinations stay explicit in the [E04 report](../docs/batches/E04/README.md).
+
 ## 2026-09-14 — E03: separate quiet framing from required information
 
 The 75/100/150 trial revealed that decoration and empty fields could not share one contrast
