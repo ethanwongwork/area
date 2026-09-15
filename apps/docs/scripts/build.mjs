@@ -1,3 +1,5 @@
+import { docsOutput } from "./output.mjs";
+import { buildLab } from "./lab.mjs";
 /**
  * Builds the documentation site.
  *
@@ -29,7 +31,7 @@ import { PRACTICES } from "../src/practices.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = resolve(root, "..", "..");
-const out = join(root, "dist");
+const out = docsOutput(root);
 const AREA_COUNT = CATALOG.filter((i) => i.source === "area").length;
 
 const tokens = JSON.parse(readFileSync(join(repo, "packages/tokens/dist/tokens.json"), "utf8"));
@@ -258,7 +260,7 @@ function sidebar(activeSlug) {
     ${railToggle("nav", "Hide navigation")}
   </div>
   <div class="area-panel__body docs-sidebar__body">
-  ${group("Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes")].join("\n      "))}
+  ${group("Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes"), item("./lab.html", "System lab", "lab")].join("\n      "))}
   ${group("Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   ${group("Components", COMPONENT_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   </div>
@@ -1269,6 +1271,8 @@ const pages = [
 
 for (const [name, html] of pages) writeFileSync(join(out, name), html, "utf8");
 
+await buildLab(root, out, DOCS_CSS);
+
 console.log(`\n  @area/docs\n`);
-console.log(`  ${pages.length} pages, ${Object.keys(demos).length} demos`);
+console.log(`  ${pages.length + 1} pages, ${Object.keys(demos).length} demos`);
 console.log(`  dist/ -> ${out}\n`);

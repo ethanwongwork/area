@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs && node scripts/check-dogfood.mjs",
-    "dev": "node scripts/build.mjs && node scripts/serve.mjs",
-    "audit": "node scripts/check-dogfood.mjs"
+    "dev": "node scripts/dev.mjs",
+    "audit": "node scripts/check-dogfood.mjs",
+    "test": "node --test scripts/preview.test.mjs",
+    "typecheck": "tsc -p tsconfig.lab.json --noEmit"
   },
   "dependencies": {
     "@area/react": "*",

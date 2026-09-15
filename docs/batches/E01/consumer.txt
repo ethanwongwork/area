@@ -1,0 +1,34 @@
+
+> area@0.0.0 test:consumer
+> node scripts/check-consumer.mjs
+
+FAIL @area/tokens . → missing ./src/index.ts
+PASS @area/tokens ./tokens.json → ./dist/tokens.json
+PASS @area/tokens ./css/tokens.css → ./dist/css/tokens.css
+PASS @area/tokens ./css/axes.css → ./dist/css/axes.css
+PASS @area/tokens ./css/properties.css → ./dist/css/properties.css
+PASS @area/styles . → ./dist/area.css
+PASS @area/styles ./area.css → ./dist/area.css
+PASS @area/styles ./manifest → ./src/manifest.ts
+PASS @area/react . → ./src/index.ts
+PASS @area/react ./variants → ./src/variants.ts
+[
+  {
+    "name": "@area/tokens",
+    "pass": false,
+    "code": "ERR_MODULE_NOT_FOUND",
+    "message": "Cannot find module '<temporary-consumer>/node_modules/@area/tokens/src/index.ts' imported from <temporary-consumer>/imports.mjs"
+  },
+  {
+    "name": "@area/react",
+    "pass": false,
+    "code": "ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING",
+    "message": "Stripping types is currently unsupported for files under node_modules, for \"file://<temporary-consumer>/node_modules/@area/react/src/index.ts\""
+  },
+  {
+    "name": "@area/styles/manifest",
+    "pass": false,
+    "code": "ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING",
+    "message": "Stripping types is currently unsupported for files under node_modules, for \"file://<temporary-consumer>/node_modules/@area/styles/src/manifest.ts\""
+  }
+]

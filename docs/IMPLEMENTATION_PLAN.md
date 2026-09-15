@@ -1,7 +1,8 @@
 # Area — implementation plan
 
 **Updated:** 2026-09-14. **Planning baseline:** `59ea987`.
-**Status:** plan complete; implementation batches below have not started.
+**Status:** E01 completed; E02 is next. See [E01 results and visuals](batches/E01/README.md).
+The system remains red: 165 existing token failures and the newly visible browser/package regressions.
 **Inputs:** [system audit](SYSTEM_AUDIT.md), [milestone checklist](ROADMAP.md), and the user's subsequent authorization to rename/add tokens, reorganize structure, build components and make system-wide improvements.
 
 ## Objective and working authority
@@ -22,7 +23,7 @@ This document is the execution sequence. `SYSTEM_AUDIT.md` is dated evidence; `R
 6. **Keep CSS independently usable.** React adds behavior and composition. CSS-only examples must state which native behavior they get and which interaction controller they require.
 7. **Use native controls where they fit.** Keep native Select for straightforward selection. Prove a mature accessible behavior layer for composite widgets before building more custom event/focus machinery.
 8. **Treat package consumption as a design constraint early.** A component that works only inside the docs is unfinished.
-9. **Make visual review continuous.** Establish a comparison board at the beginning and return to it after every visible change.
+9. **Make visual review continuous.** Return to the System lab after every visible change. The user requests a one-off before/after summary after each batch, with real screenshots where applicable. Preserve matched profile/viewport/state captures and describe what changed; for nonvisual work report checks instead.
 10. **Use small, coherent commits.** Keep mechanical moves separate from behavior or color changes where possible; each commit must have an intelligible purpose and recorded checks.
 
 ## Sequence and dependencies
@@ -56,7 +57,7 @@ The first concrete changes will be:
 
 Why this order: palette tuning inside an incorrectly inherited theme is unreliable, and new components would otherwise copy broken tokens and behavior. Theme scoping is a bounded, reproducible first fix that strengthens every later batch.
 
-### E01 — Establish the regression and visual baseline
+### E01 — Establish the regression and visual baseline · completed
 
 **Scope:** verification scaffolding, fixtures, current-state documentation. **Effort:** small–medium. **Maps to:** R10 and preparation for R02/R03.
 
@@ -67,6 +68,8 @@ Why this order: palette tuning inside an incorrectly inherited theme is unreliab
 - Include representative light/dark, neutral casts, both densities, sharp/default/pill, and flat/outlined/elevated states. Capture a selected matrix, not every possible screenshot.
 - Establish a clean-consumer fixture and a baseline export/import check. Record its existing token-root failure.
 - Add a docs rebuild/watch workflow that preserves the last successful preview on a build error.
+
+**Delivered:** [System lab, checks, watcher and baseline evidence](batches/E01/README.md). Browser execution is currently an in-page runner in Chromium; cross-engine automation and CI remain later work.
 
 **Commit units:** test runner and probe fixtures; comparison board and watcher; recorded baseline.
 

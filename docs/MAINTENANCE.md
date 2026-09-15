@@ -19,7 +19,9 @@ There is no general ESLint script; manifest parity and the docs audit are the ex
 lint checks. The docs MJS/TSX pipeline is bundled and rendered, but has no separate tsc task.
 
 For runtime checks, use `npm run dev`, open the site, follow component links, and change
-inspector controls. Rebuild and refresh after source edits; the server has no watcher.
+inspector controls. The dev server watches source edits, publishes only successful builds, and reloads the
+browser. Restart it after editing the watcher/server itself. Use the System lab for the
+repeatable six-profile baseline; see [E01](batches/E01/README.md) for commands and limits.
 The generated `packages/tokens/dist/fixture/axes.html` also exposes `window.areaSweep()`
 for browser inspection of axis presets.
 

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Area — an axis-driven design system.",
+  "description": "Area \u2014 an axis-driven design system.",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -16,7 +16,9 @@
     "lint:manifest": "npm run lint:manifest -w @area/styles",
     "dev": "npm run dev -w @area/docs",
     "clean": "rm -rf packages/*/dist apps/*/dist",
-    "audit": "npm run audit -w @area/docs"
+    "audit": "npm run audit -w @area/docs",
+    "test:preview": "npm run test -w @area/docs",
+    "test:consumer": "node scripts/check-consumer.mjs"
   },
   "engines": {
     "node": "^22.18.0 || ^24.0.0 || >=26.0.0"

@@ -15,6 +15,9 @@ The next implementation milestone should be **theme correctness and honest contr
 
 Effort bands describe uncertainty and scope, not calendar commitments: **small** is one focused change; **medium** spans several modules and a focused test suite; **large** needs a design/API decision, implementation and browser/assistive-technology validation. Dependencies matter more than the bands.
 
+E01 tooling and visual baseline is complete: [results and screenshots](batches/E01/README.md).
+This does not close the foundation or release-readiness milestones. E02 is next.
+
 ## Milestone 1 — Trust the rendered foundation
 
 ### R01 · P0 · Resolve the stroke trial · small

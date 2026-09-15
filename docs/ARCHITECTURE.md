@@ -46,7 +46,15 @@ There is no checked-in CI workflow or automatic publish gate.
 
 The docs are static HTML with browser-side interaction and local storage for preferences.
 `serve.mjs` serves only `apps/docs/dist/` on port 4321 (`PORT` overrides it).
-It does not watch source files. Rebuild and refresh after changes.
+The development server watches sources and builds into a disposable docs cache directory.
+After the build and dogfood audit pass, it reads an immutable snapshot and swaps the live
+preview in one operation. Failed builds preserve the prior snapshot. A development-only
+revision endpoint reloads open pages after successful publication. The static server reads
+the built `dist` once; restart that server after rebuilding.
+
+`apps/docs/src/lab/` supplies the System lab: server-rendered Area components hydrated from
+the same React tree, six representative profiles, and in-page regression assertions. It
+has no separate component styling overrides. Its layout CSS joins the dogfood audit.
 There is no application backend, database, required secret, or environment template.
 Geist fonts load from a pinned jsDelivr URL; the system font preset remains available.
 

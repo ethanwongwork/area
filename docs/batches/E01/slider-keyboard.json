@@ -1,0 +1,137 @@
+{
+  "profile": "Light · neutral · default",
+  "checks": [
+    {
+      "id": "F01/brand/--area-brand-surface",
+      "label": "Brand-only child inherits dark polarity",
+      "pass": false,
+      "detail": "Actual: \"#f1fbf5\"; expected: \"#003d24\""
+    },
+    {
+      "id": "F01/brand/--area-fg-brand",
+      "label": "Brand-only child inherits dark polarity",
+      "pass": false,
+      "detail": "Actual: \"#007249\"; expected: \"#82f7c4\""
+    },
+    {
+      "id": "F01/brand/--area-brand-solid-hover",
+      "label": "Brand-only child inherits dark polarity",
+      "pass": false,
+      "detail": "Actual: \"#007249\"; expected: \"#009764\""
+    },
+    {
+      "id": "F01/neutral/--area-bg-page",
+      "label": "Neutral-only child inherits dark polarity",
+      "pass": false,
+      "detail": "Actual: \"#ffffff\"; expected: \"#16120d\""
+    },
+    {
+      "id": "F01/neutral/--area-fg-default",
+      "label": "Neutral-only child inherits dark polarity",
+      "pass": false,
+      "detail": "Actual: \"#2b2722\"; expected: \"#f1eeeb\""
+    },
+    {
+      "id": "F01/light/--area-bg-page",
+      "label": "Light boundary resets inherited dark values",
+      "pass": false,
+      "detail": "Actual: \"#121212\"; expected: \"#ffffff\""
+    },
+    {
+      "id": "F01/light/--area-fg-default",
+      "label": "Light boundary resets inherited dark values",
+      "pass": false,
+      "detail": "Actual: \"#eeeeee\"; expected: \"#282828\""
+    },
+    {
+      "id": "F01/light/color-scheme",
+      "label": "Light boundary resets inherited dark values",
+      "pass": false,
+      "detail": "Actual: \"dark\"; expected: \"light\""
+    },
+    {
+      "id": "label/name",
+      "label": "Input is associated with its visible label",
+      "pass": true,
+      "detail": "Actual: \"Project name\"; expected: \"Project name\""
+    },
+    {
+      "id": "F07/description",
+      "label": "Input references its rendered description",
+      "pass": false,
+      "detail": "Actual: false; expected: true"
+    },
+    {
+      "id": "F07/required",
+      "label": "Required field exposes native required state",
+      "pass": false,
+      "detail": "Actual: false; expected: true"
+    },
+    {
+      "id": "invalid/state",
+      "label": "Invalid input exposes invalid state",
+      "pass": true,
+      "detail": "Actual: \"true\"; expected: \"true\""
+    },
+    {
+      "id": "F04/tab-ids",
+      "label": "Multiple Tabs instances have unique relationships",
+      "pass": false,
+      "detail": "Actual: 3; expected: 6"
+    },
+    {
+      "id": "F04/segmented-tabstops",
+      "label": "Segmented has one tab stop",
+      "pass": false,
+      "detail": "Actual: 2; expected: 1"
+    },
+    {
+      "id": "F05/motion-none",
+      "label": "Explicit motion none stops the spinner",
+      "pass": false,
+      "detail": "Actual: false; expected: true"
+    },
+    {
+      "id": "size/lab-button",
+      "label": "Medium outer height matches density",
+      "pass": true,
+      "detail": "Actual: 32; expected: 32"
+    },
+    {
+      "id": "size/lab-name",
+      "label": "Medium outer height matches density",
+      "pass": true,
+      "detail": "Actual: 32; expected: 32"
+    },
+    {
+      "id": "size/lab-access",
+      "label": "Medium outer height matches density",
+      "pass": true,
+      "detail": "Actual: 32; expected: 32"
+    },
+    {
+      "id": "size/lab-segmented",
+      "label": "Medium outer height matches density",
+      "pass": true,
+      "detail": "Actual: 32; expected: 32"
+    },
+    {
+      "id": "F07/slider-fill",
+      "label": "Slider fill follows the current value",
+      "pass": false,
+      "detail": "Actual: 40; expected: 41"
+    },
+    {
+      "id": "focus/tab",
+      "label": "Selected tab accepts focus",
+      "pass": true,
+      "detail": "Actual: true; expected: true"
+    },
+    {
+      "id": "F04/tab-arrow",
+      "label": "Right arrow moves focus to the next tab",
+      "pass": false,
+      "detail": "Actual: false; expected: true"
+    }
+  ]
+}

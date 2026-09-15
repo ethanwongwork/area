@@ -105,7 +105,7 @@ These guarantees are covered by tests, build audits, and the review conventions 
   typed `.d.ts`, a browser fixture) and the contrast gate.
 - **`@area/styles`** — component CSS. Framework-agnostic; works without React.
 - **`@area/react`** — React components, generated variant props, no CSS.
-- **`apps/docs`** — the site: 38 pages, every demo rendered from real components, and an
+- **`apps/docs`** — the site: 39 pages, every demo rendered from real components, and an
   icon browser over 1,739 marks.
 
 ## Verifying
@@ -131,8 +131,17 @@ Use Node 22.18+ on the 22.x line, 24.x, or 26+ (see `package.json`). The scripts
 TypeScript directly in Node; Node 20 is not supported by this workflow or installed Vitest.
 Dependencies are locked by `package-lock.json`; use `npm ci` for a fresh checkout.
 
-The dev command builds docs once and starts a static server. After editing sources, run
-`npm run build:docs` and refresh the preview. `PORT=4322 npm run dev` uses a different port.
+The dev command watches token, style, React and docs sources, rebuilds the packages and
+validates the docs, then reloads the browser. Failed builds keep the last successful
+preview available; errors appear in the terminal. `PORT=4322 npm run dev` uses another
+loopback port. Restart the command after changing the watcher/server itself.
+
+The [System lab](http://localhost:4321/lab.html) compares real, hydrated components in six
+representative profiles. Select **Run browser checks** for individual regression results.
+See [E01 baseline and visual comparison](docs/batches/E01/README.md) for current failures,
+keyboard reproductions, screenshots and limits. `npm run test:preview` tests the rebuild
+queue/server; `npm run test:consumer` checks packed exports and raw Node imports, and
+currently exits nonzero for known package defects. Neither command replaces `npm test`.
 No environment secrets are needed. The docs use externally hosted Geist fonts.
 
 - [AGENTS.md](AGENTS.md): orientation, commands and essential rules.

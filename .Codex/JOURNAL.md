@@ -1,5 +1,16 @@
 # Project journal
 
+## 2026-09-14 — E01: a visible regression baseline
+
+The first implementation batch adds the System lab, six representative profiles, and
+22 rendered checks; 14 existing defects remain visible in each profile instead of being
+waived. The preview now publishes only successful audited builds, retains its last working
+snapshot on failure, and filters duplicate filesystem notifications by source content.
+The user requested a real before/after visual summary after every batch; matched specimens
+and screenshots now live in [docs/batches/E01](../docs/batches/E01/README.md), alongside the
+known-red token, keyboard and packed-consumer evidence. No component styling or token values
+changed: E02 theme correctness must precede E03 stroke and contrast refinements.
+
 ## 2026-09-14 — Authorized implementation sequence
 
 The user authorized broad design and implementation improvements, including token/API renames,

@@ -1,3 +1,5 @@
+import { docsOutput } from "./output.mjs";
+import { LAB_CSS } from "./lab.mjs";
 /**
  * Dogfood audit.
  *
@@ -80,7 +82,7 @@ const { DOCS_CSS } = await import("./layout.mjs");
 
 /* --- 1. Raw values in the docs stylesheet --------------------------------- */
 
-const css = DOCS_CSS
+const css = (DOCS_CSS + LAB_CSS)
   // Ignore media-query breakpoints and the allowlisted declarations themselves.
   .replace(/@media[^{]+\{/g, "")
   .replace(/\/\*[\s\S]*?\*\//g, "");
@@ -163,11 +165,11 @@ for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
 
 /* --- 2. Inline styles in the built HTML ----------------------------------- */
 
-const htmlFiles = readdirSync(join(root, "dist")).filter((f) => f.endsWith(".html"));
+const htmlFiles = readdirSync(docsOutput(root)).filter((f) => f.endsWith(".html"));
 const inlineRaw = new Map();
 
 for (const file of htmlFiles) {
-  const html = readFileSync(join(root, "dist", file), "utf8");
+  const html = readFileSync(join(docsOutput(root), file), "utf8");
   for (const match of html.matchAll(/style="([^"]*)"/g)) {
     const style = match[1];
     // A style attribute is acceptable when every value in it resolves from a token, or it
