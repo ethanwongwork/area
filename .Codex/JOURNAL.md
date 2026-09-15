@@ -1,5 +1,16 @@
 # Project journal
 
+## 2026-09-14 — Authorized implementation sequence
+
+The user authorized broad design and implementation improvements, including token/API renames,
+structure changes and new components. [IMPLEMENTATION_PLAN.md](../docs/IMPLEMENTATION_PLAN.md)
+now defines E01–E12, starting with regression evidence and theme scope correctness, then
+semantic contrast/strokes, early API/package cleanup, existing component behavior and visual
+refinement; customization and new widgets follow a dependable core. The quiet appearance
+remains the direction, while 75/100/150 is a comparison reference rather than an immutable
+control-boundary policy. This turn produced the plan only: no source behavior or test
+threshold changed, no dependency was adopted, and the 165 known stroke failures remain.
+
 ## 2026-09-14 — Stroke trial and system completion audit
 
 Tried the user's 75/100/150 light stroke progression across the shared decorative/faint/subtle

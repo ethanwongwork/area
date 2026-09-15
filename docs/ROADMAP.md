@@ -1,9 +1,13 @@
 # Area — completion roadmap
 
 **Updated:** 2026-09-14. Source: [system audit](SYSTEM_AUDIT.md).
-**Scope:** a reusable web application design system, with a verified CSS contract and usable React components. Items below are proposed work, not completed changes or automatic authorization to adopt dependencies/publish packages.
+**Scope:** a reusable web application design system, with a verified CSS contract and usable React components. Items below are a milestone checklist, not completed changes. The user has authorized broad system improvements; the detailed work order and design authority are in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). External publishing/push authorization remains separate.
 
 ## Start here
+
+Follow [the execution plan](IMPLEMENTATION_PLAN.md): regression baseline and theme scoping first,
+then semantic contrast/strokes, API/package cleanup, behavior and component completion.
+Its E01–E12 batches refine the order of the milestone checklist below.
 
 The current 75/100/150 stroke trial is visible but fails five existing contrast assertions (165 parameterized tests). Preserve the checks. First resolve the intended resting-stroke policy: decorative 75 passes; faint 150 and subtle 200 restore these existing floors, while required control indicators still need rendered accessibility review.
 
@@ -20,7 +24,7 @@ Effort bands describe uncertainty and scope, not calendar commitments: **small**
 - [ ] Select release values and rerun the unchanged gate; document any policy change separately with rationale.
 - [ ] Preserve a comparison of the trial and release hierarchy in the journal.
 
-**Exit:** no unexplained gate failure; no blanket claim that a quiet stroke meets non-text contrast. Depends on the user's final aesthetic direction; measurement/classification work can proceed immediately. Audit: stroke section, F02–F03.
+**Exit:** no unexplained gate failure; no blanket claim that a quiet stroke meets non-text contrast. The user has authorized final token/value decisions that improve consistency and quality; preserve the quiet visual direction and justify the result with measurements. Audit: stroke section, F02–F03.
 
 ### R02 · P0 · Repair scoped themes · medium
 
@@ -52,7 +56,7 @@ Effort bands describe uncertainty and scope, not calendar commitments: **small**
 - [ ] Verify keyboard behavior, names/relationships, SSR/hydration, portals and focus return.
 - [ ] Select the approach using that evidence, then apply it consistently.
 
-**Exit:** a real form → menu → dialog → confirmation flow works with keyboard and assistive technology. The architecture decision records bundle/API/maintenance implications. No dependency choice is made by this roadmap alone. Audit: F04.
+**Exit:** a real form → menu → dialog → confirmation flow works with keyboard and assistive technology. The architecture decision records bundle/API/maintenance implications. E05 in the execution plan specifies the preferred prototype and selection gate; the user has authorized the agent to choose a suitable implementation dependency after that proof. Audit: F04.
 
 ### R05 · P0/P1 · Complete composite widgets and native state · large
 

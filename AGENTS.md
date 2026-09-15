@@ -78,7 +78,8 @@ Run tests separately: `build` does not execute the contrast test gate.
 ## Current audit
 
 Read [docs/SYSTEM_AUDIT.md](docs/SYSTEM_AUDIT.md) and [docs/ROADMAP.md](docs/ROADMAP.md) before
-expanding the system. The 75/100/150 stroke trial leaves five contrast assertion groups
+expanding the system. Follow [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) for
+the authorized work order and decision boundaries. The 75/100/150 stroke trial leaves five contrast assertion groups
 failing; do not lower thresholds to hide this. Audit recommendations are not implemented.
 
 ## Finish

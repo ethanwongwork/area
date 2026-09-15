@@ -150,3 +150,6 @@ The [system audit](docs/SYSTEM_AUDIT.md) records measured gaps, axis priorities,
 options and research. The [roadmap](docs/ROADMAP.md) defines a first release and its acceptance
 checks. The current stroke trial is intentionally recorded as a red test state; do not
 interpret a successful build as release readiness.
+
+The [implementation plan](docs/IMPLEMENTATION_PLAN.md) is the detailed execution order, with
+12 work packages, design directions, migration rules and verification gates.
