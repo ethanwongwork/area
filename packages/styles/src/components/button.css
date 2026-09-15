@@ -143,8 +143,9 @@
   }
 
   .area-button:focus-visible {
-    outline: none;
-    box-shadow: var(--_shadow), var(--area-ring);
+    box-shadow: var(--_shadow);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
   }
 
   .area-button:disabled,

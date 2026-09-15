@@ -83,10 +83,10 @@ These guarantees are covered by tests, build audits, and the review conventions 
 - **The colour maths is proven, not assumed.** OKLab conversions are checked against
   `colorjs.io` to 1e-12 per channel across both gamuts, and the gamut mapper matches the
   CSS Color 4 reference to a fifth of a JND.
-- **Contrast is a test gate.** 178 unwaived assertion groups across 66 color themes,
-  using contrast ratios and supplementary APCA checks. Four syntax groups are waived.
-  The current 75/100/150 stroke trial fails five groups; the audit also identifies gaps
-  between token checks and rendered accessibility. See [the audit](docs/SYSTEM_AUDIT.md).
+- **Contrast is a test gate.** 308 passing WCAG/APCA groups across 66 color themes,
+  with no active waivers. E03 distinguishes supplementary edges from required control/state
+  indicators and verifies actual rendered focus. Native forced-colors and full release
+  accessibility checks remain pending. See [the contrast contract](docs/CONTRAST.md).
 - **Axes cannot collide.** The registry throws if two axes write one property.
 - **CSS variants are checked against a shared manifest.** Variant helpers and the parity audit use one manifest per component
   (36 of them), checked in both directions: a declared variant with no selector fails, and
@@ -105,7 +105,7 @@ These guarantees are covered by tests, build audits, and the review conventions 
   typed `.d.ts`, a browser fixture) and the contrast gate.
 - **`@area/styles`** — component CSS. Framework-agnostic; works without React.
 - **`@area/react`** — React components, generated variant props, no CSS.
-- **`apps/docs`** — the site: 40 pages, every demo rendered from real components, and an
+- **`apps/docs`** — the site: 41 pages, every demo rendered from real components, and an
   icon browser over 1,739 marks.
 
 ## Verifying
@@ -169,3 +169,6 @@ Nested CSS selections and the React `Theme` / `useTheme` API follow the
 [scope contract](docs/THEMING.md). Generated, DOM-free configuration helpers are available
 at `@area/tokens/config`. See [E02 results and matched visuals](docs/batches/E02/README.md)
 and the [live theme-boundary lab](http://localhost:4321/scopes.html).
+
+E03 adds [the stroke and contrast report](docs/batches/E03/README.md) and a
+[live control comparison](http://localhost:4321/contrast.html).

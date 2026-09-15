@@ -93,7 +93,7 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "bg-surface": at("neutral", "surface"),
   /** A quieter region within a surface: table header, inset well, code block. */
   "bg-subtle": at("neutral", "subtle"),
-  /** A code block. White in light, so the palette's 500 rungs stay legible. */
+  /** A code block. Vivid text is measured against its own ground. */
   "bg-code": at("neutral", "code"),
   /** A control's own resting fill, and its hover and active states. */
   "bg-component": at("neutral", "component"),
@@ -125,7 +125,7 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   /**
    * Placeholder text.
    *
-   * Held to 3:1 against every surface an input can sit on, which lands it at a level most
+   * Held to 4.5:1 against every surface an input can sit on, which lands it at a level most
    * systems would call too dark for a placeholder. That instinct is the wrong one: a hint
    * nobody can read is not subtle, it is missing, and WCAG makes no exemption for
    * placeholders. Primer reaches the same conclusion and ships its placeholder at full AA.
@@ -155,7 +155,10 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
    * A text level is tuned against the page by definition and flips with the theme
    * automatically, so one rule stays conformant for every brand hue in both themes.
    */
-  "border-focus": at("brand", "textTonal"),
+  "stroke-control": at("neutral", "strokeControl"),
+  "stroke-control-hover": at("neutral", "strokeControlHover"),
+  "stroke-selected": at("brand", "textTonal"),
+  "focus-color": at("brand", "textTonal"),
 
   // --- Tonal blocks -------------------------------------------------------------
   ...tonalBlock("brand", "brand"),

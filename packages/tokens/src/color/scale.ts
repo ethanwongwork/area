@@ -76,7 +76,7 @@ export interface SolidChoice {
    * crosses the ladder with the theme.
    */
   level: { light: Level; dark: Level };
-  /** The hover rung, per theme -- always one step *away* from that theme's page. */
+  /** The hover rung, per theme -- one adjacent step that preserves label contrast. */
   hover: { light: Level; dark: Level };
   foreground: "#ffffff" | "#000000";
   wcag: number;
@@ -285,8 +285,11 @@ function chooseSolid(
 
   return {
     level: { light: chosen.level, dark: chosen.level },
-    // Away from the page background in both themes: darker on light, lighter on dark.
-    hover: { light: at(index + 1), dark: at(index - 1) },
+    // Prefer the page-relative direction; reverse it if the same label would fail.
+    hover: {
+      light: passes(steps[Math.min(steps.length - 1, index + 1)]!.hex) ? at(index + 1) : at(index - 1),
+      dark: passes(steps[Math.max(0, index - 1)]!.hex) ? at(index - 1) : at(index + 1),
+    },
     foreground: fg,
     wcag: Number(wcagContrastHex(fg, chosen.hex).toFixed(2)),
     apca: Number(apcaMagnitude(fg, chosen.hex).toFixed(1)),
@@ -301,41 +304,22 @@ function chooseSolid(
  * colourful legible text is the rung closest to the page *before* contrast runs out.
  * Walking outward from 500 and stopping at the first pass finds it.
  *
- * The walk measures against `bg-code`, because a code block is the only place this token is
- * used and its ground is the one that decides legibility. That ground is white in light,
- * which is exactly what the palette pins its 500 rung to -- so on the label ladder the walk
- * returns 500 unchanged. Measured against a grey ground instead it returned 550, a rung the
- * palette never calibrated for anything.
- *
- * This is what "use 500" has to mean in a palette with two walls. On the label ladder --
- * blue, red, indigo, purple, pink -- 500 clears AA on the page and is returned unchanged.
- * On the glyph ladder it measures barely 3:1, which is fine for a status dot and unusable
- * for a string literal, so those families walk one or two rungs deeper. Hardcoding 500
- * everywhere would have shipped illegible syntax highlighting in exactly six hues.
+ * The walk measures against the code block's actual ground. Light walks darker from
+ * 500 until AA clears with a margin; dark walks lighter and also clears Area's APCA
+ * content floor. No hue is pinned to an unreadable rung or covered by a syntax waiver.
  */
 function chooseVivid(steps: readonly ScaleStep[], theme: Theme): Level {
-  // Light is pinned to 500, by instruction, accepting a measured shortfall: red lands at
-  // 4.42 against a 4.5 bar, purple 4.48, blue 4.47 -- and green 2.93, which is not
-  // marginal. Every one of those is recorded in `contrast/exceptions.ts` with its number,
-  // so the gate still reports them rather than passing them in silence.
-  //
-  // Dark is *not* pinned, and that is not the same decision made twice. 500 is calibrated
-  // against white, so on a dark ground the same hexes measure APCA Lc 28-31 against a floor
-  // of 60 -- roughly half, which is unreadable rather than slightly under. Dark keeps the
-  // walk.
-  if (theme === "light") return 500;
-
   // Measured against the block's own ground.
   const page = groundHex(INVERSION.code[theme]);
   const start = steps.findIndex((s) => s.level === 500);
-  // A dark ground needs the text lighter, which is a lower rung.
-  const direction = -1;
+  // Dark needs lighter text; light needs darker text.
+  const direction = theme === "light" ? 1 : -1;
   // Both standards, as everywhere else. WCAG alone let six families through in dark mode
   // at APCA Lc 41-46 against a floor of 60 -- the exact overstatement near black that is
   // the reason this system gates on APCA in dark themes at all.
   for (let i = start; i >= 0 && i < steps.length; i += direction) {
     const hex = steps[i]!.hex;
-    if (wcagContrastHex(hex, page) >= 4.6 && apcaMagnitude(hex, page) >= 61) return steps[i]!.level;
+    if (wcagContrastHex(hex, page) >= 4.6 && (theme === "light" || apcaMagnitude(hex, page) >= 61)) return steps[i]!.level;
   }
   return steps[start]!.level;
 }

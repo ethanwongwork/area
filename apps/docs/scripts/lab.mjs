@@ -12,6 +12,8 @@ export const LAB_CSS = `
   .lab-header p, .lab-report p { color: var(--area-fg-muted); }
   .scope-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--area-space-16); }
   .scope-sample { display:flex; flex-direction:column; gap:var(--area-space-8); padding:var(--area-space-16); background:var(--area-bg-page); color:var(--area-fg-default); border:1px solid var(--area-border-decorative); border-radius:var(--area-radius-container); }
+  .contrast-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--area-space-12); }
+  .contrast-inset { padding:var(--area-space-16); background:var(--area-bg-subtle); border-radius:var(--area-radius-container); }
   .lab-row { display:flex; flex-wrap:wrap; align-items:center; gap:var(--area-space-12); }
   .lab-between { justify-content:space-between; }
   .lab-stack { display:flex; flex-direction:column; gap:var(--area-space-16); min-inline-size:0; }
@@ -27,7 +29,7 @@ export async function buildLab(root, out, docsCSS) {
   const cache = join(root,'.cache');
   await mkdir(cache,{recursive:true});
   const temporary = await mkdtemp(join(cache,'lab-'));
-  const pages = [["lab", "board", "Board", "System lab"], ["scopes", "scopes", "ScopeBoard", "Theme boundaries"]];
+  const pages = [["lab", "board", "Board", "System lab"], ["scopes", "scopes", "ScopeBoard", "Theme boundaries"], ["contrast", "contrast", "ContrastBoard", "Edges and contrast"]];
   await writeFile(join(out,"scope-reference.json"),JSON.stringify(shippedThemes().map(({theme,neutral,brand,tokens})=>({theme,neutral,brand,tokens}))));
   try {
   for(const [slug,source,exportName,title] of pages) {

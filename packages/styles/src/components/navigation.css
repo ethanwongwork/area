@@ -62,10 +62,10 @@
   }
 
   .area-tabs__tab:focus-visible {
-    outline: none;
     /* Capped against this tier's own height; see button.css. */
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
-    box-shadow: var(--area-ring);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
   }
 
   .area-tabs__tab[data-disabled] {
@@ -159,6 +159,8 @@
    * keyboard behaviour intact.
    */
   .area-select {
+    --_border: var(--area-stroke-control);
+    --_border-hover: var(--area-stroke-control-hover);
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
@@ -173,7 +175,7 @@
     padding-inline: var(--_gutter);
     padding-inline-end: calc(var(--_gutter) + var(--_icon) + var(--area-space-4));
 
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
     background-color: var(--area-bg-surface);
@@ -193,11 +195,18 @@
 
   [dir="rtl"] .area-select { background-position: left var(--_gutter) center; }
 
-  .area-select:hover:not(:disabled):not(:focus) { border-color: var(--area-border-hover); }
+  .area-select:hover:not(:disabled):not(:focus) { border-color: var(--_border-hover); }
 
   .area-select:focus-visible {
-    border-color: var(--area-border-focus);
-    box-shadow: var(--area-shadow-1), var(--area-ring);
+    border-color: var(--_border);
+    box-shadow: var(--area-shadow-1);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+
+  .area-select[aria-invalid="true"] {
+    --_border: var(--area-fg-danger);
+    --_border-hover: var(--area-fg-danger);
   }
 
   .area-select:disabled {

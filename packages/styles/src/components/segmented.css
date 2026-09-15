@@ -61,12 +61,12 @@
 
     block-size: var(--_item);
     padding-inline: var(--_gutter);
-    border: 0;
+    border: var(--area-stroke-width) solid transparent;
     /* Capped against the item's own height; see button.css. */
     border-radius: min(var(--area-radius-control), calc(var(--_item) * var(--area-radius-cap)));
 
     background: transparent;
-    color: var(--area-fg-muted);
+    color: var(--area-fg-default);
     font-family: inherit;
     font-size: var(--_text);
     line-height: var(--_leading);
@@ -78,7 +78,6 @@
 
   .area-segmented__item:hover:not([data-selected]):not(:disabled) {
     background-color: var(--area-bg-hover);
-    color: var(--area-fg-default);
   }
 
   /*
@@ -89,14 +88,13 @@
   .area-segmented__item[data-selected] {
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    box-shadow:
-      var(--area-shadow-1),
-      inset 0 0 0 var(--area-border-width) var(--area-border-subtle);
+    border-color: var(--area-stroke-control);
+    box-shadow: var(--area-shadow-1);
   }
 
   .area-segmented__item:focus-visible {
-    outline: none;
-    box-shadow: var(--area-ring);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
   }
 
   .area-segmented__item:disabled {

@@ -1,7 +1,7 @@
 # Area — implementation plan
 
 **Updated:** 2026-09-14. **Planning baseline:** `59ea987`.
-**Status:** E01 and E02 implementation completed; E03 is next. E02 Gecko execution remains a release-validation item. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
+**Status:** E01–E03 implementation completed; E04 is next. Cross-engine and native forced-colors execution remain release-validation items. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
 The system remains red: 165 existing token failures and the newly visible browser/package regressions.
 **Inputs:** [system audit](SYSTEM_AUDIT.md), [milestone checklist](ROADMAP.md), and the user's subsequent authorization to rename/add tokens, reorganize structure, build components and make system-wide improvements.
 
@@ -111,6 +111,14 @@ exit criterion below is not yet fully closed. [Batch report](batches/E02/README.
 **Exit:** all nesting and mutation cases match the reference resolver, across the supported browser engines. Changing radius/density/type must not change resolved color roles. Document any unsupported bare-CSS composition explicitly rather than silently replacing the original promise with React-only behavior.
 
 ### E03 — Rebuild the semantic stroke and contrast contract
+
+**Delivered:** [E03 report and before/after visuals](batches/E03/README.md),
+[final color/stroke contract](CONTRAST.md). All 16,316 token tests pass, 308 contrast groups
+pass without waivers, and 21,120 Chromium paint checks plus 75,493 scope comparisons pass.
+Final vocabulary retains decorative/faint/subtle tokens and adds required stroke-control,
+stroke-control-hover and stroke-selected; opaque focus uses focus-color/width/offset.
+Safari revalidation was blocked by a locked host; Gecko and native forced-colors remain open.
+The proposal below records the batch's scope; CONTRAST.md defines the delivered contract.
 
 **Scope:** semantic tokens, color policy, focus recipes, component token consumption, contrast tests. **Effort:** large. **Maps to:** R01/R03, F02/F03.
 

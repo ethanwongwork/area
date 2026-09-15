@@ -1,5 +1,17 @@
 # Project journal
 
+## 2026-09-14 — E03: separate quiet framing from required information
+
+The 75/100/150 trial revealed that decoration and empty fields could not share one contrast
+contract. E03 preserves the quiet 75 seam, restores supplementary 150/200 edges and gives
+required controls/selection their own measured strokes that survive Elevated. An opaque
+outline replaces the 45% focus halo; normal-text tests now cover placeholders, hover and active
+fills, and measured syntax selection removes every waiver. Actual browser inspection also
+exposed zero-size checkbox/radio marks and flat-mode shadow-list invalidity, which token
+ratios alone could not catch. All 16,316 token tests and 21,120 Chromium paint comparisons pass;
+Safari/Gecko and native forced colors remain explicit validation work. See [E03](../docs/batches/E03/README.md).
+
+
 ## 2026-09-14 — E02: color polarity belongs at consumption
 
 Independent color scopes now retain light/dark pairs until consumed, so changing a neutral

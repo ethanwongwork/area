@@ -7,6 +7,8 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-textarea {
+    --_border: var(--area-stroke-control);
+    --_border-hover: var(--area-stroke-control-hover);
     --_gutter: var(--area-gutter-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
@@ -16,7 +18,7 @@
     min-block-size: calc(var(--area-control-md) * 2);
     padding: var(--area-space-8) var(--_gutter);
 
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-stroke-width) solid var(--_border);
     border-radius: var(--area-radius-control);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -34,16 +36,19 @@
   }
 
   .area-textarea:hover:not(:disabled):not(:focus) {
-    border-color: var(--area-border-hover);
+    border-color: var(--_border-hover);
   }
 
   .area-textarea:focus {
-    border-color: var(--area-border-focus);
-    box-shadow: var(--area-shadow-1), var(--area-ring);
+    border-color: var(--_border);
+    box-shadow: var(--area-shadow-1);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
   }
 
   .area-textarea[data-invalid] {
-    border-color: var(--area-danger-border-strong);
+    --_border: var(--area-fg-danger);
+    --_border-hover: var(--area-fg-danger);
   }
 
   .area-textarea:disabled {

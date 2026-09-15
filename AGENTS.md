@@ -82,8 +82,10 @@ Run tests separately: `build` does not execute the contrast test gate.
 
 Read [docs/SYSTEM_AUDIT.md](docs/SYSTEM_AUDIT.md) and [docs/ROADMAP.md](docs/ROADMAP.md) before
 expanding the system. Follow [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) for
-the authorized work order and decision boundaries. The 75/100/150 stroke trial leaves five contrast assertion groups
-failing; do not lower thresholds to hide this. E01 and E02 implementation is complete; Gecko scope validation remains pending. See the batch reports for delivered work.
+the authorized work order and decision boundaries. E03 resolves the five stroke failure groups
+without lowering their floors and removes all syntax waivers. Read [docs/CONTRAST.md](docs/CONTRAST.md)
+before changing strokes, focus or state painting. Required edges use stroke-width independently
+of Surface; opaque focus uses focus-color/width/offset. Contrast report now exits nonzero on failures.
 
 ## Finish
 

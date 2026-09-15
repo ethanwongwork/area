@@ -131,8 +131,8 @@
   }
 
   .area-nav__item:focus-visible {
-    outline: var(--area-ring-width) solid var(--area-border-focus);
-    outline-offset: var(--area-ring-offset);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
   }
 
   .area-nav__item[data-disabled] {

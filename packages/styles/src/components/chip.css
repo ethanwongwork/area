@@ -35,7 +35,7 @@
 
     block-size: var(--_height);
     padding-inline: var(--_gutter);
-    border: var(--area-border-width) solid var(--_border);
+    border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
 
@@ -53,13 +53,13 @@
   /* Background and border move; the label does not. See button.css. */
   .area-chip:hover:not([data-disabled]) {
     background-color: var(--_bg-hover);
-    border-color: var(--area-border-hover);
+    border-color: var(--_border-hover, var(--area-border-hover));
   }
 
   .area-chip:focus-visible {
-    outline: none;
-    border-color: var(--area-border-focus);
-    box-shadow: var(--area-ring);
+    border-color: var(--area-focus-color);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
   }
 
   /*
@@ -70,7 +70,8 @@
   .area-chip[data-selected] {
     --_bg: var(--area-brand-surface);
     --_bg-hover: var(--area-brand-surface-hover);
-    --_border: var(--area-brand-border);
+    --_border: var(--area-stroke-selected);
+    --_border-hover: var(--area-stroke-selected);
     --_fg: var(--area-fg-brand);
   }
 

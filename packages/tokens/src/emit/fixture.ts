@@ -96,7 +96,7 @@ window.areaProbe = function (el) {
     bgPage: color("--area-bg-page"),
     fgDefault: color("--area-fg-default"),
     accentSolid: color("--area-brand-solid"),
-    borderFocus: color("--area-border-focus"),
+    borderFocus: color("--area-focus-color"),
     borderWidth: v("--area-border-width"),
     shadow2: v("--area-shadow-2").slice(0, 20),
     durationBase: v("--area-duration-base"),

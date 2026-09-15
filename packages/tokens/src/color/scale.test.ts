@@ -137,12 +137,12 @@ describe("solid fill", () => {
     }
   });
 
-  it("moves its hover away from each theme's own page background", () => {
+  it("uses one adjacent hover step while preserving its foreground", () => {
     for (const spec of CHROMATIC_SCALES) {
       const scale = buildScale(spec, "light");
-      // A higher rung is darker, so light darkens and dark lightens.
-      expect(scale.solid.hover.light, spec.id).toBeGreaterThan(scale.solid.level.light);
-      expect(scale.solid.hover.dark, spec.id).toBeLessThan(scale.solid.level.dark);
+      for (const theme of THEMES) {
+        expect(Math.abs(LEVELS.indexOf(scale.solid.hover[theme]) - LEVELS.indexOf(scale.solid.level[theme])), spec.id).toBe(1);
+      }
     }
   });
 
@@ -154,7 +154,7 @@ describe("solid fill", () => {
         expect(
           wcagContrastHex(scale.contrast.hex, hover.hex),
           `${spec.id} hover in ${theme}`,
-        ).toBeGreaterThanOrEqual(WCAG.LARGE_TEXT);
+        ).toBeGreaterThanOrEqual(WCAG.TEXT);
       }
     }
   });

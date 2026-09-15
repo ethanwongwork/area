@@ -469,7 +469,7 @@ export const DOCS_CSS = `
   }
 
   .docs-icon:hover { background-color: var(--area-bg-hover); }
-  .docs-icon:focus-visible { outline: none; box-shadow: var(--area-ring); }
+  .docs-icon:focus-visible { outline: none; outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .docs-icon[data-copied] { background-color: var(--area-brand-surface); color: var(--area-fg-brand); }
 
   .docs-icon__mark {

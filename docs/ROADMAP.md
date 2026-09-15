@@ -9,24 +9,25 @@ Follow [the execution plan](IMPLEMENTATION_PLAN.md): regression baseline and the
 then semantic contrast/strokes, API/package cleanup, behavior and component completion.
 Its E01–E12 batches refine the order of the milestone checklist below.
 
-The current 75/100/150 stroke trial is visible but fails five existing contrast assertions (165 parameterized tests). Preserve the checks. First resolve the intended resting-stroke policy: decorative 75 passes; faint 150 and subtle 200 restore these existing floors, while required control indicators still need rendered accessibility review.
-
-The next implementation milestone is **honest contrast coverage and semantic strokes**, followed by **working interaction primitives**. Do not begin with more colors, radius stops or a large new component catalog.
+E03 resolves the 75/100/150 trial's failures: decoration remains quiet at 75, supplementary
+frames/outlines return to 150/200, and required control/state edges gain explicit 3:1 contracts.
+See [the final contrast policy](CONTRAST.md). The next milestone is **API/package consistency**,
+then **working interaction primitives**. Further palette expansion is not the priority.
 
 Effort bands describe uncertainty and scope, not calendar commitments: **small** is one focused change; **medium** spans several modules and a focused test suite; **large** needs a design/API decision, implementation and browser/assistive-technology validation. Dependencies matter more than the bands.
 
 E01 tooling and visual baseline is complete: [results and screenshots](batches/E01/README.md).
 E02 scope implementation is complete: [contract and browser evidence](batches/E02/README.md).
-Gecko validation remains pending. E03 is next; the foundation and release milestones remain open.
+Gecko validation remains pending. E03 is implemented; E04 is next; the foundation and release milestones remain open.
 
 ## Milestone 1 — Trust the rendered foundation
 
 ### R01 · P0 · Resolve the stroke trial · small
 
-- [ ] Review 75/100/150 in flat/outlined surfaces, light/dark, all neutral casts.
-- [ ] Decide which borders are decorative, supplementary, or required control/state indicators.
-- [ ] Select release values and rerun the unchanged gate; document any policy change separately with rationale.
-- [ ] Preserve a comparison of the trial and release hierarchy in the journal.
+- [x] Review 75/100/150 in flat/outlined surfaces, light/dark, all neutral casts.
+- [x] Decide which borders are decorative, supplementary, or required control/state indicators.
+- [x] Select release values and rerun the unchanged gate; document any policy change separately with rationale.
+- [x] Preserve a comparison of the trial and release hierarchy in the journal.
 
 **Exit:** no unexplained gate failure; no blanket claim that a quiet stroke meets non-text contrast. The user has authorized final token/value decisions that improve consistency and quality; preserve the quiet visual direction and justify the result with measurements. Audit: stroke section, F02–F03.
 
@@ -44,12 +45,13 @@ Gecko validation remains pending. E03 is next; the foundation and release milest
 
 ### R03 · P0 · Make contrast tests reflect actual UI · medium
 
-- [ ] Apply normal-text requirements to normal-size hover labels and placeholders.
-- [ ] Resolve four syntax-color waiver groups through semantic color selection.
-- [ ] Measure translucent focus rings and actual adjacent surfaces.
-- [ ] Inventory unchecked glyphs, selected/invalid states, outline controls and active backgrounds.
-- [ ] Add forced-color focus/selection indicators and inspect keyboard clipping.
-- [ ] Label aesthetic floors, WCAG requirements and supplementary APCA policy distinctly.
+- [x] Apply normal-text requirements to normal-size hover labels and placeholders.
+- [x] Resolve four syntax-color waiver groups through semantic color selection.
+- [x] Measure translucent focus rings and actual adjacent surfaces.
+- [x] Inventory unchecked glyphs, selected/invalid states, outline controls and active backgrounds.
+- [x] Add forced-color focus/selection fallbacks and inspect fixture keyboard clipping.
+- [ ] Validate the fallbacks in native Windows forced colors and rerun supported engines.
+- [x] Label aesthetic floors, WCAG requirements and supplementary APCA policy distinctly.
 
 **Exit:** every supported rendered state has the right criterion and passes or is explicitly excluded from the supported release contract. No default accessibility claim based solely on the current token report. Audit: F02–F03.
 

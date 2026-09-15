@@ -88,3 +88,5 @@ if (waived.length) {
 }
 
 console.log();
+
+process.exitCode = failing.length ? 1 : 0;

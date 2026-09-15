@@ -17,8 +17,8 @@
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
-    --_border: var(--area-border-subtle);
-    --_border-hover: var(--area-border-hover);
+    --_border: var(--area-stroke-control);
+    --_border-hover: var(--area-stroke-control-hover);
     --_bg: var(--area-bg-surface);
 
     display: flex;
@@ -28,7 +28,7 @@
     block-size: var(--_height);
     inline-size: 100%;
     padding-inline: var(--_gutter);
-    border: var(--area-border-width) solid var(--_border);
+    border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
 
@@ -45,20 +45,15 @@
   }
 
   .area-input:focus-within {
-    border-color: var(--area-border-focus);
-    box-shadow: var(--area-shadow-1), var(--area-ring);
+    border-color: var(--_border);
+    box-shadow: var(--area-shadow-1);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
   }
 
   .area-input[data-invalid] {
-    --_border: var(--area-danger-border-strong);
-    --_border-hover: var(--area-danger-border-strong);
-  }
-
-  .area-input[data-invalid]:focus-within {
-    border-color: var(--area-danger-solid);
-    box-shadow:
-      var(--area-shadow-1),
-      0 0 0 var(--area-ring-width) color-mix(in oklab, var(--area-danger-solid) 45%, transparent);
+    --_border: var(--area-fg-danger);
+    --_border-hover: var(--area-fg-danger);
   }
 
   .area-input[data-disabled] {

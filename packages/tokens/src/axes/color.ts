@@ -175,7 +175,7 @@ export const BRAND_AXIS: AxisDefinition = {
   label: "Accent",
   description: "The brand hue. Drives fills, links, and the focus ring.",
   defaultPreset: DEFAULT_SELECTION.brand,
-  namespaces: ["--area-brand-", "--area-fg-brand", "--area-fg-on-brand", "--area-border-focus"],
+  namespaces: ["--area-brand-", "--area-fg-brand", "--area-fg-on-brand", "--area-focus-color:", "--area-stroke-selected:"],
   presets: CHROMATIC_SCALES.map((spec) => ({
     id: spec.id,
     label: spec.id[0]!.toUpperCase() + spec.id.slice(1),

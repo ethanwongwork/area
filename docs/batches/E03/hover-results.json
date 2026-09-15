@@ -1,0 +1,98 @@
+[
+  {
+    "theme": "light",
+    "brand": "red",
+    "rest": {
+      "bg": "rgb(232, 9, 69)",
+      "fg": "rgb(255, 255, 255)"
+    },
+    "hover": {
+      "bg": "rgb(207, 3, 60)",
+      "fg": "rgb(255, 255, 255)",
+      "hover": true
+    },
+    "restRatio": 4.609134348333558,
+    "hoverRatio": 5.627984719607786,
+    "pass": true
+  },
+  {
+    "theme": "dark",
+    "brand": "red",
+    "rest": {
+      "bg": "rgb(232, 9, 69)",
+      "fg": "rgb(255, 255, 255)"
+    },
+    "hover": {
+      "bg": "rgb(207, 3, 60)",
+      "fg": "rgb(255, 255, 255)",
+      "hover": true
+    },
+    "restRatio": 4.609134348333558,
+    "hoverRatio": 5.627984719607786,
+    "pass": true
+  },
+  {
+    "theme": "light",
+    "brand": "green",
+    "rest": {
+      "bg": "rgb(0, 131, 86)",
+      "fg": "rgb(255, 255, 255)"
+    },
+    "hover": {
+      "bg": "rgb(0, 114, 73)",
+      "fg": "rgb(255, 255, 255)",
+      "hover": true
+    },
+    "restRatio": 4.793538860692997,
+    "hoverRatio": 5.994633337535096,
+    "pass": true
+  },
+  {
+    "theme": "dark",
+    "brand": "green",
+    "rest": {
+      "bg": "rgb(0, 131, 86)",
+      "fg": "rgb(255, 255, 255)"
+    },
+    "hover": {
+      "bg": "rgb(0, 114, 73)",
+      "fg": "rgb(255, 255, 255)",
+      "hover": true
+    },
+    "restRatio": 4.793538860692997,
+    "hoverRatio": 5.994633337535096,
+    "pass": true
+  },
+  {
+    "theme": "light",
+    "brand": "yellow",
+    "rest": {
+      "bg": "rgb(243, 179, 3)",
+      "fg": "rgb(0, 0, 0)"
+    },
+    "hover": {
+      "bg": "rgb(249, 186, 29)",
+      "fg": "rgb(0, 0, 0)",
+      "hover": true
+    },
+    "restRatio": 11.260292007158062,
+    "hoverRatio": 12.069251319600394,
+    "pass": true
+  },
+  {
+    "theme": "dark",
+    "brand": "yellow",
+    "rest": {
+      "bg": "rgb(243, 179, 3)",
+      "fg": "rgb(0, 0, 0)"
+    },
+    "hover": {
+      "bg": "rgb(249, 186, 29)",
+      "fg": "rgb(0, 0, 0)",
+      "hover": true
+    },
+    "restRatio": 11.260292007158062,
+    "hoverRatio": 12.069251319600394,
+    "pass": true
+  }
+]

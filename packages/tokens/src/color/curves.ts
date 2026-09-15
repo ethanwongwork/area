@@ -84,14 +84,8 @@ export const INVERSION = {
   component: { light: 50, dark: 800 },
   componentHover: { light: 75, dark: 750 },
   componentActive: { light: 100, dark: 700 },
-  /**
-   * Neutral strokes, quietest to loudest.
-   *
-   * The light 75/100/150 progression is a visual trial requested on 2026-09-14.
-   * Existing contrast thresholds remain unchanged so the audit exposes the cost of
-   * the quieter edges. See docs/SYSTEM_AUDIT.md before treating it as release-ready.
-   */
-  borderSubtle: { light: 150, dark: 750 },
+  /** Supplementary strokes: keep decoration quiet; required controls have separate slots. */
+  borderSubtle: { light: 200, dark: 750 },
   /**
    * Decorative dividers and container seams. The light theme deliberately uses rung 75
    * for a quiet but visible rule; dark uses 800 so the rule stays close to its ground.
@@ -104,7 +98,10 @@ export const INVERSION = {
    * `borderSubtle`, stronger than purely decorative seams. Dark keeps its existing
    * rung: 800 would disappear against the subtle surface itself.
    */
-  borderFaint: { light: 100, dark: 750 },
+  borderFaint: { light: 150, dark: 750 },
+  /** Required editable-control and glyph boundaries, across neutral surfaces. */
+  strokeControl: { light: 450, dark: 400 },
+  strokeControlHover: { light: 500, dark: 350 },
   borderStrong: { light: 300, dark: 600 },
   /**
    * Tonal strokes, which sit deeper on the ladder than neutral ones.
@@ -117,21 +114,12 @@ export const INVERSION = {
    */
   tonalBorder: { light: 400, dark: 650 },
   tonalBorderStrong: { light: 450, dark: 600 },
-  /**
-   * Text, from the least emphatic that is still content to the most.
-   *
-   * Four neutral foregrounds, not five. `textSubtle` sat at 500 between placeholder at 450
-   * and muted at 550 -- one rung from each, which is the smallest step this ladder can
-   * express. Measured on the light page that put three tokens inside a 1.9:1 band (3.63,
-   * 4.48, 5.50), and the middle one earned 0.85:1 of separation from the token below it.
-   * Its consumers -- field affixes, syntax punctuation, a nav's trailing slot, group
-   * headings -- all wanted "quieter than body copy", which is what muted already means.
-   */
+  /** Text roles. Placeholder now shares the readable muted rung in each polarity. */
   textDisabled: { light: 350, dark: 550 },
-  textPlaceholder: { light: 450, dark: 450 },
+  textPlaceholder: { light: 550, dark: 250 },
   textMuted: { light: 550, dark: 250 },
   /** Tonal text, and the most saturated rung of a family that is still readable as it. */
-  textTonal: { light: 650, dark: 200 },
+  textTonal: { light: 650, dark: 150 },
   textTonalStrong: { light: 750, dark: 100 },
   textDefault: { light: 800, dark: 100 },
   /** A filled neutral that carries inverted text: tooltip, toast, primary button. */
@@ -140,15 +128,7 @@ export const INVERSION = {
   inverseText: { light: 25, dark: 900 },
   secondaryFill: { light: 700, dark: 200 },
   secondaryFillHover: { light: 750, dark: 100 },
-  /**
-   * A code block: the code and anything riding on it.
-   *
-   * One rung back from the page, which is now white, so the block reads as a block without
-   * needing a stroke to say so. It costs a little contrast -- the palette pins its 500 rung
-   * against white specifically, and syntax is set in 500, so on neutral-25 the label-wall
-   * hues land just under AA. That is recorded in `contrast/exceptions.ts` rather than
-   * absorbed, and it is the price of the block having a ground of its own.
-   */
+  /** Code sits one rung off the page; vivid text is measured against this actual ground. */
   code: { light: 25, dark: 800 },
   /** The level a translucent scrim is solved from. */
   scrim: { light: 600, dark: 950 },

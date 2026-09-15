@@ -54,7 +54,7 @@ export const Z_LAYERS = {
 } as const;
 
 export function baseTokens(): Record<string, string> {
-  const out: Record<string, string> = {};
+  const out: Record<string, string> = { "--area-focus-width": "2px", "--area-focus-offset": "2px", "--area-stroke-width": "1px" };
 
   // Pure black and white. Named because they are real answers, not placeholders: every
   // `fg-on-*` token resolves to one of these two after the scale measures which is
@@ -94,10 +94,6 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}radius-nested`]:
       `round(nearest, max(0px, calc(var(${PREFIX}radius-container) - var(${PREFIX}space-6))), 1px)`,
 
-    // The focus ring, assembled once so every component's focus looks identical.
-    [`${PREFIX}ring`]:
-      `0 0 0 var(${PREFIX}ring-width) color-mix(in oklab, var(${PREFIX}border-focus) 45%, transparent)`,
-
     // Standard transition for interactive chrome. Only properties that actually change.
     [`${PREFIX}transition`]:
       `background-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), border-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), box-shadow var(${PREFIX}duration-fast) var(${PREFIX}ease-out)`,
@@ -124,8 +120,8 @@ export function derivedTokens(): Record<string, string> {
 export const REGISTERED_PROPERTIES = [
   { name: `${PREFIX}radius-container`, syntax: "<length>", initial: "12px" },
   { name: `${PREFIX}radius-small`, syntax: "<length>", initial: "4px" },
-  { name: `${PREFIX}ring-width`, syntax: "<length>", initial: "2px" },
-  { name: `${PREFIX}ring-offset`, syntax: "<length>", initial: "2px" },
+  { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
+  { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}border-width`, syntax: "<length>", initial: "1px" },
   { name: `${PREFIX}control-md`, syntax: "<length>", initial: "32px" },
   { name: `${PREFIX}duration-fast`, syntax: "<time>", initial: "100ms" },

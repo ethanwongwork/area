@@ -38,13 +38,12 @@
     flex-shrink: 0;
     inline-size: var(--_size);
     block-size: var(--_size);
-    border: var(--area-border-width) solid var(--area-border-hover);
+    border: var(--area-stroke-width) solid var(--area-stroke-control);
     background-color: var(--area-bg-surface);
     box-shadow: var(--area-shadow-1);
     cursor: inherit;
     transition: var(--area-transition);
-    display: grid;
-    place-content: center;
+    position: relative;
   }
 
   .area-checkbox__control {
@@ -64,8 +63,8 @@
   .area-radio__control::after {
     content: "";
     display: block;
-    inline-size: 100%;
-    block-size: 100%;
+    position: absolute;
+    inset: 0;
     background-color: var(--area-fg-on-brand);
     transform: scale(0);
     transition: transform var(--area-duration-fast) var(--area-ease-spring);
@@ -86,15 +85,14 @@
 
   .area-radio__control::after {
     border-radius: var(--area-radius-full);
-    inline-size: 40%;
-    block-size: 40%;
+    inset: 30%;
   }
 
   .area-checkbox__control:checked,
   .area-checkbox__control:indeterminate,
   .area-radio__control:checked {
     background-color: var(--area-brand-solid);
-    border-color: var(--area-brand-solid);
+    border-color: var(--area-stroke-selected);
   }
 
   .area-checkbox__control:checked::after,
@@ -106,19 +104,20 @@
   .area-checkbox__control:checked:hover,
   .area-radio__control:checked:hover {
     background-color: var(--area-brand-solid-hover);
-    border-color: var(--area-brand-solid-hover);
+    border-color: var(--area-stroke-selected);
   }
 
-  .area-checkbox__control:not(:checked):hover,
-  .area-radio__control:not(:checked):hover {
-    border-color: var(--area-fg-muted);
+  .area-checkbox__control:not(:checked):not(:indeterminate):hover:not(:disabled),
+  .area-radio__control:not(:checked):hover:not(:disabled) {
+    border-color: var(--area-stroke-control-hover);
   }
 
   .area-checkbox__control:focus-visible,
   .area-radio__control:focus-visible,
   .area-switch__control:focus-visible {
-    outline: none;
-    box-shadow: var(--area-shadow-1), var(--area-ring);
+    box-shadow: var(--area-shadow-1);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
   }
 
   /* --- Switch ------------------------------------------------------------- */
@@ -126,7 +125,7 @@
   .area-switch {
     --_track-inline: calc(var(--area-control-md) - var(--area-space-4));
     --_track-block: var(--area-icon-md);
-    --_thumb-inset: 2px;
+    --_thumb-inset: var(--area-space-2);
   }
 
   .area-switch__control {
@@ -136,9 +135,9 @@
     position: relative;
     inline-size: var(--_track-inline);
     block-size: var(--_track-block);
-    border: 0;
+    border: var(--area-stroke-width) solid var(--area-stroke-control);
     border-radius: var(--area-radius-full);
-    background-color: var(--area-bg-component-active);
+    background-color: var(--area-stroke-control);
     cursor: inherit;
     transition: var(--area-transition);
   }
@@ -146,8 +145,8 @@
   .area-switch__control::after {
     content: "";
     position: absolute;
-    inset-block-start: var(--_thumb-inset);
-    inset-inline-start: var(--_thumb-inset);
+    inset-block-start: calc(var(--_thumb-inset) - var(--area-stroke-width));
+    inset-inline-start: calc(var(--_thumb-inset) - var(--area-stroke-width));
     inline-size: calc(var(--_track-block) - var(--_thumb-inset) * 2);
     block-size: calc(var(--_track-block) - var(--_thumb-inset) * 2);
     border-radius: var(--area-radius-full);
@@ -157,15 +156,17 @@
   }
 
   .area-switch__control:checked {
+    border-color: var(--area-stroke-selected);
     background-color: var(--area-brand-solid);
   }
 
   .area-switch__control:checked::after {
+    background-color: var(--area-fg-on-brand);
     translate: calc(var(--_track-inline) - var(--_track-block)) 0;
   }
 
   .area-switch__control:hover:not(:disabled) {
-    background-color: var(--area-bg-component-hover);
+    background-color: var(--area-stroke-control-hover);
   }
 
   .area-switch__control:checked:hover:not(:disabled) {

@@ -61,7 +61,10 @@ the built `dist` once; restart that server after rebuilding.
 the same React tree, six representative profiles, and in-page regression assertions. It
 has no separate component styling overrides. Its layout CSS joins the dogfood audit.
 The theme-boundary page adds a pure-resolver oracle for CSS inheritance, native scheme,
-shadow and React portal checks. The full site builds 40 pages and 65 catalog demos.
+shadow and React portal checks. The full site builds 41 pages and 65 catalog demos.
+The paint lab checks required edges, marks, selected states and actual opaque focus across
+66 color themes and four elevations. Focus and required stroke geometry are primitives;
+Surface controls decorative borders and shadows. See [CONTRAST.md](CONTRAST.md).
 There is no application backend, database, required secret, or environment template.
 Geist fonts load from a pinned jsDelivr URL; the system font preset remains available.
 

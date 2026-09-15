@@ -1,0 +1,51 @@
+/* System colors preserve required information when shadows and authored fills disappear. */
+@layer area.utilities {
+  @media (forced-colors: active) {
+    .area-input, .area-textarea, .area-select {
+      border-color: CanvasText;
+    }
+    .area-select {
+      appearance: auto;
+      background-image: none;
+    }
+    .area-input[data-invalid], .area-textarea[data-invalid], .area-select[aria-invalid="true"] {
+      border-style: dashed;
+    }
+    .area-button:focus-visible, .area-chip:focus-visible, .area-tabs__tab:focus-visible,
+    .area-segmented__item:focus-visible, .area-select:focus-visible, .area-textarea:focus,
+    .area-input:focus-within, .area-checkbox__control:focus-visible,
+    .area-radio__control:focus-visible, .area-switch__control:focus-visible {
+      outline: var(--area-focus-width) solid Highlight;
+      outline-offset: var(--area-focus-offset);
+    }
+    .area-segmented__item[data-selected], .area-chip[data-selected] {
+      border-color: Highlight;
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+    .area-checkbox__control, .area-radio__control, .area-switch__control {
+      forced-color-adjust: none;
+      border-color: CanvasText;
+      background-color: Canvas;
+    }
+    .area-checkbox__control:checked, .area-checkbox__control:indeterminate,
+    .area-radio__control:checked, .area-switch__control:checked {
+      border-color: Highlight;
+      background-color: Highlight;
+    }
+    .area-checkbox__control::after, .area-radio__control::after,
+    .area-switch__control:checked::after {
+      background-color: HighlightText;
+    }
+    .area-switch__control:not(:checked)::after { background-color: CanvasText; }
+    .area-slider__control { forced-color-adjust: none; }
+    .area-slider__control::-webkit-slider-runnable-track { background: CanvasText; }
+    .area-slider__control::-moz-range-track { background: CanvasText; }
+    .area-slider__control::-webkit-slider-thumb { border-color: CanvasText; background: Canvas; }
+    .area-slider__control::-moz-range-thumb { border-color: CanvasText; background: Canvas; }
+    .area-slider__control:focus-visible::-webkit-slider-thumb { outline-color: Highlight; }
+    .area-slider__control:focus-visible::-moz-range-thumb { outline-color: Highlight; }
+    .area-tabs__tab[data-selected]::after { background-color: Highlight; forced-color-adjust: none; }
+  }
+}

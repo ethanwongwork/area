@@ -2,7 +2,7 @@
  * THE GATE.
  *
  * Every semantic pairing, across every theme Area ships, measured under both standards.
- * `npm run build` depends on this passing, so a colour that fails here cannot be published.
+ * Run through npm test; package build alone does not execute this gate.
  */
 import { describe, expect, it } from "vitest";
 import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "../color/presets.ts";

@@ -1,4 +1,5 @@
 import { docsOutput } from "./output.mjs";
+import { baseTokens } from "../../../packages/tokens/src/emit/base.ts";
 import { buildLab } from "./lab.mjs";
 /**
  * Builds the documentation site.
@@ -1080,8 +1081,8 @@ ${tokenSection({
   description: "Border weight, and the geometry of the focus ring every component shares.",
   rows: [
     { name: "border/width", token: "--area-border-width", value: current.tokens["--area-border-width"] },
-    { name: "ring/width", token: "--area-ring-width", value: current.tokens["--area-ring-width"] },
-    { name: "ring/offset", token: "--area-ring-offset", value: current.tokens["--area-ring-offset"] },
+    { name: "focus/width", token: "--area-focus-width", value: baseTokens()["--area-focus-width"] },
+    { name: "focus/offset", token: "--area-focus-offset", value: baseTokens()["--area-focus-offset"] },
   ].filter((r) => r.value),
   columns: [
     { header: "Token", cell: (r) => tokenChip(r.name) },
@@ -1278,5 +1279,5 @@ for (const [name, html] of pages) writeFileSync(join(out, name), html, "utf8");
 await buildLab(root, out, DOCS_CSS);
 
 console.log(`\n  @area/docs\n`);
-console.log(`  ${pages.length + 2} pages, ${Object.keys(demos).length} demos`);
+console.log(`  ${pages.length + 3} pages, ${Object.keys(demos).length} demos`);
 console.log(`  dist/ -> ${out}\n`);

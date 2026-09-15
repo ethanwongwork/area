@@ -47,3 +47,5 @@
 @import "./components/code.css";
 @import "./components/token.css";
 @import "./components/kbd.css";
+
+@import "./forced-colors.css";

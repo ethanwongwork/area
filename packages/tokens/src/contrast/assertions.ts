@@ -1,12 +1,11 @@
 /**
  * The contrast contract.
  *
- * Every pairing a component is allowed to render, declared as data and checked on every
- * build. Modelled on Primer, which runs roughly 250 such assertions in CI and is the only
+ * Supported token pairings declared as data and checked by npm test. Modelled on Primer, which runs roughly 250 such assertions in CI and is the only
  * mainstream system that treats contrast as a machine-checked contract rather than a
  * review-time opinion.
  *
- * Each assertion carries two thresholds because the two standards disagree in ways that
+ * Each assertion carries WCAG and supplementary APCA thresholds because they disagree in ways that
  * matter. See `../color/contrast.ts` for why both are enforced.
  */
 import { APCA, WCAG } from "../color/contrast.ts";
@@ -35,24 +34,10 @@ const TONES = ["brand", "danger", "warning", "caution", "success", "info", "disc
  */
 const SYNTAX_ROLES: readonly string[] = ["danger", "success", "brand", "discovery"];
 
-/**
- * Resting strokes: a deliberate, documented departure from a flat 3:1 reading of
- * WCAG 1.4.11, and the one place in this file where Area asserts less than the headline
- * number. It is stated here rather than buried in an allowlist.
- *
- * A 1px stroke that clears 3:1 against white sits near L 0.62 -- a mid grey. No shipping
- * system does this, because it does not look like a modern interface: Radix's UI border
- * measures 1.53:1, Tailwind's 1.24:1, Vercel's Geist 1.20:1, shadcn's 1.23:1. Area's is
- * 1.57:1, the strongest of that group.
- *
- * The reading that justifies it: 1.4.11 governs visual information *required to identify*
- * a component and its state. Area's controls are identified by fill, label, and position;
- * the resting stroke is ambient definition, not the sole affordance. What the criterion
- * does unambiguously cover is the focus indicator, and Area holds that to the full 3:1 --
- * which is why `border-focus` resolves to the solid step rather than the border band.
- *
- * So the contract is: resting strokes must be reliably *discernible*, and every stroke
- * that carries state meaning must be *conformant*.
+/** Supplementary stroke floors are aesthetic policy, not WCAG conformance thresholds.
+ * Text-identified buttons may use quiet outlines. Editable fields, unchecked glyphs,
+ * persistent selection and keyboard focus use separate required indicators at 3:1.
+ * See docs/CONTRAST.md and WCAG 2.2 SC 1.4.11; hover itself need not contrast with rest.
  */
 const STROKE = {
   /**
@@ -73,7 +58,7 @@ const STROKE = {
   faint: { wcag: 1.2, apca: 0 },
   /** Resting definition on an interactive control. Must be visible; not a state indicator. */
   resting: { wcag: 1.5, apca: 10 },
-  /** Hover. Carries state, so it is held higher than rest. */
+  /** Supplementary hover definition; an aesthetic floor above rest. */
   hover: { wcag: 1.9, apca: 15 },
   /** Focus. A conformance requirement, held to the full non-text threshold. */
   focus: { wcag: WCAG.NON_TEXT, apca: APCA.LARGE },
@@ -87,9 +72,8 @@ function textAssertions(): ContrastAssertion[] {
   for (const bg of TEXT_SURFACES) {
     out.push({ fg: "fg-default", bg, wcag: WCAG.TEXT, apca: APCA.BODY, note: "body copy" });
     out.push({ fg: "fg-muted", bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: "secondary copy" });
-    // Placeholders are not content, and APCA's own conformance table names Lc 30 as the
-    // level for exactly this case. WCAG's non-text 3:1 still applies.
-    out.push({ fg: "fg-placeholder", bg, wcag: 3, apca: APCA.PLACEHOLDER, note: "placeholder" });
+    // A small placeholder is ordinary text: no exemption from the 4.5:1 requirement.
+    out.push({ fg: "fg-placeholder", bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: "placeholder" });
   }
   return out;
 }
@@ -105,8 +89,7 @@ function tonalAssertions(): ContrastAssertion[] {
     }
     // The vivid rung is asserted for the four tones a code block actually paints with, on
     // the ground it paints them on. Asserting the other three would be asserting pairings
-    // nothing renders -- and, since vivid is pinned to 500 in light, would have meant three
-    // more waivers for colours that never appear.
+    // nothing renders. Readable vivid colors are measured against the code ground.
     if (SYNTAX_ROLES.includes(tone)) {
       out.push({
         fg: `fg-${tone}-vivid`,
@@ -127,8 +110,8 @@ function tonalAssertions(): ContrastAssertion[] {
     out.push({
       fg: `fg-on-${tone}`,
       bg: `${tone}-solid-hover`,
-      wcag: WCAG.LARGE_TEXT,
-      apca: APCA.LARGE,
+      wcag: WCAG.TEXT,
+      apca: APCA.CONTENT,
       note: `${tone} solid button label, hover`,
     });
     // Tonal borders are held to the ambient tier, not the resting one.
@@ -156,7 +139,7 @@ function tonalAssertions(): ContrastAssertion[] {
 
 function chromeAssertions(): ContrastAssertion[] {
   return [
-    // Deliberately faint visual grouping, requested at neutral 100 in light themes.
+    // Deliberately faint visual grouping, retained at neutral 75 in light themes.
     // This is a design floor, not a control-contrast threshold. Existing control,
     // focus, text and ambient thresholds remain unchanged.
     { fg: "border-decorative", bg: "bg-page", wcag: 1.1, apca: 0, note: "decorative divider on page" },
@@ -174,10 +157,10 @@ function chromeAssertions(): ContrastAssertion[] {
     // The focus ring is checked against every surface it can land on. Checking only the
     // page is the classic miss: a ring that clears the page can vanish against a filled
     // control or an inset well.
-    { fg: "border-focus", bg: "bg-page", ...STROKE.focus, note: "focus ring on page" },
-    { fg: "border-focus", bg: "bg-surface", ...STROKE.focus, note: "focus ring on surface" },
-    { fg: "border-focus", bg: "bg-component", ...STROKE.focus, note: "focus ring on control" },
-    { fg: "border-focus", bg: "bg-subtle", ...STROKE.focus, note: "focus ring on inset" },
+    { fg: "focus-color", bg: "bg-page", ...STROKE.focus, note: "focus ring on page" },
+    { fg: "focus-color", bg: "bg-surface", ...STROKE.focus, note: "focus ring on surface" },
+    { fg: "focus-color", bg: "bg-component", ...STROKE.focus, note: "focus ring on control" },
+    { fg: "focus-color", bg: "bg-subtle", ...STROKE.focus, note: "focus ring on inset" },
 
     // The neutral button fills. Primary is the strongest call to action a neutral palette
     // can make, so its label has to clear body-text contrast, not merely large-text.
@@ -200,4 +183,28 @@ export const ASSERTIONS: ContrastAssertion[] = [
   ...textAssertions(),
   ...tonalAssertions(),
   ...chromeAssertions(),
+  ...stateAssertions(),
 ];
+
+/** Required indicators are separate from supplementary decorative stroke floors. */
+function stateAssertions(): ContrastAssertion[] {
+  const out: ContrastAssertion[] = [];
+  const surfaces = [...TEXT_SURFACES, "bg-component-hover", "bg-component-active"];
+  for (const bg of surfaces) {
+    for (const fg of ["stroke-control", "stroke-control-hover", "stroke-selected", "fg-danger", "focus-color"]) {
+      if (fg === "focus-color" && TEXT_SURFACES.includes(bg)) continue;
+      out.push({fg,bg,wcag:WCAG.NON_TEXT,apca:0,note:"required boundary, state or opaque focus"});
+    }
+    out.push({fg:"fg-default",bg,wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"UI label in interactive state"});
+  }
+  for (const bg of ["brand-solid", "brand-solid-hover"]) out.push({fg:"fg-on-brand",bg,wcag:WCAG.NON_TEXT,apca:0,note:"checked mark or switch thumb"});
+  out.push({fg:"bg-surface",bg:"stroke-control",wcag:WCAG.NON_TEXT,apca:0,note:"unchecked switch thumb"});
+  out.push({fg:"fg-on-primary",bg:"bg-primary-solid-hover",wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"neutral button hover label"});
+  for (const tone of TONES) for (const state of ["", "-hover", "-active"]) {
+    const bg = `${tone}-surface${state}`;
+    out.push({fg:"focus-color",bg,wcag:WCAG.NON_TEXT,apca:0,note:"opaque focus on a tinted surface"});
+    if(state) out.push({fg:`fg-${tone}`,bg,wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"tonal UI label in interactive state"});
+  }
+  for (const state of ["", "-hover", "-active"]) out.push({fg:"stroke-selected",bg:`brand-surface${state}`,wcag:WCAG.NON_TEXT,apca:0,note:"selected chip border on its tint"});
+  return out;
+}

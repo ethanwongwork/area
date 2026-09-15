@@ -1,0 +1,172 @@
+{
+  "input/edge-outside": {
+    "id": "light/cool/red/flat/input/edge-outside",
+    "pass": true,
+    "actual": "3.7170:1 (rgb(129, 133, 137) / rgb(255, 255, 255))"
+  },
+  "input/edge-inside": {
+    "id": "light/cool/red/flat/input/edge-inside",
+    "pass": true,
+    "actual": "3.7170:1 (rgb(129, 133, 137) / rgb(255, 255, 255))"
+  },
+  "textarea/edge-outside": {
+    "id": "light/cool/red/flat/textarea/edge-outside",
+    "pass": true,
+    "actual": "3.4311:1 (rgb(129, 133, 137) / rgb(244, 246, 248))"
+  },
+  "textarea/edge-inside": {
+    "id": "light/cool/red/flat/textarea/edge-inside",
+    "pass": true,
+    "actual": "3.7170:1 (rgb(129, 133, 137) / rgb(255, 255, 255))"
+  },
+  "select/edge-outside": {
+    "id": "light/cool/red/flat/select/edge-outside",
+    "pass": true,
+    "actual": "3.7170:1 (rgb(129, 133, 137) / rgb(255, 255, 255))"
+  },
+  "select/edge-inside": {
+    "id": "light/cool/red/flat/select/edge-inside",
+    "pass": true,
+    "actual": "3.7170:1 (rgb(129, 133, 137) / rgb(255, 255, 255))"
+  },
+  "invalid/edge-outside": {
+    "id": "light/neutral/red/flat/invalid/edge-outside",
+    "pass": true,
+    "actual": "8.5465:1 (rgb(156, 2, 43) / rgb(255, 255, 255))"
+  },
+  "invalid/edge-inside": {
+    "id": "light/neutral/red/flat/invalid/edge-inside",
+    "pass": true,
+    "actual": "8.5465:1 (rgb(156, 2, 43) / rgb(255, 255, 255))"
+  },
+  "contrast-input/placeholder": {
+    "id": "light/warm/red/flat/contrast-input/placeholder",
+    "pass": true,
+    "actual": "5.6914:1 (rgb(106, 102, 98) / rgb(255, 255, 255))"
+  },
+  "contrast-textarea/placeholder": {
+    "id": "light/warm/red/flat/contrast-textarea/placeholder",
+    "pass": true,
+    "actual": "5.6914:1 (rgb(106, 102, 98) / rgb(255, 255, 255))"
+  },
+  "unchecked/boundary": {
+    "id": "light/cool/red/flat/unchecked/boundary",
+    "pass": true,
+    "actual": "3.7170:1 (rgb(129, 133, 137) / rgb(255, 255, 255))"
+  },
+  "checked/boundary": {
+    "id": "light/neutral/green/flat/checked/boundary",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "checked/mark": {
+    "id": "light/neutral/red/flat/checked/mark",
+    "pass": true,
+    "actual": "4.6091:1 (rgb(255, 255, 255) / rgb(232, 9, 69))"
+  },
+  "radio/boundary": {
+    "id": "light/neutral/green/flat/radio/boundary",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "radio/mark": {
+    "id": "light/neutral/red/flat/radio/mark",
+    "pass": true,
+    "actual": "4.6091:1 (rgb(255, 255, 255) / rgb(232, 9, 69))"
+  },
+  "switch/boundary": {
+    "id": "light/cool/red/flat/switch/boundary",
+    "pass": true,
+    "actual": "3.7170:1 (rgb(129, 133, 137) / rgb(255, 255, 255))"
+  },
+  "switch/mark": {
+    "id": "light/cool/red/flat/switch/mark",
+    "pass": true,
+    "actual": "3.7170:1 (rgb(255, 255, 255) / rgb(129, 133, 137))"
+  },
+  "switch-on/boundary": {
+    "id": "light/neutral/green/flat/switch-on/boundary",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "switch-on/mark": {
+    "id": "light/neutral/red/flat/switch-on/mark",
+    "pass": true,
+    "actual": "4.6091:1 (rgb(255, 255, 255) / rgb(232, 9, 69))"
+  },
+  "segment/selected-edge": {
+    "id": "light/cool/red/flat/segment/selected-edge",
+    "pass": true,
+    "actual": "3.4311:1 (rgb(129, 133, 137) / rgb(244, 246, 248))"
+  },
+  "chip/selected-edge": {
+    "id": "light/neutral/green/flat/chip/selected-edge",
+    "pass": true,
+    "actual": "5.6685:1 (rgb(0, 114, 73) / rgb(241, 251, 245))"
+  },
+  "solid/label": {
+    "id": "light/neutral/red/flat/solid/label",
+    "pass": true,
+    "actual": "4.6091:1 (rgb(255, 255, 255) / rgb(232, 9, 69))"
+  },
+  "syntax/area-syntax-keyword": {
+    "id": "light/warm/red/flat/syntax/area-syntax-keyword",
+    "pass": true,
+    "actual": "5.4450:1 (rgb(125, 65, 218) / rgb(250, 248, 246))"
+  },
+  "syntax/area-syntax-string": {
+    "id": "light/warm/cyan/flat/syntax/area-syntax-string",
+    "pass": true,
+    "actual": "4.5432:1 (rgb(0, 124, 156) / rgb(250, 248, 246))"
+  },
+  "focus/contrast-input/contrast": {
+    "id": "light/neutral/green/flat/focus/contrast-input/contrast",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "focus/contrast-textarea/contrast": {
+    "id": "light/warm/green/flat/focus/contrast-textarea/contrast",
+    "pass": true,
+    "actual": "5.5122:1 (rgb(0, 114, 73) / rgb(247, 245, 243))"
+  },
+  "focus/contrast-select/contrast": {
+    "id": "light/neutral/green/flat/focus/contrast-select/contrast",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "focus/contrast-invalid/contrast": {
+    "id": "light/neutral/green/flat/focus/contrast-invalid/contrast",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "focus/contrast-solid/contrast": {
+    "id": "light/neutral/green/flat/focus/contrast-solid/contrast",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "focus/contrast-outline/contrast": {
+    "id": "light/neutral/green/flat/focus/contrast-outline/contrast",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "focus/area-segmented__item/contrast": {
+    "id": "light/warm/green/flat/focus/area-segmented__item/contrast",
+    "pass": true,
+    "actual": "5.5122:1 (rgb(0, 114, 73) / rgb(247, 245, 243))"
+  },
+  "focus/area-chip area-chip--sm/contrast": {
+    "id": "light/neutral/green/flat/focus/area-chip area-chip--sm/contrast",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "focus/contrast-unchecked/contrast": {
+    "id": "light/neutral/green/flat/focus/contrast-unchecked/contrast",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  },
+  "focus/contrast-switch/contrast": {
+    "id": "light/neutral/green/flat/focus/contrast-switch/contrast",
+    "pass": true,
+    "actual": "5.9946:1 (rgb(0, 114, 73) / rgb(255, 255, 255))"
+  }
+}

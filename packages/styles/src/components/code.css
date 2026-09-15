@@ -183,8 +183,8 @@
   }
 
   .area-code-block__toggle:focus-visible {
-    outline: var(--area-ring-width) solid var(--area-border-focus);
-    outline-offset: calc(var(--area-ring-offset) * -1);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: calc(var(--area-focus-offset) * -1);
   }
 
   /*

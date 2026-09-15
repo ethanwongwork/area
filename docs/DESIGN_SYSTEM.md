@@ -324,14 +324,10 @@ modest — 17 degrees and an OKLab distance of 0.068, about three and a half JND
 separates twice as well and is already `discovery`, so taking it would move the collision
 rather than remove it.
 
-**Syntax highlighting is pinned to level 500 in light themes.** The code block is white, and
-white is exactly what the palette pins 500 against, so red, purple, blue and the default
-indigo all clear AA there on their own. What remains waived is the glyph wall: green at
-2.80 — 3.06 before its hue rotation — and whatever a consumer points the brand axis at. Both are in
-`contrast/exceptions.ts` with their measured numbers, the gate still counts them, and
-`report.ts` prints them in their own section rather than folding them into the pass count.
-Dark themes are *not* pinned — there 500 measures APCA Lc 28–31 against a floor of 60,
-which is unreadable rather than marginal, so `chooseVivid` keeps walking.
+**Syntax highlighting is measured against its code background.** Light walks darker from
+500 until normal-text contrast clears with a margin; dark walks lighter and also meets
+Area's supplementary APCA floor. E03 removed all four syntax waiver groups. Palette values
+remain unchanged; the semantic foreground chooses the rung that can do the job.
 
 **The page is white; a code block is one rung back from it.** That is what lets the block
 read as a block without a stroke doing the work. Its edge uses `--area-border-decorative`,
@@ -339,7 +335,7 @@ which maps to neutral 75 in the current light-theme trial and neutral 800 in dar
 table rules, navigation dividers and example containers share that quiet decorative token.
 Control outlines, swatch rings and focus indicators retain their stronger tokens.
 The decorative tier has its own 1.1 design floor; it never identifies an interactive
-control or state. Existing text, control and focus contrast thresholds are unchanged.
+control or state. E03 strengthens normal-text and required-indicator coverage; supplementary stroke floors remain unchanged.
 
 **The docs code block has no toolbar.** The React CodeBlock wrapper still exposes an
 optional toolbar; unifying that contract remains part of the audit roadmap. Copy rides at the top right of the code itself, centred on
@@ -516,15 +512,14 @@ See [the archive guide](../archive/playground/README.md) before consulting it.
 
 ## Stroke hierarchy
 
-In light themes, decorative dividers and container seams use `border-decorative` at
-neutral 75. Floating Menu/Popover frames and segmented tracks use `border-faint` at 100.
-Inputs, Select, Textarea, unselected Chip, neutral outline Button and selected segmented
-items use `border-subtle` at 150. This is a requested visual trial, not a release-ready
-contrast policy: five existing stroke assertions fail in all light color themes. Thresholds
-remain unchanged. See [the system audit](SYSTEM_AUDIT.md) for measurements and next steps. `border` remains available
-for stronger resting definition; hover and focus keep their existing tokens.
+The [current contrast contract](CONTRAST.md) defines roles, values, migration and coverage.
+Decoration remains 75/800; faint framing is 150/750 and quiet outlines are 200/750. Required
+fields use stroke-control at 450/400, with one stronger hover step. Selected controls retain
+a real edge even when elevation removes decorative borders. Focus is an opaque 2px outline
+with a 2px offset and is independent of the Surface axis.
 
-Dark values follow the same semantic roles, with decorative at 800 and faint/subtle at
-750 where the palette compresses the quiet end. Checkbox/radio glyph outlines keep their
-stronger stroke, since their shape identifies the control. A native Select popup is drawn
-by the platform; Menu/Popover frames are styled by Area. There is no separate Combobox yet.
+The dated 75/100/150 trial and its measured failures remain in the audit and E01/E02 reports.
+E03 resolves those five failures without lowering their existing aesthetic thresholds and
+strengthens small-text, active-state and focus coverage. No syntax waiver remains.
+A native Select popup is drawn by the platform; Menu/Popover frames are styled by Area.
+There is no separate Combobox yet.

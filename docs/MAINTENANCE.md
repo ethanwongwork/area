@@ -16,7 +16,7 @@ npm run typecheck
 The build checks axis integrity and CSS/manifest parity. The docs build also renders
 all examples and runs the dogfood audit. Contrast is enforced by Vitest, not by `build`.
 There is no general ESLint script; manifest parity and the docs audit are the existing
-lint checks. The docs MJS/TSX pipeline is bundled and rendered, but has no separate tsc task.
+lint checks. The docs MJS/TSX pipeline is bundled and rendered; the hydrated lab also has a tsc task.
 
 For runtime checks, use `npm run dev`, open the site, follow component links, and change
 inspector controls. The dev server watches source edits, publishes only successful builds, and reloads the
@@ -46,12 +46,12 @@ There are no checked-in environment templates or CI workflows.
 - `@area/tokens` declares a root export to `src/index.ts`, but that file does not exist.
   Current workspaces use its CSS/JSON exports or direct source imports. A public root API
   needs a deliberate contract; this cleanup does not invent one.
-- Four documented contrast waivers remain, with expiration checks. Consult
-  `packages/tokens/src/contrast/exceptions.ts`; do not hide or remove them to claim a pass.
+- E03 removes the four syntax waiver groups through readable color selection. No active
+  exception remains. Preserve explicit reporting if a future exception is proposed.
 - Some old source comments retain historical measurements or old names. The current
   token tables, manifest and passing checks take precedence over historical prose.
-- The input invalid-focus ring uses its own recipe, as recorded by the previous handoff.
-  Revisit it when changing focus geometry; it was not changed by this migration.
+- E03 replaces the invalid-input halo with the shared opaque focus outline while preserving
+  its danger border. Required edges and focus survive every Surface preset.
 - The [contrast-policy proposal](../archive/plans/contrast-policy.md) is a historical research
   snapshot, not an active ninth axis. It must be remeasured and explicitly scoped before work.
 - Figma utilities are archived. Their usefulness to external Figma documents cannot be
@@ -64,14 +64,15 @@ Start with [the handoff](../.Codex/HANDOFF.md); consult
 verify, commit, push and update both. Keep plans, rationale and current state in Git,
 not only in a private assistant session. Historical snapshots are not active instructions.
 
-## Audit status — 2026-09-14
+## Current status — E03
 
-See [SYSTEM_AUDIT.md](SYSTEM_AUDIT.md) and [ROADMAP.md](ROADMAP.md). The current stroke trial
-has 165 failing / 8,810 passing tests (five light-theme stroke assertion groups), with
-four existing syntax groups waived. Build/typecheck/parity/docs checks pass. The contrast
-report prints failures but exits zero; `npm test` is the actual blocking command.
+[The dated audit](SYSTEM_AUDIT.md) preserves the original failures. E02 repairs nested color
+scope/reset. E03 passes 16,316 token tests and 308 contrast groups with zero waivers, and adds
+rendered contrast evidence. Build/typecheck/parity/docs checks pass. The contrast report now
+exits nonzero on an unwaived failure; build alone still does not run the token gate.
 
-Confirmed pre-existing gaps include nested color scope/reset, motion-none animations,
-composite widget behavior, rendered contrast coverage, and token root exports. The audit
-includes source evidence and reproducible probes. Do not claim a complete accessibility
-check from the existing token suite.
+Remaining defects include motion-none animation, composite widget behavior, slider keyboard
+fill and package root/distribution contracts. Safari revalidation of E03 was unavailable
+because the host Mac was locked; Gecko and native Windows forced-colors were not tested.
+See [ROADMAP.md](ROADMAP.md) and [the E03 report](batches/E03/README.md). Do not infer a complete
+accessibility or release-readiness claim from passing token and local fixture checks.

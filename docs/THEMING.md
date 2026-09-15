@@ -92,4 +92,5 @@ are unsupported by the new scope contract; the scope harness reports that explic
 E02's local matrix passed in Chromium and Safari 27.0. Firefox/Gecko is not installed and
 was not run. OS preference, forced colors, screen-reader behavior and full component
 accessibility remain distinct release checks. Passing scoped color resolution does not
-resolve the 165 existing contrast failures or the behavior issues recorded in the audit.
+establish overall accessibility. E03 subsequently resolves the 165 contrast failures; behavior
+issues and release validation remain in the roadmap. See [CONTRAST.md](CONTRAST.md).
