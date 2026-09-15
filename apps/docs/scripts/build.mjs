@@ -1182,6 +1182,10 @@ function axesPage() {
 </div>
 <h2 class="docs-h2" id="usage">Usage</h2>
 ${codeBlock(`<html data-area-theme="dark" data-area-brand="purple" data-area-density="compact">`)}
+<h2 class="docs-h2" id="scopes">Nested themes</h2>
+<p class="docs-note">CSS attributes inherit independently. A light boundary keeps its inherited neutral and accent; changing either role inside dark keeps the dark scheme. Color pairs require CSS light-dark() support. <a href="./scopes.html">Inspect the browser scope checks.</a></p>
+<p class="docs-note">React Theme inherits from the nearest React Theme and emits all eight attributes, including inside a portal. Its root starts at Area defaults. Pass the host selection explicitly when integrating with a surrounding CSS-only theme.</p>
+${exampleBlock({demo:"ThemeNested",id:"react-theme",title:"A light preview inside a dark workspace"})}
 ${tokens.axes
   .map(
     (a) => `<h2 class="docs-h2" id="${a.id}">${escapeHtml(a.label)}</h2>
@@ -1195,7 +1199,7 @@ ${axisPresetTable(a.id)}`,
     title: "Axes",
     lede: "Eight independent dimensions, each one data attribute away.",
     body,
-    toc: [{ id: "usage", title: "Usage" }, ...tokens.axes.map((a) => ({ id: a.id, title: a.label }))],
+    toc: [{ id: "usage", title: "Usage" }, { id: "scopes", title: "Nested themes" }, ...tokens.axes.map((a) => ({ id: a.id, title: a.label }))],
   });
 }
 
@@ -1274,5 +1278,5 @@ for (const [name, html] of pages) writeFileSync(join(out, name), html, "utf8");
 await buildLab(root, out, DOCS_CSS);
 
 console.log(`\n  @area/docs\n`);
-console.log(`  ${pages.length + 1} pages, ${Object.keys(demos).length} demos`);
+console.log(`  ${pages.length + 2} pages, ${Object.keys(demos).length} demos`);
 console.log(`  dist/ -> ${out}\n`);

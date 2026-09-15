@@ -26,7 +26,7 @@ export function Board() {
       <div className="lab-row">
         <Field label="Comparison profile" htmlFor="lab-profile"><Select id="lab-profile" value={profile} onChange={e=>{setProfile(Number(e.target.value));setChecks([]);}}>{profiles.map((p,i)=><option key={p.name} value={i}>{p.name}</option>)}</Select></Field>
         <Button variant="outline" onClick={()=>{try{setChecks(runChecks());}catch(error){setChecks([{id:'harness/error',label:'The harness could not complete',pass:false,detail:String(error)}]);}}}>Run browser checks</Button>
-        <a href="#regressions">Regression results</a>
+        <a href="#regressions">Regression results</a><a href="./scopes.html">Theme boundaries</a>
       </div>
     </header>
     <main>

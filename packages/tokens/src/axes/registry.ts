@@ -1,16 +1,16 @@
 /**
  * The axis registry, and the invariant that makes the whole design hold together.
  *
- * Seven axes with three to twelve presets each is on the order of ten thousand
- * combinations. Verifying that many is impossible; the only thing that makes it tractable
+ * Eight axes produce tens of thousands of combinations. The property that makes targeted
+ * verification tractable
  * is proving the axes are *orthogonal*, which reduces the problem to checking each axis
  * once. Orthogonality is not a hope here -- `assertAxisIntegrity` fails the build if any
  * two axes ever write the same custom property.
  *
- * Where axes genuinely interact, the relationship is expressed once in `derived.ts` as a
+ * Where axes genuinely interact, the relationship is expressed once in `emit/base.ts` as a
  * calc() over both axes' tokens, never by one axis reaching into another's namespace.
  */
-import type { AxisDefinition } from "./schema.ts";
+import type { AxisDefinition, TokenMap } from "./schema.ts";
 import { BRAND_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "./color.ts";
 import { DENSITY_AXIS } from "./density.ts";
 import { MOTION_AXIS } from "./motion.ts";
@@ -87,54 +87,66 @@ export function checkAxisIntegrity(axes: AxisDefinition[] = AXES): IntegrityProb
         });
       }
 
-      if (preset.darkTokens) {
-        const darkKeys = new Set(Object.keys(preset.darkTokens));
-        const mismatched = [...keys].filter((k) => !darkKeys.has(k));
-        if (mismatched.length) {
-          problems.push({
-            kind: "inconsistent-preset",
-            message: `Axis "${axis.id}" preset "${preset.id}" sets tokens in light that its dark variant omits: ${mismatched.slice(0, 6).join(", ")}`,
-          });
-        }
-      }
-
-      // Key parity does not imply valid values. A token whose value contains `undefined`
-      // or `NaN` still has the right name, so every structural check passes while the
-      // stylesheet ships something the browser silently drops. Caught exactly that once.
-      for (const [key, value] of Object.entries(preset.tokens)) {
-        if (/undefined|NaN/.test(value)) {
-          problems.push({
-            kind: "invalid-value",
-            message: `Axis "${axis.id}" preset "${preset.id}" emits "${key}: ${value}".`,
-          });
-        }
-      }
-
-      for (const key of keys) {
-        // Ownership: no two axes may write the same property.
-        const previous = owner.get(key);
-        if (previous !== undefined && previous !== axis.id) {
-          problems.push({
-            kind: "collision",
-            message:
-              `"${key}" is written by both the "${previous}" and "${axis.id}" axes. ` +
-              `Axes must own disjoint namespaces -- express the relationship with calc() in derived.ts instead.`,
-          });
-        }
-        owner.set(key, axis.id);
-
-        // Namespace: a token must live under a prefix its axis declared.
-        if (!axis.namespaces.some((ns) => key.startsWith(ns.replace(/:$/, "")))) {
-          problems.push({
-            kind: "namespace",
-            message: `"${key}" is emitted by the "${axis.id}" axis but falls outside its declared namespaces.`,
-          });
+      for (const [polarity, map] of [["light", preset.tokens], ["dark", preset.darkTokens]] as const) {
+        if (!map) continue;
+        problems.push(...checkEmittedTokens(axis, map, `${preset.id}/${polarity}`, keys));
+        for (const key of Object.keys(map)) {
+          const previous = owner.get(key);
+          if (previous !== undefined && previous !== axis.id) {
+            problems.push({ kind: "collision", message: `"${key}" is written by both "${previous}" and "${axis.id}".` });
+          }
+          owner.set(key, axis.id);
         }
       }
     }
   }
 
+  for (let i = 0; i < axes.length; i++) for (let j = i + 1; j < axes.length; j++) {
+    const a = axes[i]!, b = axes[j]!;
+    for (const x of a.namespaces) for (const y of b.namespaces) {
+      const xName = x.replace(/:$/, ""), yName = y.replace(/:$/, "");
+      const overlap = x.endsWith(":") && y.endsWith(":") ? xName === yName
+        : x.endsWith(":") ? xName.startsWith(yName)
+        : y.endsWith(":") ? yName.startsWith(xName)
+        : xName.startsWith(yName) || yName.startsWith(xName);
+      if (overlap) problems.push({kind:"namespace",message:`Axes "${a.id}" and "${b.id}" claim overlapping namespaces "${x}" and "${y}".`});
+    }
+  }
   return problems;
+}
+
+/** A trailing colon denotes an exact property; all other namespaces are prefixes. */
+function owns(axis: AxisDefinition, key: string): boolean {
+  return axis.namespaces.some(ns => ns.endsWith(":") ? key === ns.slice(0, -1) : key.startsWith(ns));
+}
+
+export function checkEmittedTokens(
+  axis: AxisDefinition,
+  map: TokenMap,
+  label = "emitted",
+  reference = new Set(Object.keys(axis.presets[0]?.tokens ?? {})),
+): IntegrityProblem[] {
+  const problems: IntegrityProblem[] = [];
+  const keys = Object.keys(map);
+  const missing = [...reference].filter(key => !(key in map));
+  const extra = keys.filter(key => !reference.has(key));
+  if (missing.length || extra.length) problems.push({
+    kind: "inconsistent-preset",
+    message: `${axis.id}/${label}: missing [${missing.join(", ")}]; extra [${extra.join(", ")}].`,
+  });
+  for (const [key, value] of Object.entries(map)) {
+    if (typeof value !== "string" || !value.trim() || /\b(?:undefined|NaN|Infinity)\b/.test(value)) {
+      problems.push({ kind: "invalid-value", message: `${axis.id}/${label}: invalid "${key}: ${value}".` });
+    }
+    if (!owns(axis, key)) problems.push({ kind: "namespace", message: `${axis.id}/${label}: "${key}" falls outside its declared namespaces.` });
+  }
+  return problems;
+}
+
+/** Validate transformed output too, so emitter-specific branches cannot bypass ownership. */
+export function assertEmittedTokens(axis: AxisDefinition, map: TokenMap): void {
+  const problems = checkEmittedTokens(axis, map);
+  if (problems.length) throw new Error(problems.map(p => `[${p.kind}] ${p.message}`).join("\n"));
 }
 
 /** Throws with every problem listed. Called at the top of the build. */

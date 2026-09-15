@@ -105,7 +105,7 @@ These guarantees are covered by tests, build audits, and the review conventions 
   typed `.d.ts`, a browser fixture) and the contrast gate.
 - **`@area/styles`** — component CSS. Framework-agnostic; works without React.
 - **`@area/react`** — React components, generated variant props, no CSS.
-- **`apps/docs`** — the site: 39 pages, every demo rendered from real components, and an
+- **`apps/docs`** — the site: 40 pages, every demo rendered from real components, and an
   icon browser over 1,739 marks.
 
 ## Verifying
@@ -162,3 +162,10 @@ interpret a successful build as release readiness.
 
 The [implementation plan](docs/IMPLEMENTATION_PLAN.md) is the detailed execution order, with
 12 work packages, design directions, migration rules and verification gates.
+
+### Theme boundaries
+
+Nested CSS selections and the React `Theme` / `useTheme` API follow the
+[scope contract](docs/THEMING.md). Generated, DOM-free configuration helpers are available
+at `@area/tokens/config`. See [E02 results and matched visuals](docs/batches/E02/README.md)
+and the [live theme-boundary lab](http://localhost:4321/scopes.html).

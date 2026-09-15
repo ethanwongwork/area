@@ -1,7 +1,7 @@
 # Area — implementation plan
 
 **Updated:** 2026-09-14. **Planning baseline:** `59ea987`.
-**Status:** E01 completed; E02 is next. See [E01 results and visuals](batches/E01/README.md).
+**Status:** E01 and E02 implementation completed; E03 is next. E02 Gecko execution remains a release-validation item. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
 The system remains red: 165 existing token failures and the newly visible browser/package regressions.
 **Inputs:** [system audit](SYSTEM_AUDIT.md), [milestone checklist](ROADMAP.md), and the user's subsequent authorization to rename/add tokens, reorganize structure, build components and make system-wide improvements.
 
@@ -89,11 +89,22 @@ Define this contract before changing selectors:
 - Native controls use the same effective scheme.
 - Overlays can carry their trigger's complete effective theme when rendered outside its DOM subtree.
 
-**Implementation direction:** retain the pure resolver as the reference model. Prototype a CSS implementation that keeps each color role's light/dark values together and applies polarity at the correct scope. `light-dark()` plus explicit `color-scheme` is a candidate, subject to supported-browser and inheritance tests; no architecture decision rests on assuming it works. If the target matrix needs a fallback, emit an explicit, tested fallback from the same model. Avoid a growing list of descendant-selector exceptions.
+**Delivered:** unregistered `light-dark()` color pairs and axis-owned `color-scheme` preserve
+independent CSS inheritance, explicit resets and inherited shadow polarity. The pure resolver
+remains the browser oracle. No legacy fallback is emitted; see [THEMING.md](THEMING.md) for
+feature requirements and the CSS/React boundary.
 
-Build a small `Theme` wrapper around the same configuration contract for React, including effective values needed by future portals. It should not become a second source of color logic or require React for the CSS-only path. Keep any universal configuration helpers free of DOM globals.
+`Theme` and `useTheme` inherit React context and recreate all eight selections at portal
+destinations. A root Theme receives host CSS selections explicitly. DOM-free configuration
+metadata, helpers and types derive from the registry through `@area/tokens/config`.
 
-**Registry work:** validate light and dark maps for missing/extra keys, invalid finite values, conflicting owners and namespace errors. Validate emitted output as well as definitions so special emitter branches cannot bypass the invariant.
+**Registry work delivered:** both polarity maps and emitted maps are checked for missing/extra
+keys, invalid values and ownership. Exact namespaces are exact; overlapping claims fail.
+
+**Evidence:** 73,507 scope comparisons pass in Chromium and Safari 27.0, including live React
+updates. The matched pre-fix subset improved from 3,174 failures to zero. Eight original lab
+failures are fixed. Gecko was unavailable and remains explicitly outstanding; the all-engine
+exit criterion below is not yet fully closed. [Batch report](batches/E02/README.md).
 
 **Commit units:** failing scope/integrity cases; emitter/resolver fix; native scheme and Theme scope; portal-scope contract fixture.
 
@@ -344,7 +355,7 @@ actual implementation pace and the behavior-library proof resolves its uncertain
 
 ## Research informing the implementation candidates
 
-- [MDN: light-dark()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/light-dark) explains scheme-dependent color selection. This is a candidate for E02, to be verified in Area's nesting and browser matrix.
+- [MDN: light-dark()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/light-dark) explains scheme-dependent color selection. E02 uses this mechanism; Chromium and Safari scope checks pass, with Gecko validation pending.
 - [React Aria: Customization](https://react-aria.adobe.com/customization) documents composition and DOM-prop forwarding; [Quality](https://react-aria.adobe.com/quality) describes its behavior/accessibility/internationalization responsibilities. They inform E05's preferred prototype, not a claim of automatic Area conformance.
 - The [audit's primary sources](SYSTEM_AUDIT.md#research-and-sources) support the contrast, interaction, target-size, reflow and interchange acceptance criteria.
 

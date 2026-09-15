@@ -89,3 +89,35 @@ describe("the integrity check actually catches things", () => {
     expect(checkAxisIntegrity([lopsided]).some((p) => p.kind === "inconsistent-preset")).toBe(true);
   });
 });
+
+it.each(['NaN', 'Infinity', '-Infinity', '', 'undefined'])("rejects invalid dark values: %s", value => {
+  const axes = structuredClone(AXES);
+  const neutral = axes.find(a => a.id === 'neutral')!;
+  neutral.presets[0]!.darkTokens = { ...neutral.presets[0]!.darkTokens, '--area-bg-page': value };
+  expect(checkAxisIntegrity(axes).some(p => p.kind === 'invalid-value')).toBe(true);
+});
+
+it('rejects an extra invalid dark token outside its namespace', () => {
+  const axes = structuredClone(AXES);
+  axes.find(a => a.id === 'neutral')!.presets[0]!.darkTokens = {
+    ...axes.find(a => a.id === 'neutral')!.presets[0]!.darkTokens,
+    '--area-rogue': 'NaN',
+  };
+  const problems = checkAxisIntegrity(axes);
+  for (const kind of ['inconsistent-preset', 'invalid-value', 'namespace']) expect(problems.some(p => p.kind === kind)).toBe(true);
+});
+
+it('rejects a dark-only collision with another axis', () => {
+  const axes = structuredClone(AXES);
+  axes.find(a => a.id === 'neutral')!.presets[0]!.darkTokens = {
+    ...axes.find(a => a.id === 'neutral')!.presets[0]!.darkTokens,
+    '--area-brand-solid': '#ffffff',
+  };
+  expect(checkAxisIntegrity(axes).some(p => p.kind === 'collision')).toBe(true);
+});
+
+it('checks namespace claims even before overlapping properties are emitted', () => {
+  const axes=structuredClone(AXES);
+  axes.find(a=>a.id==='surface')!.namespaces=['--area-shadow-','--area-border-width','--area-ring-'];
+  expect(checkAxisIntegrity(axes).some(p=>p.message.includes('overlapping namespaces'))).toBe(true);
+});

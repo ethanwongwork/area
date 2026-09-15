@@ -15,10 +15,16 @@ try {
     await mkdir(target,{recursive:true});
     execFileSync('tar',['-xzf',join(temp,packed.filename),'--strip-components=1','-C',target]);
     const pkg = JSON.parse(await readFile(join(target,'package.json'),'utf8'));
-    for (const [key,path] of Object.entries(pkg.exports)) {
-      if (typeof path !== 'string' || key.includes('*')) continue;
-      try { await access(join(target,path)); console.log(`PASS ${pkg.name} ${key} → ${path}`); }
-      catch { failed=true; console.log(`FAIL ${pkg.name} ${key} → missing ${path}`); }
+    function exportPaths(value, key) {
+      if(typeof value === 'string') return [[key,value]];
+      return Object.entries(value).flatMap(([condition,path])=>exportPaths(path,`${key}/${condition}`));
+    }
+    for (const [key,value] of Object.entries(pkg.exports)) {
+      if (key.includes('*')) continue;
+      for(const [label,path] of exportPaths(value,key)) {
+        try { await access(join(target,path)); console.log(`PASS ${pkg.name} ${label} → ${path}`); }
+        catch { failed=true; console.log(`FAIL ${pkg.name} ${label} → missing ${path}`); }
+      }
     }
   }
   // This first-stage fixture deliberately probes dependency-free entry resolution only.

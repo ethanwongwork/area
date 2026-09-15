@@ -1,103 +1,110 @@
 # Handoff — 2026-09-14
 
-**Branch:** `main`. **Starting commit:** `e679615`.
+**Branch:** `main`. **Starting commit:** `378f74d`.
 **Checkpoint:** the commit containing this handoff; use `git log -1 --oneline`.
-**State:** E01 completed. System remains RED: 165 token failures; lab baseline 14 failures
-per profile; known package imports fail. Build, typecheck, manifest and four preview tests pass.
+**State:** E02 implementation complete; Gecko validation pending. System remains RED:
+165 token failures, six initial lab failures per profile and three package import failures.
 
 ## Where things stand
 
-Area is following [E01–E12](../docs/IMPLEMENTATION_PLAN.md). E01 now supplies the System lab,
-source watcher, preview recovery tests and packed-consumer baseline. E02 theme resolution is
-next; no component CSS, token values or behavior was changed in E01. The 75/100/150 trial
-and dated [audit](../docs/SYSTEM_AUDIT.md) remain unchanged.
+Area follows [E01–E12](../docs/IMPLEMENTATION_PLAN.md). E02 fixes independent CSS color
+inheritance and explicit light resets, introduces React Theme/context and generated config,
+and strengthens registry ownership. E03 semantic strokes, normal-text contrast and focus is
+next. The 75/100/150 trial and historical audit remain unchanged.
 
-The user authorized token/API renames, architecture improvements, new components and routine
-implementation decisions. Continue without another design permission round. They now request
-**a one-off visual before/after summary after every batch**, with real screenshots where
-applicable. Match specimen, profile, viewport and state; document nonvisual verification when
-no visual change applies. Preserve each batch in `docs/batches/E##/`.
+The user authorizes token/API renames, structure improvements, components and routine design
+choices. They request a real matched visual before/after report after every batch. Preserve
+each in `docs/batches/E##/`; match specimen, viewport, profile and state.
 
 ## What happened this session
 
-- Added `apps/docs/src/lab/`: real Area components server-rendered and hydrated from one tree;
-  six representative profiles; 22 visible assertions with actual/expected data and JSON.
-- Added lab navigation and included its CSS in the dogfood audit and its TypeScript in checks.
-- Added immutable preview snapshots, staged audited builds, serialized/debounced rebuilds,
-  live reload, loopback serving and staging-path containment. Source fingerprints ignore
-  duplicate filesystem events and unchanged writes. No dependencies added.
-- Added `npm run test:preview` (four passing tests) and `npm run test:consumer` (known red).
-  Consumer check packs three packages into a temporary independent directory without registry
-  installs or workspace symlinks. It checks declared export targets and raw Node entry imports;
-  compiler/React-peer consumption remains E04.
-- Saved [E01 report and visuals](../docs/batches/E01/README.md), six-profile browser JSON,
-  keyboard slider JSON and consumer output. README, architecture, maintenance and plan updated.
+- `emit/colors.ts` retains light/dark pairs until a consuming CSS property selects polarity.
+  `emit/css.ts` owns color-scheme; the theme axis no longer injects neutral/accent maps.
+  Theme-owned shadow color must also be paired: inherited shadow recipes otherwise freeze
+  the root light opacity. Geometric derivations keep their existing re-emission rules.
+- Registry checks both polarity maps and emitted maps, including malformed values and exact
+  namespace claims. Surface owns four shadow recipes; Theme owns shadow color. Fifteen new
+  unit tests cover these contracts and generated config.
+- `@area/tokens/config` emits small DOM-free JS/types from AXES: AXIS_PRESETS, DEFAULT_AXES,
+  mergeAxes and themeAttributes. It validates selections and freezes merged values. React
+  declares a local tokens dependency; no new external dependency was added.
+- React `Theme` / `useTheme` inherit React context, recreate complete eight-axis DOM scopes,
+  and support portals through a Theme inside createPortal. They do not infer arbitrary host
+  DOM attributes; pass a root host selection explicitly. [Contract](../docs/THEMING.md).
+- Added `/scopes.html` with a pure-resolver color oracle, nested comparisons and hydrated
+  React updates/portal specimen. Axes docs include a real Theme demo and extracted source.
+  Updated current architecture, conventions, roadmap and implementation plan.
+- [E02 report](../docs/batches/E02/README.md) preserves actual before/after images and evidence.
+  The same 29,040-comparison subset improved from 3,174 failures to zero. Expanded 73,507
+  comparisons pass in Chromium and Safari 27.0, including colors, native scheme, shadows,
+  role removal, three-level nesting, attribute order, React context and body portal.
 
 ## In flight
 
-E01 is complete; no partial implementation changes are intentionally left dirty. All existing
-red states are documented below. Preview is running at http://localhost:4321/lab.html through
-`npm run dev` (terminal session 98213; log `/tmp/area-e01-dev-final.log`). The visible tab is
-marked as a deliverable. Restart the watcher process after editing its own implementation.
+No intentional partial implementation remains. E02's all-engine exit is not fully closed:
+Firefox is not installed. Preserve this limitation for release validation. Preview remains
+at http://localhost:4321/scopes.html via `npm run dev` (session 98213, log
+`/tmp/area-e01-dev-final.log`); the tab is marked deliverable and viewport override reset.
+Restart the dev process only after editing its watcher/server implementation.
 
 ## Next
 
-1. **E02:** define closest-scope theme/neutral/accent inheritance and explicit light resets.
-   Extend lab fixtures with nested boundaries, attribute removal/mutation order and comparisons
-   to the pure resolver; then fix emission and dark-map ownership validation. Preserve E01.
-2. **E03:** fix semantic stroke/normal-text/focus contracts and the existing contrast failures.
-   The quiet visual direction matters; 75/100/150 is a reference, not mandatory for every edge.
-3. **E04:** API naming, manifest/props parity and genuine compiled/consumer package contracts.
-   React Aria is still a planned proof in E05, not installed or selected.
+1. **E03:** capture current real controls; classify decorative, supplementary and required
+   strokes. Resolve 165 failures and normal-text/syntax/focus coverage without silently
+   weakening gates. Check selected/invalid/unchecked states and forced-colors treatment.
+   Preserve quiet visual direction; 75/100/150 is a reference, not every edge's requirement.
+2. **E04:** align accent/brand and other API vocabulary, manifest/props and compiled package
+   contracts. Config is compiled; the rest of the package contract remains defective.
+3. E05 behavior proof, then component and axis completion. React Aria is not installed or
+   selected. Six initial lab failures and keyboard slider fill remain later batch work.
 
 ## Traps
 
-- Build success is not a green token suite. Contrast report still exits zero on printed
-  failures; `npm test` is the actual token gate. Never weaken thresholds to clear this baseline.
-- Lab scope references are explicit sibling scopes, not yet an independent resolver oracle.
-  Its synthetic Tab key assertion complements one trusted keyboard reproduction; it is not
-  cross-engine automation. In-page checks run from the UI, not a headless browser CLI.
-- Slider initial-fill check passes at 40. Press Right: value 41, fill 40, then rerun to see
-  the extra failure. Field required/help links, Tab IDs/keyboard, segmented tab stops and
-  explicit-none spinner remain defective. Menu/Popover remain presentation specimens.
-- Browser capture immediately after profile selection can catch color transitions midway.
-  Observe the settled view before saving. Full-page captures in this provider produced blank
-  padding; final desktop images use normal 1280×720 viewport captures instead.
-- Browser locator clicks could time out when the action was scrolled away after a slider
-  interaction. Scroll to the top and use the fresh AX button; do not treat it as a component bug.
-- The first watcher reacted to duplicate/metadata notifications. Source fingerprints now
-  filter unchanged bytes; the dedicated regression covers rewrite, edit, deletion and restore.
-- A syntax-error experiment confirmed the server retains the last successful build; restoring
-  the source recovered. No intentional syntax error remains. Generated output is excluded.
-- Local sandbox needs escalation to bind loopback ports. The consumer script uses its own
-  temporary npm cache rather than touching the user's protected cache. Do not run npm's
-  suggested cache ownership changes; the original error was sandbox access, not proven ownership.
+- Raw custom-property strings may contain light-dark(). Measure an actual consuming color,
+  border or shadow. The lab and axis fixture now do this. Do not @property-register paired
+  colors: declaration-time resolution would recreate the inheritance bug.
+- React scope starts from context defaults, not host DOM. CSS-only attributes remain
+  independently composable. A Theme is unstyled and does not implement overlay behavior.
+- Build tokens before typecheck/packing a fresh checkout; config's generated types are needed.
+- Registry namespace suffix ':' is exact. Do not let --area-border: claim all border tokens
+  or --area-shadow- let Surface claim Theme's shadow-color.
+- Build success is not a green token suite. contrast/report.ts prints failures but exits0;
+  npm test is the real gate. No palette values, thresholds or waivers changed in E02.
+- Browser runner lives in the app and is invoked through UI. It is not headless automation
+  or CI. Count 73,507 means repeated defined comparisons, not that many distinct features.
+  No screen-reader, forced-colors, OS preference or historical minimum browser claim.
+- CUA-only browser work. Captures are normal 1280×720 viewport screenshots; fullPage produced
+  blank padding. Wait for settled color transitions before capturing profiles. Source edits
+  cause live reload and clear results; avoid edits between running checks and saving JSON.
+- The first native Safari acquisition took over eight minutes; later native calls were fast.
+  Safari27 scope evidence is saved; do not rerun just to regenerate the same result.
+- Slider Right changes value41 while fill stays40. Field relationships/required, Tab IDs and
+  keyboard, segmented tab stops, and explicit-none spinner remain defective.
+- Loopback tests require sandbox escalation. Do not modify npm cache ownership; consumer
+  tests use a temporary cache. No dependencies were fetched for E02.
 
 ## Verify
 
-Fresh E01 results:
+- `npm test`: **165 failed / 8,825 passed / 8,990 total**, 1 failed / 7 passed files.
+- Contrast report: **173 passing / 5 failing unwaived groups + 4 waived**, 66 themes.
+- `npm run build:docs`: pass including package build, parity and dogfood; **40 pages,
+  65 catalog demos, 36/36 manifest components**.
+- `npm run typecheck`: three packages plus lab pass. Manifest parity: 36 components pass.
+- `npm run test:preview`: **4 passed**.
+- Scope matrix: **73,507 passed / 0 failed** in Chromium and Safari27. Live React parent
+  polarity change and child override removal each pass the full matrix in Chromium.
+- Original lab: **16 passed / 6 failed / 22** in all six profiles (was8/14). Eight scope
+  failures resolved. Keyboard slider interaction exposes another existing failure.
+- `npm run test:consumer`: **11 export targets exist / 1 missing**. Config import passes;
+  token root missing and raw React/styles-manifest TypeScript imports fail in Node.
+- 390×844 scope fixture: no horizontal overflow. Firefox absent, not tested.
+- Markdown local links and `git diff --check`: pass at checkpoint.
 
-- `npm test`: **165 failed / 8,810 passed / 8,975 total**, 1 failed / 5 passed files.
-- `node packages/tokens/src/contrast/report.ts`: **5 failing / 173 passing groups + 4 waived**,
-  66 themes. Independent stricter diagnostics remain in the dated research directory.
-- `npm run build:docs`: pass, including package build and manifest parity. **39 pages,
-  64 catalog demos, 36/36 manifest components**; no dogfood violations.
-- `npm run lint:manifest`: **36 components**, pass.
-- `npm run typecheck`: pass for three packages plus the lab.
-- `npm run test:preview`: **4 tests passed**.
-- Lab **Run browser checks**: **8 passed / 14 failed / 22** in each of 6 profiles.
-  With a trusted Right on Allocation: **7 passed / 15 failed**.
-- `npm run test:consumer`: **9 export targets exist / 1 missing**; three raw Node imports
-  fail (missing token root; React and manifest source TS unsupported in node_modules).
-- Hydration: Activity click, Select choice and Checkbox work. Trusted Tab Right stays Account.
-  Mobile 390×844: no horizontal overflow. No screen reader, forced-colors or cross-engine claim.
-- Markdown local links and `git diff --check`: pass.
-
-Logs: `/tmp/area-e01-{tests,build,typecheck,contrast,parity,preview-tests,consumer}.log`.
-Durable results and screenshots: `docs/batches/E01/`. Original audit: `docs/research/2026-09-14/`.
+Logs: `/tmp/area-e02-{tests,build,typecheck,contrast,parity,preview-tests,consumer}.log`.
+Durable results: `docs/batches/E02/`. Preserve E01 and dated research as historical baselines.
 
 ## Remote state
 
-Local checkpoints are unpushed. Automatic approval review previously rejected `git push origin
-main` because explicit authorization to export repository contents and update the shared
-branch was missing. Do not retry without explicit push authorization. None was attempted in E01.
+Local checkpoints remain unpushed. Automatic approval review previously rejected
+`git push origin main` for missing explicit repository export/shared-branch authorization.
+Do not retry without explicit push authorization. No push was attempted in E02.

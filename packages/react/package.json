@@ -12,7 +12,7 @@
     "src"
   ],
   "scripts": {
-    "build": "echo '  @area/react — source-only package, nothing to build.'",
+    "build": "echo '  @area/react \u2014 source-only package, nothing to build.'",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -28,7 +28,8 @@
     }
   },
   "dependencies": {
-    "@area/styles": "*"
+    "@area/styles": "*",
+    "@area/tokens": "*"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",

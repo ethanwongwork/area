@@ -3,8 +3,8 @@
  *
  * Three separate axes rather than one, because their token namespaces are disjoint and
  * therefore compose. `--area-neutral-*` and everything derived from it belongs to the
- * neutral axis; `--area-brand-*` to the brand axis. Twelve accents times six neutrals is
- * seventy-two looks from eighteen CSS blocks rather than seventy-two.
+ * neutral axis; `--area-brand-*` to the brand axis. Eleven accents and three neutral casts give
+ * thirty-three selections, each retaining both light and dark polarity.
  *
  * The theme axis carries what neither of the others owns: every scale's primitive ramp,
  * the fixed semantic tones (danger, warning, success, info), and the shadow colour.
@@ -29,8 +29,8 @@ function tokensForRole(theme: ResolvedTheme, role: string): Record<string, strin
  * A scale's full primitive ramp: every level, its translucent twin, and the foreground the
  * scale measured against its own solid fill.
  *
- * Keyed by level, not by position. `--area-blue-55` names the lightness it carries, so a
- * change to the ladder renames the tokens it affects instead of silently repointing them.
+ * Keyed by ordinal rung, not array position. A level identifies a palette step; it is not
+ * a measured lightness and it does not change when theme polarity changes.
  */
 function primitiveRamp(theme: ResolvedTheme, scaleId: string, as = scaleId): Record<string, string> {
   const scale = theme.scales[scaleId]!;
@@ -146,16 +146,8 @@ export const NEUTRAL_AXIS: AxisDefinition = {
   defaultPreset: DEFAULT_SELECTION.neutral,
   namespaces: [
     "--area-neutral-",
-    "--area-bg-",
-    "--area-fg-default",
-    "--area-fg-muted",
-    "--area-fg-placeholder",
-    "--area-fg-disabled",
-    "--area-fg-on-inverse",
-    "--area-fg-on-primary",
-    "--area-border-subtle",
-    "--area-border-hover",
-    "--area-border:",
+    ...Object.keys(tokensForRole(themeFor("light", DEFAULT_SELECTION.brand, DEFAULT_SELECTION.neutral), "neutral"))
+      .map(name => `--area-${name}:`),
   ],
   presets: NEUTRAL_SCALES.map((spec) => ({
     id: spec.id,

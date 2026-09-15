@@ -11,12 +11,13 @@ Its E01–E12 batches refine the order of the milestone checklist below.
 
 The current 75/100/150 stroke trial is visible but fails five existing contrast assertions (165 parameterized tests). Preserve the checks. First resolve the intended resting-stroke policy: decorative 75 passes; faint 150 and subtle 200 restore these existing floors, while required control indicators still need rendered accessibility review.
 
-The next implementation milestone should be **theme correctness and honest contrast coverage**, followed by **working interaction primitives**. Do not begin with more colors, radius stops or a large new component catalog.
+The next implementation milestone is **honest contrast coverage and semantic strokes**, followed by **working interaction primitives**. Do not begin with more colors, radius stops or a large new component catalog.
 
 Effort bands describe uncertainty and scope, not calendar commitments: **small** is one focused change; **medium** spans several modules and a focused test suite; **large** needs a design/API decision, implementation and browser/assistive-technology validation. Dependencies matter more than the bands.
 
 E01 tooling and visual baseline is complete: [results and screenshots](batches/E01/README.md).
-This does not close the foundation or release-readiness milestones. E02 is next.
+E02 scope implementation is complete: [contract and browser evidence](batches/E02/README.md).
+Gecko validation remains pending. E03 is next; the foundation and release milestones remain open.
 
 ## Milestone 1 — Trust the rendered foundation
 
@@ -31,13 +32,15 @@ This does not close the foundation or release-readiness milestones. E02 is next.
 
 ### R02 · P0 · Repair scoped themes · medium
 
-- [ ] Define inherited theme + brand + neutral resolution and explicit reset rules.
-- [ ] Fix dark parent → brand/neutral child and dark parent → light child.
-- [ ] Add native light color-scheme reset and verify controls.
-- [ ] Specify how portals inherit the effective scope.
-- [ ] Validate dark maps for extra keys, namespace collisions and invalid values.
+- [x] Define inherited theme + brand + neutral resolution and explicit reset rules.
+- [x] Fix dark parent → brand/neutral child and dark parent → light child.
+- [x] Add native light color-scheme reset and verify controls.
+- [x] Specify how portals inherit the effective scope.
+- [x] Validate dark maps for extra keys, namespace collisions and invalid values.
 
 **Exit:** multi-level nesting equals `resolveTheme()` for all color selections; test both attribute placement and attribute removal. Do not rely only on same-element theme selections. Audit: F01, F08.
+
+**Validation remaining:** execute the scope matrix in Gecko; Chromium and Safari passed.
 
 ### R03 · P0 · Make contrast tests reflect actual UI · medium
 

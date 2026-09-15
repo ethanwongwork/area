@@ -1,5 +1,17 @@
 # Project journal
 
+## 2026-09-14 — E02: color polarity belongs at consumption
+
+Independent color scopes now retain light/dark pairs until consumed, so changing a neutral
+or accent inside dark no longer resets polarity, and light islands inherit the correct hues.
+Pairing theme-owned shadow color was also necessary: an inherited shadow recipe had already
+substituted its opacity at the ancestor. React Theme carries a complete contextual selection
+to portal destinations; it deliberately requires an explicit host bridge rather than guessing
+raw DOM attributes. The matched matrix lost all 3,174 failures; expanded 73,507 comparisons
+pass in Chromium and Safari, with Gecko still pending and the 165 contrast failures unchanged.
+See [the E02 report](../docs/batches/E02/README.md) and [scope contract](../docs/THEMING.md).
+
+
 ## 2026-09-14 — E01: a visible regression baseline
 
 The first implementation batch adds the System lab, six representative profiles, and

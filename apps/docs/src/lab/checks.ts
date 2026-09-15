@@ -3,7 +3,12 @@ export type Check = { id: string; label: string; pass: boolean; detail: string }
 export function runChecks(): Check[] {
   const result: Check[] = [];
   const el = (id: string) => { const node = document.getElementById(id); if (!node) throw new Error(`Missing fixture ${id}`); return node; };
-  const token = (id: string, name: string) => { const value = getComputedStyle(el(id)).getPropertyValue(name).trim(); if (!value) throw new Error(`Missing computed token ${name} on ${id}`); return value; };
+  const token = (id: string, name: string) => {
+    if (name === 'color-scheme') return getComputedStyle(el(id)).colorScheme;
+    if (!getComputedStyle(el(id)).getPropertyValue(name).trim()) throw new Error(`Missing token ${name}`);
+    const probe=document.createElement('span');probe.style.color=`var(${name})`;el(id).append(probe);
+    const value=getComputedStyle(probe).color;probe.remove();return value;
+  };
   const check = (id: string, label: string, actual: unknown, expected: unknown) => result.push({id,label,pass:actual===expected,detail:`Actual: ${JSON.stringify(actual)}; expected: ${JSON.stringify(expected)}`});
   for (const name of ['--area-brand-surface','--area-fg-brand','--area-brand-solid-hover']) check('F01/brand/'+name,'Brand-only child inherits dark polarity',token('nested-brand',name),token('explicit-brand',name));
   for (const name of ['--area-bg-page','--area-fg-default']) check('F01/neutral/'+name,'Neutral-only child inherits dark polarity',token('nested-neutral',name),token('explicit-neutral',name));

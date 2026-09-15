@@ -33,9 +33,9 @@ Use Node 22.18+, 24.x, or 26+ as permitted by `package.json`; npm workspaces are
 ```sh
 npm ci
 npm run build                 # tokens, stylesheet, manifest parity, React source package
-npm run dev                   # builds docs once; serves http://localhost:4321
+npm run dev                   # watches sources; serves http://localhost:4321
 npm test                      # token maths, axes, contrast and waiver integrity
-npm run typecheck             # all three packages; docs has no separate TS check
+npm run typecheck             # all three packages plus the React lab
 npm run lint:manifest         # CSS/manifest parity
 npm run build:docs            # package build, docs render, dogfood audit
 npm run audit                # audit already-built docs
@@ -43,14 +43,17 @@ node apps/docs/scripts/gen-icons.mjs
 node packages/tokens/src/contrast/report.ts
 ```
 
-The dev server does not watch files. Rebuild with `npm run build:docs`, then refresh.
+The dev server watches token, style, React and docs sources and retains the last good build.
+Restart it after changing the watcher/server implementation.
 Run tests separately: `build` does not execute the contrast test gate.
 
 ## Rules that protect the system
 
 - Axes own disjoint custom-property namespaces. Express interactions once in
   `packages/tokens/src/emit/base.ts`; re-emit derived values on every axis-bearing element.
-  Never register derived tokens with `@property`.
+  Never register derived tokens or paired semantic colors with `@property`.
+  Read [docs/THEMING.md](docs/THEMING.md) before changing scope behavior; both polarity maps
+  and emitted maps must preserve ownership. React Theme inherits context, not arbitrary host DOM.
 - Keep the color values in `palette.json` verbatim. Hue and light-end chroma adjustments belong in
   `HUE_ROTATION` and `CHROMA_TRIM`; semantic rung choices belong in `INVERSION`.
   Run contrast tests for color changes; never weaken thresholds to obtain a pass.
@@ -80,7 +83,7 @@ Run tests separately: `build` does not execute the contrast test gate.
 Read [docs/SYSTEM_AUDIT.md](docs/SYSTEM_AUDIT.md) and [docs/ROADMAP.md](docs/ROADMAP.md) before
 expanding the system. Follow [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) for
 the authorized work order and decision boundaries. The 75/100/150 stroke trial leaves five contrast assertion groups
-failing; do not lower thresholds to hide this. Audit recommendations are not implemented.
+failing; do not lower thresholds to hide this. E01 and E02 implementation is complete; Gecko scope validation remains pending. See the batch reports for delivered work.
 
 ## Finish
 

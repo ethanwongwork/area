@@ -1,0 +1,2486 @@
+[
+  {
+    "state": "light/warm/red",
+    "passed": 73507,
+    "failed": 0,
+    "react": [
+      {
+        "id": "react/child/bg-page",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/bg-surface",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/bg-subtle",
+        "pass": true,
+        "detail": "rgb(247, 245, 243) → rgb(247, 245, 243)"
+      },
+      {
+        "id": "react/child/bg-code",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/child/bg-component",
+        "pass": true,
+        "detail": "rgb(247, 245, 243) → rgb(247, 245, 243)"
+      },
+      {
+        "id": "react/child/bg-component-hover",
+        "pass": true,
+        "detail": "rgb(243, 241, 239) → rgb(243, 241, 239)"
+      },
+      {
+        "id": "react/child/bg-component-active",
+        "pass": true,
+        "detail": "rgb(241, 238, 235) → rgb(241, 238, 235)"
+      },
+      {
+        "id": "react/child/bg-inverse",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/child/fg-on-inverse",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/child/bg-primary-solid",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/child/bg-primary-solid-hover",
+        "pass": true,
+        "detail": "rgb(32, 28, 23) → rgb(32, 28, 23)"
+      },
+      {
+        "id": "react/child/fg-on-primary",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/child/bg-hover",
+        "pass": true,
+        "detail": "rgba(64, 32, 0, 0.063) → rgba(64, 32, 0, 0.063)"
+      },
+      {
+        "id": "react/child/bg-active",
+        "pass": true,
+        "detail": "rgba(85, 49, 12, 0.082) → rgba(85, 49, 12, 0.082)"
+      },
+      {
+        "id": "react/child/bg-overlay",
+        "pass": true,
+        "detail": "rgba(13, 7, 1, 0.675) → rgba(13, 7, 1, 0.675)"
+      },
+      {
+        "id": "react/child/fg-default",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/child/fg-muted",
+        "pass": true,
+        "detail": "rgb(106, 102, 98) → rgb(106, 102, 98)"
+      },
+      {
+        "id": "react/child/fg-placeholder",
+        "pass": true,
+        "detail": "rgb(135, 131, 127) → rgb(135, 131, 127)"
+      },
+      {
+        "id": "react/child/fg-disabled",
+        "pass": true,
+        "detail": "rgb(166, 163, 160) → rgb(166, 163, 160)"
+      },
+      {
+        "id": "react/child/border-subtle",
+        "pass": true,
+        "detail": "rgb(229, 226, 223) → rgb(229, 226, 223)"
+      },
+      {
+        "id": "react/child/border-decorative",
+        "pass": true,
+        "detail": "rgb(243, 241, 239) → rgb(243, 241, 239)"
+      },
+      {
+        "id": "react/child/border-faint",
+        "pass": true,
+        "detail": "rgb(241, 238, 235) → rgb(241, 238, 235)"
+      },
+      {
+        "id": "react/child/border",
+        "pass": true,
+        "detail": "rgb(198, 195, 192) → rgb(198, 195, 192)"
+      },
+      {
+        "id": "react/child/border-hover",
+        "pass": true,
+        "detail": "rgb(182, 179, 176) → rgb(182, 179, 176)"
+      },
+      {
+        "id": "react/child/border-focus",
+        "pass": true,
+        "detail": "rgb(156, 2, 43) → rgb(156, 2, 43)"
+      },
+      {
+        "id": "react/child/brand-surface",
+        "pass": true,
+        "detail": "rgb(251, 245, 245) → rgb(251, 245, 245)"
+      },
+      {
+        "id": "react/child/brand-surface-hover",
+        "pass": true,
+        "detail": "rgb(252, 237, 237) → rgb(252, 237, 237)"
+      },
+      {
+        "id": "react/child/brand-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/child/brand-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/child/brand-border",
+        "pass": true,
+        "detail": "rgb(255, 201, 203) → rgb(255, 201, 203)"
+      },
+      {
+        "id": "react/child/brand-border-strong",
+        "pass": true,
+        "detail": "rgb(255, 140, 147) → rgb(255, 140, 147)"
+      },
+      {
+        "id": "react/child/brand-solid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/child/brand-solid-hover",
+        "pass": true,
+        "detail": "rgb(207, 3, 60) → rgb(207, 3, 60)"
+      },
+      {
+        "id": "react/child/fg-brand",
+        "pass": true,
+        "detail": "rgb(156, 2, 43) → rgb(156, 2, 43)"
+      },
+      {
+        "id": "react/child/fg-brand-vivid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/child/fg-brand-strong",
+        "pass": true,
+        "detail": "rgb(109, 0, 27) → rgb(109, 0, 27)"
+      },
+      {
+        "id": "react/child/fg-on-brand",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/danger-surface",
+        "pass": true,
+        "detail": "rgb(251, 245, 245) → rgb(251, 245, 245)"
+      },
+      {
+        "id": "react/child/danger-surface-hover",
+        "pass": true,
+        "detail": "rgb(252, 237, 237) → rgb(252, 237, 237)"
+      },
+      {
+        "id": "react/child/danger-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/child/danger-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/child/danger-border",
+        "pass": true,
+        "detail": "rgb(255, 201, 203) → rgb(255, 201, 203)"
+      },
+      {
+        "id": "react/child/danger-border-strong",
+        "pass": true,
+        "detail": "rgb(255, 140, 147) → rgb(255, 140, 147)"
+      },
+      {
+        "id": "react/child/danger-solid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/child/danger-solid-hover",
+        "pass": true,
+        "detail": "rgb(207, 3, 60) → rgb(207, 3, 60)"
+      },
+      {
+        "id": "react/child/fg-danger",
+        "pass": true,
+        "detail": "rgb(156, 2, 43) → rgb(156, 2, 43)"
+      },
+      {
+        "id": "react/child/fg-danger-vivid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/child/fg-danger-strong",
+        "pass": true,
+        "detail": "rgb(109, 0, 27) → rgb(109, 0, 27)"
+      },
+      {
+        "id": "react/child/fg-on-danger",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/warning-surface",
+        "pass": true,
+        "detail": "rgb(255, 245, 238) → rgb(255, 245, 238)"
+      },
+      {
+        "id": "react/child/warning-surface-hover",
+        "pass": true,
+        "detail": "rgb(255, 238, 226) → rgb(255, 238, 226)"
+      },
+      {
+        "id": "react/child/warning-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 235, 221) → rgb(255, 235, 221)"
+      },
+      {
+        "id": "react/child/warning-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 235, 221) → rgb(255, 235, 221)"
+      },
+      {
+        "id": "react/child/warning-border",
+        "pass": true,
+        "detail": "rgb(254, 219, 194) → rgb(254, 219, 194)"
+      },
+      {
+        "id": "react/child/warning-border-strong",
+        "pass": true,
+        "detail": "rgb(254, 156, 81) → rgb(254, 156, 81)"
+      },
+      {
+        "id": "react/child/warning-solid",
+        "pass": true,
+        "detail": "rgb(254, 156, 81) → rgb(254, 156, 81)"
+      },
+      {
+        "id": "react/child/warning-solid-hover",
+        "pass": true,
+        "detail": "rgb(254, 140, 48) → rgb(254, 140, 48)"
+      },
+      {
+        "id": "react/child/fg-warning",
+        "pass": true,
+        "detail": "rgb(156, 75, 0) → rgb(156, 75, 0)"
+      },
+      {
+        "id": "react/child/fg-warning-vivid",
+        "pass": true,
+        "detail": "rgb(234, 116, 1) → rgb(234, 116, 1)"
+      },
+      {
+        "id": "react/child/fg-warning-strong",
+        "pass": true,
+        "detail": "rgb(105, 49, 2) → rgb(105, 49, 2)"
+      },
+      {
+        "id": "react/child/fg-on-warning",
+        "pass": true,
+        "detail": "rgb(0, 0, 0) → rgb(0, 0, 0)"
+      },
+      {
+        "id": "react/child/caution-surface",
+        "pass": true,
+        "detail": "rgb(249, 246, 240) → rgb(249, 246, 240)"
+      },
+      {
+        "id": "react/child/caution-surface-hover",
+        "pass": true,
+        "detail": "rgb(246, 241, 229) → rgb(246, 241, 229)"
+      },
+      {
+        "id": "react/child/caution-surface-active",
+        "pass": true,
+        "detail": "rgb(253, 236, 198) → rgb(253, 236, 198)"
+      },
+      {
+        "id": "react/child/caution-border-subtle",
+        "pass": true,
+        "detail": "rgb(253, 236, 198) → rgb(253, 236, 198)"
+      },
+      {
+        "id": "react/child/caution-border",
+        "pass": true,
+        "detail": "rgb(249, 209, 122) → rgb(249, 209, 122)"
+      },
+      {
+        "id": "react/child/caution-border-strong",
+        "pass": true,
+        "detail": "rgb(219, 161, 2) → rgb(219, 161, 2)"
+      },
+      {
+        "id": "react/child/caution-solid",
+        "pass": true,
+        "detail": "rgb(243, 179, 3) → rgb(243, 179, 3)"
+      },
+      {
+        "id": "react/child/caution-solid-hover",
+        "pass": true,
+        "detail": "rgb(219, 161, 2) → rgb(219, 161, 2)"
+      },
+      {
+        "id": "react/child/fg-caution",
+        "pass": true,
+        "detail": "rgb(127, 92, 2) → rgb(127, 92, 2)"
+      },
+      {
+        "id": "react/child/fg-caution-vivid",
+        "pass": true,
+        "detail": "rgb(191, 140, 2) → rgb(191, 140, 2)"
+      },
+      {
+        "id": "react/child/fg-caution-strong",
+        "pass": true,
+        "detail": "rgb(86, 61, 0) → rgb(86, 61, 0)"
+      },
+      {
+        "id": "react/child/fg-on-caution",
+        "pass": true,
+        "detail": "rgb(0, 0, 0) → rgb(0, 0, 0)"
+      },
+      {
+        "id": "react/child/success-surface",
+        "pass": true,
+        "detail": "rgb(241, 251, 245) → rgb(241, 251, 245)"
+      },
+      {
+        "id": "react/child/success-surface-hover",
+        "pass": true,
+        "detail": "rgb(235, 246, 240) → rgb(235, 246, 240)"
+      },
+      {
+        "id": "react/child/success-surface-active",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/child/success-border-subtle",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/child/success-border",
+        "pass": true,
+        "detail": "rgb(130, 247, 196) → rgb(130, 247, 196)"
+      },
+      {
+        "id": "react/child/success-border-strong",
+        "pass": true,
+        "detail": "rgb(0, 199, 135) → rgb(0, 199, 135)"
+      },
+      {
+        "id": "react/child/success-solid",
+        "pass": true,
+        "detail": "rgb(0, 131, 86) → rgb(0, 131, 86)"
+      },
+      {
+        "id": "react/child/success-solid-hover",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/child/fg-success",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/child/fg-success-vivid",
+        "pass": true,
+        "detail": "rgb(0, 171, 114) → rgb(0, 171, 114)"
+      },
+      {
+        "id": "react/child/fg-success-strong",
+        "pass": true,
+        "detail": "rgb(0, 79, 48) → rgb(0, 79, 48)"
+      },
+      {
+        "id": "react/child/fg-on-success",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/info-surface",
+        "pass": true,
+        "detail": "rgb(240, 246, 255) → rgb(240, 246, 255)"
+      },
+      {
+        "id": "react/child/info-surface-hover",
+        "pass": true,
+        "detail": "rgb(230, 240, 255) → rgb(230, 240, 255)"
+      },
+      {
+        "id": "react/child/info-surface-active",
+        "pass": true,
+        "detail": "rgb(219, 233, 254) → rgb(219, 233, 254)"
+      },
+      {
+        "id": "react/child/info-border-subtle",
+        "pass": true,
+        "detail": "rgb(219, 233, 254) → rgb(219, 233, 254)"
+      },
+      {
+        "id": "react/child/info-border",
+        "pass": true,
+        "detail": "rgb(193, 217, 253) → rgb(193, 217, 253)"
+      },
+      {
+        "id": "react/child/info-border-strong",
+        "pass": true,
+        "detail": "rgb(121, 174, 255) → rgb(121, 174, 255)"
+      },
+      {
+        "id": "react/child/info-solid",
+        "pass": true,
+        "detail": "rgb(0, 109, 245) → rgb(0, 109, 245)"
+      },
+      {
+        "id": "react/child/info-solid-hover",
+        "pass": true,
+        "detail": "rgb(1, 96, 217) → rgb(1, 96, 217)"
+      },
+      {
+        "id": "react/child/fg-info",
+        "pass": true,
+        "detail": "rgb(0, 71, 165) → rgb(0, 71, 165)"
+      },
+      {
+        "id": "react/child/fg-info-vivid",
+        "pass": true,
+        "detail": "rgb(0, 109, 245) → rgb(0, 109, 245)"
+      },
+      {
+        "id": "react/child/fg-info-strong",
+        "pass": true,
+        "detail": "rgb(0, 48, 117) → rgb(0, 48, 117)"
+      },
+      {
+        "id": "react/child/fg-on-info",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/discovery-surface",
+        "pass": true,
+        "detail": "rgb(246, 244, 255) → rgb(246, 244, 255)"
+      },
+      {
+        "id": "react/child/discovery-surface-hover",
+        "pass": true,
+        "detail": "rgb(240, 237, 253) → rgb(240, 237, 253)"
+      },
+      {
+        "id": "react/child/discovery-surface-active",
+        "pass": true,
+        "detail": "rgb(234, 229, 255) → rgb(234, 229, 255)"
+      },
+      {
+        "id": "react/child/discovery-border-subtle",
+        "pass": true,
+        "detail": "rgb(234, 229, 255) → rgb(234, 229, 255)"
+      },
+      {
+        "id": "react/child/discovery-border",
+        "pass": true,
+        "detail": "rgb(219, 210, 254) → rgb(219, 210, 254)"
+      },
+      {
+        "id": "react/child/discovery-border-strong",
+        "pass": true,
+        "detail": "rgb(184, 159, 255) → rgb(184, 159, 255)"
+      },
+      {
+        "id": "react/child/discovery-solid",
+        "pass": true,
+        "detail": "rgb(141, 77, 243) → rgb(141, 77, 243)"
+      },
+      {
+        "id": "react/child/discovery-solid-hover",
+        "pass": true,
+        "detail": "rgb(125, 65, 218) → rgb(125, 65, 218)"
+      },
+      {
+        "id": "react/child/fg-discovery",
+        "pass": true,
+        "detail": "rgb(98, 30, 181) → rgb(98, 30, 181)"
+      },
+      {
+        "id": "react/child/fg-discovery-vivid",
+        "pass": true,
+        "detail": "rgb(141, 77, 243) → rgb(141, 77, 243)"
+      },
+      {
+        "id": "react/child/fg-discovery-strong",
+        "pass": true,
+        "detail": "rgb(70, 0, 136) → rgb(70, 0, 136)"
+      },
+      {
+        "id": "react/child/fg-on-discovery",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/native-scheme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/child/inherited-shadow",
+        "pass": true,
+        "detail": "rgba(0, 0, 0, 0.1) 0px 1px 2px -1px → rgba(0, 0, 0, 0.1) 0px 1px 2px -1px"
+      },
+      {
+        "id": "react/portal/bg-page",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/bg-surface",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/bg-subtle",
+        "pass": true,
+        "detail": "rgb(247, 245, 243) → rgb(247, 245, 243)"
+      },
+      {
+        "id": "react/portal/bg-code",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/portal/bg-component",
+        "pass": true,
+        "detail": "rgb(247, 245, 243) → rgb(247, 245, 243)"
+      },
+      {
+        "id": "react/portal/bg-component-hover",
+        "pass": true,
+        "detail": "rgb(243, 241, 239) → rgb(243, 241, 239)"
+      },
+      {
+        "id": "react/portal/bg-component-active",
+        "pass": true,
+        "detail": "rgb(241, 238, 235) → rgb(241, 238, 235)"
+      },
+      {
+        "id": "react/portal/bg-inverse",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/portal/fg-on-inverse",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/portal/bg-primary-solid",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/portal/bg-primary-solid-hover",
+        "pass": true,
+        "detail": "rgb(32, 28, 23) → rgb(32, 28, 23)"
+      },
+      {
+        "id": "react/portal/fg-on-primary",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/portal/bg-hover",
+        "pass": true,
+        "detail": "rgba(64, 32, 0, 0.063) → rgba(64, 32, 0, 0.063)"
+      },
+      {
+        "id": "react/portal/bg-active",
+        "pass": true,
+        "detail": "rgba(85, 49, 12, 0.082) → rgba(85, 49, 12, 0.082)"
+      },
+      {
+        "id": "react/portal/bg-overlay",
+        "pass": true,
+        "detail": "rgba(13, 7, 1, 0.675) → rgba(13, 7, 1, 0.675)"
+      },
+      {
+        "id": "react/portal/fg-default",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/portal/fg-muted",
+        "pass": true,
+        "detail": "rgb(106, 102, 98) → rgb(106, 102, 98)"
+      },
+      {
+        "id": "react/portal/fg-placeholder",
+        "pass": true,
+        "detail": "rgb(135, 131, 127) → rgb(135, 131, 127)"
+      },
+      {
+        "id": "react/portal/fg-disabled",
+        "pass": true,
+        "detail": "rgb(166, 163, 160) → rgb(166, 163, 160)"
+      },
+      {
+        "id": "react/portal/border-subtle",
+        "pass": true,
+        "detail": "rgb(229, 226, 223) → rgb(229, 226, 223)"
+      },
+      {
+        "id": "react/portal/border-decorative",
+        "pass": true,
+        "detail": "rgb(243, 241, 239) → rgb(243, 241, 239)"
+      },
+      {
+        "id": "react/portal/border-faint",
+        "pass": true,
+        "detail": "rgb(241, 238, 235) → rgb(241, 238, 235)"
+      },
+      {
+        "id": "react/portal/border",
+        "pass": true,
+        "detail": "rgb(198, 195, 192) → rgb(198, 195, 192)"
+      },
+      {
+        "id": "react/portal/border-hover",
+        "pass": true,
+        "detail": "rgb(182, 179, 176) → rgb(182, 179, 176)"
+      },
+      {
+        "id": "react/portal/border-focus",
+        "pass": true,
+        "detail": "rgb(156, 2, 43) → rgb(156, 2, 43)"
+      },
+      {
+        "id": "react/portal/brand-surface",
+        "pass": true,
+        "detail": "rgb(251, 245, 245) → rgb(251, 245, 245)"
+      },
+      {
+        "id": "react/portal/brand-surface-hover",
+        "pass": true,
+        "detail": "rgb(252, 237, 237) → rgb(252, 237, 237)"
+      },
+      {
+        "id": "react/portal/brand-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/portal/brand-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/portal/brand-border",
+        "pass": true,
+        "detail": "rgb(255, 201, 203) → rgb(255, 201, 203)"
+      },
+      {
+        "id": "react/portal/brand-border-strong",
+        "pass": true,
+        "detail": "rgb(255, 140, 147) → rgb(255, 140, 147)"
+      },
+      {
+        "id": "react/portal/brand-solid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/portal/brand-solid-hover",
+        "pass": true,
+        "detail": "rgb(207, 3, 60) → rgb(207, 3, 60)"
+      },
+      {
+        "id": "react/portal/fg-brand",
+        "pass": true,
+        "detail": "rgb(156, 2, 43) → rgb(156, 2, 43)"
+      },
+      {
+        "id": "react/portal/fg-brand-vivid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/portal/fg-brand-strong",
+        "pass": true,
+        "detail": "rgb(109, 0, 27) → rgb(109, 0, 27)"
+      },
+      {
+        "id": "react/portal/fg-on-brand",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/danger-surface",
+        "pass": true,
+        "detail": "rgb(251, 245, 245) → rgb(251, 245, 245)"
+      },
+      {
+        "id": "react/portal/danger-surface-hover",
+        "pass": true,
+        "detail": "rgb(252, 237, 237) → rgb(252, 237, 237)"
+      },
+      {
+        "id": "react/portal/danger-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/portal/danger-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/portal/danger-border",
+        "pass": true,
+        "detail": "rgb(255, 201, 203) → rgb(255, 201, 203)"
+      },
+      {
+        "id": "react/portal/danger-border-strong",
+        "pass": true,
+        "detail": "rgb(255, 140, 147) → rgb(255, 140, 147)"
+      },
+      {
+        "id": "react/portal/danger-solid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/portal/danger-solid-hover",
+        "pass": true,
+        "detail": "rgb(207, 3, 60) → rgb(207, 3, 60)"
+      },
+      {
+        "id": "react/portal/fg-danger",
+        "pass": true,
+        "detail": "rgb(156, 2, 43) → rgb(156, 2, 43)"
+      },
+      {
+        "id": "react/portal/fg-danger-vivid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/portal/fg-danger-strong",
+        "pass": true,
+        "detail": "rgb(109, 0, 27) → rgb(109, 0, 27)"
+      },
+      {
+        "id": "react/portal/fg-on-danger",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/warning-surface",
+        "pass": true,
+        "detail": "rgb(255, 245, 238) → rgb(255, 245, 238)"
+      },
+      {
+        "id": "react/portal/warning-surface-hover",
+        "pass": true,
+        "detail": "rgb(255, 238, 226) → rgb(255, 238, 226)"
+      },
+      {
+        "id": "react/portal/warning-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 235, 221) → rgb(255, 235, 221)"
+      },
+      {
+        "id": "react/portal/warning-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 235, 221) → rgb(255, 235, 221)"
+      },
+      {
+        "id": "react/portal/warning-border",
+        "pass": true,
+        "detail": "rgb(254, 219, 194) → rgb(254, 219, 194)"
+      },
+      {
+        "id": "react/portal/warning-border-strong",
+        "pass": true,
+        "detail": "rgb(254, 156, 81) → rgb(254, 156, 81)"
+      },
+      {
+        "id": "react/portal/warning-solid",
+        "pass": true,
+        "detail": "rgb(254, 156, 81) → rgb(254, 156, 81)"
+      },
+      {
+        "id": "react/portal/warning-solid-hover",
+        "pass": true,
+        "detail": "rgb(254, 140, 48) → rgb(254, 140, 48)"
+      },
+      {
+        "id": "react/portal/fg-warning",
+        "pass": true,
+        "detail": "rgb(156, 75, 0) → rgb(156, 75, 0)"
+      },
+      {
+        "id": "react/portal/fg-warning-vivid",
+        "pass": true,
+        "detail": "rgb(234, 116, 1) → rgb(234, 116, 1)"
+      },
+      {
+        "id": "react/portal/fg-warning-strong",
+        "pass": true,
+        "detail": "rgb(105, 49, 2) → rgb(105, 49, 2)"
+      },
+      {
+        "id": "react/portal/fg-on-warning",
+        "pass": true,
+        "detail": "rgb(0, 0, 0) → rgb(0, 0, 0)"
+      },
+      {
+        "id": "react/portal/caution-surface",
+        "pass": true,
+        "detail": "rgb(249, 246, 240) → rgb(249, 246, 240)"
+      },
+      {
+        "id": "react/portal/caution-surface-hover",
+        "pass": true,
+        "detail": "rgb(246, 241, 229) → rgb(246, 241, 229)"
+      },
+      {
+        "id": "react/portal/caution-surface-active",
+        "pass": true,
+        "detail": "rgb(253, 236, 198) → rgb(253, 236, 198)"
+      },
+      {
+        "id": "react/portal/caution-border-subtle",
+        "pass": true,
+        "detail": "rgb(253, 236, 198) → rgb(253, 236, 198)"
+      },
+      {
+        "id": "react/portal/caution-border",
+        "pass": true,
+        "detail": "rgb(249, 209, 122) → rgb(249, 209, 122)"
+      },
+      {
+        "id": "react/portal/caution-border-strong",
+        "pass": true,
+        "detail": "rgb(219, 161, 2) → rgb(219, 161, 2)"
+      },
+      {
+        "id": "react/portal/caution-solid",
+        "pass": true,
+        "detail": "rgb(243, 179, 3) → rgb(243, 179, 3)"
+      },
+      {
+        "id": "react/portal/caution-solid-hover",
+        "pass": true,
+        "detail": "rgb(219, 161, 2) → rgb(219, 161, 2)"
+      },
+      {
+        "id": "react/portal/fg-caution",
+        "pass": true,
+        "detail": "rgb(127, 92, 2) → rgb(127, 92, 2)"
+      },
+      {
+        "id": "react/portal/fg-caution-vivid",
+        "pass": true,
+        "detail": "rgb(191, 140, 2) → rgb(191, 140, 2)"
+      },
+      {
+        "id": "react/portal/fg-caution-strong",
+        "pass": true,
+        "detail": "rgb(86, 61, 0) → rgb(86, 61, 0)"
+      },
+      {
+        "id": "react/portal/fg-on-caution",
+        "pass": true,
+        "detail": "rgb(0, 0, 0) → rgb(0, 0, 0)"
+      },
+      {
+        "id": "react/portal/success-surface",
+        "pass": true,
+        "detail": "rgb(241, 251, 245) → rgb(241, 251, 245)"
+      },
+      {
+        "id": "react/portal/success-surface-hover",
+        "pass": true,
+        "detail": "rgb(235, 246, 240) → rgb(235, 246, 240)"
+      },
+      {
+        "id": "react/portal/success-surface-active",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/portal/success-border-subtle",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/portal/success-border",
+        "pass": true,
+        "detail": "rgb(130, 247, 196) → rgb(130, 247, 196)"
+      },
+      {
+        "id": "react/portal/success-border-strong",
+        "pass": true,
+        "detail": "rgb(0, 199, 135) → rgb(0, 199, 135)"
+      },
+      {
+        "id": "react/portal/success-solid",
+        "pass": true,
+        "detail": "rgb(0, 131, 86) → rgb(0, 131, 86)"
+      },
+      {
+        "id": "react/portal/success-solid-hover",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/portal/fg-success",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/portal/fg-success-vivid",
+        "pass": true,
+        "detail": "rgb(0, 171, 114) → rgb(0, 171, 114)"
+      },
+      {
+        "id": "react/portal/fg-success-strong",
+        "pass": true,
+        "detail": "rgb(0, 79, 48) → rgb(0, 79, 48)"
+      },
+      {
+        "id": "react/portal/fg-on-success",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/info-surface",
+        "pass": true,
+        "detail": "rgb(240, 246, 255) → rgb(240, 246, 255)"
+      },
+      {
+        "id": "react/portal/info-surface-hover",
+        "pass": true,
+        "detail": "rgb(230, 240, 255) → rgb(230, 240, 255)"
+      },
+      {
+        "id": "react/portal/info-surface-active",
+        "pass": true,
+        "detail": "rgb(219, 233, 254) → rgb(219, 233, 254)"
+      },
+      {
+        "id": "react/portal/info-border-subtle",
+        "pass": true,
+        "detail": "rgb(219, 233, 254) → rgb(219, 233, 254)"
+      },
+      {
+        "id": "react/portal/info-border",
+        "pass": true,
+        "detail": "rgb(193, 217, 253) → rgb(193, 217, 253)"
+      },
+      {
+        "id": "react/portal/info-border-strong",
+        "pass": true,
+        "detail": "rgb(121, 174, 255) → rgb(121, 174, 255)"
+      },
+      {
+        "id": "react/portal/info-solid",
+        "pass": true,
+        "detail": "rgb(0, 109, 245) → rgb(0, 109, 245)"
+      },
+      {
+        "id": "react/portal/info-solid-hover",
+        "pass": true,
+        "detail": "rgb(1, 96, 217) → rgb(1, 96, 217)"
+      },
+      {
+        "id": "react/portal/fg-info",
+        "pass": true,
+        "detail": "rgb(0, 71, 165) → rgb(0, 71, 165)"
+      },
+      {
+        "id": "react/portal/fg-info-vivid",
+        "pass": true,
+        "detail": "rgb(0, 109, 245) → rgb(0, 109, 245)"
+      },
+      {
+        "id": "react/portal/fg-info-strong",
+        "pass": true,
+        "detail": "rgb(0, 48, 117) → rgb(0, 48, 117)"
+      },
+      {
+        "id": "react/portal/fg-on-info",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/discovery-surface",
+        "pass": true,
+        "detail": "rgb(246, 244, 255) → rgb(246, 244, 255)"
+      },
+      {
+        "id": "react/portal/discovery-surface-hover",
+        "pass": true,
+        "detail": "rgb(240, 237, 253) → rgb(240, 237, 253)"
+      },
+      {
+        "id": "react/portal/discovery-surface-active",
+        "pass": true,
+        "detail": "rgb(234, 229, 255) → rgb(234, 229, 255)"
+      },
+      {
+        "id": "react/portal/discovery-border-subtle",
+        "pass": true,
+        "detail": "rgb(234, 229, 255) → rgb(234, 229, 255)"
+      },
+      {
+        "id": "react/portal/discovery-border",
+        "pass": true,
+        "detail": "rgb(219, 210, 254) → rgb(219, 210, 254)"
+      },
+      {
+        "id": "react/portal/discovery-border-strong",
+        "pass": true,
+        "detail": "rgb(184, 159, 255) → rgb(184, 159, 255)"
+      },
+      {
+        "id": "react/portal/discovery-solid",
+        "pass": true,
+        "detail": "rgb(141, 77, 243) → rgb(141, 77, 243)"
+      },
+      {
+        "id": "react/portal/discovery-solid-hover",
+        "pass": true,
+        "detail": "rgb(125, 65, 218) → rgb(125, 65, 218)"
+      },
+      {
+        "id": "react/portal/fg-discovery",
+        "pass": true,
+        "detail": "rgb(98, 30, 181) → rgb(98, 30, 181)"
+      },
+      {
+        "id": "react/portal/fg-discovery-vivid",
+        "pass": true,
+        "detail": "rgb(141, 77, 243) → rgb(141, 77, 243)"
+      },
+      {
+        "id": "react/portal/fg-discovery-strong",
+        "pass": true,
+        "detail": "rgb(70, 0, 136) → rgb(70, 0, 136)"
+      },
+      {
+        "id": "react/portal/fg-on-discovery",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/native-scheme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/portal/inherited-shadow",
+        "pass": true,
+        "detail": "rgba(0, 0, 0, 0.1) 0px 1px 2px -1px → rgba(0, 0, 0, 0.1) 0px 1px 2px -1px"
+      },
+      {
+        "id": "react/portal-outside-parent",
+        "pass": true,
+        "detail": "false → false"
+      },
+      {
+        "id": "react/context/theme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/portal-attribute/theme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/child-attribute/theme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/context/neutral",
+        "pass": true,
+        "detail": "warm → warm"
+      },
+      {
+        "id": "react/portal-attribute/neutral",
+        "pass": true,
+        "detail": "warm → warm"
+      },
+      {
+        "id": "react/child-attribute/neutral",
+        "pass": true,
+        "detail": "warm → warm"
+      },
+      {
+        "id": "react/context/brand",
+        "pass": true,
+        "detail": "red → red"
+      },
+      {
+        "id": "react/portal-attribute/brand",
+        "pass": true,
+        "detail": "red → red"
+      },
+      {
+        "id": "react/child-attribute/brand",
+        "pass": true,
+        "detail": "red → red"
+      },
+      {
+        "id": "react/context/type",
+        "pass": true,
+        "detail": "geist → geist"
+      },
+      {
+        "id": "react/portal-attribute/type",
+        "pass": true,
+        "detail": "geist → geist"
+      },
+      {
+        "id": "react/child-attribute/type",
+        "pass": true,
+        "detail": "geist → geist"
+      },
+      {
+        "id": "react/context/density",
+        "pass": true,
+        "detail": "compact → compact"
+      },
+      {
+        "id": "react/portal-attribute/density",
+        "pass": true,
+        "detail": "compact → compact"
+      },
+      {
+        "id": "react/child-attribute/density",
+        "pass": true,
+        "detail": "compact → compact"
+      },
+      {
+        "id": "react/context/radius",
+        "pass": true,
+        "detail": "pill → pill"
+      },
+      {
+        "id": "react/portal-attribute/radius",
+        "pass": true,
+        "detail": "pill → pill"
+      },
+      {
+        "id": "react/child-attribute/radius",
+        "pass": true,
+        "detail": "pill → pill"
+      },
+      {
+        "id": "react/context/surface",
+        "pass": true,
+        "detail": "outlined → outlined"
+      },
+      {
+        "id": "react/portal-attribute/surface",
+        "pass": true,
+        "detail": "outlined → outlined"
+      },
+      {
+        "id": "react/child-attribute/surface",
+        "pass": true,
+        "detail": "outlined → outlined"
+      },
+      {
+        "id": "react/context/motion",
+        "pass": true,
+        "detail": "subtle → subtle"
+      },
+      {
+        "id": "react/portal-attribute/motion",
+        "pass": true,
+        "detail": "subtle → subtle"
+      },
+      {
+        "id": "react/child-attribute/motion",
+        "pass": true,
+        "detail": "subtle → subtle"
+      }
+    ]
+  },
+  {
+    "state": "light/warm/green",
+    "passed": 73507,
+    "failed": 0,
+    "react": [
+      {
+        "id": "react/child/bg-page",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/bg-surface",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/bg-subtle",
+        "pass": true,
+        "detail": "rgb(247, 245, 243) → rgb(247, 245, 243)"
+      },
+      {
+        "id": "react/child/bg-code",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/child/bg-component",
+        "pass": true,
+        "detail": "rgb(247, 245, 243) → rgb(247, 245, 243)"
+      },
+      {
+        "id": "react/child/bg-component-hover",
+        "pass": true,
+        "detail": "rgb(243, 241, 239) → rgb(243, 241, 239)"
+      },
+      {
+        "id": "react/child/bg-component-active",
+        "pass": true,
+        "detail": "rgb(241, 238, 235) → rgb(241, 238, 235)"
+      },
+      {
+        "id": "react/child/bg-inverse",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/child/fg-on-inverse",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/child/bg-primary-solid",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/child/bg-primary-solid-hover",
+        "pass": true,
+        "detail": "rgb(32, 28, 23) → rgb(32, 28, 23)"
+      },
+      {
+        "id": "react/child/fg-on-primary",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/child/bg-hover",
+        "pass": true,
+        "detail": "rgba(64, 32, 0, 0.063) → rgba(64, 32, 0, 0.063)"
+      },
+      {
+        "id": "react/child/bg-active",
+        "pass": true,
+        "detail": "rgba(85, 49, 12, 0.082) → rgba(85, 49, 12, 0.082)"
+      },
+      {
+        "id": "react/child/bg-overlay",
+        "pass": true,
+        "detail": "rgba(13, 7, 1, 0.675) → rgba(13, 7, 1, 0.675)"
+      },
+      {
+        "id": "react/child/fg-default",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/child/fg-muted",
+        "pass": true,
+        "detail": "rgb(106, 102, 98) → rgb(106, 102, 98)"
+      },
+      {
+        "id": "react/child/fg-placeholder",
+        "pass": true,
+        "detail": "rgb(135, 131, 127) → rgb(135, 131, 127)"
+      },
+      {
+        "id": "react/child/fg-disabled",
+        "pass": true,
+        "detail": "rgb(166, 163, 160) → rgb(166, 163, 160)"
+      },
+      {
+        "id": "react/child/border-subtle",
+        "pass": true,
+        "detail": "rgb(229, 226, 223) → rgb(229, 226, 223)"
+      },
+      {
+        "id": "react/child/border-decorative",
+        "pass": true,
+        "detail": "rgb(243, 241, 239) → rgb(243, 241, 239)"
+      },
+      {
+        "id": "react/child/border-faint",
+        "pass": true,
+        "detail": "rgb(241, 238, 235) → rgb(241, 238, 235)"
+      },
+      {
+        "id": "react/child/border",
+        "pass": true,
+        "detail": "rgb(198, 195, 192) → rgb(198, 195, 192)"
+      },
+      {
+        "id": "react/child/border-hover",
+        "pass": true,
+        "detail": "rgb(182, 179, 176) → rgb(182, 179, 176)"
+      },
+      {
+        "id": "react/child/border-focus",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/child/brand-surface",
+        "pass": true,
+        "detail": "rgb(241, 251, 245) → rgb(241, 251, 245)"
+      },
+      {
+        "id": "react/child/brand-surface-hover",
+        "pass": true,
+        "detail": "rgb(235, 246, 240) → rgb(235, 246, 240)"
+      },
+      {
+        "id": "react/child/brand-surface-active",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/child/brand-border-subtle",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/child/brand-border",
+        "pass": true,
+        "detail": "rgb(130, 247, 196) → rgb(130, 247, 196)"
+      },
+      {
+        "id": "react/child/brand-border-strong",
+        "pass": true,
+        "detail": "rgb(0, 199, 135) → rgb(0, 199, 135)"
+      },
+      {
+        "id": "react/child/brand-solid",
+        "pass": true,
+        "detail": "rgb(0, 131, 86) → rgb(0, 131, 86)"
+      },
+      {
+        "id": "react/child/brand-solid-hover",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/child/fg-brand",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/child/fg-brand-vivid",
+        "pass": true,
+        "detail": "rgb(0, 171, 114) → rgb(0, 171, 114)"
+      },
+      {
+        "id": "react/child/fg-brand-strong",
+        "pass": true,
+        "detail": "rgb(0, 79, 48) → rgb(0, 79, 48)"
+      },
+      {
+        "id": "react/child/fg-on-brand",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/danger-surface",
+        "pass": true,
+        "detail": "rgb(251, 245, 245) → rgb(251, 245, 245)"
+      },
+      {
+        "id": "react/child/danger-surface-hover",
+        "pass": true,
+        "detail": "rgb(252, 237, 237) → rgb(252, 237, 237)"
+      },
+      {
+        "id": "react/child/danger-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/child/danger-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/child/danger-border",
+        "pass": true,
+        "detail": "rgb(255, 201, 203) → rgb(255, 201, 203)"
+      },
+      {
+        "id": "react/child/danger-border-strong",
+        "pass": true,
+        "detail": "rgb(255, 140, 147) → rgb(255, 140, 147)"
+      },
+      {
+        "id": "react/child/danger-solid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/child/danger-solid-hover",
+        "pass": true,
+        "detail": "rgb(207, 3, 60) → rgb(207, 3, 60)"
+      },
+      {
+        "id": "react/child/fg-danger",
+        "pass": true,
+        "detail": "rgb(156, 2, 43) → rgb(156, 2, 43)"
+      },
+      {
+        "id": "react/child/fg-danger-vivid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/child/fg-danger-strong",
+        "pass": true,
+        "detail": "rgb(109, 0, 27) → rgb(109, 0, 27)"
+      },
+      {
+        "id": "react/child/fg-on-danger",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/warning-surface",
+        "pass": true,
+        "detail": "rgb(255, 245, 238) → rgb(255, 245, 238)"
+      },
+      {
+        "id": "react/child/warning-surface-hover",
+        "pass": true,
+        "detail": "rgb(255, 238, 226) → rgb(255, 238, 226)"
+      },
+      {
+        "id": "react/child/warning-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 235, 221) → rgb(255, 235, 221)"
+      },
+      {
+        "id": "react/child/warning-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 235, 221) → rgb(255, 235, 221)"
+      },
+      {
+        "id": "react/child/warning-border",
+        "pass": true,
+        "detail": "rgb(254, 219, 194) → rgb(254, 219, 194)"
+      },
+      {
+        "id": "react/child/warning-border-strong",
+        "pass": true,
+        "detail": "rgb(254, 156, 81) → rgb(254, 156, 81)"
+      },
+      {
+        "id": "react/child/warning-solid",
+        "pass": true,
+        "detail": "rgb(254, 156, 81) → rgb(254, 156, 81)"
+      },
+      {
+        "id": "react/child/warning-solid-hover",
+        "pass": true,
+        "detail": "rgb(254, 140, 48) → rgb(254, 140, 48)"
+      },
+      {
+        "id": "react/child/fg-warning",
+        "pass": true,
+        "detail": "rgb(156, 75, 0) → rgb(156, 75, 0)"
+      },
+      {
+        "id": "react/child/fg-warning-vivid",
+        "pass": true,
+        "detail": "rgb(234, 116, 1) → rgb(234, 116, 1)"
+      },
+      {
+        "id": "react/child/fg-warning-strong",
+        "pass": true,
+        "detail": "rgb(105, 49, 2) → rgb(105, 49, 2)"
+      },
+      {
+        "id": "react/child/fg-on-warning",
+        "pass": true,
+        "detail": "rgb(0, 0, 0) → rgb(0, 0, 0)"
+      },
+      {
+        "id": "react/child/caution-surface",
+        "pass": true,
+        "detail": "rgb(249, 246, 240) → rgb(249, 246, 240)"
+      },
+      {
+        "id": "react/child/caution-surface-hover",
+        "pass": true,
+        "detail": "rgb(246, 241, 229) → rgb(246, 241, 229)"
+      },
+      {
+        "id": "react/child/caution-surface-active",
+        "pass": true,
+        "detail": "rgb(253, 236, 198) → rgb(253, 236, 198)"
+      },
+      {
+        "id": "react/child/caution-border-subtle",
+        "pass": true,
+        "detail": "rgb(253, 236, 198) → rgb(253, 236, 198)"
+      },
+      {
+        "id": "react/child/caution-border",
+        "pass": true,
+        "detail": "rgb(249, 209, 122) → rgb(249, 209, 122)"
+      },
+      {
+        "id": "react/child/caution-border-strong",
+        "pass": true,
+        "detail": "rgb(219, 161, 2) → rgb(219, 161, 2)"
+      },
+      {
+        "id": "react/child/caution-solid",
+        "pass": true,
+        "detail": "rgb(243, 179, 3) → rgb(243, 179, 3)"
+      },
+      {
+        "id": "react/child/caution-solid-hover",
+        "pass": true,
+        "detail": "rgb(219, 161, 2) → rgb(219, 161, 2)"
+      },
+      {
+        "id": "react/child/fg-caution",
+        "pass": true,
+        "detail": "rgb(127, 92, 2) → rgb(127, 92, 2)"
+      },
+      {
+        "id": "react/child/fg-caution-vivid",
+        "pass": true,
+        "detail": "rgb(191, 140, 2) → rgb(191, 140, 2)"
+      },
+      {
+        "id": "react/child/fg-caution-strong",
+        "pass": true,
+        "detail": "rgb(86, 61, 0) → rgb(86, 61, 0)"
+      },
+      {
+        "id": "react/child/fg-on-caution",
+        "pass": true,
+        "detail": "rgb(0, 0, 0) → rgb(0, 0, 0)"
+      },
+      {
+        "id": "react/child/success-surface",
+        "pass": true,
+        "detail": "rgb(241, 251, 245) → rgb(241, 251, 245)"
+      },
+      {
+        "id": "react/child/success-surface-hover",
+        "pass": true,
+        "detail": "rgb(235, 246, 240) → rgb(235, 246, 240)"
+      },
+      {
+        "id": "react/child/success-surface-active",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/child/success-border-subtle",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/child/success-border",
+        "pass": true,
+        "detail": "rgb(130, 247, 196) → rgb(130, 247, 196)"
+      },
+      {
+        "id": "react/child/success-border-strong",
+        "pass": true,
+        "detail": "rgb(0, 199, 135) → rgb(0, 199, 135)"
+      },
+      {
+        "id": "react/child/success-solid",
+        "pass": true,
+        "detail": "rgb(0, 131, 86) → rgb(0, 131, 86)"
+      },
+      {
+        "id": "react/child/success-solid-hover",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/child/fg-success",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/child/fg-success-vivid",
+        "pass": true,
+        "detail": "rgb(0, 171, 114) → rgb(0, 171, 114)"
+      },
+      {
+        "id": "react/child/fg-success-strong",
+        "pass": true,
+        "detail": "rgb(0, 79, 48) → rgb(0, 79, 48)"
+      },
+      {
+        "id": "react/child/fg-on-success",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/info-surface",
+        "pass": true,
+        "detail": "rgb(240, 246, 255) → rgb(240, 246, 255)"
+      },
+      {
+        "id": "react/child/info-surface-hover",
+        "pass": true,
+        "detail": "rgb(230, 240, 255) → rgb(230, 240, 255)"
+      },
+      {
+        "id": "react/child/info-surface-active",
+        "pass": true,
+        "detail": "rgb(219, 233, 254) → rgb(219, 233, 254)"
+      },
+      {
+        "id": "react/child/info-border-subtle",
+        "pass": true,
+        "detail": "rgb(219, 233, 254) → rgb(219, 233, 254)"
+      },
+      {
+        "id": "react/child/info-border",
+        "pass": true,
+        "detail": "rgb(193, 217, 253) → rgb(193, 217, 253)"
+      },
+      {
+        "id": "react/child/info-border-strong",
+        "pass": true,
+        "detail": "rgb(121, 174, 255) → rgb(121, 174, 255)"
+      },
+      {
+        "id": "react/child/info-solid",
+        "pass": true,
+        "detail": "rgb(0, 109, 245) → rgb(0, 109, 245)"
+      },
+      {
+        "id": "react/child/info-solid-hover",
+        "pass": true,
+        "detail": "rgb(1, 96, 217) → rgb(1, 96, 217)"
+      },
+      {
+        "id": "react/child/fg-info",
+        "pass": true,
+        "detail": "rgb(0, 71, 165) → rgb(0, 71, 165)"
+      },
+      {
+        "id": "react/child/fg-info-vivid",
+        "pass": true,
+        "detail": "rgb(0, 109, 245) → rgb(0, 109, 245)"
+      },
+      {
+        "id": "react/child/fg-info-strong",
+        "pass": true,
+        "detail": "rgb(0, 48, 117) → rgb(0, 48, 117)"
+      },
+      {
+        "id": "react/child/fg-on-info",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/discovery-surface",
+        "pass": true,
+        "detail": "rgb(246, 244, 255) → rgb(246, 244, 255)"
+      },
+      {
+        "id": "react/child/discovery-surface-hover",
+        "pass": true,
+        "detail": "rgb(240, 237, 253) → rgb(240, 237, 253)"
+      },
+      {
+        "id": "react/child/discovery-surface-active",
+        "pass": true,
+        "detail": "rgb(234, 229, 255) → rgb(234, 229, 255)"
+      },
+      {
+        "id": "react/child/discovery-border-subtle",
+        "pass": true,
+        "detail": "rgb(234, 229, 255) → rgb(234, 229, 255)"
+      },
+      {
+        "id": "react/child/discovery-border",
+        "pass": true,
+        "detail": "rgb(219, 210, 254) → rgb(219, 210, 254)"
+      },
+      {
+        "id": "react/child/discovery-border-strong",
+        "pass": true,
+        "detail": "rgb(184, 159, 255) → rgb(184, 159, 255)"
+      },
+      {
+        "id": "react/child/discovery-solid",
+        "pass": true,
+        "detail": "rgb(141, 77, 243) → rgb(141, 77, 243)"
+      },
+      {
+        "id": "react/child/discovery-solid-hover",
+        "pass": true,
+        "detail": "rgb(125, 65, 218) → rgb(125, 65, 218)"
+      },
+      {
+        "id": "react/child/fg-discovery",
+        "pass": true,
+        "detail": "rgb(98, 30, 181) → rgb(98, 30, 181)"
+      },
+      {
+        "id": "react/child/fg-discovery-vivid",
+        "pass": true,
+        "detail": "rgb(141, 77, 243) → rgb(141, 77, 243)"
+      },
+      {
+        "id": "react/child/fg-discovery-strong",
+        "pass": true,
+        "detail": "rgb(70, 0, 136) → rgb(70, 0, 136)"
+      },
+      {
+        "id": "react/child/fg-on-discovery",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/child/native-scheme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/child/inherited-shadow",
+        "pass": true,
+        "detail": "rgba(0, 0, 0, 0.1) 0px 1px 2px -1px → rgba(0, 0, 0, 0.1) 0px 1px 2px -1px"
+      },
+      {
+        "id": "react/portal/bg-page",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/bg-surface",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/bg-subtle",
+        "pass": true,
+        "detail": "rgb(247, 245, 243) → rgb(247, 245, 243)"
+      },
+      {
+        "id": "react/portal/bg-code",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/portal/bg-component",
+        "pass": true,
+        "detail": "rgb(247, 245, 243) → rgb(247, 245, 243)"
+      },
+      {
+        "id": "react/portal/bg-component-hover",
+        "pass": true,
+        "detail": "rgb(243, 241, 239) → rgb(243, 241, 239)"
+      },
+      {
+        "id": "react/portal/bg-component-active",
+        "pass": true,
+        "detail": "rgb(241, 238, 235) → rgb(241, 238, 235)"
+      },
+      {
+        "id": "react/portal/bg-inverse",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/portal/fg-on-inverse",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/portal/bg-primary-solid",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/portal/bg-primary-solid-hover",
+        "pass": true,
+        "detail": "rgb(32, 28, 23) → rgb(32, 28, 23)"
+      },
+      {
+        "id": "react/portal/fg-on-primary",
+        "pass": true,
+        "detail": "rgb(250, 248, 246) → rgb(250, 248, 246)"
+      },
+      {
+        "id": "react/portal/bg-hover",
+        "pass": true,
+        "detail": "rgba(64, 32, 0, 0.063) → rgba(64, 32, 0, 0.063)"
+      },
+      {
+        "id": "react/portal/bg-active",
+        "pass": true,
+        "detail": "rgba(85, 49, 12, 0.082) → rgba(85, 49, 12, 0.082)"
+      },
+      {
+        "id": "react/portal/bg-overlay",
+        "pass": true,
+        "detail": "rgba(13, 7, 1, 0.675) → rgba(13, 7, 1, 0.675)"
+      },
+      {
+        "id": "react/portal/fg-default",
+        "pass": true,
+        "detail": "rgb(43, 39, 34) → rgb(43, 39, 34)"
+      },
+      {
+        "id": "react/portal/fg-muted",
+        "pass": true,
+        "detail": "rgb(106, 102, 98) → rgb(106, 102, 98)"
+      },
+      {
+        "id": "react/portal/fg-placeholder",
+        "pass": true,
+        "detail": "rgb(135, 131, 127) → rgb(135, 131, 127)"
+      },
+      {
+        "id": "react/portal/fg-disabled",
+        "pass": true,
+        "detail": "rgb(166, 163, 160) → rgb(166, 163, 160)"
+      },
+      {
+        "id": "react/portal/border-subtle",
+        "pass": true,
+        "detail": "rgb(229, 226, 223) → rgb(229, 226, 223)"
+      },
+      {
+        "id": "react/portal/border-decorative",
+        "pass": true,
+        "detail": "rgb(243, 241, 239) → rgb(243, 241, 239)"
+      },
+      {
+        "id": "react/portal/border-faint",
+        "pass": true,
+        "detail": "rgb(241, 238, 235) → rgb(241, 238, 235)"
+      },
+      {
+        "id": "react/portal/border",
+        "pass": true,
+        "detail": "rgb(198, 195, 192) → rgb(198, 195, 192)"
+      },
+      {
+        "id": "react/portal/border-hover",
+        "pass": true,
+        "detail": "rgb(182, 179, 176) → rgb(182, 179, 176)"
+      },
+      {
+        "id": "react/portal/border-focus",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/portal/brand-surface",
+        "pass": true,
+        "detail": "rgb(241, 251, 245) → rgb(241, 251, 245)"
+      },
+      {
+        "id": "react/portal/brand-surface-hover",
+        "pass": true,
+        "detail": "rgb(235, 246, 240) → rgb(235, 246, 240)"
+      },
+      {
+        "id": "react/portal/brand-surface-active",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/portal/brand-border-subtle",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/portal/brand-border",
+        "pass": true,
+        "detail": "rgb(130, 247, 196) → rgb(130, 247, 196)"
+      },
+      {
+        "id": "react/portal/brand-border-strong",
+        "pass": true,
+        "detail": "rgb(0, 199, 135) → rgb(0, 199, 135)"
+      },
+      {
+        "id": "react/portal/brand-solid",
+        "pass": true,
+        "detail": "rgb(0, 131, 86) → rgb(0, 131, 86)"
+      },
+      {
+        "id": "react/portal/brand-solid-hover",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/portal/fg-brand",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/portal/fg-brand-vivid",
+        "pass": true,
+        "detail": "rgb(0, 171, 114) → rgb(0, 171, 114)"
+      },
+      {
+        "id": "react/portal/fg-brand-strong",
+        "pass": true,
+        "detail": "rgb(0, 79, 48) → rgb(0, 79, 48)"
+      },
+      {
+        "id": "react/portal/fg-on-brand",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/danger-surface",
+        "pass": true,
+        "detail": "rgb(251, 245, 245) → rgb(251, 245, 245)"
+      },
+      {
+        "id": "react/portal/danger-surface-hover",
+        "pass": true,
+        "detail": "rgb(252, 237, 237) → rgb(252, 237, 237)"
+      },
+      {
+        "id": "react/portal/danger-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/portal/danger-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 224, 225) → rgb(255, 224, 225)"
+      },
+      {
+        "id": "react/portal/danger-border",
+        "pass": true,
+        "detail": "rgb(255, 201, 203) → rgb(255, 201, 203)"
+      },
+      {
+        "id": "react/portal/danger-border-strong",
+        "pass": true,
+        "detail": "rgb(255, 140, 147) → rgb(255, 140, 147)"
+      },
+      {
+        "id": "react/portal/danger-solid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/portal/danger-solid-hover",
+        "pass": true,
+        "detail": "rgb(207, 3, 60) → rgb(207, 3, 60)"
+      },
+      {
+        "id": "react/portal/fg-danger",
+        "pass": true,
+        "detail": "rgb(156, 2, 43) → rgb(156, 2, 43)"
+      },
+      {
+        "id": "react/portal/fg-danger-vivid",
+        "pass": true,
+        "detail": "rgb(232, 9, 69) → rgb(232, 9, 69)"
+      },
+      {
+        "id": "react/portal/fg-danger-strong",
+        "pass": true,
+        "detail": "rgb(109, 0, 27) → rgb(109, 0, 27)"
+      },
+      {
+        "id": "react/portal/fg-on-danger",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/warning-surface",
+        "pass": true,
+        "detail": "rgb(255, 245, 238) → rgb(255, 245, 238)"
+      },
+      {
+        "id": "react/portal/warning-surface-hover",
+        "pass": true,
+        "detail": "rgb(255, 238, 226) → rgb(255, 238, 226)"
+      },
+      {
+        "id": "react/portal/warning-surface-active",
+        "pass": true,
+        "detail": "rgb(255, 235, 221) → rgb(255, 235, 221)"
+      },
+      {
+        "id": "react/portal/warning-border-subtle",
+        "pass": true,
+        "detail": "rgb(255, 235, 221) → rgb(255, 235, 221)"
+      },
+      {
+        "id": "react/portal/warning-border",
+        "pass": true,
+        "detail": "rgb(254, 219, 194) → rgb(254, 219, 194)"
+      },
+      {
+        "id": "react/portal/warning-border-strong",
+        "pass": true,
+        "detail": "rgb(254, 156, 81) → rgb(254, 156, 81)"
+      },
+      {
+        "id": "react/portal/warning-solid",
+        "pass": true,
+        "detail": "rgb(254, 156, 81) → rgb(254, 156, 81)"
+      },
+      {
+        "id": "react/portal/warning-solid-hover",
+        "pass": true,
+        "detail": "rgb(254, 140, 48) → rgb(254, 140, 48)"
+      },
+      {
+        "id": "react/portal/fg-warning",
+        "pass": true,
+        "detail": "rgb(156, 75, 0) → rgb(156, 75, 0)"
+      },
+      {
+        "id": "react/portal/fg-warning-vivid",
+        "pass": true,
+        "detail": "rgb(234, 116, 1) → rgb(234, 116, 1)"
+      },
+      {
+        "id": "react/portal/fg-warning-strong",
+        "pass": true,
+        "detail": "rgb(105, 49, 2) → rgb(105, 49, 2)"
+      },
+      {
+        "id": "react/portal/fg-on-warning",
+        "pass": true,
+        "detail": "rgb(0, 0, 0) → rgb(0, 0, 0)"
+      },
+      {
+        "id": "react/portal/caution-surface",
+        "pass": true,
+        "detail": "rgb(249, 246, 240) → rgb(249, 246, 240)"
+      },
+      {
+        "id": "react/portal/caution-surface-hover",
+        "pass": true,
+        "detail": "rgb(246, 241, 229) → rgb(246, 241, 229)"
+      },
+      {
+        "id": "react/portal/caution-surface-active",
+        "pass": true,
+        "detail": "rgb(253, 236, 198) → rgb(253, 236, 198)"
+      },
+      {
+        "id": "react/portal/caution-border-subtle",
+        "pass": true,
+        "detail": "rgb(253, 236, 198) → rgb(253, 236, 198)"
+      },
+      {
+        "id": "react/portal/caution-border",
+        "pass": true,
+        "detail": "rgb(249, 209, 122) → rgb(249, 209, 122)"
+      },
+      {
+        "id": "react/portal/caution-border-strong",
+        "pass": true,
+        "detail": "rgb(219, 161, 2) → rgb(219, 161, 2)"
+      },
+      {
+        "id": "react/portal/caution-solid",
+        "pass": true,
+        "detail": "rgb(243, 179, 3) → rgb(243, 179, 3)"
+      },
+      {
+        "id": "react/portal/caution-solid-hover",
+        "pass": true,
+        "detail": "rgb(219, 161, 2) → rgb(219, 161, 2)"
+      },
+      {
+        "id": "react/portal/fg-caution",
+        "pass": true,
+        "detail": "rgb(127, 92, 2) → rgb(127, 92, 2)"
+      },
+      {
+        "id": "react/portal/fg-caution-vivid",
+        "pass": true,
+        "detail": "rgb(191, 140, 2) → rgb(191, 140, 2)"
+      },
+      {
+        "id": "react/portal/fg-caution-strong",
+        "pass": true,
+        "detail": "rgb(86, 61, 0) → rgb(86, 61, 0)"
+      },
+      {
+        "id": "react/portal/fg-on-caution",
+        "pass": true,
+        "detail": "rgb(0, 0, 0) → rgb(0, 0, 0)"
+      },
+      {
+        "id": "react/portal/success-surface",
+        "pass": true,
+        "detail": "rgb(241, 251, 245) → rgb(241, 251, 245)"
+      },
+      {
+        "id": "react/portal/success-surface-hover",
+        "pass": true,
+        "detail": "rgb(235, 246, 240) → rgb(235, 246, 240)"
+      },
+      {
+        "id": "react/portal/success-surface-active",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/portal/success-border-subtle",
+        "pass": true,
+        "detail": "rgb(209, 249, 229) → rgb(209, 249, 229)"
+      },
+      {
+        "id": "react/portal/success-border",
+        "pass": true,
+        "detail": "rgb(130, 247, 196) → rgb(130, 247, 196)"
+      },
+      {
+        "id": "react/portal/success-border-strong",
+        "pass": true,
+        "detail": "rgb(0, 199, 135) → rgb(0, 199, 135)"
+      },
+      {
+        "id": "react/portal/success-solid",
+        "pass": true,
+        "detail": "rgb(0, 131, 86) → rgb(0, 131, 86)"
+      },
+      {
+        "id": "react/portal/success-solid-hover",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/portal/fg-success",
+        "pass": true,
+        "detail": "rgb(0, 114, 73) → rgb(0, 114, 73)"
+      },
+      {
+        "id": "react/portal/fg-success-vivid",
+        "pass": true,
+        "detail": "rgb(0, 171, 114) → rgb(0, 171, 114)"
+      },
+      {
+        "id": "react/portal/fg-success-strong",
+        "pass": true,
+        "detail": "rgb(0, 79, 48) → rgb(0, 79, 48)"
+      },
+      {
+        "id": "react/portal/fg-on-success",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/info-surface",
+        "pass": true,
+        "detail": "rgb(240, 246, 255) → rgb(240, 246, 255)"
+      },
+      {
+        "id": "react/portal/info-surface-hover",
+        "pass": true,
+        "detail": "rgb(230, 240, 255) → rgb(230, 240, 255)"
+      },
+      {
+        "id": "react/portal/info-surface-active",
+        "pass": true,
+        "detail": "rgb(219, 233, 254) → rgb(219, 233, 254)"
+      },
+      {
+        "id": "react/portal/info-border-subtle",
+        "pass": true,
+        "detail": "rgb(219, 233, 254) → rgb(219, 233, 254)"
+      },
+      {
+        "id": "react/portal/info-border",
+        "pass": true,
+        "detail": "rgb(193, 217, 253) → rgb(193, 217, 253)"
+      },
+      {
+        "id": "react/portal/info-border-strong",
+        "pass": true,
+        "detail": "rgb(121, 174, 255) → rgb(121, 174, 255)"
+      },
+      {
+        "id": "react/portal/info-solid",
+        "pass": true,
+        "detail": "rgb(0, 109, 245) → rgb(0, 109, 245)"
+      },
+      {
+        "id": "react/portal/info-solid-hover",
+        "pass": true,
+        "detail": "rgb(1, 96, 217) → rgb(1, 96, 217)"
+      },
+      {
+        "id": "react/portal/fg-info",
+        "pass": true,
+        "detail": "rgb(0, 71, 165) → rgb(0, 71, 165)"
+      },
+      {
+        "id": "react/portal/fg-info-vivid",
+        "pass": true,
+        "detail": "rgb(0, 109, 245) → rgb(0, 109, 245)"
+      },
+      {
+        "id": "react/portal/fg-info-strong",
+        "pass": true,
+        "detail": "rgb(0, 48, 117) → rgb(0, 48, 117)"
+      },
+      {
+        "id": "react/portal/fg-on-info",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/discovery-surface",
+        "pass": true,
+        "detail": "rgb(246, 244, 255) → rgb(246, 244, 255)"
+      },
+      {
+        "id": "react/portal/discovery-surface-hover",
+        "pass": true,
+        "detail": "rgb(240, 237, 253) → rgb(240, 237, 253)"
+      },
+      {
+        "id": "react/portal/discovery-surface-active",
+        "pass": true,
+        "detail": "rgb(234, 229, 255) → rgb(234, 229, 255)"
+      },
+      {
+        "id": "react/portal/discovery-border-subtle",
+        "pass": true,
+        "detail": "rgb(234, 229, 255) → rgb(234, 229, 255)"
+      },
+      {
+        "id": "react/portal/discovery-border",
+        "pass": true,
+        "detail": "rgb(219, 210, 254) → rgb(219, 210, 254)"
+      },
+      {
+        "id": "react/portal/discovery-border-strong",
+        "pass": true,
+        "detail": "rgb(184, 159, 255) → rgb(184, 159, 255)"
+      },
+      {
+        "id": "react/portal/discovery-solid",
+        "pass": true,
+        "detail": "rgb(141, 77, 243) → rgb(141, 77, 243)"
+      },
+      {
+        "id": "react/portal/discovery-solid-hover",
+        "pass": true,
+        "detail": "rgb(125, 65, 218) → rgb(125, 65, 218)"
+      },
+      {
+        "id": "react/portal/fg-discovery",
+        "pass": true,
+        "detail": "rgb(98, 30, 181) → rgb(98, 30, 181)"
+      },
+      {
+        "id": "react/portal/fg-discovery-vivid",
+        "pass": true,
+        "detail": "rgb(141, 77, 243) → rgb(141, 77, 243)"
+      },
+      {
+        "id": "react/portal/fg-discovery-strong",
+        "pass": true,
+        "detail": "rgb(70, 0, 136) → rgb(70, 0, 136)"
+      },
+      {
+        "id": "react/portal/fg-on-discovery",
+        "pass": true,
+        "detail": "rgb(255, 255, 255) → rgb(255, 255, 255)"
+      },
+      {
+        "id": "react/portal/native-scheme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/portal/inherited-shadow",
+        "pass": true,
+        "detail": "rgba(0, 0, 0, 0.1) 0px 1px 2px -1px → rgba(0, 0, 0, 0.1) 0px 1px 2px -1px"
+      },
+      {
+        "id": "react/portal-outside-parent",
+        "pass": true,
+        "detail": "false → false"
+      },
+      {
+        "id": "react/context/theme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/portal-attribute/theme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/child-attribute/theme",
+        "pass": true,
+        "detail": "light → light"
+      },
+      {
+        "id": "react/context/neutral",
+        "pass": true,
+        "detail": "warm → warm"
+      },
+      {
+        "id": "react/portal-attribute/neutral",
+        "pass": true,
+        "detail": "warm → warm"
+      },
+      {
+        "id": "react/child-attribute/neutral",
+        "pass": true,
+        "detail": "warm → warm"
+      },
+      {
+        "id": "react/context/brand",
+        "pass": true,
+        "detail": "green → green"
+      },
+      {
+        "id": "react/portal-attribute/brand",
+        "pass": true,
+        "detail": "green → green"
+      },
+      {
+        "id": "react/child-attribute/brand",
+        "pass": true,
+        "detail": "green → green"
+      },
+      {
+        "id": "react/context/type",
+        "pass": true,
+        "detail": "geist → geist"
+      },
+      {
+        "id": "react/portal-attribute/type",
+        "pass": true,
+        "detail": "geist → geist"
+      },
+      {
+        "id": "react/child-attribute/type",
+        "pass": true,
+        "detail": "geist → geist"
+      },
+      {
+        "id": "react/context/density",
+        "pass": true,
+        "detail": "compact → compact"
+      },
+      {
+        "id": "react/portal-attribute/density",
+        "pass": true,
+        "detail": "compact → compact"
+      },
+      {
+        "id": "react/child-attribute/density",
+        "pass": true,
+        "detail": "compact → compact"
+      },
+      {
+        "id": "react/context/radius",
+        "pass": true,
+        "detail": "pill → pill"
+      },
+      {
+        "id": "react/portal-attribute/radius",
+        "pass": true,
+        "detail": "pill → pill"
+      },
+      {
+        "id": "react/child-attribute/radius",
+        "pass": true,
+        "detail": "pill → pill"
+      },
+      {
+        "id": "react/context/surface",
+        "pass": true,
+        "detail": "outlined → outlined"
+      },
+      {
+        "id": "react/portal-attribute/surface",
+        "pass": true,
+        "detail": "outlined → outlined"
+      },
+      {
+        "id": "react/child-attribute/surface",
+        "pass": true,
+        "detail": "outlined → outlined"
+      },
+      {
+        "id": "react/context/motion",
+        "pass": true,
+        "detail": "subtle → subtle"
+      },
+      {
+        "id": "react/portal-attribute/motion",
+        "pass": true,
+        "detail": "subtle → subtle"
+      },
+      {
+        "id": "react/child-attribute/motion",
+        "pass": true,
+        "detail": "subtle → subtle"
+      }
+    ]
+  }
+]

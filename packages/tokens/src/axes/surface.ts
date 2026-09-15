@@ -18,7 +18,7 @@ export const SURFACE_AXIS: AxisDefinition = {
   label: "Surface",
   description: "Stroke weight and how much surfaces lift off the page.",
   defaultPreset: "outlined",
-  namespaces: ["--area-border-width", "--area-shadow-", "--area-ring-"],
+  namespaces: ["--area-border-width", "--area-shadow-1:", "--area-shadow-2:", "--area-shadow-3:", "--area-shadow-4:", "--area-ring-"],
   presets: [
     {
       id: "flat",

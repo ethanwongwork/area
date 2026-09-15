@@ -12,6 +12,7 @@ import { assertAxisIntegrity } from "./axes/registry.ts";
 import { emitAxes, emitProperties, emitTokens } from "./emit/css.ts";
 import { buildTokensJson } from "./emit/json.ts";
 import { emitTypes } from "./emit/dts.ts";
+import { emitConfig, emitConfigTypes } from "./emit/config.ts";
 import { emitFixture } from "./emit/fixture.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -35,6 +36,8 @@ write("css/tokens.css", emitTokens());
 write("css/axes.css", emitAxes());
 write("tokens.json", `${JSON.stringify(buildTokensJson(), null, 2)}\n`);
 write("tokens.d.ts", emitTypes());
+write("config.js", emitConfig());
+write("config.d.ts", emitConfigTypes());
 
 // Written last: it inlines the CSS files above.
 write("fixture/axes.html", emitFixture());

@@ -10,10 +10,12 @@
  * the result degrades to declaration order rather than to chaos.
  */
 import { type AxisDefinition, type TokenMap } from "../axes/schema.ts";
-import { AXES, assertAxisIntegrity, attributeFor, defaultPresetOf } from "../axes/registry.ts";
+import { AXES, assertAxisIntegrity, attributeFor, defaultPresetOf, assertEmittedTokens } from "../axes/registry.ts";
 import { baseTokens, derivedTokens } from "./base.ts";
 import { REGISTERED_PROPERTIES } from "./base.ts";
-import { BRAND_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "../axes/color.ts";
+import { THEME_AXIS } from "../axes/color.ts";
+
+import { colorPairs } from "./colors.ts";
 
 const INDENT = "  ";
 
@@ -35,6 +37,16 @@ function banner(title: string, note?: string): string {
     ...(note ? [` *`, ...note.split("\n").map((l) => ` * ${l}`)] : []),
     ` * ${"-".repeat(74)} */`,
   ].join("\n");
+}
+
+function axisColors(axis: AxisDefinition, light: TokenMap, dark?: TokenMap): TokenMap {
+  // Shadow recipes substitute their color where declared. Keep theme-owned colors paired
+  // too, so a shadow inherited through a later theme boundary still selects its own mode.
+  if (axis === THEME_AXIS) return colorPairs(
+    THEME_AXIS.presets.find(p => p.id === "light")!.tokens,
+    THEME_AXIS.presets.find(p => p.id === "dark")!.tokens,
+  );
+  return colorPairs(light, dark);
 }
 
 /** `@property` registrations. Their own file so a consumer can skip them if they clash. */
@@ -73,7 +85,12 @@ export function emitTokens(): string {
   assertAxisIntegrity();
 
   const defaults: Record<string, string> = {};
-  for (const axis of AXES) Object.assign(defaults, defaultPresetOf(axis).tokens);
+  for (const axis of AXES) {
+    const preset = defaultPresetOf(axis);
+    const map = axisColors(axis, preset.tokens, preset.darkTokens);
+    assertEmittedTokens(axis, map);
+    Object.assign(defaults, map);
+  }
 
   const out: string[] = [
     banner(
@@ -84,7 +101,7 @@ export function emitTokens(): string {
     ),
     "",
     "@layer area.tokens {",
-    rule(":where(:root)", { ...baseTokens(), ...defaults, ...derivedTokens() }),
+    rule(":where(:root)", { "color-scheme": "light", ...baseTokens(), ...defaults, ...derivedTokens() }),
     "}",
     "",
   ];
@@ -93,23 +110,11 @@ export function emitTokens(): string {
 }
 
 /** Selector for one preset of one axis, at its natural specificity. */
-function presetSelector(axis: AxisDefinition, presetId: string, dark = false): string {
-  const own = `[${attributeFor(axis)}="${presetId}"]`;
-  return dark ? `[${attributeFor(THEME_AXIS)}="dark"]${own}` : own;
+function presetSelector(axis: AxisDefinition, presetId: string): string {
+  return `[${attributeFor(axis)}="${presetId}"]`;
 }
 
-/**
- * Every axis preset as its own block.
- *
- * Specificity does the work here rather than `:where()`, because the colour axes need
- * theme-qualified variants to beat their unqualified ones. A compound selector such as
- * `[data-area-theme="dark"][data-area-brand="blue"]` scores (0,2,0) and so reliably wins
- * over the plain `[data-area-brand="blue"]` that carries the light values. Using
- * `:where()` here would zero both and leave the outcome to source order.
- *
- * Layer placement still guarantees the whole file beats the defaults, and unlayered
- * consumer CSS still beats all of it.
- */
+/** Each role retains both polarities; the nearest color-scheme selects at consumption. */
 export function emitAxes(): string {
   assertAxisIntegrity();
 
@@ -118,7 +123,7 @@ export function emitAxes(): string {
       "Area — axes",
       "Generated. Do not edit.\n\n" +
         "One block per preset. Selecting an axis is a data attribute on any element:\n" +
-        '  <html data-area-theme="dark" data-area-density="compact" data-area-radius="sharp">\n\n' +
+        '  <html data-area-theme="dark" data-area-density="compact" data-area-radius="0">\n\n' +
         "Custom properties inherit, so a subtree can carry its own axis values:\n" +
         '  <aside data-area-density="compact"> ... </aside>',
     ),
@@ -131,21 +136,12 @@ export function emitAxes(): string {
     out.push(`${INDENT}/* ${axis.label} — ${axis.description} */`);
 
     for (const preset of axis.presets) {
-      // The theme axis additionally carries the dark values of the *default* neutral and
-      // brand, so `data-area-theme="dark"` alone produces a complete dark theme.
-      const extra =
-        axis === THEME_AXIS && preset.id === "dark"
-          ? {
-              ...(defaultPresetOf(NEUTRAL_AXIS).darkTokens ?? {}),
-              ...(defaultPresetOf(BRAND_AXIS).darkTokens ?? {}),
-            }
-          : {};
-
-      out.push(rule(presetSelector(axis, preset.id), { ...preset.tokens, ...extra }));
-
-      if (preset.darkTokens) {
-        out.push(rule(presetSelector(axis, preset.id, true), preset.darkTokens));
-      }
+      const map = axisColors(axis, preset.tokens, preset.darkTokens);
+      assertEmittedTokens(axis, map);
+      out.push(rule(presetSelector(axis, preset.id), {
+        ...map,
+        ...(axis === THEME_AXIS ? { "color-scheme": preset.id } : {}),
+      }));
     }
   }
 

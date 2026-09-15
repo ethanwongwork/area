@@ -10,7 +10,11 @@
     "./css/tokens.css": "./dist/css/tokens.css",
     "./css/axes.css": "./dist/css/axes.css",
     "./css/properties.css": "./dist/css/properties.css",
-    "./css/*": "./dist/css/*"
+    "./css/*": "./dist/css/*",
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
+    }
   },
   "files": [
     "dist",

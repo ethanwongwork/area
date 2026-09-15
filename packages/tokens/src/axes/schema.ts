@@ -5,7 +5,7 @@
  * surface, motion. Each ships a small set of presets, each preset is a flat map of CSS
  * custom properties, and choosing one is a single data attribute on the root element.
  *
- * The rule that makes six axes composable rather than a 4,096-cell matrix is that no two
+ * The rule that makes eight axes composable rather than a large preset matrix is that no two
  * axes may write the same custom property. `registry.ts` enforces it mechanically. Where
  * axes genuinely interact -- radius depends on control height -- the dependent axis emits
  * a unitless multiplier and the relationship is expressed once, in calc(), in the tokens

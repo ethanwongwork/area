@@ -7,7 +7,7 @@ the component catalog and a consumer of the same system.
 ## Build flow
 
 1. `packages/tokens/src/build.ts` checks axis integrity and emits CSS, JSON, declarations,
-   and a self-contained browser fixture into `packages/tokens/dist/`.
+   DOM-free configuration JavaScript/types, and a self-contained browser fixture into `packages/tokens/dist/`.
 2. `packages/styles/scripts/build.mjs` follows CSS imports, respecting package exports,
    and bundles them into `packages/styles/dist/area.css`. The parity script checks
    component selectors against `src/manifest.ts`.
@@ -30,7 +30,12 @@ There is no checked-in CI workflow or automatic publish gate.
   holds hue/trim adjustments and semantic inversion. `semantic/resolve.ts` resolves
   themes and defines the shipped test matrix.
 - **Axis composition:** `axes/registry.ts` owns registration and collision checks.
-  `emit/base.ts` owns primitives and derivations; `emit/css.ts` preserves nested scoping.
+  `emit/base.ts` owns primitives and geometric derivations. `emit/colors.ts` pairs light/dark
+  colors; `emit/css.ts` emits them without crossing axis ownership. `color-scheme` selects
+  polarity at consumption. Both polarity maps and transformed maps are validated.
+- **Scope configuration:** `emit/config.ts` generates `@area/tokens/config` from the registry.
+  React `Theme` / `useTheme` merge contextual selections and recreate attributes at portals.
+  They do not infer host DOM attributes; see [THEMING.md](THEMING.md).
 - **Components:** CSS lives only in styles. React wrappers supply markup, native
   attributes and composition. The manifest is a variant contract, not a code generator
   for every wrapper or stylesheet.
@@ -55,6 +60,8 @@ the built `dist` once; restart that server after rebuilding.
 `apps/docs/src/lab/` supplies the System lab: server-rendered Area components hydrated from
 the same React tree, six representative profiles, and in-page regression assertions. It
 has no separate component styling overrides. Its layout CSS joins the dogfood audit.
+The theme-boundary page adds a pure-resolver oracle for CSS inheritance, native scheme,
+shadow and React portal checks. The full site builds 40 pages and 65 catalog demos.
 There is no application backend, database, required secret, or environment template.
 Geist fonts load from a pinned jsDelivr URL; the system font preset remains available.
 
@@ -68,7 +75,8 @@ Detailed current design rules are in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
 ## Audit boundary
 
 The [system audit](SYSTEM_AUDIT.md) distinguishes intended architecture from verified
-behavior. In particular, the CSS emitter currently fails independently nested color
-selections and light resets; namespace checks do not prove DOM scope correctness.
+behavior. E02 repaired independently nested colors and light resets, with Chromium and
+Safari evidence; Gecko validation remains pending. Namespace checks alone do not prove
+DOM scope correctness.
 React wrappers include presentation-only composite widgets and handwritten prop unions.
 [ROADMAP.md](ROADMAP.md) defines the completion checks for those boundaries.

@@ -2,14 +2,6 @@
  * Element defaults and the shared interaction primitives.
  * ------------------------------------------------------------------------- */
 @layer area.base {
-  :root {
-    color-scheme: light;
-  }
-
-  [data-area-theme="dark"] {
-    color-scheme: dark;
-  }
-
   body {
     background-color: var(--area-bg-page);
     color: var(--area-fg-default);

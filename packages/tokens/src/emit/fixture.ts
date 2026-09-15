@@ -77,19 +77,26 @@ window.AREA_AXES = ${axisData};
 window.areaProbe = function (el) {
   const cs = getComputedStyle(el || document.getElementById("probe"));
   const v = (n) => cs.getPropertyValue(n).trim();
+  const color = (n) => {
+    const swatch = document.createElement("span");
+    swatch.style.color = "var(" + n + ")";
+    (el || document.getElementById("probe")).append(swatch);
+    const value = getComputedStyle(swatch).color;
+    swatch.remove();
+    return value;
+  };
   return {
     loaded: v("--area-loaded"),
     controlMd: v("--area-control-md"),
-    radiusControl: v("--area-radius-control"),
     radiusControl: v("--area-radius-control"),
     radiusContainer: v("--area-radius-container"),
     gutterMd: v("--area-gutter-md"),
     textMdSize: v("--area-text-md-size"),
     fontSans: v("--area-font-sans").slice(0, 24),
-    bgPage: v("--area-bg-page"),
-    fgDefault: v("--area-fg-default"),
-    accentSolid: v("--area-brand-solid"),
-    borderFocus: v("--area-border-focus"),
+    bgPage: color("--area-bg-page"),
+    fgDefault: color("--area-fg-default"),
+    accentSolid: color("--area-brand-solid"),
+    borderFocus: color("--area-border-focus"),
     borderWidth: v("--area-border-width"),
     shadow2: v("--area-shadow-2").slice(0, 20),
     durationBase: v("--area-duration-base"),

@@ -1,0 +1,89 @@
+Window: "Theme boundaries — Area", App: Safari.
+0 standard window Theme boundaries — Area, ID: SafariWindow?IsSecure=false&UUID=7CE7024C-7347-44D8-961D-0771C3583027, Secondary Actions: Raise
+	1 split group
+		2 splitter (disabled, settable, float) -1
+		3 tab group
+			4 scroll area
+				5 HTML content Description: Theme boundaries — Area, URL: localhost:4321/scopes.html
+					6 container
+						7 link Area / System lab, Value: localhost:4321/lab.html
+						8 heading Theme boundaries, Value: 1
+							9 text Theme boundaries
+						10 text Each pair should match. The left card inherits its context; the right declares the complete selection.
+						11 button Run scope checks
+					12 container
+						13 heading Inside a dark section, Value: 2
+							14 text Inside a dark section
+						15 text Inherited dark · warm Project settings
+						16 text field (settable) Inherited dark · warm project, Value: Area
+						17 pop up button (collapsed) Inherited dark · warm access, Value: Workspace members, Secondary Actions: Expand
+						18 button Save changes
+						19 text Explicit dark · warm Project settings
+						20 text field (settable) Explicit dark · warm project, Value: Area
+						21 pop up button (collapsed) Explicit dark · warm access, Value: Workspace members, Secondary Actions: Expand
+						22 button Save changes
+						23 text Inherited dark · green Project settings
+						24 text field (settable) Inherited dark · green project, Value: Area
+						25 pop up button (collapsed) Inherited dark · green access, Value: Workspace members, Secondary Actions: Expand
+						26 button Save changes
+						27 text Explicit dark · green Project settings
+						28 text field (settable) Explicit dark · green project, Value: Area
+						29 pop up button (collapsed) Explicit dark · green access, Value: Workspace members, Secondary Actions: Expand
+						30 button Save changes
+						31 heading A light island inside dark, Value: 2
+							32 text A light island inside dark
+						33 text Inherited warm + green · light Project settings
+						34 text field (settable) Inherited warm + green · light project, Value: Area
+						35 pop up button (collapsed) Inherited warm + green · light access, Value: Workspace members, Secondary Actions: Expand
+						36 button Save changes
+						37 text Explicit warm + green · light Project settings
+						38 text field (settable) Explicit warm + green · light project, Value: Area
+						39 pop up button (collapsed) Explicit warm + green · light access, Value: Workspace members, Secondary Actions: Expand
+						40 button Save changes
+						41 heading React scope and portal, Value: 2
+							42 text React scope and portal
+						43 text The hidden portal probe mounts directly under the document body, outside this scope's DOM ancestry. Its colors and all eight selections should follow React context. Expected: dark / warm / red · compact · pill.
+						44 button Toggle React theme
+						45 button Toggle child override
+						46 heading Scope results, Value: 2
+							47 text Scope results
+						48 text 73507 passed / 0 failed Computed colors are compared with build-time output from the independent semantic resolver. The fixture tests nesting, native scheme, attribute changes and removal.
+						49 summary Machine-readable report, Value: off
+							50 text Machine-readable report
+				51 scroll bar (settable, float) 0
+	52 toolbar
+		53 container Secondary Actions: Move previous, Move next, Remove from toolbar
+			54 button Description: show sidebar, Help: Show sidebar, ID: SidebarButton
+			55 menu button Description: Tab Group picker, ID: TabGroupPickerButton?TabGroup=
+		56 container BackForwardSegmentedControl
+			57 button Description: Go back, Help: Show the previous page, ID: BackButton
+			58 button (disabled) Description: Go forward, Help: Show the next page, ID: ForwardButton
+		59 container Secondary Actions: Move previous, Move next, Remove from toolbar
+			60 button Page Menu, ID: AssistantButton
+			61 button Add page to Reading List, ID: OneStepBookmarkingButton
+			62 text field (settable) Description: smart search field, Value: localhost:4321/scopes.html, ID: WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD
+			63 button Reload this page, ID: ReloadButton
+		64 button Description: Share, ID: ShareButton, Secondary Actions: Move previous, Move next, Remove from toolbar
+		65 button Description: New Tab, ID: NewTabButton, Secondary Actions: Move previous, Move next, Remove from toolbar
+		66 button Description: Tab Overview, ID: TabOverviewButton, Secondary Actions: Move previous, Remove from toolbar
+	67 tab group Description: Tab bar, 2 tabs, ID: TabBar?isSeparate=false
+		68 tab Start Page, Value: off, Secondary Actions: close tab, ID: TabBarTab?isNarrow=false&isExpanded=false&tabCount=&isPinned=false&isCluster=false&clusterID=&isActive=false
+			69 image Description: favorite, ID: FaviconImageView
+			70 text Value: Start Page, ID: UnifiedTabBarButton._titleTextField
+		71 tab Theme boundaries — Area, Help: To interact with the items in this button, press Control-Option-Shift-Down Arrow., Value: on, Secondary Actions: close tab, ID: TabBarTab?isNarrow=false&isExpanded=false&tabCount=&isPinned=false&isCluster=false&clusterID=&isActive=true
+			72 image FaviconImageView
+			73 text Value: Theme boundaries — Area, ID: UnifiedTabBarButton._titleTextField
+	74 close button
+	75 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	76 minimize button
+77 menu bar
+	78 Safari
+	79 File
+	80 Edit
+	81 View, ID: SafariViewMenu
+	82 History
+	83 Bookmarks, ID: SafariBookmarksMenu
+	84 Window, ID: SafariWindowMenu
+	85 Help, ID: SafariHelpMenu
+
+The focused UI element is 5 HTML content Description: Theme boundaries — Area, URL: localhost:4321/scopes.html

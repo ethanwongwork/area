@@ -1,6 +1,6 @@
 // Run from a temporary directory populated only by the three npm tarballs.
 const checks = [];
-for (const name of ['@area/tokens', '@area/react', '@area/styles/manifest']) {
+for (const name of ['@area/tokens/config', '@area/tokens', '@area/react', '@area/styles/manifest']) {
   try { await import(name); checks.push({ name, pass: true }); }
   catch (error) { checks.push({ name, pass: false, code: error.code, message: error.message }); }
 }

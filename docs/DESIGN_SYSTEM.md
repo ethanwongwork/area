@@ -4,6 +4,13 @@ Detailed rules and rationale migrated from the prior project instructions. Read 
 sections before changing tokens, components, or documentation. Start with [AGENTS.md](../AGENTS.md)
 for orientation and commands. Source code and measured checks resolve stale historical claims.
 
+## Current scope contract
+
+[THEMING.md](THEMING.md) defines CSS inheritance, React context and portal boundaries. E02
+keeps semantic light/dark pairs unresolved until a real color property consumes them. The
+registry validates both polarity maps and emitted maps; `:` ends an exact-name namespace.
+Theme owns polarity and fixed colors; neutral and accent remain independently inherited.
+
 ## The invariants
 
 These are not preferences. Some are mechanically checked by tests or build audits; others require code review. Each
@@ -18,7 +25,8 @@ multiplier and the relationship is written once, in `calc()`, in `emit/base.ts`.
 **Derived tokens are never `@property`-registered.** A registered `<length>` computes at its
 declaration site, so `--area-radius-control` would freeze at `:root`'s value and stop
 responding to a nested `data-area-density`. The height changes, the radius does not, and
-nothing in the source looks wrong. Register leaf tokens only.
+nothing in the source looks wrong. Register geometric leaf tokens only; paired semantic
+colors also remain unregistered.
 
 **Derived tokens are re-emitted on every axis-bearing element.** A custom property is
 substituted where it is declared and then inherits already-resolved, so a derivation on
