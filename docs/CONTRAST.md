@@ -57,8 +57,10 @@ Set `data-area-contrast="standard"` to explicitly reset a subtree. Without a roo
 CSS follows `prefers-contrast: more`. This preference is separate from the eight axes.
 
 The aliases are unregistered derivations re-emitted on axis and preference boundaries.
-Text, focus and invalid colors do not depend on this preference. Decorative seams stay quiet.
-The browser audit retains the same 3:1 requirement in both modes: standard has **3,696
+Text and invalid colors do not depend on this preference. Editable-field focus changes from
+neutral to accent under increased contrast; other focus indicators remain accent. Decorative
+seams stay quiet.
+The browser audit retains the same 3:1 requirement in both modes: standard has **3,012
 shortfalls / 21,120 checks**, more has **0 / 21,120**. These are fixture measurements,
 not overall conformance claims or individual counts of WCAG violations. The build gate
 continues validating the strong endpoint tokens; it does not certify the default soft edges.
@@ -67,9 +69,12 @@ continues validating the strong endpoint tokens; it does not certify the default
 
 `focus-color` replaces `border-focus`. `focus-width` and `focus-offset` replace `ring-width`
 and `ring-offset`; both are 2px geometric primitives, independent of elevation. `ring` was
-removed. Components now paint an opaque CSS outline, preserving their existing selection
-border and shadow. Input shells use focus-within; native choice controls and buttons use
-focus-visible. The code disclosure retains its inset outline to fit the clipped code frame.
+removed. Components paint an opaque CSS outline, preserving their existing selection border
+and shadow. Native choice controls and buttons use the accent outline on `focus-visible`.
+Input shells, Textarea and Select use `field-focus-color`: the measured neutral
+`stroke-control` endpoint in standard mode and the accent `focus-color` endpoint in increased
+contrast. Their zero-offset opaque edge sits inside a 6px halo made from the current 6%/8%
+shadow ink. The code disclosure retains its inset outline to fit the clipped code frame.
 
 The former 45% halo could not be validated by measuring its opaque source token. The browser
 runner now reads the actual outline, rejects alpha, checks its width/style and measures it

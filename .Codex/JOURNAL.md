@@ -1,5 +1,18 @@
 # Project journal
 
+## 2026-09-15 — V03 native control polish
+
+The user’s OpenAI-sized switch, Primer keybinding and soft gray focus references exposed four
+small inconsistencies that shared one cause: compact geometry lacked enough optical allowance
+for state. V03 makes the default Switch 32×20px, holds Checkbox/Radio outer geometry constant
+across selection, frames each keyboard chord once in a native UI face, and gives
+Input/Textarea/Select a neutral opaque focus edge inside a 6px 6%/8% halo. Shadow opacity
+returns to 6%/8% while V02’s tight geometry remains. Increased contrast restores accent field
+focus and strong state edges; its 21,120 rendered checks pass, while standard’s 3,012 quiet-edge
+shortfalls remain explicit. Palette inputs are unchanged. [V03 evidence](../docs/batches/V03/README.md)
+includes the supplied references, Area before/after captures and browser measurements. E05
+behavior architecture remains next.
+
 ## 2026-09-14 — V02 tonal harmony and component gallery
 
 Matching outline luminance alone left green visibly neon beside other tones. V02 derives all chromatic strokes as measured tints of existing readable ink, cutting green rest chroma from 0.1296 to 0.0248 while preserving palette inputs and contrast floors; shadows now use 4%/6% ink with much shorter offset/blur and a shared boxed-button contact shadow. The new alphabetical gallery exposes 32 component families in native-sized square specimens, including dedicated Code, Code block and Segmented docs; mobile review also fixed a rail cascade overlap and preserved desktop preferences across resizing. [V02 evidence](../docs/batches/V02/README.md) records captures, palette hashes and checks; E05 behavior architecture remains next, with soft-mode limitations explicit.

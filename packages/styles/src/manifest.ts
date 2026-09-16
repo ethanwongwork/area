@@ -96,7 +96,7 @@ export const select = {
 export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
-  variants: { size: ["sm", "md", "lg"] },
+  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
   states: ["disabled"],
   elements: ["control"],
   defaults: { size: "md" },
@@ -105,7 +105,7 @@ export const checkbox = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { size: ["sm", "md", "lg"] },
+  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
   states: ["disabled"],
   elements: ["control"],
   defaults: { size: "md" },
@@ -114,7 +114,7 @@ export const radio = {
 export const switchControl = {
   block: "area-switch",
   description: "Toggles a setting that takes effect immediately.",
-  variants: { size: ["xs", "sm", "md", "lg"] },
+  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
   states: ["disabled"],
   elements: ["control"],
   defaults: { size: "md" },
@@ -349,10 +349,10 @@ export const tokenChip = {
 
 export const kbd = {
   block: "area-kbd",
-  description: "Marks a keyboard key.",
-  variants: { tone: ["quiet"] },
-  elements: [],
-  defaults: {},
+  description: "Marks a keyboard shortcut.",
+  variants: { size: ["small", "normal"], tone: ["quiet"] },
+  elements: ["key"],
+  defaults: { size: "normal" },
 } as const satisfies ComponentManifest;
 
 export const kbdGroup = {

@@ -55,6 +55,11 @@ export const Z_LAYERS = {
 
 export function baseTokens(): Record<string, string> {
   const out: Record<string, string> = { "--area-contrast-more": "0", "--area-focus-width": "2px", "--area-focus-offset": "2px", "--area-stroke-width": "1px" };
+  // Keyboard legends use the same native UI face for letters and modifier symbols.
+  // Keep this separate from the creative typography axis: a custom text font may lack
+  // keyboard glyphs, causing individual characters to fall back at different metrics.
+  out["--area-font-keyboard"] = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  out["--area-keyboard-gap"] = "0.5ch";
 
   // Pure black and white. Named because they are real answers, not placeholders: every
   // `fg-on-*` token resolves to one of these two after the scale measures which is
@@ -96,6 +101,13 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle-hover`]: `color-mix(in srgb, var(${PREFIX}border), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
+    // Text fields use a neutral focus edge in the quiet presentation and the regular
+    // accent focus edge when increased contrast is requested. The surrounding halo is
+    // deliberately translucent; the opaque inner edge still carries the indicator.
+    [`${PREFIX}field-focus-color`]:
+      `color-mix(in srgb, var(${PREFIX}stroke-control), var(${PREFIX}focus-color) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}field-focus-halo-width`]:
+      `calc(var(${PREFIX}focus-width) + var(${PREFIX}space-4))`,
     // A control nested inside a container keeps concentric corners: the inner radius is the
     // outer radius less the inset. This is the forward form of the concentric rule; the
     // inset varies per component, so components apply it themselves against this token.

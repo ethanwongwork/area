@@ -198,11 +198,11 @@
 
   .area-select:hover:not(:disabled):not(:focus) { border-color: var(--_border-hover); }
 
-  .area-select:focus-visible {
+  .area-select:focus {
     border-color: var(--_border);
-    box-shadow: var(--area-shadow-1);
-    outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color);
+    outline: var(--area-focus-width) solid var(--area-field-focus-color);
+    outline-offset: 0;
   }
 
   .area-select[aria-invalid="true"] {

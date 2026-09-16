@@ -1,6 +1,6 @@
 # Area — completion roadmap
 
-**Updated:** 2026-09-14. Source: [system audit](SYSTEM_AUDIT.md).
+**Updated:** 2026-09-15. Source: [system audit](SYSTEM_AUDIT.md).
 **Scope:** a reusable web application design system, with a verified CSS contract and usable React components. Items below are a milestone checklist, not completed changes. The user has authorized broad system improvements; the detailed work order and design authority are in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). External publishing/push authorization remains separate.
 
 ## Start here
@@ -14,7 +14,9 @@ frames/outlines return to 150/200, and required control/state edges gain explici
 V01 subsequently softens default presentation and preserves those strong endpoints in an
 increased-contrast preference; standard-mode limitations remain explicit. See [the current contrast policy](CONTRAST.md)
 and [V01 visual study](batches/V01/README.md). [V02](batches/V02/README.md) adds quieter tonal
-outlines, tighter 4%/6% shadows and a 32-family alphabetical gallery, preserving the palette. E04 completes API/package consistency. The next milestone is **interaction architecture**,
+outlines, tight shadow geometry and a 32-family alphabetical gallery. [V03](batches/V03/README.md)
+refines native control size/state geometry, Primer-style keyboard hints and neutral field focus,
+with 6%/8% shadow ink. All three preserve the palette. E04 completes API/package consistency. The next milestone is **interaction architecture**,
 then **working interaction primitives**. Further palette expansion is not the priority.
 
 Effort bands describe uncertainty and scope, not calendar commitments: **small** is one focused change; **medium** spans several modules and a focused test suite; **large** needs a design/API decision, implementation and browser/assistive-technology validation. Dependencies matter more than the bands.
@@ -109,6 +111,10 @@ Gecko validation remains pending. E01–E04 are implemented; E05 is next; the fo
 - [ ] Separate selection, keyboard focus, hover, pressed and invalid signals.
 - [ ] Check sharp/pill corners, compact extremes and focus clipping.
 - [ ] Review three real application compositions: settings/form, data/filter/empty state, command/dialog flow.
+
+V03 completes a focused subset: native choice geometry, Switch sizing, editable-field focus,
+keyboard hints and shared shadow ink. The remaining surface recipes and state combinations
+still require the broader composition review above.
 
 **Exit:** all four surface recipes are distinct and documented, with no required indicator lost; mixed component layouts remain harmonious. Audit: surface/radius and visual refinements.
 

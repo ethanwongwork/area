@@ -712,6 +712,7 @@ const KEY_GLYPHS: Record<string, string> = {
   escape: "Esc",
   esc: "Esc",
   tab: "⇥",
+  space: "Space",
   up: "↑",
   down: "↓",
   left: "←",
@@ -735,8 +736,10 @@ const KEY_LABELS: Record<string, string> = {
 };
 
 export interface KbdProps extends HTMLAttributes<HTMLElement> {
-  /** Key names, in order. `cmd`, `shift`, `alt`, `ctrl` and the arrows become glyphs. */
+  /** Key names, in order. Modifiers, arrows and common special keys become native legends. */
   keys: string[];
+  /** Normal matches body text; small is reserved for dense menu chrome. */
+  size?: VariantProps<typeof MANIFESTS.kbd>["size"];
   /** Drops the fill and border. For keys rendered inside a menu item. */
   quiet?: boolean;
 }
@@ -744,21 +747,25 @@ export interface KbdProps extends HTMLAttributes<HTMLElement> {
 /**
  * Marks a keyboard shortcut.
  *
- * Renders one element per key rather than one element reading "⌘K", because a shortcut is
- * a sequence of physical keys and screen readers need each one named — the glyphs alone
- * are read as nothing useful.
+ * Renders one flat chord with one semantic element per key. The chord provides its own
+ * spoken label because bare modifier glyphs are not announced usefully.
  */
 export const Kbd = /* @__PURE__ */ forwardRef<HTMLElement, KbdProps>(function Kbd(
-  { keys, quiet, className, ...rest },
+  { keys, size = "normal", quiet, className, ...rest },
   ref,
 ) {
   const rendered = keys.map((key) => KEY_GLYPHS[key.toLowerCase()] ?? key.toUpperCase());
   const spoken = rendered.map((glyph) => KEY_LABELS[glyph] ?? glyph).join(" plus ");
 
   return (
-    <span ref={ref} className={cx("area-kbd-group", className)} aria-label={spoken} {...rest}>
+    <span
+      ref={ref}
+      className={cx("area-kbd-group", "area-kbd", `area-kbd--${size}`, quiet && "area-kbd--quiet", className)}
+      aria-label={spoken}
+      {...rest}
+    >
       {rendered.map((glyph, i) => (
-        <kbd key={i} className={cx("area-kbd", quiet && "area-kbd--quiet")} aria-hidden="true">
+        <kbd key={i} className="area-kbd__key" aria-hidden="true">
           {glyph}
         </kbd>
       ))}

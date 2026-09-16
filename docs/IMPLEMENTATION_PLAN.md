@@ -1,7 +1,7 @@
 # Area — implementation plan
 
 **Updated:** 2026-09-14. **Planning baseline:** `59ea987`.
-**Status:** E01–E04 and V01–V02 visual calibration implemented; E05 is next. Cross-engine and native forced-colors execution remain release-validation items. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
+**Status:** E01–E04 and V01–V03 visual calibration implemented; E05 is next. Cross-engine and native forced-colors execution remain release-validation items. See [E01](batches/E01/README.md) and [E02 results and visuals](batches/E02/README.md).
 The system remains red: 165 existing token failures and the newly visible browser/package regressions.
 **Inputs:** [system audit](SYSTEM_AUDIT.md), [milestone checklist](ROADMAP.md), and the user's subsequent authorization to rename/add tokens, reorganize structure, build components and make system-wide improvements.
 
@@ -30,7 +30,7 @@ This document is the execution sequence. `SYSTEM_AUDIT.md` is dated evidence; `R
 
 The main path is:
 
-**E01 baseline → E02 theme resolution → E03 semantic color/strokes → E04 API and package boundary → V01–V02 quiet visual calibration and gallery → E05 behavior proof → E06–E07 component completion → E08–E09 axis and visual refinement → E10 core release validation → E11 customization → E12 new components.**
+**E01 baseline → E02 theme resolution → E03 semantic color/strokes → E04 API and package boundary → V01–V03 visual calibration, gallery and native-control polish → E05 behavior proof → E06–E07 component completion → E08–E09 axis and visual refinement → E10 core release validation → E11 customization → E12 new components.**
 
 Some work can be interleaved without changing that order:
 
@@ -193,6 +193,15 @@ shadow tiers become shorter and fainter (4% light /6% dark), with one contact sh
 by boxed button variants. The gallery presents 32 alphabetical component families in square
 tiles, covering all 36 manifest blocks; Code, Code block and Segmented gain dedicated docs.
 Responsive rails now open in flow without overlapping content. Behavior work remains E05.
+
+### V03 — Native controls, keyboard hints and field focus · implemented
+
+[V03](batches/V03/README.md) enlarges the default Switch to 32×20px and documents five
+tiers, keeps checked and unchecked Checkbox/Radio geometry identical, and adopts Primer’s
+flat one-chord keyboard hint with normal/small sizes. Input, Textarea and Select now share a
+neutral opaque focus edge with a subtle 6px halo; increased contrast retains the accent edge.
+Shadow ink rises by two points to 6% light /8% dark while V02’s tight geometry remains.
+Palette primitives and color curves remain byte-identical. Behavior work remains E05.
 
 ### E05 — Prove the interaction architecture
 

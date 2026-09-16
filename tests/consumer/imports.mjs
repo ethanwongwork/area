@@ -17,7 +17,8 @@ assert.match(selectVariants({size:'xl'}),/area-select--xl/);
 for(const props of [{tone:'brand'},{tone:'primary'},{size:'xxl'},{fullWidth:'yes'},{typo:true}])assert.throws(()=>buttonVariants(props));
 assert.deepEqual(stateAttributes(MANIFESTS.select,{disabled:true,invalid:true}),{disabled:true,'aria-invalid':'true'});
 assert.deepEqual(stateAttributes(MANIFESTS.textarea,{disabled:true}),{disabled:true});
-assert.throws(()=>checkboxVariants({size:'xs'}));
+assert.match(checkboxVariants({size:'xs'}),/area-checkbox--xs/);
+assert.throws(()=>checkboxVariants({size:'xxl'}));
 assert.throws(()=>stateAttributes(MANIFESTS.button,{invalid:true}));
 for(const manifest of Object.values(MANIFESTS))for(const [key,values] of Object.entries(manifest.variants))for(const value of values)assert.ok(classesFor(manifest,{[key]:value}).includes(manifest.block+'--'+value));
 const html=renderToString(h(Area.Theme,{value:{theme:'dark',accent:'green'}},h(Area.Theme,{value:{density:'compact'}},

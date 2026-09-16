@@ -33,7 +33,7 @@ it('rejects transformed declarations outside the emitting owner', async()=>{
   expect(()=>assertEmittedTokens(ACCENT_AXIS,{...ACCENT_AXIS.presets[0]!.tokens,'--area-accent-solid':'Infinity'})).toThrow();
 });
 it('keeps inherited shadow recipes responsive to theme boundaries',()=>{
-  expect(emitTokens()).toContain('--area-shadow-color: light-dark(rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.06));');
+  expect(emitTokens()).toContain('--area-shadow-color: light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.08));');
 });
 
 it('re-emits contrast presentation aliases at every axis and preference boundary',()=>{

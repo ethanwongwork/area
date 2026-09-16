@@ -188,21 +188,27 @@ export const DialogDefault = () => (
 
 export const KbdDefault = () => <Kbd keys={["cmd", "K"]} />;
 
+export const KbdSizes = () => (
+  <><Kbd keys={["cmd", "K"]} size="small" /> <Kbd keys={["cmd", "K"]} /></>
+);
+
 export const KbdSequence = () => (
   <>
     <Kbd keys={["cmd", "shift", "P"]} />
     <Kbd keys={["ctrl", "shift", "M"]} />
+    <Kbd keys={["alt", "tab"]} />
     <Kbd keys={["escape"]} />
     <Kbd keys={["enter"]} />
+    <Kbd keys={["space"]} />
   </>
 );
 
 export const MenuWithShortcuts = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />}>Search</MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />}>New file</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="small" quiet />}>Search</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="small" quiet />}>New file</MenuItem>
     <div className="area-menu__separator" />
-    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />}>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} size="small" quiet />}>
       Delete
     </MenuItem>
   </Menu>

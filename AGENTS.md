@@ -60,13 +60,15 @@ Run tests separately: `build` does not execute the contrast test gate.
 - Components consume semantic tokens. Every CSS dimension traces to a token, except
   documented hairlines and mask geometry. Follow `components/button.css`: variants set
   local `--_*` properties; base rules consume them; size tiers set density tokens only.
-- A size tier is the outer control height. Checkbox, radio and switch use the icon ramp.
-  Radius is flat per preset and capped against the box; density also changes UI type.
+- A size tier is the outer control height. Checkbox and Radio use the icon ramp. Switch
+  width follows the control ramp while its track height uses 12/16/20/20/24px, so the
+  default medium switch is 32×20px. Radius is flat per preset and capped against the box;
+  density also changes UI type.
 - Decorative dividers and container edges use `--area-border-decorative` (light neutral 75, current visual trial).
   Never use it for control affordances or state indicators.
 - Foreground does not change on hover. State belongs on `data-*` attributes.
-  Tone conveys meaning; variant conveys emphasis. Current Button props use `neutral` and
-  `brand`; the manifest still calls neutral `primary` (audit F06). Type role never implies weight (400/500).
+  Tone conveys meaning; variant conveys emphasis. Button and the manifest use `neutral`
+  and `accent` consistently. Type role never implies weight (400/500).
 - Update CSS and `manifest.ts` together. React wrappers forward native props and refs;
   add behavior only when it belongs to the component contract.
 - Docs previews and snippets come from the same demo source. Use `tokenSection()` or
@@ -85,7 +87,9 @@ expanding the system. Follow [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_P
 the authorized work order and decision boundaries. E03 resolves the five stroke failure groups
 without lowering their floors and removes all syntax waivers. Read [docs/CONTRAST.md](docs/CONTRAST.md)
 before changing strokes, focus or state painting. Required edges use stroke-width independently
-of Surface; opaque focus uses focus-color/width/offset. Contrast report now exits nonzero on failures.
+of Surface. Most controls use focus-color/width/offset; editable fields use a neutral opaque
+focus edge plus a translucent halo in standard mode and return to accent in increased contrast.
+Contrast report exits nonzero on failures.
 
 ## Finish
 

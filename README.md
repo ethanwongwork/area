@@ -194,3 +194,8 @@ filters, card/list views, themes, density and the increased-contrast preference.
 [V02 visual refinements and gallery](docs/batches/V02/README.md) soften tonal outlines and all
 shadow tiers, with the palette preserved. Open the [component gallery](http://localhost:4321/gallery.html)
 for 32 alphabetical component families, useful variants and dedicated documentation links.
+
+[V03 native control refinements](docs/batches/V03/README.md) add a 32×20px default Switch,
+fixed selected/unselected Checkbox and Radio geometry, Primer-style keyboard chords, shared
+neutral focus treatment for editable fields and a two-point shadow-opacity correction. The
+palette and V02 shadow geometry remain unchanged.

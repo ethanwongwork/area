@@ -114,3 +114,36 @@ export const FieldInline = () => (
     </Field>
   </div>
 );
+
+export const CheckboxSizes = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
+    {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
+      <div key={size} data-choice-size={size} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-24)" }}>
+        <Checkbox size={size} label={`${size} off`} />
+        <Checkbox size={size} label={`${size} on`} defaultChecked />
+      </div>
+    ))}
+  </div>
+);
+
+export const RadioSizes = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
+    {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
+      <div key={size} data-choice-size={size} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-24)" }}>
+        <Radio size={size} name={`size-${size}`} value="off" label={`${size} off`} />
+        <Radio size={size} name={`size-${size}`} value="on" label={`${size} on`} defaultChecked />
+      </div>
+    ))}
+  </div>
+);
+
+export const SwitchSizes = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
+    {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
+      <div key={size} data-choice-size={size} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-24)" }}>
+        <Switch size={size} label={`${size} off`} />
+        <Switch size={size} label={`${size} on`} defaultChecked />
+      </div>
+    ))}
+  </div>
+);

@@ -1,0 +1,20 @@
+{
+  "paletteSha256": "8035be3c95f72da6dc95ec407e6ca27be794cefdcf376b50dd9f9f0be5bed64c",
+  "curvesSha256": "d85f91e99275c1d66c3799a3cff91a04852c3ddd2c5462f6c7d81ac08f030e39",
+  "switchDefault": { "width": 32, "height": 20, "thumb": 16, "inset": 2 },
+  "switchTiers": [[24, 12], [28, 16], [32, 20], [40, 20], [48, 24]],
+  "choiceTiers": [12, 16, 16, 16, 24],
+  "kbd": {
+    "normal": { "height": 20, "fontSize": 12 },
+    "small": { "height": 16, "fontSize": 11 },
+    "boxShadow": "none"
+  },
+  "fieldFocus": { "border": 1, "opaqueEdge": 2, "halo": 6 },
+  "shadowOpacity": { "light": 0.06, "dark": 0.08 },
+  "browser": {
+    "scope": { "passed": 75493, "failed": 0 },
+    "preference": { "passed": 288, "failed": 0 },
+    "paintStandard": { "passed": 18108, "failed": 3012 },
+    "paintMore": { "passed": 21120, "failed": 0 }
+  }
+}

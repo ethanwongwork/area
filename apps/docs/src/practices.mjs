@@ -9,6 +9,20 @@
 const code = (text) => `<code class="area-code">${text}</code>`;
 
 export const PRACTICES = {
+  checkbox: [
+    `Use Checkbox for independent choices. Native checked, indeterminate and focus states keep one fixed border-box; selecting fills the existing shape rather than changing its size.`,
+    `Choose xs through xl on the icon ramp. Adjacent tiers may share a glyph size while their label type and spacing differ. Labels follow density rather than the prose scale.`,
+    `Standard mode matches the selected boundary to its fill; increased contrast restores the strong selected edge. Focus remains distinct in both modes.`,
+  ],
+  radio: [
+    `Give mutually exclusive Radio controls the same name and distinct values. Native browser keyboard and form behavior remain intact.`,
+    `Selection fills the existing outer circle. The five size tiers follow the same icon and label ramps as Checkbox.`,
+  ],
+  switch: [
+    `Use Switch for settings that take effect immediately. Give it a stable label that describes the setting, not an action.`,
+    `The standard track is flat: its off boundary is transparent, and its on boundary matches the fill. Reserved stroke geometry keeps the track and thumb in place when increased contrast adds a visible edge.`,
+    `Five tiers are available. Width follows the control ramp; track height follows a 12, 16, 20, 20 and 24px ramp. Default-density md is 32×20px, matching the measured OpenAI pattern. Compact density deliberately steps width down.`,
+  ],
   code: [
     `Use Code for short commands, identifiers and literal values inside a sentence. Use CodeBlock for multiple lines.`,
     `Use Token when a reference should include a semantic color swatch. Code uses the same compact visual language without the swatch.`,
@@ -17,12 +31,6 @@ export const PRACTICES = {
     `Pass plain text through code. The html prop inserts pre-highlighted markup directly; only supply trusted or sanitized HTML.`,
     `Actions belong in the actions slot at the upper right. The component does not implement copying; the consumer owns that behavior.`,
     `Use flush only inside an existing frame. The standard treatment supplies the surface and decorative edge.`,
-  ],
-  segmented: [
-    `Use a segmented control for a short, exclusive set of choices. Use Select for longer labels or larger sets.`,
-    `Supply an accessible label for the group and a readable label for every option. Connect onSelect to the controlled value in an application.`,
-    `Current limitation: the component exposes radio semantics and click selection callbacks, but arrow-key navigation and a single tab stop are not yet implemented. The static previews do not change their controlled selection.`,
-    `The size tier describes the outer track height, so it aligns with the same tier on Button, Input and Select.`,
   ],
   button: [
     `Use one solid ${code("neutral")} button per view. It is the strongest call to action a neutral palette can make, and a second one halves the value of the first.`,
@@ -66,9 +74,9 @@ export const PRACTICES = {
   ],
   kbd: [
     `Pass ${code("keys")} as names, not glyphs. ${code("cmd")}, ${code("shift")}, ${code("alt")}, ${code("ctrl")} and the arrows become symbols automatically.`,
-    `One element per key, never a single element reading ${code("⌘K")}. A shortcut is a sequence of physical keys, and a screen reader reads a bare glyph as nothing at all.`,
-    `Use ${code("quiet")} inside a menu item, where the key is chrome rather than content. The filled form is for running text and empty states.`,
-    `A key is a rounded rectangle, never a pill. The shape is most of what makes it read as a key rather than as a badge.`,
+    `One flat chord contains the keys, matching Primer’s KeybindingHint. The visual symbols remain individual semantic key elements, and the chord supplies one useful spoken label.`,
+    `Use ${code("quiet")} and ${code('size="small"')} inside a menu item, where the shortcut is dense chrome rather than standalone content.`,
+    `The chord uses a flat outline with no inset or drop shadow. Modifier symbols and letters share ${code("--area-font-keyboard")}, a native UI font, at the same size and weight; Fluent icons are unnecessary.`,
   ],
   dialog: [
     `Render it inside a native ${code("<dialog>")} and open it with ${code("showModal()")}. That supplies the focus trap, the backdrop and Escape-to-close without any JavaScript of your own.`,
@@ -84,5 +92,7 @@ export const PRACTICES = {
     `A Segmented control picks a value. Tabs navigate between views. Keep the underbar for one and the raised fill for the other.`,
     `Use it for two to five options. Past that, a Select holds the list without pushing the layout around.`,
     `It is a ${code("radiogroup")}, not a row of toggle buttons — the choice is exclusive, which ${code("aria-pressed")} does not convey.`,
+    `Connect ${code("onSelect")} to the controlled value. Arrow-key navigation and a single tab stop remain part of the E05 behavior work.`,
+    `The size tier describes the outer track height, so it aligns with the same tier on Button, Input and Select.`,
   ],
 };

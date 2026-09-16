@@ -1,55 +1,71 @@
 /* ---------------------------------------------------------------------------
  * Kbd
  *
- * A keyboard key, in running text or at the end of a menu item.
+ * A keyboard shortcut, in running text or at the end of a menu item.
  *
- * A rounded rectangle, never a pill: a key is a physical object with corners, and the
- * shape is most of what makes it read as a key rather than as a badge. Vercel ships 4px
- * on a ~20px box; this derives the same proportion from the radius axis instead of fixing
- * it, so a sharp or soft theme carries through.
- *
- * Set in the UI face rather than mono. Key glyphs -- the command, shift and option
- * symbols -- are drawn better in a text face, and a monospaced cell makes a single
- * character sit lost in the middle of its box.
+ * Primer frames one chord, not every character inside it. Native text glyphs and letters
+ * share one UI face and one size, with no simulated keycap depth.
  */
 @layer area.components {
   .area-kbd {
+    --_min: var(--area-space-20);
+    --_height: var(--area-space-20);
+    --_padding: var(--area-space-4);
+    --_font: var(--area-text-xs-size);
+    --_leading: var(--area-size-10);
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--area-space-2);
+    gap: var(--area-keyboard-gap);
+    min-inline-size: var(--_min);
+    block-size: var(--_height);
+    padding: var(--_padding);
 
-    min-inline-size: var(--area-space-20);
-    block-size: var(--area-space-20);
-    padding-inline: var(--area-space-4);
-
-    border: var(--area-border-width) solid var(--area-border-subtle);
+    border: var(--area-stroke-width) solid var(--area-edge-control);
     border-radius: var(--area-radius-small);
-    background-color: var(--area-bg-surface);
+    background-color: transparent;
     color: var(--area-fg-muted);
 
-    font-family: var(--area-font-sans);
-    font-size: var(--area-text-xs-size);
-    line-height: 1;
+    font-family: var(--area-font-keyboard);
+    font-size: var(--_font);
+    line-height: var(--_leading);
     font-weight: var(--area-weight-regular);
     /* Keys never wrap, and never inherit italics from surrounding prose. */
     white-space: nowrap;
     font-style: normal;
-    /*
-     * A weighted bottom edge, which is what makes this read as a key rather than as a
-     * badge. VS Code, Primer and Radix all arrive at the same `inset 0 -1px 0`
-     * independently -- it is the cheapest possible suggestion of a keycap's depth.
-     */
-    box-shadow:
-      inset 0 -1px 0 var(--area-border-subtle),
-      var(--area-shadow-1);
+    box-shadow: none;
   }
 
-  /* A sequence of keys: Cmd then K, rather than one key labelled "⌘K". */
+  .area-kbd__key {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+  }
+
+  .area-kbd--normal {
+    --_min: var(--area-space-20);
+    --_height: var(--area-space-20);
+    --_padding: var(--area-space-4);
+    --_font: var(--area-text-xs-size);
+    --_leading: var(--area-size-10);
+  }
+
+  .area-kbd--small {
+    --_min: var(--area-space-16);
+    --_height: var(--area-space-16);
+    --_padding: var(--area-space-2);
+    --_font: var(--area-size-11);
+    --_leading: var(--area-space-8);
+  }
+
+  /* A sequence contains separate chord components; each Kbd is one chord. */
   .area-kbd-group {
     display: inline-flex;
     align-items: center;
-    gap: var(--area-space-4);
   }
 
   /* Inside a menu item, keys are chrome: quieter, and pushed to the trailing edge. */

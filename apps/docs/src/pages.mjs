@@ -175,7 +175,7 @@ export const COMPONENT_PAGES = [
     name: "Checkbox",
     manifest: "checkbox",
     api: [
-      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
       ["label", "ReactNode", "—"],
       ["description", "ReactNode", "—"],
       ["defaultChecked", "boolean", "false"],
@@ -183,6 +183,7 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "CheckboxDefault" },
       { id: "description", title: "With description", demo: "CheckboxDescription" },
+      { id: "sizes", title: "Sizes and states", note: "The unselected and selected glyphs share one exact outer size. The icon ramp supplies 12, 16 and 24px glyphs; not every tier has a different glyph size.", demo: "CheckboxSizes" },
     ],
   },
   {
@@ -190,22 +191,22 @@ export const COMPONENT_PAGES = [
     name: "Radio",
     manifest: "radio",
     api: [
-      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
       ["label", "ReactNode", "—"],
       ["name", "string", "—"],
     ],
-    examples: [{ id: "default", title: "Default", demo: "RadioDefault" }],
+    examples: [{ id: "default", title: "Default", demo: "RadioDefault" }, { id: "sizes", title: "Sizes and states", note: "Selection fills the same outer circle. Each pair shows the same size before and after selection.", demo: "RadioSizes" }],
   },
   {
     slug: "switch",
     name: "Switch",
     manifest: "switch",
     api: [
-      ["size", '"xs" | "sm" | "md" | "lg"', '"md"'],
+      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
       ["label", "ReactNode", "—"],
       ["defaultChecked", "boolean", "false"],
     ],
-    examples: [{ id: "default", title: "Default", demo: "SwitchDefault" }],
+    examples: [{ id: "default", title: "Default", demo: "SwitchDefault" }, { id: "sizes", title: "Sizes and states", note: "Five tiers: width follows the control ramp and the default medium track is 32×20px. Standard mode is flat; increased contrast restores a distinct boundary.", demo: "SwitchSizes" }],
   },
 
   {
@@ -481,17 +482,19 @@ export const COMPONENT_PAGES = [
     manifest: "kbd",
     api: [
       ["keys", "string[]", "—"],
+      ["size", '"small" | "normal"', '"normal"'],
       ["quiet", "boolean", "false"],
     ],
     practices: [
       "Pass <code class='area-code'>keys</code> as names, not glyphs. <code class='area-code'>cmd</code>, <code class='area-code'>shift</code>, <code class='area-code'>alt</code>, <code class='area-code'>ctrl</code> and the arrows render as symbols automatically.",
-      "One element per key, never one element reading <code class='area-code'>⌘K</code>. A shortcut is a sequence of physical keys, and a screen reader reads a bare glyph as nothing at all — the component supplies a spoken label for the whole group.",
+      "One flat chord contains its keys, matching Primer's KeybindingHint. The visual symbols remain individual semantic key elements, while the component supplies a spoken label for the whole shortcut.",
       "Use <code class='area-code'>quiet</code> inside a menu item, where the key is chrome rather than content. The filled form is for running text and empty states.",
-      "A key is a rounded rectangle, never a pill. The shape is most of what makes it read as a key.",
+      "Keycaps are flat, with a quiet outline and no inset or drop shadow. Native modifier symbols and letters share the keyboard font, size and weight; customize <code class='area-code'>--area-font-keyboard</code> only with a face that includes those symbols.",
     ],
     examples: [
       { id: "default", title: "Default", demo: "KbdDefault" },
-      { id: "sequence", title: "Sequences", note: "Modifier names become glyphs; everything else is uppercased.", demo: "KbdSequence" },
+      { id: "sizes", title: "Sizes", note: "Normal matches body text; small is reserved for dense menu chrome.", demo: "KbdSizes" },
+      { id: "sequence", title: "Shortcuts", note: "Modifier names become native text glyphs. Symbols and letters share one UI font and one type size.", demo: "KbdSequence" },
       { id: "in-menu", title: "In a menu", note: "Use the quiet form where the key labels an action rather than standing alone.", demo: "MenuWithShortcuts" },
     ],
   },

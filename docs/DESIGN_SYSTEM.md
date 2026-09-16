@@ -41,10 +41,12 @@ track a tier taller than its own class said -- an `xs` segmented rendered 28px b
 item is derived now (`--_item`), and its inset is a flat 2px because scaling it put the
 `sm` and `md` items at the same 24px once the track carried the tier.
 
-Checkbox, radio and switch are the documented exceptions: they sit on the *icon* ramp, not
-the control ramp, because they are glyphs rather than boxes. At the default density that
-ramp is {12, 16, 16, 16, 24}, so their `sm`, `md` and `lg` are all 16px tall and differ
-only in the switch's track width.
+Checkbox and radio are documented exceptions: they sit on the *icon* ramp because they are
+glyphs rather than control boxes. At the default density that ramp is {12, 16, 16, 16, 24},
+so their `sm`, `md` and `lg` controls are all 16px while label type and spacing still follow
+the tier. Switch is a track: its width follows the control ramp and its height follows
+{12, 16, 20, 20, 24}. The default `md` switch is 32×20px, matching the measured OpenAI
+pattern while preserving a 2px thumb inset.
 
 **Every number in component CSS traces to a token.** A literal pixel value is a bug unless
 it is a hairline (`1px`) or a mask geometry. If a value is not on a ramp, derive it with
@@ -510,8 +512,10 @@ See [the archive guide](../archive/playground/README.md) before consulting it.
 The [current contrast contract](CONTRAST.md) defines roles, values, migration and coverage.
 Decoration remains 75/800; faint framing is 150/750 and quiet outlines are 200/750. V01 fields read edge-control: faint framing by default, or stroke-control at 450/400 under
 `data-area-contrast="more"`, with a corresponding hover step. Selected controls retain
-a real edge even when elevation removes decorative borders. Focus is an opaque 2px outline
-with a 2px offset and is independent of the Surface axis.
+a real edge even when elevation removes decorative borders. Most controls use an opaque 2px
+accent outline with a 2px offset. Editable fields use an opaque neutral 2px edge at zero
+offset inside a 6px translucent neutral halo; increased contrast restores the accent edge.
+Focus geometry remains independent of the Surface axis.
 
 The dated 75/100/150 trial and its measured failures remain in the audit and E01/E02 reports.
 E03 resolves those five failures without lowering their existing aesthetic thresholds and
@@ -538,3 +542,14 @@ default contact shadow is 0 0.5px 1px -0.5px. Solid, soft and outline buttons sh
 ghost buttons remain unboxed and shadowless. Container/overlay tiers retain a restrained
 hierarchy. The component gallery presents real components in square tiles, alphabetically,
 with direct documentation links.
+
+
+## Native control polish · V03
+
+[V03](batches/V03/README.md) brings native controls closer to the compact, quiet references
+without changing the palette. The default Switch is 32×20px with five documented tiers and
+a flat boundary. Checkbox and Radio reserve one fixed border-box in every state. Editable
+fields use a neutral focus edge plus a soft 6px halo; increased contrast restores the accent
+edge. Kbd follows Primer’s one-chord treatment with native text glyphs, normal/small sizes and
+no keycap shadow. Shared shadow ink returns to 6% light /8% dark while retaining V02’s tight
+offset, blur and negative spread.
