@@ -66,6 +66,12 @@ Run tests separately: `build` does not execute the contrast test gate.
   density also changes UI type.
 - Decorative dividers and container edges use `--area-border-decorative` (light neutral 75, current visual trial).
   Never use it for control affordances or state indicators.
+- Optical insets follow `packages/styles/src/inset.css` and the Optical insets section of
+  `docs/DESIGN_SYSTEM.md`: square icon boxes, one font reference for all text, and
+  `(backplate height - edge item height) / 2` outer spacing with borders counted once.
+  Apply it to both ends, swatches and nested backplates; never nudge individual glyphs.
+  Multiline icons align to the first text line, with equal top/leading insets and allowed
+  space below. Same-tier controls share icon/text/gap tokens; messages use medium UI type.
 - Foreground does not change on hover. State belongs on `data-*` attributes.
   Tone conveys meaning; variant conveys emphasis. Button and the manifest use `neutral`
   and `accent` consistently. Type role never implies weight (400/500).

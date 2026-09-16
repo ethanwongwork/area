@@ -19,7 +19,7 @@
     --_height: var(--area-control-sm);
     --_gutter: var(--area-gutter-sm);
     --_gap: var(--area-gap-sm);
-    --_dot: var(--area-icon-xs);
+    --_dot: var(--area-icon-sm);
     --_text: var(--area-control-sm-text);
     --_leading: var(--area-control-sm-leading);
 
@@ -116,11 +116,11 @@
 
   /* --- Sizes -------------------------------------------------------------- */
 
-  .area-chip--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
-  .area-chip--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-chip--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_gap: var(--area-gap-md); --_dot: var(--area-icon-sm); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-chip--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_gap: var(--area-gap-lg); --_dot: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
-  .area-chip--xl { --_height: var(--area-control-xl); --_gutter: var(--area-gutter-xl); --_gap: var(--area-gap-xl); --_dot: var(--area-icon-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
+  .area-chip--xs { --_height: var(--area-control-xs); --_dot: var(--area-icon-xs); --_gutter: var(--area-gutter-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
+  .area-chip--sm { --_height: var(--area-control-sm); --_dot: var(--area-icon-sm); --_gutter: var(--area-gutter-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-chip--md { --_height: var(--area-control-md); --_dot: var(--area-icon-md); --_gutter: var(--area-gutter-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-chip--lg { --_height: var(--area-control-lg); --_dot: var(--area-icon-lg); --_gutter: var(--area-gutter-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-chip--xl { --_height: var(--area-control-xl); --_dot: var(--area-icon-xl); --_gutter: var(--area-gutter-xl); --_gap: var(--area-gap-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
 
   /* --- Group -------------------------------------------------------------- */
 

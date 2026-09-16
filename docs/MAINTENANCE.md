@@ -28,6 +28,12 @@ repeatable six-profile baseline; see [E01](batches/E01/README.md) for commands a
 The generated `packages/tokens/dist/fixture/axes.html` also exposes `window.areaSweep()`
 for browser inspection of axis presets.
 
+The V04 `inset.html` fixture compares rendered optical edges, first-line alignment and
+same-tier icon/text/gap sizes across 32 profiles. Click **Run geometry checks**; the
+result is also available as `window.insetResults`. Repeat at 390px and inspect
+`gallery.html`. `inset-before.html` uses the frozen pre-V04 CSS for comparison.
+See [V04](batches/V04/README.md) for captured results and platform limits.
+
 ## Generated and vendored files
 
 Keep generated icon files checked in: the docs builder imports them directly.

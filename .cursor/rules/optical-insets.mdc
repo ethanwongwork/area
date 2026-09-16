@@ -1,0 +1,32 @@
+---
+description: Apply consistent optical content boxes and equal insets to all Area backplates.
+alwaysApply: true
+---
+
+# Optical insets
+
+- Follow `docs/DESIGN_SYSTEM.md` → Optical insets and `packages/styles/src/inset.css`.
+- Measure icons by the full square slot/viewBox, never by visible path bounds.
+  Use the same placement for horizontal, vertical, round and asymmetric marks.
+  Do not change vendored SVG geometry, scale a chevron separately or add per-icon nudges.
+- Center text using the font's cap-to-baseline reference, consistently for every label.
+  Use the documented text slots; keep symmetric safety space for accents and descenders.
+  Never measure a word to change its padding; wording must not alter placement.
+- For a fixed-height backplate H and an edge item's reference height B, the outer
+  inset is (H − B) / 2. CSS padding subtracts the border width exactly once.
+  Calculate start and end independently; an end chevron follows the leading-icon rule.
+- Swatches, dots, avatars, shortcuts and nested buttons use their own box dimensions.
+  A content-sized or multiline container uses equal padding around the content group;
+  intentional full-width layout can add interior space, not move edge slots off-grid.
+- Multiline icon/text: keep the icon's top and leading insets equal, align its center
+  with the first text line's cap center, and allow more space below. Preserve leading
+  between lines and between a title and description; never center on the whole paragraph.
+- Use the same tier's icon, text and gap tokens across Button, Input, Select, Chip and
+  Segmented. Menu/Nav and Alert/Toast use the medium UI pairing. Keep icons on the
+  12/16/24px ramp and weights unmodified; status dots and keyboard glyphs have distinct
+  semantic roles. No per-glyph scaling, stroke adjustments or nudges.
+- Keep dimensions token-derived, account for nested density and RTL, and preserve
+  component outer heights, line wrapping, native editing, focus and hit targets.
+- Add slot selectors to the manifest and mirror markup in React and framework-free docs.
+- Verify `inset.html` and the gallery at both densities, all tiers, all font presets,
+  RTL, strong borders and narrow widths. Check actual geometry and inspect the preview.

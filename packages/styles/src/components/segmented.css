@@ -115,10 +115,7 @@
     block-size: 100%;
   }
 
-  /* Optical inset, matching Button: an icon centres in the square its radius is cut from. */
-  .area-segmented__item:has(> .area-segmented__icon:first-child) {
-    padding-inline-start: calc((var(--_item) - var(--_icon)) / 2);
-  }
+  /* Outer-edge optical insets are shared in inset.css. */
 
   .area-segmented__item:has(> .area-segmented__icon:only-child) {
     padding-inline: 0;
@@ -137,8 +134,8 @@
   .area-segmented--full-width .area-segmented__item { flex: 1; min-inline-size: 0; }
 
   .area-segmented--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_icon: var(--area-icon-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
-  .area-segmented--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-xs); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-segmented--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-segmented--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
-  .area-segmented--xl { --_height: var(--area-control-xl); --_gutter: var(--area-gutter-xl); --_icon: var(--area-icon-md); --_gap: var(--area-gap-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
+  .area-segmented--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-segmented--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-segmented--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-segmented--xl { --_height: var(--area-control-xl); --_gutter: var(--area-gutter-xl); --_icon: var(--area-icon-xl); --_gap: var(--area-gap-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
 }

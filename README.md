@@ -199,3 +199,8 @@ for 32 alphabetical component families, useful variants and dedicated documentat
 fixed selected/unselected Checkbox and Radio geometry, Primer-style keyboard chords, shared
 neutral focus treatment for editable fields and a two-point shadow-opacity correction. The
 palette and V02 shadow geometry remain unchanged.
+
+[V04 optical insets and first-line alignment](docs/batches/V04/README.md) standardizes
+text, icon, swatch and nested-backplate placement. Multiline icons align with the first
+text line, and named control tiers share icon/text/gap sizes. Open the
+[inset specimen](http://localhost:4321/inset.html) to compare before/after and run geometry checks.

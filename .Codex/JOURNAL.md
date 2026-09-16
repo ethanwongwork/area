@@ -1,5 +1,16 @@
 # Project journal
 
+## 2026-09-15 — Shared optical insets and first-line sizing
+
+V04 turns the user's box-based alignment reference into a shared CSS contract: measure
+outer-edge clearance, subtract the border once, and use a consistent cap reference for
+text without per-glyph corrections. Multiline icons keep equal top/leading insets and
+center on the first text line; title/description leading remains intact. Chip, Segmented
+and Select share their tier's sizing with Button/Input; status messages use medium UI type.
+The browser matrix passes 5,728 checks at both desktop and mobile. The user explicitly
+authorized pushing this batch and all earlier local checkpoints to GitHub.
+
+
 ## 2026-09-15 — V03 native control polish
 
 The user’s OpenAI-sized switch, Primer keybinding and soft gray focus references exposed four

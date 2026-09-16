@@ -50,7 +50,7 @@ export const Badge = /* @__PURE__ */ forwardRef<HTMLSpanElement, BadgeProps>(fun
   return (
     <span ref={ref} className={badgeVariants({ tone, variant }, className)} {...rest}>
       {dot ? <span className="area-badge__dot" aria-hidden="true" /> : null}
-      {children}
+      <span className="area-badge__label">{children}</span>
     </span>
   );
 });
@@ -375,7 +375,7 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
           {icon}
         </span>
       ) : null}
-      {swatchOnly ? null : children}
+      {swatchOnly ? null : <span className="area-chip__label">{children}</span>}
     </button>
   );
 });
@@ -494,7 +494,7 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
       {...(disabled ? { "data-disabled": "" } : {})}
       {...rest}
     >
-      {children}
+      {typeof children === "string" || typeof children === "number" ? <span className="area-menu__text">{children}</span> : children}
       {shortcut ? <span className="area-menu__shortcut">{shortcut}</span> : null}
     </button>
   );
@@ -552,7 +552,7 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
             {...(tab.id === value ? { "data-selected": "" } : {})}
             {...(tab.disabled ? { "data-disabled": "" } : {})}
           >
-            {tab.label}
+            <span className="area-tabs__label">{tab.label}</span>
           </button>
         ))}
       </div>
@@ -655,7 +655,7 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
               {option.icon}
             </span>
           ) : null}
-          {option.label}
+          <span className="area-segmented__label">{option.label}</span>
         </button>
       ))}
     </div>
@@ -818,7 +818,7 @@ export const Token = /* @__PURE__ */ forwardRef<HTMLElement, TokenProps>(functio
       {swatch ? (
         <span className="area-token__swatch" style={{ background: swatch }} aria-hidden="true" />
       ) : null}
-      {children}
+      <span className="area-token__label">{children}</span>
     </span>
   );
 });

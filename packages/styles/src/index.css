@@ -48,4 +48,6 @@
 @import "./components/token.css";
 @import "./components/kbd.css";
 
+@import "./inset.css";
+
 @import "./forced-colors.css";

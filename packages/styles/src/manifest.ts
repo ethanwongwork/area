@@ -135,7 +135,7 @@ export const chip = {
   variants: { size: ["xs", "sm", "md", "lg", "xl"] },
   booleans: ["pill", "swatch-only"],
   states: ["selected", "disabled"],
-  elements: ["swatch", "icon"],
+  elements: ["swatch", "icon", "label"],
   defaults: { size: "sm" },
 } as const satisfies ComponentManifest;
 
@@ -161,7 +161,7 @@ export const badge = {
     variant: ["solid", "outline"],
     tone: ["neutral", "accent", "danger", "warning", "success"],
   },
-  elements: ["dot"],
+  elements: ["dot", "label"],
   defaults: { tone: "neutral" },
 } as const satisfies ComponentManifest;
 
@@ -280,7 +280,7 @@ export const tabs = {
   description: "Switches between views in the same context.",
   variants: {},
   states: ["selected", "disabled"],
-  elements: ["list", "tab", "panel"],
+  elements: ["list", "tab", "panel", "label"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -308,7 +308,7 @@ export const segmented = {
   booleans: ["full-width"],
   states: ["selected", "disabled"],
   stateAttributes: { disabled: "disabled" },
-  elements: ["item", "icon"],
+  elements: ["item", "icon", "label"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -343,7 +343,7 @@ export const tokenChip = {
   block: "area-token",
   description: "Names a design token inline.",
   variants: { ground: ["on-color", "subtle"] },
-  elements: ["swatch"],
+  elements: ["swatch", "label"],
   defaults: {},
 } as const satisfies ComponentManifest;
 

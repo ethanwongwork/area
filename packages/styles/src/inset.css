@@ -1,0 +1,195 @@
+/* Shared inset contract. Measure from the outer backplate to the content box.
+ * Icons use their square viewport, never their path bounds. Text uses one cap-to-
+ * baseline reference for the whole font, never a measurement of an individual word.
+ * Component-local inputs are reset on every backplate to prevent nested leakage.
+ */
+@layer area.components {
+  .area-button, .area-input, .area-chip, .area-select,
+  .area-segmented__item, .area-nav__item, .area-nav__label,
+  .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-kbd, .area-panel__bar {
+    --_box-height: var(--_height);
+    --_box-border: var(--area-stroke-width);
+    --_box-text: 1lh;
+    --_box-start: var(--_box-text);
+    --_box-end: var(--_box-text);
+    --_box-icon: var(--_icon);
+    padding-block: 0;
+    padding-inline-start: max(0px, calc((var(--_box-height) - var(--_box-start)) / 2 - var(--_box-border)));
+    padding-inline-end: max(0px, calc((var(--_box-height) - var(--_box-end)) / 2 - var(--_box-border)));
+  }
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-button, .area-input, .area-chip, .area-select,
+    .area-segmented__item, .area-nav__item, .area-nav__label,
+    .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-kbd, .area-panel__bar {
+      --_box-text: 1cap;
+    }
+  }
+  .area-panel__bar {
+    --_box-height: var(--_bar);
+    --_box-border: 0px;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    /* Balance the bar's bottom-only divider in its vertical content box. */
+    padding-block-start: var(--area-border-width);
+  }
+  .area-panel--bare-bar > .area-panel__bar { padding-block-start: 0; }
+  .area-panel__bar:has(> .area-button:last-child) { --_box-end: var(--area-control-md); }
+  .area-panel__bar:has(> .area-button--xs:last-child) { --_box-end: var(--area-control-xs); }
+  .area-panel__bar:has(> .area-button--sm:last-child) { --_box-end: var(--area-control-sm); }
+  .area-panel__bar:has(> .area-button--lg:last-child) { --_box-end: var(--area-control-lg); }
+  .area-panel__bar:has(> .area-button--xl:last-child) { --_box-end: var(--area-control-xl); }
+  .area-button { --_box-border: var(--area-border-width); }
+  .area-chip { --_box-icon: var(--_dot); }
+  .area-segmented__item { --_box-height: var(--_item); }
+  .area-nav__item, .area-nav__label, .area-menu__item, .area-menu__label {
+    --_box-height: var(--area-control-md);
+    --_box-border: 0px;
+    --_box-icon: var(--area-icon-md);
+  }
+  .area-nav__item, .area-menu__item { gap: var(--area-gap-md); }
+  .area-menu--inline .area-menu__item, .area-menu--inline .area-menu__label {
+    --_box-height: var(--area-control-sm);
+  }
+  .area-tabs__tab {
+    --_height: var(--area-control-lg);
+    --_box-border: 0px;
+    --_box-icon: var(--area-icon-md);
+  }
+  .area-badge {
+    --_box-height: var(--area-control-xs);
+    --_box-border: 0px;
+    --_box-icon: var(--area-space-6);
+  }
+  .area-badge--outline { --_box-border: var(--area-border-width); }
+
+  .area-button:has(> .area-button__icon:first-child),
+  .area-input:has(> .area-input__icon:first-child),
+  .area-chip:has(> :is(.area-chip__icon, .area-chip__swatch):first-child),
+  .area-segmented__item:has(> .area-segmented__icon:first-child),
+  .area-nav__item:has(> .area-nav__icon:first-child),
+  .area-menu__item:has(> .area-menu__icon:first-child),
+  .area-badge:has(> .area-badge__dot:first-child) { --_box-start: var(--_box-icon); }
+
+  .area-button:has(> .area-button__icon:last-child),
+  .area-input:has(> .area-input__icon:last-child),
+  .area-chip:has(> :is(.area-chip__icon, .area-chip__swatch):last-child),
+  .area-segmented__item:has(> .area-segmented__icon:last-child),
+  .area-nav__item:has(> .area-nav__icon:last-child),
+  .area-menu__item:has(> .area-menu__icon:last-child),
+  .area-badge:has(> .area-badge__dot:last-child) { --_box-end: var(--_box-icon); }
+
+  .area-button--icon-only, .area-chip--swatch-only,
+  .area-segmented__item:has(> .area-segmented__icon:only-child) { padding-inline: 0; }
+
+  /* Native select's background is positioned inside its padding box. */
+  .area-select {
+    --_box-end: var(--_icon);
+    --_chevron-inset: max(0px, calc((var(--_height) - var(--_icon)) / 2 - var(--area-stroke-width)));
+    padding-inline-end: calc(var(--_chevron-inset) + var(--_icon) + var(--_gap));
+    background-position: right var(--_chevron-inset) center;
+  }
+  .area-select:dir(rtl) { background-position: left var(--_chevron-inset) center; }
+
+  /* A nested backplate is measured by its own box, not by the parent's icon tier. */
+  .area-input:has(> .area-button:last-child) {
+    --_box-end: var(--area-control-md);
+  }
+  .area-input:has(> .area-button--xs:last-child) { --_box-end: var(--area-control-xs); }
+  .area-input:has(> .area-button--sm:last-child) { --_box-end: var(--area-control-sm); }
+  .area-input:has(> .area-button--lg:last-child) { --_box-end: var(--area-control-lg); }
+  .area-input:has(> .area-button--xl:last-child) { --_box-end: var(--area-control-xl); }
+  .area-menu__item:has(> .area-menu__shortcut > .area-kbd) { --_box-end: var(--area-space-20); }
+  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--small) { --_box-end: var(--area-space-16); }
+  .area-menu__shortcut { display: inline-flex; align-items: center; padding-inline-start: 0; }
+  .area-menu__shortcut:not(:has(> *)), .area-nav__trailing:not(:has(> *)) {
+    display: block;
+    text-box: trim-both cap alphabetic;
+    padding-block: 0.25em;
+  }
+  .area-nav__item:has(> .area-nav__trailing > svg:only-child) { --_box-end: var(--area-icon-md); }
+  .area-nav__trailing > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex-shrink: 0; }
+
+  /* The marker is a separate selection rail, with room reserved ahead of the label. */
+  .area-menu--marker .area-menu__item { padding-inline-start: var(--area-space-16); }
+
+  /* Trim only text slots, never SVGs or containers holding controls. Symmetric
+   * safety padding lets accents/descenders paint even in an ellipsized label. */
+  .area-button__label, .area-chip__label, .area-badge__label,
+  .area-segmented__label, .area-tabs__label, .area-token__label,
+  .area-nav__text, .area-menu__text, .area-input__affix,
+  .area-kbd__key, .area-avatar > span,
+  .area-nav__label > span, .area-menu__label > span {
+    text-box: trim-both cap alphabetic;
+    padding-block: 0.25em;
+    min-inline-size: 0;
+  }
+  .area-chip__label, .area-segmented__label, .area-tabs__label, .area-token__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Content-sized plates use equal insets; text trim removes outer leading but
+   * preserves leading between lines. No fixed height or clipping of prose. */
+  .area-tooltip { padding: var(--area-space-8); text-box: trim-both cap alphabetic; }
+  .area-card__title, .area-card__description, .area-dialog__title,
+  .area-dialog__description, .area-panel__title, .area-panel__heading,
+  .area-alert__title, .area-alert__description, .area-toast > div {
+    text-box: trim-both cap alphabetic;
+  }
+  /* Keep normal leading between a title and description; trim only the
+   * first and last edge of the combined text block. */
+  .area-alert__title { text-box-trim: trim-start; }
+  .area-alert__description { text-box-trim: trim-end; }
+  .area-alert__title:only-child, .area-alert__description:only-child { text-box-trim: trim-both; }
+  .area-alert, .area-toast {
+    align-items: flex-start;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    gap: var(--area-gap-md);
+  }
+  .area-alert:has(> .area-alert__icon) > .area-alert__content,
+  .area-toast:has(> .area-toast__icon) > div {
+    /* First-line cap center aligns to the icon center. The icon keeps equal
+     * top/leading insets; subsequent lines are allowed to extend below it. */
+    margin-block-start: max(0px, calc((var(--area-icon-md) - 1cap) / 2));
+  }
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-checkbox, .area-radio, .area-switch { align-items: flex-start; }
+    .area-choice-label {
+      font-size: var(--_text);
+      line-height: var(--_leading);
+      margin-block-start: max(0px, calc((var(--_size) - 1cap) / 2));
+    }
+    .area-switch > .area-choice-label {
+      margin-block-start: max(0px, calc((var(--_track-block) - 1cap) / 2));
+    }
+    .area-choice-label:has(> .area-choice-label__description:only-child) { font-size: var(--area-text-xs-size); }
+    .area-choice-label__title { text-box: trim-start cap alphabetic; }
+    .area-choice-label__description { text-box: trim-end cap alphabetic; }
+    .area-choice-label__title:only-child, .area-choice-label__description:only-child { text-box-trim: trim-both; }
+  }
+  .area-alert__icon, .area-toast__icon { display: inline-flex; align-items: center; justify-content: center; }
+  .area-alert__icon > svg, .area-toast__icon > svg { display: block; inline-size: 100%; block-size: 100%; }
+
+  .area-token {
+    --_token-height: calc(1em + var(--area-space-8));
+    block-size: var(--_token-height);
+    padding-block: 0;
+    padding-inline: calc((var(--_token-height) - 1cap) / 2 - var(--area-border-width));
+  }
+  .area-token:has(> .area-token__swatch:first-child) {
+    padding-inline-start: calc(var(--area-space-4) - var(--area-border-width));
+  }
+  .area-token:has(> .area-token__swatch:last-child) {
+    padding-inline-end: calc(var(--area-space-4) - var(--area-border-width));
+  }
+  .area-textarea { padding: var(--_gutter); }
+  .area-code { padding: var(--area-space-4); text-box: trim-both cap alphabetic; }
+  .area-button--align-start { margin-inline-start: calc((var(--_box-height) - var(--_box-start)) / -2); }
+  .area-button--align-end { margin-inline-end: calc((var(--_box-height) - var(--_box-end)) / -2); }
+  .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-control-xs); }
+  .area-nav__item:has(> .area-nav__trailing > .area-kbd:last-child) { --_box-end: var(--area-space-20); }
+  .area-nav__item:has(> .area-nav__trailing > .area-kbd--small:last-child) { --_box-end: var(--area-space-16); }
+
+}

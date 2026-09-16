@@ -1,0 +1,260 @@
+{
+  "total": 5728,
+  "failures": [
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--xs",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "start",
+      "horizontal": 9,
+      "top": 4,
+      "bottom": 4,
+      "error": 5
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--xs",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "end",
+      "horizontal": 9,
+      "top": 4,
+      "bottom": 4,
+      "error": 5
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--xs",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "start",
+      "horizontal": 7,
+      "top": 6,
+      "bottom": 6,
+      "error": 1
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--xs",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "end",
+      "horizontal": 7,
+      "top": 6,
+      "bottom": 6,
+      "error": 1
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--xs",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "start",
+      "horizontal": 9,
+      "top": 4,
+      "bottom": 4,
+      "error": 5
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--xs",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "end",
+      "horizontal": 7,
+      "top": 6,
+      "bottom": 6,
+      "error": 1
+    },
+    {
+      "component": "area-chip area-chip--xs",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "start",
+      "horizontal": 9,
+      "top": 6,
+      "bottom": 6,
+      "error": 3
+    },
+    {
+      "component": "area-chip area-chip--xs",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "end",
+      "horizontal": 9,
+      "top": 4,
+      "bottom": 4,
+      "error": 5
+    },
+    {
+      "component": "area-segmented__item",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "start",
+      "horizontal": 5,
+      "top": 4,
+      "bottom": 4,
+      "error": 1
+    },
+    {
+      "component": "area-segmented__item",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "end",
+      "horizontal": 9,
+      "top": 2,
+      "bottom": 2,
+      "error": 7
+    },
+    {
+      "component": "area-segmented__item",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "start",
+      "horizontal": 9,
+      "top": 2,
+      "bottom": 2,
+      "error": 7
+    },
+    {
+      "component": "area-segmented__item",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "end",
+      "horizontal": 9,
+      "top": 2,
+      "bottom": 2,
+      "error": 7
+    },
+    {
+      "component": "area-input area-input--xs",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "start",
+      "horizontal": 7,
+      "top": 6,
+      "bottom": 6,
+      "error": 1
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--sm",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "start",
+      "horizontal": 11,
+      "top": 5,
+      "bottom": 5,
+      "error": 6
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--sm",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "end",
+      "horizontal": 11,
+      "top": 5,
+      "bottom": 5,
+      "error": 6
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--sm",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "start",
+      "horizontal": 7,
+      "top": 6,
+      "bottom": 6,
+      "error": 1
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--sm",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "end",
+      "horizontal": 7,
+      "top": 6,
+      "bottom": 6,
+      "error": 1
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--sm",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "start",
+      "horizontal": 11,
+      "top": 5,
+      "bottom": 5,
+      "error": 6
+    },
+    {
+      "component": "area-button area-button--soft area-button--neutral area-button--sm",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "end",
+      "horizontal": 7,
+      "top": 6,
+      "bottom": 6,
+      "error": 1
+    },
+    {
+      "component": "area-chip area-chip--sm",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "start",
+      "horizontal": 11,
+      "top": 8,
+      "bottom": 8,
+      "error": 3
+    },
+    {
+      "component": "area-chip area-chip--sm",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "end",
+      "horizontal": 11,
+      "top": 5,
+      "bottom": 5,
+      "error": 6
+    },
+    {
+      "component": "area-segmented__item",
+      "profile": "default · geist · ltr · standard",
+      "kind": "shape",
+      "side": "start",
+      "horizontal": 7,
+      "top": 6,
+      "bottom": 6,
+      "error": 1
+    },
+    {
+      "component": "area-segmented__item",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "end",
+      "horizontal": 11,
+      "top": 3,
+      "bottom": 3,
+      "error": 8
+    },
+    {
+      "component": "area-segmented__item",
+      "profile": "default · geist · ltr · standard",
+      "kind": "text",
+      "side": "start",
+      "horizontal": 11,
+      "top": 3,
+      "bottom": 3,
+      "error": 8
+    }
+  ],
+  "maxError": 16.3203125,
+  "textBoxSupported": true,
+  "profiles": 32,
+  "overflow": false,
+  "counts": {
+    "shape": 1600,
+    "text": 1600,
+    "native-chevron": 160,
+    "first-line": 544,
+    "multiline-inset": 64,
+    "tier-icon": 480,
+    "tier-type": 640,
+    "tier-gap": 640
+  },
+  "failureCount": 3592
+}

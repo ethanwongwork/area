@@ -43,7 +43,7 @@ export const NavGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, NavGroupProps
 ) {
   return (
     <div ref={ref} className={cx("area-nav__group", className)} {...rest}>
-      {label ? <div className="area-nav__label">{label}</div> : null}
+      {label ? <div className="area-nav__label"><span>{label}</span></div> : null}
       {children}
     </div>
   );

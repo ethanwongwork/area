@@ -1,3 +1,4 @@
+import { buildInsetFixture } from "./inset-fixture.mjs";
 import { docsOutput } from "./output.mjs";
 import { baseTokens } from "../../../packages/tokens/src/emit/base.ts";
 import { buildLab } from "./lab.mjs";
@@ -82,7 +83,7 @@ function axisSegmented(axis, size = "xs") {
   const items = axis.presets
     .map(
       (p) =>
-        `<button type="button" role="radio" class="area-segmented__item" data-value="${p.id}" aria-checked="${p.id === axis.defaultPreset}"${p.id === axis.defaultPreset ? " data-selected" : ""}>${escapeHtml(p.label)}</button>`,
+        `<button type="button" role="radio" class="area-segmented__item" data-value="${p.id}" aria-checked="${p.id === axis.defaultPreset}"${p.id === axis.defaultPreset ? " data-selected" : ""}><span class="area-segmented__label">${escapeHtml(p.label)}</span></button>`,
     )
     .join("");
   return `<div class="area-segmented area-segmented--${size} area-segmented--full-width" role="radiogroup" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}">${items}</div>`;
@@ -141,7 +142,7 @@ function axisChips(axis) {
       const selected = preset.id === axis.defaultPreset;
       const swatch = `var(--area-${preset.id}-${tokens.scales[preset.id].solid.level.light})`;
       return `<button type="button" class="area-chip area-chip--xs" data-value="${preset.id}" aria-pressed="${selected}"${selected ? " data-selected" : ""}>
-        <span class="area-chip__swatch" style="background:${swatch}" aria-hidden="true"></span>${escapeHtml(preset.label)}
+        <span class="area-chip__swatch" style="background:${swatch}" aria-hidden="true"></span><span class="area-chip__label">${escapeHtml(preset.label)}</span>
       </button>`;
     })
     .join("");
@@ -251,7 +252,7 @@ function sidebar(activeSlug) {
 
   const group = (title, links) =>
     `<nav class="area-menu area-menu--inline" aria-label="${escapeHtml(title)}">
-      <div class="area-menu__label">${escapeHtml(title)}</div>
+      <div class="area-menu__label"><span>${escapeHtml(title)}</span></div>
       ${links}
     </nav>`;
 
@@ -277,7 +278,7 @@ function page({ slug, title, lede, body, toc = [], wide = false }) {
    */
   const tocHtml = toc.length
     ? `<nav class="docs-toc area-menu area-menu--inline area-menu--marker" aria-label="On this page">
-      <div class="area-menu__label">On this page</div>
+      <div class="area-menu__label"><span>On this page</span></div>
       ${toc.map((t) => `<a class="area-menu__item" href="#${t.id}"${t.nested ? ' data-nested' : ""}>${escapeHtml(t.title)}</a>`).join("")}
     </nav>`
     : "";
@@ -604,10 +605,10 @@ function iconBrowser() {
     </button>`;
 
   const styleItem = (value, label, selected) =>
-    `<button type="button" role="radio" class="area-segmented__item" data-icon-style="${value}" aria-checked="${selected}"${selected ? " data-selected" : ""}>${label}</button>`;
+    `<button type="button" role="radio" class="area-segmented__item" data-icon-style="${value}" aria-checked="${selected}"${selected ? " data-selected" : ""}><span class="area-segmented__label">${label}</span></button>`;
 
   const sourceChip = (value, label, selected) =>
-    `<button type="button" class="area-chip area-chip--xs" data-icon-source="${value}" aria-pressed="${selected}"${selected ? " data-selected" : ""}>${label}</button>`;
+    `<button type="button" class="area-chip area-chip--xs" data-icon-source="${value}" aria-pressed="${selected}"${selected ? " data-selected" : ""}><span class="area-chip__label">${label}</span></button>`;
 
   return `<div class="docs-iconbrowser" id="icon-browser" data-style="regular" data-source="all">
   <div class="docs-iconbrowser__bar">
@@ -1306,7 +1307,8 @@ const pages = [
 for (const [name, html] of pages) writeFileSync(join(out, name), html, "utf8");
 
 const labPageCount = await buildLab(root, out, DOCS_CSS);
+buildInsetFixture(out, repo);
 
 console.log(`\n  @area/docs\n`);
-console.log(`  ${pages.length + labPageCount} pages, ${Object.keys(demos).length} demos`);
+console.log(`  ${pages.length + labPageCount + 2} pages, ${Object.keys(demos).length} demos`);
 console.log(`  dist/ -> ${out}\n`);

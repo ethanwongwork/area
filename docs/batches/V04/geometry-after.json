@@ -1,0 +1,18 @@
+{
+  "total": 5728,
+  "failures": [],
+  "maxError": 0.0078125,
+  "textBoxSupported": true,
+  "profiles": 32,
+  "overflow": false,
+  "counts": {
+    "shape": 1600,
+    "text": 1600,
+    "native-chevron": 160,
+    "first-line": 544,
+    "multiline-inset": 64,
+    "tier-icon": 480,
+    "tier-type": 640,
+    "tier-gap": 640
+  }
+}

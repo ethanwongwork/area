@@ -121,7 +121,7 @@ export function customizer(inspectorHtml) {
 export function tokenChip(name, { swatch, onColor = false } = {}) {
   return `<span class="area-token${onColor ? " area-token--on-color" : ""}">${
     swatch ? `<span class="area-token__swatch" style="background:${swatch}"></span>` : ""
-  }${escapeHtml(name)}</span>`;
+  }<span class="area-token__label">${escapeHtml(name)}</span></span>`;
 }
 
 /**
@@ -137,7 +137,7 @@ export function tokenChip(name, { swatch, onColor = false } = {}) {
  */
 export function viewToggle(id, { grid, table: tableHtml, initial = "table" }) {
   const option = (value, label) =>
-    `<button type="button" role="radio" class="area-segmented__item" data-view-value="${value}" aria-checked="${value === initial}"${value === initial ? " data-selected" : ""}>${label}</button>`;
+    `<button type="button" role="radio" class="area-segmented__item" data-view-value="${value}" aria-checked="${value === initial}"${value === initial ? " data-selected" : ""}><span class="area-segmented__label">${label}</span></button>`;
 
   return `<div class="docs-view" data-view="${initial}" id="view-${id}">
   <div class="docs-view__bar">

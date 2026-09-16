@@ -183,6 +183,63 @@ Linear at 32 and Notion at 28 all ship exactly 6px. Radius is owned entirely by 
 axis, flat at every tier. Area's default is one step rounder than that group at 8px, which
 is shadcn/ui's number; the 6px preset is still there for anyone who wants the Primer look.
 
+## Optical insets
+
+`packages/styles/src/inset.css` owns the shared content-placement contract. The V04
+reference uses square red icon boxes and one consistent text reference. All glyphs
+use the full square slot, regardless of the ink's shape or orientation; never crop,
+rescale or offset individual icons. Swatches and other shapes use their own boxes.
+
+For an outer backplate height H and an edge item's reference height B, the desired
+outer inset is `(H - B) / 2`. CSS padding is that inset minus the border width.
+Leading and trailing edges are calculated independently. A 32px plate around a 16px
+icon therefore has 8px outer spacing on the top, bottom and adjoining side, including
+its border. An inset segmented item uses its own height, not its track's height.
+Gutter tokens still serve layout spacing; fixed control edges use the content-derived
+inset instead of treating a gutter as universal padding.
+
+Text slots use `text-box: trim-both cap alphabetic` and `1cap` as the font reference.
+This aligns capitals to the same center as icons without measuring individual words.
+Symmetric safety padding preserves accents and descenders in ellipsized labels; it
+is not included in the optical reference. Text naturally extends beyond this reference
+for descenders and accents: never shift individual words to compensate. Browsers
+without text-box support retain line-box alignment for fixed-height controls.
+Native input/select/textarea text retains the browser's editing metrics; native glyph
+placement is not guaranteed to match trimmed DOM text across engines.
+
+Buttons, fields, chips, segmented items, tabs, menu/nav rows, badges, tokens and keyboard
+chords share this policy. Nested backplates use their own height. Content-sized surfaces
+use equal padding around their content group and trimmed outer text leading. In multiline
+messages, the icon keeps equal top and leading insets; its center aligns with the first
+line's cap center, and more space below it is expected. Only the combined text block's
+outer edges are trimmed; leading between title and description remains intact. Full-width controls retain intentional interior expansion.
+The marker menu's selection rail reserves a separate leading lane. Inline code remains
+wrappable, and native textareas remain resizable. Neither is made into a fixed-height box.
+
+**Size by role and tier, never by glyph.** Button, Input, Select, Chip and Segmented
+use the same tier's icon, text and gap tokens. Default xs/sm/md/lg/xl pairs are
+12/12, 16/13, 16/14, 16/14 and 24/16px (icon box / text size). Compact pairs are
+12/11, 12/12, 16/13, 16/14 and 16/14px. Larger controls can add whitespace without
+inflating their font; the icon ramp deliberately has only 12, 16 and 24px slots.
+Chip swatches share its icon slot. Status dots remain smaller semantic indicators;
+they are not substitute icons. Never thicken a stroke or scale an individual icon
+inside its slot to compensate for a narrow or horizontal glyph.
+
+Menu/Nav and status messages (Alert/Toast) use the medium UI pairing: density-aware
+UI text with the medium icon. Multiline Checkbox/Radio/Switch labels also align their
+first line to the control box. Kbd uses native keyboard glyphs with its own text scale;
+it is a text chord, not an icon. Text weight remains 400 or 500 independently of size.
+Use the supplied Fluent Regular and vendored Area geometry; do not manufacture a new
+weight by altering stroke widths. Text-only content surfaces retain their content type.
+
+Framework-free markup must use the same label slots as React: `__label` on Button,
+Chip, Badge, Segmented, Tabs and Token; `__text` on Nav and Menu. MenuItem wraps primitive
+text children; composed menu content supplies its explicit icon/text slots. Group
+heading text uses a span inside `area-nav__label` / `area-menu__label`.
+
+Verify with the [V04 specimen](batches/V04/README.md), actual bounding rectangles and
+browser screenshots; font smoothing and path-specific overshoot are not spacing errors.
+
 ## Tones
 
 Eight public tone values: `neutral`, `accent`, `info`, `success`, `warning`, `caution`,

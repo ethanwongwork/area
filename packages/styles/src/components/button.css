@@ -108,20 +108,7 @@
     text-overflow: ellipsis;
   }
 
-  /*
-   * Optical padding. A leading icon is a hard-edged shape where a label is not, so an
-   * equal padding either side reads as too much space on the icon side. Setting the
-   * icon-side padding to (height - icon) / 2 centres the icon in the same square the
-   * control's own corner radius is cut from, which is what makes it look even.
-   */
-  .area-button:has(> .area-button__icon:first-child) {
-    padding-inline-start: calc((var(--_height) - var(--_icon)) / 2);
-  }
-
-  .area-button:has(> .area-button__icon:last-child) {
-    padding-inline-end: calc((var(--_height) - var(--_icon)) / 2);
-  }
-
+  /* Outer-edge optical insets are shared in inset.css. */
   .area-button--icon-only {
     padding-inline: 0;
     inline-size: var(--_height);

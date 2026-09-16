@@ -165,6 +165,7 @@
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
+    --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
 
@@ -215,9 +216,9 @@
     opacity: 0.5;
   }
 
-  .area-select--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_icon: var(--area-icon-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
-  .area-select--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-select--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-select--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
-  .area-select--xl { --_height: var(--area-control-xl); --_gutter: var(--area-gutter-xl); --_icon: var(--area-icon-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
+  .area-select--xs { --_height: var(--area-control-xs); --_gap: var(--area-gap-xs); --_gutter: var(--area-gutter-xs); --_icon: var(--area-icon-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
+  .area-select--sm { --_height: var(--area-control-sm); --_gap: var(--area-gap-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-select--md { --_height: var(--area-control-md); --_gap: var(--area-gap-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-select--lg { --_height: var(--area-control-lg); --_gap: var(--area-gap-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-select--xl { --_height: var(--area-control-xl); --_gap: var(--area-gap-xl); --_gutter: var(--area-gutter-xl); --_icon: var(--area-icon-xl); --_text: var(--area-control-xl-text); --_leading: var(--area-control-xl-leading); }
 }

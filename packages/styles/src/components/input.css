@@ -101,14 +101,7 @@
     white-space: nowrap;
   }
 
-  /* Same optical inset as Button, for the same reason. */
-  .area-input:has(> .area-input__icon:first-child) {
-    padding-inline-start: calc((var(--_height) - var(--_icon)) / 2);
-  }
-
-  .area-input:has(> .area-input__icon:last-child) {
-    padding-inline-end: calc((var(--_height) - var(--_icon)) / 2);
-  }
+  /* Outer-edge optical insets are shared in inset.css. */
 
   .area-input--xs { --_height: var(--area-control-xs); --_gutter: var(--area-gutter-xs); --_icon: var(--area-icon-xs); --_gap: var(--area-gap-xs); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
   .area-input--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
