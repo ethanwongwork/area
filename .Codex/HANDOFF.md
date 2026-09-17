@@ -1,9 +1,9 @@
-# Handoff — 2026-09-16
+# Handoff — 2026-09-17
 
-**Checkpoint update:** Textarea audit, shared 24px Code/Token, compact docs rails, and named radius families are complete in `af4a90b`. Verification: 18,104 tests passed; 344 contrast passes/0 failures across 66 themes; build/docs/typecheck/diff check passed. Radius is now `sharp/xs/sm/md/lg/xl/pill`; `xl` curves 4/8/10/12/14px across default button tiers, while compact caps at 32% of height. Next: audit Select.
+**Checkpoint update:** Radius repair plus Nav and Select audits are complete in `384e782`. Verification: 18,104 tests passed; 344 contrast passes/0 failures across 66 themes; build/docs/typecheck/manifest parity/diff check passed. This record supersedes the older session detail below.
 
-**Branch** `main` · **Last commit** checkpoint commit; run `git log -1 --oneline` after checkout
-**State** Green: the working tree is checkpointed after the commit and push described below.
+**Branch** `main` · **Last implementation commit** `384e782 feat: audit nav and select controls`
+**State** Green once this handoff commit has been pushed.
 
 ## Where things stand
 
@@ -39,18 +39,17 @@ resumed after this checkpoint rather than the prior V04-only snapshot.
 
 ## In flight
 
-Nothing intentional — the tree should be clean after the checkpoint commit and GitHub push.
-The next component audit is **Textarea**, the next queued sibling after completed Field and
-Input. Read `.agents/skills/component-audit/SKILL.md`, `docs/COMPONENT_AUDIT.md`, and
-`docs/component-audits/input.md` first.
+Nothing intentional. The tree should be clean after this handoff commit and GitHub push.
+The next component audit is **Checkbox**. Read `.agents/skills/component-audit/SKILL.md`,
+`docs/COMPONENT_AUDIT.md`, and `docs/component-audits/select.md` first.
 
 ## Next
 
-1. Audit Textarea against all seven required benchmarks before changing its contract.
-2. Continue the stated audit order through Select and choice controls; treat Tag/TokenInput
-   as a separate behavior family when that work is explicitly requested.
-3. Keep browser validation for visual component changes: built docs at desktop/narrow widths,
-   compact/default UI scale, representative themes, and radius extremes.
+1. Audit Checkbox against all seven required benchmarks before changing its contract.
+2. Keep the Nav collapsed/drawer shell, Nav-specific size family, Combobox, and MultiSelect
+   as separate audits; do not infer them from the closed controls.
+3. Keep browser validation for visual component changes at compact/default UI, radius extremes,
+   and representative themes.
 
 ## Traps
 
@@ -65,6 +64,13 @@ Input. Read `.agents/skills/component-audit/SKILL.md`, `docs/COMPONENT_AUDIT.md`
   icon, and outer plate → text. Do not solve tight icon spacing by shrinking the glyph.
 - Native editable controls retain browser-managed text metrics. Chromium measurements do
   not prove Safari/Firefox/OS-font behavior. Preserve generated/vendor icon geometry.
+- Button alone consumes `--area-radius-button-cap`; generic controls intentionally stay at
+  the 0.4 radius cap even under the Pill axis.
+- Area Nav aligns square SVG viewports and one text reference, never arbitrary path ink.
+  Direct anonymous ChatGPT comparison measured a 20px icon viewport in a 36px row but does
+  not justify a new 20px global icon token.
+- React Select deliberately excludes `multiple`; do not re-add it without a dedicated
+  MultiSelect/listbox contract.
 - Do not commit `dist/`, caches, or `node_modules/`. Stop dev before full builds if a watcher
   is rebuilding the same output.
 
@@ -76,7 +82,7 @@ Input. Read `.agents/skills/component-audit/SKILL.md`, `docs/COMPONENT_AUDIT.md`
 - `npm run build`: passed; axis integrity and styles manifest parity passed for
   **36 components**.
 - `npm run lint:manifest -w @area/styles`: passed, **36 components**.
-- `npm run build:docs`: passed, **47 pages / 130 demos**; dogfood audit passed.
+- `npm run build:docs`: passed, **47 pages / 149 demos**; dogfood audit passed.
 - `npm run typecheck`: passed after rebuilding React declarations.
 - `npm run test:contracts`: **13/13** passed.
 - `npm run test:consumer`: strict NodeNext declarations, runtime, SSR, browser bundle, CSS,

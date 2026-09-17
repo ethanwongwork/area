@@ -123,6 +123,21 @@ primitive dependencies were adopted. This checkpoint is local; push remains unau
 Current Area decisions, newest first. Earlier records are preserved in
 [the historical journal](../archive/history/journal-before-area-name.md).
 
+## 2026-09-17 — Radius repair, Nav audit, and Select audit
+
+The shared Pill axis had been capped at 40% of control height by the UI scale, so a 32px
+button painted only a 12.8px radius. Radius now owns both a generic 40% cap and a Button-only
+50% cap; the named XL radius is 16px. Nav’s docs rail is slightly wider with smaller edge
+spacing, while labelled group semantics and disabled-link behavior are complete. Direct
+anonymous ChatGPT observation established a 260px rail, 36px rows, and a 20px icon viewport,
+but Area retains its 16/24px icon ramp and aligns SVG viewports rather than glyph-path ink.
+
+Select is now audited as a native single-value control: it has a contained width, explicit
+full width, Field validation paint, semantic aliases, native optgroup examples, and a
+type-level boundary excluding multiple selection. Combobox, MultiSelect, and custom popup
+selection are separate. Build, docs, typecheck, 18,104 token tests, 344 contrast assertions
+across 66 themes, and diff check passed before checkpoint.
+
 ## 2026-09-14 — A coordinated stroke hierarchy
 
 Neutral 50 made dividers too faint beside controls that still used stronger outlines.
