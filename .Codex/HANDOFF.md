@@ -1,6 +1,6 @@
 # Handoff — 2026-09-16
 
-**Checkpoint update:** Textarea audit, shared 24px Code/Token, compact docs rails, and named radius families are complete. Verification: 18,104 tests passed; 344 contrast passes/0 failures across 66 themes; build/docs/typecheck/diff check passed. Radius is now `sharp/xs/sm/md/lg/xl/pill`; `xl` curves 4/8/10/12/14px across default button tiers, while compact caps at 32% of height. Next: commit/push this checkpoint, then audit Select.
+**Checkpoint update:** Textarea audit, shared 24px Code/Token, compact docs rails, and named radius families are complete in `af4a90b`. Verification: 18,104 tests passed; 344 contrast passes/0 failures across 66 themes; build/docs/typecheck/diff check passed. Radius is now `sharp/xs/sm/md/lg/xl/pill`; `xl` curves 4/8/10/12/14px across default button tiers, while compact caps at 32% of height. Next: audit Select.
 
 **Branch** `main` · **Last commit** checkpoint commit; run `git log -1 --oneline` after checkout
 **State** Green: the working tree is checkpointed after the commit and push described below.
