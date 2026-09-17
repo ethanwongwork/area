@@ -93,6 +93,7 @@ export const select = {
   block: "area-select",
   description: "Picks one value from a list.",
   variants: { size: ["xs", "sm", "md", "lg", "xl"] },
+  booleans: ["full-width"],
   states: ["invalid", "disabled"],
   stateAttributes: { disabled: "disabled", invalid: "aria-invalid" },
   elements: [],

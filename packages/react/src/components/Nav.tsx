@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useId } from "react";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 import { cx, navVariants, MANIFESTS, type VariantProps } from "../variants.ts";
 
@@ -41,9 +41,10 @@ export const NavGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, NavGroupProps
   { label, className, children, ...rest },
   ref,
 ) {
+  const labelId = useId();
   return (
-    <div ref={ref} className={cx("area-nav__group", className)} {...rest}>
-      {label ? <div className="area-nav__label"><span>{label}</span></div> : null}
+    <div ref={ref} className={cx("area-nav__group", className)} role={label ? "group" : undefined} aria-labelledby={label ? labelId : undefined} {...rest}>
+      {label ? <div className="area-nav__label" id={labelId}><span>{label}</span></div> : null}
       {children}
     </div>
   );
@@ -61,7 +62,7 @@ export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
 }
 
 export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProps>(function NavItem(
-  { current, icon, trailing, disabled, className, children, ...rest },
+  { current, icon, trailing, disabled, className, children, href, onClick, tabIndex, ...rest },
   ref,
 ) {
   return (
@@ -73,6 +74,9 @@ export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProp
       aria-current={current ? "page" : undefined}
       data-disabled={disabled ? "" : undefined}
       aria-disabled={disabled || undefined}
+      href={disabled ? undefined : href}
+      tabIndex={disabled ? -1 : tabIndex}
+      onClick={disabled ? (event) => { event.preventDefault(); } : onClick}
       {...rest}
     >
       {icon ? (

@@ -160,9 +160,11 @@
    * keyboard behaviour intact.
    */
   .area-select {
-    --_border: var(--area-edge-control);
-    --_border-hover: var(--area-edge-control-hover);
+    --_border: var(--area-select-edge);
+    --_border-hover: var(--area-select-edge-hover);
     --_border-focus: var(--area-field-focus-color);
+    --_focus-outline: var(--area-field-focus-color);
+    --_focus-halo: var(--area-shadow-color);
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
@@ -173,7 +175,8 @@
     appearance: none;
     display: inline-flex;
     align-items: center;
-    inline-size: 100%;
+    inline-size: var(--area-select-inline-size);
+    max-inline-size: 100%;
     block-size: var(--_height);
     padding-inline: var(--_gutter);
     padding-inline-end: calc(var(--_gutter) + var(--_icon) + var(--area-space-4));
@@ -181,8 +184,8 @@
     border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
-    background-color: var(--area-bg-surface);
-    color: var(--area-fg-default);
+    background-color: var(--area-select-bg);
+    color: var(--area-select-text);
     font-size: var(--_text);
     line-height: var(--_leading);
     box-shadow: var(--area-shadow-1);
@@ -198,22 +201,46 @@
 
   [dir="rtl"] .area-select { background-position: left var(--_gutter) center; }
 
+  .area-select--full-width { inline-size: 100%; }
+
   .area-select:hover:not(:disabled):not(:focus) { border-color: var(--_border-hover); }
 
   .area-select:focus {
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color);
-    outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }
 
+  .area-select[data-invalid],
   .area-select[aria-invalid="true"] {
-    --_border: var(--area-fg-danger);
-    --_border-hover: var(--area-fg-danger);
-    --_border-focus: var(--area-fg-danger);
+    --_border: var(--area-select-invalid-color);
+    --_border-hover: var(--area-select-invalid-color);
+    --_border-focus: var(--area-select-invalid-color);
+    --_focus-outline: var(--area-select-invalid-color);
+    --_focus-halo: var(--area-select-invalid-halo-color);
+  }
+
+  .area-select[data-success] {
+    --_border: var(--area-select-success-color);
+    --_border-hover: var(--area-select-success-color);
+    --_border-focus: var(--area-select-success-color);
+    --_focus-outline: var(--area-select-success-color);
+    --_focus-halo: var(--area-select-success-halo-color);
+  }
+
+  .area-select[data-warning] {
+    --_border: var(--area-select-warning-color);
+    --_border-hover: var(--area-select-warning-color);
+    --_border-focus: var(--area-select-warning-color);
+    --_focus-outline: var(--area-select-warning-color);
+    --_focus-halo: var(--area-select-warning-halo-color);
   }
 
   .area-select:disabled {
+    --_border: var(--area-border-faint);
+    background-color: var(--area-select-bg-disabled);
+    color: var(--area-fg-disabled);
     cursor: not-allowed;
     opacity: 0.5;
   }

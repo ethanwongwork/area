@@ -7,15 +7,44 @@ type SwitchSize = NonNullable<VariantProps<typeof MANIFESTS.switch>["size"]>;
 
 /* --- Select / Textarea ---------------------------------------------------- */
 
-export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> {
+export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "size" | "multiple"> {
   size?: VariantProps<typeof MANIFESTS.select>["size"];
+  /** Stretch to the available inline size. The default is a contained 16rem measure. */
+  fullWidth?: boolean;
+  /** Internal Field-to-Select validation bridge; plain HTML uses the matching data attribute. */
+  "data-validation-status"?: "error" | "success" | "warning";
+  /** Semantic validation paint. `invalid` remains the compatibility alias for `error`. */
+  validationStatus?: "error" | "success" | "warning";
+  invalid?: boolean;
 }
 
 export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>(function Select(
-  { size, className, ...rest },
+  {
+    size,
+    fullWidth,
+    validationStatus,
+    invalid,
+    className,
+    "aria-invalid": ariaInvalid,
+    "data-validation-status": fieldValidationStatus,
+    ...rest
+  },
   ref,
 ) {
-  return <select ref={ref} className={selectVariants({ size }, className)} {...rest} />;
+  const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
+  const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
+
+  return (
+    <select
+      ref={ref}
+      className={selectVariants({ size, fullWidth }, className)}
+      aria-invalid={invalidState ? true : ariaInvalid}
+      {...(invalidState ? { "data-invalid": "" } : {})}
+      {...(resolvedValidationStatus === "success" ? { "data-success": "" } : {})}
+      {...(resolvedValidationStatus === "warning" ? { "data-warning": "" } : {})}
+      {...rest}
+    />
+  );
 });
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {

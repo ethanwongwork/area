@@ -28,7 +28,7 @@ interface TierSpec {
   leading: number;
 }
 
-export function densityTokens(tiers: Record<Tier, TierSpec>, radiusCap = 0.4) {
+export function densityTokens(tiers: Record<Tier, TierSpec>) {
   const out: Record<string, string | number> = {};
   for (const [name, tier] of Object.entries(tiers)) {
     out[`control-${name}`] = `${tier.height}px`;
@@ -48,8 +48,6 @@ export function densityTokens(tiers: Record<Tier, TierSpec>, radiusCap = 0.4) {
   const medium = tiers.md;
   out["ui-size"] = `var(--area-size-${medium.size})`;
   out["ui-leading"] = `var(--area-leading-${medium.leading})`;
-  out["ui-radius-cap"] = String(radiusCap);
-
   return out;
 }
 

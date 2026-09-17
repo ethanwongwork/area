@@ -201,7 +201,7 @@ export const DOCS_CSS = `
 @layer area.base {
   :root {
     /* Site layout. Not design-system tokens: these describe this documentation site. */
-    --docs-sidebar: 184px;
+    --docs-sidebar: 208px;
     /*
      * The site's own spacing, derived from the density axis rather than fixed, so the
      * documentation tightens with the system it documents instead of staying put while the
@@ -292,15 +292,12 @@ export const DOCS_CSS = `
   .docs-sidebar__body { padding-block-start: 0; }
 
   /* Rails are denser than a floating inspector: normal-sized controls, smaller inset. */
-  .docs-sidebar,
-  .docs-inspector { --_inset: var(--area-gutter-sm); }
-
   /*
    * The seam between nav groups. Each group already opens with a label that occupies a full
    * item row, so the label is doing most of the separating on its own -- 12 on top of that
    * read as a gap between three lists rather than as one list with headings.
    */
-  .docs-sidebar .area-menu + .area-menu { margin-block-start: var(--area-space-4); }
+  .docs-sidebar .area-menu + .area-menu { margin-block-start: 0; }
 
   .docs-inspector__actions { display: flex; align-items: center; gap: var(--area-space-2); }
 
@@ -1090,7 +1087,7 @@ export const DOCS_SCRIPT = `
   if (!shell) return;
 
   var KEY = "area-docs-rail-widths";
-  var limits = { nav: [176, 280], panel: [220, 360] };
+  var limits = { nav: [192, 320], panel: [220, 360] };
   var widths = {};
   try { widths = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
 

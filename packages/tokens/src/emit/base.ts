@@ -147,6 +147,20 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}textarea-warning-color`]: `var(${PREFIX}input-warning-color)`,
     [`${PREFIX}textarea-warning-halo-color`]: `var(${PREFIX}input-warning-halo-color)`,
     [`${PREFIX}textarea-inline-size`]: `var(${PREFIX}input-inline-size)`,
+    // Select is a native, single-value editable control. These aliases keep its visual
+    // contract independently themeable while sharing the established Input endpoints.
+    [`${PREFIX}select-bg`]: `var(${PREFIX}input-bg)`,
+    [`${PREFIX}select-bg-disabled`]: `var(${PREFIX}input-bg-disabled)`,
+    [`${PREFIX}select-edge`]: `var(${PREFIX}input-edge)`,
+    [`${PREFIX}select-edge-hover`]: `var(${PREFIX}input-edge-hover)`,
+    [`${PREFIX}select-text`]: `var(${PREFIX}input-text)`,
+    [`${PREFIX}select-invalid-color`]: `var(${PREFIX}input-invalid-color)`,
+    [`${PREFIX}select-invalid-halo-color`]: `var(${PREFIX}input-invalid-halo-color)`,
+    [`${PREFIX}select-success-color`]: `var(${PREFIX}input-success-color)`,
+    [`${PREFIX}select-success-halo-color`]: `var(${PREFIX}input-success-halo-color)`,
+    [`${PREFIX}select-warning-color`]: `var(${PREFIX}input-warning-color)`,
+    [`${PREFIX}select-warning-halo-color`]: `var(${PREFIX}input-warning-halo-color)`,
+    [`${PREFIX}select-inline-size`]: `var(${PREFIX}input-inline-size)`,
     [`${PREFIX}field-error-color`]: `var(${PREFIX}fg-danger-vivid)`,
     // Token is a static design-token reference, not a selectable tag or metadata badge.
     // These aliases let a documentation surface tune that reference without changing Code,

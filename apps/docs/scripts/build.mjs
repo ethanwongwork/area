@@ -176,7 +176,7 @@ function sidebar(activeSlug) {
       ${links}
     </nav>`;
 
-  return `<aside class="docs-sidebar area-panel area-panel--md area-panel--flush area-panel--bare-bar">
+  return `<aside class="docs-sidebar area-panel area-panel--xs area-panel--flush area-panel--bare-bar">
   <div class="area-panel__bar">
     <a class="docs-wordmark" href="./index.html">area</a>
     ${railToggle("nav", "Hide navigation")}
@@ -186,7 +186,7 @@ function sidebar(activeSlug) {
   ${group("Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   ${group("Components", COMPONENT_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   </div>
-  <button type="button" class="docs-rail-resizer" data-resize-rail="nav" aria-label="Resize navigation" aria-orientation="vertical" aria-valuemin="176" aria-valuemax="280" aria-valuenow="192"></button>
+  <button type="button" class="docs-rail-resizer" data-resize-rail="nav" aria-label="Resize navigation" aria-orientation="vertical" aria-valuemin="192" aria-valuemax="320" aria-valuenow="208"></button>
 </aside>`;
 }
 

@@ -150,10 +150,50 @@ export const TextareaField = () => (
 export const TextareaResizeNone = () => <Textarea resize="none" rows={3} aria-label="Fixed message area" placeholder="Resize disabled" />;
 
 export const SelectDefault = () => (
-  <Select defaultValue="md">
+  <Select aria-label="Control size" defaultValue="md">
     <option value="sm">Small</option>
     <option value="md">Medium</option>
     <option value="lg">Large</option>
+  </Select>
+);
+
+export const SelectSizes = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-select-inline-size)" }}>
+    <Select size="xs" aria-label="Extra small size" defaultValue="xs"><option value="xs">Extra small</option></Select>
+    <Select size="sm" aria-label="Small size" defaultValue="sm"><option value="sm">Small</option></Select>
+    <Select size="md" aria-label="Medium size" defaultValue="md"><option value="md">Medium</option></Select>
+    <Select size="lg" aria-label="Large size" defaultValue="lg"><option value="lg">Large</option></Select>
+    <Select size="xl" aria-label="Extra large size" defaultValue="xl"><option value="xl">Extra large</option></Select>
+  </div>
+);
+
+export const SelectField = () => (
+  <Field label="Region" description="This determines the default data location." required>
+    <Select defaultValue="us"><option value="us">United States</option><option value="eu">European Union</option><option value="apac">Asia Pacific</option></Select>
+  </Field>
+);
+
+export const SelectInvalid = () => (
+  <Field label="Framework" error="Select a framework." required>
+    <Select defaultValue=""><option value="">Select a framework</option><option value="react">React</option><option value="vue">Vue</option></Select>
+  </Field>
+);
+
+export const SelectValidation = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
+    <Select validationStatus="success" aria-label="Verified region" defaultValue="us"><option value="us">United States</option></Select>
+    <Select validationStatus="warning" aria-label="Region with warning" defaultValue="us"><option value="us">United States</option></Select>
+  </div>
+);
+
+export const SelectDisabled = () => <Select disabled aria-label="Managed plan" defaultValue="enterprise"><option value="enterprise">Enterprise</option></Select>;
+
+export const SelectFullWidth = () => <div style={{ inlineSize: 320 }}><Select fullWidth aria-label="Full-width region" defaultValue="us"><option value="us">United States</option><option value="eu">European Union</option></Select></div>;
+
+export const SelectGroups = () => (
+  <Select aria-label="Deployment region" defaultValue="us-west">
+    <optgroup label="North America"><option value="us-west">US West</option><option value="us-east">US East</option></optgroup>
+    <optgroup label="Europe"><option value="eu-west">EU West</option><option value="eu-central">EU Central</option></optgroup>
   </Select>
 );
 

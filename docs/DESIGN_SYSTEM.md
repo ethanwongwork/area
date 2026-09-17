@@ -150,8 +150,8 @@ to carry two names. Within a preset every semantic radius is distinct; at `0` th
 0, which is the point of that preset rather than a gap in it.
 
 **A radius is capped against the box it lands on.** `--area-radius-cap` is a unitless 0.4
-(0.5 at the pill preset) and every control-height radius reads
-`min(radius, calc(height * cap))`. A radius is an absolute length and a control is not: the
+for generic controls, while `--area-radius-button-cap` reaches 0.5 at the pill preset.
+Every control-height radius reads `min(radius, calc(height * cap))`. A radius is an absolute length and a control is not: the
 browser clamps `border-radius` to half the shorter side, so the same 12px is a gentle round
 at 48px and a pill at 20px. Measured before the cap, presets 10, 12 and pill all painted the
 same 10px pill on a compact extra-small control — three choices, one result.
@@ -159,7 +159,8 @@ same 10px pill on a compact extra-small control — three choices, one result.
 The cap does not make every preset distinct on every box, and nothing can short of scaling
 radius with height, which this system deliberately does not do. What it does is bound the
 failure: where a box is too small to tell 10 from 12, both render as the same rounded
-rectangle rather than as the same lozenge. `pill` stays the one preset that reaches half.
+rectangle rather than as the same lozenge. `pill` reaches half-height on buttons; fields,
+menus, and navigation remain rounded rectangles so their role stays clear.
 
 **Concentric derivations are guarded at both ends.** `max(0px, outer - inset)` because the
 sharp preset makes the subtraction negative, and the cap because the pill preset makes it

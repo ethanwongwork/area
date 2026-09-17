@@ -59,6 +59,13 @@ export const PRACTICES = {
     `Use native ${code("minLength")}, ${code("maxLength")}, ${code("required")}, and ${code("readOnly")} semantics. Field owns explanatory validation text; Textarea only paints the matching error, success, or warning state.`,
     `Area does not auto-grow or render a character counter. Those behaviors need explicit height limits, controlled-value synchronization, and announced remaining-count policy in a richer composition.`,
   ],
+  select: [
+    `Use Select for one choice from a short, fixed list. Use Segmented for two to five immediately comparable choices, and a separately audited Combobox when filtering or freeform entry helps.`,
+    `Always pair a Select with a ${code("Field")}, or give it an ${code("aria-label")}. Keep labels concise and write options in parallel construction.`,
+    `The default is a contained 16rem measure. Set ${code("fullWidth")} only when the expected value or layout needs the available column.`,
+    `Use native ${code("optgroup")} to organize a longer fixed list. ${code("multiple")} is intentionally not part of this single-value Select contract; use a separately audited multi-select instead.`,
+    `Set ${code("invalid")} or ${code("validationStatus")} rather than colouring the edge yourself. Disabled Selects are unavailable; native Select has no read-only state.`,
+  ],
   field: [
     `Give Field one direct control child. It generates a stable id and connects the label, description and validation message; an explicit child ${code("id")} or ${code("htmlFor")} still wins.`,
     `Keep ${code("description")} as durable guidance and ${code("error")} or ${code("validation")} as a concise outcome. They may appear together when they are useful and non-redundant.`,

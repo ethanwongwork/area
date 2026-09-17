@@ -67,9 +67,14 @@ interface RadiusPreset {
    * the same pill.
    */
   cap: number;
+  /**
+   * Button-only upper bound. The Pill preset is intentionally full only on actions;
+   * editable fields and navigation rows stay recognisably rectangular.
+   */
+  buttonCap: number;
 }
 
-function radiusTokens({ control, container, small, row, cap }: RadiusPreset) {
+function radiusTokens({ control, container, small, row, cap, buttonCap }: RadiusPreset) {
   return {
     "radius-control": `${control.md}px`,
     "radius-control-xs": `${control.xs}px`,
@@ -80,10 +85,10 @@ function radiusTokens({ control, container, small, row, cap }: RadiusPreset) {
     "radius-container": `${container}px`,
     "radius-small": `${small}px`,
     "radius-row": `${row}px`,
-    // Unitless, because the box it applies to is only known where it is used. This is the
-    // same shape as the density/radius interaction: the dependent axis emits a multiplier
-    // and the relationship is written in calc() at the point of use.
-    "radius-cap": `var(--area-ui-radius-cap, ${cap})`,
+    // Unitless, because the box it applies to is only known where it is used. Radius owns
+    // both caps: UI scale owns box dimensions, never a shape decision.
+    "radius-cap": String(cap),
+    "radius-button-cap": String(buttonCap),
   };
 }
 
@@ -106,20 +111,21 @@ function radiusTokens({ control, container, small, row, cap }: RadiusPreset) {
  * available -- which is the point of that preset rather than a gap in it.
  */
 const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
-  { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, note: "Square corners throughout." },
-  { id: "xs", control: { xs: 2, sm: 2, md: 2, lg: 2, xl: 2 }, small: 0, row: 2, container: 4, cap: 0.4, note: "A near-square treatment." },
-  { id: "sm", control: { xs: 2, sm: 4, md: 4, lg: 6, xl: 6 }, small: 2, row: 6, container: 8, cap: 0.4, note: "Restrained rounding that grows with the control." },
-  { id: "md", control: { xs: 2, sm: 4, md: 6, lg: 6, xl: 8 }, small: 4, row: 8, container: 12, cap: 0.4, note: "Default: a 6px medium control with a measured container step." },
-  { id: "lg", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 10 }, small: 6, row: 10, container: 14, cap: 0.4, note: "Soft controls without turning small shapes into pills." },
-  { id: "xl", control: { xs: 4, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 12, container: 16, cap: 0.4, note: "The roundest finite family: 10px at medium and 12px at large." },
+  { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, buttonCap: 0.4, note: "Square corners throughout." },
+  { id: "xs", control: { xs: 2, sm: 2, md: 2, lg: 2, xl: 2 }, small: 0, row: 2, container: 4, cap: 0.4, buttonCap: 0.4, note: "A near-square treatment." },
+  { id: "sm", control: { xs: 2, sm: 4, md: 4, lg: 6, xl: 6 }, small: 2, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, note: "Restrained rounding that grows with the control." },
+  { id: "md", control: { xs: 2, sm: 4, md: 6, lg: 6, xl: 8 }, small: 4, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, note: "Default: a 6px medium control with a measured container step." },
+  { id: "lg", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 10 }, small: 6, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, note: "Soft controls without turning small shapes into pills." },
+  { id: "xl", control: { xs: 4, sm: 8, md: 10, lg: 12, xl: 16 }, small: 8, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, note: "The roundest finite family: 10px at medium, 12px at large, and 16px at extra large." },
   {
     id: "pill",
     control: { xs: 9999, sm: 9999, md: 9999, lg: 9999, xl: 9999 },
     small: 9999,
     row: 9999,
     container: 24,
-    cap: 0.5,
-    note: "Fully round controls. Containers stay finite, since a pill card is a lozenge.",
+    cap: 0.4,
+    buttonCap: 0.5,
+    note: "Fully round buttons. Other controls and containers stay finite, since a pill field or card obscures its role.",
   },
 ];
 
@@ -135,6 +141,7 @@ export const RADIUS_AXIS: AxisDefinition = {
     "--area-radius-small",
     "--area-radius-row",
     "--area-radius-cap",
+    "--area-radius-button-cap",
   ],
   presets: PRESETS.map(({ id, note, ...preset }) => ({
     id,

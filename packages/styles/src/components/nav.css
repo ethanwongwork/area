@@ -57,7 +57,7 @@
    * already there plus 12 here. It read as 16, which is a third too much.
    */
   .area-nav__group + .area-nav__group {
-    margin-block-start: var(--area-space-12);
+    margin-block-start: var(--area-space-8);
   }
 
   /*

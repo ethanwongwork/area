@@ -77,7 +77,7 @@ move ahead of the proposed order. `Queued` means no conclusions have been made.
 | 1 | Field | Complete | [Field audit](component-audits/field.md) |
 | 2 | Input | Complete | [Input audit](component-audits/input.md) |
 | 3 | Textarea | Complete | [Textarea audit](component-audits/textarea.md) |
-| 4 | Select | Queued | — |
+| 4 | Select | Complete | [Select audit](component-audits/select.md) |
 | 5 | Checkbox | Queued | — |
 | 6 | Radio | Queued | — |
 | 7 | Switch | Queued | — |
@@ -103,7 +103,7 @@ move ahead of the proposed order. `Queued` means no conclusions have been made.
 | 27 | Panel | Queued | — |
 | 28 | Dialog | Queued | — |
 | 29 | Popover | Queued | — |
-| 30 | Nav | Queued | — |
+| 30 | Nav | Complete | [Nav audit](component-audits/nav.md) |
 | 31 | Separator | Queued | — |
 | 32 | Table | Queued | — |
 
