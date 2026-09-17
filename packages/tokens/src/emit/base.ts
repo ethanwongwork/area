@@ -54,12 +54,12 @@ export const Z_LAYERS = {
 } as const;
 
 export function baseTokens(): Record<string, string> {
-  const out: Record<string, string> = { "--area-contrast-more": "0", "--area-focus-width": "2px", "--area-focus-offset": "2px", "--area-stroke-width": "1px" };
+  const out: Record<string, string> = { "--area-contrast-more": "0", "--area-focus-width": "2px", "--area-focus-offset": "2px", "--area-stroke-width": "1px", "--area-input-inline-size": "16rem" };
   // Keyboard legends use the same native UI face for letters and modifier symbols.
   // Keep this separate from the creative typography axis: a custom text font may lack
   // keyboard glyphs, causing individual characters to fall back at different metrics.
   out["--area-font-keyboard"] = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-  out["--area-keyboard-gap"] = "0.5ch";
+  out["--area-keyboard-gap"] = "0.25ch";
 
   // Pure black and white. Named because they are real answers, not placeholders: every
   // `fg-on-*` token resolves to one of these two after the scale measures which is
@@ -89,7 +89,7 @@ export function baseTokens(): Record<string, string> {
  * These are the only places two axes meet, and they are expressed as live calc() rather
  * than baked pixels for two reasons: baking would require a block per density-times-radius
  * combination, and custom properties inherit -- so a live calc() is what lets
- * `<aside data-area-density="compact">` correctly re-derive its own corner radius.
+ * `<aside data-area-ui="compact">` correctly re-derive its own corner radius.
  */
 export function derivedTokens(): Record<string, string> {
   return {
@@ -101,13 +101,46 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle-hover`]: `color-mix(in srgb, var(${PREFIX}border), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
-    // Text fields use a neutral focus edge in the quiet presentation and the regular
-    // accent focus edge when increased contrast is requested. The surrounding halo is
-    // deliberately translucent; the opaque inner edge still carries the indicator.
+    // Editable fields keep their existing 1px edge in the quiet presentation: focus moves
+    // it one neutral step darker and adds a tight translucent halo. Increased contrast
+    // restores the regular 2px accent outline and expands the halo by that same width.
     [`${PREFIX}field-focus-color`]:
-      `color-mix(in srgb, var(${PREFIX}stroke-control), var(${PREFIX}focus-color) calc(var(${PREFIX}contrast-more) * 100%))`,
+      `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}focus-color) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}field-focus-outline-width`]:
+      `calc(var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,
     [`${PREFIX}field-focus-halo-width`]:
-      `calc(var(${PREFIX}focus-width) + var(${PREFIX}space-4))`,
+      `calc(var(${PREFIX}space-2) + var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,
+    // Input aliases are public theming seams. They preserve the shared defaults while
+    // allowing one product to tune editable fields without repointing every control.
+    [`${PREFIX}input-bg`]: `var(${PREFIX}bg-surface)`,
+    [`${PREFIX}input-bg-soft`]: `var(${PREFIX}bg-component)`,
+    [`${PREFIX}input-bg-disabled`]: `var(${PREFIX}bg-component)`,
+    [`${PREFIX}input-edge`]: `var(${PREFIX}edge-control)`,
+    [`${PREFIX}input-edge-hover`]: `var(${PREFIX}edge-control-hover)`,
+    [`${PREFIX}input-text`]: `var(${PREFIX}fg-default)`,
+    [`${PREFIX}input-placeholder`]: `var(${PREFIX}fg-placeholder)`,
+    [`${PREFIX}input-icon`]: `var(${PREFIX}fg-muted)`,
+    // The invalid edge uses the most saturated readable danger endpoint. Its halo is the
+    // same context colour at low alpha rather than an unrelated neutral shadow.
+    [`${PREFIX}input-invalid-color`]: `var(${PREFIX}fg-danger-vivid)`,
+    [`${PREFIX}input-invalid-halo-color`]:
+      `color-mix(in srgb, var(${PREFIX}input-invalid-color) 14%, transparent)`,
+    [`${PREFIX}input-success-color`]: `var(${PREFIX}fg-success-vivid)`,
+    [`${PREFIX}input-success-halo-color`]:
+      `color-mix(in srgb, var(${PREFIX}input-success-color) 14%, transparent)`,
+    [`${PREFIX}input-warning-color`]: `var(${PREFIX}fg-warning-vivid)`,
+    [`${PREFIX}input-warning-halo-color`]:
+      `color-mix(in srgb, var(${PREFIX}input-warning-color) 14%, transparent)`,
+    [`${PREFIX}field-error-color`]: `var(${PREFIX}fg-danger-vivid)`,
+    // Token is a static design-token reference, not a selectable tag or metadata badge.
+    // These aliases let a documentation surface tune that reference without changing Code,
+    // Badge, or Chip. The on-color values intentionally stay local: they must derive from
+    // the surrounding foreground rather than from a global page colour.
+    [`${PREFIX}token-bg`]: `var(${PREFIX}bg-code)`,
+    [`${PREFIX}token-bg-subtle`]: `var(${PREFIX}bg-subtle)`,
+    [`${PREFIX}token-edge`]: `var(${PREFIX}border-decorative)`,
+    [`${PREFIX}token-text`]: `var(${PREFIX}fg-default)`,
+    [`${PREFIX}token-swatch-ring`]: `color-mix(in oklab, var(${PREFIX}token-text) 15%, transparent)`,
     // A control nested inside a container keeps concentric corners: the inner radius is the
     // outer radius less the inset. This is the forward form of the concentric rule; the
     // inset varies per component, so components apply it themselves against this token.
@@ -128,7 +161,7 @@ export function derivedTokens(): Record<string, string> {
  * Deliberately a short list, and it contains only *leaf* tokens. Derived tokens must never
  * be registered: a registered `<length>` computes at its declaration site, so
  * `--area-radius-control` would freeze at the value it had on `:root` and stop responding
- * to a nested `data-area-density`. That silently breaks subtree scoping -- the height
+ * to a nested `data-area-ui`. That silently breaks subtree scoping -- the height
  * changes, the corner radius does not -- and it is invisible in source. Verified in a real
  * browser by the axis fixture check.
  *

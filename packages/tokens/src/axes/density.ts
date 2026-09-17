@@ -28,7 +28,7 @@ interface TierSpec {
   leading: number;
 }
 
-function ladder(tiers: Record<Tier, TierSpec>) {
+export function densityTokens(tiers: Record<Tier, TierSpec>) {
   const out: Record<string, string | number> = {};
   for (const [name, tier] of Object.entries(tiers)) {
     out[`control-${name}`] = `${tier.height}px`;
@@ -65,16 +65,15 @@ function ladder(tiers: Record<Tier, TierSpec>) {
  * the same with 24 added for the large tier. An earlier version of this ladder used 14
  * and 20; both are off every published ramp.
  *
- * Gap follows the tier rather than holding constant: Primer ties 4px to its xsmall and
- * small controls and 8px to medium and large, and 6px sits on VS Code's spacing ramp as
- * the step between.
+ * Gap follows the tier rather than holding constant: compact controls use 4px, while
+ * medium and larger controls use Primer's 8px control gap.
  */
-const DEFAULT_TIERS: Record<Tier, TierSpec> = {
+export const DEFAULT_TIERS: Record<Tier, TierSpec> = {
   xs: { height: 24, gutter: 8, icon: 12, gap: 4, size: 12, leading: 16 },
-  sm: { height: 28, gutter: 10, icon: 16, gap: 4, size: 13, leading: 18 },
-  md: { height: 32, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
-  lg: { height: 40, gutter: 16, icon: 16, gap: 8, size: 14, leading: 20 },
-  xl: { height: 48, gutter: 20, icon: 24, gap: 8, size: 16, leading: 24 },
+  sm: { height: 28, gutter: 8, icon: 16, gap: 4, size: 13, leading: 18 },
+  md: { height: 32, gutter: 12, icon: 16, gap: 8, size: 14, leading: 20 },
+  lg: { height: 40, gutter: 12, icon: 16, gap: 8, size: 14, leading: 20 },
+  xl: { height: 48, gutter: 16, icon: 24, gap: 8, size: 16, leading: 24 },
 };
 
 /**
@@ -86,7 +85,7 @@ const DEFAULT_TIERS: Record<Tier, TierSpec> = {
  * Chrome steps down with the box: medium is 13/18 rather than 14/20. Content type
  * remains on the independent typography axis, so a compact interface keeps readable prose.
  */
-const COMPACT_TIERS: Record<Tier, TierSpec> = {
+export const COMPACT_TIERS: Record<Tier, TierSpec> = {
   xs: { height: 20, gutter: 6, icon: 12, gap: 4, size: 11, leading: 14 },
   sm: { height: 24, gutter: 8, icon: 12, gap: 4, size: 12, leading: 16 },
   md: { height: 28, gutter: 10, icon: 16, gap: 6, size: 13, leading: 18 },
@@ -105,13 +104,13 @@ export const DENSITY_AXIS: AxisDefinition = {
       id: "compact",
       label: "Compact",
       description: "28px controls. Calibrated to Notion. For dense, tool-shaped interfaces.",
-      tokens: tokens(ladder(COMPACT_TIERS)),
+      tokens: tokens(densityTokens(COMPACT_TIERS)),
     },
     {
       id: "default",
       label: "Default",
       description: "32px controls. Calibrated to Primer, OpenAI and Vercel.",
-      tokens: tokens(ladder(DEFAULT_TIERS)),
+      tokens: tokens(densityTokens(DEFAULT_TIERS)),
     },
   ],
 };

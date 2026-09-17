@@ -1,8 +1,8 @@
 /** Browser-owned scope probe. Separate from the unchanged accessibility thresholds. */
 export function runPreferenceChecks() {
   const cases = [
-    ['theme','dark'],['neutral','warm'],['accent','yellow'],['density','compact'],
-    ['radius','0'],['type','system'],['surface','flat'],['motion','none'],
+    ['theme','dark'],['neutral','warm'],['accent','yellow'],['ui','compact'],
+    ['radius','0'],['surface','flat'],['motion','none'],
   ];
   const pairs = [
     ['edge-control','border-faint','stroke-control'],

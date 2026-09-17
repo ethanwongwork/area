@@ -199,7 +199,8 @@ Responsive rails now open in flow without overlapping content. Behavior work rem
 [V03](batches/V03/README.md) enlarges the default Switch to 32×20px and documents five
 tiers, keeps checked and unchecked Checkbox/Radio geometry identical, and adopts Primer’s
 flat one-chord keyboard hint with normal/small sizes. Input, Textarea and Select now share a
-neutral opaque focus edge with a subtle 6px halo; increased contrast retains the accent edge.
+quiet 1px focus edge with a 2px translucent halo; increased contrast adds the 2px accent
+outline and expands the halo to 4px.
 Shadow ink rises by two points to 6% light /8% dark while V02’s tight geometry remains.
 Palette primitives and color curves remain byte-identical. Behavior work remains E05.
 

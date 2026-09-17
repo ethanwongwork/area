@@ -69,7 +69,7 @@ ${css}
   <div class="probe" id="probe">Probe</div>
   <div class="probe solid" id="solid">Solid</div>
   <div class="panel" id="panel"><div class="probe" id="inPanel">Nested in panel</div></div>
-  <aside data-area-density="compact"><div class="probe" id="nested">Subtree: compact</div></aside>
+  <aside data-area-ui="compact"><div class="probe" id="nested">Subtree: compact</div></aside>
 <script>
 window.AREA_AXES = ${axisData};
 

@@ -123,9 +123,9 @@ export function emitAxes(): string {
       "Area — axes",
       "Generated. Do not edit.\n\n" +
         "One block per preset. Selecting an axis is a data attribute on any element:\n" +
-        '  <html data-area-theme="dark" data-area-density="compact" data-area-radius="0">\n\n' +
+        '  <html data-area-theme="dark" data-area-ui="compact" data-area-radius="0">\n\n' +
         "Custom properties inherit, so a subtree can carry its own axis values:\n" +
-        '  <aside data-area-density="compact"> ... </aside>',
+        '  <aside data-area-ui="compact"> ... </aside>',
     ),
     "",
     "@layer area.axes {",
@@ -156,7 +156,7 @@ export function emitAxes(): string {
   //
   // A custom property is substituted where it is *declared*, and the result inherits as an
   // already-resolved value. So a derived token declared on :root bakes in :root's inputs and
-  // will not respond to a subtree that redeclares them -- `<aside data-area-density="compact">`
+  // will not respond to a subtree that redeclares them -- `<aside data-area-ui="compact">`
   // would get a 28px control with a 6px radius derived from 32. Repeating the derivations on
   // any element that carries an axis attribute makes them resolve against that element's own
   // values, which is exactly where they need to change and nowhere else.

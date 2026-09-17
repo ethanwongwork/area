@@ -1,101 +1,49 @@
 /* ---------------------------------------------------------------------------
  * Token
  *
- * Names a design token inline: in documentation, in a spec, in a comment thread.
- *
- * Distinct from Code because a token reference is a *name*, not a fragment of source.
- * It gets an outline and a surface fill rather than a tinted block, and it can carry a
- * swatch showing what the token actually resolves to.
- *
- * Geometry is ported from the original playground's token badge: a surface fill, a
- * hairline, 12/16 mono at the regular weight, and a swatch with the small radius.
- * Two values are mapped onto Area's ramps rather than copied literally -- 5px of inline
- * padding becomes 6, and the fixed 8px radius becomes the radius axis's control step --
- * because a component that hardcodes a number stops responding to the axis that owns it.
+ * A static, inline reference to a design token. Token is deliberately distinct from Code
+ * (literal source), Kbd (a key), Badge (status/metadata), and Chip/Tag (a selectable or
+ * removable choice). The optional swatch samples a colour token; it is not a generic icon
+ * slot, which keeps the compact inline boundary clear.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  /*
-   * One badge, one size, everywhere a token name appears.
-   *
-   * It carries the caption size rather than the UI size, and that is the point: a badge has
-   * to sit inside 14px table chrome *and* inside 16px running prose without looking like it
-   * was set for one of them. At the UI size it matched the table and swelled in the copy; at
-   * 12/16 it reads as a badge in both, which is what it is. There is deliberately no size
-   * variant -- a second size is a second decision at every call site.
-   *
-   * Ground is `--area-bg-code`, the same quiet fill a code block uses, because a token name
-   * and a line of source are the same kind of thing: text you could type. The stroke is the
-   * lightest the system has. The literal next rung -- neutral-50 on a neutral-25 fill --
-   * measures 1.03:1, which is not a hairline, it is a rounding error; `border-faint` is
-   * 1.21:1 and is the faintest edge that survives being looked at.
-   */
   .area-token {
+    --_token-bg: var(--area-token-bg);
+    --_token-edge: var(--area-token-edge);
+    --_token-text: var(--area-token-text);
+
     display: inline-flex;
     align-items: center;
     gap: var(--area-space-4);
-
     inline-size: fit-content;
     max-inline-size: 100%;
-    padding: var(--area-space-2) var(--area-space-6);
-    /*
-     * Breathing room on both sides. Set inline, so it survives sitting against punctuation:
-     * a badge butted up against a comma reads as part of the token's name.
-     */
     margin-inline: var(--area-space-2);
-
-    border: var(--area-border-width) solid var(--area-border-faint);
+    border: var(--area-border-width) solid var(--_token-edge);
     border-radius: var(--area-radius-small);
-    background-color: var(--area-bg-code);
-    color: var(--area-fg-default);
-
+    background-color: var(--_token-bg);
+    color: var(--_token-text);
     font-family: var(--area-font-mono);
-    /*
-     * Sized relative to whatever it is set in, not to an absolute step.
-     *
-     * This is the one place a ratio beats a token. The badge has to sit inside 14px table
-     * chrome and inside 16px running prose, and an absolute size can only be right for one
-     * of them: at 14 it filled a table row, at 12 it read as a footnote in a paragraph.
-     * 0.875em keeps it a consistent step below its surroundings in both -- which is the
-     * relationship the eye actually reads, and what Vercel and GitHub both do here.
-     *
-     * The leading is unitless and tighter than body copy on purpose: an inline badge that
-     * inherits a 1.5 line-height pushes the lines around it apart.
-     */
     font-size: 0.875em;
-    line-height: 1.35;
     font-weight: var(--area-weight-regular);
+    line-height: 1.35;
     white-space: nowrap;
   }
 
-  /*
-   * A rounded square, never a circle. A circle reads as a status dot -- something with a
-   * state -- where this is a sample of a colour.
-   *
-   * Its radius is concentric with the badge's: the badge's corner less the padding the
-   * swatch is inset by. `max(0px, ...)` because the sharp preset takes the subtraction
-   * negative. The ring is a translucent foreground rather than a border colour, which is
-   * load-bearing: a fixed light stroke is invisible on a pale swatch -- the one case the
-   * ring exists for -- while a fixed dark one draws a hard line around a dark swatch.
-   * Mixing from the foreground gives a stroke always slightly darker than what it encloses.
-   */
   .area-token__swatch {
     inline-size: 1em;
     block-size: 1em;
     flex-shrink: 0;
     border-radius: max(0px, calc(var(--area-radius-small) - var(--area-space-2)));
-    box-shadow: inset 0 0 0 var(--area-border-width)
-      color-mix(in oklab, var(--area-fg-default) 15%, transparent);
+    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-token-swatch-ring);
   }
 
-  /* For a token that names something derived rather than primitive. */
   .area-token--subtle {
-    background-color: var(--area-bg-subtle);
+    --_token-bg: var(--area-token-bg-subtle);
   }
 
-  /* On a coloured ground: inherits the surrounding foreground instead of the page's. */
   .area-token--on-color {
-    border-color: color-mix(in oklab, currentcolor 20%, transparent);
-    background-color: color-mix(in oklab, currentcolor 8%, transparent);
-    color: inherit;
+    --_token-bg: color-mix(in oklab, currentcolor 8%, transparent);
+    --_token-edge: color-mix(in oklab, currentcolor 20%, transparent);
+    --_token-text: inherit;
   }
 }

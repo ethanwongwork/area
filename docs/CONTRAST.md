@@ -57,10 +57,12 @@ Set `data-area-contrast="standard"` to explicitly reset a subtree. Without a roo
 CSS follows `prefers-contrast: more`. This preference is separate from the eight axes.
 
 The aliases are unregistered derivations re-emitted on axis and preference boundaries.
-Text and invalid colors do not depend on this preference. Editable-field focus changes from
-neutral to accent under increased contrast; other focus indicators remain accent. Decorative
-seams stay quiet.
-The browser audit retains the same 3:1 requirement in both modes: standard has **3,012
+Text and invalid colors do not depend on this preference. Input's invalid edge and Field's
+associated error copy use the brighter `fg-danger-vivid` endpoint; its 14% halo derives from
+that same context color and is never credited as the required edge. Editable-field focus
+changes from neutral to accent under increased contrast; other focus indicators remain
+accent. Decorative seams stay quiet.
+The browser audit retains the same 3:1 requirement in both modes: standard has **3,804
 shortfalls / 21,120 checks**, more has **0 / 21,120**. These are fixture measurements,
 not overall conformance claims or individual counts of WCAG violations. The build gate
 continues validating the strong endpoint tokens; it does not certify the default soft edges.
@@ -70,15 +72,21 @@ continues validating the strong endpoint tokens; it does not certify the default
 `focus-color` replaces `border-focus`. `focus-width` and `focus-offset` replace `ring-width`
 and `ring-offset`; both are 2px geometric primitives, independent of elevation. `ring` was
 removed. Components paint an opaque CSS outline, preserving their existing selection border
-and shadow. Native choice controls and buttons use the accent outline on `focus-visible`.
+and shadow where an outline is part of the component's treatment. Native choice controls
+and buttons use the accent outline on `focus-visible`.
 Input shells, Textarea and Select use `field-focus-color`: the measured neutral
-`stroke-control` endpoint in standard mode and the accent `focus-color` endpoint in increased
-contrast. Their zero-offset opaque edge sits inside a 6px halo made from the current 6%/8%
-shadow ink. The code disclosure retains its inset outline to fit the clipped code frame.
+`border-subtle` endpoint in standard mode and the accent `focus-color` endpoint in increased
+contrast. Standard focus preserves the control's existing 1px boundary, changes that boundary
+from `border-faint` to `border-subtle`, and adds a 2px halo made from the current 6%/8% shadow
+ink. Increased contrast adds the regular 2px accent outline at zero offset and expands the
+halo to 4px. Invalid Input retains its brighter danger boundary while focused and replaces
+the neutral halo with the same danger context at 14% alpha. The code disclosure
+retains its inset outline to fit the clipped code frame.
 
 The former 45% halo could not be validated by measuring its opaque source token. The browser
-runner now reads the actual outline, rejects alpha, checks its width/style and measures it
-against its actual ground. Token checks cover neutral and tonal surfaces. Focus geometry is
+runner now reads the actual painted edge or outline, rejects alpha, checks the intended
+edge-plus-halo or outline geometry, and measures it against its actual ground. Token checks
+cover neutral and tonal surfaces. Focus geometry is
 informed by [WCAG Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html),
 a Level AAA criterion; this focused work does not claim overall AAA conformance.
 

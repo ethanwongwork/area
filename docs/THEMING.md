@@ -29,8 +29,9 @@ background and type tokens as the existing components do.
 
 `Theme`, `useTheme` and `AxisSelection` are exported from `@area/react`.
 
-- `Theme.value` is a partial selection of the eight current axis IDs: `theme`, `neutral`,
-  `accent`, `type`, `density`, `radius`, `surface`, `motion`.
+- `Theme.value` is a partial selection of the seven current axis IDs: `theme`, `neutral`,
+  `accent`, `ui`, `radius`, `surface`, `motion`. `ui` is the curated compact/default
+  package for type, controls, icons, padding, and gaps.
 - Omitted or undefined values inherit from the nearest **React Theme**. The root starts at
   registry defaults. Passing an invalid axis or preset is a runtime error as well as a type error.
 - `Theme` renders a div, forwards its ref and ordinary HTML attributes, and writes the
@@ -47,8 +48,9 @@ When introducing a React root inside a CSS-only themed host, pass the same compl
 selection to its root Theme. Do not expect a raw `data-area-neutral` between two React Theme
 components to update their context. The independent CSS-attribute path remains supported.
 
-E04 standardizes the public axis ID as `accent`. Typography retains `type`. The docs migrate
-saved preferences without resetting other valid choices; see [API migration](API_MIGRATION.md).
+E04 standardizes the public axis ID as `accent`. The UI-scale migration replaces the former
+independent `type` and `density` selectors with `ui`; saved compact preferences migrate to
+`ui="compact"`, and all other old combinations migrate to `ui="default"`.
 
 Executable examples: [nested theme demo](../apps/docs/src/demos/theme.tsx), rendered with its
 own source snippet on the docs Axes page; [portal and live updates](../apps/docs/src/lab/react-scopes.tsx).

@@ -16,9 +16,9 @@ it('derives all runtime presets and defaults from the registry',async()=>{
 it('inherits omitted choices, validates inputs, and does not mutate its parent',async()=>{
   const {mergeAxes,themeAttributes}=await runtime();
   const parent=mergeAxes(undefined,{theme:'dark',accent:'green',neutral:'warm'});
-  const child=mergeAxes(parent,{density:'compact',theme:undefined});
-  expect(child).toMatchObject({theme:'dark',accent:'green',neutral:'warm',density:'compact'});
-  expect(parent.density).toBe('default');
+  const child=mergeAxes(parent,{ui:'compact',theme:undefined});
+  expect(child).toMatchObject({theme:'dark',accent:'green',neutral:'warm',ui:'compact'});
+  expect(parent.ui).toBe('default');
   expect(themeAttributes(child)['data-area-theme']).toBe('dark');
   expect(()=>mergeAxes(parent,{accent:'missing'})).toThrow();
   expect(()=>mergeAxes(parent,{unknown:'value'})).toThrow();

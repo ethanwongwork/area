@@ -117,7 +117,7 @@ function ramp(prefix: string, steps: Record<string, Step>, offset: number) {
   return out;
 }
 
-const RAMPS = (offset: number) => ({
+export const typographyRamps = (offset: number) => ({
   ...ramp("text", TEXT, offset),
   ...ramp("title", TITLE, offset),
   ...ramp("display", DISPLAY, offset),
@@ -128,7 +128,7 @@ const RAMPS = (offset: number) => ({
  * to 288 glyphs with every stylistic set stripped, including `ss11` -- the one
  * vercel.com itself enables.
  */
-const GEIST = {
+export const GEIST_TOKENS = {
   "font-sans": `"Geist", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`,
   "font-mono": `"Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace`,
   "font-feature-settings": `"rlig" 1, "calt" 0, "ss11" 1`,
@@ -163,25 +163,25 @@ export const TYPOGRAPHY_AXIS: AxisDefinition = {
       id: "geist",
       label: "Geist",
       description: "Geist Sans and Geist Mono. 16px body, 14px controls.",
-      tokens: tokens({ ...GEIST, ...RAMPS(0) }),
+      tokens: tokens({ ...GEIST_TOKENS, ...typographyRamps(0) }),
     },
     {
       id: "geist-compact",
       label: "Compact",
       description: "Geist one step down, for dense tools.",
-      tokens: tokens({ ...GEIST, ...RAMPS(-1) }),
+      tokens: tokens({ ...GEIST_TOKENS, ...typographyRamps(-1) }),
     },
     {
       id: "geist-large",
       label: "Large",
       description: "Geist one step up, for reading-heavy products.",
-      tokens: tokens({ ...GEIST, ...RAMPS(1) }),
+      tokens: tokens({ ...GEIST_TOKENS, ...typographyRamps(1) }),
     },
     {
       id: "system",
       label: "System",
       description: "The platform UI font. No webfont, no layout shift.",
-      tokens: tokens({ ...SYSTEM, ...RAMPS(0) }),
+      tokens: tokens({ ...SYSTEM, ...typographyRamps(0) }),
     },
   ],
 };

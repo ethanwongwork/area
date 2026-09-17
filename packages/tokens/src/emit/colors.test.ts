@@ -39,8 +39,8 @@ it('keeps inherited shadow recipes responsive to theme boundaries',()=>{
 it('re-emits contrast presentation aliases at every axis and preference boundary',()=>{
   const css=emitAxes();
   const boundary=css.slice(css.lastIndexOf('[data-area-theme],'));
-  for(const axis of ['theme','neutral','accent','density','radius','type','surface','motion','contrast']) expect(boundary).toContain(`[data-area-${axis}]`);
-  for(const name of Object.keys(derivedTokens()).filter(k=>k.startsWith('--area-edge-')||k.startsWith('--area-fill-toggle'))) {
+  for(const axis of ['theme','neutral','accent','ui','radius','surface','motion','contrast']) expect(boundary).toContain(`[data-area-${axis}]`);
+  for(const name of Object.keys(derivedTokens()).filter(k=>k.startsWith('--area-edge-')||k.startsWith('--area-fill-toggle')||k.startsWith('--area-token-'))) {
     expect(boundary).toContain(`${name}:`);
     expect(REGISTERED_PROPERTIES.some(p=>p.name===name)).toBe(false);
   }

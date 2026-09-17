@@ -21,7 +21,7 @@ assert.match(checkboxVariants({size:'xs'}),/area-checkbox--xs/);
 assert.throws(()=>checkboxVariants({size:'xxl'}));
 assert.throws(()=>stateAttributes(MANIFESTS.button,{invalid:true}));
 for(const manifest of Object.values(MANIFESTS))for(const [key,values] of Object.entries(manifest.variants))for(const value of values)assert.ok(classesFor(manifest,{[key]:value}).includes(manifest.block+'--'+value));
-const html=renderToString(h(Area.Theme,{value:{theme:'dark',accent:'green'}},h(Area.Theme,{value:{density:'compact'}},
+const html=renderToString(h(Area.Theme,{value:{theme:'dark',accent:'green'}},h(Area.Theme,{value:{ui:'compact'}},
  h(Area.Button,{tone:'neutral'},'Save'),h(Area.Nav,{tone:'accent'}),h(Area.Select,{size:'xl'},h('option',{},'One')),h(Area.Panel,{size:'xs',title:'Settings'}),h(Area.Chip,{size:'lg'},'Design'),h(Area.Slider,{size:'xl'}),h(Area.CodeBlock,{code:'const area = true;',actions:h(Area.Button,{},'Copy')}))));
 assert.equal((html.match(/data-area-accent="green"/g)??[]).length,2);
 for(const c of ['area-button--neutral','area-nav--accent','area-select--xl','area-panel--xs','area-chip--lg','area-slider--xl','area-code-block__actions'])assert.ok(html.includes(c),c);

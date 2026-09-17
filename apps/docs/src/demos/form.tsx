@@ -1,33 +1,113 @@
-import { Checkbox, Chip, ChipGroup, Field, Input, Radio, Select, Slider, Switch, Textarea } from "@area/react";
-import { SearchIcon } from "../icons.tsx";
+import { Checkbox, Chip, ChipGroup, Field, Input, InputAction, Radio, Select, Slider, Switch, Textarea } from "@area/react";
+import { CheckIcon, DismissIcon, SearchIcon } from "../icons.tsx";
 
-export const InputDefault = () => <Input placeholder="Email" />;
+export const InputDefault = () => <Input aria-label="Email" placeholder="Email" />;
 
-export const InputWithIcon = () => <Input icon={<SearchIcon />} placeholder="Search" />;
+export const InputLeadingVisual = () => <Input leadingIcon={<SearchIcon />} placeholder="Search" aria-label="Search" />;
 
-export const InputWithAffix = () => <Input prefix="$" suffix="USD" placeholder="0.00" />;
+export const InputTrailingVisual = () => <Input trailingIcon={<CheckIcon />} defaultValue="area.design" aria-label="Verified domain" />;
+
+export const InputWithAffix = () => <Input aria-label="Amount" prefix="$" suffix="USD" placeholder="0.00" />;
 
 export const InputSizes = () => (
-  <>
-    <Input size="sm" placeholder="Small" />
-    <Input size="md" placeholder="Medium" />
-    <Input size="lg" placeholder="Large" />
-  </>
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-input-inline-size)" }}>
+    <Input size="xs" placeholder="Extra small" aria-label="Extra small input" />
+    <Input size="sm" placeholder="Small" aria-label="Small input" />
+    <Input size="md" placeholder="Medium" aria-label="Medium input" />
+    <Input size="lg" placeholder="Large" aria-label="Large input" />
+    <Input size="xl" placeholder="Extra large" aria-label="Extra large input" />
+  </div>
 );
 
-export const InputInvalid = () => <Input invalid defaultValue="not-an-email" />;
+export const InputInvalid = () => <Input aria-label="Email" invalid defaultValue="not-an-email" />;
+
+export const InputSuccess = () => <Input aria-label="Workspace name" validationStatus="success" defaultValue="area-design" />;
+
+export const InputWarning = () => <Input aria-label="Workspace name" validationStatus="warning" defaultValue="area-design" />;
+
+export const InputOutline = () => <Input variant="outline" placeholder="Outline" aria-label="Outline input" />;
+
+export const InputSoft = () => <Input variant="soft" placeholder="Soft" aria-label="Soft input" />;
+
+export const InputReadOnly = () => <Input readOnly defaultValue="Read-only value" aria-label="Read-only input" />;
+
+export const InputDisabled = () => <Input disabled placeholder="Disabled" aria-label="Disabled input" />;
+
+export const InputLoading = () => <Input loading loadingText="Checking availability" defaultValue="area.design" aria-label="Loading input" />;
+
+export const InputLoadingLeading = () => <Input leadingIcon={<SearchIcon />} loading loaderPosition="leading" loadingText="Searching" placeholder="Search" aria-label="Searching" />;
+
+export const InputTrailingAction = () => <Input defaultValue="area.design" aria-label="Domain" trailingAction={<InputAction icon={<DismissIcon />} tooltip="Clear domain" />} />;
+
+export const InputFullWidth = () => <div style={{ inlineSize: 320 }}><Input fullWidth placeholder="Full width when requested" aria-label="Full-width input" /></div>;
+
+export const InputMonospace = () => <Input monospace defaultValue="sk-area-1234" aria-label="API key" />;
+
+export const InputFile = () => <Input type="file" aria-label="Upload file" />;
+
+export const InputRtl = () => (
+  <div dir="rtl" style={{ inlineSize: "var(--area-input-inline-size)" }}>
+    <Input
+      leadingIcon={<SearchIcon />}
+      trailingIcon={<CheckIcon />}
+      defaultValue="اسم مساحة عمل طويل لاختبار الاتجاه"
+      aria-label="Verified domain in right-to-left layout"
+    />
+  </div>
+);
 
 export const FieldDefault = () => (
-  <Field label="Email" description="We only use this to sign you in." htmlFor="email">
-    <Input id="email" type="email" placeholder="you@example.com" />
+  <Field label="Email">
+    <Input type="email" placeholder="you@example.com" />
   </Field>
 );
 
 export const FieldError = () => (
-  <Field label="Email" error="Enter a valid email address." required htmlFor="email-error">
-    <Input id="email-error" invalid defaultValue="not-an-email" />
+  <Field
+    label="Email"
+    description="Use the address associated with your workspace."
+    error="Enter a valid email address."
+    required
+  >
+    <Input defaultValue="not-an-email" />
   </Field>
 );
+
+export const FieldDisabled = () => (
+  <Field label="Workspace" description="Managed by your organization." disabled>
+    <Input defaultValue="Area design" />
+  </Field>
+);
+
+export const FieldHiddenLabel = () => (
+  <Field label="Search components" visuallyHiddenLabel>
+    <Input icon={<SearchIcon />} placeholder="Search components" />
+  </Field>
+);
+
+export const FieldHorizontal = () => (
+  <Field orientation="horizontal" label="Account name">
+    <Input placeholder="area-design" />
+  </Field>
+);
+
+export const FieldSizes = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-input-inline-size)" }}>
+    <Field label="Small field"><Input size="sm" placeholder="Small control" /></Field>
+    <Field label="Medium field"><Input size="md" placeholder="Medium control" /></Field>
+    <Field label="Large field"><Input size="lg" placeholder="Large control" /></Field>
+  </div>
+);
+
+export const FieldRequired = () => <Field label="Email" required><Input type="email" placeholder="you@example.com" /></Field>;
+
+export const FieldCaption = () => <Field label="Email" description="Use the address associated with your workspace."><Input type="email" placeholder="you@example.com" /></Field>;
+
+export const FieldValidation = () => <Field label="Email" error="Enter a valid email address." required><Input defaultValue="not-an-email" /></Field>;
+
+export const FieldSuccess = () => <Field label="Workspace" validation="This name is available." validationStatus="success"><Input defaultValue="area-design" /></Field>;
+
+export const FieldWarning = () => <Field label="Workspace" validation="This name is visible to everyone in your organization." validationStatus="warning"><Input defaultValue="area-design" /></Field>;
 
 export const TextareaDefault = () => <Textarea placeholder="Write a message" rows={3} />;
 
@@ -96,23 +176,6 @@ export const ChipSizes = () => (
     <Chip size="sm">Small</Chip>
     <Chip size="md">Medium</Chip>
   </ChipGroup>
-);
-
-export const FieldInline = () => (
-  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-12)", inlineSize: 280 }}>
-    <Field inline label="Density" htmlFor="inline-density">
-      <Select size="xs" id="inline-density" defaultValue="default">
-        <option value="compact">Compact</option>
-        <option value="default">Default</option>
-      </Select>
-    </Field>
-    <Field inline label="Radius" htmlFor="inline-radius">
-      <Slider size="xs" id="inline-radius" min={0} max={12} defaultValue={8} readout="8" />
-    </Field>
-    <Field inline label="Reduce motion" htmlFor="inline-motion">
-      <Switch size="xs" id="inline-motion" />
-    </Field>
-  </div>
 );
 
 export const CheckboxSizes = () => (

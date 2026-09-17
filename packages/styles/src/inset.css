@@ -27,6 +27,8 @@
   .area-panel__bar {
     --_box-height: var(--_bar);
     --_box-border: 0px;
+    /* A panel title shares its content column with the body below it. */
+    --_box-start: calc(var(--_box-height) - var(--_inset) * 2);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     /* Balance the bar's bottom-only divider in its vertical content box. */
@@ -98,9 +100,15 @@
   .area-input:has(> .area-button--sm:last-child) { --_box-end: var(--area-control-sm); }
   .area-input:has(> .area-button--lg:last-child) { --_box-end: var(--area-control-lg); }
   .area-input:has(> .area-button--xl:last-child) { --_box-end: var(--area-control-xl); }
+  /* A trailing InputAction is a nested square backplate. Its own icon uses the shared
+   * icon slot; the outer Input reserves the action's larger box, keeping both inset layers
+   * optically centered instead of letting a glyph touch its hit target. */
+  .area-input:has(> .area-input__action:last-child) { --_box-end: var(--_action); }
   .area-menu__item:has(> .area-menu__shortcut > .area-kbd) { --_box-end: var(--area-space-20); }
   .area-menu__item:has(> .area-menu__shortcut > .area-kbd--small) { --_box-end: var(--area-space-16); }
+  .area-menu__item:has(> .area-menu__shortcut > svg:only-child) { --_box-end: var(--area-icon-md); }
   .area-menu__shortcut { display: inline-flex; align-items: center; padding-inline-start: 0; }
+  .area-menu__shortcut > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex-shrink: 0; }
   .area-menu__shortcut:not(:has(> *)), .area-nav__trailing:not(:has(> *)) {
     display: block;
     text-box: trim-both cap alphabetic;
@@ -173,7 +181,7 @@
   .area-alert__icon > svg, .area-toast__icon > svg { display: block; inline-size: 100%; block-size: 100%; }
 
   .area-token {
-    --_token-height: calc(1em + var(--area-space-8));
+    --_token-height: calc(1em + var(--area-space-4));
     block-size: var(--_token-height);
     padding-block: 0;
     padding-inline: calc((var(--_token-height) - 1cap) / 2 - var(--area-border-width));

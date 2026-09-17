@@ -19,7 +19,7 @@ function PortalSample() {
 export function ReactScopes({onChange}:{onChange:()=>void}) {
   const [dark,setDark]=useState(true);
   const [override,setOverride]=useState(true);
-  const expected={...DEFAULT_AXES,theme:dark?'dark':'light',neutral:'warm',accent:override?'red':'green',density:'compact',radius:'pill'};
+  const expected={...DEFAULT_AXES,theme:dark?'dark':'light',neutral:'warm',accent:override?'red':'green',ui:'compact',radius:'pill'};
   return <section className="lab-report">
     <h2>React scope and portal</h2>
     <p>The hidden portal probe mounts directly under the document body, outside this scope's DOM ancestry. Its colors and all eight selections should follow React context.</p>
@@ -28,7 +28,7 @@ export function ReactScopes({onChange}:{onChange:()=>void}) {
       <Button variant="outline" onClick={()=>{setDark(v=>!v);onChange();}}>Toggle React theme</Button>
       <Button variant="outline" onClick={()=>{setOverride(v=>!v);onChange();}}>Toggle child override</Button>
     </div>
-    <Theme id="react-parent" value={{theme:dark?'dark':'light',neutral:'warm',accent:'green',density:'compact',radius:'pill'}}>
+    <Theme id="react-parent" value={{theme:dark?'dark':'light',neutral:'warm',accent:'green',ui:'compact',radius:'pill'}}>
       <Theme id="react-child" value={override?{accent:'red'}:{}}><PortalSample/></Theme>
     </Theme>
   </section>;

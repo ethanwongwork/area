@@ -210,6 +210,47 @@ const unused = Object.entries(MANIFESTS)
   .filter(([, m]) => !new RegExp(`class="[^"]*\\b${m.block}\\b`).test(allHtml))
   .map(([name]) => name);
 
+/* --- 4. Field ID and relationship integrity ------------------------------- */
+
+{
+  const fieldHtml = readFileSync(join(docsOutput(root), "field.html"), "utf8");
+  const ids = [...fieldHtml.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+  const fieldIds = ids.filter((id) => id.startsWith("area-field-"));
+  const duplicateIds = [...new Set(fieldIds.filter((id, index) => fieldIds.indexOf(id) !== index))];
+
+  for (const id of duplicateIds) {
+    findings.push({
+      kind: "duplicate Field id",
+      where: "field.html",
+      detail: `${id} is emitted more than once across independent demo roots.`,
+      value: id,
+    });
+  }
+
+  const knownIds = new Set(ids);
+  for (const match of fieldHtml.matchAll(/\s(aria-labelledby|aria-describedby|aria-errormessage)="([^"]+)"/g)) {
+    for (const id of match[2].split(/\s+/)) {
+      if (!id.startsWith("area-field-") || knownIds.has(id)) continue;
+      findings.push({
+        kind: "dangling Field relationship",
+        where: "field.html",
+        detail: `${match[1]} references missing id ${id}.`,
+        value: id,
+      });
+    }
+  }
+
+  for (const required of ["aria-invalid=\"true\"", "aria-errormessage=", " required=\"\"", " disabled=\"\""]) {
+    if (fieldHtml.includes(required)) continue;
+    findings.push({
+      kind: "missing Field state propagation",
+      where: "field.html",
+      detail: `The Field examples do not contain ${required}.`,
+      value: required,
+    });
+  }
+}
+
 /* --- Report ---------------------------------------------------------------- */
 
 console.log("\n  Dogfood audit\n");

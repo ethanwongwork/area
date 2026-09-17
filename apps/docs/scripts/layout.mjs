@@ -201,7 +201,7 @@ export const DOCS_CSS = `
 @layer area.base {
   :root {
     /* Site layout. Not design-system tokens: these describe this documentation site. */
-    --docs-sidebar: 216px;
+    --docs-sidebar: 192px;
     /*
      * The site's own spacing, derived from the density axis rather than fixed, so the
      * documentation tightens with the system it documents instead of staying put while the
@@ -229,9 +229,9 @@ export const DOCS_CSS = `
     --docs-measure: 720px;
     --docs-max: 1400px;
     --docs-blur: 8px;
-    --docs-inspector: 264px;
+    --docs-inspector: 248px;
     --docs-toc: 192px;
-    --docs-preview-min: 200px;
+    --docs-preview-min: calc(var(--area-space-96) * 3);
     --docs-specimen: 150px;
     --docs-figure: 72px;
     --docs-card: 230px;
@@ -289,14 +289,14 @@ export const DOCS_CSS = `
   .docs-sidebar::after { inset-inline-end: 0; }
   .docs-inspector::after { inset-inline-start: 0; }
 
-  .docs-sidebar__body { padding-block-start: var(--area-space-8); }
+  .docs-sidebar__body { padding-block-start: var(--area-space-4); }
 
   /*
    * The seam between nav groups. Each group already opens with a label that occupies a full
    * item row, so the label is doing most of the separating on its own -- 12 on top of that
    * read as a gap between three lists rather than as one list with headings.
    */
-  .docs-sidebar .area-menu + .area-menu { margin-block-start: var(--area-space-6); }
+  .docs-sidebar .area-menu + .area-menu { margin-block-start: var(--area-space-4); }
 
   .docs-inspector__actions { display: flex; align-items: center; gap: var(--area-space-2); }
 
@@ -314,10 +314,9 @@ export const DOCS_CSS = `
     /*
      * A menu item pads its own label by 8 inside the body's inset, so the nav's text ink
      * begins 8px further in than the bar's edge. The wordmark takes the same offset, which
-     * puts it on the column the section labels and the item icons already sit on -- the
-     * bar's padding aligns boxes, and what reads here is ink.
+     * puts it on the label column after the leading-icon box and its gap -- the bar's
+     * padding aligns boxes, and what reads here is ink.
      */
-    margin-inline-start: var(--area-space-8);
     font-family: var(--area-font-mono);
     font-size: var(--area-text-md-size);
     /* One line, centred by the bar: it takes the cap height it needs, the bar the leading. */
@@ -325,6 +324,8 @@ export const DOCS_CSS = `
     font-weight: var(--area-weight-strong);
     letter-spacing: var(--area-text-md-tracking);
     text-transform: lowercase;
+    /* Align the wordmark's painted left edge with a sidebar heading and icon ink. */
+    margin-inline-start: var(--area-space-8);
   }
 
   /*
@@ -376,6 +377,28 @@ export const DOCS_CSS = `
     --docs-col-side: var(--docs-inspector);
     max-inline-size: var(--docs-max);
     margin-inline: auto;
+  }
+
+  .docs-rail-resizer {
+    position: absolute;
+    inset-block: 0;
+    z-index: var(--area-z-sticky);
+    inline-size: var(--area-space-12);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: col-resize;
+    touch-action: none;
+  }
+  .docs-sidebar .docs-rail-resizer { inset-inline-end: calc(var(--area-space-6) * -1); }
+  .docs-inspector .docs-rail-resizer { inset-inline-start: calc(var(--area-space-6) * -1); }
+  .docs-rail-resizer:focus-visible { outline: none; }
+  .docs-rail-resizer:focus-visible::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline: calc(var(--area-space-4) + var(--area-border-width));
+    background-color: var(--area-focus-color);
   }
 
   .docs-sidebar {
@@ -445,7 +468,7 @@ export const DOCS_CSS = `
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--area-gutter-xl);
+    padding: var(--area-gutter-md);
   }
   .docs-gallery-tile__specimen {
     min-inline-size: 0;
@@ -458,6 +481,7 @@ export const DOCS_CSS = `
   .docs-gallery-stack {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: var(--area-space-12);
     inline-size: 100%;
     min-inline-size: 0;
@@ -612,14 +636,16 @@ export const DOCS_CSS = `
   .docs-example__preview {
     position: relative;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    gap: var(--area-space-16);
+    align-content: center;
+    gap: var(--area-space-24);
     padding: var(--area-space-32);
     min-block-size: var(--docs-preview-min);
   }
-  .docs-example__preview--column { flex-direction: column; align-items: flex-start; justify-content: flex-start; }
+  .docs-example__preview--column { align-items: center; justify-content: center; }
   .docs-example__actions {
     position: absolute;
     inset-block-start: var(--docs-pad);
@@ -867,6 +893,7 @@ export const DOCS_CSS = `
   .docs-icon[hidden] { display: none; }
   /* The outline has no independent column at these widths. */
   @media (max-width: 1100px) { .docs-toc { display: none; } }
+  @media (max-width: 1100px) { .docs-rail-resizer { display: none; } }
 }
 
 `;
@@ -1051,6 +1078,69 @@ export const DOCS_SCRIPT = `
       var corner = document.querySelector('.docs-rail-toggle[data-rail="' + rail + '"]');
       if (corner) corner.focus({ preventScroll: true });
     }
+  });
+})();
+
+(function () {
+  var shell = document.querySelector(".docs-shell");
+  if (!shell) return;
+
+  var KEY = "area-docs-rail-widths";
+  var limits = { nav: [176, 280], panel: [220, 360] };
+  var widths = {};
+  try { widths = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
+
+  function property(rail) { return rail === "nav" ? "--docs-sidebar" : "--docs-inspector"; }
+  function clamp(rail, value) { return Math.max(limits[rail][0], Math.min(limits[rail][1], value)); }
+  function apply(rail, value, save) {
+    var width = clamp(rail, value);
+    shell.style.setProperty(property(rail), width + "px");
+    document.querySelectorAll('[data-resize-rail="' + rail + '"]').forEach(function (handle) {
+      handle.setAttribute("aria-valuenow", String(width));
+    });
+    if (save) {
+      widths[rail] = width;
+      try { localStorage.setItem(KEY, JSON.stringify(widths)); } catch (e) {}
+    }
+  }
+
+  Object.keys(widths).forEach(function (rail) {
+    if (limits[rail] && Number.isFinite(widths[rail])) apply(rail, widths[rail], false);
+  });
+
+  document.querySelectorAll("[data-resize-rail]").forEach(function (handle) {
+    var rail = handle.getAttribute("data-resize-rail");
+    handle.addEventListener("pointerdown", function (event) {
+      if (event.button !== 0) return;
+      var startX = event.clientX;
+      var start = shell.querySelector(rail === "nav" ? ".docs-sidebar" : ".docs-inspector").getBoundingClientRect().width;
+      handle.setPointerCapture(event.pointerId);
+      function move(next) {
+        var delta = next.clientX - startX;
+        apply(rail, rail === "nav" ? start + delta : start - delta, false);
+      }
+      function end(next) {
+        move(next);
+        apply(rail, Number.parseFloat(getComputedStyle(shell).getPropertyValue(property(rail))), true);
+        handle.removeEventListener("pointermove", move);
+        handle.removeEventListener("pointerup", end);
+        handle.removeEventListener("pointercancel", end);
+      }
+      handle.addEventListener("pointermove", move);
+      handle.addEventListener("pointerup", end);
+      handle.addEventListener("pointercancel", end);
+      event.preventDefault();
+    });
+    handle.addEventListener("keydown", function (event) {
+      var step = event.shiftKey ? 24 : 8;
+      var current = Number.parseFloat(getComputedStyle(shell).getPropertyValue(property(rail)));
+      if (event.key === "ArrowLeft") apply(rail, current + (rail === "nav" ? -step : step), true);
+      else if (event.key === "ArrowRight") apply(rail, current + (rail === "nav" ? step : -step), true);
+      else if (event.key === "Home") apply(rail, limits[rail][0], true);
+      else if (event.key === "End") apply(rail, limits[rail][1], true);
+      else return;
+      event.preventDefault();
+    });
   });
 })();
 

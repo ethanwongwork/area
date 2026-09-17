@@ -162,6 +162,7 @@
   .area-select {
     --_border: var(--area-edge-control);
     --_border-hover: var(--area-edge-control-hover);
+    --_border-focus: var(--area-field-focus-color);
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
@@ -200,15 +201,16 @@
   .area-select:hover:not(:disabled):not(:focus) { border-color: var(--_border-hover); }
 
   .area-select:focus {
-    border-color: var(--_border);
+    border-color: var(--_border-focus);
     box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color);
-    outline: var(--area-focus-width) solid var(--area-field-focus-color);
+    outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
     outline-offset: 0;
   }
 
   .area-select[aria-invalid="true"] {
     --_border: var(--area-fg-danger);
     --_border-hover: var(--area-fg-danger);
+    --_border-focus: var(--area-fg-danger);
   }
 
   .area-select:disabled {

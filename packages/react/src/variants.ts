@@ -59,6 +59,7 @@ export function stateAttributes<M extends ComponentManifest>(manifest: M, state:
   return out;
 }
 export const buttonVariants = /* @__PURE__ */ createVariants(manifests.button);
+export const fieldVariants = /* @__PURE__ */ createVariants(manifests.field);
 export const inputVariants = /* @__PURE__ */ createVariants(manifests.input);
 export const badgeVariants = /* @__PURE__ */ createVariants(manifests.badge);
 export const alertVariants = /* @__PURE__ */ createVariants(manifests.alert);

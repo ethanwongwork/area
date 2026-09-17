@@ -1,7 +1,7 @@
 /**
  * Axis definitions.
  *
- * An axis is one dimension a consumer can retune: colour, typography, density, radius,
+ * An axis is one dimension a consumer can retune: colour, UI scale, radius,
  * surface, motion. Each ships a small set of presets, each preset is a flat map of CSS
  * custom properties, and choosing one is a single data attribute on the root element.
  *
@@ -9,7 +9,7 @@
  * axes may write the same custom property. `registry.ts` enforces it mechanically. Where
  * axes genuinely interact -- radius depends on control height -- the dependent axis emits
  * a unitless multiplier and the relationship is expressed once, in calc(), in the tokens
- * layer. That is also what makes `<aside data-area-density="compact">` work: custom
+ * layer. That is also what makes `<aside data-area-ui="compact">` work: custom
  * properties inherit, so a subtree can carry its own axis values, but only while the
  * derived values stay as live calc() rather than baked pixels.
  */

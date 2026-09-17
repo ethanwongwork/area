@@ -73,17 +73,28 @@ export async function runPaintChecks(): Promise<PaintReport> {
         node.focus({preventScroll:true});
         const painted=node.classList.contains('area-input__control')?node.parentElement!:node;
         const style=css(painted);
-        check(`focus/${node.id||node.className}/geometry`,parseFloat(style.outlineWidth)>=2&&style.outlineStyle==='solid',`${style.outlineWidth} ${style.outlineStyle}`);
-        check(`focus/${node.id||node.className}/opaque`,opaque(style.outlineColor),style.outlineColor);
-        contrast(`focus/${node.id||node.className}/contrast`,style.outlineColor,background(painted.parentElement!));
-        const rect=painted.getBoundingClientRect(),extra=Math.max(0,parseFloat(style.outlineOffset)+parseFloat(style.outlineWidth));
+        const editable=painted.matches('.area-input,.area-textarea,.area-select');
+        const increased=parseFloat(css(stage).getPropertyValue('--area-contrast-more'))>=1;
+        const shadowLengths=style.boxShadow.match(/-?\d+(?:\.\d+)?px/g)?.map(value=>parseFloat(value))??[];
+        const haloWidth=editable?Math.max(0,shadowLengths[shadowLengths.length-1]??0):0;
+        const focusColor=editable&&!increased?style.borderTopColor:style.outlineColor;
+        const geometry=editable&&!increased
+          ? parseFloat(style.borderTopWidth)>=1&&style.borderTopStyle==='solid'&&haloWidth>=2&&style.boxShadow!=='none'
+          : parseFloat(style.outlineWidth)>=2&&style.outlineStyle==='solid';
+        const geometryValue=editable&&!increased
+          ? `${style.borderTopWidth} ${style.borderTopStyle} edge + ${haloWidth}px halo`
+          : `${style.outlineWidth} ${style.outlineStyle}`;
+        check(`focus/${node.id||node.className}/geometry`,geometry,geometryValue);
+        check(`focus/${node.id||node.className}/opaque`,opaque(focusColor),focusColor);
+        contrast(`focus/${node.id||node.className}/contrast`,focusColor,background(painted.parentElement!));
+        const rect=painted.getBoundingClientRect(),extra=Math.max(haloWidth,0,parseFloat(style.outlineOffset)+parseFloat(style.outlineWidth));
         let unclipped=true;
         for(let ancestor=painted.parentElement;ancestor;ancestor=ancestor.parentElement) {
           const a=css(ancestor),r=ancestor.getBoundingClientRect();
           if(/hidden|clip|auto|scroll/.test(a.overflowX)&& (rect.left-extra<r.left||rect.right+extra>r.right))unclipped=false;
           if(/hidden|clip|auto|scroll/.test(a.overflowY)&& (rect.top-extra<r.top||rect.bottom+extra>r.bottom))unclipped=false;
         }
-        check(`focus/${node.id||node.className}/clipping`,unclipped,'Outline fits clipping ancestors in this fixture');
+        check(`focus/${node.id||node.className}/clipping`,unclipped,'Focus paint fits clipping ancestors in this fixture');
       }
       input.blur();
     }

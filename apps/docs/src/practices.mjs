@@ -25,7 +25,7 @@ export const PRACTICES = {
   ],
   code: [
     `Use Code for short commands, identifiers and literal values inside a sentence. Use CodeBlock for multiple lines.`,
-    `Use Token when a reference should include a semantic color swatch. Code uses the same compact visual language without the swatch.`,
+    `Use Token for a design-token reference and an optional colour swatch. Use Kbd for a keyboard key and Badge or Chip when the content is status or a choice.`,
   ],
   "code-block": [
     `Pass plain text through code. The html prop inserts pre-highlighted markup directly; only supply trusted or sanitized HTML.`,
@@ -42,14 +42,23 @@ export const PRACTICES = {
   ],
   input: [
     `Always pair an Input with a ${code("Field")}, or give it an ${code("aria-label")}. A placeholder is not a label — it disappears the moment someone types.`,
-    `Icons inside a field are chrome, not content: they categorise the field rather than carrying its value, so they never change colour on hover.`,
+    `Use ${code("leadingIcon")} or ${code("trailingIcon")} for decorative context. The old ${code("icon")} prop remains a deprecated leading alias. Use ${code("InputAction")} in ${code("trailingAction")} for one named icon action: it has a density-owned square slot and an accessible hover/focus tooltip. Grouped actions belong in a separately audited input-group composition.`,
     `Use ${code("prefix")} and ${code("suffix")} for units and symbols that are not editable, such as a currency mark or a domain.`,
-    `Set ${code("invalid")} rather than colouring the border yourself. It also sets ${code("aria-invalid")}, which is what assistive tech actually reads.`,
+    `Set ${code("invalid")} or ${code("validationStatus")} rather than colouring the border yourself. Error, success, and warning keep the 1px edge and soft halo in the same context color.`,
+    `Focus preserves the 1px boundary, moves it one neutral step darker, and adds a soft 2px halo. Increased contrast adds the stronger 2px accent outline.`,
+    `Use ${code('variant="soft"')} on an existing surface when a quieter neutral boundary is appropriate. Area does not expose a ghost input because a field still needs a persistent affordance.`,
+    `The default width is a contained 16rem measure. Use ${code("fullWidth")} when the expected value or layout genuinely needs the available column.`,
+    `${code("loading")} announces progress with ${code("aria-busy")} and keeps the field editable. Use ${code("disabled")} only when input is impossible; use ${code("readOnly")} for a value that may still be selected and copied.`,
+    `Use ${code("monospace")} for keys, hashes, and code-like values. Native input types, including ${code('type="file"')} and ${code('type="search"')}, continue to forward to the underlying input.`,
   ],
   field: [
-    `Pass ${code("htmlFor")} and give the control a matching ${code("id")}. Without it the label is decorative and clicking it does nothing.`,
-    `${code("error")} replaces ${code("description")} rather than stacking beneath it, so the two never compete for the same glance.`,
-    `The required asterisk is ${code("aria-hidden")}. Mark the control itself ${code("required")}; the glyph is for sighted users only.`,
+    `Give Field one direct control child. It generates a stable id and connects the label, description and validation message; an explicit child ${code("id")} or ${code("htmlFor")} still wins.`,
+    `Keep ${code("description")} as durable guidance and ${code("error")} or ${code("validation")} as a concise outcome. They may appear together when they are useful and non-redundant.`,
+    `${code("required")}, ${code("disabled")}, and validation status propagate to the direct control. The visible required mark remains ${code("aria-hidden")} because the control carries the semantic state.`,
+    `Use ${code('orientation="horizontal"')} for compact settings panels with shared columns. Keep the default vertical layout for forms and narrow containers.`,
+    `Use ${code("visuallyHiddenLabel")} only when visible context already makes the field purpose clear. A placeholder still does not replace a label.`,
+    `If one page mounts multiple independent React roots, give each root a distinct ${code("identifierPrefix")}. Field uses React ${code("useId")} and prefixes prevent IDs from colliding across roots.`,
+    `Field does not paint focus itself. Its Input, Select or Textarea child owns the shared editable-control focus treatment, including invalid and increased-contrast states.`,
   ],
   badge: [
     `A Badge labels something; it is not a control. If it can be clicked or dismissed, it is a Button.`,
@@ -73,9 +82,9 @@ export const PRACTICES = {
     `Cells align to the top. In real data the rows are rarely the same height, and top alignment keeps a wrapped cell from pushing its neighbours off the reading line.`,
   ],
   kbd: [
-    `Pass ${code("keys")} as names, not glyphs. ${code("cmd")}, ${code("shift")}, ${code("alt")}, ${code("ctrl")} and the arrows become symbols automatically.`,
+    `Pass ${code("keys")} as names, not glyphs. ${code("cmd")}, ${code("shift")}, ${code("alt")}, ${code("ctrl")}, ${code("enter")} / ${code("return")} and the arrows become symbols automatically.`,
     `One flat chord contains the keys, matching Primer’s KeybindingHint. The visual symbols remain individual semantic key elements, and the chord supplies one useful spoken label.`,
-    `Use ${code("quiet")} and ${code('size="small"')} inside a menu item, where the shortcut is dense chrome rather than standalone content.`,
+    `Use ${code("quiet")} and ${code('size="small"')} inside a menu item, where the keycap is dense chrome rather than standalone content.`,
     `The chord uses a flat outline with no inset or drop shadow. Modifier symbols and letters share ${code("--area-font-keyboard")}, a native UI font, at the same size and weight; Fluent icons are unnecessary.`,
   ],
   dialog: [

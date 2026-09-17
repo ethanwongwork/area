@@ -196,6 +196,9 @@ function stateAssertions(): ContrastAssertion[] {
       out.push({fg,bg,wcag:WCAG.NON_TEXT,apca:0,note:"required boundary, state or opaque focus"});
     }
     out.push({fg:"fg-default",bg,wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"UI label in interactive state"});
+    for (const tone of ["danger", "success", "warning"]) {
+      out.push({fg:`fg-${tone}-vivid`,bg,wcag:WCAG.NON_TEXT,apca:0,note:`vivid ${tone} input edge`});
+    }
   }
   for (const bg of ["accent-solid", "accent-solid-hover"]) out.push({fg:"fg-on-accent",bg,wcag:WCAG.NON_TEXT,apca:0,note:"checked mark or switch thumb"});
   out.push({fg:"bg-surface",bg:"stroke-control",wcag:WCAG.NON_TEXT,apca:0,note:"increased-contrast unchecked switch thumb"});

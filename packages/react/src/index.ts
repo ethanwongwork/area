@@ -10,7 +10,8 @@
  * know about.
  */
 export { Button, type ButtonProps } from "./components/Button.tsx";
-export { Input, type InputProps } from "./components/Input.tsx";
+export { Input, InputAction, type InputProps, type InputActionProps } from "./components/Input.tsx";
+export { Field, Label, type FieldProps, type LabelProps } from "./components/Field.tsx";
 export {
   Nav,
   NavGroup,

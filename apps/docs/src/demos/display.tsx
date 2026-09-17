@@ -1,5 +1,5 @@
-import { Alert, Avatar, Badge, Button, Card, CardDescription, CardFooter, CardTitle, Checkbox, Chip, ChipGroup, Dialog, Field, Input, Kbd, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
-import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, CheckIcon, DismissIcon, InfoIcon } from "../icons.tsx";
+import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Dialog, Field, Input, Kbd, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
+import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
 
@@ -38,14 +38,32 @@ export const AvatarSizes = () => (
 );
 
 export const CardDefault = () => (
-  <Card style={{ inlineSize: 320 }}>
-    <CardTitle>Deploy to production</CardTitle>
-    <CardDescription>This will make your changes live for everyone.</CardDescription>
+  <Card style={{ inlineSize: 420 }}>
+    <CardMedia>
+      <span className="area-card__media-cluster" aria-hidden="true">
+        <span className="area-card__media-tile"><InfoIcon /></span>
+        <span className="area-card__media-tile"><DotsFourIcon /></span>
+        <span className="area-card__media-tile"><TokenIcon /></span>
+        <span className="area-card__media-tile"><CheckIcon /></span>
+      </span>
+      <span className="area-card__media-caption">Area</span>
+    </CardMedia>
+    <CardTitle>High-performance toolkit</CardTitle>
+    <CardDescription>Full access to tools that keep work fast, integrated, and calm.</CardDescription>
+    <CardAction href="#">
+      <TokenIcon />
+      <span>Read more about integrations</span>
+      <ArrowIcon />
+    </CardAction>
     <CardFooter>
-      <Button variant="ghost" tone="neutral" size="sm">
-        Cancel
-      </Button>
-      <Button size="sm">Deploy</Button>
+      <Button variant="outline" tone="neutral" size="sm">Previous</Button>
+      <span className="area-card__steps" aria-label="Step 2 of 4">
+        <span className="area-card__step" />
+        <span className="area-card__step" data-current />
+        <span className="area-card__step" />
+        <span className="area-card__step" />
+      </span>
+      <Button tone="accent" size="sm">Continue</Button>
     </CardFooter>
   </Card>
 );
@@ -102,10 +120,27 @@ export const TooltipDefault = () => <Tooltip>Copy to clipboard</Tooltip>;
 
 export const MenuDefault = () => (
   <Menu>
-    <MenuItem shortcut="⌘K">Search</MenuItem>
-    <MenuItem shortcut="⌘N">New file</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="small" quiet />}>
+      <span className="area-menu__icon"><SearchIcon /></span>
+      <span className="area-menu__text">Search</span>
+    </MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="small" quiet />}>
+      <span className="area-menu__icon"><PlusIcon /></span>
+      <span className="area-menu__text">New file</span>
+    </MenuItem>
     <div className="area-menu__separator" />
-    <MenuItem tone="danger">Delete</MenuItem>
+    <MenuItem>
+      <span className="area-menu__icon"><TokenIcon /></span>
+      <span className="area-menu__text">Use connectors</span>
+    </MenuItem>
+    <MenuItem shortcut={<ArrowIcon />}>
+      <span className="area-menu__icon"><DotsFourIcon /></span>
+      <span className="area-menu__text">More</span>
+    </MenuItem>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} size="small" quiet />}>
+      <span className="area-menu__icon"><DismissIcon /></span>
+      <span className="area-menu__text">Delete</span>
+    </MenuItem>
   </Menu>
 );
 
@@ -192,6 +227,12 @@ export const KbdSizes = () => (
   <><Kbd keys={["cmd", "K"]} size="small" /> <Kbd keys={["cmd", "K"]} /></>
 );
 
+export const KbdButton = () => (
+  <Button variant="outline" tone="neutral" size="sm">
+    Duplicate <Kbd keys={["cmd", "D"]} size="small" quiet />
+  </Button>
+);
+
 export const KbdSequence = () => (
   <>
     <Kbd keys={["cmd", "shift", "P"]} />
@@ -205,11 +246,18 @@ export const KbdSequence = () => (
 
 export const MenuWithShortcuts = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="small" quiet />}>Search</MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="small" quiet />}>New file</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="small" quiet />}>
+      <span className="area-menu__icon"><SearchIcon /></span>
+      <span className="area-menu__text">Search</span>
+    </MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="small" quiet />}>
+      <span className="area-menu__icon"><PlusIcon /></span>
+      <span className="area-menu__text">New file</span>
+    </MenuItem>
     <div className="area-menu__separator" />
     <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} size="small" quiet />}>
-      Delete
+      <span className="area-menu__icon"><DismissIcon /></span>
+      <span className="area-menu__text">Delete</span>
     </MenuItem>
   </Menu>
 );
@@ -217,10 +265,13 @@ export const MenuWithShortcuts = () => (
 export const TokenDefault = () => <Token>--area-space-16</Token>;
 
 export const TokenSwatch = () => (
-  <>
-    <Token swatch="var(--area-accent-solid)">--area-accent-solid</Token>
-    <Token swatch="var(--area-danger-solid)">--area-danger-solid</Token>
-  </>
+  <Token swatch="var(--area-accent-solid)">--area-accent-solid</Token>
+);
+
+export const TokenOnColor = () => (
+  <div style={{ background: "var(--area-accent-solid)", color: "var(--area-fg-on-accent)", padding: "var(--area-space-12)", inlineSize: "fit-content", borderRadius: "var(--area-radius-container)" }}>
+    <Token onColor>--area-fg-on-accent</Token>
+  </div>
 );
 
 export const TokenInProse = () => (
@@ -230,12 +281,7 @@ export const TokenInProse = () => (
   </div>
 );
 
-export const TokenSubtle = () => (
-  <>
-    <Token>--area-blue-500</Token>
-    <Token subtle>--area-accent-solid</Token>
-  </>
-);
+export const TokenSubtle = () => <Token subtle>--area-accent-solid</Token>;
 
 /*
  * Every control the system has, in one panel, at one tier.
@@ -255,14 +301,14 @@ export const PanelEverything = () => (
     style={{ inlineSize: 320, blockSize: 560 }}
   >
     <PanelSection heading="Trigger">
-      <Field inline label="Trigger" htmlFor="panel-trigger">
+      <Field orientation="horizontal" label="Trigger" htmlFor="panel-trigger">
         <Select size="sm" id="panel-trigger" defaultValue="view">
           <option value="view">Section in View</option>
           <option value="click">On Click</option>
           <option value="load">On Load</option>
         </Select>
       </Field>
-      <Field inline label="Viewport">
+      <Field orientation="horizontal" label="Viewport">
         <Segmented
           size="sm"
           fullWidth
@@ -275,7 +321,7 @@ export const PanelEverything = () => (
           ]}
         />
       </Field>
-      <Field inline label="Replay">
+      <Field orientation="horizontal" label="Replay">
         <Segmented
           size="sm"
           fullWidth
@@ -287,16 +333,16 @@ export const PanelEverything = () => (
           ]}
         />
       </Field>
-      <Field inline label="Enabled" htmlFor="panel-enabled">
+      <Field orientation="horizontal" label="Enabled" htmlFor="panel-enabled">
         <Switch size="sm" id="panel-enabled" defaultChecked />
       </Field>
     </PanelSection>
 
     <PanelSection heading="Style">
-      <Field inline label="Opacity">
+      <Field orientation="horizontal" label="Opacity">
         <Slider size="sm" min={0} max={100} defaultValue={80} readout="80" />
       </Field>
-      <Field inline label="Radius" htmlFor="panel-radius">
+      <Field orientation="horizontal" label="Radius" htmlFor="panel-radius">
         <Input size="sm" id="panel-radius" defaultValue="22" suffix="px" />
       </Field>
       <PanelStack>
@@ -314,10 +360,10 @@ export const PanelEverything = () => (
         <Label htmlFor="panel-note">Note</Label>
         <Textarea size="sm" id="panel-note" rows={2} placeholder="Describe this variant" />
       </PanelStack>
-      <Field inline label="Loop" htmlFor="panel-loop">
+      <Field orientation="horizontal" label="Loop" htmlFor="panel-loop">
         <Checkbox id="panel-loop" defaultChecked />
       </Field>
-      <Field inline label="Easing" htmlFor="panel-ease">
+      <Field orientation="horizontal" label="Easing" htmlFor="panel-ease">
         <Select size="sm" id="panel-ease" defaultValue="out">
           <option value="out">Ease out</option>
           <option value="linear">Linear</option>

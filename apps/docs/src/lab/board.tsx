@@ -4,12 +4,12 @@ import { Alert, Badge, Button, Checkbox, Chip, CodeBlock, Field, Input, Menu, Me
 import { runChecks, type Check } from './checks';
 
 const profiles = [
-  { name: 'Light · neutral · default', theme: 'light', neutral: 'neutral', density: 'default', radius: '8', surface: 'outlined' },
-  { name: 'Dark · neutral · default', theme: 'dark', neutral: 'neutral', density: 'default', radius: '8', surface: 'outlined' },
-  { name: 'Light · cool · compact · sharp', theme: 'light', neutral: 'cool', density: 'compact', radius: '0', surface: 'flat' },
-  { name: 'Dark · warm · compact · pill', theme: 'dark', neutral: 'warm', density: 'compact', radius: 'pill', surface: 'elevated' },
-  { name: 'Light · warm · default · elevated', theme: 'light', neutral: 'warm', density: 'default', radius: '8', surface: 'elevated' },
-  { name: 'Dark · cool · default · flat', theme: 'dark', neutral: 'cool', density: 'default', radius: '8', surface: 'flat' },
+  { name: 'Light · neutral · default', theme: 'light', neutral: 'neutral', ui: 'default', radius: '8', surface: 'outlined' },
+  { name: 'Dark · neutral · default', theme: 'dark', neutral: 'neutral', ui: 'default', radius: '8', surface: 'outlined' },
+  { name: 'Light · cool · compact · sharp', theme: 'light', neutral: 'cool', ui: 'compact', radius: '0', surface: 'flat' },
+  { name: 'Dark · warm · compact · pill', theme: 'dark', neutral: 'warm', ui: 'compact', radius: 'pill', surface: 'elevated' },
+  { name: 'Light · warm · default · elevated', theme: 'light', neutral: 'warm', ui: 'default', radius: '8', surface: 'elevated' },
+  { name: 'Dark · cool · default · flat', theme: 'dark', neutral: 'cool', ui: 'default', radius: '8', surface: 'flat' },
 ];
 const options = [{value:'overview',label:'Overview'}, {value:'activity',label:'Activity'}];
 const tabs = [{id:'account',label:'Account'}, {id:'settings',label:'Settings'}];
@@ -30,7 +30,7 @@ export function Board() {
       </div>
     </header>
     <main>
-      <section id="comparison" className="lab-stage" aria-label={p.name} data-area-theme={p.theme} data-area-neutral={p.neutral} data-area-accent="indigo" data-area-density={p.density} data-area-radius={p.radius} data-area-surface={p.surface} data-area-motion="subtle">
+      <section id="comparison" className="lab-stage" aria-label={p.name} data-area-theme={p.theme} data-area-neutral={p.neutral} data-area-accent="indigo" data-area-ui={p.ui} data-area-radius={p.radius} data-area-surface={p.surface} data-area-motion="subtle">
         <div className="lab-row lab-between"><h2>{p.name}</h2><Badge tone="success" dot>Baseline E01</Badge></div>
         <div className="lab-row">
           <Button id="lab-button">Create project</Button><Button variant="outline">Invite people</Button><Button variant="ghost">View activity</Button><Button disabled>Unavailable</Button><Chip selected>Design</Chip><Chip>Engineering</Chip>

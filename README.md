@@ -1,6 +1,6 @@
 # Area
 
-A design system you tune along eight axes.
+A design system you tune along seven axes.
 
 ```bash
 npm ci
@@ -15,7 +15,7 @@ itself is a set of **independent dimensions** — eight of them — each retuned
 data attribute, at any depth in the tree:
 
 ```html
-<html data-area-theme="dark" data-area-accent="teal" data-area-density="compact" data-area-radius="12">
+<html data-area-theme="dark" data-area-accent="teal" data-area-ui="compact" data-area-radius="12">
 ```
 
 | Axis | Attribute | Presets | Owns |
@@ -23,22 +23,21 @@ data attribute, at any depth in the tree:
 | Theme | `data-area-theme` | `light`, `dark` | which rung each semantic slot reads |
 | Neutral | `data-area-neutral` | `neutral`, `cool`, `warm` | the grey the interface is built from |
 | Accent | `data-area-accent` | 11 hues, default `indigo` | fills, links, focus ring |
-| Typography | `data-area-type` | `geist`, `geist-compact`, `geist-large`, `system` | families and the size / leading / tracking ramp |
-| Density | `data-area-density` | `compact`, `default` | control heights, gutters, icons, gaps |
+| UI scale | `data-area-ui` | `compact`, `default` | curated reading/UI type, control heights, gutters, icons, and gaps |
 | Radius | `data-area-radius` | `0`, `2`, `4`, `6`, `8`, `10`, `12`, `pill` | corner geometry |
 | Surface | `data-area-surface` | `flat`, `outlined`, `raised`, `elevated` | stroke weight and elevation |
 | Motion | `data-area-motion` | `none`, `subtle`, `expressive` | durations and easings |
 
 Components consume only semantic tokens, so changing an axis reflows the whole system
 without touching a single component. Because custom properties inherit, a subtree carries
-its own values — `<aside data-area-density="compact">` gets shorter controls *and*
+its own values — `<aside data-area-ui="compact">` gets the complete compact package and
 correctly re-derived corner radii, not just smaller boxes.
 
 ### Why axes rather than themes
 
-Eight axes is roughly ten thousand combinations, which is not a thing anyone can test. It
+Seven axes is a substantial configuration space, which is not a thing anyone can test. It
 is testable here because of one rule the build enforces: **no two axes may write the same
-custom property.** Each axis owns a disjoint namespace, so eight independent checks replace
+custom property.** Each axis owns a disjoint namespace, so seven independent checks replace
 the cross-product. Where two axes genuinely interact — a corner radius has to be capped
 against the control height it lands on — the dependent axis emits a *unitless multiplier*
 and the relationship is written once, in `calc()`, rather than in either axis.
@@ -102,7 +101,7 @@ These guarantees are covered by tests, build audits, and the review conventions 
 
 ## Packages
 
-- **`@area/tokens`** — the vendored palette, the eight axes, the emitters (CSS, JSON, a
+- **`@area/tokens`** — the vendored palette, the seven axes, the emitters (CSS, JSON, a
   typed `.d.ts`, a browser fixture) and the contrast gate.
 - **`@area/styles`** — component CSS. Framework-agnostic; works without React.
 - **`@area/react`** — React components, generated variant props, no CSS.

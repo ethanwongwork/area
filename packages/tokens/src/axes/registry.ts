@@ -12,18 +12,16 @@
  */
 import type { AxisDefinition, TokenMap } from "./schema.ts";
 import { ACCENT_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "./color.ts";
-import { DENSITY_AXIS } from "./density.ts";
 import { MOTION_AXIS } from "./motion.ts";
 import { RADIUS_AXIS } from "./radius.ts";
 import { SURFACE_AXIS } from "./surface.ts";
-import { TYPOGRAPHY_AXIS } from "./typography.ts";
+import { UI_SCALE_AXIS } from "./ui-scale.ts";
 
 export const AXES: AxisDefinition[] = [
   THEME_AXIS,
   NEUTRAL_AXIS,
   ACCENT_AXIS,
-  TYPOGRAPHY_AXIS,
-  DENSITY_AXIS,
+  UI_SCALE_AXIS,
   RADIUS_AXIS,
   SURFACE_AXIS,
   MOTION_AXIS,

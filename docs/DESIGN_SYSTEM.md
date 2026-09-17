@@ -17,20 +17,20 @@ These are not preferences. Some are mechanically checked by tests or build audit
 was arrived at by a specific failure — breaking one silently reintroduces that failure.
 
 **Axes own disjoint custom-property namespaces.** No two axes may write the same property.
-`packages/tokens/src/axes/registry.ts` throws otherwise. This is the only reason eight axes
-are testable: it reduces ~10,000 combinations to eight independent checks. Where axes
+`packages/tokens/src/axes/registry.ts` throws otherwise. This is the only reason seven axes
+are testable: it reduces ~10,000 combinations to seven independent checks. Where axes
 genuinely interact — radius depends on control height — the dependent axis emits a unitless
 multiplier and the relationship is written once, in `calc()`, in `emit/base.ts`.
 
 **Derived tokens are never `@property`-registered.** A registered `<length>` computes at its
 declaration site, so `--area-radius-control` would freeze at `:root`'s value and stop
-responding to a nested `data-area-density`. The height changes, the radius does not, and
+responding to a nested `data-area-ui`. The height changes, the radius does not, and
 nothing in the source looks wrong. Register geometric leaf tokens only; paired semantic
 colors also remain unregistered.
 
 **Derived tokens are re-emitted on every axis-bearing element.** A custom property is
 substituted where it is declared and then inherits already-resolved, so a derivation on
-`:root` bakes in `:root`'s inputs. The `[data-area-density], [data-area-radius], ...`
+`:root` bakes in `:root`'s inputs. The `[data-area-ui], [data-area-radius], ...`
 selector block in `emit/css.ts` is what makes subtree scoping correct.
 
 **A size tier is the control's outer height, on every component that has one.**
@@ -86,7 +86,7 @@ Follow `packages/styles/src/components/button.css`. Three rules:
 
 - A variant sets local `--_*` properties. The base rule is the only place that consumes
   them, so a variant is three lines and a new tone is a copy-paste.
-- A size tier sets nothing but tier tokens, all of which come from the density axis. No
+- A size tier sets nothing but tier tokens, all of which come from the UI-scale axis. No
   size block should ever contain a pixel value.
 - Foreground does not change on hover — only background and border. A label that shifts
   colour under the cursor reads as a different control, and it makes contrast
@@ -215,6 +215,15 @@ line's cap center, and more space below it is expected. Only the combined text b
 outer edges are trimmed; leading between title and description remains intact. Full-width controls retain intentional interior expansion.
 The marker menu's selection rail reserves a separate leading lane. Inline code remains
 wrappable, and native textareas remain resizable. Neither is made into a fixed-height box.
+
+**Slots own their inset; parents reserve their box.** A direct visual uses its square icon
+slot and a text label uses its trimmed text slot. A focusable action is different: its
+button is a nested square backplate and its icon sits inside that backplate. The parent
+calculates the outer inset from the action box, then the action calculates equal local
+padding from its icon box. For example, a default 32px Input reserves a 24px InputAction
+with a 16px icon: 4px around the action from the Input edge, and 4px around the icon inside
+the action. This is a structural contract shared through named slots, not child-specific
+margins; components may use different tier dimensions while preserving the same rule.
 
 **Size by role and tier, never by glyph.** Button, Input, Select, Chip and Segmented
 use the same tier's icon, text and gap tokens. Default xs/sm/md/lg/xl pairs are
@@ -412,7 +421,7 @@ Area overloads the name — `neutral` is both its achromatic cast and the alias 
 writes — and Area cannot, because two axes writing one property is what `checkAxisIntegrity`
 forbids. The role wins the namespace; `cool` and `warm` keep their own primitive ramps.
 
-**The documentation's own spacing comes from the density axis.** `--docs-pad` is
+**The documentation's own spacing comes from the UI-scale axis.** `--docs-pad` is
 `--area-gutter-sm` and `--docs-gutter` is `--area-gutter-xl`, so the site tightens with the
 system it documents instead of standing still while the components inside it shrink.
 
@@ -423,20 +432,24 @@ was retired with the header: a component's inset has to come from its own ramp, 
 the panel's size tiers step on the *gutter* ramp rather than the flat spacing ramp — a
 compact panel has to tighten like the controls inside it.
 
-## Token badges
+## Token references
 
-**One badge, one size, everywhere a token name appears** — and inline code is the same badge
-without a swatch. A tone name written in a paragraph and the same name written in a table are
-the same kind of reference; styling them differently implies a distinction that is not there.
+**Token names a static design-token reference.** It is not a generic badge, tag, or a
+compact control: use Code for literal source, Kbd for a key, Badge for status or metadata,
+and Chip or a future TokenInput composition for a selectable/removable value. The optional
+swatch is reserved for a token that resolves to a colour; it is a square sample, not a
+generic icon slot.
 
-The size is the caption step, not the UI size, and that is the point: the badge has to sit
-inside 14px table chrome *and* inside 16px running prose without having been set for either.
-There is deliberately no size variant — a second size is a second decision at every call site.
+Token has one *relative* size. Its 0.875em mono type and `1em + --area-space-4` box follow
+the surrounding type role, which keeps it contained in both table chrome and running prose
+without creating a per-call-site size choice. `--area-token-bg`, `--area-token-bg-subtle`,
+`--area-token-edge`, `--area-token-text`, and `--area-token-swatch-ring` are its stable
+component theming seams. `onColor` deliberately derives its fill, edge, and text from the
+surrounding foreground, so it remains legible on the context that owns it.
 
-The swatch is a rounded square, never a circle, and its radius is concentric with the badge's:
-the badge's corner less the padding it is inset by, floored at 0 for the sharp preset. Its
-ring is a translucent foreground rather than a border colour, because a fixed light stroke is
-invisible on a pale swatch — the one case the ring exists for.
+The swatch uses its square slot and a concentric radius: token radius less the actual inset,
+floored at zero for sharp corners. The shared inset rule sets the token's vertical and
+horizontal text/swatch clearance from its own box rather than from glyph ink bounds.
 
 ## Panel
 
@@ -447,11 +460,14 @@ out to be a system decision rather than a site one — how a section is separate
 relates to a body, where a footer action sits — so it moved into the system and the docs
 now use it like any other consumer. Both rails are `area-panel --flush`.
 
-**A panel does not own its rows.** A row is `area-field --inline`, which is what gives every
+**A panel does not own its rows.** A row is `area-field --horizontal`, which is what gives every
 control one left edge; the panel owns the container, the grouping and the seams. A control
 that can fill its column does (`area-segmented --full-width` is the opt-in that puts a
 segmented track's right edge on the select's above it); a switch or checkbox cannot fill and
 sits at the column's start, so the left edge still holds.
+
+`area-field --inline` remains a compatibility alias for the earlier name. New CSS and React
+use `orientation="horizontal"`; the default vertical orientation remains the form layout.
 
 **A section is a rule and a name, not a box.** Every inspector worth copying separates its
 groups with a hairline rather than nesting each in a panel of its own, which is what keeps
@@ -516,6 +532,14 @@ keeps every stop one notch apart, which is what a scrub should feel like.
 
 ## Documentation sections
 
+Component pages begin with one standalone default at the default size. Their next examples
+show persistent visual treatments, then every supported size tier, followed by semantic
+states, layout, composition, and behavior. A component that owns no treatment or size does
+not receive a fabricated demo: Field shows its horizontal layout second because orientation
+is its meaningful alternative, then demonstrates the child control sizes it composes with.
+When one preview contains several variants, stack them vertically with enough space to judge
+each one. This sequence is enforced by the component-audit skill and recorded in each audit.
+
 Every foundation section is built with `tokenSection()` in `apps/docs/scripts/layout.mjs`:
 a heading, one sentence, and a table/grid pair generated from **one** list of rows. The
 table is how you read values and compare a column; the grid is how you judge a scale by
@@ -570,8 +594,13 @@ The [current contrast contract](CONTRAST.md) defines roles, values, migration an
 Decoration remains 75/800; faint framing is 150/750 and quiet outlines are 200/750. V01 fields read edge-control: faint framing by default, or stroke-control at 450/400 under
 `data-area-contrast="more"`, with a corresponding hover step. Selected controls retain
 a real edge even when elevation removes decorative borders. Most controls use an opaque 2px
-accent outline with a 2px offset. Editable fields use an opaque neutral 2px edge at zero
-offset inside a 6px translucent neutral halo; increased contrast restores the accent edge.
+accent outline with a 2px offset. Editable fields preserve their 1px boundary, move it from
+`border-faint` to `border-subtle`, and add a 2px translucent neutral halo. Increased contrast
+adds the 2px accent outline at zero offset and expands the halo to 4px.
+Invalid Input uses one brighter semantic danger context for its 1px edge, associated Field
+error copy, and low-alpha halo. The halo is supplemental paint; the opaque edge and error
+text carry the tested contrast roles. Component-scoped Input aliases preserve these defaults
+while allowing a product to tune Input without repointing every control.
 Focus geometry remains independent of the Surface axis.
 
 The dated 75/100/150 trial and its measured failures remain in the audit and E01/E02 reports.
@@ -606,7 +635,24 @@ with direct documentation links.
 [V03](batches/V03/README.md) brings native controls closer to the compact, quiet references
 without changing the palette. The default Switch is 32×20px with five documented tiers and
 a flat boundary. Checkbox and Radio reserve one fixed border-box in every state. Editable
-fields use a neutral focus edge plus a soft 6px halo; increased contrast restores the accent
-edge. Kbd follows Primer’s one-chord treatment with native text glyphs, normal/small sizes and
+fields preserve their 1px edge, move it one neutral step darker, and add a soft 2px halo;
+increased contrast adds a 2px accent outline with a 4px halo. Kbd follows Primer’s one-chord
+treatment with native text glyphs, normal/small sizes and
 no keycap shadow. Shared shadow ink returns to 6% light /8% dark while retaining V02’s tight
 offset, blur and negative spread.
+
+## Input contract
+
+Input is a native single-line text control. Its default inline measure is 20rem and clamps
+to the available container; `fullWidth` is an explicit layout choice. `outline` is the
+default treatment and `soft` provides a filled, lower-stroke alternative. Area does not
+expose a ghost Input because a text-entry field needs a persistent affordance unless a
+separately specified group backplate supplies it.
+
+Leading and trailing visuals are decorative square icon slots. Prefix and suffix are static
+units or symbols. Interactive edge actions, password reveal, search clearing, keyboard
+shortcuts, and grouped buttons belong to a separately audited InputGroup or specialized
+control. Read-only keeps the native value focusable and selectable; disabled prevents
+interaction; loading announces progress without silently making the field uneditable.
+See the [Input audit](component-audits/input.md) for the evidence, geometry, radius caps,
+tokens, and rejected alternatives.

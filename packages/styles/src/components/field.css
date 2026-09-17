@@ -12,6 +12,11 @@
     gap: var(--area-space-6);
   }
 
+  /* Explicit for manifest parity; the base class remains the framework-free default. */
+  .area-field--vertical {
+    flex-direction: column;
+  }
+
   .area-field__label {
     display: inline-flex;
     align-items: center;
@@ -24,7 +29,7 @@
 
   /* Marked aria-hidden in the markup; the accessible name carries `required` instead. */
   .area-field__required {
-    color: var(--area-fg-danger);
+    color: var(--area-field-error-color);
   }
 
   .area-field__description {
@@ -33,52 +38,64 @@
     color: var(--area-fg-muted);
   }
 
+  .area-field__validation,
   .area-field__error {
     display: flex;
     align-items: flex-start;
     gap: var(--area-space-4);
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
-    color: var(--area-fg-danger);
+    color: var(--area-field-error-color);
   }
 
-  .area-field[data-disabled] {
-    opacity: 0.5;
+  .area-field__validation[data-tone="success"] { color: var(--area-fg-success-vivid); }
+  .area-field__validation[data-tone="warning"] { color: var(--area-fg-warning-vivid); }
+
+  /* Keep instructions and validation readable; the child control owns disabled paint. */
+  .area-field[data-disabled] > .area-field__label {
+    color: var(--area-fg-muted);
   }
 
-  /* --- Inline ------------------------------------------------------------- */
+  /* --- Horizontal --------------------------------------------------------- */
 
-  /*
-   * The inspector row: label in a left column, control in a right one, every row on the
-   * same two columns so the controls form a single edge down the panel. That shared edge
-   * is what makes a dense panel scannable -- without it each row's control starts wherever
-   * its label happens to end, and the eye has to find the control again on every line.
-   *
-   * The columns are a ratio rather than a fixed label width, so the pair survives a
-   * narrow panel and a density change without a breakpoint. 1 to 1.5 gives a two-word
-   * label its line and still leaves the control the larger half.
-   *
-   * A label here names the row rather than heading it, so it drops to the muted
-   * foreground and to regular weight. In the stacked field the label is the only thing
-   * above the control and has to carry it; on a row the control is right there.
-   */
+  /* A horizontal Field retains the contained Input width; only its label adds to the row. */
+  .area-field--horizontal,
   .area-field--inline {
-    --_columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    --_columns: max-content minmax(0, var(--area-input-inline-size));
 
     display: grid;
     grid-template-columns: var(--_columns);
     align-items: center;
     gap: var(--area-gap-md);
+    inline-size: max-content;
+    max-inline-size: 100%;
   }
 
+  /* Panels are the deliberate full-row exception: their control edges align. */
+  .area-panel .area-field--horizontal,
+  .area-panel .area-field--inline {
+    --_columns: minmax(0, 1fr) minmax(0, 1.5fr);
+
+    inline-size: auto;
+  }
+
+  .area-field--horizontal > .area-field__label,
   .area-field--inline > .area-field__label {
     font-weight: var(--area-weight-regular);
     color: var(--area-fg-muted);
   }
 
   /* The description and error belong under the control, not under the label. */
+  .area-field--horizontal > .area-field__description,
+  .area-field--horizontal > .area-field__validation,
+  .area-field--horizontal > .area-field__error,
   .area-field--inline > .area-field__description,
+  .area-field--inline > .area-field__validation,
   .area-field--inline > .area-field__error {
     grid-column: 2;
   }
+
+  /* An inspector switch is the right edge of a row, like a trailing control in a settings panel. */
+  .area-panel .area-field--horizontal > .area-switch,
+  .area-panel .area-field--inline > .area-switch { justify-self: end; }
 }

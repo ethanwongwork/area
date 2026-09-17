@@ -56,21 +56,22 @@ export const button = {
 
 export const field = {
   block: "area-field",
-  description: "Wraps a control with its label, description and error message.",
-  variants: {},
+  description: "Labels and describes one form control, including its validation message.",
+  variants: { orientation: ["vertical", "horizontal"] },
   booleans: ["inline"],
   states: ["disabled"],
-  elements: ["label", "required", "description", "error"],
-  defaults: {},
+  elements: ["label", "required", "description", "validation", "error"],
+  defaults: { orientation: "vertical" },
 } as const satisfies ComponentManifest;
 
 export const input = {
   block: "area-input",
   description: "Accepts a single line of text.",
-  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
-  states: ["disabled", "invalid"],
-  elements: ["control", "icon", "affix"],
-  defaults: { size: "md" },
+  variants: { variant: ["outline", "soft"], size: ["xs", "sm", "md", "lg", "xl"] },
+  booleans: ["full-width", "monospace"],
+  states: ["disabled", "invalid", "success", "warning", "read-only", "loading"],
+  elements: ["control", "icon", "affix", "action", "action-button", "action-icon", "action-tooltip"],
+  defaults: { variant: "outline", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const textarea = {
@@ -219,7 +220,18 @@ export const card = {
   block: "area-card",
   description: "Groups related content on its own surface.",
   variants: {},
-  elements: ["title", "description", "footer", "media"],
+  elements: [
+    "title",
+    "description",
+    "footer",
+    "media",
+    "action",
+    "media-cluster",
+    "media-tile",
+    "media-caption",
+    "steps",
+    "step",
+  ],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -339,7 +351,7 @@ export const nav = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
-export const tokenChip = {
+export const token = {
   block: "area-token",
   description: "Names a design token inline.",
   variants: { ground: ["on-color", "subtle"] },
@@ -397,7 +409,7 @@ export const MANIFESTS = {
   code,
   codeBlock,
   nav,
-  tokenChip,
+  token,
   kbd,
   kbdGroup,
 } as const satisfies Record<string, ComponentManifest>;

@@ -42,9 +42,8 @@ const demos = await renderDemos();
 
 const FOUNDATION_PAGES = [
   { slug: "color", name: "Color" },
-  { slug: "typography", name: "Typography" },
+  { slug: "ui-scale", name: "UI scale" },
   { slug: "iconography", name: "Iconography" },
-  { slug: "density", name: "Density" },
   { slug: "radius", name: "Radius" },
   { slug: "surface", name: "Surface" },
   { slug: "motion", name: "Motion" },
@@ -73,20 +72,10 @@ const FOUNDATION_PAGES = [
  * the script.
  */
 function axisRow(label, control) {
-  return `<div class="area-field area-field--inline">
+  return `<div class="area-field area-field--horizontal">
       <span class="area-field__label">${escapeHtml(label)}</span>
       ${control}
     </div>`;
-}
-
-function axisSegmented(axis, size = "xs") {
-  const items = axis.presets
-    .map(
-      (p) =>
-        `<button type="button" role="radio" class="area-segmented__item" data-value="${p.id}" aria-checked="${p.id === axis.defaultPreset}"${p.id === axis.defaultPreset ? " data-selected" : ""}><span class="area-segmented__label">${escapeHtml(p.label)}</span></button>`,
-    )
-    .join("");
-  return `<div class="area-segmented area-segmented--${size} area-segmented--full-width" role="radiogroup" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}">${items}</div>`;
 }
 
 function axisSelect(axis) {
@@ -96,82 +85,19 @@ function axisSelect(axis) {
         `<option value="${p.id}"${p.id === axis.defaultPreset ? " selected" : ""}>${escapeHtml(p.label)}</option>`,
     )
     .join("");
-  return `<select class="area-select area-select--xs" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}">${options}</select>`;
-}
-
-/*
- * The switch reports one preset when on and another when off, which is the whole reason
- * an axis with exactly two presets can be a switch at all. Both are named in the markup
- * so the script never has to know that "theme" means light and dark.
- */
-function axisSwitch(axis, onPreset) {
-  const off = axis.presets.find((p) => p.id !== onPreset).id;
-  const on = axis.defaultPreset === onPreset;
-  return `<label class="area-switch area-switch--xs docs-inspector__switch">
-      <input type="checkbox" class="area-switch__control" role="switch" aria-label="${escapeHtml(axis.label)}"
-             data-axis="${axis.id}" data-default="${axis.defaultPreset}" data-on="${onPreset}" data-off="${off}"${on ? " checked" : ""}>
-    </label>`;
-}
-
-/*
- * The slider runs over preset *indices*, not over the radius values themselves -- the
- * ramp ends in `pill`, which is not a number, and the steps are not evenly spaced in any
- * case. An index keeps every stop one notch apart, which is what a scrub should feel like.
- */
-function axisSlider(axis) {
-  const index = axis.presets.findIndex((p) => p.id === axis.defaultPreset);
-  const pct = (index / (axis.presets.length - 1)) * 100;
-  const values = axis.presets.map((p) => p.id).join(" ");
-  const labels = axis.presets.map((p) => p.label).join("|");
-
-  return `<div class="area-slider area-slider--xs" style="--_pct:${pct}%" data-axis="${axis.id}" data-default="${axis.defaultPreset}" data-values="${values}" data-labels="${escapeHtml(labels)}">
-      <input type="range" class="area-slider__control" min="0" max="${axis.presets.length - 1}" step="1" value="${index}" aria-label="${escapeHtml(axis.label)}">
-      <span class="area-slider__value">${escapeHtml(axis.presets[index].label)}</span>
-    </div>`;
-}
-
-/*
- * The accent chips carry a swatch of each scale's own solid fill, which is both the
- * clearest way to choose a hue and a working demonstration that the scales are addressable
- * as tokens. The solid level differs per hue -- blue's is 500, yellow's is 350 -- so the
- * swatch asks the scale rather than assuming a fixed rung.
- */
-function axisChips(axis) {
-  const chips = axis.presets
-    .map((preset) => {
-      const selected = preset.id === axis.defaultPreset;
-      const swatch = `var(--area-${preset.id}-${tokens.scales[preset.id].solid.level.light})`;
-      return `<button type="button" class="area-chip area-chip--xs" data-value="${preset.id}" aria-pressed="${selected}"${selected ? " data-selected" : ""}>
-        <span class="area-chip__swatch" style="background:${swatch}" aria-hidden="true"></span><span class="area-chip__label">${escapeHtml(preset.label)}</span>
-      </button>`;
-    })
-    .join("");
-
-  return `<div class="area-chip-group" role="group" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}">${chips}</div>`;
+  return `<select class="area-select area-select--md" aria-label="${escapeHtml(axis.label)}" data-axis="${axis.id}" data-default="${axis.defaultPreset}">${options}</select>`;
 }
 
 const AXIS_SECTIONS = [
   { title: "Appearance", axes: ["theme", "neutral", "accent"] },
-  { title: "Type", axes: ["type"] },
-  { title: "Layout", axes: ["density", "radius", "surface"] },
+  { title: "Scale", axes: ["ui"] },
+  { title: "Layout", axes: ["radius", "surface"] },
   { title: "Motion", axes: ["motion"] },
 ];
 
-/** The control an axis gets, and the label it goes under. */
+/** Every inspector axis uses the native medium Select: one equal-height control per row. */
 function axisControl(axis) {
-  switch (axis.id) {
-    case "theme":
-      return { label: "Dark mode", control: axisSwitch(axis, "dark") };
-    case "accent":
-      return { label: "Accent", control: axisChips(axis), full: true };
-    case "radius":
-      return { label: "Radius", control: axisSlider(axis) };
-    case "neutral":
-    case "density":
-      return { label: axis.label, control: axisSegmented(axis) };
-    default:
-      return { label: axis.label, control: axisSelect(axis) };
-  }
+  return { label: axis.label, control: axisSelect(axis) };
 }
 
 function inspectorBody() {
@@ -180,15 +106,8 @@ function inspectorBody() {
   return AXIS_SECTIONS.map((section) => {
     const rows = section.axes
       .map((id) => {
-        const { label, control, full } = axisControl(byId[id]);
-        // A chip group is given the row's full width: eleven chips in the control column
-        // of a 280px panel wrap to five lines and stop reading as one set.
-        return full
-          ? `<div class="area-panel__stack">
-      <span class="area-field__label">${escapeHtml(label)}</span>
-      ${control}
-    </div>`
-          : axisRow(label, control);
+        const { label, control } = axisControl(byId[id]);
+        return axisRow(label, control);
       })
       .join("\n      ");
 
@@ -221,6 +140,7 @@ function inspector() {
   <div class="area-panel__body">
     ${inspectorBody()}
   </div>
+  <button type="button" class="docs-rail-resizer" data-resize-rail="panel" aria-label="Resize customize panel" aria-orientation="vertical" aria-valuemin="220" aria-valuemax="360" aria-valuenow="248"></button>
 </aside>`;
 }
 
@@ -266,6 +186,7 @@ function sidebar(activeSlug) {
   ${group("Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   ${group("Components", COMPONENT_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   </div>
+  <button type="button" class="docs-rail-resizer" data-resize-rail="nav" aria-label="Resize navigation" aria-orientation="vertical" aria-valuemin="176" aria-valuemax="280" aria-valuenow="192"></button>
 </aside>`;
 }
 
@@ -364,16 +285,16 @@ ${example.note ? `<p class="docs-note">${escapeHtml(example.note)}</p>` : ""}
 /** Demos whose instances stack rather than sit in a row. */
 const COLUMN_DEMOS = new Set([
   "InputSizes",
+  "FieldSizes",
   "FieldDefault",
-  "FieldInline",
+  "FieldHorizontal",
+  "FieldHiddenLabel",
   "SliderSizes",
   "SliderDefault",
   "SliderBare",
-  "FieldError",
   "RadioDefault",
   "AlertTones",
   "InputDefault",
-  "InputWithIcon",
   "InputWithAffix",
   "InputInvalid",
   "TextareaDefault",
@@ -650,7 +571,7 @@ function iconographyPage() {
     "16px": "The default. Every inline icon beside a label.",
     "24px": "Standalone, where the icon is the whole affordance.",
   };
-  const density = tokens.axes.find((a) => a.id === "density").presets.find((p) => p.id === "default");
+  const density = tokens.axes.find((a) => a.id === "ui").presets.find((p) => p.id === "default");
   const seen = new Map();
   for (const [token, value] of Object.entries(density.tokens)) {
     if (!/^--area-icon-/.test(token)) continue;
@@ -722,7 +643,7 @@ function extractIcon(source, name) {
 }
 
 function typographyPage() {
-  const preset = tokens.axes.find((a) => a.id === "type").presets.find((p) => p.id === "geist");
+  const preset = tokens.axes.find((a) => a.id === "ui").presets.find((p) => p.id === "default");
   const px = (token) => (preset.tokens[token] ?? "").replace(/var\(--area-(size|leading)-|\)/g, "");
 
   const groups = { text: [], title: [], display: [] };
@@ -890,7 +811,7 @@ function specimenGrid(items) {
 
 /** Tier values for the current density preset, read from the token data. */
 function densityRows(presetId) {
-  const axis = tokens.axes.find((a) => a.id === "density");
+  const axis = tokens.axes.find((a) => a.id === "ui");
   const preset = axis.presets.find((p) => p.id === presetId);
   return ["xs", "sm", "md", "lg", "xl"].map((tier) => ({
     tier,
@@ -902,16 +823,14 @@ function densityRows(presetId) {
   }));
 }
 
-function densityPage() {
+function uiScalePage() {
   const rows = densityRows("default");
   const compact = densityRows("compact");
 
   const body = `<div class="docs-prose">
-<p>The default tier is 32px — the most common default across every system measured. The ladder 24/28/32/40/48 is Primer's exact scale.</p>
-<p>Two presets, each calibrated to real products. <strong>Default</strong> puts medium at 32px, which Primer, OpenAI and Vercel all agree on. <strong>Compact</strong> puts it at 28px, which is Notion's measured in-app row height.</p>
-<p><strong>The type steps down with the box.</strong> Each compact tier sits exactly one stop below its default counterpart on the size ramp, so medium goes from 14px to 13px — the UI font size VS&nbsp;Code, Cursor and Linear all ship.</p>
-<p>The two references genuinely disagree here. VS&nbsp;Code's own density layer contains no <code class='area-code'>font-size</code> declarations at all: it swaps 24px for 20px and 8px for 4px and leaves type alone, because its base is already 13px and has nowhere to go. Ant Design, starting from a roomier 14px, drops a step. Area starts at 14, so it follows Ant Design.</p>
-<p>Chrome follows the density; content does not. <code class='area-code'>--area-ui-size</code> carries the medium tier's size to anything that is scanned rather than read — tables, menu items, field labels — while prose stays on the typography axis at 16px. That is the same split Notion uses between its 14px interface and its 16px documents.</p>
+<p>UI scale is one deliberate product choice, not separate type and density switches. It changes reading type, UI type, control heights, icons, internal padding, and gaps together.</p>
+<p><strong>Default</strong> uses 16px reading text, 14px UI text, and 32px medium controls: the common Primer and Geist baseline. <strong>Compact</strong> uses 14px reading text, 13px UI text, and 28px medium controls, matching dense tool interfaces such as Notion.</p>
+<p>There is intentionally no spacious preset. Primer documents a spacious spacing mode, but it is not a different product-scale baseline; browser zoom and text-resize support remain the accessible way to enlarge an interface.</p>
 </div>
 ${tokenSection({
   id: "tiers",
@@ -943,7 +862,7 @@ ${tokenSection({
   id: "spacing",
   title: "Spacing",
   description:
-    "Fixed primitives, named by their pixel value. The density axis moves which step a component reaches for; it never rescales the ramp.",
+    "Fixed primitives, named by their pixel value. UI scale chooses which steps components use; it never silently rescales the ramp.",
   rows: tokens.spaceRamp.map((value) => ({ value })),
   columns: [
     { header: "Token", cell: (r) => tokenChip(`spacing/${r.value}`) },
@@ -983,12 +902,12 @@ ${tokenSection({
     }),
 })}
 <h2 class="docs-h2" id="presets">Presets</h2>
-${axisPresetTable("density")}`;
+${axisPresetTable("ui")}`;
 
   return page({
-    slug: "density",
-    title: "Density",
-    lede: "Control heights and the room inside them.",
+    slug: "ui-scale",
+    title: "UI scale",
+    lede: "Curated type and control geometry for compact or default products.",
     body,
     toc: [
       { id: "tiers", title: "Control tiers" },
@@ -1206,12 +1125,12 @@ ${axisPresetTable("motion")}`;
 
 function axesPage() {
   const body = `<div class="docs-prose">
-<p>Area is built around eight axes. Each one is a dimension you can retune, each ships a small set of presets, and choosing one is a single data attribute on the root element.</p>
-<p>The rule that makes eight axes composable rather than a matrix of thousands of combinations is that no two axes write the same custom property. That is checked mechanically on every build — if two axes ever collide, the build stops.</p>
-<p>Because custom properties inherit, a subtree can carry its own axis values. A sidebar marked <code class='area-code'>data-area-density="compact"</code> gets shorter controls <em>and</em> correctly re-derived corner radii, without any component knowing it happened.</p>
+<p>Area is built around seven axes. Each one is a dimension you can retune, each ships a small set of presets, and choosing one is a single data attribute on the root element.</p>
+<p>The rule that makes seven axes composable rather than a matrix of thousands of combinations is that no two axes write the same custom property. That is checked mechanically on every build — if two axes ever collide, the build stops.</p>
+<p>Because custom properties inherit, a subtree can carry its own axis values. A sidebar marked <code class='area-code'>data-area-ui="compact"</code> gets the complete compact package without any component knowing it happened.</p>
 </div>
 <h2 class="docs-h2" id="usage">Usage</h2>
-${codeBlock(`<html data-area-theme="dark" data-area-accent="purple" data-area-density="compact">`)}
+${codeBlock(`<html data-area-theme="dark" data-area-accent="purple" data-area-ui="compact">`)}
 <h2 class="docs-h2" id="scopes">Nested themes</h2>
 <p class="docs-note">CSS attributes inherit independently. A light boundary keeps its inherited neutral and accent; changing either role inside dark keeps the dark scheme. Color pairs require CSS light-dark() support. <a href="./scopes.html">Inspect the browser scope checks.</a></p>
 <p class="docs-note">React Theme inherits from the nearest React Theme and emits all eight attributes, including inside a portal. Its root starts at Area defaults. Pass the host selection explicitly when integrating with a surrounding CSS-only theme.</p>
@@ -1227,7 +1146,7 @@ ${axisPresetTable(a.id)}`,
   return page({
     slug: "axes",
     title: "Axes",
-    lede: "Eight independent dimensions, each one data attribute away.",
+    lede: "Seven independent dimensions, each one data attribute away.",
     body,
     toc: [{ id: "usage", title: "Usage" }, { id: "scopes", title: "Nested themes" }, ...tokens.axes.map((a) => ({ id: a.id, title: a.label }))],
   });
@@ -1295,9 +1214,8 @@ const pages = [
   ["axes.html", axesPage()],
   ["gallery.html", galleryPage()],
   ["color.html", colorPage()],
-  ["typography.html", typographyPage()],
+  ["ui-scale.html", uiScalePage()],
   ["iconography.html", iconographyPage()],
-  ["density.html", densityPage()],
   ["radius.html", radiusPage()],
   ["surface.html", surfacePage()],
   ["motion.html", motionPage()],

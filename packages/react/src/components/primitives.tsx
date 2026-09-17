@@ -9,10 +9,10 @@ import { MANIFESTS } from "../variants.ts";
  */
 import { forwardRef } from "react";
 import type {
+  AnchorHTMLAttributes,
   ButtonHTMLAttributes,
   HTMLAttributes,
   InputHTMLAttributes,
-  LabelHTMLAttributes,
   ReactNode,
 } from "react";
 import {
@@ -134,6 +134,17 @@ export const CardDescription = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(f
   return <div ref={ref} className={cx("area-card__description", className)} {...rest} />;
 });
 
+export const CardMedia = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardMedia({ className, ...rest }, ref) {
+  return <div ref={ref} className={cx("area-card__media", className)} {...rest} />;
+});
+
+export const CardAction = /* @__PURE__ */ forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>(function CardAction(
+  { className, ...rest },
+  ref,
+) {
+  return <a ref={ref} className={cx("area-card__action", className)} {...rest} />;
+});
+
 export const CardFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardFooter({ className, ...rest }, ref) {
   return <div ref={ref} className={cx("area-card__footer", className)} {...rest} />;
 });
@@ -232,7 +243,7 @@ export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps
 /*
  * Composed rather than configured. A panel takes a title and an optional footer because
  * those are structural, and everything between them is children -- `Panel.Section` and
- * `Field inline` rows. A props API for the rows would have to grow a case for every
+ * horizontal Field rows. A props API for the rows would have to grow a case for every
  * control the system has, which is the API the CSS deliberately does not have either.
  */
 export interface PanelProps extends Omit<Div, "title"> {
@@ -387,51 +398,6 @@ export const ChipGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, ChipGroupPro
   ref,
 ) {
   return <div ref={ref} className={cx("area-chip-group", className)} {...rest} />;
-});
-
-/* --- Field ---------------------------------------------------------------- */
-
-export interface FieldProps extends Div {
-  label?: ReactNode;
-  description?: ReactNode;
-  error?: ReactNode;
-  required?: boolean;
-  htmlFor?: string;
-  /** Label left, control right, on columns shared with every other inline field. */
-  inline?: boolean;
-}
-
-export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(function Field(
-  { label, description, error, required, htmlFor, inline, className, children, ...rest },
-  ref,
-) {
-  return (
-    <div
-      ref={ref}
-      className={cx("area-field", inline && "area-field--inline", className)}
-      {...rest}
-    >
-      {label ? (
-        <label className="area-field__label" htmlFor={htmlFor}>
-          {label}
-          {required ? (
-            <span className="area-field__required" aria-hidden="true">
-              *
-            </span>
-          ) : null}
-        </label>
-      ) : null}
-      {children}
-      {description && !error ? <span className="area-field__description">{description}</span> : null}
-      {error ? <span className="area-field__error">{error}</span> : null}
-    </div>
-  );
-});
-
-export type LabelProps = LabelHTMLAttributes<HTMLLabelElement>;
-
-export const Label = /* @__PURE__ */ forwardRef<HTMLLabelElement, LabelProps>(function Label({ className, ...rest }, ref) {
-  return <label ref={ref} className={cx("area-field__label", className)} {...rest} />;
 });
 
 /* --- Table ---------------------------------------------------------------- */
@@ -706,13 +672,14 @@ const KEY_GLYPHS: Record<string, string> = {
   option: "⌥",
   ctrl: "⌃",
   control: "⌃",
-  enter: "↵",
+  enter: "⏎",
+  return: "⏎",
   backspace: "⌫",
   delete: "⌦",
-  escape: "Esc",
-  esc: "Esc",
+  escape: "⎋",
+  esc: "⎋",
   tab: "⇥",
-  space: "Space",
+  space: "␣",
   up: "↑",
   down: "↓",
   left: "←",
@@ -725,10 +692,12 @@ const KEY_LABELS: Record<string, string> = {
   "⇧": "Shift",
   "⌥": "Option",
   "⌃": "Control",
-  "↵": "Enter",
+  "⏎": "Enter",
   "⌫": "Backspace",
   "⌦": "Delete",
+  "⎋": "Escape",
   "⇥": "Tab",
+  "␣": "Space",
   "↑": "Up arrow",
   "↓": "Down arrow",
   "←": "Left arrow",
@@ -740,7 +709,7 @@ export interface KbdProps extends HTMLAttributes<HTMLElement> {
   keys: string[];
   /** Normal matches body text; small is reserved for dense menu chrome. */
   size?: VariantProps<typeof MANIFESTS.kbd>["size"];
-  /** Drops the fill and border. For keys rendered inside a menu item. */
+  /** Uses the subtler keycap treatment for keys rendered inside menu chrome. */
   quiet?: boolean;
 }
 

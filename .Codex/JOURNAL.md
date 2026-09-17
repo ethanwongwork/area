@@ -1,5 +1,23 @@
 # Project journal
 
+## 2026-09-16 — Curated UI scale, Field/Input, and Token audit
+
+The docs exposed that independent typography and density controls could create a UI that no
+real product would ship. Area now packages UI type, control geometry, icons, insets, and gaps
+into compact/default scale choices, while fields retain a documented 16rem contained measure
+and their nested action owns a real 24px hit box. The Token audit records a deliberate boundary:
+Area Token names a static design token, whereas removable or selected values need a future
+TokenInput/Tag behavior contract.
+
+## 2026-09-15 — Docs shell density and component refinement
+
+The visual pass exposed a real mismatch: the docs inspector rendered compact axis inputs
+inside a default-density panel, and a stale wordmark offset no longer matched the nav label
+column. The inspector now uses medium form controls, has a narrower persistent resizable
+rail, and the gallery contains one representative component specimen per tile. Cards keep
+their requested 8px media and 12px content layers; chips, Kbd, Slider, Dialog and panel
+rows now share the same visual hierarchy across the docs.
+
 ## 2026-09-15 — Shared optical insets and first-line sizing
 
 V04 turns the user's box-based alignment reference into a shared CSS contract: measure

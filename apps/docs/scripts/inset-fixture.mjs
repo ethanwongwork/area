@@ -10,7 +10,7 @@ const globe = icon('globe');
 const chevron = icon('chevron-down');
 export function buildInsetFixture(out, repo) {
   const sections = [];
-  for (const density of ['default', 'compact']) for (const type of ['geist', 'geist-compact', 'geist-large', 'system']) for (const dir of ['ltr', 'rtl']) for (const contrast of ['standard','more']) {
+  for (const ui of ['default', 'compact']) for (const dir of ['ltr', 'rtl']) for (const contrast of ['standard','more']) {
     const rows = ['xs','sm','md','lg','xl'].map(size => h('div', {className:'specimen-row', key:size},
       h('small',null,size),
       h(Button,{size,variant:'soft'},'Text'),
@@ -23,13 +23,13 @@ export function buildInsetFixture(out, repo) {
       h(Select,{size,'aria-label':`${size} choice`},h('option',null,'Text')),
       h(Checkbox,{size,label:'Text',description:'Second line'}),h(Radio,{size,label:'Text',description:'Second line'}),h(Switch,{size,label:'Text',description:'Second line'})
     ));
-    sections.push(h('section', {'data-area-density':density,'data-area-type':type,'data-area-contrast':contrast,'data-area-theme':contrast==='more'?'dark':'light','data-area-surface':contrast==='more'?'outlined':'flat','data-area-radius':contrast==='more'?'pill':'8',dir,key:density+type+dir+contrast},
-      h('h2',null,`${density} · ${type} · ${dir} · ${contrast}`),...rows,
+    sections.push(h('section', {'data-area-ui':ui,'data-area-contrast':contrast,'data-area-theme':contrast==='more'?'dark':'light','data-area-surface':contrast==='more'?'outlined':'flat','data-area-radius':contrast==='more'?'pill':'8',dir,key:ui+dir+contrast},
+      h('h2',null,`${ui} · ${dir} · ${contrast}`),...rows,
       h('div',{className:'specimen-row'},
         h(Badge,{dot:true},'Live'),h(Badge,{variant:'outline'},'Text'),
         h(Token,{swatch:'var(--area-accent-solid)'},'--area-accent'),h(Kbd,{keys:['cmd','k']}),
         h(Button,{variant:'soft'},'Égjpqy Ångström'),h(Tooltip,null,'Text'),
-        h(Tabs,{tabs:[{id:density+type+dir+contrast,label:'Text'}],value:density+type+dir+contrast})),
+        h(Tabs,{tabs:[{id:ui+dir+contrast,label:'Text'}],value:ui+dir+contrast})),
       h('div',{className:'specimen-row'},
         h(Nav,null,h(NavItem,{href:'#',icon:globe,trailing:chevron,current:true},'Text')),
         h(Menu,null,h(MenuItem,{shortcut:h(Kbd,{size:'small',keys:['cmd','k']})},h('span',{className:'area-menu__icon'},globe),h('span',{className:'area-menu__text'},'Text'))),

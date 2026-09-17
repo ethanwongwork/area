@@ -24,9 +24,9 @@ export function runChecks(): Check[] {
   check('F04/segmented-tabstops','Segmented has one tab stop',Array.from(el('lab-segmented').querySelectorAll('button')).filter(n=>n.tabIndex===0).length,1);
   const spinner = getComputedStyle(el('motion-probe'));
   check('F05/motion-none','Explicit motion none stops the spinner',spinner.animationName==='none'||spinner.animationDuration.split(',').every(n=>parseFloat(n)===0),true);
-  const density = el('comparison').dataset.areaDensity;
-  const height = density==='compact'?28:32;
-  for(const id of ['lab-button','lab-name','lab-access','lab-segmented']) check('size/'+id,'Medium outer height matches density',Math.round((id==='lab-name'?el(id).parentElement!:el(id)).getBoundingClientRect().height),height);
+  const ui = el('comparison').dataset.areaUi;
+  const height = ui==='compact'?28:32;
+  for(const id of ['lab-button','lab-name','lab-access','lab-segmented']) check('size/'+id,'Medium outer height matches UI scale',Math.round((id==='lab-name'?el(id).parentElement!:el(id)).getBoundingClientRect().height),height);
   const slider = el('lab-slider') as HTMLInputElement;
   const expected = (Number(slider.value)-Number(slider.min))/(Number(slider.max)-Number(slider.min))*100;
   check('F07/slider-fill','Slider fill follows the current value',parseFloat(getComputedStyle(slider).getPropertyValue('--_pct')),expected);

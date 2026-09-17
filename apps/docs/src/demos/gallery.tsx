@@ -1,54 +1,46 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
-import { Alert, Avatar, Badge, Button, Card, CardDescription, CardFooter, CardTitle, Checkbox, Chip, ChipGroup, Code, CodeBlock, Dialog, Field, Input, Kbd, Menu, MenuItem, Nav, NavItem, Panel, PanelSection, Popover, Progress, Radio, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
-import { CheckIcon, InfoIcon, SearchIcon } from "../icons.tsx";
+import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, Code, CodeBlock, Dialog, Field, Input, Kbd, Menu, MenuItem, Nav, NavItem, Panel, PanelSection, Popover, Progress, Radio, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
+import { ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
 export const GalleryAlert = () => (
-  <div className="docs-gallery-stack">
-    <Alert icon={<InfoIcon />} title="A little heads up">Your trial ends in 3 days.</Alert>
-    <Alert tone="success" icon={<CheckIcon />} title="Changes saved" />
-  </div>
+  <Alert icon={<InfoIcon />} title="A little heads up">Your trial ends in 3 days.</Alert>
 );
 
 export const GalleryAvatar = () => (
-  <div className="docs-gallery-row">
-    <Avatar size="sm" fallback="EW" alt="Ethan Wong" />
-    <Avatar fallback="AL" alt="Alex Lee" />
-    <Avatar size="lg" fallback="MK" alt="Morgan Kim" />
-  </div>
+  <Avatar fallback="AL" alt="Alex Lee" />
 );
 
 export const GalleryBadge = () => (
-  <div className="docs-gallery-row">
-    <Badge>Draft</Badge><Badge tone="accent">New</Badge>
-    <Badge tone="success" dot>Live</Badge><Badge variant="outline">Review</Badge>
-  </div>
+  <Badge tone="success" dot>Live</Badge>
 );
 
 export const GalleryButton = () => (
-  <div className="docs-gallery-stack">
-    <div className="docs-gallery-row"><Button>Continue</Button><Button variant="soft">Save</Button></div>
-    <div className="docs-gallery-row"><Button variant="outline">Preview</Button><Button variant="ghost">Cancel</Button></div>
-  </div>
+  <Button>Submit <Kbd keys={["cmd", "enter"]} size="small" quiet /></Button>
 );
 
 export const GalleryCard = () => (
   <Card style={{ inlineSize: "100%" }}>
-    <CardTitle>Project notes</CardTitle>
-    <CardDescription>A shared place for ideas.</CardDescription>
-    <CardFooter><Button size="sm" variant="outline">Open project</Button></CardFooter>
+    <CardMedia>
+      <span className="area-card__media-cluster" aria-hidden="true">
+        <span className="area-card__media-tile"><InfoIcon /></span>
+        <span className="area-card__media-tile"><DotsFourIcon /></span>
+        <span className="area-card__media-tile"><TokenIcon /></span>
+      </span>
+      <span className="area-card__media-caption">Area</span>
+    </CardMedia>
+    <CardTitle>Project toolkit</CardTitle>
+    <CardDescription>A shared place for tools, notes, and integrations.</CardDescription>
+    <CardAction href="#"><TokenIcon /><span>Open integrations</span><ArrowIcon /></CardAction>
+    <CardFooter><Button size="sm" variant="outline">Previous</Button><Button size="sm" tone="accent">Continue</Button></CardFooter>
   </Card>
 );
 
 export const GalleryCheckbox = () => (
-  <div className="docs-gallery-stack">
-    <Checkbox label="Email updates" defaultChecked />
-    <Checkbox label="Product news" />
-    <Checkbox label="Weekly digest" disabled />
-  </div>
+  <Checkbox label="Email updates" defaultChecked />
 );
 
 export const GalleryChip = () => (
-  <ChipGroup><Chip selected>All</Chip><Chip>Design</Chip><Chip>Product</Chip></ChipGroup>
+  <Chip selected>Design</Chip>
 );
 
 export const GalleryCode = () => <Code>npm install @area/react</Code>;
@@ -62,24 +54,43 @@ export const GalleryDialog = () => (
 );
 
 export const GalleryField = () => (
-  <Field label="Email address" htmlFor="gallery-email" description="Use your work email.">
-    <Input id="gallery-email" type="email" placeholder="you@example.com" />
+  <Field label="Email address" description="Use your work email.">
+    <Input type="email" placeholder="you@example.com" />
   </Field>
 );
 
 export const GalleryInput = () => (
-  <div className="docs-gallery-stack">
-    <Input aria-label="Search the gallery specimen" icon={<SearchIcon />} placeholder="Search anything" />
-    <Input aria-label="Amount specimen" prefix="$" suffix="USD" placeholder="0.00" />
-  </div>
+  <Input aria-label="Search the gallery specimen" leadingIcon={<SearchIcon />} placeholder="Search anything" />
 );
 
 export const GalleryKbd = () => (
-  <div className="docs-gallery-row"><Kbd keys={["cmd", "K"]} /><Kbd keys={["shift", "enter"]} /><Kbd keys={["escape"]} /></div>
+  <Kbd keys={["cmd", "K"]} />
 );
 
 export const GalleryMenu = () => (
-  <Menu><MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />}>Search</MenuItem><MenuItem>New document</MenuItem><MenuItem tone="danger">Delete</MenuItem></Menu>
+  <Menu>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="small" quiet />}>
+      <span className="area-menu__icon"><SearchIcon /></span>
+      <span className="area-menu__text">Search</span>
+    </MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="small" quiet />}>
+      <span className="area-menu__icon"><PlusIcon /></span>
+      <span className="area-menu__text">New document</span>
+    </MenuItem>
+    <div className="area-menu__separator" />
+    <MenuItem>
+      <span className="area-menu__icon"><TokenIcon /></span>
+      <span className="area-menu__text">Use connectors</span>
+    </MenuItem>
+    <MenuItem shortcut={<ArrowIcon />}>
+      <span className="area-menu__icon"><DotsFourIcon /></span>
+      <span className="area-menu__text">More</span>
+    </MenuItem>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} size="small" quiet />}>
+      <span className="area-menu__icon"><DismissIcon /></span>
+      <span className="area-menu__text">Delete</span>
+    </MenuItem>
+  </Menu>
 );
 
 export const GalleryNav = () => (
@@ -89,10 +100,10 @@ export const GalleryNav = () => (
 );
 
 export const GalleryPanel = () => (
-  <Panel size="sm" title="Appearance" style={{ inlineSize: "100%" }}>
+  <Panel title="Appearance" style={{ inlineSize: "100%" }}>
     <PanelSection>
-      <Field inline label="Style" htmlFor="gallery-panel-style"><Select size="sm" id="gallery-panel-style" defaultValue="soft"><option value="soft">Soft</option><option value="outline">Outline</option></Select></Field>
-      <Field inline label="Visible" htmlFor="gallery-panel-visible"><Switch size="sm" id="gallery-panel-visible" defaultChecked /></Field>
+      <Field orientation="horizontal" label="Style" htmlFor="gallery-panel-style"><Select id="gallery-panel-style" defaultValue="soft"><option value="soft">Soft</option><option value="outline">Outline</option></Select></Field>
+      <Field orientation="horizontal" label="Visible" htmlFor="gallery-panel-visible"><Switch id="gallery-panel-visible" defaultChecked /></Field>
     </PanelSection>
   </Panel>
 );
@@ -102,11 +113,11 @@ export const GalleryPopover = () => (
 );
 
 export const GalleryProgress = () => (
-  <div className="docs-gallery-stack"><Progress value={62} label="Upload progress" /><Progress label="Loading" /></div>
+  <Progress value={62} label="Upload progress" />
 );
 
 export const GalleryRadio = () => (
-  <div className="docs-gallery-stack"><Radio name="gallery-plan" value="starter" label="Starter" defaultChecked /><Radio name="gallery-plan" value="pro" label="Pro" /><Radio name="gallery-plan" value="team" label="Team" /></div>
+  <Radio name="gallery-plan" value="starter" label="Starter" defaultChecked />
 );
 
 export const GallerySegmented = () => (
@@ -122,17 +133,17 @@ export const GallerySeparator = () => (
 );
 
 export const GallerySkeleton = () => (
-  <div className="docs-gallery-stack"><Skeleton shape="text" style={{ inlineSize: "60%" }} /><Skeleton shape="text" /><Skeleton shape="text" style={{ inlineSize: "80%" }} /></div>
+  <Skeleton shape="text" style={{ inlineSize: "60%" }} />
 );
 
 export const GallerySlider = () => <Slider aria-label="Gallery opacity specimen" min={0} max={100} defaultValue={60} />;
 
 export const GallerySpinner = () => (
-  <div className="docs-gallery-row"><Spinner size="sm" /><Spinner /><Spinner size="lg" /></div>
+  <Spinner />
 );
 
 export const GallerySwitch = () => (
-  <div className="docs-gallery-stack"><Switch label="Notifications" defaultChecked /><Switch label="Do not disturb" /></div>
+  <Switch label="Notifications" defaultChecked />
 );
 
 export const GalleryTable = () => (
@@ -148,7 +159,7 @@ export const GalleryTextarea = () => <Textarea aria-label="Gallery message speci
 export const GalleryToast = () => <Toast tone="success" icon={<CheckIcon />} style={{ inlineSize: "100%", minInlineSize: 0 }}>Changes saved.</Toast>;
 
 export const GalleryToken = () => (
-  <div className="docs-gallery-stack"><Token swatch="var(--area-accent-solid)">--area-accent-solid</Token><Token>--area-space-16</Token></div>
+  <Token swatch="var(--area-accent-solid)">--area-accent-solid</Token>
 );
 
 export const GalleryTooltip = () => <Tooltip>Copy to clipboard</Tooltip>;

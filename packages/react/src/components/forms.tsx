@@ -24,15 +24,17 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 }
 
 export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  { size, invalid, className, ...rest },
+  { size, invalid, className, "aria-invalid": ariaInvalid, ...rest },
   ref,
 ) {
+  const invalidState = invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
+
   return (
     <textarea
       ref={ref}
       className={textareaVariants({ size }, className)}
-      aria-invalid={invalid || undefined}
-      {...(invalid ? { "data-invalid": "" } : {})}
+      aria-invalid={invalid ? true : ariaInvalid}
+      {...(invalidState ? { "data-invalid": "" } : {})}
       {...rest}
     />
   );

@@ -10,9 +10,9 @@
   .area-kbd {
     --_min: var(--area-space-20);
     --_height: var(--area-space-20);
-    --_padding: var(--area-space-4);
+    --_padding: var(--area-space-6);
     --_font: var(--area-text-xs-size);
-    --_leading: var(--area-size-10);
+    --_leading: var(--area-text-xs-leading);
 
     display: inline-flex;
     align-items: center;
@@ -22,10 +22,10 @@
     block-size: var(--_height);
     padding: var(--_padding);
 
-    border: var(--area-stroke-width) solid var(--area-edge-control);
+    border: var(--area-stroke-width) solid transparent;
     border-radius: var(--area-radius-small);
-    background-color: transparent;
-    color: var(--area-fg-muted);
+    background-color: var(--area-bg-component-hover);
+    color: var(--area-fg-default);
 
     font-family: var(--area-font-keyboard);
     font-size: var(--_font);
@@ -49,17 +49,17 @@
   .area-kbd--normal {
     --_min: var(--area-space-20);
     --_height: var(--area-space-20);
-    --_padding: var(--area-space-4);
+    --_padding: var(--area-space-6);
     --_font: var(--area-text-xs-size);
-    --_leading: var(--area-size-10);
+    --_leading: var(--area-text-xs-leading);
   }
 
   .area-kbd--small {
-    --_min: var(--area-space-16);
-    --_height: var(--area-space-16);
-    --_padding: var(--area-space-2);
+    --_min: var(--area-space-20);
+    --_height: var(--area-space-20);
+    --_padding: var(--area-space-4);
     --_font: var(--area-size-11);
-    --_leading: var(--area-space-8);
+    --_leading: var(--area-text-xs-leading);
   }
 
   /* A sequence contains separate chord components; each Kbd is one chord. */
@@ -71,9 +71,24 @@
   /* Inside a menu item, keys are chrome: quieter, and pushed to the trailing edge. */
   .area-menu__item .area-kbd,
   .area-kbd--quiet {
-    background-color: transparent;
+    background-color: var(--area-bg-component-hover);
     border-color: transparent;
     box-shadow: none;
-    color: var(--area-fg-muted);
+    color: var(--area-fg-default);
+  }
+
+  /* Keycaps inside a coloured action borrow that action's hue through a translucent dark plate. */
+  .area-button--accent .area-kbd,
+  .area-button--danger .area-kbd,
+  .area-menu__item--danger:hover .area-kbd,
+  .area-menu__item--danger[data-highlighted] .area-kbd {
+    background-color: color-mix(in srgb, var(--area-bg-inverse) 16%, transparent);
+    color: inherit;
+  }
+
+  .area-button__label:has(> .area-kbd) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-gap-sm);
   }
 }

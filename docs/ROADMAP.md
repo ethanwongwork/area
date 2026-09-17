@@ -79,7 +79,7 @@ Gecko validation remains pending. E01–E04 are implemented; E05 is next; the fo
 - [ ] Dialog: single semantic owner, inert background, focus entry/return, close policy.
 - [ ] Toast: live-region lifecycle, queue/action/dismissal contract.
 - [ ] Slider: controlled/uncontrolled fill synchronization and browser-aligned normalization.
-- [ ] Field: label/help/error IDs, required/invalid semantics and composed examples.
+- [x] Field: label/help/error IDs, required/invalid semantics and composed examples. See the [Field audit](component-audits/field.md).
 - [ ] Nav disabled behavior; Progress value bounds; Avatar fallback/name policy.
 
 **Exit:** targeted interaction tests and actual consumer demos, with no docs-only JavaScript needed to repair library behavior. Audit: F04, F07. Depends on R04 for composites; native fixes can proceed independently.

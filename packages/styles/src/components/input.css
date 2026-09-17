@@ -14,52 +14,101 @@
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
+    --_action: calc(var(--_icon) + var(--area-space-8));
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
-    --_border: var(--area-edge-control);
-    --_border-hover: var(--area-edge-control-hover);
-    --_bg: var(--area-bg-surface);
+    --_border: var(--area-input-edge);
+    --_border-hover: var(--area-input-edge-hover);
+    --_border-focus: var(--area-field-focus-color);
+    --_focus-outline: var(--area-field-focus-color);
+    --_focus-halo: var(--area-shadow-color);
+    --_bg: var(--area-input-bg);
 
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: var(--_gap);
 
     block-size: var(--_height);
-    inline-size: 100%;
+    inline-size: var(--area-input-inline-size);
+    max-inline-size: 100%;
     padding-inline: var(--_gutter);
     border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
 
     background-color: var(--_bg);
-    color: var(--area-fg-default);
+    color: var(--area-input-text);
     font-size: var(--_text);
     line-height: var(--_leading);
     box-shadow: var(--area-shadow-1);
     transition: var(--area-transition);
   }
 
+  /* Explicit for manifest parity; the base class remains the framework-free default. */
+  .area-input--outline { --_bg: var(--area-input-bg); }
+
+  .area-input--soft {
+    --_bg: var(--area-input-bg-soft);
+    --_border: transparent;
+    --_border-hover: var(--area-input-edge);
+  }
+
+  .area-input--full-width { inline-size: 100%; }
+  .area-input--monospace { font-family: var(--area-font-mono); }
+
   .area-input:hover:not([data-disabled]):not(:focus-within) {
     border-color: var(--_border-hover);
   }
 
   .area-input:focus-within {
-    border-color: var(--_border);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color);
-    outline: var(--area-focus-width) solid var(--area-field-focus-color);
+    border-color: var(--_border-focus);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }
 
   .area-input[data-invalid] {
-    --_border: var(--area-fg-danger);
-    --_border-hover: var(--area-fg-danger);
+    --_border: var(--area-input-invalid-color);
+    --_border-hover: var(--area-input-invalid-color);
+    --_border-focus: var(--area-input-invalid-color);
+    --_focus-outline: var(--area-input-invalid-color);
+    --_focus-halo: var(--area-input-invalid-halo-color);
+  }
+
+  .area-input[data-success] {
+    --_border: var(--area-input-success-color);
+    --_border-hover: var(--area-input-success-color);
+    --_border-focus: var(--area-input-success-color);
+    --_focus-outline: var(--area-input-success-color);
+    --_focus-halo: var(--area-input-success-halo-color);
+  }
+
+  .area-input[data-warning] {
+    --_border: var(--area-input-warning-color);
+    --_border-hover: var(--area-input-warning-color);
+    --_border-focus: var(--area-input-warning-color);
+    --_focus-outline: var(--area-input-warning-color);
+    --_focus-halo: var(--area-input-warning-halo-color);
   }
 
   .area-input[data-disabled] {
+    --_bg: var(--area-input-bg-disabled);
+    --_border: var(--area-border-faint);
+    color: var(--area-fg-disabled);
     cursor: not-allowed;
-    opacity: 0.5;
   }
+
+  .area-input[data-read-only] {
+    --_bg: var(--area-input-bg-soft);
+    cursor: default;
+  }
+
+  .area-input[data-loading] { cursor: progress; }
+
+  .area-input[data-invalid] .area-input__icon { color: var(--area-input-invalid-color); }
+  .area-input[data-success] .area-input__icon { color: var(--area-input-success-color); }
+  .area-input[data-warning] .area-input__icon { color: var(--area-input-warning-color); }
 
   /* The control itself carries no chrome; the shell owns all of it. */
   .area-input__control {
@@ -75,7 +124,25 @@
   }
 
   .area-input__control::placeholder {
-    color: var(--area-fg-placeholder);
+    color: var(--area-input-placeholder);
+  }
+
+  .area-input[data-disabled] .area-input__control::placeholder { color: var(--area-fg-disabled); }
+
+  .area-input__control::file-selector-button {
+    margin-inline-end: var(--_gap);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--area-fg-accent);
+    font: inherit;
+    font-weight: var(--area-weight-strong);
+    cursor: pointer;
+  }
+
+  .area-input[data-disabled] .area-input__control::file-selector-button {
+    color: var(--area-fg-disabled);
+    cursor: not-allowed;
   }
 
   .area-input__icon {
@@ -85,7 +152,7 @@
     inline-size: var(--_icon);
     block-size: var(--_icon);
     flex-shrink: 0;
-    color: var(--area-fg-muted);
+    color: var(--area-input-icon);
   }
 
   .area-input__icon > svg {
@@ -99,6 +166,64 @@
     color: var(--area-fg-muted);
     user-select: none;
     white-space: nowrap;
+  }
+
+  .area-input__action {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .area-input__action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_action);
+    block-size: var(--_action);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: min(var(--area-radius-small), calc(var(--_action) / 2));
+    background: transparent;
+    color: var(--area-input-icon);
+    cursor: pointer;
+  }
+
+  .area-input__action-button:hover { background-color: var(--area-bg-component-hover); }
+  .area-input__action-button:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+
+  .area-input__action-icon,
+  .area-input__action-icon > svg {
+    display: block;
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+  }
+
+  .area-input__action-tooltip {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: calc(100% + var(--area-space-4));
+    inset-inline-end: 0;
+    inline-size: max-content;
+    max-inline-size: 200px;
+    padding: var(--area-space-6) var(--area-space-8);
+    border-radius: var(--area-radius-small);
+    background-color: var(--area-bg-inverse);
+    color: var(--area-fg-on-inverse);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    box-shadow: var(--area-shadow-2);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(calc(var(--area-space-2) * -1));
+    transition: var(--area-transition);
+  }
+
+  .area-input__action:hover .area-input__action-tooltip,
+  .area-input__action:focus-within .area-input__action-tooltip {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   /* Outer-edge optical insets are shared in inset.css. */

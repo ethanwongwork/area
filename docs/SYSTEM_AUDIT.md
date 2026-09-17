@@ -146,7 +146,7 @@ The OS reduced-motion query disables those animations, but axis transition overr
 ### F07 · P1 · Form and state ownership are incomplete
 
 - Uncontrolled Slider derives `--_pct` once from `defaultValue`; native value changes do not update that fill. The docs inspector separately updates its own CSS percentage, hiding the library gap. Out-of-range values also need normalization consistent with the browser.
-- Field prints a description/error and required asterisk but does not connect descriptions via IDs or convey required/invalid state to its control. `htmlFor` works only when the consumer wires an ID. Establish an explicit composition contract, not an implicit expectation that children infer it.
+- Field now generates stable label/help/error IDs, preserves consumer ARIA references, and propagates required, disabled, and invalid state to one direct control. The [Field audit](component-audits/field.md) records its explicit composition contract and remaining group/assistive-technology work.
 - NavItem's `disabled` sets ARIA/data attributes but leaves href/event behavior to the caller. CSS pointer suppression, if present, does not prevent keyboard activation.
 - Progress clamps painted width but announces the raw value; zero/negative max and invalid values need a defined policy.
 - Avatar's claimed required alt is optional in the type; broken-image fallback is not implemented.

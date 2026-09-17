@@ -42,8 +42,11 @@ export async function renderDemos() {
   const rendered = {};
 
   for (const [name, Component] of Object.entries(DEMOS)) {
+    const identifierPrefix = `area-${name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()}-`;
     rendered[name] = {
-      html: renderToStaticMarkup(createElement(Component)),
+      // Every preview is an independent React root. Prefix useId() output so controls
+      // in different previews cannot resolve another demo's label or description.
+      html: renderToStaticMarkup(createElement(Component), { identifierPrefix }),
       code: sources[name] ?? "",
     };
     if (!sources[name]) {

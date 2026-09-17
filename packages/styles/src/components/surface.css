@@ -7,49 +7,166 @@
  * padding takes a 6px radius and looks nested rather than pasted on.
  *
  * The rule is applied per component rather than through one global token because the
- * inset differs per component -- a menu pads 6px, a card pads 16px -- so there is no
- * single correct value for a shared token to hold.
+ * inset differs per component -- a menu pads 4px, while card media and content
+ * use separate 8px and 12px layers -- so there is no single correct value for a
+ * shared token to hold.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   /* --- Card --------------------------------------------------------------- */
   .area-card {
-    --_inset: var(--area-space-16);
+    --_media-inset: var(--area-space-8);
+    --_content-inset: var(--area-space-12);
+    --_inner-radius: var(--area-radius-control);
     display: flex;
     flex-direction: column;
     gap: var(--area-space-12);
-    padding: var(--_inset);
+    padding: var(--_media-inset);
     border: var(--area-border-width) solid var(--area-border-decorative);
-    border-radius: var(--area-radius-container);
+    border-radius: calc(var(--_inner-radius) + var(--_media-inset));
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
     box-shadow: var(--area-shadow-1);
   }
 
+  .area-card__title,
+  .area-card__description,
+  .area-card__action {
+    margin-inline: calc(var(--_content-inset) - var(--_media-inset));
+  }
+
   .area-card__title {
-    font-size: var(--area-title-xs-size);
-    line-height: var(--area-title-xs-leading);
-    letter-spacing: var(--area-title-xs-tracking);
+    margin-block-start: calc(var(--_content-inset) - var(--_media-inset));
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-sm-leading);
+    letter-spacing: var(--area-text-md-tracking);
     font-weight: var(--area-weight-strong);
   }
 
   .area-card__description {
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     color: var(--area-fg-muted);
+  }
+
+  .area-card__action {
+    display: flex;
+    align-items: center;
+    gap: var(--area-gap-md);
+    min-block-size: var(--area-control-lg);
+    padding-inline: var(--area-gutter-md);
+    border-radius: var(--area-radius-control);
+    background-color: var(--area-bg-component);
+    color: var(--area-fg-accent);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-strong);
+    text-decoration: none;
+    transition: var(--area-transition);
+  }
+
+  .area-card__action:hover {
+    background-color: var(--area-bg-component-hover);
+  }
+
+  .area-card__action > svg {
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    flex-shrink: 0;
+  }
+
+  .area-card__action > svg:last-child {
+    margin-inline-start: auto;
   }
 
   .area-card__footer {
     display: flex;
+    align-items: center;
     gap: var(--area-space-8);
+    justify-content: space-between;
+    margin: 0 calc(var(--_media-inset) * -1) calc(var(--_media-inset) * -1);
+    padding: var(--_content-inset);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+  }
+
+  .area-card__footer:has(> :only-child) {
     justify-content: flex-end;
   }
 
-  /* Concentric: a media block bleeds to the card's edge and inherits the inner radius. */
   .area-card__media {
-    margin: calc(var(--_inset) * -1) calc(var(--_inset) * -1) 0;
-    border-start-start-radius: max(0px, calc(var(--area-radius-container) - var(--area-border-width)));
-    border-start-end-radius: max(0px, calc(var(--area-radius-container) - var(--area-border-width)));
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    min-block-size: var(--area-space-96);
+    border: var(--area-border-width) solid var(--area-border-decorative);
+    border-radius: var(--_inner-radius);
+    background:
+      radial-gradient(circle at 72% 18%, color-mix(in oklab, var(--area-accent-solid) 55%, transparent), transparent 34%),
+      radial-gradient(circle at 20% 80%, color-mix(in oklab, var(--area-warning-solid) 65%, transparent), transparent 44%),
+      linear-gradient(135deg, var(--area-info-solid), var(--area-warning-solid), var(--area-accent-surface-hover));
     overflow: hidden;
+  }
+
+  .area-card__media-cluster {
+    display: flex;
+    align-items: center;
+    isolation: isolate;
+  }
+
+  .area-card__media-tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--area-space-64);
+    block-size: var(--area-space-64);
+    margin-inline: calc(var(--area-space-8) * -1);
+    border: var(--area-border-width) solid var(--area-border-decorative);
+    border-radius: var(--area-radius-container);
+    background-color: color-mix(in oklab, var(--area-bg-surface) 90%, transparent);
+    color: var(--area-fg-accent);
+    box-shadow: var(--area-shadow-2);
+  }
+
+  .area-card__media-tile:nth-child(2) {
+    color: var(--area-fg-default);
+  }
+
+  .area-card__media-tile:nth-child(3) {
+    inline-size: var(--area-space-80);
+    block-size: var(--area-space-80);
+    z-index: 1;
+    color: var(--area-fg-discovery);
+  }
+
+  .area-card__media-caption {
+    position: absolute;
+    inset-block-end: var(--area-space-12);
+    padding: var(--area-space-4) var(--area-space-8);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-bg-inverse);
+    color: var(--area-fg-on-inverse);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    box-shadow: var(--area-shadow-2);
+  }
+
+  .area-card__steps {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--area-space-4);
+    min-inline-size: var(--area-space-48);
+  }
+
+  .area-card__step {
+    inline-size: var(--area-space-6);
+    block-size: var(--area-space-6);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-border-decorative);
+  }
+
+  .area-card__step[data-current] {
+    background-color: var(--area-fg-muted);
   }
 
   /* --- Alert -------------------------------------------------------------- */
@@ -157,7 +274,7 @@
   /* --- Popover and Menu --------------------------------------------------- */
   .area-popover,
   .area-menu {
-    --_inset: var(--area-space-6);
+    --_inset: var(--area-space-4);
     padding: var(--_inset);
     border: var(--area-border-width) solid var(--area-border-faint);
     border-radius: var(--area-radius-container);
@@ -174,8 +291,8 @@
   .area-menu {
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-2);
-    min-inline-size: 180px;
+    gap: 0;
+    min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
   }
 
   /*
@@ -186,6 +303,7 @@
    */
   .area-menu--inline {
     --_inset: 0px;
+    gap: var(--area-space-2);
     padding: 0;
     border: 0;
     background: transparent;
@@ -323,8 +441,12 @@
     font-weight: var(--area-weight-strong);
   }
 
-  .area-menu__item--danger { color: var(--area-fg-danger); }
-  .area-menu__item--danger:hover:not([data-disabled]) { background-color: var(--area-danger-surface); }
+  .area-menu__item--danger { color: var(--area-fg-danger-vivid); }
+  .area-menu__item--danger:hover:not([data-disabled]),
+  .area-menu__item--danger[data-highlighted] {
+    background-color: var(--area-danger-surface);
+    color: var(--area-fg-danger);
+  }
 
   /*
    * The icon and text slots of a menu item. The icon holds its size; the label takes what
@@ -367,10 +489,11 @@
     font-weight: var(--area-weight-strong);
   }
 
-  /* Negative inline margin so the rule spans the panel, not just the item column. */
   .area-menu__separator {
     block-size: 1px;
-    margin: var(--area-space-4) calc(var(--_inset) * -1);
+    margin-block: var(--area-space-4);
+    margin-inline-start: var(--area-space-8);
+    margin-inline-end: var(--area-space-8);
     background-color: var(--area-border-decorative);
   }
 
