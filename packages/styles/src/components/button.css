@@ -26,6 +26,7 @@
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
+    --_radius: var(--area-radius-control-md);
 
     /*
      * Tone: nine slots a tone repoints, and a variant reads. The base is `neutral`, which
@@ -66,7 +67,7 @@
      * browser clamps border-radius to half the shorter side. The cap keeps the smallest
      * tier a rounded rectangle rather than a lozenge. See axes/radius.ts for why 0.4.
      */
-    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
+    border-radius: min(var(--_radius), calc(var(--_height) * var(--area-radius-cap)));
 
     font-family: inherit;
     font-size: var(--_text);
@@ -384,6 +385,7 @@
 
   .area-button--xs {
     --_height: var(--area-control-xs);
+    --_radius: var(--area-radius-control-xs);
     --_gutter: var(--area-gutter-xs);
     --_icon: var(--area-icon-xs);
     --_gap: var(--area-gap-xs);
@@ -393,6 +395,7 @@
 
   .area-button--sm {
     --_height: var(--area-control-sm);
+    --_radius: var(--area-radius-control-sm);
     --_gutter: var(--area-gutter-sm);
     --_icon: var(--area-icon-sm);
     --_gap: var(--area-gap-sm);
@@ -402,6 +405,7 @@
 
   .area-button--md {
     --_height: var(--area-control-md);
+    --_radius: var(--area-radius-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
     --_gap: var(--area-gap-md);
@@ -411,6 +415,7 @@
 
   .area-button--lg {
     --_height: var(--area-control-lg);
+    --_radius: var(--area-radius-control-lg);
     --_gutter: var(--area-gutter-lg);
     --_icon: var(--area-icon-lg);
     --_gap: var(--area-gap-lg);
@@ -420,6 +425,7 @@
 
   .area-button--xl {
     --_height: var(--area-control-xl);
+    --_radius: var(--area-radius-control-xl);
     --_gutter: var(--area-gutter-xl);
     --_icon: var(--area-icon-xl);
     --_gap: var(--area-gap-xl);

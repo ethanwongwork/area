@@ -2,16 +2,16 @@
 
 ## Decision summary
 
-Area **Token** remains a static inline reference to a design token, with an optional
-colour swatch. It is deliberately not Primer's selectable/removable object token. That
+Area **Token** is now the optional colour-swatch composition of the shared **Code** inline
+reference treatment. It is deliberately not Primer's selectable/removable object token. That
 separate job belongs to a future TokenInput/Tag composition, where selection, removal,
 keyboard navigation, overflow, and value management can be implemented completely.
 
 This audit clarifies the boundary in CSS, React, docs, and the shared manifest, adds
 stable component theming aliases, softens the edge to the decorative-edge role, and makes
-the examples one ordinary treatment per preview container. Token has no size prop: it
-uses one relative inline size that follows the surrounding type role. The renamed manifest
-key is `token`; `tokenChip` was an internal inconsistency, not public API.
+the examples one ordinary treatment per preview container. Code and Token share one relative
+24px inline size; Token adds only the optional swatch. The renamed manifest key is `token`;
+`tokenChip` was an internal inconsistency, not public API.
 
 ## Current Area contract
 
@@ -23,8 +23,8 @@ public component and page were Token. The swatch and base label were already sep
 slots, but the documentation combined unrelated specimens in the swatch and subtle
 previews.
 
-The resulting contract is a static `span`, `area-token__label`, and optional
-`area-token__swatch`. It is one contained inline item. `subtle` is an appearance for a
+The resulting contract is a static `code` element that shares `.area-code`, plus an optional
+`area-token__label` and `area-token__swatch`. It is one contained inline item. `subtle` is an appearance for a
 derived alias; `onColor` is an appearance for an inherited coloured context. Neither
 changes semantics or behavior.
 
@@ -35,9 +35,10 @@ while optionally showing its current colour resolution. It must stay compact in 
 tables, inherit themes, clip only by the surrounding layout, and never imply that the
 reference can be selected or dismissed.
 
-It is not literal source (Code), a shortcut (Kbd), status/metadata (Badge), a selectable
-filter (Chip), an editable tokenized input, a removable value, or a generic leading-icon
-container. Those jobs have different accessibility and interaction contracts.
+It is not a shortcut (Kbd), status/metadata (Badge), a selectable filter (Chip), an editable
+tokenized input, a removable value, or a generic leading-icon container. Those jobs have
+different accessibility and interaction contracts. Literal source and a design-token name
+are intentionally the same Code treatment.
 
 ## Evidence ledger
 
@@ -75,13 +76,15 @@ design-token reference.
 
 Measurements were taken from the built Chromium documentation page at a 1159×798 CSS-pixel
 viewport, device-pixel ratio 2, light/neutral/blue/default UI scale/8px radius/outlined
-surface. A standard Token has 14px mono type, 18.9px line height, a painted 18px outer
-height, 1px edge, 3.03px inline text clearance, and a 6px painted radius. A Token with a
-swatch remains 18px high; its swatch is 14×14px with a 4px gap. Intrinsic width follows the
-name: `--area-space-16` measured 134.05px; the colour-swatches `--area-accent-solid`
-measured 185.63px.
+surface. Standard Code and a Token without a swatch have the same 14px mono type, 18.9px
+line height, and 24px painted outer height. A Token with a swatch remains 24px high; its
+swatch is 14×14px with a 4px gap and equal 5px outer inset
+on every side. Intrinsic width follows the
+name: `--area-space-16` measured 138px; the colour-swatches `--area-accent-solid`
+measured 189.63px.
 
-The shared inset formula sets `--_token-height` to `1em + --area-space-4`; because the
+The shared inset formula sets a swatch Token's `--_token-height` to `1em + --area-space-10`;
+because the
 component's `0.875em` type follows its surrounding text, there is no independent default
 or compact size ramp to measure. It clamps to `max-inline-size: 100%` and intentionally
 does not grow to a preview/container width. Long names are a documentation-content
@@ -114,10 +117,10 @@ existing readable default foreground role.
   reference job, and a swatch directly supports that job without adding behavior.
 - **`subtle` and `onColor` appearances.** They are persistent, orthogonal visual contexts
   that CSS can support across themes without changing Token's static semantics.
-- **Relative one-size geometry.** A documentation reference must fit surrounding prose and
-  table roles. It is more coherent than an independent size decision at every call site.
+- **Shared relative inline geometry.** A documentation reference must fit surrounding prose
+  and table roles. One 24px Code treatment is more coherent than competing inline badges.
 - **Token-scoped semantic aliases.** Stable component roles let a documentation product
-  retheme Token without changing Code, Badge, or Chip.
+  add the swatch context without changing Code, Badge, or Chip.
 
 ### Separate component or composition
 

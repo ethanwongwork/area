@@ -8,7 +8,7 @@
       appearance: auto;
       background-image: none;
     }
-    .area-input[data-invalid], .area-textarea[data-invalid], .area-select[aria-invalid="true"] {
+    .area-input[data-invalid], .area-textarea:is([data-invalid], [aria-invalid="true"]), .area-select[aria-invalid="true"] {
       border-style: dashed;
     }
     .area-button:focus-visible, .area-chip:focus-visible, .area-tabs__tab:focus-visible,

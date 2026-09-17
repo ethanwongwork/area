@@ -201,7 +201,7 @@ export const DOCS_CSS = `
 @layer area.base {
   :root {
     /* Site layout. Not design-system tokens: these describe this documentation site. */
-    --docs-sidebar: 192px;
+    --docs-sidebar: 184px;
     /*
      * The site's own spacing, derived from the density axis rather than fixed, so the
      * documentation tightens with the system it documents instead of staying put while the
@@ -289,7 +289,11 @@ export const DOCS_CSS = `
   .docs-sidebar::after { inset-inline-end: 0; }
   .docs-inspector::after { inset-inline-start: 0; }
 
-  .docs-sidebar__body { padding-block-start: var(--area-space-4); }
+  .docs-sidebar__body { padding-block-start: 0; }
+
+  /* Rails are denser than a floating inspector: normal-sized controls, smaller inset. */
+  .docs-sidebar,
+  .docs-inspector { --_inset: var(--area-gutter-sm); }
 
   /*
    * The seam between nav groups. Each group already opens with a label that occupies a full
@@ -325,7 +329,7 @@ export const DOCS_CSS = `
     letter-spacing: var(--area-text-md-tracking);
     text-transform: lowercase;
     /* Align the wordmark's painted left edge with a sidebar heading and icon ink. */
-    margin-inline-start: var(--area-space-8);
+    margin-inline-start: var(--area-space-4);
   }
 
   /*

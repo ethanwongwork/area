@@ -109,7 +109,45 @@ export const FieldSuccess = () => <Field label="Workspace" validation="This name
 
 export const FieldWarning = () => <Field label="Workspace" validation="This name is visible to everyone in your organization." validationStatus="warning"><Input defaultValue="area-design" /></Field>;
 
-export const TextareaDefault = () => <Textarea placeholder="Write a message" rows={3} />;
+export const TextareaDefault = () => <Textarea aria-label="Message" placeholder="Write a message" />;
+
+export const TextareaOutline = () => <Textarea variant="outline" aria-label="Outline message" placeholder="Outline" />;
+
+export const TextareaSoft = () => <Textarea variant="soft" aria-label="Soft message" placeholder="Soft" />;
+
+export const TextareaSizes = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-textarea-inline-size)" }}>
+    <Textarea size="sm" rows={3} aria-label="Small textarea" placeholder="Small" />
+    <Textarea size="md" rows={3} aria-label="Medium textarea" placeholder="Medium" />
+    <Textarea size="lg" rows={3} aria-label="Large textarea" placeholder="Large" />
+  </div>
+);
+
+export const TextareaInvalid = () => <Textarea invalid aria-label="Invalid message" defaultValue="Too short" />;
+
+export const TextareaSuccess = () => <Textarea validationStatus="success" aria-label="Accepted message" defaultValue="This response is ready." />;
+
+export const TextareaWarning = () => <Textarea validationStatus="warning" aria-label="Message with warning" defaultValue="This response will be visible to everyone." />;
+
+export const TextareaReadOnly = () => <Textarea readOnly aria-label="Read-only message" defaultValue="This note may be selected and copied." />;
+
+export const TextareaDisabled = () => <Textarea disabled aria-label="Disabled message" placeholder="Disabled" />;
+
+export const TextareaFullWidth = () => (
+  <div style={{ inlineSize: 320 }}>
+    <Textarea fullWidth rows={3} aria-label="Full-width message" placeholder="Full width when requested" />
+  </div>
+);
+
+export const TextareaRows = () => <Textarea rows={2} aria-label="Short message" placeholder="Two visible rows" />;
+
+export const TextareaField = () => (
+  <Field label="Release notes" description="Summarize the user-visible changes.">
+    <Textarea placeholder="Added keyboard navigation" />
+  </Field>
+);
+
+export const TextareaResizeNone = () => <Textarea resize="none" rows={3} aria-label="Fixed message area" placeholder="Resize disabled" />;
 
 export const SelectDefault = () => (
   <Select defaultValue="md">

@@ -15,7 +15,7 @@ itself is a set of **independent dimensions** — eight of them — each retuned
 data attribute, at any depth in the tree:
 
 ```html
-<html data-area-theme="dark" data-area-accent="teal" data-area-ui="compact" data-area-radius="12">
+<html data-area-theme="dark" data-area-accent="teal" data-area-ui="compact" data-area-radius="xl">
 ```
 
 | Axis | Attribute | Presets | Owns |

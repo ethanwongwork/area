@@ -24,8 +24,8 @@ export const PRACTICES = {
     `Five tiers are available. Width follows the control ramp; track height follows a 12, 16, 20, 20 and 24px ramp. Default-density md is 32×20px, matching the measured OpenAI pattern. Compact density deliberately steps width down.`,
   ],
   code: [
-    `Use Code for short commands, identifiers and literal values inside a sentence. Use CodeBlock for multiple lines.`,
-    `Use Token for a design-token reference and an optional colour swatch. Use Kbd for a keyboard key and Badge or Chip when the content is status or a choice.`,
+    `Use Code for short commands, identifiers, literal values and design-token names inside a sentence. Use CodeBlock for multiple lines.`,
+    `Token is the same inline reference treatment with an optional colour swatch. Use Kbd for a keyboard key and Badge or Chip when the content is status or a choice.`,
   ],
   "code-block": [
     `Pass plain text through code. The html prop inserts pre-highlighted markup directly; only supply trusted or sanitized HTML.`,
@@ -50,6 +50,14 @@ export const PRACTICES = {
     `The default width is a contained 16rem measure. Use ${code("fullWidth")} when the expected value or layout genuinely needs the available column.`,
     `${code("loading")} announces progress with ${code("aria-busy")} and keeps the field editable. Use ${code("disabled")} only when input is impossible; use ${code("readOnly")} for a value that may still be selected and copied.`,
     `Use ${code("monospace")} for keys, hashes, and code-like values. Native input types, including ${code('type="file"')} and ${code('type="search"')}, continue to forward to the underlying input.`,
+  ],
+  textarea: [
+    `Use Textarea when the expected value can wrap to multiple lines. Use Input for one-line values and a separately audited editor for rich text, syntax highlighting, or formatting commands.`,
+    `Always pair a Textarea with a ${code("Field")}, or give it an ${code("aria-label")}. Placeholder text is a short example, never the durable label or instructions.`,
+    `The default reserves four lines at a contained 16rem width. Set native ${code("rows")} to the approximate response volume and use ${code("fullWidth")} only when the layout calls for the available column.`,
+    `Vertical resize is the default. Choose ${code('resize="none"')} only when growth would obscure or displace essential actions; horizontal and two-axis resizing are explicit opt-ins.`,
+    `Use native ${code("minLength")}, ${code("maxLength")}, ${code("required")}, and ${code("readOnly")} semantics. Field owns explanatory validation text; Textarea only paints the matching error, success, or warning state.`,
+    `Area does not auto-grow or render a character counter. Those behaviors need explicit height limits, controlled-value synchronization, and announced remaining-count policy in a richer composition.`,
   ],
   field: [
     `Give Field one direct control child. It generates a stable id and connects the label, description and validation message; an explicit child ${code("id")} or ${code("htmlFor")} still wins.`,

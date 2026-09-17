@@ -29,13 +29,13 @@ export const UI_SCALE_AXIS: AxisDefinition = {
       id: "compact",
       label: "Compact",
       description: "14px reading text, 13px UI text, and 28px medium controls for dense tools.",
-      tokens: tokens({ ...GEIST_TOKENS, ...typographyRamps(-1), ...densityTokens(COMPACT_TIERS) }),
+      tokens: tokens({ ...GEIST_TOKENS, ...typographyRamps(-1), ...densityTokens(COMPACT_TIERS, 0.32) }),
     },
     {
       id: "default",
       label: "Default",
       description: "16px reading text, 14px UI text, and 32px medium controls for everyday products.",
-      tokens: tokens({ ...GEIST_TOKENS, ...typographyRamps(0), ...densityTokens(DEFAULT_TIERS) }),
+      tokens: tokens({ ...GEIST_TOKENS, ...typographyRamps(0), ...densityTokens(DEFAULT_TIERS, 0.4) }),
     },
   ],
 };

@@ -16,9 +16,11 @@
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
+type ControlRadii = { xs: number; sm: number; md: number; lg: number; xl: number };
+
 interface RadiusPreset {
-  /** Control radius, in pixels. Flat across every tier. */
-  control: number;
+  /** Control radii on the default UI ladder. Compact applies its own safe cap. */
+  control: ControlRadii;
   /** Cards, dialogs, menus, popovers. */
   container: number;
   /** Badges, swatches, and other small nested shapes. */
@@ -69,14 +71,19 @@ interface RadiusPreset {
 
 function radiusTokens({ control, container, small, row, cap }: RadiusPreset) {
   return {
-    "radius-control": `${control}px`,
+    "radius-control": `${control.md}px`,
+    "radius-control-xs": `${control.xs}px`,
+    "radius-control-sm": `${control.sm}px`,
+    "radius-control-md": `${control.md}px`,
+    "radius-control-lg": `${control.lg}px`,
+    "radius-control-xl": `${control.xl}px`,
     "radius-container": `${container}px`,
     "radius-small": `${small}px`,
     "radius-row": `${row}px`,
     // Unitless, because the box it applies to is only known where it is used. This is the
     // same shape as the density/radius interaction: the dependent axis emits a multiplier
     // and the relationship is written in calc() at the point of use.
-    "radius-cap": String(cap),
+    "radius-cap": `var(--area-ui-radius-cap, ${cap})`,
   };
 }
 
@@ -99,32 +106,15 @@ function radiusTokens({ control, container, small, row, cap }: RadiusPreset) {
  * available -- which is the point of that preset rather than a gap in it.
  */
 const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
-  { id: "0", control: 0, small: 0, row: 0, container: 0, cap: 0.4, note: "Square corners throughout." },
-  { id: "2", control: 2, small: 0, row: 4, container: 6, cap: 0.4, note: "Barely softened." },
-  { id: "4", control: 4, small: 2, row: 6, container: 10, cap: 0.4, note: "Restrained. Close to Material 3." },
-  {
-    id: "6",
-    control: 6,
-    small: 4,
-    row: 8,
-    container: 12,
-    cap: 0.4,
-    note: "Matches Primer, Vercel, Linear and Notion, which all ship a 6px control.",
-  },
-  {
-    id: "8",
-    control: 8,
-    small: 6,
-    row: 10,
-    container: 14,
-    cap: 0.4,
-    note: "The default. Matches shadcn/ui.",
-  },
-  { id: "10", control: 10, small: 8, row: 12, container: 16, cap: 0.4, note: "Soft." },
-  { id: "12", control: 12, small: 10, row: 14, container: 18, cap: 0.4, note: "Very soft." },
+  { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, note: "Square corners throughout." },
+  { id: "xs", control: { xs: 2, sm: 2, md: 2, lg: 2, xl: 2 }, small: 0, row: 2, container: 4, cap: 0.4, note: "A near-square treatment." },
+  { id: "sm", control: { xs: 2, sm: 4, md: 4, lg: 6, xl: 6 }, small: 2, row: 6, container: 8, cap: 0.4, note: "Restrained rounding that grows with the control." },
+  { id: "md", control: { xs: 2, sm: 4, md: 6, lg: 6, xl: 8 }, small: 4, row: 8, container: 12, cap: 0.4, note: "Default: a 6px medium control with a measured container step." },
+  { id: "lg", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 10 }, small: 6, row: 10, container: 14, cap: 0.4, note: "Soft controls without turning small shapes into pills." },
+  { id: "xl", control: { xs: 4, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 12, container: 16, cap: 0.4, note: "The roundest finite family: 10px at medium and 12px at large." },
   {
     id: "pill",
-    control: 9999,
+    control: { xs: 9999, sm: 9999, md: 9999, lg: 9999, xl: 9999 },
     small: 9999,
     row: 9999,
     container: 24,
@@ -137,9 +127,10 @@ export const RADIUS_AXIS: AxisDefinition = {
   id: "radius",
   label: "Radius",
   description: "How rounded controls and containers are, named by the button's own radius.",
-  defaultPreset: "8",
+  defaultPreset: "md",
   namespaces: [
     "--area-radius-control",
+    "--area-radius-control-",
     "--area-radius-container",
     "--area-radius-small",
     "--area-radius-row",
@@ -147,7 +138,7 @@ export const RADIUS_AXIS: AxisDefinition = {
   ],
   presets: PRESETS.map(({ id, note, ...preset }) => ({
     id,
-    label: id === "pill" ? "Pill" : `${id}px`,
+    label: id === "pill" ? "Pill" : id === "sharp" ? "Sharp" : id.toUpperCase(),
     description: note,
     tokens: tokens(radiusTokens(preset)),
   })),

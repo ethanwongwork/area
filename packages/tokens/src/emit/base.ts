@@ -131,6 +131,22 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}input-warning-color`]: `var(${PREFIX}fg-warning-vivid)`,
     [`${PREFIX}input-warning-halo-color`]:
       `color-mix(in srgb, var(${PREFIX}input-warning-color) 14%, transparent)`,
+    // Textarea aliases share Input's editable-control defaults but remain independent
+    // theming seams for products whose multiline fields need a different surface or width.
+    [`${PREFIX}textarea-bg`]: `var(${PREFIX}input-bg)`,
+    [`${PREFIX}textarea-bg-soft`]: `var(${PREFIX}input-bg-soft)`,
+    [`${PREFIX}textarea-bg-disabled`]: `var(${PREFIX}input-bg-disabled)`,
+    [`${PREFIX}textarea-edge`]: `var(${PREFIX}input-edge)`,
+    [`${PREFIX}textarea-edge-hover`]: `var(${PREFIX}input-edge-hover)`,
+    [`${PREFIX}textarea-text`]: `var(${PREFIX}input-text)`,
+    [`${PREFIX}textarea-placeholder`]: `var(${PREFIX}input-placeholder)`,
+    [`${PREFIX}textarea-invalid-color`]: `var(${PREFIX}input-invalid-color)`,
+    [`${PREFIX}textarea-invalid-halo-color`]: `var(${PREFIX}input-invalid-halo-color)`,
+    [`${PREFIX}textarea-success-color`]: `var(${PREFIX}input-success-color)`,
+    [`${PREFIX}textarea-success-halo-color`]: `var(${PREFIX}input-success-halo-color)`,
+    [`${PREFIX}textarea-warning-color`]: `var(${PREFIX}input-warning-color)`,
+    [`${PREFIX}textarea-warning-halo-color`]: `var(${PREFIX}input-warning-halo-color)`,
+    [`${PREFIX}textarea-inline-size`]: `var(${PREFIX}input-inline-size)`,
     [`${PREFIX}field-error-color`]: `var(${PREFIX}fg-danger-vivid)`,
     // Token is a static design-token reference, not a selectable tag or metadata badge.
     // These aliases let a documentation surface tune that reference without changing Code,

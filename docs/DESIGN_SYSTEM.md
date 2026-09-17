@@ -141,7 +141,7 @@ exactly {16, 12} and comments that "a codicon at 13/14/15px is always a mistake 
 16"; Octicons says the same with 24 for the large tier. Gap follows the tier: Primer ties
 4px to xsmall and small, 8px to medium and large, with 6px as the step between.
 
-**Radius presets are named by the button's own radius.** `data-area-radius="8"`, not
+**Radius presets are named by their visual family.** `data-area-radius="md"`, not
 `="default"`. The old `sharp / subtle / default / rounded / soft` ladder needed a lookup
 table to read and never said which of two names was rounder; every other primitive ramp in
 Area is named by its value, and this is no different. Steps are 2px apart — the smallest
@@ -434,16 +434,17 @@ compact panel has to tighten like the controls inside it.
 
 ## Token references
 
-**Token names a static design-token reference.** It is not a generic badge, tag, or a
-compact control: use Code for literal source, Kbd for a key, Badge for status or metadata,
-and Chip or a future TokenInput composition for a selectable/removable value. The optional
-swatch is reserved for a token that resolves to a colour; it is a square sample, not a
-generic icon slot.
+**Code and Token share one inline reference treatment.** Use Code for commands, identifiers,
+literal values, and design-token names. Token remains the backwards-compatible composition
+for a design-token name with an optional colour swatch; it is not a generic badge, tag, or
+compact control. Use Kbd for a key, Badge for status or metadata, and Chip or a future
+TokenInput composition for a selectable/removable value. The swatch is reserved for a token
+that resolves to a colour; it is a square sample, not a generic icon slot.
 
-Token has one *relative* size. Its 0.875em mono type and `1em + --area-space-4` box follow
-the surrounding type role, which keeps it contained in both table chrome and running prose
-without creating a per-call-site size choice. `--area-token-bg`, `--area-token-bg-subtle`,
-`--area-token-edge`, `--area-token-text`, and `--area-token-swatch-ring` are its stable
+Both use the same relative 0.875em mono type and a 24px one-line painted box, so inline
+source and token names remain aligned in table chrome and running prose without a
+per-call-site size choice. `--area-token-bg`, `--area-token-bg-subtle`,
+`--area-token-edge`, `--area-token-text`, and `--area-token-swatch-ring` are Token's stable
 component theming seams. `onColor` deliberately derives its fill, edge, and text from the
 surrounding foreground, so it remains legible on the context that owns it.
 

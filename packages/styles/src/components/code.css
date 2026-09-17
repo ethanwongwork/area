@@ -27,14 +27,21 @@
    * lines and a badge with a swatch must not.
    */
   .area-code {
+    --_code-bg: var(--area-bg-code);
+    --_code-edge: var(--area-border-decorative);
+    --_code-text: var(--area-fg-default);
+
     display: inline;
+    /* A direct preview child is blockified by a flex parent; retain the same one-line
+     * reference box there without making inline prose a fixed-height, unwrappable box. */
+    min-block-size: calc(1em + var(--area-space-10));
     white-space: normal;
-    padding: var(--area-space-2) var(--area-space-6);
+    padding: var(--area-space-2) calc(var(--area-space-6) - var(--area-border-width));
     margin-inline: var(--area-space-2);
-    border: var(--area-border-width) solid var(--area-border-decorative);
+    border: var(--area-border-width) solid var(--_code-edge);
     border-radius: var(--area-radius-small);
-    background-color: var(--area-bg-code);
-    color: var(--area-fg-default);
+    background-color: var(--_code-bg);
+    color: var(--_code-text);
     font-family: var(--area-font-mono);
     /*
      * Sized relative to whatever it is set in, not to an absolute step.

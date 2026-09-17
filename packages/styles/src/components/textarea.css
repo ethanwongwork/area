@@ -1,28 +1,33 @@
 /* ---------------------------------------------------------------------------
  * Textarea
  *
- * Block padding rather than a fixed height, since the control grows. The native resize
- * handle is kept -- hiding it removes a real affordance, and the component is still
- * resizable either way.
+ * Rows own the block size. The component supplies a four-line default only when rows is
+ * omitted, keeps vertical resize as the conservative default, and exposes the other
+ * native resize directions explicitly.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-textarea {
-    --_border: var(--area-edge-control);
-    --_border-hover: var(--area-edge-control-hover);
+    --_height: var(--area-control-md);
+    --_border: var(--area-textarea-edge);
+    --_border-hover: var(--area-textarea-edge-hover);
     --_border-focus: var(--area-field-focus-color);
+    --_focus-outline: var(--area-field-focus-color);
+    --_focus-halo: var(--area-shadow-color);
+    --_bg: var(--area-textarea-bg);
     --_gutter: var(--area-gutter-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
 
     display: block;
-    inline-size: 100%;
-    min-block-size: calc(var(--area-control-md) * 2);
-    padding: var(--area-space-8) var(--_gutter);
+    inline-size: var(--area-textarea-inline-size);
+    max-inline-size: 100%;
+    min-block-size: calc(var(--_height) * 2);
+    padding: var(--_gutter);
 
     border: var(--area-stroke-width) solid var(--_border);
-    border-radius: var(--area-radius-control);
-    background-color: var(--area-bg-surface);
-    color: var(--area-fg-default);
+    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
+    background-color: var(--_bg);
+    color: var(--area-textarea-text);
     font-family: inherit;
     font-size: var(--_text);
     line-height: var(--_leading);
@@ -32,8 +37,28 @@
     transition: var(--area-transition);
   }
 
+  .area-textarea:not([rows]) {
+    min-block-size: calc(var(--_leading) * 4 + var(--_gutter) * 2 + var(--area-stroke-width) * 2);
+  }
+
+  /* Explicit for manifest parity; the base class remains the framework-free default. */
+  .area-textarea--outline { --_bg: var(--area-textarea-bg); }
+
+  .area-textarea--soft {
+    --_bg: var(--area-textarea-bg-soft);
+    --_border: transparent;
+    --_border-hover: var(--area-textarea-edge);
+  }
+
+  .area-textarea--full-width { inline-size: 100%; }
+
+  .area-textarea--vertical { resize: vertical; }
+  .area-textarea--horizontal { resize: horizontal; }
+  .area-textarea--both { resize: both; }
+  .area-textarea--none { resize: none; }
+
   .area-textarea::placeholder {
-    color: var(--area-fg-placeholder);
+    color: var(--area-textarea-placeholder);
   }
 
   .area-textarea:hover:not(:disabled):not(:focus) {
@@ -42,24 +67,52 @@
 
   .area-textarea:focus {
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color);
-    outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }
 
-  .area-textarea[data-invalid] {
-    --_border: var(--area-fg-danger);
-    --_border-hover: var(--area-fg-danger);
-    --_border-focus: var(--area-fg-danger);
+  .area-textarea[data-invalid],
+  .area-textarea[aria-invalid="true"] {
+    --_border: var(--area-textarea-invalid-color);
+    --_border-hover: var(--area-textarea-invalid-color);
+    --_border-focus: var(--area-textarea-invalid-color);
+    --_focus-outline: var(--area-textarea-invalid-color);
+    --_focus-halo: var(--area-textarea-invalid-halo-color);
+  }
+
+  .area-textarea[data-success] {
+    --_border: var(--area-textarea-success-color);
+    --_border-hover: var(--area-textarea-success-color);
+    --_border-focus: var(--area-textarea-success-color);
+    --_focus-outline: var(--area-textarea-success-color);
+    --_focus-halo: var(--area-textarea-success-halo-color);
+  }
+
+  .area-textarea[data-warning] {
+    --_border: var(--area-textarea-warning-color);
+    --_border-hover: var(--area-textarea-warning-color);
+    --_border-focus: var(--area-textarea-warning-color);
+    --_focus-outline: var(--area-textarea-warning-color);
+    --_focus-halo: var(--area-textarea-warning-halo-color);
+  }
+
+  .area-textarea:read-only {
+    --_bg: var(--area-textarea-bg-soft);
+    cursor: default;
   }
 
   .area-textarea:disabled {
+    --_bg: var(--area-textarea-bg-disabled);
+    --_border: var(--area-border-faint);
+    color: var(--area-fg-disabled);
     cursor: not-allowed;
-    opacity: 0.5;
     resize: none;
   }
 
-  .area-textarea--sm { --_gutter: var(--area-gutter-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-textarea--md { --_gutter: var(--area-gutter-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-textarea--lg { --_gutter: var(--area-gutter-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-textarea:disabled::placeholder { color: var(--area-fg-disabled); }
+
+  .area-textarea--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-textarea--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-textarea--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

@@ -759,22 +759,18 @@ export interface TokenProps extends HTMLAttributes<HTMLElement> {
 }
 
 /**
- * Names a design token inline — in documentation, in a spec, in a comment thread.
+ * Names a design token inline — in documentation, a spec, or a comment thread.
  *
- * Distinct from `Code` because a token reference is a *name*, not a fragment of source, and
- * it can carry a swatch showing what the name currently resolves to. The two share a size,
- * ground and stroke deliberately: they are both text you could type, and a page that styles
- * them differently implies a distinction that is not there.
- *
- * One size, and no size prop. The badge has to sit inside 14px table chrome and inside 16px
- * running prose without having been set for either.
+ * Token is `Code` with an optional colour swatch. Keeping the same element and base class
+ * means any source-like reference reads as one 24px inline treatment; the Token name only
+ * preserves the more specific swatch composition.
  */
 export const Token = /* @__PURE__ */ forwardRef<HTMLElement, TokenProps>(function Token(
   { children, swatch, subtle, onColor, className, ...rest },
   ref,
 ) {
   return (
-    <span
+    <Code
       ref={ref}
       className={cx(
         "area-token",
@@ -787,7 +783,7 @@ export const Token = /* @__PURE__ */ forwardRef<HTMLElement, TokenProps>(functio
       {swatch ? (
         <span className="area-token__swatch" style={{ background: swatch }} aria-hidden="true" />
       ) : null}
-      <span className="area-token__label">{children}</span>
-    </span>
+      {swatch ? <span className="area-token__label">{children}</span> : children}
+    </Code>
   );
 });

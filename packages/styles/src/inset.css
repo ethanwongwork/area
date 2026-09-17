@@ -180,20 +180,19 @@
   .area-alert__icon, .area-toast__icon { display: inline-flex; align-items: center; justify-content: center; }
   .area-alert__icon > svg, .area-toast__icon > svg { display: block; inline-size: 100%; block-size: 100%; }
 
-  .area-token {
-    --_token-height: calc(1em + var(--area-space-4));
-    block-size: var(--_token-height);
-    padding-block: 0;
-    padding-inline: calc((var(--_token-height) - 1cap) / 2 - var(--area-border-width));
-  }
   .area-token:has(> .area-token__swatch:first-child) {
-    padding-inline-start: calc(var(--area-space-4) - var(--area-border-width));
+    /* The decorative swatch is a direct, named Token slot. The parent reserves its
+     * box; it is not a nested action and therefore owns no independent backplate. */
+    padding-inline-start: calc(
+      (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--area-border-width)
+    );
   }
   .area-token:has(> .area-token__swatch:last-child) {
-    padding-inline-end: calc(var(--area-space-4) - var(--area-border-width));
+    padding-inline-end: calc(
+      (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--area-border-width)
+    );
   }
-  .area-textarea { padding: var(--_gutter); }
-  .area-code { padding: var(--area-space-4); text-box: trim-both cap alphabetic; }
+  .area-code { text-box: trim-both cap alphabetic; }
   .area-button--align-start { margin-inline-start: calc((var(--_box-height) - var(--_box-start)) / -2); }
   .area-button--align-end { margin-inline-end: calc((var(--_box-height) - var(--_box-end)) / -2); }
   .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-control-xs); }

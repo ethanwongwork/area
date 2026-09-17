@@ -19,22 +19,45 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
 });
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  variant?: VariantProps<typeof MANIFESTS.textarea>["variant"];
   size?: VariantProps<typeof MANIFESTS.textarea>["size"];
+  /** Controls which directions the native resize affordance can change. */
+  resize?: VariantProps<typeof MANIFESTS.textarea>["resize"];
+  /** Stretch to the available inline size. The default is a contained 16rem measure. */
+  fullWidth?: boolean;
+  /** Internal Field-to-Textarea validation bridge; plain HTML uses the matching data attribute. */
+  "data-validation-status"?: "error" | "success" | "warning";
+  /** Semantic validation paint. `invalid` remains the compatibility alias for `error`. */
+  validationStatus?: "error" | "success" | "warning";
   invalid?: boolean;
 }
 
 export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  { size, invalid, className, "aria-invalid": ariaInvalid, ...rest },
+  {
+    variant,
+    size,
+    resize,
+    fullWidth,
+    validationStatus,
+    invalid,
+    className,
+    "aria-invalid": ariaInvalid,
+    "data-validation-status": fieldValidationStatus,
+    ...rest
+  },
   ref,
 ) {
-  const invalidState = invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
+  const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
+  const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
 
   return (
     <textarea
       ref={ref}
-      className={textareaVariants({ size }, className)}
-      aria-invalid={invalid ? true : ariaInvalid}
+      className={textareaVariants({ variant, size, resize, fullWidth }, className)}
+      aria-invalid={invalidState ? true : ariaInvalid}
       {...(invalidState ? { "data-invalid": "" } : {})}
+      {...(resolvedValidationStatus === "success" ? { "data-success": "" } : {})}
+      {...(resolvedValidationStatus === "warning" ? { "data-warning": "" } : {})}
       {...rest}
     />
   );

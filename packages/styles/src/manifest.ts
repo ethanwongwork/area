@@ -77,11 +77,16 @@ export const input = {
 export const textarea = {
   block: "area-textarea",
   description: "Accepts multiple lines of text.",
-  variants: { size: ["sm", "md", "lg"] },
-  states: ["invalid", "disabled"],
-  stateAttributes: { disabled: "disabled" },
+  variants: {
+    variant: ["outline", "soft"],
+    size: ["sm", "md", "lg"],
+    resize: ["vertical", "horizontal", "both", "none"],
+  },
+  booleans: ["full-width"],
+  states: ["invalid", "success", "warning", "disabled", "read-only"],
+  stateAttributes: { invalid: "aria-invalid", disabled: "disabled", "read-only": "readonly" },
   elements: [],
-  defaults: { size: "md" },
+  defaults: { variant: "outline", size: "md", resize: "vertical" },
 } as const satisfies ComponentManifest;
 
 export const select = {
@@ -353,7 +358,7 @@ export const nav = {
 
 export const token = {
   block: "area-token",
-  description: "Names a design token inline.",
+  description: "Adds an optional colour swatch to inline Code.",
   variants: { ground: ["on-color", "subtle"] },
   elements: ["swatch", "label"],
   defaults: {},

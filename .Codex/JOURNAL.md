@@ -1,5 +1,9 @@
 # Project journal
 
+## 2026-09-16 — Inline references, radius families, and compact rails
+
+Code and Token now share one 24px inline reference surface, with Token retaining only its colour-swatch extension. Radius moved from literal values to semantic families with a real default-scale tier curve and a tighter compact safety cap; the docs rail was reduced to a denser, normal-control-sized shell after comparing the current ChatGPT sidebar visually.
+
 ## 2026-09-16 — Curated UI scale, Field/Input, and Token audit
 
 The docs exposed that independent typography and density controls could create a UI that no

@@ -76,7 +76,7 @@ move ahead of the proposed order. `Queued` means no conclusions have been made.
 | ---: | --- | --- | --- |
 | 1 | Field | Complete | [Field audit](component-audits/field.md) |
 | 2 | Input | Complete | [Input audit](component-audits/input.md) |
-| 3 | Textarea | Queued | — |
+| 3 | Textarea | Complete | [Textarea audit](component-audits/textarea.md) |
 | 4 | Select | Queued | — |
 | 5 | Checkbox | Queued | — |
 | 6 | Radio | Queued | — |

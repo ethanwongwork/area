@@ -156,7 +156,7 @@ function inspector() {
  */
 function railToggle(rail, label, { corner = false } = {}) {
   const icon = rail === "nav" ? ICONS.panelLeft : ICONS.panelRight;
-  return `<button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm area-button--icon-only${corner ? " docs-rail-toggle" : ""}" data-rail="${rail}" aria-label="${escapeHtml(label)}" aria-expanded="true">
+  return `<button type="button" class="area-button area-button--ghost area-button--neutral area-button--md area-button--icon-only${corner ? " docs-rail-toggle" : ""}" data-rail="${rail}" aria-label="${escapeHtml(label)}" aria-expanded="true">
       <span class="area-button__icon" aria-hidden="true">${icon}</span>
     </button>`;
 }
@@ -298,6 +298,8 @@ const COLUMN_DEMOS = new Set([
   "InputWithAffix",
   "InputInvalid",
   "TextareaDefault",
+  "TextareaSizes",
+  "TextareaField",
   "SelectDefault",
   "CheckboxDescription",
   "ButtonToneMatrix",
@@ -922,8 +924,8 @@ function radiusPage() {
   const axis = tokens.axes.find((a) => a.id === "radius");
 
   const body = `<div class="docs-prose">
-<p>Flat per preset, and the same at every control tier. An earlier version derived radius as a proportion of control height, but the evidence does not support it: Primer at 32px, Vercel at 32px, Linear at 32px and Notion at 28px all ship exactly 6px. Nobody moves control radius when density changes.</p>
-<p>Containers sit at 12px — the single most agreed-upon number in the survey: Primer overlays, OpenAI's popover, dialog and alert, and Linear's cards all use it.</p>
+<p>Radius is a named visual family, not a frozen pixel value. Each family defines a small-to-large control curve on the default UI ladder; <code class='area-code'>md</code> remains a 6px medium control, while <code class='area-code'>xl</code> deliberately reaches 10px at medium and 12px at large.</p>
+<p>Compact UI keeps the same family but applies a tighter safe cap to the smaller 20–36px ladder. Containers and small nested shapes retain their own semantic steps, so a 12px dialog corner does not force a 12px button corner.</p>
 </div>
 ${tokenSection({
   id: "presets",
@@ -1155,7 +1157,7 @@ ${axisPresetTable(a.id)}`,
 function indexPage() {
   const body = `<div class="docs-prose">
 <p>Area is a design system whose defining feature is that it is tunable along eight independent axes: theme, neutral, accent, typography, density, radius, surface and motion. Components consume only semantic tokens, so changing an axis reflows the whole system without touching a single component.</p>
-<p>The default medium control is 32px with 14/20 text. Radius preset 8 gives controls an 8px radius and containers a 14px radius; preset 6 provides the tighter 6px/12px pairing. Radius stays flat across density presets and is capped against the control's height.</p>
+<p>The default medium control is 32px with 14/20 text. Radius uses named visual families: <code class='area-code'>md</code> gives a 6px medium control and 12px container, while <code class='area-code'>xl</code> reaches 10px at medium and 12px at large. Each family has a tier curve; compact UI applies a tighter cap so smaller controls do not become lozenges.</p>
 </div>
 <h2 class="docs-h2" id="install">Installation</h2>
 ${codeBlock("npm install @area/react @area/styles")}
