@@ -1,5 +1,12 @@
 # Project journal
 
+## 2026-09-17 — Audited controls, Code consolidation, and bounded dark chroma
+
+Button, Checkbox, Code, and Nav now have complete audit records and one coherent Code reference
+treatment. The dark-end request is gamut-bounded: it takes only remaining chroma headroom and
+preserves the original family peak/solid contract; tonal stroke floors then bring low-chroma hues
+up rather than only allowing purple to become louder.
+
 ## 2026-09-16 — Inline references, radius families, and compact rails
 
 Code and Token now share one 24px inline reference surface, with Token retaining only its colour-swatch extension. Radius moved from literal values to semantic families with a real default-scale tier curve and a tighter compact safety cap; the docs rail was reduced to a denser, normal-control-sized shell after comparing the current ChatGPT sidebar visually.
