@@ -8,11 +8,11 @@
  */
 @layer area.components {
   .area-kbd {
-    --_min: var(--area-space-20);
-    --_height: var(--area-space-20);
-    --_padding: var(--area-space-6);
+    --_min: var(--area-space-24);
+    --_height: var(--area-space-24);
+    --_padding: var(--area-space-4);
     --_font: var(--area-text-xs-size);
-    --_leading: var(--area-text-xs-leading);
+    --_leading: var(--area-size-14);
 
     display: inline-flex;
     align-items: center;
@@ -22,7 +22,7 @@
     block-size: var(--_height);
     padding: var(--_padding);
 
-    border: var(--area-stroke-width) solid transparent;
+    border: var(--area-stroke-width) solid var(--area-border-subtle);
     border-radius: var(--area-radius-small);
     background-color: var(--area-bg-component-hover);
     color: var(--area-fg-default);
@@ -47,42 +47,65 @@
   }
 
   .area-kbd--normal {
-    --_min: var(--area-space-20);
-    --_height: var(--area-space-20);
-    --_padding: var(--area-space-6);
+    --_min: var(--area-space-24);
+    --_height: var(--area-space-24);
+    --_padding: var(--area-space-4);
     --_font: var(--area-text-xs-size);
-    --_leading: var(--area-text-xs-leading);
+    --_leading: var(--area-size-14);
   }
 
   .area-kbd--small {
     --_min: var(--area-space-20);
     --_height: var(--area-space-20);
-    --_padding: var(--area-space-4);
+    --_padding: var(--area-space-2);
     --_font: var(--area-size-11);
-    --_leading: var(--area-text-xs-leading);
+    --_leading: var(--area-size-14);
   }
 
   /* A sequence contains separate chord components; each Kbd is one chord. */
   .area-kbd-group {
     display: inline-flex;
     align-items: center;
+    gap: var(--area-gap-sm);
   }
 
-  /* Inside a menu item, keys are chrome: quieter, and pushed to the trailing edge. */
-  .area-menu__item .area-kbd,
-  .area-kbd--quiet {
+  /* Default is a quiet keycap rather than a second control. */
+  .area-kbd--default {
     background-color: var(--area-bg-component-hover);
-    border-color: transparent;
-    box-shadow: none;
+    border-color: var(--area-border-subtle);
     color: var(--area-fg-default);
   }
 
-  /* Keycaps inside a coloured action borrow that action's hue through a translucent dark plate. */
-  .area-button--accent .area-kbd,
-  .area-button--danger .area-kbd,
+  /* Inside a menu item, keys are chrome: unboxed and pushed to the trailing edge. */
+  .area-menu__item .area-kbd,
+  .area-kbd--quiet {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--area-fg-muted);
+  }
+
+  /* On colour, the keycap is a translucent plate rather than a nested outlined control. */
+  .area-kbd--on-color {
+    background-color: color-mix(in srgb, currentColor 14%, transparent);
+    border-color: transparent;
+    color: inherit;
+  }
+
+  /* Coloured solid actions borrow the inverse surface, which darkens in light mode and
+   * lightens in dark mode. Neutral solid instead borrows its own foreground so its keycap
+   * cannot disappear into the near-black/near-white action fill. */
+  .area-button--solid:not(.area-button--neutral) .area-kbd,
   .area-menu__item--danger:hover .area-kbd,
   .area-menu__item--danger[data-highlighted] .area-kbd {
     background-color: color-mix(in srgb, var(--area-bg-inverse) 16%, transparent);
+    border-color: transparent;
+    color: inherit;
+  }
+
+  .area-button--solid.area-button--neutral .area-kbd {
+    background-color: color-mix(in srgb, currentColor 14%, transparent);
+    border-color: transparent;
     color: inherit;
   }
 
@@ -91,4 +114,5 @@
     align-items: center;
     gap: var(--area-gap-sm);
   }
+
 }

@@ -239,6 +239,14 @@ it is a text chord, not an icon. Text weight remains 400 or 500 independently of
 Use the supplied Fluent Regular and vendored Area geometry; do not manufacture a new
 weight by altering stroke widths. Text-only content surfaces retain their content type.
 
+**Supporting copy is still UI text, not microcopy.** Captions, descriptions, helper text,
+and validation messages that explain a component use at least the small control pairing
+(`--area-control-sm-text` / `--area-control-sm-leading`), never the `text-xs` ramp.
+`text-xs` remains available for compact chrome whose box establishes its context — such as
+a Badge, Kbd chord, or tooltip — but not for copy a person must read to understand or
+correct a component. Group headings use the medium UI pairing at strong weight; option
+labels remain regular so hierarchy comes from the named group rather than bolding every row.
+
 Framework-free markup must use the same label slots as React: `__label` on Button,
 Chip, Badge, Segmented, Tabs and Token; `__text` on Nav and Menu. MenuItem wraps primitive
 text children; composed menu content supplies its explicit icon/text slots. Group
@@ -644,8 +652,10 @@ without changing the palette. The default Switch is 32×20px with five documente
 a flat boundary. Checkbox and Radio reserve one fixed border-box in every state. Editable
 fields preserve their 1px edge, move it one neutral step darker, and add a soft 2px halo;
 increased contrast adds a 2px accent outline with a 4px halo. Kbd follows Primer’s one-chord
-treatment with native text glyphs, normal/small sizes and
-no keycap shadow. Shared shadow ink returns to 6% light /8% dark while retaining V02’s tight
+treatment with native text glyphs, normal/small sizes, default/quiet/on-color appearances,
+a separate KbdGroup for sequences, and no keycap shadow. Inside controls use the 20px small
+Kbd; its parent reserves the nested backplate so inline and block edge spacing agree. Shared
+shadow ink returns to 6% light /8% dark while retaining V02’s tight
 offset, blur and negative spread.
 
 ## Input contract

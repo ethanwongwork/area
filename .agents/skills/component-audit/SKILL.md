@@ -1,11 +1,12 @@
 ---
 name: component-audit
-description: Audit one Area design-system component against current OpenAI, Notion, Primer, shadcn/ui, Fluent 2, Figma, and Vercel Geist evidence, then document and implement justified changes to its name, API, variants, states, composition, geometry, tokens, accessibility, React wrapper, and examples. Use when asked to audit, compare, expand, standardize, or harden an Area component.
+description: Expand and audit one Area component family against the capability atlas plus current OpenAI, Notion, Primer, shadcn/ui, Fluent 2, Figma, Vercel Geist, Material, Carbon, Atlassian, Apple, MUI, and relevant product evidence; document and implement the resulting contract. Use when asked to audit, compare, expand, standardize, or harden an Area component.
 ---
 
 # Component audit
 
-Audit exactly one public component family at a time. Treat an inseparable compound part,
+A planning pass inventories the whole capability atlas; an implementation audit changes
+exactly one public component family at a time. Treat an inseparable compound part,
 such as MenuItem inside Menu, as part of the same family. Do not mix unrelated component
 changes into the batch.
 
@@ -14,10 +15,25 @@ Read these before editing:
 - `AGENTS.md`, `.Codex/HANDOFF.md`, and the relevant sections of
   `docs/DESIGN_SYSTEM.md`.
 - `docs/COMPONENT_AUDIT.md` for the queue and project-specific policy.
+- `docs/COMPONENT_CAPABILITY_ATLAS.md` for the breadth-first expansion inventory and
+  neighbouring component boundaries.
 - [references/audit-framework.md](references/audit-framework.md) for the evidence,
   measurement, decision, report, and completion requirements.
 - [references/benchmark-sources.md](references/benchmark-sources.md) for the required
   benchmark set and source hierarchy.
+
+## Start with breadth, then refine
+
+Area's program is **breadth-first in planning and contract discovery**, then consistent and
+high-quality in visual refinement. Before proposing a component API, use the capability atlas
+to map the entire category, aliases, neighbouring names, and adjacent behavioural contracts.
+Every completed audit should eventually receive a retroactive atlas review; see
+`docs/component-audits/atlas-review.md` for the first pass.
+
+This does not permit a superficial catalogue. Accessibility semantics, keyboard behaviour,
+contrast, token ownership, and manifest/React/CSS/docs parity are non-negotiable gates on
+each shipped family. Defer fine visual calibration until the category's breadth and boundaries
+are understood, but never defer correctness in order to ship more names.
 
 ## Scope the component
 
@@ -44,7 +60,11 @@ Do not merge native Select, custom Dropdown, Combobox, Autocomplete, and MultiSe
 one component merely because they can look alike. Different keyboard, value, filtering,
 or popup contracts normally justify separate names and components.
 
-## Research the seven required benchmarks
+For every audit, first record the atlas entries that are: (a) this component's aliases,
+(b) potential compositions, and (c) separate neighbouring components. Absence from the
+current Area manifest is a candidate gap, not a reason to overload this component.
+
+## Research the expanded benchmark set
 
 Browse current primary sources for every audit. Check all seven named benchmarks:
 OpenAI, Notion, Primer, shadcn/ui, Fluent 2, Figma, and Vercel Geist. Use the source and
@@ -73,6 +93,12 @@ Separate, Defer, or Reject with its source and an Area-specific reason. A patter
 to one credible system may still be adopted when it solves a reusable Area job; record
 product-only observations as unavailable for API decisions unless a published component
 contract supports them.
+
+Then consult the capability catalogues for Material Design, IBM Carbon, Atlassian Design,
+Apple Human Interface Guidelines, and MUI. Tailwind CSS is utility-first rather than a
+canonical component system; use its patterns only as supplementary inspiration, never as a
+source of an asserted component contract. The expanded set finds functional categories the
+original seven may not publish; it does not replace the seven required comparisons.
 
 ## Measure Area and compare it
 
@@ -116,6 +142,10 @@ contrast for every new foreground/background or required edge pairing.
 Create or update `docs/component-audits/<component>.md` using the required report shape.
 State accepted, deferred, separated, and rejected candidates with reasons. Update the
 row in `docs/COMPONENT_AUDIT.md`.
+
+The report must link the atlas rows considered, including aliases and components deliberately
+kept separate. A new reusable family should be added to the atlas before or with its first
+implementation.
 
 Implement clear, justified changes within the user's authorized scope. Keep CSS,
 `packages/styles/src/manifest.ts`, React props and behavior, docs demos, API tables,

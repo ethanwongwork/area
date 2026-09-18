@@ -103,10 +103,19 @@ export const select = {
 export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
-  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
-  states: ["checked", "indeterminate", "disabled"],
-  elements: ["control"],
+  variants: { variant: ["card"], size: ["xs", "sm", "md", "lg", "xl"] },
+  states: ["checked", "indeterminate", "disabled", "invalid"],
+  elements: ["control", "visual"],
   defaults: { size: "md" },
+} as const satisfies ComponentManifest;
+
+export const checkboxGroup = {
+  block: "area-checkbox-group",
+  description: "Groups related Checkbox options under one label.",
+  variants: { orientation: ["vertical", "horizontal"] },
+  states: ["disabled", "invalid", "success", "warning"],
+  elements: ["legend", "description", "options", "validation"],
+  defaults: { orientation: "vertical" },
 } as const satisfies ComponentManifest;
 
 export const radio = {
@@ -116,6 +125,15 @@ export const radio = {
   states: ["disabled"],
   elements: ["control"],
   defaults: { size: "md" },
+} as const satisfies ComponentManifest;
+
+export const radioGroup = {
+  block: "area-radio-group",
+  description: "Groups mutually exclusive Radio options under one label.",
+  variants: { orientation: ["vertical", "horizontal"] },
+  states: ["disabled", "invalid"],
+  elements: ["legend", "description", "options", "validation"],
+  defaults: { orientation: "vertical" },
 } as const satisfies ComponentManifest;
 
 export const switchControl = {
@@ -369,14 +387,17 @@ export const token = {
 export const kbd = {
   block: "area-kbd",
   description: "Marks a keyboard shortcut.",
-  variants: { size: ["small", "normal"], tone: ["quiet"] },
+  variants: {
+    size: ["small", "normal"],
+    appearance: ["default", "quiet", "on-color"],
+  },
   elements: ["key"],
-  defaults: { size: "normal" },
+  defaults: { size: "normal", appearance: "default" },
 } as const satisfies ComponentManifest;
 
 export const kbdGroup = {
   block: "area-kbd-group",
-  description: "Groups a sequence of keys into one shortcut.",
+  description: "Groups chord hints into a keyboard shortcut sequence.",
   variants: {},
   elements: [],
   defaults: {},
@@ -389,7 +410,9 @@ export const MANIFESTS = {
   textarea,
   select,
   checkbox,
+  checkboxGroup,
   radio,
+  radioGroup,
   switch: switchControl,
   slider,
   chip,

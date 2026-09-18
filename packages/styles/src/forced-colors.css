@@ -29,6 +29,10 @@
       border-color: CanvasText;
       background-color: Canvas;
     }
+    .area-checkbox__control:is([data-invalid], [aria-invalid="true"]) {
+      border-color: Mark;
+      border-style: dashed;
+    }
     .area-checkbox__control:checked, .area-checkbox__control:is(:indeterminate, [data-indeterminate]),
     .area-radio__control:checked, .area-switch__control:checked {
       border-color: Highlight;

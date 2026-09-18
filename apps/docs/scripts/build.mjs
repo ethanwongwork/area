@@ -49,10 +49,9 @@ const FOUNDATION_PAGES = [
   { slug: "motion", name: "Motion" },
 ];
 
-/* Temporary audit triage: completed families stay visible at the top of the documentation
- * rail while the remaining queue is worked through. The marker is presentation only; page
- * names and landmarks remain unchanged. */
-const AUDITED_COMPONENTS = new Set(["field", "input", "textarea", "select", "checkbox", "button", "code", "nav"]);
+/* Audit triage: reviewed families stay together while their capability gaps are still
+ * being resolved. This deliberately is not a completion marker. */
+const REVIEWED_COMPONENTS = new Set(["field", "input", "textarea", "select", "checkbox", "radio", "button", "kbd", "code", "nav"]);
 
 /* --- Chrome ---------------------------------------------------------------- */
 
@@ -194,7 +193,7 @@ function sidebar(activeSlug) {
   <nav class="area-nav docs-sidebar__nav" aria-label="Documentation">
   ${group("docs-nav-getting-started", "Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes"), item("./gallery.html", "Component gallery", "gallery"), item("./lab.html", "System lab", "lab")].join("\n      "))}
   ${group("docs-nav-foundations", "Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
-  ${group("docs-nav-components", "Components", [...COMPONENT_PAGES].sort((a, b) => Number(AUDITED_COMPONENTS.has(b.slug)) - Number(AUDITED_COMPONENTS.has(a.slug))).map((p) => item(`./${p.slug}.html`, p.name, p.slug, { complete: AUDITED_COMPONENTS.has(p.slug) })).join("\n      "))}
+  ${group("docs-nav-components", "Components", [...COMPONENT_PAGES].sort((a, b) => Number(REVIEWED_COMPONENTS.has(b.slug)) - Number(REVIEWED_COMPONENTS.has(a.slug))).map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   </nav>
   </div>
   <button type="button" class="docs-rail-resizer" data-resize-rail="nav" aria-label="Resize navigation" aria-orientation="vertical" aria-valuemin="192" aria-valuemax="320" aria-valuenow="208"></button>
@@ -248,30 +247,185 @@ ${railToggle("panel", "Show customize panel", { corner: true })}
 
 /* One tile per public component family. Compound pieces appear inside their parent. */
 function galleryPage() {
-  const specs = [
-    ...COMPONENT_PAGES.map((spec) => ({
-      slug: spec.slug,
-      name: spec.name,
-      href: `./${spec.slug}.html`,
-      demo: `Gallery${spec.exportName ?? spec.name}`,
-    })),
-  ].sort((a, b) => a.name.localeCompare(b.name, "en"));
-  const tiles = specs.map((spec) => {
-    const demo = demos[spec.demo];
-    if (!demo) throw new Error(`Gallery specimen missing: ${spec.demo}`);
-    return `<article class="docs-gallery-tile" id="gallery-${spec.slug}" aria-labelledby="gallery-title-${spec.slug}">
-      <header class="docs-gallery-tile__header">
-        <h2 class="docs-gallery-tile__title" id="gallery-title-${spec.slug}">${escapeHtml(spec.name)}</h2>
-        <a class="area-button area-button--ghost area-button--neutral area-button--sm" href="${spec.href}" aria-label="${escapeHtml(spec.name)} documentation"><span class="area-button__label">Docs</span></a>
-      </header>
-      <div class="docs-gallery-tile__preview"><div class="docs-gallery-tile__specimen">${demo.html}</div></div>
-    </article>`;
+  // Every component receives its own compact section. The section supplies the component
+  // name; a tile therefore names only its single specimen (Default, Tone / success,
+  // Size / medium) and never repeats the family name just to fill space.
+  const auditedFamilies = new Set(["field", "input", "textarea", "select", "checkbox", "radio", "button", "kbd", "code", "nav"]);
+  const gallerySpecimens = {
+    avatar: [
+      { id: "default", title: "Default", demo: "GalleryAvatar" },
+      { id: "size-small", title: "Size / small", demo: "GalleryAvatarSmall" },
+      { id: "size-medium", title: "Size / medium", demo: "GalleryAvatarMedium" },
+      { id: "size-large", title: "Size / large", demo: "GalleryAvatarLarge" },
+    ],
+    button: [
+      { id: "default", title: "Default", demo: "GalleryButton" },
+      { id: "size-small", title: "Size / small", demo: "GalleryButtonSmall" },
+      { id: "size-medium", title: "Size / medium", demo: "GalleryButtonMedium" },
+      { id: "size-large", title: "Size / large", demo: "GalleryButtonLarge" },
+      ...["Neutral", "Accent", "Info", "Success", "Warning", "Caution", "Danger", "Discovery"].flatMap((tone) =>
+        ["Solid", "Soft", "Outline", "Ghost"].map((variant) => ({
+          id: `tone-${tone.toLowerCase()}-variant-${variant.toLowerCase()}`,
+          title: `${tone} / ${variant}`,
+          demo: `GalleryButton${tone}${variant}`,
+        })),
+      ),
+      { id: "pill", title: "Pill", demo: "GalleryButtonPill" },
+      { id: "selected", title: "Selected", demo: "GalleryButtonSelected" },
+      { id: "with-icon", title: "With icon", demo: "GalleryButtonWithIcon" },
+      { id: "with-shortcut", title: "With shortcut", demo: "GalleryButtonShortcut" },
+      { id: "loading", title: "Loading", demo: "GalleryButtonLoading" },
+      { id: "disabled", title: "Disabled", demo: "GalleryButtonDisabled" },
+      { id: "icon-only", title: "Icon only", demo: "GalleryButtonIconOnly" },
+    ],
+    kbd: [
+      { id: "default", title: "Default", demo: "GalleryKbd" },
+      { id: "size-small", title: "Size / small", demo: "GalleryKbdSmall" },
+      { id: "quiet", title: "Appearance / quiet", demo: "GalleryKbdQuiet" },
+      { id: "chord", title: "Chord", demo: "GalleryKbdChord" },
+      { id: "sequence", title: "Sequence", demo: "GalleryKbdSequence" },
+      { id: "on-color", title: "Context / on color", demo: "GalleryKbdOnColor" },
+    ],
+    checkbox: [
+      { id: "default", title: "Default", demo: "GalleryCheckbox" },
+      { id: "size-xs", title: "Size / extra small", demo: "GalleryCheckboxExtraSmall" },
+      { id: "size-small", title: "Size / small", demo: "GalleryCheckboxSmall" },
+      { id: "size-medium", title: "Size / medium", demo: "GalleryCheckboxMedium" },
+      { id: "size-large", title: "Size / large", demo: "GalleryCheckboxLarge" },
+      { id: "size-xl", title: "Size / extra large", demo: "GalleryCheckboxExtraLarge" },
+      { id: "selected", title: "Selected", demo: "GalleryCheckboxSelected" },
+      { id: "partial", title: "Partial selection", demo: "GalleryCheckboxIndeterminate" },
+      { id: "caption", title: "With caption", demo: "GalleryCheckboxCaption" },
+      { id: "leading-visual", title: "With leading visual", demo: "GalleryCheckboxLeadingVisual" },
+      { id: "card", title: "Variant / card", demo: "GalleryCheckboxCard" },
+      { id: "invalid", title: "Invalid", demo: "GalleryCheckboxInvalid" },
+      { id: "invalid-selected", title: "Invalid / selected", demo: "GalleryCheckboxInvalidChecked" },
+      { id: "disabled", title: "Disabled", demo: "GalleryCheckboxDisabled" },
+      { id: "disabled-selected", title: "Disabled / selected", demo: "GalleryCheckboxDisabledChecked" },
+      { id: "disabled-indeterminate", title: "Disabled / partial selection", demo: "GalleryCheckboxDisabledIndeterminate" },
+      { id: "group", title: "Checkbox group", demo: "GalleryCheckboxGroup" },
+      { id: "group-invalid", title: "Checkbox group / invalid", demo: "GalleryCheckboxGroupInvalid" },
+      { id: "group-success", title: "Checkbox group / success", demo: "GalleryCheckboxGroupSuccess" },
+    ],
+    radio: [
+      { id: "default", title: "Default", demo: "GalleryRadio" },
+      { id: "size-xs", title: "Size / extra small", demo: "GalleryRadioExtraSmall" },
+      { id: "size-small", title: "Size / small", demo: "GalleryRadioSmall" },
+      { id: "size-medium", title: "Size / medium", demo: "GalleryRadioMedium" },
+      { id: "size-large", title: "Size / large", demo: "GalleryRadioLarge" },
+      { id: "size-xl", title: "Size / extra large", demo: "GalleryRadioExtraLarge" },
+      { id: "selected", title: "Selected", demo: "GalleryRadioSelected" },
+      { id: "disabled", title: "Disabled", demo: "GalleryRadioDisabled" },
+    ],
+    field: [
+      { id: "default", title: "Default", demo: "FieldDefault" },
+      { id: "horizontal", title: "Horizontal", demo: "FieldHorizontal" },
+      { id: "size-small", title: "Control size / small", demo: "GalleryFieldSmall" },
+      { id: "size-medium", title: "Control size / medium", demo: "GalleryFieldMedium" },
+      { id: "size-large", title: "Control size / large", demo: "GalleryFieldLarge" },
+      { id: "required", title: "Required", demo: "FieldRequired" },
+      { id: "description", title: "Description", demo: "FieldCaption" },
+      { id: "error", title: "Validation / error", demo: "FieldValidation" },
+      { id: "success", title: "Validation / success", demo: "FieldSuccess" },
+      { id: "warning", title: "Validation / warning", demo: "FieldWarning" },
+      { id: "disabled", title: "Disabled", demo: "FieldDisabled" },
+      { id: "hidden-label", title: "Visually hidden label", demo: "FieldHiddenLabel" },
+    ],
+    input: [
+      { id: "default", title: "Default", demo: "InputDefault" },
+      { id: "outline", title: "Variant / outline", demo: "InputOutline" },
+      { id: "soft", title: "Variant / soft", demo: "InputSoft" },
+      { id: "size-xs", title: "Size / extra small", demo: "GalleryInputExtraSmall" },
+      { id: "size-sm", title: "Size / small", demo: "GalleryInputSmall" },
+      { id: "size-md", title: "Size / medium", demo: "GalleryInputMedium" },
+      { id: "size-lg", title: "Size / large", demo: "GalleryInputLarge" },
+      { id: "size-xl", title: "Size / extra large", demo: "GalleryInputExtraLarge" },
+      { id: "leading", title: "Leading icon", demo: "InputLeadingVisual" },
+      { id: "trailing", title: "Trailing icon", demo: "InputTrailingVisual" },
+      { id: "affix", title: "With affix", demo: "InputWithAffix" },
+      { id: "action", title: "Trailing action", demo: "InputTrailingAction" },
+      { id: "readonly", title: "Read-only", demo: "InputReadOnly" },
+      { id: "disabled", title: "Disabled", demo: "InputDisabled" },
+      { id: "invalid", title: "Validation / error", demo: "InputInvalid" },
+      { id: "success", title: "Validation / success", demo: "InputSuccess" },
+      { id: "warning", title: "Validation / warning", demo: "InputWarning" },
+      { id: "loading", title: "Loading", demo: "InputLoading" },
+      { id: "monospace", title: "Monospace", demo: "InputMonospace" },
+      { id: "file", title: "File", demo: "InputFile" },
+      { id: "rtl", title: "Right-to-left", demo: "InputRtl" },
+    ],
+    select: [
+      { id: "default", title: "Default", demo: "SelectDefault" },
+      { id: "size-xs", title: "Size / extra small", demo: "GallerySelectExtraSmall" },
+      { id: "size-sm", title: "Size / small", demo: "GallerySelectSmall" },
+      { id: "size-md", title: "Size / medium", demo: "GallerySelectMedium" },
+      { id: "size-lg", title: "Size / large", demo: "GallerySelectLarge" },
+      { id: "size-xl", title: "Size / extra large", demo: "GallerySelectExtraLarge" },
+      { id: "field", title: "With field", demo: "SelectField" },
+      { id: "error", title: "Validation / error", demo: "SelectInvalid" },
+      { id: "success", title: "Validation / success", demo: "GallerySelectSuccess" },
+      { id: "warning", title: "Validation / warning", demo: "GallerySelectWarning" },
+      { id: "disabled", title: "Disabled", demo: "SelectDisabled" },
+      { id: "groups", title: "Option groups", demo: "SelectGroups" },
+    ],
+    textarea: [
+      { id: "default", title: "Default", demo: "TextareaDefault" },
+      { id: "outline", title: "Variant / outline", demo: "TextareaOutline" },
+      { id: "soft", title: "Variant / soft", demo: "TextareaSoft" },
+      { id: "size-sm", title: "Size / small", demo: "GalleryTextareaSmall" },
+      { id: "size-md", title: "Size / medium", demo: "GalleryTextareaMedium" },
+      { id: "size-lg", title: "Size / large", demo: "GalleryTextareaLarge" },
+      { id: "error", title: "Validation / error", demo: "TextareaInvalid" },
+      { id: "success", title: "Validation / success", demo: "TextareaSuccess" },
+      { id: "warning", title: "Validation / warning", demo: "TextareaWarning" },
+      { id: "readonly", title: "Read-only", demo: "TextareaReadOnly" },
+      { id: "disabled", title: "Disabled", demo: "TextareaDisabled" },
+      { id: "rows", title: "Visible rows", demo: "TextareaRows" },
+      { id: "resize-none", title: "Resize / none", demo: "TextareaResizeNone" },
+    ],
+    switch: [
+      { id: "default", title: "Default", demo: "GallerySwitch" },
+      { id: "size-small", title: "Size / small", demo: "GallerySwitchSmall" },
+      { id: "size-medium", title: "Size / medium", demo: "GallerySwitchMedium" },
+      { id: "size-large", title: "Size / large", demo: "GallerySwitchLarge" },
+      { id: "on", title: "On", demo: "GallerySwitchOn" },
+      { id: "disabled", title: "Disabled", demo: "GallerySwitchDisabled" },
+    ],
+  };
+  const sections = COMPONENT_PAGES.filter((component) => auditedFamilies.has(component.slug)).map((component) => {
+    const specimens = gallerySpecimens[component.slug] ?? component.examples;
+    const tiles = specimens.map((example) => {
+      const demo = demos[example.demo];
+      if (!demo) throw new Error(`Gallery specimen missing: ${example.demo}`);
+      const id = `${component.slug}-${example.id}`;
+      return `<article class="docs-visual-gallery__tile" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
+        <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${escapeHtml(example.title)}</h3>
+        <div class="docs-visual-gallery__tile-preview">${demo.html}</div>
+      </article>`;
+    }).join("\n");
+    return `<section class="docs-visual-gallery__section" aria-labelledby="gallery-section-${component.slug}">
+      <h2 class="docs-visual-gallery__section-title" id="gallery-section-${component.slug}">${escapeHtml(component.name)}</h2>
+      <div class="docs-visual-gallery__grid">${tiles}</div>
+    </section>`;
   }).join("\n");
-  return page({
-    slug: "gallery", title: "Component gallery", wide: true,
-    lede: "The building blocks of Area, from A to Z. Real components, a few useful variants, and room to see how they fit together.",
-    body: `<p class="docs-note">Use Customize to compare themes and density. These are presentation specimens; open Docs for the component’s API and interaction guidance.</p><div class="docs-gallery">${tiles}</div>`,
-  });
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component gallery — area</title>
+<meta name="description" content="A full-screen visual inspection gallery for Area components.">
+<link rel="stylesheet" href="./area.css">
+<style>${DOCS_CSS}</style>
+</head>
+<body>
+<main class="docs-visual-gallery">
+  <header class="docs-visual-gallery__header"><h1 class="docs-visual-gallery__title">Component gallery</h1></header>
+  ${sections}
+</main>
+</body>
+</html>`;
 }
 
 /* --- Component pages -------------------------------------------------------- */
@@ -324,7 +478,7 @@ function componentPage(spec) {
 ${codeBlock("npm install @area/react @area/styles")}
 <h2 class="docs-h2" id="usage">Usage</h2>
 <div class="docs-stack">
-${codeBlock(`import { ${spec.exportName ?? spec.name} } from "@area/react";\nimport "@area/styles/area.css";`)}
+${codeBlock(`import { ${spec.imports ?? spec.exportName ?? spec.name} } from "@area/react";\nimport "@area/styles/area.css";`)}
 ${codeBlock(demos[spec.examples[0].demo].code)}
 </div>`;
 
@@ -459,8 +613,8 @@ function colorPage() {
   const body = `<div class="docs-prose">
 <p>The colours are the <strong>Area palette</strong>, vendored verbatim — ${Object.keys(tokens.scales).length} families of ${tokens.levels.length} rungs. Area does not generate them. The palette was wall-anchored rather than formula-generated, with per-hue splines and hue held in IPT, and reproducing that from a curve was never going to land closer to it than using it.</p>
 <p>A rung is an ordinal position, not a measurement: <strong>higher is darker</strong>, the direction Tailwind, Material and Radix all read. The ladder is ${levels} — finer at the ends than through the middle, because that is where an interface spends its steps. 25/50/75 are three distinguishable page grounds and 925/950/975 three distinguishable dark ones, while the middle, where text and fills live, runs in 50s.</p>
-<p>Each family's <code class="docs-code-inline">500</code> is pinned to a contrast wall rather than to a lightness, which is why the hues do not share a lightness at a shared rung — yellow's 500 sits lighter than indigo's because yellow has to. There are two walls: a <em>label</em> ladder that clears AA with white at 500, and a <em>glyph</em> ladder pinned at 3:1 that only reaches AA at 600. Area finds each family's solid fill by measuring, so nothing here hardcodes which family is on which wall.</p>
-<p>The three neutrals are one grey at three temperatures. <code class="docs-code-inline">neutral</code> is chroma 0 at every rung; <code class="docs-code-inline">cool</code> carries hue 248 and <code class="docs-code-inline">warm</code> is cool mirrored exactly — 180° away in OKLCh — so neither can drift from the other. Only chroma differs, so contrast is near-invariant across all three: measured, lightness deviates by at most 0.0055 and a white-contrast ratio by at most 0.23:1.</p>
+<p>Each family's <code class="area-code">500</code> is pinned to a contrast wall rather than to a lightness, which is why the hues do not share a lightness at a shared rung — yellow's 500 sits lighter than indigo's because yellow has to. There are two walls: a <em>label</em> ladder that clears AA with white at 500, and a <em>glyph</em> ladder pinned at 3:1 that only reaches AA at 600. Area finds each family's solid fill by measuring, so nothing here hardcodes which family is on which wall.</p>
+<p>The three neutrals are one grey at every rung; <code class="area-code">neutral</code> is chroma 0, <code class="area-code">cool</code> carries hue 248, and <code class="area-code">warm</code> is cool mirrored exactly — 180° away in OKLCh — so neither can drift from the other. Only chroma differs, so contrast is near-invariant across all three: measured, lightness deviates by at most 0.0055 and a white-contrast ratio by at most 0.23:1.</p>
 <p>Dark mode is the same ramp read from the other end. There is one set of colours, not two.</p>
 </div>
 ${inversionSection()}

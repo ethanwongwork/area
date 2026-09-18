@@ -80,6 +80,26 @@ const findings = [];
 
 const { DOCS_CSS } = await import("./layout.mjs");
 
+/* --- 0b. Inline-code dogfooding ------------------------------------------ */
+
+/*
+ * Inline literal source in the documentation is itself a Code component. A prior colour
+ * page kept a docs-only code class, which silently split the documented contract from the
+ * thing readers saw. Plain .docs-mono remains legitimate for unbadged tabular data.
+ */
+{
+  const docsSources = [
+    join(root, "scripts", "build.mjs"),
+    join(root, "src", "pages.mjs"),
+    join(root, "src", "practices.mjs"),
+  ];
+  const legacy = docsSources.filter((file) => readFileSync(file, "utf8").includes("docs-code-inline"));
+  if (legacy.length) {
+    console.error("docs dogfood failed: inline code must use the public area-code component:\n" + legacy.join("\n"));
+    process.exit(1);
+  }
+}
+
 /* --- 1. Raw values in the docs stylesheet --------------------------------- */
 
 const css = (DOCS_CSS + LAB_CSS)

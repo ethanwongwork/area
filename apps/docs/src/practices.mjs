@@ -12,10 +12,15 @@ export const PRACTICES = {
   checkbox: [
     `Use Checkbox for independent choices. Native checked, indeterminate and focus states keep one fixed border-box; selecting fills the existing shape rather than changing its size.`,
     `Choose xs through xl on the icon ramp. Adjacent tiers may share a glyph size while their label type and spacing differ. Labels follow density rather than the prose scale.`,
+    `Give a CheckboxGroup a visible, strong group label. Captions and validation messages use the small UI pairing — not microcopy — with a consistent 4px label-to-caption and 12px section rhythm.`,
+    `Use red for an individually invalid Checkbox, including its checked state; do not combine an accent fill with an error edge. In a group, keep option labels neutral and put the red on the error message and unresolved option marks.`,
     `Standard mode matches the selected boundary to its fill; increased contrast restores the strong selected edge. Focus remains distinct in both modes.`,
   ],
   radio: [
-    `Give mutually exclusive Radio controls the same name and distinct values. Native browser keyboard and form behavior remain intact.`,
+    `Use RadioGroup for one choice from a short, visible set. It owns the native legend, shared name, group description and group-level error; Radio owns an individual option.`,
+    `Prefer a vertical group. Use ${code('orientation="horizontal"')} only for short, immediately comparable labels with enough room to wrap the whole option without truncating it.`,
+    `Give every Radio a distinct ${code("value")}. The group supports ${code("value")} / ${code("onValueChange")} for controlled use or ${code("defaultValue")} for native-like uncontrolled selection.`,
+    `Use Checkbox for multiple choices, Switch for an immediate on/off setting, and Select or Combobox when the list is too long to scan.`,
     `Selection fills the existing outer circle. The five size tiers follow the same icon and label ramps as Checkbox.`,
   ],
   switch: [

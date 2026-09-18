@@ -721,7 +721,9 @@ export interface KbdProps extends HTMLAttributes<HTMLElement> {
   keys: string[];
   /** Normal matches body text; small is reserved for dense menu chrome. */
   size?: VariantProps<typeof MANIFESTS.kbd>["size"];
-  /** Uses the subtler keycap treatment for keys rendered inside menu chrome. */
+  /** Surface treatment for standalone, compact chrome, or coloured backgrounds. */
+  appearance?: VariantProps<typeof MANIFESTS.kbd>["appearance"];
+  /** @deprecated Use `appearance="quiet"`. */
   quiet?: boolean;
 }
 
@@ -732,16 +734,17 @@ export interface KbdProps extends HTMLAttributes<HTMLElement> {
  * spoken label because bare modifier glyphs are not announced usefully.
  */
 export const Kbd = /* @__PURE__ */ forwardRef<HTMLElement, KbdProps>(function Kbd(
-  { keys, size = "normal", quiet, className, ...rest },
+  { keys, size = "normal", appearance = "default", quiet, className, ...rest },
   ref,
 ) {
   const rendered = keys.map((key) => KEY_GLYPHS[key.toLowerCase()] ?? key.toUpperCase());
   const spoken = rendered.map((glyph) => KEY_LABELS[glyph] ?? glyph).join(" plus ");
+  const resolvedAppearance = quiet ? "quiet" : appearance;
 
   return (
     <span
       ref={ref}
-      className={cx("area-kbd-group", "area-kbd", `area-kbd--${size}`, quiet && "area-kbd--quiet", className)}
+      className={cx("area-kbd", `area-kbd--${size}`, `area-kbd--${resolvedAppearance}`, className)}
       aria-label={spoken}
       {...rest}
     >
@@ -752,6 +755,16 @@ export const Kbd = /* @__PURE__ */ forwardRef<HTMLElement, KbdProps>(function Kb
       ))}
     </span>
   );
+});
+
+export interface KbdGroupProps extends HTMLAttributes<HTMLSpanElement> {}
+
+/** Groups separate chord hints that are pressed in sequence. */
+export const KbdGroup = /* @__PURE__ */ forwardRef<HTMLSpanElement, KbdGroupProps>(function KbdGroup(
+  { className, ...rest },
+  ref,
+) {
+  return <span ref={ref} className={cx("area-kbd-group", className)} {...rest} />;
 });
 
 export interface TokenProps extends HTMLAttributes<HTMLElement> {

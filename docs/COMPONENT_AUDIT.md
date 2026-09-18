@@ -28,6 +28,23 @@ Each audit separates:
 - optional composition;
 - interaction behavior that may require another component.
 
+## Expansion-first program
+
+Area now plans breadth before visual refinement. The
+[component capability atlas](COMPONENT_CAPABILITY_ATLAS.md) is the required starting index
+for every audit: it names the wider category, aliases used by other systems, compositions,
+and behavioural neighbours that must remain separate. The searchable companion is the
+Component Capability Atlas canvas.
+
+This does **not** mean adding cosmetic variants indiscriminately. Each implementation still
+ships one component family at a time, with complete semantics, keyboard behaviour where
+applicable, contrast, token ownership, and manifest/React/CSS/docs parity. Once a category's
+functional breadth and boundaries are recorded, visual consistency and calibration can be
+refined across that category without discovering a late-breaking competing contract.
+
+The [completed-audit atlas review](component-audits/atlas-review.md) records the current
+families' acknowledged gaps and protects their existing boundaries from accidental merging.
+
 The benchmark review is a union, not a popularity contest. Every distinct documented
 capability from OpenAI, Notion, Primer, shadcn/ui, Fluent 2, Figma, or Vercel Geist is
 entered into the component's decision ledger. Area adopts it when the job and contract are
@@ -79,7 +96,7 @@ move ahead of the proposed order. `Queued` means no conclusions have been made.
 | 3 | Textarea | Complete | [Textarea audit](component-audits/textarea.md) |
 | 4 | Select | Complete | [Select audit](component-audits/select.md) |
 | 5 | Checkbox | Complete | [Checkbox audit](component-audits/checkbox.md) |
-| 6 | Radio | Queued | — |
+| 6 | Radio | Complete | [Radio audit](component-audits/radio.md) |
 | 7 | Switch | Queued | — |
 | 8 | Slider | Queued | — |
 | 9 | Button | Complete | [Button audit](component-audits/button.md) |
@@ -87,7 +104,7 @@ move ahead of the proposed order. `Queued` means no conclusions have been made.
 | 11 | Segmented | Queued | — |
 | 12 | Tabs | Queued | — |
 | 13 | Menu | Queued | — |
-| 14 | Kbd | Queued | — |
+| 14 | Kbd | Complete | [Kbd audit](component-audits/kbd.md) |
 | 15 | Badge | Queued | — |
 | 16 | Avatar | Queued | — |
 | 17 | Alert | Queued | — |

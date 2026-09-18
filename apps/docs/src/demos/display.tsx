@@ -1,4 +1,4 @@
-import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Code, Dialog, Field, Input, Kbd, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
+import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Code, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
 import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
@@ -228,12 +228,21 @@ export const KbdSizes = () => (
 );
 
 export const KbdButton = () => (
-  <Button variant="outline" tone="neutral" size="sm">
-    Duplicate <Kbd keys={["cmd", "D"]} size="small" quiet />
-  </Button>
+  <>
+    <Button variant="outline" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} size="small" /></Button>
+    <Button tone="neutral" aria-keyshortcuts="Meta+Enter">Save <Kbd keys={["cmd", "enter"]} size="small" /></Button>
+    <Button tone="success" aria-keyshortcuts="Meta+Enter">Submit <Kbd keys={["cmd", "enter"]} size="small" /></Button>
+  </>
 );
 
 export const KbdSequence = () => (
+  <KbdGroup>
+    <Kbd keys={["G"]} />
+    <Kbd keys={["I"]} />
+  </KbdGroup>
+);
+
+export const KbdKeyMap = () => (
   <>
     <Kbd keys={["cmd", "shift", "P"]} />
     <Kbd keys={["ctrl", "shift", "M"]} />

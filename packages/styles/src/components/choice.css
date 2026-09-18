@@ -44,6 +44,7 @@
     block-size: var(--_size);
     --_fill: var(--area-bg-surface);
     --_edge: var(--area-edge-control);
+    --_mark: var(--area-fg-on-accent);
     border: var(--area-stroke-width) solid var(--_edge);
     background-color: var(--_fill);
     box-shadow: var(--area-shadow-1);
@@ -53,12 +54,55 @@
   }
 
   .area-checkbox__control {
-    border-radius: var(--area-radius-small);
+    /* Small glyphs must not become circles as the global radius family grows. */
+    border-radius: min(var(--area-radius-small), calc(var(--_size) / 4));
+  }
+
+  /* The mark is a glyph, but its visible label owns a 24px minimum activation lane.
+     Align the glyph to the first line so a wrapped option retains an unambiguous start. */
+  .area-checkbox {
+    align-items: flex-start;
+    min-block-size: var(--area-space-24);
+  }
+
+  .area-checkbox__control {
+    margin-block-start: 0;
+  }
+
+  .area-checkbox__visual {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    flex-shrink: 0;
+    margin-block-start: 0;
+    color: var(--area-fg-muted);
+  }
+
+  .area-checkbox__visual > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Card is a contained Checkbox composition, not a competing choice control. The label
+     * remains the native click target, including its optional caption and leading visual. */
+  .area-checkbox--card {
+    inline-size: 100%;
+    padding: var(--area-space-12);
+    border: var(--area-border-width) solid var(--area-border-decorative);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
   }
 
   .area-radio__control {
     border-radius: var(--area-radius-full);
   }
+
+  /* A Radio's mark belongs on the first text line. Unlike a compact checkbox beside a
+     single label, centring it against wrapped copy makes the selected dot lose its option. */
+  .area-radio { align-items: flex-start; }
+  .area-radio__control { margin-block-start: calc((var(--_leading) - var(--_size)) / 2); }
 
   /*
    * The mark is drawn with a mask rather than a pseudo-element glyph, so it inherits the
@@ -71,21 +115,21 @@
     display: block;
     position: absolute;
     inset: 0;
-    background-color: var(--area-fg-on-accent);
+    background-color: var(--_mark);
     transform: scale(0);
     transition: transform var(--area-duration-fast) var(--area-ease-spring);
   }
 
   .area-checkbox__control::after {
-    -webkit-mask: var(--_check) center / 68% no-repeat;
-    mask: var(--_check) center / 68% no-repeat;
-    --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round' d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+    -webkit-mask: var(--_check) center / 75% no-repeat;
+    mask: var(--_check) center / 75% no-repeat;
+    --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round' d='M3.25 8.5l3.25 3.25 6.25-7'/%3E%3C/svg%3E");
   }
 
   .area-checkbox__control:is(:indeterminate, [data-indeterminate])::after {
-    -webkit-mask: var(--_dash) center / 68% no-repeat;
-    mask: var(--_dash) center / 68% no-repeat;
-    --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2.25' stroke-linecap='round' d='M4 8h8'/%3E%3C/svg%3E");
+    -webkit-mask: var(--_dash) center / 75% no-repeat;
+    mask: var(--_dash) center / 75% no-repeat;
+    --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' d='M3.75 8h8.5'/%3E%3C/svg%3E");
     transform: scale(1);
   }
 
@@ -107,6 +151,21 @@
     transform: scale(1);
   }
 
+  .area-checkbox__control:is([data-invalid], [aria-invalid="true"]) {
+    --_edge: var(--area-fg-danger-vivid);
+  }
+
+  /* A checked invalid option is one error state, not accent selection plus a red edge.
+     The error fill, its matching foreground, and the label agree without relying on color
+     alone: the native checked mark and invalid ARIA state stay present. */
+  .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):is(:checked, :indeterminate, [data-indeterminate]) {
+    --_fill: var(--area-danger-solid);
+    --_edge: var(--area-danger-solid);
+    --_mark: var(--area-fg-on-danger);
+  }
+
+  .area-checkbox[data-invalid] .area-choice-label__title { color: var(--area-fg-danger-vivid); }
+
   /* Checked controls darken on hover. Lightening washes the fill out. */
   .area-checkbox__control:checked:hover:not(:disabled),
   .area-checkbox__control:is(:indeterminate, [data-indeterminate]):hover:not(:disabled),
@@ -114,9 +173,19 @@
     --_fill: var(--area-accent-solid-hover);
   }
 
+  .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {
+    --_fill: var(--area-danger-solid-hover);
+    --_edge: var(--area-danger-solid-hover);
+  }
+
   .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled),
   .area-radio__control:not(:checked):hover:not(:disabled) {
     --_edge: var(--area-edge-control-hover);
+  }
+
+  .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
+    --_fill: var(--area-danger-surface-hover);
+    --_edge: var(--area-danger-border-strong);
   }
 
   .area-checkbox__control:focus-visible,
@@ -183,6 +252,90 @@
     --_fill: var(--area-accent-solid-hover);
   }
 
+  /* --- Radio group -------------------------------------------------------- */
+
+  .area-radio-group,
+  .area-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .area-radio-group__legend,
+  .area-checkbox-group__legend {
+    padding: 0;
+    font-size: var(--area-control-md-text);
+    line-height: var(--area-control-md-leading);
+    font-weight: var(--area-weight-strong);
+    color: var(--area-fg-default);
+  }
+
+  .area-radio-group__description,
+  .area-radio-group__validation,
+  .area-checkbox-group__description,
+  .area-checkbox-group__validation {
+    font-size: var(--area-control-sm-text);
+    line-height: var(--area-control-sm-leading);
+  }
+
+  .area-radio-group__description,
+  .area-checkbox-group__description { margin-block-start: var(--area-space-4); }
+  .area-radio-group__description { color: var(--area-fg-muted); }
+  .area-radio-group__validation { color: var(--area-fg-danger-vivid); }
+
+  .area-radio-group__options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--area-space-8);
+    margin-block-start: var(--area-space-12);
+  }
+
+  .area-radio-group--vertical .area-radio-group__options { flex-direction: column; }
+
+  .area-radio-group--horizontal .area-radio-group__options {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: var(--area-space-16);
+  }
+
+  .area-radio-group:disabled .area-radio { cursor: not-allowed; opacity: 0.5; }
+  .area-radio-group[data-invalid] .area-radio__control:not(:checked) { --_edge: var(--area-fg-danger-vivid); }
+
+  .area-checkbox-group__description { color: var(--area-fg-muted); }
+  .area-checkbox-group__validation { color: var(--area-fg-danger-vivid); }
+  .area-checkbox-group[data-success] .area-checkbox-group__validation { color: var(--area-fg-success-vivid); }
+  .area-checkbox-group[data-warning] .area-checkbox-group__validation { color: var(--area-fg-warning-vivid); }
+
+  .area-checkbox-group__options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--area-space-8);
+    margin-block-start: var(--area-space-12);
+  }
+
+  .area-checkbox-group--vertical .area-checkbox-group__options { flex-direction: column; }
+
+  .area-checkbox-group--horizontal .area-checkbox-group__options {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: var(--area-space-16);
+  }
+
+  .area-checkbox-group:disabled .area-checkbox { cursor: not-allowed; opacity: 0.5; }
+  .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]) { --_edge: var(--area-fg-danger-vivid); }
+  .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
+    --_fill: var(--area-danger-surface-hover);
+    --_edge: var(--area-danger-border-strong);
+  }
+  .area-checkbox-group__validation,
+  .area-radio-group__validation { margin-block-start: var(--area-space-12); }
+
   /* --- Labels ------------------------------------------------------------- */
 
   .area-choice-label {
@@ -198,8 +351,8 @@
   }
 
   .area-choice-label__description {
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-control-sm-text);
+    line-height: var(--area-control-sm-leading);
     color: var(--area-fg-muted);
   }
 

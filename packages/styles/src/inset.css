@@ -6,7 +6,7 @@
 @layer area.components {
   .area-button, .area-input, .area-chip, .area-select,
   .area-segmented__item, .area-nav__item, .area-nav__label,
-  .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-kbd, .area-panel__bar {
+  .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-panel__bar {
     --_box-height: var(--_height);
     --_box-border: var(--area-stroke-width);
     --_box-text: 1lh;
@@ -20,7 +20,7 @@
   @supports (text-box: trim-both cap alphabetic) {
     .area-button, .area-input, .area-chip, .area-select,
     .area-segmented__item, .area-nav__item, .area-nav__label,
-    .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-kbd, .area-panel__bar {
+    .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-panel__bar {
       --_box-text: 1cap;
     }
   }
@@ -86,6 +86,15 @@
   .area-menu__item:has(> .area-menu__icon:last-child),
   .area-badge:has(> .area-badge__dot:last-child) { --_box-end: var(--_box-icon); }
 
+  /* A shortcut is a nested backplate. Reserve its actual outer box so the space after it
+   * equals the vertical space above and below it in the Button. */
+  .area-button:has(> .area-button__label > .area-kbd:last-child) {
+    --_box-end: var(--area-space-24);
+  }
+  .area-button:has(> .area-button__label > .area-kbd--small:last-child) {
+    --_box-end: var(--area-space-20);
+  }
+
   .area-button--icon-only, .area-chip--swatch-only,
   .area-segmented__item:has(> .area-segmented__icon:only-child) { padding-inline: 0; }
 
@@ -129,7 +138,7 @@
   .area-button__label, .area-chip__label, .area-badge__label,
   .area-segmented__label, .area-tabs__label, .area-code__label, .area-token__label,
   .area-nav__text, .area-menu__text, .area-input__affix,
-  .area-kbd__key, .area-avatar > span,
+  .area-avatar > span,
   .area-nav__label > span, .area-menu__label > span {
     text-box: trim-both cap alphabetic;
     padding-block: 0.25em;

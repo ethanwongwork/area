@@ -41,6 +41,9 @@
     border: var(--area-border-width) solid var(--_code-edge);
     border-radius: var(--area-radius-small);
     background-color: var(--_code-bg);
+    /* Code is an inline reference, never an elevated badge. Make this invariant explicit
+       so it cannot inherit a presentation shadow from a future documentation container. */
+    box-shadow: none;
     color: var(--_code-text);
     font-family: var(--area-font-mono);
     /*

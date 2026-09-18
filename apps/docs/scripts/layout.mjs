@@ -506,6 +506,70 @@ export const DOCS_CSS = `
     line-height: var(--area-ui-leading);
   }
 
+  /* The visual gallery is intentionally outside the documentation shell. It is a
+   * full-screen inspection surface: no rails, prose, controls, or component-specific
+   * framing compete with the specimens. Every family uses one responsive square tile
+   * size, so a component's perceived scale never changes with its category. */
+  .docs-visual-gallery {
+    min-block-size: 100vh;
+    padding: var(--area-space-8);
+    background: var(--area-bg-subtle);
+  }
+  .docs-visual-gallery__header {
+    margin-block-end: var(--area-space-8);
+  }
+  .docs-visual-gallery__title,
+  .docs-visual-gallery__section-title,
+  .docs-visual-gallery__tile-title {
+    margin: 0;
+    font-weight: var(--area-weight-regular);
+  }
+  .docs-visual-gallery__title {
+    font-size: var(--area-text-xl-size);
+    line-height: var(--area-text-xl-leading);
+  }
+  .docs-visual-gallery__section + .docs-visual-gallery__section {
+    margin-block-start: var(--area-space-8);
+  }
+  .docs-visual-gallery__section-title {
+    margin-block-end: var(--area-space-8);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  .docs-visual-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--area-space-64) * 4)), 1fr));
+    gap: var(--area-space-8);
+  }
+  .docs-visual-gallery__tile {
+    aspect-ratio: 1;
+    min-inline-size: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    border: 1px solid var(--area-border-decorative);
+    background: var(--area-bg-surface);
+    border-radius: var(--area-radius-container);
+  }
+  .docs-visual-gallery__tile-title {
+    padding: var(--area-space-12);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  .docs-visual-gallery__tile-preview {
+    min-inline-size: 0;
+    min-block-size: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--area-space-12);
+  }
+  .docs-visual-gallery__tile--large .docs-visual-gallery__tile-preview {
+    padding: var(--area-space-24);
+  }
+  .docs-visual-gallery__tile-preview > * {
+    max-inline-size: 100%;
+  }
+
   /* --- Icon browser ------------------------------------------------------- */
 
   /*

@@ -1,4 +1,4 @@
-import { Checkbox, Chip, ChipGroup, Field, Input, InputAction, Radio, Select, Slider, Switch, Textarea } from "@area/react";
+import { Checkbox, CheckboxGroup, Chip, ChipGroup, Field, Input, InputAction, Radio, RadioGroup, Select, Slider, Switch, Textarea } from "@area/react";
 import { CheckIcon, DismissIcon, SearchIcon } from "../icons.tsx";
 
 export const InputDefault = () => <Input aria-label="Email" placeholder="Email" />;
@@ -202,18 +202,89 @@ export const CheckboxDefault = () => <Checkbox label="Accept terms" defaultCheck
 export const CheckboxDescription = () => (
   <Checkbox
     label="Email notifications"
-    description="Get notified when someone mentions you."
+    caption="Get notified when someone mentions you."
     defaultChecked
   />
+);
+
+export const CheckboxLeadingVisual = () => (
+  <Checkbox label="GitHub notifications" leadingVisual={<CheckIcon />} />
+);
+
+export const CheckboxCard = () => (
+  <Checkbox
+    variant="card"
+    label="Enable notifications"
+    caption="You can change this setting at any time."
+    leadingVisual={<CheckIcon />}
+  />
+);
+
+export const CheckboxInvalid = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
+    <Checkbox label="Accept terms" invalid />
+    <Checkbox label="Required confirmation" defaultChecked invalid />
+  </div>
+);
+
+export const CheckboxGroupDefault = () => (
+  <CheckboxGroup label="Notifications" description="Choose the updates you want to receive.">
+    <Checkbox name="notifications" value="mentions" label="Mentions" defaultChecked />
+    <Checkbox name="notifications" value="replies" label="Replies" />
+    <Checkbox name="notifications" value="releases" label="Product releases" />
+  </CheckboxGroup>
+);
+
+export const CheckboxGroupInvalid = () => (
+  <CheckboxGroup label="Desktop items" error="Choose at least one item to show.">
+    <Checkbox name="desktop-items" value="drives" label="Hard disks" />
+    <Checkbox name="desktop-items" value="servers" label="Connected servers" />
+  </CheckboxGroup>
+);
+
+export const CheckboxGroupHorizontal = () => (
+  <CheckboxGroup label="Delivery channels" orientation="horizontal">
+    <Checkbox name="channels" value="email" label="Email" />
+    <Checkbox name="channels" value="sms" label="SMS" />
+    <Checkbox name="channels" value="push" label="Push" />
+  </CheckboxGroup>
+);
+
+export const CheckboxGroupSuccess = () => (
+  <CheckboxGroup label="Release notes" validation="Two update channels selected." validationStatus="success">
+    <Checkbox name="release-notes" value="email" label="Email" defaultChecked />
+    <Checkbox name="release-notes" value="in-app" label="In-app" defaultChecked />
+  </CheckboxGroup>
 );
 
 export const CheckboxIndeterminate = () => <Checkbox label="Select all workspace members" indeterminate />;
 
 export const RadioDefault = () => (
-  <>
-    <Radio name="plan" label="Starter" defaultChecked />
-    <Radio name="plan" label="Pro" />
-  </>
+  <RadioGroup label="Plan" name="plan" defaultValue="starter">
+    <Radio value="starter" label="Starter" />
+    <Radio value="pro" label="Pro" />
+  </RadioGroup>
+);
+
+export const RadioHorizontal = () => (
+  <RadioGroup label="Billing cycle" name="billing" defaultValue="monthly" orientation="horizontal">
+    <Radio value="monthly" label="Monthly" />
+    <Radio value="yearly" label="Yearly" />
+  </RadioGroup>
+);
+
+export const RadioDescription = () => (
+  <RadioGroup label="Deployment visibility" name="visibility" defaultValue="team" description="Choose who can find this deployment.">
+    <Radio value="team" label="Team" description="Members of your workspace can access it." />
+    <Radio value="public" label="Public" description="Anyone with the link can access it." />
+  </RadioGroup>
+);
+
+export const RadioInvalid = () => (
+  <RadioGroup label="Preferred contact method" name="contact" error="Select one contact method.">
+    <Radio value="email" label="Email" />
+    <Radio value="phone" label="Phone" />
+  </RadioGroup>
 );
 
 export const SwitchDefault = () => <Switch label="Airplane mode" defaultChecked />;
@@ -261,24 +332,31 @@ export const ChipSizes = () => (
 export const CheckboxSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
     {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
-      <div key={size} data-choice-size={size} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-24)" }}>
-        <Checkbox size={size} label={`${size} off`} />
-        <Checkbox size={size} label={`${size} on`} defaultChecked />
-      </div>
+      <Checkbox key={size} size={size} label={size} />
     ))}
+  </div>
+);
+
+export const CheckboxStates = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
+    <Checkbox label="Selected" defaultChecked />
+    <Checkbox label="Unavailable" disabled />
+    <Checkbox label="Unavailable selected" defaultChecked disabled />
+    <Checkbox label="Unavailable partial selection" indeterminate disabled />
   </div>
 );
 
 export const RadioSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
     {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
-      <div key={size} data-choice-size={size} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-24)" }}>
-        <Radio size={size} name={`size-${size}`} value="off" label={`${size} off`} />
-        <Radio size={size} name={`size-${size}`} value="on" label={`${size} on`} defaultChecked />
-      </div>
+      <Radio key={size} size={size} name={`radio-size-${size}`} value={size} label={size.toUpperCase()} />
     ))}
   </div>
 );
+
+export const RadioChecked = () => <Radio name="radio-state-checked" value="selected" label="Selected" defaultChecked />;
+
+export const RadioDisabled = () => <Radio name="radio-state-disabled" value="disabled" label="Unavailable" disabled />;
 
 export const SwitchSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
