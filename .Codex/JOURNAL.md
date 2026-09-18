@@ -1,5 +1,14 @@
 # Project journal
 
+## 2026-09-18 — Capability atlas, gallery expansion, and Kbd contract
+
+The audit now begins with the full component-capability space instead of the names Area already
+ships. The gallery makes that breadth inspectable one specimen at a time, while Checkbox and
+Radio gained native group contracts and fuller state/composition coverage. Kbd is now a real
+display-only shortcut family: separate chord and sequence semantics, compact composition,
+contextual surfaces, and geometry measured against its parent rather than patched by eye. The
+remaining platform-aware shortcut work is explicitly separated from visual variants.
+
 ## 2026-09-17 — Audited controls, Code consolidation, and bounded dark chroma
 
 Button, Checkbox, Code, and Nav now have complete audit records and one coherent Code reference

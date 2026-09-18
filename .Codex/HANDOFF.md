@@ -1,61 +1,73 @@
-# Handoff — 2026-09-17
+# Handoff — 2026-09-18
 
-**Branch** `main` · **Last implementation commit** `7bfff36 feat: refine audited components and chroma`
-**State** Green — implementation is committed and fully verified; this handoff/journal checkpoint awaits commit and push.
+**Branch** `main` · **Last implementation commit** `00c2490 feat: expand component audits and visual gallery`
+**State** Green — implementation is committed and fully verified; only this handoff/journal checkpoint remains to commit and push.
 
 ## Where things stand
 
 Area is an eight-axis design system with framework-free CSS, thin React components, and a
-static documentation site. The current refinement batch is complete: radius packages are
-coherent, Button/Checkbox/Code/Nav have audit records, Code is the shared inline-reference
-component, and dark-end color chroma has a gamut-bounded lift.
+static documentation site. The component-audit workflow now starts from the repository-wide
+capability atlas and requires broad system/product evidence, aliases, candidate dispositions,
+gallery coverage, and visual QA. Field, Input, Textarea, Select, Checkbox, Radio, Button,
+Kbd, Code, Token, and Nav have complete audit records.
 
 ## What happened this session
 
-- Radius names are now semantic: `sharp`, `subtle`, `soft`, `standard`, `round`, `rotund`,
-  and `pill`. Button has only small, medium, and large packages; same-height text and icon
-  buttons share their radius.
-- Button, Checkbox, Code, and Nav have complete audit records. The temporary documentation
-  ordering puts audited components first and marks them with a colored completion marker.
-- Nav row text and icons now align to shared optical references, while text-only rows use the
-  intentionally offset text column requested for section-header alignment. Horizontal Nav
-  surfaces are lighter and selected items rely on their backplate rather than bold type.
-- Code subsumes the static Token documentation treatment. It supports prose, tables,
-  token swatches, subtle and on-color surfaces; legacy Token remains only as a compatibility
-  wrapper and one gallery dogfood specimen. Removing experimental `text-box` trimming fixed
-  Code's visually low baseline in Chromium.
-- Dark chroma is lifted only where sRGB gamut headroom exists, without changing palette
-  lightness/hue or semantic solid selection. Low-chroma tonal strokes have a deliberate
-  chroma floor so component foreground/stroke colors improve broadly rather than only purple.
+- Added the component capability atlas and reframed the component-audit skill around
+  breadth-first capability discovery before consistency refinement.
+- Rebuilt the full-screen gallery around one labeled specimen per equal-size tile, full-width
+  responsive sections, audited families only, and separate size/state/variant specimens.
+- Expanded Checkbox with groups, descriptions, leading visuals, card composition, invalid,
+  success, disabled-selected, and disabled-indeterminate coverage; aligned multiline labels,
+  strengthened group hierarchy, and retained native interaction semantics.
+- Added native RadioGroup with fieldset/legend, controlled and uncontrolled values,
+  vertical/horizontal layout, descriptions, errors, disabled propagation, and complete audit.
+- Consolidated documentation inline references on the real Code component and removed its
+  table/prose drop shadow; the dogfood audit rejects the retired docs-only inline style.
+- Completed the Kbd audit: normal/small, default/quiet/on-color, one chord per Kbd, real
+  KbdGroup sequences, Button/Menu context treatments, and explicit extension backlog.
+- Fixed Button shortcut geometry structurally. A 32px Button uses a 20px small Kbd and leaves
+  6px from keycap edge to Button edge on top, right, and bottom. Neutral solid uses a
+  contrasting translucent plate; colored solids use the inverse plate; neither has a nested
+  outline or shadow.
 
 ## In flight
 
-Nothing functional. Commit and push this handoff/journal update; the tree should then be clean.
+Nothing. The implementation commit is complete and the verification suite is green.
 
 ## Next
 
-1. Audit Radio, Switch, and Slider against the component-audit framework.
-2. Keep Nav's collapsed/drawer shell, Combobox, and MultiSelect as separate contracts.
-3. Consider a dedicated TokenInput/Tag audit before adding behavior to legacy Token.
+1. Continue the atlas-first queue with Switch, then Slider.
+2. Audit Menu before expanding shortcut sequences into command/menu behavior.
+3. Treat Kbd platform-aware `Mod`, full-text format, localization, and user remapping as
+   extensions or product command-layer work, not visual variants.
+4. Keep choice cards as a composition contract unless a later audit proves a reusable
+   standalone family.
 
 ## Traps
 
 - Build React before docs typecheck because docs resolve generated React declarations.
-- Use `ui: "compact" | "default"`; `density` and `type` remain retired public inputs.
-- The dark 750–950 rungs are commonly already 94–100% of sRGB cusp. Preserve the
-  gamut-bounded lift rather than forcing clipping or moving their lightness/hue.
-- Do not reinstate experimental `text-box` trimming on inline Code without cross-browser
-  baseline verification.
-- Legacy Token is compatibility-only. New docs prose/tables should use Code; behavior such
-  as remove/selection belongs to a future TokenInput/Tag contract.
+- Gallery tiles contain exactly one named specimen; size, state, tone, and variant examples
+  remain separate instead of being combined into a matrix inside one tile.
+- Supporting copy uses at least small UI text. `text-xs` is reserved for compact chrome such
+  as Badge, Kbd, and Tooltip, not explanatory captions or validation.
+- Kbd is display-only. Register behavior separately and put `aria-keyshortcuts` on the
+  associated action. Use `size="small"` inside controls.
+- The deprecated Kbd `quiet` boolean remains compatible, but new code uses
+  `appearance="quiet"`. One Kbd is one simultaneous chord; KbdGroup is a sequence.
+- Preserve the shared optical-inset formula; do not fix nested controls with glyph nudges or
+  arbitrary right padding.
 - Do not commit `dist/`, caches, or `node_modules/`.
 
 ## Verify
 
+- `npm run lint:manifest`: passed; manifest parity covers **38 components**.
+- `npm run typecheck`: passed across tokens, styles, React, and docs.
+- `npm run build:docs`: passed; **46 pages / 270 demos**, dogfood **38/38**.
+- `npm run audit`: passed with no raw docs values or unapproved inline literal styles.
+- `npm run test:consumer`: passed packaging, NodeNext, SSR, browser bundle, and tree-shaking.
+- `node --test apps/docs/scripts/axis-preferences.test.mjs`: **5/5 passed**.
 - `npm test`: **18,104 tests / 9 files passed**.
-- `npm run build`: passed; manifest parity covers **36 components**.
-- `npm run lint:manifest -w @area/styles`: passed.
-- `npm run build:docs`: passed; **46 pages / 153 demos**, dogfood **36/36**.
 - `node packages/tokens/src/contrast/report.ts`: **344 passing / 0 failing** across **66 themes**.
-- `npm run typecheck`, `npm run test:contracts` (**14/14**), `npm run test:consumer`, and
-  `git diff --check` all passed.
+- `git diff --check`: passed.
+- Live Chromium at 100% CSS zoom verified the Kbd gallery and exact Button/Kbd geometry.
