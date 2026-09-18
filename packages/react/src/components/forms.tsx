@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useId } from "react";
 import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ReactNode } from "react";
 import { MANIFESTS, selectVariants, textareaVariants, checkboxVariants, radioVariants, switchVariants } from "../variants.ts";
 import type { VariantProps } from "../variants.ts";
@@ -100,6 +100,48 @@ interface ChoiceProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"
   description?: ReactNode;
 }
 
+export interface CheckboxProps extends ChoiceProps {
+  /** Shows the native mixed state; useful for a parent that represents a partial selection. */
+  indeterminate?: boolean;
+}
+
+export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
+  { size, label, description, indeterminate = false, className, disabled, "aria-describedby": describedBy, ...rest },
+  ref,
+) {
+  const descriptionId = useId();
+  const resolvedDescription = description ? [describedBy, descriptionId].filter(Boolean).join(" ") : describedBy;
+  const setControl = (node: HTMLInputElement | null) => {
+    if (node) node.indeterminate = indeterminate;
+    if (typeof ref === "function") ref(node);
+    else if (ref) ref.current = node;
+  };
+
+  useEffect(() => {
+    if (typeof ref !== "function" && ref?.current) ref.current.indeterminate = indeterminate;
+  }, [indeterminate, ref]);
+
+  return (
+    <label className={checkboxVariants({ size }, className)} {...(disabled ? { "data-disabled": "" } : {})}>
+      <input
+        ref={setControl}
+        type="checkbox"
+        className="area-checkbox__control"
+        disabled={disabled}
+        aria-describedby={resolvedDescription}
+        {...(indeterminate ? { "data-indeterminate": "" } : {})}
+        {...rest}
+      />
+      {label || description ? (
+        <span className="area-choice-label">
+          {label ? <span className="area-choice-label__title">{label}</span> : null}
+          {description ? <span className="area-choice-label__description" id={descriptionId}>{description}</span> : null}
+        </span>
+      ) : null}
+    </label>
+  );
+});
+
 function choice<S extends string>(kind: "checkbox" | "radio" | "switch", variants: (props: { size?: S }, className?: string) => string) {
   const block = `area-${kind}`;
 
@@ -130,11 +172,8 @@ function choice<S extends string>(kind: "checkbox" | "radio" | "switch", variant
   });
 }
 
-export const Checkbox = /* @__PURE__ */ choice("checkbox", checkboxVariants);
 export const Radio = /* @__PURE__ */ choice("radio", radioVariants);
 export const Switch = /* @__PURE__ */ choice<SwitchSize>("switch", switchVariants);
 
-
-export type CheckboxProps = ChoiceProps;
 export type RadioProps = Omit<ChoiceProps, "size"> & { size?: VariantProps<typeof MANIFESTS.radio>["size"] };
 export type SwitchProps = Omit<ChoiceProps, "size"> & { size?: SwitchSize };

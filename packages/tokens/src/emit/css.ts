@@ -123,7 +123,7 @@ export function emitAxes(): string {
       "Area — axes",
       "Generated. Do not edit.\n\n" +
         "One block per preset. Selecting an axis is a data attribute on any element:\n" +
-        '  <html data-area-theme="dark" data-area-ui="compact" data-area-radius="0">\n\n' +
+        '  <html data-area-theme="dark" data-area-ui="compact" data-area-radius="sharp">\n\n' +
         "Custom properties inherit, so a subtree can carry its own axis values:\n" +
         '  <aside data-area-ui="compact"> ... </aside>',
     ),

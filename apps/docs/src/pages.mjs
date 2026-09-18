@@ -9,9 +9,12 @@
 export const COMPONENT_PAGES = [
   {
     slug: "code", name: "Code", manifest: "code",
-    api: [["children", "ReactNode", "—"], ["…props", "HTMLAttributes<HTMLElement>", "—"]],
+    api: [["children", "ReactNode", "—"], ["swatch", "string", "—"], ["subtle", "boolean", "false"], ["onColor", "boolean", "false"], ["…props", "HTMLAttributes<HTMLElement>", "—"]],
     examples: [
       { id: "default", title: "Default", demo: "GalleryCode" },
+      { id: "treatments", title: "Surface treatments", demo: "CodeSubtle" },
+      { id: "on-color", title: "On color", demo: "CodeOnColor" },
+      { id: "swatch", title: "With token swatch", demo: "CodeTokenSwatch" },
       { id: "prose", title: "In prose", demo: "CodeInProse" },
     ],
   },
@@ -39,7 +42,7 @@ export const COMPONENT_PAGES = [
     api: [
       ["variant", '"solid" | "soft" | "outline" | "ghost"', '"solid"'],
       ["tone", "ButtonTone (8 values)", '"neutral"'],
-      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
       ["icon", "ReactNode", "—"],
       ["trailingIcon", "ReactNode", "—"],
       ["pill", "boolean", "false"],
@@ -58,6 +61,7 @@ export const COMPONENT_PAGES = [
         note: "Use the variant prop to change the fill treatment.",
         demo: "ButtonVariants",
       },
+      { id: "sizes", title: "Sizes", note: "Buttons have Small, Medium, and Large tiers. Medium is the default when size is omitted.", demo: "ButtonSizes" },
       {
         id: "tones",
         title: "Tones",
@@ -82,7 +86,6 @@ export const COMPONENT_PAGES = [
         note: "Set selected for a toggle that is currently on. It sets aria-pressed.",
         demo: "ButtonSelected",
       },
-      { id: "sizes", title: "Sizes", note: "Use the size prop to change the size of the button.", demo: "ButtonSizes" },
       {
         id: "icon",
         title: "With icon",
@@ -350,11 +353,13 @@ export const COMPONENT_PAGES = [
       ["label", "ReactNode", "—"],
       ["description", "ReactNode", "—"],
       ["defaultChecked", "boolean", "false"],
+      ["indeterminate", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", demo: "CheckboxDefault" },
       { id: "description", title: "With description", demo: "CheckboxDescription" },
       { id: "sizes", title: "Sizes and states", note: "The unselected and selected glyphs share one exact outer size. The icon ramp supplies 12, 16 and 24px glyphs; not every tier has a different glyph size.", demo: "CheckboxSizes" },
+      { id: "indeterminate", title: "Partial selection", note: "Use indeterminate only for a parent whose related choices are partly selected. It is a visual state, not a submitted value.", demo: "CheckboxIndeterminate" },
     ],
   },
   {
@@ -606,50 +611,6 @@ export const COMPONENT_PAGES = [
         title: "Default",
         note: "In an application, render this inside a native dialog and open it with showModal().",
         demo: "DialogDefault",
-      },
-    ],
-  },
-  {
-    slug: "token",
-    name: "Token",
-    manifest: "token",
-    api: [
-      ["swatch", "string", "\u2014"],
-      ["subtle", "boolean", "false"],
-      ["onColor", "boolean", "false"],
-    ],
-    practices: [
-      "Use Code for literal source and design-token names. Token is the same inline treatment when the name needs an optional colour swatch; use Kbd for a shortcut, Badge for status/metadata, and Chip or a future TokenInput composition for a selected or removable value.",
-      "The shared 24px inline reference follows the surrounding type role, so source and token names stay aligned in tables and prose without a call-site size decision.",
-      "Pass <code class='area-code'>swatch</code> a <code class='area-code'>var()</code>, never a hex. A variable continues to represent the current theme and axes.",
-      "The swatch is a rounded square sample, never a status dot or generic icon. Its square uses the token's internal slot and follows the concentric radius rule.",
-      "Use <code class='area-code'>subtle</code> for a derived alias. Use <code class='area-code'>onColor</code> only on a coloured surface; its fill, edge, and text inherit that surface's context.",
-    ],
-    examples: [
-      { id: "default", title: "Default", demo: "TokenDefault" },
-      {
-        id: "subtle",
-        title: "Subtle",
-        note: "Use the quieter treatment for a derived semantic alias.",
-        demo: "TokenSubtle",
-      },
-      {
-        id: "on-color",
-        title: "On color",
-        note: "Use this treatment when the surrounding surface supplies the text context.",
-        demo: "TokenOnColor",
-      },
-      {
-        id: "swatch",
-        title: "With a swatch",
-        note: "Use a swatch only where the token resolves to a colour.",
-        demo: "TokenSwatch",
-      },
-      {
-        id: "prose",
-        title: "In prose",
-        note: "The token follows its surrounding type role and remains an inline, contained reference.",
-        demo: "TokenInProse",
       },
     ],
   },

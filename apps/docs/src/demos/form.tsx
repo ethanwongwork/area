@@ -207,6 +207,8 @@ export const CheckboxDescription = () => (
   />
 );
 
+export const CheckboxIndeterminate = () => <Checkbox label="Select all workspace members" indeterminate />;
+
 export const RadioDefault = () => (
   <>
     <Radio name="plan" label="Starter" defaultChecked />

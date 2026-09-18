@@ -49,6 +49,11 @@ const FOUNDATION_PAGES = [
   { slug: "motion", name: "Motion" },
 ];
 
+/* Temporary audit triage: completed families stay visible at the top of the documentation
+ * rail while the remaining queue is worked through. The marker is presentation only; page
+ * names and landmarks remain unchanged. */
+const AUDITED_COMPONENTS = new Set(["field", "input", "textarea", "select", "checkbox", "button", "code", "nav"]);
+
 /* --- Chrome ---------------------------------------------------------------- */
 
 /**
@@ -131,7 +136,7 @@ function inspector() {
   <div class="area-panel__bar">
     <span class="area-panel__title">Customize</span>
     <span class="docs-inspector__actions">
-      <button type="button" class="area-button area-button--ghost area-button--neutral area-button--xs" data-reset-axes>
+      <button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm" data-reset-axes>
         <span class="area-button__label">Reset</span>
       </button>
       ${railToggle("panel", "Hide customize panel")}
@@ -165,16 +170,20 @@ function sidebar(activeSlug) {
   // An icon where the slug has one. Components have none deliberately: there are
   // twenty-odd of them and a column of near-identical glyphs is noise, where nine
   // foundations each have a distinct thing to depict.
-  const item = (href, label, slug) =>
-    `<a class="area-menu__item" href="${href}"${slug === activeSlug ? ' data-selected aria-current="page"' : ""}>${
-      ICONS[slug] ? `<span class="area-menu__icon" aria-hidden="true">${ICONS[slug]}</span>` : ""
-    }<span class="area-menu__text">${escapeHtml(label)}</span></a>`;
+  const item = (href, label, slug, { complete = false } = {}) =>
+    `<a class="area-nav__item" href="${href}"${slug === activeSlug ? ' aria-current="page"' : ""}>${
+      complete
+        ? '<span class="area-nav__icon" aria-hidden="true"><span class="docs-sidebar__complete-marker"></span></span>'
+        : ICONS[slug]
+          ? `<span class="area-nav__icon" aria-hidden="true">${ICONS[slug]}</span>`
+          : ""
+    }<span class="area-nav__text">${escapeHtml(label)}</span></a>`;
 
-  const group = (title, links) =>
-    `<nav class="area-menu area-menu--inline" aria-label="${escapeHtml(title)}">
-      <div class="area-menu__label"><span>${escapeHtml(title)}</span></div>
+  const group = (id, title, links) =>
+    `<div class="docs-sidebar__group area-nav__group" role="group" aria-labelledby="${id}">
+      <div class="area-nav__label" id="${id}"><span>${escapeHtml(title)}</span></div>
       ${links}
-    </nav>`;
+    </div>`;
 
   return `<aside class="docs-sidebar area-panel area-panel--xs area-panel--flush area-panel--bare-bar">
   <div class="area-panel__bar">
@@ -182,9 +191,11 @@ function sidebar(activeSlug) {
     ${railToggle("nav", "Hide navigation")}
   </div>
   <div class="area-panel__body docs-sidebar__body">
-  ${group("Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes"), item("./gallery.html", "Component gallery", "gallery"), item("./lab.html", "System lab", "lab")].join("\n      "))}
-  ${group("Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
-  ${group("Components", COMPONENT_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
+  <nav class="area-nav docs-sidebar__nav" aria-label="Documentation">
+  ${group("docs-nav-getting-started", "Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes"), item("./gallery.html", "Component gallery", "gallery"), item("./lab.html", "System lab", "lab")].join("\n      "))}
+  ${group("docs-nav-foundations", "Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
+  ${group("docs-nav-components", "Components", [...COMPONENT_PAGES].sort((a, b) => Number(AUDITED_COMPONENTS.has(b.slug)) - Number(AUDITED_COMPONENTS.has(a.slug))).map((p) => item(`./${p.slug}.html`, p.name, p.slug, { complete: AUDITED_COMPONENTS.has(p.slug) })).join("\n      "))}
+  </nav>
   </div>
   <button type="button" class="docs-rail-resizer" data-resize-rail="nav" aria-label="Resize navigation" aria-orientation="vertical" aria-valuemin="192" aria-valuemax="320" aria-valuenow="208"></button>
 </aside>`;
@@ -251,7 +262,7 @@ function galleryPage() {
     return `<article class="docs-gallery-tile" id="gallery-${spec.slug}" aria-labelledby="gallery-title-${spec.slug}">
       <header class="docs-gallery-tile__header">
         <h2 class="docs-gallery-tile__title" id="gallery-title-${spec.slug}">${escapeHtml(spec.name)}</h2>
-        <a class="area-button area-button--ghost area-button--neutral area-button--xs" href="${spec.href}" aria-label="${escapeHtml(spec.name)} documentation"><span class="area-button__label">Docs</span></a>
+        <a class="area-button area-button--ghost area-button--neutral area-button--sm" href="${spec.href}" aria-label="${escapeHtml(spec.name)} documentation"><span class="area-button__label">Docs</span></a>
       </header>
       <div class="docs-gallery-tile__preview"><div class="docs-gallery-tile__specimen">${demo.html}</div></div>
     </article>`;
@@ -924,7 +935,7 @@ function radiusPage() {
   const axis = tokens.axes.find((a) => a.id === "radius");
 
   const body = `<div class="docs-prose">
-<p>Radius is a named visual family, not a frozen pixel value. Each family defines a small-to-large control curve on the default UI ladder; <code class='area-code'>md</code> remains a 6px medium control, while <code class='area-code'>xl</code> deliberately reaches 10px at medium and 12px at large.</p>
+<p>Radius is a named visual family, not a component-size alias. The default <code class='area-code'>standard</code> family is 6px on a small Button, 8px on a medium Button, and 10px on a large Button. Same-size icon-only and text Buttons always share that exact corner.</p>
 <p>Compact UI keeps the same family but applies a tighter safe cap to the smaller 20–36px ladder. Containers and small nested shapes retain their own semantic steps, so a 12px dialog corner does not force a 12px button corner.</p>
 </div>
 ${tokenSection({
@@ -1157,7 +1168,7 @@ ${axisPresetTable(a.id)}`,
 function indexPage() {
   const body = `<div class="docs-prose">
 <p>Area is a design system whose defining feature is that it is tunable along eight independent axes: theme, neutral, accent, typography, density, radius, surface and motion. Components consume only semantic tokens, so changing an axis reflows the whole system without touching a single component.</p>
-<p>The default medium control is 32px with 14/20 text. Radius uses named visual families: <code class='area-code'>md</code> gives a 6px medium control and 12px container, while <code class='area-code'>xl</code> reaches 10px at medium and 12px at large. Each family has a tier curve; compact UI applies a tighter cap so smaller controls do not become lozenges.</p>
+<p>The default medium control is 32px with 14/20 text. Radius uses named visual families: <code class='area-code'>standard</code> gives an 8px medium control and 12px container, while <code class='area-code'>rotund</code> reaches 12px at medium. Each family has a tier curve; compact UI applies a tighter cap so smaller controls do not become lozenges.</p>
 </div>
 <h2 class="docs-h2" id="install">Installation</h2>
 ${codeBlock("npm install @area/react @area/styles")}

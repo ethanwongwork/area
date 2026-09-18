@@ -1,15 +1,10 @@
 /**
  * Radius.
  *
- * Flat per preset, and the same at every control tier.
- *
- * An earlier version derived this as a proportion of control height, so that radius
- * scaled with the box. The evidence does not support it: Primer at 32px, Vercel at 32px,
- * Linear at 32px and Notion at 28px all ship exactly 6px. Nobody moves control radius
- * when density changes, and deriving it meant a compact button quietly became 5px.
- *
- * Keeping it absolute also restores the axis boundary properly -- radius is now owned
- * entirely by this axis, with no slice of it living in density.
+ * Radius is a size curve owned entirely by this axis. Each family has a reference value
+ * at the default 32px control, then scales deliberately for smaller and larger boxes.
+ * This makes a standard small Button 6px and a standard medium Button 8px while keeping
+ * same-size text and icon Buttons identical.
  *
  * Containers sit at 12px, the single most agreed-upon number in the survey: Primer
  * overlays, OpenAI's popover, dialog and alert, and Linear's cards all use it.
@@ -19,7 +14,10 @@ import { type AxisDefinition, tokens } from "./schema.ts";
 type ControlRadii = { xs: number; sm: number; md: number; lg: number; xl: number };
 
 interface RadiusPreset {
-  /** Control radii on the default UI ladder. Compact applies its own safe cap. */
+  /**
+   * A value per control tier. The curve changes only where box height changes; controls
+   * at the same painted height always read the same token.
+   */
   control: ControlRadii;
   /** Cards, dialogs, menus, popovers. */
   container: number;
@@ -93,33 +91,20 @@ function radiusTokens({ control, container, small, row, cap, buttonCap }: Radius
 }
 
 /**
- * The presets, named by the one number a reader already has in their head: the radius of a
- * button.
- *
- * `sharp` / `subtle` / `default` / `rounded` / `soft` was a ladder that needed a lookup
- * table to read, and which of `subtle` and `default` was rounder was a thing you had to
- * remember rather than something the name told you. Every other primitive ramp in Area is
- * named by its value -- `space-16` is 16px, `wght-400` is weight 400 -- and a radius preset
- * is no different: `data-area-radius="8"` says what it does.
- *
- * The steps are 2px apart, which is the smallest difference that reads on a 32px control,
- * and the low end is denser than it was: 0, 2 and 4 are three distinguishable near-square
- * treatments where `sharp` and `subtle` were two.
- *
- * Within a preset every semantic radius takes a distinct value, so nothing collapses into
- * anything else. The single exception is 0, where square is square and uniqueness is not
- * available -- which is the point of that preset rather than a gap in it.
+ * Public names describe visible character rather than duplicating component-size labels.
+ * The 32px reference ladder is Sharp 0, Subtle 4, Soft 6, Standard 8, Round 10, Rotund 12,
+ * and Pill. Standard is the default family.
  */
 const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
   { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, buttonCap: 0.4, note: "Square corners throughout." },
-  { id: "xs", control: { xs: 2, sm: 2, md: 2, lg: 2, xl: 2 }, small: 0, row: 2, container: 4, cap: 0.4, buttonCap: 0.4, note: "A near-square treatment." },
-  { id: "sm", control: { xs: 2, sm: 4, md: 4, lg: 6, xl: 6 }, small: 2, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, note: "Restrained rounding that grows with the control." },
-  { id: "md", control: { xs: 2, sm: 4, md: 6, lg: 6, xl: 8 }, small: 4, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, note: "Default: a 6px medium control with a measured container step." },
-  { id: "lg", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 10 }, small: 6, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, note: "Soft controls without turning small shapes into pills." },
-  { id: "xl", control: { xs: 4, sm: 8, md: 10, lg: 12, xl: 16 }, small: 8, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, note: "The roundest finite family: 10px at medium, 12px at large, and 16px at extra large." },
+  { id: "subtle", control: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }, small: 2, row: 4, container: 6, cap: 0.4, buttonCap: 0.4, note: "A restrained 4px medium-control family." },
+  { id: "soft", control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, small: 4, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, note: "A soft 6px medium-control family." },
+  { id: "standard", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
+  { id: "round", control: { xs: 5, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, note: "A round 10px medium-control family." },
+  { id: "rotund", control: { xs: 6, sm: 10, md: 12, lg: 14, xl: 16 }, small: 10, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, note: "The roundest finite family: 12px at medium." },
   {
     id: "pill",
-    control: { xs: 9999, sm: 9999, md: 9999, lg: 9999, xl: 9999 },
+    control: { xs: 999, sm: 999, md: 999, lg: 999, xl: 999 },
     small: 9999,
     row: 9999,
     container: 24,
@@ -132,8 +117,8 @@ const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
 export const RADIUS_AXIS: AxisDefinition = {
   id: "radius",
   label: "Radius",
-  description: "How rounded controls and containers are, named by the button's own radius.",
-  defaultPreset: "md",
+  description: "How rounded controls and containers are, grouped by visual character.",
+  defaultPreset: "standard",
   namespaces: [
     "--area-radius-control",
     "--area-radius-control-",
@@ -145,7 +130,7 @@ export const RADIUS_AXIS: AxisDefinition = {
   ],
   presets: PRESETS.map(({ id, note, ...preset }) => ({
     id,
-    label: id === "pill" ? "Pill" : id === "sharp" ? "Sharp" : id.toUpperCase(),
+    label: id.slice(0, 1).toUpperCase() + id.slice(1),
     description: note,
     tokens: tokens(radiusTokens(preset)),
   })),

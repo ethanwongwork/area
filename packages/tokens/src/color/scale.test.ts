@@ -256,19 +256,23 @@ describe("chroma across families", () => {
     ).toBeLessThan(bound);
   });
 
-  it("leaves the mid and dark rungs to the palette", () => {
-    // The trim tapers to nothing by 400, so from there down every family is the export's
-    // own chroma. If this fails, the taper has been widened past what it was argued for.
+  it("only takes available chroma headroom beyond the light-end trim", () => {
+    // The dark lift must never desaturate a palette rung, alter lightness, or paint outside
+    // sRGB. At most it reaches the gamut limit at the original L/H; it is not a route to
+    // clipped, hue-shifted dark colours.
     for (const spec of CHROMATIC_SCALES) {
       const built = buildScale(spec, "light");
       for (const step of built.steps) {
-        if (step.level < 400) continue;
-        const families = PALETTE.families as Record<string, Record<string, { oklch: { C: number } }>>;
+        if (step.level <= 500) continue;
+        const families = PALETTE.families as Record<string, Record<string, { oklch: { L: number; C: number } }>>;
         const rung = families[spec.id]?.[String(step.level)];
         if (!rung) continue;
-        // Rotation still moves chroma at these rungs; only untrimmed families are exact.
-        if (spec.id === "green") continue;
-        expect(step.oklch.C, `${spec.id}-${step.level}`).toBeCloseTo(rung.oklch.C, 3);
+        expect(step.oklch.L, `${spec.id}-${step.level} lightness`).toBeCloseTo(rung.oklch.L, 3);
+        // Green's documented hue rotation can lower C while changing its hue; all other
+        // families retain or lift the exported dark-end chroma.
+        if (spec.id !== "green") {
+          expect(step.oklch.C, `${spec.id}-${step.level} chroma`).toBeGreaterThanOrEqual(rung.oklch.C - 0.001);
+        }
       }
     }
   });

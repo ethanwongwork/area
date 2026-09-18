@@ -78,11 +78,11 @@ move ahead of the proposed order. `Queued` means no conclusions have been made.
 | 2 | Input | Complete | [Input audit](component-audits/input.md) |
 | 3 | Textarea | Complete | [Textarea audit](component-audits/textarea.md) |
 | 4 | Select | Complete | [Select audit](component-audits/select.md) |
-| 5 | Checkbox | Queued | — |
+| 5 | Checkbox | Complete | [Checkbox audit](component-audits/checkbox.md) |
 | 6 | Radio | Queued | — |
 | 7 | Switch | Queued | — |
 | 8 | Slider | Queued | — |
-| 9 | Button | Queued | — |
+| 9 | Button | Complete | [Button audit](component-audits/button.md) |
 | 10 | Chip | Queued | — |
 | 11 | Segmented | Queued | — |
 | 12 | Tabs | Queued | — |
@@ -97,7 +97,7 @@ move ahead of the proposed order. `Queued` means no conclusions have been made.
 | 21 | Spinner | Queued | — |
 | 22 | Skeleton | Queued | — |
 | 23 | Token | Complete | [Token audit](component-audits/token.md) |
-| 24 | Code | Queued | — |
+| 24 | Code | Complete | [Code audit](component-audits/code.md) |
 | 25 | Code block | Queued | — |
 | 26 | Card | Queued | — |
 | 27 | Panel | Queued | — |

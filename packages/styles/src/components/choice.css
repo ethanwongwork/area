@@ -82,7 +82,7 @@
     --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round' d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
   }
 
-  .area-checkbox__control:indeterminate::after {
+  .area-checkbox__control:is(:indeterminate, [data-indeterminate])::after {
     -webkit-mask: var(--_dash) center / 68% no-repeat;
     mask: var(--_dash) center / 68% no-repeat;
     --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2.25' stroke-linecap='round' d='M4 8h8'/%3E%3C/svg%3E");
@@ -95,7 +95,7 @@
   }
 
   .area-checkbox__control:checked,
-  .area-checkbox__control:indeterminate,
+  .area-checkbox__control:is(:indeterminate, [data-indeterminate]),
   .area-radio__control:checked {
     --_fill: var(--area-accent-solid);
     /* The selected face reaches the exact same outer box as the empty control. */
@@ -109,12 +109,12 @@
 
   /* Checked controls darken on hover. Lightening washes the fill out. */
   .area-checkbox__control:checked:hover:not(:disabled),
-  .area-checkbox__control:indeterminate:hover:not(:disabled),
+  .area-checkbox__control:is(:indeterminate, [data-indeterminate]):hover:not(:disabled),
   .area-radio__control:checked:hover:not(:disabled) {
     --_fill: var(--area-accent-solid-hover);
   }
 
-  .area-checkbox__control:not(:checked):not(:indeterminate):hover:not(:disabled),
+  .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled),
   .area-radio__control:not(:checked):hover:not(:disabled) {
     --_edge: var(--area-edge-control-hover);
   }

@@ -16,6 +16,9 @@ Historical batch reports and research preserve the vocabulary used when they wer
 - The docs migrate saved `area-docs-axes.brand` to `accent` once, preserving other valid
   selections. An existing `accent` selection takes precedence. Retired API aliases are
   removed; invalid new API selections produce errors rather than silently falling back.
+- Radius values are named visual families: `sharp`, `subtle`, `soft`, `standard`, `round`,
+  `rotund`, and `pill`. Migrate former `xs`/`sm`/`md`/`lg`/`xl` selections to
+  `subtle`/`soft`/`standard`/`round`/`rotund`; docs preferences perform that migration once.
 
 Package exports and exact component contract changes are recorded below when verified.
 
@@ -24,6 +27,9 @@ Package exports and exact component contract changes are recorded below when ver
 - Select and Slider expose all five existing CSS tiers (`xs` through `xl`); Chip gains `lg`
   and `xl`; Panel gains `xs`. Checkbox/Radio remain `sm`–`lg`; Switch remains `xs`–`lg`.
   Prop unions index literal manifest data rather than maintaining another size list.
+- Button owns three tiers only: `sm`, `md`, and `lg`; `md` is the default when `size` is
+  omitted. Migrate Button `xs` to `sm` and Button `xl` to `lg`. “Default” names omission,
+  while `md` remains the stable explicit tier shared with other multi-size components.
 - Nav accepts `tone="accent"` and now emits the matching CSS class. Its unmodified defaults
   remain vertical and neutral. The old implementation emitted an accent class while CSS
   expected the retired name, leaving its colored current-item variant ineffective.

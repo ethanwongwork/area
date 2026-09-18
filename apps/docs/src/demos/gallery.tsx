@@ -43,7 +43,10 @@ export const GalleryChip = () => (
   <Chip selected>Design</Chip>
 );
 
-export const GalleryCode = () => <Code>npm install @area/react</Code>;
+export const GalleryCode = () => <Code>const project = "area"</Code>;
+export const CodeSubtle = () => <Code subtle>--area-fg-muted</Code>;
+export const CodeOnColor = () => <span style={{ background: "var(--area-accent-solid)", borderRadius: "var(--area-radius-standard)", color: "var(--area-fg-on-accent)", padding: "var(--area-space-8)" }}><Code onColor>area</Code></span>;
+export const CodeTokenSwatch = () => <Code swatch="var(--area-accent-solid)">--area-accent-solid</Code>;
 
 export const GalleryCodeBlock = () => <CodeBlock code={'import { Button }\n  from "@area/react";'} style={{ inlineSize: "100%" }} />;
 

@@ -210,3 +210,23 @@ export function chromaTrimWeight(level: number): number {
   if (level >= 400) return 0;
   return (400 - level) / 200;
 }
+
+/**
+ * A conservative chroma lift for the readable/dark end of chromatic ramps.
+ *
+ * The vendored palette remains the source of every lightness and hue. Most dark rungs are
+ * already on the sRGB cusp, so this is deliberately a *headroom* lift rather than an
+ * instruction to clip colours or move them toward a different hue. `gamutMap()` retains
+ * only the increase each family can actually paint at its own lightness. That gives the
+ * lower-chroma foreground families (especially the indigo/purple middle) their available
+ * saturation while keeping the 750–950 falloff smooth and the near-black 975 endpoint calm.
+ */
+export const DARK_CHROMA_LIFT = 1.16;
+
+/** No lift through 500; full available headroom from 700 through 950; fade at 975. */
+export function darkChromaLiftWeight(level: number): number {
+  if (level <= 500 || level >= 975) return 0;
+  if (level < 700) return (level - 500) / 200;
+  if (level <= 950) return 1;
+  return (975 - level) / 25;
+}

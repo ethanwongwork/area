@@ -16,7 +16,8 @@
     --_code-text: var(--_token-text);
   }
 
-  .area-token:has(> .area-token__swatch) {
+  .area-code--swatch,
+  .area-token:has(> :is(.area-code__swatch, .area-token__swatch)) {
     --_token-height: calc(1em + var(--area-space-10));
     --_token-swatch-size: 1em;
 
@@ -31,6 +32,7 @@
     white-space: nowrap;
   }
 
+  .area-code__swatch,
   .area-token__swatch {
     inline-size: var(--_token-swatch-size, 1em);
     block-size: var(--_token-swatch-size, 1em);
@@ -39,10 +41,12 @@
     box-shadow: inset 0 0 0 var(--area-border-width) var(--area-token-swatch-ring);
   }
 
+  .area-code--subtle,
   .area-token--subtle {
     --_token-bg: var(--area-token-bg-subtle);
   }
 
+  .area-code--on-color,
   .area-token--on-color {
     --_code-bg: color-mix(in oklab, currentcolor 8%, transparent);
     --_code-edge: color-mix(in oklab, currentcolor 20%, transparent);

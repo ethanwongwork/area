@@ -141,13 +141,11 @@ exactly {16, 12} and comments that "a codicon at 13/14/15px is always a mistake 
 16"; Octicons says the same with 24 for the large tier. Gap follows the tier: Primer ties
 4px to xsmall and small, 8px to medium and large, with 6px as the step between.
 
-**Radius presets are named by their visual family.** `data-area-radius="md"`, not
-`="default"`. The old `sharp / subtle / default / rounded / soft` ladder needed a lookup
-table to read and never said which of two names was rounder; every other primitive ramp in
-Area is named by its value, and this is no different. Steps are 2px apart — the smallest
-difference that reads on a 32px control — and the low end carries 0, 2 and 4 where it used
-to carry two names. Within a preset every semantic radius is distinct; at `0` they are all
-0, which is the point of that preset rather than a gap in it.
+**Radius presets are named by their visual family, not their component tier.** The seven
+families are `sharp`, `subtle`, `soft`, `standard`, `round`, `rotund`, and `pill`.
+Standard is the default. Their 32px-control values are 0/4/6/8/10/12/999px. Each family
+is a deliberate size curve: standard is 6px at a small button, 8px at medium, and 10px at
+large. A same-size icon-only and text button always use the exact same radius token.
 
 **A radius is capped against the box it lands on.** `--area-radius-cap` is a unitless 0.4
 for generic controls, while `--area-radius-button-cap` reaches 0.5 at the pill preset.
@@ -178,11 +176,10 @@ Radius has four semantic steps, not three. `row` sits between `control` and `con
 a full-width backplate — a sidebar item, a table-of-contents entry, a nav link — because a
 row has a control's height and a container's width and neither of the others fits it.
 
-Radius does *not* move with density. An earlier version derived it as a proportion of
-control height, which quietly made a compact button 5px — but Primer at 32, Vercel at 32,
-Linear at 32 and Notion at 28 all ship exactly 6px. Radius is owned entirely by the radius
-axis, flat at every tier. Area's default is one step rounder than that group at 8px, which
-is shadcn/ui's number; the 6px preset is still there for anyone who wants the Primer look.
+Radius does not move *with density* as an axis-owned proportion: the radius axis owns each
+complete size curve, and UI scale only selects the box it lands on. This keeps a compact
+medium and default medium from acquiring unrelated geometry while preserving a visibly
+scaled family across small, medium, and large controls.
 
 ## Optical insets
 
@@ -310,9 +307,10 @@ and C are what make contrast predictable, so they are never touched. `scale.ts` 
 table and computes what it does not carry: each rung's translucent twin, which foreground it
 takes, which rung is the solid fill, and which is the family's own quietest stroke.
 
-The one thing Area may change is hue, through `HUE_ROTATION` in `curves.ts`. A family with no
-entry ships its exported hex byte for byte. Still do not edit a hex: if a lightness or a
-chroma is wrong it is wrong in the export; if a hue is wrong, rotate it.
+Area may tune hue through `HUE_ROTATION` and chroma through the bounded adjustment tables in
+`curves.ts`. A family with no entry ships its exported hex byte for byte. Still do not edit a
+hex: adjustment must preserve the palette's lightness anchors, original peak character, and
+the gamut at each rung.
 
 **A rotation is not free, and how expensive it is depends entirely on where the family sits
 in the gamut.** −4 on red cost 0.0003 of chroma and nothing else, which is where the old
@@ -329,15 +327,13 @@ The light-end chroma trims described below also apply. Red carried −4 degrees 
 while and was reverted; the trade to weigh if it is tried again is red-to-orange widening from
 35 to 39 against red-to-pink narrowing from 20 to 16.
 
-**Chroma is trimmed at the light end, and only there.** `CHROMA_TRIM` in `curves.ts` is the
-one place Area touches chroma, and it exists because Area's anchor and this one answer
-different questions. The export pins a rung against *white* — a statement about one family,
-which says nothing about that family beside its ten siblings at the same rung. At the dark
-end that does not matter, because the gamut squeezes every hue into the same narrow band. At
-the light end it does: sRGB holds far more chroma in a pale green than in a pale blue, so
-the families that can be bright, are. Measured at rung 150, chroma ran 0.051 (orange) to
-0.138 (lime) around a mean of 0.079 — lime and green at nearly twice their peers, which is
-what makes a green tint read as a wash where a blue one reads as a tint.
+**Chroma has two bounded adjustments.** `CHROMA_TRIM` in `curves.ts` evens the light end.
+The export pins a rung against *white* — a statement about one family, which says nothing
+about that family beside its ten siblings at the same rung. At the light end sRGB holds far
+more chroma in pale green than pale blue, so the families that can be bright are. Measured
+at rung 150, chroma ran 0.051 (orange) to 0.138 (lime) around a mean of 0.079 — lime and
+green at nearly twice their peers, which makes a green tint read as a wash where a blue one
+reads as a tint.
 
 Three families are trimmed: **lime 0.72, green 0.78, yellow 0.88**, and the trim tapers —
 full strength at rung 200 and below, gone by 400. That taper is the whole argument: the
@@ -346,6 +342,15 @@ solid down with the tint, which are the rungs the palette anchored deliberately.
 touched, so no wall moves; the spread at rung 150 closes from 0.087 to 0.054 and at 200 from
 0.086 to 0.049. `scale.test.ts` bounds all four light rungs, so the trim cannot be dropped
 quietly — remove it and four assertions fail.
+
+`DARK_CHROMA_LIFT` takes up to 16% of the remaining chroma headroom from rung 550 through
+950, strongest from 700. It is capped at both the sRGB cusp for the rung's original
+lightness/hue and that family's original chromatic peak, so it cannot clip, change the
+palette's lightness ladder, or make a later rung replace the semantic solid. The 975 endpoint
+is unchanged. In practice most 750–950 rungs are already at their cusp; the visible gain is
+therefore concentrated in the remaining foreground/stroke headroom, notably indigo and
+purple. The scale and stroke tests protect the cusp, solid-wall, contrast, and cross-hue
+stroke-balance contracts.
 
 **A rung is an ordinal, not a measurement.** Higher is darker. An earlier ladder named each
 level after its own lightness and asserted it; this one cannot, because Area anchors to

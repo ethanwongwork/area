@@ -15,6 +15,10 @@ export function restoreAxisPreferences(storage, presets) {
   }
   delete next.density;
   delete next.type;
+  // Radius families used component-size labels until 2026-09-17. Preserve the closest
+  // visual intent for stored docs preferences, including the older numeric ramp.
+  const radiusMigration = { '0': 'sharp', '2': 'subtle', '4': 'subtle', '6': 'soft', '8': 'standard', '10': 'round', '12': 'rotund', xs: 'subtle', sm: 'soft', md: 'standard', lg: 'round', xl: 'rotund' };
+  if (typeof next.radius === 'string' && radiusMigration[next.radius]) next.radius = radiusMigration[next.radius];
   const result = Object.fromEntries(Object.entries(next).filter(([axis,value]) =>
     Object.hasOwn(presets,axis) && presets[axis].includes(value)));
   if (JSON.stringify(result) !== JSON.stringify(parsed)) {

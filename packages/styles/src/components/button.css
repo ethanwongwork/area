@@ -379,19 +379,9 @@
   /* --- Sizes -------------------------------------------------------------- */
   /*
    * A tier sets only tier tokens. Nothing here is a pixel value: every one of these
-   * resolves through the density axis, so all five tiers move together when density
+   * resolves through the density axis, so all three tiers move together when density
    * changes and no size block ever needs editing.
    */
-
-  .area-button--xs {
-    --_height: var(--area-control-xs);
-    --_radius: var(--area-radius-control-xs);
-    --_gutter: var(--area-gutter-xs);
-    --_icon: var(--area-icon-xs);
-    --_gap: var(--area-gap-xs);
-    --_text: var(--area-control-xs-text);
-    --_leading: var(--area-control-xs-leading);
-  }
 
   .area-button--sm {
     --_height: var(--area-control-sm);
@@ -423,13 +413,4 @@
     --_leading: var(--area-control-lg-leading);
   }
 
-  .area-button--xl {
-    --_height: var(--area-control-xl);
-    --_radius: var(--area-radius-control-xl);
-    --_gutter: var(--area-gutter-xl);
-    --_icon: var(--area-icon-xl);
-    --_gap: var(--area-gap-xl);
-    --_text: var(--area-control-xl-text);
-    --_leading: var(--area-control-xl-leading);
-  }
 }

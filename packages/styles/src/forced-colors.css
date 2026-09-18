@@ -29,7 +29,7 @@
       border-color: CanvasText;
       background-color: Canvas;
     }
-    .area-checkbox__control:checked, .area-checkbox__control:indeterminate,
+    .area-checkbox__control:checked, .area-checkbox__control:is(:indeterminate, [data-indeterminate]),
     .area-radio__control:checked, .area-switch__control:checked {
       border-color: Highlight;
       background-color: Highlight;

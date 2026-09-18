@@ -45,7 +45,7 @@ export const button = {
       "danger",
       "discovery",
     ],
-    size: ["xs", "sm", "md", "lg", "xl"],
+    size: ["sm", "md", "lg"],
     align: ["align-start", "align-end"],
   },
   booleans: ["full-width", "icon-only", "pill"],
@@ -104,7 +104,7 @@ export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
   variants: { size: ["xs", "sm", "md", "lg", "xl"] },
-  states: ["disabled"],
+  states: ["checked", "indeterminate", "disabled"],
   elements: ["control"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
@@ -332,9 +332,10 @@ export const segmented = {
 
 export const code = {
   block: "area-code",
-  description: "Marks a fragment of code inline.",
-  variants: {},
-  elements: [],
+  description: "Marks source or a design token inline.",
+  variants: { ground: ["on-color", "subtle"] },
+  booleans: ["swatch"],
+  elements: ["swatch", "label"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -359,7 +360,7 @@ export const nav = {
 
 export const token = {
   block: "area-token",
-  description: "Adds an optional colour swatch to inline Code.",
+  description: "Deprecated compatibility alias for Code with a token swatch.",
   variants: { ground: ["on-color", "subtle"] },
   elements: ["swatch", "label"],
   defaults: {},

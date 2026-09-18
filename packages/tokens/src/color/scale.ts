@@ -15,8 +15,8 @@
  *   Which rung is the solid fill, and its hover -- see `chooseSolid`.
  */
 import { type Oklch, SRGB, parseHex, toHex, toOklchCss } from "./oklab.ts";
-import { gamutMap } from "./gamut.ts";
-import { type Level, type Ramp, CHROMA_TRIM, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight } from "./curves.ts";
+import { gamutMap, maxChromaAt } from "./gamut.ts";
+import { DARK_CHROMA_LIFT, type Level, type Ramp, CHROMA_TRIM, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight, darkChromaLiftWeight } from "./curves.ts";
 import { apcaMagnitude, wcagContrastHex } from "./contrast.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
 import PALETTE from "./palette.json" with { type: "json" };
@@ -138,28 +138,43 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     );
   }
 
-  // Area's two adjustments to the export, both per family and both optional: a hue rotation
-  // that moves character, and a chroma trim that evens the light end against the other ten
-  // families. Lightness is never touched by either, so the wall each rung is pinned against
-  // stays where the palette put it. A family with no entry in either table keeps its
-  // exported hex byte for byte.
+  // Area's adjustments to the export: a hue rotation that moves character, a chroma trim
+  // that evens the light end, and a gamut-bounded lift that takes available headroom at the
+  // readable/dark end. Lightness is never touched, so the wall each rung is pinned against
+  // stays where the palette put it. A family with no adjustment keeps its exported byte.
   const rotation = HUE_ROTATION[spec.id] ?? 0;
   const trim = CHROMA_TRIM[spec.id] ?? 1;
+  const familyPeakChroma = Math.max(...Object.values(family).map((rung) => rung.oklch.C));
+  const familyPeakLevel = LEVELS.reduce(
+    (peak, level) => family[String(level)]!.oklch.C > family[String(peak)]!.oklch.C ? level : peak,
+    LEVELS[0],
+  );
 
   const steps: ScaleStep[] = LEVELS.map((level) => {
     const rung = family[String(level)];
     if (!rung) throw new Error(`${spec.id} is missing rung ${level}.`);
 
-    // Tapered: full strength at the light end, none by rung 400. See curves.ts.
-    const factor = trim === 1 ? 1 : 1 - (1 - trim) * chromaTrimWeight(level);
+    // Tapered trim at the light end; bounded headroom lift at the readable/dark end.
+    const trimFactor = trim === 1 ? 1 : 1 - (1 - trim) * chromaTrimWeight(level);
+    const liftFactor = 1 + (DARK_CHROMA_LIFT - 1) * darkChromaLiftWeight(level);
+    const factor = trimFactor * liftFactor;
+    const hue = (rung.oklch.H + rotation + 360) % 360;
+    // The adjustment must not create a new chromatic peak or invoke gamut mapping that
+    // changes lightness. A dark step only receives the C still available at its own L/H,
+    // and never overtakes the family character established by the vendored peak.
+    const chroma = Math.min(
+      rung.oklch.C * factor,
+      maxChromaAt(rung.oklch.L, hue, SRGB),
+      familyPeakChroma,
+    );
 
-    if (rotation === 0 && factor === 1) {
+    if (rotation === 0 && chroma === rung.oklch.C) {
       const oklch: Oklch = { L: rung.oklch.L, C: rung.oklch.C, h: rung.oklch.H };
       return { level, oklch, hex: rung.hex, oklchCss: toOklchCss(oklch), contrast: stepContrast(rung.hex) };
     }
 
     const mapped = gamutMap(
-      { L: rung.oklch.L, C: rung.oklch.C * factor, h: (rung.oklch.H + rotation + 360) % 360 },
+      { L: rung.oklch.L, C: chroma, h: hue },
       SRGB,
     );
     const hex = toHex(mapped.rgb);
@@ -177,7 +192,9 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
   const peak = { level: peakStep.level, C: peakStep.oklch.C };
   const solid = spec.kind === "neutral"
     ? neutralSolid(steps)
-    : chooseSolid(steps, peakStep.level, spec.solidForeground ?? "light");
+    // Chroma refinement must not silently recategorize a palette family's established
+    // solid-wall rung. Start the contrast walk from the export's own peak instead.
+    : chooseSolid(steps, familyPeakLevel, spec.solidForeground ?? "light");
   const solidHex = steps.find((x) => x.level === solid.level[theme])!.hex;
   const stroke: StrokeChoice = {
     // The bars are the gate's own ambient and hover stroke tiers; see contrast/assertions.ts.

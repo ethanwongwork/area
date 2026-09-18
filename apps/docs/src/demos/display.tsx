@@ -1,4 +1,4 @@
-import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Dialog, Field, Input, Kbd, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
+import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Code, Dialog, Field, Input, Kbd, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
 import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
@@ -262,26 +262,26 @@ export const MenuWithShortcuts = () => (
   </Menu>
 );
 
-export const TokenDefault = () => <Token>--area-space-16</Token>;
+export const TokenDefault = () => <Code>--area-space-16</Code>;
 
 export const TokenSwatch = () => (
-  <Token swatch="var(--area-accent-solid)">--area-accent-solid</Token>
+  <Code swatch="var(--area-accent-solid)">--area-accent-solid</Code>
 );
 
 export const TokenOnColor = () => (
   <div style={{ background: "var(--area-accent-solid)", color: "var(--area-fg-on-accent)", padding: "var(--area-space-12)", inlineSize: "fit-content", borderRadius: "var(--area-radius-container)" }}>
-    <Token onColor>--area-fg-on-accent</Token>
+    <Code onColor>--area-fg-on-accent</Code>
   </div>
 );
 
 export const TokenInProse = () => (
   <div style={{ inlineSize: 380 }}>
-    Set <Token>--area-radius-control</Token> to change how rounded a control is. It reads the
+    Set <Code>--area-radius-control</Code> to change how rounded a control is. It reads the
     same here as it does in a table.
   </div>
 );
 
-export const TokenSubtle = () => <Token subtle>--area-accent-solid</Token>;
+export const TokenSubtle = () => <Code subtle>--area-accent-solid</Code>;
 
 /*
  * Every control the system has, in one panel, at one tier.
@@ -295,7 +295,7 @@ export const PanelEverything = () => (
     size="md"
     title="Scroll Variant"
     action={
-      <Button variant="ghost" tone="neutral" size="xs" iconOnly aria-label="Close" icon={<DismissIcon />} />
+      <Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} />
     }
     footer={<Button variant="soft" tone="neutral" size="sm" fullWidth>Add Section</Button>}
     style={{ inlineSize: 320, blockSize: 560 }}

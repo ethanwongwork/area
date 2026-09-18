@@ -114,8 +114,14 @@
     flex: 0 0 auto;
   }
 
+  /* A horizontal destination with no end annotation is a compact plate, not a left-aligned
+   * list row. Centre its single content run; annotated controls retain the end slot. */
+  .area-nav--horizontal .area-nav__item:not(:has(> .area-nav__trailing)) {
+    justify-content: center;
+  }
+
   .area-nav__item:hover:not([data-disabled]) {
-    background-color: var(--area-bg-hover);
+    background-color: var(--area-bg-component);
   }
 
   /*
@@ -123,9 +129,8 @@
    * only the plate, keeping each label stable under the pointer.
    */
   .area-nav__item[aria-current]:not([aria-current="false"]) {
-    background-color: var(--area-bg-component-active);
+    background-color: var(--area-bg-component-hover);
     color: var(--area-fg-default);
-    font-weight: var(--area-weight-strong);
   }
 
   .area-nav__item:focus-visible {
@@ -140,7 +145,7 @@
 
   /* The accent variant: current items carry the accent rather than the neutral. */
   .area-nav--accent .area-nav__item[aria-current]:not([aria-current="false"]) {
-    background-color: var(--area-accent-surface);
+    background-color: var(--area-accent-surface-hover);
     color: var(--area-fg-accent);
   }
 

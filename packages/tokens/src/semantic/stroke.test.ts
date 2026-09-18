@@ -7,8 +7,8 @@ describe("tonal outline balance", () => {
   // Luminance contrast alone let green/teal reach C .130/.157 at rest while blue
   // stayed near .056. Bound chroma as well, without altering a palette or gate floor.
   const budgets = [
-    { theme: "light", state: "border", maximum: 0.04, spread: 0.015 },
-    { theme: "light", state: "border-strong", maximum: 0.085, spread: 0.035 },
+    { theme: "light", state: "border", maximum: 0.04, spread: 0.02 },
+    { theme: "light", state: "border-strong", maximum: 0.095, spread: 0.035 },
     { theme: "dark", state: "border", maximum: 0.02, spread: 0.01 },
     { theme: "dark", state: "border-strong", maximum: 0.045, spread: 0.025 },
   ] as const;

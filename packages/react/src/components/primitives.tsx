@@ -630,10 +630,22 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
 
 /* --- Code ----------------------------------------------------------------- */
 
-export type CodeProps = HTMLAttributes<HTMLElement>;
+export interface CodeProps extends HTMLAttributes<HTMLElement> {
+  /** A CSS colour the reference resolves to. Adds a decorative swatch. */
+  swatch?: string;
+  /** A quieter treatment for a derived reference. */
+  subtle?: boolean;
+  /** Uses the surrounding foreground on a coloured ground. */
+  onColor?: boolean;
+}
 
-export const Code = /* @__PURE__ */ forwardRef<HTMLElement, CodeProps>(function Code({ className, ...rest }, ref) {
-  return <code ref={ref} className={cx("area-code", className)} {...rest} />;
+export const Code = /* @__PURE__ */ forwardRef<HTMLElement, CodeProps>(function Code(
+  { children, swatch, subtle, onColor, className, ...rest }, ref,
+) {
+  return <code ref={ref} className={cx("area-code", swatch && "area-code--swatch", subtle && "area-code--subtle", onColor && "area-code--on-color", className)} {...rest}>
+    {swatch ? <span className="area-code__swatch" style={{ background: swatch }} aria-hidden="true" /> : null}
+    {swatch ? <span className="area-code__label">{children}</span> : children}
+  </code>;
 });
 
 const codeBlockVariants = /* @__PURE__ */ createVariants(MANIFESTS.codeBlock);

@@ -59,9 +59,9 @@ apps/docs          the site, built from the system it documents
 
 **Colour.** `packages/tokens/src/color/palette.json` is the Area palette vendored
 verbatim — 14 families × 23 rungs, each rung anchored to a contrast wall rather than to a
-lightness. The exported lightness and chroma anchors stay fixed. `HUE_ROTATION` tunes hue, with
-one narrow chroma adjustment at the light end (`CHROMA_TRIM`) where the palette's
-per-family anchoring leaves families visibly uneven against each other. Never edit a hex.
+lightness. The exported lightness and chroma anchors stay fixed. `HUE_ROTATION` tunes hue;
+`CHROMA_TRIM` evens the light end, while the gamut-bounded `DARK_CHROMA_LIFT` takes only
+available readable/dark-end headroom without changing lightness or hue. Never edit a hex.
 
 **Semantics.** A numbered rung is never referenced from component CSS. `INVERSION` maps
 slots to rungs once, per theme, and components read `--area-bg-surface`,

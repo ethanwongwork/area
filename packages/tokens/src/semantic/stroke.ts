@@ -1,6 +1,6 @@
 import { INVERSION } from "../color/curves.ts";
 import { apcaMagnitude, wcagContrastHex } from "../color/contrast.ts";
-import { parseHex, toHex, type Rgb } from "../color/oklab.ts";
+import { labToLch, parseHex, rgbToOklab, SRGB, toHex, type Rgb } from "../color/oklab.ts";
 import type { Theme } from "../color/scale.ts";
 import PALETTE from "../color/palette.json" with { type: "json" };
 
@@ -29,11 +29,22 @@ export function tonalStroke(ink: string, theme: Theme, hover: boolean): string {
   // Quantisation margin above the unchanged 1.3 / 1.9 policy floors.
   const ratio = hover ? 1.91 : 1.31;
   const apca = theme === "dark" && hover ? 15.1 : 0;
+  // The dark end of a chromatic palette has a great deal of perceptual hue even where
+  // sRGB leaves little numeric C headroom. Light strokes therefore used to make purple
+  // visibly coloured while teal/cyan barely registered. Once the contrast floor is met,
+  // take enough of the readable ink to give every light tonal stroke a shared minimum
+  // chroma. The ceiling remains enforced by stroke.test.ts.
+  const minimumChroma = theme === "light" ? (hover ? 0.06 : 0.025) : 0;
   for (let opacity = 1; opacity <= 255; opacity++) {
     const alpha = opacity / 255;
     const rgb = foreground.map((value, channel) => value * alpha + background[channel]! * (1 - alpha)) as Rgb;
     const hex = toHex(rgb);
-    if (wcagContrastHex(hex, ground) >= ratio && apcaMagnitude(hex, ground) >= apca) {
+    const chroma = labToLch(rgbToOklab(parseHex(hex), SRGB)).C;
+    if (
+      wcagContrastHex(hex, ground) >= ratio &&
+      apcaMagnitude(hex, ground) >= apca &&
+      chroma >= minimumChroma
+    ) {
       cache.set(key, hex);
       return hex;
     }

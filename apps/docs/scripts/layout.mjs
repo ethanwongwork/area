@@ -119,9 +119,9 @@ export function customizer(inspectorHtml) {
 
 /** Names a token, optionally with a swatch of what it resolves to. */
 export function tokenChip(name, { swatch, onColor = false } = {}) {
-  return `<span class="area-token${onColor ? " area-token--on-color" : ""}">${
-    swatch ? `<span class="area-token__swatch" style="background:${swatch}"></span>` : ""
-  }<span class="area-token__label">${escapeHtml(name)}</span></span>`;
+  return `<code class="area-code area-code--swatch docs-token-chip${onColor ? " area-code--on-color" : ""}">${
+    swatch ? `<span class="area-code__swatch" style="background:${swatch}" aria-hidden="true"></span>` : ""
+  }<span class="area-code__label">${escapeHtml(name)}</span></code>`;
 }
 
 /**
@@ -297,7 +297,13 @@ export const DOCS_CSS = `
    * item row, so the label is doing most of the separating on its own -- 12 on top of that
    * read as a gap between three lists rather than as one list with headings.
    */
-  .docs-sidebar .area-menu + .area-menu { margin-block-start: 0; }
+  .docs-sidebar__group + .docs-sidebar__group { margin-block-start: 0; }
+  .docs-sidebar__complete-marker {
+    inline-size: var(--area-space-6);
+    block-size: var(--area-space-6);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-accent-solid);
+  }
 
   .docs-inspector__actions { display: flex; align-items: center; gap: var(--area-space-2); }
 
@@ -313,10 +319,10 @@ export const DOCS_CSS = `
     display: flex;
     align-items: center;
     /*
-     * A menu item pads its own label by 8 inside the body's inset, so the nav's text ink
-     * begins 8px further in than the bar's edge. The wordmark takes the same offset, which
-     * puts it on the label column after the leading-icon box and its gap -- the bar's
-     * padding aligns boxes, and what reads here is ink.
+     * The bar and body share the panel inset. A menu heading then takes its own 8px optical
+     * inset, so the wordmark takes that same 8px step. This aligns the wordmark with the
+     * section-heading ink and an icon viewport's leading edge; a row without an icon does
+     * not reserve an empty lane merely to satisfy the sidebar chrome.
      */
     font-family: var(--area-font-mono);
     font-size: var(--area-text-md-size);
@@ -325,8 +331,8 @@ export const DOCS_CSS = `
     font-weight: var(--area-weight-strong);
     letter-spacing: var(--area-text-md-tracking);
     text-transform: lowercase;
-    /* Align the wordmark's painted left edge with a sidebar heading and icon ink. */
-    margin-inline-start: var(--area-space-4);
+    /* Align the wordmark's painted left edge with the shared sidebar content edge. */
+    margin-inline-start: var(--area-space-8);
   }
 
   /*
@@ -787,11 +793,11 @@ export const DOCS_CSS = `
   }
 
   /* A card with a figure and no values still needs the line of separation. */
-  .docs-card > .area-token + .docs-card__figure {
+  .docs-card > .docs-token-chip + .docs-card__figure {
     margin-block-start: var(--area-text-xs-leading);
   }
 
-  .docs-card > .area-token { align-self: flex-start; }
+  .docs-card > .docs-token-chip { align-self: flex-start; }
 
   /* Table previews sit in a fixed column, so a tall specimen cannot stretch the row. */
   .docs-preview-cell { display: flex; align-items: center; min-block-size: var(--area-space-24); }

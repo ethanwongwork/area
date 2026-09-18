@@ -36,10 +36,8 @@
   }
   .area-panel--bare-bar > .area-panel__bar { padding-block-start: 0; }
   .area-panel__bar:has(> .area-button:last-child) { --_box-end: var(--area-control-md); }
-  .area-panel__bar:has(> .area-button--xs:last-child) { --_box-end: var(--area-control-xs); }
   .area-panel__bar:has(> .area-button--sm:last-child) { --_box-end: var(--area-control-sm); }
   .area-panel__bar:has(> .area-button--lg:last-child) { --_box-end: var(--area-control-lg); }
-  .area-panel__bar:has(> .area-button--xl:last-child) { --_box-end: var(--area-control-xl); }
   .area-button { --_box-border: var(--area-border-width); }
   .area-chip { --_box-icon: var(--_dot); }
   .area-segmented__item { --_box-height: var(--_item); }
@@ -48,6 +46,14 @@
     --_box-border: 0px;
     --_box-icon: var(--area-icon-md);
   }
+  /* A Nav heading names rows that may lead with an icon. Its content edge therefore
+   * follows the icon viewport rather than a font-specific cap measurement: group names,
+   * icon ink, and shell identity can share one optical leading edge. */
+  .area-nav__label { --_box-start: var(--_box-icon); }
+  /* A destination without a leading icon belongs on that same heading column. This is
+   * intentionally asymmetric with generic text-only controls: in a Nav, visual scanning
+   * follows the group column, not each row's cap-height-centred text inset. */
+  .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-icon); }
   .area-nav__item, .area-menu__item { gap: var(--area-gap-md); }
   .area-menu--inline .area-menu__item, .area-menu--inline .area-menu__label {
     --_box-height: var(--area-control-sm);
@@ -96,10 +102,8 @@
   .area-input:has(> .area-button:last-child) {
     --_box-end: var(--area-control-md);
   }
-  .area-input:has(> .area-button--xs:last-child) { --_box-end: var(--area-control-xs); }
   .area-input:has(> .area-button--sm:last-child) { --_box-end: var(--area-control-sm); }
   .area-input:has(> .area-button--lg:last-child) { --_box-end: var(--area-control-lg); }
-  .area-input:has(> .area-button--xl:last-child) { --_box-end: var(--area-control-xl); }
   /* A trailing InputAction is a nested square backplate. Its own icon uses the shared
    * icon slot; the outer Input reserves the action's larger box, keeping both inset layers
    * optically centered instead of letting a glyph touch its hit target. */
@@ -123,7 +127,7 @@
   /* Trim only text slots, never SVGs or containers holding controls. Symmetric
    * safety padding lets accents/descenders paint even in an ellipsized label. */
   .area-button__label, .area-chip__label, .area-badge__label,
-  .area-segmented__label, .area-tabs__label, .area-token__label,
+  .area-segmented__label, .area-tabs__label, .area-code__label, .area-token__label,
   .area-nav__text, .area-menu__text, .area-input__affix,
   .area-kbd__key, .area-avatar > span,
   .area-nav__label > span, .area-menu__label > span {
@@ -131,7 +135,7 @@
     padding-block: 0.25em;
     min-inline-size: 0;
   }
-  .area-chip__label, .area-segmented__label, .area-tabs__label, .area-token__label {
+  .area-chip__label, .area-segmented__label, .area-tabs__label, .area-token__label, .area-code__label {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -180,6 +184,7 @@
   .area-alert__icon, .area-toast__icon { display: inline-flex; align-items: center; justify-content: center; }
   .area-alert__icon > svg, .area-toast__icon > svg { display: block; inline-size: 100%; block-size: 100%; }
 
+  .area-code--swatch:has(> .area-code__swatch:first-child),
   .area-token:has(> .area-token__swatch:first-child) {
     /* The decorative swatch is a direct, named Token slot. The parent reserves its
      * box; it is not a nested action and therefore owns no independent backplate. */
@@ -187,12 +192,12 @@
       (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--area-border-width)
     );
   }
+  .area-code--swatch:has(> .area-code__swatch:last-child),
   .area-token:has(> .area-token__swatch:last-child) {
     padding-inline-end: calc(
       (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--area-border-width)
     );
   }
-  .area-code { text-box: trim-both cap alphabetic; }
   .area-button--align-start { margin-inline-start: calc((var(--_box-height) - var(--_box-start)) / -2); }
   .area-button--align-end { margin-inline-end: calc((var(--_box-height) - var(--_box-end)) / -2); }
   .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-control-xs); }

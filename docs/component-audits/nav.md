@@ -128,9 +128,9 @@ Nav retains `--area-radius-cap`. There is no new Nav color pair or contrast obli
 ## Implementation
 
 - `packages/react/src/components/Nav.tsx`: semantic labelled groups and non-activatable disabled items.
-- `packages/styles/src/components/nav.css`: 8px inter-group rhythm.
+- `packages/styles/src/components/nav.css` and `packages/styles/src/inset.css`: 8px inter-group rhythm and a shared icon-viewport leading edge for group headings and icon-bearing rows.
 - `packages/tokens/src/axes/radius.ts` and Button CSS: true button-only pill cap; XL radius becomes 16px.
-- `apps/docs/scripts/layout.mjs` and `build.mjs`: 208px rail, 192–320px resizer, reduced rail inset and group gap.
+- `apps/docs/scripts/layout.mjs` and `build.mjs`: 208px rail, 192–320px resizer, reduced rail inset and group gap; the documentation sidebar dogfoods `area-nav` rather than the Menu component.
 
 ## Verification
 
@@ -141,6 +141,13 @@ Passed on 2026-09-17: `npm run build`, `npm run lint:manifest -w @area/styles`,
 a button 12.8px radius at 32px because UI scale overrode the radius cap. The repaired Button
 paints at 16px. The rebuilt desktop rail measured its new 8px body inset; its saved 217.09px
 user preference remained intact, while a first visit receives the 208px default.
+
+Post-audit alignment correction, 2026-09-17: Nav headings now take the same icon-viewport
+leading inset as icon-bearing rows. The docs rail uses the actual Nav markup, and fresh
+Chromium inspection confirmed the wordmark, section-heading text, and icon viewports share
+one optical leading edge without reserving an empty icon slot for text-only destinations.
+Text-only Nav destinations take that same leading inset so their label ink aligns with the
+group heading; this is a deliberate navigation-scanning exception to generic text centring.
 
 ## Remaining limits
 
