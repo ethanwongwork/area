@@ -1,3 +1,4 @@
+import { specimenName } from "./specimen-names.mjs";
 import { buildInsetFixture } from "./inset-fixture.mjs";
 import { docsOutput } from "./output.mjs";
 import { baseTokens } from "../../../packages/tokens/src/emit/base.ts";
@@ -29,6 +30,7 @@ import {
 import { ICONS } from "./icons.generated.mjs";
 import { CATALOG } from "./icons.catalog.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
+import { COMPLETE_COMPONENTS } from "../src/component-status.mjs";
 import { PRACTICES } from "../src/practices.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -49,9 +51,12 @@ const FOUNDATION_PAGES = [
   { slug: "motion", name: "Motion" },
 ];
 
-/* Audit triage: reviewed families stay together while their capability gaps are still
- * being resolved. This deliberately is not a completion marker. */
-const REVIEWED_COMPONENTS = new Set(["field", "input", "textarea", "select", "checkbox", "radio", "button", "kbd", "code", "nav", "badge", "switch"]);
+// Only owner-confirmed families receive completion styling.
+for (const slug of COMPLETE_COMPONENTS) {
+  if (!COMPONENT_PAGES.some(page => page.slug === slug)) throw new Error(`Unknown completed component: ${slug}`);
+}
+const orderedComponents = [...COMPONENT_PAGES].sort((a, b) =>
+  Number(COMPLETE_COMPONENTS.has(b.slug)) - Number(COMPLETE_COMPONENTS.has(a.slug)) || a.name.localeCompare(b.name));
 
 /* --- Chrome ---------------------------------------------------------------- */
 
@@ -186,7 +191,7 @@ function sidebar(activeSlug) {
         : ICONS[slug]
           ? `<span class="area-nav__icon" aria-hidden="true">${ICONS[slug]}</span>`
           : ""
-    }<span class="area-nav__text">${escapeHtml(label)}</span></a>`;
+    }<span class="area-nav__text"><span${COMPONENT_PAGES.some(p => p.slug === slug) ? ` class="docs-audit-label" data-audit="${COMPLETE_COMPONENTS.has(slug) ? "complete" : "unrefined"}"` : ""}>${escapeHtml(label)}</span></span></a>`;
 
   const group = (id, title, links) =>
     `<div class="docs-sidebar__group area-nav__group" role="group" aria-labelledby="${id}">
@@ -203,7 +208,7 @@ function sidebar(activeSlug) {
   <nav class="area-nav docs-sidebar__nav" aria-label="Documentation">
   ${group("docs-nav-getting-started", "Getting started", [item("./index.html", "Introduction", "index"), item("./axes.html", "Axes", "axes"), item("./gallery.html", "Component gallery", "gallery"), item("./lab.html", "System lab", "lab")].join("\n      "))}
   ${group("docs-nav-foundations", "Foundations", FOUNDATION_PAGES.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
-  ${group("docs-nav-components", "Components", [...COMPONENT_PAGES].sort((a, b) => Number(REVIEWED_COMPONENTS.has(b.slug)) - Number(REVIEWED_COMPONENTS.has(a.slug))).map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
+  ${group("docs-nav-components", "Components", orderedComponents.map((p) => item(`./${p.slug}.html`, p.name, p.slug)).join("\n      "))}
   </nav>
   </div>
   <button type="button" class="docs-rail-resizer" data-resize-rail="nav" aria-label="Resize navigation" aria-orientation="vertical" aria-valuemin="192" aria-valuemax="320" aria-valuenow="208"></button>
@@ -260,13 +265,14 @@ ${slug === "badge" ? '<script type="module" src="./badge-demos.js"></script>' : 
 /* One tile per public component family. Compound pieces appear inside their parent. */
 function galleryPage() {
   // Every component receives its own compact section. The section supplies the component
-  // name; a tile therefore names only its single specimen (Default, Tone / success,
-  // Size / medium) and never repeats the family name just to fill space.
-  const auditedFamilies = new Set(["field", "input", "textarea", "select", "checkbox", "radio", "button", "kbd", "code", "nav", "badge", "switch"]);
+  // name; a tile therefore names only its single specimen (default, soft-success,
+  // size-md) and never repeats the family name just to fill space.
   const badgeTones = ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"];
   const badgeVariants = ["soft", "solid", "outline", "ghost", "plain"];
   const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {
+    code: COMPONENT_PAGES.find(page => page.slug === "code").examples,
+    nav: COMPONENT_PAGES.find(page => page.slug === "nav").examples,
 
     badge: [
       { id: "default", title: "Default", demo: "BadgeDefault" },
@@ -305,15 +311,8 @@ function galleryPage() {
       { id: "group-overlay", title: "Group Overlay", demo: "BadgeGroupOverlay" },
       { id: "group-auto", title: "Group Auto", demo: "BadgeGroupAuto" },
       { id: "custom-brand", title: "Custom Brand", demo: "BadgeCustomBrand" },
-      { id: "table-deployed", title: "Table Status / Deployed", demo: "GalleryBadgeTableDeployed" },
-      { id: "table-building", title: "Table Status / Building", demo: "GalleryBadgeTableBuilding" },
       { id: "nav-new", title: "Nav New", demo: "BadgeNavNew" },
       { id: "card-heading", title: "Card Heading", demo: "BadgeCardHeading" },
-      { id: "theme-light", title: "Theme / Light", demo: "GalleryBadgeThemeLight" },
-      { id: "theme-dark", title: "Theme / Dark", demo: "GalleryBadgeThemeDark" },
-      { id: "stress-long", title: "Stress / Long Label", demo: "GalleryBadgeStressLong" },
-      { id: "stress-rtl", title: "Stress / RTL", demo: "GalleryBadgeStressRtl" },
-      { id: "stress-zoom", title: "Stress / 200%", demo: "GalleryBadgeStressZoom" },
     ],
     avatar: [
       { id: "default", title: "Default", demo: "GalleryAvatar" },
@@ -452,19 +451,23 @@ function galleryPage() {
       demo: name,
     })),
   };
-  const sections = COMPONENT_PAGES.filter((component) => auditedFamilies.has(component.slug)).map((component) => {
-    const specimens = gallerySpecimens[component.slug] ?? component.examples;
+  const sections = orderedComponents.map((component) => {
+    const complete = COMPLETE_COMPONENTS.has(component.slug);
+    const fallbackName = `Gallery${component.exportName ?? component.name.replaceAll(" ", "")}`;
+    const specimens = (gallerySpecimens[component.slug] ??
+      [{ id: "default", title: "Default", demo: demos[fallbackName] ? fallbackName : component.examples[0].demo }])
+      .filter(example => !example.verification && !/^(theme-|stress-|rtl$)/.test(example.id));
     const tiles = specimens.map((example) => {
       const demo = demos[example.demo];
       if (!demo) throw new Error(`Gallery specimen missing: ${example.demo}`);
       const id = `${component.slug}-${example.id}`;
-      return `<article class="docs-visual-gallery__tile" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
-        <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${escapeHtml(example.title)}</h3>
+      return `<article class="docs-visual-gallery__tile" data-audit="${complete ? "complete" : "unrefined"}" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
+        <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${escapeHtml(specimenName(example, component.slug))}</h3>
         <div class="docs-visual-gallery__tile-preview">${demoMarkup(example.demo, demo.html)}</div>
       </article>`;
     }).join("\n");
     return `<section class="docs-visual-gallery__section" aria-labelledby="gallery-section-${component.slug}">
-      <h2 class="docs-visual-gallery__section-title" id="gallery-section-${component.slug}">${escapeHtml(component.name)}</h2>
+      <h2 class="docs-visual-gallery__section-title" id="gallery-section-${component.slug}">${escapeHtml(component.name)} <span class="docs-audit-label" data-audit="${complete ? "complete" : "unrefined"}">${complete ? "Complete" : "Unrefined"}</span></h2>
       <div class="docs-visual-gallery__grid">${tiles}</div>
     </section>`;
   }).join("\n");
@@ -483,6 +486,9 @@ function galleryPage() {
 <main class="docs-visual-gallery">
   <div class="docs-visual-gallery__content">
     <header class="docs-visual-gallery__header"><h1 class="docs-visual-gallery__title">Component gallery</h1></header>
+    <nav class="docs-gallery-index" aria-label="Components by audit status">
+      ${[true, false].map(complete => `<div><h2 class="docs-visual-gallery__section-title">${complete ? "Complete" : "Unrefined"}</h2><div class="docs-gallery-index__links">${orderedComponents.filter(component => COMPLETE_COMPONENTS.has(component.slug) === complete).map(component => `<a class="docs-audit-label" data-audit="${complete ? "complete" : "unrefined"}" href="#gallery-section-${component.slug}">${escapeHtml(component.name)}</a>`).join("")}</div></div>`).join("")}
+    </nav>
     ${sections}
   </div>
   <aside class="docs-visual-gallery__inspector area-panel area-panel--md area-panel--flush" aria-label="Customize gallery">
@@ -557,6 +563,7 @@ const COLUMN_DEMOS = new Set([
 ]);
 
 function componentPage(spec) {
+  spec = { ...spec, examples: spec.examples.map(example => ({ ...example, title: specimenName(example, spec.slug) })) };
   const manifest = MANIFESTS[spec.manifest];
   const lede = manifest?.description ?? "";
 
@@ -568,7 +575,7 @@ ${codeBlock(`import { ${spec.imports ?? spec.exportName ?? spec.name} } from "@a
 ${codeBlock(demos[spec.examples[0].demo].code)}
 </div>`;
 
-  const examples = `<h2 class="docs-h2" id="examples">Examples</h2>${spec.examples.map(exampleBlock).join("\n")}`;
+  const examples = `<h2 class="docs-h2" id="examples">Examples</h2>${spec.examples.filter(example => !example.verification).map(exampleBlock).join("\n")}${spec.examples.some(example => example.verification) ? `<details><summary>Verification fixtures</summary>${spec.examples.filter(example => example.verification).map(exampleBlock).join("\n")}</details>` : ""}`;
 
   const aliasNote = manifest?.aliases ? `<p class="docs-note">Source aliases: ${Object.entries(manifest.aliases).map(([alias, canonical]) => `${escapeHtml(alias)} → ${escapeHtml(canonical)}`).join("; ")}</p>` : "";
   const api = `<h2 class="docs-h2" id="api">API reference</h2>
@@ -596,7 +603,7 @@ ${codeBlock(demos[spec.examples[0].demo].html)}`;
     { id: "installation", title: "Installation" },
     { id: "usage", title: "Usage" },
     { id: "examples", title: "Examples" },
-    ...spec.examples.map((e) => ({ id: e.id, title: e.title, nested: true })),
+    ...spec.examples.filter(e => !e.verification).map((e) => ({ id: e.id, title: e.title, nested: true })),
     ...(guidance.length ? [{ id: "practices", title: "Best practices" }] : []),
     { id: "api", title: "API reference" },
     { id: "css", title: "Without React" },
@@ -1388,7 +1395,7 @@ function axesPage() {
 ${codeBlock(`<html data-area-theme="dark" data-area-accent="purple" data-area-ui="compact">`)}
 <h2 class="docs-h2" id="scopes">Nested themes</h2>
 <p class="docs-note">CSS attributes inherit independently. A light boundary keeps its inherited neutral and accent; changing either role inside dark keeps the dark scheme. Color pairs require CSS light-dark() support. <a href="./scopes.html">Inspect the browser scope checks.</a></p>
-<p class="docs-note">React Theme inherits from the nearest React Theme and emits all eight attributes, including inside a portal. Its root starts at Area defaults. Pass the host selection explicitly when integrating with a surrounding CSS-only theme.</p>
+<p class="docs-note">React Theme inherits from the nearest React Theme and emits all seven axis attributes, including inside a portal. Its root starts at Area defaults. Pass the host selection explicitly when integrating with a surrounding CSS-only theme.</p>
 ${exampleBlock({demo:"ThemeNested",id:"react-theme",title:"A light preview inside a dark workspace"})}
 ${tokens.axes
   .map(
@@ -1409,7 +1416,7 @@ ${axisPresetTable(a.id)}`,
 
 function indexPage() {
   const body = `<div class="docs-prose">
-<p>Area is a design system whose defining feature is that it is tunable along eight independent axes: theme, neutral, accent, typography, density, radius, surface and motion. Components consume only semantic tokens, so changing an axis reflows the whole system without touching a single component.</p>
+<p>Area is a component library built on shared tokens, with seven customization axes: theme, neutral, accent, UI scale, radius, surface and motion. Components consume only semantic tokens, so changing an axis reflows the whole system without touching a single component.</p>
 <p>The default medium control is 32px with 14/20 text. Radius uses named visual families: <code class='area-code'>standard</code> gives an 8px medium control and 12px container, while <code class='area-code'>rotund</code> reaches 12px at medium. Each family has a tier curve; compact UI applies a tighter cap so smaller controls do not become lozenges.</p>
 </div>
 <h2 class="docs-h2" id="install">Installation</h2>
@@ -1417,33 +1424,20 @@ ${codeBlock("npm install @area/react @area/styles")}
 <h2 class="docs-h2" id="start">Getting started</h2>
 ${codeBlock(`import { Button } from "@area/react";\nimport "@area/styles/area.css";\n\nexport default function App() {\n  return <Button>Get started</Button>;\n}`)}
 <h2 class="docs-h2" id="defaults">Defaults</h2>
-<p class="docs-note">Area's current defaults beside the reference measurements used when designing the system.</p>
-${table(
-  ["", "Area", "Primer", "OpenAI", "Vercel", "shadcn", "Notion"],
-  [
-    ["Control height", "<strong>32</strong>", "32", "32", "40", "36", "28–32"],
-    ["Control radius", "<strong>8</strong>", "6", "6–8", "6", "8", "6"],
-    ["Container radius", "<strong>14</strong>", "12", "12", "8–12", "10–14", "10"],
-    ["Control text", "<strong>14/20</strong>", "14/21", "14/20", "14/20", "14/20", "14/16.8"],
-    ["Inline icon", "<strong>16</strong>", "16", "18", "—", "16", "20"],
-    ["Spacing base", "<strong>4</strong>", "4", "4", "4", "4", "2"],
-  ].map((row) => [
-    escapeHtml(row[0]),
-    ...row.slice(1).map((v) => `<span class="docs-mono">${v}</span>`),
-  ]),
-)}
+<p class="docs-note">Use the shared axis controls to change every component together. UI scale combines typography and density; theme handles light and dark mode. Component variants describe treatment, meaning, size, state and composition.</p>
+<p class="docs-note">Only ${[...COMPLETE_COMPONENTS].map(slug => COMPONENT_PAGES.find(page => page.slug === slug).name).join(", ")} are owner-confirmed complete. Other families remain available for refinement; see the <a href="./gallery.html">component gallery</a>.</p>
 <h2 class="docs-h2" id="principles">Principles</h2>
 <div class="docs-prose">
 <p><strong>Every number traces to a token.</strong> A control's corner radius comes from the radius preset and is capped against its height; a menu item's radius is its panel's radius less the panel's padding, floored at zero and capped against the row. These relationships stay true under every combination of axes.</p>
 <p><strong>Contrast is a test gate.</strong> The test suite checks colour pairings under WCAG 2.2 across all 66 shipped themes, with APCA also enforced in dark themes. Documented exceptions are tracked separately. Run the tests as well as the build before releasing.</p>
-<p><strong>The CSS and the React API cannot drift.</strong> Both are generated from one manifest per component, and a script fails the build if a declared variant has no selector, or a selector exists that was never declared.</p>
+<p><strong>One shared variant contract.</strong> CSS and typed React helpers share a manifest. The build checks selector parity; component behavior and wrapper markup still need verification.</p>
 <p><strong>Documentation cannot lie.</strong> Every preview on this site is the real component rendered, and every snippet is that same demo's source.</p>
 </div>`;
 
   return page({
     slug: "index",
     title: "Area",
-    lede: "A design system you tune along eight axes.",
+    lede: "A customizable component library built on shared tokens.",
     body,
     toc: [
       { id: "install", title: "Installation" },

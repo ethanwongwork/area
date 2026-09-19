@@ -1,0 +1,674 @@
+# Area design-system conventions
+
+Detailed rules and rationale migrated from the prior project instructions. Read the relevant
+sections before changing tokens, components, or documentation. Start with [AGENTS.md](../../AGENTS.md)
+for orientation and commands. Source code and measured checks resolve stale historical claims.
+
+## Current scope contract
+
+[THEMING.md](THEMING.md) defines CSS inheritance, React context and portal boundaries. E02
+keeps semantic light/dark pairs unresolved until a real color property consumes them. The
+registry validates both polarity maps and emitted maps; `:` ends an exact-name namespace.
+Theme owns polarity and fixed colors; neutral and accent remain independently inherited.
+
+## The invariants
+
+These are not preferences. Some are mechanically checked by tests or build audits; others require code review. Each
+was arrived at by a specific failure — breaking one silently reintroduces that failure.
+
+**Axes own disjoint custom-property namespaces.** No two axes may write the same property.
+`packages/tokens/src/axes/registry.ts` throws otherwise. This is the only reason seven axes
+are testable: it reduces ~10,000 combinations to seven independent checks. Where axes
+genuinely interact — radius depends on control height — the dependent axis emits a unitless
+multiplier and the relationship is written once, in `calc()`, in `emit/base.ts`.
+
+**Derived tokens are never `@property`-registered.** A registered `<length>` computes at its
+declaration site, so `--area-radius-control` would freeze at `:root`'s value and stop
+responding to a nested `data-area-ui`. The height changes, the radius does not, and
+nothing in the source looks wrong. Register geometric leaf tokens only; paired semantic
+colors also remain unregistered.
+
+**Derived tokens are re-emitted on every axis-bearing element.** A custom property is
+substituted where it is declared and then inherits already-resolved, so a derivation on
+`:root` bakes in `:root`'s inputs. The `[data-area-ui], [data-area-radius], ...`
+selector block in `emit/css.ts` is what makes subtree scoping correct.
+
+**A size tier is the control's outer height, on every component that has one.**
+`--sm` is 28px whether it is a button, an input, a select, a slider, a chip or a segmented
+control. Segmented broke this for a while by naming its *item* instead, which made the
+track a tier taller than its own class said -- an `xs` segmented rendered 28px beside a
+24px `xs` select -- and every call site had to know the offset and pick one tier down. The
+item is derived now (`--_item`), and its inset is a flat 2px because scaling it put the
+`sm` and `md` items at the same 24px once the track carried the tier.
+
+Checkbox and radio are documented exceptions: they sit on the *icon* ramp because they are
+glyphs rather than control boxes. At the default density that ramp is {12, 16, 16, 16, 24},
+so their `sm`, `md` and `lg` controls are all 16px while label type and spacing still follow
+the tier. Switch uses fixed glyph geometry in both densities: 24×12, 28×16, 40×20, 40×20,
+48×24px, preserving a space-2 thumb inset. Compact changes label type. Icon and spinner
+tracks promote xs/sm to 40×20px. See the approved Switch construction packet.
+
+**Every number in component CSS traces to a token.** A literal pixel value is a bug unless
+it is a hairline (`1px`) or a mask geometry. If a value is not on a ramp, derive it with
+`calc()` from values that are — or change the ramp.
+
+**Contrast is a test gate.** `packages/tokens/src/contrast/` checks declared token
+pairings across 66 color themes, with supplementary APCA checks in dark themes. The
+[2026-09-14 audit](SYSTEM_AUDIT.md) identifies missing rendered pairings and incorrect
+text thresholds; passing this suite alone does not establish accessibility. For semantic changes, edit `INVERSION` in
+`color/curves.ts`; for hue and light-end chroma, use the documented adjustment tables.
+Keep the vendored palette and its ladder intact, and let the gate tell you what broke; `contrast/report.ts` groups
+failures by assertion rather than printing them one theme at a time.
+
+**CSS variants share a manifest.** Variant helpers derive from `packages/styles/src/manifest.ts`;
+React prop interfaces remain handwritten and need the parity work recorded in the audit.
+`check-manifest-parity.mjs` fails if a declared variant has no selector, or a selector
+exists that was never declared. Add the manifest entry in the same commit as the CSS.
+
+**Documentation cannot lie.** Every docs preview is the real component rendered with
+`react-dom/server`; every snippet is that demo's own source text. Never hand-write a code
+sample.
+
+**The documentation is built from the system.** `apps/docs/scripts/check-dogfood.mjs`
+fails the build on a raw length, colour or font size in the docs stylesheet, and on any
+inline style carrying a literal beyond a demo's own framing width. Site-layout exceptions
+are allowlisted by name, each with a stated reason. If the docs need something the system
+does not have, add it to the system.
+
+**Docs CSS must never target an `.area-*` class.** `DOCS_CSS` lives in `area.base`, which
+the cascade resolves *before* `area.components` — so such a rule silently does nothing.
+The audit catches it. The fix is always a documented variant on the component
+(`--inline`, `--flush`, `--wrap`), never an override.
+
+## Component CSS shape
+
+Follow `packages/styles/src/components/button.css`. Three rules:
+
+- A variant sets local `--_*` properties. The base rule is the only place that consumes
+  them, so a variant is three lines and a new tone is a copy-paste.
+- A size tier sets nothing but tier tokens, all of which come from the UI-scale axis. No
+  size block should ever contain a pixel value.
+- Foreground does not change on hover — only background and border. A label that shifts
+  colour under the cursor reads as a different control, and it makes contrast
+  unverifiable, because the pair being measured stops being the pair being rendered.
+
+State goes on `data-*` attributes, not classes, so the CSS works with plain HTML and with
+headless primitives unchanged.
+
+## Type
+
+Weight is orthogonal to role. A role sets size, leading and tracking; it never sets
+weight. That is what makes large text at a regular weight possible — a 20px paragraph
+rather than a 20px heading — which a ramp with weight baked into the role cannot express.
+
+Two weights only: regular 400, strong **500**, in every preset. Material's `emphasized`
+scale is the same idea with a second full ramp instead of one token, and it is a uniform
+one-step increase on the variable weight axis: 400→500 for large roles.
+
+Strong was 550 on Geist and 600 on the system preset. Both read as heavier than the
+contrast this system wants — the whole point of the two-weight rule is a *soft* step, and
+550 against 400 is already most of the way to a semibold at UI sizes. 500 is also the one
+value every platform font actually ships, so the variable and non-variable presets stop
+disagreeing about what "strong" means.
+
+Names are relative (xs..xl), unlike spacing and radius, because the type axis rescales the
+whole ramp — `--area-text-14` would become a lie the moment someone picked the compact
+preset. Spacing does not rescale, so there the pixel value is the honest name.
+
+## Density
+
+Two presets, each calibrated to a real product. **Default** puts medium at 32px, which
+Primer, OpenAI and Vercel all agree on. **Compact** puts it at 28px, which is Notion's
+measured in-app row height.
+
+**The type steps down with the box.** Each compact tier sits exactly one stop below its
+default counterpart on the size ramp, so medium goes 14px to 13px — the UI font size
+VS Code, Cursor and Linear all ship. The two references disagree: VS Code's density layer
+has zero `font-size` declarations because its base is already 13px, while Ant Design,
+starting from 14, drops a step. Area starts at 14 and follows Ant Design.
+
+**Chrome follows the density; content does not.** `--area-ui-size` / `--area-ui-leading`
+carry the medium tier's type to anything scanned rather than read — tables, menu items,
+field labels. Prose stays on the typography axis at 16px. That is Notion's split between
+its 14px interface and its 16px documents. A component that renders UI chrome should use
+`--area-ui-*`, not `--area-text-*`.
+
+Control tiers point straight at the primitive size ramp rather than through a composite,
+because the chrome scale needs a 13px step the content ramp deliberately does not carry.
+
+Icon sizes are 12, 16 or 24 and nothing else. VS Code's design-token linter permits
+exactly {16, 12} and comments that "a codicon at 13/14/15px is always a mistake for 12 or
+16"; Octicons says the same with 24 for the large tier. Gap follows the tier: Primer ties
+4px to xsmall and small, 8px to medium and large, with 6px as the step between.
+
+**Radius presets are named by their visual family, not their component tier.** The seven
+families are `sharp`, `subtle`, `soft`, `standard`, `round`, `rotund`, and `pill`.
+Standard is the default. Their 32px-control values are 0/4/6/8/10/12/999px. Each family
+is a deliberate size curve: standard is 6px at a small button, 8px at medium, and 10px at
+large. A same-size icon-only and text button always use the exact same radius token.
+
+**A radius is capped against the box it lands on.** `--area-radius-cap` is a unitless 0.4
+for generic controls, while `--area-radius-button-cap` reaches 0.5 at the pill preset.
+Every control-height radius reads `min(radius, calc(height * cap))`. A radius is an absolute length and a control is not: the
+browser clamps `border-radius` to half the shorter side, so the same 12px is a gentle round
+at 48px and a pill at 20px. Measured before the cap, presets 10, 12 and pill all painted the
+same 10px pill on a compact extra-small control — three choices, one result.
+
+The cap does not make every preset distinct on every box, and nothing can short of scaling
+radius with height, which this system deliberately does not do. What it does is bound the
+failure: where a box is too small to tell 10 from 12, both render as the same rounded
+rectangle rather than as the same lozenge. `pill` reaches half-height on buttons; fields,
+menus, and navigation remain rounded rectangles so their role stays clear.
+
+**Concentric derivations are guarded at both ends.** `max(0px, outer - inset)` because the
+sharp preset makes the subtraction negative, and the cap because the pill preset makes it
+larger than the row can carry — which used to leave a "pill" menu whose items were the only
+rectangles in it.
+
+**`--area-radius-full` does not follow the axis, on purpose.** Every use is either
+shape-defining — a radio that is not a circle is a checkbox, Switch defaults to pill (its explicit rounded alternative follows the radius axis), a slider handle that is not a circle reads as a segment of its own track, and
+the same goes for the status dot, the spinner, the chip's swatch and the selection rail — or
+an explicit opt-in (`--pill`, `--circle`). An avatar wanting corners asks for
+`.area-avatar--square`, which does follow the axis.
+
+Radius has four semantic steps, not three. `row` sits between `control` and `container` for
+a full-width backplate — a sidebar item, a table-of-contents entry, a nav link — because a
+row has a control's height and a container's width and neither of the others fits it.
+
+Radius does not move *with density* as an axis-owned proportion: the radius axis owns each
+complete size curve, and UI scale only selects the box it lands on. This keeps a compact
+medium and default medium from acquiring unrelated geometry while preserving a visibly
+scaled family across small, medium, and large controls.
+
+## Optical insets
+
+`packages/styles/src/inset.css` owns the shared content-placement contract. The V04
+reference uses square red icon boxes and one consistent text reference. All glyphs
+use the full square slot, regardless of the ink's shape or orientation; never crop,
+rescale or offset individual icons. Swatches and other shapes use their own boxes.
+
+For an outer backplate height H and an edge item's reference height B, the desired
+outer inset is `(H - B) / 2`. CSS padding is that inset minus the border width.
+Leading and trailing edges are calculated independently. A 32px plate around a 16px
+icon therefore has 8px outer spacing on the top, bottom and adjoining side, including
+its border. An inset segmented item uses its own height, not its track's height.
+Gutter tokens still serve layout spacing; fixed control edges use the content-derived
+inset instead of treating a gutter as universal padding.
+
+Text slots use `text-box: trim-both cap alphabetic` and `1cap` as the font reference.
+This aligns capitals to the same center as icons without measuring individual words.
+Symmetric safety padding preserves accents and descenders in ellipsized labels; it
+is not included in the optical reference. Text naturally extends beyond this reference
+for descenders and accents: never shift individual words to compensate. Browsers
+without text-box support retain line-box alignment for fixed-height controls.
+Native input/select/textarea text retains the browser's editing metrics; native glyph
+placement is not guaranteed to match trimmed DOM text across engines.
+
+Buttons, fields, chips, segmented items, tabs, menu/nav rows, badges, tokens and keyboard
+chords share this policy. Nested backplates use their own height. Content-sized surfaces
+use equal padding around their content group and trimmed outer text leading. In multiline
+messages, the icon keeps equal top and leading insets; its center aligns with the first
+line's cap center, and more space below it is expected. Only the combined text block's
+outer edges are trimmed; leading between title and description remains intact. Full-width controls retain intentional interior expansion.
+The marker menu's selection rail reserves a separate leading lane. Inline code remains
+wrappable, and native textareas remain resizable. Neither is made into a fixed-height box.
+
+**Slots own their inset; parents reserve their box.** A direct visual uses its square icon
+slot and a text label uses its trimmed text slot. A focusable action is different: its
+button is a nested square backplate and its icon sits inside that backplate. The parent
+calculates the outer inset from the action box, then the action calculates equal local
+padding from its icon box. For example, a default 32px Input reserves a 24px InputAction
+with a 16px icon: 4px around the action from the Input edge, and 4px around the icon inside
+the action. This is a structural contract shared through named slots, not child-specific
+margins; components may use different tier dimensions while preserving the same rule.
+
+**Size by role and tier, never by glyph.** Button, Input, Select, Chip and Segmented
+use the same tier's icon, text and gap tokens. Default xs/sm/md/lg/xl pairs are
+12/12, 16/13, 16/14, 16/14 and 24/16px (icon box / text size). Compact pairs are
+12/11, 12/12, 16/13, 16/14 and 16/14px. Larger controls can add whitespace without
+inflating their font; the icon ramp deliberately has only 12, 16 and 24px slots.
+Chip swatches share its icon slot. Status dots remain smaller semantic indicators;
+they are not substitute icons. Never thicken a stroke or scale an individual icon
+inside its slot to compensate for a narrow or horizontal glyph.
+
+Menu/Nav and status messages (Alert/Toast) use the medium UI pairing: density-aware
+UI text with the medium icon. Multiline Checkbox/Radio/Switch labels also align their
+first line to the control box. Kbd uses native keyboard glyphs with its own text scale;
+it is a text chord, not an icon. Text weight remains 400 or 500 independently of size.
+Use the supplied Fluent Regular and vendored Area geometry; do not manufacture a new
+weight by altering stroke widths. Text-only content surfaces retain their content type.
+
+**Supporting copy is still UI text, not microcopy.** Captions, descriptions, helper text,
+and validation messages that explain a component use at least the small control pairing
+(`--area-control-sm-text` / `--area-control-sm-leading`), never the `text-xs` ramp.
+`text-xs` remains available for compact chrome whose box establishes its context — such as
+a Badge, Kbd chord, or tooltip — but not for copy a person must read to understand or
+correct a component. Group headings use the medium UI pairing at strong weight; option
+labels remain regular so hierarchy comes from the named group rather than bolding every row.
+
+Framework-free markup must use the same label slots as React: `__label` on Button,
+Chip, Badge, Segmented, Tabs and Token; `__text` on Nav and Menu. MenuItem wraps primitive
+text children; composed menu content supplies its explicit icon/text slots. Group
+heading text uses a span inside `area-nav__label` / `area-menu__label`.
+
+Verify with the [V04 specimen](batches/V04/README.md), actual bounding rectangles and
+browser screenshots; font smoothing and path-specific overshoot are not spacing errors.
+
+## Tones
+
+Eight public tone values: `neutral`, `accent`, `info`, `success`, `warning`, `caution`,
+`danger`, `discovery`. Neutral is the near-black (near-white in dark) action; accent follows
+its configurable hue. Emphasis belongs to the variant. The E04 migration removes the old
+public synonyms; see [API migration](API_MIGRATION.md).
+
+There were nine, and two of them were `primary` and `secondary` in an earlier sense: both
+near-black, one rung apart, delivering none of the distinction the names promised. OpenAI separates
+them properly — `primary-solid` is gray-900, `secondary-solid` is gray-500 carrying white —
+but their *soft* variants are literally the same tokens, so the real difference is one fill
+plus the strength of an outline's label. Area already spans that on the variant axis.
+**Emphasis is the variant's job; the tone carries meaning.** A second neutral tone
+re-expressed what solid / outline / ghost already said.
+
+A tone repoints nine slots; a variant decides which it reads. Eight tones and four variants
+is twelve CSS blocks, not thirty-two, and adding a tone costs one block. Never write a
+`.area-button--{tone}.area-button--{variant}` pair.
+
+Three warm roles is more than hue separation alone can carry — danger to warning is 30
+degrees, short of the 50 that keeps two tones from reading as one signal. What separates
+them is where each solid lands on the ladder: red can stay saturated at L 0.55 and carry
+white text, while yellow cannot be both saturated and dark, so its fill sits at L 0.90 with
+black text. A danger button and a caution button differ in weight, not only in hue. That is
+the cost of eight tones and it is recorded in `color/presets.ts` rather than rediscovered.
+
+## Icons
+
+**Fluent System Icons, generated, with Area's marks vendored beside them.**
+`apps/docs/src/icons.tsx`, `apps/docs/scripts/icons.generated.mjs`,
+`apps/docs/scripts/icons.catalog.mjs` and the two sprites in `apps/docs/assets` are all
+output of `gen-icons.mjs`, which reads `@fluentui/svg-icons` and the vendored files in
+`assets/area-icons`. Never hand-edit any of them and never hand-draw a path: add the
+export name and its Fluent id to the map, or drop the file in the directory, and re-run.
+Use the 16px cut at 16px rather than scaling the 20 or 24, because they are optically
+corrected per size.
+
+**The rule is optical weight, not fill-versus-stroke.** This used to read "a stroke-based
+icon dropped in beside them will not match at any weight", which was the right warning
+attached to the wrong property. Fluent's marks are filled paths and Area's twenty-nine
+are stroked, and they match — because Area fitted them by measurement: a 1-unit rule at
+16, round terminals, and an ink box of 12 units for a rectilinear mark or 14 for a round
+one, which is where Fluent's own square and round marks land. What will not match is a mark
+that skipped that fitting, stroked or filled. Area's inner markup is therefore vendored
+verbatim, stroke attributes and all; reducing it to a path list is what would break the fit.
+
+**The browser documents the whole set, from sprites.** 1,739 marks is 711 KB of path data in
+one style, which cannot be inlined per page, so `assets/icons.svg` and
+`assets/icons-filled.svg` carry the geometry and a grid cell is a `<use>` reference.
+Switching style rewrites one href prefix across the grid; the two files hold the same ids
+under the same names.
+
+## Colour
+
+**Palette anchors stay fixed; adjustments are explicit.** `packages/tokens/src/color/palette.json`
+is the Area palette exported verbatim — 14 families x 23 rungs — and its wall-anchored L
+and C are what make contrast predictable, so they are never touched. `scale.ts` reads that
+table and computes what it does not carry: each rung's translucent twin, which foreground it
+takes, which rung is the solid fill, and which is the family's own quietest stroke.
+
+Area may tune hue through `HUE_ROTATION` and chroma through the bounded adjustment tables in
+`curves.ts`. A family with no entry ships its exported hex byte for byte. Still do not edit a
+hex: adjustment must preserve the palette's lightness anchors, original peak character, and
+the gamut at each rung.
+
+**A rotation is not free, and how expensive it is depends entirely on where the family sits
+in the gamut.** −4 on red cost 0.0003 of chroma and nothing else, which is where the old
+claim that rotation is "close to free" came from. +14 on green costs **0.043 of chroma** at
+the peak rungs and moves L by **0.009**, because green at hue 150 sits in a wide part of
+sRGB and hue 161 does not — the mapper holds what it can and gives back the rest. Measure
+the cost of a rotation against `palette.json` rather than assuming it; `contrast/report.ts`
+then says what the luminance change did.
+
+**Rotations are checked against adjacent-hue separation, never copied.** Matching a reference
+exactly (red +10, orange −11) would have pulled red and orange to 14 degrees apart, half the
+roughly 30 that keeps danger and warning from reading as one signal. `HUE_ROTATION` currently contains `green: 14`; all other families have no hue rotation.
+The light-end chroma trims described below also apply. Red carried −4 degrees toward pink for a
+while and was reverted; the trade to weigh if it is tried again is red-to-orange widening from
+35 to 39 against red-to-pink narrowing from 20 to 16.
+
+**Chroma has two bounded adjustments.** `CHROMA_TRIM` in `curves.ts` evens the light end.
+The export pins a rung against *white* — a statement about one family, which says nothing
+about that family beside its ten siblings at the same rung. At the light end sRGB holds far
+more chroma in pale green than pale blue, so the families that can be bright are. Measured
+at rung 150, chroma ran 0.051 (orange) to 0.138 (lime) around a mean of 0.079 — lime and
+green at nearly twice their peers, which makes a green tint read as a wash where a blue one
+reads as a tint.
+
+Three families are trimmed: **lime 0.72, green 0.78, yellow 0.88**, and the trim tapers —
+full strength at rung 200 and below, gone by 400. That taper is the whole argument: the
+divergence is a light-end effect, and trimming the mid rungs would take the fill and the
+solid down with the tint, which are the rungs the palette anchored deliberately. L is never
+touched, so no wall moves; the spread at rung 150 closes from 0.087 to 0.054 and at 200 from
+0.086 to 0.049. `scale.test.ts` bounds all four light rungs, so the trim cannot be dropped
+quietly — remove it and four assertions fail.
+
+`DARK_CHROMA_LIFT` takes up to 16% of the remaining chroma headroom from rung 550 through
+950, strongest from 700. It is capped at both the sRGB cusp for the rung's original
+lightness/hue and that family's original chromatic peak, so it cannot clip, change the
+palette's lightness ladder, or make a later rung replace the semantic solid. The 975 endpoint
+is unchanged. In practice most 750–950 rungs are already at their cusp; the visible gain is
+therefore concentrated in the remaining foreground/stroke headroom, notably indigo and
+purple. The scale and stroke tests protect the cusp, solid-wall, contrast, and cross-hue
+stroke-balance contracts.
+
+**A rung is an ordinal, not a measurement.** Higher is darker. An earlier ladder named each
+level after its own lightness and asserted it; this one cannot, because Area anchors to
+contrast instead — each family's 500 is pinned so a label clears its wall, which means the
+hues deliberately sit at different lightnesses at a shared rung (spread peaks at 0.217 at
+rung 350, closing to 0.007 at the ends). Both anchors are defensible and mutually exclusive.
+Contrast is the one that is externally binding, so the ramp's guarantee is now the same
+guarantee the gate checks. The cost is that swapping a tone can shift a layout's weight
+slightly; `scale.test.ts` measures that rather than leaving it as a claim.
+
+**There are two solid ladders and the code must find them by measuring.** blue, indigo,
+pink, purple, red and the neutrals clear AA with white at 500 — the *label* wall. cyan,
+green, lime, orange, teal and yellow are pinned at 3:1 there and only reach AA at 600 — the
+*glyph* wall. Those six take a dark foreground at their chromatic peak instead, because
+walking them down to 600 for white arrives somewhere muddy (yellow-600 is `#936b02`).
+Nothing hardcodes the split: `chooseSolid` walks from peak chroma and measures.
+
+**Tonal strokes balance chroma as well as luminance.** The old raw-rung walk made green
+and teal much more saturated than neighboring outlines, even when brightness contrast was
+similar. V02 derives a tint from each family's existing readable ink and the canonical
+neutral surface. It measures the faintest quantized blend that preserves the existing
+1.3 resting / 1.9 hover floors and the dark hover APCA floor of 15.
+
+The palette itself stays unchanged. A semantic stroke is now a derived color, so it has no
+numbered rung; raw palette stroke candidates remain diagnostic. The canonical ground is
+fixed per theme rather than following the neutral axis, keeping axis ownership disjoint.
+[The V02 measurements](batches/V02/tonal-strokes.json) include all eleven hues, both states
+and both themes. Foregrounds still use their existing readable shared rungs.
+
+**Four neutral foregrounds, not five.** `fg-default`, `fg-muted`, `fg-placeholder`,
+`fg-disabled`. There was a fifth, `fg-subtle`, sitting one rung from muted and one from
+placeholder — which put three tokens inside a 1.9:1 band on the light page (3.63, 4.48,
+5.50) and earned the middle one 0.85:1 of separation from its neighbour. Everything that
+used it wanted "quieter than body copy", which is what muted already means.
+
+**Accent defaults to indigo, not blue.** `info` is pinned to blue, so a brand that also
+defaulted to blue made the axis look like it did nothing. OpenAI never has this problem
+because they have no accent hue at all: their brand is the neutral near-black button and
+blue is reserved for info, links and the focus ring. The separation indigo buys is real but
+modest — 17 degrees and an OKLab distance of 0.068, about three and a half JND. Purple
+separates twice as well and is already `discovery`, so taking it would move the collision
+rather than remove it.
+
+**Syntax highlighting is measured against its code background.** Light walks darker from
+500 until normal-text contrast clears with a margin; dark walks lighter and also meets
+Area's supplementary APCA floor. E03 removed all four syntax waiver groups. Palette values
+remain unchanged; the semantic foreground chooses the rung that can do the job.
+
+**The page is white; a code block is one rung back from it.** That is what lets the block
+read as a block without a stroke doing the work. Its edge uses `--area-border-decorative`,
+which maps to neutral 75 in the current light-theme trial and neutral 800 in dark themes. Panels, cards,
+table rules, navigation dividers and example containers share that quiet decorative token.
+V01 control presentation uses faint framing by default and strong indicators under the increased-contrast preference. Swatch rings and focus keep their own roles.
+The decorative tier has its own 1.1 design floor; it never identifies an interactive
+control or state. E03 strengthens normal-text and required-indicator coverage; supplementary stroke floors remain unchanged.
+
+**A code block has no toolbar.** E04 aligned the React wrapper with the real action slot. Copy rides at the top right of the code itself, centred on
+the first line rather than on the block, so it belongs to the code and costs no row. The one
+rule worth drawing is the line where an example's rendered component ends and its source
+begins — two different kinds of thing sharing a container. Customize sits on the preview it
+acts on; in a shared toolbar it was equidistant from the thing it changed and the thing it
+did not.
+
+**A level is a colour, not a job.** Which rung is a background and which is a border is a
+decision the semantic layer makes, per theme, in one table — `INVERSION`. Never reach for a
+numbered rung from component CSS; that is what the semantic tokens are for.
+
+**Dark mode is the same ramp read from the other end.** One set of colours per family, not
+two. `--area-blue-500` is byte-identical in both themes; only the rung each slot reads
+changes.
+
+**The neutral role owns `--area-neutral-*`, so the theme axis does not emit that family.**
+Area overloads the name — `neutral` is both its achromatic cast and the alias a consumer
+writes — and Area cannot, because two axes writing one property is what `checkAxisIntegrity`
+forbids. The role wins the namespace; `cool` and `warm` keep their own primitive ramps.
+
+**The documentation's own spacing comes from the UI-scale axis.** `--docs-pad` is
+`--area-gutter-sm` and `--docs-gutter` is `--area-gutter-xl`, so the site tightens with the
+system it documents instead of standing still while the components inside it shrink.
+
+There is no page header. The two rails are each an `area-panel --xs --flush` carrying their
+own bar, so the wordmark on the left and the panel title on the right derive the same height
+from the same formula and sit on one line with the document between them. `--docs-chrome`
+was retired with the header: a component's inset has to come from its own ramp, which is why
+the panel's size tiers step on the *gutter* ramp rather than the flat spacing ramp — a
+compact panel has to tighten like the controls inside it.
+
+## Token references
+
+**Code and Token share one inline reference treatment.** Use Code for commands, identifiers,
+literal values, and design-token names. Token remains the backwards-compatible composition
+for a design-token name with an optional colour swatch; it is not a generic badge, tag, or
+compact control. Use Kbd for a key, Badge for status or metadata, and Chip or a future
+TokenInput composition for a selectable/removable value. The swatch is reserved for a token
+that resolves to a colour; it is a square sample, not a generic icon slot.
+
+Both use the same relative 0.875em mono type and a 24px one-line painted box, so inline
+source and token names remain aligned in table chrome and running prose without a
+per-call-site size choice. `--area-token-bg`, `--area-token-bg-subtle`,
+`--area-token-edge`, `--area-token-text`, and `--area-token-swatch-ring` are Token's stable
+component theming seams. `onColor` deliberately derives its fill, edge, and text from the
+surrounding foreground, so it remains legible on the context that owns it.
+
+The swatch uses its square slot and a concentric radius: token radius less the actual inset,
+floored at zero for sharp corners. The shared inset rule sets the token's vertical and
+horizontal text/swatch clearance from its own box rather than from glyph ink bounds.
+
+## Panel
+
+**The inspector is a component, not a page layout.** `area-panel` is a titled surface of
+rows that act on something beside it: Card presents content, Dialog interrupts, Panel sits
+next to its subject and stays. It was `.docs-inspector` first, and everything in it turned
+out to be a system decision rather than a site one — how a section is separated, how a bar
+relates to a body, where a footer action sits — so it moved into the system and the docs
+now use it like any other consumer. Both rails are `area-panel --flush`.
+
+**A panel does not own its rows.** A row is `area-field --horizontal`, which is what gives every
+control one left edge; the panel owns the container, the grouping and the seams. A control
+that can fill its column does (`area-segmented --full-width` is the opt-in that puts a
+segmented track's right edge on the select's above it); a switch or checkbox cannot fill and
+sits at the column's start, so the left edge still holds.
+
+`area-field --inline` remains a compatibility alias for the earlier name. New CSS and React
+use `orientation="horizontal"`; the default vertical orientation remains the form layout.
+
+**A section is a rule and a name, not a box.** Every inspector worth copying separates its
+groups with a hairline rather than nesting each in a panel of its own, which is what keeps
+eight groups from reading as eight cards inside one card. The last section drops its rule.
+
+**Select is called Select.** A combobox is a text input with a list attached — filterable,
+typeahead, `role="combobox"` — and this has no text entry, so the name would promise
+behaviour that is not there. "Dropdown" names the popup's behaviour rather than the control,
+and Menu already drops down. Radix, shadcn, Material, Primer, Ant, Chakra, Carbon and
+Polaris all land on Select. If a searchable one is ever needed it is a *second* component
+called Combobox, not a rename of this one.
+
+## Docs CSS and the cascade
+
+**`DOCS_CSS` lives in `area.base`, which loses to `area.components`.** The audit catches a
+docs rule that names an `.area-*` class. It cannot catch one that names only a docs class on
+an element that *also* carries an Area class — `.docs-sidebar` is an `area-panel`, and a
+corner toggle is an `area-button`, so a `display` rule on either is just as dead. Both were
+written that way first and both silently did nothing.
+
+The sanctioned door is **`@layer area.utilities`**, which the layer order puts after
+components precisely so a rule like this can win without `!important`. `DOCS_CSS` closes its
+base layer and opens a small utilities block for exactly the rules that must beat a
+component: rail visibility, and nothing else.
+
+**A backtick anywhere inside `DOCS_CSS` or `DOCS_SCRIPT` ends the template literal** — a
+comment quoting a class name is enough. Node then reports a syntax error on whatever word
+follows, which says nothing about the cause. The dogfood audit now checks for this as text,
+before it imports the file, because a file with this fault cannot be imported at all.
+
+## The inspector
+
+The docs' right rail is a persistent inspector, the way Figma and Framer both put controls
+beside the thing they act on rather than in a drawer over it. It replaced a drop-down strip
+of eight identical segmented controls, and it replaced the on-this-page column — an outline
+is read once on arrival, where a panel of controls is returned to, so the outline became a
+wrapping strip under the lede (`area-menu--inline`) and the rail went to the controls.
+
+**Which control an axis gets is decided by the shape of its values, never by uniformity.**
+
+| shape of the set | control | axes |
+| --- | --- | --- |
+| two states, one of them "on" | Switch | theme |
+| short, unordered, tiny labels | Segmented | neutral, density |
+| long and unordered | Chip | accent — eleven hues |
+| labels that will not fit a track | Select | typography, surface, motion |
+| an ordered ramp with a direction | Slider | radius — 0 to pill |
+
+Eight segmented controls said every axis was the same kind of choice. They are not: radius
+is a ramp you scrub, accent is a palette you pick from, and dark mode is a thing you turn on.
+
+**Every control declares `data-axis` and every option `data-value`**, so one delegated
+listener drives all five shapes and the shape is read off the markup — a `<select>`, an
+input with `data-on`, one with `data-values`, or a group with `[data-value]` children. A
+control can be swapped for another without touching the script. The customizer dialog is
+handed the docked inspector's own body rather than a second set of controls, so an axis with
+two controls on screen stays in sync through one `sync()`.
+
+**The radius slider runs over preset indices, not over radius values.** The ramp ends in
+`pill`, which is not a number, and the numeric steps are not evenly spaced either. An index
+keeps every stop one notch apart, which is what a scrub should feel like.
+
+## Documentation sections
+
+Component pages begin with one standalone default at the default size. Their next examples
+show persistent visual treatments, then every supported size tier, followed by semantic
+states, layout, composition, and behavior. A component that owns no treatment or size does
+not receive a fabricated demo: Field shows its horizontal layout second because orientation
+is its meaningful alternative, then demonstrates the child control sizes it composes with.
+When one preview contains several variants, stack them vertically with enough space to judge
+each one. This sequence is enforced by the component-audit skill and recorded in each audit.
+
+Every foundation section is built with `tokenSection()` in `apps/docs/scripts/layout.mjs`:
+a heading, one sentence, and a table/grid pair generated from **one** list of rows. The
+table is how you read values and compare a column; the grid is how you judge a scale by
+eye and gives each entry room to show the thing itself. Because both views read the same
+row objects, they cannot describe different data.
+
+The segmented control sits at the left, above the content. Token names render as
+`.area-token` chips, with a swatch where the token resolves to a colour.
+
+Do not hand-write a `<table>` in the docs. Use `tokenSection()`, or `table()` for a
+one-off that has no useful grid form.
+
+## Reference style
+
+Tables, code containers and segmented controls carry the original playground's visual
+language deliberately: a fully ruled grid in a clipped rounded container; a code block
+with copy inside the code on a surface one step quieter than the page; a segmented track
+whose radius is `inner + inset` with an inset ring rather than a border. The shapes are
+the original's, the density and tokens are the current system's.
+
+## Concentric corners
+
+An inner radius is its container's radius less the container's padding. Applied per
+component, because the inset differs per component — a menu pads 6px, a card pads 16px, so
+no single shared token is correct. This is why a menu item is 6px inside a 12px panel,
+which is where OpenAI (12 − 6) and Notion (10 − 4) both independently land.
+
+## Verifying
+
+```
+npm test -w @area/tokens          # colour maths, gamut mapper, scales, contrast gate
+npm run build                     # axis integrity, tokens, styles, parity
+npm run lint:manifest -w @area/styles
+npm run dev -w @area/docs         # docs at http://localhost:4321
+node packages/tokens/src/color/preview.ts light   # ANSI swatches, for tuning curves
+node packages/tokens/src/contrast/report.ts       # gate failures grouped by assertion
+```
+
+`packages/tokens/dist/fixture/axes.html` exposes `window.areaSweep()`, which flips every
+preset of every axis and returns the computed values. That is how axis orthogonality is
+checked in a real browser.
+
+## What is not here
+
+The previous system is archived under `archive/playground/`, with its design rationale
+also preserved in git at commit `c35ac15`. Figma sync was dropped deliberately.
+See [the archive guide](../playground/README.md) before consulting it.
+
+## Stroke hierarchy
+
+The [current contrast contract](CONTRAST.md) defines roles, values, migration and coverage.
+Decoration remains 75/800; faint framing is 150/750 and quiet outlines are 200/750. V01 fields read edge-control: faint framing by default, or stroke-control at 450/400 under
+`data-area-contrast="more"`, with a corresponding hover step. Selected controls retain
+a real edge even when elevation removes decorative borders. Most controls use an opaque 2px
+accent outline with a 2px offset. Editable fields preserve their 1px boundary, move it from
+`border-faint` to `border-subtle`, and add a 2px translucent neutral halo. Increased contrast
+adds the 2px accent outline at zero offset and expands the halo to 4px.
+Invalid Input uses one brighter semantic danger context for its 1px edge, associated Field
+error copy, and low-alpha halo. The halo is supplemental paint; the opaque edge and error
+text carry the tested contrast roles. Component-scoped Input aliases preserve these defaults
+while allowing a product to tune Input without repointing every control.
+Focus geometry remains independent of the Surface axis.
+
+The dated 75/100/150 trial and its measured failures remain in the audit and E01/E02 reports.
+E03 resolves those five failures without lowering their existing aesthetic thresholds and
+strengthens small-text, active-state and focus coverage. No syntax waiver remains.
+A native Select popup is drawn by the platform; Menu/Popover frames are styled by Area.
+There is no separate Combobox yet.
+
+
+## Quiet presentation · V01
+
+[V01](batches/V01/README.md) supersedes E03’s default strong control appearance. Shared shadows
+use 6% black in light / 8% in dark; outlined contact elevation is 0 1px 1px 0. Soft control
+edges, selected plates and pale neutral layers are a coherent presentation, with the explicit
+non-text contrast limitations recorded in [CONTRAST.md](CONTRAST.md). Text/focus gates and
+palette values remain unchanged. The [workspace specimen](http://localhost:4321/workbench.html)
+shows compact composition, working filters and all-theme presentation controls.
+
+
+## Tighter elevation and component overview · V02
+
+[V02](batches/V02/README.md) refines the quiet direction further. Shadow ink is now 4% black
+in light / 6% in dark, with short offsets and negative spread at every non-flat tier. The
+default contact shadow is 0 0.5px 1px -0.5px. Solid, soft and outline buttons share it;
+ghost buttons remain unboxed and shadowless. Container/overlay tiers retain a restrained
+hierarchy. The component gallery presents real components in square tiles, alphabetically,
+with direct documentation links.
+
+
+## Native control polish · V03
+
+[V03](batches/V03/README.md) brings native controls closer to the compact, quiet references
+without changing the palette. The default Switch is 40×20px with five documented tiers and
+a flat boundary. Checkbox and Radio reserve one fixed border-box in every state. Editable
+fields preserve their 1px edge, move it one neutral step darker, and add a soft 2px halo;
+increased contrast adds a 2px accent outline with a 4px halo. Kbd follows Primer’s one-chord
+treatment with native text glyphs, normal/small sizes, default/quiet/on-color appearances,
+a separate KbdGroup for sequences, and no keycap shadow. Inside controls use the 20px small
+Kbd; its parent reserves the nested backplate so inline and block edge spacing agree. Shared
+shadow ink returns to 6% light /8% dark while retaining V02’s tight
+offset, blur and negative spread.
+
+## Input contract
+
+Input is a native single-line text control. Its default inline measure is 20rem and clamps
+to the available container; `fullWidth` is an explicit layout choice. `outline` is the
+default treatment and `soft` provides a filled, lower-stroke alternative. Area does not
+expose a ghost Input because a text-entry field needs a persistent affordance unless a
+separately specified group backplate supplies it.
+
+Leading and trailing visuals are decorative square icon slots. Prefix and suffix are static
+units or symbols. Interactive edge actions, password reveal, search clearing, keyboard
+shortcuts, and grouped buttons belong to a separately audited InputGroup or specialized
+control. Read-only keeps the native value focusable and selectable; disabled prevents
+interaction; loading announces progress without silently making the field uneditable.
+See the [Input audit](component-audits/input.md) for the evidence, geometry, radius caps,
+tokens, and rejected alternatives.

@@ -1,9 +1,0 @@
-
-> area@0.0.0 lint:manifest
-> npm run lint:manifest -w @area/styles
-
-
-> @area/styles@0.0.0 lint:manifest
-> node scripts/check-manifest-parity.mjs
-
-  manifest parity ok (36 components; scoped states, modifiers and elements)

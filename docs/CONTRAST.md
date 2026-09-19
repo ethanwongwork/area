@@ -1,134 +1,74 @@
-# Color, stroke and focus contracts
+# Color, stroke and focus
 
-Revised in V01 after the user rejected E03’s heavy default outlines. See [V01](batches/V01/README.md)
-for the current visual direction, matched captures and measured limits. E03 remains dated evidence.
+These are implementation and verification constraints, not a claim that every component
+or custom composition is accessible. Keep the quiet appearance while preserving honest
+limits and stronger indicators under increased contrast.
 
-## Readability and identification
+## Text and indicators
 
 Small labels, placeholders and code are normal text and must meet 4.5:1. Hover does not
-change the text category. Area also retains its supplementary APCA content floor in dark
-mode. These are separate policies; APCA is not a WCAG conformance standard.
-[WCAG contrast minimum](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
+change that classification. The token suite also retains a supplementary APCA floor in
+dark mode; APCA is not a WCAG conformance standard.
 
-Quiet borders may supplement text-identified buttons and visual grouping. Fields with no
-value, unchecked controls and required state indicators need a distinct signal. Area’s increased-contrast preference gives
-these required boundaries at least 3:1 against the documented adjacent surfaces. The standard
-soft appearance deliberately falls below that threshold for several boundaries and states;
-it is not represented as universally conforming. A hover
-color does not need to contrast with its resting color; the control must remain legible.
-[WCAG non-text contrast](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html).
+Required boundaries and state indicators need a distinct signal against their adjacent
+surfaces. Area's increased-contrast preference targets at least 3:1 for these roles.
+The standard soft presentation falls below that threshold in some cases and must not be
+presented as universally conforming. A token test passing is not proof of rendered
+conformance on arbitrary backgrounds. See the retained
+[paint measurements](../archive/docs/batches/V01/README.md) for historical results.
 
-## The stroke hierarchy
+## Roles
 
-Existing supplementary tokens remain distinct from required indicators:
+- `border-decorative`: container seams, section/table rules and dividers; never the only
+  control or state cue. Its design floor is not a required-indicator accessibility floor.
+- `border-faint`, `border-subtle`, `border`, `border-hover`: supplementary visual definition.
+- `stroke-control`, `stroke-control-hover`, `stroke-selected`: strong endpoints for
+  control identification and selection.
+- `stroke-width`: required edges, independent of Surface. `border-width` is decorative;
+  removing a container frame must not erase a control or focus indicator.
+- `edge-control`, `edge-control-hover`, `edge-selected`, `edge-accent`, `fill-toggle`:
+  presentation roles selecting quiet or strong endpoints according to contrast preference.
 
-- `border-decorative`: section/table rules and container seams. Light 75 / dark 800.
-  Existing 1.1 aesthetic floor retained. This is decoration, never the only field/state cue.
-- `border-faint`: floating frames, token badges and standard control edges. Light 150 / dark 750.
-  Existing 1.2 floor retained, plus the segmented track's own adjacent fill check.
-- `border-subtle`: quiet text-identified outlines and swatch edges. Light 200 / dark 750.
-  Existing 1.3 floor retained. A swatch's exact color is not inferred solely from its outline.
-- `border` and `border-hover`: supplementary stronger definition, 250/650 and 300/600.
-  Existing 1.5 and 1.9 aesthetic floors retained; they are not required-indicator tokens.
-- `stroke-control`: increased-contrast fields, unchecked glyphs and neutral selection boundaries. 450/400.
-  The faint filled backgrounds alone do not reliably identify an empty input.
-- `stroke-control-hover`: one stronger neutral step, 500/350. Invalid fields keep their
-  danger edge across hover and focus.
-- `stroke-selected`: accent text rung, 650/150. In increased contrast, selected chips and choice boundaries use
-  this independently of bright solid fills, which may carry black marks.
-- `stroke-width`: a constant 1px required edge. Surface's `border-width` remains decorative;
-  Elevated can remove container frames without erasing a field or selection boundary.
+`data-area-contrast="more"` selects strong endpoints; `standard` resets them locally.
+Without a root preference, CSS follows `prefers-contrast: more`. Derivations must be
+re-emitted at axis and preference boundaries. Text/invalid colors remain independent.
 
-No duplicate divider/container aliases were introduced: their current consumers share one
-purpose and treatment. V01 adds presentation aliases so soft and increased-contrast appearances share the same endpoints.
-V02 tonal `*-border` recipes blend existing readable family ink onto the canonical neutral
-surface and measure unchanged 1.3/1.9 floors (plus dark hover APCA 15). This avoids saturated
-green/teal raw-rung outlines without editing the palette. These semantic colors have no raw
-rung number. They remain quiet outline definitions; required danger edges use `fg-danger`.
-
-## Soft presentation and increased contrast
-
-`edge-control` reads `border-faint` by default; `edge-control-hover` reads `border-subtle`.
-`edge-selected` reads `border-faint`, `edge-accent` reads `accent-border`, and `fill-toggle`
-reads `border-subtle` (`fill-toggle-hover` reads `border`). Set `data-area-contrast="more"` to select their strong counterparts:
-`stroke-control`, `stroke-control-hover`, `stroke-control`, `stroke-selected`, `stroke-control`
-(and `stroke-control-hover` for the toggle hover).
-Set `data-area-contrast="standard"` to explicitly reset a subtree. Without a root preference,
-CSS follows `prefers-contrast: more`. This preference is separate from the eight axes.
-
-The aliases are unregistered derivations re-emitted on axis and preference boundaries.
-Text and invalid colors do not depend on this preference. Input's invalid edge and Field's
-associated error copy use the brighter `fg-danger-vivid` endpoint; its 14% halo derives from
-that same context color and is never credited as the required edge. Editable-field focus
-changes from neutral to accent under increased contrast; other focus indicators remain
-accent. Decorative seams stay quiet.
-The browser audit retains the same 3:1 requirement in both modes: standard has **3,804
-shortfalls / 21,120 checks**, more has **0 / 21,120**. These are fixture measurements,
-not overall conformance claims or individual counts of WCAG violations. The build gate
-continues validating the strong endpoint tokens; it does not certify the default soft edges.
+Components consume semantic roles. Keep palette values verbatim. Tonal supplementary
+borders are measured blends of existing readable ink and canonical surface; their design
+floors do not replace required-indicator checks. Keep foregrounds unchanged on hover.
+Syntax colors are measured against the actual code background, including dark-mode APCA.
+Never lower a floor or add a waiver to hide a failure.
 
 ## Focus
 
-`focus-color` replaces `border-focus`. `focus-width` and `focus-offset` replace `ring-width`
-and `ring-offset`; both are 2px geometric primitives, independent of elevation. `ring` was
-removed. Components paint an opaque CSS outline, preserving their existing selection border
-and shadow where an outline is part of the component's treatment. Native choice controls
-and buttons use the accent outline on `focus-visible`.
-Input shells, Textarea and Select use `field-focus-color`: the measured neutral
-`border-subtle` endpoint in standard mode and the accent `focus-color` endpoint in increased
-contrast. Standard focus preserves the control's existing 1px boundary, changes that boundary
-from `border-faint` to `border-subtle`, and adds a 2px halo made from the current 6%/8% shadow
-ink. Increased contrast adds the regular 2px accent outline at zero offset and expands the
-halo to 4px. Invalid Input retains its brighter danger boundary while focused and replaces
-the neutral halo with the same danger context at 14% alpha. The code disclosure
-retains its inset outline to fit the clipped code frame.
+Use `focus-color`, `focus-width` and `focus-offset` for ordinary control focus. Required
+focus geometry is independent of elevation. Editable fields use `field-focus-*` roles:
+a neutral opaque edge and translucent halo in standard mode, returning to an accent
+outline in increased contrast. Invalid inputs retain their danger edge/context.
 
-The former 45% halo could not be validated by measuring its opaque source token. The browser
-runner now reads the actual painted edge or outline, rejects alpha, checks the intended
-edge-plus-halo or outline geometry, and measures it against its actual ground. Token checks
-cover neutral and tonal surfaces. Focus geometry is
-informed by [WCAG Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance.html),
-a Level AAA criterion; this focused work does not claim overall AAA conformance.
+Measure the actual painted opaque edge/outline against its ground. Measuring only the
+source color of a translucent halo is insufficient. Preserve focus and selected/invalid
+state simultaneously. Do not remove a native outline without supplying a visible replacement.
 
-## Text and solid fills
+## State and forced colors
 
-Placeholder shares the readable muted rung (550 light / 250 dark). Its role remains useful
-for future treatment, but a lighter gray must not make the hint unreadable. Tonal text uses
-650 light / 150 dark so the same foreground clears the active tint as well as the resting one.
+State is more than color. Use text, shape, icons and native/ARIA semantics as appropriate.
+Control marks must have real positioned dimensions; do not depend on shadows alone for
+selection. Foregrounds stay fixed on hover; disabled/read-only/loading remain distinct.
 
-Solid hover prefers the existing page-relative direction, then takes the other adjacent rung
-if that would lose label contrast. The foreground stays fixed. The old test demanding that
-all dark hovers lighten was replaced with adjacent-step and unchanged-label readability tests.
+`packages/styles/src/forced-colors.css` uses system colors for required marks, selected
+states, invalid indications and focus; Select restores its native arrow. These rules do
+not replace native Windows forced-colors execution or assistive-technology testing.
+Respect motion preferences without removing the meaning of loading/progress states.
 
-Syntax colors walk the palette against the actual code background. Light uses the first
-passing rung from 500 toward darker colors; dark walks lighter with APCA as well. All four
-syntax waiver groups are removed. Palette values, hue rotations and chroma trims are unchanged.
+## Verification
 
-## State geometry and forced colors
+Run `npm test` and `node packages/tokens/src/contrast/report.ts` for token/color/focus/state
+changes. The report exits nonzero for failures. `npm run build` does not run this gate.
+Use `contrast.html` for rendered paint and keyboard-triggered focus checks, plus the
+component's real interactions. Validate the actual foreground/background/edge combinations
+introduced by a change, including nested themes and relevant contrast preferences.
 
-Checkbox/radio marks now have positioned dimensions; percent-sized children of the former
-intrinsic grid could collapse to zero. Switch thumbs use the solid's measured foreground in
-the checked state. Selected segments retain a real border when shadows are absent, and all
-segments keep the same foreground on hover. Sliders have distinct track and thumb definition.
-
-`packages/styles/src/forced-colors.css` uses Canvas/CanvasText and Highlight/HighlightText for
-required marks, selected segments, invalid dashes and focus. Select restores the native arrow.
-The targeted system-color rules accommodate environments where shadows disappear; they do not
-replace the user's chosen colors with a fixed palette.
-[Forced-colors behavior](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/forced-colors).
-
-Native Windows forced-colors execution, Firefox/Gecko and assistive-technology validation remain
-release checks. A passing token or Chromium paint matrix does not establish those results.
-
-## Verification boundary
-
-`npm test` checks semantic pairings across all 66 shipped color themes. `contrast/report.ts`
-now exits nonzero when it prints an unwaived failure. `npm run build` still does not run tests.
-The [paint lab](http://localhost:4321/contrast.html) measures actual fields, marks, selected
-states, syntax and opaque focus across four elevation presets. Run its button with keyboard
-focus (Tab, then Enter); a pointer click cannot prove focus-visible styling.
-
-These checks cover the fixtures and named surfaces, not every possible consumer composition.
-Do not place these controls directly on arbitrary images or solid-tone backgrounds and assume
-this contract applies. E05–E10 still own component behavior and release
-accessibility validation; the separate System lab keeps those known defects visible.
+Cross-browser, OS preference, forced-colors and screen-reader coverage must be reported
+separately. Custom overrides, image backgrounds and other consumer compositions need their
+own verification. See [Development](DEVELOPMENT.md) for the remaining release boundary.

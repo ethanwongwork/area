@@ -60,15 +60,15 @@ There are no checked-in environment templates or CI workflows.
   token tables, manifest and passing checks take precedence over historical prose.
 - E03 replaces the invalid-input halo with the shared opaque focus outline while preserving
   its danger border. Required edges and focus survive every Surface preset.
-- The [contrast-policy proposal](../archive/plans/contrast-policy.md) is a historical research
+- The [contrast-policy proposal](../plans/contrast-policy.md) is a historical research
   snapshot, not an active ninth axis. It must be remeasured and explicitly scoped before work.
 - Figma utilities are archived. Their usefulness to external Figma documents cannot be
   established from this repository; no current sync workflow is wired to the application.
 
 ## Session continuity
 
-Start with [the handoff](../.Codex/HANDOFF.md); consult
-[the journal](../.Codex/JOURNAL.md) for reasoning. Use the project checkpoint skill to
+Start with [the handoff](../../.Codex/HANDOFF.md); consult
+[the journal](../../.Codex/JOURNAL.md) for reasoning. Use the project checkpoint skill to
 verify, commit, push and update both. Keep plans, rationale and current state in Git,
 not only in a private assistant session. Historical snapshots are not active instructions.
 

@@ -1,7 +1,7 @@
-/** Reproduce the audit's token measurements: node docs/research/2026-09-14/measure.ts */
-import { AXES, checkAxisIntegrity } from '../../../packages/tokens/src/axes/registry.ts';
-import { shippedThemes } from '../../../packages/tokens/src/semantic/resolve.ts';
-import { wcagContrastHex } from '../../../packages/tokens/src/color/contrast.ts';
+/** Reproduce the audit's token measurements: node archive/docs/research/2026-09-14/measure.ts */
+import { AXES, checkAxisIntegrity } from '../../../../packages/tokens/src/axes/registry.ts';
+import { shippedThemes } from '../../../../packages/tokens/src/semantic/resolve.ts';
+import { wcagContrastHex } from '../../../../packages/tokens/src/color/contrast.ts';
 const themes = shippedThemes();
 function pair(fg: string, bg: string, threshold: number) {
   const values = themes.map(t => ({ theme: `${t.theme}/${t.neutral}/${t.brand}`, fg: t.tokens[fg], bg: t.tokens[bg], ratio: wcagContrastHex(t.tokens[fg]!,t.tokens[bg]!) }));

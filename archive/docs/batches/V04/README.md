@@ -22,7 +22,7 @@ chevron gap follows its tier, too. Nav/Menu and Alert/Toast use medium UI text, 
 gaps. There is no per-icon adjustment, cropping, path change or stroke-weight adjustment.
 The exact pairs and exceptions are in [the design contract](../../DESIGN_SYSTEM.md#optical-insets).
 
-The always-applied [rule](../../../.cursor/rules/optical-insets.mdc), AGENTS and maintenance
+The always-applied [rule](../../../../.cursor/rules/optical-insets.mdc), AGENTS and maintenance
 instructions preserve this behavior for future components.
 
 ## Before and after

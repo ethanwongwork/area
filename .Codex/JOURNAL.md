@@ -1,5 +1,17 @@
 # Project journal
 
+## 2026-09-19 — Simplify the library workflow and correct completion
+
+Owner confirmed that only Badge, Button and Checkbox are complete. Completion now lives
+in one docs source registry rather than being inferred from old audit reports. Replaced
+the active documentation corpus with five focused guides; archived all prior docs,
+measurements and benchmark tools, plus the two mandatory audit skills and duplicated
+optical rule. Retained the working token/CSS/React structure, tests and generated icon
+inputs. The archive is optional reference; ordinary component work no longer requires
+benchmark quotas, exhaustive reports or a construction approval ceremony. No component
+implementation, commit or push was made during this cleanup.
+
+
 ## 2026-09-18 — Collapsible gallery rail and pushed checkpoint
 
 The component gallery customizer is now an actual collapsible right rail. It contracts to a narrow
@@ -65,21 +77,21 @@ across selection, frames each keyboard chord once in a native UI face, and gives
 Input/Textarea/Select a neutral opaque focus edge inside a 6px 6%/8% halo. Shadow opacity
 returns to 6%/8% while V02’s tight geometry remains. Increased contrast restores accent field
 focus and strong state edges; its 21,120 rendered checks pass, while standard’s 3,012 quiet-edge
-shortfalls remain explicit. Palette inputs are unchanged. [V03 evidence](../docs/batches/V03/README.md)
+shortfalls remain explicit. Palette inputs are unchanged. [V03 evidence](../archive/docs/batches/V03/README.md)
 includes the supplied references, Area before/after captures and browser measurements. E05
 behavior architecture remains next.
 
 ## 2026-09-14 — V02 tonal harmony and component gallery
 
-Matching outline luminance alone left green visibly neon beside other tones. V02 derives all chromatic strokes as measured tints of existing readable ink, cutting green rest chroma from 0.1296 to 0.0248 while preserving palette inputs and contrast floors; shadows now use 4%/6% ink with much shorter offset/blur and a shared boxed-button contact shadow. The new alphabetical gallery exposes 32 component families in native-sized square specimens, including dedicated Code, Code block and Segmented docs; mobile review also fixed a rail cascade overlap and preserved desktop preferences across resizing. [V02 evidence](../docs/batches/V02/README.md) records captures, palette hashes and checks; E05 behavior architecture remains next, with soft-mode limitations explicit.
+Matching outline luminance alone left green visibly neon beside other tones. V02 derives all chromatic strokes as measured tints of existing readable ink, cutting green rest chroma from 0.1296 to 0.0248 while preserving palette inputs and contrast floors; shadows now use 4%/6% ink with much shorter offset/blur and a shared boxed-button contact shadow. The new alphabetical gallery exposes 32 component families in native-sized square specimens, including dedicated Code, Code block and Segmented docs; mobile review also fixed a rail cascade overlap and preserved desktop preferences across resizing. [V02 evidence](../archive/docs/batches/V02/README.md) records captures, palette hashes and checks; E05 behavior architecture remains next, with soft-mode limitations explicit.
 
 ## 2026-09-14 — V01 quiet presentation without a palette rewrite
 
-The user's seven new references exposed that E03 had made required-indicator contrast the default visual language everywhere. V01 separates quiet control presentation from an explicit/OS increased-contrast preference using existing palette endpoints, and coordinates 6%/8% shadows, selection plates, compact table spacing and stable navigation labels. The distinction remains measurable: standard has 3,696 non-text audit shortfalls, more passes 21,120 checks, and neither result is presented as overall accessibility conformance. [The V01 study](../docs/batches/V01/README.md) preserves the references, matched captures, live workspace composition, palette hashes and next priorities; behavior and platform release work remain open.
+The user's seven new references exposed that E03 had made required-indicator contrast the default visual language everywhere. V01 separates quiet control presentation from an explicit/OS increased-contrast preference using existing palette endpoints, and coordinates 6%/8% shadows, selection plates, compact table spacing and stable navigation labels. The distinction remains measurable: standard has 3,696 non-text audit shortfalls, more passes 21,120 checks, and neither result is presented as overall accessibility conformance. [The V01 study](../archive/docs/batches/V01/README.md) preserves the references, matched captures, live workspace composition, palette hashes and next priorities; behavior and platform release work remain open.
 
 ## 2026-09-14 — E04 public vocabulary and compiled contracts
 
-Accent and neutral now name the public axis/tones consistently, with a one-time docs preference migration preserving saved choices. Literal manifest types and component-scoped positive state checks found hidden size tiers, a Nav class mismatch, undeclared table slots and dead CodeBlock toolbar markup. Packed ESM/declarations now pass strict isolated NodeNext, Node SSR and browser CSS/tree-shaking checks; Theme alone keeps a client directive. The matched contrast specimen is byte-identical and both browser matrices remain green; behavior failures and unverified RSC/peer/browser combinations stay explicit in the [E04 report](../docs/batches/E04/README.md).
+Accent and neutral now name the public axis/tones consistently, with a one-time docs preference migration preserving saved choices. Literal manifest types and component-scoped positive state checks found hidden size tiers, a Nav class mismatch, undeclared table slots and dead CodeBlock toolbar markup. Packed ESM/declarations now pass strict isolated NodeNext, Node SSR and browser CSS/tree-shaking checks; Theme alone keeps a client directive. The matched contrast specimen is byte-identical and both browser matrices remain green; behavior failures and unverified RSC/peer/browser combinations stay explicit in the [E04 report](../archive/docs/batches/E04/README.md).
 
 ## 2026-09-14 — E03: separate quiet framing from required information
 
@@ -90,7 +102,7 @@ outline replaces the 45% focus halo; normal-text tests now cover placeholders, h
 fills, and measured syntax selection removes every waiver. Actual browser inspection also
 exposed zero-size checkbox/radio marks and flat-mode shadow-list invalidity, which token
 ratios alone could not catch. All 16,316 token tests and 21,120 Chromium paint comparisons pass;
-Safari/Gecko and native forced colors remain explicit validation work. See [E03](../docs/batches/E03/README.md).
+Safari/Gecko and native forced colors remain explicit validation work. See [E03](../archive/docs/batches/E03/README.md).
 
 
 ## 2026-09-14 — E02: color polarity belongs at consumption
@@ -102,7 +114,7 @@ substituted its opacity at the ancestor. React Theme carries a complete contextu
 to portal destinations; it deliberately requires an explicit host bridge rather than guessing
 raw DOM attributes. The matched matrix lost all 3,174 failures; expanded 73,507 comparisons
 pass in Chromium and Safari, with Gecko still pending and the 165 contrast failures unchanged.
-See [the E02 report](../docs/batches/E02/README.md) and [scope contract](../docs/THEMING.md).
+See [the E02 report](../archive/docs/batches/E02/README.md) and [scope contract](../archive/docs/THEMING.md).
 
 
 ## 2026-09-14 — E01: a visible regression baseline
@@ -112,14 +124,14 @@ The first implementation batch adds the System lab, six representative profiles,
 waived. The preview now publishes only successful audited builds, retains its last working
 snapshot on failure, and filters duplicate filesystem notifications by source content.
 The user requested a real before/after visual summary after every batch; matched specimens
-and screenshots now live in [docs/batches/E01](../docs/batches/E01/README.md), alongside the
+and screenshots now live in [docs/batches/E01](../archive/docs/batches/E01/README.md), alongside the
 known-red token, keyboard and packed-consumer evidence. No component styling or token values
 changed: E02 theme correctness must precede E03 stroke and contrast refinements.
 
 ## 2026-09-14 — Authorized implementation sequence
 
 The user authorized broad design and implementation improvements, including token/API renames,
-structure changes and new components. [IMPLEMENTATION_PLAN.md](../docs/IMPLEMENTATION_PLAN.md)
+structure changes and new components. [IMPLEMENTATION_PLAN.md](../archive/docs/IMPLEMENTATION_PLAN.md)
 now defines E01–E12, starting with regression evidence and theme scope correctness, then
 semantic contrast/strokes, early API/package cleanup, existing component behavior and visual
 refinement; customization and new widgets follow a dependable core. The quiet appearance
@@ -135,7 +147,7 @@ fail across all 33 light color themes (165 tests); the thresholds were preserved
 trial cannot silently redefine the contrast policy. Decorative 75 still passes its floor;
 faint 150/subtle 200 are the immediate route back to the existing stroke checks.
 
-The [system audit](../docs/SYSTEM_AUDIT.md) and [roadmap](../docs/ROADMAP.md) record source,
+The [system audit](../archive/docs/SYSTEM_AUDIT.md) and [roadmap](../archive/docs/ROADMAP.md) record source,
 browser and measured evidence, with 17 primary research sources and reproducible probes.
 The strongest next work is nested theme resolution, accurate rendered text/focus contrast,
 and complete component behavior; motion-none and public-package/API parity also have

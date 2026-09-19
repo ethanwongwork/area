@@ -50,7 +50,7 @@ No current package, build, test or runtime references them.
 Neither function is needed by the current application. Figma integration was deliberately
 dropped; there is no active replacement exporter. External personal Figma-document needs
 remain unknown, so both scripts and their reusable logic are preserved, not destroyed.
-See [the archive guide](../archive/playground/README.md).
+See [the archive guide](../playground/README.md).
 
 ## Files removed
 
@@ -131,7 +131,7 @@ See [maintenance](MAINTENANCE.md) for the ongoing list.
 At the user's request, current palette metadata, custom icon directories, source labels,
 generated identifiers, comments and current documentation now use Area. Previous names
 and research snapshots are preserved in `archive/history/` and `archive/plans/`;
-[the archived naming audit](../archive/NAMING.md) records the inventory and exceptions.
+[the archived naming audit](../NAMING.md) records the inventory and exceptions.
 Fluent's literal shape and venue glyph names remain upstream vocabulary.
 
 The new `--area-border-decorative` token maps to neutral 50 (`#f7f7f7`) in light themes

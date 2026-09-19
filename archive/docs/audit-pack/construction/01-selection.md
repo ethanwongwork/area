@@ -141,25 +141,96 @@ n/a: external label geometry in primitive-only files, nonexistent parts, and sha
 Toggle as a Switch benchmark. No benchmark browser measurement, component code,
 manifest or demos changed.
 
-## Slider
+## Slider (status: complete construction research; owner approval pending)
 
-| System | Track | Thumb | Control height | Radius | Other |
+Read 2026-09-18 from the pinned extraction in `evidence/` using `lookup.py slider`
+and full reads for all eight indexed systems. `lookup.py --find Range` found only
+Atlassian; Primer has no matching extracted Slider/Range file. Values below are CSS px,
+not browser measurements. Defaults are not inferred where the extraction omits them.
+
+### Measured construction
+
+| System / evidence file | Track thickness | Thumb W × H | Root / hit-area height | Padding / gap / type | Shape / border |
 | --- | --- | --- | --- | --- | --- |
-| OpenAI `oai/Slider` | 4 | 14 and 22 boxes (see file for thumb versus hit area) | n/p | track 2 | |
-| shadcn `sha/slider` | 6 | 16, 1px border, 4px ring on hover / focus | n/p | full | vertical min 176 |
-| Fluent `flu/Slider` | 2 small, 4 medium | 16 small, 20 medium (inner radius 5 / 6) | min 24 / 32 | full | min length 120 |
-| Material 3 `m3/slider` | 16 | 4 x 44 bar handle (2 wide when focused) | n/p | | value label 28 high |
-| Carbon `car/slider` | 2 (4 hover target) | 14 | n/p | | 200 to 640 long |
-| MUI `mui/Slider` | 4; small 2 | 20; small 12 | 4 + 13 + 13 = *30* (pad 20 on touch) | 12 | |
-| Atlassian `atl/range` | 4 | see file | 40 | full | |
-| Radix `rdx/slider` | 6, 8, 10 | track + 4 = 10, 12, 14 | n/p | track / 3 x factor | |
+| OpenAI `oai/Slider.txt` | 4 | 14×14 | n/p | root bottom 6; label gap 4, bottom margin 8, font 14; label leading n/p | track radius 2; thumb 50%; inset thumb shadow 2 |
+| Primer — no file | n/p | n/p | n/p | n/p | n/p |
+| shadcn `sha/slider.txt` | 6 | 16×16 | horizontal n/p; vertical min 176 | n/p | track/thumb full; thumb border 1; hover/focus ring 4 |
+| Fluent `flu/Slider.txt` | small 2; medium 4 | small 16×16; medium 20×20 | root min 24 / 32; transparent input height 16 / 20 | input padding/margin 0; external label n/p | rail radius 8 (capped); thumb circular; rail outline 1; inner radius variables 5 / 6 |
+| Material 3 `m3/slider.txt` | 16 | 4×44 bar; focused/pressed width 2 | n/p; state layer 40 is not proof of a target | handle leading/trailing space 6, padding 6; label 12/16; value label 14/20 | handle/outer track full; inner track corners 2; overlap outline 1 |
+| Carbon `car/slider.txt` | 2 | single wrapper 14×14; upper range wrapper 16×24 | root n/p | root block padding 16, inline 0; container gap 16; range label 14/18 | single thumb 50%; upper thumb radius unset; focus inset shadows 2 and 3 |
+| MUI `mui/Slider.txt` | medium 4; small 2 | medium 20×20; small 12×12 | medium content+padding *30 = 4+13+13*; alternate padding gives *44 = 4+20+20*; thumb pseudo target 42×42 | block pad 13 or 20, inline 0; small value label font 12, padding 4×8 | root/rail radius 12 (capped); thumb 50%; rail border 1 |
+| Atlassian `atl/range.txt` | n/p | n/p | root 40 | n/p | end-marker pseudo 4×4, radius 9999; track/thumb n/p |
+| Radix `rdx/slider.txt` | sizes 1/2/3: 6 / 8 / 10 | layout boxes *10 / 12 / 14* = track+4; painted pseudo *13 / 16 / 19* = layout+2×(track/4) | root 6 / 8 / 10; target pseudo *30 / 36 / 42* = layout×3 | external label n/p | theme-dependent root max expression; painted thumb max(radius-1,radius-thumb); sample 3; surface shadow 1 |
+| Geist | n/p | n/p | n/p | n/p | n/p |
+| Notion | n/p | n/p | n/p | n/p | n/p |
+| Figma | n/p | n/p | n/p | n/p | n/p |
+| Apple HIG | n/p | n/p | n/p | n/p | n/p |
 
-**Consensus.** Track 4 (2 to 6), thumb 14 to 20 with 16 the median, thumb is a circle with
-a hairline border and a focus ring, the row reserves a control height (24 to 40) so it
-aligns with inputs. Material's bar handle is an outlier. **Area decision.** Track
-`space-4` (`space-2` at xs, `space-6` at xl); thumb 12, 16, 16, 20, 24 on the icon ramp;
-row height = the control tier so a slider aligns with an adjacent Input; min inline size
-`space-96 + space-24` (120).
+Carbon length is 200–640; Fluent horizontal minimum is 120. OpenAI's 22px box belongs
+to the **Reset button**, not the thumb or hit target. Carbon's 4×2 mark is not a hover
+target. Atlassian's extracted 4px value belongs to an end marker, not a verified rail.
+Radix painted-thumb bounds exclude shadow ink. MUI content+padding sums do not establish
+an exact rendered outer box without checking the reset/box-sizing context.
+
+### Size class and shape
+
+**Control ramp for the row; independent track and thumb geometry.** Fluent explicitly
+separates 24/32px root minima from 2/4px rails and 16/20px thumbs. MUI likewise separates
+track, padding and thumb target. Applying one control height to all these parts would
+misrepresent the evidence.
+
+**Identity shape:** circle thumb, pill rail, independent of the radius axis. OpenAI,
+shadcn, Fluent and MUI establish the circular-thumb cluster. Material's bar handle and
+Radix's theme-sensitive shape remain alternatives, not an Area shape menu.
+
+### Consensus
+
+OpenAI, Fluent medium and MUI medium use a 4px rail; Carbon and small Fluent/MUI use 2px,
+while shadcn uses 6px. Circular desktop thumbs span 12–20px in these sources, with 16px
+supported by shadcn and small Fluent. Root height, visible thumb and pointer target must
+be specified separately. Material's 16px rail/bar handle and Radix's expanding painted
+pseudo are different constructions; the files do not establish a motive for either.
+There is no shared label padding or type ramp across the primitive-only sources.
+
+### Proposed Area decision
+
+Preserve the current five-size API and default medium geometry. Token names below omit
+`--area-`; paired values are default / compact. This is a proposal, not implemented code.
+
+| Size | Row token / px | Thumb token / px | Track | Gap token / px | Type tokens / px |
+| --- | --- | --- | --- | --- | --- |
+| xs | `control-xs` 24 / 20 | `icon-xs` 12 / 12 | `space-2` | `gap-xs` 4 / 4 | `control-xs-text/leading` 12/16 / 11/14 |
+| sm | `control-sm` 28 / 24 | `icon-sm` 16 / 12 | `space-2` | `gap-sm` 4 / 4 | `control-sm-text/leading` 13/18 / 12/16 |
+| **md default** | `control-md` 32 / 28 | `icon-md` 16 / 16 | `space-4` | `gap-md` 8 / 6 | `control-md-text/leading` 14/20 / 13/18 |
+| lg | `control-lg` 40 / 32 | `icon-lg` 16 / 16 | `space-4` | `gap-lg` 8 / 6 | `control-lg-text/leading` 14/20 / 14/20 |
+| xl | `control-xl` 48 / 36 | `icon-xl` 24 / 16 | `space-6` | `gap-xl` 8 / 8 | `control-xl-text/leading` 16/24 / 14/20 |
+
+Track/thumb use `radius-full`; input padding/margin use `space-0`; required edges use
+`stroke-width`, and focus uses the shared focus tokens. Existing xl thumb 24 is an Area
+compatibility choice, not the central benchmark cluster. Reserve at least `space-24`
+for the input target independently of the visual row, and evaluate coarse input with
+`calc(space-40 + space-4)` target clearance so neighboring targets do not overlap.
+
+Propose component roles `slider-inline-size` → `input-inline-size` (existing contained
+field width), `slider-min-inline-size` → `calc(space-96 + space-24)` (120), with minimum
+clamped to the available width. `fullWidth` explicitly opts into the current 100% layout.
+The mark/label and optional value layout must use the same thumb-center travel interval.
+
+### Differences from current Area
+
+- Current rail is `space-4` at every tier. Proposal makes xs/sm 2 and xl 6; md/lg unchanged.
+- Row, thumb, text and gap tokens stay unchanged. The old seed's 20px lg “icon ramp”
+  claim was false: Area's actual lg icon token is 16px.
+- Current width is always 100% with no component width/minimum role. Proposal introduces
+  contained width plus explicit full-width behavior; existing inspector must opt in.
+- Explicit input box-sizing/padding and independently reserved target clearance need
+  verification; current native pseudoelement sizes may differ by browser.
+- Current numeric fill comes only from render-time props, is not normalized to the native
+  value, and does not synchronize uncontrolled input/reset. Fix this before optional API.
+- No component CSS, manifest, React, tokens or Slider demo code changed in this research pass.
+
+Construction research is complete. Implementation and post-build geometry are pending
+owner approval; the overall Slider audit remains Researching.
 
 ## Segmented control
 

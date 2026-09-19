@@ -5,7 +5,7 @@ This is a research snapshot, not current instructions. Area still has eight axes
 Green now rotates +14; red is unrotated; component light surfaces remain at rung 50.
 Re-measure all figures and confirm the desired accessibility policy before implementing.
 References to CLAUDE.md below describe the original proposal; current rules are in
-[DESIGN_SYSTEM.md](../../docs/DESIGN_SYSTEM.md).
+[DESIGN_SYSTEM.md](../docs/DESIGN_SYSTEM.md).
 
 ---
 

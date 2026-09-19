@@ -1,78 +1,39 @@
-# Handoff — 2026-09-18
+# Handoff — 2026-09-19
 
-**Checkpoint status:** Safe to archive. `main` is pushed to `origin/main` at `7f6b4e5`.
-The gallery customizer is now a persisted, accessible collapsible right rail. Verification is
-green: `npm test`, `npm run build`, manifest lint, docs build/audit, contrast report, and typecheck.
-The working tree is clean except for ignored generated caches.
+**Branch:** `main`; checkpoint commit `5022dbd` (`docs: simplify component library workflow`).
+The commit is saved locally; push is pending explicit confirmation of the configured origin.
 
-**Branch** `main` · **Last implementation commit** `7f6b4e5 add audit evidence corpus`
-**State** Green — implementation is committed and fully verified; only this handoff/journal checkpoint remains to commit and push.
+## Current work
 
-## Where things stand
+Repository simplification and gallery corrections are implemented. Only Badge, Button
+and Checkbox are owner-confirmed complete; `apps/docs/src/component-status.mjs` drives
+both gallery and sidebar. Everything else is unrefined, regardless of historical reports.
+The gallery retains variant specimens, consistent names and shared theme controls.
 
-Area is an eight-axis design system with framework-free CSS, thin React components, and a
-static documentation site. The component-audit workflow now starts from the repository-wide
-capability atlas and requires broad system/product evidence, aliases, candidate dispositions,
-gallery coverage, and visual QA. Field, Input, Textarea, Select, Checkbox, Radio, Button,
-Kbd, Code, Token, and Nav have complete audit records.
-
-## What happened this session
-
-- Added the component capability atlas and reframed the component-audit skill around
-  breadth-first capability discovery before consistency refinement.
-- Rebuilt the full-screen gallery around one labeled specimen per equal-size tile, full-width
-  responsive sections, audited families only, and separate size/state/variant specimens.
-- Expanded Checkbox with groups, descriptions, leading visuals, card composition, invalid,
-  success, disabled-selected, and disabled-indeterminate coverage; aligned multiline labels,
-  strengthened group hierarchy, and retained native interaction semantics.
-- Added native RadioGroup with fieldset/legend, controlled and uncontrolled values,
-  vertical/horizontal layout, descriptions, errors, disabled propagation, and complete audit.
-- Consolidated documentation inline references on the real Code component and removed its
-  table/prose drop shadow; the dogfood audit rejects the retired docs-only inline style.
-- Completed the Kbd audit: normal/small, default/quiet/on-color, one chord per Kbd, real
-  KbdGroup sequences, Button/Menu context treatments, and explicit extension backlog.
-- Fixed Button shortcut geometry structurally. A 32px Button uses a 20px small Kbd and leaves
-  6px from keycap edge to Button edge on top, right, and bottom. Neutral solid uses a
-  contrasting translucent plate; colored solids use the inverse plate; neither has a nested
-  outline or shadow.
-
-## In flight
-
-Nothing. The implementation commit is complete and the verification suite is green.
+Active docs are five guides linked from README. Read AGENTS.md and the relevant guide,
+not the old audit process. All previous docs/evidence are preserved under `archive/docs`;
+old audit skills and the duplicate optical rule are under `archive/guidance`. Default
+ripgrep searches exclude the archive; `npm run reference:lookup -- <component>` still works.
+Normal builds do not read historical reports. Inset baseline: `tests/fixtures/inset-before.css`.
+The lone active checkpoint skill is short and optional; a handoff does not authorize push.
 
 ## Next
 
-1. Continue the atlas-first queue with Switch, then Slider.
-2. Audit Menu before expanding shortcut sequences into command/menu behavior.
-3. Treat Kbd platform-aware `Mod`, full-text format, localization, and user remapping as
-   extensions or product command-layer work, not visual variants.
-4. Keep choice cards as a composition contract unless a later audit proves a reusable
-   standalone family.
+The last component request was Slider; no Slider implementation change was made.
+Its uncontrolled native value can diverge from fill. The old sizing proposal is archived
+and not approved/binding. Use `docs/COMPONENTS.md` for the new short build workflow.
+No mandatory benchmark sweep, multi-document audit or pre-build approval packet remains.
 
-## Traps
+## Verification
 
-- Build React before docs typecheck because docs resolve generated React declarations.
-- Gallery tiles contain exactly one named specimen; size, state, tone, and variant examples
-  remain separate instead of being combined into a matrix inside one tile.
-- Supporting copy uses at least small UI text. `text-xs` is reserved for compact chrome such
-  as Badge, Kbd, and Tooltip, not explanatory captions or validation.
-- Kbd is display-only. Register behavior separately and put `aria-keyshortcuts` on the
-  associated action. Use `size="small"` inside controls.
-- The deprecated Kbd `quiet` boolean remains compatible, but new code uses
-  `appearance="quiet"`. One Kbd is one simultaneous chord; KbdGroup is a sequence.
-- Preserve the shared optical-inset formula; do not fix nested controls with glyph nudges or
-  arbitrary right padding.
-- Do not commit `dist/`, caches, or `node_modules/`.
+Passed: docs/package build (46 pages, 408 demos, manifest/docs coverage 40/40), typecheck,
+18,401 token tests, contrast report (350 passing / 0 failing across 66 themes), 14 contract
+tests, 4 preview tests, 6 Badge tests, 5 Switch tests, packed-consumer checks and diff check.
+Preview tests required loopback permission. Skill frontmatter was manually reviewed;
+the optional Python validator could not run because PyYAML is not installed.
+All 1,682 original docs files are archived; 1,497 evidence files match HEAD byte-for-byte.
+Active local Markdown links pass. Browser shows 3 complete / 28 unrefined families.
 
-## Verify
-
-- `npm run lint:manifest`: passed; manifest parity covers **38 components**.
-- `npm run typecheck`: passed across tokens, styles, React, and docs.
-- `npm run build:docs`: passed; **46 pages / 270 demos**, dogfood **38/38**.
-- `npm run audit`: passed with no raw docs values or unapproved inline literal styles.
-- `npm run test:consumer`: passed packaging, NodeNext, SSR, browser bundle, and tree-shaking.
-- `node --test apps/docs/scripts/axis-preferences.test.mjs`: **5/5 passed**.
-- `npm test`: **18,104 tests / 9 files passed**.
-- `node packages/tokens/src/contrast/report.ts`: **344 passing / 0 failing** across **66 themes**.
-- `git diff --check`: passed.
-- Live Chromium at 100% CSS zoom verified the Kbd gallery and exact Button/Kbd geometry.
+Avoid concurrent package builds/typecheck while the dev watcher rebuilds declarations.
+Cross-engine, native forced-colors, assistive-technology and release limitations remain
+in docs/DEVELOPMENT.md. Passing local checks does not mark unrefined components complete.

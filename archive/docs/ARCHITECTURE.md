@@ -73,7 +73,7 @@ Geist fonts load from a pinned jsDelivr URL; the system font preset remains avai
 ## Historical material
 
 The root-level prototype was superseded when the workspace system was introduced.
-[Archive guide](../archive/playground/README.md) explains its files.
+[Archive guide](../playground/README.md) explains its files.
 Do not mix its `ds-*` classes, palette, DM fonts or `.is-*` state conventions into Area.
 Detailed current design rules are in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md).
 

@@ -1,99 +1,89 @@
-# Theme scopes
+# Theming
 
-Implemented in E02. [Measured results and visual comparison](batches/E02/README.md).
+Customize the whole library through shared settings, then use semantic/component tokens
+for specific roles. Components do not need separate light/dark variants.
 
-## CSS contract
+## Shared settings
 
-Each `data-area-*` attribute selects one axis. An omitted attribute inherits its closest
-selection. An explicit theme boundary changes light/dark polarity while preserving the
-inherited neutral and accent. Removing an attribute restores inheritance; setting theme,
-neutral and accent in a different order produces the same result. Invalid CSS attribute
-values select no preset.
+The registry in `packages/tokens/src/axes/registry.ts` defines seven axes:
 
-Each semantic color retains its light/dark pair until a real CSS color property consumes
-it. `color-scheme` selects polarity at that element, including for native controls. This
-also keeps inherited shadow recipes responsive to a new theme boundary. The theme axis
-owns its fixed tones and shadow color; it does not write neutral or accent tokens.
+- `theme`: light or dark color polarity.
+- `neutral`: neutral, cool or warm neutral colors.
+- `accent`: configurable chromatic accent; indigo is the default.
+- `ui`: default or compact, combining typography, control sizes, icons, gaps and padding.
+- `radius`: sharp, subtle, soft, standard, round, rotund or pill.
+- `surface`: flat, outlined, raised or elevated.
+- `motion`: none, subtle or expressive.
 
-Unregistered custom properties may now return a `light-dark(...)` expression from
-`getComputedStyle(...).getPropertyValue(...)`. That string is not the painted color.
-Measure a real `color`, `background-color`, `border-color` or shadow on an element consuming
-the token. The lab and axis fixture do this. Do not register paired colors with `@property`:
-resolving a color at its declaration would freeze its polarity before it is inherited.
+Use `data-area-<axis>` on any ancestor. Missing settings inherit; explicit settings form
+a local boundary. `data-area-contrast="more"` is a separate accessibility preference;
+`standard` resets it locally. Without a root override, contrast follows the OS preference.
 
-A scope selects tokens; components consume them. It is not a Card, a surface, or a blanket
-restyling of arbitrary HTML. Custom content must consume the appropriate semantic foreground,
-background and type tokens as the existing components do.
+```html
+<section data-area-theme="dark" data-area-accent="teal" data-area-ui="compact">
+  <!-- Components inherit this scope. -->
+</section>
+```
 
-## React contract
+## CSS inheritance
 
-`Theme`, `useTheme` and `AxisSelection` are exported from `@area/react`.
+Every axis owns disjoint custom-property namespaces. Changing light/dark preserves the
+inherited accent and neutral. Attribute order must not change the result; removing a
+selection restores inheritance. Invalid CSS attribute values select no preset.
 
-- `Theme.value` is a partial selection of the seven current axis IDs: `theme`, `neutral`,
-  `accent`, `ui`, `radius`, `surface`, `motion`. `ui` is the curated compact/default
-  package for type, controls, icons, padding, and gaps.
-- Omitted or undefined values inherit from the nearest **React Theme**. The root starts at
-  registry defaults. Passing an invalid axis or preset is a runtime error as well as a type error.
-- `Theme` renders a div, forwards its ref and ordinary HTML attributes, and writes the
-  complete effective selection as data attributes. Raw axis attributes cannot override its
-  configuration silently. Use `value` to change an axis.
-- `useTheme()` returns the frozen effective React selection. Changes propagate through
-  React context, including across portals.
-- Inside `createPortal`, wrap the content in another `Theme`. React context crosses the
-  portal but CSS DOM inheritance does not; the inner Theme recreates the complete scope at
-  the destination. It does not implement overlay behavior or focus management.
+Semantic colors preserve their light/dark pair until consumed by a real CSS color
+property. `color-scheme` chooses the polarity at that element, including native controls.
+Do not register those pairs with `@property`, which could resolve and freeze them early.
+A computed custom property can contain `light-dark(...)`; measure painted `color`,
+`background-color`, border or shadow when checking actual color.
 
-React context does **not** infer arbitrary DOM attributes outside the React provider tree.
-When introducing a React root inside a CSS-only themed host, pass the same complete host
-selection to its root Theme. Do not expect a raw `data-area-neutral` between two React Theme
-components to update their context. The independent CSS-attribute path remains supported.
+Geometric derivations are re-emitted on scope-bearing elements. A derived property that
+is resolved only at the root can freeze the wrong density/radius inputs for descendants.
+A theme scope selects tokens, not layout or component behavior. Custom HTML must consume
+the appropriate foreground/background/type roles itself.
 
-E04 standardizes the public axis ID as `accent`. The UI-scale migration replaces the former
-independent `type` and `density` selectors with `ui`; saved compact preferences migrate to
-`ui="compact"`, and all other old combinations migrate to `ui="default"`.
+## React scopes
 
-Executable examples: [nested theme demo](../apps/docs/src/demos/theme.tsx), rendered with its
-own source snippet on the docs Axes page; [portal and live updates](../apps/docs/src/lab/react-scopes.tsx).
+`Theme`, `useTheme` and `AxisSelection` are public exports from `@area/react`.
 
-## DOM-free configuration
+```tsx
+<Theme value={{ theme: "dark", accent: "teal" }}>
+  <Button tone="accent">Save</Button>
+</Theme>
+```
 
-`@area/tokens/config` exports `AXIS_PRESETS`, `DEFAULT_AXES`, `mergeAxes` and `themeAttributes`,
-with generated declarations. They come from the axis registry, not a second hand-maintained
-preset list. `mergeAxes` validates and combines selections; `themeAttributes` materializes a
-full attribute map. These helpers import no palette, React, DOM globals or browser APIs.
+`Theme.value` is partial; omitted values inherit from the nearest React Theme, with
+registry defaults at the root. Unknown axes/presets are rejected. Theme renders a div,
+forwards its ref and ordinary attributes, and emits the complete effective selection.
+Use `value` rather than raw axis attributes to configure that component.
 
-Run the package build before typechecking or packing from a fresh checkout. The token root
-and config subpath export the same compiled helpers. All public package imports are covered
-by the isolated packed-consumer fixture. Theme has an explicit client boundary; Node SSR is
-verified, while RSC framework integration remains a release check.
+`useTheme()` returns the effective React selection. Context crosses React portals; CSS
+inheritance does not. Wrap portal content in another Theme to recreate the scope at its
+new DOM location. Theme does not manage overlay focus, positioning or dismissal.
 
-## Ownership checks
+React context does not infer arbitrary host DOM attributes. When mounting into a CSS-only
+themed host, pass that host's selection into the root Theme explicitly.
 
-The registry checks both light and dark maps for extra/missing keys, invalid values,
-namespace violations and conflicting owners. A namespace ending in `:` means one exact
-property; other entries are prefixes. Overlapping claims across axes fail validation even
-before a property happens to collide. Neutral semantic names are exact claims; Surface owns
-its four shadow recipes, while Theme owns the shadow color.
+## Custom values and configuration
 
-The CSS emitter validates transformed token maps too. Pairing colors or adding an emitter
-branch cannot bypass key and ownership checks. Geometric derived tokens retain their existing
-re-emission rules on axis-bearing elements.
+Use stable semantic CSS custom properties for role changes, and documented component
+roles for local customization. Do not depend on private `--_*` slots. Consumers must
+verify contrast and geometry for their overrides; preset checks cannot certify arbitrary
+custom themes. Add reusable roles to the token package rather than duplicating literals
+across components. See [Design system](DESIGN_SYSTEM.md).
 
-## Browser requirements and verification limits
+`@area/tokens/config` exports registry-derived `AXIS_PRESETS`, `DEFAULT_AXES`, `mergeAxes`
+and `themeAttributes` without importing React, browser globals or palette math. Use these
+helpers when consumers need validated configuration and a complete attribute map.
+Build the packages before importing them from a fresh checkout.
 
-This implementation requires the color form of `light-dark()` and `color-scheme`. The feature
-shipped in [Chrome 123](https://developer.chrome.com/blog/new-in-chrome-123),
-[Safari 17.5](https://webkit.org/blog/15383/webkit-features-in-safari-17-5/) and
-[Firefox 120](https://developer.mozilla.org/docs/Mozilla/Firefox/Releases/120). These are
-feature availability references, not a claim that the entire Area library has been tested
-at each historical minimum version. The selection mechanism follows
-[CSS Color 5](https://drafts.csswg.org/css-color-5/#light-dark).
+## Compatibility and verification
 
-There is no legacy fallback or client-side color injection. Browsers without this feature
-are unsupported by the new scope contract; the scope harness reports that explicitly.
+Saved docs preferences migrate older `brand` to `accent` and old type/density choices
+to the current UI scale. Legacy axis names are not new public API. Historical migration
+notes are retained in the archive; the current registry and public types are authoritative.
 
-E02's local matrix passed in Chromium and Safari 27.0. Firefox/Gecko is not installed and
-was not run. OS preference, forced colors, screen-reader behavior and full component
-accessibility remain distinct release checks. Passing scoped color resolution does not
-establish overall accessibility. E03 subsequently resolves the 165 contrast failures; behavior
-issues and release validation remain in the roadmap. See [CONTRAST.md](CONTRAST.md).
+The color scope model requires CSS `light-dark()` and `color-scheme`; there is no legacy
+color-injection fallback. Scope fixtures exercise nested resets and portals. A passing
+scope matrix does not prove component behavior, forced colors, screen-reader support or
+all browsers. Use `scopes.html` and the relevant checks in [Development](DEVELOPMENT.md).

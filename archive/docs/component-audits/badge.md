@@ -210,7 +210,7 @@ Core means the initial default/variant/size contract. Extended rows are implemen
 - [x] **Companion — group:** `BadgeGroupWrap`, `BadgeGroupInline`, `BadgeGroupOverlay`, `BadgeGroupAuto`.
 - [x] **Extended — static/link hover/focus:** `BadgeLink`, `BadgeLinkSoft`, `BadgeAuditControls` (tested through native interaction).
 
-The remaining requested demo-list contexts are `BadgeTableStatus`, `BadgeNavNew`, `BadgeCardHeading` (a complete card specimen), and `BadgeBothThemes`. `BadgeStress` adds long German, RTL and 200% zoom; `BadgeAuditControls` exposes theme/density/radius/font/motion/contrast/direction. Every page example also appears in the gallery. Every matrix cell, size, state, anchor placement, theme, table row, and stress case has its own gallery tile. A BadgeGroup tile contains one composite group specimen because multiple children are intrinsic to that component.
+The remaining requested demo-list contexts are `BadgeTableStatus`, `BadgeNavNew`, `BadgeCardHeading` (a complete card specimen), and `BadgeBothThemes`. `BadgeStress` adds long German, RTL and 200% zoom; `BadgeAuditControls` exposes theme/density/radius/font/motion/contrast/direction. The gallery shows separate matrix cells, sizes, states and anchor placements. The 2026-09-18 owner review removed duplicate theme, table-row and stress tiles. Theme/stress/audit fixtures remain in a collapsed verification section on the Badge page; table status remains a composition example, not a Badge variant. A BadgeGroup tile contains one composite group specimen because multiple children are intrinsic to that component.
 
 ## Final contract
 
@@ -260,3 +260,12 @@ from the implementation audit, not a claim that the open v2 geometry bugs pass.
 ## Remaining limits
 
 Native Windows forced colors, screen-reader speech and other browser engines remain release validation, consistent with the wider repository. Brand overrides require consumer contrast checks. Font fallback may change intrinsic widths; automatic overflow remeasures after fonts load. The native overflow popover is viewport-bounded and centered, not a collision-positioning library. Source-only CSS consumers implement their own automatic fitting if they do not use React; native numeric popover markup works without hydration.
+
+
+### Gallery clarification — 2026-09-18
+
+`BadgeGroup overflow="inline"` allows wrapping; `overflow="overlay"` prevents wrapping.
+Both disclose hidden children through the same native popover. `visibleCount="auto"`
+measures the available width and is independent of overflow layout. The +N trigger is
+a small ghost Button and follows Button radius; it is not a static pill Badge. No shape
+or public API changes were made during this clarification.

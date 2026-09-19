@@ -57,7 +57,7 @@ The test count mostly reflects parameterized color checks. It is not evidence of
 
 ## Stroke trial
 
-The requested hierarchy is now global through `INVERSION` in [curves.ts](../packages/tokens/src/color/curves.ts):
+The requested hierarchy is now global through `INVERSION` in [curves.ts](../../packages/tokens/src/color/curves.ts):
 
 - **Decorative, 75:** `border-decorative`, `#f3f3f3` in the default light neutral. Panel/card/table/code framing and dividers. Approximately **1.110:1** against white.
 - **Faint, 100:** `border-faint`, `#eeeeee`. Menu/Popover frames, token badges, and segmented tracks. Approximately **1.160:1** against white.
@@ -79,7 +79,7 @@ Priority meanings: **P0** blocks a release claim; **P1** belongs in the first us
 
 ### F01 · P0 · Nested color scopes do not compose
 
-**Verified in-browser.** [emit/css.ts](../packages/tokens/src/emit/css.ts), `presetSelector()` and `emitAxes()`, only emit dark neutral/brand overrides when theme and color selection appear on the same element. The dark theme also injects default brand/neutral values, while the light theme does not equivalently reset them.
+**Verified in-browser.** [emit/css.ts](../../packages/tokens/src/emit/css.ts), `presetSelector()` and `emitAxes()`, only emit dark neutral/brand overrides when theme and color selection appear on the same element. The dark theme also injects default brand/neutral values, while the light theme does not equivalently reset them.
 
 - Dark parent + child `data-area-neutral="warm"`: child page token becomes white and foreground `#2b2722`; explicit dark+warm reference resolves to page `#16120d`, foreground `#f1eeeb`.
 - Dark parent + green-brand child: brand surface becomes light `#f1fbf5`; explicit dark+green reference is `#003d24`. Solid happened to match, so checking only the solid color would miss the bug.
@@ -91,7 +91,7 @@ Priority meanings: **P0** blocks a release claim; **P1** belongs in the first us
 
 ### F02 · P0 · The contrast contract understates ordinary text requirements
 
-[contrast/assertions.ts](../packages/tokens/src/contrast/assertions.ts) tests placeholders at 3:1 and solid hover labels at `WCAG.LARGE_TEXT` (3:1), although Area's common controls render 11–16px text at weight 400/500. Placeholders and hover text are covered by text contrast requirements; normal text requires 4.5:1, with the large-text exception depending on actual size/weight. [S2](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)
+[contrast/assertions.ts](../../packages/tokens/src/contrast/assertions.ts) tests placeholders at 3:1 and solid hover labels at `WCAG.LARGE_TEXT` (3:1), although Area's common controls render 11–16px text at weight 400/500. Placeholders and hover text are covered by text contrast requirements; normal text requires 4.5:1, with the large-text exception depending on actual size/weight. [S2](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)
 
 Independent diagnostics against 4.5:1 found:
 
@@ -106,7 +106,7 @@ These predate the stroke trial. Four syntax-color assertion groups are already w
 
 ### F03 · P0 · Focus checks measure a different color from the painted ring
 
-[emit/base.ts](../packages/tokens/src/emit/base.ts) constructs `--area-ring` from `border-focus` at **45% opacity**. Button and Segmented remove the outline and use that shadow. The contrast assertion tests the opaque token instead of the composited ring. Default light indigo focus token `#3c2ebe`, composited at 45% over white, measures approximately **2.376:1**. Inputs additionally change their actual border, so evaluate each component rather than applying one verdict to all of them.
+[emit/base.ts](../../packages/tokens/src/emit/base.ts) constructs `--area-ring` from `border-focus` at **45% opacity**. Button and Segmented remove the outline and use that shadow. The contrast assertion tests the opaque token instead of the composited ring. Default light indigo focus token `#3c2ebe`, composited at 45% over white, measures approximately **2.376:1**. Inputs additionally change their actual border, so evaluate each component rather than applying one verdict to all of them.
 
 No forced-colors rules were found in the system CSS. CSS forced-color processing removes box shadows; a focus indicator built only from a shadow is therefore at risk of disappearing. [S3](https://www.w3.org/TR/css-color-adjust-1/)
 
@@ -114,7 +114,7 @@ No forced-colors rules were found in the system CSS. CSS forced-color processing
 
 ### F04 · P0 · Composite widgets have semantics without complete behavior
 
-Source: [primitives.tsx](../packages/react/src/components/primitives.tsx).
+Source: [primitives.tsx](../../packages/react/src/components/primitives.tsx).
 
 - **Tabs:** selected tab gets `tabIndex=0`, others -1, but no arrow-key handler or activation callback exists. Browser ArrowRight leaves focus and selection on Account. IDs are derived from caller values without an instance prefix, so two groups can collide. The docs explicitly promise arrow navigation that does not happen. Implement activation, unique IDs, disabled handling and a defined automatic/manual activation policy. [S5](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)
 - **Segmented:** buttons expose `role=radio` and click selection but no roving focus or arrow navigation; every option is a tab stop. Use native radios where suitable or implement the full radio-group contract, including form value/reset behavior. [S6](https://www.w3.org/WAI/ARIA/apg/patterns/radio/)
@@ -127,7 +127,7 @@ Source: [primitives.tsx](../packages/react/src/components/primitives.tsx).
 
 ### F05 · P1 · Motion-none does not mean no motion
 
-[display.css](../packages/styles/src/components/display.css) hardcodes spinner 0.7s, skeleton 1.4s and indeterminate progress 1.1s. The explicit motion axis sets transition-duration tokens to zero but does not affect those animations. The browser confirms `area-spin` still runs at 0.7s inside `data-area-motion="none"`.
+[display.css](../../packages/styles/src/components/display.css) hardcodes spinner 0.7s, skeleton 1.4s and indeterminate progress 1.1s. The explicit motion axis sets transition-duration tokens to zero but does not affect those animations. The browser confirms `area-spin` still runs at 0.7s inside `data-area-motion="none"`.
 
 The OS reduced-motion query disables those animations, but axis transition overrides only apply to `:root:not([data-area-motion])`; an explicit root or child preset can bypass them. Decide and document preference precedence instead of accidentally deriving it from selector specificity.
 
@@ -135,8 +135,8 @@ The OS reduced-motion query disables those animations, but axis transition overr
 
 ### F06 · P0 · Package/API promises do not match the implementation boundary
 
-- [tokens/package.json](../packages/tokens/package.json) exports a missing `src/index.ts`; a root import fails.
-- [react/package.json](../packages/react/package.json) distributes TS/TSX source and calls build a no-op. This can be a deliberate workspace strategy, but a general npm installation needs a tested consumer/transpilation contract, declarations, exports and React peer policy.
+- [tokens/package.json](../../packages/tokens/package.json) exports a missing `src/index.ts`; a root import fails.
+- [react/package.json](../../packages/react/package.json) distributes TS/TSX source and calls build a no-op. This can be a deliberate workspace strategy, but a general npm installation needs a tested consumer/transpilation contract, declarations, exports and React peer policy.
 - `ButtonTone` is `neutral`, while the manifest lists `primary`; Badge has the same mismatch. Neutral currently falls through to base styling, masking the contract difference. `classesFor()` silently drops unknown values.
 - React Select allows xs/sm/md/lg while CSS/manifest has xl; Slider and Panel also expose narrower size unions than their manifest. Decide which are supported rather than assuming the helper guarantees parity.
 - No tracked CI workflow or project license file was found. Clarify release intent, asset attribution, package contents, versioning and migration policy before distribution. This is a repository-readiness observation, not a legal conclusion.

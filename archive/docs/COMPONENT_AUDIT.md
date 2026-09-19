@@ -64,7 +64,7 @@ React props, and documentation aligned.
 ## Construction and owner approval
 
 Before planning or implementation, run the
-[`construction-audit` skill](../.agents/skills/construction-audit/SKILL.md). It creates a
+[`construction-audit` skill](../guidance/skills/construction-audit/SKILL.md). It creates a
 measured table from `docs/audit-pack/evidence/`, a benchmark consensus, and an Area
 decision covering the component’s size class, shape rule, sizes, padding, gap, type, and
 radius. Show those three artifacts and every difference from Area’s current CSS to the
@@ -118,7 +118,7 @@ move ahead of the proposed order. `Queued` means no conclusions have been made.
 | 5 | Checkbox | Complete | [Checkbox audit](component-audits/checkbox.md) |
 | 6 | Radio | Complete | [Radio audit](component-audits/radio.md) |
 | 7 | Switch | Complete — owner-corrected core contract, 84-case geometry and native behavior verification | [Report](component-audits/switch.md) |
-| 8 | Slider | Queued | — |
+| 8 | Slider | Researching — construction proposal ready for owner review | [Construction](audit-pack/construction/01-selection.md#slider-status-complete-construction-research-owner-approval-pending) |
 | 9 | Button | Complete | [Button audit](component-audits/button.md) |
 | 10 | Chip | Queued | — |
 | 11 | Segmented | Queued | — |
@@ -200,3 +200,22 @@ The following practices keep the program accurate as it grows:
 - Revisit shared ramps only after multiple component audits identify the same mismatch.
   One outlier should receive a justified component role instead of silently shifting the
   entire system.
+
+## Gallery presentation contract — 2026-09-18
+
+The gallery and sidebar derive completed families from this tracker. Completed families
+come first; completed specimen labels use green-500. Unrefined families follow, with
+red-25 backgrounds and red-500 labels. These are docs review annotations, not component
+color overrides or a release-readiness claim. The gallery index labels both groups.
+
+Specimen labels use lowerCamelCase parts separated by hyphens: treatment-tone
+(`soft-accent`, `dotOutline-accent`), category-value (`state-queued`, `size-md`,
+`group-inline`), or a single composition name (`leadingIcon`). Button uses the same
+variant-before-tone sequence as Badge. These names identify examples; they do not merge
+orthogonal React props. Use the shared `specimenName` formatter in the docs build.
+
+Theme and density remain system-wide axes. Do not add public per-component theme
+variants or duplicate light/dark gallery tiles. Long-content, RTL and 200% enlargement
+remain verification coverage, not variants. Put test-only fixtures in the collapsed
+Verification fixtures section and keep them out of the public gallery. Table status is
+a dot Badge used inside Table, retained on the Badge docs page as a composition.

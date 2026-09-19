@@ -1,0 +1,3 @@
+# Keep default code searches focused on the live library.
+# Search history explicitly with: rg --no-ignore <pattern> archive/
+/archive/
