@@ -1,0 +1,11 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-toolbar-floating.scss
+container-between-space: 4px
+container-external-padding: 16px
+container-height: 64px
+container-leading-space: 8px
+container-trailing-space: 8px
+horizontal-container-external-space: 16px
+horizontal-container-height: 64px
+vertical-container-external-space: 24px
+vertical-container-width: 64px
+container-shape: corner-full = 9999px

@@ -1,0 +1,21 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/drawer.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot drawer]
+  [slot drawer-trigger]
+  [slot drawer-portal]
+  [slot drawer-close]
+  [slot drawer-overlay]
+  [slot drawer-portal]
+  [slot drawer-content]
+  L59 data-[vaul-drawer-direction=top]:inset-x-0=0px data-[vaul-drawer-direction=top]:top-0=0px data-[vaul-drawer-direction=top]:mb-24=96px data-[vaul-drawer-direction=top]:rounded-b-lg=10px data-[vaul-drawer-direction=top]:border-b=1px
+  L60 data-[vaul-drawer-direction=bottom]:inset-x-0=0px data-[vaul-drawer-direction=bottom]:bottom-0=0px data-[vaul-drawer-direction=bottom]:mt-24=96px data-[vaul-drawer-direction=bottom]:rounded-t-lg=10px data-[vaul-drawer-direction=bottom]:border-t=1px
+  L61 data-[vaul-drawer-direction=right]:inset-y-0=0px data-[vaul-drawer-direction=right]:right-0=0px data-[vaul-drawer-direction=right]:border-l=1px data-[vaul-drawer-direction=right]:sm:max-w-sm=384px
+  L62 data-[vaul-drawer-direction=left]:inset-y-0=0px data-[vaul-drawer-direction=left]:left-0=0px data-[vaul-drawer-direction=left]:border-r=1px data-[vaul-drawer-direction=left]:sm:max-w-sm=384px
+  L67 mt-4=16px h-2=8px w-[100px] shrink-0 rounded-full=9999px
+  [slot drawer-header]
+  L79 gap-0.5=2px p-4=16px md:gap-1.5=6px
+  [slot drawer-footer]
+  L91 gap-2=8px p-4=16px
+  [slot drawer-title]
+  L104 font-semibold
+  [slot drawer-description]
+  L117 text-sm=14/20px

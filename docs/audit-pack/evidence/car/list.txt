@@ -1,0 +1,21 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/list/_list.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L22 @mixin list {
+L26 .#{$prefix}--list--ordered--native {
+L28   @include type.type-style('body-01');   // body-01=14/20
+L33 .#{$prefix}--list--unordered:not(.#{$prefix}--list--nested) {
+L34   margin-inline-start: $spacing-05;   // spacing-05=16px
+L38 .#{$prefix}--list--expressive .#{$prefix}--list--nested {
+L39   @include type.type-style('body-02');   // body-02=16/24
+L42 .#{$prefix}--list--ordered--native {
+L46 .#{$prefix}--list__item {
+L50 .#{$prefix}--list--nested {
+L51   margin-inline-start: convert.to-rem(32px);
+L54 .#{$prefix}--list--nested .#{$prefix}--list__item {
+L55   padding-inline-start: $spacing-02;   // spacing-02=4px
+L58 .#{$prefix}--list--ordered:not(.#{$prefix}--list--nested) {
+L72   inset-inline-start: convert.to-rem(-24px);
+L76 .#{$prefix}--list--ordered--native.#{$prefix}--list--nested {
+L80 .#{$prefix}--list--unordered > .#{$prefix}--list__item {
+L83 &::before {
+L87   inset-inline-start: calc(-1 * #{$spacing-05});   // spacing-05=16px
+L96   inset-inline-start: calc(-1 * #{$spacing-04});   // spacing-04=12px

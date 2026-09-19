@@ -1,0 +1,16 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Menu/Menu.js
+L16 const RTL_ORIGIN = {
+L21 const LTR_ORIGIN = {
+L29 const slots = {
+L38 const MenuRoot = styled(Popover, {
+L40 name: 'MuiMenu',
+L41 slot: 'Root',
+L45 name: 'MuiMenu',
+L46 slot: 'Paper',
+L51   maxHeight: 'calc(100% - 96px)',
+L56 const MenuMenuList = styled(MenuList, {
+L57 name: 'MuiMenu',
+L58 slot: 'List',
+L84 const ownerState = {
+L121 const externalForwardedProps = {
+L188 transition: {

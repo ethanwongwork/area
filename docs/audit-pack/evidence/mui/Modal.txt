@@ -1,0 +1,19 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Modal/Modal.js
+L21 const slots = {
+L29 const ModalRoot = styled('div', {
+L30 name: 'MuiModal',
+L31 slot: 'Root',
+L41   right: 0,
+L42   bottom: 0,
+L43   top: 0,
+L44   left: 0,
+L45 variants: [
+L48 style: {
+L56 const ModalBackdrop = styled(Backdrop, {
+L57 name: 'MuiModal',
+L58 slot: 'Backdrop',
+L103 const propsWithDefaults = {
+L129 const ownerState = {
+L136 const childProps = {};
+L148 const externalForwardedProps = { slots, slotProps };
+L153 externalForwardedProps: {

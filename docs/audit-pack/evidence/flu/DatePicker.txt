@@ -1,0 +1,12 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-datepicker-compat/library/src/components/DatePicker/useDatePickerStyles.styles.ts
+L4 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L14 const useStyles = makeStyles({
+L15 base: {
+L22 disabled: {
+L28 inline: {
+L30 // This is due to the surface being positioned as absolute, therefore zIndex: 1 ensures that won't happen.
+L31 zIndex: 1,
+L35 const usePopupSurfaceClassName = makeResetStyles({
+L38 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L39 borderWidth: '1px',
+L44 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400

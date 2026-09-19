@@ -1,0 +1,24 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/select.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot select]
+  [slot select-group]
+  [slot select-value]
+  [slot select-trigger]
+  L39 gap-2=8px rounded-md=8px border=1px px-3=12px py-2=8px text-sm=14/20px focus-visible:ring-[3px] data-[size=default]:h-9=36px data-[size=sm]:h-8=32px *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:gap-2=8px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L46 size-4=16px
+  [slot select-content]
+  L64 min-w-[8rem] rounded-md=8px border=1px
+  [slot select-label]
+  L96 px-2=8px py-1.5=6px text-xs=12/16px
+  [slot select-item]
+  L111 gap-2=8px rounded-sm=6px py-1.5=6px pr-8=32px pl-2=8px text-sm=14/20px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px *:[span]:last:gap-2=8px
+  [slot select-item-indicator]
+  L118 right-2=8px size-3.5=14px
+  L121 size-4=16px
+  [slot select-separator]
+  L136 -mx-1=4px my-1=4px h-px=1px
+  [slot select-scroll-up-button]
+  L150 py-1=4px
+  L155 size-4=16px
+  [slot select-scroll-down-button]
+  L168 py-1=4px
+  L173 size-4=16px

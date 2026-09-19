@@ -1,0 +1,104 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/checkbox/_checkbox.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L19 @mixin checkbox {
+L20 .#{$prefix}--checkbox-group {
+L25 .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
+L27   margin-block-end: convert.to-rem(6px);
+L31 .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:first-of-type {
+L32   margin-block-start: 0;
+L37 .#{$prefix}--label + .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
+L38   margin-block-start: -#{$spacing-01};   // spacing-01=2px
+L49   margin-block-start: -#{$spacing-01};   // spacing-01=2px
+L53 .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:last-of-type {
+L54   margin-block-end: convert.to-rem(3px);
+L59 .#{$prefix}--checkbox {
+L62   inset-block-start: 1.25rem;
+L63   inset-inline-start: 0.7rem;
+L69 .#{$prefix}--checkbox-label {
+L71   @include type-style('body-compact-01');   // body-compact-01=14/18
+L76   min-block-size: convert.to-rem(20px);
+L77   padding-block-start: convert.to-rem(1px);
+L78   padding-inline-start: convert.to-rem(20px);
+L82 .#{$prefix}--checkbox-label-text {
+L84   padding-inline-start: convert.to-rem(10px);
+L89 .#{$prefix}--checkbox-label::after {
+L98 .#{$prefix}--checkbox-label::before {
+L104   border: 1px solid $icon-primary;
+L105   border-radius: 2px;
+L107   border: 1px solid ButtonBorder;
+L112   block-size: convert.to-rem(16px);
+L118   inline-size: convert.to-rem(16px);
+L119   inset-block-start: convert.to-rem(2px);
+L120   inset-inline-start: 0;
+L123   margin-block: convert.to-rem(1px) convert.to-rem(2px);
+L124   margin-inline: convert.to-rem(3px) 0;
+L128 .#{$prefix}--checkbox-label::after {
+L131   block-size: convert.to-rem(5px);
+L135   inline-size: convert.to-rem(9px);
+L136   inset-block-start: convert.to-rem(6.5px);
+L137   inset-inline-start: convert.to-rem(7px);
+L138   margin-block-start: convert.to-rem(-3px);
+L150 .#{$prefix}--checkbox-label[data-contained-checkbox-state='true']::before {
+L151   border: none;
+L152   border-width: 1px;
+L158   border: 1px solid ButtonBorder;
+L165 .#{$prefix}--checkbox-label[data-contained-checkbox-state='true']::after {
+L170 .#{$prefix}--checkbox:indeterminate + .#{$prefix}--checkbox-label::after {
+L173   inline-size: convert.to-rem(8px);
+L174   inset-block-start: convert.to-rem(11px);
+L189 .#{$prefix}--checkbox:indeterminate:focus + .#{$prefix}--checkbox-label::before {
+L199 .#{$prefix}--checkbox-label[data-contained-checkbox-disabled='true'] {
+L205 .#{$prefix}--checkbox-label[data-contained-checkbox-disabled='true']::before {
+L212 .#{$prefix}--checkbox-label[data-contained-checkbox-state='true'][data-contained-checkbox-disabled='true']::be
+L224   border: 1px solid $support-error;
+L247   border: 1px solid $icon-primary;
+L251 .#{$prefix}--checkbox__validation-msg {
+L254   inline-size: 100%;
+L255   margin-block-start: $spacing-02;   // spacing-02=4px
+L258 .#{$prefix}--checkbox__invalid-icon {
+L259   margin: convert.to-rem(1px) convert.to-rem(1px) 0 convert.to-rem(3px);
+L261   min-inline-size: convert.to-rem(16px);
+L264 .#{$prefix}--checkbox__invalid-icon--warning {
+L268 .#{$prefix}--checkbox__invalid-icon--warning path:first-of-type {
+L294 .#{$prefix}--form-requirement {
+L297   margin-block-start: 0;
+L298   margin-inline-start: $spacing-03;   // spacing-03=8px
+L299   max-block-size: 100%;
+L307 .#{$prefix}--form-requirement {
+L315 .#{$prefix}--checkbox-wrapper--readonly .#{$prefix}--checkbox-label {
+L320 .#{$prefix}--checkbox-wrapper--readonly .#{$prefix}--checkbox-label-text {
+L340   border: 1px solid $icon-disabled;
+L362 .#{$prefix}--checkbox-skeleton .#{$prefix}--checkbox-label {
+L366 .#{$prefix}--checkbox-label-text.#{$prefix}--skeleton {
+L370   block-size: $spacing-05;   // spacing-05=16px
+L371   inline-size: convert.to-rem(100px);
+L372   margin-block: convert.to-rem(1px) 0;
+L373   margin-inline: convert.to-rem(6px) 0;
+L379 .#{$prefix}--checkbox--inline {
+L385   margin-block-start: 0;
+L386   margin-inline-start: convert.to-rem(-1px);
+L394 .#{$prefix}--checkbox-label[data-contained-checkbox-state='true']::after {
+L402 .#{$prefix}--checkbox-wrapper--slug {
+L410 .#{$prefix}--checkbox-group--slug legend.#{$prefix}--label {
+L417 .#{$prefix}--checkbox-group--slug > .#{$prefix}--slug {
+L431 .#{$prefix}--checkbox-group--slug > .#{$prefix}--slug {
+L441   margin-inline-start: $spacing-03;   // spacing-03=8px
+L447 .#{$prefix}--checkbox-wrapper--slug > .#{$prefix}--slug {
+L448   margin-inline-start: $spacing-03;   // spacing-03=8px
+L453 .#{$prefix}--ai-label__button--inline {
+L454   line-height: inherit;
+L455   margin-block-start: convert.to-rem(-1px);
+L459 .#{$prefix}--checkbox-wrapper--slug .#{$prefix}--slug__button--inline {
+L460   line-height: inherit;
+L461   margin-block-start: convert.to-rem(-1px);
+L465 .#{$prefix}--checkbox-wrapper--slug > .#{$prefix}--form__helper-text {
+L466   inline-size: 100%;
+L479 .#{$prefix}--checkbox-group--horizontal {
+L485 .#{$prefix}--form-item {
+L487   margin-block-end: 0;
+L489 &:not(:last-of-type) {
+L490   margin-inline-end: $spacing-05;   // spacing-05=16px
+L494 .#{$prefix}--checkbox-label-text {
+L495   padding-inline-start: $spacing-03;   // spacing-03=8px
+L498 .#{$prefix}--label + .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
+L499   margin-block-start: 0;
+L507   margin-block-start: 0;

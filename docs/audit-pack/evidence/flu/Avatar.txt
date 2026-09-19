@@ -1,0 +1,197 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-avatar/library/src/components/Avatar/useAvatarStyles.styles.ts
+L18 badgeRadius: '--fui-Avatar-badgeRadius',
+L19 badgeGap: '--fui-Avatar-badgeGap',
+L21 ringWidth: '--fui-Avatar-ringWidth',
+L24 const useRootClassName = makeResetStyles({
+L26 flexShrink: 0,
+L29 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L31 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L32 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L33 width: '32px',
+L34 height: '32px',
+L40 top: 0,
+L41 left: 0,
+L42 bottom: 0,
+L43 right: 0,
+L45 margin: `calc(-2 * var(${vars.ringWidth}, 0px))`,
+L46 borderRadius: 'inherit',
+L47 transitionProperty: 'margin, opacity',
+L51 transitionDuration: '0.01ms',
+L56 borderWidth: `var(${vars.ringWidth})`,
+L60 const useImageClassName = makeResetStyles({
+L62 top: 0,
+L63 left: 0,
+L64 width: '100%',
+L65 height: '100%',
+L67 borderRadius: 'inherit',
+L72 const useIconInitialsClassName = makeResetStyles({
+L75 top: 0,
+L76 left: 0,
+L77 width: '100%',
+L78 height: '100%',
+L79 lineHeight: '1',
+L80 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L88 borderRadius: 'inherit',
+L92 * Helper to create a maskImage that punches out a circle larger than the badge by `badgeGap`.
+L93 * This creates a transparent gap between the badge and Avatar.
+L97 const badgeMask = (margin?: string) => {
+L99 // The ring (::before) also has a 2 * ringWidth margin that also needs to be offset.
+L100 const centerOffset = margin ? `calc(var(${vars.badgeRadius}) + ${margin})` : `var(${vars.badgeRadius})`;
+L103 const innerRadius = `calc(var(${vars.badgeRadius}) + var(${vars.badgeGap}) - 0.25px)`;
+L104 const outerRadius = `calc(var(${vars.badgeRadius}) + var(${vars.badgeGap}) + 0.25px)`;
+L108 `transparent ${innerRadius}, white ${outerRadius})`
+L112 const useStyles = makeStyles({
+L113 textCaption2Strong: { fontSize: tokens.fontSizeBase100 },   // fontSizeBase100=10px
+L114 textCaption1Strong: { fontSize: tokens.fontSizeBase200 },   // fontSizeBase200=12px
+L115 textSubtitle2: { fontSize: tokens.fontSizeBase400 },   // fontSizeBase400=16px
+L116 textSubtitle1: { fontSize: tokens.fontSizeBase500 },   // fontSizeBase500=20px
+L117 textTitle3: { fontSize: tokens.fontSizeBase600 },   // fontSizeBase600=24px
+L119 squareSmall: { borderRadius: tokens.borderRadiusSmall },   // borderRadiusSmall=2px
+L120 squareMedium: { borderRadius: tokens.borderRadiusMedium },   // borderRadiusMedium=4px
+L121 squareLarge: { borderRadius: tokens.borderRadiusLarge },   // borderRadiusLarge=6px
+L122 squareXLarge: { borderRadius: tokens.borderRadiusXLarge },   // borderRadiusXLarge=8px
+L124 activeOrInactive: {
+L131 transitionDuration: '0.01ms',
+L135 ring: {
+L139 ringBadgeCutout: {
+L140 '::before': { maskImage: badgeMask(/*margin =*/ `2 * var(${vars.ringWidth})`) },
+L142 ringThick: {
+L143 [vars.ringWidth]: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L145 ringThicker: {
+L146 [vars.ringWidth]: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L148 ringThickest: {
+L149 [vars.ringWidth]: tokens.strokeWidthThickest,   // strokeWidthThickest=4px
+L152 shadow: {
+L156 shadow4: {
+L159 shadow8: {
+L162 shadow16: {
+L165 shadow28: {
+L169 inactive: {
+L170 opacity: '0.8',
+L175 margin: 0,
+L176 opacity: 0,
+L182 badge: {
+L184 bottom: 0,
+L185 right: 0,
+L189 badgeCutout: {
+L194 badgeAlign: {
+L200 // Badge size: applied to root when there is a badge
+L201 tiny: {
+L202 [vars.badgeRadius]: '3px',
+L203 [vars.badgeGap]: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L206 [vars.badgeRadius]: '5px',
+L207 [vars.badgeGap]: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L209 small: {
+L210 [vars.badgeRadius]: '6px',
+L211 [vars.badgeGap]: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L213 medium: {
+L214 [vars.badgeRadius]: '8px',
+L215 [vars.badgeGap]: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L217 large: {
+L218 [vars.badgeRadius]: '10px',
+L219 [vars.badgeGap]: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L222 [vars.badgeRadius]: '14px',
+L223 [vars.badgeGap]: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L226 icon12: { fontSize: '12px' },
+L227 icon16: { fontSize: '16px' },
+L228 icon20: { fontSize: '20px' },
+L229 icon24: { fontSize: '24px' },
+L230 icon28: { fontSize: '28px' },
+L231 icon32: { fontSize: '32px' },
+L232 icon48: { fontSize: '48px' },
+L235 export const useSizeStyles = makeStyles({
+L236 16: { width: '16px', height: '16px' },
+L237 20: { width: '20px', height: '20px' },
+L238 24: { width: '24px', height: '24px' },
+L239 28: { width: '28px', height: '28px' },
+L240 32: { width: '32px', height: '32px' },
+L241 36: { width: '36px', height: '36px' },
+L242 40: { width: '40px', height: '40px' },
+L243 48: { width: '48px', height: '48px' },
+L244 56: { width: '56px', height: '56px' },
+L245 64: { width: '64px', height: '64px' },
+L246 72: { width: '72px', height: '72px' },
+L247 96: { width: '96px', height: '96px' },
+L248 120: { width: '120px', height: '120px' },
+L249 128: { width: '128px', height: '128px' },
+L252 const useColorStyles = makeStyles({
+L253 neutral: {
+L257 brand: {
+L265 cranberry: {
+L269 red: {
+L273 pumpkin: {
+L277 peach: {
+L281 marigold: {
+L285 gold: {
+L289 brass: {
+L293 brown: {
+L297 forest: {
+L301 seafoam: {
+L313 teal: {
+L317 steel: {
+L321 blue: {
+L329 cornflower: {
+L333 navy: {
+L337 lavender: {
+L341 purple: {
+L345 grape: {
+L349 lilac: {
+L353 pink: {
+L357 magenta: {
+L361 plum: {
+L365 beige: {
+L369 mink: {
+L373 platinum: {
+L377 anchor: {
+L383 const useRingColorStyles = makeStyles({
+L384 neutral: {
+L387 brand: {
+L393 cranberry: {
+L396 red: {
+L399 pumpkin: {
+L402 peach: {
+L405 marigold: {
+L408 gold: {
+L411 brass: {
+L414 brown: {
+L417 forest: {
+L420 seafoam: {
+L429 teal: {
+L432 steel: {
+L435 blue: {
+L441 cornflower: {
+L444 navy: {
+L447 lavender: {
+L450 purple: {
+L453 grape: {
+L456 lilac: {
+L459 pink: {
+L462 magenta: {
+L465 plum: {
+L468 beige: {
+L471 mink: {
+L474 platinum: {
+L477 anchor: {
+L483 const { size, shape, active, activeAppearance, color } = state;
+L493 const rootClasses = [rootClassName, size !== 32 && sizeStyles[size]];
+L496 rootClasses.push(styles.badgeAlign, styles[state.badge.size || 'medium']);
+L499 if (size <= 24) {
+L501 } else if (size <= 28) {
+L503 } else if (size <= 40) {
+L504 // Default text size included in useRootClassName
+L505 } else if (size <= 56) {
+L507 } else if (size <= 96) {
+L514 if (size <= 24) {
+L516 } else if (size <= 48) {
+L518 } else if (size <= 72) {
+L534 if (size <= 48) {
+L536 } else if (size <= 64) {
+L545 if (size <= 28) {
+L547 } else if (size <= 48) {
+L549 } else if (size <= 64) {
+L594 if (size <= 16) {
+L596 } else if (size <= 24) {
+L598 } else if (size <= 40) {
+L600 } else if (size <= 48) {
+L602 } else if (size <= 56) {
+L604 } else if (size <= 72) {

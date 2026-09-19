@@ -1,0 +1,99 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/text-input/_text-input.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L33 @mixin text-input {
+L34 .#{$prefix}--text-input {
+L35   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L38   @include type-style('body-compact-01');   // body-compact-01=14/18
+L41   padding: 0 layout.density('padding-inline');
+L42   border: none;
+L44   block-size: layout.size('height');
+L49   inline-size: 100%;
+L55   border: 1px solid transparent;
+L56   border-radius: $border-radius-04;
+L59   linear-gradient($field, $field) padding-box,
+L69 &:active {
+L73 &-wrapper svg[hidden] {
+L78 .#{$prefix}--password-input {
+L79   padding-inline-end: layout.size('height');
+L82 .#{$prefix}--text-input::placeholder {
+L87 .#{$prefix}--text-input--light {
+L94 .#{$prefix}--text-input__field-wrapper {
+L97   inline-size: 100%;
+L100 .#{$prefix}--text-input__invalid-icon {
+L104   inset-block-start: 50%;
+L105   inset-inline-end: $spacing-05;   // spacing-05=16px
+L109 .#{$prefix}--text-input__invalid-icon--warning {
+L113 .#{$prefix}--text-input__invalid-icon--warning path:first-of-type {
+L120 .#{$prefix}--toggle-password-tooltip {
+L123   inset-block: 0;
+L124   inset-inline-end: 0;
+L127 .#{$prefix}--toggle-password-tooltip .#{$prefix}--tooltip-trigger__wrapper {
+L128   block-size: 100%;
+L129   inline-size: 100%;
+L132 .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
+L139   padding: 0;
+L140   border: 0;
+L143   block-size: 100%;
+L145   inset-inline-end: 0;
+L146   min-block-size: auto;
+L150   border-radius: $border-radius-04;
+L154 .#{$prefix}--toggle-password-tooltip .#{$prefix}--popover-content {
+L155   min-inline-size: $spacing-08;   // spacing-08=40px
+L163 .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger:focus {
+L168 .#{$prefix}--text-input--warning {
+L169   padding-inline-end: $spacing-08;   // spacing-08=40px
+L173 .#{$prefix}--text-input--warning.#{$prefix}--password-input {
+L174   padding-inline-end: calc(layout.size('height') + 1.5rem);
+L177 .#{$prefix}--password-input-wrapper .#{$prefix}--text-input__invalid-icon {
+L178   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L180   inset-inline-end: layout.size('height');
+L194 .#{$prefix}--text-input--password__visibility__toggle:disabled.#{$prefix}--tooltip__trigger {
+L202 .#{$prefix}--text-input__counter-alert {
+L205   padding: 0;
+L206   border: 0;
+L207   margin: -1px;
+L208   block-size: 1px;
+L210   inline-size: 1px;
+L216 .#{$prefix}--text-input:disabled {
+L227 .#{$prefix}--text-input--light:disabled {
+L231 .#{$prefix}--text-input:disabled::placeholder {
+L239 .#{$prefix}--text-input--invalid {
+L248 .#{$prefix}--skeleton.#{$prefix}--text-input {
+L256 .#{$prefix}--text-input-wrapper.#{$prefix}--text-input-wrapper--inline {
+L261 .#{$prefix}--text-input-wrapper .#{$prefix}--label--inline {
+L263   margin: 0;
+L268 .#{$prefix}--text-input__label-helper-wrapper {
+L271   max-inline-size: convert.to-rem(142px);
+L274 &:first-of-type {
+L275   margin-inline-end: $spacing-03;   // spacing-03=8px
+L278 &:last-of-type {
+L279   margin-inline-start: $spacing-03;   // spacing-03=8px
+L283 .#{$prefix}--text-input-wrapper .#{$prefix}--form__helper-text--inline {
+L284   margin-block-start: convert.to-rem(2px);
+L287 .#{$prefix}--text-input-wrapper--inline {
+L289 .#{$prefix}--form-requirement {
+L290   margin: 0;
+L294 .#{$prefix}--text-input__field-outer-wrapper {
+L299   inline-size: 100%;
+L302 .#{$prefix}--text-input__field-outer-wrapper--inline {
+L307 .#{$prefix}--text-input-wrapper--inline .#{$prefix}--form-requirement {
+L311   max-block-size: convert.to-rem(200px);
+L315 .#{$prefix}--form-requirement {
+L324 .#{$prefix}--text-input-wrapper--readonly .#{$prefix}--text-input {
+L332 .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
+L333   border-radius: $border-radius-00;
+L342 .#{$prefix}--text-input__field-wrapper .#{$prefix}--slug {
+L344   inset-block-start: 50%;
+L345   inset-inline-end: $spacing-05;   // spacing-05=16px
+L380   padding-box,
+L381   linear-gradient($field, $field) padding-box,
+L404   padding-inline-end: $spacing-08;   // spacing-08=40px
+L416 .#{$prefix}--text-input--warning:has(~ .#{$prefix}--slug) {
+L417   padding-inline-end: $spacing-10;   // spacing-10=64px
+L421 .#{$prefix}--text-input__field-wrapper--slug {
+L423 .#{$prefix}--text-input--warning ~ .#{$prefix}--text-input__invalid-icon {
+L424   inset-inline-end: $spacing-08;   // spacing-08=40px
+L436 .#{$prefix}--text-input--warning ~ .#{$prefix}--slug {
+L437   inset-inline-end: $spacing-05;   // spacing-05=16px
+L447   block-size: 1rem;
+L450 .#{$prefix}--text-input__label-wrapper {
+L453   inline-size: 100%;

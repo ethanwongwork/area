@@ -1,0 +1,3 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/separator.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot separator]
+  L19 shrink-0 data-[orientation=horizontal]:h-px=1px data-[orientation=vertical]:w-px=1px

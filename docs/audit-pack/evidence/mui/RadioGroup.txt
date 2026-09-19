@@ -1,0 +1,3 @@
+### MUI Material @ 69960c1  packages/mui-material/src/RadioGroup/RadioGroup.js
+L16 const slots = {
+L43 name: 'RadioGroup',

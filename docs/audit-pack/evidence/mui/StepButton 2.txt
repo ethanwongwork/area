@@ -1,0 +1,17 @@
+### MUI Material @ 69960c1  packages/mui-material/src/StepButton/StepButton.js
+L21 const slots = {
+L29 const StepButtonRoot = styled(ButtonBase, {
+L30 name: 'MuiStepButton',
+L31 slot: 'Root',
+L43   width: '100%',
+L44   padding: '24px 16px',
+L45   margin: '-24px -16px',
+L55   borderRadius: (theme.vars || theme).shape.borderRadius,
+L59 variants: [
+L61 props: { orientation: 'vertical' },
+L62 style: {
+L64   padding: '8px',
+L65   margin: '-8px',
+L96 const ownerState = { ...props, orientation };
+L100 const childProps = {
+L111 const stepButtonProps = {

@@ -1,0 +1,12 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ListItemIcon/ListItemIcon.js
+L15 const slots = {
+L22 const ListItemIconRoot = styled('div', {
+L23 name: 'MuiListItemIcon',
+L24 slot: 'Root',
+L32   minWidth: theme.spacing(4.5),
+L36 variants: [
+L38 props: {
+L41 style: {
+L42   marginTop: 8,
+L55 name: 'MuiListItemIcon',
+L60 const ownerState = { ...props, alignItems: context.alignItems };

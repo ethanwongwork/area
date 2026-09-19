@@ -1,0 +1,49 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-menus.scss
+gap: 2px
+group-padding: 2px
+horizontal-container-bottom-space: 8px
+horizontal-container-top-space: 8px
+horizontal-icon-only-gap: 4px
+horizontal-icon-only-menu-item-bottom-space: 16px
+horizontal-icon-only-menu-item-leading-space: 16px
+horizontal-icon-only-menu-item-top-space: 16px
+horizontal-icon-only-menu-item-trailing-space: 16px
+horizontal-menu-item-between-space: 12px
+horizontal-menu-item-bottom-space: 6px
+horizontal-menu-item-leading-space: 12px
+horizontal-menu-item-top-space: 6px
+horizontal-menu-item-trailing-space: 12px
+menu-item-between-space: 12px
+menu-item-bottom-space: 8px
+menu-item-height: 44px
+menu-item-leading-icon-size: 20px
+menu-item-leading-space: 16px
+menu-item-top-space: 8px
+menu-item-trailing-icon-size: 20px
+menu-item-trailing-space: 16px
+active-container-shape: corner-large = 16px
+container-shape: corner-large = 16px
+group-shape: corner-small = 8px
+horizontal-container-shape: corner-full = 9999px
+horizontal-icon-only-menu-item-selected-shape: corner-full = 9999px
+horizontal-menu-item-focused-shape: corner-medium = 12px
+horizontal-menu-item-hovered-shape: corner-medium = 12px
+horizontal-menu-item-pressed-shape: corner-medium = 12px
+horizontal-menu-item-selected-focused-shape: corner-full = 9999px
+horizontal-menu-item-selected-hovered-shape: corner-full = 9999px
+horizontal-menu-item-selected-pressed-shape: corner-full = 9999px
+inactive-container-shape: corner-small = 8px
+menu-item-first-child-inner-corner-corner-size: corner-extra-small = 4px
+menu-item-first-child-shape: corner-medium = 12px
+menu-item-focus-indicator-outline-offset: md-sys-state-focus-indicator.$inner-offset
+menu-item-focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+menu-item-label-text-line-height: label-large-line-height = 20px
+menu-item-label-text-size: label-large-size = 14px
+menu-item-last-child-inner-corner-corner-size: corner-extra-small = 4px
+menu-item-last-child-shape: corner-medium = 12px
+menu-item-selected-shape: corner-medium = 12px
+menu-item-shape: corner-extra-small = 4px
+menu-item-supporting-text-line-height: body-small-line-height = 16px
+menu-item-supporting-text-size: body-small-size = 12px
+menu-item-trailing-supporting-text-line-height: label-large-line-height = 20px
+menu-item-trailing-supporting-text-size: label-large-size = 14px

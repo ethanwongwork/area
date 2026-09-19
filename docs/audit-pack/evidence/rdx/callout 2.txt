@@ -1,0 +1,82 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/callout.css
+.rt-CalloutRoot {
+  box-sizing: border-box;
+  display: grid;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  color: var(--accent-a11);   /* = var(--amber-a11) */
+
+  &:where(.rt-high-contrast) {
+    color: var(--accent-12);   /* = var(--amber-12) */
+  }
+}
+
+.rt-CalloutIcon {
+  display: flex;
+  align-items: center;
+  grid-column-start: -2;
+  height: var(--callout-icon-height);   /* = 20px */
+}
+
+/* Anything that’s not an icon goes to the right of the icon */
+.rt-CalloutRoot > :where(:not(.rt-CalloutIcon)) {
+  grid-column-start: -1;
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * SIZES                                                                                           *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+@breakpoints {
+  .rt-CalloutRoot {
+    &:where(.rt-r-size-1) {
+      row-gap: var(--space-2);   /* = 8px */
+      column-gap: var(--space-2);   /* = 8px */
+      padding: var(--space-3);   /* = 12px */
+      border-radius: var(--radius-3);   /* = 6px */
+      --callout-icon-height: var(--line-height-2);   /* = 20px */
+    }
+    &:where(.rt-r-size-2) {
+      row-gap: var(--space-2);   /* = 8px */
+      column-gap: var(--space-3);   /* = 12px */
+      padding: var(--space-4);   /* = 16px */
+      border-radius: var(--radius-4);   /* = 8px */
+      --callout-icon-height: var(--line-height-2);   /* = 20px */
+    }
+    &:where(.rt-r-size-3) {
+      row-gap: var(--space-3);   /* = 12px */
+      column-gap: var(--space-4);   /* = 16px */
+      padding: var(--space-5);   /* = 24px */
+      border-radius: var(--radius-5);   /* = 12px */
+      --callout-icon-height: var(--line-height-3);   /* = 24px */
+    }
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * VARIANTS                                                                                        *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+/* soft */
+
+.rt-CalloutRoot:where(.rt-variant-soft) {
+  background-color: var(--accent-a3);   /* = var(--amber-a3) */
+}
+
+/* surface */
+
+.rt-CalloutRoot:where(.rt-variant-surface) {
+  box-shadow: inset 0 0 0 1px var(--accent-a6);   /* = inset 0 0 0 1px var(--amber-a6) */
+  background-color: var(--accent-a2);   /* = var(--amber-a2) */
+}
+
+/* outline */
+
+.rt-CalloutRoot:where(.rt-variant-outline) {
+  box-shadow: inset 0 0 0 1px var(--accent-a7);   /* = inset 0 0 0 1px var(--amber-a7) */
+}

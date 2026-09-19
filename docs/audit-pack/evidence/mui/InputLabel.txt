@@ -1,0 +1,35 @@
+### MUI Material @ 69960c1  packages/mui-material/src/InputLabel/InputLabel.js
+L18 const slots = {
+L38 const InputLabelRoot = styled(FormLabel, {
+L40 name: 'MuiInputLabel',
+L41 slot: 'Root',
+L62   maxWidth: '100%',
+L63 variants: [
+L66 style: {
+L68   left: 0,
+L69   top: 0,
+L75 props: {
+L76   size: 'small',
+L78 style: {
+L85 style: {
+L88   maxWidth: '133%',
+L93 style: {
+L101 props: {
+L104 style: {
+L112   maxWidth: 'calc(100% - 24px)',
+L116 props: {
+L118   size: 'small',
+L120 style: {
+L126 style: {
+L130   maxWidth: 'calc(133% - 24px)',
+L136 style: {
+L141 props: {
+L144 style: {
+L149   maxWidth: 'calc(100% - 24px)',
+L153 props: {
+L155   size: 'small',
+L157 style: {
+L163 style: {
+L168   maxWidth: 'calc(133% - 32px)',
+L197 const ownerState = {
+L202   size: fcs.size,

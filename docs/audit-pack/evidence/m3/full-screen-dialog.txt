@@ -1,0 +1,12 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-full-screen-dialog.scss
+action-bar-container-height: 56px
+header-container-height: 56px
+header-icon-size: 24px
+with-divider-divider-height: 1px
+action-bar-label-text-line-height: label-large-line-height = 20px
+action-bar-label-text-size: label-large-size = 14px
+container-shape: corner-none = 0px
+header-action-label-text-line-height: label-large-line-height = 20px
+header-action-label-text-size: label-large-size = 14px
+header-headline-line-height: title-large-line-height = 28px
+header-headline-size: title-large-size = 22px

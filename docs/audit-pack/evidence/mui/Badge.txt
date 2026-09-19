@@ -1,0 +1,35 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Badge/Badge.js
+L23 const slots = {
+L41 const BadgeRoot = styled('span', {
+L42 name: 'MuiBadge',
+L43 slot: 'Root',
+L52 const BadgeBadge = styled('span', {
+L53 name: 'MuiBadge',
+L54 slot: 'Badge',
+L81   fontWeight: theme.typography.fontWeightMedium,
+L82   fontSize: theme.typography.pxToRem(12),
+L83   minWidth: RADIUS_STANDARD * 2,
+L84   lineHeight: 1,
+L85   padding: '0 6px',
+L86   height: RADIUS_STANDARD * 2,
+L87   borderRadius: RADIUS_STANDARD,
+L90   border: '1px solid ButtonBorder',
+L96 variants: [
+L100 props: { color },
+L101 style: {
+L107 props: { variant: 'dot' },
+L108 style: {
+L109   borderRadius: RADIUS_DOT,
+L110   height: RADIUS_DOT * 2,
+L111   minWidth: RADIUS_DOT * 2,
+L112   padding: 0,
+L116 props: { invisible: true },
+L117 style: {
+L125 style: {
+L126   inset: 'var(--Badge-inset)',
+L197 const ownerState = {
+L212 const externalForwardedProps = {
+L219 externalForwardedProps: {
+L226 additionalProps: {
+L242 additionalProps: {
+L244 style: {

@@ -1,0 +1,4 @@
+### @atlaskit/popup@6.3.8  popper-wrapper.js  (token fallbacks; pt and pc converted to px)
+  root: border-radius:8px; box-sizing:border-box
+  fullWidth: width:100%
+  motion: max-height:inherit

@@ -1,0 +1,8 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-rich-tooltip.scss
+action-label-text-line-height: label-large-line-height = 20px
+action-label-text-size: label-large-size = 14px
+container-shape: corner-medium = 12px
+subhead-line-height: title-small-line-height = 20px
+subhead-size: title-small-size = 14px
+supporting-text-line-height: body-medium-line-height = 20px
+supporting-text-size: body-medium-size = 14px

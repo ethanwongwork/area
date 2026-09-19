@@ -1,0 +1,113 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/fluid-date-picker/_fluid-date-picker.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L22 @mixin fluid-date-picker {
+L23 .#{$prefix}--date-picker--fluid {
+L28   border: 1px solid transparent;
+L30 &:not(.#{$prefix}--date-picker--fluid--readonly) {
+L31   border-radius: $border-radius-04;
+L33 &:not([disabled]) {
+L35   linear-gradient($field, $field) padding-box,
+L45 &.#{$prefix}--date-picker--fluid--readonly {
+L49 &:focus-within {
+L50 .#{$prefix}--date-picker__input {
+L51   outline-offset: convert.to-rem(-1.5px);
+L57 .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker {
+L59   block-size: 100%;
+L60   inline-size: 100%;
+L66 .#{$prefix}--date-picker--fluid .#{$prefix}--label {
+L71   margin: 0;
+L72   block-size: convert.to-rem(16px);
+L73   inline-size: calc(100% - 2rem);
+L74   inset-block-start: convert.to-rem(13px);
+L75   inset-inline-start: $spacing-05;   // spacing-05=16px
+L81 .#{$prefix}--toggletip-label::-webkit-scrollbar {
+L89 .#{$prefix}--toggletip-label {
+L92   scrollbar-width: none;
+L99   inline-size: 100%;
+L104 .#{$prefix}--date-picker__input {
+L105   padding: convert.to-rem(32px) $spacing-05 convert.to-rem(13px);   // spacing-05=16px
+L108   min-block-size: convert.to-rem(64px);
+L109   min-inline-size: convert.to-rem(144px);
+L115 .#{$prefix}--date-picker__icon {
+L126 .#{$prefix}--date-picker--fluid--warn {
+L133 .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker__icon {
+L134   inset-block-start: convert.to-rem(43px);
+L139 .#{$prefix}--date-picker__input {
+L140   inline-size: 100%;
+L143 .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker--single {
+L152 .#{$prefix}--date-picker--single .#{$prefix}--date-picker--fluid--warn {
+L176 .#{$prefix}--date-picker-container {
+L177   inline-size: 100%;
+L178   min-block-size: convert.to-rem(63px);
+L179   min-inline-size: convert.to-rem(144px);
+L185   margin-inline-end: 0;
+L191 .#{$prefix}--date-picker__input {
+L203 .#{$prefix}--date-picker__input {
+L212 .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--invalid {
+L218 .#{$prefix}--date-picker-container.#{$prefix}--date-picker--fluid--invalid {
+L225 .#{$prefix}--date-picker__input--invalid {
+L235 .#{$prefix}--date-picker__input {
+L242 .#{$prefix}--form-requirement {
+L243   padding: $spacing-03 convert.to-rem(40px) $spacing-03 $spacing-05;   // spacing-03=8px spacing-03=8px spacing-05=16px
+L244   margin: 0;
+L258 .#{$prefix}--date-picker-container {
+L276 .#{$prefix}--date-picker__input {
+L288 .#{$prefix}--date-picker--fluid--warn.#{$prefix}--date-picker-container:first-child::after {
+L291   block-size: calc(100% - 1rem);
+L293   inline-size: 1px;
+L294   inset-block-start: convert.to-rem(8px);
+L295   inset-inline-end: 0;
+L307 .#{$prefix}--date-picker--fluid--warn.#{$prefix}--date-picker-container:last-child::after {
+L311   block-size: calc(100% - 1rem);
+L313   inline-size: 1px;
+L314   inset-block-start: convert.to-rem(8px);
+L315   inset-inline-end: 0;
+L320 .#{$prefix}--date-picker--fluid--warn.#{$prefix}--date-picker-container:last-child::after {
+L321   inset-inline-start: 0;
+L324 .#{$prefix}--date-picker--fluid .#{$prefix}--date-picker__divider {
+L325   border-style: solid;
+L327   margin: 0 1rem;
+L329   inline-size: calc(100% - 2rem);
+L335 .#{$prefix}--date-picker__icon--warn {
+L336   inset-block-start: convert.to-rem(80px);
+L346 .#{$prefix}--date-picker__icon--warn {
+L352 .#{$prefix}--date-picker__input:focus {
+L365   padding: $spacing-03 convert.to-rem(40px) $spacing-03 $spacing-05;   // spacing-03=8px spacing-03=8px spacing-05=16px
+L366   margin-block-start: 0;
+L367   max-block-size: 100%;
+L377 .#{$prefix}--date-picker--fluid.#{$prefix}--date-picker--fluid--warn {
+L387   inset-block-start: convert.to-rem(80px);
+L391 .#{$prefix}--date-picker--fluid__skeleton {
+L393   block-size: convert.to-rem(64px);
+L397   border-radius: $border-radius-04;
+L401 .#{$prefix}--date-picker--fluid__skeleton--container {
+L403   block-size: 100%;
+L404   inline-size: 100%;
+L407 .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--skeleton {
+L409   block-size: convert.to-rem(8px);
+L410   inline-size: 25%;
+L411   inset-block-start: $spacing-05;   // spacing-05=16px
+L412   inset-inline-start: $spacing-05;   // spacing-05=16px
+L415 .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--label {
+L416   margin-block-end: convert.to-rem(4px);
+L419 .#{$prefix}--date-picker--fluid__skeleton .#{$prefix}--text-input {
+L421   padding: 0;
+L422   block-size: convert.to-rem(8px);
+L423   inline-size: 50%;
+L424   inset-block-start: convert.to-rem(36px);
+L425   inset-inline-start: $spacing-05;   // spacing-05=16px
+L429 .#{$prefix}--date-picker__icon {
+L430   inset-block: auto $spacing-03;   // spacing-03=8px
+L434 .#{$prefix}--date-picker--fluid__skeleton--range {
+L440 .#{$prefix}--date-picker--fluid__skeleton--container {
+L443   inline-size: 50%;
+L447 .#{$prefix}--date-picker--fluid__skeleton--container:first-of-type {
+L453 .#{$prefix}--date-picker__icon {
+L454   inset-block-end: $spacing-03;   // spacing-03=8px
+L467 .#{$prefix}--date-picker__input {
+L476 .#{$prefix}--date-picker__input {
+L490 .#{$prefix}--slug {
+L491   inset-block-start: convert.to-rem(43px);
+L541 .#{$prefix}--date-picker__input {
+L542   padding-inline-end: $spacing-10;   // spacing-10=64px
+L546 .#{$prefix}--date-picker__calendar.#{$prefix}--date-picker__calendar--fluid.open.arrowTop {
+L547   margin-block-start: $spacing-02;   // spacing-02=4px

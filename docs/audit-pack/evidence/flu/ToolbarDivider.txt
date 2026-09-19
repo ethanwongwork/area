@@ -1,0 +1,7 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toolbar/library/src/components/ToolbarDivider/useToolbarDividerStyles.styles.ts
+L7 const useBaseStyles = makeStyles({
+L9 root: {
+L11 maxWidth: '1px',
+L12 padding: '0 12px',
+L14 vertical: {
+L15 maxWidth: 'initial',

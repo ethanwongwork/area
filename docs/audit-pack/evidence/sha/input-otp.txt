@@ -1,0 +1,8 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/input-otp.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot input-otp]
+  L19 gap-2=8px
+  [slot input-otp-group]
+  [slot input-otp-slot]
+  L53 h-9=36px w-9=36px border-y=1px border-r=1px text-sm=14/20px first:rounded-l-md=8px first:border-l=1px last:rounded-r-md=8px data-[active=true]:ring-[3px]
+  L61 h-4=16px w-px=1px
+  [slot input-otp-separator]

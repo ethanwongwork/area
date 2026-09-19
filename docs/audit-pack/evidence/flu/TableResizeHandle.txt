@@ -1,0 +1,18 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-table/library/src/components/TableResizeHandle/useTableResizeHandleStyles.styles.ts
+L17 const useStyles = makeStyles({
+L18 root: {
+L20 right: 0,
+L21 top: 0,
+L22 bottom: 0,
+L23 width: '16px',
+L24 margin: '0 -8px',
+L25 cursor: 'col-resize',
+L26 opacity: 0,
+L29 zIndex: 1,
+L31 // If mouse users focus on the resize handle through a context menu, we want the handle
+L34 opacity: 1,
+L39 opacity: 1,
+L45 width: '1px',
+L47 left: '50%',
+L48 top: 0,
+L49 bottom: 0,

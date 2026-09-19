@@ -1,0 +1,10 @@
+### @atlaskit/section-message@10.2.4  section-message-action.js  (token fallbacks; pt and pc converted to px)
+  common: font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif
+  anchor: font-weight:400
+  pressable: border-radius:2px; font-weight:500; padding-block-start:0; padding-inline-end:0; padding-block-end:0; padding-inline-start:0
+### @atlaskit/section-message@10.2.4  section-message.js  (token fallbacks; pt and pc converted to px)
+  container: border-radius:8px; padding-block:16px; padding-inline:16px
+  iconContainer: margin-block:-2px
+  content: font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif
+  actionsContainer: font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif
+  dismissButtonContainer: margin-block-start:-2px

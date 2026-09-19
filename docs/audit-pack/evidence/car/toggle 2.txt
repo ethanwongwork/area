@@ -1,0 +1,76 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/toggle/_toggle.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L23 @mixin toggle($enable-v12-toggle-reduced-label-spacing: false) {
+L24 .#{$prefix}--toggle {
+L29 .#{$prefix}--toggle__label-text {
+L30   @include type-style('label-01');   // label-01=12/16
+L34   margin-block-end: $spacing-05;   // spacing-05=16px
+L36   enabled('enable-v12-toggle-reduced-label-spacing') or
+L37   $enable-v12-toggle-reduced-label-spacing
+L39   margin-block-end: $spacing-03;   // spacing-03=8px
+L43 .#{$prefix}--toggle__button {
+L46 &:focus {
+L51 .#{$prefix}--toggle__appearance {
+L54   column-gap: $spacing-03;   // spacing-03=8px
+L59 .#{$prefix}--toggle__switch {
+L61   border-radius: convert.to-rem(12px);
+L63   block-size: convert.to-rem(24px);
+L64   inline-size: convert.to-rem(48px);
+L67 &::before {
+L69   border-radius: 50%;
+L71   block-size: convert.to-rem(18px);
+L73   inline-size: convert.to-rem(18px);
+L74   inset-block-start: convert.to-rem(3px);
+L75   inset-inline-start: convert.to-rem(3px);
+L88 .#{$prefix}--toggle__switch {
+L89 &::after {
+L91   border-radius: convert.to-rem(16px);
+L92   block-size: 100%;
+L99 .#{$prefix}--toggle__switch--checked {
+L102 &::before {
+L103   transform: translateX(convert.to-rem(24px));
+L108 .#{$prefix}--toggle__switch--checked {
+L113 .#{$prefix}--toggle__text {
+L114   @include type-style('body-01');   // body-01=14/20
+L119 .#{$prefix}--toggle__appearance--sm .#{$prefix}--toggle__switch {
+L120   block-size: convert.to-rem(16px);
+L121   inline-size: convert.to-rem(32px);
+L123 &::before {
+L124   block-size: convert.to-rem(10px);
+L125   inline-size: convert.to-rem(10px);
+L130 .#{$prefix}--toggle__switch--checked::before {
+L131   transform: translateX(convert.to-rem(16px));
+L134 .#{$prefix}--toggle__check {
+L136   block-size: convert.to-rem(5px);
+L138   inline-size: convert.to-rem(6px);
+L139   inset-block-start: convert.to-rem(6px);
+L140   inset-inline-end: convert.to-rem(5px);
+L144 .#{$prefix}--toggle__switch--checked .#{$prefix}--toggle__check {
+L152 .#{$prefix}--toggle--disabled .#{$prefix}--toggle__appearance {
+L157 .#{$prefix}--toggle--disabled .#{$prefix}--toggle__text {
+L161 .#{$prefix}--toggle--disabled .#{$prefix}--toggle__switch {
+L164 &::before {
+L169 .#{$prefix}--toggle--disabled .#{$prefix}--toggle__check {
+L176 .#{$prefix}--toggle--readonly .#{$prefix}--toggle__appearance {
+L180 .#{$prefix}--toggle--readonly .#{$prefix}--toggle__switch {
+L181   border: 1px solid $icon-disabled;
+L184 &::before {
+L186   inset-block-start: convert.to-rem(2px);
+L187   inset-inline-start: convert.to-rem(2px);
+L191 .#{$prefix}--toggle--readonly .#{$prefix}--toggle__check {
+L193   inset-block-start: convert.to-rem(5px);
+L194   inset-inline-end: convert.to-rem(4px);
+L197 .#{$prefix}--toggle--readonly .#{$prefix}--toggle__text {
+L205 .#{$prefix}--toggle__switch::before {
+L213 .#{$prefix}--toggle__switch {
+L218 .#{$prefix}--toggle--skeleton {
+L223 .#{$prefix}--toggle--skeleton .#{$prefix}--toggle__skeleton-circle {
+L226   border-radius: 50%;
+L227   block-size: convert.to-rem(18px);
+L228   inline-size: convert.to-rem(18px);
+L231 .#{$prefix}--toggle--skeleton .#{$prefix}--toggle__skeleton-rectangle {
+L234   block-size: convert.to-rem(8px);
+L235   inline-size: convert.to-rem(24px);
+L236   margin-inline-start: convert.to-rem(8px);
+L241   transform: translateX(convert.to-rem(-24px));
+L246 .#{$prefix}--toggle__switch--checked::before {
+L247   transform: translateX(convert.to-rem(-16px));

@@ -1,0 +1,7 @@
+### MUI Material @ 69960c1  packages/mui-material/src/CssBaseline/CssBaseline.js
+L33 const colorSchemeStyles = {};
+L44 ':root': {
+L62   fontWeight: theme.typography.fontWeightBold,
+L64 body: {
+L65   margin: 0, // Remove the margin in all browsers.
+L69 '&::backdrop': {

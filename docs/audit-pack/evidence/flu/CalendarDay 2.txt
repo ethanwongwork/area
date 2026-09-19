@@ -1,0 +1,41 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-calendar-compat/library/src/components/CalendarDay/useCalendarDayStyles.styles.ts
+L20 const useRootStyles = makeStyles({
+L21 base: {
+L23 padding: '12px',
+L24 width: '196px',
+L26 normalize: {
+L29 margin: '0',
+L30 padding: '0',
+L32 showWeekNumbers: {
+L33 width: '226px',
+L37 const useHeaderStyles = makeStyles({
+L38 base: {
+L40 height: '28px',
+L41 lineHeight: '44px',
+L43 width: '100%',
+L47 const useMonthAndYearStyles = makeStyles({
+L48 base: {
+L51 ...shorthands.borderStyle('none'),
+L52 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L55 flexGrow: 1,
+L57 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L58 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L59 lineHeight: '28px',
+L61 padding: '0 4px 0 10px',
+L66 headerIsClickable: {
+L71 outline: `1px solid ${tokens.colorTransparentStroke}`,
+L77 outline: `1px solid ${tokens.colorTransparentStroke}`,
+L82 const useMonthComponentsStyles = makeStyles({
+L83 base: {
+L89 const useHeaderIconButtonStyles = makeStyles({
+L90 base: {
+L92 ...shorthands.borderStyle('none'),
+L93 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L97 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L98 height: '28px',
+L99 lineHeight: '28px',
+L101 padding: '0',
+L104 width: '28px',
+L110 outline: `1px solid ${tokens.colorTransparentStroke}`,
+L119 const useDisabledStyleStyles = makeStyles({
+L120 base: {

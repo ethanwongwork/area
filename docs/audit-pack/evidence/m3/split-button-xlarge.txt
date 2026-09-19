@@ -1,0 +1,13 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-split-button-xlarge.scss
+between-space: 2px
+container-height: 136px
+leading-button-leading-space: 64px
+leading-button-trailing-space: 64px
+trailing-button-icon-size: 50px
+trailing-button-inner-corner-selected-corner-size: 50%
+trailing-button-leading-space: 43px
+trailing-button-trailing-space: 43px
+container-shape: corner-full = 9999px
+inner-corner-corner-size: corner-value-medium = 12px
+inner-corner-hovered-corner-size: corner-value-large-increased = 20px
+inner-corner-pressed-corner-size: corner-value-large-increased = 20px

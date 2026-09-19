@@ -1,0 +1,20 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Step/Step.js
+L16 const slots = {
+L23 const StepRoot = styled('li', {
+L24 name: 'MuiStep',
+L25 slot: 'Root',
+L37 variants: [
+L39 props: { orientation: 'horizontal', alternativeLabel: false, hasConnector: false },
+L40 style: {
+L41   paddingLeft: 8,
+L45 props: { orientation: 'horizontal', alternativeLabel: false, last: true },
+L46 style: {
+L47   paddingRight: 8,
+L51 props: { orientation: 'horizontal', alternativeLabel: false, hasConnector: true },
+L52 style: {
+L57   gap: 8,
+L61 props: { orientation: 'vertical', alternativeLabel: true },
+L62 style: {
+L68 props: { orientation: 'horizontal', alternativeLabel: true },
+L69 style: {
+L116 const ownerState = {

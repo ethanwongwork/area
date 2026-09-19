@@ -1,0 +1,12 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/card.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot card]
+  L9 gap-6=24px rounded-xl=14px border=1px py-6=24px
+  [slot card-header]
+  L22 gap-2=8px px-6=24px [.border-b]:pb-6=24px
+  [slot card-title]
+  [slot card-description]
+  L44 text-sm=14/20px
+  [slot card-action]
+  [slot card-content]
+  [slot card-footer]
+  L77 px-6=24px [.border-t]:pt-6=24px

@@ -1,0 +1,79 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/heading.css
+.rt-Heading {
+  --leading-trim-start: var(--heading-leading-trim-start);   /* = 0.42em */
+  --leading-trim-end: var(--heading-leading-trim-end);   /* = 0.36em */
+  font-family: var(--heading-font-family);   /* = -apple-system, BlinkMacSystemFont, 'Segoe UI (Custom)', Roboto, 'Helvetica Neue', 'Open Sans (Custom)', system-ui,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' */
+  font-style: var(--heading-font-style);   /* = normal */
+  font-weight: var(--font-weight-bold);   /* = 700 */
+  line-height: var(--line-height);   /* = 16px */
+
+  :where(&) {
+    margin: 0;
+  }
+
+  &:where([data-accent-color]) {
+    color: var(--accent-a11);   /* = var(--amber-a11) */
+  }
+
+  &:where([data-accent-color].rt-high-contrast),
+  :where([data-accent-color]:not(.radix-themes)) &:where(.rt-high-contrast) {
+    color: var(--accent-12);   /* = var(--amber-12) */
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * SIZES                                                                                           *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+@breakpoints {
+  .rt-Heading {
+    &:where(.rt-r-size-1) {
+      font-size: calc(var(--font-size-1) * var(--heading-font-size-adjust));   /* = 12px */
+      --line-height: var(--heading-line-height-1);   /* = 16px */
+      letter-spacing: calc(var(--letter-spacing-1) + var(--heading-letter-spacing));   /* = calc(0.0025em + 0em) */
+    }
+    &:where(.rt-r-size-2) {
+      font-size: calc(var(--font-size-2) * var(--heading-font-size-adjust));   /* = 14px */
+      --line-height: var(--heading-line-height-2);   /* = 18px */
+      letter-spacing: calc(var(--letter-spacing-2) + var(--heading-letter-spacing));   /* = calc(0em + 0em) */
+    }
+    &:where(.rt-r-size-3) {
+      font-size: calc(var(--font-size-3) * var(--heading-font-size-adjust));   /* = 16px */
+      --line-height: var(--heading-line-height-3);   /* = 22px */
+      letter-spacing: calc(var(--letter-spacing-3) + var(--heading-letter-spacing));   /* = calc(0em + 0em) */
+    }
+    &:where(.rt-r-size-4) {
+      font-size: calc(var(--font-size-4) * var(--heading-font-size-adjust));   /* = 18px */
+      --line-height: var(--heading-line-height-4);   /* = 24px */
+      letter-spacing: calc(var(--letter-spacing-4) + var(--heading-letter-spacing));   /* = calc(-0.0025em + 0em) */
+    }
+    &:where(.rt-r-size-5) {
+      font-size: calc(var(--font-size-5) * var(--heading-font-size-adjust));   /* = 20px */
+      --line-height: var(--heading-line-height-5);   /* = 26px */
+      letter-spacing: calc(var(--letter-spacing-5) + var(--heading-letter-spacing));   /* = calc(-0.005em + 0em) */
+    }
+    &:where(.rt-r-size-6) {
+      font-size: calc(var(--font-size-6) * var(--heading-font-size-adjust));   /* = 24px */
+      --line-height: var(--heading-line-height-6);   /* = 30px */
+      letter-spacing: calc(var(--letter-spacing-6) + var(--heading-letter-spacing));   /* = calc(-0.00625em + 0em) */
+    }
+    &:where(.rt-r-size-7) {
+      font-size: calc(var(--font-size-7) * var(--heading-font-size-adjust));   /* = 28px */
+      --line-height: var(--heading-line-height-7);   /* = 36px */
+      letter-spacing: calc(var(--letter-spacing-7) + var(--heading-letter-spacing));   /* = calc(-0.0075em + 0em) */
+    }
+    &:where(.rt-r-size-8) {
+      font-size: calc(var(--font-size-8) * var(--heading-font-size-adjust));   /* = 35px */
+      --line-height: var(--heading-line-height-8);   /* = 40px */
+      letter-spacing: calc(var(--letter-spacing-8) + var(--heading-letter-spacing));   /* = calc(-0.01em + 0em) */
+    }
+    &:where(.rt-r-size-9) {
+      font-size: calc(var(--font-size-9) * var(--heading-font-size-adjust));   /* = 60px */
+      --line-height: var(--heading-line-height-9);   /* = 60px */
+      letter-spacing: calc(var(--letter-spacing-9) + var(--heading-letter-spacing));   /* = calc(-0.025em + 0em) */
+    }
+  }
+}

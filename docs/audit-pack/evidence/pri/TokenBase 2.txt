@@ -1,0 +1,55 @@
+### Primer React @ e4e6eba  packages/react/src/Token/TokenBase.module.css
+.TokenBase {
+  position: relative;
+  display: inline-flex;
+  font-family: inherit;
+  font-weight: var(--base-text-weight-semibold);   /* = 600 */
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: var(--borderRadius-full);   /* = 9999px */
+  align-items: center;
+  /* stylelint-disable-next-line primer/typography */
+  line-height: 1;
+}
+
+.TokenBase:where([data-cursor-is-interactive='true']) {
+  cursor: pointer;
+}
+
+.TokenBase:where([data-cursor-is-interactive='false']) {
+  cursor: auto;
+}
+
+.TokenBase:where([data-size='small']) {
+  width: auto;
+  height: var(--base-size-16);   /* = 16px */
+  padding-right: var(--base-size-4);   /* = 4px */
+  padding-left: var(--base-size-4);   /* = 4px */
+  font-size: var(--text-body-size-small);   /* = 12px */
+}
+
+.TokenBase:where([data-size='medium']) {
+  width: auto;
+  height: var(--base-size-20);   /* = 20px */
+  padding-right: var(--base-size-6);   /* = 6px */
+  padding-left: var(--base-size-6);   /* = 6px */
+  font-size: var(--text-body-size-small);   /* = 12px */
+}
+
+.TokenBase[data-size='large'] {
+  width: auto;
+  height: var(--base-size-24);   /* = 24px */
+  padding-right: var(--base-size-8);   /* = 8px */
+  padding-left: var(--base-size-8);   /* = 8px */
+  font-size: var(--text-body-size-medium);   /* = 14px */
+}
+
+.TokenBase[data-size='xlarge'] {
+  width: auto;
+  height: var(--base-size-32);   /* = 32px */
+  padding-top: 0;
+  padding-right: var(--base-size-12);   /* = 12px */
+  padding-bottom: 0;
+  padding-left: var(--base-size-12);   /* = 12px */
+  font-size: var(--text-body-size-medium);   /* = 14px */
+}

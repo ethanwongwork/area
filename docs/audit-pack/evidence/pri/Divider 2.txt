@@ -1,0 +1,9 @@
+### Primer React @ e4e6eba  packages/react/src/deprecated/ActionList/Divider.module.css
+.Divider {
+  height: var(--borderWidth-thin);   /* = 1px */
+  /* stylelint-disable-next-line primer/colors */
+  background: var(--borderColor-muted);
+  /* stylelint-disable-next-line primer/spacing */
+  margin-top: calc(var(--base-size-8) - 1px);   /* = 7px */
+  margin-bottom: var(--base-size-8);   /* = 8px */
+}

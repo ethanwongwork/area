@@ -1,0 +1,8 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-progress-indicator.scss
+active-indicator-track-space: 4px
+active-indicator-thickness: 4px
+stop-indicator-size: 4px
+track-thickness: 4px
+active-indicator-shape: corner-full = 9999px
+stop-indicator-shape: corner-full = 9999px
+track-shape: corner-full = 9999px

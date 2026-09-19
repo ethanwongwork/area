@@ -1,0 +1,245 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/SegmentedControl/SegmentedControl.module.css
+.SegmentedControl {
+  --segmented-control-option-radius: calc(
+    var(--segmented-control-radius) - var(--segmented-control-gutter)
+  );
+
+  position: relative;
+  overflow: auto;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: var(--segmented-control-gap);   /* = 2px */
+  height: var(--segmented-control-size);   /* = 22px */
+  padding: var(--segmented-control-gutter);   /* = 2px */
+  border-radius: var(--segmented-control-radius);   /* = 6px */
+  background: var(--segmented-control-background);   /* = light-dark(light-dark(#ededed, #181818), light-dark(#ffffff, #0d0d0d)) */
+  font-size: var(--segmented-control-font-size);   /* = 12px */
+  font-weight: var(--segmented-control-font-weight);   /* = 600 */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  /* Remove inline-flex baseline gap */
+  vertical-align: middle;
+  white-space: nowrap;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  &:where([data-block]) {
+    overflow: hidden;
+    display: flex;
+    width: 100%;
+    white-space: wrap;
+  }
+
+  /* =============================================
+    Sizes
+  ============================================= */
+  &:where([data-size="3xs"]) {
+    --segmented-control-size: var(--control-size-3xs);   /* = 22px */
+    --segmented-control-font-size: var(--control-font-size-sm);   /* = 12px */
+    --segmented-control-radius: var(--control-radius-sm);   /* = 6px */
+    --segmented-control-option-gutter: var(--control-gutter-xs);   /* = 8px */
+  }
+
+  &:where([data-size="2xs"]) {
+    --segmented-control-size: var(--control-size-2xs);   /* = 24px */
+    --segmented-control-font-size: var(--control-font-size-sm);   /* = 12px */
+    --segmented-control-radius: var(--control-radius-sm);   /* = 6px */
+    --segmented-control-option-gutter: var(--control-gutter-xs);   /* = 8px */
+  }
+
+  &:where([data-size="xs"]) {
+    --segmented-control-size: var(--control-size-xs);   /* = 26px */
+    --segmented-control-font-size: var(--control-font-size-md);   /* = 14px */
+    --segmented-control-radius: var(--control-radius-sm);   /* = 6px */
+    --segmented-control-option-gutter: var(--control-gutter-xs);   /* = 8px */
+  }
+
+  &:where([data-size="sm"]) {
+    --segmented-control-size: var(--control-size-sm);   /* = 28px */
+    --segmented-control-font-size: var(--control-font-size-md);   /* = 14px */
+    --segmented-control-radius: var(--control-radius-md);   /* = 8px */
+    --segmented-control-option-gutter: var(--control-gutter-sm);   /* = 10px */
+  }
+
+  &:where([data-size="md"]) {
+    --segmented-control-size: var(--control-size-md);   /* = 32px */
+    --segmented-control-font-size: var(--control-font-size-md);   /* = 14px */
+    --segmented-control-radius: var(--control-radius-md);   /* = 8px */
+    --segmented-control-option-gutter: var(--control-gutter-md);   /* = 12px */
+  }
+
+  &:where([data-size="lg"]) {
+    --segmented-control-size: var(--control-size-lg);   /* = 36px */
+    --segmented-control-font-size: var(--control-font-size-md);   /* = 14px */
+    --segmented-control-radius: var(--control-radius-md);   /* = 8px */
+    --segmented-control-option-gutter: var(--control-gutter-md);   /* = 12px */
+  }
+
+  &:where([data-size="xl"]) {
+    --segmented-control-size: var(--control-size-xl);   /* = 40px */
+    --segmented-control-font-size: var(--control-font-size-md);   /* = 14px */
+    --segmented-control-radius: var(--control-radius-lg);   /* = 10px */
+    --segmented-control-option-gutter: var(--control-gutter-lg);   /* = 14px */
+  }
+
+  &:where([data-size="2xl"]) {
+    --segmented-control-size: var(--control-size-2xl);   /* = 44px */
+    --segmented-control-font-size: var(--control-font-size-lg);   /* = 16px */
+    --segmented-control-radius: var(--control-radius-xl);   /* = 12px */
+    --segmented-control-option-gutter: var(--control-gutter-xl);   /* = 16px */
+  }
+
+  &:where([data-size="3xl"]) {
+    --segmented-control-size: var(--control-size-3xl);   /* = 48px */
+    --segmented-control-font-size: var(--control-font-size-lg);   /* = 16px */
+    --segmented-control-radius: var(--control-radius-xl);   /* = 12px */
+    --segmented-control-option-gutter: var(--control-gutter-xl);   /* = 16px */
+  }
+
+  /* =============================================
+    Gutter sizes
+  ============================================= */
+  &:where([data-gutter-size="2xs"]) {
+    --segmented-control-option-gutter: var(--control-gutter-2xs);   /* = 6px */
+  }
+
+  &:where([data-gutter-size="xs"]) {
+    --segmented-control-option-gutter: var(--control-gutter-xs);   /* = 8px */
+  }
+
+  &:where([data-gutter-size="sm"]) {
+    --segmented-control-option-gutter: var(--control-gutter-sm);   /* = 10px */
+  }
+
+  &:where([data-gutter-size="md"]) {
+    --segmented-control-option-gutter: var(--control-gutter-md);   /* = 12px */
+  }
+
+  &:where([data-gutter-size="lg"]) {
+    --segmented-control-option-gutter: var(--control-gutter-lg);   /* = 14px */
+  }
+
+  &:where([data-gutter-size="xl"]) {
+    --segmented-control-option-gutter: var(--control-gutter-xl);   /* = 16px */
+  }
+
+  /* =============================================
+    Pill
+  ============================================= */
+  &:where([data-pill]) {
+    --segmented-control-radius: var(--radius-full);   /* = 9999px */
+    --segmented-control-option-radius: var(--radius-full);   /* = 9999px */
+  }
+}
+
+.SegmentedControlOption {
+  position: relative;
+  padding: 0 var(--segmented-control-option-gutter);   /* = 0 8px */
+  border-radius: var(--segmented-control-option-radius);   /* = calc(
+    6px - 2px
+  ) */
+  color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+  cursor: pointer;
+  line-height: 1;
+  transition-duration: var(--transition-duration-basic);   /* = 150ms */
+  transition-property: opacity, background-color, color;
+  transition-timing-function: var(--transition-ease-basic);   /* = ease */
+
+  &:focus {
+    outline: 0;
+  }
+
+  :where(.SegmentedControl[data-block]) & {
+    flex: 1;
+  }
+
+  :where(.SegmentedControl[data-pill]) & {
+    padding: 0 calc(var(--segmented-control-option-gutter) * var(--control-gutter-pill-scaling));   /* = 0 10.64px */
+  }
+
+  &[data-state="on"]:focus-visible {
+    outline: 2px solid var(--color-ring);   /* = 2px solid light-dark(#0169cc, #0285ff) */
+  }
+
+  &::before {
+    position: absolute;
+    inset: var(--segmented-control-option-highlight-gutter);   /* = 1px */
+    border-radius: var(--segmented-control-option-radius);   /* = calc(
+    6px - 2px
+  ) */
+    background: var(--segmented-control-option-highlight-background-color);   /* = light-dark(
+      light-dark(#cdcdcd, #212121),
+      light-dark(#afafaf, #303030)
+    ) */
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1);
+    transition-duration: var(--transition-duration-basic);   /* = 150ms */
+    transition-property: opacity, transform;
+    transition-timing-function: var(--transition-ease-basic);   /* = ease */
+    will-change: transform;
+  }
+
+  &:active::before {
+    transform: scale(var(--scale), 0.97);
+  }
+
+  svg {
+    display: block;
+  }
+
+  &[data-state="off"]:where(:not([disabled])) {
+    @mixin hover {
+      color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+
+      &::before {
+        opacity: 0.5;
+      }
+    }
+
+    &:focus-visible {
+      color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+      outline: 2px solid var(--color-ring);   /* = 2px solid light-dark(#0169cc, #0285ff) */
+    }
+
+    &:active::before {
+      opacity: 0.75;
+    }
+  }
+
+  &[data-state="on"] {
+    color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+  }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &::before {
+      opacity: 0 !important;
+    }
+  }
+}
+
+.SegmentedControlThumb {
+  position: absolute;
+  top: var(--segmented-control-gutter);   /* = 2px */
+  bottom: var(--segmented-control-gutter);   /* = 2px */
+  left: 0;
+  border-radius: var(--segmented-control-option-radius);   /* = calc(
+    6px - 2px
+  ) */
+  background: var(--segmented-control-thumb-background);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+  box-shadow: var(--segmented-control-thumb-shadow);   /* = 0 1px 4px -1px rgb(0 0 0 / 20%) */
+  pointer-events: none;
+  will-change: transform;
+}

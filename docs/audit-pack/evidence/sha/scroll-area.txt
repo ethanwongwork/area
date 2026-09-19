@@ -1,0 +1,10 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/scroll-area.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot scroll-area]
+  [slot scroll-area-viewport]
+  L20 focus-visible:ring-[3px] focus-visible:outline-1=1px
+  [slot scroll-area-scrollbar]
+  L40 p-px=1px
+  L42 w-2.5=10px border-l=1px
+  L44 h-2.5=10px border-t=1px
+  [slot scroll-area-thumb]
+  L51 rounded-full=9999px

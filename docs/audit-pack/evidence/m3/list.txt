@@ -1,0 +1,62 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-list.scss
+divider-bottom-space: 0px
+divider-height: 1px
+divider-leading-space: 16px
+divider-top-space: 0px
+divider-trailing-space: 16px
+list-item-between-space: 12px
+list-item-bottom-space: 10px
+list-item-container-height: 56px
+list-item-large-leading-video-height: 64px
+list-item-large-leading-video-width: 114px
+list-item-leading-avatar-size: 40px
+list-item-leading-icon-expressive-size: 20px
+list-item-leading-icon-size: 24px
+list-item-leading-image-height: 56px
+list-item-leading-image-width: 56px
+list-item-leading-space: 16px
+list-item-leading-video-width: 100px
+list-item-one-line-container-height: 56px
+list-item-small-leading-video-height: 56px
+list-item-small-leading-video-width: 100px
+list-item-three-line-container-height: 88px
+list-item-top-space: 10px
+list-item-trailing-icon-expressive-size: 20px
+list-item-trailing-icon-size: 24px
+list-item-trailing-space: 16px
+list-item-two-line-container-height: 72px
+md-comp-list-list-item-one-line-container-height: 56px
+md-comp-list-list-item-three-line-container-height: 88px
+md-comp-list-list-item-two-line-container-height: 72px
+segmented-gap: 2px
+container-shape: corner-large = 16px
+focus-indicator-outline-offset: md-sys-state-focus-indicator.$inner-offset
+focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+list-item-container-expressive-shape: corner-extra-small = 4px
+list-item-container-shape: corner-none = 0px
+list-item-disabled-container-expressive-shape: corner-extra-small = 4px
+list-item-dragged-container-expressive-shape: corner-large = 16px
+list-item-focused-container-expressive-shape: corner-large = 16px
+list-item-hovered-container-expressive-shape: corner-medium = 12px
+list-item-label-text-line-height: body-large-line-height = 24px
+list-item-label-text-size: body-large-size = 16px
+list-item-leading-avatar-label-line-height: title-medium-line-height = 24px
+list-item-leading-avatar-label-size: title-medium-size = 16px
+list-item-leading-avatar-shape: corner-full = 9999px
+list-item-leading-image-expressive-shape: corner-small = 8px
+list-item-leading-image-shape: corner-none = 0px
+list-item-leading-video-shape: corner-small = 8px
+list-item-overline-line-height: label-small-line-height = 16px
+list-item-overline-size: label-small-size = 11px
+list-item-pressed-container-expressive-shape: corner-large = 16px
+list-item-selected-container-expressive-shape: corner-large = 16px
+list-item-selected-container-shape: corner-large = 16px
+list-item-selected-disabled-container-expressive-shape: corner-large = 16px
+list-item-selected-dragged-container-expressive-shape: corner-large = 16px
+list-item-selected-focused-container-expressive-shape: corner-large = 16px
+list-item-selected-hovered-container-expressive-shape: corner-large = 16px
+list-item-selected-pressed-container-expressive-shape: corner-large = 16px
+list-item-supporting-text-line-height: body-medium-line-height = 20px
+list-item-supporting-text-size: body-medium-size = 14px
+list-item-trailing-supporting-text-line-height: label-small-line-height = 16px
+list-item-trailing-supporting-text-size: label-small-size = 11px

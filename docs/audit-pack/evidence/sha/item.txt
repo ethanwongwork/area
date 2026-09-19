@@ -1,0 +1,23 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/item.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot item-group]
+  [slot item-separator]
+  L34 rounded-md=8px border=1px text-sm=14/20px focus-visible:ring-[3px]
+  L43 default: gap-4=16px p-4=16px
+  L44 sm: gap-2.5=10px px-4=16px py-3=12px
+  [slot item]
+  L75 shrink-0 gap-2=8px group-has-[[data-slot=item-description]]/item:translate-y-0.5=2px
+  L80 icon: size-8=32px rounded-sm=6px border=1px [&_svg:not([class*='size-'])]:size-4=16px
+  L82 size-10=40px rounded-sm=6px
+  [slot item-media]
+  [slot item-content]
+  L111 gap-1=4px
+  [slot item-title]
+  L124 gap-2=8px text-sm=14/20px leading-snug font-medium
+  [slot item-description]
+  L137 line-clamp-2 text-sm=14/20px leading-normal font-normal
+  [slot item-actions]
+  L150 gap-2=8px
+  [slot item-header]
+  L161 gap-2=8px
+  [slot item-footer]
+  L174 gap-2=8px

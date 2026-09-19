@@ -1,0 +1,45 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-breadcrumb/library/src/components/BreadcrumbButton/useBreadcrumbButtonStyles.styles.ts
+L7 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L22 breadcrumbIconSizeVar: '--fui-Breadcrumb--icon-size',
+L23 breadcrumbIconLineHeightVar: '--fui-Breadcrumb--icon-line-height',
+L26 const useIconStyles = makeStyles({
+L27 base: {
+L28 fontSize: `var(${breadcrumbCSSVars.breadcrumbIconSizeVar})`,
+L29 height: `var(${breadcrumbCSSVars.breadcrumbIconSizeVar})`,
+L30 lineHeight: `var(${breadcrumbCSSVars.breadcrumbIconLineHeightVar})`,
+L31 width: `var(${breadcrumbCSSVars.breadcrumbIconSizeVar})`,
+L32 marginRight: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L34 small: {
+L35 [breadcrumbCSSVars.breadcrumbIconSizeVar]: '12px',
+L36 [breadcrumbCSSVars.breadcrumbIconLineHeightVar]: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L38 medium: {
+L39 [breadcrumbCSSVars.breadcrumbIconSizeVar]: '16px',
+L40 [breadcrumbCSSVars.breadcrumbIconLineHeightVar]: tokens.lineHeightBase400,   // lineHeightBase400=22px
+L42 large: {
+L43 [breadcrumbCSSVars.breadcrumbIconSizeVar]: '20px',
+L44 [breadcrumbCSSVars.breadcrumbIconLineHeightVar]: tokens.lineHeightBase600,   // lineHeightBase600=32px
+L67 const useStyles = makeStyles({
+L68 root: {
+L69 minWidth: 'unset',
+L72 small: {
+L73 height: '24px',
+L74 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L75 padding: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L77 medium: {
+L78 height: '32px',
+L79 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L80 padding: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L82 large: {
+L83 height: '40px',
+L84 ...typographyStyles.body2,   // typographyStyles.body2=16px/22px w400
+L85 padding: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L87 current: {
+L98 currentSmall: {
+L99 ...typographyStyles.caption1Strong,   // typographyStyles.caption1Strong=12px/16px w600
+L101 currentMedium: {
+L102 ...typographyStyles.body1Strong,   // typographyStyles.body1Strong=14px/20px w600
+L104 currentLarge: {
+L105 ...typographyStyles.subtitle2,   // typographyStyles.subtitle2=16px/22px w600
+L124 styles[state.size],
+L126 state.current && currentSizeMap[state.size],
+L133 state.icon.className = mergeClasses(iconStyles.base, iconStyles[state.size], state.icon.className);

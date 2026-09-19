@@ -1,0 +1,20 @@
+### MUI Material @ 69960c1  packages/mui-material/src/InputAdornment/InputAdornment.js
+L28 const slots = {
+L42 const InputAdornmentRoot = styled('div', {
+L43 name: 'MuiInputAdornment',
+L44 slot: 'Root',
+L49   maxHeight: '2em',
+L53 variants: [
+L55 props: {
+L58 style: {
+L61   marginTop: 16,
+L66 props: {
+L69 style: {
+L70   marginRight: 8,
+L74 props: {
+L77 style: {
+L78   marginLeft: 8,
+L82 props: {
+L85 style: {
+L125 const ownerState = {
+L128   size: muiFormControl.size,

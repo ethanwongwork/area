@@ -1,0 +1,22 @@
+### MUI Material @ 69960c1  packages/mui-material/src/FormControlLabel/FormControlLabel.js
+L20 const slots = {
+L36 name: 'MuiFormControlLabel',
+L37 slot: 'Root',
+L55   marginLeft: -11,
+L56   marginRight: 16, // used for row presentation of radio/checkbox
+L65 variants: [
+L67 props: { labelPlacement: 'start' },
+L68 style: {
+L70   marginRight: -11,
+L74 props: { labelPlacement: 'top' },
+L75 style: {
+L80 props: { labelPlacement: 'bottom' },
+L81 style: {
+L88 style: {
+L89   marginLeft: 16, // used for row presentation of radio/checkbox
+L96 const AsteriskComponent = styled('span', {
+L97 name: 'MuiFormControlLabel',
+L98 slot: 'Asterisk',
+L139 const controlProps = {
+L150 const ownerState = {
+L160 const externalForwardedProps = {

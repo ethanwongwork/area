@@ -1,0 +1,11 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-breadcrumb/library/src/components/BreadcrumbDivider/useBreadcrumbDividerStyles.styles.ts
+L14 const useStyles = makeResetStyles({
+L18 const useIconStyles = makeStyles({
+L19 small: {
+L20 fontSize: '12px',
+L22 medium: {
+L23 fontSize: '16px',
+L25 large: {
+L26 fontSize: '20px',
+L36 const { size = 'medium' } = state;
+L39 state.root.className = mergeClasses(breadcrumbDividerClassNames.root, styles, iconStyles[size], state.root.className);

@@ -1,0 +1,52 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-accordion/library/src/components/AccordionHeader/useAccordionHeaderStyles.styles.ts
+L5 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L16 const useStyles = makeStyles({
+L18 resetButton: {
+L23 fontSize: 'inherit',
+L24 lineHeight: 'normal',
+L26 padding: '0',
+L31 root: {
+L34 margin: '0',
+L35 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L37 rootDisabled: {
+L41 rootInline: {
+L44 button: {
+L46 width: '100%',
+L47 ...shorthands.borderWidth('0'),
+L48 padding: `0 ${tokens.spacingHorizontalM} 0 ${tokens.spacingHorizontalMNudge}`,   // spacingHorizontalM=12px spacingHorizontalMNudge=10px
+L49 minHeight: '44px',
+L53 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L56 buttonSmall: {
+L57 minHeight: '32px',
+L58 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L60 buttonLarge: {
+L61 lineHeight: tokens.lineHeightBase400,   // lineHeightBase400=22px
+L62 fontSize: tokens.fontSizeBase400,   // fontSizeBase400=16px
+L64 buttonExtraLarge: {
+L65 lineHeight: tokens.lineHeightBase500,   // lineHeightBase500=28px
+L66 fontSize: tokens.fontSizeBase500,   // fontSizeBase500=20px
+L68 buttonInline: {
+L71 buttonExpandIconEndNoIcon: {
+L72 paddingLeft: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L74 buttonExpandIconEnd: {
+L75 paddingRight: tokens.spacingHorizontalMNudge,   // spacingHorizontalMNudge=10px
+L77 buttonDisabled: {
+L80 expandIcon: {
+L81 height: '100%',
+L84 lineHeight: tokens.lineHeightBase500,   // lineHeightBase500=28px
+L85 fontSize: tokens.fontSizeBase500,   // fontSizeBase500=20px
+L87 expandIconStart: {
+L88 paddingRight: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L90 expandIconEnd: {
+L91 flexGrow: 1,
+L92 flexShrink: 1,
+L93 flexBasis: '0%',
+L96 paddingLeft: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L98 icon: {
+L99 height: '100%',
+L102 paddingRight: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L103 lineHeight: tokens.lineHeightBase500,   // lineHeightBase500=28px
+L104 fontSize: tokens.fontSizeBase500,   // fontSizeBase500=20px
+L129 state.size === 'small' && styles.buttonSmall,
+L130 state.size === 'large' && styles.buttonLarge,
+L131 state.size === 'extra-large' && styles.buttonExtraLarge,

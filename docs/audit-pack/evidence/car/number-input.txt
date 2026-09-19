@@ -1,0 +1,162 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/number-input/_number-input.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L28 @mixin number-input {
+L29 .#{$prefix}--number {
+L35   inline-size: 100%;
+L44   padding-inline-end: convert.to-rem(128px);
+L48 .#{$prefix}--number input[type='text'] {
+L49   @include type-style('body-compact-01');   // body-compact-01=14/18
+L54   border: 0;
+L55   border-radius: 0;
+L61   block-size: convert.to-rem(40px);
+L62   border-block-end: convert.to-rem(1px) solid $border-strong;
+L66   inline-size: 100%;
+L67   min-inline-size: 9.375rem;
+L68   padding-inline: $spacing-05 $spacing-12;   // spacing-05=16px spacing-12=96px
+L74   border: 1px solid transparent;
+L75   border-radius: $border-radius-04;
+L78   linear-gradient($field, $field) padding-box,
+L87 &:focus {
+L91 &:disabled ~ .#{$prefix}--number__controls {
+L96 &:disabled ~ .#{$prefix}--number__controls svg {
+L101 &::-ms-clear {
+L106 &::-webkit-inner-spin-button {
+L110 &[data-invalid] {
+L111   padding-inline-end: convert.to-rem(128px);
+L115 .#{$prefix}--number--lg.#{$prefix}--number {
+L118   padding-inline-end: convert.to-rem(112px);
+L120 &[data-invalid] {
+L121   padding-inline-end: convert.to-rem(144px);
+L126 .#{$prefix}--number__input-wrapper--warning input[type='text'] {
+L127   padding-inline-end: convert.to-rem(144px);
+L131 .#{$prefix}--number--sm.#{$prefix}--number {
+L134   padding-inline-end: convert.to-rem(80px);
+L136 &[data-invalid] {
+L137   padding-inline-end: convert.to-rem(112px);
+L142 .#{$prefix}--number__input-wrapper--warning input[type='text'] {
+L143   padding-inline-end: convert.to-rem(112px);
+L148 .#{$prefix}--number input[type='text']:disabled {
+L154   border: none;
+L159 .#{$prefix}--number__input-wrapper {
+L165 .#{$prefix}--number__controls {
+L173   block-size: 100%;
+L174   inline-size: convert.to-rem(80px);
+L176   inset-block-start: 50%;
+L177   inset-inline-end: 0;
+L181 .#{$prefix}--number__control-btn {
+L188   block-size: 100%;
+L195 &:focus {
+L200   outline-width: 2px;
+L203 &:hover {
+L205   box-shadow: 0 -1px 0 $border-strong inset;
+L210 &:disabled {
+L217   border: 1px solid transparent;
+L218   border-radius: $border-radius-04;
+L219   background-clip: padding-box;
+L221 &:hover {
+L228 .#{$prefix}--number__control-btn.down-icon {
+L232 .#{$prefix}--number__control-btn.up-icon {
+L243 .#{$prefix}--number__control-btn {
+L255 .#{$prefix}--number__control-btn {
+L256   border-width: 2px 0;
+L257   border-style: solid;
+L274 .#{$prefix}--number__control-btn:last-of-type:hover {
+L275   box-shadow: -4px 0 0 -2px $focus inset;
+L286 .#{$prefix}--number__control-btn:last-of-type:hover {
+L287   box-shadow: -4px 0 0 -2px $support-error inset;
+L297 .#{$prefix}--number__control-btn {
+L298   border-width: 2px 0;
+L299   border-style: solid;
+L316 .#{$prefix}--number__control-btn:focus:hover {
+L320 .#{$prefix}--number__rule-divider {
+L324   block-size: convert.to-rem(16px);
+L325   inline-size: convert.to-rem(1px);
+L327 &:first-of-type {
+L338 .#{$prefix}--number__rule-divider:first-of-type {
+L340   inset-inline-start: 0;
+L345 .#{$prefix}--number__rule-divider:first-of-type {
+L354 .#{$prefix}--number__rule-divider:first-of-type {
+L365 .#{$prefix}--number__rule-divider:first-of-type {
+L376 .#{$prefix}--number__rule-divider {
+L380 .#{$prefix}--number__control-btn:focus ~ .#{$prefix}--number__rule-divider {
+L384 .#{$prefix}--number__invalid {
+L387   inset-inline-end: $spacing-12;   // spacing-12=96px
+L390 .#{$prefix}--number--lg .#{$prefix}--number__invalid {
+L391   inset-inline-end: convert.to-rem(112px);
+L394 .#{$prefix}--number--sm .#{$prefix}--number__invalid {
+L395   inset-inline-end: convert.to-rem(80px);
+L398 .#{$prefix}--number__invalid + .#{$prefix}--number__rule-divider {
+L400   inset-inline-end: convert.to-rem(80px);
+L406   inset-inline-end: $spacing-12;   // spacing-12=96px
+L412   inset-inline-end: convert.to-rem(64px);
+L426 .#{$prefix}--number__invalid--warning {
+L430 .#{$prefix}--number__invalid--warning path:first-of-type {
+L437 .#{$prefix}--number--lg input[type='text'] {
+L438   block-size: convert.to-rem(48px);
+L441 .#{$prefix}--number--lg .#{$prefix}--number__controls {
+L442   inline-size: $spacing-12;   // spacing-12=96px
+L445 .#{$prefix}--number--lg .#{$prefix}--number__control-btn {
+L446   inline-size: convert.to-rem(48px);
+L450 .#{$prefix}--number--sm input[type='text'] {
+L451   block-size: convert.to-rem(32px);
+L454 .#{$prefix}--number--sm .#{$prefix}--number__controls {
+L455   inline-size: convert.to-rem(64px);
+L458 .#{$prefix}--number--sm .#{$prefix}--number__control-btn {
+L459   inline-size: convert.to-rem(32px);
+L466   margin-block-start: 0;
+L471 .#{$prefix}--number--nosteppers input[type='text'] {
+L472   padding-inline-end: 0;
+L483   padding-inline-end: convert.to-rem(48px);
+L486 .#{$prefix}--number--nosteppers .#{$prefix}--number__invalid {
+L487   inset-inline-end: convert.to-rem(16px);
+L492 .#{$prefix}--number--readonly input[type='text'] {
+L497   border-radius: $border-radius-00;
+L501 .#{$prefix}--number--readonly .#{$prefix}--number__control-btn {
+L506   border-radius: $border-radius-00;
+L509 &:hover {
+L522 .#{$prefix}--number__control-btn:hover {
+L528 .#{$prefix}--number__rule-divider:not(:first-of-type) {
+L537 .#{$prefix}--number__input-wrapper--slug .#{$prefix}--slug {
+L539   inset-block-start: 50%;
+L540   inset-inline-end: $spacing-12;   // spacing-12=96px
+L549   block-size: 1rem;
+L564 .#{$prefix}--number__control-btn::after {
+L567   block-size: convert.to-rem(16px);
+L569   inline-size: convert.to-rem(1px);
+L580 .#{$prefix}--number__input-wrapper--slug .#{$prefix}--slug::before {
+L582   inset-inline-start: convert.to-rem(-16px);
+L590 .#{$prefix}--number__input-wrapper--slug .#{$prefix}--slug--revert::before {
+L591   inset-block-start: convert.to-rem(8px);
+L592   inset-inline-start: convert.to-rem(-8px);
+L595 .#{$prefix}--number__control-btn::after {
+L597   inset-inline-end: 0;
+L607 .#{$prefix}--number__control-btn::before {
+L609   inset-inline-end: $spacing-08;   // spacing-08=40px
+L615 .#{$prefix}--number__control-btn:focus::before {
+L620 .#{$prefix}--number__control-btn:hover::before {
+L622   inset-inline-end: 0;
+L633 .#{$prefix}--number__control-btn:has(.up-icon)::before {
+L638 .#{$prefix}--number__input-wrapper--slug .#{$prefix}--number__invalid {
+L639   inset-inline-end: $spacing-13 - $spacing-05;   // spacing-13=160px spacing-05=16px
+L652 .#{$prefix}--slug::before {
+L668   padding-inline-end: convert.to-rem(144px);
+L708 .#{$prefix}--number__input-wrapper--slug input[type='text']:disabled {
+L711   padding-inline-end: convert.to-rem(145px);
+L714   border: 1px solid transparent;
+L715   border-radius: $border-radius-04;
+L726   padding-box,
+L727   linear-gradient($field, $field) padding-box,
+L741 .#{$prefix}--number.#{$prefix}--skeleton {
+L744   inline-size: 100%;
+L752 .#{$prefix}--number.#{$prefix}--skeleton.#{$prefix}--number--sm {
+L753   block-size: $spacing-07;   // spacing-07=32px
+L756 .#{$prefix}--number.#{$prefix}--skeleton.#{$prefix}--number--md {
+L757   block-size: $spacing-08;   // spacing-08=40px
+L760 .#{$prefix}--number.#{$prefix}--skeleton.#{$prefix}--number--lg {
+L761   block-size: $spacing-09;   // spacing-09=48px
+L767 .#{$prefix}--number__control-btn:focus {
+L771 .#{$prefix}--number__control-btn {
+L776 .#{$prefix}--number__controls:hover .#{$prefix}--number__control-btn::after {
+L781 .#{$prefix}--number__input-wrapper--slug .#{$prefix}--number__rule-divider {
+L789 .#{$prefix}--number__control-btn:hover {
+L790   box-shadow: 0 -1px 0 $ai-border-strong inset;
+L796 .#{$prefix}--number__control-btn::after {

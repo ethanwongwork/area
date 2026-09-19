@@ -1,0 +1,101 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/select/_select.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L28 @mixin select {
+L29 .#{$prefix}--select {
+L31   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L37   inline-size: 100%;
+L40 .#{$prefix}--select-input__wrapper {
+L44   inline-size: 100%;
+L47 .#{$prefix}--select-input {
+L48   @include type-style('body-compact-01');   // body-compact-01=14/18
+L50   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L54   border: none;
+L55   border-radius: 0;
+L58   block-size: layout.size('height');
+L63   inline-size: 100%;
+L66   padding-block: 0;
+L67   padding-inline: $spacing-05 $spacing-09;   // spacing-05=16px spacing-09=48px
+L74   border: 1px solid transparent;
+L75   border-radius: $border-radius-04;
+L78   linear-gradient($field, $field) padding-box,
+L87 &:hover {
+L92   linear-gradient($field-hover, $field-hover) padding-box,
+L103 &::-ms-expand {
+L114 &::-moz-focus-inner {
+L121 &:focus {
+L128 &:hover:disabled {
+L137 .#{$prefix}--select--disabled .#{$prefix}--form__helper-text {
+L142 .#{$prefix}--select--warning .#{$prefix}--select-input {
+L143   padding-inline-end: $spacing-10;   // spacing-10=64px
+L146 .#{$prefix}--select-input:disabled ~ .#{$prefix}--select__arrow {
+L150 .#{$prefix}--select--light .#{$prefix}--select-input {
+L153 &:hover {
+L158 &:hover:disabled {
+L165 .#{$prefix}--select__arrow {
+L167   block-size: 100%;
+L169   inset-block-start: 0;
+L170   inset-inline-end: $spacing-05;   // spacing-05=16px
+L183 .#{$prefix}--select__invalid-icon {
+L185   inset-inline-end: $spacing-08;   // spacing-08=40px
+L194 .#{$prefix}--select-input--inline__wrapper[data-invalid] {
+L195 .#{$prefix}--select__invalid-icon {
+L200 .#{$prefix}--select__invalid-icon--warning {
+L204 .#{$prefix}--select__invalid-icon--warning path[fill] {
+L210 .#{$prefix}--select-option {
+L215 &:disabled {
+L220 .#{$prefix}--select--inline {
+L226 .#{$prefix}--select--inline .#{$prefix}--form__helper-text {
+L227   margin-block-end: 0;
+L228   margin-inline-start: $spacing-03;   // spacing-03=8px
+L231 .#{$prefix}--select--inline .#{$prefix}--label {
+L232   margin: 0 $spacing-03 0 0;   // spacing-03=8px
+L236 .#{$prefix}--select--inline .#{$prefix}--select-input {
+L240   inline-size: 100%;
+L241   padding-inline: $spacing-03 $spacing-09;   // spacing-03=8px spacing-09=48px
+L249 &:hover {
+L256 .#{$prefix}--select--inline .#{$prefix}--select-input:focus optgroup {
+L259 &:hover {
+L265 .#{$prefix}--select--inline .#{$prefix}--select-input[disabled]:hover {
+L269 .#{$prefix}--select--inline .#{$prefix}--select__arrow {
+L270   inset-inline-end: $spacing-03;   // spacing-03=8px
+L274 .#{$prefix}--select-input {
+L275   padding-inline-end: convert.to-rem(56px);
+L284   inset-inline-end: $spacing-07;   // spacing-07=32px
+L287 .#{$prefix}--select--inline .#{$prefix}--select-input:disabled {
+L297 .#{$prefix}--select--readonly .#{$prefix}--select-input {
+L303   border-radius: $border-radius-00;
+L307 .#{$prefix}--select--readonly .#{$prefix}--select__arrow {
+L312 .#{$prefix}--select-input:hover {
+L317 .#{$prefix}--select.#{$prefix}--skeleton {
+L320   block-size: 2.5rem;
+L322   inline-size: 100%;
+L325 .#{$prefix}--select.#{$prefix}--skeleton .#{$prefix}--select-input {
+L331   $divider-width: 1px;
+L337 .#{$prefix}--select--slug .#{$prefix}--slug {
+L339   inset-block-start: 50%;
+L340   inset-inline-end: calc($spacing-08 + 8px + $divider-width);   // spacing-08=40px
+L341   margin-block-start: convert.to-rem(0.5px);
+L354 .#{$prefix}--select--slug .#{$prefix}--slug::before {
+L357   block-size: convert.to-rem(16px);
+L359   inline-size: convert.to-rem(1px);
+L366 .#{$prefix}--select--slug .#{$prefix}--slug::before {
+L368   inset-inline-start: calc(-#{$spacing-03} - #{$divider-width});   // spacing-03=8px
+L375 .#{$prefix}--select--slug .#{$prefix}--slug::after {
+L377   inset-block-start: 0;
+L378   inset-inline-end: calc(-#{$spacing-03} - #{$divider-width});   // spacing-03=8px
+L385 .#{$prefix}--select--slug .#{$prefix}--slug--revert::before {
+L386   inset-block-start: 0.5rem;
+L387   inset-inline-start: 0;
+L393 .#{$prefix}--select--slug .#{$prefix}--ai-label--revert {
+L394   inset-inline-end: convert.to-rem(41px);
+L399 .#{$prefix}--select--slug .#{$prefix}--slug--revert::after {
+L400   inset-block-start: convert.to-rem(8px);
+L401   inset-inline-end: -($divider-width);
+L416   inset-inline-end: $spacing-11;   // spacing-11=80px
+L425 .#{$prefix}--select--slug .#{$prefix}--select-input:has(~ .#{$prefix}--slug) {
+L426   padding-inline-end: $spacing-10;   // spacing-10=64px
+L436 .#{$prefix}--select-input:has(~ .#{$prefix}--slug) {
+L437   padding-inline-end: $spacing-12;   // spacing-12=96px
+L457 .#{$prefix}--select-input-has--ai-label {
+L471   padding-box,
+L472   linear-gradient($field, $field) padding-box,
+L490 .#{$prefix}--slug::before {

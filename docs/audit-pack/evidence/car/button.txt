@@ -1,0 +1,186 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/button/_button.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L31 @mixin button-set-fluid-column() {
+L34 .#{$prefix}--btn {
+L36   inline-size: 100%;
+L37   max-inline-size: none;
+L40 .#{$prefix}--btn--ghost {
+L41   padding-inline-start: $spacing-05;   // spacing-05=16px
+L51 @mixin button-set-fluid-layout($min-inline-size: $button-min-inline-size) {
+L52   container-type: inline-size;
+L54 .#{$prefix}--btn-set__fluid-inner {
+L61   inline-size: 100%;
+L64 .#{$prefix}--btn-set__fluid-inner .#{$prefix}--btn {
+L69   max-inline-size: convert.to-rem(232px);
+L72 .#{$prefix}--btn-set__fluid-inner--auto-stack .#{$prefix}--btn {
+L73   min-inline-size: $min-inline-size;
+L77 .#{$prefix}--btn-set__fluid-inner .#{$prefix}--btn--danger--ghost {
+L80   max-inline-size: none;
+L81   padding-inline-start: $spacing-07; /* increased padding when inline */   // spacing-07=32px
+L87   @container (width <= #{$i * $min-inline-size}) {
+L88 .#{$prefix}--btn-set__fluid-inner--auto-stack#{has-n-children($i)} {
+L94   @container (width <= #{4 * $min-inline-size}) {
+L95 .#{$prefix}--btn-set__fluid-inner#{has-n-children(2)} {
+L96 .#{$prefix}--btn {
+L97   flex-basis: 50%;
+L98   max-inline-size: none;
+L103   @container (width <= #{3 * $min-inline-size}) {
+L104 .#{$prefix}--btn-set__fluid-inner#{has-n-children(1)} .#{$prefix}--btn {
+L106   max-inline-size: none;
+L111 @mixin button {
+L112 .#{$prefix}--btn {
+L113   @include layout.use('size', $min: 'xs', $default: 'lg', $max: '2xl');
+L120 .#{$prefix}--btn::-moz-focus-inner {
+L121   padding: 0;
+L122   border: 0;
+L125 .#{$prefix}--btn--primary {
+L135 &:hover {
+L140 .#{$prefix}--btn--secondary {
+L151 &:focus {
+L156 .#{$prefix}--btn--tertiary {
+L167 &:hover {
+L172 &:focus {
+L177 &:active {
+L188 &.#{$prefix}--btn--disabled:focus {
+L195 .#{$prefix}--btn--ghost {
+L205   padding-inline-end: calc(
+L206   layout.density('padding-inline') - convert.to-rem(1px)
+L209 .#{$prefix}--btn__icon {
+L212   margin-inline-start: $spacing-03;   // spacing-03=8px
+L217 &:hover {
+L222 &:active {
+L232 &.#{$prefix}--btn--disabled:focus {
+L239 &:not([disabled]) svg {
+L244 .#{$prefix}--btn--icon-only {
+L247   padding: 0;
+L248   block-size: layout.size('height');
+L249   inline-size: layout.size('height');
+L250   padding-block-start: 0;
+L253   min-inline-size: convert.to-rem(16px);
+L256 .#{$prefix}--btn__icon {
+L260 &.#{$prefix}--btn--ghost {
+L261 &:focus {
+L267 &.#{$prefix}--btn--danger--ghost .#{$prefix}--btn__icon {
+L268   margin: 0;
+L271 &.#{$prefix}--btn--danger--ghost {
+L272   padding-inline-end: calc(
+L273   layout.density('padding-inline') - convert.to-rem(16px)
+L279 .#{$prefix}--btn--xs:not(.#{$prefix}--btn--icon-only) {
+L280   padding-block-start: 1.5px;
+L286 .#{$prefix}--btn--md:not(.#{$prefix}--btn--icon-only) .#{$prefix}--btn__icon {
+L287   margin-block-start: 0;
+L290 .#{$prefix}--btn--icon-only.#{$prefix}--btn--selected {
+L294 .#{$prefix}--btn path[data-icon-path='inner-path'] {
+L301 .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only .#{$prefix}--btn__icon {
+L311 .#{$prefix}--btn__icon {
+L315 .#{$prefix}--btn--ghost.#{$prefix}--btn--icon-only[disabled] {
+L321 .#{$prefix}--icon-tooltip--disabled .#{$prefix}--tooltip-trigger__wrapper {
+L325 .#{$prefix}--icon-tooltip--disabled .#{$prefix}--btn--icon-only[disabled] {
+L329 .#{$prefix}--btn--danger {
+L339 &:hover {
+L343 &--tertiary {
+L354 &:hover {
+L360 &:focus {
+L365 &:active {
+L376 &.#{$prefix}--btn--disabled:focus {
+L383 &--ghost {
+L393   padding-inline-end: calc(
+L394   layout.density('padding-inline') - convert.to-rem(1px)
+L397 .#{$prefix}--btn__icon {
+L399   margin-inline-start: $spacing-03;   // spacing-03=8px
+L403 &:hover {
+L408 &:active {
+L417 &.#{$prefix}--btn--disabled:focus {
+L427 .#{$prefix}--btn--expressive {
+L428   @include type-style('body-compact-02');   // body-compact-02=16/22
+L430   padding-block: min(
+L432   (layout.size('height') - var(--temp-expressive-1lh)) / 2 - convert.to-rem(
+L436   var(--temp-padding-block-max)
+L440 .#{$prefix}--btn--icon-only.#{$prefix}--btn--expressive {
+L441   padding: 12px 13px;
+L445 .#{$prefix}--btn.#{$prefix}--btn--expressive .#{$prefix}--btn__icon {
+L446   block-size: convert.to-rem(20px);
+L447   inline-size: convert.to-rem(20px);
+L450 .#{$prefix}--btn-set .#{$prefix}--btn.#{$prefix}--btn--expressive {
+L451   max-inline-size: convert.to-rem(320px);
+L455 .#{$prefix}--btn.#{$prefix}--skeleton {
+L458   inline-size: convert.to-rem(150px);
+L462 .#{$prefix}--btn-set {
+L466 .#{$prefix}--btn-set--stacked {
+L470 .#{$prefix}--btn-set .#{$prefix}--btn {
+L471   inline-size: 100%;
+L473   max-inline-size: convert.to-rem(196px);
+L475 &:not(:focus) {
+L476   box-shadow: convert.to-rem(-1px) 0 0 0 $button-separator;
+L479 &:first-of-type:not(:focus) {
+L484 .#{$prefix}--btn-set .#{$prefix}--btn:focus + .#{$prefix}--btn {
+L488 .#{$prefix}--btn-set--stacked .#{$prefix}--btn:not(:focus) {
+L489   box-shadow: 0 convert.to-rem(-1px) 0 0 $button-separator;
+L492 .#{$prefix}--btn-set--stacked .#{$prefix}--btn:first-of-type:not(:focus) {
+L496 .#{$prefix}--btn-set .#{$prefix}--btn.#{$prefix}--btn--disabled {
+L499 &:first-of-type {
+L504 .#{$prefix}--btn-set--stacked .#{$prefix}--btn.#{$prefix}--btn--disabled {
+L505   box-shadow: 0 convert.to-rem(-1px) 0 0 $layer-selected-disabled;
+L507 &:first-of-type {
+L512 .#{$prefix}--btn-set .#{$prefix}--btn.#{$prefix}--btn--loading {
+L520 .#{$prefix}--btn--sm .#{$prefix}--badge-indicator {
+L521   margin-block-start: $spacing-02;   // spacing-02=4px
+L522   margin-inline-end: $spacing-02;   // spacing-02=4px
+L526 .#{$prefix}--btn:focus {
+L532   box-shadow: convert.to-rem(1px) 0 0 0 $button-separator;
+L535 .#{$prefix}--btn-set--fluid {
+### Carbon styles @ 8472cca  packages/styles/scss/components/button/_mixins.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L24 @mixin button-base {
+L28   'body-compact-01-line-height',
+L29   map.get($body-compact-01, line-height)
+L34   'body-compact-02-line-height',
+L35   map.get($body-compact-02, line-height)
+L39   --temp-padding-block-max: calc(
+L40   (#{custom-property.get-var('layout-size-height-lg')} - var(--temp-1lh)) / 2 -
+L41   #{convert.to-rem(1px)}
+L45   @include type-style('body-compact-01');   // body-compact-01=14/18
+L51   border-radius: $button-border-radius;
+L53   margin: 0;
+L55   inline-size: max-content;
+L56   max-inline-size: convert.to-rem(320px);
+L57   min-block-size: layout.size('height');
+L60   padding-block: min(
+L61   calc((layout.size('height') - var(--temp-1lh)) / 2 - convert.to-rem(1px)),
+L62   var(--temp-padding-block-max)
+L64   padding-inline: calc(layout.density('padding-inline') - convert.to-rem(1px))
+L66   layout.density('padding-inline') * 3 + convert.to-rem(16px) - convert.to-rem(
+L84 &.#{$prefix}--btn--disabled:focus {
+L92 .#{$prefix}--btn__icon {
+L95   block-size: convert.to-rem(16px);
+L96   inline-size: convert.to-rem(16px);
+L98   inset-block-start: min(
+L100   (layout.size('height') - convert.to-rem(16px)) / 2 - convert.to-rem(1px)
+L102   var(--temp-padding-block-max)
+L104   inset-inline-end: layout.density('padding-inline');
+L105   margin-block-start: convert.to-rem(1px);
+L120   border-width: $button-outline-width;
+L121   border-style: solid;
+L128 &:hover {
+L133 &:focus {
+L137   inset 0 0 0 $button-border-width $background;
+L140 &:active {
+L145 .#{$prefix}--btn__icon path:not([data-icon-path]):not([fill='none']) {
+L150 @mixin button-padding-large {
+L152   padding-block-start: $spacing-05;   // spacing-05=16px
+L153   padding-inline: $spacing-05 $spacing-10;   // spacing-05=16px spacing-10=64px
+### Carbon styles @ 8472cca  packages/styles/scss/components/button/_vars.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L19   $button-font-size: 0.875rem !default;
+L24   $button-border-radius: 0 !default;
+L29   $button-height: 3rem !default;
+L34   $button-padding: calc(0.875rem - 3px) calc(#{$spacing-10} - 1px)   // spacing-10=64px
+L35   calc(0.875rem - 3px) calc(#{$spacing-05} - 1px) !default;   // spacing-05=16px
+L40   $button-padding-field: calc(0.675rem - 3px) calc(#{$spacing-10} - 4px)   // spacing-10=64px
+L41   calc(0.675rem - 3px) calc(#{$spacing-05} - 4px) !default;   // spacing-05=16px
+L46   $button-padding-sm: calc(0.375rem - 3px) calc(#{$spacing-10} - 4px)   // spacing-10=64px
+L47   calc(0.375rem - 3px) calc(#{$spacing-05} - 4px) !default;   // spacing-05=16px
+L52   $button-padding-lg: $spacing-04 !default;   // spacing-04=12px
+L58   $button-padding-ghost: calc(0.875rem - 3px) $spacing-05 !default;   // spacing-05=16px
+L64   $button-padding-ghost-field: calc(0.675rem - 3px) $spacing-05 !default;   // spacing-05=16px
+L70   $button-padding-ghost-sm: calc(0.375rem - 3px) $spacing-05 !default;   // spacing-05=16px
+L75   $button-border-width: 2px !default;
+L80   $button-outline-width: 1px !default;
+L89   $button-min-inline-size: convert.to-rem(176px) !default;

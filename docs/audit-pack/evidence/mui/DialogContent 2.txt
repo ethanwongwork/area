@@ -1,0 +1,13 @@
+### MUI Material @ 69960c1  packages/mui-material/src/DialogContent/DialogContent.js
+L15 const slots = {
+L22 const DialogContentRoot = styled('div', {
+L23 name: 'MuiDialogContent',
+L24 slot: 'Root',
+L36   padding: '20px 24px',
+L37 variants: [
+L40 style: {
+L41   padding: '16px 24px',
+L48 style: {
+L50   paddingTop: 0,
+L61 name: 'MuiDialogContent',
+L65 const ownerState = { ...props, dividers };

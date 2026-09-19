@@ -1,0 +1,60 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-text/library/src/components/Text/useTextStyles.styles.ts
+L15 const useStyles = makeStyles({
+L16 root: {
+L18 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L19 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L20 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L27 nowrap: {
+L31 truncate: {
+L34 block: {
+L37 italic: {
+L40 underline: {
+L43 strikethrough: {
+L46 strikethroughUnderline: {
+L49 base100: {
+L50 fontSize: tokens.fontSizeBase100,   // fontSizeBase100=10px
+L51 lineHeight: tokens.lineHeightBase100,   // lineHeightBase100=14px
+L53 base200: {
+L54 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L55 lineHeight: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L57 base400: {
+L58 fontSize: tokens.fontSizeBase400,   // fontSizeBase400=16px
+L59 lineHeight: tokens.lineHeightBase400,   // lineHeightBase400=22px
+L61 base500: {
+L62 fontSize: tokens.fontSizeBase500,   // fontSizeBase500=20px
+L63 lineHeight: tokens.lineHeightBase500,   // lineHeightBase500=28px
+L65 base600: {
+L66 fontSize: tokens.fontSizeBase600,   // fontSizeBase600=24px
+L67 lineHeight: tokens.lineHeightBase600,   // lineHeightBase600=32px
+L69 hero700: {
+L70 fontSize: tokens.fontSizeHero700,   // fontSizeHero700=28px
+L71 lineHeight: tokens.lineHeightHero700,   // lineHeightHero700=36px
+L73 hero800: {
+L74 fontSize: tokens.fontSizeHero800,   // fontSizeHero800=32px
+L75 lineHeight: tokens.lineHeightHero800,   // lineHeightHero800=40px
+L77 hero900: {
+L78 fontSize: tokens.fontSizeHero900,   // fontSizeHero900=40px
+L79 lineHeight: tokens.lineHeightHero900,   // lineHeightHero900=52px
+L81 hero1000: {
+L82 fontSize: tokens.fontSizeHero1000,   // fontSizeHero1000=68px
+L83 lineHeight: tokens.lineHeightHero1000,   // lineHeightHero1000=92px
+L85 monospace: {
+L88 numeric: {
+L91 weightMedium: {
+L92 fontWeight: tokens.fontWeightMedium,   // fontWeightMedium=500
+L94 weightSemibold: {
+L95 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L97 weightBold: {
+L98 fontWeight: tokens.fontWeightBold,   // fontWeightBold=700
+L100 alignCenter: {
+L103 alignEnd: {
+L106 alignJustify: {
+L128 state.size === 100 && styles.base100,
+L129 state.size === 200 && styles.base200,
+L130 state.size === 400 && styles.base400,
+L131 state.size === 500 && styles.base500,
+L132 state.size === 600 && styles.base600,
+L133 state.size === 700 && styles.hero700,
+L134 state.size === 800 && styles.hero800,
+L135 state.size === 900 && styles.hero900,
+L136 state.size === 1000 && styles.hero1000,

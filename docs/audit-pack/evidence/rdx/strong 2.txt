@@ -1,0 +1,13 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/strong.css
+.rt-Strong {
+  font-family: var(--strong-font-family);   /* = -apple-system, BlinkMacSystemFont, 'Segoe UI (Custom)', Roboto, 'Helvetica Neue', 'Open Sans (Custom)', system-ui,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' */
+  font-size: calc(var(--strong-font-size-adjust) * 1em);   /* = calc(1 * 1em) */
+  font-style: var(--strong-font-style);   /* = inherit */
+  font-weight: var(--strong-font-weight);   /* = 700 */
+  letter-spacing: calc(var(--strong-letter-spacing) + var(--letter-spacing, var(--default-letter-spacing)));   /* = calc(0em + 0em) */
+
+  & :where(&) {
+    font-size: inherit;
+  }
+}

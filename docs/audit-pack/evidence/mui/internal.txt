@@ -1,0 +1,33 @@
+### MUI Material @ 69960c1  packages/mui-material/src/internal/SwitchBase.js
+L17 const slots = {
+L25 const SwitchBaseRoot = styled(ButtonBase, {
+L26 name: 'MuiSwitchBase',
+L28   padding: 9,
+L29   borderRadius: '50%',
+L30 variants: [
+L32 props: {
+L34   size: 'small',
+L36 style: {
+L37   marginLeft: -3,
+L42 style: {
+L43   marginLeft: -12,
+L47 props: {
+L49   size: 'small',
+L51 style: {
+L52   marginRight: -3,
+L57 style: {
+L58   marginRight: -12,
+L64 const SwitchBaseInput = styled('input', {
+L65 name: 'MuiSwitchBase',
+L71   width: '100%',
+L72   height: '100%',
+L73   top: 0,
+L74   left: 0,
+L75   margin: 0,
+L76   padding: 0,
+L111 name: 'SwitchBase',
+L163 const ownerState = {
+L173 const externalForwardedProps = {
+L183 externalForwardedProps: {
+L200 additionalProps: {
+L221 additionalProps: {

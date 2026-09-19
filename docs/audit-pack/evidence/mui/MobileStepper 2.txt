@@ -1,0 +1,44 @@
+### MUI Material @ 69960c1  packages/mui-material/src/MobileStepper/MobileStepper.js
+L21 const slots = {
+L32 const MobileStepperRoot = styled(Paper, {
+L33 name: 'MuiMobileStepper',
+L34 slot: 'Root',
+L47   padding: 8,
+L48 variants: [
+L51 style: {
+L53   left: 0,
+L54   right: 0,
+L59 props: { position: 'top' },
+L60 style: { top: 0 },
+L63 props: { position: 'bottom' },
+L64 style: { bottom: 0 },
+L70 const MobileStepperDots = styled('div', {
+L71 name: 'MuiMobileStepper',
+L72 slot: 'Dots',
+L74 variants: [
+L76 props: { variant: 'dots' },
+L77 style: {
+L85 const MobileStepperDot = styled('div', {
+L86 name: 'MuiMobileStepper',
+L87 slot: 'Dot',
+L96 variants: [
+L98 props: { variant: 'dots' },
+L99 style: {
+L104   borderRadius: '50%',
+L105   width: 8,
+L106   height: 8,
+L107   margin: '0 2px',
+L111 props: { variant: 'dots', dotActive: true },
+L112 style: {
+L120 const MobileStepperProgress = styled(LinearProgress, {
+L121 name: 'MuiMobileStepper',
+L122 slot: 'Progress',
+L124 variants: [
+L126 props: { variant: 'progress' },
+L127 style: {
+L128   width: '50%',
+L149 const ownerState = {
+L167 const externalForwardedProps = {
+L177 externalForwardedProps: {
+L182 additionalProps: {
+L207 additionalProps: {

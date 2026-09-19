@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toast/library/src/components/Toaster/useToasterStyles.styles.ts
+L15 const useRootBaseClassName = makeResetStyles({
+L17 width: '292px',
+L21 const useToasterStyles = makeStyles({
+L22 inline: {

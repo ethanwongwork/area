@@ -1,0 +1,29 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/Avatar/AvatarGroup.module.css
+.Group {
+  display: flex;
+
+  > * ~ * {
+    box-shadow: 0 0 0 var(--avatar-group-cutout-width) var(--avatar-group-cutout-color);   /* = 0 0 0 3px light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#cdcdcd, #212121)) */
+
+    /*
+     * Mask approach avoids the need to apply a specific color, however:
+     * -radial masks currently have very harsh anti-aliasing
+     * - sizing must be set statically, and cannot use % sizing. You trade one imperative value for another.
+     * mask-image: radial-gradient(circle 22px at -15px, transparent 99%, #fff 100%);
+     */
+  }
+
+  &[data-stack="start"] {
+    flex-direction: row-reverse;
+
+    > * ~ * {
+      margin-inline-end: var(--avatar-group-spacing);   /* = -8px */
+    }
+  }
+
+  &[data-stack="end"] {
+    > * ~ * {
+      margin-inline-start: var(--avatar-group-spacing);   /* = -8px */
+    }
+  }
+}

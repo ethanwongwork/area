@@ -1,0 +1,7 @@
+### @atlaskit/flag@18.5.6  flag-group.js  (token fallbacks; pt and pc converted to px)
+  root: width:25pc; inset-block-end:0; width:100vw
+  root: inset-block-end:0; width:25pc; width:100vw
+### @atlaskit/flag@18.5.6  flag.js  (token fallbacks; pt and pc converted to px)
+  flag: border-radius:8px; width:100%
+### @atlaskit/flag@18.5.6  internal/expander.js  (token fallbacks; pt and pc converted to px)
+  expander: width:100%

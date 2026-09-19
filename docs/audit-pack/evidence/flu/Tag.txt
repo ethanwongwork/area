@@ -1,0 +1,134 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tags/library/src/components/Tag/useTagStyles.styles.ts
+L7 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L22 const tagSpacingMedium = '7px';
+L23 const tagSpacingSmall = '5px';
+L24 const tagSpacingExtraSmall = '5px';
+L26 const mediumIconSize = '20px';
+L27 const smallIconSize = '16px';
+L28 const extraSmallIconSize = '12px';
+L33 padding: '0px',
+L44 width: 'fit-content',
+L46 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L49 const useRootRoundedBaseClassName = makeResetStyles({
+L52 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L54 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L55 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L60 * when Tag is with secondary text, primary text has negative margin that covers the border.
+L66 borderTop: `${tokens.strokeWidthThin} solid`,   // strokeWidthThin=1px
+L68 inset: '-1px',
+L69 borderTopLeftRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L70 borderTopRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L75 const useRootCircularBaseClassName = makeResetStyles({
+L78 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L80 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L81 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L86 * when Tag is with secondary text, primary text has negative margin that covers the border.
+L92 borderTop: `${tokens.strokeWidthThin} solid`,   // strokeWidthThin=1px
+L93 borderLeft: `${tokens.strokeWidthThin} solid`,   // strokeWidthThin=1px
+L94 borderRight: `${tokens.strokeWidthThin} solid`,   // strokeWidthThin=1px
+L96 inset: '-1px',
+L97 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L102 const useRootStyles = makeStyles({
+L103 filled: {
+L107 outline: {
+L110 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L112 brand: {
+L116 selected: {
+L119 ...shorthands.borderColor(tokens.colorBrandStroke1),
+L127 medium: {
+L128 height: '32px',
+L130 small: {
+L131 height: '24px',
+L135 height: '20px',
+L138 // https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html
+L143 height: '2px',
+L144 left: '0',
+L145 width: '100%',
+L148 bottom: '100%',
+L151 top: '100%',
+L157 const useRootDisabledStyles = makeStyles({
+L158 filled: {
+L162 ...shorthands.borderColor(tokens.colorTransparentStrokeDisabled),
+L164 outline: {
+L168 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L170 brand: {
+L174 ...shorthands.borderColor(tokens.colorTransparentStrokeDisabled),
+L181 const useRootWithoutMediaStyles = makeStyles({
+L182 medium: {
+L183 paddingLeft: tagSpacingMedium,
+L185 small: {
+L186 paddingLeft: tagSpacingSmall,
+L189 paddingLeft: tagSpacingExtraSmall,
+L195 const useRootWithoutDismissStyles = makeStyles({
+L196 medium: {
+L197 paddingRight: tagSpacingMedium,
+L199 small: {
+L200 paddingRight: tagSpacingSmall,
+L203 paddingRight: tagSpacingExtraSmall,
+L207 export const useIconStyles = makeStyles({
+L208 base: {
+L213 medium: {
+L214 paddingLeft: tagSpacingMedium,
+L215 paddingRight: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L216 width: mediumIconSize,
+L217 fontSize: mediumIconSize,
+L219 small: {
+L220 paddingLeft: tagSpacingSmall,
+L221 paddingRight: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L222 width: smallIconSize,
+L223 fontSize: smallIconSize,
+L226 paddingLeft: tagSpacingExtraSmall,
+L227 paddingRight: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L228 width: extraSmallIconSize,
+L229 fontSize: extraSmallIconSize,
+L233 export const useMediaStyles = makeStyles({
+L234 base: {
+L238 paddingLeft: '1px',
+L240 medium: {
+L241 paddingRight: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L243 small: {
+L244 paddingRight: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L247 paddingRight: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L251 const useDismissIconStyles = makeStyles({
+L252 base: {
+L267 medium: {
+L268 paddingLeft: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L269 paddingRight: tagSpacingMedium,
+L270 fontSize: mediumIconSize,
+L272 small: {
+L273 paddingLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L274 paddingRight: tagSpacingSmall,
+L275 fontSize: smallIconSize,
+L278 paddingLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L279 paddingRight: tagSpacingExtraSmall,
+L280 fontSize: extraSmallIconSize,
+L283 filled: {
+L292 outline: {
+L301 brand: {
+L310 selected: {
+L320 export const usePrimaryTextStyles = makeStyles({
+L321 base: {
+L323 paddingLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L324 paddingRight: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L327 medium: {
+L328 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L330 small: {
+L331 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L334 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L337 withoutSecondaryText: {
+L341 paddingBottom: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L343 withSecondaryText: {
+L346 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L347 marginTop: '-2px',
+L351 export const useSecondaryTextBaseClassName = makeResetStyles({
+L353 paddingLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L354 paddingRight: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L355 ...typographyStyles.caption2,   // typographyStyles.caption2=10px/14px w400
+L377 const { disabled, shape, size, appearance, selected } = state;
+L387 rootStyles[size],
+L389 !state.media && !state.icon && rootWithoutMediaStyles[size],
+L390 !state.dismissIcon && rootWithoutDismissStyles[size],
+L400 mediaStyles[size],
+L406 state.icon.className = mergeClasses(tagClassNames.icon, iconStyles.base, iconStyles[size], state.icon.className);
+L414 primaryTextStyles[size],
+L434 dismissIconStyles[size],

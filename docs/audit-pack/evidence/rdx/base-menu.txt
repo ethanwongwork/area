@@ -1,0 +1,248 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/_internal/base-menu.css
+.rt-BaseMenuContent {
+  --scrollarea-scrollbar-vertical-margin-top: var(--base-menu-content-padding);   /* = 4px */
+  --scrollarea-scrollbar-vertical-margin-bottom: var(--base-menu-content-padding);   /* = 4px */
+  --scrollarea-scrollbar-horizontal-margin-left: var(--base-menu-content-padding);   /* = 4px */
+  --scrollarea-scrollbar-horizontal-margin-right: var(--base-menu-content-padding);   /* = 4px */
+
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: var(--base-menu-bg);   /* = white */
+}
+
+.rt-BaseMenuViewport {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: var(--base-menu-content-padding);   /* = 4px */
+  box-sizing: border-box;
+
+  :where(.rt-BaseMenuContent:has(.rt-ScrollAreaScrollbar[data-orientation='vertical'])) & {
+    padding-right: var(--space-3);   /* = 12px */
+  }
+}
+
+.rt-BaseMenuItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);   /* = 8px */
+  height: var(--base-menu-item-height);   /* = 24px */
+  padding-left: var(--base-menu-item-padding-left);   /* = 20px */
+  padding-right: var(--base-menu-item-padding-right);   /* = 8px */
+  box-sizing: border-box;
+  position: relative;
+  outline: none;
+  scroll-margin: var(--base-menu-content-padding) 0;   /* = 4px 0 */
+
+  /* Fix sticky text highlighting after selection in Firefox */
+  user-select: none;
+
+  /* Cursors */
+  cursor: var(--cursor-menu-item);   /* = default */
+  &:where([data-disabled]) {
+    cursor: default;
+  }
+}
+
+.rt-BaseMenuShortcut {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding-left: var(--space-4);   /* = 16px */
+}
+
+.rt-BaseMenuSubTriggerIcon {
+  color: var(--gray-12);   /* = var(--mauve-12) */
+  margin-right: calc(-2px * var(--scaling));   /* = -2px */
+}
+
+.rt-BaseMenuItemIndicator {
+  position: absolute;
+  left: 0;
+  width: var(--base-menu-item-padding-left);   /* = 20px */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rt-BaseMenuSeparator {
+  height: 1px;
+  margin-top: var(--space-2);   /* = 8px */
+  margin-bottom: var(--space-2);   /* = 8px */
+  margin-left: var(--base-menu-item-padding-left);   /* = 20px */
+  margin-right: var(--base-menu-item-padding-right);   /* = 8px */
+}
+
+.rt-BaseMenuLabel {
+  display: flex;
+  align-items: center;
+  height: var(--base-menu-item-height);   /* = 24px */
+  padding-left: var(--base-menu-item-padding-left);   /* = 20px */
+  padding-right: var(--base-menu-item-padding-right);   /* = 8px */
+  box-sizing: border-box;
+  color: var(--gray-a10);   /* = var(--mauve-a10) */
+  user-select: none;
+  cursor: default;
+
+  :where(.rt-BaseMenuItem) + & {
+    margin-top: var(--space-2);   /* = 8px */
+  }
+}
+
+.rt-BaseMenuArrow {
+  fill: var(--base-menu-bg);   /* = white */
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * SIZES                                                                                           *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+@breakpoints {
+  .rt-BaseMenuContent {
+    &:where(.rt-r-size-1) {
+      --base-menu-content-padding: var(--space-1);   /* = 4px */
+      --base-menu-item-padding-left: calc(var(--space-5) / 1.2);   /* = 20px */
+      --base-menu-item-padding-right: var(--space-2);   /* = 8px */
+      --base-menu-item-height: var(--space-5);   /* = 24px */
+      border-radius: var(--radius-3);   /* = 6px */
+
+      & :where(.rt-BaseMenuItem) {
+        font-size: var(--font-size-1);   /* = 12px */
+        line-height: var(--line-height-1);   /* = 16px */
+        letter-spacing: var(--letter-spacing-1);   /* = 0.0025em */
+        border-radius: var(--radius-1);   /* = 3px */
+      }
+
+      & :where(.rt-BaseMenuLabel) {
+        font-size: var(--font-size-1);   /* = 12px */
+        line-height: var(--line-height-1);   /* = 16px */
+        letter-spacing: var(--letter-spacing-1);   /* = 0.0025em */
+      }
+
+      & :where(.rt-BaseMenuItemIndicatorIcon, .rt-BaseMenuSubTriggerIcon) {
+        width: calc(8px * var(--scaling));   /* = 8px */
+        height: calc(8px * var(--scaling));   /* = 8px */
+      }
+
+      /* reset with :not:has so we still support browsers without :has */
+      &:where(:not(:has(.rt-BaseMenuCheckboxItem, .rt-BaseMenuRadioItem))) {
+        --base-menu-item-padding-left: var(--space-2);   /* = 8px */
+      }
+      &:where(:has(.rt-BaseMenuCheckboxItem, .rt-BaseMenuRadioItem)) {
+        --base-menu-item-padding-left: calc(var(--space-5) / 1.2);   /* = 20px */
+      }
+    }
+
+    &:where(.rt-r-size-2) {
+      --base-menu-content-padding: var(--space-2);   /* = 8px */
+      --base-menu-item-padding-left: var(--space-3);   /* = 12px */
+      --base-menu-item-padding-right: var(--space-3);   /* = 12px */
+      --base-menu-item-height: var(--space-6);   /* = 32px */
+      border-radius: var(--radius-4);   /* = 8px */
+
+      & :where(.rt-BaseMenuItem) {
+        font-size: var(--font-size-2);   /* = 14px */
+        line-height: var(--line-height-2);   /* = 20px */
+        letter-spacing: var(--letter-spacing-2);   /* = 0em */
+        border-radius: var(--radius-2);   /* = 4px */
+      }
+
+      & :where(.rt-BaseMenuLabel) {
+        font-size: var(--font-size-2);   /* = 14px */
+        line-height: var(--line-height-2);   /* = 20px */
+        letter-spacing: var(--letter-spacing-2);   /* = 0em */
+      }
+
+      & :where(.rt-BaseMenuItemIndicatorIcon, .rt-BaseMenuSubTriggerIcon) {
+        width: calc(10px * var(--scaling));   /* = 10px */
+        height: calc(10px * var(--scaling));   /* = 10px */
+      }
+
+      /* reset with :not:has so we still support browsers without :has */
+      &:where(:not(:has(.rt-BaseMenuCheckboxItem, .rt-BaseMenuRadioItem))) {
+        --base-menu-item-padding-left: var(--space-3);   /* = 12px */
+      }
+      &:where(:has(.rt-BaseMenuCheckboxItem, .rt-BaseMenuRadioItem)) {
+        --base-menu-item-padding-left: var(--space-5);   /* = 24px */
+      }
+    }
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * VARIANTS                                                                                        *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+.rt-BaseMenuContent {
+  --base-menu-bg: var(--color-panel-solid);   /* = white */
+  box-shadow: var(--shadow-5);   /* = 0 0 0 1px var(--mauve-a3),
+    0 12px 60px var(--black-a3),
+    0 12px 32px -16px var(--mauve-a5) */
+}
+.rt-BaseMenuItem:where([data-accent-color]) {
+  color: var(--accent-a11);   /* = var(--amber-a11) */
+}
+.rt-BaseMenuItem:where([data-disabled]) {
+  color: var(--gray-a8);   /* = var(--mauve-a8) */
+}
+.rt-BaseMenuShortcut {
+  color: var(--gray-a11);   /* = var(--mauve-a11) */
+}
+.rt-BaseMenuItem:where([data-disabled], [data-highlighted]),
+.rt-BaseMenuSubTrigger:where([data-state='open']) {
+  & :where(.rt-BaseMenuShortcut) {
+    color: inherit;
+  }
+}
+.rt-BaseMenuSeparator {
+  background-color: var(--gray-a6);   /* = var(--mauve-a6) */
+}
+
+/* solid */
+
+.rt-BaseMenuContent:where(.rt-variant-solid) {
+  & :where(.rt-BaseMenuSubTrigger[data-state='open']) {
+    background-color: var(--gray-a3);   /* = var(--mauve-a3) */
+  }
+  & :where(.rt-BaseMenuItem[data-highlighted]) {
+    background-color: var(--accent-9);   /* = var(--amber-9) */
+    color: var(--accent-contrast);   /* = var(--amber-contrast) */
+
+    & :where(.rt-BaseMenuSubTriggerIcon) {
+      color: var(--accent-contrast);   /* = var(--amber-contrast) */
+    }
+  }
+  &:where(.rt-high-contrast) {
+    & :where(.rt-BaseMenuItem[data-highlighted]) {
+      background-color: var(--accent-12);   /* = var(--amber-12) */
+      color: var(--accent-1);   /* = var(--amber-1) */
+
+      & :where(.rt-BaseMenuSubTriggerIcon) {
+        color: var(--accent-1);   /* = var(--amber-1) */
+      }
+
+      &:where([data-accent-color]) {
+        background-color: var(--accent-9);   /* = var(--amber-9) */
+        color: var(--accent-contrast);   /* = var(--amber-contrast) */
+      }
+    }
+  }
+}
+
+/* soft */
+
+.rt-BaseMenuContent:where(.rt-variant-soft) {
+  & :where(.rt-BaseMenuSubTrigger[data-state='open']) {
+    background-color: var(--accent-a3);   /* = var(--amber-a3) */
+  }
+  & :where(.rt-BaseMenuItem[data-highlighted]) {
+    background-color: var(--accent-a4);   /* = var(--amber-a4) */
+  }
+}

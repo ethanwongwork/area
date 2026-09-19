@@ -1,0 +1,104 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/fluid-list-box/_fluid-list-box.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21 @mixin fluid-list-box {
+L22 .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper {
+L25   block-size: 100%;
+L32 .#{$prefix}--list-box--warning {
+L36 &:has(.#{$prefix}--list-box--warning) {
+L37   border: 1px solid transparent;
+L39   linear-gradient($field, $field) padding-box,
+L48 .#{$prefix}--list-box {
+L49   border: none;
+L50   min-block-size: convert.to-rem(62px);
+L52 .#{$prefix}--label {
+L53   inline-size: calc(100% - 2rem + 2px);
+L54   inset-block-start: convert.to-rem(12px);
+L55   inset-inline-start: calc(#{$spacing-05} - 1px);   // spacing-05=16px
+L58 &:focus-within {
+L59 .#{$prefix}--list-box {
+L72   border-radius: $border-radius-04;
+L77 .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box {
+L78   padding: 0;
+L79   min-block-size: convert.to-rem(64px);
+L82 .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--label {
+L87   margin: 0;
+L88   block-size: convert.to-rem(16px);
+L89   inline-size: calc(100% - 2rem);
+L90   inset-block-start: convert.to-rem(13px);
+L91   inset-inline-start: $spacing-05;   // spacing-05=16px
+L97 .#{$prefix}--toggletip-label::-webkit-scrollbar {
+L105 .#{$prefix}--toggletip-label {
+L108   scrollbar-width: none;
+L112 .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__field {
+L113   padding-block: convert.to-rem(33px) convert.to-rem(13px);
+L114   padding-inline-start: $spacing-05;   // spacing-05=16px
+L117 .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__menu-icon {
+L118   block-size: 1rem;
+L119   inline-size: 1rem;
+L125 .#{$prefix}--list-box__menu-item {
+L126   block-size: $spacing-10;   // spacing-10=64px
+L132 .#{$prefix}--list-box__menu-item__selected-icon {
+L133   inset-block-start: convert.to-rem(20px);
+L139 .#{$prefix}--toggletip-label {
+L145 .#{$prefix}--toggletip-button {
+L158 .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--focus {
+L168   outline-width: convert.to-rem(1px);
+L172 .#{$prefix}--list-box__field:focus {
+L185 &:not(:has(.#{$prefix}--list-box__wrapper--fluid-invalid)) {
+L202 .#{$prefix}--text-input {
+L213 .#{$prefix}--text-input {
+L218 .#{$prefix}--list-box__wrapper--fluid.#{$prefix}--list-box__wrapper--fluid--invalid:focus-within {
+L220 &:not(:has(.#{$prefix}--list-box__wrapper--fluid-invalid)) {
+L229 .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box--warning {
+L239   padding: convert.to-rem(8px) 4rem convert.to-rem(8px) $spacing-05;   // spacing-05=16px
+L240   margin-block-start: 0;
+L243   border-radius: $border-radius-04;
+L260   block-size: convert.to-rem(32px);
+L268 .#{$prefix}--list-box__invalid-icon {
+L269   inset-block-start: convert.to-rem(81px);
+L270   inset-inline-end: $spacing-05;   // spacing-05=16px
+L276 .#{$prefix}--list-box__field {
+L277   padding-inline-end: $spacing-09;   // spacing-09=48px
+L282 .#{$prefix}--text-input {
+L283   padding-inline-end: $spacing-10;   // spacing-10=64px
+L287 .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__divider {
+L299   border: none;
+L300   margin: 0 1rem;
+L315 .#{$prefix}--list-box__menu {
+L316   inset-block-end: $spacing-10;   // spacing-10=64px
+L320 .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--skeleton {
+L322   border: 1px solid transparent;
+L323   border-radius: $border-radius-04;
+L325   linear-gradient($skeleton-background, $skeleton-background) padding-box,
+L340 .#{$prefix}--list-box__field {
+L344   padding: 0;
+L345   block-size: convert.to-rem(8px);
+L346   inline-size: 50%;
+L347   inset-block-start: convert.to-rem(36px);
+L348   inset-inline-start: $spacing-05;   // spacing-05=16px
+L353 .#{$prefix}--list-box__label {
+L357   block-size: convert.to-rem(8px);
+L358   inline-size: 25%;
+L359   inset-block-start: $spacing-05;   // spacing-05=16px
+L360   inset-inline-start: $spacing-05;   // spacing-05=16px
+L370 .#{$prefix}--slug {
+L371   inset-block-start: convert.to-rem(42px);
+L399 .#{$prefix}--slug {
+L400   inset-inline-end: $spacing-08;   // spacing-08=40px
+L415   padding-inline-end: $spacing-10;   // spacing-10=64px
+L429 .#{$prefix}--text-input:not(.#{$prefix}--text-input--empty) {
+L430   padding-inline-end: convert.to-rem(88px);
+L483   inset-inline-end: $spacing-10;   // spacing-10=64px
+L489 .#{$prefix}--text-input:not(.#{$prefix}--text-input--empty) {
+L490   padding-inline-end: $spacing-12;   // spacing-12=96px
+L493 .#{$prefix}--list-box__wrapper--fluid .#{$prefix}--list-box__selection {
+L494   inset-inline-end: convert.to-rem(41px);
+L499 .#{$prefix}--list-box--invalid[data-invalid] {
+L501 .#{$prefix}--list-box__selection::before {
+L504   block-size: convert.to-rem(16px);
+L506   inline-size: convert.to-rem(1px);
+L507   margin-inline-end: convert.to-rem(33px);
+L512 .#{$prefix}--list-box__menu-icon {
+L513   inset-inline-end: $spacing-04;   // spacing-04=12px
+L517 .#{$prefix}--list-box__menu-icon {
+L518   inset-inline-end: $spacing-05;   // spacing-05=16px
+L541 .#{$prefix}--slug::before {

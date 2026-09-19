@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu-grid-preview/library/src/components/MenuGridCell/useMenuGridCellStyles.styles.ts
+L11 const useRootStyles = makeStyles({
+L12 root: {
+L17 minHeight: '24px', // To match small button size
+L19 visuallyHidden: {

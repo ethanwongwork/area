@@ -1,0 +1,8 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-teaching-popover/library/src/components/TeachingPopoverCarouselFooter/useTeachingPopoverCarouselFooterStyles.styles.ts
+L17 const useStyles = makeStyles({
+L18 root: {
+L22 rootCentered: {
+L24 gap: '8px',
+L26 rootRightAligned: {
+L27 gap: '8px',
+L29 marginInlineEnd: 'auto',

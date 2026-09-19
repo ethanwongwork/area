@@ -1,0 +1,77 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/fluid-text-input/_fluid-text-input.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21 @mixin fluid-text-input {
+L22 .#{$prefix}--text-input--fluid.#{$prefix}--text-input-wrapper {
+L24   block-size: 100%;
+L34 .#{$prefix}--text-input--fluid .#{$prefix}--label {
+L39   margin: 0;
+L40   block-size: convert.to-rem(16px);
+L41   inset-block-start: convert.to-rem(13px);
+L44 &:not(.#{$prefix}--text-input__label-counter) {
+L45   inline-size: auto;
+L46   inset-inline-end: auto;
+L47   inset-inline-start: $spacing-05;   // spacing-05=16px
+L51 &.#{$prefix}--text-input__label-counter {
+L52   inline-size: auto;
+L53   inset-inline-end: $spacing-05;   // spacing-05=16px
+L54   inset-inline-start: auto;
+L59 .#{$prefix}--text-input {
+L66 .#{$prefix}--toggletip-label::-webkit-scrollbar {
+L74 .#{$prefix}--toggletip-label {
+L77   scrollbar-width: none;
+L81 .#{$prefix}--text-input--fluid .#{$prefix}--form__helper-text {
+L85 .#{$prefix}--text-input--fluid .#{$prefix}--text-input {
+L86   padding: convert.to-rem(32px) $spacing-05 convert.to-rem(13px);   // spacing-05=16px
+L87   min-block-size: convert.to-rem(64px);
+L91 .#{$prefix}--text-input--fluid .#{$prefix}--text-input__divider {
+L98 .#{$prefix}--text-input__field-wrapper--warning {
+L102   border-radius: $border-radius-04;
+L105 .#{$prefix}--text-input {
+L106   border: none;
+L107   border-radius: $border-radius-00;
+L113 .#{$prefix}--text-input--fluid input[data-invalid] {
+L117 .#{$prefix}--text-input--fluid .#{$prefix}--form-requirement {
+L118   padding: $spacing-03 convert.to-rem(40px) $spacing-03 $spacing-05;   // spacing-03=8px spacing-03=8px spacing-05=16px
+L119   margin: 0;
+L123 .#{$prefix}--text-input--fluid .#{$prefix}--text-input--warning {
+L134   border-style: solid;
+L136   margin: 0 1rem;
+L140 .#{$prefix}--text-input--fluid .#{$prefix}--text-input__invalid-icon {
+L141   inset-block-start: convert.to-rem(80px);
+L154 .#{$prefix}--text-input__field-wrapper--warning {
+L159 .#{$prefix}--text-input__field-wrapper[data-invalid]:not(:focus) {
+L166 .#{$prefix}--text-input__field-wrapper--warning:focus-within {
+L181 .#{$prefix}--text-input.#{$prefix}--password-input {
+L182   padding-inline-end: $spacing-08;   // spacing-08=40px
+L186 .#{$prefix}--text-input__invalid-icon {
+L187   inset-inline-end: $spacing-05;   // spacing-05=16px
+L190 .#{$prefix}--text-input--fluid .#{$prefix}--toggle-password-tooltip {
+L194   block-size: convert.to-rem(64px);
+L196   inline-size: convert.to-rem(48px);
+L197   inset-block-start: 0;
+L198   inset-inline-end: 0;
+L203 .#{$prefix}--btn.#{$prefix}--text-input--password__visibility__toggle.#{$prefix}--tooltip__trigger {
+L204   block-size: convert.to-rem(32px);
+L205   inline-size: convert.to-rem(32px);
+L206   inset-block-start: convert.to-rem(26px);
+L207   inset-inline-end: $spacing-03;   // spacing-03=8px
+L211 .#{$prefix}--text-input--fluid__skeleton {
+L213   block-size: convert.to-rem(64px);
+L216   border: 1px solid transparent;
+L217   border-radius: $border-radius-04;
+L219   linear-gradient($skeleton-background, $skeleton-background) padding-box,
+L232 .#{$prefix}--text-input--fluid__skeleton .#{$prefix}--skeleton {
+L234   block-size: convert.to-rem(8px);
+L235   inline-size: 25%;
+L236   inset-block-start: $spacing-05;   // spacing-05=16px
+L237   inset-inline-start: $spacing-05;   // spacing-05=16px
+L240 .#{$prefix}--text-input--fluid__skeleton .#{$prefix}--label {
+L242   padding: 0;
+L243   block-size: convert.to-rem(8px);
+L244   inline-size: 50%;
+L245   inset-block-start: convert.to-rem(36px);
+L246   inset-inline-start: $spacing-05;   // spacing-05=16px
+L259 .#{$prefix}--slug {
+L260   inset-block-start: convert.to-rem(42px);
+L283   inset-inline-end: $spacing-05;   // spacing-05=16px
+L303 .#{$prefix}--text-input--warning {
+L304   padding-inline-end: $spacing-08;   // spacing-08=40px

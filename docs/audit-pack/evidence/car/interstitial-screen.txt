@@ -1,0 +1,67 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/interstitial-screen/_interstitial-screen.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L19 @mixin interstitial-screen {
+L23 .#{$block-class} {
+L26 &--body {
+L29   padding: 0;
+L30   margin: 0;
+L34 &--progress {
+L36   margin-block-end: $spacing-04;   // spacing-04=12px
+L39 &__carousel {
+L40   block-size: 100%;
+L42 .#{$carousel-item} {
+L48 &--internal-body {
+L49   padding: 0 !important;
+L50   margin: 0 !important;
+L53 &--content {
+L54   block-size: 100%;
+L58 &--internal-header {
+L61   margin-block-end: 0 !important;
+L62   padding-block-start: $spacing-06 !important;   // spacing-06=24px
+L63   padding-inline-start: $spacing-07 !important;   // spacing-07=32px
+L65 @include breakpoint-down(md) {
+L66   padding-inline: $spacing-05 !important;   // spacing-05=16px
+L69 &:empty {
+L70   min-block-size: 0;
+L73 .#{$block-class}--titleContainer {
+L74   margin-block-end: $spacing-05;   // spacing-05=16px
+L77   @include type-style('productive-heading-04');
+L79   margin-block-end: $spacing-03;   // spacing-03=8px
+L81 &:empty {
+L82   padding: 0;
+L87   @include type-style('productive-heading-03');
+L89 &:empty {
+L90   padding: 0;
+L95 &--has-title {
+L99 #{$block}--progress {
+L100   margin-block-start: 0;
+L106 &--footer {
+L109   inline-size: 100%;
+L111 @include breakpoint-down(md) {
+L112   block-size: auto;
+L116 .#{$prefix}--btn-set {
+L119   inline-size: 100%;
+L123 @include breakpoint-down(md) {
+L127 .#{$prefix}--btn#{$block}--skip-btn {
+L129   inline-size: auto;
+L130   max-inline-size: none;
+L131   min-inline-size: 0;
+L136 @include breakpoint(md) {
+L139 .#{$prefix}--btn#{$block}--start-btn {
+L141   inline-size: calc($spacing-11 * 3);   // spacing-11=80px
+L142   max-inline-size: 15rem;
+L145 .#{$prefix}--btn#{$block}--skip-btn {
+L147   max-inline-size: none;
+L151 .#{$prefix}--inline-loading {
+L153   inline-size: $spacing-07;   // spacing-07=32px
+L154   inset-block-start: 0;
+L155   inset-inline-end: 0;
+L159 &--footer-controls {
+L162   margin-inline-start: auto;
+L166 &--full-screen {
+L168   inset-block-start: 0;
+L169   inset-inline: 0;
+L171 #{$block}--container {
+L174   padding: 0;
+L175   margin: 0;
+L176   block-size: 100vh;
+L177   max-inline-size: 100vw;

@@ -1,0 +1,80 @@
+### Primer React @ e4e6eba  packages/react/src/Label/Label.module.css
+:where(.Label) {
+  display: inline-flex;
+  font-size: var(--text-body-size-small);   /* = 12px */
+  font-weight: var(--base-text-weight-medium);   /* = 500 */
+  /* stylelint-disable-next-line primer/typography */
+  line-height: 1;
+  color: var(--fgColor-default);
+  white-space: nowrap;
+  background-color: transparent;
+  border-style: solid;
+  border-width: var(--borderWidth-thin);   /* = 1px */
+  border-radius: var(--borderRadius-full);   /* = 9999px */
+  align-items: center;
+
+  &:where([data-size='small']) {
+    height: var(--base-size-20);   /* = 20px */
+    padding: 0 var(--base-size-6);   /* = 0 6px */
+  }
+
+  &:where([data-size='large']) {
+    height: var(--base-size-24);   /* = 24px */
+    padding: 0 var(--base-size-8);   /* = 0 8px */
+  }
+
+  &:where([data-variant='default']) {
+    border-color: var(--borderColor-default);
+  }
+
+  &:where([data-variant='primary']) {
+    /* stylelint-disable-next-line primer/colors */
+    border-color: var(--fgColor-default);
+  }
+
+  &:where([data-variant='secondary']) {
+    color: var(--fgColor-muted);
+    border-color: var(--borderColor-muted);
+  }
+
+  &:where([data-variant='accent']) {
+    color: var(--fgColor-accent);
+    /* stylelint-disable-next-line primer/colors */
+    border-color: var(--bgColor-accent-emphasis);
+  }
+
+  &:where([data-variant='success']) {
+    color: var(--fgColor-success);
+    /* stylelint-disable-next-line primer/colors */
+    border-color: var(--bgColor-success-emphasis);
+  }
+
+  &:where([data-variant='attention']) {
+    color: var(--fgColor-attention);
+    /* stylelint-disable-next-line primer/colors */
+    border-color: var(--bgColor-attention-emphasis);
+  }
+
+  &:where([data-variant='severe']) {
+    color: var(--fgColor-severe);
+    /* stylelint-disable-next-line primer/colors */
+    border-color: var(--bgColor-severe-emphasis);
+  }
+
+  &:where([data-variant='danger']) {
+    color: var(--fgColor-danger);
+    border-color: var(--borderColor-danger-emphasis);
+  }
+
+  &:where([data-variant='done']) {
+    color: var(--fgColor-done);
+    /* stylelint-disable-next-line primer/colors */
+    border-color: var(--bgColor-done-emphasis);
+  }
+
+  &:where([data-variant='sponsors']) {
+    color: var(--fgColor-sponsors);
+    /* stylelint-disable-next-line primer/colors */
+    border-color: var(--bgColor-sponsors-emphasis);
+  }
+}

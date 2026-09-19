@@ -1,0 +1,32 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/combobox.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot combobox-value]
+  [slot combobox-trigger]
+  L30 [&_svg:not([class*='size-'])]:size-4=16px
+  [slot combobox-trigger-icon]
+  L36 size-4=16px
+  [slot combobox-clear]
+  [slot input-group-button]
+  [slot combobox-content]
+  L119 max-h-96=384px min-w-[calc(var(--anchor-width)+--spacing(7))] rounded-md=8px ring-1=1px *:data-[slot=input-group]:m-1=4px *:data-[slot=input-group]:mb-0=0px *:data-[slot=input-group]:h-8=32px
+  [slot combobox-list]
+  L134 max-h-[min(calc(--spacing(96)---spacing(9)),calc(var(--available-height)---spacing(9)))] p-1=4px data-empty:p-0=0px
+  [slot combobox-item]
+  L151 gap-2=8px rounded-sm=6px py-1.5=6px pr-8=32px pl-2=8px text-sm=14/20px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  [slot combobox-item-indicator]
+  L160 right-2=8px size-4=16px
+  L163 size-4=16px pointer-coarse:size-5=20px
+  [slot combobox-group]
+  [slot combobox-label]
+  L187 px-2=8px py-1.5=6px text-xs=12/16px pointer-coarse:px-3=12px pointer-coarse:py-2=8px pointer-coarse:text-sm=14/20px
+  [slot combobox-collection]
+  [slot combobox-empty]
+  L206 py-2=8px text-sm=14/20px
+  [slot combobox-separator]
+  L221 -mx-1=4px my-1=4px h-px=1px
+  [slot combobox-chips]
+  L236 min-h-9=36px gap-1.5=6px rounded-md=8px border=1px px-2.5=10px py-1.5=6px text-sm=14/20px focus-within:ring-[3px] has-aria-invalid:ring-[3px] has-data-[slot=combobox-chip]:px-1.5=6px
+  [slot combobox-chip]
+  L256 h-[calc(--spacing(5.5))] gap-1=4px rounded-sm=6px px-1.5=6px text-xs=12/16px font-medium has-data-[slot=combobox-chip-remove]:pr-0=0px
+  [slot combobox-chip-remove]
+  [slot combobox-chip-input]
+  L283 min-w-16=64px

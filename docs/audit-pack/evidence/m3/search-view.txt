@@ -1,0 +1,20 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-search-view.scss
+contained-docked-bar-results-gap: 2px
+contained-full-screen-bar-container-height: 56px
+contained-icon-label-gap: 4px
+contained-leading-margin: 12px
+contained-trailing-margin: 12px
+docked-header-container-height: 56px
+full-screen-header-container-height: 72px
+leading-icon-leading-icon-label-space: 16px
+leading-space: 16px
+trailing-icon-label-trailing-icon-space: 16px
+trailing-space: 16px
+contained-docked-bar-shape: corner-full = 9999px
+contained-docked-results-shape: corner-medium = 12px
+docked-container-shape: corner-extra-large = 28px
+full-screen-container-shape: corner-none = 0px
+header-input-text-line-height: body-large-line-height = 24px
+header-input-text-size: body-large-size = 16px
+header-supporting-text-line-height: body-large-line-height = 24px
+header-supporting-text-size: body-large-size = 16px

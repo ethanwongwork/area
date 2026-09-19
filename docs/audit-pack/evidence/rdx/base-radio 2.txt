@@ -1,0 +1,179 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/_internal/base-radio.css
+.rt-BaseRadioRoot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: top;
+  flex-shrink: 0;
+  cursor: var(--cursor-radio);   /* = default */
+
+  /* Unless in a skeleton, align with text line height when possible and fall back to own height */
+  height: var(--skeleton-height, var(--line-height, var(--radio-size)));   /* = 14px */
+  --skeleton-height-override: var(--radio-size);   /* = 14px */
+
+  /* Set root radius when in a skeleton */
+  border-radius: var(--skeleton-radius);
+  --skeleton-radius-override: 100%;
+
+  &:where(:disabled, [data-disabled]) {
+    cursor: var(--cursor-disabled);   /* = not-allowed */
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    height: var(--radio-size);   /* = 14px */
+    width: var(--radio-size);   /* = 14px */
+    border-radius: 100%;
+  }
+
+  &::after {
+    pointer-events: none;
+    position: absolute;
+    height: var(--radio-size);   /* = 14px */
+    width: var(--radio-size);   /* = 14px */
+    border-radius: 100%;
+    /* Scale via transform to achieve perfect sub-pixel positioning */
+    transform: scale(0.4);
+  }
+
+  &:where(:checked, [data-state='checked']) {
+    &::after {
+      content: '';
+    }
+  }
+
+  &:where(:focus-visible)::before {
+    outline: 2px solid var(--focus-8);   /* = 2px solid var(--amber-8) */
+    outline-offset: 2px;
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * SIZES                                                                                           *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+@breakpoints {
+  .rt-BaseRadioRoot {
+    &:where(.rt-r-size-1) {
+      --radio-size: calc(var(--space-4) * 0.875);   /* = 14px */
+    }
+    &:where(.rt-r-size-2) {
+      --radio-size: var(--space-4);   /* = 16px */
+    }
+    &:where(.rt-r-size-3) {
+      --radio-size: calc(var(--space-4) * 1.25);   /* = 20px */
+    }
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * VARIANTS                                                                                        *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+/* surface */
+
+.rt-BaseRadioRoot:where(.rt-variant-surface) {
+  &:where(:not(:checked), [data-state='unchecked'])::before {
+    background-color: var(--color-surface);   /* = rgba(255, 255, 255, 0.85) */
+    box-shadow: inset 0 0 0 1px var(--gray-a7);   /* = inset 0 0 0 1px var(--mauve-a7) */
+  }
+  &:where(:checked, [data-state='checked'])::before {
+    background-color: var(--accent-indicator);   /* = var(--amber-indicator) */
+  }
+  &::after {
+    background-color: var(--accent-contrast);   /* = var(--amber-contrast) */
+  }
+
+  &:where(.rt-high-contrast) {
+    &:where(:checked, [data-state='checked'])::before {
+      background-color: var(--accent-12);   /* = var(--amber-12) */
+    }
+    &::after {
+      background-color: var(--accent-1);   /* = var(--amber-1) */
+    }
+  }
+
+  &:where(:disabled, [data-disabled])::before {
+    box-shadow: inset 0 0 0 1px var(--gray-a6);   /* = inset 0 0 0 1px var(--mauve-a6) */
+    background-color: var(--gray-a3);   /* = var(--mauve-a3) */
+  }
+  &:where(:disabled, [data-disabled])::after {
+    background-color: var(--gray-a8);   /* = var(--mauve-a8) */
+  }
+}
+
+/* classic */
+
+.rt-BaseRadioRoot:where(.rt-variant-classic) {
+  &:where(:not(:checked), [data-state='unchecked'])::before {
+    background-color: var(--color-surface);   /* = rgba(255, 255, 255, 0.85) */
+    box-shadow:
+      inset 0 0 0 1px var(--gray-7),
+      var(--shadow-1);
+  }
+  &:where(:checked, [data-state='checked'])::before {
+    background-color: var(--accent-indicator);   /* = var(--amber-indicator) */
+    background-image: linear-gradient(to bottom, var(--white-a3), transparent, var(--black-a3));
+    box-shadow:
+      inset 0 0.5px 0.5px var(--white-a4),
+      inset 0 -0.5px 0.5px var(--black-a4);
+  }
+  &::after {
+    background-color: var(--accent-contrast);   /* = var(--amber-contrast) */
+  }
+
+  &:where(.rt-high-contrast) {
+    &:where(:checked, [data-state='checked'])::before {
+      background-color: var(--accent-12);   /* = var(--amber-12) */
+    }
+    &::after {
+      background-color: var(--accent-1);   /* = var(--amber-1) */
+    }
+  }
+
+  &:where(:disabled, [data-disabled])::before {
+    box-shadow: var(--shadow-1);   /* = inset 0 0 0 1px var(--mauve-a5),
+    inset 0 1.5px 2px 0 var(--mauve-a2),
+    inset 0 1.5px 2px 0 var(--black-a2) */
+    background-color: var(--gray-a3);   /* = var(--mauve-a3) */
+    background-image: none;
+  }
+  &:where(:disabled, [data-disabled])::after {
+    background-color: var(--gray-a8);   /* = var(--mauve-a8) */
+  }
+}
+
+/* soft */
+
+.rt-BaseRadioRoot:where(.rt-variant-soft) {
+  &::before {
+    background-color: var(--accent-a4);   /* = var(--amber-a4) */
+  }
+  &::after {
+    background-color: var(--accent-a11);   /* = var(--amber-a11) */
+  }
+
+  &:where(.rt-high-contrast) {
+    &::after {
+      background-color: var(--accent-12);   /* = var(--amber-12) */
+    }
+  }
+
+  &:where(:focus-visible)::before {
+    /* Use gray outline when component color is gray */
+    outline-color: var(--accent-a8);   /* = var(--amber-a8) */
+  }
+
+  &:where(:disabled, [data-disabled])::before {
+    background-color: var(--gray-a3);   /* = var(--mauve-a3) */
+  }
+  &:where(:disabled, [data-disabled])::after {
+    background-color: var(--gray-a8);   /* = var(--mauve-a8) */
+  }
+}

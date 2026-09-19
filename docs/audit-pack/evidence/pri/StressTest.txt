@@ -1,0 +1,71 @@
+### Primer React @ e4e6eba  packages/react/src/utils/StressTest.module.css
+.Root {
+  display: flex;
+  margin-top: var(--base-size-16);   /* = 16px */
+  margin-right: var(--base-size-32);   /* = 32px */
+  margin-bottom: var(--base-size-16);   /* = 16px */
+  margin-left: var(--base-size-32);   /* = 32px */
+  flex-direction: column;
+}
+
+.Header {
+  display: flex;
+  padding: var(--base-size-16) var(--base-size-24);   /* = 16px 24px */
+  flex-direction: row;
+  background-color: var(--bgColor-muted);
+  border: var(--borderWidth-thin) solid var(--borderColor-default);   /* = 1px solid var(--borderColor-default) */
+  border-top-left-radius: var(--borderRadius-medium);   /* = 6px */
+  border-top-right-radius: var(--borderRadius-medium);   /* = 6px */
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--base-size-4);   /* = 4px */
+}
+
+.HeaderRow {
+  display: flex;
+  flex-direction: row;
+  gap: var(--base-size-6);   /* = 6px */
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.HeaderColumn {
+  display: flex;
+  gap: var(--base-size-4);   /* = 4px */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.Container {
+  display: flex;
+  max-height: 300px;
+  padding: var(--base-size-16);   /* = 16px */
+  overflow: auto;
+  border: var(--borderWidth-thin) solid var(--borderColor-default);   /* = 1px solid var(--borderColor-default) */
+  border: var(--borderWidth-thin) solid var(--borderColor-muted);   /* = 1px solid var(--borderColor-muted) */
+  border-top: none;
+  flex: 1;
+}
+
+.Footer {
+  display: flex;
+  padding: var(--base-size-12) var(--base-size-24);   /* = 12px 24px */
+  flex-direction: row;
+  border: var(--borderWidth-thin) solid var(--borderColor-default);   /* = 1px solid var(--borderColor-default) */
+  border-top: none;
+  border-bottom-right-radius: var(--borderRadius-medium);   /* = 6px */
+  border-bottom-left-radius: var(--borderRadius-medium);   /* = 6px */
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.Box {
+  flex: 1;
+  display: flex;
+  min-height: min-content;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: var(--base-size-8);   /* = 8px */
+}

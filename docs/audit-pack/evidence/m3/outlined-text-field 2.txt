@@ -1,0 +1,18 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-outlined-text-field.scss
+container-height: 56px
+disabled-outline-width: 1px
+focus-outline-width: 3px
+hover-outline-width: 1px
+leading-icon-size: 24px
+outline-width: 1px
+trailing-icon-size: 24px
+container-shape: corner-extra-small = 4px
+focus-indicator-outline-thickness: md-sys-state-focus-indicator.$thickness
+input-text-line-height: body-large-line-height = 24px
+input-text-size: body-large-size = 16px
+label-text-line-height: body-large-line-height = 24px
+label-text-populated-line-height: body-small-line-height = 16px
+label-text-populated-size: body-small-size = 12px
+label-text-size: body-large-size = 16px
+supporting-text-line-height: body-small-line-height = 16px
+supporting-text-size: body-small-size = 12px

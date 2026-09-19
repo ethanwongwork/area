@@ -1,0 +1,37 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-color-picker/library/src/components/ColorArea/useColorAreaStyles.styles.ts
+L18 const thumbSizeVar = `--fui-Slider__thumb--size`;
+L23 const useRootStyles = makeResetStyles({
+L25 border: `1px solid ${tokens.colorNeutralStroke1}`,
+L32 [thumbSizeVar]: '20px',
+L33 minWidth: '300px',
+L34 minHeight: '300px',
+L36 marginBottom: tokens.spacingVerticalSNudge,   // spacingVerticalSNudge=6px
+L42 const useThumbStyles = makeStyles({
+L43 thumb: {
+L45 width: `var(${thumbSizeVar})`,
+L46 height: `var(${thumbSizeVar})`,
+L50 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L51 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralForeground4}`,   // strokeWidthThin=1px
+L55 left: `var(${colorAreaCSSVars.areaXProgressVar})`,
+L56 bottom: `var(${colorAreaCSSVars.areaYProgressVar})`,
+L59 inset: '0px',
+L60 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L63 border: `${tokens.strokeWidthThick} solid ${tokens.colorNeutralBackground1}`,   // strokeWidthThick=2px
+L68 style: {
+L69 outlineWidth: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L70 ...shorthands.borderWidth(tokens.strokeWidthThick),   // strokeWidthThick=2px
+L71 outlineRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L79 const useInputStyles = makeStyles({
+L80 input: {
+L84 top: 0,
+L85 left: 0,
+L86 opacity: 0,
+L87 padding: '0',
+L88 margin: '0',
+L89 width: '100%',
+L90 height: '100%',
+L94 const useShapeStyles = makeStyles({
+L95 rounded: {
+L96 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L98 square: {
+L99 borderRadius: tokens.borderRadiusNone,   // borderRadiusNone=0

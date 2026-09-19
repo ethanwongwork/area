@@ -1,0 +1,89 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Chip/Chip.js
+L23 const slots = {
+L42 const ChipRoot = styled('div', {
+L43 name: 'MuiChip',
+L44 slot: 'Root',
+L70   maxWidth: '100%',
+L72   fontSize: theme.typography.pxToRem(13),
+L76   height: 32,
+L77   lineHeight: 1.5,
+L80   borderRadius: 32 / 2,
+L88   border: 0, // Remove `button` border
+L89   padding: 0, // Remove `button` padding
+L97   marginLeft: 5,
+L98   marginRight: -6,
+L99   width: 24,
+L100   height: 24,
+L102   fontSize: theme.typography.pxToRem(12),
+L105   marginLeft: 5,
+L106   marginRight: -6,
+L111   fontSize: 22,
+L113   margin: '0 5px 0 -6px',
+L114 '&:hover': {
+L118 variants: [
+L120 props: {
+L123 style: {
+L131 props: {
+L134 style: {
+L142 props: { size: 'small' },
+L143 style: {
+L144   height: 24,
+L146   marginLeft: 4,
+L147   marginRight: -4,
+L148   width: 18,
+L149   height: 18,
+L150   fontSize: theme.typography.pxToRem(10),
+L153   fontSize: 18,
+L154   marginLeft: 4,
+L155   marginRight: -4,
+L158   fontSize: 16,
+L159   marginRight: 4,
+L160   marginLeft: -4,
+L168 props: { color },
+L169 style: {
+L183 style: {
+L191 style: {
+L198 props: { onDelete: true },
+L212 props: { color, onDelete: true },
+L221 props: { clickable: true },
+L222 style: {
+L226 '&:hover': {
+L240 '&:active': {
+L248 props: { color, clickable: true },
+L249 style: {
+L250 '&:hover': {
+L261 props: { variant: 'outlined' },
+L262 style: {
+L264   border: theme.vars
+L278   marginLeft: 4,
+L281   marginLeft: 4,
+L284   marginRight: 5,
+L289 props: { size: 'small', variant: 'outlined' },
+L290 style: {
+L292   marginLeft: 2,
+L295   marginLeft: 2,
+L298   marginRight: 3,
+L305 props: { variant: 'outlined', color },
+L306 style: {
+L336 const ChipLabel = styled('span', {
+L337 name: 'MuiChip',
+L338 slot: 'Label',
+L342   paddingLeft: 12,
+L343   paddingRight: 12,
+L345 variants: [
+L347 props: { variant: 'outlined' },
+L348 style: {
+L349   paddingLeft: 11,
+L350   paddingRight: 11,
+L354 props: { size: 'small' },
+L355 style: {
+L356   paddingLeft: 8,
+L357   paddingRight: 8,
+L361 props: { size: 'small', variant: 'outlined' },
+L362 style: {
+L363   paddingLeft: 7,
+L364   paddingRight: 7,
+L442 const ownerState = {
+L503 const externalForwardedProps = {
+L510 externalForwardedProps: {
+L519 additionalProps: {

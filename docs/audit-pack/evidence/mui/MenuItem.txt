@@ -1,0 +1,30 @@
+### MUI Material @ 69960c1  packages/mui-material/src/MenuItem/MenuItem.js
+L38 const slots = {
+L57 const MenuItemRoot = styled(ButtonBase, {
+L59 name: 'MuiMenuItem',
+L60 slot: 'Root',
+L70   minHeight: 48,
+L71   paddingTop: 6,
+L72   paddingBottom: 6,
+L75 '&:hover': {
+L113 : {
+L122   marginTop: theme.spacing(1),
+L123   marginBottom: theme.spacing(1),
+L126   marginLeft: 52,
+L129   marginTop: 0,
+L130   marginBottom: 0,
+L133   paddingLeft: 36,
+L136   minWidth: 36,
+L138 variants: [
+L141 style: {
+L142   paddingLeft: 16,
+L143   paddingRight: 16,
+L148 style: {
+L155 style: {
+L157   minHeight: 'auto',
+L163 style: {
+L164   minHeight: 32, // https://m2.material.io/components/menus#specs > Dense
+L165   paddingTop: 4,
+L166   paddingBottom: 4,
+L169   fontSize: '1.25rem',
+L228 const ownerState = {

@@ -1,0 +1,87 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/radio-button/_radio-button.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L28   $radio-border-width: 1px !default;
+L33 @mixin radio-button {
+L34 .#{$prefix}--radio-button-group {
+L43 .#{$prefix}--label + .#{$prefix}--form-item .#{$prefix}--radio-button-group {
+L44   margin-block-start: 0;
+L48 .#{$prefix}--radio-button-group--vertical {
+L52 &.#{$prefix}--radio-button-group--label-left {
+L56 .#{$prefix}--radio-button__label {
+L57   margin-inline-end: 0;
+L60 .#{$prefix}--radio-button__label:not(:last-of-type) {
+L61   margin-block-end: $spacing-03;   // spacing-03=8px
+L65 .#{$prefix}--radio-button {
+L68   margin-block-start: 0.9rem;
+L69   margin-inline-start: 0.63rem;
+L73 .#{$prefix}--radio-button__label {
+L77   margin-inline-end: $spacing-05;   // spacing-05=16px
+L80 .#{$prefix}--radio-button__label-text {
+L81   @include type.type-style('body-compact-01');   // body-compact-01=14/18
+L86 .#{$prefix}--radio-button__appearance {
+L90   border: $radio-border-width solid $icon-primary;
+L91   border-radius: 50%;
+L93   block-size: convert.to-rem(18px);
+L94   inline-size: convert.to-rem(18px);
+L95   margin-block: convert.to-rem(1px) convert.to-rem(2px);
+L96   margin-inline: convert.to-rem(2px) convert.to-rem(10px);
+L100 .#{$prefix}--radio-button__appearance {
+L101   margin-block: 0;
+L106 .#{$prefix}--radio-button__appearance {
+L112 &::before {
+L115   border-radius: 50%;
+L117   block-size: 100%;
+L119   inline-size: 100%;
+L133 .#{$prefix}--radio-button:disabled + .#{$prefix}--radio-button__label {
+L143 .#{$prefix}--radio-button__appearance {
+L147 &::before {
+L156 .#{$prefix}--radio-button__appearance {
+L160 .#{$prefix}--radio-button-group--readonly .#{$prefix}--radio-button__label {
+L165 .#{$prefix}--radio-button__label-text {
+L174 .#{$prefix}--radio-button__appearance {
+L178 .#{$prefix}--radio-button__validation-msg {
+L181   margin-block-start: convert.to-rem(6px);
+L184 .#{$prefix}--radio-button__invalid-icon {
+L186   margin-inline: convert.to-rem(3px) convert.to-rem(1px);
+L189 .#{$prefix}--radio-button__invalid-icon--warning {
+L193 .#{$prefix}--radio-button__invalid-icon--warning path:first-of-type {
+L209 .#{$prefix}--form-requirement {
+L212   margin-block-start: 0;
+L213   margin-inline-start: $spacing-03;   // spacing-03=8px
+L214   max-block-size: 100%;
+L219 .#{$prefix}--form-requirement {
+L223 .#{$prefix}--radio-button-group ~ .#{$prefix}--form__helper-text {
+L224   margin-block-start: convert.to-rem(6px);
+L231 .#{$prefix}--radio-button__appearance {
+L237 .#{$prefix}--radio-button__label.#{$prefix}--skeleton {
+L240   block-size: convert.to-rem(18px);
+L242   inline-size: convert.to-rem(100px);
+L246 .#{$prefix}--radio-button__appearance {
+L250 .#{$prefix}--radio-button-wrapper .#{$prefix}--radio-button__label {
+L254   margin: 0;
+L257 .#{$prefix}--radio-button-wrapper:not(:last-of-type) {
+L258   margin-inline-end: $spacing-05;   // spacing-05=16px
+L261 .#{$prefix}--radio-button-group--vertical .#{$prefix}--radio-button-wrapper {
+L262   margin-block-end: convert.to-rem(6px);
+L263   margin-inline-end: 0;
+L268 .#{$prefix}--radio-button__label {
+L269   padding-block-start: convert.to-rem(2px);
+L274 .#{$prefix}--radio-button__label {
+L280 .#{$prefix}--radio-button__label {
+L287 .#{$prefix}--radio-button__appearance {
+L288   margin-inline: $spacing-03 0;   // spacing-03=8px
+L293 .#{$prefix}--radio-button-group--slug {
+L298 .#{$prefix}--radio-button-group--slug::after {
+L305 .#{$prefix}--radio-button-wrapper--slug {
+L312 .#{$prefix}--radio-button-wrapper--slug .#{$prefix}--radio-button__label {
+L313   margin-inline-end: 0;
+L317 .#{$prefix}--radio-button-group--slug legend.#{$prefix}--label {
+L324 .#{$prefix}--radio-button-group--slug > .#{$prefix}--slug {
+L363 .#{$prefix}--radio-button-group--slug > .#{$prefix}--slug {
+L376 .#{$prefix}--radio-button-wrapper--slug > .#{$prefix}--slug {
+L377   margin-inline-start: $spacing-03;   // spacing-03=8px
+L383 .#{$prefix}--radio-button-wrapper--slug > .#{$prefix}--slug {
+L384   margin-inline-end: $spacing-05;   // spacing-05=16px
+L391 .#{$prefix}--radio-button-wrapper--slug .#{$prefix}--slug__button--inline {
+L392   line-height: inherit;
+L393   margin-block-start: convert.to-rem(-1px);
+L400   inline-size: 100%;

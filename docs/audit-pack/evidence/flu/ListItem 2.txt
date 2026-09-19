@@ -1,0 +1,13 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-list/library/src/components/ListItem/useListItemStyles.styles.ts
+L14 const useRootBaseStyles = makeResetStyles({
+L15 padding: 0,
+L16 margin: 0,
+L17 textIndent: 0,
+L21 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L22 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L28 const useCheckmarkBaseStyles = makeStyles({
+L29 root: {
+L32 '& .fui-Checkbox__indicator': { margin: '4px' },
+L38 const useStyles = makeStyles({
+L39 rootClickableOrSelectable: {
+L44 disabled: {

@@ -1,0 +1,90 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-select/library/src/components/Select/useSelectStyles.styles.ts
+L4 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L15 small: '16px',
+L16 medium: '20px',
+L17 large: '24px',
+L20 //TODO: Should fieldHeights be a set of global design tokens or constants?
+L21 const fieldHeights = {
+L22 small: '24px',
+L23 medium: '32px',
+L24 large: '40px',
+L27 /* Since the <select> element must span the full width and cannot have children,
+L28 * the right padding needs to be calculated from the sum of the following:
+L29 * 1. Field padding-right
+L30 * 2. Icon width
+L32 * 4. Content inner padding
+L34 const paddingRight = {
+L49 /* Left padding is calculated from the outer padding + inner content padding values
+L51 const paddingLeft = {
+L59 const useRootStyles = makeStyles({
+L60 base: {
+L76 borderRadius: `0 0 ${tokens.borderRadiusMedium} ${tokens.borderRadiusMedium}`,   // borderRadiusMedium=4px borderRadiusMedium=4px
+L79 height: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L81 bottom: '0',
+L82 left: '0',
+L83 right: '0',
+L90 transitionDuration: '0.01ms',
+L91 transitionDelay: '0.01ms',
+L102 transitionDuration: '0.01ms',
+L103 transitionDelay: '0.01ms',
+L109 const useSelectStyles = makeStyles({
+L110 base: {
+L112 border: '1px solid transparent',
+L113 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L118 flexGrow: 1,
+L119 maxWidth: '100%',
+L120 paddingBottom: 0,
+L121 paddingTop: 0,
+L124 outlineWidth: '2px',
+L129 disabled: {
+L131 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L135 ...shorthands.borderColor('GrayText'),
+L138 disabledUnderline: {
+L139 ...shorthands.borderColor(
+L146 small: {
+L147 height: fieldHeights.small,
+L148 paddingLeft: paddingLeft.small,
+L149 paddingRight: paddingRight.small,
+L150 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L152 medium: {
+L153 height: fieldHeights.medium,
+L154 paddingLeft: paddingLeft.medium,
+L155 paddingRight: paddingRight.medium,
+L156 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L158 large: {
+L159 height: fieldHeights.large,
+L160 paddingLeft: paddingLeft.large,
+L161 paddingRight: paddingRight.large,
+L162 ...typographyStyles.body2,   // typographyStyles.body2=16px/22px w400
+L164 outline: {
+L166 border: `1px solid ${tokens.colorNeutralStroke1}`,
+L169 outlineInteractive: {
+L171 ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+L176 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L180 underline: {
+L182 borderBottom: `1px solid ${tokens.colorNeutralStrokeAccessible}`,
+L183 borderRadius: '0',
+L195 invalid: {
+L197 ...shorthands.borderColor(tokens.colorPaletteRedBorder2),
+L200 invalidUnderline: {
+L207 const useIconStyles = makeStyles({
+L208 icon: {
+L221 disabled: {
+L227 small: {
+L228 fontSize: iconSizes.small,
+L229 height: iconSizes.small,
+L230 right: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L231 width: iconSizes.small,
+L233 medium: {
+L234 fontSize: iconSizes.medium,
+L235 height: iconSizes.medium,
+L236 right: tokens.spacingHorizontalMNudge,   // spacingHorizontalMNudge=10px
+L237 width: iconSizes.medium,
+L239 large: {
+L240 fontSize: iconSizes.large,
+L241 height: iconSizes.large,
+L242 right: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L243 width: iconSizes.large,
+L251 const { size, appearance } = state;
+L266 selectStyles[size],
+L282 iconStyles[size],

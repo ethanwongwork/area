@@ -1,0 +1,65 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-button/library/src/components/CompoundButton/useCompoundButtonStyles.styles.ts
+L16 const useRootStyles = makeStyles({
+L18 base: {
+L19 height: 'auto',
+L39 highContrast: {
+L56 outline: {
+L59 primary: {
+L82 secondary: {
+L85 subtle: {
+L115 transparent: {
+L133 // Size variations
+L134 small: {
+L135 padding: `${tokens.spacingHorizontalS} ${tokens.spacingHorizontalS} ${tokens.spacingHorizontalMNudge} ${tokens.spacingHorizontalS}`,   // spacingHorizontalS=8px spacingHorizontalS=8px spacingHorizontalMNudge=10px spacingHorizontalS=8px
+L137 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L138 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L140 medium: {
+L141 padding: `14px ${tokens.spacingHorizontalM} ${tokens.spacingHorizontalL} ${tokens.spacingHorizontalM}`,   // spacingHorizontalM=12px spacingHorizontalL=16px spacingHorizontalM=12px
+L143 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L144 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L146 large: {
+L147 padding: `18px ${tokens.spacingHorizontalL} ${tokens.spacingHorizontalXL} ${tokens.spacingHorizontalL}`,   // spacingHorizontalL=16px spacingHorizontalXL=20px spacingHorizontalL=16px
+L149 fontSize: tokens.fontSizeBase400,   // fontSizeBase400=16px
+L150 lineHeight: tokens.lineHeightBase400,   // lineHeightBase400=22px
+L154 disabled: {
+L173 disabledHighContrast: {
+L194 const useRootIconOnlyStyles = makeStyles({
+L195 // Size variations
+L196 small: {
+L197 padding: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L199 maxWidth: '48px',
+L200 minWidth: '48px',
+L202 medium: {
+L203 padding: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L205 maxWidth: '52px',
+L206 minWidth: '52px',
+L208 large: {
+L209 padding: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L211 maxWidth: '56px',
+L212 minWidth: '56px',
+L216 const useIconStyles = makeStyles({
+L218 base: {
+L219 fontSize: '40px',
+L220 height: '40px',
+L221 width: '40px',
+L225 before: {
+L226 marginRight: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L228 after: {
+L229 marginLeft: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L233 const useContentContainerStyles = makeStyles({
+L235 base: {
+L242 const useSecondaryContentStyles = makeStyles({
+L244 base: {
+L245 lineHeight: '100%',
+L246 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L249 // Size variations
+L250 small: {
+L251 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L253 medium: {
+L254 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L256 large: {
+L257 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L268 const { appearance, disabled, disabledFocusable, iconOnly, iconPosition, size } = state;
+L278 rootStyles[size],
+L285 iconOnly && rootIconOnlyStyles[size],
+L313 secondaryContentStyles[size],

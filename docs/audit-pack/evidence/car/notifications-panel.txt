@@ -1,0 +1,139 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/notifications-panel/_notifications-panel.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L20 @mixin notifications-panel {
+L22   $block-size: 38.5rem;
+L27   transform: translateY(-$block-size);
+L44   transform: translateY(-$block-size);
+L68 .#{$block-class}__entrance {
+L73 .#{$block-class}__exit {
+L79 .#{$block-class}__entrance {
+L84 .#{$block-class}__exit {
+L90 .#{$block-class}__container {
+L97   box-shadow: 0 $spacing-01 $spacing-02 $overlay;   // spacing-01=2px spacing-02=4px
+L98   clip-path: inset(
+L99   0 calc(-1 * var(--#{$prefix}-spacing-01))   // spacing-01=2px
+L100   calc(-1 * var(--#{$prefix}-spacing-02))   // spacing-02=4px
+L101   calc(-1 * var(--#{$prefix}-spacing-01))   // spacing-01=2px
+L104   inset-block-start: $spacing-09;   // spacing-09=48px
+L105   inset-inline-end: 0;
+L106   max-block-size: $block-size;
+L107   max-inline-size: 22.75rem;
+L108   min-block-size: $block-size;
+L109   min-inline-size: 20rem;
+L113 .#{$block-class}__header-container {
+L116   padding: $spacing-03 $spacing-05;   // spacing-03=8px spacing-05=16px
+L119   inset-block-start: 0;
+L122 .#{$block-class}__header-flex {
+L128 .#{$block-class}__do-not-disturb-toggle {
+L129   padding-block-end: $spacing-03;   // spacing-03=8px
+L131 .#{$prefix}--toggle__label-text {
+L136 .#{$block-class}__dismiss-button {
+L140 .#{$block-class}__header {
+L141   @include type.type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L143   margin: 0;
+L146 .#{$block-class}__time-section-label {
+L147   @include type.type-style('label-01');   // label-01=12/16
+L152   padding: $spacing-03 $spacing-05;   // spacing-03=8px spacing-05=16px
+L155   inset-block-start: 3.0625rem;
+L159 .#{$block-class}__notification:focus {
+L162 .#{$block-class}__dismiss-single-button {
+L167 .#{$block-class}__notification:focus {
+L170   inset 0 0 0 2px $focus,
+L171   inset 0 0 0 2px $background;
+L175 .#{$block-class}__notification {
+L179   padding: $spacing-05;   // spacing-05=16px
+L180   border: 0;
+L183   inline-size: 100%;
+L184   min-block-size: 6.25rem;
+L189 .#{$block-class}__notification-title {
+L190   @include type.type-style('heading-01');   // heading-01=14/20 w600
+L193   margin-block-end: $spacing-02;   // spacing-02=4px
+L197 .#{$block-class}__notification-title.#{$block-class}__notification-title-unread {
+L199   margin-block-end: $spacing-02;   // spacing-02=4px
+L203 .#{$block-class}__notifications-link {
+L204   @include type.type-style('label-01');   // label-01=12/16
+L207 .#{$block-class}__notification-status-icon {
+L208   margin-inline-end: $spacing-03;   // spacing-03=8px
+L209   min-inline-size: 1rem;
+L211 &.#{$block-class}__notification-status-icon-error {
+L215 &.#{$block-class}__notification-status-icon-success {
+L219 &.#{$block-class}__notification-status-icon-warning {
+L223 &.#{$block-class}__notification-status-icon-informational {
+L228 .#{$block-class}__notification-content {
+L229 .#{$block-class}__notification-time-label {
+L230   margin-block-end: $spacing-03;   // spacing-03=8px
+L234 .#{$block-class}__notification-description {
+L235   @include type.type-style('label-01');   // label-01=12/16
+L240 .#{$block-class}__notification-description {
+L241 &.#{$block-class}__notification-short-description {
+L249 &.#{$block-class}__notification-long-description {
+L258 .#{$block-class}__notification-read-less-button {
+L259   @include type.type-style('label-01');   // label-01=12/16
+L263   padding: 0;
+L264   min-inline-size: 5.5rem;
+L266 .#{$prefix}--btn__icon {
+L274 &.#{$block-class}__notification-read-more-button {
+L275 .#{$prefix}--btn__icon {
+L280 &.#{$block-class}__notification-read-less-button {
+L281 .#{$prefix}--btn__icon {
+L288 .#{$block-class}__dismiss-single-button {
+L293   padding: 0;
+L295   inset-block-start: 0;
+L296   inset-inline-end: 0;
+L297   min-inline-size: 2rem;
+L301 &:focus {
+L306 .#{$block-class}__notification:focus::before {
+L312 .#{$block-class}__notification-previous:not(:first-of-type)::before {
+L314   margin: 0 auto;
+L316   block-size: 1px;
+L318   inline-size: calc(100% - (2 * #{$spacing-05}));   // spacing-05=16px
+L319   inset-block-start: 0;
+L332 .#{$block-class}__main-section-empty.#{$block-class}__main-section {
+L336   block-size: 100%;
+L337   margin-block-start: $spacing-13;   // spacing-13=160px
+L338   min-block-size: initial;
+L341 .#{$block-class}__main-section {
+L342   min-block-size: 498px;
+L345 .#{$block-class}__bottom-actions {
+L351   block-size: 2.5rem;
+L353   inset-block-end: 0;
+L354   min-block-size: 2.5rem;
+L357 .#{$block-class}__view-all-button {
+L360   block-size: 2.5rem;
+L363   inline-size: 100%;
+L364   max-inline-size: calc(100% - 2.5rem);
+L365   min-block-size: 2.5rem;
+L368 .#{$block-class}__settings-button {
+L372   padding: 0;
+L373   block-size: 2.5rem;
+L375   min-block-size: 2.5rem;
+L376   min-inline-size: 2.5rem;
+L378 .#{$prefix}--btn__icon {
+L379   margin: 0;
+L387   inset-block-start: 4.8125rem;
+L398 .#{$prefix}--empty-state {
+L403 .#{$prefix}--empty-state-position--top {
+L407 .#{$prefix}--empty-state-position--right {
+L411 .#{$prefix}--empty-state-position--bottom {
+L415 .#{$prefix}--empty-state-position--left {
+L419 .#{$prefix}--empty-state__illustration {
+L420   block-size: auto;
+L421   margin-block-end: $spacing-05;   // spacing-05=16px
+L423 &.#{$prefix}--empty-state__illustration--lg {
+L424   max-inline-size: $spacing-11;   // spacing-11=80px
+L425   min-inline-size: $spacing-11;   // spacing-11=80px
+L428 &.#{$prefix}--empty-state__illustration--sm {
+L429   max-inline-size: $spacing-10;   // spacing-10=64px
+L430   min-inline-size: $spacing-10;   // spacing-10=64px
+L434 .#{$prefix}--empty-state__content {
+L435 .#{$prefix}--empty-state__header {
+L436   @include type.type-style('heading-03');   // heading-03=20/28
+L438   margin: 0;
+L439   padding-block-end: $spacing-03;   // spacing-03=8px
+L442 .#{$prefix}--empty-state__header--small {
+L443   @include type.type-style('body-compact-02');   // body-compact-02=16/22
+L445   padding-block-end: $spacing-03;   // spacing-03=8px
+L448 .#{$prefix}--empty-state__subtitle {
+L449   @include type.type-style('body-01');   // body-01=14/20
+L452   padding-block-end: $spacing-05;   // spacing-05=16px
+L455 .#{$prefix}--empty-state__subtitle--small {
+L456   @include type.type-style('label-01');   // label-01=12/16

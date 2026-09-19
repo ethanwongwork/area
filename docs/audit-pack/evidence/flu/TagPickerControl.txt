@@ -1,0 +1,84 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tag-picker/library/src/components/TagPickerControl/useTagPickerControlStyles.styles.ts
+L19 export const tagPickerControlAsideWidthToken = '--fui-TagPickerControl-aside-width' as const;
+L24 const useStyles = makeStyles({
+L25 root: {
+L26 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L27 paddingRight: `calc(${tokens.spacingHorizontalM} + var(${tagPickerControlAsideWidthToken}, 0px))`,   // spacingHorizontalM=12px
+L28 paddingLeft: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L30 columnGap: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L33 minWidth: '250px',
+L39 outlineWidth: '2px',
+L49 left: '-1px',
+L50 bottom: '-1px',
+L51 right: '-1px',
+L52 height: `max(2px, ${tokens.borderRadiusMedium})`,   // borderRadiusMedium=4px
+L53 borderBottomLeftRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L54 borderBottomRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L55 borderBottom: `${tokens.strokeWidthThick} solid ${tokens.colorCompoundBrandStroke}`,   // strokeWidthThick=2px
+L56 clipPath: 'inset(calc(100% - 2px) 0 0 0)',
+L63 transitionDuration: '0.01ms',
+L64 transitionDelay: '0.01ms',
+L74 transitionDuration: '0.01ms',
+L75 transitionDelay: '0.01ms',
+L83 listbox: {
+L85 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L86 maxHeight: '80vh',
+L90 listboxCollapsed: {
+L94 // size variants
+L95 medium: {
+L96 minHeight: '32px',
+L98 large: {
+L99 minHeight: '40px',
+L102 minHeight: '44px',
+L106 outline: {
+L108 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1}`,   // strokeWidthThin=1px
+L112 outlineInteractive: {
+L114 ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+L119 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L124 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L128 underline: {
+L130 borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStrokeAccessible}`,   // strokeWidthThin=1px
+L131 borderRadius: '0',
+L135 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L139 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L141 invalid: {
+L143 ...shorthands.borderColor(tokens.colorPaletteRedBorder2),
+L146 invalidUnderline: {
+L152 disabled: {
+L155 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L157 ...shorthands.borderColor('GrayText'),
+L162 const useAsideStyles = makeStyles({
+L163 root: {
+L166 top: '0',
+L167 right: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L168 height: '100%',
+L171 // size variants
+L172 medium: {
+L173 minHeight: '32px',
+L175 large: {
+L176 minHeight: '40px',
+L179 minHeight: '44px',
+L184 small: '16px',
+L185 medium: '20px',
+L186 large: '24px',
+L189 const useIconStyles = makeStyles({
+L190 icon: {
+L198 fontSize: tokens.fontSizeBase500,   // fontSizeBase500=20px
+L205 // icon size variants
+L206 medium: {
+L207 fontSize: iconSizes.small,
+L208 marginLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L209 minHeight: '32px',
+L211 large: {
+L212 fontSize: iconSizes.medium,
+L213 marginLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L214 minHeight: '40px',
+L217 fontSize: iconSizes.large,
+L218 marginLeft: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L219 minHeight: '44px',
+L221 disabled: {
+L227 const useSecondaryActionStyles = makeStyles({
+L228 root: { display: 'flex' },
+L243 styles[state.size],
+L257 asideStyles[state.size],
+L267 iconStyles[state.size],

@@ -1,0 +1,9 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-filled-menu-button.scss
+container-height: 40px
+trailing-icon-size: 18px
+with-icon-leading-icon-size: 18px
+focus-indicator-outline-offset: md-sys-state-focus-indicator.$outer-offset
+focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+label-text-line-height: label-large-line-height = 20px
+label-text-size: label-large-size = 14px
+shape: corner-full = 9999px

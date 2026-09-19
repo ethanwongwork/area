@@ -1,0 +1,10 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/tabs.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot tabs]
+  L19 gap-2=8px
+  L28 rounded-lg=10px p-[3px] group-data-[orientation=horizontal]/tabs:h-9=36px data-[variant=line]:rounded-none=0px
+  L33 line: gap-1=4px
+  [slot tabs-list]
+  [slot tabs-trigger]
+  L66 h-[calc(100%-1px)] gap-1.5=6px rounded-md=8px border=1px px-2=8px py-1=4px text-sm=14/20px font-medium focus-visible:ring-[3px] focus-visible:outline-1=1px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L69 "after: group-data-[orientation=horizontal]/tabs:after:inset-x-0=0px group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5=2px group-data-[orientation=vertical]/tabs:after:inset-y-0=0px group-data-[orientation=vertical]/tabs:after:-right-1=4px group-data-[orientation=vertical]/tabs:after:w-0.5=2px
+  [slot tabs-content]

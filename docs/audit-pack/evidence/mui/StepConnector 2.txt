@@ -1,0 +1,28 @@
+### MUI Material @ 69960c1  packages/mui-material/src/StepConnector/StepConnector.js
+L16 const slots = {
+L31 const StepConnectorRoot = styled('div', {
+L32 name: 'MuiStepConnector',
+L33 slot: 'Root',
+L46 variants: [
+L48 props: { orientation: 'vertical' },
+L49 style: {
+L50   marginLeft: 12, // half icon
+L54 props: { orientation: 'vertical', alternativeLabel: true },
+L55 style: {
+L56   marginLeft: 'auto',
+L57   marginRight: 12, // half icon
+L61 props: { orientation: 'horizontal', alternativeLabel: true },
+L62 style: {
+L64   top: 8 + 4,
+L65   left: 'calc(-50% + 20px)',
+L66   right: 'calc(50% + 20px)',
+L72 const StepConnectorLine = styled('span', {
+L73 name: 'MuiStepConnector',
+L74 slot: 'Line',
+L82 variants: [
+L84 props: { orientation: 'horizontal' },
+L85 style: {
+L91 props: { orientation: 'vertical' },
+L92 style: {
+L95   minHeight: 24,
+L110 const ownerState = { ...props, alternativeLabel, orientation, active, completed, disabled };

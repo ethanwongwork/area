@@ -1,0 +1,7 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TableRow/TableRow.js
+L15 const slots = {
+L22 const TableRowRoot = styled('tr', {
+L23 name: 'MuiTableRow',
+L24 slot: 'Root',
+L45 '&:hover': {
+L71 const ownerState = {

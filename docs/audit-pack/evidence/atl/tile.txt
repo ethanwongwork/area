@@ -1,0 +1,18 @@
+### @atlaskit/tile@4.1.2  tile.js  (token fallbacks; pt and pc converted to px)
+  root: border-radius:25%; box-sizing:border-box; min-width:0; min-height:0
+  border: border-width:1px
+  inset: [div] height:auto; [img] height:auto; [span] height:auto; [svg] height:auto
+  nonInset: [div] width:100%; [img] width:100%; [span] width:100%; [svg] width:100%; [div] height:100%; [img] height:100%; [span] height:100%; [svg] height:100%
+  xxsmall: width:16px; height:16px; font-size:10px
+  xsmall: width:20px; height:20px; font-size:12px
+  small: width:24px; height:24px; font-size:14px
+  medium: width:32px; height:32px; font-size:16px
+  large: width:40px; height:40px; font-size:20px
+  xlarge: width:3pc; height:3pc; font-size:24px
+  xxsmall: [div] width:10px; [img] width:10px; [span] width:10px; [svg] width:10px; [.emoji-common-emoji-sprite] width:10px!important; [.emoji-common-emoji-sprite] min-width:10px!important; [.emoji-common-emoji-sprite] height:10px!important; [.emoji-common-emoji-sprite] min-height:10px!important
+  xsmall: [div] width:12px; [img] width:12px; [span] width:12px; [svg] width:12px; [.emoji-common-emoji-sprite] width:12px!important; [.emoji-common-emoji-sprite] min-width:12px!important; [.emoji-common-emoji-sprite] height:12px!important; [.emoji-common-emoji-sprite] min-height:12px!important
+  small: [div] width:14px; [img] width:14px; [span] width:14px; [svg] width:14px; [.emoji-common-emoji-sprite] width:14px!important; [.emoji-common-emoji-sprite] min-width:14px!important; [.emoji-common-emoji-sprite] height:14px!important; [.emoji-common-emoji-sprite] min-height:14px!important
+  medium: [div] width:16px; [img] width:16px; [span] width:16px; [svg] width:16px; [.emoji-common-emoji-sprite] width:16px!important; [.emoji-common-emoji-sprite] min-width:16px!important; [.emoji-common-emoji-sprite] height:16px!important; [.emoji-common-emoji-sprite] min-height:16px!important
+  large: [div] width:20px; [img] width:20px; [span] width:20px; [svg] width:20px; [.emoji-common-emoji-sprite] width:20px!important; [.emoji-common-emoji-sprite] min-width:20px!important; [.emoji-common-emoji-sprite] height:20px!important; [.emoji-common-emoji-sprite] min-height:20px!important
+  xlarge: [div] width:24px; [img] width:24px; [span] width:24px; [svg] width:24px; [.emoji-common-emoji-sprite] width:24px!important; [.emoji-common-emoji-sprite] min-width:24px!important; [.emoji-common-emoji-sprite] height:24px!important; [.emoji-common-emoji-sprite] min-height:24px!important
+### @atlaskit/tile@4.1.2  tile.js  size map: large 40, medium 32, small 24, xlarge 48, xsmall 20

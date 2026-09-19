@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-carousel/library/src/components/CarouselViewport/useCarouselViewportStyles.styles.ts
+L14 const useStyles = makeStyles({
+L15 root: {
+L16 maxWidth: '100%',
+L17 width: 'auto',

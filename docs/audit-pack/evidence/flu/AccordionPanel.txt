@@ -1,0 +1,4 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-accordion/library/src/components/AccordionPanel/useAccordionPanelStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L18 margin: `0 ${tokens.spacingHorizontalM}`,   // spacingHorizontalM=12px

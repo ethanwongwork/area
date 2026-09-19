@@ -1,0 +1,13 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-infolabel/library/src/components/InfoLabel/useInfoLabelStyles.styles.ts
+L14 const useLabelStyles = makeStyles({
+L15 base: {
+L22 const useInfoButtonStyles = makeStyles({
+L23 base: {
+L26 // Negative margin to align with the text
+L27 marginTop: `calc(0px - ${tokens.spacingVerticalXXS})`,   // spacingVerticalXXS=2px
+L28 marginBottom: `calc(0px - ${tokens.spacingVerticalXXS})`,   // spacingVerticalXXS=2px
+L31 large: {
+L32 // Negative margin to align with the text
+L33 marginTop: '-1px',
+L34 marginBottom: '-1px',
+L55 state.size === 'large' && infoButtonStyles.large,

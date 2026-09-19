@@ -1,0 +1,59 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/edit-in-place/_edit-in-place.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L17 @mixin edit-in-place {
+L21 .#{$block-class} {
+L22   --#{$block-class}--size: #{$spacing-07};   // spacing-07=32px
+L30 .#{$block-class}--sm {
+L31   --#{$block-class}--size: #{$spacing-08};   // spacing-08=40px
+L34 .#{$block-class}--md {
+L35   --#{$block-class}--size: #{$spacing-09};   // spacing-09=48px
+L38 .#{$block-class}--lg {
+L39   --#{$block-class}--size: #{$spacing-10};   // spacing-10=64px
+L42 .#{$block-class}__toggletip-wrapper {
+L44   inline-size: 100%;
+L47 .#{$block-class}__toggletip-wrapper .#{$prefix}--toggletip-button {
+L49   inline-size: 100%;
+L52 .#{$block-class}:hover {
+L57 .#{$block-class}__btn-edit.#{$block-class}__btn-edit--always-visible {
+L61 .#{$block-class}__btn-edit {
+L65 .#{$block-class}--invalid {
+L66   border: 2px solid $support-error;
+L69 .#{$block-class}--focused {
+L74 .#{$block-class}--focused:has(.#{$block-class}__text-input:focus) {
+L79 .#{$block-class}--invalid.#{$block-class}--focused {
+L80   border: none;
+L83 .#{$block-class}__text-input {
+L87 .#{$block-class}--inherit-type .#{$block-class}__text-input {
+L89   font-size: inherit;
+L91   letter-spacing: inherit;
+L92   line-height: inherit;
+L95 .#{$block-class}__text-input-label {
+L99 .#{$block-class}__warning-icon {
+L100   margin: auto $spacing-03;   // spacing-03=8px
+L102   inline-size: $spacing-05;   // spacing-05=16px
+L105 .#{$block-class}__warning-text {
+L106   @include type-style('label-01');   // label-01=12/16
+L110   margin-block-start: $spacing-03;   // spacing-03=8px
+L114 .#{$block-class}__text-input.#{$carbon-input} {
+L115   border: none;
+L125 .#{$block-class}__text-input.#{$carbon-input}:active {
+L129 .#{$block-class}__toolbar {
+L130   --toolbar-width: var(--#{$block-class}--size);
+L131   --toolbar-width-focussed: calc(2 * var(--#{$block-class}--size));
+L136   inline-size: var(--toolbar-width);
+L138 .#{$prefix}--btn.#{$prefix}--btn--icon-only:not(#{$prefix}-icon-button) {
+L139   padding: 0;
+L140   min-block-size: unset;
+L146 .#{$prefix}--btn.#{$prefix}--btn--icon-only:not(#{$prefix}-icon-button) {
+L147   block-size: var(--#{$block-class}--size);
+L148   inline-size: var(--#{$block-class}--size);
+L151 .#{$block-class}__toolbar #{$prefix}-icon-button::part(button) {
+L152   padding: $spacing-02;   // spacing-02=4px
+L155 .#{$block-class}--invalid .#{$block-class}__toolbar {
+L157   --toolbar-width: calc(var(--#{$block-class}--size) + #{$spacing-07});   // spacing-07=32px
+L158   --toolbar-width-focussed: calc(
+L159   2 * var(--#{$block-class}--size) + #{$spacing-07}   // spacing-07=32px
+L166   inline-size: var(--toolbar-width);
+L171   inline-size: var(--toolbar-width-focussed);
+L176   inline-size: var(--toolbar-width-focussed);
+L181 .#{$block-class}__toolbar {
+L186   inline-size: var(--toolbar-width-focussed);

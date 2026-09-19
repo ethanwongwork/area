@@ -1,0 +1,88 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/EmptyMessage/EmptyMessage.module.css
+.EmptyMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &[data-fill="static"] {
+    width: 100%;
+    height: 100%;
+  }
+
+  &[data-fill="absolute"] {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.IconBadge {
+  --badge-size: 40px;
+  --icon-size: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--badge-size);   /* = 40px */
+  height: var(--badge-size);   /* = 40px */
+  border-radius: var(--radius-md);   /* = 8px */
+  margin: 0 0 12px;
+  background: var(--badge-background-color);   /* = light-dark(light-dark(#ededed, #181818), light-dark(#afafaf, #303030)) */
+  color: var(--badge-text-color);   /* = light-dark(#0d0d0d, #ffffff) */
+
+  svg {
+    width: var(--icon-size);   /* = 24px */
+    height: var(--icon-size);   /* = 24px */
+  }
+
+  &[data-size="sm"] {
+    --badge-size: 32px;
+    --icon-size: 20px;
+  }
+
+  &[data-color="secondary"] {
+    --badge-background-color: var(--color-background-secondary-soft);   /* = light-dark(light-dark(#ededed, #181818), light-dark(#afafaf, #303030)) */
+    --badge-text-color: var(--color-text-secondary-soft);   /* = light-dark(#0d0d0d, #ffffff) */
+  }
+
+  &[data-color="warning"] {
+    --badge-background-color: var(--color-background-warning-soft);   /* = #ffe7d9 */
+    --badge-text-color: var(--color-text-warning-soft);   /* = light-dark(#923b0f, #fb6a22) */
+  }
+
+  &[data-color="danger"] {
+    --badge-background-color: var(--color-background-danger-soft);   /* = #ffd9d9 */
+    --badge-text-color: var(--color-text-danger-soft);   /* = light-dark(#ba2623, #fa423e) */
+  }
+}
+
+.Title {
+  max-width: 90%;
+  color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+  font-size: 16px;
+  font-weight: var(--font-weight-semibold);   /* = 600 */
+  text-align: center;
+  text-wrap: balance;
+
+  &:where([data-color="danger"]) {
+    color: var(--color-text-danger);   /* = light-dark(#911e1b, #e02e2a) */
+  }
+
+  &:where([data-color="warning"]) {
+    color: var(--color-text-warning);   /* = light-dark(#923b0f, #e25507) */
+  }
+}
+
+.Description {
+  max-width: 90%;
+  margin: 6px 0 0;
+  color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.ActionRow {
+  margin-top: spacing(4);   /* = 16px */
+}

@@ -1,0 +1,1 @@
+### @atlaskit/motion@8.8.0  utils/durations.js  size map: large 700, medium 350, small 100

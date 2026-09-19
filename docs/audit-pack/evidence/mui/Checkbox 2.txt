@@ -1,0 +1,25 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Checkbox/Checkbox.js
+L27 const slots = {
+L44 const CheckboxRoot = styled(SwitchBase, {
+L46 name: 'MuiCheckbox',
+L47 slot: 'Root',
+L64   borderRadius: (theme.vars || theme).shape.borderRadius,
+L68 variants: [
+L70 props: { color: 'default', disableRipple: false },
+L71 style: {
+L72 '&:hover': {
+L83 props: { color, disableRipple: false },
+L84 style: {
+L85 '&:hover': {
+L96 props: { color },
+L97 style: {
+L108 props: { disableRipple: false },
+L109 style: {
+L111 '&:hover': {
+L145 const ownerState = {
+L172 externalForwardedProps: {
+L178 additionalProps: {
+L181   fontSize: icon.props.fontSize ?? size,
+L184   fontSize: indeterminateIcon.props.fontSize ?? size,
+L190 slotProps: {
+L191 input: {

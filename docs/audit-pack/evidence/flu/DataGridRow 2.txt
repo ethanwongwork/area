@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-table/library/src/components/DataGridRow/useDataGridRowStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 subtleSelection: {
+L21 opacity: 1,
+L29 opacity: 1,

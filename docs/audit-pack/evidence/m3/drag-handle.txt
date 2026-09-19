@@ -1,0 +1,8 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-drag-handle.scss
+container-width: 24px
+height: 48px
+pressed-height: 52px
+pressed-width: 12px
+width: 4px
+pressed-shape: corner-medium = 12px
+shape: corner-full = 9999px

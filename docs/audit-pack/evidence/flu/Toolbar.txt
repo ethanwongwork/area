@@ -1,0 +1,13 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toolbar/library/src/components/Toolbar/useToolbarStyles.styles.ts
+L14 const useStyles = makeStyles({
+L15 root: {
+L18 padding: '4px 8px',
+L20 vertical: {
+L22 width: 'fit-content',
+L24 small: { padding: '0px 4px' },
+L25 medium: { padding: '4px 8px' },
+L26 large: { padding: '4px 20px' },
+L34 const { vertical, size } = state;
+L40 size === 'small' && !vertical && styles.small,
+L41 size === 'medium' && !vertical && styles.medium,
+L42 size === 'large' && !vertical && styles.large,

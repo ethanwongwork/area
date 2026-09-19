@@ -1,0 +1,64 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/page-header/_page-header.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L19 @mixin page-header {
+L20 .#{$prefix}--page-header {
+L25 .#{$prefix}--page-header__breadcrumb-bar {
+L26   block-size: convert.to-rem(40px);
+L29 .#{$prefix}--page-header__breadcrumb-bar .#{$prefix}--subgrid {
+L30   block-size: 100%;
+L33 .#{$prefix}--page-header__breadcrumb-container {
+L37   block-size: 100%;
+L38   inline-size: 100%;
+L41 .#{$prefix}--page-header__breadcrumb__actions-flush {
+L42 .#{$prefix}--css-grid {
+L43   padding-inline-end: 0;
+L46 .#{$prefix}--css-grid-column {
+L47   margin-inline-end: 0;
+L51 .#{$prefix}--page-header__breadcrumb-bar-border {
+L55 .#{$prefix}--page-header__breadcrumb__icon {
+L56   margin-inline-end: $spacing-03;   // spacing-03=8px
+L59 .#{$prefix}--page-header__breadcrumb__actions {
+L63 .#{$prefix}--page-header__breadcrumb__content-actions {
+L64   margin-inline-end: $spacing-04;   // spacing-04=12px
+L67 .#{$prefix}--page-header__breadcrumb-wrapper {
+L71 .#{$prefix}--page-header__content {
+L72   padding: $spacing-06 0;   // spacing-06=24px
+L75 .#{$prefix}--page-header__content__title-wrapper {
+L76 @include breakpoint-down(md) {
+L79   grid-gap: $spacing-05;   // spacing-05=16px
+L83   gap: $spacing-05;   // spacing-05=16px
+L85   var(--pageheader-title-grid-width, 0),
+L88   margin-block-end: 1rem;
+L89   min-block-size: convert.to-rem(40px);
+L92 .#{$prefix}--page-header__content__start {
+L95   gap: $spacing-05;   // spacing-05=16px
+L98 .#{$prefix}--page-header__content__title-container {
+L103 .#{$prefix}--definition-term {
+L107 .#{$prefix}--page-header__content__contextual-actions {
+L111 .#{$prefix}--page-header__content__title {
+L112   @include type-style('productive-heading-04');
+L118   max-inline-size: convert.to-rem(640px);
+L126 .#{$prefix}--page-header__content__title {
+L130 .#{$prefix}--page-header__content__icon {
+L131   margin-inline-end: $spacing-05;   // spacing-05=16px
+L134 .#{$prefix}--page-header__content__page-actions {
+L138 @include breakpoint-down('md') {
+L140   margin-block-start: 0;
+L145 .#{$prefix}--menu-button__trigger:not(.#{$prefix}--btn--ghost) {
+L146   min-inline-size: 0;
+L149 .#{$prefix}--page-header__content__subtitle {
+L150   @include type-style('productive-heading-03');
+L152   margin-block-end: $spacing-03;   // spacing-03=8px
+L155 .#{$prefix}--page-header__content__body {
+L156   @include type-style('body-01');   // body-01=14/20
+L158   margin-block-start: $spacing-03;   // spacing-03=8px
+L159   max-inline-size: convert.to-rem(640px);
+L166 .#{$prefix}--page-header__hero-image {
+L171   block-size: 100%;
+L174 .#{$prefix}--page-header__tab-bar {
+L175   margin-inline-start: -$spacing-05;   // spacing-05=16px
+L178 .#{$prefix}--page-header__tab-bar--tablist {
+L180   grid-gap: $spacing-10;   // spacing-10=64px
+L184 .#{$prefix}--page-header__tags {
+L190 .#{$prefix}--page-header__tags-popover-list {
+L193   padding: $spacing-05;   // spacing-05=16px
+L196 .#{$prefix}--page-header__tag-item {

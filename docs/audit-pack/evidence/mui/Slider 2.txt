@@ -1,0 +1,164 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Slider/Slider.js
+L27 name: 'MuiSlider',
+L28 slot: 'Root',
+L44   borderRadius: 12,
+L64 variants: [
+L68 props: { color },
+L69 style: {
+L74 props: { orientation: 'horizontal' },
+L75 style: {
+L76   height: 4,
+L77   width: '100%',
+L78   padding: '13px 0',
+L82   padding: '20px 0',
+L87 props: { orientation: 'horizontal', size: 'small' },
+L88 style: {
+L89   height: 2,
+L93 props: { orientation: 'horizontal', marked: true },
+L94 style: {
+L95   marginBottom: 20,
+L99 props: { orientation: 'vertical' },
+L100 style: {
+L101   height: '100%',
+L102   width: 4,
+L103   padding: '0 13px',
+L107   padding: '0 20px',
+L112 props: { orientation: 'vertical', size: 'small' },
+L113 style: {
+L114   width: 2,
+L118 props: { orientation: 'vertical', marked: true },
+L119 style: {
+L120   marginRight: 44,
+L128 name: 'MuiSlider',
+L129 slot: 'Rail',
+L133   borderRadius: 'inherit',
+L137   border: '1px solid transparent',
+L140 variants: [
+L142 props: { orientation: 'horizontal' },
+L143 style: {
+L144   width: '100%',
+L145   height: 'inherit',
+L146   top: '50%',
+L151 props: { orientation: 'vertical' },
+L152 style: {
+L153   height: '100%',
+L154   width: 'inherit',
+L155   left: '50%',
+L160 props: { track: 'inverted' },
+L161 style: {
+L169 name: 'MuiSlider',
+L170 slot: 'Track',
+L176   borderRadius: 'inherit',
+L182 variants: [
+L184 props: { size: 'small' },
+L185 style: {
+L187   border: 'none',
+L192 props: { orientation: 'horizontal' },
+L193 style: {
+L194   height: 'inherit',
+L195   top: '50%',
+L200 props: { orientation: 'vertical' },
+L201 style: {
+L202   width: 'inherit',
+L203   left: '50%',
+L208 props: { track: false },
+L209 style: {
+L216 props: { color, track: 'inverted' },
+L217 style: {
+L223 : {
+L241 name: 'MuiSlider',
+L242 slot: 'Thumb',
+L246   width: 20,
+L247   height: 20,
+L249   borderRadius: '50%',
+L259   border: '1px solid ButtonBorder',
+L261 '&::before': {
+L264   borderRadius: 'inherit',
+L265   width: '100%',
+L266   height: '100%',
+L269 '&::after': {
+L272   borderRadius: '50%',
+L274   width: 42,
+L275   height: 42,
+L276   top: '50%',
+L277   left: '50%',
+L281 '&:hover': {
+L288 variants: [
+L290 props: { size: 'small' },
+L291 style: {
+L292   width: 12,
+L293   height: 12,
+L294 '&::before': {
+L300 props: { orientation: 'horizontal' },
+L301 style: {
+L302   top: '50%',
+L307 props: { orientation: 'vertical' },
+L308 style: {
+L309   left: '50%',
+L316 props: { color },
+L317 style: {
+L318 '&:hover': {
+L341 const SliderValueLabel = styled(BaseSliderValueLabel, {
+L342 name: 'MuiSlider',
+L343 slot: 'ValueLabel',
+L349   fontWeight: 500,
+L355   borderRadius: 2,
+L360   padding: '0.25rem 0.75rem',
+L361 variants: [
+L363 props: { orientation: 'horizontal' },
+L364 style: {
+L366   top: '-10px',
+L368 '&::before': {
+L371   width: 8,
+L372   height: 8,
+L375   bottom: 0,
+L376   left: '50%',
+L384 props: { orientation: 'vertical' },
+L385 style: {
+L387   right: '30px',
+L388   top: '50%',
+L390 '&::before': {
+L393   width: 8,
+L394   height: 8,
+L397   right: -8,
+L398   top: '50%',
+L406 props: { size: 'small' },
+L407 style: {
+L408   fontSize: theme.typography.pxToRem(12),
+L409   padding: '0.25rem 0.5rem',
+L413 props: { orientation: 'vertical', size: 'small' },
+L414 style: {
+L415   right: '20px',
+L448 name: 'MuiSlider',
+L449 slot: 'Mark',
+L459   width: 2,
+L460   height: 2,
+L461   borderRadius: 1,
+L463 variants: [
+L465 props: { orientation: 'horizontal' },
+L466 style: {
+L467   top: '50%',
+L472 props: { orientation: 'vertical' },
+L473 style: {
+L474   left: '50%',
+L479 props: { markActive: true },
+L480 style: {
+L490 name: 'MuiSlider',
+L491 slot: 'MarkLabel',
+L499 variants: [
+L501 props: { orientation: 'horizontal' },
+L502 style: {
+L503   top: 30,
+L506   top: 40,
+L511 props: { orientation: 'vertical' },
+L512 style: {
+L513   left: 36,
+L516   left: 44,
+L521 props: { markLabelActive: true },
+L522 style: {
+L533 const slots = {
+L600 const ownerState = {
+L644 const externalForwardedProps = {
+L652 externalForwardedProps: {
+L670 additionalProps: {
+L671 style: {

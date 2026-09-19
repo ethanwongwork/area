@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tag-picker/library/src/components/TagPickerList/useTagPickerListStyles.styles.ts
+L15 const useStyles = makeStyles({
+L16 root: {
+L18 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L19 maxHeight: '80vh',
+L23 collapsed: {

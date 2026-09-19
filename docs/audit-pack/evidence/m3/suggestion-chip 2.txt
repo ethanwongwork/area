@@ -1,0 +1,9 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-suggestion-chip.scss
+container-height: 32px
+flat-outline-width: 1px
+with-leading-icon-leading-icon-size: 18px
+container-shape: corner-small = 8px
+focus-indicator-outline-offset: md-sys-state-focus-indicator.$outer-offset
+focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+label-text-line-height: label-large-line-height = 20px
+label-text-size: label-large-size = 14px

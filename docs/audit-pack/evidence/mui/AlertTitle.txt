@@ -1,0 +1,8 @@
+### MUI Material @ 69960c1  packages/mui-material/src/AlertTitle/AlertTitle.js
+L15 const slots = {
+L22 const AlertTitleRoot = styled(Typography, {
+L23 name: 'MuiAlertTitle',
+L24 slot: 'Root',
+L28   fontWeight: theme.typography.fontWeightMedium,
+L29   marginTop: -2,
+L37 name: 'MuiAlertTitle',

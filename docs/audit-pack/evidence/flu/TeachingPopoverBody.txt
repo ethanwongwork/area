@@ -1,0 +1,16 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-teaching-popover/library/src/components/TeachingPopoverBody/useTeachingPopoverBodyStyles.styles.ts
+L12 const popoverBodyDimension = 288;
+L14 export const useMediaStyles = makeStyles({
+L15 base: {
+L18 width: 'auto',
+L19 marginBottom: '12px',
+L24 short: {
+L27 height: '117px',
+L30 medium: {
+L33 height: '176px',
+L36 tall: {
+L37 aspectRatio: 1,
+L39 height: `${popoverBodyDimension}px`,
+L44 const useStyles = makeStyles({
+L45 root: {
+L48 paddingBottom: '12px',

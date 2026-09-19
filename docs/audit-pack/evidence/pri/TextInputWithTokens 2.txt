@@ -1,0 +1,63 @@
+### Primer React @ e4e6eba  packages/react/src/TextInputWithTokens/TextInputWithTokens.module.css
+.TextInputWrapper {
+  padding-top: var(--base-size-6);   /* = 6px */
+  padding-bottom: var(--base-size-6);   /* = 6px */
+  padding-left: var(--base-size-12);   /* = 12px */
+
+  &:where([data-block]) {
+    display: flex;
+    width: 100%;
+  }
+
+  &:where([data-token-wrapping='true']) {
+    overflow: auto;
+  }
+}
+
+.UnstyledTextInput {
+  height: 100%;
+}
+
+.InputWrapper {
+  order: 1;
+  flex-grow: 1;
+}
+
+.Container {
+  display: flex;
+  margin-bottom: calc(var(--base-size-4) * -1);   /* = -4px */
+  margin-left: calc(var(--base-size-4) * -1);   /* = -4px */
+  align-items: center;
+  flex-wrap: wrap;
+  flex-grow: 1;
+
+  &:where([data-prevent-token-wrapping='true']) {
+    flex-wrap: nowrap;
+  }
+
+  > * {
+    margin-bottom: var(--base-size-4);   /* = 4px */
+    margin-left: var(--base-size-4);   /* = 4px */
+    flex-shrink: 0;
+  }
+}
+
+.OverflowCountSmall {
+  color: var(--fgColor-muted);
+  font-size: var(--text-body-size-small);   /* = 12px */
+}
+
+.OverflowCountMedium {
+  color: var(--fgColor-muted);
+  font-size: var(--text-body-size-medium);   /* = 14px */
+}
+
+.OverflowCountLarge {
+  color: var(--fgColor-muted);
+  font-size: var(--text-body-size-medium);   /* = 14px */
+}
+
+.OverflowCountXLarge {
+  color: var(--fgColor-muted);
+  font-size: var(--text-body-size-large);   /* = 16px */
+}

@@ -1,0 +1,52 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-rating/library/src/components/RatingItem/useRatingItemStyles.styles.ts
+L20 const useStyles = makeStyles({
+L21 root: {
+L25 small: {
+L26 fontSize: '12px',
+L27 width: '12px',
+L28 height: '12px',
+L31 medium: {
+L32 fontSize: '16px',
+L33 width: '16px',
+L34 height: '16px',
+L37 large: {
+L38 fontSize: '20px',
+L39 width: '20px',
+L40 height: '20px',
+L44 fontSize: '28px',
+L45 width: '28px',
+L46 height: '28px',
+L50 const useInputBaseClassName = makeResetStyles({
+L52 left: 0,
+L53 top: 0,
+L54 right: 0,
+L55 bottom: 0,
+L57 margin: 0,
+L58 opacity: 0,
+L60 height: '100%',
+L63 const useInputStyles = makeStyles({
+L64 lowerHalf: {
+L65 right: '50%',
+L67 upperHalf: {
+L68 left: '50%',
+L72 const useIndicatorBaseClassName = makeResetStyles({
+L79 left: 0,
+L80 right: 0,
+L81 top: 0,
+L82 bottom: 0,
+L85 const useIndicatorStyles = makeStyles({
+L86 lowerHalf: {
+L87 right: '50%',
+L89 flex: '0 0 auto',
+L92 upperHalf: {
+L93 left: '50%',
+L94 marginLeft: '-50%',
+L96 brand: {
+L99 marigold: {
+L102 filled: {
+L110 brandFilled: {
+L113 marigoldFilled: {
+L122 const { color, size, iconFillWidth, appearance } = state;
+L130 state.root.className = mergeClasses(ratingItemClassNames.root, styles.root, styles[size], state.root.className);
+L160 iconFillWidth === 0.5 && indicatorStyles.upperHalf,
+L172 iconFillWidth === 0.5 && indicatorStyles.lowerHalf,

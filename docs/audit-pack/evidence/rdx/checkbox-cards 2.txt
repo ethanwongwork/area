@@ -1,0 +1,197 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/checkbox-cards.css
+@import './_internal/base-card.css';
+@import './_internal/base-checkbox.css';
+
+.rt-CheckboxCardsRoot {
+  line-height: var(--line-height);   /* = 20px */
+  letter-spacing: var(--letter-spacing);   /* = 0em */
+  cursor: default;
+}
+
+.rt-CheckboxCardsItem {
+  --base-card-padding-top: var(--checkbox-cards-item-padding-top);   /* = 10px */
+  --base-card-padding-right: var(--checkbox-cards-item-padding-right);   /* = calc(
+    12px * 2 + 14px
+  ) */
+  --base-card-padding-bottom: var(--checkbox-cards-item-padding-bottom);   /* = 10px */
+  --base-card-padding-left: var(--checkbox-cards-item-padding-left);   /* = 12px */
+  --base-card-border-radius: var(--checkbox-cards-item-border-radius);   /* = 6px */
+  --base-card-border-width: var(--checkbox-cards-item-border-width);   /* = 1px */
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);   /* = 8px */
+  cursor: var(--cursor-button);   /* = default */
+  -webkit-tap-highlight-color: transparent;
+
+  &:where(:has(:focus-visible)) {
+    outline: 2px solid var(--focus-8);   /* = 2px solid var(--amber-8) */
+    outline-offset: -1px;
+
+    &::after {
+      outline: inherit;
+    }
+  }
+
+  & > * {
+    /* Avoid unintentional drag interactions (e.g. on images) */
+    pointer-events: none;
+  }
+  /* stylelint-disable-next-line selector-max-type */
+  & > :where(svg) {
+    /* Don’t squish icons */
+    flex-shrink: 0;
+  }
+}
+
+.rt-CheckboxCardCheckbox {
+  position: absolute;
+  right: var(--checkbox-cards-item-padding-left);   /* = 12px */
+}
+
+/* * * * * * * * * * * * * * * * * * * */
+/*                                     */
+/*                Sizes                */
+/*                                     */
+/* * * * * * * * * * * * * * * * * * * */
+
+.rt-CheckboxCardsItem {
+  --checkbox-cards-item-padding-right: calc(
+    var(--checkbox-cards-item-padding-left) * 2 + var(--checkbox-cards-item-checkbox-size)
+  );
+}
+
+@breakpoints {
+  .rt-CheckboxCardsRoot {
+    /* 40px height for the card with one line of text */
+    &:where(.rt-r-size-1) {
+      font-size: var(--font-size-2);   /* = 14px */
+      --line-height: var(--line-height-2);   /* = 20px */
+      --letter-spacing: var(--letter-spacing-2);   /* = 0em */
+      --checkbox-cards-item-padding-top: calc(var(--space-3) / 1.2);   /* = 10px */
+      --checkbox-cards-item-padding-bottom: calc(var(--space-3) / 1.2);   /* = 10px */
+      --checkbox-cards-item-padding-left: var(--space-3);   /* = 12px */
+      --checkbox-cards-item-border-radius: var(--radius-3);   /* = 6px */
+      /* keep in sync with checkbox */
+      --checkbox-cards-item-checkbox-size: calc(var(--space-4) * 0.875);   /* = 14px */
+    }
+    /* 48px height for the card with one line of text */
+    &:where(.rt-r-size-2) {
+      font-size: var(--font-size-2);   /* = 14px */
+      --line-height: var(--line-height-2);   /* = 20px */
+      --letter-spacing: var(--letter-spacing-2);   /* = 0em */
+      --checkbox-cards-item-padding-top: calc(var(--space-4) * 0.875);   /* = 14px */
+      --checkbox-cards-item-padding-bottom: calc(var(--space-4) * 0.875);   /* = 14px */
+      --checkbox-cards-item-padding-left: var(--space-4);   /* = 16px */
+      --checkbox-cards-item-border-radius: var(--radius-3);   /* = 6px */
+      /* keep in sync with checkbox */
+      --checkbox-cards-item-checkbox-size: var(--space-4);   /* = 16px */
+    }
+    /* 64px height for the card with one line of text */
+    &:where(.rt-r-size-3) {
+      font-size: var(--font-size-3);   /* = 16px */
+      --line-height: var(--line-height-3);   /* = 24px */
+      --letter-spacing: var(--letter-spacing-3);   /* = 0em */
+      --checkbox-cards-item-padding-top: calc(var(--space-5) / 1.2);   /* = 20px */
+      --checkbox-cards-item-padding-bottom: calc(var(--space-5) / 1.2);   /* = 20px */
+      --checkbox-cards-item-padding-left: var(--space-5);   /* = 24px */
+      --checkbox-cards-item-border-radius: var(--radius-4);   /* = 8px */
+      /* keep in sync with checkbox */
+      --checkbox-cards-item-checkbox-size: calc(var(--space-4) * 1.25);   /* = 20px */
+    }
+  }
+}
+
+/* * * * * * * * * * * * * * * * * * * */
+/*                                     */
+/*         Variants / Surface          */
+/*                                     */
+/* * * * * * * * * * * * * * * * * * * */
+
+:where(.rt-CheckboxCardsRoot.rt-variant-surface) {
+  .rt-CheckboxCardsItem {
+    --checkbox-cards-item-border-width: 1px;
+    --checkbox-cards-item-background-color: var(--color-surface);   /* = rgba(255, 255, 255, 0.85) */
+
+    &::before {
+      background-color: var(--checkbox-cards-item-background-color);   /* = rgba(255, 255, 255, 0.85) */
+    }
+    &::after {
+      box-shadow: var(--base-card-surface-box-shadow);
+    }
+    @media (hover: hover) {
+      &:where(:not(:has(:disabled)):hover) {
+        &::after {
+          box-shadow: var(--base-card-surface-hover-box-shadow);
+        }
+      }
+    }
+  }
+}
+
+/* * * * * * * * * * * * * * * * * * * */
+/*                                     */
+/*         Variants / Classic          */
+/*                                     */
+/* * * * * * * * * * * * * * * * * * * */
+
+:where(.rt-CheckboxCardsRoot.rt-variant-classic) {
+  .rt-CheckboxCardsItem {
+    --checkbox-cards-item-border-width: 1px;
+    --checkbox-cards-item-background-color: var(--color-surface);   /* = rgba(255, 255, 255, 0.85) */
+
+    transition: box-shadow 120ms;
+    box-shadow: var(--base-card-classic-box-shadow-outer);
+
+    &::before {
+      background-color: var(--checkbox-cards-item-background-color);   /* = rgba(255, 255, 255, 0.85) */
+    }
+    &::after {
+      box-shadow: var(--base-card-classic-box-shadow-inner);
+    }
+    @media (hover: hover) {
+      &:where(:not(:has(:disabled)):hover) {
+        transition-duration: 40ms;
+        box-shadow: var(--base-card-classic-hover-box-shadow-outer);
+        &::after {
+          box-shadow: var(--base-card-classic-hover-box-shadow-inner);
+        }
+      }
+    }
+  }
+}
+
+/* * * * * * * * * * * * * * * * * * * */
+/*                                     */
+/*         All tap highlights          */
+/*                                     */
+/* * * * * * * * * * * * * * * * * * * */
+
+/* Better -webkit-tap-highlight-color */
+.rt-CheckboxCardsItem {
+  @media (pointer: coarse) {
+    &:where(:active:not(:focus-visible)) {
+      &::before {
+        background-image: linear-gradient(var(--gray-a4), var(--gray-a4));   /* = linear-gradient(var(--mauve-a4), var(--mauve-a4)) */
+      }
+    }
+  }
+}
+
+/* * * * * * * * * * * * * * * * * * * */
+/*                                     */
+/*            All disabled             */
+/*                                     */
+/* * * * * * * * * * * * * * * * * * * */
+
+.rt-CheckboxCardsItem:where(:has(:disabled)) {
+  cursor: var(--cursor-disabled);   /* = not-allowed */
+  color: var(--gray-a9);   /* = var(--mauve-a9) */
+
+  &::before {
+    background-image: linear-gradient(var(--gray-a2), var(--gray-a2));   /* = linear-gradient(var(--mauve-a2), var(--mauve-a2)) */
+  }
+  &::selection {
+    background-color: var(--gray-a5);   /* = var(--mauve-a5) */
+  }
+}

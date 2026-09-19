@@ -1,0 +1,7 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TableBody/TableBody.js
+L14 const slots = {
+L21 const TableBodyRoot = styled('tbody', {
+L22 name: 'MuiTableBody',
+L23 slot: 'Root',
+L28 const tablelvl2 = {
+L38 const ownerState = {

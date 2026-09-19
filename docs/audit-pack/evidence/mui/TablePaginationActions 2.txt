@@ -1,0 +1,5 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TablePaginationActions/TablePaginationActions.js
+L31 const slots = {
+L38 const TablePaginationActionsRoot = styled('div', {
+L39 name: 'MuiTablePaginationActions',
+L40 slot: 'Root',

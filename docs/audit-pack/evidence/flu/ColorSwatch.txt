@@ -1,0 +1,62 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-swatch-picker/library/src/components/ColorSwatch/useColorSwatchStyles.styles.ts
+L21 const useResetStyles = makeResetStyles({
+L23 flexShrink: 0,
+L27 border: `1px solid var(${borderColor}, ${tokens.colorTransparentStroke})`,
+L30 padding: '0',
+L34 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorBrandStroke1}, inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorStrokeFocus1}`,   // strokeWidthThick=2px strokeWidthThicker=3px
+L38 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorCompoundBrandStrokePressed}, inset 0 0 0 ${tokens.strokeWidthThickest} ${tokens.colorStrokeFocus1}`,   // strokeWidthThicker=3px strokeWidthThickest=4px
+L49 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorStrokeFocus2}, inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorStrokeFocus1}`,   // strokeWidthThick=2px strokeWidthThicker=3px
+L57 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorBrandStroke2Hover}, inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorStrokeFocus1}`,   // strokeWidthThick=2px strokeWidthThicker=3px
+L60 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorBrandStroke2Pressed}, inset 0 0 0 ${tokens.strokeWidthThickest} ${tokens.colorStrokeFocus1}`,   // strokeWidthThicker=3px strokeWidthThickest=4px
+L65 const useStyles = makeStyles({
+L66 disabled: {
+L77 selected: {
+L79 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorBrandStroke1}, inset 0 0 0 5px ${tokens.colorStrokeFocus1}`,   // strokeWidthThicker=3px
+L81 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThickest} ${tokens.colorCompoundBrandStrokeHover}, inset 0 0 0 6px ${tokens.colorStrokeFocus1}`,   // strokeWidthThickest=4px
+L84 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThickest} ${tokens.colorCompoundBrandStrokePressed}, inset 0 0 0 7px ${tokens.colorStrokeFocus1}`,   // strokeWidthThickest=4px
+L87 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorStrokeFocus2}, inset 0 0 0 5px ${tokens.colorStrokeFocus1}`,   // strokeWidthThicker=3px
+L90 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorBrandStroke2Pressed}, inset 0 0 0 5px ${tokens.colorStrokeFocus1}`,   // strokeWidthThicker=3px
+L93 selectedSmall: {
+L94 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorBrandStroke1}, inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorStrokeFocus1}`,   // strokeWidthThick=2px strokeWidthThicker=3px
+L96 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorCompoundBrandStrokeHover}, inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorStrokeFocus1}`,   // strokeWidthThick=2px strokeWidthThicker=3px
+L99 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorCompoundBrandStrokePressed}, inset 0 0 0 ${tokens.strokeWidthThickest} ${tokens.colorStrokeFocus1}`,   // strokeWidthThicker=3px strokeWidthThickest=4px
+L104 const useSizeStyles = makeStyles({
+L106 width: '20px',
+L107 height: '20px',
+L109 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThin} ${tokens.colorBrandStroke1}, inset 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorStrokeFocus1}`,   // strokeWidthThin=1px strokeWidthThick=2px
+L113 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorCompoundBrandStrokePressed}, inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorStrokeFocus1}`,   // strokeWidthThick=2px strokeWidthThicker=3px
+L116 small: {
+L117 width: '24px',
+L118 height: '24px',
+L121 boxShadow: `inset 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorCompoundBrandStrokePressed}, inset 0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorStrokeFocus1}`,   // strokeWidthThick=2px strokeWidthThicker=3px
+L124 medium: {
+L125 width: '28px',
+L126 height: '28px',
+L128 large: {
+L129 width: '32px',
+L130 height: '32px',
+L134 const useShapeStyles = makeStyles({
+L135 rounded: {
+L136 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L137 ...createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusMedium }),   // borderRadiusMedium=4px
+L139 circular: {
+L140 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L141 ...createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusCircular }),   // borderRadiusCircular=10000px
+L143 square: {
+L144 borderRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L145 ...createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusNone }),   // borderRadiusNone=0
+L149 const useIconStyles = makeStyles({
+L150 disabledIcon: {
+L154 icon: {
+L160 fontSize: '16px',
+L162 small: {
+L163 fontSize: '16px',
+L165 medium: {
+L166 fontSize: '20px',
+L168 large: {
+L169 fontSize: '24px',
+L177 const { size = 'medium', shape = 'square' } = state;
+L184 const smallerSelectedStyles = size === 'small' || size === 'extra-small' ? styles.selectedSmall : '';
+L190 sizeStyles[size],
+L202 iconStyles[size],
+L210 state.icon.className = mergeClasses(iconStyles.icon, iconStyles[size], state.icon.className);

@@ -1,0 +1,23 @@
+### MUI Material @ 69960c1  packages/mui-material/src/BottomNavigationAction/BottomNavigationAction.js
+L21 const slots = {
+L29 const BottomNavigationActionRoot = styled(ButtonBase, {
+L30 name: 'MuiBottomNavigationAction',
+L31 slot: 'Root',
+L42   padding: '0px 12px',
+L43   minWidth: 80,
+L44   maxWidth: 168,
+L52 variants: [
+L55 style: {
+L56   paddingTop: 14,
+L61 style: {
+L62   paddingTop: 0,
+L69 const BottomNavigationActionLabel = styled('span', {
+L70 name: 'MuiBottomNavigationAction',
+L71 slot: 'Label',
+L75   fontSize: theme.typography.pxToRem(12),
+L83   fontSize: theme.typography.pxToRem(14),
+L85 variants: [
+L88 style: {
+L127 const externalForwardedProps = {
+L134 externalForwardedProps: {
+L142 additionalProps: {

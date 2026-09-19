@@ -1,0 +1,109 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-combobox/library/src/components/Combobox/useComboboxStyles.styles.ts
+L3 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L17 // Matches internal heights for Select and Input, but there are no theme variables for these
+L18 const fieldHeights = {
+L19 small: '24px',
+L20 medium: '32px',
+L21 large: '40px',
+L27 const useStyles = makeStyles({
+L28 root: {
+L30 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L32 columnGap: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L34 gridTemplateColumns: '1fr auto',
+L36 minWidth: '250px',
+L42 outlineWidth: '2px',
+L52 left: '-1px',
+L53 bottom: '-1px',
+L54 right: '-1px',
+L55 height: `max(2px, ${tokens.borderRadiusMedium})`,   // borderRadiusMedium=4px
+L56 borderBottomLeftRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L57 borderBottomRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L58 borderBottom: `${tokens.strokeWidthThick} solid ${tokens.colorCompoundBrandStroke}`,   // strokeWidthThick=2px
+L59 clipPath: 'inset(calc(100% - 2px) 0 0 0)',
+L66 transitionDuration: '0.01ms',
+L67 transitionDelay: '0.01ms',
+L77 transitionDuration: '0.01ms',
+L78 transitionDelay: '0.01ms',
+L86 listbox: {
+L88 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L89 maxHeight: '80vh',
+L93 listboxCollapsed: {
+L98 // This is due to the surface being positioned as absolute, therefore zIndex: 1 ensures that won't happen.
+L99 inlineListbox: {
+L100 zIndex: 1,
+L103 // size variants
+L104 small: {
+L105 height: fieldHeights.small,
+L106 paddingRight: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L108 medium: {
+L109 height: fieldHeights.medium,
+L110 paddingRight: tokens.spacingHorizontalMNudge,   // spacingHorizontalMNudge=10px
+L112 large: {
+L113 columnGap: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L114 height: fieldHeights.large,
+L115 paddingRight: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L119 outline: {
+L121 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1}`,   // strokeWidthThin=1px
+L124 outlineInteractive: {
+L126 ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+L131 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L136 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L140 underline: {
+L142 borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStrokeAccessible}`,   // strokeWidthThin=1px
+L143 borderRadius: '0',
+L147 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L151 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L153 invalid: {
+L155 ...shorthands.borderColor(tokens.colorPaletteRedBorder2),
+L158 invalidUnderline: {
+L164 disabled: {
+L167 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L169 ...shorthands.borderColor('GrayText'),
+L174 const useInputStyles = makeStyles({
+L175 input: {
+L188 opacity: 1,
+L192 // size variants
+L193 small: {
+L194 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L195 padding: `0 0 0 ${`calc(${tokens.spacingHorizontalSNudge} + ${tokens.spacingHorizontalXXS})`}`,   // spacingHorizontalSNudge=6px spacingHorizontalXXS=2px
+L197 medium: {
+L198 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L199 padding: `0 0 0 ${`calc(${tokens.spacingHorizontalMNudge} + ${tokens.spacingHorizontalXXS})`}`,   // spacingHorizontalMNudge=10px spacingHorizontalXXS=2px
+L201 large: {
+L202 ...typographyStyles.body2,   // typographyStyles.body2=16px/22px w400
+L203 padding: `0 0 0 ${`calc(${tokens.spacingHorizontalM} + ${tokens.spacingHorizontalSNudge})`}`,   // spacingHorizontalM=12px spacingHorizontalSNudge=6px
+L205 disabled: {
+L215 const useIconStyles = makeStyles({
+L216 icon: {
+L221 fontSize: tokens.fontSizeBase500,   // fontSizeBase500=20px
+L231 // Extend the clickable area to cover the root's right paddingRight "dead zone".
+L233 // The negative `right` is overridden per size variant below to match the root's paddingRight.
+L237 top: 0,
+L238 bottom: 0,
+L239 left: 0,
+L240 right: 0,
+L243 hidden: {
+L246 visuallyHidden: {
+L248 height: '1px',
+L249 margin: '-1px',
+L251 padding: '0px',
+L252 width: '1px',
+L256 // icon size variants
+L257 small: {
+L258 fontSize: iconSizes.small,
+L259 marginLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L261 right: `calc(-1 * ${tokens.spacingHorizontalSNudge})`,   // spacingHorizontalSNudge=6px
+L264 medium: {
+L265 fontSize: iconSizes.medium,
+L266 marginLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L268 right: `calc(-1 * ${tokens.spacingHorizontalMNudge})`,   // spacingHorizontalMNudge=10px
+L271 large: {
+L272 fontSize: iconSizes.large,
+L273 marginLeft: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L275 right: `calc(-1 * ${tokens.spacingHorizontalM})`,   // spacingHorizontalM=12px
+L278 disabled: {
+L288 const { appearance, open, size, showClearIcon } = state;
+L300 styles[size],
+L312 inputStyles[size],
+L333 iconStyles[size],
+L345 iconStyles[size],

@@ -1,0 +1,9 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tree/library/src/components/TreeItem/useTreeItemStyles.styles.ts
+L17 const useBaseStyles = makeResetStyles({
+L25 paddingRight: tokens.spacingHorizontalNone,   // spacingHorizontalNone=0
+L36 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L38 outlineRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L39 // FIXME: tokens.strokeWidthThick causes some weird bugs   // strokeWidthThick=2px
+L40 outlineWidth: '2px',
+L53 const useStyles = makeStyles({
+L55 Array.from<never, [StaticLevelProperty, TreeItemCSSProperties]>({ length: 10 }, (_, index) => [

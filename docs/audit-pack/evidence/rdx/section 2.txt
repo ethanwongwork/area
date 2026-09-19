@@ -1,0 +1,26 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/section.css
+.rt-Section {
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+@breakpoints {
+  .rt-Section {
+    &:where(.rt-r-size-1) {
+      padding-top: var(--space-5);   /* = 24px */
+      padding-bottom: var(--space-5);   /* = 24px */
+    }
+    &:where(.rt-r-size-2) {
+      padding-top: var(--space-7);   /* = 40px */
+      padding-bottom: var(--space-7);   /* = 40px */
+    }
+    &:where(.rt-r-size-3) {
+      padding-top: var(--space-9);   /* = 64px */
+      padding-bottom: var(--space-9);   /* = 64px */
+    }
+    &:where(.rt-r-size-4) {
+      padding-top: calc(80px * var(--scaling));   /* = 80px */
+      padding-bottom: calc(80px * var(--scaling));   /* = 80px */
+    }
+  }
+}

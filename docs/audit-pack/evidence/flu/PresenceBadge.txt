@@ -1,0 +1,39 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-badge/library/src/components/PresenceBadge/usePresenceBadgeStyles.styles.ts
+L22 const useRootClassName = makeResetStyles({
+L28 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L32 // Since all presence icons have a border around the edge that is at least 1px wide*, we can inset the background
+L33 // using padding and backgroundClip. The icon has margin: -1px to account for the padding.
+L34 // (* except size="tiny", where backgroundClip is unset)
+L35 padding: '1px',
+L39 const useIconClassName = makeResetStyles({
+L41 margin: '-1px',
+L44 const useStyles = makeStyles({
+L45 statusBusy: {
+L48 statusAway: {
+L51 statusAvailable: {
+L54 statusOffline: {
+L57 statusOutOfOffice: {
+L60 statusUnknown: {
+L63 outOfOffice: {
+L66 outOfOfficeAvailable: {
+L69 outOfOfficeBusy: {
+L72 outOfOfficeUnknown: {
+L77 // use `!important` to size the currently available icons to the missing ones
+L79 tiny: {
+L80 aspectRatio: '1',
+L81 width: '6px',
+L84 width: '6px !important',
+L85 height: '6px !important',
+L88 large: {
+L89 aspectRatio: '1',
+L90 width: '20px',
+L92 width: '20px !important',
+L93 height: '20px !important',
+L96 extraLarge: {
+L97 aspectRatio: '1',
+L98 width: '28px',
+L100 width: '28px !important',
+L101 height: '28px !important',
+L131 state.size === 'tiny' && styles.tiny,
+L132 state.size === 'large' && styles.large,
+L133 state.size === 'extra-large' && styles.extraLarge,

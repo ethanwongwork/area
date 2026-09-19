@@ -1,0 +1,12 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu-grid-preview/library/src/components/MenuGridItem/useMenuGridItemStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 content: {
+L18 flexGrow: 1,
+L19 height: '100%', // ensures content stay centered vertically when menu item's height is overridden
+L20 minWidth: 0,
+L22 icon: {
+L23 height: '100%',
+L25 firstSubAction: {
+L26 height: '100%',
+L28 secondSubAction: {
+L29 height: '100%',

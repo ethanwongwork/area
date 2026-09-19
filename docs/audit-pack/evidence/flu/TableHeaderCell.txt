@@ -1,0 +1,29 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-table/library/src/components/TableHeaderCell/useTableHeaderCellStyles.styles.ts
+L17 const useTableLayoutStyles = makeStyles({
+L18 root: {
+L24 const useFlexLayoutStyles = makeStyles({
+L25 root: {
+L27 flex: '1 1 0px',
+L28 minWidth: '0px',
+L35 const useStyles = makeStyles({
+L36 root: {
+L37 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L38 padding: `0px ${tokens.spacingHorizontalS}`,   // spacingHorizontalS=8px
+L40 { outline: `2px solid ${tokens.colorStrokeFocus2}`, borderRadius: tokens.borderRadiusMedium },   // borderRadiusMedium=4px
+L46 rootInteractive: {
+L57 resetButton: {
+L58 resize: 'horizontal',
+L63 fontSize: 'inherit',
+L64 lineHeight: 'normal',
+L66 padding: '0',
+L71 button: {
+L73 width: '100%',
+L75 flexGrow: 1,
+L76 height: '100%',
+L78 gap: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L79 minHeight: '32px',
+L80 flex: '1 1 0px',
+L84 sortable: {
+L88 sortIcon: {
+L91 paddingTop: tokens.spacingVerticalXXS,   // spacingVerticalXXS=2px
+L94 resizeHandle: {},

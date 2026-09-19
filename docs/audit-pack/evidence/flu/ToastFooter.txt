@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toast/library/src/components/ToastFooter/useToastFooterStyles.styles.ts
+L14 const useRootBaseClassName = makeResetStyles({
+L15 paddingTop: '16px',
+L16 gridColumnStart: 2,
+L17 gridColumnEnd: 3,
+L20 gap: '14px',

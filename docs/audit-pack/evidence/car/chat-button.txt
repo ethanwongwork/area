@@ -1,0 +1,21 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/chat-button/_chat-button.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L14 @mixin chat-button {
+L15 .#{$prefix}--chat-btn {
+L16   border-radius: convert.to-rem(24px);
+L19 .#{$prefix}--chat-btn:not(.#{$prefix}--chat-btn--with-icon) {
+L20   padding-inline-end: convert.to-rem(15px);
+L23 .#{$prefix}--chat-btn.#{$prefix}--btn--md {
+L24   border-radius: convert.to-rem(20px);
+L27 .#{$prefix}--chat-btn.#{$prefix}--btn--sm {
+L28   border-radius: convert.to-rem(16px);
+L32 .#{$prefix}--chat-btn--quick-action {
+L34   border: 1px solid $chat-button;
+L39 .#{$prefix}--chat-btn--quick-action:hover:not(:active):not([disabled]) {
+L45 .#{$prefix}--chat-btn--quick-action:active {
+L51 .#{$prefix}--chat-btn--quick-action.#{$prefix}--btn--ghost:focus {
+L53   box-shadow: inset 0 0 0 1px $focus;
+L56 .#{$prefix}--chat-btn--quick-action.#{$prefix}--btn--ghost:hover:focus {
+L58   box-shadow: inset 0 0 0 1px $focus-inset;
+L62 .#{$prefix}--chat-btn--quick-action[disabled]:hover {
+L69 .#{$prefix}--chat-btn--quick-action--selected[disabled]:hover {
+L84 .#{$prefix}--chat-btn.#{$prefix}--skeleton {

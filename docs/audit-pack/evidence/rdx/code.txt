@@ -1,0 +1,188 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/code.css
+/* stylelint-disable selector-max-type */
+/* Disable selector-max-type rule to target individual element types. */
+
+.rt-Code {
+  --code-variant-font-size-adjust: calc(var(--code-font-size-adjust) * 0.95);   /* = calc(0.95 * 0.95) */
+  font-family: var(--code-font-family);   /* = 'Menlo', 'Consolas (Custom)', 'Bitstream Vera Sans Mono', monospace, 'Apple Color Emoji', 'Segoe UI Emoji' */
+  font-size: calc(var(--code-variant-font-size-adjust) * 1em);   /* = calc(calc(0.95 * 0.95) * 1em) */
+  font-style: var(--code-font-style);   /* = normal */
+  font-weight: var(--code-font-weight);   /* = inherit */
+  line-height: 1.25;
+  letter-spacing: calc(var(--code-letter-spacing) + var(--letter-spacing, var(--default-letter-spacing)));   /* = calc(-0.007em + 0.0025em) */
+  border-radius: calc((0.5px + 0.2em) * var(--radius-factor));   /* = calc((0.5px + 0.2em) * 1) */
+
+  box-sizing: border-box;
+  padding-top: var(--code-padding-top);   /* = 0.1em */
+  padding-left: var(--code-padding-left);   /* = 0.25em */
+  padding-bottom: var(--code-padding-bottom);   /* = 0.1em */
+  padding-right: var(--code-padding-right);   /* = 0.25em */
+
+  /* Make sure that the height is not stretched in a Flex/Grid layout */
+  height: fit-content;
+
+  & :where(&) {
+    font-size: inherit;
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * SIZES                                                                                           *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+@breakpoints {
+  .rt-Code {
+    &:where(.rt-r-size-1) {
+      font-size: calc(var(--font-size-1) * var(--code-variant-font-size-adjust));   /* = calc(12px * calc(0.95 * 0.95)) */
+      line-height: var(--line-height-1);   /* = 16px */
+      --letter-spacing: var(--letter-spacing-1);   /* = 0.0025em */
+    }
+    &:where(.rt-r-size-2) {
+      font-size: calc(var(--font-size-2) * var(--code-variant-font-size-adjust));   /* = calc(14px * calc(0.95 * 0.95)) */
+      line-height: var(--line-height-2);   /* = 20px */
+      --letter-spacing: var(--letter-spacing-2);   /* = 0em */
+    }
+    &:where(.rt-r-size-3) {
+      font-size: calc(var(--font-size-3) * var(--code-variant-font-size-adjust));   /* = calc(16px * calc(0.95 * 0.95)) */
+      line-height: var(--line-height-3);   /* = 24px */
+      --letter-spacing: var(--letter-spacing-3);   /* = 0em */
+    }
+    &:where(.rt-r-size-4) {
+      font-size: calc(var(--font-size-4) * var(--code-variant-font-size-adjust));   /* = calc(18px * calc(0.95 * 0.95)) */
+      line-height: var(--line-height-4);   /* = 26px */
+      --letter-spacing: var(--letter-spacing-4);   /* = -0.0025em */
+    }
+    &:where(.rt-r-size-5) {
+      font-size: calc(var(--font-size-5) * var(--code-variant-font-size-adjust));   /* = calc(20px * calc(0.95 * 0.95)) */
+      line-height: var(--line-height-5);   /* = 28px */
+      --letter-spacing: var(--letter-spacing-5);   /* = -0.005em */
+    }
+    &:where(.rt-r-size-6) {
+      font-size: calc(var(--font-size-6) * var(--code-variant-font-size-adjust));   /* = calc(24px * calc(0.95 * 0.95)) */
+      line-height: var(--line-height-6);   /* = 30px */
+      --letter-spacing: var(--letter-spacing-6);   /* = -0.00625em */
+    }
+    &:where(.rt-r-size-7) {
+      font-size: calc(var(--font-size-7) * var(--code-variant-font-size-adjust));   /* = calc(28px * calc(0.95 * 0.95)) */
+      line-height: var(--line-height-7);   /* = 36px */
+      --letter-spacing: var(--letter-spacing-7);   /* = -0.0075em */
+    }
+    &:where(.rt-r-size-8) {
+      font-size: calc(var(--font-size-8) * var(--code-variant-font-size-adjust));   /* = calc(35px * calc(0.95 * 0.95)) */
+      line-height: var(--line-height-8);   /* = 40px */
+      --letter-spacing: var(--letter-spacing-8);   /* = -0.01em */
+    }
+    &:where(.rt-r-size-9) {
+      font-size: calc(var(--font-size-9) * var(--code-variant-font-size-adjust));   /* = calc(60px * calc(0.95 * 0.95)) */
+      line-height: var(--line-height-9);   /* = 60px */
+      --letter-spacing: var(--letter-spacing-9);   /* = -0.025em */
+    }
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * VARIANTS                                                                                        *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+/* ghost */
+
+.rt-Code:where(.rt-variant-ghost) {
+  --code-variant-font-size-adjust: var(--code-font-size-adjust);   /* = 0.95 */
+  padding: 0;
+
+  &:where([data-accent-color]) {
+    color: var(--accent-a11);   /* = var(--amber-a11) */
+  }
+
+  &:where([data-accent-color].rt-high-contrast),
+  :where([data-accent-color]:not(.radix-themes)) &:where(.rt-high-contrast) {
+    color: var(--accent-12);   /* = var(--amber-12) */
+  }
+}
+
+/* solid */
+
+.rt-Code:where(.rt-variant-solid) {
+  background-color: var(--accent-a9);   /* = var(--amber-a9) */
+  color: var(--accent-contrast);   /* = var(--amber-contrast) */
+
+  &::selection {
+    background-color: var(--accent-7);   /* = var(--amber-7) */
+    color: var(--accent-12);   /* = var(--amber-12) */
+  }
+
+  &:where(.rt-high-contrast) {
+    background-color: var(--accent-12);   /* = var(--amber-12) */
+    color: var(--accent-1);   /* = var(--amber-1) */
+
+    &::selection {
+      background-color: var(--accent-a11);   /* = var(--amber-a11) */
+      color: var(--accent-1);   /* = var(--amber-1) */
+    }
+  }
+
+  :where(.rt-Link) &,
+  &:where(:any-link, button) {
+    /* Create a new stacking context (otherwise, `filter` may do it on hover) */
+    isolation: isolate;
+    @media (hover: hover) {
+      &:where(:hover) {
+        background-color: var(--accent-10);   /* = var(--amber-10) */
+      }
+      &:where(.rt-high-contrast:hover) {
+        background-color: var(--accent-12);   /* = var(--amber-12) */
+        /* Re-use base button hover filter */
+        filter: var(--base-button-solid-high-contrast-hover-filter);
+      }
+    }
+  }
+}
+
+/* soft */
+
+.rt-Code:where(.rt-variant-soft) {
+  background-color: var(--accent-a3);   /* = var(--amber-a3) */
+  color: var(--accent-a11);   /* = var(--amber-a11) */
+
+  &:where(.rt-high-contrast) {
+    color: var(--accent-12);   /* = var(--amber-12) */
+  }
+
+  :where(.rt-Link) &,
+  &:where(:any-link, button) {
+    isolation: isolate;
+    @media (hover: hover) {
+      &:where(:hover) {
+        background-color: var(--accent-a4);   /* = var(--amber-a4) */
+      }
+    }
+  }
+}
+
+/* outline */
+
+.rt-Code:where(.rt-variant-outline) {
+  box-shadow: inset 0 0 0 max(1px, 0.033em) var(--accent-a8);   /* = inset 0 0 0 max(1px, 0.033em) var(--amber-a8) */
+  color: var(--accent-a11);   /* = var(--amber-a11) */
+
+  &:where(.rt-high-contrast) {
+    box-shadow:
+      inset 0 0 0 max(1px, 0.033em) var(--accent-a7),
+      inset 0 0 0 max(1px, 0.033em) var(--gray-a11);
+    color: var(--accent-12);   /* = var(--amber-12) */
+  }
+
+  :where(.rt-Link) &,
+  &:where(:any-link, button) {
+    isolation: isolate;
+    @media (hover: hover) {
+      &:where(:hover) {
+        background-color: var(--accent-a2);   /* = var(--amber-a2) */
+      }
+    }
+  }
+}

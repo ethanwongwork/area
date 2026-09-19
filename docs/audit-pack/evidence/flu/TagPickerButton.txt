@@ -1,0 +1,42 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tag-picker/library/src/components/TagPickerButton/useTagPickerButtonStyles.styles.ts
+L4 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L15 const useStyles = makeStyles({
+L16 button: {
+L18 minHeight: '32px',
+L23 columnGap: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L27 flexGrow: 1,
+L34 placeholder: {
+L38 // size variants
+L39 medium: {
+L40 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L41 padding: `3px ${
+L45 large: {
+L46 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L47 padding: `5px ${
+L52 columnGap: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L53 ...typographyStyles.body2,   // typographyStyles.body2=16px/22px w400
+L54 padding: `7px ${
+L60 outline: {
+L62 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1}`,   // strokeWidthThin=1px
+L65 outlineInteractive: {
+L67 ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+L72 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L76 underline: {
+L78 borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStrokeAccessible}`,   // strokeWidthThin=1px
+L79 borderRadius: '0',
+L83 border: `${tokens.strokeWidthThin} solid transparent`,   // strokeWidthThin=1px
+L87 border: `${tokens.strokeWidthThin} solid transparent`,   // strokeWidthThin=1px
+L89 invalid: {
+L91 ...shorthands.borderColor(tokens.colorPaletteRedBorder2),
+L94 invalidUnderline: {
+L99 disabled: {
+L102 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L104 ...shorthands.borderColor('GrayText'),
+L108 disabledText: {
+L113 hidden: {
+L116 visuallyHidden: {
+L118 height: '1px',
+L119 margin: '-1px',
+L121 padding: '0px',
+L122 width: '1px',
+L136 styles[state.size],

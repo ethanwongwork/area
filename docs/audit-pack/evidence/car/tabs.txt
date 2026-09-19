@@ -1,0 +1,203 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/tabs/_tabs.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L41 @mixin tabs {
+L43 .#{$prefix}--tab-content {
+L48 .#{$prefix}--tabs.#{$prefix}--tabs--contained.#{$prefix}--tabs--tall {
+L49   @include layout.use('size', $min: 'lg', $max: 'xl', $default: 'xl');
+L52 .#{$prefix}--tabs {
+L54   @include type-style('body-compact-01');   // body-compact-01=14/18
+L55   @include layout.use('size', $min: 'sm', $max: 'lg', $default: 'md');
+L59   block-size: auto;
+L61   inline-size: 100%;
+L62   max-block-size: custom-property.get-var('layout-size-height-xl');
+L63   min-block-size: layout.size('height');
+L66 &.#{$prefix}--tabs--contained {
+L67   @include layout.use('size', $min: 'sm', $max: 'xl', $default: 'lg');
+L70 .#{$prefix}--tab--list {
+L72   inline-size: auto;
+L75   scrollbar-width: none;
+L78 &::-webkit-scrollbar {
+L83 &.#{$prefix}--tabs--vertical {
+L84   @include layout.use('size', $min: 'sm', $max: 'xl', $default: 'xl');
+L87   box-shadow: inset -1px 0 $border-subtle;
+L89   max-block-size: none;
+L91 @include breakpoint(lg) {
+L95 .#{$prefix}--tab--list {
+L98   inline-size: 100%;
+L101 .#{$prefix}--tab--list-gradient_bottom {
+L104   block-size: $spacing-10;   // spacing-10=64px
+L105   inset-block-end: 0;
+L106   inset-inline: 0;
+L110 .#{$prefix}--tab--list-gradient_top {
+L113   block-size: $spacing-10;   // spacing-10=64px
+L114   inset-block-start: 0;
+L115   inset-inline: 0;
+L120 .#{$prefix}--tabs__nav {
+L129 .#{$prefix}--tab--overflow-nav-button {
+L137   inline-size: $spacing-08;   // spacing-08=40px
+L139 &:focus {
+L143 &:hover {
+L147 &:active {
+L152 .#{$prefix}--tab--overflow-nav-button--hidden {
+L156 &.#{$prefix}--tabs--contained .#{$prefix}--tab--overflow-nav-button {
+L157   margin: 0;
+L159   inline-size: $spacing-09;   // spacing-09=48px
+L161 &:hover {
+L165 &:active {
+L170 .#{$prefix}--tab--overflow-nav-button svg {
+L175 &:hover {
+L180 .#{$prefix}--tab--overflow-nav-button--next {
+L182   inset-block: 0;
+L183   inset-inline-end: 0;
+L186 .#{$prefix}--tab--overflow-nav-button--next::before {
+L189   block-size: 100%;
+L191   inline-size: $spacing-03;   // spacing-03=8px
+L192   inset-inline-start: -$spacing-03;   // spacing-03=8px
+L195 &:not(.#{$prefix}--tabs--contained) {
+L196 .#{$prefix}--tab--overflow-nav-button--next::before {
+L203 .#{$prefix}--tab--overflow-nav-button--previous::before {
+L212 .#{$prefix}--tab--overflow-nav-button--previous {
+L215   inset-block: 0;
+L216   inset-inline-start: 0;
+L219 .#{$prefix}--tab--overflow-nav-button--previous::before {
+L222   block-size: 100%;
+L224   inline-size: $spacing-03;   // spacing-03=8px
+L225   inset-inline-end: -$spacing-03;   // spacing-03=8px
+L228 .#{$prefix}--tabs--light .#{$prefix}--tabs__overflow-indicator--left {
+L236 .#{$prefix}--tabs--light .#{$prefix}--tabs__overflow-indicator--right {
+L244 &.#{$prefix}--tabs--contained .#{$prefix}--tabs__overflow-indicator--left {
+L252 &.#{$prefix}--tabs--contained .#{$prefix}--tabs__overflow-indicator--right {
+L265 .#{$prefix}--tabs__overflow-indicator--left {
+L273 .#{$prefix}--tabs__overflow-indicator--right {
+L282 .#{$prefix}--tabs__overflow-indicator--left {
+L291 .#{$prefix}--tabs__overflow-indicator--right {
+L303 .#{$prefix}--tabs__nav-item-label-wrapper {
+L308 .#{$prefix}--tabs__nav-item-label-wrapper {
+L310   inset-block-start: convert.to-rem(1px);
+L316 .#{$prefix}--tabs__nav-item {
+L322   padding: 0;
+L328 .#{$prefix}--tabs__nav-item + .#{$prefix}--tabs__nav-item {
+L329   margin-inline-start: convert.to-rem(1px);
+L332 &.#{$prefix}--tabs--contained .#{$prefix}--tabs__nav-item {
+L335   box-shadow: convert.to-rem(-1px) 0 0 0 $border-strong;
+L336   margin-inline-start: 0;
+L339 &.#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item {
+L342   block-size: layout.size('height');
+L345   box-shadow: inset 3px 0 0 0 $border-subtle;
+L346   inline-size: 100%;
+L347   margin-inline-start: 0;
+L354   box-shadow: convert.to-rem(-1px) 0 0 0 transparent;
+L357 .#{$prefix}--tabs__nav-item .#{$prefix}--tabs__nav-link {
+L364 &.#{$prefix}--tabs--dismissable .#{$prefix}--tabs__nav-link {
+L365   padding-inline-end: $spacing-08;   // spacing-08=40px
+L369 .#{$prefix}--tabs__nav-link {
+L370   padding-inline-end: calc($spacing-09 - 1px);   // spacing-09=48px
+L377 .#{$prefix}--tabs__nav-item--close {
+L381   inset-inline-start: calc(-#{$spacing-04} - 1px);   // spacing-04=12px
+L382   margin-inline-start: calc(-#{$spacing-06} + 1px);   // spacing-06=24px
+L386 .#{$prefix}--tabs__nav-item--close--hidden {
+L390   inline-size: convert.to-rem(3px);
+L393   &.#{$prefix}--tabs--contained.#{$prefix}--tabs--full-width
+L394 .#{$prefix}--tabs__nav-item--close--hidden {
+L398 .#{$prefix}--tabs__nav-item--close-icon {
+L401   block-size: convert.to-rem(24px);
+L402   inline-size: convert.to-rem(24px);
+L403   padding-block: $spacing-02;   // spacing-02=4px
+L404   padding-inline: $spacing-02;   // spacing-02=4px
+L408   block-size: convert.to-rem(16px);
+L410   inline-size: convert.to-rem(16px);
+L417 &:hover {
+L422 &:active {
+L434 .#{$prefix}--tabs__nav-item--close-icon--selected {
+L444 .#{$prefix}--tabs__nav-item--close-icon--disabled:hover {
+L455 &:active {
+L460 .#{$prefix}--tabs__nav-item--icon {
+L463   padding-inline-start: $spacing-03;   // spacing-03=8px
+L466 .#{$prefix}--tabs__nav-item--icon-left {
+L469   margin-block-start: -2px;
+L470   padding-inline-end: $spacing-03;   // spacing-03=8px
+L473 &.#{$prefix}--tabs--contained .#{$prefix}--tabs__nav-item--icon {
+L474   padding-inline-start: layout.density('padding-inline');
+L480 .#{$prefix}--tabs__nav-link {
+L481   @include button-reset.reset($width: false);
+L483   @include type-style('body-compact-01');   // body-compact-01=14/18
+L488   padding-inline: layout.density('padding-inline');
+L498 &:active {
+L504 .#{$prefix}--tabs__nav-link {
+L509 .#{$prefix}--tabs__nav-item-label {
+L511   line-height: calc(#{convert.to-rem(48px)} - (#{$spacing-03} * 2));   // spacing-03=8px
+L514 &.#{$prefix}--tabs--contained .#{$prefix}--tabs__nav-item-secondary-label {
+L515   @include type-style('label-01');   // label-01=12/16
+L517   min-block-size: convert.to-rem(16px);
+L521 .#{$prefix}--tabs__nav-item-label {
+L522   line-height: custom-property.get-var('body-compact-01-line-height');
+L531 &.#{$prefix}--tabs__icon--lg .#{$prefix}--tab--list {
+L535 .#{$prefix}--tabs__nav-item--icon-only {
+L536   margin-inline-end: convert.to-rem(1px);
+L540 &.#{$prefix}--tabs--contained .#{$prefix}--tabs__nav-item--icon-only {
+L544   padding: 0;
+L545   block-size: layout.size('height');
+L546   inline-size: layout.size('height');
+L548 .#{$prefix}--tabs__nav-item-label {
+L549   line-height: 0;
+L553   &.#{$prefix}--layout--size-sm
+L557 .#{$prefix}--badge-indicator {
+L558   margin-block-start: $spacing-02;   // spacing-02=4px
+L559   margin-inline-end: $spacing-02;   // spacing-02=4px
+L590   box-shadow: inset 3px 0 0 0 $border-strong;
+L596 .#{$prefix}--tabs__nav-item--selected {
+L608 .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--selected {
+L610   box-shadow: inset 0 2px 0 0 $border-interactive;
+L614 .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--selected {
+L615   border-inline: none;
+L617   box-shadow: inset 3px 0 0 0 $border-interactive;
+L625 .#{$prefix}--tabs__nav-link:active {
+L626   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L634 .#{$prefix}--tabs__nav-item--selected:hover {
+L636   line-height: calc(#{convert.to-rem(48px)} - (#{$spacing-03} * 2));   // spacing-03=8px
+L640 &.#{$prefix}--tabs--contained .#{$prefix}--tabs__nav-item--selected:hover {
+L644 .#{$prefix}--tabs__nav-link:active {
+L652 .#{$prefix}--tabs__nav-item--selected:hover {
+L660 .#{$prefix}--tabs__nav-item--disabled {
+L667 .#{$prefix}--tabs__nav-item--disabled:hover {
+L676 .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--disabled:hover {
+L683 .#{$prefix}--tabs__nav-item.#{$prefix}--tabs__nav-item--disabled:hover {
+L689 .#{$prefix}--tabs__nav-item--disabled:active {
+L697 .#{$prefix}--tabs__nav-link {
+L703 .#{$prefix}--tabs__nav-link {
+L712 .#{$prefix}--tabs__nav-link:active {
+L717 .#{$prefix}--tabs__nav-item--disabled {
+L725 .#{$prefix}--tab-content {
+L726   padding: layout.density('padding-inline');
+L728 &:focus {
+L733 .#{$prefix}--tabs--contained ~ .#{$prefix}--tab-content {
+L737 .#{$prefix}--tabs--vertical ~ .#{$prefix}--tab-content {
+L743 @include breakpoint(lg) {
+L751 .#{$prefix}--tabs.#{$prefix}--skeleton {
+L757 .#{$prefix}--tabs__nav-link {
+L761 .#{$prefix}--tabs.#{$prefix}--skeleton .#{$prefix}--tabs__nav-link {
+L764   padding: 0 layout.density('padding-inline');
+L765   block-size: 100%;
+L766   inline-size: 10rem;
+L769 .#{$prefix}--tabs.#{$prefix}--skeleton .#{$prefix}--tabs__nav-link span {
+L773   block-size: convert.to-rem(14px);
+L774   inline-size: 100%;
+L783 .#{$prefix}--tabs__nav-item--selected.#{$prefix}--tabs__nav-link {
+L791 .#{$prefix}--tabs__nav-link {
+L800   .#{$prefix}--tabs.#{$prefix}--tabs--contained.#{$prefix}--tabs--full-width
+L801 .#{$prefix}--tab--list {
+L804   inline-size: 100%;
+L806 .#{$prefix}--tabs__nav-link {
+L808 .#{$prefix}--tabs__nav-item-secondary-label {
+L812 .#{$prefix}--tabs__nav-item--icon {
+L813   margin-inline-start: auto;
+L818 .#{$prefix}--tabs.#{$prefix}--tabs--vertical {
+L819 .#{$prefix}--tabs__nav-link {
+L820 .#{$prefix}--tabs__nav-item-label {
+L834 .#{$prefix}--tabs .#{$prefix}--icon-tooltip .#{$prefix}--popover-content {
+L835   @include custom-property.declaration('popover-offset', convert.to-rem(8px));
+L838 .#{$prefix}--tabs .#{$prefix}--icon-tooltip .#{$prefix}--popover-caret {
+L839   @include custom-property.declaration('popover-offset', convert.to-rem(8px));
+L842 .#{$prefix}--tabs.#{$prefix}--tabs--vertical.#{$prefix}--layout--size-sm {
+L843 .#{$prefix}--tabs__nav-link {
+L844 .#{$prefix}--tabs__nav-item-label {
+### Carbon styles @ 8472cca  packages/styles/scss/components/tabs/_vars.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)

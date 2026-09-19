@@ -1,0 +1,30 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ListItem/ListItem.js
+L32 const slots = {
+L48 name: 'MuiListItem',
+L49 slot: 'Root',
+L58   width: '100%',
+L61 variants: [
+L64 style: {
+L65   paddingTop: 8,
+L66   paddingBottom: 8,
+L71 style: {
+L72   paddingTop: 4,
+L73   paddingBottom: 4,
+L78 style: {
+L79   paddingLeft: 16,
+L80   paddingRight: 16,
+L85 style: {
+L88   paddingRight: 48,
+L93 style: {
+L95   paddingRight: 48,
+L100 props: {
+L103 style: {
+L109 style: {
+L116 style: {
+L120 '&:hover': {
+L134 const StyledListItemSecondaryAction = styled(ListItemSecondaryAction, {
+L135 name: 'MuiListItem',
+L136 slot: 'secondaryAction',
+L166 const ownerState = {
+L178 const externalForwardedProps = {
+L186 externalForwardedProps: {

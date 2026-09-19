@@ -1,0 +1,18 @@
+### Primer React @ e4e6eba  packages/react/src/SubNav/SubNav.dev.module.css
+.SubNavDev {
+  padding: var(--base-size-4);   /* = 4px */
+  border: var(--borderWidth-thick) solid var(--borderColor-default);   /* = 2px solid var(--borderColor-default) */
+}
+
+.SubNavLinksDev {
+  margin: var(--base-size-8);   /* = 8px */
+}
+
+.SubNavLinkDev {
+  font-weight: var(--text-title-weight-large);   /* = 600 */
+  color: var(--fgColor-accent);
+
+  &:is([data-selected]) {
+    background-color: var(--bgColor-open-emphasis);
+  }
+}

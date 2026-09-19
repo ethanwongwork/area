@@ -1,0 +1,22 @@
+### Primer React @ e4e6eba  packages/react/src/FormControl/FormControlLeadingVisual.module.css
+.LeadingVisual {
+  --leadingVisual-size: 16px;
+
+  color: var(--fgColor-default);
+  display: flex;
+  align-items: center;
+
+  &:where([data-control-disabled]) {
+    color: var(--control-fgColor-disabled);
+  }
+
+  & > * {
+    min-width: var(--leadingVisual-size);   /* = 16px */
+    min-height: var(--leadingVisual-size);   /* = 16px */
+    fill: currentColor;
+  }
+
+  &:where([data-has-caption]) {
+    --leadingVisual-size: 24px;
+  }
+}

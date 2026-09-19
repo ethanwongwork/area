@@ -1,0 +1,27 @@
+### MUI Material @ 69960c1  packages/mui-material/src/SvgIcon/SvgIcon.js
+L16 const slots = {
+L27 const SvgIconRoot = styled('svg', {
+L28 name: 'MuiSvgIcon',
+L29 slot: 'Root',
+L42   width: '1em',
+L43   height: '1em',
+L49 variants: [
+L52 style: {
+L59 props: { fontSize: 'inherit' },
+L60 style: { fontSize: 'inherit' },
+L63 props: { fontSize: 'small' },
+L64 style: { fontSize: theme.typography?.pxToRem?.(20) || '1.25rem' },
+L67 props: { fontSize: 'medium' },
+L68 style: { fontSize: theme.typography?.pxToRem?.(24) || '1.5rem' },
+L71 props: { fontSize: 'large' },
+L72 style: { fontSize: theme.typography?.pxToRem?.(35) || '2.1875rem' },
+L78 props: { color },
+L79 style: { color: (theme.vars ?? theme).palette?.[color]?.main },
+L82 props: { color: 'action' },
+L83 style: { color: (theme.vars ?? theme).palette?.action?.active },
+L86 props: { color: 'disabled' },
+L87 style: { color: (theme.vars ?? theme).palette?.action?.disabled },
+L90 props: { color: 'inherit' },
+L91 style: { color: undefined },
+L114 const ownerState = {
+L125 const more = {};

@@ -1,0 +1,72 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-button/library/src/components/ToggleButton/useToggleButtonStyles.styles.ts
+L17 const useRootCheckedStyles = makeStyles({
+L19 base: {
+L21 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L24 ...shorthands.borderWidth(tokens.strokeWidthThin),   // strokeWidthThin=1px
+L35 ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+L41 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L47 highContrast: {
+L50 ...shorthands.borderColor('Highlight'),
+L56 ...shorthands.borderColor('Highlight'),
+L62 ...shorthands.borderColor('Highlight'),
+L67 border: '1px solid HighlightText',
+L74 outline: {
+L76 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L77 ...shorthands.borderWidth(tokens.strokeWidthThicker),   // strokeWidthThicker=3px
+L88 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L91 primary: {
+L93 ...shorthands.borderColor('transparent'),
+L98 ...shorthands.borderColor('transparent'),
+L104 ...shorthands.borderColor('transparent'),
+L108 secondary: {
+L111 subtle: {
+L113 ...shorthands.borderColor('transparent'),
+L118 ...shorthands.borderColor('transparent'),
+L124 ...shorthands.borderColor('transparent'),
+L128 transparent: {
+L130 ...shorthands.borderColor('transparent'),
+L135 ...shorthands.borderColor('transparent'),
+L141 ...shorthands.borderColor('transparent'),
+L147 const useCheckedAccessibleStyles = makeStyles({
+L149 base: {
+L151 ...shorthands.borderColor('transparent'),
+L156 ...shorthands.borderColor('transparent'),
+L162 ...shorthands.borderColor('transparent'),
+L168 outline: {
+L170 ...shorthands.borderWidth(tokens.strokeWidthThin),   // strokeWidthThin=1px
+L173 primary: {
+L175 outline: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralForegroundOnBrand}`,   // strokeWidthThin=1px
+L176 outlineOffset: `calc(${tokens.strokeWidthThicker} * -1)`,   // strokeWidthThicker=3px
+L180 outline: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralForegroundOnBrand}`,   // strokeWidthThin=1px
+L181 outlineOffset: `calc(${tokens.strokeWidthThickest} * -1)`,   // strokeWidthThickest=4px
+L185 subtle: {
+L194 transparent: {
+L198 secondary: {
+L203 const useRootDisabledStyles = makeStyles({
+L205 base: {
+L207 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L212 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L218 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L224 outline: {
+L227 primary: {
+L228 ...shorthands.borderColor('transparent'),
+L231 ...shorthands.borderColor('transparent'),
+L235 ...shorthands.borderColor('transparent'),
+L238 secondary: {
+L241 subtle: {
+L243 ...shorthands.borderColor('transparent'),
+L247 ...shorthands.borderColor('transparent'),
+L252 ...shorthands.borderColor('transparent'),
+L255 transparent: {
+L257 ...shorthands.borderColor('transparent'),
+L261 ...shorthands.borderColor('transparent'),
+L266 ...shorthands.borderColor('transparent'),
+L271 const useIconCheckedStyles = makeStyles({
+L273 subtleOrTransparent: {
+L277 highContrast: {
+L284 const usePrimaryHighContrastStyles = makeStyles({
+L287 base: {
+L290 ...shorthands.borderColor('ButtonBorder'),
+L296 disabled: {
+L298 ...shorthands.borderColor('GrayText'),
+L302 ...shorthands.borderColor('GrayText'),

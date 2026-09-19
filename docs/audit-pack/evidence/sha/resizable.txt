@@ -1,0 +1,7 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/resizable.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot resizable-panel-group]
+  [slot resizable-panel]
+  [slot resizable-handle]
+  L38 w-px=1px after:inset-y-0=0px after:w-1=4px focus-visible:ring-1=1px focus-visible:ring-offset-1=4px aria-[orientation=horizontal]:h-px=1px aria-[orientation=horizontal]:after:left-0=0px aria-[orientation=horizontal]:after:h-1=4px aria-[orientation=horizontal]:after:translate-x-0=0px
+  L44 h-4=16px w-3=12px rounded-xs=2px border=1px
+  L45 size-2.5=10px

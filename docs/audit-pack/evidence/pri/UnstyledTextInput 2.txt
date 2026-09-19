@@ -1,0 +1,14 @@
+### Primer React @ e4e6eba  packages/react/src/internal/components/UnstyledTextInput.module.css
+.Input {
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background-color: transparent;
+  border: 0;
+  appearance: none;
+
+  &:focus {
+    outline: 0;
+  }
+}

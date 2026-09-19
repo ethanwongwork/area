@@ -1,0 +1,259 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/data-table/_data-table.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L28 @mixin data-table {
+L32 .#{$prefix}--data-table-container {
+L35   padding-block-start: $spacing-01;   // spacing-01=2px
+L38 .#{$prefix}--data-table-content {
+L43 .#{$prefix}--data-table-content:focus {
+L50 .#{$prefix}--data-table-container--ai-enabled {
+L53   padding: 1px;
+L54   border: none;
+L57 .#{$prefix}--data-table-container--ai-enabled::after {
+L62   block-size: 100%;
+L64   inline-size: 100%;
+L65   inset: 0;
+L69 .#{$prefix}--data-table-container--ai-enabled tbody {
+L73 .#{$prefix}--data-table-container--ai-enabled tbody::before {
+L75   block-size: 100%;
+L77   inline-size: 100%;
+L78   inset: 0;
+L88 .#{$prefix}--data-table-header {
+L90   padding-block: $spacing-05 $spacing-06;   // spacing-05=16px spacing-06=24px
+L91   padding-inline: $spacing-05;   // spacing-05=16px
+L94 .#{$prefix}--data-table-header.#{$prefix}--data-table-header__with-decorator {
+L99 .#{$prefix}--data-table-header.#{$prefix}--data-table-header__with-decorator.#{$prefix}--data-table-header__wi
+L103 .#{$prefix}--data-table-header__title {
+L104   @include type-style('heading-03');   // heading-03=20/28
+L109 .#{$prefix}--data-table-header__description {
+L110   @include type-style('body-compact-01');   // body-compact-01=14/18
+L114 @include breakpoint(md) {
+L115   max-inline-size: 50ch;
+L118 @include breakpoint(lg) {
+L119   max-inline-size: 80ch;
+L126 .#{$prefix}--data-table {
+L127   border-collapse: collapse;
+L128   border-spacing: 0;
+L129   inline-size: 100%;
+L132 .#{$prefix}--data-table thead {
+L133   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L138 .#{$prefix}--data-table tbody {
+L139   @include type-style('body-compact-01');   // body-compact-01=14/18
+L142   inline-size: 100%;
+L145 .#{$prefix}--data-table tr {
+L146   border: none;
+L147   block-size: $spacing-09;   // spacing-09=48px
+L148   inline-size: 100%;
+L153 .#{$prefix}--data-table tbody tr th {
+L159 .#{$prefix}--data-table tbody tr[data-child-row]:hover > td {
+L164 .#{$prefix}--data-table tbody tr:hover th {
+L172 .#{$prefix}--link:not(.#{$prefix}--popover-container .#{$prefix}--link) {
+L186 .#{$prefix}--data-table td {
+L190 .#{$prefix}--data-table.#{$prefix}--data-table--top-aligned-body {
+L194   padding-block: $spacing-05 $spacing-05;   // spacing-05=16px spacing-05=16px
+L196 &.#{$prefix}--table-column-menu {
+L197   padding-block-start: $spacing-03;   // spacing-03=8px
+L200 &.#{$prefix}--table-column-checkbox:not(.#{$prefix}--table-column-radio) {
+L201   padding-block-start: convert.to-rem(13px);
+L210 .#{$prefix}--data-table.#{$prefix}--data-table--top-aligned-header {
+L213   padding-block: $spacing-05 $spacing-05;   // spacing-05=16px spacing-05=16px
+L215 &.#{$prefix}--table-column-menu {
+L216   padding-block-start: $spacing-03;   // spacing-03=8px
+L219 &.#{$prefix}--table-column-checkbox {
+L220   padding-block-start: convert.to-rem(13px);
+L230 .#{$prefix}--data-table td[align='right'] {
+L235 .#{$prefix}--data-table td[align='center'] {
+L239 .#{$prefix}--data-table th {
+L242   padding-inline: $spacing-05 $spacing-05;   // spacing-05=16px spacing-05=16px
+L245 .#{$prefix}--data-table th:last-of-type {
+L248   inline-size: auto;
+L251 .#{$prefix}--data-table .#{$prefix}--table-header-label {
+L256 .#{$prefix}--data-table tbody th {
+L260   padding-inline: $spacing-05 $spacing-05;   // spacing-05=16px spacing-05=16px
+L263   padding-inline-start: $spacing-04;   // spacing-04=12px
+L268 .#{$prefix}--layer-two .#{$prefix}--data-table tbody th {
+L273 .#{$prefix}--layer-three .#{$prefix}--data-table tbody th {
+L278 .#{$prefix}--data-table td {
+L280   background-clip: padding-box;
+L295 .#{$prefix}--data-table .#{$prefix}--select-input {
+L302 .#{$prefix}--overflow-menu[aria-expanded='false']:focus {
+L308 .#{$prefix}--overflow-menu[aria-expanded='true']:focus {
+L318 .#{$prefix}--overflow-menu__icon {
+L326 .#{$prefix}--overflow-menu__icon {
+L341 .#{$prefix}--overflow-menu__icon {
+L350 .#{$prefix}--overflow-menu__icon {
+L361   inset-block-start: convert.to-rem(3px);
+L362   margin-inline-end: $spacing-03;   // spacing-03=8px
+L366 .#{$prefix}--data-table .#{$prefix}--overflow-menu__trigger {
+L367 &:hover {
+L373 .#{$prefix}--data-table--selected .#{$prefix}--overflow-menu__trigger {
+L374 &:hover {
+L380 .#{$prefix}--link:not(.#{$prefix}--link--disabled) {
+L385 .#{$prefix}--data-table--sm td.#{$prefix}--table-column-menu {
+L386   block-size: convert.to-rem(24px);
+L387   padding-block: 0;
+L390 .#{$prefix}--data-table--sm td.#{$prefix}--table-column-menu {
+L391   block-size: convert.to-rem(32px);
+L394 .#{$prefix}--data-table--md td.#{$prefix}--table-column-menu {
+L395   block-size: convert.to-rem(40px);
+L398 .#{$prefix}--data-table--xl .#{$prefix}--table-column-menu {
+L399   padding-block-start: $spacing-03;   // spacing-03=8px
+L450 .#{$prefix}--table-column-checkbox .#{$prefix}--checkbox-label {
+L451   min-block-size: $spacing-06;   // spacing-06=24px
+L452   padding-inline-start: 0;
+L455 .#{$prefix}--table-column-checkbox .#{$prefix}--checkbox-label::before {
+L456   margin-block-start: convert.to-rem(2px);
+L459 .#{$prefix}--table-column-checkbox .#{$prefix}--checkbox-label::after {
+L460   inset-block-start: convert.to-rem(7.5px);
+L463 .#{$prefix}--data-table th.#{$prefix}--table-column-checkbox {
+L467   inline-size: convert.to-rem(32px);
+L474 .#{$prefix}--data-table tbody td.#{$prefix}--table-expand {
+L475   min-inline-size: 0;
+L479 .#{$prefix}--data-table tbody td.#{$prefix}--table-column-checkbox {
+L480   min-inline-size: 2.5rem;
+L482   padding-inline: 1rem convert.to-rem(4px);
+L486 .#{$prefix}--data-table tbody td.#{$prefix}--table-expand {
+L487   block-size: convert.to-rem(32px);
+L488   inline-size: convert.to-rem(32px);
+L492 .#{$prefix}--data-table--xs tbody td.#{$prefix}--table-expand {
+L493   padding: 0 0 0 0.5rem;
+L494   block-size: convert.to-rem(24px);
+L495   inline-size: convert.to-rem(24px);
+L499 .#{$prefix}--data-table--sm tbody td.#{$prefix}--table-expand {
+L500   padding: 0;
+L501   block-size: convert.to-rem(32px);
+L502   inline-size: convert.to-rem(32px);
+L503   padding-inline-start: 0.5rem;
+L507 .#{$prefix}--data-table--md tbody td.#{$prefix}--table-expand {
+L508   padding: convert.to-rem(4px) 0 convert.to-rem(4px) convert.to-rem(8px);
+L509   block-size: convert.to-rem(40px);
+L510   inline-size: convert.to-rem(40px);
+L514 .#{$prefix}--data-table--xl tbody td.#{$prefix}--table-expand {
+L515   block-size: convert.to-rem(64px);
+L516   padding-block: convert.to-rem(10px) convert.to-rem(22px);
+L519 .#{$prefix}--data-table--xl .#{$prefix}--table-column-checkbox {
+L520   padding-block-start: convert.to-rem(13px);
+L523 .#{$prefix}--data-table--xl .#{$prefix}--table-column-radio {
+L524   padding-block-start: $spacing-05;   // spacing-05=16px
+L530 .#{$prefix}--table-column-radio {
+L531   inline-size: 48px;
+L534 .#{$prefix}--table-column-radio .#{$prefix}--radio-button__appearance {
+L535   margin-inline-end: convert.to-rem(-2px);
+L603 .#{$prefix}--data-table tbody .#{$prefix}--data-table--selected:hover td {
+L612 .#{$prefix}--data-table tbody .#{$prefix}--data-table--selected:hover {
+L620 .#{$prefix}--overflow-menu__icon {
+L629 .#{$prefix}--data-table--xs tbody tr th {
+L630   block-size: convert.to-rem(24px);
+L633 .#{$prefix}--data-table--xs .#{$prefix}--table-header-label {
+L634   padding-block: convert.to-rem(2px) convert.to-rem(2px);
+L638 .#{$prefix}--data-table--xs tbody tr th {
+L639   padding-block: convert.to-rem(2px) convert.to-rem(2px);
+L642 .#{$prefix}--data-table--xs .#{$prefix}--overflow-menu {
+L643   block-size: calc(100% + 1px);
+L644   inline-size: convert.to-rem(32px);
+L655   padding-block: 0;
+L660 .#{$prefix}--checkbox-label {
+L661   block-size: convert.to-rem(23px);
+L663   min-block-size: convert.to-rem(23px);
+L671 .#{$prefix}--data-table--sm tbody tr th {
+L672   block-size: convert.to-rem(32px);
+L675 .#{$prefix}--data-table--sm .#{$prefix}--table-header-label {
+L676   padding-block: convert.to-rem(7px) convert.to-rem(7px);
+L683   padding-block: convert.to-rem(7px) convert.to-rem(6px);
+L694   padding-block: convert.to-rem(3px) convert.to-rem(3px);
+L697 .#{$prefix}--data-table--sm .#{$prefix}--overflow-menu {
+L698   block-size: calc(100% + 1px);
+L706 .#{$prefix}--data-table--md tbody tr th {
+L707   block-size: convert.to-rem(40px);
+L713   padding-block: convert.to-rem(7px) convert.to-rem(7px);
+L717 .#{$prefix}--data-table--md tbody tr th {
+L718   padding-block: convert.to-rem(7px) convert.to-rem(6px);
+L729   padding-block: convert.to-rem(3px) convert.to-rem(3px);
+L732 .#{$prefix}--data-table--md .#{$prefix}--table-column-menu {
+L733   padding-block: convert.to-rem(3px) convert.to-rem(3px);
+L741 .#{$prefix}--data-table--xl tbody tr th {
+L742   block-size: convert.to-rem(64px);
+L745 .#{$prefix}--data-table--xl .#{$prefix}--table-header-label {
+L746   padding-block: $spacing-05 $spacing-05;   // spacing-05=16px spacing-05=16px
+L750 .#{$prefix}--data-table--xl tbody tr th {
+L751   padding-block: $spacing-05 $spacing-05;   // spacing-05=16px spacing-05=16px
+L755 .#{$prefix}--data-table--xl td {
+L759 .#{$prefix}--data-table--xl .#{$prefix}--data-table--cell-secondary-text {
+L760   @include type-style('label-01');   // label-01=12/16
+L766 .#{$prefix}--data-table--static {
+L767   inline-size: auto;
+L770 .#{$prefix}--data-table-container--static {
+L771   inline-size: fit-content;
+L777 .#{$prefix}--data-table_inner-container {
+L782 .#{$prefix}--data-table--sticky-header {
+L784   inline-size: fit-content;
+L785   min-inline-size: 100%;
+L799   inline-size: 100%;
+L800   inset-block-start: 0;
+L816   block-size: auto;
+L817   min-block-size: 3rem;
+L821   block-size: auto;
+L824 .#{$prefix}--table-expand {
+L825   max-inline-size: convert.to-rem(48px);
+L832 .#{$prefix}--parent-row {
+L833   min-block-size: 3rem;
+L842   padding-block-start: convert.to-rem(14px);
+L867   inline-size: convert.to-rem(36px);
+L868   min-inline-size: convert.to-rem(36px);
+L872 &.#{$prefix}--data-table--xl td.#{$prefix}--table-column-checkbox {
+L877   /* When using sticky header, with a selection element in the first column, we need to set the last item to a fixed width to match 
+L879   max-inline-size: convert.to-rem(64px);
+L883   max-inline-size: 2.25rem;
+L888   block-size: auto;
+L889   padding-block-start: 0;
+L905   scrollbar-width: none;
+L919   inline-size: 100%;
+L920   min-inline-size: 0;
+L925 &.#{$prefix}--data-table--xl tr:not(.#{$prefix}--expandable-row) {
+L926   block-size: auto;
+L929 &.#{$prefix}--data-table--xs tr:not(.#{$prefix}--expandable-row) {
+L930   min-block-size: convert.to-rem(24px);
+L933 &.#{$prefix}--data-table--sm tr:not(.#{$prefix}--expandable-row) {
+L934   min-block-size: convert.to-rem(32px);
+L937 &.#{$prefix}--data-table--xl tr:not(.#{$prefix}--expandable-row) {
+L938   min-block-size: convert.to-rem(64px);
+L942 &.#{$prefix}--data-table--xs tr td.#{$prefix}--table-expand {
+L943   padding-block-start: convert.to-rem(4px);
+L946 &.#{$prefix}--data-table--sm tr td.#{$prefix}--table-expand {
+L947   padding-block-start: convert.to-rem(8px);
+L950 .#{$prefix}--table-header-label {
+L953   max-inline-size: calc(100% - 10px);
+L955   padding-block: convert.to-rem(15px) 1rem;
+L959 &.#{$prefix}--data-table--xs th .#{$prefix}--table-header-label {
+L960   padding-block: convert.to-rem(3px) 0;
+L963 &.#{$prefix}--data-table--sm th .#{$prefix}--table-header-label {
+L964   padding-block: convert.to-rem(8px) 0;
+L967 &.#{$prefix}--data-table--xl th .#{$prefix}--table-header-label {
+L968   padding-block-start: 1rem;
+L971 &.#{$prefix}--data-table--xl th.#{$prefix}--table-expand {
+L981 .#{$prefix}--table-column-checkbox {
+L986   @include sticky-header($max-width: 100%);
+L992 .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:last-of-type {
+L993   margin: 0;
+L999 .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper:last-of-type {
+L1000   margin: convert.to-rem(-3px) 0;
+L1007 .#{$prefix}--data-table .#{$prefix}--table-column-decorator {
+L1008   inline-size: $spacing-05;   // spacing-05=16px
+L1009   padding-inline-end: 0;
+L1022 .#{$prefix}--data-table--ai-label-row {
+L1023   box-shadow: inset 1px 0 $ai-border-strong;
+L1152 .#{$prefix}--table-column-decorator .#{$prefix}--decorator {
+L1164 .#{$prefix}--decorator {
+L1187 .#{$prefix}--table-header-label--decorator-inner {
+L1188   margin-inline-start: auto;
+L1195   box-shadow: inset 0 1px $ai-border-strong;
+L1218 .#{$prefix}--data-table-content {
+### Carbon styles @ 8472cca  packages/styles/scss/components/data-table/_mixins.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L17   $min-width: false,
+L18   $max-width: 100%,
+L19   $max-height: convert.to-rem(300px)
+L21 .#{$prefix}--data-table--max-width {
+L22   max-inline-size: $max-width;
+L25 .#{$prefix}--data-table--sticky-header {
+L26   max-block-size: $max-height;
+L28   @if $min-width {
+L35   min-inline-size: $min-width;
+### Carbon styles @ 8472cca  packages/styles/scss/components/data-table/_vars.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)

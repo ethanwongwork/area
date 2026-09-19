@@ -1,0 +1,164 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/content-switcher/_content-switcher.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21 @mixin content-switcher {
+L22 .#{$prefix}--content-switcher {
+L23   @include layout.use('size', $default: 'md', $min: 'sm', $max: 'lg');
+L28   border-radius: convert.to-rem(4px);
+L29   block-size: layout.size('height');
+L30   inline-size: 100%;
+L31   outline: convert.to-rem(1px) solid $border-inverse;
+L32   outline-offset: convert.to-rem(-1px);
+L41 .#{$prefix}--content-switcher-btn {
+L45   @include type-style('body-compact-01');   // body-compact-01=14/18
+L50   border: none;
+L51   margin: 0;
+L53   border-block-end: convert.to-rem(1px) solid $border-inverse;
+L54   border-block-start: convert.to-rem(1px) solid $border-inverse;
+L60 &::after {
+L63   border-radius: convert.to-rem(4px);
+L65   block-size: 100%;
+L67   inline-size: 100%;
+L68   inset-block-start: 0;
+L69   inset-inline-start: 0;
+L74 &:disabled::after {
+L78 &:focus {
+L79   border: 0;
+L82 &:focus::after {
+L83   border-radius: convert.to-rem(4px);
+L85   inset 0 0 0 2px $focus,
+L86   inset 0 0 0 3px $focus-inset;
+L89 &:active {
+L96 &:hover {
+L104 &:disabled {
+L110 &:hover {
+L120 &:focus::before {
+L122   border-radius: convert.to-rem(4px);
+L123   block-size: 100%;
+L124   box-shadow: inset 0 0 0 convert.to-rem(2px) $focus;
+L126   inline-size: 100%;
+L129 &:focus::after {
+L135 &:focus:hover::after {
+L136   border-radius: 0;
+L138   border-block-end: convert.to-rem(1px) solid $border-inverse;
+L139   border-block-start: convert.to-rem(1px) solid $border-inverse;
+L146 .#{$prefix}--content-switcher-btn {
+L148   padding: $spacing-03 layout.density('padding-inline');   // spacing-03=8px
+L149   inline-size: 100%;
+L153 .#{$prefix}--content-switcher-btn:first-child {
+L154   border-end-start-radius: convert.to-rem(4px);
+L155   border-start-start-radius: convert.to-rem(4px);
+L156   box-shadow: inset convert.to-rem(1px) 0 0 0 $border-inverse;
+L158 &:disabled {
+L164 .#{$prefix}--content-switcher-btn:last-child {
+L165   border-end-end-radius: convert.to-rem(4px);
+L166   border-start-end-radius: convert.to-rem(4px);
+L167   box-shadow: inset convert.to-rem(-1px) 0 0 0 $border-inverse;
+L169 &:disabled {
+L179 .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:last-child {
+L180   border: 0;
+L182 &:disabled::before {
+L187 .#{$prefix}--content-switcher-btn::before {
+L192   block-size: convert.to-rem(16px);
+L194   inline-size: convert.to-rem(1px);
+L195   inset-inline-start: 0;
+L199 .#{$prefix}--content-switcher-btn:first-of-type::before {
+L220 .#{$prefix}--content-switcher-btn:disabled::before {
+L243 .#{$prefix}--content-switcher__icon {
+L247 .#{$prefix}--content-switcher__icon + span {
+L248   margin-inline-start: $spacing-03;   // spacing-03=8px
+L251 .#{$prefix}--content-switcher__label {
+L254   max-inline-size: 100%;
+L259 .#{$prefix}--content-switcher-btn:focus .#{$prefix}--content-switcher__icon {
+L265 .#{$prefix}--content-switcher__icon {
+L285 &::before {
+L287   border-radius: 0;
+L288   block-size: 100%;
+L289   border-block-end: convert.to-rem(1px) solid $border-inverse;
+L290   border-block-start: convert.to-rem(1px) solid $border-inverse;
+L291   box-shadow: inset 0 0 0 convert.to-rem(1px) $layer-hover;
+L293   inline-size: 100%;
+L296 &:not(.#{$prefix}--content-switcher--selected)::after {
+L303 .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected {
+L308 &:hover {
+L313 &:disabled {
+L314   border-radius: convert.to-rem(4px);
+L319 &::after {
+L325 .#{$prefix}--content-switcher__icon {
+L330 .#{$prefix}--content-switcher-btn:focus {
+L335 .#{$prefix}--content-switcher--icon-only {
+L337   inline-size: fit-content;
+L340 .#{$prefix}--content-switcher--icon-only .#{$prefix}--content-switcher-btn {
+L342   padding: 0;
+L345 &:focus {
+L352 .#{$prefix}--content-switcher-btn:first-of-type::before {
+L358 .#{$prefix}--content-switcher-btn {
+L359   border-end-start-radius: convert.to-rem(4px);
+L360   border-start-start-radius: convert.to-rem(4px);
+L361   box-shadow: inset convert.to-rem(1px) 0 0 0 $border-inverse;
+L366 .#{$prefix}--content-switcher-btn {
+L367   border-end-end-radius: convert.to-rem(4px);
+L368   border-start-end-radius: convert.to-rem(4px);
+L369   box-shadow: inset convert.to-rem(-1px) 0 0 0 $border-inverse;
+L377 .#{$prefix}--content-switcher-btn[disabled] {
+L381 .#{$prefix}--content-switcher--lg .#{$prefix}--content-switcher-btn {
+L383   padding-inline: convert.to-rem(14px) convert.to-rem(14px);
+L386 .#{$prefix}--content-switcher--lg .#{$prefix}--content-switcher-btn svg {
+L387   block-size: 20px;
+L388   inline-size: 20px;
+L406 .#{$prefix}--btn--sm {
+L407   block-size: 2rem;
+L419 .#{$prefix}--content-switcher-btn::before {
+L449 .#{$prefix}--content-switcher-btn[disabled]:hover::before {
+L454 .#{$prefix}--content-switcher-btn[disabled]:hover::before {
+L477 .#{$prefix}--content-switcher-btn {
+L478 &::before {
+L480   border-radius: 0;
+L481   block-size: 100%;
+L482   border-block-end: convert.to-rem(1px) solid $border-inverse;
+L483   border-block-start: convert.to-rem(1px) solid $border-inverse;
+L484   box-shadow: inset 0 0 0 convert.to-rem(1px) $layer-hover;
+L486   inline-size: 100%;
+L489 &:not(.#{$prefix}--content-switcher--selected)::after {
+L497 .#{$prefix}--content-switcher--low-contrast {
+L503 .#{$prefix}--content-switcher-btn {
+L506 &:active {
+L511 &:hover {
+L516 &::before {
+L520 &::after {
+L524 &:disabled {
+L530 &:hover {
+L541 &:focus::before {
+L545 &:focus::after {
+L547   box-shadow: inset 0 0 0 convert.to-rem(2px) $focus;
+L551 &:focus:hover::after {
+L562 .#{$prefix}--content-switcher-btn:first-child {
+L563   box-shadow: inset convert.to-rem(1px) 0 0 0 $border-strong;
+L569 .#{$prefix}--content-switcher-btn:last-child {
+L570   box-shadow: inset convert.to-rem(-1px) 0 0 0 $border-strong;
+L573 .#{$prefix}--content-switcher--low-contrast {
+L589 &::before {
+L591   box-shadow: inset 0 0 0 convert.to-rem(1px)
+L595 &:not(.#{$prefix}--content-switcher--selected)::after {
+L603 .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected {
+L604   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L609 &:hover {
+L614 &::after {
+L615   border-radius: convert.to-rem(4px);
+L617   box-shadow: inset 0 0 0 convert.to-rem(1px) $border-inverse;
+L620 &:focus::after {
+L621   box-shadow: inset 0 0 0 convert.to-rem(2px) $focus;
+L624 &:disabled {
+L625   border: convert.to-rem(1px) solid $border-disabled;
+L626   border-radius: convert.to-rem(4px);
+L631 &:disabled::before {
+L660 .#{$prefix}--content-switcher-btn:disabled::before {
+L693 .#{$prefix}--content-switcher-btn:not([disabled]) {
+L694   box-shadow: inset convert.to-rem(1px) 0 0 0 $border-strong;
+L699 .#{$prefix}--content-switcher-btn:not([disabled]) {
+L700   box-shadow: inset convert.to-rem(-1px) 0 0 0 $border-strong;
+L735 .#{$prefix}--content-switcher-btn.#{$prefix}--content-switcher--selected:disabled {
+L754 .#{$prefix}--content-switcher-btn::before {
+L771 .#{$prefix}--content-switcher--low-contrast {
+L792 .#{$prefix}--content-switcher-btn {
+L793 &::before {
+L795   box-shadow: inset 0 0 0 convert.to-rem(1px)
+L799 &:not(.#{$prefix}--content-switcher--selected)::after {

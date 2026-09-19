@@ -1,0 +1,8 @@
+### Primer React @ e4e6eba  packages/react/src/ToggleSwitch/ToggleSwitchStoryWrapper.module.css
+.StoryWrapper {
+  display: grid;
+  grid-template-columns: max-content auto;
+  max-width: 20rem;   /* = 320px */
+  align-items: center;
+  justify-content: space-between;
+}

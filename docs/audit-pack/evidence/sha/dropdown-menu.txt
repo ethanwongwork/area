@@ -1,0 +1,30 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/dropdown-menu.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot dropdown-menu]
+  [slot dropdown-menu-portal]
+  [slot dropdown-menu-trigger]
+  [slot dropdown-menu-content]
+  L44 min-w-[8rem] rounded-md=8px border=1px p-1=4px
+  [slot dropdown-menu-group]
+  [slot dropdown-menu-item]
+  L76 gap-2=8px rounded-sm=6px px-2=8px py-1.5=6px text-sm=14/20px data-[inset]:pl-8=32px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  [slot dropdown-menu-checkbox-item]
+  L94 gap-2=8px rounded-sm=6px py-1.5=6px pr-2=8px pl-8=32px text-sm=14/20px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L100 left-2=8px size-3.5=14px
+  L102 size-4=16px
+  [slot dropdown-menu-radio-group]
+  [slot dropdown-menu-radio-item]
+  L130 gap-2=8px rounded-sm=6px py-1.5=6px pr-2=8px pl-8=32px text-sm=14/20px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L135 left-2=8px size-3.5=14px
+  L137 size-2=8px
+  [slot dropdown-menu-label]
+  L157 px-2=8px py-1.5=6px text-sm=14/20px font-medium data-[inset]:pl-8=32px
+  [slot dropdown-menu-separator]
+  L172 -mx-1=4px my-1=4px h-px=1px
+  [slot dropdown-menu-shortcut]
+  L186 text-xs=12/16px tracking-widest
+  [slot dropdown-menu-sub]
+  [slot dropdown-menu-sub-trigger]
+  L213 gap-2=8px rounded-sm=6px px-2=8px py-1.5=6px text-sm=14/20px data-[inset]:pl-8=32px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L219 size-4=16px
+  [slot dropdown-menu-sub-content]
+  L232 min-w-[8rem] rounded-md=8px border=1px p-1=4px

@@ -1,0 +1,58 @@
+### Primer React @ e4e6eba  packages/react/src/FormControl/FormControl.module.css
+.ControlHorizontalLayout {
+  display: flex;
+
+  &:where([data-has-leading-visual]) {
+    align-items: center;
+  }
+}
+
+.ControlVerticalLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  & > *:not(label) + * {
+    margin-top: var(--base-size-4);   /* = 4px */
+  }
+
+  &[data-has-label] > * + * {
+    margin-top: var(--base-size-4);   /* = 4px */
+  }
+}
+
+.ControlChoiceInputs > input {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.LabelContainer {
+  > * {
+    /* stylelint-disable-next-line primer/spacing */
+    padding-left: var(--stack-gap-condensed);   /* = 8px */
+  }
+
+  > label {
+    font-weight: var(--base-text-weight-normal);   /* = 400 */
+  }
+}
+
+.LeadingVisual {
+  margin-left: var(--base-size-8);   /* = 8px */
+  color: var(--fgColor-muted);
+
+  &:where([data-disabled]) {
+    color: var(--control-fgColor-disabled);
+  }
+
+  > * {
+    min-width: var(--text-body-size-large);   /* = 16px */
+    min-height: var(--text-body-size-large);   /* = 16px */
+    fill: currentColor;
+  }
+
+  > *:where([data-has-caption]) {
+    min-width: var(--base-size-24);   /* = 24px */
+    min-height: var(--base-size-24);   /* = 24px */
+  }
+}

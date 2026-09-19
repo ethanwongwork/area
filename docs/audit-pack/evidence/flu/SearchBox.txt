@@ -1,0 +1,52 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-search/library/src/components/SearchBox/useSearchBoxStyles.styles.ts
+L20 const useRootStyles = makeStyles({
+L21 small: {
+L22 columnGap: 0,
+L23 maxWidth: '468px',
+L25 paddingLeft: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L26 paddingRight: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L28 medium: {
+L29 columnGap: 0,
+L30 maxWidth: '468px',
+L32 paddingLeft: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L33 paddingRight: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L35 large: {
+L36 columnGap: 0,
+L37 maxWidth: '468px',
+L39 paddingLeft: tokens.spacingHorizontalMNudge,   // spacingHorizontalMNudge=10px
+L40 paddingRight: tokens.spacingHorizontalMNudge,   // spacingHorizontalMNudge=10px
+L43 input: {
+L44 paddingLeft: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L45 paddingRight: 0,
+L56 unfocusedNoContentAfter: {
+L57 paddingRight: 0,
+L61 const useInputStyles = makeStyles({
+L62 small: {
+L63 paddingRight: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L65 medium: {
+L66 paddingRight: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L68 large: {
+L69 paddingRight: tokens.spacingHorizontalMNudge,   // spacingHorizontalMNudge=10px
+L73 const useContentAfterStyles = makeStyles({
+L74 contentAfter: {
+L75 paddingLeft: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L76 columnGap: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L78 rest: {
+L79 height: 0,
+L80 width: 0,
+L81 paddingLeft: 0,
+L86 const useDismissClassName = makeResetStyles({
+L91 // size: medium (default)
+L92 '> svg': { fontSize: '20px' },
+L96 const useDismissStyles = makeStyles({
+L97 disabled: {
+L100 // Ensure resizable icons show up with the proper font size
+L101 small: {
+L102 '> svg': { fontSize: '16px' },
+L104 medium: {
+L107 large: {
+L108 '> svg': { fontSize: '24px' },
+L116 const { disabled, focused, size } = state;
+L127 rootStyles[size],
+L135 !focused && inputStyles[size],
+L145 dismissStyles[size],

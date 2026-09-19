@@ -1,0 +1,26 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Breadcrumbs/BreadcrumbCollapsed.js
+L9 const BreadcrumbCollapsedButton = styled(ButtonBase, {
+L10 name: 'MuiBreadcrumbCollapsed',
+L14   marginLeft: `calc(${theme.spacing(1)} * 0.5)`,
+L15   marginRight: `calc(${theme.spacing(1)} * 0.5)`,
+L19   borderRadius: 2,
+L25 '&:active': {
+L34 const BreadcrumbCollapsedIcon = styled(MoreHorizIcon)({
+L35   width: 24,
+L36   height: 16,
+### MUI Material @ 69960c1  packages/mui-material/src/Breadcrumbs/Breadcrumbs.js
+L18 const slots = {
+L28 const BreadcrumbsRoot = styled(Typography, {
+L29 name: 'MuiBreadcrumbs',
+L30 slot: 'Root',
+L36 const BreadcrumbsOl = styled('ol', {
+L37 name: 'MuiBreadcrumbs',
+L38 slot: 'Ol',
+L43   padding: 0,
+L44   margin: 0,
+L48 const BreadcrumbsSeparator = styled('li', {
+L49 name: 'MuiBreadcrumbs',
+L50 slot: 'Separator',
+L54   marginLeft: 8,
+L55   marginRight: 8,
+L97 const ownerState = {

@@ -1,0 +1,43 @@
+### MUI Material @ 69960c1  packages/mui-material/src/IconButton/IconButton.js
+L21 const slots = {
+L37 const IconButtonRoot = styled(ButtonBase, {
+L38 name: 'MuiIconButton',
+L39 slot: 'Root',
+L55   fontSize: theme.typography.pxToRem(24),
+L56   padding: 8,
+L57   borderRadius: '50%',
+L62 variants: [
+L65 style: {
+L70 '&:hover': {
+L80 props: { edge: 'start' },
+L81 style: {
+L82   marginLeft: -12,
+L86 props: { edge: 'start', size: 'small' },
+L87 style: {
+L88   marginLeft: -3,
+L92 props: { edge: 'end' },
+L93 style: {
+L94   marginRight: -12,
+L98 props: { edge: 'end', size: 'small' },
+L99 style: {
+L100   marginRight: -3,
+L106 variants: [
+L108 props: { color: 'inherit' },
+L109 style: {
+L116 props: { color },
+L117 style: {
+L126 props: { size: 'small' },
+L127 style: {
+L128   padding: 5,
+L129   fontSize: theme.typography.pxToRem(18),
+L133 props: { size: 'large' },
+L134 style: {
+L135   padding: 12,
+L136   fontSize: theme.typography.pxToRem(28),
+L150 const IconButtonLoadingIndicator = styled('span', {
+L151 name: 'MuiIconButton',
+L152 slot: 'LoadingIndicator',
+L157   top: '50%',
+L158   left: '50%',
+L161 variants: [{ props: { loading: true }, style: { display: 'flex' } }],
+L189 const ownerState = {

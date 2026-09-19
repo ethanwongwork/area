@@ -1,0 +1,30 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-table/library/src/components/TableRow/useTableRowStyles.styles.ts
+L16 const useTableLayoutStyles = makeStyles({
+L17 root: {
+L22 const useFlexLayoutStyles = makeStyles({
+L23 root: {
+L32 const useStyles = makeStyles({
+L33 root: {
+L39 opacity: 1,
+L42 opacity: 1,
+L48 { outline: `2px solid ${tokens.colorStrokeFocus2}`, borderRadius: tokens.borderRadiusMedium },   // borderRadiusMedium=4px
+L53 rootInteractive: {
+L57 opacity: 1,
+L66 opacity: 1,
+L69 opacity: 1,
+L76 opacity: 1,
+L79 opacity: 1,
+L86 ...shorthands.borderColor('Highlight'),
+L91 medium: { borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}` },   // strokeWidthThin=1px
+L93 small: { borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}` },   // strokeWidthThin=1px
+L96 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L99 brand: {
+L101 ...shorthands.borderColor(tokens.colorTransparentStrokeInteractive),
+L108 border: '2px solid transparent',
+L109 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L117 neutral: {
+L119 border: '2px solid transparent',
+L120 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L133 ...shorthands.borderColor(tokens.colorNeutralStrokeOnBrand),
+L136 none: {},
+L153 styles[state.size],

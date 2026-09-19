@@ -1,0 +1,8 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/NavDrawer/useNavDrawerStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L22 // if size is not set, use default width from the token.
+L23 defaultWidth: {
+L24 width: `${navItemTokens.defaultDrawerWidth}px`,
+L32 const { size } = state;
+L39 !size && styles.defaultWidth,

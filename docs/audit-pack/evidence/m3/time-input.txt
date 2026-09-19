@@ -1,0 +1,22 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-time-input.scss
+period-selector-container-height: 72px
+period-selector-container-width: 52px
+period-selector-outline-width: 1px
+time-input-field-container-height: 72px
+time-input-field-container-width: 96px
+time-input-field-focus-outline-width: 2px
+container-shape: corner-extra-large = 28px
+focus-indicator-outline-offset: md-sys-state-focus-indicator.$outer-offset
+focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+headline-line-height: label-medium-line-height = 16px
+headline-size: label-medium-size = 12px
+period-selector-container-shape: corner-small = 8px
+period-selector-label-text-line-height: title-medium-line-height = 24px
+period-selector-label-text-size: title-medium-size = 16px
+time-input-field-container-shape: corner-small = 8px
+time-input-field-label-text-line-height: display-medium-line-height = 52px
+time-input-field-label-text-size: display-medium-size = 45px
+time-input-field-separator-line-height: display-large-line-height = 64px
+time-input-field-separator-size: display-large-size = 57px
+time-input-field-supporting-text-line-height: body-small-line-height = 16px
+time-input-field-supporting-text-size: body-small-size = 12px

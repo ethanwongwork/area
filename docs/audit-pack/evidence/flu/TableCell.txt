@@ -1,0 +1,22 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-table/library/src/components/TableCell/useTableCellStyles.styles.ts
+L14 const useTableLayoutStyles = makeStyles({
+L15 root: {
+L20 medium: {
+L21 height: '44px',
+L24 small: {
+L25 height: '34px',
+L29 height: '24px',
+L33 const useFlexLayoutStyles = makeStyles({
+L34 root: {
+L36 minWidth: '0px',
+L38 flex: '1 1 0px',
+L41 medium: {
+L42 minHeight: '44px',
+L45 small: {
+L46 minHeight: '34px',
+L50 minHeight: '24px',
+L57 const useStyles = makeStyles({
+L58 root: {
+L60 padding: `0px ${tokens.spacingHorizontalS}`,   // spacingHorizontalS=8px
+L63 { outline: `2px solid ${tokens.colorStrokeFocus2}`, borderRadius: tokens.borderRadiusMedium },   // borderRadiusMedium=4px
+L83 state.noNativeElements ? layoutStyles.flex[state.size] : layoutStyles.table[state.size],

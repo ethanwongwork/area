@@ -1,0 +1,18 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-carousel/library/src/components/CarouselNavImageButton/useCarouselNavImageButtonStyles.styles.ts
+L13 const imageButtonSize = 40;
+L14 const selectedImageButtonSize = 48;
+L19 const useStyles = makeStyles({
+L20 root: {
+L22 padding: '0px',
+L23 margin: `0 ${tokens.spacingHorizontalXS}`,   // spacingHorizontalXS=4px
+L24 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L25 borderRadius: tokens.borderRadiusSmall,   // borderRadiusSmall=2px
+L26 width: imageButtonSize + 'px',
+L27 height: imageButtonSize + 'px',
+L33 image: {
+L34 width: imageButtonSize + 'px',
+L35 height: imageButtonSize + 'px',
+L36 borderRadius: tokens.borderRadiusSmall,   // borderRadiusSmall=2px
+L38 selected: {
+L39 width: selectedImageButtonSize + 'px',
+L40 height: selectedImageButtonSize + 'px',

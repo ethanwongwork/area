@@ -1,0 +1,9 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/fluid-multiselect/_fluid-multiselect.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21 @mixin fluid-multiselect {
+L25 .#{$prefix}--list-box__field--wrapper--input-focused {
+L30 .#{$prefix}--tag.#{$prefix}--tag--filter {
+L31   margin-block-start: 1.25rem;
+L38 .#{$prefix}--text-input {
+L44 .#{$prefix}--list-box__field {
+L51 .#{$prefix}--list-box__menu {
+L52   inset-block-start: calc(100% + convert.to-rem(1px));

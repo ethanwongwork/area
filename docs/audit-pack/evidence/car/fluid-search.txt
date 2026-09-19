@@ -1,0 +1,34 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/fluid-search/_fluid-search.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L20 @mixin fluid-search {
+L21 .#{$prefix}--search--fluid {
+L22   block-size: convert.to-rem(64px);
+L25 .#{$prefix}--search--fluid .#{$prefix}--label {
+L31   margin: 0;
+L32   block-size: convert.to-rem(16px);
+L34   inline-size: calc(100% - 2rem);
+L35   inset-block-start: convert.to-rem(13px);
+L36   inset-inline-start: $spacing-05;   // spacing-05=16px
+L43 .#{$prefix}--toggletip-label::-webkit-scrollbar {
+L49 .#{$prefix}--search--fluid .#{$prefix}--label .#{$prefix}--toggletip-label {
+L52   scrollbar-width: none;
+L56 .#{$prefix}--search--fluid .#{$prefix}--search-input {
+L57   padding: convert.to-rem(32px) convert.to-rem(88px) convert.to-rem(13px)
+L58   $spacing-05;   // spacing-05=16px
+L59   block-size: 100%;
+L62 .#{$prefix}--search--fluid .#{$prefix}--search-magnifier-icon {
+L64   inset: auto 1rem convert.to-rem(13px) auto;
+L68 .#{$prefix}--search--fluid .#{$prefix}--search-close {
+L69   border: none;
+L70   block-size: convert.to-rem(40px);
+L71   inline-size: convert.to-rem(40px);
+L72   inset: auto convert.to-rem(48px) 0 auto;
+L82 .#{$prefix}--search--fluid .#{$prefix}--search-close::after {
+L85   block-size: convert.to-rem(2px);
+L87   inline-size: 100%;
+L88   inset-block-end: 0;
+L89   inset-inline-start: 0;
+L102   block-size: convert.to-rem(1px);
+L105 .#{$prefix}--search--fluid .#{$prefix}--search-close svg {
+L106   margin-block-end: convert.to-rem(2px);
+L116 .#{$prefix}--search--fluid.#{$prefix}--search--disabled .#{$prefix}--label {
+L123 .#{$prefix}--search-input[disabled] {

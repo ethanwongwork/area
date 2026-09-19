@@ -1,0 +1,15 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-data-table.scss
+footer-container-height: 52px
+footer-outlined-select-text-field-container-height: 36px
+header-container-height: 56px
+outline-width: 1px
+row-item-container-height: 52px
+row-item-divider-thickness: 1px
+row-item-outline-width: 1px
+container-shape: corner-extra-small = 4px
+footer-supporting-text-line-height: body-medium-line-height = 20px
+footer-supporting-text-size: body-medium-size = 14px
+header-headline-line-height: title-small-line-height = 20px
+header-headline-size: title-small-size = 14px
+row-item-label-text-line-height: body-medium-line-height = 20px
+row-item-label-text-size: body-medium-size = 14px

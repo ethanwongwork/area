@@ -1,0 +1,7 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TableFooter/TableFooter.js
+L14 const slots = {
+L21 const TableFooterRoot = styled('tfoot', {
+L22 name: 'MuiTableFooter',
+L23 slot: 'Root',
+L28 const tablelvl2 = {
+L38 const ownerState = {

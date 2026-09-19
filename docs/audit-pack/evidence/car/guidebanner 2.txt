@@ -1,0 +1,88 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/guidebanner/_guidebanner.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L22 @mixin when-collapsed($selector: '&') {
+L23 .#{$prefix}--guidebanner__collapsible-collapsed #{$selector} {
+L28   $horizontal-margin: to-rem(52px);
+L35 @mixin guidebanner {
+L40 .#{$prefix}--guidebanner__carousel {
+L43 &:focus {
+L48 .#{$prefix}--guidebanner__carousel-elements-container {
+L54 .#{$prefix}--guidebanner__carousel-elements-container--scroll-max {
+L57   inline-size: $spacing-07;   // spacing-07=32px
+L58   inset-block: 0;
+L62 .#{$prefix}--guidebanner__carousel-elements-container--scrolled {
+L63   inset-inline-start: 0;
+L66 .#{$prefix}--guidebanner__carousel-elements-container--scroll-max {
+L67   inset-inline-end: 0;
+L70 .#{$prefix}--guidebanner__carousel-elements {
+L76   scrollbar-width: none;
+L80 &:focus {
+L89 .#{$prefix}--guidebanner__carousel-elements::-webkit-scrollbar {
+L97 .#{$block-class} {
+L108 .#{$block-class}__icon-idea {
+L111   inset-block-start: $spacing-05;   // spacing-05=16px
+L112   inset-inline-start: $spacing-05;   // spacing-05=16px
+L115 .#{$block-class}__title {
+L116   @include type-style('heading-compact-02');   // heading-compact-02=16/22 w600
+L118   padding: $spacing-05 to-rem(175px) 0 $horizontal-margin;   // spacing-05=16px
+L122 .#{$block-class}__close-button {
+L124   inset-block-start: 0;
+L125   inset-inline-end: 0;
+L128 .#{$block-class}__close-button button {
+L129   block-size: $spacing-07;   // spacing-07=32px
+L130   inline-size: $spacing-07;   // spacing-07=32px
+L131   min-block-size: $spacing-07;   // spacing-07=32px
+L132   padding-block-start: 6px;
+L135 &:hover {
+L145 .#{$block-class}__carousel {
+L146   padding: 0 0 $spacing-05;   // spacing-05=16px
+L150   margin-block-end: 0;
+L155 .#{$block-class}__carousel .#{$block-class}__item .#{$block-class}__element {
+L159   margin: $spacing-05 0 0;   // spacing-05=16px
+L161   inline-size: to-rem(400px);
+L163   max-block-size: to-rem(512px);
+L165   padding-inline-start: $horizontal-margin;
+L168   max-height 50ms motion(exit, productive),
+L169   margin-top 50ms motion(exit, productive),
+L173   margin-block-start: 0;
+L174   max-block-size: $spacing-03;   // spacing-03=8px
+L182 .#{$block-class}__element {
+L184   inline-size: to-rem(448px);
+L185   padding-inline-end: $horizontal-margin;
+L190 .#{$block-class}__element-title {
+L191   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L193   margin: $spacing-05 0 0;   // spacing-05=16px
+L196 .#{$block-class}__carousel .#{$block-class}__element-content {
+L197   @include type-style('body-01');   // body-01=14/20
+L199   margin-block-end: $spacing-05;   // spacing-05=16px
+L203 .#{$block-class}__carousel .#{$prefix}--btn--tertiary {
+L208 &:hover {
+L218   block-size: 1rem;
+L219   inline-size: 1rem;
+L220   inset-inline-end: $spacing-05;   // spacing-05=16px
+L224 .#{$block-class}__carousel .#{$prefix}--btn--ghost {
+L226   margin-inline-start: calc(-1 * $spacing-05);   // spacing-05=16px
+L229 &:hover {
+L235 .#{$block-class}__carousel .#{$block-class}__element-link {
+L238 &:visited {
+L243 &:hover {
+L248 .#{$block-class}__navigation {
+L250   border-block-start: to-rem(1px) solid $purple-60;
+L257 .#{$block-class}__navigation .#{$block-class}__toggle-button {
+L259   margin-inline-start: calc($horizontal-margin - to-rem(18px));
+L262 &:hover {
+L269 .#{$block-class}__navigation .#{$block-class}__back-button {
+L270   margin-inline-start: auto;
+L275 .#{$block-class}__navigation .#{$block-class}__next-button {
+L282 .#{$block-class}__navigation .#{$block-class}__next-button button {
+L284 &:hover {
+L292 &[disabled] path {
+L299 .#{$block-class}__with-left-gutter .#{$block-class}__icon-idea {
+L300   inset-inline-start: $spacing-07;   // spacing-07=32px
+L303 .#{$block-class}__with-left-gutter .#{$block-class}__title {
+L304   padding-inline-start: calc($horizontal-margin + $spacing-05);   // spacing-05=16px
+L307 .#{$block-class}__with-left-gutter .#{$block-class}__navigation {
+L308   padding-inline-start: $spacing-05;   // spacing-05=16px
+L313 .#{$prefix}--guidebanner__carousel-elements-container {
+L314   padding-inline-start: $spacing-05;   // spacing-05=16px
+L319 .#{$prefix}--guidebanner__carousel-elements-container--scrolled {
+L320   inline-size: $spacing-10;   // spacing-10=64px

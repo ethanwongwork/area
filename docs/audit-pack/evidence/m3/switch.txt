@@ -1,0 +1,22 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-switch.scss
+handle-height: 20px
+handle-width: 20px
+pressed-handle-height: 28px
+pressed-handle-width: 28px
+selected-handle-height: 24px
+selected-handle-width: 24px
+selected-icon-size: 16px
+state-layer-size: 40px
+track-height: 32px
+track-outline-width: 2px
+track-width: 52px
+unselected-handle-height: 16px
+unselected-handle-width: 16px
+unselected-icon-size: 16px
+with-icon-handle-height: 24px
+with-icon-handle-width: 24px
+focus-indicator-offset: md-sys-state-focus-indicator.$outer-offset
+focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+handle-shape: corner-full = 9999px
+state-layer-shape: corner-full = 9999px
+track-shape: corner-full = 9999px

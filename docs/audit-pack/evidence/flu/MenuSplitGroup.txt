@@ -1,0 +1,9 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu/library/src/components/MenuSplitGroup/useMenuSplitGroupStyles.styles.ts
+L18 const useStyles = makeStyles({
+L19 root: {
+L27 flex: 1,
+L30 borderTopLeftRadius: 0,
+L31 borderBottomLeftRadius: 0,
+L32 paddingLeft: 0,
+L35 width: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L36 height: '20px',

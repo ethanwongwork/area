@@ -1,0 +1,20 @@
+### Primer React @ e4e6eba  packages/react/src/deprecated/FilteredSearch/FilteredSearch.module.css
+.FilteredSearch {
+  display: flex;
+  align-items: stretch;
+
+  & summary,
+  & > button {
+    border-radius: 0;
+    border-top-left-radius: var(--borderRadius-medium);   /* = 6px */
+    border-bottom-left-radius: var(--borderRadius-medium);   /* = 6px */
+    border-right: 0;
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  & :global(.TextInput-wrapper) {
+    border-radius: 0;
+    border-top-right-radius: var(--borderRadius-medium);   /* = 6px */
+    border-bottom-right-radius: var(--borderRadius-medium);   /* = 6px */
+  }
+}

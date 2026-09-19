@@ -1,0 +1,42 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TablePagination/TablePagination.js
+L24 const TablePaginationRoot = styled(TableCell, {
+L25 name: 'MuiTablePagination',
+L26 slot: 'Root',
+L31   fontSize: theme.typography.pxToRem(14),
+L33 '&:last-child': {
+L34   padding: 0,
+L39 const TablePaginationToolbar = styled(Toolbar, {
+L40 name: 'MuiTablePagination',
+L41 slot: 'Toolbar',
+L48   minHeight: 52,
+L49   paddingRight: 2,
+L51   minHeight: 52,
+L54   minHeight: 52,
+L55   paddingRight: 2,
+L59   marginLeft: 20,
+L64 const TablePaginationSpacer = styled('div', {
+L65 name: 'MuiTablePagination',
+L66 slot: 'Spacer',
+L71 const TablePaginationSelectLabel = styled('p', {
+L72 name: 'MuiTablePagination',
+L73 slot: 'SelectLabel',
+L81 const TablePaginationSelect = styled(Select, {
+L82 name: 'MuiTablePagination',
+L83 slot: 'Select',
+L92   fontSize: 'inherit',
+L94   marginRight: 32,
+L95   marginLeft: 8,
+L97   paddingLeft: 8,
+L98   paddingRight: 24,
+L104 const TablePaginationInputBase = styled(InputBase)(
+L112 const TablePaginationMenuItem = styled(MenuItem, {
+L113 name: 'MuiTablePagination',
+L114 slot: 'MenuItem',
+L117 const TablePaginationDisplayedRows = styled('p', {
+L118 name: 'MuiTablePagination',
+L119 slot: 'DisplayedRows',
+L137 const slots = {
+L204 const externalForwardedProps = { slots, slotProps };
+L210 externalForwardedProps: {
+L216 additionalProps: {
+L240 additionalProps: {

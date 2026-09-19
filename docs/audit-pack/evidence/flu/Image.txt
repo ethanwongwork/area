@@ -1,0 +1,26 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-image/library/src/components/Image/useImageStyles.styles.ts
+L12 const useStyles = makeStyles({
+L14 base: {
+L15 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L16 borderRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L23 bordered: {
+L24 ...shorthands.borderStyle('solid'),
+L25 ...shorthands.borderWidth(tokens.strokeWidthThin),   // strokeWidthThin=1px
+L29 circular: { borderRadius: tokens.borderRadiusCircular },   // borderRadiusCircular=10000px
+L30 rounded: { borderRadius: tokens.borderRadiusMedium },   // borderRadiusMedium=4px
+L31 square: {
+L36 shadow: {
+L41 center: {
+L45 contain: {
+L49 default: {
+L52 cover: {
+L56 none: {
+L61 // When no explicit height/width props are provided, apply full-size
+L63 fitFill: {
+L64 height: '100%',
+L65 width: '100%',
+L69 block: {
+L70 width: '100%',
+L77 const { height, width } = state.root;
+L79 const hasExplicitSize = height != null || width != null;
+L80 const shouldApplyFitFill = state.fit !== 'default' && !hasExplicitSize;

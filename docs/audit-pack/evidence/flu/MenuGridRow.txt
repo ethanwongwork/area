@@ -1,0 +1,9 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu-grid-preview/library/src/components/MenuGridRow/useMenuGridRowStyles.styles.ts
+L16 const useRootBaseStyles = makeResetStyles({
+L17 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L21 padding: `${tokens.spacingVerticalXS} ${tokens.spacingVerticalSNudge}`,   // spacingVerticalXS=4px spacingVerticalSNudge=6px
+L23 maxWidth: '290px',
+L24 minHeight: '32px',
+L25 flexShrink: 0,
+L28 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L30 gap: '4px',

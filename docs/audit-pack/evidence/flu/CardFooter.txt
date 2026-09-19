@@ -1,0 +1,7 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-card/library/src/components/CardFooter/useCardFooterStyles.styles.ts
+L15 const useStyles = makeStyles({
+L16 root: {
+L19 gap: '12px',
+L21 action: {
+L22 marginLeft: 'auto',
+L28 ...shorthands.borderColor('currentColor'),

@@ -1,0 +1,6 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/kbd.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot kbd]
+  L8 h-5=20px min-w-5=20px gap-1=4px rounded-sm=6px px-1=4px font-sans text-xs=12/16px font-medium
+  L9 [&_svg:not([class*='size-'])]:size-3=12px
+  [slot kbd-group]
+  L22 gap-1=4px

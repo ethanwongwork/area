@@ -1,0 +1,11 @@
+### MUI Material @ 69960c1  packages/mui-material/src/DialogActions/DialogActions.js
+L13 const slots = {
+L20 const DialogActionsRoot = styled('div', {
+L21 name: 'MuiDialogActions',
+L22 slot: 'Root',
+L31   padding: 8,
+L34 variants: [
+L37 style: {
+L39   marginLeft: 8,
+L49 name: 'MuiDialogActions',
+L53 const ownerState = { ...props, disableSpacing };

@@ -1,0 +1,38 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-combobox/library/src/components/Option/useOptionStyles.styles.ts
+L17 const useStyles = makeStyles({
+L18 root: {
+L20 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L22 columnGap: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L26 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L27 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L28 padding: `${tokens.spacingVerticalSNudge} ${tokens.spacingHorizontalS}`,   // spacingVerticalSNudge=6px spacingHorizontalS=8px
+L32 interactive: {
+L36 [`& .${optionClassNames.checkIcon}`]: shorthands.borderColor(tokens.colorNeutralForeground1Hover),
+L42 [`& .${optionClassNames.checkIcon}`]: shorthands.borderColor(tokens.colorNeutralForeground1Hover),
+L46 active: {
+L51 zIndex: 1,
+L53 border: `2px solid ${tokens.colorStrokeFocus2}`,
+L54 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L56 top: '-2px',
+L57 bottom: '-2px',
+L58 left: '-2px',
+L59 right: '-2px',
+L63 disabled: {
+L72 selected: {},
+L74 checkIcon: {
+L75 flexShrink: 0,
+L76 fontSize: tokens.fontSizeBase400,   // fontSizeBase400=16px
+L78 // This is done instead of gap since the extra space only exists between icon > content, not icon > icon
+L79 marginLeft: `calc(${tokens.spacingHorizontalXXS} * -1)`,   // spacingHorizontalXXS=2px
+L80 marginRight: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L88 selectedCheck: {
+L92 multiselectCheck: {
+L93 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStrokeAccessible}`,   // strokeWidthThin=1px
+L94 borderRadius: tokens.borderRadiusSmall,   // borderRadiusSmall=2px
+L102 fontSize: '12px',
+L103 height: '16px',
+L104 width: '16px',
+L108 selectedMultiselectCheck: {
+L111 ...shorthands.borderColor(tokens.colorCompoundBrandBackground),
+L114 checkDisabled: {
+L121 multiselectCheckDisabled: shorthands.borderColor(tokens.colorNeutralForegroundDisabled),

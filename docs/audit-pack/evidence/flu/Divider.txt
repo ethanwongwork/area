@@ -1,0 +1,80 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-divider/library/src/components/Divider/useDividerStyles.styles.ts
+L13 const contentSpacing = '12px';
+L14 const insetSpacing = '12px';
+L15 const maxStartEndLength = '8px';
+L16 const minStartEndLength = '8px;';
+L18 const useBaseStyles = makeStyles({
+L20 base: {
+L25 flexGrow: 1,
+L29 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L30 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L31 lineHeight: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L37 flexGrow: 1,
+L43 flexGrow: 1,
+L48 childless: {
+L50 marginBottom: 0,
+L51 marginRight: 0,
+L55 marginLeft: 0,
+L56 marginTop: 0,
+L61 start: {
+L66 center: {
+L74 end: {
+L81 brand: {
+L85 ...shorthands.borderColor(tokens.colorBrandStroke1),
+L89 ...shorthands.borderColor(tokens.colorBrandStroke1),
+L92 default: {
+L96 ...shorthands.borderColor(tokens.colorNeutralStroke2),
+L100 ...shorthands.borderColor(tokens.colorNeutralStroke2),
+L103 subtle: {
+L107 ...shorthands.borderColor(tokens.colorNeutralStroke3),
+L111 ...shorthands.borderColor(tokens.colorNeutralStroke3),
+L114 strong: {
+L118 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L122 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L127 const useHorizontalStyles = makeStyles({
+L129 base: {
+L130 width: '100%',
+L134 borderTopWidth: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L135 minWidth: minStartEndLength,
+L140 borderTopWidth: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L141 minWidth: minStartEndLength,
+L146 inset: {
+L147 paddingLeft: insetSpacing,
+L148 paddingRight: insetSpacing,
+L152 start: {
+L157 marginRight: contentSpacing,
+L158 maxWidth: maxStartEndLength,
+L162 marginLeft: contentSpacing,
+L165 center: {
+L169 marginRight: contentSpacing,
+L172 marginLeft: contentSpacing,
+L175 end: {
+L179 marginRight: contentSpacing,
+L183 marginLeft: contentSpacing,
+L184 maxWidth: maxStartEndLength,
+L189 const useVerticalStyles = makeStyles({
+L191 base: {
+L193 minHeight: '20px',
+L197 borderRightWidth: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L198 minHeight: minStartEndLength,
+L203 borderRightWidth: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L204 minHeight: minStartEndLength,
+L209 inset: {
+L210 marginTop: insetSpacing,
+L211 marginBottom: insetSpacing,
+L215 withChildren: {
+L216 minHeight: '84px',
+L220 start: {
+L223 marginBottom: contentSpacing,
+L224 maxHeight: maxStartEndLength,
+L228 marginTop: contentSpacing,
+L231 center: {
+L233 marginBottom: contentSpacing,
+L236 marginTop: contentSpacing,
+L239 end: {
+L241 marginBottom: contentSpacing,
+L245 marginTop: contentSpacing,
+L246 maxHeight: maxStartEndLength,
+L256 const { alignContent, appearance, inset, vertical } = state;
+L269 !vertical && inset && horizontalStyles.inset,
+L274 vertical && inset && verticalStyles.inset,

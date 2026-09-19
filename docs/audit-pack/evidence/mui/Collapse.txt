@@ -1,0 +1,42 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Collapse/Collapse.js
+L18 const EMPTY_OBJECT = {};
+L23 const slots = {
+L34 const CollapseRoot = styled('div', {
+L35 name: 'MuiCollapse',
+L36 slot: 'Root',
+L52   height: 0,
+L55 variants: [
+L57 props: {
+L60 style: {
+L61   height: 'auto',
+L62   width: 0,
+L67 props: {
+L70 style: {
+L71   height: 'auto',
+L76 props: {
+L80 style: {
+L81   width: 'auto',
+L87 style: {
+L95 const CollapseWrapper = styled('div', {
+L96 name: 'MuiCollapse',
+L97 slot: 'Wrapper',
+L101   width: '100%',
+L102 variants: [
+L104 props: {
+L107 style: {
+L108   width: 'auto',
+L109   height: '100%',
+L115 const CollapseWrapperInner = styled('div', {
+L116 name: 'MuiCollapse',
+L117 slot: 'WrapperInner',
+L119   width: '100%',
+L120 variants: [
+L122 props: {
+L125 style: {
+L126   width: 'auto',
+L127   height: '100%',
+L164 const ownerState = {
+L297 const externalForwardedProps = {
+L309 additionalProps: {
+L310 style: {
+L350 const stateOwnerState = { ...ownerState, state };

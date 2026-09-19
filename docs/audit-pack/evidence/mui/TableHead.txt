@@ -1,0 +1,7 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TableHead/TableHead.js
+L14 const slots = {
+L21 const TableHeadRoot = styled('thead', {
+L22 name: 'MuiTableHead',
+L23 slot: 'Root',
+L28 const tablelvl2 = {
+L38 const ownerState = {

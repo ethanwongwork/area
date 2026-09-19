@@ -1,0 +1,70 @@
+### Primer React @ e4e6eba  packages/react/src/SubNav/SubNav.module.css
+.SubNav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Body {
+  display: flex;
+  /* stylelint-disable-next-line primer/spacing */
+  margin-bottom: -1px;
+
+  & > * {
+    margin-left: var(--base-size-8);   /* = 8px */
+  }
+
+  & > *:first-child {
+    margin-left: 0;
+  }
+}
+
+.Actions {
+  align-self: center;
+}
+
+.Links {
+  display: flex;
+}
+
+.Link {
+  display: flex;
+  min-height: 34px; /* custom values for SubNav */
+  padding-right: var(--base-size-16);   /* = 16px */
+  padding-left: var(--base-size-16);   /* = 16px */
+  font-size: var(--text-body-size-medium);   /* = 14px */
+  font-weight: var(--base-text-weight-medium);   /* = 500 */
+  /* stylelint-disable-next-line primer/typography */
+  line-height: 20px; /* custom values for SubNav */
+  color: var(--fgColor-default);
+  text-align: center;
+  text-decoration: none;
+  border-top: var(--borderWidth-thin) solid var(--borderColor-default);   /* = 1px solid var(--borderColor-default) */
+  border-right: var(--borderWidth-thin) solid var(--borderColor-default);   /* = 1px solid var(--borderColor-default) */
+  border-bottom: var(--borderWidth-thin) solid var(--borderColor-default);   /* = 1px solid var(--borderColor-default) */
+  align-items: center;
+
+  &:first-of-type {
+    border-left: var(--borderWidth-thin) solid var(--borderColor-default);   /* = 1px solid var(--borderColor-default) */
+    border-top-left-radius: var(--borderRadius-medium);   /* = 6px */
+    border-bottom-left-radius: var(--borderRadius-medium);   /* = 6px */
+  }
+
+  &:last-of-type {
+    border-top-right-radius: var(--borderRadius-medium);   /* = 6px */
+    border-bottom-right-radius: var(--borderRadius-medium);   /* = 6px */
+  }
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    background-color: var(--bgColor-muted);
+    transition: background-color 0.2s ease;
+  }
+
+  &:is([data-selected='true']) {
+    color: var(--fgColor-onEmphasis);
+    background-color: var(--bgColor-accent-emphasis);
+    /* stylelint-disable-next-line primer/colors */
+    border-color: var(--bgColor-accent-emphasis);
+  }
+}

@@ -1,0 +1,13 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-message-bar/library/src/components/MessageBarActions/useMessageBarActionsStyles.styles.ts
+L16 const useRootBaseStyles = makeResetStyles({
+L19 columnGap: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L20 paddingRight: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L23 const useContainerActionBaseStyles = makeResetStyles({
+L25 paddingRight: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L28 const useMultilineStyles = makeStyles({
+L29 root: {
+L31 marginTop: tokens.spacingVerticalMNudge,   // spacingVerticalMNudge=10px
+L32 marginBottom: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L33 marginRight: '0px',
+L34 paddingRight: tokens.spacingVerticalM,   // spacingVerticalM=12px
+L37 noActions: {

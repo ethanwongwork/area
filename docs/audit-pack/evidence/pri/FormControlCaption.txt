@@ -1,0 +1,10 @@
+### Primer React @ e4e6eba  packages/react/src/FormControl/FormControlCaption.module.css
+.Caption {
+  display: block;
+  font-size: var(--text-body-size-small);   /* = 12px */
+  color: var(--fgColor-muted);
+
+  &:where([data-control-disabled]) {
+    color: var(--control-fgColor-disabled);
+  }
+}

@@ -1,0 +1,10 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-sheet-side.scss
+docked-container-height: 100%
+docked-container-width: 256px
+detached-container-shape: corner-large = 16px
+docked-container-shape: corner-none = 0px
+docked-focus-indicator-outline-offset: md-sys-state-focus-indicator.$outer-offset
+docked-focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+docked-headline-line-height: title-large-line-height = 28px
+docked-headline-size: title-large-size = 22px
+docked-modal-container-shape: corner-large-start = 16px 0px 0px 16px

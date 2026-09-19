@@ -1,0 +1,19 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ToggleButtonGroup/ToggleButtonGroup.js
+L24 const slots = {
+L35 const ToggleButtonGroupRoot = styled('div', {
+L36 name: 'MuiToggleButtonGroup',
+L37 slot: 'Root',
+L60   borderRadius: (theme.vars || theme).shape.borderRadius,
+L68 variants: [
+L70 props: { orientation: 'vertical' },
+L71 style: {
+L77   marginTop: 0,
+L87   marginTop: -1,
+L99 props: { fullWidth: true },
+L100 style: {
+L101   width: '100%',
+L105 props: { orientation: 'horizontal' },
+L106 style: {
+L111   marginLeft: 0,
+L121   marginLeft: -1,
+L151 const ownerState = { ...props, disabled, fullWidth, orientation, size };

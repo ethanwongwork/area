@@ -1,0 +1,14 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Paper/Paper.js
+L19 const slots = {
+L31 const PaperRoot = styled('div', {
+L32 name: 'MuiPaper',
+L33 slot: 'Root',
+L49 variants: [
+L52 style: {
+L53   borderRadius: theme.shape.borderRadius,
+L57 props: {
+L60 style: {
+L61   border: `1px solid ${(theme.vars || theme).palette.divider}`,
+L65 props: {
+L68 style: {
+L90 const ownerState = {

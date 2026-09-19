@@ -1,0 +1,12 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/empty.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot empty]
+  L9 min-w-0=0px gap-6=24px rounded-lg=10px p-6=24px md:p-12=48px
+  [slot empty-header]
+  L22 max-w-sm=384px gap-2=8px
+  L36 icon: size-10=40px shrink-0 rounded-lg=10px [&_svg:not([class*='size-'])]:size-6=24px
+  [slot empty-icon]
+  [slot empty-title]
+  L64 text-lg=18/28px font-medium tracking-tight
+  [slot empty-description]
+  [slot empty-content]
+  L88 max-w-sm=384px min-w-0=0px gap-4=16px text-sm=14/20px

@@ -1,0 +1,42 @@
+### MUI Material @ 69960c1  packages/mui-material/src/StepLabel/StepLabel.js
+L19 const slots = {
+L49 const StepLabelRoot = styled('span', {
+L50 name: 'MuiStepLabel',
+L51 slot: 'Root',
+L63 variants: [
+L65 props: { orientation: 'vertical' },
+L66 style: {
+L68   padding: '8px 0',
+L72 props: { alternativeLabel: true },
+L73 style: {
+L78 props: { orientation: 'vertical', alternativeLabel: true },
+L79 style: {
+L86 const StepLabelLabel = styled('span', {
+L87 name: 'MuiStepLabel',
+L88 slot: 'Label',
+L98   fontWeight: 500,
+L101   marginTop: 16,
+L106 variants: [
+L108 props: { orientation: 'vertical', alternativeLabel: true },
+L109 style: {
+L111   marginTop: 0,
+L119 const StepLabelIconContainer = styled('span', {
+L120 name: 'MuiStepLabel',
+L121 slot: 'IconContainer',
+L125   paddingRight: 8,
+L127   paddingRight: 0,
+L129 variants: [
+L131 props: { orientation: 'vertical', alternativeLabel: true },
+L132 style: {
+L133   paddingRight: 0,
+L134   paddingLeft: 8,
+L140 const StepLabelLabelContainer = styled('span', {
+L141 name: 'MuiStepLabel',
+L142 slot: 'LabelContainer',
+L145   width: '100%',
+L150 variants: [
+L152 props: { orientation: 'vertical', alternativeLabel: true },
+L153 style: {
+L180 const ownerState = {
+L192 const externalForwardedProps = {
+L199 externalForwardedProps: {

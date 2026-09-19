@@ -1,0 +1,2 @@
+### @atlaskit/empty-state@12.2.2  styled/container.js  (token fallbacks; pt and pc converted to px)
+  "_p12fko4j": max-width:29pc

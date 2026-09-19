@@ -1,0 +1,20 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ImageListItem/ImageListItem.js
+L17 const slots = {
+L25 const ImageListItemRoot = styled('li', {
+L26 name: 'MuiImageListItem',
+L27 slot: 'Root',
+L42   width: '100%',
+L43   height: '100%',
+L46 variants: [
+L48 props: {
+L51 style: {
+L58 props: {
+L61 style: {
+L62   height: '100%',
+L65   height: '70%',
+L70 props: {
+L73 style: {
+L75   height: 'auto',
+L86 name: 'MuiImageListItem',
+L101 const ownerState = {
+L122   marginBottom: variant === 'masonry' ? gap : undefined,

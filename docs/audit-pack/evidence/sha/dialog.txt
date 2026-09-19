@@ -1,0 +1,19 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/dialog.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot dialog]
+  [slot dialog-trigger]
+  [slot dialog-portal]
+  [slot dialog-close]
+  [slot dialog-overlay]
+  [slot dialog-portal]
+  [slot dialog-content]
+  L64 top-[50%] left-[50%] max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4=16px rounded-lg=10px border=1px p-6=24px sm:max-w-lg=512px
+  [slot dialog-close]
+  L73 top-4=16px right-4=16px rounded-xs=2px focus:ring-2=2px focus:ring-offset-2=8px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  [slot dialog-header]
+  L88 gap-2=8px
+  [slot dialog-footer]
+  L106 gap-2=8px
+  [slot dialog-title]
+  L128 text-lg=18/28px leading-none font-semibold
+  [slot dialog-description]
+  L141 text-sm=14/20px

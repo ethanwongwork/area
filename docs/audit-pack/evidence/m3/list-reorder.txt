@@ -1,0 +1,2 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-list-reorder.scss
+list-item-shape: corner-large = 16px

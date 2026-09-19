@@ -1,0 +1,22 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/command.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot command]
+  L24 rounded-md=8px
+  L52 p-0=0px
+  L55 **:data-[slot=command-input-wrapper]:h-12=48px [&_[cmdk-group-heading]]:px-2=8px [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]]:px-2=8px [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0=0px [&_[cmdk-input-wrapper]_svg]:h-5=20px [&_[cmdk-input-wrapper]_svg]:w-5=20px [&_[cmdk-input]]:h-12=48px [&_[cmdk-item]]:px-2=8px [&_[cmdk-item]]:py-3=12px [&_[cmdk-item]_svg]:h-5=20px [&_[cmdk-item]_svg]:w-5=20px
+  [slot command-input-wrapper]
+  L70 h-9=36px gap-2=8px border-b=1px px-3=12px
+  L72 size-4=16px shrink-0
+  [slot command-input]
+  L76 h-10=40px rounded-md=8px py-3=12px text-sm=14/20px
+  [slot command-list]
+  L93 max-h-[300px]
+  [slot command-empty]
+  L107 py-6=24px text-sm=14/20px
+  [slot command-group]
+  L121 p-1=4px [&_[cmdk-group-heading]]:px-2=8px [&_[cmdk-group-heading]]:py-1.5=6px [&_[cmdk-group-heading]]:text-xs=12/16px [&_[cmdk-group-heading]]:font-medium
+  [slot command-separator]
+  L136 -mx-1=4px h-px=1px
+  [slot command-item]
+  L150 gap-2=8px rounded-sm=6px px-2=8px py-1.5=6px text-sm=14/20px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  [slot command-shortcut]
+  L166 text-xs=12/16px tracking-widest

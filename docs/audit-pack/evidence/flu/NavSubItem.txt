@@ -1,0 +1,8 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/NavSubItem/useNavSubItemStyles.styles.ts
+L21 const useNavSubItemSpecificStyles = makeStyles({
+L22 base: {
+L23 paddingInlineStart: '46px',
+L25 smallBase: {
+L26 paddingInlineStart: '40px',
+L28 selectedIndicator: {
+L30 marginInlineStart: `-${navItemTokens.indicatorOffset + 36}px`,

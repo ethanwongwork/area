@@ -1,0 +1,33 @@
+### Primer React @ e4e6eba  packages/react/src/internal/components/InputValidation.module.css
+.InputValidation {
+  display: flex;
+  font-size: var(--text-body-size-small);   /* = 12px */
+  font-weight: var(--base-text-weight-semibold);   /* = 600 */
+  /* stylelint-disable-next-line primer/colors */
+  color: var(--inputValidation-fgColor);   /* = var(--fgColor-success) */
+
+  & :where(a) {
+    color: currentColor;
+    text-decoration: underline;
+  }
+
+  &:where([data-validation-status='success']) {
+    --inputValidation-fgColor: var(--fgColor-success);
+  }
+
+  &:where([data-validation-status='error']) {
+    --inputValidation-fgColor: var(--fgColor-danger);
+  }
+}
+
+.ValidationIcon {
+  display: flex;
+  margin-top: var(--base-size-2);   /* = 2px */
+  margin-inline-end: var(--base-size-4);   /* = 4px */
+  min-height: var(--inputValidation-iconSize);
+}
+
+.ValidationText {
+  /* stylelint-disable-next-line primer/typography */
+  line-height: var(--inputValidation-lineHeight);
+}

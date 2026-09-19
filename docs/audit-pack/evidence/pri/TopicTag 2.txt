@@ -1,0 +1,36 @@
+### Primer React @ e4e6eba  packages/react/src/TopicTag/TopicTag.module.css
+/* Add a reset for when TopicTag is an <a> element since our link styles apply an underline text-decoration by default */
+/* stylelint-disable-next-line selector-no-qualifying-type */
+.TopicTag:where(a) {
+  text-decoration: none;
+}
+
+/* Add a reset for when TopicTag is a <button> element */
+/* stylelint-disable-next-line selector-no-qualifying-type */
+.TopicTag:where(button) {
+  @mixin buttonReset;
+}
+
+.TopicTag {
+  background-color: var(--bgColor-accent-muted);
+  color: var(--fgColor-accent);
+  font-size: var(--text-body-size-small);   /* = 12px */
+  font-weight: var(--base-text-weight-semibold);   /* = 600 */
+  line-height: var(--text-body-lineHeight-small);   /* = 1.625 */
+  border-radius: var(--borderRadius-full);   /* = 9999px */
+  padding: var(--base-size-2) var(--base-size-12);   /* = 2px 12px */
+  border: var(--borderWidth-thin) solid var(--topicTag-borderColor, transparent);   /* = 1px solid transparent */
+  display: inline-flex;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: var(--bgColor-accent-emphasis);
+    color: var(--fgColor-onEmphasis);
+  }
+
+  /* stylelint-disable-next-line selector-max-type */
+  &:where(a, button) {
+    cursor: pointer;
+    user-select: none;
+  }
+}

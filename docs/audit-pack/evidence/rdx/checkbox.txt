@@ -1,0 +1,19 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/checkbox.css
+@import './_internal/base-checkbox.css';
+
+.rt-CheckboxRoot {
+  &:where(:focus-visible) {
+    &::before {
+      outline: 2px solid var(--focus-8);   /* = 2px solid var(--amber-8) */
+      outline-offset: 2px;
+    }
+  }
+
+  &:where(:disabled) {
+    cursor: var(--cursor-disabled);   /* = not-allowed */
+
+    &::before {
+      background-color: var(--gray-a3);   /* = var(--mauve-a3) */
+    }
+  }
+}

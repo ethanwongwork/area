@@ -1,0 +1,179 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/Avatar/Avatar.module.css
+.Avatar {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: var(--avatar-size);   /* = 28px */
+  height: var(--avatar-size);   /* = 28px */
+  border-radius: var(--avatar-radius);   /* = 9999px */
+  transition: background-color 0.3s var(--cubic-enter);   /* = background-color 0.3s cubic-bezier(0.19, 1, 0.22, 1) */
+  user-select: none;
+
+  /* Interactive */
+  &[type="button"] {
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--avatar-ring-color);   /* = 2px solid light-dark(#0169cc, #0285ff) */
+      outline-offset: 2px;
+    }
+  }
+
+  &[data-variant="soft"] {
+    background-color: var(--avatar-background-color);   /* = light-dark(light-dark(#ededed, #181818), light-dark(#afafaf, #303030)) */
+    color: var(--avatar-text-color);   /* = light-dark(#0d0d0d, #ffffff) */
+
+    &:where([data-color="primary"]) {
+      --avatar-background-color: var(--color-background-primary-soft);   /* = light-dark(light-dark(#ededed, #181818), light-dark(#afafaf, #303030)) */
+      --avatar-text-color: var(--color-text-primary-soft);   /* = light-dark(#0d0d0d, #ffffff) */
+      --avatar-ring-color: var(--color-ring-primary-soft);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="secondary"]) {
+      --avatar-background-color: var(--color-background-secondary-soft);   /* = light-dark(light-dark(#ededed, #181818), light-dark(#afafaf, #303030)) */
+      --avatar-text-color: var(--color-text-secondary-soft);   /* = light-dark(#0d0d0d, #ffffff) */
+      --avatar-ring-color: var(--color-ring-secondary-soft);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="discovery"]) {
+      --avatar-background-color: var(--color-background-discovery-soft);   /* = #efe5fe */
+      --avatar-text-color: var(--color-text-discovery-soft);   /* = light-dark(#6b3ab4, #be95fa) */
+      --avatar-ring-color: var(--color-ring-discovery-soft);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="info"]) {
+      --avatar-background-color: var(--color-background-info-soft);   /* = #e5f3ff */
+      --avatar-text-color: var(--color-text-info-soft);   /* = light-dark(#004f99, #339cff) */
+      --avatar-ring-color: var(--color-ring-info-soft);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="success"]) {
+      --avatar-background-color: var(--color-background-success-soft);   /* = #d9f4e4 */
+      --avatar-text-color: var(--color-text-success-soft);   /* = light-dark(#008635, #04b84c) */
+      --avatar-ring-color: var(--color-ring-success-soft);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="danger"]) {
+      --avatar-background-color: var(--color-background-danger-soft);   /* = #ffd9d9 */
+      --avatar-text-color: var(--color-text-danger-soft);   /* = light-dark(#ba2623, #fa423e) */
+      --avatar-ring-color: var(--color-ring-danger-soft);   /* = #ff8583 */
+    }
+  }
+
+  &[data-variant="solid"] {
+    background-color: var(--avatar-background-color);   /* = light-dark(light-dark(#ededed, #181818), light-dark(#afafaf, #303030)) */
+    color: var(--avatar-text-color);   /* = light-dark(#0d0d0d, #ffffff) */
+
+    &:where([data-color="primary"]) {
+      --avatar-background-color: var(--color-background-primary-solid);   /* = light-dark(light-dark(#181818, #ededed), light-dark(#131313, #f3f3f3)) */
+      --avatar-text-color: var(--color-text-primary-solid);   /* = light-dark(#ffffff, #0d0d0d) */
+      --avatar-ring-color: var(--color-ring-primary-solid);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="secondary"]) {
+      --avatar-background-color: var(--color-background-secondary-solid);   /* = light-dark(#5d5d5d, light-dark(#8f8f8f, #414141)) */
+      --avatar-text-color: var(--color-text-secondary-solid);   /* = #ffffff */
+      --avatar-ring-color: var(--color-ring-secondary-solid);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="discovery"]) {
+      --avatar-background-color: var(--color-background-discovery-solid);   /* = #924ff7 */
+      --avatar-text-color: var(--color-text-discovery-solid);   /* = #ffffff */
+      --avatar-ring-color: var(--color-ring-discovery-solid);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="info"]) {
+      --avatar-background-color: var(--color-background-info-solid);   /* = #0285ff */
+      --avatar-text-color: var(--color-text-info-solid);   /* = #ffffff */
+      --avatar-ring-color: var(--color-ring-info-solid);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="success"]) {
+      --avatar-background-color: var(--color-background-success-solid);   /* = light-dark(#00a240, #008635) */
+      --avatar-text-color: var(--color-text-success-solid);   /* = #ffffff */
+      --avatar-ring-color: var(--color-ring-success-solid);   /* = light-dark(#0169cc, #0285ff) */
+    }
+
+    &:where([data-color="danger"]) {
+      --avatar-background-color: var(--color-background-danger-solid);   /* = #e02e2a */
+      --avatar-text-color: var(--color-text-danger-solid);   /* = #ffffff */
+      --avatar-ring-color: var(--color-ring-danger-solid);   /* = #ff8583 */
+    }
+  }
+}
+
+/*
+ * Images with low contrast backgrounds should have clear edges,
+ * but this border should not impact the size of the image, or
+ * create fringed edges on various background colors. Using a transparency
+ * on top of the image ensures crisp edges while also solving the issue of low contrast backgrounds.
+ */
+.AvatarImageContainer {
+  border-radius: inherit;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border: 1px solid var(--avatar-image-border-color);   /* = 1px solid light-dark(alpha(light-dark(#0d0d0d, #ffffff), 4%), alpha(light-dark(#0d0d0d, #ffffff), 15%)) */
+    border-radius: inherit;
+    content: "";
+    pointer-events: none;
+  }
+}
+
+.AvatarImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  opacity: 0;
+  /* Prevent awkward dragging of the image */
+  pointer-events: none;
+  transition: 0.15s ease;
+
+  &[data-loaded] {
+    opacity: 1;
+  }
+}
+
+.AvatarInitial {
+  font-size: calc(var(--avatar-size) * var(--avatar-font-size-scaling));   /* = 14px */
+  font-weight: var(--font-weight-semibold);   /* = 600 */
+}
+
+.AvatarOverflowCount {
+  font-size: calc(var(--avatar-size) * var(--avatar-overflow-font-size-scaling-three));   /* = 8.4px */
+  font-weight: var(--font-weight-semibold);   /* = 600 */
+
+  &[data-letter-count="2"] {
+    font-size: calc(var(--avatar-size) * var(--avatar-overflow-font-size-scaling-two));   /* = 10.36px */
+  }
+
+  &[data-letter-count="1"] {
+    font-size: calc(var(--avatar-size) * var(--avatar-overflow-font-size-scaling-one));   /* = 12.6px */
+  }
+}
+
+/*
+ * The "+" sits very low in the baseline - this lifts it up 1px per 24px of size
+ */
+.AvatarOverflowCountSymbol {
+  position: relative;
+  top: calc(-1 * var(--avatar-size) / 24);   /* = -1.17px */
+  margin-left: -1px;
+}
+
+.AvatarIcon {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: calc(var(--avatar-size) * 0.7);   /* = 19.6px */
+}

@@ -1,0 +1,31 @@
+### MUI Material @ 69960c1  packages/mui-material/src/CircularProgress/CircularProgress.js
+L72 const slots = {
+L82 const CircularProgressRoot = styled('span', {
+L83 name: 'MuiCircularProgress',
+L84 slot: 'Root',
+L102 variants: [
+L104 props: {
+L107 style: {
+L112 props: {
+L122 props: {
+L132 props: { color },
+L133 style: {
+L142 const CircularProgressSVG = styled('svg', {
+L143 name: 'MuiCircularProgress',
+L144 slot: 'Svg',
+L149 const CircularProgressCircle = styled('circle', {
+L150 name: 'MuiCircularProgress',
+L151 slot: 'Circle',
+L165 variants: [
+L167 props: {
+L170 style: {
+L175 props: {
+L178 style: {
+L206 const CircularProgressTrack = styled('circle', {
+L207 name: 'MuiCircularProgress',
+L208 slot: 'Track',
+L256 const ownerState = {
+L269 const circleStyle = {};
+L270 const rootStyle = {};
+L271 const rootProps = {};
+L301   style={{ width: size, height: size, ...rootStyle, ...style }}

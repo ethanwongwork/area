@@ -1,0 +1,6 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/hover-card.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot hover-card]
+  [slot hover-card-trigger]
+  [slot hover-card-portal]
+  [slot hover-card-content]
+  L34 w-64=256px rounded-md=8px border=1px p-4=16px

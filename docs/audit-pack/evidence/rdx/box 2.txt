@@ -1,0 +1,5 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/box.css
+.rt-Box {
+  box-sizing: border-box;
+  display: block;
+}

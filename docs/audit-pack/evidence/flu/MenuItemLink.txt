@@ -1,0 +1,3 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu/library/src/components/MenuItemLink/useMenuItemLinkStyles.styles.ts
+L20 const useStyles = makeStyles({
+L21 resetLink: {

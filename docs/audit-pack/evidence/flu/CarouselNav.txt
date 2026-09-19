@@ -1,0 +1,8 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-carousel/library/src/components/CarouselNav/useCarouselNavStyles.styles.ts
+L17 const useStyles = makeStyles({
+L18 root: {
+L25 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L26 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L27 ...shorthands.borderColor('transparent'),
+L29 borderRadius: tokens.borderRadiusXLarge,   // borderRadiusXLarge=8px
+L30 margin: `auto ${tokens.spacingHorizontalS}`,   // spacingHorizontalS=8px

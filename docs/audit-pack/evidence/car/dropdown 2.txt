@@ -1,0 +1,133 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/dropdown/_dropdown.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L26 @mixin dropdown {
+L27 .#{$prefix}--dropdown__wrapper--inline {
+L30   grid-gap: 0 convert.to-rem(8px);
+L33 &:has(.#{$prefix}--label.#{$prefix}--visually-hidden) {
+L37 .#{$prefix}--label {
+L38   @include type-style('body-compact-01');   // body-compact-01=14/18
+L43 .#{$prefix}--form-requirement {
+L44   margin: 0;
+L47 .#{$prefix}--form-requirement {
+L52 .#{$prefix}--dropdown {
+L58   border: none;
+L60   block-size: convert.to-rem(40px);
+L64   inline-size: 100%;
+L69 &:hover {
+L74   border: 1px solid transparent;
+L79 .#{$prefix}--dropdown .#{$prefix}--list-box__field {
+L83 .#{$prefix}--dropdown--lg {
+L84   block-size: convert.to-rem(48px);
+L85   max-block-size: convert.to-rem(48px);
+L88 .#{$prefix}--dropdown--lg .#{$prefix}--dropdown__arrow {
+L89   inset-block-start: convert.to-rem(16px);
+L92 .#{$prefix}--dropdown--sm {
+L93   block-size: convert.to-rem(32px);
+L94   max-block-size: convert.to-rem(32px);
+L97 .#{$prefix}--dropdown--sm .#{$prefix}--dropdown__arrow {
+L98   inset-block-start: convert.to-rem(8px);
+L101 .#{$prefix}--dropdown--open {
+L107 .#{$prefix}--dropdown--open .#{$prefix}--list-box__field {
+L112 .#{$prefix}--dropdown--focus .#{$prefix}--list-box__field {
+L125 .#{$prefix}--dropdown .#{$prefix}--list-box__field:focus {
+L130 .#{$prefix}--dropdown--invalid {
+L133 .#{$prefix}--dropdown-text {
+L134   padding-inline-end: convert.to-rem(56px);
+L140   max-block-size: convert.to-rem(200px);
+L144 .#{$prefix}--dropdown__invalid-icon {
+L147   inset-block-start: 50%;
+L148   inset-inline-end: $spacing-08;   // spacing-08=40px
+L152 .#{$prefix}--dropdown--open:hover {
+L156 .#{$prefix}--dropdown--open:focus {
+L160 .#{$prefix}--dropdown--open .#{$prefix}--dropdown-list {
+L164   max-block-size: convert.to-rem(220px);
+L168 .#{$prefix}--dropdown--light {
+L171 &:hover {
+L176 .#{$prefix}--dropdown--up .#{$prefix}--dropdown-list {
+L177   inset-block-end: 2rem;
+L180 .#{$prefix}--dropdown__arrow {
+L183   inset-block-start: convert.to-rem(13px);
+L184   inset-inline-end: 1rem;
+L191   border: none;
+L195   inline-size: 100%;
+L198 &:focus {
+L203 .#{$prefix}--dropdown-text {
+L204   @include type-style('body-compact-01');   // body-compact-01=14/18
+L209   block-size: calc(100% + 1px);
+L211   padding-inline: $spacing-05 convert.to-rem(42px);   // spacing-05=16px
+L216 .#{$prefix}--dropdown-list {
+L220   @include type-style('body-compact-01');   // body-compact-01=14/18
+L229   inline-size: 100%;
+L231   max-block-size: 0;
+L236 .#{$prefix}--dropdown--light .#{$prefix}--dropdown-list {
+L241 .#{$prefix}--dropdown-item {
+L245 .#{$prefix}--dropdown-item {
+L254 &:hover {
+L262 &:active {
+L266 &:first-of-type .#{$prefix}--dropdown-link {
+L271 .#{$prefix}--dropdown-item:last-of-type .#{$prefix}--dropdown-link {
+L275 .#{$prefix}--dropdown-link {
+L280   padding: convert.to-rem(11px) 0;
+L281   border: 1px solid transparent;
+L282   margin: 0 $spacing-05;   // spacing-05=16px
+L283   block-size: convert.to-rem(40px);
+L287   line-height: 1rem;
+L292 &:hover {
+L299 .#{$prefix}--dropdown--light .#{$prefix}--dropdown-link {
+L303 .#{$prefix}--dropdown--sm .#{$prefix}--dropdown-link {
+L304   block-size: convert.to-rem(32px);
+L305   padding-block: convert.to-rem(7px) convert.to-rem(7px);
+L309 .#{$prefix}--dropdown-link:focus {
+L312   padding: convert.to-rem(11px) convert.to-rem(16px);
+L313   margin: 0;
+L318 .#{$prefix}--dropdown-link:focus {
+L320   padding: convert.to-rem(11px) 0;
+L321   margin: 0 $spacing-05;   // spacing-05=16px
+L327 .#{$prefix}--dropdown--focused:focus {
+L331   padding: convert.to-rem(11px) convert.to-rem(16px);
+L332   margin: 0;
+L342 .#{$prefix}--dropdown-item:active {
+L346 .#{$prefix}--dropdown-item:hover .#{$prefix}--dropdown-link {
+L350 .#{$prefix}--dropdown--open .#{$prefix}--dropdown__arrow {
+L355 .#{$prefix}--dropdown-list {
+L357   max-block-size: convert.to-rem(176px);
+L360 .#{$prefix}--dropdown--open .#{$prefix}--dropdown-item {
+L364 .#{$prefix}--dropdown--disabled {
+L367 &:hover {
+L371 &:focus {
+L377 .#{$prefix}--list-box__label {
+L383 .#{$prefix}--list-box__menu-icon svg {
+L388 &.#{$prefix}--dropdown--light:hover {
+L394 .#{$prefix}--dropdown--disabled .#{$prefix}--list-box__menu-icon {
+L398 .#{$prefix}--dropdown--auto-width {
+L399   inline-size: auto;
+L400   max-inline-size: convert.to-rem(400px);
+L403 .#{$prefix}--dropdown--inline {
+L407   inline-size: auto;
+L411 &:hover {
+L415 &.#{$prefix}--dropdown--disabled {
+L419 .#{$prefix}--dropdown__arrow {
+L420   inset-block-start: convert.to-rem(8px);
+L421   inset-inline-end: convert.to-rem(8px);
+L425 .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--open {
+L429 .#{$prefix}--dropdown--inline .#{$prefix}--dropdown-text {
+L432   padding: convert.to-rem(7px) $spacing-07 convert.to-rem(7px) $spacing-04;   // spacing-07=32px spacing-04=12px
+L433   block-size: convert.to-rem(32px);
+L438 .#{$prefix}--dropdown-text {
+L443 .#{$prefix}--dropdown-text {
+L448 .#{$prefix}--dropdown__invalid-icon {
+L449   inset-inline-end: convert.to-rem(32px);
+L453 .#{$prefix}--dropdown-text {
+L454   padding-inline-end: convert.to-rem(56px);
+L458 .#{$prefix}--dropdown-list {
+L462 .#{$prefix}--dropdown--inline .#{$prefix}--dropdown-link {
+L466 .#{$prefix}--dropdown--show-selected .#{$prefix}--dropdown--selected {
+L471 &:hover {
+L475 .#{$prefix}--dropdown-link {
+L483 .#{$prefix}--list-box__menu-item__selected-icon {
+L490 .#{$prefix}--dropdown.#{$prefix}--skeleton {
+L496 .#{$prefix}--dropdown .#{$prefix}--list-box__field {
+L500 .#{$prefix}--list-box__menu-item__option {
+L508 .#{$prefix}--dropdown--readonly:hover {
+L512 .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--readonly {
+L517 .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__menu-icon {
+L521 .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__menu-icon svg {

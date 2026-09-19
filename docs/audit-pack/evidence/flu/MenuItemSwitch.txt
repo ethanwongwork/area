@@ -1,0 +1,25 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu/library/src/components/MenuItemSwitch/useMenuItemSwitchStyles.styles.ts
+L21 const spaceBetweenThumbAndTrack = 2;
+L22 const trackHeight = 20;
+L23 const trackWidth = 40;
+L24 const thumbSize = trackHeight - spaceBetweenThumbAndTrack;
+L26 const useSwitchIndicatorBaseClassName = makeResetStyles({
+L27 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L28 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStrokeAccessible}`,   // strokeWidthThin=1px
+L29 lineHeight: 0,
+L32 flexShrink: 0,
+L33 fontSize: `${thumbSize}px`,
+L34 height: `${trackHeight}px`,
+L38 width: `${trackWidth}px`,
+L39 marginRight: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L42 transitionDuration: '0.01ms',
+L61 transitionDuration: '0.01ms',
+L66 const useSwitchIndicatorStyles = makeStyles({
+L67 checked: {
+L69 transform: `translateX(${trackWidth - thumbSize - spaceBetweenThumbAndTrack}px)`,
+L74 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L79 ...shorthands.borderColor(tokens.colorTransparentStrokeInteractive),
+L85 ...shorthands.borderColor(tokens.colorTransparentStrokeInteractive),
+L90 const useMultilineStyles = makeStyles({
+L91 switch: {
+L143 components: {

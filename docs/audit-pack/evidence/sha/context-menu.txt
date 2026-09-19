@@ -1,0 +1,29 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/context-menu.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot context-menu]
+  [slot context-menu-trigger]
+  [slot context-menu-group]
+  [slot context-menu-portal]
+  [slot context-menu-sub]
+  [slot context-menu-radio-group]
+  [slot context-menu-sub-trigger]
+  L68 rounded-sm=6px px-2=8px py-1.5=6px text-sm=14/20px data-[inset]:pl-8=32px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  [slot context-menu-sub-content]
+  L87 min-w-[8rem] rounded-md=8px border=1px p-1=4px
+  [slot context-menu-content]
+  L104 min-w-[8rem] rounded-md=8px border=1px p-1=4px
+  [slot context-menu-item]
+  L128 gap-2=8px rounded-sm=6px px-2=8px py-1.5=6px text-sm=14/20px data-[inset]:pl-8=32px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  [slot context-menu-checkbox-item]
+  L146 gap-2=8px rounded-sm=6px py-1.5=6px pr-2=8px pl-8=32px text-sm=14/20px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L152 left-2=8px size-3.5=14px
+  L154 size-4=16px
+  [slot context-menu-radio-item]
+  L171 gap-2=8px rounded-sm=6px py-1.5=6px pr-2=8px pl-8=32px text-sm=14/20px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L176 left-2=8px size-3.5=14px
+  L178 size-2=8px
+  [slot context-menu-label]
+  L198 px-2=8px py-1.5=6px text-sm=14/20px font-medium data-[inset]:pl-8=32px
+  [slot context-menu-separator]
+  L213 -mx-1=4px my-1=4px h-px=1px
+  [slot context-menu-shortcut]
+  L227 text-xs=12/16px tracking-widest

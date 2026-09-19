@@ -1,0 +1,30 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-progress/library/src/components/ProgressBar/useProgressBarStyles.styles.ts
+L15 const ZERO_THRESHOLD = 0.01;
+L18 medium: '2px',
+L19 large: '4px',
+L25 const useRootStyles = makeStyles({
+L26 root: {
+L29 width: '100%',
+L36 rounded: {
+L37 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L39 square: {
+L40 borderRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L42 medium: {
+L43 height: barThicknessValues.medium,
+L45 large: {
+L46 height: barThicknessValues.large,
+L53 const useBarStyles = makeStyles({
+L54 base: {
+L58 borderRadius: 'inherit',
+L59 height: '100%',
+L61 nonZeroDeterminate: {
+L62 transitionProperty: 'width',
+L63 transitionDuration: '0.3s',
+L66 indeterminate: {
+L67 maxWidth: '33%',
+L77 maxWidth: '100%',
+L81 brand: {
+L85 error: {
+L88 warning: {
+L91 success: {
+L129 width: Math.min(100, Math.max(0, (value / max) * 100)) + '%',

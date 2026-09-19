@@ -1,0 +1,39 @@
+### MUI Material @ 69960c1  packages/mui-material/src/SpeedDial/SpeedDial.js
+L26 const slots = {
+L48 const SpeedDialRoot = styled('div', {
+L49 name: 'MuiSpeedDial',
+L50 slot: 'Root',
+L62 variants: [
+L64 props: {
+L67 style: {
+L71   marginBottom: -dialRadius,
+L72   paddingBottom: spacingActions + dialRadius,
+L77 props: {
+L80 style: {
+L84   marginTop: -dialRadius,
+L85   paddingTop: spacingActions + dialRadius,
+L90 props: {
+L93 style: {
+L97   marginRight: -dialRadius,
+L98   paddingRight: spacingActions + dialRadius,
+L103 props: {
+L106 style: {
+L110   marginLeft: -dialRadius,
+L111   paddingLeft: spacingActions + dialRadius,
+L119 const SpeedDialFab = styled(Fab, {
+L120 name: 'MuiSpeedDial',
+L121 slot: 'Fab',
+L126 const SpeedDialActions = styled('div', {
+L127 name: 'MuiSpeedDial',
+L128 slot: 'Actions',
+L138 variants: [
+L141 style: {
+L154 const defaultTransitionDuration = {
+L185 name: 'SpeedDial',
+L189 const ownerState = { ...props, open, direction };
+L342 const eventMap = {
+L380 slotProps: {
+L382 fab: {
+L400 const externalForwardedProps = {
+L407 externalForwardedProps: {
+L414 additionalProps: {

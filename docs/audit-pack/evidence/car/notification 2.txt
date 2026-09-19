@@ -1,0 +1,290 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/notification/_actionable-notification.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L28 @mixin actionable-notification-base {
+L34   block-size: auto;
+L36   inline-size: 100%;
+L37   max-inline-size: convert.to-rem(288px);
+L38   min-block-size: convert.to-rem(48px);
+L39   min-inline-size: convert.to-rem(288px);
+L41 @include breakpoint(md) {
+L43   max-inline-size: convert.to-rem(608px);
+L46 @include breakpoint(lg) {
+L47   max-inline-size: convert.to-rem(736px);
+L50 @include breakpoint(max) {
+L51   max-inline-size: convert.to-rem(832px);
+L57 @mixin actionable-notification-toast-base {
+L60   max-inline-size: convert.to-rem(288px);
+L61   min-inline-size: convert.to-rem(288px);
+L67 @mixin actionable-notification-low-contrast-base {
+L71 .#{$prefix}--actionable-notification__caption {
+L76 .#{$prefix}--actionable-notification__close-icon {
+L84 @mixin actionable-notification-error-base {
+L94 @mixin actionable-notification-success-base {
+L104 @mixin actionable-notification-info-base {
+L114 @mixin actionable-notification-warning-base {
+L124 @mixin actionable-notification-low-contrast-error {
+L130 &::before {
+L138 @mixin actionable-notification-low-contrast-success {
+L144 &::before {
+L152 @mixin actionable-notification-low-contrast-info {
+L158 &::before {
+L166 @mixin actionable-notification-low-contrast-warning {
+L172 &::before {
+L180 @mixin actionable-notification-low-contrast-inline-before {
+L183   border-width: 1px 1px 1px 0;
+L184   border-style: solid;
+L185   block-size: 100%;
+L188   inline-size: 100%;
+L189   inset-block-start: 0;
+L190   inset-inline-start: 0;
+L197 @mixin actionable-notification {
+L198 .#{$prefix}--actionable-notification {
+L202 .#{$prefix}--actionable-notification--toast {
+L213 .#{$prefix}--actionable-notification a {
+L217 .#{$prefix}--actionable-notification a:hover {
+L221 .#{$prefix}--actionable-notification a:focus {
+L230 .#{$prefix}--actionable-notification--low-contrast {
+L240 .#{$prefix}--actionable-notification--error {
+L244 .#{$prefix}--actionable-notification--low-contrast.#{$prefix}--actionable-notification--error {
+L248 .#{$prefix}--actionable-notification--success {
+L252 .#{$prefix}--actionable-notification--low-contrast.#{$prefix}--actionable-notification--success {
+L257 .#{$prefix}--actionable-notification--info-square {
+L262 .#{$prefix}--actionable-notification--low-contrast.#{$prefix}--actionable-notification--info-square {
+L267 .#{$prefix}--actionable-notification--warning-alt {
+L272 .#{$prefix}--actionable-notification--low-contrast.#{$prefix}--actionable-notification--warning-alt {
+L296 .#{$prefix}--actionable-notification__details {
+L299   margin-inline: convert.to-rem(13px) $spacing-09;   // spacing-09=48px
+L305 .#{$prefix}--actionable-notification__details {
+L306 @include breakpoint(md) {
+L307   margin: 0 convert.to-rem(13px);
+L311 .#{$prefix}--actionable-notification .#{$prefix}--inline-notification__icon {
+L313   margin-block-start: convert.to-rem(14px);
+L314   margin-inline-end: $spacing-05;   // spacing-05=16px
+L317 .#{$prefix}--actionable-notification .#{$prefix}--toast-notification__icon {
+L319   margin-block-start: $spacing-05;   // spacing-05=16px
+L320   margin-inline-end: $spacing-05;   // spacing-05=16px
+L323 .#{$prefix}--actionable-notification__text-wrapper {
+L326   padding: convert.to-rem(15px) 0;
+L329 .#{$prefix}--actionable-notification__focus-wrapper {
+L333 .#{$prefix}--actionable-notification__button-wrapper {
+L338 .#{$prefix}--actionable-notification__text-wrapper {
+L339   padding: convert.to-rem(15px) 0 convert.to-rem(23px) 0;
+L342 .#{$prefix}--actionable-notification__content {
+L343   @include type-style('body-compact-01');   // body-compact-01=14/18
+L351 .#{$prefix}--actionable-notification__content {
+L355 .#{$prefix}--actionable-notification__title {
+L356   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L359   margin-inline-end: $spacing-02;   // spacing-02=4px
+L364 .#{$prefix}--actionable-notification__title {
+L365   margin-inline-end: 0;
+L368 .#{$prefix}--actionable-notification__subtitle {
+L369   @include type-style('body-compact-01');   // body-compact-01=14/18
+L372   margin-block-start: 0;
+L376 .#{$prefix}--actionable-notification__caption {
+L377   @include type-style('body-compact-01');   // body-compact-01=14/18
+L380   padding-block-start: $spacing-06;   // spacing-06=24px
+L384 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--ghost {
+L385   block-size: convert.to-rem(32px);
+L386   margin-block-end: $spacing-03;   // spacing-03=8px
+L387   margin-inline-start: $spacing-08;   // spacing-08=40px
+L389 @include breakpoint(md) {
+L390   margin: $spacing-03 0;   // spacing-03=8px
+L397 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--ghost {
+L401 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--ghost:active {
+L406 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--ghost:hover {
+L412 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--ghost:active {
+L418 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--ghost:hover {
+L423 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--ghost:focus {
+L431 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--ghost:focus {
+L436 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--ghost {
+L437   margin-inline-end: $spacing-03;   // spacing-03=8px
+L441 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--tertiary {
+L442   margin-block-end: $spacing-05;   // spacing-05=16px
+L446   margin-inline-start: calc(
+L447   #{$spacing-07} + #{convert.to-rem(20px)} - #{convert.to-rem(2px)}   // spacing-07=32px
+L449   padding-inline: $spacing-05;   // spacing-05=16px
+L462 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--tertiary {
+L477 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--tertiary:hover {
+L485 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--tertiary:focus {
+L489   inset 0 0 0 button-vars.$button-outline-width $focus-inverse,
+L490   inset 0 0 0 button-vars.$button-border-width $background-inverse;
+L497 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--tertiary:active {
+L518 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--tertiary.#{$prefix}--btn--disabled:focus 
+L532 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--tertiary.#{$prefix}--btn--disabled:hover 
+L540 .#{$prefix}--actionable-notification__action-button.#{$prefix}--btn--tertiary {
+L541   margin-inline-end: $spacing-03;   // spacing-03=8px
+L544 .#{$prefix}--actionable-notification__close-button {
+L552   padding: 0;
+L553   border: none;
+L555   block-size: convert.to-rem(48px);
+L557   inline-size: convert.to-rem(48px);
+L558   inset-block-start: 0;
+L559   inset-inline-end: 0;
+L560   max-inline-size: convert.to-rem(48px);
+L561   min-inline-size: convert.to-rem(48px);
+L566 &:focus {
+L571 .#{$prefix}--actionable-notification__close-icon {
+L575 @include breakpoint(md) {
+L581 .#{$prefix}--actionable-notification__close-button {
+L582 @include breakpoint(md) {
+L588 .#{$prefix}--actionable-notification__close-button:focus {
+L594 .#{$prefix}--actionable-notification {
+L599 .#{$prefix}--btn.#{$prefix}--btn--ghost.#{$prefix}--actionable-notification__action-button:focus {
+### Carbon styles @ 8472cca  packages/styles/scss/components/notification/_inline-notification.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L25 @mixin inline-notification-base {
+L31   block-size: auto;
+L34   inline-size: 100%;
+L35   max-inline-size: convert.to-rem(288px);
+L36   min-block-size: convert.to-rem(48px);
+L37   min-inline-size: convert.to-rem(288px);
+L39 @include breakpoint(md) {
+L41   max-inline-size: convert.to-rem(608px);
+L44 @include breakpoint(lg) {
+L45   max-inline-size: convert.to-rem(736px);
+L48 @include breakpoint(max) {
+L49   max-inline-size: convert.to-rem(832px);
+L56 @mixin inline-notification-low-contrast-before {
+L59   border-width: 1px 1px 1px 0;
+L60   border-style: solid;
+L61   block-size: 100%;
+L64   inline-size: 100%;
+L65   inset-block-start: 0;
+L66   inset-inline-start: 0;
+L73 @mixin inline-notification-low-contrast-error {
+L79 &::before {
+L87 @mixin inline-notification-low-contrast-success {
+L93 &::before {
+L101 @mixin inline-notification-low-contrast-info {
+L107 &::before {
+L115 @mixin inline-notification-low-contrast-warning {
+L121 &::before {
+L129 @mixin inline-notification-low-contrast-base {
+L132 .#{$prefix}--inline-notification__close-button:focus {
+L137 .#{$prefix}--inline-notification__close-icon {
+L141 &::before {
+L149 @mixin inline-notification-error-base {
+L159 @mixin inline-notification-success-base {
+L169 @mixin inline-notification-info-base {
+L179 @mixin inline-notification-warning-base {
+L189 @mixin inline-notification {
+L190 .#{$prefix}--inline-notification {
+L201 .#{$prefix}--inline-notification a {
+L205 .#{$prefix}--inline-notification a:hover {
+L209 .#{$prefix}--inline-notification a:focus {
+L218 .#{$prefix}--inline-notification--low-contrast {
+L222 .#{$prefix}--inline-notification--error {
+L226 .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--error {
+L230 .#{$prefix}--inline-notification--success {
+L234 .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--success {
+L239 .#{$prefix}--inline-notification--info-square {
+L244 .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--info-square {
+L249 .#{$prefix}--inline-notification--warning-alt {
+L254 .#{$prefix}--inline-notification--low-contrast.#{$prefix}--inline-notification--warning-alt {
+L268 .#{$prefix}--inline-notification__details {
+L271   margin-inline: convert.to-rem(13px) $spacing-09;   // spacing-09=48px
+L273 @include breakpoint(md) {
+L274   margin: 0 convert.to-rem(13px);
+L278 .#{$prefix}--inline-notification__icon {
+L280   margin-block-start: convert.to-rem(14px);
+L281   margin-inline-end: $spacing-05;   // spacing-05=16px
+L284 .#{$prefix}--inline-notification__text-wrapper {
+L287   padding: convert.to-rem(15px) 0;
+L290 .#{$prefix}--inline-notification__title {
+L291   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L293   margin-inline-end: $spacing-02;   // spacing-02=4px
+L296 .#{$prefix}--inline-notification__subtitle {
+L297   @include type-style('body-compact-01');   // body-compact-01=14/18
+L302 .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
+L303   block-size: convert.to-rem(32px);
+L304   margin-block-end: $spacing-03;   // spacing-03=8px
+L305   margin-inline-start: $spacing-08;   // spacing-08=40px
+L307 @include breakpoint(md) {
+L308   margin: $spacing-03 0;   // spacing-03=8px
+L315 .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
+L319 .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:active {
+L324 .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:hover {
+L330 .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:active {
+L336 .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:hover {
+L341 .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:focus {
+L349 .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost:focus {
+L354 .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
+L355   margin-inline-end: $spacing-03;   // spacing-03=8px
+L358 .#{$prefix}--inline-notification__close-button {
+L366   padding: 0;
+L367   border: none;
+L369   block-size: convert.to-rem(48px);
+L371   inline-size: convert.to-rem(48px);
+L372   inset-block-start: 0;
+L373   inset-inline-end: 0;
+L374   max-inline-size: convert.to-rem(48px);
+L375   min-inline-size: convert.to-rem(48px);
+L380 &:focus {
+L385 .#{$prefix}--inline-notification__close-icon {
+L389 @include breakpoint(md) {
+L396 .#{$prefix}--inline-notification {
+L401 .#{$prefix}--btn.#{$prefix}--btn--ghost.#{$prefix}--inline-notification__action-button:focus {
+### Carbon styles @ 8472cca  packages/styles/scss/components/notification/_mixins.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L12 @mixin inline-notification--color($color) {
+L16 .#{$prefix}--inline-notification__icon {
+L27 @mixin notification--color($color) {
+L33 @mixin notification--experimental($color, $background-color) {
+L39 .#{$prefix}--actionable-notification__icon {
+### Carbon styles @ 8472cca  packages/styles/scss/components/notification/_toast-notification.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L27 @mixin toast-notification-base {
+L31   block-size: auto;
+L34   inline-size: convert.to-rem(288px);
+L35   padding-inline-start: convert.to-rem(13px);
+L37 @include breakpoint(max) {
+L38   inline-size: convert.to-rem(352px);
+L45 @mixin toast-notification-low-contrast-base {
+L49 .#{$prefix}--toast-notification__caption {
+L54 .#{$prefix}--toast-notification__close-icon {
+L58 .#{$prefix}--toast-notification__close-button:focus {
+L66 @mixin toast-notification-error-base {
+L76 @mixin toast-notification-success-base {
+L86 @mixin toast-notification-info-base {
+L96 @mixin toast-notification-warning-base {
+L106 @mixin toast-notification-low-contrast-error {
+L116 @mixin toast-notification-low-contrast-success {
+L126 @mixin toast-notification-low-contrast-info {
+L136 @mixin toast-notification-low-contrast-warning {
+L146 @mixin toast-notification {
+L147 .#{$prefix}--toast-notification {
+L158 .#{$prefix}--toast-notification a {
+L162 .#{$prefix}--toast-notification a:hover {
+L166 .#{$prefix}--toast-notification a:focus {
+L175 .#{$prefix}--toast-notification--low-contrast {
+L179 .#{$prefix}--toast-notification--error {
+L183 .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--error {
+L187 .#{$prefix}--toast-notification--success {
+L191 .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--success {
+L196 .#{$prefix}--toast-notification--info-square {
+L201 .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--info-square {
+L206 .#{$prefix}--toast-notification--warning-alt {
+L211 .#{$prefix}--toast-notification--low-contrast.#{$prefix}--toast-notification--warning-alt {
+L225 .#{$prefix}--toast-notification__icon {
+L227   margin-block-start: $spacing-05;   // spacing-05=16px
+L228   margin-inline-end: $spacing-05;   // spacing-05=16px
+L231 .#{$prefix}--toast-notification__details {
+L232   margin-block-end: $spacing-05;   // spacing-05=16px
+L233   margin-inline-end: $spacing-05;   // spacing-05=16px
+L236 .#{$prefix}--toast-notification__close-button {
+L243   padding: 0;
+L244   border: none;
+L246   block-size: convert.to-rem(48px);
+L248   inline-size: convert.to-rem(48px);
+L249   margin-inline-start: auto;
+L250   min-block-size: convert.to-rem(48px);
+L251   min-inline-size: convert.to-rem(48px);
+L256 &:focus {
+L261 .#{$prefix}--toast-notification__close-icon {
+L266 .#{$prefix}--toast-notification__title {
+L267   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L270   margin-block-start: $spacing-05;   // spacing-05=16px
+L274 .#{$prefix}--toast-notification__subtitle {
+L275   @include type-style('body-compact-01');   // body-compact-01=14/18
+L278   margin-block: 0 $spacing-05;   // spacing-05=16px
+L282 .#{$prefix}--toast-notification__caption {
+L283   @include type-style('body-compact-01');   // body-compact-01=14/18
+L286   padding-block-start: $spacing-03;   // spacing-03=8px
+L291 .#{$prefix}--toast-notification {
+L294 .#{$prefix}--toast-notification__close-button:focus {

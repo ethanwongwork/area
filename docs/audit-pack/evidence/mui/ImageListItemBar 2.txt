@@ -1,0 +1,46 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ImageListItemBar/ImageListItemBar.js
+L15 const slots = {
+L30 const ImageListItemBarRoot = styled('div', {
+L31 name: 'MuiImageListItemBar',
+L32 slot: 'Root',
+L42   left: 0,
+L43   right: 0,
+L48 variants: [
+L50 props: {
+L53 style: {
+L54   bottom: 0,
+L58 props: {
+L61 style: {
+L62   top: 0,
+L66 props: {
+L69 style: {
+L80 const ImageListItemBarTitleWrap = styled('div', {
+L81 name: 'MuiImageListItemBar',
+L82 slot: 'TitleWrap',
+L87   padding: '12px 16px',
+L90 variants: [
+L92 props: {
+L95 style: {
+L96   padding: '6px 0 12px',
+L102 style: {
+L103   paddingLeft: 0,
+L108 style: {
+L109   paddingRight: 0,
+L117 const ImageListItemBarTitle = styled('div', {
+L118 name: 'MuiImageListItemBar',
+L119 slot: 'Title',
+L123   fontSize: theme.typography.pxToRem(16),
+L124   lineHeight: '24px',
+L132 const ImageListItemBarSubtitle = styled('div', {
+L133 name: 'MuiImageListItemBar',
+L134 slot: 'Subtitle',
+L138   fontSize: theme.typography.pxToRem(12),
+L139   lineHeight: 1,
+L147 const ImageListItemBarActionIcon = styled('div', {
+L148 name: 'MuiImageListItemBar',
+L149 slot: 'ActionIcon',
+L151 variants: [
+L153 props: {
+L156 style: {
+L166 name: 'MuiImageListItemBar',
+L179 const ownerState = { ...props, position, actionPosition };

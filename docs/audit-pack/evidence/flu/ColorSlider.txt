@@ -1,0 +1,75 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-color-picker/library/src/components/ColorSlider/useColorSliderStyles.styles.ts
+L30 const useRootStyles = makeResetStyles({
+L36 [colorSliderCSSVars.thumbSizeVar]: '20px',
+L37 [colorSliderCSSVars.railSizeVar]: '20px',
+L38 minHeight: '32px',
+L41 const useStyles = makeStyles({
+L42 horizontal: {
+L43 minWidth: '200px',
+L45 gridTemplateRows: `1fr var(${colorSliderCSSVars.thumbSizeVar}) 1fr`,
+L46 gridTemplateColumns: `1fr 100% 1fr`,
+L49 vertical: {
+L50 minHeight: '280px',
+L52 gridTemplateRows: `1fr 100% 1fr`,
+L53 gridTemplateColumns: `1fr var(${colorSliderCSSVars.thumbSizeVar}) 1fr`,
+L57 const useChannelStyles = makeStyles({
+L58 hue: {
+L61 saturation: {
+L64 value: {
+L72 const useRailStyles = makeStyles({
+L73 rail: {
+L75 gridRowStart: '2',
+L76 gridRowEnd: '2',
+L77 gridColumnStart: '2',
+L78 gridColumnEnd: '2',
+L81 outlineWidth: '1px',
+L90 horizontal: {
+L91 width: '100%',
+L92 height: `var(${colorSliderCSSVars.railSizeVar})`,
+L94 left: '-1px',
+L95 right: '-1px',
+L96 height: `var(${colorSliderCSSVars.railSizeVar})`,
+L100 vertical: {
+L101 width: `var(${colorSliderCSSVars.railSizeVar})`,
+L102 height: '100%',
+L104 width: `var(${colorSliderCSSVars.railSizeVar})`,
+L105 top: '-1px',
+L106 bottom: '1px',
+L114 const useThumbStyles = makeStyles({
+L115 thumb: {
+L116 gridRowStart: '2',
+L117 gridRowEnd: '2',
+L118 gridColumnStart: '2',
+L119 gridColumnEnd: '2',
+L121 width: `var(${colorSliderCSSVars.thumbSizeVar})`,
+L122 height: `var(${colorSliderCSSVars.thumbSizeVar})`,
+L126 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L127 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralForeground4}`,   // strokeWidthThin=1px
+L132 inset: '0px',
+L133 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L136 border: `${tokens.strokeWidthThick} solid ${tokens.colorNeutralBackground1}`,   // strokeWidthThick=2px
+L139 horizontal: {
+L141 left: `var(${colorSliderCSSVars.sliderProgressVar})`,
+L143 vertical: {
+L145 bottom: `var(${colorSliderCSSVars.sliderProgressVar})`,
+L149 const useShapeStyles = makeStyles({
+L150 rounded: {
+L151 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L153 square: {
+L154 borderRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L161 const useInputStyles = makeStyles({
+L162 input: {
+L164 opacity: 0,
+L165 gridRowStart: '1',
+L167 gridColumnStart: '1',
+L169 padding: '0',
+L170 margin: '0',
+L172 border: `2px solid ${tokens.colorStrokeFocus2}`,
+L173 outline: `${tokens.strokeWidthThick} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThick=2px
+L174 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L177 horizontal: {
+L178 height: `var(${colorSliderCSSVars.thumbSizeVar})`,
+L179 width: '100%',
+L181 vertical: {
+L182 height: '100%',
+L183 width: `var(${colorSliderCSSVars.thumbSizeVar})`,

@@ -1,0 +1,29 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ToggleButton/ToggleButton.js
+L23 const slots = {
+L37 const ToggleButtonRoot = styled(ButtonBase, {
+L38 name: 'MuiToggleButton',
+L39 slot: 'Root',
+L48   borderRadius: (theme.vars || theme).shape.borderRadius,
+L49   padding: 11,
+L50   border: `1px solid ${(theme.vars || theme).palette.divider}`,
+L54   border: `1px solid ${(theme.vars || theme).palette.action.disabledBackground}`,
+L56 '&:hover': {
+L67 variants: [
+L69 props: { color: 'standard' },
+L70 style: {
+L77 '&:hover': {
+L96 props: { color },
+L97 style: {
+L104 '&:hover': {
+L121 props: { fullWidth: true },
+L122 style: {
+L123   width: '100%',
+L127 props: { size: 'small' },
+L128 style: {
+L129   padding: 7,
+L130   fontSize: theme.typography.pxToRem(13),
+L134 props: { size: 'large' },
+L135 style: {
+L136   padding: 15,
+L137   fontSize: theme.typography.pxToRem(15),
+L174 const ownerState = {

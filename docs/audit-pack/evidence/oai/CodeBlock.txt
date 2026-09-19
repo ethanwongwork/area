@@ -1,0 +1,95 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/CodeBlock/CodeBlock.module.css
+.CodeBlock {
+  position: relative;
+  border: 1px solid var(--color-border);   /* = 1px solid light-dark(alpha(light-dark(#0d0d0d, #ffffff), 10%), alpha(light-dark(#0d0d0d, #ffffff), 12%)) */
+  border-radius: var(--radius-md);   /* = 8px */
+  background-color: var(--codeblock-background-color);   /* = light-dark(#fcfcfc, #101010) */
+}
+
+.CopyButtonContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px 10px 0 0;
+  border-radius: inherit;
+  background-color: var(--codeblock-background-color);   /* = light-dark(#fcfcfc, #101010) */
+}
+
+.SyntaxHighlighter {
+  --syntax1: var(--codeblock-syntax-1);   /* = light-dark(#c0660d, #ffe48c) */
+  --syntax2: var(--codeblock-syntax-2);   /* = light-dark(#0169cc, #66b5ff) */
+  --syntax3: var(--codeblock-syntax-3);   /* = light-dark(#008635, #40c977) */
+  --syntax4: var(--codeblock-syntax-4);   /* = #e04c91 */
+  --syntax5: var(--codeblock-syntax-5);   /* = light-dark(#8046d9, #ad7bf9) */
+
+  overflow: auto;
+  display: block;
+  /* Padding inside the overflow: auto container */
+  padding: 14px 40px 14px 16px;
+  margin: 0;
+  background: transparent;
+  color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+  font-size: 0.875em; /* 14px to a 16px baseline */
+  font-weight: var(--font-weight-normal);   /* = 400 */
+  line-height: 1.5em;
+
+  /* stylelint-disable selector-class-pattern */
+  :global {
+    .token.property,
+    .token.variable,
+    .token.attr-name,
+    .token.unit,
+    .token.id,
+    .token.selector,
+    .token.entity,
+    .token.tag,
+    .token.type {
+      color: var(--syntax4);   /* = #e04c91 */
+    }
+
+    .token.url,
+    .token.boolean,
+    .token.number,
+    .token.important {
+      color: var(--syntax5);   /* = light-dark(#8046d9, #ad7bf9) */
+    }
+
+    .token.builtin,
+    .token.function,
+    .token.class-name {
+      color: var(--syntax1);   /* = light-dark(#c0660d, #ffe48c) */
+    }
+
+    /* Order matters here, for nested tokens */
+    .token.keyword,
+    .token.constant,
+    .token.symbol,
+    .token.deleted {
+      color: var(--syntax2);   /* = light-dark(#0169cc, #66b5ff) */
+    }
+
+    .token.string,
+    .token.char,
+    .token.regex,
+    .token.attr-value,
+    .token.inserted {
+      color: var(--syntax3);   /* = light-dark(#008635, #40c977) */
+    }
+
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: alpha(var(--color-text), 0.5);   /* = alpha(light-dark(#0d0d0d, #ffffff), 0.5) */
+    }
+
+    .token.punctuation,
+    .token.operator {
+      color: alpha(var(--color-text), 0.6);   /* = alpha(light-dark(#0d0d0d, #ffffff), 0.6) */
+    }
+
+    .token.console {
+      color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+    }
+  }
+}

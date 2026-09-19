@@ -1,0 +1,23 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-rating/library/src/components/RatingDisplay/useRatingDisplayStyles.styles.ts
+L6 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L18 const useRootClassName = makeResetStyles({
+L24 const useLabelClassName = makeResetStyles({
+L26 marginLeft: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L27 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L30 const useLabelStyles = makeStyles({
+L31 large: {
+L32 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L33 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L34 marginLeft: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L36 extraLarge: {
+L37 fontSize: tokens.fontSizeBase400,   // fontSizeBase400=16px
+L38 lineHeight: tokens.lineHeightBase400,   // lineHeightBase400=22px
+L39 marginLeft: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L41 strong: {
+L42 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L44 divider: {
+L55 const { size } = state;
+L68 size === 'large' && labelStyles.large,
+L69 size === 'extra-large' && labelStyles.extraLarge,
+L78 size === 'large' && labelStyles.large,
+L79 size === 'extra-large' && labelStyles.extraLarge,

@@ -1,0 +1,25 @@
+### MUI Material @ 69960c1  packages/mui-material/src/AccordionSummary/AccordionSummary.js
+L20 const slots = {
+L30 const AccordionSummaryRoot = styled(ButtonBase, {
+L31 name: 'MuiAccordionSummary',
+L32 slot: 'Root',
+L36   width: '100%',
+L37   minHeight: 48,
+L38   padding: theme.spacing(0, 2),
+L53 variants: [
+L56 style: {
+L58   minHeight: 64,
+L66 const AccordionSummaryContent = styled('span', {
+L67 name: 'MuiAccordionSummary',
+L68 slot: 'Content',
+L74   margin: '12px 0',
+L75 variants: [
+L78 style: {
+L83   margin: '20px 0',
+L91 const AccordionSummaryExpandIconWrapper = styled('span', {
+L92 name: 'MuiAccordionSummary',
+L93 slot: 'ExpandIconWrapper',
+L131 const ownerState = {
+L140 const externalForwardedProps = {
+L150 externalForwardedProps: {
+L155 additionalProps: {

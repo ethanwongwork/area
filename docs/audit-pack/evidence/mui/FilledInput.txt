@@ -1,0 +1,65 @@
+### MUI Material @ 69960c1  packages/mui-material/src/FilledInput/FilledInput.js
+L28 const slots = {
+L49 const FilledInputRoot = styled(InputBaseRoot, {
+L51 name: 'MuiFilledInput',
+L52 slot: 'Root',
+L76 '&:hover': {
+L91 variants: [
+L94 style: {
+L95 '&::after': {
+L96   left: 0,
+L97   bottom: 0,
+L100   right: 0,
+L118 '&::before': {
+L127   left: 0,
+L128   bottom: 0,
+L131   right: 0,
+L148 props: {
+L152 style: {
+L153 '&::after': {
+L160 style: {
+L161   paddingLeft: 12,
+L166 style: {
+L169   paddingRight: 'var(--_trailingPad)',
+L177 style: {
+L178   padding: '25px 12px 8px',
+L183 style: {
+L184   paddingTop: 21,
+L185   paddingBottom: 4,
+L190 style: {
+L191   paddingTop: 16,
+L192   paddingBottom: 17,
+L198 style: {
+L199   paddingTop: 8,
+L200   paddingBottom: 9,
+L208 const FilledInputInput = styled(InputBaseInput, {
+L209 name: 'MuiFilledInput',
+L210 slot: 'Input',
+L214   paddingTop: 25,
+L215   paddingRight: 12,
+L216   paddingBottom: 8,
+L217   paddingLeft: 12,
+L218 '&:-webkit-autofill': {
+L234 variants: [
+L236 props: {
+L237   size: 'small',
+L239 style: {
+L240   paddingTop: 21,
+L241   paddingBottom: 4,
+L246 style: {
+L247   paddingTop: 16,
+L248   paddingBottom: 17,
+L253 style: {
+L254   paddingLeft: 0,
+L259 style: {
+L260   paddingRight: 0,
+L265 style: {
+L266   paddingTop: 8,
+L267   paddingBottom: 9,
+L272 style: {
+L273   paddingTop: 0,
+L274   paddingBottom: 0,
+L275   paddingLeft: 0,
+L276   paddingRight: 0,
+L299 const ownerState = {
+L309 const filledInputComponentsProps = { root: { ownerState }, input: { ownerState } };

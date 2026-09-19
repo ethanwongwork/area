@@ -1,0 +1,5 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/switch.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot switch]
+  L19 shrink-0 rounded-full=9999px border=1px focus-visible:ring-[3px] data-[size=default]:h-[1.15rem] data-[size=default]:w-8=32px data-[size=sm]:h-3.5=14px data-[size=sm]:w-6=24px
+  [slot switch-thumb]
+  L27 rounded-full=9999px ring-0=0px group-data-[size=default]/switch:size-4=16px group-data-[size=sm]/switch:size-3=12px data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0=0px

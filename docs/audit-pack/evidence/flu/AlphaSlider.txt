@@ -1,0 +1,10 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-color-picker/library/src/components/AlphaSlider/useAlphaSliderStyles.styles.ts
+L22 const useStyles = makeStyles({
+L23 rail: {
+L24 border: `1px solid ${tokens.colorNeutralStroke1}`,
+L32 const useThumbStyles = makeStyles({
+L33 thumb: {
+L39 horizontal: {
+L41 left: `var(${alphaSliderCSSVars.sliderProgressVar})`,
+L43 vertical: {
+L45 bottom: `var(${alphaSliderCSSVars.sliderProgressVar})`,

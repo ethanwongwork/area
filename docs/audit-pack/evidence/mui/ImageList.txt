@@ -1,0 +1,12 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ImageList/ImageList.js
+L15 const slots = {
+L22 const ImageListRoot = styled('ul', {
+L23 name: 'MuiImageList',
+L24 slot: 'Root',
+L34   padding: 0,
+L37 variants: [
+L39 props: {
+L42 style: {
+L52 name: 'MuiImageList',
+L74   ? { columnCount: cols, columnGap: gap, ...styleProp }
+L77 const ownerState = { ...props, component, gap, rowHeight, variant };

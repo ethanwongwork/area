@@ -1,0 +1,6 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-nav-rail-collapsed.scss
+container-width: 96px
+item-vertical-space: 4px
+narrow-container-width: 80px
+top-space: 44px
+container-shape: corner-none = 0px

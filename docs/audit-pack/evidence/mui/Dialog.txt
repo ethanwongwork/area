@@ -1,0 +1,65 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Dialog/Dialog.js
+L20 const DialogBackdrop = styled(Backdrop, {
+L21 name: 'MuiDialog',
+L22 slot: 'Backdrop',
+L31 const slots = {
+L46 const DialogRoot = styled(Modal, {
+L47 name: 'MuiDialog',
+L48 slot: 'Root',
+L56 const DialogContainer = styled('div', {
+L57 name: 'MuiDialog',
+L58 slot: 'Container',
+L65   height: '100%',
+L67   height: 'auto',
+L71 variants: [
+L73 props: {
+L76 style: {
+L83 props: {
+L86 style: {
+L90 '&::after': {
+L94   height: '100%',
+L95   width: '0',
+L102 const DialogPaper = styled(Paper, {
+L103 name: 'MuiDialog',
+L104 slot: 'Paper',
+L117   margin: 32,
+L126 variants: [
+L128 props: {
+L131 style: {
+L134   maxHeight: 'calc(100% - 64px)',
+L138 props: {
+L141 style: {
+L149 style: {
+L150   maxWidth: 'calc(100% - 64px)',
+L154 props: {
+L155   maxWidth: 'xs',
+L157 style: {
+L158   maxWidth:
+L165 props: {
+L166   maxWidth: 'xs',
+L169 style: {
+L171   maxWidth: 'calc(100% - 64px)',
+L178 props: { maxWidth },
+L179 style: {
+L180   maxWidth: `${theme.breakpoints.values[maxWidth]}${theme.breakpoints.unit}`,
+L186 props: { maxWidth, scroll: 'body' },
+L187 style: {
+L189   maxWidth: 'calc(100% - 64px)',
+L195 style: {
+L196   width: 'calc(100% - 64px)',
+L201 style: {
+L202   margin: 0,
+L203   width: '100%',
+L204   maxWidth: '100%',
+L205   height: '100%',
+L206   maxHeight: 'none',
+L207   borderRadius: 0,
+L212 style: {
+L213   margin: 0,
+L214   maxWidth: '100%',
+L227 const defaultTransitionDuration = {
+L253 const ownerState = {
+L291 const externalForwardedProps = {
+L319 additionalProps: {
+L341 additionalProps: {
+L354 backdrop: {

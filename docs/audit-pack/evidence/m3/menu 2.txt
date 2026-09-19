@@ -1,0 +1,11 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-menu.scss
+cascading-menu-indicator-icon-size: 24px
+divider-height: 1px
+list-item-container-height: 48px
+list-item-with-leading-icon-leading-icon-size: 24px
+list-item-with-trailing-icon-trailing-icon-size: 24px
+container-shape: corner-extra-small = 4px
+focus-indicator-outline-offset: md-sys-state-focus-indicator.$inner-offset
+focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+list-item-label-text-line-height: label-large-line-height = 20px
+list-item-label-text-size: label-large-size = 14px

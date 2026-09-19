@@ -1,0 +1,25 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Snackbar/Snackbar.js
+L19 const slots = {
+L29 const SnackbarRoot = styled('div', {
+L30 name: 'MuiSnackbar',
+L31 slot: 'Root',
+L49   left: 8,
+L50   right: 8,
+L53 variants: [
+L56 style: { top: 8, [theme.breakpoints.up('sm')]: { top: 24 } },
+L60 style: { bottom: 8, [theme.breakpoints.up('sm')]: { bottom: 24 } },
+L64 style: {
+L67   left: 24,
+L68   right: 'auto',
+L74 style: {
+L77   right: 24,
+L78   left: 'auto',
+L84 style: {
+L86   left: '50%',
+L87   right: 'auto',
+L99 const defaultTransitionDuration = {
+L125 const ownerState = {
+L139 const externalForwardedProps = {
+L149 externalForwardedProps: {
+L177 additionalProps: {
+L197 additionalProps: {

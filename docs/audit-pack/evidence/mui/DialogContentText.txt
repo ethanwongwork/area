@@ -1,0 +1,5 @@
+### MUI Material @ 69960c1  packages/mui-material/src/DialogContentText/DialogContentText.js
+L15 const slots = {
+L27 const DialogContentTextRoot = styled(Typography, {
+L29 name: 'MuiDialogContentText',
+L30 slot: 'Root',

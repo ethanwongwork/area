@@ -1,0 +1,61 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/big-number/_big-number.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L20 @mixin big-number {
+L21 .#{$prefix}--big-number {
+L22   margin: 0;
+L25 .#{$prefix}--big-number__label {
+L26   @include type-style('label-01');   // label-01=12/16
+L29   margin: 0;
+L33 .#{$prefix}--big-number__value {
+L34   @include type-style('heading-04');
+L36   margin-block-end: 0;
+L39 .#{$prefix}--big-number__total {
+L40   @include type-style('body-compact-01');   // body-compact-01=14/18
+L44 .#{$prefix}--big-number__percentage-mark {
+L45   margin-block: auto $spacing-02;   // spacing-02=4px
+L48 .#{$prefix}--big-number__info {
+L49   padding-inline-start: $spacing-03;   // spacing-03=8px
+L53 .#{$prefix}--big-number__trend {
+L54   margin-block-start: $spacing-03;   // spacing-03=8px
+L58 .#{$prefix}--big-number__row {
+L63 .#{$prefix}--big-number__percentage {
+L64   @include type-style('heading-04');
+L67 .#{$prefix}--big-number__percentage-mark {
+L68   @include type-style('body-compact-01');   // body-compact-01=14/18
+L71 .#{$prefix}--big-number__icon-button {
+L72   margin-inline-start: $spacing-02;   // spacing-02=4px
+L76 .#{$prefix}--big-number--lg .#{$prefix}--big-number__percentage {
+L77   @include type-style('heading-06');
+L81 .#{$prefix}--big-number--lg .#{$prefix}--big-number__percentage-mark {
+L82   @include type-style('heading-03');   // heading-03=20/28
+L85 .#{$prefix}--big-number--xl .#{$prefix}--big-number__label {
+L86   @include type-style('body-compact-01');   // body-compact-01=14/18
+L90 .#{$prefix}--big-number--xl .#{$prefix}--big-number__percentage {
+L91   @include type-style('heading-07');
+L95 .#{$prefix}--big-number--xl .#{$prefix}--big-number__percentage-mark {
+L96   @include type-style('heading-04');
+L99 .#{$prefix}--big-number--xl .#{$prefix}--big-number__trend {
+L100   margin-block-start: $spacing-04;   // spacing-04=12px
+L103 .#{$prefix}--big-number .#{$prefix}--big-number__tooltip-trigger {
+L105   padding: 0;
+L106   border: 0;
+L112 &:focus {
+L121 .#{$prefix}--big-number-skeleton {
+L122   inline-size: 4rem;
+L125 .#{$prefix}--big-number-skeleton__label {
+L126   block-size: $spacing-04;   // spacing-04=12px
+L127   margin-block: 0 $spacing-03;   // spacing-03=8px
+L130 .#{$prefix}--big-number-skeleton__value {
+L131   margin: 0;
+L133   block-size: $spacing-08 !important;   // spacing-08=40px
+L136 .#{$prefix}--big-number-skeleton--lg {
+L137   inline-size: 5rem;
+L140 .#{$prefix}--big-number-skeleton--xl {
+L141   inline-size: 6rem;
+L145 .#{$prefix}--big-number-skeleton__label {
+L146   block-size: $spacing-04;   // spacing-04=12px
+L150 .#{$prefix}--big-number-skeleton__value {
+L152   block-size: $spacing-09 !important;   // spacing-09=48px
+L156 .#{$prefix}--big-number-skeleton__label {
+L157   block-size: $spacing-04;   // spacing-04=12px
+L161 .#{$prefix}--big-number-skeleton__value {
+L163   block-size: $spacing-10 !important;   // spacing-10=64px

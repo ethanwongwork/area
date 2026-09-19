@@ -1,0 +1,14 @@
+### Primer React @ e4e6eba  packages/react/src/Spinner/Spinner.module.css
+.Box {
+  display: inline-flex;
+}
+
+@keyframes rotate-keyframes {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.SpinnerAnimation {
+  animation: rotate-keyframes var(--base-duration-1000) var(--base-easing-linear) infinite;   /* = rotate-keyframes 1000ms cubic-bezier(0, 0, 1, 1) infinite */
+}

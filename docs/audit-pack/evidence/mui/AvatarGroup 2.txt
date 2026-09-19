@@ -1,0 +1,14 @@
+### MUI Material @ 69960c1  packages/mui-material/src/AvatarGroup/AvatarGroup.js
+L15 const SPACINGS = {
+L23 const slots = {
+L31 const AvatarGroupRoot = styled('div', {
+L32 name: 'MuiAvatarGroup',
+L33 slot: 'Root',
+L42   border: `2px solid ${(theme.vars || theme).palette.background.default}`,
+L44   marginLeft: 'var(--AvatarGroup-spacing, -8px)',
+L45 '&:last-child': {
+L46   marginLeft: 0,
+L55 name: 'MuiAvatarGroup',
+L73 const ownerState = {
+L120 const externalForwardedProps = {
+L130 additionalProps: {

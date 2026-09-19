@@ -1,0 +1,226 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/Markdown/Markdown.module.css
+.MarkdownContent {
+  overflow-wrap: anywhere;
+
+  /* Avoid margin collapse on all children, for more predictable spacing. */
+  /* ******************************************************************** */
+  /* IMPORTANT: These cannot be removed without changing SmoothMarkdown   */
+  *:first-child {
+    margin-top: 0;
+  }
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+  /* ******************************************************************** */
+
+  /* Headers */
+  h1 {
+    margin-bottom: 0.5rem;   /* = 8px */
+    font-size: 1.75em;
+    font-weight: var(--font-weight-semibold);   /* = 600 */
+    letter-spacing: -0.04rem;   /* = -0.64px */
+    line-height: 1.222;
+  }
+
+  h2 {
+    margin-top: 2rem;   /* = 32px */
+    margin-bottom: 1rem;   /* = 16px */
+    font-size: 1.5em;
+    font-weight: var(--font-weight-semibold);   /* = 600 */
+    line-height: 1.222;
+  }
+
+  h3 {
+    margin-top: 1.125rem;   /* = 18px */
+    margin-bottom: 0.625rem;   /* = 10px */
+    font-size: 1.25em;
+    font-weight: var(--font-weight-semibold);   /* = 600 */
+    line-height: 1.3;
+  }
+
+  h4 {
+    margin-top: 1rem;   /* = 16px */
+    margin-bottom: 0.5rem;   /* = 8px */
+    font-size: 1em;
+    font-weight: var(--font-weight-semibold);   /* = 600 */
+    line-height: 1.5;
+  }
+
+  h5 {
+    font-size: 1em;
+    font-weight: var(--font-weight-semibold);   /* = 600 */
+    line-height: 1.5;
+  }
+
+  h6 {
+    font-size: 1em;
+    line-height: 1.5;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    margin: 0.5em 0 1em;
+
+    > li > :first-child {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    > li ul,
+    > li ol {
+      margin-top: 0.25em !important;
+    }
+  }
+
+  ul {
+    padding-left: 1.625em;
+    list-style-type: disc;
+
+    > li {
+      padding-left: 0.375em;
+      margin: 0.5em 0;
+
+      &::marker {
+        color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+        font-size: 1em;
+        font-weight: var(--font-weight-medium);   /* = 500 */
+      }
+    }
+  }
+
+  ol {
+    padding-left: 1.625em;
+    list-style-type: decimal;
+
+    > li {
+      padding-left: 0.375em;
+      margin: 0.5em 0;
+
+      &::marker {
+        color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+        font-size: 1em;
+        font-weight: var(--font-weight-medium);   /* = 500 */
+      }
+    }
+  }
+
+  li {
+    min-height: 1.5em;
+    margin: 0.5em 0;
+  }
+
+  /* Text */
+  p {
+    margin: 1em 0;
+  }
+
+  /* Emphasis */
+  strong {
+    font-weight: var(--font-weight-semibold);   /* = 600 */
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  /* Quotes */
+  blockquote {
+    position: relative;
+    padding-top: 0.25em;
+    padding-bottom: 0.25rem;   /* = 4px */
+    padding-left: spacing(6);   /* = 24px */
+    color: var(--tw-prose-quotes);
+    font-weight: var(--font-weight-normal);   /* = 400 */
+    quotes: "\201C" "\201D" "\2018" "\2019";
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      display: block;
+      width: 0.25rem;   /* = 4px */
+      border-radius: var(--radius-2xs);   /* = 2px */
+      background: light-dark(var(--alpha-15), var(--alpha-20));   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 15%), alpha(light-dark(#0d0d0d, #ffffff), 20%)) */
+      content: "";
+    }
+
+    p {
+      margin: 0.5em 0 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  /* Dividers */
+  hr {
+    border-color: var(--alpha-10);   /* = alpha(light-dark(#0d0d0d, #ffffff), 10%) */
+    border-top-width: 1px;
+    margin-top: 2em;
+    margin-bottom: 2em;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border: 0;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-collapse: separate;
+    font-size: 0.875em;
+    line-height: 1.7142857;
+    table-layout: auto;
+  }
+
+  th {
+    border: 0;
+    border-bottom: 1px solid var(--color-border-strong);   /* = 1px solid light-dark(alpha(light-dark(#0d0d0d, #ffffff), 15%), alpha(light-dark(#0d0d0d, #ffffff), 20%)) */
+    line-height: var(--font-text-sm-line-height);   /* = 20px */
+    padding-block: spacing(2);   /* = 8px */
+    padding-inline: spacing(2);   /* = 8px */
+    text-align: start;
+
+    &:first-child {
+      padding-inline-start: 0;
+    }
+
+    &:last-child {
+      padding-inline-end: 0;
+    }
+  }
+
+  td {
+    border: 0;
+    border-bottom: 1px solid var(--color-border);   /* = 1px solid light-dark(alpha(light-dark(#0d0d0d, #ffffff), 10%), alpha(light-dark(#0d0d0d, #ffffff), 12%)) */
+    padding-block: spacing(2.5);   /* = 10px */
+    padding-inline: spacing(2);   /* = 8px */
+
+    &:first-child {
+      padding-inline-start: 0;
+    }
+
+    &:last-child {
+      padding-inline-end: 0;
+    }
+  }
+
+  tbody tr:last-child {
+    td {
+      border-bottom: 0;
+    }
+  }
+}
+
+.InlineCode {
+  padding: 1px 0.3rem;   /* = 1px 4.8px */
+  border-radius: 0.25rem;   /* = 4px */
+  background-color: light-dark(var(--alpha-04), var(--alpha-10));   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 4%), alpha(light-dark(#0d0d0d, #ffffff), 10%)) */
+  box-shadow: inset 0 0 0 1px var(--alpha-08);   /* = inset 0 0 0 1px alpha(light-dark(#0d0d0d, #ffffff), 8%) */
+  color: inherit;
+  font-size: 0.875em;
+  font-weight: 500;
+}

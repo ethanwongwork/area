@@ -1,0 +1,48 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/TextLink/TextLink.module.css
+.TextLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--link-gap);   /* = 2px */
+  /* Used to round the focus ring */
+  border-radius: var(--link-radius);   /* = 6px */
+  color: currentcolor;
+  cursor: pointer;
+  font-weight: var(--link-font-weight);   /* = inherit */
+  overflow-wrap: anywhere;
+  transition-duration: var(--transition-duration-basic);   /* = 150ms */
+  transition-property: opacity, color, box-shadow, text-decoration-color;
+  transition-timing-function: var(--transition-ease-basic);   /* = ease */
+
+  @mixin hover {
+    color: color-mix(in oklab, currentcolor 80%, transparent);
+
+    /* stylelint-disable-next-line */
+    :global(.text-secondary) & {
+      color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+    }
+
+    /* stylelint-disable-next-line */
+    :global(.text-tertiary) & {
+      color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-ring);   /* = 2px solid light-dark(#0169cc, #0285ff) */
+    outline-offset: 1px;
+  }
+
+  &[data-underline] {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, currentcolor 70%, transparent);
+    text-underline-offset: var(--link-underline-decoration-offset);   /* = 0.1em */
+  }
+
+  &[data-primary] {
+    color: var(--link-primary-text-color);   /* = light-dark(#0169cc, #339cff) */
+
+    @mixin hover {
+      color: var(--link-primary-text-color-hover);   /* = light-dark(#013566, #0285ff) */
+    }
+  }
+}

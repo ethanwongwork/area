@@ -1,0 +1,58 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/pagination-nav/_mixins.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L16 @mixin pseudo-underline() {
+L17 &:not(.#{$prefix}--pagination-nav__page--direction) {
+L18 &::after {
+L22   block-size: $spacing-02;   // spacing-02=4px
+L24   inline-size: 0;
+L25   inset-block-end: 0;
+L26   inset-inline-start: 50%;
+L37 &.#{$prefix}--pagination-nav__page--active::after {
+L38   inline-size: $spacing-05;   // spacing-05=16px
+L39   inset-inline-start: calc(50% - #{$spacing-05 * 0.5});   // spacing-05=16px
+### Carbon styles @ 8472cca  packages/styles/scss/components/pagination-nav/_pagination-nav.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L40   $item-padding: 0,
+L41   $button-min-width: $spacing-09,   // spacing-09=48px
+L42   $button-padding: 1.0625rem $spacing-02,   // spacing-02=4px
+L43   $button-direction-size: $spacing-09,   // spacing-09=48px
+L44   $select-icon-top-position: $spacing-05,   // spacing-05=16px
+L45   $select-icon-left-position: $spacing-05   // spacing-05=16px
+L47 .#{$prefix}--pagination-nav {
+L49   @include type-style('body-compact-01');   // body-compact-01=14/18
+L50   @include layout.use('size', $default: 'lg', $min: 'sm', $max: 'lg');
+L53   line-height: 0;
+L56 .#{$prefix}--pagination-nav__list {
+L62 .#{$prefix}--pagination-nav__list-item {
+L63   padding: $item-padding;
+L65 &:first-child {
+L66   padding-inline-start: 0;
+L69 &:last-child {
+L70   padding-inline-end: 0;
+L74 .#{$prefix}--pagination-nav__page {
+L75   @include type-style('body-compact-01');   // body-compact-01=14/18
+L76   @include button-reset.reset($width: false);
+L81   padding: calc((layout.size('height') - 0.875rem) / 2) $spacing-02;   // spacing-02=4px
+L82   border-radius: 0;
+L85   line-height: 1;
+L86   min-inline-size: layout.size('height');
+L96 &:hover {
+L102 &:focus {
+L107 &.#{$prefix}--pagination-nav__page--disabled {
+L116 &.#{$prefix}--pagination-nav__page--active {
+L122 .#{$prefix}--pagination-nav__icon {
+L129 .#{$prefix}--pagination-nav__page--direction {
+L133   block-size: $button-direction-size;
+L134   inline-size: $button-direction-size;
+L135   line-height: 0;
+L138 .#{$prefix}--pagination-nav__select {
+L142 .#{$prefix}--pagination-nav__page--select {
+L144   max-block-size: layout.size('height');
+L154 .#{$prefix}--pagination-nav__select-icon-wrapper {
+L156   block-size: 100%;
+L157   inline-size: 100%;
+L158   inset-block-start: 0;
+L163 .#{$prefix}--pagination-nav__page--active + & {
+L164 .#{$prefix}--pagination-nav__select-icon {
+L170 .#{$prefix}--pagination-nav__select-icon {
+L172   inset-block-start: calc(50% - #{$select-icon-top-position * 0.25});
+L173   inset-inline-start: calc(50% - #{$select-icon-top-position * 0.5});
+L177 .#{$prefix}--pagination-nav__accessibility-label {

@@ -1,0 +1,6 @@
+### MUI Material @ 69960c1  packages/mui-material/src/AccordionDetails/AccordionDetails.js
+L14 const slots = {
+L21 const AccordionDetailsRoot = styled('div', {
+L22 name: 'MuiAccordionDetails',
+L23 slot: 'Root',
+L26   padding: theme.spacing(1, 2, 2),

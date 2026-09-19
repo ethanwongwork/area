@@ -1,0 +1,93 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-card/library/src/components/Card/useCardStyles.styles.ts
+L30 cardSizeVar: '--fui-Card--size',
+L31 cardBorderRadiusVar: '--fui-Card--border-radius',
+L35 outlineRadius: `var(${cardCSSVars.cardBorderRadiusVar})`,
+L36 outlineWidth: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L37 outlineOffset: '-2px', // FIXME: tokens.strokeWidthThick causes some weird bugs   // strokeWidthThick=2px
+L40 const useCardResetStyles = makeResetStyles({
+L42 borderRadius: `var(${cardCSSVars.cardBorderRadiusVar})`,
+L43 padding: `var(${cardCSSVars.cardSizeVar})`,
+L44 gap: `var(${cardCSSVars.cardSizeVar})`,
+L54 top: 0,
+L55 left: 0,
+L56 right: 0,
+L57 bottom: 0,
+L61 ...shorthands.borderStyle('solid'),
+L62 ...shorthands.borderWidth(tokens.strokeWidthThin),   // strokeWidthThin=1px
+L63 borderRadius: `var(${cardCSSVars.cardBorderRadiusVar})`,
+L68 flexShrink: 0,
+L78 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L83 inset: 0,
+L88 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L92 const useCardStyles = makeStyles({
+L93 focused: {
+L105 orientationHorizontal: {
+L109 // Remove vertical padding to keep CardPreview content flush with Card's borders.
+L111 marginTop: `calc(var(${cardCSSVars.cardSizeVar}) * -1)`,
+L112 marginBottom: `calc(var(${cardCSSVars.cardSizeVar}) * -1)`,
+L116 // Since this is on horizontal cards, the left padding is removed to keep the content flush with the border.
+L118 marginLeft: `calc(var(${cardCSSVars.cardSizeVar}) * -1)`,
+L122 // Since this is on horizontal cards, the right padding is removed to keep the content flush with the border.
+L124 marginRight: `calc(var(${cardCSSVars.cardSizeVar}) * -1)`,
+L129 flexGrow: 1,
+L132 orientationVertical: {
+L135 // Remove lateral padding to keep CardPreview content flush with Card's borders.
+L137 marginLeft: `calc(var(${cardCSSVars.cardSizeVar}) * -1)`,
+L138 marginRight: `calc(var(${cardCSSVars.cardSizeVar}) * -1)`,
+L143 // Since this is on vertical cards, the top padding is removed to keep the content flush with the border.
+L145 marginTop: `calc(var(${cardCSSVars.cardSizeVar}) * -1)`,
+L148 marginTop: `calc(var(${cardCSSVars.cardSizeVar}) * -1)`,
+L153 // Since this is on vertical cards, the bottom padding is removed to keep the content flush with the border.
+L155 marginBottom: `calc(var(${cardCSSVars.cardSizeVar}) * -1)`,
+L159 sizeSmall: {
+L160 [cardCSSVars.cardSizeVar]: '8px',
+L161 [cardCSSVars.cardBorderRadiusVar]: tokens.borderRadiusSmall,   // borderRadiusSmall=2px
+L163 sizeMedium: {
+L164 [cardCSSVars.cardSizeVar]: '12px',
+L165 [cardCSSVars.cardBorderRadiusVar]: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L167 sizeLarge: {
+L168 [cardCSSVars.cardSizeVar]: '16px',
+L169 [cardCSSVars.cardBorderRadiusVar]: tokens.borderRadiusLarge,   // borderRadiusLarge=6px
+L172 interactive: {
+L178 filled: {
+L183 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L186 filledInteractive: {
+L192 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L204 filledInteractiveSelected: {
+L208 ...shorthands.borderColor(tokens.colorNeutralStroke1Selected),
+L217 filledAlternative: {
+L222 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L225 filledAlternativeInteractive: {
+L231 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L243 filledAlternativeInteractiveSelected: {
+L247 ...shorthands.borderColor(tokens.colorNeutralStroke1Selected),
+L256 outline: {
+L261 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L264 outlineInteractive: {
+L270 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L278 ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+L285 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L289 outlineInteractiveSelected: {
+L293 ...shorthands.borderColor(tokens.colorNeutralStroke1Selected),
+L301 outlineDisabled: {
+L304 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L312 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L316 subtle: {
+L321 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L324 subtleInteractive: {
+L330 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L341 subtleInteractiveSelected: {
+L345 ...shorthands.borderColor(tokens.colorNeutralStroke1Selected),
+L354 highContrastSelected: {
+L365 ...shorthands.borderColor('Highlight'),
+L370 highContrastInteractive: {
+L383 ...shorthands.borderColor('Highlight'),
+L388 select: {
+L390 top: '4px',
+L391 right: '4px',
+L395 hiddenCheckbox: {
+L397 width: '1px',
+L398 height: '1px',
+L401 clipPath: 'inset(50%)',
+L405 disabled: {
+L472 sizeMap[state.size],

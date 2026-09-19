@@ -1,0 +1,21 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TableSortLabel/TableSortLabel.js
+L19 const slots = {
+L27 const TableSortLabelRoot = styled(ButtonBase, {
+L28 name: 'MuiTableSortLabel',
+L29 slot: 'Root',
+L42 '&:focus': {
+L45 '&:hover': {
+L61 const TableSortLabelIcon = styled('span', {
+L62 name: 'MuiTableSortLabel',
+L63 slot: 'Icon',
+L66   fontSize: 18,
+L67   marginRight: 4,
+L68   marginLeft: 4,
+L74 variants: [
+L76 props: {
+L79 style: {
+L84 props: {
+L87 style: {
+L112 const ownerState = {
+L122 const externalForwardedProps = {
+L133 additionalProps: {

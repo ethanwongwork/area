@@ -1,0 +1,23 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/attachment.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  L9 min-w-0=0px shrink-0 rounded-xl=14px border=1px focus-within:ring-1=1px
+  L14 gap-2=8px text-sm=14/20px has-data-[slot=attachment-content]:px-2.5=10px has-data-[slot=attachment-content]:py-2=8px has-data-[slot=attachment-media]:p-2=8px
+  L15 sm: gap-2.5=10px text-xs=12/16px has-data-[slot=attachment-content]:px-2=8px has-data-[slot=attachment-content]:py-1.5=6px has-data-[slot=attachment-media]:p-1.5=6px
+  L16 xs: gap-1.5=6px rounded-lg=10px text-xs=12/16px has-data-[slot=attachment-content]:px-1.5=6px has-data-[slot=attachment-content]:py-1=4px has-data-[slot=attachment-media]:p-1=4px
+  L19 horizontal: min-w-40=160px
+  L20 vertical: w-24=96px has-data-[slot=attachment-content]:w-30=120px
+  [slot attachment]
+  L49 aspect-square w-10=40px shrink-0 rounded-lg=10px group-data-[size=sm]/attachment:w-8=32px group-data-[size=xs]/attachment:w-7=28px group-data-[size=xs]/attachment:rounded-md=8px [&_svg:not([class*='size-'])]:size-4=16px group-data-[orientation=vertical]/attachment:[&_svg:not([class*='size-'])]:size-6=24px group-data-[size=xs]/attachment:[&_svg:not([class*='size-'])]:size-3.5=14px
+  L55 *:[img]:aspect-square
+  [slot attachment-media]
+  [slot attachment-content]
+  L87 min-w-0=0px leading-tight group-data-[orientation=vertical]/attachment:px-1=4px
+  [slot attachment-title]
+  L103 min-w-0=0px font-medium
+  [slot attachment-description]
+  L119 mt-0.5=2px min-w-0=0px text-xs=12/16px
+  [slot attachment-actions]
+  L136 shrink-0 group-data-[orientation=vertical]/attachment:top-3=12px group-data-[orientation=vertical]/attachment:right-3=12px group-data-[orientation=vertical]/attachment:gap-1=4px
+  [slot attachment-action]
+  [slot attachment-trigger]
+  [slot attachment-group]
+  L186 min-w-0=0px gap-3=12px py-1=4px

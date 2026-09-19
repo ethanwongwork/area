@@ -1,0 +1,69 @@
+### Primer React @ e4e6eba  packages/react/src/ActionList/Group.module.css
+.Group {
+  list-style: none;
+
+  &:not(:first-child) {
+    margin-block-start: var(--base-size-8);   /* = 8px */
+  }
+}
+
+.GroupList {
+  padding-inline-start: 0;
+}
+
+.GroupHeadingWrap {
+  display: flex;
+  font-size: var(--text-body-size-small);   /* = 12px */
+  font-weight: var(--base-text-weight-semibold);   /* = 600 */
+
+  /* line-height: var(--text-body-lineHeight-small); use when FF rolls out */
+  /* stylelint-disable-next-line primer/typography */
+  line-height: 18px;
+  color: var(--fgColor-muted);
+  flex-direction: column;
+  padding-inline: var(--base-size-16);   /* = 16px */
+  padding-block: var(--base-size-6);   /* = 6px */
+
+  &:where([data-variant='filled']) {
+    /* stylelint-disable-next-line primer/spacing */
+    margin-block-start: calc(var(--base-size-8) - var(--borderWidth-thin));   /* = 7px */
+    margin-block-end: var(--base-size-8);   /* = 8px */
+    background: var(--bgColor-muted);
+    border-top: solid var(--borderWidth-thin) var(--borderColor-muted);   /* = solid 1px var(--borderColor-muted) */
+    border-bottom: solid var(--borderWidth-thin) var(--borderColor-muted);   /* = solid 1px var(--borderColor-muted) */
+    padding-inline: var(--base-size-16);   /* = 16px */
+
+    &:first-child {
+      margin-block-start: 0;
+    }
+  }
+
+  /* & + ul:has(.GroupHeadingWrap) {
+    outline: solid 1px red;
+  } */
+}
+
+.GroupHeading {
+  margin: 0;
+  font-size: var(--text-body-size-small);   /* = 12px */
+  font-weight: var(--base-text-weight-semibold);   /* = 600 */
+  color: var(--fgColor-muted);
+  align-self: flex-start;
+}
+
+.GroupHeadingWrap[data-has-trailing-action] {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--base-size-8);   /* = 8px */
+
+  & > .GroupHeading {
+    align-self: center;
+  }
+}
+
+.GroupHeadingTrailingAction {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: auto;
+}

@@ -1,0 +1,27 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/field.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot field-set]
+  L15 gap-6=24px
+  L16 has-[>[data-slot=checkbox-group]]:gap-3=12px has-[>[data-slot=radio-group]]:gap-3=12px
+  [slot field-legend]
+  L35 data-[variant=legend]:text-base=16/24px
+  L36 data-[variant=label]:text-sm=14/20px
+  [slot field-group]
+  L49 gap-7=28px data-[slot=checkbox-group]:gap-3=12px [&>[data-slot=field-group]]:gap-4=16px
+  L58 gap-3=12px
+  [slot field]
+  [slot field-content]
+  L102 gap-1.5=6px leading-snug
+  [slot field-label]
+  L118 gap-2=8px leading-snug
+  L119 has-[>[data-slot=field]]:rounded-md=8px has-[>[data-slot=field]]:border=1px [&>*]:data-[slot=field]:p-4=16px
+  [slot field-label]
+  L133 gap-2=8px text-sm=14/20px leading-snug font-medium
+  [slot field-description]
+  L146 text-sm=14/20px leading-normal font-normal
+  [slot field-separator]
+  L168 -my-2=8px h-5=20px text-sm=14/20px group-data-[variant=outline]/field-group:-mb-2=8px
+  L176 px-2=8px
+  [slot field-separator-content]
+  L212 ml-4=16px gap-1=4px
+  [slot field-error]
+  L229 text-sm=14/20px font-normal

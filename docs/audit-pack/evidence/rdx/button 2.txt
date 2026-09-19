@@ -1,0 +1,126 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/button.css
+@import './_internal/base-button.css';
+
+.rt-Button {
+  &:where(:not(.rt-variant-ghost)) {
+    /* stylelint-disable-next-line selector-max-type */
+    & :where(svg) {
+      opacity: 0.9;
+    }
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * SIZES                                                                                           *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+.rt-Button {
+  &:where(.rt-variant-ghost) {
+    padding: var(--button-ghost-padding-y) var(--button-ghost-padding-x);   /* = 4px 8px */
+
+    /* We reset the defined margin variables to avoid inheriting them from a higher component */
+    /* If a margin IS defined on the component itself, the utility class will win and reset it */
+    --margin-top: 0px;
+    --margin-right: 0px;
+    --margin-bottom: 0px;
+    --margin-left: 0px;
+
+    /* Define the overrides to incorporate the negative margins */
+    --margin-top-override: calc(var(--margin-top) - var(--button-ghost-padding-y));   /* = -4px */
+    --margin-right-override: calc(var(--margin-right) - var(--button-ghost-padding-x));   /* = -8px */
+    --margin-bottom-override: calc(var(--margin-bottom) - var(--button-ghost-padding-y));   /* = -4px */
+    --margin-left-override: calc(var(--margin-left) - var(--button-ghost-padding-x));   /* = -8px */
+
+    /* Reset the overrides on direct children */
+    :where(&) > * {
+      --margin-top-override: initial;
+      --margin-right-override: initial;
+      --margin-bottom-override: initial;
+      --margin-left-override: initial;
+    }
+
+    margin: var(--margin-top-override) var(--margin-right-override) var(--margin-bottom-override)   /* = -4px -8px -4px */
+      var(--margin-left-override);
+  }
+}
+
+@breakpoints {
+  .rt-Button {
+    &:where(.rt-r-size-1) {
+      gap: var(--space-1);   /* = 4px */
+      font-size: var(--font-size-1);   /* = 12px */
+      line-height: var(--line-height-1);   /* = 16px */
+      letter-spacing: var(--letter-spacing-1);   /* = 0.0025em */
+
+      &:where(:not(.rt-variant-ghost)) {
+        padding-left: var(--space-2);   /* = 8px */
+        padding-right: var(--space-2);   /* = 8px */
+      }
+      &:where(.rt-variant-ghost) {
+        gap: var(--space-1);   /* = 4px */
+        --button-ghost-padding-x: var(--space-2);   /* = 8px */
+        --button-ghost-padding-y: var(--space-1);   /* = 4px */
+      }
+    }
+    &:where(.rt-r-size-2) {
+      gap: var(--space-2);   /* = 8px */
+      font-size: var(--font-size-2);   /* = 14px */
+      line-height: var(--line-height-2);   /* = 20px */
+      letter-spacing: var(--letter-spacing-2);   /* = 0em */
+
+      &:where(:not(.rt-variant-ghost)) {
+        padding-left: var(--space-3);   /* = 12px */
+        padding-right: var(--space-3);   /* = 12px */
+      }
+      &:where(.rt-variant-ghost) {
+        gap: var(--space-1);   /* = 4px */
+        --button-ghost-padding-x: var(--space-2);   /* = 8px */
+        --button-ghost-padding-y: var(--space-1);   /* = 4px */
+      }
+    }
+    &:where(.rt-r-size-3) {
+      gap: var(--space-3);   /* = 12px */
+      font-size: var(--font-size-3);   /* = 16px */
+      line-height: var(--line-height-3);   /* = 24px */
+      letter-spacing: var(--letter-spacing-3);   /* = 0em */
+
+      &:where(:not(.rt-variant-ghost)) {
+        padding-left: var(--space-4);   /* = 16px */
+        padding-right: var(--space-4);   /* = 16px */
+      }
+      &:where(.rt-variant-ghost) {
+        gap: var(--space-2);   /* = 8px */
+        --button-ghost-padding-x: var(--space-3);   /* = 12px */
+        --button-ghost-padding-y: calc(var(--space-1) * 1.5);   /* = 6px */
+      }
+    }
+    &:where(.rt-r-size-4) {
+      gap: var(--space-3);   /* = 12px */
+      font-size: var(--font-size-4);   /* = 18px */
+      line-height: var(--line-height-4);   /* = 26px */
+      letter-spacing: var(--letter-spacing-4);   /* = -0.0025em */
+
+      &:where(:not(.rt-variant-ghost)) {
+        padding-left: var(--space-5);   /* = 24px */
+        padding-right: var(--space-5);   /* = 24px */
+      }
+      &:where(.rt-variant-ghost) {
+        gap: var(--space-2);   /* = 8px */
+        --button-ghost-padding-x: var(--space-4);   /* = 16px */
+        --button-ghost-padding-y: var(--space-2);   /* = 8px */
+      }
+    }
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * VARIANTS                                                                                        *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+.rt-Button:where(:not(.rt-variant-ghost)) {
+  font-weight: var(--font-weight-medium);   /* = 500 */
+}

@@ -1,0 +1,64 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/options-tile/_options-tile.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L23 @mixin options-tile {
+L24 .#{$prefix}--options-tile {
+L32 .#{$prefix}--options-tile__toggle-container {
+L37   inline-size: calc(#{$spacing-05} + 2rem + #{$spacing-05});   // spacing-05=16px spacing-05=16px
+L39   inset-block: 0;
+L40   inset-inline-end: 0;
+L41   padding-inline-end: $spacing-05;   // spacing-05=16px
+L42   padding-inline-start: $spacing-05;   // spacing-05=16px
+L45 .#{$prefix}--options-tile__toggle {
+L51 .#{$prefix}--toggle__switch {
+L52   margin: 0;
+L55 .#{$prefix}--options-tile__toggle .#{$prefix}--toggle__label-text {
+L59 .#{$prefix}--options-tile__details {
+L66 .#{$prefix}--options-tile__static-content {
+L71   padding-inline-end: $spacing-05;   // spacing-05=16px
+L74 .#{$prefix}--options-tile__header {
+L78   inline-size: 100%;
+L81 &--has-toggle {
+L82   inline-size: calc(100% - (#{$spacing-05} + 2rem + #{$spacing-05}));   // spacing-05=16px spacing-05=16px
+L86 .#{$prefix}--options-tile__header::-webkit-details-marker {
+L90 .#{$prefix}--options-tile__header:hover {
+L100 .#{$prefix}--options-tile__header:focus {
+L104 .#{$prefix}--options-tile__heading {
+L108 .#{$prefix}--options-tile__title {
+L109   @include type.type-style('productive-heading-01');
+L114 .#{$prefix}--options-tile__summary {
+L115   @include type.type-style('helper-text-01');   // helper-text-01=12/16
+L118   block-size: $spacing-05;   // spacing-05=16px
+L120   margin-block-start: $spacing-02;   // spacing-02=4px
+L129 .#{$prefix}--options-tile__summary--locked {
+L130   column-gap: $spacing-02;   // spacing-02=4px
+L134 .#{$prefix}--options-tile__summary--invalid {
+L138 .#{$prefix}--options-tile__summary--warn {
+L142 .#{$prefix}--options-tile__summary--warn svg {
+L146 .#{$prefix}--options-tile__summary--warn svg path[fill='none'] {
+L150 .#{$prefix}--options-tile__summary-text {
+L152   block-size: max-content;
+L153   padding-inline-end: $spacing-05;   // spacing-05=16px
+L158 .#{$prefix}--options-tile__chevron {
+L164 .#{$prefix}--options-tile__content {
+L165   padding-inline: $spacing-09 $spacing-05;   // spacing-09=48px spacing-05=16px
+L174 .#{$prefix}--options-tile--closing .#{$prefix}--options-tile__content {
+L181 .#{$prefix}--options-tile__summary--hidden {
+L182   block-size: 0;
+L183   margin-block-start: 0;
+L193 .#{$prefix}--options-tile > details[open] .#{$prefix}--options-tile__content {
+L194   padding-block: $spacing-03 $spacing-06;   // spacing-03=8px spacing-06=24px
+L197 .#{$prefix}--options-tile__locked-text {
+L198   @include type.type-style('body-long-01');
+L203   margin-block-end: $spacing-06;   // spacing-06=24px
+L206 .#{$prefix}--options-tile__locked-text > svg {
+L207   margin-inline-end: $spacing-02;   // spacing-02=4px
+L211 .#{$prefix}--options-tile--lg .#{$prefix}--options-tile__static-content {
+L212   block-size: 3rem;
+L216 .#{$prefix}--options-tile--xl .#{$prefix}--options-tile__static-content {
+L217   block-size: 4rem;
+L220 .#{$prefix}--options-tile--lg .#{$prefix}--options-tile__toggle {
+L222   inset-block-start: $spacing-05;   // spacing-05=16px
+L225 .#{$prefix}--options-tile--xl .#{$prefix}--options-tile__toggle {
+L227   inset-block-start: $spacing-06;   // spacing-06=24px
+L230 .#{$prefix}--options-tile--lg .#{$prefix}--options-tile__summary {
+L231   margin-block-start: $spacing-01;   // spacing-01=2px
+L236 .#{$prefix}--options-tile__chevron {

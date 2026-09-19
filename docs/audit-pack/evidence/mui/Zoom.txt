@@ -1,0 +1,4 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Zoom/Zoom.js
+L17 const styles = {
+L24 const hiddenStyles = { transform: 'scale(0)', visibility: 'hidden' };
+L32 const defaultTimeout = {

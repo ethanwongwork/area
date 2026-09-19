@@ -1,0 +1,9 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/stack/_stack.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L12 @mixin stack() {
+L13 .#{$prefix}--stack-horizontal {
+L15   column-gap: custom-property.get-var('stack-gap', 0);
+L19 .#{$prefix}--stack-vertical {
+L22   row-gap: custom-property.get-var('stack-gap', 0);
+L27   @each $step, $value in spacing.$spacing {
+L28 .#{$prefix}--stack-scale-#{$index} {
+L29   @include custom-property.declaration('stack-gap', $value);

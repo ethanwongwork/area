@@ -1,0 +1,15 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/em.css
+.rt-Em {
+  box-sizing: border-box;
+  font-family: var(--em-font-family);   /* = 'Times New Roman', 'Times', serif */
+  font-size: calc(var(--em-font-size-adjust) * 1em);   /* = calc(1.18 * 1em) */
+  font-style: var(--em-font-style);   /* = italic */
+  font-weight: var(--em-font-weight);   /* = inherit */
+  line-height: 1.25;
+  letter-spacing: calc(var(--em-letter-spacing) + var(--letter-spacing, var(--default-letter-spacing)));   /* = calc(-0.025em + 0em) */
+  color: inherit;
+
+  & :where(&) {
+    font-size: inherit;
+  }
+}

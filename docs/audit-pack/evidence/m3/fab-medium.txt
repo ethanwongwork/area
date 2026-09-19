@@ -1,0 +1,5 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-fab-medium.scss
+container-height: 80px
+container-width: 80px
+icon-size: 28px
+container-shape: corner-large-increased = 20px

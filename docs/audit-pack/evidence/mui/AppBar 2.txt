@@ -1,0 +1,37 @@
+### MUI Material @ 69960c1  packages/mui-material/src/AppBar/AppBar.js
+L18 const slots = {
+L29 const AppBarRoot = styled(Paper, {
+L30 name: 'MuiAppBar',
+L31 slot: 'Root',
+L45   width: '100%',
+L48 variants: [
+L50 props: { position: 'fixed' },
+L51 style: {
+L54   top: 0,
+L55   left: 'auto',
+L56   right: 0,
+L64 props: { position: 'absolute' },
+L65 style: {
+L68   top: 0,
+L69   left: 'auto',
+L70   right: 0,
+L74 props: { position: 'sticky' },
+L75 style: {
+L78   top: 0,
+L79   left: 'auto',
+L80   right: 0,
+L84 props: { position: 'static' },
+L85 style: {
+L90 props: { position: 'relative' },
+L91 style: {
+L96 props: { color: 'inherit' },
+L97 style: {
+L103 props: { color: 'default' },
+L104 style: {
+L124 props: { color },
+L125 style: {
+L137 style: {
+L145 style: {
+L159 props: { color: 'transparent' },
+L160 style: {
+L184 const ownerState = {

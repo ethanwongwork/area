@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toolbar/library/src/components/ToolbarGroup/useToolbarGroupStyles.styles.ts
+L12 const useStyles = makeStyles({
+L13 root: {
+L17 vertical: {
+L19 width: 'fit-content',

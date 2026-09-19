@@ -1,0 +1,70 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/structured-list/_mixins.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L15   $structured-list-padding: 2rem !default;
+L26 @mixin padding-td--condensed($padding: $structured-list-padding) {
+L27   padding: $padding * 0.25;
+L34 @mixin padding--data-structured-list($padding: $structured-list-padding) {
+L35   padding-inline: $padding * 0.5 $padding * 0.5;
+L38 &:first-child {
+L39   padding-inline: $padding * 0.5 $padding * 0.5;
+L47 @mixin padding-th($padding: $structured-list-padding) {
+L48   padding: $spacing-05 $spacing-03 $spacing-03 $spacing-03;   // spacing-05=16px spacing-03=8px spacing-03=8px spacing-03=8px
+L55 @mixin padding-td($padding: $structured-list-padding) {
+L56   padding: $spacing-05 $spacing-03 $spacing-06 $spacing-03;   // spacing-05=16px spacing-03=8px spacing-06=24px spacing-03=8px
+### Carbon styles @ 8472cca  packages/styles/scss/components/structured-list/_structured-list.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21 @mixin structured-list($enable-v12-structured-list-visible-icons: false) {
+L23 .#{$prefix}--structured-list--selection .#{$prefix}--structured-list-th {
+L24   @include padding--data-structured-list;
+L26 .#{$prefix}--structured-list-row--focused-within {
+L30 .#{$prefix}--structured-list {
+L36   border-collapse: collapse;
+L37   border-spacing: 0;
+L38   inline-size: 100%;
+L43 &.#{$prefix}--structured-list--condensed .#{$prefix}--structured-list-th {
+L44   @include padding-td--condensed;
+L51 .#{$prefix}--structured-list-th:first-of-type {
+L52   padding-inline-start: 1rem;
+L69 .#{$prefix}--structured-list-th:first-of-type {
+L70   padding-inline: 0 1rem;
+L74 .#{$prefix}--structured-list-row {
+L82 .#{$prefix}--structured-list-row:last-child {
+L86 .#{$prefix}--structured-list-row--header-row {
+L87   border: none;
+L110 .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--selected {
+L123 .#{$prefix}--structured-list-td {
+L127 .#{$prefix}--structured-list-row.#{$prefix}--structured-list-row--header-row {
+L147 .#{$prefix}--structured-list-thead {
+L152 .#{$prefix}--structured-list-th {
+L154   @include padding-th;
+L155   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L158   block-size: convert.to-rem(40px);
+L166 .#{$prefix}--structured-list-tbody {
+L171 .#{$prefix}--structured-list-td {
+L173   @include type-style('body-01');   // body-01=14/20
+L174   @include padding-td;
+L179   max-inline-size: 36rem;
+L185 .#{$prefix}--structured-list-content--nowrap {
+L189 .#{$prefix}--structured-list-input + .#{$prefix}--structured-list-td {
+L193 .#{$prefix}--structured-list-svg {
+L195   margin-block-start: $spacing-01;   // spacing-01=2px
+L205 .#{$prefix}--structured-list-svg {
+L214 .#{$prefix}--structured-list-svg {
+L218 .#{$prefix}--structured-list-td:last-child {
+L219   inline-size: $spacing-07;   // spacing-07=32px
+L220   padding-inline-start: 0;
+L229 .#{$prefix}--structured-list-svg {
+L235 .#{$prefix}--structured-list.#{$prefix}--skeleton {
+L236 .#{$prefix}--structured-list-th {
+L237 &:first-child {
+L238   inline-size: 8%;
+L241 &:nth-child(3n + 2) {
+L242   inline-size: 30%;
+L245 &:nth-child(3n + 3) {
+L246   inline-size: 15%;
+L254   block-size: 1rem;
+L256   inline-size: 75%;
+L261 .#{$prefix}--structured-list-th:first-child {
+L262   inline-size: 5%;
+L269 .#{$prefix}--structured-list__icon {
+L270   margin-block-start: $spacing-01;   // spacing-01=2px
+L278   inline-size: $spacing-07;   // spacing-07=32px
+L279   padding-inline-end: 0;

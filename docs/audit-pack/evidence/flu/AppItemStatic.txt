@@ -1,0 +1,3 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/AppItemStatic/useAppItemStaticStyles.styles.ts
+L14 const useAppItemStaticStyles = makeStyles({
+L15 root: {

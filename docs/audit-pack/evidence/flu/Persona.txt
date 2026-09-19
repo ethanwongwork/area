@@ -1,0 +1,59 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-persona/library/src/components/Persona/usePersonaStyles.styles.ts
+L4 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L20 const useRootClassName = makeResetStyles({
+L31 const useStyles = makeStyles({
+L32 beforeAfterCenter: {
+L38 after: {
+L41 before: {
+L45 below: {
+L51 media: {
+L55 mediaBeforeAfterCenter: {
+L59 start: {
+L62 center: {
+L66 afterAlignToPrimary: {
+L71 beforeAlignToPrimary: {
+L77 secondLineSpacing: {
+L78 marginTop: '-2px',
+L81 primary: { gridRowStart: 'primary' },
+L82 secondary: { gridRowStart: 'secondary' },
+L83 tertiary: { gridRowStart: 'tertiary' },
+L84 quaternary: { gridRowStart: 'quaternary' },
+L87 const useAvatarSpacingStyles = makeStyles({
+L91 small: {
+L94 medium: {
+L97 large: {
+L103 huge: {
+L106 after: {
+L107 marginRight: `var(${avatarSpacing})`,
+L109 below: {
+L110 marginBottom: `var(${avatarSpacing})`,
+L112 before: {
+L113 marginLeft: `var(${avatarSpacing})`,
+L117 const usePresenceSpacingStyles = makeStyles({
+L118 small: {
+L127 const { presenceOnly, size, textAlignment, textPosition } = state;
+L129 const alignToPrimary = presenceOnly && textAlignment === 'start' && size !== 'extra-large' && size !== 'huge';
+L154 avatarSpacingStyles[size],
+L167 presenceSpacingStyles[size],
+L219 const usePrimaryTextBaseClassName = makeResetStyles({
+L222 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L225 const useOptionalTextBaseClassName = makeResetStyles({
+L228 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L231 const useTextStyles = makeStyles({
+L232 beforeAlignToPrimary: {
+L235 afterAlignToPrimary: {
+L239 body1: typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L240 caption1: typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L241 subtitle2: typographyStyles.subtitle2,   // typographyStyles.subtitle2=16px/22px w600
+L251 const { presenceOnly, size, textPosition } = state;
+L256 let primaryTextSize;
+L260 if (size === 'extra-small') {
+L261 primaryTextSize = state.numTextLines <= 1 && textStyles.caption1;
+L262 } else if (size === 'extra-large' || size === 'huge') {
+L263 primaryTextSize = textStyles.subtitle2;
+L274 if (size === 'huge') {
+L275 primaryTextSize = textStyles.subtitle2;
+L276 } else if (size === 'extra-large') {
+L277 primaryTextSize = textStyles.subtitle2;
+L282 primaryTextClassName: mergeClasses(primaryTextBaseClassName, primaryTextSize, alignToPrimaryClassName),
+L285 !presenceOnly && size === 'huge' && textStyles.body1,

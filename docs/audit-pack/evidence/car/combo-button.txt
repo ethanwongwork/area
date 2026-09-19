@@ -1,0 +1,20 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/combo-button/_combo-button.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L18 @mixin combo-button {
+L19 .#{$prefix}--combo-button__container {
+L21   column-gap: convert.to-rem(1px);
+L25   'sm': convert.to-rem(32px),
+L26   'md': convert.to-rem(40px),
+L27   'lg': convert.to-rem(48px),
+L30   @each $size, $trigger in $triggerSizes {
+L31   .#{$prefix}--combo-button__container--#{$size}
+L32 .#{$prefix}--combo-button__primary-action {
+L33   min-inline-size: 10rem - convert.to-rem(1px) - $trigger;
+L37 .#{$prefix}--combo-button__primary-action .#{$prefix}--btn {
+L38   inline-size: 100%;
+L39   max-inline-size: convert.to-rem(239px);
+L40   min-inline-size: convert.to-rem(111px);
+L43 .#{$prefix}--combo-button__primary-action button {
+L50 .#{$prefix}--combo-button__trigger svg {
+L63 .#{$prefix}--combo-button__top {
+L67 .#{$prefix}--combo-button__top-start {
+L71 .#{$prefix}--combo-button__top-end {

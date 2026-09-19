@@ -1,0 +1,72 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/breadcrumb/_breadcrumb.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L20 @mixin breadcrumb {
+L21 .#{$prefix}--breadcrumb {
+L23   @include type-style('body-compact-01');   // body-compact-01=14/18
+L27 @include breakpoint(md) {
+L33 .#{$prefix}--breadcrumb--sm {
+L34   @include type-style('label-01');   // label-01=12/16
+L37 .#{$prefix}--breadcrumb .#{$prefix}--link {
+L41 .#{$prefix}--breadcrumb-item {
+L45   margin-inline-end: $spacing-03;   // spacing-03=8px
+L48 .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item {
+L49   margin-inline-end: $spacing-02;   // spacing-02=4px
+L52 .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item .#{$prefix}--link {
+L54   min-inline-size: $spacing-04;   // spacing-04=12px
+L57 .#{$prefix}--breadcrumb-item .#{$prefix}--link:visited {
+L60 &:hover {
+L66 .#{$prefix}--breadcrumb-item .#{$prefix}--link:visited:active:hover {
+L70 .#{$prefix}--breadcrumb-item::after {
+L73   margin-inline-start: $spacing-03;   // spacing-03=8px
+L76 .#{$prefix}--breadcrumb--sm .#{$prefix}--breadcrumb-item::after {
+L77   margin-inline-start: $spacing-02;   // spacing-02=4px
+L81 .#{$prefix}--breadcrumb-item:last-child::after {
+L86 .#{$prefix}--breadcrumb-item:last-child::after {
+L87   margin-inline-end: 0;
+L90 .#{$prefix}--breadcrumb .#{$prefix}--link {
+L96 .#{$prefix}--link {
+L100 &:hover {
+L106 .#{$prefix}--breadcrumb-item .#{$prefix}--overflow-menu {
+L108   block-size: convert.to-rem(18px);
+L109   inline-size: $spacing-05;   // spacing-05=16px
+L111 &:focus {
+L112   border: none;
+L118 &:hover {
+L121 &::after {
+L126 &:active {
+L127 &::after {
+L133 &:hover {
+L134 &::after {
+L140 &::after {
+L143   block-size: 1px;
+L145   inline-size: convert.to-rem(12px);
+L146   inset-block-end: 2px;
+L157 .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open {
+L164 .#{$prefix}--overflow-menu__icon {
+L172 .#{$prefix}--overflow-menu__icon {
+L178 .#{$prefix}--overflow-menu__icon {
+L182 .#{$prefix}--breadcrumb-menu-options:focus {
+L186   $caret-size: convert.to-rem(7px);
+L187 .#{$prefix}--breadcrumb-menu-options.#{$prefix}--overflow-menu-options::after {
+L188   margin: 0 auto;
+L190   block-size: 0;
+L191   border-block-end: $caret-size solid $field;
+L192   border-inline-end: $caret-size solid transparent;
+L193   border-inline-start: $caret-size solid transparent;
+L194   inline-size: 0;
+L195   inset-block-start: -$caret-size;
+L196   inset-inline-start: $caret-size * 2;
+L200 .#{$prefix}--breadcrumb-menu-options.#{$prefix}--overflow-menu-options::after {
+L201   inset-inline-end: $caret-size * 2;
+L202   inset-inline-start: initial;
+L206 .#{$prefix}--overflow-menu.#{$prefix}--btn--icon-only {
+L207   min-block-size: 1.125rem;
+L208   padding-inline: 0;
+L213 .#{$prefix}--overflow-menu {
+L214   block-size: $spacing-05;   // spacing-05=16px
+L215   inline-size: $spacing-05;   // spacing-05=16px
+L216   min-block-size: $spacing-05;   // spacing-05=16px
+L217 .#{$prefix}--overflow-menu__icon {
+L223 .#{$prefix}--breadcrumb.#{$prefix}--skeleton .#{$prefix}--link {
+L226   block-size: 1rem;
+L227   inline-size: convert.to-rem(100px);
+### Carbon styles @ 8472cca  packages/styles/scss/components/breadcrumb/_css.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)

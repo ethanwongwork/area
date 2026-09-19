@@ -1,0 +1,11 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu/library/src/components/MenuPopover/useMenuPopoverStyles.styles.ts
+L4 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L12 const useStyles = makeStyles({
+L13 root: {
+L14 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L18 minWidth: '138px',
+L19 maxWidth: '300px',
+L21 width: 'max-content',
+L23 padding: '4px',
+L24 border: `1px solid ${tokens.colorTransparentStroke}`,
+L25 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400

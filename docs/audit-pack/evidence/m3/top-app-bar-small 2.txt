@@ -1,0 +1,7 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-top-app-bar-small.scss
+container-height: 64px
+leading-icon-size: 24px
+trailing-icon-size: 24px
+container-shape: corner-none = 0px
+headline-line-height: title-large-line-height = 28px
+headline-size: title-large-size = 22px

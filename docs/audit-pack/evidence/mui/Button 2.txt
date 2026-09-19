@@ -1,0 +1,144 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Button/Button.js
+L25 const slots = {
+L52 props: { size: 'small' },
+L53 style: {
+L55   fontSize: 18,
+L60 props: { size: 'medium' },
+L61 style: {
+L63   fontSize: 20,
+L68 props: { size: 'large' },
+L69 style: {
+L71   fontSize: 22,
+L77 const ButtonRoot = styled(ButtonBase, {
+L79 name: 'MuiButton',
+L80 slot: 'Root',
+L103   minWidth: 64,
+L104   padding: '6px 16px',
+L105   border: 0,
+L106   borderRadius: (theme.vars || theme).shape.borderRadius,
+L110 '&:hover': {
+L116 variants: [
+L118 props: { variant: 'contained' },
+L119 style: {
+L123 '&:hover': {
+L130 '&:active': {
+L147 props: { variant: 'outlined' },
+L148 style: {
+L149   padding: '5px 15px',
+L155   border: `1px solid ${(theme.vars || theme).palette.action.disabledBackground}`,
+L160 props: { variant: 'text' },
+L161 style: {
+L162   padding: '6px 8px',
+L170 props: { color },
+L171 style: {
+L181 '&:hover': {
+L197 props: {
+L200 style: {
+L207 '&:hover': {
+L224 props: {
+L225   size: 'small',
+L228 style: {
+L229   padding: '4px 5px',
+L230   fontSize: theme.typography.pxToRem(13),
+L234 props: {
+L235   size: 'large',
+L238 style: {
+L239   padding: '8px 11px',
+L240   fontSize: theme.typography.pxToRem(15),
+L244 props: {
+L245   size: 'small',
+L248 style: {
+L249   padding: '3px 9px',
+L250   fontSize: theme.typography.pxToRem(13),
+L254 props: {
+L255   size: 'large',
+L258 style: {
+L259   padding: '7px 21px',
+L260   fontSize: theme.typography.pxToRem(15),
+L264 props: {
+L265   size: 'small',
+L268 style: {
+L269   padding: '4px 10px',
+L270   fontSize: theme.typography.pxToRem(13),
+L274 props: {
+L275   size: 'large',
+L278 style: {
+L279   padding: '8px 22px',
+L280   fontSize: theme.typography.pxToRem(15),
+L284 props: {
+L287 style: {
+L289 '&:hover': {
+L295 '&:active': {
+L304 props: { fullWidth: true },
+L305 style: { width: '100%' },
+L308 props: {
+L311 style: {
+L325 const ButtonStartIcon = styled('span', {
+L326 name: 'MuiButton',
+L327 slot: 'StartIcon',
+L336   marginRight: 8,
+L337   marginLeft: -4,
+L338 '&::before': {
+L340   width: 0,
+L343 variants: [
+L345 props: { size: 'small' },
+L346 style: {
+L347   marginLeft: -2,
+L351 props: { loadingPosition: 'start', loading: true },
+L352 style: {
+L360 props: { loadingPosition: 'start', loading: true, fullWidth: true },
+L361 style: {
+L362   marginRight: -8,
+L369 const ButtonEndIcon = styled('span', {
+L370 name: 'MuiButton',
+L371 slot: 'EndIcon',
+L379   marginRight: -4,
+L380   marginLeft: 8,
+L381 variants: [
+L383 props: { size: 'small' },
+L384 style: {
+L385   marginRight: -2,
+L389 props: { loadingPosition: 'end', loading: true },
+L390 style: {
+L398 props: { loadingPosition: 'end', loading: true, fullWidth: true },
+L399 style: {
+L400   marginLeft: -8,
+L407 const ButtonLoadingIndicator = styled('span', {
+L408 name: 'MuiButton',
+L409 slot: 'LoadingIndicator',
+L414 variants: [
+L417 props: { loadingPosition: 'start' },
+L418 style: {
+L419   left: 14,
+L423 props: {
+L425   size: 'small',
+L427 style: {
+L428   left: 10,
+L432 props: {
+L436 style: {
+L437   left: 6,
+L441 props: {
+L444 style: {
+L445   left: '50%',
+L451 props: { loadingPosition: 'end' },
+L452 style: {
+L453   right: 14,
+L457 props: {
+L459   size: 'small',
+L461 style: {
+L462   right: 10,
+L466 props: {
+L470 style: {
+L471   right: 6,
+L475 props: { loadingPosition: 'start', fullWidth: true },
+L476 style: {
+L478   left: -10,
+L482 props: { loadingPosition: 'end', fullWidth: true },
+L483 style: {
+L485   right: -10,
+L491 const ButtonLoadingIconPlaceholder = styled('span', {
+L492 name: 'MuiButton',
+L493 slot: 'LoadingIconPlaceholder',
+L496   width: '1em',
+L497   height: '1em',
+L533 const ownerState = {

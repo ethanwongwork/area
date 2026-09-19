@@ -1,0 +1,45 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/menu/_menu.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L26 @mixin menu {
+L29 .#{$prefix}--menu {
+L35   padding: $spacing-02 0;   // spacing-02=4px
+L37   max-inline-size: 18rem;
+L38   min-inline-size: 10rem;
+L44   padding: $spacing-02;   // spacing-02=4px
+L45   border-radius: $border-radius-08;
+L49 .#{$prefix}--menu--border {
+L53 .#{$prefix}--menu--background-token__background {
+L57 .#{$prefix}--menu--with-icons {
+L58   min-inline-size: 12rem;
+L61 .#{$prefix}--menu--open {
+L64 &:focus {
+L69 .#{$prefix}--menu:not(.#{$prefix}--menu--open) .#{$prefix}--menu--open {
+L73 .#{$prefix}--menu--shown {
+L80 .#{$prefix}--menu-item {
+L81   @include type-style('body-short-01');   // body-short-01=14/18
+L85   block-size: 2rem;
+L87   column-gap: $spacing-03;   // spacing-03=8px
+L90   padding-inline: $spacing-05;   // spacing-05=16px
+L93 &:focus {
+L98   border-radius: $border-radius-04;
+L99   padding-inline: $spacing-04;   // spacing-04=12px
+L104 .#{$prefix}--menu-item:hover {
+L110   $supported-sizes: (
+L117   @each $size, $value in $supported-sizes {
+L118 .#{$prefix}--menu--#{$size} .#{$prefix}--menu-item {
+L119   block-size: $value;
+L123 .#{$prefix}--menu-item__label {
+L129 .#{$prefix}--menu-item__shortcut {
+L134 .#{$prefix}--menu-item-radio-group > ul {
+L139 .#{$prefix}--menu-item__selection-icon {
+L206 .#{$prefix}--menu-item--disabled {
+L213 .#{$prefix}--menu-item--disabled.#{$prefix}--menu-item--danger:hover {
+L218 .#{$prefix}--menu-item--danger:hover {
+L224 .#{$prefix}--menu-item--danger:focus {
+L229 .#{$prefix}--menu-item--danger:focus {
+L230   box-shadow: inset 0 0 0 convert.to-rem(3px) $background;
+L235 .#{$prefix}--menu-item-divider {
+L238   block-size: convert.to-rem(1px);
+L239   inline-size: 100%;
+L240   margin-block: $spacing-02;   // spacing-02=4px
+L243   inline-size: calc(100% + #{$spacing-02 * 2});   // spacing-02=4px
+L244   margin-inline: -$spacing-02;   // spacing-02=4px

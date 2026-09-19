@@ -1,0 +1,16 @@
+### Primer React @ e4e6eba  packages/react/src/KeybindingHint/KeybindingHint.module.css
+.KeybindingHint {
+  position: relative;
+  padding: 0;
+  overflow: visible;
+  font-family: inherit;
+  font-size: inherit;
+  /* stylelint-disable-next-line primer/typography */
+  line-height: unset;
+  color: inherit;
+  white-space: nowrap;
+  vertical-align: baseline;
+  background: none;
+  border: none;
+  box-shadow: none;
+}

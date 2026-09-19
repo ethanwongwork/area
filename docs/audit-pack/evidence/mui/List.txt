@@ -1,0 +1,14 @@
+### MUI Material @ 69960c1  packages/mui-material/src/List/List.js
+L14 const slots = {
+L21 const ListRoot = styled('ul', {
+L22 name: 'MuiList',
+L23 slot: 'Root',
+L36   margin: 0,
+L37   padding: 0,
+L39 variants: [
+L42 style: {
+L43   paddingTop: 8,
+L44   paddingBottom: 8,
+L49 style: {
+L50   paddingTop: 0,
+L71 const ownerState = {

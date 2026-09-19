@@ -1,0 +1,12 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-drawer/library/src/components/OverlayDrawer/useOverlayDrawerStyles.styles.ts
+L20 const useDrawerResetStyles = makeResetStyles({
+L24 top: 0,
+L25 bottom: 0,
+L28 const useDrawerRootStyles = makeStyles({
+L30 start: {},
+L31 end: {},
+L32 bottom: {
+L33 top: 'auto',
+L34 height: `var(${drawerCSSVars.drawerSizeVar})`,
+L35 width: '100vw',
+L37 absolute: {

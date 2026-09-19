@@ -1,0 +1,140 @@
+### Primer React @ e4e6eba  packages/react/src/Blankslate/Blankslate.module.css
+.Container {
+  container: blankslate / inline-size;
+}
+
+.Blankslate {
+  display: grid;
+  justify-items: center;
+  /* stylelint-disable-next-line primer/spacing */
+  padding: var(--blankslate-padding);   /* = 32px */
+
+  &:where([data-border]) {
+    border: var(--borderWidth-thin) solid var(--borderColor-default);   /* = 1px solid var(--borderColor-default) */
+    border-radius: var(--borderRadius-medium);   /* = 6px */
+  }
+
+  &:where([data-narrow]) {
+    max-width: 485px;
+    margin: 0 auto;
+  }
+
+  &:where([data-size='medium']) {
+    --blankslate-heading-text: var(--text-title-shorthand-medium);   /* = 600 20px / 1.625 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+    --blankslate-heading-margin-block: 0 var(--base-size-4);   /* = 0 4px */
+    --blankslate-description-text: var(--text-body-shorthand-large);   /* = 400 16px / 1.5 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+    --blankslate-padding: var(--base-size-32);   /* = 32px */
+    --blankslate-action-margin-block-end: var(--base-size-16);   /* = 16px */
+  }
+
+  &:where([data-size='medium'][data-spacious]) {
+    --blankslate-padding: var(--base-size-80) var(--base-size-40);   /* = 80px 40px */
+  }
+
+  &:where([data-size='small']) {
+    --blankslate-heading-text: var(--text-title-shorthand-small);   /* = 600 16px / 1.5 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+    --blankslate-heading-margin-block: 0 var(--base-size-4);   /* = 0 4px */
+    --blankslate-description-text: var(--text-body-shorthand-medium);   /* = 400 14px / 1.5 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+    --blankslate-padding: var(--base-size-16);   /* = 16px */
+    --blankslate-action-margin-block-end: var(--base-size-12);   /* = 12px */
+    --blankslate-visual-size: var(--base-size-24);   /* = 24px */
+  }
+
+  &:where([data-size='small'][data-spacious]) {
+    --blankslate-padding: var(--base-size-44) var(--base-size-28);   /* = 44px 28px */
+  }
+
+  &:where([data-size='large']) {
+    --blankslate-heading-text: var(--text-title-shorthand-large);   /* = 600 32px / 1.5 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+    --blankslate-heading-margin-block: var(--base-size-8) var(--base-size-4);   /* = 8px 4px */
+    --blankslate-description-text: var(--text-body-shorthand-large);   /* = 400 16px / 1.5 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+    --blankslate-description-margin-block: 0 var(--base-size-8);   /* = 0 8px */
+    --blankslate-padding: var(--base-size-32);   /* = 32px */
+    --blankslate-action-margin-block-end: var(--base-size-16);   /* = 16px */
+  }
+
+  &:where([data-size='large'][data-spacious]) {
+    --blankslate-padding: var(--base-size-80) var(--base-size-40);   /* = 80px 40px */
+  }
+}
+
+.Heading,
+.Description {
+  margin: 0;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.Heading {
+  /* stylelint-disable-next-line primer/typography */
+  font: var(--blankslate-heading-text);   /* = 600 20px / 1.625 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+  /* stylelint-disable-next-line primer/spacing */
+  margin-block: var(--blankslate-heading-margin-block);   /* = 0 4px */
+}
+
+.Description {
+  /* stylelint-disable-next-line primer/typography */
+  font: var(--blankslate-description-text);   /* = 400 16px / 1.5 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+  color: var(--fgColor-muted);
+  /* stylelint-disable-next-line primer/spacing */
+  margin-block: var(--blankslate-description-margin-block);   /* = 0 8px */
+}
+
+.Visual {
+  color: var(--fgColor-muted);
+  /* This display property exists so that the container matches the size of the inner svg element */
+  display: inline-flex;
+  margin-block-end: var(--base-size-8);   /* = 8px */
+  max-width: var(--blankslate-visual-size);   /* = 24px */
+
+  & svg {
+    width: 100%;
+  }
+}
+
+.Action {
+  /* stylelint-disable-next-line primer/typography */
+  font: var(--blankslate-description-text);   /* = 400 16px / 1.5 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+  margin-block-start: var(--base-size-16);   /* = 16px */
+
+  &:where(:last-of-type) {
+    /* stylelint-disable-next-line primer/spacing */
+    margin-block-end: var(--blankslate-action-margin-block-end);   /* = 16px */
+  }
+}
+
+/* At the time these styles were written, 34rem was our "small" breakpoint width */
+@container blankslate (max-width: 34rem) {
+  .Blankslate {
+    --blankslate-padding: var(--base-size-20);   /* = 20px */
+
+    &:where([data-size='small']) {
+      --blankslate-padding: var(--base-size-16);   /* = 16px */
+    }
+
+    &:where([data-spacious]) {
+      --blankslate-padding: var(--base-size-44) var(--base-size-28);   /* = 44px 28px */
+    }
+
+    --blankslate-heading-text: var(--text-title-shorthand-small);   /* = 600 16px / 1.5 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+    --blankslate-description-text: var(--text-body-shorthand-medium);   /* = 400 14px / 1.5 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+  }
+
+  .Visual {
+    max-width: var(--base-size-24);   /* = 24px */
+    margin-bottom: var(--base-size-8);   /* = 8px */
+    color: var(--fgColor-muted);
+  }
+
+  .Action {
+    margin-top: var(--base-size-8);   /* = 8px */
+
+    &:first-of-type {
+      margin-top: var(--base-size-16);   /* = 16px */
+    }
+
+    &:last-of-type {
+      margin-bottom: calc(var(--base-size-8) / 2);   /* = 4px */
+    }
+  }
+}

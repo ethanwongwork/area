@@ -1,0 +1,8 @@
+### Primer React @ e4e6eba  packages/react/src/Details/Details.module.css
+.Details > summary {
+  list-style: none;
+}
+
+.Details > summary::-webkit-details-marker {
+  display: none;
+}

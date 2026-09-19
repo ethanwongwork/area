@@ -1,0 +1,42 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-radio/library/src/components/Radio/useRadioStyles.styles.ts
+L16 // The indicator size is used by the indicator and label styles
+L17 const indicatorSize = '16px';
+L19 const useRootBaseClassName = makeResetStyles({
+L25 const useRootStyles = makeStyles({
+L26 vertical: {
+L32 const useInputBaseClassName = makeResetStyles({
+L34 left: 0,
+L35 top: 0,
+L36 width: `calc(${indicatorSize} + 2 * ${tokens.spacingHorizontalS})`,   // spacingHorizontalS=8px
+L37 height: '100%',
+L39 margin: 0,
+L40 opacity: 0,
+L135 const useInputStyles = makeStyles({
+L136 below: {
+L137 width: '100%',
+L138 height: `calc(${indicatorSize} + 2 * ${tokens.spacingVerticalS})`,   // spacingVerticalS=8px
+L142 defaultIndicator: {
+L149 customIndicator: {
+L151 opacity: '0',
+L156 const useIndicatorBaseClassName = makeResetStyles({
+L158 width: indicatorSize,
+L159 height: indicatorSize,
+L160 fontSize: '12px',
+L162 flexShrink: 0,
+L169 border: tokens.strokeWidthThin + ' solid',   // strokeWidthThin=1px
+L170 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L171 margin: tokens.spacingVerticalS + ' ' + tokens.spacingHorizontalS,   // spacingVerticalS=8px spacingHorizontalS=8px
+L177 width: indicatorSize,
+L178 height: indicatorSize,
+L179 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L188 const useLabelStyles = makeStyles({
+L189 base: {
+L191 padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalS}`,   // spacingVerticalS=8px spacingHorizontalS=8px
+L194 after: {
+L195 paddingLeft: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L197 // Use a (negative) margin to account for the difference between the indicator's height and the label's line height.
+L198 // This prevents the label from expanding the height of the Radio, but preserves line height if the label wraps.
+L199 marginTop: `calc((${indicatorSize} - ${tokens.lineHeightBase300}) / 2)`,   // lineHeightBase300=20px
+L200 marginBottom: `calc((${indicatorSize} - ${tokens.lineHeightBase300}) / 2)`,   // lineHeightBase300=20px
+L203 below: {
+L204 paddingTop: tokens.spacingVerticalXS,   // spacingVerticalXS=4px

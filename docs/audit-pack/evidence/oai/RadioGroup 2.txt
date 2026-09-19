@@ -1,0 +1,144 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/RadioGroup/RadioGroup.module.css
+.RadioGroup {
+  display: flex;
+  gap: var(--radio-group-row-gap);   /* = 20px */
+
+  &:where([data-direction="col"]) {
+    flex-direction: column;
+    gap: var(--radio-group-col-gap);   /* = 10px */
+  }
+}
+
+.RadioLabel {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--radio-group-item-gap);   /* = 6px */
+  cursor: pointer;
+  font-size: var(--radio-group-item-font-size);   /* = 14px */
+  line-height: var(--radio-group-item-line-height);   /* = 20px */
+
+  &[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &[data-block] {
+    width: 100%;
+  }
+}
+
+/* Creates centered alignment with `line-height` of the label */
+.RadioIndicatorWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: var(--radio-group-item-line-height);   /* = 20px */
+
+  /* Radix pushes the inputs off screen in a weird way that
+    messes with error overlays */
+  > input {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px !important;
+    transform: none !important;
+  }
+}
+
+.RadioItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--radio-group-indicator-size);   /* = 16px */
+  height: var(--radio-group-indicator-size);   /* = 16px */
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);   /* = 9999px */
+  background-color: transparent;
+  box-shadow: 0 0 0 1px var(--radio-group-indicator-border-color) inset;   /* = 0 0 0 1px light-dark(alpha(light-dark(#0d0d0d, #ffffff), 16%), alpha(light-dark(#0d0d0d, #ffffff), 25%)) inset */
+  cursor: pointer;
+  transition-duration: var(--transition-duration-basic);   /* = 150ms */
+  transition-property: box-shadow;
+  transition-timing-function: var(--transition-ease-basic);   /* = ease */
+
+  &:where(:not([data-disabled])) {
+    @mixin hover {
+      box-shadow: 0 0 0 1px var(--radio-group-indicator-border-color-hover) inset;   /* = 0 0 0 1px alpha(light-dark(#0d0d0d, #ffffff), 25%) inset */
+    }
+  }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-ring);   /* = 2px solid light-dark(#0169cc, #0285ff) */
+    outline-offset: 2px;
+  }
+}
+
+.RadioIndicator {
+  position: relative;
+  display: inline-grid;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  &::before,
+  &::after {
+    display: block;
+    content: "";
+    grid-column-start: 1;
+    grid-row-start: 1;
+    place-self: center center;
+    will-change: transform;
+  }
+
+  /* Filled circle */
+  &::before {
+    width: var(--radio-group-indicator-size);   /* = 16px */
+    height: var(--radio-group-indicator-size);   /* = 16px */
+    border-radius: var(--radius-full);   /* = 9999px */
+    animation: fade-in 0.6s var(--cubic-enter);   /* = fade-in 0.6s cubic-bezier(0.19, 1, 0.22, 1) */
+    background-color: var(--radio-group-indicator-background-color);   /* = light-dark(light-dark(#181818, #ededed), light-dark(#131313, #f3f3f3)) */
+  }
+
+  /*  Empty middle circle */
+  &::after {
+    width: var(--radio-group-indicator-hole-size);   /* = 6px */
+    height: var(--radio-group-indicator-hole-size);   /* = 6px */
+    border-radius: var(--radius-full);   /* = 9999px */
+    animation: scale-in 0.6s var(--cubic-enter);   /* = scale-in 0.6s cubic-bezier(0.19, 1, 0.22, 1) */
+    background-color: var(--radio-group-indicator-hole-background-color);   /* = light-dark(#ffffff, #0d0d0d) */
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

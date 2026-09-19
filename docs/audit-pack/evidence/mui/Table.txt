@@ -1,0 +1,11 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Table/Table.js
+L15 const slots = {
+L22 const TableRoot = styled('table', {
+L23 name: 'MuiTable',
+L24 slot: 'Root',
+L33   width: '100%',
+L36 '& caption': {
+L38   padding: theme.spacing(2),
+L43 variants: [
+L46 style: {
+L67 const ownerState = {

@@ -1,0 +1,14 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/table.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot table-container]
+  [slot table]
+  L14 text-sm=14/20px
+  [slot table-header]
+  [slot table-body]
+  [slot table-footer]
+  [slot table-row]
+  [slot table-head]
+  L72 h-10=40px px-2=8px font-medium [&:has([role=checkbox])]:pr-0=0px [&>[role=checkbox]]:translate-y-[2px]
+  [slot table-cell]
+  L85 p-2=8px [&:has([role=checkbox])]:pr-0=0px [&>[role=checkbox]]:translate-y-[2px]
+  [slot table-caption]
+  L100 mt-4=16px text-sm=14/20px

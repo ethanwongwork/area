@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/NavDivider/useNavDividerStyles.styles.ts
+L13 const useStyles = makeStyles({
+L14 root: {
+L15 flexGrow: 0,
+L16 marginTop: '4px',
+L17 marginBottom: '4px',

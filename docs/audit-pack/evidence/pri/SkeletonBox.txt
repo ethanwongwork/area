@@ -1,0 +1,31 @@
+### Primer React @ e4e6eba  packages/react/src/Skeleton/SkeletonBox.module.css
+@keyframes shimmer {
+  from {
+    mask-position: 200%;
+  }
+
+  to {
+    mask-position: 0%;
+  }
+}
+
+.SkeletonBox {
+  display: block;
+  height: 1rem;   /* = 16px */
+  background-color: var(--skeletonLoader-bgColor);
+  border-radius: var(--borderRadius-small);   /* = 3px */
+  animation: shimmer;
+
+  @media (prefers-reduced-motion: no-preference) {
+    mask-image: linear-gradient(75deg, #000 30%, rgb(0, 0, 0, 0.65) 80%);
+    mask-size: 200%;
+    animation: shimmer;
+    animation-duration: var(--base-duration-1000);   /* = 1000ms */
+    animation-iteration-count: infinite;
+  }
+
+  @media (forced-colors: active) {
+    outline: 1px solid transparent;
+    outline-offset: -1px;
+  }
+}

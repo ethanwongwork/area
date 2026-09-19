@@ -1,0 +1,503 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/DatePicker/Calendar.module.css
+.CalendarContainer {
+  position: relative;
+  width: 210px;
+  /*  Default size of the calendar is assumed to be 224px */
+  /*  and then is dynamically set via JS measuring */
+  height: 224px;
+}
+
+.Previous {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  z-index: 2;
+  background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+
+  /*  Prevent titles from bleeding beyond the button */
+  &::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -10px;
+    display: block;
+    width: 12px;
+    background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+    content: "";
+  }
+
+  /*  Slide fade as titles collide with the button */
+  &::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    display: block;
+    width: 14px;
+    background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+    content: "";
+    mask-image: linear-gradient(-90deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 100%));
+  }
+}
+
+.Next {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  z-index: 2;
+  background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+
+  /*  Prevent titles from bleeding beyond the button */
+  &::before {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    bottom: 0;
+    display: block;
+    width: 12px;
+    background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+    content: "";
+  }
+
+  /*  Slide fade as titles collide with the button */
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    bottom: 0;
+    display: block;
+    width: 14px;
+    background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+    content: "";
+    mask-image: linear-gradient(90deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 100%));
+  }
+}
+
+/*  Lift the inner button above the pseudo elements to avoid clipping in the focus ring box shadow. */
+.Next button[type="button"],
+.Previous button[type="button"] {
+  z-index: 2;
+}
+
+.CalendarWrapper {
+  overflow: hidden;
+  padding: 10px 12px 12px;
+}
+
+.CalendarRange {
+  transition: transform 0.25s var(--cubic-move);   /* = transform 0.25s cubic-bezier(0.65, 0, 0.35, 1) */
+}
+
+.Calendar {
+  --cell-size: 30px;
+  --cell-vertical-gutter: 2px;
+
+  position: absolute;
+  top: 0;
+  width: 210px;
+  font-size: 14px;
+}
+
+.Week {
+  display: flex;
+  margin-bottom: var(--cell-vertical-gutter);   /* = 2px */
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.DayLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--cell-size);   /* = 30px */
+  height: var(--cell-size);   /* = 30px */
+  color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+  font-size: 12px;
+  letter-spacing: var(--tracking-none);
+  text-align: center;
+}
+
+.MonthLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0;
+  margin: 0 0 6px;
+  color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);   /* = 600 */
+}
+
+.Day {
+  position: relative;
+  width: var(--cell-size);   /* = 30px */
+  height: var(--cell-size);   /* = 30px */
+  text-align: center;
+  transition: background-color 0.15s var(--cubic-enter);   /* = background-color 0.15s cubic-bezier(0.19, 1, 0.22, 1) */
+
+  &[data-is-selected] {
+    border-radius: var(--radius-full);   /* = 9999px */
+    background-color: light-dark(var(--alpha-06), var(--alpha-08));   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 6%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) */
+  }
+}
+
+.InteractiveDay {
+  position: relative;
+  display: block;
+  width: var(--cell-size);   /* = 30px */
+  height: var(--cell-size);   /* = 30px */
+  border: 0;
+  border-radius: var(--radius-full);   /* = 9999px */
+  appearance: auto;
+  background: none;
+  cursor: pointer;
+  font-size: var(--font-text-sm-size);   /* = 14px */
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border: 1px solid var(--color-text);   /* = 1px solid light-dark(#0d0d0d, #ffffff) */
+    border-radius: var(--radius-full);   /* = 9999px */
+    content: "";
+    opacity: 0;
+    transition:
+      color,
+      0.15s var(--cubic-enter),
+      opacity 0.15s var(--cubic-enter);
+  }
+
+  @mixin hover {
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.4;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  [data-is-selected] & {
+    background: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+    color: var(--color-text-inverse);   /* = light-dark(#ffffff, #0d0d0d) */
+  }
+}
+
+.TodayDot {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 100%;
+  margin-left: -1px;
+  background-color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+  transition: background-color 0.15s var(--cubic-enter);   /* = background-color 0.15s cubic-bezier(0.19, 1, 0.22, 1) */
+
+  [data-is-selected] & {
+    background-color: var(--gray-0);   /* = light-dark(#ffffff, #0d0d0d) */
+  }
+}
+### OpenAI Apps SDK UI @ 0f00143  src/components/DateRangePicker/Calendar.module.css
+.CalendarContainer {
+  position: relative;
+  width: 210px;
+  /*  Default size of the calendar is assumed to be 224px */
+  /*  and then is dynamically set via JS measuring */
+  height: 224px;
+
+  @mixin breakpoint sm {
+    width: 452px;
+  }
+}
+
+.Previous {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  z-index: 2;
+  background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+
+  /*  Prevent titles from bleeding beyond the button */
+  &::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -10px;
+    display: block;
+    width: 12px;
+    background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+    content: "";
+  }
+
+  /*  Slide fade as titles collide with the button */
+  &::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    display: block;
+    width: 14px;
+    background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+    content: "";
+    mask-image: linear-gradient(-90deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 100%));
+  }
+}
+
+.Next {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  z-index: 2;
+  background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+
+  /*  Prevent titles from bleeding beyond the button */
+  &::before {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    bottom: 0;
+    display: block;
+    width: 12px;
+    background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+    content: "";
+  }
+
+  /*  Slide fade as titles collide with the button */
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    bottom: 0;
+    display: block;
+    width: 14px;
+    background-color: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+    content: "";
+    mask-image: linear-gradient(90deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 100%));
+  }
+}
+
+/*  Lift the inner button above the pseudo elements to avoid clipping in the focus ring box shadow. */
+.Next button[type="button"],
+.Previous button[type="button"] {
+  z-index: 2;
+}
+
+.CalendarWrapper {
+  overflow: hidden;
+  padding: 10px 12px 12px;
+}
+
+.CalendarRange {
+  transition: transform 0.25s var(--cubic-move);   /* = transform 0.25s cubic-bezier(0.65, 0, 0.35, 1) */
+}
+
+.ButtonText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-weight: var(--font-weight-normal);   /* = 400 */
+  text-align: left;
+
+  [data-active] & {
+    font-weight: var(--font-weight-semibold);   /* = 600 */
+  }
+}
+
+.Calendar {
+  --cell-size: 30px;
+  --cell-vertical-gutter: 2px;
+
+  position: absolute;
+  top: 0;
+  width: 210px;
+  font-size: 14px;
+}
+
+.Week {
+  display: flex;
+  margin-bottom: var(--cell-vertical-gutter);   /* = 2px */
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.DayLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--cell-size);   /* = 30px */
+  height: var(--cell-size);   /* = 30px */
+  color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+  font-size: 12px;
+  letter-spacing: var(--tracking-none);
+  text-align: center;
+}
+
+.MonthLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0;
+  margin: 0 0 6px;
+  color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);   /* = 600 */
+}
+
+.Day {
+  position: relative;
+  width: var(--cell-size);   /* = 30px */
+  height: var(--cell-size);   /* = 30px */
+  text-align: center;
+  transition: background-color 0.15s var(--cubic-enter);   /* = background-color 0.15s cubic-bezier(0.19, 1, 0.22, 1) */
+
+  &:first-child {
+    border-radius: var(--radius-xs) 0 0 var(--radius-xs);   /* = 4px 0 0 4px */
+  }
+
+  &:last-child {
+    border-radius: 0 var(--radius-xs) var(--radius-xs) 0;   /* = 0 4px 4px 0 */
+  }
+
+  &[data-is-start],
+  &[data-is-end],
+  &[data-is-in-range] {
+    background-color: light-dark(var(--alpha-06), var(--alpha-08));   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 6%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) */
+  }
+
+  &[data-is-start][data-is-end] {
+    background: none;
+  }
+
+  &[data-is-first-range-trail] {
+    border-radius: 0;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 100%;
+      bottom: 0;
+      width: 15px;
+      background-color: light-dark(var(--alpha-06), var(--alpha-08));   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 6%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) */
+      content: "";
+      mask-image: linear-gradient(90deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 100%));
+      transition: opacity 0.15s var(--cubic-enter);   /* = opacity 0.15s cubic-bezier(0.19, 1, 0.22, 1) */
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+  }
+
+  &[data-is-last-range-trail] {
+    border-radius: 0;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 100%;
+      width: 15px;
+      background-color: light-dark(var(--alpha-06), var(--alpha-08));   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 6%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) */
+      content: "";
+      mask-image: linear-gradient(-90deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 100%));
+      transition: opacity 0.15s var(--cubic-enter);   /* = opacity 0.15s cubic-bezier(0.19, 1, 0.22, 1) */
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+  }
+
+  &[data-is-start] {
+    border-bottom-left-radius: var(--radius-full);   /* = 9999px */
+    border-top-left-radius: var(--radius-full);   /* = 9999px */
+  }
+
+  &[data-is-end] {
+    border-bottom-right-radius: var(--radius-full);   /* = 9999px */
+    border-top-right-radius: var(--radius-full);   /* = 9999px */
+  }
+}
+
+.InteractiveDay {
+  position: relative;
+  display: block;
+  width: var(--cell-size);   /* = 30px */
+  height: var(--cell-size);   /* = 30px */
+  border: 0;
+  border-radius: var(--radius-full);   /* = 9999px */
+  appearance: auto;
+  background: none;
+  cursor: pointer;
+  font-size: var(--font-text-sm-size);   /* = 14px */
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border: 1px solid var(--color-text);   /* = 1px solid light-dark(#0d0d0d, #ffffff) */
+    border-radius: var(--radius-full);   /* = 9999px */
+    content: "";
+    opacity: 0;
+    transition:
+      color,
+      0.15s var(--cubic-enter),
+      opacity 0.15s var(--cubic-enter);
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.4;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  [data-is-start] &,
+  [data-is-end] & {
+    background: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+    color: var(--color-text-inverse);   /* = light-dark(#ffffff, #0d0d0d) */
+  }
+}
+
+.TodayDot {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 100%;
+  margin-left: -1px;
+  background-color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+  transition: background-color 0.15s var(--cubic-enter);   /* = background-color 0.15s cubic-bezier(0.19, 1, 0.22, 1) */
+
+  [data-is-start] &,
+  [data-is-end] & {
+    background-color: var(--gray-0);   /* = light-dark(#ffffff, #0d0d0d) */
+  }
+}
+
+.Shortcuts {
+  flex: 1;
+  width: 150px;
+  padding: spacing(2);   /* = 8px */
+  border-right: 1px solid var(--color-border);   /* = 1px solid light-dark(alpha(light-dark(#0d0d0d, #ffffff), 10%), alpha(light-dark(#0d0d0d, #ffffff), 12%)) */
+}

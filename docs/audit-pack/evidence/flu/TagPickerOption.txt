@@ -1,0 +1,10 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tag-picker/library/src/components/TagPickerOption/useTagPickerOptionStyles.styles.ts
+L7 import { typographyStyles } from '@fluentui/react-theme';
+L15 const useRootBaseStyle = makeResetStyles({
+L20 const useRootStyles = makeStyles({
+L21 secondaryContent: {
+L27 const useSecondaryContentBaseStyle = makeResetStyles({
+L28 gridColumnStart: 2,
+L29 gridRowStart: 2,
+L30 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L33 const useMediaBaseStyle = makeResetStyles({

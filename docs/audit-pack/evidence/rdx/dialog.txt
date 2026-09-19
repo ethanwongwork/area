@@ -1,0 +1,2 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/dialog.css
+@import './_internal/base-dialog.css';

@@ -1,0 +1,101 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-calendar-compat/library/src/components/CalendarDayGrid/useCalendarDayGridStyles.styles.ts
+L40 const useWrapperStyles = makeStyles({
+L41 base: {
+L42 paddingBottom: '10px',
+L46 const useTableStyles = makeStyles({
+L47 base: {
+L49 borderSpacing: 0,
+L50 fontSize: 'inherit',
+L51 marginTop: '4px',
+L52 paddingBottom: '10px',
+L56 width: '196px',
+L58 showWeekNumbers: {
+L59 width: '226px',
+L63 const useDayCellStyles = makeStyles({
+L64 base: {
+L67 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L68 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L69 margin: '0',
+L70 padding: '2px',
+L81 outline: '1px solid Highlight',
+L82 zIndex: 3,
+L94 ...shorthands.borderColor('Highlight'),
+L100 style: {
+L101 outlineWidth: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L102 ...shorthands.borderWidth(tokens.strokeWidthThick),   // strokeWidthThick=2px
+L107 const useDaySelectedStyles = makeStyles({
+L108 base: {
+L114 ...shorthands.borderColor('Highlight'),
+L136 const useDaySingleSelectedStyles = makeStyles({
+L137 base: {
+L148 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L149 border: `1px solid ${tokens.colorBrandStroke1}`,
+L152 ...shorthands.borderColor('Highlight'),
+L160 const useWeekRowStyles = makeStyles({
+L161 base: {
+L164 zIndex: 1,
+L169 const useWeekDayLabelCellStyles = makeStyles({
+L170 base: {
+L175 const useWeekNumberCellStyles = makeStyles({
+L176 base: {
+L178 borderRight: `1px solid ${tokens.colorNeutralStroke2}`,
+L181 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L182 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L183 height: '28px',
+L184 margin: '0',
+L185 padding: '0',
+L186 width: '28px',
+L190 const useDayOutsideBoundsStyles = makeStyles({
+L191 base: {
+L204 const useDayOutsideNavigatedMonthStyles = makeStyles({
+L205 lightenDaysOutsideNavigatedMonth: {
+L207 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L215 const useDayButtonStyles = makeStyles({
+L216 base: {
+L221 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L222 fontWeight: 'inherit',
+L223 height: '24px',
+L224 lineHeight: '24px',
+L226 padding: '0',
+L227 width: '24px',
+L230 height: 'inherit',
+L231 lineHeight: 'inherit',
+L235 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L243 const useDayIsTodayStyles = makeStyles({
+L244 base: {
+L249 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L260 const useDayTodayMarkerStyles = makeStyles({
+L261 base: {
+L266 borderRadius: '100%',
+L267 width: '20px',
+L268 height: '20px',
+L269 lineHeight: '20px',
+L272 ...shorthands.borderColor('WindowText'),
+L279 const useFirstTransitionWeekStyles = makeStyles({
+L280 base: {
+L283 opacity: 0,
+L290 const useLastTransitionWeekStyles = makeStyles({
+L291 base: {
+L292 marginTop: '-28px',
+L293 opacity: 0,
+L300 const useDayMarkerStyles = makeStyles({
+L301 base: {
+L303 borderRadius: '100%',
+L304 bottom: '1px',
+L305 height: '4px',
+L306 left: 0,
+L307 margin: 'auto',
+L310 right: 0,
+L311 width: '4px',
+L320 const useCornerBorderAndRadiusStyles = makeStyles({
+L321 corners: {
+L323 borderTopRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L326 borderTopLeftRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L329 borderBottomRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L332 borderBottomLeftRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L360 const cornerBorderAndRadiusStyles = useCornerBorderAndRadiusStyles();
+L376 cornerBorderAndRadiusStyles.corners,
+### Fluent UI React v9 @ babf260  packages/react-components/react-calendar-compat/library/src/components/CalendarDayGrid/useWeekCornerStyles.styles.ts
+L34 (above: boolean, below: boolean, left: boolean, right: boolean) => string,
+L42 * If we just round all of the corners, there isn't a good overlap and we get gaps between contiguous day boxes
+L110 const calculateRoundedStyles = (above: boolean, below: boolean, left: boolean, right: boolean): string => {

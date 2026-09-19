@@ -1,0 +1,9 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/form.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot form-item]
+  L83 gap-2=8px
+  [slot form-label]
+  [slot form-control]
+  [slot form-description]
+  L132 text-sm=14/20px
+  [slot form-message]
+  L150 text-sm=14/20px

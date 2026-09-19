@@ -1,0 +1,14 @@
+### @atlaskit/progress-indicator@13.4.2  components/button-indicator.js  (token fallbacks; pt and pc converted to px)
+  common: border-radius:9999px; width:var(--ds-dots-size); height:var(--ds-dots-size); [:before] width:calc(var(--ds-dots-size) + var(--ds-dots-margin)); [:before] height:calc(var(--ds-dots-size) + var(--ds-dots-margin)); [:before] inset-block-start:calc(var(--ds-dots-margin)*-1/2); [:before] inset-inline-start:calc(var(--ds-dots-margin)*-1/2)
+  default: border:1px solid #7d818a
+  help: border:1px solid #7d818a
+  inverted: border:1px solid #fff
+  primary: border:1px solid #7d818a
+  root: padding-block-start:0; padding-inline-end:0; padding-block-end:0; padding-inline-start:0
+### @atlaskit/progress-indicator@13.4.2  components/presentational-indicator.js  (token fallbacks; pt and pc converted to px)
+  common: border-radius:9999px; width:var(--ds-dots-size); height:var(--ds-dots-size); [:before] width:calc(var(--ds-dots-size) + var(--ds-dots-margin)); [:before] height:calc(var(--ds-dots-size) + var(--ds-dots-margin)); [:before] inset-block-start:calc(var(--ds-dots-margin)*-1/2); [:before] inset-inline-start:calc(var(--ds-dots-margin)*-1/2)
+  default: border:1px solid #7d818a
+  help: border:1px solid #7d818a
+  inverted: border:1px solid #fff
+  primary: border:1px solid #7d818a
+### @atlaskit/progress-indicator@13.4.2  components/progress-dots.js  size map: large 12

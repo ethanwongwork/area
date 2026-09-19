@@ -1,0 +1,8 @@
+### @atlaskit/progress-tracker@11.4.2  internal/link.js  (token fallbacks; pt and pc converted to px)
+  anchor: font:inherit; border-radius:4px
+### @atlaskit/progress-tracker@11.4.2  internal/stage.js  (token fallbacks; pt and pc converted to px)
+  listItemContent: width:100%
+  unvisited: font-weight:400
+  current: font-weight:653
+  visited: font-weight:653
+  disabled: font-weight:653

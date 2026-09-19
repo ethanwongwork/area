@@ -1,0 +1,4 @@
+### Primer React @ e4e6eba  packages/react/src/Autocomplete/AutocompleteOverlay.module.css
+.Overlay {
+  overflow: auto;
+}

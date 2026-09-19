@@ -1,0 +1,123 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Autocomplete/Autocomplete.js
+L43 const slots = {
+L72 const AutocompleteRoot = styled('div', {
+L73 name: 'MuiAutocomplete',
+L74 slot: 'Root',
+L102   margin: 3,
+L103   maxWidth: 'calc(100% - 6px)',
+L107   paddingRight: 26 + 4,
+L110   paddingRight: 52 + 4,
+L113   width: 0,
+L114   minWidth: 30,
+L118   paddingBottom: 1,
+L119 '& .MuiInput-input': {
+L120   padding: '4px 4px 4px 0px',
+L125   padding: '2px 4px 3px 0',
+L129   padding: 9,
+L131   paddingRight: 26 + 4 + 9,
+L134   paddingRight: 52 + 4 + 9,
+L137   padding: '7.5px 4px 7.5px 5px',
+L140   right: 9,
+L146   paddingTop: 6,
+L147   paddingBottom: 6,
+L148   paddingLeft: 6,
+L150   padding: '2.5px 4px 2.5px 8px',
+L154   paddingTop: 19,
+L155   paddingLeft: 8,
+L157   paddingRight: 26 + 4 + 9,
+L160   paddingRight: 52 + 4 + 9,
+L163   padding: '7px 4px',
+L166   right: 9,
+L170   paddingBottom: 1,
+L172   padding: '2.5px 4px',
+L176   paddingTop: 8,
+L179   paddingTop: 0,
+L180   paddingBottom: 0,
+L182   paddingTop: 16,
+L183   paddingBottom: 17,
+L188   paddingTop: 8,
+L189   paddingBottom: 9,
+L197 variants: [
+L199 props: { fullWidth: true },
+L200 style: { width: '100%' },
+L203 props: { size: 'small' },
+L204 style: {
+L206   margin: 2,
+L207   maxWidth: 'calc(100% - 4px)',
+L212 props: { inputFocused: true },
+L213 style: {
+L220 props: { multiple: true },
+L221 style: {
+L230 const AutocompleteEndAdornment = styled('div', {
+L231 name: 'MuiAutocomplete',
+L232 slot: 'EndAdornment',
+L236   right: 0,
+L237   top: '50%',
+L241 const AutocompleteClearIndicator = styled(IconButton, {
+L242 name: 'MuiAutocomplete',
+L243 slot: 'ClearIndicator',
+L245   marginRight: -2,
+L246   padding: 4,
+L250 const AutocompletePopupIndicator = styled(IconButton, {
+L251 name: 'MuiAutocomplete',
+L252 slot: 'PopupIndicator',
+L259   padding: 2,
+L260   marginRight: -2,
+L261 variants: [
+L263 props: { popupOpen: true },
+L264 style: {
+L271 const AutocompletePopper = styled(Popper, {
+L272 name: 'MuiAutocomplete',
+L273 slot: 'Popper',
+L286 variants: [
+L288 props: { disablePortal: true },
+L289 style: {
+L297 const AutocompletePaper = styled(Paper, {
+L298 name: 'MuiAutocomplete',
+L299 slot: 'Paper',
+L307 const AutocompleteLoading = styled('div', {
+L308 name: 'MuiAutocomplete',
+L309 slot: 'Loading',
+L313   padding: '14px 16px',
+L317 const AutocompleteStatus = styled('div', {
+L318 name: 'MuiAutocomplete',
+L319 slot: 'Status',
+L322 const AutocompleteNoOptions = styled('div', {
+L323 name: 'MuiAutocomplete',
+L324 slot: 'NoOptions',
+L328   padding: '14px 16px',
+L332 const AutocompleteListbox = styled('ul', {
+L333 name: 'MuiAutocomplete',
+L334 slot: 'Listbox',
+L338   margin: 0,
+L339   padding: '8px 0',
+L340   maxHeight: '40vh',
+L345   minHeight: 48,
+L351   paddingTop: 6,
+L355   paddingBottom: 6,
+L356   paddingLeft: 16,
+L357   paddingRight: 16,
+L359   minHeight: 'auto',
+L379 : {
+L410 const AutocompleteGroupLabel = styled(ListSubheader, {
+L411 name: 'MuiAutocomplete',
+L412 slot: 'GroupLabel',
+L416   top: -8,
+L420 const AutocompleteGroupUl = styled('ul', {
+L421 name: 'MuiAutocomplete',
+L422 slot: 'GroupUl',
+L424   padding: 0,
+L426   paddingLeft: 24,
+L578 const ownerState = {
+L594 const externalForwardedProps = {
+L603 externalForwardedProps: {
+L631 additionalProps: {
+L643 additionalProps: {
+L645 style: {
+L646   width: anchorEl ? anchorEl.clientWidth : null,
+L672 additionalProps: {
+L685 additionalProps: {
+L785   size: size === 'small' ? 'small' : undefined,
+L786 slotProps: {
+L788 input: {
+L813 htmlInput: {

@@ -1,0 +1,12 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-progress-indicator-circular.scss
+active-indicator-thickness: 4px
+active-indicator-wave-amplitude: 1.6px
+active-indicator-wave-wavelength: 15px
+size: 40px
+thick-active-indicator-thickness: 8px
+thick-size: 52px
+thick-track-active-indicator-space: 4px
+thick-track-thickness: 8px
+track-active-indicator-space: 4px
+track-thickness: 4px
+with-wave-size: 48px

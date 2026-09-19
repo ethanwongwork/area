@@ -1,0 +1,31 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/link/_link.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L35 @mixin link {
+L36 .#{$prefix}--link {
+L38   @include type.type-style('body-compact-01');   // body-compact-01=14/18
+L47 &:hover {
+L54 &:active:visited {
+L62 &:focus:not(.#{$prefix}--link--disabled) {
+L69 &:visited {
+L74 &:visited:hover {
+L78 &:active:not(.#{$prefix}--link--disabled):visited:hover {
+L84 .#{$prefix}--link--disabled {
+L86   @include type.type-style('body-compact-01');   // body-compact-01=14/18
+L94 &:hover {
+L101 .#{$prefix}--link.#{$prefix}--link--visited:visited {
+L106 .#{$prefix}--link.#{$prefix}--link--visited:visited:hover {
+L117 .#{$prefix}--link.#{$prefix}--link--inline {
+L122 .#{$prefix}--link--disabled.#{$prefix}--link--inline {
+L126 .#{$prefix}--link--sm {
+L127   @include type.type-style('helper-text-01');   // helper-text-01=12/16
+L130 .#{$prefix}--link--lg {
+L131   @include type.type-style('body-compact-02');   // body-compact-02=16/22
+L135 .#{$prefix}--link--icon {
+L139 .#{$prefix}--link__icon {
+L142   block-size: 1lh;
+L143   line-height: inherit;
+L144   margin-inline-start: $spacing-03;   // spacing-03=8px
+L149 .#{$prefix}--link--lg .#{$prefix}--link__icon > svg {
+L150   block-size: convert.to-rem(20px);
+L151   inline-size: convert.to-rem(20px);
+L155 .#{$prefix}--link--lg .#{$prefix}--link__icon {
+L156   block-size: convert.to-rem(20px);

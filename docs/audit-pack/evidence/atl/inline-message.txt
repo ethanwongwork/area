@@ -1,0 +1,4 @@
+### @atlaskit/inline-message@16.4.2  components/inline-message/index.js  (token fallbacks; pt and pc converted to px)
+  contentStyles: padding-inline-start:24px; padding-inline-end:24px; padding-block-start:16px; padding-block-end:16px; max-width:28pc; max-height:28pc
+  rootStyles: max-width:100%
+  pressableStyles: border-radius:6px; font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif; padding-block:0; padding-inline:0; max-width:100%; height:auto; width:auto

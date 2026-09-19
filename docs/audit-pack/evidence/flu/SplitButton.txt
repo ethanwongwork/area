@@ -1,0 +1,28 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-button/library/src/components/SplitButton/useSplitButtonStyles.styles.ts
+L15 // WCAG minimum target size for pointer targets that are immediately adjacent to other targets:
+L16 // https://w3c.github.io/wcag/guidelines/22/#target-size-minimum
+L17 const MIN_TARGET_SIZE = '24px';
+L19 const useFocusStyles = makeStyles({
+L21 borderTopRightRadius: 0,
+L22 borderBottomRightRadius: 0,
+L26 borderLeftWidth: 0,
+L27 borderTopLeftRadius: 0,
+L28 borderBottomLeftRadius: 0,
+L32 const useRootStyles = makeStyles({
+L34 base: {
+L41 borderTopRightRadius: 0,
+L42 borderBottomRightRadius: 0,
+L46 borderLeftWidth: 0,
+L47 borderTopLeftRadius: 0,
+L48 borderBottomLeftRadius: 0,
+L49 minWidth: MIN_TARGET_SIZE,
+L54 outline: {
+L57 primary: {
+L92 secondary: {
+L95 subtle: {
+L112 transparent: {
+L131 circular: {},
+L132 rounded: {},
+L133 square: {},
+L136 disabled: {
+L155 disabledHighContrast: {

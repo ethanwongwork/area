@@ -1,0 +1,69 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-skeleton/library/src/components/SkeletonItem/useSkeletonItemStyles.styles.ts
+L13 to: {
+L20 opacity: '1',
+L23 opacity: '0.4',
+L26 opacity: '1',
+L33 const useStyles = makeStyles({
+L34 root: {
+L42 inset: '0',
+L44 animationDuration: '3s',
+L47 animationDuration: '0.01ms',
+L48 animationIterationCount: '1',
+L52 wave: {
+L69 pulse: {
+L72 animationDuration: '1s',
+L76 translucent: {
+L87 translucentPulse: {
+L94 blockStyling: {
+L99 const useRectangleStyles = makeStyles({
+L100 root: {
+L101 width: '100%',
+L102 borderRadius: '4px',
+L104 8: { height: '8px' },
+L105 12: { height: '12px' },
+L106 14: { height: '14px' },
+L107 16: { height: '16px' },
+L108 20: { height: '20px' },
+L109 22: { height: '22px' },
+L110 24: { height: '24px' },
+L111 28: { height: '28px' },
+L112 32: { height: '32px' },
+L113 36: { height: '36px' },
+L114 40: { height: '40px' },
+L115 48: { height: '48px' },
+L116 52: { height: '52px' },
+L117 56: { height: '56px' },
+L118 64: { height: '64px' },
+L119 72: { height: '72px' },
+L120 92: { height: '92px' },
+L121 96: { height: '96px' },
+L122 120: { height: '120px' },
+L123 128: { height: '128px' },
+L126 const useSizeStyles = makeStyles({
+L127 8: { width: '8px', height: '8px' },
+L128 12: { width: '12px', height: '12px' },
+L129 14: { width: '14px', height: '14px' },
+L130 16: { width: '16px', height: '16px' },
+L131 20: { width: '20px', height: '20px' },
+L132 22: { width: '22px', height: '22px' },
+L133 24: { width: '24px', height: '24px' },
+L134 28: { width: '28px', height: '28px' },
+L135 32: { width: '32px', height: '32px' },
+L136 36: { width: '36px', height: '36px' },
+L137 40: { width: '40px', height: '40px' },
+L138 48: { width: '48px', height: '48px' },
+L139 52: { width: '52px', height: '52px' },
+L140 56: { width: '56px', height: '56px' },
+L141 64: { width: '64px', height: '64px' },
+L142 72: { width: '72px', height: '72px' },
+L143 92: { width: '92px', height: '92px' },
+L144 96: { width: '96px', height: '96px' },
+L145 120: { width: '120px', height: '120px' },
+L146 128: { width: '128px', height: '128px' },
+L149 const useCircleSizeStyles = makeStyles({
+L150 root: {
+L151 borderRadius: '50%',
+L159 const { animation, appearance, size, shape } = state;
+L176 shape === 'rectangle' && rectStyles[size],
+L177 shape === 'square' && sizeStyles[size],
+L179 shape === 'circle' && sizeStyles[size],

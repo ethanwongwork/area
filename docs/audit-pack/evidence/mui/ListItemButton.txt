@@ -1,0 +1,21 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ListItemButton/ListItemButton.js
+L33 const slots = {
+L53 const ListItemButtonRoot = styled(ButtonBase, {
+L55 name: 'MuiListItemButton',
+L56 slot: 'Root',
+L66   minWidth: 0,
+L69   paddingTop: 8,
+L70   paddingBottom: 8,
+L74 '&:hover': {
+L112 : {
+L120 variants: [
+L123 style: {
+L129 props: {
+L132 style: {
+L138 style: {
+L139   paddingLeft: 16,
+L140   paddingRight: 16,
+L145 style: {
+L146   paddingTop: 4,
+L147   paddingBottom: 4,
+L193 const ownerState = {

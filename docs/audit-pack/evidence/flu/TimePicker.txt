@@ -1,0 +1,4 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-timepicker-compat/library/src/components/TimePicker/useTimePickerStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 listbox: {
+L18 maxHeight: 'min(80vh, 416px)', // height for 12 items or 80vh, whichever is smaller

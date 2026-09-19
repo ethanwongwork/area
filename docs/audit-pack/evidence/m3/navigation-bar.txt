@@ -1,0 +1,15 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-navigation-bar.scss
+active-indicator-height: 32px
+active-indicator-width: 64px
+badge-shape: 3px
+badge-size: 6px
+container-height: 80px
+icon-size: 24px
+large-badge-shape: 8px
+large-badge-size: 16px
+active-indicator-shape: corner-full = 9999px
+container-shape: corner-none = 0px
+focus-indicator-outline-offset: md-sys-state-focus-indicator.$inner-offset
+focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+label-text-line-height: label-medium-line-height = 16px
+label-text-size: label-medium-size = 12px

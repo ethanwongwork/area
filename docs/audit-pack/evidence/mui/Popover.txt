@@ -1,0 +1,26 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Popover/Popover.js
+L65 const slots = {
+L74 name: 'MuiPopover',
+L75 slot: 'Root',
+L79 name: 'MuiPopover',
+L80 slot: 'Paper',
+L87   minWidth: 16,
+L88   minHeight: 16,
+L89   maxWidth: 'calc(100% - 32px)',
+L90   maxHeight: 'calc(100% - 32px)',
+L126 const ownerState = {
+L183   top: anchorRect.top + getOffsetTop(anchorRect, anchorOrigin.vertical),
+L184   left: anchorRect.left + getOffsetLeft(anchorRect, anchorOrigin.horizontal),
+L201 const elemRect = {
+L202   width: element.offsetWidth,
+L203   height: element.offsetHeight,
+L211   top: null,
+L212   left: null,
+L274   top: `${Math.round(top)}px`,
+L275   left: `${Math.round(left)}px`,
+L356 const externalForwardedProps = {
+L376 additionalProps: {
+L397 externalForwardedProps: {
+L402 additionalProps: {
+L404 slotProps: {
+L426 additionalProps: {

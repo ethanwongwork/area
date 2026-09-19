@@ -1,0 +1,288 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/Select/Select.module.css
+/* =============================================
+  Custom Select
+============================================= */
+.Menu {
+  /* Top-level selector needs to exist */
+}
+
+.MenuList {
+  /* Default to the width of the trigger */
+  width: var(--select-list-width, var(--radix-popover-trigger-width));   /* = var(--radix-popover-trigger-width) */
+  min-width: var(--select-list-min-width, 300px);   /* = 300px */
+  max-width: var(--select-list-max-width, none);   /* = none */
+  border-radius: var(--menu-radius);   /* = 12px */
+  background: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+  box-shadow: var(--shadow), var(--shadow-hairline);   /* = 0 10px 15px -3px light-dark(rgba(0 0 0 / 10%), rgba(0 0 0 / 20%)),
+      0 4px 6px -4px light-dark(rgba(0 0 0 / 10%), rgba(0 0 0 / 20%)), 0 0 rgb(0 0 0 / 0%) */
+  font-size: var(--menu-font-size);   /* = 14px */
+  line-height: var(--menu-line-height);   /* = 20px */
+  /* The transform-origin computed from the content and arrow positions/offsets */
+  transform-origin: var(--radix-popover-content-transform-origin);
+  user-select: none;
+  will-change: opacity, transform;
+
+  /* Animation states applied to a wrapping parent */
+  .Menu[data-entering] & {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  .Menu[data-entering-active] &,
+  .Menu[data-entering][data-interrupted] & {
+    opacity: 1;
+    transform: scale(1);
+    transition-duration: 0.35s;
+    transition-property: opacity, transform;
+    transition-timing-function: var(--cubic-enter);   /* = cubic-bezier(0.19, 1, 0.22, 1) */
+  }
+
+  .Menu[data-exiting] & {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .Menu[data-exiting-active] &,
+  .Menu[data-exiting][data-interrupted] & {
+    opacity: 0;
+    transform: scale(0.95);
+    transition-duration: 0.2s;
+    transition-property: opacity, transform;
+    transition-timing-function: var(--cubic-exit);   /* = cubic-bezier(0.8, 0, 0.4, 1) */
+  }
+}
+
+.MenuInner {
+  display: flex;
+  flex-direction: column;
+  /* The remaining height between the trigger and the boundary edge */
+  max-height: min(
+    var(--select-list-max-height, 400px),
+    var(--radix-popover-content-available-height)
+  );
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+/* =============================================
+  Options
+============================================= */
+.OptionsList {
+  overflow: auto;
+  flex: 1;
+  padding: var(--menu-gutter);   /* = 6px */
+}
+
+.Option {
+  position: relative;
+  padding: var(--menu-item-padding);   /* = 6px 8px */
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  /* When keyboard navigation snaps item into scrollable view, ensure 20px of spacing to show additional items below */
+  scroll-margin: 15px 0;
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border-radius: calc(var(--menu-radius) - var(--menu-gutter));   /* = 6px */
+    background: var(--menu-item-background-color);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 8%), alpha(light-dark(#0d0d0d, #ffffff), 10%)) */
+    content: "";
+    opacity: 0;
+    transform: scale(var(--scale, 0.98));   /* = scale(0.98) */
+    transition-duration: var(--transition-duration-basic);   /* = 150ms */
+    transition-property: opacity, background-color, transform;
+    transition-timing-function: var(--cubic-enter);   /* = cubic-bezier(0.19, 1, 0.22, 1) */
+    will-change: opacity, transform;
+  }
+
+  &[data-selected] {
+    font-weight: var(--font-weight-semibold);   /* = 600 */
+  }
+
+  &[data-highlight] {
+    &::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    &:active::before {
+      transform: scale(var(--scale, 0.98));   /* = scale(0.98) */
+    }
+  }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+.PressableInner {
+  position: relative;
+}
+
+.OptionInner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: spacing(1);   /* = 4px */
+}
+
+.OptionCheck {
+  display: block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.OptionIndicatorSlot {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.OptionGroupHeading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: spacing(1);   /* = 4px */
+  padding: var(--menu-item-padding);   /* = 6px 8px */
+  margin-top: spacing(1.5);   /* = 6px */
+  color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.OptionHardLimitHeading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: spacing(1);   /* = 4px */
+  padding: var(--menu-item-padding);   /* = 6px 8px */
+  color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+}
+
+.OptionsLimit {
+  color: var(--link-primary-text-color);   /* = light-dark(#0169cc, #339cff) */
+  font-weight: var(--font-weight-medium);   /* = 500 */
+}
+
+/* =============================================
+  Action
+============================================= */
+.Action {
+  position: relative;
+  padding: var(--menu-item-padding);   /* = 6px 8px */
+  border-radius: calc(var(--menu-radius) - var(--menu-gutter));   /* = 6px */
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  /* Background shape */
+  &::before {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border-radius: calc(var(--menu-radius) - var(--menu-gutter));   /* = 6px */
+    background: light-dark(var(--gray-100), var(--gray-25));   /* = light-dark(light-dark(#ededed, #181818), light-dark(#fcfcfc, #101010)) */
+    content: "";
+    opacity: 0;
+    transform: scale(var(--scale, 0.98));   /* = scale(0.98) */
+    transition-duration: 0.15s;
+    transition-property: opacity, background-color, transform;
+    transition-timing-function: var(--cubic-enter);   /* = cubic-bezier(0.19, 1, 0.22, 1) */
+    will-change: opacity, transform;
+  }
+
+  /* Focus ring */
+  &::after {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border-radius: calc(var(--menu-radius) - var(--menu-gutter));   /* = 6px */
+    content: "";
+    pointer-events: none;
+    transition-duration: 0.15s;
+    transition-property: box-shadow, transform;
+    transition-timing-function: var(--cubic-enter);   /* = cubic-bezier(0.19, 1, 0.22, 1) */
+  }
+
+  @mixin hover {
+    &::before {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible::after {
+    box-shadow: 0 0 0 2px var(--color-ring);   /* = 0 0 0 2px light-dark(#0169cc, #0285ff) */
+  }
+
+  &:active::before,
+  &:active::after {
+    transform: scale(var(--scale, 0.98));   /* = scale(0.98) */
+  }
+
+  svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.ActionInner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--menu-item-gap);   /* = 6px */
+}
+
+.ActionsContainer {
+  position: relative;
+  padding: var(--menu-gutter);   /* = 6px */
+  border-top: 1px solid var(--menu-separator-background-color);   /* = 1px solid light-dark(alpha(light-dark(#0d0d0d, #ffffff), 10%), alpha(light-dark(#0d0d0d, #ffffff), 12%)) */
+
+  &::before {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    width: 100%;
+    height: 9px;
+    margin-bottom: 1px;
+    background: var(--color-surface-elevated);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#afafaf, #303030)) */
+    content: "";
+    mask-image: linear-gradient(180deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 100%));
+    pointer-events: none;
+  }
+}
+
+/* =============================================
+  Search
+============================================= */
+.Search {
+  position: relative;
+  padding: var(--menu-gutter) var(--menu-gutter) 0;   /* = 6px 6px 0 */
+}
+
+.SearchEmpty {
+  padding: var(--menu-gutter);   /* = 6px */
+  margin: spacing(4) 0;   /* = 16px 0 */
+
+  &[data-text-only] {
+    color: var(--color-text-secondary);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+    text-align: center;
+  }
+}

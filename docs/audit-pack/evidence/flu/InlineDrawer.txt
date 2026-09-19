@@ -1,0 +1,17 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-drawer/library/src/components/InlineDrawer/useInlineDrawerStyles.styles.ts
+L14 const useDrawerResetStyles = makeResetStyles({
+L23 const useDrawerRootStyles = makeStyles({
+L25 separatorStart: { borderRight: borderValue },
+L26 separatorEnd: { borderLeft: borderValue },
+L27 separatorBottom: { borderTop: borderValue },
+L30 start: {},
+L31 end: {},
+L32 bottom: {
+L33 width: '100%',
+L34 height: `var(${drawerCSSVars.drawerSizeVar})`,
+L38 animationExitStart: {
+L39 width: '0',
+L42 animationExitEnd: {
+L43 width: '0',
+L46 animationExitBottom: {
+L47 height: '0',

@@ -1,0 +1,10 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tags/library/src/components/TagGroup/useTagGroupStyles.styles.ts
+L15 const useRootStyles = makeStyles({
+L16 base: {
+L19 medium: {
+L20 columnGap: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L22 small: {
+L23 columnGap: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L26 columnGap: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L35 const { size } = state;
+L37 state.root.className = mergeClasses(tagGroupClassNames.root, styles.base, styles[size], state.root.className);

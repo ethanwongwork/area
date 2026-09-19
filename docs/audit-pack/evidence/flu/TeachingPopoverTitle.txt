@@ -1,0 +1,21 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-teaching-popover/library/src/components/TeachingPopoverTitle/useTeachingPopoverTitleStyles.styles.ts
+L7 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L14 const useStyles = makeStyles({
+L15 root: {
+L19 fontSize: tokens.fontSizeBase400,   // fontSizeBase400=16px
+L20 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L22 lineHeight: tokens.lineHeightBase400,   // lineHeightBase400=22px
+L23 paddingBottom: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L24 marginTop: tokens.spacingHorizontalNone,   // spacingHorizontalNone=0
+L25 marginBottom: tokens.spacingHorizontalNone,   // spacingHorizontalNone=0
+L27 rootBrand: {
+L30 dismissButton: {
+L32 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L36 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L39 borderTopRightRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L40 borderBottomRightRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L43 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L44 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L45 ...shorthands.borderColor('transparent'),
+L47 marginInlineStart: 'auto',
+L49 dismissBrand: {

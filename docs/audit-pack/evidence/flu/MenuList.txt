@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu/library/src/components/MenuList/useMenuListStyles.styles.ts
+L11 const useStyles = makeStyles({
+L12 root: {
+L15 gap: '2px',
+L17 hasMenuContext: {
+L18 height: '100%',

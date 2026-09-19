@@ -1,0 +1,7 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-combobox/library/src/components/Listbox/useListboxStyles.styles.ts
+L15 const useStyles = makeStyles({
+L16 root: {
+L21 minWidth: '160px',
+L23 outline: `1px solid ${tokens.colorTransparentStroke}`,
+L24 padding: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L25 rowGap: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px

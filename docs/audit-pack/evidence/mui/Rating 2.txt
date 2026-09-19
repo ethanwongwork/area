@@ -1,0 +1,51 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Rating/Rating.js
+L40 const slots = {
+L63 const RatingRoot = styled('span', {
+L64 name: 'MuiRating',
+L65 slot: 'Root',
+L81   fontSize: theme.typography.pxToRem(24),
+L85   width: 'min-content',
+L99 variants: [
+L101 props: {
+L102   size: 'small',
+L104 style: {
+L105   fontSize: theme.typography.pxToRem(18),
+L109 props: {
+L110   size: 'large',
+L112 style: {
+L113   fontSize: theme.typography.pxToRem(30),
+L119 style: {
+L127 const RatingLabel = styled('label', {
+L128 name: 'MuiRating',
+L129 slot: 'Label',
+L137 variants: [
+L140 style: {
+L141   top: 0,
+L142   bottom: 0,
+L144   width: '100%',
+L156 const RatingIcon = styled('span', {
+L157 name: 'MuiRating',
+L158 slot: 'Icon',
+L181 variants: [
+L184 style: {
+L190 style: {
+L198 const RatingDecimal = styled('span', {
+L199 name: 'MuiRating',
+L200 slot: 'Decimal',
+L209 variants: [
+L212 style: {
+L265 const externalForwardedProps = {
+L280 ownerState: {
+L288 additionalProps: {
+L291 internalForwardedProps: {
+L300 additionalProps: {
+L401 name: 'Rating',
+L430   const { right, left, width: containerWidth } = rootNode.getBoundingClientRect();
+L446 : {
+L540 const ownerState = {
+L559 const externalForwardedProps = {
+L568 externalForwardedProps: {
+L585 additionalProps: {
+L610 const ratingItemProps = {
+L659 : {
+L660   width:

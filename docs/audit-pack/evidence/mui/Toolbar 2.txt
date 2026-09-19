@@ -1,0 +1,16 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Toolbar/Toolbar.js
+L14 const slots = {
+L21 const ToolbarRoot = styled('div', {
+L22 name: 'MuiToolbar',
+L23 slot: 'Root',
+L34 variants: [
+L37 style: {
+L38   paddingLeft: theme.spacing(2),
+L39   paddingRight: theme.spacing(2),
+L41   paddingLeft: theme.spacing(3),
+L42   paddingRight: theme.spacing(3),
+L47 props: {
+L50 style: {
+L51   minHeight: 48,
+L55 props: {
+L74 const ownerState = {

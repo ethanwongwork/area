@@ -1,0 +1,57 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/text-area/_text-area.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L27 @mixin text-area {
+L28 .#{$prefix}--text-area {
+L30   @include type-style('body-01');   // body-01=14/20
+L33   padding: convert.to-rem(11px) layout.density('padding-inline');
+L34   border: none;
+L36   block-size: 100%;
+L40   min-block-size: convert.to-rem(40px);
+L42   min-inline-size: 10rem;
+L43   resize: vertical;
+L50 .#{$prefix}--text-area:active {
+L54 .#{$prefix}--text-area::placeholder {
+L56   @include type-style('body-01');   // body-01=14/20
+L60 .#{$prefix}--text-area--light {
+L64 .#{$prefix}--text-area__wrapper {
+L69   inline-size: 100%;
+L70   max-inline-size: 100%;
+L73 .#{$prefix}--text-area__wrapper--cols {
+L74   inline-size: auto;
+L77 .#{$prefix}--text-area__invalid-icon {
+L80   inset-block-start: $spacing-04;   // spacing-04=12px
+L81   inset-inline-end: layout.density('padding-inline');
+L84 .#{$prefix}--text-area__invalid-icon--warning {
+L88 .#{$prefix}--text-area__invalid-icon--warning path[fill] {
+L93 .#{$prefix}--text-area__counter-alert {
+L96   padding: 0;
+L97   border: 0;
+L98   margin: -1px;
+L99   block-size: 1px;
+L101   inline-size: 1px;
+L104 .#{$prefix}--form-item {
+L105 &:has(.#{$prefix}--text-area__wrapper--cols) {
+L106   inline-size: fit-content;
+L113 .#{$prefix}--text-area:disabled {
+L119   resize: none;
+L122 .#{$prefix}--text-area:disabled::placeholder {
+L129 .#{$prefix}--text-area__wrapper--readonly .#{$prefix}--text-area {
+L139 .#{$prefix}--text-area__wrapper--slug .#{$prefix}--slug {
+L141   inset-block-start: $spacing-04;   // spacing-04=12px
+L142   inset-inline-end: $spacing-05;   // spacing-05=16px
+L150 .#{$prefix}--slug.#{$prefix}--slug--revert {
+L151   inset-block-start: $spacing-02;   // spacing-02=4px
+L152   inset-inline-end: $spacing-03;   // spacing-03=8px
+L183 .#{$prefix}--text-area:has(~ .#{$prefix}--slug) {
+L184   padding-inline-end: $spacing-08;   // spacing-08=40px
+L196 .#{$prefix}--text-area--warn:has(~ .#{$prefix}--slug) {
+L197   padding-inline-end: $spacing-10;   // spacing-10=64px
+L209 .#{$prefix}--text-area--warn ~ .#{$prefix}--slug {
+L210   inset-inline-end: $spacing-08;   // spacing-08=40px
+L224 .#{$prefix}--text-area--warn ~ .#{$prefix}--slug.#{$prefix}--slug--revert {
+L225   inset-inline-end: $spacing-07;   // spacing-07=32px
+L229 .#{$prefix}--text-area.#{$prefix}--skeleton {
+L232   block-size: convert.to-rem(100px);
+L233   inline-size: 100%;
+L235 &::placeholder {
+L240 .#{$prefix}--text-area__label-wrapper {
+L244   inline-size: 100%;

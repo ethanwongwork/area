@@ -1,0 +1,10 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-teaching-popover/library/src/components/TeachingPopoverCarouselFooterButton/useTeachingPopoverCarouselFooterButtonStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L18 minWidth: '96px',
+L20 brandNext: {
+L23 ...shorthands.borderColor(tokens.colorTransparentBackground),
+L33 brandPrevious: {
+L37 ...shorthands.borderColor(tokens.colorNeutralForegroundOnBrand),
+L40 ...shorthands.borderColor(tokens.colorNeutralForegroundOnBrand),
+L45 ...shorthands.borderColor(tokens.colorNeutralForegroundOnBrand),

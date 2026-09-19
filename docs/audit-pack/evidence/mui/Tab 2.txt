@@ -1,0 +1,37 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Tab/Tab.js
+L19 const slots = {
+L35 const TabRoot = styled(ButtonBase, {
+L36 name: 'MuiTab',
+L37 slot: 'Root',
+L55   maxWidth: 360,
+L56   minWidth: 90,
+L58   minHeight: 48,
+L60   padding: '12px 16px',
+L64   lineHeight: 1.25,
+L67 variants: [
+L72 style: {
+L81 style: {
+L87 style: {
+L88   minHeight: 72,
+L89   paddingTop: 9,
+L90   paddingBottom: 9,
+L96 style: {
+L98   marginBottom: 6,
+L105 style: {
+L107   marginTop: 6,
+L114 style: {
+L116   marginRight: theme.spacing(1),
+L123 style: {
+L125   marginLeft: theme.spacing(1),
+L130 props: {
+L133 style: {
+L150 props: {
+L153 style: {
+L164 props: {
+L167 style: {
+L179 style: {
+L182   flexBasis: 0,
+L183   maxWidth: 'none',
+L188 style: {
+L189   fontSize: theme.typography.pxToRem(12),
+L236 const ownerState = {

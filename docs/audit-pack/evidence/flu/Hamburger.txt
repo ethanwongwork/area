@@ -1,0 +1,3 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/Hamburger/useHamburgerStyles.styles.ts
+L18 const useStyles = makeStyles({
+L19 root: {

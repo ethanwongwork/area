@@ -1,0 +1,12 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ListItemAvatar/ListItemAvatar.js
+L14 const slots = {
+L21 const ListItemAvatarRoot = styled('div', {
+L22 name: 'MuiListItemAvatar',
+L23 slot: 'Root',
+L30   minWidth: 56,
+L32 variants: [
+L34 props: {
+L37 style: {
+L38   marginTop: 8,
+L50 name: 'MuiListItemAvatar',
+L55 const ownerState = { ...props, alignItems: context.alignItems };

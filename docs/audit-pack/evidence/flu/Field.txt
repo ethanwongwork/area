@@ -1,0 +1,60 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-field/library/src/components/Field/useFieldStyles.styles.ts
+L3 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L16 // Size of the icon in the validation message
+L17 const iconSize = '12px';
+L22 const useRootStyles = makeStyles({
+L23 base: {
+L29 horizontal: {
+L30 gridTemplateColumns: '33% 1fr',
+L34 // In horizontal layout without a label, replace the label's column with padding.
+L36 horizontalNoLabel: {
+L37 paddingLeft: '33%',
+L38 gridTemplateColumns: '1fr',
+L42 const useLabelStyles = makeStyles({
+L43 base: {
+L44 maxWidth: 'max-content',
+L45 maxHeight: 'max-content',
+L48 vertical: {
+L49 paddingTop: tokens.spacingVerticalXXS,   // spacingVerticalXXS=2px
+L50 paddingBottom: tokens.spacingVerticalXXS,   // spacingVerticalXXS=2px
+L51 marginBottom: tokens.spacingVerticalXXS,   // spacingVerticalXXS=2px
+L54 verticalLarge: {
+L55 paddingTop: '1px',
+L56 paddingBottom: '1px',
+L57 marginBottom: tokens.spacingVerticalXS,   // spacingVerticalXS=4px
+L60 horizontal: {
+L61 paddingTop: tokens.spacingVerticalSNudge,   // spacingVerticalSNudge=6px
+L62 paddingBottom: tokens.spacingVerticalSNudge,   // spacingVerticalSNudge=6px
+L63 marginRight: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L64 gridRowStart: '1',
+L68 horizontalSmall: {
+L69 paddingTop: tokens.spacingVerticalXS,   // spacingVerticalXS=4px
+L70 paddingBottom: tokens.spacingVerticalXS,   // spacingVerticalXS=4px
+L73 horizontalLarge: {
+L74 // To align the label text with the Input text, it should be centered within the 40px height of the Input.
+L75 // This is (40px - lineHeightBase400) / 2 = 9px. Hardcoded since there is no 9px padding token.
+L76 paddingTop: '9px',
+L77 paddingBottom: '9px',
+L81 const useSecondaryTextBaseClassName = makeResetStyles({
+L82 marginTop: tokens.spacingVerticalXXS,   // spacingVerticalXXS=2px
+L84 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L87 const useSecondaryTextStyles = makeStyles({
+L88 error: {
+L92 withIcon: {
+L94 paddingLeft: `calc(${iconSize} + ${tokens.spacingHorizontalXS})`,   // spacingHorizontalXS=4px
+L98 const useValidationMessageIconBaseClassName = makeResetStyles({
+L100 fontSize: iconSize,
+L101 // Negative left margin puts the icon in the gutter of the validation message div's withIcon style.
+L102 marginLeft: `calc(-${iconSize} - ${tokens.spacingHorizontalXS})`,   // spacingHorizontalXS=4px
+L103 marginRight: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L104 // Line height of 0 prevents the verticalAlign from affecting the line height of the text.
+L105 lineHeight: '0',
+L106 // Negative verticalAlign shifts the inline icon down to align with the text (effectively top padding).
+L110 const useValidationMessageIconStyles = makeStyles({
+L111 error: {
+L114 warning: {
+L117 success: {
+L126 const { validationState, size } = state;
+L146 horizontal && size === 'small' && labelStyles.horizontalSmall,
+L147 horizontal && size === 'large' && labelStyles.horizontalLarge,
+L149 !horizontal && size === 'large' && labelStyles.verticalLarge,

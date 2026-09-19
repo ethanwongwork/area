@@ -1,0 +1,31 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-banners-rich.scss
+actions-between-space: 8px
+actions-bottom-space: 12px
+actions-leading-space: 12px
+actions-top-space: 12px
+actions-trailing-space: 12px
+body-text-bottom-space: 0px
+body-text-leading-space: 0px
+body-text-text-actions-space: 8px
+body-text-top-space: 0px
+body-text-trailing-space: 48px
+bottom-space: 12px
+icon-text-space: 4px
+icon-size: 24px
+image-text-space: 8px
+image-size: 80px
+leading-element-bottom-space: 12px
+leading-element-leading-space: 4px
+leading-element-top-space: 12px
+leading-element-trailing-space: 4px
+leading-space: 12px
+title-text-bottom-space: 14px
+title-text-height: 48px
+title-text-leading-space: 0px
+title-text-top-space: 14px
+title-text-trailing-space: 0px
+top-space: 12px
+trailing-space: 12px
+with-image-leading-space: 20px
+image-shape: corner-none = 0px
+shape: corner-extra-large = 28px

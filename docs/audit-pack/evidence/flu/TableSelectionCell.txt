@@ -1,0 +1,21 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-table/library/src/components/TableSelectionCell/useTableSelectionCellStyles.styles.ts
+L9 export const CELL_WIDTH = 44;
+L17 const useTableLayoutStyles = makeStyles({
+L18 root: {
+L20 width: `${CELL_WIDTH}px`,
+L24 const useFlexLayoutStyles = makeStyles({
+L25 root: {
+L27 flex: '1 1 0px',
+L28 minWidth: `${CELL_WIDTH}px`,
+L29 maxWidth: `${CELL_WIDTH}px`,
+L37 const useStyles = makeStyles({
+L38 root: {
+L41 padding: '0',
+L43 { outline: `2px solid ${tokens.colorStrokeFocus2}`, borderRadius: tokens.borderRadiusMedium },   // borderRadiusMedium=4px
+L48 radioIndicator: {
+L50 flexGrow: 1,
+L55 subtle: {
+L56 opacity: 0,
+L59 opacity: 1,
+L65 hidden: {
+L66 opacity: 0,

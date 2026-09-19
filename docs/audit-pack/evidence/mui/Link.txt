@@ -1,0 +1,33 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Link/Link.js
+L18 const v6Colors = {
+L33 const slots = {
+L45 const LinkRoot = styled(Typography, {
+L46 name: 'MuiLink',
+L47 slot: 'Root',
+L63 variants: [
+L65 props: {
+L68 style: {
+L73 props: {
+L76 style: {
+L78 '&:hover': {
+L84 props: {
+L87 style: {
+L89 '&:hover': {
+L97 style: {
+L113 props: { underline: 'always', color },
+L114 style: {
+L119 props: { underline: 'always', color: 'textPrimary' },
+L120 style: {
+L125 props: { underline: 'always', color: 'textSecondary' },
+L126 style: {
+L131 props: { underline: 'always', color: 'textDisabled' },
+L132 style: {
+L137 props: {
+L140 style: {
+L146   border: 0,
+L147   margin: 0, // Remove the margin in Safari
+L148   borderRadius: 0,
+L149   padding: 0, // Remove the padding in Firefox
+L155 '&::-moz-focus-inner': {
+L174 name: 'MuiLink',
+L209 const ownerState = {

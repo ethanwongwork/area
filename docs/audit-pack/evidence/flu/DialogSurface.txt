@@ -1,0 +1,19 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-dialog/library/src/components/DialogSurface/useDialogSurfaceStyles.styles.ts
+L24 const useRootBaseStyle = makeResetStyles({
+L26 inset: 0,
+L27 padding: SURFACE_PADDING,
+L28 margin: 'auto',
+L32 borderRadius: tokens.borderRadiusXLarge,   // borderRadiusXLarge=8px
+L38 height: 'fit-content',
+L39 maxWidth: '600px',
+L40 maxHeight: ['100vh', '100dvh'],
+L49 maxWidth: '100vw',
+L56 paddingRight: `calc(${SURFACE_PADDING} - ${DIALOG_FULLSCREEN_DIALOG_SCROLLBAR_OFFSET})`,
+L57 borderRightWidth: DIALOG_FULLSCREEN_DIALOG_SCROLLBAR_OFFSET,
+L58 borderTopWidth: DIALOG_FULLSCREEN_DIALOG_SCROLLBAR_OFFSET,
+L59 borderBottomWidth: DIALOG_FULLSCREEN_DIALOG_SCROLLBAR_OFFSET,
+L63 const useBackdropBaseStyle = makeResetStyles({
+L64 inset: '0px',
+L69 const useStyles = makeStyles({
+L70 nestedDialogBackdrop: {
+L74 dialogHidden: {

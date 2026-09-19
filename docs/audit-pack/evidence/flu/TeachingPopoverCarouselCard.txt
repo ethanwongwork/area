@@ -1,0 +1,3 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-teaching-popover/library/src/components/TeachingPopoverCarouselCard/useTeachingPopoverCarouselCardStyles.styles.ts
+L14 const useStyles = makeStyles({
+L15 root: {},

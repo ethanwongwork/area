@@ -1,0 +1,14 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tooltip/library/src/components/Tooltip/useTooltipStyles.styles.ts
+L6 import { arrowHeight } from './private/constants';
+L17 const useStyles = makeStyles({
+L18 root: {
+L21 maxWidth: '240px',
+L24 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L25 lineHeight: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L27 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L28 border: `1px solid ${tokens.colorTransparentStroke}`,
+L29 padding: '4px 11px 6px 11px', // '5px 12px 7px 12px' minus the border width '1px'
+L39 visible: {
+L43 hidden: {
+L48 inverted: {
+L53 arrow: createArrowStyles({ arrowHeight }),

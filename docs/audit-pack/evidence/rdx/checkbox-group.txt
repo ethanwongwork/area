@@ -1,0 +1,36 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/checkbox-group.css
+.rt-CheckboxGroupRoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);   /* = 4px */
+}
+
+.rt-CheckboxGroupItem {
+  display: flex;
+  gap: 0.5em;
+
+  /* Make sure whitespace to the right of the text is not clickable */
+  width: fit-content;
+}
+
+.rt-CheckboxGroupItemCheckbox {
+  &:where(:focus-visible) {
+    &::before {
+      outline: 2px solid var(--focus-8);   /* = 2px solid var(--amber-8) */
+      outline-offset: 2px;
+    }
+  }
+
+  &:where(:disabled) {
+    cursor: var(--cursor-disabled);   /* = not-allowed */
+
+    &::before {
+      background-color: var(--gray-a3);   /* = var(--mauve-a3) */
+    }
+  }
+}
+
+.rt-CheckboxGroupItemInner {
+  /* Make layouts with text truncation possible */
+  min-width: 0;
+}

@@ -1,0 +1,5 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Slide/Slide.js
+L22 const hiddenStyles = { visibility: 'hidden' };
+L23 const DEFAULT_TRANSLATE_OPTIONS = {};
+L115 const defaultEasing = {
+L120 const defaultTimeout = {

@@ -1,0 +1,39 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Skeleton/Skeleton.js
+L16 const slots = {
+L78 const SkeletonRoot = styled('span', {
+L79 name: 'MuiSkeleton',
+L80 slot: 'Root',
+L99 '&::after': {
+L111   height: '1.2em',
+L112 variants: [
+L114 props: {
+L117 style: {
+L118   marginTop: 0,
+L119   marginBottom: 0,
+L120   height: 'auto',
+L123   borderRadius: `${radiusValue}${radiusUnit}/${Math.round((radiusValue / 0.6) * 10) / 10}${
+L126 '&:empty:before': {
+L132 props: {
+L135 style: {
+L136   borderRadius: '50%',
+L140 props: {
+L143 style: {
+L144   borderRadius: (theme.vars || theme).shape.borderRadius,
+L149 style: {
+L157 style: {
+L158   maxWidth: 'fit-content',
+L163 style: {
+L164   height: 'auto',
+L168 props: {
+L178 props: {
+L186 props: {
+L189 style: {
+L194 '&::after': {
+L204   bottom: 0,
+L205   left: 0,
+L206   right: 0,
+L207   top: 0,
+L212 props: {
+L216 '&::after': {
+L224 props: {
+L249 const ownerState = {

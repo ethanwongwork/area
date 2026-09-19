@@ -1,0 +1,128 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/slider/_slider.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L30 @mixin slider {
+L31 .#{$prefix}--slider-container {
+L35   gap: 1rem;
+L39 .#{$prefix}--slider {
+L41   padding: $spacing-05 0;   // spacing-05=16px
+L43   inline-size: 100%;
+L44   max-inline-size: convert.to-rem(640px);
+L45   min-inline-size: convert.to-rem(200px);
+L47 .#{$prefix}--slider-container--two-handles & {
+L48   margin-inline: convert.to-rem(4px);
+L52 .#{$prefix}--slider__range-label {
+L53   @include type-style('body-compact-01');   // body-compact-01=14/18
+L59 .#{$prefix}--slider__track {
+L62   block-size: convert.to-rem(2px);
+L63   inline-size: 100%;
+L67 .#{$prefix}--slider__track:before {
+L71   block-size: convert.to-rem(4px);
+L73   inline-size: convert.to-rem(2px);
+L74   inset-block-start: convert.to-rem(-5px);
+L75   inset-inline-start: 50%;
+L79 .#{$prefix}--slider__filled-track {
+L82   block-size: convert.to-rem(2px);
+L83   inline-size: 100%;
+L90 .#{$prefix}--slider__thumb-wrapper {
+L93   block-size: convert.to-rem(14px);
+L94   inline-size: convert.to-rem(14px);
+L96   @include custom-property.declaration('tooltip-padding-inline', $spacing-03);   // spacing-03=8px
+L97   @include custom-property.declaration('popover-offset', $spacing-03);   // spacing-03=8px
+L99 .#{$prefix}--slider-container--rtl & {
+L105 .#{$prefix}--slider__thumb-wrapper--upper {
+L106   block-size: 24px;
+L107   inline-size: 16px;
+L110   custom-property.get-var('popover-caret-height', $spacing-03)   // spacing-03=8px
+L114 .#{$prefix}--slider__thumb-wrapper--lower {
+L125   inset-inline-start: revert;
+L133 .#{$prefix}--slider-container--rtl .#{$prefix}--slider__thumb-wrapper--lower {
+L151 .#{$prefix}--slider__thumb-wrapper--upper {
+L169 .#{$prefix}--slider-container--rtl .#{$prefix}--slider__thumb-wrapper--upper {
+L187 .#{$prefix}--slider__thumb {
+L189   border-radius: 50%;
+L192   inset 0 0 0 1px transparent,
+L193   inset 0 0 0 2px transparent;
+L194   inset: 0;
+L202 &:hover {
+L208 &:focus {
+L211   inset 0 0 0 2px $interactive,
+L212   inset 0 0 0 3px $layer;
+L217 &:active {
+L218   box-shadow: inset 0 0 0 2px $interactive;
+L223 .#{$prefix}--slider__thumb-icon {
+L227 .#{$prefix}--slider__thumb-icon--focus {
+L233 .#{$prefix}--slider__thumb--upper {
+L235   border-radius: unset;
+L238   inset: 0;
+L241 &::before {
+L246   block-size: convert.to-rem(2px);
+L248   inline-size: convert.to-rem(6px);
+L249   inset-block-start: calc(50% - #{convert.to-rem(2px) * 0.5});
+L250   inset-inline-end: 0;
+L254 &:hover {
+L257 .#{$prefix}--slider__thumb-icon {
+L263 &:active {
+L268 &:focus {
+L273 .#{$prefix}--slider__thumb-icon {
+L278 .#{$prefix}--slider__thumb-icon--focus {
+L285 .#{$prefix}--slider__thumb--upper:focus::before {
+L286   inline-size: 100%;
+L289 .#{$prefix}--slider__thumb--upper {
+L292 &::before {
+L293   inset-inline: 0 auto;
+L297 &:focus {
+L302 &:hover {
+L308 .#{$prefix}--slider__input {
+L312 .#{$prefix}--slider-text-input-wrapper {
+L316 .#{$prefix}--slider-text-input-wrapper--hidden {
+L321 .#{$prefix}-slider-text-input {
+L324   block-size: convert.to-rem(40px);
+L325   inline-size: convert.to-rem(64px);
+L328 &::-webkit-inner-spin-button {
+L341 .#{$prefix}--slider-text-input--warn {
+L342   inline-size: 6rem;
+L343   padding-inline-end: $spacing-09;   // spacing-09=48px
+L346 .#{$prefix}--slider__invalid-icon {
+L350   inset-block-start: 50%;
+L351   inset-inline-end: $spacing-05;   // spacing-05=16px
+L355 .#{$prefix}--slider__validation-msg.#{$prefix}--form-requirement {
+L358   max-block-size: 100%;
+L361 .#{$prefix}--slider__validation-msg--invalid {
+L365 .#{$prefix}--slider__invalid-icon.#{$prefix}--slider__invalid-icon--warning {
+L369 .#{$prefix}--slider__invalid-icon--warning path:first-of-type {
+L381 .#{$prefix}--slider--disabled.#{$prefix}--slider {
+L385 .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb {
+L389 &:hover {
+L395 &:focus {
+L402 &:active {
+L410 .#{$prefix}--slider--disabled .#{$prefix}--slider__thumb--upper {
+L414 &:focus {
+L420 &:hover {
+L426 .#{$prefix}--slider__thumb-icon {
+L442 .#{$prefix}--slider--disabled ~ .#{$prefix}--slider-text-input {
+L443   border: none;
+L450 &:focus {
+L456 &:hover {
+L464 .#{$prefix}--slider--readonly {
+L468 .#{$prefix}--slider-container--readonly .#{$prefix}--slider__thumb {
+L469   block-size: 0;
+L470   inline-size: 0;
+L473 &::after {
+L478 .#{$prefix}--slider-container--readonly .#{$prefix}--slider-text-input {
+L482 .#{$prefix}--slider__status-msg.#{$prefix}--form-requirement {
+L485   max-block-size: 100%;
+L490 .#{$prefix}--slider__range-label {
+L493   block-size: convert.to-rem(12px);
+L494   inline-size: convert.to-rem(20px);
+L498 .#{$prefix}--slider__track {
+L503 .#{$prefix}--slider-container.#{$prefix}--skeleton {
+L504 .#{$prefix}--slider__thumb-wrapper {
+L505   inset-inline-start: 50%;
+L508 .#{$prefix}--slider__thumb {
+L513 .#{$prefix}--slider__thumb-wrapper--lower {
+L514   inset-inline-start: 0;
+L517 .#{$prefix}--slider__thumb-wrapper--upper {
+L518   inset-inline-start: 100%;
+L523 .#{$prefix}--popover-container.#{$prefix}--slider__thumb-wrapper {
+L529 .#{$prefix}--slider__thumb {
+L532 .#{$prefix}--slider__thumb:focus {
+L535 .#{$prefix}--slider__track {

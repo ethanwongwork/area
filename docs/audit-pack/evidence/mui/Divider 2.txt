@@ -1,0 +1,57 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Divider/Divider.js
+L14 const slots = {
+L31 const DividerRoot = styled('div', {
+L32 name: 'MuiDivider',
+L33 slot: 'Root',
+L54   margin: 0, // Reset browser default style.
+L56   borderWidth: 0,
+L60 variants: [
+L62 props: {
+L65 style: {
+L67   bottom: 0,
+L68   left: 0,
+L69   width: '100%',
+L73 props: {
+L76 style: {
+L77   marginLeft: 72,
+L81 props: {
+L85 style: {
+L86   marginLeft: theme.spacing(2),
+L87   marginRight: theme.spacing(2),
+L91 props: {
+L95 style: {
+L96   marginTop: theme.spacing(1),
+L97   marginBottom: theme.spacing(1),
+L101 props: {
+L104 style: {
+L105   height: '100%',
+L111 props: {
+L114 style: {
+L116   height: 'auto',
+L121 style: {
+L124   border: 0,
+L135 style: {
+L137   width: '100%',
+L145 style: {
+L148   height: '100%',
+L157 style: {
+L158 '&::before': {
+L159   width: '90%',
+L161 '&::after': {
+L162   width: '10%',
+L169 style: {
+L170 '&::before': {
+L171   width: '10%',
+L173 '&::after': {
+L174   width: '90%',
+L182 const DividerWrapper = styled('span', {
+L183 name: 'MuiDivider',
+L184 slot: 'Wrapper',
+L193   paddingLeft: `calc(${theme.spacing(1)} * 1.2)`,
+L194   paddingRight: `calc(${theme.spacing(1)} * 1.2)`,
+L196 variants: [
+L198 props: {
+L201 style: {
+L202   paddingTop: `calc(${theme.spacing(1)} * 1.2)`,
+L203   paddingBottom: `calc(${theme.spacing(1)} * 1.2)`,
+L225 const ownerState = {

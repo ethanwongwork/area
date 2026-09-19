@@ -1,0 +1,12 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/bubble.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot bubble-group]
+  L10 min-w-0=0px gap-2=8px
+  L17 max-w-[80%] min-w-0=0px gap-1=4px
+  L24 [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]
+  L28 *:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]
+  L32 *:data-[slot=bubble-content]:rounded-none=0px *:data-[slot=bubble-content]:p-0=0px
+  [slot bubble]
+  [slot bubble-content]
+  L76 min-w-0=0px rounded-xl=14px border=1px px-3=12px py-2=8px text-sm=14/20px leading-relaxed [button,a]:focus-visible:ring-3=3px
+  L85 shrink-0 gap-1=4px rounded-full=9999px px-1.5=6px py-0.5=2px text-sm=14/20px ring-3=3px has-[button]:p-0=0px
+  [slot bubble-reactions]

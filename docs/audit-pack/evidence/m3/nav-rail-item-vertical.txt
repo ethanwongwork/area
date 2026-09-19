@@ -1,0 +1,6 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-nav-rail-item-vertical.scss
+active-indicator-height: 32px
+active-indicator-width: 56px
+icon-label-space: 4px
+leading-space: 16px
+trailing-space: 16px

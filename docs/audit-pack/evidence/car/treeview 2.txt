@@ -1,0 +1,91 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/treeview/_treeview.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L22 @mixin treeview {
+L23 .#{$prefix}--tree {
+L29 .#{$prefix}--tree-node {
+L32   padding-inline-start: $spacing-05;   // spacing-05=16px
+L34 &:focus {
+L39 &:hover {
+L45 .#{$prefix}--tree-node--hidden {
+L49 .#{$prefix}--tree-node__children {
+L55 .#{$prefix}--tree-node--with-icon .#{$prefix}--tree-node {
+L56   margin-inline-start: $spacing-03;   // spacing-03=8px
+L59 .#{$prefix}--tree-node:focus > .#{$prefix}--tree-node__label {
+L64   inline-size: auto;
+L66 .#{$prefix}--tree-node--disabled:focus > .#{$prefix}--tree-node__label {
+L70 .#{$prefix}--tree-node--disabled {
+L77 .#{$prefix}--tree-node--disabled .#{$prefix}--tree-node__icon {
+L85 .#{$prefix}--tree-node__label__details {
+L95 .#{$prefix}--tree-node__icon {
+L100 .#{$prefix}--tree-parent-node__toggle-icon:hover {
+L109 &:not(.#{$prefix}--tree-node--disabled) {
+L120   padding-inline-start: $spacing-05;   // spacing-05=16px
+L124 .#{$prefix}--tree-node__label {
+L125   @include type-style('body-compact-01');   // body-compact-01=14/18
+L132   inline-size: 100%;
+L133   min-block-size: convert.to-rem(32px);
+L134   padding-inline-end: 1rem;
+L137 &:hover {
+L145 .#{$prefix}--tree-node__label {
+L146   padding-block: convert.to-rem(7px) convert.to-rem(7px);
+L151 .#{$prefix}--tree-node__label:hover .#{$prefix}--tree-node__label__details {
+L157 .#{$prefix}--tree-node__label:hover .#{$prefix}--tree-node__icon {
+L162 .#{$prefix}--tree-leaf-node {
+L164   padding-inline-start: $spacing-08;   // spacing-08=40px
+L167 .#{$prefix}--tree-leaf-node.#{$prefix}--tree-node--with-icon {
+L168   padding-inline-start: $spacing-07;   // spacing-07=32px
+L172 .#{$prefix}--tree-leaf-node {
+L173   padding-inline-start: $spacing-06;   // spacing-06=24px
+L176 .#{$prefix}--tree-node__label__details {
+L179   min-inline-size: 0;
+L182 .#{$prefix}--tree-node--with-icon .#{$prefix}--tree-parent-node__toggle {
+L183   margin-inline-end: 0;
+L186 .#{$prefix}--tree-parent-node__toggle {
+L189   border: 0;
+L190   block-size: convert.to-rem(24px);
+L191   inline-size: convert.to-rem(24px);
+L192   margin-inline: -$spacing-02 $spacing-02;   // spacing-02=4px spacing-02=4px
+L193   padding-inline-start: $spacing-02;   // spacing-02=4px
+L196 &:hover {
+L201 &:focus {
+L206 .#{$prefix}--tree-parent-node__toggle-icon {
+L212 .#{$prefix}--tree-parent-node__toggle-icon--expanded {
+L216 .#{$prefix}--tree-node__icon {
+L218   margin-inline: $spacing-03 $spacing-03;   // spacing-03=8px spacing-03=8px
+L219   min-block-size: 1rem;
+L220   min-inline-size: 1rem;
+L225 .#{$prefix}--tree-node__icon {
+L226   margin-inline-start: $spacing-02;   // spacing-02=4px
+L229 .#{$prefix}--tree-node--selected > .#{$prefix}--tree-node__label {
+L234 &:hover {
+L245 .#{$prefix}--tree-node__icon {
+L249 .#{$prefix}--tree-node--active > .#{$prefix}--tree-node__label {
+L252 &::before {
+L255   block-size: 100%;
+L257   inline-size: convert.to-rem(4px);
+L258   inset-block-start: 0;
+L259   inset-inline-start: 0;
+L264 .#{$prefix}--tree--xs .#{$prefix}--tree-node__label {
+L265   min-block-size: convert.to-rem(24px);
+L270 .#{$prefix}--tree-node__label {
+L271   padding: 0;
+L274 .#{$prefix}--tree--xs .#{$prefix}--tree-parent-node__toggle {
+L275   margin-block-start: 0;
+L277 .#{$prefix}--tree-node__label__text {
+L278   @include type-style('body-compact-01');   // body-compact-01=14/18
+L282   line-height: 1.2;
+L283   padding-inline-start: convert.to-rem(4px);
+L288 .#{$prefix}--tree-node__label .#{$prefix}--icon-tooltip {
+L289   inline-size: 100%;
+L294 .#{$prefix}--btn--icon-only {
+L295   padding: 0;
+L296   border: none;
+L298   block-size: auto;
+L300   inline-size: 100%;
+L301   min-block-size: unset;
+L308 .#{$prefix}--tree-node__label__text {
+L310   inline-size: 100%;
+L313 .#{$prefix}--tree-node__label .#{$prefix}--tooltip-content {
+L314   padding: 1rem;
+L317 .#{$prefix}--tree-node__label .#{$prefix}--popover-container {
+L318   inline-size: 100%;
+L323 .#{$prefix}--btn--ghost:focus {

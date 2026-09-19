@@ -1,0 +1,77 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-spinner/library/src/components/Spinner/useSpinnerStyles.styles.ts
+L4 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L20 strokeWidth: '--fui-Spinner--strokeWidth',
+L23 const useRootBaseClassName = makeResetStyles({
+L27 lineHeight: '0',
+L28 gap: '8px',
+L29 overflow: 'hidden', // prevents height changes from rotating children
+L30 minWidth: 'min-content',
+L33 const useRootStyles = makeStyles({
+L34 vertical: {
+L39 const useSpinnerBaseClassName = makeResetStyles({
+L41 flexShrink: 0,
+L46 `transparent calc(100% - var(${vars.strokeWidth}) - 1px), ` +
+L47 `white calc(100% - var(${vars.strokeWidth})) calc(100% - 1px), ` +
+L58 animationDuration: '1.5s',
+L61 animationName: {
+L67 animationDuration: '1.8s',
+L75 const useSpinnerTailBaseClassName = makeResetStyles({
+L78 width: '100%',
+L79 height: '100%',
+L86 width: '100%',
+L87 height: '100%',
+L92 animationDuration: '1.5s',
+L95 animationName: {
+L101 animationName: {
+L108 animationName: {
+L115 animationIterationCount: '0',
+L123 const useSpinnerStyles = makeStyles({
+L124 inverted: {
+L129 rtlTail: {
+L140 height: '16px',
+L141 width: '16px',
+L142 [vars.strokeWidth]: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L145 tiny: {
+L146 height: '20px',
+L147 width: '20px',
+L148 [vars.strokeWidth]: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L152 height: '24px',
+L153 width: '24px',
+L154 [vars.strokeWidth]: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L157 small: {
+L158 height: '28px',
+L159 width: '28px',
+L160 [vars.strokeWidth]: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L163 medium: {
+L164 height: '32px',
+L165 width: '32px',
+L166 [vars.strokeWidth]: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L169 large: {
+L170 height: '36px',
+L171 width: '36px',
+L172 [vars.strokeWidth]: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L176 height: '40px',
+L177 width: '40px',
+L178 [vars.strokeWidth]: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L181 huge: {
+L182 height: '44px',
+L183 width: '44px',
+L184 [vars.strokeWidth]: tokens.strokeWidthThickest,   // strokeWidthThickest=4px
+L188 const useLabelStyles = makeStyles({
+L189 inverted: {
+L194 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L197 tiny: {
+L198 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L202 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L205 small: {
+L206 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L209 medium: {
+L210 ...typographyStyles.subtitle2,   // typographyStyles.subtitle2=16px/22px w600
+L213 large: {
+L214 ...typographyStyles.subtitle2,   // typographyStyles.subtitle2=16px/22px w600
+L218 ...typographyStyles.subtitle2,   // typographyStyles.subtitle2=16px/22px w600
+L221 huge: {
+L222 ...typographyStyles.subtitle1,   // typographyStyles.subtitle1=20px/28px w600
+L230 const { labelPosition, size, appearance } = state;
+L252 spinnerStyles[size],
+L270 labelStyles[size],

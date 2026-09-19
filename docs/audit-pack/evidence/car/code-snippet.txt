@@ -1,0 +1,152 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/code-snippet/_code-snippet.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L35 @mixin code-snippet {
+L36 .#{$prefix}--snippet {
+L42 .#{$prefix}--btn.#{$prefix}--snippet-btn--expand {
+L47 .#{$prefix}--snippet--disabled .#{$prefix}--copy-btn {
+L55 .#{$prefix}--snippet--disabled .#{$prefix}--copy-btn:hover {
+L65 .#{$prefix}--icon-chevron--down {
+L69 .#{$prefix}--snippet code {
+L70   @include type-style('code-01');   // code-01=12/16
+L74 .#{$prefix}--snippet--inline {
+L79   padding: 0;
+L80   border: 1px solid transparent;
+L81   border-radius: 4px;
+L87 &:hover {
+L92 &:active {
+L96 &:focus {
+L97   border: 1px solid $focus;
+L101 &::before {
+L106   border: none;
+L109 .#{$prefix}--copy-btn__feedback {
+L115   margin: auto;
+L122 .#{$prefix}--copy-btn__feedback {
+L128 .#{$prefix}--copy-btn__feedback {
+L134 .#{$prefix}--copy-btn__feedback {
+L138 .#{$prefix}--snippet--inline code {
+L139   padding: 0 $spacing-03;   // spacing-03=8px
+L142 .#{$prefix}--snippet--inline.#{$prefix}--snippet--no-copy {
+L146 &:hover {
+L154 .#{$prefix}--snippet--light.#{$prefix}--snippet--inline.#{$prefix}--snippet--no-copy:hover {
+L161 .#{$prefix}--snippet--single {
+L166   block-size: $spacing-08;   // spacing-08=40px
+L167   padding-inline-end: $spacing-08;   // spacing-08=40px
+L170 .#{$prefix}--snippet--single.#{$prefix}--snippet--no-copy {
+L171   padding: 0;
+L173 &::after {
+L174   inset-inline-end: $spacing-05;   // spacing-05=16px
+L178 .#{$prefix}--snippet--single .#{$prefix}--snippet-container {
+L182   block-size: 100%;
+L183   min-inline-size: 0;
+L185   padding-inline-start: $spacing-05;   // spacing-05=16px
+L187 &:focus {
+L192 .#{$prefix}--snippet--single pre {
+L193   @include type-style('code-01');   // code-01=12/16
+L195   padding-inline-end: $spacing-07;   // spacing-07=32px
+L200 .#{$prefix}--snippet--inline code {
+L205 .#{$prefix}--snippet--multi {
+L209   padding: $spacing-05;   // spacing-05=16px
+L213 .#{$prefix}--snippet--multi .#{$prefix}--snippet-container {
+L216   max-block-size: 100%;
+L217   min-block-size: 100%;
+L221 &:focus {
+L230 .#{$prefix}--snippet-container {
+L231   padding-block-end: $spacing-05;   // spacing-05=16px
+L235 .#{$prefix}--snippet--multi.#{$prefix}--snippet--wraptext pre {
+L240 .#{$prefix}--snippet--multi .#{$prefix}--snippet-container pre {
+L242   padding-block-end: $spacing-06;   // spacing-06=24px
+L243   padding-inline-end: $spacing-06;   // spacing-06=24px
+L249   padding-inline-end: 0;
+L253 .#{$prefix}--snippet--multi.#{$prefix}--snippet--has-right-overflow::after {
+L257 .#{$prefix}--snippet--multi .#{$prefix}--snippet-container pre code {
+L262 .#{$prefix}--snippet__icon {
+L263   block-size: convert.to-rem(16px);
+L265   inline-size: convert.to-rem(16px);
+L269 .#{$prefix}--btn > .#{$prefix}--snippet__icon {
+L270   margin-block-start: 0;
+L273 .#{$prefix}--copy-btn {
+L280   padding: 0;
+L281   border: none;
+L286 &:focus {
+L294 .#{$prefix}--snippet .#{$prefix}--popover-container {
+L298   inset-block-start: 0;
+L299   inset-inline-end: 0;
+L305 .#{$prefix}--snippet--inline.#{$prefix}--btn {
+L306   block-size: 1.25rem;
+L307   inline-size: initial;
+L308   max-inline-size: unset;
+L309   min-block-size: 1.25rem;
+L310   padding-inline: 0;
+L314 .#{$prefix}--snippet--inline.#{$prefix}--btn.#{$prefix}--btn--primary:hover {
+L321 .#{$prefix}--popover-container {
+L322   inset-block-start: 0.5rem;
+L323   inset-inline-end: 0.5rem;
+L326 .#{$prefix}--snippet--multi .#{$prefix}--copy-btn {
+L331 .#{$prefix}--snippet-btn--expand {
+L332   @include type-style('body-compact-01');   // body-compact-01=14/18
+L340   padding: $spacing-03 $spacing-05;   // spacing-03=8px spacing-05=16px
+L341   border: 0;
+L343   block-size: convert.to-rem(32px);
+L345   inset-block-end: 0;
+L346   inset-inline-end: 0;
+L349 .#{$prefix}--snippet-btn--expand .#{$prefix}--snippet-btn--text {
+L351   inset-block-start: convert.to-rem(-1px);
+L354 .#{$prefix}--snippet-btn--expand--hide.#{$prefix}--snippet-btn--expand {
+L358 .#{$prefix}--snippet-btn--expand .#{$prefix}--icon-chevron--down {
+L360   margin-inline-start: $spacing-03;   // spacing-03=8px
+L366 .#{$prefix}--snippet-btn--expand:hover {
+L372 .#{$prefix}--snippet-btn--expand:active {
+L376 .#{$prefix}--snippet-btn--expand:focus {
+L384 .#{$prefix}--icon-chevron--down {
+L393 .#{$prefix}--snippet--light .#{$prefix}--copy-btn {
+L402 .#{$prefix}--snippet--light .#{$prefix}--copy-btn:hover {
+L411 .#{$prefix}--snippet--light .#{$prefix}--copy-btn:active {
+L416 .#{$prefix}--snippet.#{$prefix}--skeleton .#{$prefix}--snippet-container {
+L417   block-size: 100%;
+L418   inline-size: 100%;
+L421 .#{$prefix}--snippet-button .#{$prefix}--btn--copy__feedback {
+L423   inset-block-start: convert.to-rem(50.8px);
+L424   inset-inline: 50% auto;
+L426 &::before {
+L427   inset-block-start: 0;
+L430 &::after {
+L431   inset-block-start: convert.to-rem(-4px);
+L437 .#{$prefix}--btn--copy__feedback {
+L439   inset-block-start: convert.to-rem(42.8px);
+L442 .#{$prefix}--snippet--inline .#{$prefix}--btn--copy__feedback {
+L445   inset-block-start: calc(100% - #{convert.to-rem(4px)});
+L446   inset-inline: 50% auto;
+L450 .#{$prefix}--snippet--single .#{$prefix}--snippet-container {
+L453   #000000 calc(100% - #{$spacing-07}),   // spacing-07=32px
+L459 .#{$prefix}--snippet--multi {
+L463 .#{$prefix}--snippet--multi .#{$prefix}--snippet-container {
+L464   inline-size: 100%;
+L468   #000000 calc(100% - #{$spacing-07}),   // spacing-07=32px
+L473   #000000 calc(100% - #{$spacing-05}),   // spacing-05=16px
+L482   #000000 calc(100% - #{$spacing-07}),   // spacing-07=32px
+L490   #000000 calc(100% - #{$spacing-07}),   // spacing-07=32px
+L495   #000000 calc(100% - #{$spacing-05}),   // spacing-05=16px
+L501 .#{$prefix}--snippet--multi:focus-within .#{$prefix}--snippet-container {
+L505 .#{$prefix}--snippet--multi.#{$prefix}--skeleton {
+L506   block-size: convert.to-rem(98px);
+L509 .#{$prefix}--snippet--single.#{$prefix}--skeleton {
+L510   block-size: convert.to-rem(56px);
+L513 .#{$prefix}--snippet.#{$prefix}--skeleton span {
+L517   block-size: 1rem;
+L518   inline-size: 100%;
+L519   margin-block-start: 0.5rem;
+L521 &:first-child {
+L522   margin: 0;
+L525 &:nth-child(2) {
+L526   inline-size: 85%;
+L529 &:nth-child(3) {
+L530   inline-size: 95%;
+L535 .#{$prefix}--snippet-container {
+L536   padding-block-end: 0;
+L540 .#{$prefix}--snippet--inline:focus {
+L545 .#{$prefix}--snippet--multi {
+### Carbon styles @ 8472cca  packages/styles/scss/components/code-snippet/_mixins.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L15 @mixin bx--snippet {
+L16   @include type-style('code-01');   // code-01=12/16
+L20   inline-size: 100%;
+L21   max-inline-size: convert.to-rem(768px);
+L23   min-inline-size: 0;

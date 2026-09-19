@@ -1,0 +1,58 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-checkbox/library/src/components/Checkbox/useCheckboxStyles.styles.ts
+L23 // The indicator size is used by the indicator and label styles
+L24 const indicatorSizeMedium = '16px';
+L25 const indicatorSizeLarge = '20px';
+L27 const useRootBaseClassName = makeResetStyles({
+L31 maxWidth: 'fit-content',
+L37 const useRootStyles = makeStyles({
+L38 unchecked: {
+L50 checked: {
+L67 mixed: {
+L83 disabled: {
+L97 const useInputBaseClassName = makeResetStyles({
+L100 height: '100%',
+L101 margin: 0,
+L102 opacity: 0,
+L104 top: 0,
+L105 // Calculate the width of the hidden input by taking into account the size of the indicator + the padding around it.
+L107 width: `calc(${indicatorSizeMedium} + 2 * ${tokens.spacingHorizontalS})`,   // spacingHorizontalS=8px
+L110 const useInputStyles = makeStyles({
+L111 before: {
+L112 right: 0,
+L114 after: {
+L115 left: 0,
+L118 large: {
+L119 width: `calc(${indicatorSizeLarge} + 2 * ${tokens.spacingHorizontalS})`,   // spacingHorizontalS=8px
+L123 const useIndicatorBaseClassName = makeResetStyles({
+L126 flexShrink: 0,
+L137 borderWidth: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L138 borderRadius: tokens.borderRadiusSmall,   // borderRadiusSmall=2px
+L139 margin: tokens.spacingVerticalS + ' ' + tokens.spacingHorizontalS,   // spacingVerticalS=8px spacingHorizontalS=8px
+L143 fontSize: '12px',
+L144 height: indicatorSizeMedium,
+L145 width: indicatorSizeMedium,
+L148 const useIndicatorStyles = makeStyles({
+L149 large: {
+L150 fontSize: '16px',
+L151 height: indicatorSizeLarge,
+L152 width: indicatorSizeLarge,
+L155 circular: { borderRadius: tokens.borderRadiusCircular },   // borderRadiusCircular=10000px
+L159 const useLabelStyles = makeStyles({
+L160 base: {
+L164 padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalS}`,   // spacingVerticalS=8px spacingHorizontalS=8px
+L167 before: {
+L168 paddingRight: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L170 after: {
+L171 paddingLeft: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L174 // Use a (negative) margin to account for the difference between the indicator's height and the label's line height.
+L175 // This prevents the label from expanding the height of the checkbox, but preserves line height if the label wraps.
+L176 medium: {
+L177 marginTop: `calc((${indicatorSizeMedium} - ${tokens.lineHeightBase300}) / 2)`,   // lineHeightBase300=20px
+L178 marginBottom: `calc((${indicatorSizeMedium} - ${tokens.lineHeightBase300}) / 2)`,   // lineHeightBase300=20px
+L180 large: {
+L181 marginTop: `calc((${indicatorSizeLarge} - ${tokens.lineHeightBase300}) / 2)`,   // lineHeightBase300=20px
+L182 marginBottom: `calc((${indicatorSizeLarge} - ${tokens.lineHeightBase300}) / 2)`,   // lineHeightBase300=20px
+L190 const { checked, disabled, labelPosition, shape, size } = state;
+L214 size === 'large' && inputStyles.large,
+L226 size === 'large' && indicatorStyles.large,
+L238 labelStyles[size],

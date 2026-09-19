@@ -1,0 +1,27 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/icon-indicator/_icon-indicator.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L20 @mixin icon-indicator {
+L21 .#{$prefix}--icon-indicator {
+L22   @include type-style('body-compact-01');   // body-compact-01=14/18
+L27   gap: $spacing-03;   // spacing-03=8px
+L28   line-height: unset;
+L31 .#{$prefix}--icon-indicator svg {
+L35 .#{$prefix}--icon-indicator--20 {
+L36   @include type-style('body-compact-02');   // body-compact-02=16/22
+L38   line-height: unset;
+L41 .#{$prefix}--icon-indicator--failed {
+L45 .#{$prefix}--icon-indicator--caution-major {
+L53 .#{$prefix}--icon-indicator--caution-minor {
+L61 .#{$prefix}--icon-indicator--undefined {
+L65 .#{$prefix}--icon-indicator--succeeded {
+L69 .#{$prefix}--icon-indicator--normal {
+L73 .#{$prefix}--icon-indicator--in-progress {
+L77 .#{$prefix}--icon-indicator--incomplete {
+L81 .#{$prefix}--icon-indicator--not-started {
+L85 .#{$prefix}--icon-indicator--pending {
+L89 .#{$prefix}--icon-indicator--unknown {
+L93 .#{$prefix}--icon-indicator--informative {
+L97 .#{$prefix}--icon-indicator__button {
+L98   @include button-reset.reset($width: false);
+L102 &:focus {
+L107 .#{$prefix}--icon-indicator .#{$prefix}--definition-tooltip {
+L108   padding-block: $spacing-01;   // spacing-01=2px

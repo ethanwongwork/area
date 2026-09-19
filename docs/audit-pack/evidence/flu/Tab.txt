@@ -1,0 +1,200 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tabs/library/src/components/Tab/useTabStyles.styles.ts
+L5 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L30 const useRootStyles = makeStyles({
+L31 root: {
+L34 flexShrink: 0,
+L41 button: {
+L44 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L47 flexShrink: 0,
+L52 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L58 horizontal: {
+L61 vertical: {
+L64 smallHorizontal: {
+L65 columnGap: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L66 padding: `${tokens.spacingVerticalSNudge} ${tokens.spacingHorizontalSNudge}`,   // spacingVerticalSNudge=6px spacingHorizontalSNudge=6px
+L68 smallVertical: {
+L69 // horizontal spacing is deliberate. This is the gap between icon and content.
+L70 columnGap: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L71 padding: `${tokens.spacingVerticalXXS} ${tokens.spacingHorizontalSNudge}`,   // spacingVerticalXXS=2px spacingHorizontalSNudge=6px
+L73 mediumHorizontal: {
+L74 columnGap: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L75 padding: `${tokens.spacingVerticalM} ${tokens.spacingHorizontalMNudge}`,   // spacingVerticalM=12px spacingHorizontalMNudge=10px
+L77 mediumVertical: {
+L78 // horizontal spacing is deliberate. This is the gap between icon and content.
+L79 columnGap: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L80 padding: `${tokens.spacingVerticalSNudge} ${tokens.spacingHorizontalMNudge}`,   // spacingVerticalSNudge=6px spacingHorizontalMNudge=10px
+L82 largeHorizontal: {
+L83 columnGap: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L84 padding: `${tokens.spacingVerticalL} ${tokens.spacingHorizontalMNudge}`,   // spacingVerticalL=16px spacingHorizontalMNudge=10px
+L86 largeVertical: {
+L87 // horizontal spacing is deliberate. This is the gap between icon and content.
+L88 columnGap: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L89 padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalMNudge}`,   // spacingVerticalS=8px spacingHorizontalMNudge=10px
+L91 transparent: {
+L118 subtle: {
+L145 disabledCursor: {
+L148 disabled: {
+L158 selected: {
+L180 const useCircularAppearanceStyles = makeStyles({
+L181 base: {
+L182 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L183 border: `solid ${tokens.strokeWidthThin} ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L191 small: {
+L192 paddingBlock: `calc(${tokens.spacingVerticalXXS} - ${tokens.strokeWidthThin})`,   // spacingVerticalXXS=2px strokeWidthThin=1px
+L194 medium: {
+L195 paddingBlock: `calc(${tokens.spacingVerticalSNudge} - ${tokens.strokeWidthThin})`,   // spacingVerticalSNudge=6px strokeWidthThin=1px
+L197 large: {
+L198 paddingBlock: `calc(${tokens.spacingVerticalS} - ${tokens.strokeWidthThin})`,   // spacingVerticalS=8px strokeWidthThin=1px
+L200 subtle: {
+L205 border: `solid ${tokens.strokeWidthThin} ${tokens.colorNeutralStroke1Hover}`,   // strokeWidthThin=1px
+L210 border: `solid ${tokens.strokeWidthThin} ${tokens.colorNeutralStroke1Pressed}`,   // strokeWidthThin=1px
+L214 border: `solid ${tokens.strokeWidthThin} Canvas`,   // strokeWidthThin=1px
+L217 subtleSelected: {
+L219 border: `solid ${tokens.strokeWidthThin} ${tokens.colorCompoundBrandStroke}`,   // strokeWidthThin=1px
+L223 border: `solid ${tokens.strokeWidthThin} ${tokens.colorCompoundBrandStrokeHover}`,   // strokeWidthThin=1px
+L228 border: `solid ${tokens.strokeWidthThin} ${tokens.colorCompoundBrandStrokePressed}`,   // strokeWidthThin=1px
+L232 border: `solid ${tokens.strokeWidthThin} Highlight`,   // strokeWidthThin=1px
+L235 subtleDisabled: {
+L239 subtleDisabledSelected: {
+L241 border: `solid ${tokens.strokeWidthThin} ${tokens.colorNeutralStrokeDisabled}`,   // strokeWidthThin=1px
+L244 filled: {
+L271 filledSelected: {
+L295 filledDisabled: {
+L299 filledDisabledSelected: {
+L301 border: `solid ${tokens.strokeWidthThin} ${tokens.colorNeutralStrokeDisabled}`,   // strokeWidthThin=1px
+L309 const useFocusStyles = makeStyles({
+L315 ...shorthands.borderColor('transparent'),
+L316 outlineWidth: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L321 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorStrokeFocus2}   // strokeWidthThick=2px
+L323 zIndex: 1,
+L329 ...shorthands.borderColor('transparent'),
+L330 outlineWidth: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L335 0 0 0 ${tokens.strokeWidthThick} ${tokens.colorStrokeFocus2},   // strokeWidthThick=2px
+L336 0 0 0 ${tokens.strokeWidthThin} ${tokens.colorNeutralStrokeOnBrand} inset   // strokeWidthThin=1px
+L338 zIndex: 1,
+L345 const usePendingIndicatorStyles = makeStyles({
+L346 base: {
+L349 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L355 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L368 disabled: {
+L384 smallHorizontal: {
+L386 bottom: 0,
+L387 height: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L388 left: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L389 right: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L392 smallVertical: {
+L394 bottom: tokens.spacingVerticalXS,   // spacingVerticalXS=4px
+L395 left: 0,
+L396 top: tokens.spacingVerticalXS,   // spacingVerticalXS=4px
+L397 width: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L400 mediumHorizontal: {
+L402 bottom: 0,
+L403 height: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L404 left: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L405 right: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L408 mediumVertical: {
+L410 bottom: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L411 left: 0,
+L412 top: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L413 width: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L416 largeHorizontal: {
+L418 bottom: 0,
+L419 height: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L420 left: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L421 right: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L424 largeVertical: {
+L426 bottom: tokens.spacingVerticalMNudge,   // spacingVerticalMNudge=10px
+L427 left: 0,
+L428 top: tokens.spacingVerticalMNudge,   // spacingVerticalMNudge=10px
+L429 width: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L434 const useActiveIndicatorStyles = makeStyles({
+L435 base: {
+L438 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L443 selected: {
+L465 disabled: {
+L470 smallHorizontal: {
+L472 bottom: 0,
+L473 height: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L474 left: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L475 right: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L478 smallVertical: {
+L480 bottom: tokens.spacingVerticalXS,   // spacingVerticalXS=4px
+L481 left: '0',
+L482 top: tokens.spacingVerticalXS,   // spacingVerticalXS=4px
+L483 width: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L486 mediumHorizontal: {
+L488 bottom: '0',
+L489 height: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L490 left: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L491 right: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L494 mediumVertical: {
+L496 bottom: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L497 left: 0,
+L498 top: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L499 width: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L502 largeHorizontal: {
+L504 bottom: 0,
+L505 height: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L506 left: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L507 right: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L510 largeVertical: {
+L512 bottom: tokens.spacingVerticalMNudge,   // spacingVerticalMNudge=10px
+L513 left: 0,
+L514 top: tokens.spacingVerticalMNudge,   // spacingVerticalMNudge=10px
+L515 width: tokens.strokeWidthThicker,   // strokeWidthThicker=3px
+L523 const useIconStyles = makeStyles({
+L524 base: {
+L525 gridColumnStart: 1,
+L526 gridRowStart: 1,
+L539 // the size prop only affects spacing.
+L540 small: {
+L541 fontSize: '20px',
+L542 height: '20px',
+L543 width: '20px',
+L545 medium: {
+L546 fontSize: '20px',
+L547 height: '20px',
+L548 width: '20px',
+L550 large: {
+L551 fontSize: '24px',
+L552 height: '24px',
+L553 width: '24px',
+L555 selected: {
+L568 const useContentStyles = makeStyles({
+L569 base: {
+L570 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L572 // content padding is the same for medium & small, horizontal & vertical
+L573 padding: `${tokens.spacingVerticalNone} ${tokens.spacingHorizontalXXS}`,   // spacingVerticalNone=0 spacingHorizontalXXS=2px
+L575 selected: {
+L576 ...typographyStyles.body1Strong,   // typographyStyles.body1Strong=14px/20px w600
+L578 large: {
+L579 ...typographyStyles.body2,   // typographyStyles.body2=16px/22px w400
+L581 largeSelected: {
+L582 ...typographyStyles.subtitle2,   // typographyStyles.subtitle2=16px/22px w600
+L584 noIconBefore: {
+L585 gridColumnStart: 1,
+L586 gridRowStart: 1,
+L588 iconBefore: {
+L589 gridColumnStart: 2,
+L590 gridRowStart: 1,
+L592 placeholder: {
+L626 const { appearance, disabled, selected, size, vertical } = state;
+L634 size === 'small' && (vertical ? pendingIndicatorStyles.smallVertical : pendingIndicatorStyles.smallHorizontal),
+L635 size === 'medium' && (vertical ? pendingIndicatorStyles.mediumVertical : pendingIndicatorStyles.mediumHorizontal),
+L636 size === 'large' && (vertical ? pendingIndicatorStyles.largeVertical : pendingIndicatorStyles.largeHorizontal),
+L643 size === 'small' &&
+L646 size === 'medium' &&
+L649 size === 'large' &&
+L678 const { appearance, disabled, selected, size, vertical } = state;
+L688 size === 'small' && circularStyles.small,
+L689 size === 'medium' && circularStyles.medium,
+L690 size === 'large' && circularStyles.large,
+L716 // size
+L717 size === 'small' && (vertical ? rootStyles.smallVertical : rootStyles.smallHorizontal),
+L718 size === 'medium' && (vertical ? rootStyles.mediumVertical : rootStyles.mediumHorizontal),
+L719 size === 'large' && (vertical ? rootStyles.largeVertical : rootStyles.largeHorizontal),
+L741 const { selected, size } = state;
+L748 iconStyles[size],
+L760 size === 'large' ? contentStyles.largeSelected : contentStyles.selected,
+L775 size === 'large' && contentStyles.large,
+L776 selected && (size === 'large' ? contentStyles.largeSelected : contentStyles.selected),

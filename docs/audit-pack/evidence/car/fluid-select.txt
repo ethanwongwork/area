@@ -1,0 +1,71 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/fluid-select/_fluid-select.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21 @mixin fluid-select {
+L22 .#{$prefix}--select--fluid .#{$prefix}--select {
+L24   block-size: 100%;
+L34 .#{$prefix}--select--fluid .#{$prefix}--label {
+L39   margin: 0;
+L40   block-size: convert.to-rem(16px);
+L41   inline-size: calc(100% - 2rem);
+L42   inset-block-start: convert.to-rem(13px);
+L43   inset-inline-start: $spacing-05;   // spacing-05=16px
+L49 .#{$prefix}--toggletip-label::-webkit-scrollbar {
+L55 .#{$prefix}--select--fluid .#{$prefix}--label .#{$prefix}--toggletip-label {
+L58   scrollbar-width: none;
+L62 .#{$prefix}--select--fluid .#{$prefix}--select-input {
+L63   padding: convert.to-rem(32px) convert.to-rem(32px) convert.to-rem(13px)
+L64   $spacing-05;   // spacing-05=16px
+L65   min-block-size: convert.to-rem(64px);
+L70 .#{$prefix}--select--fluid .#{$prefix}--select__arrow {
+L71   block-size: 1rem;
+L72   inset-block-start: convert.to-rem(34px);
+L73   inset-inline-end: $spacing-04;   // spacing-04=12px
+L76 .#{$prefix}--select--fluid .#{$prefix}--select__divider {
+L84 .#{$prefix}--select-input__wrapper {
+L93 .#{$prefix}--select__divider {
+L95   border: none;
+L96   margin: 0 1rem;
+L98   inline-size: calc(100% - 2rem);
+L106 .#{$prefix}--select-input {
+L108   padding-inline-end: convert.to-rem(32px);
+L111 .#{$prefix}--select--fluid .#{$prefix}--select--warning {
+L115 .#{$prefix}--select--fluid .#{$prefix}--select-input__wrapper {
+L121 .#{$prefix}--select-input__wrapper {
+L123   border-radius: $border-radius-04;
+L130 .#{$prefix}--select-input__wrapper {
+L132   border-radius: $border-radius-04;
+L135 .#{$prefix}--select-input {
+L136   border: none;
+L137   border-radius: $border-radius-00;
+L148 .#{$prefix}--select-input:not(:focus) {
+L157 .#{$prefix}--form-requirement {
+L160   max-block-size: 100%;
+L165 .#{$prefix}--form-requirement {
+L169 .#{$prefix}--select--fluid .#{$prefix}--form-requirement {
+L170   padding: $spacing-03 convert.to-rem(40px) $spacing-03 $spacing-05;   // spacing-03=8px spacing-03=8px spacing-05=16px
+L171   margin: 0;
+L191 .#{$prefix}--select__invalid-icon {
+L192   inset-block-start: convert.to-rem(73px);
+L193   inset-inline-end: $spacing-05;   // spacing-05=16px
+L200 .#{$prefix}--select-input__wrapper {
+L208 .#{$prefix}--select--fluid--focus.#{$prefix}--select--warning {
+L215 .#{$prefix}--toggletip-label {
+L221 .#{$prefix}--toggletip-button {
+L238 .#{$prefix}--select--fluid .#{$prefix}--select--slug .#{$prefix}--slug {
+L239   inset-block-start: convert.to-rem(42px);
+L240   inset-inline-end: $spacing-09;   // spacing-09=48px
+L245 .#{$prefix}--select-input {
+L246   padding-inline-end: $spacing-10;   // spacing-10=64px
+L259 .#{$prefix}--slug::before {
+L264 .#{$prefix}--select--fluid__skeleton {
+L267   block-size: convert.to-rem(64px);
+L271 .#{$prefix}--select--fluid__skeleton .#{$prefix}--skeleton {
+L273   block-size: convert.to-rem(8px);
+L274   inline-size: 25%;
+L275   inset-block-start: $spacing-05;   // spacing-05=16px
+L276   inset-inline-start: $spacing-05;   // spacing-05=16px
+L279 .#{$prefix}--select--fluid__skeleton .#{$prefix}--label {
+L281   padding: 0;
+L282   block-size: convert.to-rem(8px);
+L283   inline-size: 50%;
+L284   inset-block-start: convert.to-rem(36px);
+L285   inset-inline-start: $spacing-05;   // spacing-05=16px

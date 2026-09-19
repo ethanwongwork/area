@@ -1,0 +1,4 @@
+### @atlaskit/pagination@17.3.2  pagination.js  (token fallbacks; pt and pc converted to px)
+  paginationMenu: padding-block-start:0; padding-inline-end:0; padding-block-end:0; padding-inline-start:0; margin-block-start:0; margin-inline-end:0; margin-block-end:0; margin-inline-start:0
+  paginationMenuItem: margin-block-start:0
+  navigatorIconWrapper: padding-inline:6px

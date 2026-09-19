@@ -1,0 +1,8 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu-grid-preview/library/src/components/MenuGridGroupHeader/useMenuGridGroupHeaderStyles.styles.ts
+L12 const useStyles = makeStyles({
+L13 root: {
+L14 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L16 paddingLeft: '8px',
+L17 paddingRight: '8px',
+L18 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L19 height: '32px',

@@ -1,0 +1,4 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-color-picker/library/src/components/ColorPicker/useColorPickerStyles.styles.ts
+L15 const useStyles = makeStyles({
+L16 root: {
+L19 gap: tokens.spacingVerticalXS,   // spacingVerticalXS=4px

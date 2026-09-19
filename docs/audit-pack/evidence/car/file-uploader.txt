@@ -1,0 +1,140 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/file-uploader/_file-uploader.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L28 @mixin file-uploader {
+L29 .#{$prefix}--file {
+L30   inline-size: 100%;
+L33 .#{$prefix}--file--invalid {
+L35   margin-inline-end: $spacing-03;   // spacing-03=8px
+L39 .#{$prefix}--file--label {
+L41   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L44   margin-block-end: $spacing-03;   // spacing-03=8px
+L47 .#{$prefix}--file--label--disabled {
+L51 .#{$prefix}--file-input {
+L58 .#{$prefix}--file-btn {
+L60   margin: 0;
+L61   padding-inline-end: convert.to-rem(64px);
+L64 .#{$prefix}--file-browse-btn {
+L69   inline-size: 100%;
+L70   max-inline-size: convert.to-rem(320px);
+L76 &:hover {
+L82 &:focus {
+L88 &:active:visited {
+L92 &:active {
+L97 .#{$prefix}--file-browse-btn--disabled {
+L103 &:hover {
+L110 &:focus {
+L117 .#{$prefix}--label-description {
+L119   @include type-style('body-compact-01');   // body-compact-01=14/18
+L122   margin-block-end: $spacing-05;   // spacing-05=16px
+L125 .#{$prefix}--label-description--disabled {
+L129 .#{$prefix}--file-container--drop {
+L130   inline-size: 100%;
+L134 .#{$prefix}--file-btn ~ .#{$prefix}--file-container {
+L135   margin-block-start: $spacing-06;   // spacing-06=24px
+L138 .#{$prefix}--btn ~ .#{$prefix}--file-container {
+L139   margin-block-start: $spacing-05;   // spacing-05=16px
+L143 .#{$prefix}--file ~ .#{$prefix}--file-container {
+L144   margin-block-start: $spacing-03;   // spacing-03=8px
+L147 .#{$prefix}--file__selected-file {
+L151   gap: convert.to-rem(12px) 0;
+L154   margin-block-end: $spacing-03;   // spacing-03=8px
+L155   max-inline-size: convert.to-rem(320px);
+L156   min-block-size: $spacing-09;   // spacing-09=48px
+L159 &:last-child {
+L160   margin-block-end: 0;
+L163 .#{$prefix}--form-requirement {
+L165   margin: 0;
+L167   max-block-size: none;
+L170 .#{$prefix}--inline-loading__animation .#{$prefix}--loading {
+L172   margin-inline-end: 0;
+L175 .#{$prefix}--file-filename {
+L176   @include type-style('body-compact-01');   // body-compact-01=14/18
+L179   margin-inline-start: $spacing-05;   // spacing-05=16px
+L184 .#{$prefix}--file-filename-container-wrap {
+L185   margin-block-start: 1px;
+L186   max-inline-size: 17.5rem;
+L187   padding-inline-start: $spacing-05;   // spacing-05=16px
+L188 @include breakpoint-down(410px) {
+L189   max-inline-size: 13.5rem;
+L193 .#{$prefix}--file-filename-container-wrap-invalid {
+L194   max-inline-size: 15.5rem;
+L196 .#{$prefix}--file-filename-tooltip {
+L197   inline-size: -webkit-fill-available;
+L198   padding-inline-start: $spacing-05;   // spacing-05=16px
+L204   inline-size: -moz-available;
+L209 .#{$prefix}--file-filename-tooltip {
+L210   inline-size: -webkit-fill-available;
+L216   inline-size: -moz-available;
+L220 .#{$prefix}--file-filename-button {
+L221   @include type-style('body-compact-01');   // body-compact-01=14/18
+L224   padding: 0;
+L225   border: none;
+L230   inline-size: -webkit-fill-available;
+L239   inline-size: -moz-available;
+L242 .#{$prefix}--file-filename-button:focus {
+L247 .#{$prefix}--file__selected-file--md {
+L248   gap: $spacing-03 0;   // spacing-03=8px
+L249   min-block-size: convert.to-rem(40px);
+L252 .#{$prefix}--file__selected-file--sm {
+L253   gap: $spacing-02 0;   // spacing-02=4px
+L254   min-block-size: convert.to-rem(32px);
+L258 .#{$prefix}--file__selected-file--invalid__wrapper {
+L262   margin-block-end: $spacing-03;   // spacing-03=8px
+L263   max-inline-size: convert.to-rem(320px);
+L264   outline-width: 1px;
+L267 .#{$prefix}--file__selected-file--disabled {
+L272 .#{$prefix}--file__selected-file--invalid {
+L275   padding: convert.to-rem(12px) 0;
+L278 .#{$prefix}--file__selected-file--invalid.#{$prefix}--file__selected-file--sm {
+L279   padding: $spacing-02 0;   // spacing-02=4px
+L282 .#{$prefix}--file__selected-file--invalid.#{$prefix}--file__selected-file--md {
+L283   padding: $spacing-03 0;   // spacing-03=8px
+L286 .#{$prefix}--file__selected-file--invalid .#{$prefix}--form-requirement {
+L288   padding-block-start: $spacing-05;   // spacing-05=16px
+L292 .#{$prefix}--form-requirement {
+L293   padding-block-start: convert.to-rem(7px);
+L297 .#{$prefix}--form-requirement {
+L298   padding-block-start: convert.to-rem(11px);
+L304 .#{$prefix}--form-requirement__supplement {
+L305   @include type-style('helper-text-01');   // helper-text-01=12/16
+L307   padding: 0 $spacing-05;   // spacing-05=16px
+L311 .#{$prefix}--form-requirement__title {
+L316 .#{$prefix}--form-requirement__supplement {
+L321 .#{$prefix}--file__selected-file--invalid + .#{$prefix}--form-requirement {
+L322   @include type-style('helper-text-01');   // helper-text-01=12/16
+L326   padding: $spacing-03 $spacing-05;   // spacing-03=8px spacing-05=16px
+L329   max-block-size: convert.to-rem(200px);
+L334 .#{$prefix}--form-requirement__supplement {
+L336   padding-block-end: $spacing-03;   // spacing-03=8px
+L338 .#{$prefix}--file__state-container {
+L342   min-inline-size: 1.5rem;
+L343   padding-inline-end: convert.to-rem(12px);
+L345 .#{$prefix}--loading__svg {
+L350 .#{$prefix}--file__state-container .#{$prefix}--file-loading {
+L354   padding: $spacing-02;   // spacing-02=4px
+L355   border: none;
+L357   block-size: $spacing-05;   // spacing-05=16px
+L358   inline-size: $spacing-06;   // spacing-06=24px
+L361 .#{$prefix}--file__state-container .#{$prefix}--file-complete {
+L364   inline-size: $spacing-06;   // spacing-06=24px
+L366 &:focus {
+L377 .#{$prefix}--file__state-container .#{$prefix}--file-invalid {
+L378   block-size: $spacing-05;   // spacing-05=16px
+L380   inline-size: $spacing-05;   // spacing-05=16px
+L383 .#{$prefix}--file__state-container .#{$prefix}--file-close {
+L387   padding: 0;
+L388   border: none;
+L390   block-size: $spacing-06;   // spacing-06=24px
+L392   inline-size: $spacing-06;   // spacing-06=24px
+L398 &[disabled] {
+L406 &:focus {
+L411 .#{$prefix}--file__state-container .#{$prefix}--inline-loading__animation {
+L412   margin-inline-end: -$spacing-03;   // spacing-03=8px
+L415 .#{$prefix}--file__drop-container {
+L417   @include type-style('body-compact-01');   // body-compact-01=14/18
+L423   padding: $spacing-05;   // spacing-05=16px
+L424   border: 1px dashed $border-strong;
+L425   block-size: convert.to-rem(96px);
+L429 .#{$prefix}--file-browse-btn--disabled .#{$prefix}--file__drop-container {
+L430   border: 1px dashed button.$button-disabled;
+L434 .#{$prefix}--file__drop-container--drag-over {
+L441 .#{$prefix}--file__selected-file {

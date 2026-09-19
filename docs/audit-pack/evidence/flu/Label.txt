@@ -1,0 +1,19 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-label/library/src/components/Label/useLabelStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L22 disabled: {
+L29 required: {
+L31 paddingLeft: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L34 small: {
+L35 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L36 lineHeight: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L39 medium: {
+L40 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L41 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L44 large: {
+L45 fontSize: tokens.fontSizeBase400,   // fontSizeBase400=16px
+L46 lineHeight: tokens.lineHeightBase400,   // lineHeightBase400=22px
+L47 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L50 semibold: {
+L51 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L65 styles[state.size],

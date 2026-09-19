@@ -1,0 +1,12 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-dialog.scss
+with-divider-divider-height: 1px
+with-icon-icon-size: 24px
+action-label-text-line-height: label-large-line-height = 20px
+action-label-text-size: label-large-size = 14px
+container-shape: corner-extra-large = 28px
+headline-line-height: headline-small-line-height = 32px
+headline-size: headline-small-size = 24px
+subhead-line-height: headline-small-line-height = 32px
+subhead-size: headline-small-size = 24px
+supporting-text-line-height: body-medium-line-height = 20px
+supporting-text-size: body-medium-size = 14px

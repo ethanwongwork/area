@@ -1,0 +1,3 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Stack/Stack.js
+L9 name: 'MuiStack',
+L10 slot: 'Root',

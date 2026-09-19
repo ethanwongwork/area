@@ -1,0 +1,2 @@
+### @atlaskit/select@22.11.6  components/control-option.js  (token fallbacks; pt and pc converted to px)
+  default: width:100%; box-sizing:border-box; padding-block-end:4px; padding-block-start:4px; padding-inline-start:16px; padding-inline-end:12px

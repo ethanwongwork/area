@@ -1,0 +1,100 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/Switch/Switch.module.css
+.Container {
+  display: flex;
+  font-size: var(--font-text-sm-size);   /* = 14px */
+  line-height: var(--font-text-sm-line-height);   /* = 20px */
+  user-select: none;
+
+  &[data-has-label] {
+    align-items: flex-start;
+  }
+
+  &[data-label-position="start"] {
+    flex-direction: row-reverse;
+  }
+}
+
+.Track {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--switch-track-width);   /* = 32px */
+  max-width: var(--switch-track-width);   /* = 32px */
+  height: var(--switch-track-height);   /* = 19px */
+  border: 0;
+  border-radius: var(--radius-full);   /* = 9999px */
+  background: var(--switch-track-color);   /* = light-dark(light-dark(#dfdfdf, #1c1c1c), light-dark(#8f8f8f, #414141)) */
+  cursor: pointer;
+  transition: background-color 250ms var(--cubic-move);   /* = background-color 250ms cubic-bezier(0.65, 0, 0.35, 1) */
+
+  &:where(:not([data-disabled], [data-state="checked"])) {
+    @mixin hover {
+      background: var(--switch-track-color-hover);   /* = light-dark(light-dark(#cdcdcd, #212121), light-dark(#767676, #4f4f4f)) */
+    }
+  }
+
+  [data-has-label] & {
+    /*
+     * Vertical alignment adjusting when necessary. Avoid using align-items: center; for long wrapping labels.
+     */
+    top: var(--switch-track-top-offset, 1px);   /* = 1px */
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-ring);   /* = 2px solid light-dark(#0169cc, #0285ff) */
+    outline-offset: 2px;
+  }
+
+  &[data-state="checked"] {
+    background: var(--switch-track-color-checked);   /* = light-dark(light-dark(#181818, #ededed), #0285ff) */
+  }
+
+  &[data-disabled] {
+    background: var(--switch-track-color-disabled);   /* = light-dark(light-dark(#ededed, #181818), light-dark(#afafaf, #303030)) */
+    cursor: not-allowed;
+
+    &[data-state="checked"] {
+      background: var(--switch-track-color-checked-disabled);   /* = light-dark(light-dark(#afafaf, #303030), #003f7a) */
+    }
+  }
+}
+
+.Thumb {
+  position: absolute;
+  top: var(--switch-thumb-offset);   /* = 3px */
+  left: var(--switch-thumb-offset);   /* = 3px */
+  display: block;
+  width: var(--switch-thumb-size);   /* = 13px */
+  height: var(--switch-thumb-size);   /* = 13px */
+  border-radius: var(--radius-full);   /* = 9999px */
+  background: var(--switch-thumb-color);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#0d0d0d, #ffffff)) */
+  box-shadow: var(--switch-thumb-shadow);   /* = 0 1px 2px rgb(0 0 0 / 20%) */
+  transition: transform 250ms var(--cubic-move);   /* = transform 250ms cubic-bezier(0.65, 0, 0.35, 1) */
+
+  [data-state="checked"] & {
+    transform: translateX(
+      calc(var(--switch-track-width) - var(--switch-thumb-size) - var(--switch-thumb-offset) * 2)
+    );
+  }
+
+  &[data-disabled] {
+    background: var(--switch-thumb-color-disabled);   /* = light-dark(light-dark(#ffffff, #0d0d0d), light-dark(#212121, #cdcdcd)) */
+    box-shadow: none;
+  }
+}
+
+.Label {
+  cursor: pointer;
+
+  /* Use padding so that the spacing is intrinsic to the label, remaining clickable. */
+  [data-label-position="end"] & {
+    padding-left: var(--switch-label-gap);   /* = 8px */
+  }
+
+  [data-label-position="start"] & {
+    padding-right: var(--switch-label-gap);   /* = 8px */
+  }
+
+  [data-disabled] & {
+    cursor: not-allowed;
+  }
+}

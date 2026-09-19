@@ -1,0 +1,8 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/native-select.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot native-select-wrapper]
+  [slot native-select]
+  L19 h-9=36px min-w-0=0px rounded-md=8px border=1px px-3=12px py-2=8px pr-9=36px text-sm=14/20px data-[size=sm]:h-8=32px data-[size=sm]:py-1=4px
+  L27 right-3.5=14px size-4=16px
+  [slot native-select-icon]
+  [slot native-select-option]
+  [slot native-select-optgroup]

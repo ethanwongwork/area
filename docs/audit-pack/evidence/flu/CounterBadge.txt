@@ -1,0 +1,8 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-badge/library/src/components/CounterBadge/useCounterBadgeStyles.styles.ts
+L14 const useStyles = makeStyles({
+L15 dot: {
+L16 minWidth: 'auto',
+L17 width: '6px',
+L18 height: '6px',
+L19 padding: '0',
+L21 hide: {

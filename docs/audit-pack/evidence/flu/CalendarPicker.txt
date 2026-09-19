@@ -1,0 +1,66 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-calendar-compat/library/src/components/CalendarPicker/useCalendarPickerStyles.styles.ts
+L25 const useRootStyles = makeStyles({
+L26 base: {
+L29 padding: '12px',
+L30 width: '196px',
+L32 normalize: {
+L35 margin: '0',
+L36 padding: '0',
+L40 const useHeaderContainerStyles = makeStyles({
+L41 base: {
+L46 const useCurrentItemButtonStyles = makeStyles({
+L47 base: {
+L49 ...shorthands.borderStyle('none'),
+L50 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L52 flexGrow: 1,
+L54 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L55 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L57 padding: '0 4px 0 10px',
+L60 hasHeaderClickCallback: {
+L66 outline: `1px solid ${tokens.colorTransparentStroke}`,
+L72 outline: `1px solid ${tokens.colorTransparentStroke}`,
+L77 const useNavigationButtonsContainerStyles = makeStyles({
+L78 base: {
+L84 const useNavigationButtonStyles = makeStyles({
+L85 base: {
+L88 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L92 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L93 height: '28px',
+L94 lineHeight: '28px',
+L95 minHeight: '28px',
+L96 minWidth: '28px',
+L98 padding: '0',
+L101 width: '28px',
+L107 outline: `1px solid ${tokens.colorTransparentStroke}`,
+L117 const useGridContainerStyles = makeStyles({
+L118 base: {
+L119 marginTop: '4px',
+L123 const useButtonRowStyles = makeStyles({
+L124 base: {
+L125 marginBottom: '16px',
+L127 marginBottom: 0,
+L132 const useItemButtonStyles = makeStyles({
+L133 base: {
+L136 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L139 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L140 height: '40px',
+L141 lineHeight: '40px',
+L142 minHeight: '40px',
+L143 minWidth: '40px',
+L144 margin: '0 12px 0 0',
+L146 padding: '0',
+L147 width: '40px',
+L150 marginRight: 0,
+L153 marginBottom: 0,
+L156 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L162 outline: `1px solid ${tokens.colorTransparentStroke}`,
+L168 outline: '1px solid Highlight',
+L183 const useCurrentStyles = makeStyles({
+L184 highlightCurrent: {
+L187 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L207 const useSelectedStyles = makeStyles({
+L208 highlightSelected: {
+L211 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L219 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L237 const useDisabledStyles = makeStyles({
+L238 base: {

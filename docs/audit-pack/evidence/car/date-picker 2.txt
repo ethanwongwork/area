@@ -1,0 +1,359 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/date-picker/_date-picker-next.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L33   inset-area: block-end span-inline-start;
+L34   margin-block-start: $spacing-02;   // spacing-02=4px
+L38   inset-area: block-start span-inline-start;
+L39   margin-block-end: $spacing-02;   // spacing-02=4px
+L43   inset-area: block-end span-inline-end;
+L44   margin-block-start: $spacing-02;   // spacing-02=4px
+L48   inset-area: block-start span-inline-end;
+L49   margin-block-end: $spacing-02;   // spacing-02=4px
+L52 @mixin date-picker-next-rules {
+L54 .#{$prefix}--date-picker-input__wrapper {
+L61 .#{$prefix}--date-picker__icon {
+L66   padding: 0;
+L67   border: none;
+L71   inset-block-start: 50%;
+L72   inset-inline-end: 1rem;
+L77 &:focus {
+L78   border: none;
+L85 &:active {
+L86   border: none;
+L92 .#{$prefix}--date-picker__calendar-popover {
+L98   padding: 0;
+L99   border: none;
+L100   margin: 0;
+L104 &:focus {
+L108   inset-area: block-end span-inline-start;
+L109   margin-block-start: $spacing-02;   // spacing-02=4px
+L113   @supports not (inset-area: block-end) {
+L115   inset-block-start: anchor(bottom);
+L116   inset-inline-start: anchor(left);
+L117   margin-block-start: $spacing-02;   // spacing-02=4px
+L124 .#{$prefix}--date-picker__calendar.open {
+L125   margin-block-start: 0;
+L130 .#{$prefix}--date-picker__calendar-container {
+L134   inset-block-start: 100%;
+L135   inset-inline-start: 0;
+L136   margin-block-start: 0;
+L139   margin-block-start: $spacing-02;   // spacing-02=4px
+L144 .#{$prefix}--date-picker-container {
+L147 .#{$prefix}--form-requirement[hidden] {
+L155 .#{$prefix}--form-requirement {
+L161 .#{$prefix}--date-picker-container--simple {
+L162 .#{$prefix}--date-picker__input {
+L163   inline-size: rem(120px);
+L167 .#{$prefix}--date-picker__input--warn {
+L168   inline-size: rem(152px);
+L172 .#{$prefix}--date-picker-container--short {
+L173 &.#{$prefix}--date-picker-container--simple {
+L174 .#{$prefix}--date-picker__input {
+L175   inline-size: rem(90px);
+L181 .#{$prefix}--date-picker-container--single {
+L182   max-inline-size: rem(288px);
+L184 .#{$prefix}--date-picker__input {
+L185   inline-size: rem(288px);
+L190 .#{$prefix}--date-picker-container--from {
+L191   margin-inline-end: rem(1px);
+L194 .#{$prefix}--date-picker__input {
+L195   border-end-end-radius: $border-radius-00;
+L197   border-start-end-radius: $border-radius-00;
+L202 .#{$prefix}--date-picker-container--to {
+L204 .#{$prefix}--date-picker__input {
+L205   border-end-start-radius: $border-radius-00;
+L207   border-start-start-radius: $border-radius-00;
+L213 .#{$prefix}--date-picker-container--to {
+L214   inline-size: rem(143.5px);
+L216 .#{$prefix}--date-picker__input {
+L217   inline-size: rem(143.5px);
+L222 .#{$prefix}--date-picker-container--ai-label {
+L223 .#{$prefix}--date-picker__input--decorator {
+L237   padding-box,
+L238   linear-gradient($field, $field) padding-box,
+L255 .#{$prefix}--date-picker-input-skeleton {
+L258 .#{$prefix}--label {
+L261   block-size: rem(14px);
+L262   inline-size: rem(75px);
+L265 .#{$prefix}--date-picker-input-skeleton-container {
+L270 .#{$prefix}--date-picker-input-skeleton--range {
+L271 .#{$prefix}--date-picker-input-skeleton-container {
+L272   inline-size: rem(143.5px);
+L274 .#{$prefix}--date-picker__input {
+L275   inline-size: rem(143.5px);
+L280 .#{$prefix}--date-picker.#{$prefix}--skeleton {
+L281 .#{$prefix}--date-picker__input.#{$prefix}--skeleton {
+L286   border: none;
+L287   block-size: rem(40px);
+L289   inline-size: 100%;
+L293 .#{$prefix}--date-picker__icon.#{$prefix}--skeleton {
+L302 .#{$prefix}--date-picker__calendar {
+L304   padding: $spacing-03;   // spacing-03=8px
+L305   border: none;
+L308   inline-size: rem(288px);
+L309   max-inline-size: rem(288px);
+L313   border: 1px solid $border-subtle;
+L314   border-radius: $border-radius-08;
+L317 &:focus {
+L323 .#{$prefix}--date-picker__month {
+L327   margin-block-end: $spacing-03;   // spacing-03=8px
+L330 .#{$prefix}--date-picker__month-nav {
+L334   border: none;
+L336   block-size: rem(40px);
+L338   inline-size: rem(40px);
+L340 &:hover {
+L344 &:focus {
+L354   border-radius: $border-radius-04;
+L358 .#{$prefix}--date-picker__current-month {
+L361   font-size: rem(14px);
+L367 .#{$prefix}--date-picker__weekdays {
+L369   gap: 0;
+L371   margin-block-end: $spacing-02;   // spacing-02=4px
+L374 .#{$prefix}--date-picker__weekday {
+L378   block-size: rem(40px);
+L380   font-size: rem(12px);
+L387 .#{$prefix}--date-picker__days {
+L389   gap: 0;
+L393 .#{$prefix}--date-picker__day {
+L397   border: none;
+L399   block-size: rem(40px);
+L402   font-size: rem(14px);
+L405 &:hover:not(:disabled, .selected) {
+L409 &:focus {
+L415 &.selected {
+L421 &.today:not(.selected) {
+L427 &::after {
+L429   border-radius: 50%;
+L431   block-size: 4px;
+L433   inline-size: 4px;
+L434   inset-block-end: 4px;
+L435   inset-inline-start: 50%;
+L441 &.inRange:not(.selected) {
+L447 &.nextMonthDay:not(.selected) {
+L452 &.disabled {
+L459 &.focused:not(.selected) {
+L466   border-radius: $border-radius-04;
+L475 @mixin date-picker-next {
+L476 .#{$prefix}--date-picker--next {
+### Carbon styles @ 8472cca  packages/styles/scss/components/date-picker/_date-picker.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L28 @mixin date-picker {
+L31 .#{$prefix}--date-picker {
+L36 .#{$prefix}--date-picker--light .#{$prefix}--date-picker__input {
+L40 .#{$prefix}--date-picker ~ .#{$prefix}--label {
+L44 .#{$prefix}--date-picker-container {
+L51 .#{$prefix}--date-picker-container .#{$prefix}--label {
+L55 .#{$prefix}--date-picker-input__wrapper {
+L60 .#{$prefix}--date-picker-input__wrapper > span {
+L66 .#{$prefix}--date-picker.#{$prefix}--date-picker--simple .#{$prefix}--label {
+L67   inline-size: convert.to-rem(120px);
+L73 .#{$prefix}--date-picker-input__wrapper--warn {
+L76   inline-size: convert.to-rem(152px);
+L80 .#{$prefix}--date-picker.#{$prefix}--date-picker--simple.#{$prefix}--date-picker--short {
+L81 .#{$prefix}--date-picker__input {
+L82   inline-size: 5.7rem;
+L87 .#{$prefix}--date-picker__input {
+L88   inline-size: convert.to-rem(288px);
+L96 .#{$prefix}--date-picker__input {
+L98   @include type-style('code-02');   // code-02=14/20
+L103   padding: 0 $spacing-05;   // spacing-05=16px
+L104   border: none;
+L106   block-size: convert.to-rem(40px);
+L112 &.#{$prefix}--focused {
+L116 &:disabled {
+L123 &:disabled::placeholder {
+L128 &:disabled:hover {
+L133 &::placeholder {
+L139 .#{$prefix}--date-picker__calendar.open.arrowTop {
+L141   margin-block-start: $spacing-01;   // spacing-01=2px
+L143 .#{$prefix}--date-picker__calendar.open {
+L144   border: 1px solid $border-subtle;
+L145   border-radius: $border-radius-08;
+L148 .#{$prefix}--date-picker__input {
+L149   border: 1px solid transparent;
+L150   border-radius: $border-radius-04;
+L152 &:not(:disabled) {
+L155   linear-gradient($field, $field) padding-box,
+L165 .#{$prefix}--date-picker--range {
+L167 .#{$prefix}--date-picker__input {
+L168   border-end-end-radius: $border-radius-00;
+L170   border-start-end-radius: $border-radius-00;
+L174 .#{$prefix}--date-picker__input {
+L175   border-end-start-radius: $border-radius-00;
+L177   border-start-start-radius: $border-radius-00;
+L183 .#{$prefix}--date-picker__input--lg {
+L184   block-size: convert.to-rem(48px);
+L187 .#{$prefix}--date-picker__input--sm {
+L188   block-size: convert.to-rem(32px);
+L191 .#{$prefix}--date-picker__icon {
+L196   inset-block-start: 50%;
+L197   inset-inline-end: 1rem;
+L203 .#{$prefix}--date-picker__icon--warn {
+L207 .#{$prefix}--date-picker__icon--warn {
+L212 .#{$prefix}--date-picker__icon--warn path:first-of-type {
+L217 .#{$prefix}--date-picker__icon--invalid {
+L221 .#{$prefix}--date-picker__icon ~ .#{$prefix}--date-picker__input {
+L222   padding-inline-end: $spacing-09;   // spacing-09=48px
+L225 .#{$prefix}--date-picker__input:disabled ~ .#{$prefix}--date-picker__icon {
+L232   margin-inline-end: convert.to-rem(1px);
+L236 .#{$prefix}--date-picker--range .#{$prefix}--date-picker__input {
+L237   inline-size: convert.to-rem(143.5px);
+L245 .#{$prefix}--date-picker-input__wrapper--slug .#{$prefix}--slug {
+L247   inset-block-start: 50%;
+L248   inset-inline-end: $spacing-08;   // spacing-08=40px
+L257   block-size: 1rem;
+L280   padding-inline-end: $spacing-10;   // spacing-10=64px
+L293   padding-box,
+L294   linear-gradient($field, $field) padding-box,
+L307 .#{$prefix}--date-picker__input[readonly] {
+L313   border-radius: $border-radius-00;
+L317 .#{$prefix}--date-picker__input[readonly] + .#{$prefix}--date-picker__icon {
+L323 .#{$prefix}--date-picker__input.#{$prefix}--skeleton {
+L326   inline-size: 100%;
+L328 &::placeholder {
+L333 .#{$prefix}--date-picker.#{$prefix}--skeleton .#{$prefix}--label {
+L336   block-size: convert.to-rem(14px);
+L337   inline-size: convert.to-rem(75px);
+### Carbon styles @ 8472cca  packages/styles/scss/components/date-picker/_flatpickr.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L93 @mixin flatpickr {
+L94 .flatpickr-calendar {
+L98   padding: 0;
+L99   border: 0;
+L100   border-radius: 0;
+L103   inline-size: convert.to-rem(315px);
+L104   max-block-size: 0;
+L113 .flatpickr-calendar.inline {
+L115   max-block-size: convert.to-rem(640px);
+L120 .flatpickr-calendar.open {
+L129   padding: $spacing-02 $spacing-02 $spacing-03 $spacing-02;   // spacing-02=4px spacing-02=4px spacing-03=8px spacing-02=4px
+L130   border: none;
+L132   block-size: convert.to-rem(336px);
+L133   inline-size: convert.to-rem(288px);
+L134   margin-block-start: convert.to-rem(-2px);
+L136 &:focus {
+L141 .flatpickr-calendar.animate.open {
+L149 .flatpickr-calendar.inline {
+L152   inset-block-start: auto;
+L155 .flatpickr-calendar.static {
+L157   inset-block-start: calc(100% + 2px);
+L160 .flatpickr-calendar.static.open {
+L165 .flatpickr-calendar.hasWeeks {
+L166   inline-size: auto;
+L169 .dayContainer {
+L173   padding: 0;
+L174   block-size: convert.to-rem(246px);
+L179 .flatpickr-calendar .hasTime .dayContainer {
+L181   border-end-end-radius: 0;
+L182   border-end-start-radius: 0;
+L185 .flatpickr-calendar .hasWeeks .dayContainer {
+L189 .flatpickr-calendar.showTimeInput.hasTime .flatpickr-time {
+L190   block-size: convert.to-rem(40px);
+L194 .flatpickr-calendar.noCalendar.hasTime .flatpickr-time {
+L195   block-size: auto;
+L198 .flatpickr-calendar:focus {
+L202 .flatpickr-months {
+L205   inline-size: 100%;
+L208 .flatpickr-month {
+L209   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L214   block-size: convert.to-rem(40px);
+L216   line-height: 1;
+L221 .flatpickr-next-month {
+L226   padding: 0;
+L227   block-size: convert.to-rem(40px);
+L230   inline-size: convert.to-rem(40px);
+L231   line-height: 16px;
+L242 &:hover {
+L249 .flatpickr-prev-month.disabled svg {
+L256 .flatpickr-prev-month.disabled:hover svg {
+L261 .flatpickr-current-month {
+L262   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L267   block-size: convert.to-rem(28px);
+L271 .flatpickr-current-month .cur-month {
+L272   margin-inline: $spacing-02 $spacing-02;   // spacing-02=4px spacing-02=4px
+L275 &:hover {
+L284 .flatpickr-day {
+L285   border-radius: $border-radius-04;
+L289 .numInputWrapper {
+L291   inline-size: convert.to-rem(60px);
+L294 &:hover {
+L300 .numInputWrapper .numInput {
+L302   padding: $spacing-02;   // spacing-02=4px
+L303   border: none;
+L304   margin: 0;
+L311   font-size: inherit;
+L313   inline-size: 100%;
+L316 &::-webkit-inner-spin-button {
+L317   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+L322 &:focus {
+L327 &[disabled]:hover {
+L334 .numInputWrapper .arrowUp {
+L336   inset-block-start: convert.to-rem(4px);
+L338 &::after {
+L339   border-block-end: convert.to-rem(4px) solid $icon-primary;
+L343 .numInputWrapper .arrowDown {
+L344   inset-block-start: convert.to-rem(11px);
+L346 &::after {
+L347   border-block-start: convert.to-rem(4px) solid $icon-primary;
+L352 .numInputWrapper .arrowDown {
+L354   padding: 0 convert.to-rem(4px) 0 convert.to-rem(2px);
+L355   border: none;
+L356   block-size: 50%;
+L358   inline-size: convert.to-rem(12px);
+L359   inset-inline-start: 2.6rem;
+L360   line-height: 50%;
+L363 &::after {
+L366   border-inline-end: convert.to-rem(4px) solid transparent;
+L367   border-inline-start: convert.to-rem(4px) solid transparent;
+L369   inset-block-start: 33%;
+L373 &:hover::after {
+L379 &:active::after {
+L387 .numInputWrapper .arrowDown {
+L392 .numInput[disabled] ~ .arrowDown {
+L397 .numInputWrapper .arrowDown::after {
+L404 .numInputWrapper .arrowUp::after {
+L408 .numInputWrapper .arrowDown::after {
+L413 .numInputWrapper .arrowUp:hover::after {
+L417 .numInputWrapper .arrowDown:hover::after {
+L423 .numInput[disabled] ~ .arrowUp::after {
+L427 .numInput[disabled] ~ .arrowDown::after {
+L433 .numInputWrapper:hover .arrowDown {
+L438 .numInputWrapper:hover .numInput[disabled] ~ .arrowDown {
+L443 .flatpickr-weekdays {
+L446   block-size: convert.to-rem(40px);
+L449 .flatpickr-weekdaycontainer {
+L451   inline-size: 100%;
+L454 .flatpickr-weekday {
+L455   @include type-style('body-compact-01');   // body-compact-01=14/18
+L462 .flatpickr-days:focus {
+L466 .flatpickr-calendar.animate .dayContainer.slideLeft {
+L473 .flatpickr-calendar.animate .dayContainer.slideLeftNew {
+L477 .flatpickr-calendar.animate .dayContainer.slideLeftNew {
+L483 .flatpickr-calendar.animate .dayContainer.slideRight {
+L490 .flatpickr-calendar.animate .dayContainer.slideRightNew {
+L496 .flatpickr-day {
+L497   @include type-style('body-compact-01');   // body-compact-01=14/18
+L502   block-size: convert.to-rem(40px);
+L505   inline-size: convert.to-rem(40px);
+L509 &:hover {
+L514 &:focus {
+L522 .prevMonthDay {
+L526 .flatpickr-day.today {
+L531 &::after {
+L535   block-size: convert.to-rem(4px);
+L537   inline-size: convert.to-rem(4px);
+L538   inset-block-end: convert.to-rem(7px);
+L539   inset-inline-start: 50%;
+L544 .flatpickr-day.today.no-border {
+L545   border: none;
+L548 .flatpickr-day.today.selected {
+L551 &::after {
+L556 .flatpickr-day.inRange {
+L561 .flatpickr-day.selected {
+L568 &:focus {
+L569   outline: convert.to-rem(1px) solid $layer-02;
+L570   outline-offset: convert.to-rem(-3px);
+L574 .flatpickr-day.startRange.selected {
+L580 .flatpickr-day.endRange.inRange {
+L588 .flatpickr-day.endRange:hover {
+L596 .flatpickr-day.endRange.inRange.selected {
+L601 .flatpickr-day.flatpickr-disabled {
+L606 &:hover {
+L612 .flatpickr-input[readonly] {
+L617 .flatpickr-day.inRange {

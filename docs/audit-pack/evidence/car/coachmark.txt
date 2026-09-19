@@ -1,0 +1,87 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/coachmark/_coachmark-beacon.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21 @mixin coachmark-beacon {
+L24 .#{$block-class} {
+L27 &-default {
+L28 .#{$block-class}__target {
+L29 &::before {
+L34 &::after {
+L36   border-radius: 50%;
+L38   block-size: $spacing-04;   // spacing-04=12px
+L40   inline-size: $spacing-04;   // spacing-04=12px
+L41   inset-block-start: calc($spacing-01 + $spacing-03);   // spacing-01=2px spacing-03=8px
+L42   inset-inline-start: calc($spacing-01 + $spacing-03);   // spacing-01=2px spacing-03=8px
+L45 &:focus {
+L48 &::before {
+L51   border-radius: 100%;
+L52   block-size: 18px;
+L54   inline-size: 18px;
+L55   inset-block-start: 7px;
+L56   inset-inline-start: 7px;
+L57   outline: $spacing-01 $focus solid;   // spacing-01=2px
+L63 .#{$block-class}__target {
+L66   padding: 0;
+L67   border: none;
+L68   border-radius: 50%;
+L70   block-size: $spacing-07;   // spacing-07=32px
+L72   inline-size: $spacing-07;   // spacing-07=32px
+L74 &[aria-expanded='true'] {
+L81 &__center {
+L84   block-size: $spacing-11;   // spacing-11=80px
+L85   inline-size: $spacing-11;   // spacing-11=80px
+L86   inset-block-start: calc(($spacing-06 - $spacing-01) * -1);   // spacing-06=24px spacing-01=2px
+L87   inset-inline-start: calc(($spacing-06 - $spacing-01) * -1);   // spacing-06=24px spacing-01=2px
+L98   stroke-width: 1px;
+### Carbon styles @ 8472cca  packages/styles/scss/components/coachmark/_coachmark-tagline.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21 @mixin coachmark-tagline {
+L24 .#{$block-class} {
+L29   border-radius: $spacing-01 $spacing-01 0 0;   // spacing-01=2px spacing-01=2px
+L33   grid-template-columns: [cta-col] auto [close-btn-col] $spacing-08;   // spacing-08=40px
+L34   inline-size: 18rem;
+L35   inset-block-end: 0;
+L36   inset-inline-end: $spacing-05;   // spacing-05=16px
+L45 &::before {
+L50   inset: 0;
+L59 &:hover::before {
+L63 &--is-open {
+L67 #{$block-class}__cta {
+L71 #{$block-class}--close-btn {
+L75 &::before {
+L80 &__cta {
+L82   padding: $spacing-03 0;   // spacing-03=8px
+L83   border: none;
+L86   grid-template-columns: [icon-col] $spacing-07 [body-col] auto;   // spacing-07=32px
+L89   @include type.type-style('body-short-01');   // body-short-01=14/18
+L91 &:focus {
+L93   inset 0 0 0 3px $purple-70,
+L94   inset 0 0 0 $spacing-02 $white-0;   // spacing-02=4px
+L98 &:hover {
+L102 .#{$block-class}__idea {
+L107 &--close-btn-container {
+L108   block-size: $spacing-07;   // spacing-07=32px
+L109   inline-size: $spacing-07;   // spacing-07=32px
+L110   margin-inline-start: auto;
+L113 &--close-btn {
+L115   border-radius: 0;
+L116   block-size: $spacing-07;   // spacing-07=32px
+L118   inline-size: $spacing-07;   // spacing-07=32px
+L119   margin-inline-start: auto !important;
+L122 &:active {
+L126 &:focus {
+L128   inset 0 0 0 1px $background-inverse,
+L129   inset 0 0 0 $spacing-01 $white-0 !important;   // spacing-01=2px
+L133   margin: 0;
+L137 &:hover {
+### Carbon styles @ 8472cca  packages/styles/scss/components/coachmark/_coachmark.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L16 @mixin coachmark {
+L19 .#{$block-class} {
+L20 &--floating {
+L22   margin-inline-end: auto;
+L26 .#{$block-class}--content-header--is-dragging {
+L27   border-radius: 0;
+L28   box-shadow: 0 0 0 $spacing-02 $icon-inverse;   // spacing-02=4px
+L29   outline: $spacing-01 solid $background-inverse;   // spacing-01=2px
+L32 .#{$block-class}--coachmark-content {
+L33 .#{$block-class}--content-header {
+L39 .#{$block-class}--content-header .#{$prefix}--btn {
+L49 .#{$block-class}--content-body {
+L52   padding: $spacing-01 $spacing-05 0;   // spacing-01=2px spacing-05=16px

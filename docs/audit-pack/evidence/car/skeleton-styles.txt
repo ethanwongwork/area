@@ -1,0 +1,28 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/skeleton-styles/_ai-skeleton-styles.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L26 @mixin ai-skeleton-styles {
+L29 .#{$prefix}--skeleton__icon--ai {
+L36 .#{$prefix}--skeleton__icon--ai::before {
+L47 .#{$prefix}--skeleton__icon--ai::before {
+L48   inline-size: 200%;
+L52 .#{$prefix}--skeleton__placeholder--ai {
+L53   border-radius: convert.to-rem(8px);
+L57 .#{$prefix}--skeleton__text--ai {
+L58   border-radius: convert.to-rem(16px);
+L62 .#{$prefix}--skeleton__icon--ai {
+L63   border-radius: convert.to-rem(2px);
+L71 .#{$prefix}--skeleton__icon--ai {
+L77 .#{$prefix}--skeleton__icon--ai::before {
+### Carbon styles @ 8472cca  packages/styles/scss/components/skeleton-styles/_skeleton-styles.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L16 @mixin skeleton-styles {
+L18 .#{$prefix}--icon--skeleton {
+L22   block-size: convert.to-rem(16px);
+L23   inline-size: convert.to-rem(16px);
+L27 .#{$prefix}--skeleton__placeholder {
+L30   block-size: convert.to-rem(100px);
+L32   inline-size: convert.to-rem(100px);
+L36 .#{$prefix}--skeleton__text {
+L39   block-size: 1rem;
+L41   inline-size: 100%;
+L43   margin-block-end: $spacing-03;   // spacing-03=8px
+L46 .#{$prefix}--skeleton__heading {
+L47   block-size: 1.5rem;

@@ -1,0 +1,22 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-navigation-rail.scss
+active-indicator-height: 32px
+active-indicator-width: 56px
+badge-shape: 3px
+badge-size: 6px
+container-width: 80px
+icon-size: 24px
+large-badge-shape: 8px
+large-badge-size: 16px
+menu-icon-size: 24px
+no-label-active-indicator-height: 56px
+active-indicator-shape: corner-full = 9999px
+container-shape: corner-none = 0px
+label-text-font-family: label-medium-font = md-ref-typeface.$plain
+label-text-font-size: label-medium-size = 12px
+label-text-letter-spacing: label-medium-tracking = 0.5px
+label-text-line-height: label-medium-line-height = 16px
+label-text-size: label-medium-size = 12px
+large-badge-label-font-family: label-small-font = md-ref-typeface.$plain
+large-badge-label-line-height: label-small-line-height = 16px
+large-badge-label-size: label-small-size = 11px
+no-label-active-indicator-shape: corner-full = 9999px

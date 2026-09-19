@@ -1,0 +1,73 @@
+### MUI Material @ 69960c1  packages/mui-material/src/OutlinedInput/NotchedOutline.js
+L8 const NotchedOutlineRoot = styled('fieldset', {
+L9 name: 'MuiNotchedOutlined',
+L14   bottom: 0,
+L15   right: 0,
+L16   top: -5,
+L17   left: 0,
+L18   margin: 0,
+L19   padding: '0 8px',
+L21   borderRadius: 'inherit',
+L23   borderWidth: 1,
+L25   minWidth: '0%',
+L28 const NotchedOutlineLegend = styled('legend', {
+L29 name: 'MuiNotchedOutlined',
+L34   width: 'auto', // Fix conflict with bootstrap
+L36 variants: [
+L39 style: {
+L40   padding: 0,
+L41   lineHeight: '11px', // sync with `height` in `legend` styles
+L50 style: {
+L52   padding: 0,
+L53   height: 11, // sync with `lineHeight` in `legend` styles
+L54   fontSize: '0.75em',
+L56   maxWidth: 0.01,
+L63   paddingLeft: 5,
+L64   paddingRight: 5,
+L73 style: {
+L74   maxWidth: '100%',
+L92 const ownerState = {
+### MUI Material @ 69960c1  packages/mui-material/src/OutlinedInput/OutlinedInput.js
+L26 const slots = {
+L40 const OutlinedInputRoot = styled(InputBaseRoot, {
+L42 name: 'MuiOutlinedInput',
+L43 slot: 'Root',
+L51   borderRadius: (theme.vars || theme).shape.borderRadius,
+L64   borderWidth: 2,
+L66 variants: [
+L70 props: { color },
+L71 style: {
+L78 props: {}, // to override the above style
+L79 style: {
+L90 style: {
+L91   paddingLeft: 14,
+L96 style: {
+L99   paddingRight: 'var(--_trailingPad)',
+L107 style: {
+L108   padding: '16.5px 14px',
+L113 style: {
+L114   padding: '8.5px 14px',
+L122 const NotchedOutlineRoot = styled(NotchedOutline, {
+L123 name: 'MuiOutlinedInput',
+L124 slot: 'NotchedOutline',
+L137 const OutlinedInputInput = styled(InputBaseInput, {
+L138 name: 'MuiOutlinedInput',
+L139 slot: 'Input',
+L143   padding: '16.5px 14px',
+L144 '&:-webkit-autofill': {
+L150   borderRadius: 'inherit',
+L159 variants: [
+L161 props: {
+L162   size: 'small',
+L164 style: {
+L165   padding: '8.5px 14px',
+L170 style: {
+L171   padding: 0,
+L176 style: {
+L177   paddingLeft: 0,
+L182 style: {
+L183   paddingRight: 0,
+L211 const ownerState = {
+L221   size: fcs.size,
+L233 externalForwardedProps: {
+L237 additionalProps: {

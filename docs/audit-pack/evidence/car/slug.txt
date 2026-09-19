@@ -1,0 +1,162 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/slug/_slug.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21   $sizes: (
+L23   height: convert.to-rem(16px),
+L24   width: convert.to-rem(16px),
+L25   font-size: convert.to-rem(9px),
+L26   line-height: convert.to-rem(12px),
+L29   height: convert.to-rem(20px),
+L30   width: convert.to-rem(20px),
+L31   font-size: convert.to-rem(12px),
+L32   line-height: convert.to-rem(16px),
+L35   height: convert.to-rem(24px),
+L36   width: convert.to-rem(24px),
+L37   font-size: convert.to-rem(12px),
+L38   line-height: convert.to-rem(16px),
+L41   height: convert.to-rem(32px),
+L42   width: convert.to-rem(32px),
+L43   font-size: convert.to-rem(16px),
+L44   line-height: convert.to-rem(21px),
+L47   height: convert.to-rem(40px),
+L48   width: convert.to-rem(40px),
+L49   font-size: convert.to-rem(16px),
+L50   line-height: convert.to-rem(21px),
+L53   height: convert.to-rem(48px),
+L54   width: convert.to-rem(48px),
+L55   font-size: convert.to-rem(16px),
+L56   line-height: convert.to-rem(21px),
+L59   height: convert.to-rem(64px),
+L60   width: convert.to-rem(64px),
+L61   font-size: convert.to-rem(20px),
+L62   line-height: convert.to-rem(26px),
+L69 @mixin slug {
+L71 .#{$prefix}--slug {
+L76 .#{$prefix}--slug:has(> .#{$prefix}--popover--open) {
+L81 .#{$prefix}--slug__button {
+L86   border: 1px solid $border-inverse;
+L97   @each $group, $size in $sizes {
+L99 &--#{$group} {
+L100   @each $property, $value in $size {
+L112 .#{$prefix}--slug__button--2xs::after {
+L115   block-size: 24px;
+L117   inline-size: 24px;
+L121 .#{$prefix}--slug .#{$prefix}--slug__button:focus {
+L122   border: 1px solid $focus;
+L123   box-shadow: inset 0 0 0 1px $focus;
+L128 .#{$prefix}--slug .#{$prefix}--slug__button:hover {
+L134 .#{$prefix}--slug .#{$prefix}--slug__button:hover:active {
+L137   inset 0 0 0 1px $focus,
+L138   inset 0 0 0 2px $focus-inset;
+L149 .#{$prefix}--slug__button.#{$prefix}--slug__button--2xs:hover:active {
+L150   box-shadow: inset 0 0 0 1px $focus-inset;
+L155 .#{$prefix}--slug__text {
+L161 .#{$prefix}--slug .#{$prefix}--slug__button--inline {
+L162   border: 1px solid transparent;
+L163   border-radius: convert.to-rem(1px);
+L165   block-size: initial;
+L167   font-size: convert.to-rem(14px);
+L168   inline-size: initial;
+L169   line-height: initial;
+L170   padding-inline: convert.to-rem(4px);
+L174 .#{$prefix}--slug__button--inline::before {
+L179 .#{$prefix}--slug .#{$prefix}--slug__button--inline:focus {
+L188 .#{$prefix}--slug .#{$prefix}--slug__button--inline:hover:active {
+L196 .#{$prefix}--slug .#{$prefix}--slug__button--inline:focus:hover {
+L205 .#{$prefix}--slug__text::before {
+L211 .#{$prefix}--slug__button--inline .#{$prefix}--slug__text {
+L212   padding-inline-start: convert.to-rem(8px);
+L222 .#{$prefix}--slug__text {
+L223   padding-inline-start: convert.to-rem(12px);
+L227 .#{$prefix}--slug__button--inline .#{$prefix}--slug__text::before {
+L231   block-size: convert.to-rem(4px);
+L233   inline-size: convert.to-rem(4px);
+L234   inset-block-start: 50%;
+L235   inset-inline-start: 0;
+L246 .#{$prefix}--slug__button--xl .#{$prefix}--slug__text::before {
+L247   block-size: convert.to-rem(8px);
+L248   inline-size: convert.to-rem(8px);
+L275 .#{$prefix}--slug__additional-text {
+L276   font-size: convert.to-rem(12px);
+L282 .#{$prefix}--slug__button--inline.#{$prefix}--slug__button--xl {
+L283   font-size: convert.to-rem(16px);
+L288 .#{$prefix}--slug .#{$prefix}--slug__button--inline-with-content {
+L289   border: 1px solid $border-inverse;
+L290   padding-block: convert.to-rem(2px);
+L291   padding-inline: convert.to-rem(8px);
+L297 .#{$prefix}--slug__additional-text {
+L298   @include type-style('body-compact-02');   // body-compact-02=16/22
+L300   padding-inline-start: convert.to-rem(4px);
+L306 .#{$prefix}--slug__additional-text {
+L307   font-size: convert.to-rem(14px);
+L312 .#{$prefix}--slug .#{$prefix}--slug__button--inline-with-content:focus {
+L313   box-shadow: inset 0 0 0 1px $focus;
+L320 .#{$prefix}--slug__button--inline-with-content:hover:focus {
+L321   box-shadow: inset 0 0 0 1px $focus;
+L327 .#{$prefix}--slug .#{$prefix}--slug-content {
+L330   border: 1px solid transparent;
+L331   border-radius: convert.to-rem(8px);
+L334   inset 0 -80px 70px -65px $ai-inner-shadow,
+L338   min-inline-size: convert.to-rem(280px);
+L473   border: 1px solid $ai-border-start;
+L475   block-size: convert.to-rem(12px);
+L478   inline-size: convert.to-rem(12px);
+L589   block-size: convert.to-rem(14px);
+L591   inline-size: convert.to-rem(2px);
+L639 &::before {
+L640   inset-block-end: convert.to-rem(1px);
+L644 &::after {
+L646   block-size: convert.to-rem(2px);
+L647   border-end-end-radius: 50%;
+L648   border-end-start-radius: 50%;
+L649   inline-size: convert.to-rem(14px);
+L650   inset-block-start: convert.to-rem(-2px);
+L651   inset-inline-start: convert.to-rem(-1px);
+L725 &::before {
+L726   inset-inline-start: convert.to-rem(1px);
+L730 &::after {
+L731   border-end-start-radius: 50%;
+L732   border-start-start-radius: 50%;
+L733   inset-block-start: convert.to-rem(-1px);
+L734   inset-inline-start: convert.to-rem(6px);
+L783 &::before {
+L784   inset-block-start: convert.to-rem(1px);
+L788 &::after {
+L789   block-size: convert.to-rem(2px);
+L790   border-start-end-radius: 50%;
+L791   border-start-start-radius: 50%;
+L792   inline-size: convert.to-rem(14px);
+L793   inset-block-end: convert.to-rem(-2.5px);
+L794   inset-inline-start: convert.to-rem(-1px);
+L843 &::before {
+L844   inset-inline-end: convert.to-rem(1px);
+L848 &::after {
+L849   border-end-end-radius: 50%;
+L850   border-start-end-radius: 50%;
+L851   inset-block-start: convert.to-rem(-1px);
+L852   inset-inline-start: convert.to-rem(-2px);
+L961 &::before {
+L1028 &::before {
+L1066 &::before {
+L1072 .#{$prefix}--slug .#{$prefix}--toggletip-content {
+L1074   padding-block: convert.to-rem(24px) convert.to-rem(80px);
+L1075   padding-inline: convert.to-rem(24px);
+L1088 .#{$prefix}--slug .#{$prefix}--slug-content .#{$prefix}--toggletip-content {
+L1089   max-inline-size: convert.to-rem(320px);
+L1093 .#{$prefix}--slug .#{$prefix}--slug-actions {
+L1098   border-end-end-radius: convert.to-rem(8px);
+L1099   border-end-start-radius: convert.to-rem(8px);
+L1100   column-gap: 0;
+L1101   inline-size: 100%;
+L1102   inset-block-end: 0;
+L1103   inset-inline-end: 0;
+L1107 .#{$prefix}--slug .#{$prefix}--slug-actions .#{$prefix}--btn:focus {
+L1110   inset 0 0 0 1px $focus,
+L1111   inset 0 0 0 2px $background;
+L1115 .#{$prefix}--slug .#{$prefix}--slug-actions .#{$prefix}--btn--primary {
+L1117   border-end-end-radius: convert.to-rem(7px);
+L1122 .#{$prefix}--slug.#{$prefix}--slug--revert {
+L1123   transform: translate($spacing-03, -50%);   // spacing-03=8px
+L1127 .#{$prefix}--slug--revert .#{$prefix}--btn--icon-only {
+L1129   padding-block-start: 0;
+L1133 .#{$prefix}--slug--revert .#{$prefix}--btn--icon-only svg {
+L1134   margin: 0;
+L1142 .#{$prefix}--slug .#{$prefix}--slug-content {

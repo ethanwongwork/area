@@ -1,0 +1,39 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-carousel/library/src/components/CarouselNavContainer/useCarouselNavContainerStyles.styles.ts
+L24 const useStyles = makeStyles({
+L25 root: {
+L29 width: '100%',
+L32 next: {},
+L33 prev: {},
+L34 autoplay: {},
+L35 inline: {
+L36 marginTop: tokens.spacingVerticalM,   // spacingVerticalM=12px
+L38 overlay: {
+L40 bottom: tokens.spacingVerticalM,   // spacingVerticalM=12px
+L43 overlayWide: {
+L44 bottom: tokens.spacingVerticalM,   // spacingVerticalM=12px
+L46 nextWide: {
+L47 marginLeft: 'auto',
+L49 prevWide: {
+L50 marginRight: 'auto',
+L52 nextOverlayWide: {
+L53 marginRight: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L55 prevOverlayWide: {
+L56 marginLeft: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L58 autoplayOverlayWide: {
+L59 marginLeft: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L61 expanded: {
+L62 width: '100%',
+L63 height: '100%',
+L66 bottom: 0,
+L69 bottom: tokens.spacingVerticalL,   // spacingVerticalL=16px
+L70 marginBottom: 0,
+L73 nextOverlayExpanded: {
+L75 right: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L76 top: '50%',
+L79 prevOverlayExpanded: {
+L81 left: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L82 top: '50%',
+L85 autoplayExpanded: {
+L87 bottom: `-${tokens.spacingHorizontalXS}`,   // spacingHorizontalXS=4px
+L88 left: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L89 marginBottom: tokens.spacingVerticalM,   // spacingVerticalM=12px

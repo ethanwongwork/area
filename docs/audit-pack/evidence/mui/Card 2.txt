@@ -1,0 +1,7 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Card/Card.js
+L15 const slots = {
+L22 const CardRoot = styled(Paper, {
+L23 name: 'MuiCard',
+L24 slot: 'Root',
+L32 name: 'MuiCard',
+L37 const ownerState = { ...props, raised };

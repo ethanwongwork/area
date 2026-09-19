@@ -1,0 +1,82 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/fluid-number-input/_fluid-number-input.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L22 @mixin fluid-number-input {
+L23 .#{$prefix}--number-input--fluid {
+L26   block-size: 100%;
+L29   border: 1px solid transparent;
+L30   border-radius: $border-radius-04;
+L32   linear-gradient($field, $field) padding-box,
+L41 &.#{$prefix}--number-input--fluid--readonly {
+L42   border-radius: $border-radius-00;
+L49 .#{$prefix}--number-input--fluid .#{$prefix}--label {
+L54   margin: 0;
+L55   block-size: convert.to-rem(16px);
+L56   inline-size: calc(100% - 2rem);
+L57   inset-block-start: convert.to-rem(13px);
+L58   inset-inline-start: $spacing-05;   // spacing-05=16px
+L64 .#{$prefix}--toggletip-label::-webkit-scrollbar {
+L72 .#{$prefix}--toggletip-label {
+L75   scrollbar-width: none;
+L79 .#{$prefix}--number-input--fluid .#{$prefix}--number__input-wrapper {
+L89 .#{$prefix}--number-input--fluid input[type='text'] {
+L90   padding: convert.to-rem(32px) convert.to-rem(80px) convert.to-rem(13px)
+L91   $spacing-05;   // spacing-05=16px
+L93   min-block-size: convert.to-rem(64px);
+L109   border: none;
+L110   border-radius: $border-radius-00;
+L124 .#{$prefix}--number-input--fluid .#{$prefix}--number__controls {
+L130   block-size: convert.to-rem(40px);
+L131   inset-block-end: convert.to-rem(-1px);
+L132   inset-block-start: auto;
+L133   inset-inline-end: convert.to-rem(-1px);
+L136   block-size: convert.to-rem(40px);
+L137   inset-block-start: convert.to-rem(23px);
+L142 .#{$prefix}--number-input--fluid .#{$prefix}--number__control-btn {
+L146 &:hover {
+L162 .#{$prefix}--number__control-btn {
+L168   border: none;
+L172   box-shadow: inset 0 -1px $focus;
+L185 .#{$prefix}--number__control-btn:last-of-type {
+L188   inset 0 -1px $focus,
+L189   inset -2px 0 $focus;
+L202 .#{$prefix}--number__control-btn:last-of-type:hover {
+L225 .#{$prefix}--number__control-btn {
+L247 .#{$prefix}--number__control-btn:last-of-type {
+L249   box-shadow: inset -2px 0 $focus;
+L260 .#{$prefix}--number__control-btn:last-of-type:hover {
+L262   box-shadow: inset -2px 0 $support-error;
+L273 .#{$prefix}--number__control-btn:hover {
+L277 .#{$prefix}--number-input--fluid.#{$prefix}--number-input--fluid--focus {
+L281 .#{$prefix}--number {
+L285 .#{$prefix}--number {
+L308 .#{$prefix}--number__control-btn:hover {
+L333 .#{$prefix}--number__control-btn:focus:hover {
+L338 .#{$prefix}--number-input--fluid .#{$prefix}--number-input__divider {
+L342 .#{$prefix}--number-input--fluid .#{$prefix}--number__invalid {
+L343   inset-block-start: convert.to-rem(73px);
+L344   inset-inline-end: $spacing-05;   // spacing-05=16px
+L350 .#{$prefix}--number__rule-divider:first-of-type {
+L379   border: none;
+L380   margin: 0 1rem;
+L381   block-size: convert.to-rem(1px);
+L383   inline-size: calc(100% - 2rem);
+L384   inset-block-start: convert.to-rem(63px);
+L387 .#{$prefix}--number-input--fluid .#{$prefix}--form-requirement {
+L388   padding: $spacing-03 convert.to-rem(40px) $spacing-03 $spacing-05;   // spacing-03=8px spacing-03=8px spacing-05=16px
+L389   margin: 0;
+L398 .#{$prefix}--number {
+L402 .#{$prefix}--number {
+L442 .#{$prefix}--number__control-btn:hover:not(:focus) {
+L465 .#{$prefix}--number__control-btn {
+L488 .#{$prefix}--number__control-btn {
+L490   border: 0;
+L499   border: 1px solid transparent;
+L500   border-radius: $border-radius-04;
+L508 .#{$prefix}--number {
+L533 .#{$prefix}--slug {
+L534   inset-block-start: convert.to-rem(43px);
+L556 .#{$prefix}--slug {
+L557   inset-inline-end: convert.to-rem(88px);
+L578   padding-inline-end: convert.to-rem(120px);
+L619   padding-box,
+L620   linear-gradient($field, $field) padding-box,
+L640 .#{$prefix}--slug::before {

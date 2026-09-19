@@ -1,0 +1,4 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-message-bar/library/src/components/MessageBarTitle/useMessageBarTitleStyles.styles.ts
+L4 import { typographyStyles } from '@fluentui/react-theme';
+L15 const useRootBaseStyles = makeResetStyles({
+L16 ...typographyStyles.body1Strong,   // typographyStyles.body1Strong=14px/20px w600

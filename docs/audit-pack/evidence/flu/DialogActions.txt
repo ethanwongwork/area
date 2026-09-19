@@ -1,0 +1,21 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-dialog/library/src/components/DialogActions/useDialogActionsStyles.styles.ts
+L15 const useResetStyles = makeResetStyles({
+L16 gap: DIALOG_GAP,
+L17 height: 'fit-content',
+L20 gridRowStart: 3,
+L21 gridRowEnd: 3,
+L28 const useStyles = makeStyles({
+L29 gridPositionEnd: {
+L31 gridColumnStart: 2,
+L32 gridColumnEnd: 4,
+L34 gridColumnStart: 1,
+L35 gridRowStart: 4,
+L39 gridPositionStart: {
+L41 gridColumnStart: 1,
+L42 gridColumnEnd: 2,
+L44 gridColumnEnd: 4,
+L45 gridRowStart: 3,
+L49 fluidStart: {
+L50 gridColumnEnd: 4,
+L52 fluidEnd: {
+L53 gridColumnStart: 1,

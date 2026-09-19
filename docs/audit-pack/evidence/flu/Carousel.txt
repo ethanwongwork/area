@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-carousel/library/src/components/Carousel/useCarouselStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L23 elevated: {
+L26 margin: tokens.spacingVerticalL,   // spacingVerticalL=16px
+L27 padding: tokens.spacingVerticalL,   // spacingVerticalL=16px

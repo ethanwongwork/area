@@ -1,0 +1,7 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/NavSectionHeader/useNavSectionHeaderStyles.styles.ts
+L6 import { typographyStyles } from '@fluentui/react-theme';
+L15 const useStyles = makeStyles({
+L16 root: {
+L17 marginInlineStart: `10px`,
+L18 marginBlock: '8px',
+L19 ...typographyStyles.caption1Strong,   // typographyStyles.caption1Strong=12px/16px w600

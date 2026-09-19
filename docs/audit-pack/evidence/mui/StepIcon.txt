@@ -1,0 +1,10 @@
+### MUI Material @ 69960c1  packages/mui-material/src/StepIcon/StepIcon.js
+L18 const slots = {
+L26 const StepIconRoot = styled(SvgIcon, {
+L27 name: 'MuiStepIcon',
+L28 slot: 'Root',
+L45 const StepIconText = styled('text', {
+L46 name: 'MuiStepIcon',
+L47 slot: 'Text',
+L51   fontSize: theme.typography.caption.fontSize,
+L67 const ownerState = { ...props, active, completed, error };

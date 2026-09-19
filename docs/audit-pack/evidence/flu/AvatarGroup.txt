@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-avatar/library/src/components/AvatarGroup/useAvatarGroupStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 base: {
+L21 pie: {
+L34 const { layout, size } = state;
+L42 layout === 'pie' && sizeStyles[size],

@@ -1,0 +1,54 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Drawer/Drawer.js
+L35 const slots = {
+L45 const DrawerRoot = styled(Modal, {
+L46 name: 'MuiDrawer',
+L47 slot: 'Root',
+L55 const DrawerDockedRoot = styled('div', {
+L57 name: 'MuiDrawer',
+L58 slot: 'Docked',
+L65 const DrawerPaper = styled(Paper, {
+L66 name: 'MuiDrawer',
+L67 slot: 'Paper',
+L73   height: '100%',
+L80   top: 0,
+L85 variants: [
+L87 props: {
+L90 style: {
+L91   left: 0,
+L95 props: {
+L98 style: {
+L99   top: 0,
+L100   left: 0,
+L101   right: 0,
+L102   height: 'auto',
+L103   maxHeight: '100%',
+L107 props: {
+L110 style: {
+L111   right: 0,
+L115 props: {
+L118 style: {
+L119   top: 'auto',
+L120   left: 0,
+L121   bottom: 0,
+L122   right: 0,
+L123   height: 'auto',
+L124   maxHeight: '100%',
+L130 style: {
+L137 style: {
+L144 style: {
+L151 style: {
+L159 const oppositeDirection = {
+L160   left: 'right',
+L161   right: 'left',
+L162   top: 'down',
+L163   bottom: 'up',
+L182 const defaultTransitionDuration = {
+L221 const ownerState = {
+L232 const externalForwardedProps = {
+L234 slotProps: {
+L248 externalForwardedProps: {
+L253 additionalProps: {
+L258 slots: {
+L261 slotProps: {
+L273 additionalProps: {
+L298 additionalProps: {

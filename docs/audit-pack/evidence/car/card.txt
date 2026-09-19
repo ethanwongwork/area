@@ -1,0 +1,129 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/card/_card.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L23 @mixin card {
+L25 .#{$prefix}--card {
+L32 .#{$prefix}--card--clickable {
+L34   border: 1px solid $border-tile-01;
+L40 &:hover {
+L44 &:focus {
+L50 &:active {
+L57 .#{$prefix}--card__clickable-footer {
+L61   padding: $spacing-05;   // spacing-05=16px
+L66 .#{$prefix}--card--disabled .#{$prefix}--card__clickable-footer {
+L71 .#{$prefix}--card--disabled {
+L80 .#{$prefix}--card__header {
+L84   column-gap: $spacing-05;   // spacing-05=16px
+L87   row-gap: 0;
+L91 .#{$prefix}--card__body {
+L92   @include type-style('body-compact-01');   // body-compact-01=14/18
+L94   padding-block: $spacing-05;   // spacing-05=16px
+L95   padding-inline: $spacing-05;   // spacing-05=16px
+L98 .#{$prefix}--card__body--flush {
+L99   padding: 0;
+L104 .#{$prefix}--card__footer {
+L107   padding: $spacing-05;   // spacing-05=16px
+L111 .#{$prefix}--card__footer:has(> .#{$prefix}--card__action) {
+L113   padding: 0;
+L115   gap: 1px;
+L122   min-inline-size: 0;
+L126   inline-size: 100%;
+L127   max-inline-size: none;
+L135   margin-inline-start: auto;
+L142   margin-inline-start: 0;
+L146 .#{$prefix}--card__action {
+L152 .#{$prefix}--card__header-media {
+L157   margin-block: $spacing-05;   // spacing-05=16px
+L158   margin-inline: $spacing-05;   // spacing-05=16px
+L160   max-block-size: $spacing-10;   // spacing-10=64px
+L164 .#{$prefix}--card__media {
+L166   inline-size: 100%;
+L170 &::after {
+L176 .#{$prefix}--card__media.#{$prefix}--aspect-ratio--16x9 {
+L179 .#{$prefix}--card__media.#{$prefix}--aspect-ratio--9x16 {
+L182 .#{$prefix}--card__media.#{$prefix}--aspect-ratio--2x1 {
+L185 .#{$prefix}--card__media.#{$prefix}--aspect-ratio--1x2 {
+L188 .#{$prefix}--card__media.#{$prefix}--aspect-ratio--4x3 {
+L191 .#{$prefix}--card__media.#{$prefix}--aspect-ratio--3x4 {
+L194 .#{$prefix}--card__media.#{$prefix}--aspect-ratio--3x2 {
+L197 .#{$prefix}--card__media.#{$prefix}--aspect-ratio--2x3 {
+L200 .#{$prefix}--card__media.#{$prefix}--aspect-ratio--1x1 {
+L205 .#{$prefix}--card__media > * {
+L207   block-size: 100%;
+L208   inline-size: 100%;
+L213 .#{$prefix}--card--horizontal {
+L219 .#{$prefix}--card__media--horizontal {
+L221   flex-basis: var(--#{$prefix}--card--media-width, 33.33%);
+L226 .#{$prefix}--card--horizontal > .#{$prefix}--card__content {
+L230   min-inline-size: 0;
+L242   margin-block-start: auto;
+L246 .#{$prefix}--card__title .#{$prefix}--card__label {
+L247   @include type-style('label-01');   // label-01=12/16
+L252 .#{$prefix}--card--disabled .#{$prefix}--card__label {
+L256 .#{$prefix}--card__label--truncate {
+L262 .#{$prefix}--card__label--truncate-multi {
+L271 .#{$prefix}--card__title {
+L276   gap: $spacing-01;   // spacing-01=2px
+L277   margin-inline: $spacing-05;   // spacing-05=16px
+L278   min-inline-size: 0;
+L281 .#{$prefix}--card__header > .#{$prefix}--card__title {
+L282   margin-block: $spacing-05;   // spacing-05=16px
+L285 .#{$prefix}--card--expressive .#{$prefix}--card__title-text-row {
+L286   @include type-style('heading-03');   // heading-03=20/28
+L289 .#{$prefix}--card--productive .#{$prefix}--card__title-text-row {
+L290   @include type-style('heading-compact-02');   // heading-compact-02=16/22 w600
+L294 .#{$prefix}--card__title-text-row {
+L298 .#{$prefix}--card__title-text-row--truncate {
+L300   max-inline-size: var(--#{$prefix}--card--title-max-width, 100%);
+L305 .#{$prefix}--card__title-text-row--truncate-multi {
+L310   max-inline-size: var(--#{$prefix}--card--title-max-width, 100%);
+L315 .#{$prefix}--card__title-text-row--with-start-icon {
+L318   gap: $spacing-03;   // spacing-03=8px
+L322 .#{$prefix}--card__title-text-row--with-end-icon {
+L327 .#{$prefix}--card__title-start-icon {
+L331   margin-block-start: $spacing-01;   // spacing-01=2px
+L335 .#{$prefix}--card__title-end-icon {
+L338   margin-inline-start: $spacing-03;   // spacing-03=8px
+L343 .#{$prefix}--card__title .#{$prefix}--card__description {
+L344   @include type-style('label-01');   // label-01=12/16
+L349 .#{$prefix}--card--disabled .#{$prefix}--card__description {
+L353 .#{$prefix}--card__description--truncate {
+L359 .#{$prefix}--card__description--truncate-multi {
+L368 .#{$prefix}--card__title-media {
+L376   margin-block-start: $spacing-05;   // spacing-05=16px
+L378   margin-inline-start: $spacing-05;   // spacing-05=16px
+L380   max-block-size: $spacing-10;   // spacing-10=64px
+L387   margin-inline-start: 0;
+L391 .#{$prefix}--card__actions {
+L396   block-size: $spacing-07;   // spacing-07=32px
+L397   gap: $spacing-02;   // spacing-02=4px
+L398   inline-size: 50%;
+L399   inset-block-start: $spacing-03;   // spacing-03=8px
+L400   inset-inline-end: $spacing-03;   // spacing-03=8px
+L401   max-inline-size: 50%;
+L405 .#{$prefix}--card--has-ai-label {
+L408   border: 1px solid transparent;
+L410   inset 0 -80px 70px -65px $ai-inner-shadow,
+L414 .#{$prefix}--card__decorator {
+L419   block-size: $spacing-07;   // spacing-07=32px
+L420   inset-block-start: $spacing-03;   // spacing-03=8px
+L421   inset-inline-end: $spacing-03;   // spacing-03=8px
+L424 .#{$prefix}--card--has-ai-label .#{$prefix}--card__title {
+L425   padding-inline-end: calc($spacing-07 + $spacing-05);   // spacing-07=32px spacing-05=16px
+L429 .#{$prefix}--card__title {
+L430   padding-inline-end: $spacing-13;   // spacing-13=160px
+L433 .#{$prefix}--card--has-ai-label .#{$prefix}--card__label {
+L434   padding-inline-end: calc($spacing-07 + $spacing-05);   // spacing-07=32px spacing-05=16px
+L438 .#{$prefix}--card__label {
+L439   padding-inline-end: $spacing-13;   // spacing-13=160px
+L442 .#{$prefix}--card--has-ai-label .#{$prefix}--card__description {
+L443   padding-inline-end: calc($spacing-07 + $spacing-05);   // spacing-07=32px spacing-05=16px
+L447 .#{$prefix}--card__description {
+L448   padding-inline-end: $spacing-13;   // spacing-13=160px
+L451 .#{$prefix}--card--has-ai-label .#{$prefix}--card__actions {
+L452   inset-inline-end: calc($spacing-03 + $spacing-06 + $spacing-03);   // spacing-03=8px spacing-06=24px spacing-03=8px
+L456 .#{$prefix}--card--clickable.#{$prefix}--card--has-ai-label::before {
+L461   block-size: 100%;
+L462   box-shadow: inset 0 -80px 70px -65px $ai-inner-shadow;
+L464   inline-size: 100%;
+L465   inset-block-start: 0;
+L466   inset-inline-start: 0;
+L471 .#{$prefix}--card--clickable.#{$prefix}--card--has-ai-label:hover::before {

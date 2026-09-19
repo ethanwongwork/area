@@ -1,0 +1,295 @@
+### Primer React @ e4e6eba  packages/react/src/Tooltip/Tooltip.module.css
+/* stylelint-disable primer/typography, primer/borders, selector-class-pattern */
+
+.Tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.Tooltip::after {
+  position: absolute;
+  z-index: 1000000;
+  display: none;
+  /* stylelint-disable-next-line primer/spacing */
+  padding: 0.5em 0.75em;
+  font: normal normal var(--text-body-size-small) / var(--text-body-lineHeight-small) var(--fontStack-system);   /* = normal normal 12px / 1.625 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+  -webkit-font-smoothing: subpixel-antialiased;
+  color: var(--tooltip-fgColor, var(--fgColor-onEmphasis));   /* = var(--fgColor-onEmphasis) */
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  overflow-wrap: break-word;
+  white-space: pre;
+  pointer-events: none;
+  content: attr(aria-label);
+  background: var(--tooltip-bgColor, var(--bgColor-emphasis));   /* = var(--bgColor-emphasis) */
+  border-radius: var(--borderRadius-medium);   /* = 6px */
+  opacity: 0;
+}
+
+/* delay animation for tooltip */
+@keyframes tooltip-appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.Tooltip:hover::after,
+.Tooltip:active::after,
+.Tooltip:focus::after,
+.Tooltip:focus-within::after {
+  display: inline-block;
+  text-decoration: none;
+  animation-name: tooltip-appear;
+  animation-duration: 0.1s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in;
+  animation-delay: 0s;
+}
+
+.Tooltip--noDelay:hover::after,
+.Tooltip--noDelay:active::after,
+.Tooltip--noDelay:focus::after,
+.Tooltip--noDelay:focus-within::after {
+  animation-delay: 0s;
+}
+
+.Tooltip--multiline:hover::after,
+.Tooltip--multiline:active::after,
+.Tooltip--multiline:focus::after,
+.Tooltip--multiline:focus-within::after {
+  display: table-cell;
+}
+
+/* Tooltipped south */
+.Tooltip--s::after,
+.Tooltip--se::after,
+.Tooltip--sw::after {
+  top: 100%;
+  right: 50%;
+  /* stylelint-disable-next-line primer/spacing */
+  margin-top: 6px;
+}
+
+.Tooltip--se::after {
+  right: auto;
+  left: 50%;
+  margin-left: calc(-1 * var(--base-size-16));   /* = -16px */
+}
+
+.Tooltip--sw::after {
+  margin-right: calc(-1 * var(--base-size-16));   /* = -16px */
+}
+
+/* Tooltips above the object */
+.Tooltip--n::after,
+.Tooltip--ne::after,
+.Tooltip--nw::after {
+  right: 50%;
+  bottom: 100%;
+  /* stylelint-disable-next-line primer/spacing */
+  margin-bottom: 6px;
+}
+
+.Tooltip--ne::after {
+  right: auto;
+  left: 50%;
+  margin-left: calc(-1 * var(--base-size-16));   /* = -16px */
+}
+
+.Tooltip--nw::after {
+  margin-right: calc(-1 * var(--base-size-16));   /* = -16px */
+}
+
+/* Move the tooltip body to the center of the object. */
+.Tooltip--s::after,
+.Tooltip--n::after {
+  transform: translateX(50%);
+}
+
+/* Tooltipped to the left */
+.Tooltip--w::after {
+  right: 100%;
+  bottom: 50%;
+  /* stylelint-disable-next-line primer/spacing */
+  margin-right: 6px;
+  transform: translateY(50%);
+}
+
+/* tooltipped to the right */
+.Tooltip--e::after {
+  bottom: 50%;
+  left: 100%;
+  /* stylelint-disable-next-line primer/spacing */
+  margin-left: 6px;
+  transform: translateY(50%);
+}
+
+.Tooltip--multiline::after {
+  width: max-content;
+  max-width: 250px;
+  overflow-wrap: break-word;
+  white-space: pre-line;
+  border-collapse: separate;
+}
+
+.Tooltip--multiline.Tooltip--s::after,
+.Tooltip--multiline.Tooltip--n::after {
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.Tooltip--multiline.Tooltip--w::after,
+.Tooltip--multiline.Tooltip--e::after {
+  right: 100%;
+}
+
+.Tooltip--alignRight::after {
+  right: 0;
+  margin-right: 0;
+}
+
+.Tooltip--alignLeft::after {
+  left: 0;
+  margin-left: 0;
+}
+### Primer React @ e4e6eba  packages/react/src/TooltipV2/Tooltip.module.css
+/* Animation definition */
+@keyframes tooltip-appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.Tooltip {
+  /* Overriding the default popover styles */
+  display: none;
+
+  &[popover] {
+    position: absolute;
+    width: max-content;
+    max-width: 250px;
+    /* stylelint-disable-next-line primer/spacing */
+    padding: var(--overlay-paddingBlock-condensed) var(--overlay-padding-condensed);   /* = 4px 8px */
+    margin: auto;
+
+    /* for scrollbar */
+    overflow: visible;
+    /* stylelint-disable-next-line property-no-deprecated */
+    clip: auto;
+    font: var(--text-body-shorthand-small);   /* = 400 12px / 1.625 "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Backtick Fix", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" */
+    color: var(--tooltip-fgColor);
+    text-align: center;
+    overflow-wrap: break-word;
+    white-space: normal;
+    background: var(--tooltip-bgColor);
+    border: 0;
+    border-radius: var(--borderRadius-medium);   /* = 6px */
+    -webkit-font-smoothing: subpixel-antialiased;
+    inset: auto;
+    text-wrap: balance;
+  }
+
+  /* class name in chrome is :popover-open */
+  &[popover]:popover-open {
+    display: block;
+  }
+
+  /* class name in firefox and safari is \:popover-open */
+  /* stylelint-disable-next-line selector-class-pattern */
+  &[popover]:global(.\\:popover-open) {
+    display: block;
+  }
+
+  @media (forced-colors: active) {
+    outline: 1px solid transparent;
+  }
+
+  /* This is needed to keep the tooltip open when the user leaves the trigger element to hover tooltip */
+  &::after {
+    position: absolute;
+    right: 0;
+    left: 0;
+    display: block;
+    height: var(--overlay-offset);   /* = 4px */
+    content: '';
+  }
+
+  /* South, East, Southeast, Southwest after */
+  &[data-direction='n']::after,
+  &[data-direction='ne']::after,
+  &[data-direction='nw']::after {
+    top: 100%;
+  }
+
+  &[data-direction='s']::after,
+  &[data-direction='se']::after,
+  &[data-direction='sw']::after {
+    bottom: 100%;
+  }
+
+  &[data-direction='w']::after {
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    display: block;
+    width: 8px;
+    height: 100%;
+    content: '';
+  }
+
+  /* East before and after */
+  &[data-direction='e']::after {
+    position: absolute;
+    right: 100%;
+    bottom: 0;
+    display: block;
+    width: 8px;
+    height: 100%;
+    /* stylelint-disable-next-line primer/spacing */
+    margin-left: -8px;
+    content: '';
+  }
+
+  /* Only show animations if users don't have a preference for reduced motion */
+  @media screen and (prefers-reduced-motion: no-preference) {
+    /* Animation styles */
+    &:popover-open,
+    &:popover-open::before {
+      animation-name: tooltip-appear;
+      animation-duration: 0.1s;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-in;
+      animation-delay: 0s;
+    }
+
+    /* Animation styles */
+    &:global(.\\:popover-open) /* stylelint-disable-line selector-class-pattern */,
+    &:global(.\\:popover-open)::before /* stylelint-disable-line selector-class-pattern */ {
+      animation-name: tooltip-appear;
+      animation-duration: 0.1s;
+      animation-fill-mode: forwards;
+      animation-timing-function: ease-in;
+      animation-delay: 0s;
+    }
+  }
+}
+
+.KeybindingHintContainer.HasTextBefore {
+  margin-left: var(--base-size-6);   /* = 6px */
+}
+
+.KeybindingHintContainer.HasTextBefore.HasMultipleHints {
+  margin-left: var(--base-size-8);   /* = 8px */
+}

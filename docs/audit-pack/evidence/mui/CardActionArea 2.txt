@@ -1,0 +1,19 @@
+### MUI Material @ 69960c1  packages/mui-material/src/CardActionArea/CardActionArea.js
+L18 const slots = {
+L26 const CardActionAreaRoot = styled(ButtonBase, {
+L27 name: 'MuiCardActionArea',
+L28 slot: 'Root',
+L33   borderRadius: 'inherit', // for Safari to work https://github.com/mui/material-ui/issues/36285.
+L34   width: '100%',
+L44 : {
+L52 const CardActionAreaFocusHighlight = styled('span', {
+L53 name: 'MuiCardActionArea',
+L54 slot: 'FocusHighlight',
+L60   top: 0,
+L61   right: 0,
+L62   bottom: 0,
+L63   left: 0,
+L64   borderRadius: 'inherit',
+L87 const externalForwardedProps = {
+L94 externalForwardedProps: {
+L102 additionalProps: {

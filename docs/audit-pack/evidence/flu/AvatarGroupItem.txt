@@ -1,0 +1,76 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-avatar/library/src/components/AvatarGroupItem/useAvatarGroupItemStyles.styles.ts
+L4 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L9 import type { AvatarSize } from '../../Avatar';
+L18 const avatarGroupItemDividerWidthVar = '--fuiAvatarGroupItem__divider--width';
+L23 const useRootStyles = makeStyles({
+L24 base: {
+L27 flexShrink: 0,
+L30 overflowItem: { padding: `${tokens.spacingVerticalXS} ${tokens.spacingHorizontalXS}` },   // spacingVerticalXS=4px spacingHorizontalXS=4px
+L31 nonOverflowItem: { borderRadius: tokens.borderRadiusCircular },   // borderRadiusCircular=10000px
+L37 const useAvatarStyles = makeStyles({
+L38 nonOverflowItem: {
+L41 pie: { borderRadius: '0' },
+L47 const useOverflowLabelStyles = makeStyles({
+L48 base: {
+L49 marginLeft: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L51 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L58 const useStackStyles = makeStyles({
+L59 thick: {
+L60 boxShadow: `0 0 0 ${tokens.strokeWidthThick} ${tokens.colorNeutralBackground2}`,   // strokeWidthThick=2px
+L62 thicker: {
+L63 boxShadow: `0 0 0 ${tokens.strokeWidthThicker} ${tokens.colorNeutralBackground2}`,   // strokeWidthThicker=3px
+L65 thickest: {
+L66 boxShadow: `0 0 0 ${tokens.strokeWidthThickest} ${tokens.colorNeutralBackground2}`,   // strokeWidthThickest=4px
+L68 xxs: { '&:not(:first-child)': { marginLeft: `calc(-1 * ${tokens.spacingHorizontalXXS})` } },   // spacingHorizontalXXS=2px
+L69 xs: { '&:not(:first-child)': { marginLeft: `calc(-1 * ${tokens.spacingHorizontalXS})` } },   // spacingHorizontalXS=4px
+L70 s: { '&:not(:first-child)': { marginLeft: `calc(-1 * ${tokens.spacingHorizontalS})` } },   // spacingHorizontalS=8px
+L71 l: { '&:not(:first-child)': { marginLeft: `calc(-1 * ${tokens.spacingHorizontalL})` } },   // spacingHorizontalL=16px
+L77 const useSpreadStyles = makeStyles({
+L78 s: { '&:not(:first-child)': { marginLeft: tokens.spacingHorizontalS } },   // spacingHorizontalS=8px
+L79 mNudge: { '&:not(:first-child)': { marginLeft: tokens.spacingHorizontalMNudge } },   // spacingHorizontalMNudge=10px
+L80 m: { '&:not(:first-child)': { marginLeft: tokens.spacingHorizontalM } },   // spacingHorizontalM=12px
+L81 l: { '&:not(:first-child)': { marginLeft: tokens.spacingHorizontalL } },   // spacingHorizontalL=16px
+L82 xl: { '&:not(:first-child)': { marginLeft: tokens.spacingHorizontalXL } },   // spacingHorizontalXL=20px
+L88 const usePieStyles = makeStyles({
+L89 base: {
+L92 slices: {
+L96 clipPath: `inset(0 calc(25% + (var(${avatarGroupItemDividerWidthVar}) / 2)) 0 25%)`,
+L97 left: '-25%',
+L101 clipPath: `inset(0 25% 0 calc(25% + (var(${avatarGroupItemDividerWidthVar}) / 2)))`,
+L102 left: '25%',
+L108 clipPath: `inset(0 calc(25% + (var(${avatarGroupItemDividerWidthVar}) / 2)) 0 25%)`,
+L109 left: '-25%',
+L113 // Since the two AvatarGroupItems on the right are scaled by 0.5, the divider width should not be halved.
+L114 clipPath: `inset(0 0 var(${avatarGroupItemDividerWidthVar}) var(${avatarGroupItemDividerWidthVar}))`,
+L115 left: '50%',
+L117 transformOrigin: '0 0',
+L121 clipPath: `inset(var(${avatarGroupItemDividerWidthVar}) 0 0 var(${avatarGroupItemDividerWidthVar}))`,
+L122 left: '50%',
+L123 top: '50%',
+L125 transformOrigin: '0 0',
+L128 rtlSlices: {
+L132 clipPath: `inset(0 25% 0 calc(25% + (var(${avatarGroupItemDividerWidthVar}) / 2)))`,
+L136 clipPath: `inset(0 calc(25% + (var(${avatarGroupItemDividerWidthVar}) / 2)) 0 25%)`,
+L142 clipPath: `inset(0 25% 0 calc(25% + (var(${avatarGroupItemDividerWidthVar}) / 2)))`,
+L146 clipPath: `inset(0 var(${avatarGroupItemDividerWidthVar}) var(${avatarGroupItemDividerWidthVar}) 0)`,
+L147 left: '0',
+L151 clipPath: `inset(var(${avatarGroupItemDividerWidthVar}) var(${avatarGroupItemDividerWidthVar}) 0 0)`,
+L152 left: '0',
+L155 thick: { [avatarGroupItemDividerWidthVar]: tokens.strokeWidthThick },   // strokeWidthThick=2px
+L156 thicker: { [avatarGroupItemDividerWidthVar]: tokens.strokeWidthThicker },   // strokeWidthThicker=3px
+L157 thickest: { [avatarGroupItemDividerWidthVar]: tokens.strokeWidthThickest },   // strokeWidthThickest=4px
+L164 const { isOverflowItem, layout, size } = state;
+L173 const groupChildClassName = useGroupChildClassName(layout, size);
+L180 rootClasses.push(sizeStyles[size]);
+L185 if (size < 56) {
+L187 } else if (size < 72) {
+L230 export const useGroupChildClassName = (layout: AvatarGroupProps['layout'], size: AvatarSize): string => {
+L235 if (size) {
+L237 if (size < 56) {
+L239 } else if (size < 72) {
+L245 if (size < 24) {
+L247 } else if (size < 48) {
+L249 } else if (size < 96) {
+L255 if (size < 20) {
+L257 } else if (size < 32) {
+L259 } else if (size < 64) {

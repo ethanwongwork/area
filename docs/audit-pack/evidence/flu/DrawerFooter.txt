@@ -1,0 +1,12 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-drawer/library/src/components/DrawerFooter/useDrawerFooterStyles.styles.ts
+L18 const useStyles = makeResetStyles({
+L19 width: '100%',
+L20 maxWidth: '100%',
+L21 padding: `${tokens.spacingVerticalL} ${tokens.spacingHorizontalXXL} ${tokens.spacingVerticalXXL}`,   // spacingVerticalL=16px spacingHorizontalXXL=24px spacingVerticalXXL=24px
+L25 columnGap: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L28 zIndex: 2,
+L31 const useDrawerFooterStyles = makeStyles({
+L32 separator: {
+L35 top: 0,
+L39 separatorVisible: {
+L41 opacity: 1,

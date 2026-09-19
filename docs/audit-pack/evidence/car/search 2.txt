@@ -1,0 +1,88 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/search/_search.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L32 @mixin search {
+L33 .#{$prefix}--search {
+L34   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L39   inline-size: 100%;
+L43   block-size: layout.size('height');
+L44   inline-size: layout.size('height');
+L48 &.#{$prefix}--search--expandable .#{$prefix}--search-magnifier {
+L49   block-size: layout.size('height');
+L50   inline-size: layout.size('height');
+L54 .#{$prefix}--search .#{$prefix}--label {
+L58 .#{$prefix}--search-input {
+L59   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L62   @include type.type-style('body-compact-01');   // body-compact-01=14/18
+L66   padding: 0 layout.size('height');
+L67   border: none;
+L70   block-size: layout.size('height');
+L74   inline-size: 100%;
+L81   border: 1px solid transparent;
+L82   border-radius: $border-radius-04;
+L85   linear-gradient($field, $field) padding-box,
+L94 &:focus {
+L98 &::placeholder {
+L102 &::-ms-clear {
+L109 &::-webkit-search-results-decoration {
+L116 .#{$prefix}--search-input[disabled] {
+L122 &::placeholder {
+L126 .#{$prefix}--search--light .#{$prefix}--search-input {
+L130 .#{$prefix}--search--light .#{$prefix}--search-close::before {
+L134 .#{$prefix}--search-magnifier-icon {
+L135   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L140   block-size: convert.to-rem(16px);
+L142   inline-size: convert.to-rem(16px);
+L143   inset-block-start: 50%;
+L144   inset-inline-start: calc((layout.size('height') - 1rem) / 2);
+L149 .#{$prefix}--search-close {
+L154   background-clip: padding-box;
+L155   inset-block-start: 0;
+L156   inset-inline-end: 0;
+L159 .#{$prefix}--search-button {
+L162   margin-inline-start: $spacing-01;   // spacing-01=2px
+L171 .#{$prefix}--search-close svg {
+L178 .#{$prefix}--search-button {
+L179   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L184   border-width: 1px;
+L185   border-style: solid;
+L187   block-size: layout.size('height');
+L190   inline-size: layout.size('height');
+L195   border-radius: $border-radius-04;
+L198 &:hover {
+L202 &:focus {
+L206 &:active {
+L214 .#{$prefix}--search-input:focus ~ .#{$prefix}--search-close:hover {
+L219 &::after {
+L223   inset-block: $spacing-01;   // spacing-01=2px
+L224   inset-inline: 0 $spacing-01;   // spacing-01=2px
+L231 .#{$prefix}--search-magnifier {
+L235 &:hover {
+L240 &:hover::before {
+L245 .#{$prefix}--search--disabled svg {
+L249 .#{$prefix}--search-close--hidden {
+L254 .#{$prefix}--skeleton .#{$prefix}--search-input {
+L257   inline-size: 100%;
+L259 &::placeholder {
+L264 .#{$prefix}--search--expandable {
+L268 .#{$prefix}--search--expandable.#{$prefix}--search--expanded {
+L269   inline-size: 100%;
+L273 .#{$prefix}--search-input {
+L274   border: 0;
+L278 .#{$prefix}--search--expandable .#{$prefix}--search-input {
+L279   padding: 0;
+L280   inline-size: 0;
+L283 &::placeholder {
+L293 .#{$prefix}--search-input {
+L294   padding: 0 layout.size('height');
+L295   inline-size: 100%;
+L298 &::placeholder {
+L300   padding: 0;
+L305 .#{$prefix}--search--expandable .#{$prefix}--search-magnifier {
+L310   border-radius: $border-radius-04;
+L313 &:focus {
+L318 .#{$prefix}--search--expandable .#{$prefix}--search-magnifier:hover {
+L323 .#{$prefix}--search-magnifier {
+L327 .#{$prefix}--search--expandable .#{$prefix}--search-magnifier-icon {
+L332 .#{$prefix}--search-magnifier-icon {
+L336 .#{$prefix}--search--expandable.#{$prefix}--search--disabled svg {
+L340 .#{$prefix}--search-magnifier-tooltip {
+L344 .#{$prefix}--search-magnifier {

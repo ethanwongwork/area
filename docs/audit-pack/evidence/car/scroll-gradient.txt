@@ -1,0 +1,36 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/scroll-gradient/_scroll-gradient.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L18 @mixin scroll-gradient {
+L21 .#{$prefix}--scroll-gradient {
+L26   block-size: inherit;
+L27   inline-size: inherit;
+L30 .#{$prefix}--scroll-gradient__content {
+L33   block-size: inherit;
+L35   inline-size: 100%;
+L38 .#{$prefix}--scroll-gradient__content-children {
+L39   block-size: 100%;
+L42   inline-size: 100%;
+L45 .#{$prefix}--scroll-gradient__content-children > * {
+L52 .#{$prefix}--scroll-gradient__end-horizontal {
+L60 .#{$prefix}--scroll-gradient__start-vertical {
+L61   block-size: $spacing-09;   // spacing-09=48px
+L62   inset-block-start: 0;
+L63   inset-inline-start: 0;
+L67 .#{$prefix}--scroll-gradient__end-vertical {
+L68   block-size: $spacing-09;   // spacing-09=48px
+L69   inset-block-end: 0;
+L70   inset-inline-start: 0;
+L74 .#{$prefix}--scroll-gradient__start-horizontal {
+L75   inline-size: $spacing-09;   // spacing-09=48px
+L76   inset-block-start: 0;
+L77   inset-inline-start: 0;
+L81 .#{$prefix}--scroll-gradient__end-horizontal {
+L82   inline-size: $spacing-09;   // spacing-09=48px
+L83   inset-block-start: 0;
+L84   inset-inline-end: 0;
+L88 .#{$prefix}--scroll-gradient [data-end-vertical] {
+L89   block-size: $intersection-value;
+L92   inline-size: 100%;
+L96 .#{$prefix}--scroll-gradient [data-end-horizontal] {
+L101 .#{$prefix}--scroll-gradient [data-end-horizontal] {
+L102   block-size: 100%;
+L105   inline-size: $intersection-value;

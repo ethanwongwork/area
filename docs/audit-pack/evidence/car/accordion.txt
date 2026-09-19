@@ -1,0 +1,104 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/accordion/_accordion.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L34   $arrow-margin: 0 layout.density('padding-inline') 0 0 !default;
+L39   $title-margin: 0 0 0 layout.density('padding-inline') !default;
+L44   $content-padding: 0 0 0 $spacing-05 !default;   // spacing-05=16px
+L46 @mixin accordion {
+L47 .#{$prefix}--accordion {
+L48   @include layout.use('size', $default: 'md', $min: 'sm', $max: 'lg');
+L53 & {
+L54   inline-size: 100%;
+L59 .#{$prefix}--accordion__item {
+L65 &:last-child {
+L70 .#{$prefix}--accordion__item:not(.#{$prefix}--accordion__item--active) {
+L75 &:hover + .#{$prefix}--accordion__item {
+L80 &:last-child:hover {
+L86 .#{$prefix}--accordion__heading {
+L90 & {
+L96   margin: 0;
+L99   inline-size: 100%;
+L100   min-block-size: layout.size('height');
+L101   padding-inline-end: layout.density('padding-inline');
+L105 &:hover {
+L111 &:focus {
+L117   inset 0 1px 0 0 $focus,
+L118   /* Border right */ inset 2px 0 0 0 $focus,
+L120   inset 0 -1px 0 0 $focus,
+L121   /* Border left */ inset -2px 0 0 0 $focus;
+L128 .#{$prefix}--accordion__heading:focus {
+L134 .#{$prefix}--accordion__heading[disabled] {
+L140 .#{$prefix}--accordion__heading[disabled] .#{$prefix}--accordion__arrow {
+L145 .#{$prefix}--accordion__heading[disabled]:hover::before {
+L151 .#{$prefix}--accordion__item--disabled + .#{$prefix}--accordion__item {
+L163 .#{$prefix}--accordion__arrow {
+L168 & {
+L170   block-size: 1rem;
+L172   inline-size: 1rem;
+L179 .#{$prefix}--accordion__title {
+L180   @include type-style('body-01');   // body-01=14/20
+L182 & {
+L184   inline-size: 100%;
+L185   padding-inline-start: $spacing-05;   // spacing-05=16px
+L190 .#{$prefix}--accordion__wrapper {
+L194   padding: 0;
+L195   max-block-size: 0;
+L202 .#{$prefix}--accordion__content {
+L203   padding-inline: layout.density('padding-inline');
+L206 @include breakpoint-up(480px) {
+L207   padding-inline-end: $spacing-09;   // spacing-09=48px
+L210 @include breakpoint-up(640px) {
+L211   padding-inline-end: 25%;
+L215   @include type-style('body-01');   // body-01=14/20
+L219 .#{$prefix}--accordion--start .#{$prefix}--accordion__heading {
+L224 .#{$prefix}--accordion--start .#{$prefix}--accordion__arrow {
+L226   margin: 2px 0 0 layout.density('padding-inline');
+L229 .#{$prefix}--accordion--start .#{$prefix}--accordion__title {
+L230   margin-inline-end: $spacing-05;   // spacing-05=16px
+L233 .#{$prefix}--accordion--start .#{$prefix}--accordion__content {
+L234   margin-inline-start: calc(
+L235   #{layout.density('padding-inline')} + #{$spacing-05}   // spacing-05=16px
+L240 .#{$prefix}--accordion__item--expanding .#{$prefix}--accordion__content {
+L244 .#{$prefix}--accordion__item--active {
+L251   max-block-size: fit-content;
+L253   padding-block: $spacing-03;   // spacing-03=8px
+L254   padding-block-end: $spacing-06;   // spacing-06=24px
+L271 .#{$prefix}--accordion__item--active {
+L273   padding: 0;
+L274   max-block-size: 0;
+L281 .#{$prefix}--accordion--flush .#{$prefix}--accordion__item {
+L285 &:last-child {
+L290 &::after {
+L293   block-size: 1px;
+L295   inline-size: calc(100% - $spacing-05 - $spacing-05);   // spacing-05=16px spacing-05=16px
+L296   margin-inline-start: $spacing-05;   // spacing-05=16px
+L304 &::before {
+L306   inset-block-start: -1px;
+L309 &:last-child::after {
+L311   inset-block-end: -1px;
+L326 .#{$prefix}--accordion--flush .#{$prefix}--accordion__heading:hover {
+L332 &::after {
+L336   block-size: 1px;
+L338   inline-size: 100%;
+L339   inset-inline-start: 0;
+L347 &::before {
+L348   inset-block-start: -1px;
+L351 &::after {
+L352   inset-block-end: -1px;
+L356 &:focus::before {
+L364 .#{$prefix}--accordion.#{$prefix}--skeleton .#{$prefix}--accordion__button {
+L368 .#{$prefix}--accordion.#{$prefix}--skeleton .#{$prefix}--accordion__arrow {
+L374 &:active {
+L375   border: none;
+L383 .#{$prefix}--accordion__arrow:hover {
+L384   border: none;
+L394 .#{$prefix}--accordion__heading:hover {
+L400 .#{$prefix}--accordion__arrow {
+L401   margin-inline-start: $spacing-05;   // spacing-05=16px
+L406 .#{$prefix}--accordion__arrow {
+L407   border: none;
+L412 .#{$prefix}--accordion__title.#{$prefix}--skeleton__text {
+L413   margin-block-end: 0;
+L416 .#{$prefix}--accordion.#{$prefix}--skeleton .#{$prefix}--accordion__title {
+L417   margin-inline-start: $spacing-05;   // spacing-05=16px
+L422   padding-inline: layout.density('padding-inline') 0;
+L426   margin-inline-end: 0;
+L427   padding-inline-start: 0;

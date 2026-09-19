@@ -1,0 +1,71 @@
+### Primer React @ e4e6eba  packages/react/src/SkeletonText/SkeletonText.module.css
+.SkeletonText {
+  --font-size: var(--text-body-size-medium);   /* = 14px */
+  --line-height: var(--text-body-lineHeight-medium);   /* = 1.5 */
+  --leading: calc(var(--font-size) * var(--line-height) - var(--font-size));   /* = 7px */
+
+  @supports (margin-block: mod(1px, 1px)) {
+    --leading: mod(var(--font-size) * var(--line-height), var(--font-size));   /* = mod(14px * 1.5, 14px) */
+  }
+
+  height: var(--font-size);   /* = 14px */
+  border-radius: var(--borderRadius-small);   /* = 3px */
+  /* stylelint-disable-next-line primer/spacing */
+  margin-block: calc(var(--leading) / 2);   /* = 3.5px */
+
+  &:where([data-in-multiline]) {
+    /* stylelint-disable-next-line primer/spacing */
+    margin-block-end: calc(var(--leading) * 2);   /* = 14px */
+
+    &:last-child {
+      min-width: 50px;
+      max-width: 65%;
+      margin-bottom: 0;
+    }
+  }
+
+  &:where([data-text-skeleton-size='display']),
+  &:where([data-text-skeleton-size='titleLarge']) {
+    border-radius: var(--borderRadius-medium);   /* = 6px */
+  }
+
+  &:where([data-text-skeleton-size='display']) {
+    --font-size: var(--text-display-size);   /* = 40px */
+    --line-height: var(--text-display-lineHeight);   /* = 1.375 */
+  }
+
+  &:where([data-text-skeleton-size='titleLarge']) {
+    --font-size: var(--text-title-size-large);   /* = 32px */
+    --line-height: var(--text-title-lineHeight-large);   /* = 1.5 */
+  }
+
+  &:where([data-text-skeleton-size='titleMedium']) {
+    --font-size: var(--text-title-size-medium);   /* = 20px */
+    --line-height: var(--text-title-lineHeight-medium);   /* = 1.625 */
+  }
+
+  &:where([data-text-skeleton-size='titleSmall']) {
+    --font-size: var(--text-title-size-small);   /* = 16px */
+    --line-height: var(--text-title-lineHeight-small);   /* = 1.5 */
+  }
+
+  &:where([data-text-skeleton-size='subtitle']) {
+    --font-size: var(--text-subtitle-size);   /* = 20px */
+    --line-height: var(--text-subtitle-lineHeight);   /* = 1.625 */
+  }
+
+  &:where([data-text-skeleton-size='bodyLarge']) {
+    --font-size: var(--text-body-size-large);   /* = 16px */
+    --line-height: var(--text-body-lineHeight-large);   /* = 1.5 */
+  }
+
+  &:where([data-text-skeleton-size='bodySmall']) {
+    --font-size: var(--text-body-size-small);   /* = 12px */
+    --line-height: var(--text-body-lineHeight-small);   /* = 1.625 */
+  }
+}
+
+.SkeletonTextWrapper {
+  /* stylelint-disable-next-line primer/spacing */
+  padding-block: 0.1px;
+}

@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/NavDrawerFooter/useNavDrawerFooterStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L18 padding: `${tokens.spacingVerticalXXS} ${tokens.spacingHorizontalXS} ${tokens.spacingVerticalXXS} ${tokens.spacingVerticalXS}  ${tokens.spacingHorizontalMNudge}`,   // spacingVerticalXXS=2px spacingHorizontalXS=4px spacingVerticalXXS=2px spacingVerticalXS=4px spacingHorizontalMNudge=10px
+L21 rowGap: tokens.spacingVerticalXXS,   // spacingVerticalXXS=2px

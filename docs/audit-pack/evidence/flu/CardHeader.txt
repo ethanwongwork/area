@@ -1,0 +1,31 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-card/library/src/components/CardHeader/useCardHeaderStyles.styles.ts
+L22 cardHeaderGapVar: '--fui-CardHeader--gap',
+L25 const useStyles = makeStyles<keyof CardHeaderSlots>({
+L26 root: {
+L27 [cardHeaderCSSVars.cardHeaderGapVar]: '12px',
+L30 image: {
+L32 marginRight: `var(${cardHeaderCSSVars.cardHeaderGapVar})`,
+L34 header: {
+L37 description: {
+L40 action: {
+L41 marginLeft: `var(${cardHeaderCSSVars.cardHeaderGapVar})`,
+L47 ...shorthands.borderColor('currentColor'),
+L55 const useStylesGrid = makeStyles<keyof CardHeaderSlots>({
+L56 root: {
+L61 image: {
+L62 gridColumnStart: '1',
+L66 header: {
+L67 gridColumnStart: '2',
+L68 gridRowStart: '1',
+L71 description: {
+L72 gridColumnStart: '2',
+L73 gridRowStart: '2',
+L76 action: {
+L77 gridColumnStart: '3',
+L82 const useStylesFlex = makeStyles<keyof CardHeaderSlots>({
+L83 root: {
+L87 header: {
+L88 flexGrow: 1,
+L91 image: {},
+L92 description: {},
+L93 action: {},

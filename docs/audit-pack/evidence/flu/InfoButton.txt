@@ -1,0 +1,20 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-infolabel/library/src/components/InfoButton/useInfoButtonStyles.styles.ts
+L6 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L20 const useButtonStyles = makeStyles({
+L21 base: {
+L33 ...shorthands.borderStyle('none'),
+L34 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L35 margin: '0',
+L36 padding: `${tokens.spacingVerticalXS} ${tokens.spacingHorizontalXS}`,   // spacingVerticalXS=4px spacingHorizontalXS=4px
+L63 selected: {
+L80 highContrast: {
+L94 large: {
+L95 padding: `${tokens.spacingVerticalXXS} ${tokens.spacingVerticalXXS}`,   // spacingVerticalXXS=2px spacingVerticalXXS=2px
+L99 const usePopoverSurfaceStyles = makeStyles({
+L100 base: {
+L101 maxWidth: '264px',
+L103 smallMedium: typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L104 large: typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L111 const { size } = state;
+L120 size === 'large' ? popoverSurfaceStyles.large : popoverSurfaceStyles.smallMedium,
+L131 size === 'large' && buttonStyles.large,

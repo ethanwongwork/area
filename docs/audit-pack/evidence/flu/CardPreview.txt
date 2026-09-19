@@ -1,0 +1,10 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-card/library/src/components/CardPreview/useCardPreviewStyles.styles.ts
+L15 const useStyles = makeStyles({
+L16 root: {
+L21 height: '100%',
+L22 width: '100%',
+L26 logo: {
+L28 bottom: '12px',
+L29 left: '12px',
+L30 width: '32px',
+L31 height: '32px',

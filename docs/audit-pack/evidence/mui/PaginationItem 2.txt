@@ -1,0 +1,78 @@
+### MUI Material @ 69960c1  packages/mui-material/src/PaginationItem/PaginationItem.js
+L39 const slots = {
+L64 const PaginationItemEllipsis = styled('div', {
+L65 name: 'MuiPaginationItem',
+L66 slot: 'Root',
+L71   borderRadius: 32 / 2,
+L74   minWidth: 32,
+L75   padding: '0 6px',
+L76   margin: '0 3px',
+L78   height: 'auto',
+L82 variants: [
+L84 props: { size: 'small' },
+L85 style: {
+L86   minWidth: 26,
+L87   borderRadius: 26 / 2,
+L88   margin: '0 1px',
+L89   padding: '0 4px',
+L93 props: { size: 'large' },
+L94 style: {
+L95   minWidth: 40,
+L96   borderRadius: 40 / 2,
+L97   padding: '0 10px',
+L98   fontSize: theme.typography.pxToRem(15),
+L105 const PaginationItemPage = styled(ButtonBase, {
+L106 name: 'MuiPaginationItem',
+L107 slot: 'Root',
+L112   borderRadius: 32 / 2,
+L115   minWidth: 32,
+L116   height: 32,
+L117   padding: '0 6px',
+L118   margin: '0 3px',
+L131 '&:hover': {
+L140 '&:hover': {
+L164 variants: [
+L166 props: { size: 'small' },
+L167 style: {
+L168   minWidth: 26,
+L169   height: 26,
+L170   borderRadius: 26 / 2,
+L171   margin: '0 1px',
+L172   padding: '0 4px',
+L176 props: { size: 'large' },
+L177 style: {
+L178   minWidth: 40,
+L179   height: 40,
+L180   borderRadius: 40 / 2,
+L181   padding: '0 10px',
+L182   fontSize: theme.typography.pxToRem(15),
+L186 props: { shape: 'rounded' },
+L187 style: {
+L188   borderRadius: (theme.vars || theme).shape.borderRadius,
+L192 props: { variant: 'outlined' },
+L193 style: {
+L194   border: theme.vars
+L208 props: { variant: 'text' },
+L209 style: {
+L220 props: { variant: 'text', color },
+L221 style: {
+L225 '&:hover': {
+L246 props: { variant: 'outlined', color },
+L247 style: {
+L255 '&:hover': {
+L280 const PaginationItemPageIcon = styled('div', {
+L281 name: 'MuiPaginationItem',
+L282 slot: 'Icon',
+L285   fontSize: theme.typography.pxToRem(20),
+L286   margin: '0 -8px',
+L287 variants: [
+L289 props: { size: 'small' },
+L290 style: {
+L291   fontSize: theme.typography.pxToRem(18),
+L295 props: { size: 'large' },
+L296 style: {
+L297   fontSize: theme.typography.pxToRem(22),
+L322 const ownerState = {
+L336 const externalForwardedProps = {
+L374 const IconSlot = {
+L381 const iconSlotProps = {

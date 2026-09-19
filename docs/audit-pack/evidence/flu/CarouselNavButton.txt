@@ -1,0 +1,37 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-carousel/library/src/components/CarouselNavButton/useCarouselNavButtonStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L20 width: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L21 height: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L22 padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalS}`,   // spacingVerticalS=8px spacingHorizontalS=8px
+L25 ...shorthands.borderWidth(0),
+L30 borderRadius: '50%',
+L32 height: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L33 width: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L44 rootUnselected: {
+L45 outline: `${tokens.strokeWidthThin} solid transparent`, // For high contrast   // strokeWidthThin=1px
+L47 border: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L48 margin: `calc(-1 * ${tokens.strokeWidthThick})`,   // strokeWidthThick=2px
+L49 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L52 opacity: 0.6,
+L56 opacity: 0.75,
+L61 opacity: 1,
+L65 rootSelected: {
+L66 width: tokens.spacingHorizontalL,   // spacingHorizontalL=16px
+L67 padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalXS}`,   // spacingVerticalS=8px spacingHorizontalXS=4px
+L68 outline: `${tokens.strokeWidthThin} solid transparent`, // For high contrast   // strokeWidthThin=1px
+L70 border: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L71 margin: `calc(-1 * ${tokens.strokeWidthThick})`,   // strokeWidthThick=2px
+L72 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L75 width: tokens.spacingHorizontalL,   // spacingHorizontalL=16px
+L76 borderRadius: '4px',
+L80 opacity: 0.75,
+L85 opacity: 0.65,
+L89 brand: {
+L92 opacity: 1,
+L97 opacity: 1,
+L103 opacity: 1,
+L107 unselectedBrand: {
+L109 opacity: 0.6,
+L114 opacity: 0.75,
+L119 opacity: 1,

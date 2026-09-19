@@ -1,0 +1,26 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-checkbox.scss
+container-height: 18px
+container-shape: 2px
+container-size: 18px
+container-width: 18px
+icon-size: 18px
+selected-disabled-container-outline-width: 0px
+selected-error-focus-outline-width: 0px
+selected-error-hover-outline-width: 0px
+selected-error-pressed-outline-width: 0px
+selected-focus-outline-width: 0px
+selected-hover-outline-width: 0px
+selected-outline-width: 0px
+selected-pressed-outline-width: 0px
+state-layer-size: 40px
+unselected-disabled-outline-width: 2px
+unselected-error-focus-outline-width: 2px
+unselected-error-hover-outline-width: 2px
+unselected-error-pressed-outline-width: 2px
+unselected-focus-outline-width: 2px
+unselected-hover-outline-width: 2px
+unselected-outline-width: 2px
+unselected-pressed-outline-width: 2px
+focus-indicator-outline-offset: md-sys-state-focus-indicator.$outer-offset
+focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+state-layer-shape: corner-full = 9999px

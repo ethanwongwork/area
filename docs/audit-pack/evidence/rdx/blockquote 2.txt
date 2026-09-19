@@ -1,0 +1,6 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/blockquote.css
+.rt-Blockquote {
+  box-sizing: border-box;
+  border-left: max(var(--space-1), 0.25em) solid var(--accent-a6);   /* = max(4px, 0.25em) solid var(--amber-a6) */
+  padding-left: min(var(--space-5), max(var(--space-3), 0.5em));   /* = min(24px, max(12px, 0.5em)) */
+}

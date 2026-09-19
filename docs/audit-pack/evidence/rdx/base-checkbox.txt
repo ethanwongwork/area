@@ -1,0 +1,185 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/_internal/base-checkbox.css
+.rt-BaseCheckboxRoot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: top;
+  flex-shrink: 0;
+  cursor: var(--cursor-checkbox);   /* = default */
+
+  /* Unless in a skeleton, align with text line height when possible and fall back to own height */
+  height: var(--skeleton-height, var(--line-height, var(--checkbox-size)));   /* = 14px */
+  --skeleton-height-override: var(--checkbox-size);   /* = 14px */
+
+  /* Set root radius when in a skeleton */
+  border-radius: var(--skeleton-radius);
+  --skeleton-radius-override: var(--checkbox-border-radius);   /* = 2.62px */
+
+  &::before {
+    content: '';
+    display: block;
+    height: var(--checkbox-size);   /* = 14px */
+    width: var(--checkbox-size);   /* = 14px */
+    border-radius: var(--checkbox-border-radius);   /* = 2.62px */
+  }
+}
+
+.rt-BaseCheckboxIndicator {
+  position: absolute;
+  width: var(--checkbox-indicator-size);   /* = 9px */
+  height: var(--checkbox-indicator-size);   /* = 9px */
+
+  /* Required for subpixel alignment in Safari */
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * SIZES                                                                                           *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+@breakpoints {
+  .rt-BaseCheckboxRoot {
+    &:where(.rt-r-size-1) {
+      --checkbox-size: calc(var(--space-4) * 0.875);   /* = 14px */
+      --checkbox-indicator-size: calc(9px * var(--scaling));   /* = 9px */
+      --checkbox-border-radius: calc(var(--radius-1) * 0.875);   /* = 2.62px */
+    }
+    &:where(.rt-r-size-2) {
+      --checkbox-size: var(--space-4);   /* = 16px */
+      --checkbox-indicator-size: calc(10px * var(--scaling));   /* = 10px */
+      --checkbox-border-radius: var(--radius-1);   /* = 3px */
+    }
+    &:where(.rt-r-size-3) {
+      --checkbox-size: calc(var(--space-4) * 1.25);   /* = 20px */
+      --checkbox-indicator-size: calc(12px * var(--scaling));   /* = 12px */
+      --checkbox-border-radius: calc(var(--radius-1) * 1.25);   /* = 3.75px */
+    }
+  }
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * VARIANTS                                                                                        *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+/* surface */
+
+.rt-BaseCheckboxRoot:where(.rt-variant-surface) {
+  &:where([data-state='unchecked']) {
+    &::before {
+      background-color: var(--color-surface);   /* = rgba(255, 255, 255, 0.85) */
+      box-shadow: inset 0 0 0 1px var(--gray-a7);   /* = inset 0 0 0 1px var(--mauve-a7) */
+    }
+  }
+
+  &:where([data-state='checked'], [data-state='indeterminate']) {
+    &::before {
+      background-color: var(--accent-indicator);   /* = var(--amber-indicator) */
+    }
+    & :where(.rt-BaseCheckboxIndicator) {
+      color: var(--accent-contrast);   /* = var(--amber-contrast) */
+    }
+
+    &:where(.rt-high-contrast) {
+      &::before {
+        background-color: var(--accent-12);   /* = var(--amber-12) */
+      }
+      & :where(.rt-BaseCheckboxIndicator) {
+        color: var(--accent-1);   /* = var(--amber-1) */
+      }
+    }
+  }
+
+  &:where(:disabled) {
+    &::before {
+      box-shadow: inset 0 0 0 1px var(--gray-a6);   /* = inset 0 0 0 1px var(--mauve-a6) */
+      background-color: transparent;
+    }
+    & :where(.rt-BaseCheckboxIndicator) {
+      color: var(--gray-a8);   /* = var(--mauve-a8) */
+    }
+  }
+}
+
+/* classic */
+
+.rt-BaseCheckboxRoot:where(.rt-variant-classic) {
+  &:where([data-state='unchecked']) {
+    &::before {
+      background-color: var(--color-surface);   /* = rgba(255, 255, 255, 0.85) */
+      box-shadow:
+        inset 0 0 0 1px var(--gray-a3),
+        var(--shadow-1);
+    }
+  }
+
+  &:where([data-state='checked'], [data-state='indeterminate']) {
+    &::before {
+      background-color: var(--accent-indicator);   /* = var(--amber-indicator) */
+      background-image: linear-gradient(to bottom, var(--white-a3), transparent, var(--black-a1));
+      box-shadow:
+        inset 0 0.5px 0.5px var(--white-a4),
+        inset 0 -0.5px 0.5px var(--black-a4);
+    }
+    & :where(.rt-BaseCheckboxIndicator) {
+      color: var(--accent-contrast);   /* = var(--amber-contrast) */
+    }
+
+    &:where(.rt-high-contrast) {
+      &::before {
+        background-color: var(--accent-12);   /* = var(--amber-12) */
+      }
+      & :where(.rt-BaseCheckboxIndicator) {
+        color: var(--accent-1);   /* = var(--amber-1) */
+      }
+    }
+  }
+
+  &:where(:disabled) {
+    &::before {
+      box-shadow: var(--shadow-1);   /* = inset 0 0 0 1px var(--mauve-a5),
+    inset 0 1.5px 2px 0 var(--mauve-a2),
+    inset 0 1.5px 2px 0 var(--black-a2) */
+      background-color: transparent;
+      background-image: none;
+    }
+    & :where(.rt-BaseCheckboxIndicator) {
+      color: var(--gray-a8);   /* = var(--mauve-a8) */
+    }
+  }
+}
+
+/* soft */
+
+.rt-BaseCheckboxRoot:where(.rt-variant-soft) {
+  &::before {
+    background-color: var(--accent-a5);   /* = var(--amber-a5) */
+  }
+
+  &:where([data-state='checked'], [data-state='indeterminate']) {
+    & :where(.rt-BaseCheckboxIndicator) {
+      color: var(--accent-a11);   /* = var(--amber-a11) */
+    }
+
+    &:where(.rt-high-contrast) {
+      & :where(.rt-BaseCheckboxIndicator) {
+        color: var(--accent-12);   /* = var(--amber-12) */
+      }
+    }
+  }
+
+  &:where(:disabled) {
+    &::before {
+      background-color: transparent;
+    }
+    & :where(.rt-BaseCheckboxIndicator) {
+      color: var(--gray-a8);   /* = var(--mauve-a8) */
+    }
+  }
+}

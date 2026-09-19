@@ -1,0 +1,8 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-slider-medium.scss
+active-handle-height: 44px
+active-track-height: 40px
+active-track-shape-leading: 12px
+icon-padding: 6px
+icon-size: 24px
+inactive-track-height: 40px
+inactive-track-shape-trailing: 12px

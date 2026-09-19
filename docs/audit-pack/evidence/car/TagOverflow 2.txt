@@ -1,0 +1,60 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/TagOverflow/_tag-overflow.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L17 @mixin tag-overflow {
+L22 .#{$block-class}__visible-tags {
+L26 .#{$block-class}--align-end {
+L30 .#{$block-class}--align-center {
+L34 .#{$block-class}--multiline {
+L38 .#{$block-class}__item--tag {
+L39   border: none;
+L40   margin-block-end: $spacing-03;   // spacing-03=8px
+L41   margin-inline-end: $spacing-03;   // spacing-03=8px
+L44 .#{$block-class}__item--tag span {
+L46   max-inline-size: $spacing-12;   // spacing-12=96px
+L53 .#{$prefix}--popover-content {
+L57 .#{$block-class}__indicator {
+L59   max-inline-size: $spacing-09;   // spacing-09=48px
+L62 .#{$block-class} .#{$prefix}--popover .#{$prefix}--popover-content {
+L66 .#{$block-class-popover} {
+L71 .#{$block-class-popover} .#{$prefix}--tag.#{$prefix}--tag--interactive {
+L72   border: 0;
+L75 .#{$block-class-popover} .#{$prefix}--popover .#{$prefix}--popover-content {
+L76   padding: $spacing-05;   // spacing-05=16px
+L79 .#{$block-class-popover}--hidden {
+L81   max-inline-size: 0;
+L85 .#{$block-class-popover}__el {
+L86   min-inline-size: initial;
+L90 .#{$block-class-popover}__el .#{$block-class-popover}__trigger {
+L92   border: none !important;
+L98 .#{$block-class-popover}__el .#{$prefix}--link:active:visited:hover {
+L102 .#{$block-class-popover}__el .#{$block-class-popover}__tag-list {
+L107 .#{$block-class-popover}__el .#{$block-class-popover}__show-all-tags-link {
+L114 .#{$block-class-popover}__show-all-tags-link:visited:hover {
+L119 .#{$block-class-popover}__show-all-tags-link:focus {
+L124 .#{$block-class-popover}__show-all-tags-link:visited {
+L130 .#{$prefix}--tag {
+L138 .#{$prefix}--tag {
+L139   @include type-style('body-compact-01');   // body-compact-01=14/18
+L143   padding: 0;
+L144   border-radius: 0;
+L145   margin: 0;
+L148   min-block-size: initial;
+L149   min-inline-size: initial;
+L154 .#{$prefix}--tag__close-icon {
+L155   padding: 0;
+L160 .#{$prefix}--tag--high-contrast {
+L167 .#{$prefix}--tag__close-icon:hover {
+L173 .#{$prefix}--tag__close-icon:focus {
+L174   box-shadow: inset 0 0 0 $spacing-01 $focus;   // spacing-01=2px
+L177 .#{$block-class-modal} {
+L182 .#{$block-class-modal}__container {
+L183 @include breakpoint(md) {
+L184   block-size: 90%;
+L185   max-block-size: 450px;
+L189 .#{$block-class-modal}__search {
+L190   margin-block: $spacing-05 0;   // spacing-05=16px
+L193 .#{$block-class-modal}__header {
+L194   margin-inline-end: $spacing-05;   // spacing-05=16px
+L195   padding-inline-end: 0;
+L198 .#{$block-class-modal}__body .#{$prefix}--tag {
+L199   margin-block-end: $spacing-03;   // spacing-03=8px
+L200   margin-inline-end: $spacing-03;   // spacing-03=8px

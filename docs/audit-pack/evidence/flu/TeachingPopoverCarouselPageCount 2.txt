@@ -1,0 +1,3 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-teaching-popover/library/src/components/TeachingPopoverCarouselPageCount/useTeachingPopoverCarouselPageCountStyles.styles.ts
+L17 const useStyles = makeStyles({
+L18 root: {

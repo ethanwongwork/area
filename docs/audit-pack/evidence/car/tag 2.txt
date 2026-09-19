@@ -1,0 +1,130 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/tag/_mixins.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L26 &.#{$prefix}--tag--operational {
+L30 &:hover {
+L36 .#{$prefix}--tag__close-icon {
+L39   padding: 1px;
+L44 &:hover {
+L50 &:focus {
+L56 .#{$prefix}--definition-term {
+L57 .#{$prefix}--tag__label {
+### Carbon styles @ 8472cca  packages/styles/scss/components/tag/_tag.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L27 @mixin tag {
+L28 .#{$prefix}--tag {
+L31   size: (
+L32   height: (
+L33   xs: convert.to-rem(18px),
+L34   sm: convert.to-rem(18px),
+L35   md: convert.to-rem(24px),
+L36   lg: convert.to-rem(32px),
+L42   @include layout.use('size', $default: 'md', $min: 'sm', $max: 'lg');
+L43   @include type-style('label-01');   // label-01=12/16
+L49   border-radius: convert.to-rem(16px);
+L52   max-inline-size: convert.to-rem(208px);
+L53   min-block-size: layout.size('height');
+L55   min-inline-size: convert.to-rem(32px);
+L56   padding-inline: $spacing-03;   // spacing-03=8px
+L61   border-radius: $border-radius-04;
+L64 &.#{$prefix}--tag--lg {
+L65   padding-inline-start: $spacing-04;   // spacing-04=12px
+L68 &:has(.#{$prefix}--tag__custom-icon) {
+L69   padding-inline-start: $spacing-02;   // spacing-02=4px
+L72 &.#{$prefix}--tag--lg:not(.#{$prefix}--tag--filter) {
+L73   padding-inline: $spacing-04;   // spacing-04=12px
+L76 &.#{$prefix}--tag--lg:has(.#{$prefix}--tag__custom-icon) {
+L77   padding-inline-start: $spacing-03;   // spacing-03=8px
+L80 &:not(.#{$prefix}--tag--selectable) {
+L81   border: 0;
+L84 &:not(:first-child) {
+L85   margin-inline-start: 0;
+L91 .#{$prefix}--tag__label {
+L98 .#{$prefix}--tag--interactive:focus {
+L104 .#{$prefix}--tag--filter {
+L105   padding-block: 0;
+L106   padding-inline-end: 0;
+L109 &:hover {
+L115 .#{$prefix}--tag--selectable {
+L116   border: 1px solid $border-inverse;
+L122 &:hover {
+L128 &:focus {
+L134 .#{$prefix}--tag--selectable-selected {
+L139 &:hover {
+L145 .#{$prefix}--tag--operational {
+L146   border: 1px solid $tag-border-gray;
+L152 &:hover {
+L158 &:focus {
+L164 .#{$prefix}--tag--red {
+L173 .#{$prefix}--tag--magenta {
+L182 .#{$prefix}--tag--purple {
+L191 .#{$prefix}--tag--blue {
+L200 .#{$prefix}--tag--cyan {
+L209 .#{$prefix}--tag--teal {
+L218 .#{$prefix}--tag--green {
+L227 .#{$prefix}--tag--gray {
+L236 .#{$prefix}--tag--cool-gray {
+L245 .#{$prefix}--tag--warm-gray {
+L254 .#{$prefix}--tag--high-contrast:not(.#{$prefix}--tag--operational) {
+L265 .#{$prefix}--tag__close-icon {
+L267 &:hover {
+L286 .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled {
+L292 .#{$prefix}--tag__label {
+L301 .#{$prefix}--tag--interactive.#{$prefix}--tag--disabled {
+L303 &:hover {
+L310 .#{$prefix}--tag--operational.#{$prefix}--tag--disabled {
+L311   border: 1px solid $border-disabled;
+L316 &:hover {
+L323 .#{$prefix}--tag--interactive {
+L327 .#{$prefix}--tag__close-icon {
+L332   padding: 0;
+L333   border: 0;
+L334   border-radius: 50%;
+L335   margin: 0 0 0 convert.to-rem(2px);
+L337   block-size: layout.size('height');
+L340   inline-size: layout.size('height');
+L346   border-radius: $border-radius-04;
+L354 .#{$prefix}--tag__custom-icon {
+L356   padding: 0;
+L357   border: 0;
+L359   block-size: convert.to-rem(16px);
+L361   inline-size: convert.to-rem(16px);
+L362   margin-inline-end: $spacing-02;   // spacing-02=4px
+L370 .#{$prefix}--tag--disabled .#{$prefix}--tag__close-icon {
+L374 .#{$prefix}--tag__close-icon:focus {
+L376   box-shadow: inset 0 0 0 1px $focus;
+L382 .#{$prefix}--tag__close-icon:hover {
+L387 .#{$prefix}--tag--filter.#{$prefix}--tag--disabled svg {
+L391 .#{$prefix}--tag--sm.#{$prefix}--tag--filter {
+L392   padding-inline-end: 0;
+L395 .#{$prefix}--tag--sm .#{$prefix}--tag__close-icon {
+L396   margin-inline-start: convert.to-rem(5px);
+L401 .#{$prefix}--tag.#{$prefix}--layout--size-sm {
+L402   border-radius: $border-radius-02;
+L406 .#{$prefix}--tag.#{$prefix}--layout--size-sm .#{$prefix}--tag__close-icon {
+L407   border-radius: $border-radius-02;
+L412 .#{$prefix}--tag.#{$prefix}--skeleton {
+L421   inline-size: convert.to-rem(60px);
+L432 .#{$prefix}--tag .#{$prefix}--slug .#{$prefix}--slug__button--inline {
+L434   margin-inline-start: convert.to-rem(1px);
+L444 .#{$prefix}--slug__text::before {
+L452 .#{$prefix}--tag .#{$prefix}--slug .#{$prefix}--slug__button--inline:hover {
+L459 .#{$prefix}--tag--filter .#{$prefix}--slug {
+L460   min-inline-size: convert.to-rem(32.14px);
+L465 .#{$prefix}--tag__decorator:not(:has(.#{$prefix}--ai-label)) {
+L466   block-size: 1rem;
+L472 .#{$prefix}--tag {
+L476 .#{$prefix}--tag__close-icon:focus {
+L480 .#{$prefix}--tag-label-tooltip {
+L481   max-inline-size: -webkit-fill-available;
+L484 .#{$prefix}--tag__custom-icon + .#{$prefix}--tag-label-tooltip {
+L485   max-inline-size: convert.to-rem(176px);
+L491   max-inline-size: convert.to-rem(158px);
+L494 .#{$prefix}--tag > span {
+L495   min-inline-size: 0;
+L498 .#{$prefix}--interactive--tag-children {
+L500   max-inline-size: convert.to-rem(200px);
+L501   min-inline-size: 0;
+L509   max-inline-size: 100%;
+L512 .#{$prefix}--tag .#{$prefix}--definition-term {
+L513   -webkit-border-after: none;
+L516   max-inline-size: convert.to-rem(192px);
+L523   max-inline-size: convert.to-rem(176px);
+L526 .#{$prefix}--tag > .#{$prefix}--popover-container {

@@ -1,0 +1,10 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toast/library/src/components/Toast/useToastStyles.styles.ts
+L12 const useRootBaseClassName = makeResetStyles({
+L15 padding: '12px',
+L16 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L17 border: `1px solid ${tokens.colorTransparentStroke}`,
+L19 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L20 lineHeight: '20px',
+L21 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L26 const useStyles = makeStyles({
+L27 inverted: {

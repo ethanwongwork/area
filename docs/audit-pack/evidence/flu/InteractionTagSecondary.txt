@@ -1,0 +1,57 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tags/library/src/components/InteractionTagSecondary/useInteractionTagSecondaryStyles.styles.ts
+L13 const mediumIconSize = '20px';
+L14 const smallIconSize = '16px';
+L15 const extraSmallIconSize = '12px';
+L17 const useRootBaseClassName = makeResetStyles({
+L21 padding: '0px',
+L28 height: '100%',
+L32 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L35 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L39 borderTopLeftRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L40 borderBottomLeftRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L43 const useRootStyles = makeStyles({
+L44 filled: {
+L47 borderTopWidth: 0,
+L48 borderBottomWidth: 0,
+L59 borderTopWidth: `${tokens.strokeWidthThin}`,   // strokeWidthThin=1px
+L60 borderBottomWidth: `${tokens.strokeWidthThin}`,   // strokeWidthThin=1px
+L69 outline: {
+L72 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L91 brand: {
+L95 borderTopWidth: 0,
+L96 borderBottomWidth: 0,
+L107 borderTopWidth: `${tokens.strokeWidthThin}`,   // strokeWidthThin=1px
+L108 borderBottomWidth: `${tokens.strokeWidthThin}`,   // strokeWidthThin=1px
+L117 selected: {
+L120 ...shorthands.borderColor(tokens.colorBrandStroke1),
+L147 rounded: {
+L148 borderTopRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L149 borderBottomRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L151 circular: {
+L152 borderTopRightRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L153 borderBottomRightRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L156 medium: {
+L157 fontSize: mediumIconSize,
+L158 paddingLeft: '5px',
+L159 paddingRight: '5px',
+L161 small: {
+L162 fontSize: smallIconSize,
+L163 paddingLeft: '3px',
+L164 paddingRight: '3px',
+L167 fontSize: extraSmallIconSize,
+L168 paddingLeft: '5px',
+L169 paddingRight: '5px',
+L176 height: '2px',
+L177 left: '0',
+L178 width: '100%',
+L181 bottom: '100%',
+L184 top: '100%',
+L189 const useRootDisabledStyles = makeStyles({
+L190 filled: {
+L194 ...shorthands.borderColor(tokens.colorTransparentStrokeDisabled),
+L197 outline: {
+L201 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L203 brand: {
+L207 ...shorthands.borderColor(tokens.colorTransparentStrokeDisabled),
+L219 const { disabled, selected, shape, size, appearance } = state;
+L227 rootStyles[size],

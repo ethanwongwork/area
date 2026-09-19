@@ -1,0 +1,11 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Pagination/Pagination.js
+L20 const slots = {
+L28 const PaginationRoot = styled('nav', {
+L29 name: 'MuiPagination',
+L30 slot: 'Root',
+L38 const PaginationUl = styled('ul', {
+L39 name: 'MuiPagination',
+L40 slot: 'Ul',
+L45   padding: 0,
+L46   margin: 0,
+L83 const ownerState = {

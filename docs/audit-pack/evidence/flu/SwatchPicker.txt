@@ -1,0 +1,8 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-swatch-picker/library/src/components/SwatchPicker/useSwatchPickerStyles.styles.ts
+L14 const useStyles = makeStyles({
+L15 root: {
+L16 padding: `${tokens.spacingHorizontalNone} ${tokens.spacingVerticalNone}`,   // spacingHorizontalNone=0 spacingVerticalNone=0
+L19 row: {
+L22 grid: {
+L25 spacingSmall: { gap: '2px' },
+L26 spacingMedium: { gap: '4px' },

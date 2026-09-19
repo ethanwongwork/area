@@ -1,0 +1,200 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/Alert/Alert.module.css
+.Alert {
+  display: flex;
+  align-items: center;
+  gap: var(--alert-gap);   /* = 12px */
+  width: 100%;
+  padding: var(--alert-gutter);   /* = 16px */
+  border-radius: var(--alert-border-radius);   /* = 12px */
+  font-size: var(--alert-font-size);   /* = 14px */
+  line-height: var(--alert-line-height);   /* = 20px */
+
+  &:where([data-actions-placement="bottom"]) {
+    align-items: flex-start;
+  }
+
+  /* =============================================
+    Variants
+  ============================================= */
+  &[data-variant="soft"] {
+    background-color: var(--alert-background-color);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 5%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) */
+    box-shadow: 0 0 0 1px var(--alert-border-color) inset;   /* = 0 0 0 1px light-dark(alpha(light-dark(#0d0d0d, #ffffff), 5%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) inset */
+    color: var(--alert-text-color);   /* = light-dark(#0d0d0d, #ffffff) */
+
+    &:where([data-color="primary"]) {
+      --alert-background-color: var(--color-background-primary-surface);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 5%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) */
+      --alert-border-color: var(--color-border-primary-surface);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 5%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) */
+      --alert-text-color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+    }
+
+    &:where([data-color="success"]) {
+      --alert-background-color: var(--color-background-success-surface);   /* = light-dark(alpha(#04b84c, 8%), alpha(#04b84c, 15%)) */
+      --alert-border-color: var(--color-border-success-surface);   /* = light-dark(alpha(#04b84c, 8%), alpha(#04b84c, 15%)) */
+      --alert-text-color: var(--color-text-success-surface);   /* = light-dark(#008635, #04b84c) */
+    }
+
+    &:where([data-color="warning"]) {
+      --alert-background-color: var(--color-background-warning-surface);   /* = light-dark(alpha(#fb6a22, 7%), alpha(#fb6a22, 16%)) */
+      --alert-border-color: var(--color-border-warning-surface);   /* = light-dark(alpha(#fb6a22, 7%), alpha(#fb6a22, 16%)) */
+      --alert-text-color: var(--color-text-warning-surface);   /* = light-dark(#923b0f, #fb6a22) */
+    }
+
+    &:where([data-color="caution"]) {
+      --alert-background-color: var(--color-background-caution-surface);   /* = light-dark(alpha(#ffc300, 8%), alpha(#ffc300, 15%)) */
+      --alert-border-color: var(--color-border-caution-surface);   /* = light-dark(alpha(#ffc300, 8%), alpha(#ffc300, 15%)) */
+      --alert-text-color: var(--color-text-caution-surface);   /* = light-dark(#6e5400, #ffc300) */
+    }
+
+    &:where([data-color="danger"]) {
+      --alert-background-color: var(--color-background-danger-surface);   /* = light-dark(alpha(#fa423e, 8%), alpha(#fa423e, 16%)) */
+      --alert-border-color: var(--color-border-danger-surface);   /* = light-dark(alpha(#fa423e, 8%), alpha(#fa423e, 16%)) */
+      --alert-text-color: var(--color-text-danger-surface);   /* = light-dark(#ba2623, #fa423e) */
+    }
+
+    &:where([data-color="info"]) {
+      --alert-background-color: var(--color-background-info-surface);   /* = light-dark(alpha(#0285ff, 4%), alpha(#0285ff, 13%)) */
+      --alert-border-color: var(--color-border-info-surface);   /* = light-dark(alpha(#0285ff, 4%), alpha(#0285ff, 13%)) */
+      --alert-text-color: var(--color-text-info-surface);   /* = light-dark(#004f99, #339cff) */
+    }
+
+    &:where([data-color="discovery"]) {
+      --alert-background-color: var(--color-background-discovery-surface);   /* = light-dark(alpha(#924ff7, 6%), alpha(#924ff7, 15%)) */
+      --alert-border-color: var(--color-border-discovery-surface);   /* = light-dark(alpha(#924ff7, 6%), alpha(#924ff7, 15%)) */
+      --alert-text-color: var(--color-text-discovery-surface);   /* = light-dark(#6b3ab4, #be95fa) */
+    }
+  }
+
+  &[data-variant="solid"] {
+    background-color: var(--alert-background-color);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 5%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) */
+    color: var(--alert-text-color);   /* = light-dark(#0d0d0d, #ffffff) */
+
+    &:where([data-color="primary"]) {
+      --alert-background-color: var(--color-background-primary-solid);   /* = light-dark(light-dark(#181818, #ededed), light-dark(#131313, #f3f3f3)) */
+      --alert-text-color: var(--color-text-primary-solid);   /* = light-dark(#ffffff, #0d0d0d) */
+    }
+
+    &:where([data-color="success"]) {
+      --alert-background-color: var(--color-background-success-solid);   /* = light-dark(#00a240, #008635) */
+      --alert-text-color: var(--color-text-success-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="warning"]) {
+      --alert-background-color: var(--color-background-warning-solid);   /* = #e25507 */
+      --alert-text-color: var(--color-text-warning-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="caution"]) {
+      --alert-background-color: var(--color-background-caution-solid);   /* = #ba8e00 */
+      --alert-text-color: var(--color-text-caution-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="danger"]) {
+      --alert-background-color: var(--color-background-danger-solid);   /* = #e02e2a */
+      --alert-text-color: var(--color-text-danger-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="info"]) {
+      --alert-background-color: var(--color-background-info-solid);   /* = #0285ff */
+      --alert-text-color: var(--color-text-info-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="discovery"]) {
+      --alert-background-color: var(--color-background-discovery-solid);   /* = #924ff7 */
+      --alert-text-color: var(--color-text-discovery-solid);   /* = #ffffff */
+    }
+  }
+
+  &[data-variant="outline"] {
+    box-shadow: 0 0 0 1px var(--alert-border-color) inset;   /* = 0 0 0 1px light-dark(alpha(light-dark(#0d0d0d, #ffffff), 5%), alpha(light-dark(#0d0d0d, #ffffff), 8%)) inset */
+    color: var(--alert-text-color);   /* = light-dark(#0d0d0d, #ffffff) */
+
+    &:where([data-color="primary"]) {
+      --alert-border-color: var(--color-border);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 10%), alpha(light-dark(#0d0d0d, #ffffff), 12%)) */
+      --alert-text-color: var(--color-text);   /* = light-dark(#0d0d0d, #ffffff) */
+    }
+
+    &:where([data-color="success"]) {
+      --alert-border-color: var(--color-border-success-outline);   /* = light-dark(#00a240, #008635) */
+      --alert-text-color: var(--color-text-success-outline);   /* = #00a240 */
+    }
+
+    &:where([data-color="warning"]) {
+      --alert-border-color: var(--color-border-warning-outline);   /* = #e25507 */
+      --alert-text-color: var(--color-text-warning-outline);   /* = #e25507 */
+    }
+
+    &:where([data-color="caution"]) {
+      --alert-border-color: var(--color-border-caution-outline);   /* = #916f00 */
+      --alert-text-color: var(--color-text-caution-outline);   /* = #916f00 */
+    }
+
+    &:where([data-color="danger"]) {
+      --alert-border-color: var(--color-border-danger-outline);   /* = #e02e2a */
+      --alert-text-color: var(--color-text-danger-outline);   /* = #e02e2a */
+    }
+
+    &:where([data-color="info"]) {
+      --alert-border-color: var(--color-border-info-outline);   /* = #0169cc */
+      --alert-text-color: var(--color-text-info-outline);   /* = #0169cc */
+    }
+
+    &:where([data-color="discovery"]) {
+      --alert-border-color: var(--color-border-discovery-outline);   /* = #8046d9 */
+      --alert-text-color: var(--color-text-discovery-outline);   /* = light-dark(#8046d9, #924ff7) */
+    }
+  }
+}
+
+.Content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+
+  :where(.Alert[data-actions-placement="bottom"]) & {
+    display: block;
+  }
+}
+
+.Indicator {
+  svg {
+    width: var(--alert-indicator-size, 20px);   /* = 20px */
+    height: var(--alert-indicator-size, 20px);   /* = 20px */
+  }
+}
+
+.Message {
+  flex: 1;
+  min-width: 0;
+}
+
+.Title {
+  font-weight: var(--alert-title-font-weight);   /* = 600 */
+  text-wrap: pretty;
+
+  /* Slight spacing when paired with a description */
+  ~ .Description {
+    margin-top: 2px;
+  }
+}
+
+.Description {
+  opacity: 1;
+  text-wrap: pretty;
+}
+
+.Actions {
+  display: flex;
+  gap: spacing(2);   /* = 8px */
+
+  :where(.Alert[data-actions-placement="end"]) & {
+    align-self: center;
+    /* Additional padding between right side or actions */
+    margin-left: var(--alert-gutter);   /* = 16px */
+  }
+
+  :where(.Alert[data-actions-placement="bottom"]) & {
+    margin-top: var(--alert-gutter);   /* = 16px */
+  }
+}

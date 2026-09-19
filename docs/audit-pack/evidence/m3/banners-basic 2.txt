@@ -1,0 +1,32 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-banners-basic.scss
+actions-close-button-space: 8px
+actions-between-space: 8px
+actions-bottom-space: 0px
+actions-leading-space: 8px
+actions-top-space: 0px
+actions-trailing-space: 8px
+body-text-bottom-space: 14px
+body-text-leading-space: 0px
+body-text-top-space: 14px
+body-text-trailing-space: 48px
+bottom-space: 4px
+centered-body-text-trailing-space: 0px
+height: 56px
+icon-container-size: 48px
+icon-size: 24px
+leading-space: 4px
+mobile-actions-close-button-space: 4px
+mobile-actions-trailing-space: 4px
+mobile-height: 112px
+mobile-top-space: 8px
+round-no-icon-body-text-leading-space: 16px
+square-no-icon-body-text-leading-space: 12px
+top-space: 4px
+trailing-space: 4px
+two-lines-body-text-bottom-space: 8px
+two-lines-body-text-top-space: 8px
+two-lines-container-buttons-bottom-space: 4px
+two-lines-container-buttons-top-space: 4px
+two-lines-height: 64px
+shape-round: corner-extra-large = 28px
+shape-square: corner-none = 0px

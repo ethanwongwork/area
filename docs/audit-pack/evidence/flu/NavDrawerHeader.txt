@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/NavDrawerHeader/useNavDrawerHeaderStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L18 margin: 'unset',
+L19 paddingInlineStart: '14px',
+L20 paddingBlock: '5px',

@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-message-bar/library/src/components/MessageBarBody/useMessageBarBodyStyles.styles.ts
+L6 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L12 const useRootBaseStyles = makeResetStyles({
+L13 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L15 paddingRight: tokens.spacingHorizontalM,   // spacingHorizontalM=12px

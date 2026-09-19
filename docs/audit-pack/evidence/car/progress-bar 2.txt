@@ -1,0 +1,54 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/progress-bar/_progress-bar.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L24 @mixin progress-bar {
+L25 .#{$prefix}--progress-bar {
+L29 .#{$prefix}--progress-bar__label {
+L30   @include type-style('body-compact-01');   // body-compact-01=14/18
+L35   margin-block-end: $spacing-03;   // spacing-03=8px
+L36   min-inline-size: convert.to-rem(48px);
+L39 .#{$prefix}--progress-bar__label-text {
+L45 .#{$prefix}--progress-bar__track {
+L48   block-size: convert.to-rem(8px);
+L49   inline-size: 100%;
+L50   min-inline-size: convert.to-rem(48px);
+L54   border-radius: $border-radius-max;
+L58 .#{$prefix}--progress-bar--big .#{$prefix}--progress-bar__track {
+L59   block-size: convert.to-rem(8px);
+L62 .#{$prefix}--progress-bar--small .#{$prefix}--progress-bar__track {
+L63   block-size: convert.to-rem(4px);
+L66 .#{$prefix}--progress-bar__bar {
+L69   block-size: 100%;
+L73   border-radius: $border-radius-max;
+L74   inline-size: 0;
+L77   inline-size: 100%;
+L91 .#{$prefix}--progress-bar__track::after {
+L100   border-radius: $border-radius-max;
+L102   inline-size: 25%;
+L103   inset-block: 0;
+L104   inset-inline-start: 0;
+L112   background-size: 200% 100%;
+L113   inset: 0;
+L119 .#{$prefix}--progress-bar__track::after {
+L123 .#{$prefix}--progress-bar__helper-text {
+L124   @include type-style('helper-text-01');   // helper-text-01=12/16
+L128   margin-block-start: $spacing-03;   // spacing-03=8px
+L131 .#{$prefix}--progress-bar__status-icon {
+L133   margin-inline-start: layout.density('padding-inline');
+L137 .#{$prefix}--progress-bar--finished .#{$prefix}--progress-bar__status-icon {
+L142 .#{$prefix}--progress-bar--error .#{$prefix}--progress-bar__status-icon {
+L146 .#{$prefix}--progress-bar--error .#{$prefix}--progress-bar__helper-text {
+L151 .#{$prefix}--progress-bar--error .#{$prefix}--progress-bar__bar {
+L153   inline-size: 100%;
+L162 .#{$prefix}--progress-bar__track {
+L169 .#{$prefix}--progress-bar__label {
+L172   margin-inline-end: 0;
+L221 .#{$prefix}--progress-bar--inline {
+L226 .#{$prefix}--progress-bar--inline .#{$prefix}--progress-bar__label {
+L228   margin-block-end: 0;
+L229   margin-inline-end: layout.density('padding-inline');
+L232 .#{$prefix}--progress-bar--inline .#{$prefix}--progress-bar__track {
+L233   flex-basis: 0;
+L237 .#{$prefix}--progress-bar--inline .#{$prefix}--progress-bar__helper-text {
+L242 .#{$prefix}--progress-bar--indented .#{$prefix}--progress-bar__helper-text {
+L243   padding-inline: layout.density('padding-inline');
+L249 .#{$prefix}--progress-bar__track {
+L258 .#{$prefix}--progress-bar__bar {

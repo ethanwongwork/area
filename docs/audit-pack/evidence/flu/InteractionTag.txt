@@ -1,0 +1,13 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tags/library/src/components/InteractionTag/useInteractionTagStyles.styles.ts
+L12 const useRootBaseClassName = makeResetStyles({
+L16 width: 'fit-content',
+L19 const useRootStyles = makeStyles({
+L20 rounded: { borderRadius: tokens.borderRadiusMedium },   // borderRadiusMedium=4px
+L21 circular: { borderRadius: tokens.borderRadiusCircular },   // borderRadiusCircular=10000px
+L23 medium: {
+L24 height: '32px',
+L26 small: {
+L27 height: '24px',
+L30 height: '20px',
+L41 const { shape, size } = state;
+L48 rootStyles[size],

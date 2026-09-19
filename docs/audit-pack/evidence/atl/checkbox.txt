@@ -1,0 +1,4 @@
+### @atlaskit/checkbox@19.2.2  checkbox.js  (token fallbacks; pt and pc converted to px)
+  root: border:none; width:100%; height:100%; margin-block-end:0; margin-block-start:0; margin-inline-end:0; margin-inline-start:0
+### @atlaskit/checkbox@19.2.2  internal/checkbox-icon.js  (token fallbacks; pt and pc converted to px)
+  root: border-radius:4px

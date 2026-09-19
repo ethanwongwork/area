@@ -1,0 +1,34 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Select/Select.js
+L24 const slots = {
+L33 const styledRootConfig = {
+L34 name: 'MuiSelect',
+L35 slot: 'Root',
+L39 const StyledInput = styled(Input, styledRootConfig)('');
+L41 const StyledOutlinedInput = styled(OutlinedInput, styledRootConfig)('');
+L43 const StyledFilledInput = styled(FilledInput, styledRootConfig)('');
+L81 const ownerState = { ...props, variant, classes: classesProp };
+L101 inputProps: {
+L110 : {
+### MUI Material @ 69960c1  packages/mui-material/src/Select/SelectInput.js
+L75 const SelectSelect = styled(StyledSelectSelect, {
+L76 name: 'MuiSelect',
+L77 slot: 'Select',
+L91   height: 'auto', // Resets for multiple select with chips
+L92   minHeight: '1.4375em', // Required for select\text-field height consistency
+L99 const SelectIcon = styled(StyledSelectIcon, {
+L100 name: 'MuiSelect',
+L101 slot: 'Icon',
+L108 const SelectNativeInput = styled('input', {
+L110 name: 'MuiSelect',
+L111 slot: 'NativeInput',
+L113   bottom: 0,
+L114   left: 0,
+L118   width: '100%',
+L125 const slots = {
+L181 name: 'Select',
+L186 name: 'Select',
+L814 const ownerState = {
+L910 list: {
+L918 paper: {
+L921 style: {
+L922   minWidth: menuMinWidth,

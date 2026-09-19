@@ -1,0 +1,3 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-app-bar-medium.scss
+container-height: 112px
+icon-size: 24px

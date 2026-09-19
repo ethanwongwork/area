@@ -1,0 +1,25 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-date-picker-docked.scss
+container-height: 456px
+container-width: 360px
+date-container-height: 48px
+date-container-width: 48px
+date-state-layer-height: 40px
+date-state-layer-width: 40px
+date-today-container-outline-width: 1px
+header-height: 64px
+menu-button-container-height: 40px
+menu-button-icon-size: 18px
+menu-list-item-container-height: 48px
+menu-list-item-selected-leading-icon-size: 24px
+container-shape: corner-large = 16px
+date-container-shape: corner-full = 9999px
+date-label-text-line-height: body-large-line-height = 24px
+date-label-text-size: body-large-size = 16px
+date-state-layer-shape: corner-full = 9999px
+menu-button-container-shape: corner-full = 9999px
+menu-button-label-text-line-height: label-large-line-height = 20px
+menu-button-label-text-size: label-large-size = 14px
+menu-list-item-label-text-line-height: body-large-line-height = 24px
+menu-list-item-label-text-size: body-large-size = 16px
+weekdays-label-text-line-height: body-large-line-height = 24px
+weekdays-label-text-size: body-large-size = 16px

@@ -1,0 +1,49 @@
+### Primer React @ e4e6eba  packages/react/src/Token/_RemoveTokenButton.module.css
+.TokenButton {
+  display: inline-flex;
+  padding: 0;
+  margin-left: var(--base-size-4);   /* = 4px */
+  font-family: inherit;
+  color: currentColor;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: 0;
+  border-radius: var(--borderRadius-full);   /* = 9999px */
+  justify-content: center;
+  align-items: center;
+  appearance: none;
+  align-self: baseline;
+}
+
+.TokenButton[data-size='small'] {
+  width: var(--base-size-16);   /* = 16px */
+  height: var(--base-size-16);   /* = 16px */
+}
+
+.TokenButton[data-size='medium'] {
+  width: var(--base-size-20);   /* = 20px */
+  height: var(--base-size-20);   /* = 20px */
+}
+
+.TokenButton[data-size='large'] {
+  width: var(--base-size-24);   /* = 24px */
+  height: var(--base-size-24);   /* = 24px */
+  margin-left: var(--base-size-6);   /* = 6px */
+}
+
+.TokenButton[data-size='xlarge'] {
+  width: var(--base-size-32);   /* = 32px */
+  height: var(--base-size-32);   /* = 32px */
+  margin-left: var(--base-size-6);   /* = 6px */
+}
+
+.TokenButton:hover,
+.TokenButton:focus {
+  background-color: var(--control-transparent-bgColor-hover);
+}
+
+.TokenButton:active {
+  background-color: var(--control-transparent-bgColor-active);
+}

@@ -1,0 +1,26 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/shape-indicator/_shape-indicator.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L20 @mixin shape-indicator {
+L21 .#{$prefix}--shape-indicator {
+L22   @include type-style('helper-text-01');   // helper-text-01=12/16
+L27   gap: $spacing-03;   // spacing-03=8px
+L28   line-height: unset;
+L31 .#{$prefix}--shape-indicator svg {
+L35 .#{$prefix}--shape-indicator--14 {
+L36   @include type-style('body-compact-01');   // body-compact-01=14/18
+L38   line-height: unset;
+L41 .#{$prefix}--shape-indicator--failed {
+L45 .#{$prefix}--shape-indicator--critical {
+L49 .#{$prefix}--shape-indicator--high {
+L53 .#{$prefix}--shape-indicator--medium {
+L61 .#{$prefix}--shape-indicator--low {
+L69 .#{$prefix}--shape-indicator--cautious {
+L77 .#{$prefix}--shape-indicator--undefined {
+L81 .#{$prefix}--shape-indicator--stable {
+L85 .#{$prefix}--shape-indicator--informative {
+L89 .#{$prefix}--shape-indicator--incomplete {
+L95 .#{$prefix}--shape-indicator--draft {
+L99 .#{$prefix}--shape-indicator__button {
+L100   @include button-reset.reset($width: false);
+L104 &:focus {
+L109 .#{$prefix}--shape-indicator .#{$prefix}--definition-tooltip {
+L110   padding-block: $spacing-01;   // spacing-01=2px

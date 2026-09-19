@@ -1,0 +1,13 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-combobox/library/src/components/OptionGroup/useOptionGroupStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L20 rowGap: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L24 borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}`,   // strokeWidthThin=1px
+L26 paddingBottom: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L27 margin: `0 ${`calc(${tokens.spacingHorizontalXS} * -1)`} ${tokens.spacingVerticalXS}`,   // spacingHorizontalXS=4px spacingVerticalXS=4px
+L31 label: {
+L32 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L35 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L36 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L37 lineHeight: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L38 padding: `${tokens.spacingHorizontalS} ${tokens.spacingHorizontalSNudge}`,   // spacingHorizontalS=8px spacingHorizontalSNudge=6px

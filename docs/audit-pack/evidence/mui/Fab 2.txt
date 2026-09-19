@@ -1,0 +1,51 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Fab/Fab.js
+L19 const slots = {
+L36 const FabRoot = styled(ButtonBase, {
+L37 name: 'MuiFab',
+L38 slot: 'Root',
+L55   minHeight: 36,
+L59   borderRadius: '50%',
+L60   padding: 0,
+L61   minWidth: 0,
+L62   width: 56,
+L63   height: 56,
+L66 '&:active': {
+L73 '&:hover': {
+L87 variants: [
+L89 props: { size: 'small' },
+L90 style: {
+L91   width: 40,
+L92   height: 40,
+L96 props: { size: 'medium' },
+L97 style: {
+L98   width: 48,
+L99   height: 48,
+L103 props: { variant: 'extended' },
+L104 style: {
+L105   borderRadius: 48 / 2,
+L106   padding: '0 16px',
+L107   width: 'auto',
+L108   minHeight: 'auto',
+L109   minWidth: 48,
+L110   height: 48,
+L114 props: { variant: 'extended', size: 'small' },
+L115 style: {
+L116   width: 'auto',
+L117   padding: '0 8px',
+L118   borderRadius: 34 / 2,
+L119   minWidth: 34,
+L120   height: 34,
+L124 props: { variant: 'extended', size: 'medium' },
+L125 style: {
+L126   width: 'auto',
+L127   padding: '0 16px',
+L128   borderRadius: 40 / 2,
+L129   minWidth: 40,
+L130   height: 40,
+L134 props: { color: 'inherit' },
+L135 style: {
+L142 variants: [
+L146 props: { color },
+L147 style: {
+L150 '&:hover': {
+L185 const ownerState = {

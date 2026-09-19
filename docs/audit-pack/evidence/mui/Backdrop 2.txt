@@ -1,0 +1,14 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Backdrop/Backdrop.js
+L15 const slots = {
+L22 const BackdropRoot = styled('div', {
+L23 name: 'MuiBackdrop',
+L24 slot: 'Root',
+L35   right: 0,
+L36   bottom: 0,
+L37   top: 0,
+L38   left: 0,
+L41 variants: [
+L43 props: { invisible: true },
+L44 style: {
+L65 const ownerState = {
+L73 const externalForwardedProps = {

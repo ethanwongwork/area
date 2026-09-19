@@ -1,0 +1,21 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ListSubheader/ListSubheader.js
+L15 const slots = {
+L28 const ListSubheaderRoot = styled('li', {
+L29 name: 'MuiListSubheader',
+L30 slot: 'Root',
+L45   lineHeight: '48px',
+L49   fontWeight: theme.typography.fontWeightMedium,
+L50   fontSize: theme.typography.pxToRem(14),
+L51 variants: [
+L53 props: {
+L56 style: {
+L61 props: {
+L64 style: {
+L70 style: {
+L71   paddingLeft: 16,
+L72   paddingRight: 16,
+L77 style: {
+L78   paddingLeft: 72,
+L83 style: {
+L85   top: 0,
+L106 const ownerState = {

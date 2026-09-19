@@ -1,0 +1,5 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-list-reveal.scss
+list-item-container-shape: corner-large = 16px
+list-item-icon-button-action-container-shape: corner-large = 16px
+list-item-icon-button-container-shape: corner-full = 9999px
+list-item-segmented-container-shape: corner-large = 16px

@@ -1,0 +1,181 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/Badge/Badge.module.css
+.Badge {
+  --indicator-size: var(--badge-indicator-size);   /* = 12px */
+
+  display: inline-flex;
+  align-items: center;
+  gap: spacing(1);   /* = 4px */
+  height: var(--badge-size);   /* = 20px */
+  padding: 0 var(--badge-gutter);   /* = 0 5px */
+  border-radius: var(--badge-radius);   /* = 4px */
+  font-size: var(--badge-font-size);   /* = 12px */
+  font-weight: var(--badge-font-weight);   /* = 600 */
+  letter-spacing: var(--badge-tracking);   /* = 0em */
+  white-space: nowrap;
+
+  svg {
+    font-size: var(--badge-icon-font-size);   /* = 12px */
+
+    :where(&:first-child:not(:only-child)) {
+      margin-left: var(--badge-icon-offset, -1px);   /* = -1px */
+    }
+
+    :where(&:last-child:not(:only-child)) {
+      margin-right: var(--badge-icon-offset, -1px);   /* = -1px */
+    }
+  }
+
+  /* =============================================
+    Variants
+  ============================================= */
+  &[data-variant="soft"] {
+    background-color: var(--badge-background-color);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 8%), alpha(light-dark(#0d0d0d, #ffffff), 12%)) */
+    color: var(--badge-text-color);   /* = light-dark(#0d0d0d, #ffffff) */
+
+    &:where([data-color="secondary"]) {
+      --badge-background-color: var(--color-background-secondary-soft-alpha);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 8%), alpha(light-dark(#0d0d0d, #ffffff), 12%)) */
+      --badge-text-color: var(--color-text-secondary-soft);   /* = light-dark(#0d0d0d, #ffffff) */
+    }
+
+    &:where([data-color="success"]) {
+      --badge-background-color: var(--color-background-success-soft-alpha);   /* = alpha(#04b84c, 15%) */
+      --badge-text-color: var(--color-text-success-soft);   /* = light-dark(#008635, #04b84c) */
+    }
+
+    &:where([data-color="warning"]) {
+      --badge-background-color: var(--color-background-warning-soft-alpha);   /* = alpha(#fb6a22, 16%) */
+      --badge-text-color: var(--color-text-warning-soft);   /* = light-dark(#923b0f, #fb6a22) */
+    }
+
+    &:where([data-color="danger"]) {
+      --badge-background-color: var(--color-background-danger-soft-alpha);   /* = alpha(#fa423e, 16%) */
+      --badge-text-color: var(--color-text-danger-soft);   /* = light-dark(#ba2623, #fa423e) */
+    }
+
+    &:where([data-color="info"]) {
+      --badge-background-color: var(--color-background-info-soft-alpha);   /* = alpha(#0285ff, 13%) */
+      --badge-text-color: var(--color-text-info-soft);   /* = light-dark(#004f99, #339cff) */
+    }
+
+    &:where([data-color="discovery"]) {
+      --badge-background-color: var(--color-background-discovery-soft-alpha);   /* = alpha(#924ff7, 15%) */
+      --badge-text-color: var(--color-text-discovery-soft);   /* = light-dark(#6b3ab4, #be95fa) */
+    }
+  }
+
+  &[data-variant="solid"] {
+    background-color: var(--badge-background-color);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 8%), alpha(light-dark(#0d0d0d, #ffffff), 12%)) */
+    color: var(--badge-text-color);   /* = light-dark(#0d0d0d, #ffffff) */
+
+    &:where([data-color="secondary"]) {
+      --badge-background-color: var(--color-background-secondary-solid);   /* = light-dark(#5d5d5d, light-dark(#8f8f8f, #414141)) */
+      --badge-text-color: var(--color-text-secondary-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="success"]) {
+      --badge-background-color: var(--color-background-success-solid);   /* = light-dark(#00a240, #008635) */
+      --badge-text-color: var(--color-text-success-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="warning"]) {
+      --badge-background-color: var(--color-background-warning-solid);   /* = #e25507 */
+      --badge-text-color: var(--color-text-warning-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="danger"]) {
+      --badge-background-color: var(--color-background-danger-solid);   /* = #e02e2a */
+      --badge-text-color: var(--color-text-danger-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="info"]) {
+      --badge-background-color: var(--color-background-info-solid);   /* = #0285ff */
+      --badge-text-color: var(--color-text-info-solid);   /* = #ffffff */
+    }
+
+    &:where([data-color="discovery"]) {
+      --badge-background-color: var(--color-background-discovery-solid);   /* = #924ff7 */
+      --badge-text-color: var(--color-text-discovery-solid);   /* = #ffffff */
+    }
+  }
+
+  &[data-variant="outline"] {
+    /* Avoids additive `width` compared to other variants */
+    box-shadow: 0 0 0 1px var(--badge-border-color) inset;   /* = 0 0 0 1px light-dark(alpha(light-dark(#0d0d0d, #ffffff), 16%), alpha(light-dark(#0d0d0d, #ffffff), 25%)) inset */
+    color: var(--badge-text-color);   /* = light-dark(#0d0d0d, #ffffff) */
+
+    &:where([data-color="secondary"]) {
+      --badge-border-color: var(--color-border-secondary-outline);   /* = light-dark(alpha(light-dark(#0d0d0d, #ffffff), 16%), alpha(light-dark(#0d0d0d, #ffffff), 25%)) */
+      --badge-text-color: var(--color-text-secondary-outline);   /* = light-dark(#5d5d5d, light-dark(#303030, #afafaf)) */
+    }
+
+    &:where([data-color="success"]) {
+      --badge-border-color: var(--color-border-success-outline);   /* = light-dark(#00a240, #008635) */
+      --badge-text-color: var(--color-text-success-outline);   /* = #00a240 */
+    }
+
+    &:where([data-color="warning"]) {
+      --badge-border-color: var(--color-border-warning-outline);   /* = #e25507 */
+      --badge-text-color: var(--color-text-warning-outline);   /* = #e25507 */
+    }
+
+    &:where([data-color="danger"]) {
+      --badge-border-color: var(--color-border-danger-outline);   /* = #e02e2a */
+      --badge-text-color: var(--color-text-danger-outline);   /* = #e02e2a */
+    }
+
+    &:where([data-color="info"]) {
+      --badge-border-color: var(--color-border-info-outline);   /* = #0169cc */
+      --badge-text-color: var(--color-text-info-outline);   /* = #0169cc */
+    }
+
+    &:where([data-color="discovery"]) {
+      --badge-border-color: var(--color-border-discovery-outline);   /* = #8046d9 */
+      --badge-text-color: var(--color-text-discovery-outline);   /* = light-dark(#8046d9, #924ff7) */
+    }
+  }
+
+  /* =============================================
+    Sizes
+  ============================================= */
+  &:where([data-size="sm"]) {
+    --badge-size: var(--badge-size-sm);   /* = 20px */
+    --badge-gutter: var(--badge-gutter-sm);   /* = 5px */
+    --badge-font-size: var(--badge-font-size-sm);   /* = 12px */
+    --badge-font-weight: var(--badge-font-weight-sm);   /* = 600 */
+    --badge-tracking: var(--badge-tracking-sm);   /* = 0em */
+    --badge-radius: var(--badge-radius-sm);   /* = 4px */
+    --badge-icon-font-size: var(--badge-icon-font-size-sm);   /* = 12px */
+    --badge-indicator-size: var(--badge-indicator-size-sm);   /* = 12px */
+  }
+
+  &:where([data-size="md"]) {
+    --badge-size: var(--badge-size-md);   /* = 22px */
+    --badge-gutter: var(--badge-gutter-md);   /* = 6px */
+    --badge-font-size: var(--badge-font-size-md);   /* = 14px */
+    --badge-font-weight: var(--badge-font-weight-md);   /* = 600 */
+    --badge-tracking: var(--badge-tracking-md);   /* = 0em */
+    --badge-radius: var(--badge-radius-md);   /* = 4px */
+    --badge-icon-font-size: var(--badge-icon-font-size-md);   /* = 16px */
+    --badge-indicator-size: var(--badge-indicator-size-md);   /* = 12px */
+  }
+
+  &:where([data-size="lg"]) {
+    --badge-size: var(--badge-size-lg);   /* = 24px */
+    --badge-gutter: var(--badge-gutter-lg);   /* = 8px */
+    --badge-font-size: var(--badge-font-size-lg);   /* = 14px */
+    --badge-font-weight: var(--badge-font-weight-lg);   /* = 600 */
+    --badge-tracking: var(--badge-tracking-lg);   /* = 0em */
+    --badge-radius: var(--badge-radius-lg);   /* = 6px */
+    --badge-icon-font-size: var(--badge-icon-font-size-lg);   /* = 16px */
+    --badge-indicator-size: var(--badge-indicator-size-lg);   /* = 14px */
+  }
+
+  /* =============================================
+    Pill
+  ============================================= */
+  &:where([data-pill]) {
+    --badge-radius: var(--radius-full);   /* = 9999px */
+
+    padding: 0 calc(var(--badge-gutter) * var(--control-gutter-pill-scaling));   /* = 0 6.65px */
+  }
+}

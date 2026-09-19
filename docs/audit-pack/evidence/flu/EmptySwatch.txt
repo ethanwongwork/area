@@ -1,0 +1,27 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-swatch-picker/library/src/components/EmptySwatch/useEmptySwatchStyles.styles.ts
+L16 const useStyles = makeResetStyles({
+L18 border: `1px dashed ${tokens.colorNeutralForeground4}`,
+L21 const useSizeStyles = makeStyles({
+L23 width: '20px',
+L24 height: '20px',
+L26 small: {
+L27 width: '24px',
+L28 height: '24px',
+L30 medium: {
+L31 width: '28px',
+L32 height: '28px',
+L34 large: {
+L35 width: '32px',
+L36 height: '32px',
+L40 const useShapeStyles = makeStyles({
+L41 rounded: {
+L42 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L43 ...createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusMedium }),   // borderRadiusMedium=4px
+L45 circular: {
+L46 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L47 ...createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusCircular }),   // borderRadiusCircular=10000px
+L49 square: {
+L50 borderRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L51 ...createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusNone }),   // borderRadiusNone=0
+L63 const size = state.size ?? 'medium';
+L69 sizeStyles[size],

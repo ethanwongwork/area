@@ -1,0 +1,20 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/input-group.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot input-group]
+  L17 rounded-md=8px border=1px
+  L18 h-9=36px min-w-0=0px
+  L23 has-[>[data-align=block-start]]:[&>input]:pb-3=12px
+  L24 has-[>[data-align=block-end]]:[&>input]:pt-3=12px
+  L40 gap-2=8px py-1.5=6px text-sm=14/20px font-medium [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4=16px
+  L49 px-3=12px pt-3=12px group-has-[>input]/input-group:pt-2.5=10px [.border-b]:pb-3=12px
+  L51 px-3=12px pb-3=12px group-has-[>input]/input-group:pb-2.5=10px [.border-t]:pt-3=12px
+  [slot input-group-addon]
+  L83 gap-2=8px text-sm=14/20px
+  L87 xs: h-6=24px gap-1=4px rounded-[calc(var(--radius)-5px)] px-2=8px has-[>svg]:px-2=8px [&>svg:not([class*='size-'])]:size-3.5=14px
+  L88 sm: h-8=32px gap-1.5=6px rounded-md=8px px-2.5=10px has-[>svg]:px-2.5=10px
+  L90 size-6=24px rounded-[calc(var(--radius)-5px)] p-0=0px has-[>svg]:p-0=0px
+  L91 "icon-sm": size-8=32px p-0=0px has-[>svg]:p-0=0px
+  L123 gap-2=8px text-sm=14/20px [&_svg:not([class*='size-'])]:size-4=16px
+  [slot input-group-control]
+  L139 rounded-none=0px border-0=0px focus-visible:ring-0=0px
+  [slot input-group-control]
+  L155 rounded-none=0px border-0=0px py-3=12px focus-visible:ring-0=0px

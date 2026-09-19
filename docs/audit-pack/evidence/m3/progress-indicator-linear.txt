@@ -1,0 +1,18 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-progress-indicator-linear.scss
+active-indicator-thickness: 4px
+active-indicator-wave-amplitude: 3px
+active-indicator-wave-wavelength: 40px
+height: 4px
+indeterminate-active-indicator-wave-wavelength: 20px
+stop-indicator-size: 4px
+stop-indicator-trailing-space: 0px
+thick-active-indicator-thickness: 8px
+thick-height: 8px
+thick-stop-indicator-size: 4px
+thick-stop-indicator-trailing-space: 2px
+thick-track-active-indicator-space: 4px
+thick-track-thickness: 8px
+thick-with-wave-height: 14px
+track-active-indicator-space: 4px
+track-thickness: 4px
+with-wave-height: 10px

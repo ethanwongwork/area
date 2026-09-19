@@ -1,0 +1,92 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/overflow-menu/_overflow-menu.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L29 @mixin overflow-menu {
+L31 .#{$prefix}--overflow-menu__trigger {
+L32   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L41   block-size: layout.size('height');
+L43   inline-size: layout.size('height');
+L44   min-block-size: layout.size('height');
+L49 &:focus {
+L54 &:hover {
+L60 .#{$prefix}--overflow-menu > :first-child {
+L61   margin-block-start: 0;
+L65 .#{$prefix}--overflow-menu__trigger.#{$prefix}--tooltip--a11y.#{$prefix}--tooltip__trigger:focus {
+L75 .#{$prefix}--overflow-menu__trigger {
+L84 .#{$prefix}--overflow-menu__trigger {
+L88 .#{$prefix}--overflow-menu__icon {
+L89   block-size: $spacing-05;   // spacing-05=16px
+L91   inline-size: $spacing-05;   // spacing-05=16px
+L94 .#{$prefix}--overflow-menu__wrapper {
+L95   line-height: 0;
+L98 .#{$prefix}--overflow-menu-options {
+L99   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L109   inline-size: $spacing-13;   // spacing-13=160px
+L110   inset-block-start: $spacing-07;   // spacing-07=32px
+L111   inset-inline-start: 0;
+L114 &::after {
+L129 .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--open:hover {
+L134 .#{$prefix}--overflow-menu-options--light {
+L137 &::after {
+L143 .#{$prefix}--overflow-menu.#{$prefix}--overflow-menu--light.#{$prefix}--overflow-menu--open:hover {
+L151   block-size: convert.to-rem(3px);
+L152   inline-size: layout.size('height');
+L153   inset-block-start: convert.to-rem(-3px);
+L154   inset-inline-start: 0;
+L157 .#{$prefix}--overflow-menu-options[data-floating-menu-direction='top']::after {
+L158   block-size: $spacing-03;   // spacing-03=8px
+L159   inline-size: layout.size('height');
+L160   inset-block-end: -$spacing-03;   // spacing-03=8px
+L161   inset-inline-start: 0;
+L164 .#{$prefix}--overflow-menu-options[data-floating-menu-direction='left']::after {
+L165   block-size: layout.size('height');
+L166   inline-size: convert.to-rem(6px);
+L167   inset-block-start: 0;
+L168   inset-inline-end: convert.to-rem(-6px);
+L171 .#{$prefix}--overflow-menu-options[data-floating-menu-direction='right']::after {
+L172   block-size: layout.size('height');
+L173   inline-size: convert.to-rem(6px);
+L174   inset-block-start: 0;
+L175   inset-inline-start: convert.to-rem(-6px);
+L179 .#{$prefix}--overflow-menu--flip.#{$prefix}--overflow-menu-options[data-floating-menu-direction='bottom']::aft
+L180   inset-inline: auto 0;
+L184 .#{$prefix}--overflow-menu--flip.#{$prefix}--overflow-menu-options[data-floating-menu-direction='right']::afte
+L185   inset-block: auto 0;
+L188 .#{$prefix}--overflow-menu-options--open {
+L192 .#{$prefix}--overflow-menu-options__content {
+L193   inline-size: 100%;
+L196 .#{$prefix}--overflow-menu-options__option {
+L201   padding: 0;
+L203   block-size: layout.size('height');
+L204   inline-size: 100%;
+L208 .#{$prefix}--overflow-menu--divider {
+L212 .#{$prefix}--overflow-menu--light .#{$prefix}--overflow-menu--divider {
+L218   block-size: 100%;
+L223 .#{$prefix}--overflow-menu-options__btn {
+L224   @include type-style('body-compact-01');   // body-compact-01=14/18
+L229   padding: 0 $spacing-05;   // spacing-05=16px
+L230   border: none;
+L232   block-size: 100%;
+L237   inline-size: 100%;
+L238   max-inline-size: 11.25rem;
+L246 &:hover {
+L251 &:focus {
+L255 &::-moz-focus-inner {
+L256   border: none;
+L260 .#{$prefix}--overflow-menu-options__btn svg {
+L265 .#{$prefix}--overflow-menu-options__btn:hover svg {
+L270 .#{$prefix}--overflow-menu-options__option-content {
+L277 .#{$prefix}--overflow-menu-options__option:hover {
+L282 .#{$prefix}--overflow-menu-options__btn:hover {
+L291 .#{$prefix}--overflow-menu-options__option--disabled:hover {
+L298 .#{$prefix}--overflow-menu-options__btn:focus {
+L308 .#{$prefix}--overflow-menu-options__btn:focus {
+L309   box-shadow: inset 0 0 0 convert.to-rem(3px) $background;
+L313 .#{$prefix}--overflow-menu-options__btn {
+L318 &:focus {
+L326 &:hover {
+L341 .#{$prefix}--overflow-menu--flip {
+L342   inset-inline-start: -140px;
+L344 &::before {
+L345   inset-inline-start: 145px;
+L352 .#{$prefix}--overflow-menu-options__btn:focus {
+L359 .#{$prefix}--overflow-menu__top-start {
+L363 .#{$prefix}--overflow-menu__top-end {

@@ -1,0 +1,7 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/alert.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  L6 gap-y-0.5=2px rounded-lg=10px border=1px px-4=16px py-3=12px text-sm=14/20px has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3=12px [&>svg]:size-4=16px [&>svg]:translate-y-0.5=2px
+  [slot alert]
+  [slot alert-title]
+  L41 line-clamp-1 min-h-4=16px font-medium tracking-tight
+  [slot alert-description]
+  L57 gap-1=4px text-sm=14/20px [&_p]:leading-relaxed

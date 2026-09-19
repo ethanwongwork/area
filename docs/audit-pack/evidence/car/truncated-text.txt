@@ -1,0 +1,11 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/truncated-text/_truncated-text.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L18 @mixin truncated-text {
+L19 .#{$prefix}--truncated-text {
+L20 &__text-content {
+L24   line-height: initial;
+L28 &__expand-toggle {
+L32 &:focus-visible {
+L38 &__tooltip-trigger {
+L40   padding: 0;
+L41   border: 0;
+L48 &:focus-visible {

@@ -1,0 +1,47 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/popover.css
+.rt-PopoverContent {
+  background-color: var(--color-panel-solid);   /* = white */
+  box-shadow: var(--shadow-5);   /* = 0 0 0 1px var(--mauve-a3),
+    0 12px 60px var(--black-a3),
+    0 12px 32px -16px var(--mauve-a5) */
+  min-width: var(--radix-popover-trigger-width);
+  outline: 0;
+  overflow: auto;
+  position: relative;
+
+  --inset-padding-top: var(--popover-content-padding);   /* = 12px */
+  --inset-padding-right: var(--popover-content-padding);   /* = 12px */
+  --inset-padding-bottom: var(--popover-content-padding);   /* = 12px */
+  --inset-padding-left: var(--popover-content-padding);   /* = 12px */
+  padding: var(--popover-content-padding);   /* = 12px */
+  box-sizing: border-box;
+
+  transform-origin: var(--radix-popover-content-transform-origin);
+}
+
+/***************************************************************************************************
+ *                                                                                                 *
+ * SIZES                                                                                           *
+ *                                                                                                 *
+ ***************************************************************************************************/
+
+@breakpoints {
+  .rt-PopoverContent {
+    &:where(.rt-r-size-1) {
+      --popover-content-padding: var(--space-3);   /* = 12px */
+      border-radius: var(--radius-4);   /* = 8px */
+    }
+    &:where(.rt-r-size-2) {
+      --popover-content-padding: var(--space-4);   /* = 16px */
+      border-radius: var(--radius-4);   /* = 8px */
+    }
+    &:where(.rt-r-size-3) {
+      --popover-content-padding: var(--space-5);   /* = 24px */
+      border-radius: var(--radius-5);   /* = 12px */
+    }
+    &:where(.rt-r-size-4) {
+      --popover-content-padding: var(--space-6);   /* = 32px */
+      border-radius: var(--radius-5);   /* = 12px */
+    }
+  }
+}

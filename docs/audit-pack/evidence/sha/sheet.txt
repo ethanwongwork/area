@@ -1,0 +1,22 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/sheet.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot sheet]
+  [slot sheet-trigger]
+  [slot sheet-close]
+  [slot sheet-portal]
+  [slot sheet-overlay]
+  [slot sheet-content]
+  L62 gap-4=16px
+  L64 inset-y-0=0px right-0=0px border-l=1px sm:max-w-sm=384px
+  L66 inset-y-0=0px left-0=0px border-r=1px sm:max-w-sm=384px
+  L68 inset-x-0=0px top-0=0px border-b=1px
+  L70 inset-x-0=0px bottom-0=0px border-t=1px
+  L77 top-4=16px right-4=16px rounded-xs=2px focus:ring-2=2px focus:ring-offset-2=8px
+  L78 size-4=16px
+  [slot sheet-header]
+  L91 gap-1.5=6px p-4=16px
+  [slot sheet-footer]
+  L101 gap-2=8px p-4=16px
+  [slot sheet-title]
+  L114 font-semibold
+  [slot sheet-description]
+  L127 text-sm=14/20px

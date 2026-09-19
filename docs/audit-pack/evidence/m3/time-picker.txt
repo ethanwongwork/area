@@ -1,0 +1,30 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-time-picker.scss
+clock-dial-container-size: 256px
+clock-dial-selector-center-container-size: 8px
+clock-dial-selector-handle-container-size: 48px
+clock-dial-selector-track-container-width: 2px
+period-selector-horizontal-container-height: 38px
+period-selector-horizontal-container-width: 216px
+period-selector-outline-width: 1px
+period-selector-vertical-container-height: 80px
+period-selector-vertical-container-width: 52px
+time-selector-24h-vertical-container-width: 114px
+time-selector-container-height: 80px
+time-selector-container-width: 96px
+clock-dial-label-text-line-height: body-large-line-height = 24px
+clock-dial-label-text-size: body-large-size = 16px
+clock-dial-selector-center-container-shape: corner-full = 9999px
+clock-dial-selector-handle-container-shape: corner-full = 9999px
+clock-dial-shape: corner-full = 9999px
+clock-dial-shape-ignore: corner-full = 9999px
+container-shape: corner-extra-large = 28px
+headline-line-height: label-medium-line-height = 16px
+headline-size: label-medium-size = 12px
+period-selector-container-shape: corner-small = 8px
+period-selector-label-text-line-height: title-medium-line-height = 24px
+period-selector-label-text-size: title-medium-size = 16px
+time-selector-container-shape: corner-small = 8px
+time-selector-label-text-line-height: display-large-line-height = 64px
+time-selector-label-text-size: display-large-size = 57px
+time-selector-separator-line-height: display-large-line-height = 64px
+time-selector-separator-size: display-large-size = 57px

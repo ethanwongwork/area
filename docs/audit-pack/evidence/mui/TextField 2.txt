@@ -1,0 +1,11 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TextField/TextField.js
+L20 const variantComponent = {
+L29 const slots = {
+L36 const TextFieldRoot = styled(FormControl, {
+L37 name: 'MuiTextField',
+L38 slot: 'Root',
+L110 const ownerState = {
+L138 const externalForwardedProps = {
+L151 const inputAdditionalProps = {};
+L171 externalForwardedProps: {
+L178 additionalProps: {

@@ -1,0 +1,10 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-date-input-modal.scss
+container-height: 512px
+container-width: 328px
+header-container-height: 120px
+header-container-width: 328px
+container-shape: corner-extra-large = 28px
+header-headline-line-height: headline-large-line-height = 40px
+header-headline-size: headline-large-size = 32px
+header-supporting-text-line-height: label-large-line-height = 20px
+header-supporting-text-size: label-large-size = 14px

@@ -1,0 +1,9 @@
+### @atlaskit/toggle@17.3.2  icon-container.js  (token fallbacks; pt and pc converted to px)
+  iconContainer: inset-block-start:2px
+  iconContainerRegular: width:16px; height:16px
+  iconContainerLarge: width:20px; height:20px
+  left: inset-inline-start:3px
+  right: inset-inline-end:3px
+### @atlaskit/toggle@17.3.2  toggle.js  (token fallbacks; pt and pc converted to px)
+  regular: border-radius:9999px; height:16px; width:32px; [:before] height:12px; [:before] width:12px
+  large: border-radius:9999px; height:20px; width:40px; [:before] height:16px; [:before] width:16px

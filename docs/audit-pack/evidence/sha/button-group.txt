@@ -1,0 +1,7 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/button-group.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  L8 has-[>[data-slot=button-group]]:gap-2=8px has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md=8px
+  L13 [&>*:not(:first-child)]:rounded-l-none=0px [&>*:not(:first-child)]:border-l-0=0px [&>*:not(:last-child)]:rounded-r-none=0px
+  L15 [&>*:not(:first-child)]:rounded-t-none=0px [&>*:not(:first-child)]:border-t-0=0px [&>*:not(:last-child)]:rounded-b-none=0px
+  [slot button-group]
+  L52 gap-2=8px rounded-md=8px border=1px px-4=16px text-sm=14/20px font-medium [&_svg:not([class*='size-'])]:size-4=16px
+  [slot button-group-separator]

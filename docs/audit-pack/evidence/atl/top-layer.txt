@@ -1,0 +1,8 @@
+### @atlaskit/top-layer@5.0.4  dialog/dialog-content.js  (token fallbacks; pt and pc converted to px)
+  root: text-transform:none
+  root: border:none; margin-top:auto; margin-right:auto; margin-bottom:auto; margin-left:auto; padding-block-start:0; padding-inline-end:0; padding-block-end:0; padding-inline-start:0; max-width:none; max-height:none
+### @atlaskit/top-layer@5.0.4  popover-surface/popover-surface.js  (token fallbacks; pt and pc converted to px)
+  root: border-radius:3px
+### @atlaskit/top-layer@5.0.4  popover/popover.js  (token fallbacks; pt and pc converted to px)
+  root: text-transform:none
+  root: border:none; padding-top:0; padding-right:0; padding-bottom:0; padding-left:0; margin-top:0; margin-right:0; margin-bottom:0; margin-left:0; inset:auto; height:auto; [)>*] min-inline-size:0; [)>*] min-block-size:0

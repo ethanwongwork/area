@@ -1,0 +1,39 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Alert/Alert.js
+L25 const slots = {
+L35 const AlertRoot = styled(Paper, {
+L36 name: 'MuiAlert',
+L37 slot: 'Root',
+L51   padding: '6px 16px',
+L52 variants: [
+L56 props: { colorSeverity: color, variant: 'standard' },
+L57 style: {
+L66 : {
+L74 props: { colorSeverity: color, variant: 'outlined' },
+L75 style: {
+L82 : {
+L90 props: { colorSeverity: color, variant: 'filled' },
+L91 style: {
+L96   fontWeight: theme.typography.fontWeightMedium,
+L102 : {
+L116 const AlertIcon = styled('div', {
+L117 name: 'MuiAlert',
+L118 slot: 'Icon',
+L120   marginRight: 12,
+L121   padding: '7px 0',
+L123   fontSize: 22,
+L127 const AlertMessage = styled('div', {
+L128 name: 'MuiAlert',
+L129 slot: 'Message',
+L131   padding: '8px 0',
+L132   minWidth: 0,
+L136 const AlertAction = styled('div', {
+L137 name: 'MuiAlert',
+L138 slot: 'Action',
+L142   padding: '4px 0 0 16px',
+L143   marginLeft: 'auto',
+L144   marginRight: -8,
+L147 const defaultIconMapping = {
+L173 const ownerState = {
+L183 const externalForwardedProps = {
+L193 externalForwardedProps: {
+L198 additionalProps: {

@@ -1,0 +1,75 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Tooltip/Tooltip.js
+L30 const slots = {
+L44 const TooltipPopper = styled(Popper, {
+L45 name: 'MuiTooltip',
+L46 slot: 'Popper',
+L61 variants: [
+L64 style: {
+L70 style: {
+L72   top: 0,
+L73   marginTop: '-0.71em',
+L74 '&::before': {
+L79   bottom: 0,
+L80   marginBottom: '-0.71em',
+L81 '&::before': {
+L86   height: '1em',
+L87   width: '0.71em',
+L88   insetInlineStart: 0,
+L89   marginInlineStart: '-0.71em',
+L90 '&::before': {
+L95   height: '1em',
+L96   width: '0.71em',
+L97   insetInlineEnd: 0,
+L98   marginInlineEnd: '-0.71em',
+L99 '&::before': {
+L109 const TooltipTooltip = styled('div', {
+L110 name: 'MuiTooltip',
+L111 slot: 'Tooltip',
+L127   borderRadius: (theme.vars || theme).shape.borderRadius,
+L130   padding: '4px 8px',
+L131   fontSize: theme.typography.pxToRem(11),
+L132   maxWidth: 300,
+L133   margin: 2,
+L135   fontWeight: theme.typography.fontWeightMedium,
+L138   marginInlineEnd: '14px',
+L142   marginInlineStart: '14px',
+L146   marginBottom: '14px',
+L150   marginTop: '14px',
+L152 variants: [
+L155 style: {
+L157   marginBlock: 0,
+L162 style: {
+L163   padding: '8px 16px',
+L164   fontSize: theme.typography.pxToRem(14),
+L165   lineHeight: `${round(16 / 14)}em`,
+L166   fontWeight: theme.typography.fontWeightRegular,
+L171 style: {
+L173   marginInlineEnd: '24px',
+L176   marginInlineStart: '24px',
+L179   marginBottom: '24px',
+L182   marginTop: '24px',
+L190 const TooltipArrow = styled('span', {
+L191 name: 'MuiTooltip',
+L192 slot: 'Arrow',
+L197   width: '1em',
+L198   height: '0.71em' /* = width / sqrt(2) = (length of the hypotenuse) */,
+L201 '&::before': {
+L203   margin: 'auto',
+L205   width: '100%',
+L206   height: '100%',
+L279 name: 'Tooltip',
+L516 const nameOrDescProps = {};
+L526 const childrenProps = {
+L553 const interactiveWrapperListeners = {};
+L594 const ownerState = {
+L607 name: 'arrow',
+L609 options: {
+L611   padding: 4,
+L627 const externalForwardedProps = {
+L629 slotProps: {
+L675   top: cursorPosition.y,
+L676   left: cursorPosition.x,
+L677   right: cursorPosition.x,
+L678   bottom: cursorPosition.y,
+L679   width: 0,
+L680   height: 0,

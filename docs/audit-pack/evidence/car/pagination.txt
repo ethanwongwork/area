@@ -1,0 +1,131 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/pagination/_pagination.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L26 @mixin pagination {
+L27 .#{$prefix}--data-table-container + .#{$prefix}--pagination {
+L31 .#{$prefix}--pagination {
+L33   @include type-style('body-compact-01');   // body-compact-01=14/18
+L34   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L43   container-type: inline-size;
+L44   inline-size: calc(100% - 1px);
+L45   min-block-size: layout.size('height');
+L48   @container pagination (min-width: 42rem) {
+L49 .#{$prefix}--pagination__control-buttons {
+L55   @container pagination (max-width: 42rem) {
+L57 .#{$prefix}--pagination__right > * {
+L61 .#{$prefix}--pagination__items-count {
+L65 .#{$prefix}--pagination__control-buttons {
+L71 .#{$prefix}--pagination .#{$prefix}--select {
+L73   block-size: 100%;
+L76 .#{$prefix}--pagination .#{$prefix}--select-input--inline__wrapper {
+L78   block-size: 100%;
+L81 .#{$prefix}--pagination .#{$prefix}--select-input {
+L82   @include type-style('body-compact-01');   // body-compact-01=14/18
+L84   block-size: 100%;
+L85   inline-size: auto;
+L86   line-height: layout.size('height');
+L87   min-inline-size: auto;
+L92   padding-inline-end: $spacing-05;   // spacing-05=16px
+L100 .#{$prefix}--select-input {
+L101   padding-inline: $spacing-05 2.25rem;   // spacing-05=16px
+L105 .#{$prefix}--pagination .#{$prefix}--select-input:hover {
+L124 .#{$prefix}--pagination .#{$prefix}--select__arrow {
+L125   inset-block-start: 50%;
+L131 .#{$prefix}--select-input {
+L135 .#{$prefix}--pagination__right {
+L138   @container pagination (max-width: 42rem) {
+L142 &.#{$prefix}--pagination__right--no-content {
+L148 .#{$prefix}--pagination__right {
+L151   block-size: 100%;
+L155 .#{$prefix}--pagination__right > .#{$prefix}--form-item {
+L156   block-size: 100%;
+L160 .#{$prefix}--pagination__right .#{$prefix}--pagination__text {
+L164 .#{$prefix}--pagination__left .#{$prefix}--pagination__text {
+L165   margin-inline-end: convert.to-rem(1px);
+L168 .#{$prefix}--pagination__right .#{$prefix}--pagination__text {
+L169   margin-inline: convert.to-rem(1px) 1rem;
+L173 .#{$prefix}--pagination__text.#{$prefix}--pagination__page-text {
+L174   margin-inline: 1rem convert.to-rem(1px);
+L178 .#{$prefix}--pagination__text.#{$prefix}--pagination__page-text.#{$prefix}--pagination__unknown-pages-text {
+L179   margin-inline-end: $spacing-05;   // spacing-05=16px
+L182 .#{$prefix}--pagination__right .#{$prefix}--pagination__text:empty {
+L183   margin: 0;
+L186 .#{$prefix}--pagination__left {
+L187   padding: 0 $spacing-05 0 0;   // spacing-05=16px
+L189 &.#{$prefix}--pagination__left--no-sizer {
+L190   padding: 0;
+L194   @container pagination (min-width: 42rem) {
+L195   padding: 0 $spacing-05;   // spacing-05=16px
+L199 .#{$prefix}--pagination__text {
+L200   @container pagination (min-width: 42rem) {
+L211   margin-inline-start: $spacing-05;   // spacing-05=16px
+L215 .#{$prefix}--btn--ghost.#{$prefix}--pagination__button {
+L221   border: none;
+L222   margin: 0;
+L224   block-size: layout.size('height');
+L228   inline-size: layout.size('height');
+L229   min-block-size: convert.to-rem(24px);
+L236 .#{$prefix}--btn--ghost.#{$prefix}--pagination__button > svg {
+L237   margin-block-start: 0;
+L246 .#{$prefix}--btn--ghost:focus.#{$prefix}--pagination__button {
+L254 .#{$prefix}--btn--ghost:hover.#{$prefix}--pagination__button {
+L260 .#{$prefix}--btn--ghost.#{$prefix}--pagination__button--no-index {
+L269 .#{$prefix}--btn--ghost:hover.#{$prefix}--pagination__button--no-index {
+L278 .#{$prefix}--pagination.#{$prefix}--skeleton .#{$prefix}--skeleton__text {
+L279   margin-block-end: 0;
+L280   margin-inline-end: 1rem;
+L286 .#{$prefix}--btn--ghost.#{$prefix}--pagination__button {
+L297 .#{$prefix}--select-input[disabled] {
+L304 .#{$prefix}--select-input[disabled]:hover {
+### Carbon styles @ 8472cca  packages/styles/scss/components/pagination/_unstable_pagination.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L22 @mixin unstable_pagination {
+L23 .#{$prefix}--unstable-pagination {
+L25   @include type-style('body-compact-01');   // body-compact-01=14/18
+L34   container-type: inline-size;
+L35   inline-size: 100%;
+L36   min-block-size: convert.to-rem(40px);
+L39 .#{$prefix}--unstable-pagination__text {
+L41   @container pagination (min-width: 42rem) {
+L45   margin: 0 $spacing-05;   // spacing-05=16px
+L50 .#{$prefix}--unstable-pagination__right {
+L53   block-size: 100%;
+L56 .#{$prefix}--unstable-pagination__left {
+L57   padding: 0 $spacing-05 0 0;   // spacing-05=16px
+L61 .#{$prefix}--unstable-pagination__right > .#{$prefix}--form-item {
+L62   block-size: 100%;
+L66 .#{$prefix}--unstable-pagination__text {
+L67   margin-inline-end: convert.to-rem(1px);
+L71 .#{$prefix}--unstable-pagination__text {
+L72   margin-inline: convert.to-rem(1px) $spacing-05;   // spacing-05=16px
+L75 .#{$prefix}--unstable-pagination__button {
+L81   border: none;
+L82   margin: 0;
+L84   block-size: convert.to-rem(40px);
+L89   inline-size: convert.to-rem(40px);
+L90   min-block-size: convert.to-rem(32px);
+L97 .#{$prefix}--unstable-pagination__button .#{$prefix}--btn__icon {
+L98   block-size: initial;
+L99   inline-size: initial;
+L102 .#{$prefix}--unstable-pagination__button.#{$prefix}--btn--icon-only.#{$prefix}--tooltip__trigger:focus {
+L107 .#{$prefix}--unstable-pagination__button:hover {
+L113 .#{$prefix}--unstable-pagination__button--no-index {
+L118 .#{$prefix}--unstable-pagination__button.#{$prefix}--btn:disabled {
+L125 .#{$prefix}--unstable-pagination__button--no-index:hover {
+L133 .#{$prefix}--unstable-pagination__page-sizer {
+L135   block-size: 100%;
+L140   .#{$prefix}--unstable-pagination__page-sizer
+L141 .#{$prefix}--select-input--inline__wrapper {
+L143   block-size: 100%;
+L147 .#{$prefix}--unstable-pagination__page-sizer .#{$prefix}--select-input {
+L148   @include type-style('body-short-01');   // body-short-01=14/18
+L150   padding: 0 2.25rem 0 $spacing-05;   // spacing-05=16px
+L151   block-size: 100%;
+L153   inline-size: auto;
+L154   line-height: convert.to-rem(40px);
+L156   min-inline-size: auto;
+L162   .#{$prefix}--unstable-pagination__page-sizer
+L163 .#{$prefix}--select-input:hover {
+L169 .#{$prefix}--unstable-pagination__page-sizer .#{$prefix}--select__arrow {
+L170   inset-block-start: 50%;
+L174   @container pagination (min-width: 42rem) {
+L175   inset-inline-end: $spacing-05;   // spacing-05=16px
+L179 .#{$prefix}--unstable-pagination__page-selector {
+L183 .#{$prefix}--unstable-pagination__page-sizer {

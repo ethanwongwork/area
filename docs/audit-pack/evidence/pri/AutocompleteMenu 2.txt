@@ -1,0 +1,10 @@
+### Primer React @ e4e6eba  packages/react/src/Autocomplete/AutocompleteMenu.module.css
+.SpinnerWrapper {
+  display: flex;
+  justify-content: center;
+  padding: var(--base-size-16);   /* = 16px */
+}
+
+.EmptyStateWrapper {
+  padding: var(--base-size-16);   /* = 16px */
+}

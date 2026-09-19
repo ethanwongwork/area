@@ -1,0 +1,17 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TabScrollButton/TabScrollButton.js
+L19 const slots = {
+L26 const TabScrollButtonRoot = styled(ButtonBase, {
+L27 name: 'MuiTabScrollButton',
+L28 slot: 'Root',
+L35   width: 40,
+L41 variants: [
+L43 props: {
+L46 style: {
+L47   width: '100%',
+L48   height: 40,
+L49 '& svg': {
+L72 const ownerState = { isRtl, ...props };
+L82 additionalProps: {
+L83   fontSize: 'small',
+L91 additionalProps: {
+L92   fontSize: 'small',

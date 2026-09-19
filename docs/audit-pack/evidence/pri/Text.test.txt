@@ -1,0 +1,67 @@
+### Primer React @ e4e6eba  packages/react/src/Text/Text.test.module.css
+/* CSS classes for Text component tests */
+
+.BoldText {
+  font-weight: var(--base-text-weight-semibold);   /* = 600 */
+}
+
+.NormalWeight {
+  font-weight: var(--base-text-weight-normal);   /* = 400 */
+}
+
+.ItalicText {
+  font-style: italic;
+}
+
+.NormalStyle {
+  font-style: normal;
+}
+
+.MonoFont {
+  font-family: var(--fontStack-monospace);   /* = ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace */
+}
+
+.LargeText {
+  font-size: var(--text-title-size-large);   /* = 32px */
+}
+
+.ExtraLargeText {
+  /* stylelint-disable-next-line primer/typography */
+  font-size: var(--base-size-96);   /* = 96px */
+}
+
+.SmallFont {
+  font-size: var(--text-body-size-small);   /* = 12px */
+}
+
+.MediumFont {
+  font-size: var(--text-body-size-large);   /* = 16px */
+}
+
+.CondensedLine {
+  line-height: var(--text-body-lineHeight-medium);   /* = 1.5 */
+}
+
+.DefaultLine {
+  line-height: var(--text-body-lineHeight-large);   /* = 1.5 */
+}
+
+.ResponsiveFont {
+  font-size: var(--text-body-size-medium);   /* = 14px */
+}
+
+@media (min-width: 768px) {
+  .ResponsiveFont {
+    font-size: var(--text-body-size-large);   /* = 16px */
+  }
+}
+
+.ResponsiveLine {
+  line-height: var(--text-body-lineHeight-medium);   /* = 1.5 */
+}
+
+@media (min-width: 768px) {
+  .ResponsiveLine {
+    line-height: var(--text-body-lineHeight-large);   /* = 1.5 */
+  }
+}

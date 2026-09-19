@@ -1,0 +1,7 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-extended-fab-large.scss
+container-height: 96px
+icon-label-space: 16px
+icon-size: 36px
+leading-space: 28px
+trailing-space: 28px
+container-shape: corner-extra-large = 28px

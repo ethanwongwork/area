@@ -1,0 +1,48 @@
+### MUI Material @ 69960c1  packages/mui-material/src/TableCell/TableCell.js
+L17 const slots = {
+L31 const TableCellRoot = styled('td', {
+L32 name: 'MuiTableCell',
+L33 slot: 'Root',
+L62   padding: 16,
+L63 variants: [
+L65 props: {
+L68 style: {
+L70   lineHeight: theme.typography.pxToRem(24),
+L71   fontWeight: theme.typography.fontWeightMedium,
+L75 props: {
+L78 style: {
+L83 props: {
+L86 style: {
+L88   lineHeight: theme.typography.pxToRem(21),
+L89   fontSize: theme.typography.pxToRem(12),
+L93 props: {
+L94   size: 'small',
+L96 style: {
+L97   padding: '6px 16px',
+L99   width: 24, // prevent the checkbox column from growing
+L100   padding: '0 12px 0 16px',
+L102   padding: 0,
+L108 props: {
+L109   padding: 'checkbox',
+L111 style: {
+L112   width: 48, // prevent the checkbox column from growing
+L113   padding: '0 0 0 4px',
+L117 props: {
+L118   padding: 'none',
+L120 style: {
+L121   padding: 0,
+L125 props: {
+L128 style: {
+L133 props: {
+L136 style: {
+L141 props: {
+L144 style: {
+L150 props: {
+L153 style: {
+L159 style: {
+L161   top: 0,
+L180   padding: paddingProp,
+L182   size: sizeProp,
+L211 const ownerState = {
+L215   padding: paddingProp || (table && table.padding ? table.padding : 'normal'),
+L216   size: sizeProp || (table && table.size ? table.size : 'medium'),

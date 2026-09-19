@@ -1,0 +1,32 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/full-page-error/_full-page-error.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L17 @mixin full-page-error {
+L18 .#{$prefix}--full-page-error {
+L19   block-size: inherit;
+L22 .#{$prefix}--full-page-error__container {
+L23   margin: 0 $spacing-06;   // spacing-06=24px
+L24   block-size: 100%;
+L26 @include breakpoint-down(md) {
+L27   margin: 0 $spacing-03;   // spacing-03=8px
+L31 .#{$prefix}--full-page-error__grid {
+L32   block-size: 100%;
+L33   padding-block: $spacing-07;   // spacing-07=32px
+L36 .#{$prefix}--full-page-error__column {
+L37   padding: 0;
+L39 @include breakpoint(lg) {
+L40   padding: 0 $spacing-07 0 0;   // spacing-07=32px
+L44 .#{$prefix}--full-page-error__svg-container {
+L46   padding: $spacing-03 $spacing-03 $spacing-11 $spacing-03;   // spacing-03=8px spacing-03=8px spacing-11=80px spacing-03=8px
+L47   block-size: 100%;
+L49 @include breakpoint(md) {
+L50   padding: auto $spacing-03 $spacing-11;   // spacing-03=8px spacing-11=80px
+L55 .#{$prefix}--full-page-error__title {
+L56   @include type-style('fluid-heading-05', true);
+L59 .#{$prefix}--full-page-error__label {
+L64 .#{$prefix}--full-page-error__title {
+L65   margin-block-end: $spacing-09;   // spacing-09=48px
+L68 .#{$prefix}--full-page-error__description {
+L69   @include type-style('body-02');   // body-02=16/24
+L71   margin-block-end: $spacing-07;   // spacing-07=32px
+L74 .#{$prefix}--full-page-error__body {
+L75   @include type-style('body-02');   // body-02=16/24
+L81   inline-size: 100%;

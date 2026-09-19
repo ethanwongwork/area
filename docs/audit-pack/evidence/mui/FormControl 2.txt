@@ -1,0 +1,22 @@
+### MUI Material @ 69960c1  packages/mui-material/src/FormControl/FormControl.js
+L16 const slots = {
+L23 const FormControlRoot = styled('div', {
+L24 name: 'MuiFormControl',
+L25 slot: 'Root',
+L40   minWidth: 0,
+L41   padding: 0,
+L42   margin: 0,
+L43   border: 0,
+L45 variants: [
+L47 props: { margin: 'normal' },
+L48 style: {
+L49   marginTop: 16,
+L50   marginBottom: 8,
+L54 props: { margin: 'dense' },
+L55 style: {
+L56   marginTop: 8,
+L57   marginBottom: 4,
+L61 props: { fullWidth: true },
+L62 style: {
+L63   width: '100%',
+L112 const ownerState = {

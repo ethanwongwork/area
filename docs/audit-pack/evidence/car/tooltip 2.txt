@@ -1,0 +1,38 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/tooltip/_tooltip.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21   $tooltip-padding-block: custom-property.get-var(
+L22   'tooltip-padding-block',
+L23   if(enabled('enable-v12-release'), spacing.$spacing-02, spacing.$spacing-05)   // spacing-02=4px spacing-05=16px
+L26   $tooltip-padding-inline: custom-property.get-var(
+L27   'tooltip-padding-inline',
+L28   spacing.$spacing-05   // spacing-05=16px
+L31 @mixin tooltip {
+L32 .#{$prefix}--tooltip {
+L35   if(enabled('enable-v12-release'), convert.to-rem(4px), 12px)
+L38   'popover-border-radius',
+L39   if(enabled('enable-v12-release'), $border-radius-04, 2px)
+L43 .#{$prefix}--tooltip-content {
+L44   @include type.type-style('body-01');   // body-01=14/20
+L46   padding: $tooltip-padding-block $tooltip-padding-inline;
+L47   max-inline-size: convert.to-rem(288px);
+L52 @mixin definition-tooltip {
+L53 .#{$prefix}--definition-term {
+L56   border-radius: 0;
+L61 .#{$prefix}--definition-term:focus {
+L67 .#{$prefix}--definition-term:hover {
+L71 .#{$prefix}--definition-tooltip {
+L73   'popover-border-radius',
+L74   if(enabled('enable-v12-release'), $border-radius-04, 2px)
+L76   @include type.type-style('body-01');   // body-01=14/20
+L78   padding: convert.to-rem(8px) convert.to-rem(16px);
+L79   max-inline-size: convert.to-rem(176px);
+L85 @mixin icon-tooltip {
+L86 .#{$prefix}--icon-tooltip {
+L88   'tooltip-padding-block',
+L89   convert.to-rem(2px)
+L92   'popover-caret-width',
+L93   convert.to-rem(8px)
+L96   'popover-caret-height',
+L97   convert.to-rem(4px)
+L99   @include custom-property.declaration('popover-offset', convert.to-rem(8px));
+L102 .#{$prefix}--icon-tooltip .#{$prefix}--tooltip-content {
+L103   @include type.type-style('body-compact-01');   // body-compact-01=14/18

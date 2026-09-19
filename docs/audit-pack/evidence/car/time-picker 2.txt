@@ -1,0 +1,35 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/time-picker/_time-picker.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L22 @mixin time-picker {
+L23 .#{$prefix}--time-picker {
+L28 .#{$prefix}--time-picker__select {
+L30   margin-inline-start: $spacing-01;   // spacing-01=2px
+L33 .#{$prefix}--time-picker__input {
+L39 .#{$prefix}--time-picker__error__icon {
+L42   block-size: 100%;
+L43   inset-block-start: 50%;
+L44   inset-inline-end: 1rem;
+L50 .#{$prefix}--time-picker__error__icon .#{$prefix}--checkbox__invalid-icon {
+L54 .#{$prefix}--time-picker .#{$prefix}--select-input {
+L55   margin: 0;
+L56   inline-size: auto;
+L57   line-height: 1;
+L58   min-inline-size: auto;
+L59   padding-inline-end: convert.to-rem(48px);
+L62 .#{$prefix}--time-picker__input-field {
+L64   @include type-style('code-02');   // code-02=14/20
+L68   block-size: convert.to-rem(40px);
+L69   inline-size: 4.875rem;
+L74 &::placeholder {
+L79 .#{$prefix}--time-picker__input-field-error {
+L80   inline-size: 6.175rem;
+L84 .#{$prefix}--time-picker--light .#{$prefix}--select-input {
+L87 &:hover {
+L92 &:hover:disabled {
+L101 .#{$prefix}--time-picker--sm .#{$prefix}--time-picker__input-field {
+L102   block-size: convert.to-rem(32px);
+L103   max-block-size: convert.to-rem(32px);
+L107 .#{$prefix}--time-picker--lg .#{$prefix}--time-picker__input-field {
+L108   block-size: convert.to-rem(48px);
+L109   max-block-size: convert.to-rem(48px);
+L113 .#{$prefix}--time-picker--readonly .#{$prefix}--time-picker__input-field {
+L118 .#{$prefix}--time-picker--readonly .#{$prefix}--select-input {

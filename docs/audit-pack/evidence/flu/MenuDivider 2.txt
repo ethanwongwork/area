@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu/library/src/components/MenuDivider/useMenuDividerStyles.styles.ts
+L12 const useStyles = makeStyles({
+L13 root: {
+L14 margin: '4px -5px 4px -5px',
+L15 width: 'auto',
+L16 borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}`,   // strokeWidthThin=1px

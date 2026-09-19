@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-provider/library/src/components/FluentProvider/useFluentProviderStyles.styles.ts
+L5 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L13 const useStyles = makeStyles({
+L14 root: {
+L18 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400

@@ -1,0 +1,22 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tag-picker/library/src/components/TagPickerInput/useTagPickerInputStyles.styles.ts
+L4 import { typographyStyles, tokens } from '@fluentui/react-theme';
+L13 const useBaseStyle = makeResetStyles({
+L24 opacity: 1,
+L31 minWidth: '24px',
+L32 maxWidth: '100%',
+L33 // by default width is 0,
+L34 // it will be calculated based on the requirement of stretching the component to 100% width
+L36 width: tagPickerInputTokens.width,
+L37 flexGrow: 1,
+L43 const useStyles = makeStyles({
+L44 // size variants
+L45 medium: {
+L46 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L47 padding: `${tokens.spacingVerticalSNudge} 0 ${tokens.spacingVerticalSNudge} 0`,   // spacingVerticalSNudge=6px spacingVerticalSNudge=6px
+L49 large: {
+L50 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L51 padding: `${tokens.spacingVerticalMNudge} 0 ${tokens.spacingVerticalMNudge} 0`,   // spacingVerticalMNudge=10px spacingVerticalMNudge=10px
+L54 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L55 padding: `${tokens.spacingVerticalM} 0 ${tokens.spacingVerticalM} 0`,   // spacingVerticalM=12px spacingVerticalM=12px
+L57 disabled: {
+L77 styles[state.size],

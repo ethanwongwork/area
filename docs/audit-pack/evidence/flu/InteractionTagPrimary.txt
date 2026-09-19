@@ -1,0 +1,76 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tags/library/src/components/InteractionTagPrimary/useInteractionTagPrimaryStyles.styles.ts
+L29 padding: '0px',
+L36 height: '100%',
+L43 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L45 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L46 zIndex: 1,
+L50 const useRootRoundedBaseClassName = makeResetStyles({
+L52 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L56 * when Tag is with secondary text, primary text has negative margin that covers the border.
+L62 borderTop: `${tokens.strokeWidthThin} solid`,   // strokeWidthThin=1px
+L64 inset: '-1px',
+L65 borderTopLeftRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L66 borderTopRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L71 const useRootCircularBaseClassName = makeResetStyles({
+L73 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L77 * when Tag is with secondary text, primary text has negative margin that covers the border.
+L83 borderTop: `${tokens.strokeWidthThin} solid`,   // strokeWidthThin=1px
+L84 borderLeft: `${tokens.strokeWidthThin} solid`,   // strokeWidthThin=1px
+L86 inset: '-1px',
+L87 borderTopLeftRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L88 borderBottomLeftRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L96 const useRootCircularContrastStyles = makeStyles({
+L97 withoutSecondaryAction: {
+L101 borderRight: `${tokens.strokeWidthThin} solid transparent`,   // strokeWidthThin=1px
+L102 borderTopRightRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L103 borderBottomRightRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L109 const useRootStyles = makeStyles({
+L110 filled: {
+L131 outline: {
+L134 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L169 brand: {
+L190 selected: {
+L193 ...shorthands.borderColor(tokens.colorBrandStroke1),
+L223 medium: {
+L224 paddingRight: '7px',
+L226 small: {
+L227 paddingRight: '5px',
+L230 paddingRight: '5px',
+L234 // https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html
+L239 height: '2px',
+L240 left: '0',
+L241 width: '100%',
+L244 bottom: '100%',
+L247 top: '100%',
+L252 const useRootDisabledAppearances = makeStyles({
+L253 filled: {
+L257 ...shorthands.borderColor(tokens.colorTransparentStrokeDisabled),
+L259 outline: {
+L263 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L265 brand: {
+L269 ...shorthands.borderColor(tokens.colorTransparentStrokeDisabled),
+L276 const useRootWithoutMediaStyles = makeStyles({
+L277 medium: {
+L278 paddingLeft: '7px',
+L280 small: {
+L281 paddingLeft: '5px',
+L284 paddingLeft: '5px',
+L290 const useRootWithSecondaryActionStyles = makeStyles({
+L291 base: {
+L292 borderTopRightRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L293 borderBottomRightRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L296 borderTopRightRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L297 borderBottomRightRadius: tokens.borderRadiusNone,   // borderRadiusNone=0
+L301 borderTopRightRadius: '0',
+L305 medium: {
+L306 paddingRight: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L308 small: {
+L309 paddingRight: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L312 paddingRight: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L333 const { disabled, shape, size, appearance, selected } = state;
+L345 rootStyles[size],
+L347 !state.media && !state.icon && rootWithoutMediaStyles[size],
+L349 state.hasSecondaryAction && rootWithSecondaryActionStyles[size],
+L359 mediaStyles[size],
+L368 iconStyles[size],
+L378 primaryTextStyles[size],

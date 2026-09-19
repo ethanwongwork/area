@@ -1,0 +1,26 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/calendar.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  L36 p-3=12px
+  L50 gap-4=16px
+  L53 month: gap-4=16px
+  L55 inset-x-0=0px top-0=0px gap-1=4px
+  L60 p-0=0px
+  L65 p-0=0px
+  L73 gap-1.5=6px text-sm=14/20px font-medium
+  L77 rounded-md=8px border=1px has-focus:ring-[3px]
+  L87 text-sm=14/20px
+  L88 h-8=32px gap-1=4px rounded-md=8px pr-1=4px pl-2=8px text-sm=14/20px [&>svg]:size-3.5=14px
+  L94 rounded-md=8px text-[0.8rem] font-normal
+  L97 week: mt-2=8px
+  L103 text-[0.8rem]
+  L107 aspect-square p-0=0px [&:last-child[data-selected=true]_button]:rounded-r-md=8px
+  L109 [&:nth-child(2)[data-selected=true]_button]:rounded-l-md=8px
+  L110 [&:first-child[data-selected=true]_button]:rounded-l-md=8px
+  L114 rounded-l-md=8px
+  L117 range_middle: rounded-none=0px
+  L118 range_end: rounded-r-md=8px
+  L120 rounded-md=8px data-[selected=true]:rounded-none=0px
+  [slot calendar]
+  L148 size-4=16px
+  L155 size-4=16px
+  L162 size-4=16px
+  L211 aspect-square gap-1=4px leading-none font-normal group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md=8px data-[range-end=true]:rounded-r-md=8px data-[range-middle=true]:rounded-none=0px data-[range-start=true]:rounded-md=8px data-[range-start=true]:rounded-l-md=8px [&>span]:text-xs=12/16px

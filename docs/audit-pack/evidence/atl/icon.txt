@@ -1,0 +1,15 @@
+### @atlaskit/icon@37.7.2  components/icon-new.js  (token fallbacks; pt and pc converted to px)
+  none: width:16px; height:16px
+  compact: width:24px; height:24px
+  spacious: width:24px; height:24px
+  none: width:12px; height:12px
+  compact: width:16px; height:16px
+  spacious: width:24px; height:24px
+### @atlaskit/icon@37.7.2  components/icon-tile/index.js  (token fallbacks; pt and pc converted to px)
+  root: line-height:0
+### @atlaskit/icon@37.7.2  components/skeleton.js  (token fallbacks; pt and pc converted to px)
+  small: width:16px; height:16px
+  medium: width:24px; height:24px
+  large: width:32px; height:32px
+  xlarge: width:3pc; height:3pc
+### @atlaskit/icon@37.7.2  constants.js  size map: large 32, medium 24, small 16, xlarge 48

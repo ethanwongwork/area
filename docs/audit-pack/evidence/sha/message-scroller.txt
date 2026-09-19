@@ -1,0 +1,11 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/message-scroller.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot message-scroller]
+  L29 min-h-0=0px
+  [slot message-scroller-viewport]
+  L45 min-h-0=0px min-w-0=0px
+  [slot message-scroller-content]
+  L60 gap-8=32px
+  [slot message-scroller-item]
+  L76 min-w-0=0px shrink-0
+  [slot message-scroller-button]
+  L102 data-[active=true]:translate-y-0=0px data-[direction=end]:bottom-4=16px data-[direction=start]:top-4=16px

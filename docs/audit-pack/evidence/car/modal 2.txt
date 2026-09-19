@@ -1,0 +1,137 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/modal/_modal.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L33 .#{$prefix}--modal {
+L43   block-size: 100vh;
+L45   inline-size: 100vw;
+L46   inset-block-start: 0;
+L47   inset-inline-start: 0;
+L49 &.#{$prefix}--modal--enable-presence {
+L53 &:not(.#{$prefix}--modal--enable-presence) {
+L66 .#{$prefix}--modal--enable-presence {
+L80 .#{$prefix}--modal-container {
+L83   border: 1px solid $border-subtle-01;
+L87   inline-size: 100%;
+L88   inset-block-start: 0;
+L89   max-block-size: 100%;
+L95 @include breakpoint(md) {
+L97   inline-size: 84%;
+L98   max-block-size: 90%;
+L101 @include breakpoint(lg) {
+L102   inline-size: 60%;
+L103   max-block-size: 84%;
+L106 @include breakpoint(xlg) {
+L107   inline-size: 48%;
+L110 .#{$prefix}--modal-container-body {
+L118 .#{$prefix}--modal-content {
+L119   @include type-style('body-01');   // body-01=14/20
+L127   padding-block: $spacing-03 $spacing-09;   // spacing-03=8px spacing-09=48px
+L130   padding-inline: $spacing-05 $spacing-05;   // spacing-05=16px spacing-05=16px
+L132 &:focus {
+L138 .#{$prefix}--modal-content .#{$prefix}--form--fluid {
+L139   margin-inline: -$spacing-03 - $spacing-03;   // spacing-03=8px spacing-03=8px
+L145 .#{$prefix}--modal-content__regular-content {
+L146   @include type-style('body-01');   // body-01=14/20
+L148   padding-inline-end: calc(20% - $spacing-07);   // spacing-07=32px
+L153 .#{$prefix}--modal-content--with-form {
+L154   padding-inline-end: $spacing-05;   // spacing-05=16px
+L160 .#{$prefix}--modal-header {
+L163   margin-block-end: $spacing-03;   // spacing-03=8px
+L164   max-block-size: 50vh;
+L166   padding-block-start: $spacing-05;   // spacing-05=16px
+L167   padding-inline: $spacing-05 $spacing-09;   // spacing-05=16px spacing-09=48px
+L170 .#{$prefix}--modal-header__label {
+L172   @include type-style('label-01');   // label-01=12/16
+L175   margin-block-end: $spacing-02;   // spacing-02=4px
+L178 .#{$prefix}--modal-header__heading {
+L180   @include type-style('heading-03');   // heading-03=20/28
+L184   padding-inline-end: calc(20% - $spacing-09);   // spacing-09=48px
+L190 .#{$prefix}--modal-container--xs {
+L192 .#{$prefix}--modal-content__regular-content {
+L193   padding-inline-end: $spacing-05;   // spacing-05=16px
+L196 .#{$prefix}--modal-content > p {
+L198   padding-inline-end: 0;
+L201 @include breakpoint(md) {
+L202   inline-size: 48%;
+L205 @include breakpoint(lg) {
+L206   inline-size: 32%;
+L207   max-block-size: 48%;
+L210 @include breakpoint(xlg) {
+L211   inline-size: 24%;
+L218 .#{$prefix}--modal-container--sm {
+L220 .#{$prefix}--modal-content__regular-content {
+L221   padding-inline-end: $spacing-05;   // spacing-05=16px
+L224 .#{$prefix}--modal-content > p {
+L226   padding-inline-end: 0;
+L229 @include breakpoint(md) {
+L230   inline-size: 60%;
+L233 @include breakpoint(lg) {
+L234   inline-size: 42%;
+L235   max-block-size: 72%;
+L238 .#{$prefix}--modal-content__regular-content {
+L239   padding-inline-end: 20%;
+L243 @include breakpoint(xlg) {
+L244   inline-size: 36%;
+L251 .#{$prefix}--modal-container--lg {
+L252 @include breakpoint(md) {
+L253   inline-size: 96%;
+L256 @include breakpoint(lg) {
+L257   inline-size: 84%;
+L258   max-block-size: 96%;
+L261 @include breakpoint(xlg) {
+L262   inline-size: 72%;
+L269 .#{$prefix}--modal-scroll-content {
+L288 .#{$prefix}--modal-scroll-content--no-fade {
+L293 .#{$prefix}--modal-scroll-content:has(.#{$prefix}--autoalign) {
+L298 .#{$prefix}--modal-scroll-content > *:last-child {
+L299   margin-block-end: $spacing-06;   // spacing-06=24px
+L305 .#{$prefix}--modal-footer {
+L308   block-size: convert.to-rem(64px);
+L311   margin-block-start: auto;
+L314 .#{$prefix}--modal-footer .#{$prefix}--btn {
+L317   margin: 0;
+L318   block-size: convert.to-rem(64px);
+L319   max-inline-size: none;
+L322 .#{$prefix}--modal-footer .#{$prefix}--btn:not(.#{$prefix}--skeleton) {
+L323   padding-block: calc($spacing-05 - convert.to-rem(2px)) $spacing-07;   // spacing-05=16px spacing-07=32px
+L326 .#{$prefix}--modal-footer--three-button .#{$prefix}--btn {
+L335 .#{$prefix}--modal-close-button {
+L337   inset-block-start: 0;
+L338   inset-inline-end: 0;
+L341 .#{$prefix}--modal-close {
+L342   padding: convert.to-rem(12px);
+L343   border: 2px solid transparent;
+L345   block-size: 3rem;
+L347   inline-size: 3rem;
+L351 &:hover {
+L356 &:focus {
+L362 .#{$prefix}--modal-close::-moz-focus-inner {
+L363   border: 0;
+L366 .#{$prefix}--modal-close__icon {
+L367   block-size: convert.to-rem(20px);
+L369   inline-size: convert.to-rem(20px);
+L372 .#{$prefix}--body--with-modal-open {
+L380 .#{$prefix}--body--with-modal-open .#{$prefix}--overflow-menu-options {
+L385 .#{$prefix}--modal-container--full-width .#{$prefix}--modal-content {
+L386   padding: 0;
+L387   margin: 0;
+L392 .#{$prefix}--modal--decorator:has(.#{$prefix}--ai-label).#{$prefix}--modal {
+L398 .#{$prefix}--modal-container {
+L401   border: 1px solid transparent;
+L404   inset 0 -80px 70px -65px $ai-inner-shadow,
+L411 .#{$prefix}--modal-container:has(.#{$prefix}--modal-footer) {
+L415   inset 0 -80px 0 -16px $layer,
+L416   inset 0 -160px 70px -65px $ai-inner-shadow,
+L423 .#{$prefix}--modal-content.#{$prefix}--modal-scroll-content {
+L465   inset-block-start: convert.to-rem(10px);
+L466   inset-inline-end: convert.to-rem(48px);
+L472   inset-block-start: 1rem;
+L478   inset-block-start: 1.475rem;
+L483 .#{$prefix}--modal--decorator .#{$prefix}--modal-content--overflow-indicator {
+L488 .#{$prefix}--modal-close:focus {
+L493 @mixin modal-animations($has-presence: false) {
+L501 &.is-visible {
+L522 &[data-exiting] {
+L555 @mixin modal-container-animations($has-presence: false) {
+L557 &.is-visible .#{$prefix}--modal-container {
+L562 .#{$prefix}--modal-container {
+L567 &[data-exiting] .#{$prefix}--modal-container {
+L578 .#{$prefix}--modal-container {

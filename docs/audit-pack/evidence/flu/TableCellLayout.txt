@@ -1,0 +1,22 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-table/library/src/components/TableCellLayout/useTableCellLayoutStyles.styles.ts
+L7 import { typographyStyles } from '@fluentui/react-theme';
+L20 const useStyles = makeStyles({
+L21 root: {
+L24 gap: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L25 flex: '1 1 0px',
+L28 rootTruncate: {
+L32 content: {
+L37 contentTruncate: {
+L41 media: {
+L46 mediaExtraSmall: {
+L47 fontSize: '16px',
+L50 mediaSmallAndMedium: {
+L51 fontSize: '20px',
+L54 mediaPrimary: {
+L55 fontSize: '24px',
+L58 mainPrimary: {
+L59 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L62 mainTruncate: {
+L68 description: {
+L70 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L101 mediaSizedStyles[state.size],

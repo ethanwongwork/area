@@ -1,0 +1,42 @@
+### MUI Material @ 69960c1  packages/mui-material/src/InputBase/InputBase.js
+L67 const slots = {
+L95 name: 'MuiInputBase',
+L96 slot: 'Root',
+L102   lineHeight: '1.4375em', // 23px
+L112 variants: [
+L115 style: {
+L116   padding: '4px 0 5px',
+L121 style: {
+L122   paddingTop: 1,
+L127 style: {
+L128   width: '100%',
+L136 name: 'MuiInputBase',
+L137 slot: 'Input',
+L142 const placeholder = {
+L148 : {
+L155 const placeholderHidden = {
+L162 : {
+L170   padding: '4px 0 5px',
+L171   border: 0,
+L174   height: '1.4375em', // Reset 23pxthe native input line-height
+L175   margin: 0, // Reset for Safari
+L179   minWidth: 0,
+L180   width: '100%',
+L184 '&:focus': {
+L188 '&:invalid': {
+L191 '&::-webkit-search-decoration': {
+L208 variants: [
+L211 style: {
+L214 '&:-webkit-autofill': {
+L221 props: {
+L222   size: 'small',
+L224 style: {
+L225   paddingTop: 1,
+L230 style: {
+L231   height: 'auto',
+L233   padding: 0,
+L234   paddingTop: 0,
+L238 props: {
+L241 style: {
+L528 const ownerState = {
+L539   size: fcs.size,

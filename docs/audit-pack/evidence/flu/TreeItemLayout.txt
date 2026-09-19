@@ -1,0 +1,48 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tree/library/src/components/TreeItemLayout/useTreeItemLayoutStyles.styles.ts
+L6 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L22 const useRootBaseStyles = makeResetStyles({
+L25 minHeight: '32px',
+L49 const useRootStyles = makeStyles({
+L50 leaf: {
+L51 paddingLeft: `calc(var(${treeItemLevelToken}, 1) * ${tokens.spacingHorizontalXXL})`,   // spacingHorizontalXXL=24px
+L53 branch: {
+L54 paddingLeft: `calc((var(${treeItemLevelToken}, 1) - 1) * ${tokens.spacingHorizontalXXL})`,   // spacingHorizontalXXL=24px
+L56 medium: {
+L57 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L59 small: {
+L60 minHeight: '24px',
+L61 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L64 subtle: {},
+L73 transparent: {
+L87 const useActionsBaseStyles = makeResetStyles({
+L89 marginLeft: 'auto',
+L91 zIndex: 1,
+L93 padding: `0 ${tokens.spacingHorizontalS}`,   // spacingHorizontalS=8px
+L98 const useAsideBaseStyles = makeResetStyles({
+L100 marginLeft: 'auto',
+L102 zIndex: 0,
+L104 padding: `0 ${tokens.spacingHorizontalM}`,   // spacingHorizontalM=12px
+L105 gap: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L111 const useExpandIconBaseStyles = makeResetStyles({
+L115 minWidth: '24px',
+L118 flex: `0 0 auto`,
+L119 padding: `${tokens.spacingVerticalXS} 0`,   // spacingVerticalXS=4px
+L125 const useMainBaseStyles = makeResetStyles({
+L126 padding: `0 ${tokens.spacingHorizontalXXS}`,   // spacingHorizontalXXS=2px
+L132 const useIconBaseStyles = makeResetStyles({
+L136 lineHeight: tokens.lineHeightBase500,   // lineHeightBase500=28px
+L137 fontSize: tokens.fontSizeBase500,   // fontSizeBase500=20px
+L140 const useIconBeforeStyles = makeStyles({
+L141 medium: {
+L142 paddingRight: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L144 small: {
+L145 paddingRight: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L149 const useIconAfterStyles = makeStyles({
+L150 medium: {
+L151 paddingLeft: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L153 small: {
+L154 paddingLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L175 const size = useTreeContext_unstable(ctx => ctx.size);
+L184 rootStyles[size],
+L206 iconBeforeStyles[size],
+L216 iconAfterStyles[size],

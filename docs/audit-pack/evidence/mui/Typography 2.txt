@@ -1,0 +1,20 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Typography/Typography.js
+L16 const slots = {
+L30 name: 'MuiTypography',
+L31 slot: 'Root',
+L45   margin: 0,
+L46 variants: [
+L48 props: {
+L51 style: {
+L54   lineHeight: 'inherit',
+L61 props: { variant },
+L67 props: { color },
+L68 style: {
+L75 props: { color: `text${capitalize(color)}` },
+L76 style: {
+L82 style: {
+L88 style: {
+L96 style: {
+L97   marginBottom: '0.35em',
+L104 const defaultVariantMapping = {
+L133 const ownerState = {

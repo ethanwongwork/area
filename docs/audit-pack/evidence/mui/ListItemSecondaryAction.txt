@@ -1,0 +1,11 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ListItemSecondaryAction/ListItemSecondaryAction.js
+L14 const slots = {
+L21 const ListItemSecondaryActionRoot = styled('div', {
+L22 name: 'MuiListItemSecondaryAction',
+L23 slot: 'Root',
+L31   right: 16,
+L32   top: '50%',
+L34 variants: [
+L37 style: {
+L38   right: 0,
+L51 const ownerState = { ...props, disableGutters: context.disableGutters };

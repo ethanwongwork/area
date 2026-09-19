@@ -1,0 +1,7 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-swatch-picker/library/src/components/SwatchPickerRow/useSwatchPickerRowStyles.styles.ts
+L14 const useResetStyles = makeResetStyles({
+L19 const useStyles = makeStyles({
+L20 spacingSmall: {
+L21 columnGap: '2px',
+L23 spacingMedium: {
+L24 columnGap: '4px',

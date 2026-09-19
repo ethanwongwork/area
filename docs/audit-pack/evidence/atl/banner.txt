@@ -1,0 +1,5 @@
+### @atlaskit/banner@15.3.2  components/banner.js  (token fallbacks; pt and pc converted to px)
+  root: min-width:0
+  root: font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif; font-weight:500
+  root: height:3rem
+  root: width:1.5rem; height:1.5rem

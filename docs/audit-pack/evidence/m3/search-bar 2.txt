@@ -1,0 +1,28 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-search-bar.scss
+avatar-size: 30px
+contained-avatar-target-size: 48px
+contained-icon-label-gap: 4px
+contained-leading-margin: 24px
+contained-leading-space: 4px
+contained-no-actions-leading-space: 16px
+contained-no-actions-trailing-space: 16px
+contained-trailing-actions-gap: 0px
+contained-trailing-actions-leading-space: 4px
+contained-trailing-actions-trailing-space: 4px
+contained-trailing-margin: 24px
+contained-trailing-space: 4px
+container-height: 56px
+icon-size: 24px
+leading-icon-leading-icon-label-space: 16px
+leading-space: 16px
+trailing-icon-label-trailing-icon-space: 16px
+trailing-space: 16px
+avatar-shape: corner-full = 9999px
+contained-motion-spring: md-sys-motion.$spring-fast-spatial
+container-shape: corner-full = 9999px
+focus-indicator-outline-offset: md-sys-state-focus-indicator.$outer-offset
+focus-indicator-thickness: md-sys-state-focus-indicator.$thickness
+input-text-line-height: body-large-line-height = 24px
+input-text-size: body-large-size = 16px
+supporting-text-line-height: body-large-line-height = 24px
+supporting-text-size: body-large-size = 16px

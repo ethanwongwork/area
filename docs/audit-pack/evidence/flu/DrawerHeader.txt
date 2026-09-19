@@ -1,0 +1,12 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-drawer/library/src/components/DrawerHeader/useDrawerHeaderStyles.styles.ts
+L18 const useStyles = makeResetStyles({
+L19 width: '100%',
+L20 maxWidth: '100%',
+L21 padding: `${tokens.spacingVerticalXXL} ${tokens.spacingHorizontalXXL} ${tokens.spacingVerticalS}`,   // spacingVerticalXXL=24px spacingHorizontalXXL=24px spacingVerticalS=8px
+L22 gap: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L28 zIndex: 2,
+L31 const useDrawerHeaderStyles = makeStyles({
+L32 separator: {
+L35 bottom: 0,
+L39 separatorVisible: {
+L41 opacity: 1,

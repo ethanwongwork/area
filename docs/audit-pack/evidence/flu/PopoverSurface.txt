@@ -1,0 +1,28 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-popover/library/src/components/PopoverSurface/usePopoverSurfaceStyles.styles.ts
+L4 import { createArrowHeightStyles, createArrowStyles } from '@fluentui/react-positioning';
+L5 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L6 import type { PopoverSize } from '../Popover/Popover.types';
+L14 export const arrowHeights: Record<PopoverSize, number> = {
+L15 small: 6,
+L16 medium: 8,
+L17 large: 8,
+L23 const useStyles = makeStyles({
+L24 root: {
+L27 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L28 border: `1px solid ${tokens.colorTransparentStroke}`,
+L29 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L37 inline: {
+L39 // This is due to the surface being positioned as absolute, therefore zIndex: 1 ensures that won't happen.
+L40 zIndex: 1,
+L43 inverted: {
+L48 brand: {
+L53 smallPadding: { padding: '12px' },
+L55 mediumPadding: { padding: '16px' },
+L57 largePadding: { padding: '20px' },
+L59 smallArrow: createArrowHeightStyles(arrowHeights.small),
+L60 mediumLargeArrow: createArrowHeightStyles(arrowHeights.medium),
+L61 arrow: createArrowStyles({ arrowHeight: undefined }),
+L74 state.size === 'small' && styles.smallPadding,
+L75 state.size === 'medium' && styles.mediumPadding,
+L76 state.size === 'large' && styles.largePadding,
+L85 state.size === 'small' ? styles.smallArrow : styles.mediumLargeArrow,

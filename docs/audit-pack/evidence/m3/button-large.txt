@@ -1,0 +1,14 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-button-large.scss
+container-height: 96px
+icon-label-space: 12px
+icon-size: 32px
+leading-space: 48px
+outlined-outline-width: 2px
+trailing-space: 48px
+container-shape-round: corner-full = 9999px
+container-shape-square: corner-extra-large = 28px
+pressed-container-corner-size-motion-spring-damping: md-sys-motion.$spring-fast-spatial-damping
+pressed-container-corner-size-motion-spring-stiffness: md-sys-motion.$spring-fast-spatial-stiffness
+pressed-container-shape: corner-large = 16px
+selected-container-shape-round: corner-extra-large = 28px
+selected-container-shape-square: corner-full = 9999px

@@ -1,0 +1,17 @@
+### MUI Material @ 69960c1  packages/mui-material/src/SnackbarContent/SnackbarContent.js
+L17 const slots = {
+L26 const SnackbarContentRoot = styled(Paper, {
+L27 name: 'MuiSnackbarContent',
+L28 slot: 'Root',
+L46   padding: '6px 16px',
+L50   minWidth: 288,
+L56 const SnackbarContentMessage = styled('div', {
+L57 name: 'MuiSnackbarContent',
+L58 slot: 'Message',
+L60   padding: '8px 0',
+L63 const SnackbarContentAction = styled('div', {
+L64 name: 'MuiSnackbarContent',
+L65 slot: 'Action',
+L69   marginLeft: 'auto',
+L70   paddingLeft: 16,
+L71   marginRight: -8,

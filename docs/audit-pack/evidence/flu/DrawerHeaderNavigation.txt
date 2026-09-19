@@ -1,0 +1,3 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-drawer/library/src/components/DrawerHeaderNavigation/useDrawerHeaderNavigationStyles.styles.ts
+L16 const useStyles = makeResetStyles({
+L17 margin: `calc(${tokens.spacingVerticalS} * -1) calc(${tokens.spacingHorizontalL} * -1)`,   // spacingVerticalS=8px spacingHorizontalL=16px

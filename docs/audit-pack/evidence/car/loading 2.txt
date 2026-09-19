@@ -1,0 +1,32 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/loading/_animation.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L11 @mixin spin {
+L31 @mixin stop {
+### Carbon styles @ 8472cca  packages/styles/scss/components/loading/_functions.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+### Carbon styles @ 8472cca  packages/styles/scss/components/loading/_loading.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L23 @mixin loading {
+L24 .#{$prefix}--loading {
+L28   block-size: $loading-size;
+L30   inline-size: $loading-size;
+L34 .#{$prefix}--loading__svg {
+L38 .#{$prefix}--loading__svg circle {
+L41   stroke-width: 10;
+L44 .#{$prefix}--loading__stroke {
+L49 .#{$prefix}--loading--small .#{$prefix}--loading__stroke {
+L53 .#{$prefix}--loading--stop {
+L57 .#{$prefix}--loading--small {
+L58   block-size: convert.to-rem(16px);
+L59   inline-size: convert.to-rem(16px);
+L62   line-height: 1rem;
+L65   stroke-width: 16;
+L69 .#{$prefix}--loading--small .#{$prefix}--loading__svg {
+L73 .#{$prefix}--loading__background {
+L87 .#{$prefix}--loading-overlay {
+L94   block-size: 100%;
+L95   inline-size: 100%;
+L96   inset-block-start: 0;
+L97   inset-inline-start: 0;
+L102 .#{$prefix}--loading-overlay--stop {
+### Carbon styles @ 8472cca  packages/styles/scss/components/loading/_vars.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L11   $radius: 44;
+L16   $circumference: $radius * 2 * 3.1416;
+L21   $loading-size: 5.5rem;

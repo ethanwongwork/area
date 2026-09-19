@@ -1,0 +1,10 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/popover.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot popover]
+  [slot popover-trigger]
+  [slot popover-content]
+  L32 w-72=288px rounded-md=8px border=1px p-4=16px
+  [slot popover-anchor]
+  [slot popover-header]
+  L51 gap-1=4px text-sm=14/20px
+  [slot popover-title]
+  [slot popover-description]

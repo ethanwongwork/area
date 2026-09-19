@@ -1,0 +1,15 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/avatar.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot avatar]
+  L19 size-8=32px shrink-0 rounded-full=9999px data-[size=lg]:size-10=40px data-[size=sm]:size-6=24px
+  [slot avatar-image]
+  L34 aspect-square
+  [slot avatar-fallback]
+  L48 rounded-full=9999px text-sm=14/20px group-data-[size=sm]/avatar:text-xs=12/16px
+  [slot avatar-badge]
+  L61 right-0=0px bottom-0=0px rounded-full=9999px ring-2=2px
+  L62 group-data-[size=sm]/avatar:size-2=8px
+  L63 group-data-[size=default]/avatar:size-2.5=10px group-data-[size=default]/avatar:[&>svg]:size-2=8px
+  L64 group-data-[size=lg]/avatar:size-3=12px group-data-[size=lg]/avatar:[&>svg]:size-2=8px
+  [slot avatar-group]
+  [slot avatar-group-count]
+  L93 size-8=32px shrink-0 rounded-full=9999px text-sm=14/20px ring-2=2px group-has-data-[size=lg]/avatar-group:size-10=40px group-has-data-[size=sm]/avatar-group:size-6=24px [&>svg]:size-4=16px group-has-data-[size=lg]/avatar-group:[&>svg]:size-5=20px group-has-data-[size=sm]/avatar-group:[&>svg]:size-3=12px

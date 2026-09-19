@@ -1,0 +1,15 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/quote.css
+.rt-Quote {
+  box-sizing: border-box;
+  font-family: var(--quote-font-family);   /* = 'Times New Roman', 'Times', serif */
+  font-size: calc(var(--quote-font-size-adjust) * 1em);   /* = calc(1.18 * 1em) */
+  font-style: var(--quote-font-style);   /* = italic */
+  font-weight: var(--quote-font-weight);   /* = inherit */
+  line-height: 1.25;
+  letter-spacing: calc(var(--quote-letter-spacing) + var(--letter-spacing, var(--default-letter-spacing)));   /* = calc(-0.025em + 0em) */
+  color: inherit;
+
+  & :where(&) {
+    font-size: inherit;
+  }
+}

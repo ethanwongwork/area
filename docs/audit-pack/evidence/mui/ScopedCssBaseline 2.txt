@@ -1,0 +1,10 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ScopedCssBaseline/ScopedCssBaseline.js
+L15 const slots = {
+L22 const ScopedCssBaselineRoot = styled('div', {
+L23 name: 'MuiScopedCssBaseline',
+L24 slot: 'Root',
+L27 const colorSchemeStyles = {};
+L49   fontWeight: theme.typography.fontWeightBold,
+L51 variants: [
+L53 props: { enableColorScheme: true },
+L65 const ownerState = {

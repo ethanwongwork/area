@@ -1,0 +1,464 @@
+### OpenAI Apps SDK UI @ 0f00143  src/styles/variables-components.css  (every component variable, resolved)
+--alert-border-radius: 12px
+--alert-gap: 12px
+--alert-gutter: 16px
+--alert-font-size: 14px
+--alert-line-height: 20px
+--alert-title-font-weight: 600
+--avatar-radius: 9999px
+--avatar-size: 28px
+--avatar-font-size-scaling: 0.5
+--avatar-overflow-font-size-scaling-one: 0.45
+--avatar-overflow-font-size-scaling-two: 0.37
+--avatar-overflow-font-size-scaling-three: 0.3
+--avatar-group-cutout-width: 3px
+--avatar-group-spacing: -8px
+--badge-gutter-sm: 5px
+--badge-gutter-md: 6px
+--badge-gutter-lg: 8px
+--badge-size-sm: 20px
+--badge-size-md: 22px
+--badge-size-lg: 24px
+--badge-radius-sm: 4px
+--badge-radius-md: 4px
+--badge-radius-lg: 6px
+--badge-font-size-sm: 12px
+--badge-font-size-md: 14px
+--badge-font-size-lg: 14px
+--badge-tracking-sm: 0em
+--badge-tracking-md: 0em
+--badge-tracking-lg: 0em
+--badge-font-weight-sm: 600
+--badge-font-weight-md: 600
+--badge-font-weight-lg: 600
+--badge-icon-font-size-sm: 12px
+--badge-icon-font-size-md: 16px
+--badge-icon-font-size-lg: 16px
+--badge-indicator-size-sm: 12px
+--badge-indicator-size-md: 12px
+--badge-indicator-size-lg: 14px
+--button-gap-sm: 3px
+--button-gap-md: 4px
+--button-gap-lg: 6px
+--button-font-weight: 500
+--input-gap-xs: 4px
+--input-gap-sm: 6px
+--input-gap-md: 8px
+--input-gap-lg: 10px
+--link-font-weight: inherit
+--link-gap: 2px
+--link-radius: 6px
+--link-underline-decoration-offset: 0.1em
+--chat-max-width: 800px
+--chat-gutter: 20px
+--thread-gutter: 16px
+--composer-gutter: 12px
+--composer-compact-gutter: 8px
+--composer-radius: 24px
+--source-list-gutter: 16px
+--codeblock-syntax-1: light-dark(#c0660d, #ffe48c)
+--codeblock-syntax-2: light-dark(#0169cc, #66b5ff)
+--codeblock-syntax-3: light-dark(#008635, #40c977)
+--codeblock-syntax-4: #e04c91
+--codeblock-syntax-5: light-dark(#8046d9, #ad7bf9)
+--dialog-min-width: 250px
+--dialog-max-width: 450px
+--dialog-container-inner-padding: 20px
+--menu-gutter: 6px
+--menu-radius: 12px
+--menu-font-size: 14px
+--menu-line-height: 20px
+--menu-item-padding: 6px 8px
+--menu-item-gap: 6px
+--menu-separator-gutter: 6px -6px
+--menu-radio-indicator-size: 18px
+--menu-radio-indicator-hole-size: 8px
+--menu-checkbox-indicator-size: 18px
+--modal-container-inner-padding: 20px
+--popover-radius: 12px
+--radio-group-col-gap: 10px
+--radio-group-row-gap: 20px
+--radio-group-item-gap: 6px
+--radio-group-item-font-size: 14px
+--radio-group-item-line-height: 20px
+--radio-group-indicator-size: 16px
+--radio-group-indicator-hole-size: 6px
+--segmented-control-gap: 2px
+--segmented-control-gutter: 2px
+--segmented-control-font-weight: 600
+--segmented-control-option-highlight-gutter: 1px
+--select-control-font-weight: 500
+--switch-track-width: 32px
+--switch-track-height: 19px
+--switch-thumb-offset: 3px
+--switch-thumb-size: 13px
+--switch-label-gap: 8px
+--gray-0: light-dark(#ffffff, #0d0d0d)
+--gray-25: light-dark(#fcfcfc, #101010)
+--gray-50: light-dark(#f9f9f9, #131313)
+--gray-75: light-dark(#f3f3f3, #161616)
+--gray-100: light-dark(#ededed, #181818)
+--gray-150: light-dark(#dfdfdf, #1c1c1c)
+--gray-200: light-dark(#cdcdcd, #212121)
+--gray-250: light-dark(#b9b9b9, #282828)
+--gray-300: light-dark(#afafaf, #303030)
+--gray-350: light-dark(#9f9f9f, #393939)
+--gray-400: light-dark(#8f8f8f, #414141)
+--gray-450: light-dark(#767676, #4f4f4f)
+--gray-500: #5d5d5d
+--gray-550: light-dark(#4f4f4f, #767676)
+--gray-600: light-dark(#414141, #8f8f8f)
+--gray-650: light-dark(#393939, #9f9f9f)
+--gray-700: light-dark(#303030, #afafaf)
+--gray-750: light-dark(#282828, #b9b9b9)
+--gray-800: light-dark(#212121, #cdcdcd)
+--gray-850: light-dark(#1c1c1c, #dcdcdc)
+--gray-900: light-dark(#181818, #ededed)
+--gray-925: light-dark(#161616, #f3f3f3)
+--gray-950: light-dark(#131313, #f3f3f3)
+--gray-975: light-dark(#101010, #f9f9f9)
+--gray-1000: light-dark(#0d0d0d, #ffffff)
+--alpha-base: light-dark(#0d0d0d, #ffffff)
+--alpha-0: alpha(light-dark(#0d0d0d, #ffffff), 0%)
+--alpha-02: alpha(light-dark(#0d0d0d, #ffffff), 2%)
+--alpha-04: alpha(light-dark(#0d0d0d, #ffffff), 4%)
+--alpha-05: alpha(light-dark(#0d0d0d, #ffffff), 5%)
+--alpha-06: alpha(light-dark(#0d0d0d, #ffffff), 6%)
+--alpha-08: alpha(light-dark(#0d0d0d, #ffffff), 8%)
+--alpha-10: alpha(light-dark(#0d0d0d, #ffffff), 10%)
+--alpha-12: alpha(light-dark(#0d0d0d, #ffffff), 12%)
+--alpha-15: alpha(light-dark(#0d0d0d, #ffffff), 15%)
+--alpha-16: alpha(light-dark(#0d0d0d, #ffffff), 16%)
+--alpha-20: alpha(light-dark(#0d0d0d, #ffffff), 20%)
+--alpha-25: alpha(light-dark(#0d0d0d, #ffffff), 25%)
+--alpha-30: alpha(light-dark(#0d0d0d, #ffffff), 30%)
+--alpha-35: alpha(light-dark(#0d0d0d, #ffffff), 35%)
+--alpha-40: alpha(light-dark(#0d0d0d, #ffffff), 40%)
+--alpha-50: alpha(light-dark(#0d0d0d, #ffffff), 50%)
+--alpha-60: alpha(light-dark(#0d0d0d, #ffffff), 60%)
+--alpha-70: alpha(light-dark(#0d0d0d, #ffffff), 70%)
+--white: #ffffff
+--black: #000000
+--green-25: #edfaf2
+--green-50: #d9f4e4
+--green-75: #b8ebcc
+--green-100: #8cdfad
+--green-200: #66d492
+--green-300: #40c977
+--green-400: #04b84c
+--green-500: #00a240
+--green-600: #008635
+--green-700: #00692a
+--green-800: #004f1f
+--green-900: #003716
+--green-950: #011c0b
+--green-1000: #001207
+--green-a25: alpha(#04b84c, 8%)
+--green-a50: alpha(#04b84c, 15%)
+--green-a75: alpha(#04b84c, 29%)
+--green-a100: alpha(#04b84c, 45%)
+--green-a200: alpha(#04b84c, 60%)
+--green-a300: alpha(#04b84c, 75%)
+--red-25: #fff0f0
+--red-50: #ffd9d9
+--red-75: #ffc6c5
+--red-100: #ffa4a2
+--red-200: #ff8583
+--red-300: #ff6764
+--red-400: #fa423e
+--red-500: #e02e2a
+--red-600: #ba2623
+--red-700: #911e1b
+--red-800: #6e1615
+--red-900: #4d100e
+--red-950: #280b0a
+--red-1000: #1f0909
+--red-a25: alpha(#fa423e, 8%)
+--red-a50: alpha(#fa423e, 16%)
+--red-a75: alpha(#fa423e, 30%)
+--red-a100: alpha(#fa423e, 48%)
+--red-a200: alpha(#fa423e, 64%)
+--red-a300: alpha(#fa423e, 79%)
+--pink-25: #fff4f9
+--pink-50: #ffe8f3
+--pink-75: #ffd4e8
+--pink-100: #ffbada
+--pink-200: #ffa3ce
+--pink-300: #ff8cc1
+--pink-400: #ff66ad
+--pink-500: #e04c91
+--pink-600: #ba437a
+--pink-700: #963c67
+--pink-800: #6e2c4a
+--pink-900: #4d1f34
+--pink-950: #29101c
+--pink-1000: #1a0a11
+--pink-a25: alpha(#ff66ad, 8%)
+--pink-a50: alpha(#ff66ad, 16%)
+--pink-a75: alpha(#ff66ad, 28%)
+--pink-a100: alpha(#ff66ad, 45%)
+--pink-a200: alpha(#ff66ad, 60%)
+--pink-a300: alpha(#ff66ad, 76%)
+--orange-25: #fff5f0
+--orange-50: #ffe7d9
+--orange-75: #ffcfb4
+--orange-100: #ffb790
+--orange-200: #ff9e6c
+--orange-300: #ff8549
+--orange-400: #fb6a22
+--orange-500: #e25507
+--orange-600: #b9480d
+--orange-700: #923b0f
+--orange-800: #6d2e0f
+--orange-900: #4a2206
+--orange-950: #281105
+--orange-1000: #211107
+--orange-a25: alpha(#fb6a22, 7%)
+--orange-a50: alpha(#fb6a22, 16%)
+--orange-a75: alpha(#fb6a22, 33%)
+--orange-a100: alpha(#fb6a22, 48%)
+--orange-a200: alpha(#fb6a22, 65%)
+--orange-a300: alpha(#fb6a22, 81%)
+--yellow-25: #fffbed
+--yellow-50: #fff6d9
+--yellow-75: #ffeeb8
+--yellow-100: #ffe48c
+--yellow-200: #ffdb66
+--yellow-300: #ffd240
+--yellow-400: #ffc300
+--yellow-500: #e0ac00
+--yellow-600: #ba8e00
+--yellow-700: #916f00
+--yellow-800: #6e5400
+--yellow-900: #4d3b00
+--yellow-950: #261d00
+--yellow-1000: #1a1400
+--yellow-a25: alpha(#ffc300, 8%)
+--yellow-a50: alpha(#ffc300, 15%)
+--yellow-a75: alpha(#ffc300, 27%)
+--yellow-a100: alpha(#ffc300, 45%)
+--yellow-a200: alpha(#ffc300, 59%)
+--yellow-a300: alpha(#ffc300, 74%)
+--purple-25: #f9f5fe
+--purple-50: #efe5fe
+--purple-75: #e0cefd
+--purple-100: #ceb0fb
+--purple-200: #be95fa
+--purple-300: #ad7bf9
+--purple-400: #924ff7
+--purple-500: #8046d9
+--purple-600: #6b3ab4
+--purple-700: #532d8d
+--purple-800: #3f226a
+--purple-900: #2c184a
+--purple-950: #160c25
+--purple-1000: #100a19
+--purple-a25: alpha(#924ff7, 6%)
+--purple-a50: alpha(#924ff7, 15%)
+--purple-a75: alpha(#924ff7, 28%)
+--purple-a100: alpha(#924ff7, 45%)
+--purple-a200: alpha(#924ff7, 60%)
+--purple-a300: alpha(#924ff7, 75%)
+--blue-25: #f5faff
+--blue-50: #e5f3ff
+--blue-75: #cce6ff
+--blue-100: #99ceff
+--blue-200: #66b5ff
+--blue-300: #339cff
+--blue-400: #0285ff
+--blue-500: #0169cc
+--blue-600: #004f99
+--blue-700: #003f7a
+--blue-800: #013566
+--blue-900: #00284d
+--blue-950: #000e1a
+--blue-1000: #000d19
+--blue-a25: alpha(#0285ff, 4%)
+--blue-a50: alpha(#0285ff, 13%)
+--blue-a75: alpha(#0285ff, 25%)
+--blue-a100: alpha(#0285ff, 40%)
+--blue-a200: alpha(#0285ff, 60%)
+--blue-a300: alpha(#0285ff, 80%)
+--hairline: 1px
+--elevation-100-geo: 0 1px 2px -1px
+--elevation-200-geo: 0 2px 4px -1px
+--elevation-300-geo: 0 4px 8px -2px
+--elevation-400-geo: 0 8px 16px -4px
+--font-serif: initial
+--font-sans: ui-sans-serif, -apple-system, system-ui, "Segoe UI", "Noto Sans", "Helvetica",
+    "Arial", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif
+--font-mono: ui-monospace, "SFMono-Regular", "SF Mono", "Menlo", "Monaco", "Consolas",
+    "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace
+--font-weight-normal: 400
+--font-weight-medium: 500
+--font-weight-semibold: 600
+--font-weight-bold: 700
+--radius-2xs: 2px
+--radius-xs: 4px
+--radius-sm: 6px
+--radius-md: 8px
+--radius-lg: 10px
+--radius-xl: 12px
+--radius-2xl: 16px
+--radius-3xl: 20px
+--radius-4xl: 24px
+--radius-full: 9999px
+--spacing: 4px
+--font-tracking-wide: 0em
+--font-tracking-normal: 0em
+--font-tracking-tight: 0em
+--font-heading-5xl-size: 72px
+--font-heading-5xl-line-height: 72px
+--font-heading-5xl-weight: 600
+--font-heading-5xl-tracking: 0em
+--font-heading-4xl-size: 60px
+--font-heading-4xl-line-height: 60px
+--font-heading-4xl-weight: 600
+--font-heading-4xl-tracking: 0em
+--font-heading-3xl-size: 48px
+--font-heading-3xl-line-height: 48px
+--font-heading-3xl-weight: 600
+--font-heading-3xl-tracking: 0em
+--font-heading-2xl-size: 36px
+--font-heading-2xl-line-height: 42px
+--font-heading-2xl-weight: 600
+--font-heading-2xl-tracking: 0em
+--font-heading-xl-size: 32px
+--font-heading-xl-line-height: 38px
+--font-heading-xl-weight: 600
+--font-heading-xl-tracking: 0em
+--font-heading-lg-size: 24px
+--font-heading-lg-line-height: 28px
+--font-heading-lg-weight: 600
+--font-heading-lg-tracking: 0em
+--font-heading-md-size: 20px
+--font-heading-md-line-height: 26px
+--font-heading-md-weight: 600
+--font-heading-md-tracking: 0em
+--font-heading-sm-size: 18px
+--font-heading-sm-line-height: 26px
+--font-heading-sm-weight: 600
+--font-heading-sm-tracking: 0em
+--font-heading-xs-size: 16px
+--font-heading-xs-line-height: 24px
+--font-heading-xs-weight: 600
+--font-heading-xs-tracking: 0em
+--font-text-lg-size: 18px
+--font-text-lg-line-height: 29px
+--font-text-lg-weight: 400
+--font-text-lg-tracking: 0em
+--font-text-md-size: 16px
+--font-text-md-line-height: 24px
+--font-text-md-weight: 400
+--font-text-md-tracking: 0em
+--font-text-sm-size: 14px
+--font-text-sm-line-height: 20px
+--font-text-sm-weight: 400
+--font-text-sm-tracking: 0em
+--font-text-xs-size: 12px
+--font-text-xs-line-height: 18px
+--font-text-xs-weight: 400
+--font-text-xs-tracking: 0em
+--font-text-2xs-size: 10px
+--font-text-2xs-line-height: 14px
+--font-text-2xs-weight: 400
+--font-text-2xs-tracking: 0em
+--font-text-3xs-size: 8px
+--font-text-3xs-line-height: 12px
+--font-text-3xs-weight: 400
+--font-text-3xs-tracking: 0em
+--control-size-3xs: 22px
+--control-size-2xs: 24px
+--control-size-xs: 26px
+--control-size-sm: 28px
+--control-size-md: 32px
+--control-size-lg: 36px
+--control-size-xl: 40px
+--control-size-2xl: 44px
+--control-size-3xl: 48px
+--control-gutter-2xs: 6px
+--control-gutter-xs: 8px
+--control-gutter-sm: 10px
+--control-gutter-md: 12px
+--control-gutter-lg: 14px
+--control-gutter-xl: 16px
+--control-gutter-pill-scaling: 1.33
+--control-radius-sm: 6px
+--control-radius-md: 8px
+--control-radius-lg: 10px
+--control-radius-xl: 12px
+--control-font-size-sm: 12px
+--control-font-size-md: 14px
+--control-font-size-lg: 16px
+--control-icon-size-xs: 14px
+--control-icon-size-sm: 16px
+--control-icon-size-md: 18px
+--control-icon-size-lg: 20px
+--control-icon-size-xl: 22px
+--control-icon-size-2xl: 24px
+--cubic-enter: cubic-bezier(0.19, 1, 0.22, 1)
+--cubic-exit: cubic-bezier(0.8, 0, 0.4, 1)
+--cubic-exit-snappy: cubic-bezier(0.65, 0, 0.4, 1)
+--cubic-move: cubic-bezier(0.65, 0, 0.35, 1)
+--text-lg: 18px
+--text-lg--line-height: 29px
+--text-lg--font-weight: 400
+--text-lg--letter-spacing: 0em
+--text-base: 16px
+--text-base--line-height: 24px
+--text-base--font-weight: 400
+--text-base--letter-spacing: 0em
+--text-sm: 14px
+--text-sm--line-height: 20px
+--text-sm--font-weight: 400
+--text-sm--letter-spacing: 0em
+--text-xs: 12px
+--text-xs--line-height: 18px
+--text-xs--font-weight: 400
+--text-xs--letter-spacing: 0em
+--text-2xs: 10px
+--text-2xs--line-height: 14px
+--text-2xs--font-weight: 400
+--text-2xs--letter-spacing: 0em
+--text-3xs: 8px
+--text-3xs--line-height: 12px
+--text-3xs--font-weight: 400
+--text-3xs--letter-spacing: 0em
+--text-xl: 20px
+--text-xl--line-height: 26px
+--text-xl--font-weight: 400
+--text-xl--letter-spacing: 0em
+--text-2xl: 24px
+--text-2xl--line-height: 28px
+--text-2xl--font-weight: 400
+--text-2xl--letter-spacing: 0em
+--text-3xl: 32px
+--text-3xl--line-height: 38px
+--text-3xl--font-weight: 400
+--text-3xl--letter-spacing: 0em
+--text-4xl: 36px
+--text-4xl--line-height: 42px
+--text-4xl--font-weight: 400
+--text-4xl--letter-spacing: 0em
+--text-5xl: 48px
+--text-5xl--line-height: 48px
+--text-5xl--font-weight: 400
+--text-5xl--letter-spacing: 0em
+--text-6xl: 60px
+--text-6xl--line-height: 60px
+--text-6xl--font-weight: 400
+--text-6xl--letter-spacing: 0em
+--text-7xl: 72px
+--text-7xl--line-height: 72px
+--text-7xl--font-weight: 400
+--text-7xl--letter-spacing: 0em
+--text-8xl: 96px
+--text-8xl--line-height: 1
+--text-8xl--letter-spacing: 0em
+--text-9xl: 128px
+--text-9xl--line-height: 1
+--text-9xl--letter-spacing: 0em
+--tracking-wide: 0em
+--tracking-normal: 0em
+--tracking-tight: 0em
+--duration-basic: 150ms

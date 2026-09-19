@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-table/library/src/components/TableHeader/useTableHeaderStyles.styles.ts
+L12 const useFlexLayoutStyles = makeStyles({
+L13 root: {
+L18 const useTableLayoutStyles = makeStyles({
+L19 root: {

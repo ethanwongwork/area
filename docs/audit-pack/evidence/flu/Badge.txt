@@ -1,0 +1,97 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-badge/library/src/components/Badge/useBadgeStyles.styles.ts
+L5 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L14 // The text content of the badge has additional horizontal padding, but there is no `text` slot to add that padding to.
+L15 // Instead, add extra padding to the root, and a negative margin on the icon to "remove" the extra padding on the icon.
+L16 const textPadding = tokens.spacingHorizontalXXS;   // spacingHorizontalXXS=2px
+L18 const useRootClassName = makeResetStyles({
+L24 ...typographyStyles.caption1Strong,   // typographyStyles.caption1Strong=12px/16px w600
+L25 height: '20px',
+L26 minWidth: '20px',
+L27 padding: `0 calc(${tokens.spacingHorizontalXS} + ${textPadding})`,   // spacingHorizontalXS=4px
+L28 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L35 top: 0,
+L36 left: 0,
+L37 bottom: 0,
+L38 right: 0,
+L41 borderWidth: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L42 borderRadius: 'inherit',
+L46 const useRootStyles = makeStyles({
+L47 fontSmallToTiny: {
+L48 ...typographyStyles.caption2Strong,   // typographyStyles.caption2Strong=10px/14px w600
+L51 // size
+L53 tiny: {
+L54 width: '6px',
+L55 height: '6px',
+L56 fontSize: '4px',
+L57 lineHeight: '4px',
+L58 minWidth: 'unset',
+L59 padding: 'unset',
+L62 width: '10px',
+L63 height: '10px',
+L64 fontSize: '6px',
+L65 lineHeight: '6px',
+L66 minWidth: 'unset',
+L67 padding: 'unset',
+L69 small: {
+L70 minWidth: '16px',
+L71 height: '16px',
+L72 padding: `0 calc(${tokens.spacingHorizontalXXS} + ${textPadding})`,   // spacingHorizontalXXS=2px
+L74 medium: {
+L77 large: {
+L78 minWidth: '24px',
+L79 height: '24px',
+L80 padding: `0 calc(${tokens.spacingHorizontalXS} + ${textPadding})`,   // spacingHorizontalXS=4px
+L83 minWidth: '32px',
+L84 height: '32px',
+L85 padding: `0 calc(${tokens.spacingHorizontalSNudge} + ${textPadding})`,   // spacingHorizontalSNudge=6px
+L90 square: { borderRadius: tokens.borderRadiusNone },   // borderRadiusNone=0
+L91 rounded: { borderRadius: tokens.borderRadiusMedium },   // borderRadiusMedium=4px
+L92 roundedSmallToTiny: { borderRadius: tokens.borderRadiusSmall },   // borderRadiusSmall=2px
+L93 circular: {
+L98 borderGhost: {
+L100 // The padding and size of the badge should be the same regardless of whether or not it has a border.
+L108 filled: {
+L146 ghost: {
+L176 outline: {
+L177 ...shorthands.borderColor('currentColor'),
+L184 ...shorthands.borderColor(tokens.colorPaletteRedBorder2),
+L188 ...shorthands.borderColor(tokens.colorNeutralStrokeAccessible),
+L192 ...shorthands.borderColor(tokens.colorNeutralStroke2),
+L202 ...shorthands.borderColor(tokens.colorPaletteGreenBorder2),
+L210 tint: {
+L216 ...shorthands.borderColor(tokens.colorBrandStroke2),
+L221 ...shorthands.borderColor(tokens.colorPaletteRedBorder1),
+L226 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L231 ...shorthands.borderColor(tokens.colorNeutralStroke2),
+L236 ...shorthands.borderColor(tokens.colorPaletteDarkOrangeBorder1),
+L241 ...shorthands.borderColor(tokens.colorNeutralStroke2),
+L246 ...shorthands.borderColor(tokens.colorPaletteGreenBorder1),
+L251 ...shorthands.borderColor(tokens.colorPaletteYellowBorder1),
+L255 const useIconRootClassName = makeResetStyles({
+L257 lineHeight: '1',
+L258 margin: `0 calc(-1 * ${textPadding})`, // Remove text padding added to root
+L259 fontSize: '12px',
+L262 const useIconStyles = makeStyles({
+L263 beforeText: {
+L264 marginRight: `calc(${tokens.spacingHorizontalXXS} + ${textPadding})`,   // spacingHorizontalXXS=2px
+L266 afterText: {
+L267 marginLeft: `calc(${tokens.spacingHorizontalXXS} + ${textPadding})`,   // spacingHorizontalXXS=2px
+L270 beforeTextXL: {
+L271 marginRight: `calc(${tokens.spacingHorizontalXS} + ${textPadding})`,   // spacingHorizontalXS=4px
+L273 afterTextXL: {
+L274 marginLeft: `calc(${tokens.spacingHorizontalXS} + ${textPadding})`,   // spacingHorizontalXS=4px
+L277 // size
+L279 tiny: {
+L280 fontSize: '6px',
+L283 fontSize: '10px',
+L285 small: {
+L286 fontSize: '12px',
+L288 medium: {
+L291 large: {
+L292 fontSize: '16px',
+L295 fontSize: '20px',
+L306 const smallToTiny = state.size === 'small' || state.size === 'extra-small' || state.size === 'tiny';
+L313 rootStyles[state.size],
+L326 // Handle the edge case where children is 0 (a falsy value that should still render text and have margin)
+L328 if (state.size === 'extra-large') {
+L340 iconStyles[state.size],

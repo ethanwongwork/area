@@ -1,0 +1,33 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Icon/Icon.js
+L16 const slots = {
+L27 const IconRoot = styled('span', {
+L28 name: 'MuiIcon',
+L29 slot: 'Root',
+L42   width: '1em',
+L43   height: '1em',
+L50 variants: [
+L52 props: {
+L53   fontSize: 'inherit',
+L55 style: {
+L56   fontSize: 'inherit',
+L60 props: {
+L61   fontSize: 'small',
+L63 style: {
+L64   fontSize: theme.typography.pxToRem(20),
+L68 props: {
+L69   fontSize: 'medium',
+L71 style: {
+L72   fontSize: theme.typography.pxToRem(24),
+L76 props: {
+L77   fontSize: 'large',
+L79 style: {
+L80   fontSize: theme.typography.pxToRem(36),
+L84 props: {
+L87 style: {
+L92 props: {
+L95 style: {
+L100 props: {
+L103 style: {
+L110 props: { color },
+L111 style: {
+L130 const ownerState = {

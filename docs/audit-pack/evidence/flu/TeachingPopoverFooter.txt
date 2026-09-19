@@ -1,0 +1,16 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-teaching-popover/library/src/components/TeachingPopoverFooter/useTeachingPopoverFooterStyles.styles.ts
+L14 const useStyles = makeStyles({
+L15 root: {
+L17 gap: '8px',
+L18 paddingTop: '12px',
+L20 rootVertical: {
+L23 rootHorizontal: {
+L27 buttonRootVertical: {
+L28 width: 'auto',
+L29 borderRadius: '4px',
+L31 buttonRootHorizontal: {
+L32 minWidth: '96px',
+L33 borderRadius: '4px',
+L35 brandSecondary: {
+L36 ...shorthands.borderColor(tokens.colorNeutralForegroundOnBrand),
+L38 brandPrimary: {

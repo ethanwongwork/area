@@ -1,0 +1,25 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/toggletip/_toggletip.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L20 @mixin toggletip() {
+L21 .#{$prefix}--toggletip-label {
+L22   @include type.type-style('label-01');   // label-01=12/16
+L25   margin-inline-end: spacing.$spacing-03;   // spacing-03=8px
+L28   @include type.type-style('label-01');   // label-01=12/16
+L30 .#{$prefix}--toggletip-button {
+L37 .#{$prefix}--toggletip-button svg {
+L42 .#{$prefix}--toggletip--open .#{$prefix}--toggletip-button svg {
+L48 .#{$prefix}--toggletip--open .#{$prefix}--toggletip-button svg {
+L53 .#{$prefix}--toggletip-button:focus {
+L57 .#{$prefix}--toggletip {
+L62   convert.to-rem(4px),
+L63   convert.to-rem(13px)
+L67   'popover-border-radius',
+L68   if(enabled('enable-v12-release'), $border-radius-04, 2px)
+L72 .#{$prefix}--toggletip-content {
+L93   @include type.type-style('body-01');   // body-01=14/20
+L96   padding: spacing.$spacing-05;   // spacing-05=16px
+L97   max-inline-size: 18rem;
+L98   row-gap: spacing.$spacing-05;   // spacing-05=16px
+L101 .#{$prefix}--toggletip-content p {
+L102   @include type.type-style('body-01');   // body-01=14/20
+L105 .#{$prefix}--toggletip-actions {
+L109   column-gap: spacing.$spacing-05;   // spacing-05=16px

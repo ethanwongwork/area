@@ -1,0 +1,18 @@
+### Primer React @ e4e6eba  packages/react/src/Header/Header.dev.module.css
+.HeaderDev {
+  color: var(--color-prettylights-syntax-carriage-return-text);
+  /* stylelint-disable-next-line primer/no-display-colors */
+  background-color: var(--display-pine-bgColor-emphasis);
+}
+
+.HeaderDevItem {
+  padding-left: var(--base-size-24);   /* = 24px */
+}
+
+.HeaderDevLink {
+  color: var(--color-prettylights-syntax-carriage-return-text);
+}
+
+.Icon {
+  margin-right: var(--base-size-8);   /* = 8px */
+}

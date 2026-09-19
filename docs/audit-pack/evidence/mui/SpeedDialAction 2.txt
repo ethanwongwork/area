@@ -1,0 +1,35 @@
+### MUI Material @ 69960c1  packages/mui-material/src/SpeedDialAction/SpeedDialAction.js
+L22 const slots = {
+L35 const SpeedDialActionFab = styled(Fab, {
+L36 name: 'MuiSpeedDialAction',
+L37 slot: 'Fab',
+L46   margin: 8,
+L49 '&:hover': {
+L59 variants: [
+L62 style: {
+L71 const SpeedDialActionStaticTooltip = styled('span', {
+L72 name: 'MuiSpeedDialAction',
+L73 slot: 'StaticTooltip',
+L94 variants: [
+L97 style: {
+L105 props: {
+L108 style: {
+L111   right: '100%',
+L112   marginRight: 8,
+L117 props: {
+L120 style: {
+L123   left: '100%',
+L124   marginLeft: 8,
+L132 const SpeedDialActionStaticTooltipLabel = styled('span', {
+L133 name: 'MuiSpeedDialAction',
+L134 slot: 'StaticTooltipLabel',
+L140   borderRadius: (theme.vars || theme).shape.borderRadius,
+L143   padding: '4px 16px',
+L158 const ownerState = { ...props, tooltipPlacement };
+L161 const externalForwardedProps = {
+L181 const transitionStyle = {
+L191 additionalProps: {
+L195   size: 'small',
+L204 additionalProps: {
+L227 additionalProps: {
+L237 additionalProps: {

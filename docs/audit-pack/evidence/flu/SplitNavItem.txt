@@ -1,0 +1,19 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/SplitNavItem/useSplitNavItemStyles.styles.ts
+L31 opacity: 1,
+L39 const useSplitNaveItemStyles = makeStyles({
+L40 baseRoot: {
+L42 gap: 'unset',
+L44 padding: 'unset',
+L60 baseNavItem: {
+L68 gap: tokens.spacingVerticalL,   // spacingVerticalL=16px
+L71 baseSecondary: {
+L72 minWidth: '28px',
+L73 paddingInlineEnd: '12px',
+L74 paddingInlineStart: '5px',
+L75 paddingBlockStart: '5px',
+L78 baseMedium: {
+L79 paddingBlockStart: '9px',
+L82 baseLarge: {
+L83 paddingBlockStart: '12px',
+L86 hoverAction: {
+L87 opacity: 0,

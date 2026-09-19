@@ -1,0 +1,23 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-filled-autocomplete.scss
+menu-cascading-menu-indicator-icon-size: 24px
+menu-divider-height: 1px
+menu-list-item-container-height: 48px
+text-field-active-indicator-height: 1px
+text-field-container-height: 56px
+text-field-disabled-active-indicator-height: 1px
+text-field-focus-active-indicator-height: 2px
+text-field-hover-active-indicator-height: 1px
+text-field-leading-icon-size: 20px
+text-field-trailing-icon-size: 24px
+menu-container-shape: corner-extra-small = 4px
+menu-list-item-label-text-line-height: label-large-line-height = 20px
+menu-list-item-label-text-size: label-large-size = 14px
+text-field-container-shape: corner-extra-small-top = 4px 4px 0px 0px
+text-field-input-text-line-height: body-large-line-height = 24px
+text-field-input-text-size: body-large-size = 16px
+text-field-label-text-line-height: body-large-line-height = 24px
+text-field-label-text-populated-line-height: body-small-line-height = 16px
+text-field-label-text-populated-size: body-small-size = 12px
+text-field-label-text-size: body-large-size = 16px
+text-field-supporting-text-line-height: body-small-line-height = 16px
+text-field-supporting-text-size: body-small-size = 12px

@@ -1,0 +1,40 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-button/library/src/components/MenuButton/useMenuButtonStyles.styles.ts
+L16 const useRootExpandedStyles = makeStyles({
+L17 base: {
+L27 outline: {
+L28 ...shorthands.borderColor(tokens.colorNeutralStroke1Selected),
+L29 ...shorthands.borderWidth(tokens.strokeWidthThicker),   // strokeWidthThicker=3px
+L32 primary: {
+L35 secondary: {
+L37 ...shorthands.borderColor(tokens.colorNeutralStroke1Selected),
+L40 subtle: {
+L44 transparent: {
+L50 const useIconExpandedStyles = makeStyles({
+L52 outline: {
+L55 primary: {
+L58 secondary: {
+L61 subtle: {
+L64 transparent: {
+L67 highContrast: {
+L77 const useMenuIconStyles = makeStyles({
+L78 base: {
+L79 lineHeight: 0,
+L82 // Size appearance
+L83 small: {
+L84 fontSize: '12px',
+L85 height: '12px',
+L86 lineHeight: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L87 width: '12px',
+L89 medium: {
+L90 fontSize: '12px',
+L91 height: '12px',
+L92 lineHeight: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L93 width: '12px',
+L95 large: {
+L96 fontSize: '16px',
+L97 height: '16px',
+L98 lineHeight: tokens.lineHeightBase400,   // lineHeightBase400=22px
+L99 width: '16px',
+L103 notIconOnly: {
+L104 marginLeft: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L135 menuIconStyles[state.size],

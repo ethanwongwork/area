@@ -1,0 +1,7 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-portal/library/src/components/Portal/usePortalMountNodeStyles.styles.ts
+L5 export const usePortalMountNodeStylesStyles = makeStyles({
+L6 root: {
+L12 top: 0,
+L13 left: 0,
+L14 right: 0,
+L16 zIndex: 1000000,

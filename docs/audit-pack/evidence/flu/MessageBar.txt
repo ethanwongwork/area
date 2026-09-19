@@ -1,0 +1,34 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-message-bar/library/src/components/MessageBar/useMessageBarStyles.styles.ts
+L14 const useRootBaseStyles = makeResetStyles({
+L18 gridTemplateRows: '1fr',
+L20 paddingLeft: tokens.spacingHorizontalM,   // spacingHorizontalM=12px
+L21 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1}`,   // strokeWidthThin=1px
+L22 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L24 minHeight: '36px',
+L29 const useIconBaseStyles = makeResetStyles({
+L31 fontSize: tokens.fontSizeBase500,   // fontSizeBase500=20px
+L32 marginRight: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L38 const useReflowSpacerBaseStyles = makeResetStyles({
+L39 marginBottom: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L43 const useStyles = makeStyles({
+L44 rootMultiline: {
+L47 paddingTop: tokens.spacingVerticalMNudge,   // spacingVerticalMNudge=10px
+L55 secondaryActionsMultiline: {
+L57 marginTop: tokens.spacingVerticalMNudge,   // spacingVerticalMNudge=10px
+L58 marginBottom: tokens.spacingVerticalS,   // spacingVerticalS=8px
+L59 marginRight: '0px',
+L62 square: {
+L63 borderRadius: '0',
+L67 const useIconIntentStyles = makeStyles({
+L68 info: {
+L71 error: {
+L74 warning: {
+L77 success: {
+L82 const useRootIntentStyles = makeStyles({
+L83 info: {
+L86 error: {
+L88 ...shorthands.borderColor(tokens.colorStatusDangerBorder1),
+L90 warning: {
+L92 ...shorthands.borderColor(tokens.colorStatusWarningBorder1),
+L94 success: {
+L96 ...shorthands.borderColor(tokens.colorStatusSuccessBorder1),

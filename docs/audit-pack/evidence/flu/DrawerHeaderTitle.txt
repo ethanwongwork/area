@@ -1,0 +1,7 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-drawer/library/src/components/DrawerHeaderTitle/useDrawerHeaderTitleStyles.styles.ts
+L19 const useStyles = makeStyles({
+L20 root: {
+L24 columnGap: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L27 action: {
+L28 marginRight: `calc(${tokens.spacingHorizontalS} * -1)`,   // spacingHorizontalS=8px
+L50 components: {

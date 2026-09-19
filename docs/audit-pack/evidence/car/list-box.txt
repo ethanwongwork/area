@@ -1,0 +1,272 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/list-box/_list-box.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L34   $list-box-width: 100%;
+L39   $list-box-height: convert.to-rem(40px);
+L44   $list-box-inline-height: $list-box-height;
+L49   $list-box-menu-width: convert.to-rem(300px);
+L54 @mixin list-box {
+L57 .#{$prefix}--list-box__wrapper {
+L61 .#{$prefix}--list-box__wrapper--inline {
+L64   grid-gap: convert.to-rem(4px);
+L67 .#{$prefix}--label {
+L68   @include type-style('body-compact-01');   // body-compact-01=14/18
+L73 .#{$prefix}--form-requirement {
+L74   margin: 0;
+L77 .#{$prefix}--form__helper-text {
+L78   max-inline-size: none;
+L81 .#{$prefix}--form-requirement {
+L86 .#{$prefix}--list-box {
+L88   @include layout.use('size', $default: 'md', $min: 'xs', $max: 'lg');
+L91   border: none;
+L93   block-size: layout.size('height');
+L97   inline-size: $list-box-width;
+L98   max-block-size: layout.size('height');
+L101 &:hover {
+L106   border: 1px solid transparent;
+L107   border-radius: $border-radius-04;
+L122   linear-gradient($field, $field) padding-box,
+L136 .#{$prefix}--dropdown--readonly {
+L137   border-radius: $border-radius-00;
+L142 .#{$prefix}--multi-select--readonly .#{$prefix}--text-input {
+L143   border-radius: $border-radius-00;
+L147 .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly.#{$prefix}--list-box {
+L152 .#{$prefix}--list-box--expanded {
+L156 .#{$prefix}--layer-two .#{$prefix}--list-box--expanded {
+L160 .#{$prefix}--layer-three .#{$prefix}--list-box--expanded {
+L165 .#{$prefix}--list-box--expanded:hover {
+L170 .#{$prefix}--list-box--expanded:hover.#{$prefix}--list-box--light:hover {
+L174 .#{$prefix}--list-box .#{$prefix}--text-input {
+L175   block-size: 100%;
+L176   min-inline-size: 0;
+L180 .#{$prefix}--list-box__invalid-icon {
+L183   inset-block-start: 50%;
+L184   inset-inline-end: $spacing-08;   // spacing-08=40px
+L188 .#{$prefix}--list-box__invalid-icon--warning {
+L192 .#{$prefix}--list-box__invalid-icon--warning path[fill] {
+L199 .#{$prefix}--list-box__field {
+L201   padding-inline-end: $spacing-10;   // spacing-10=64px
+L207 .#{$prefix}--list-box__field {
+L208   padding-inline-end: convert.to-rem(56px);
+L213 .#{$prefix}--list-box--light {
+L216 &:hover {
+L222 .#{$prefix}--list-box--light .#{$prefix}--list-box__menu {
+L227 .#{$prefix}--list-box--light .#{$prefix}--list-box__menu-item__option {
+L231 .#{$prefix}--list-box--light.#{$prefix}--list-box--expanded {
+L236 .#{$prefix}--list-box--disabled:hover {
+L241 .#{$prefix}--list-box--light.#{$prefix}--list-box--disabled {
+L247 .#{$prefix}--list-box--disabled .#{$prefix}--list-box__field:focus {
+L254 .#{$prefix}--list-box__label {
+L259 .#{$prefix}--list-box--disabled .#{$prefix}--list-box__selection > svg {
+L265 .#{$prefix}--list-box--disabled .#{$prefix}--list-box__menu-icon {
+L272 .#{$prefix}--list-box__menu-item--highlighted {
+L277 .#{$prefix}--list-box--disabled .#{$prefix}--list-box__selection:hover {
+L283 .#{$prefix}--list-box__field {
+L284   padding-inline-end: $spacing-09;   // spacing-09=48px
+L288 .#{$prefix}--list-box__field {
+L289   padding-inline-end: $spacing-07;   // spacing-07=32px
+L293 .#{$prefix}--list-box.#{$prefix}--list-box--inline {
+L294   border-width: 0;
+L297 &:hover {
+L302 .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--list-box--expanded {
+L303   border-block-end-width: 0;
+L307 .#{$prefix}--list-box__field[aria-expanded='true'] {
+L308   border-width: 0;
+L312 .#{$prefix}--list-box.#{$prefix}--list-box--inline.#{$prefix}--list-box--disabled:hover {
+L317 .#{$prefix}--list-box__field {
+L318   padding: 0 $spacing-07 0 $spacing-03;   // spacing-07=32px spacing-03=8px
+L322 .#{$prefix}--list-box__menu-icon {
+L323   inset-inline-end: $spacing-03;   // spacing-03=8px
+L327 .#{$prefix}--list-box__invalid-icon {
+L328   inset-inline-end: $spacing-07;   // spacing-07=32px
+L331 .#{$prefix}--list-box--inline .#{$prefix}--list-box__label {
+L335 .#{$prefix}--list-box--inline .#{$prefix}--list-box__field {
+L336   block-size: 100%;
+L339 .#{$prefix}--dropdown--inline .#{$prefix}--list-box__field {
+L340   max-inline-size: convert.to-rem(480px);
+L343 .#{$prefix}--dropdown--inline .#{$prefix}--list-box__menu {
+L344   max-inline-size: convert.to-rem(480px);
+L345   min-inline-size: convert.to-rem(288px);
+L349 .#{$prefix}--list-box__field {
+L357   block-size: calc(100% + 1px);
+L360   padding-block: 0;
+L361   padding-inline: $spacing-05 $spacing-09;   // spacing-05=16px spacing-09=48px
+L367   block-size: 100%;
+L371 .#{$prefix}--list-box__field:focus {
+L379 .#{$prefix}--combo-box--input--focus.#{$prefix}--text-input {
+L383 .#{$prefix}--list-box:has(.#{$prefix}--combo-box--input--focus) {
+L388 .#{$prefix}--list-box__field[disabled] {
+L394 .#{$prefix}--list-box__field .#{$prefix}--text-input {
+L395   padding-inline-end: convert.to-rem(70px);
+L404 .#{$prefix}--text-input {
+L406   padding-inline-end: convert.to-rem(105px);
+L418   inset-inline-end: convert.to-rem(82px);
+L422 .#{$prefix}--list-box__field .#{$prefix}--text-input--empty {
+L423   padding-inline-end: $spacing-09;   // spacing-09=48px
+L432 .#{$prefix}--text-input--empty {
+L433   padding-inline-end: $spacing-10;   // spacing-10=64px
+L445   inset-inline-end: convert.to-rem(40px);
+L449 .#{$prefix}--list-box__label {
+L450   @include type-style('body-compact-01');   // body-compact-01=14/18
+L460 .#{$prefix}--list-box__menu-icon {
+L461   @include button-reset.reset($width: false);
+L467   block-size: convert.to-rem(24px);
+L469   inline-size: convert.to-rem(24px);
+L470   inset-inline-end: $spacing-04;   // spacing-04=12px
+L475 .#{$prefix}--list-box__menu-icon > svg {
+L479 .#{$prefix}--list-box__menu-icon--open {
+L481   inline-size: convert.to-rem(24px);
+L486 .#{$prefix}--list-box__selection {
+L487   @include button-reset.reset($width: false);
+L493   block-size: convert.to-rem(24px);
+L495   inline-size: convert.to-rem(24px);
+L496   inset-block-start: 50%;
+L498   inset-inline-end: convert.to-rem(45px);
+L503 &:focus {
+L506 &:hover {
+L512 .#{$prefix}--list-box__selection > svg {
+L516 .#{$prefix}--list-box--disabled .#{$prefix}--list-box__selection:focus {
+L521 .#{$prefix}--list-box__selection--multi {
+L522   @include type-style('label-01');   // label-01=12/16
+L528   padding: convert.to-rem(8px);
+L529   border-radius: convert.to-rem(12px);
+L531   block-size: convert.to-rem(24px);
+L533   inline-size: auto;
+L534   inset-block-start: auto;
+L535   line-height: 0;
+L536   margin-inline-end: convert.to-rem(10px);
+L538   padding-inline-end: convert.to-rem(2px);
+L542 .#{$prefix}--list-box__selection--multi > svg {
+L543   padding: convert.to-rem(2px);
+L544   block-size: convert.to-rem(20px);
+L546   inline-size: convert.to-rem(20px);
+L547   margin-inline-start: convert.to-rem(4px);
+L549 &:hover {
+L550   border-radius: 50%;
+L555 .#{$prefix}--list-box--disabled .#{$prefix}--list-box__selection--multi {
+L561 &:hover {
+L567 .#{$prefix}--list-box__selection--multi:hover {
+L572 .#{$prefix}--list-box__menu {
+L579   inline-size: $list-box-width;
+L580   inset-inline: 0;
+L586   padding: $spacing-02;   // spacing-02=4px
+L587   border: 1px solid $border-subtle;
+L588   border-radius: $border-radius-08;
+L589   margin-block-start: $spacing-02;   // spacing-02=4px
+L592 &:focus {
+L599 .#{$prefix}--autoalign .#{$prefix}--list-box__menu {
+L600   inset-inline: auto;
+L603 .#{$prefix}--list-box .#{$prefix}--list-box__field[aria-expanded='false'] {
+L604 .#{$prefix}--list-box__menu {
+L606   max-block-size: 0;
+L611 .#{$prefix}--list-box--expanded .#{$prefix}--list-box__menu {
+L614   max-block-size: calc(layout.size('height') * 5.5);
+L618 .#{$prefix}--list-box__menu-item {
+L619   @include type-style('body-compact-01');   // body-compact-01=14/18
+L622   block-size: layout.size('height');
+L628 &:hover {
+L632 &:active {
+L637   border-radius: $border-radius-04;
+L642 .#{$prefix}--list-box--light .#{$prefix}--list-box__menu-item:hover {
+L646 .#{$prefix}--list-box--disabled .#{$prefix}--list-box__menu-item:hover {
+L651 .#{$prefix}--list-box--light .#{$prefix}--list-box__menu-item:active {
+L656 .#{$prefix}--list-box__menu-item__option:hover {
+L662 .#{$prefix}--list-box__menu-item__option:hover {
+L668 .#{$prefix}--list-box__menu-item__option:hover {
+L673 .#{$prefix}--list-box__menu-item__option {
+L678 .#{$prefix}--list-box__menu-item__option {
+L685 .#{$prefix}--list-box__menu-item__option {
+L693 .#{$prefix}--list-box__menu-item__option {
+L701 .#{$prefix}--list-box__menu-item__option {
+L705 .#{$prefix}--layer-two .#{$prefix}--list-box__menu-item__option {
+L709 .#{$prefix}--layer-three .#{$prefix}--list-box__menu-item__option {
+L713 .#{$prefix}--list-box__menu-item__option {
+L719   padding: calc((layout.size('height') - 1rem) / 2 - 1px) 0;
+L720   margin: 0 $spacing-05;   // spacing-05=16px
+L721   block-size: layout.size('height');
+L727   line-height: 1rem;
+L728   padding-inline-end: $spacing-06;   // spacing-06=24px
+L736 &:focus {
+L739   padding: calc((layout.size('height') - 1rem) / 2) convert.to-rem(16px);
+L741   margin: 0;
+L745   border-radius: $border-radius-04;
+L750 &:hover {
+L759 .#{$prefix}--list-box--disabled .#{$prefix}--list-box__menu-item__option {
+L767 .#{$prefix}--list-box__menu-item[disabled]:hover {
+L773 .#{$prefix}--list-box__menu-item[disabled]:hover {
+L778 .#{$prefix}--checkbox-label::before {
+L786 .#{$prefix}--list-box__menu-item__option {
+L796 .#{$prefix}--list-box__menu-item__option {
+L806 .#{$prefix}--list-box__menu-item__option {
+L815 .#{$prefix}--list-box__menu-item__option {
+L820 .#{$prefix}--list-box__menu-item__option {
+L821   margin: 0 $spacing-03;   // spacing-03=8px
+L823 &:focus {
+L824   margin: 0;
+L825   padding-inline: $spacing-03 $spacing-03;   // spacing-03=8px spacing-03=8px
+L829 .#{$prefix}--list-box__menu-item--highlighted {
+L839 .#{$prefix}--list-box__menu-item__option {
+L844 .#{$prefix}--list-box__menu-item__option {
+L848 .#{$prefix}--list-box__menu-item--active {
+L855 .#{$prefix}--list-box--light .#{$prefix}--list-box__menu-item--active {
+L860 .#{$prefix}--list-box__menu-item--active:hover {
+L866 .#{$prefix}--list-box__menu-item__option {
+L877 .#{$prefix}--list-box__menu-item__selected-icon {
+L881   inset-block-start: 50%;
+L882   inset-inline-end: convert.to-rem(16px);
+L887 .#{$prefix}--list-box__menu-item__selected-icon {
+L888   inset-inline-end: convert.to-rem(8px);
+L892 .#{$prefix}--list-box__menu-item__selected-icon {
+L896 .#{$prefix}--list-box__menu-item .#{$prefix}--checkbox-label {
+L897   inline-size: 100%;
+L900 .#{$prefix}--list-box__menu-item .#{$prefix}--checkbox-label-text {
+L907 .#{$prefix}--list-box--up .#{$prefix}--list-box__menu {
+L908   inset-block-end: layout.size('height');
+L915 .#{$prefix}--list-box .#{$prefix}--text-input {
+L917   min-inline-size: 0;
+L922   border: 0;
+L932 .#{$prefix}--list-box__wrapper--slug .#{$prefix}--slug {
+L934   inset-block-start: 50%;
+L935   inset-inline-end: calc($spacing-08 + 9px);   // spacing-08=40px
+L936   margin-block-start: convert.to-rem(0.5px);
+L953 .#{$prefix}--list-box__wrapper--slug .#{$prefix}--slug::after {
+L956   block-size: convert.to-rem(16px);
+L958   inline-size: convert.to-rem(1px);
+L965 .#{$prefix}--list-box__wrapper--slug .#{$prefix}--slug::before {
+L967   inset-inline-start: convert.to-rem(-9px);
+L984 .#{$prefix}--list-box__wrapper--slug .#{$prefix}--slug::after {
+L986   inset-block-start: convert.to-rem(1px);
+L987   inset-inline-end: convert.to-rem(-9px);
+L999 .#{$prefix}--list-box__wrapper--slug .#{$prefix}--slug--revert::after {
+L1000   inset-block-start: convert.to-rem(8px);
+L1001   inset-inline-end: convert.to-rem(-1px);
+L1034   padding-box,
+L1035   linear-gradient($field, $field) padding-box,
+L1058 .#{$prefix}--list-box__wrapper--slug .#{$prefix}--text-input--empty {
+L1059   padding-inline-end: $spacing-10;   // spacing-10=64px
+L1065 .#{$prefix}--text-input:not(.#{$prefix}--text-input--empty) {
+L1066   padding-inline-end: convert.to-rem(105px);
+L1092 .#{$prefix}--list-box__field {
+L1093   padding-inline-end: $spacing-12;   // spacing-12=96px
+L1107 .#{$prefix}--text-input:not(.#{$prefix}--text-input--empty) {
+L1108   padding-inline-end: convert.to-rem(137px);
+L1130 .#{$prefix}--list-box__invalid-icon.#{$prefix}--list-box__invalid-icon--warning {
+L1131   inset-inline-end: convert.to-rem(81px);
+L1157 .#{$prefix}--slug::before {
+L1184   inset-inline-end: calc($spacing-10 + 18px);   // spacing-10=64px
+L1191   inset-inline-end: calc($spacing-10 + 18px);   // spacing-10=64px
+L1209 .#{$prefix}--list-box__invalid-icon {
+L1210   inset-inline-end: convert.to-rem(114px);
+L1216 .#{$prefix}--multi-select .#{$prefix}--tag--filter {
+L1223 .#{$prefix}--list-box__menu-item__option {
+L1228 .#{$prefix}--list-box__selection::after {
+L1231   block-size: convert.to-rem(16px);
+L1233   inline-size: convert.to-rem(1px);
+L1234   margin-inline-start: convert.to-rem(33px);
+L1238 .#{$prefix}--list-box--invalid[data-invalid] {
+L1240 .#{$prefix}--list-box__selection::before {
+L1243   block-size: convert.to-rem(16px);
+L1245   inline-size: convert.to-rem(1px);
+L1246   margin-inline-end: convert.to-rem(33px);
+L1253 .#{$prefix}--list-box__menu-icon {
+L1254   inset-inline-end: $spacing-04;   // spacing-04=12px
+L1260 .#{$prefix}--list-box__menu-icon {
+L1261   inset-inline-end: $spacing-04;   // spacing-04=12px

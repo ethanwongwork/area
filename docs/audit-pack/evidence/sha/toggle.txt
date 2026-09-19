@@ -1,0 +1,7 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/toggle.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  L9 gap-2=8px rounded-md=8px text-sm=14/20px font-medium focus-visible:ring-[3px] [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L15 border=1px
+  L18 default: h-9=36px min-w-9=36px px-2=8px
+  L19 sm: h-8=32px min-w-8=32px px-1.5=6px
+  L20 lg: h-10=40px min-w-10=40px px-2.5=10px
+  [slot toggle]

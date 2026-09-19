@@ -1,0 +1,109 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-spinbutton/library/src/components/SpinButton/useSpinButtonStyles.styles.ts
+L6 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L19 const fieldHeights = {
+L20 small: '24px',
+L21 medium: '32px',
+L24 const useRootClassName = makeResetStyles({
+L26 gridTemplateColumns: `1fr 24px`,
+L27 gridTemplateRows: '1fr 1fr',
+L28 columnGap: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L29 rowGap: 0,
+L35 minHeight: fieldHeights.medium,
+L36 padding: `0 0 0 ${tokens.spacingHorizontalMNudge}`,   // spacingHorizontalMNudge=10px
+L37 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L44 // there is a bit of a gap which can become very noticeable
+L53 top: 0,
+L54 right: 0,
+L55 bottom: 0,
+L56 left: 0,
+L58 zIndex: 10,
+L59 border: `1px solid ${tokens.colorNeutralStroke1}`,
+L61 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L68 right: 0,
+L69 bottom: 0,
+L70 left: 0,
+L71 zIndex: 20,
+L74 // Use the whole border-radius as the height and only put radii on the bottom corners.
+L76 // max() ensures the focus border still shows up even if someone sets tokens.borderRadiusMedium to 0.   // borderRadiusMedium=4px
+L77 height: `max(2px, ${tokens.borderRadiusMedium})`,   // borderRadiusMedium=4px
+L78 borderBottomLeftRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L79 borderBottomRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L85 borderBottom: `2px solid ${tokens.colorCompoundBrandStroke}`,
+L86 clipPath: 'inset(calc(100% - 2px) 0 0 0)',
+L95 transitionDuration: '0.01ms',
+L96 transitionDelay: '0.01ms',
+L108 transitionDuration: '0.01ms',
+L109 transitionDelay: '0.01ms',
+L117 outline: '2px solid transparent',
+L121 const useRootStyles = makeStyles({
+L122 small: {
+L123 minHeight: fieldHeights.small,
+L124 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L125 paddingLeft: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L128 medium: {
+L132 outline: {
+L136 outlineInteractive: {
+L138 ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+L144 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L150 underline: {
+L152 ...shorthands.borderWidth(0, 0, '1px', 0),
+L153 borderRadius: tokens.borderRadiusNone, // corners look strange if rounded   // borderRadiusNone=0
+L157 underlineInteractive: {
+L168 borderRadius: tokens.borderRadiusNone, // remove rounded corners from focus underline   // borderRadiusNone=0
+L172 filled: {
+L174 border: `1px solid ${tokens.colorTransparentStroke}`,
+L185 filledInteractive: {
+L190 ...shorthands.borderColor(tokens.colorTransparentStrokeInteractive),
+L195 invalid: {
+L198 ...shorthands.borderColor(tokens.colorPaletteRedBorder2),
+L203 disabled: {
+L207 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L210 ...shorthands.borderColor('GrayText'),
+L216 const useInputClassName = makeResetStyles({
+L217 gridColumnStart: '1',
+L218 gridColumnEnd: '2',
+L219 gridRowStart: '1',
+L220 gridRowEnd: '3',
+L222 border: '0',
+L223 padding: '0',
+L228 fontSize: 'inherit',
+L229 fontWeight: 'inherit',
+L230 lineHeight: 'inherit',
+L231 width: '100%',
+L235 opacity: 1, // browser style override
+L239 const useInputStyles = makeStyles({
+L240 disabled: {
+L250 const useBaseButtonClassName = makeResetStyles({
+L252 width: '24px',
+L255 border: '0',
+L259 height: '16px',
+L266 gridColumnStart: '2',
+L267 borderRadius: '0',
+L268 padding: '0 5px 0 5px',
+L296 const useButtonStyles = makeStyles({
+L297 increment: {
+L298 gridRowStart: '1',
+L299 borderTopRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L300 paddingTop: '4px',
+L301 paddingBottom: '1px',
+L303 decrement: {
+L304 gridRowStart: '2',
+L305 borderBottomRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L306 paddingTop: '1px',
+L307 paddingBottom: '4px',
+L309 // Padding values numbers don't align with design specs
+L310 // but visually the padding aligns.
+L311 // The icons are set in a 16x16px square but the artwork is inset from that
+L312 // so these padding values are computed by hand.
+L315 incrementButtonSmall: {
+L316 padding: '3px 6px 0px 4px',
+L317 height: '12px',
+L320 decrementButtonSmall: {
+L321 padding: '0px 6px 3px 4px',
+L322 height: '12px',
+L325 outline: {
+L329 underline: {
+L396 const { appearance, spinState, size } = state;
+L409 rootStyles[size],
+L427 size === 'small' && buttonStyles.incrementButtonSmall,
+L437 size === 'small' && buttonStyles.decrementButtonSmall,

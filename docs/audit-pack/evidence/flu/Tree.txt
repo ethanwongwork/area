@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tree/library/src/components/Tree/useTreeStyles.styles.ts
+L12 const useBaseStyles = makeResetStyles({
+L15 rowGap: tokens.spacingVerticalXXS,   // spacingVerticalXXS=2px
+L18 const useStyles = makeStyles({
+L19 subtree: {
+L20 paddingTop: tokens.spacingVerticalXXS,   // spacingVerticalXXS=2px

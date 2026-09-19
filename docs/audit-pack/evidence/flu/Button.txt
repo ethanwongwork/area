@@ -1,0 +1,151 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-button/library/src/components/Button/useButtonStyles.styles.ts
+L17 const buttonSpacingSmall = '3px';
+L18 const buttonSpacingSmallWithIcon = '1px';
+L19 const buttonSpacingMedium = '5px';
+L20 const buttonSpacingLarge = '8px';
+L21 const buttonSpacingLargeWithIcon = '7px';
+L24 * this will ensure the inset boxShadow is always uniform
+L27 const boxShadowStrokeWidthThinMoz = `calc(${tokens.strokeWidthThin} + 0.25px)`;   // strokeWidthThin=1px
+L29 const useRootBaseClassName = makeResetStyles({
+L37 margin: 0,
+L42 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1}`,   // strokeWidthThin=1px
+L63 padding: `${buttonSpacingMedium} ${tokens.spacingHorizontalM}`,   // spacingHorizontalM=12px
+L64 minWidth: '96px',
+L65 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L67 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L68 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L69 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L78 transitionDuration: '0.01ms',
+L107 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L108 borderWidth: '1px',
+L109 outline: `${tokens.strokeWidthThick} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThick=2px
+L110 boxShadow: `0 0 0 ${tokens.strokeWidthThin} ${tokens.colorStrokeFocus2}   // strokeWidthThin=1px
+L111 inset
+L113 zIndex: 1,
+L116 // BUGFIX: Mozilla specific styles (Mozilla BugID: 1857642)
+L119 boxShadow: `0 0 0 ${boxShadowStrokeWidthThinMoz} ${tokens.colorStrokeFocus2}
+L120 inset
+L126 const useIconBaseClassName = makeResetStyles({
+L131 fontSize: '20px',
+L132 height: '20px',
+L133 width: '20px',
+L138 const useRootStyles = makeStyles({
+L140 outline: {
+L151 primary: {
+L153 ...shorthands.borderColor('transparent'),
+L158 ...shorthands.borderColor('transparent'),
+L164 ...shorthands.borderColor('transparent'),
+L170 ...shorthands.borderColor('HighlightText'),
+L176 ...shorthands.borderColor('Highlight'),
+L182 ...shorthands.borderColor('Highlight'),
+L187 secondary: {
+L190 subtle: {
+L192 ...shorthands.borderColor('transparent'),
+L197 ...shorthands.borderColor('transparent'),
+L212 ...shorthands.borderColor('transparent'),
+L242 transparent: {
+L244 ...shorthands.borderColor('transparent'),
+L249 ...shorthands.borderColor('transparent'),
+L261 ...shorthands.borderColor('transparent'),
+L284 circular: { borderRadius: tokens.borderRadiusCircular },   // borderRadiusCircular=10000px
+L285 rounded: {
+L286 /* The borderRadius rounded styles are handled in the size variations */
+L288 square: { borderRadius: tokens.borderRadiusNone },   // borderRadiusNone=0
+L290 // Size variations
+L291 small: {
+L292 minWidth: '64px',
+L293 padding: `${buttonSpacingSmall} ${tokens.spacingHorizontalS}`,   // spacingHorizontalS=8px
+L294 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L296 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L297 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L298 lineHeight: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L300 smallWithIcon: {
+L301 paddingBottom: buttonSpacingSmallWithIcon,
+L302 paddingTop: buttonSpacingSmallWithIcon,
+L304 medium: {
+L307 large: {
+L308 minWidth: '96px',
+L309 padding: `${buttonSpacingLarge} ${tokens.spacingHorizontalL}`,   // spacingHorizontalL=16px
+L310 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L312 fontSize: tokens.fontSizeBase400,   // fontSizeBase400=16px
+L313 fontWeight: tokens.fontWeightSemibold,   // fontWeightSemibold=600
+L314 lineHeight: tokens.lineHeightBase400,   // lineHeightBase400=22px
+L316 largeWithIcon: {
+L317 paddingBottom: buttonSpacingLargeWithIcon,
+L318 paddingTop: buttonSpacingLargeWithIcon,
+L322 const useRootDisabledStyles = makeStyles({
+L324 base: {
+L326 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L336 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L354 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L372 highContrast: {
+L375 ...shorthands.borderColor('GrayText'),
+L383 ...shorthands.borderColor('GrayText'),
+L388 ...shorthands.borderColor('GrayText'),
+L398 ...shorthands.borderColor('GrayText'),
+L409 outline: {
+L420 primary: {
+L421 ...shorthands.borderColor('transparent'),
+L424 ...shorthands.borderColor('transparent'),
+L428 ...shorthands.borderColor('transparent'),
+L431 secondary: {
+L434 subtle: {
+L436 ...shorthands.borderColor('transparent'),
+L440 ...shorthands.borderColor('transparent'),
+L445 ...shorthands.borderColor('transparent'),
+L448 transparent: {
+L450 ...shorthands.borderColor('transparent'),
+L454 ...shorthands.borderColor('transparent'),
+L459 ...shorthands.borderColor('transparent'),
+L464 const useRootFocusStyles = makeStyles({
+L466 circular: createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusCircular }),   // borderRadiusCircular=10000px
+L467 rounded: {
+L470 square: createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusNone }),   // borderRadiusNone=0
+L473 primary: {
+L475 ...shorthands.borderColor(tokens.colorStrokeFocus2),
+L476 boxShadow: `${tokens.shadow2}, 0 0 0 ${tokens.strokeWidthThin} ${tokens.colorStrokeFocus2} inset,  0 0 0 ${tokens.strokeWidthThick} ${tokens.colorNeutralForegroundOnBrand   // strokeWidthThin=1px strokeWidthThick=2px
+L478 boxShadow: `${tokens.shadow2}, 0 0 0 ${tokens.strokeWidthThin} ${tokens.colorStrokeFocus2} inset`,   // strokeWidthThin=1px
+L479 ...shorthands.borderColor(tokens.colorStrokeFocus2),
+L483 // BUGFIX: Mozilla specific styles (Mozilla BugID: 1857642)
+L486 boxShadow: `${tokens.shadow2}, 0 0 0 ${boxShadowStrokeWidthThinMoz} ${tokens.colorStrokeFocus2} inset,  0 0 0 ${tokens.strokeWidthThick} ${tokens.colorNeutralForegroundOn   // strokeWidthThick=2px
+L488 boxShadow: `${tokens.shadow2}, 0 0 0 ${boxShadowStrokeWidthThinMoz} ${tokens.colorStrokeFocus2} inset`,
+L494 // Size variations
+L495 small: createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusSmall }),   // borderRadiusSmall=2px
+L496 medium: {
+L499 large: createCustomFocusIndicatorStyle({ borderRadius: tokens.borderRadiusLarge }),   // borderRadiusLarge=6px
+L502 const useRootIconOnlyStyles = makeStyles({
+L503 // Size variations
+L504 small: {
+L505 padding: buttonSpacingSmallWithIcon,
+L507 minWidth: '24px',
+L508 maxWidth: '24px',
+L510 medium: {
+L511 padding: buttonSpacingMedium,
+L513 minWidth: '32px',
+L514 maxWidth: '32px',
+L516 large: {
+L517 padding: buttonSpacingLargeWithIcon,
+L519 minWidth: '40px',
+L520 maxWidth: '40px',
+L524 const useIconStyles = makeStyles({
+L525 // Size variations
+L526 small: {
+L527 fontSize: '20px',
+L528 height: '20px',
+L529 width: '20px',
+L533 medium: {
+L536 large: {
+L537 fontSize: '24px',
+L538 height: '24px',
+L539 width: '24px',
+L545 before: {
+L546 marginRight: `var(${iconSpacingVar})`,
+L548 after: {
+L549 marginLeft: `var(${iconSpacingVar})`,
+L563 const { appearance, disabled, disabledFocusable, icon, iconOnly, iconPosition, shape, size } = state;
+L572 rootStyles[size],
+L573 icon && size === 'small' && rootStyles.smallWithIcon,
+L574 icon && size === 'large' && rootStyles.largeWithIcon,
+L584 rootFocusStyles[size],
+L588 iconOnly && rootIconOnlyStyles[size],
+L600 iconStyles[size],

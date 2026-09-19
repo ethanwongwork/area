@@ -1,0 +1,7 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toast/library/src/components/Timer/useTimerStyles.styles.ts
+L5 export const useBaseAnimationStyles = makeResetStyles({
+L6 animationName: {
+L7 from: {
+L8 opacity: 0,
+L10 to: {
+L11 opacity: 0,

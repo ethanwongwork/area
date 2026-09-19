@@ -1,0 +1,203 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/Tearsheet/_tearsheet.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L22 @mixin tearsheet {
+L28 .#{$block-class} {
+L32 &.#{$block-class}:not(.#{$block-class}--keep-mounted) {
+L38 &.#{$block-class}.#{$block-class} .#{$block-class}__container {
+L47 &.#{$block-class}--stacked.is-visible .#{$block-class}__container {
+L51 &[data-tearsheet-exiting] {
+L55 &.#{$block-class}.#{$block-class} .#{$block-class}__container {
+L68 &.#{$block-class}--keep-mounted {
+L69 &:not(.is-visible) {
+L70 &.#{$block-class}.#{$block-class} .#{$block-class}__container {
+L105 .#{$block-class}__container {
+L107   border: 1px solid $border-subtle-01;
+L108   block-size: 100%;
+L109   inset-block-start: auto;
+L110   max-block-size: calc(
+L112   --tearsheet-vertical-gap,
+L113   calc(#{$spacing-11} + #{$spacing-03})   // spacing-11=80px spacing-03=8px
+L116   max-inline-size: var(--tearsheet-max-inline-size, 1312px);
+L119 &:not(.#{$block-class}--stack-activated.is-visible) {
+L120 .#{$block-class}__container {
+L121 @include breakpoint-down(md) {
+L122   max-block-size: none;
+L127 &:not(.is-visible) {
+L128 &.#{$block-class}.#{$block-class} .#{$block-class}__container {
+L133 &.#{$block-class}.#{$block-class}--has-ai-label {
+L134 .#{$block-class}__container {
+L135   border: 1px solid transparent;
+L140   padding-box,
+L152 .#{$block-class}__main-content {
+L156   box-shadow: inset 0 -80px 70px -65px $ai-inner-shadow;
+L161 &.#{$block-class}.#{$block-class} .#{$block-class}__container {
+L164   max-block-size $motion-duration motion(entrance, expressive);
+L174 .#{$block-class}__header {
+L179   margin-block: 0;
+L180   max-block-size: 50vh;
+L181   padding-block-end: 0;
+L182   padding-block-start: $spacing-06;   // spacing-06=24px
+L183   padding-inline: $spacing-07;   // spacing-07=32px
+L186   flex-basis: 100%;
+L195   margin-block-end: $spacing-06;   // spacing-06=24px
+L198 @include breakpoint-down(md) {
+L199   padding-inline: $spacing-05;   // spacing-05=16px
+L203 .#{$prefix}--modal-container--sm .#{$prefix}--modal-header {
+L204   padding-inline-end: $spacing-07;   // spacing-07=32px
+L210 .#{$block-class}__header-content-wrapper {
+L212   flex-basis: unset;
+L213   gap: $spacing-05;   // spacing-05=16px
+L215   var(--tearsheet-header-title-grid-width, 0),
+L218   inline-size: calc(100% - var(--tearsheet-header-action-offset));
+L220 @include breakpoint-down(md) {
+L226 &:not(.#{$block-class}--narrow) {
+L227 @include breakpoint(md) {
+L228 .#{$block-class}__header-content-wrapper {
+L229 .#{$block-class}__header-actions {
+L233 .#{$block-class}__header-content {
+L243 .#{$block-class}__header {
+L253   max-block-size: 50vh;
+L256   max-block-size $motion-duration motion(entrance, expressive),
+L258   margin $motion-duration motion(entrance, expressive),
+L259   padding $motion-duration motion(entrance, expressive);
+L276 .#{$prefix}--modal-close {
+L281 .#{$block-class}__header-collapsed {
+L282   padding-block-start: 0;
+L311   padding: 0;
+L312   margin: 0;
+L313   max-block-size: 0;
+L320 .#{$block-class}__header-title {
+L321   @include type-style('label-02');   // label-02=14/18
+L324   gap: $spacing-03;   // spacing-03=8px
+L325   margin-block-start: $spacing-02;   // spacing-02=4px
+L331   block-size: $spacing-06;   // spacing-06=24px
+L335 .#{$block-class}__title-end {
+L337   inline-size: $spacing-05;   // spacing-05=16px
+L342 .#{$block-class}__header-content {
+L344   margin-block-end: 0;
+L346 @include breakpoint-down(md) {
+L351 .#{$prefix}--modal-close {
+L352   block-size: $spacing-08;   // spacing-08=40px
+L353   inline-size: $spacing-08;   // spacing-08=40px
+L357 .#{$block-class}__decorator {
+L358   inset-block-start: $spacing-03;   // spacing-03=8px
+L361 .#{$block-class}__header-title {
+L362   block-size: $spacing-08;   // spacing-08=40px
+L365 .#{$block-class}__content__header-actions {
+L366   block-size: $spacing-06;   // spacing-06=24px
+L367   margin-block-start: $spacing-03;   // spacing-03=8px
+L371 @include breakpoint-down(md) {
+L372 .#{$block-class}__header-actions {
+L381 .#{$block-class}__header-title {
+L382   margin-block: 0;
+L386 .#{$block-class}__header-content-wrapper {
+L387   min-block-size: $spacing-08;   // spacing-08=40px
+L390 .#{$block-class}__navigation-bar::before {
+L394   block-size: 1px;
+L396   inline-size: calc(100% + $spacing-11);   // spacing-11=80px
+L397   inset-block-start: 0;
+L398   inset-inline-start: -$spacing-07;   // spacing-07=32px
+L403 &.#{$block-class}--stack-activated.is-visible {
+L410 &::before {
+L415   inset: 0;
+L426 &.is-visible {
+L427 .#{$block-class}__container {
+L428   max-block-size: calc(
+L430   --tearsheet-vertical-gap,
+L431   calc(#{$spacing-11} + #{$spacing-03} + #{$spacing-01})   // spacing-11=80px spacing-03=8px spacing-01=2px
+L432   ) + var(--block-size-change)
+L445 .#{$block-class}__header-label {
+L446   @include type-style('label-01');   // label-01=12/16
+L449   margin-block-end: $spacing-02;   // spacing-02=4px
+L452 .#{$block-class}__header-title {
+L453   @include type-style('heading-04');
+L455 @include breakpoint-down(md) {
+L456   @include type-style('heading-03');   // heading-03=20/28
+L461   gap: $spacing-05;   // spacing-05=16px
+L462   margin-block-end: $spacing-03;   // spacing-03=8px
+L464 &--no-content-below {
+L465   margin-block-end: 0;
+L472 .#{$block-class}__title-end {
+L473   margin-inline-start: $spacing-05;   // spacing-05=16px
+L477 .#{$block-class}__header-description {
+L478   @include type-style('body-compact-01');   // body-compact-01=14/18
+L481 .#{$block-class}__header--no-close-icon {
+L485 .#{$block-class}__decorator {
+L487   inset-block-start: convert.to-rem(10px);
+L488   inset-inline-end: $spacing-09;   // spacing-09=48px
+L491 .#{$block-class}__navigation-bar {
+L496   gap: $spacing-01;   // spacing-01=2px
+L497   max-inline-size: calc(100% - $spacing-04);   // spacing-04=12px
+L498   min-block-size: $spacing-08;   // spacing-08=40px
+L500 .#{$prefix}--tabs {
+L501   margin-inline-start: -$spacing-05;   // spacing-05=16px
+L505 .#{$block-class}__scroller-container {
+L507   inset-block-end: 0;
+L508   inset-inline-end: -$spacing-08;   // spacing-08=40px
+L510 @include breakpoint-down(md) {
+L511   inset-inline-end: -$spacing-06;   // spacing-06=24px
+L514 .#{$block-class}__scroller-button-icon-collapsed {
+L519 .#{$block-class}__header-actions {
+L524 .#{$block-class}__content__header-actions {
+L530   block-size: $spacing-07;   // spacing-07=32px
+L531   gap: $spacing-03;   // spacing-03=8px
+L532   inline-size: 100%;
+L533   margin-block-start: -14px;
+L539 @include breakpoint-down(md) {
+L541   margin-inline-end: 0;
+L546 .#{$block-class}__header-actions {
+L547   margin-block-end: $spacing-06;   // spacing-06=24px
+L550 @include breakpoint(md) {
+L551 .#{$block-class}--wide .#{$block-class}__container {
+L552   inline-size: calc(100% - (2 * #{$spacing-10}));   // spacing-10=64px
+L556 .#{$block-class}__body-layout {
+L562   var(--tearsheet-influencer-width, calc($spacing-10 * 4))   // spacing-10=64px
+L565   padding-block: 0;
+L566   padding-inline-end: 0;
+L568 &:not(.#{$block-class}__body-layout--has-influencer) {
+L576 .#{$block-class}__influencer {
+L581 .#{$block-class}__body {
+L587   --tearsheet-summary-content-width,
+L588   calc($spacing-10 * 4)   // spacing-10=64px
+L591 @include breakpoint-down(md) {
+L599 .#{$prefix}--tab-content {
+L600   padding: 0;
+L604 .#{$block-class}__footer {
+L618 .#{$block-class}__footer-button-set {
+L619   block-size: 100%;
+L621 &.#{$prefix}--btn-set--fluid {
+L623   $min-inline-size: convert.to-rem(120px)
+L631 .#{$block-class}__summary-content {
+L634 &:not(.#{$block-class}__flush) {
+L635   padding-inline: $spacing-07;   // spacing-07=32px
+L637 @include breakpoint-down(md) {
+L638   padding-inline: $spacing-05;   // spacing-05=16px
+L642 &:focus {
+L647 .#{$block-class}__main-content {
+L651 .#{$block-class}__side-panel {
+L654   block-size: 100%;
+L655   inline-size: 100% !important; /* stylelint-disable-line declaration-no-important */
+L656   inset-block-start: 0;
+L657   max-inline-size: none;
+L659 .#{$prefix}--side-panel__header {
+L660   min-block-size: 0;
+L664 .#{$block-class}--narrow {
+L665 .#{$block-class}__container {
+L666   inline-size: 480px;
+L667   max-inline-size: 480px;
+L669   @media (width <= 480px) {
+L670   inline-size: 100%;
+L671   max-inline-size: 100%;
+L675 .#{$block-class}__header {
+L676   padding-inline: $spacing-05;   // spacing-05=16px
+L679 .#{$block-class}__header.#{$block-class}__header-collapsed {
+L680 .#{$block-class}__header-actions {
+L684 .#{$block-class}__header-content {
+L689 .#{$block-class}__header-content-wrapper {
+L694 .#{$block-class}__header-title {
+L695   @include type-style('heading-03');   // heading-03=20/28
+L698 .#{$block-class}__content__header-actions {
+L700   margin-inline-end: 0;
+L703 .#{$block-class}__body {
+L709 .#{$block-class}__summary-content {
+L710 &:not(.#{$block-class}__flush) {
+L711   padding-inline: $spacing-05;   // spacing-05=16px

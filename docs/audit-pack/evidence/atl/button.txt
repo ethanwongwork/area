@@ -1,0 +1,40 @@
+### @atlaskit/button@25.3.5  new-button/containers/split-button/divider.js  (token fallbacks; pt and pc converted to px)
+  baseDivider: width:1px
+  dividerOffset: margin-inline:-1px
+  navigation: margin-block:8px; margin-inline:-.03125rem; height:16px
+  default: height:2rem
+  compact: height:1.5rem
+  default: height:calc(2rem - 1px - 1px)
+  compact: height:calc(1.5rem - 1px - 1px)
+### @atlaskit/button@25.3.5  new-button/containers/split-button/split-button-container.js  (token fallbacks; pt and pc converted to px)
+  defaultAppearanceContainer: border-radius:6px
+### @atlaskit/button@25.3.5  new-button/containers/split-button/split-button-with-slots.js  (token fallbacks; pt and pc converted to px)
+  primaryButton: [a] border-end-end-radius:0; [button] border-end-end-radius:0; [a] border-start-end-radius:0; [button] border-start-end-radius:0
+  secondaryButton: [a] border-end-start-radius:0; [button] border-end-start-radius:0; [a] border-start-start-radius:0; [button] border-start-start-radius:0
+### @atlaskit/button@25.3.5  new-button/containers/split-button/split-button.js  (token fallbacks; pt and pc converted to px)
+  primaryButton: [a] border-end-end-radius:0; [button] border-end-end-radius:0; [a] border-start-end-radius:0; [button] border-start-end-radius:0
+  secondaryButton: [a] border-end-start-radius:0; [button] border-end-start-radius:0; [a] border-start-start-radius:0; [button] border-start-start-radius:0
+### @atlaskit/button@25.3.5  new-button/variants/default/link.js  (token fallbacks; pt and pc converted to px)
+  base: border-radius:6px; font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif; border-width:0; padding-block:6px; box-sizing:border-box; width:auto; max-width:100%; column-gap:4px; height:2rem; font-weight:500; padding-inline-end:12px; padding-inline-start:12px; [:after] border-radius:inherit; [:after] inset:0; [:after] border-width:1px
+  spacingCompact: padding-block:2px; column-gap:4px; height:1.5rem; padding-inline-end:12px; padding-inline-start:12px
+  buttonIconBefore: padding-inline-start:12px; column-gap:6px
+  buttonIconAfter: padding-inline-end:12px; column-gap:6px
+  fullWidth: width:100%
+### @atlaskit/button@25.3.5  new-button/variants/icon/link.js  (token fallbacks; pt and pc converted to px)
+  base: border-radius:6px; font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif; border-width:0; padding-block:6px; box-sizing:border-box; width:auto; max-width:100%; column-gap:4px; height:2rem; font-weight:500; padding-inline-end:12px; padding-inline-start:12px; [:after] border-radius:inherit; [:after] inset:0; [:after] border-width:1px
+  spacingCompact: padding-block:2px; column-gap:4px; padding-inline-end:12px; padding-inline-start:12px; height:1.5rem; width:1.5rem
+  iconButton: height:2rem; width:2rem; padding-inline-end:0; padding-inline-start:0
+  circle: border-radius:9999px
+### @atlaskit/button@25.3.5  new-button/variants/shared/button-base.js  (token fallbacks; pt and pc converted to px)
+  base: border-radius:6px; font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif; border-width:0; padding-block:6px; box-sizing:border-box; width:auto; max-width:100%; column-gap:4px; height:2rem; font-weight:500; padding-inline-end:12px; padding-inline-start:12px; [:after] border-radius:inherit; [:after] inset:0; [:after] border-width:1px
+  spacingCompact: border-radius:4px; padding-block:2px; column-gap:4px; height:1.5rem; padding-inline-end:12px; padding-inline-start:12px
+  circle: border-radius:9999px
+  fullWidth: width:100%
+  iconButton: height:2rem; width:2rem; padding-inline-end:0; padding-inline-start:0
+  iconButtonCompact: height:1.5rem; width:1.5rem
+  buttonIconBefore: padding-inline-start:12px; column-gap:6px
+  buttonIconAfter: padding-inline-end:12px; column-gap:6px
+  loadingOverlay: inset-block-end:0; inset-block-start:0; inset-inline-end:0; inset-inline-start:0
+  navigationSplitButton: width:24px; padding-inline-end:6px; padding-inline-start:6px
+### @atlaskit/button@25.3.5  new-button/variants/shared/content.js  (token fallbacks; pt and pc converted to px)
+  icon: font-size:0; line-height:0

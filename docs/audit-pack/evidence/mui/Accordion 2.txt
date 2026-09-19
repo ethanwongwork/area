@@ -1,0 +1,37 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Accordion/Accordion.js
+L22 const slots = {
+L37 const AccordionRoot = styled(Paper, {
+L38 name: 'MuiAccordion',
+L39 slot: 'Root',
+L52 const transition = {
+L60 '&::before': {
+L62   left: 0,
+L63   top: -1,
+L64   right: 0,
+L65   height: 1,
+L71 '&:first-of-type': {
+L72 '&::before': {
+L77 '&::before': {
+L80 '&:first-of-type': {
+L81   marginTop: 0,
+L83 '&:last-of-type': {
+L84   marginBottom: 0,
+L87 '&::before': {
+L98 variants: [
+L101 style: {
+L102   borderRadius: 0,
+L103 '&:first-of-type': {
+L107 '&:last-of-type': {
+L120 style: {
+L122   margin: '16px 0',
+L130 const AccordionHeading = styled('h3', {
+L131 name: 'MuiAccordion',
+L132 slot: 'Heading',
+L137 const AccordionRegion = styled('div', {
+L138 name: 'MuiAccordion',
+L139 slot: 'Region',
+L160 name: 'Accordion',
+L181 const ownerState = {
+L190 const externalForwardedProps = {
+L197 externalForwardedProps: {
+L225 additionalProps: {

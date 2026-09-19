@@ -1,0 +1,10 @@
+### MUI Material @ 69960c1  packages/mui-material/src/CardContent/CardContent.js
+L13 const slots = {
+L20 const CardContentRoot = styled('div', {
+L21 name: 'MuiCardContent',
+L22 slot: 'Root',
+L24   padding: 16,
+L25 '&:last-child': {
+L26   paddingBottom: 24,
+L33 name: 'MuiCardContent',
+L38 const ownerState = { ...props, component };

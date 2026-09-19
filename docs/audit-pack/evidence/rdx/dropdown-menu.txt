@@ -1,0 +1,7 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/dropdown-menu.css
+@import './_internal/base-menu.css';
+
+.rt-DropdownMenuContent {
+  max-height: var(--radix-dropdown-menu-content-available-height);
+  transform-origin: var(--radix-dropdown-menu-content-transform-origin);
+}

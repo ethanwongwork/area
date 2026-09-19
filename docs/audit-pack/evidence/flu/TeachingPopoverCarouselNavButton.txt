@@ -1,0 +1,24 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-teaching-popover/library/src/components/TeachingPopoverCarouselNavButton/useTeachingPopoverCarouselNavButtonStyles.styles.ts
+L19 const useStyles = makeStyles({
+L20 root: {
+L24 height: '8px',
+L25 width: '8px',
+L28 rootUnselected: {
+L30 borderRadius: '50%',
+L31 padding: '0px',
+L32 outline: `${tokens.strokeWidthThin} solid transparent`, // For high contrast   // strokeWidthThin=1px
+L34 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L35 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L36 ...shorthands.borderColor('transparent'),
+L41 opacity: 0.3,
+L45 rootSelected: {
+L46 outline: `${tokens.strokeWidthThin} solid transparent`, // For high contrast   // strokeWidthThin=1px
+L47 width: '16px',
+L49 borderRadius: '4px',
+L50 padding: '0px',
+L52 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L53 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L54 ...shorthands.borderColor('transparent'),
+L60 rootBrand: {
+L63 rootBrandUnselected: {
+L67 opacity: 0.3,

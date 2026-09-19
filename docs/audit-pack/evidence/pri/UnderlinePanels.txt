@@ -1,0 +1,7 @@
+### Primer React @ e4e6eba  packages/react/src/experimental/UnderlinePanels/UnderlinePanels.module.css
+.StyledUnderlineWrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: auto;
+}

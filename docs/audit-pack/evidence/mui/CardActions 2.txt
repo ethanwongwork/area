@@ -1,0 +1,12 @@
+### MUI Material @ 69960c1  packages/mui-material/src/CardActions/CardActions.js
+L13 const slots = {
+L20 const CardActionsRoot = styled('div', {
+L21 name: 'MuiCardActions',
+L22 slot: 'Root',
+L31   padding: 8,
+L32 variants: [
+L34 props: { disableSpacing: false },
+L35 style: {
+L37   marginLeft: 8,
+L47 name: 'MuiCardActions',
+L52 const ownerState = { ...props, disableSpacing };

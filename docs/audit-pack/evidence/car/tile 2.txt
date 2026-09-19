@@ -1,0 +1,122 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/tile/_tile.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L25   $-icon-container-size: calc(#{layout.density('padding-inline')} * 2 + 1rem);
+L35 .#{$prefix}--tile-group {
+L39 .#{$prefix}--tile {
+L40   @include type-style('body-compact-01');   // body-compact-01=14/18
+L45   padding: layout.density('padding-inline');
+L47   min-block-size: 4rem;
+L48   min-inline-size: 8rem;
+L52 &:focus {
+L58 .#{$prefix}--tile--light {
+L63 .#{$prefix}--tile--selectable {
+L65   @include type-style('body-compact-01');   // body-compact-01=14/18
+L67   padding: layout.density('padding-inline');
+L71 &:hover {
+L76 .#{$prefix}--tile--clickable {
+L86   border: 1px solid $border-tile;
+L89 &:focus {
+L96 &:focus {
+L97 .#{$prefix}--tile__checkmark {
+L104 .#{$prefix}--tile--expandable::-moz-focus-inner {
+L105   border: 0;
+L111 .#{$prefix}--tile--clickable:visited:hover {
+L118 .#{$prefix}--tile--clickable:hover.#{$prefix}--link--disabled {
+L120   padding: layout.density('padding-inline');
+L131   border: 1px solid $border-disabled;
+L137 .#{$prefix}--tile--disabled-icon {
+L139   block-size: convert.to-rem(20px);
+L140   inline-size: convert.to-rem(20px);
+L141   inset-block-end: convert.to-rem(12px);
+L142   inset-inline-end: convert.to-rem(12px);
+L145 .#{$prefix}--tile--clickable .#{$prefix}--tile--icon {
+L150 .#{$prefix}--tile--disabled-icon {
+L155 .#{$prefix}--tile--icon {
+L159 .#{$prefix}--tile--selectable {
+L160   border: 1px solid transparent;
+L161   padding-inline-end: $-icon-container-size;
+L169   border: 1px solid $border-tile;
+L173 .#{$prefix}--tile__checkmark {
+L175   border: none;
+L177   block-size: 1rem;
+L178   inset-block-start: layout.density('padding-inline');
+L179   inset-inline-end: layout.density('padding-inline');
+L193   border-radius: 50%;
+L197 &:focus {
+L202 .#{$prefix}--tile__checkmark--persistent {
+L206 .#{$prefix}--tile__chevron {
+L211   block-size: $-icon-container-size;
+L212   inline-size: $-icon-container-size;
+L213   inset-block-end: 0;
+L214   inset-inline-end: 0;
+L227 .#{$prefix}--tile__chevron--interactive {
+L234   block-size: $-icon-container-size;
+L235   inline-size: $-icon-container-size;
+L236   inset-block-end: 0;
+L237   inset-inline-end: 0;
+L244   border: 1px solid $border-disabled;
+L247 &:focus {
+L252 &:hover {
+L258 .#{$prefix}--tile--expandable {
+L261   border: 0;
+L265   font-size: inherit;
+L266   inline-size: 100%;
+L270   @include type-style('body-compact-01');   // body-compact-01=14/18
+L278   border: 1px solid $border-tile;
+L281 &:hover {
+L286 .#{$prefix}--tile--expandable.#{$prefix}--tile--expandable--interactive {
+L287   border: none;
+L291 &:hover {
+L295 &:focus {
+L300 .#{$prefix}--tile--expandable--interactive:focus {
+L304 .#{$prefix}--tile-content__below-the-fold {
+L313 .#{$prefix}--tile--is-expanded {
+L317 .#{$prefix}--tile__chevron svg {
+L321 .#{$prefix}--tile-content__below-the-fold {
+L338 .#{$prefix}--tile--is-selected {
+L339   border: 1px solid $layer-selected-inverse;
+L342 .#{$prefix}--tile--is-selected .#{$prefix}--tile__checkmark {
+L346 .#{$prefix}--tile--is-selected .#{$prefix}--tile__checkmark svg {
+L350 .#{$prefix}--tile-content {
+L351   block-size: 100%;
+L352   inline-size: 100%;
+L355 .#{$prefix}--tile-input {
+L359 .#{$prefix}--tile-input:focus + .#{$prefix}--tile {
+L363 .#{$prefix}--tile--disabled.#{$prefix}--tile--selectable {
+L374   border: 1px solid $border-disabled;
+L379 .#{$prefix}--tile--disabled.#{$prefix}--tile--selectable.#{$prefix}--tile--light {
+L383 .#{$prefix}--tile--disabled.#{$prefix}--tile--is-selected {
+L387 .#{$prefix}--tile--disabled .#{$prefix}--tile__checkmark svg {
+L395 .#{$prefix}--radio-tile__wrapper--slug {
+L417 .#{$prefix}--tile--clickable .#{$prefix}--tile--ai-label-icon {
+L419   inset-block-start: $spacing-05;   // spacing-05=16px
+L420   inset-inline-end: $spacing-05;   // spacing-05=16px
+L448   inset-inline-end: $spacing-08;   // spacing-08=40px
+L468   inset-inline-end: $spacing-05;   // spacing-05=16px
+L476   inset-inline-end: $spacing-08;   // spacing-08=40px
+L497   inset-inline-end: $spacing-08;   // spacing-08=40px
+L516 .#{$prefix}--tile--slug.#{$prefix}--tile {
+L519   border: 1px solid transparent;
+L521   inset 0 -80px 70px -65px $ai-inner-shadow,
+L528 .#{$prefix}--tile--slug.#{$prefix}--tile--expandable:hover {
+L537 .#{$prefix}--tile--slug.#{$prefix}--tile--clickable::before {
+L540   block-size: 100%;
+L542   inline-size: 100%;
+L543   inset-block-start: 0;
+L544   inset-inline-start: 0;
+L571 .#{$prefix}--tile--slug.#{$prefix}--tile--clickable::before {
+L575   inset 0 -80px 70px -65px $ai-inner-shadow,
+L582 .#{$prefix}--tile--slug.#{$prefix}--tile--clickable:hover::before {
+L591 .#{$prefix}--tile-input:focus + .#{$prefix}--tile--slug.#{$prefix}--tile {
+L606 .#{$prefix}--tile--slug.#{$prefix}--tile--selectable::after {
+L610   inset 0 -80px 70px -65px $ai-inner-shadow,
+L615 .#{$prefix}--tile--slug.#{$prefix}--tile--selectable:hover::after {
+L620 .#{$prefix}--tile--slug.#{$prefix}--tile--is-selected::after {
+L635 .#{$prefix}--tile--slug.#{$prefix}--tile--is-selected {
+L646 .#{$prefix}--tile-content {
+L670 .#{$prefix}--tile--slug.#{$prefix}--tile--is-selected .#{$prefix}--slug {
+L731 .#{$prefix}--tile--clickable .#{$prefix}--tile--ai-label-icon rect {
+L735 .#{$prefix}--tile--clickable .#{$prefix}--tile--ai-label-icon path {
+L747 .#{$prefix}--tile--slug-rounded.#{$prefix}--tile--clickable::before {
+L748   border-radius: $spacing-03;   // spacing-03=8px
+L752 .#{$prefix}--tile--slug-rounded .#{$prefix}--tile__chevron {
+L753   border-end-end-radius: $spacing-03;   // spacing-03=8px

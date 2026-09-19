@@ -1,0 +1,75 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/contained-list/_contained-list.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L27 @mixin contained-list {
+L28 .#{$prefix}--contained-list {
+L29   @include layout.use('size', $default: 'lg', $min: 'sm', $max: 'xl');
+L33 .#{$prefix}--contained-list .#{$prefix}--tag {
+L36   size: (
+L37   height: (
+L38   xs: convert.to-rem(18px),
+L39   sm: convert.to-rem(18px),
+L40   md: convert.to-rem(24px),
+L41   lg: convert.to-rem(24px),
+L42   xl: convert.to-rem(24px),
+L48   @include layout.use('size', $default: 'md', $min: 'sm', $max: 'xl');
+L51 .#{$prefix}--contained-list > ul {
+L52   padding: 0;
+L53   margin: 0;
+L56 .#{$prefix}--contained-list__header {
+L62   inset-block-start: 0;
+L63   padding-inline: layout.density('padding-inline');
+L66 .#{$prefix}--contained-list__label {
+L67   inline-size: 100%;
+L70 .#{$prefix}--contained-list .#{$prefix}--search {
+L73   inset-block-start: layout.size('height');
+L75 &.#{$prefix}--search--expandable .#{$prefix}--search-input {
+L80 .#{$prefix}--contained-list .#{$prefix}--search .#{$prefix}--search-input {
+L87 .#{$prefix}--search-close::before {
+L91 .#{$prefix}--contained-list .#{$prefix}--search .#{$prefix}--search-close {
+L95 &:focus {
+L111   border: 2px solid $focus;
+L118 .#{$prefix}--contained-list--on-page + .#{$prefix}--contained-list--on-page {
+L119   margin-block-start: $spacing-05;   // spacing-05=16px
+L122 .#{$prefix}--contained-list--on-page .#{$prefix}--contained-list__header {
+L123   @include type-style('heading-compact-01');   // heading-compact-01=14/18 w600
+L126   block-size: layout.size('height');
+L133 .#{$prefix}--contained-list__header {
+L139 .#{$prefix}--contained-list__header {
+L145 .#{$prefix}--contained-list--disclosed .#{$prefix}--contained-list__header {
+L146   @include type-style('label-01');   // label-01=12/16
+L149   block-size: $spacing-07;   // spacing-07=32px
+L155 .#{$prefix}--contained-list-item {
+L161 .#{$prefix}--contained-list-item:not(:first-of-type) {
+L162   margin-block-start: -1px;
+L165 .#{$prefix}--contained-list-item__content {
+L170 .#{$prefix}--contained-list-item__content {
+L180 .#{$prefix}--contained-list-item__content {
+L184   'body-01-line-height',
+L185   map.get($body-01, line-height)
+L189   @include type-style('body-01');   // body-01=14/20
+L191   padding: calc(calc((#{layout.size('height')} - var(--temp-1lh)) / 2))
+L192   layout.density('padding-inline');
+L194   min-block-size: layout.size('height');
+L197 .#{$prefix}--contained-list-item:not(:last-of-type)::before {
+L200   block-size: 1px;
+L202   inset-block-end: 0;
+L203   inset-inline: 0;
+L213   .#{$prefix}--contained-list--inset-rulers
+L214 .#{$prefix}--contained-list-item:not(:last-of-type)::before {
+L215   inset-inline: layout.density('padding-inline')
+L216   layout.density('padding-inline');
+L220 .#{$prefix}--contained-list-item__content:not(:disabled):hover {
+L225 .#{$prefix}--contained-list-item__content:not(:disabled):active {
+L230 .#{$prefix}--contained-list-item__content:disabled {
+L236 .#{$prefix}--contained-list-item__content:focus {
+L241 .#{$prefix}--contained-list-item__content:focus::after {
+L246   inset: 0;
+L250 .#{$prefix}--contained-list-item__content {
+L251   padding-inline-end: $spacing-10;   // spacing-10=64px
+L255 .#{$prefix}--contained-list-item__action {
+L259   inset-block-start: 0;
+L260   inset-inline: 0;
+L265 .#{$prefix}--contained-list-item__action > * {
+L270 .#{$prefix}--contained-list-item__content {
+L272   column-gap: $spacing-04;   // spacing-04=12px
+L276 .#{$prefix}--contained-list-item__icon {
+L278   padding-block-start: $spacing-01;   // spacing-01=2px

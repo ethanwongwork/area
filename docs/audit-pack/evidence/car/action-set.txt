@@ -1,0 +1,23 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/action-set/_action-set.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L21 @mixin action-set {
+L22 .#{$prefix}--action-set {
+L28 .#{$prefix}--action-set .#{$prefix}--action-set__action-button {
+L29   @include type.type-style('body-short-01');   // body-short-01=14/18
+L32   margin: 0;
+L34 &.#{$prefix}--action-set__action-button--expressive {
+L35   block-size: $spacing-10;   // spacing-10=64px
+L36   padding-block: $spacing-05 $spacing-07;   // spacing-05=16px spacing-07=32px
+L43 .#{$prefix}--action-set__action-button.#{$prefix}--btn {
+L44   max-inline-size: none;
+L48 .#{$prefix}--action-set__action-button--ghost {
+L49   padding-inline-start: $spacing-05;   // spacing-05=16px
+L58 .#{$prefix}--action-set__action-button--ghost {
+L65 .#{$prefix}--action-set__action-button--ghost {
+L81 .#{$prefix}--action-set__action-button--ghost {
+L88 .#{$prefix}--action-set__action-button--ghost {
+L114   max-inline-size: to-rem(232px);
+L118 .#{$prefix}--action-set__action-button--ghost {
+L124 .#{$prefix}--inline-loading {
+L126   inline-size: $spacing-07;   // spacing-07=32px
+L127   inset-block-start: 0;
+L128   inset-inline-end: 0;

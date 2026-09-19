@@ -1,0 +1,66 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/fluid-text-area/_fluid-text-area.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L19 @mixin fluid-text-area {
+L20 .#{$prefix}--text-area--fluid .#{$prefix}--text-area__wrapper {
+L24   block-size: 100%;
+L29 .#{$prefix}--text-area__wrapper {
+L33 .#{$prefix}--text-area--fluid .#{$prefix}--text-area__label-wrapper {
+L35   block-size: 100%;
+L38 .#{$prefix}--text-area--fluid .#{$prefix}--label {
+L43   margin: 0;
+L44   block-size: convert.to-rem(16px);
+L45   inset-block-start: convert.to-rem(13px);
+L48 &:not(.#{$prefix}--text-area__label-counter) {
+L49   inline-size: auto;
+L50   inset-inline-end: auto;
+L51   inset-inline-start: $spacing-05;   // spacing-05=16px
+L55 &.#{$prefix}--text-area__label-counter {
+L56   inline-size: auto;
+L57   inset-inline-end: $spacing-05;   // spacing-05=16px
+L58   inset-inline-start: auto;
+L60 .#{$prefix}--toggletip-button {
+L61   padding: $spacing-02;   // spacing-02=4px
+L62   margin-inline-start: -$spacing-02;   // spacing-02=4px
+L63   min-block-size: $spacing-06;   // spacing-06=24px
+L64   min-inline-size: $spacing-06;   // spacing-06=24px
+L71 .#{$prefix}--toggletip-label::-webkit-scrollbar {
+L79 .#{$prefix}--toggletip-label {
+L82   scrollbar-width: none;
+L87 .#{$prefix}--text-area--fluid div.#{$prefix}--label {
+L92 .#{$prefix}--text-area--fluid .#{$prefix}--text-area {
+L93   padding: 0 $spacing-05 convert.to-rem(13px);   // spacing-05=16px
+L94   margin-block-start: 2rem;
+L95   min-block-size: convert.to-rem(64px);
+L99 .#{$prefix}--text-area--fluid .#{$prefix}--form__helper-text {
+L105 .#{$prefix}--text-area--fluid .#{$prefix}--text-area:focus {
+L110 .#{$prefix}--text-area--fluid .#{$prefix}--text-area__divider {
+L115 .#{$prefix}--text-area--fluid .#{$prefix}--text-area--warn {
+L116   resize: none;
+L120 .#{$prefix}--text-area--fluid .#{$prefix}--text-area--invalid {
+L121   padding: 0 convert.to-rem(14px) convert.to-rem(13px);
+L122   margin-block-start: convert.to-rem(30px);
+L130 .#{$prefix}--text-area__divider {
+L132   border-style: solid;
+L134   margin: 0 1rem;
+L144 .#{$prefix}--form-requirement.#{$prefix}--form-requirement {
+L148   padding: 0.5rem 2.5rem 0.5rem 1rem;
+L149   margin: 0;
+L151   max-block-size: 12.5rem;
+L156 .#{$prefix}--form-requirement.#{$prefix}--form-requirement {
+L163 .#{$prefix}--form-requirement.#{$prefix}--form-requirement {
+L168 .#{$prefix}--text-area--fluid .#{$prefix}--text-area--warn {
+L180 .#{$prefix}--text-area--fluid .#{$prefix}--text-area__invalid-icon {
+L181   inset-block-start: 0.5rem;
+L187 .#{$prefix}--text-area__wrapper[data-invalid]:not(:focus) {
+L188   border: 2px solid $support-error;
+L194 .#{$prefix}--text-area--fluid .#{$prefix}--text-area__wrapper:focus-within {
+L217 .#{$prefix}--text-area--fluid__skeleton {
+L218   padding: $spacing-05;   // spacing-05=16px
+L225 .#{$prefix}--text-area.#{$prefix}--skeleton::before {
+L226   block-size: 0.5rem;
+L229 .#{$prefix}--text-area--fluid__skeleton .#{$prefix}--label {
+L230   margin-block-end: $spacing-04;   // spacing-04=12px
+L234 .#{$prefix}--text-area.#{$prefix}--skeleton {
+L235   block-size: 4rem;
+L236   inline-size: 80%;
+L286   inset-inline-end: $spacing-05;   // spacing-05=16px
+L295 .#{$prefix}--text-area--invalid {

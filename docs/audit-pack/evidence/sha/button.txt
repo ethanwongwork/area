@@ -1,0 +1,12 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/button.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  L7 shrink-0 gap-2=8px rounded-md=8px text-sm=14/20px font-medium focus-visible:ring-[3px] [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L15 border=1px
+  L23 default: h-9=36px px-4=16px py-2=8px has-[>svg]:px-3=12px
+  L24 xs: h-6=24px gap-1=4px rounded-md=8px px-2=8px text-xs=12/16px has-[>svg]:px-1.5=6px [&_svg:not([class*='size-'])]:size-3=12px
+  L25 sm: h-8=32px gap-1.5=6px rounded-md=8px px-3=12px has-[>svg]:px-2.5=10px
+  L26 lg: h-10=40px rounded-md=8px px-6=24px has-[>svg]:px-4=16px
+  L27 icon: size-9=36px
+  L28 "icon-xs": size-6=24px rounded-md=8px [&_svg:not([class*='size-'])]:size-3=12px
+  L29 "icon-sm": size-8=32px
+  L30 "icon-lg": size-10=40px
+  [slot button]

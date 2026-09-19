@@ -1,0 +1,39 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-date-picker-modal.scss
+container-height: 524px
+container-width: 360px
+date-container-height: 40px
+date-container-width: 40px
+date-state-layer-height: 40px
+date-state-layer-width: 40px
+date-today-container-outline-width: 1px
+header-container-height: 120px
+header-container-width: 360px
+range-selection-active-indicator-container-height: 40px
+range-selection-header-container-height: 128px
+year-selection-year-container-height: 36px
+year-selection-year-container-width: 72px
+year-selection-year-state-layer-height: 36px
+year-selection-year-state-layer-width: 72px
+container-shape: corner-extra-large = 28px
+date-container-shape: corner-full = 9999px
+date-label-text-line-height: body-large-line-height = 24px
+date-label-text-size: body-large-size = 16px
+date-state-layer-shape: corner-full = 9999px
+header-headline-line-height: headline-large-line-height = 40px
+header-headline-size: headline-large-size = 32px
+header-supporting-text-line-height: label-large-line-height = 20px
+header-supporting-text-size: label-large-size = 14px
+range-selection-active-indicator-container-shape: corner-full = 9999px
+range-selection-container-shape: corner-none = 0px
+range-selection-date-in-range-focus-state-layer-opcaity: md-sys-state.$focus-state-layer-opacity
+range-selection-date-in-range-hover-state-layer-opcaity: md-sys-state.$hover-state-layer-opacity
+range-selection-date-in-range-pressed-state-layer-opcaity: md-sys-state.$pressed-state-layer-opacity
+range-selection-header-headline-line-height: title-large-line-height = 28px
+range-selection-header-headline-size: title-large-size = 22px
+range-selection-month-subhead-line-height: title-small-line-height = 20px
+range-selection-month-subhead-size: title-small-size = 14px
+weekdays-label-text-line-height: body-large-line-height = 24px
+weekdays-label-text-size: body-large-size = 16px
+year-selection-year-label-text-line-height: body-large-line-height = 24px
+year-selection-year-label-text-size: body-large-size = 16px
+year-selection-year-state-layer-shape: corner-full = 9999px

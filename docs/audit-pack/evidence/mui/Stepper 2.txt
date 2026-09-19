@@ -1,0 +1,20 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Stepper/Stepper.js
+L18 const slots = {
+L25 const StepperRoot = styled('ol', {
+L26 name: 'MuiStepper',
+L27 slot: 'Root',
+L40   margin: 0,
+L41   padding: 0,
+L42 variants: [
+L44 props: { orientation: 'horizontal' },
+L45 style: {
+L51 props: { orientation: 'horizontal', alternativeLabel: false },
+L52 style: {
+L53   gap: 8,
+L57 props: { orientation: 'vertical' },
+L58 style: {
+L63 props: { alternativeLabel: true },
+L64 style: {
+L69 props: { orientation: 'vertical', alternativeLabel: true },
+L70 style: {
+L126 const ownerState = {

@@ -1,0 +1,4 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-radio/library/src/components/RadioGroup/useRadioGroupStyles.styles.ts
+L11 const useStyles = makeStyles({
+L12 root: {
+L17 vertical: {

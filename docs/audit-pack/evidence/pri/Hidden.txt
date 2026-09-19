@@ -1,0 +1,14 @@
+### Primer React @ e4e6eba  packages/react/src/Hidden/Hidden.module.css
+.Hidden {
+  @media screen and (--viewportRange-narrow) {
+    display: var(--hiddenDisplay-narrow, block);   /* = block */
+  }
+
+  @media screen and (--viewportRange-regular) {
+    display: var(--hiddenDisplay-regular, block);   /* = block */
+  }
+
+  @media screen and (--viewportRange-wide) {
+    display: var(--hiddenDisplay-wide, block);   /* = block */
+  }
+}

@@ -1,0 +1,37 @@
+### @atlaskit/breadcrumbs@17.7.4  components/breadcrumbs-current-item.js  (token fallbacks; pt and pc converted to px)
+  container: gap:4px; border-radius:4px; padding-block:2px; box-sizing:border-box; height:1.5rem
+  interactiveContainer: gap:4px; font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif; box-sizing:border-box
+  interactiveContainerSmall: font:normal 400 12px/16px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif
+  interactiveContainerLegacy: height:1.5rem
+  interactiveContainerWithTruncation: min-width:0; max-width:var(--breadcrumbs-current-item-max-width)
+  itemWrapper: box-sizing:border-box; max-width:100%; margin-block-end:0; margin-block-start:0; margin-inline-end:0; margin-inline-start:0; padding-block-end:0; padding-block-start:0; padding-inline-end:0; padding-inline-start:0
+  iconWrapperSmall: [svg] width:16px; [svg] height:16px
+  iconWrapper: width:24px; height:24px
+  iconWrapperExternal: margin-inline-end:2px
+  iconWrapperExternalSmall: margin-inline-end:0
+  text: font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif
+  textSmall: font:normal 400 12px/16px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif
+  textWithTruncation: min-width:0; max-width:100%
+### @atlaskit/breadcrumbs@17.7.4  components/breadcrumbs-item.js  (token fallbacks; pt and pc converted to px)
+  "_p12f1pis": min-width:0!important
+### @atlaskit/breadcrumbs@17.7.4  components/breadcrumbs-skeleton-item.js  (token fallbacks; pt and pc converted to px)
+  item: box-sizing:border-box; height:1.5rem; max-width:100%
+  iconWrapper: width:24px; height:24px; margin-inline-end:2px
+  item: [:not(:last-of-type):after] padding-block:2px; [:not(:last-of-type):after] padding-inline:8px; [:not(:last-of-type):after] width:8px
+### @atlaskit/breadcrumbs@17.7.4  components/breadcrumbs-skeleton.js  (token fallbacks; pt and pc converted to px)
+  nav: max-width:100%
+  list: margin-block-end:0; margin-block-start:0; margin-inline-end:0; margin-inline-start:0; padding-block-end:0; padding-block-start:0; padding-inline-end:0; padding-inline-start:0
+### @atlaskit/breadcrumbs@17.7.4  components/ellipsis-item.js  (token fallbacks; pt and pc converted to px)
+  root: font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif; padding-top:0; padding-right:0; padding-bottom:0; padding-left:0; border:none; gap:4px; border-radius:4px; margin-block-start:0
+  rootSmall: font:normal 400 12px/16px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif
+### @atlaskit/breadcrumbs@17.7.4  components/internal/step.js  (token fallbacks; pt and pc converted to px)
+  root: font:normal 400 14px/20px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif; border:none; gap:4px; border-radius:2px; padding-inline:0
+  rootSmall: font:normal 400 12px/16px "Atlassian Sans",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Ubuntu,"Helvetica Neue",sans-serif
+  rootRefresh: box-sizing:border-box; height:1.5rem
+  withoutTruncation: min-width:0
+  withTruncation: min-width:0
+  iconWrapper: width:24px; height:24px
+  iconWrapperExternal: margin-inline-end:2px
+  iconWrapperExternalSmall: margin-inline-end:0
+  textWithTruncation: min-width:0; max-width:100%
+  iconWrapperSmall: [svg] width:16px; [svg] height:16px

@@ -1,0 +1,13 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/resizer/_resizer.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L14 @mixin resizer {
+L15 .#{$prefix}--resizer {
+L20 &:hover {
+L27 &:focus {
+L32 &:active {
+L36 &:focus:not(:focus-visible) {
+L41 &:focus-visible {
+L45 &--horizontal {
+L46   cursor: ns-resize;
+L49 &--vertical {
+L50   cursor: ew-resize;
+L55 .#{$prefix}--smooth-resize {

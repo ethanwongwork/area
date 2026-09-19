@@ -1,0 +1,227 @@
+### Primer React @ e4e6eba  packages/react/src/UnderlineNav/UnderlineNav.module.css
+.UnderlineWrapper {
+  /* Progressive enhancement: Detect overflow using scroll-based animations.
+  The idiomatic way would be a scroll-state container query but browser support
+  is slightly better for animations. */
+  animation: detect-overflow linear;
+  animation-timeline: scroll(self block);
+  container-type: inline-size;
+
+  --UnderlineNav_moreButton-display: none;
+
+  &[data-has-overflow='true'] {
+    --UnderlineNav_moreButton-display: flex;
+  }
+}
+
+/* Set overflow button visibility with pure CSS to avoid a layout shift on hydration */
+@keyframes detect-overflow {
+  0%,
+  100% {
+    --UnderlineNav_moreButton-display: flex;
+  }
+}
+
+.UnderlineWrapper[data-hide-icons-breakpoint='xsmall'] {
+  @container (width < 20rem) {
+    .ItemsList [data-component='icon'] {
+      display: none;
+    }
+  }
+}
+
+.UnderlineWrapper[data-hide-icons-breakpoint='small'] {
+  @container (width < 34rem) {
+    .ItemsList [data-component='icon'] {
+      display: none;
+    }
+  }
+}
+
+.UnderlineWrapper[data-hide-icons-breakpoint='medium'] {
+  @container (width < 48rem) {
+    .ItemsList [data-component='icon'] {
+      display: none;
+    }
+  }
+}
+
+.UnderlineWrapper[data-hide-icons-breakpoint='large'] {
+  @container (width < 63.25rem) {
+    .ItemsList [data-component='icon'] {
+      display: none;
+    }
+  }
+}
+
+.UnderlineWrapper[data-hide-icons-breakpoint='xlarge'] {
+  @container (width < 80rem) {
+    .ItemsList [data-component='icon'] {
+      display: none;
+    }
+  }
+}
+
+.UnderlineWrapper[data-hide-icons-breakpoint='xxlarge'] {
+  @container (width < 87.5rem) {
+    .ItemsList [data-component='icon'] {
+      display: none;
+    }
+  }
+}
+
+.WrapSpacer {
+  /* Cancel out the flex gap so the first real item has no leading gap */
+  /* stylelint-disable-next-line primer/spacing -- negative margin required to cancel the flex gap from the list */
+  margin-inline-end: calc(-1 * var(--stack-gap-condensed));   /* = -8px */
+}
+
+.MoreButtonContainer {
+  display: var(--UnderlineNav_moreButton-display, flex);   /* = none */
+  align-items: center;
+}
+
+.OverflowMenuItem [aria-current] {
+  position: relative;
+
+  .OverflowMenuItemLabel {
+    font-weight: var(--base-text-weight-semibold);   /* = 600 */
+  }
+
+  &::after {
+    content: '';
+    width: var(--base-size-2);   /* = 2px */
+    position: absolute;
+    inset: var(--base-size-2) auto var(--base-size-2) 0;   /* = 2px auto 2px 0 */
+    /* stylelint-disable-next-line primer/colors */
+    background: var(--underlineNav-borderColor-active);
+  }
+}
+
+.MoreButtonDivider {
+  display: inline-block;
+  border-left: var(--borderWidth-thin) solid var(--borderColor-muted);   /* = 1px solid var(--borderColor-muted) */
+  width: 0;
+  margin-inline: var(--base-size-4);   /* = 4px */
+  height: var(--base-size-24);   /* = 24px */
+}
+
+.MoreButton {
+  margin: 0; /* reset Safari extra margin */
+  font-weight: var(--base-text-weight-normal);   /* = 400 */
+  position: relative;
+
+  & > [data-component='trailingVisual'] {
+    margin-left: 0;
+  }
+
+  /* When the current item has overflowed into the menu, style the overflow
+   anchor so it looks like the current item (semibold text + active underline). */
+  &[data-current='true'] {
+    font-weight: var(--base-text-weight-semibold);   /* = 600 */
+
+    &::after {
+      position: absolute;
+      inset: auto 0 0;
+      /* Pull down same amount as the item-level decoration, plus the border width of the button */
+      /* stylelint-disable-next-line primer/spacing */
+      margin-bottom: calc(-1 * (var(--base-size-8) + var(--borderWidth-thin)));   /* = -9px */
+      height: 2px;
+      pointer-events: none;
+      content: '';
+      /* stylelint-disable-next-line primer/colors */
+      background-color: var(--underlineNav-borderColor-active, var(--color-primer-border-active, #fd8c73));   /* = #fd8c73 */
+
+      @media (forced-colors: active) {
+        /* Support for Windows Forced Color Mode https://learn.microsoft.com/en-us/fluent-ui/web-components/design-system/high-contrast */
+        background-color: LinkText;
+      }
+    }
+  }
+}
+### Primer React @ e4e6eba  packages/react/src/deprecated/UnderlineNav/UnderlineNav.module.css
+.UnderlineNav {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: var(--borderWidth-thin) solid var(--borderColor-muted);   /* = 1px solid var(--borderColor-muted) */
+
+  &.UnderlineNav--right {
+    justify-content: flex-end;
+  }
+
+  &.UnderlineNav--right .UnderlineNavItem {
+    margin-right: 0;
+    margin-left: var(--base-size-16);   /* = 16px */
+  }
+
+  &.UnderlineNav--right .UnderlineNavActions {
+    flex: 1 1 auto;
+  }
+
+  &.UnderlineNav--full {
+    display: block;
+  }
+
+  .UnderlineNavBody {
+    display: flex;
+    /* stylelint-disable-next-line primer/spacing */
+    margin-bottom: -1px;
+  }
+
+  .UnderlineNavActions {
+    align-self: center;
+  }
+}
+
+.UnderlineNavLink {
+  padding: var(--base-size-16) var(--base-size-8);   /* = 16px 8px */
+  margin-right: var(--base-size-16);   /* = 16px */
+  font-size: var(--text-body-size-medium);   /* = 14px */
+  line-height: var(--text-title-lineHeight-large);   /* = 1.5 */
+  color: var(--fgColor-default);
+  text-align: center;
+  /* stylelint-disable-next-line primer/borders */
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+
+  /* fallback :focus state */
+  &:focus:not(:disabled) {
+    box-shadow: none;
+    outline: 2px solid var(--fgColor-accent);
+    outline-offset: -8px;
+
+    /* remove fallback :focus if :focus-visible is supported */
+    &:not(:focus-visible) {
+      outline: solid 1px transparent;
+    }
+  }
+
+  /* default focus state */
+  &:focus-visible:not(:disabled) {
+    box-shadow: none;
+    outline: 2px solid var(--fgColor-accent);
+    outline-offset: -8px;
+  }
+}
+
+.UnderlineNavLink:hover,
+.UnderlineNavLink:focus {
+  color: var(--fgColor-default);
+  text-decoration: none;
+  border-bottom-color: var(--borderColor-muted);
+  transition: border-bottom-color 0.2s ease;
+}
+
+.UnderlineNavLink:hover .UnderlineNavOcticon,
+.UnderlineNavLink:focus .UnderlineNavOcticon {
+  color: var(--fgColor-muted);
+}
+
+.UnderlineNavLink:where([data-selected]) {
+  color: var(--fgColor-default);
+  border-bottom-color: var(--underlineNav-borderColor-active);
+}
+
+.UnderlineNavLink:where([data-selected]) .UnderlineNavOcticon {
+  color: var(--fgColor-default);
+}

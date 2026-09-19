@@ -1,0 +1,2 @@
+### @atlaskit/inline-dialog@20.3.3  inline-dialog-top-layer.js  (token fallbacks; pt and pc converted to px)
+  container: border-radius:3px; box-sizing:content-box; max-width:28pc; max-height:28pc; padding-block-end:16px; padding-block-start:16px; padding-inline-end:24px; padding-inline-start:24px

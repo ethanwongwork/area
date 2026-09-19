@@ -1,0 +1,19 @@
+### MUI Material @ 69960c1  packages/mui-material/src/FormHelperText/FormHelperText.js
+L15 const slots = {
+L31 const FormHelperTextRoot = styled('p', {
+L32 name: 'MuiFormHelperText',
+L33 slot: 'Root',
+L49   marginTop: 3,
+L50   marginRight: 0,
+L51   marginBottom: 0,
+L52   marginLeft: 0,
+L59 variants: [
+L61 props: {
+L62   size: 'small',
+L64 style: {
+L65   marginTop: 4,
+L70 style: {
+L71   marginLeft: 14,
+L72   marginRight: 14,
+L100 const ownerState = {
+L105   size: fcs.size,

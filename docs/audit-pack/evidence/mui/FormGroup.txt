@@ -1,0 +1,10 @@
+### MUI Material @ 69960c1  packages/mui-material/src/FormGroup/FormGroup.js
+L14 const slots = {
+L21 const FormGroupRoot = styled('div', {
+L22 name: 'MuiFormGroup',
+L23 slot: 'Root',
+L33 variants: [
+L35 props: { row: true },
+L36 style: {
+L51 name: 'MuiFormGroup',
+L60 const ownerState = { ...props, row, error: fcs.error };

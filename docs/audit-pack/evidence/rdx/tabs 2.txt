@@ -1,0 +1,11 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/tabs.css
+@import './_internal/base-tab-list.css';
+
+.rt-TabsContent {
+  position: relative;
+  outline: 0;
+}
+
+.rt-TabsContent:where(:focus-visible) {
+  outline: 2px solid var(--focus-8);   /* = 2px solid var(--amber-8) */
+}

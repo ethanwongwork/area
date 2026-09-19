@@ -1,0 +1,60 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/multiselect/_multiselect.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L23 @mixin multiselect {
+L24 .#{$prefix}--multi-select {
+L28 .#{$prefix}--multi-select .#{$prefix}--list-box__field--wrapper {
+L31   block-size: calc(100% + 1px);
+L32   inline-size: 100%;
+L35 .#{$prefix}--multi-select .#{$prefix}--list-box__field {
+L36   block-size: 100%;
+L39 .#{$prefix}--multi-select .#{$prefix}--list-box__field:focus {
+L43 .#{$prefix}--multi-select--filterable .#{$prefix}--list-box__field {
+L44   padding: 0;
+L47 .#{$prefix}--multi-select .#{$prefix}--tag {
+L48   margin: 0 $spacing-03 0 $spacing-05;   // spacing-03=8px spacing-05=16px
+L49   min-inline-size: auto;
+L52 .#{$prefix}--multi-select .#{$prefix}--list-box__menu {
+L53   min-inline-size: auto;
+L60 .#{$prefix}--list-box__menu-divider {
+L63   block-size: convert.to-rem(1px);
+L64   margin-block: $spacing-02;   // spacing-02=4px
+L65   margin-inline: -$spacing-02;   // spacing-02=4px
+L73 .#{$prefix}--list-box__menu-item__option {
+L74   padding: calc((layout.size('height') - 1lh) / 2 - 1px) $spacing-05;   // spacing-05=16px
+L75   margin: 0;
+L84 .#{$prefix}--list-box__menu-item__option {
+L91 .#{$prefix}--checkbox-wrapper {
+L94   block-size: 100%;
+L95   inline-size: 100%;
+L100 .#{$prefix}--checkbox-label {
+L103   inline-size: 100%;
+L104   padding-inline-start: convert.to-rem(28px);
+L111 .#{$prefix}--checkbox-label::before {
+L112   margin-block: 0;
+L119   inset-block-start: convert.to-rem(9px);
+L123 .#{$prefix}--checkbox-label::after {
+L124   inset-block-start: convert.to-rem(5px);
+L130   margin: 0;
+L140 .#{$prefix}--multi-select--filterable {
+L145 .#{$prefix}--text-input {
+L146   border: convert.to-rem(2px) solid transparent;
+L147   background-clip: padding-box;
+L177   outline-offset: convert.to-rem(-1px);
+L178   outline-width: convert.to-rem(1px);
+L189   outline-offset: convert.to-rem(-1px);
+L190   outline-width: convert.to-rem(1px);
+L197 .#{$prefix}--list-box__menu-item:first-child.#{$prefix}--list-box__menu-item--highlighted::before {
+L199   border: 2px solid $focus;
+L200   block-size: 100%;
+L203   inline-size: 100%;
+L209 .#{$prefix}--list-box__menu-item:first-child.#{$prefix}--list-box__menu-item--highlighted {
+L216 .#{$prefix}--list-box__field {
+L217   padding-inline-start: 0;
+L223 .#{$prefix}--text-input {
+L228 .#{$prefix}--list-box__selection--multi {
+L229   margin: 0 0 0 $spacing-05;   // spacing-05=16px
+L234 .#{$prefix}--text-input {
+L240 .#{$prefix}--list-box__menu {
+L245 .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly:hover {
+L259 .#{$prefix}--tag__close-icon:hover {
+L266 .#{$prefix}--tag--filter {
+L279 .#{$prefix}--list-box__menu-icon {

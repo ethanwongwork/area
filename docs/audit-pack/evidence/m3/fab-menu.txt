@@ -1,0 +1,13 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-fab-menu.scss
+close-button-between-space: 8px
+close-button-container-height: 56px
+close-button-container-width: 56px
+close-button-icon-size: 20px
+menu-item-between-space: 4px
+menu-item-container-height: 56px
+menu-item-icon-label-space: 8px
+menu-item-icon-size: 24px
+menu-item-leading-space: 24px
+menu-item-trailing-space: 24px
+close-button-container-shape: corner-full = 9999px
+menu-item-container-shape: corner-full = 9999px

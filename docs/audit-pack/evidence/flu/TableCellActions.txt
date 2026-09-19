@@ -1,0 +1,9 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-table/library/src/components/TableCellActions/useTableCellActionsStyles.styles.ts
+L14 const useStyles = makeStyles({
+L15 root: {
+L18 right: '0px',
+L19 top: '50%',
+L21 opacity: 0,
+L22 marginLeft: 'auto',
+L25 visible: {
+L26 opacity: 1,

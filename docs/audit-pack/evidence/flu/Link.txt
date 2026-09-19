@@ -1,0 +1,17 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-link/library/src/components/Link/useLinkStyles.styles.ts
+L13 const useStyles = makeStyles({
+L21 root: {
+L31 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L32 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L33 margin: '0',
+L34 padding: '0',
+L38 textDecorationThickness: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L53 button: {
+L54 ...shorthands.borderStyle('none'),
+L57 href: {
+L58 fontSize: 'inherit',
+L61 subtle: {
+L75 inline: {
+L79 disabled: {
+L107 inverted: {
+L116 brand: {

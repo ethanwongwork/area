@@ -1,0 +1,19 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/alert-dialog.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot alert-dialog]
+  [slot alert-dialog-trigger]
+  [slot alert-dialog-portal]
+  [slot alert-dialog-overlay]
+  [slot alert-dialog-content]
+  L61 top-[50%] left-[50%] max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4=16px rounded-lg=10px border=1px p-6=24px data-[size=sm]:max-w-xs=320px data-[size=default]:sm:max-w-lg=512px
+  [slot alert-dialog-header]
+  L78 gap-1.5=6px has-data-[slot=alert-dialog-media]:gap-x-6=24px
+  [slot alert-dialog-footer]
+  L94 gap-2=8px
+  [slot alert-dialog-title]
+  L110 text-lg=18/28px font-semibold
+  [slot alert-dialog-description]
+  L125 text-sm=14/20px
+  [slot alert-dialog-media]
+  L139 mb-2=8px size-16=64px rounded-md=8px *:[svg:not([class*='size-'])]:size-8=32px
+  [slot alert-dialog-action]
+  [slot alert-dialog-cancel]

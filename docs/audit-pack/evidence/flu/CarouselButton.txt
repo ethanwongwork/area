@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-carousel/library/src/components/CarouselButton/useCarouselButtonStyles.styles.ts
+L17 const useStyles = makeStyles({
+L18 root: {
+L19 marginTop: 'auto',
+L20 marginBottom: 'auto',

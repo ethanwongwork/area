@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-carousel/library/src/components/CarouselAutoplayButton/useCarouselAutoplayButtonStyles.styles.ts
+L17 const useStyles = makeStyles({
+L18 root: {
+L20 marginTop: 'auto',
+L21 marginBottom: 'auto',
+L22 ...shorthands.borderColor(tokens.colorTransparentStroke),

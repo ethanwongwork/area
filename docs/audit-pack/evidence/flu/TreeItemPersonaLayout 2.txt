@@ -1,0 +1,45 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tree/library/src/components/TreeItemPersonaLayout/useTreeItemPersonaLayoutStyles.styles.ts
+L6 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L22 const useRootBaseStyles = makeResetStyles({
+L24 gridTemplateRows: '1fr auto',
+L31 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L53 const useRootStyles = makeStyles({
+L54 leaf: {
+L55 paddingLeft: `calc(var(${treeItemLevelToken}, 1) * ${tokens.spacingHorizontalXXL})`,   // spacingHorizontalXXL=24px
+L57 branch: {
+L58 paddingLeft: `calc((var(${treeItemLevelToken}, 1) - 1) * ${tokens.spacingHorizontalXXL})`,   // spacingHorizontalXXL=24px
+L60 // Size variations
+L61 medium: {
+L62 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L64 small: {
+L65 minHeight: '24px',
+L66 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L69 subtle: {},
+L78 transparent: {
+L92 const useMediaBaseStyles = makeResetStyles({
+L95 width: '32px',
+L96 height: '32px',
+L98 padding: `0 ${tokens.spacingHorizontalXS} 0 ${tokens.spacingHorizontalXXS}`,   // spacingHorizontalXS=4px spacingHorizontalXXS=2px
+L101 const useMainBaseStyles = makeResetStyles({
+L103 padding: `${tokens.spacingVerticalMNudge} ${tokens.spacingHorizontalXS} ${tokens.spacingVerticalMNudge} ${tokens.spacingHorizontalS}`,   // spacingVerticalMNudge=10px spacingHorizontalXS=4px spacingVerticalMNudge=10px spacingHorizontalS=8px
+L106 const useMainStyles = makeStyles({
+L107 withDescription: {
+L108 padding: `${tokens.spacingVerticalMNudge} ${tokens.spacingHorizontalXS} 0 ${tokens.spacingHorizontalS}`,   // spacingVerticalMNudge=10px spacingHorizontalXS=4px spacingHorizontalS=8px
+L112 const useDescriptionBaseStyles = makeResetStyles({
+L114 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L115 padding: `0 ${tokens.spacingHorizontalXS} ${tokens.spacingVerticalMNudge} ${tokens.spacingHorizontalS}`,   // spacingHorizontalXS=4px spacingVerticalMNudge=10px spacingHorizontalS=8px
+L121 const useActionsBaseStyles = makeResetStyles({
+L123 marginLeft: 'auto',
+L125 zIndex: 1,
+L127 padding: `0 ${tokens.spacingHorizontalS}`,   // spacingHorizontalS=8px
+L132 const useAsideBaseStyles = makeResetStyles({
+L134 marginLeft: 'auto',
+L136 zIndex: 0,
+L138 padding: `0 ${tokens.spacingHorizontalM}`,   // spacingHorizontalM=12px
+L139 gap: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L145 const useExpandIconBaseStyles = makeResetStyles({
+L149 minWidth: '24px',
+L153 flex: `0 0 auto`,
+L154 padding: `${tokens.spacingVerticalXS} 0`,   // spacingVerticalXS=4px
+L173 const size = useTreeContext_unstable(ctx => ctx.size);
+L183 rootStyles[size],

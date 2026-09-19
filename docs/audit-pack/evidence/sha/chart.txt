@@ -1,0 +1,14 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/chart.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot chart]
+  L67 aspect-video text-xs=12/16px
+  L193 min-w-[8rem] gap-1.5=6px rounded-lg=10px border=1px px-2.5=10px py-1.5=6px text-xs=12/16px
+  L198 gap-1.5=6px
+  L210 gap-2=8px [&>svg]:h-2.5=10px [&>svg]:w-2.5=10px
+  L224 shrink-0 rounded-[2px]
+  L226 h-2.5=10px w-2.5=10px
+  L228 w-0=0px border-[1.5px]
+  L248 gap-1.5=6px
+  L255 font-mono font-medium
+  L293 gap-4=16px
+  L308 gap-1.5=6px [&>svg]:h-3=12px [&>svg]:w-3=12px
+  L315 h-2=8px w-2=8px shrink-0 rounded-[2px]

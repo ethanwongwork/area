@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-list/library/src/components/List/useListStyles.styles.ts
+L11 const useRootBaseStyles = makeResetStyles({
+L12 padding: 0,
+L13 margin: 0,
+L14 textIndent: 0,

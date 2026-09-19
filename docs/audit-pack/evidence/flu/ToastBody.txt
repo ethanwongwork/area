@@ -1,0 +1,18 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toast/library/src/components/ToastBody/useToastBodyStyles.styles.ts
+L13 const useRootBaseClassName = makeResetStyles({
+L14 gridColumnStart: 2,
+L15 gridColumnEnd: 3,
+L16 paddingTop: '6px',
+L17 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L18 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L19 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L24 const useSubtitleBaseClassName = makeResetStyles({
+L25 paddingTop: '4px',
+L26 gridColumnStart: 2,
+L27 gridColumnEnd: 3,
+L28 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L29 lineHeight: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L30 fontWeight: tokens.fontWeightRegular,   // fontWeightRegular=400
+L34 const useInvertedStyles = makeStyles({
+L35 root: {
+L38 subtitle: {

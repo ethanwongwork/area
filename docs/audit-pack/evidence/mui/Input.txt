@@ -1,0 +1,25 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Input/Input.js
+L26 const slots = {
+L39 const InputRoot = styled(InputBaseRoot, {
+L41 name: 'MuiInput',
+L42 slot: 'Root',
+L63 variants: [
+L66 style: {
+L68   marginTop: 16,
+L74 style: {
+L75 '&::after': {
+L76   left: 0,
+L77   bottom: 0,
+L80   right: 0,
+L98 '&::before': {
+L100   left: 0,
+L101   bottom: 0,
+L104   right: 0,
+L125 props: { color, disableUnderline: false },
+L126 style: {
+L127 '&::after': {
+L137 const InputInput = styled(InputBaseInput, {
+L138 name: 'MuiInput',
+L139 slot: 'Input',
+L159 const ownerState = { disableUnderline };
+L160 const inputComponentsProps = { root: { ownerState } };

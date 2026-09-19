@@ -1,0 +1,190 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/side-panel/_animations.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+### Carbon styles @ 8472cca  packages/styles/scss/components/side-panel/_side-panel-variables.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L8   $side-panel-sizes: (
+### Carbon styles @ 8472cca  packages/styles/scss/components/side-panel/_side-panel.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L27   $resizer-class: #{$prefix}--resizer;
+L33 @mixin setPanelSize($size: map.get($side-panel-sizes, md)) {
+L34   inline-size: clamp(
+L36   var(--#{$prefix}-side-panel-modified-size, $size),
+L41 @mixin setDividerStyles() {
+L44   block-size: 1px;
+L46   inline-size: 100%;
+L47   inset-block-end: 0;
+L48   inset-inline-start: 0;
+L52 @mixin setCommonTitleStyles() {
+L53   padding-inline-end: var(--#{$block-class}--title-padding-right);
+L56 @mixin side-panel {
+L63 .#{$block-class}--scrolls {
+L71 .#{$block-class} {
+L73   --#{$block-class}--title-stop: #{$spacing-05};   // spacing-05=16px
+L75   --#{$block-class}--title-padding-right: #{$spacing-07};   // spacing-07=32px
+L76   --#{$block-class}--actions-height: #{$spacing-10};   // spacing-10=64px
+L83   block-size: calc(100% - 3rem);
+L87   inset-block-start: $spacing-09;   // spacing-09=48px
+L88   max-inline-size: 100%;
+L89   min-inline-size: map.get($side-panel-sizes, xs);
+L96 &:not(.#{$block-class}--slide-in) {
+L97 &.#{$block-class}--resizable {
+L100 &:has(.#{$resizer-class}) {
+L114 @include breakpoint(md) {
+L115   max-inline-size: 75vw;
+L118   @each $size, $size_value in $side-panel-sizes {
+L119 &.#{$block-class}--#{$size} {
+L120   @include setPanelSize($size_value);
+L124 &.#{$block-class}--open.#{$block-class}--right-placement {
+L130 &.#{$block-class}--open.#{$block-class}--left-placement {
+L136 &.#{$block-class}--closing.#{$block-class}--right-placement {
+L141 &.#{$block-class}--closing.#{$block-class}--left-placement {
+L147 &.#{$block-class}--closing {
+L152 &.#{$block-class}--closing.#{$block-class}--left-placement {
+L160 &.#{$block-class}--open.#{$block-class}--left-placement {
+L169 &.#{$block-class}--closing.#{$block-class}--right-placement {
+L179 &.#{$block-class}--animated-title {
+L183 &.#{$block-class}--condensed-actions {
+L184   --#{$block-class}--actions-height: #{$spacing-09};   // spacing-09=48px
+L187 &:not(.#{$block-class}--has-overlay) {
+L188   box-shadow: 0 $spacing-01 $spacing-02 $overlay;   // spacing-01=2px spacing-02=4px
+L193 &.#{$block-class}--slide-in:not(.#{$block-class}--has-overlay) {
+L197 .#{$block-class}__actions-container {
+L198   inline-size: 100%;
+L200 &.#{$block-class}--right-placement {
+L202   inset-inline-end: 0;
+L204 &.#{$block-class}--left-placement {
+L205 .#{$resizer-class} {
+L207   inset-inline-start: 0;
+L209 &::before {
+L210   inset-inline-start: 0;
+L213 &:not(.#{$block-class}--slide-in) {
+L214 &.#{$block-class}--resizable {
+L215 &:has(.#{$resizer-class}) {
+L226   inset-inline-start: 0;
+L230 &.#{$block-class}.#{$block-class}--has-decorator {
+L233   inset 0 -80px 70px -65px $ai-inner-shadow,
+L237 .#{$resizer-class}--vertical::before {
+L241   block-size: 100%;
+L243   inline-size: $spacing-01;   // spacing-01=2px
+L244   inset-block-end: 0;
+L245   inset-inline-end: 0;
+L250 &:hover {
+L251 .#{$resizer-class}--vertical::before {
+L256 .#{$resizer-class} {
+L259   inset-inline-start: -$spacing-02;   // spacing-02=4px
+L261 &--vertical::after {
+L264   block-size: 100%;
+L266   inline-size: $spacing-03;   // spacing-03=8px
+L267   inset-inline-start: -$spacing-01;   // spacing-01=2px
+L271 &:focus {
+L276 .#{$block-class}__header {
+L277   --#{$block-class}--title-padding-bottom: #{$spacing-05};   // spacing-05=16px
+L281   padding: $spacing-05;   // spacing-05=16px
+L283   inset-block-start: calc(
+L286   min-block-size: $spacing-08;   // spacing-08=40px
+L287   padding-block-end: 0;
+L289 &.#{$block-class}__header--has-title {
+L290   min-block-size: auto;
+L294 &.#{$block-class}__header--has-subtitle {
+L295   --#{$block-class}--title-padding-bottom: #{$spacing-03};   // spacing-03=8px
+L299 &.#{$block-class}__header--has-navigation-back {
+L300   padding-block-start: $spacing-07;   // spacing-07=32px
+L304 &.#{$block-class}__header--has-navigation-back.#{$prefix}--btn--md {
+L305   padding-block-start: $spacing-08;   // spacing-08=40px
+L308 &::before {
+L314 &.#{$block-class}__header--no-title-animation {
+L316   inset-block-start: 0;
+L319 &.#{$block-class}__header--no-title-animation::before {
+L323 &.#{$block-class}__header--reduced-motion {
+L326   margin-block-end: $spacing-05;   // spacing-05=16px
+L329 &.#{$block-class}__header--reduced-motion.#{$block-class}__header--no-title-animation {
+L331   margin-block-end: 0;
+L337   inset-block-start: $spacing-06;   // spacing-06=24px
+L343   padding: $spacing-05 $spacing-05 $spacing-03 $spacing-05;   // spacing-05=16px spacing-05=16px spacing-03=8px spacing-05=16px
+L344   block-size: calc(#{$spacing-08} + #{$spacing-02});   // spacing-08=40px spacing-02=4px
+L347 &:not(.#{$block-class}__header--has-title)::before {
+L353 .#{$block-class}__header:empty {
+L354   min-block-size: unset;
+L361 &.#{$block-class}--has-decorator {
+L362   --#{$block-class}--title-padding-right: #{$spacing-10};   // spacing-10=64px
+L366 &.#{$block-class}--has-action-toolbar {
+L369 &.#{$block-class}--has-decorator {
+L370   --#{$block-class}--title-padding-right: #{$spacing-11};   // spacing-11=80px
+L374 .#{$block-class}__animated-scroll-wrapper {
+L379 .#{$block-class}__title {
+L384   /* border-bottom used instead of padding which wrapped text shows through */
+L385   border-block-end: var(--#{$block-class}--title-padding-bottom) solid
+L387   inset-block-start: var(--#{$block-class}--title-stop);
+L390 .#{$block-class}__title-text {
+L391   @include type.type-style('heading-03');   // heading-03=20/28
+L397 .#{$block-class}__title--no-label .#{$block-class}__title-text {
+L400   -1 * #{$spacing-05} *   // spacing-05=16px
+L406 .#{$block-class}__header--no-title-animation .#{$block-class}__title-text {
+L410 .#{$block-class}__label-text {
+L411   @include type.type-style('label-01');   // label-01=12/16
+L414   padding-inline-end: var(--#{$block-class}--title-padding-right);
+L417 .#{$block-class}__collapsed-title-text {
+L418   @include type.type-style('heading-compact-02');   // heading-compact-02=16/22 w600
+L422   inset-block-start: 0;
+L426 .#{$block-class}__title--no-label .#{$block-class}__collapsed-title-text {
+L429   #{$spacing-05} * (1 - var(   // spacing-05=16px
+L436 .#{$block-class}__subtitle-text {
+L437   @include type.type-style('body-compact-01');   // body-compact-01=14/18
+L440   padding-block-end: $spacing-05;   // spacing-05=16px
+L441   padding-inline-end: var(--#{$block-class}--title-padding-right);
+L445 .#{$block-class}__subtitle-text {
+L450 .#{$block-class}__title-text + .#{$block-class}__subtitle-text {
+L451   padding-block-start: $spacing-05;   // spacing-05=16px
+L453 .#{$block-class}__inner-content {
+L454   padding: 0 $spacing-05 $spacing-05;   // spacing-05=16px spacing-05=16px
+L457 .#{$block-class}__inner-content--no-animated-title {
+L458   padding-block-start: $spacing-05;   // spacing-05=16px
+L465   padding-block-start: $spacing-03;   // spacing-03=8px
+L470 &.#{$block-class}--has-decorator .#{$block-class}--scrolls {
+L474   inset 0 -80px 70px -65px $ai-inner-shadow,
+L478 .#{$block-class}__action-toolbar {
+L487 .#{$block-class}__action-toolbar-leading-button {
+L488   margin-inline-end: $spacing-03;   // spacing-03=8px
+L491 .#{$prefix}--btn.#{$block-class}__navigation-back-button {
+L494   inset-block-start: 0;
+L495   inset-inline-start: 0;
+L498 .#{$prefix}--btn.#{$block-class}__close-button {
+L502   padding: 0;
+L504   block-size: $spacing-07;   // spacing-07=32px
+L506   inline-size: $spacing-07;   // spacing-07=32px
+L507   min-block-size: 0;
+L509 &:hover {
+L512 .#{$block-class}--btn__icon {
+L513   margin: 0;
+L518 .#{$prefix}--btn--md.#{$block-class}__close-button {
+L519   block-size: $spacing-08;   // spacing-08=40px
+L520   inline-size: $spacing-08;   // spacing-08=40px
+L525 .#{$block-class}__decorator-and-close {
+L529   block-size: $spacing-07;   // spacing-07=32px
+L530   inset-block-start: 0;
+L531   inset-inline-end: 0;
+L537 .#{$block-class}__decorator-and-close .#{$prefix}--ai-label__button--xs {
+L538   margin: $spacing-02;   // spacing-02=4px
+L541 .#{$block-class}__actions-container {
+L546   inset-block-end: 0;
+L548 &.#{$action-set-block-class}--2xl {
+L549 .#{$action-set-block-class}__action-button {
+L550   inline-size: 100%;
+L551   max-inline-size: 100%;
+L554 @include breakpoint(md) {
+L556 .#{$action-set-block-class}__action-button {
+L557   inline-size: 25%;
+L562 .#{$action-set-block-class}__action-button.#{$action-set-block-class}__action-button {
+L564   block-size: var(--#{$block-class}--actions-height);
+L568 .#{$block-class}__actions-container.#{$action-set-block-class}--sm {
+L569   @include setPanelSize(map.get($side-panel-sizes, xs));
+L582 .#{$block-class} .#{$prefix}--date-picker__input {
+L606 .#{$block-class}__visually-hidden {
+L609   padding: 0;
+L610   border: 0;
+L611   margin: -1px;
+L612   block-size: 1px;
+L614   inline-size: 1px;
+L619 .#{$block-class}__overlay {
+L625   block-size: 100%;
+L626   inline-size: 100%;
+L627   inset: 0;
+L630 .#{$block-class}__overlay--closing {
+L637 .#{$block-class}--has-decorator + .#{$block-class}__overlay {

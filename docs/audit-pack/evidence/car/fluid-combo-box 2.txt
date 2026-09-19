@@ -1,0 +1,14 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/fluid-combo-box/_fluid-combo-box.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L20 @mixin fluid-combo-box {
+L24 .#{$prefix}--list-box__field {
+L26   padding: 0;
+L31 .#{$prefix}--text-input {
+L33   padding-block: convert.to-rem(33px) convert.to-rem(13px);
+L34   padding-inline: $spacing-05 $spacing-10;   // spacing-05=16px spacing-10=64px
+L42 .#{$prefix}--list-box__selection {
+L43   inset-block: auto convert.to-rem(10px);
+L49 .#{$prefix}--list-box__menu-icon {
+L50   inset-block-end: convert.to-rem(14px);
+L63   inset-inline-end: 1rem;
+L69 .#{$prefix}--list-box__menu {
+L70   inset-block-start: calc(100% + convert.to-rem(1px));

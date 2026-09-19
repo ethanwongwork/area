@@ -1,0 +1,62 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-avatar/library/src/components/AvatarGroupPopover/useAvatarGroupPopoverStyles.styles.ts
+L5 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L22 const useContentStyles = makeStyles({
+L23 base: {
+L25 margin: '0',
+L26 padding: '0',
+L35 const usePopoverSurfaceStyles = makeStyles({
+L36 base: {
+L37 maxHeight: '220px',
+L38 minHeight: '80px',
+L40 padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalS}`,   // spacingVerticalS=8px spacingHorizontalS=8px
+L41 width: '220px',
+L48 const useTriggerButtonStyles = makeStyles({
+L49 base: {
+L52 flexShrink: 0,
+L57 ...shorthands.borderColor(tokens.colorNeutralStroke1),
+L58 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L59 ...shorthands.borderStyle('solid'),
+L60 padding: '0',
+L64 ...shorthands.borderColor('CanvasText'),
+L68 pie: {
+L70 ...shorthands.borderColor(tokens.colorTransparentStroke),
+L75 border: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L79 states: {
+L83 ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+L88 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L92 selected: {
+L95 ...shorthands.borderColor(tokens.colorNeutralStroke1Selected),
+L98 icon12: { fontSize: '12px' },
+L99 icon16: { fontSize: '16px' },
+L100 icon20: { fontSize: '20px' },
+L101 icon24: { fontSize: '24px' },
+L102 icon28: { fontSize: '28px' },
+L103 icon32: { fontSize: '32px' },
+L104 icon48: { fontSize: '48px' },
+L105 caption2Strong: { ...typographyStyles.caption2Strong },   // typographyStyles.caption2Strong=10px/14px w600
+L106 caption1Strong: { ...typographyStyles.caption1Strong },   // typographyStyles.caption1Strong=12px/16px w600
+L107 body1Strong: { ...typographyStyles.body1Strong },   // typographyStyles.body1Strong=14px/20px w600
+L108 subtitle2: { ...typographyStyles.subtitle2 },   // typographyStyles.subtitle2=16px/22px w600
+L109 subtitle1: { ...typographyStyles.subtitle1 },   // typographyStyles.subtitle1=20px/28px w600
+L110 title3: { ...typographyStyles.title3 },   // typographyStyles.title3=24px/32px w600
+L111 borderThin: { ...shorthands.borderWidth(tokens.strokeWidthThin) },   // strokeWidthThin=1px
+L112 borderThick: { ...shorthands.borderWidth(tokens.strokeWidthThick) },   // strokeWidthThick=2px
+L113 borderThicker: { ...shorthands.borderWidth(tokens.strokeWidthThicker) },   // strokeWidthThicker=3px
+L114 borderThickest: { ...shorthands.borderWidth(tokens.strokeWidthThickest) },   // strokeWidthThickest=4px
+L121 const { indicator, size, layout, popoverOpen } = state;
+L126 const groupChildClassName = useGroupChildClassName(layout, size);
+L130 if (size < 36) {
+L132 } else if (size < 56) {
+L134 } else if (size < 72) {
+L141 if (size <= 24) {
+L143 } else if (size <= 28) {
+L145 } else if (size <= 40) {
+L147 } else if (size <= 56) {
+L149 } else if (size <= 96) {
+L155 if (size <= 16) {
+L157 } else if (size <= 24) {
+L159 } else if (size <= 40) {
+L161 } else if (size <= 48) {
+L163 } else if (size <= 56) {
+L165 } else if (size <= 72) {
+L176 sizeStyles[size],

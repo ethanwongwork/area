@@ -1,0 +1,54 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-menu/library/src/components/MenuItem/useMenuItemStyles.styles.ts
+L6 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L22 const useRootBaseStyles = makeResetStyles({
+L23 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L27 paddingRight: tokens.spacingVerticalSNudge, // 6px   // spacingVerticalSNudge=6px
+L28 paddingLeft: tokens.spacingVerticalSNudge,   // spacingVerticalSNudge=6px
+L29 paddingTop: tokens.spacingVerticalSNudge,   // spacingVerticalSNudge=6px
+L30 paddingBottom: tokens.spacingVerticalSNudge,   // spacingVerticalSNudge=6px
+L32 maxWidth: '290px',
+L33 minHeight: '32px',
+L34 flexShrink: 0,
+L37 fontSize: tokens.fontSizeBase300,   // fontSizeBase300=14px
+L39 gap: '4px',
+L83 const useContentBaseStyles = makeResetStyles({
+L84 paddingLeft: '2px',
+L85 paddingRight: '2px',
+L87 flexGrow: 1,
+L90 const useSecondaryContentBaseStyles = makeResetStyles({
+L91 paddingLeft: '2px',
+L92 paddingRight: '2px',
+L93 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L94 lineHeight: tokens.lineHeightBase300,   // lineHeightBase300=20px
+L104 const useIconBaseStyles = makeResetStyles({
+L105 width: '20px',
+L106 height: '20px',
+L107 fontSize: '20px',
+L108 lineHeight: 0,
+L112 flexShrink: 0,
+L115 const useSubmenuIndicatorBaseStyles = makeResetStyles({
+L116 width: '20px',
+L117 height: '20px',
+L118 fontSize: '20px',
+L119 lineHeight: 0,
+L125 const useSubtextBaseStyles = makeResetStyles({
+L126 ...typographyStyles.caption2,   // typographyStyles.caption2=10px/14px w400
+L130 const useStyles = makeStyles({
+L131 checkmark: {
+L132 marginTop: '2px',
+L135 splitItemMain: {
+L136 flexGrow: 1,
+L139 splitItemTrigger: {
+L140 borderTopLeftRadius: 0,
+L141 borderBottomLeftRadius: 0,
+L142 paddingLeft: 0,
+L145 width: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L146 height: '24px',
+L150 submenuOpen: {
+L173 disabled: {
+L234 const useSubTextStyles = makeStyles({
+L235 disabled: {
+L244 const useMultilineStyles = makeStyles({
+L245 content: {
+L250 secondaryContent: {
+L254 submenuIndicator: {

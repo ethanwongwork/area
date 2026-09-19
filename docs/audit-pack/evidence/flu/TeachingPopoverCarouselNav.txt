@@ -1,0 +1,7 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-teaching-popover/library/src/components/TeachingPopoverCarouselNav/useTeachingPopoverCarouselNavStyles.styles.ts
+L16 const useStyles = makeStyles({
+L17 root: {
+L20 columnGap: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L24 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px
+L25 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L26 ...shorthands.borderColor('transparent'),

@@ -1,0 +1,9 @@
+### OpenAI Apps SDK UI @ 0f00143  src/components/Image/Image.module.css
+.Image {
+  opacity: 0;
+  transition: opacity 0.3s var(--transition-ease-basic);   /* = opacity 0.3s ease */
+
+  &[data-loaded] {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,45 @@
+### Primer React @ e4e6eba  packages/react/src/InlineMessage/InlineMessage.module.css
+.InlineMessage {
+  display: grid;
+  /* stylelint-disable-next-line primer/typography */
+  font-size: var(--inline-message-fontSize);   /* = 12px */
+  /* stylelint-disable-next-line primer/typography */
+  line-height: var(--inline-message-lineHeight);   /* = 1.625 */
+  /* stylelint-disable-next-line primer/colors */
+  color: var(--inline-message-fgColor);   /* = var(--fgColor-default) */
+  column-gap: 0.5rem;   /* = 8px */
+  grid-template-columns: auto 1fr;
+  align-items: start;
+
+  --inline-message-fgColor: var(--fgColor-default);
+
+  &[data-size='small'] {
+    --inline-message-fontSize: var(--text-body-size-small);   /* = 12px */
+    --inline-message-lineHeight: var(--text-body-lineHeight-small, 1.6666);   /* = 1.625 */
+  }
+
+  &[data-size='medium'] {
+    --inline-message-fontSize: var(--text-body-size-medium);   /* = 14px */
+    --inline-message-lineHeight: var(--text-body-lineHeight-medium, 1.4285);   /* = 1.5 */
+  }
+
+  &[data-variant='warning'] {
+    --inline-message-fgColor: var(--fgColor-attention);
+  }
+
+  &[data-variant='critical'] {
+    --inline-message-fgColor: var(--fgColor-danger);
+  }
+
+  &[data-variant='success'] {
+    --inline-message-fgColor: var(--fgColor-success);
+  }
+
+  &[data-variant='unavailable'] {
+    --inline-message-fgColor: var(--fgColor-muted);
+  }
+}
+
+.InlineMessageIcon {
+  min-height: calc(var(--inline-message-lineHeight) * var(--inline-message-fontSize));   /* = 19.5px */
+}

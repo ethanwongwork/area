@@ -1,0 +1,11 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-dialog/library/src/components/DialogContent/useDialogContentStyles.styles.ts
+L6 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L16 const useStyles = makeResetStyles({
+L17 padding: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L18 margin: `calc(${tokens.strokeWidthThick} * -1)`,   // strokeWidthThick=2px
+L19 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L21 minHeight: '32px',
+L23 gridRowStart: 2,
+L24 gridRowEnd: 2,
+L25 gridColumnStart: 1,
+L26 gridColumnEnd: 4,

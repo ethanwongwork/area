@@ -1,0 +1,33 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/menubar.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot menubar]
+  L16 h-9=36px gap-1=4px rounded-md=8px border=1px p-1=4px
+  [slot menubar-menu]
+  [slot menubar-group]
+  [slot menubar-portal]
+  [slot menubar-radio-group]
+  [slot menubar-trigger]
+  L58 rounded-sm=6px px-2=8px py-1=4px text-sm=14/20px font-medium
+  [slot menubar-content]
+  L81 min-w-[12rem] rounded-md=8px border=1px p-1=4px
+  [slot menubar-item]
+  L105 gap-2=8px rounded-sm=6px px-2=8px py-1.5=6px text-sm=14/20px data-[inset]:pl-8=32px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  [slot menubar-checkbox-item]
+  L123 gap-2=8px rounded-xs=2px py-1.5=6px pr-2=8px pl-8=32px text-sm=14/20px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L129 left-2=8px size-3.5=14px
+  L131 size-4=16px
+  [slot menubar-radio-item]
+  L148 gap-2=8px rounded-xs=2px py-1.5=6px pr-2=8px pl-8=32px text-sm=14/20px [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4=16px
+  L153 left-2=8px size-3.5=14px
+  L155 size-2=8px
+  [slot menubar-label]
+  L175 px-2=8px py-1.5=6px text-sm=14/20px font-medium data-[inset]:pl-8=32px
+  [slot menubar-separator]
+  L190 -mx-1=4px my-1=4px h-px=1px
+  [slot menubar-shortcut]
+  L204 text-xs=12/16px tracking-widest
+  [slot menubar-sub]
+  [slot menubar-sub-trigger]
+  L231 rounded-sm=6px px-2=8px py-1.5=6px text-sm=14/20px data-[inset]:pl-8=32px
+  L237 h-4=16px w-4=16px
+  [slot menubar-sub-content]
+  L250 min-w-[8rem] rounded-md=8px border=1px p-1=4px

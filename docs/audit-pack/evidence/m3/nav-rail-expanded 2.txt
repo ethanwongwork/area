@@ -1,0 +1,8 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-nav-rail-expanded.scss
+between-item-space: 0px
+container-width-maximum: 360px
+container-width-minimum: 220px
+top-space: 44px
+vertical-trailing-space: 20px
+container-shape: corner-none = 0px
+modal-container-shape: corner-large = 16px

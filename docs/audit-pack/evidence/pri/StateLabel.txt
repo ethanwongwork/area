@@ -1,0 +1,136 @@
+### Primer React @ e4e6eba  packages/react/src/StateLabel/StateLabel.module.css
+.StateLabel {
+  display: inline-flex;
+  align-items: center;
+  font-weight: var(--base-text-weight-semibold);   /* = 600 */
+  /* stylelint-disable-next-line primer/typography */
+  line-height: 16px;
+  color: var(--fgColor-onEmphasis);
+  text-align: center;
+  border-radius: var(--borderRadius-full);   /* = 9999px */
+}
+
+/* Size variants */
+.StateLabel:where([data-size='small']) {
+  padding: var(--base-size-4) var(--base-size-8);   /* = 4px 8px */
+  font-size: var(--text-body-size-small);   /* = 12px */
+}
+
+.StateLabel:where([data-size='medium']) {
+  padding: var(--base-size-8) var(--base-size-12);   /* = 8px 12px */
+  font-size: var(--text-body-size-medium);   /* = 14px */
+}
+
+/* Status color variants */
+.StateLabel:where([data-status='issueClosed']) {
+  background-color: var(--bgColor-done-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-done-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='issueClosedNotPlanned']) {
+  background-color: var(--bgColor-neutral-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-neutral-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='pullClosed']) {
+  background-color: var(--bgColor-closed-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-closed-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='pullMerged']) {
+  background-color: var(--bgColor-done-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-done-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='pullQueued']) {
+  background-color: var(--bgColor-attention-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-attention-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='issueOpened']) {
+  background-color: var(--bgColor-open-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-open-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='pullOpened']) {
+  background-color: var(--bgColor-open-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-open-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='draft']) {
+  background-color: var(--bgColor-draft-emphasis, var(--bgColor-neutral-emphasis));   /* = var(--bgColor-neutral-emphasis) */
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px)   /* = inset 0 0 0 1px */
+    var(--borderColor-draft-emphasis, var(--borderColor-neutral-emphasis, transparent));
+}
+
+.StateLabel:where([data-status='issueDraft']) {
+  background-color: var(--bgColor-draft-emphasis, var(--bgColor-neutral-emphasis));   /* = var(--bgColor-neutral-emphasis) */
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px)   /* = inset 0 0 0 1px */
+    var(--borderColor-draft-emphasis, var(--borderColor-neutral-emphasis, transparent));
+}
+
+.StateLabel:where([data-status='unavailable']) {
+  background-color: var(--bgColor-neutral-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-neutral-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='open']) {
+  background-color: var(--bgColor-open-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-open-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='closed']) {
+  background-color: var(--bgColor-done-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-done-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='alertOpened']) {
+  background-color: var(--bgColor-open-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-open-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='alertFixed']) {
+  background-color: var(--bgColor-done-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-done-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='alertDismissed']) {
+  background-color: var(--bgColor-draft-emphasis, var(--bgColor-neutral-emphasis));   /* = var(--bgColor-neutral-emphasis) */
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px)   /* = inset 0 0 0 1px */
+    var(--borderColor-draft-emphasis, var(--borderColor-neutral-emphasis, transparent));
+}
+
+.StateLabel:where([data-status='alertClosed']) {
+  background-color: var(--bgColor-closed-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-closed-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.StateLabel:where([data-status='archived']) {
+  background-color: var(--bgColor-neutral-emphasis);
+  color: var(--fgColor-onEmphasis);
+  box-shadow: var(--boxShadow-thin, inset 0 0 0 1px) var(--borderColor-neutral-emphasis, transparent);   /* = inset 0 0 0 1px transparent */
+}
+
+.Icon {
+  margin-right: var(--base-size-4);   /* = 4px */
+}
+
+.Icon:where([data-size-small]) {
+  width: 1em;
+}

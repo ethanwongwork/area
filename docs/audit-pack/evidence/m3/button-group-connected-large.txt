@@ -1,0 +1,7 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-button-group-connected-large.scss
+between-space: 2px
+container-height: 96px
+selected-inner-corner-corner-size: 50%
+container-shape: corner-full = 9999px
+inner-corner-corner-size: corner-value-large = 16px
+pressed-inner-corner-corner-size: corner-value-medium = 12px

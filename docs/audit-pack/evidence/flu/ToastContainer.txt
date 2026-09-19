@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toast/library/src/components/ToastContainer/useToastContainerStyles.styles.ts
+L14 const useRootBaseClassName = makeResetStyles({
+L16 marginTop: '16px',
+L18 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L20 outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}`,   // strokeWidthThick=2px

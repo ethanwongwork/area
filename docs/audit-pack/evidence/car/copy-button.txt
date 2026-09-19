@@ -1,0 +1,19 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/copy-button/_copy-button.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L20 @mixin copy-button {
+L21 .#{$prefix}--copy-btn {
+L28   padding: 0;
+L29   border: none;
+L34 &:hover {
+L39 &:active {
+L43 &::before {
+L49 .#{$prefix}--copy-btn__feedback {
+L55   margin: auto;
+L59 &:focus {
+L66 &.#{$prefix}--copy-btn--animating .#{$prefix}--copy-btn__feedback {
+L70 &.#{$prefix}--copy-btn--animating::before {
+L71   border: none;
+L76 .#{$prefix}--copy-btn__feedback {
+L83 .#{$prefix}--copy-btn__feedback {
+L88 .#{$prefix}--copy-btn svg {
+L93 .#{$prefix}--copy {
+L94   font-size: 0;

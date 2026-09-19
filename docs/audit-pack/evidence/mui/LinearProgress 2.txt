@@ -1,0 +1,85 @@
+### MUI Material @ 69960c1  packages/mui-material/src/LinearProgress/LinearProgress.js
+L16 const EMPTY_STYLE = {};
+L33   left: -35%;
+L34   right: 100%;
+L38   left: 100%;
+L39   right: -90%;
+L43   left: 100%;
+L44   right: -90%;
+L60   left: -200%;
+L61   right: 100%;
+L65   left: 107%;
+L66   right: -8%;
+L70   left: 107%;
+L71   right: -8%;
+L107 const slots = {
+L126 const LinearProgressRoot = styled('span', {
+L127 name: 'MuiLinearProgress',
+L128 slot: 'Root',
+L143   height: 4,
+L149 variants: [
+L153 props: { color },
+L154 style: {
+L161 style: {
+L162 '&::before': {
+L165   left: 0,
+L166   top: 0,
+L167   right: 0,
+L168   bottom: 0,
+L175 props: { variant: 'buffer' },
+L176 style: { backgroundColor: 'transparent' },
+L179 props: { variant: 'query' },
+L180 style: { transform: 'rotate(180deg)' },
+L186 const LinearProgressDashed = styled('span', {
+L187 name: 'MuiLinearProgress',
+L188 slot: 'Dashed',
+L192   marginTop: 0,
+L193   height: '100%',
+L194   width: '100%',
+L197 variants: [
+L199 props: { color: 'inherit' },
+L200 style: {
+L210 props: { color },
+L211 style: {
+L225 const LinearProgressBar1 = styled('span', {
+L226 name: 'MuiLinearProgress',
+L227 slot: 'Bar1',
+L235   left: '30%',
+L236   right: 'auto',
+L237   width: '40%',
+L241   width: '100%',
+L243   left: 0,
+L244   bottom: 0,
+L245   top: 0,
+L251 variants: [
+L253 props: {
+L256 style: {
+L263 props: { color },
+L264 style: {
+L269 props: {
+L272 style: {
+L280 props: {
+L283 style: {
+L294 style: {
+L295   width: 'auto',
+L319 const LinearProgressBar2 = styled('span', {
+L320 name: 'MuiLinearProgress',
+L321 slot: 'Bar2',
+L333   width: '100%',
+L335   left: 0,
+L336   bottom: 0,
+L337   top: 0,
+L343 variants: [
+L347 props: { color },
+L348 style: {
+L355 style: {
+L362 style: {
+L367 props: {
+L370 style: {
+L377 props: { color, variant: 'buffer' },
+L378 style: {
+L389 style: {
+L390   width: 'auto',
+L433 const ownerState = {
+L458 const rootProps = {};
+L459 const inlineStyles = { bar1: {}, bar2: {} };

@@ -1,0 +1,17 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ListItemText/ListItemText.js
+L16 const slots = {
+L25 const ListItemTextRoot = styled('div', {
+L26 name: 'MuiListItemText',
+L27 slot: 'Root',
+L42   minWidth: 0,
+L43   marginTop: 4,
+L44   marginBottom: 4,
+L52 variants: [
+L55 style: {
+L56   marginTop: 6,
+L57   marginBottom: 6,
+L62 style: {
+L63   paddingLeft: 56,
+L87 const ownerState = {
+L98 const externalForwardedProps = {
+L106 externalForwardedProps: {

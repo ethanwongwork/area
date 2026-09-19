@@ -1,0 +1,33 @@
+### MUI Material @ 69960c1  packages/mui-material/src/SwipeableDrawer/SwipeArea.js
+L11 const SwipeAreaRoot = styled('div', {
+L12 name: 'MuiSwipeArea',
+L17   top: 0,
+L18   left: 0,
+L19   bottom: 0,
+L21 variants: [
+L23 props: {
+L26 style: {
+L27   right: 'auto',
+L31 props: {
+L34 style: {
+L35   left: 'auto',
+L36   right: 0,
+L40 props: {
+L43 style: {
+L44   bottom: 'auto',
+L45   right: 0,
+L49 props: {
+L52 style: {
+L53   top: 'auto',
+L54   bottom: 0,
+L55   right: 0,
+### MUI Material @ 69960c1  packages/mui-material/src/SwipeableDrawer/SwipeableDrawer.js
+L100 const axisProperties = {
+L101 scrollPosition: {
+L105 scrollLength: {
+L109 clientLength: {
+L142 const transitionDurationDefault = {
+L598 externalForwardedProps: {
+L602 additionalProps: {
+L603   width: swipeAreaWidth,
+L633 style: {

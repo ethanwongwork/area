@@ -1,0 +1,9 @@
+### Primer React @ e4e6eba  packages/react/src/Pagehead/Pagehead.module.css
+.Pagehead {
+  position: relative;
+  padding-top: var(--base-size-24);   /* = 24px */
+  padding-bottom: var(--base-size-24);   /* = 24px */
+  margin-bottom: var(--base-size-24);   /* = 24px */
+  /* stylelint-disable-next-line primer/borders */
+  border-bottom: 1px solid var(--borderColor-default);
+}

@@ -1,0 +1,5 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-overflow/library/src/components/Overflow/useOverflowStyles.styles.ts
+L8 export const useOverflowStyles = makeStyles({
+L9 overflowMenu: {
+L11 flexShrink: 0,
+L15 overflowingItems: {

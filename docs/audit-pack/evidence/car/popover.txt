@@ -1,0 +1,279 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/popover/_popover.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L55   drop-shadow(0 $spacing-01 $spacing-01 rgba(0, 0, 0, 0.2))   // spacing-01=2px spacing-01=2px
+L65   $popover-border-radius: custom-property.get-var(
+L66   'popover-border-radius',
+L67   if(enabled('enable-v12-release'), $border-radius-08, 2px)
+L84   $popover-caret-width: custom-property.get-var(
+L85   'popover-caret-width',
+L86   convert.to-rem(12px)
+L88   $popover-caret-height: custom-property.get-var(
+L89   'popover-caret-height',
+L90   convert.to-rem(6px)
+L94 @mixin popover-base {
+L97   inset: 0;
+L102 @mixin popover-highcontrast-base {
+L114 @mixin popover-tab-tip-button {
+L121   block-size: convert.to-rem(32px);
+L122   inline-size: convert.to-rem(32px);
+L124 &:focus {
+L129 &:hover {
+L139 @mixin popover {
+L141 .#{$prefix}--popover-container {
+L148 .#{$prefix}--popover-container:not(.#{$prefix}--popover--auto-align) {
+L155 .#{$prefix}--popover--high-contrast .#{$prefix}--popover {
+L161 .#{$prefix}--icon--skeleton {
+L168 .#{$prefix}--icon--skeleton::before {
+L174 .#{$prefix}--popover--drop-shadow .#{$prefix}--popover {
+L187 .#{$prefix}--popover--caret {
+L190   convert.to-rem(10px)
+L195 .#{$prefix}--popover {
+L200 .#{$prefix}--popover-content {
+L204   size: (
+L205   height: (
+L206   sm: convert.to-rem(32px),
+L207   md: convert.to-rem(40px),
+L208   lg: convert.to-rem(48px),
+L218   border-radius: $popover-border-radius;
+L221   inline-size: max-content;
+L222   max-inline-size: convert.to-rem(368px);
+L244 .#{$prefix}--popover-content::before {
+L258 .#{$prefix}--popover--auto-align.#{$prefix}--popover-caret {
+L269 &::after {
+L277 &::before {
+L293 .#{$prefix}--popover--auto-align.#{$prefix}--popover-caret::before {
+L338   .#{$prefix}--popover--bottom:not(.#{$prefix}--popover--auto-align)
+L341   inset-block-end: 0;
+L342   inset-inline-start: 50%;
+L346   .#{$prefix}--popover--bottom:not(.#{$prefix}--popover--caret):not(
+L362   inset-block-end: -$spacing-02;   // spacing-02=4px
+L366   .#{$prefix}--popover--top:not(.#{$prefix}--popover--caret):not(
+L382   inset-block-start: -$spacing-02;   // spacing-02=4px
+L397   inset-inline-start: calc(50% - $popover-offset - 1rem);
+L409   inset-inline-end: calc(50% - $popover-offset - 1rem);
+L413   .#{$prefix}--popover--right:not(.#{$prefix}--popover--caret):not(
+L429   inset-inline-start: calc(100%);
+L431   inset-inline-start: calc(100% + $spacing-02);   // spacing-02=4px
+L435   .#{$prefix}--popover--left:not(.#{$prefix}--popover--caret):not(
+L451   inset-inline-end: calc(100%);
+L453   inset-inline-end: calc(100% + $spacing-02);   // spacing-02=4px
+L457   .#{$prefix}--popover--bottom:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L463   .#{$prefix}--popover--bottom-left:not(.#{$prefix}--popover--auto-align)
+L469   inset-block-end: 0;
+L470   inset-inline-start: calc(50% - $popover-offset);
+L477   .#{$prefix}--popover--bottom-left:not(.#{$prefix}--popover--auto-align):dir(
+L487   inset-inline-end: calc(50% - $popover-offset);
+L488   inset-inline-start: initial;
+L491   .#{$prefix}--popover--bottom-right:not(.#{$prefix}--popover--auto-align)
+L497   inset-block-end: 0;
+L498   inset-inline-end: calc(50% - $popover-offset);
+L502   .#{$prefix}--popover--bottom-right:not(.#{$prefix}--popover--auto-align):dir(
+L512   inset-inline-start: calc(50% - $popover-offset);
+L531   block-size: $popover-offset;
+L532   inset-block-start: 0;
+L533   inset-inline: 0;
+L553   block-size: $popover-caret-height;
+L554   inline-size: $popover-caret-width;
+L555   inset-block-end: 0;
+L556   inset-inline-start: 50%;
+L559 &::after {
+L560   block-size: $popover-caret-height;
+L562   inline-size: $popover-caret-width;
+L582 &::before {
+L583   block-size: $popover-caret-height;
+L585   inline-size: $popover-caret-width;
+L588 &::after {
+L589   inline-size: calc($popover-caret-width - 1px);
+L590   inset-block-start: 1px;
+L591   inset-inline-start: 0.5px;
+L595   .#{$prefix}--popover--bottom:dir(rtl)
+L598   .#{$prefix}--popover--bottom-left:dir(rtl)
+L604   .#{$prefix}--popover--bottom-right:dir(rtl)
+L634   block-size: $popover-caret-height;
+L635   inline-size: $popover-caret-width;
+L637 &::after {
+L638   block-size: $popover-caret-height;
+L640   inline-size: $popover-caret-width;
+L665 &::before {
+L666   block-size: $popover-caret-height;
+L668   inline-size: $popover-caret-width;
+L671 &::after {
+L672   inline-size: calc($popover-caret-width - 1px);
+L673   inset-block-start: 1px;
+L674   inset-inline-start: 0.5px;
+L683   .#{$prefix}--popover--top:not(.#{$prefix}--popover--auto-align)
+L686   inset-block-start: 0;
+L687   inset-inline-start: 50%;
+L691   .#{$prefix}--popover--top:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L697   .#{$prefix}--popover--top-left:not(.#{$prefix}--popover--auto-align)
+L703   inset-block-start: 0;
+L704   inset-inline-start: calc(50% - $popover-offset);
+L711   .#{$prefix}--popover--top-left:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L717   inset-inline-end: calc(50% - $popover-offset);
+L718   inset-inline-start: initial;
+L721   .#{$prefix}--popover--top-right:not(.#{$prefix}--popover--auto-align)
+L727   inset-block-start: 0;
+L728   inset-inline-end: calc(50% - $popover-offset);
+L732   .#{$prefix}--popover--top-right:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L738   inset-inline-start: calc(50% - $popover-offset);
+L757   block-size: $popover-offset;
+L758   inset-block-end: 0;
+L759   inset-inline: 0;
+L777   block-size: $popover-caret-height;
+L778   inline-size: $popover-caret-width;
+L779   inset-block-start: 0;
+L780   inset-inline-start: 50%;
+L783 &::after {
+L784   block-size: $popover-caret-height;
+L786   inline-size: $popover-caret-width;
+L806 &::before {
+L807   block-size: $popover-caret-height;
+L809   inline-size: $popover-caret-width;
+L812 &::after {
+L813   inline-size: calc($popover-caret-width - 1px);
+L814   inset-block-start: -1px;
+L815   inset-inline-start: 0.5px;
+L819   .#{$prefix}--popover--top:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L822   .#{$prefix}--popover--top-left:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L828   .#{$prefix}--popover--top-right:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L858   block-size: $popover-caret-height;
+L859   inline-size: $popover-caret-width;
+L861 &::after {
+L862   block-size: $popover-caret-height;
+L864   inline-size: $popover-caret-width;
+L889 &::before {
+L890   block-size: $popover-caret-height;
+L892   inline-size: $popover-caret-width;
+L895 &::after {
+L896   inline-size: calc($popover-caret-width - 1px);
+L897   inset-block-start: -1px;
+L898   inset-inline-start: 0.5px;
+L907   .#{$prefix}--popover--right:not(.#{$prefix}--popover--auto-align)
+L910   inset-block-start: 50%;
+L911   inset-inline-start: 100%;
+L917   .#{$prefix}--popover--right-top:not(.#{$prefix}--popover--auto-align)
+L923   inset-block-start: 50%;
+L924   inset-inline-start: 100%;
+L931   .#{$prefix}--popover--right-bottom:not(.#{$prefix}--popover--auto-align)
+L937   inset-block-end: 50%;
+L938   inset-inline-start: 100%;
+L942   .#{$prefix}--popover--right:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L945   .#{$prefix}--popover--right-bottom:not(.#{$prefix}--popover--auto-align):dir(
+L953   .#{$prefix}--popover--right-top:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L961   inset-inline-end: 100%;
+L962   inset-inline-start: initial;
+L981   inline-size: $popover-offset;
+L982   inset-block: 0;
+L983   inset-inline-start: 0;
+L988   .#{$prefix}--popover--right:not(.#{$prefix}--popover--auto-align)
+L991   .#{$prefix}--popover--right-top:not(.#{$prefix}--popover--auto-align)
+L997   .#{$prefix}--popover--right-bottom:not(.#{$prefix}--popover--auto-align)
+L1003   block-size: $popover-caret-width;
+L1004   inline-size: $popover-caret-height;
+L1005   inset-block-start: 50%;
+L1006   inset-inline-start: 100%;
+L1009 &::after {
+L1010   block-size: $popover-caret-width;
+L1012   inline-size: $popover-caret-height;
+L1016   .#{$prefix}--popover--right:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L1019   .#{$prefix}--popover--right-top:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L1027   .#{$prefix}--popover--right-bottom:not(.#{$prefix}--popover--auto-align):dir(
+L1035   inset-inline-end: 100%;
+L1036   inset-inline-start: initial;
+L1040   .#{$prefix}--popover--border.#{$prefix}--popover--right:not(
+L1045   .#{$prefix}--popover--border.#{$prefix}--popover--right-top:not(
+L1055   .#{$prefix}--popover--border.#{$prefix}--popover--right-bottom:not(
+L1065 &::before {
+L1066   block-size: $popover-caret-width;
+L1068   inline-size: $popover-caret-height;
+L1071 &::after {
+L1072   inset-inline-start: 1px;
+L1076   .#{$prefix}--popover--border.#{$prefix}--popover--right:not(
+L1081   .#{$prefix}--popover--border.#{$prefix}--popover--right-top:not(
+L1091   .#{$prefix}--popover--border.#{$prefix}--popover--right-bottom:not(
+L1101 &::after {
+L1102   inset-inline-start: -1px;
+L1127   block-size: $popover-caret-width;
+L1128   inline-size: $popover-caret-height;
+L1130 &::after {
+L1131   block-size: $popover-caret-width;
+L1133   inline-size: $popover-caret-height;
+L1159 &::before {
+L1160   block-size: $popover-caret-width;
+L1162   inline-size: $popover-caret-height;
+L1166 &::after {
+L1167   inset-inline-start: 1px;
+L1201 &::before {
+L1202   margin-inline-start: 1px;
+L1205 &::after {
+L1206   inset-inline-start: 0;
+L1215   .#{$prefix}--popover--left:not(.#{$prefix}--popover--auto-align)
+L1218   inset-block-start: 50%;
+L1219   inset-inline-end: 100%;
+L1225   .#{$prefix}--popover--left-top:not(.#{$prefix}--popover--auto-align)
+L1231   inset-block-start: 50%;
+L1232   inset-inline-end: 100%;
+L1241   .#{$prefix}--popover--left-bottom:not(.#{$prefix}--popover--auto-align)
+L1247   inset-block-end: 50%;
+L1248   inset-inline-end: 100%;
+L1257   .#{$prefix}--popover--left:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L1260   .#{$prefix}--popover--left-bottom:not(.#{$prefix}--popover--auto-align):dir(
+L1268   .#{$prefix}--popover--left-top:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L1276   inset-inline-end: initial;
+L1277   inset-inline-start: 100%;
+L1296   inline-size: $popover-offset;
+L1297   inset-block: 0;
+L1298   inset-inline-end: 0;
+L1303   .#{$prefix}--popover--left:not(.#{$prefix}--popover--auto-align)
+L1306   .#{$prefix}--popover--left-top:not(.#{$prefix}--popover--auto-align)
+L1312   .#{$prefix}--popover--left-bottom:not(.#{$prefix}--popover--auto-align)
+L1318   block-size: $popover-caret-width;
+L1319   inline-size: $popover-caret-height;
+L1320   inset-block-start: 50%;
+L1321   inset-inline-end: 100%;
+L1324 &::after {
+L1325   block-size: $popover-caret-width;
+L1327   inline-size: $popover-caret-height;
+L1331   .#{$prefix}--popover--left:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L1334   .#{$prefix}--popover--left-top:not(.#{$prefix}--popover--auto-align):dir(rtl)
+L1342   .#{$prefix}--popover--left-bottom:not(.#{$prefix}--popover--auto-align):dir(
+L1350   inset-inline-end: initial;
+L1351   inset-inline-start: 100%;
+L1355   .#{$prefix}--popover--border.#{$prefix}--popover--left:not(
+L1360   .#{$prefix}--popover--border.#{$prefix}--popover--left-top:not(
+L1370   .#{$prefix}--popover--border.#{$prefix}--popover--left-bottom:not(
+L1380 &::before {
+L1381   block-size: $popover-caret-width;
+L1383   inline-size: $popover-caret-height;
+L1386 &::after {
+L1387   inset-inline-start: -1px;
+L1391   .#{$prefix}--popover--border.#{$prefix}--popover--left:not(
+L1396   .#{$prefix}--popover--border.#{$prefix}--popover--left-top:not(
+L1406   .#{$prefix}--popover--border.#{$prefix}--popover--left-bottom:not(
+L1416 &::after {
+L1417   inset-inline-start: 1px;
+L1442   block-size: $popover-caret-width;
+L1443   inline-size: $popover-caret-height;
+L1445 &::after {
+L1446   block-size: $popover-caret-width;
+L1448   inline-size: $popover-caret-height;
+L1473 &::before {
+L1474   block-size: $popover-caret-width;
+L1476   inline-size: $popover-caret-height;
+L1479 &::after {
+L1480   inset-inline-start: -1px;
+L1514 &::before {
+L1515   margin-inline-start: -1px;
+L1518 &::after {
+L1519   inset-inline-start: 0;
+L1530   border-radius: 0;
+L1554   inset-inline-start: 0;
+L1577   inset-inline-end: 0;
+L1578   inset-inline-start: initial;
+L1581 .#{$prefix}--popover--tab-tip .#{$prefix}--popover {
+L1585 .#{$prefix}--popover--tab-tip__button {
+L1590 .#{$prefix}--popover--tab-tip__button {
+L1596 .#{$prefix}--popover--tab-tip__button:not(:focus)::after {
+L1600   block-size: 2px;
+L1602   inline-size: 100%;
+L1603   inset-block-end: 0;
+L1606 .#{$prefix}--popover--tab-tip__button svg {

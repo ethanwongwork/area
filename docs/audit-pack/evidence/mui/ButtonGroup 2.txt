@@ -1,0 +1,41 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ButtonGroup/ButtonGroup.js
+L43 const slots = {
+L61 const ButtonGroupRoot = styled('div', {
+L62 name: 'MuiButtonGroup',
+L63 slot: 'Root',
+L68   borderRadius: (theme.vars || theme).shape.borderRadius,
+L75 variants: [
+L77 props: { variant: 'contained' },
+L78 style: {
+L82 '&:hover': {
+L94 props: { disableElevation: true },
+L95 style: {
+L100 props: { fullWidth: true },
+L101 style: {
+L102   width: '100%',
+L106 props: { orientation: 'vertical' },
+L107 style: {
+L120 props: { orientation: 'horizontal' },
+L121 style: {
+L133 props: { variant: 'text', orientation: 'horizontal' },
+L134 style: {
+L150 props: { variant: 'text', orientation: 'vertical' },
+L151 style: {
+L170 props: { variant: 'text', color },
+L171 style: {
+L179 props: { variant: 'outlined', orientation: 'horizontal' },
+L180 style: {
+L184 '&:hover': {
+L190   marginLeft: -1,
+L195 props: { variant: 'outlined', orientation: 'vertical' },
+L196 style: {
+L200 '&:hover': {
+L206   marginTop: -1,
+L211 props: { variant: 'contained', orientation: 'horizontal' },
+L212 style: {
+L222 props: { variant: 'contained', orientation: 'vertical' },
+L223 style: {
+L235 props: { variant: 'contained', color },
+L236 style: {
+L244   minWidth: 40,
+L267 const ownerState = {

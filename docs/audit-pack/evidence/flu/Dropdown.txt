@@ -1,0 +1,83 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-combobox/library/src/components/Dropdown/useDropdownStyles.styles.ts
+L4 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L21 const useStyles = makeStyles({
+L22 root: {
+L23 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L26 minWidth: '250px',
+L32 outlineWidth: '2px',
+L42 left: '-1px',
+L43 bottom: '-1px',
+L44 right: '-1px',
+L45 height: `max(${tokens.strokeWidthThick}, ${tokens.borderRadiusMedium})`,   // strokeWidthThick=2px borderRadiusMedium=4px
+L46 borderBottomLeftRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L47 borderBottomRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L48 borderBottom: `${tokens.strokeWidthThick} solid ${tokens.colorCompoundBrandStroke}`,   // strokeWidthThick=2px
+L49 clipPath: 'inset(calc(100% - 2px) 0 0 0)',
+L56 transitionDuration: '0.01ms',
+L57 transitionDelay: '0.01ms',
+L67 transitionDuration: '0.01ms',
+L68 transitionDelay: '0.01ms',
+L83 listbox: {
+L86 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L87 maxHeight: '80vh',
+L90 listboxCollapsed: {
+L95 // This is due to the surface being positioned as absolute, therefore zIndex: 1 ensures that won't happen.
+L96 inlineListbox: {
+L97 zIndex: 1,
+L100 button: {
+L106 columnGap: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L113 width: '100%',
+L120 placeholder: {
+L124 // size variants
+L125 small: {
+L126 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L127 padding: `3px ${
+L131 medium: {
+L132 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L133 padding: `5px ${
+L137 large: {
+L138 columnGap: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L139 ...typographyStyles.body2,   // typographyStyles.body2=16px/22px w400
+L140 padding: `7px ${
+L146 outline: {
+L148 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1}`,   // strokeWidthThin=1px
+L151 outlineInteractive: {
+L153 ...shorthands.borderColor(tokens.colorNeutralStroke1Hover),
+L158 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L163 ...shorthands.borderColor(tokens.colorNeutralStroke1Pressed),
+L167 underline: {
+L169 borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStrokeAccessible}`,   // strokeWidthThin=1px
+L170 borderRadius: '0',
+L174 border: `${tokens.strokeWidthThin} solid transparent`,   // strokeWidthThin=1px
+L178 border: `${tokens.strokeWidthThin} solid transparent`,   // strokeWidthThin=1px
+L180 invalid: {
+L182 ...shorthands.borderColor(tokens.colorPaletteRedBorder2),
+L185 invalidUnderline: {
+L190 disabled: {
+L193 ...shorthands.borderColor(tokens.colorNeutralStrokeDisabled),
+L195 ...shorthands.borderColor('GrayText'),
+L199 disabledText: {
+L204 hidden: {
+L209 const useIconStyles = makeStyles({
+L210 icon: {
+L214 fontSize: tokens.fontSizeBase500,   // fontSizeBase500=20px
+L225 // icon size variants
+L226 small: {
+L227 fontSize: iconSizes.small,
+L228 marginLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L230 medium: {
+L231 fontSize: iconSizes.medium,
+L232 marginLeft: tokens.spacingHorizontalXXS,   // spacingHorizontalXXS=2px
+L234 large: {
+L235 fontSize: iconSizes.large,
+L236 marginLeft: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L239 disabled: {
+L244 const useBaseClearButtonStyle = makeResetStyles({
+L249 height: 'fit-content',
+L250 margin: 0,
+L251 marginRight: tokens.spacingHorizontalMNudge,   // spacingHorizontalMNudge=10px
+L252 padding: 0,
+L262 const { appearance, open, placeholderVisible, showClearButton, size } = state;
+L285 styles[size],
+L307 iconStyles[size],
+L320 iconStyles[size],

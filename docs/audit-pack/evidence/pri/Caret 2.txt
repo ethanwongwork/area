@@ -1,0 +1,17 @@
+### Primer React @ e4e6eba  packages/react/src/internal/components/Caret.module.css
+.Caret {
+  pointer-events: none;
+  position: absolute;
+}
+
+.CaretTriangle {
+  /* stylelint-disable-next-line primer/colors */
+  fill: var(--caret-bg, var(--bgColor-default));   /* = var(--bgColor-default) */
+}
+
+.CaretBorder {
+  fill: none;
+  /* stylelint-disable-next-line primer/colors */
+  stroke: var(--caret-border-color, var(--borderColor-default));   /* = var(--borderColor-default) */
+  stroke-width: var(--caret-border-width, var(--borderWidth-thin));   /* = 1px */
+}

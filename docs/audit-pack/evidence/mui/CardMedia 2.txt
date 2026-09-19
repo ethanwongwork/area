@@ -1,0 +1,12 @@
+### MUI Material @ 69960c1  packages/mui-material/src/CardMedia/CardMedia.js
+L14 const slots = {
+L21 const CardMediaRoot = styled('div', {
+L22 name: 'MuiCardMedia',
+L23 slot: 'Root',
+L35 variants: [
+L37 props: { isMediaComponent: true },
+L38 style: {
+L39   width: '100%',
+L43 props: { isImageComponent: true },
+L44 style: {
+L62 const ownerState = {

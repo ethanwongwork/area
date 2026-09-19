@@ -1,0 +1,76 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-switch/library/src/components/Switch/useSwitchStyles.styles.ts
+L22 const spaceBetweenThumbAndTrack = 2;
+L23 // Medium size dimensions
+L24 const trackHeightMedium = 20;
+L25 const trackWidthMedium = 40;
+L26 const thumbSizeMedium = trackHeightMedium - spaceBetweenThumbAndTrack;
+L27 // Small size dimensions (from design mockup)
+L28 const trackHeightSmall = 16;
+L29 const trackWidthSmall = 32;
+L30 const thumbSizeSmall = trackHeightSmall - spaceBetweenThumbAndTrack;
+L32 const useRootBaseClassName = makeResetStyles({
+L41 const useRootStyles = makeStyles({
+L42 vertical: {
+L47 const useIndicatorBaseClassName = makeResetStyles({
+L48 borderRadius: tokens.borderRadiusCircular,   // borderRadiusCircular=10000px
+L49 border: '1px solid',
+L50 lineHeight: 0,
+L53 flexShrink: 0,
+L54 fontSize: `${thumbSizeMedium}px`,
+L55 height: `${trackHeightMedium}px`,
+L56 margin: tokens.spacingVerticalS + ' ' + tokens.spacingHorizontalS,   // spacingVerticalS=8px spacingHorizontalS=8px
+L61 width: `${trackWidthMedium}px`,
+L64 transitionDuration: '0.01ms',
+L80 transitionDuration: '0.01ms',
+L85 const useIndicatorStyles = makeStyles({
+L86 labelAbove: {
+L87 marginTop: 0,
+L89 sizeSmall: {
+L90 fontSize: `${thumbSizeSmall}px`,
+L91 height: `${trackHeightSmall}px`,
+L92 width: `${trackWidthSmall}px`,
+L96 const useInputBaseClassName = makeResetStyles({
+L99 height: '100%',
+L100 margin: 0,
+L101 opacity: 0,
+L104 // Calculate the width of the hidden input by taking into account the size of the indicator + the padding around it.
+L106 width: `calc(${trackWidthMedium}px + 2 * ${tokens.spacingHorizontalS})`,   // spacingHorizontalS=8px
+L112 transform: `translateX(${trackWidthMedium - thumbSizeMedium - spaceBetweenThumbAndTrack}px)`,
+L233 const useInputStyles = makeStyles({
+L234 before: {
+L235 right: 0,
+L236 top: 0,
+L238 after: {
+L239 left: 0,
+L240 top: 0,
+L242 above: {
+L243 bottom: 0,
+L244 height: `calc(${trackHeightMedium}px + ${tokens.spacingVerticalS})`,   // spacingVerticalS=8px
+L245 width: '100%',
+L247 sizeSmall: {
+L248 width: `calc(${trackWidthSmall}px + 2 * ${tokens.spacingHorizontalS})`,   // spacingHorizontalS=8px
+L252 transform: `translateX(${trackWidthSmall - thumbSizeSmall - spaceBetweenThumbAndTrack}px)`,
+L260 const useLabelStyles = makeStyles({
+L261 base: {
+L264 // Use a (negative) margin to account for the difference between the track's height and the label's line height.
+L265 // This prevents the label from expanding the height of the switch, but preserves line height if the label wraps.
+L266 marginBottom: `calc((${trackHeightMedium}px - ${tokens.lineHeightBase300}) / 2)`,   // lineHeightBase300=20px
+L267 marginTop: `calc((${trackHeightMedium}px - ${tokens.lineHeightBase300}) / 2)`,   // lineHeightBase300=20px
+L268 padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalS}`,   // spacingVerticalS=8px spacingHorizontalS=8px
+L270 sizeSmall: {
+L271 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L272 lineHeight: tokens.lineHeightBase200,   // lineHeightBase200=16px
+L273 marginBottom: `calc((${trackHeightSmall}px - ${tokens.lineHeightBase200}) / 2)`,   // lineHeightBase200=16px
+L274 marginTop: `calc((${trackHeightSmall}px - ${tokens.lineHeightBase200}) / 2)`,   // lineHeightBase200=16px
+L276 above: {
+L277 paddingTop: tokens.spacingVerticalXS,   // spacingVerticalXS=4px
+L278 paddingBottom: tokens.spacingVerticalXS,   // spacingVerticalXS=4px
+L279 width: '100%',
+L281 after: {
+L282 paddingLeft: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L284 before: {
+L285 paddingRight: tokens.spacingHorizontalXS,   // spacingHorizontalXS=4px
+L301 const { label, labelPosition, size } = state;
+L316 size === 'small' && indicatorStyles.sizeSmall,
+L325 size === 'small' && inputStyles.sizeSmall,
+L335 size === 'small' && labelStyles.sizeSmall,

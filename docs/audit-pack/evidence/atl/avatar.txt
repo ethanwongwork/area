@@ -1,0 +1,85 @@
+### @atlaskit/avatar@28.0.3  avatar-content.js  (token fallbacks; pt and pc converted to px)
+  root: border:none; margin-block-end:2px; margin-block-start:2px; margin-inline-end:2px; margin-inline-start:2px; padding-block-end:0; padding-block-start:0; padding-inline-end:0; padding-inline-start:0; [:after] inset:0; [:after] width:100%
+  circle: border-radius:50%; [:after] border-radius:50%
+  square: border-radius:25%
+  root: box-sizing:content-box
+  hexagonFocusContainer: padding-block:calc(2px*1.25); padding-inline:2px; margin-block:calc(2px*1.25*-1); margin-inline:calc(2px*-1)
+  hexagonBorderContainer: padding-block:calc(2px*.5); padding-inline:calc(2px*.4); margin-block:calc(2px*.5*-1); margin-inline:calc(2px*.4*-1)
+  hexagon: border-radius:0; [:after] border-radius:0
+  hexagonBorderContainer: padding-block-end:calc(2px*.12); padding-block-start:calc(2px*.12); padding-inline-end:calc(2px*.12); padding-inline-start:calc(2px*.12); margin-block-end:calc(2px*-.12); margin-block-start:calc(2px*-.12); margin-inline-end:calc(2px*-.12); margin-inline-start:calc(2px*-.12)
+  hexagonFocusContainer: padding-block-end:calc(2px*1.12); padding-block-start:calc(2px*1.12); padding-inline-end:calc(2px*1.12); padding-inline-start:calc(2px*1.12); margin-block-end:calc(2px*-1.12); margin-block-start:calc(2px*-1.12); margin-inline-end:calc(2px*-1.12); margin-inline-start:calc(2px*-1.12)
+  xxsmall: width:16px; height:16px
+  xsmall: width:16px; height:16px
+  UNSAFE_xsmall: width:20px; height:20px
+  small: width:24px; height:24px
+  medium: width:32px; height:32px
+  large: width:40px; height:40px
+  xlarge: width:6pc; height:6pc
+  xxlarge: width:8pc; height:8pc
+### @atlaskit/avatar@28.0.3  avatar-item.js  (token fallbacks; pt and pc converted to px)
+  root: border-radius:3px; border-width:2px; box-sizing:border-box; width:100%; font-size:inherit; font-weight:400; line-height:1; margin-block-end:0; margin-block-start:0; margin-inline-end:0; margin-inline-start:0; padding-block-end:4px; padding-block-start:4px; padding-inline-end:4px; padding-inline-start:4px
+  avatarItem: flex-basis:100%; min-width:0; max-width:100%; line-height:1.4; padding-inline-start:8px
+  secondaryTextLegacy: font-size:.85em
+### @atlaskit/avatar@28.0.3  internal/avatar-image.js  (token fallbacks; pt and pc converted to px)
+  image: flex-basis:100%; width:100%; height:100%
+  icon: width:100%; height:100%
+  circle: border-radius:9999px
+  xxsmall: border-radius:2px
+  xsmall: border-radius:2px
+  UNSAFE_xsmall: border-radius:2px
+  small: border-radius:2px
+  medium: border-radius:4px
+  large: border-radius:4px
+  xlarge: border-radius:6px
+  xxlarge: border-radius:12px
+  xxsmall: [svg] width:16px; [svg] height:16px
+  xsmall: [svg] width:16px; [svg] height:16px
+  UNSAFE_xsmall: [svg] width:20px; [svg] height:20px
+  small: [svg] width:24px; [svg] height:24px
+  medium: [svg] width:32px; [svg] height:32px
+  large: [svg] width:40px; [svg] height:40px
+  xlarge: [svg] width:6pc; [svg] height:6pc
+  xxlarge: [svg] width:8pc; [svg] height:8pc
+### @atlaskit/avatar@28.0.3  internal/icon-wrapper.js  (token fallbacks; pt and pc converted to px)
+  root: border-radius:50%; border-width:2px; box-sizing:border-box; width:100%; height:100%
+### @atlaskit/avatar@28.0.3  internal/presence-wrapper.js  (token fallbacks; pt and pc converted to px)
+  small: height:12px; width:12px
+  medium: height:14px; width:14px
+  large: height:15px; width:15px
+  xlarge: height:18px; width:18px
+  small: bottom:0; right:0
+  medium: bottom:0; right:0
+  large: bottom:1px; right:1px
+  xlarge: bottom:7px; right:7px
+  root: bottom:-4px; right:-4px
+  small: bottom:-1px; right:-1px
+  medium: bottom:-1px; right:-1px
+  large: bottom:4px; right:-4px
+  xlarge: bottom:17px; right:-5px
+### @atlaskit/avatar@28.0.3  internal/status-wrapper.js  (token fallbacks; pt and pc converted to px)
+  small: height:12px; width:12px
+  medium: height:14px; width:14px
+  large: height:15px; width:15px
+  xlarge: height:18px; width:18px
+  small: inset-inline-end:0; inset-block-start:0
+  medium: inset-inline-end:0; inset-block-start:0
+  large: inset-inline-end:1px; inset-block-start:1px
+  xlarge: inset-inline-end:7px; inset-block-start:7px
+  root: inset-inline-end:0; inset-block-start:0
+  small: inset-inline-end:-1px; inset-block-start:-1px
+  medium: inset-inline-end:-1px; inset-block-start:-1px
+  large: inset-inline-end:-4px; inset-block-start:4px
+  xlarge: inset-inline-end:-5px; inset-block-start:17px
+### @atlaskit/avatar@28.0.3  skeleton.js  (token fallbacks; pt and pc converted to px)
+  root: border-radius:50%; border-width:2px
+  square: border-radius:25%
+  xxsmall: width:16px; height:16px
+  xsmall: width:16px; height:16px
+  UNSAFE_xsmall: width:20px; height:20px
+  small: width:24px; height:24px
+  medium: width:32px; height:32px
+  large: width:40px; height:40px
+  xlarge: width:6pc; height:6pc
+  xxlarge: width:8pc; height:8pc
+### @atlaskit/avatar@28.0.3  avatar-radius.js  size map: large 3, medium 3, small 2, xlarge 6, xsmall 2, xxlarge 12
+### @atlaskit/avatar@28.0.3  avatar-sizes.js  size map: large 40, medium 32, small 24, xlarge 96, xsmall 16, xxlarge 128

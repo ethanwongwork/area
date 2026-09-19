@@ -1,0 +1,7 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/tooltip.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot tooltip-provider]
+  [slot tooltip]
+  [slot tooltip-trigger]
+  [slot tooltip-content]
+  L44 rounded-md=8px px-3=12px py-1.5=6px text-xs=12/16px
+  L50 size-2.5=10px translate-y-[calc(-50%_-_2px)] rounded-[2px]

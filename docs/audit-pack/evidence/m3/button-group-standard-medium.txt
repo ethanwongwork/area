@@ -1,0 +1,6 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-button-group-standard-medium.scss
+between-space: 8px
+container-height: 56px
+pressed-item-width-multiplier: 15%
+pressed-item-width-motion-spring-dampening: md-sys-motion.$spring-fast-spatial-damping
+pressed-item-width-motion-spring-stiffness: md-sys-motion.$spring-fast-spatial-stiffness

@@ -1,0 +1,52 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Switch/Switch.js
+L23 const slots = {
+L44 const SwitchRoot = styled('span', {
+L45 name: 'MuiSwitch',
+L46 slot: 'Root',
+L58   width: 34 + 12 * 2,
+L59   height: 14 + 12 * 2,
+L61   padding: 12,
+L70 variants: [
+L72 props: { edge: 'start' },
+L73 style: { marginLeft: -8 },
+L76 props: { edge: 'end' },
+L77 style: { marginRight: -8 },
+L80 props: { size: 'small' },
+L81 style: {
+L82   width: 40,
+L83   height: 24,
+L84   padding: 7,
+L86   width: 16,
+L87   height: 16,
+L90   padding: 4,
+L100 const SwitchSwitchBase = styled(SwitchBase, {
+L101 name: 'MuiSwitch',
+L102 slot: 'SwitchBase',
+L115   top: 0,
+L116   left: 0,
+L160 : {
+L171   left: '-100%',
+L172   width: '300%',
+L176 '&:hover': {
+L186 variants: [
+L190 props: { color },
+L191 style: {
+L194 '&:hover': {
+L245 const SwitchTrack = styled('span', {
+L246 name: 'MuiSwitch',
+L247 slot: 'Track',
+L250   height: '100%',
+L251   width: '100%',
+L252   borderRadius: 14 / 2,
+L259   border: '1px solid ButtonBorder',
+L272 : {
+L283 const SwitchThumb = styled('span', {
+L284 name: 'MuiSwitch',
+L285 slot: 'Thumb',
+L291   border: '1px solid transparent',
+L292   width: 20,
+L293   height: 20,
+L294   borderRadius: '50%',
+L311 const ownerState = {
+L321 const externalForwardedProps = {
+L331 additionalProps: {

@@ -1,0 +1,54 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/user-avatar/_user-avatar.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L15   $_sizes: (
+L16   xl: $spacing-10,   // spacing-10=64px
+L17   lg: $spacing-09,   // spacing-09=48px
+L18   md: $spacing-07,   // spacing-07=32px
+L19   sm: $spacing-06,   // spacing-06=24px
+L22 @mixin -size($block-class, $size) {
+L23   $_size: map.get($_sizes, $size);
+L25 .#{$block-class}--#{$size} {
+L26   block-size: $_size;
+L27   inline-size: $_size;
+L31 @mixin -photo-size($block-class, $size) {
+L32   $_size: map.get($_sizes, $size);
+L34 .#{$block-class}__photo--#{$size} {
+L35   border-radius: 100%;
+L36   block-size: $_size;
+L37   inline-size: $_size;
+L42 @mixin -set-light-bg($block-class, $order, $color) {
+L45 .#{$prefix}--white .#{$block-class}--#{$order} {
+L50 @mixin -set-dark-bg($block-class, $order, $color) {
+L52 .#{$prefix}--g100 .#{$block-class}--#{$order} {
+L60 @mixin user-avatar {
+L63 .#{$block-class} {
+L68   border: 0.5px solid transparent;
+L69   border-radius: 100%;
+L70   block-size: 4rem;
+L72   inline-size: 4rem;
+L77 .#{$block-class} svg {
+L81 .#{$block-class}__tooltip-trigger {
+L86   padding: 0;
+L87   border: 0;
+L88   margin: 0;
+L91   block-size: 100%;
+L93   inline-size: 100%;
+L97 .#{$block-class}__tooltip {
+L98 &:focus-within .#{$block-class} {
+L104 .#{$block-class}__photo {
+L105   border-radius: 100%;
+L109   @include -size($block-class, 'xl');
+L110   @include -size($block-class, 'lg');
+L111   @include -size($block-class, 'md');
+L112   @include -size($block-class, 'sm');
+L114 .#{$block-class}--xl {
+L115   @include type-style('heading-04');
+L118 .#{$block-class}--lg {
+L119   @include type-style('heading-03');   // heading-03=20/28
+L122 .#{$block-class}--md {
+L123   @include type-style('body-compact-01');   // body-compact-01=14/18
+L126 .#{$block-class}--sm {
+L127   @include type-style('label-01');   // label-01=12/16
+L130   @include -photo-size($block-class, 'xl');
+L131   @include -photo-size($block-class, 'lg');
+L132   @include -photo-size($block-class, 'md');
+L133   @include -photo-size($block-class, 'sm');

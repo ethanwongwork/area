@@ -1,0 +1,4 @@
+### @atlaskit/textfield@10.2.4  text-field.js  (token fallbacks; pt and pc converted to px)
+  standard: padding-block-start:1px; padding-block-end:1px; padding-inline-start:0; padding-inline-end:0
+  subtle: padding-block-start:1px; padding-block-end:1px; padding-inline-start:0; padding-inline-end:0
+### @atlaskit/textfield@10.2.4  text-field.js  size map: large 320, medium 240, small 160, xlarge 480, xsmall 80

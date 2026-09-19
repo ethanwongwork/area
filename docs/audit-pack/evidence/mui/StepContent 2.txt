@@ -1,0 +1,25 @@
+### MUI Material @ 69960c1  packages/mui-material/src/StepContent/StepContent.js
+L18 const slots = { root: ['root', last && 'last'], transition: ['transition'] };
+L23 const StepContentRoot = styled('div', {
+L24 name: 'MuiStepContent',
+L25 slot: 'Root',
+L33   marginLeft: 12, // half icon
+L34   paddingLeft: 8 + 12, // margin + half icon
+L35   paddingRight: 8,
+L41 variants: [
+L43 props: { last: true },
+L44 style: {
+L49 props: { alternativeLabel: true },
+L50 style: {
+L51   marginLeft: 0,
+L52   marginRight: 12, // half icon
+L53   paddingLeft: 8,
+L54   paddingRight: 8 + 12, // margin + half icon
+L64 props: { alternativeLabel: true, last: true },
+L65 style: {
+L73 const StepContentTransition = styled(Collapse, {
+L74 name: 'MuiStepContent',
+L75 slot: 'Transition',
+L92 const ownerState = { ...props, last, alternativeLabel };
+L107 const externalForwardedProps = {
+L117 additionalProps: {

@@ -1,0 +1,5 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-loading-indicator.scss
+active-indicator-size: 38px
+container-height: 48px
+container-width: 48px
+container-shape: corner-full = 9999px

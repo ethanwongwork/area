@@ -1,0 +1,97 @@
+### Carbon styles @ 8472cca  packages/styles/scss/components/dialog/_dialog.scss  (layout.size('height') control scale: xs 24, sm 32, md 40, lg 48, xl 64, 2xl 80 unless the component redefines it)
+L25 @mixin dialog($enable-presence: false) {
+L26 .#{$prefix}--dialog {
+L28   padding: 0;
+L29   border: none;
+L30   margin: auto;
+L33   inline-size: 48rem;
+L34   inset: 0;
+L35   max-block-size: 100%;
+L37 @include breakpoint(md) {
+L38   max-inline-size: 84%;
+L40 @include breakpoint(lg) {
+L41   max-inline-size: 60%;
+L43 @include breakpoint(xlg) {
+L44   max-inline-size: 48%;
+L49   transform: translateY(calc(-1 * #{$spacing-06}));   // spacing-06=24px
+L63 &[open] {
+L93 &[data-exiting] {
+L107   transform: translateY(calc(-1 * #{$spacing-06}));   // spacing-06=24px
+L124   transform: translateY(calc(-1 * #{$spacing-06}));   // spacing-06=24px
+L137 &[open] {
+L139   transform: translateY(calc(-1 * #{$spacing-06}));   // spacing-06=24px
+L144 .#{$prefix}--dialog__header {
+L147   inline-size: 100%;
+L148   margin-block-end: $spacing-03;   // spacing-03=8px
+L149   min-block-size: $spacing-09;   // spacing-09=48px
+L150   padding-block-start: $spacing-05;   // spacing-05=16px
+L151   padding-inline: $spacing-05 $spacing-09;   // spacing-05=16px spacing-09=48px
+L154 .#{$prefix}--dialog::backdrop {
+L161 .#{$prefix}--dialog::backdrop {
+L174 .#{$prefix}--dialog[open]::backdrop {
+L185 .#{$prefix}--dialog {
+L186 &::backdrop {
+L197 &[data-exiting]::backdrop {
+L237 .#{$prefix}--dialog[open]::backdrop {
+L242 .#{$prefix}--dialog__header-controls {
+L244   inset-block-start: 0;
+L245   inset-inline-end: 0;
+L248 .#{$prefix}--dialog-header__label {
+L251   @include type-style('label-01');   // label-01=12/16
+L254   margin-block-end: $spacing-02;   // spacing-02=4px
+L257 .#{$prefix}--dialog-header__heading {
+L260   @include type-style('heading-03');   // heading-03=20/28
+L262   margin: 0;
+L265   padding-inline-end: calc(20% - $spacing-09);   // spacing-09=48px
+L268 .#{$prefix}--dialog-container {
+L271   border: 1px solid $border-subtle-01;
+L279   inline-size: 100%;
+L281 @include breakpoint(md) {
+L282   max-block-size: 90vh;
+L285 @include breakpoint(lg) {
+L286   max-block-size: 84vh;
+L291 .#{$prefix}--dialog.#{$prefix}--modal-container {
+L292   border: none;
+L295 .#{$prefix}--dialog-content {
+L299   padding-block: $spacing-03 $spacing-09;   // spacing-03=8px spacing-09=48px
+L300   padding-inline: $spacing-05 $spacing-05;   // spacing-05=16px spacing-05=16px
+L302 &:focus {
+L307 .#{$prefix}--dialog-scroll-content {
+L308   border-block-end: $spacing-01 solid transparent;   // spacing-01=2px
+L311   $layer calc(100% - $spacing-11),   // spacing-11=80px
+L312   transparent calc(100% - $spacing-09),   // spacing-09=48px
+L315   linear-gradient(to left, $layer 0, $spacing-05, transparent $spacing-05),   // spacing-05=16px spacing-05=16px
+L316   linear-gradient(to right, $layer 0, $spacing-01, transparent $spacing-01),   // spacing-01=2px spacing-01=2px
+L317   linear-gradient(to top, $layer 0, $spacing-01, transparent $spacing-01);   // spacing-01=2px spacing-01=2px
+L320 .#{$prefix}--dialog-scroll-content > *:last-child {
+L321   margin-block-end: $spacing-06;   // spacing-06=24px
+L324 .#{$prefix}--dialog-scroll-content:has(.#{$prefix}--autoalign) {
+L329 .#{$prefix}--dialog-scroll-content--no-fade {
+L333 .#{$prefix}--dialog-footer {
+L337   block-size: $spacing-10;   // spacing-10=64px
+L341 .#{$prefix}--dialog-footer .#{$prefix}--btn {
+L344   margin: 0;
+L345   block-size: $spacing-10;   // spacing-10=64px
+L346   max-inline-size: none;
+L349 .#{$prefix}--dialog-footer--three-button .#{$prefix}--btn {
+L354 .#{$prefix}--dialog--danger {
+L358 .#{$prefix}--dialog--danger .#{$prefix}--dialog-container {
+L361   border: 1px solid transparent;
+L364   inset 0 -80px 70px -65px $ai-inner-shadow,
+L369 .#{$prefix}--dialog-container:has(.#{$prefix}--dialog-footer) {
+L370   @include ai-popover-gradient('default', $spacing-10, 'layer');   // spacing-10=64px
+L373   inset 0 -80px 0 -16px $layer,
+L374   inset 0 -160px 70px -65px $ai-inner-shadow,
+L379 .#{$prefix}--dialog-content.#{$prefix}--dialog-scroll-content {
+L382   $layer calc(100% - $spacing-11),   // spacing-11=80px
+L383   transparent calc(100% - $spacing-09),   // spacing-09=48px
+L386   linear-gradient(to left, $layer 0, $spacing-05, transparent $spacing-05),   // spacing-05=16px spacing-05=16px
+L387   linear-gradient(to right, $layer 0, $spacing-01, transparent $spacing-01),   // spacing-01=2px spacing-01=2px
+L388   linear-gradient(to top, $layer 0, $spacing-01, transparent $spacing-01);   // spacing-01=2px spacing-01=2px
+L390 .#{$prefix}--dialog__close {
+L391   padding: convert.to-rem(12px);
+L392   border: 2px solid transparent;
+L394   block-size: 3rem;
+L396   inline-size: 3rem;
+L400 &:hover {
+L405 &:focus {

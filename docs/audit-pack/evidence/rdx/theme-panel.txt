@@ -1,0 +1,67 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/theme-panel.css
+.rt-ThemePanelShortcut {
+  &:where(:focus-visible) {
+    outline-style: solid;
+    outline-width: 2px;
+    outline-offset: 2px;
+    outline-color: var(--accent-9);   /* = var(--amber-9) */
+  }
+}
+
+.rt-ThemePanelSwatch,
+.rt-ThemePanelRadioCard {
+  position: relative;
+}
+
+.rt-ThemePanelSwatchInput,
+.rt-ThemePanelRadioCardInput {
+  appearance: none;
+  margin: 0;
+  outline: none;
+  outline-width: 2px;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.rt-ThemePanelSwatch {
+  width: var(--space-4);   /* = 16px */
+  height: var(--space-4);   /* = 16px */
+  border-radius: 100%;
+
+  @media (--sm) {
+    width: var(--space-5);   /* = 24px */
+    height: var(--space-5);   /* = 24px */
+  }
+}
+
+.rt-ThemePanelSwatchInput {
+  outline-offset: 2px;
+  &:where(:checked) {
+    outline-style: solid;
+    outline-color: var(--gray-12);   /* = var(--mauve-12) */
+  }
+  &:where(:focus-visible) {
+    outline-style: solid;
+    outline-color: var(--accent-9);   /* = var(--amber-9) */
+  }
+}
+
+.rt-ThemePanelRadioCard {
+  border-radius: var(--radius-1);   /* = 3px */
+  box-shadow: 0 0 0 1px var(--gray-7);   /* = 0 0 0 1px var(--mauve-7) */
+}
+
+.rt-ThemePanelRadioCardInput {
+  outline-offset: -1px;
+
+  &:where(:checked) {
+    outline-style: solid;
+    outline-color: var(--gray-12);   /* = var(--mauve-12) */
+  }
+  &:where(:focus-visible) {
+    background-color: var(--accent-a3);   /* = var(--amber-a3) */
+    outline-style: solid;
+    outline-color: var(--accent-9);   /* = var(--amber-9) */
+  }
+}

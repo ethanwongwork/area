@@ -1,0 +1,15 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-banner.scss
+desktop-with-single-line-container-height: 52px
+desktop-with-three-lines-container-height: 90px
+desktop-with-two-lines-with-image-container-height: 72px
+divider-height: 1px
+mobile-with-single-line-container-height: 54px
+mobile-with-two-lines-container-height: 112px
+mobile-with-two-lines-with-image-container-height: 120px
+with-image-image-size: 40px
+action-label-text-line-height: label-large-line-height = 20px
+action-label-text-size: label-large-size = 14px
+container-shape: corner-none = 0px
+supporting-text-line-height: body-medium-line-height = 20px
+supporting-text-size: body-medium-size = 14px
+with-image-image-shape: corner-full = 9999px

@@ -1,0 +1,16 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-nav/library/src/components/AppItem/useAppItemStyles.styles.ts
+L6 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L17 export const useAppItemStyles = makeStyles({
+L18 root: {
+L19 marginInline: '4px',
+L20 width: 'revert',
+L22 gap: '10px',
+L23 marginInlineStart: '-6px',
+L24 marginInlineEnd: '0px',
+L25 padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalS} ${tokens.spacingVerticalS} ${tokens.spacingHorizontalMNudge}`,   // spacingVerticalS=8px spacingHorizontalS=8px spacingVerticalS=8px spacingHorizontalMNudge=10px
+L26 ...typographyStyles.subtitle2,   // typographyStyles.subtitle2=16px/22px w600
+L28 small: {
+L29 padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalS} ${tokens.spacingVerticalS} 14px`,   // spacingVerticalS=8px spacingHorizontalS=8px spacingVerticalS=8px
+L30 gap: '14px',
+L32 absentIconRootAdjustment: {
+L33 paddingInlineStart: '16px',

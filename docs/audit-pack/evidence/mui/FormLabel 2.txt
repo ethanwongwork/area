@@ -1,0 +1,15 @@
+### MUI Material @ 69960c1  packages/mui-material/src/FormLabel/FormLabel.js
+L16 const slots = {
+L33 name: 'MuiFormLabel',
+L34 slot: 'Root',
+L47   lineHeight: '1.4375em',
+L48   padding: 0,
+L50 variants: [
+L54 props: { color },
+L55 style: {
+L62 props: {},
+L63 style: {
+L76 const AsteriskComponent = styled('span', {
+L77 name: 'MuiFormLabel',
+L78 slot: 'Asterisk',
+L107 const ownerState = {

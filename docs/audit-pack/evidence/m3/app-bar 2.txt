@@ -1,0 +1,9 @@
+### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-app-bar.scss
+avatar-size: 32px
+icon-button-space: 0px
+icon-size: 24px
+leading-space: 4px
+search-leading-space: 8px
+search-trailing-space: 8px
+trailing-space: 4px
+container-shape: corner-none = 0px

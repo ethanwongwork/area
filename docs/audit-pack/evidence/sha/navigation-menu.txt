@@ -1,0 +1,18 @@
+### shadcn/ui (new-york-v4 registry) @ a87a63b  apps/v4/registry/new-york-v4/ui/navigation-menu.tsx  (Tailwind to px: spacing unit 4; --radius 0.625rem so sm 6, md 8, lg 10, xl 14)
+  [slot navigation-menu]
+  [slot navigation-menu-list]
+  L39 gap-1=4px
+  [slot navigation-menu-item]
+  L61 h-9=36px rounded-md=8px px-4=16px py-2=8px text-sm=14/20px font-medium focus-visible:ring-[3px] focus-visible:outline-1=1px
+  [slot navigation-menu-trigger]
+  L77 top-[1px] ml-1=4px size-3=12px
+  [slot navigation-menu-content]
+  L92 top-0=0px left-0=0px p-2=8px pr-2.5=10px
+  L93 group-data-[viewport=false]/navigation-menu:mt-1.5=6px group-data-[viewport=false]/navigation-menu:rounded-md=8px group-data-[viewport=false]/navigation-menu:border=1px **:data-[slot=navigation-menu-link]:focus:ring-0=0px
+  [slot navigation-menu-viewport]
+  L114 mt-1.5=6px rounded-md=8px border=1px
+  [slot navigation-menu-link]
+  L131 gap-1=4px rounded-sm=6px p-2=8px text-sm=14/20px focus-visible:ring-[3px] focus-visible:outline-1=1px [&_svg:not([class*='size-'])]:size-4=16px
+  [slot navigation-menu-indicator]
+  L147 h-1.5=6px
+  L152 top-[60%] h-2=8px w-2=8px rounded-tl-sm=6px

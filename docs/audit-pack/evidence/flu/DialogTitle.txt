@@ -1,0 +1,20 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-dialog/library/src/components/DialogTitle/useDialogTitleStyles.styles.ts
+L6 import { typographyStyles } from '@fluentui/react-theme';
+L17 const useRootResetStyles = makeResetStyles({
+L18 ...typographyStyles.subtitle1,   // typographyStyles.subtitle1=20px/28px w600
+L19 margin: 0,
+L20 gridRowStart: 1,
+L21 gridRowEnd: 1,
+L22 gridColumnStart: 1,
+L23 gridColumnEnd: 3,
+L26 const useStyles = makeStyles({
+L27 rootWithoutAction: {
+L28 gridColumnEnd: 4,
+L35 const useActionResetStyles = makeResetStyles({
+L36 gridRowStart: 1,
+L37 gridRowEnd: 1,
+L38 gridColumnStart: 3,
+L47 export const useDialogTitleInternalStyles = makeResetStyles({
+L50 padding: 0,
+L57 fontSize: 'inherit',
+L59 lineHeight: 0,

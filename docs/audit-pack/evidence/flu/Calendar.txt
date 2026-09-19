@@ -1,0 +1,39 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-calendar-compat/library/src/components/Calendar/useCalendarStyles.styles.ts
+L19 const useRootStyles = makeStyles({
+L20 base: {
+L22 width: '220px',
+L24 normalize: {
+L27 margin: '0',
+L28 padding: '0',
+L30 monthPickerNotVisible: {
+L33 dayAndMonthPickersVisible: {
+L34 width: '440px',
+L36 dayPickerVisibleAndWeekNumbersShown: {
+L37 width: '250px',
+L39 dayAndMonthPickersVisibleAndWeekNumbersShown: {
+L40 width: '470px',
+L44 const useDividerStyles = makeStyles({
+L45 base: {
+L46 borderRight: `1px solid ${tokens.colorNeutralStroke2}`,
+L47 top: 0,
+L51 const useMonthPickerWrapperStyles = makeStyles({
+L52 base: {
+L58 const useGoTodayButtonStyles = makeStyles({
+L59 base: {
+L62 ...shorthands.borderStyle('none'),
+L63 bottom: 0,
+L67 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L68 height: '30px',
+L69 lineHeight: '30px',
+L70 marginRight: '16px',
+L71 marginTop: '3px',
+L73 padding: '0 4px',
+L76 fontSize: tokens.fontSizeBase200,   // fontSizeBase200=12px
+L84 outline: tokens.strokeWidthThin,   // strokeWidthThin=1px
+L85 borderRadius: tokens.borderRadiusSmall,   // borderRadiusSmall=2px
+L98 const useLiveRegionStyles = makeStyles({
+L99 base: {
+L101 height: '1px',
+L102 margin: '-1px',
+L104 padding: '0',
+L106 width: '1px',

@@ -1,0 +1,24 @@
+### MUI Material @ 69960c1  packages/mui-material/src/CardHeader/CardHeader.js
+L14 const slots = {
+L26 const CardHeaderRoot = styled('div', {
+L27 name: 'MuiCardHeader',
+L28 slot: 'Root',
+L39   padding: 16,
+L42 const CardHeaderAvatar = styled('div', {
+L43 name: 'MuiCardHeader',
+L44 slot: 'Avatar',
+L48   marginRight: 16,
+L51 const CardHeaderAction = styled('div', {
+L52 name: 'MuiCardHeader',
+L53 slot: 'Action',
+L57   marginTop: -4,
+L58   marginRight: -8,
+L59   marginBottom: -4,
+L62 const CardHeaderContent = styled('div', {
+L63 name: 'MuiCardHeader',
+L64 slot: 'Content',
+L90 const ownerState = {
+L98 const externalForwardedProps = {
+L109 additionalProps: {
+L124 additionalProps: {
+L138 externalForwardedProps: {

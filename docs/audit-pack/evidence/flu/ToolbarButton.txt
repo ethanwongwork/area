@@ -1,0 +1,6 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-toolbar/library/src/components/ToolbarButton/useToolbarButtonStyles.styles.ts
+L7 const useBaseStyles = makeStyles({
+L8 vertical: {
+L11 verticalIcon: {
+L12 fontSize: '24px',
+L13 margin: '0',

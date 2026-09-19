@@ -1,0 +1,6 @@
+### Radix Themes @ 1faff10  packages/radix-ui-themes/src/components/tab-nav.css
+@import './_internal/base-tab-list.css';
+
+.rt-TabNavItem {
+  display: flex;
+}

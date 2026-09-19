@@ -1,0 +1,78 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-textarea/library/src/components/Textarea/useTextareaStyles.styles.ts
+L4 import { tokens, typographyStyles } from '@fluentui/react-theme';
+L16 const useRootStyles = makeStyles({
+L17 base: {
+L21 // Padding needed so the focus indicator does not overlap the resize handle, this should match focus indicator size.
+L22 padding: `0 0 ${tokens.strokeWidthThick} 0`,   // strokeWidthThick=2px
+L23 margin: '0',
+L24 borderRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L28 disabled: {
+L30 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStrokeDisabled}`,   // strokeWidthThin=1px
+L33 ...shorthands.borderColor('GrayText'),
+L37 interactive: {
+L44 left: '-1px',
+L45 bottom: '-1px',
+L46 right: '-1px',
+L49 // Use the whole border-radius as the height and only put radii on the bottom corners.
+L51 // max() ensures the focus border still shows up even if someone sets tokens.borderRadiusMedium to 0.   // borderRadiusMedium=4px
+L52 height: `max(${tokens.strokeWidthThick}, ${tokens.borderRadiusMedium})`,   // strokeWidthThick=2px borderRadiusMedium=4px
+L53 borderBottomLeftRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L54 borderBottomRightRadius: tokens.borderRadiusMedium,   // borderRadiusMedium=4px
+L60 borderBottom: `${tokens.strokeWidthThick} solid ${tokens.colorCompoundBrandStroke}`,   // strokeWidthThick=2px
+L61 clipPath: `inset(calc(100% - ${tokens.strokeWidthThick}) 0 0 0)`,   // strokeWidthThick=2px
+L70 transitionDuration: '0.01ms',
+L71 transitionDelay: '0.01ms',
+L82 transitionDuration: '0.01ms',
+L83 transitionDelay: '0.01ms',
+L91 outlineWidth: tokens.strokeWidthThick,   // strokeWidthThick=2px
+L97 filled: {
+L98 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStroke}`,   // strokeWidthThin=1px
+L100 ...shorthands.borderColor(tokens.colorTransparentStrokeInteractive),
+L111 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStrokeInteractive}`,   // strokeWidthThin=1px
+L116 border: `${tokens.strokeWidthThin} solid ${tokens.colorTransparentStrokeInteractive}`,   // strokeWidthThin=1px
+L120 outline: {
+L122 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1}`,   // strokeWidthThin=1px
+L125 outlineInteractive: {
+L127 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1Hover}`,   // strokeWidthThin=1px
+L132 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1Pressed}`,   // strokeWidthThin=1px
+L137 border: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke1Pressed}`,   // strokeWidthThin=1px
+L142 invalid: {
+L144 ...shorthands.borderColor(tokens.colorPaletteRedBorder2),
+L152 const useTextareaStyles = makeStyles({
+L153 base: {
+L154 ...shorthands.borderStyle('none'),
+L155 margin: '0',
+L159 flexGrow: 1,
+L161 height: '100%',
+L165 opacity: 1,
+L171 disabled: {
+L179 // The padding style adds both content and regular padding (from design spec), this is because the handle is not
+L180 // affected by changing the padding of the root.
+L181 small: {
+L182 minHeight: '40px',
+L183 padding: `${tokens.spacingVerticalXS} calc(${tokens.spacingHorizontalSNudge} + ${tokens.spacingHorizontalXXS})`,   // spacingVerticalXS=4px spacingHorizontalSNudge=6px spacingHorizontalXXS=2px
+L184 maxHeight: '200px',
+L185 ...typographyStyles.caption1,   // typographyStyles.caption1=12px/16px w400
+L187 medium: {
+L188 minHeight: '52px',
+L189 padding: `${tokens.spacingVerticalSNudge} calc(${tokens.spacingHorizontalMNudge} + ${tokens.spacingHorizontalXXS})`,   // spacingVerticalSNudge=6px spacingHorizontalMNudge=10px spacingHorizontalXXS=2px
+L190 maxHeight: '260px',
+L191 ...typographyStyles.body1,   // typographyStyles.body1=14px/20px w400
+L193 large: {
+L194 minHeight: '64px',
+L195 padding: `${tokens.spacingVerticalS} calc(${tokens.spacingHorizontalM} + ${tokens.spacingHorizontalXXS})`,   // spacingVerticalS=8px spacingHorizontalM=12px spacingHorizontalXXS=2px
+L196 maxHeight: '320px',
+L197 ...typographyStyles.body2,   // typographyStyles.body2=16px/22px w400
+L202 * Styles for the textarea's resize property
+L204 const useTextareaResizeStyles = makeStyles({
+L205 none: {
+L206 resize: 'none',
+L208 both: {
+L209 resize: 'both',
+L211 horizontal: {
+L212 resize: 'horizontal',
+L214 vertical: {
+L215 resize: 'vertical',
+L223 const { size, appearance, resize } = state;
+L248 textareaStyles[size],
+L249 textareaResizeStyles[resize],

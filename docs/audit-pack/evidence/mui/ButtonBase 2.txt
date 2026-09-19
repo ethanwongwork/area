@@ -1,0 +1,40 @@
+### MUI Material @ 69960c1  packages/mui-material/src/ButtonBase/ButtonBase.js
+L24 const slots = {
+L38 name: 'MuiButtonBase',
+L39 slot: 'Root',
+L51   border: 0,
+L52   margin: 0, // Remove the margin in Safari
+L53   borderRadius: 0,
+L54   padding: 0, // Remove the padding in Firefox
+L63 '&::-moz-focus-inner': {
+L73 variants: [
+L75 props: { internalDisabledThemeFocusVisible: false },
+L269 const linkProps = {};
+L280 const ownerState = {
+### MUI Material @ 69960c1  packages/mui-material/src/ButtonBase/Ripple.js
+L33 const rippleStyles = {
+L34   width: rippleSize,
+L35   height: rippleSize,
+L36   top: -(rippleSize / 2) + rippleY,
+L37   left: -(rippleSize / 2) + rippleX,
+### MUI Material @ 69960c1  packages/mui-material/src/ButtonBase/TouchRipple.js
+L17 const EMPTY_OBJ = {};
+L75 : {
+L76   width: 0,
+L77   height: 0,
+L78   left: 0,
+L79   top: 0,
+L161 const styles = css`
+L199 name: 'MuiTouchRipple',
+L200 slot: 'Root',
+L206   top: 0,
+L207   right: 0,
+L208   bottom: 0,
+L209   left: 0,
+L210   borderRadius: 'inherit',
+L216 name: 'MuiTouchRipple',
+L217 slot: 'Ripple',
+L238   width: 100%;
+L239   height: 100%;
+L251   left: 0px;
+L252   top: 0;

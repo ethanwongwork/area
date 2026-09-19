@@ -1,0 +1,64 @@
+### MUI Material @ 69960c1  packages/mui-material/src/Tabs/ScrollbarSize.js
+L7 const styles = {
+L8   width: 99,
+L9   height: 99,
+L11   top: -9999,
+### MUI Material @ 69960c1  packages/mui-material/src/Tabs/Tabs.js
+L42 const slots = {
+L61 const TabsRoot = styled('div', {
+L62 name: 'MuiTabs',
+L63 slot: 'Root',
+L80   minHeight: 48,
+L84 variants: [
+L87 style: {
+L93 style: {
+L105 const TabsScroller = styled('div', {
+L106 name: 'MuiTabs',
+L107 slot: 'Scroller',
+L123 variants: [
+L126 style: {
+L128   width: '100%',
+L133 style: {
+L136 '&::-webkit-scrollbar': {
+L143 style: {
+L150 style: {
+L158 const List = styled('div', {
+L159 name: 'MuiTabs',
+L160 slot: 'List',
+L167 variants: [
+L170 style: {
+L176 style: {
+L183 const TabsIndicator = styled('span', {
+L184 name: 'MuiTabs',
+L185 slot: 'Indicator',
+L189   height: 2,
+L190   bottom: 0,
+L191   width: '100%',
+L193 variants: [
+L195 props: {
+L198 style: {
+L203 props: {
+L206 style: {
+L212 style: {
+L213   height: '100%',
+L214   width: 2,
+L215   right: 0,
+L222 const TabsScrollbarSize = styled(ScrollbarSize)({
+L227 '&::-webkit-scrollbar': {
+L232 const defaultIndicatorStyle = {};
+L286 const ownerState = {
+L347 const externalForwardedProps = {
+L364   top: rect.top,
+L365   bottom: rect.bottom,
+L366   left: rect.left,
+L367   right: rect.right,
+L442 const newIndicatorStyle = {
+L543 additionalProps: {
+L545 slots: {
+L549 slotProps: {
+L557 const conditionalElements = {};
+L708 const observerOptions = {
+L779 additionalProps: {
+L833 externalForwardedProps: {
+L847 additionalProps: {
+L848 style: {

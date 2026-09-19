@@ -1,0 +1,12 @@
+### Fluent UI React v9 @ babf260  packages/react-components/react-tabs/library/src/components/TabList/useTabListStyles.styles.ts
+L15 const useStyles = makeStyles({
+L16 root: {
+L19 flexShrink: 0,
+L23 horizontal: {
+L27 vertical: {
+L31 roundedSmall: {
+L32 gap: tokens.spacingHorizontalSNudge,   // spacingHorizontalSNudge=6px
+L34 rounded: {
+L35 gap: tokens.spacingHorizontalS,   // spacingHorizontalS=8px
+L43 const { appearance, vertical, size } = state;
+L54 isRounded && (size === 'small' ? styles.roundedSmall : styles.rounded),
