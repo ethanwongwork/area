@@ -51,7 +51,7 @@ const FOUNDATION_PAGES = [
 
 /* Audit triage: reviewed families stay together while their capability gaps are still
  * being resolved. This deliberately is not a completion marker. */
-const REVIEWED_COMPONENTS = new Set(["field", "input", "textarea", "select", "checkbox", "radio", "button", "kbd", "code", "nav"]);
+const REVIEWED_COMPONENTS = new Set(["field", "input", "textarea", "select", "checkbox", "radio", "button", "kbd", "code", "nav", "badge", "switch"]);
 
 /* --- Chrome ---------------------------------------------------------------- */
 
@@ -96,6 +96,7 @@ const AXIS_SECTIONS = [
   { title: "Appearance", axes: ["theme", "neutral", "accent"] },
   { title: "Scale", axes: ["ui"] },
   { title: "Layout", axes: ["radius", "surface"] },
+  { title: "Accessibility", axes: ["contrast"] },
   { title: "Motion", axes: ["motion"] },
 ];
 
@@ -106,6 +107,15 @@ function axisControl(axis) {
 
 function inspectorBody() {
   const byId = Object.fromEntries(tokens.axes.map((axis) => [axis.id, axis]));
+  byId.contrast = {
+    id: "contrast",
+    label: "Contrast",
+    defaultPreset: "standard",
+    presets: [
+      { id: "standard", label: "Standard" },
+      { id: "more", label: "More" },
+    ],
+  };
 
   return AXIS_SECTIONS.map((section) => {
     const rows = section.axes
@@ -241,6 +251,8 @@ ${customizer(inspectorBody())}
 ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
+${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "badge" ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 </body>
 </html>`;
 }
@@ -250,8 +262,59 @@ function galleryPage() {
   // Every component receives its own compact section. The section supplies the component
   // name; a tile therefore names only its single specimen (Default, Tone / success,
   // Size / medium) and never repeats the family name just to fill space.
-  const auditedFamilies = new Set(["field", "input", "textarea", "select", "checkbox", "radio", "button", "kbd", "code", "nav"]);
+  const auditedFamilies = new Set(["field", "input", "textarea", "select", "checkbox", "radio", "button", "kbd", "code", "nav", "badge", "switch"]);
+  const badgeTones = ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"];
+  const badgeVariants = ["soft", "solid", "outline", "ghost", "plain"];
+  const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {
+
+    badge: [
+      { id: "default", title: "Default", demo: "BadgeDefault" },
+      ...[["sm", "small"], ["md", "medium"], ["lg", "large"]].map(([size, label]) => ({ id: `size-${size}`, title: `Size / ${label}`, demo: `GalleryBadgeSize${titleCase(size)}` })),
+      ...badgeVariants.flatMap((variant) => badgeTones.map((tone) => ({
+        id: `variant-${variant}-tone-${tone}`,
+        title: `${titleCase(variant)} / ${titleCase(tone)}`,
+        demo: `GalleryBadge${titleCase(variant)}${titleCase(tone)}`,
+      }))),
+      { id: "leading-icon", title: "Leading Icon", demo: "BadgeLeadingIcon" },
+      { id: "trailing-icon", title: "Trailing Icon", demo: "BadgeTrailingIcon" },
+      { id: "icon-only", title: "Icon Only", demo: "BadgeIconOnly" },
+      { id: "icon-circle", title: "Icon Circle", demo: "BadgeIconCircle" },
+      { id: "number", title: "Number", demo: "BadgeNumber" },
+      ...["soft", "outline"].flatMap((variant) => badgeTones.map((tone) => ({
+        id: `dot-${variant}-${tone}`,
+        title: `Dot ${titleCase(variant)} / ${titleCase(tone)}`,
+        demo: `GalleryBadgeDot${titleCase(variant)}${titleCase(tone)}`,
+      }))),
+      ...["Open", "Merged", "Closed", "Draft", "Queued"].map((state) => ({ id: `state-${state.toLowerCase()}`, title: `State / ${state}`, demo: `GalleryBadgeState${state}` })),
+      { id: "truncation", title: "Truncation", demo: "BadgeTruncation" },
+      { id: "uppercase", title: "Uppercase", demo: "BadgeUppercase" },
+      { id: "link", title: "Link", demo: "BadgeLink" },
+      { id: "link-soft", title: "Link Soft", demo: "BadgeLinkSoft" },
+      { id: "anchor-button", title: "Anchor Button", demo: "BadgeAnchorButton" },
+      { id: "anchor-avatar", title: "Anchor Avatar", demo: "BadgeAnchorAvatar" },
+      { id: "anchor-tab", title: "Anchor Tab", demo: "BadgeAnchorTab" },
+      ...["top-end", "top-start", "bottom-end", "bottom-start"].map((placement) => ({
+        id: `anchor-${placement}`,
+        title: `Anchor / ${placement}`,
+        demo: `GalleryBadgeAnchor${titleCase(placement).replace("-", "")}`,
+      })),
+      { id: "anchor-visibility", title: "Anchor Visibility", demo: "BadgeAnchorVisibility" },
+      { id: "group-wrap", title: "Group Wrap", demo: "BadgeGroupWrap" },
+      { id: "group-inline", title: "Group Inline", demo: "BadgeGroupInline" },
+      { id: "group-overlay", title: "Group Overlay", demo: "BadgeGroupOverlay" },
+      { id: "group-auto", title: "Group Auto", demo: "BadgeGroupAuto" },
+      { id: "custom-brand", title: "Custom Brand", demo: "BadgeCustomBrand" },
+      { id: "table-deployed", title: "Table Status / Deployed", demo: "GalleryBadgeTableDeployed" },
+      { id: "table-building", title: "Table Status / Building", demo: "GalleryBadgeTableBuilding" },
+      { id: "nav-new", title: "Nav New", demo: "BadgeNavNew" },
+      { id: "card-heading", title: "Card Heading", demo: "BadgeCardHeading" },
+      { id: "theme-light", title: "Theme / Light", demo: "GalleryBadgeThemeLight" },
+      { id: "theme-dark", title: "Theme / Dark", demo: "GalleryBadgeThemeDark" },
+      { id: "stress-long", title: "Stress / Long Label", demo: "GalleryBadgeStressLong" },
+      { id: "stress-rtl", title: "Stress / RTL", demo: "GalleryBadgeStressRtl" },
+      { id: "stress-zoom", title: "Stress / 200%", demo: "GalleryBadgeStressZoom" },
+    ],
     avatar: [
       { id: "default", title: "Default", demo: "GalleryAvatar" },
       { id: "size-small", title: "Size / small", demo: "GalleryAvatarSmall" },
@@ -383,14 +446,11 @@ function galleryPage() {
       { id: "rows", title: "Visible rows", demo: "TextareaRows" },
       { id: "resize-none", title: "Resize / none", demo: "TextareaResizeNone" },
     ],
-    switch: [
-      { id: "default", title: "Default", demo: "GallerySwitch" },
-      { id: "size-small", title: "Size / small", demo: "GallerySwitchSmall" },
-      { id: "size-medium", title: "Size / medium", demo: "GallerySwitchMedium" },
-      { id: "size-large", title: "Size / large", demo: "GallerySwitchLarge" },
-      { id: "on", title: "On", demo: "GallerySwitchOn" },
-      { id: "disabled", title: "Disabled", demo: "GallerySwitchDisabled" },
-    ],
+    switch: ["SwitchDefault", "SwitchSizeSm", "SwitchSizeMd", "SwitchSizeLg", "SwitchChecked", "SwitchHover", "SwitchActive", "SwitchFocus", "SwitchDisabled", "SwitchDisabledChecked", "SwitchReadOnly", "SwitchLoading", "SwitchLabelEnd", "SwitchLabelStart", "SwitchDescription", "SwitchHiddenLabel", "SwitchSettingsRow", "SwitchList"].map(name => ({
+      id: name.slice(6).toLowerCase(),
+      title: name.slice(6).replace(/([a-z])([A-Z])/g, "$1 $2"),
+      demo: name,
+    })),
   };
   const sections = COMPONENT_PAGES.filter((component) => auditedFamilies.has(component.slug)).map((component) => {
     const specimens = gallerySpecimens[component.slug] ?? component.examples;
@@ -400,7 +460,7 @@ function galleryPage() {
       const id = `${component.slug}-${example.id}`;
       return `<article class="docs-visual-gallery__tile" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
         <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${escapeHtml(example.title)}</h3>
-        <div class="docs-visual-gallery__tile-preview">${demo.html}</div>
+        <div class="docs-visual-gallery__tile-preview">${demoMarkup(example.demo, demo.html)}</div>
       </article>`;
     }).join("\n");
     return `<section class="docs-visual-gallery__section" aria-labelledby="gallery-section-${component.slug}">
@@ -421,14 +481,40 @@ function galleryPage() {
 </head>
 <body>
 <main class="docs-visual-gallery">
-  <header class="docs-visual-gallery__header"><h1 class="docs-visual-gallery__title">Component gallery</h1></header>
-  ${sections}
+  <div class="docs-visual-gallery__content">
+    <header class="docs-visual-gallery__header"><h1 class="docs-visual-gallery__title">Component gallery</h1></header>
+    ${sections}
+  </div>
+  <aside class="docs-visual-gallery__inspector area-panel area-panel--md area-panel--flush" aria-label="Customize gallery">
+    <div class="area-panel__bar docs-visual-gallery__inspector-bar">
+      <span class="area-panel__title docs-visual-gallery__inspector-title">Customize</span>
+      <span class="docs-visual-gallery__inspector-actions">
+        <button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm" data-reset-axes>
+          <span class="area-button__label">Reset</span>
+        </button>
+        <button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm area-button--icon-only docs-visual-gallery__rail-toggle" data-gallery-rail="panel" aria-expanded="true" aria-controls="gallery-customizer-body" aria-label="Collapse customize panel">
+          <span aria-hidden="true">${ICONS.panelRight}</span>
+        </button>
+      </span>
+    </div>
+    <div class="area-panel__body docs-visual-gallery__inspector-body" id="gallery-customizer-body">
+      ${inspectorBody()}
+    </div>
+  </aside>
 </main>
+<script>${DOCS_SCRIPT}</script>
+<script type="module" src="./badge-demos.js"></script>
+<script type="module" src="./switch-demos.js"></script>
 </body>
 </html>`;
 }
 
 /* --- Component pages -------------------------------------------------------- */
+
+function demoMarkup(name, html) {
+  if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  return name.startsWith("Badge") ? `<div data-badge-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>` : html;
+}
 
 function exampleBlock(example) {
   const demo = demos[example.demo];
@@ -441,7 +527,7 @@ ${example.note ? `<p class="docs-note">${escapeHtml(example.note)}</p>` : ""}
 <div class="docs-example">
   <div class="docs-example__preview${column ? " docs-example__preview--column" : ""}">
     <span class="docs-example__actions">${customizeButton()}</span>
-    ${demo.html}
+    ${demoMarkup(example.demo, demo.html)}
   </div>
   ${codeBlock(demo.code, { flush: true })}
 </div>`;
@@ -484,7 +570,9 @@ ${codeBlock(demos[spec.examples[0].demo].code)}
 
   const examples = `<h2 class="docs-h2" id="examples">Examples</h2>${spec.examples.map(exampleBlock).join("\n")}`;
 
+  const aliasNote = manifest?.aliases ? `<p class="docs-note">Source aliases: ${Object.entries(manifest.aliases).map(([alias, canonical]) => `${escapeHtml(alias)} → ${escapeHtml(canonical)}`).join("; ")}</p>` : "";
   const api = `<h2 class="docs-h2" id="api">API reference</h2>
+${aliasNote}
 ${table(
   ["Prop", "Type", "Default"],
   spec.api.map(([name, type, dflt]) => [
@@ -1397,3 +1485,8 @@ buildInsetFixture(out, repo);
 console.log(`\n  @area/docs\n`);
 console.log(`  ${pages.length + labPageCount + 2} pages, ${Object.keys(demos).length} demos`);
 console.log(`  dist/ -> ${out}\n`);
+
+await (await import("esbuild")).build({ entryPoints: [join(root, "src/badge-client.tsx")], outfile: join(out, "badge-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
+
+await (await import("esbuild")).build({ entryPoints: [join(root, "src/switch-client.tsx")], outfile: join(out, "switch-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
+await (await import("./build-switch-fixture.mjs")).buildSwitchFixture(root, out);

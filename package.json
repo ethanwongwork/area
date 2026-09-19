@@ -17,8 +17,12 @@
     "dev": "npm run dev -w @area/docs",
     "clean": "rm -rf packages/*/dist apps/*/dist",
     "audit": "npm run audit -w @area/docs",
+    "audit:evidence": "cd docs/audit-pack/tools/audit-evidence && ./fetch.sh && python3 extract.py && python3 lookup.py --reindex",
+    "audit:lookup": "python3 docs/audit-pack/tools/audit-evidence/lookup.py",
     "test:preview": "npm run test -w @area/docs",
     "test:consumer": "node scripts/check-consumer.mjs",
+    "test:switch": "node --test packages/react/tests/switch.test.mjs",
+    "test:badge": "node --test packages/react/tests/badge.test.mjs",
     "test:contracts": "node --test packages/styles/scripts/manifest-parity.test.mjs apps/docs/scripts/axis-preferences.test.mjs"
   },
   "engines": {

@@ -110,6 +110,11 @@ export function derivedTokens(): Record<string, string> {
       `calc(var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,
     [`${PREFIX}field-focus-halo-width`]:
       `calc(var(${PREFIX}space-2) + var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,
+    // Badge brand paint is an opt-in product seam, re-derived at axis boundaries.
+    [`${PREFIX}badge-bg`]: `var(${PREFIX}bg-component)`,
+    [`${PREFIX}badge-fg`]: `var(${PREFIX}fg-default)`,
+    [`${PREFIX}badge-max-width`]: `calc(var(${PREFIX}space-40) * 5)`,
+    [`${PREFIX}badge-tracking-wide`]: "0.04em",
     // Input aliases are public theming seams. They preserve the shared defaults while
     // allowing one product to tune editable fields without repointing every control.
     [`${PREFIX}input-bg`]: `var(${PREFIX}bg-surface)`,

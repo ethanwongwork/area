@@ -5,54 +5,6 @@
  * needs the hover/focus/disabled machinery the controls carry.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  /* --- Badge -------------------------------------------------------------- */
-  /*
-   * A badge is distinguished from a button by the absence of a stroke, not by its
-   * corner radius. Giving it a pill shape would make it read as an interactive chip.
-   */
-  .area-badge {
-    --_bg: var(--area-bg-component);
-    --_fg: var(--area-fg-default);
-
-    display: inline-flex;
-    align-items: center;
-    gap: var(--area-space-4);
-    padding-inline: var(--area-space-6);
-    block-size: var(--area-control-xs);
-    border-radius: var(--area-radius-small);
-    background-color: var(--_bg);
-    color: var(--_fg);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
-    font-weight: var(--area-weight-strong);
-    white-space: nowrap;
-  }
-
-  .area-badge__dot {
-    inline-size: var(--area-space-6);
-    block-size: var(--area-space-6);
-    border-radius: var(--area-radius-full);
-    background-color: currentcolor;
-    flex-shrink: 0;
-  }
-
-  .area-badge--neutral { --_bg: var(--area-bg-component); --_fg: var(--area-fg-muted); }
-  .area-badge--accent  { --_bg: var(--area-accent-surface); --_fg: var(--area-fg-accent); }
-  .area-badge--danger  { --_bg: var(--area-danger-surface); --_fg: var(--area-fg-danger); }
-  .area-badge--warning { --_bg: var(--area-warning-surface); --_fg: var(--area-fg-warning); }
-  .area-badge--success { --_bg: var(--area-success-surface); --_fg: var(--area-fg-success); }
-
-  .area-badge--solid.area-badge--neutral { --_bg: var(--area-fg-default); --_fg: var(--area-bg-surface); }
-  .area-badge--solid.area-badge--accent  { --_bg: var(--area-accent-solid); --_fg: var(--area-fg-on-accent); }
-  .area-badge--solid.area-badge--danger  { --_bg: var(--area-danger-solid); --_fg: var(--area-fg-on-danger); }
-  .area-badge--solid.area-badge--warning { --_bg: var(--area-warning-solid); --_fg: var(--area-fg-on-warning); }
-  .area-badge--solid.area-badge--success { --_bg: var(--area-success-solid); --_fg: var(--area-fg-on-success); }
-
-  .area-badge--outline {
-    --_bg: transparent;
-    border: var(--area-border-width) solid var(--area-border);
-  }
-
   /* --- Avatar ------------------------------------------------------------- */
   .area-avatar {
     --_size: var(--area-control-md);

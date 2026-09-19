@@ -1,0 +1,118 @@
+/* Switch: a pill-shaped glyph with an independent native hit target. */
+@layer area.components {
+  .area-switch {
+    --_w: var(--area-space-40);
+    --_h: var(--area-space-20);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+    --_inset: var(--area-space-2);
+    --_thumb: calc(var(--_h) - var(--_inset) * 2);
+    --_gap: var(--area-space-8);
+    --_on: var(--area-accent-solid);
+    --_on-hover: var(--area-accent-solid-hover);
+    --_off: var(--area-fill-toggle);
+    --_off-hover: var(--area-fill-toggle-hover);
+    --_edge: var(--area-edge-control);
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--_gap);
+    position: relative;
+    isolation: isolate;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    min-block-size: var(--area-space-24);
+    font-family: var(--area-font-sans);
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    color: var(--area-fg-default);
+    cursor: pointer;
+  }
+
+  .area-switch--sm { --_w: var(--area-space-32); --_h: var(--area-space-16); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-switch--md { --_w: var(--area-space-40); --_h: var(--area-space-20); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-switch--lg { --_w: var(--area-space-48); --_h: var(--area-space-24); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+
+  .area-switch__control {
+    appearance: none;
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    min-inline-size: var(--area-space-24);
+    min-block-size: var(--area-space-24);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    z-index: 2;
+    cursor: inherit;
+  }
+
+  .area-switch__track {
+    position: relative;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    inline-size: var(--_w);
+    block-size: var(--_h);
+    margin-block-start: calc((var(--_leading) - var(--_h)) / 2);
+    border: var(--area-stroke-width) solid var(--_edge);
+    border-radius: var(--area-radius-full);
+    background: var(--_off);
+    transition: background var(--area-duration-fast) var(--area-ease-out);
+    pointer-events: none;
+  }
+
+  .area-switch__thumb {
+    position: absolute;
+    box-sizing: border-box;
+    inset-block-start: calc(var(--_inset) - var(--area-stroke-width));
+    inset-inline-start: calc(var(--_inset) - var(--area-stroke-width));
+    inline-size: var(--_thumb);
+    block-size: var(--_thumb);
+    border-radius: var(--area-radius-full);
+    background: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-1);
+    transition: inset-inline-start var(--area-duration-slow) var(--area-ease-out), inline-size var(--area-duration-fast) var(--area-ease-out);
+  }
+
+  .area-switch__control:checked ~ .area-switch__track { background: var(--_on); border-color: var(--_on); }
+  .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb)); }
+  .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); }
+  .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); }
+  .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__thumb { inline-size: calc(var(--_thumb) + var(--area-space-2)); }
+  .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb) - var(--area-space-2)); }
+  .area-switch__control:focus-visible ~ .area-switch__track,
+  .area-switch[data-focus-visible] .area-switch__track { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+
+  .area-switch:is([data-disabled], [data-read-only]) { cursor: not-allowed; color: var(--area-fg-disabled); }
+  .area-switch:is([data-disabled], [data-read-only]) .area-switch__track { background: var(--area-bg-component); border-color: var(--area-fg-disabled); }
+  .area-switch:is([data-disabled], [data-read-only]) .area-switch__thumb { background: var(--area-fg-disabled); }
+  .area-switch[data-read-only] { cursor: default; }
+  .area-switch[data-loading] { cursor: progress; }
+
+  .area-switch__text { display: flex; flex-direction: column; gap: var(--area-space-2); min-inline-size: 0; }
+  .area-switch__label { display: block; font-size: var(--_text); line-height: var(--_leading); overflow-wrap: anywhere; }
+  .area-switch__description { display: block; font-size: var(--area-control-sm-text); line-height: var(--area-control-sm-leading); color: var(--area-fg-muted); overflow-wrap: anywhere; }
+  .area-switch__loading { display: inline-flex; align-items: center; min-block-size: var(--_leading); order: 1; }
+  .area-switch--label-end .area-switch__text { order: 2; }
+  .area-switch--label-start .area-switch__text { order: -2; }
+  .area-switch--label-start .area-switch__loading,
+  .area-switch--full-width .area-switch__loading { order: -1; }
+  .area-switch--full-width { display: flex; inline-size: 100%; }
+  .area-switch--full-width .area-switch__text { order: -2; flex: 1; }
+
+  [data-area-motion="none"] .area-switch__thumb { transition: none; }
+  @media (prefers-reduced-motion: reduce) { .area-switch__thumb { transition: none; } }
+  @media (pointer: coarse) { .area-switch { min-block-size: calc(var(--area-space-40) + var(--area-space-4)); min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); } }
+  @media (forced-colors: active) {
+    .area-switch { --_on: Highlight; --_on-hover: Highlight; --_off: Canvas; --_off-hover: Canvas; --_edge: CanvasText; }
+    .area-switch__track { forced-color-adjust: none; background: Canvas; border-color: CanvasText; }
+    .area-switch__thumb { background: CanvasText; box-shadow: none; }
+    .area-switch__control:checked ~ .area-switch__track { background: Highlight; border-color: Highlight; }
+    .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { background: HighlightText; }
+    .area-switch:is([data-disabled], [data-read-only]) .area-switch__track { background: Canvas; border-color: GrayText; }
+    .area-switch:is([data-disabled], [data-read-only]) .area-switch__thumb { background: GrayText; }
+    .area-switch__control:focus-visible ~ .area-switch__track,
+    .area-switch[data-focus-visible] .area-switch__track { outline-color: Highlight; }
+  }
+}

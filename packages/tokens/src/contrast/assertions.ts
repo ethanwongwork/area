@@ -181,6 +181,10 @@ function chromeAssertions(): ContrastAssertion[] {
 
 export const ASSERTIONS: ContrastAssertion[] = [
   ...textAssertions(),
+  ...["bg-page", "bg-surface", "bg-component-hover"].map(bg => ({
+    fg: "bg-inverse", bg, wcag: WCAG.TEXT, apca: APCA.CONTENT,
+    note: "inverted Badge transparent label and hover",
+  })),
   ...tonalAssertions(),
   ...chromeAssertions(),
   ...stateAssertions(),

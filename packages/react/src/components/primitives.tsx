@@ -18,7 +18,6 @@ import type {
 import {
   alertVariants,
   avatarVariants,
-  badgeVariants,
   cx,
   chipVariants,
   panelVariants,
@@ -34,27 +33,6 @@ import {
 } from "../variants.ts";
 
 type Div = HTMLAttributes<HTMLDivElement>;
-/* --- Badge ---------------------------------------------------------------- */
-
-export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  tone?: VariantProps<typeof MANIFESTS.badge>["tone"];
-  variant?: VariantProps<typeof MANIFESTS.badge>["variant"];
-  /** Shows a leading status dot. */
-  dot?: boolean;
-}
-
-export const Badge = /* @__PURE__ */ forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
-  { tone, variant, dot, className, children, ...rest },
-  ref,
-) {
-  return (
-    <span ref={ref} className={badgeVariants({ tone, variant }, className)} {...rest}>
-      {dot ? <span className="area-badge__dot" aria-hidden="true" /> : null}
-      <span className="area-badge__label">{children}</span>
-    </span>
-  );
-});
-
 /* --- Avatar --------------------------------------------------------------- */
 
 export interface AvatarProps extends Omit<Div, "children"> {

@@ -26,3 +26,5 @@ export * from "./components/forms.tsx";
 export * from "./variants.ts";
 
 export { Theme, useTheme, type ThemeProps, type AxisSelection } from "./components/Theme.tsx";
+
+export { Badge, BadgeAnchor, BadgeGroup, type BadgeProps, type BadgeAnchorProps, type BadgeGroupProps } from "./components/Badge.tsx";

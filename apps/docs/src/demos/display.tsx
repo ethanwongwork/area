@@ -1,30 +1,6 @@
 import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Code, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
 import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
-export const BadgeDefault = () => <Badge>Badge</Badge>;
-
-export const BadgeTones = () => (
-  <>
-    <Badge tone="neutral">Neutral</Badge>
-    <Badge tone="accent">Accent</Badge>
-    <Badge tone="success">Success</Badge>
-    <Badge tone="warning">Warning</Badge>
-    <Badge tone="danger">Danger</Badge>
-  </>
-);
-
-export const BadgeVariants = () => (
-  <>
-    <Badge variant="solid" tone="accent">
-      Solid
-    </Badge>
-    <Badge variant="outline">Outline</Badge>
-    <Badge tone="success" dot>
-      Live
-    </Badge>
-  </>
-);
-
 export const AvatarDefault = () => <Avatar fallback="EW" alt="Ethan Wong" />;
 
 export const AvatarSizes = () => (

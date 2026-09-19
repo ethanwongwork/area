@@ -13,6 +13,7 @@ export function buildInsetFixture(out, repo) {
   for (const ui of ['default', 'compact']) for (const dir of ['ltr', 'rtl']) for (const contrast of ['standard','more']) {
     const rows = ['xs','sm','md','lg','xl'].map(size => {
       const buttonSize = size === 'xs' ? 'sm' : size === 'xl' ? 'lg' : size;
+      const switchSize = size === 'xs' ? 'sm' : size === 'xl' ? 'lg' : size;
       return h('div', {className:'specimen-row', key:size},
       h('small',null,size),
       h(Button,{size:buttonSize,variant:'soft'},'Text'),
@@ -23,7 +24,7 @@ export function buildInsetFixture(out, repo) {
       h(Segmented,{size,value:'a',options:[{value:'a',label:'Text',icon:globe},{value:'b',label:'Text'}]}),
       h(Input,{size,icon:globe,'aria-label':`${size} search`,defaultValue:'Text'}),
       h(Select,{size,'aria-label':`${size} choice`},h('option',null,'Text')),
-      h(Checkbox,{size,label:'Text',description:'Second line'}),h(Radio,{size,label:'Text',description:'Second line'}),h(Switch,{size,label:'Text',description:'Second line'})
+      h(Checkbox,{size,label:'Text',description:'Second line'}),h(Radio,{size,label:'Text',description:'Second line'}),h(Switch,{size:switchSize,label:'Text',description:'Second line'})
     ); });
     sections.push(h('section', {'data-area-ui':ui,'data-area-contrast':contrast,'data-area-theme':contrast==='more'?'dark':'light','data-area-surface':contrast==='more'?'outlined':'flat','data-area-radius':contrast==='more'?'pill':'standard',dir,key:ui+dir+contrast},
       h('h2',null,`${ui} · ${dir} · ${contrast}`),...rows,

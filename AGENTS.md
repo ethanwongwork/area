@@ -61,8 +61,8 @@ Run tests separately: `build` does not execute the contrast test gate.
   documented hairlines and mask geometry. Follow `components/button.css`: variants set
   local `--_*` properties; base rules consume them; size tiers set density tokens only.
 - A size tier is the outer control height. Checkbox and Radio use the icon ramp. Switch
-  width follows the control ramp while its track height uses 12/16/20/20/24px, so the
-  default medium switch is 32×20px. Radius is flat per preset and capped against the box;
+  tracks use fixed 24×12 / 28×16 / 40×20 / 40×20 / 48×24px glyph geometry in both densities;
+  medium is 40×20px. Pill is the identity default; rounded is an explicit alternative. Radius is flat per preset and capped against the box;
   density also changes UI type.
 - Decorative dividers and container edges use `--area-border-decorative` (light neutral 75, current visual trial).
   Never use it for control affordances or state indicators.
@@ -89,11 +89,16 @@ Run tests separately: `build` does not execute the contrast test gate.
 ## Current audit
 
 Read [docs/SYSTEM_AUDIT.md](docs/SYSTEM_AUDIT.md) and [docs/ROADMAP.md](docs/ROADMAP.md) before
-expanding the system. Follow [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) for
-the authorized work order and decision boundaries. E03 resolves the five stroke failure groups
-without lowering their floors and removes all syntax waivers. Read [docs/CONTRAST.md](docs/CONTRAST.md)
-before changing strokes, focus or state painting. Required edges use stroke-width independently
-of Surface. Most controls use focus-color/width/offset; editable fields use a neutral opaque
+expanding the system. Every component audit starts from the matching family section in
+[the audit pack](docs/audit-pack/00-START-HERE.md): read the build brief first, then
+the [repo map](docs/audit-pack/09-area-repo-map.md), then the matching family file. Never
+write a size from memory; all numeric audit evidence comes from
+`docs/audit-pack/evidence/`.
+Follow [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) for the authorized work
+order and decision boundaries. E03 resolves the five stroke failure groups without lowering
+their floors and removes all syntax waivers. Read [docs/CONTRAST.md](docs/CONTRAST.md) before
+changing strokes, focus or state painting. Required edges use stroke-width independently of
+Surface. Most controls use focus-color/width/offset; editable fields use a neutral opaque
 focus edge plus a translucent halo in standard mode and return to accent in increased contrast.
 Contrast report exits nonzero on failures.
 

@@ -1,0 +1,213 @@
+/* Badge: token-sized metadata, with native links and orthogonal dot composition. */
+@layer area.components {
+  .area-badge {
+    --_height: var(--area-space-24); --_icon: var(--area-icon-sm);
+    --_gap: var(--area-gap-xs); --_gutter: var(--area-space-8); --_text: var(--area-control-sm-text);
+    --_leading: var(--area-control-sm-leading);
+    --_solid: var(--area-neutral-solid); --_solid-hover: var(--area-neutral-solid-hover);
+    --_surface: var(--area-bg-component); --_surface-hover: var(--area-bg-component-hover);
+    --_tone-fg: var(--area-fg-default); --_on-solid: var(--area-fg-on-neutral);
+    --_line: var(--area-edge-control); --_line-hover: var(--area-edge-control-hover);
+    --_bg: var(--_surface); --_bg-hover: var(--_surface-hover); --_fg: var(--_tone-fg);
+    --_border: transparent; --_border-hover: transparent;
+    --_dot: var(--area-space-6); --_dot-color: var(--_tone-fg);
+    --_tracking: normal;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-sizing: border-box; vertical-align: baseline; flex-shrink: 0;
+    block-size: var(--_height); gap: var(--_gap);
+    border: var(--area-stroke-width) solid var(--_border);
+    border-radius: var(--area-radius-full);
+    background: var(--_bg); color: var(--_fg);
+    font-family: var(--area-font-sans); font-size: var(--_text); line-height: var(--_leading);
+    font-weight: var(--area-weight-strong); letter-spacing: var(--_tracking);
+    white-space: nowrap; text-decoration: none; transition: var(--area-transition);
+  }
+  .area-badge__label { min-inline-size: 0; line-height: var(--_leading); }
+  .area-badge__leading-icon, .area-badge__trailing-icon {
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    inline-size: var(--_icon); block-size: var(--_icon);
+  }
+  .area-badge__leading-icon > svg, .area-badge__trailing-icon > svg { inline-size: 100%; block-size: 100%; }
+  .area-badge__dot { inline-size: var(--_dot); block-size: var(--_dot); flex-shrink: 0; border-radius: var(--area-radius-full); background: var(--_dot-color); }
+  .area-badge--neutral {
+    --_solid: var(--area-neutral-solid);
+    --_solid-hover: var(--area-neutral-solid-hover);
+    --_surface: var(--area-bg-component);
+    --_surface-hover: var(--area-bg-component-hover);
+    --_surface-active: var(--area-bg-component-active);
+    /*
+     * A step lighter than the control border, at rest and on hover alike.
+     *
+     * An outline button is identified by its label and its shape; the stroke is definition,
+     * not the affordance, and at the resting border's weight it read as a field. The pair
+     * still moves one rung on hover, so the state change is unchanged -- only the weight of
+     * both ends came down.
+     */
+    --_line: var(--area-edge-control);
+    --_line-hover: var(--area-edge-control-hover);
+    --_tone-fg: var(--area-fg-default);
+    --_on-solid: var(--area-fg-on-neutral);
+  }
+
+  /* The accent hue. Follows the accent axis. */
+  .area-badge--accent {
+    --_solid: var(--area-accent-solid);
+    --_solid-hover: var(--area-accent-solid-hover);
+    --_surface: var(--area-accent-surface);
+    --_surface-hover: var(--area-accent-surface-hover);
+    --_surface-active: var(--area-accent-surface-active);
+    --_line: var(--area-accent-border);
+    --_line-hover: var(--area-accent-border-strong);
+    --_tone-fg: var(--area-fg-accent);
+    --_on-solid: var(--area-fg-on-accent);
+  }
+
+  /* Fixed blue. Informational, never the primary action. */
+  .area-badge--info {
+    --_solid: var(--area-info-solid);
+    --_solid-hover: var(--area-info-solid-hover);
+    --_surface: var(--area-info-surface);
+    --_surface-hover: var(--area-info-surface-hover);
+    --_surface-active: var(--area-info-surface-active);
+    --_line: var(--area-info-border);
+    --_line-hover: var(--area-info-border-strong);
+    --_tone-fg: var(--area-fg-info);
+    --_on-solid: var(--area-fg-on-info);
+  }
+
+  .area-badge--success {
+    --_solid: var(--area-success-solid);
+    --_solid-hover: var(--area-success-solid-hover);
+    --_surface: var(--area-success-surface);
+    --_surface-hover: var(--area-success-surface-hover);
+    --_surface-active: var(--area-success-surface-active);
+    --_line: var(--area-success-border);
+    --_line-hover: var(--area-success-border-strong);
+    --_tone-fg: var(--area-fg-success);
+    --_on-solid: var(--area-fg-on-success);
+  }
+
+  .area-badge--warning {
+    --_solid: var(--area-warning-solid);
+    --_solid-hover: var(--area-warning-solid-hover);
+    --_surface: var(--area-warning-surface);
+    --_surface-hover: var(--area-warning-surface-hover);
+    --_surface-active: var(--area-warning-surface-active);
+    --_line: var(--area-warning-border);
+    --_line-hover: var(--area-warning-border-strong);
+    --_tone-fg: var(--area-fg-warning);
+    --_on-solid: var(--area-fg-on-warning);
+  }
+
+  .area-badge--caution {
+    --_solid: var(--area-caution-solid);
+    --_solid-hover: var(--area-caution-solid-hover);
+    --_surface: var(--area-caution-surface);
+    --_surface-hover: var(--area-caution-surface-hover);
+    --_surface-active: var(--area-caution-surface-active);
+    --_line: var(--area-caution-border);
+    --_line-hover: var(--area-caution-border-strong);
+    --_tone-fg: var(--area-fg-caution);
+    --_on-solid: var(--area-fg-on-caution);
+  }
+
+  .area-badge--danger {
+    --_solid: var(--area-danger-solid);
+    --_solid-hover: var(--area-danger-solid-hover);
+    --_surface: var(--area-danger-surface);
+    --_surface-hover: var(--area-danger-surface-hover);
+    --_surface-active: var(--area-danger-surface-active);
+    --_line: var(--area-danger-border);
+    --_line-hover: var(--area-danger-border-strong);
+    --_tone-fg: var(--area-fg-danger);
+    --_on-solid: var(--area-fg-on-danger);
+  }
+
+  /* Violet. Marks AI and newly-introduced surfaces. */
+  .area-badge--discovery {
+    --_solid: var(--area-discovery-solid);
+    --_solid-hover: var(--area-discovery-solid-hover);
+    --_surface: var(--area-discovery-surface);
+    --_surface-hover: var(--area-discovery-surface-hover);
+    --_surface-active: var(--area-discovery-surface-active);
+    --_line: var(--area-discovery-border);
+    --_line-hover: var(--area-discovery-border-strong);
+    --_tone-fg: var(--area-fg-discovery);
+    --_on-solid: var(--area-fg-on-discovery);
+  }
+
+
+  .area-badge--inverted {
+    --_solid: var(--area-bg-inverse); --_solid-hover: var(--area-bg-inverse);
+    --_surface: var(--area-bg-inverse); --_surface-hover: var(--area-bg-inverse);
+    --_on-solid: var(--area-fg-on-inverse); --_tone-fg: var(--area-fg-on-inverse);
+    --_line: var(--area-bg-inverse); --_line-hover: var(--area-bg-inverse);
+  }
+  .area-badge--soft { --_bg: var(--_surface); --_bg-hover: var(--_surface-hover); --_fg: var(--_tone-fg); }
+  .area-badge--solid { --_bg: var(--_solid); --_bg-hover: var(--_solid-hover); --_fg: var(--_on-solid); --_dot-color: var(--_on-solid); }
+  .area-badge--outline { --_bg: transparent; --_bg-hover: var(--_surface); --_fg: var(--_tone-fg); --_border: var(--_line); --_border-hover: var(--_line-hover); }
+  .area-badge--ghost, .area-badge--plain { --_bg: transparent; --_bg-hover: var(--_surface); --_fg: var(--_tone-fg); }
+  /* Transparent inverted treatments use inverse ink (the background endpoint). */
+  .area-badge--inverted:is(.area-badge--outline, .area-badge--ghost, .area-badge--plain) { --_tone-fg: var(--area-bg-inverse); --_bg-hover: var(--area-bg-component-hover); }
+  /* Custom paint is a product-owned contrast pair, including transparent treatments. */
+  .area-badge--custom {
+    --_solid: var(--area-badge-bg); --_solid-hover: var(--area-badge-bg);
+    --_surface: var(--area-badge-bg); --_surface-hover: var(--area-badge-bg);
+    --_tone-fg: var(--area-badge-fg); --_on-solid: var(--area-badge-fg);
+    --_line: var(--area-badge-fg); --_line-hover: var(--area-badge-fg);
+  }
+  .area-badge--dot:is(.area-badge--soft, .area-badge--outline) { --_bg: var(--area-bg-component); --_bg-hover: var(--area-bg-component-hover); --_fg: var(--area-fg-default); --_dot-color: var(--_solid); }
+  .area-badge--dot.area-badge--outline { --_bg: transparent; --_border: var(--area-edge-control); --_border-hover: var(--area-edge-control-hover); }
+  .area-badge--dot.area-badge--inverted { --_dot-color: var(--area-bg-inverse); }
+  .area-badge--dot.area-badge--custom { --_dot-color: var(--area-fg-default); }
+  .area-badge--pill { border-radius: var(--area-radius-full); }
+  .area-badge--icon-only, .area-badge--dot-only { inline-size: var(--_height); padding-inline: 0; }
+  .area-badge--dot-only { --_bg: transparent; --_bg-hover: transparent; --_border: transparent; }
+  .area-badge--dot-only .area-badge__dot { --_dot-color: var(--_tone-fg); }
+  .area-badge--dot-only.area-badge--inverted .area-badge__dot { --_dot-color: var(--area-bg-inverse); }
+  .area-badge--truncate { max-inline-size: min(100%, var(--area-badge-max-width)); flex-shrink: 1; }
+  .area-badge--truncate .area-badge__label { overflow: hidden; text-overflow: ellipsis; }
+  .area-badge--uppercase { text-transform: uppercase; }
+  a.area-badge { position: relative; cursor: pointer; }
+  a.area-badge:hover { background: var(--_bg-hover); border-color: var(--_border-hover); }
+  a.area-badge--plain:hover { text-decoration: underline; }
+  a.area-badge:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  a.area-badge::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; min-inline-size: var(--area-space-24); min-block-size: var(--area-space-24); inline-size: 100%; block-size: 100%; }
+  @media (pointer: coarse) { a.area-badge::after { min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); min-block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
+  .area-badge--sm { --_height: var(--area-space-20); --_icon: var(--area-icon-xs); --_gap: var(--area-gap-xs); --_gutter: var(--area-space-6); --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); }
+  .area-badge--md { --_height: var(--area-space-24); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-xs); --_gutter: var(--area-space-8); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-badge--lg { --_height: var(--area-space-32); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_gutter: var(--area-space-12); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-badge--sm { --_tracking: var(--area-badge-tracking-wide); }
+  .area-badge--lg { --_dot: var(--area-space-8); }
+  .area-badge-anchor { position: relative; display: inline-flex; vertical-align: middle; --_overlap: 0%; --_x: 50%; --_y: -50%; --_inset: var(--area-badge-anchor-offset, var(--area-space-0)); }
+  .area-badge-anchor--overlap-rectangular { --_overlap: 0%; }
+  .area-badge-anchor--overlap-circular { --_overlap: 0%; --_inset: calc(var(--area-badge-anchor-offset, var(--area-space-0)) + 14%); }
+  .area-badge-anchor__badge { position: absolute; display: inline-flex; pointer-events: none; border-radius: var(--area-radius-full); transform: translate(var(--_x), var(--_y)) scale(1); opacity: 1; transition: transform var(--area-duration-base) var(--area-ease-out), opacity var(--area-duration-base) var(--area-ease-out); }
+  .area-badge-anchor__badge > .area-badge:not(.area-badge--dot-only) { box-shadow: 0 0 0 var(--area-space-2) var(--area-bg-surface); }
+  .area-badge-anchor__badge > .area-badge--dot-only .area-badge__dot { box-shadow: 0 0 0 var(--area-space-2) var(--area-bg-surface); }
+  .area-badge-anchor--top-end > .area-badge-anchor__badge { inset-block-start: calc(var(--_overlap) + var(--_inset)); inset-inline-end: calc(var(--_overlap) + var(--_inset)); }
+  .area-badge-anchor--top-start { --_x: -50%; }
+  .area-badge-anchor--top-start > .area-badge-anchor__badge { inset-block-start: calc(var(--_overlap) + var(--_inset)); inset-inline-start: calc(var(--_overlap) + var(--_inset)); }
+  .area-badge-anchor--bottom-end { --_y: 50%; }
+  .area-badge-anchor--bottom-end > .area-badge-anchor__badge { inset-block-end: calc(var(--_overlap) + var(--_inset)); inset-inline-end: calc(var(--_overlap) + var(--_inset)); }
+  .area-badge-anchor--bottom-start { --_x: -50%; --_y: 50%; }
+  .area-badge-anchor--bottom-start > .area-badge-anchor__badge { inset-block-end: calc(var(--_overlap) + var(--_inset)); inset-inline-start: calc(var(--_overlap) + var(--_inset)); }
+  .area-badge-anchor:dir(rtl) { --_x: -50%; }
+  .area-badge-anchor--top-start:dir(rtl), .area-badge-anchor--bottom-start:dir(rtl) { --_x: 50%; }
+  .area-badge-anchor[data-invisible] > .area-badge-anchor__badge { transform: translate(var(--_x), var(--_y)) scale(0); opacity: 0; }
+  .area-badge-group { display: flex; align-items: center; flex-wrap: wrap; gap: var(--area-space-4); min-inline-size: 0; max-inline-size: 100%; }
+  .area-badge-group--inline { flex-wrap: wrap; }
+  .area-badge-group--overlay { flex-wrap: nowrap; }
+  .area-badge-group__item { display: inline-flex; flex-shrink: 0; }
+  .area-badge-group__overflow-trigger[hidden] { display: none; }
+  .area-badge-group__overflow-trigger { flex-shrink: 0; }
+  .area-badge-group__overflow-content { margin: auto; max-inline-size: calc(100% - var(--area-space-32)); max-block-size: calc(100% - var(--area-space-32)); overflow: auto; }
+  .area-badge-group__overflow-content:popover-open { display: flex; flex-wrap: wrap; gap: var(--area-space-4); }
+  @media (forced-colors: active) {
+    .area-badge { background: Canvas; color: CanvasText; border-color: CanvasText; }
+    .area-badge__dot { background: CanvasText; }
+    a.area-badge:hover { background: Canvas; border-color: LinkText; }
+    a.area-badge:focus-visible { outline-color: Highlight; }
+    .area-badge-anchor__badge { outline: var(--area-space-2) solid Canvas; }
+  }
+}

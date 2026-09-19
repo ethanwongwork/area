@@ -64,27 +64,29 @@
     --_box-icon: var(--area-icon-md);
   }
   .area-badge {
-    --_box-height: var(--area-control-xs);
-    --_box-border: 0px;
-    --_box-icon: var(--area-space-6);
+    --_box-height: var(--_height);
+    --_box-border: var(--area-stroke-width);
+    --_box-icon: var(--_icon);
+    padding-inline: var(--_gutter);
   }
-  .area-badge--outline { --_box-border: var(--area-border-width); }
+  .area-badge:has(> .area-badge__dot:first-child) { --_box-start: var(--_dot); }
+  .area-badge:has(> .area-badge__leading-icon:first-child) { --_box-start: var(--_icon); }
+  .area-badge:has(> .area-badge__trailing-icon:last-child) { --_box-end: var(--_icon); }
+  .area-badge--icon-only, .area-badge--dot-only { padding-inline: 0; }
 
   .area-button:has(> .area-button__icon:first-child),
   .area-input:has(> .area-input__icon:first-child),
   .area-chip:has(> :is(.area-chip__icon, .area-chip__swatch):first-child),
   .area-segmented__item:has(> .area-segmented__icon:first-child),
   .area-nav__item:has(> .area-nav__icon:first-child),
-  .area-menu__item:has(> .area-menu__icon:first-child),
-  .area-badge:has(> .area-badge__dot:first-child) { --_box-start: var(--_box-icon); }
+  .area-menu__item:has(> .area-menu__icon:first-child) { --_box-start: var(--_box-icon); }
 
   .area-button:has(> .area-button__icon:last-child),
   .area-input:has(> .area-input__icon:last-child),
   .area-chip:has(> :is(.area-chip__icon, .area-chip__swatch):last-child),
   .area-segmented__item:has(> .area-segmented__icon:last-child),
   .area-nav__item:has(> .area-nav__icon:last-child),
-  .area-menu__item:has(> .area-menu__icon:last-child),
-  .area-badge:has(> .area-badge__dot:last-child) { --_box-end: var(--_box-icon); }
+  .area-menu__item:has(> .area-menu__icon:last-child) { --_box-end: var(--_box-icon); }
 
   /* A shortcut is a nested backplate. Reserve its actual outer box so the space after it
    * equals the vertical space above and below it in the Button. */
@@ -176,14 +178,11 @@
     margin-block-start: max(0px, calc((var(--area-icon-md) - 1cap) / 2));
   }
   @supports (text-box: trim-both cap alphabetic) {
-    .area-checkbox, .area-radio, .area-switch { align-items: flex-start; }
+    .area-checkbox, .area-radio { align-items: flex-start; }
     .area-choice-label {
       font-size: var(--_text);
       line-height: var(--_leading);
       margin-block-start: max(0px, calc((var(--_size) - 1cap) / 2));
-    }
-    .area-switch > .area-choice-label {
-      margin-block-start: max(0px, calc((var(--_track-block) - 1cap) / 2));
     }
     .area-choice-label:has(> .area-choice-label__description:only-child) { font-size: var(--area-text-xs-size); }
     .area-choice-label__title { text-box: trim-start cap alphabetic; }

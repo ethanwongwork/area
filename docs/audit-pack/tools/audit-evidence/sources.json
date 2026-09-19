@@ -1,0 +1,117 @@
+{
+  "note": "Pinned sources for the Area component audit evidence. `./fetch.sh` checks these out; `./fetch.sh --latest` moves every git source to its default-branch head and npm packages to latest, then rewrites this file.",
+  "git": {
+    "oai": {
+      "name": "OpenAI Apps SDK UI",
+      "url": "https://github.com/openai/apps-sdk-ui.git",
+      "commit": "0f00143c7a639906f1621fe58e1b6be7b5bea46d",
+      "sparse": [
+        "src/components",
+        "src/styles"
+      ],
+      "date": "2026-05-05"
+    },
+    "pri": {
+      "name": "Primer React",
+      "url": "https://github.com/primer/react.git",
+      "commit": "e4e6eba2ed4968008a1af50d05a0ffdabc4ad352",
+      "sparse": [
+        "packages/react/src"
+      ],
+      "date": "2026-09-18"
+    },
+    "sha": {
+      "name": "shadcn/ui (new-york-v4 registry)",
+      "url": "https://github.com/shadcn-ui/ui.git",
+      "commit": "a87a63b2ca25143d26c8bd0903e4e9bc77b3f824",
+      "sparse": [
+        "apps/v4/registry/new-york-v4/ui"
+      ],
+      "date": "2026-09-17"
+    },
+    "flu": {
+      "name": "Fluent UI React v9",
+      "url": "https://github.com/microsoft/fluentui.git",
+      "commit": "babf26015958505fc6fc0216724f2f61244f829c",
+      "sparse": [
+        "packages/react-components"
+      ],
+      "date": "2026-09-16"
+    },
+    "m3": {
+      "name": "Material 3 tokens (material-web)",
+      "url": "https://github.com/material-components/material-web.git",
+      "commit": "56a486b147b8b7e95e6e8035fa02aed7e0009a85",
+      "sparse": [
+        "tokens"
+      ],
+      "date": "2026-09-15"
+    },
+    "car": {
+      "name": "Carbon styles",
+      "url": "https://github.com/carbon-design-system/carbon.git",
+      "commit": "8472ccac7c2150ef317617063da6b82058812319",
+      "sparse": [
+        "packages/styles/scss"
+      ],
+      "date": "2026-09-18"
+    },
+    "mui": {
+      "name": "MUI Material",
+      "url": "https://github.com/mui/material-ui.git",
+      "commit": "69960c12d9e3c378c00a55fc0943974cd894cfea",
+      "sparse": [
+        "packages/mui-material/src"
+      ],
+      "date": "2026-09-18"
+    },
+    "rdx": {
+      "name": "Radix Themes",
+      "url": "https://github.com/radix-ui/themes.git",
+      "commit": "1faff10ac26ae17f09944d418c6949b93fc6b566",
+      "sparse": [
+        "packages/radix-ui-themes/src"
+      ],
+      "date": "2026-04-11"
+    }
+  },
+  "npm": {
+    "@primer/primitives": "11.10.0",
+    "@fluentui/tokens": "1.0.0-alpha.24",
+    "@atlaskit/tokens": "18.2.0",
+    "@atlaskit/avatar": "28.0.3",
+    "@atlaskit/avatar-group": "14.3.7",
+    "@atlaskit/badge": "21.2.2",
+    "@atlaskit/banner": "15.3.2",
+    "@atlaskit/breadcrumbs": "17.7.4",
+    "@atlaskit/checkbox": "19.2.2",
+    "@atlaskit/code": "19.2.4",
+    "@atlaskit/drawer": "14.3.4",
+    "@atlaskit/dynamic-table": "19.3.4",
+    "@atlaskit/empty-state": "12.2.2",
+    "@atlaskit/flag": "18.5.6",
+    "@atlaskit/inline-dialog": "20.3.3",
+    "@atlaskit/inline-message": "16.4.2",
+    "@atlaskit/lozenge": "15.4.3",
+    "@atlaskit/menu": "11.0.0",
+    "@atlaskit/modal-dialog": "16.6.6",
+    "@atlaskit/pagination": "17.3.2",
+    "@atlaskit/progress-bar": "5.3.5",
+    "@atlaskit/progress-indicator": "13.4.2",
+    "@atlaskit/progress-tracker": "11.4.2",
+    "@atlaskit/radio": "10.2.2",
+    "@atlaskit/range": "12.2.4",
+    "@atlaskit/section-message": "10.2.4",
+    "@atlaskit/select": "22.11.6",
+    "@atlaskit/skeleton": "4.4.2",
+    "@atlaskit/spinner": "20.4.2",
+    "@atlaskit/tabs": "21.2.2",
+    "@atlaskit/tag": "15.8.4",
+    "@atlaskit/textfield": "10.2.4",
+    "@atlaskit/toggle": "17.3.2",
+    "@atlaskit/tooltip": "24.3.4",
+    "@atlaskit/button": "25.3.5",
+    "@atlaskit/popup": "6.3.8",
+    "@atlaskit/dropdown-menu": "18.3.4"
+  }
+}

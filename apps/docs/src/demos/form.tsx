@@ -1,4 +1,4 @@
-import { Checkbox, CheckboxGroup, Chip, ChipGroup, Field, Input, InputAction, Radio, RadioGroup, Select, Slider, Switch, Textarea } from "@area/react";
+import { Checkbox, CheckboxGroup, Chip, ChipGroup, Field, Input, InputAction, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
 import { CheckIcon, DismissIcon, SearchIcon } from "../icons.tsx";
 
 export const InputDefault = () => <Input aria-label="Email" placeholder="Email" />;
@@ -287,7 +287,7 @@ export const RadioInvalid = () => (
   </RadioGroup>
 );
 
-export const SwitchDefault = () => <Switch label="Airplane mode" defaultChecked />;
+
 
 export const SliderDefault = () => <Slider min={0} max={12} defaultValue={8} readout="8" />;
 
@@ -357,14 +357,3 @@ export const RadioSizes = () => (
 export const RadioChecked = () => <Radio name="radio-state-checked" value="selected" label="Selected" defaultChecked />;
 
 export const RadioDisabled = () => <Radio name="radio-state-disabled" value="disabled" label="Unavailable" disabled />;
-
-export const SwitchSizes = () => (
-  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
-      <div key={size} data-choice-size={size} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-24)" }}>
-        <Switch size={size} label={`${size} off`} />
-        <Switch size={size} label={`${size} on`} defaultChecked />
-      </div>
-    ))}
-  </div>
-);

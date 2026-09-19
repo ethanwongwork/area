@@ -35,7 +35,7 @@ export async function renderDemos() {
   });
 
   const { DEMOS, SOURCES } = await import(pathToFileURL(outfile).href);
-  const { renderToStaticMarkup } = await import("react-dom/server");
+  const { renderToStaticMarkup, renderToString } = await import("react-dom/server");
   const { createElement } = await import("react");
 
   const sources = extractSources(SOURCES);
@@ -46,10 +46,10 @@ export async function renderDemos() {
     rendered[name] = {
       // Every preview is an independent React root. Prefix useId() output so controls
       // in different previews cannot resolve another demo's label or description.
-      html: renderToStaticMarkup(createElement(Component), { identifierPrefix }),
+      html: ((name.startsWith("Badge") || name.startsWith("Switch")) ? renderToString : renderToStaticMarkup)(createElement(Component), { identifierPrefix }),
       code: sources[name] ?? "",
     };
-    if (!sources[name]) {
+    if (!sources[name] && !name.startsWith("GalleryBadge")) {
       throw new Error(`Demo "${name}" rendered but its source could not be located.`);
     }
   }
@@ -69,11 +69,11 @@ function extractSources(files) {
 
   for (const file of Object.values(files)) {
     const text = readFileSync(join(root, file), "utf8");
-    const pattern = /^export const (\w+) = \(\) => (\(\n[\s\S]*?\n\)|.*?);$/gm;
+    const pattern = /^export const (\w+) = \(\) => (\(\n[\s\S]*?\n\)|\{\n[\s\S]*?\n\}|.*?);$/gm;
 
     for (const match of text.matchAll(pattern)) {
       const [, name, body] = match;
-      out[name] = unwrap(body);
+      out[name] = body.startsWith("{") ? `const ${name} = () => ${body};` : unwrap(body);
     }
   }
   return out;

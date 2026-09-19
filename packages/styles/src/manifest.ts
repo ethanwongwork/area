@@ -11,6 +11,8 @@
  */
 
 export interface ComponentManifest {
+  /** Searchable source terminology mapped to canonical contracts; not CSS modifiers. */
+  aliases?: Record<string, string>;
   /** BEM block, e.g. "area-button". Also the root class name. */
   block: string;
   /** One sentence, used as the docs page description. */
@@ -139,10 +141,16 @@ export const radioGroup = {
 export const switchControl = {
   block: "area-switch",
   description: "Toggles a setting that takes effect immediately.",
-  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
-  states: ["disabled"],
-  elements: ["control"],
-  defaults: { size: "md" },
+  aliases: { Toggle: "Switch", ToggleSwitch: "Switch", block: "full-width", before: "label-start", after: "label-end" },
+  variants: {
+    size: ["sm", "md", "lg"],
+    labelPosition: ["label-end", "label-start"],
+  },
+  booleans: ["full-width"],
+  states: ["checked", "disabled", "read-only", "loading", "hover", "active", "focus-visible"],
+  stateAttributes: { checked: "checked" },
+  elements: ["control", "track", "thumb", "text", "label", "description", "loading"],
+  defaults: { size: "md", labelPosition: "label-end" },
 } as const satisfies ComponentManifest;
 
 export const slider = {
@@ -181,13 +189,33 @@ export const choiceLabel = {
 
 export const badge = {
   block: "area-badge",
-  description: "Labels an item with a short status.",
+  description: "Labels an item with a short status or metadata; optionally links to its details.",
+  aliases: { tint: "soft", subtle: "soft", secondary: "soft", filled: "solid", bold: "solid", bordered: "outline", link: "plain", circular: "default pill shape", rounded: "default pill shape", LabelGroup: "BadgeGroup", StateLabel: "solid + icon", Lozenge: "Badge", Pill: "Badge link" },
   variants: {
-    variant: ["solid", "outline"],
-    tone: ["neutral", "accent", "danger", "warning", "success"],
+    variant: ["soft", "solid", "outline", "ghost", "plain"],
+    tone: ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"],
+    size: ["sm", "md", "lg"],
   },
-  elements: ["dot", "label"],
-  defaults: { tone: "neutral" },
+  booleans: ["pill", "dot", "dot-only", "icon-only", "truncate", "uppercase"],
+  elements: ["dot", "leading-icon", "label", "trailing-icon"],
+  defaults: { variant: "soft", tone: "neutral", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const badgeAnchor = {
+  block: "area-badge-anchor",
+  description: "Attaches a decorative badge to an accessibly named object.",
+  variants: { placement: ["top-end", "top-start", "bottom-end", "bottom-start"], overlap: ["overlap-rectangular", "overlap-circular"] },
+  states: ["invisible"],
+  elements: ["badge"],
+  defaults: { placement: "top-end", overlap: "overlap-rectangular" },
+} as const satisfies ComponentManifest;
+
+export const badgeGroup = {
+  block: "area-badge-group",
+  description: "Wraps badges or collapses overflow behind a disclosure.",
+  variants: { overflow: ["inline", "overlay"] },
+  elements: ["item", "overflow-trigger", "overflow-content"],
+  defaults: { overflow: "inline" },
 } as const satisfies ComponentManifest;
 
 export const avatar = {
@@ -419,6 +447,8 @@ export const MANIFESTS = {
   chipGroup,
   choiceLabel,
   badge,
+  badgeAnchor,
+  badgeGroup,
   avatar,
   separator,
   skeleton,

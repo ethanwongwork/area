@@ -1,22 +1,8 @@
-/* ---------------------------------------------------------------------------
- * Checkbox, Radio, Switch
- *
- * One file, because the three share a single interaction contract and diverge only in
- * shape. Keeping them together is what stops their checked, focus and disabled states
- * drifting apart.
- *
- * Shape is the semantic signal and is never decorative: a checkbox is a rounded square
- * because it is independent, a radio is a circle because it is exclusive, a switch is a
- * track because it is immediate. Those three shapes are the only round-by-identity
- * exceptions to the system's rounded-rectangle default.
- *
- * All three are built on a real input that stays in the DOM and keeps its native
- * semantics and keyboard behaviour; `appearance: none` removes only the painting.
- * ------------------------------------------------------------------------- */
+/* Checkbox and Radio retain native inputs and share icon-ramp geometry.
+ * Switch has its own track/thumb construction in switch.css. */
 @layer area.components {
   .area-checkbox,
-  .area-radio,
-  .area-switch {
+  .area-radio {
     --_size: var(--area-icon-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
@@ -28,8 +14,7 @@
   }
 
   .area-checkbox[data-disabled],
-  .area-radio[data-disabled],
-  .area-switch[data-disabled] {
+  .area-radio[data-disabled] {
     cursor: not-allowed;
     opacity: 0.5;
   }
@@ -189,67 +174,9 @@
   }
 
   .area-checkbox__control:focus-visible,
-  .area-radio__control:focus-visible,
-  .area-switch__control:focus-visible {
+  .area-radio__control:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
-  }
-
-  /* --- Switch ------------------------------------------------------------- */
-
-  .area-switch {
-    --_track-inline: calc(var(--area-control-md) - var(--area-space-4));
-    --_track-block: var(--area-icon-md);
-    --_thumb-inset: var(--area-space-2);
-  }
-
-  .area-switch__control {
-    appearance: none;
-    box-sizing: border-box;
-    margin: 0;
-    flex-shrink: 0;
-    position: relative;
-    inline-size: var(--_track-inline);
-    block-size: var(--_track-block);
-    --_fill: var(--area-fill-toggle);
-    /* Reserve the stroke geometry, but let the quiet track read as one flat shape. */
-    --_edge: color-mix(in srgb, transparent, var(--area-stroke-control) calc(var(--area-contrast-more) * 100%));
-    border: var(--area-stroke-width) solid var(--_edge);
-    border-radius: var(--area-radius-full);
-    background-color: var(--_fill);
-    cursor: inherit;
-    transition: var(--area-transition);
-  }
-
-  .area-switch__control::after {
-    content: "";
-    position: absolute;
-    inset-block-start: calc(var(--_thumb-inset) - var(--area-stroke-width));
-    inset-inline-start: calc(var(--_thumb-inset) - var(--area-stroke-width));
-    inline-size: calc(var(--_track-block) - var(--_thumb-inset) * 2);
-    block-size: calc(var(--_track-block) - var(--_thumb-inset) * 2);
-    border-radius: var(--area-radius-full);
-    background-color: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-1);
-    transition: translate var(--area-duration-fast) var(--area-ease-out);
-  }
-
-  .area-switch__control:checked {
-    --_fill: var(--area-accent-solid);
-    --_edge: color-mix(in srgb, var(--_fill), var(--area-stroke-selected) calc(var(--area-contrast-more) * 100%));
-  }
-
-  .area-switch__control:checked::after {
-    background-color: var(--area-fg-on-accent);
-    translate: calc(var(--_track-inline) - var(--_track-block)) 0;
-  }
-
-  .area-switch__control:hover:not(:disabled) {
-    --_fill: var(--area-fill-toggle-hover);
-  }
-
-  .area-switch__control:checked:hover:not(:disabled) {
-    --_fill: var(--area-accent-solid-hover);
   }
 
   /* --- Radio group -------------------------------------------------------- */
@@ -358,40 +285,35 @@
 
   /* --- Sizes -------------------------------------------------------------- */
 
-  .area-checkbox--xs, .area-radio--xs, .area-switch--xs {
+  .area-checkbox--xs, .area-radio--xs {
     --_size: var(--area-icon-xs);
     --_text: var(--area-control-xs-text);
     --_leading: var(--area-control-xs-leading);
     --_gap: var(--area-gap-xs);
   }
-  .area-checkbox--sm, .area-radio--sm, .area-switch--sm {
+  .area-checkbox--sm, .area-radio--sm {
     --_size: var(--area-icon-sm);
     --_text: var(--area-control-sm-text);
     --_leading: var(--area-control-sm-leading);
     --_gap: var(--area-gap-sm);
   }
-  .area-checkbox--md, .area-radio--md, .area-switch--md {
+  .area-checkbox--md, .area-radio--md {
     --_size: var(--area-icon-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_gap: var(--area-gap-md);
   }
-  .area-checkbox--lg, .area-radio--lg, .area-switch--lg {
+  .area-checkbox--lg, .area-radio--lg {
     --_size: var(--area-icon-lg);
     --_text: var(--area-control-lg-text);
     --_leading: var(--area-control-lg-leading);
     --_gap: var(--area-gap-lg);
   }
-  .area-checkbox--xl, .area-radio--xl, .area-switch--xl {
+  .area-checkbox--xl, .area-radio--xl {
     --_size: var(--area-icon-xl);
     --_text: var(--area-control-xl-text);
     --_leading: var(--area-control-xl-leading);
     --_gap: var(--area-gap-xl);
   }
 
-  .area-switch--xs { --_track-inline: var(--area-control-xs); --_track-block: var(--area-icon-xs); }
-  .area-switch--sm { --_track-inline: var(--area-control-sm); --_track-block: var(--area-icon-sm); }
-  .area-switch--md { --_track-inline: var(--area-control-md); --_track-block: var(--area-space-20); }
-  .area-switch--lg { --_track-inline: var(--area-control-lg); --_track-block: var(--area-space-20); }
-  .area-switch--xl { --_track-inline: var(--area-control-xl); --_track-block: var(--area-icon-xl); }
 }

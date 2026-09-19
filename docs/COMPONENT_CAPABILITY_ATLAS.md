@@ -24,7 +24,7 @@ not become a single overloaded component because they share a closed-box appeara
 | Form foundations | Field/Form field/Input group; Input/Text field/Text box; Textarea/Multiline field; Number input/Stepper; Search/Search field; Inline edit/Editable text |
 | Form choice | Select/Native picker; Combobox/Autocomplete/Typeahead; Multi-select/Multi-combobox; Checkbox; Radio group/Option group; Switch/Toggle; Slider/Range; Rating/Star rating; Transfer list/Dual listbox |
 | Form specialisation | Date picker/Calendar picker; Time picker; Date-time picker; File upload/Uploader/Dropzone; Color picker/Color well; Rich-text editor/Composer |
-| Compact selection and labels | Chip/Filter chip/Choice chip; Segmented control/Content switcher; Toggle button/Press toggle; Badge/Count badge; Tag/Label/Lozenge; Token/Design token; Kbd/Keyboard hint |
+| Compact selection and labels | Chip/Filter chip/Choice chip; Segmented control/Content switcher; Toggle button/Press toggle; Badge/Count badge; BadgeAnchor/Anchored badge; BadgeGroup/LabelGroup; Tag/Label/Lozenge; Token/Design token; Kbd/Keyboard hint |
 | Navigation | Tabs/Tab bar; Nav/Sidebar/Rail/Top nav; Breadcrumbs/Breadcrumb trail; Pagination/Pager; Stepper/Progress steps; Tree/Outline; Command menu/Command palette/Quick switcher; Bottom navigation; Menubar; Speed dial |
 | Overlays | Menu/Dropdown menu/Context menu; Popover/Popup/Flyout/Inline dialog; Tooltip/Hint; Dialog/Modal/Alert dialog; Drawer/Sheet/Side panel; Banner/Global message; Spotlight/Coach mark |
 | Feedback | Alert/Inline message/Section message; Toast/Snackbar/Flag; Progress/Progress bar; Progress indicator/Tracker; Spinner/Activity indicator; Skeleton/Content placeholder; Empty state/Blank slate/Zero state; Error state |

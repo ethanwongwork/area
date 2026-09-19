@@ -10,11 +10,24 @@ exactly one public component family at a time. Treat an inseparable compound par
 such as MenuItem inside Menu, as part of the same family. Do not mix unrelated component
 changes into the batch.
 
+## Phase 1 — construction and owner approval
+
+Run the `construction-audit` skill before any component implementation work. Complete the
+component’s construction entry from `docs/audit-pack/evidence/`, show the measured table,
+consensus, Area decision, and differences from current Area to the owner, then wait for
+owner approval. Do not change component CSS, manifest, React, or demos until that approval
+is received.
+
 Read these before editing:
 
 - `AGENTS.md`, `.Codex/HANDOFF.md`, and the relevant sections of
   `docs/DESIGN_SYSTEM.md`.
 - `docs/COMPONENT_AUDIT.md` for the queue and project-specific policy.
+- The matching family section in `docs/audit-pack/` as the audit's required research
+  input. Read `docs/audit-pack/00-CODEX-BUILD-BRIEF.md` first, then
+  `docs/audit-pack/09-area-repo-map.md`, then the matching family file. Treat its Build
+  list as a candidate inventory to normalize and decide, not as an implementation order.
+  Do not re-research recorded evidence unless it is marked re-verify.
 - `docs/COMPONENT_CAPABILITY_ATLAS.md` for the breadth-first expansion inventory and
   neighbouring component boundaries.
 - [references/audit-framework.md](references/audit-framework.md) for the evidence,
@@ -66,10 +79,12 @@ current Area manifest is a candidate gap, not a reason to overload this componen
 
 ## Research the expanded benchmark set
 
-Browse current primary sources for every audit. Check all seven named benchmarks:
-OpenAI, Notion, Primer, shadcn/ui, Fluent 2, Figma, and Vercel Geist. Use the source and
-evidence rules in the references. Record the URL, access date, and evidence level for
-every claim.
+Numbers come only from `docs/audit-pack/evidence/`. Use its pinned, extracted source and
+the construction entry for dimensions, padding, gaps, type, radius, and shape; never
+supply a number from memory, a screenshot, or unmeasured product observation. Check all
+seven named benchmarks—OpenAI, Notion, Primer, shadcn/ui, Fluent 2, Figma, and Vercel
+Geist—for capability evidence, and record the URL, access date, and evidence level for
+every non-numeric claim.
 
 Primer, shadcn/ui, Fluent 2, and Geist publish reusable component guidance. OpenAI,
 Notion, and Figma product interfaces are observational benchmarks unless an official
@@ -86,13 +101,11 @@ For each benchmark capture:
 - keyboard, focus, pointer, touch, screen-reader, and high-contrast behavior;
 - patterns unique enough to consider and patterns intentionally excluded.
 
-Treat the benchmark set as a **union of documented capabilities**, not a vote for the
-smallest common denominator. Make a candidate row for every distinct documented variant,
-state, layout, slot, or behavior found in any benchmark. Mark each row Core, Optional,
-Separate, Defer, or Reject with its source and an Area-specific reason. A pattern unique
-to one credible system may still be adopted when it solves a reusable Area job; record
-product-only observations as unavailable for API decisions unless a published component
-contract supports them.
+Treat the benchmark set as an inventory of candidates. Normalize different names for the
+same job before counting support, and separate component API from product composition and
+test-only stress cases. For every distinct pattern, record the systems that publish it,
+its canonical Area name, and its relationship to Area's existing tokens and components.
+Product-only observations can explain a use case but do not establish a reusable API.
 
 Then consult the capability catalogues for Material Design, IBM Carbon, Atlassian Design,
 Apple Human Interface Guidelines, and MUI. Tailwind CSS is utility-first rather than a
@@ -121,16 +134,23 @@ but the report must identify the collision and whether the cap is intentional.
 
 Classify every candidate as one of:
 
-1. **Core** — common, semantically clear, broadly useful, and supportable.
-2. **Optional** — less common but solves a concrete, reusable Area use case.
-3. **Separate component or composition** — a different semantic or behavioral contract.
-4. **Reject** — redundant alias, purely cosmetic duplication, inaccessible treatment,
-   unsupported behavior, or no credible use case.
+1. **Core** — supported by at least three independent reusable systems, required by the
+   platform or accessibility, or already part of Area's stable component job.
+2. **Extended** — supported by at least two reusable systems and solves a concrete Area
+   use case without duplicating another component or multiplying unrelated axes.
+3. **Composition** — useful in context but assembled from existing components rather than
+   added to the component's public API.
+4. **Separate** — belongs to another semantic or behavioral component contract.
+5. **Alias** — the same treatment under a different name; record it once under Area's name.
+6. **Log only** — useful research evidence that lacks sufficient overlap or Area fit.
+7. **Reject** — conflicts with accessibility or the component's stated job.
 
-A candidate needs evidence plus an Area use case. Frequency across benchmarks is useful
-evidence, not a vote. Prefer orthogonal props and slots over enumerating every visual
-combination. Prefer native behavior when it meets the job. Do not promise composite-widget
-behavior without complete keyboard, focus, popup, and assistive-technology handling.
+Build Core and approved Extended rows. Keep Composition, Separate, Alias, and Log-only rows
+in the report without inflating the public contract. A unique feature is evidence to log,
+not an automatic shipping requirement. Prefer Area's existing semantic axes and primitives;
+do not add a tone matrix to a component unless tone changes its meaning. Prefer native
+behavior when it meets the job. Do not promise composite-widget behavior without complete
+keyboard, focus, popup, and assistive-technology handling.
 
 Add a component-scoped semantic alias when consumers may reasonably theme that role
 independently and the role has a stable meaning. Do not add an alias solely to rename a
@@ -155,18 +175,12 @@ exclusive or the change would create a broad breaking API with no clear migratio
 
 ### Documentation specimen order
 
-Every audited component page starts its Examples section with one standalone instance of
-the public default at its default size. The second example shows persistent visual
-treatments when the component has them; the third shows every supported size tier. Follow
-with semantic states, layout, composition, and behavior in that order. Do not invent an
-appearance or size example for a component that does not own that axis. When layout is the
-component's only meaningful alternative, such as Field's horizontal orientation, it may
-replace the second treatment slot; record that exception in the component audit. A child
-control's size belongs to the child, but a composition may demonstrate those child tiers
-after the Field layout example. Stack multiple variants vertically in one preview and give
-each one enough separation to inspect. One ordinary example container demonstrates one
-variant or state. A size family and an explicitly labelled comparison matrix are the only
-exceptions; stack those vertically with at least `--area-space-24` between specimens.
+Every audited component page starts with one standalone public default at its default size,
+then shows supported sizes, states, layouts, and compositions. Do not invent an appearance,
+tone, or size example for a component that does not own that axis. Each gallery tile shows
+one case. A size-family comparison and a real multi-item composition are the only exceptions.
+Test-only stress fixtures do not need a public gallery tile when the same contract is already
+visible and the fixture remains part of verification.
 Contained-width controls must use the same component width token in their standalone and
 Field-wrapped examples. Full-width is always an explicit layout variant, never a side
 effect of the docs preview or a grid fraction. The demos, snippets, API table, practices,

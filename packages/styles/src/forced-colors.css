@@ -14,7 +14,7 @@
     .area-button:focus-visible, .area-chip:focus-visible, .area-tabs__tab:focus-visible,
     .area-segmented__item:focus-visible, .area-select:focus-visible, .area-textarea:focus,
     .area-input:focus-within, .area-checkbox__control:focus-visible,
-    .area-radio__control:focus-visible, .area-switch__control:focus-visible {
+    .area-radio__control:focus-visible {
       outline: var(--area-focus-width) solid Highlight;
       outline-offset: var(--area-focus-offset);
     }
@@ -24,7 +24,7 @@
       color: HighlightText;
       forced-color-adjust: none;
     }
-    .area-checkbox__control, .area-radio__control, .area-switch__control {
+    .area-checkbox__control, .area-radio__control {
       forced-color-adjust: none;
       border-color: CanvasText;
       background-color: Canvas;
@@ -34,15 +34,13 @@
       border-style: dashed;
     }
     .area-checkbox__control:checked, .area-checkbox__control:is(:indeterminate, [data-indeterminate]),
-    .area-radio__control:checked, .area-switch__control:checked {
+    .area-radio__control:checked {
       border-color: Highlight;
       background-color: Highlight;
     }
-    .area-checkbox__control::after, .area-radio__control::after,
-    .area-switch__control:checked::after {
+    .area-checkbox__control::after, .area-radio__control::after {
       background-color: HighlightText;
     }
-    .area-switch__control:not(:checked)::after { background-color: CanvasText; }
     .area-slider__control { forced-color-adjust: none; }
     .area-slider__control::-webkit-slider-runnable-track { background: CanvasText; }
     .area-slider__control::-moz-range-track { background: CanvasText; }

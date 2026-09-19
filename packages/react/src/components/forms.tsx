@@ -1,9 +1,9 @@
 import { createContext, forwardRef, useContext, useEffect, useId, useState } from "react";
 import type { FieldsetHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ChangeEvent, ReactNode } from "react";
-import { MANIFESTS, selectVariants, textareaVariants, checkboxVariants, checkboxGroupVariants, radioGroupVariants, radioVariants, switchVariants } from "../variants.ts";
+import { MANIFESTS, selectVariants, textareaVariants, checkboxVariants, checkboxGroupVariants, radioGroupVariants, radioVariants } from "../variants.ts";
 import type { VariantProps } from "../variants.ts";
 type Size = NonNullable<VariantProps<typeof MANIFESTS.checkbox>["size"]>;
-type SwitchSize = NonNullable<VariantProps<typeof MANIFESTS.switch>["size"]>;
+
 
 /* --- Select / Textarea ---------------------------------------------------- */
 
@@ -202,36 +202,6 @@ export const CheckboxGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, Che
   );
 });
 
-function choice<S extends string>(kind: "checkbox" | "radio" | "switch", variants: (props: { size?: S }, className?: string) => string) {
-  const block = `area-${kind}`;
-
-  return forwardRef<HTMLInputElement, Omit<ChoiceProps, "size"> & { size?: S }>(function Choice(
-    { size, label, description, className, disabled, ...rest },
-    ref,
-  ) {
-    return (
-      <label className={variants({ size }, className)} {...(disabled ? { "data-disabled": "" } : {})}>
-        <input
-          ref={ref}
-          // A switch is a checkbox carrying role="switch", not a separate control, so it
-          // keeps native keyboard behaviour and form participation either way.
-          type={kind === "radio" ? "radio" : "checkbox"}
-          role={kind === "switch" ? "switch" : undefined}
-          className={`${block}__control`}
-          disabled={disabled}
-          {...rest}
-        />
-        {label || description ? (
-          <span className="area-choice-label">
-            {label ? <span className="area-choice-label__title">{label}</span> : null}
-            {description ? <span className="area-choice-label__description">{description}</span> : null}
-          </span>
-        ) : null}
-      </label>
-    );
-  });
-}
-
 interface RadioGroupContextValue {
   name?: string;
   value?: string;
@@ -332,7 +302,6 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
     </label>
   );
 });
-export const Switch = /* @__PURE__ */ choice<SwitchSize>("switch", switchVariants);
+export { Switch, type SwitchProps } from "./Switch.tsx";
 
 export type RadioProps = Omit<ChoiceProps, "size"> & { size?: VariantProps<typeof MANIFESTS.radio>["size"] };
-export type SwitchProps = Omit<ChoiceProps, "size"> & { size?: SwitchSize };

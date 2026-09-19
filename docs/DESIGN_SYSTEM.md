@@ -44,9 +44,9 @@ item is derived now (`--_item`), and its inset is a flat 2px because scaling it 
 Checkbox and radio are documented exceptions: they sit on the *icon* ramp because they are
 glyphs rather than control boxes. At the default density that ramp is {12, 16, 16, 16, 24},
 so their `sm`, `md` and `lg` controls are all 16px while label type and spacing still follow
-the tier. Switch is a track: its width follows the control ramp and its height follows
-{12, 16, 20, 20, 24}. The default `md` switch is 32×20px, matching the measured OpenAI
-pattern while preserving a 2px thumb inset.
+the tier. Switch uses fixed glyph geometry in both densities: 24×12, 28×16, 40×20, 40×20,
+48×24px, preserving a space-2 thumb inset. Compact changes label type. Icon and spinner
+tracks promote xs/sm to 40×20px. See the approved Switch construction packet.
 
 **Every number in component CSS traces to a token.** A literal pixel value is a bug unless
 it is a hairline (`1px`) or a mask geometry. If a value is not on a ramp, derive it with
@@ -166,8 +166,7 @@ larger than the row can carry — which used to leave a "pill" menu whose items 
 rectangles in it.
 
 **`--area-radius-full` does not follow the axis, on purpose.** Every use is either
-shape-defining — a radio that is not a circle is a checkbox, a switch that is not a pill is
-not a switch, a slider handle that is not a circle reads as a segment of its own track, and
+shape-defining — a radio that is not a circle is a checkbox, Switch defaults to pill (its explicit rounded alternative follows the radius axis), a slider handle that is not a circle reads as a segment of its own track, and
 the same goes for the status dot, the spinner, the chip's swatch and the selection rail — or
 an explicit opt-in (`--pill`, `--circle`). An avatar wanting corners asks for
 `.area-avatar--square`, which does follow the axis.
@@ -648,7 +647,7 @@ with direct documentation links.
 ## Native control polish · V03
 
 [V03](batches/V03/README.md) brings native controls closer to the compact, quiet references
-without changing the palette. The default Switch is 32×20px with five documented tiers and
+without changing the palette. The default Switch is 40×20px with five documented tiers and
 a flat boundary. Checkbox and Radio reserve one fixed border-box in every state. Editable
 fields preserve their 1px edge, move it one neutral step darker, and add a soft 2px halo;
 increased contrast adds a 2px accent outline with a 4px halo. Kbd follows Primer’s one-chord

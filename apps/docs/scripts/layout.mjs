@@ -506,14 +506,54 @@ export const DOCS_CSS = `
     line-height: var(--area-ui-leading);
   }
 
-  /* The visual gallery is intentionally outside the documentation shell. It is a
-   * full-screen inspection surface: no rails, prose, controls, or component-specific
-   * framing compete with the specimens. Every family uses one responsive square tile
-   * size, so a component's perceived scale never changes with its category. */
+  /* The visual gallery is a full-screen inspection surface. Its persistent right rail
+   * uses the same axis controls as the documentation shell, so every specimen changes
+   * together while the family grid keeps its uniform tile scale. */
   .docs-visual-gallery {
     min-block-size: 100vh;
     padding: var(--area-space-8);
     background: var(--area-bg-subtle);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--docs-gallery-rail, minmax(var(--area-space-80), calc(var(--area-space-80) * 3)));
+    align-items: start;
+    gap: var(--area-space-8);
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] {
+    --docs-gallery-rail: var(--area-space-12);
+  }
+  .docs-visual-gallery__content {
+    min-inline-size: 0;
+  }
+  .docs-visual-gallery__inspector {
+    position: sticky;
+    inset-block-start: var(--area-space-8);
+    max-block-size: calc(100vh - var(--area-space-16));
+    overflow: auto;
+    min-inline-size: 0;
+    transition: inline-size 160ms ease, opacity 160ms ease;
+  }
+  .docs-visual-gallery__inspector-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-2);
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector {
+    overflow: hidden;
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-title,
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-body,
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector [data-reset-axes] {
+    display: none;
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-bar {
+    justify-content: center;
+    padding-inline: 0;
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-actions {
+    display: block;
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__rail-toggle {
+    transform: rotate(180deg);
   }
   .docs-visual-gallery__header {
     margin-block-end: var(--area-space-8);
@@ -550,6 +590,7 @@ export const DOCS_CSS = `
     background: var(--area-bg-surface);
     border-radius: var(--area-radius-container);
   }
+  .docs-visual-gallery__tile--expanded { aspect-ratio: auto; grid-column: 1 / -1; }
   .docs-visual-gallery__tile-title {
     padding: var(--area-space-12);
     font-size: var(--area-ui-size);
@@ -568,6 +609,11 @@ export const DOCS_CSS = `
   }
   .docs-visual-gallery__tile-preview > * {
     max-inline-size: 100%;
+  }
+  @media (max-width: 980px) {
+    .docs-visual-gallery { display: block; }
+    .docs-visual-gallery__inspector { position: static; max-block-size: none; margin-block-start: var(--area-space-8); }
+    .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector { inline-size: var(--area-space-12); margin-inline-start: auto; }
   }
 
   /* --- Icon browser ------------------------------------------------------- */
@@ -1149,6 +1195,30 @@ export const DOCS_SCRIPT = `
       var corner = document.querySelector('.docs-rail-toggle[data-rail="' + rail + '"]');
       if (corner) corner.focus({ preventScroll: true });
     }
+  });
+})();
+
+(function () {
+  var gallery = document.querySelector(".docs-visual-gallery");
+  if (!gallery) return;
+  var KEY = "area-gallery-customizer";
+  var toggle = gallery.querySelector("[data-gallery-rail=panel]");
+  if (!toggle) return;
+  var open = true;
+  try { open = localStorage.getItem(KEY) !== "closed"; } catch (e) {}
+
+  function write(next) {
+    open = next;
+    gallery.setAttribute("data-gallery-panel", open ? "open" : "closed");
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Collapse customize panel" : "Expand customize panel");
+  }
+
+  write(open);
+  toggle.addEventListener("click", function () {
+    write(!open);
+    try { localStorage.setItem(KEY, open ? "open" : "closed"); } catch (e) {}
+    toggle.focus({ preventScroll: true });
   });
 })();
 

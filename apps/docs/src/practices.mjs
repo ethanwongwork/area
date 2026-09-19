@@ -24,9 +24,11 @@ export const PRACTICES = {
     `Selection fills the existing outer circle. The five size tiers follow the same icon and label ramps as Checkbox.`,
   ],
   switch: [
-    `Use Switch for settings that take effect immediately. Give it a stable label that describes the setting, not an action.`,
-    `The standard track is flat: its off boundary is transparent, and its on boundary matches the fill. Reserved stroke geometry keeps the track and thumb in place when increased contrast adds a visible edge.`,
-    `Five tiers are available. Width follows the control ramp; track height follows a 12, 16, 20, 20 and 24px ramp. Default-density md is 32×20px, matching the measured OpenAI pattern. Compact density deliberately steps width down.`,
+    `Use Switch for settings that take effect immediately. Give it a stable label; use Checkbox for deferred submission.`,
+    `The identity shape is always pill. Opt into rounded only when the themed track and concentric rectangular thumb are intentional.`,
+    `Tracks are 24×12, 28×16, 40×20, 40×20 and 48×24px in both densities. Compact changes type, not track geometry. Thumb media promotes the two smallest tracks.`,
+    `Promise callbacks provide optimistic uncontrolled updates and rollback. A controlled parent owns checked state and rollback. Read-only, busy and disabled-focusable controls block activation but retain native form semantics.`,
+    `Keep labels stable and slots decorative. Use an accessible name when hiding the visible label; do not place links or buttons inside a Switch label. Custom colors must be supplied as a contrast-tested foreground/background pair.`,
   ],
   code: [
     `Use Code for short commands, identifiers, literal values and design-token names inside a sentence. Use CodeBlock for multiple lines.`,
@@ -81,9 +83,14 @@ export const PRACTICES = {
     `Field does not paint focus itself. Its Input, Select or Textarea child owns the shared editable-control focus treatment, including invalid and increased-contrast states.`,
   ],
   badge: [
-    `A Badge labels something; it is not a control. If it can be clicked or dismissed, it is a Button.`,
-    `Badge is distinguished from Button by the absence of a stroke, not by its shape. Do not give it a pill radius — that reads as an interactive chip.`,
-    `Use ${code("dot")} for live status, where the colour carries the meaning and the text merely names it.`,
+    `Use Badge for status or metadata. Classification belongs to Tag; selection and removal belong to Chip. A plain Badge is a native link treatment only when rendered as an anchor; static Badge never changes on hover or acts like a button.`,
+    `Dot is independent of fill. Use text or an accessible name to communicate meaning without color. Icon-only and dot-only forms require an accessible name.`,
+    `Badge is always pill-shaped so static metadata remains visually distinct from Button. Its independent small / medium / large scale is 20 / 24 / 32px; medium is the default and does not follow the control-height ramp.`,
+    `BadgeAnchor hides its decorative overlay from assistive technology. Put the count or status in the owning control's accessible name. Do not put interactive children in the overlay.`,
+    `BadgeGroup wraps all children by default. A numeric visibleCount or auto collapses overflow into a native popover: Enter or Space opens it, Escape and outside click close it. Inline permits wrapping; overlay preserves one row. Auto needs React hydration and ResizeObserver.`,
+    `Truncation supplies title for plain text; supply title explicitly for rich content. Keep the full accessible text. Important explanations should also appear in nearby visible text.`,
+    `Custom tone uses --area-badge-bg and --area-badge-fg as a complete paint pair, including gradients. The consumer must check contrast across the entire gradient in each theme; built-in defaults use tested neutral tokens.`,
+    `Small uses --area-badge-tracking-wide and strong weight 500. Uppercase is opt-in. Foreground remains unchanged on hover.`,
   ],
   alert: [
     `Only the ${code("danger")} tone uses ${code("role=alert")}, which interrupts a screen reader mid-sentence. Every other tone uses ${code("role=status")} and waits for a pause.`,
