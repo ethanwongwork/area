@@ -1,7 +1,6 @@
 # Handoff — 2026-09-19
 
-**Branch:** `main`; checkpoint commit `5022dbd` (`docs: simplify component library workflow`).
-The commit is saved locally; push is pending explicit confirmation of the configured origin.
+**Branch:** `main`; pushed checkpoint commit `4886743` (`docs: simplify component library workflow`).
 
 ## Current work
 
