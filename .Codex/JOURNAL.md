@@ -1,5 +1,12 @@
 # Project journal
 
+## 2026-09-18 — Collapsible gallery rail and pushed checkpoint
+
+The component gallery customizer is now an actual collapsible right rail. It contracts to a narrow
+control strip, keeps an accessible toggle, and persists open/closed state. The completed audit,
+implementation, docs, and non-cache evidence changes were committed in `e6e35dc` and `7f6b4e5`
+and pushed to `origin/main`. All checkpoint verification gates passed.
+
 ## 2026-09-18 — Capability atlas, gallery expansion, and Kbd contract
 
 The audit now begins with the full component-capability space instead of the names Area already

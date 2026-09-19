@@ -1,6 +1,11 @@
 # Handoff — 2026-09-18
 
-**Branch** `main` · **Last implementation commit** `00c2490 feat: expand component audits and visual gallery`
+**Checkpoint status:** Safe to archive. `main` is pushed to `origin/main` at `7f6b4e5`.
+The gallery customizer is now a persisted, accessible collapsible right rail. Verification is
+green: `npm test`, `npm run build`, manifest lint, docs build/audit, contrast report, and typecheck.
+The working tree is clean except for ignored generated caches.
+
+**Branch** `main` · **Last implementation commit** `7f6b4e5 add audit evidence corpus`
 **State** Green — implementation is committed and fully verified; only this handoff/journal checkpoint remains to commit and push.
 
 ## Where things stand
