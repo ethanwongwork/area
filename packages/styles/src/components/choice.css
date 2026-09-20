@@ -285,12 +285,6 @@
 
   /* --- Sizes -------------------------------------------------------------- */
 
-  .area-checkbox--xs, .area-radio--xs {
-    --_size: var(--area-icon-xs);
-    --_text: var(--area-control-xs-text);
-    --_leading: var(--area-control-xs-leading);
-    --_gap: var(--area-gap-xs);
-  }
   .area-checkbox--sm, .area-radio--sm {
     --_size: var(--area-icon-sm);
     --_text: var(--area-control-sm-text);
@@ -309,11 +303,4 @@
     --_leading: var(--area-control-lg-leading);
     --_gap: var(--area-gap-lg);
   }
-  .area-checkbox--xl, .area-radio--xl {
-    --_size: var(--area-icon-xl);
-    --_text: var(--area-control-xl-text);
-    --_leading: var(--area-control-xl-leading);
-    --_gap: var(--area-gap-xl);
-  }
-
 }

@@ -30,7 +30,7 @@ import {
 import { ICONS } from "./icons.generated.mjs";
 import { CATALOG } from "./icons.catalog.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
-import { COMPLETE_COMPONENTS } from "../src/component-status.mjs";
+import { COMPLETE_COMPONENTS, RECENT_COMPONENTS } from "../src/component-status.mjs";
 import { PRACTICES } from "../src/practices.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -56,7 +56,9 @@ for (const slug of COMPLETE_COMPONENTS) {
   if (!COMPONENT_PAGES.some(page => page.slug === slug)) throw new Error(`Unknown completed component: ${slug}`);
 }
 const orderedComponents = [...COMPONENT_PAGES].sort((a, b) =>
-  Number(COMPLETE_COMPONENTS.has(b.slug)) - Number(COMPLETE_COMPONENTS.has(a.slug)) || a.name.localeCompare(b.name));
+  Number(COMPLETE_COMPONENTS.has(b.slug)) - Number(COMPLETE_COMPONENTS.has(a.slug)) ||
+  (RECENT_COMPONENTS.includes(a.slug) ? RECENT_COMPONENTS.indexOf(a.slug) : 999) -
+  (RECENT_COMPONENTS.includes(b.slug) ? RECENT_COMPONENTS.indexOf(b.slug) : 999) || a.name.localeCompare(b.name));
 
 /* --- Chrome ---------------------------------------------------------------- */
 
@@ -258,6 +260,7 @@ ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${slug === "badge" ? '<script type="module" src="./badge-demos.js"></script>' : ""}
+${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 </body>
 </html>`;
 }
@@ -350,11 +353,9 @@ function galleryPage() {
     ],
     checkbox: [
       { id: "default", title: "Default", demo: "GalleryCheckbox" },
-      { id: "size-xs", title: "Size / extra small", demo: "GalleryCheckboxExtraSmall" },
       { id: "size-small", title: "Size / small", demo: "GalleryCheckboxSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GalleryCheckboxMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryCheckboxLarge" },
-      { id: "size-xl", title: "Size / extra large", demo: "GalleryCheckboxExtraLarge" },
       { id: "selected", title: "Selected", demo: "GalleryCheckboxSelected" },
       { id: "partial", title: "Partial selection", demo: "GalleryCheckboxIndeterminate" },
       { id: "caption", title: "With caption", demo: "GalleryCheckboxCaption" },
@@ -371,11 +372,9 @@ function galleryPage() {
     ],
     radio: [
       { id: "default", title: "Default", demo: "GalleryRadio" },
-      { id: "size-xs", title: "Size / extra small", demo: "GalleryRadioExtraSmall" },
       { id: "size-small", title: "Size / small", demo: "GalleryRadioSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GalleryRadioMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryRadioLarge" },
-      { id: "size-xl", title: "Size / extra large", demo: "GalleryRadioExtraLarge" },
       { id: "selected", title: "Selected", demo: "GalleryRadioSelected" },
       { id: "disabled", title: "Disabled", demo: "GalleryRadioDisabled" },
     ],
@@ -388,6 +387,7 @@ function galleryPage() {
       { id: "required", title: "Required", demo: "FieldRequired" },
       { id: "description", title: "Description", demo: "FieldCaption" },
       { id: "error", title: "Validation / error", demo: "FieldValidation" },
+      { id: "description-error", title: "Description and error", demo: "FieldError" },
       { id: "success", title: "Validation / success", demo: "FieldSuccess" },
       { id: "warning", title: "Validation / warning", demo: "FieldWarning" },
       { id: "disabled", title: "Disabled", demo: "FieldDisabled" },
@@ -397,38 +397,49 @@ function galleryPage() {
       { id: "default", title: "Default", demo: "InputDefault" },
       { id: "outline", title: "Variant / outline", demo: "InputOutline" },
       { id: "soft", title: "Variant / soft", demo: "InputSoft" },
-      { id: "size-xs", title: "Size / extra small", demo: "GalleryInputExtraSmall" },
       { id: "size-sm", title: "Size / small", demo: "GalleryInputSmall" },
       { id: "size-md", title: "Size / medium", demo: "GalleryInputMedium" },
       { id: "size-lg", title: "Size / large", demo: "GalleryInputLarge" },
-      { id: "size-xl", title: "Size / extra large", demo: "GalleryInputExtraLarge" },
       { id: "leading", title: "Leading icon", demo: "InputLeadingVisual" },
       { id: "trailing", title: "Trailing icon", demo: "InputTrailingVisual" },
       { id: "affix", title: "With affix", demo: "InputWithAffix" },
       { id: "action", title: "Trailing action", demo: "InputTrailingAction" },
+      { id: "full-width", title: "Layout / full width", demo: "InputFullWidth" },
       { id: "readonly", title: "Read-only", demo: "InputReadOnly" },
       { id: "disabled", title: "Disabled", demo: "InputDisabled" },
       { id: "invalid", title: "Validation / error", demo: "InputInvalid" },
       { id: "success", title: "Validation / success", demo: "InputSuccess" },
       { id: "warning", title: "Validation / warning", demo: "InputWarning" },
       { id: "loading", title: "Loading", demo: "InputLoading" },
+      { id: "loading-leading", title: "Loading / leading", demo: "InputLoadingLeading" },
       { id: "monospace", title: "Monospace", demo: "InputMonospace" },
       { id: "file", title: "File", demo: "InputFile" },
       { id: "rtl", title: "Right-to-left", demo: "InputRtl" },
     ],
     select: [
       { id: "default", title: "Default", demo: "SelectDefault" },
-      { id: "size-xs", title: "Size / extra small", demo: "GallerySelectExtraSmall" },
       { id: "size-sm", title: "Size / small", demo: "GallerySelectSmall" },
       { id: "size-md", title: "Size / medium", demo: "GallerySelectMedium" },
       { id: "size-lg", title: "Size / large", demo: "GallerySelectLarge" },
-      { id: "size-xl", title: "Size / extra large", demo: "GallerySelectExtraLarge" },
       { id: "field", title: "With field", demo: "SelectField" },
       { id: "error", title: "Validation / error", demo: "SelectInvalid" },
       { id: "success", title: "Validation / success", demo: "GallerySelectSuccess" },
       { id: "warning", title: "Validation / warning", demo: "GallerySelectWarning" },
       { id: "disabled", title: "Disabled", demo: "SelectDisabled" },
       { id: "groups", title: "Option groups", demo: "SelectGroups" },
+    ],
+    slider: [
+      { id: "default", title: "Default", demo: "GallerySlider" },
+      { id: "tone-neutral", title: "Tone / neutral", demo: "GallerySliderNeutral" },
+      { id: "tone-accent", title: "Tone / accent", demo: "GallerySliderAccent" },
+      { id: "with-label", title: "Composition / top label + value", demo: "GallerySliderWithLabel" },
+      { id: "steps", title: "Steps / fractional", demo: "GallerySliderSteps" },
+      { id: "step-marks", title: "Steps / markers", demo: "GallerySliderStepMarks" },
+      { id: "range-inputs", title: "Composition / range with inputs", demo: "GallerySliderRangeWithInputs" },
+      { id: "vertical", title: "Layout / vertical", demo: "GallerySliderVertical" },
+      { id: "controlled", title: "Behavior / controlled", demo: "GallerySliderControlled" },
+      { id: "disabled", title: "State / disabled", demo: "GallerySliderDisabled" },
+      { id: "bare", title: "Composition / without readout", demo: "GallerySliderBare" },
     ],
     textarea: [
       { id: "default", title: "Default", demo: "TextareaDefault" },
@@ -466,10 +477,10 @@ function galleryPage() {
         <div class="docs-visual-gallery__tile-preview">${demoMarkup(example.demo, demo.html)}</div>
       </article>`;
     }).join("\n");
-    return `<section class="docs-visual-gallery__section" aria-labelledby="gallery-section-${component.slug}">
-      <h2 class="docs-visual-gallery__section-title" id="gallery-section-${component.slug}">${escapeHtml(component.name)} <span class="docs-audit-label" data-audit="${complete ? "complete" : "unrefined"}">${complete ? "Complete" : "Unrefined"}</span></h2>
+    return `<details open class="docs-visual-gallery__section" id="gallery-section-${component.slug}">
+      <summary class="docs-visual-gallery__section-title">${escapeHtml(component.name)} <span class="docs-audit-label" data-audit="${complete ? "complete" : "unrefined"}">${complete ? "Complete" : "Unrefined"}</span></summary>
       <div class="docs-visual-gallery__grid">${tiles}</div>
-    </section>`;
+    </details>`;
   }).join("\n");
 
   return `<!doctype html>
@@ -483,7 +494,7 @@ function galleryPage() {
 <style>${DOCS_CSS}</style>
 </head>
 <body>
-<main class="docs-visual-gallery">
+<main class="docs-visual-gallery" data-gallery-panel="closed">
   <div class="docs-visual-gallery__content">
     <header class="docs-visual-gallery__header"><h1 class="docs-visual-gallery__title">Component gallery</h1></header>
     <nav class="docs-gallery-index" aria-label="Components by audit status">
@@ -511,6 +522,7 @@ function galleryPage() {
 <script>${DOCS_SCRIPT}</script>
 <script type="module" src="./badge-demos.js"></script>
 <script type="module" src="./switch-demos.js"></script>
+<script type="module" src="./slider-demos.js"></script>
 </body>
 </html>`;
 }
@@ -519,6 +531,7 @@ function galleryPage() {
 
 function demoMarkup(name, html) {
   if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("Slider") || name.startsWith("GallerySlider")) return `<div data-slider-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   return name.startsWith("Badge") ? `<div data-badge-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>` : html;
 }
 
@@ -791,7 +804,7 @@ function iconBrowser() {
     `<button type="button" role="radio" class="area-segmented__item" data-icon-style="${value}" aria-checked="${selected}"${selected ? " data-selected" : ""}><span class="area-segmented__label">${label}</span></button>`;
 
   const sourceChip = (value, label, selected) =>
-    `<button type="button" class="area-chip area-chip--xs" data-icon-source="${value}" aria-pressed="${selected}"${selected ? " data-selected" : ""}><span class="area-chip__label">${label}</span></button>`;
+    `<button type="button" class="area-chip area-chip--sm" data-icon-source="${value}" aria-pressed="${selected}"${selected ? " data-selected" : ""}><span class="area-chip__label">${label}</span></button>`;
 
   return `<div class="docs-iconbrowser" id="icon-browser" data-style="regular" data-source="all">
   <div class="docs-iconbrowser__bar">
@@ -1097,7 +1110,7 @@ function uiScalePage() {
 ${tokenSection({
   id: "tiers",
   title: "Control tiers",
-  description: "Every dimension a control needs, at each of the five tiers, in both presets.",
+  description: "Every dimension a control needs across the shared internal ramp, in both presets.",
   rows,
   columns: [
     { header: "Token", cell: (r) => tokenChip(`control/${r.tier}`) },
@@ -1483,4 +1496,5 @@ console.log(`  dist/ -> ${out}\n`);
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/badge-client.tsx")], outfile: join(out, "badge-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/switch-client.tsx")], outfile: join(out, "switch-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
+await (await import("esbuild")).build({ entryPoints: [join(root, "src/slider-client.tsx")], outfile: join(out, "slider-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("./build-switch-fixture.mjs")).buildSwitchFixture(root, out);

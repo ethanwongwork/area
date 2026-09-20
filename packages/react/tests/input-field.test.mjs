@@ -1,0 +1,76 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { createElement as h } from "react";
+import { renderToString } from "react-dom/server";
+import { Field, Input, InputAction, MANIFESTS, inputVariants } from "../dist/modules/index.js";
+
+const render = element => renderToString(element, { identifierPrefix: "input-field-test-" });
+
+test("Input forwards native semantics and exposes its complete variant family", () => {
+  const html = render(h(Input, { name: "email", type: "email", required: true, autoComplete: "email", placeholder: "you@example.com" }));
+  assert.match(html, /area-input--outline area-input--md/);
+  assert.match(html, /type="email"/);
+  assert.match(html, /name="email"/);
+  assert.match(html, /required=""/);
+  assert.match(html, /autoComplete="email"/);
+  assert.deepEqual(MANIFESTS.input.variants.size, ["sm", "md", "lg"]);
+  assert.deepEqual(MANIFESTS.input.variants.variant, ["outline", "soft"]);
+  assert.throws(() => inputVariants({ size: "xxl" }), RangeError);
+});
+
+test("every error entry point sets native invalid semantics", () => {
+  for (const props of [{ invalid: true }, { validationStatus: "error" }, { "aria-invalid": true }]) {
+    const html = render(h(Input, { ...props, "aria-label": "Email" }));
+    assert.match(html, /data-invalid=""/);
+    assert.match(html, /aria-invalid="true"/);
+  }
+});
+
+test("loading remains editable and exposes busy status", () => {
+  const html = render(h(Input, { loading: true, loadingText: "Checking availability", defaultValue: "area.design", "aria-label": "Domain" }));
+  assert.match(html, /data-loading=""/);
+  assert.match(html, /aria-busy="true"/);
+  assert.doesNotMatch(html, / disabled=""/);
+  assert.match(html, /Checking availability/);
+});
+
+test("InputAction keeps external descriptions alongside its tooltip", () => {
+  const html = render(h(InputAction, { icon: h("svg"), tooltip: "Clear domain", "aria-describedby": "keyboard-help" }));
+  assert.match(html, /aria-label="Clear domain"/);
+  assert.match(html, /aria-describedby="keyboard-help area-input-action-/);
+  assert.match(html, /role="tooltip">Clear domain/);
+});
+
+test("Field connects label, description, error, and required state to its control", () => {
+  const html = render(h(Field, {
+    label: "Email",
+    description: "Use your work address.",
+    error: "Enter a valid address.",
+    required: true,
+  }, h(Input, { type: "email", "aria-describedby": "external-help" })));
+  const id = html.match(/for="(area-field-[^"]+)"/)[1];
+  assert.match(html, new RegExp(`for="${id}"`));
+  assert.match(html, new RegExp(`aria-labelledby="${id}-label"`));
+  assert.match(html, new RegExp(`aria-describedby="external-help ${id}-description ${id}-validation"`));
+  assert.match(html, new RegExp(`aria-errormessage="${id}-validation"`));
+  assert.match(html, /aria-invalid="true"/);
+  assert.match(html, /required=""/);
+});
+
+test("Field success and warning paint without claiming an error", () => {
+  for (const validationStatus of ["success", "warning"]) {
+    const html = render(h(Field, { label: "Workspace", validation: "Helpful context", validationStatus }, h(Input)));
+    assert.match(html, new RegExp(`data-${validationStatus}=""`));
+    assert.match(html, new RegExp(`data-tone="${validationStatus}"`));
+    assert.doesNotMatch(html, /aria-invalid="true"/);
+    assert.doesNotMatch(html, /aria-errormessage=/);
+  }
+});
+
+test("Field propagates disabled and preserves an explicit control id", () => {
+  const html = render(h(Field, { label: "Workspace", disabled: true, htmlFor: "workspace-name" }, h(Input, { defaultValue: "Area" })));
+  assert.match(html, /data-disabled=""/);
+  assert.match(html, /for="workspace-name"/);
+  assert.match(html, /id="workspace-name"/);
+  assert.match(html, / disabled=""/);
+});

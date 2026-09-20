@@ -9,8 +9,8 @@
  *    component, and a new tone costs one block.
  *
  * 2. Size tiers set nothing but the tier tokens. Every dimension -- height, padding,
- *    type, icon, gap -- comes from the density axis, so changing density moves all
- *    five tiers at once and no component needs editing.
+ *    type, icon, gap -- comes from the density axis, so changing density moves every
+ *    exposed tier at once and no component needs editing.
  *
  * 3. Foreground does not change on hover. Only background and border move. A label
  *    that shifts colour under the cursor reads as a different control; it also makes

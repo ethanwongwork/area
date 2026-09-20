@@ -1,4 +1,5 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
+import { useState } from "react";
 import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, Code, CodeBlock, Dialog, Field, Input, Kbd, KbdGroup, Menu, MenuItem, Nav, NavItem, Panel, PanelSection, Popover, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
 import { ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
@@ -94,8 +95,6 @@ export const GalleryCheckbox = () => (
 export const GalleryCheckboxSmall = () => <Checkbox size="sm" label="Small" />;
 export const GalleryCheckboxMedium = () => <Checkbox size="md" label="Medium" />;
 export const GalleryCheckboxLarge = () => <Checkbox size="lg" label="Large" />;
-export const GalleryCheckboxExtraSmall = () => <Checkbox size="xs" label="Extra small" />;
-export const GalleryCheckboxExtraLarge = () => <Checkbox size="xl" label="Extra large" />;
 export const GalleryCheckboxSelected = () => <Checkbox label="Selected" defaultChecked />;
 export const GalleryCheckboxIndeterminate = () => <Checkbox label="Partial selection" indeterminate />;
 export const GalleryCheckboxCaption = () => <Checkbox label="Email updates" caption="Get notified about activity." />;
@@ -156,11 +155,9 @@ export const GalleryInput = () => (
   <Input aria-label="Search the gallery specimen" leadingIcon={<SearchIcon />} placeholder="Search anything" />
 );
 
-export const GalleryInputExtraSmall = () => <Input size="xs" aria-label="Extra small input" placeholder="Extra small" />;
 export const GalleryInputSmall = () => <Input size="sm" aria-label="Small input" placeholder="Small" />;
 export const GalleryInputMedium = () => <Input size="md" aria-label="Medium input" placeholder="Medium" />;
 export const GalleryInputLarge = () => <Input size="lg" aria-label="Large input" placeholder="Large" />;
-export const GalleryInputExtraLarge = () => <Input size="xl" aria-label="Extra large input" placeholder="Extra large" />;
 
 export const GalleryKbd = () => (
   <Kbd keys={["cmd", "K"]} />
@@ -234,8 +231,6 @@ export const GalleryRadio = () => (
 export const GalleryRadioSmall = () => <Radio size="sm" name="gallery-radio-small" value="small" label="Small" />;
 export const GalleryRadioMedium = () => <Radio size="md" name="gallery-radio-medium" value="medium" label="Medium" />;
 export const GalleryRadioLarge = () => <Radio size="lg" name="gallery-radio-large" value="large" label="Large" />;
-export const GalleryRadioExtraSmall = () => <Radio size="xs" name="gallery-radio-xs" value="xs" label="Extra small" />;
-export const GalleryRadioExtraLarge = () => <Radio size="xl" name="gallery-radio-xl" value="xl" label="Extra large" />;
 export const GalleryRadioSelected = () => <Radio name="gallery-radio-selected" value="selected" label="Selected" defaultChecked />;
 export const GalleryRadioDisabled = () => <Radio name="gallery-radio-disabled" value="disabled" label="Unavailable" disabled />;
 
@@ -247,11 +242,9 @@ export const GallerySelect = () => (
   <Select aria-label="Gallery status specimen" defaultValue="draft"><option value="draft">Draft</option><option value="review">In review</option><option value="live">Published</option></Select>
 );
 
-export const GallerySelectExtraSmall = () => <Select size="xs" aria-label="Extra small select" defaultValue="xs"><option value="xs">Extra small</option></Select>;
 export const GallerySelectSmall = () => <Select size="sm" aria-label="Small select" defaultValue="sm"><option value="sm">Small</option></Select>;
 export const GallerySelectMedium = () => <Select size="md" aria-label="Medium select" defaultValue="md"><option value="md">Medium</option></Select>;
 export const GallerySelectLarge = () => <Select size="lg" aria-label="Large select" defaultValue="lg"><option value="lg">Large</option></Select>;
-export const GallerySelectExtraLarge = () => <Select size="xl" aria-label="Extra large select" defaultValue="xl"><option value="xl">Extra large</option></Select>;
 export const GallerySelectSuccess = () => <Select validationStatus="success" aria-label="Verified region" defaultValue="us"><option value="us">United States</option></Select>;
 export const GallerySelectWarning = () => <Select validationStatus="warning" aria-label="Region warning" defaultValue="us"><option value="us">United States</option></Select>;
 
@@ -263,7 +256,29 @@ export const GallerySkeleton = () => (
   <Skeleton shape="text" style={{ inlineSize: "60%" }} />
 );
 
-export const GallerySlider = () => <Slider aria-label="Gallery opacity specimen" min={0} max={100} defaultValue={60} />;
+export const GallerySlider = () => <Slider aria-label="Gallery opacity specimen" min={0} max={100} defaultValue={60} readout={value => `${value}%`} />;
+export const GallerySliderSmall = () => <Slider aria-label="Small opacity" size="sm" defaultValue={40} readout={value => `${value}%`} />;
+export const GallerySliderMedium = () => <Slider aria-label="Medium opacity" size="md" defaultValue={60} readout={value => `${value}%`} />;
+export const GallerySliderLarge = () => <Slider aria-label="Large opacity" size="lg" defaultValue={80} readout={value => `${value}%`} />;
+export const GallerySliderNeutral = () => <Slider aria-label="Neutral opacity" tone="neutral" defaultValue={45} readout={value => `${value}%`} />;
+export const GallerySliderAccent = () => <Slider aria-label="Accent opacity" tone="accent" defaultValue={65} readout={value => `${value}%`} />;
+export const GallerySliderWithLabel = () => <Slider label="Volume" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
+export const GallerySliderSteps = () => <Slider aria-label="Scale" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
+export const GallerySliderStepMarks = () => <Slider aria-label="Step example" min={0} max={5} step={1} defaultValue={1} stepMarks />;
+export const GallerySliderVertical = () => <div style={{ display: "flex", gap: "var(--area-space-24)", alignItems: "center" }}><Slider aria-label="Vertical volume" orientation="vertical" defaultValue={50} /><Slider aria-label="Vertical balance" orientation="vertical" defaultValue={25} /></div>;
+export const GallerySliderControlled = () => {
+  const [value, setValue] = useState(40);
+  return <Slider label="Temperature" labelPosition="top" value={value} onValueChange={setValue} readout={value => `${value}%`} />;
+};
+export const GallerySliderRangeWithInputs = () => {
+  const [range, setRange] = useState<[number, number]>([42, 75]);
+  const setStart = (next: number) => setRange(([, end]) => [Number.isFinite(next) ? Math.min(Math.max(0, next), end) : 0, end]);
+  const setEnd = (next: number) => setRange(([start]) => [start, Number.isFinite(next) ? Math.max(start, Math.min(100, next)) : start]);
+  return <div className="area-slider-range"><Input aria-label="Minimum range" type="number" min={0} max={range[1]} value={range[0]} onChange={event => setStart(event.currentTarget.valueAsNumber)} /><div className="area-slider-range__track" style={{ ["--_range-start" as string]: `${range[0]}%`, ["--_range-end" as string]: `${range[1]}%` }}><Slider aria-label="Range minimum" value={range[0]} onValueChange={setStart} className="area-slider-range__start" /><Slider aria-label="Range maximum" value={range[1]} onValueChange={setEnd} className="area-slider-range__end" /></div><Input aria-label="Maximum range" type="number" min={range[0]} max={100} value={range[1]} onChange={event => setEnd(event.currentTarget.valueAsNumber)} /></div>;
+};
+export const GallerySliderDisabled = () => <Slider aria-label="Locked volume" defaultValue={60} readout={value => `${value}%`} disabled />;
+export const GallerySliderBare = () => <Slider aria-label="Brightness" defaultValue={40} />;
+
 
 export const GallerySpinner = () => (
   <Spinner />

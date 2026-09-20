@@ -28,7 +28,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "segmented", name: "Segmented", manifest: "segmented",
-    api: [["options", "{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }[]", "—"], ["value", "string", "—"], ["label", "string (accessible group name)", "—"], ["onSelect", "(value: string) => void", "—"], ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'], ["fullWidth", "boolean", "false"]],
+    api: [["options", "{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }[]", "—"], ["value", "string", "—"], ["label", "string (accessible group name)", "—"], ["onSelect", "(value: string) => void", "—"], ["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"]],
     examples: [
       { id: "default", title: "Default", note: "A controlled presentation. In an application, update value from onSelect. Complete radio-group arrow-key navigation is still pending.", demo: "GallerySegmented" },
       { id: "sizes", title: "Sizes", demo: "SegmentedSizes" },
@@ -113,7 +113,7 @@ export const COMPONENT_PAGES = [
     manifest: "input",
     api: [
       ["variant", '"outline" | "soft"', '"outline"'],
-      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
       ["leadingIcon", "ReactNode", "—"],
       ["trailingIcon", "ReactNode", "—"],
       ["prefix", "ReactNode", "—"],
@@ -129,6 +129,7 @@ export const COMPONENT_PAGES = [
       ["disabled", "boolean", "false"],
       ["readOnly", "boolean", "false"],
       ["icon", "ReactNode (deprecated)", "—"],
+      ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
     ],
     examples: [
       {
@@ -149,7 +150,7 @@ export const COMPONENT_PAGES = [
         note: "Use soft on an existing surface when a quieter neutral boundary is appropriate.",
         demo: "InputSoft",
       },
-      { id: "sizes", title: "Sizes", note: "The five tiers share the control-height ramp.", demo: "InputSizes" },
+      { id: "sizes", title: "Sizes", note: "Medium is the default. Small supports compact compositions and large supports prominent or touch-oriented entry; system UI scale handles density without multiplying component sizes.", demo: "InputSizes" },
       {
         id: "leading-visual",
         title: "Leading visual",
@@ -228,6 +229,7 @@ export const COMPONENT_PAGES = [
       ["orientation", '"vertical" | "horizontal"', '"vertical"'],
       ["visuallyHiddenLabel", "boolean", "false"],
       ["inline", "boolean (deprecated)", "false"],
+      ["children", "one direct form control", "—"],
     ],
     examples: [
       {
@@ -265,6 +267,12 @@ export const COMPONENT_PAGES = [
         title: "Validation",
         note: "Use one concise correction when the value needs attention.",
         demo: "FieldValidation",
+      },
+      {
+        id: "description-validation",
+        title: "Description and validation",
+        note: "Durable guidance and a concise correction may coexist when they are useful and non-redundant.",
+        demo: "FieldError",
       },
       { id: "success", title: "Success validation", note: "Success confirms a completed value without turning the message into an error.", demo: "FieldSuccess" },
       { id: "warning", title: "Warning validation", note: "Warning explains an important consequence while keeping the value usable.", demo: "FieldWarning" },
@@ -332,7 +340,7 @@ export const COMPONENT_PAGES = [
     slug: "select",
     name: "Select",
     manifest: "select",
-    api: [["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'], ["fullWidth", "boolean", "false"], ["validationStatus", '"error" | "success" | "warning"', "—"], ["invalid", "boolean", "false"]],
+    api: [["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"], ["validationStatus", '"error" | "success" | "warning"', "—"], ["invalid", "boolean", "false"]],
     examples: [
       { id: "default", title: "Default", demo: "SelectDefault" },
       { id: "field", title: "Label and required state", demo: "SelectField" },
@@ -351,7 +359,7 @@ export const COMPONENT_PAGES = [
     manifest: "checkbox",
     api: [
       ["variant", '"card"', "—"],
-      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
       ["caption / description", "ReactNode", "—"],
       ["leadingVisual", "ReactNode", "—"],
@@ -381,7 +389,7 @@ export const COMPONENT_PAGES = [
     imports: "Radio, RadioGroup",
     manifest: "radio",
     api: [
-      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
       ["name", "string", "—"],
       ["description", "ReactNode", "—"],
@@ -426,15 +434,31 @@ export const COMPONENT_PAGES = [
     name: "Slider",
     manifest: "slider",
     api: [
-      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
+      ["variant", '"track"', '"track"'],
+      ["tone", '"neutral" | "accent"', '"neutral"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["label", "ReactNode", "—"],
+      ["labelPosition", '"inline" | "top"', '"inline"'],
+      ["orientation", '"horizontal" | "vertical"', '"horizontal"'],
+      ["stepMarks", "boolean", "false"],
       ["min", "number", "0"],
       ["max", "number", "100"],
-      ["readout", "ReactNode", "—"],
+      ["step", 'number | "any"', "1"],
+      ["value / defaultValue", "number; controlled / initial value", "native midpoint"],
+      ["readout", "boolean | ReactNode | (value) => ReactNode", "—"],
+      ["onValueChange", "(value: number) => void", "—"],
       ["disabled", "boolean", "false"],
+      ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
     ],
     examples: [
       { id: "default", title: "Default", demo: "SliderDefault" },
-      { id: "sizes", title: "Sizes", demo: "SliderSizes" },
+      { id: "tones", title: "Neutral and accent", note: "Neutral is the stable default. Opt a Slider into the selected system accent when its value should carry product emphasis.", demo: "SliderTones" },
+      { id: "label", title: "Label and value above", demo: "SliderWithLabel" },
+      { id: "steps", title: "Steps and formatting", note: "The fill and optional formatter use the same normalized native value, including fractional steps.", demo: "SliderSteps" },
+      { id: "marks", title: "Discrete step markers", demo: "SliderStepMarks" },
+      { id: "range", title: "Range with numeric inputs", demo: "SliderRangeWithInputs" },
+      { id: "vertical", title: "Vertical", demo: "SliderVertical" },
+      { id: "disabled", title: "Disabled", demo: "SliderDisabled" },
       { id: "bare", title: "Without a readout", demo: "SliderBare" },
     ],
   },
@@ -443,7 +467,7 @@ export const COMPONENT_PAGES = [
     name: "Chip",
     manifest: "chip",
     api: [
-      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"sm"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
       ["selected", "boolean", "false"],
       ["swatch", "string", "—"],
       ["swatchOnly", "boolean", "false"],
@@ -520,7 +544,7 @@ export const COMPONENT_PAGES = [
     name: "Avatar",
     manifest: "avatar",
     api: [
-      ["size", '"xs" | "sm" | "md" | "lg" | "xl"', '"md"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
       ["shape", '"square"', "—"],
       ["src", "string", "—"],
       ["fallback", "ReactNode", "—"],

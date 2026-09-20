@@ -15,6 +15,13 @@ The registry in `packages/tokens/src/axes/registry.ts` defines seven axes:
 - `surface`: flat, outlined, raised or elevated.
 - `motion`: none, subtle or expressive.
 
+Keep the name `accent`: it is the system-selected chromatic role and may represent a
+product brand. `custom` means a per-instance value outside that role, so renaming accent
+to custom would blur two different contracts. Components with meaningful chromatic
+emphasis expose `neutral` and `accent` treatments explicitly; neutral remains stable,
+while the product chooses the accent preset and which component instances opt into it.
+Button and Badge expose both as part of their core variant families.
+
 Use `data-area-<axis>` on any ancestor. Missing settings inherit; explicit settings form
 a local boundary. `data-area-contrast="more"` is a separate accessibility preference;
 `standard` resets it locally. Without a root override, contrast follows the OS preference.

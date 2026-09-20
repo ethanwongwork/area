@@ -11,7 +11,7 @@ const code = (text) => `<code class="area-code">${text}</code>`;
 export const PRACTICES = {
   checkbox: [
     `Use Checkbox for independent choices. Native checked, indeterminate and focus states keep one fixed border-box; selecting fills the existing shape rather than changing its size.`,
-    `Choose xs through xl on the icon ramp. Adjacent tiers may share a glyph size while their label type and spacing differ. Labels follow density rather than the prose scale.`,
+    `Choose small, medium or large on the icon ramp; medium is the default. Labels follow the active UI scale rather than the prose scale.`,
     `Give a CheckboxGroup a visible, strong group label. Captions and validation messages use the small UI pairing — not microcopy — with a consistent 4px label-to-caption and 12px section rhythm.`,
     `Use red for an individually invalid Checkbox, including its checked state; do not combine an accent fill with an error edge. In a group, keep option labels neutral and put the red on the error message and unresolved option marks.`,
     `Standard mode matches the selected boundary to its fill; increased contrast restores the strong selected edge. Focus remains distinct in both modes.`,

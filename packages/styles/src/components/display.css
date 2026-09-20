@@ -32,11 +32,9 @@
 
   .area-avatar--square { border-radius: var(--area-radius-control); }
 
-  .area-avatar--xs { --_size: var(--area-control-xs); }
   .area-avatar--sm { --_size: var(--area-control-sm); }
   .area-avatar--md { --_size: var(--area-control-md); }
   .area-avatar--lg { --_size: var(--area-control-lg); }
-  .area-avatar--xl { --_size: var(--area-control-xl); }
 
   /* --- Separator ---------------------------------------------------------- */
   .area-separator {

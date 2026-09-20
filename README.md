@@ -56,7 +56,8 @@ unpublished ESM workspaces; publishing them is separate work.
 - [Contrast](docs/CONTRAST.md): color, focus and accessibility constraints.
 - [Development](docs/DEVELOPMENT.md): architecture, commands, testing and generated files.
 
-Only **Badge, Button and Checkbox** are currently owner-confirmed complete. The gallery's
+Only **Badge, Button, Checkbox, Field, Input and Slider** are currently owner-confirmed
+complete. The gallery's
 [completion registry](apps/docs/src/component-status.mjs) is authoritative; everything
 else is unrefined even where an older report called it complete.
 

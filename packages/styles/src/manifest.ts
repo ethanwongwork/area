@@ -69,7 +69,7 @@ export const field = {
 export const input = {
   block: "area-input",
   description: "Accepts a single line of text.",
-  variants: { variant: ["outline", "soft"], size: ["xs", "sm", "md", "lg", "xl"] },
+  variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
   booleans: ["full-width", "monospace"],
   states: ["disabled", "invalid", "success", "warning", "read-only", "loading"],
   elements: ["control", "icon", "affix", "action", "action-button", "action-icon", "action-tooltip"],
@@ -94,7 +94,7 @@ export const textarea = {
 export const select = {
   block: "area-select",
   description: "Picks one value from a list.",
-  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
+  variants: { size: ["sm", "md", "lg"] },
   booleans: ["full-width"],
   states: ["invalid", "disabled"],
   stateAttributes: { disabled: "disabled", invalid: "aria-invalid" },
@@ -105,7 +105,7 @@ export const select = {
 export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
-  variants: { variant: ["card"], size: ["xs", "sm", "md", "lg", "xl"] },
+  variants: { variant: ["card"], size: ["sm", "md", "lg"] },
   states: ["checked", "indeterminate", "disabled", "invalid"],
   elements: ["control", "visual"],
   defaults: { size: "md" },
@@ -123,7 +123,7 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
+  variants: { size: ["sm", "md", "lg"] },
   states: ["disabled"],
   elements: ["control"],
   defaults: { size: "md" },
@@ -156,20 +156,24 @@ export const switchControl = {
 export const slider = {
   block: "area-slider",
   description: "Picks a value from an ordered range.",
-  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
-  states: ["disabled"],
-  elements: ["control", "value"],
-  defaults: { size: "md" },
+  variants: {
+    variant: ["track"],
+    tone: ["neutral", "accent"],
+    size: ["sm", "md", "lg"],
+  },
+  states: ["disabled", "hover", "focus-visible"],
+  elements: ["label", "control", "value", "marks"],
+  defaults: { variant: "track", tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const chip = {
   block: "area-chip",
   description: "Selects one value from a set too long for a segmented track.",
-  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
+  variants: { size: ["sm", "md", "lg"] },
   booleans: ["pill", "swatch-only"],
   states: ["selected", "disabled"],
   elements: ["swatch", "icon", "label"],
-  defaults: { size: "sm" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const chipGroup = {
@@ -221,7 +225,7 @@ export const badgeGroup = {
 export const avatar = {
   block: "area-avatar",
   description: "Represents a user or entity.",
-  variants: { size: ["xs", "sm", "md", "lg", "xl"], shape: ["square"] },
+  variants: { size: ["sm", "md", "lg"], shape: ["square"] },
   elements: ["image"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
@@ -368,7 +372,7 @@ export const tableWrapper = {
 export const segmented = {
   block: "area-segmented",
   description: "Picks one value from a small set of options.",
-  variants: { size: ["xs", "sm", "md", "lg", "xl"] },
+  variants: { size: ["sm", "md", "lg"] },
   booleans: ["full-width"],
   states: ["selected", "disabled"],
   stateAttributes: { disabled: "disabled" },

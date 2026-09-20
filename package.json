@@ -20,6 +20,8 @@
     "test:preview": "npm run test -w @area/docs",
     "test:consumer": "node scripts/check-consumer.mjs",
     "test:switch": "node --test packages/react/tests/switch.test.mjs",
+    "test:slider": "node --test packages/react/tests/slider.test.mjs",
+    "test:input-field": "node --test packages/react/tests/input-field.test.mjs",
     "test:badge": "node --test packages/react/tests/badge.test.mjs",
     "test:contracts": "node --test packages/styles/scripts/manifest-parity.test.mjs apps/docs/scripts/axis-preferences.test.mjs",
     "reference:lookup": "python3 archive/docs/audit-pack/tools/audit-evidence/lookup.py"

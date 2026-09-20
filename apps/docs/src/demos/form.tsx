@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Checkbox, CheckboxGroup, Chip, ChipGroup, Field, Input, InputAction, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
 import { CheckIcon, DismissIcon, SearchIcon } from "../icons.tsx";
 
@@ -11,15 +12,13 @@ export const InputWithAffix = () => <Input aria-label="Amount" prefix="$" suffix
 
 export const InputSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-input-inline-size)" }}>
-    <Input size="xs" placeholder="Extra small" aria-label="Extra small input" />
     <Input size="sm" placeholder="Small" aria-label="Small input" />
     <Input size="md" placeholder="Medium" aria-label="Medium input" />
     <Input size="lg" placeholder="Large" aria-label="Large input" />
-    <Input size="xl" placeholder="Extra large" aria-label="Extra large input" />
   </div>
 );
 
-export const InputInvalid = () => <Input aria-label="Email" invalid defaultValue="not-an-email" />;
+export const InputInvalid = () => <Input aria-label="Email" validationStatus="error" defaultValue="not-an-email" />;
 
 export const InputSuccess = () => <Input aria-label="Workspace name" validationStatus="success" defaultValue="area-design" />;
 
@@ -159,11 +158,9 @@ export const SelectDefault = () => (
 
 export const SelectSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-select-inline-size)" }}>
-    <Select size="xs" aria-label="Extra small size" defaultValue="xs"><option value="xs">Extra small</option></Select>
     <Select size="sm" aria-label="Small size" defaultValue="sm"><option value="sm">Small</option></Select>
     <Select size="md" aria-label="Medium size" defaultValue="md"><option value="md">Medium</option></Select>
     <Select size="lg" aria-label="Large size" defaultValue="lg"><option value="lg">Large</option></Select>
-    <Select size="xl" aria-label="Extra large size" defaultValue="xl"><option value="xl">Extra large</option></Select>
   </div>
 );
 
@@ -289,17 +286,41 @@ export const RadioInvalid = () => (
 
 
 
-export const SliderDefault = () => <Slider min={0} max={12} defaultValue={8} readout="8" />;
+export const SliderDefault = () => <Slider aria-label="Columns" min={0} max={12} defaultValue={8} readout />;
 
 export const SliderSizes = () => (
   <>
-    <Slider size="xs" min={0} max={100} defaultValue={25} readout="25" />
-    <Slider size="sm" min={0} max={100} defaultValue={50} readout="50" />
-    <Slider size="md" min={0} max={100} defaultValue={75} readout="75" />
+    <Slider aria-label="Small opacity" size="sm" min={0} max={100} defaultValue={25} readout={value => `${value}%`} />
+    <Slider aria-label="Medium opacity" size="md" min={0} max={100} defaultValue={50} readout={value => `${value}%`} />
+    <Slider aria-label="Large opacity" size="lg" min={0} max={100} defaultValue={75} readout={value => `${value}%`} />
   </>
 );
 
-export const SliderBare = () => <Slider min={0} max={100} defaultValue={40} />;
+export const SliderTones = () => (
+  <>
+    <Slider aria-label="Neutral volume" tone="neutral" defaultValue={40} readout={value => `${value}%`} />
+    <Slider aria-label="Accent volume" tone="accent" defaultValue={70} readout={value => `${value}%`} />
+  </>
+);
+
+export const SliderSteps = () => <Slider aria-label="Scale" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
+
+export const SliderWithLabel = () => <Slider label="Volume" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
+
+export const SliderStepMarks = () => <Slider aria-label="Step example" min={0} max={5} step={1} defaultValue={1} stepMarks />;
+
+export const SliderRangeWithInputs = () => {
+  const [range, setRange] = useState<[number, number]>([42, 75]);
+  const setStart = (start: number) => setRange(([, end]) => [Number.isFinite(start) ? Math.min(Math.max(0, start), end) : 0, end]);
+  const setEnd = (end: number) => setRange(([start]) => [start, Number.isFinite(end) ? Math.max(start, Math.min(100, end)) : start]);
+  return <div className="area-slider-range"><Input aria-label="Minimum range" type="number" min={0} max={range[1]} value={range[0]} onChange={event => setStart(event.currentTarget.valueAsNumber)} /><div className="area-slider-range__track" style={{ ["--_range-start" as string]: `${range[0]}%`, ["--_range-end" as string]: `${range[1]}%` }}><Slider aria-label="Range minimum" value={range[0]} onValueChange={setStart} className="area-slider-range__start" /><Slider aria-label="Range maximum" value={range[1]} onValueChange={setEnd} className="area-slider-range__end" /></div><Input aria-label="Maximum range" type="number" min={range[0]} max={100} value={range[1]} onChange={event => setEnd(event.currentTarget.valueAsNumber)} /></div>;
+};
+
+export const SliderVertical = () => <div style={{ display: "flex", gap: "var(--area-space-24)", alignItems: "center" }}><Slider aria-label="Vertical volume" orientation="vertical" defaultValue={50} /><Slider aria-label="Vertical balance" orientation="vertical" defaultValue={25} /></div>;
+
+export const SliderDisabled = () => <Slider aria-label="Locked volume" defaultValue={60} readout={value => `${value}%`} disabled />;
+
+export const SliderBare = () => <Slider aria-label="Brightness" min={0} max={100} defaultValue={40} />;
 
 export const ChipDefault = () => (
   <ChipGroup>
@@ -323,15 +344,15 @@ export const ChipSwatches = () => (
 
 export const ChipSizes = () => (
   <ChipGroup>
-    <Chip size="xs">Extra small</Chip>
     <Chip size="sm">Small</Chip>
     <Chip size="md">Medium</Chip>
+    <Chip size="lg">Large</Chip>
   </ChipGroup>
 );
 
 export const CheckboxSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
+    {(["sm", "md", "lg"] as const).map((size) => (
       <Checkbox key={size} size={size} label={size} />
     ))}
   </div>
@@ -348,7 +369,7 @@ export const CheckboxStates = () => (
 
 export const RadioSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    {(["xs", "sm", "md", "lg", "xl"] as const).map((size) => (
+    {(["sm", "md", "lg"] as const).map((size) => (
       <Radio key={size} size={size} name={`radio-size-${size}`} value={size} label={size.toUpperCase()} />
     ))}
   </div>

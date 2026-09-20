@@ -50,7 +50,7 @@ export interface InputActionProps extends Omit<ButtonHTMLAttributes<HTMLButtonEl
 }
 
 export const InputAction = /* @__PURE__ */ forwardRef<HTMLButtonElement, InputActionProps>(function InputAction(
-  { icon, tooltip, "aria-label": ariaLabel, className, ...rest },
+  { icon, tooltip, "aria-label": ariaLabel, "aria-describedby": describedBy, className, ...rest },
   ref,
 ) {
   const tooltipId = `area-input-action-${useId().replace(/:/g, "")}`;
@@ -62,7 +62,7 @@ export const InputAction = /* @__PURE__ */ forwardRef<HTMLButtonElement, InputAc
         type="button"
         className={cx("area-input__action-button", className)}
         aria-label={ariaLabel ?? tooltip}
-        aria-describedby={tooltipId}
+        aria-describedby={[describedBy, tooltipId].filter(Boolean).join(" ")}
         {...rest}
       >
         <span className="area-input__action-icon" aria-hidden="true">{icon}</span>
@@ -108,7 +108,7 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
   const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
   const startIcon = leadingIcon ?? icon;
-  const spinnerSize = size === "xs" || size === "sm" ? "sm" : size === "lg" || size === "xl" ? "lg" : "md";
+  const spinnerSize = size === "sm" ? "sm" : size === "lg" ? "lg" : "md";
   const resolvedLoaderPosition = loaderPosition === "auto" ? (startIcon ? "leading" : "trailing") : loaderPosition;
 
   return (
@@ -134,7 +134,7 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
         className="area-input__control"
         disabled={disabled}
         readOnly={readOnly}
-        aria-invalid={invalid ? true : ariaInvalid}
+        aria-invalid={invalidState ? true : ariaInvalid}
         aria-busy={loading ? true : ariaBusy}
         {...rest}
       />

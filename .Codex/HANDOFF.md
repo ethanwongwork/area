@@ -1,13 +1,32 @@
 # Handoff — 2026-09-19
 
-**Branch:** `main`; pushed checkpoint commit `4886743` (`docs: simplify component library workflow`).
+**Branch:** `main`.
 
 ## Current work
 
-Repository simplification and gallery corrections are implemented. Only Badge, Button
-and Checkbox are owner-confirmed complete; `apps/docs/src/component-status.mjs` drives
-both gallery and sidebar. Everything else is unrefined, regardless of historical reports.
-The gallery retains variant specimens, consistent names and shared theme controls.
+Design visually first, then tokenize. Do not assume every family needs S/M/L: Slider’s
+small/medium/large tiers are supported and medium remains the default, while UI scale owns
+product-wide density. Gallery sections collapse natively and persist; customization floats
+over content with an icon-only collapsed state.
+
+Slider’s inset property-row experiment is removed. The gallery shows its neutral default,
+accent opt-in, label/value-above-track composition, fractional and marked discrete steps,
+range with numeric inputs, vertical layout, controlled behavior, disabled state and
+without-readout composition. Its thumb uses a surface ring with a centered fill-color dot.
+The gallery keeps themed specimen surfaces in dark mode and uses a subtle red-50 edge/title
+for unrefined status instead of replacing the surface.
+
+Input, Select, Checkbox, Radio, Slider, Chip, Avatar and Segmented no longer expose token-
+ramp-only xs/xl sizes; their public families are sm/md/lg with md as default. UI scale
+owns system-wide density. Internal ramps remain available to specialized layout/content
+roles such as Panel and Kbd. Consumer fixtures and inset fixtures were updated.
+
+Input and Field received a confirmation pass without rebuilding their existing work.
+Input `validationStatus="error"` now sets native `aria-invalid`; InputAction merges an
+external `aria-describedby` with its tooltip. Seven focused tests cover Input variants,
+native semantics, loading, action descriptions and Field relationships/propagation. Their
+gallery coverage was expanded. The owner accepted Slider, Input and Field on 2026-09-19;
+the completion registry, README and component workflow status now record that decision.
 
 Active docs are five guides linked from README. Read AGENTS.md and the relevant guide,
 not the old audit process. All previous docs/evidence are preserved under `archive/docs`;
@@ -18,20 +37,18 @@ The lone active checkpoint skill is short and optional; a handoff does not autho
 
 ## Next
 
-The last component request was Slider; no Slider implementation change was made.
-Its uncontrolled native value can diverge from fill. The old sizing proposal is archived
-and not approved/binding. Use `docs/COMPONENTS.md` for the new short build workflow.
-No mandatory benchmark sweep, multi-document audit or pre-build approval packet remains.
+Select the next unrefined family from `docs/COMPONENTS.md`. The documented workflow treats
+public system documentation as a functional baseline and keeps concise observations from
+non-public systems as suggestions—not automatic variants.
 
 ## Verification
 
-Passed: docs/package build (46 pages, 408 demos, manifest/docs coverage 40/40), typecheck,
-18,401 token tests, contrast report (350 passing / 0 failing across 66 themes), 14 contract
-tests, 4 preview tests, 6 Badge tests, 5 Switch tests, packed-consumer checks and diff check.
-Preview tests required loopback permission. Skill frontmatter was manually reviewed;
-the optional Python validator could not run because PyYAML is not installed.
-All 1,682 original docs files are archived; 1,497 evidence files match HEAD byte-for-byte.
-Active local Markdown links pass. Browser shows 3 complete / 28 unrefined families.
+Passed: docs/package build (46 pages, 420 demos), typecheck, 6 Slider tests and 7
+Input/Field tests. Browser verification confirmed marked step indicators, numeric range
+inputs, vertical layout and the completed gallery status for Slider, Input and Field.
+Input's 22 specimens including focus tooltip and native invalid semantics; Field's 13
+specimens and label/description/error relationships; and themed gallery surfaces in dark
+compact mode. Slider form reset is implemented but lacks an automated browser test.
 
 Avoid concurrent package builds/typecheck while the dev watcher rebuilds declarations.
 Cross-engine, native forced-colors, assistive-technology and release limitations remain

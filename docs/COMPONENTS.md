@@ -6,15 +6,17 @@ tokens, predictable APIs, accessibility and visual quality consistent.
 
 ## What is complete
 
-Only **Badge, Button and Checkbox** are owner-confirmed complete as of 2026-09-18.
+**Badge, Button, Checkbox, Field, Input and Slider** are owner-confirmed complete as of
+2026-09-19.
 All other existing families are **unrefined**, including ones with historical audits.
 Their code remains available; unrefined means they still need component-level review,
 not that every feature is broken or should be rebuilt.
 
 The single executable status source is
 [`component-status.mjs`](../apps/docs/src/component-status.mjs). Both the gallery and
-sidebar read it. Complete labels use green-500; unrefined labels/backgrounds use
-red-500/red-25. Explicit words accompany the colors in the gallery.
+sidebar read it. Complete labels use green-500; unrefined labels use red-500/red-25 and
+specimen tiles use a red-500 edge while retaining the active themed surface. Explicit
+words accompany the colors in the gallery.
 Compound parts follow their parent family. Token is a compatibility composition of Code,
 not a second completed family. A green build is not a completion signal.
 
@@ -78,25 +80,41 @@ Long text, RTL and enlargement are verification cases, not public variants.
 
 ## Build workflow
 
-1. Inspect the current CSS, manifest, React wrapper and demos. Identify the user job and
-   missing useful variants; avoid rebuilding already working behavior.
-2. Resolve uncertain geometry or behavior with existing tokens, rendered measurement,
-   platform guidance or a few relevant primary references. Use archived evidence only
-   when it answers the question. There is no required number of benchmark systems.
-3. Implement the family across CSS, manifest, React and demos. Keep rationale close to
-   the code or in a short note here only when future work needs it. A separate report
-   is optional, not a completion prerequisite.
-4. Verify semantics, keyboard/state behavior, sizes, customization and relevant edge
+1. Start with the user job and a visually coherent default. Inspect the current CSS,
+   manifest, React wrapper and demos; retain working behavior rather than rebuilding it.
+2. Use public design-system documentation to establish functional baselines—native
+   behavior, accessibility, size classes, states and composition boundaries. Treat those
+   findings as a starting point, not a mandate to import every documented variant.
+3. Preserve concise observations from products without public component systems (for
+   example Notion, ChatGPT/OpenAI and Cursor): density, type hierarchy, color use,
+   interaction patterns and useful compositions. They are design signals and suggestions,
+   never implied public API contracts or invented measurements.
+4. Present the default plus a short, labeled set of suggested functional variants. The
+   owner chooses which reference-driven variants enter the library; do not let an audit
+   or a coverage checklist decide the component surface.
+5. Implement accepted work across CSS, manifest, React and demos. First match the visual
+   system—density, radius, gaps, padding, type, icons and structure—then consolidate
+   stable decisions into semantic/component tokens.
+6. Verify semantics, keyboard/state behavior, sizes, customization and relevant edge
    cases. Run affected checks and inspect the preview. Say what is still unverified.
-5. Present the working result. Mark it complete only after owner acceptance and checks;
+7. Present the working result. Mark it complete only after owner acceptance and checks;
    do not turn that final acceptance into a mandatory pre-implementation approval gate.
 
 ## Next work and known gaps
 
-Slider was the next requested family before repository cleanup. Its existing native input
-needs value/fill synchronization for uncontrolled changes, normalization and form reset.
-The earlier sizing proposal is archived and is not approved or binding. Resume from the
-current code and this short workflow when component work resumes.
+Slider has been refined across its native value lifecycle: controlled and uncontrolled
+values, normalization, live fill/readout updates and form reset now stay synchronized.
+It now has a neutral default, an accent opt-in, labeled and range-with-input compositions,
+vertical layout, and discrete step markers, plus a surface thumb with a centered fill-color
+dot. Its public sizes are the justified
+small/medium/large family; UI scale owns product-wide density. It is owner-confirmed
+complete.
+
+Input and Field have also received a confirmation pass. Input's error entry points now
+agree on native `aria-invalid`, InputAction preserves external descriptions alongside its
+tooltip, and focused tests cover the Field label, description, validation, required and
+disabled relationships. Their existing variants remain intact and are expanded in the
+gallery. Both are owner-confirmed complete.
 
 Other existing families need refinement and owner review. Prioritize form correctness,
 composite-widget keyboard/focus behavior, motion-none behavior and theme resilience as

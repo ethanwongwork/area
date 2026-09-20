@@ -7,7 +7,7 @@ import { MANIFESTS } from "../variants.ts";
  * of its own. Every appearance decision lives in `@area/styles`, which is what lets a
  * consumer use the CSS without React and get an identical result.
  */
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -289,42 +289,149 @@ export const PanelStack = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(functi
  * than a length it survives a density change without recomputing.
  */
 export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
+  variant?: VariantProps<typeof MANIFESTS.slider>["variant"];
+  tone?: VariantProps<typeof MANIFESTS.slider>["tone"];
   size?: VariantProps<typeof MANIFESTS.slider>["size"];
-  /** Rendered to the right of the track. Pass `false` for a track on its own. */
-  readout?: ReactNode;
+  /** Visible label for the range. */
+  label?: ReactNode;
+  /** Places the label and readout above opposite ends of the track. */
+  labelPosition?: "inline" | "top";
+  /** Changes the visual axis while retaining native range keyboard semantics. */
+  orientation?: "horizontal" | "vertical";
+  /** Draws a marker at each interior step of a discrete track. */
+  stepMarks?: boolean;
+  /**
+   * Rendered after the track. `true` shows the normalized numeric value; a function can
+   * format that live value. A React node remains supported for fully custom content.
+   */
+  readout?: boolean | ReactNode | ((value: number) => ReactNode);
+  /** Called with the normalized native value for every input event. */
+  onValueChange?: (value: number) => void;
   disabled?: boolean;
 }
 
+function finiteNumber(value: unknown, fallback: number) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+}
+
+/** Mirrors the native range defaults closely enough for correct server-rendered paint. */
+function normalizeSliderValue(
+  value: unknown,
+  min: string | number,
+  max: string | number,
+  step: string | number | undefined,
+) {
+  const lower = finiteNumber(min, 0);
+  const upper = Math.max(lower, finiteNumber(max, 100));
+  const fallback = lower + (upper - lower) / 2;
+  const requested = Math.min(upper, Math.max(lower, finiteNumber(value, fallback)));
+  if (step === "any") return requested;
+
+  const interval = finiteNumber(step, 1);
+  if (interval <= 0) return requested;
+  const stepped = lower + Math.round((requested - lower) / interval) * interval;
+  // Floating-point multiplication can otherwise leak values such as 0.30000000000000004
+  // into the readout and percentage custom property.
+  const precision = Math.max(
+    String(lower).split(".")[1]?.length ?? 0,
+    String(interval).split(".")[1]?.length ?? 0,
+  );
+  return Math.min(upper, Math.max(lower, Number(stepped.toFixed(Math.min(precision, 12)))));
+}
 
 export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(function Slider(
-  { size, readout, className, disabled, min = 0, max = 100, value, defaultValue, style, ...rest },
+  {
+    variant,
+    tone,
+    size,
+    label,
+    labelPosition = "inline",
+    orientation = "horizontal",
+    stepMarks,
+    readout,
+    onValueChange,
+    onInput,
+    className,
+    disabled,
+    min = 0,
+    max = 100,
+    step,
+    value,
+    defaultValue,
+    style,
+    ...rest
+  },
   ref,
 ) {
-  const current = Number(value ?? defaultValue ?? min);
-  const span = Number(max) - Number(min);
-  const pct = span > 0 ? ((current - Number(min)) / span) * 100 : 0;
+  const input = useRef<HTMLInputElement>(null);
+  useImperativeHandle(ref, () => input.current!, []);
+  const initialValue = normalizeSliderValue(defaultValue, min, max, step);
+  const [localValue, setLocalValue] = useState(initialValue);
+  const current = value === undefined
+    ? localValue
+    : normalizeSliderValue(value, min, max, step);
+  const lower = finiteNumber(min, 0);
+  const upper = Math.max(lower, finiteNumber(max, 100));
+  const pct = upper > lower ? ((current - lower) / (upper - lower)) * 100 : 0;
+  const interval = step === "any" ? 0 : finiteNumber(step, 1);
+  const markCount = stepMarks && interval > 0
+    ? Math.min(24, Math.max(0, Math.round((upper - lower) / interval) - 1))
+    : 0;
+
+  useEffect(() => {
+    const form = input.current?.form;
+    const reset = (event: Event) => queueMicrotask(() => {
+      if (!event.defaultPrevented && value === undefined && input.current) {
+        setLocalValue(input.current.valueAsNumber);
+      }
+    });
+    form?.addEventListener("reset", reset);
+    return () => form?.removeEventListener("reset", reset);
+  }, [value, rest.form]);
+
+  useEffect(() => {
+    if (value === undefined && input.current && input.current.valueAsNumber !== localValue) {
+      setLocalValue(input.current.valueAsNumber);
+    }
+  }, [defaultValue, localValue, max, min, step, value]);
+
+  const renderedReadout = typeof readout === "function"
+    ? readout(current)
+    : readout === true
+      ? current
+      : readout;
 
   return (
-    <div
-      className={sliderVariants({ size }, className)}
+    <label
+      className={cx(sliderVariants({ variant, tone, size }, className), labelPosition === "top" && "area-slider--label-top", orientation === "vertical" && "area-slider--vertical")}
       style={{ ["--_pct" as string]: `${pct}%`, ...style }}
       {...(disabled ? { "data-disabled": "" } : {})}
     >
+      {label ? <span className="area-slider__label">{label}</span> : null}
+      {markCount > 0 ? <span className="area-slider__marks" aria-hidden="true">{Array.from({ length: markCount }, (_, index) => <i key={index} style={{ ["--_mark" as string]: `${((index + 1) / (markCount + 1)) * 100}%` }} />)}</span> : null}
       <input
-        ref={ref}
+        {...rest}
+        ref={input}
         type="range"
         className="area-slider__control"
         min={min}
         max={max}
+        step={step}
         value={value}
         defaultValue={defaultValue}
         disabled={disabled}
-        {...rest}
+        onInput={event => {
+          onInput?.(event);
+          const nextValue = event.currentTarget.valueAsNumber;
+          if (value === undefined) setLocalValue(nextValue);
+          onValueChange?.(nextValue);
+        }}
       />
       {readout === false || readout === undefined ? null : (
-        <span className="area-slider__value">{readout}</span>
+        <span className="area-slider__value" aria-hidden="true">{renderedReadout}</span>
       )}
-    </div>
+    </label>
   );
 });
 

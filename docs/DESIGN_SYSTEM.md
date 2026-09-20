@@ -74,6 +74,14 @@ ramp. Shared controls use the same tier's icon, text and gap tokens. Default med
 32px with 14/20px type; compact medium is 28px with 13/18px type. Read the current ramps
 in `axes/density.ts` rather than copying tables into each component.
 
+Public component size families default to `md`. Expose `sm` when a component has a real
+compact-composition use case and `lg` when it needs a more prominent or touch-oriented
+target; do not expose `xs`/`xl` merely because the internal token ramp contains them.
+Product-wide compactness belongs to the UI-scale axis, so consumers do not have to set a
+smaller size on every instance. Specialized layout/content roles such as Panel insets and
+Kbd labels may use their own vocabulary because they are not interchangeable control
+heights.
+
 Do not force control heights onto labels, glyphs or containers. Badge has a dedicated
 20/24/32px label ramp and a pill identity; Checkbox/Radio use the icon ramp. Switch has
 its own track geometry. Kbd and Token have separate content roles. These current

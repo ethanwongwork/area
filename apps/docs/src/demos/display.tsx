@@ -5,11 +5,9 @@ export const AvatarDefault = () => <Avatar fallback="EW" alt="Ethan Wong" />;
 
 export const AvatarSizes = () => (
   <>
-    <Avatar size="xs" fallback="XS" />
     <Avatar size="sm" fallback="SM" />
     <Avatar size="md" fallback="MD" />
     <Avatar size="lg" fallback="LG" />
-    <Avatar size="xl" fallback="XL" />
   </>
 );
 
@@ -333,9 +331,9 @@ export const PanelEverything = () => (
       <PanelStack>
         <Label>Accent</Label>
         <ChipGroup>
-          <Chip size="xs" swatch="var(--area-red-500)">Red</Chip>
-          <Chip size="xs" selected swatch="var(--area-indigo-500)">Indigo</Chip>
-          <Chip size="xs" swatch="var(--area-teal-600)">Teal</Chip>
+          <Chip size="sm" swatch="var(--area-red-500)">Red</Chip>
+          <Chip size="sm" selected swatch="var(--area-indigo-500)">Indigo</Chip>
+          <Chip size="sm" swatch="var(--area-teal-600)">Teal</Chip>
         </ChipGroup>
       </PanelStack>
     </PanelSection>

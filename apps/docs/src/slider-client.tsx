@@ -1,0 +1,14 @@
+import { createElement } from "react";
+import { hydrateRoot } from "react-dom/client";
+import * as formDemos from "./demos/form.tsx";
+import * as galleryDemos from "./demos/gallery.tsx";
+
+const demos = { ...formDemos, ...galleryDemos };
+
+for (const root of document.querySelectorAll<HTMLElement>("[data-slider-demo]")) {
+  const name = root.dataset.sliderDemo!;
+  const Component = demos[name as keyof typeof demos];
+  if (Component) hydrateRoot(root, createElement(Component), {
+    identifierPrefix: `area-${name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()}-`,
+  });
+}

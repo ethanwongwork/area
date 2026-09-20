@@ -141,7 +141,7 @@ export function viewToggle(id, { grid, table: tableHtml, initial = "table" }) {
 
   return `<div class="docs-view" data-view="${initial}" id="view-${id}">
   <div class="docs-view__bar">
-    <div class="area-segmented area-segmented--xs" role="radiogroup" aria-label="View as" data-view-toggle>
+    <div class="area-segmented area-segmented--sm" role="radiogroup" aria-label="View as" data-view-toggle>
       ${option("table", "Table")}${option("grid", "Grid")}
     </div>
   </div>
@@ -514,7 +514,7 @@ export const DOCS_CSS = `
     padding: var(--area-space-8);
     background: var(--area-bg-subtle);
     display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--docs-gallery-rail, minmax(var(--area-space-80), calc(var(--area-space-80) * 3)));
+    grid-template-columns: minmax(0, 1fr);
     align-items: start;
     gap: var(--area-space-8);
   }
@@ -525,7 +525,12 @@ export const DOCS_CSS = `
     min-inline-size: 0;
   }
   .docs-visual-gallery__inspector {
-    position: sticky;
+    position: fixed;
+    z-index: 50;
+    inset-inline-end: var(--area-space-12);
+    inline-size: min(calc(100vw - var(--area-space-24)), calc(var(--area-space-80) * 3));
+    border-radius: var(--area-radius-container);
+    box-shadow: var(--area-shadow-3);
     inset-block-start: var(--area-space-8);
     max-block-size: calc(100vh - var(--area-space-16));
     overflow: auto;
@@ -539,6 +544,7 @@ export const DOCS_CSS = `
   }
   .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector {
     overflow: hidden;
+    inline-size: var(--area-control-md);
   }
   .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-title,
   .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-body,
@@ -548,6 +554,8 @@ export const DOCS_CSS = `
   .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-bar {
     justify-content: center;
     padding-inline: 0;
+    padding-block: 0;
+    min-block-size: var(--area-control-md);
   }
   .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-actions {
     display: block;
@@ -559,9 +567,14 @@ export const DOCS_CSS = `
   .docs-visual-gallery__tile[data-audit="complete"] .docs-visual-gallery__tile-title {
     color: var(--area-green-500);
   }
-  .docs-audit-label[data-audit="unrefined"],
-  .docs-visual-gallery__tile[data-audit="unrefined"] {
+  .docs-audit-label[data-audit="unrefined"] {
     background: var(--area-red-25);
+    color: var(--area-red-500);
+  }
+  .docs-visual-gallery__tile[data-audit="unrefined"] {
+    border-color: var(--area-red-50);
+  }
+  .docs-visual-gallery__tile[data-audit="unrefined"] .docs-visual-gallery__tile-title {
     color: var(--area-red-500);
   }
   .docs-audit-label {
@@ -600,6 +613,7 @@ export const DOCS_CSS = `
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
+  summary.docs-visual-gallery__section-title { cursor: pointer; padding-block: var(--area-space-8); }
   .docs-visual-gallery__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--area-space-64) * 4)), 1fr));
@@ -616,7 +630,7 @@ export const DOCS_CSS = `
   }
   .docs-visual-gallery__tile--expanded { aspect-ratio: auto; grid-column: 1 / -1; }
   .docs-visual-gallery__tile-title {
-    padding: var(--area-space-12);
+    padding: var(--area-space-8) var(--area-space-12);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
@@ -626,7 +640,7 @@ export const DOCS_CSS = `
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--area-space-12);
+    padding: var(--area-space-24);
   }
   .docs-visual-gallery__tile--large .docs-visual-gallery__tile-preview {
     padding: var(--area-space-24);
@@ -636,8 +650,7 @@ export const DOCS_CSS = `
   }
   @media (max-width: 980px) {
     .docs-visual-gallery { display: block; }
-    .docs-visual-gallery__inspector { position: static; max-block-size: none; margin-block-start: var(--area-space-8); }
-    .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector { inline-size: var(--area-space-12); margin-inline-start: auto; }
+    .docs-visual-gallery__inspector { position: fixed; }
   }
 
   /* --- Icon browser ------------------------------------------------------- */
@@ -1228,14 +1241,16 @@ export const DOCS_SCRIPT = `
   var KEY = "area-gallery-customizer";
   var toggle = gallery.querySelector("[data-gallery-rail=panel]");
   if (!toggle) return;
-  var open = true;
-  try { open = localStorage.getItem(KEY) !== "closed"; } catch (e) {}
+  var open = false;
 
   function write(next) {
     open = next;
     gallery.setAttribute("data-gallery-panel", open ? "open" : "closed");
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "Collapse customize panel" : "Expand customize panel");
+    gallery.querySelectorAll('.docs-visual-gallery__inspector-title, .docs-visual-gallery__inspector-body, .docs-visual-gallery__inspector [data-reset-axes]').forEach(function (element) {
+      element.style.display = open ? "" : "none";
+    });
   }
 
   write(open);
@@ -1243,6 +1258,33 @@ export const DOCS_SCRIPT = `
     write(!open);
     try { localStorage.setItem(KEY, open ? "open" : "closed"); } catch (e) {}
     toggle.focus({ preventScroll: true });
+  });
+  gallery.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && open) { write(false); toggle.focus(); }
+  });
+  function revealSection() {
+    var target = document.getElementById(location.hash.slice(1));
+    if (target && target.matches("details.docs-visual-gallery__section")) {
+      target.open = true;
+      target.scrollIntoView({ block: "start" });
+    }
+  }
+  window.addEventListener("hashchange", revealSection);
+  gallery.querySelectorAll('.docs-gallery-index a').forEach(function (link) {
+    link.addEventListener("click", function () {
+      var target = document.getElementById(link.hash.slice(1));
+      if (target) target.open = true;
+    });
+  });
+  revealSection();
+  var sectionState = {};
+  try { sectionState = JSON.parse(localStorage.getItem("area-gallery-sections") || "{}"); } catch (e) {}
+  gallery.querySelectorAll("details.docs-visual-gallery__section").forEach(function (section) {
+    if (typeof sectionState[section.id] === "boolean" && location.hash !== "#" + section.id) section.open = sectionState[section.id];
+    section.addEventListener("toggle", function () {
+      sectionState[section.id] = section.open;
+      try { localStorage.setItem("area-gallery-sections", JSON.stringify(sectionState)); } catch (e) {}
+    });
   });
 })();
 
