@@ -1,5 +1,5 @@
 /**
- * Fluent System Icons, 16px Regular.
+ * Fluent System Icons, primarily 16px Regular with explicit component-sized cuts.
  *
  * Microsoft's set, taken verbatim from `@fluentui/svg-icons` -- the path data below is
  * generated from that package, never drawn by hand. Fluent's 16px grid is the same inline
@@ -7,8 +7,8 @@
  *
  * Two things follow from using the real set rather than approximating it. Fluent icons are
  * *filled* paths, not strokes, so they take `fill` and never `stroke` or `stroke-width`;
- * and they are optically corrected per size, which is why the 16px cut is used at 16px
- * instead of scaling the 20 or 24.
+ * and they are optically corrected per size, so a component-owned 20px slot uses the
+ * 20px cut rather than scaling a 16px path.
  *
  * Regenerate with `node scripts/gen-icons.mjs` after changing the map there.
  */
@@ -22,6 +22,8 @@ const base = {
   focusable: false as const,
   "aria-hidden": true,
 };
+
+const base20 = { ...base, viewBox: "0 0 20 20", width: 20, height: 20 };
 
 /** Fluent `add_16_regular`. */
 export const PlusIcon = () => (
@@ -76,6 +78,34 @@ export const ChevronIcon = () => (
 export const DismissIcon = () => (
   <svg {...base}>
     <path d="m2.59 2.72.06-.07a.5.5 0 0 1 .63-.06l.07.06L8 7.29l4.65-4.64a.5.5 0 0 1 .7.7L8.71 8l4.64 4.65c.18.17.2.44.06.63l-.06.07a.5.5 0 0 1-.63.06l-.07-.06L8 8.71l-4.65 4.64a.5.5 0 0 1-.7-.7L7.29 8 2.65 3.35a.5.5 0 0 1-.06-.63l.06-.07z" />
+  </svg>
+);
+
+/** Fluent `delete_16_regular`. */
+export const TrashIcon = () => (
+  <svg {...base}>
+    <path d="M7 3h2a1 1 0 0 0-2 0M6 3a2 2 0 1 1 4 0h4a.5.5 0 0 1 0 1h-.56l-1.2 8.84A2.5 2.5 0 0 1 9.74 15h-3.5a2.5 2.5 0 0 1-2.48-2.16L2.57 4H2a.5.5 0 0 1 0-1zm1 3.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM9.5 6c.28 0 .5.22.5.5v5a.5.5 0 0 1-1 0v-5c0-.28.22-.5.5-.5m-4.74 6.7c.1.75.74 1.3 1.49 1.3h3.5a1.5 1.5 0 0 0 1.5-1.3L12.42 4H3.57z" />
+  </svg>
+);
+
+/** Fluent `link_16_regular`. */
+export const LinkIcon = () => (
+  <svg {...base}>
+    <path d="M9.5 4h1a3.5 3.5 0 0 1 .2 7H9.5a.5.5 0 0 1-.1-.99h.1l1-.01a2.5 2.5 0 0 0 .16-5H9.5a.5.5 0 0 1-.09-1zh1zm-4 0h1a.5.5 0 0 1 .09 1H5.5a2.5 2.5 0 0 0-.16 5H6.5a.5.5 0 0 1 .09 1H5.5a3.5 3.5 0 0 1-.2-7zh1zm0 3h5a.5.5 0 0 1 .09 1H5.5a.5.5 0 0 1-.09-1z" />
+  </svg>
+);
+
+/** Fluent `open_16_regular`. */
+export const OpenIcon = () => (
+  <svg {...base}>
+    <path d="M4.5 3C3.67 3 3 3.67 3 4.5v7c0 .83.67 1.5 1.5 1.5h7c.83 0 1.5-.67 1.5-1.5V9.27a.5.5 0 0 1 1 0v2.23a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 11.5v-7A2.5 2.5 0 0 1 4.5 2h2.23a.5.5 0 0 1 0 1zm4.27-.5c0-.28.22-.5.5-.5h4.23c.28 0 .5.22.5.5v4.23a.5.5 0 0 1-1 0V3.71L9.62 7.08a.5.5 0 1 1-.7-.7L12.29 3H9.27a.5.5 0 0 1-.5-.5" />
+  </svg>
+);
+
+/** Fluent `person_20_regular`. */
+export const PersonIcon = () => (
+  <svg {...base20}>
+    <path d="M10 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8M7 6a3 3 0 1 1 6 0 3 3 0 0 1-6 0m-2 5a2 2 0 0 0-2 2c0 1.7.83 2.97 2.13 3.8A9 9 0 0 0 10 18c1.85 0 3.58-.39 4.87-1.2A4.4 4.4 0 0 0 17 13a2 2 0 0 0-2-2zm-1 2a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1c0 1.3-.62 2.28-1.67 2.95A8 8 0 0 1 10 17a8 8 0 0 1-4.33-1.05A3.4 3.4 0 0 1 4 13" />
   </svg>
 );
 

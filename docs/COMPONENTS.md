@@ -6,8 +6,8 @@ tokens, predictable APIs, accessibility and visual quality consistent.
 
 ## What is complete
 
-**Badge, Button, Checkbox, Field, Input and Slider** are owner-confirmed complete as of
-2026-09-19.
+**Badge, Button, Checkbox, Field, Input, Slider, Card, Avatar, Alert and Chip** are owner-confirmed complete as of
+2026-09-21.
 All other existing families are **unrefined**, including ones with historical audits.
 Their code remains available; unrefined means they still need component-level review,
 not that every feature is broken or should be rebuilt.

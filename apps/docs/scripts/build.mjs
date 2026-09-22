@@ -261,9 +261,15 @@ ${railToggle("panel", "Show customize panel", { corner: true })}
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${slug === "badge" ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
+${slug === "chip" ? '<script type="module" src="./chip-demos.js"></script>' : ""}
+${slug === "alert" ? '<script type="module" src="./alert-demos.js"></script>' : ""}
+${slug === "avatar" ? '<script type="module" src="./avatar-demos.js"></script>' : ""}
 </body>
 </html>`;
 }
+
+/** The three tile sizes the gallery grid places: whole cells of one square unit. */
+const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2"]);
 
 /* One tile per public component family. Compound pieces appear inside their parent. */
 function galleryPage() {
@@ -319,6 +325,17 @@ function galleryPage() {
     ],
     avatar: [
       { id: "default", title: "Default", demo: "GalleryAvatar" },
+      { id: "content-image", title: "Content / image", demo: "GalleryAvatarImage" },
+      { id: "behavior-image-fallback", title: "Behavior / image fallback", demo: "GalleryAvatarImageFallback" },
+      { id: "content-two-initials", title: "Content / two initials", demo: "GalleryAvatarTwoInitials" },
+      { id: "content-icon", title: "Content / generic icon", demo: "GalleryAvatarIcon" },
+      { id: "composition-group", title: "Composition / group", demo: "GalleryAvatarGroup" },
+      { id: "state-active", title: "State / active", demo: "GalleryAvatarActive" },
+      { id: "composition-availability", title: "Composition / availability", demo: "GalleryAvatarAvailability" },
+      { id: "composition-notification", title: "Composition / notification", demo: "GalleryAvatarNotification" },
+      { id: "tone-accent", title: "Tone / accent", demo: "GalleryAvatarAccent" },
+      { id: "tone-inverse", title: "Tone / inverse", demo: "GalleryAvatarInverse" },
+      { id: "shape-square", title: "Shape / square", demo: "GalleryAvatarSquare" },
       { id: "size-small", title: "Size / small", demo: "GalleryAvatarSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GalleryAvatarMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryAvatarLarge" },
@@ -433,6 +450,7 @@ function galleryPage() {
       { id: "tone-neutral", title: "Tone / neutral", demo: "GallerySliderNeutral" },
       { id: "tone-accent", title: "Tone / accent", demo: "GallerySliderAccent" },
       { id: "with-label", title: "Composition / top label + value", demo: "GallerySliderWithLabel" },
+      { id: "label-only", title: "Composition / top label", demo: "GallerySliderLabelOnly" },
       { id: "steps", title: "Steps / fractional", demo: "GallerySliderSteps" },
       { id: "step-marks", title: "Steps / markers", demo: "GallerySliderStepMarks" },
       { id: "range-inputs", title: "Composition / range with inputs", demo: "GallerySliderRangeWithInputs" },
@@ -440,6 +458,55 @@ function galleryPage() {
       { id: "controlled", title: "Behavior / controlled", demo: "GallerySliderControlled" },
       { id: "disabled", title: "State / disabled", demo: "GallerySliderDisabled" },
       { id: "bare", title: "Composition / without readout", demo: "GallerySliderBare" },
+    ],
+    spinner: [
+      { id: "default", title: "Default", demo: "GallerySpinner" },
+      { id: "size-small", title: "Size / small", demo: "GallerySpinnerSmall" },
+      { id: "size-medium", title: "Size / medium", demo: "GallerySpinnerMedium" },
+      { id: "size-large", title: "Size / large", demo: "GallerySpinnerLarge" },
+      { id: "tone-accent", title: "Tone / accent", demo: "GallerySpinnerAccent" },
+    ],
+    chip: [
+      { id: "default", title: "Default", demo: "GalleryChip" },
+      { id: "size-sm", title: "Size / small", demo: "GalleryChipSmall" },
+      { id: "size-md", title: "Size / medium", demo: "GalleryChipMedium" },
+      { id: "size-lg", title: "Size / large", demo: "GalleryChipLarge" },
+      { id: "swatch", title: "Composition / swatch", demo: "GalleryChipSwatch" },
+      { id: "icon", title: "Composition / icon", demo: "GalleryChipIcon" },
+      { id: "group", title: "Composition / filter group", demo: "GalleryChipGroup" },
+      { id: "assist", title: "Variant / assist", demo: "GalleryChipAssist" },
+      { id: "filter", title: "Variant / filter", demo: "GalleryChipFilter" },
+      { id: "input", title: "Variant / input", demo: "GalleryChipInput" },
+      { id: "suggestion", title: "Variant / suggestion", demo: "GalleryChipSuggestion" },
+      { id: "delete", title: "Action / delete", demo: "GalleryChipDelete" },
+      { id: "click-delete", title: "Action / click + delete", demo: "GalleryChipClickableDelete" },
+      { id: "custom-delete", title: "Action / custom delete", demo: "GalleryChipCustomDelete" },
+      { id: "link-underline", title: "Action / link underline", demo: "GalleryChipLinkUnderline" },
+      { id: "link-icon", title: "Action / link-out icon", demo: "GalleryChipLinkIcon" },
+      { id: "avatar-initials", title: "Composition / avatar initials", demo: "GalleryChipAvatarInitials" },
+      { id: "avatar-photo", title: "Composition / avatar photo", demo: "GalleryChipAvatarPhoto" },
+      { id: "image-filter", title: "Composition / image filter", demo: "GalleryChipImageFilter" },
+      { id: "invalid", title: "State / invalid input", demo: "GalleryChipInvalid" },
+      { id: "disabled", title: "State / disabled", demo: "GalleryChipDisabled" },
+    ],
+    alert: [
+      { id: "default", title: "Default / single line", demo: "GalleryAlert", span: "2x1" },
+      { id: "accent", title: "Tone / accent", demo: "GalleryAlertAccent", span: "2x1" },
+      { id: "link", title: "Composition / text link", demo: "GalleryAlertLink", span: "2x1" },
+      { id: "success", title: "Tone / success", demo: "GalleryAlertSuccess", span: "2x1" },
+      { id: "danger", title: "Tone / danger", demo: "GalleryAlertDanger", span: "2x1" },
+      { id: "action", title: "Composition / actions single line", demo: "GalleryAlertAction", span: "2x1" },
+      { id: "multiline", title: "Layout / multiline", demo: "GalleryAlertMultiline", span: "2x1" },
+      { id: "dismissible", title: "Behavior / dismissible", demo: "GalleryAlertDismissible", span: "2x1" },
+    ],
+    card: [
+      { id: "default", title: "Default", demo: "CardText", span: "2x2" },
+      { id: "vertical", title: "Vertical", demo: "CardPortrait", span: "2x2" },
+      { id: "horizontal", title: "Horizontal", demo: "CardLandscape", span: "2x2" },
+      { id: "immersive", title: "Immersive", demo: "CardImmersive", span: "2x2" },
+      { id: "small", title: "Small", demo: "CardThumbnail", span: "2x1" },
+      { id: "list", title: "List", demo: "CardList", span: "2x2" },
+      { id: "carousel", title: "Carousel", demo: "CardCarousel", span: "2x2" },
     ],
     textarea: [
       { id: "default", title: "Default", demo: "TextareaDefault" },
@@ -472,7 +539,9 @@ function galleryPage() {
       const demo = demos[example.demo];
       if (!demo) throw new Error(`Gallery specimen missing: ${example.demo}`);
       const id = `${component.slug}-${example.id}`;
-      return `<article class="docs-visual-gallery__tile" data-audit="${complete ? "complete" : "unrefined"}" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
+      const span = example.span ?? "1x1";
+      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 2x1 or 2x2.`);
+      return `<article class="docs-visual-gallery__tile" data-span="${span}" data-audit="${complete ? "complete" : "unrefined"}" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
         <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${escapeHtml(specimenName(example, component.slug))}</h3>
         <div class="docs-visual-gallery__tile-preview">${demoMarkup(example.demo, demo.html)}</div>
       </article>`;
@@ -523,6 +592,9 @@ function galleryPage() {
 <script type="module" src="./badge-demos.js"></script>
 <script type="module" src="./switch-demos.js"></script>
 <script type="module" src="./slider-demos.js"></script>
+<script type="module" src="./chip-demos.js"></script>
+<script type="module" src="./alert-demos.js"></script>
+<script type="module" src="./avatar-demos.js"></script>
 </body>
 </html>`;
 }
@@ -531,7 +603,10 @@ function galleryPage() {
 
 function demoMarkup(name, html) {
   if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (name.startsWith("Slider") || name.startsWith("GallerySlider")) return `<div data-slider-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("Slider") || name.startsWith("GallerySlider")) return `<div data-slider-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("Chip") || name.startsWith("GalleryChip")) return `<div data-chip-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("Alert") || name.startsWith("GalleryAlert")) return `<div data-alert-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("Avatar") || name.startsWith("GalleryAvatar")) return `<div data-avatar-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   return name.startsWith("Badge") ? `<div data-badge-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>` : html;
 }
 
@@ -719,9 +794,9 @@ function colorPage() {
   const levels = tokens.levels.join(", ");
 
   const body = `<div class="docs-prose">
-<p>The colours are the <strong>Area palette</strong>, vendored verbatim — ${Object.keys(tokens.scales).length} families of ${tokens.levels.length} rungs. Area does not generate them. The palette was wall-anchored rather than formula-generated, with per-hue splines and hue held in IPT, and reproducing that from a curve was never going to land closer to it than using it.</p>
+<p>The colours start from the <strong>Area palette</strong>, vendored verbatim — ${Object.keys(tokens.scales).length} families of ${tokens.levels.length} rungs. Area preserves that source and applies explicit, bounded refinements when it builds the global tokens: a light-end chroma trim, and a chromatic dark-end lightness/chroma curve. The palette was wall-anchored rather than formula-generated, with per-hue splines and hue held in IPT.</p>
 <p>A rung is an ordinal position, not a measurement: <strong>higher is darker</strong>, the direction Tailwind, Material and Radix all read. The ladder is ${levels} — finer at the ends than through the middle, because that is where an interface spends its steps. 25/50/75 are three distinguishable page grounds and 925/950/975 three distinguishable dark ones, while the middle, where text and fills live, runs in 50s.</p>
-<p>Each family's <code class="area-code">500</code> is pinned to a contrast wall rather than to a lightness, which is why the hues do not share a lightness at a shared rung — yellow's 500 sits lighter than indigo's because yellow has to. There are two walls: a <em>label</em> ladder that clears AA with white at 500, and a <em>glyph</em> ladder pinned at 3:1 that only reaches AA at 600. Area finds each family's solid fill by measuring, so nothing here hardcodes which family is on which wall.</p>
+<p>Each family's <code class="area-code">500</code> is pinned to a contrast wall rather than to a lightness, which is why the hues do not share a lightness at a shared rung — yellow's 500 sits lighter than indigo's because yellow has to. There are two walls: a <em>label</em> ladder that clears AA with white at 500, and a <em>glyph</em> ladder pinned at 3:1 whose white-label families reach AA at 600 or the next measured rung. Area finds each family's solid fill by measuring, so nothing here hardcodes which family is on which wall.</p>
 <p>The three neutrals are one grey at every rung; <code class="area-code">neutral</code> is chroma 0, <code class="area-code">cool</code> carries hue 248, and <code class="area-code">warm</code> is cool mirrored exactly — 180° away in OKLCh — so neither can drift from the other. Only chroma differs, so contrast is near-invariant across all three: measured, lightness deviates by at most 0.0055 and a white-contrast ratio by at most 0.23:1.</p>
 <p>Dark mode is the same ramp read from the other end. There is one set of colours, not two.</p>
 </div>
@@ -1470,6 +1545,7 @@ cpSync(join(repo, "packages/styles/dist/area.css"), join(out, "area.css"));
 // iconBrowser() for why.
 cpSync(join(root, "assets/icons.svg"), join(out, "icons.svg"));
 cpSync(join(root, "assets/icons-filled.svg"), join(out, "icons-filled.svg"));
+cpSync(join(root, "public"), out, { recursive: true });
 
 const pages = [
   ["index.html", indexPage()],
@@ -1497,4 +1573,7 @@ await (await import("esbuild")).build({ entryPoints: [join(root, "src/badge-clie
 
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/switch-client.tsx")], outfile: join(out, "switch-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/slider-client.tsx")], outfile: join(out, "slider-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
+await (await import("esbuild")).build({ entryPoints: [join(root, "src/chip-client.tsx")], outfile: join(out, "chip-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
+await (await import("esbuild")).build({ entryPoints: [join(root, "src/alert-client.tsx")], outfile: join(out, "alert-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
+await (await import("esbuild")).build({ entryPoints: [join(root, "src/avatar-client.tsx")], outfile: join(out, "avatar-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("./build-switch-fixture.mjs")).buildSwitchFixture(root, out);

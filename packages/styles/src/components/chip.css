@@ -20,6 +20,7 @@
     --_gutter: var(--area-gutter-sm);
     --_gap: var(--area-gap-sm);
     --_dot: var(--area-icon-sm);
+    --_visual: calc(var(--_dot) + var(--area-space-4));
     --_text: var(--area-control-sm-text);
     --_leading: var(--area-control-sm-leading);
 
@@ -62,6 +63,28 @@
     outline-offset: var(--area-focus-offset);
   }
 
+  .area-chip--assist,
+  .area-chip--suggestion {
+    --_bg: var(--area-bg-surface);
+  }
+
+  .area-chip--filter { /* The neutral, selectable chip contract is the base treatment. */ }
+
+  .area-chip--input {
+    --_bg: var(--area-bg-component);
+    --_bg-hover: var(--area-bg-component-hover);
+    --_border: transparent;
+    --_border-hover: var(--area-edge-control-hover);
+  }
+
+  .area-chip[data-invalid] {
+    --_bg: var(--area-danger-surface);
+    --_bg-hover: var(--area-danger-surface-hover);
+    --_border: var(--area-danger-border);
+    --_border-hover: var(--area-danger-border-strong);
+    --_fg: var(--area-fg-danger);
+  }
+
   /*
    * Selected is a tonal fill rather than a solid one. A row of chips is scanned as a set,
    * and a solid fill on one member turns it into the only thing on the row with weight --
@@ -87,13 +110,14 @@
    */
   .area-chip__swatch {
     flex-shrink: 0;
-    inline-size: var(--_dot);
-    block-size: var(--_dot);
+    inline-size: var(--_visual);
+    block-size: var(--_visual);
     border-radius: var(--area-radius-full);
     box-shadow: inset 0 0 0 var(--area-border-width) color-mix(in oklab, var(--area-fg-default) 20%, transparent);
   }
 
-  .area-chip__icon {
+  .area-chip__icon,
+  .area-chip__trailing-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -103,7 +127,87 @@
     color: var(--area-fg-muted);
   }
 
-  .area-chip__icon > svg { inline-size: 100%; block-size: 100%; }
+  .area-chip__icon > svg,
+  .area-chip__trailing-icon > svg { inline-size: 100%; block-size: 100%; }
+
+  .area-chip__avatar,
+  .area-chip__image {
+    display: inline-flex;
+    flex: 0 0 var(--_visual);
+    inline-size: var(--_visual);
+    block-size: var(--_visual);
+    overflow: hidden;
+    border-radius: var(--area-radius-full);
+  }
+
+  .area-chip__avatar > .area-avatar,
+  .area-chip__image > img {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .area-chip__avatar > .area-avatar {
+    --_size: 100%;
+    font-size: var(--area-size-10);
+    line-height: 1;
+  }
+
+  .area-chip__image > img { object-fit: cover; }
+
+  .area-chip--link .area-chip__label {
+    text-decoration: underline;
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: var(--area-space-2);
+  }
+
+  .area-chip--link-icon:hover .area-chip__label,
+  .area-chip--link-icon:focus-visible .area-chip__label {
+    text-decoration: underline;
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: var(--area-space-2);
+  }
+
+  /* A removable chip is a composition: its primary action and removal action stay peers. */
+  .area-chip__action,
+  .area-chip__remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+  }
+
+  .area-chip__action {
+    gap: var(--_gap);
+    cursor: pointer;
+  }
+
+  .area-chip__action:not(button) { cursor: default; }
+
+  .area-chip__remove {
+    flex: 0 0 var(--_dot);
+    inline-size: var(--_dot);
+    block-size: var(--_dot);
+    margin-inline-start: calc(var(--_gap) * -0.25);
+    border-radius: var(--area-radius-full);
+    color: var(--area-fg-muted);
+    cursor: pointer;
+  }
+
+  .area-chip[data-invalid] .area-chip__remove { color: var(--area-fg-danger); }
+  .area-chip__remove:hover { background: transparent; color: var(--area-fg-danger-vivid); }
+  .area-chip__remove:focus-visible,
+  .area-chip__action:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+  .area-chip__remove > svg { inline-size: 100%; block-size: 100%; }
 
   /* A chip carrying nothing but a swatch is square: there is no label to set its width. */
   .area-chip--swatch-only {

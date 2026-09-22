@@ -1,60 +1,95 @@
-import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Code, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
-import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
+import { useState } from "react";
+import { Alert, Avatar, AvatarGroup, Badge, BadgeAnchor, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Code, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
+import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
-export const AvatarDefault = () => <Avatar fallback="EW" alt="Ethan Wong" />;
+export const AvatarDefault = () => <Avatar fallback="A" alt="Avatar" />;
 
-export const AvatarSizes = () => (
+export const AvatarImage = () => (
+  <Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar photo" />
+);
+
+export const AvatarImageFallback = () => (
+  <Avatar src="/images/avatar-missing.png" fallback="A" alt="Avatar fallback" />
+);
+
+export const AvatarInitials = () => <><Avatar fallback="A" alt="Single initial avatar" /><Avatar fallback="AV" alt="Two initial avatar" /></>;
+
+export const AvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Generic avatar" />;
+
+export const AvatarGrouped = () => (
+  <AvatarGroup max={3} aria-label="Project members"><Avatar fallback="AM" alt="Avery Morgan" /><Avatar src="/images/chip-avatar.png" fallback="JW" alt="Jordan Wong" /><Avatar fallback="SK" alt="Sam Kim" /><Avatar fallback="NP" alt="Noah Patel" /><Avatar fallback="RL" alt="Riley Lee" /></AvatarGroup>
+);
+
+export const AvatarActive = () => <Avatar active fallback="AM" alt="Active avatar" />;
+
+export const AvatarAvailability = () => <BadgeAnchor compact placement="bottom-end" overlap="circular" badge={<Badge size="sm" dotOnly tone="success" aria-label="Available" />}><Avatar fallback="AM" role="img" aria-label="Avery Morgan, available" /></BadgeAnchor>;
+
+export const AvatarNotification = () => <BadgeAnchor compact placement="top-end" overlap="circular" badge={<Badge size="sm" variant="solid" tone="info">2</Badge>}><Avatar src="/images/chip-avatar.png" fallback="JW" alt="Jordan Wong, 2 notifications" /></BadgeAnchor>;
+
+export const AvatarTones = () => <><Avatar tone="accent" fallback="AC" alt="Accent avatar" /><Avatar tone="inverse" fallback="IN" alt="Inverse avatar" /></>;
+
+export const AvatarShapes = () => (
   <>
-    <Avatar size="sm" fallback="SM" />
-    <Avatar size="md" fallback="MD" />
-    <Avatar size="lg" fallback="LG" />
+    <Avatar fallback="C" alt="Circle avatar" />
+    <Avatar shape="square" fallback="S" alt="Square avatar" />
   </>
 );
 
-export const CardDefault = () => (
-  <Card style={{ inlineSize: 420 }}>
-    <CardMedia>
-      <span className="area-card__media-cluster" aria-hidden="true">
-        <span className="area-card__media-tile"><InfoIcon /></span>
-        <span className="area-card__media-tile"><DotsFourIcon /></span>
-        <span className="area-card__media-tile"><TokenIcon /></span>
-        <span className="area-card__media-tile"><CheckIcon /></span>
-      </span>
-      <span className="area-card__media-caption">Area</span>
-    </CardMedia>
-    <CardTitle>High-performance toolkit</CardTitle>
-    <CardDescription>Full access to tools that keep work fast, integrated, and calm.</CardDescription>
-    <CardAction href="#">
-      <TokenIcon />
-      <span>Read more about integrations</span>
-      <ArrowIcon />
-    </CardAction>
-    <CardFooter>
-      <Button variant="outline" tone="neutral" size="sm">Previous</Button>
-      <span className="area-card__steps" aria-label="Step 2 of 4">
-        <span className="area-card__step" />
-        <span className="area-card__step" data-current />
-        <span className="area-card__step" />
-        <span className="area-card__step" />
-      </span>
-      <Button tone="accent" size="sm">Continue</Button>
-    </CardFooter>
-  </Card>
+export const AvatarSizes = () => (
+  <>
+    <Avatar size="sm" fallback="S" alt="Small avatar" />
+    <Avatar size="md" fallback="M" alt="Medium avatar" />
+    <Avatar size="lg" fallback="L" alt="Large avatar" />
+  </>
 );
 
+
 export const AlertDefault = () => (
-  <Alert icon={<InfoIcon />} title="Heads up" style={{ inlineSize: 380 }}>
-    Your trial ends in 3 days.
+  <Alert icon={<InfoIcon />} title="Title" style={{ maxInlineSize: 720 }}>
+    Body copy goes here.
+  </Alert>
+);
+
+export const AlertAccent = () => (
+  <Alert tone="accent" icon={<InfoIcon />} title="Title" style={{ maxInlineSize: 720 }}>
+    Body copy goes here.
+  </Alert>
+);
+
+export const AlertWithLink = () => (
+  <Alert icon={<InfoIcon />} title="Title" link={<a href="#alert-multiline">Text link</a>} style={{ maxInlineSize: 720 }}>
+    Body copy goes here.
   </Alert>
 );
 
 export const AlertTones = () => (
-  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-12)", inlineSize: 380 }}>
-    <Alert tone="success" icon={<CheckIcon />} title="Deployed" />
-    <Alert tone="warning" icon={<AlertIcon />} title="Usage is at 90%" />
-    <Alert tone="danger" icon={<AlertIcon />} title="Build failed" />
+  <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-12)", inlineSize: 720 }}>
+    <Alert tone="success" icon={<CheckIcon />} title="Title">Body copy goes here.</Alert>
+    <Alert tone="warning" icon={<AlertIcon />} title="Title">Body copy goes here.</Alert>
+    <Alert tone="danger" icon={<AlertIcon />} title="Title">Body copy goes here.</Alert>
   </div>
 );
+
+export const AlertAction = () => (
+  <Alert icon={<InfoIcon />} title="Title" action={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}} style={{ maxInlineSize: 720 }}>
+    Body copy goes here.
+  </Alert>
+);
+
+export const AlertMultiline = () => (
+  <Alert layout="multiline" icon={<InfoIcon />} title="Title" action={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}} style={{ maxInlineSize: 720 }}>
+    Secondary body copy goes here.
+  </Alert>
+);
+
+export const AlertDismissible = () => {
+  const [visible, setVisible] = useState(true);
+  return visible ? (
+    <Alert icon={<InfoIcon />} title="Title" onDismiss={() => setVisible(false)} style={{ maxInlineSize: 720 }}>
+      Body copy goes here.
+    </Alert>
+  ) : <Button variant="outline" size="sm" onClick={() => setVisible(true)}>Show alert</Button>;
+};
 
 export const SeparatorDefault = () => (
   <div style={{ inlineSize: 280 }}>

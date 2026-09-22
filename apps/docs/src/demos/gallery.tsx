@@ -1,19 +1,41 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useState } from "react";
-import { Alert, Avatar, Badge, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, Code, CodeBlock, Dialog, Field, Input, Kbd, KbdGroup, Menu, MenuItem, Nav, NavItem, Panel, PanelSection, Popover, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
-import { ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
+import { Alert, Avatar, AvatarGroup, Badge, BadgeAnchor, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, Dialog, Field, Input, Kbd, KbdGroup, Menu, MenuItem, Nav, NavItem, Panel, PanelSection, Popover, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
+import { ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, OpenIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon } from "../icons.tsx";
+import { SliderRangeComposition } from "./slider-range.tsx";
 
 export const GalleryAlert = () => (
-  <Alert icon={<InfoIcon />} title="A little heads up">Your trial ends in 3 days.</Alert>
+  <Alert icon={<InfoIcon />} title="Title">Body copy goes here.</Alert>
 );
+export const GalleryAlertAccent = () => <Alert tone="accent" icon={<InfoIcon />} title="Title">Body copy goes here.</Alert>;
+export const GalleryAlertSuccess = () => <Alert tone="success" icon={<CheckIcon />} title="Title">Body copy goes here.</Alert>;
+export const GalleryAlertDanger = () => <Alert tone="danger" icon={<DismissIcon />} title="Title">Body copy goes here.</Alert>;
+export const GalleryAlertLink = () => <Alert icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-multiline">Text link</a>}>Body copy goes here.</Alert>;
+export const GalleryAlertAction = () => <Alert icon={<InfoIcon />} title="Title" action={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}}>Body copy goes here.</Alert>;
+export const GalleryAlertMultiline = () => <Alert layout="multiline" icon={<InfoIcon />} title="Title" action={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}}>Secondary body copy goes here.</Alert>;
+export const GalleryAlertDismissible = () => {
+  const [visible, setVisible] = useState(true);
+  return visible ? <Alert icon={<InfoIcon />} title="Title" onDismiss={() => setVisible(false)}>Body copy goes here.</Alert> : <Button size="sm" variant="outline" onClick={() => setVisible(true)}>Show alert</Button>;
+};
 
 export const GalleryAvatar = () => (
-  <Avatar fallback="AL" alt="Alex Lee" />
+  <Avatar fallback="A" alt="Avatar" />
 );
 
-export const GalleryAvatarSmall = () => <Avatar size="sm" fallback="AL" alt="Alex Lee" />;
-export const GalleryAvatarMedium = () => <Avatar size="md" fallback="AL" alt="Alex Lee" />;
-export const GalleryAvatarLarge = () => <Avatar size="lg" fallback="AL" alt="Alex Lee" />;
+export const GalleryAvatarImage = () => <Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar photo" />;
+export const GalleryAvatarImageFallback = () => <Avatar src="/images/avatar-missing.png" fallback="A" alt="Avatar fallback" />;
+export const GalleryAvatarTwoInitials = () => <Avatar fallback="AV" alt="Avatar initials" />;
+export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Generic avatar" />;
+export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="Project members"><Avatar fallback="AM" alt="Avery Morgan" /><Avatar src="/images/chip-avatar.png" fallback="JW" alt="Jordan Wong" /><Avatar fallback="SK" alt="Sam Kim" /><Avatar fallback="NP" alt="Noah Patel" /><Avatar fallback="RL" alt="Riley Lee" /></AvatarGroup>;
+export const GalleryAvatarActive = () => <Avatar active fallback="AM" alt="Active avatar" />;
+export const GalleryAvatarAvailability = () => <BadgeAnchor compact placement="bottom-end" overlap="circular" badge={<Badge size="sm" dotOnly tone="success" aria-label="Available" />}><Avatar fallback="AM" role="img" aria-label="Avery Morgan, available" /></BadgeAnchor>;
+export const GalleryAvatarNotification = () => <BadgeAnchor compact placement="top-end" overlap="circular" badge={<Badge size="sm" variant="solid" tone="info">2</Badge>}><Avatar src="/images/chip-avatar.png" fallback="JW" alt="Jordan Wong, 2 notifications" /></BadgeAnchor>;
+export const GalleryAvatarAccent = () => <Avatar tone="accent" fallback="AC" alt="Accent avatar" />;
+export const GalleryAvatarInverse = () => <Avatar tone="inverse" fallback="IN" alt="Inverse avatar" />;
+export const GalleryAvatarSquare = () => <Avatar shape="square" fallback="S" alt="Square avatar" />;
+export const GalleryAvatarSmall = () => <Avatar size="sm" fallback="S" alt="Small avatar" />;
+export const GalleryAvatarMedium = () => <Avatar size="md" fallback="M" alt="Medium avatar" />;
+export const GalleryAvatarLarge = () => <Avatar size="lg" fallback="L" alt="Large avatar" />;
 
 export const GalleryBadge = () => (
   <Badge tone="success" dot>Live</Badge>
@@ -71,22 +93,6 @@ export const GalleryButtonDiscoverySoft = () => <Button tone="discovery" variant
 export const GalleryButtonDiscoveryOutline = () => <Button tone="discovery" variant="outline">Button</Button>;
 export const GalleryButtonDiscoveryGhost = () => <Button tone="discovery" variant="ghost">Button</Button>;
 
-export const GalleryCard = () => (
-  <Card style={{ inlineSize: "100%" }}>
-    <CardMedia>
-      <span className="area-card__media-cluster" aria-hidden="true">
-        <span className="area-card__media-tile"><InfoIcon /></span>
-        <span className="area-card__media-tile"><DotsFourIcon /></span>
-        <span className="area-card__media-tile"><TokenIcon /></span>
-      </span>
-      <span className="area-card__media-caption">Area</span>
-    </CardMedia>
-    <CardTitle>Project toolkit</CardTitle>
-    <CardDescription>A shared place for tools, notes, and integrations.</CardDescription>
-    <CardAction href="#"><TokenIcon /><span>Open integrations</span><ArrowIcon /></CardAction>
-    <CardFooter><Button size="sm" variant="outline">Previous</Button><Button size="sm" tone="accent">Continue</Button></CardFooter>
-  </Card>
-);
 
 export const GalleryCheckbox = () => (
   <Checkbox label="Email updates" defaultChecked />
@@ -125,8 +131,29 @@ export const GalleryCheckboxGroupSuccess = () => (
 );
 
 export const GalleryChip = () => (
-  <Chip selected>Design</Chip>
+  <Chip>Design</Chip>
 );
+
+export const GalleryChipSmall = () => <Chip size="sm">Design</Chip>;
+export const GalleryChipMedium = () => <Chip size="md">Design</Chip>;
+export const GalleryChipLarge = () => <Chip size="lg">Design</Chip>;
+export const GalleryChipSwatch = () => <Chip swatch="var(--area-indigo-500)">Indigo</Chip>;
+export const GalleryChipIcon = () => <Chip icon={<CheckIcon />}>Published</Chip>;
+export const GalleryChipDisabled = () => <Chip disabled>Locked</Chip>;
+export const GalleryChipGroup = () => <ChipGroup><Chip defaultSelected>All</Chip><Chip>Open</Chip><Chip>Closed</Chip></ChipGroup>;
+export const GalleryChipAssist = () => <Chip variant="assist" icon={<SearchIcon />}>Search</Chip>;
+export const GalleryChipFilter = () => <Chip icon={<CheckIcon />}>Filter</Chip>;
+export const GalleryChipInput = () => <Chip variant="input">Input</Chip>;
+export const GalleryChipSuggestion = () => <Chip variant="suggestion">Suggestion</Chip>;
+export const GalleryChipDelete = () => <Chip variant="input" onRemove={() => {}}>Delete</Chip>;
+export const GalleryChipClickableDelete = () => <Chip variant="input" clickable onClick={() => {}} onRemove={() => {}}>Delete</Chip>;
+export const GalleryChipCustomDelete = () => <Chip variant="input" onRemove={() => {}} removeIcon={<TrashIcon />} removeLabel="Delete">Delete</Chip>;
+export const GalleryChipLinkUnderline = () => <ChipLink href="#gallery-section-chip">Link</ChipLink>;
+export const GalleryChipLinkIcon = () => <ChipLink href="#gallery-section-chip" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
+export const GalleryChipAvatarInitials = () => <Chip avatar={<Avatar fallback="AV" alt="Avatar initials" />}>Avatar</Chip>;
+export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="/images/chip-avatar.png" alt="Photo" />}>Photo</Chip>;
+export const GalleryChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
+export const GalleryChipInvalid = () => <Chip variant="input" invalid onRemove={() => {}}>Unrecognized tag</Chip>;
 
 export const GalleryCode = () => <Code>const project = "area"</Code>;
 export const CodeSubtle = () => <Code subtle>--area-fg-muted</Code>;
@@ -263,19 +290,15 @@ export const GallerySliderLarge = () => <Slider aria-label="Large opacity" size=
 export const GallerySliderNeutral = () => <Slider aria-label="Neutral opacity" tone="neutral" defaultValue={45} readout={value => `${value}%`} />;
 export const GallerySliderAccent = () => <Slider aria-label="Accent opacity" tone="accent" defaultValue={65} readout={value => `${value}%`} />;
 export const GallerySliderWithLabel = () => <Slider label="Volume" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
+export const GallerySliderLabelOnly = () => <Slider label="Volume" labelPosition="top" defaultValue={50} />;
 export const GallerySliderSteps = () => <Slider aria-label="Scale" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
 export const GallerySliderStepMarks = () => <Slider aria-label="Step example" min={0} max={5} step={1} defaultValue={1} stepMarks />;
-export const GallerySliderVertical = () => <div style={{ display: "flex", gap: "var(--area-space-24)", alignItems: "center" }}><Slider aria-label="Vertical volume" orientation="vertical" defaultValue={50} /><Slider aria-label="Vertical balance" orientation="vertical" defaultValue={25} /></div>;
+export const GallerySliderVertical = () => <Slider aria-label="Vertical volume" orientation="vertical" defaultValue={50} style={{ ["--_vertical-length" as string]: "100%" }} />;
 export const GallerySliderControlled = () => {
   const [value, setValue] = useState(40);
   return <Slider label="Temperature" labelPosition="top" value={value} onValueChange={setValue} readout={value => `${value}%`} />;
 };
-export const GallerySliderRangeWithInputs = () => {
-  const [range, setRange] = useState<[number, number]>([42, 75]);
-  const setStart = (next: number) => setRange(([, end]) => [Number.isFinite(next) ? Math.min(Math.max(0, next), end) : 0, end]);
-  const setEnd = (next: number) => setRange(([start]) => [start, Number.isFinite(next) ? Math.max(start, Math.min(100, next)) : start]);
-  return <div className="area-slider-range"><Input aria-label="Minimum range" type="number" min={0} max={range[1]} value={range[0]} onChange={event => setStart(event.currentTarget.valueAsNumber)} /><div className="area-slider-range__track" style={{ ["--_range-start" as string]: `${range[0]}%`, ["--_range-end" as string]: `${range[1]}%` }}><Slider aria-label="Range minimum" value={range[0]} onValueChange={setStart} className="area-slider-range__start" /><Slider aria-label="Range maximum" value={range[1]} onValueChange={setEnd} className="area-slider-range__end" /></div><Input aria-label="Maximum range" type="number" min={range[0]} max={100} value={range[1]} onChange={event => setEnd(event.currentTarget.valueAsNumber)} /></div>;
-};
+export const GallerySliderRangeWithInputs = () => <SliderRangeComposition />;
 export const GallerySliderDisabled = () => <Slider aria-label="Locked volume" defaultValue={60} readout={value => `${value}%`} disabled />;
 export const GallerySliderBare = () => <Slider aria-label="Brightness" defaultValue={40} />;
 
@@ -283,6 +306,10 @@ export const GallerySliderBare = () => <Slider aria-label="Brightness" defaultVa
 export const GallerySpinner = () => (
   <Spinner />
 );
+export const GallerySpinnerSmall = () => <Spinner size="sm" />;
+export const GallerySpinnerMedium = () => <Spinner size="md" />;
+export const GallerySpinnerLarge = () => <Spinner size="lg" />;
+export const GallerySpinnerAccent = () => <Spinner tone="accent" />;
 
 export const GallerySwitch = () => (
   <Switch label="Notifications" defaultChecked />

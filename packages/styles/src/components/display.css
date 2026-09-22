@@ -8,6 +8,10 @@
   /* --- Avatar ------------------------------------------------------------- */
   .area-avatar {
     --_size: var(--area-control-md);
+    --_bg: var(--area-bg-component-active);
+    --_fg: var(--area-fg-muted);
+    --_group-ring: 0 0 0 0 transparent;
+    --_active-ring: 0 0 0 0 transparent;
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -16,8 +20,9 @@
     block-size: var(--_size);
     flex-shrink: 0;
     border-radius: var(--area-radius-full);
-    background-color: var(--area-bg-component-active);
-    color: var(--area-fg-muted);
+    background-color: var(--_bg);
+    color: var(--_fg);
+    box-shadow: var(--_group-ring), var(--_active-ring);
     font-size: var(--area-text-xs-size);
     font-weight: var(--area-weight-strong);
     overflow: hidden;
@@ -30,11 +35,69 @@
     object-fit: cover;
   }
 
+  .area-avatar__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_icon, var(--area-icon-md));
+    block-size: var(--_icon, var(--area-icon-md));
+  }
+
+  .area-avatar__icon > svg { inline-size: 100%; block-size: 100%; }
+
+  .area-avatar--circle { border-radius: var(--area-radius-full); }
   .area-avatar--square { border-radius: var(--area-radius-control); }
 
-  .area-avatar--sm { --_size: var(--area-control-sm); }
-  .area-avatar--md { --_size: var(--area-control-md); }
-  .area-avatar--lg { --_size: var(--area-control-lg); }
+  .area-avatar--neutral {
+    --_bg: var(--area-bg-component-active);
+    --_fg: var(--area-fg-muted);
+  }
+
+  .area-avatar--accent {
+    --_bg: var(--area-accent-solid);
+    --_fg: var(--area-fg-on-accent);
+  }
+
+  .area-avatar--inverse {
+    --_bg: var(--area-bg-inverse);
+    --_fg: var(--area-fg-on-inverse);
+  }
+
+  .area-avatar--active {
+    --_active-ring:
+      0 0 0 var(--area-space-2) var(--area-bg-surface),
+      0 0 0 var(--area-space-4) var(--area-accent-solid);
+  }
+
+  .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); }
+  .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); }
+  .area-avatar--lg {
+    --_size: var(--area-control-lg);
+    --_icon: var(--area-space-24);
+    font-size: var(--area-text-sm-size);
+  }
+
+  .area-avatar-group {
+    display: inline-flex;
+    align-items: center;
+    isolation: isolate;
+  }
+
+  .area-avatar-group__item,
+  .area-avatar-group__overflow {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .area-avatar-group__item + .area-avatar-group__item,
+  .area-avatar-group__item + .area-avatar-group__overflow {
+    margin-inline-start: calc(var(--area-space-8) * -1);
+  }
+
+  .area-avatar-group__item > .area-avatar,
+  .area-avatar-group__overflow {
+    --_group-ring: 0 0 0 var(--area-border-width) var(--area-bg-surface);
+  }
 
   /* --- Separator ---------------------------------------------------------- */
   .area-separator {
@@ -96,18 +159,37 @@
   /* --- Spinner ------------------------------------------------------------ */
   .area-spinner {
     --_size: var(--area-icon-md);
+    --_stroke: var(--area-space-2);
+    --_indicator: var(--area-neutral-solid);
+    position: relative;
     display: inline-block;
+    box-sizing: border-box;
     inline-size: var(--_size);
     block-size: var(--_size);
-    border: 2px solid var(--area-bg-component-active);
-    border-top-color: var(--area-accent-solid);
     border-radius: var(--area-radius-full);
+    background: conic-gradient(var(--_indicator) 0 25%, var(--area-bg-component-active) 25% 100%);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
+    mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
     animation: area-spin 0.7s linear infinite;
+  }
+
+  .area-spinner::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: calc(50% - var(--_stroke) / 2);
+    inline-size: var(--_stroke);
+    block-size: var(--_stroke);
+    border-radius: var(--area-radius-full);
+    background: var(--_indicator);
+    box-shadow: calc((var(--_size) - var(--_stroke)) / 2) calc((var(--_size) - var(--_stroke)) / 2) 0 var(--_indicator);
   }
 
   .area-spinner--sm { --_size: var(--area-icon-sm); }
   .area-spinner--md { --_size: var(--area-icon-md); }
   .area-spinner--lg { --_size: var(--area-icon-lg); }
+  .area-spinner--neutral { --_indicator: var(--area-neutral-solid); }
+  .area-spinner--accent { --_indicator: var(--area-accent-solid); }
 
   @keyframes area-spin {
     to { rotate: 360deg; }

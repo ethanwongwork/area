@@ -615,20 +615,47 @@ export const DOCS_CSS = `
   }
   summary.docs-visual-gallery__section-title { cursor: pointer; padding-block: var(--area-space-8); }
   .docs-visual-gallery__grid {
+    /*
+     * One cell, square, and every specimen a whole number of them: 1x1, 2x1 or 2x2. Every
+     * column is one cell wide and every row is one cell tall, so a row keeps its height
+     * whatever a specimen does inside it. A tile that grew with its own content pushed its
+     * row out of step with the rows beside it, which is what the spanning specimens did
+     * while the rows were sized by what they held rather than by the grid.
+     */
+    --docs-gallery-cell: calc(var(--area-space-64) * 4);
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--area-space-64) * 4)), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--docs-gallery-cell)), 1fr));
+    grid-auto-rows: var(--docs-gallery-cell);
     gap: var(--area-space-8);
   }
+  /*
+   * Auto-fill counts its columns and then stretches them to fill the width, which leaves
+   * the rows a little shorter than the columns are wide. Counting here instead lets the
+   * row track be exactly one column -- how many cells fit with the gaps, then what is left
+   * over shared between them -- so the cell is square at every width rather than at one.
+   * Only where that count can be computed: a container query unit for the width and a math
+   * function where repeat() wants an integer. The grid above stands everywhere else.
+   */
+  @supports (container-type: inline-size) and (width: 100cqw) and (grid-template-columns: repeat(round(down, 1, 1), minmax(0, 1fr))) {
+    .docs-visual-gallery__content { container-type: inline-size; }
+    .docs-visual-gallery__grid {
+      --docs-gallery-columns: max(1, round(down, calc((100cqw + var(--area-space-8)) / (var(--docs-gallery-cell) + var(--area-space-8))), 1));
+      grid-template-columns: repeat(var(--docs-gallery-columns), minmax(0, 1fr));
+      grid-auto-rows: calc((100cqw - (var(--docs-gallery-columns) - 1) * var(--area-space-8)) / var(--docs-gallery-columns));
+    }
+  }
   .docs-visual-gallery__tile {
-    aspect-ratio: 1;
     min-inline-size: 0;
+    min-block-size: 0;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
     border: 1px solid var(--area-border-decorative);
     background: var(--area-bg-surface);
     border-radius: var(--area-radius-container);
   }
-  .docs-visual-gallery__tile--expanded { aspect-ratio: auto; grid-column: 1 / -1; }
+  /* Spans are whole cells. 1x1 is the default tile and needs no rule of its own. */
+  .docs-visual-gallery__tile[data-span="2x1"] { grid-column: span 2; }
+  .docs-visual-gallery__tile[data-span="2x2"] { grid-column: span 2; grid-row: span 2; }
   .docs-visual-gallery__tile-title {
     padding: var(--area-space-8) var(--area-space-12);
     font-size: var(--area-ui-size);
@@ -642,11 +669,14 @@ export const DOCS_CSS = `
     justify-content: center;
     padding: var(--area-space-24);
   }
-  .docs-visual-gallery__tile--large .docs-visual-gallery__tile-preview {
-    padding: var(--area-space-24);
-  }
   .docs-visual-gallery__tile-preview > * {
     max-inline-size: 100%;
+  }
+  .docs-visual-gallery__tile:has([data-slider-demo="GallerySliderVertical"]) .docs-visual-gallery__tile-preview > [data-slider-demo] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
   }
   @media (max-width: 980px) {
     .docs-visual-gallery { display: block; }

@@ -43,6 +43,8 @@ export type Alias =
   /** The scale's own solid fill -- the level is computed per hue, not chosen here. */
   | { kind: "solid"; role: Role }
   | { kind: "solidHover"; role: Role }
+  | { kind: "tonalSurface"; role: Role; state: "rest" | "hover" | "active" }
+  | { kind: "tonalForeground"; role: Role }
   /** A measured tint of the family's readable ink, without changing its palette. */
   | { kind: "stroke"; role: Role }
   | { kind: "strokeHover"; role: Role }
@@ -55,6 +57,8 @@ const at = (role: Role, slot: Slot): Alias => ({ kind: "slot", role, slot });
 const alphaAt = (role: Role, slot: Slot): Alias => ({ kind: "alphaSlot", role, slot });
 const solid = (role: Role): Alias => ({ kind: "solid", role });
 const solidHover = (role: Role): Alias => ({ kind: "solidHover", role });
+const tonalSurface = (role: Role, state: "rest" | "hover" | "active"): Alias => ({ kind: "tonalSurface", role, state });
+const tonalForeground = (role: Role): Alias => ({ kind: "tonalForeground", role });
 const stroke = (role: Role): Alias => ({ kind: "stroke", role });
 const strokeHover = (role: Role): Alias => ({ kind: "strokeHover", role });
 const vivid = (role: Role): Alias => ({ kind: "vivid", role });
@@ -63,10 +67,10 @@ const contrast = (role: Role): Alias => ({ kind: "contrast", role });
 /** The tonal block every role repeats, so `danger` and `accent` are structurally identical. */
 function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
   return {
-    [`${prefix}-surface`]: at(role, "component"),
-    [`${prefix}-surface-hover`]: at(role, "componentHover"),
-    [`${prefix}-surface-active`]: at(role, "componentActive"),
-    [`${prefix}-border-subtle`]: at(role, "componentActive"),
+    [`${prefix}-surface`]: tonalSurface(role, "rest"),
+    [`${prefix}-surface-hover`]: tonalSurface(role, "hover"),
+    [`${prefix}-surface-active`]: tonalSurface(role, "active"),
+    [`${prefix}-border-subtle`]: tonalSurface(role, "active"),
     /*
      * Measured tints of existing readable ink. Choosing raw rungs by luminance alone
      * left green and teal neon beside equally visible but much quieter blue outlines.
@@ -75,7 +79,7 @@ function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
     [`${prefix}-border-strong`]: strokeHover(role),
     [`${prefix}-solid`]: solid(role),
     [`${prefix}-solid-hover`]: solidHover(role),
-    [`fg-${prefix}`]: at(role, "textTonal"),
+    [`fg-${prefix}`]: tonalForeground(role),
     /**
      * The loudest this tone gets as text. Syntax highlighting and inline emphasis use it;
      * body copy does not, because a paragraph set in it reads as a link.
@@ -223,6 +227,12 @@ export interface ScaleView {
   solid: { level: { light: Level; dark: Level }; hover: { light: Level; dark: Level } };
   stroke: { rest: { light: Level; dark: Level }; hover: { light: Level; dark: Level } };
   vivid: { light: Level; dark: Level };
+  tonal: {
+    foreground: { light: Level; dark: Level };
+    surface: { light: Level; dark: Level };
+    surfaceHover: { light: Level; dark: Level };
+    surfaceActive: { light: Level; dark: Level };
+  };
   contrast: { hex: string };
 }
 
@@ -258,6 +268,12 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.level[theme]]!;
     case "solidHover":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.hover[theme]]!;
+    case "tonalSurface": {
+      const key = aliasValue.state === "rest" ? "surface" : aliasValue.state === "hover" ? "surfaceHover" : "surfaceActive";
+      return scales[aliasValue.role].byLevel[scales[aliasValue.role].tonal[key][theme]]!;
+    }
+    case "tonalForeground":
+      return scales[aliasValue.role].byLevel[scales[aliasValue.role].tonal.foreground[theme]]!;
     case "stroke":
       return tonalStroke(scales[aliasValue.role].byLevel[INVERSION.textTonal[theme]]!, theme, false);
     case "strokeHover":
@@ -281,6 +297,12 @@ export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme)
       return scales[aliasValue.role].solid.level[theme];
     case "solidHover":
       return scales[aliasValue.role].solid.hover[theme];
+    case "tonalSurface": {
+      const key = aliasValue.state === "rest" ? "surface" : aliasValue.state === "hover" ? "surfaceHover" : "surfaceActive";
+      return scales[aliasValue.role].tonal[key][theme];
+    }
+    case "tonalForeground":
+      return scales[aliasValue.role].tonal.foreground[theme];
     case "stroke":
     case "strokeHover":
       // A semantic tint is not a numbered palette rung.

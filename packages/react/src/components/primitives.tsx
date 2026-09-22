@@ -7,12 +7,13 @@ import { MANIFESTS } from "../variants.ts";
  * of its own. Every appearance decision lives in `@area/styles`, which is what lets a
  * consumer use the CSS without React and get an identical result.
  */
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { Children, forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
   HTMLAttributes,
   InputHTMLAttributes,
+  MouseEvent,
   ReactNode,
 } from "react";
 import {
@@ -38,24 +39,83 @@ type Div = HTMLAttributes<HTMLDivElement>;
 export interface AvatarProps extends Omit<Div, "children"> {
   size?: VariantProps<typeof MANIFESTS.avatar>["size"];
   shape?: VariantProps<typeof MANIFESTS.avatar>["shape"];
+  tone?: VariantProps<typeof MANIFESTS.avatar>["tone"];
+  /** Draws the current-person or active-participant ring around the Avatar. */
+  active?: boolean;
   src?: string;
   /** Describes the person or entity. Required when `src` is set. */
   alt?: string;
   /** Shown when there is no image. Usually one or two initials. */
   fallback?: ReactNode;
+  /** A generic fallback visual, used instead of initials when no image is available. */
+  icon?: ReactNode;
 }
 
 export const Avatar = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
-  { size, shape, src, alt, fallback, className, ...rest },
+  { size, shape, tone, active, src, alt, fallback, icon, className, role, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
+  const [imageFailed, setImageFailed] = useState(false);
+  const imageRef = useRef<HTMLImageElement>(null);
+  useEffect(() => setImageFailed(false), [src]);
+  useEffect(() => {
+    const image = imageRef.current;
+    // A cached failure can finish before hydration attaches `onError`. Check the native
+    // image state once mounted so server-rendered avatars still reach their fallback.
+    if (src && image?.complete && image.naturalWidth === 0) setImageFailed(true);
+  }, [src]);
+
+  const hasImage = Boolean(src) && !imageFailed;
+  const wrapperLabel = hasImage ? ariaLabel : (ariaLabel ?? alt);
+  const wrapperRole = role ?? (wrapperLabel ? "img" : undefined);
+
   return (
-    <div ref={ref} className={avatarVariants({ size, shape }, className)} {...rest}>
-      {src ? (
-        <img className="area-avatar__image" src={src} alt={alt ?? ""} />
+    <div
+      ref={ref}
+      className={avatarVariants({ size, shape, tone, active }, className)}
+      role={wrapperRole}
+      aria-label={wrapperLabel}
+      {...rest}
+    >
+      {hasImage ? (
+        <img
+          ref={imageRef}
+          className="area-avatar__image"
+          src={src}
+          alt={wrapperLabel ? "" : (alt ?? "")}
+          onError={() => setImageFailed(true)}
+        />
+      ) : icon ? (
+        <span className="area-avatar__icon" aria-hidden="true">{icon}</span>
       ) : (
-        <span aria-hidden={alt ? undefined : "true"}>{fallback}</span>
+        <span aria-hidden="true">{fallback}</span>
       )}
+    </div>
+  );
+});
+
+export interface AvatarGroupProps extends Div {
+  /** Limits visible avatars; the remaining count is rendered as an Avatar. */
+  max?: number;
+  /** Size used by the generated overflow Avatar. */
+  size?: AvatarProps["size"];
+  overflowLabel?: (count: number) => string;
+}
+
+export const AvatarGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarGroupProps>(function AvatarGroup(
+  { max, size = "md", overflowLabel = count => `${count} more avatars`, className, children, role = "group", ...rest },
+  ref,
+) {
+  if (max !== undefined && (!Number.isFinite(max) || max < 0)) {
+    throw new RangeError("AvatarGroup: max must be a nonnegative finite number.");
+  }
+  const items = Children.toArray(children);
+  const visibleCount = max === undefined ? items.length : Math.min(items.length, Math.floor(max));
+  const remaining = items.length - visibleCount;
+  return (
+    <div {...rest} ref={ref} role={role} className={cx("area-avatar-group", className)}>
+      {items.slice(0, visibleCount).map((item, index) => <span className="area-avatar-group__item" key={index}>{item}</span>)}
+      {remaining > 0 ? <Avatar className="area-avatar-group__overflow" size={size} fallback={`+${remaining}`} alt={overflowLabel(remaining)} /> : null}
     </div>
   );
 });
@@ -64,22 +124,35 @@ export const Avatar = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarProps>(fu
 
 export interface AlertProps extends Omit<Div, "title"> {
   tone?: VariantProps<typeof MANIFESTS.alert>["tone"];
+  /** Omit for automatic layout: compact by default, multiline for multiple actions. */
+  layout?: VariantProps<typeof MANIFESTS.alert>["layout"];
   icon?: ReactNode;
   /** Shadows the native `title` attribute deliberately: an Alert's title is content. */
   title?: ReactNode;
+  /** An optional action associated with this message. */
+  action?: ReactNode;
+  /** An optional inline text link following the message. */
+  link?: ReactNode;
+  /** Adds a separate dismiss button. The parent owns whether the alert remains rendered. */
+  onDismiss?: () => void;
+  /** Replaces the standard dismiss icon. */
+  dismissIcon?: ReactNode;
+  /** Accessible name for the dismiss button. */
+  dismissLabel?: string;
 }
 
 export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { tone, icon, title, className, children, ...rest },
+  { tone, layout, icon, title, action, link, onDismiss, dismissIcon, dismissLabel = "Dismiss alert", className, children, ...rest },
   ref,
 ) {
+  const resolvedLayout = layout ?? "single-line";
   return (
     <div
       ref={ref}
       // `alert` interrupts a screen reader; `status` waits for a pause. Only danger earns
       // the interruption.
       role={tone === "danger" ? "alert" : "status"}
-      className={alertVariants({ tone }, className)}
+      className={alertVariants({ tone, layout: resolvedLayout }, className)}
       {...rest}
     >
       {icon ? (
@@ -89,16 +162,42 @@ export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(func
       ) : null}
       <div className="area-alert__content">
         {title ? <div className="area-alert__title">{title}</div> : null}
-        {children ? <div className="area-alert__description">{children}</div> : null}
+        {children || link ? (
+          <div className="area-alert__description">
+            {children}
+            {link ? <span className="area-alert__link">{link}</span> : null}
+          </div>
+        ) : null}
       </div>
+      {action ? <div className="area-alert__actions">{action}</div> : null}
+      {onDismiss ? (
+        <button type="button" className="area-alert__dismiss" aria-label={dismissLabel} onClick={onDismiss}>
+          {dismissIcon ?? <AlertDismissIcon />}
+        </button>
+      ) : null}
     </div>
   );
 });
 
+const AlertDismissIcon = () => (
+  <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" focusable="false" aria-hidden="true">
+    <path d="m2.59 2.72.06-.07a.5.5 0 0 1 .63-.06l.07.06L8 7.29l4.65-4.64a.5.5 0 0 1 .7.7L8.71 8l4.64 4.65c.18.17.2.44.06.63l-.06.07a.5.5 0 0 1-.63.06l-.07-.06L8 8.71l-4.65 4.64a.5.5 0 0 1-.7-.7L7.29 8 2.65 3.35a.5.5 0 0 1-.06-.63l.06-.07z" />
+  </svg>
+);
+
 /* --- Card ----------------------------------------------------------------- */
 
-export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function Card({ className, ...rest }, ref) {
-  return <div ref={ref} className={cx("area-card", className)} {...rest} />;
+export interface CardProps extends Div {
+  layout?: VariantProps<typeof MANIFESTS.card>["layout"];
+}
+
+const cardVariants = createVariants(MANIFESTS.card);
+export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, className, ...rest }, ref) {
+  return <div ref={ref} className={cardVariants({ layout }, className)} {...rest} />;
+});
+
+export const CardContent = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardContent({ className, ...rest }, ref) {
+  return <div ref={ref} className={cx("area-card__content", className)} {...rest} />;
 });
 
 export const CardTitle = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardTitle({ className, ...rest }, ref) {
@@ -165,12 +264,13 @@ export const Skeleton = /* @__PURE__ */ forwardRef<HTMLDivElement, SkeletonProps
 
 export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
   size?: VariantProps<typeof MANIFESTS.spinner>["size"];
+  tone?: VariantProps<typeof MANIFESTS.spinner>["tone"];
   /** Announced to assistive tech. Omit when a nearby element already says it. */
   label?: string;
 }
 
 export const Spinner = /* @__PURE__ */ forwardRef<HTMLSpanElement, SpinnerProps>(function Spinner(
-  { size, label, className, ...rest },
+  { size, tone, label, className, ...rest },
   ref,
 ) {
   return (
@@ -179,7 +279,7 @@ export const Spinner = /* @__PURE__ */ forwardRef<HTMLSpanElement, SpinnerProps>
       role={label ? "status" : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : "true"}
-      className={spinnerVariants({ size }, className)}
+      className={spinnerVariants({ size, tone }, className)}
       {...rest}
     />
   );
@@ -404,7 +504,13 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
 
   return (
     <label
-      className={cx(sliderVariants({ variant, tone, size }, className), labelPosition === "top" && "area-slider--label-top", orientation === "vertical" && "area-slider--vertical")}
+      className={sliderVariants({
+        variant,
+        tone,
+        size,
+        composition: labelPosition === "top" ? "label-top" : undefined,
+        orientation: orientation === "vertical" ? "vertical" : undefined,
+      }, className)}
       style={{ ["--_pct" as string]: `${pct}%`, ...style }}
       {...(disabled ? { "data-disabled": "" } : {})}
     >
@@ -418,7 +524,7 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
         min={min}
         max={max}
         step={step}
-        value={value}
+        value={value === undefined ? undefined : current}
         defaultValue={defaultValue}
         disabled={disabled}
         onInput={event => {
@@ -438,43 +544,133 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
 /* --- Chip ----------------------------------------------------------------- */
 
 export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
+  variant?: VariantProps<typeof MANIFESTS.chip>["variant"];
   size?: VariantProps<typeof MANIFESTS.chip>["size"];
   pill?: boolean;
   /** A colour this chip stands for, shown as a dot before the label. */
   swatch?: string;
   icon?: ReactNode;
+  /** Controlled selected state. */
   selected?: boolean;
+  /** Initial selected state for an uncontrolled chip. */
+  defaultSelected?: boolean;
+  /** Called after a user toggles an enabled chip. */
+  onSelectedChange?: (selected: boolean) => void;
+  /** A person or entity visual, usually an Avatar. */
+  avatar?: ReactNode;
+  /** A small visual filter thumbnail. `imageAlt` is optional when the label names it. */
+  image?: string;
+  imageAlt?: string;
+  /** Adds an independently focusable remove action using a standard dismiss icon by default. */
+  onRemove?: () => void;
+  /** Makes the label an action when a removable input chip would otherwise only expose dismiss. */
+  clickable?: boolean;
+  /** Replaces the standard dismiss icon in the remove action, for example with a trash can. */
+  removeIcon?: ReactNode;
+  /** Accessible name for the remove action. */
+  removeLabel?: string;
+  /** Marks an input chip whose value was not recognized. */
+  invalid?: boolean;
   /** No label: the swatch is the whole chip, and the box goes square. */
   swatchOnly?: boolean;
 }
 
 export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(function Chip(
-  { size, pill, swatch, icon, selected, swatchOnly, className, children, disabled, ...rest },
+  { variant = "filter", size, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onRemove, clickable, removeIcon, removeLabel = "Remove chip", invalid, swatchOnly, className, children, disabled, ...rest },
   ref,
 ) {
+  const [localSelected, setLocalSelected] = useState(defaultSelected);
+  const currentSelected = selected ?? localSelected;
+  const selectable = variant === "filter";
+  const primaryInteractive = selectable || clickable || Boolean(onClick);
+  const classes = chipVariants({ variant, size, pill, swatchOnly }, className);
+  const state = {
+    ...(selectable && currentSelected ? { "data-selected": "" } : {}),
+    ...(disabled ? { "data-disabled": "" } : {}),
+    ...(invalid ? { "data-invalid": "" } : {}),
+  };
+  const contents = (
+    <>
+      {swatch ? <span className="area-chip__swatch" style={{ background: swatch }} aria-hidden="true" /> : null}
+      {avatar ? <span className="area-chip__avatar">{avatar}</span> : null}
+      {image ? <span className="area-chip__image"><img src={image} alt={imageAlt ?? ""} /></span> : null}
+      {icon ? <span className="area-chip__icon" aria-hidden="true">{icon}</span> : null}
+      {swatchOnly ? null : <span className="area-chip__label">{children}</span>}
+    </>
+  );
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    onClick?.(event);
+    if (event.defaultPrevented || disabled || !selectable) return;
+    const next = !currentSelected;
+    if (selected === undefined) setLocalSelected(next);
+    onSelectedChange?.(next);
+  };
+
+  if (onRemove) {
+    return (
+      <span className={classes} {...state}>
+        {primaryInteractive ? (
+          <button ref={ref} type="button" aria-pressed={selectable ? currentSelected : undefined} disabled={disabled} className="area-chip__action" onClick={handleClick} {...rest}>
+            {contents}
+          </button>
+        ) : <span className="area-chip__action">{contents}</span>}
+        <button ref={primaryInteractive ? undefined : ref} type="button" className="area-chip__remove" aria-label={removeLabel} disabled={disabled} onClick={event => { event.stopPropagation(); onRemove(); }}>
+          {removeIcon ?? <ChipDismissIcon />}
+        </button>
+      </span>
+    );
+  }
+
   return (
     <button
       ref={ref}
       type="button"
-      aria-pressed={selected}
+      aria-pressed={selectable ? currentSelected : undefined}
       disabled={disabled}
-      className={chipVariants({ size, pill, swatchOnly }, className)}
-      {...(selected ? { "data-selected": "" } : {})}
-      {...(disabled ? { "data-disabled": "" } : {})}
+      className={classes}
+      {...state}
+      onClick={handleClick}
       {...rest}
     >
-      {swatch ? (
-        <span className="area-chip__swatch" style={{ background: swatch }} aria-hidden="true" />
-      ) : null}
-      {icon ? (
-        <span className="area-chip__icon" aria-hidden="true">
-          {icon}
-        </span>
-      ) : null}
-      {swatchOnly ? null : <span className="area-chip__label">{children}</span>}
+      {contents}
     </button>
   );
 });
+
+export interface ChipLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> {
+  size?: VariantProps<typeof MANIFESTS.chip>["size"];
+  pill?: boolean;
+  icon?: ReactNode;
+  trailingIcon?: ReactNode;
+  /** Underline is the text-link treatment; icon uses an outgoing-link visual and underlines only on hover/focus. */
+  treatment?: "underline" | "icon";
+  avatar?: ReactNode;
+  image?: string;
+  imageAlt?: string;
+  children?: ReactNode;
+}
+
+/** A navigational chip. Selection and removal remain the responsibility of `Chip`. */
+export const ChipLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, ChipLinkProps>(function ChipLink(
+  { size, pill, icon, trailingIcon, treatment = "underline", avatar, image, imageAlt, className, children, ...rest },
+  ref,
+) {
+  return (
+    <a ref={ref} className={chipVariants({ variant: "suggestion", size, pill, link: treatment === "underline", linkIcon: treatment === "icon" }, className)} {...rest}>
+      {avatar ? <span className="area-chip__avatar">{avatar}</span> : null}
+      {image ? <span className="area-chip__image"><img src={image} alt={imageAlt ?? ""} /></span> : null}
+      {icon ? <span className="area-chip__icon" aria-hidden="true">{icon}</span> : null}
+      <span className="area-chip__label">{children}</span>
+      {treatment === "icon" && trailingIcon ? <span className="area-chip__trailing-icon" aria-hidden="true">{trailingIcon}</span> : null}
+    </a>
+  );
+});
+
+const ChipDismissIcon = () => (
+  <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" focusable="false" aria-hidden="true">
+    <path d="m2.59 2.72.06-.07a.5.5 0 0 1 .63-.06l.07.06L8 7.29l4.65-4.64a.5.5 0 0 1 .7.7L8.71 8l4.64 4.65c.18.17.2.44.06.63l-.06.07a.5.5 0 0 1-.63.06l-.07-.06L8 8.71l-4.65 4.64a.5.5 0 0 1-.7-.7L7.29 8 2.65 3.35a.5.5 0 0 1-.06-.63l.06-.07z" />
+  </svg>
+);
 
 export type ChipGroupProps = Div;
 

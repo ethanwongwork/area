@@ -15,11 +15,13 @@ import * as display from "./demos/display.tsx";
 import * as theme from "./demos/theme.tsx";
 import * as nav from "./demos/nav.tsx";
 import * as gallery from "./demos/gallery.tsx";
+import * as cards from "./demos/card.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
-export const DEMOS = { ...BADGE_GALLERY_DEMOS, ...badgeDemos, ...switches, ...button, ...form, ...display, ...nav, ...theme, ...gallery } as Record<string, () => unknown>;
+export const DEMOS = { ...BADGE_GALLERY_DEMOS, ...badgeDemos, ...switches, ...button, ...form, ...display, ...nav, ...theme, ...gallery, ...cards } as Record<string, () => unknown>;
 
 export const SOURCES = {
+  card: "src/demos/card.tsx",
   switch: "src/demos/switch.tsx",
   badge: "src/demos/badge.tsx",
   theme: "src/demos/theme.tsx",

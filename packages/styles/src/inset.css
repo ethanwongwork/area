@@ -76,17 +76,24 @@
 
   .area-button:has(> .area-button__icon:first-child),
   .area-input:has(> .area-input__icon:first-child),
-  .area-chip:has(> :is(.area-chip__icon, .area-chip__swatch):first-child),
+  .area-chip:has(> .area-chip__icon:first-child),
   .area-segmented__item:has(> .area-segmented__icon:first-child),
   .area-nav__item:has(> .area-nav__icon:first-child),
   .area-menu__item:has(> .area-menu__icon:first-child) { --_box-start: var(--_box-icon); }
 
   .area-button:has(> .area-button__icon:last-child),
   .area-input:has(> .area-input__icon:last-child),
-  .area-chip:has(> :is(.area-chip__icon, .area-chip__swatch):last-child),
+  .area-chip:has(> .area-chip__icon:last-child),
   .area-segmented__item:has(> .area-segmented__icon:last-child),
   .area-nav__item:has(> .area-nav__icon:last-child),
   .area-menu__item:has(> .area-menu__icon:last-child) { --_box-end: var(--_box-icon); }
+
+  .area-chip:has(> :is(.area-chip__swatch, .area-chip__avatar, .area-chip__image):first-child) {
+    --_box-start: var(--_visual);
+  }
+  .area-chip:has(> :is(.area-chip__swatch, .area-chip__avatar, .area-chip__image):last-child) {
+    --_box-end: var(--_visual);
+  }
 
   /* A shortcut is a nested backplate. Reserve its actual outer box so the space after it
    * equals the vertical space above and below it in the Button. */
@@ -140,7 +147,7 @@
   .area-button__label, .area-chip__label, .area-badge__label,
   .area-segmented__label, .area-tabs__label, .area-code__label, .area-token__label,
   .area-nav__text, .area-menu__text, .area-input__affix,
-  .area-avatar > span,
+  .area-avatar > span:not(.area-avatar__icon),
   .area-nav__label > span, .area-menu__label > span {
     text-box: trim-both cap alphabetic;
     padding-block: 0.25em;
@@ -155,23 +162,16 @@
   /* Content-sized plates use equal insets; text trim removes outer leading but
    * preserves leading between lines. No fixed height or clipping of prose. */
   .area-tooltip { padding: var(--area-space-8); text-box: trim-both cap alphabetic; }
-  .area-card__title, .area-card__description, .area-dialog__title,
+  .area-dialog__title,
   .area-dialog__description, .area-panel__title, .area-panel__heading,
-  .area-alert__title, .area-alert__description, .area-toast > div {
+  .area-toast > div {
     text-box: trim-both cap alphabetic;
   }
-  /* Keep normal leading between a title and description; trim only the
-   * first and last edge of the combined text block. */
-  .area-alert__title { text-box-trim: trim-start; }
-  .area-alert__description { text-box-trim: trim-end; }
-  .area-alert__title:only-child, .area-alert__description:only-child { text-box-trim: trim-both; }
   .area-alert, .area-toast {
-    align-items: flex-start;
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     gap: var(--area-gap-md);
   }
-  .area-alert:has(> .area-alert__icon) > .area-alert__content,
   .area-toast:has(> .area-toast__icon) > div {
     /* First-line cap center aligns to the icon center. The icon keeps equal
      * top/leading insets; subsequent lines are allowed to extend below it. */

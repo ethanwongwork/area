@@ -45,12 +45,14 @@ export interface BadgeAnchorProps extends HTMLAttributes<HTMLSpanElement> {
   /** Positive CSS length moves the badge inward. Prefer an Area token expression. */
   offset?: string;
   invisible?: boolean;
+  /** Uses the compact attachment scale without changing the anchored object. */
+  compact?: boolean;
 }
 /** The owner supplies the status in its accessible name; the overlay is decorative. */
 export const BadgeAnchor = forwardRef<HTMLSpanElement, BadgeAnchorProps>(function BadgeAnchor(
-  { badge, placement, overlap = "rectangular", offset, invisible, children, className, style, ...rest }, ref,
+  { badge, placement, overlap = "rectangular", offset, invisible, compact = true, children, className, style, ...rest }, ref,
 ) {
-  return <span {...rest} ref={ref} className={badgeAnchorVariants({ placement, overlap: `overlap-${overlap}` }, className)} style={{ ...style, ...(offset ? { "--area-badge-anchor-offset": offset } : {}) } as CSSProperties} data-invisible={invisible ? "" : undefined}>
+  return <span {...rest} ref={ref} className={badgeAnchorVariants({ placement, overlap: `overlap-${overlap}`, compact }, className)} style={{ ...style, ...(offset ? { "--area-badge-anchor-offset": offset } : {}) } as CSSProperties} data-invisible={invisible ? "" : undefined}>
     {children}<span className="area-badge-anchor__badge" aria-hidden="true" inert>{badge}</span>
   </span>;
 });

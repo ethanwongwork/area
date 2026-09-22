@@ -78,6 +78,7 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
         solid: { level: scale.solid.level, hover: scale.solid.hover },
         stroke: scale.stroke,
         vivid: scale.vivid,
+        tonal: scale.tonal,
         contrast: { hex: scale.contrast.hex },
       },
     ]),

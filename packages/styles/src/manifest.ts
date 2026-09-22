@@ -160,6 +160,8 @@ export const slider = {
     variant: ["track"],
     tone: ["neutral", "accent"],
     size: ["sm", "md", "lg"],
+    composition: ["label-top"],
+    orientation: ["vertical"],
   },
   states: ["disabled", "hover", "focus-visible"],
   elements: ["label", "control", "value", "marks"],
@@ -169,11 +171,11 @@ export const slider = {
 export const chip = {
   block: "area-chip",
   description: "Selects one value from a set too long for a segmented track.",
-  variants: { size: ["sm", "md", "lg"] },
-  booleans: ["pill", "swatch-only"],
-  states: ["selected", "disabled"],
-  elements: ["swatch", "icon", "label"],
-  defaults: { size: "md" },
+  variants: { variant: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"] },
+  booleans: ["pill", "swatch-only", "link", "link-icon"],
+  states: ["selected", "disabled", "invalid"],
+  elements: ["swatch", "icon", "trailing-icon", "avatar", "image", "label", "action", "remove"],
+  defaults: { variant: "filter", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const chipGroup = {
@@ -210,6 +212,7 @@ export const badgeAnchor = {
   description: "Attaches a decorative badge to an accessibly named object.",
   variants: { placement: ["top-end", "top-start", "bottom-end", "bottom-start"], overlap: ["overlap-rectangular", "overlap-circular"] },
   states: ["invisible"],
+  booleans: ["compact"],
   elements: ["badge"],
   defaults: { placement: "top-end", overlap: "overlap-rectangular" },
 } as const satisfies ComponentManifest;
@@ -225,9 +228,22 @@ export const badgeGroup = {
 export const avatar = {
   block: "area-avatar",
   description: "Represents a user or entity.",
-  variants: { size: ["sm", "md", "lg"], shape: ["square"] },
-  elements: ["image"],
-  defaults: { size: "md" },
+  variants: {
+    size: ["sm", "md", "lg"],
+    shape: ["circle", "square"],
+    tone: ["neutral", "accent", "inverse"],
+  },
+  booleans: ["active"],
+  elements: ["image", "icon"],
+  defaults: { size: "md", shape: "circle", tone: "neutral" },
+} as const satisfies ComponentManifest;
+
+export const avatarGroup = {
+  block: "area-avatar-group",
+  description: "Stacks related avatars and summarizes any hidden remainder.",
+  variants: {},
+  elements: ["item", "overflow"],
+  defaults: {},
 } as const satisfies ComponentManifest;
 
 export const separator = {
@@ -249,9 +265,9 @@ export const skeleton = {
 export const spinner = {
   block: "area-spinner",
   description: "Indicates an action in progress with no known duration.",
-  variants: { size: ["sm", "md", "lg"] },
+  variants: { size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
   elements: [],
-  defaults: { size: "md" },
+  defaults: { size: "md", tone: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const progress = {
@@ -274,29 +290,18 @@ export const panel = {
 
 export const card = {
   block: "area-card",
-  description: "Groups related content on its own surface.",
-  variants: {},
-  elements: [
-    "title",
-    "description",
-    "footer",
-    "media",
-    "action",
-    "media-cluster",
-    "media-tile",
-    "media-caption",
-    "steps",
-    "step",
-  ],
-  defaults: {},
+  description: "Groups related media, content and actions on one surface.",
+  variants: { layout: ["vertical", "horizontal", "thumbnail", "immersive"] },
+  elements: ["title", "description", "content", "footer", "media", "action", "list", "list-item", "carousel"],
+  defaults: { layout: "vertical" },
 } as const satisfies ComponentManifest;
 
 export const alert = {
   block: "area-alert",
   description: "Draws attention to an important message in place.",
-  variants: { tone: ["info", "danger", "warning", "success"] },
-  elements: ["icon", "content", "title", "description"],
-  defaults: { tone: "info" },
+  variants: { tone: ["neutral", "accent", "info", "danger", "warning", "success"], layout: ["single-line", "multiline"] },
+  elements: ["icon", "content", "title", "description", "link", "actions", "dismiss"],
+  defaults: { tone: "neutral", layout: "single-line" },
 } as const satisfies ComponentManifest;
 
 export const dialog = {
@@ -454,6 +459,7 @@ export const MANIFESTS = {
   badgeAnchor,
   badgeGroup,
   avatar,
+  avatarGroup,
   separator,
   skeleton,
   spinner,

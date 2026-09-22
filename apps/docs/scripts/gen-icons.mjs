@@ -35,7 +35,7 @@ const area = (dir) =>
 
 const AREA = area("area-icons");
 const AREA_FILLED = area("area-icons-filled");
-// name -> Fluent icon id. 16px Regular throughout: that is Fluent's own inline size.
+// name -> Fluent icon id, or a size-specific cut where a component owns a larger slot.
 const MAP = {
   PlusIcon: "add_16_regular",
   SearchIcon: "search_16_regular",
@@ -45,6 +45,10 @@ const MAP = {
   ArrowIcon: "arrow_right_16_regular",
   ChevronIcon: "chevron_down_16_regular",
   DismissIcon: "dismiss_16_regular",
+  TrashIcon: "delete_16_regular",
+  LinkIcon: "link_16_regular",
+  OpenIcon: "open_16_regular",
+  PersonIcon: { id: "person_20_regular", size: 20 },
   AlignTopIcon: "align_top_16_regular",
   AlignMiddleIcon: "align_center_vertical_16_regular",
   AlignBottomIcon: "align_bottom_16_regular",
@@ -105,7 +109,7 @@ const path = (id) => {
   return ds;
 };
 const tsx = `/**
- * Fluent System Icons, 16px Regular.
+ * Fluent System Icons, primarily 16px Regular with explicit component-sized cuts.
  *
  * Microsoft's set, taken verbatim from \`@fluentui/svg-icons\` -- the path data below is
  * generated from that package, never drawn by hand. Fluent's 16px grid is the same inline
@@ -113,8 +117,8 @@ const tsx = `/**
  *
  * Two things follow from using the real set rather than approximating it. Fluent icons are
  * *filled* paths, not strokes, so they take \`fill\` and never \`stroke\` or \`stroke-width\`;
- * and they are optically corrected per size, which is why the 16px cut is used at 16px
- * instead of scaling the 20 or 24.
+ * and they are optically corrected per size, so a component-owned 20px slot uses the
+ * 20px cut rather than scaling a 16px path.
  *
  * Regenerate with \`node scripts/gen-icons.mjs\` after changing the map there.
  */
@@ -129,12 +133,17 @@ const base = {
   "aria-hidden": true,
 };
 
+const base20 = { ...base, viewBox: "0 0 20 20", width: 20, height: 20 };
+
 ${Object.entries(MAP)
   .map(
-    ([name, id]) =>
-      `/** Fluent \`${id}\`. */\nexport const ${name} = () => (\n  <svg {...base}>\n${path(id)
+    ([name, definition]) => {
+      const { id, size = 16 } = typeof definition === "string" ? { id: definition, size: 16 } : definition;
+      const iconBase = size === 16 ? "base" : `base${size}`;
+      return `/** Fluent \`${id}\`. */\nexport const ${name} = () => (\n  <svg {...${iconBase}}>\n${path(id)
         .map((d) => `    <path d="${d}" />`)
-        .join("\n")}\n  </svg>\n);`,
+        .join("\n")}\n  </svg>\n);`;
+    },
   )
   .join("\n\n")}
 

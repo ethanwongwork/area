@@ -30,7 +30,9 @@ Validate both polarity maps and emitted maps; an exact namespace claim ends in `
 
 Keep `packages/tokens/src/color/palette.json` verbatim. Hue/chroma tuning belongs in the
 explicit adjustment tables in `color/curves.ts`; semantic selection belongs in `INVERSION`
-and the resolver. Preserve the palette's lightness anchors and gamut constraints.
+and the resolver. Preserve the palette's light-end and neutral lightness anchors and all
+gamut constraints. Chromatic dark-end lightness adjustments must remain explicit, bounded
+tables so they cannot silently move surface grounds or the white-label contrast wall.
 
 Component CSS consumes semantic colors, not numbered palette rungs. Tone means meaning;
 treatment means emphasis. Reuse `neutral`, `accent`, `info`, `success`, `warning`,

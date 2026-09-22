@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
-import { type Theme, assertScale, buildScale } from "./scale.ts";
-import { LEVELS } from "./curves.ts";
+import { type Theme, WHITE, assertScale, buildScale } from "./scale.ts";
+import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, INVERSION, LEVELS } from "./curves.ts";
+import { maxChromaAt } from "./gamut.ts";
+import { SRGB } from "./oklab.ts";
 import { parseHex } from "./oklab.ts";
-import { WCAG, wcagContrastHex } from "./contrast.ts";
+import { APCA, WCAG, apcaMagnitude, wcagContrastHex } from "./contrast.ts";
 import PALETTE from "./palette.json" with { type: "json" };
 
 const THEMES: Theme[] = ["light", "dark"];
@@ -77,13 +79,15 @@ describe("the vendored palette", () => {
     expect(Math.max(...at350) - Math.min(...at350)).toBeGreaterThan(0.1);
   });
 
-  it("closes that spread at the ends, where page grounds have to agree", () => {
-    // The middle may diverge; the ends may not, or two tinted surfaces at rung 50 would
-    // not read as the same elevation.
-    for (const level of [25, 50, 75, 950, 975] as const) {
+  it("closes that spread at the shared endpoints", () => {
+    // The middle may diverge; the light surface rungs and untouched near-black endpoint
+    // may not. Chromatic 950 is deliberately lifted and is not a neutral surface ground.
+    for (const level of [25, 50, 75, 975] as const) {
       const ls = ALL_SCALES.map((s) => buildScale(s, "light").steps.find((x) => x.level === level)!.oklch.L);
       expect(Math.max(...ls) - Math.min(...ls), `rung ${level}`).toBeLessThan(0.025);
     }
+    const at950 = CHROMATIC_SCALES.map((s) => buildScale(s, "light").steps.find((x) => x.level === 950)!.oklch.L);
+    expect(Math.max(...at950) - Math.min(...at950), "chromatic rung 950").toBeLessThan(0.025);
   });
 });
 
@@ -104,7 +108,7 @@ describe("solid fill", () => {
     // walks from peak chroma and measures. This asserts that doing so reproduces exactly
     // the division the palette's README documents.
     const LABEL_WALL = ["red", "blue", "indigo", "purple", "pink"];
-    const GLYPH_WALL_WHITE = ["green", "teal", "cyan"];
+    const GLYPH_WALL_WHITE = ["green", "cyan"];
     for (const id of LABEL_WALL) {
       const spec = CHROMATIC_SCALES.find((s) => s.id === id)!;
       expect(buildScale(spec, "light").solid.level.light, id).toBe(500);
@@ -113,9 +117,12 @@ describe("solid fill", () => {
       const spec = CHROMATIC_SCALES.find((s) => s.id === id)!;
       expect(buildScale(spec, "light").solid.level.light, id).toBe(600);
     }
+    // The bounded +0.01 lightness lift at 600 puts teal just below the white-label wall;
+    // its measured solid selection correctly retreats one rung instead of weakening it.
+    expect(buildScale(CHROMATIC_SCALES.find((s) => s.id === "teal")!, "light").solid.level.light).toBe(650);
     // Every family named above takes white; the remaining three are the warm hues with no
     // readable dark end, which take black at their chromatic peak instead.
-    for (const id of [...LABEL_WALL, ...GLYPH_WALL_WHITE]) {
+    for (const id of [...LABEL_WALL, ...GLYPH_WALL_WHITE, "teal"]) {
       expect(buildScale(CHROMATIC_SCALES.find((s) => s.id === id)!, "light").contrast.hex, id).toBe(
         "#ffffff",
       );
@@ -256,10 +263,10 @@ describe("chroma across families", () => {
     ).toBeLessThan(bound);
   });
 
-  it("only takes available chroma headroom beyond the light-end trim", () => {
-    // The dark lift must never desaturate a palette rung, alter lightness, or paint outside
-    // sRGB. At most it reaches the gamut limit at the original L/H; it is not a route to
-    // clipped, hue-shifted dark colours.
+  it("applies only the declared dark-end lightness lift and chroma ceiling", () => {
+    // The dark adjustment is an explicit bounded curve. It may desaturate indigo and
+    // purple to keep them in balance, but it cannot move undeclared rungs, exceed the
+    // family's established peak, or paint outside sRGB.
     for (const spec of CHROMATIC_SCALES) {
       const built = buildScale(spec, "light");
       for (const step of built.steps) {
@@ -267,12 +274,54 @@ describe("chroma across families", () => {
         const families = PALETTE.families as Record<string, Record<string, { oklch: { L: number; C: number } }>>;
         const rung = families[spec.id]?.[String(step.level)];
         if (!rung) continue;
-        expect(step.oklch.L, `${spec.id}-${step.level} lightness`).toBeCloseTo(rung.oklch.L, 3);
-        // Green's documented hue rotation can lower C while changing its hue; all other
-        // families retain or lift the exported dark-end chroma.
-        if (spec.id !== "green") {
-          expect(step.oklch.C, `${spec.id}-${step.level} chroma`).toBeGreaterThanOrEqual(rung.oklch.C - 0.001);
+        const expectedLift = DARK_LIGHTNESS_LIFT[step.level] ?? 0;
+        expect(step.oklch.L, `${spec.id}-${step.level} lightness`).toBeCloseTo(rung.oklch.L + expectedLift, 3);
+        const familyPeak = Math.max(...Object.values(families[spec.id]!).map((x) => x.oklch.C));
+        expect(step.oklch.C, `${spec.id}-${step.level} family peak`).toBeLessThanOrEqual(familyPeak + 0.001);
+        expect(step.oklch.C, `${spec.id}-${step.level} sRGB boundary`).toBeLessThanOrEqual(
+          maxChromaAt(step.oklch.L, step.oklch.h, SRGB) + 0.001,
+        );
+        const cap = DARK_CHROMA_CAP[step.level];
+        if (cap !== undefined) {
+          expect(step.oklch.C, `${spec.id}-${step.level} dark cap`).toBeLessThanOrEqual(cap * step.oklch.L + 0.001);
         }
+      }
+    }
+  });
+
+  it("chooses the maximum-chroma accessible tonal foreground and surface sequence", () => {
+    const neutral = buildScale(NEUTRAL_SCALES.find(spec => spec.id === "neutral")!, "light");
+    const neutralHex = (position: (typeof INVERSION)[keyof typeof INVERSION][Theme]) =>
+      position === "white" ? WHITE : neutral.steps.find(step => step.level === position)!.hex;
+    const sequences = {
+      light: [[25, 50, 75], [50, 75, 100], [75, 100, 150], [100, 150, 200]],
+      dark: [[850, 800, 750], [800, 750, 700], [750, 700, 650], [700, 650, 600]],
+    } as const;
+
+    for (const spec of CHROMATIC_SCALES) {
+      const scale = buildScale(spec, "light");
+      const byLevel = new Map(scale.steps.map(step => [step.level, step]));
+      for (const theme of THEMES) {
+        const ambient = [INVERSION.page, INVERSION.surface, INVERSION.subtle].map(slot => neutralHex(slot[theme]));
+        const selectedForeground = byLevel.get(scale.tonal.foreground[theme])!;
+        const selectedSurfaces = [scale.tonal.surface[theme], scale.tonal.surfaceHover[theme], scale.tonal.surfaceActive[theme]];
+        const passes = (foreground: typeof selectedForeground, surfaceLevels: readonly number[]) =>
+          [...ambient, ...surfaceLevels.map(level => byLevel.get(level as typeof selectedForeground.level)!.hex)].every(background =>
+            wcagContrastHex(foreground.hex, background) >= WCAG.TEXT &&
+            (theme === "light" || apcaMagnitude(foreground.hex, background) >= APCA.CONTENT)
+          );
+
+        const moreChromatic = scale.steps.filter(step => step.oklch.C > selectedForeground.oklch.C + 1e-9);
+        expect(
+          moreChromatic.some(step => sequences[theme].some(surfaceLevels => passes(step, surfaceLevels))),
+          `${spec.id}/${theme} foreground ${selectedForeground.level}`,
+        ).toBe(false);
+
+        const selectedSurfaceChroma = selectedSurfaces.reduce((sum, level) => sum + byLevel.get(level)!.oklch.C, 0);
+        const bestSurfaceChroma = Math.max(...sequences[theme]
+          .filter(surfaceLevels => passes(selectedForeground, surfaceLevels))
+          .map(surfaceLevels => surfaceLevels.reduce((sum, level) => sum + byLevel.get(level)!.oklch.C, 0)));
+        expect(selectedSurfaceChroma, `${spec.id}/${theme} surfaces`).toBeCloseTo(bestSurfaceChroma, 9);
       }
     }
   });

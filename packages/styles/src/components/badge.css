@@ -182,9 +182,26 @@
   .area-badge-anchor { position: relative; display: inline-flex; vertical-align: middle; --_overlap: 0%; --_x: 50%; --_y: -50%; --_inset: var(--area-badge-anchor-offset, var(--area-space-0)); }
   .area-badge-anchor--overlap-rectangular { --_overlap: 0%; }
   .area-badge-anchor--overlap-circular { --_overlap: 0%; --_inset: calc(var(--area-badge-anchor-offset, var(--area-space-0)) + 14%); }
+  .area-badge-anchor--compact { --_inset: calc(var(--area-badge-anchor-offset, var(--area-space-0)) + 12%); }
+  .area-badge-anchor--compact.area-badge-anchor--overlap-circular {
+    --_inset: var(--area-badge-anchor-offset, var(--area-space-0));
+  }
+  .area-badge-anchor--compact.area-badge-anchor--overlap-circular:has(.area-badge--dot-only) {
+    --_inset: calc(var(--area-badge-anchor-offset, var(--area-space-0)) - 4%);
+  }
+  .area-badge-anchor--compact .area-badge {
+    --_height: var(--area-icon-md);
+    --_icon: var(--area-icon-xs);
+    --_gutter: var(--area-space-4);
+    --_text: var(--area-control-xs-text);
+    --_leading: var(--area-control-xs-leading);
+  }
+  .area-badge-anchor--compact.area-badge-anchor--overlap-circular .area-badge--dot-only {
+    --_dot: var(--area-space-8);
+  }
   .area-badge-anchor__badge { position: absolute; display: inline-flex; pointer-events: none; border-radius: var(--area-radius-full); transform: translate(var(--_x), var(--_y)) scale(1); opacity: 1; transition: transform var(--area-duration-base) var(--area-ease-out), opacity var(--area-duration-base) var(--area-ease-out); }
-  .area-badge-anchor__badge > .area-badge:not(.area-badge--dot-only) { box-shadow: 0 0 0 var(--area-space-2) var(--area-bg-surface); }
-  .area-badge-anchor__badge > .area-badge--dot-only .area-badge__dot { box-shadow: 0 0 0 var(--area-space-2) var(--area-bg-surface); }
+  .area-badge-anchor__badge > .area-badge:not(.area-badge--dot-only) { box-shadow: 0 0 0 var(--area-border-width) var(--area-bg-surface); }
+  .area-badge-anchor__badge > .area-badge--dot-only .area-badge__dot { box-shadow: 0 0 0 var(--area-border-width) var(--area-bg-surface); }
   .area-badge-anchor--top-end > .area-badge-anchor__badge { inset-block-start: calc(var(--_overlap) + var(--_inset)); inset-inline-end: calc(var(--_overlap) + var(--_inset)); }
   .area-badge-anchor--top-start { --_x: -50%; }
   .area-badge-anchor--top-start > .area-badge-anchor__badge { inset-block-start: calc(var(--_overlap) + var(--_inset)); inset-inline-start: calc(var(--_overlap) + var(--_inset)); }

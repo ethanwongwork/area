@@ -16,7 +16,7 @@
  */
 import { type Oklch, SRGB, parseHex, toHex, toOklchCss } from "./oklab.ts";
 import { gamutMap, maxChromaAt } from "./gamut.ts";
-import { DARK_CHROMA_LIFT, type Level, type Ramp, CHROMA_TRIM, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight, darkChromaLiftWeight } from "./curves.ts";
+import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, type Level, type Ramp, CHROMA_TRIM, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight } from "./curves.ts";
 import { apcaMagnitude, wcagContrastHex } from "./contrast.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
 import PALETTE from "./palette.json" with { type: "json" };
@@ -91,6 +91,15 @@ export interface VividChoice {
   dark: Level;
 }
 
+export interface TonalChoice {
+  /** Most chromatic foreground that clears the supported tonal and neutral grounds. */
+  foreground: { light: Level; dark: Level };
+  /** The most chromatic accessible base/hover/active surface sequence for that ink. */
+  surface: { light: Level; dark: Level };
+  surfaceHover: { light: Level; dark: Level };
+  surfaceActive: { light: Level; dark: Level };
+}
+
 export interface StrokeChoice {
   /** Raw palette stroke candidate, per theme. Semantic outlines use measured ink tints. */
   rest: { light: Level; dark: Level };
@@ -110,6 +119,7 @@ export interface BuiltScale {
   alphas: Ramp<{ level: Level; hex8: string; alpha: number; residual: number }>;
   solid: SolidChoice;
   stroke: StrokeChoice;
+  tonal: TonalChoice;
   /** This theme's solid fill, resolved. */
   solidHex: string;
   vivid: VividChoice;
@@ -138,10 +148,9 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     );
   }
 
-  // Area's adjustments to the export: a hue rotation that moves character, a chroma trim
-  // that evens the light end, and a gamut-bounded lift that takes available headroom at the
-  // readable/dark end. Lightness is never touched, so the wall each rung is pinned against
-  // stays where the palette put it. A family with no adjustment keeps its exported byte.
+  // Area's adjustments to the export: an optional hue rotation, a chroma trim that evens
+  // the light end, and bounded lightness/chroma curves for the dark end. Neutral families
+  // bypass this path because their palette anchors also define surface contrast.
   const rotation = HUE_ROTATION[spec.id] ?? 0;
   const trim = CHROMA_TRIM[spec.id] ?? 1;
   const familyPeakChroma = Math.max(...Object.values(family).map((rung) => rung.oklch.C));
@@ -154,27 +163,26 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     const rung = family[String(level)];
     if (!rung) throw new Error(`${spec.id} is missing rung ${level}.`);
 
-    // Tapered trim at the light end; bounded headroom lift at the readable/dark end.
+    // Tapered trim at the light end; an explicit lift and ceiling at the dark end.
     const trimFactor = trim === 1 ? 1 : 1 - (1 - trim) * chromaTrimWeight(level);
-    const liftFactor = 1 + (DARK_CHROMA_LIFT - 1) * darkChromaLiftWeight(level);
-    const factor = trimFactor * liftFactor;
     const hue = (rung.oklch.H + rotation + 360) % 360;
-    // The adjustment must not create a new chromatic peak or invoke gamut mapping that
-    // changes lightness. A dark step only receives the C still available at its own L/H,
-    // and never overtakes the family character established by the vendored peak.
-    const chroma = Math.min(
-      rung.oklch.C * factor,
-      maxChromaAt(rung.oklch.L, hue, SRGB),
-      familyPeakChroma,
-    );
+    const lightness = rung.oklch.L + (spec.kind === "chromatic" ? (DARK_LIGHTNESS_LIFT[level] ?? 0) : 0);
+    const darkCap = DARK_CHROMA_CAP[level];
+    const chroma = level >= 600 && level < 975 && spec.kind === "chromatic"
+      ? Math.min(
+          maxChromaAt(lightness, hue, SRGB),
+          familyPeakChroma,
+          darkCap === undefined ? Infinity : darkCap * lightness,
+        )
+      : Math.min(rung.oklch.C * trimFactor, maxChromaAt(lightness, hue, SRGB), familyPeakChroma);
 
-    if (rotation === 0 && chroma === rung.oklch.C) {
+    if (rotation === 0 && lightness === rung.oklch.L && chroma === rung.oklch.C) {
       const oklch: Oklch = { L: rung.oklch.L, C: rung.oklch.C, h: rung.oklch.H };
       return { level, oklch, hex: rung.hex, oklchCss: toOklchCss(oklch), contrast: stepContrast(rung.hex) };
     }
 
     const mapped = gamutMap(
-      { L: rung.oklch.L, C: chroma, h: hue },
+      { L: lightness, C: chroma, h: hue },
       SRGB,
     );
     const hex = toHex(mapped.rgb);
@@ -188,6 +196,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
   });
 
   const vivid = { light: chooseVivid(steps, "light"), dark: chooseVivid(steps, "dark") };
+  const tonal = chooseTonalPair(steps, spec.kind);
   const peakStep = steps.reduce((a, s) => (s.oklch.C > a.oklch.C ? s : a), steps[0]!);
   const peak = { level: peakStep.level, C: peakStep.oklch.C };
   const solid = spec.kind === "neutral"
@@ -229,9 +238,65 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     alphas,
     solid,
     stroke,
+    tonal,
     vivid,
     contrast: { hex: solid.foreground, wcag: solid.wcag, apca: solid.apca },
     solidHex,
+  };
+}
+
+const TONAL_SURFACE_SEQUENCES: Record<Theme, readonly (readonly [Level, Level, Level])[]> = {
+  light: [[25, 50, 75], [50, 75, 100], [75, 100, 150], [100, 150, 200]],
+  dark: [[850, 800, 750], [800, 750, 700], [750, 700, 650], [700, 650, 600]],
+};
+
+/**
+ * Pair tonal ink and surfaces by measurement rather than by a shared rung.
+ *
+ * Foreground chroma is the primary objective. Once the most chromatic readable ink is
+ * known, the base/hover/active sequence with the greatest combined chroma wins. This is
+ * deliberately pair-aware: a slightly quieter ground may admit substantially more colour
+ * in the text, while every selected combination still clears AA and the dark APCA floor.
+ */
+function chooseTonalPair(steps: readonly ScaleStep[], kind: ScaleKind): TonalChoice {
+  if (kind === "neutral") {
+    return {
+      foreground: { light: INVERSION.textTonal.light as Level, dark: INVERSION.textTonal.dark as Level },
+      surface: { light: INVERSION.component.light as Level, dark: INVERSION.component.dark as Level },
+      surfaceHover: { light: INVERSION.componentHover.light as Level, dark: INVERSION.componentHover.dark as Level },
+      surfaceActive: { light: INVERSION.componentActive.light as Level, dark: INVERSION.componentActive.dark as Level },
+    };
+  }
+
+  const byLevel = new Map(steps.map(step => [step.level, step]));
+  const picked = {} as Record<Theme, { foreground: Level; surfaces: readonly [Level, Level, Level] }>;
+  for (const theme of ["light", "dark"] as const) {
+    const ambient = [INVERSION.page, INVERSION.surface, INVERSION.subtle].map(slot => groundHex(slot[theme]));
+    let best: { foreground: ScaleStep; surfaces: readonly [Level, Level, Level]; surfaceChroma: number } | undefined;
+    for (const surfaces of TONAL_SURFACE_SEQUENCES[theme]) {
+      const grounds = [...ambient, ...surfaces.map(level => byLevel.get(level)!.hex)];
+      for (const foreground of steps) {
+        const readable = grounds.every(background =>
+          wcagContrastHex(foreground.hex, background) >= 4.5 &&
+          (theme === "light" || apcaMagnitude(foreground.hex, background) >= 60)
+        );
+        if (!readable) continue;
+        const surfaceChroma = surfaces.reduce((sum, level) => sum + byLevel.get(level)!.oklch.C, 0);
+        if (!best || foreground.oklch.C > best.foreground.oklch.C + 1e-9 ||
+          (Math.abs(foreground.oklch.C - best.foreground.oklch.C) <= 1e-9 && surfaceChroma > best.surfaceChroma)) {
+          best = { foreground, surfaces, surfaceChroma };
+        }
+      }
+    }
+    if (!best) throw new Error(`No accessible tonal foreground/surface pairing for ${theme}.`);
+    picked[theme] = { foreground: best.foreground.level, surfaces: best.surfaces };
+  }
+
+  return {
+    foreground: { light: picked.light.foreground, dark: picked.dark.foreground },
+    surface: { light: picked.light.surfaces[0], dark: picked.dark.surfaces[0] },
+    surfaceHover: { light: picked.light.surfaces[1], dark: picked.dark.surfaces[1] },
+    surfaceActive: { light: picked.light.surfaces[2], dark: picked.dark.surfaces[2] },
   };
 }
 

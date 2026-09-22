@@ -95,7 +95,9 @@ export function buildTokensJson(): TokensJson {
               alias.kind === "solidHover" ||
               alias.kind === "stroke" ||
               alias.kind === "strokeHover" ||
-              alias.kind === "vivid"
+              alias.kind === "vivid" ||
+              alias.kind === "tonalSurface" ||
+              alias.kind === "tonalForeground"
             ? { kind: alias.kind, role: alias.role }
             : {
                 kind: alias.kind,

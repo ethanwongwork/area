@@ -1,9 +1,9 @@
 /**
  * The shape of every Area colour scale.
  *
- * Area no longer generates its own ramps. The colours are the Area palette, vendored
- * verbatim as `palette.json` -- 14 families x 23 rungs, exported from the system that
- * shipped them. `scale.ts` reads that table; nothing here computes a colour.
+ * Area starts from the Area palette, vendored verbatim as `palette.json` -- 14 families x
+ * 23 rungs, exported from the system that shipped them. `scale.ts` reads that table and
+ * applies the bounded, documented refinements below without changing the source file.
  *
  * That is a deliberate reversal of the previous model, in which a level name *was* its
  * lightness and `assertLadder()` enforced it. Area is anchored to contrast instead:
@@ -139,9 +139,9 @@ export type Slot = keyof typeof INVERSION;
 /**
  * Area's own hue adjustment, in OKLCh degrees, applied per family where the palette loads.
  *
- * The exported L and C anchors stay fixed; this table tunes hue at load time.
- * Gamut mapping may then change chroma and lightness. Green at +14 costs up to 0.043
- * chroma and moves L by 0.009, so measure every adjustment against the base palette.
+ * The table is intentionally neutral today. Keeping green here documents the decision not
+ * to rotate it toward teal: the former +14 degree rotation cost roughly 23% of the chroma
+ * available to green's dark rungs and crowded teal without improving semantic separation.
  *
  * Rotations are deliberately small and are checked against adjacent-hue separation, not
  * copied from a reference. The obvious move -- matching OpenAI, which sits at red +10 and
@@ -153,42 +153,25 @@ export type Slot = keyof typeof INVERSION;
  * widens red to orange from 35 degrees to 39, and narrows red to pink from 20 to 16.
  */
 export const HUE_ROTATION: Record<string, number> = {
-  /**
-   * Toward teal, to an emerald rather than a pure green. Area's green is pinned flat at
-   * hue 150 across the whole family; the reference this matches sits at 164 at its solid
-   * rung, and +14 lands Area's 500 on that number exactly.
-   *
-   * The reference's own ramp sweeps its hue from 156 at the light end to 190 at the dark,
-   * which is a different technique than this one -- a family here carries one hue and one
-   * rotation, because two rungs of one family at different hues is what makes a tonal
-   * stroke and its fill stop looking related. The mid rungs are what a green button and a
-   * success badge actually render, so those are what this is fitted to.
-   *
-   * The cost is separation, and it lands on the right side: green to lime widens from 22
-   * degrees to 36, green to teal narrows from 33 to 19. Green is the success tone and both
-   * neighbours are bound to no role at all, so the pair that narrowed carries no meaning
-   * between them -- the same trade, in the same direction, that -4 on red did not.
-   */
-  green: 14,
+  green: 0,
 };
 
 /**
  * Area's chroma trim, per family, applied to the light end of a ramp.
  *
- * **This is the one place Area touches chroma, and it exists because Area's anchor and
- * this one are answering different questions.** The export pins each rung to a contrast
- * wall, which is a statement about a family against *white* -- it says nothing about that
- * family against its eleven siblings at the same rung. At the dark end that does not
- * matter, because the gamut squeezes every hue toward the same narrow band. At the light
- * end it does: sRGB will hold far more chroma in a pale green than in a pale blue, so the
- * families that can be bright, are.
+ * This exists because Area's anchor and this table answer different questions. The export
+ * pins each rung to a contrast wall, which is a statement about a family against *white* --
+ * it says nothing about that family against its eleven siblings at the same rung. At the
+ * light end that matters: sRGB will hold far more chroma in a pale green than in a pale
+ * blue, so the families that can be bright, are. The separate dark-end cap below solves a
+ * different imbalance after the gamut has narrowed.
  *
  * Measured across the eleven chromatic families at rung 150, chroma runs 0.051 (orange) to
  * 0.138 (lime) around a mean of 0.079 -- lime and green nearly twice their peers, which is
  * what makes a green tint read as a wash where a blue one reads as a tint.
  *
- * The trim is a multiplier on chroma alone. L is never touched, so the wall each rung is
- * pinned against is not moved, and the contrast gate measures the result either way.
+ * The trim is a multiplier on chroma alone. It does not interact with the bounded dark-end
+ * lightness lift below.
  *
  * It tapers rather than applying flat, because the divergence is a light-end effect: full
  * strength at rung 200 and below, gone by 400, linear between. Trimming the mid rungs would
@@ -212,21 +195,40 @@ export function chromaTrimWeight(level: number): number {
 }
 
 /**
- * A conservative chroma lift for the readable/dark end of chromatic ramps.
+ * A bounded lightness lift for the readable/dark end of chromatic ramps.
  *
- * The vendored palette remains the source of every lightness and hue. Most dark rungs are
- * already on the sRGB cusp, so this is deliberately a *headroom* lift rather than an
- * instruction to clip colours or move them toward a different hue. `gamutMap()` retains
- * only the increase each family can actually paint at its own lightness. That gives the
- * lower-chroma foreground families (especially the indigo/purple middle) their available
- * saturation while keeping the 750–950 falloff smooth and the near-black 975 endpoint calm.
+ * Most dark rungs are already on the sRGB boundary, where additional chroma is impossible
+ * without more lightness. The lift starts after the solid wall, peaks at 850, and returns
+ * to the vendored 975 endpoint. Neutral families do not use it, so page and surface grounds
+ * remain unchanged.
  */
-export const DARK_CHROMA_LIFT = 1.16;
+export const DARK_LIGHTNESS_LIFT: Partial<Record<Level, number>> = {
+  600: 0.01,
+  650: 0.02,
+  700: 0.035,
+  750: 0.045,
+  800: 0.055,
+  850: 0.06,
+  900: 0.055,
+  925: 0.045,
+  950: 0.03,
+};
 
-/** No lift through 500; full available headroom from 700 through 950; fade at 975. */
-export function darkChromaLiftWeight(level: number): number {
-  if (level <= 500 || level >= 975) return 0;
-  if (level < 700) return (level - 500) / 200;
-  if (level <= 950) return 1;
-  return (975 - level) / 25;
-}
+/**
+ * Dark-end chroma ceiling expressed as a fraction of adjusted lightness.
+ *
+ * Most hues are already limited by the sRGB boundary. Indigo and purple are not, so an
+ * explicit ceiling keeps those two from becoming disproportionately saturated as the
+ * ladder darkens. Rung 600 takes the boundary without an additional ceiling; 975 remains
+ * the vendored near-black endpoint.
+ */
+export const DARK_CHROMA_CAP: Partial<Record<Level, number>> = {
+  650: 0.52,
+  700: 0.46,
+  750: 0.42,
+  800: 0.4,
+  850: 0.4,
+  900: 0.4,
+  925: 0.4,
+  950: 0.4,
+};

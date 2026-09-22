@@ -26,8 +26,13 @@ test('unlabelled icon/dot-only badges fail, named forms carry image semantics', 
   assert.match(render(h(Badge,{dotOnly:true,'aria-label':'Available'})),/role="img"/);
 });
 test('anchor overlay is inert and decorative; owner retains its name', () => {
-  const html=render(h(BadgeAnchor,{invisible:true,placement:'bottom-start',overlap:'circular',badge:h(Badge,null,'3')},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
+  const html=render(h(BadgeAnchor,{compact:true,invisible:true,placement:'bottom-start',overlap:'circular',badge:h(Badge,null,'3')},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
   assert.match(html,/aria-hidden="true" inert=""/); assert.match(html,/data-invisible=""/);assert.match(html,/Inbox, 3 unread/);assert.match(html,/overlap-circular/);
+  assert.match(html,/area-badge-anchor--compact/);
+});
+test('anchor overlays use the same compact attachment scale by default', () => {
+  const html=render(h(BadgeAnchor,{badge:h(Badge,null,'3')},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
+  assert.match(html,/area-badge-anchor--compact/);
 });
 test('group limits children without losing them and uses native popover relationships', () => {
   const html=render(h(BadgeGroup,{visibleCount:1},['Draft','Reviewed','Ready'].map(label=>h(Badge,{key:label},label))));

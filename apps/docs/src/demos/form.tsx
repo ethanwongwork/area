@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Checkbox, CheckboxGroup, Chip, ChipGroup, Field, Input, InputAction, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
-import { CheckIcon, DismissIcon, SearchIcon } from "../icons.tsx";
+import { Avatar, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Input, InputAction, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
+import { CheckIcon, DismissIcon, OpenIcon, SearchIcon, TrashIcon } from "../icons.tsx";
+import { SliderRangeComposition } from "./slider-range.tsx";
 
 export const InputDefault = () => <Input aria-label="Email" placeholder="Email" />;
 
@@ -307,16 +308,13 @@ export const SliderSteps = () => <Slider aria-label="Scale" min={0.5} max={2} st
 
 export const SliderWithLabel = () => <Slider label="Volume" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
 
+export const SliderLabelOnly = () => <Slider label="Volume" labelPosition="top" defaultValue={50} />;
+
 export const SliderStepMarks = () => <Slider aria-label="Step example" min={0} max={5} step={1} defaultValue={1} stepMarks />;
 
-export const SliderRangeWithInputs = () => {
-  const [range, setRange] = useState<[number, number]>([42, 75]);
-  const setStart = (start: number) => setRange(([, end]) => [Number.isFinite(start) ? Math.min(Math.max(0, start), end) : 0, end]);
-  const setEnd = (end: number) => setRange(([start]) => [start, Number.isFinite(end) ? Math.max(start, Math.min(100, end)) : start]);
-  return <div className="area-slider-range"><Input aria-label="Minimum range" type="number" min={0} max={range[1]} value={range[0]} onChange={event => setStart(event.currentTarget.valueAsNumber)} /><div className="area-slider-range__track" style={{ ["--_range-start" as string]: `${range[0]}%`, ["--_range-end" as string]: `${range[1]}%` }}><Slider aria-label="Range minimum" value={range[0]} onValueChange={setStart} className="area-slider-range__start" /><Slider aria-label="Range maximum" value={range[1]} onValueChange={setEnd} className="area-slider-range__end" /></div><Input aria-label="Maximum range" type="number" min={range[0]} max={100} value={range[1]} onChange={event => setEnd(event.currentTarget.valueAsNumber)} /></div>;
-};
+export const SliderRangeWithInputs = () => <SliderRangeComposition />;
 
-export const SliderVertical = () => <div style={{ display: "flex", gap: "var(--area-space-24)", alignItems: "center" }}><Slider aria-label="Vertical volume" orientation="vertical" defaultValue={50} /><Slider aria-label="Vertical balance" orientation="vertical" defaultValue={25} /></div>;
+export const SliderVertical = () => <Slider aria-label="Vertical volume" orientation="vertical" defaultValue={50} style={{ ["--_vertical-length" as string]: "100%" }} />;
 
 export const SliderDisabled = () => <Slider aria-label="Locked volume" defaultValue={60} readout={value => `${value}%`} disabled />;
 
@@ -324,20 +322,25 @@ export const SliderBare = () => <Slider aria-label="Brightness" min={0} max={100
 
 export const ChipDefault = () => (
   <ChipGroup>
-    <Chip selected>All</Chip>
+    <Chip defaultSelected>All</Chip>
     <Chip>Components</Chip>
     <Chip>Foundations</Chip>
     <Chip>Patterns</Chip>
   </ChipGroup>
 );
 
+export const ChipControlled = () => {
+  const [selected, setSelected] = useState(false);
+  return <Chip selected={selected} onSelectedChange={setSelected}>Show archived</Chip>;
+};
+
+export const ChipDisabled = () => <Chip disabled>Locked filter</Chip>;
+
 export const ChipSwatches = () => (
   <ChipGroup>
     <Chip swatch="var(--area-red-500)">Red</Chip>
     <Chip swatch="var(--area-green-600)">Green</Chip>
-    <Chip selected swatch="var(--area-indigo-500)">
-      Indigo
-    </Chip>
+    <Chip swatch="var(--area-indigo-500)">Indigo</Chip>
     <Chip swatch="var(--area-purple-500)">Purple</Chip>
   </ChipGroup>
 );
@@ -349,6 +352,39 @@ export const ChipSizes = () => (
     <Chip size="lg">Large</Chip>
   </ChipGroup>
 );
+
+export const ChipVariants = () => (
+  <ChipGroup>
+    <Chip variant="assist" icon={<SearchIcon />}>Search</Chip>
+    <Chip icon={<CheckIcon />}>Filter</Chip>
+    <Chip variant="input">Input</Chip>
+    <Chip variant="suggestion">Suggestion</Chip>
+  </ChipGroup>
+);
+
+export const ChipDeletable = () => {
+  const [chips, setChips] = useState(["Name", "Avatar", "Image"]);
+  return <ChipGroup>{chips.map(chip => <Chip key={chip} variant="input" onRemove={() => setChips(current => current.filter(item => item !== chip))}>{chip}</Chip>)}</ChipGroup>;
+};
+
+export const ChipClickableDeletable = () => <Chip variant="input" clickable onClick={() => {}} onRemove={() => {}}>Delete</Chip>;
+
+export const ChipLinkUnderline = () => <ChipLink href="#chip-api">Link</ChipLink>;
+
+export const ChipLinkIcon = () => <ChipLink href="#chip-api" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
+
+export const ChipCustomDelete = () => <Chip variant="input" onRemove={() => {}} removeIcon={<TrashIcon />} removeLabel="Delete">Delete</Chip>;
+
+export const ChipAvatars = () => (
+  <ChipGroup>
+    <Chip avatar={<Avatar fallback="AV" alt="Avatar initials" />}>Avatar</Chip>
+    <Chip avatar={<Avatar src="/images/chip-avatar.png" alt="Photo" />}>Photo</Chip>
+  </ChipGroup>
+);
+
+export const ChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
+
+export const ChipInvalidInput = () => <Chip variant="input" invalid onRemove={() => {}}>Unrecognized tag</Chip>;
 
 export const CheckboxSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
