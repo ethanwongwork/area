@@ -248,4 +248,56 @@
   .area-select--sm { --_height: var(--area-control-sm); --_gap: var(--area-gap-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
   .area-select--md { --_height: var(--area-control-md); --_gap: var(--area-gap-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-select--lg { --_height: var(--area-control-lg); --_gap: var(--area-gap-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+
+  /* Native customizable picker preserves form values, groups, typeahead and dismissal.
+   * Unsupported browsers keep the ordinary native picker above. */
+  @supports (appearance: base-select) {
+    .area-select, .area-select::picker(select) { appearance: base-select; }
+    .area-select::picker-icon { display: none; }
+    .area-select::picker(select) {
+      margin-block-start: var(--area-space-4);
+      min-inline-size: anchor-size(self-inline);
+      max-block-size: min(60vh, calc(var(--area-space-96) * 3));
+      overflow: auto;
+      padding: var(--area-space-4);
+      border: var(--area-border-width) solid var(--area-border-decorative);
+      border-radius: var(--area-radius-container);
+      background: var(--area-bg-surface);
+      color: var(--area-fg-default);
+      box-shadow: var(--area-shadow-2);
+      font-family: var(--area-font-sans);
+      font-size: var(--area-ui-size);
+      line-height: var(--area-ui-leading);
+    }
+    .area-select option {
+      display: flex;
+      align-items: center;
+      gap: var(--area-space-8);
+      box-sizing: border-box;
+      flex-shrink: 0;
+      min-block-size: max(var(--_height), var(--area-control-md));
+      padding: var(--area-space-6) var(--area-space-8);
+      font-size: var(--area-ui-size);
+      line-height: var(--area-ui-leading);
+      margin-block: var(--area-space-2) 0;
+      border: 0;
+      border-radius: var(--area-radius-row);
+      background: transparent;
+      color: var(--area-fg-default);
+      cursor: pointer;
+    }
+    .area-select option:first-child { margin-block-start: 0; }
+    .area-select option:is(:hover, :focus-visible, :checked) { background: var(--area-bg-component-hover); }
+    .area-select option:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+    .area-select option:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
+    .area-select option::checkmark { order: 1; margin-inline-start: auto; color: currentColor; }
+    .area-select optgroup {
+      display: grid;
+      grid-template-rows: var(--area-control-md) auto;
+      padding: 0;
+      color: var(--area-fg-muted);
+      font-weight: var(--area-weight-strong);
+    }
+    .area-select optgroup option { font-weight: var(--area-weight-regular); }
+  }
 }

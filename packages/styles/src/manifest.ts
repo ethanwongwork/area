@@ -145,12 +145,14 @@ export const switchControl = {
   variants: {
     size: ["sm", "md", "lg"],
     labelPosition: ["label-end", "label-start"],
+    track: ["short", "long"],
+    tone: ["neutral", "accent", "custom"],
   },
   booleans: ["full-width"],
   states: ["checked", "disabled", "read-only", "loading", "hover", "active", "focus-visible"],
   stateAttributes: { checked: "checked" },
   elements: ["control", "track", "thumb", "text", "label", "description", "loading"],
-  defaults: { size: "md", labelPosition: "label-end" },
+  defaults: { size: "md", labelPosition: "label-end", track: "short", tone: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const slider = {
@@ -249,17 +251,18 @@ export const avatarGroup = {
 export const separator = {
   block: "area-separator",
   description: "Divides related groups of content.",
-  variants: { orientation: ["horizontal", "vertical"] },
+  variants: { orientation: ["horizontal", "vertical"], spacing: ["none", "normal"] },
+  booleans: ["inset"],
   elements: [],
-  defaults: { orientation: "horizontal" },
+  defaults: { orientation: "horizontal", spacing: "none" },
 } as const satisfies ComponentManifest;
 
 export const skeleton = {
   block: "area-skeleton",
   description: "Stands in for content that has not loaded.",
-  variants: { shape: ["text", "circle"] },
+  variants: { shape: ["text", "circle", "rectangle", "rounded"] },
   elements: [],
-  defaults: {},
+  defaults: { shape: "text" },
 } as const satisfies ComponentManifest;
 
 export const spinner = {
@@ -273,10 +276,10 @@ export const spinner = {
 export const progress = {
   block: "area-progress",
   description: "Shows how far along a task is.",
-  variants: {},
+  variants: { size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
   states: ["indeterminate"],
   elements: ["bar"],
-  defaults: {},
+  defaults: { size: "md", tone: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const panel = {
@@ -291,8 +294,8 @@ export const panel = {
 export const card = {
   block: "area-card",
   description: "Groups related media, content and actions on one surface.",
-  variants: { layout: ["vertical", "horizontal", "thumbnail", "immersive"] },
-  elements: ["title", "description", "content", "footer", "media", "action", "list", "list-item", "carousel"],
+  variants: { layout: ["vertical", "wide", "small", "immersive"] },
+  elements: ["title", "description", "content", "footer", "media", "action", "carousel"],
   defaults: { layout: "vertical" },
 } as const satisfies ComponentManifest;
 
@@ -308,7 +311,7 @@ export const dialog = {
   block: "area-dialog",
   description: "Interrupts with content that requires a response.",
   variants: {},
-  elements: ["header", "title", "description", "body", "footer"],
+  elements: ["header", "title", "description", "body", "footer", "modal"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -323,11 +326,9 @@ export const popover = {
 export const menu = {
   block: "area-menu",
   description: "Lists actions triggered from a button.",
-  // `selection` is how a current item is marked: a plate by default, or a rail beside
-  // the label for a list read down rather than clicked across.
-  variants: { layout: ["inline"], selection: ["marker"] },
+  variants: {},
   states: ["disabled", "highlighted", "selected"],
-  elements: ["item", "icon", "text", "label", "separator", "shortcut"],
+  elements: ["item", "icon", "text", "label", "separator", "shortcut", "search-surface"],
   elementModifiers: { item: ["danger"] },
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -335,9 +336,10 @@ export const menu = {
 export const tooltip = {
   block: "area-tooltip",
   description: "Names a control on hover or focus.",
-  variants: {},
-  elements: [],
-  defaults: {},
+  variants: { side: ["top", "right", "bottom", "left"] },
+  booleans: ["arrow", "interactive"],
+  elements: ["media", "content", "actions"],
+  defaults: { side: "top" },
 } as const satisfies ComponentManifest;
 
 export const toast = {
@@ -399,7 +401,7 @@ export const codeBlock = {
   description: "Shows a block of code with optional actions.",
   variants: { layout: ["flush", "wrap"] },
   states: ["collapsed"],
-  elements: ["actions", "body", "pre", "toggle"],
+  elements: ["actions", "body", "pre", "toggle", "header"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -408,7 +410,7 @@ export const nav = {
   description: "Site navigation, vertical or horizontal.",
   // `orientation` is the axis; `tone` decides what a current item's plate carries. A nav
   // with neither modifier is vertical and neutral, which is the sidebar case.
-  variants: { orientation: ["horizontal"], tone: ["accent"] },
+  variants: { orientation: ["horizontal"], tone: ["accent"], selection: ["marker"] },
   elements: ["group", "label", "item", "icon", "text", "trailing", "separator"],
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -426,7 +428,7 @@ export const kbd = {
   description: "Marks a keyboard shortcut.",
   variants: {
     size: ["small", "normal"],
-    appearance: ["default", "quiet", "on-color"],
+    appearance: ["default", "quiet", "on-color", "on-emphasis"],
   },
   elements: ["key"],
   defaults: { size: "normal", appearance: "default" },

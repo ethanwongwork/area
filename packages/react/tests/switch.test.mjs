@@ -40,7 +40,7 @@ test("description and visible label have separate associations", () => {
 test("loading reuses the shared Area spinner", () => {
   const html = render({ label: "Sync", loading: true });
   assert.match(html, /area-switch__loading/);
-  assert.match(html, /area-spinner area-spinner--sm/);
+  assert.match(html, /area-spinner area-spinner--md/);
   assert.match(html, /role="switch"/);
   assert.doesNotMatch(html, /area-switch__spinner/);
 });

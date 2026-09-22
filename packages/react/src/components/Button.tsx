@@ -66,7 +66,7 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
   },
   ref,
 ) {
-  const leading = loading ? <span className="area-spinner area-spinner--sm" /> : icon;
+  const leading = loading ? <span className="area-spinner area-spinner--md" aria-hidden="true" /> : icon;
 
   return (
     <button

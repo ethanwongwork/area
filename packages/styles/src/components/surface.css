@@ -16,7 +16,7 @@
   .area-card {
     --_card-padding: calc(var(--area-space-8) - var(--area-border-width));
     --_card-gap: var(--area-space-8);
-    --_card-radius: var(--area-space-32);
+    --_card-radius: var(--area-space-24);
     --_card-columns: minmax(0, 1fr);
     display: grid;
     grid-template-columns: var(--_card-columns);
@@ -35,10 +35,10 @@
   }
 
   .area-card--vertical { --_card-columns: minmax(0, 1fr); }
-  .area-card--horizontal {
+  .area-card--wide {
     --_card-columns: repeat(auto-fit, minmax(min(100%, calc(var(--area-space-96) * 2)), 1fr));
   }
-  .area-card--thumbnail { --_card-columns: calc(var(--area-space-80) + var(--area-space-4)) minmax(0, 1fr); }
+  .area-card--small { --_card-columns: calc(var(--area-space-80) + var(--area-space-4)) minmax(0, 1fr); }
   .area-card--vertical:has(> .area-card__media) { grid-template-rows: minmax(calc(var(--area-space-64) * 2), 1fr) auto; }
   .area-card--immersive {
     --_card-padding: 0px;
@@ -64,27 +64,27 @@
     align-self: end;
     padding: calc(var(--area-space-16) - var(--area-border-width));
   }
-  .area-card--thumbnail > .area-card__content { justify-content: start; padding-inline-start: 0; }
+  .area-card--small > .area-card__content { justify-content: start; padding-inline-start: 0; }
   .area-card__content {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: var(--area-space-8);
+    gap: var(--area-space-4);
     min-inline-size: 0;
     padding: var(--area-space-8);
   }
   .area-card__title {
     margin: 0;
-    font-size: var(--area-size-20);
-    line-height: var(--area-leading-26);
+    font-size: var(--area-size-16);
+    line-height: var(--area-leading-24);
     font-weight: var(--area-weight-strong);
     overflow-wrap: anywhere;
   }
   .area-card__description {
     margin: 0;
     color: var(--area-fg-muted);
-    font-size: var(--area-size-16);
-    line-height: var(--area-leading-24);
+    font-size: var(--area-size-14);
+    line-height: var(--area-leading-20);
     overflow-wrap: anywhere;
   }
   .area-card__media {
@@ -101,26 +101,22 @@
     block-size: 100%;
     object-fit: cover;
   }
-  .area-card--thumbnail > .area-card__media { aspect-ratio: 1; }
-  .area-card--horizontal > .area-card__media { min-block-size: calc(var(--area-space-64) * 2); }
+  .area-card--small > .area-card__media { aspect-ratio: 1; }
+  .area-card--wide > .area-card__media { min-block-size: calc(var(--area-space-64) * 2); }
   .area-card__footer {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: var(--area-gap-md);
     margin-block-start: auto;
     padding-block-start: var(--area-space-8);
   }
-  .area-card__footer > .area-button { flex: 1 1 0; min-inline-size: 0; }
-  .area-card__list { display: grid; gap: var(--area-space-12); list-style: none; padding: 0; margin: 0; min-inline-size: 0; }
-  .area-card__list-item { display: grid; grid-template-columns: var(--area-space-48) minmax(0, 1fr); gap: var(--area-space-12); min-inline-size: 0; }
-  .area-card__list-item .area-card__content { padding: 0; gap: var(--area-space-4); }
-  .area-card__list-item .area-card__title { font-size: var(--area-size-16); line-height: var(--area-leading-24); }
-  .area-card__list-item .area-card__media { aspect-ratio: 1; border-radius: var(--area-space-12); align-self: start; }
-  .area-card__carousel { grid-auto-flow: column; grid-auto-columns: max(var(--area-space-96), calc((100% - var(--area-space-12) * 3) / 4)); overflow-x: auto; scroll-snap-type: x mandatory; }
-  .area-card__carousel > .area-card__list-item { display: flex; flex-direction: column; gap: var(--area-space-8); scroll-snap-align: start; }
-  .area-card__carousel .area-card__media { inline-size: 100%; }
+  .area-card__footer > .area-button { flex: 0 0 auto; min-inline-size: 0; }
+  .area-card__carousel { display: grid; grid-auto-flow: column; grid-auto-columns: max(var(--area-space-96), calc((100% - var(--area-space-12) * 3) / 4)); gap: var(--area-space-12); list-style: none; padding: 0; margin: 0; min-inline-size: 0; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .area-card__carousel > li { display: flex; flex-direction: column; gap: var(--area-space-8); min-inline-size: 0; scroll-snap-align: start; }
+  .area-card__carousel > li > .area-card__media { inline-size: 100%; aspect-ratio: 1; border-radius: var(--area-space-12); align-self: start; }
+  .area-card__carousel > li > .area-card__content { padding: 0; gap: var(--area-space-4); }
   .area-card__carousel:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
@@ -298,15 +294,28 @@
   }
 
   /* --- Dialog ------------------------------------------------------------- */
+  .area-dialog__modal {
+    margin: auto;
+    padding: 0;
+    border: 0;
+    max-inline-size: calc(100vw - var(--area-space-32));
+    max-block-size: calc(100vh - var(--area-space-32));
+    background: transparent;
+    overflow: visible;
+  }
+  .area-dialog__modal::backdrop { background: var(--area-bg-overlay); }
   .area-dialog {
-    inline-size: min(calc(100vw - var(--area-space-32)), 480px);
+    text-align: start;
+    inline-size: min(calc(100vw - var(--area-space-32)), calc(var(--area-space-96) * 5));
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     max-block-size: calc(100vh - var(--area-space-64));
     padding: 0;
     border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    box-shadow: var(--area-shadow-4);
+    box-shadow: var(--area-shadow-2);
     overflow: hidden;
   }
 
@@ -325,22 +334,22 @@
   }
 
   .area-dialog__title {
-    font-size: var(--area-title-xs-size);
-    line-height: var(--area-title-xs-leading);
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
     letter-spacing: var(--area-title-xs-tracking);
     font-weight: var(--area-weight-strong);
   }
 
   .area-dialog__description {
     margin-block-start: var(--area-space-4);
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     color: var(--area-fg-muted);
   }
 
   /* flex-basis 0 with overflow hidden is what lets the body scroll inside a flex column. */
   .area-dialog__body {
-    flex: 1 1 0;
+    flex: 1 1 auto;
     padding-inline: var(--area-space-16);
     overflow-y: auto;
   }
@@ -372,100 +381,13 @@
   .area-menu {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
-  }
-
-  /*
-   * Rendered in place rather than floating: a sidebar, a settings list, a table of
-   * contents. Sheds the surface, the outline and the elevation, because those exist to
-   * separate a floating panel from the page -- inline, they read as a stray card.
-   * Item geometry is untouched, so a menu item is the same control either way.
-   */
-  .area-menu--inline {
-    --_inset: 0px;
+    /* A small break lets adjacent hover plates remain distinct without turning the
+     * panel into a loose stack. */
     gap: var(--area-space-2);
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
-    min-inline-size: 0;
-  }
-
-  /*
-   * With no panel around them, items are not nested inside anything, so the concentric
-   * rule has nothing to subtract from and the row radius applies directly. It is rounder
-   * than the small radius these used to take, which made a full-width backplate read as a
-   * rectangle with its corners filed off rather than as a soft row.
-   *
-   * A row is also a tier shorter than a menu item. An inline menu is a list read down --
-   * navigation, an outline -- where a column of full-height rows wastes the height it takes;
-   * a floating menu is a pointer target and keeps the medium tier.
-   */
-  .area-menu--inline .area-menu__item,
-  .area-menu--inline .area-menu__label {
-    block-size: var(--area-control-sm);
-    border-radius: min(
-      var(--area-radius-row),
-      calc(var(--area-control-sm) * var(--area-radius-cap))
-    );
-  }
-
-  /*
-   * The marker variant: selection shown as a rail beside the label rather than a plate
-   * under it.
-   *
-   * For a list that is read down rather than clicked across -- a table of contents, an
-   * outline -- where a filled plate on every visited item turns the column into a stack of
-   * blocks. Fluent's documentation nav is the reference: a short coloured rail, the label
-   * at full strength and strong weight, everything else one step back.
-   *
-   * The rail is sized to the *ink*, not to the row. `1cap` is the font's own cap height, so
-   * a 14px label gets a 10px cap and a 14px rail -- 2px of overhang at each end, which is
-   * enough to read as deliberate rather than as a rail that fell short of its own text. It
-   * tracks any type scale without a magic number. The fallback above it covers browsers
-   * without `cap` units, where a fixed 14px is right for the default scale.
-   *
-   * Its width is 3px, which is not on the spacing ramp: at 2px the rail reads as a hairline
-   * and at 4px it competes with the text. Derived rather than hardcoded, per the rule for
-   * values the ramps do not carry.
-   *
-   * It is inset from the row's leading edge rather than flush with it, which puts it nearer
-   * the label than the boundary. Flush, it read as an edge treatment on the row; inset, it
-   * reads as a mark on the text -- which is what it is.
-   */
-  .area-menu--marker .area-menu__item {
-    position: relative;
-    /*
-     * Wider than the default inline padding, because the rail is sitting inside it: at the
-     * standard 12 the label began 3px after the rail ended, close enough to look attached
-     * to the letterforms rather than set beside them.
-     */
-    padding-inline-start: var(--area-space-16);
-    color: var(--area-fg-muted);
-  }
-
-  .area-menu--marker .area-menu__item[data-selected] {
-    background-color: transparent;
-    color: var(--area-fg-default);
-    font-weight: var(--area-weight-strong);
-  }
-
-  .area-menu--marker .area-menu__item[data-selected]::before {
-    content: "";
-    position: absolute;
-    inset-inline-start: var(--area-space-6);
-    inset-block-start: 50%;
-    translate: 0 -50%;
-    inline-size: calc(var(--area-space-2) + var(--area-border-width));
-    block-size: var(--area-space-16);
-    block-size: calc(1cap + var(--area-space-4));
-    border-radius: var(--area-radius-full);
-    background-color: var(--area-accent-solid);
-  }
-
-  .area-menu--inline .area-menu__separator {
-    margin-inline: 0;
+    min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
+    /* Menus sit close to their trigger, so a lower elevation keeps them present
+     * without the hard card-like edge of the general popover shadow. */
+    box-shadow: var(--area-shadow-2);
   }
 
   /*
@@ -496,6 +418,11 @@
     text-align: start;
     cursor: pointer;
     transition: var(--area-transition);
+  }
+
+  /* The extra 2px visually aligns a stroked icon's ink with the section label. */
+  .area-menu__item:has(> .area-menu__icon) {
+    padding-inline-start: var(--area-space-10);
   }
 
   .area-menu__item:hover:not([data-disabled]),
@@ -572,7 +499,9 @@
 
   .area-menu__separator {
     block-size: 1px;
-    margin-block: var(--area-space-4);
+    /* The line remains a hairline; its surrounding space is the separator's
+     * actual affordance, making distinct groups easy to scan. */
+    margin-block: var(--area-space-8);
     margin-inline-start: var(--area-space-8);
     margin-inline-end: var(--area-space-8);
     background-color: var(--area-border-decorative);
@@ -586,21 +515,128 @@
     font-family: var(--area-font-mono);
   }
 
+  /* A searchable menu is one floating surface: the input sits above a compact menu,
+   * rather than becoming an invalid child of the menu's `role="menu"` element. */
+  .area-menu__search-surface {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-4);
+    min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
+    padding: var(--area-space-4);
+    border: var(--area-border-width) solid var(--area-border-faint);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-2);
+  }
+
+  .area-menu__search-surface > .area-menu {
+    min-inline-size: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
   /* --- Tooltip ------------------------------------------------------------ */
   /*
    * Inverted rather than tinted, so it reads as an annotation on the interface rather
    * than as another surface within it.
    */
   .area-tooltip {
-    padding: var(--area-space-6) var(--area-space-8);
-    border-radius: var(--area-radius-small);
+    --_tooltip-inset-block: var(--area-space-4);
+    --_tooltip-inset-inline: var(--area-space-8);
+    --_tooltip-inset-inline-end: var(--_tooltip-inset-inline);
+    --_tooltip-radius: var(--area-radius-row);
+
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    padding-block: var(--_tooltip-inset-block);
+    padding-inline-start: var(--_tooltip-inset-inline);
+    padding-inline-end: var(--_tooltip-inset-inline-end);
+    border-radius: min(var(--_tooltip-radius), calc((var(--area-ui-leading) + var(--_tooltip-inset-block) * 2) * var(--area-radius-cap)));
     background-color: var(--area-bg-inverse);
     color: var(--area-fg-on-inverse);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
-    max-inline-size: 260px;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    max-inline-size: calc(var(--area-space-96) * 3);
     box-shadow: var(--area-shadow-2);
   }
+
+  /* Rich content stays above its arrow and is allowed to receive focus as a compact popover. */
+  .area-tooltip--interactive {
+    --_tooltip-inset-block: var(--area-space-8);
+    z-index: 0;
+  }
+
+  /* The nested keycap uses the outer radius less its actual vertical inset. Its 20px
+   * box is vertically centred by construction: (28px - 20px) / 2 = 4px. */
+  .area-tooltip > .area-kbd {
+    border-radius: max(0px, calc(var(--_tooltip-radius) - var(--_tooltip-inset-block)));
+  }
+  /* A terminal Kbd's end inset equals its measured 4px block inset. The label keeps
+   * its larger reading inset on the leading side. */
+  .area-tooltip:has(> .area-kbd:last-child) {
+    --_tooltip-inset-inline-end: var(--_tooltip-inset-block);
+  }
+
+  .area-tooltip--arrow::after {
+    content: "";
+    position: absolute;
+    inline-size: var(--area-space-10);
+    block-size: var(--area-space-10);
+    /* A lightly rounded diamond reads as a pointer rather than the circular nub a
+     * full keycap radius would create at this 10px geometry. */
+    border-radius: var(--area-space-2);
+    background: inherit;
+    transform: rotate(45deg);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .area-tooltip--arrow > .area-tooltip__content,
+  .area-tooltip--arrow > .area-tooltip__actions,
+  .area-tooltip--arrow > .area-tooltip__media {
+    position: relative;
+    z-index: 1;
+  }
+  /* The 1px centring correction is mask geometry: 10px pointer / 2 minus the 4px token. */
+  .area-tooltip--top::after { inset-inline-start: calc(50% - var(--area-space-4) - 1px); inset-block-end: calc(var(--area-space-8) * -1); }
+  .area-tooltip--right::after { inset-inline-start: calc(var(--area-space-4) * -1); inset-block-start: calc(50% - var(--area-space-4) - 1px); }
+  .area-tooltip--bottom::after { inset-inline-start: calc(50% - var(--area-space-4) - 1px); inset-block-start: calc(var(--area-space-8) * -1); }
+  .area-tooltip--left::after { inset-inline-end: calc(var(--area-space-4) * -1); inset-block-start: calc(50% - var(--area-space-4) - 1px); }
+
+  .area-tooltip:has(> .area-tooltip__media) {
+    --_tooltip-inset-block: var(--area-space-8);
+    --_tooltip-radius: var(--area-radius-container);
+
+    display: grid;
+    align-items: stretch;
+    gap: var(--area-space-8);
+    max-inline-size: calc(var(--area-space-96) * 2);
+  }
+  .area-tooltip__media {
+    inline-size: 100%;
+    aspect-ratio: 1;
+    border-radius: max(0px, calc(var(--_tooltip-radius) - var(--_tooltip-inset-block)));
+    background: linear-gradient(180deg, var(--area-blue-400), var(--area-neutral-25));
+  }
+  .area-tooltip__content {
+    display: grid;
+    gap: var(--area-space-2);
+  }
+  .area-tooltip__content > strong { font-weight: var(--area-weight-strong); }
+  .area-tooltip:has(> .area-tooltip__actions) {
+    display: grid;
+    align-items: stretch;
+  }
+  .area-tooltip__actions {
+    display: grid;
+    gap: var(--area-space-8);
+    inline-size: 100%;
+  }
+  .area-tooltip__actions > .area-button { inline-size: 100%; }
 
   /* --- Toast -------------------------------------------------------------- */
   .area-toast {

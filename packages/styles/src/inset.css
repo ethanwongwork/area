@@ -55,9 +55,6 @@
    * follows the group column, not each row's cap-height-centred text inset. */
   .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-icon); }
   .area-nav__item, .area-menu__item { gap: var(--area-gap-md); }
-  .area-menu--inline .area-menu__item, .area-menu--inline .area-menu__label {
-    --_box-height: var(--area-control-sm);
-  }
   .area-tabs__tab {
     --_height: var(--area-control-lg);
     --_box-border: 0px;
@@ -98,7 +95,7 @@
   /* A shortcut is a nested backplate. Reserve its actual outer box so the space after it
    * equals the vertical space above and below it in the Button. */
   .area-button:has(> .area-button__label > .area-kbd:last-child) {
-    --_box-end: var(--area-space-24);
+    --_box-end: var(--area-space-20);
   }
   .area-button:has(> .area-button__label > .area-kbd--small:last-child) {
     --_box-end: var(--area-space-20);
@@ -139,8 +136,8 @@
   .area-nav__item:has(> .area-nav__trailing > svg:only-child) { --_box-end: var(--area-icon-md); }
   .area-nav__trailing > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex-shrink: 0; }
 
-  /* The marker is a separate selection rail, with room reserved ahead of the label. */
-  .area-menu--marker .area-menu__item { padding-inline-start: var(--area-space-16); }
+  /* The marker is a separate navigation rail, with room reserved ahead of the label. */
+  .area-nav--marker .area-nav__item { padding-inline-start: var(--area-space-16); }
 
   /* Trim only text slots, never SVGs or containers holding controls. Symmetric
    * safety padding lets accents/descenders paint even in an ellipsized label. */
@@ -161,7 +158,12 @@
 
   /* Content-sized plates use equal insets; text trim removes outer leading but
    * preserves leading between lines. No fixed height or clipping of prose. */
-  .area-tooltip { padding: var(--area-space-8); text-box: trim-both cap alphabetic; }
+  .area-tooltip {
+    padding-block: var(--_tooltip-inset-block);
+    padding-inline-start: var(--_tooltip-inset-inline);
+    padding-inline-end: var(--_tooltip-inset-inline-end);
+    text-box: trim-both cap alphabetic;
+  }
   .area-dialog__title,
   .area-dialog__description, .area-panel__title, .area-panel__heading,
   .area-toast > div {
@@ -179,6 +181,7 @@
   }
   @supports (text-box: trim-both cap alphabetic) {
     .area-checkbox, .area-radio { align-items: flex-start; }
+    .area-radio__control { margin-block-start: 0; }
     .area-choice-label {
       font-size: var(--_text);
       line-height: var(--_leading);

@@ -101,21 +101,38 @@
 
   /* --- Separator ---------------------------------------------------------- */
   .area-separator {
+    --_separator-gap: 0px;
     border: 0;
     background-color: var(--area-border-decorative);
     flex-shrink: 0;
   }
 
   .area-separator--horizontal {
+    margin-block: var(--_separator-gap);
     inline-size: 100%;
     block-size: 1px;
   }
 
   .area-separator--vertical {
+    margin-inline: var(--_separator-gap);
     inline-size: 1px;
-    block-size: 100%;
+    block-size: auto;
     align-self: stretch;
   }
+
+  .area-separator--inset.area-separator--horizontal {
+    inline-size: auto;
+    align-self: stretch;
+    margin-inline: var(--area-space-16);
+  }
+
+  .area-separator--inset.area-separator--vertical {
+    block-size: auto;
+    margin-block: var(--area-separator-inset, var(--area-space-8));
+  }
+
+  .area-separator--none { --_separator-gap: 0px; }
+  .area-separator--normal { --_separator-gap: var(--area-space-8); }
 
   /* --- Skeleton ----------------------------------------------------------- */
   /*
@@ -145,11 +162,13 @@
    * square.
    */
   .area-skeleton--text {
-    block-size: var(--area-text-md-leading);
+    block-size: 1em;
     border-radius: var(--area-radius-small);
   }
 
   .area-skeleton--circle { border-radius: var(--area-radius-full); }
+  .area-skeleton--rectangle { border-radius: 0; }
+  .area-skeleton--rounded { border-radius: var(--area-radius-container); }
 
   @keyframes area-shimmer {
     from { background-position: 200% 0; }
@@ -170,7 +189,7 @@
     background: conic-gradient(var(--_indicator) 0 25%, var(--area-bg-component-active) 25% 100%);
     -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
     mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
-    animation: area-spin 0.7s linear infinite;
+    animation: area-spin 2s linear infinite;
   }
 
   .area-spinner::after {
@@ -185,9 +204,9 @@
     box-shadow: calc((var(--_size) - var(--_stroke)) / 2) calc((var(--_size) - var(--_stroke)) / 2) 0 var(--_indicator);
   }
 
-  .area-spinner--sm { --_size: var(--area-icon-sm); }
-  .area-spinner--md { --_size: var(--area-icon-md); }
-  .area-spinner--lg { --_size: var(--area-icon-lg); }
+  .area-spinner--sm { --_size: var(--area-space-12); }
+  .area-spinner--md { --_size: var(--area-space-16); }
+  .area-spinner--lg { --_size: var(--area-space-24); }
   .area-spinner--neutral { --_indicator: var(--area-neutral-solid); }
   .area-spinner--accent { --_indicator: var(--area-accent-solid); }
 
@@ -197,8 +216,10 @@
 
   /* --- Progress ----------------------------------------------------------- */
   .area-progress {
+    --_progress-size: var(--area-space-6);
+    --_progress-fill: var(--area-neutral-solid);
     inline-size: 100%;
-    block-size: var(--area-space-6);
+    block-size: var(--_progress-size);
     border-radius: var(--area-radius-full);
     background-color: var(--area-bg-component-active);
     overflow: hidden;
@@ -207,9 +228,15 @@
   .area-progress__bar {
     block-size: 100%;
     border-radius: inherit;
-    background-color: var(--area-accent-solid);
+    background-color: var(--_progress-fill);
     transition: inline-size var(--area-duration-slow) var(--area-ease-out);
   }
+
+  .area-progress--sm { --_progress-size: var(--area-space-4); }
+  .area-progress--md { --_progress-size: var(--area-space-6); }
+  .area-progress--lg { --_progress-size: var(--area-space-8); }
+  .area-progress--accent { --_progress-fill: var(--area-accent-solid); }
+  .area-progress--neutral { --_progress-fill: var(--area-neutral-solid); }
 
   /*
    * Indeterminate is a travelling segment rather than a full-width pulse, so it cannot
@@ -217,7 +244,7 @@
    */
   .area-progress[data-indeterminate] .area-progress__bar {
     inline-size: 35%;
-    animation: area-progress-indeterminate 1.1s var(--area-ease-in-out) infinite;
+    animation: area-progress-indeterminate 1.8s linear infinite;
   }
 
   @keyframes area-progress-indeterminate {

@@ -18,6 +18,8 @@ export type SwitchProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "
 export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch({
   size,
   labelPosition,
+  track,
+  tone,
   fullWidth,
   label,
   description,
@@ -30,6 +32,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
   onChange,
   onClick,
   className,
+  style,
   "data-hover": hover,
   "data-active": active,
   "data-focus-visible": focus,
@@ -55,7 +58,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
 
   return (
     <label
-      className={switchVariants({ size, labelPosition, fullWidth }, className)}
+      className={switchVariants({ size, labelPosition, track, tone, fullWidth }, className)}
+      style={style}
       dir={rest.dir}
       data-disabled={disabled ? "" : undefined}
       data-read-only={readOnly ? "" : undefined}
@@ -95,7 +99,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
       <span className="area-switch__track" aria-hidden="true">
         <span className="area-switch__thumb" />
       </span>
-      {loading ? <span className="area-switch__loading"><Spinner size="sm" /></span> : null}
+      {loading ? <span className="area-switch__loading"><Spinner /></span> : null}
       {(label || description) ? (
         <span className="area-switch__text">
           {label ? <span id={`${id}-label`} className="area-switch__label">{label}</span> : null}

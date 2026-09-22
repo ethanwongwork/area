@@ -577,6 +577,13 @@ export const DOCS_CSS = `
   .docs-visual-gallery__tile[data-audit="unrefined"] .docs-visual-gallery__tile-title {
     color: var(--area-red-500);
   }
+  .docs-audit-label[data-audit="review"],
+  .docs-visual-gallery__tile[data-audit="review"] .docs-visual-gallery__tile-title {
+    color: var(--area-fg-caution);
+  }
+  .docs-visual-gallery__tile[data-audit="review"] {
+    border-color: var(--area-caution-border);
+  }
   .docs-audit-label {
     display: inline-block;
     padding: var(--area-space-2) var(--area-space-4);

@@ -133,6 +133,30 @@
     color: var(--area-fg-default);
   }
 
+  /* A marker is navigation's quiet current-location treatment. Unlike a menu's action
+   * highlight, it persists as the reader moves through an outline or sidebar. */
+  .area-nav--marker .area-nav__item {
+    position: relative;
+    padding-inline-start: var(--area-space-16);
+  }
+
+  .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"]) {
+    background-color: transparent;
+    font-weight: var(--area-weight-strong);
+  }
+
+  .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"])::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: var(--area-space-6);
+    inset-block-start: 50%;
+    translate: 0 -50%;
+    inline-size: calc(var(--area-space-2) + var(--area-border-width));
+    block-size: calc(1cap + var(--area-space-4));
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-accent-solid);
+  }
+
   .area-nav__item:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);

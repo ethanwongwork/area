@@ -58,8 +58,8 @@ unpublished ESM workspaces; publishing them is separate work.
 
 **Badge, Button, Checkbox, Field, Input, Slider, Card, Avatar, Alert and Chip** are currently owner-confirmed
 complete. The gallery's
-[completion registry](apps/docs/src/component-status.mjs) is authoritative; everything
-else is unrefined even where an older report called it complete.
+[completion registry](apps/docs/src/component-status.mjs) is authoritative. Refined
+families awaiting approval are yellow (In review); untouched families remain unrefined.
 
 [Archived research](archive/README.md) remains available when a specific question needs
 it. It is not required reading or an implementation plan. Session notes live in

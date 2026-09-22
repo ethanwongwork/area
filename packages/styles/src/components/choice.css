@@ -201,6 +201,8 @@
     color: var(--area-fg-default);
   }
 
+  .area-radio-group__legend { font-weight: var(--area-weight-regular); }
+
   .area-radio-group__description,
   .area-radio-group__validation,
   .area-checkbox-group__description,
@@ -303,4 +305,9 @@
     --_leading: var(--area-control-lg-leading);
     --_gap: var(--area-gap-lg);
   }
+
+  .area-radio { min-block-size: var(--area-space-24); }
+  .area-radio--sm { --_size: var(--area-space-12); }
+  .area-radio--md { --_size: var(--area-space-16); }
+  .area-radio--lg { --_size: var(--area-space-20); }
 }

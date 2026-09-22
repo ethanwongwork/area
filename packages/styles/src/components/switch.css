@@ -1,15 +1,17 @@
 /* Switch: a pill-shaped glyph with an independent native hit target. */
 @layer area.components {
   .area-switch {
-    --_w: var(--area-space-40);
+    --_width-adjust: var(--area-space-4);
+    --_w: calc(var(--area-space-40) - var(--_width-adjust));
     --_h: var(--area-space-20);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_inset: var(--area-space-2);
     --_thumb: calc(var(--_h) - var(--_inset) * 2);
+    --_thumb-width: var(--_thumb);
     --_gap: var(--area-space-8);
-    --_on: var(--area-accent-solid);
-    --_on-hover: var(--area-accent-solid-hover);
+    --_on: var(--area-neutral-solid);
+    --_on-hover: var(--area-neutral-solid-hover);
     --_off: var(--area-fill-toggle);
     --_off-hover: var(--area-fill-toggle-hover);
     --_edge: var(--area-edge-control);
@@ -28,9 +30,14 @@
     cursor: pointer;
   }
 
-  .area-switch--sm { --_w: var(--area-space-32); --_h: var(--area-space-16); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-switch--md { --_w: var(--area-space-40); --_h: var(--area-space-20); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-switch--lg { --_w: var(--area-space-48); --_h: var(--area-space-24); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-switch--sm { --_w: calc(var(--area-space-32) - var(--_width-adjust)); --_h: var(--area-space-16); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-switch--md { --_w: calc(var(--area-space-40) - var(--_width-adjust)); --_h: var(--area-space-20); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-switch--lg { --_w: calc(var(--area-space-48) - var(--_width-adjust)); --_h: var(--area-space-24); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-switch--short { --_width-adjust: var(--area-space-4); }
+  .area-switch--long { --_width-adjust: 0px; --_thumb-width: calc(var(--_thumb) + var(--area-space-8)); --_w: calc(var(--_h) * 2 + var(--area-space-4)); }
+  .area-switch--neutral { --_on: var(--area-neutral-solid); --_on-hover: var(--area-neutral-solid-hover); }
+  .area-switch--accent { --_on: var(--area-accent-solid); --_on-hover: var(--area-accent-solid-hover); }
+  .area-switch--custom { --_on: var(--area-switch-color, var(--area-neutral-solid)); --_on-hover: var(--area-switch-color-hover, var(--area-switch-color, var(--area-neutral-solid-hover))); }
 
   .area-switch__control {
     appearance: none;
@@ -67,7 +74,7 @@
     box-sizing: border-box;
     inset-block-start: calc(var(--_inset) - var(--area-stroke-width));
     inset-inline-start: calc(var(--_inset) - var(--area-stroke-width));
-    inline-size: var(--_thumb);
+    inline-size: var(--_thumb-width);
     block-size: var(--_thumb);
     border-radius: var(--area-radius-full);
     background: var(--area-bg-surface);
@@ -76,11 +83,11 @@
   }
 
   .area-switch__control:checked ~ .area-switch__track { background: var(--_on); border-color: var(--_on); }
-  .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb)); }
+  .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width)); }
   .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); }
   .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); }
-  .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__thumb { inline-size: calc(var(--_thumb) + var(--area-space-2)); }
-  .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb) - var(--area-space-2)); }
+  .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__thumb { inline-size: calc(var(--_thumb-width) + var(--area-space-2)); }
+  .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width) - var(--area-space-2)); }
   .area-switch__control:focus-visible ~ .area-switch__track,
   .area-switch[data-focus-visible] .area-switch__track { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 

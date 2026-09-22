@@ -8,11 +8,11 @@
  */
 @layer area.components {
   .area-kbd {
-    --_min: var(--area-space-24);
-    --_height: var(--area-space-24);
+    --_min: var(--area-space-20);
+    --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-border-width) + var(--area-border-width));
     --_padding: var(--area-space-4);
     --_font: var(--area-text-xs-size);
-    --_leading: var(--area-size-14);
+    --_leading: var(--area-size-10);
 
     display: inline-flex;
     align-items: center;
@@ -23,7 +23,7 @@
     padding: var(--_padding);
 
     border: var(--area-stroke-width) solid var(--area-border-subtle);
-    border-radius: var(--area-radius-small);
+    border-radius: min(var(--area-radius-small), calc(var(--_height) * var(--area-radius-cap)));
     background-color: var(--area-bg-component-hover);
     color: var(--area-fg-default);
 
@@ -47,19 +47,19 @@
   }
 
   .area-kbd--normal {
-    --_min: var(--area-space-24);
-    --_height: var(--area-space-24);
+    --_min: var(--area-space-20);
+    --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-border-width) + var(--area-border-width));
     --_padding: var(--area-space-4);
     --_font: var(--area-text-xs-size);
-    --_leading: var(--area-size-14);
+    --_leading: var(--area-size-10);
   }
 
   .area-kbd--small {
-    --_min: var(--area-space-20);
-    --_height: var(--area-space-20);
+    --_min: var(--area-space-16);
+    --_height: calc(var(--area-size-10) + var(--area-space-4) + var(--area-border-width) + var(--area-border-width));
     --_padding: var(--area-space-2);
     --_font: var(--area-size-11);
-    --_leading: var(--area-size-14);
+    --_leading: var(--area-size-10);
   }
 
   /* A sequence contains separate chord components; each Kbd is one chord. */
@@ -85,10 +85,25 @@
     color: var(--area-fg-muted);
   }
 
-  /* On colour, the keycap is a translucent plate rather than a nested outlined control. */
-  .area-kbd--on-color {
+  /* On a strong fill, the keycap is a translucent plate rather than a nested outlined control. */
+  .area-kbd--on-color,
+  .area-kbd--on-emphasis {
     background-color: color-mix(in srgb, currentColor 14%, transparent);
     border-color: transparent;
+    color: inherit;
+  }
+
+  /* A destructive menu row is itself a colour treatment. Keep its shortcut on
+   * the same translucent backplate instead of falling back to the generic
+   * unboxed menu shortcut. */
+  .area-menu__item--danger .area-kbd--on-color {
+    background-color: color-mix(in srgb, currentColor 14%, transparent);
+    border-color: transparent;
+    color: inherit;
+  }
+
+  .area-menu__item--danger .area-menu__shortcut {
+    /* The shortcut is an explicit destructive affordance, not muted metadata. */
     color: inherit;
   }
 
@@ -96,8 +111,8 @@
    * lightens in dark mode. Neutral solid instead borrows its own foreground so its keycap
    * cannot disappear into the near-black/near-white action fill. */
   .area-button--solid:not(.area-button--neutral) .area-kbd,
-  .area-menu__item--danger:hover .area-kbd,
-  .area-menu__item--danger[data-highlighted] .area-kbd {
+  .area-menu__item--danger:hover .area-kbd:not(.area-kbd--on-color),
+  .area-menu__item--danger[data-highlighted] .area-kbd:not(.area-kbd--on-color) {
     background-color: color-mix(in srgb, var(--area-bg-inverse) 16%, transparent);
     border-color: transparent;
     color: inherit;

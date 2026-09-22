@@ -129,11 +129,11 @@ export const TooltipDefault = () => <Tooltip>Copy to clipboard</Tooltip>;
 
 export const MenuDefault = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="small" quiet />}>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />}>
       <span className="area-menu__icon"><SearchIcon /></span>
       <span className="area-menu__text">Search</span>
     </MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="small" quiet />}>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />}>
       <span className="area-menu__icon"><PlusIcon /></span>
       <span className="area-menu__text">New file</span>
     </MenuItem>
@@ -146,7 +146,7 @@ export const MenuDefault = () => (
       <span className="area-menu__icon"><DotsFourIcon /></span>
       <span className="area-menu__text">More</span>
     </MenuItem>
-    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} size="small" quiet />}>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />}>
       <span className="area-menu__icon"><DismissIcon /></span>
       <span className="area-menu__text">Delete</span>
     </MenuItem>
@@ -238,16 +238,22 @@ export const KbdSizes = () => (
 
 export const KbdButton = () => (
   <>
-    <Button variant="outline" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} size="small" /></Button>
-    <Button tone="neutral" aria-keyshortcuts="Meta+Enter">Save <Kbd keys={["cmd", "enter"]} size="small" /></Button>
-    <Button tone="success" aria-keyshortcuts="Meta+Enter">Submit <Kbd keys={["cmd", "enter"]} size="small" /></Button>
+    <Button variant="outline" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} /></Button>
+    <Button tone="neutral" aria-keyshortcuts="Meta+Enter">Save <Kbd keys={["cmd", "enter"]} /></Button>
+    <Button tone="success" aria-keyshortcuts="Meta+Enter">Submit <Kbd keys={["cmd", "enter"]} /></Button>
   </>
+);
+
+export const KbdOnEmphasis = () => (
+  <Tooltip>
+    Toggle sidebar <Kbd appearance="on-emphasis" keys={["cmd", "B"]} />
+  </Tooltip>
 );
 
 export const KbdSequence = () => (
   <KbdGroup>
-    <Kbd keys={["G"]} />
-    <Kbd keys={["I"]} />
+    <Kbd keys={["cmd", "K"]} />
+    <Kbd keys={["P"]} />
   </KbdGroup>
 );
 
@@ -264,16 +270,16 @@ export const KbdKeyMap = () => (
 
 export const MenuWithShortcuts = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="small" quiet />}>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />}>
       <span className="area-menu__icon"><SearchIcon /></span>
       <span className="area-menu__text">Search</span>
     </MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="small" quiet />}>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />}>
       <span className="area-menu__icon"><PlusIcon /></span>
       <span className="area-menu__text">New file</span>
     </MenuItem>
     <div className="area-menu__separator" />
-    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} size="small" quiet />}>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />}>
       <span className="area-menu__icon"><DismissIcon /></span>
       <span className="area-menu__text">Delete</span>
     </MenuItem>

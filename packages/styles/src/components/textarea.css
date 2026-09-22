@@ -112,7 +112,10 @@
 
   .area-textarea:disabled::placeholder { color: var(--area-fg-disabled); }
 
-  .area-textarea--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-textarea--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-textarea--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  /* Multiline fields use a tighter content inset than a one-line control: the text's
+     own leading already supplies vertical breathing room. Each tier remains visible when
+     a fixed row count is used in a compact composition. */
+  .area-textarea--sm { --_height: var(--area-control-sm); --_gutter: var(--area-space-6); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-textarea--md { --_height: var(--area-control-md); --_gutter: var(--area-space-8); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-textarea--lg { --_height: var(--area-control-lg); --_gutter: var(--area-space-12); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

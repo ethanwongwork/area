@@ -3,10 +3,8 @@
  *
  * Inline code, and the block form with its toolbar.
  *
- * No toolbar. One action -- Copy -- rides at the top right of the code itself, aligned to the
- * first line rather than to the block, so it reads as belonging to the code and costs no
- * row. A block that named a file and stacked a bar above it spent a whole row on a label
- * that said nothing the code did not.
+ * Optional file headers keep actions outside the code. Without a header, actions
+ * sit at the top right with reserved inline space.
  *
  * Embedded in an example, the block takes a rule along its top edge. That is the one line
  * worth drawing: above it is a rendered component, below it the source, and they are two
@@ -17,6 +15,18 @@
  * syntax palette is exactly the kind of thing that ships unreadable in dark mode.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  .area-code-block__header {
+    text-align: start;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--area-space-12);
+    padding: var(--area-space-8) var(--area-space-16);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  .area-code-block__header + .area-code-block__pre { padding-inline-end: var(--area-space-16); }
   /*
    * Inline code is the token badge without a swatch.
    *
@@ -39,7 +49,10 @@
     padding: var(--area-space-2) calc(var(--area-space-6) - var(--area-border-width));
     margin-inline: var(--area-space-2);
     border: var(--area-border-width) solid var(--_code-edge);
-    border-radius: var(--area-radius-small);
+    border-radius: min(
+      var(--area-radius-small),
+      calc((1em + var(--area-space-10)) * var(--area-radius-cap))
+    );
     background-color: var(--_code-bg);
     /* Code is an inline reference, never an elevated badge. Make this invariant explicit
        so it cannot inherit a presentation shadow from a future documentation container. */
@@ -60,9 +73,12 @@
      */
     font-size: 0.875em;
     line-height: 1.35;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   .area-code-block {
+    text-align: start;
     position: relative;
     display: flex;
     flex-direction: column;

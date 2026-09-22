@@ -189,9 +189,9 @@ export const SelectDisabled = () => <Select disabled aria-label="Managed plan" d
 export const SelectFullWidth = () => <div style={{ inlineSize: 320 }}><Select fullWidth aria-label="Full-width region" defaultValue="us"><option value="us">United States</option><option value="eu">European Union</option></Select></div>;
 
 export const SelectGroups = () => (
-  <Select aria-label="Deployment region" defaultValue="us-west">
-    <optgroup label="North America"><option value="us-west">US West</option><option value="us-east">US East</option></optgroup>
-    <optgroup label="Europe"><option value="eu-west">EU West</option><option value="eu-central">EU Central</option></optgroup>
+  <Select aria-label="Option groups" defaultValue="one">
+    <optgroup label="Group one"><option value="one">Option one</option><option value="two">Option two</option></optgroup>
+    <optgroup label="Group two"><option value="three">Option three</option><option value="four">Option four</option></optgroup>
   </Select>
 );
 
