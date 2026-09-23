@@ -36,7 +36,11 @@ export const PRACTICES = {
   ],
   "code-block": [
     `Pass plain text through code. The html prop inserts pre-highlighted markup directly; only supply trusted or sanitized HTML.`,
-    `Actions belong in the actions slot at the upper right. The component does not implement copying; the consumer owns that behavior.`,
+    `Four syntax hues do the work — red for keywords, purple for tags, blue for attributes, and the accent for strings — each at its scale's measured vivid rung against the code block's own ground. Structure stays neutral, because a hue on the punctuation that carries the nesting reads as confetti.`,
+    `Copy is built in and on by default. It copies the code without the line numbers, swaps its glyph and announces the result; pass copyable={false} when a host already owns that action.`,
+    `Number the lines by default. Turn them off with lineNumbers={false} for an excerpt, or set linkLines when a reader should be able to cite one line — the reference travels in the URL and paints from :target, with no script.`,
+    `Show a filename only when the snippet has a paste destination such as app/page.tsx. An ephemeral example reads better with no header.`,
+    `Mark changed lines with marks, and lines under discussion with highlightLines. Do not fake a diff with comments inside the code; the marker belongs in the gutter, where it cannot be copied.`,
     `Use flush only inside an existing frame. The standard treatment supplies the surface and decorative edge.`,
   ],
   button: [

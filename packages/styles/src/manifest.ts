@@ -141,10 +141,10 @@ export const radioGroup = {
 export const switchControl = {
   block: "area-switch",
   description: "Toggles a setting that takes effect immediately.",
-  aliases: { Toggle: "Switch", ToggleSwitch: "Switch", block: "full-width", before: "label-start", after: "label-end" },
+  aliases: { Toggle: "Switch", ToggleSwitch: "Switch", block: "full-width", before: "start", after: "end" },
   variants: {
     size: ["sm", "md", "lg"],
-    labelPosition: ["label-end", "label-start"],
+    labelPosition: ["end", "start"],
     track: ["short", "long"],
     tone: ["neutral", "accent", "custom"],
   },
@@ -152,32 +152,31 @@ export const switchControl = {
   states: ["checked", "disabled", "read-only", "loading", "hover", "active", "focus-visible"],
   stateAttributes: { checked: "checked" },
   elements: ["control", "track", "thumb", "text", "label", "description", "loading"],
-  defaults: { size: "md", labelPosition: "label-end", track: "short", tone: "neutral" },
+  defaults: { size: "md", labelPosition: "end", track: "short", tone: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const slider = {
   block: "area-slider",
   description: "Picks a value from an ordered range.",
   variants: {
-    variant: ["track"],
     tone: ["neutral", "accent"],
     size: ["sm", "md", "lg"],
-    composition: ["label-top"],
+    labelPosition: ["top"],
     orientation: ["vertical"],
   },
   states: ["disabled", "hover", "focus-visible"],
   elements: ["label", "control", "value", "marks"],
-  defaults: { variant: "track", tone: "neutral", size: "md" },
+  defaults: { tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const chip = {
   block: "area-chip",
   description: "Selects one value from a set too long for a segmented track.",
-  variants: { variant: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"] },
+  variants: { kind: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"] },
   booleans: ["pill", "swatch-only", "link", "link-icon"],
   states: ["selected", "disabled", "invalid"],
   elements: ["swatch", "icon", "trailing-icon", "avatar", "image", "label", "action", "remove"],
-  defaults: { variant: "filter", size: "md" },
+  defaults: { kind: "filter", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const chipGroup = {
@@ -294,7 +293,7 @@ export const panel = {
 export const card = {
   block: "area-card",
   description: "Groups related media, content and actions on one surface.",
-  variants: { layout: ["vertical", "wide", "small", "immersive"] },
+  variants: { layout: ["vertical", "horizontal", "compact", "immersive"] },
   elements: ["title", "description", "content", "footer", "media", "action", "carousel"],
   defaults: { layout: "vertical" },
 } as const satisfies ComponentManifest;
@@ -311,7 +310,7 @@ export const dialog = {
   block: "area-dialog",
   description: "Interrupts with content that requires a response.",
   variants: {},
-  elements: ["header", "title", "description", "body", "footer", "modal"],
+  elements: ["header", "heading", "title", "description", "close", "body", "footer", "modal"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -364,8 +363,8 @@ export const tabs = {
 export const table = {
   block: "area-table",
   description: "Presents rows of structured data.",
-  variants: { variant: ["interactive"], size: ["sm", "md", "lg"] },
-  booleans: ["striped", "column-dividers"],
+  variants: { size: ["sm", "md", "lg"] },
+  booleans: ["interactive", "striped", "column-dividers"],
   elements: ["cell"],
   elementModifiers: { cell: ["numeric", "fit"] },
   defaults: {},
@@ -401,10 +400,12 @@ export const code = {
 
 export const codeBlock = {
   block: "area-code-block",
-  description: "Shows a block of code with optional actions.",
-  variants: { layout: ["flush", "wrap"] },
+  description: "Shows a block of code with an optional file header, numbered lines and a copy action.",
+  variants: {},
+  booleans: ["flush", "wrap", "unnumbered"],
   states: ["collapsed"],
-  elements: ["actions", "body", "pre", "toggle", "header"],
+  elements: ["header", "title", "language", "languages", "select", "tab", "actions", "body", "pre", "code", "line", "gutter", "linenumber", "marker", "text", "toggle"],
+  elementModifiers: { line: ["highlighted", "added", "removed"] },
   defaults: {},
 } as const satisfies ComponentManifest;
 

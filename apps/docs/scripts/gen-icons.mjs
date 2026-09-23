@@ -58,6 +58,7 @@ const MAP = {
 // by adding one line here rather than by editing markup.
 const TOOLBAR = {
   copy: "copy_16_regular",
+  check: "checkmark_16_regular",
   reset: "arrow_counterclockwise_16_regular",
   expand: "arrow_expand_16_regular",
   close: "dismiss_16_regular",

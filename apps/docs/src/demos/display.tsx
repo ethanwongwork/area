@@ -5,33 +5,33 @@ import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, C
 export const AvatarDefault = () => <Avatar fallback="A" alt="Avatar" />;
 
 export const AvatarImage = () => (
-  <Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar photo" />
+  <Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar" />
 );
 
 export const AvatarImageFallback = () => (
-  <Avatar src="/images/avatar-missing.png" fallback="A" alt="Avatar fallback" />
+  <Avatar src="/images/avatar-missing.png" fallback="A" alt="Avatar" />
 );
 
-export const AvatarInitials = () => <><Avatar fallback="A" alt="Single initial avatar" /><Avatar fallback="AV" alt="Two initial avatar" /></>;
+export const AvatarInitials = () => <><Avatar fallback="A" alt="Avatar" /><Avatar fallback="AV" alt="Avatar" /></>;
 
-export const AvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Generic avatar" />;
+export const AvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Avatar" />;
 
 export const AvatarGrouped = () => (
-  <AvatarGroup max={3} aria-label="Project members"><Avatar fallback="AM" alt="Avery Morgan" /><Avatar src="/images/chip-avatar.png" fallback="JW" alt="Jordan Wong" /><Avatar fallback="SK" alt="Sam Kim" /><Avatar fallback="NP" alt="Noah Patel" /><Avatar fallback="RL" alt="Riley Lee" /></AvatarGroup>
+  <AvatarGroup max={3} aria-label="Avatars"><Avatar fallback="A" alt="Avatar" /><Avatar src="/images/chip-avatar.png" fallback="B" alt="Avatar" /><Avatar fallback="C" alt="Avatar" /><Avatar fallback="D" alt="Avatar" /><Avatar fallback="E" alt="Avatar" /></AvatarGroup>
 );
 
-export const AvatarActive = () => <Avatar active fallback="AM" alt="Active avatar" />;
+export const AvatarActive = () => <Avatar active fallback="A" alt="Avatar" />;
 
-export const AvatarAvailability = () => <BadgeAnchor compact placement="bottom-end" overlap="circular" badge={<Badge size="sm" dotOnly tone="success" aria-label="Available" />}><Avatar fallback="AM" role="img" aria-label="Avery Morgan, available" /></BadgeAnchor>;
+export const AvatarAvailability = () => <BadgeAnchor compact placement="bottom-end" overlap="circular" badge={<Badge size="sm" dotOnly tone="success" aria-label="Available" />}><Avatar fallback="A" role="img" aria-label="Avatar, available" /></BadgeAnchor>;
 
-export const AvatarNotification = () => <BadgeAnchor compact placement="top-end" overlap="circular" badge={<Badge size="sm" variant="solid" tone="info">2</Badge>}><Avatar src="/images/chip-avatar.png" fallback="JW" alt="Jordan Wong, 2 notifications" /></BadgeAnchor>;
+export const AvatarNotification = () => <BadgeAnchor compact placement="top-end" overlap="circular" badge={<Badge size="sm" variant="solid" tone="info">2</Badge>}><Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar, 2 notifications" /></BadgeAnchor>;
 
-export const AvatarTones = () => <><Avatar tone="accent" fallback="AC" alt="Accent avatar" /><Avatar tone="inverse" fallback="IN" alt="Inverse avatar" /></>;
+export const AvatarTones = () => <><Avatar tone="accent" fallback="A" alt="Avatar" /><Avatar tone="inverse" fallback="A" alt="Avatar" /></>;
 
 export const AvatarShapes = () => (
   <>
-    <Avatar fallback="C" alt="Circle avatar" />
-    <Avatar shape="square" fallback="S" alt="Square avatar" />
+    <Avatar fallback="A" alt="Avatar" />
+    <Avatar shape="square" fallback="A" alt="Avatar" />
   </>
 );
 
@@ -46,39 +46,39 @@ export const AvatarSizes = () => (
 
 export const AlertDefault = () => (
   <Alert icon={<InfoIcon />} title="Title" style={{ maxInlineSize: 720 }}>
-    Body copy goes here.
+    Body text
   </Alert>
 );
 
 export const AlertAccent = () => (
   <Alert tone="accent" icon={<InfoIcon />} title="Title" style={{ maxInlineSize: 720 }}>
-    Body copy goes here.
+    Body text
   </Alert>
 );
 
 export const AlertWithLink = () => (
-  <Alert icon={<InfoIcon />} title="Title" link={<a href="#alert-multiline">Text link</a>} style={{ maxInlineSize: 720 }}>
-    Body copy goes here.
+  <Alert icon={<InfoIcon />} title="Title" link={<a href="#alert-multiline">Link</a>} style={{ maxInlineSize: 720 }}>
+    Body text
   </Alert>
 );
 
 export const AlertTones = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-12)", inlineSize: 720 }}>
-    <Alert tone="success" icon={<CheckIcon />} title="Title">Body copy goes here.</Alert>
-    <Alert tone="warning" icon={<AlertIcon />} title="Title">Body copy goes here.</Alert>
-    <Alert tone="danger" icon={<AlertIcon />} title="Title">Body copy goes here.</Alert>
+    <Alert tone="success" icon={<CheckIcon />} title="Title">Body text</Alert>
+    <Alert tone="warning" icon={<AlertIcon />} title="Title">Body text</Alert>
+    <Alert tone="danger" icon={<AlertIcon />} title="Title">Body text</Alert>
   </div>
 );
 
 export const AlertAction = () => (
   <Alert icon={<InfoIcon />} title="Title" action={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}} style={{ maxInlineSize: 720 }}>
-    Body copy goes here.
+    Body text
   </Alert>
 );
 
 export const AlertMultiline = () => (
   <Alert layout="multiline" icon={<InfoIcon />} title="Title" action={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}} style={{ maxInlineSize: 720 }}>
-    Secondary body copy goes here.
+    Body text that wraps onto a second line
   </Alert>
 );
 
@@ -86,7 +86,7 @@ export const AlertDismissible = () => {
   const [visible, setVisible] = useState(true);
   return visible ? (
     <Alert icon={<InfoIcon />} title="Title" onDismiss={() => setVisible(false)} style={{ maxInlineSize: 720 }}>
-      Body copy goes here.
+      Body text
     </Alert>
   ) : <Button variant="outline" size="sm" onClick={() => setVisible(true)}>Show alert</Button>;
 };
@@ -115,40 +115,40 @@ export const SpinnerDefault = () => (
 
 export const ProgressDefault = () => (
   <div style={{ inlineSize: 280 }}>
-    <Progress value={62} label="Upload progress" />
+    <Progress value={62} label="Label" />
   </div>
 );
 
 export const ProgressIndeterminate = () => (
   <div style={{ inlineSize: 280 }}>
-    <Progress label="Loading" />
+    <Progress label="Label" />
   </div>
 );
 
-export const TooltipDefault = () => <Tooltip>Copy to clipboard</Tooltip>;
+export const TooltipDefault = () => <Tooltip>Description</Tooltip>;
 
 export const MenuDefault = () => (
   <Menu>
     <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />}>
       <span className="area-menu__icon"><SearchIcon /></span>
-      <span className="area-menu__text">Search</span>
+      <span className="area-menu__text">Item one</span>
     </MenuItem>
     <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />}>
       <span className="area-menu__icon"><PlusIcon /></span>
-      <span className="area-menu__text">New file</span>
+      <span className="area-menu__text">Item two</span>
     </MenuItem>
     <div className="area-menu__separator" />
     <MenuItem>
       <span className="area-menu__icon"><TokenIcon /></span>
-      <span className="area-menu__text">Use connectors</span>
+      <span className="area-menu__text">Item three</span>
     </MenuItem>
     <MenuItem shortcut={<ArrowIcon />}>
       <span className="area-menu__icon"><DotsFourIcon /></span>
-      <span className="area-menu__text">More</span>
+      <span className="area-menu__text">Item four</span>
     </MenuItem>
     <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />}>
       <span className="area-menu__icon"><DismissIcon /></span>
-      <span className="area-menu__text">Delete</span>
+      <span className="area-menu__text">Item five</span>
     </MenuItem>
   </Menu>
 );
@@ -156,15 +156,15 @@ export const MenuDefault = () => (
 export const PopoverDefault = () => (
   <Popover>
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-4)" }}>
-      <strong>Dimensions</strong>
-      <span style={{ color: "var(--area-fg-muted)" }}>Set the size of the layer.</span>
+      <strong>Title</strong>
+      <span style={{ color: "var(--area-fg-muted)" }}>Description</span>
     </div>
   </Popover>
 );
 
 export const ToastDefault = () => (
   <Toast tone="success" icon={<CheckIcon />}>
-    Changes saved.
+    Body text
   </Toast>
 );
 
@@ -174,25 +174,25 @@ export const TableDefault = () => (
       <tr>
         <th>Name</th>
         <th>Status</th>
-        <th className="area-table__cell--numeric">Size</th>
+        <th className="area-table__cell--numeric">Value</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>index.html</td>
+        <td>Item one</td>
         <td>
           <Badge tone="success" dot>
-            Live
+            Status
           </Badge>
         </td>
-        <td className="area-table__cell--numeric">12.4 kB</td>
+        <td className="area-table__cell--numeric">1</td>
       </tr>
       <tr>
-        <td>app.css</td>
+        <td>Item two</td>
         <td>
-          <Badge tone="warning">Building</Badge>
+          <Badge tone="warning">Status</Badge>
         </td>
-        <td className="area-table__cell--numeric">86.1 kB</td>
+        <td className="area-table__cell--numeric">2</td>
       </tr>
     </tbody>
   </Table>
@@ -200,34 +200,34 @@ export const TableDefault = () => (
 
 export const TabsDefault = () => (
   <Tabs
-    value="account"
+    value="one"
     tabs={[
-      { id: "account", label: "Account" },
-      { id: "password", label: "Password" },
-      { id: "team", label: "Team", disabled: true },
+      { id: "one", label: "Item one" },
+      { id: "two", label: "Item two" },
+      { id: "three", label: "Item three" },
     ]}
     style={{ inlineSize: 380 }}
   >
-    Make changes to your account here.
+    Body text
   </Tabs>
 );
 
 export const DialogDefault = () => (
   <Dialog
-    title="Delete project"
-    description="This permanently removes the project and everything in it."
+    title="Title"
+    description="Description"
     footer={
       <>
-        <Button variant="ghost" tone="neutral" size="sm">
+        <Button variant="ghost">
           Cancel
         </Button>
-        <Button tone="danger" size="sm">
-          Delete
+        <Button>
+          Action
         </Button>
       </>
     }
     style={{ inlineSize: 400 }}
-  />
+  >Body text</Dialog>
 );
 
 export const KbdDefault = () => <Kbd keys={["cmd", "K"]} />;
@@ -238,15 +238,15 @@ export const KbdSizes = () => (
 
 export const KbdButton = () => (
   <>
-    <Button variant="outline" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} /></Button>
-    <Button tone="neutral" aria-keyshortcuts="Meta+Enter">Save <Kbd keys={["cmd", "enter"]} /></Button>
-    <Button tone="success" aria-keyshortcuts="Meta+Enter">Submit <Kbd keys={["cmd", "enter"]} /></Button>
+    <Button variant="outline" tone="neutral" aria-keyshortcuts="Meta+Z">Button <Kbd keys={["cmd", "Z"]} /></Button>
+    <Button tone="neutral" aria-keyshortcuts="Meta+Enter">Button <Kbd keys={["cmd", "enter"]} /></Button>
+    <Button tone="success" aria-keyshortcuts="Meta+Enter">Button <Kbd keys={["cmd", "enter"]} /></Button>
   </>
 );
 
 export const KbdOnEmphasis = () => (
   <Tooltip>
-    Toggle sidebar <Kbd appearance="on-emphasis" keys={["cmd", "B"]} />
+    Description <Kbd appearance="on-emphasis" keys={["cmd", "B"]} />
   </Tooltip>
 );
 
@@ -272,16 +272,16 @@ export const MenuWithShortcuts = () => (
   <Menu>
     <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />}>
       <span className="area-menu__icon"><SearchIcon /></span>
-      <span className="area-menu__text">Search</span>
+      <span className="area-menu__text">Item one</span>
     </MenuItem>
     <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />}>
       <span className="area-menu__icon"><PlusIcon /></span>
-      <span className="area-menu__text">New file</span>
+      <span className="area-menu__text">Item two</span>
     </MenuItem>
     <div className="area-menu__separator" />
     <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />}>
       <span className="area-menu__icon"><DismissIcon /></span>
-      <span className="area-menu__text">Delete</span>
+      <span className="area-menu__text">Item three</span>
     </MenuItem>
   </Menu>
 );
@@ -300,8 +300,7 @@ export const TokenOnColor = () => (
 
 export const TokenInProse = () => (
   <div style={{ inlineSize: 380 }}>
-    Set <Code>--area-radius-control</Code> to change how rounded a control is. It reads the
-    same here as it does in a table.
+    Set <Code>--area-radius-control</Code> to change how rounded a control is.
   </div>
 );
 
@@ -317,60 +316,60 @@ export const TokenSubtle = () => <Code subtle>--area-accent-solid</Code>;
 export const PanelEverything = () => (
   <Panel
     size="md"
-    title="Scroll Variant"
+    title="Title"
     action={
       <Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} />
     }
-    footer={<Button variant="soft" tone="neutral" size="sm" fullWidth>Add Section</Button>}
+    footer={<Button variant="soft" tone="neutral" size="sm" fullWidth>Action</Button>}
     style={{ inlineSize: 320, blockSize: 560 }}
   >
-    <PanelSection heading="Trigger">
-      <Field orientation="horizontal" label="Trigger" htmlFor="panel-trigger">
-        <Select size="sm" id="panel-trigger" defaultValue="view">
-          <option value="view">Section in View</option>
-          <option value="click">On Click</option>
-          <option value="load">On Load</option>
+    <PanelSection heading="Label">
+      <Field orientation="horizontal" label="Label" htmlFor="panel-trigger">
+        <Select size="sm" id="panel-trigger" defaultValue="one">
+          <option value="one">Option one</option>
+          <option value="two">Option two</option>
+          <option value="three">Option three</option>
         </Select>
       </Field>
-      <Field orientation="horizontal" label="Viewport">
+      <Field orientation="horizontal" label="Label">
         <Segmented
           size="sm"
           fullWidth
-          label="Viewport"
-          value="bottom"
+          label="Label"
+          value="top"
           options={[
-            { value: "top", label: "", icon: <AlignTopIcon /> },
-            { value: "middle", label: "", icon: <AlignMiddleIcon /> },
-            { value: "bottom", label: "", icon: <AlignBottomIcon /> },
+            { value: "top", icon: <AlignTopIcon />, label: <span className="area-sr-only">Align top</span> },
+            { value: "middle", icon: <AlignMiddleIcon />, label: <span className="area-sr-only">Align middle</span> },
+            { value: "bottom", icon: <AlignBottomIcon />, label: <span className="area-sr-only">Align bottom</span> },
           ]}
         />
       </Field>
-      <Field orientation="horizontal" label="Replay">
+      <Field orientation="horizontal" label="Label">
         <Segmented
           size="sm"
           fullWidth
-          label="Replay"
-          value="yes"
+          label="Label"
+          value="one"
           options={[
-            { value: "yes", label: "Yes" },
-            { value: "no", label: "No" },
+            { value: "one", label: "One" },
+            { value: "two", label: "Two" },
           ]}
         />
       </Field>
-      <Field orientation="horizontal" label="Enabled" htmlFor="panel-enabled">
+      <Field orientation="horizontal" label="Label" htmlFor="panel-enabled">
         <Switch size="sm" id="panel-enabled" defaultChecked />
       </Field>
     </PanelSection>
 
-    <PanelSection heading="Style">
-      <Field orientation="horizontal" label="Opacity">
+    <PanelSection heading="Label">
+      <Field orientation="horizontal" label="Label">
         <Slider size="sm" min={0} max={100} defaultValue={80} readout="80" />
       </Field>
-      <Field orientation="horizontal" label="Radius" htmlFor="panel-radius">
+      <Field orientation="horizontal" label="Label" htmlFor="panel-radius">
         <Input size="sm" id="panel-radius" defaultValue="22" suffix="px" />
       </Field>
       <PanelStack>
-        <Label>Accent</Label>
+        <Label>Label</Label>
         <ChipGroup>
           <Chip size="sm" swatch="var(--area-red-500)">Red</Chip>
           <Chip size="sm" selected swatch="var(--area-indigo-500)">Indigo</Chip>
@@ -379,18 +378,18 @@ export const PanelEverything = () => (
       </PanelStack>
     </PanelSection>
 
-    <PanelSection heading="Content">
+    <PanelSection heading="Label">
       <PanelStack>
-        <Label htmlFor="panel-note">Note</Label>
-        <Textarea size="sm" id="panel-note" rows={2} placeholder="Describe this variant" />
+        <Label htmlFor="panel-note">Label</Label>
+        <Textarea size="sm" id="panel-note" rows={2} placeholder="Placeholder" />
       </PanelStack>
-      <Field orientation="horizontal" label="Loop" htmlFor="panel-loop">
+      <Field orientation="horizontal" label="Label" htmlFor="panel-loop">
         <Checkbox id="panel-loop" defaultChecked />
       </Field>
-      <Field orientation="horizontal" label="Easing" htmlFor="panel-ease">
-        <Select size="sm" id="panel-ease" defaultValue="out">
-          <option value="out">Ease out</option>
-          <option value="linear">Linear</option>
+      <Field orientation="horizontal" label="Label" htmlFor="panel-ease">
+        <Select size="sm" id="panel-ease" defaultValue="one">
+          <option value="one">Option one</option>
+          <option value="two">Option two</option>
         </Select>
       </Field>
     </PanelSection>

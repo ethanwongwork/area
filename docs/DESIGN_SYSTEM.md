@@ -58,6 +58,12 @@ still need to forward native props and refs and render the right slots.
 - Blocks: `.area-badge`; parts: `.area-badge__dot`; modifiers: `.area-badge--outline`.
 - CSS modifiers stay kebab-case; React boolean props use camelCase (`fullWidth`).
 - Keep tone, treatment, size, state, layout and composition orthogonal.
+- Name public axes for what they change: `variant` for visual treatment, `tone` for
+  semantic color, `size` for scale, `orientation` for direction, `layout` for
+  arrangement, and `kind` for a component's interaction role. Use a boolean for an
+  independent option that can combine with other choices. Values should be short and
+  should not repeat the axis name in React props. A CSS modifier may keep a prefix
+  when it prevents a collision with another modifier on the same block.
 - Use native state/ARIA for behavior and accessible meaning; documented `data-*`
   attributes are painting hooks. A data-disabled flag cannot disable a native button.
 - Use logical properties so direction follows the enclosing scope.
@@ -135,6 +141,29 @@ because they have similar silhouettes.
 Demos and snippets come from the same source. Pages begin with a standalone default,
 then supported sizes/treatments, states and compositions. Gallery names and completion
 rules are in [Components](COMPONENTS.md).
+
+### Example copy
+
+Every demo and gallery specimen uses one placeholder vocabulary, so what a reader
+compares is type, rhythm and alignment rather than a borrowed product story. Reach for
+the slot's own name:
+
+- `Button`, `Badge`, `Chip`, `Code` — a specimen that stands for itself.
+- `Title`, `Label`, `Description`, `Body text` — headings, labels, supporting text and a
+  message body.
+- `Action`, `Secondary`, `Cancel`, `Delete`, `Undo` — buttons inside a composition.
+- `Item one`, `Option one`, `Value`, `1` — repeated content, choices, values and figures.
+  A control that shows every option inline (Segmented, Tabs, a chip row) uses the short
+  ordinal instead (`One`, `Two`, `Item one`), so the track does not truncate.
+- `Placeholder`, `Error message`, `Success message`, `Warning message` — attributes and
+  validation text.
+
+Size tiers name their tier (`Small`, `Medium`, `Large`); a treatment or tone matrix names
+the value it shows. An icon-paired label (`Align top`, `Add item`) keeps the meaning the
+glyph carries, and a verification fixture (long text, RTL, doubled zoom) keeps the text
+that makes the failure visible. Do not invent a product, a person or a domain: an email
+label, a colleague's name or a project noun dates badly and pulls attention away from
+the geometry the example exists to show.
 
 Docs CSS must not target `.area-*` or silently override shared components. It lives in
 `area.base`, before components; the utilities exception is for rail visibility only.

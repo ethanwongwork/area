@@ -26,13 +26,13 @@ export interface ContrastAssertion {
 const TONES = ["accent", "danger", "warning", "caution", "success", "info", "discovery"] as const;
 
 /**
- * The four tones a code block paints with: tags, strings, attributes and keywords.
+ * The four tones a code block paints with: keywords, tags, attributes and strings.
  *
  * Named here rather than inferred, because `code.css` is where they are chosen and this is
  * where they are checked, and the two have to agree. Adding a fifth syntax colour without
  * adding it here would ship an unmeasured foreground.
  */
-const SYNTAX_ROLES: readonly string[] = ["danger", "success", "accent", "discovery"];
+const SYNTAX_ROLES: readonly string[] = ["danger", "discovery", "info", "accent"];
 
 /** Supplementary stroke floors are aesthetic policy, not WCAG conformance thresholds.
  * Text-identified buttons may use quiet outlines. Editable fields, unchecked glyphs,

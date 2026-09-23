@@ -38,8 +38,6 @@
     block-size: var(--_height);
   }
 
-  .area-slider--track { background: transparent; }
-
   .area-slider__marks {
     position: absolute;
     z-index: 0;
@@ -57,7 +55,7 @@
     transform: translateX(-50%);
   }
 
-  .area-slider--label-top {
+  .area-slider--top {
     display: grid;
     grid-template: auto var(--_height) / 1fr auto;
     column-gap: var(--area-space-4);
@@ -65,10 +63,10 @@
     inline-size: min(100%, calc(var(--area-input-inline-size) + 4ch + var(--_gap)));
     block-size: auto;
   }
-  .area-slider--label-top .area-slider__label { grid-area: 1 / 1; }
-  .area-slider--label-top .area-slider__value { grid-area: 1 / 2; }
-  .area-slider--label-top .area-slider__control { grid-area: 2 / 1 / 3 / 3; inline-size: 100%; }
-  .area-slider--label-top .area-slider__marks { inset-inline: calc(var(--_thumb) / 2); inset-block-start: calc(100% - (var(--_height) / 2)); }
+  .area-slider--top .area-slider__label { grid-area: 1 / 1; }
+  .area-slider--top .area-slider__value { grid-area: 1 / 2; }
+  .area-slider--top .area-slider__control { grid-area: 2 / 1 / 3 / 3; inline-size: 100%; }
+  .area-slider--top .area-slider__marks { inset-inline: calc(var(--_thumb) / 2); inset-block-start: calc(100% - (var(--_height) / 2)); }
 
   .area-slider--vertical {
     flex-direction: column;

@@ -14,12 +14,12 @@ test("a filter chip is a native toggle button with an announced false state by d
 });
 
 test("assist and suggestion chips are actions rather than toggles", () => {
-  assert.doesNotMatch(render({ variant: "assist" }), /aria-pressed/);
-  assert.doesNotMatch(render({ variant: "suggestion" }), /aria-pressed/);
+  assert.doesNotMatch(render({ kind: "assist" }), /aria-pressed/);
+  assert.doesNotMatch(render({ kind: "suggestion" }), /aria-pressed/);
 });
 
 test("a delete-only input chip exposes only the dismiss action as a button", () => {
-  const html = render({ variant: "input", onRemove: () => {} });
+  const html = render({ kind: "input", onRemove: () => {} });
   assert.match(html, /area-chip__action/);
   assert.match(html, /area-chip__remove/);
   assert.match(html, /aria-label="Remove chip"/);
@@ -28,7 +28,7 @@ test("a delete-only input chip exposes only the dismiss action as a button", () 
 });
 
 test("a clickable deletable input chip keeps its primary and dismiss actions separate", () => {
-  const html = render({ variant: "input", clickable: true, onRemove: () => {} });
+  const html = render({ kind: "input", clickable: true, onRemove: () => {} });
   assert.equal((html.match(/<button/g) ?? []).length, 2);
 });
 

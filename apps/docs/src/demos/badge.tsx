@@ -3,14 +3,14 @@ import type { CSSProperties, ReactNode } from "react";
 import { Avatar, Badge, BadgeAnchor, BadgeGroup, Button, Card, CardDescription, CardTitle, Nav, NavItem, Table, Theme } from "@area/react";
 import { ArrowIcon, CheckIcon, DismissIcon, InfoIcon, PlusIcon } from "../icons.tsx";
 
-export const BadgeDefault = () => <Badge>Draft</Badge>;
+export const BadgeDefault = () => <Badge>Badge</Badge>;
 export const BadgeVariants = () => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "start", gap: "var(--area-space-24)" }}>
     <Badge variant="soft">Soft</Badge>
     <Badge variant="solid">Solid</Badge>
     <Badge variant="outline">Outline</Badge>
     <Badge variant="ghost">Ghost</Badge>
-    <Badge as="a" href="#api" variant="plain">Plain link</Badge>
+    <Badge as="a" href="#api" variant="plain">Plain</Badge>
   </div>
 );
 export const BadgeSizes = () => (
@@ -35,13 +35,13 @@ export const BadgeToneMatrix = () => (
 export const BadgeTones = () => (
   <BadgeGroup>{(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"] as const).map(tone => <Badge key={tone} tone={tone}>{tone}</Badge>)}</BadgeGroup>
 );
-export const BadgeLeadingIcon = () => <Badge tone="success" icon={<CheckIcon />}>Deployed</Badge>;
-export const BadgeTrailingIcon = () => <Badge trailingIcon={<InfoIcon />}>Queued</Badge>;
-export const BadgeIconOnly = () => <Badge iconOnly icon={<CheckIcon />} tone="success" aria-label="Deployed" />;
-export const BadgeIconCircle = () => <Badge pill iconOnly icon={<CheckIcon />} tone="success" aria-label="Deployed" />;
+export const BadgeLeadingIcon = () => <Badge tone="success" icon={<CheckIcon />}>Badge</Badge>;
+export const BadgeTrailingIcon = () => <Badge trailingIcon={<InfoIcon />}>Badge</Badge>;
+export const BadgeIconOnly = () => <Badge iconOnly icon={<CheckIcon />} tone="success" aria-label="Badge" />;
+export const BadgeIconCircle = () => <Badge pill iconOnly icon={<CheckIcon />} tone="success" aria-label="Badge" />;
 export const BadgeNumber = () => <Badge pill>12</Badge>;
-export const BadgeDotSoft = () => <Badge dot tone="success">Ready</Badge>;
-export const BadgeDotOutline = () => <Badge dot variant="outline" tone="warning">Building</Badge>;
+export const BadgeDotSoft = () => <Badge dot tone="success">Badge</Badge>;
+export const BadgeDotOutline = () => <Badge dot variant="outline" tone="warning">Badge</Badge>;
 export const BadgeDotOnly = () => <Badge dotOnly tone="success" aria-label="Available" />;
 export const BadgeDotMatrix = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)" }}>
@@ -51,72 +51,72 @@ export const BadgeDotMatrix = () => (
 export const BadgeStateLabels = () => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "start", gap: "var(--area-space-24)" }}>
     <Badge pill variant="solid" tone="success" icon={<PlusIcon />}>Open</Badge>
-    <Badge pill variant="solid" tone="discovery" icon={<CheckIcon />}>Merged</Badge>
+    <Badge pill variant="solid" tone="discovery" icon={<CheckIcon />}>Done</Badge>
     <Badge pill variant="solid" tone="danger" icon={<DismissIcon />}>Closed</Badge>
     <Badge pill variant="solid" icon={<InfoIcon />}>Draft</Badge>
     <Badge pill variant="solid" tone="info" icon={<InfoIcon />}>Queued</Badge>
   </div>
 );
-export const BadgeTruncation = () => <Badge truncate title="Awaiting production deployment approval">Awaiting production deployment approval</Badge>;
-export const BadgeUppercase = () => <Badge uppercase>Early access</Badge>;
-export const BadgeLink = () => <Badge as="a" href="#api" variant="plain" tone="info" trailingIcon={<ArrowIcon />}>Release notes</Badge>;
-export const BadgeLinkSoft = () => <Badge as="a" href="#api" tone="discovery">Preview details</Badge>;
+export const BadgeTruncation = () => <Badge truncate title="Badge text that overflows the available space">Badge text that overflows the available space</Badge>;
+export const BadgeUppercase = () => <Badge uppercase>Badge</Badge>;
+export const BadgeLink = () => <Badge as="a" href="#api" variant="plain" tone="info" trailingIcon={<ArrowIcon />}>Link</Badge>;
+export const BadgeLinkSoft = () => <Badge as="a" href="#api" tone="discovery">Link</Badge>;
 export const BadgeAnchorButton = () => (
   <BadgeAnchor badge={<Badge size="sm" variant="solid" tone="danger">3</Badge>}>
-    <Button aria-label="Notifications, 3 unread">Notifications</Button>
+    <Button aria-label="Label, 3">Button</Button>
   </BadgeAnchor>
 );
 export const BadgeAnchorAvatar = () => (
   <BadgeAnchor placement="bottom-end" overlap="circular" badge={<Badge size="sm" dotOnly tone="success" aria-label="Available" />}>
-    <Avatar fallback="MO" role="img" aria-label="Mira Okafor, available" />
+    <Avatar fallback="A" role="img" aria-label="Avatar, available" />
   </BadgeAnchor>
 );
 export const BadgeAnchorTab = () => (
-  <div className="area-tabs"><div className="area-tabs__list" role="tablist" aria-label="Project activity">
-    <BadgeAnchor badge={<Badge size="sm" variant="solid" tone="info">2</Badge>}><button type="button" className="area-tabs__tab" role="tab" aria-selected="true" aria-label="Activity, 2 new events">Activity</button></BadgeAnchor>
+  <div className="area-tabs"><div className="area-tabs__list" role="tablist" aria-label="Label">
+    <BadgeAnchor badge={<Badge size="sm" variant="solid" tone="info">2</Badge>}><button type="button" className="area-tabs__tab" role="tab" aria-selected="true" aria-label="Label, 2">Item one</button></BadgeAnchor>
   </div></div>
 );
 export const BadgeAnchorPlacements = () => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "start", gap: "var(--area-space-32)" }}>
-    {(["top-end", "top-start", "bottom-end", "bottom-start"] as const).map(placement => <BadgeAnchor key={placement} placement={placement} badge={<Badge size="sm" variant="solid">3</Badge>}><Button aria-label={`${placement}, 3 unread`}>{placement}</Button></BadgeAnchor>)}
+    {(["top-end", "top-start", "bottom-end", "bottom-start"] as const).map(placement => <BadgeAnchor key={placement} placement={placement} badge={<Badge size="sm" variant="solid">3</Badge>}><Button aria-label="Label, 3">Button</Button></BadgeAnchor>)}
   </div>
 );
 export const BadgeAnchorVisibility = () => {
   const [invisible, setInvisible] = useState(false);
-  return <BadgeAnchor invisible={invisible} badge={<Badge size="sm" variant="solid" tone="danger">3</Badge>}><Button onClick={() => setInvisible(value => !value)} aria-label={invisible ? "Show unread badge" : "Hide badge, 3 unread"}>Toggle badge</Button></BadgeAnchor>;
+  return <BadgeAnchor invisible={invisible} badge={<Badge size="sm" variant="solid" tone="danger">3</Badge>}><Button onClick={() => setInvisible(value => !value)} aria-label={invisible ? "Label" : "Label, 3"}>Button</Button></BadgeAnchor>;
 };
 export const BadgeGroupWrap = () => (
-  <BadgeGroup><Badge>Draft</Badge><Badge tone="info">Internal</Badge><Badge tone="discovery">Preview</Badge><Badge tone="success">Reviewed</Badge></BadgeGroup>
+  <BadgeGroup><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge></BadgeGroup>
 );
 export const BadgeGroupInline = () => (
-  <BadgeGroup visibleCount={2} overflow="inline"><Badge>Draft</Badge><Badge tone="info">Internal</Badge><Badge tone="discovery">Preview</Badge><Badge tone="success">Reviewed</Badge><Badge tone="warning">Pending</Badge></BadgeGroup>
+  <BadgeGroup visibleCount={2} overflow="inline"><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge><Badge tone="warning">Warning</Badge></BadgeGroup>
 );
 export const BadgeGroupOverlay = () => (
-  <BadgeGroup visibleCount={2} overflow="overlay"><Badge>Draft</Badge><Badge tone="info">Internal</Badge><Badge tone="discovery">Preview</Badge><Badge tone="success">Reviewed</Badge><Badge tone="warning">Pending</Badge></BadgeGroup>
+  <BadgeGroup visibleCount={2} overflow="overlay"><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge><Badge tone="warning">Warning</Badge></BadgeGroup>
 );
 export const BadgeGroupAuto = () => (
   <div style={{ width: "calc(var(--area-space-80) * 3)", maxWidth: "100%", resize: "horizontal", overflow: "auto", padding: "var(--area-space-8)" }}>
-    <BadgeGroup visibleCount="auto" overflow="overlay"><Badge>Draft</Badge><Badge tone="info">Internal</Badge><Badge tone="discovery">Preview</Badge><Badge tone="success">Reviewed</Badge><Badge tone="warning">Pending</Badge></BadgeGroup>
+    <BadgeGroup visibleCount="auto" overflow="overlay"><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge><Badge tone="warning">Warning</Badge></BadgeGroup>
   </div>
 );
 export const BadgeCustomBrand = () => (
-  <Badge tone="custom" style={{ "--area-badge-bg": "linear-gradient(135deg, var(--area-discovery-solid), var(--area-discovery-solid-hover))", "--area-badge-fg": "var(--area-fg-on-discovery)" } as CSSProperties}>Pro</Badge>
+  <Badge tone="custom" style={{ "--area-badge-bg": "linear-gradient(135deg, var(--area-discovery-solid), var(--area-discovery-solid-hover))", "--area-badge-fg": "var(--area-fg-on-discovery)" } as CSSProperties}>Custom</Badge>
 );
 export const BadgeTableStatus = () => (
-  <Table><thead><tr><th>Project</th><th>Status</th></tr></thead><tbody><tr><td>Website</td><td><Badge dot tone="success">Deployed</Badge></td></tr><tr><td>Brand kit</td><td><Badge dot tone="warning">Building</Badge></td></tr></tbody></Table>
+  <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item one</td><td><Badge dot tone="success">Status</Badge></td></tr><tr><td>Item two</td><td><Badge dot tone="warning">Status</Badge></td></tr></tbody></Table>
 );
 export const BadgeNavNew = () => (
-  <Nav aria-label="Workspace"><NavItem href="#api" trailing={<Badge tone="discovery">New</Badge>}>Activity</NavItem></Nav>
+  <Nav aria-label="Label"><NavItem href="#api" trailing={<Badge tone="discovery">Status</Badge>}>Item one</NavItem></Nav>
 );
 export const BadgeCardHeading = () => (
   <Card style={{ inlineSize: "min(100%, calc(var(--area-space-80) * 3))" }}>
-    <CardTitle><span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--area-space-12)" }}><span>Deployments</span><Badge tone="discovery">Beta</Badge></span></CardTitle>
-    <CardDescription>Track releases across every environment.</CardDescription>
+    <CardTitle><span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--area-space-12)" }}><span>Title</span><Badge tone="discovery">Badge</Badge></span></CardTitle>
+    <CardDescription>Description</CardDescription>
   </Card>
 );
 export const BadgeBothThemes = () => (
   <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--area-space-24)" }}>
-    {(["light", "dark"] as const).map(theme => <Theme key={theme} value={{ theme }}><div style={{ background: "var(--area-bg-surface)", padding: "var(--area-space-16)" }}><Badge tone="success" dot>Deployed</Badge></div></Theme>)}
+    {(["light", "dark"] as const).map(theme => <Theme key={theme} value={{ theme }}><div style={{ background: "var(--area-bg-surface)", padding: "var(--area-space-16)" }}><Badge tone="success" dot>Badge</Badge></div></Theme>)}
   </div>
 );
 export const BadgeStress = () => (
@@ -143,7 +143,7 @@ export const BadgeAuditControls = () => {
     <label>Audit contrast <select className="area-select area-select--sm" value={contrast} onChange={event => setContrast(event.target.value)}><option>standard</option><option>more</option></select></label>
     <label>Audit direction <select className="area-select area-select--sm" value={direction} onChange={event => setDirection(event.target.value as "ltr" | "rtl")}><option>ltr</option><option>rtl</option></select></label>
     <div data-badge-audit="" data-area-theme={theme} data-area-ui={density} data-area-radius={radius} data-area-contrast={contrast} data-area-motion={motion} dir={direction} style={{ ...(type === "system" ? { "--area-font-sans": "system-ui" } : {}), background: "var(--area-bg-surface)", color: "var(--area-fg-default)", padding: "var(--area-space-24)", display: "grid", gap: "var(--area-space-24)" } as CSSProperties}>
-      {(["sm", "md", "lg"] as const).map(size => <div key={size}><Badge size={size} icon={<InfoIcon />} trailingIcon={<ArrowIcon />}>Review</Badge></div>)}
+      {(["sm", "md", "lg"] as const).map(size => <div key={size}><Badge size={size} icon={<InfoIcon />} trailingIcon={<ArrowIcon />}>Badge</Badge></div>)}
       <BadgeToneMatrix />
       <BadgeAnchorPlacements />
       <BadgeGroupAuto />
@@ -166,15 +166,15 @@ export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromE
   ...(["soft", "outline"] as const).flatMap(variant => galleryTones.map(tone => [`GalleryBadgeDot${galleryName(variant)}${galleryName(tone)}`, galleryDotBadge(variant, tone)])),
   ...(["top-end", "top-start", "bottom-end", "bottom-start"] as const).map(placement => [`GalleryBadgeAnchor${galleryName(placement).replace("-", "")}`, galleryPlacement(placement)]),
   ["GalleryBadgeStateOpen", () => <Badge variant="solid" tone="success" icon={<PlusIcon />}>Open</Badge>],
-  ["GalleryBadgeStateMerged", () => <Badge variant="solid" tone="discovery" icon={<CheckIcon />}>Merged</Badge>],
+  ["GalleryBadgeStateDone", () => <Badge variant="solid" tone="discovery" icon={<CheckIcon />}>Done</Badge>],
   ["GalleryBadgeStateClosed", () => <Badge variant="solid" tone="danger" icon={<DismissIcon />}>Closed</Badge>],
   ["GalleryBadgeStateDraft", () => <Badge variant="solid" icon={<InfoIcon />}>Draft</Badge>],
   ["GalleryBadgeStateQueued", () => <Badge variant="solid" tone="info" icon={<InfoIcon />}>Queued</Badge>],
-  ["GalleryBadgeThemeLight", () => <Theme value={{ theme: "light" }}><div style={{ background: "var(--area-bg-surface)", padding: "var(--area-space-16)" }}><Badge tone="success" dot>Deployed</Badge></div></Theme>],
-  ["GalleryBadgeThemeDark", () => <Theme value={{ theme: "dark" }}><div style={{ background: "var(--area-bg-surface)", padding: "var(--area-space-16)" }}><Badge tone="success" dot>Deployed</Badge></div></Theme>],
+  ["GalleryBadgeThemeLight", () => <Theme value={{ theme: "light" }}><div style={{ background: "var(--area-bg-surface)", padding: "var(--area-space-16)" }}><Badge tone="success" dot>Badge</Badge></div></Theme>],
+  ["GalleryBadgeThemeDark", () => <Theme value={{ theme: "dark" }}><div style={{ background: "var(--area-bg-surface)", padding: "var(--area-space-16)" }}><Badge tone="success" dot>Badge</Badge></div></Theme>],
   ["GalleryBadgeStressLong", () => <div style={{ width: "calc(var(--area-space-80) * 3)", maxWidth: "100%" }}><Badge truncate icon={<InfoIcon />}>Produktionsbereitstellungsbestätigung ausstehend</Badge></div>],
   ["GalleryBadgeStressRtl", () => <div dir="rtl"><Badge as="a" href="#api" trailingIcon={<ArrowIcon />}>تفاصيل الإصدار</Badge></div>],
   ["GalleryBadgeStressZoom", () => <div style={{ zoom: 2, maxWidth: "100%" }}><Badge truncate>Awaiting deployment approval</Badge></div>],
-  ["GalleryBadgeTableDeployed", () => <Table><thead><tr><th>Project</th><th>Status</th></tr></thead><tbody><tr><td>Website</td><td><Badge dot tone="success">Deployed</Badge></td></tr></tbody></Table>],
-  ["GalleryBadgeTableBuilding", () => <Table><thead><tr><th>Project</th><th>Status</th></tr></thead><tbody><tr><td>Brand kit</td><td><Badge dot tone="warning">Building</Badge></td></tr></tbody></Table>],
+  ["GalleryBadgeTableDeployed", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item one</td><td><Badge dot tone="success">Status</Badge></td></tr></tbody></Table>],
+  ["GalleryBadgeTableBuilding", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item two</td><td><Badge dot tone="warning">Status</Badge></td></tr></tbody></Table>],
 ]);

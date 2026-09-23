@@ -264,6 +264,7 @@ ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' 
 ${slug === "chip" ? '<script type="module" src="./chip-demos.js"></script>' : ""}
 ${slug === "alert" ? '<script type="module" src="./alert-demos.js"></script>' : ""}
 ${slug === "avatar" ? '<script type="module" src="./avatar-demos.js"></script>' : ""}
+${slug === "code-block" ? '<script type="module" src="./code-block-demos.js"></script>' : ""}
 </body>
 </html>`;
 }
@@ -281,26 +282,39 @@ function galleryPage() {
   const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {
     "code-block": [
-      { id: "default", title: "Default", demo: "GalleryCodeBlock", span: "2x2" },
-      { id: "copy", title: "With copy action", demo: "GalleryCodeBlockCopy", span: "2x2" },
-      { id: "wrap", title: "Wrapped", demo: "GalleryCodeBlockWrap", span: "2x2" },
+      { id: "default", title: "Default", demo: "CodeBlockDefault", span: "2x2" },
+      { id: "no-filename", title: "No filename", demo: "CodeBlockPlain", span: "2x2" },
+      { id: "highlighted", title: "Highlighted lines", demo: "CodeBlockHighlighted", span: "2x2" },
+      { id: "diff", title: "Added and removed", demo: "CodeBlockDiff", span: "2x2" },
+      { id: "linked", title: "Referenced lines", demo: "CodeBlockLinked", span: "2x2" },
+      { id: "languages", title: "Language switcher", demo: "CodeBlockLanguages", span: "2x2" },
+      { id: "language-tabs", title: "Language tabs", demo: "CodeBlockLanguageTabs", span: "2x2" },
+      { id: "unnumbered", title: "Hidden line numbers", demo: "CodeBlockUnnumbered", span: "2x2" },
+      { id: "wrap", title: "Wrapped", demo: "CodeBlockWrap", span: "2x2" },
+      { id: "collapsed", title: "Collapsed", demo: "CodeBlockCollapsed", span: "2x2" },
     ],
     dialog: [
       { id: "default", title: "Default", demo: "GalleryDialog", span: "2x2" },
+      { id: "no-close", title: "Without close button", demo: "GalleryDialogNoClose", span: "2x2" },
       { id: "form", title: "With field", demo: "GalleryDialogForm", span: "2x2" },
+      { id: "scrollable", title: "Scrollable body", demo: "GalleryDialogScrollable", span: "2x2" },
       { id: "modal", title: "Interactive modal", demo: "GalleryDialogModal", span: "2x2" },
     ],
     code: COMPONENT_PAGES.find(page => page.slug === "code").examples,
     nav: [
-      { id: "default", title: "Default / grouped", demo: "GalleryNav", span: "2x2" },
-      { id: "marker", title: "Selection / marker", demo: "GalleryNavMarker", span: "2x2" },
+      { id: "default", title: "Default", demo: "GalleryNav", span: "2x2" },
+      { id: "grouped", title: "Grouped", demo: "GalleryNavGrouped", span: "2x2" },
+      { id: "icons", title: "Icons", demo: "GalleryNavIcons", span: "2x2" },
+      { id: "counts", title: "Counts", demo: "GalleryNavCounts", span: "2x2" },
+      { id: "marker", title: "Selection marker", demo: "GalleryNavMarker", span: "2x2" },
       { id: "horizontal", title: "Horizontal", demo: "GalleryNavHorizontal", span: "2x2" },
-      { id: "actions", title: "Actions / expandable", demo: "GalleryNavActions", span: "2x2" },
+      { id: "actions", title: "Actions", demo: "GalleryNavActions", span: "2x2" },
+      { id: "expandable", title: "Expandable", demo: "GalleryNavExpandable", span: "2x2" },
     ],
     panel: [
-      { id: "default", title: "Frame inspector", demo: "GalleryPanel", span: "2x2" },
-      { id: "sections", title: "Scroll variant", demo: "GalleryPanelSections", span: "2x2" },
-      { id: "footer", title: "Section mappings", demo: "GalleryPanelFooter", span: "2x2" },
+      { id: "default", title: "Default", demo: "GalleryPanel", span: "2x2" },
+      { id: "sections", title: "Sections", demo: "GalleryPanelSections", span: "2x2" },
+      { id: "footer", title: "Footer", demo: "GalleryPanelFooter", span: "2x2" },
     ],
     popover: [
       { id: "teaching", title: "Teaching step", demo: "GalleryPopover" },
@@ -326,7 +340,7 @@ function galleryPage() {
         title: `Dot ${titleCase(variant)} / ${titleCase(tone)}`,
         demo: `GalleryBadgeDot${titleCase(variant)}${titleCase(tone)}`,
       }))),
-      ...["Open", "Merged", "Closed", "Draft", "Queued"].map((state) => ({ id: `state-${state.toLowerCase()}`, title: `State / ${state}`, demo: `GalleryBadgeState${state}` })),
+      ...["Open", "Done", "Closed", "Draft", "Queued"].map((state) => ({ id: `state-${state.toLowerCase()}`, title: `State / ${state}`, demo: `GalleryBadgeState${state}` })),
       { id: "truncation", title: "Truncation", demo: "BadgeTruncation" },
       { id: "uppercase", title: "Uppercase", demo: "BadgeUppercase" },
       { id: "link", title: "Link", demo: "BadgeLink" },
@@ -344,7 +358,7 @@ function galleryPage() {
       { id: "group-inline", title: "Group Inline", demo: "BadgeGroupInline" },
       { id: "group-overlay", title: "Group Overlay", demo: "BadgeGroupOverlay" },
       { id: "group-auto", title: "Group Auto", demo: "BadgeGroupAuto" },
-      { id: "custom-brand", title: "Custom Brand", demo: "BadgeCustomBrand" },
+      { id: "custom-brand", title: "Custom tone", demo: "BadgeCustomBrand" },
       { id: "nav-new", title: "Nav New", demo: "BadgeNavNew" },
       { id: "card-heading", title: "Card Heading", demo: "BadgeCardHeading" },
     ],
@@ -522,9 +536,9 @@ function galleryPage() {
     ],
     card: [
       { id: "vertical", title: "Vertical", demo: "CardVertical", span: "2x2" },
-      { id: "wide", title: "Wide", demo: "CardWide", span: "2x2" },
+      { id: "horizontal", title: "Horizontal", demo: "CardHorizontal", span: "2x2" },
       { id: "immersive", title: "Immersive", demo: "CardImmersive", span: "2x2" },
-      { id: "small", title: "Small", demo: "CardSmall", span: "2x2" },
+      { id: "compact", title: "Compact", demo: "CardCompact", span: "2x2" },
       { id: "carousel", title: "Carousel", demo: "CardCarousel", span: "2x2" },
     ],
     kbd: [
@@ -537,18 +551,21 @@ function galleryPage() {
       { id: "on-emphasis", title: "Appearance / on emphasis", demo: "GalleryKbdOnEmphasis" },
     ],
     tooltip: [
-      { id: "open", title: "Top", demo: "GalleryTooltip" },
+      { id: "open", title: "Default", demo: "GalleryTooltip" },
+      { id: "arrow", title: "With indicator", demo: "GalleryTooltipArrow" },
       { id: "kbd", title: "With Kbd", demo: "GalleryTooltipKbd" },
       { id: "side", title: "Right", demo: "GalleryTooltipSide" },
       { id: "bottom", title: "Bottom", demo: "GalleryTooltipBottom" },
       { id: "left", title: "Left", demo: "GalleryTooltipLeft" },
     ],
     menu: [
-      { id: "default", title: "Default / actions", demo: "GalleryMenu", span: "2x2" },
+      { id: "default", title: "Default", demo: "GalleryMenu", span: "2x2" },
+      { id: "shortcuts", title: "Shortcuts", demo: "GalleryMenuShortcuts", span: "2x2" },
       { id: "selected", title: "State / selected", demo: "GalleryMenuSelected", span: "2x2" },
       { id: "search", title: "Composition / search", demo: "GalleryMenuSearch", span: "2x2" },
       { id: "submenu", title: "Composition / nested submenu", demo: "GalleryMenuSubmenu", span: "2x2" },
-      { id: "disabled", title: "State / disabled + danger", demo: "GalleryMenuDisabled", span: "2x2" },
+      { id: "disabled", title: "Disabled", demo: "GalleryMenuDisabled", span: "2x2" },
+      { id: "danger", title: "Danger", demo: "GalleryMenuDanger", span: "2x2" },
       { id: "controls", title: "Composition / controls", demo: "GalleryMenuControls", span: "2x2" },
     ],
     separator: [
@@ -579,13 +596,15 @@ function galleryPage() {
       { id: "icons", title: "With icons", demo: "GallerySegmentedIcons" },
       { id: "icon-only", title: "Icon only", demo: "GallerySegmentedIconOnly" },
       { id: "full-width", title: "Full width", demo: "GallerySegmentedFullWidth" },
+      { id: "disabled", title: "Disabled", demo: "GallerySegmentedDisabled" },
       { id: "size-small", title: "Size / small", demo: "GallerySegmentedSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GallerySegmentedMedium" },
       { id: "size-large", title: "Size / large", demo: "GallerySegmentedLarge" },
     ],
     table: [
       { id: "default", title: "Default", demo: "GalleryTable", span: "2x2" },
-      { id: "selection", title: "Selection / sorting", demo: "GalleryTableSelectable", span: "2x2" },
+      { id: "selection", title: "Selection", demo: "GalleryTableSelectable", span: "2x2" },
+      { id: "sorting", title: "Sorting", demo: "GalleryTableSorting", span: "2x2" },
       { id: "compact", title: "Compact rows", demo: "GalleryTableCompact", span: "2x2" },
       { id: "striped", title: "Striped", demo: "GalleryTableStriped", span: "2x2" },
       { id: "column-dividers", title: "Column dividers", demo: "GalleryTableDividers", span: "2x2" },
@@ -593,19 +612,23 @@ function galleryPage() {
       { id: "loading", title: "Loading", demo: "GalleryTableLoading", span: "2x2" },
     ],
     tabs: [
-      { id: "default", title: "Default / disabled", demo: "GalleryTabs", span: "2x1" },
+      { id: "default", title: "Default", demo: "GalleryTabs", span: "2x1" },
+      { id: "disabled", title: "Disabled", demo: "GalleryTabsDisabled", span: "2x1" },
       { id: "vertical", title: "Vertical", demo: "GalleryTabsVertical", span: "2x1" },
       { id: "small", title: "Small", demo: "GalleryTabsSmall", span: "2x1" },
       { id: "track", title: "With track", demo: "GalleryTabsTrack", span: "2x1" },
-      { id: "badges", title: "Icons / counts", demo: "GalleryTabsBadges", span: "2x1" },
+      { id: "icons", title: "Icons", demo: "GalleryTabsIcons", span: "2x1" },
+      { id: "counts", title: "Counts", demo: "GalleryTabsCounts", span: "2x1" },
     ],
     toast: [
       { id: "default", title: "Success", demo: "GalleryToast", span: "2x1" },
       { id: "info", title: "Info", demo: "GalleryToastInfo", span: "2x1" },
       { id: "warning", title: "Warning", demo: "GalleryToastWarning", span: "2x1" },
       { id: "danger", title: "Danger", demo: "GalleryToastDanger", span: "2x1" },
+      { id: "title", title: "With title", demo: "GalleryToastTitle", span: "2x1" },
       { id: "multiline", title: "Multiline", demo: "GalleryToastMultiline", span: "2x1" },
-      { id: "action", title: "Action / dismissible", demo: "GalleryToastAction", span: "2x1" },
+      { id: "action", title: "Action", demo: "GalleryToastAction", span: "2x1" },
+      { id: "dismissible", title: "Dismissible", demo: "GalleryToastDismissible", span: "2x1" },
     ],
     textarea: [
       { id: "count", title: "Label / character count", demo: "GalleryTextareaCount" },
@@ -671,15 +694,15 @@ function galleryPage() {
     </nav>
     ${sections}
   </div>
-  <aside class="docs-visual-gallery__inspector area-panel area-panel--md area-panel--flush" aria-label="Customize gallery">
+  <aside class="docs-visual-gallery__inspector area-panel area-panel--md" aria-label="Customize gallery">
     <div class="area-panel__bar docs-visual-gallery__inspector-bar">
       <span class="area-panel__title docs-visual-gallery__inspector-title">Customize</span>
       <span class="docs-visual-gallery__inspector-actions">
         <button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm" data-reset-axes>
           <span class="area-button__label">Reset</span>
         </button>
-        <button type="button" class="area-button area-button--ghost area-button--neutral area-button--sm area-button--icon-only docs-visual-gallery__rail-toggle" data-gallery-rail="panel" aria-expanded="true" aria-controls="gallery-customizer-body" aria-label="Collapse customize panel">
-          <span aria-hidden="true">${ICONS.panelRight}</span>
+        <button type="button" class="area-button area-button--ghost area-button--neutral area-button--md area-button--icon-only docs-visual-gallery__rail-toggle" data-gallery-rail="panel" aria-expanded="true" aria-controls="gallery-customizer-body" aria-label="Collapse customize panel">
+          <span class="area-button__icon" aria-hidden="true">${ICONS.panelRight}</span>
         </button>
       </span>
     </div>
@@ -695,6 +718,7 @@ function galleryPage() {
 <script type="module" src="./chip-demos.js"></script>
 <script type="module" src="./alert-demos.js"></script>
 <script type="module" src="./avatar-demos.js"></script>
+<script type="module" src="./code-block-demos.js"></script>
 </body>
 </html>`;
 }
@@ -703,10 +727,12 @@ function galleryPage() {
 
 function demoMarkup(name, html) {
   if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryCodeBlockCopy", "GalleryDialogModal"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;min-inline-size:0;text-align:center">${html}</div>`;
+  if (name === "GalleryDialogModal") return `<div data-switch-demo="${name}" style="inline-size:100%;min-inline-size:0;text-align:center">${html}</div>`;
+  // Every code block is hydrated: copy, the language picker and show/hide are behaviour.
+  if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
   if (["GalleryTableSelectable", "GalleryTextareaCount"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryNavActions", "GalleryTabs", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsBadges", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryMenuControls") return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="${["SwitchList", "SwitchSettingsRow"].includes(name) ? "inline-size:100%;" : ""}max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Slider") || name.startsWith("GallerySlider")) return `<div data-slider-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
@@ -1619,7 +1645,7 @@ ${codeBlock("npm install @area/react @area/styles")}
 ${codeBlock(`import { Button } from "@area/react";\nimport "@area/styles/area.css";\n\nexport default function App() {\n  return <Button>Get started</Button>;\n}`)}
 <h2 class="docs-h2" id="defaults">Defaults</h2>
 <p class="docs-note">Use the shared axis controls to change every component together. UI scale combines typography and density; theme handles light and dark mode. Component variants describe treatment, meaning, size, state and composition.</p>
-<p class="docs-note">Only ${[...COMPLETE_COMPONENTS].map(slug => COMPONENT_PAGES.find(page => page.slug === slug).name).join(", ")} are owner-confirmed complete. Other families remain available for refinement; see the <a href="./gallery.html">component gallery</a>.</p>
+<p class="docs-note">All ${[...COMPLETE_COMPONENTS].map(slug => COMPONENT_PAGES.find(page => page.slug === slug).name).join(", ")} are owner-confirmed complete. Refining a family reopens it as in review; see the <a href="./gallery.html">component gallery</a>.</p>
 <h2 class="docs-h2" id="principles">Principles</h2>
 <div class="docs-prose">
 <p><strong>Every number traces to a token.</strong> A control's corner radius comes from the radius preset and is capped against its height; a menu item's radius is its panel's radius less the panel's padding, floored at zero and capped against the row. These relationships stay true under every combination of axes.</p>
@@ -1682,4 +1708,5 @@ await (await import("esbuild")).build({ entryPoints: [join(root, "src/slider-cli
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/chip-client.tsx")], outfile: join(out, "chip-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/alert-client.tsx")], outfile: join(out, "alert-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/avatar-client.tsx")], outfile: join(out, "avatar-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
+await (await import("esbuild")).build({ entryPoints: [join(root, "src/code-block-client.tsx")], outfile: join(out, "code-block-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("./build-switch-fixture.mjs")).buildSwitchFixture(root, out);

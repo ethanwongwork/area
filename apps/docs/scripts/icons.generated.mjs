@@ -5,6 +5,8 @@
 export const ICONS = {
   // Fluent `copy_16_regular`
   copy: `<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M5 6H4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1h1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h1zm7-4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zM8 3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z"/></svg>`,
+  // Fluent `checkmark_16_regular`
+  check: `<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M13.86 3.66a.5.5 0 0 1-.02.7l-7.93 7.48a.6.6 0 0 1-.84-.02L2.4 9.1a.5.5 0 0 1 .72-.7l2.4 2.44 7.65-7.2a.5.5 0 0 1 .7.02"/></svg>`,
   // Fluent `arrow_counterclockwise_16_regular`
   reset: `<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M13 8a5 5 0 0 0-9-3h2a.5.5 0 1 1 0 1H2.99a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 1 0v1.53A5.99 5.99 0 0 1 14 8a6 6 0 0 1-11.97.54.5.5 0 0 1 1-.08A5 5 0 0 0 13 8"/></svg>`,
   // Fluent `arrow_expand_16_regular`

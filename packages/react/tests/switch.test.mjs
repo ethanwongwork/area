@@ -8,7 +8,7 @@ const render = props => renderToString(h(Switch, props));
 
 test("default is a medium switch with one native checkbox", () => {
   const html = render({ label: "Sync", name: "sync", value: "yes", defaultChecked: true });
-  assert.match(html, /area-switch--md area-switch--label-end/);
+  assert.match(html, /area-switch--md area-switch--end/);
   assert.equal((html.match(/<input /g) || []).length, 1);
   assert.match(html, /type="checkbox" role="switch"/);
   assert.match(html, /name="sync"/);

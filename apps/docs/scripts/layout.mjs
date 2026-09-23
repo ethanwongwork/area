@@ -22,9 +22,23 @@ export const escapeHtml = (s) =>
  *
  * Keywords are matched last and only outside a tag, so `import` in prose stays prose and an
  * attribute named `for` is not recoloured as a statement.
+ *
+ * Comments are recognised by line rather than by scan, because the only honest way to tell
+ * a `//` comment from a `//` inside a URL is that it starts the line. A line that starts as
+ * a comment is emitted whole: running the pass first would let a quoted string inside a
+ * comment swallow the span that wraps it.
  */
 export function highlight(code) {
-  return escapeHtml(code)
+  return code.split("\n").map(highlightLine).join("\n");
+}
+
+function highlightLine(line) {
+  if (/^\s*\/\//.test(line)) return `<span class="area-syntax-comment">${escapeHtml(line)}</span>`;
+  return highlightTokens(line);
+}
+
+function highlightTokens(line) {
+  return escapeHtml(line)
     .replace(/(&lt;\/?)([A-Za-z][\w.]*)/g, '$1<span class="area-syntax-tag">$2</span>')
     .replace(
       /([a-zA-Z-]+)(=)(&quot;[^&]*?&quot;)/g,
@@ -68,10 +82,16 @@ export function codeBlock(code, { flush = false, wrap = true } = {}) {
   // Only a block long enough to need it gets the control; wrapping a three-line import in
   // "Show code" would cost a row to hide nothing.
   const COLLAPSE_AFTER = 8;
-  const collapsible = code.split("\n").length > COLLAPSE_AFTER;
+  const lines = code.split("\n");
+  const collapsible = lines.length > COLLAPSE_AFTER;
   const collapsed = collapsible ? " data-collapsed" : "";
 
-  const pre = `<pre class="area-code-block__pre"><code>${highlight(code)}</code></pre>`;
+  // One row per line, numbered: the same anatomy the React component renders. The snippet
+  // keeps its numbers because the point of the block is to be referred to line by line.
+  const rows = lines
+    .map((line, index) => `<span class="area-code-block__line"><span class="area-code-block__gutter" aria-hidden="true">${index + 1}</span><span class="area-code-block__text">${highlight(line)}</span></span>`)
+    .join("");
+  const pre = `<pre class="area-code-block__pre"><code class="area-code-block__code">${rows}</code></pre>`;
   const body = collapsible
     ? `<div class="area-code-block__body">${pre}
     <button type="button" class="area-code-block__toggle" data-code-toggle aria-expanded="false">
@@ -84,7 +104,7 @@ export function codeBlock(code, { flush = false, wrap = true } = {}) {
   // panel already reverts, from a button most readers never had reason to press -- and
   // Customize moved onto the preview it acts on.
   return `<div class="${cls}"${collapsed}>
-  <span class="area-code-block__actions">${toolbarButton("copy", "Copy code", "data-copy")}</span>
+  <span class="area-code-block__actions">${toolbarButton("copy", "Copy code", "data-copy")}<span class="area-sr-only" data-copy-status aria-live="polite"></span></span>
   ${body}
 </div>`;
 }
@@ -529,8 +549,6 @@ export const DOCS_CSS = `
     z-index: 50;
     inset-inline-end: var(--area-space-12);
     --area-panel-inline-size: min(calc(100vw - var(--area-space-24)), calc(var(--area-space-80) * 3));
-    border-radius: var(--area-radius-container);
-    box-shadow: var(--area-shadow-3);
     inset-block-start: var(--area-space-8);
     max-block-size: calc(100vh - var(--area-space-16));
     overflow: auto;
@@ -1054,8 +1072,8 @@ export const DOCS_CSS = `
  */
 @layer area.utilities {
   .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector {
-    overflow: hidden;
-    --area-panel-inline-size: var(--area-control-md);
+    overflow: visible;
+    --area-panel-inline-size: calc(var(--area-control-md) + var(--area-border-width) * 2);
   }
   .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-title,
   .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-body,
@@ -1067,6 +1085,8 @@ export const DOCS_CSS = `
     padding-inline: 0;
     padding-block: 0;
     min-block-size: var(--area-control-md);
+    block-size: var(--area-control-md);
+    border-block-end: 0;
   }
   .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-actions {
     display: block;
@@ -1092,6 +1112,11 @@ export const DOCS_CSS = `
 `;
 
 export const DOCS_SCRIPT = `
+  // The two glyphs the Copy control swaps between, serialised so the handler can put the
+  // mark back without a second request.
+  var COPY_GLYPH = ${JSON.stringify(ICONS.copy)};
+  var CHECK_GLYPH = ${JSON.stringify(ICONS.check)};
+
   // Show / hide code. Collapsed is the server-rendered state, so a block is never briefly
   // full-height before the script runs.
   document.querySelectorAll("[data-code-toggle]").forEach(function (button) {
@@ -1553,13 +1578,27 @@ export const DOCS_SCRIPT = `
     var copy = event.target.closest("[data-copy]");
     if (copy) {
       var block = copy.closest(".area-code-block");
-      var text = block.querySelector("pre").textContent;
-      navigator.clipboard.writeText(text).then(function () {
-        var label = copy.querySelector(".area-button__label");
-        var original = label.textContent;
-        label.textContent = "Copied";
-        setTimeout(function () { label.textContent = original; }, 1200);
-      });
+      // The gutter is chrome, so the clipboard is assembled from the text cells rather
+      // than from the pre -- otherwise every paste would arrive with line numbers.
+      var cells = block.querySelectorAll(".area-code-block__text");
+      var text = cells.length
+        ? Array.prototype.map.call(cells, function (cell) { return cell.textContent; }).join("\\n")
+        : block.querySelector("pre").textContent;
+      var status = block.querySelector("[data-copy-status]");
+      var glyph = copy.querySelector(".area-button__icon");
+      var mark = copy.getAttribute("aria-label");
+      var settle = function (message, icon) {
+        if (status) status.textContent = message;
+        copy.setAttribute("aria-label", message);
+        if (glyph && icon) glyph.innerHTML = icon;
+        setTimeout(function () {
+          if (status) status.textContent = "";
+          copy.setAttribute("aria-label", mark);
+          if (glyph) glyph.innerHTML = COPY_GLYPH;
+        }, 1600);
+      };
+      if (!navigator.clipboard || !navigator.clipboard.writeText) settle("Copy failed");
+      else navigator.clipboard.writeText(text).then(function () { settle("Copied", CHECK_GLYPH); }, function () { settle("Copy failed"); });
     }
   });
 

@@ -1,10 +1,15 @@
 /* ---------------------------------------------------------------------------
  * Code
  *
- * Inline code, and the block form with its toolbar.
+ * Inline code, and the block form: a file header, a numbered gutter and the code itself.
  *
- * Optional file headers keep actions outside the code. Without a header, actions
- * sit at the top right with reserved inline space.
+ * The header carries the filename, the language and the actions. Without a title there is
+ * no header row: the copy control floats over the first line, which reserves room for it
+ * rather than giving a two-line example a bar of its own.
+ *
+ * A block is one grid row per line -- gutter, then text -- so the line treatments, the
+ * numbered and linked line numbers and the diff markers all compose instead of each
+ * needing a variant of its own markup.
  *
  * Embedded in an example, the block takes a rule along its top edge. That is the one line
  * worth drawing: above it is a rendered component, below it the source, and they are two
@@ -15,18 +20,113 @@
  * syntax palette is exactly the kind of thing that ships unreadable in dark mode.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /*
+   * The file header. A filename on the leading edge, the language beside it, and the copy
+   * action pushed to the trailing edge.
+   *
+   * The row is a control tier tall rather than a text tier tall, so the icon button inside
+   * it lands on the same rhythm as a toolbar and the hairline under it sits at a stable
+   * height whether or not the block has a language or actions.
+   */
   .area-code-block__header {
     text-align: start;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--area-space-12);
-    padding: var(--area-space-8) var(--area-space-16);
+    gap: var(--area-space-8);
+    min-block-size: var(--area-control-md);
+    padding-block: var(--area-space-4);
+    padding-inline: var(--area-space-12);
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
-  .area-code-block__header + .area-code-block__pre { padding-inline-end: var(--area-space-16); }
+
+  /* The filename is a literal, so it is set in the same face as the code it names. */
+  .area-code-block__title {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-6);
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    font-family: var(--area-font-mono);
+    font-weight: var(--area-weight-strong);
+  }
+
+  /* The language is a quiet annotation beside the filename, not a second title. */
+  .area-code-block__language {
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+
+  .area-code-block__languages {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-2);
+    min-inline-size: 0;
+  }
+
+  /*
+   * The picker is chrome inside the header rather than a form control on a page, so it
+   * takes its own width instead of the field measure it would take in a form. The height,
+   * edge and chevron stay the shared Select's -- one control, one appearance.
+   */
+  .area-code-block .area-code-block__select {
+    inline-size: auto;
+  }
+
+  /*
+   * The tabbed switcher follows the Tabs language: transparent, hover previews the
+   * indicator, and the selected tab carries a label-width underline in the foreground
+   * rather than an accent fill, so the row does not read as a row of buttons.
+   */
+  .area-code-block__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    block-size: var(--area-control-sm);
+    padding-inline: var(--area-space-6);
+    border: 0;
+    border-radius: var(--area-radius-small);
+    background-color: transparent;
+    color: var(--area-fg-muted);
+    font-family: var(--area-font-mono);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+
+  .area-code-block__tab:hover {
+    color: var(--area-fg-default);
+    background-color: var(--area-bg-hover);
+  }
+
+  .area-code-block__tab:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+
+  .area-code-block__tab[aria-selected="true"] {
+    color: var(--area-fg-default);
+  }
+
+  .area-code-block__tab[aria-selected="true"]::after {
+    content: "";
+    position: absolute;
+    inset-inline: var(--area-space-6);
+    inset-block-end: 0;
+    block-size: var(--area-border-width);
+    border-radius: var(--area-radius-small);
+    background-color: currentColor;
+  }
+
+  .area-code-block__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    margin-inline-start: auto;
+  }
   /*
    * Inline code is the token badge without a swatch.
    *
@@ -101,21 +201,113 @@
   }
 
   /*
-   * Copy, riding on the first line of code rather than above it.
+   * Copy with no filename to sit beside, riding on the first line of code instead.
    *
    * Centred on that line, not on the block's padding: the offset is the padding plus half
    * the difference between the line's leading and the control's height, so the button's
    * midline and the first line's midline coincide at any density.
    */
-  .area-code-block__actions {
+  .area-code-block > .area-code-block__actions {
     position: absolute;
     inset-block-start: calc(
-      var(--area-space-16) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2
+      var(--area-space-12) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2
     );
-    inset-inline-end: var(--area-space-12);
+    inset-inline-end: var(--area-space-8);
     z-index: 1;
+  }
+
+  /* The first line keeps clear of the control that floats over it. */
+  .area-code-block > .area-code-block__actions ~ .area-code-block__body
+    .area-code-block__line:first-child .area-code-block__text {
+    padding-inline-end: var(--area-space-48);
+  }
+
+  .area-code-block__pre {
+    --_code-gutter: calc(var(--area-space-24) + var(--area-space-8));
+    --_code-block-inset: var(--area-space-12);
+    --_code-inline-inset: var(--area-space-16);
+
+    margin: 0;
+    padding-block: var(--_code-block-inset);
+    padding-inline: 0;
+    overflow-x: auto;
+    font-family: var(--area-font-mono);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    color: var(--area-fg-default);
+    white-space: pre;
+    tab-size: 2;
+  }
+
+  /*
+   * A line is a gutter and its text. Grid rather than a float so a two-line number -- or a
+   * diff marker beside it -- cannot push the code off its column, and so wrapped
+   * continuations line up under the first character rather than under the number.
+   */
+  .area-code-block__code {
+    display: block;
+    /* One long line scrolls the whole block rather than wrapping under the gutter. */
+    min-inline-size: max-content;
+  }
+
+  .area-code-block__line {
+    display: grid;
+    grid-template-columns: var(--_code-gutter) minmax(0, 1fr);
+  }
+
+  .area-code-block--unnumbered .area-code-block__line {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* A diff marker keeps its own column even when the numbers are hidden. */
+  .area-code-block--unnumbered .area-code-block__line--added,
+  .area-code-block--unnumbered .area-code-block__line--removed {
+    grid-template-columns: var(--_code-gutter) minmax(0, 1fr);
+  }
+
+  .area-code-block__gutter {
     display: flex;
+    align-items: center;
+    justify-content: flex-end;
     gap: var(--area-space-4);
+    /* The gap between number and code, and the row's leading inset when it is a link. */
+    padding-inline: var(--area-space-6) var(--area-space-12);
+    color: var(--area-fg-muted);
+    font-variant-numeric: tabular-nums;
+    /* Numbers are chrome: they must not land in a copied selection. */
+    user-select: none;
+  }
+
+  /*
+   * A referenced line number is a link to the line itself, so the target paints from
+   * `:target` with no script -- and the URL carries the reference the reader can share.
+   */
+  .area-code-block__linenumber {
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--area-radius-small);
+  }
+
+  .area-code-block__linenumber:hover {
+    color: var(--area-fg-default);
+  }
+
+  .area-code-block__linenumber:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+
+  /* Diff markers sit inside the gutter, before the number. */
+  .area-code-block__marker {
+    inline-size: var(--area-space-8);
+    text-align: center;
+    font-weight: var(--area-weight-strong);
+  }
+
+  .area-code-block__text {
+    padding-inline-end: var(--_code-inline-inset);
+    /* A blank line in the source still occupies a line in the block. */
+    min-block-size: var(--area-text-sm-leading);
   }
 
   /*
@@ -127,35 +319,82 @@
     overflow-wrap: break-word;
   }
 
-  .area-code-block__pre {
-    margin: 0;
-    padding: var(--area-space-16);
-    /* Room for the floating Copy, so a long first line cannot slide under it. */
-    padding-inline-end: var(--area-space-48);
-    overflow-x: auto;
-    font-family: var(--area-font-mono);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
-    color: var(--area-fg-default);
-    white-space: pre;
-    tab-size: 2;
+  .area-code-block--wrap .area-code-block__code {
+    min-inline-size: 0;
+  }
+
+  .area-code-block--wrap .area-code-block__text {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  /* --- Line emphasis --------------------------------------------------------- */
+
+  /*
+   * Three line treatments, all painted on the row so the tint runs the full inline width
+   * including the gutter -- a highlight that starts after the number reads as a text
+   * decoration rather than as a marked line.
+   *
+   * The neutral wash is a translucent state token, so it composes over the code ground in
+   * either theme; the diff tints use the success and danger surfaces their markers agree
+   * with.
+   */
+  .area-code-block__line--highlighted {
+    background-color: var(--area-bg-active);
+  }
+
+  .area-code-block__line--added {
+    background-color: var(--area-success-surface);
+  }
+
+  .area-code-block__line--removed {
+    background-color: var(--area-danger-surface);
+  }
+
+  .area-code-block__line--added .area-code-block__marker {
+    color: var(--area-fg-success-vivid);
+  }
+
+  .area-code-block__line--removed .area-code-block__marker {
+    color: var(--area-fg-danger-vivid);
+  }
+
+  /* Following a line-number link marks the line it landed on. */
+  .area-code-block__line:target {
+    background-color: var(--area-bg-active);
+    box-shadow: inset var(--area-space-2) 0 0 0 var(--area-accent-solid);
   }
 
   /*
-   * Four hues at their vivid rung, which on this ground resolves to level 500 for red,
-   * purple and blue -- the three on the palette's label wall, where 500 is pinned to clear
-   * AA against white.
+   * Four hues, each at its scale's own vivid rung.
    *
-   * Orange cannot join them. It sits on the glyph wall, where 500 is pinned to 3:1, and it
-   * measures 3.00 against white -- fine for a status dot, unusable for an attribute name.
-   * Its vivid rung is 600. That is why these read a computed token rather than naming 500:
-   * the number is right for three of the four families and wrong for the fourth, and the
-   * walk knows which is which.
+   * Vivid is not a rung we picked: `chooseVivid` walks outward from 500 until the colour
+   * clears 4.6:1 against the code block's own ground, and APCA Lc 61 in dark. That is why
+   * these read a computed token rather than naming a level -- the number that works is
+   * different per family and per theme, and a palette literal here is exactly how a syntax
+   * palette ships unreadable in dark mode.
+   *
+   *   keyword  red      import, const, return
+   *   tag      purple   <Button>
+   *   attr     blue     icon=, variant=
+   *   string   accent   "…" -- follows the accent axis, so a pink accent gives pink strings
+   *
+   * Structure stays neutral: a hue on the punctuation that carries the nesting makes code
+   * read as confetti rather than as syntax. Comments are muted for the same reason.
+   *
+   * Three of the four are blue-violet, and dark mode compresses that family: blue and
+   * indigo measure 0.065 apart in OKLab in light and 0.024 in dark, purple 0.035 from
+   * indigo in dark (JND is 0.02). The assignment is therefore deliberate about which pairs
+   * may sit close: the tag is written inside angle brackets and the string carries its own
+   * quotes, so the two near pairs separate by shape as well as hue, while the two bare
+   * identifiers that would genuinely be confusable -- tag and attribute -- are 0.059 apart
+   * in dark rather than 0.024. A fifth blue-violet family would not add information.
    */
-  .area-code-block__pre .area-syntax-keyword { color: var(--area-fg-discovery-vivid); }
-  .area-code-block__pre .area-syntax-tag { color: var(--area-fg-danger-vivid); }
-  .area-code-block__pre .area-syntax-attr { color: var(--area-fg-success-vivid); }
+  .area-code-block__pre .area-syntax-keyword { color: var(--area-fg-danger-vivid); }
+  .area-code-block__pre .area-syntax-tag { color: var(--area-fg-discovery-vivid); }
+  .area-code-block__pre .area-syntax-attr { color: var(--area-fg-info-vivid); }
   .area-code-block__pre .area-syntax-string { color: var(--area-fg-accent-vivid); }
+  .area-code-block__pre .area-syntax-comment { color: var(--area-fg-muted); }
   .area-code-block__pre .area-syntax-punct { color: var(--area-fg-muted); }
 
   /* --- Collapsing ------------------------------------------------------------ */
@@ -180,7 +419,7 @@
   }
 
   .area-code-block[data-collapsed] .area-code-block__pre {
-    max-block-size: calc(var(--area-text-sm-leading) * 8 + var(--area-space-16) * 2);
+    max-block-size: calc(var(--area-text-sm-leading) * 8 + var(--_code-block-inset) * 2);
     overflow: hidden;
   }
 

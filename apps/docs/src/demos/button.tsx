@@ -82,10 +82,10 @@ export const ButtonSizes = () => (
 export const ButtonWithIcon = () => (
   <>
     <Button variant="outline" tone="neutral" icon={<PlusIcon />}>
-      Add item
+      Button
     </Button>
     <Button variant="outline" tone="neutral" trailingIcon={<ArrowIcon />}>
-      Continue
+      Button
     </Button>
   </>
 );
@@ -94,7 +94,7 @@ export const ButtonIconOnly = () => (
   <Button variant="outline" tone="neutral" iconOnly icon={<PlusIcon />} aria-label="Add item" />
 );
 
-export const ButtonLoading = () => <Button loading>Saving</Button>;
+export const ButtonLoading = () => <Button loading>Button</Button>;
 
 export const ButtonDisabled = () => (
   <>

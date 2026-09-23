@@ -4,7 +4,7 @@ import { mergeAxes, type AxisSelection } from '@area/tokens';
 import type { AreaToken } from '@area/tokens/types';
 const selection: Partial<AxisSelection> = {accent:'green',ui:'compact'};
 const token: AreaToken = '--area-accent-solid';
-export const valid = <Theme value={mergeAxes(undefined,selection)}><Button tone="accent" size="lg"/><Badge tone="neutral"/><Select size="lg"/><Panel size="xs"/><Slider size="lg"/><Chip size="lg"/><Checkbox size="sm"/><Switch size="lg"/><Nav tone="accent"/><CodeBlock layout="wrap" code={token}/></Theme>;
+export const valid = <Theme value={mergeAxes(undefined,selection)}><Button tone="accent" size="lg"/><Badge tone="neutral"/><Select size="lg"/><Panel size="xs"/><Slider size="lg"/><Chip size="lg"/><Checkbox size="sm"/><Switch size="lg"/><Nav tone="accent"/><CodeBlock wrap code={token}/></Theme>;
 buttonVariants({tone:'neutral',fullWidth:true}); selectVariants({size:'lg'});
 classesFor(MANIFESTS.button,{variant:'outline'});stateAttributes(MANIFESTS.button,{disabled:true});
 // @ts-expect-error retired vocabulary
@@ -29,8 +29,8 @@ stateAttributes(MANIFESTS.button,{invalid:true});
 // @ts-expect-error unknown element
 buttonVariants.element('mystery');
 export const titledCode = <CodeBlock title="example.ts" code="const value = 1"/>;
-// @ts-expect-error toolbar is not a CodeBlock layout
-export const invalidCode = <CodeBlock layout="toolbar"/>;
+// @ts-expect-error toolbar is not a CodeBlock option
+export const invalidCode = <CodeBlock toolbar/>;
 
 // @ts-expect-error generic helpers retain the exact manifest contract
 classesFor(MANIFESTS.button,{tone:"invalid"});

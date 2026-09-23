@@ -1,7 +1,182 @@
-# Handoff — 2026-09-22
+# Handoff — 2026-09-23
+
+## Current checkpoint
+
+- Branch `main`; GitHub `origin` is canonical. The user authorized committing and
+  pushing the complete working tree after this checkpoint.
+- Tooltip is owner-approved and complete. The default has no indicator; the separate
+  `withIndicator` specimen uses an 8px diamond with a subtle 2px rounded tip.
+- Gallery customizer uses the normal rounded Panel surface with a subtle shadow and a
+  real icon-only Button. Compact controls measure 28px; the default scale is 32px with
+  16px icons.
+- Prior component-library work in this tree includes the code block redesign, tabs/nav/
+  dialog refinements, stroke and fill audit, toast alignment, copy cleanup, variant
+  naming, and supplied Figma-style inspector research.
+
+## Next roadmap
+
+Implement the inspector foundation in this order: NumberField (numeric values, stepper,
+scrubbing, units and calculations), InputGroup, Toolbar/ButtonGroup, AlignmentPicker,
+composable color controls, then Position/Auto layout/Appearance/Fill/Stroke/Effects
+inspector recipes. Add overlay placement and focus behavior before advanced pickers.
+Use compact density as a scoped system setting for inspector panels: 28px controls with
+13px type and 18px line height; keep ordinary fields at the normal `md` size elsewhere.
+The broader proposed catalogue is in `docs/COMPONENTS.md`.
+
+## Next session
+
+Read this section and `docs/COMPONENTS.md`, then start NumberField. Keep CSS, the styles
+manifest, React, demos and docs aligned; test keyboard behavior, accessible names and
+native refs. Only owner-confirm completion in `apps/docs/src/component-status.mjs`.
+
 
 Branch main; substantial uncommitted changes. Do not commit/push without authorization.
 GitHub origin is canonical. Preview: http://localhost:4321/gallery.html.
+
+## Tooltip, gallery panel and expansion research, 2026-09-23
+
+Tooltip's default gallery specimen omits the pointer; a separate withIndicator example
+uses the existing arrow boolean with a 1px rounded tip. Side and shortcut examples keep
+that default. Tooltip is reopened as In review. The gallery customizer now uses the
+normal rounded Panel with shadow-2 and a proper md icon Button; the collapsed container
+preserves the button's square size and allows its focus outline to paint outside.
+Browser verified default/indicator, Enter expand/collapse, 32px default and 28px compact
+buttons, 16px icons, 12px panel radius and subtle shadow. Restored default UI scale.
+Docs/package build, dogfood audit, typecheck and 14 contract tests pass.
+
+Expanded docs/COMPONENTS.md with official-source research and review of all six supplied
+references. First proposed additions: NumberField (steppers/scrubbing/units), InputGroup,
+Toolbar/ButtonGroup, AlignmentPicker, composable color controls and inspector recipes.
+Most md controls should inherit compact UI density; this is Area guidance, not a claim
+about Figma's internal APIs. Broader catalogue gaps and overlay behavior prerequisites
+are recorded as proposals, not shipped components. No new input families built yet.
+
+## Stroke, fill and toast pass, 2026-09-23
+
+Audited neutral strokes against their existing contrast floors across light/dark and
+neutral/warm/cool palettes. Each shared border rung is already the lightest one that
+passes its role's floor; required control strokes also need their current rung to clear
+3:1 on the darkest/lightest neutral fills. Kept the neutral fill progression because
+the resting light fill is already #f7f7f7 against white, with the next rung at #fafafa.
+Popover, Menu and searchable Menu now use the same decorative edge as Card, Dialog and
+Toast; the popover arrow matches its shell. The multiline Toast demo is 240px wide and
+measures exactly two 20px lines. Toast icons align with the first line in every layout;
+8px vertical/10px horizontal padding gives the 16px icon equal 11px optical insets.
+Browser checked light and dark popovers and light toasts. Docs build, typecheck,
+19,491 token tests, 12 gallery primitive tests and 370 contrast assertions pass.
+
+## Tabs, Nav and Dialog refinement, 2026-09-22
+
+Tabs underline now spans the selected control including its icon or count; vertical tabs
+retain the leading marker. The gallery splits Tabs icons/counts/disabled and Nav
+groups/icons/counts/actions/expansion into distinct specimens, and simplifies the
+horizontal Nav. Also separated mixed Menu, Table, Alert, Toast and Segmented specimens.
+Dialog now has an optional close control (default on), title/description associations,
+24px inset and section gaps, 18/26 title, scrollable body and an undivided footer.
+Native modal close and focus return were browser checked. Gallery screenshots covered
+Tabs, vertical/horizontal Nav and Dialog; the scrollable example has a 288px surface,
+129px body viewport and 244px scroll content. Docs build/audit (46 pages, 583 demos),
+typecheck, 61 React tests, 14 contracts, 19,491 token tests and diff check pass. The
+browser viewport override is unavailable, so 390px was not rechecked in this pass.
+
+## Code block redesign, 2026-09-22
+
+Rebuilt CodeBlock on the [Geist Code Block](https://vercel.com/geist/code-block) anatomy,
+with Area tokens rather than Geist's measurements. Every block now renders a header row
+(filename, language, actions), a 32px line-number gutter, and one grid row per line, so
+the variants compose instead of each needing its own markup:
+
+- `title` / `language` add the header; without a title the copy control floats over the
+  first line, which keeps a long first line clear of it.
+- `languages` turns the label into a Select; `languageTabs` renders a tablist over the
+  same code, with arrow keys and the code body as the panel. `value` / `onLanguageChange`
+  are optional (uncontrolled defaults to the first language).
+- `highlightLines` takes numbers or `"3, 5-7"`; `marks` takes added/removed per line and
+  paints a glyph in the gutter as well as a tint.
+- `linkLines` makes each number an anchor to its own row. The target paints from `:target`
+  with no script and the reference travels in the URL.
+- `lineNumbers={false}` is the hidden-number variant; `collapsible` / `defaultCollapsed`
+  restore the show/hide control inside the component (it was docs-chrome-only before).
+- Copy is built in and on by default: it copies the code without the gutter, swaps glyphs,
+  and announces through a polite live region. `copyable={false}` opts out.
+
+Syntax palette is four measured vivid rungs: red keywords (danger), purple tags
+(discovery), blue attributes (info), accent strings. Punctuation and comments stay
+muted. Strings follow the accent axis, so a pink accent produces pink strings -- pink has
+no contrast-gated role of its own, and a palette literal would ship unreadable in dark
+mode. `SYNTAX_ROLES` in `packages/tokens/src/contrast/assertions.ts` moved from
+`success` to `info` to match. The remaining weakness is measured, not assumed: dark mode
+puts blue and indigo 0.024 apart in OKLab (JND 0.02) and purple 0.035 from indigo, so the
+two near pairs are the tokens that carry their own delimiters (`"…"`, `<…>`), while the
+two bare identifiers that would genuinely be confusable, tag and attribute, are 0.059
+apart. `code.css` records the numbers.
+
+Docs chrome follows the same anatomy: the docs highlighter now highlights per line and
+emits `area-syntax-comment` for a line that starts with `//`, and `codeBlock()` in
+`layout.mjs` emits numbered rows. The delegated copy handler reads the text cells rather
+than `pre.textContent`, so pasted code never carries line numbers, and it now swaps to the
+check glyph and announces -- the previous handler looked for an `.area-button__label` the
+icon-only toolbar button never had, so its "Copied" feedback threw instead.
+`TOOLBAR.check` was added to `gen-icons.mjs` and the icons regenerated (catalog unchanged).
+
+New plumbing: `apps/docs/src/code-block-client.tsx` hydrates `[data-code-block-demo]` on
+the gallery and the code-block page, because copy, the language picker and show/hide are
+behaviour. Ten gallery specimens (default, no filename, highlighted, diff, referenced,
+switcher, tabs, hidden numbers, wrapped, collapsed) plus eleven page examples share the
+same demos, which pass pre-highlighted `html` so the palette is visible in the previews.
+
+Checks: docs build + audit (46 pages, 565 demos), typecheck, 61 React tests, 14 contracts,
+19,491 token tests, consumer check, preview tests, `lint:manifest`, `git diff --check`.
+Browser-verified light and dark, default and compact, desktop and 390px: copy announces and
+swaps, the Select and tablist both swap the code, ArrowRight moves tab selection, the
+collapsed block measures exactly eight lines (184px), a line link paints its target, and
+no console errors on the code-block, gallery, button, lab or contrast pages. The 390px
+overflow seen on the gallery page comes from another section, not this one: with only the
+code-block section open the document measures exactly the viewport width.
+
+## Completion and placeholder copy, 2026-09-22
+
+Every family that ships is now owner-confirmed complete: `component-status.mjs` lists
+all 31 component pages, `REVIEW_COMPONENTS` is empty, and README, Components and the
+Introduction page say the same. The gallery index reads 31 Complete, 0 In review, 0
+Unrefined; refining a family is what reopens it.
+
+All demo and gallery copy now uses one placeholder vocabulary, documented under
+"Example copy" in `docs/DESIGN_SYSTEM.md`: the component's own name (`Button`, `Badge`,
+`Chip`, `Code`), `Title`, `Label`, `Description`, `Body text`, `Action`/`Secondary`/
+`Cancel`/`Delete`/`Undo`, `Item one`, `Option one`, `Value`, `1`, `Placeholder`,
+`Error|Success|Warning message`. Size specimens name the tier, treatment/tone matrices
+name the value, and icon-paired labels keep their meaning (`Top`/`Middle`/`Bottom` with
+alignment icons, `Add item` for a plus icon-only button). Inline controls that show every
+option (Segmented, Tabs, chip rows) use the short ordinal `One`/`Two`/`Three` so the
+track does not truncate. Invented people, products and projects are gone; only the RTL,
+long-text and zoom verification fixtures keep their stress copy.
+
+Two stale tests left over from the naming pass were corrected: chip tests used the old
+`variant` prop instead of `kind`, and the slider test asserted the removed `track`
+variant and `area-slider--label-top`. Panel gallery tiles were renamed Default/Sections/
+Footer, and the Badge custom-tone tile "Custom tone".
+
+Checks: docs build + dogfood audit (46 pages, 559 demos), typecheck, 56 React tests,
+14 contracts, 19,491 token tests, consumer check, preview tests, `lint:manifest` and
+`git diff --check` all pass. Browser-checked the gallery index, avatar/badge/table/panel/
+segmented/input/kbd/dialog sections and every component page for clipped text; only the
+intentional truncation and verification fixtures clip. Light desktop only; narrow
+widths, dark mode and the lab fixtures were not re-inspected for this copy pass.
+
+## Variant naming pass
+
+Reviewed all 41 manifest entries (60 axes, 174 named values, 35 flags) against React,
+CSS and docs. Chip interaction categories use `kind`; Card layouts use `horizontal`
+and `compact`; Switch `labelPosition` uses `start`/`end`; Slider top labels use the
+`labelPosition` axis. Removed Slider's no-op `variant="track"`. Table `interactive`
+and CodeBlock `flush`/`wrap` are independent booleans; the latter can combine.
+These are API/class renames in the unpublished local packages. Existing Button/Badge
+`variant` remains visual treatment; specialized Kbd/Panel size names remain deliberate.
+Docs build/audit, typecheck, 14 contracts, 12 focused component tests, consumer check
+and diff check passed. Browser confirmed renamed specimen classes and computed layouts.
+Owner completion status unchanged. The earlier Tabs/Switch tier-gap edits remain
+uncommitted alongside this pass.
 
 ## Latest work
 

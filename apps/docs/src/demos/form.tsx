@@ -3,47 +3,47 @@ import { Avatar, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Inpu
 import { CheckIcon, DismissIcon, OpenIcon, SearchIcon, TrashIcon } from "../icons.tsx";
 import { SliderRangeComposition } from "./slider-range.tsx";
 
-export const InputDefault = () => <Input aria-label="Email" placeholder="Email" />;
+export const InputDefault = () => <Input aria-label="Label" placeholder="Placeholder" />;
 
-export const InputLeadingVisual = () => <Input leadingIcon={<SearchIcon />} placeholder="Search" aria-label="Search" />;
+export const InputLeadingVisual = () => <Input leadingIcon={<SearchIcon />} placeholder="Placeholder" aria-label="Label" />;
 
-export const InputTrailingVisual = () => <Input trailingIcon={<CheckIcon />} defaultValue="area.design" aria-label="Verified domain" />;
+export const InputTrailingVisual = () => <Input trailingIcon={<CheckIcon />} defaultValue="Value" aria-label="Label" />;
 
-export const InputWithAffix = () => <Input aria-label="Amount" prefix="$" suffix="USD" placeholder="0.00" />;
+export const InputWithAffix = () => <Input aria-label="Label" prefix="$" suffix="USD" placeholder="0.00" />;
 
 export const InputSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-input-inline-size)" }}>
-    <Input size="sm" placeholder="Small" aria-label="Small input" />
-    <Input size="md" placeholder="Medium" aria-label="Medium input" />
-    <Input size="lg" placeholder="Large" aria-label="Large input" />
+    <Input size="sm" placeholder="Small" aria-label="Label" />
+    <Input size="md" placeholder="Medium" aria-label="Label" />
+    <Input size="lg" placeholder="Large" aria-label="Label" />
   </div>
 );
 
-export const InputInvalid = () => <Input aria-label="Email" validationStatus="error" defaultValue="not-an-email" />;
+export const InputInvalid = () => <Input aria-label="Label" validationStatus="error" defaultValue="Invalid value" />;
 
-export const InputSuccess = () => <Input aria-label="Workspace name" validationStatus="success" defaultValue="area-design" />;
+export const InputSuccess = () => <Input aria-label="Label" validationStatus="success" defaultValue="Value" />;
 
-export const InputWarning = () => <Input aria-label="Workspace name" validationStatus="warning" defaultValue="area-design" />;
+export const InputWarning = () => <Input aria-label="Label" validationStatus="warning" defaultValue="Value" />;
 
-export const InputOutline = () => <Input variant="outline" placeholder="Outline" aria-label="Outline input" />;
+export const InputOutline = () => <Input variant="outline" placeholder="Outline" aria-label="Label" />;
 
-export const InputSoft = () => <Input variant="soft" placeholder="Soft" aria-label="Soft input" />;
+export const InputSoft = () => <Input variant="soft" placeholder="Soft" aria-label="Label" />;
 
-export const InputReadOnly = () => <Input readOnly defaultValue="Read-only value" aria-label="Read-only input" />;
+export const InputReadOnly = () => <Input readOnly defaultValue="Value" aria-label="Label" />;
 
-export const InputDisabled = () => <Input disabled placeholder="Disabled" aria-label="Disabled input" />;
+export const InputDisabled = () => <Input disabled placeholder="Disabled" aria-label="Label" />;
 
-export const InputLoading = () => <Input loading loadingText="Checking availability" defaultValue="area.design" aria-label="Loading input" />;
+export const InputLoading = () => <Input loading loadingText="Loading" defaultValue="Value" aria-label="Label" />;
 
-export const InputLoadingLeading = () => <Input leadingIcon={<SearchIcon />} loading loaderPosition="leading" loadingText="Searching" placeholder="Search" aria-label="Searching" />;
+export const InputLoadingLeading = () => <Input leadingIcon={<SearchIcon />} loading loaderPosition="leading" loadingText="Loading" placeholder="Placeholder" aria-label="Label" />;
 
-export const InputTrailingAction = () => <Input defaultValue="area.design" aria-label="Domain" trailingAction={<InputAction icon={<DismissIcon />} tooltip="Clear domain" />} />;
+export const InputTrailingAction = () => <Input defaultValue="Value" aria-label="Label" trailingAction={<InputAction icon={<DismissIcon />} tooltip="Clear" />} />;
 
-export const InputFullWidth = () => <div style={{ inlineSize: 320 }}><Input fullWidth placeholder="Full width when requested" aria-label="Full-width input" /></div>;
+export const InputFullWidth = () => <div style={{ inlineSize: 320 }}><Input fullWidth placeholder="Placeholder" aria-label="Label" /></div>;
 
-export const InputMonospace = () => <Input monospace defaultValue="sk-area-1234" aria-label="API key" />;
+export const InputMonospace = () => <Input monospace defaultValue="Value" aria-label="Label" />;
 
-export const InputFile = () => <Input type="file" aria-label="Upload file" />;
+export const InputFile = () => <Input type="file" aria-label="Label" />;
 
 export const InputRtl = () => (
   <div dir="rtl" style={{ inlineSize: "var(--area-input-inline-size)" }}>
@@ -51,290 +51,290 @@ export const InputRtl = () => (
       leadingIcon={<SearchIcon />}
       trailingIcon={<CheckIcon />}
       defaultValue="اسم مساحة عمل طويل لاختبار الاتجاه"
-      aria-label="Verified domain in right-to-left layout"
+      aria-label="Label"
     />
   </div>
 );
 
 export const FieldDefault = () => (
-  <Field label="Email">
-    <Input type="email" placeholder="you@example.com" />
+  <Field label="Label">
+    <Input type="email" placeholder="Placeholder" />
   </Field>
 );
 
 export const FieldError = () => (
   <Field
-    label="Email"
-    description="Use the address associated with your workspace."
-    error="Enter a valid email address."
+    label="Label"
+    description="Description"
+    error="Error message"
     required
   >
-    <Input defaultValue="not-an-email" />
+    <Input defaultValue="Invalid value" />
   </Field>
 );
 
 export const FieldDisabled = () => (
-  <Field label="Workspace" description="Managed by your organization." disabled>
-    <Input defaultValue="Area design" />
+  <Field label="Label" description="Description" disabled>
+    <Input defaultValue="Value" />
   </Field>
 );
 
 export const FieldHiddenLabel = () => (
-  <Field label="Search components" visuallyHiddenLabel>
-    <Input icon={<SearchIcon />} placeholder="Search components" />
+  <Field label="Label" visuallyHiddenLabel>
+    <Input icon={<SearchIcon />} placeholder="Placeholder" />
   </Field>
 );
 
 export const FieldHorizontal = () => (
-  <Field orientation="horizontal" label="Account name">
-    <Input placeholder="area-design" />
+  <Field orientation="horizontal" label="Label">
+    <Input placeholder="Placeholder" />
   </Field>
 );
 
 export const FieldSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-input-inline-size)" }}>
-    <Field label="Small field"><Input size="sm" placeholder="Small control" /></Field>
-    <Field label="Medium field"><Input size="md" placeholder="Medium control" /></Field>
-    <Field label="Large field"><Input size="lg" placeholder="Large control" /></Field>
+    <Field label="Small"><Input size="sm" placeholder="Small" /></Field>
+    <Field label="Medium"><Input size="md" placeholder="Medium" /></Field>
+    <Field label="Large"><Input size="lg" placeholder="Large" /></Field>
   </div>
 );
 
-export const FieldRequired = () => <Field label="Email" required><Input type="email" placeholder="you@example.com" /></Field>;
+export const FieldRequired = () => <Field label="Label" required><Input type="email" placeholder="Placeholder" /></Field>;
 
-export const FieldCaption = () => <Field label="Email" description="Use the address associated with your workspace."><Input type="email" placeholder="you@example.com" /></Field>;
+export const FieldCaption = () => <Field label="Label" description="Description"><Input type="email" placeholder="Placeholder" /></Field>;
 
-export const FieldValidation = () => <Field label="Email" error="Enter a valid email address." required><Input defaultValue="not-an-email" /></Field>;
+export const FieldValidation = () => <Field label="Label" error="Error message" required><Input defaultValue="Invalid value" /></Field>;
 
-export const FieldSuccess = () => <Field label="Workspace" validation="This name is available." validationStatus="success"><Input defaultValue="area-design" /></Field>;
+export const FieldSuccess = () => <Field label="Label" validation="Success message" validationStatus="success"><Input defaultValue="Value" /></Field>;
 
-export const FieldWarning = () => <Field label="Workspace" validation="This name is visible to everyone in your organization." validationStatus="warning"><Input defaultValue="area-design" /></Field>;
+export const FieldWarning = () => <Field label="Label" validation="Warning message" validationStatus="warning"><Input defaultValue="Value" /></Field>;
 
-export const TextareaDefault = () => <Textarea aria-label="Message" placeholder="Write a message" />;
+export const TextareaDefault = () => <Textarea aria-label="Label" placeholder="Placeholder" />;
 
-export const TextareaOutline = () => <Textarea variant="outline" aria-label="Outline message" placeholder="Outline" />;
+export const TextareaOutline = () => <Textarea variant="outline" aria-label="Label" placeholder="Outline" />;
 
-export const TextareaSoft = () => <Textarea variant="soft" aria-label="Soft message" placeholder="Soft" />;
+export const TextareaSoft = () => <Textarea variant="soft" aria-label="Label" placeholder="Soft" />;
 
 export const TextareaSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-textarea-inline-size)" }}>
-    <Textarea size="sm" rows={3} aria-label="Small textarea" placeholder="Small" />
-    <Textarea size="md" rows={3} aria-label="Medium textarea" placeholder="Medium" />
-    <Textarea size="lg" rows={3} aria-label="Large textarea" placeholder="Large" />
+    <Textarea size="sm" rows={3} aria-label="Label" placeholder="Small" />
+    <Textarea size="md" rows={3} aria-label="Label" placeholder="Medium" />
+    <Textarea size="lg" rows={3} aria-label="Label" placeholder="Large" />
   </div>
 );
 
-export const TextareaInvalid = () => <Textarea invalid aria-label="Invalid message" defaultValue="Too short" />;
+export const TextareaInvalid = () => <Textarea invalid aria-label="Label" defaultValue="Invalid value" />;
 
-export const TextareaSuccess = () => <Textarea validationStatus="success" aria-label="Accepted message" defaultValue="This response is ready." />;
+export const TextareaSuccess = () => <Textarea validationStatus="success" aria-label="Label" defaultValue="Value" />;
 
-export const TextareaWarning = () => <Textarea validationStatus="warning" aria-label="Message with warning" defaultValue="This response will be visible to everyone." />;
+export const TextareaWarning = () => <Textarea validationStatus="warning" aria-label="Label" defaultValue="Value" />;
 
-export const TextareaReadOnly = () => <Textarea readOnly aria-label="Read-only message" defaultValue="This note may be selected and copied." />;
+export const TextareaReadOnly = () => <Textarea readOnly aria-label="Label" defaultValue="Value" />;
 
-export const TextareaDisabled = () => <Textarea disabled aria-label="Disabled message" placeholder="Disabled" />;
+export const TextareaDisabled = () => <Textarea disabled aria-label="Label" placeholder="Disabled" />;
 
 export const TextareaFullWidth = () => (
   <div style={{ inlineSize: 320 }}>
-    <Textarea fullWidth rows={3} aria-label="Full-width message" placeholder="Full width when requested" />
+    <Textarea fullWidth rows={3} aria-label="Label" placeholder="Placeholder" />
   </div>
 );
 
-export const TextareaRows = () => <Textarea rows={2} aria-label="Short message" placeholder="Two visible rows" />;
+export const TextareaRows = () => <Textarea rows={2} aria-label="Label" placeholder="Placeholder" />;
 
 export const TextareaField = () => (
-  <Field label="Release notes" description="Summarize the user-visible changes.">
-    <Textarea placeholder="Added keyboard navigation" />
+  <Field label="Label" description="Description">
+    <Textarea placeholder="Placeholder" />
   </Field>
 );
 
-export const TextareaResizeNone = () => <Textarea resize="none" rows={3} aria-label="Fixed message area" placeholder="Resize disabled" />;
+export const TextareaResizeNone = () => <Textarea resize="none" rows={3} aria-label="Label" placeholder="Placeholder" />;
 
 export const SelectDefault = () => (
-  <Select aria-label="Control size" defaultValue="md">
-    <option value="sm">Small</option>
-    <option value="md">Medium</option>
-    <option value="lg">Large</option>
+  <Select aria-label="Label" defaultValue="one">
+    <option value="one">Option one</option>
+    <option value="two">Option two</option>
+    <option value="three">Option three</option>
   </Select>
 );
 
 export const SelectSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-select-inline-size)" }}>
-    <Select size="sm" aria-label="Small size" defaultValue="sm"><option value="sm">Small</option></Select>
-    <Select size="md" aria-label="Medium size" defaultValue="md"><option value="md">Medium</option></Select>
-    <Select size="lg" aria-label="Large size" defaultValue="lg"><option value="lg">Large</option></Select>
+    <Select size="sm" aria-label="Label" defaultValue="sm"><option value="sm">Small</option></Select>
+    <Select size="md" aria-label="Label" defaultValue="md"><option value="md">Medium</option></Select>
+    <Select size="lg" aria-label="Label" defaultValue="lg"><option value="lg">Large</option></Select>
   </div>
 );
 
 export const SelectField = () => (
-  <Field label="Region" description="This determines the default data location." required>
-    <Select defaultValue="us"><option value="us">United States</option><option value="eu">European Union</option><option value="apac">Asia Pacific</option></Select>
+  <Field label="Label" description="Description" required>
+    <Select defaultValue="one"><option value="one">Option one</option><option value="two">Option two</option><option value="three">Option three</option></Select>
   </Field>
 );
 
 export const SelectInvalid = () => (
-  <Field label="Framework" error="Select a framework." required>
-    <Select defaultValue=""><option value="">Select a framework</option><option value="react">React</option><option value="vue">Vue</option></Select>
+  <Field label="Label" error="Error message" required>
+    <Select defaultValue=""><option value="">Placeholder</option><option value="one">Option one</option><option value="two">Option two</option></Select>
   </Field>
 );
 
 export const SelectValidation = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    <Select validationStatus="success" aria-label="Verified region" defaultValue="us"><option value="us">United States</option></Select>
-    <Select validationStatus="warning" aria-label="Region with warning" defaultValue="us"><option value="us">United States</option></Select>
+    <Select validationStatus="success" aria-label="Label" defaultValue="one"><option value="one">Option one</option></Select>
+    <Select validationStatus="warning" aria-label="Label" defaultValue="one"><option value="one">Option one</option></Select>
   </div>
 );
 
-export const SelectDisabled = () => <Select disabled aria-label="Managed plan" defaultValue="enterprise"><option value="enterprise">Enterprise</option></Select>;
+export const SelectDisabled = () => <Select disabled aria-label="Label" defaultValue="one"><option value="one">Option one</option></Select>;
 
-export const SelectFullWidth = () => <div style={{ inlineSize: 320 }}><Select fullWidth aria-label="Full-width region" defaultValue="us"><option value="us">United States</option><option value="eu">European Union</option></Select></div>;
+export const SelectFullWidth = () => <div style={{ inlineSize: 320 }}><Select fullWidth aria-label="Label" defaultValue="one"><option value="one">Option one</option><option value="two">Option two</option></Select></div>;
 
 export const SelectGroups = () => (
-  <Select aria-label="Option groups" defaultValue="one">
+  <Select aria-label="Label" defaultValue="one">
     <optgroup label="Group one"><option value="one">Option one</option><option value="two">Option two</option></optgroup>
     <optgroup label="Group two"><option value="three">Option three</option><option value="four">Option four</option></optgroup>
   </Select>
 );
 
-export const CheckboxDefault = () => <Checkbox label="Accept terms" defaultChecked />;
+export const CheckboxDefault = () => <Checkbox label="Label" defaultChecked />;
 
 export const CheckboxDescription = () => (
   <Checkbox
-    label="Email notifications"
-    caption="Get notified when someone mentions you."
+    label="Label"
+    caption="Description"
     defaultChecked
   />
 );
 
 export const CheckboxLeadingVisual = () => (
-  <Checkbox label="GitHub notifications" leadingVisual={<CheckIcon />} />
+  <Checkbox label="Label" leadingVisual={<CheckIcon />} />
 );
 
 export const CheckboxCard = () => (
   <Checkbox
     variant="card"
-    label="Enable notifications"
-    caption="You can change this setting at any time."
+    label="Label"
+    caption="Description"
     leadingVisual={<CheckIcon />}
   />
 );
 
 export const CheckboxInvalid = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    <Checkbox label="Accept terms" invalid />
-    <Checkbox label="Required confirmation" defaultChecked invalid />
+    <Checkbox label="Label" invalid />
+    <Checkbox label="Label" defaultChecked invalid />
   </div>
 );
 
 export const CheckboxGroupDefault = () => (
-  <CheckboxGroup label="Notifications" description="Choose the updates you want to receive.">
-    <Checkbox name="notifications" value="mentions" label="Mentions" defaultChecked />
-    <Checkbox name="notifications" value="replies" label="Replies" />
-    <Checkbox name="notifications" value="releases" label="Product releases" />
+  <CheckboxGroup label="Label" description="Description">
+    <Checkbox name="notifications" value="one" label="Option one" defaultChecked />
+    <Checkbox name="notifications" value="two" label="Option two" />
+    <Checkbox name="notifications" value="three" label="Option three" />
   </CheckboxGroup>
 );
 
 export const CheckboxGroupInvalid = () => (
-  <CheckboxGroup label="Desktop items" error="Choose at least one item to show.">
-    <Checkbox name="desktop-items" value="drives" label="Hard disks" />
-    <Checkbox name="desktop-items" value="servers" label="Connected servers" />
+  <CheckboxGroup label="Label" error="Error message">
+    <Checkbox name="desktop-items" value="one" label="Option one" />
+    <Checkbox name="desktop-items" value="two" label="Option two" />
   </CheckboxGroup>
 );
 
 export const CheckboxGroupHorizontal = () => (
-  <CheckboxGroup label="Delivery channels" orientation="horizontal">
-    <Checkbox name="channels" value="email" label="Email" />
-    <Checkbox name="channels" value="sms" label="SMS" />
-    <Checkbox name="channels" value="push" label="Push" />
+  <CheckboxGroup label="Label" orientation="horizontal">
+    <Checkbox name="channels" value="one" label="Option one" />
+    <Checkbox name="channels" value="two" label="Option two" />
+    <Checkbox name="channels" value="three" label="Option three" />
   </CheckboxGroup>
 );
 
 export const CheckboxGroupSuccess = () => (
-  <CheckboxGroup label="Release notes" validation="Two update channels selected." validationStatus="success">
-    <Checkbox name="release-notes" value="email" label="Email" defaultChecked />
-    <Checkbox name="release-notes" value="in-app" label="In-app" defaultChecked />
+  <CheckboxGroup label="Label" validation="Success message" validationStatus="success">
+    <Checkbox name="release-notes" value="one" label="Option one" defaultChecked />
+    <Checkbox name="release-notes" value="two" label="Option two" defaultChecked />
   </CheckboxGroup>
 );
 
-export const CheckboxIndeterminate = () => <Checkbox label="Select all workspace members" indeterminate />;
+export const CheckboxIndeterminate = () => <Checkbox label="Label" indeterminate />;
 
 export const RadioDefault = () => (
-  <RadioGroup label="Plan" name="plan" defaultValue="starter">
-    <Radio value="starter" label="Starter" />
-    <Radio value="pro" label="Pro" />
+  <RadioGroup label="Label" name="plan" defaultValue="one">
+    <Radio value="one" label="Option one" />
+    <Radio value="two" label="Option two" />
   </RadioGroup>
 );
 
 export const RadioHorizontal = () => (
-  <RadioGroup label="Billing cycle" name="billing" defaultValue="monthly" orientation="horizontal">
-    <Radio value="monthly" label="Monthly" />
-    <Radio value="yearly" label="Yearly" />
+  <RadioGroup label="Label" name="billing" defaultValue="one" orientation="horizontal">
+    <Radio value="one" label="Option one" />
+    <Radio value="two" label="Option two" />
   </RadioGroup>
 );
 
 export const RadioDescription = () => (
-  <RadioGroup label="Deployment visibility" name="visibility" defaultValue="team" description="Choose who can find this deployment.">
-    <Radio value="team" label="Team" description="Members of your workspace can access it." />
-    <Radio value="public" label="Public" description="Anyone with the link can access it." />
+  <RadioGroup label="Label" name="visibility" defaultValue="one" description="Description">
+    <Radio value="one" label="Option one" description="Description" />
+    <Radio value="two" label="Option two" description="Description" />
   </RadioGroup>
 );
 
 export const RadioInvalid = () => (
-  <RadioGroup label="Preferred contact method" name="contact" error="Select one contact method.">
-    <Radio value="email" label="Email" />
-    <Radio value="phone" label="Phone" />
+  <RadioGroup label="Label" name="contact" error="Error message">
+    <Radio value="one" label="Option one" />
+    <Radio value="two" label="Option two" />
   </RadioGroup>
 );
 
 
 
-export const SliderDefault = () => <Slider aria-label="Columns" min={0} max={12} defaultValue={8} readout />;
+export const SliderDefault = () => <Slider aria-label="Label" min={0} max={12} defaultValue={8} readout />;
 
 export const SliderSizes = () => (
   <>
-    <Slider aria-label="Small opacity" size="sm" min={0} max={100} defaultValue={25} readout={value => `${value}%`} />
-    <Slider aria-label="Medium opacity" size="md" min={0} max={100} defaultValue={50} readout={value => `${value}%`} />
-    <Slider aria-label="Large opacity" size="lg" min={0} max={100} defaultValue={75} readout={value => `${value}%`} />
+    <Slider aria-label="Label" size="sm" min={0} max={100} defaultValue={25} readout={value => `${value}%`} />
+    <Slider aria-label="Label" size="md" min={0} max={100} defaultValue={50} readout={value => `${value}%`} />
+    <Slider aria-label="Label" size="lg" min={0} max={100} defaultValue={75} readout={value => `${value}%`} />
   </>
 );
 
 export const SliderTones = () => (
   <>
-    <Slider aria-label="Neutral volume" tone="neutral" defaultValue={40} readout={value => `${value}%`} />
-    <Slider aria-label="Accent volume" tone="accent" defaultValue={70} readout={value => `${value}%`} />
+    <Slider aria-label="Label" tone="neutral" defaultValue={40} readout={value => `${value}%`} />
+    <Slider aria-label="Label" tone="accent" defaultValue={70} readout={value => `${value}%`} />
   </>
 );
 
-export const SliderSteps = () => <Slider aria-label="Scale" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
+export const SliderSteps = () => <Slider aria-label="Label" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
 
-export const SliderWithLabel = () => <Slider label="Volume" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
+export const SliderWithLabel = () => <Slider label="Label" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
 
-export const SliderLabelOnly = () => <Slider label="Volume" labelPosition="top" defaultValue={50} />;
+export const SliderLabelOnly = () => <Slider label="Label" labelPosition="top" defaultValue={50} />;
 
-export const SliderStepMarks = () => <Slider aria-label="Step example" min={0} max={5} step={1} defaultValue={1} stepMarks />;
+export const SliderStepMarks = () => <Slider aria-label="Label" min={0} max={5} step={1} defaultValue={1} stepMarks />;
 
 export const SliderRangeWithInputs = () => <SliderRangeComposition />;
 
-export const SliderVertical = () => <Slider aria-label="Vertical volume" orientation="vertical" defaultValue={50} style={{ ["--_vertical-length" as string]: "100%" }} />;
+export const SliderVertical = () => <Slider aria-label="Label" orientation="vertical" defaultValue={50} style={{ ["--_vertical-length" as string]: "100%" }} />;
 
-export const SliderDisabled = () => <Slider aria-label="Locked volume" defaultValue={60} readout={value => `${value}%`} disabled />;
+export const SliderDisabled = () => <Slider aria-label="Label" defaultValue={60} readout={value => `${value}%`} disabled />;
 
-export const SliderBare = () => <Slider aria-label="Brightness" min={0} max={100} defaultValue={40} />;
+export const SliderBare = () => <Slider aria-label="Label" min={0} max={100} defaultValue={40} />;
 
 export const ChipDefault = () => (
   <ChipGroup>
-    <Chip defaultSelected>All</Chip>
-    <Chip>Components</Chip>
-    <Chip>Foundations</Chip>
-    <Chip>Patterns</Chip>
+    <Chip defaultSelected>Item one</Chip>
+    <Chip>Item two</Chip>
+    <Chip>Item three</Chip>
+    <Chip>Item four</Chip>
   </ChipGroup>
 );
 
 export const ChipControlled = () => {
   const [selected, setSelected] = useState(false);
-  return <Chip selected={selected} onSelectedChange={setSelected}>Show archived</Chip>;
+  return <Chip selected={selected} onSelectedChange={setSelected}>Chip</Chip>;
 };
 
-export const ChipDisabled = () => <Chip disabled>Locked filter</Chip>;
+export const ChipDisabled = () => <Chip disabled>Chip</Chip>;
 
 export const ChipSwatches = () => (
   <ChipGroup>
@@ -355,36 +355,36 @@ export const ChipSizes = () => (
 
 export const ChipVariants = () => (
   <ChipGroup>
-    <Chip variant="assist" icon={<SearchIcon />}>Search</Chip>
+    <Chip kind="assist" icon={<SearchIcon />}>Assist</Chip>
     <Chip icon={<CheckIcon />}>Filter</Chip>
-    <Chip variant="input">Input</Chip>
-    <Chip variant="suggestion">Suggestion</Chip>
+    <Chip kind="input">Input</Chip>
+    <Chip kind="suggestion">Suggestion</Chip>
   </ChipGroup>
 );
 
 export const ChipDeletable = () => {
-  const [chips, setChips] = useState(["Name", "Avatar", "Image"]);
-  return <ChipGroup>{chips.map(chip => <Chip key={chip} variant="input" onRemove={() => setChips(current => current.filter(item => item !== chip))}>{chip}</Chip>)}</ChipGroup>;
+  const [chips, setChips] = useState(["Item one", "Item two", "Item three"]);
+  return <ChipGroup>{chips.map(chip => <Chip key={chip} kind="input" onRemove={() => setChips(current => current.filter(item => item !== chip))}>{chip}</Chip>)}</ChipGroup>;
 };
 
-export const ChipClickableDeletable = () => <Chip variant="input" clickable onClick={() => {}} onRemove={() => {}}>Delete</Chip>;
+export const ChipClickableDeletable = () => <Chip kind="input" clickable onClick={() => {}} onRemove={() => {}}>Chip</Chip>;
 
 export const ChipLinkUnderline = () => <ChipLink href="#chip-api">Link</ChipLink>;
 
 export const ChipLinkIcon = () => <ChipLink href="#chip-api" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
 
-export const ChipCustomDelete = () => <Chip variant="input" onRemove={() => {}} removeIcon={<TrashIcon />} removeLabel="Delete">Delete</Chip>;
+export const ChipCustomDelete = () => <Chip kind="input" onRemove={() => {}} removeIcon={<TrashIcon />} removeLabel="Delete">Chip</Chip>;
 
 export const ChipAvatars = () => (
   <ChipGroup>
-    <Chip avatar={<Avatar fallback="AV" alt="Avatar initials" />}>Avatar</Chip>
-    <Chip avatar={<Avatar src="/images/chip-avatar.png" alt="Photo" />}>Photo</Chip>
+    <Chip avatar={<Avatar fallback="AV" alt="Avatar" />}>Avatar</Chip>
+    <Chip avatar={<Avatar src="/images/chip-avatar.png" alt="Avatar" />}>Avatar</Chip>
   </ChipGroup>
 );
 
 export const ChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
 
-export const ChipInvalidInput = () => <Chip variant="input" invalid onRemove={() => {}}>Unrecognized tag</Chip>;
+export const ChipInvalidInput = () => <Chip kind="input" invalid onRemove={() => {}}>Chip</Chip>;
 
 export const CheckboxSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
@@ -396,21 +396,21 @@ export const CheckboxSizes = () => (
 
 export const CheckboxStates = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    <Checkbox label="Selected" defaultChecked />
-    <Checkbox label="Unavailable" disabled />
-    <Checkbox label="Unavailable selected" defaultChecked disabled />
-    <Checkbox label="Unavailable partial selection" indeterminate disabled />
+    <Checkbox label="Label" defaultChecked />
+    <Checkbox label="Label" disabled />
+    <Checkbox label="Label" defaultChecked disabled />
+    <Checkbox label="Label" indeterminate disabled />
   </div>
 );
 
 export const RadioSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    {(["sm", "md", "lg"] as const).map((size) => (
-      <Radio key={size} size={size} name={`radio-size-${size}`} value={size} label={size.toUpperCase()} />
+    {([["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] as const).map(([size, label]) => (
+      <Radio key={size} size={size} name={`radio-size-${size}`} value={size} label={label} />
     ))}
   </div>
 );
 
-export const RadioChecked = () => <Radio name="radio-state-checked" value="selected" label="Selected" defaultChecked />;
+export const RadioChecked = () => <Radio name="radio-state-checked" value="selected" label="Label" defaultChecked />;
 
-export const RadioDisabled = () => <Radio name="radio-state-disabled" value="disabled" label="Unavailable" disabled />;
+export const RadioDisabled = () => <Radio name="radio-state-disabled" value="disabled" label="Label" disabled />;

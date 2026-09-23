@@ -5,18 +5,18 @@ export const CardVertical = () => (
     <CardMedia aria-hidden="true" style={{ background: "linear-gradient(180deg, var(--area-blue-400), var(--area-neutral-25))" }} />
     <CardContent>
       <CardTitle>Title</CardTitle>
-      <CardDescription>Body copy goes here.</CardDescription>
+      <CardDescription>Description</CardDescription>
       <CardFooter><Button>Action</Button></CardFooter>
     </CardContent>
   </Card>
 );
 
-export const CardWide = () => (
-  <Card layout="wide" style={{ inlineSize: 600, minBlockSize: 300 }}>
+export const CardHorizontal = () => (
+  <Card layout="horizontal" style={{ inlineSize: 600, minBlockSize: 300 }}>
     <CardMedia aria-hidden="true" style={{ background: "linear-gradient(180deg, var(--area-blue-400), var(--area-neutral-25))" }} />
     <CardContent>
       <CardTitle>Title</CardTitle>
-      <CardDescription>Body copy goes here.</CardDescription>
+      <CardDescription>Description</CardDescription>
       <CardFooter><Button variant="outline">Secondary</Button><Button>Action</Button></CardFooter>
     </CardContent>
   </Card>
@@ -27,17 +27,17 @@ export const CardImmersive = () => (
     <CardMedia aria-hidden="true" style={{ background: "linear-gradient(180deg, var(--area-blue-400), var(--area-neutral-25))" }} />
     <CardContent>
       <CardTitle>Title</CardTitle>
-      <CardDescription>Body copy goes here.</CardDescription>
+      <CardDescription>Description</CardDescription>
     </CardContent>
   </Card>
 );
 
-export const CardSmall = () => (
-  <Card layout="small" style={{ inlineSize: 300, minBlockSize: 100 }}>
+export const CardCompact = () => (
+  <Card layout="compact" style={{ inlineSize: 300, minBlockSize: 100 }}>
     <CardMedia aria-hidden="true" style={{ background: "linear-gradient(180deg, var(--area-blue-400), var(--area-neutral-25))" }} />
     <CardContent>
       <CardTitle>Title</CardTitle>
-      <CardDescription>Body copy.</CardDescription>
+      <CardDescription>Description</CardDescription>
     </CardContent>
   </Card>
 );
@@ -50,7 +50,7 @@ export const CardCarousel = () => (
         {[1, 2, 3, 4, 5, 6].map((item) => (
           <li key={item}>
             <CardMedia aria-hidden="true" style={{ background: "linear-gradient(180deg, var(--area-blue-400), var(--area-neutral-25))" }} />
-            <CardContent><CardTitle>Item {item}</CardTitle><CardDescription>Metadata</CardDescription></CardContent>
+            <CardContent><CardTitle>Item {item}</CardTitle><CardDescription>Description</CardDescription></CardContent>
           </li>
         ))}
       </ul>

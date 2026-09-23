@@ -56,10 +56,9 @@ unpublished ESM workspaces; publishing them is separate work.
 - [Contrast](docs/CONTRAST.md): color, focus and accessibility constraints.
 - [Development](docs/DEVELOPMENT.md): architecture, commands, testing and generated files.
 
-**Badge, Button, Checkbox, Field, Input, Slider, Card, Avatar, Alert and Chip** are currently owner-confirmed
-complete. The gallery's
-[completion registry](apps/docs/src/component-status.mjs) is authoritative. Refined
-families awaiting approval are yellow (In review); untouched families remain unrefined.
+**Every family that ships today is owner-confirmed complete** as of 2026-09-22. The
+gallery's [completion registry](apps/docs/src/component-status.mjs) is authoritative;
+refining a family reopens it as yellow (In review) until the owner accepts it again.
 
 [Archived research](archive/README.md) remains available when a specific question needs
 it. It is not required reading or an implementation plan. Session notes live in

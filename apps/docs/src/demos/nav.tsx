@@ -1,5 +1,5 @@
 import { Nav, NavGroup, NavItem, NavSeparator } from "@area/react";
-import { CheckIcon, InfoIcon, PlusIcon, SearchIcon } from "../icons.tsx";
+import { CheckIcon, InfoIcon, SearchIcon } from "../icons.tsx";
 
 /**
  * A vertical nav is framed at a sidebar's width, because that is the only width at which
@@ -11,62 +11,65 @@ import { CheckIcon, InfoIcon, PlusIcon, SearchIcon } from "../icons.tsx";
 const sidebar = { inlineSize: 260 };
 
 export const NavDefault = () => (
-  <Nav aria-label="Sections" style={sidebar}>
+  <Nav aria-label="Label" style={sidebar}>
     <NavItem href="#" current>
-      Overview
+      Item one
     </NavItem>
-    <NavItem href="#">Activity</NavItem>
-    <NavItem href="#">Settings</NavItem>
+    <NavItem href="#">Item two</NavItem>
+    <NavItem href="#">Item three</NavItem>
   </Nav>
 );
 
 export const NavVertical = () => (
-  <Nav aria-label="Workspace" style={sidebar}>
-    <NavGroup label="Pinned">
-      <NavItem href="#" icon={<CheckIcon />} current>
-        Release checklist
+  <Nav aria-label="Label" style={sidebar}>
+    <NavGroup label="Label">
+      <NavItem href="#" current>
+        Item one
       </NavItem>
-      <NavItem href="#" icon={<InfoIcon />}>
-        Onboarding notes
+      <NavItem href="#">
+        Item two
       </NavItem>
     </NavGroup>
-    <NavGroup label="Recents">
-      <NavItem href="#" icon={<SearchIcon />} trailing="12">
-        Search results
+    <NavGroup label="Label">
+      <NavItem href="#">
+        Item three
       </NavItem>
-      <NavItem href="#" icon={<PlusIcon />}>
-        Untitled document with a very long name that has to truncate
-      </NavItem>
+      <NavItem href="#">Item four</NavItem>
     </NavGroup>
   </Nav>
 );
+
+export const NavIcons = () => <Nav aria-label="Label" style={sidebar}><NavItem href="#" current icon={<CheckIcon />}>Item one</NavItem><NavItem href="#" icon={<InfoIcon />}>Item two</NavItem><NavItem href="#" icon={<SearchIcon />}>Item three</NavItem></Nav>;
+export const NavCounts = () => <Nav aria-label="Label" style={sidebar}><NavItem href="#" current trailing="1">Item one</NavItem><NavItem href="#" trailing="2">Item two</NavItem><NavItem href="#">Item three</NavItem></Nav>;
+export const NavTruncation = () => <Nav aria-label="Label" style={sidebar}><NavItem href="#" current>Item one</NavItem><NavItem href="#">Item two with a name long enough to truncate</NavItem></Nav>;
 
 export const NavHorizontal = () => (
-  <Nav orientation="horizontal" aria-label="Product">
+  <Nav orientation="horizontal" aria-label="Label">
     <NavItem href="#" current>
-      Overview
+      Item one
     </NavItem>
-    <NavItem href="#">Pricing</NavItem>
-    <NavItem href="#">Docs</NavItem>
-    <NavSeparator />
-    <NavItem href="#">Changelog</NavItem>
+    <NavItem href="#">Item two</NavItem>
+    <NavItem href="#">Item three</NavItem>
+    <NavItem href="#">Item four</NavItem>
   </Nav>
 );
 
+export const NavSeparated = () => <Nav orientation="horizontal" aria-label="Label"><NavItem href="#" current>Item one</NavItem><NavSeparator /><NavItem href="#">Item two</NavItem></Nav>;
+
 export const NavAccent = () => (
-  <Nav tone="accent" aria-label="Accent example" style={sidebar}>
+  <Nav tone="accent" aria-label="Label" style={sidebar}>
     <NavItem href="#" current>
-      Current
+      Item one
     </NavItem>
-    <NavItem href="#">Another page</NavItem>
+    <NavItem href="#">Item two</NavItem>
   </Nav>
 );
 
 export const NavDisabled = () => (
-  <Nav aria-label="Disabled example" style={sidebar}>
+  <Nav aria-label="Label" style={sidebar}>
     <NavItem href="#" current>
-      Available
+      Item one
     </NavItem>
-    <NavItem disabled>Not yet available</NavItem>
+    <NavItem disabled>Item two</NavItem>
   </Nav>
 );

@@ -1,6 +1,7 @@
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
+import { Select } from "./forms.tsx";
 /**
  * The presentational components.
  *
@@ -401,7 +402,6 @@ export const PanelStack = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(functi
  * than a length it survives a density change without recomputing.
  */
 export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
-  variant?: VariantProps<typeof MANIFESTS.slider>["variant"];
   tone?: VariantProps<typeof MANIFESTS.slider>["tone"];
   size?: VariantProps<typeof MANIFESTS.slider>["size"];
   /** Visible label for the range. */
@@ -454,7 +454,6 @@ function normalizeSliderValue(
 
 export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(function Slider(
   {
-    variant,
     tone,
     size,
     label,
@@ -517,10 +516,9 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
   return (
     <label
       className={sliderVariants({
-        variant,
         tone,
         size,
-        composition: labelPosition === "top" ? "label-top" : undefined,
+        labelPosition: labelPosition === "top" ? "top" : undefined,
         orientation: orientation === "vertical" ? "vertical" : undefined,
       }, className)}
       style={{ ["--_pct" as string]: `${pct}%`, ...style }}
@@ -556,7 +554,8 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
 /* --- Chip ----------------------------------------------------------------- */
 
 export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
-  variant?: VariantProps<typeof MANIFESTS.chip>["variant"];
+  /** Interaction role: assist action, selectable filter, removable input, or suggestion. */
+  kind?: VariantProps<typeof MANIFESTS.chip>["kind"];
   size?: VariantProps<typeof MANIFESTS.chip>["size"];
   pill?: boolean;
   /** A colour this chip stands for, shown as a dot before the label. */
@@ -588,14 +587,14 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
 }
 
 export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(function Chip(
-  { variant = "filter", size, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onRemove, clickable, removeIcon, removeLabel = "Remove chip", invalid, swatchOnly, className, children, disabled, ...rest },
+  { kind = "filter", size, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onRemove, clickable, removeIcon, removeLabel = "Remove chip", invalid, swatchOnly, className, children, disabled, ...rest },
   ref,
 ) {
   const [localSelected, setLocalSelected] = useState(defaultSelected);
   const currentSelected = selected ?? localSelected;
-  const selectable = variant === "filter";
+  const selectable = kind === "filter";
   const primaryInteractive = selectable || clickable || Boolean(onClick);
-  const classes = chipVariants({ variant, size, pill, swatchOnly }, className);
+  const classes = chipVariants({ kind, size, pill, swatchOnly }, className);
   const state = {
     ...(selectable && currentSelected ? { "data-selected": "" } : {}),
     ...(disabled ? { "data-disabled": "" } : {}),
@@ -668,7 +667,7 @@ export const ChipLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, ChipLinkPr
   ref,
 ) {
   return (
-    <a ref={ref} className={chipVariants({ variant: "suggestion", size, pill, link: treatment === "underline", linkIcon: treatment === "icon" }, className)} {...rest}>
+    <a ref={ref} className={chipVariants({ kind: "suggestion", size, pill, link: treatment === "underline", linkIcon: treatment === "icon" }, className)} {...rest}>
       {avatar ? <span className="area-chip__avatar">{avatar}</span> : null}
       {image ? <span className="area-chip__image"><img src={image} alt={imageAlt ?? ""} /></span> : null}
       {icon ? <span className="area-chip__icon" aria-hidden="true">{icon}</span> : null}
@@ -711,7 +710,7 @@ export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(fu
     <div className="area-table-wrapper">
       <table
         ref={ref}
-        className={tableVariants({ variant: interactive ? "interactive" : undefined, size, striped, columnDividers }, className)}
+        className={tableVariants({ interactive, size, striped, columnDividers }, className)}
         {...rest}
       />
     </div>
@@ -723,7 +722,7 @@ export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(fu
 export interface TooltipProps extends Div {
   /** The side of the trigger that this visible tooltip occupies. */
   side?: VariantProps<typeof MANIFESTS.tooltip>["side"];
-  /** Draws a diamond pointer toward the trigger. */
+  /** Draws a subtly rounded pointer toward the trigger. Omitted by default. */
   arrow?: boolean;
 }
 
@@ -902,10 +901,14 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
 
 /* --- Dialog --------------------------------------------------------------- */
 
-export interface DialogProps extends Omit<Div, "title"> {
+export interface DialogProps extends Omit<Div, "title" | "onClose"> {
   title?: ReactNode;
   description?: ReactNode;
   footer?: ReactNode;
+  /** Shows the corner close control. On by default. */
+  showCloseButton?: boolean;
+  /** Called by the close control before closing an enclosing native dialog. */
+  onClose?: () => void;
 }
 
 /**
@@ -917,25 +920,30 @@ export interface DialogProps extends Omit<Div, "title"> {
  * your own.
  */
 export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { title, description, footer, className, children, ...rest },
+  { title, description, footer, showCloseButton = true, onClose, className, children, ...rest },
   ref,
 ) {
+  const id = useId();
   return (
     <div
       ref={ref}
       role="dialog"
       aria-modal="true"
-      aria-label={typeof title === "string" ? title : undefined}
+      aria-labelledby={title ? `${id}-title` : undefined}
+      aria-describedby={description ? `${id}-description` : undefined}
       className={cx("area-dialog", className)}
-      style={{ display: "flex", flexDirection: "column" }}
       {...rest}
     >
-      {title || description ? (
+      {title || description || showCloseButton ? (
         <div className="area-dialog__header">
-          <div>
-            <div className="area-dialog__title">{title}</div>
-            {description ? <div className="area-dialog__description">{description}</div> : null}
+          <div className="area-dialog__heading">
+            {title ? <div className="area-dialog__title" id={`${id}-title`}>{title}</div> : null}
+            {description ? <div className="area-dialog__description" id={`${id}-description`}>{description}</div> : null}
           </div>
+          {showCloseButton ? <button type="button" className="area-dialog__close" aria-label="Close dialog" onClick={event => {
+            onClose?.();
+            event.currentTarget.closest("dialog")?.close();
+          }}><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 3.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg></button> : null}
         </div>
       ) : null}
       {children ? <div className="area-dialog__body">{children}</div> : null}
@@ -1044,26 +1052,284 @@ export const Code = /* @__PURE__ */ forwardRef<HTMLElement, CodeProps>(function 
 
 const codeBlockVariants = /* @__PURE__ */ createVariants(MANIFESTS.codeBlock);
 
+/**
+ * The copy glyphs are the two Fluent cuts the documentation's own toolbar uses, so the
+ * React control and the generated HTML chrome draw the same mark.
+ */
+const CopyGlyph = () => (
+  <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" focusable="false" aria-hidden="true">
+    <path d="M5 6H4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1h1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h1zm7-4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zM8 3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z" />
+  </svg>
+);
+
+const CopiedGlyph = () => (
+  <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" focusable="false" aria-hidden="true">
+    <path d="M13.86 3.66a.5.5 0 0 1-.02.7l-7.93 7.48a.6.6 0 0 1-.84-.02L2.4 9.1a.5.5 0 0 1 .72-.7l2.4 2.44 7.65-7.2a.5.5 0 0 1 .7.02" />
+  </svg>
+);
+
+export type CodeLineMark = "added" | "removed";
+
+/** `"3, 5-7"` or `[3, 5, 6, 7]` into the set of line numbers to emphasise. */
+function parseLineNumbers(value: number[] | string | undefined): Set<number> | undefined {
+  if (value === undefined) return undefined;
+  if (Array.isArray(value)) return new Set(value.filter(line => Number.isInteger(line) && line > 0));
+
+  const lines = new Set<number>();
+  for (const part of value.split(",")) {
+    const range = part.trim().match(/^(\d+)\s*-\s*(\d+)$/);
+    if (!range) {
+      const single = Number(part.trim());
+      if (Number.isInteger(single) && single > 0) lines.add(single);
+      continue;
+    }
+    const start = Number(range[1]);
+    const end = Number(range[2]);
+    // The range is authored by hand, but a runaway bound must not spin the renderer.
+    for (let line = Math.min(start, end); line <= Math.max(start, end) && lines.size < 10000; line += 1) lines.add(line);
+  }
+  return lines;
+}
+
 export interface CodeBlockProps extends Omit<Div, "title"> {
-  title?: ReactNode;
-  layout?: VariantProps<typeof MANIFESTS.codeBlock>["layout"];
-  /** Actions placed at the top right of the code. */
-  actions?: ReactNode;
-  /** Pre-highlighted HTML. Use `code` instead for plain text. */
-  html?: string;
+  /** Plain code. One grid row is rendered per line. */
   code?: string;
+  /**
+   * Trusted, pre-highlighted HTML from a highlighter that emits one line of markup per line
+   * of code. Use `code` for plain text.
+   */
+  html?: string;
+  /** Filename, or whatever else names the snippet. Adds the header row. */
+  title?: ReactNode;
+  /** Language shown beside the title. */
+  language?: string;
+  /** More than one language turns the label into a picker. */
+  languages?: string[];
+  /** Renders the picker as tabs rather than a Select. */
+  languageTabs?: boolean;
+  /** Controlled active language. Omit for an uncontrolled picker. */
+  value?: string;
+  onLanguageChange?: (language: string) => void;
+  /** Line numbers. On by default; turn them off for a short excerpt. */
+  lineNumbers?: boolean;
+  /** Lines to emphasise, as numbers or a range string such as `"3, 5-7"`. */
+  highlightLines?: number[] | string;
+  /** Added and removed lines, keyed by line number. */
+  marks?: Record<number, CodeLineMark>;
+  /** Makes each line number a link to its own line, so a reference can be shared. */
+  linkLines?: boolean;
+  /** Shows the show/hide control over an excerpt. */
+  collapsible?: boolean;
+  /** Starts collapsed. Only meaningful with `collapsible`. */
+  defaultCollapsed?: boolean;
+  /** Built-in copy control. On by default. */
+  copyable?: boolean;
+  copyLabel?: string;
+  /** Extra actions beside the copy control. Adds the header row when there is no title. */
+  actions?: ReactNode;
+  /** Remove the surrounding border when embedded in another framed surface. */
+  flush?: boolean;
+  /** Wrap long code lines instead of scrolling horizontally. */
+  wrap?: boolean;
 }
 
 export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockProps>(function CodeBlock(
-  { layout, title, actions, html, code, className, ...rest },
+  {
+    flush,
+    wrap,
+    title,
+    language,
+    languages,
+    languageTabs,
+    value,
+    onLanguageChange,
+    lineNumbers = true,
+    highlightLines,
+    marks,
+    linkLines,
+    collapsible,
+    defaultCollapsed,
+    copyable = true,
+    copyLabel = "Copy code",
+    actions,
+    html,
+    code,
+    className,
+    ...rest
+  },
   ref,
 ) {
+  // A fragment has to be a plain token, so punctuation from useId is dropped rather than
+  // escaped; uniqueness survives because nothing else about the id changes.
+  const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
+  const source = useRef<HTMLElement>(null);
+  const tabButtons = useRef(new Map<string, HTMLButtonElement>());
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
+  const [localLanguage, setLocalLanguage] = useState(() => value ?? languages?.[0]);
+  const [collapsed, setCollapsed] = useState(Boolean(defaultCollapsed));
+
+  useEffect(() => () => { if (copyTimer.current) clearTimeout(copyTimer.current); }, []);
+
+  const activeLanguage = value ?? localLanguage ?? languages?.[0];
+  const highlighted = parseLineNumbers(highlightLines);
+  const lines = (html ?? code ?? "").split("\n");
+
+  const selectLanguage = (next: string) => {
+    if (value === undefined) setLocalLanguage(next);
+    onLanguageChange?.(next);
+  };
+
+  /*
+   * Pre-highlighted HTML has no plain-text twin, so the copy reads it back off the rendered
+   * text cells -- which is also what keeps the gutter out of the clipboard.
+   */
+  const copy = () => {
+    const read = () => {
+      if (code !== undefined && html === undefined) return code;
+      const node = source.current;
+      if (!node) return code ?? "";
+      const cells = node.querySelectorAll<HTMLElement>(".area-code-block__text");
+      return cells.length ? Array.from(cells, cell => cell.textContent ?? "").join("\n") : node.textContent ?? "";
+    };
+    const settle = (state: "copied" | "failed") => {
+      setCopyState(state);
+      if (copyTimer.current) clearTimeout(copyTimer.current);
+      copyTimer.current = setTimeout(() => setCopyState("idle"), 1600);
+    };
+    if (!navigator.clipboard?.writeText) { settle("failed"); return; }
+    navigator.clipboard.writeText(read()).then(() => settle("copied"), () => settle("failed"));
+  };
+
+  const picker = languages?.length ? (
+    languageTabs ? (
+      <div className="area-code-block__languages" role="tablist" aria-label="Language">
+        {languages.map((item, index) => {
+          const selected = item === activeLanguage;
+          return (
+            <button
+              key={item}
+              type="button"
+              role="tab"
+              /* Language names are the author's text, so the id is the index. */
+              id={`${id}-tab-${index}`}
+              className="area-code-block__tab"
+              ref={node => { if (node) tabButtons.current.set(item, node); else tabButtons.current.delete(item); }}
+              aria-selected={selected}
+              aria-controls={`${id}-panel`}
+              /* Only the selected tab is in the tab order; arrows move between them. */
+              tabIndex={selected ? 0 : -1}
+              onKeyDown={event => {
+                if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+                event.preventDefault();
+                const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
+                const step = (event.key === "ArrowRight" ? 1 : -1) * (rtl ? -1 : 1);
+                const next = languages[event.key === "Home" ? 0 : event.key === "End" ? languages.length - 1 : (index + step + languages.length) % languages.length]!;
+                selectLanguage(next);
+                tabButtons.current.get(next)?.focus();
+              }}
+              onClick={() => selectLanguage(item)}
+            >
+              {item}
+            </button>
+          );
+        })}
+      </div>
+    ) : (
+      <span className="area-code-block__languages">
+        <Select
+          className="area-code-block__select"
+          size="sm"
+          aria-label="Language"
+          value={activeLanguage}
+          onChange={event => selectLanguage(event.currentTarget.value)}
+        >
+          {languages.map(item => <option key={item} value={item}>{item}</option>)}
+        </Select>
+      </span>
+    )
+  ) : language ? <span className="area-code-block__language">{language}</span> : null;
+
+  const tools = copyable || actions ? (
+    <span className="area-code-block__actions">
+      {actions}
+      {copyable ? (
+        <Button
+          variant="ghost"
+          tone="neutral"
+          size="sm"
+          iconOnly
+          aria-label={copyState === "copied" ? "Copied" : copyLabel}
+          icon={copyState === "copied" ? <CopiedGlyph /> : <CopyGlyph />}
+          onClick={copy}
+        />
+      ) : null}
+    </span>
+  ) : null;
+
+  const header = title || language || languages?.length ? (
+    <div className="area-code-block__header">
+      {title ? <span className="area-code-block__title">{title}</span> : null}
+      {picker}
+      {tools}
+    </div>
+  ) : tools;
+
+  const panel = languageTabs && languages?.length
+    ? { role: "tabpanel", id: `${id}-panel`, "aria-labelledby": `${id}-tab-${languages.indexOf(activeLanguage ?? "")}`, tabIndex: linkLines ? undefined : 0 }
+    : {};
+
   return (
-    <div ref={ref} className={codeBlockVariants({ layout }, className)} {...rest}>
-      {title ? <div className="area-code-block__header"><span>{title}</span>{actions}</div> : actions ? <span className="area-code-block__actions">{actions}</span> : null}
-      <pre className="area-code-block__pre">
-        {html ? <code dangerouslySetInnerHTML={{ __html: html }} /> : <code>{code}</code>}
-      </pre>
+    <div ref={ref} className={codeBlockVariants({ flush, wrap, unnumbered: !lineNumbers }, className)} {...(collapsed ? { "data-collapsed": "" } : {})} {...rest}>
+      {header}
+      <div className="area-code-block__body" {...panel}>
+        <pre className="area-code-block__pre">
+          <code className="area-code-block__code" ref={source}>
+          {lines.map((text, index) => {
+            const number = index + 1;
+            const mark = marks?.[number];
+            // Hiding the numbers hides the gutter too, unless a diff marker needs its column.
+            const gutter = lineNumbers || mark;
+            return (
+                <span
+                  key={number}
+                  id={linkLines ? `${id}-L${number}` : undefined}
+                  className={cx(
+                    "area-code-block__line",
+                    mark && `area-code-block__line--${mark}`,
+                    highlighted?.has(number) && "area-code-block__line--highlighted",
+                  )}
+                >
+                {gutter ? (
+                  <span className="area-code-block__gutter">
+                    {mark ? <span className="area-code-block__marker">{mark === "added" ? "+" : "-"}</span> : null}
+                    {linkLines
+                      ? <a className="area-code-block__linenumber" href={`#${id}-L${number}`} aria-label={`Line ${number}`}>{number}</a>
+                      : lineNumbers ? <span className="area-code-block__linenumber" aria-hidden="true">{number}</span> : null}
+                  </span>
+                ) : null}
+                  {html
+                    ? <span className="area-code-block__text" dangerouslySetInnerHTML={{ __html: text }} />
+                    : <span className="area-code-block__text">{text}</span>}
+                </span>
+              );
+            })}
+          </code>
+        </pre>
+        {collapsible ? (
+          <button
+            type="button"
+            className="area-code-block__toggle"
+            aria-expanded={!collapsed}
+            onClick={() => setCollapsed(current => !current)}
+          >
+            {collapsed ? "Show code" : "Hide code"}
+          </button>
+        ) : null}
+      </div>
+      <span className="area-sr-only" aria-live="polite">
+        {copyState === "copied" ? "Copied to clipboard" : copyState === "failed" ? "Copy failed" : ""}
+      </span>
     </div>
   );
 });

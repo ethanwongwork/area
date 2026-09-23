@@ -53,7 +53,7 @@ export const SliderRangeComposition = () => {
     <div className="area-slider-range" data-overlap={range[0] === range[1] ? "" : undefined}>
       <Input
         className="area-slider-range__input"
-        aria-label="Minimum range"
+        aria-label="Minimum"
         type="number"
         min={0}
         max={range[1]}
@@ -69,12 +69,12 @@ export const SliderRangeComposition = () => {
         onPointerUp={() => { activeHandle.current = null; }}
         onPointerCancel={() => { activeHandle.current = null; }}
       >
-        <Slider ref={startInput} aria-label="Range minimum" value={range[0]} onValueChange={setStart} className="area-slider-range__start" />
-        <Slider ref={endInput} aria-label="Range maximum" value={range[1]} onValueChange={setEnd} className="area-slider-range__end" />
+        <Slider ref={startInput} aria-label="Minimum" value={range[0]} onValueChange={setStart} className="area-slider-range__start" />
+        <Slider ref={endInput} aria-label="Maximum" value={range[1]} onValueChange={setEnd} className="area-slider-range__end" />
       </div>
       <Input
         className="area-slider-range__input"
-        aria-label="Maximum range"
+        aria-label="Maximum"
         type="number"
         min={range[0]}
         max={100}
