@@ -269,7 +269,7 @@ ${slug === "avatar" ? '<script type="module" src="./avatar-demos.js"></script>' 
 }
 
 /** The three tile sizes the gallery grid places: whole cells of one square unit. */
-const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2"]);
+const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2", "2x3"]);
 
 /* One tile per public component family. Compound pieces appear inside their parent. */
 function galleryPage() {
@@ -295,15 +295,17 @@ function galleryPage() {
       { id: "default", title: "Default / grouped", demo: "GalleryNav", span: "2x2" },
       { id: "marker", title: "Selection / marker", demo: "GalleryNavMarker", span: "2x2" },
       { id: "horizontal", title: "Horizontal", demo: "GalleryNavHorizontal", span: "2x2" },
+      { id: "actions", title: "Actions / expandable", demo: "GalleryNavActions", span: "2x2" },
     ],
     panel: [
-      { id: "default", title: "Default", demo: "GalleryPanel", span: "2x2" },
-      { id: "sections", title: "With sections", demo: "GalleryPanelSections", span: "2x2" },
-      { id: "footer", title: "With footer", demo: "GalleryPanelFooter", span: "2x2" },
+      { id: "default", title: "Frame inspector", demo: "GalleryPanel", span: "2x2" },
+      { id: "sections", title: "Scroll variant", demo: "GalleryPanelSections", span: "2x2" },
+      { id: "footer", title: "Section mappings", demo: "GalleryPanelFooter", span: "2x2" },
     ],
     popover: [
-      { id: "default", title: "Default", demo: "GalleryPopover", span: "2x2" },
-      { id: "field", title: "With field", demo: "GalleryPopoverField", span: "2x2" },
+      { id: "teaching", title: "Teaching step", demo: "GalleryPopover" },
+      { id: "field", title: "With field", demo: "GalleryPopoverField" },
+      { id: "image", title: "Composition / image", demo: "GalleryPopoverImage" },
     ],
 
     badge: [
@@ -535,11 +537,11 @@ function galleryPage() {
       { id: "on-emphasis", title: "Appearance / on emphasis", demo: "GalleryKbdOnEmphasis" },
     ],
     tooltip: [
-      { id: "open", title: "Open / hover", demo: "GalleryTooltip" },
+      { id: "open", title: "Top", demo: "GalleryTooltip" },
       { id: "kbd", title: "With Kbd", demo: "GalleryTooltipKbd" },
-      { id: "side", title: "Side / rounded arrow", demo: "GalleryTooltipSide" },
-      { id: "image", title: "Composition / image", demo: "GalleryTooltipImage" },
-      { id: "action", title: "Composition / action", demo: "GalleryTooltipAction" },
+      { id: "side", title: "Right", demo: "GalleryTooltipSide" },
+      { id: "bottom", title: "Bottom", demo: "GalleryTooltipBottom" },
+      { id: "left", title: "Left", demo: "GalleryTooltipLeft" },
     ],
     menu: [
       { id: "default", title: "Default / actions", demo: "GalleryMenu", span: "2x2" },
@@ -575,12 +577,38 @@ function galleryPage() {
     segmented: [
       { id: "default", title: "Default", demo: "GallerySegmented" },
       { id: "icons", title: "With icons", demo: "GallerySegmentedIcons" },
+      { id: "icon-only", title: "Icon only", demo: "GallerySegmentedIconOnly" },
       { id: "full-width", title: "Full width", demo: "GallerySegmentedFullWidth" },
       { id: "size-small", title: "Size / small", demo: "GallerySegmentedSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GallerySegmentedMedium" },
       { id: "size-large", title: "Size / large", demo: "GallerySegmentedLarge" },
     ],
+    table: [
+      { id: "default", title: "Default", demo: "GalleryTable", span: "2x2" },
+      { id: "selection", title: "Selection / sorting", demo: "GalleryTableSelectable", span: "2x2" },
+      { id: "compact", title: "Compact rows", demo: "GalleryTableCompact", span: "2x2" },
+      { id: "striped", title: "Striped", demo: "GalleryTableStriped", span: "2x2" },
+      { id: "column-dividers", title: "Column dividers", demo: "GalleryTableDividers", span: "2x2" },
+      { id: "empty", title: "Empty", demo: "GalleryTableEmpty", span: "2x2" },
+      { id: "loading", title: "Loading", demo: "GalleryTableLoading", span: "2x2" },
+    ],
+    tabs: [
+      { id: "default", title: "Default / disabled", demo: "GalleryTabs", span: "2x1" },
+      { id: "vertical", title: "Vertical / manual activation", demo: "GalleryTabsVertical", span: "2x1" },
+      { id: "small", title: "Small", demo: "GalleryTabsSmall", span: "2x1" },
+      { id: "track", title: "With track", demo: "GalleryTabsTrack", span: "2x1" },
+      { id: "badges", title: "Icons / counts", demo: "GalleryTabsBadges", span: "2x1" },
+    ],
+    toast: [
+      { id: "default", title: "Success", demo: "GalleryToast", span: "2x1" },
+      { id: "info", title: "Info", demo: "GalleryToastInfo", span: "2x1" },
+      { id: "warning", title: "Warning", demo: "GalleryToastWarning", span: "2x1" },
+      { id: "danger", title: "Danger", demo: "GalleryToastDanger", span: "2x1" },
+      { id: "multiline", title: "Multiline", demo: "GalleryToastMultiline", span: "2x1" },
+      { id: "action", title: "Action / dismissible", demo: "GalleryToastAction", span: "2x1" },
+    ],
     textarea: [
+      { id: "count", title: "Label / character count", demo: "GalleryTextareaCount" },
       { id: "default", title: "Default", demo: "TextareaDefault" },
       { id: "outline", title: "Variant / outline", demo: "TextareaOutline" },
       { id: "soft", title: "Variant / soft", demo: "TextareaSoft" },
@@ -612,7 +640,7 @@ function galleryPage() {
       if (!demo) throw new Error(`Gallery specimen missing: ${example.demo}`);
       const id = `${component.slug}-${example.id}`;
       const span = example.span ?? "1x1";
-      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 2x1 or 2x2.`);
+      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 2x1, 2x2 or 2x3.`);
       return `<article class="docs-visual-gallery__tile" data-span="${span}" data-audit="${status}" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
         <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${escapeHtml(specimenName(example, component.slug))}</h3>
         <div class="docs-visual-gallery__tile-preview">${demoMarkup(example.demo, demo.html)}</div>
@@ -674,8 +702,11 @@ function galleryPage() {
 /* --- Component pages -------------------------------------------------------- */
 
 function demoMarkup(name, html) {
-  if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (["GalleryCodeBlockCopy", "GalleryDialogModal"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;min-inline-size:0;text-align:center">${html}</div>`;
+  if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
+  if (["GalleryTableSelectable", "GalleryTextareaCount"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryNavActions", "GalleryTabs", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsBadges", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryMenuControls") return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="${["SwitchList", "SwitchSettingsRow"].includes(name) ? "inline-size:100%;" : ""}max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Slider") || name.startsWith("GallerySlider")) return `<div data-slider-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;

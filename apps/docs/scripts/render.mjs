@@ -46,7 +46,7 @@ export async function renderDemos() {
     rendered[name] = {
       // Every preview is an independent React root. Prefix useId() output so controls
       // in different previews cannot resolve another demo's label or description.
-      html: ((name.startsWith("Badge") || name.startsWith("Switch") || name.startsWith("Slider") || name === "GallerySlider") ? renderToString : renderToStaticMarkup)(createElement(Component), { identifierPrefix }),
+      html: ((name.startsWith("Badge") || name.startsWith("Switch") || name.startsWith("Slider") || name.startsWith("Gallery")) ? renderToString : renderToStaticMarkup)(createElement(Component), { identifierPrefix }),
       code: sources[name] ?? "",
     };
     if (!sources[name] && !name.startsWith("GalleryBadge")) {

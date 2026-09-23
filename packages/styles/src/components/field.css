@@ -77,6 +77,7 @@
     --_columns: minmax(0, 1fr) minmax(0, 1.5fr);
 
     inline-size: auto;
+    min-block-size: var(--_row);
   }
 
   .area-field--horizontal > .area-field__label,

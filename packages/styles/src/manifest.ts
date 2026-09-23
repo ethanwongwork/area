@@ -317,10 +317,11 @@ export const dialog = {
 
 export const popover = {
   block: "area-popover",
-  description: "Floats content next to the element that opened it.",
-  variants: {},
-  elements: [],
-  defaults: {},
+  description: "Floats rich, interactive content next to the element that opened it.",
+  variants: { side: ["top", "right", "bottom", "left"] },
+  booleans: ["arrow"],
+  elements: ["header", "title", "description", "body", "footer", "media", "arrow", "arrow-edge"],
+  defaults: { side: "top" },
 } as const satisfies ComponentManifest;
 
 export const menu = {
@@ -337,8 +338,8 @@ export const tooltip = {
   block: "area-tooltip",
   description: "Names a control on hover or focus.",
   variants: { side: ["top", "right", "bottom", "left"] },
-  booleans: ["arrow", "interactive"],
-  elements: ["media", "content", "actions"],
+  booleans: ["arrow"],
+  elements: [],
   defaults: { side: "top" },
 } as const satisfies ComponentManifest;
 
@@ -346,23 +347,25 @@ export const toast = {
   block: "area-toast",
   description: "Reports the outcome of an action without interrupting.",
   variants: { tone: ["info", "danger", "warning", "success"] },
-  elements: ["icon"],
+  elements: ["icon", "content", "title", "action"],
   defaults: { tone: "info" },
 } as const satisfies ComponentManifest;
 
 export const tabs = {
   block: "area-tabs",
   description: "Switches between views in the same context.",
-  variants: {},
+  variants: { size: ["sm", "md", "lg"], orientation: ["vertical"] },
+  booleans: ["track"],
   states: ["selected", "disabled"],
-  elements: ["list", "tab", "panel", "label"],
+  elements: ["list", "tab", "panel", "label", "icon"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
 export const table = {
   block: "area-table",
   description: "Presents rows of structured data.",
-  variants: { variant: ["interactive"] },
+  variants: { variant: ["interactive"], size: ["sm", "md", "lg"] },
+  booleans: ["striped", "column-dividers"],
   elements: ["cell"],
   elementModifiers: { cell: ["numeric", "fit"] },
   defaults: {},
@@ -380,7 +383,7 @@ export const segmented = {
   block: "area-segmented",
   description: "Picks one value from a small set of options.",
   variants: { size: ["sm", "md", "lg"] },
-  booleans: ["full-width"],
+  booleans: ["full-width", "icon-only"],
   states: ["selected", "disabled"],
   stateAttributes: { disabled: "disabled" },
   elements: ["item", "icon", "label"],
@@ -411,7 +414,7 @@ export const nav = {
   // `orientation` is the axis; `tone` decides what a current item's plate carries. A nav
   // with neither modifier is vertical and neutral, which is the sidebar case.
   variants: { orientation: ["horizontal"], tone: ["accent"], selection: ["marker"] },
-  elements: ["group", "label", "item", "icon", "text", "trailing", "separator"],
+  elements: ["group", "label", "item", "icon", "text", "trailing", "separator", "row", "actions"],
   defaults: {},
 } as const satisfies ComponentManifest;
 

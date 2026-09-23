@@ -49,6 +49,7 @@
     align-items: flex-start;
     min-block-size: var(--area-space-24);
   }
+  .area-checkbox:has(> input:only-child) { align-items: center; }
 
   .area-checkbox__control {
     margin-block-start: 0;
@@ -84,10 +85,9 @@
     border-radius: var(--area-radius-full);
   }
 
-  /* A Radio's mark belongs on the first text line. Unlike a compact checkbox beside a
-     single label, centring it against wrapped copy makes the selected dot lose its option. */
-  .area-radio { align-items: flex-start; }
-  .area-radio__control { margin-block-start: calc((var(--_leading) - var(--_size)) / 2); }
+  /* A radio and its label share the same vertical centre in a control row. */
+  .area-radio { align-items: center; }
+  .area-radio__control { margin-block-start: 0; }
 
   /*
    * The mark is drawn with a mask rather than a pseudo-element glyph, so it inherits the

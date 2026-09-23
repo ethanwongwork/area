@@ -8,14 +8,21 @@
 @layer area.components {
   /* --- Tabs --------------------------------------------------------------- */
   .area-tabs {
+    --_tab-height: var(--area-control-md);
+    --_tab-text: var(--area-control-md-text);
+    --_tab-leading: var(--area-control-md-leading);
     display: flex;
     flex-direction: column;
+    min-inline-size: 0;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
   }
 
   .area-tabs__list {
     display: flex;
     gap: var(--area-space-4);
-    border-block-end: 1px solid var(--area-border-decorative);
+    border-block-end: 0;
+    overflow-x: auto;
   }
 
   .area-tabs__tab {
@@ -23,30 +30,46 @@
     display: inline-flex;
     align-items: center;
     gap: var(--area-space-6);
-    block-size: var(--area-control-lg);
+    flex-shrink: 0;
+    block-size: var(--_tab-height);
     padding-inline: var(--area-space-10);
     border: 0;
     background: transparent;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-family: inherit;
+    font-size: var(--_tab-text);
+    line-height: var(--_tab-leading);
     font-weight: var(--area-weight-strong);
     cursor: pointer;
     transition: var(--area-transition);
   }
 
-  .area-tabs__tab::after {
+  .area-tabs__label::after {
     content: "";
     position: absolute;
-    inset-inline: var(--area-space-4);
-    inset-block-end: -1px;
-    block-size: 2px;
-    border-radius: var(--area-radius-full) var(--area-radius-full) 0 0;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: var(--area-space-2);
+    border-radius: var(--area-radius-full);
     background-color: transparent;
     transition: var(--area-transition);
   }
 
-  .area-tabs__tab:hover:not([data-disabled]) { color: var(--area-fg-default); }
+  .area-tabs__tab:hover:not([data-disabled]) { background-color: var(--area-bg-component); }
+  .area-tabs__label { position: relative; block-size: 100%; display: inline-flex; align-items: center; gap: var(--area-space-6); white-space: nowrap; }
+  .area-tabs--track .area-tabs__list { border-block-end: var(--area-border-width) solid var(--area-border-decorative); }
+  .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+  .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+  .area-tabs__icon > svg { inline-size: 100%; block-size: 100%; }
+  .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); }
+  .area-tabs--md { --_tab-height: var(--area-control-md); }
+  .area-tabs--lg { --_tab-height: var(--area-control-lg); --_tab-text: var(--area-control-lg-text); --_tab-leading: var(--area-control-lg-leading); }
+  .area-tabs--vertical { flex-direction: row; gap: var(--area-space-16); }
+  .area-tabs--vertical .area-tabs__list { flex-direction: column; flex-shrink: 0; border-block-end: 0; border-inline-end: 0; }
+  .area-tabs--vertical .area-tabs__tab { justify-content: flex-start; }
+  .area-tabs--vertical .area-tabs__label::after { display: none; }
+  .area-tabs--vertical .area-tabs__tab::after { content: ""; position: absolute; border-radius: var(--area-radius-full); inset-block: var(--area-space-4); inset-inline: auto 0; inline-size: var(--area-space-2); block-size: auto; }
+  .area-tabs--vertical .area-tabs__panel { padding-block-start: var(--area-space-6); min-inline-size: 0; }
 
   /*
    * The active indicator is the foreground colour, not the accent. Reserving accent for
@@ -57,15 +80,16 @@
     color: var(--area-fg-default);
   }
 
-  .area-tabs__tab[data-selected]::after {
+  .area-tabs__tab[data-selected] > .area-tabs__label::after,
+  .area-tabs--vertical .area-tabs__tab[data-selected]::after {
     background-color: var(--area-fg-default);
   }
 
   .area-tabs__tab:focus-visible {
     /* Capped against this tier's own height; see button.css. */
-    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
+    border-radius: min(var(--area-radius-control), calc(var(--_tab-height) * var(--area-radius-cap)));
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: calc(-1 * var(--area-focus-width));
   }
 
   .area-tabs__tab[data-disabled] {
@@ -78,16 +102,8 @@
   }
 
   /* --- Table -------------------------------------------------------------- */
-  /*
-   * Horizontal rules only, inside a clipped, rounded container. Column rules are left
-   * out deliberately: the eye already groups a column by alignment, so a vertical line
-   * adds ink without adding structure, and it fights the container's corner radius at
-   * the top and bottom edges. The last row drops its rule so nothing crosses the curve.
-   *
-   * Cells align to the top, not the middle. In a data table the rows are rarely the same
-   * height, and top alignment is what keeps a wrapped cell from pushing its neighbours
-   * off the reading line.
-   */
+  /* Body cells align to their first line; headers center labels and controls.
+   * Column dividers are optional, independent of row spacing and stripes. */
   .area-table-wrapper {
     inline-size: 100%;
     overflow-x: auto;
@@ -102,6 +118,7 @@
    * values look sparse. Primer, OpenAI and shadcn all set tables at 14.
    */
   .area-table {
+    --_cell-inset: var(--area-space-8);
     inline-size: 100%;
     border-collapse: collapse;
     /*
@@ -115,7 +132,7 @@
   .area-table th,
   .area-table td,
   .area-table__cell {
-    padding: var(--area-gutter-sm) var(--area-gutter-md);
+    padding: var(--_cell-inset) var(--area-gutter-md);
     text-align: start;
     vertical-align: top;
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
@@ -131,6 +148,7 @@
     color: var(--area-fg-muted);
     font-weight: var(--area-weight-strong);
     white-space: nowrap;
+    vertical-align: middle;
   }
 
   .area-table tbody tr {
@@ -142,16 +160,23 @@
   }
 
   /* Tabular figures so columns of numbers align on the decimal. */
-  .area-table__cell--numeric {
+  .area-table .area-table__cell--numeric {
     text-align: end;
     font-variant-numeric: tabular-nums;
   }
 
   /* Shrink-to-fit column, for a cell holding only controls. */
-  .area-table__cell--fit {
+  .area-table .area-table__cell--fit {
     inline-size: 1%;
     white-space: nowrap;
   }
+  .area-table--sm { --_cell-inset: var(--area-space-4); }
+  .area-table--md { --_cell-inset: var(--area-space-8); }
+  .area-table--lg { --_cell-inset: var(--area-space-12); }
+  .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
+  .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+  .area-table tbody tr[aria-selected="true"] { background: var(--area-bg-component-hover); }
+  .area-table caption { padding: var(--area-space-12); text-align: start; color: var(--area-fg-muted); }
 
   /* --- Select ------------------------------------------------------------- */
   /*
@@ -255,9 +280,12 @@
     .area-select, .area-select::picker(select) { appearance: base-select; }
     .area-select::picker-icon { display: none; }
     .area-select::picker(select) {
-      margin-block-start: var(--area-space-4);
+      margin: var(--area-space-4) 0 0;
+      inset: auto;
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: none;
       min-inline-size: anchor-size(self-inline);
-      max-block-size: min(60vh, calc(var(--area-space-96) * 3));
+      max-block-size: min(calc(var(--area-space-96) * 3), 100%);
       overflow: auto;
       padding: var(--area-space-4);
       border: var(--area-border-width) solid var(--area-border-decorative);

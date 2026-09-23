@@ -74,6 +74,7 @@ export const INVERSION = {
   page: { light: "white", dark: 900 },
   surface: { light: "white", dark: 850 },
   subtle: { light: 50, dark: 800 },
+  stripe: { light: 25, dark: 800 },
   /**
    * A control's own fill, at rest, hover, and active.
    *

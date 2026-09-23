@@ -528,7 +528,7 @@ export const DOCS_CSS = `
     position: fixed;
     z-index: 50;
     inset-inline-end: var(--area-space-12);
-    inline-size: min(calc(100vw - var(--area-space-24)), calc(var(--area-space-80) * 3));
+    --area-panel-inline-size: min(calc(100vw - var(--area-space-24)), calc(var(--area-space-80) * 3));
     border-radius: var(--area-radius-container);
     box-shadow: var(--area-shadow-3);
     inset-block-start: var(--area-space-8);
@@ -541,27 +541,6 @@ export const DOCS_CSS = `
     display: flex;
     align-items: center;
     gap: var(--area-space-2);
-  }
-  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector {
-    overflow: hidden;
-    inline-size: var(--area-control-md);
-  }
-  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-title,
-  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-body,
-  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector [data-reset-axes] {
-    display: none;
-  }
-  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-bar {
-    justify-content: center;
-    padding-inline: 0;
-    padding-block: 0;
-    min-block-size: var(--area-control-md);
-  }
-  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-actions {
-    display: block;
-  }
-  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__rail-toggle {
-    transform: rotate(180deg);
   }
   .docs-audit-label[data-audit="complete"],
   .docs-visual-gallery__tile[data-audit="complete"] .docs-visual-gallery__tile-title {
@@ -663,6 +642,7 @@ export const DOCS_CSS = `
   /* Spans are whole cells. 1x1 is the default tile and needs no rule of its own. */
   .docs-visual-gallery__tile[data-span="2x1"] { grid-column: span 2; }
   .docs-visual-gallery__tile[data-span="2x2"] { grid-column: span 2; grid-row: span 2; }
+  .docs-visual-gallery__tile[data-span="2x3"] { grid-column: span 2; grid-row: span 3; }
   .docs-visual-gallery__tile-title {
     padding: var(--area-space-8) var(--area-space-12);
     font-size: var(--area-ui-size);
@@ -1073,6 +1053,28 @@ export const DOCS_CSS = `
  * once, the corner one sitting on top of the wordmark.
  */
 @layer area.utilities {
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector {
+    overflow: hidden;
+    --area-panel-inline-size: var(--area-control-md);
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-title,
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-body,
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector [data-reset-axes] {
+    display: none;
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-bar {
+    justify-content: center;
+    padding-inline: 0;
+    padding-block: 0;
+    min-block-size: var(--area-control-md);
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__inspector-actions {
+    display: block;
+  }
+  .docs-visual-gallery[data-gallery-panel="closed"] .docs-visual-gallery__rail-toggle {
+    transform: rotate(180deg);
+  }
+
   .docs-shell[data-nav="open"] ~ .docs-rail-toggle[data-rail="nav"],
   .docs-shell[data-panel="open"] ~ .docs-rail-toggle[data-rail="panel"] { display: none; }
 

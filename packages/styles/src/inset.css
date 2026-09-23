@@ -56,7 +56,7 @@
   .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-icon); }
   .area-nav__item, .area-menu__item { gap: var(--area-gap-md); }
   .area-tabs__tab {
-    --_height: var(--area-control-lg);
+    --_height: var(--_tab-height);
     --_box-border: 0px;
     --_box-icon: var(--area-icon-md);
   }
@@ -165,19 +165,13 @@
     text-box: trim-both cap alphabetic;
   }
   .area-dialog__title,
-  .area-dialog__description, .area-panel__title, .area-panel__heading,
-  .area-toast > div {
+  .area-dialog__description, .area-panel__title, .area-panel__heading {
     text-box: trim-both cap alphabetic;
   }
   .area-alert, .area-toast {
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     gap: var(--area-gap-md);
-  }
-  .area-toast:has(> .area-toast__icon) > div {
-    /* First-line cap center aligns to the icon center. The icon keeps equal
-     * top/leading insets; subsequent lines are allowed to extend below it. */
-    margin-block-start: max(0px, calc((var(--area-icon-md) - 1cap) / 2));
   }
   @supports (text-box: trim-both cap alphabetic) {
     .area-checkbox, .area-radio { align-items: flex-start; }

@@ -8,9 +8,9 @@ tokens, predictable APIs, accessibility and visual quality consistent.
 
 **Badge, Button, Checkbox, Field, Input, Slider, Card, Avatar, Alert and Chip** are owner-confirmed complete as of
 2026-09-21.
-All other existing families are **unrefined**, including ones with historical audits.
-Their code remains available; unrefined means they still need component-level review,
-not that every feature is broken or should be rebuilt.
+The remaining existing families are **in review** after component refinement; only
+owner confirmation moves them to complete. Historical audits and passing builds do not
+confer approval.
 
 The single executable status source is
 [`component-status.mjs`](../apps/docs/src/component-status.mjs). Both the gallery and
@@ -37,15 +37,64 @@ Presentation-only or partially implemented behaviors must be stated in the compo
 page. A menu-shaped surface does not by itself implement keyboard navigation; a visual
 table is not a data-grid engine.
 
+Current refinements: Nav has a 200px default vertical measure, content-width horizontal
+layout, decorative trailing annotations and independent action slots. Panel is 280px
+with medium control-height rows; its inset size does not resize child controls.
+Table retains three cell inset sizes (row spacing, not table width or text size). The
+gallery separates compact rows, stripes and optional columnDividers; its tiles are 2×2.
+Stripes use bg-stripe (neutral 25 in light mode, 800 in dark). Headers align vertically
+to the middle. Sorting and selection are composed with native
+headers, buttons and Checkbox in the live gallery, rather than a data-grid API. Tabs
+supports three sizes, both orientations and automatic/manual keyboard activation.
+Its default rounded underline excludes the tab's horizontal padding; track optionally
+adds a divider. Tab gallery tiles are 2×1. Vertical orientation remains useful for
+settings views and uses the corresponding vertical keyboard navigation.
+Textarea keeps native resizing and validation with horizontally larger insets at every
+size. Toast supports titles, actions and dismissal; it is a surface, not a global queue
+or automatic timer. Toasts use 8px vertical/12px horizontal insets; icons align to the
+first text line, and multiline is demonstrated separately from tone. Consumers own
+placement, lifetime and dismissal focus restoration. Tooltip arrows use 8px geometry,
+with all four sides demonstrated. Skeleton cards have two text lines; type samples
+share the trailing half of the tile.
+
+These refinements draw on [WAI-ARIA Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/),
+[Carbon Table](https://carbondesignsystem.com/components/data-table/usage/),
+[Spectrum Toast](https://react-spectrum.adobe.com/v3/Toast.html) and
+[Atlassian Textarea](https://atlassian.design/components/textarea/usage).
+Area keeps its own type, spacing and control tokens rather than copying their dimensions.
+
+Popover uses Tooltip's medium UI type and shadow-2, with a 12px border-inclusive
+outer inset. It uses the theme surface (white in light, dark in dark mode).
+Its preferred width is 240px, capped at its container for every composition. Group gaps
+are 12px with 8px inside the body. A small-control-height header contains the title and
+close button, without negative margins or trimmed title line boxes. Description leading
+is UI leading minus 2px (14/18px at default density). Examples omit pointers and share
+optional media, header, body and optional footer slots.
+Media corners subtract the inset and border from the outer radius. The optional
+decorative SVG pointer has a curved outline and supports all four sides. Tooltip is a
+non-focusable hover/focus description; rich interactive content belongs in Popover.
+See [WAI Tooltip](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) and
+[Radix Popover](https://www.radix-ui.com/primitives/docs/components/popover).
+The existing Popover API supplies the surface; consumers still own trigger, positioning,
+focus and dismissal behavior.
+
+Dialog uses a single 16px outer inset (including border), 16px between header/body/footer,
+8px between title and description, 16/24px title and medium UI body type. All sections
+share a leading edge and the container radius follows the system radius axis.
+Select's enhanced native picker opens below with a 4px gap and no above-input fallback;
+unsupported browsers retain their platform-native picker placement. Segmented iconOnly
+keeps option labels accessible while using square inner buttons.
+
 ## Expansion inventory
 
 This is a menu of useful future work, not a promise that every item already exists or a
 mandatory sequence. Pick a coherent family and its useful variants for each task.
 
 - Actions: link, icon button, button group, split button, toggle button/group.
-- Text entry: number input, search, password, input group, combobox/autocomplete,
-  multi-select, editable text and file upload.
-- Choice/value: range slider, marks, paired numeric input, rating, choice cards.
+- Text entry: documented number input with Area steppers, search, password, input group,
+  combobox/autocomplete, multi-select, editable text and file upload.
+- Choice/value: range slider, marks, paired numeric input, rating, choice cards,
+  nine-point alignment picker for two-dimensional layout alignment.
 - Date/time: date picker, date range, calendar, time picker.
 - Navigation: breadcrumbs, pagination, stepper, tree, command menu, context menu, menubar.
 - Identity/labels: avatar group, persona, tag, counter badge and standalone status dot.
@@ -53,7 +102,8 @@ mandatory sequence. Pick a coherent family and its useful variants for each task
   empty state and error state.
 - Surfaces: accordion, drawer/sheet, alert dialog, hover card and teaching popover.
 - Data: list, description list, stat, timeline, tree table and data grid.
-- Content/tools: code snippet, color picker and rich-text editor.
+- Content/tools: code snippet, color picker with a separately editable opacity value and
+  rich-text editor.
 - Composition: toolbar, page header, form layouts, search/filter bars and application shells.
 
 Keep behavioral boundaries clear: Select differs from Combobox; Badge from selectable

@@ -28,8 +28,9 @@ mergeAxes(undefined,{brand:'green'});
 stateAttributes(MANIFESTS.button,{invalid:true});
 // @ts-expect-error unknown element
 buttonVariants.element('mystery');
-// @ts-expect-error removed unsupported toolbar prop
-export const invalidCode = <CodeBlock title="old toolbar"/>;
+export const titledCode = <CodeBlock title="example.ts" code="const value = 1"/>;
+// @ts-expect-error toolbar is not a CodeBlock layout
+export const invalidCode = <CodeBlock layout="toolbar"/>;
 
 // @ts-expect-error generic helpers retain the exact manifest contract
 classesFor(MANIFESTS.button,{tone:"invalid"});

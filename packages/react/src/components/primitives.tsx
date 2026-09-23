@@ -1,5 +1,6 @@
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
+import { Button } from "./Button.tsx";
 /**
  * The presentational components.
  *
@@ -29,10 +30,12 @@ import {
   skeletonVariants,
   spinnerVariants,
   tableVariants,
+  tabsVariants,
   toastVariants,
   tooltipVariants,
   createVariants,
   menuVariants,
+  popoverVariants,
 } from "../variants.ts";
 
 type Div = HTMLAttributes<HTMLDivElement>;
@@ -332,6 +335,7 @@ export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps
  * horizontal Field rows. A props API for the rows would have to grow a case for every
  * control the system has, which is the API the CSS deliberately does not have either.
  */
+/** Fixed 280px inspector by default; override --area-panel-inline-size to customize. */
 export interface PanelProps extends Omit<Div, "title"> {
   size?: VariantProps<typeof MANIFESTS.panel>["size"];
   /** Shadows the DOM `title` attribute deliberately: a panel's title is content, not a tooltip. */
@@ -694,17 +698,20 @@ export const ChipGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, ChipGroupPro
 export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   /** Highlights rows on hover. Use only when a row is clickable. */
   interactive?: boolean;
+  size?: VariantProps<typeof MANIFESTS.table>["size"];
+  striped?: boolean;
+  columnDividers?: boolean;
 }
 
 export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(function Table(
-  { interactive, className, ...rest },
+  { interactive, size, striped, columnDividers, className, ...rest },
   ref,
 ) {
   return (
     <div className="area-table-wrapper">
       <table
         ref={ref}
-        className={tableVariants(interactive ? { variant: "interactive" } : {}, className)}
+        className={tableVariants({ variant: interactive ? "interactive" : undefined, size, striped, columnDividers }, className)}
         {...rest}
       />
     </div>
@@ -716,34 +723,37 @@ export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(fu
 export interface TooltipProps extends Div {
   /** The side of the trigger that this visible tooltip occupies. */
   side?: VariantProps<typeof MANIFESTS.tooltip>["side"];
-  /** Draws the rounded pointer toward the trigger. */
+  /** Draws a diamond pointer toward the trigger. */
   arrow?: boolean;
-  /** Uses dialog semantics for the rich media/action composition. */
-  interactive?: boolean;
 }
 
 export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(function Tooltip(
-  { side, arrow, interactive, className, ...rest },
+  { side, arrow, className, ...rest },
   ref,
 ) {
-  return <div ref={ref} role={interactive ? "dialog" : "tooltip"} className={tooltipVariants({ side, arrow, interactive }, className)} {...rest} />;
+  return <div ref={ref} role="tooltip" className={tooltipVariants({ side, arrow }, className)} {...rest} />;
 });
 
-export const TooltipMedia = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function TooltipMedia({ className, ...rest }, ref) {
-  return <div ref={ref} className={cx("area-tooltip__media", className)} {...rest} />;
+export interface PopoverProps extends Div {
+  side?: VariantProps<typeof MANIFESTS.popover>["side"];
+  /** Draw a conventional diamond tip toward the anchored element. */
+  arrow?: boolean;
+}
+export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(function Popover({ side, arrow, className, children, ...rest }, ref) {
+  return <div ref={ref} className={popoverVariants({ side, arrow }, className)} {...rest}>
+    {children}
+    {arrow ? <svg className="area-popover__arrow" viewBox="0 0 32 14" aria-hidden="true" focusable="false">
+      <path d="M0 -1H32V0C24 0 23 3 20 9Q16 17 12 9C9 3 8 0 0 0Z" />
+      <path className="area-popover__arrow-edge" d="M0 0C8 0 9 3 12 9Q16 17 20 9C23 3 24 0 32 0" />
+    </svg> : null}
+  </div>;
 });
-
-export const TooltipContent = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function TooltipContent({ className, ...rest }, ref) {
-  return <div ref={ref} className={cx("area-tooltip__content", className)} {...rest} />;
-});
-
-export const TooltipActions = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function TooltipActions({ className, ...rest }, ref) {
-  return <div ref={ref} className={cx("area-tooltip__actions", className)} {...rest} />;
-});
-
-export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function Popover({ className, ...rest }, ref) {
-  return <div ref={ref} className={cx("area-popover", className)} {...rest} />;
-});
+export const PopoverHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverHeader({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__header", className)} {...rest} />; });
+export const PopoverTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(function PopoverTitle({ className, ...rest }, ref) { return <h2 ref={ref} className={cx("area-popover__title", className)} {...rest} />; });
+export const PopoverDescription = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverDescription({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__description", className)} {...rest} />; });
+export const PopoverBody = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverBody({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__body", className)} {...rest} />; });
+export const PopoverFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverFooter({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__footer", className)} {...rest} />; });
+export const PopoverMedia = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverMedia({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__media", className)} {...rest} />; });
 
 export type MenuProps = Div;
 export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(function Menu({ className, ...rest }, ref) {
@@ -791,23 +801,29 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
   );
 });
 
-export interface ToastProps extends Div {
+export interface ToastProps extends Omit<Div, "title"> {
   tone?: VariantProps<typeof MANIFESTS.toast>["tone"];
   icon?: ReactNode;
+  title?: ReactNode;
+  action?: ReactNode;
+  onDismiss?: () => void;
+  dismissLabel?: string;
 }
 
 export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(function Toast(
-  { tone = "info", icon, className, children, ...rest },
+  { tone = "info", icon, title, action, onDismiss, dismissLabel = "Dismiss notification", className, children, ...rest },
   ref,
 ) {
   return (
-    <div ref={ref} role="status" className={toastVariants({ tone }, className)} {...rest}>
+    <div ref={ref} className={toastVariants({ tone }, className)} {...rest}>
       {icon ? (
         <span className="area-toast__icon" aria-hidden="true">
           {icon}
         </span>
       ) : null}
-      <div>{children}</div>
+      <div className="area-toast__content" role="status" aria-atomic="true">{title ? <div className="area-toast__title">{title}</div> : null}<div>{children}</div></div>
+      {action ? <div className="area-toast__action">{action}</div> : null}
+      {onDismiss ? <Button size="sm" variant="ghost" iconOnly icon={<ChipDismissIcon />} aria-label={dismissLabel} onClick={onDismiss} /> : null}
     </div>
   );
 });
@@ -816,15 +832,19 @@ export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(func
 
 export interface TabsProps extends Omit<Div, "defaultValue"> {
   /** Tab labels, in order. */
-  tabs: Array<{ id: string; label: ReactNode; disabled?: boolean; content?: ReactNode }>;
+  tabs: Array<{ id: string; label: ReactNode; icon?: ReactNode; trailing?: ReactNode; disabled?: boolean; content?: ReactNode }>;
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   label?: string;
+  size?: VariantProps<typeof MANIFESTS.tabs>["size"];
+  orientation?: "horizontal" | "vertical";
+  activationMode?: "automatic" | "manual";
+  track?: boolean;
 }
 
 export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(function Tabs(
-  { tabs, value: controlledValue, defaultValue, onValueChange, label = "Views", className, children, ...rest },
+  { tabs, value: controlledValue, defaultValue, onValueChange, label = "Views", size = "md", orientation = "horizontal", activationMode = "automatic", track, className, children, ...rest },
   ref,
 ) {
   const id = useId();
@@ -837,8 +857,8 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
     onValueChange?.(next);
   };
   return (
-    <div ref={ref} className={cx("area-tabs", className)} {...rest}>
-      <div className="area-tabs__list" role="tablist" aria-label={label}>
+    <div ref={ref} className={tabsVariants({ size, track, orientation: orientation === "vertical" ? orientation : undefined }, className)} {...rest}>
+      <div className="area-tabs__list" role="tablist" aria-label={label} aria-orientation={orientation}>
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -850,15 +870,15 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
             aria-controls={`${id}-panel-${tab.id}`}
             onClick={() => select(tab.id)}
             onKeyDown={event => {
-              const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+              const keys = orientation === "vertical" ? ["ArrowUp", "ArrowDown", "Home", "End"] : ["ArrowLeft", "ArrowRight", "Home", "End"];
               if (!keys.includes(event.key)) return;
               event.preventDefault();
               const enabled = tabs.filter(item => !item.disabled);
               const index = enabled.findIndex(item => item.id === tab.id);
               const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
-              const step = (event.key === "ArrowRight" ? 1 : -1) * (rtl ? -1 : 1);
+              const step = (event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1) * (orientation === "horizontal" && rtl ? -1 : 1);
               const next = enabled[event.key === "Home" ? 0 : event.key === "End" ? enabled.length - 1 : (index + step + enabled.length) % enabled.length];
-              if (next) { select(next.id); buttons.current.get(next.id)?.focus(); }
+              if (next) { if (activationMode === "automatic") select(next.id); buttons.current.get(next.id)?.focus(); }
             }}
             // Only the selected tab is in the tab order; arrow keys move between them.
             tabIndex={tab.id === value ? 0 : -1}
@@ -867,7 +887,9 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
             {...(tab.id === value ? { "data-selected": "" } : {})}
             {...(tab.disabled ? { "data-disabled": "" } : {})}
           >
+            {tab.icon ? <span className="area-tabs__icon" aria-hidden="true">{tab.icon}</span> : null}
             <span className="area-tabs__label">{tab.label}</span>
+            {tab.trailing}
           </button>
         ))}
       </div>
@@ -928,6 +950,8 @@ export interface SegmentedProps extends Omit<Div, "onChange" | "onSelect" | "def
   size?: VariantProps<typeof MANIFESTS.segmented>["size"];
   /** Stretch to the container, items sharing the width. For a panel row. */
   fullWidth?: boolean;
+  /** Hide visible option labels while retaining their accessible names. */
+  iconOnly?: boolean;
   options: Array<{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }>;
   value?: string;
   defaultValue?: string;
@@ -944,7 +968,7 @@ export interface SegmentedProps extends Omit<Div, "onChange" | "onSelect" | "def
  * convey.
  */
 export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedProps>(function Segmented(
-  { size, fullWidth, options, value: controlledValue, defaultValue, label, onSelect, className, ...rest },
+  { size, fullWidth, iconOnly, options, value: controlledValue, defaultValue, label, onSelect, className, ...rest },
   ref,
 ) {
   const [localValue, setLocalValue] = useState(defaultValue ?? options.find(option => !option.disabled)?.value);
@@ -960,7 +984,7 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
       ref={ref}
       role="radiogroup"
       aria-label={label}
-      className={segmentedVariants({ size, fullWidth }, className)}
+      className={segmentedVariants({ size, fullWidth, iconOnly }, className)}
       {...rest}
     >
       {options.map((option) => (
@@ -991,7 +1015,7 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
               {option.icon}
             </span>
           ) : null}
-          <span className="area-segmented__label">{option.label}</span>
+          <span className={iconOnly ? "area-sr-only" : "area-segmented__label"}>{option.label}</span>
         </button>
       ))}
     </div>

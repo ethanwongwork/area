@@ -14,7 +14,8 @@
     --_focus-outline: var(--area-field-focus-color);
     --_focus-halo: var(--area-shadow-color);
     --_bg: var(--area-textarea-bg);
-    --_gutter: var(--area-gutter-md);
+    --_gutter-inline: var(--area-gutter-md);
+    --_gutter-block: max(var(--area-space-2), calc(var(--_gutter-inline) - var(--area-space-4)));
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
 
@@ -22,7 +23,8 @@
     inline-size: var(--area-textarea-inline-size);
     max-inline-size: 100%;
     min-block-size: calc(var(--_height) * 2);
-    padding: var(--_gutter);
+    padding-block: max(0px, calc(var(--_gutter-block) - var(--area-stroke-width)));
+    padding-inline: max(0px, calc(var(--_gutter-inline) - var(--area-stroke-width)));
 
     border: var(--area-stroke-width) solid var(--_border);
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
@@ -38,7 +40,7 @@
   }
 
   .area-textarea:not([rows]) {
-    min-block-size: calc(var(--_leading) * 4 + var(--_gutter) * 2 + var(--area-stroke-width) * 2);
+    min-block-size: calc(var(--_leading) * 4 + var(--_gutter-block) * 2 + var(--area-stroke-width) * 2);
   }
 
   /* Explicit for manifest parity; the base class remains the framework-free default. */
@@ -115,7 +117,7 @@
   /* Multiline fields use a tighter content inset than a one-line control: the text's
      own leading already supplies vertical breathing room. Each tier remains visible when
      a fixed row count is used in a compact composition. */
-  .area-textarea--sm { --_height: var(--area-control-sm); --_gutter: var(--area-space-6); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-textarea--md { --_height: var(--area-control-md); --_gutter: var(--area-space-8); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-textarea--lg { --_height: var(--area-control-lg); --_gutter: var(--area-space-12); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-textarea--sm { --_height: var(--area-control-sm); --_gutter-inline: var(--area-gutter-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-textarea--md { --_height: var(--area-control-md); --_gutter-inline: var(--area-gutter-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-textarea--lg { --_height: var(--area-control-lg); --_gutter-inline: var(--area-gutter-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

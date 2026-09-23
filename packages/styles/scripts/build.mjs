@@ -11,6 +11,7 @@ import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { transform } from "esbuild";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
@@ -39,6 +40,10 @@ function inline(file) {
 
 const entry = join(root, "src", "index.css");
 const css = inline(entry);
+// Parsing must precede publishing: selector parity cannot detect a stray brace that
+// makes the browser discard the next component's layer.
+const parsed = await transform(css, { loader: "css", logLevel: "silent" });
+if (parsed.warnings.length) throw new Error(parsed.warnings.map(w => w.text).join("\n"));
 
 if (/^@import/m.test(css)) {
   throw new Error("An @import survived bundling; every import must be inlined.");

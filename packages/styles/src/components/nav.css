@@ -22,6 +22,8 @@
     flex-direction: column;
     gap: var(--area-space-2);
     min-inline-size: 0;
+    inline-size: var(--area-nav-inline-size, 200px);
+    max-inline-size: 100%;
   }
 
   /*
@@ -29,6 +31,7 @@
    * a second line moves every item below it and changes the height of the page chrome.
    */
   .area-nav--horizontal {
+    inline-size: max-content;
     flex-direction: row;
     align-items: center;
     gap: var(--area-space-4);
@@ -112,6 +115,7 @@
   /* Horizontal items hug their label instead of filling the axis. */
   .area-nav--horizontal .area-nav__item {
     flex: 0 0 auto;
+    inline-size: max-content;
   }
 
   /* A horizontal destination with no end annotation is a compact plate, not a left-aligned
@@ -218,6 +222,25 @@
     margin-block: var(--area-space-8);
     background-color: var(--area-border-decorative);
   }
+
+  /* The link and independent actions share one plate without nesting buttons in links. */
+  .area-nav__row {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+    gap: var(--area-space-2);
+    padding-inline-end: calc((var(--area-control-md) - var(--area-control-sm)) / 2);
+    border-radius: min(var(--area-radius-row), calc(var(--area-control-md) * var(--area-radius-cap)));
+  }
+  .area-nav__row:has(> .area-nav__item:not([data-disabled])):hover { background: var(--area-bg-component); }
+  .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: var(--area-bg-component-hover); }
+  .area-nav--accent .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: var(--area-accent-surface-hover); }
+  .area-nav--marker .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: transparent; }
+  .area-nav .area-nav__row > .area-nav__item { background: transparent; }
+
+  .area-nav__row > .area-nav__item { flex: 1; }
+  .area-nav__actions { display: flex; align-items: center; gap: var(--area-space-2); flex-shrink: 0; }
+  .area-nav__actions [aria-expanded="false"] svg { rotate: -90deg; }
 
   .area-nav--horizontal .area-nav__separator {
     inline-size: var(--area-border-width);

@@ -59,15 +59,17 @@ export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
   icon?: ReactNode;
   /** Pushed to the end of the row: a count, a shortcut, a status dot. */
   trailing?: ReactNode;
+  /** Independent controls beside the link, within its shared row backplate; never nested inside the anchor. */
+  actions?: ReactNode;
   disabled?: boolean;
   children?: ReactNode;
 }
 
 export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProps>(function NavItem(
-  { current, icon, trailing, disabled, className, children, href, onClick, tabIndex, ...rest },
+  { current, icon, trailing, actions, disabled, className, children, href, onClick, tabIndex, ...rest },
   ref,
 ) {
-  return (
+  const link = (
     <a
       ref={ref}
       className={cx("area-nav__item", className)}
@@ -90,6 +92,7 @@ export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProp
       {trailing ? <span className="area-nav__trailing">{trailing}</span> : null}
     </a>
   );
+  return actions ? <div className="area-nav__row">{link}<div className="area-nav__actions">{actions}</div></div> : link;
 });
 
 /** A rule between runs of items. Horizontal navs get a vertical hairline instead. */

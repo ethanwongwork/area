@@ -98,6 +98,8 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "bg-surface": at("neutral", "surface"),
   /** A quieter region within a surface: table header, inset well, code block. */
   "bg-subtle": at("neutral", "subtle"),
+  /** Alternate table rows, quieter than headers and control fills. */
+  "bg-stripe": at("neutral", "stripe"),
   /** A code block. Vivid text is measured against its own ground. */
   "bg-code": at("neutral", "code"),
   /** A control's own resting fill, and its hover and active states. */

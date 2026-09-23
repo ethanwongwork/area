@@ -29,7 +29,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "segmented", name: "Segmented", manifest: "segmented",
-    api: [["options", "{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }[]", "—"], ["value", "string", "—"], ["label", "string (accessible group name)", "—"], ["onSelect", "(value: string) => void", "—"], ["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"]],
+    api: [["options", "{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }[]", "—"], ["value", "string", "—"], ["label", "string (accessible group name)", "—"], ["onSelect", "(value: string) => void", "—"], ["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"], ["iconOnly", "boolean (labels stay accessible)", "false"]],
     examples: [
       { id: "default", title: "Default", note: "A controlled presentation. In an application, update value from onSelect. Complete radio-group arrow-key navigation is still pending.", demo: "GallerySegmented" },
       { id: "sizes", title: "Sizes", demo: "SegmentedSizes" },
@@ -727,7 +727,7 @@ export const COMPONENT_PAGES = [
     slug: "popover",
     name: "Popover",
     manifest: "popover",
-    api: [["className", "string", "—"]],
+    api: [["side", '"top" | "right" | "bottom" | "left"', '"top"'], ["arrow", "boolean", "false"]],
     examples: [{ id: "default", title: "Default", demo: "PopoverDefault" }],
   },
   {
@@ -737,6 +737,8 @@ export const COMPONENT_PAGES = [
     api: [
       ["tone", '"info" | "danger" | "warning" | "success"', '"info"'],
       ["icon", "ReactNode", "—"],
+      ["title / action", "ReactNode", "—"],
+      ["onDismiss / dismissLabel", "() => void / string", "— / Dismiss notification"],
     ],
     examples: [{ id: "default", title: "Default", demo: "ToastDefault" }],
   },
@@ -745,8 +747,14 @@ export const COMPONENT_PAGES = [
     name: "Tabs",
     manifest: "tabs",
     api: [
-      ["tabs", "{ id, label, disabled? }[]", "—"],
+      ["tabs", "{ id, label, disabled?, content? }[]", "—"],
       ["value", "string", "—"],
+      ["defaultValue / onValueChange", "string / (value: string) => void", "first enabled tab / —"],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["orientation", '"horizontal" | "vertical"', '"horizontal"'],
+      ["activationMode", '"automatic" | "manual"', '"automatic"'],
+      ["track", "boolean", "false"],
+      ["tabs[].icon / trailing", "ReactNode", "—"],
     ],
     examples: [
       {
@@ -814,6 +822,7 @@ export const COMPONENT_PAGES = [
       ["current", "boolean", "false"],
       ["icon", "ReactNode", "\u2014"],
       ["trailing", "ReactNode", "\u2014"],
+      ["actions", "ReactNode (independent buttons inside the shared row backplate)", "—"],
       ["disabled", "boolean", "false"],
     ],
     practices: [
@@ -850,7 +859,7 @@ export const COMPONENT_PAGES = [
     slug: "table",
     name: "Table",
     manifest: "table",
-    api: [["interactive", "boolean", "false"]],
+    api: [["interactive", "boolean", "false"], ["size", '"sm" | "md" | "lg"', '"md"'], ["striped", "boolean", "false"], ["columnDividers", "boolean", "false"]],
     examples: [{ id: "default", title: "Default", demo: "TableDefault" }],
   },
 ].sort((a, b) => a.name.localeCompare(b.name, "en"));

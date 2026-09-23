@@ -65,7 +65,7 @@ const STROKE = {
 } as const;
 
 /** Surfaces that body text is allowed to land on. */
-const TEXT_SURFACES = ["bg-page", "bg-surface", "bg-subtle", "bg-component"];
+const TEXT_SURFACES = ["bg-page", "bg-surface", "bg-subtle", "bg-component", "bg-stripe"];
 
 function textAssertions(): ContrastAssertion[] {
   const out: ContrastAssertion[] = [];

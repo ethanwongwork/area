@@ -26,6 +26,7 @@
  * tier, which left two sizes apart only by their text.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  .area-segmented--icon-only .area-segmented__item { inline-size: var(--_item); padding-inline: 0; }
   .area-segmented {
     --_inset: var(--area-space-2);
     --_height: var(--area-control-md);

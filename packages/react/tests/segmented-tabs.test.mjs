@@ -27,3 +27,11 @@ test("tabs renders a linked tabpanel for every tab and hides inactive content", 
   assert.match(html, /role="tabpanel"/);
   assert.match(html, /hidden=""/);
 });
+
+test("vertical tabs fall back from a disabled value to an enabled tab", () => {
+  const html = renderToString(h(Tabs, { orientation: "vertical", size: "sm", defaultValue: "disabled", tabs: [{ id: "disabled", label: "Unavailable", disabled: true }, { id: "enabled", label: "Available" }] }));
+  assert.match(html, /aria-orientation="vertical"/);
+  assert.match(html, /area-tabs--sm area-tabs--vertical/);
+  assert.equal((html.match(/aria-selected="true"/g) ?? []).length, 1);
+  assert.match(html, /aria-selected="false"[^>]*tabindex="-1" disabled=""/);
+});

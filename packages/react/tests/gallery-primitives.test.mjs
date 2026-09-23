@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToString } from "react-dom/server";
-import { CodeBlock, Dialog, Skeleton, MANIFESTS } from "../dist/modules/index.js";
+import { CodeBlock, Dialog, Skeleton, NavItem, Toast, MANIFESTS } from "../dist/modules/index.js";
 
 test("code block preserves plain-text escaping and supports a separate action header", () => {
   const html = renderToString(h(CodeBlock, { title: "example.ts", code: "<example>", actions: h("button", null, "Copy"), layout: "wrap" }));
@@ -23,4 +23,18 @@ test("dialog surface can compose inside a native modal without duplicate dialog 
   assert.match(html, /role="group"/);
   assert.doesNotMatch(html, /aria-modal/);
   for (const part of ["title", "description", "body", "footer"]) assert.match(html, new RegExp(`area-dialog__${part}`));
+});
+
+test("navigation actions stay outside the destination link", () => {
+  const html = renderToString(h(NavItem, { href: "/projects", actions: h("button", { type: "button", "aria-label": "Expand projects" }, "Expand") }, "Projects"));
+  assert.match(html, /<a[^>]*href="\/projects"/);
+  assert.match(html, /<\/a><div class="area-nav__actions"><button/);
+  assert.doesNotMatch(html, /<a[^>]*>[^]*<button[^]*<\/a>/);
+});
+
+test("toast announces content while leaving independent actions outside its live region", () => {
+  const html = renderToString(h(Toast, { title: "Saved", onDismiss() {}, action: h("button", null, "Undo") }, "Project updated"));
+  assert.match(html, /role="status" aria-atomic="true"/);
+  assert.match(html, /Project updated<\/div><\/div><div class="area-toast__action">/);
+  assert.match(html, /aria-label="Dismiss notification"/);
 });
