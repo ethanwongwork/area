@@ -1,0 +1,34 @@
+@layer area.components {
+  .area-button-group {
+    --_group-height: var(--area-control-md);
+    --_group-icon: var(--area-icon-md);
+    --_group-text: var(--area-control-md-text);
+    --_group-leading: var(--area-control-md-leading);
+    display: inline-flex;
+    align-items: stretch;
+    block-size: var(--_group-height);
+    max-inline-size: 100%;
+    padding: var(--area-space-2);
+    border: var(--area-stroke-width) solid var(--area-border-decorative);
+    border-radius: min(var(--area-radius-control), calc(var(--_group-height) * var(--area-radius-cap)));
+    background: var(--area-bg-subtle);
+  }
+  .area-button-group--soft { background: var(--area-bg-subtle); border-color: transparent; }
+  .area-button-group--outline { background: var(--area-bg-surface); }
+  .area-button-group--sm { --_group-height: var(--area-control-sm); --_group-icon: var(--area-icon-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); }
+  .area-button-group--md { --_group-height: var(--area-control-md); --_group-icon: var(--area-icon-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); }
+  .area-button-group--lg { --_group-height: var(--area-control-lg); --_group-icon: var(--area-icon-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); }
+  .area-button-group > .area-button {
+    --_height: calc(var(--_group-height) - 2 * var(--area-space-2) - 2 * var(--area-stroke-width));
+    --_icon: var(--_group-icon);
+    --_text: var(--_group-text);
+    --_leading: var(--_group-leading);
+    min-inline-size: var(--_height);
+    block-size: 100%;
+    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-button-cap)));
+  }
+  .area-button-group > .area-button:not([data-selected]) { background: transparent; border-color: transparent; box-shadow: none; }
+  .area-button-group > .area-button:not([data-selected]):hover { background: var(--area-bg-component-hover); }
+  .area-button-group > .area-button:focus-visible { z-index: 1; }
+  .area-button-group > .area-button + .area-button:not([data-selected]) { margin-inline-start: var(--area-space-2); }
+}

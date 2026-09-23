@@ -822,7 +822,7 @@ export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(func
       ) : null}
       <div className="area-toast__content" role="status" aria-atomic="true">{title ? <div className="area-toast__title">{title}</div> : null}<div>{children}</div></div>
       {action ? <div className="area-toast__action">{action}</div> : null}
-      {onDismiss ? <Button size="sm" variant="ghost" iconOnly icon={<ChipDismissIcon />} aria-label={dismissLabel} onClick={onDismiss} /> : null}
+      {onDismiss ? <span className="area-toast__dismiss"><Button size="sm" variant="ghost" iconOnly icon={<ChipDismissIcon />} aria-label={dismissLabel} onClick={onDismiss} /></span> : null}
     </div>
   );
 });

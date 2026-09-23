@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Avatar, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Input, InputAction, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
+import { Avatar, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Input, InputAction, NumberField, Panel, PanelSection, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
 import { CheckIcon, DismissIcon, OpenIcon, SearchIcon, TrashIcon } from "../icons.tsx";
 import { SliderRangeComposition } from "./slider-range.tsx";
 
@@ -55,6 +55,33 @@ export const InputRtl = () => (
     />
   </div>
 );
+
+export const NumberFieldDefault = () => <Field label="Width"><NumberField defaultValue={240} unit="px" /></Field>;
+export const NumberFieldSteppers = () => <Field label="Opacity"><NumberField defaultValue={80} min={0} max={100} step={1} unit="%" steppers /></Field>;
+export const NumberFieldScrub = () => <Field label="Rotation"><NumberField defaultValue={15} min={-360} max={360} unit="°" scrub /></Field>;
+export const NumberFieldDecimal = () => <Field label="Scale"><NumberField defaultValue={1.25} min={0} step={0.05} fractionDigits={2} /></Field>;
+export const NumberFieldExpression = () => <Field label="Position"><NumberField defaultValue={24} unit="px" scrub steppers /></Field>;
+export const NumberFieldMixed = () => {
+  const [mixed, setMixed] = useState(true);
+  return <Field label="Spacing"><NumberField mixed={mixed} defaultValue={8} onValueChange={() => setMixed(false)} unit="px" steppers /></Field>;
+};
+export const NumberFieldSoft = () => <Field label="Height"><NumberField variant="soft" defaultValue={120} unit="px" /></Field>;
+export const NumberFieldReadOnly = () => <Field label="Locked"><NumberField defaultValue={48} unit="px" readOnly /></Field>;
+export const NumberFieldDisabled = () => <Field label="Unavailable"><NumberField defaultValue={48} unit="px" disabled /></Field>;
+export const NumberFieldSizes = () => <div style={{ display: "grid", gap: "var(--area-space-16)", inlineSize: "var(--area-input-inline-size)" }}><NumberField size="sm" aria-label="Small" defaultValue={8} unit="px" /><NumberField size="md" aria-label="Medium" defaultValue={16} unit="px" /><NumberField size="lg" aria-label="Large" defaultValue={24} unit="px" /></div>;
+export const NumberFieldInspector = () => {
+  const pair = { display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--area-space-8)" };
+  return <Panel size="sm" title="Frame" aria-label="Frame properties">
+    <PanelSection heading="Position"><div style={pair}>
+      <Field label="X"><NumberField fullWidth defaultValue={24} unit="px" scrub /></Field>
+      <Field label="Y"><NumberField fullWidth defaultValue={48} unit="px" scrub /></Field>
+    </div></PanelSection>
+    <PanelSection heading="Size"><div style={pair}>
+      <Field label="W"><NumberField fullWidth defaultValue={320} min={0} unit="px" /></Field>
+      <Field label="H"><NumberField fullWidth defaultValue={240} min={0} unit="px" /></Field>
+    </div></PanelSection>
+  </Panel>;
+};
 
 export const FieldDefault = () => (
   <Field label="Label">

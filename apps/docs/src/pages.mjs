@@ -8,6 +8,16 @@
 
 export const COMPONENT_PAGES = [
   {
+    slug: "tree-view", name: "Tree view", exportName: "TreeView", manifest: "treeView",
+    api: [["items", "TreeViewNode[]", "—"], ["selectionMode", '"navigation" | "checkbox"', '"navigation"'], ["expandedIds / defaultExpandedIds", "string[]", "—"], ["selectedIds / defaultSelectedIds", "string[]", "—"], ["onExpandedChange / onSelectedChange", "(ids: string[]) => void", "—"], ["onActivate", "(id: string) => void", "—"]],
+    examples: [{ id: "files", title: "Project files", demo: "GalleryTreeViewFiles" }, { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters" }, { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed" }],
+  },
+  {
+    slug: "composer", name: "Composer", manifest: "composer",
+    api: [["layout", '"inline" | "stacked"', '"inline"'], ["value / defaultValue", "string", "—"], ["onValueChange", "(value: string) => void", "—"], ["onSubmit", "(value: string) => void", "—"], ["leadingActions / trailingActions / mode", "ReactNode", "—"], ["submitOnEnter", "boolean", "true"]],
+    examples: [{ id: "inline", title: "Inline", demo: "GalleryComposerInline" }, { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked" }, { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled" }, { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled" }],
+  },
+  {
     slug: "code", name: "Code", manifest: "code",
     api: [["children", "ReactNode", "—"], ["swatch", "string", "—"], ["subtle", "boolean", "false"], ["onColor", "boolean", "false"], ["…props", "HTMLAttributes<HTMLElement>", "—"]],
     examples: [
@@ -134,6 +144,71 @@ export const COMPONENT_PAGES = [
         demo: "ButtonLoading",
       },
       { id: "disabled", title: "Disabled", demo: "ButtonDisabled" },
+    ],
+  },
+  {
+    slug: "button-group", name: "Button group", exportName: "ButtonGroup", manifest: "buttonGroup",
+    imports: "ButtonGroup, Button",
+    api: [
+      ["variant", '"soft" | "outline"', '"soft"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["children", "Button[]", "—"],
+      ["native div props / ref", "HTMLAttributes / HTMLDivElement", "forwarded"],
+    ],
+    examples: [
+      { id: "commands", title: "Independent icon commands", note: "Each button is a separate command and retains its own tab stop and accessible name.", demo: "GalleryButtonGroupCommands" },
+      { id: "text", title: "Text and toggle", note: "A toggle exposes aria-pressed through Button; grouping does not change its state semantics.", demo: "GalleryButtonGroupText" },
+    ],
+  },
+  {
+    slug: "input-group", name: "Input group", exportName: "InputGroup", manifest: "inputGroup",
+    imports: "InputGroup, InputGroupText, Input, NumberField",
+    api: [
+      ["variant", '"outline" | "soft"', '"outline"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["fullWidth", "boolean", "false"],
+      ["children", "Input, NumberField, Select, Button, InputGroupText", "—"],
+      ["native div props / ref", "HTMLAttributes / HTMLDivElement", "forwarded"],
+    ],
+    examples: [
+      { id: "affixes", title: "Affixes", note: "Static symbols share one shell with the editable value. Name the input with the unit or currency for assistive technology.", demo: "GalleryInputGroupAffixes" },
+      { id: "paired", title: "Independent paired fields", note: "Two separate soft fields match the inspector reference; each value has its own shell, accessible name and keyboard stop.", demo: "GalleryInputGroupPair" },
+      { id: "icon", title: "Icon visual", demo: "GalleryInputGroupIcon" },
+      { id: "opacity", title: "Opacity icon", demo: "GalleryInputGroupOpacity" },
+      { id: "rotation", title: "Rotation icon", demo: "GalleryInputGroupRotation" },
+      { id: "letter", title: "Letter visual", demo: "GalleryInputGroupLetter" },
+      { id: "mode", title: "Mode picker", note: "A native Select chooses the unit independently of the numeric value.", demo: "GalleryInputGroupMode" },
+      { id: "phone", title: "Phone country code", demo: "GalleryInputGroupPhone" },
+      { id: "action", title: "Independent action", demo: "GalleryInputGroupAction" },
+    ],
+  },
+  {
+    slug: "number-field", name: "Number field", exportName: "NumberField", manifest: "numberField",
+    api: [
+      ["value / defaultValue", "number | null", "null"],
+      ["onValueChange / onValueCommit", "(value: number | null) => void", "—"],
+      ["min / max / step", "number", "unbounded / 1"],
+      ["unit", "string", "—"],
+      ["steppers / scrub / mixed", "boolean", "false"],
+      ["variant", '"outline" | "soft"', '"outline"'],
+      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["fullWidth", "boolean", "false"],
+      ["locale / fractionDigits", "string / number", "system locale / step precision"],
+      ["validationStatus", '"error" | "success" | "warning"', "—"],
+      ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A normal-density property field. Use a visible Field label; the unit is static text outside the editable value.", demo: "NumberFieldDefault" },
+      { id: "steppers", title: "Steppers", note: "Optional increment and decrement buttons respect the range. Arrow keys work from the input even when buttons are hidden.", demo: "NumberFieldSteppers" },
+      { id: "scrub", title: "Scrub handle", note: "Drag the leading handle horizontally. Keyboard users can use arrows, Shift+arrows for coarse steps and Alt+arrows for fine steps.", demo: "NumberFieldScrub" },
+      { id: "expression", title: "Calculation", note: "Type an expression such as 24*2 or +8 and press Enter; Escape restores the prior value. Invalid expressions stay visible for correction.", demo: "NumberFieldExpression" },
+      { id: "decimal", title: "Decimal", demo: "NumberFieldDecimal" },
+      { id: "mixed", title: "Mixed values", note: "An inspector editing multiple selected objects can show an empty mixed state before the next value is chosen.", demo: "NumberFieldMixed" },
+      { id: "soft", title: "Soft", demo: "NumberFieldSoft" },
+      { id: "sizes", title: "Sizes", note: "Medium is the normal default. UI scale controls density across the full system.", demo: "NumberFieldSizes" },
+      { id: "inspector", title: "Inspector composition", note: "Paired position and size values in a Panel at the normal UI scale. A reusable InputGroup can later unify each pair's shell without changing NumberField's behavior.", demo: "NumberFieldInspector", span: "2x2" },
+      { id: "read-only", title: "Read only", demo: "NumberFieldReadOnly" },
+      { id: "disabled", title: "Disabled", demo: "NumberFieldDisabled" },
     ],
   },
   {

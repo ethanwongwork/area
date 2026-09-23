@@ -218,6 +218,7 @@ export function table(headers, rows, { className = "" } = {}) {
  * a local custom property up top so it is named rather than scattered.
  */
 export const DOCS_CSS = `
+  .docs-paired-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-16); inline-size: 320px; max-inline-size: 100%; }
 @layer area.base {
   :root {
     /* Site layout. Not design-system tokens: these describe this documentation site. */

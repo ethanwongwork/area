@@ -6,15 +6,16 @@ tokens, predictable APIs, accessibility and visual quality consistent.
 
 ## What is complete
 
-**Every family that ships today is owner-confirmed complete** as of 2026-09-22: Alert,
+The families owner-confirmed complete as of 2026-09-22 are Alert,
 Avatar, Badge, Button, Card, Checkbox, Chip, Code, Code block, Dialog, Field, Input, Kbd,
 Menu, Nav, Panel, Popover, Progress, Radio, Segmented, Select, Separator, Skeleton,
 Slider, Spinner, Switch, Table, Tabs, Textarea, Toast and Tooltip. Refining a family
 reopens it as **in review**; only owner confirmation moves it back to complete.
 Historical audits and passing builds do not confer approval.
 
-Tooltip was refined on 2026-09-23 and is complete; the registry below records the
-current owner-confirmed status.
+Tooltip's exposed pointer tip was refined on 2026-09-23 and is in review. NumberField
+is the first inspector-foundation component and is also in review. TreeView and Composer
+are built at normal UI density and remain in review.
 
 The single executable status source is
 [`component-status.mjs`](../apps/docs/src/component-status.mjs). Both the gallery and
@@ -31,8 +32,9 @@ actual specimens. Current families include:
 
 - Actions and choices: Button, Checkbox/CheckboxGroup, Radio/RadioGroup, Switch,
   Slider, Chip/ChipGroup and Segmented.
-- Forms: Field, Input/InputAction, Textarea and native Select.
-- Navigation: Nav, Tabs and Menu.
+- Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, Textarea,
+  Composer and native Select.
+- Navigation: Nav, Tabs, Menu and TreeView.
 - Labels and identity: Badge/BadgeAnchor/BadgeGroup, Avatar, Kbd/KbdGroup and Code/Token.
 - Feedback: Alert, Toast, Tooltip, Progress, Spinner and Skeleton.
 - Structure and content: Card, Panel, Dialog, Popover, Separator, Table and CodeBlock.
@@ -57,11 +59,12 @@ vertical keyboard navigation. Nav uses filled rows for destinations, with a comp
 horizontal run for top level routes and a separate vertical selection marker option.
 Textarea keeps native resizing and validation with horizontally larger insets at every
 size. Toast supports titles, actions and dismissal; it is a surface, not a global queue
-or automatic timer. Toasts use 8px vertical/10px horizontal insets so 16px icons have
-equal optical insets on a 20px text line; icons align to the first text line, and
+or automatic timer. Plain Toasts use 8px vertical/10px horizontal insets; action and
+dismissal Toasts use 4px vertical insets around their 28px controls. All three are 38px
+high at normal density, with centered icons and text. Multiline icons align to the first text line, and
 multiline is demonstrated separately from tone. Consumers own
 placement, lifetime and dismissal focus restoration. Tooltip omits its indicator by
-default; arrow opts into an 8px diamond with a subtle 2px tip radius. The gallery
+default; arrow opts into an 8px diamond with a subtle 2px radius on only its exposed tip. The gallery
 shows the default, indicator, shortcut and side compositions separately. Skeleton cards have two text lines; type samples
 share the trailing half of the tile.
 
@@ -107,26 +110,27 @@ keeps option labels accessible while using square inner buttons.
 
 ## Expansion inventory
 
-Research refreshed 2026-09-23 against official component catalogues. The items below
-are proposed additions, not shipped APIs. Build the inspector foundation first, then
+Research refreshed 2026-09-23 against official component catalogues. NumberField is now
+built and in review; the remaining items are proposed additions. Build the inspector foundation first, then
 extend coverage across general product interfaces.
 
 ### Inspector foundation: first priority
 
-1. **NumberField.** Decimal and negative values, min/max/step, keyboard increments,
-   optional steppers, units and locale-aware formatting. Add optional scrubbing on a
-   labeled handle, fine/coarse increments, mixed values, and commit/cancel behavior.
-   Expression entry needs a bounded arithmetic parser, never evaluation of arbitrary
-   code. Native Input type=number already exists; these are the missing behaviors.
+1. **NumberField — built, in review.** Decimal and negative values, min/max/step,
+   keyboard increments, optional steppers, units, locale-aware formatting, scrubbing,
+   fine/coarse increments, mixed values, and commit/cancel behavior are implemented.
+   Expression entry uses a bounded arithmetic parser. Native Input type=number remains
+   available for ordinary numeric forms.
    [React Aria NumberField](https://react-aria.adobe.com/NumberField) supplies a strong
    behavioral baseline. [Figma's field documentation](https://help.figma.com/hc/en-us/articles/360039956914-Adjust-alignment-rotation-position-and-dimensions)
    confirms arithmetic entry and dragging a field icon to change its value.
-2. **InputGroup and compound fields.** One shell around labeled segments, affixes,
-   units, independent actions and a mode picker. Reuse NumberField for X/Y, W/H,
+2. **InputGroup — built, in review.** One shell now composes independently named
+   controls, affixes, actions and a native mode picker. Reuse NumberField for X/Y, W/H,
    angle, opacity, gap and padding. A dimension field combines a number with a sizing
    mode such as fixed, hug or fill; these modes belong to an inspector recipe, not
    to every text input. Keep labels and keyboard stops on each independently edited value.
-3. **Toolbar and ButtonGroup.** Support independent actions, toggle actions and
+3. **ButtonGroup — built, in review; Toolbar next.** ButtonGroup collects independent
+   actions and toggles in one visual track. Toolbar still needs command grouping and
    overflow. Alignment/distribution/flip buttons execute commands; flow direction
    and mutually exclusive modes reuse Segmented. Add SplitButton only where a default
    action and its menu have separate jobs. Button already supports iconOnly: no second
@@ -281,3 +285,28 @@ keyboard/focus behavior, motion-none behavior and theme resilience as those fami
 touched. Before a release, verify cross-browser, forced-colors, assistive-technology and
 consumer integration behavior; automated token checks alone do not establish those
 results. See [Development](DEVELOPMENT.md).
+
+## TreeView and Composer, 2026-09-23
+
+TreeView follows [Primer's hierarchy guidance](https://primer.style/product/components/tree-view/guidelines/)
+and [keyboard model](https://primer.style/product/components/tree-view/accessibility/):
+only one visible row is in the Tab order; Up/Down, Left/Right, Home/End and typeahead
+move through or expand the hierarchy. It accepts controlled or initial expansion and
+selection. The gallery shows a file tree and a checkbox filter tree. Checkbox mode is
+an Area addition based on the supplied filter screenshot; Primer's current TreeView
+reserves Space for future checkbox support. Counts are visible and announced. Add an
+accessible tree name with `aria-label` or `aria-labelledby`. Nodes use a flat DOM with
+explicit level, position and set size metadata; further screen-reader testing of deeply
+nested structures is appropriate before owner acceptance.
+
+Composer uses a native textarea, so text selection, IME entry and Shift+Enter newlines
+remain native. Inline and stacked layouts share the same action slots and submission
+contract. Enter sends by default, Shift+Enter adds a line, and Ctrl/Command+Enter sends
+when Enter submission is disabled. The send action stays unavailable for empty text.
+The textarea grows up to five normal control rows; the gallery uses working send and
+mode examples without assuming attachment or voice service APIs. Form submission,
+attachments and model selection belong to the consuming application.
+
+InputGroup now paints one focus shell. Its visual compartment is one square control
+height with centered 16px Fluent art or a control-text-sized letter, so both have equal
+horizontal inset. The focused child's rectangular inner shadow was removed.

@@ -658,17 +658,18 @@
     position: absolute;
     inline-size: var(--area-space-8);
     block-size: var(--area-space-8);
-    /* A small radius softens the tip without turning it into a bubble. */
-    border-radius: var(--area-space-2);
+    /* The edge buried beneath the shell remains square; each side rounds its visible tip. */
     background: inherit;
     transform: rotate(45deg);
     z-index: 0;
     pointer-events: none;
   }
-  .area-tooltip--top::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-end: calc(var(--area-space-8) / -2); }
-  .area-tooltip--right::after { inset-inline-start: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); }
-  .area-tooltip--bottom::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-start: calc(var(--area-space-8) / -2); }
-  .area-tooltip--left::after { inset-inline-end: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); }
+  .area-tooltip--top::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-end: calc(var(--area-space-8) / -2); border-bottom-right-radius: var(--area-space-2); }
+  .area-tooltip--right::after { inset-inline-start: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); border-bottom-left-radius: var(--area-space-2); }
+  .area-tooltip--bottom::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-start: calc(var(--area-space-8) / -2); border-top-left-radius: var(--area-space-2); }
+  .area-tooltip--left::after { inset-inline-end: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); border-top-right-radius: var(--area-space-2); }
+  .area-tooltip--right:dir(rtl)::after { border-bottom-left-radius: 0; border-top-right-radius: var(--area-space-2); }
+  .area-tooltip--left:dir(rtl)::after { border-top-right-radius: 0; border-bottom-left-radius: var(--area-space-2); }
 
 
   /* --- Toast -------------------------------------------------------------- */
@@ -699,6 +700,9 @@
   .area-toast__content { flex: 1; min-inline-size: 0; overflow-wrap: anywhere; display: grid; gap: var(--area-space-4); }
   .area-toast__title { font-weight: var(--area-weight-strong); }
   .area-toast__action { flex-shrink: 0; display: flex; align-items: center; align-self: center; }
+  .area-toast__dismiss { flex-shrink: 0; display: flex; align-items: center; align-self: center; }
+  .area-toast:has(> :is(.area-toast__action, .area-toast__dismiss)) { align-items: center; padding-block: var(--area-space-4); }
+  .area-toast:has(> :is(.area-toast__action, .area-toast__dismiss)) .area-toast__icon { margin-block-start: 0; }
 
   .area-toast--danger .area-toast__icon  { color: var(--area-fg-danger); }
   .area-toast--warning .area-toast__icon { color: var(--area-fg-warning); }

@@ -1,0 +1,110 @@
+/* Numeric entry shares Input's chrome and system UI scale; the controls remain optional. */
+@layer area.components {
+  .area-number-field {
+    --_height: var(--area-control-md);
+    --_icon: var(--area-icon-md);
+    --_gap: var(--area-gap-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+    --_step-width: calc(var(--_height) - var(--area-space-6));
+    --_border: var(--area-input-edge);
+    --_border-hover: var(--area-input-edge-hover);
+    --_border-focus: var(--area-field-focus-color);
+    --_bg: var(--area-input-bg);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_gap);
+    block-size: var(--_height);
+    inline-size: var(--area-input-inline-size);
+    max-inline-size: 100%;
+    border: var(--area-stroke-width) solid var(--_border);
+    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
+    background-color: var(--_bg);
+    color: var(--area-input-text);
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    box-shadow: var(--area-shadow-1);
+    transition: var(--area-transition);
+  }
+  .area-number-field--outline { --_bg: var(--area-input-bg); }
+  .area-number-field--soft { --_bg: var(--area-input-bg-soft); --_border: transparent; --_border-hover: var(--area-input-edge); }
+  .area-number-field--sm { --_height: var(--area-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-number-field--md { --_height: var(--area-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-number-field--lg { --_height: var(--area-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-number-field--full-width { inline-size: 100%; }
+  .area-number-field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); }
+  .area-number-field:focus-within {
+    border-color: var(--_border-focus);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color);
+    outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
+    outline-offset: 0;
+  }
+  .area-number-field[data-invalid] {
+    --_border: var(--area-input-invalid-color);
+    --_border-hover: var(--area-input-invalid-color);
+    --_border-focus: var(--area-input-invalid-color);
+  }
+  .area-number-field[data-invalid]:focus-within { outline-color: var(--area-input-invalid-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-invalid-halo-color); }
+  .area-number-field[data-success] { --_border: var(--area-input-success-color); --_border-hover: var(--area-input-success-color); --_border-focus: var(--area-input-success-color); }
+  .area-number-field[data-warning] { --_border: var(--area-input-warning-color); --_border-hover: var(--area-input-warning-color); --_border-focus: var(--area-input-warning-color); }
+  .area-number-field[data-success]:focus-within { outline-color: var(--area-input-success-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-success-halo-color); }
+  .area-number-field[data-warning]:focus-within { outline-color: var(--area-input-warning-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-warning-halo-color); }
+  .area-number-field[data-disabled] { --_bg: var(--area-input-bg-disabled); --_border: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }
+  .area-number-field[data-read-only] { --_bg: var(--area-input-bg-soft); }
+  .area-number-field[data-scrubbing] { cursor: ew-resize; }
+  .area-number-field__control {
+    flex: 1;
+    min-inline-size: 0;
+    block-size: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    outline: none;
+  }
+  .area-number-field__control::placeholder { color: var(--area-input-placeholder); }
+  .area-number-field__unit { flex-shrink: 0; color: var(--area-fg-muted); white-space: nowrap; user-select: none; }
+  .area-number-field__scrub {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+    flex-shrink: 0;
+    color: var(--area-input-icon);
+    cursor: ew-resize;
+    touch-action: none;
+  }
+  .area-number-field__scrub svg { inline-size: 100%; block-size: 100%; }
+  .area-number-field__steppers {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    inline-size: var(--_step-width);
+    flex-shrink: 0;
+    border-inline-start: var(--area-stroke-width) solid var(--_border);
+    overflow: hidden;
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
+  }
+  .area-number-field__steppers:has(.area-number-field__step:hover:not(:disabled)) {
+    background: var(--area-bg-component-hover);
+  }
+  .area-number-field__step {
+    display: grid;
+    place-items: center;
+    flex: 1;
+    min-block-size: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--area-input-icon);
+    cursor: pointer;
+  }
+  /* Exact Fluent chevron_up/down_12_regular geometry in the component markup. */
+  .area-number-field__step svg { display: block; inline-size: var(--area-space-12); block-size: var(--area-space-12); }
+  .area-number-field__step + .area-number-field__step { border-block-start: var(--area-stroke-width) solid var(--_border); }
+  .area-number-field__step:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: -2px; }
+  .area-number-field__step:disabled { opacity: .4; cursor: not-allowed; }
+}

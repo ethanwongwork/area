@@ -10,7 +10,12 @@
  * know about.
  */
 export { Button, type ButtonProps } from "./components/Button.tsx";
+export { ButtonGroup, type ButtonGroupProps } from "./components/ButtonGroup.tsx";
 export { Input, InputAction, type InputProps, type InputActionProps } from "./components/Input.tsx";
+export { NumberField, type NumberFieldProps } from "./components/NumberField.tsx";
+export { InputGroup, InputGroupText, type InputGroupProps, type InputGroupTextProps } from "./components/InputGroup.tsx";
+export { TreeView, type TreeViewProps, type TreeViewNode } from "./components/TreeView.tsx";
+export { Composer, type ComposerProps } from "./components/Composer.tsx";
 export { Field, Label, type FieldProps, type LabelProps } from "./components/Field.tsx";
 export {
   Nav,

@@ -56,6 +56,13 @@ export const button = {
   defaults: { variant: "solid", tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
 
+export const buttonGroup = {
+  block: "area-button-group",
+  description: "Groups related independent button actions in one visual track.",
+  variants: { variant: ["soft", "outline"], size: ["sm", "md", "lg"] },
+  defaults: { variant: "soft", size: "md" },
+} as const satisfies ComponentManifest;
+
 export const field = {
   block: "area-field",
   description: "Labels and describes one form control, including its validation message.",
@@ -74,6 +81,43 @@ export const input = {
   states: ["disabled", "invalid", "success", "warning", "read-only", "loading"],
   elements: ["control", "icon", "affix", "action", "action-button", "action-icon", "action-tooltip"],
   defaults: { variant: "outline", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const numberField = {
+  block: "area-number-field",
+  description: "Edits a number with optional units, stepping and scrubbing.",
+  variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
+  booleans: ["full-width"],
+  states: ["disabled", "read-only", "invalid", "success", "warning", "scrubbing"],
+  elements: ["control", "unit", "scrub", "steppers", "step"],
+  defaults: { variant: "outline", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const inputGroup = {
+  block: "area-input-group",
+  description: "Combines independently named controls and passive segments in one shell.",
+  variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
+  booleans: ["full-width"],
+  elements: ["text"],
+  defaults: { variant: "outline", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const treeView = {
+  block: "area-tree-view",
+  description: "Navigates or selects items in an expandable hierarchy.",
+  variants: { selectionMode: ["navigation", "checkbox"] },
+  elements: ["chevron", "check", "icon", "label", "trailing"],
+  defaults: { selectionMode: "navigation" },
+} as const satisfies ComponentManifest;
+
+export const composer = {
+  block: "area-composer",
+  description: "Writes and submits a message with optional action slots.",
+  variants: { layout: ["inline", "stacked"] },
+  states: ["disabled", "busy"],
+  elements: ["entry", "input", "actions", "extras", "footer", "submit"],
+  elementModifiers: { actions: ["leading", "trailing"] },
+  defaults: { layout: "inline" },
 } as const satisfies ComponentManifest;
 
 export const textarea = {
@@ -346,7 +390,7 @@ export const toast = {
   block: "area-toast",
   description: "Reports the outcome of an action without interrupting.",
   variants: { tone: ["info", "danger", "warning", "success"] },
-  elements: ["icon", "content", "title", "action"],
+  elements: ["icon", "content", "title", "action", "dismiss"],
   defaults: { tone: "info" },
 } as const satisfies ComponentManifest;
 
@@ -448,8 +492,13 @@ export const kbdGroup = {
 
 export const MANIFESTS = {
   button,
+  buttonGroup,
   field,
   input,
+  numberField,
+  inputGroup,
+  treeView,
+  composer,
   textarea,
   select,
   checkbox,

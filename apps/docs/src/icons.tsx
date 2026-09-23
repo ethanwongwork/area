@@ -67,10 +67,31 @@ export const ArrowIcon = () => (
   </svg>
 );
 
+/** Fluent `arrow_up_16_regular`. */
+export const ArrowUpIcon = () => (
+  <svg {...base}>
+    <path d="M7.5 13.5a.5.5 0 0 0 1 0V3.8l3.63 4.03a.5.5 0 0 0 .74-.66l-4.5-5a.5.5 0 0 0-.74 0l-4.5 5a.5.5 0 0 0 .74.66L7.5 3.8z" />
+  </svg>
+);
+
 /** Fluent `chevron_down_16_regular`. */
 export const ChevronIcon = () => (
   <svg {...base}>
     <path d="M3.15 5.65c.2-.2.5-.2.7 0L8 9.79l4.15-4.14a.5.5 0 0 1 .7.7l-4.5 4.5a.5.5 0 0 1-.7 0l-4.5-4.5a.5.5 0 0 1 0-.7" />
+  </svg>
+);
+
+/** Fluent `folder_16_regular`. */
+export const FolderIcon = () => (
+  <svg {...base}>
+    <path d="M2 4.5V6h3.59a.5.5 0 0 0 .35-.15L7.29 4.5 5.94 3.15A.5.5 0 0 0 5.59 3H3.5C2.67 3 2 3.67 2 4.5m-1 0A2.5 2.5 0 0 1 3.5 2h2.09c.4 0 .78.16 1.06.44L8.2 4h4.29A2.5 2.5 0 0 1 15 6.5v5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 11.5zM2 7v4.5c0 .83.67 1.5 1.5 1.5h9c.83 0 1.5-.67 1.5-1.5v-5c0-.83-.67-1.5-1.5-1.5H8.2L6.66 6.56A1.5 1.5 0 0 1 5.59 7z" />
+  </svg>
+);
+
+/** Fluent `document_16_regular`. */
+export const DocumentIcon = () => (
+  <svg {...base}>
+    <path d="M5 1a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h6a2 2 0 0 0 2-2V5.41c0-.4-.16-.78-.44-1.06L9.65 1.44A1.5 1.5 0 0 0 8.59 1zM4 3a1 1 0 0 1 1-1h3v2.5C8 5.33 8.67 6 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.8 2H9.5a.5.5 0 0 1-.5-.5V2.2z" />
   </svg>
 );
 

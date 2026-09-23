@@ -56,9 +56,8 @@ unpublished ESM workspaces; publishing them is separate work.
 - [Contrast](docs/CONTRAST.md): color, focus and accessibility constraints.
 - [Development](docs/DEVELOPMENT.md): architecture, commands, testing and generated files.
 
-**Every family that ships today is owner-confirmed complete** as of 2026-09-22. The
-gallery's [completion registry](apps/docs/src/component-status.mjs) is authoritative;
-refining a family reopens it as yellow (In review) until the owner accepts it again.
+The gallery's [completion registry](apps/docs/src/component-status.mjs) is authoritative.
+New and refined families stay In review until the owner accepts them.
 
 [Archived research](archive/README.md) remains available when a specific question needs
 it. It is not required reading or an implementation plan. Session notes live in

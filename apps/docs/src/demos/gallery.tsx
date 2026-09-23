@@ -1,7 +1,7 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useId, useRef, useState } from "react";
-import { Alert, Avatar, AvatarGroup, Badge, BadgeAnchor, Button, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, Dialog, Field, Input, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip } from "@area/react";
-import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DotsFourIcon, InfoIcon, OpenIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon } from "../icons.tsx";
+import { Alert, Avatar, AvatarGroup, Badge, BadgeAnchor, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip, TreeView } from "@area/react";
+import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon } from "../icons.tsx";
 import { SliderRangeComposition } from "./slider-range.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
@@ -62,6 +62,14 @@ export const GalleryButtonGhost = () => <Button variant="ghost">Button</Button>;
 export const GalleryButtonPill = () => <Button pill>Button</Button>;
 export const GalleryButtonSelected = () => <Button selected>Selected</Button>;
 export const GalleryButtonShortcut = () => <Button aria-keyshortcuts="Meta+Enter">Button <Kbd keys={["cmd", "enter"]} /></Button>;
+export const GalleryButtonGroupCommands = () => {
+  const [command, setCommand] = useState("");
+  return <div><ButtonGroup aria-label="Vertical alignment"><Button variant="ghost" iconOnly icon={<AlignTopIcon />} aria-label="Align top" onClick={() => setCommand("Aligned top")} /><Button variant="ghost" iconOnly icon={<AlignMiddleIcon />} aria-label="Align middle" onClick={() => setCommand("Aligned middle")} /><Button variant="ghost" iconOnly icon={<AlignBottomIcon />} aria-label="Align bottom" onClick={() => setCommand("Aligned bottom")} /></ButtonGroup><span className="area-sr-only" role="status">{command}</span></div>;
+};
+export const GalleryButtonGroupText = () => {
+  const [pressed, setPressed] = useState(false);
+  return <ButtonGroup variant="outline" aria-label="Text options"><Button variant="ghost" selected={pressed} onClick={() => setPressed(!pressed)}>Bold</Button><Button variant="ghost" onClick={() => setPressed(false)}>Reset</Button></ButtonGroup>;
+};
 export const GalleryButtonNeutralSolid = () => <Button tone="neutral">Button</Button>;
 export const GalleryButtonNeutralSoft = () => <Button tone="neutral" variant="soft">Button</Button>;
 export const GalleryButtonNeutralOutline = () => <Button tone="neutral" variant="outline">Button</Button>;
@@ -306,6 +314,29 @@ export const GalleryInput = () => (
 export const GalleryInputSmall = () => <Input size="sm" aria-label="Label" placeholder="Small" />;
 export const GalleryInputMedium = () => <Input size="md" aria-label="Label" placeholder="Medium" />;
 export const GalleryInputLarge = () => <Input size="lg" aria-label="Label" placeholder="Large" />;
+export const GalleryInputText = () => <Field label="Full name"><Input defaultValue="Value" /></Field>;
+export const GalleryInputSearch = () => <Field label="Search"><Input type="search" leadingIcon={<SearchIcon />} placeholder="Search" /></Field>;
+export const GalleryInputDate = () => <Field label="Date"><Input type="date" defaultValue="2026-09-23" /></Field>;
+export const GalleryInputPhone = () => <Field label="Phone"><Input type="tel" prefix="+1" defaultValue="555 0100" autoComplete="tel" /></Field>;
+export const GalleryInputPassword = () => {
+  const [visible, setVisible] = useState(false);
+  return <Field label="Password"><Input type={visible ? "text" : "password"} defaultValue="AreaDesign" trailingAction={<InputAction icon={visible ? <EyeSlashIcon /> : <EyeIcon />} tooltip={visible ? "Hide password" : "Show password"} onClick={() => setVisible(!visible)} />} /></Field>;
+};
+export const GalleryNumberFieldPlain = () => <Field label="Quantity"><NumberField defaultValue={4} min={0} steppers /></Field>;
+
+export const GalleryInputGroupAffixes = () => <InputGroup aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount in dollars" defaultValue="24.00" inputMode="decimal" /><InputGroupText aria-hidden="true">USD</InputGroupText></InputGroup>;
+export const GalleryInputGroupPair = () => <div className="docs-paired-fields"><InputGroup variant="soft" fullWidth aria-label="X position"><InputGroupText visual aria-hidden="true">X</InputGroupText><NumberField aria-label="X position" defaultValue={24} /></InputGroup><InputGroup variant="soft" fullWidth aria-label="Y position"><InputGroupText visual aria-hidden="true">Y</InputGroupText><NumberField aria-label="Y position" defaultValue={48} /></InputGroup></div>;
+export const GalleryInputGroupIcon = () => <InputGroup aria-label="Search by keyword"><InputGroupText visual aria-hidden="true"><SearchIcon /></InputGroupText><Input type="search" aria-label="Search by keyword" placeholder="Search" /></InputGroup>;
+export const GalleryInputGroupOpacity = () => <InputGroup variant="soft" aria-label="Opacity"><InputGroupText visual aria-hidden="true"><OpacityIcon /></InputGroupText><NumberField aria-label="Opacity" defaultValue={100} min={0} max={100} unit="%" /></InputGroup>;
+export const GalleryInputGroupRotation = () => <InputGroup variant="soft" aria-label="Rotation"><InputGroupText visual aria-hidden="true"><RotateIcon /></InputGroupText><NumberField aria-label="Rotation" defaultValue={0} unit="°" /></InputGroup>;
+export const GalleryInputGroupLetter = () => <InputGroup aria-label="Width"><InputGroupText visual aria-hidden="true">W</InputGroupText><NumberField aria-label="Width" defaultValue={300} /></InputGroup>;
+export const GalleryInputGroupMode = () => <InputGroup aria-label="Width and unit"><Select aria-label="Unit" defaultValue="px"><option value="px">px</option><option value="percent">%</option></Select><NumberField aria-label="Width" defaultValue={320} min={0} /></InputGroup>;
+export const GalleryInputGroupPhone = () => <InputGroup aria-label="Phone number"><Select aria-label="Country code" defaultValue="+1"><option value="+1">+1</option><option value="+44">+44</option><option value="+61">+61</option></Select><Input type="tel" aria-label="Phone number" defaultValue="555 0100" /></InputGroup>;
+export const GalleryInputGroupAction = () => {
+  const [query, setQuery] = useState("");
+  const [submitted, setSubmitted] = useState("");
+  return <div><InputGroup aria-label="Search"><Input type="search" aria-label="Search terms" placeholder="Search" value={query} onChange={event => setQuery(event.target.value)} /><Button type="button" variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Run search" onClick={() => setSubmitted(query)} /></InputGroup>{submitted && <span role="status" className="area-sr-only">Searched for {submitted}</span>}</div>;
+};
 
 export const GalleryKbd = () => (
   <Kbd keys={["cmd", "K"]} />
@@ -777,3 +808,47 @@ export const SegmentedSizes = () => (
 export const SegmentedFullWidth = () => (
   <div style={{ inlineSize: 280 }}><Segmented fullWidth label="Label" defaultValue="one" options={[{ value: "one", label: "One" }, { value: "two", label: "Two" }, { value: "three", label: "Three", disabled: true }]} /></div>
 );
+
+const fileTree = [
+  { id: "src", label: "src", icon: <FolderIcon />, children: [
+    { id: "components", label: "components", icon: <FolderIcon />, children: [
+      { id: "avatar", label: "Avatar.tsx", icon: <DocumentIcon />, trailing: "A" },
+      { id: "button", label: "Button.tsx", icon: <DocumentIcon />, trailing: "M" },
+    ] },
+    { id: "index", label: "index.ts", icon: <DocumentIcon /> },
+  ] },
+  { id: "package", label: "package.json", icon: <DocumentIcon /> },
+];
+const filterTree = [
+  { id: "markets", label: "Markets", trailing: "85", children: [
+    { id: "open", label: "Open interest", trailing: "24" },
+    { id: "funding", label: "Funding rates", trailing: "12", children: [
+      { id: "positive", label: "Positive funding", trailing: "4" },
+      { id: "negative", label: "Negative funding", trailing: "3" },
+    ] },
+    { id: "spot", label: "Spot only", trailing: "110" },
+  ] },
+  { id: "setup", label: "Trade setup", trailing: "27" },
+];
+export const GalleryTreeViewFiles = () => {
+  const [current, setCurrent] = useState("button");
+  return <TreeView aria-label="Project files" items={fileTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
+};
+export const GalleryTreeViewFilters = () => <TreeView aria-label="Market filters" selectionMode="checkbox" items={filterTree} defaultExpandedIds={["markets", "funding"]} defaultSelectedIds={["open"]} />;
+
+export const GalleryComposerInline = () => {
+  const [sent, setSent] = useState("");
+  return <div style={{ inlineSize: "100%" }}><Composer label="Message" placeholder="Write a message…" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} trailingActions={<Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search tools" onClick={() => setSent("Search tools action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+};
+export const GalleryComposerStacked = () => {
+  const [sent, setSent] = useState("");
+  const [mode, setMode] = useState("Standard");
+  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Task" placeholder="Work on anything" mode={<Button variant="ghost" size="sm" trailingIcon={<ChevronIcon />} onClick={() => setMode(mode === "Standard" ? "Focused" : "Standard")}>{mode}</Button>} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+};
+export const GalleryTreeViewCollapsed = () => <TreeView aria-label="Collapsed project" items={fileTree} defaultSelectedIds={["src"]} />;
+export const GalleryComposerPrefilled = () => {
+  const [value, setValue] = useState("Could you review this change?");
+  const [sent, setSent] = useState("");
+  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Draft message" value={value} onValueChange={setValue} onSubmit={message => { setSent(message); setValue(""); }} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+};
+export const GalleryComposerDisabled = () => <Composer label="Unavailable message" placeholder="Messaging unavailable" disabled />;

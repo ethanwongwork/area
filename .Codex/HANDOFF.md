@@ -2,32 +2,44 @@
 
 ## Current checkpoint
 
-- Branch `main`; GitHub `origin` is canonical. The user authorized committing and
-  pushing the complete working tree after this checkpoint.
-- Tooltip is owner-approved and complete. The default has no indicator; the separate
-  `withIndicator` specimen uses an 8px diamond with a subtle 2px rounded tip.
-- Gallery customizer uses the normal rounded Panel surface with a subtle shadow and a
-  real icon-only Button. Compact controls measure 28px; the default scale is 32px with
-  16px icons.
-- Prior component-library work in this tree includes the code block redesign, tabs/nav/
-  dialog refinements, stroke and fill audit, toast alignment, copy cleanup, variant
-  naming, and supplied Figma-style inspector research.
+- Branch `main`; GitHub `origin` is canonical. Do not commit or push without current
+  authorization. The working tree contains this session's Tooltip, NumberField and
+  InputGroup work.
+- Tooltip's 8px diamond rounds only the exposed corner for each side. It is reopened
+  as In review.
+- NumberField is built at normal `md` density with expression entry, range and step,
+  keyboard increments, optional steppers/scrubbing/units, locale formatting, mixed
+  values and Field validation. Steppers now use Fluent 12px chevrons and a narrower
+  column. It is In review.
+- The component gallery adds text, search, date, phone, password and unitless number
+  specimens. InputGroup has balanced visual slots for matching letters/icons, soft
+  paired independent fields, affixes, unit/country selectors and search actions. It is
+  In review. The X/Y screenshot shows two independent soft fields, not one shared shell.
+- NumberField stepper hover paints the full rail. Toast action/dismiss variants now
+  measure the same 38px height as a plain Toast at normal density. Toast is In review.
+- ButtonGroup is built with independent icon commands and a text toggle; it is In review.
+- TreeView and Composer are built at normal density and shown in the component gallery,
+  both In review. TreeView has navigation and checkbox modes, controlled/initial state,
+  keyboard traversal and a current marker. Composer has inline/stacked layouts, native
+  multiline entry, working send controls and optional action slots.
+- InputGroup now uses one outer focus treatment and 32px square visual slots with
+  control-sized letters. Browser checked focus, tree navigation/selection, composer
+  submission and multiline growth. Docs build and typecheck pass; recheck after changes.
 
 ## Next roadmap
 
-Implement the inspector foundation in this order: NumberField (numeric values, stepper,
-scrubbing, units and calculations), InputGroup, Toolbar/ButtonGroup, AlignmentPicker,
+Continue the inspector foundation with Toolbar, AlignmentPicker,
 composable color controls, then Position/Auto layout/Appearance/Fill/Stroke/Effects
 inspector recipes. Add overlay placement and focus behavior before advanced pickers.
-Use compact density as a scoped system setting for inspector panels: 28px controls with
-13px type and 18px line height; keep ordinary fields at the normal `md` size elsewhere.
+Keep inspector recipes at the normal system density for now; the user deferred dense
+versions of all components to a later pass.
 The broader proposed catalogue is in `docs/COMPONENTS.md`.
 
 ## Next session
 
-Read this section and `docs/COMPONENTS.md`, then start NumberField. Keep CSS, the styles
-manifest, React, demos and docs aligned; test keyboard behavior, accessible names and
-native refs. Only owner-confirm completion in `apps/docs/src/component-status.mjs`.
+Read this section and `docs/COMPONENTS.md`, then continue Toolbar. Review the new and
+refined components with the owner; only owner-confirm completion in
+`apps/docs/src/component-status.mjs`.
 
 
 Branch main; substantial uncommitted changes. Do not commit/push without authorization.

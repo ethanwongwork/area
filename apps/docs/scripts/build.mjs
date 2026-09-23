@@ -259,8 +259,10 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "composer" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${slug === "badge" ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
+${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
 ${slug === "chip" ? '<script type="module" src="./chip-demos.js"></script>' : ""}
 ${slug === "alert" ? '<script type="module" src="./alert-demos.js"></script>' : ""}
 ${slug === "avatar" ? '<script type="module" src="./avatar-demos.js"></script>' : ""}
@@ -281,6 +283,17 @@ function galleryPage() {
   const badgeVariants = ["soft", "solid", "outline", "ghost", "plain"];
   const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {
+    "tree-view": [
+      { id: "files", title: "Project files", demo: "GalleryTreeViewFiles", span: "2x2" },
+      { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters", span: "2x2" },
+      { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed", span: "2x1" },
+    ],
+    composer: [
+      { id: "inline", title: "Inline", demo: "GalleryComposerInline", span: "2x1" },
+      { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked", span: "2x2" },
+      { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled", span: "2x2" },
+      { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled", span: "2x1" },
+    ],
     "code-block": [
       { id: "default", title: "Default", demo: "CodeBlockDefault", span: "2x2" },
       { id: "no-filename", title: "No filename", demo: "CodeBlockPlain", span: "2x2" },
@@ -399,6 +412,10 @@ function galleryPage() {
       { id: "disabled", title: "Disabled", demo: "GalleryButtonDisabled" },
       { id: "icon-only", title: "Icon only", demo: "GalleryButtonIconOnly" },
     ],
+    "button-group": [
+      { id: "commands", title: "Independent icon commands", demo: "GalleryButtonGroupCommands" },
+      { id: "text", title: "Text and toggle", demo: "GalleryButtonGroupText" },
+    ],
     checkbox: [
       { id: "default", title: "Default", demo: "GalleryCheckbox" },
       { id: "size-small", title: "Size / small", demo: "GalleryCheckboxSmall" },
@@ -441,8 +458,37 @@ function galleryPage() {
       { id: "disabled", title: "Disabled", demo: "FieldDisabled" },
       { id: "hidden-label", title: "Visually hidden label", demo: "FieldHiddenLabel" },
     ],
+    "number-field": [
+      { id: "default", title: "Default", demo: "NumberFieldDefault" },
+      { id: "unitless", title: "Plain number", demo: "GalleryNumberFieldPlain" },
+      { id: "steppers", title: "Steppers", demo: "NumberFieldSteppers" },
+      { id: "scrub", title: "Scrub handle", demo: "NumberFieldScrub" },
+      { id: "calculation", title: "Calculation", demo: "NumberFieldExpression" },
+      { id: "decimal", title: "Decimal", demo: "NumberFieldDecimal" },
+      { id: "mixed", title: "Mixed values", demo: "NumberFieldMixed" },
+      { id: "soft", title: "Soft", demo: "NumberFieldSoft" },
+      { id: "inspector", title: "Inspector composition", demo: "NumberFieldInspector", span: "2x2" },
+      { id: "read-only", title: "Read only", demo: "NumberFieldReadOnly" },
+      { id: "disabled", title: "Disabled", demo: "NumberFieldDisabled" },
+    ],
+    "input-group": [
+      { id: "affixes", title: "Affixes", demo: "GalleryInputGroupAffixes" },
+      { id: "paired", title: "Independent paired fields", demo: "GalleryInputGroupPair", span: "2x1" },
+      { id: "icon", title: "Icon visual", demo: "GalleryInputGroupIcon" },
+      { id: "opacity", title: "Opacity icon", demo: "GalleryInputGroupOpacity" },
+      { id: "rotation", title: "Rotation icon", demo: "GalleryInputGroupRotation" },
+      { id: "letter", title: "Letter visual", demo: "GalleryInputGroupLetter" },
+      { id: "mode", title: "Mode picker", demo: "GalleryInputGroupMode" },
+      { id: "phone", title: "Phone country code", demo: "GalleryInputGroupPhone" },
+      { id: "action", title: "Independent action", demo: "GalleryInputGroupAction" },
+    ],
     input: [
       { id: "default", title: "Default", demo: "InputDefault" },
+      { id: "text", title: "Text", demo: "GalleryInputText" },
+      { id: "search", title: "Search", demo: "GalleryInputSearch" },
+      { id: "date", title: "Date", demo: "GalleryInputDate" },
+      { id: "phone", title: "Phone", demo: "GalleryInputPhone" },
+      { id: "password", title: "Password", demo: "GalleryInputPassword" },
       { id: "outline", title: "Variant / outline", demo: "InputOutline" },
       { id: "soft", title: "Variant / soft", demo: "InputSoft" },
       { id: "size-sm", title: "Size / small", demo: "GalleryInputSmall" },
@@ -715,6 +761,7 @@ function galleryPage() {
 <script type="module" src="./badge-demos.js"></script>
 <script type="module" src="./switch-demos.js"></script>
 <script type="module" src="./slider-demos.js"></script>
+<script type="module" src="./number-field-demos.js"></script>
 <script type="module" src="./chip-demos.js"></script>
 <script type="module" src="./alert-demos.js"></script>
 <script type="module" src="./avatar-demos.js"></script>
@@ -728,6 +775,7 @@ function galleryPage() {
 function demoMarkup(name, html) {
   if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryDialogModal") return `<div data-switch-demo="${name}" style="inline-size:100%;min-inline-size:0;text-align:center">${html}</div>`;
+  if (["GalleryInputPassword", "GalleryButtonGroupCommands", "GalleryButtonGroupText"].includes(name)) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // Every code block is hydrated: copy, the language picker and show/hide are behaviour.
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
@@ -736,6 +784,8 @@ function demoMarkup(name, html) {
   if (name === "GalleryMenuControls") return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="${["SwitchList", "SwitchSettingsRow"].includes(name) ? "inline-size:100%;" : ""}max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Slider") || name.startsWith("GallerySlider")) return `<div data-slider-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("NumberField") || name === "GalleryNumberFieldPlain" || name.startsWith("GalleryInputGroup")) return `<div data-number-field-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryTreeView") || name.startsWith("GalleryComposer")) return `<div data-structure-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Chip") || name.startsWith("GalleryChip")) return `<div data-chip-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Alert") || name.startsWith("GalleryAlert")) return `<div data-alert-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Avatar") || name.startsWith("GalleryAvatar")) return `<div data-avatar-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
@@ -1705,6 +1755,7 @@ await (await import("esbuild")).build({ entryPoints: [join(root, "src/badge-clie
 
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/switch-client.tsx")], outfile: join(out, "switch-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/slider-client.tsx")], outfile: join(out, "slider-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
+await (await import("esbuild")).build({ entryPoints: [join(root, "src/number-field-client.tsx")], outfile: join(out, "number-field-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/chip-client.tsx")], outfile: join(out, "chip-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/alert-client.tsx")], outfile: join(out, "alert-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/avatar-client.tsx")], outfile: join(out, "avatar-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });

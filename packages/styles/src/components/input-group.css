@@ -1,0 +1,99 @@
+/* Shared shell for independently editable controls; the children keep their own refs and names. */
+@layer area.components {
+  .area-input-group {
+    --_group-height: var(--area-control-md);
+    --_group-text: var(--area-control-md-text);
+    --_group-leading: var(--area-control-md-leading);
+    --_group-icon: var(--area-icon-md);
+    --_group-gap: var(--area-gap-md);
+    --_group-gutter: var(--area-gutter-md);
+    display: inline-flex;
+    align-items: center;
+    inline-size: var(--area-input-inline-size);
+    block-size: var(--_group-height);
+    max-inline-size: 100%;
+    border: var(--area-stroke-width) solid var(--area-input-edge);
+    border-radius: min(var(--area-radius-control), calc(var(--_group-height) * var(--area-radius-cap)));
+    background-color: var(--area-input-bg);
+    box-shadow: var(--area-shadow-1);
+    color: var(--area-input-text);
+    font-size: var(--_group-text);
+    line-height: var(--_group-leading);
+    overflow: clip;
+    transition: var(--area-transition);
+  }
+  .area-input-group--outline { background-color: var(--area-input-bg); }
+  .area-input-group--soft { background-color: var(--area-input-bg-soft); border-color: transparent; box-shadow: none; }
+  .area-input-group--sm { --_group-height: var(--area-control-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-icon: var(--area-icon-sm); --_group-gap: var(--area-gap-sm); --_group-gutter: var(--area-gutter-sm); }
+  .area-input-group--md { --_group-height: var(--area-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); --_group-gutter: var(--area-gutter-md); }
+  .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); --_group-gutter: var(--area-gutter-lg); }
+  .area-input-group--full-width { inline-size: 100%; }
+  .area-input-group:hover:not(:focus-within) { border-color: var(--area-input-edge-hover); }
+  .area-input-group:focus-within {
+    border-color: var(--area-field-focus-color);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color);
+    outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
+  }
+  .area-input-group:has([aria-invalid="true"], [data-invalid]) { border-color: var(--area-input-invalid-color); }
+  .area-input-group:has([aria-invalid="true"], [data-invalid]):focus-within { outline-color: var(--area-input-invalid-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-invalid-halo-color); }
+  .area-input-group > :is(.area-input, .area-number-field, .area-select) {
+    --_height: var(--_group-height);
+    --_text: var(--_group-text);
+    --_leading: var(--_group-leading);
+    --_icon: var(--_group-icon);
+    --_gap: var(--_group-gap);
+    --_gutter: var(--_group-gutter);
+    flex: 1 1 0;
+    inline-size: 0;
+    min-inline-size: 0;
+    max-inline-size: none;
+    block-size: 100%;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+  .area-input-group > :is(.area-input, .area-number-field, .area-select):focus,
+  .area-input-group > :is(.area-input, .area-number-field, .area-select):focus-within {
+    border-color: var(--area-border-decorative);
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
+  }
+  .area-input-group > .area-button {
+    --_height: var(--_group-height);
+    --_text: var(--_group-text);
+    --_leading: var(--_group-leading);
+    --_icon: var(--_group-icon);
+    --_gap: var(--_group-gap);
+    flex: 0 0 var(--_group-height);
+    block-size: 100%;
+    inline-size: var(--_group-height);
+    padding-inline: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .area-input-group__text {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    flex-shrink: 0;
+    padding-inline: var(--_group-gutter);
+    color: var(--area-fg-muted);
+    white-space: nowrap;
+  }
+  .area-input-group__text[data-visual] {
+    flex: 0 0 var(--_group-height);
+    inline-size: var(--_group-height);
+    padding-inline: 0;
+    font-size: var(--_group-text);
+    line-height: var(--_group-leading);
+  }
+  .area-input-group__text[data-visual] > svg { display: block; inline-size: var(--_group-icon); block-size: var(--_group-icon); flex: none; }
+  .area-input-group > .area-select:first-child { flex: 0 0 calc(var(--_group-height) * 3); }
+  .area-input-group > :not(:first-child) { border-inline-start: var(--area-stroke-width) solid var(--area-border-decorative); }
+  .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field) { border-inline-start: 0; }
+  .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field) { padding-inline-start: 0; }
+}
