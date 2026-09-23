@@ -760,7 +760,7 @@ export const COMPONENT_PAGES = [
       {
         id: "default",
         title: "Default",
-        note: "The active indicator is the foreground colour, not the accent, so tabs never read as buttons.",
+        note: "Transparent tabs align their labels with the panel content. Rounded label-width indicators stay close to the text; hover previews the indicator without a backplate.",
         demo: "TabsDefault",
       },
     ],

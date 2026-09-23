@@ -5,6 +5,13 @@ GitHub origin is canonical. Preview: http://localhost:4321/gallery.html.
 
 ## Latest work
 
+Tabs: Fluent-inspired transparent hover indicators, flush horizontal content alignment,
+leading-edge vertical indicator; retained close rounded label-width underline. Vertical
+gallery replaces manual activation with automatic. Shared inset exemption fixes alignment.
+Docs build/audit, typecheck, 3 component tests, 14 contracts, 19,491 token tests and 370
+contrast assertions passed. Browser checked light desktop alignment and horizontal/vertical
+keyboard selection. Dark/narrow and screen-reader checks not repeated.
+
 Menu control composition rows now use control-md (32px default, previously 48px),
 with the existing 2px gaps; removed the checkbox's forced 16px wrapper. Nav action
 rows share a single backplate around sibling link/buttons. Overview demonstrates

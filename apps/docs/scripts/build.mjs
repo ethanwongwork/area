@@ -594,7 +594,7 @@ function galleryPage() {
     ],
     tabs: [
       { id: "default", title: "Default / disabled", demo: "GalleryTabs", span: "2x1" },
-      { id: "vertical", title: "Vertical / manual activation", demo: "GalleryTabsVertical", span: "2x1" },
+      { id: "vertical", title: "Vertical", demo: "GalleryTabsVertical", span: "2x1" },
       { id: "small", title: "Small", demo: "GalleryTabsSmall", span: "2x1" },
       { id: "track", title: "With track", demo: "GalleryTabsTrack", span: "2x1" },
       { id: "badges", title: "Icons / counts", demo: "GalleryTabsBadges", span: "2x1" },

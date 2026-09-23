@@ -614,7 +614,7 @@ export const GalleryTableLoading = () => <Table aria-label="Loading projects" ar
 export const GalleryTabs = () => (
   <Tabs tabs={[{ id: "account", label: "Account", content: "Manage your account details." }, { id: "security", label: "Security", content: "Keep your account secure." }, { id: "billing", label: "Billing", disabled: true }]} style={{ inlineSize: "100%" }} />
 );
-export const GalleryTabsVertical = () => <Tabs orientation="vertical" activationMode="manual" label="Project settings" tabs={[{ id: "general", label: "General", content: "Edit project details." }, { id: "members", label: "Members", content: "Manage project access." }, { id: "activity", label: "Activity", content: "View recent changes." }]} />;
+export const GalleryTabsVertical = () => <Tabs orientation="vertical" label="Project settings" tabs={[{ id: "general", label: "General", content: "Edit project details." }, { id: "members", label: "Members", content: "Manage project access." }, { id: "activity", label: "Activity", content: "View recent changes." }]} />;
 export const GalleryTabsSmall = () => <Tabs size="sm" tabs={[{ id: "design", label: "Design", content: "Design view" }, { id: "preview", label: "Preview", content: "Preview view" }]} />;
 export const GalleryTabsTrack = () => <Tabs track tabs={[{ id: "design", label: "Design", content: "Design view" }, { id: "preview", label: "Preview", content: "Preview view" }]} />;
 export const GalleryTabsBadges = () => <Tabs tabs={[{ id: "members", label: "Members", icon: <PersonIcon />, trailing: <Badge size="sm">4</Badge>, content: "Four people have access." }, { id: "requests", label: "Requests", icon: <InfoIcon />, trailing: <Badge size="sm" tone="info">2</Badge>, content: "Two requests awaiting review." }]} />;

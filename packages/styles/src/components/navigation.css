@@ -11,6 +11,8 @@
     --_tab-height: var(--area-control-md);
     --_tab-text: var(--area-control-md-text);
     --_tab-leading: var(--area-control-md-leading);
+    --_tab-gap: var(--area-space-20);
+    --_tab-icon: var(--area-icon-md);
     display: flex;
     flex-direction: column;
     min-inline-size: 0;
@@ -20,7 +22,7 @@
 
   .area-tabs__list {
     display: flex;
-    gap: var(--area-space-4);
+    gap: var(--_tab-gap);
     border-block-end: 0;
     overflow-x: auto;
   }
@@ -32,7 +34,7 @@
     gap: var(--area-space-6);
     flex-shrink: 0;
     block-size: var(--_tab-height);
-    padding-inline: var(--area-space-10);
+    padding: 0;
     border: 0;
     background: transparent;
     color: var(--area-fg-muted);
@@ -55,20 +57,28 @@
     transition: var(--area-transition);
   }
 
-  .area-tabs__tab:hover:not([data-disabled]) { background-color: var(--area-bg-component); }
+  /* Transparent tabs use a pending indicator instead of a hover backplate. */
+  .area-tabs__tab:hover:not([data-disabled]):not([data-selected]) > .area-tabs__label::after,
+  .area-tabs--vertical .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after {
+    background-color: var(--area-border-hover);
+  }
+  .area-tabs__tab:active:not([data-disabled]):not([data-selected]) > .area-tabs__label::after,
+  .area-tabs--vertical .area-tabs__tab:active:not([data-disabled]):not([data-selected])::after {
+    background-color: var(--area-fg-muted);
+  }
   .area-tabs__label { position: relative; block-size: 100%; display: inline-flex; align-items: center; gap: var(--area-space-6); white-space: nowrap; }
   .area-tabs--track .area-tabs__list { border-block-end: var(--area-border-width) solid var(--area-border-decorative); }
   .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
-  .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+  .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--_tab-icon); block-size: var(--_tab-icon); }
   .area-tabs__icon > svg { inline-size: 100%; block-size: 100%; }
-  .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); }
+  .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: var(--area-space-16); --_tab-icon: var(--area-icon-sm); }
   .area-tabs--md { --_tab-height: var(--area-control-md); }
-  .area-tabs--lg { --_tab-height: var(--area-control-lg); --_tab-text: var(--area-control-lg-text); --_tab-leading: var(--area-control-lg-leading); }
+  .area-tabs--lg { --_tab-height: var(--area-control-lg); --_tab-text: var(--area-control-lg-text); --_tab-leading: var(--area-control-lg-leading); --_tab-gap: var(--area-space-24); --_tab-icon: var(--area-icon-lg); }
   .area-tabs--vertical { flex-direction: row; gap: var(--area-space-16); }
-  .area-tabs--vertical .area-tabs__list { flex-direction: column; flex-shrink: 0; border-block-end: 0; border-inline-end: 0; }
-  .area-tabs--vertical .area-tabs__tab { justify-content: flex-start; }
+  .area-tabs--vertical .area-tabs__list { flex-direction: column; gap: var(--area-space-4); flex-shrink: 0; border-block-end: 0; border-inline-end: 0; }
+  .area-tabs--vertical .area-tabs__tab { justify-content: flex-start; padding-inline-start: var(--area-space-10); }
   .area-tabs--vertical .area-tabs__label::after { display: none; }
-  .area-tabs--vertical .area-tabs__tab::after { content: ""; position: absolute; border-radius: var(--area-radius-full); inset-block: var(--area-space-4); inset-inline: auto 0; inline-size: var(--area-space-2); block-size: auto; }
+  .area-tabs--vertical .area-tabs__tab::after { content: ""; position: absolute; border-radius: var(--area-radius-full); inset-block: var(--area-space-4); inset-inline: 0 auto; inline-size: var(--area-space-2); block-size: auto; }
   .area-tabs--vertical .area-tabs__panel { padding-block-start: var(--area-space-6); min-inline-size: 0; }
 
   /*

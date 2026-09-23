@@ -353,7 +353,7 @@ export const toast = {
 
 export const tabs = {
   block: "area-tabs",
-  description: "Switches between views in the same context.",
+  description: "Switches between views with transparent tabs and rounded indicators; labels align with panel content.",
   variants: { size: ["sm", "md", "lg"], orientation: ["vertical"] },
   booleans: ["track"],
   states: ["selected", "disabled"],

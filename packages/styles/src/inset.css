@@ -58,7 +58,9 @@
   .area-tabs__tab {
     --_height: var(--_tab-height);
     --_box-border: 0px;
-    --_box-icon: var(--area-icon-md);
+    --_box-icon: var(--_tab-icon);
+    /* Transparent tabs align to content, rather than a backplate inset. */
+    padding-inline: 0;
   }
   .area-badge {
     --_box-height: var(--_height);

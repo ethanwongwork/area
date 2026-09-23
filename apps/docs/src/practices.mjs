@@ -120,6 +120,7 @@ export const PRACTICES = {
     `Put the confirming action last in the footer, and make a destructive one ${code("danger")}.`,
   ],
   tabs: [
+    `Transparent tabs have no hover backplate, so horizontal labels align with the panel edge. Hover previews an indicator; vertical tabs place it at the leading edge.`,
     `The active indicator is the foreground colour, not the accent. Reserving accent for genuinely actionable things keeps a row of tabs from reading as a row of buttons.`,
     `Tabs switch between views of the same thing. To pick a value, use a Segmented control — giving both a filled indicator is how the two end up indistinguishable.`,
     `Only the selected tab is in the tab order; arrow keys move between them. That is what ${code("role=tablist")} promises.`,
