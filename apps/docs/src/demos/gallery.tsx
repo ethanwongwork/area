@@ -1,11 +1,38 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useId, useRef, useState } from "react";
-import { Alert, Avatar, AvatarGroup, Badge, BadgeAnchor, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Tooltip, TreeView } from "@area/react";
+import { Alert, AlignmentPicker, Avatar, AvatarGroup, Badge, BadgeAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition } from "@area/react";
 import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon } from "../icons.tsx";
 import { SliderRangeComposition } from "./slider-range.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
 
+export const GalleryBreadcrumb = () => (
+  <Breadcrumb><BreadcrumbList>
+    <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-default">Dashboard</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-default">Reports</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem><BreadcrumbPage>Export</BreadcrumbPage></BreadcrumbItem>
+  </BreadcrumbList></Breadcrumb>
+);
+export const GalleryBreadcrumbCollapsed = () => (
+  <Breadcrumb><BreadcrumbList>
+    <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-collapsed">Dashboard</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem><BreadcrumbEllipsis /></BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-collapsed">Reports</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem><BreadcrumbPage>Export</BreadcrumbPage></BreadcrumbItem>
+  </BreadcrumbList></Breadcrumb>
+);
+export const GalleryBreadcrumbIcons = () => (
+  <Breadcrumb><BreadcrumbList>
+    <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-icons"><FolderIcon /> Projects</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem><BreadcrumbPage><DocumentIcon /> Files</BreadcrumbPage></BreadcrumbItem>
+  </BreadcrumbList></Breadcrumb>
+);
 export const GalleryAlert = () => (
   <Alert icon={<InfoIcon />} title="Title">Body text</Alert>
 );
@@ -69,6 +96,162 @@ export const GalleryButtonGroupCommands = () => {
 export const GalleryButtonGroupText = () => {
   const [pressed, setPressed] = useState(false);
   return <ButtonGroup variant="outline" aria-label="Text options"><Button variant="ghost" selected={pressed} onClick={() => setPressed(!pressed)}>Bold</Button><Button variant="ghost" onClick={() => setPressed(false)}>Reset</Button></ButtonGroup>;
+};
+
+export const GalleryToolbar = () => {
+  const [command, setCommand] = useState("");
+  return <div>
+    <Toolbar aria-label="Arrange objects" variant="surface">
+      <ToolbarGroup aria-label="Vertical alignment">
+        <ToolbarItem><Button variant="ghost" iconOnly icon={<AlignTopIcon />} aria-label="Align top" onClick={() => setCommand("Aligned top")} /></ToolbarItem>
+        <ToolbarItem><Button variant="ghost" iconOnly icon={<AlignMiddleIcon />} aria-label="Align middle" onClick={() => setCommand("Aligned middle")} /></ToolbarItem>
+        <ToolbarItem><Button variant="ghost" iconOnly icon={<AlignBottomIcon />} aria-label="Align bottom" onClick={() => setCommand("Aligned bottom")} /></ToolbarItem>
+      </ToolbarGroup>
+      <ToolbarSeparator />
+      <ToolbarGroup aria-label="Object actions">
+        <ToolbarItem><Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add item" onClick={() => setCommand("Added item")} /></ToolbarItem>
+      </ToolbarGroup>
+      <ToolbarOverflow>
+        <Button variant="ghost" size="sm" onClick={() => setCommand("Duplicated")}>Duplicate</Button>
+        <Button variant="ghost" size="sm" onClick={() => setCommand("Deleted")}>Delete</Button>
+      </ToolbarOverflow>
+    </Toolbar>
+    <span className="area-sr-only" role="status">{command}</span>
+  </div>;
+};
+export const GalleryToolbarPlain = () => (
+  <Toolbar aria-label="Editing commands">
+  <ToolbarGroup aria-label="Text style">
+    <ToolbarItem><Button variant="ghost" aria-label="Bold">Bold</Button></ToolbarItem>
+    <ToolbarItem><Button variant="ghost" aria-label="Italic">Italic</Button></ToolbarItem>
+    <ToolbarItem><Button variant="ghost" aria-label="Underline">Underline</Button></ToolbarItem>
+  </ToolbarGroup>
+  </Toolbar>
+);
+export const GalleryToolbarVertical = () => (
+  <Toolbar orientation="vertical" variant="surface" aria-label="Arrange vertically">
+  <ToolbarGroup aria-label="Vertical alignment">
+    <ToolbarItem><Button variant="ghost" iconOnly icon={<AlignTopIcon />} aria-label="Align top" /></ToolbarItem>
+    <ToolbarItem><Button variant="ghost" iconOnly icon={<AlignMiddleIcon />} aria-label="Align middle" /></ToolbarItem>
+    <ToolbarItem><Button variant="ghost" iconOnly icon={<AlignBottomIcon />} aria-label="Align bottom" /></ToolbarItem>
+  </ToolbarGroup>
+  </Toolbar>
+);
+export const GalleryToolbarSizes = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-16)" }}>
+  {(["sm", "md", "lg"] as const).map(size => <Toolbar key={size} size={size} variant="surface" aria-label={`${size} toolbar`}>
+    <ToolbarGroup aria-label="Alignment">
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<AlignTopIcon />} aria-label="Align top" /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<AlignMiddleIcon />} aria-label="Align middle" /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<AlignBottomIcon />} aria-label="Align bottom" /></ToolbarItem>
+    </ToolbarGroup>
+  </Toolbar>)}
+  </div>
+);
+export const GalleryAlignmentPickerDefault = () => <AlignmentPicker label="Object alignment" />;
+export const GalleryAlignmentPicker = () => {
+  const [position, setPosition] = useState<AlignmentPosition>("center");
+  return <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
+    <AlignmentPicker label="Object alignment" value={position} onValueChange={setPosition} />
+    <span role="status">{position.replace("-", " ")}</span>
+  </div>;
+};
+export const GalleryAlignmentPickerPlain = () => <AlignmentPicker label="Image anchor" variant="plain" defaultValue="top-left" />;
+export const GalleryAlignmentPickerSizes = () => (
+  <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
+  {(["sm", "md", "lg"] as const).map(size => <AlignmentPicker key={size} label={`${size} alignment`} size={size} />)}
+  </div>
+);
+export const GalleryAlignmentPickerDisabled = () => <AlignmentPicker label="Locked position" defaultValue="bottom-right" disabled />;
+export const GalleryAlignmentPickerForm = () => {
+  const [submitted, setSubmitted] = useState("");
+  return <form onReset={() => setSubmitted("")} onSubmit={event => {
+    event.preventDefault();
+    setSubmitted(String(new FormData(event.currentTarget).get("alignment") ?? ""));
+  }} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-12)" }}>
+    <AlignmentPicker label="Saved alignment" name="alignment" defaultValue="top-left" />
+    <Button type="reset" variant="ghost" size="sm">Reset</Button>
+    <Button type="submit" variant="soft" size="sm">Apply</Button>
+    <output>{submitted}</output>
+  </form>;
+};
+export const GalleryColorField = () => <Field label="Fill"><ColorField defaultValue="#6855E8" /></Field>;
+export const GalleryColorFieldAlpha = () => <Field label="Overlay"><ColorField defaultValue="#6855E880" /></Field>;
+export const GalleryColorFieldControlled = () => {
+  const [color, setColor] = useState("#D97745");
+  return <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
+    <Field label="Accent"><ColorField value={color} onValueChange={setColor} /></Field>
+    <ColorSwatch color={color} size="lg" />
+  </div>;
+};
+export const GalleryColorFieldSizes = () => (
+  <div style={{ display: "flex", alignItems: "end", gap: "var(--area-space-16)" }}>
+    {(["sm", "md", "lg"] as const).map(size => <Field key={size} label={size}><ColorField size={size} defaultValue="#317C6B" /></Field>)}
+  </div>
+);
+export const GalleryColorFieldDisabled = () => <Field label="Locked fill"><ColorField defaultValue="#317C6B" disabled /></Field>;
+export const GalleryColorFieldForm = () => {
+  const [submitted, setSubmitted] = useState("");
+  return <form onReset={() => setSubmitted("")} onSubmit={event => {
+    event.preventDefault();
+    setSubmitted(String(new FormData(event.currentTarget).get("fill") ?? ""));
+  }} style={{ display: "flex", alignItems: "end", gap: "var(--area-space-12)" }}>
+    <Field label="Fill"><ColorField name="fill" defaultValue="#317C6B" required /></Field>
+    <Button type="reset" variant="ghost" size="sm">Reset</Button>
+    <Button type="submit" variant="soft" size="sm">Apply</Button>
+    <output>{submitted}</output>
+  </form>;
+};
+export const GalleryColorSwatch = () => (
+  <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
+    <ColorSwatch color="#6855E8" />
+    <ColorSwatch color="#6855E880" />
+    <ColorSwatch color="#00000000" />
+  </div>
+);
+export const GalleryColorSwatchSizes = () => (
+  <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
+    {(["sm", "md", "lg"] as const).map(size => <ColorSwatch key={size} color="#317C6B" size={size} />)}
+  </div>
+);
+export const GalleryColorSwatchPicker = () => (
+<ColorSwatchPicker label="Fill color" name="fill" defaultValue="#6855E8" options={[
+  { value: "#A33A3A", label: "Brick red" }, { value: "#C96E3E", label: "Terracotta" },
+  { value: "#D4A334", label: "Ochre" }, { value: "#5A9553", label: "Leaf green" },
+  { value: "#317C6B", label: "Teal" }, { value: "#357BA6", label: "Ocean blue" },
+  { value: "#425DB5", label: "Indigo" }, { value: "#6855E8", label: "Violet" },
+  { value: "#A0519E", label: "Orchid" }, { value: "#BB5776", label: "Rose" },
+  { value: "#697386", label: "Slate" }, { value: "#D1D5DB", label: "Mist" },
+]} />
+);
+export const GalleryColorSwatchPickerRow = () => (
+<ColorSwatchPicker label="Overlay color" layout="row" defaultValue="#6855E880" options={[
+  { value: "#6855E8", label: "Solid violet" }, { value: "#6855E8C0", label: "Violet at 75%" },
+  { value: "#6855E880", label: "Violet at 50%" }, { value: "#6855E840", label: "Violet at 25%" },
+  { value: "#00000000", label: "Transparent" },
+]} />
+);
+export const GalleryColorSwatchPickerSizes = () => (
+<div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
+  {(["sm", "md", "lg"] as const).map(size => <ColorSwatchPicker key={size} label={`${size} palette`} size={size} layout="row" options={[
+    { value: "#D4A334", label: "Ochre" }, { value: "#317C6B", label: "Teal" }, { value: "#6855E8", label: "Violet" },
+  ]} />)}
+</div>
+);
+export const GalleryColorSwatchPickerForm = () => {
+  const [submitted, setSubmitted] = useState("");
+  return <form onReset={() => setSubmitted("")} onSubmit={event => {
+    event.preventDefault();
+    setSubmitted(String(new FormData(event.currentTarget).get("theme-color") ?? ""));
+  }} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-12)" }}>
+    <ColorSwatchPicker label="Theme color" name="theme-color" defaultValue="#317C6B" layout="row" required options={[
+      { value: "#317C6B", label: "Teal" }, { value: "#6855E8", label: "Violet" },
+      { value: "#D4A334", label: "Ochre" }, { value: "#A33A3A", label: "Brick red", disabled: true },
+    ]} />
+    <Button type="reset" variant="ghost" size="sm">Reset</Button>
+    <Button type="submit" variant="soft" size="sm">Apply</Button>
+    <output>{submitted}</output>
+  </form>;
 };
 export const GalleryButtonNeutralSolid = () => <Button tone="neutral">Button</Button>;
 export const GalleryButtonNeutralSoft = () => <Button tone="neutral" variant="soft">Button</Button>;

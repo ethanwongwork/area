@@ -17,6 +17,8 @@
     block-size: var(--_height);
     inline-size: var(--area-input-inline-size);
     max-inline-size: 100%;
+    padding-inline-start: var(--area-gutter-md);
+    padding-inline-end: var(--area-gutter-md);
     border: var(--area-stroke-width) solid var(--_border);
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
     background-color: var(--_bg);
@@ -31,6 +33,9 @@
   .area-number-field--sm { --_height: var(--area-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
   .area-number-field--md { --_height: var(--area-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-number-field--lg { --_height: var(--area-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-number-field--sm { padding-inline-start: var(--area-gutter-sm); padding-inline-end: var(--area-gutter-sm); }
+  .area-number-field--lg { padding-inline-start: var(--area-gutter-lg); padding-inline-end: var(--area-gutter-lg); }
+  .area-number-field:has(.area-number-field__steppers) { padding-inline-end: 0; }
   .area-number-field--full-width { inline-size: 100%; }
   .area-number-field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); }
   .area-number-field:focus-within {

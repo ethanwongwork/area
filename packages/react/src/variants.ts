@@ -60,6 +60,11 @@ export function stateAttributes<M extends ComponentManifest>(manifest: M, state:
 }
 export const buttonVariants = /* @__PURE__ */ createVariants(manifests.button);
 export const buttonGroupVariants = /* @__PURE__ */ createVariants(manifests.buttonGroup);
+export const toolbarVariants = /* @__PURE__ */ createVariants(manifests.toolbar);
+export const alignmentPickerVariants = /* @__PURE__ */ createVariants(manifests.alignmentPicker);
+export const colorSwatchVariants = /* @__PURE__ */ createVariants(manifests.colorSwatch);
+export const colorSwatchPickerVariants = /* @__PURE__ */ createVariants(manifests.colorSwatchPicker);
+export const colorFieldVariants = /* @__PURE__ */ createVariants(manifests.colorField);
 export const fieldVariants = /* @__PURE__ */ createVariants(manifests.field);
 export const inputVariants = /* @__PURE__ */ createVariants(manifests.input);
 export const numberFieldVariants = /* @__PURE__ */ createVariants(manifests.numberField);

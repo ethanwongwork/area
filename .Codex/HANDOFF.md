@@ -2,6 +2,33 @@
 
 ## Current checkpoint
 
+- ColorSwatchPicker is built and In review: token-sized row/grid choices with labeled
+  native radios, spatial arrows, Home/End, disabled options, form submission/reset and
+  transparent swatches. Docs examples cover palette, alpha, sizes and form behavior.
+  Next: ColorArea, then ColorSlider and the composed ColorPicker.
+- ColorField and ColorSwatch are built and In review. ColorField reuses Input/Field,
+  accepts 3/4/6/8-digit hex drafts, commits canonical 6/8-digit values, keeps invalid
+  drafts visible until blur/Enter, supports Escape and form reset. ColorSwatch shows
+  alpha over a semantic checkerboard. Browser checked light/default and dark/compact,
+  128/144/160px widths at 28/32/40px default heights, controlled updates and form
+  submission/reset. Docs build, typecheck, consumer check and focused tests pass.
+- AlignmentPicker is built and In review: nine physical positions with native radio
+  semantics, controlled/uncontrolled values, form name/reset, spatial arrows and
+  Home/End, surface/plain treatments and three token-sized tiers. Browser checked
+  light/default and dark/compact/contrast appearances, measured 78/84/96px default
+  grids and 72/78/84px compact grids, and verified selection and form behavior.
+- Toolbar is built and In review: plain/surface, three token-based sizes, horizontal/
+  vertical groups, separators, one Tab stop with arrow/Home/End navigation, and native
+  overflow disclosure. The docs show all variants. Browser checked light/default and
+  dark/compact sizing, focus movement, overflow close/return, and action activation.
+  Docs build, typecheck, consumer check and focused React tests pass.
+- Breadcrumb has composable nav/list/link/page/separator/ellipsis parts, a simple CSS
+  chevron, docs specimens and In review status. NumberField now uses Input's tokenized
+  outer gutter, including its inspector compositions. Docs build/audit, typecheck and
+  focused input tests pass; Breadcrumb was browser-inspected in light/default. Figma
+  desktop could not be inspected in this pass, so the input comparison used the six
+  references summarized in `docs/COMPONENTS.md`.
+
 - Branch `main`; GitHub `origin` is canonical. Do not commit or push without current
   authorization. The working tree contains this session's Tooltip, NumberField and
   InputGroup work.
@@ -28,8 +55,8 @@
 
 ## Next roadmap
 
-Continue the inspector foundation with Toolbar, AlignmentPicker,
-composable color controls, then Position/Auto layout/Appearance/Fill/Stroke/Effects
+Continue the inspector foundation with ColorArea and ColorSlider,
+then Position/Auto layout/Appearance/Fill/Stroke/Effects
 inspector recipes. Add overlay placement and focus behavior before advanced pickers.
 Keep inspector recipes at the normal system density for now; the user deferred dense
 versions of all components to a later pass.
@@ -37,7 +64,7 @@ The broader proposed catalogue is in `docs/COMPONENTS.md`.
 
 ## Next session
 
-Read this section and `docs/COMPONENTS.md`, then continue Toolbar. Review the new and
+Read this section and `docs/COMPONENTS.md`, then continue ColorArea. Review the new and
 refined components with the owner; only owner-confirm completion in
 `apps/docs/src/component-status.mjs`.
 

@@ -33,6 +33,9 @@
 
 @import "./components/button.css";
 @import "./components/button-group.css";
+@import "./components/toolbar.css";
+@import "./components/alignment-picker.css";
+@import "./components/color.css";
 @import "./components/field.css";
 @import "./components/input.css";
 @import "./components/number-field.css";
@@ -50,6 +53,7 @@
 @import "./components/panel.css";
 @import "./components/navigation.css";
 @import "./components/nav.css";
+@import "./components/breadcrumb.css";
 @import "./components/segmented.css";
 @import "./components/code.css";
 @import "./components/token.css";

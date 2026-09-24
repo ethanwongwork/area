@@ -63,6 +63,46 @@ export const buttonGroup = {
   defaults: { variant: "soft", size: "md" },
 } as const satisfies ComponentManifest;
 
+export const toolbar = {
+  block: "area-toolbar",
+  description: "Groups commands with keyboard navigation and optional overflow.",
+  variants: { variant: ["plain", "surface"], size: ["sm", "md", "lg"], orientation: ["horizontal", "vertical"] },
+  booleans: ["full-width"],
+  elements: ["group", "separator", "overflow", "overflow-trigger", "overflow-dots", "overflow-content"],
+  defaults: { variant: "plain", size: "md", orientation: "horizontal" },
+} as const satisfies ComponentManifest;
+
+export const alignmentPicker = {
+  block: "area-alignment-picker",
+  description: "Chooses one of nine physical alignment positions.",
+  variants: { variant: ["surface", "plain"], size: ["sm", "md", "lg"] },
+  elements: ["cell", "dot"],
+  defaults: { variant: "surface", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const colorSwatch = {
+  block: "area-color-swatch",
+  description: "Displays a color and reveals transparency over a checkerboard.",
+  variants: { size: ["sm", "md", "lg"] },
+  defaults: { size: "md" },
+} as const satisfies ComponentManifest;
+
+export const colorSwatchPicker = {
+  block: "area-color-swatch-picker",
+  description: "Chooses one labeled color from a row or grid of swatches.",
+  variants: { size: ["sm", "md", "lg"], layout: ["grid", "row"] },
+  elements: ["cell"],
+  defaults: { size: "md", layout: "grid" },
+} as const satisfies ComponentManifest;
+
+export const colorField = {
+  block: "area-color-field",
+  description: "Edits a hex color beside its preview.",
+  variants: { size: ["sm", "md", "lg"] },
+  booleans: ["full-width"],
+  defaults: { size: "md" },
+} as const satisfies ComponentManifest;
+
 export const field = {
   block: "area-field",
   description: "Labels and describes one form control, including its validation message.",
@@ -100,6 +140,14 @@ export const inputGroup = {
   booleans: ["full-width"],
   elements: ["text"],
   defaults: { variant: "outline", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const breadcrumb = {
+  block: "area-breadcrumb",
+  description: "Shows the current page within a hierarchy of links.",
+  variants: {},
+  elements: ["list", "item", "link", "page", "separator", "chevron", "ellipsis"],
+  defaults: {},
 } as const satisfies ComponentManifest;
 
 export const treeView = {
@@ -493,10 +541,16 @@ export const kbdGroup = {
 export const MANIFESTS = {
   button,
   buttonGroup,
+  toolbar,
+  alignmentPicker,
+  colorSwatch,
+  colorSwatchPicker,
+  colorField,
   field,
   input,
   numberField,
   inputGroup,
+  breadcrumb,
   treeView,
   composer,
   textarea,

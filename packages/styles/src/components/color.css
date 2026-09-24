@@ -1,0 +1,81 @@
+@layer area.components {
+  .area-color-swatch {
+    --_size: var(--area-space-16);
+    display: inline-block;
+    flex: none;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    border-radius: min(var(--area-radius-small), calc(var(--_size) * var(--area-radius-cap)));
+    background: linear-gradient(var(--_swatch-color), var(--_swatch-color)),
+      repeating-conic-gradient(
+        color-mix(in srgb, var(--area-fg-default) 16%, var(--area-bg-surface)) 0% 25%,
+        var(--area-bg-surface) 0% 50%
+      ) 50% / var(--area-space-8) var(--area-space-8);
+    box-shadow: inset 0 0 0 var(--area-border-width) color-mix(in srgb, var(--area-fg-default) 22%, transparent);
+  }
+  .area-color-swatch--sm { --_size: var(--area-space-12); }
+  .area-color-swatch--md { --_size: var(--area-space-16); }
+  .area-color-swatch--lg { --_size: var(--area-space-24); }
+
+  .area-color-swatch-picker {
+    --_cell: var(--area-control-md);
+    --_swatch-size: calc(var(--_cell) - var(--area-space-8));
+    display: inline-grid;
+    grid-template-columns: repeat(var(--_columns), var(--_cell));
+    gap: var(--area-space-4);
+    padding: var(--area-space-4);
+    border-radius: var(--area-radius-container);
+    max-inline-size: 100%;
+  }
+  .area-color-swatch-picker--sm { --_cell: var(--area-control-sm); }
+  .area-color-swatch-picker--md { --_cell: var(--area-control-md); }
+  .area-color-swatch-picker--lg { --_cell: var(--area-control-lg); }
+  .area-color-swatch-picker--grid { display: inline-grid; }
+  .area-color-swatch-picker--row { display: inline-flex; flex-wrap: wrap; }
+  .area-color-swatch-picker__cell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_cell);
+    block-size: var(--_cell);
+    border-radius: min(var(--area-radius-control), calc(var(--_cell) * var(--area-radius-button-cap)));
+    cursor: pointer;
+  }
+  .area-color-swatch-picker__cell > input {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+  .area-color-swatch-picker__cell > .area-color-swatch { --_size: var(--_swatch-size); pointer-events: none; }
+  .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) { background: var(--area-bg-hover); }
+  .area-color-swatch-picker__cell:has(input:checked) {
+    background: var(--area-bg-surface);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-selected);
+  }
+  .area-color-swatch-picker__cell:has(input:focus-visible) {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+    z-index: 1;
+  }
+  .area-color-swatch-picker__cell:has(input:disabled) { opacity: 0.5; cursor: not-allowed; }
+  @media (forced-colors: active) {
+    .area-color-swatch-picker__cell:has(input:checked) { outline: var(--area-stroke-width) solid Highlight; }
+    .area-color-swatch-picker__cell:has(input:focus-visible) { outline: var(--area-focus-width) solid Highlight; }
+  }
+
+  .area-color-field {
+    --_color-field-width: calc(var(--area-space-96) + var(--area-space-48));
+  }
+  .area-input.area-color-field {
+    inline-size: var(--_color-field-width);
+  }
+  .area-color-field--sm { --_color-field-width: calc(var(--area-space-96) + var(--area-space-32)); }
+  .area-color-field--md { --_color-field-width: calc(var(--area-space-96) + var(--area-space-48)); }
+  .area-color-field--lg { --_color-field-width: calc(var(--area-space-96) + var(--area-space-64)); }
+  .area-input.area-color-field--full-width { inline-size: 100%; }
+}

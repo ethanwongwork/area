@@ -8,6 +8,71 @@
 
 export const COMPONENT_PAGES = [
   {
+    slug: "color-swatch-picker", name: "Color swatch picker", exportName: "ColorSwatchPicker", manifest: "colorSwatchPicker",
+    imports: "ColorSwatchPicker",
+    api: [["label", "string (accessible group name)", "—"], ["options", "{ value, label, disabled? }[]", "—"], ["value / defaultValue", "CSS color string", "first enabled option"], ["onValueChange", "(color, event) => void", "—"], ["layout", '"grid" | "row"', '"grid"'], ["columns", "positive integer (grid)", "6"], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled", "native radio form props", "—"]],
+    examples: [
+      { id: "default", title: "Palette", note: "A labeled, single-color choice. Left and Right move through colors; Up and Down move by column. Home and End reach the first and last enabled colors.", demo: "GalleryColorSwatchPicker" },
+      { id: "row", title: "Transparency", note: "A compact row can include alpha values; the checkerboard stays visible through each swatch.", demo: "GalleryColorSwatchPickerRow" },
+      { id: "sizes", title: "Sizes", note: "Each square target follows the matching control tier, with a larger inset swatch for easy color comparison.", demo: "GalleryColorSwatchPickerSizes" },
+      { id: "form", title: "Form", note: "Native radios submit the selected color by name. Reset restores the uncontrolled default.", demo: "GalleryColorSwatchPickerForm" },
+    ],
+  },
+  {
+    slug: "color-field", name: "Color field", exportName: "ColorField", manifest: "colorField",
+    imports: "ColorField, Field",
+    api: [["value / defaultValue", "hex color string", '"#6366F1"'], ["onValueChange", "(canonicalHex) => void", "—"], ["variant", '"outline" | "soft"', '"outline"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled / readOnly", "native input props", "—"], ["fullWidth", "boolean", "false"]],
+    examples: [
+      { id: "default", title: "Default", note: "Type 3, 4, 6 or 8 hex digits. Enter or blur commits a canonical value; Escape restores the last value. Invalid drafts stay visible until commit, then revert.", demo: "GalleryColorField" },
+      { id: "alpha", title: "Alpha", note: "Eight-digit hex keeps alpha in the same editable value; the checkerboard shows transparency.", demo: "GalleryColorFieldAlpha" },
+      { id: "controlled", title: "Controlled", demo: "GalleryColorFieldControlled" },
+      { id: "sizes", title: "Sizes", demo: "GalleryColorFieldSizes" },
+      { id: "form", title: "Form value and reset", demo: "GalleryColorFieldForm" },
+      { id: "disabled", title: "Disabled", demo: "GalleryColorFieldDisabled" },
+    ],
+  },
+  {
+    slug: "color-swatch", name: "Color swatch", exportName: "ColorSwatch", manifest: "colorSwatch",
+    api: [["color", "CSS color string", "—"], ["size", '"sm" | "md" | "lg"', '"md"'], ["aria-label", "optional accessible name", "Color + value"]],
+    examples: [
+      { id: "default", title: "Solid and transparent", note: "A passive preview; translucent colors reveal a checkerboard. Give it a contextual accessible name where needed.", demo: "GalleryColorSwatch" },
+      { id: "sizes", title: "Sizes", demo: "GalleryColorSwatchSizes" },
+    ],
+  },
+  {
+    slug: "alignment-picker", name: "Alignment picker", exportName: "AlignmentPicker", manifest: "alignmentPicker",
+    api: [["label", "string (accessible group name)", "—"], ["value / defaultValue", "nine physical positions", '"center"'], ["onValueChange", "(position, event) => void", "—"], ["variant", '"surface" | "plain"', '"surface"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled", "native radio form props", "—"]],
+    examples: [
+      { id: "default", title: "Default", note: "Choose one of nine physical points. Arrow keys move within a row or column and wrap at its edge; Home and End reach the first and last point.", demo: "GalleryAlignmentPickerDefault" },
+      { id: "controlled", title: "Controlled position", note: "The selected value and callback can drive an inspector property.", demo: "GalleryAlignmentPicker" },
+      { id: "plain", title: "Plain", note: "Use inside an existing inspector surface.", demo: "GalleryAlignmentPickerPlain" },
+      { id: "sizes", title: "Sizes", note: "Each square cell sits midway between its control and icon tiers, with a 20px minimum. The grid uses 2px gaps and 4px outer padding.", demo: "GalleryAlignmentPickerSizes" },
+      { id: "form", title: "Form value and reset", note: "Native radio inputs submit the chosen position by name. Reset restores the uncontrolled default.", demo: "GalleryAlignmentPickerForm" },
+      { id: "disabled", title: "Disabled", demo: "GalleryAlignmentPickerDisabled" },
+    ],
+  },
+  {
+    slug: "toolbar", name: "Toolbar", manifest: "toolbar",
+    imports: "Toolbar, ToolbarGroup, ToolbarItem, ToolbarSeparator, ToolbarOverflow, Button",
+    api: [["variant", '"plain" | "surface"', '"plain"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["orientation", '"horizontal" | "vertical"', '"horizontal"'], ["fullWidth", "boolean", "false"], ["ToolbarItem", "one focusable child", "—"], ["ToolbarOverflow", "label, optional icon, children", '"More actions"']],
+    examples: [
+      { id: "default", title: "Grouped commands and overflow", note: "Tab enters once; arrow keys and Home/End move among enabled commands without activating them. Overflow is a native disclosure for secondary actions.", demo: "GalleryToolbar" },
+      { id: "plain", title: "Plain", note: "Use a light command row within an existing surface.", demo: "GalleryToolbarPlain" },
+      { id: "vertical", title: "Vertical", note: "Up and Down move focus through a vertical group.", demo: "GalleryToolbarVertical" },
+      { id: "sizes", title: "Sizes", note: "Outer toolbar height follows the control tier; command buttons use the height remaining after equal two-pixel insets.", demo: "GalleryToolbarSizes" },
+    ],
+  },
+  {
+    slug: "breadcrumb", name: "Breadcrumb", manifest: "breadcrumb",
+    imports: "Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis",
+    api: [["Breadcrumb", "nav props and ref", "aria-label: Breadcrumb"], ["BreadcrumbLink", "native anchor props and ref", "—"], ["BreadcrumbPage", "span props and ref", "aria-current: page"], ["BreadcrumbSeparator", "optional children", "simple chevron"], ["BreadcrumbEllipsis", "aria-label", "More pages"]],
+    examples: [
+      { id: "default", title: "Default", note: "Use links for ancestors and a non-interactive current page. The chevron is decorative and reverses in RTL.", demo: "GalleryBreadcrumb" },
+      { id: "collapsed", title: "Collapsed path", note: "The ellipsis marks omitted levels; if users need to navigate them, provide a separate menu control in this item.", demo: "GalleryBreadcrumbCollapsed" },
+      { id: "icons", title: "With icons", demo: "GalleryBreadcrumbIcons" },
+    ],
+  },
+  {
     slug: "tree-view", name: "Tree view", exportName: "TreeView", manifest: "treeView",
     api: [["items", "TreeViewNode[]", "—"], ["selectionMode", '"navigation" | "checkbox"', '"navigation"'], ["expandedIds / defaultExpandedIds", "string[]", "—"], ["selectedIds / defaultSelectedIds", "string[]", "—"], ["onExpandedChange / onSelectedChange", "(ids: string[]) => void", "—"], ["onActivate", "(id: string) => void", "—"]],
     examples: [{ id: "files", title: "Project files", demo: "GalleryTreeViewFiles" }, { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters" }, { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed" }],

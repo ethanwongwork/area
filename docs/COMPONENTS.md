@@ -35,6 +35,7 @@ actual specimens. Current families include:
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, Textarea,
   Composer and native Select.
 - Navigation: Nav, Tabs, Menu and TreeView.
+- Breadcrumb shows linked ancestors, a current page and an optional collapsed marker; it is in review.
 - Labels and identity: Badge/BadgeAnchor/BadgeGroup, Avatar, Kbd/KbdGroup and Code/Token.
 - Feedback: Alert, Toast, Tooltip, Progress, Spinner and Skeleton.
 - Structure and content: Card, Panel, Dialog, Popover, Separator, Table and CodeBlock.
@@ -129,17 +130,28 @@ extend coverage across general product interfaces.
    angle, opacity, gap and padding. A dimension field combines a number with a sizing
    mode such as fixed, hug or fill; these modes belong to an inspector recipe, not
    to every text input. Keep labels and keyboard stops on each independently edited value.
-3. **ButtonGroup — built, in review; Toolbar next.** ButtonGroup collects independent
-   actions and toggles in one visual track. Toolbar still needs command grouping and
-   overflow. Alignment/distribution/flip buttons execute commands; flow direction
+3. **ButtonGroup and Toolbar — built, in review.** ButtonGroup collects independent
+   actions and toggles in one visual track. Toolbar adds command grouping, roving
+   keyboard focus and native overflow disclosure. Alignment/distribution/flip buttons execute commands; flow direction
    and mutually exclusive modes reuse Segmented. Add SplitButton only where a default
    action and its menu have separate jobs. Button already supports iconOnly: no second
    icon-button implementation is needed. [Fluent's catalogue](https://fluent2.microsoft.design/components/web/react)
    distinguishes Toolbar, SpinButton and TagPicker from ordinary inputs.
-4. **AlignmentPicker.** A reusable nine-position choice with arrow-key navigation,
-   an accessible selected position and a visible focus indicator. Constraints and
+4. **AlignmentPicker — built, in review.** A reusable nine-position choice with spatial arrow-key navigation,
+   native radio state, form submission, an accessible selected position and a visible focus indicator. Constraints and
    pinning are a separate composition because opposing anchors may be selected together.
-5. **Color controls.** ColorField, ColorSwatch, ColorSwatchPicker, ColorArea and
+   The single-choice contract follows the [WAI radio group pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/)
+   and [Base UI radio group](https://base-ui.com/react/components/radio-group); spatial arrows follow the visible grid.
+5. **Color controls — ColorField, ColorSwatch and ColorSwatchPicker built, in review.** ColorField edits
+   canonical 6/8-digit hex with draft/commit behavior. ColorSwatch previews solid and
+   transparent values. [React Spectrum's ColorField](https://react-spectrum.adobe.com/v3/ColorField.html)
+   and [ColorSwatch](https://react-spectrum.adobe.com/v3/ColorSwatch.html) establish
+   editable color values and a transparency preview. ColorSwatchPicker offers labeled,
+   native radio choices in a token-sized row or spatial grid, including transparency,
+   form submission and reset. Its keyboard contract follows the
+   [WAI radio group pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/), while its
+   color-list structure follows [React Aria ColorSwatchPicker](https://react-aria.adobe.com/ColorSwatchPicker).
+   Next, ColorArea and
    ColorSlider compose into ColorPicker. Include independently editable alpha,
    hex/RGB/HSL formats, an optional eyedropper and keyboard equivalents for pointer
    operations. [React Aria ColorPicker](https://react-aria.adobe.com/ColorPicker)

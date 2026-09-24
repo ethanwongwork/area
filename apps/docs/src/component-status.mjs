@@ -11,9 +11,9 @@ export const COMPLETE_COMPONENTS = new Set([
 ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-export const REVIEW_COMPONENTS = new Set(['button-group', 'input-group', 'number-field', 'toast', 'tooltip', 'tree-view', 'composer']);
+export const REVIEW_COMPONENTS = new Set(['color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'toolbar', 'breadcrumb', 'button-group', 'input-group', 'number-field', 'toast', 'tooltip', 'tree-view', 'composer']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['composer', 'tree-view', 'input-group', 'button-group', 'toast', 'number-field'];
+export const RECENT_COMPONENTS = ['color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'toolbar', 'breadcrumb', 'input-group', 'number-field', 'composer', 'tree-view'];

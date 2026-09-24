@@ -96,4 +96,5 @@
   .area-input-group > :not(:first-child) { border-inline-start: var(--area-stroke-width) solid var(--area-border-decorative); }
   .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field) { border-inline-start: 0; }
   .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field) { padding-inline-start: 0; }
+  .area-input-group > .area-number-field:has(.area-number-field__steppers) { padding-inline-end: 0; }
 }

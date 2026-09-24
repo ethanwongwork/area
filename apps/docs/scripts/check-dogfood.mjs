@@ -194,7 +194,8 @@ for (const file of htmlFiles) {
     const style = match[1];
     // A style attribute is acceptable when every value in it resolves from a token, or it
     // is a demo's own layout. Flag the ones carrying literal colours or sizes.
-    const stripped = style.replace(/var\(--area-[a-z0-9-]+\)/g, "");
+    // A swatch's color is the component's example value, not a system paint token.
+    const stripped = style.replace(/--_swatch-color:[^;]+;?/g, "").replace(/var\(--area-[a-z0-9-]+\)/g, "");
     const hit = stripped.match(/#[0-9a-f]{3,8}\b|rgba?\(|(?<![\w-])\d+(\.\d+)?(px|rem)\b/i);
     if (!hit) continue;
     // Classify per declaration, not per string. A style is example framing when every
