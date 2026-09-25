@@ -184,8 +184,8 @@ base.css sets the line from `--area-weight-icon` and the size curve.
    `apps/docs/assets/area-icons-pilot/batches.json`, which also records the owner's status
    for each icon (approved, revising, review), shown in the component gallery's status
    colours (Complete, In review, Unrefined). Add each new batch there. Each batch opens
-   with the whole set so far at 16px, 24px and filled, with the batch's icons underlined:
-   judge every new icon against the set it joins. A tile shows the
+   with the whole set so far as a grid, one labelled row per batch at 16px with the new
+   batch last: judge every new icon against the set it joins. A tile shows the
    icon at every size on the size curve, 3× plates against Fluent, and the icon inside a
    Button, Badge, Menu item and Nav item (the current item uses the filled variant) beside
    Fluent's. Directional families are one drawing with `data-rotations` (quarter turns,

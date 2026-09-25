@@ -310,30 +310,33 @@ export const ICON_REVIEW_DEMOS: Record<string, () => ReactElement> = Object.from
   PILOT_ICONS.map(({ name }) => [`GalleryIconReview${pascal(name)}`, () => <IconReview name={name} />]),
 );
 
-/* Whole set at the top of each batch: every icon up to and including the batch, at 16 and
-   24px and filled, so a new batch is judged against the set it joins. This batch's icons are
-   underlined. Rotations and mirrors follow their base icon. */
+/* Whole set at the top of each batch: one labelled row per batch up to this one, the new
+   batch last, every icon at 16px in a fixed cell so columns line up from row to row.
+   Rotations and mirrors follow their base icon. */
 const withDerived = (names: readonly string[]) => names.flatMap(name => [
   ...PILOT_ICONS.filter(icon => icon.name === name),
   ...PILOT_ICONS.filter(icon => icon.derivedFrom === name),
 ]);
-const setRow: CSSProperties = { display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--area-space-12)", color: "var(--area-fg-default)" };
-const newMark: CSSProperties = { paddingBlockEnd: "var(--area-space-2)", boxShadow: "inset 0 calc(var(--area-border-width) * -2) var(--area-fg-accent)" };
-const BatchSet = ({ index }: { index: number }) => {
-  const icons = withDerived(PILOT_BATCHES.slice(0, index + 1).flatMap(batch => Object.keys(batch.icons)));
-  const fresh = new Set(withDerived(Object.keys(PILOT_BATCHES[index]!.icons)).map(icon => icon.name));
-  const row = (render: (icon: (typeof icons)[number]) => ReactElement) => (
-    <div style={setRow}>{icons.map(icon => <span key={icon.name} title={icon.name} style={fresh.has(icon.name) ? newMark : undefined}>{render(icon)}</span>)}</div>
-  );
-  return (
-    <div style={{ ...reviewTile, gap: "var(--area-space-16)" }}>
-      <span style={muted}>{icons.length} icons: batches 1–{index + 1}; this batch underlined</span>
-      {row(({ Icon }) => <Icon size={16} />)}
-      {row(({ Icon }) => <Icon size={24} />)}
-      {row(({ Filled }) => <Filled size={16} />)}
-    </div>
-  );
+const setGrid: CSSProperties = {
+  display: "grid", gridTemplateColumns: "calc(var(--area-space-64) * 2) 1fr", alignItems: "start",
+  columnGap: "var(--area-space-16)", rowGap: "var(--area-space-12)", inlineSize: "100%", color: "var(--area-fg-default)",
+  font: "var(--area-weight-regular) var(--area-text-xs-size)/var(--area-text-xs-leading) var(--area-font-sans)",
 };
+const setCells: CSSProperties = {
+  display: "grid", gridTemplateColumns: "repeat(auto-fill, var(--area-space-24))", gridAutoRows: "var(--area-space-24)",
+  placeItems: "center", gap: "var(--area-space-4)",
+};
+const BatchSet = ({ index }: { index: number }) => (
+  <div style={setGrid}>
+    {PILOT_BATCHES.slice(0, index + 1).flatMap(batch => {
+      const icons = withDerived(Object.keys(batch.icons));
+      return [
+        <span key={batch.id + "-label"} style={{ ...muted, paddingBlockStart: "var(--area-space-4)" }}>{batch.title}<br />{icons.length} icons</span>,
+        <div key={batch.id} style={setCells}>{icons.map(({ name, Icon }) => <span key={name} title={name}><Icon size={16} /></span>)}</div>,
+      ];
+    })}
+  </div>
+);
 /** One whole-set strip per batch, named GalleryIconBatchSet<index>; the build places each at the top of its batch. */
 export const ICON_BATCH_DEMOS: Record<string, () => ReactElement> = Object.fromEntries(
   PILOT_BATCHES.map((_, index) => [`GalleryIconBatchSet${index + 1}`, () => <BatchSet index={index} />]),

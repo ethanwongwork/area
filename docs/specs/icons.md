@@ -618,8 +618,9 @@ Roadmap renumbered to the owner's batches:
 - **Review page:**
   - status is shown in the component gallery's colours (approved = Complete, review = In
     review, revising = Unrefined), with counts on each batch header;
-  - each batch opens with a full-width whole-set strip (`GalleryIconBatchSet<n>`): every
-    icon up to and including that batch at 16px, 24px and filled, with the batch's own
-    icons underlined;
+  - each batch opens with a full-width whole-set grid (`GalleryIconBatchSet<n>`): one
+    labelled row per batch up to that one, the new batch last, every icon at 16px in a
+    fixed 24px cell so columns line up (the owner replaced an earlier underlined strip
+    with this);
   - `PILOT_BATCHES` is generated from `batches.json`.
 - The generator's path parser now supports `Q` curves.
