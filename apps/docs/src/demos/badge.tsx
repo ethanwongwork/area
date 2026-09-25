@@ -1,16 +1,17 @@
 import { useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { Avatar, Badge, BadgeAnchor, BadgeGroup, Button, Card, CardDescription, CardTitle, Nav, NavItem, Table, Theme } from "@area/react";
-import { ArrowIcon, CheckIcon, DismissIcon, InfoIcon, PlusIcon } from "../icons.tsx";
+import { Avatar, Badge, Presence, Indicator, IndicatorAnchor, BadgeGroup, Button, Card, CardContent, CardDescription, CardTitle, Nav, NavItem, Table, Theme } from "@area/react";
+import { ArrowIcon, CheckIcon, DismissIcon, InfoIcon, LinkIcon, PlusIcon } from "../icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
 export const BadgeVariants = () => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "start", gap: "var(--area-space-24)" }}>
     <Badge variant="soft">Soft</Badge>
     <Badge variant="solid">Solid</Badge>
+    <Badge variant="color">Color</Badge>
+    <Badge variant="modern">Modern</Badge>
     <Badge variant="outline">Outline</Badge>
-    <Badge variant="ghost">Ghost</Badge>
-    <Badge as="a" href="#api" variant="plain">Plain</Badge>
+    <Badge as="a" href="#api" variant="soft">Plain</Badge>
   </div>
 );
 export const BadgeSizes = () => (
@@ -20,11 +21,11 @@ export const BadgeSizes = () => (
 );
 export const BadgeToneMatrix = () => (
   <div aria-label="Badge variant by tone matrix" style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", maxWidth: "100%" }}>
-    {(["soft", "solid", "outline", "ghost", "plain"] as const).map(variant => (
+    {(["soft", "solid", "outline", "color", "modern"] as const).map(variant => (
       <section key={variant} aria-label={variant}>
         <p>{variant}</p>
         <BadgeGroup>
-          {(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"] as const).map(tone => variant === "plain"
+          {(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => false
             ? <Badge key={tone} as="a" href="#api" variant={variant} tone={tone}>{tone}</Badge>
             : <Badge key={tone} variant={variant} tone={tone}>{tone}</Badge>)}
         </BadgeGroup>
@@ -33,19 +34,17 @@ export const BadgeToneMatrix = () => (
   </div>
 );
 export const BadgeTones = () => (
-  <BadgeGroup>{(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"] as const).map(tone => <Badge key={tone} tone={tone}>{tone}</Badge>)}</BadgeGroup>
+  <BadgeGroup>{(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => <Badge key={tone} tone={tone}>{tone}</Badge>)}</BadgeGroup>
 );
-export const BadgeLeadingIcon = () => <Badge tone="success" icon={<CheckIcon />}>Badge</Badge>;
+export const BadgeLeadingIcon = () => <Badge icon={<CheckIcon />}>Badge</Badge>;
 export const BadgeTrailingIcon = () => <Badge trailingIcon={<InfoIcon />}>Badge</Badge>;
-export const BadgeIconOnly = () => <Badge iconOnly icon={<CheckIcon />} tone="success" aria-label="Badge" />;
-export const BadgeIconCircle = () => <Badge pill iconOnly icon={<CheckIcon />} tone="success" aria-label="Badge" />;
-export const BadgeNumber = () => <Badge pill>12</Badge>;
+export const BadgeIconOnly = () => <Badge iconOnly icon={<CheckIcon />} aria-label="Badge" />;
 export const BadgeDotSoft = () => <Badge dot tone="success">Badge</Badge>;
 export const BadgeDotOutline = () => <Badge dot variant="outline" tone="warning">Badge</Badge>;
 export const BadgeDotOnly = () => <Badge dotOnly tone="success" aria-label="Available" />;
 export const BadgeDotMatrix = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)" }}>
-    {(["soft", "outline"] as const).map(variant => <BadgeGroup key={variant}>{(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"] as const).map(tone => <Badge key={tone} dot variant={variant} tone={tone}>{tone}</Badge>)}</BadgeGroup>)}
+    {(["soft", "outline"] as const).map(variant => <BadgeGroup key={variant}>{(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => <Badge key={tone} dot variant={variant} tone={tone}>{tone}</Badge>)}</BadgeGroup>)}
   </div>
 );
 export const BadgeStateLabels = () => (
@@ -59,31 +58,30 @@ export const BadgeStateLabels = () => (
 );
 export const BadgeTruncation = () => <Badge truncate title="Badge text that overflows the available space">Badge text that overflows the available space</Badge>;
 export const BadgeUppercase = () => <Badge uppercase>Badge</Badge>;
-export const BadgeLink = () => <Badge as="a" href="#api" variant="plain" tone="info" trailingIcon={<ArrowIcon />}>Link</Badge>;
-export const BadgeLinkSoft = () => <Badge as="a" href="#api" tone="discovery">Link</Badge>;
+export const BadgeLink = () => <Badge as="a" href="#api" trailingIcon={<LinkIcon />}>Link</Badge>;
 export const BadgeAnchorButton = () => (
-  <BadgeAnchor badge={<Badge size="sm" variant="solid" tone="danger">3</Badge>}>
+  <IndicatorAnchor indicator={<Indicator count={3} />}>
     <Button aria-label="Label, 3">Button</Button>
-  </BadgeAnchor>
+  </IndicatorAnchor>
 );
 export const BadgeAnchorAvatar = () => (
-  <BadgeAnchor placement="bottom-end" overlap="circular" badge={<Badge size="sm" dotOnly tone="success" aria-label="Available" />}>
+  <IndicatorAnchor placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}>
     <Avatar fallback="A" role="img" aria-label="Avatar, available" />
-  </BadgeAnchor>
+  </IndicatorAnchor>
 );
 export const BadgeAnchorTab = () => (
   <div className="area-tabs"><div className="area-tabs__list" role="tablist" aria-label="Label">
-    <BadgeAnchor badge={<Badge size="sm" variant="solid" tone="info">2</Badge>}><button type="button" className="area-tabs__tab" role="tab" aria-selected="true" aria-label="Label, 2">Item one</button></BadgeAnchor>
+    <IndicatorAnchor indicator={<Indicator count={2} />}><button type="button" className="area-tabs__tab" role="tab" aria-selected="true" aria-label="Label, 2">Item one</button></IndicatorAnchor>
   </div></div>
 );
 export const BadgeAnchorPlacements = () => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "start", gap: "var(--area-space-32)" }}>
-    {(["top-end", "top-start", "bottom-end", "bottom-start"] as const).map(placement => <BadgeAnchor key={placement} placement={placement} badge={<Badge size="sm" variant="solid">3</Badge>}><Button aria-label="Label, 3">Button</Button></BadgeAnchor>)}
+    {(["top-end", "top-start", "bottom-end", "bottom-start"] as const).map(placement => <IndicatorAnchor key={placement} placement={placement} indicator={<Indicator count={3} />}><Button aria-label="Label, 3">Button</Button></IndicatorAnchor>)}
   </div>
 );
 export const BadgeAnchorVisibility = () => {
   const [invisible, setInvisible] = useState(false);
-  return <BadgeAnchor invisible={invisible} badge={<Badge size="sm" variant="solid" tone="danger">3</Badge>}><Button onClick={() => setInvisible(value => !value)} aria-label={invisible ? "Label" : "Label, 3"}>Button</Button></BadgeAnchor>;
+  return <IndicatorAnchor invisible={invisible} indicator={<Indicator count={3} />}><Button onClick={() => setInvisible(value => !value)} aria-label={invisible ? "Label" : "Label, 3"}>Button</Button></IndicatorAnchor>;
 };
 export const BadgeGroupWrap = () => (
   <BadgeGroup><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge></BadgeGroup>
@@ -99,20 +97,8 @@ export const BadgeGroupAuto = () => (
     <BadgeGroup visibleCount="auto" overflow="overlay"><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge><Badge tone="warning">Warning</Badge></BadgeGroup>
   </div>
 );
-export const BadgeCustomBrand = () => (
-  <Badge tone="custom" style={{ "--area-badge-bg": "linear-gradient(135deg, var(--area-discovery-solid), var(--area-discovery-solid-hover))", "--area-badge-fg": "var(--area-fg-on-discovery)" } as CSSProperties}>Custom</Badge>
-);
 export const BadgeTableStatus = () => (
   <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item one</td><td><Badge dot tone="success">Status</Badge></td></tr><tr><td>Item two</td><td><Badge dot tone="warning">Status</Badge></td></tr></tbody></Table>
-);
-export const BadgeNavNew = () => (
-  <Nav aria-label="Label"><NavItem href="#api" trailing={<Badge tone="discovery">Status</Badge>}>Item one</NavItem></Nav>
-);
-export const BadgeCardHeading = () => (
-  <Card style={{ inlineSize: "min(100%, calc(var(--area-space-80) * 3))" }}>
-    <CardTitle><span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--area-space-12)" }}><span>Title</span><Badge tone="discovery">Badge</Badge></span></CardTitle>
-    <CardDescription>Description</CardDescription>
-  </Card>
 );
 export const BadgeBothThemes = () => (
   <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--area-space-24)" }}>
@@ -151,16 +137,24 @@ export const BadgeAuditControls = () => {
   </div>;
 };
 
-const galleryTones = ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"] as const;
-const galleryVariants = ["soft", "solid", "outline", "ghost", "plain"] as const;
+const galleryTones = ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const;
+const galleryVariants = ["soft", "solid", "outline", "color", "modern"] as const;
 const galleryName = (value: string) => value[0]!.toUpperCase() + value.slice(1);
-const galleryBadge = (variant: typeof galleryVariants[number], tone: typeof galleryTones[number]) => () => variant === "plain"
+const galleryBadge = (variant: typeof galleryVariants[number], tone: typeof galleryTones[number]) => () => false
   ? <Badge as="a" href="#api" variant={variant} tone={tone}>{tone}</Badge>
   : <Badge variant={variant} tone={tone}>{tone}</Badge>;
 const galleryDotBadge = (variant: "soft" | "outline", tone: typeof galleryTones[number]) => () => <Badge dot variant={variant} tone={tone}>{tone}</Badge>;
-const galleryPlacement = (placement: "top-end" | "top-start" | "bottom-end" | "bottom-start") => () => <BadgeAnchor placement={placement} badge={<Badge size="sm" variant="solid">3</Badge>}><Button aria-label={`${placement}, 3 unread`}>{placement}</Button></BadgeAnchor>;
+const galleryPlacement = (placement: "top-end" | "top-start" | "bottom-end" | "bottom-start") => () => <IndicatorAnchor placement={placement} indicator={<Indicator count={3} />}><Button aria-label={`${placement}, 3 unread`}>{placement}</Button></IndicatorAnchor>;
 
 export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromEntries([
+  ...(["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"] as const).map(status => [`GalleryBadgePresence${galleryName(status).replaceAll("-", "")}`, () => <Indicator status={status} />]),
+  ...(["xs", "sm", "md", "lg"] as const).map(size => [`GalleryBadgePresenceSize${galleryName(size)}`, () => <Indicator status="available" size={size} />]),
+  ...(["available", "away", "busy", "do-not-disturb", "offline"] as const).map(status => [`GalleryBadgePresenceOutside${galleryName(status).replaceAll("-", "")}`, () => <Indicator status={status} outOfOffice />]),
+  ...[0, 3, 24, 125].map(count => [`GalleryBadgeCount${count}`, () => <Indicator count={count} />]),
+  ["GalleryBadgeActivity", () => <Indicator tone="accent" />],
+  ["GalleryBadgeProcessing", () => <Indicator tone="info" processing />],
+  ["GalleryBadgeBorder", () => <Indicator tone="success" withBorder />],
+  ["GalleryBadgeCountNeutral", () => <Indicator count={8} tone="neutral" />],
   ...(["sm", "md", "lg"] as const).map(size => [`GalleryBadgeSize${galleryName(size)}`, () => <Badge size={size}>{galleryName(size)}</Badge>]),
   ...galleryVariants.flatMap(variant => galleryTones.map(tone => [`GalleryBadge${galleryName(variant)}${galleryName(tone)}`, galleryBadge(variant, tone)])),
   ...(["soft", "outline"] as const).flatMap(variant => galleryTones.map(tone => [`GalleryBadgeDot${galleryName(variant)}${galleryName(tone)}`, galleryDotBadge(variant, tone)])),
@@ -178,3 +172,26 @@ export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromE
   ["GalleryBadgeTableDeployed", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item one</td><td><Badge dot tone="success">Status</Badge></td></tr></tbody></Table>],
   ["GalleryBadgeTableBuilding", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item two</td><td><Badge dot tone="warning">Status</Badge></td></tr></tbody></Table>],
 ]);
+
+export const BadgeAvatar = () => <Badge variant="modern" avatar={<Avatar fallback="A" />}>Alex Morgan</Badge>;
+export const BadgeFlag = () => <Badge variant="color" flag={<svg viewBox="0 0 16 16"><rect width="16" height="16" fill="white" /><circle cx="8" cy="8" r="4" fill="#BC002D" /></svg>}>Japan</Badge>;
+export const BadgeDismissible = () => {
+  const [visible, setVisible] = useState(true);
+  return visible ? <Badge variant="color" tone="discovery" dismissLabel="Remove design label" onDismiss={() => setVisible(false)}>Design</Badge> : <Button size="sm" variant="ghost" onClick={() => setVisible(true)}>Restore badge</Button>;
+};
+
+export const BadgePresenceIndicators = () => (
+  <div style={{display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--area-space-16)"}}>
+    {(["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"] as const).map(status => <span key={status} style={{display: "inline-flex", gap: "var(--area-space-8)", alignItems: "center"}}><Presence status={status} aria-hidden="true" />{status.replaceAll("-", " ")}</span>)}
+  </div>
+);
+export const BadgePresenceSizes = () => <div style={{display: "flex", gap: "var(--area-space-16)", alignItems: "center"}}>{(["xs", "sm", "md", "lg"] as const).map(size => <Presence key={size} size={size} aria-label={`Available, ${size}`} />)}</div>;
+export const BadgePresenceOutside = () => <div style={{display: "flex", flexWrap: "wrap", gap: "var(--area-space-16)"}}>{(["available", "away", "busy", "do-not-disturb", "offline"] as const).map(status => <Presence key={status} status={status} outOfOffice />)}</div>;
+export const BadgeCountIndicators = () => (
+  <div style={{display: "flex", gap: "var(--area-space-16)"}}><Indicator count={0} /><Indicator count={3} /><Indicator count={24} /><Indicator count={125} /></div>
+);
+export const BadgeIndicatorActivity = () => <div style={{display: "flex", gap: "var(--area-space-24)", alignItems: "center"}}><Indicator tone="accent" /><Indicator tone="info" processing /><Indicator tone="success" withBorder /><Indicator count={8} tone="neutral" /></div>;
+export const BadgeIndicatorZero = () => {
+  const [show, setShow] = useState(true);
+  return <div style={{display: "flex", gap: "var(--area-space-16)", alignItems: "center"}}><IndicatorAnchor indicator={<Indicator count={0} showZero={show} />}><Button aria-label={show ? "Inbox, 0 notifications" : "Inbox"}>Inbox</Button></IndicatorAnchor><Button size="sm" variant="soft" onClick={() => setShow(!show)}>{show ? "Hide zero" : "Show zero"}</Button></div>;
+};

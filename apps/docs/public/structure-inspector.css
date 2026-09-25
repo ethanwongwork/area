@@ -1,0 +1,21 @@
+/* Inspection chrome is separate from specimen CSS and never changes component layout. */
+.docs-structure-toggle { position: fixed; inset-block-end: 16px; inset-inline-start: 16px; z-index: 10000; border: 1px solid var(--area-border); border-radius: var(--area-radius-full); padding: 8px 12px; background: var(--area-bg-surface); color: var(--area-fg-default); font: 500 12px/20px var(--area-font-sans); box-shadow: var(--area-shadow-2); cursor: pointer; }
+.docs-structure-toggle[aria-pressed="true"] { background: var(--area-accent-solid); color: var(--area-fg-on-accent); }
+.docs-structure-panel { position: fixed; z-index: 10000; inset-inline-end: 16px; inset-block-end: 16px; width: min(360px, calc(100vw - 32px)); max-height: 60vh; overflow: auto; box-sizing: border-box; padding: 12px; border: 1px solid var(--area-border); border-radius: var(--area-radius-control); background: var(--area-bg-surface); color: var(--area-fg-default); box-shadow: var(--area-shadow-2); font: 12px/1.5 var(--area-font-sans); }
+.docs-structure-panel[hidden], .docs-structure-overlay[hidden] { display: none; }
+.docs-structure-panel header { display: flex; justify-content: space-between; align-items: center; }
+.docs-structure-panel p { margin-block: 8px; }
+.docs-structure-panel button { cursor: pointer; border: 1px solid var(--area-border); border-radius: 4px; background: var(--area-bg-surface); color: inherit; padding: 4px 8px; font: inherit; }
+.docs-structure-panel button:focus-visible, .docs-structure-toggle:focus-visible { outline: 2px solid var(--area-focus-color); outline-offset: 2px; }
+.docs-structure-panel [data-tree] { max-height: 160px; overflow: auto; margin-block: 8px; }
+.docs-structure-panel [data-tree] button { display: block; white-space: nowrap; text-align: start; width: 100%; overflow: hidden; text-overflow: ellipsis; border: 0; border-radius: 0; }
+.docs-structure-panel button[aria-pressed="true"] { background: var(--area-bg-component-hover); }
+.docs-structure-panel pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 11px/1.6 var(--area-font-mono); }
+.docs-structure-panel small { display: block; margin-block-start: 12px; color: var(--area-fg-muted); }
+.docs-structure-overlay { pointer-events: none; position: fixed; inset: 0; z-index: 9999; }
+.docs-structure-overlay > div { position: absolute; box-sizing: border-box; }
+.docs-structure-overlay [data-box="margin"] { background: #f6b26b55; outline: 1px dashed #d98032; }
+.docs-structure-overlay [data-box="border"] { background: #ffe59977; }
+.docs-structure-overlay [data-box="padding"] { background: #93c47d77; }
+.docs-structure-overlay [data-box="content"] { background: #6fa8dc88; outline: 1px dashed #674ea7; }
+@media (max-width: 600px) { .docs-structure-panel { bottom: 64px; max-height: 40vh; } }

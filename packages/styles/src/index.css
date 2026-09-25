@@ -62,3 +62,6 @@
 @import "./inset.css";
 
 @import "./forced-colors.css";
+
+@import "./components/indicator.css";
+@import "./components/presence.css";

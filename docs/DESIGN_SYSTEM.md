@@ -91,7 +91,7 @@ Kbd labels may use their own vocabulary because they are not interchangeable con
 heights.
 
 Do not force control heights onto labels, glyphs or containers. Badge has a dedicated
-20/24/32px label ramp and a pill identity; Checkbox/Radio use the icon ramp. Switch has
+20/24/28px label ramp and pill shapes; Checkbox/Radio use the icon ramp. Switch has
 its own track geometry. Kbd and Token have separate content roles. These current
 constructions do not confer completion on unrefined families.
 

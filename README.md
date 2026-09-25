@@ -50,6 +50,8 @@ unpublished ESM workspaces; publishing them is separate work.
 
 ## Essential documentation
 
+- [Component workflow](docs/COMPONENT_ADAPTATION.md): source structure, slot ownership, visual pass and gallery inspection.
+- [Design references](docs/DESIGN_REFERENCES.md): code sources and product visual direction.
 - [Components](docs/COMPONENTS.md): scope, completion status, backlog and the short build workflow.
 - [Design system](docs/DESIGN_SYSTEM.md): tokens, naming, geometry and component conventions.
 - [Theming](docs/THEMING.md): customization, inheritance and React scopes.

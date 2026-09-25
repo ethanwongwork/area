@@ -62,15 +62,19 @@
     /* Transparent tabs align to content, rather than a backplate inset. */
     padding-inline: 0;
   }
+  /* Badge explicitly follows Untitled UI's content-specific gutters (owner request).
+   * Text/media/dot use reference gutters; icon sides use equal optical insets.
+   * These are outer insets: subtract the stroke once. No per-glyph offsets. */
   .area-badge {
-    --_box-height: var(--_height);
-    --_box-border: var(--area-stroke-width);
-    --_box-icon: var(--_icon);
-    padding-inline: var(--_gutter);
+    --_badge-start: var(--_gutter); --_badge-end: var(--_gutter);
+    padding-inline-start: calc(var(--_badge-start) - var(--area-stroke-width));
+    padding-inline-end: calc(var(--_badge-end) - var(--area-stroke-width));
   }
-  .area-badge:has(> .area-badge__dot:first-child) { --_box-start: var(--_dot); }
-  .area-badge:has(> .area-badge__leading-icon:first-child) { --_box-start: var(--_icon); }
-  .area-badge:has(> .area-badge__trailing-icon:last-child) { --_box-end: var(--_icon); }
+  .area-badge:has(> .area-badge__dot:first-child) { --_badge-start: var(--_icon-gutter); }
+  .area-badge:has(> .area-badge__leading-icon:first-child) { --_badge-start: calc((var(--_height) - var(--_icon)) / 2); }
+  .area-badge:has(> .area-badge__trailing-icon:last-child) { --_badge-end: calc((var(--_height) - var(--_icon)) / 2); }
+  .area-badge:has(> :is(.area-badge__avatar, .area-badge__flag):first-child) { --_badge-start: var(--_media-gutter); }
+  .area-badge:has(> .area-badge__dismiss:last-child) { --_badge-end: var(--_media-gutter); }
   .area-badge--icon-only, .area-badge--dot-only { padding-inline: 0; }
 
   .area-button:has(> .area-button__icon:first-child),

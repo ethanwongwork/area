@@ -1,5 +1,27 @@
 # Project journal
 
+## 2026-09-23 — Breadcrumb, inspector controls and input refinement
+
+Built Breadcrumb on shadcn's simple-chevron anatomy with Area tokens rather than shadcn
+measurements: composable `nav`/list/item/link/page/separator/ellipsis parts, one
+decorative CSS chevron that flips in RTL, `aria-current="page"` on the current page and an
+accessible ellipsis. It carries no variants and no size tiers, so gaps and type resolve
+from the `md` control tier; whether it needs tiers is left to owner review instead of
+guessed at.
+
+Continued the inspector foundation with Toolbar, AlignmentPicker, ColorField, ColorSwatch
+and ColorSwatchPicker, all In review. NumberField moved onto Input's tokenized outer
+gutter, and a NumberField with steppers or a grouped rail drops its trailing gutter so the
+control is not double-spaced. The control-input comparison used the six supplied
+references summarized in `docs/COMPONENTS.md` because Figma desktop was not inspectable in
+this pass; the doc keeps that limit explicit instead of presenting screenshot pixels as
+CSS measurements.
+
+Committed as `6e20da5` and pushed to `origin/main`. Docs build (57 pages, 644 demos),
+typecheck, 19,491 token tests, 76 React tests, 14 contracts, manifest parity and the
+consumer check all pass on that tree. Completion status is unchanged: 29 Complete, 13 In
+review.
+
 ## 2026-09-19 — Simplify the library workflow and correct completion
 
 Owner confirmed that only Badge, Button and Checkbox are complete. Completion now lives
@@ -197,3 +219,21 @@ focus indicators and their existing contrast thresholds remain separate.
 Agent guidance now starts with AGENTS.md and points to detailed repository documentation.
 The previous playground and disconnected tooling are archived. The icon generator uses
 portable paths, and the maintenance guide records actual verification commands and limits.
+
+## 2026-09-24 — source workflow and full refinement checkpoint
+
+Owner requested saving/pushing all accumulated changes and preparing a new session.
+Added source-adaptation workflow, reference shortlist, Area visual-language skill and live
+DOM structure inspector. Consolidated duplicated guidance; Untitled UI is now the first
+reference. Slot ownership separates shell/text/icon/action geometry.
+
+Indicator incorporates presence status in one public family; Presence remains compatible.
+Switched available/away/DND to Fluent Regular cuts, retained native size geometry, reduced
+anchors to four corners and fixed width-dependent rectangle offsets/circular rim placement.
+One variant per Indicator gallery tile, enforced by a rendering regression test.
+
+Checkpoint also includes earlier badge simplification/insets, BadgeGroup extraction,
+ColorPicker/split ColorField, alignment controls and ButtonGroup/Toolbar/Composer/dialog
+refinements. Source notices preserved. Build/typecheck,87 React,14 contracts,consumer,
+19,491 token tests and370 contrast assertions pass; browser light/dark/geometry/interaction
+checks recorded in HANDOFF. No new owner completion; cross-engine/AT unverified.

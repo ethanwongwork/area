@@ -51,6 +51,7 @@ const MAP = {
   TrashIcon: "delete_16_regular",
   LinkIcon: "link_16_regular",
   OpenIcon: "open_16_regular",
+  PersonSmallIcon: "person_16_regular",
   PersonIcon: { id: "person_20_regular", size: 20 },
   AlignTopIcon: "align_top_16_regular",
   AlignMiddleIcon: "align_center_vertical_16_regular",
@@ -259,3 +260,12 @@ console.log(
   catalog.length,
   `catalogued (${Object.keys(AREA).length} Area + ${REGULAR.length} Fluent)`,
 );
+
+// Native presence cuts: preserve Fluent geometry, never resize a different cut.
+const presenceGlyphs = ["available_filled", "available_regular", "away_filled", "away_regular", "blocked_regular", "busy_filled", "dnd_filled", "dnd_regular", "offline_regular", "oof_regular", "unknown_regular"];
+const presencePaths = Object.fromEntries(presenceGlyphs.map(key => {
+  const [name, style] = key.split("_");
+  return [key, Object.fromEntries([10, 12, 16, 20].map(size => [size, path(`presence_${name}_${size}_${style}`)]))];
+}));
+writeFileSync(resolve(ROOT, "../../packages/react/src/components/presence-icons.ts"),
+  `/** Generated from @fluentui/svg-icons ${require("@fluentui/svg-icons/package.json").version}. MIT, Microsoft. See THIRD_PARTY_NOTICES.md. Regenerate: node apps/docs/scripts/gen-icons.mjs */\nexport const presencePaths = ${JSON.stringify(presencePaths, null, 2)} as const;\n`);

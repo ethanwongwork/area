@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Avatar, AvatarGroup, Badge, BadgeAnchor, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Code, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
+import { Alert, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Code, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
 import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
 export const AvatarDefault = () => <Avatar fallback="A" alt="Avatar" />;
@@ -22,9 +22,9 @@ export const AvatarGrouped = () => (
 
 export const AvatarActive = () => <Avatar active fallback="A" alt="Avatar" />;
 
-export const AvatarAvailability = () => <BadgeAnchor compact placement="bottom-end" overlap="circular" badge={<Badge size="sm" dotOnly tone="success" aria-label="Available" />}><Avatar fallback="A" role="img" aria-label="Avatar, available" /></BadgeAnchor>;
+export const AvatarAvailability = () => <IndicatorAnchor compact placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="A" role="img" aria-label="Avatar, available" /></IndicatorAnchor>;
 
-export const AvatarNotification = () => <BadgeAnchor compact placement="top-end" overlap="circular" badge={<Badge size="sm" variant="solid" tone="info">2</Badge>}><Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar, 2 notifications" /></BadgeAnchor>;
+export const AvatarNotification = () => <IndicatorAnchor compact placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar, 2 notifications" /></IndicatorAnchor>;
 
 export const AvatarTones = () => <><Avatar tone="accent" fallback="A" alt="Avatar" /><Avatar tone="inverse" fallback="A" alt="Avatar" /></>;
 

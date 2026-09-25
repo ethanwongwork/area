@@ -58,7 +58,7 @@ export const button = {
 
 export const buttonGroup = {
   block: "area-button-group",
-  description: "Groups related independent button actions in one visual track.",
+  description: "Joins related full-size button actions at shared edges.",
   variants: { variant: ["soft", "outline"], size: ["sm", "md", "lg"] },
   defaults: { variant: "soft", size: "md" },
 } as const satisfies ComponentManifest;
@@ -76,8 +76,16 @@ export const alignmentPicker = {
   block: "area-alignment-picker",
   description: "Chooses one of nine physical alignment positions.",
   variants: { variant: ["surface", "plain"], size: ["sm", "md", "lg"] },
+  booleans: ["stretch"],
   elements: ["cell", "dot"],
   defaults: { variant: "surface", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const colorPicker = {
+  block: "area-color-picker",
+  variants: {}, defaults: {},
+  description: "Edits a solid color with saturation, brightness, hue, opacity and saved swatches.",
+  elements: ["area", "thumb", "channel", "slider", "hue", "alpha", "heading"],
 } as const satisfies ComponentManifest;
 
 export const colorSwatch = {
@@ -97,9 +105,10 @@ export const colorSwatchPicker = {
 
 export const colorField = {
   block: "area-color-field",
-  description: "Edits a hex color beside its preview.",
+  description: "Edits a hex color beside its preview, with optional split opacity.",
   variants: { size: ["sm", "md", "lg"] },
-  booleans: ["full-width"],
+  booleans: ["full-width", "alpha"],
+  elements: ["opacity"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -289,24 +298,37 @@ export const choiceLabel = {
 export const badge = {
   block: "area-badge",
   description: "Labels an item with a short status or metadata; optionally links to its details.",
-  aliases: { tint: "soft", subtle: "soft", secondary: "soft", filled: "solid", bold: "solid", bordered: "outline", link: "plain", circular: "default pill shape", rounded: "default pill shape", LabelGroup: "BadgeGroup", StateLabel: "solid + icon", Lozenge: "Badge", Pill: "Badge link" },
   variants: {
-    variant: ["soft", "solid", "outline", "ghost", "plain"],
-    tone: ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"],
+    variant: ["soft", "solid", "outline", "color", "modern"],
+    tone: ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"],
     size: ["sm", "md", "lg"],
   },
   booleans: ["pill", "dot", "dot-only", "icon-only", "truncate", "uppercase"],
-  elements: ["dot", "leading-icon", "label", "trailing-icon"],
+  elements: ["dot", "leading-icon", "label", "trailing-icon", "avatar", "flag", "dismiss"],
   defaults: { variant: "soft", tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
 
-export const badgeAnchor = {
-  block: "area-badge-anchor",
-  description: "Attaches a decorative badge to an accessibly named object.",
+export const indicator = {
+  block: "area-indicator", description: "Displays a compact notification count or activity dot.",
+  variants: {kind: ["count", "dot"], tone: ["accent", "neutral", "info", "success", "warning", "danger"]},
+  states: ["processing", "border"],
+  defaults: {kind: "dot", tone: "danger"},
+} as const satisfies ComponentManifest;
+
+export const presence = {
+  block: "area-presence", description: "Shows availability using native Fluent status glyphs.",
+  variants: {status: ["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"], size: ["xs", "sm", "md", "lg"]},
+  states: ["out-of-office"],
+  defaults: {status: "available", size: "md"},
+} as const satisfies ComponentManifest;
+
+export const indicatorAnchor = {
+  block: "area-indicator-anchor",
+  description: "Attaches a count or presence indicator to an accessibly named object.",
   variants: { placement: ["top-end", "top-start", "bottom-end", "bottom-start"], overlap: ["overlap-rectangular", "overlap-circular"] },
   states: ["invisible"],
   booleans: ["compact"],
-  elements: ["badge"],
+  elements: ["indicator"],
   defaults: { placement: "top-end", overlap: "overlap-rectangular" },
 } as const satisfies ComponentManifest;
 
@@ -543,6 +565,7 @@ export const MANIFESTS = {
   buttonGroup,
   toolbar,
   alignmentPicker,
+  colorPicker,
   colorSwatch,
   colorSwatchPicker,
   colorField,
@@ -565,7 +588,9 @@ export const MANIFESTS = {
   chipGroup,
   choiceLabel,
   badge,
-  badgeAnchor,
+  presence,
+  indicatorAnchor,
+  indicator,
   badgeGroup,
   avatar,
   avatarGroup,

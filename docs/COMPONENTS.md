@@ -6,16 +6,8 @@ tokens, predictable APIs, accessibility and visual quality consistent.
 
 ## What is complete
 
-The families owner-confirmed complete as of 2026-09-22 are Alert,
-Avatar, Badge, Button, Card, Checkbox, Chip, Code, Code block, Dialog, Field, Input, Kbd,
-Menu, Nav, Panel, Popover, Progress, Radio, Segmented, Select, Separator, Skeleton,
-Slider, Spinner, Switch, Table, Tabs, Textarea, Toast and Tooltip. Refining a family
-reopens it as **in review**; only owner confirmation moves it back to complete.
-Historical audits and passing builds do not confer approval.
-
-Tooltip's exposed pointer tip was refined on 2026-09-23 and is in review. NumberField
-is the first inspector-foundation component and is also in review. TreeView and Composer
-are built at normal UI density and remain in review.
+Completion is owner-confirmed. Refining a family reopens it as **in review**; historical
+audits and passing builds do not confer approval.
 
 The single executable status source is
 [`component-status.mjs`](../apps/docs/src/component-status.mjs). Both the gallery and
@@ -36,7 +28,7 @@ actual specimens. Current families include:
   Composer and native Select.
 - Navigation: Nav, Tabs, Menu and TreeView.
 - Breadcrumb shows linked ancestors, a current page and an optional collapsed marker; it is in review.
-- Labels and identity: Badge/BadgeAnchor/BadgeGroup, Avatar, Kbd/KbdGroup and Code/Token.
+- Labels and identity: Badge/BadgeGroup, Indicator/IndicatorAnchor, Presence, Avatar, Kbd/KbdGroup and Code/Token.
 - Feedback: Alert, Toast, Tooltip, Progress, Spinner and Skeleton.
 - Structure and content: Card, Panel, Dialog, Popover, Separator, Table and CodeBlock.
 
@@ -101,8 +93,8 @@ focus and dismissal behavior.
 
 Dialog follows the [shadcn/ui Dialog](https://ui.shadcn.com/docs/components/base/dialog)
 composition: a title and description above an optional scrolling body, trailing
-actions, and an optional corner close control. It uses one 24px outer inset (including
-the border), 24px between sections and 8px between title and description. The footer
+actions, and an optional corner close control. It uses one 16px outer inset (including
+the border), 16px between sections and 8px between title and description. The footer
 has no divider. The title uses the 18/26px text role, with medium UI body type. All
 sections share a leading edge and the container radius follows the system radius axis.
 Select's enhanced native picker opens below with a 4px gap and no above-input fallback;
@@ -199,6 +191,32 @@ larger pickers and mixed fields reflect function. [Spectrum's platform scale](ht
 also treats coordinated sizing as a system concern. Small visible icons still need
 usable focus and pointer targets.
 
+### Framer inspector reference
+
+Framer's public [Property Controls guide](https://www.framer.com/developers/property-controls)
+describes a right-side properties panel with typed editors. Its Number control can show
+a range slider or steppers and accepts bounds, units and step; Padding and BorderRadius
+switch between one value and four separate values. Color is its own control. This
+supports Area's current split between NumberField, color controls, and inspector recipes
+for linked values. A sizing-mode picker belongs beside a numeric field in a recipe, not
+inside every Input.
+
+Framer's [plugin interface guide](https://www.framer.com/developers/interface) says
+plugins receive basic styles for semantic inputs and buttons, but Framer does not publish
+an official reusable component set there. The [June 2026 developer changelog](https://www.framer.com/developers/changelog)
+also records refreshed input styles for Framer 3.0. These sources establish control
+types and composition, not stable editor dimensions, tokens or interaction details.
+Keep Area's own density, contrast and keyboard contracts; avoid inferring pixel values
+from Framer screenshots.
+
+### Breadcrumb sizing decision
+
+Keep Breadcrumb on the medium UI type and gap tier for now. It is a navigation trail,
+not an input control, and the current specimens do not show a distinct small or large
+use case. Product-wide compact UI already changes its tier values. Add a public size
+axis only when a real composition needs one; Breadcrumb remains in review until owner
+acceptance.
+
 ### Broader coverage after the inspector foundation
 
 - **Entry and forms:** SearchField, PasswordField, Combobox/Autocomplete, MultiSelect,
@@ -255,25 +273,11 @@ Long text, RTL and enlargement are verification cases, not public variants.
 
 ## Build workflow
 
-1. Start with the user job and a visually coherent default. Inspect the current CSS,
-   manifest, React wrapper and demos; retain working behavior rather than rebuilding it.
-2. Use public design-system documentation to establish functional baselines—native
-   behavior, accessibility, size classes, states and composition boundaries. Treat those
-   findings as a starting point, not a mandate to import every documented variant.
-3. Preserve concise observations from products without public component systems (for
-   example Notion, ChatGPT/OpenAI and Cursor): density, type hierarchy, color use,
-   interaction patterns and useful compositions. They are design signals and suggestions,
-   never implied public API contracts or invented measurements.
-4. Present the default plus a short, labeled set of suggested functional variants. The
-   owner chooses which reference-driven variants enter the library; do not let an audit
-   or a coverage checklist decide the component surface.
-5. Implement accepted work across CSS, manifest, React and demos. First match the visual
-   system—density, radius, gaps, padding, type, icons and structure—then consolidate
-   stable decisions into semantic/component tokens.
-6. Verify semantics, keyboard/state behavior, sizes, customization and relevant edge
-   cases. Run affected checks and inspect the preview. Say what is still unverified.
-7. Present the working result. Mark it complete only after owner acceptance and checks;
-   do not turn that final acceptance into a mandatory pre-implementation approval gate.
+Use [Component adaptation](COMPONENT_ADAPTATION.md) as the canonical process for new
+components and substantial refinements: real source, explicit slot ownership, Area visual
+language, then measured browser verification. [Design references](DESIGN_REFERENCES.md)
+routes source choices; the repository visual-language skill guides the visual pass.
+Small fixes reuse established structure and research only unresolved questions.
 
 ## Next work and known gaps
 
@@ -322,3 +326,125 @@ attachments and model selection belong to the consuming application.
 InputGroup now paints one focus shell. Its visual compartment is one square control
 height with centered 16px Fluent art or a control-text-sized letter, so both have equal
 horizontal inset. The focused child's rectangular inner shadow was removed.
+
+## Control refinement, 2026-09-24
+
+The screenshot regressions were traced to implementation, not screen scaling: the
+medium badge was 24px and a fixed horizontal padding rule bypassed its optical inset.
+The default is now 20px with 12px icons and equal 4px outer icon insets; small/large
+are 16/24px. Closed native popovers must remain hidden, overlay content must not shrink
+inside a badge row, and tabs reserve space for anchored badges. The card-heading demo
+now uses CardContent and an explicit composition width. Dialog content inset is 16px.
+Badge and Dialog are reopened for owner review.
+
+Public code used for the refinements:
+
+- [shadcn ButtonGroup](https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/new-york-v4/ui/button-group.tsx)
+  and [Untitled UI ButtonGroup](https://github.com/untitleduico/react/blob/main/components/base/button-group/button-group.tsx):
+  connected full-size buttons, collapsed shared borders and only outside corners rounded.
+  Area reuses Button typography, icons, state painting and focus behavior.
+- [Primer ActionBar CSS](https://github.com/primer/react/blob/main/packages/react/src/ActionBar/ActionBar.module.css):
+  command sizing follows the control tier. Area's surface toolbar adds 4px around full-size
+  commands; the plain variant adds no surface inset. This does not imply parity with
+  Primer's responsive overflow implementation.
+- [OpenAI Textarea CSS](https://github.com/openai/apps-sdk-ui/blob/main/src/components/Textarea/Textarea.module.css):
+  line-height-driven text gutters and bounded rows inform Composer. Area keeps its native
+  textarea, 32px default actions and 8px outer inset, with a concentric 16px corner radius.
+- [React Aria ColorSwatchPicker](https://react-aria.adobe.com/ColorSwatchPicker):
+  labeled radio choices and separate selected/focus states. Area uses compact square
+  cells, a legible selection ring and checkerboard transparency. ColorField inherits
+  Input's typography and inset instead of introducing an unrelated monospace field.
+- [Figma alignment guidance](https://help.figma.com/hc/en-us/articles/31289464393751-Use-the-horizontal-and-vertical-flows-in-auto-layout):
+  the nine-position control and spatial arrow navigation inform AlignmentPicker; a flat
+  selected cell replaces the raised tile. Dimensions come from Area's tokens.
+
+[Geist Avatar](https://vercel.com/geist/avatar) and
+[Notion editing guidance](https://www.notion.com/help/writing-and-editing-basics) were
+reviewed for adjacent-control sizing and contextual actions. Neither establishes
+private editor CSS measurements. The Framer findings above remain the reference for
+inspector composition and conditional property controls. Exact Figma/Notion/Framer
+internal tokens remain unverified; no private source implementation is claimed.
+
+### Color and alignment follow-up, September 24
+
+The earlier muted swatches were arbitrary demo hex values, not palette tokens. Color
+examples now use exact family-500 hex values from `packages/tokens/src/color/palette.json`
+(e.g. blue #006DF5, purple #8D4DF3, green #01AA4E). Alpha examples deliberately remain
+translucent. Swatches represent document color data and must not change with UI theme.
+The supplied Figma neutral values are retained only in the explicitly labeled split-field
+reference example. The palette source itself is unchanged.
+
+[Untitled UI's solid picker](https://www.untitledui.com/react/components/color-pickers)
+was inspected directly: square saturation/value area, hue and alpha tracks, joined
+color/opacity editing, saved colors. Area's new ColorPicker implements that solid-color
+composition using its own InputGroup, ColorField, NumberField and ColorSwatchPicker.
+It exposes separate native keyboard sliders for saturation and brightness, pointer
+capture for the area, and canonical hex callbacks/form values. Gradient/image editing,
+format conversion UI and eyedropper are not part of this solid-color component.
+
+ColorField `alpha` joins hex and a 0–100% opacity editor in one InputGroup shell; `name`
+submits one canonical hex value. `opacityLabel` names the separate control. AlignmentPicker
+uses three rounded bars with column-dependent alignment, 2px unselected dots, no selected
+backplate, and `stretch` to fill both dimensions of a sized parent. Landscape and portrait
+examples demonstrate this independently of size/treatment variants.
+
+### Badge structure — Untitled UI follow-up
+
+The owner requested Untitled UI's badge structure, superseding the prior 16/20/24px
+scale. Its [public badge source](https://github.com/untitleduico/react/blob/main/components/base/badges/badges.tsx)
+uses 20/24/28px text badges (sm/md/lg), 12px icons, 16px images, and content-dependent
+horizontal gutters. Area now follows that scale: pill text gutters 8/10/12px; icon-side
+6/8/10px; icon gaps 2/4/4px; dot/media gaps 4/6/6px. Rounded text gutters are 6/8/10px.
+Border width is subtracted once in inset.css. This is an explicit badge exception to the
+usual equal optical inset formula, with no per-glyph adjustment. Medium is now 24px;
+choose small for the 20px badge requested earlier.
+
+Existing soft/solid/outline/ghost/plain, tones, anchors, groups and content flags remain.
+Added `shape="rounded"`, `variant="color"` (tinted fill and border), `variant="modern"`
+(neutral surface, subtle shadow and colored addon), avatar/flag slots, and a native dismiss
+button with a required `dismissLabel`. Modern defaults to rounded; explicit shape/pill
+can override it. Links cannot contain dismiss buttons. Media must be decorative; its
+meaning belongs in the visible label.
+
+Untitled's color recipe uses utility-50 fills, utility-200 rings, utility-700 text and
+utility-500 addons. Its pale backgrounds make the stronger accents perceptually distinct;
+it does not paint the entire badge at one saturation or opacity. Area uses its existing
+semantic counterparts so contrast/theme behavior is retained. No palette colors or
+contrast thresholds were changed. Exact hues differ between the two systems; matching
+spacing does not imply their palettes are identical.
+
+### Badge / Indicator / BadgeGroup separation
+
+Latest owner direction supersedes the badge shape/treatment additions above: badges
+are pill-only; ghost/plain/custom are removed. Custom was a caller-owned color-pair escape
+hatch, not distinct badge behavior. Reference comparison, duplicate number/icon-circle,
+custom-brand, card-heading and nav-new examples were removed.
+
+Indicator and IndicatorAnchor now own compact counts (with a display cap), presence
+(online/offline/busy/away), and attachments to buttons, avatars and tabs. The attached
+visual is inert and decorative; name its count/status on the owning control. BadgeGroup
+is a separate layout component and documentation family: omit visibleCount to wrap all,
+set a number to cap the visible badges, or use auto to fit available width. Inline allows
+wrapping and overlay keeps one line; both use the same native overflow popover.
+
+Badge icons use native Fluent 16px artwork in 16px boxes; the earlier 16-to-12 downscale
+made them appear too small. The dismiss glyph is the vendored Fluent dismiss_16_regular
+geometry. Dot badges follow Untitled's small Dot: an 8px slot containing a 6px painted
+circle (its source has radius 2.5 plus a 1px stroke), with 4/6/6px slot-to-text gaps.
+
+Badge icon inset follow-up: leading/trailing 16px Fluent slots now use equal outer
+insets of 2/4/6px at sm/md/lg, while text and dot gutters stay unchanged. Dismiss uses
+the native Fluent 12px cut inside its 16px action box. Leading/icon-only gallery examples
+use default neutral-soft paint. LinkSoft was redundant and removed; the single Link
+example is a neutral-soft native anchor with Fluent's link icon. Navigation does not
+assign a tone; semantic tone remains a separate choice.
+
+## Source-based adaptation
+
+For owner-requested source adaptations, use [Component adaptation](COMPONENT_ADAPTATION.md).
+Indicator now follows Mantine and Presence follows Fluent UI; both remain In review.
+Presence is separate from count/activity Indicator, with shared IndicatorAnchor composition.
+
+Latest owner direction: Untitled UI first; Indicator includes presence status. Presence
+remains a compatibility export. Four corner anchors, one variant per gallery tile.
+See the latest adaptation record for source and geometry changes.

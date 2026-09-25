@@ -28,6 +28,9 @@
     overflow-x: auto;
   }
 
+  /* Reserve the attachment overhang inside the scrolling viewport. */
+  .area-tabs__list:has(> .area-indicator-anchor) { padding: var(--area-space-8); }
+
   .area-tabs__tab {
     position: relative;
     display: inline-flex;

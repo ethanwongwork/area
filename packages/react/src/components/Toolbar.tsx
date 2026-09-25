@@ -111,7 +111,7 @@ export const ToolbarOverflow = forwardRef<HTMLDetailsElement, ToolbarOverflowPro
       if (!event.currentTarget.contains(event.relatedTarget as Node | null)) event.currentTarget.open = false;
     }} {...rest}>
     <summary className="area-toolbar__overflow-trigger" aria-label={label} data-area-toolbar-item="" tabIndex={-1}>
-      {icon ?? <span className="area-toolbar__overflow-dots" aria-hidden="true">···</span>}
+      {icon ?? <span className="area-toolbar__overflow-dots" aria-hidden="true" />}
     </summary>
     <div className="area-toolbar__overflow-content">{children}</div>
   </details>;

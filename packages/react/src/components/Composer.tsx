@@ -61,7 +61,7 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
     <div className="area-composer__entry">
       {layout === "inline" && leadingActions && <div className="area-composer__actions area-composer__actions--leading">{leadingActions}</div>}
       <label htmlFor={id} className="area-sr-only">{label}</label>
-      <textarea {...inputProps} id={id} ref={element => { inputRef.current = element; if (typeof ref === "function") ref(element); else if (ref) ref.current = element; }} className="area-composer__input" rows={layout === "inline" ? 1 : 3} value={text}
+      <textarea {...inputProps} id={id} ref={element => { inputRef.current = element; if (typeof ref === "function") ref(element); else if (ref) ref.current = element; }} className="area-composer__input" rows={layout === "inline" ? 1 : 2} value={text}
         onChange={change} onKeyDown={keyDown} placeholder={placeholder} disabled={disabled || busy} maxLength={maxLength} />
       {layout === "inline" && <div className="area-composer__actions area-composer__actions--trailing">
         {mode}<span className="area-composer__extras">{trailingActions}</span>

@@ -38,4 +38,10 @@ export * from "./variants.ts";
 
 export { Theme, useTheme, type ThemeProps, type AxisSelection } from "./components/Theme.tsx";
 
-export { Badge, BadgeAnchor, BadgeGroup, type BadgeProps, type BadgeAnchorProps, type BadgeGroupProps } from "./components/Badge.tsx";
+export { Badge, type BadgeProps } from "./components/Badge.tsx";
+export { BadgeGroup, type BadgeGroupProps } from "./components/BadgeGroup.tsx";
+export { Indicator, IndicatorAnchor, type IndicatorProps, type IndicatorAnchorProps } from "./components/Indicator.tsx";
+
+export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps } from "./components/ColorPicker.tsx";
+
+export { Presence, type PresenceProps } from "./components/Presence.tsx";

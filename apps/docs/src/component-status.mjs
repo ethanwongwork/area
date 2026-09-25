@@ -4,16 +4,16 @@
  * parent family.
  */
 export const COMPLETE_COMPONENTS = new Set([
-  'alert', 'avatar', 'badge', 'button', 'card', 'checkbox', 'chip', 'code',
-  'code-block', 'dialog', 'field', 'input', 'kbd', 'menu', 'nav', 'panel',
+  'alert', 'avatar', 'button', 'card', 'checkbox', 'chip', 'code',
+  'code-block', 'field', 'input', 'kbd', 'menu', 'nav', 'panel',
   'popover', 'progress', 'radio', 'segmented', 'select', 'separator', 'skeleton',
   'slider', 'spinner', 'switch', 'table', 'tabs', 'textarea',
 ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-export const REVIEW_COMPONENTS = new Set(['color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'toolbar', 'breadcrumb', 'button-group', 'input-group', 'number-field', 'toast', 'tooltip', 'tree-view', 'composer']);
+export const REVIEW_COMPONENTS = new Set(['indicator', 'badge-group', 'color-picker', 'badge', 'dialog', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'toolbar', 'breadcrumb', 'button-group', 'input-group', 'number-field', 'toast', 'tooltip', 'tree-view', 'composer']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'toolbar', 'breadcrumb', 'input-group', 'number-field', 'composer', 'tree-view'];
+export const RECENT_COMPONENTS = ['indicator', 'badge', 'badge-group', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'toolbar', 'breadcrumb', 'input-group', 'number-field', 'composer', 'tree-view'];

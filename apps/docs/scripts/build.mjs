@@ -259,8 +259,8 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "tree-view" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-swatch-picker" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "badge" ? '<script type="module" src="./badge-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${["badge", "badge-group", "indicator", "presence"].includes(slug) ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 ${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
 ${slug === "chip" ? '<script type="module" src="./chip-demos.js"></script>' : ""}
@@ -279,14 +279,41 @@ function galleryPage() {
   // Every component receives its own compact section. The section supplies the component
   // name; a tile therefore names only its single specimen (default, soft-success,
   // size-md) and never repeats the family name just to fill space.
-  const badgeTones = ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted", "custom"];
-  const badgeVariants = ["soft", "solid", "outline", "ghost", "plain"];
+  const badgeTones = ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"];
+  const badgeVariants = ["soft", "solid", "outline", "color", "modern"];
   const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {
+    "color-picker": [{id: "default", title: "Solid color", demo: "GalleryColorPicker", span: "2x2"}],
     "tree-view": [
       { id: "files", title: "Project files", demo: "GalleryTreeViewFiles", span: "2x2" },
       { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters", span: "2x2" },
       { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed", span: "2x1" },
+    ],
+    "color-swatch-picker": [
+      { id: "default", title: "Palette", demo: "GalleryColorSwatchPicker" },
+      { id: "row", title: "Transparency", demo: "GalleryColorSwatchPickerRow" },
+    ],
+    "color-field": [
+      { id: "default", title: "Fill", demo: "GalleryColorField" },
+      { id: "split", title: "Split opacity", demo: "GalleryColorFieldSplit" },
+      { id: "alpha", title: "Alpha", demo: "GalleryColorFieldAlpha" },
+      { id: "disabled", title: "Disabled", demo: "GalleryColorFieldDisabled" },
+    ],
+    "color-swatch": [
+      { id: "default", title: "Transparency", demo: "GalleryColorSwatch" },
+      { id: "sizes", title: "Sizes", demo: "GalleryColorSwatchSizes" },
+    ],
+    "alignment-picker": [
+      { id: "default", title: "Alignment", demo: "GalleryAlignmentPickerDefault" },
+      { id: "landscape", title: "Landscape", demo: "GalleryAlignmentPickerLandscape" },
+      { id: "portrait", title: "Portrait", demo: "GalleryAlignmentPickerPortrait" },
+      { id: "plain", title: "Plain", demo: "GalleryAlignmentPickerPlain" },
+      { id: "disabled", title: "Disabled", demo: "GalleryAlignmentPickerDisabled" },
+    ],
+    toolbar: [
+      { id: "default", title: "Commands", demo: "GalleryToolbar" },
+      { id: "plain", title: "Plain", demo: "GalleryToolbarPlain" },
+      { id: "vertical", title: "Vertical", demo: "GalleryToolbarVertical" },
     ],
     composer: [
       { id: "inline", title: "Inline", demo: "GalleryComposerInline", span: "2x1" },
@@ -335,6 +362,32 @@ function galleryPage() {
       { id: "image", title: "Composition / image", demo: "GalleryPopoverImage" },
     ],
 
+    indicator: [
+      ...["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"].map(status => ({id: `presence-${status}`, title: `Presence / ${status}`, demo: `GalleryBadgePresence${titleCase(status).replaceAll("-", "")}`})),
+      ...["xs", "sm", "md", "lg"].map(size => ({id: `presence-size-${size}`, title: `Presence size / ${size}`, demo: `GalleryBadgePresenceSize${titleCase(size)}`})),
+      ...["available", "away", "busy", "do-not-disturb", "offline"].map(status => ({id: `outside-${status}`, title: `Out of office / ${status}`, demo: `GalleryBadgePresenceOutside${titleCase(status).replaceAll("-", "")}`})),
+      ...[0, 3, 24, 125].map(count => ({id: `count-${count}`, title: `Count / ${count}`, demo: `GalleryBadgeCount${count}`})),
+      {id: "activity", title: "Activity dot", demo: "GalleryBadgeActivity"},
+      {id: "processing", title: "Processing", demo: "GalleryBadgeProcessing"},
+      {id: "border", title: "Surface border", demo: "GalleryBadgeBorder"},
+      {id: "neutral", title: "Neutral count", demo: "GalleryBadgeCountNeutral"},
+      {id: "zero", title: "Zero visibility", demo: "BadgeIndicatorZero"},
+      { id: "anchor-button", title: "Anchor Button", demo: "BadgeAnchorButton" },
+      { id: "anchor-avatar", title: "Anchor Avatar", demo: "BadgeAnchorAvatar" },
+      { id: "anchor-tab", title: "Anchor Tab", demo: "BadgeAnchorTab" },
+      ...["top-end", "top-start", "bottom-end", "bottom-start"].map((placement) => ({
+        id: `anchor-${placement}`,
+        title: `Anchor / ${placement}`,
+        demo: `GalleryBadgeAnchor${titleCase(placement).replace("-", "")}`,
+      })),
+      { id: "anchor-visibility", title: "Anchor Visibility", demo: "BadgeAnchorVisibility" },
+    ],
+    "badge-group": [
+      { id: "group-wrap", title: "Group Wrap", demo: "BadgeGroupWrap" },
+      { id: "group-inline", title: "Group Inline", demo: "BadgeGroupInline" },
+      { id: "group-overlay", title: "Group Overlay", demo: "BadgeGroupOverlay" },
+      { id: "group-auto", title: "Group Auto", demo: "BadgeGroupAuto" },
+    ],
     badge: [
       { id: "default", title: "Default", demo: "BadgeDefault" },
       ...[["sm", "small"], ["md", "medium"], ["lg", "large"]].map(([size, label]) => ({ id: `size-${size}`, title: `Size / ${label}`, demo: `GalleryBadgeSize${titleCase(size)}` })),
@@ -346,34 +399,18 @@ function galleryPage() {
       { id: "leading-icon", title: "Leading Icon", demo: "BadgeLeadingIcon" },
       { id: "trailing-icon", title: "Trailing Icon", demo: "BadgeTrailingIcon" },
       { id: "icon-only", title: "Icon Only", demo: "BadgeIconOnly" },
-      { id: "icon-circle", title: "Icon Circle", demo: "BadgeIconCircle" },
-      { id: "number", title: "Number", demo: "BadgeNumber" },
       ...["soft", "outline"].flatMap((variant) => badgeTones.map((tone) => ({
         id: `dot-${variant}-${tone}`,
         title: `Dot ${titleCase(variant)} / ${titleCase(tone)}`,
         demo: `GalleryBadgeDot${titleCase(variant)}${titleCase(tone)}`,
       }))),
       ...["Open", "Done", "Closed", "Draft", "Queued"].map((state) => ({ id: `state-${state.toLowerCase()}`, title: `State / ${state}`, demo: `GalleryBadgeState${state}` })),
+      { id: "avatar", title: "With avatar", demo: "BadgeAvatar" },
+      { id: "flag", title: "With flag", demo: "BadgeFlag" },
+      { id: "dismissible", title: "Dismissible", demo: "BadgeDismissible" },
       { id: "truncation", title: "Truncation", demo: "BadgeTruncation" },
       { id: "uppercase", title: "Uppercase", demo: "BadgeUppercase" },
       { id: "link", title: "Link", demo: "BadgeLink" },
-      { id: "link-soft", title: "Link Soft", demo: "BadgeLinkSoft" },
-      { id: "anchor-button", title: "Anchor Button", demo: "BadgeAnchorButton" },
-      { id: "anchor-avatar", title: "Anchor Avatar", demo: "BadgeAnchorAvatar" },
-      { id: "anchor-tab", title: "Anchor Tab", demo: "BadgeAnchorTab" },
-      ...["top-end", "top-start", "bottom-end", "bottom-start"].map((placement) => ({
-        id: `anchor-${placement}`,
-        title: `Anchor / ${placement}`,
-        demo: `GalleryBadgeAnchor${titleCase(placement).replace("-", "")}`,
-      })),
-      { id: "anchor-visibility", title: "Anchor Visibility", demo: "BadgeAnchorVisibility" },
-      { id: "group-wrap", title: "Group Wrap", demo: "BadgeGroupWrap" },
-      { id: "group-inline", title: "Group Inline", demo: "BadgeGroupInline" },
-      { id: "group-overlay", title: "Group Overlay", demo: "BadgeGroupOverlay" },
-      { id: "group-auto", title: "Group Auto", demo: "BadgeGroupAuto" },
-      { id: "custom-brand", title: "Custom tone", demo: "BadgeCustomBrand" },
-      { id: "nav-new", title: "Nav New", demo: "BadgeNavNew" },
-      { id: "card-heading", title: "Card Heading", demo: "BadgeCardHeading" },
     ],
     avatar: [
       { id: "default", title: "Default", demo: "GalleryAvatar" },
@@ -730,6 +767,7 @@ function galleryPage() {
 <meta name="description" content="A full-screen visual inspection gallery for Area components.">
 <link rel="stylesheet" href="./area.css">
 <style>${DOCS_CSS}</style>
+<link rel="stylesheet" href="./structure-inspector.css">
 </head>
 <body>
 <main class="docs-visual-gallery" data-gallery-panel="closed">
@@ -758,6 +796,7 @@ function galleryPage() {
   </aside>
 </main>
 <script>${DOCS_SCRIPT}</script>
+<script type="module" src="./structure-inspector.js"></script>
 <script type="module" src="./badge-demos.js"></script>
 <script type="module" src="./switch-demos.js"></script>
 <script type="module" src="./slider-demos.js"></script>
@@ -775,7 +814,7 @@ function galleryPage() {
 function demoMarkup(name, html) {
   if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryDialogModal") return `<div data-switch-demo="${name}" style="inline-size:100%;min-inline-size:0;text-align:center">${html}</div>`;
-  if (["GalleryInputPassword", "GalleryButtonGroupCommands", "GalleryButtonGroupText"].includes(name) || name.startsWith("GalleryToolbar") || name.startsWith("GalleryAlignmentPicker") || name.startsWith("GalleryColorField") || name.startsWith("GalleryColorSwatchPicker")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryInputPassword", "GalleryButtonGroupCommands", "GalleryButtonGroupText"].includes(name) || name.startsWith("GalleryToolbar") || name.startsWith("GalleryAlignmentPicker") || name.startsWith("GalleryColorPicker") || name.startsWith("GalleryColorField") || name.startsWith("GalleryColorSwatchPicker")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // Every code block is hydrated: copy, the language picker and show/hide are behaviour.
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;

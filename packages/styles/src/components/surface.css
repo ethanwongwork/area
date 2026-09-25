@@ -306,10 +306,10 @@
   }
   .area-dialog__modal::backdrop { background: var(--area-bg-overlay); }
   .area-dialog {
-    --_dialog-inset: calc(var(--area-space-24) - var(--area-border-width));
+    --_dialog-inset: calc(var(--area-space-16) - var(--area-border-width));
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-24);
+    gap: var(--area-space-16);
     text-align: start;
     inline-size: min(calc(100vw - var(--area-space-32)), calc(var(--area-space-96) * 5));
     font-size: var(--area-ui-size);
@@ -426,6 +426,9 @@
     overflow-wrap: anywhere;
     box-shadow: var(--area-shadow-2);
   }
+  /* Author display/position must preserve the native popover closed state and top layer. */
+  .area-popover[popover] { position: fixed; }
+  .area-popover[popover]:not(:popover-open) { display: none; }
   .area-popover > *, .area-popover__body > * { min-inline-size: 0; max-inline-size: 100%; }
   /* Custom SVG geometry: a 32×14 shoulder that curves smoothly out of the edge.
    * Its open stroke omits the base; the fill overlaps the shell border by one stroke. */

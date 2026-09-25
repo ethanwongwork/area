@@ -71,7 +71,7 @@ export const numberFieldVariants = /* @__PURE__ */ createVariants(manifests.numb
 export const inputGroupVariants = /* @__PURE__ */ createVariants(manifests.inputGroup);
 export const treeViewVariants = /* @__PURE__ */ createVariants(manifests.treeView);
 export const composerVariants = /* @__PURE__ */ createVariants(manifests.composer);
-export const badgeAnchorVariants = /* @__PURE__ */ createVariants(manifests.badgeAnchor);
+export const indicatorAnchorVariants = /* @__PURE__ */ createVariants(manifests.indicatorAnchor);
 export const badgeGroupVariants = /* @__PURE__ */ createVariants(manifests.badgeGroup);
 export const badgeVariants = /* @__PURE__ */ createVariants(manifests.badge);
 export const alertVariants = /* @__PURE__ */ createVariants(manifests.alert);
@@ -98,3 +98,9 @@ export const toastVariants = /* @__PURE__ */ createVariants(manifests.toast);
 export const menuVariants = /* @__PURE__ */ createVariants(manifests.menu);
 export const popoverVariants = /* @__PURE__ */ createVariants(manifests.popover);
 export const tooltipVariants = /* @__PURE__ */ createVariants(manifests.tooltip);
+
+export const colorPickerVariants = /* @__PURE__ */ createVariants(manifests.colorPicker);
+
+export const indicatorVariants = /* @__PURE__ */ createVariants(manifests.indicator);
+
+export const presenceVariants = /* @__PURE__ */ createVariants(manifests.presence);

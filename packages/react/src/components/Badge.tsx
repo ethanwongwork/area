@@ -1,18 +1,21 @@
 "use client";
 
-import { Children, forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
-import type { AnchorHTMLAttributes, CSSProperties, HTMLAttributes, ReactNode, Ref, RefAttributes } from "react";
-import { badgeVariants, badgeAnchorVariants, badgeGroupVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
-import { Button } from "./Button.tsx";
-import { Popover } from "./primitives.tsx";
+import { forwardRef } from "react";
+import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode, Ref, RefAttributes } from "react";
+import { badgeVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 
-type Options = VariantProps<typeof MANIFESTS.badge> & { icon?: ReactNode; trailingIcon?: ReactNode };
+type Options = VariantProps<typeof MANIFESTS.badge> & {
+  icon?: ReactNode; trailingIcon?: ReactNode;
+  avatar?: ReactNode; flag?: ReactNode;
+  onDismiss?: () => void;
+  dismissLabel?: string;
+};
 type SpanProps = Options & HTMLAttributes<HTMLSpanElement> & { as?: "span" };
 type LinkProps = Options & AnchorHTMLAttributes<HTMLAnchorElement> & { as: "a"; href: string };
 export type BadgeProps = SpanProps | LinkProps;
 /** Static metadata or a native link. Icon/dot-only forms require an accessible name. */
 export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>(function Badge(
-  { as = "span", tone, variant, size, pill, dot, dotOnly, iconOnly, truncate, uppercase, icon, trailingIcon, className, children, title, ...rest }, ref,
+  { as = "span", tone, variant, size, pill, dot, dotOnly, iconOnly, truncate, uppercase, icon, trailingIcon, avatar, flag, onDismiss, dismissLabel, className, children, title, ...rest }, ref,
 ) {
   if ((iconOnly || dotOnly) && !rest["aria-label"] && !rest["aria-labelledby"] && !rest["aria-hidden"]) {
     throw new Error("Badge: iconOnly and dotOnly require aria-label or aria-labelledby (or aria-hidden when decorative).");
@@ -20,16 +23,21 @@ export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>
   if (truncate && children != null && typeof children !== "string" && typeof children !== "number" && !title) {
     throw new Error("Badge: truncated rich content requires a full-text title.");
   }
+  if (onDismiss && (as === "a" || iconOnly || dotOnly)) throw new Error("Badge: dismiss requires a labeled non-link badge.");
+  if (onDismiss && !dismissLabel) throw new Error("Badge: dismissLabel is required for the dismiss button.");
   const props = {
     ...rest,
     className: badgeVariants({ tone, variant, size, pill, dot, dotOnly, iconOnly, truncate, uppercase }, className),
     title: title ?? (truncate && (typeof children === "string" || typeof children === "number") ? String(children) : undefined),
     role: rest.role ?? ((iconOnly || dotOnly) && as === "span" ? "img" : undefined),
     children: <>
+      {avatar && !dotOnly && !iconOnly ? <span className="area-badge__avatar" aria-hidden="true">{avatar}</span> : null}
+      {flag && !dotOnly && !iconOnly ? <span className="area-badge__flag" aria-hidden="true">{flag}</span> : null}
       {dot || dotOnly ? <span className="area-badge__dot" aria-hidden="true" /> : null}
       {icon && !dotOnly ? <span className="area-badge__leading-icon" aria-hidden="true">{icon}</span> : null}
       {!iconOnly && !dotOnly && children != null ? <span className="area-badge__label">{children}</span> : null}
       {trailingIcon && !dotOnly && !iconOnly ? <span className="area-badge__trailing-icon" aria-hidden="true">{trailingIcon}</span> : null}
+      {onDismiss ? <button type="button" className="area-badge__dismiss" aria-label={dismissLabel} onClick={onDismiss}><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="m2.09 2.22.06-.07a.5.5 0 0 1 .63-.06l.07.06L6 5.29l3.15-3.14a.5.5 0 1 1 .7.7L6.71 6l3.14 3.15c.18.17.2.44.06.63l-.06.07a.5.5 0 0 1-.63.06l-.07-.06L6 6.71 2.85 9.85a.5.5 0 0 1-.7-.7L5.29 6 2.15 2.85a.5.5 0 0 1-.06-.63l.06-.07z" /></svg></button> : null}
     </>,
   };
   return as === "a" ? <a {...props as AnchorHTMLAttributes<HTMLAnchorElement>} ref={ref as Ref<HTMLAnchorElement>} /> : <span {...props as HTMLAttributes<HTMLSpanElement>} ref={ref as Ref<HTMLSpanElement>} />;
@@ -37,91 +45,3 @@ export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>
   (props: LinkProps & RefAttributes<HTMLAnchorElement>): ReactNode;
   (props: SpanProps & RefAttributes<HTMLSpanElement>): ReactNode;
 };
-
-export interface BadgeAnchorProps extends HTMLAttributes<HTMLSpanElement> {
-  badge: ReactNode;
-  placement?: VariantProps<typeof MANIFESTS.badgeAnchor>["placement"];
-  overlap?: "rectangular" | "circular";
-  /** Positive CSS length moves the badge inward. Prefer an Area token expression. */
-  offset?: string;
-  invisible?: boolean;
-  /** Uses the compact attachment scale without changing the anchored object. */
-  compact?: boolean;
-}
-/** The owner supplies the status in its accessible name; the overlay is decorative. */
-export const BadgeAnchor = forwardRef<HTMLSpanElement, BadgeAnchorProps>(function BadgeAnchor(
-  { badge, placement, overlap = "rectangular", offset, invisible, compact = true, children, className, style, ...rest }, ref,
-) {
-  return <span {...rest} ref={ref} className={badgeAnchorVariants({ placement, overlap: `overlap-${overlap}`, compact }, className)} style={{ ...style, ...(offset ? { "--area-badge-anchor-offset": offset } : {}) } as CSSProperties} data-invisible={invisible ? "" : undefined}>
-    {children}<span className="area-badge-anchor__badge" aria-hidden="true" inert>{badge}</span>
-  </span>;
-});
-
-export interface BadgeGroupProps extends HTMLAttributes<HTMLDivElement> {
-  overflow?: "inline" | "overlay";
-  /** Omit to wrap every badge. Auto fits one line and reserves the overflow trigger. */
-  visibleCount?: "auto" | number;
-  overflowLabel?: string;
-}
-/** Native auto-popover supplies Escape, light dismissal and focus restoration. */
-export const BadgeGroup = forwardRef<HTMLDivElement, BadgeGroupProps>(function BadgeGroup(
-  { overflow = "inline", visibleCount, overflowLabel = "More statuses", children, className, ...rest }, ref,
-) {
-  if (typeof visibleCount === "number" && (!Number.isFinite(visibleCount) || visibleCount < 0)) throw new RangeError("BadgeGroup: visibleCount must be a nonnegative finite number or auto.");
-  const items = Children.toArray(children);
-  const root = useRef<HTMLDivElement>(null);
-  const popup = useRef<HTMLDivElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const id = useId();
-  const [fitted, setFitted] = useState(items.length);
-  useImperativeHandle(ref, () => root.current!, []);
-  const count = visibleCount === "auto" ? Math.min(fitted, items.length) : visibleCount === undefined ? items.length : Math.max(0, Math.min(items.length, Math.floor(visibleCount)));
-  const hidden = items.length - count;
-  useEffect(() => {
-    if (visibleCount !== "auto" || !root.current || !popup.current) return;
-    let disposed = false;
-    const measure = () => {
-      if (disposed) return;
-      const host = root.current!;
-      const panel = popup.current!;
-      // Measure the actual items while the closed popover is invisible. No cloned IDs,
-      // duplicate links, or guessed character widths; styles are restored synchronously.
-      const saved = panel.style.cssText;
-      panel.style.cssText = "display:flex;position:fixed;visibility:hidden;inline-size:max-content;max-inline-size:none";
-      const widths = Array.from(host.querySelectorAll<HTMLElement>(".area-badge-group__item")).map(el => el.getBoundingClientRect().width);
-      panel.style.cssText = saved;
-      const gap = parseFloat(getComputedStyle(host).columnGap) || 0;
-      const available = host.clientWidth;
-      if (widths.reduce((a, b) => a + b, 0) + gap * Math.max(0, widths.length - 1) <= available) { setFitted(items.length); return; }
-      const probe = trigger.current!.cloneNode(true) as HTMLButtonElement;
-      probe.hidden = false;
-      probe.inert = true;
-      probe.removeAttribute("id");
-      probe.removeAttribute("popovertarget");
-      probe.style.cssText = "display:inline-flex;position:fixed;visibility:hidden";
-      probe.querySelector(".area-button__label")!.textContent = `+${items.length}`;
-      host.append(probe);
-      const reserve = probe.getBoundingClientRect().width + gap;
-      probe.remove();
-      let used = reserve, next = 0;
-      for (const width of widths) { if (used + width > available) break; used += width + gap; next++; }
-      setFitted(next);
-    };
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(root.current);
-    for (const item of root.current.querySelectorAll(".area-badge-group__item")) observer.observe(item);
-    document.fonts?.ready.then(measure);
-    return () => { disposed = true; observer.disconnect(); };
-  }, [visibleCount, children, count, items.length]);
-  useEffect(() => {
-    if (!hidden && popup.current?.matches(":popover-open")) popup.current.hidePopover();
-  }, [hidden]);
-  return <div {...rest} ref={root} className={badgeGroupVariants({ overflow }, className)}>
-    {items.slice(0, count).map((item, index) => <span className="area-badge-group__item" key={index}>{item}</span>)}
-    <Button ref={trigger} size="sm" variant="ghost" className="area-badge-group__overflow-trigger" popoverTarget={id} hidden={!hidden} aria-label={`${overflowLabel}, ${hidden} more`}>+{hidden || items.length}</Button>
-    <Popover ref={popup} id={id} popover="auto" role="group" tabIndex={-1} autoFocus className={cx("area-badge-group__overflow-content")} aria-label={overflowLabel}>
-      {items.slice(count).map((item, index) => <span className="area-badge-group__item" key={count + index}>{item}</span>)}
-    </Popover>
-  </div>;
-});

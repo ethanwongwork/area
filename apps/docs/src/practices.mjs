@@ -87,10 +87,10 @@ export const PRACTICES = {
     `Field does not paint focus itself. Its Input, Select or Textarea child owns the shared editable-control focus treatment, including invalid and increased-contrast states.`,
   ],
   badge: [
-    `Use Badge for status or metadata. Classification belongs to Tag; selection and removal belong to Chip. A plain Badge is a native link treatment only when rendered as an anchor; static Badge never changes on hover or acts like a button.`,
+    `Use Badge for status or metadata. Classification belongs to Tag; selection and removal belong to Chip. Badge links use the same supported treatments when rendered as an anchor; static Badge never changes on hover or acts like a button.`,
     `Dot is independent of fill. Use text or an accessible name to communicate meaning without color. Icon-only and dot-only forms require an accessible name.`,
-    `Badge is always pill-shaped so static metadata remains visually distinct from Button. Its independent small / medium / large scale is 20 / 24 / 32px; medium is the default and does not follow the control-height ramp.`,
-    `BadgeAnchor hides its decorative overlay from assistive technology. Put the count or status in the owning control's accessible name. Do not put interactive children in the overlay.`,
+    `Badge is always pill-shaped. Following Untitled UI, its independent small / medium / large scale is 20 / 24 / 28px; medium is the default and does not follow the control-height ramp.`,
+    `IndicatorAnchor hides its decorative overlay from assistive technology. Put the count or status in the owning control's accessible name. Do not put interactive children in the overlay.`,
     `BadgeGroup wraps all children by default. A numeric visibleCount or auto collapses overflow into a native popover: Enter or Space opens it, Escape and outside click close it. Inline permits wrapping; overlay preserves one row. Auto needs React hydration and ResizeObserver.`,
     `Truncation supplies title for plain text; supply title explicitly for rich content. Keep the full accessible text. Important explanations should also appear in nearby visible text.`,
     `Custom tone uses --area-badge-bg and --area-badge-fg as a complete paint pair, including gradients. The consumer must check contrast across the entire gradient in each theme; built-in defaults use tested neutral tokens.`,

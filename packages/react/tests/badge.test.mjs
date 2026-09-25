@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createElement as h } from 'react';
 import { renderToString } from 'react-dom/server';
-import { Badge, BadgeGroup, BadgeAnchor, badgeVariants, MANIFESTS } from '../dist/modules/index.js';
+import { Badge, BadgeGroup, Indicator, IndicatorAnchor, badgeVariants, MANIFESTS } from '../dist/modules/index.js';
 import { readFileSync } from 'node:fs';
 const render = element => renderToString(element);
 test('default and full variant/tone matrix preserve orthogonal classes', () => {
@@ -13,7 +13,8 @@ test('default and full variant/tone matrix preserve orthogonal classes', () => {
     assert.ok(html.includes(`area-badge--${variant}`) && html.includes(`area-badge--${tone}`) && html.includes('area-badge__dot'));
   }
   assert.throws(()=>badgeVariants({variant:'tint'}),RangeError);
-  assert.equal(MANIFESTS.badge.aliases.tint,'soft');
+  for (const variant of ['ghost','plain']) assert.throws(()=>badgeVariants({variant}),RangeError);
+  assert.throws(()=>badgeVariants({tone:'custom'}),RangeError);
 });
 test('native link forwards navigation props and truncation preserves the full text', () => {
   const html=render(h(Badge,{as:'a',href:'/release',target:'_blank',rel:'noreferrer',truncate:true},'Awaiting deployment approval'));
@@ -26,13 +27,13 @@ test('unlabelled icon/dot-only badges fail, named forms carry image semantics', 
   assert.match(render(h(Badge,{dotOnly:true,'aria-label':'Available'})),/role="img"/);
 });
 test('anchor overlay is inert and decorative; owner retains its name', () => {
-  const html=render(h(BadgeAnchor,{compact:true,invisible:true,placement:'bottom-start',overlap:'circular',badge:h(Badge,null,'3')},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
+  const html=render(h(IndicatorAnchor,{compact:true,invisible:true,placement:'bottom-start',overlap:'circular',indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
   assert.match(html,/aria-hidden="true" inert=""/); assert.match(html,/data-invisible=""/);assert.match(html,/Inbox, 3 unread/);assert.match(html,/overlap-circular/);
-  assert.match(html,/area-badge-anchor--compact/);
+  assert.match(html,/area-indicator-anchor--compact/);
 });
 test('anchor overlays use the same compact attachment scale by default', () => {
-  const html=render(h(BadgeAnchor,{badge:h(Badge,null,'3')},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
-  assert.match(html,/area-badge-anchor--compact/);
+  const html=render(h(IndicatorAnchor,{indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
+  assert.match(html,/area-indicator-anchor--compact/);
 });
 test('group limits children without losing them and uses native popover relationships', () => {
   const html=render(h(BadgeGroup,{visibleCount:1},['Draft','Reviewed','Ready'].map(label=>h(Badge,{key:label},label))));
@@ -52,4 +53,20 @@ test('Badge gallery splits the complete matrix into one specimen per tile', asyn
     assert.equal((tile.match(/class="area-badge /g)||[]).length,1,`${variant}/${tone}`);
   }
   assert.ok(!gallery.includes('data-badge-demo="BadgeToneMatrix"'));
+});
+
+test("badge media and dismiss actions preserve accessible native structure", () => {
+  const html = renderToString(h(Badge, { variant: "modern", avatar: h("img", {src: "avatar.png", alt: ""}), onDismiss: () => {}, dismissLabel: "Remove Alex" }, "Alex"));
+  assert.ok(!html.includes("shape-rounded"));
+  assert.match(html, /area-badge__avatar/);
+  assert.match(html, /type="button"[^>]*aria-label="Remove Alex"/);
+  assert.throws(() => renderToString(h(Badge, {onDismiss: () => {}}, "Alex")), /dismissLabel/);
+  assert.throws(() => renderToString(h(Badge, {as: "a", href: "/", onDismiss: () => {}, dismissLabel: "Remove"}, "Alex")), /non-link/);
+});
+
+test('Indicator keeps the full count accessible while capping its displayed value', () => {
+  const html = render(h(Indicator, {count: 125, max: 99}));
+  assert.match(html, /aria-label="125 notifications"/);
+  assert.match(html, />99\+</);
+  for (const status of ['online','offline','busy','away']) assert.match(render(h(Indicator,{status})), new RegExp(`aria-label="${status === "online" ? "available" : status}"`));
 });

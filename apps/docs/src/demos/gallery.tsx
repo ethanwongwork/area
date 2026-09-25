@@ -1,7 +1,7 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useId, useRef, useState } from "react";
-import { Alert, AlignmentPicker, Avatar, AvatarGroup, Badge, BadgeAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition } from "@area/react";
-import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon } from "../icons.tsx";
+import { Alert, AlignmentPicker, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition } from "@area/react";
+import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon } from "../icons.tsx";
 import { SliderRangeComposition } from "./slider-range.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
@@ -57,8 +57,8 @@ export const GalleryAvatarTwoInitials = () => <Avatar fallback="AV" alt="Avatar"
 export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Avatar" />;
 export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="Avatars"><Avatar fallback="A" alt="Avatar" /><Avatar src="/images/chip-avatar.png" fallback="B" alt="Avatar" /><Avatar fallback="C" alt="Avatar" /><Avatar fallback="D" alt="Avatar" /><Avatar fallback="E" alt="Avatar" /></AvatarGroup>;
 export const GalleryAvatarActive = () => <Avatar active fallback="A" alt="Avatar" />;
-export const GalleryAvatarAvailability = () => <BadgeAnchor compact placement="bottom-end" overlap="circular" badge={<Badge size="sm" dotOnly tone="success" aria-label="Available" />}><Avatar fallback="A" role="img" aria-label="Avatar, available" /></BadgeAnchor>;
-export const GalleryAvatarNotification = () => <BadgeAnchor compact placement="top-end" overlap="circular" badge={<Badge size="sm" variant="solid" tone="info">2</Badge>}><Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar, 2 notifications" /></BadgeAnchor>;
+export const GalleryAvatarAvailability = () => <IndicatorAnchor compact placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="A" role="img" aria-label="Avatar, available" /></IndicatorAnchor>;
+export const GalleryAvatarNotification = () => <IndicatorAnchor compact placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar, 2 notifications" /></IndicatorAnchor>;
 export const GalleryAvatarAccent = () => <Avatar tone="accent" fallback="A" alt="Avatar" />;
 export const GalleryAvatarInverse = () => <Avatar tone="inverse" fallback="A" alt="Avatar" />;
 export const GalleryAvatarSquare = () => <Avatar shape="square" fallback="A" alt="Avatar" />;
@@ -175,10 +175,10 @@ export const GalleryAlignmentPickerForm = () => {
     <output>{submitted}</output>
   </form>;
 };
-export const GalleryColorField = () => <Field label="Fill"><ColorField defaultValue="#6855E8" /></Field>;
-export const GalleryColorFieldAlpha = () => <Field label="Overlay"><ColorField defaultValue="#6855E880" /></Field>;
+export const GalleryColorField = () => <Field label="Fill"><ColorField defaultValue="#8D4DF3" /></Field>;
+export const GalleryColorFieldAlpha = () => <Field label="Overlay"><ColorField alpha variant="soft" defaultValue="#8D4DF380" /></Field>;
 export const GalleryColorFieldControlled = () => {
-  const [color, setColor] = useState("#D97745");
+  const [color, setColor] = useState("#EA7401");
   return <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
     <Field label="Accent"><ColorField value={color} onValueChange={setColor} /></Field>
     <ColorSwatch color={color} size="lg" />
@@ -186,17 +186,17 @@ export const GalleryColorFieldControlled = () => {
 };
 export const GalleryColorFieldSizes = () => (
   <div style={{ display: "flex", alignItems: "end", gap: "var(--area-space-16)" }}>
-    {(["sm", "md", "lg"] as const).map(size => <Field key={size} label={size}><ColorField size={size} defaultValue="#317C6B" /></Field>)}
+    {(["sm", "md", "lg"] as const).map(size => <Field key={size} label={size}><ColorField size={size} defaultValue="#00A797" /></Field>)}
   </div>
 );
-export const GalleryColorFieldDisabled = () => <Field label="Locked fill"><ColorField defaultValue="#317C6B" disabled /></Field>;
+export const GalleryColorFieldDisabled = () => <Field label="Locked fill"><ColorField defaultValue="#00A797" disabled /></Field>;
 export const GalleryColorFieldForm = () => {
   const [submitted, setSubmitted] = useState("");
   return <form onReset={() => setSubmitted("")} onSubmit={event => {
     event.preventDefault();
     setSubmitted(String(new FormData(event.currentTarget).get("fill") ?? ""));
   }} style={{ display: "flex", alignItems: "end", gap: "var(--area-space-12)" }}>
-    <Field label="Fill"><ColorField name="fill" defaultValue="#317C6B" required /></Field>
+    <Field label="Fill"><ColorField alpha name="fill" defaultValue="#00A797" required /></Field>
     <Button type="reset" variant="ghost" size="sm">Reset</Button>
     <Button type="submit" variant="soft" size="sm">Apply</Button>
     <output>{submitted}</output>
@@ -204,37 +204,37 @@ export const GalleryColorFieldForm = () => {
 };
 export const GalleryColorSwatch = () => (
   <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
-    <ColorSwatch color="#6855E8" />
-    <ColorSwatch color="#6855E880" />
+    <ColorSwatch color="#8D4DF3" />
+    <ColorSwatch color="#8D4DF380" />
     <ColorSwatch color="#00000000" />
   </div>
 );
 export const GalleryColorSwatchSizes = () => (
   <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
-    {(["sm", "md", "lg"] as const).map(size => <ColorSwatch key={size} color="#317C6B" size={size} />)}
+    {(["sm", "md", "lg"] as const).map(size => <ColorSwatch key={size} color="#00A797" size={size} />)}
   </div>
 );
 export const GalleryColorSwatchPicker = () => (
-<ColorSwatchPicker label="Fill color" name="fill" defaultValue="#6855E8" options={[
-  { value: "#A33A3A", label: "Brick red" }, { value: "#C96E3E", label: "Terracotta" },
-  { value: "#D4A334", label: "Ochre" }, { value: "#5A9553", label: "Leaf green" },
-  { value: "#317C6B", label: "Teal" }, { value: "#357BA6", label: "Ocean blue" },
-  { value: "#425DB5", label: "Indigo" }, { value: "#6855E8", label: "Violet" },
-  { value: "#A0519E", label: "Orchid" }, { value: "#BB5776", label: "Rose" },
-  { value: "#697386", label: "Slate" }, { value: "#D1D5DB", label: "Mist" },
+<ColorSwatchPicker label="Fill color" name="fill" defaultValue="#8D4DF3" options={[
+  { value: "#E80945", label: "Red 500" }, { value: "#EA7401", label: "Orange 500" },
+  { value: "#BF8C02", label: "Yellow 500" }, { value: "#01AA4E", label: "Green 500" },
+  { value: "#00A797", label: "Teal" }, { value: "#006DF5", label: "Blue 500" },
+  { value: "#5C5DFE", label: "Indigo" }, { value: "#8D4DF3", label: "Violet" },
+  { value: "#DF127D", label: "Pink 500" }, { value: "#03A0C8", label: "Cyan 500" },
+  { value: "#717579", label: "Cool 500" }, { value: "#747474", label: "Neutral 500" },
 ]} />
 );
 export const GalleryColorSwatchPickerRow = () => (
-<ColorSwatchPicker label="Overlay color" layout="row" defaultValue="#6855E880" options={[
-  { value: "#6855E8", label: "Solid violet" }, { value: "#6855E8C0", label: "Violet at 75%" },
-  { value: "#6855E880", label: "Violet at 50%" }, { value: "#6855E840", label: "Violet at 25%" },
+<ColorSwatchPicker label="Overlay color" layout="row" defaultValue="#8D4DF380" options={[
+  { value: "#8D4DF3", label: "Solid violet" }, { value: "#8D4DF3C0", label: "Violet at 75%" },
+  { value: "#8D4DF380", label: "Violet at 50%" }, { value: "#8D4DF340", label: "Violet at 25%" },
   { value: "#00000000", label: "Transparent" },
 ]} />
 );
 export const GalleryColorSwatchPickerSizes = () => (
 <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
   {(["sm", "md", "lg"] as const).map(size => <ColorSwatchPicker key={size} label={`${size} palette`} size={size} layout="row" options={[
-    { value: "#D4A334", label: "Ochre" }, { value: "#317C6B", label: "Teal" }, { value: "#6855E8", label: "Violet" },
+    { value: "#BF8C02", label: "Yellow 500" }, { value: "#00A797", label: "Teal" }, { value: "#8D4DF3", label: "Violet" },
   ]} />)}
 </div>
 );
@@ -244,9 +244,9 @@ export const GalleryColorSwatchPickerForm = () => {
     event.preventDefault();
     setSubmitted(String(new FormData(event.currentTarget).get("theme-color") ?? ""));
   }} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-12)" }}>
-    <ColorSwatchPicker label="Theme color" name="theme-color" defaultValue="#317C6B" layout="row" required options={[
-      { value: "#317C6B", label: "Teal" }, { value: "#6855E8", label: "Violet" },
-      { value: "#D4A334", label: "Ochre" }, { value: "#A33A3A", label: "Brick red", disabled: true },
+    <ColorSwatchPicker label="Theme color" name="theme-color" defaultValue="#00A797" layout="row" required options={[
+      { value: "#00A797", label: "Teal" }, { value: "#8D4DF3", label: "Violet" },
+      { value: "#BF8C02", label: "Yellow 500" }, { value: "#E80945", label: "Red 500", disabled: true },
     ]} />
     <Button type="reset" variant="ghost" size="sm">Reset</Button>
     <Button type="submit" variant="soft" size="sm">Apply</Button>
@@ -628,7 +628,7 @@ export const GalleryNavGrouped = () => (
     </NavGroup>
   </Nav>
 );
-export const GalleryNavIcons = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-icons" icon={<DotsFourIcon />} current>Item one</NavItem><NavItem href="#gallery-nav-icons" icon={<PersonIcon />}>Item two</NavItem><NavItem href="#gallery-nav-icons" icon={<TokenIcon />}>Item three</NavItem></Nav>;
+export const GalleryNavIcons = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-icons" icon={<DotsFourIcon />} current>Item one</NavItem><NavItem href="#gallery-nav-icons" icon={<PersonSmallIcon />}>Item two</NavItem><NavItem href="#gallery-nav-icons" icon={<TokenIcon />}>Item three</NavItem></Nav>;
 export const GalleryNavCounts = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-counts" current trailing={<Badge size="sm">1</Badge>}>Item one</NavItem><NavItem href="#gallery-nav-counts" trailing={<Badge size="sm">2</Badge>}>Item two</NavItem><NavItem href="#gallery-nav-counts">Item three</NavItem></Nav>;
 
 export const GalleryNavMarker = () => (
@@ -916,7 +916,7 @@ export const GalleryTabsDisabled = () => <Tabs tabs={[{ id: "one", label: "Item 
 export const GalleryTabsVertical = () => <Tabs orientation="vertical" label="Label" tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }, { id: "three", label: "Item three", content: "Body text" }]} />;
 export const GalleryTabsSmall = () => <Tabs size="sm" tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
 export const GalleryTabsTrack = () => <Tabs track tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
-export const GalleryTabsIcons = () => <Tabs tabs={[{ id: "one", label: "Item one", icon: <PersonIcon />, content: "Body text" }, { id: "two", label: "Item two", icon: <InfoIcon />, content: "Body text" }]} />;
+export const GalleryTabsIcons = () => <Tabs tabs={[{ id: "one", label: "Item one", icon: <PersonSmallIcon />, content: "Body text" }, { id: "two", label: "Item two", icon: <InfoIcon />, content: "Body text" }]} />;
 export const GalleryTabsCounts = () => <Tabs tabs={[{ id: "one", label: "Item one", trailing: <Badge size="sm">1</Badge>, content: "Body text" }, { id: "two", label: "Item two", trailing: <Badge size="sm">2</Badge>, content: "Body text" }]} />;
 
 export const GalleryTextarea = () => <Textarea aria-label="Label" placeholder="Placeholder" rows={3} />;
@@ -1035,3 +1035,20 @@ export const GalleryComposerPrefilled = () => {
   return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Draft message" value={value} onValueChange={setValue} onSubmit={message => { setSent(message); setValue(""); }} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
 export const GalleryComposerDisabled = () => <Composer label="Unavailable message" placeholder="Messaging unavailable" disabled />;
+
+export const GalleryColorFieldSplit = () => (
+<div style={{display: "grid", gap: "var(--area-space-8)"}}>
+  {["#1E1E1E", "#D9D9D9", "#FFFFFF"].map((color, i) => <ColorField key={color} alpha variant="soft" defaultValue={color} aria-label={`Fill ${i + 1}`} opacityLabel={`Fill ${i + 1} opacity`} />)}
+</div>
+);
+export const GalleryAlignmentPickerLandscape = () => <div style={{inlineSize: "220px", blockSize: "112px"}}><AlignmentPicker label="Landscape alignment" stretch defaultValue="top-left" /></div>;
+export const GalleryAlignmentPickerPortrait = () => <div style={{inlineSize: "112px", blockSize: "200px"}}><AlignmentPicker label="Portrait alignment" stretch defaultValue="bottom-right" /></div>;
+export const GalleryColorPicker = () => {
+  const [swatches, setSwatches] = useState([
+    {value: "#01AA4E", label: "Green 500"}, {value: "#006DF5", label: "Blue 500"},
+    {value: "#5C5DFE", label: "Indigo 500"}, {value: "#8D4DF3", label: "Purple 500"},
+    {value: "#DF127D", label: "Pink 500"}, {value: "#E80945", label: "Red 500"},
+    {value: "#EA7401", label: "Orange 500"}, {value: "#00A797", label: "Teal 500"},
+  ]);
+  return <ColorPicker label="Fill" defaultValue="#8D4DF3" swatches={swatches} onAddSwatch={value => setSwatches(current => current.some(item => item.value === value) ? current : [...current, {value, label: value}])} />;
+};
