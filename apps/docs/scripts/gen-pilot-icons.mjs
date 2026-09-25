@@ -29,7 +29,9 @@ const KEYLINES = { square: [13, 13], circle: [14, 14], horizontal: [14, 11], ver
 // Gaps between separate shapes come from a two-step scale, so every gap is intentional:
 // tight (satellites: clapper, i dot, a gear's hub) and standard (parallel strokes, pupils,
 // bars), or open (≥ 2.5, no longer read as a gap). Cursor: cuts of 2.5 grid units or less blur.
-const GAPS = { tight: [1.25, 1.625], standard: [1.75, 2.0] };
+// tight starts at the stroke weight: an overlap cut (a shape passing behind another) leaves
+// a gap equal to the line (owner, round 4); 2.25px between centre-lines at 1.125.
+const GAPS = { tight: [1.125, 1.625], standard: [1.75, 2.0] };
 const OPEN = 2.5;
 const JOIN = 0.1;              // closer than this (centre-lines) counts as a join, not a gap
 // Counters use the same scale: a satellite pocket (a clapper cup, a document's fold) may be
@@ -152,8 +154,20 @@ function retractFreeEnds(d, others) {
       const l = Math.hypot(first[2] - sx, first[3] - sy);
       tokens[1] = fmt(sx + RETRACT * (first[2] - sx) / l); tokens[2] = fmt(sy + RETRACT * (first[3] - sy) / l);
     }
+    // An arc end retracts along the arc itself: the new end is the arc sample RETRACT away,
+    // which stays on the same circle, so the arc keeps its radius and flags.
+    const along = (pts, from) => { let run = 0; for (let k = 1; k < pts.length; k++) { run += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]); if (run >= RETRACT) return pts[k]; } return from; };
+    const cmds = tokens.filter(t => /[A-Za-z]/.test(t));
+    if (cmds[1] === "A" && !(first && first[0] === sx && first[1] === sy) && free([sx, sy])) {
+      const arc = parsePath("retract", sub).samples;
+      const [nx, ny] = along(arc, [sx, sy]); tokens[1] = fmt(nx); tokens[2] = fmt(ny);
+    }
     const last = segments.at(-1), [ex, ey] = points.at(-1);
     const at = tokens.findLastIndex(t => /[A-Za-z]/.test(t));
+    if (tokens[at] === "A" && tokens.length - at === 8 && free([ex, ey])) {
+      const arc = parsePath("retract", sub).samples;
+      const [nx, ny] = along([...arc].reverse(), [ex, ey]); tokens[at + 6] = fmt(nx); tokens[at + 7] = fmt(ny);
+    }
     if (last && last[2] === ex && last[3] === ey && at > 0 && free([ex, ey]) && tokens.length - at <= 3) {
       const l = Math.hypot(ex - last[0], ey - last[1]);
       const nx = fmt(ex - RETRACT * (ex - last[0]) / l), ny = fmt(ey - RETRACT * (ey - last[1]) / l);

@@ -46,8 +46,8 @@ open lines (cross, close, check), reach to within about a pixel of it.
 **Negative space.** Negative space is designed like ink. Measure it in ink at 1.125px;
 the lint prints every gap and counter with `--report`.
 - **Gaps** between separate shapes come from a two-step scale:
-  - *tight*, 1.25–1.625px: satellites such as the bell's clapper, the dot of an i or !,
-    and a gear's hub;
+  - *tight*, 1.125–1.625px: satellites such as the bell's clapper, the dot of an i or !,
+    and a gear's hub, and overlap cuts (a gap equal to the line, 1.125px);
   - *standard*, 1.75–2px (3px between centre-lines): parallel strokes, bars, a pupil or
     check inside its surround;
   - *open*, 2.5px or more: space that no longer reads as a gap.
@@ -72,13 +72,16 @@ the lint prints every gap and counter with `--report`.
 - ring: r 6.5 at 8,8 (info, status-*, any circled glyph);
 - check: 45° arms in a 1:2 ratio. Standalone it is 3.5 / 7 (M3 8 L6.5 11.5 L13.5 4.5).
   Inside a ring it is 2 / 4 (M5 8 L7 10 L11 6);
-- corner radius, on the centre-line (slightly rounder than Fluent's minimum, well short of
-  ChatGPT's):
-  - 1.5px for containers: pages, folders, boxes, the copy sheets, the trash body;
-  - 2px for wide frames: the panel;
+- corner radius, on the centre-line. The set should feel soft: no container corner is
+  square, and the radius grows with the shape, so values differ but the softness is even.
+  Rounder than Fluent's minimum, well short of ChatGPT's:
+  - 2px for large containers and frames: document page, open's box, panel;
+  - 1.5px for mid containers: folder, copy sheets, trash body, shapes, the book's outer
+    page corners, square-dashed;
   - 1px for bars 3px tall (alignment) and small parts (the trash handle);
-- overlap cut: where one shape passes behind another (copy's back sheet, shapes' circle),
-  the hidden part stops 3px short (a standard gap), the same in every icon;
+- overlap cut: where one shape passes behind another (shapes' circle), the hidden part
+  stops so the gap equals the line (2.25px between centre-lines, 1.125px of space).
+  Owner, round 4: 3px read too far;
 - dots: ⌀2 for standalone dots (more), on whole-pixel centres so they fill 2 × 2 pixels
   at 1×. ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning).
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
@@ -141,7 +144,9 @@ separately. Filled is about emphasis and layers, not flooding the shape:
   glyphs.
 
 **Proportions from references.** Where Fluent and ChatGPT agree on a shape, follow them:
-- panels are wide (13 × 10), not square;
+- panels are Fluent's frame (11 × 9 on the centre-line, r 2) with a divider line; the side
+  pane fills only in the filled variant, never as a pill in the outline;
+- a book's pages dip toward the spine and have rounded outer corners;
 - options has two sliders with large knobs;
 - a document's fold is about 5px;
 - text is a T with end ticks and a foot (Fluent's text_t, Lucide's type), not a letter A.

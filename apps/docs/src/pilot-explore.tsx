@@ -10,31 +10,37 @@ export type ExploreCandidate = {
 
 const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none", "aria-hidden": true, focusable: false } as const;
 
-const PilotB0CurrentIcon = ({ weight, size, ...props }: PilotIconProps) => (
+const PilotF0PreviousIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <path d="M3.5 10.5V6.5A4.5 4.5 0 0 1 12.5 6.5V10.5L13.5 11.5H2.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M6 11.5V12A2 2 0 0 0 10 12V11.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M 6.757 2.649 A 1 1 0 0 1 7.693 2 L 10.523 2 A 1 1 0 0 1 11.451 3.371 L 10.411 5.971 A 0.75 0.75 0 0 0 11.108 7 L 10.899 7 A 1 1 0 0 1 11.675 8.631 L 8.03 13.117 A 1 1 0 0 1 6.259 12.586 L 6.068 10.675 A 0.75 0.75 0 0 0 5.321 10 L 5.443 10 A 1 1 0 0 1 4.507 8.649 Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-const PilotB1SoftIcon = ({ weight, size, ...props }: PilotIconProps) => (
+const PilotF1FluentIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <path d="M3.5 6.5A4.5 4.5 0 0 1 12.5 6.5V8.5C12.5 9.75 13.5 10.25 13.5 11A0.5 0.5 0 0 1 13 11.5H3A0.5 0.5 0 0 1 2.5 11C2.5 10.25 3.5 9.75 3.5 8.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M6 11.5V12A2 2 0 0 0 10 12V11.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M5.983 3.021A0.75 0.75 0 0 1 6.697 2.5L10.035 2.5A0.75 0.75 0 0 1 10.771 3.397L10.27 5.902A0.5 0.5 0 0 0 10.76 6.5L11.094 6.5A0.75 0.75 0 0 1 11.657 7.745L6.636 13.466A0.75 0.75 0 0 1 5.334 12.837L5.743 10.589A0.5 0.5 0 0 0 5.251 10L4.777 10A0.75 0.75 0 0 1 4.063 9.021Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-const PilotB2LongIcon = ({ weight, size, ...props }: PilotIconProps) => (
+const PilotL0CurrentIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <path d="M3.5 6.5A4.5 4.5 0 0 1 12.5 6.5V8C12.5 9.5 13.5 10.25 13.5 11A0.5 0.5 0 0 1 13 11.5H3A0.5 0.5 0 0 1 2.5 11C2.5 10.25 3.5 9.5 3.5 8Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M6 11.5V12A2 2 0 0 0 10 12V11.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M7.553 3.474A1 1 0 0 1 8.447 3.474L12.211 5.356A1 1 0 0 1 12.211 7.144L8.447 9.026A1 1 0 0 1 7.553 9.026L3.789 7.144A1 1 0 0 1 3.789 5.356Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2 9.604L8 12.604L14 9.604" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-const PilotB3FluentIcon = ({ weight, size, ...props }: PilotIconProps) => (
+const PilotL1ThreeIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <path d="M3.5 6.5A4.5 4.5 0 0 1 12.5 6.5V8.5Q12.5 8.75 12.6 9L13.45 11.1A0.3 0.3 0 0 1 13.2 11.5H2.8A0.3 0.3 0 0 1 2.55 11.1L3.4 9Q3.5 8.75 3.5 8.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M6 11.5V12A2 2 0 0 0 10 12V11.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M7.553 2.724A1 1 0 0 1 8.447 2.724L11.211 4.106A1 1 0 0 1 11.211 5.894L8.447 7.276A1 1 0 0 1 7.553 7.276L4.789 5.894A1 1 0 0 1 4.789 4.106Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M3 7.963L8 10.463L13 7.963" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M3 10.926L8 13.426L13 10.926" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const PilotL2StackIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
+    <rect x="5" y="2.5" width="8.5" height="7" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2.5 6V11.5A2 2 0 0 0 4.5 13.5H10" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -65,10 +71,11 @@ const PilotT3TBoxIcon = ({ weight, size, ...props }: PilotIconProps) => (
 );
 
 export const EXPLORE: readonly ExploreCandidate[] = [
-  { group: "Bell flare", label: "Previous: 1px 45° step", Icon: PilotB0CurrentIcon, gaps: [], counters: [7.93,1.43], notes: ["corner at 13.5,11.5 is 45°; below 60° round it with an arc (r ≥ 1) or open the angle","corner at 2.5,11.5 is 45°; below 60° round it with an arc (r ≥ 1) or open the angle"] },
-  { group: "Bell flare", label: "Soft S-curve flare, rounded base ends", Icon: PilotB1SoftIcon, gaps: [], counters: [7.93,1.43], notes: [] },
-  { group: "Bell flare", label: "Applied: longer flare from higher up", Icon: PilotB2LongIcon, gaps: [], counters: [7.93,1.43], notes: [] },
-  { group: "Bell flare", label: "Fluent-like straight steep flare, rounded ends", Icon: PilotB3FluentIcon, gaps: [], counters: [7.93,1.43], notes: ["segment 12.6,9 → 13.45,11.1 is not at 0°, 45° or 90°","diagonal 12.6,9 → 13.45,11.1 is off the diagonal pixel lattice (x − y must be whole)","segment 2.55,11.1 → 3.4,9 is not at 0°, 45° or 90°","diagonal 2.55,11.1 → 3.4,9 is off the diagonal pixel lattice (x + y must be whole)"] },
+  { group: "Flash", label: "Previous: flat top, filleted", Icon: PilotF0PreviousIcon, gaps: [], counters: [4.89], notes: [] },
+  { group: "Flash", label: "Applied: Fluent proportions", Icon: PilotF1FluentIcon, gaps: [], counters: [5.06], notes: [] },
+  { group: "Layers", label: "Current: diamond over one layer", Icon: PilotL0CurrentIcon, gaps: ["1.88 standard"], counters: [4.25], notes: [] },
+  { group: "Layers", label: "Three layers (Lucide, Material)", Icon: PilotL1ThreeIcon, gaps: ["1.53 tight","4.18 open","1.53 tight"], counters: [3.36], notes: [] },
+  { group: "Layers", label: "Stacked cards (Figma-like panels)", Icon: PilotL2StackIcon, gaps: ["1.38 tight"], counters: [5.93], notes: [] },
   { group: "Text", label: "Previous: letter A (49° apex)", Icon: PilotT0AIcon, gaps: [], counters: [3.02], notes: ["corner at 8,2.5 is 48.89°; below 60° round it with an arc (r ≥ 1) or open the angle"] },
   { group: "Text", label: "Applied: T with ticks and a foot", Icon: PilotT1TTicksIcon, gaps: [], counters: [], notes: [] },
   { group: "Text", label: "Plain T", Icon: PilotT2TPlainIcon, gaps: [], counters: [], notes: [] },

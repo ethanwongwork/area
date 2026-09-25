@@ -1,0 +1,5 @@
+<svg data-set="area-pilot" data-group="Layers" data-label="Three layers (Lucide, Material)" data-keyline="square" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.553 2.724A1 1 0 0 1 8.447 2.724L11.211 4.106A1 1 0 0 1 11.211 5.894L8.447 7.276A1 1 0 0 1 7.553 7.276L4.789 5.894A1 1 0 0 1 4.789 4.106Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3 7.963L8 10.463L13 7.963" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3 10.926L8 13.426L13 10.926" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
