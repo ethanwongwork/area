@@ -146,10 +146,14 @@ separately. Filled is about emphasis and layers, not flooding the shape:
 **Proportions from references.** Where Fluent and ChatGPT agree on a shape, follow them:
 - panels are Fluent's frame (11 × 9 on the centre-line, r 2) with a divider line; the side
   pane fills only in the filled variant, never as a pill in the outline;
-- a book's pages dip toward the spine and have rounded outer corners;
+- a book's page tops hump up and meet at the spine (an M, not a V), with the bottom edges
+  following them, and rounded outer corners;
 - options has two sliders with large knobs;
 - a document's fold is about 5px;
-- text is a T with end ticks and a foot (Fluent's text_t, Lucide's type), not a letter A.
+- text is a T with end ticks and a foot (Fluent's text_t, Lucide's type), not a letter A;
+- layers are three isometric layers facing up (Fluent's three, Area's orientation);
+- flash follows Fluent's structure (flat top, notch and shoulders) at about 80% of its
+  width, so it doesn't read fat; a pointed tip gets only a small rounding (r 0.75).
 
 Check ChatGPT's icon set for proportion and roundness, but keep Area's grid and weight.
 
@@ -226,6 +230,15 @@ base.css sets the line from `--area-weight-icon` and the size curve.
      that jumps out as larger, smaller, darker or denser;
    - *Filled*: outline, derived filled variant and Fluent's filled cut;
    - *Pixel check*: 1× and 2× rasters, beside Fluent's.
+5. **Audit optical size** with `node apps/docs/scripts/gen-pilot-icons.mjs --check --audit`.
+   It rasterises each icon and reports:
+   - apparent size (√ of the ink's convex-hull area) and density (ink per hull area),
+     each against the set's median;
+   - read results within a class: line glyphs (add, check, chevron, arrows, more) have thin
+     hulls by nature; full rings run about 15% large by design (circles are drawn larger);
+     diagonal shapes (a bolt) read small by hull even when they fill their keyline;
+   - a solid shape more than about 8% under the median, or a density above about +25%,
+     is a candidate to enlarge or lighten. Confirm by eye in the whole-set grid.
 5. **Judge** density as well as size. Count parallel strokes and corners. If an icon reads
    heavier than its neighbours, remove a line or corner, or pull it inside its keyline,
    before thinning any stroke.

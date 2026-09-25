@@ -1,5 +1,5 @@
 import { cloneElement, type CSSProperties, type ReactElement, type ReactNode } from "react";
-import { Badge, Button, Menu, MenuItem, Nav, NavItem } from "@area/react";
+import { Badge, Button, Nav, NavItem } from "@area/react";
 import { PILOT_BATCHES, PILOT_ICONS } from "../pilot-icons.tsx";
 import { EXPLORE } from "../pilot-explore.tsx";
 
@@ -265,14 +265,16 @@ const KeylineSm = ({ shape }: { shape: string }) => (
     {KEYLINE_SHAPES[shape]}
   </svg>
 );
+/* Contexts that fit a one-cell tile at any column count: a button, an icon button and a
+   badge on one line, then the current Nav item (filled icon). The Nav item stands in for
+   the menu row, which uses the same 16px slot. */
 const Context = ({ icon, filled, label }: { icon: () => ReactElement; filled: () => ReactElement; label: string }) => (
-  <div style={{ ...reviewRow, alignItems: "center", gap: "var(--area-space-8)" }}>
-    <Button variant="outline" size="sm" icon={icon()}>{label}</Button>
-    <Button variant="ghost" size="sm" iconOnly icon={icon()} aria-label={label} />
-    <Badge icon={icon()}>{label}</Badge>
-    <Menu style={{ inlineSize: "calc(var(--area-space-64) * 2)" }}>
-      <MenuItem><span className="area-menu__icon">{icon()}</span><span className="area-menu__text">{label}</span></MenuItem>
-    </Menu>
+  <div style={{ display: "grid", gap: "var(--area-space-8)", justifyItems: "start" }}>
+    <div style={{ ...reviewRow, alignItems: "center", gap: "var(--area-space-8)" }}>
+      <Button variant="outline" size="sm" icon={icon()}>{label}</Button>
+      <Button variant="ghost" size="sm" iconOnly icon={icon()} aria-label={label} />
+      <Badge icon={icon()}>{label}</Badge>
+    </div>
     <Nav aria-label={label} style={{ inlineSize: "calc(var(--area-space-64) * 2)" }}>
       <NavItem href="#" current icon={filled()}>{label}</NavItem>
     </Nav>
@@ -285,7 +287,7 @@ const IconReview = ({ name }: { name: string }) => {
   const FluentFilled = FLUENT_FILLED[name];
   const label = LABELS[name] ?? name;
   return (
-    <div style={reviewTile}>
+    <div style={{ ...reviewTile, gap: "var(--area-space-8)" }}>
       <span style={muted}>{keyline} · filled by {fill === "solid" ? "solid shapes and cut-outs" : "a 1.5px line"}{entry.derivedFrom ? ` · from ${entry.derivedFrom}` : ""}</span>
       <div style={reviewRow}>
         {SIZES.map(size => <div key={size} style={sizeCell}><Icon size={size} /><span style={muted}>{size}</span></div>)}
@@ -296,7 +298,6 @@ const IconReview = ({ name }: { name: string }) => {
         {Fluent ? <div style={sizeCell}><div style={plateSm}><KeylineSm shape={keyline} />{mid(Fluent())}</div><span style={muted}>Fluent</span></div> : null}
         {Fluent ? <div style={sizeCell}><div style={plateSm}>{mid(Fluent(), { color: "var(--area-fg-accent)", opacity: 0.45 })}{mid(<Icon weight={1.125} />)}</div><span style={muted}>over</span></div> : null}
         <div style={sizeCell}><div style={plateSm}><KeylineSm shape={keyline} />{mid(<Filled weight={1.125} />)}</div><span style={muted}>filled</span></div>
-        {FluentFilled ? <div style={sizeCell}><div style={plateSm}><KeylineSm shape={keyline} />{mid(FluentFilled())}</div><span style={muted}>Fluent filled</span></div> : null}
       </div>
       <Context icon={() => <Icon />} filled={() => <Filled />} label={label} />
       {Fluent ? <span style={muted}>Fluent</span> : null}

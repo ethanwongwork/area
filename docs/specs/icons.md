@@ -654,3 +654,29 @@ sharp. Batch statuses are updated in `batches.json`: every touched icon is back 
 | everything a bit softer; radii needn't be identical | Large containers r 2 (document, open, panel); mid containers r 1.5; bars and small parts r 1 |
 | flash too extreme; look at Fluent and others | Redrawn on Fluent's proportions: flat top 5.9–10.7, notch and shoulder at 5.5, left shoulder at 9, tip at 4.6, 14.5. Gentle fillets (r 0.5–0.75), centred. Candidate: the previous bolt. A Lucide-style Z bolt was tried and dropped: its 26° points lose most of their shape when rounded, which is the sharpness the owner flagged |
 | other examples for layers | Candidates: the current diamond over one layer; three layers (Lucide, Material); stacked cards (a Figma-like panel stack) |
+
+## Twelfth pass: review round 5 and the optical audit, 2026-09-25
+
+| Owner note | Change |
+|---|---|
+| flash still too fat | Fluent's structure at 82% width and 112% height, filling the vertical keyline (ink 7.7 × 13.2), centred. Previous versions on the Exploration sheet |
+| book arcs should bend down more, an M not a V | Page tops now hump up (C7 3.2 5 2.6 3 3 from the spine) and the bottoms follow them. Previous version on the sheet |
+| droplet point too rounded | Tip r 1.5 → 0.75 |
+| content should fit its containers | At four columns (282px tiles) 16 review tiles overflowed. Tiles now show four plates (Area, Fluent, over, filled) and a compact context: an outline button, icon button and badge on one line, then the current Nav item. The Menu item was dropped, since it is the same slot as the Nav item |
+| deep optical size audit | New `--audit` mode (below). Enlarged person, warning and color |
+| like Fluent's three-layer layers, facing up | Layers is now three isometric layers facing up (tight 1.53 gaps). Fluent's diagonal cards are on the sheet as an alternative |
+
+**Optical audit.** The ink is rasterised at 8 samples per px, and each icon gets an
+apparent size (√ of the convex-hull area) and a density (ink / hull), compared with the
+set's median (10.86 and 0.39).
+- **Line glyphs** have thin hulls by nature (more −55%, chevron −47%, check −41%, add,
+  arrows and expand about −18%).
+- **Full rings** run about 16% large, the intended circle compensation (info,
+  status-available).
+- **Solid shapes** below −8% were enlarged:
+  - person −11% → −5%: head r 2.5 at y 4.5; shoulders 3–13 from y 10, a standard gap;
+  - warning −8% → −5%: triangle (8, 0.75) (14.75, 13.5) (1.25, 13.5), r 1.25 corners;
+  - color −12% → −4%: bowl r 5 at y 9.25, tip at 1.5.
+- **Accepted as is:**
+  - flash reads −22% because a diagonal bolt has a small hull, but it fills its keyline;
+  - layers' density (+22%) comes from its three stacked layers.

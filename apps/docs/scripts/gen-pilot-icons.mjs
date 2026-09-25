@@ -214,6 +214,33 @@ function measureCounters(elements) {
   return counters;
 }
 
+// Optical audit (--audit): rasterise the ink and measure what the eye reads as size and
+// weight. hull = convex hull of the ink (its √area is the apparent size); coverage = ink
+// area; density = coverage / hull (how heavy the icon reads inside its own outline).
+function opticalAudit(elements) {
+  const n = 16 * RASTER, rows = [];
+  const shapes = elements.map(el => el.stroked ? { pts: el.samples, pad: WEIGHT / 2 }
+    : el.tag === "circle" ? { pts: [[Number(el.attrs.cx), Number(el.attrs.cy)]], pad: Number(el.attrs.r) } : { pts: el.samples, pad: 0 });
+  let coverage = 0;
+  for (let j = 0; j < n; j++) {
+    let lo = -1, hi = -1;
+    for (let i = 0; i < n; i++) {
+      const x = (i + 0.5) / RASTER, y = (j + 0.5) / RASTER;
+      let inside = false;
+      for (const { pts, pad } of shapes) { for (const [px, py] of pts) if (Math.hypot(px - x, py - y) <= pad) { inside = true; break; } if (inside) break; }
+      if (inside) { coverage++; if (lo < 0) lo = i; hi = i; }
+    }
+    if (lo >= 0) rows.push([lo / RASTER, j / RASTER], [(hi + 1) / RASTER, j / RASTER], [lo / RASTER, (j + 1) / RASTER], [(hi + 1) / RASTER, (j + 1) / RASTER]);
+  }
+  const pts = rows.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const half = list => { const h = []; for (const q of list) { while (h.length >= 2 && cross(h.at(-2), h.at(-1), q) <= 0) h.pop(); h.push(q); } return h; };
+  const hull = [...half(pts).slice(0, -1), ...half([...pts].reverse()).slice(0, -1)];
+  let area = 0; for (let k = 0; k < hull.length; k++) { const [x1, y1] = hull[k], [x2, y2] = hull[(k + 1) % hull.length]; area += x1 * y2 - x2 * y1; }
+  area = Math.abs(area) / 2; coverage /= RASTER * RASTER;
+  return { size: Math.sqrt(area), coverage, density: coverage / area };
+}
+
 // strict: the full construction system (grid, lattice, keylines unless keylines: false).
 function load(dir, { strict, soft = false, keylines = true }) {
 const icons = [];
@@ -373,6 +400,14 @@ const statuses = load(STATUS_SRC, { strict: true, keylines: false });
 
 if (errors.length) { console.error(errors.map(e => "✗ " + e).join("\n")); process.exit(1); }
 console.log(`icon lint ok (${icons.length} icons, ${statuses.length} status marks)`);
+if (process.argv.includes("--audit")) {
+  const rows = icons.filter(i => !i.derivedFrom).map(icon => ({ icon, ...opticalAudit(icon.elements.filter(el => !el.filledOnly)) }));
+  const median = list => { const v = [...list].sort((a, b) => a - b); return v[Math.floor(v.length / 2)]; };
+  const mSize = median(rows.map(r => r.size)), mDensity = median(rows.map(r => r.density));
+  console.log(`optical audit — median apparent size ${r2(mSize)}, median density ${r2(mDensity)}`);
+  for (const { icon, size, coverage, density } of rows.sort((a, b) => a.size - b.size))
+    console.log(`  ${icon.name.padEnd(17)} ${icon.keyline.padEnd(10)} size ${r2(size).toFixed(2).padStart(5)} (${(size / mSize * 100 - 100).toFixed(0).padStart(3)}%)  ink ${r2(coverage).toFixed(1).padStart(5)}  density ${r2(density).toFixed(2)} (${(density / mDensity * 100 - 100).toFixed(0).padStart(3)}%)`);
+}
 if (process.argv.includes("--report")) for (const icon of icons.filter(i => !i.derivedFrom)) {
   const [x0, y0, x1, y1] = icon.ink;
   console.log(`  ${icon.name.padEnd(17)} ${icon.keyline.padEnd(10)} ink ${r2(x1 - x0)}×${r2(y1 - y0)}  centre ${r2((x0 + x1) / 2)},${r2((y0 + y1) / 2)}` +

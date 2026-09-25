@@ -4,7 +4,7 @@
     {
       "id": "batch-1",
       "title": "Batch 1 · Core",
-      "note": "Approved by the owner on 2026-09-25. Back in review after round 3: open and reset (revised), bell (flare), and document, folder, copy and trash (corner radius 1.5; document fold enlarged to Fluent's size).",
+      "note": "Approved by the owner on 2026-09-25. Back in review after round 3: open and reset (revised), bell (flare), and document, folder, copy and trash (corner radius 1.5; document fold enlarged to Fluent's size). Round 5 optical audit: person and warning enlarged.",
       "icons": {
         "add": "approved",
         "arrow-up": "approved",
@@ -20,13 +20,13 @@
         "link": "approved",
         "more-horizontal": "approved",
         "open": "review",
-        "person": "approved",
+        "person": "review",
         "reset": "review",
         "search": "approved",
         "settings": "approved",
         "status-available": "approved",
         "trash": "review",
-        "warning": "approved"
+        "warning": "review"
       }
     },
     {
@@ -41,7 +41,7 @@
     {
       "id": "batch-3",
       "title": "Batch 3 · Docs chrome",
-      "note": "Round 4: panel is Fluent's frame with a divider line; book softer with deeper pages; shapes' overlap gap equals the line; flash on Fluent's proportions. Flash, layers and text have candidates on the Exploration sheet.",
+      "note": "Round 5: slimmer flash, M-shaped book, sharper droplet tip and a larger bowl, three layers facing up. Candidates on the Exploration sheet.",
       "icons": {
         "expand": "review",
         "panel-left": "review",
