@@ -1,5 +1,6 @@
 /**
- * Typography: families, the size ramp, and exactly two weights.
+ * Typography: families, the size ramp, and exactly two weights (regular for text and
+ * titles; strong only for labels on fills: buttons, segmented options, badges, counts).
  *
  * Three decisions shape this ramp.
  *
@@ -38,35 +39,27 @@ interface Step {
 }
 
 /**
- * Text: anything read as prose or rendered inside a control.
+ * The UI ramp is six sizes with one leading each, all on the 4px grid
+ * (docs/specs/typography.md, owner-approved 2026-09-25). Hierarchy comes from size,
+ * tracking and color; titles are set at the regular weight, as ChatGPT and Cursor do.
  *
- * Leading runs 1.33 to 1.5, rising with size, because WCAG 2.2 SC 1.4.12 requires content
- * to survive 1.5x line spacing and body copy that already sits there has nowhere to go.
- * `md` is 16px -- the size at which this ramp is meant to be read -- while controls take
- * `sm` at 14px, which is the split Notion uses between content and chrome.
+ * Text: xs is the caption (12/16), sm the UI size (14/20), md the body size (16/24).
+ * Long-form prose loosens md to 16/26 in its container rather than through another role.
  */
 const TEXT: Record<string, Step> = {
-  xs: { size: 12, leading: 16, tracking: "0.0025em" },
+  xs: { size: 12, leading: 16, tracking: "0.005em" },
   sm: { size: 14, leading: 20, tracking: "0em" },
   md: { size: 16, leading: 24, tracking: "0em" },
-  lg: { size: 18, leading: 26, tracking: "-0.005em" },
-  xl: { size: 20, leading: 30, tracking: "-0.01em" },
 };
 
 /**
- * Title: headings, from a card's to a page's.
- *
- * The same sizes as the upper half of the text ramp, but with tighter leading and real
- * negative tracking, because a title is one or two lines and a paragraph is not. Keeping
- * both means a 20px string can be a heading or a lead paragraph, and the choice is the
- * author's rather than the ramp's.
+ * Title: 20/28, 24/32 and 32/40 with negative tracking. A smaller heading uses body
+ * (text-md); anything larger than 32px is display type.
  */
 const TITLE: Record<string, Step> = {
-  xs: { size: 16, leading: 22, tracking: "-0.01em" },
-  sm: { size: 20, leading: 26, tracking: "-0.015em" },
-  md: { size: 24, leading: 30, tracking: "-0.02em" },
-  lg: { size: 32, leading: 40, tracking: "-0.025em" },
-  xl: { size: 40, leading: 48, tracking: "-0.03em" },
+  sm: { size: 20, leading: 28, tracking: "-0.01em" },
+  md: { size: 24, leading: 32, tracking: "-0.015em" },
+  lg: { size: 32, leading: 40, tracking: "-0.02em" },
 };
 
 /**
@@ -119,7 +112,8 @@ function ramp(prefix: string, steps: Record<string, Step>, offset: number) {
 
 export const typographyRamps = (offset: number) => ({
   ...ramp("text", TEXT, offset),
-  ...ramp("title", TITLE, offset),
+  // Compact tightens text only; titles keep their size so headings do not shrink toward body.
+  ...ramp("title", TITLE, Math.max(0, offset)),
   ...ramp("display", DISPLAY, offset),
 });
 
@@ -135,6 +129,8 @@ export const GEIST_TOKENS = {
   "weight-regular": "var(--area-wght-400)",
   /** Geist's own emphasis weight, as shipped by Vercel. Needs the variable font. */
   "weight-strong": "var(--area-wght-500)",
+  /** Line weight of Area-drawn icons, matched to this face's 14px regular stem (docs/specs/icons.md). */
+  "weight-icon": "1.125px",
 };
 
 const SYSTEM = {
@@ -144,6 +140,8 @@ const SYSTEM = {
   "weight-regular": "var(--area-wght-400)",
   /** Platform fonts ship discrete weights; 500 is one every UI stack actually has. */
   "weight-strong": "var(--area-wght-500)",
+  /** Unmeasured for platform faces; keeps the Geist value until one is measured. */
+  "weight-icon": "1.125px",
 };
 
 export const TYPOGRAPHY_AXIS: AxisDefinition = {

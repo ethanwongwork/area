@@ -16,7 +16,9 @@ npm ci
 npm run dev
 ```
 
-Open the [component gallery](http://localhost:4321/gallery.html). The dev server rebuilds
+Open the [gallery](http://localhost:4321/gallery-components.html): components, type ramp,
+iconography, color, UI scale, radius, surface and motion, each on its own page. The
+documentation site is hidden for now; its entry points redirect to the gallery. The dev server rebuilds
 changed sources and keeps the last successful preview if a build fails.
 
 ## Use the library
@@ -50,9 +52,10 @@ unpublished ESM workspaces; publishing them is separate work.
 
 ## Essential documentation
 
-- [Component workflow](docs/COMPONENT_ADAPTATION.md): source structure, slot ownership, visual pass and gallery inspection.
-- [Design references](docs/DESIGN_REFERENCES.md): code sources and product visual direction.
-- [Components](docs/COMPONENTS.md): scope, completion status, backlog and the short build workflow.
+- [Building a component](docs/COMPONENT_ADAPTATION.md): measured evidence, spec sheets, slot ownership, visual pass and review.
+- [Design references](docs/DESIGN_REFERENCES.md): target products, design systems and where to measure each.
+- [Component specs](docs/specs/README.md) and the [reference baseline](docs/research/BASELINE.md): per-component evidence and shared cross-product values.
+- [Components](docs/COMPONENTS.md): scope, completion status, backlog and variant conventions.
 - [Design system](docs/DESIGN_SYSTEM.md): tokens, naming, geometry and component conventions.
 - [Theming](docs/THEMING.md): customization, inheritance and React scopes.
 - [Contrast](docs/CONTRAST.md): color, focus and accessibility constraints.
@@ -61,6 +64,6 @@ unpublished ESM workspaces; publishing them is separate work.
 The gallery's [completion registry](apps/docs/src/component-status.mjs) is authoritative.
 New and refined families stay In review until the owner accepts them.
 
-[Archived research](archive/README.md) remains available when a specific question needs
-it. It is not required reading or an implementation plan. Session notes live in
-[the handoff](.Codex/HANDOFF.md); history lives in the journal and Git.
+Session notes live in [the handoff](.Codex/HANDOFF.md); history lives in the journal
+and Git. Earlier audits and research were removed from the tree after commit `2f90f2d`
+and remain in Git history.

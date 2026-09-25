@@ -217,7 +217,15 @@ function sidebar(activeSlug) {
 </aside>`;
 }
 
+/** While set, page() returns only its body so gallery pages can reuse foundation content. */
+const PAGE_MODE = { bodyOnly: false };
+function bodyOf(render) {
+  PAGE_MODE.bodyOnly = true;
+  try { return render(); } finally { PAGE_MODE.bodyOnly = false; }
+}
+
 function page({ slug, title, lede, body, toc = [], wide = false }) {
+  if (PAGE_MODE.bodyOnly) return body;
   /*
    * On this page keeps the right rail as its home. The inspector shares that column, and
    * the two never show at once -- when the panel is open the outline is hidden rather than
@@ -275,7 +283,7 @@ ${slug === "code-block" ? '<script type="module" src="./code-block-demos.js"></s
 const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2", "2x3"]);
 
 /* One tile per public component family. Compound pieces appear inside their parent. */
-function galleryPage() {
+function galleryPage({ families = null } = {}) {
   // Every component receives its own compact section. The section supplies the component
   // name; a tile therefore names only its single specimen (default, soft-success,
   // size-md) and never repeats the family name just to fill space.
@@ -362,6 +370,12 @@ function galleryPage() {
       { id: "image", title: "Composition / image", demo: "GalleryPopoverImage" },
     ],
 
+    "icon-pilot": [
+      { id: "weight-1", title: "Weight / 1px", demo: "GalleryIconPilotWeight100", span: "2x2" },
+      { id: "weight-1125", title: "Weight / 1.125px", demo: "GalleryIconPilotWeight1125", span: "2x2" },
+      { id: "weight-125", title: "Weight / 1.25px", demo: "GalleryIconPilotWeight125", span: "2x2" },
+      { id: "reference-fluent", title: "Reference / Fluent", demo: "GalleryIconPilotFluent", span: "2x2" },
+    ],
     indicator: [
       ...["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"].map(status => ({id: `presence-${status}`, title: `Presence / ${status}`, demo: `GalleryBadgePresence${titleCase(status).replaceAll("-", "")}`})),
       ...["xs", "sm", "md", "lg"].map(size => ({id: `presence-size-${size}`, title: `Presence size / ${size}`, demo: `GalleryBadgePresenceSize${titleCase(size)}`})),
@@ -373,6 +387,7 @@ function galleryPage() {
       {id: "neutral", title: "Neutral count", demo: "GalleryBadgeCountNeutral"},
       {id: "zero", title: "Zero visibility", demo: "BadgeIndicatorZero"},
       { id: "anchor-button", title: "Anchor Button", demo: "BadgeAnchorButton" },
+      { id: "anchor-icon-button", title: "Anchor Icon button", demo: "BadgeAnchorIconButton" },
       { id: "anchor-avatar", title: "Anchor Avatar", demo: "BadgeAnchorAvatar" },
       { id: "anchor-tab", title: "Anchor Tab", demo: "BadgeAnchorTab" },
       ...["top-end", "top-start", "bottom-end", "bottom-start"].map((placement) => ({
@@ -735,7 +750,7 @@ function galleryPage() {
       demo: name,
     })),
   };
-  const sections = orderedComponents.map((component) => {
+  const sections = orderedComponents.filter((component) => families ? families.includes(component.slug) : !component.docsOnly).map((component) => {
     const status = componentStatus(component.slug);
     const fallbackName = `Gallery${component.exportName ?? component.name.replaceAll(" ", "")}`;
     const specimens = (gallerySpecimens[component.slug] ??
@@ -758,25 +773,63 @@ function galleryPage() {
     </details>`;
   }).join("\n");
 
+  if (families) return sections;
+  const indexNav = `    <nav class="docs-gallery-index" aria-label="Components by audit status">
+      ${["complete", "review", "unrefined"].map(status => `<div><h2 class="docs-visual-gallery__section-title">${statusLabel(status)}</h2><div class="docs-gallery-index__links">${orderedComponents.filter(component => componentStatus(component.slug) === status).map(component => `<a class="docs-audit-label" data-audit="${status}" href="#gallery-section-${component.slug}">${escapeHtml(component.name)}</a>`).join("")}</div></div>`).join("")}
+    </nav>`;
+  return galleryShell({ current: "gallery-components.html", title: "Components", body: indexNav + sections });
+}
+
+function redirectPage(target) {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=./${target}"><title>area</title></head><body><a href="./${target}">Gallery</a></body></html>`;
+}
+
+/** 1× and 2× rasterisation of the pilot icons, drawn by the browser into canvases. */
+function iconPixelSection() {
+  const demo = demos.GalleryIconPilotPixels;
+  if (!demo) throw new Error("Gallery specimen missing: GalleryIconPilotPixels");
+  return `<details open class="docs-visual-gallery__section" id="gallery-section-icon-pixels">
+      <summary class="docs-visual-gallery__section-title">Pixel check</summary>
+      <div class="docs-visual-gallery__grid">
+        <article class="docs-visual-gallery__tile" data-span="2x3" id="gallery-icon-pixels" aria-labelledby="gallery-title-icon-pixels">
+          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-pixels">raster-1x-2x</h3>
+          <div class="docs-visual-gallery__tile-preview">${demo.html}</div>
+        </article>
+      </div>
+    </details>`;
+}
+
+/** Gallery pages, in nav order. The documentation site stays hidden until it is rebuilt. */
+const GALLERY_PAGES = [
+  ["gallery-components.html", "Components"],
+  ["gallery-typeRamp.html", "Type ramp"],
+  ["gallery-iconography.html", "Iconography"],
+  ["gallery-color.html", "Color"],
+  ["gallery-scale.html", "UI scale"],
+  ["gallery-radius.html", "Radius"],
+  ["gallery-surface.html", "Surface"],
+  ["gallery-motion.html", "Motion"],
+];
+
+function galleryShell({ current, title, body }) {
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Component gallery — area</title>
-<meta name="description" content="A full-screen visual inspection gallery for Area components.">
+<title>${escapeHtml(title)} — area gallery</title>
+<meta name="description" content="Area visual inspection gallery.">
 <link rel="stylesheet" href="./area.css">
 <style>${DOCS_CSS}</style>
-<link rel="stylesheet" href="./structure-inspector.css">
 </head>
 <body>
 <main class="docs-visual-gallery" data-gallery-panel="closed">
   <div class="docs-visual-gallery__content">
-    <header class="docs-visual-gallery__header"><h1 class="docs-visual-gallery__title">Component gallery</h1></header>
-    <nav class="docs-gallery-index" aria-label="Components by audit status">
-      ${["complete", "review", "unrefined"].map(status => `<div><h2 class="docs-visual-gallery__section-title">${statusLabel(status)}</h2><div class="docs-gallery-index__links">${orderedComponents.filter(component => componentStatus(component.slug) === status).map(component => `<a class="docs-audit-label" data-audit="${status}" href="#gallery-section-${component.slug}">${escapeHtml(component.name)}</a>`).join("")}</div></div>`).join("")}
-    </nav>
-    ${sections}
+    <header class="docs-visual-gallery__header">
+      <nav class="docs-gallery-pages" aria-label="Gallery pages">${GALLERY_PAGES.map(([file, label]) => `<a href="./${file}"${file === current ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav>
+      <h1 class="docs-visual-gallery__title">${escapeHtml(title)}</h1>
+    </header>
+    ${body}
   </div>
   <aside class="docs-visual-gallery__inspector area-panel area-panel--md" aria-label="Customize gallery">
     <div class="area-panel__bar docs-visual-gallery__inspector-bar">
@@ -796,7 +849,8 @@ function galleryPage() {
   </aside>
 </main>
 <script>${DOCS_SCRIPT}</script>
-<script type="module" src="./structure-inspector.js"></script>
+<script src="./area-capture.js"></script>
+<script type="module" src="./pixel-preview.js"></script>
 <script type="module" src="./badge-demos.js"></script>
 <script type="module" src="./switch-demos.js"></script>
 <script type="module" src="./slider-demos.js"></script>
@@ -891,7 +945,7 @@ ${codeBlock(demos[spec.examples[0].demo].code)}
 ${aliasNote}
 ${table(
   ["Prop", "Type", "Default"],
-  spec.api.map(([name, type, dflt]) => [
+  (spec.api ?? []).map(([name, type, dflt]) => [
     `<span class="docs-mono">${escapeHtml(name)}</span>`,
     `<span class="docs-mono" style="color:var(--area-fg-accent)">${escapeHtml(type)}</span>`,
     `<span class="docs-mono" style="color:var(--area-fg-muted)">${escapeHtml(dflt)}</span>`,
@@ -918,6 +972,12 @@ ${codeBlock(demos[spec.examples[0].demo].html)}`;
     { id: "css", title: "Without React" },
   ];
 
+  // Docs-only families (for example the icon pilot) are not package exports: no install,
+  // import, API or plain-CSS sections.
+  if (spec.docsOnly) {
+    const docsToc = toc.filter(entry => !["installation", "usage", "api", "css"].includes(entry.id));
+    return page({ slug: spec.slug, title: spec.name, lede: spec.lede ?? lede, body: examples + practices, toc: docsToc });
+  }
   return page({ slug: spec.slug, title: spec.name, lede, body: install + examples + practices + api + cssNote, toc });
 }
 
@@ -1769,9 +1829,18 @@ cpSync(join(root, "assets/icons-filled.svg"), join(out, "icons-filled.svg"));
 cpSync(join(root, "public"), out, { recursive: true });
 
 const pages = [
-  ["index.html", indexPage()],
   ["axes.html", axesPage()],
-  ["gallery.html", galleryPage()],
+  // The documentation site is hidden for now: its entry points redirect to the gallery.
+  ["index.html", redirectPage("gallery-components.html")],
+  ["gallery.html", redirectPage("gallery-components.html")],
+  ["gallery-components.html", galleryPage()],
+  ["gallery-typeRamp.html", galleryShell({ current: "gallery-typeRamp.html", title: "Type ramp", body: `<div class="docs-gallery-foundation">${bodyOf(typographyPage)}</div>` })],
+  ["gallery-iconography.html", galleryShell({ current: "gallery-iconography.html", title: "Iconography", body: galleryPage({ families: ["icon-pilot"] }) + iconPixelSection() + `<div class="docs-gallery-foundation">${bodyOf(iconographyPage)}</div>` })],
+  ["gallery-color.html", galleryShell({ current: "gallery-color.html", title: "Color", body: `<div class="docs-gallery-foundation">${bodyOf(colorPage)}</div>` })],
+  ["gallery-scale.html", galleryShell({ current: "gallery-scale.html", title: "UI scale", body: `<div class="docs-gallery-foundation">${bodyOf(uiScalePage)}</div>` })],
+  ["gallery-radius.html", galleryShell({ current: "gallery-radius.html", title: "Radius", body: `<div class="docs-gallery-foundation">${bodyOf(radiusPage)}</div>` })],
+  ["gallery-surface.html", galleryShell({ current: "gallery-surface.html", title: "Surface", body: `<div class="docs-gallery-foundation">${bodyOf(surfacePage)}</div>` })],
+  ["gallery-motion.html", galleryShell({ current: "gallery-motion.html", title: "Motion", body: `<div class="docs-gallery-foundation">${bodyOf(motionPage)}</div>` })],
   ["color.html", colorPage()],
   ["ui-scale.html", uiScalePage()],
   ["iconography.html", iconographyPage()],

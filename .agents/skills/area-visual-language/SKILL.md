@@ -1,64 +1,80 @@
 ---
 name: area-visual-language
-description: Apply Area’s product visual language when building or materially refining components in this repository. Pair real source structure with Area type, paint, shape, icons and optical alignment, using ChatGPT, Notion, Cursor and Figma as product direction.
+description: Visual pass for Area components. Use after a component's structure is built from measured evidence, and whenever reviewing whether a component looks polished, balanced and consistent. Compares Area side by side with ChatGPT, Notion and Figma references and with peer Area components, then routes fixes through the spec.
 ---
 
 # Area visual language
 
-Use after identifying the component’s job and structural source. Follow the canonical
-workflow in `docs/COMPONENT_ADAPTATION.md` from the repository root; this skill owns the
-visual decisions, not a duplicate build process. Read `docs/DESIGN_REFERENCES.md` for
-source choices, only relevant sections of `docs/DESIGN_SYSTEM.md`, and `docs/CONTRAST.md`
-when painting states. The user’s current direction overrides these defaults.
+Run this after the structure is built (`area-component-build`, `docs/COMPONENT_ADAPTATION.md`).
+The measured structure is the starting point. This pass judges whether the rendered result
+looks right: polished, balanced, consistent, and at home in ChatGPT, Notion and Figma.
+The owner's feedback overrides it.
 
-Untitled UI is the owner’s preferred first reference for structure and visual quality.
-Use another source for concrete missing behavior or anatomy, while translating its paint
-back to Area. Show one component variant per gallery tile.
+## Character
 
-## Intended character
+Area should feel like it belongs in ChatGPT, Notion and Figma: content-first, precise,
+quiet, compact but readable. In practice:
 
-Area should feel comfortable beside ChatGPT, Notion, Cursor and Figma: content-first,
-precise, quiet, compact but readable. These are owner-selected design goals. Do not invent
-those products’ internal measurements, tokens or source availability. OpenAI Apps SDK UI
-is a public code candidate for ChatGPT apps; it does not establish all ChatGPT client UI.
+- neutral surfaces and ink carry most of the interface;
+- color is sparse and means something (accent for action/selection, tones for status);
+- the hierarchy is clear from weight, ink strength and fill, not from decoration;
+- edges are crisp, and radius is consistent within a family;
+- icons sit at the weight of the adjacent text;
+- spacing is even, and every inset looks intentional.
 
-Choose the relevant quality for the component: conversational action hierarchy for a
-composer, low-noise text operations for inline tools, dense organization for navigation,
-precision and units for inspector fields. Avoid combining unrelated brand treatments.
+Match the product that owns the context (see `docs/research/BASELINE.md`): Figma for
+inspector and editing controls, ChatGPT for conversation surfaces, Notion for content and
+navigation.
 
-## Make visual decisions explicit
+## Required comparisons
 
-- **Hierarchy:** identify the primary content, secondary information and actions. Establish
-  emphasis through Area roles and states. Decorative affordances should not compete with
-  labels; selected, focus, invalid and disabled must remain recognizable.
-- **Density:** retain credible source dimensions unless there is a documented reason to
-  adapt them. Compare at the same Area UI scale. Do not simulate compact density by
-  shrinking glyphs or substituting unreadably small text.
-- **Type:** choose an existing text role. Align labels using the shared font reference and
-  line height; use first-line icon alignment for multiline content. Preserve readable
-  label/value/description hierarchy without adding ad hoc font sizes.
-- **Paint:** begin with neutral semantic surfaces and ink. Use accent for selection/action
-  and semantic tones for meaning. Keep foreground stable across hover. A pale fill can
-  pair with strong ink; do not wash every layer out with opacity. Follow CONTRAST.md.
-- **Edges:** choose radius by shape role. Pills/circles remain full; controls use their role;
-  nested surfaces relate through their inset. Use borders for boundaries and restrained
-  shadows for elevation. Avoid stacking fill, border and shadow without a distinct job.
-- **Icons:** use the actual Fluent cut matching the slot. Inspect viewBox and rendered size.
-  Keep a square viewport, a separate hit target where needed, and no per-glyph nudges.
-- **Balance:** inspect outer edges, icon/text relationship, trailing action and multiline
-  baseline. If one child needs independent geometry, give its slot ownership as described
-  in the workflow. Fix the responsible layer instead of accumulating offsets.
+Do all three for every variant touched. Use `zoom` screenshots at the same browser zoom
+for both sides, and repeat in light and dark.
 
-## Practical review
+1. **Against each target reference.** Put the Area tile beside the product or design
+   system capture of the same variant and state. Compare text optical size and weight,
+   icon stroke weight against text, fill strength, edge definition, shadow softness,
+   and how the space distributes around the content.
+2. **Against peers.** Line up the component with the Area peers named in its spec (for
+   example Indicator with Badge, Avatar and Tabs counts). The same role should look the
+   same: same text role at the same size, same radius role, same stroke and fill
+   strength, same icon-to-text relationship.
+3. **Against the baseline.** Check the component's values against the baseline rows for
+   the elements it resembles.
 
-Compare the default and the variants relevant to this task beside accepted Area peers.
-Use gallery **Inspect structure** to select shell/text/icon/action layers and measure
-resolved padding, margins, gap and dimensions. Inspect the normal visual result with the
-mode off. Check light/dark and the size/state or narrow-layout case most likely to fail.
-Do not impose an exhaustive audit for a small change.
+## What to judge
 
-Document only consequential adaptations and unresolved observations in the component
-record. Distinguish source facts, DOM measurements, screenshot observations and Area
-choices. Owner feedback updates that record first. Promote repeated useful lessons here;
-remove obsolete instructions instead of adding contradictory rules. Completion remains
-owner-confirmed in the registry.
+- **Balance:** equal-looking space on all sides of the content. Text is judged by
+  cap height and baseline, icons by their square viewport. Leading and trailing slots
+  are judged separately.
+- **Hierarchy:** primary content reads first, then secondary information, then actions.
+  Selected, focus, invalid and disabled stay recognizable, and foreground stays fixed on
+  hover.
+- **Weight:** text weight, icon stroke and border weight feel like one family. A heavy
+  filled glyph beside light text, or a border darker than the text it frames, is a
+  defect. Measure it: text stem (rasterised), icon stroke, cutout or ring width. Cursor's
+  published rule is a useful benchmark: 1.25px strokes for 16px icons beside 16px text,
+  1.5px for 24px icons, at least 3px between overlapping shapes.
+- **Placement in context:** judge attachments on the real owners (button, icon button,
+  tab, avatar). An offset that works on one owner can cover the label on another.
+- **Paint:** a pale fill can pair with strong ink; avoid washing every layer out with
+  opacity. Don't stack fill, border and shadow unless each has a distinct job. Follow
+  `docs/CONTRAST.md`.
+- **Edges and shape:** radius follows the shape role. Nested radius is
+  `max(0, outer − inset)`. Pills and circles stay full.
+- **Density:** compare at the same UI scale. Don't simulate density by shrinking glyphs
+  or using unreadably small text.
+
+## When something looks wrong
+
+1. Find the responsible layer with a fresh capture (`areaCapture.capture` in the gallery).
+2. Check its value against the references in the spec. If the measured basis itself
+   looks wrong in Area's context, say so and choose another basis. Don't nudge.
+3. Record the observation and the change in the spec's decision table and visual-pass
+   notes, then change the code, then re-capture.
+4. Fix geometry in the structure (slot ownership, insets). Never hide it with paint or
+   per-glyph offsets.
+
+Write down what you compared, what you saw, and what changed. Screenshot impressions are
+observations, not measurements. Promote a lesson that applies beyond one component into
+this skill, and remove any instruction it replaces.

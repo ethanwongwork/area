@@ -84,16 +84,23 @@ checked-in generated sprites, `src/icons.tsx`, `scripts/icons.generated.mjs` and
 node apps/docs/scripts/gen-icons.mjs
 ```
 
-Do not commit `dist/`, `.cache/`, `node_modules/`, test output or logs. Old benchmark
-source checkouts remain ignored even inside the archive. Optional archived lookup:
+Do not commit `dist/`, `.cache/`, `node_modules/`, test output or logs. Source checkouts
+cloned for research go in the ignored `.cache/sources/<system>@<sha>/`.
+
+## Research captures
+
+`apps/docs/public/area-capture.js` measures an element's layer tree (geometry, insets from
+parent and shell, computed styles, text cap/baseline, SVG viewBox and ink, pseudo-elements
+and readable declared rules). The gallery loads it; on other pages, run its full text in
+the browser. Captures are saved under `docs/research/captures/<slug>/` and compared with:
 
 ```sh
-npm run reference:lookup -- slider
-npm run reference:lookup -- badge --full --sys flu
+npm run capture:compare -- docs/research/captures/indicator/*.json
 ```
 
-No network fetch is needed for lookup. Refresh commands and historical source pins are
-in [the archive guide](../archive/README.md); they are not part of normal development.
+The workflow is in [Building a component](COMPONENT_ADAPTATION.md#capture-protocol).
+Read each capture before committing it: redaction is on by default off localhost, but
+committed captures must not contain personal content.
 
 ## Package contract and remaining release work
 
@@ -115,8 +122,9 @@ accessibility certification or permission to publish a package.
 
 ## Keeping documentation small
 
-The active docs are five guides linked from the root README. Keep current contracts here,
-exact APIs in source/live pages, and historical evidence in `archive/`. Do not create a
-new plan/report/skill for routine component work. Update `.Codex/HANDOFF.md` after
+The active docs are the guides linked from the root README. Keep current contracts in
+them, exact APIs in source/live pages, each component's evidence and decisions in its
+spec, and history in Git and the journal. Do not create a new plan, report or skill for
+routine component work. Update `.Codex/HANDOFF.md` after
 substantial work; append concise decisions to the journal when useful. Neither a report
 nor a session summary can overrule the completion registry or the owner's latest request.

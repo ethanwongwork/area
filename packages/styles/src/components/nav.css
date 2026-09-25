@@ -85,7 +85,7 @@
     color: var(--area-fg-muted);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--area-weight-regular);
   }
 
   .area-nav__item {
@@ -146,7 +146,7 @@
 
   .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"]) {
     background-color: transparent;
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--area-weight-regular);
   }
 
   .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"])::before {

@@ -1,3 +1,0 @@
-### MUI Material @ 69960c1  packages/mui-material/src/Grow/Grow.js
-L21 const styles = {
-L28 const hiddenStyles = { opacity: 0, transform: getScale(0.75), visibility: 'hidden' };

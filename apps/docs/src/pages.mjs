@@ -8,16 +8,27 @@
 
 export const COMPONENT_PAGES = [
   {
-    slug: "indicator", name: "Indicator", manifest: "indicator", imports: "Indicator, IndicatorAnchor",
-    api: [["status / size / outOfOffice", "availability variant; native xs10 / sm12 / md16 / lg20; optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "accent | neutral | info | success | warning | danger", "danger"], ["processing / withBorder / disabled", "pulse / surface cutout / hide indicator", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["compact", "inset attachment into rectangular owners", "true"]],
+    slug: "icon-pilot", name: "Icon pilot", docsOnly: true,
+    lede: "Twelve Area-drawn icons on a 16px grid, stroked with round caps and joins, compared at three stroke weights beside 14/20 regular text and against the Fluent icons in use today. Construction rules and measurements: docs/specs/icons.md.",
     examples: [
-      {id: "presence", title: "Presence", demo: "GalleryBadgePresenceAvailable", note: "Presence is the status variant of Indicator. Native Fluent Regular glyphs retain size-specific geometry. Presence remains a compatibility export."},
-      {id: "activity", title: "Activity dots", demo: "GalleryBadgeActivity", note: "Mantine’s 10px dot and pulse structure, translated to Area semantic colors. Processing respects reduced motion."},
+      {id: "weight-1", title: "Weight 1px", demo: "GalleryIconPilotWeight100", note: "Figma's and Fluent's 16px weight."},
+      {id: "weight-1125", title: "Weight 1.125px", demo: "GalleryIconPilotWeight1125", note: "Chosen weight (owner, 2026-09-25): --area-weight-icon. Slightly lighter than 14px/400 text (1.2px stems)."},
+      {id: "weight-125", title: "Weight 1.25px", demo: "GalleryIconPilotWeight125", note: "Cursor's published 16px weight; Notion measures 1.27px."},
+      {id: "reference-fluent", title: "Fluent reference", demo: "GalleryIconPilotFluent", note: "The Fluent 16px Regular icons Area uses today (1px, filled outlines)."},
+    ],
+  },
+  {
+    slug: "indicator", name: "Indicator", manifest: "indicator", imports: "Indicator, IndicatorAnchor",
+    api: [["status / size / outOfOffice", "availability variant; xs10 / sm12 / md16 / lg20; optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "accent | neutral | info | success | warning | danger", "danger"], ["processing / withBorder / disabled", "pulse / surface cutout / hide indicator", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["compact", "inset rectangular count and presence attachments by 4px", "false"]],
+    examples: [
+      {id: "presence", title: "Presence", demo: "GalleryBadgePresenceAvailable", note: "Presence is the status variant of Indicator. Area-drawn glyphs: the ring and mark share the 1.125px icon line weight at every size, following Fluent’s status mapping. Presence remains a compatibility export."},
+      {id: "activity", title: "Activity dots", demo: "GalleryBadgeActivity", note: "A 6px dot, matching the Badge dot and Untitled UI; Figma’s unread dot measures 5px. The pulse keeps Mantine’s structure and respects reduced motion."},
 
       {id: "zero", title: "Zero visibility", demo: "BadgeIndicatorZero"},
       {id: "counts", title: "Counts", demo: "GalleryBadgeCount3"},
       { id: "anchor-button", title: "Anchor Button", demo: "BadgeAnchorButton", note: "Attach unread information to an accessibly named control." },
-      { id: "anchor-avatar", title: "Anchor Avatar", demo: "BadgeAnchorAvatar", note: "Attach availability to a circular identity image." },
+      { id: "anchor-icon-button", title: "Anchor Icon button", demo: "BadgeAnchorIconButton", note: "An unread dot centres on the icon’s top-end corner, overlapping the glyph as in Figma’s notifications button." },
+      { id: "anchor-avatar", title: "Anchor Avatar", demo: "BadgeAnchorAvatar", note: "Circular owners hold the indicator in their corner, 2px outside the bounding box, with a 1px surface cutout." },
       { id: "anchor-tab", title: "Anchor Tab", demo: "BadgeAnchorTab", note: "Attach new activity to its owning tab." },
       { id: "anchor-placements", title: "Top start", demo: "GalleryBadgeAnchorTopstart", note: "Place metadata at any logical corner with an offset." },
       { id: "anchor-visibility", title: "Anchor Visibility", demo: "BadgeAnchorVisibility", note: "Toggle an attachment without moving its owner." },

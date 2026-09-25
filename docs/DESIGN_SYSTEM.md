@@ -34,10 +34,14 @@ and the resolver. Preserve the palette's light-end and neutral lightness anchors
 gamut constraints. Chromatic dark-end lightness adjustments must remain explicit, bounded
 tables so they cannot silently move surface grounds or the white-label contrast wall.
 
-Component CSS consumes semantic colors, not numbered palette rungs. Tone means meaning;
+Component CSS consumes semantic colors, not numbered palette rungs. During the visual-first
+phase, a measured color with no matching role may be a `light-dark()` spec literal. Tone means meaning;
 treatment means emphasis. Reuse `neutral`, `accent`, `info`, `success`, `warning`,
 `caution`, `danger` and `discovery` where applicable. Additional roles require a clear job.
-Foreground does not change on hover. Text weight is independent of type role: 400 or 500.
+Foreground does not change on hover. Text weight is independent of type role: 400 for text
+and every title or heading; 500 only for labels on fills (buttons, segmented options,
+badges, counts, avatar initials). Text uses two foreground levels, default and muted;
+disabled is for disabled and placeholder text only.
 
 Use `border-decorative` for container seams and dividers only. Required control/state
 edges use `stroke-width` independently of Surface. Most controls use the shared focus
@@ -49,7 +53,9 @@ See [Contrast](CONTRAST.md) before changing color, focus or state painting.
 
 CSS lives in `packages/styles/src/`, under `@layer area.components`. Follow `button.css`:
 variants set local slots and the base rule consumes them. Size rules select tier tokens.
-Every dimension traces to a token except documented hairlines or mask geometry.
+Every dimension traces to a token, a documented hairline or mask geometry, or, during
+the current visual-first phase, a measured spec value in a private property marked
+`/* spec */` (see [Building a component](COMPONENT_ADAPTATION.md#5-build)).
 
 Update `manifest.ts` with CSS selectors, elements, modifiers and states. The parity check
 runs in both directions. React helpers derive variant values from the manifest; wrappers
@@ -79,7 +85,9 @@ checks prevent drift; they do not replace implementation or behavior tests.
 
 A control tier describes its outer row/control height where that family uses the control
 ramp. Shared controls use the same tier's icon, text and gap tokens. Default medium is
-32px with 14/20px type; compact medium is 28px with 13/18px type. Read the current ramps
+32px with 14/20px type; compact medium is 28px with 13/18px type. The UI type ramp is six
+sizes with one leading each on the 4px grid: 12/16, 14/20, 16/24, and titles 20/28, 24/32,
+32/40 (see [the type spec](specs/typography.md)). Read the current ramps
 in `axes/density.ts` rather than copying tables into each component.
 
 Public component size families default to `md`. Expose `sm` when a component has a real
@@ -126,7 +134,9 @@ full-width is explicit rather than an accidental consequence of the docs grid.
 
 ## Icons and technical labels
 
-Use Fluent's size-specific cuts and the vendored Area marks. Generate with
+Use Fluent's size-specific cuts and the vendored Area marks. Area-drawn icons (the pilot
+set and presence status glyphs) are stroked at `--area-weight-icon`, 1.125px for Geist; see
+[the icon spec](specs/icons.md). Generate with
 `node apps/docs/scripts/gen-icons.mjs`; never hand-edit generated assets or redraw a
 replacement. Preserve original SVG markup, stroke attributes and both regular/filled sets.
 Icons use the 12/16/24px ramp; a status dot and a keyboard glyph have different roles.

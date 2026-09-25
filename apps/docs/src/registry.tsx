@@ -16,9 +16,10 @@ import * as theme from "./demos/theme.tsx";
 import * as nav from "./demos/nav.tsx";
 import * as gallery from "./demos/gallery.tsx";
 import * as cards from "./demos/card.tsx";
+import * as icons from "./demos/icons.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
-export const DEMOS = { ...BADGE_GALLERY_DEMOS, ...badgeDemos, ...switches, ...button, ...form, ...display, ...nav, ...theme, ...gallery, ...cards } as Record<string, () => unknown>;
+export const DEMOS = { ...BADGE_GALLERY_DEMOS, ...badgeDemos, ...switches, ...button, ...form, ...display, ...nav, ...theme, ...gallery, ...cards, ...icons } as Record<string, () => unknown>;
 
 export const SOURCES = {
   card: "src/demos/card.tsx",
@@ -30,4 +31,5 @@ export const SOURCES = {
   display: "src/demos/display.tsx",
   nav: "src/demos/nav.tsx",
   gallery: "src/demos/gallery.tsx",
+  icons: "src/demos/icons.tsx",
 };

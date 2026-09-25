@@ -69,7 +69,9 @@ export function densityTokens(tiers: Record<Tier, TierSpec>) {
  */
 export const DEFAULT_TIERS: Record<Tier, TierSpec> = {
   xs: { height: 24, gutter: 8, icon: 12, gap: 4, size: 12, leading: 16 },
-  sm: { height: 28, gutter: 8, icon: 16, gap: 4, size: 13, leading: 18 },
+  // Small controls use the 12/16 caption pairing, so default UI text is only 12, 14 and 16
+  // (docs/specs/typography.md, owner-approved 2026-09-25).
+  sm: { height: 28, gutter: 8, icon: 16, gap: 4, size: 12, leading: 16 },
   md: { height: 32, gutter: 12, icon: 16, gap: 8, size: 14, leading: 20 },
   lg: { height: 40, gutter: 12, icon: 16, gap: 8, size: 14, leading: 20 },
   xl: { height: 48, gutter: 16, icon: 24, gap: 8, size: 16, leading: 24 },

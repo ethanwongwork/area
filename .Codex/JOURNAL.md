@@ -237,3 +237,37 @@ ColorPicker/split ColorField, alignment controls and ButtonGroup/Toolbar/Compose
 refinements. Source notices preserved. Build/typecheck,87 React,14 contracts,consumer,
 19,491 token tests and370 contrast assertions pass; browser light/dark/geometry/interaction
 checks recorded in HANDOFF. No new owner completion; cross-engine/AT unverified.
+
+## 2026-09-24 — Evidence-based component process
+
+Owner found component quality not visually polished, balanced or consistent, and research
+inconsistent. Replaced the adaptation guide with a measured process: capture real
+components (target products ChatGPT/Notion/Figma via the owner's Chrome, design systems
+rendered and pinned source) with one script, generate comparison tables, record decisions
+per component in `docs/specs/`, build with `/* spec */` literals (visual-first phase), then
+a required side-by-side visual pass. Captures are checksummed so copied files are exact.
+Removed the retired `archive/` tree; journal links into `archive/` now refer to Git history
+before this change. Indicator pilot: design-system captures done; product captures pending.
+
+## 2026-09-25 — Indicator pilot completed through the capture workflow
+
+Captured ChatGPT, Notion and Figma through the owner's logged-in Edge, alongside Untitled UI and
+Fluent. Only Figma shows an indicator (a 5px unread dot inside its bell icon). Rebuilt Indicator
+from the evidence: 6px dot (matches Badge's dot), 16px count with 10px text, 1.5px surface ring,
+indicators contained inside circular owners and inside icon buttons. Added a gallery tile for the
+icon-button case. Remains In review pending owner acceptance.
+Owner review 2026-09-25: placements adjusted (corner-centred counts, icon-corner dots, tab
+counts after the label, avatar status 2px outward), 1px cutout. Measured stroke weights:
+Geist 14px stems 1.2–1.5px, UI icons 1px, Fluent status glyphs 2px at 16px. Added Cursor's
+published icon/type rules as a reference and weight measurement to the visual pass.
+2026-09-25: removed the gallery's Inspect structure control (capture script stays loaded).
+Measured icon strokes (Fluent 1px, ChatGPT 1.33@20, Notion 1.27@16, Figma 1px, Cursor
+1.25@16) and product type ramps; proposals in docs/specs/icons.md and typography.md.
+2026-09-25: applied the lighter type ramp (six UI sizes on a 4px leading grid, regular-weight
+titles, 500 only on fills) and built the 12-icon stroked pilot with lint and gallery section.
+2026-09-25: icon weight set to 1.125px as a typography token (--area-weight-icon); presence
+status glyphs redrawn in the pilot construction (CSS-border ring, non-scaling stroked marks),
+replacing the generated Fluent presence paths.
+2026-09-25: split the gallery into eight pages with a nav and hid the documentation site
+(index and gallery.html redirect). Added a 1× / 2× pixel check for the icon pilot; fixed the
+More dots (whole-pixel centres), eye pupil and gear after it.

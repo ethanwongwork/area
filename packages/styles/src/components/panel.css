@@ -81,7 +81,7 @@
   .area-panel__title {
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--area-weight-regular);
   }
 
   .area-panel__body {
@@ -135,7 +135,7 @@
     padding-inline: var(--_inset);
     font-size: var(--area-control-sm-text);
     line-height: var(--area-control-sm-leading);
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--area-weight-regular);
   }
 
   /* A row whose control needs the whole width: the label sits above it, not beside it. */
