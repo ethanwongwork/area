@@ -63,6 +63,25 @@ const MAP = {
   FluentEyeIcon: "eye_16_regular",
   AlignLeftIcon: "align_left_16_regular",
   PresenceAvailableIcon: "presence_available_16_regular",
+  // Fluent filled references for the pilot's filled variants.
+  FluentBellFilledIcon: "alert_16_filled",
+  FluentInfoFilledIcon: "info_16_filled",
+  FluentSettingsFilledIcon: "settings_16_filled",
+  FluentEyeFilledIcon: "eye_16_filled",
+  FluentAlignLeftFilledIcon: "align_left_16_filled",
+  FluentCheckCircleFilledIcon: "checkmark_circle_16_filled",
+  FluentCopyIcon: "copy_16_regular",
+  FluentDocumentFilledIcon: "document_16_filled",
+  FluentFolderFilledIcon: "folder_16_filled",
+  FluentCopyFilledIcon: "copy_16_filled",
+  FluentTrashFilledIcon: "delete_16_filled",
+  FluentWarningFilledIcon: "warning_16_filled",
+  FluentResetIcon: "arrow_counterclockwise_16_regular",
+  FluentChevronLeftIcon: "chevron_left_16_regular",
+  FluentChevronRightIcon: "chevron_right_16_regular",
+  FluentChevronUpIcon: "chevron_up_16_regular",
+  FluentArrowLeftIcon: "arrow_left_16_regular",
+  FluentArrowDownIcon: "arrow_down_16_regular",
 };
 // Inline SVG for the documentation's own chrome: toolbars, and the sidebar's section
 // icons. Keyed by the page slug where it names one, so a new foundation page gets an icon

@@ -3,6 +3,7 @@
 import { forwardRef } from "react";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode, Ref, RefAttributes } from "react";
 import { badgeVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { Glyph } from "./Glyph.tsx";
 
 type Options = VariantProps<typeof MANIFESTS.badge> & {
   icon?: ReactNode; trailingIcon?: ReactNode;
@@ -37,7 +38,7 @@ export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>
       {icon && !dotOnly ? <span className="area-badge__leading-icon" aria-hidden="true">{icon}</span> : null}
       {!iconOnly && !dotOnly && children != null ? <span className="area-badge__label">{children}</span> : null}
       {trailingIcon && !dotOnly && !iconOnly ? <span className="area-badge__trailing-icon" aria-hidden="true">{trailingIcon}</span> : null}
-      {onDismiss ? <button type="button" className="area-badge__dismiss" aria-label={dismissLabel} onClick={onDismiss}><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="m2.09 2.22.06-.07a.5.5 0 0 1 .63-.06l.07.06L6 5.29l3.15-3.14a.5.5 0 1 1 .7.7L6.71 6l3.14 3.15c.18.17.2.44.06.63l-.06.07a.5.5 0 0 1-.63.06l-.07-.06L6 6.71 2.85 9.85a.5.5 0 0 1-.7-.7L5.29 6 2.15 2.85a.5.5 0 0 1-.06-.63l.06-.07z" /></svg></button> : null}
+      {onDismiss ? <button type="button" className="area-badge__dismiss" aria-label={dismissLabel} onClick={onDismiss}><Glyph name="dismiss" /></button> : null}
     </>,
   };
   return as === "a" ? <a {...props as AnchorHTMLAttributes<HTMLAnchorElement>} ref={ref as Ref<HTMLAnchorElement>} /> : <span {...props as HTMLAttributes<HTMLSpanElement>} ref={ref as Ref<HTMLSpanElement>} />;

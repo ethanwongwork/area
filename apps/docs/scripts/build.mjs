@@ -9,7 +9,7 @@ import { buildLab } from "./lab.mjs";
  * Static HTML. Previews are the real React components rendered with react-dom/server, and
  * each snippet is the source of the very demo beside it -- so the two cannot disagree.
  */
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderDemos } from "./render.mjs";
@@ -280,7 +280,7 @@ ${slug === "code-block" ? '<script type="module" src="./code-block-demos.js"></s
 }
 
 /** The three tile sizes the gallery grid places: whole cells of one square unit. */
-const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2", "2x3"]);
+const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2", "2x3", "2x4", "2x5"]);
 
 /* One tile per public component family. Compound pieces appear inside their parent. */
 function galleryPage({ families = null } = {}) {
@@ -761,7 +761,7 @@ function galleryPage({ families = null } = {}) {
       if (!demo) throw new Error(`Gallery specimen missing: ${example.demo}`);
       const id = `${component.slug}-${example.id}`;
       const span = example.span ?? "1x1";
-      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 2x1, 2x2 or 2x3.`);
+      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 2x1, 2x2, 2x3, 2x4 or 2x5.`);
       return `<article class="docs-visual-gallery__tile" data-span="${span}" data-audit="${status}" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
         <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${escapeHtml(specimenName(example, component.slug))}</h3>
         <div class="docs-visual-gallery__tile-preview">${demoMarkup(example.demo, demo.html)}</div>
@@ -784,17 +784,47 @@ function redirectPage(target) {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=./${target}"><title>area</title></head><body><a href="./${target}">Gallery</a></body></html>`;
 }
 
-/** 1× and 2× rasterisation of the pilot icons, drawn by the browser into canvases. */
-function iconPixelSection() {
-  const demo = demos.GalleryIconPilotPixels;
-  if (!demo) throw new Error("Gallery specimen missing: GalleryIconPilotPixels");
-  return `<details open class="docs-visual-gallery__section" id="gallery-section-icon-pixels">
-      <summary class="docs-visual-gallery__section-title">Pixel check</summary>
+/** Icon review sheets: one wide tile per sheet (side by side, optical balance, 1×/2× raster). */
+function iconReviewSection(id, title, tileTitle, demoName, span) {
+  const demo = demos[demoName];
+  if (!demo) throw new Error(`Gallery specimen missing: ${demoName}`);
+  return `<details open class="docs-visual-gallery__section" id="gallery-section-${id}">
+      <summary class="docs-visual-gallery__section-title">${title}</summary>
       <div class="docs-visual-gallery__grid">
-        <article class="docs-visual-gallery__tile" data-span="2x3" id="gallery-icon-pixels" aria-labelledby="gallery-title-icon-pixels">
-          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-pixels">raster-1x-2x</h3>
+        <article class="docs-visual-gallery__tile" data-span="${span}" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
+          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${tileTitle}</h3>
           <div class="docs-visual-gallery__tile-preview">${demo.html}</div>
         </article>
+      </div>
+    </details>`;
+}
+/** Exploration: icon candidates under review (assets/area-icons-pilot/explore), shown only
+ *  while candidates exist. */
+function iconExploreSection() {
+  const dir = join(root, "assets/area-icons-pilot/explore");
+  if (!existsSync(dir) || !readdirSync(dir).some(file => file.endsWith(".svg"))) return "";
+  return iconReviewSection("icon-explore", "Exploration", "candidates", "GalleryIconPilotExplore", "2x5");
+}
+const iconReviewSections = () => [
+  iconReviewSection("icon-compare", "Side by side", "fluent-area-keylines", "GalleryIconPilotCompare", "2x5"),
+  iconReviewSection("icon-balance", "Optical balance", "set-16-32", "GalleryIconPilotBalance", "2x1"),
+  iconReviewSection("icon-filled", "Filled", "outline-filled-fluent", "GalleryIconPilotFilled", "2x4"),
+  iconReviewSection("icon-sizes", "Sizes", "scaled-vs-constant-line", "GalleryIconPilotSizes", "2x2"),
+  iconReviewSection("icon-sizes-raster", "Sizes at 12px", "raster-12-1x-2x", "GalleryIconPilotSizesRaster", "2x3"),
+  iconReviewSection("icon-pixels", "Pixel check", "raster-1x-2x", "GalleryIconPilotPixels", "2x5"),
+].join("");
+
+/** Icon review page: one tile per pilot icon (demos named GalleryIconReview<Name>). */
+function iconReviewPage() {
+  const names = Object.keys(demos).filter(name => name.startsWith("GalleryIconReview")).sort();
+  const slug = name => name.replace("GalleryIconReview", "").replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+  return `<details open class="docs-visual-gallery__section" id="gallery-section-icon-review">
+      <summary class="docs-visual-gallery__section-title">Icons, one by one</summary>
+      <div class="docs-visual-gallery__grid">${names.map(name => `
+        <article class="docs-visual-gallery__tile" data-span="2x3" id="gallery-icon-review-${slug(name)}" aria-labelledby="gallery-title-icon-review-${slug(name)}">
+          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-review-${slug(name)}">${slug(name)}</h3>
+          <div class="docs-visual-gallery__tile-preview">${demos[name].html}</div>
+        </article>`).join("")}
       </div>
     </details>`;
 }
@@ -804,6 +834,7 @@ const GALLERY_PAGES = [
   ["gallery-components.html", "Components"],
   ["gallery-typeRamp.html", "Type ramp"],
   ["gallery-iconography.html", "Iconography"],
+  ["gallery-icons.html", "Icons"],
   ["gallery-color.html", "Color"],
   ["gallery-scale.html", "UI scale"],
   ["gallery-radius.html", "Radius"],
@@ -1835,7 +1866,8 @@ const pages = [
   ["gallery.html", redirectPage("gallery-components.html")],
   ["gallery-components.html", galleryPage()],
   ["gallery-typeRamp.html", galleryShell({ current: "gallery-typeRamp.html", title: "Type ramp", body: `<div class="docs-gallery-foundation">${bodyOf(typographyPage)}</div>` })],
-  ["gallery-iconography.html", galleryShell({ current: "gallery-iconography.html", title: "Iconography", body: galleryPage({ families: ["icon-pilot"] }) + iconPixelSection() + `<div class="docs-gallery-foundation">${bodyOf(iconographyPage)}</div>` })],
+  ["gallery-icons.html", galleryShell({ current: "gallery-icons.html", title: "Icons", body: iconExploreSection() + iconReviewPage() })],
+  ["gallery-iconography.html", galleryShell({ current: "gallery-iconography.html", title: "Iconography", body: galleryPage({ families: ["icon-pilot"] }) + iconReviewSections() + `<div class="docs-gallery-foundation">${bodyOf(iconographyPage)}</div>` })],
   ["gallery-color.html", galleryShell({ current: "gallery-color.html", title: "Color", body: `<div class="docs-gallery-foundation">${bodyOf(colorPage)}</div>` })],
   ["gallery-scale.html", galleryShell({ current: "gallery-scale.html", title: "UI scale", body: `<div class="docs-gallery-foundation">${bodyOf(uiScalePage)}</div>` })],
   ["gallery-radius.html", galleryShell({ current: "gallery-radius.html", title: "Radius", body: `<div class="docs-gallery-foundation">${bodyOf(radiusPage)}</div>` })],

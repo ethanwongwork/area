@@ -4,7 +4,7 @@ export const statusMarks = {
   "available": [
     {
       "tag": "path",
-      "d": "M4.5 8.25L7 10.75L11.5 6.25",
+      "d": "M5 8L7 10L11 6",
       "fill": "none",
       "stroked": true
     }
@@ -20,7 +20,7 @@ export const statusMarks = {
   "blocked": [
     {
       "tag": "path",
-      "d": "M4.75 11.25L11.25 4.75",
+      "d": "M4.75 4.75L11.25 11.25",
       "fill": "none",
       "stroked": true
     }
@@ -44,7 +44,7 @@ export const statusMarks = {
   "out-of-office": [
     {
       "tag": "path",
-      "d": "M11.5 8H4.5M7.5 5L4.5 8L7.5 11",
+      "d": "M12 8H4M7 5L4 8L7 11",
       "fill": "none",
       "stroked": true
     }
@@ -52,15 +52,15 @@ export const statusMarks = {
   "unknown": [
     {
       "tag": "path",
-      "d": "M6 6.25A2 2 0 1 1 9.1 7.9C8.45 8.35 8 8.85 8 9.75",
+      "d": "M6 6.25A2 2 0 1 1 9.1 7.9C8.45 8.35 8 8.85 8 9.5",
       "fill": "none",
       "stroked": true
     },
     {
       "tag": "circle",
       "cx": "8",
-      "cy": "12",
-      "r": "0.875",
+      "cy": "12.25",
+      "r": "0.75",
       "fill": "currentColor"
     }
   ]

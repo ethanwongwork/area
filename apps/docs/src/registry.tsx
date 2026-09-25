@@ -19,7 +19,8 @@ import * as cards from "./demos/card.tsx";
 import * as icons from "./demos/icons.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
-export const DEMOS = { ...BADGE_GALLERY_DEMOS, ...badgeDemos, ...switches, ...button, ...form, ...display, ...nav, ...theme, ...gallery, ...cards, ...icons } as Record<string, () => unknown>;
+const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
+export const DEMOS = { ...BADGE_GALLERY_DEMOS, ...badgeDemos, ...switches, ...button, ...form, ...display, ...nav, ...theme, ...gallery, ...cards, ...iconDemos, ...ICON_REVIEW_DEMOS } as Record<string, () => unknown>;
 
 export const SOURCES = {
   card: "src/demos/card.tsx",

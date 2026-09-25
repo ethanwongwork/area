@@ -2,6 +2,7 @@ import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import type { InputHTMLAttributes, PointerEvent as ReactPointerEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
 import { numberFieldVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { calculateNumber, clampNumber, steppedNumber } from "./number-math.ts";
+import { Glyph } from "./Glyph.tsx";
 
 export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size" | "value" | "defaultValue" | "onChange" | "step" | "min" | "max"> {
   value?: number | null;
@@ -163,8 +164,8 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     {name && <input type="hidden" name={name} value={mixed || numeric == null ? "" : String(numeric)} disabled={disabled} />}
     {unit && <span className="area-number-field__unit" aria-hidden="true">{unit}</span>}
     {steppers && <span className="area-number-field__steppers">
-      <button type="button" className="area-number-field__step" aria-label={ariaLabelledBy ? undefined : `Increase ${ariaLabel ?? "value"}`} aria-labelledby={ariaLabelledBy ? `${inputId}-increase ${ariaLabelledBy}` : undefined} disabled={disabledState || max !== undefined && numeric !== null && numeric !== undefined && numeric >= max} onClick={() => stepBy(1)}><span id={`${inputId}-increase`} className="area-sr-only">Increase</span><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true" focusable="false"><path d="M2.15 7.35c.2.2.5.2.7 0L6 4.21l3.15 3.14a.5.5 0 1 0 .7-.7l-3.5-3.5a.5.5 0 0 0-.7 0l-3.5 3.5a.5.5 0 0 0 0 .7" /></svg></button>
-      <button type="button" className="area-number-field__step" aria-label={ariaLabelledBy ? undefined : `Decrease ${ariaLabel ?? "value"}`} aria-labelledby={ariaLabelledBy ? `${inputId}-decrease ${ariaLabelledBy}` : undefined} disabled={disabledState || min !== undefined && numeric !== null && numeric !== undefined && numeric <= min} onClick={() => stepBy(-1)}><span id={`${inputId}-decrease`} className="area-sr-only">Decrease</span><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true" focusable="false"><path d="M2.15 4.65c.2-.2.5-.2.7 0L6 7.79l3.15-3.14a.5.5 0 1 1 .7.7l-3.5 3.5a.5.5 0 0 1-.7 0l-3.5-3.5a.5.5 0 0 1 0-.7" /></svg></button>
+      <button type="button" className="area-number-field__step" aria-label={ariaLabelledBy ? undefined : `Increase ${ariaLabel ?? "value"}`} aria-labelledby={ariaLabelledBy ? `${inputId}-increase ${ariaLabelledBy}` : undefined} disabled={disabledState || max !== undefined && numeric !== null && numeric !== undefined && numeric >= max} onClick={() => stepBy(1)}><span id={`${inputId}-increase`} className="area-sr-only">Increase</span><Glyph name="chevron-down" rotate={180} /></button>
+      <button type="button" className="area-number-field__step" aria-label={ariaLabelledBy ? undefined : `Decrease ${ariaLabel ?? "value"}`} aria-labelledby={ariaLabelledBy ? `${inputId}-decrease ${ariaLabelledBy}` : undefined} disabled={disabledState || min !== undefined && numeric !== null && numeric !== undefined && numeric <= min} onClick={() => stepBy(-1)}><span id={`${inputId}-decrease`} className="area-sr-only">Decrease</span><Glyph name="chevron-down" /></button>
     </span>}
   </span>;
 });

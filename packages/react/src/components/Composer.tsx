@@ -1,6 +1,7 @@
 import { forwardRef, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ChangeEvent, HTMLAttributes, KeyboardEvent, ReactNode, TextareaHTMLAttributes } from "react";
 import { composerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { Glyph } from "./Glyph.tsx";
 
 export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "onSubmit" | "defaultValue"> {
   layout?: VariantProps<typeof MANIFESTS.composer>["layout"];
@@ -66,7 +67,7 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
       {layout === "inline" && <div className="area-composer__actions area-composer__actions--trailing">
         {mode}<span className="area-composer__extras">{trailingActions}</span>
         <button type="button" className="area-composer__submit" aria-label={submitLabel} disabled={disabled || busy || !text.trim()} onClick={submit}>
-          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M7.5 13.5a.5.5 0 0 0 1 0V3.8l3.63 4.03a.5.5 0 0 0 .74-.66l-4.5-5a.5.5 0 0 0-.74 0l-4.5 5a.5.5 0 0 0 .74.66L7.5 3.8z" /></svg>
+          <Glyph name="arrow-up" />
         </button>
       </div>}
     </div>
@@ -74,7 +75,7 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
       <div className="area-composer__actions area-composer__actions--leading">{leadingActions}{mode}</div>
       <div className="area-composer__actions area-composer__actions--trailing">{trailingActions}
         <button type="button" className="area-composer__submit" aria-label={submitLabel} disabled={disabled || busy || !text.trim()} onClick={submit}>
-          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M7.5 13.5a.5.5 0 0 0 1 0V3.8l3.63 4.03a.5.5 0 0 0 .74-.66l-4.5-5a.5.5 0 0 0-.74 0l-4.5 5a.5.5 0 0 0 .74.66L7.5 3.8z" /></svg>
+          <Glyph name="arrow-up" />
         </button>
       </div>
     </div>}
