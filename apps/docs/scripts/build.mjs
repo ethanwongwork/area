@@ -824,20 +824,30 @@ function iconReviewPage() {
   const { batches } = JSON.parse(readFileSync(join(root, "assets/area-icons-pilot/batches.json"), "utf8"));
   const pascal = name => name.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
   const derived = Object.keys(demos).filter(name => name.startsWith("GalleryIconReview"));
+  // Owner status in the component gallery's colours: approved = Complete, review = In
+  // review, revising = Unrefined.
+  const AUDIT = { approved: "complete", review: "review", revising: "unrefined" };
+  const LABEL = { approved: "Approved", review: "In review", revising: "Revising" };
   const tile = (name, status) => {
     const demo = demos[name];
     if (!demo) throw new Error(`Gallery specimen missing: ${name}`);
     const slug = name.replace("GalleryIconReview", "").replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
     return `
-        <article class="docs-visual-gallery__tile" data-span="1x2" id="gallery-icon-review-${slug}" aria-labelledby="gallery-title-icon-review-${slug}">
-          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-review-${slug}">${slug} · ${status}</h3>
+        <article class="docs-visual-gallery__tile" data-span="1x2" data-audit="${AUDIT[status]}" id="gallery-icon-review-${slug}" aria-labelledby="gallery-title-icon-review-${slug}">
+          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-review-${slug}">${slug} <span class="docs-audit-label" data-audit="${AUDIT[status]}">${LABEL[status]}</span></h3>
           <div class="docs-visual-gallery__tile-preview">${demo.html}</div>
         </article>`;
   };
-  return batches.map(batch => `<details open class="docs-visual-gallery__section" id="gallery-section-icon-${batch.id}">
-      <summary class="docs-visual-gallery__section-title">${batch.title}</summary>
+  const counts = icons => Object.entries(Object.values(icons).reduce((n, status) => ({ ...n, [status]: (n[status] ?? 0) + 1 }), {}))
+    .map(([status, n]) => `<span class="docs-audit-label" data-audit="${AUDIT[status]}">${n} ${LABEL[status].toLowerCase()}</span>`).join(" ");
+  return batches.map((batch, index) => `<details open class="docs-visual-gallery__section" id="gallery-section-icon-${batch.id}">
+      <summary class="docs-visual-gallery__section-title">${batch.title} ${counts(batch.icons)}</summary>
       <p class="docs-gallery-note">${batch.note}</p>
-      <div class="docs-visual-gallery__grid">${Object.entries(batch.icons).map(([icon, status]) => {
+      <div class="docs-visual-gallery__grid">
+        <article class="docs-visual-gallery__tile" data-span="row" id="gallery-icon-set-${batch.id}" aria-labelledby="gallery-title-icon-set-${batch.id}">
+          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-set-${batch.id}">whole set</h3>
+          <div class="docs-visual-gallery__tile-preview">${demos[`GalleryIconBatchSet${index + 1}`].html}</div>
+        </article>${Object.entries(batch.icons).map(([icon, status]) => {
         const base = `GalleryIconReview${pascal(icon)}`;
         // A derived icon's demo is listed after its base, found by the base's derivation.
         const variants = derived.filter(name => name !== base && DERIVED_FROM[name] === icon);

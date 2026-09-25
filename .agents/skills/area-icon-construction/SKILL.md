@@ -136,6 +136,13 @@ separately. Filled is about emphasis and layers, not flooding the shape:
   it came from;
 - heads sit on the diagonal lattice. Never shrink a head to fit; move or resize the body.
 
+**Soft transitions.** Where an object's outline changes direction as part of its form (a
+bell's flare, a cup's lip, a base meeting a side), draw a curve, and give the end a small
+radius (0.5px on the centre-line), not a 45° step or a hard corner. The bell's flare runs
+from 3px above the base as an S-curve and meets the base with an r 0.5 corner. A short
+diagonal step read as sharp and understated. Geometric corners (rects, arrowheads,
+chevrons) keep their rules.
+
 **Lines and angles.** Lines run at 0°, 45° and 90°. A radial exception such as the gear
 must be declared with `data-angles="radial"` (gear) or `"free"` (triangle). Round caps and joins. Corners are rounded
 after the geometry is set. Prefer closed shapes to open ones. Keep an object's natural
@@ -175,7 +182,10 @@ base.css sets the line from `--area-weight-icon` and the size curve.
    1.5–14.5), angles and attributes, and prints each icon's ink box and centre.
 4. **Review** each icon on `gallery-icons.html`. It is grouped by batch, from
    `apps/docs/assets/area-icons-pilot/batches.json`, which also records the owner's status
-   for each icon (approved, revising, review). Add each new batch there. A tile shows the
+   for each icon (approved, revising, review), shown in the component gallery's status
+   colours (Complete, In review, Unrefined). Add each new batch there. Each batch opens
+   with the whole set so far at 16px, 24px and filled, with the batch's icons underlined:
+   judge every new icon against the set it joins. A tile shows the
    icon at every size on the size curve, 3× plates against Fluent, and the icon inside a
    Button, Badge, Menu item and Nav item (the current item uses the filled variant) beside
    Fluent's. Directional families are one drawing with `data-rotations` (quarter turns,

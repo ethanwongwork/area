@@ -686,6 +686,7 @@ export const DOCS_CSS = `
   }
   /* Spans are whole cells. 1x1 is the default tile and needs no rule of its own. */
   .docs-visual-gallery__tile[data-span="1x2"] { grid-row: span 2; }
+  .docs-visual-gallery__tile[data-span="row"] { grid-column: 1 / -1; }
   .docs-visual-gallery__tile[data-span="2x1"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); }
   .docs-visual-gallery__tile[data-span="2x2"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 2; }
   .docs-visual-gallery__tile[data-span="2x3"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 3; }

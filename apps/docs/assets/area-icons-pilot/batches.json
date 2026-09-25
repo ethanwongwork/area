@@ -4,11 +4,11 @@
     {
       "id": "batch-1",
       "title": "Batch 1 · Core",
-      "note": "Approved by the owner on 2026-09-25. Open (filled gap kept by retracting free ends) and reset (Fluent-style corner arrowhead) are revised and back in review.",
+      "note": "Approved by the owner on 2026-09-25. Open (filled gap kept by retracting free ends) and reset (Fluent-style corner arrowhead) are revised and back in review. Bell's flare redrawn longer and softer (owner, same day), back in review.",
       "icons": {
         "add": "approved",
         "arrow-up": "approved",
-        "bell": "approved",
+        "bell": "review",
         "check": "approved",
         "chevron-down": "approved",
         "copy": "approved",

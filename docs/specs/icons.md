@@ -607,3 +607,19 @@ Roadmap renumbered to the owner's batches:
 - batch 4: Area's 29 inspector marks;
 - batch 5: new needs (lock, star, calendar, pencil, download, sparkle…);
 - then the demo-level Fluent swap.
+
+**Same day, owner:**
+- **Bell:** the flare should be more pronounced and less sharp, like Fluent's. Three
+  candidates were compared on the Exploration sheet: a soft S-curve, a longer flare, and a
+  Fluent-like straight steep flare (which breaks the angle rules). Applied the **longer
+  flare**: the sides curve out from y 8 to the base ends (C 12.5 9.5, 13.5 10.25, 13.5 11)
+  and meet the base with r 0.5 corners. The skill gains a "soft transitions" rule. The bell
+  is back in review.
+- **Review page:**
+  - status is shown in the component gallery's colours (approved = Complete, review = In
+    review, revising = Unrefined), with counts on each batch header;
+  - each batch opens with a full-width whole-set strip (`GalleryIconBatchSet<n>`): every
+    icon up to and including that batch at 16px, 24px and filled, with the batch's own
+    icons underlined;
+  - `PILOT_BATCHES` is generated from `batches.json`.
+- The generator's path parser now supports `Q` curves.

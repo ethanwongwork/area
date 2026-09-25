@@ -90,7 +90,7 @@ function parsePath(name, d) {
   const num = () => Number(tokens[i++]);
   while (i < tokens.length) {
     if (/[A-Za-z]/.test(tokens[i])) cmd = tokens[i++];
-    if (/[a-z]/.test(cmd) && cmd !== "z") { fail(name, `relative command "${cmd}" is not allowed; author absolute paths`); return { segments, points }; }
+    if (/[a-z]/.test(cmd) && cmd !== "z") { fail(name, `relative command "${cmd}" is not allowed; author absolute paths`); return { segments, points, samples }; }
     if (cmd === "M") { x = num(); y = num(); sx = x; sy = y; points.push([x, y]); cmd = "L"; }
     else if (cmd === "L") { const nx = num(), ny = num(); segments.push([x, y, nx, ny]); line(x, y, nx, ny); x = nx; y = ny; points.push([x, y]); }
     else if (cmd === "H") { const nx = num(); segments.push([x, y, nx, y]); line(x, y, nx, y); x = nx; points.push([x, y]); }
@@ -99,13 +99,17 @@ function parsePath(name, d) {
       const c = [num(), num(), num(), num(), num(), num()];
       for (let k = 0; k <= 64; k++) { const t = k / 64, u = 1 - t; samples.push([u * u * u * x + 3 * u * u * t * c[0] + 3 * u * t * t * c[2] + t * t * t * c[4], u * u * u * y + 3 * u * u * t * c[1] + 3 * u * t * t * c[3] + t * t * t * c[5]]); }
       points.push(...samples.slice(-65)); x = c[4]; y = c[5];
+    } else if (cmd === "Q") {
+      const c = [num(), num(), num(), num()];
+      for (let k = 0; k <= 32; k++) { const t = k / 32, u = 1 - t; samples.push([u * u * x + 2 * u * t * c[0] + t * t * c[2], u * u * y + 2 * u * t * c[1] + t * t * c[3]]); }
+      points.push(...samples.slice(-33)); x = c[2]; y = c[3];
     } else if (cmd === "A") {
       const [rx, ry, rot, large, sweep] = [num(), num(), num(), num(), num()]; const nx = num(), ny = num();
       const arc = arcPoints(x, y, rx, ry, rot, large, sweep, nx, ny);
       points.push(...arc); samples.push(...arc);
       x = nx; y = ny;
     } else if (cmd === "Z" || cmd === "z") { segments.push([x, y, sx, sy]); line(x, y, sx, sy); x = sx; y = sy; if (i < tokens.length && !/[A-Za-z]/.test(tokens[i])) i++; }
-    else { fail(name, `unsupported command "${cmd}"`); return { segments, points }; }
+    else { fail(name, `unsupported command "${cmd}"`); return { segments, points, samples }; }
   }
   return { segments, points, samples };
 }
@@ -417,6 +421,9 @@ export const ${component(icon)}FilledIcon = ({ weight, size, ...props }: PilotIc
     </svg>
   );
 };` : "")).join("\n\n")}
+
+/** Review batches and owner status, from assets/area-icons-pilot/batches.json. */
+export const PILOT_BATCHES = ${JSON.stringify(JSON.parse(readFileSync(join(SRC, "batches.json"), "utf8")).batches.map(({ id, title, icons }) => ({ id, title, icons })))} as const;
 
 export const PILOT_ICONS = [
 ${icons.map(icon => `  { name: "${icon.name}", keyline: "${icon.keyline}", derivedFrom: ${icon.derivedFrom ? `"${icon.derivedFrom}"` : "undefined"}, Icon: ${component(icon)}Icon, Filled: ${component(icon)}FilledIcon, fill: "${icon.elements.some(el => el.filled === "solid") ? "solid" : "weight"}" },`).join("\n")}
