@@ -45,7 +45,8 @@ const COUNTERS = { tight: [1.25, 1.625], standard: [1.75, Infinity] };
 // gap: a separation that exists only in the filled variant (the bell's clapper).
 // Line glyphs (no solid shape) fill by weight: every stroke at FILLED_WEIGHT_RATIO.
 const FILLED_ROLES = ["solid", "knockout", "hole", "cut", "gap"];
-const FILLED_WEIGHT_RATIO = 4 / 3;   // 1.125 → 1.5px, Fluent's filled line weight
+const FILLED_WEIGHT_RATIO = 4 / 3;
+const SIZE_CURVE = 0.45;             // line ∝ size^0.45: Cursor's 1.25px at 16 → 1.5px at 24   // 1.125 → 1.5px, Fluent's filled line weight
 const BOLD = WEIGHT * FILLED_WEIGHT_RATIO;
 const BOLD_GAP_MIN = 1.0;            // 2.5px between centre-lines at 1.5px: Cursor's floor
 const RASTER = 8;              // samples per px for the counter check
@@ -107,6 +108,34 @@ function parsePath(name, d) {
     else { fail(name, `unsupported command "${cmd}"`); return { segments, points }; }
   }
   return { segments, points, samples };
+}
+
+// Filled line glyphs draw at BOLD, which grows each round cap by (BOLD − WEIGHT) / 2. Free
+// ends (touching nothing else) retract by that amount along their straight end segment, so
+// the visible length and every gap stay exactly as in the outline.
+const RETRACT = (BOLD - WEIGHT) / 2;
+function retractFreeEnds(d, others) {
+  if (/[Zz]/.test(d)) return d;
+  return d.match(/M[^M]*/g).map((sub, index, subs) => {
+    const near = [...others, ...subs.filter((_, j) => j !== index).flatMap(o => parsePath("retract", o).samples)];
+    const free = ([x, y]) => near.every(([ox, oy]) => Math.hypot(ox - x, oy - y) > 0.3);
+    const { segments, points } = parsePath("retract", sub);
+    const tokens = sub.match(/[A-Za-z]|-?\d*\.?\d+(?:e-?\d+)?/g);
+    const fmt = v => Number(v.toFixed(3));
+    const first = segments[0], [sx, sy] = points[0];
+    if (first && first[0] === sx && first[1] === sy && free([sx, sy])) {
+      const l = Math.hypot(first[2] - sx, first[3] - sy);
+      tokens[1] = fmt(sx + RETRACT * (first[2] - sx) / l); tokens[2] = fmt(sy + RETRACT * (first[3] - sy) / l);
+    }
+    const last = segments.at(-1), [ex, ey] = points.at(-1);
+    const at = tokens.findLastIndex(t => /[A-Za-z]/.test(t));
+    if (last && last[2] === ex && last[3] === ey && at > 0 && free([ex, ey]) && tokens.length - at <= 3) {
+      const l = Math.hypot(ex - last[0], ey - last[1]);
+      const nx = fmt(ex - RETRACT * (ex - last[0]) / l), ny = fmt(ey - RETRACT * (ey - last[1]) / l);
+      if (tokens[at] === "H") tokens[at + 1] = nx; else if (tokens[at] === "V") tokens[at + 1] = ny; else if (tokens[at] === "L") { tokens[at + 1] = nx; tokens[at + 2] = ny; }
+    }
+    return tokens.join(" ");
+  }).join(" ");
 }
 
 // Circle outline samples, for gap measurement.
@@ -234,6 +263,11 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   if (!elements.length) fail(name, "no shapes found");
   if (elements.some(el => el.filled) && !elements.some(el => el.filled === "solid")) fail(name, "cut-outs need at least one solid shape to cut");
   const drawn = elements.filter(el => !el.filledOnly);
+  const lineGlyphIcon = !elements.some(el => el.filled === "solid");
+  for (const el of drawn) if (el.stroked && el.tag === "path" && (lineGlyphIcon || !el.filled)) {
+    el.boldD = retractFreeEnds(el.attrs.d, drawn.filter(o => o !== el).flatMap(o => o.samples));
+    el.boldSamples = parsePath(name, el.boldD).samples;
+  }
   // Gaps: separate shapes either join or sit on the gap scale (measured ink to ink).
   const gaps = [];
   const pads = drawn.map(el => el.stroked ? WEIGHT / 2 : 0);
@@ -246,7 +280,9 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     if (d <= JOIN) continue;
     const g = d - pads[p] - pads[q];
     const negative = [drawn[p].filled, drawn[q].filled].some(role => ["knockout", "hole", "cut"].includes(role));
-    const gBold = d - boldPads[p] - boldPads[q];
+    let dBold = Infinity;
+    for (const [ax, ay] of drawn[p].boldSamples ?? drawn[p].samples) for (const [bx, by] of drawn[q].boldSamples ?? drawn[q].samples) dBold = Math.min(dBold, Math.hypot(ax - bx, ay - by));
+    const gBold = dBold - boldPads[p] - boldPads[q];
     if (!negative && gBold < BOLD_GAP_MIN - 1e-6) fail(name, `shapes ${p + 1} and ${q + 1} close to ${r2(gBold)}px in the filled variant (${BOLD}px line); keep ${BOLD_GAP_MIN}`);
     const step = Object.entries(GAPS).find(([, [lo, hi]]) => g >= lo - 1e-6 && g <= hi + 1e-6)?.[0] ?? (g >= OPEN ? "open" : null);
     gaps.push(`${r2(g)}${step ? " " + step : ""}`);
@@ -277,8 +313,11 @@ const icons = load(SRC, { strict: true }).flatMap(icon => [icon, ...icon.rotatio
   // flipx / flipy mirror across the centre (align-right from align-left); a mirror keeps
   // the grid and swaps the two diagonal lattice conditions, so every rule still holds.
   if (turn === "flipx" || turn === "flipy") return { ...icon, name, flip: turn, derivedFrom: icon.name };
+  // transpose mirrors across the diagonal (x ↔ y): a horizontal family becomes vertical
+  // with the same reading order (align-left → align-top keeps the long bar first).
+  if (turn === "transpose") return { ...icon, name, flip: turn, derivedFrom: icon.name, keyline: SWAP[icon.keyline] ?? icon.keyline };
   const rotate = Number(turn);
-  if (![90, 180, 270].includes(rotate)) { fail(icon.name, `derivation ${spec} must be 90, 180, 270, flipx or flipy`); return null; }
+  if (![90, 180, 270].includes(rotate)) { fail(icon.name, `derivation ${spec} must be 90, 180, 270, flipx, flipy or transpose`); return null; }
   return { ...icon, name, rotate, derivedFrom: icon.name, keyline: rotate === 180 ? icon.keyline : SWAP[icon.keyline] ?? icon.keyline };
 }).filter(Boolean)]).sort((a, b) => a.name.localeCompare(b.name));
 // Candidates under review (docs/specs/icons.md): linted with the same rules, findings shown
@@ -298,9 +337,9 @@ if (process.argv.includes("--report")) for (const icon of icons.filter(i => !i.d
 if (process.argv.includes("--check")) process.exit(0);
 
 const camel = s => s.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
-const STROKE = `style={{ strokeWidth: weight ?? "var(--area-weight-icon)" }} strokeLinecap="round" strokeLinejoin="round"`;
-const STROKE_BOLD = `style={{ strokeWidth: weight ? weight * ${FILLED_WEIGHT_RATIO.toFixed(4)} : "calc(var(--area-weight-icon) * 4 / 3)" }} strokeLinecap="round" strokeLinejoin="round"`;
-const STROKE_CUT = `style={{ strokeWidth: weight ?? "var(--area-weight-icon)" }} strokeLinecap="butt" strokeLinejoin="miter"`;
+const STROKE = `style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round"`;
+const STROKE_BOLD = `style={{ strokeWidth: sw(weight, size, ${FILLED_WEIGHT_RATIO.toFixed(4)}) }} strokeLinecap="round" strokeLinejoin="round"`;
+const STROKE_CUT = `style={{ strokeWidth: sw(weight, size) }} strokeLinecap="butt" strokeLinejoin="miter"`;
 const jsx = (el, paint) => {
   const attrs = { ...el.attrs, ...paint?.attrs };
   const props = Object.entries(attrs).map(([k, v]) => `${camel(k)}="${v}"`);
@@ -309,7 +348,7 @@ const jsx = (el, paint) => {
 };
 const component = icon => `Pilot${camel("-" + icon.name)}`;
 // A rotated icon wraps its whole drawing (mask included) in one rotation about the centre.
-const TRANSFORMS = { flipx: "matrix(-1 0 0 1 16 0)", flipy: "matrix(1 0 0 -1 0 16)" };
+const TRANSFORMS = { flipx: "matrix(-1 0 0 1 16 0)", flipy: "matrix(1 0 0 -1 0 16)", transpose: "matrix(0 1 1 0 0 0)" };
 const turn = (icon, lines) => {
   const transform = icon.rotate ? `rotate(${icon.rotate} 8 8)` : TRANSFORMS[icon.flip];
   return transform ? [`<g transform="${transform}">`, ...lines.map(l => "  " + l), `</g>`] : lines;
@@ -321,14 +360,15 @@ const filledBody = icon => {
   const outline = icon.elements.filter(el => !el.filledOnly);
   const lineGlyph = !icon.elements.some(el => el.filled === "solid");
   // A line glyph fills by weight: every stroke at BOLD, dots grown by the same amount.
-  if (lineGlyph) return outline.map(el => el.stroked ? jsx(el, { strokeStyle: STROKE_BOLD }) : jsx(el.tag === "circle" ? boldDot(el) : el));
+  const bold = el => jsx(el, { strokeStyle: STROKE_BOLD, ...(el.boldD ? { attrs: { d: el.boldD } } : {}) });
+  if (lineGlyph) return outline.map(el => el.stroked ? bold(el) : jsx(el.tag === "circle" ? boldDot(el) : el));
   const solid = icon.elements.filter(el => el.filled === "solid").map(el => jsx(el, { attrs: { fill: "currentColor" }, stroke: el.stroked }));
   const cuts = icon.elements.filter(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)).map(el =>
     el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
     : el.filled === "hole" ? jsx(el, { attrs: { fill: "black" }, stroke: false })
     : jsx(el, { attrs: { fill: "none", ...(el.cutD ? { d: el.cutD } : {}) }, stroke: true, color: "black", strokeStyle: STROKE_CUT }));
   // Unmarked strokes stay strokes, drawn at BOLD like every other filled line.
-  const plain = icon.elements.filter(el => !el.filled).map(el => el.stroked ? jsx(el, { strokeStyle: STROKE_BOLD }) : jsx(el));
+  const plain = icon.elements.filter(el => !el.filled).map(el => el.stroked ? bold(el) : jsx(el));
   if (!cuts.length) return [...solid, ...plain];
   return [
     `<mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">`,
@@ -350,19 +390,29 @@ const tsx = `/**
  */
 import { useId, type SVGProps } from "react";
 
-export type PilotIconProps = Omit<SVGProps<SVGSVGElement>, "stroke"> & { weight?: number };
+/** weight: line in CSS px at 16px (overrides --area-weight-icon). size: rendered size in px;
+ *  the line then follows the size curve instead of scaling with the drawing. */
+export type PilotIconProps = Omit<SVGProps<SVGSVGElement>, "stroke"> & { weight?: number; size?: number };
+/** Size curve (docs/specs/icons.md, "Sizes"): the line grows with size^${SIZE_CURVE}, Cursor's
+ *  16 → 24px step (1.25 → 1.5px). In drawing units that is a factor of (size / 16)^${(SIZE_CURVE - 1).toFixed(2)}. */
+export const sizeFactor = (size?: number) => size ? Math.pow(size / 16, ${(SIZE_CURVE - 1).toFixed(2)}) : 1;
+export const sw = (weight: number | undefined, size: number | undefined, ratio = 1) => {
+  const k = ratio * sizeFactor(size);
+  if (weight !== undefined) return weight * k;
+  return k === 1 ? "var(--area-weight-icon)" : \`calc(var(--area-weight-icon) * \${k.toFixed(4)})\`;
+};
 const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none", "aria-hidden": true, focusable: false } as const;
 const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");
 
-${icons.map(icon => `export const ${component(icon)}Icon = ({ weight, ...props }: PilotIconProps) => (
-  <svg {...base} {...props}>
+${icons.map(icon => `export const ${component(icon)}Icon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
     ${turn(icon, icon.elements.filter(el => !el.filledOnly).map(el => jsx(el))).join("\n    ")}
   </svg>
 );` + (hasFilled(icon) ? `
 
-export const ${component(icon)}FilledIcon = ({ weight, ...props }: PilotIconProps) => {
+export const ${component(icon)}FilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
   ${filledBody(icon).some(line => line.includes("mask")) ? "const id = useMaskId();\n  " : ""}return (
-    <svg {...base} {...props}>
+    <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
       ${turn(icon, filledBody(icon)).join("\n      ")}
     </svg>
   );
@@ -390,7 +440,7 @@ const EXPLORE_OUT = join(ROOT, "src/pilot-explore.tsx");
 writeFileSync(EXPLORE_OUT, `/** Area icon candidates under review, generated from apps/docs/assets/area-icons-pilot/explore
  * by scripts/gen-pilot-icons.mjs. Do not edit by hand. Each carries its lint measurements. */
 import type { ReactElement } from "react";
-import type { PilotIconProps } from "./pilot-icons.tsx";
+import { sw, type PilotIconProps } from "./pilot-icons.tsx";
 
 export type ExploreCandidate = {
   group: string; label: string; Icon: (props: PilotIconProps) => ReactElement;
@@ -399,8 +449,8 @@ export type ExploreCandidate = {
 
 const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none", "aria-hidden": true, focusable: false } as const;
 
-${explore.map(icon => `const ${component(icon)}Icon = ({ weight, ...props }: PilotIconProps) => (
-  <svg {...base} {...props}>
+${explore.map(icon => `const ${component(icon)}Icon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
     ${icon.elements.map(el => jsx(el)).join("\n    ")}
   </svg>
 );`).join("\n\n")}

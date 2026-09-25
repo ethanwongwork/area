@@ -38,7 +38,7 @@ export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>
       {icon && !dotOnly ? <span className="area-badge__leading-icon" aria-hidden="true">{icon}</span> : null}
       {!iconOnly && !dotOnly && children != null ? <span className="area-badge__label">{children}</span> : null}
       {trailingIcon && !dotOnly && !iconOnly ? <span className="area-badge__trailing-icon" aria-hidden="true">{trailingIcon}</span> : null}
-      {onDismiss ? <button type="button" className="area-badge__dismiss" aria-label={dismissLabel} onClick={onDismiss}><Glyph name="dismiss" /></button> : null}
+      {onDismiss ? <button type="button" className="area-badge__dismiss" aria-label={dismissLabel} onClick={onDismiss}><Glyph name="dismiss" size={12} /></button> : null}
     </>,
   };
   return as === "a" ? <a {...props as AnchorHTMLAttributes<HTMLAnchorElement>} ref={ref as Ref<HTMLAnchorElement>} /> : <span {...props as HTMLAttributes<HTMLSpanElement>} ref={ref as Ref<HTMLSpanElement>} />;

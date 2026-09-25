@@ -1,0 +1,60 @@
+{
+  "$comment": "Icon review batches and owner status (approved | revising | review). The gallery's Icons page lays tiles out by batch. Rotations and mirrors follow their base icon. Record: docs/specs/icons.md.",
+  "batches": [
+    {
+      "id": "batch-1",
+      "title": "Batch 1 · Core",
+      "note": "Approved by the owner on 2026-09-25. Open (filled gap kept by retracting free ends) and reset (Fluent-style corner arrowhead) are revised and back in review.",
+      "icons": {
+        "add": "approved",
+        "arrow-up": "approved",
+        "bell": "approved",
+        "check": "approved",
+        "chevron-down": "approved",
+        "copy": "approved",
+        "dismiss": "approved",
+        "document": "approved",
+        "eye": "approved",
+        "folder": "approved",
+        "info": "approved",
+        "link": "approved",
+        "more-horizontal": "approved",
+        "open": "review",
+        "person": "approved",
+        "reset": "review",
+        "search": "approved",
+        "settings": "approved",
+        "status-available": "approved",
+        "trash": "approved",
+        "warning": "approved"
+      }
+    },
+    {
+      "id": "batch-2",
+      "title": "Batch 2 · Alignment",
+      "note": "Revised after review: the same 8 × 3 and 5 × 3 bars and 3px spacing throughout; the long bar comes first in reading order (align-top and align-middle now transpose instead of rotating).",
+      "icons": {
+        "align-left": "review",
+        "align-center": "review"
+      }
+    },
+    {
+      "id": "batch-3",
+      "title": "Batch 3 · Docs chrome",
+      "note": "New for review: the docs site's toolbar and sidebar icons.",
+      "icons": {
+        "expand": "review",
+        "panel-left": "review",
+        "book": "review",
+        "options": "review",
+        "color": "review",
+        "text": "review",
+        "shapes": "review",
+        "list": "review",
+        "square-dashed": "review",
+        "layers": "review",
+        "flash": "review"
+      }
+    }
+  ]
+}

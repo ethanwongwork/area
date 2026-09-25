@@ -78,10 +78,22 @@ the lint prints every gap and counter with `--report`.
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
   a little more width than a square to look the same size, and 1.56× read too big;
 - hub or pupil: r 1.5;
-- satellites: the bell's clapper is a U cup 3 wide and 3 deep, joined to the base, with a
-  standard counter. The ! and the i share the ⌀1.5 dot and the tight gap to their stem;
-- layering: fold and flap lines are knockouts in the filled variant, so the layer reads
-  in both states.
+- satellites: the bell's clapper is a U cup 4 wide and 2.5 deep, joined to the base. The !
+  and the i share the ⌀1.5 dot and the tight gap to their stem;
+- layering: fold and flap lines are `cut`s in the filled variant, so the layer reads in
+  both states;
+- bars: 8 × 3 and 5 × 3, r 1, 3px between centre-lines (align family).
+
+**Families.** Related icons share one pattern, as Figma's alignment icons do:
+- the same parts at the same sizes and spacing (the alignment icons all use the 8 × 3 and
+  5 × 3 bars, 3px spacing, and an 11px guide line);
+- the same reading order: the primary (longer) element comes first, at the top for
+  horizontal bars and on the left for vertical bars;
+- the same derivation: one drawing, and the others as quarter turns, mirrors or a
+  `transpose` (a mirror across the diagonal, which turns a horizontal family vertical and
+  keeps its order). Never redraw a variant by hand;
+- a guide line behind bars runs as stubs between them (align-center), so it reads as a
+  layer, not a line through the counters.
 
 **Filled variants.** Every icon has one, derived from the outline, never drawn
 separately. Filled is about emphasis and layers, not flooding the shape:
@@ -103,6 +115,11 @@ separately. Filled is about emphasis and layers, not flooding the shape:
   reset…) gets its filled variant by drawing every stroke at 4/3 of the icon weight
   (1.5px, Fluent's filled line), with dots grown by the same amount. The same applies to
   unmarked strokes beside solids (align-left's edge line, trash's lid).
+- **A heavier line does not get longer.** A 1.5px round cap reaches 0.19px further than a
+  1.125px one, which lengthens the line and closes gaps (open's arrowhead gap closed this
+  way). Free ends, which touch nothing else, retract by that amount along their end
+  segment, so visible lengths and gaps match the outline. The generator does this; the
+  lint measures filled gaps on the retracted geometry.
 - **Gaps must survive the heavier line.** The lint rechecks every gap at 1.5px; it must stay
   at least 1px (Cursor's 2.5px between centre-lines). Prefer standard gaps in line
   glyphs.
@@ -110,8 +127,13 @@ separately. Filled is about emphasis and layers, not flooding the shape:
 **Arrows.** One arrowhead system, so arrows read as arrows at 12px:
 - standalone arrows: a 90° head with 5px legs on a 12px stem (M8 14 V2 M3 7 L8 2 L13 7),
   Fluent's proportion; other directions are rotations;
-- arrows inside another icon (reset, open, out-of-office): a 90° head with 3px legs,
-  identical in every icon;
+- arrows inside another icon (reset, open, expand, out-of-office): a 90° head with 3px
+  legs, identical in every icon;
+- a head is balanced about the stroke that arrives at it: its two barbs are equal and
+  sit symmetrically either side of the arriving direction. On a curve, put the head where
+  the arc's tangent bisects the barbs, or use Fluent's corner head (reset: the arc ends at
+  the corner of an L with equal barbs, up and right). Never let one barb crowd the curve
+  it came from;
 - heads sit on the diagonal lattice. Never shrink a head to fit; move or resize the body.
 
 **Lines and angles.** Lines run at 0°, 45° and 90°. A radial exception such as the gear
@@ -124,16 +146,23 @@ shapes with a heavy base (bell, the i of info) sit about 0.25px high, a triangle
 lifted until its ink box is centred (its mass sits low), and pointed shapes
 (chevron, check) may sit up to 0.25px off centre to stay on the diagonal lattice.
 
-**Sizes.** One 16px drawing serves 12–20px slots and scales uniformly, line included
-(Cursor's model). Its line then tracks the adjacent text stem: 0.84 at 12, 1.125 at 16,
-1.41 at 20. Do not hold the line constant at small sizes: at 12px that shrinks the gaps
-below the tight step. A dense icon that must read at 12px on 1× screens gets its own 12px
-cut.
+**Sizes.** One 16px drawing serves every slot, but the line does not scale with it. It
+follows the size curve, line ∝ size^0.45, which is Cursor's step from 1.25px at 16 to 1.5px
+at 24:
+
+| Size | 12 | 16 | 20 | 24 | 32 |
+|---|---|---|---|---|---|
+| Line | 1.0 | 1.125 | 1.24 | 1.35 | 1.54 |
+
+Uniform scaling made large icons too thick (2.25px at 32) and small ones too light (0.84 at
+12). Pass `size` to a pilot icon, or `size` to `Glyph` (base.css holds the factors), and
+the line follows the curve. At 12px the tight gap falls to about 0.9px, so a dense icon
+that must read at 12px on 1× screens gets its own 12px cut.
 
 **In components.** A component that draws its own glyph uses `Glyph` from
 `packages/react/src/components/Glyph.tsx`. Add the icon (or one element of it) to
-`PACKAGE_GLYPHS` in the generator, never a hand-copied path. base.css sets the line
-from `--area-weight-icon`.
+`PACKAGE_GLYPHS` in the generator, never a hand-copied path, and pass the slot's `size`.
+base.css sets the line from `--area-weight-icon` and the size curve.
 
 ## Process
 
@@ -144,10 +173,14 @@ from `--area-weight-icon`.
 3. **Lint** with `node apps/docs/scripts/gen-pilot-icons.mjs --report`. It checks the 0.5px
    grid, the diagonal lattice, the keyline, gaps, the live area (centre-lines within
    1.5–14.5), angles and attributes, and prints each icon's ink box and centre.
-4. **Review** each icon on `gallery-icons.html`: its tile shows every size, the 4× comparison
-   with Fluent, and the icon inside a Button, Badge, Menu item and Nav item beside
-   Fluent's. Directional families are one drawing with `data-rotations` (quarter turns, or
-   `flipx` / `flipy` mirrors); never redraw a rotation or a mirror. Then **compare** the set on `gallery-iconography.html`:
+4. **Review** each icon on `gallery-icons.html`. It is grouped by batch, from
+   `apps/docs/assets/area-icons-pilot/batches.json`, which also records the owner's status
+   for each icon (approved, revising, review). Add each new batch there. A tile shows the
+   icon at every size on the size curve, 3× plates against Fluent, and the icon inside a
+   Button, Badge, Menu item and Nav item (the current item uses the filled variant) beside
+   Fluent's. Directional families are one drawing with `data-rotations` (quarter turns,
+   `flipx` / `flipy` mirrors or `transpose`); never redraw a variant. Only the owner marks
+   an icon approved. Then **compare** the set on `gallery-iconography.html`:
    - *Side by side*: Fluent and Area at 16px and at 4× on the pixel grid with the
      keyline, and Area drawn over Fluent;
    - *Optical balance*: the whole set in one line at 16 and 32px. Look for the icon
@@ -168,9 +201,13 @@ from `--area-weight-icon`.
 ## Review checklist
 
 - Is every icon the same apparent size in the balance strip, at 16 and 32px?
-- Is every gap tight, standard or open, and does every counter hold a 1.75px disc?
+- Is every gap tight, standard or open, and is every counter tight (satellite pockets) or
+  standard?
 - Is the negative space balanced, with no tiny pocket beside a large one?
-- Does the filled variant keep the outline's silhouette, with knockouts on the gap scale?
+- Does the filled variant keep the outline's silhouette, with knockouts on the gap scale,
+  layers separated, and no gap closed by a heavier line?
+- Do related icons share parts, spacing, reading order and derivation?
+- Is every arrowhead balanced about the stroke that arrives at it, and the shared size?
 - Are the same parts (ring, check, dot, hub, radius) identical wherever they recur?
 - Are axis-aligned edges on the 0.5px grid, and on x.5 where the shape allows? Are
   diagonals on the lattice?

@@ -528,3 +528,82 @@ centre keeps the grid and swaps the two lattice conditions).
 Fluent references: align_right, align_top, align_bottom, align_center_vertical (for
 align-center) and align_center_horizontal (for align-middle). Distribute is left for later.
 The set has 33 icons.
+
+## Ninth pass: review round 2, 2026-09-25
+
+**Owner feedback:**
+- the first batch is approved, except the icons commented on;
+- in the filled open, the thicker stroke's cap closed the gap;
+- reset's head is unbalanced (its lower barb crowds the circle); Fluent's design is
+  preferred;
+- are align-middle's bars and gaps the same as align-left's? Figma's alignment set reads
+  as one family;
+- large icons look too thick;
+- review tiles should be smaller (two or more columns) and grouped by batch.
+
+**Filled line glyphs keep their length.** At 1.5px a round cap reaches 0.19px further, which
+lengthened lines and closed open's tight gap. The generator now retracts free ends (ends
+touching nothing else) by (1.5 − 1.125) / 2 along their end segment. Open's filled gaps
+now equal its outline gaps (1.38). The lint measures filled gaps on the retracted
+geometry. Arc ends are not retracted yet.
+
+**Reset** now uses Fluent's construction:
+- circle r 5.59 at 8, 8, with the arc from the corner (3, 5.5) round to a tail at 165°;
+- the head is an L with equal 3px barbs (M3 2.5 V5.5 H6);
+- the arc arrives at the corner between the barbs, so neither barb crowds the circle.
+
+Three candidates were compared on the Exploration sheet (barbs 3, barbs 2.5, and a lower
+corner); barbs 3 match the shared embedded head.
+
+**Alignment family.** The bars are the same, 8 × 3 and 5 × 3 with r 1, and so is the
+spacing, 3px between centre-lines (1.88 gaps). What differed was reading order: rotating
+align-left put align-top's long bar on the right. A new `transpose` derivation (mirror
+across the diagonal) keeps the long bar first. align-top and align-middle now transpose;
+align-bottom stays a 270° turn, which already puts the long bar on the left.
+
+**Size curve.** The line no longer scales with the drawing:
+
+| Size | Line | Adjacent text stem |
+|---|---|---|
+| 12 | 1.0 | 1.0 at 12/400 |
+| 16 | 1.125 | 1.2 at 14/400 |
+| 20 | 1.24 | |
+| 24 | 1.35 | 1.35 at 16/400 |
+| 32 | 1.54 | |
+
+The line grows with size^0.45, derived from Cursor's 1.25px at 16 to 1.5px at 24. Uniform
+scaling gave 1.69 at 24 and 2.25 at 32.
+- **Pilot icons:** take `size`; `sw()` in `pilot-icons.tsx` computes the line.
+- **Component glyphs:** take `size`, and `base.css` holds the factors (12: × 1.1715,
+  20: × 0.8846, 24: × 0.8000). Badge dismiss and the NumberField steppers pass 12.
+- **Gallery:** the Sizes sheet now shows the curve, with uniform scaling at 24 for
+  comparison.
+
+**Review page:**
+- one-cell tiles (`data-span="1x2"`), three columns in a 1000px pane;
+- 3× plates, and contexts trimmed to Button, icon Button, Badge, Menu item and the current
+  Nav item (filled), then Fluent's;
+- sections come from `assets/area-icons-pilot/batches.json`, which records each icon's
+  owner status. Batch 1 (core) is approved except open and reset, which are back in
+  review; batch 2 (alignment) and batch 3 (docs chrome) are in review.
+
+**Batch 3, docs chrome** (45 icons in the set):
+
+| Icon | Construction | Notes |
+|---|---|---|
+| expand | two corner arrows, open's 3px head, shafts on x + y = 16 | Fluent's is four corners ("fullscreen") |
+| panel-left / panel-right | 11 × 11 frame, 4-wide panel that fills; mirror | panel counter 2.94 |
+| list | four lines at 3px spacing, 2.5–13.5 | standard gaps |
+| square-dashed | corners (1.5 arms) and centred 3px dashes, tight gaps | |
+| flash | closed bolt with a 1.5px jog so the waist stays open (counter 1.43) | a narrower jog pinched into 0.2px slivers |
+| text | an A, crossbar at 9.5 | counter 3.02 |
+| shapes | 7 × 7 square (solid) and an r 3.5 circle cut 2.5 short of it | Cursor's overlap cut |
+| layers | isometric diamond (solid) over a chevron, 1.875 apart | |
+| book | two pages meeting at the spine; the spine is a `cut` | |
+| options | three sliders, r 1.5 knobs (solid), knob to line tight | denser than Fluent's two |
+| color | a droplet: tangents from the tip to an r 4.5 bowl | Fluent draws a palette |
+
+Roadmap renumbered to the owner's batches:
+- batch 4: Area's 29 inspector marks;
+- batch 5: new needs (lock, star, calendar, pencil, download, sparkle…);
+- then the demo-level Fluent swap.
