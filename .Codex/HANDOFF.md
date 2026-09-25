@@ -1,7 +1,7 @@
 # Handoff — 2026-09-25
 
-Work from 2026-09-24/25 is on branch `area-evidence-process` (see its PR); `main` holds the
-earlier checkpoint `2f90f2d` until that PR is merged. The dev server is `npm run dev`.
+PR 1 (`area-evidence-process`) is merged into `main` on GitHub. The icon passes since then
+are uncommitted; move them to a new branch from `main` (see the owner's branch question). The dev server is `npm run dev`.
 It started on port 3000 in the latest session (4321 by default); open
 `/gallery-components.html`. No owner completion changed; Indicator stays In review.
 
@@ -39,6 +39,18 @@ It started on port 3000 in the latest session (4321 by default); open
   - presence status glyphs are Area-drawn: the ring is the shell's border and the mark a
     non-scaling stroke, both at `--area-weight-icon`;
   - the 1× / 2× pixel check is on the iconography page;
+  - second pass (2026-09-25): every icon redrawn to one system. The rules are the
+    `area-icon-construction` skill: Cursor keylines, 0.5px grid, 45° diagonals on the
+    pixel lattice, 3px gap unit, shared parts. The lint enforces them (`--report`).
+    The page has new Side by side and Optical balance sheets. Record: `docs/specs/icons.md`;
+  - third pass: negative-space lint (gap scale, counter minimum), filled variants from
+    `data-filled` roles, five more icons (copy, document, folder, trash, warning); 17 in all;
+  - fourth/fifth pass: tiered counter scale; owner picks applied (U cup 4 × 2.5, ⌀1.5 dots,
+    fold 4, tab flap); Exploration section appears only while `explore/` has candidates;
+    Sizes sheets (scaled vs constant line at 12/20px);
+  - components: Badge dismiss, NumberField steppers, TreeView chevron and check, Composer
+    send arrow now draw Area glyphs (`packages/react/src/components/glyphs.ts` + `Glyph.tsx`);
+    status marks pass done (strict lint, shared inset check);
   - Fluent remains in all other components.
 - **Indicator (pilot component):**
   - 6px dot; 16px count with 10/14 text, weight 500;
@@ -48,13 +60,15 @@ It started on port 3000 in the latest session (4321 by default); open
 
 ## Next
 
-1. Owner review: gallery pages, type ramp, and the pilot icons at 1× (see
-   `docs/specs/icons.md`, "1× pixel check").
-2. Icons: draw the 12px and 20px cuts, then replace Fluent family by family (chevron,
-   close, check, add, search first). Move Area's 29 marks to 1.125px at the same time.
-3. A stroke and type baseline across Cursor, ChatGPT, Notion and Figma. Product dark themes
+1. Owner: confirm the size model (scale 12–20px, recommended) and the 12px glyphs in
+   Badge and NumberField (`docs/specs/icons.md`, fifth pass).
+2. Next icon work: swap demo-level Fluent icons (PlusIcon, SearchIcon…) for pilot icons,
+   which changes every gallery demo — ask first.
+3. Icons: replace the remaining Fluent families. Move Area's 29 marks to 1.125px at the
+   same time.
+4. A stroke and type baseline across Cursor, ChatGPT, Notion and Figma. Product dark themes
    need the owner's go-ahead, and the Figma editor needs Edge in the foreground.
-4. The next component through the process.
+5. The next component through the process.
 
 ## Verification (2026-09-25)
 

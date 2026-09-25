@@ -1,6 +1,7 @@
 import { forwardRef, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { treeViewVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { Glyph } from "./Glyph.tsx";
 
 export interface TreeViewNode {
   id: string;
@@ -125,9 +126,9 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
         style={{ "--_tree-depth": depth - 1 } as React.CSSProperties}
         onFocus={() => setFocused(node.id)} onClick={() => { if (!node.disabled) { focusItem(node.id); activate(node.id); } }}>
         <span className="area-tree-view__chevron" aria-hidden="true" onClick={event => { if (!branch || node.disabled) return; event.stopPropagation(); setExpansion(node.id, !open); focusItem(node.id); }}>
-          {branch && <svg viewBox="0 0 16 16" fill="currentColor"><path d="M3.15 5.65c.2-.2.5-.2.7 0L8 9.79l4.15-4.14a.5.5 0 0 1 .7.7l-4.5 4.5a.5.5 0 0 1-.7 0l-4.5-4.5a.5.5 0 0 1 0-.7" /></svg>}
+          {branch && <Glyph name="chevron-down" />}
         </span>
-        {selectionMode === "checkbox" && <span className="area-tree-view__check" aria-hidden="true">{selected.has(node.id) && <svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.86 3.66a.5.5 0 0 1-.02.7l-7.93 7.48a.6.6 0 0 1-.84-.02L2.4 9.1a.5.5 0 0 1 .72-.7l2.4 2.44 7.65-7.2a.5.5 0 0 1 .7.02" /></svg>}</span>}
+        {selectionMode === "checkbox" && <span className="area-tree-view__check" aria-hidden="true">{selected.has(node.id) && <Glyph name="check-inset" />}</span>}
         {node.icon && <span className="area-tree-view__icon" aria-hidden="true">{node.icon}</span>}
         <span className="area-tree-view__label">{node.label}</span>
         {node.trailing && <span className="area-tree-view__trailing">{node.trailing}</span>}

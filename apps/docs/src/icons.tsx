@@ -200,6 +200,90 @@ export const PresenceAvailableIcon = () => (
   </svg>
 );
 
+/** Fluent `alert_16_filled`. */
+export const FluentBellFilledIcon = () => (
+  <svg {...base}>
+    <path d="M8 2a4.5 4.5 0 0 0-4.5 4.5v2.4l-.96 2.41A.5.5 0 0 0 3 12h10a.5.5 0 0 0 .46-.69l-.96-2.4V6.5A4.5 4.5 0 0 0 8 2m0 12.5A2 2 0 0 1 6.06 13h3.88A2 2 0 0 1 8 14.5" />
+  </svg>
+);
+
+/** Fluent `info_16_filled`. */
+export const FluentInfoFilledIcon = () => (
+  <svg {...base}>
+    <path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1m0 5.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m.5 1.25a.5.5 0 0 0-1 0v3a.5.5 0 0 0 1 0z" />
+  </svg>
+);
+
+/** Fluent `settings_16_filled`. */
+export const FluentSettingsFilledIcon = () => (
+  <svg {...base}>
+    <path d="M2.27 6.15q.4-1.21 1.26-2.17.17-.16.38-.1l1.36.49a.7.7 0 0 0 .94-.54l.26-1.41a.4.4 0 0 1 .27-.29 6 6 0 0 1 2.52 0q.23.06.27.28l.26 1.42a.7.7 0 0 0 .94.54l1.36-.49a.4.4 0 0 1 .38.1q.86.96 1.26 2.17.06.23-.1.38l-1.1.93a.7.7 0 0 0 0 1.08l1.1.93q.16.16.1.38-.4 1.21-1.26 2.17-.17.16-.38.1l-1.36-.49a.7.7 0 0 0-.94.54l-.26 1.41a.4.4 0 0 1-.27.29 6 6 0 0 1-2.52 0 .4.4 0 0 1-.27-.29l-.26-1.41a.7.7 0 0 0-.94-.54l-1.36.49a.4.4 0 0 1-.38-.1q-.86-.96-1.26-2.17a.4.4 0 0 1 .1-.38l1.1-.93a.7.7 0 0 0 0-1.08l-1.1-.93a.4.4 0 0 1-.1-.38M6.25 8a1.75 1.75 0 1 0 3.5 0 1.75 1.75 0 0 0-3.5 0" />
+  </svg>
+);
+
+/** Fluent `eye_16_filled`. */
+export const FluentEyeFilledIcon = () => (
+  <svg {...base}>
+    <path d="M2.98 8.62a.5.5 0 0 1-.6.36c-.44-.11-.36-.6-.36-.6l.01-.07.05-.14q.06-.2.2-.5c.18-.4.47-.95.92-1.49C4.1 5.08 5.6 4 8 4s3.9 1.09 4.8 2.18a7 7 0 0 1 1.18 2.17v.02a.5.5 0 0 1-.96.26L13 8.6a3 3 0 0 0-.2-.52 6 6 0 0 0-.78-1.26A5 5 0 0 0 8 5c-2.04 0-3.29.91-4.03 1.82A6 6 0 0 0 3 8.6zm2.52.88a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0" />
+  </svg>
+);
+
+/** Fluent `align_left_16_filled`. */
+export const FluentAlignLeftFilledIcon = () => (
+  <svg {...base}>
+    <path d="M2 1.5a.5.5 0 0 1 1 0v13a.5.5 0 0 1-1 0zm3.75.5C4.78 2 4 2.78 4 3.75v1.5C4 6.22 4.78 7 5.75 7h6.5C13.22 7 14 6.22 14 5.25v-1.5C14 2.78 13.22 2 12.25 2zm0 7C4.78 9 4 9.78 4 10.75v1.5c0 .97.78 1.75 1.75 1.75h4.5c.97 0 1.75-.78 1.75-1.75v-1.5C12 9.78 11.22 9 10.25 9z" />
+  </svg>
+);
+
+/** Fluent `checkmark_circle_16_filled`. */
+export const FluentCheckCircleFilledIcon = () => (
+  <svg {...base}>
+    <path d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8m9.85-1.15a.5.5 0 0 0-.7-.7l-2.9 2.9-1.4-1.4a.5.5 0 1 0-.7.7L6.9 10.1c.2.2.5.2.7 0z" />
+  </svg>
+);
+
+/** Fluent `copy_16_regular`. */
+export const FluentCopyIcon = () => (
+  <svg {...base}>
+    <path d="M5 6H4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1h1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h1zm7-4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zM8 3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z" />
+  </svg>
+);
+
+/** Fluent `document_16_filled`. */
+export const FluentDocumentFilledIcon = () => (
+  <svg {...base}>
+    <path d="M8 1v3.5C8 5.33 8.67 6 9.5 6H13v7.5c0 .83-.67 1.5-1.5 1.5h-7A1.5 1.5 0 0 1 3 13.5v-11C3 1.67 3.67 1 4.5 1zm1 .25V4.5c0 .28.22.5.5.5h3.25z" />
+  </svg>
+);
+
+/** Fluent `folder_16_filled`. */
+export const FluentFolderFilledIcon = () => (
+  <svg {...base}>
+    <path d="M1 4.5A2.5 2.5 0 0 1 3.5 2h2.09c.4 0 .78.16 1.06.44L8 3.79 5.94 5.85a.5.5 0 0 1-.35.15H1zM1 7v4.5A2.5 2.5 0 0 0 3.5 14h9a2.5 2.5 0 0 0 2.5-2.5v-5A2.5 2.5 0 0 0 12.5 4H9.2L6.66 6.56A1.5 1.5 0 0 1 5.59 7z" />
+  </svg>
+);
+
+/** Fluent `copy_16_filled`. */
+export const FluentCopyFilledIcon = () => (
+  <svg {...base}>
+    <path d="M5 9a3 3 0 0 0 3 3h2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h1zm7-7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2z" />
+  </svg>
+);
+
+/** Fluent `delete_16_filled`. */
+export const FluentTrashFilledIcon = () => (
+  <svg {...base}>
+    <path d="M7 3h2a1 1 0 0 0-2 0M6 3a2 2 0 1 1 4 0h4a.5.5 0 0 1 0 1h-.56l-1.2 8.84A2.5 2.5 0 0 1 9.74 15h-3.5a2.5 2.5 0 0 1-2.48-2.16L2.57 4H2a.5.5 0 0 1 0-1zm1 3.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM9.5 6a.5.5 0 0 0-.5.5v5a.5.5 0 0 0 1 0v-5a.5.5 0 0 0-.5-.5" />
+  </svg>
+);
+
+/** Fluent `warning_16_filled`. */
+export const FluentWarningFilledIcon = () => (
+  <svg {...base}>
+    <path d="M5.82 2.28a2.5 2.5 0 0 1 4.36 0l4.5 8A2.5 2.5 0 0 1 12.5 14h-9a2.5 2.5 0 0 1-2.18-3.72zM8 9.5A.75.75 0 1 0 8 11a.75.75 0 0 0 0-1.5M8 5a.5.5 0 0 0-.5.5V8a.5.5 0 0 0 1 0V5.5A.5.5 0 0 0 8 5" />
+  </svg>
+);
+
 /*
  * Area's marks. They are stroked rather than filled, so they take their own base: the
  * fill is off and the colour rides on the stroke. Fitted to Fluent's optical weight by

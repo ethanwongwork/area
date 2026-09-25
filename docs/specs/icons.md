@@ -53,6 +53,8 @@ Cursor's published construction (minoradventures.co, "The making of Cursor's ico
 
 ## Proposed construction
 
+Superseded where they differ by "Construction system, second pass" below.
+
 | Rule | Proposal | Basis |
 |---|---|---|
 | Source | Stroked centre-line geometry, one drawing per icon | Area marks; Cursor; allows weight control |
@@ -171,3 +173,262 @@ Findings and changes:
   on 8 behave the same way. Options, if 1× crispness matters: shift the symmetric axes to
   7.5, or keep 2× as the design target.
 - Diagonal marks (check, close, chevron) anti-alias at 1× in both sets; no change.
+
+## Construction system, second pass, 2026-09-25
+
+Owner review of the first pass:
+- check and close read small;
+- the gap between the bell's dome and its clapper was unwanted;
+- settings read too large and heavy;
+- align-left read dense, and its bars should be as far apart as they are from the edge line;
+- Area rasterised blurrier than Fluent at 1× and 2×.
+
+The rules are now the `area-icon-construction` skill (`.agents/skills`), taken from
+Cursor's published construction and the owner's keyline diagram. The lint enforces them.
+
+**Why the first pass blurred.** Measured by rasterising each icon in the gallery (Edge)
+and taking the share of ink in pixels that are at least 85% covered:
+- **Quarter-pixel coordinates.** The eye (3.75, 12.25), the align bars (edges on 4/7/9/12)
+  and the r 6.375 rings put edges inside device pixels at both densities.
+- **Whole-pixel centre-lines at 1×.** A 1.125px line centred on a whole pixel covers two
+  pixels at 56%. Centred on x.5 it fills one pixel, plus a 6% fringe.
+- **Weight at 2×.** 1.125px is 2.25 device pixels, so every straight edge carries a faint
+  fringe. Fluent's 1px is exactly 2 device pixels. This remains while the weight is 1.125.
+  The pixel check has an "Area 1× at 1px" column to judge snapping the weight to 1px on 1×
+  screens (open decision).
+- **Diagonals crossing pixel edges mid-way.** A 45° line is sharpest when x − y (or x + y)
+  is whole. The check moved from 2.75 to 3 and went from 0.66 to 0.82 at 2×.
+
+Crispness at 1× (share of ink in solid pixels), first pass → second pass: align-left 0.45 →
+0.81, bell 0.48 → 0.70, check 0.07 → 0.53, eye 0.17 → 0.49, info 0.35 → 0.49, settings 0.27 →
+0.50, status-available 0.37 → 0.55. Add stays at 0: its stem must centre on 8, as Fluent's
+does.
+
+**Rules the lint adds:**
+- `data-keyline` is square, circle, horizontal or vertical, and the ink box at 1.125px
+  fits it (13 × 13, ⌀14, 14 × 11, 11 × 14);
+- axis-aligned edges and circle extremes sit on the 0.5px grid;
+- 45° segments sit on the diagonal pixel lattice;
+- separate stroked shapes join or keep at least 2.5px between centre-lines (3px is the
+  unit);
+- centre-lines stay within 1.5–14.5.
+
+`--report` prints each icon's keyline, ink box and centre.
+
+**Drawings**, with ink at 1.125px:
+
+| Icon | Keyline | Construction | Ink |
+|---|---|---|---|
+| add | square | 11px cross on 8 | 12.1 × 12.1 |
+| align-left | square | edge line x 2.5; bars 8 × 3 and 5 × 3, r 1, starting x 5.5; bar gap 3 = edge gap 3 | 12.1 × 12.1 |
+| bell | square | r 4.5 dome at y 7, sides x 3.5/12.5, 45° flare to a closed base at y 11.5 (2.5–13.5), r 1.5 clapper joined to the base | 12.1 × 11.6 |
+| check | horizontal | arms 3.5 / 7 (1:2), M3 8 L6.5 11.5 L13.5 4.5 | 11.6 × 8.1 |
+| chevron-down | horizontal | 9 × 4.5, M3.5 5.5 L8 10 L12.5 5.5 | 10.1 × 5.6 |
+| dismiss | circle | 10 × 10, 3 → 13 | 11.1 × 11.1 |
+| eye | horizontal | almond 1.5–14.5 × 3.5–12.5, r 1.5 pupil (gap 3) | 14.1 × 10.1 |
+| info | circle | ring r 6.5; stem 7.5–11; ⌀1.75 dot at y 5 | 14.1 × 14.1 |
+| more-horizontal | horizontal | ⌀2 dots at 3, 8, 13 | 12 × 2 |
+| search | circle | r 5 lens at 7,7; handle to 14,14 | 13.1 × 13.1 |
+| settings | circle | 6 teeth: tips at 5.59 (flat at y 2.5), roots solved so the side roots sit on x 4/12; r 1.5 hub, 2.5 from the roots | 11.7 × 12.1 |
+| status-available | circle | ring r 6.5; ring check 2 / 4 (M5 8 L7 10 L11 6), the check's 1:2 shape | 14.1 × 14.1 |
+
+Against Fluent, with ink as w × h: add 12.1 vs 12; check 11.6 × 8.1 vs 11.75 × 8.5; close 11.1 vs 11;
+chevron 10.1 × 5.6 vs 9.9 × 5.5; search 13.1 vs 12.9; settings 11.7 × 12.1 vs 11.5 × 12. The
+eye is a full almond (Fluent draws only the upper lid), so it is larger by design.
+
+**Gallery.** The Iconography page adds:
+- *Side by side*: Fluent and Area at 16px, both at 4× on the pixel grid with the
+  icon's keyline, and Area drawn over Fluent;
+- *Optical balance*: the set in one line at 16 and 32px;
+- *Pixel check*: now with an "Area 1× at 1px" column.
+
+**Open (resolved in the third pass):** the balance strip, the 1× weight, the gear's teeth.
+The status marks (`status/`) still use quarter coordinates and have not had this pass.
+
+## Third pass: negative space, filled variants, second batch, 2026-09-25
+
+Owner review:
+- the balance reads better;
+- the bell's small clapper cup left negative space that unbalanced it, worst at small sizes;
+- future icons need minimum negative space and intentional gaps, as in align-left;
+- look at filled versions.
+
+The owner deferred the 1× weight to a recommendation and accepted six teeth.
+
+**Decisions:**
+- **1× weight: keep 1.125px everywhere.** Measured over the set, snapping to 1px on 1×
+  screens changes the solid-pixel share from 0.53 to 0.54, which is nothing. The drawing
+  rules did the work. Area now averages 0.53 at 1× and 0.79 at 2×, against Fluent's 0.36
+  and 0.65. The "1× at 1px" column was removed.
+- **Gear: six teeth.** Five were rendered beside six and eight. Five reads as a flower,
+  with one axis of symmetry and a flat bottom, and its flats cannot land on the grid.
+  Eight clogs at 16px.
+
+**Negative space (lint, measured in ink at 1.125px):**
+- gaps between separate shapes must be tight (1.25–1.625), standard (1.75–2) or open
+  (≥ 2.5), or the shapes must join;
+- every enclosed counter must hold a 1.75px disc. The ink is rasterised at 8 samples per
+  px, the outside is flood-filled, and each pocket's widest inscribed disc is measured.
+
+The check rejects both earlier bells: the first pass's floating clapper (0.88px gap) and
+the second pass's joined cup (0.43px counter). `--report` lists every gap and counter.
+Current values: align-left gaps 1.88 × 3, counters 1.93; eye gap 1.88, pupil 1.88; info
+1.56 / 1.56 tight, 1.88 standard; settings hub 1.38 tight, hole 1.88; trash handle
+counter 1.93.
+
+**Changes:**
+- **bell:** the dome and body move up 1px (dome top y 2, closed body with a 45° flare to a
+  base at 10.5). The clapper is a detached r 1.75 arc (M6.5 13 A1.75 … 9.5 13), a tight
+  1.38 gap below the base, so the enclosed cup is gone. Ink 12.1 × 13.0.
+- **info:** the dot moves to y 4.5 and the stem runs to 11.5. Dot-to-ring and dot-to-stem
+  are both 1.56 (tight); stem-to-ring is 1.88 (standard).
+- **status/unknown:** the question-mark dot was 0.81 from its hook. The hook now ends at
+  9.5 and the dot is at 12.25 (1.31, tight).
+
+**Filled variants.** Cursor's rule is "solid shapes with the interior details knocked
+out". Cursor's docs site uses only stroked UI icons (57 stroked, no filled icons), so
+there was nothing to measure there. Fluent's 16px filled cuts were read for reference:
+- enclosed shapes become solid, with details knocked out at the regular weight (info,
+  check-circle, gear hub hole ⌀3.5);
+- line glyphs get a heavier line instead;
+- the filled bell separates its clapper with a gap.
+
+Area derives the filled icon from the outline source. Each shape has a `data-filled` role
+(solid, knockout, hole); knockouts are drawn in an SVG mask with a per-instance
+`useId`. The generator emits `Pilot<Name>FilledIcon` and `PILOT_ICONS[].Filled`.
+Filled variants exist for align-left, bell, copy, document, eye, folder, info, settings,
+status-available, trash and warning. Line glyphs have none, by rule. Knockout lines use
+`--area-weight-icon`.
+
+**Second batch.** These test the rules on new cases, with Fluent regular and filled cuts
+vendored as references through `gen-icons.mjs`:
+
+| Icon | Keyline | Construction | Ink | Negative space |
+|---|---|---|---|---|
+| copy | square | front 8 × 8 r 1 at 5.5; back sheet as an L (2.5, 8 → 8.5, 2.5) ending 3 from the front | 12.1 × 12.1 | gap 1.88 |
+| document | vertical | 9 × 13 page, 45° clipped corner (9.5, 1.5 → 12.5, 4.5), lines 6.5–9.5 at y 8.5 / 11.5 | 10.1 × 14.1 | lines 1.88 from every edge. No dog-ear: its triangle counter would be about 0.6px |
+| folder | horizontal | closed tab silhouette, 45° tab step (6.5, 3.5 → 8, 5) | 14.1 × 10.1 | no flap line: it would leave a 0.38px band beside the tab |
+| trash | vertical | lid 3–13 at y 4.5; handle 6.5–9.5, 3 tall; body 3.5–12.5; lines at x 6.5 / 9.5 | 11.1 × 14.1 | handle counter 1.93; lines 1.88 to lid, sides and base. The handle sits on the line positions |
+| warning | circle, `data-angles="free"` | triangle (8, 1) (14.5, 13.5) (1.5, 13.5), r 1.25 corners; ! stem 6.25–8, ⌀1.75 dot at 10.75 | 12.5 × 12.2 | stem and dot 1.3 tight to the sides and base; the triangle is lifted 0.5px so its ink box centres |
+
+The warning shows the limit of 16px. The 60° apex is narrow, so the ! stem can only be
+1.75px long while keeping tight gaps. Owner to judge whether it reads.
+
+**Gallery:**
+- a *Filled* sheet: outline, filled, Fluent filled, and both at 4× with the keyline;
+- the side-by-side and pixel sheets use new 2x5 tile spans for the 17 icons.
+
+## Fourth pass: clapper, dots, layering, 2026-09-25
+
+Owner:
+- Fluent is a good baseline but not optically consistent across its set;
+- prefers a closed clapper cup, bigger;
+- the i and ! dots may be slightly too big;
+- wants Fluent's layered fold (document) and flap (folder).
+
+**Counter scale.** Enclosed counters now use the same two steps as gaps: tight
+(1.25–1.625) for satellite pockets such as a clapper cup or a fold, and standard (≥ 1.75)
+for the rest. Anything smaller or in between fails the lint.
+
+**Exploration sheet.** Candidates live in `assets/area-icons-pilot/explore/`. They are
+linted without failing the build, generated to `src/pilot-explore.tsx`, and shown on the
+gallery's Exploration section at 16px beside text and at 4×, each with its gaps, counters
+and rule findings.
+
+| Question | Candidate | Counter | Verdict |
+|---|---|---|---|
+| Bell clapper | detached arc (third pass) | none (gap 1.38) | passes |
+| | cup r 1.5 | 0.43 | fails |
+| | cup r 2 | 0.93 | fails |
+| | cup r 2.5 | 1.43 tight | passes; wide |
+| | **U cup 3 × 3** | **1.93 standard** | **adopted** |
+| | U cup 4 × 2.5 | 1.43 tight | passes |
+| Document fold | clipped corner (third pass) | none | passes |
+| | fold 3, Fluent's size | 0.66 | fails |
+| | **fold 4** | **1.35 tight** | **adopted** |
+| | fold 4.5 | 1.68, off the lattice | fails |
+| Folder flap | none (third pass) | none | passes |
+| | **flap closing the tab** | **1.93 standard** | **adopted** |
+| | flap across | 1.93 | passes; ignores the tab |
+
+**Dot size.** Geist was measured by rendering it at 400px:
+- the i's dot is 1.05× the stem width (and a little taller than wide);
+- the !'s dot is 1.3× the stem width.
+
+Both are rounded squares. A circle needs a little more width to look the same size, so a
+round dot belongs at about 1.25–1.35× the line. The ⌀1.75 dot was 1.56×. Adopted ⌀1.5
+(1.33×) for info and warning. The more-horizontal dots stay ⌀2, a standalone role.
+
+Changes:
+- **info:** stem 7.25–11.5, dot ⌀1.5 at y 4.375; dot-to-ring and dot-to-stem 1.56 (tight),
+  stem-to-ring 1.88;
+- **warning:** dot ⌀1.5 at y 10.75; gaps 1.44 (tight);
+- **bell:** U cup M6.5 10.5 V12 A1.5 … 9.5 12 V10.5, joined to the base; counter 1.93. Ink
+  box 12.1 × 12.6, centred 0.25px high (heavy base). Filled: body and cup solid;
+- **document:** 4px fold, with the diagonal on the lattice (8.5, 1.5 → 12.5, 5.5) and an
+  r 1 corner. Lines stay 3 from the fold. Filled: the fold and lines are knockouts, so the
+  corner reads as a separate layer;
+- **folder:** flap M1.5 6.5 H6.5 L8 5 closes the tab. Filled: the flap is a knockout.
+
+The candidate files stay until the owner confirms. Then delete `explore/`, and the
+section empties.
+
+## Fifth pass: owner picks, sizes, first components, 2026-09-25
+
+**Owner picks** (candidates deleted; the Exploration section shows only while
+`assets/area-icons-pilot/explore/` holds candidates):
+- bell: U cup, 4 wide and 2.5 deep (tight counter 1.43). A 0.5px shift would put the
+  flare off the diagonal lattice, so the body is 1px longer instead: sides 6.5–10.5, base
+  11.5, cup M6 11.5 V12 A2 … 10 12 V11.5. Ink 12.1 × 13.1, centred;
+- dot ⌀1.5 for info and warning;
+- document fold 4;
+- folder flap closing the tab.
+
+**Sizes.** A new *Sizes* sheet shows the 16px drawings in 12 and 20px slots two ways.
+Values at each size:
+
+| Size | Scaled line (Cursor) | Constant 1.125 line: standard / tight gap | Adjacent text stem |
+|---|---|---|---|
+| 12 | 0.84 | 1.13 / 0.75 | 1.0 (12/400) |
+| 16 | 1.125 | 1.88 / 1.38 | 1.2 (14/400) |
+| 20 | 1.41 | 2.63 / 2.0 | 1.35 (16/400) |
+
+With a constant line, the 12px gaps fall below the tight step, so dense icons (gear,
+trash, eye, document, warning) clog. The *Sizes at 12px* sheet shows it at 1× and 2×.
+Scaling keeps the gaps proportional, and its line tracks the adjacent text stem at every
+size. **Recommendation: scale uniformly from 12 to 20px** (Cursor's model; the generated
+components already do this). Draw 12px cuts only for dense icons, and only if 1× must
+read at 12px: at 1× they blur in both modes. Owner to confirm.
+
+Note: the Presence marks use a constant line (non-scaling stroke) by the earlier owner
+decision. They are simple marks inside a ring, so the constant line holds up there.
+
+**Components.** The first Fluent family is replaced in components that draw their own
+glyphs:
+- `apps/docs/scripts/gen-pilot-icons.mjs` writes `packages/react/src/components/glyphs.ts`
+  (PACKAGE_GLYPHS: check, check-inset (the check inside the Available ring), chevron-down,
+  dismiss);
+- `Glyph.tsx` renders them, with `rotate` for 90/180/270;
+- base.css sets the line: `[data-area-glyph] path { stroke-width: var(--area-weight-icon) }`.
+
+| Component | Was (Fluent) | Now |
+|---|---|---|
+| Badge dismiss (12px) | dismiss_12 | dismiss |
+| NumberField steppers (12px) | chevron_up/down_12 | chevron-down, rotated 180 for up |
+| TreeView disclosure (16px) | chevron_down_16 | chevron-down (CSS still rotates −90 when collapsed) |
+| TreeView checkbox (14px inside the box border) | checkmark_16 | check-inset, the same shared part as Available |
+
+At 12px the scaled line is 0.84px against Fluent's 1px 12px cut. Composer's send arrow
+and the icons that demos pass in (folders, files) are still Fluent.
+
+**Sixth pass, same day: status marks and arrow.**
+- The lint now holds status marks to every rule except keylines (grid, lattice, gaps,
+  counters).
+- **available:** now the shared inset check (M5 8 L7 10 L11 6), the same part as the
+  Available icon and the TreeView checkbox. The old check was off the lattice.
+- **blocked:** the slash now runs from top-left to bottom-right, per Cursor's direction
+  rule for negation.
+- **out-of-office:** the arrowhead moved onto the lattice (M12 8 H4 M7 5 L4 8 L7 11).
+- **unknown:** the dot is ⌀1.5 (the dot rule); its gap to the hook is 1.44, tight.
+- **arrow-up** is new: vertical keyline, M8 13 V3 M3.5 7.5 L8 3 L12.5 7.5, lattice-aligned,
+  ink 10.1 × 11.1. It is a package glyph, and Composer's send button now uses it.

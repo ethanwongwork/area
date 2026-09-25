@@ -21,6 +21,12 @@
   ::placeholder {
     color: var(--area-fg-placeholder);
   }
+
+  /* Area-drawn component glyphs (packages/react Glyph, docs/specs/icons.md): stroked on a
+     16px grid, the line set by the typeface's icon weight and scaling with the slot. */
+  [data-area-glyph] path {
+    stroke-width: var(--area-weight-icon);
+  }
 }
 
 @layer area.utilities {

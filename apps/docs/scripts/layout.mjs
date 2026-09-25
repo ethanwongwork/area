@@ -682,6 +682,8 @@ export const DOCS_CSS = `
   .docs-visual-gallery__tile[data-span="2x1"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); }
   .docs-visual-gallery__tile[data-span="2x2"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 2; }
   .docs-visual-gallery__tile[data-span="2x3"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 3; }
+  .docs-visual-gallery__tile[data-span="2x4"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 4; }
+  .docs-visual-gallery__tile[data-span="2x5"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 5; }
   .docs-visual-gallery__tile-title {
     padding: var(--area-space-8) var(--area-space-12);
     font-size: var(--area-ui-size);
