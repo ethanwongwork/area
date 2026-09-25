@@ -83,18 +83,36 @@ the lint prints every gap and counter with `--report`.
 - layering: fold and flap lines are knockouts in the filled variant, so the layer reads
   in both states.
 
-**Filled variants.** The filled icon is derived from the outline, never drawn separately
-(Cursor: solid shapes with the interior details knocked out). Each shape declares a role
-with `data-filled`:
-- `solid` fills the shape and keeps its stroke, so the silhouette has the outline's exact
-  outer edge;
-- `knockout` cuts the stroke out of the solids at the icon weight (the i, the check, the
-  pupil ring, a document's lines);
-- `hole` cuts the shape's interior out (the gear hub, the i dot).
-Unmarked shapes are drawn as in the outline (the clapper, trash lid, copy's back sheet).
-Line glyphs (add, check, close, chevron, more) have no filled variant; they are the same
-in both states. Knockouts follow the same gap scale as ink. The solid bridge between a
-knockout and the edge must be standard or wider.
+**Filled variants.** Every icon has one, derived from the outline, never drawn
+separately. Filled is about emphasis and layers, not flooding the shape:
+- **Enclosed shapes fill.** Mark each shape with `data-filled`:
+  - `solid` fills it and keeps the outline's outer edge;
+  - `knockout` cuts an inner detail out at the icon weight, with round caps (the i, the
+    check, the pupil ring, a document's text lines);
+  - `hole` cuts an interior out (the gear hub, the i dot).
+- **Layers separate.** Where the outline shows two parts or layers, the filled variant
+  shows negative space between them, even where the outline strokes join:
+  - `cut`: a layer line (a fold or a flap). The outline draws it as a stroke; the filled
+    variant turns it into a gap at the icon weight with square ends and sharp corners,
+    extended past the silhouette so it runs cleanly through. It must start and end with
+    straight segments. Never let a cut end inside the fill, where its rounded cap shows
+    as a notch;
+  - `gap`: a separation that exists only in the filled variant, such as the line between
+    the bell's body and its clapper (Fluent does the same).
+- **Line glyphs fill by weight.** An icon with no solid shape (add, check, arrows, link,
+  reset…) gets its filled variant by drawing every stroke at 4/3 of the icon weight
+  (1.5px, Fluent's filled line), with dots grown by the same amount. The same applies to
+  unmarked strokes beside solids (align-left's edge line, trash's lid).
+- **Gaps must survive the heavier line.** The lint rechecks every gap at 1.5px; it must stay
+  at least 1px (Cursor's 2.5px between centre-lines). Prefer standard gaps in line
+  glyphs.
+
+**Arrows.** One arrowhead system, so arrows read as arrows at 12px:
+- standalone arrows: a 90° head with 5px legs on a 12px stem (M8 14 V2 M3 7 L8 2 L13 7),
+  Fluent's proportion; other directions are rotations;
+- arrows inside another icon (reset, open, out-of-office): a 90° head with 3px legs,
+  identical in every icon;
+- heads sit on the diagonal lattice. Never shrink a head to fit; move or resize the body.
 
 **Lines and angles.** Lines run at 0°, 45° and 90°. A radial exception such as the gear
 must be declared with `data-angles="radial"` (gear) or `"free"` (triangle). Round caps and joins. Corners are rounded
@@ -128,8 +146,8 @@ from `--area-weight-icon`.
    1.5–14.5), angles and attributes, and prints each icon's ink box and centre.
 4. **Review** each icon on `gallery-icons.html`: its tile shows every size, the 4× comparison
    with Fluent, and the icon inside a Button, Badge, Menu item and Nav item beside
-   Fluent's. Directional families are one drawing with `data-rotations`; never redraw a
-   rotation. Then **compare** the set on `gallery-iconography.html`:
+   Fluent's. Directional families are one drawing with `data-rotations` (quarter turns, or
+   `flipx` / `flipy` mirrors); never redraw a rotation or a mirror. Then **compare** the set on `gallery-iconography.html`:
    - *Side by side*: Fluent and Area at 16px and at 4× on the pixel grid with the
      keyline, and Area drawn over Fluent;
    - *Optical balance*: the whole set in one line at 16 and 32px. Look for the icon

@@ -82,6 +82,8 @@ const MAP = {
   FluentChevronUpIcon: "chevron_up_16_regular",
   FluentArrowLeftIcon: "arrow_left_16_regular",
   FluentArrowDownIcon: "arrow_down_16_regular",
+  FluentAlignRightIcon: "align_right_16_regular",
+  FluentAlignCenterIcon: "align_center_horizontal_16_regular",
 };
 // Inline SVG for the documentation's own chrome: toolbars, and the sidebar's section
 // icons. Keyed by the page slug where it names one, so a new foundation page gets an icon

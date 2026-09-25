@@ -5,7 +5,7 @@ import { EXPLORE } from "../pilot-explore.tsx";
 
 /* The Iconography sheets compare base drawings; rotations appear on the per-icon review page. */
 const BASE_ICONS = PILOT_ICONS.filter(icon => !icon.derivedFrom);
-import { AlignLeftIcon, BellIcon, CheckIcon, ChevronIcon, DismissIcon, InfoIcon, MoreIcon, PlusIcon, PresenceAvailableIcon, SearchIcon, SettingsIcon, FluentEyeIcon, FluentAlignLeftFilledIcon, FluentBellFilledIcon, FluentCheckCircleFilledIcon, FluentEyeFilledIcon, FluentInfoFilledIcon, FluentSettingsFilledIcon, AlertIcon, ArrowUpIcon, ArrowIcon, LinkIcon, OpenIcon, PersonSmallIcon, FluentResetIcon, FluentChevronLeftIcon, FluentChevronRightIcon, FluentChevronUpIcon, FluentArrowLeftIcon, FluentArrowDownIcon, DocumentIcon, FolderIcon, TrashIcon, FluentCopyIcon, FluentCopyFilledIcon, FluentDocumentFilledIcon, FluentFolderFilledIcon, FluentTrashFilledIcon, FluentWarningFilledIcon } from "../icons.tsx";
+import { AlignLeftIcon, BellIcon, CheckIcon, ChevronIcon, DismissIcon, InfoIcon, MoreIcon, PlusIcon, PresenceAvailableIcon, SearchIcon, SettingsIcon, FluentEyeIcon, FluentAlignLeftFilledIcon, FluentBellFilledIcon, FluentCheckCircleFilledIcon, FluentEyeFilledIcon, FluentInfoFilledIcon, FluentSettingsFilledIcon, AlertIcon, ArrowUpIcon, ArrowIcon, LinkIcon, OpenIcon, PersonSmallIcon, FluentResetIcon, FluentChevronLeftIcon, FluentChevronRightIcon, FluentChevronUpIcon, FluentArrowLeftIcon, FluentArrowDownIcon, FluentAlignRightIcon, FluentAlignCenterIcon, AlignTopIcon, AlignMiddleIcon, AlignBottomIcon, DocumentIcon, FolderIcon, TrashIcon, FluentCopyIcon, FluentCopyFilledIcon, FluentDocumentFilledIcon, FluentFolderFilledIcon, FluentTrashFilledIcon, FluentWarningFilledIcon } from "../icons.tsx";
 
 /* Icon pilot (docs/specs/icons.md): each icon beside a 14/20 regular label, the UI text it
    pairs with. One tile per stroke weight, plus the Fluent icons Area uses today. */
@@ -14,7 +14,7 @@ const LABELS: Record<string, string> = {
   "add": "Add", "align-left": "Align left", "bell": "Notifications", "check": "Check",
   "chevron-down": "Expand", "dismiss": "Close", "eye": "Show", "info": "Info",
   "more-horizontal": "More", "search": "Search", "settings": "Settings", "status-available": "Available",
-  "arrow-up": "Send", "arrow-right": "Next", "arrow-down": "Down", "arrow-left": "Back", "chevron-left": "Previous", "chevron-right": "Open", "chevron-up": "Collapse", "link": "Link", "open": "Open in new tab", "person": "Profile", "reset": "Reset", "copy": "Copy", "document": "Document", "folder": "Folder", "trash": "Delete", "warning": "Warning",
+  "arrow-up": "Send", "arrow-right": "Next", "arrow-down": "Down", "arrow-left": "Back", "chevron-left": "Previous", "chevron-right": "Open", "chevron-up": "Collapse", "link": "Link", "open": "Open in new tab", "person": "Profile", "reset": "Reset", "align-right": "Align right", "align-center": "Align center", "align-top": "Align top", "align-middle": "Align middle", "align-bottom": "Align bottom", "copy": "Copy", "document": "Document", "folder": "Folder", "trash": "Delete", "warning": "Warning",
 };
 
 const grid: CSSProperties = {
@@ -42,7 +42,7 @@ const FLUENT: [string, () => ReactElement][] = [
   ["add", PlusIcon], ["align-left", AlignLeftIcon], ["bell", BellIcon], ["check", CheckIcon],
   ["chevron-down", ChevronIcon], ["dismiss", DismissIcon], ["eye", FluentEyeIcon], ["info", InfoIcon],
   ["more-horizontal", MoreIcon], ["search", SearchIcon], ["settings", SettingsIcon], ["status-available", PresenceAvailableIcon],
-  ["arrow-up", ArrowUpIcon], ["arrow-right", ArrowIcon], ["copy", FluentCopyIcon], ["link", LinkIcon], ["open", OpenIcon], ["person", PersonSmallIcon], ["reset", FluentResetIcon], ["chevron-left", FluentChevronLeftIcon], ["chevron-right", FluentChevronRightIcon], ["chevron-up", FluentChevronUpIcon], ["arrow-left", FluentArrowLeftIcon], ["arrow-down", FluentArrowDownIcon], ["document", DocumentIcon], ["folder", FolderIcon], ["trash", TrashIcon], ["warning", AlertIcon],
+  ["arrow-up", ArrowUpIcon], ["arrow-right", ArrowIcon], ["copy", FluentCopyIcon], ["link", LinkIcon], ["open", OpenIcon], ["person", PersonSmallIcon], ["reset", FluentResetIcon], ["chevron-left", FluentChevronLeftIcon], ["chevron-right", FluentChevronRightIcon], ["chevron-up", FluentChevronUpIcon], ["arrow-left", FluentArrowLeftIcon], ["arrow-down", FluentArrowDownIcon], ["align-right", FluentAlignRightIcon], ["align-center", AlignMiddleIcon], ["align-top", AlignTopIcon], ["align-middle", FluentAlignCenterIcon], ["align-bottom", AlignBottomIcon], ["document", DocumentIcon], ["folder", FolderIcon], ["trash", TrashIcon], ["warning", AlertIcon],
 ];
 export const GalleryIconPilotFluent = () => (
   <div style={grid}>
@@ -275,26 +275,26 @@ const Context = ({ icon, filled, label }: { icon: () => ReactElement; filled?: (
 );
 const IconReview = ({ name }: { name: string }) => {
   const entry = PILOT_ICONS.find(icon => icon.name === name)!;
-  const { Icon, Filled, keyline } = entry;
+  const { Icon, Filled, keyline, fill } = entry;
   const Fluent = fluentFor(name);
   const FluentFilled = FLUENT_FILLED[name];
   const label = LABELS[name] ?? name;
   return (
     <div style={reviewTile}>
-      <span style={muted}>{keyline} keyline{Filled ? " · has a filled variant" : " · line glyph, no filled variant"}</span>
+      <span style={muted}>{keyline} keyline · filled by {fill === "solid" ? "solid shapes and cut-outs" : "a heavier line (1.5px)"}</span>
       <div style={reviewRow}>
         {SIZES.map(size => <div key={size} style={sizeCell}>{at(<Icon />, size)}<span style={muted}>{size}</span></div>)}
-        {Filled ? SIZES.slice(1, 3).map(size => <div key={"f" + size} style={sizeCell}>{at(<Filled />, size)}<span style={muted}>filled {size}</span></div>) : null}
+        {SIZES.slice(1, 3).map(size => <div key={"f" + size} style={sizeCell}>{at(<Filled />, size)}<span style={muted}>filled {size}</span></div>)}
       </div>
       <div style={reviewRow}>
         <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(<Icon weight={1.125} />)}</div><span style={muted}>Area</span></div>
         {Fluent ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(Fluent())}</div><span style={muted}>Fluent</span></div> : null}
         {Fluent ? <div style={sizeCell}><div style={plate}>{big(Fluent(), { color: "var(--area-fg-accent)", opacity: 0.45 })}{big(<Icon weight={1.125} />)}</div><span style={muted}>over Fluent</span></div> : null}
-        {Filled && FluentFilled ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(<Filled weight={1.125} />)}</div><span style={muted}>Area filled</span></div> : null}
-        {Filled && FluentFilled ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(FluentFilled())}</div><span style={muted}>Fluent filled</span></div> : null}
+        <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(<Filled weight={1.125} />)}</div><span style={muted}>Area filled</span></div>
+        {FluentFilled ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(FluentFilled())}</div><span style={muted}>Fluent filled</span></div> : null}
       </div>
       <span style={muted}>Area in context</span>
-      <Context icon={() => <Icon />} filled={Filled ? () => <Filled /> : undefined} label={label} />
+      <Context icon={() => <Icon />} filled={() => <Filled />} label={label} />
       {Fluent ? <span style={muted}>Fluent in context</span> : null}
       {Fluent ? <Context icon={Fluent} filled={FluentFilled} label={label} /> : null}
     </div>

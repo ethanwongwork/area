@@ -808,7 +808,7 @@ function iconExploreSection() {
 const iconReviewSections = () => [
   iconReviewSection("icon-compare", "Side by side", "fluent-area-keylines", "GalleryIconPilotCompare", "2x5"),
   iconReviewSection("icon-balance", "Optical balance", "set-16-32", "GalleryIconPilotBalance", "2x1"),
-  iconReviewSection("icon-filled", "Filled", "outline-filled-fluent", "GalleryIconPilotFilled", "2x4"),
+  iconReviewSection("icon-filled", "Filled", "outline-filled-fluent", "GalleryIconPilotFilled", "2x5"),
   iconReviewSection("icon-sizes", "Sizes", "scaled-vs-constant-line", "GalleryIconPilotSizes", "2x2"),
   iconReviewSection("icon-sizes-raster", "Sizes at 12px", "raster-12-1x-2x", "GalleryIconPilotSizesRaster", "2x3"),
   iconReviewSection("icon-pixels", "Pixel check", "raster-1x-2x", "GalleryIconPilotPixels", "2x5"),

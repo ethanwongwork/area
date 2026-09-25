@@ -485,3 +485,46 @@ Then:
 - swap the demo-level Fluent imports (PlusIcon, SearchIcon…) for Area icons, family by
   family; this changes every gallery demo, so the owner approves each family;
 - retire the Fluent map.
+
+## Eighth pass: filled layering, filled line glyphs, arrows, 2026-09-25
+
+Owner:
+- likes that Fluent's filled icons use negative space to imply layers and separation,
+  even where the outline strokes join;
+- dislikes the rounded corners the folder's knockout showed inside the fill;
+- likes Fluent's arrow size; Area's arrow got lost at small sizes;
+- asked how line icons should fill ("just thicken the stroke").
+
+**Filled roles** (generator and lint):
+- `cut` is a layer line that becomes a square-ended, sharp-cornered gap, extended 2px past
+  the silhouette along its end segments. It is used for the folder's flap and the
+  document's fold. The folder's cut now runs from outside the left edge, along the flap,
+  and out past the tab step;
+- `gap` is a filled-only separation. The bell has one at y 12.625 (x 4–12), leaving a
+  1.4px clapper below the body, like Fluent's filled alert;
+- **Line glyphs** fill by weight: every stroke at 4/3 of `--area-weight-icon` (1.5px), and
+  dots grow by the same amount. Unmarked strokes beside solids are drawn at 1.5px too.
+  Every icon now has a filled variant; `PILOT_ICONS[].fill` is `solid` or `weight`.
+- **The lint checks gaps at 1.5px:** they must stay at least 1px. Open's tight arrowhead
+  gap reaches exactly 1.0.
+
+**Arrows:**
+
+| Arrow | Change | Result |
+|---|---|---|
+| arrow-up (and its rotations) | M8 14 V2 M3 7 L8 2 L13 7: 5px legs on a 12px stem | ink 11.1 × 13.1; Fluent's head is 9 wide on 11.5, so Area's is at least as present |
+| reset | circle r 5 moved to 8, 9.5; head legs 3 (M8.5 1.5 L5.5 4.5 L8.5 7.5), apex at 5.5, 4.5 | ink 11.1 × 14.1, centred |
+
+Embedded heads (reset, open, out-of-office) all use 3px legs.
+
+**Batch 4, alignment.** `data-rotations` also accepts `flipx` / `flipy` (a mirror across the
+centre keeps the grid and swaps the two lattice conditions).
+- align-left gives align-top (90), align-bottom (270) and align-right (flipx);
+- align-center is new: bars 8 × 3 and 5 × 3 (the same parts as align-left) centred on x 8;
+  the centre line runs behind the bars as stubs (2.5–3.5, 6.5–9.5, 12.5–13.5), so it reads
+  as a layer, not a line through the counters. Ink 9.1 × 12.1; gap and counters standard;
+- align-middle is align-center at 90.
+
+Fluent references: align_right, align_top, align_bottom, align_center_vertical (for
+align-center) and align_center_horizontal (for align-middle). Distribute is left for later.
+The set has 33 icons.

@@ -51,6 +51,8 @@ It started on port 3000 in the latest session (4321 by default); open
     Sizes sheets (scaled vs constant line at 12/20px);
   - seventh pass: `gallery-icons.html` review page (one tile per icon, sizes, 4×, contexts),
     folder 11 × 9, rotations (`data-rotations`), batch 3 (open, link, person, reset); 28 icons;
+  - eighth pass: filled layering (`cut`, `gap` roles), line glyphs fill by weight (1.5px),
+    arrowhead system (5px standalone, 3px embedded); batch 4 alignment (33 icons);
   - components: Badge dismiss, NumberField steppers, TreeView chevron and check, Composer
     send arrow now draw Area glyphs (`packages/react/src/components/glyphs.ts` + `Glyph.tsx`);
     status marks pass done (strict lint, shared inset check);
@@ -65,7 +67,7 @@ It started on port 3000 in the latest session (4321 by default); open
 
 1. Owner: confirm the size model (scale 12–20px, recommended) and the 12px glyphs in
    Badge and NumberField (`docs/specs/icons.md`, fifth pass).
-2. Next icon work: batch 4 (alignment) per the roadmap in `docs/specs/icons.md`; review
+2. Next icon work: batch 5 (docs chrome), then 6 (Area's 29 marks) per the roadmap in `docs/specs/icons.md`; review
    each icon on `gallery-icons.html`. Swapping demo-level Fluent imports needs the owner.
 3. Icons: replace the remaining Fluent families. Move Area's 29 marks to 1.125px at the
    same time.
