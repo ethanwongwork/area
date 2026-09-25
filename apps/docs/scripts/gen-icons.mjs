@@ -76,6 +76,12 @@ const MAP = {
   FluentCopyFilledIcon: "copy_16_filled",
   FluentTrashFilledIcon: "delete_16_filled",
   FluentWarningFilledIcon: "warning_16_filled",
+  FluentResetIcon: "arrow_counterclockwise_16_regular",
+  FluentChevronLeftIcon: "chevron_left_16_regular",
+  FluentChevronRightIcon: "chevron_right_16_regular",
+  FluentChevronUpIcon: "chevron_up_16_regular",
+  FluentArrowLeftIcon: "arrow_left_16_regular",
+  FluentArrowDownIcon: "arrow_down_16_regular",
 };
 // Inline SVG for the documentation's own chrome: toolbars, and the sidebar's section
 // icons. Keyed by the page slug where it names one, so a new foundation page gets an icon

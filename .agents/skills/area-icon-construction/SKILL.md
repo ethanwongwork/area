@@ -126,7 +126,10 @@ from `--area-weight-icon`.
 3. **Lint** with `node apps/docs/scripts/gen-pilot-icons.mjs --report`. It checks the 0.5px
    grid, the diagonal lattice, the keyline, gaps, the live area (centre-lines within
    1.5–14.5), angles and attributes, and prints each icon's ink box and centre.
-4. **Compare** on `gallery-iconography.html`:
+4. **Review** each icon on `gallery-icons.html`: its tile shows every size, the 4× comparison
+   with Fluent, and the icon inside a Button, Badge, Menu item and Nav item beside
+   Fluent's. Directional families are one drawing with `data-rotations`; never redraw a
+   rotation. Then **compare** the set on `gallery-iconography.html`:
    - *Side by side*: Fluent and Area at 16px and at 4× on the pixel grid with the
      keyline, and Area drawn over Fluent;
    - *Optical balance*: the whole set in one line at 16 and 32px. Look for the icon

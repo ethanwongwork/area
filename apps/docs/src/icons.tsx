@@ -284,6 +284,48 @@ export const FluentWarningFilledIcon = () => (
   </svg>
 );
 
+/** Fluent `arrow_counterclockwise_16_regular`. */
+export const FluentResetIcon = () => (
+  <svg {...base}>
+    <path d="M13 8a5 5 0 0 0-9-3h2a.5.5 0 1 1 0 1H2.99a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 1 0v1.53A5.99 5.99 0 0 1 14 8a6 6 0 0 1-11.97.54.5.5 0 0 1 1-.08A5 5 0 0 0 13 8" />
+  </svg>
+);
+
+/** Fluent `chevron_left_16_regular`. */
+export const FluentChevronLeftIcon = () => (
+  <svg {...base}>
+    <path d="M10.35 3.15c.2.2.2.5 0 .7L6.21 8l4.14 4.15a.5.5 0 0 1-.7.7l-4.5-4.5a.5.5 0 0 1 0-.7l4.5-4.5c.2-.2.5-.2.7 0" />
+  </svg>
+);
+
+/** Fluent `chevron_right_16_regular`. */
+export const FluentChevronRightIcon = () => (
+  <svg {...base}>
+    <path d="M5.65 3.15a.5.5 0 0 0 0 .7L9.79 8l-4.14 4.15a.5.5 0 0 0 .7.7l4.5-4.5a.5.5 0 0 0 0-.7l-4.5-4.5a.5.5 0 0 0-.7 0" />
+  </svg>
+);
+
+/** Fluent `chevron_up_16_regular`. */
+export const FluentChevronUpIcon = () => (
+  <svg {...base}>
+    <path d="M3.15 10.35c.2.2.5.2.7 0L8 6.21l4.15 4.14a.5.5 0 0 0 .7-.7l-4.5-4.5a.5.5 0 0 0-.7 0l-4.5 4.5a.5.5 0 0 0 0 .7" />
+  </svg>
+);
+
+/** Fluent `arrow_left_16_regular`. */
+export const FluentArrowLeftIcon = () => (
+  <svg {...base}>
+    <path d="M13.5 8.5a.5.5 0 0 0 0-1H3.8l4.03-3.63a.5.5 0 1 0-.66-.74l-5 4.5a.5.5 0 0 0 0 .74l5 4.5a.5.5 0 1 0 .66-.74L3.8 8.5z" />
+  </svg>
+);
+
+/** Fluent `arrow_down_16_regular`. */
+export const FluentArrowDownIcon = () => (
+  <svg {...base}>
+    <path d="M8.5 2.5a.5.5 0 1 0-1 0v9.7L3.87 8.17a.5.5 0 1 0-.74.66l4.5 5a.5.5 0 0 0 .74 0l4.5-5a.5.5 0 0 0-.74-.66L8.5 12.2z" />
+  </svg>
+);
+
 /*
  * Area's marks. They are stroked rather than filled, so they take their own base: the
  * fill is off and the colour rides on the stroke. Fitted to Fluent's optical weight by

@@ -805,7 +805,7 @@ function iconExploreSection() {
   if (!existsSync(dir) || !readdirSync(dir).some(file => file.endsWith(".svg"))) return "";
   return iconReviewSection("icon-explore", "Exploration", "candidates", "GalleryIconPilotExplore", "2x5");
 }
-const iconReviewSections = () => iconExploreSection() + [
+const iconReviewSections = () => [
   iconReviewSection("icon-compare", "Side by side", "fluent-area-keylines", "GalleryIconPilotCompare", "2x5"),
   iconReviewSection("icon-balance", "Optical balance", "set-16-32", "GalleryIconPilotBalance", "2x1"),
   iconReviewSection("icon-filled", "Filled", "outline-filled-fluent", "GalleryIconPilotFilled", "2x4"),
@@ -814,11 +814,27 @@ const iconReviewSections = () => iconExploreSection() + [
   iconReviewSection("icon-pixels", "Pixel check", "raster-1x-2x", "GalleryIconPilotPixels", "2x5"),
 ].join("");
 
+/** Icon review page: one tile per pilot icon (demos named GalleryIconReview<Name>). */
+function iconReviewPage() {
+  const names = Object.keys(demos).filter(name => name.startsWith("GalleryIconReview")).sort();
+  const slug = name => name.replace("GalleryIconReview", "").replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+  return `<details open class="docs-visual-gallery__section" id="gallery-section-icon-review">
+      <summary class="docs-visual-gallery__section-title">Icons, one by one</summary>
+      <div class="docs-visual-gallery__grid">${names.map(name => `
+        <article class="docs-visual-gallery__tile" data-span="2x3" id="gallery-icon-review-${slug(name)}" aria-labelledby="gallery-title-icon-review-${slug(name)}">
+          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-review-${slug(name)}">${slug(name)}</h3>
+          <div class="docs-visual-gallery__tile-preview">${demos[name].html}</div>
+        </article>`).join("")}
+      </div>
+    </details>`;
+}
+
 /** Gallery pages, in nav order. The documentation site stays hidden until it is rebuilt. */
 const GALLERY_PAGES = [
   ["gallery-components.html", "Components"],
   ["gallery-typeRamp.html", "Type ramp"],
   ["gallery-iconography.html", "Iconography"],
+  ["gallery-icons.html", "Icons"],
   ["gallery-color.html", "Color"],
   ["gallery-scale.html", "UI scale"],
   ["gallery-radius.html", "Radius"],
@@ -1850,6 +1866,7 @@ const pages = [
   ["gallery.html", redirectPage("gallery-components.html")],
   ["gallery-components.html", galleryPage()],
   ["gallery-typeRamp.html", galleryShell({ current: "gallery-typeRamp.html", title: "Type ramp", body: `<div class="docs-gallery-foundation">${bodyOf(typographyPage)}</div>` })],
+  ["gallery-icons.html", galleryShell({ current: "gallery-icons.html", title: "Icons", body: iconExploreSection() + iconReviewPage() })],
   ["gallery-iconography.html", galleryShell({ current: "gallery-iconography.html", title: "Iconography", body: galleryPage({ families: ["icon-pilot"] }) + iconReviewSections() + `<div class="docs-gallery-foundation">${bodyOf(iconographyPage)}</div>` })],
   ["gallery-color.html", galleryShell({ current: "gallery-color.html", title: "Color", body: `<div class="docs-gallery-foundation">${bodyOf(colorPage)}</div>` })],
   ["gallery-scale.html", galleryShell({ current: "gallery-scale.html", title: "UI scale", body: `<div class="docs-gallery-foundation">${bodyOf(uiScalePage)}</div>` })],

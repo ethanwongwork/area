@@ -432,3 +432,56 @@ and the icons that demos pass in (folders, files) are still Fluent.
 - **unknown:** the dot is ⌀1.5 (the dot rule); its gap to the hook is 1.44, tight.
 - **arrow-up** is new: vertical keyline, M8 13 V3 M3.5 7.5 L8 3 L12.5 7.5, lattice-aligned,
   ink 10.1 × 11.1. It is a package glyph, and Composer's send button now uses it.
+
+## Seventh pass: review page, folder, direction family, batch 3, 2026-09-25
+
+**Review page.** The gallery has a new *Icons* page (`gallery-icons.html`) with one tile per
+icon (`ICON_REVIEW_DEMOS` in `apps/docs/src/demos/icons.tsx`). Each tile shows:
+- the icon at 12, 16, 20, 24 and 32px, and the filled variant at 16 and 20;
+- Area and Fluent at 4× on the pixel grid with the keyline, Area over Fluent, and both
+  filled variants;
+- a real outline Button, icon-only Button, soft Button, Badge, Menu item and Nav item (the
+  current item uses the filled variant), first with the Area icon and then with Fluent's.
+
+Cursor's icons are proprietary and are not stored in the repository; compare against the
+product directly. The Exploration section moved to this page.
+
+**Folder** (owner: too long, make it more square but still a rectangle). Four proportions
+are on the Exploration sheet: 13 × 9 (previous), 11 × 9, 12 × 10 and 11 × 10. Applied
+**11 × 9** (1.22:1, ink 12.1 × 10.1). Its edges stay on the x.5 grid, and it sits at the
+size of its neighbours. The tab step and flap stay on the lattice.
+
+**Directional families.** `data-rotations` on a source emits rotated icons (one drawing,
+rotated about 8,8). A quarter turn keeps the grid and the diagonal lattice; the keyline
+swaps for 90° and 270°.
+- chevron-down gives chevron-left, chevron-up and chevron-right;
+- arrow-up gives arrow-right, arrow-down and arrow-left.
+
+**Batch 3**, the icons components already use:
+
+| Icon | Keyline | Construction | Ink | Negative space |
+|---|---|---|---|---|
+| open | square | 11 × 11 box, r 1, top-right corner replaced by the arrow (head 10.5–13.5, shaft to 8, 8) | 12.1 × 12.1 | box ends 2.5 from the head (tight) |
+| link | horizontal | two r 3 brackets (x 2–6.5, 9.5–14, y 5–11) and a bar 6–10 | 13.1 × 7.1 | bracket to bracket and bar to bracket 1.88 (standard) |
+| person | vertical | r 2.5 head at 8, 5; closed shoulders 3.5–12.5 × 10–13.5, r 3 | 10.1 × 12.1 | head gap 1.38 (tight), body counter 2.43 |
+| reset | circle | r 5 arc (centre 8, 8.5) from the left, three-quarters round to the top, chevron head M7 2 L5.5 3.5 L7 5 | 11.1 × 12.6 | none |
+
+For reset, a corner-arrowhead version (Lucide's construction) read as a "t" and was
+dropped.
+
+## Full set roadmap
+
+Each batch goes through the skill: draw, lint, review page, owner review.
+
+| Batch | Icons | Replaces |
+|---|---|---|
+| 1–3 (done) | add, align-left, arrow ×4, bell, check, chevron ×4, copy, dismiss, document, eye, folder, info, link, more, open, person, reset, search, settings, status-available, trash, warning | Fluent in components and demos |
+| 4: alignment | align top, middle and bottom; align center and right; distribute | AlignTop/Middle/Bottom (12 demo uses) |
+| 5: docs chrome | expand, panel left/right, book, options, color, text, shapes, lines, square, layers, flash | TOOLBAR |
+| 6: Area marks | the 29 inspector marks (padding, gap, flow, corners, rotate, opacity, token, sliders…) redrawn on the system at 1.125px | `assets/area-icons` |
+| 7: states | eye-off, lock, star, heart, pin, filter, sort, calendar, clock, edit (pencil), send, download, upload, refresh, sparkle | new needs as components arrive |
+
+Then:
+- swap the demo-level Fluent imports (PlusIcon, SearchIcon…) for Area icons, family by
+  family; this changes every gallery demo, so the owner approves each family;
+- retire the Fluent map.

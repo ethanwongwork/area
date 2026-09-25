@@ -229,11 +229,19 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     if (w > kw + 0.25 || h > kh + 0.25) fail(name, `ink ${r2(w)}×${r2(h)} exceeds the ${keyline} keyline ${kw}×${kh}`);
   }
   sink = errors;
-  icons.push({ name, keyline, elements, ink: ink.map(r2), gaps, counters: counters.map(r2), notes, label: root["data-label"] ?? name, group: root["data-group"] ?? "" });
+  icons.push({ name, keyline, elements, ink: ink.map(r2), gaps, counters: counters.map(r2), notes, label: root["data-label"] ?? name, group: root["data-group"] ?? "", rotations: root["data-rotations"] ?? "" });
 }
 return icons;
 }
-const icons = load(SRC, { strict: true });
+// Directional families are one drawing plus rotations about the centre (data-rotations=
+// "chevron-right:270 …"). A quarter turn keeps the 0.5px grid and the diagonal lattice,
+// so rotated icons inherit every rule; the keyline swaps for 90° and 270°.
+const SWAP = { horizontal: "vertical", vertical: "horizontal" };
+const icons = load(SRC, { strict: true }).flatMap(icon => [icon, ...icon.rotations.split(/\s+/).filter(Boolean).map(spec => {
+  const [name, turn] = spec.split(":"); const rotate = Number(turn);
+  if (![90, 180, 270].includes(rotate)) { fail(icon.name, `rotation ${spec} must be 90, 180 or 270`); return null; }
+  return { ...icon, name, rotate, derivedFrom: icon.name, keyline: rotate === 180 ? icon.keyline : SWAP[icon.keyline] ?? icon.keyline };
+}).filter(Boolean)]).sort((a, b) => a.name.localeCompare(b.name));
 // Candidates under review (docs/specs/icons.md): linted with the same rules, findings shown
 // on the gallery's exploration sheet instead of failing the build.
 const EXPLORE_SRC = join(SRC, "explore");
@@ -243,7 +251,7 @@ const statuses = load(STATUS_SRC, { strict: true, keylines: false });
 
 if (errors.length) { console.error(errors.map(e => "✗ " + e).join("\n")); process.exit(1); }
 console.log(`icon lint ok (${icons.length} icons, ${statuses.length} status marks)`);
-if (process.argv.includes("--report")) for (const icon of icons) {
+if (process.argv.includes("--report")) for (const icon of icons.filter(i => !i.derivedFrom)) {
   const [x0, y0, x1, y1] = icon.ink;
   console.log(`  ${icon.name.padEnd(17)} ${icon.keyline.padEnd(10)} ink ${r2(x1 - x0)}×${r2(y1 - y0)}  centre ${r2((x0 + x1) / 2)},${r2((y0 + y1) / 2)}` +
     (icon.gaps.length ? `  gaps ${icon.gaps.join(", ")}` : "") + (icon.counters.length ? `  counters ${icon.counters.join(", ")}` : ""));
@@ -251,7 +259,7 @@ if (process.argv.includes("--report")) for (const icon of icons) {
 if (process.argv.includes("--check")) process.exit(0);
 
 const camel = s => s.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
-const STROKE = `style={{ strokeWidth: weight ?? "var(--area-weight-icon, 1.125px)" }} strokeLinecap="round" strokeLinejoin="round"`;
+const STROKE = `style={{ strokeWidth: weight ?? "var(--area-weight-icon)" }} strokeLinecap="round" strokeLinejoin="round"`;
 const jsx = (el, paint) => {
   const attrs = { ...el.attrs, ...paint?.attrs };
   const props = Object.entries(attrs).map(([k, v]) => `${camel(k)}="${v}"`);
@@ -259,6 +267,8 @@ const jsx = (el, paint) => {
   return `<${el.tag} ${props.join(" ")} />`;
 };
 const component = icon => `Pilot${camel("-" + icon.name)}`;
+// A rotated icon wraps its whole drawing (mask included) in one rotation about the centre.
+const turn = (icon, lines) => icon.rotate ? [`<g transform="rotate(${icon.rotate} 8 8)">`, ...lines.map(l => "  " + l), `</g>`] : lines;
 const hasFilled = icon => icon.elements.some(el => el.filled === "solid");
 // Solids keep their stroke, so the filled silhouette has the outline's exact outer edge.
 const filledBody = icon => {
@@ -294,20 +304,20 @@ const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");
 
 ${icons.map(icon => `export const ${component(icon)}Icon = ({ weight, ...props }: PilotIconProps) => (
   <svg {...base} {...props}>
-    ${icon.elements.map(el => jsx(el)).join("\n    ")}
+    ${turn(icon, icon.elements.map(el => jsx(el))).join("\n    ")}
   </svg>
 );` + (hasFilled(icon) ? `
 
 export const ${component(icon)}FilledIcon = ({ weight, ...props }: PilotIconProps) => {
   ${filledBody(icon).some(line => line.includes("mask")) ? "const id = useMaskId();\n  " : ""}return (
     <svg {...base} {...props}>
-      ${filledBody(icon).join("\n      ")}
+      ${turn(icon, filledBody(icon)).join("\n      ")}
     </svg>
   );
 };` : "")).join("\n\n")}
 
 export const PILOT_ICONS = [
-${icons.map(icon => `  { name: "${icon.name}", keyline: "${icon.keyline}", Icon: ${component(icon)}Icon, Filled: ${hasFilled(icon) ? component(icon) + "FilledIcon" : "undefined"} },`).join("\n")}
+${icons.map(icon => `  { name: "${icon.name}", keyline: "${icon.keyline}", derivedFrom: ${icon.derivedFrom ? `"${icon.derivedFrom}"` : "undefined"}, Icon: ${component(icon)}Icon, Filled: ${hasFilled(icon) ? component(icon) + "FilledIcon" : "undefined"} },`).join("\n")}
 ] as const;
 `;
 writeFileSync(OUT, tsx);

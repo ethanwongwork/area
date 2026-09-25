@@ -1,7 +1,8 @@
 # Handoff — 2026-09-25
 
-PR 1 (`area-evidence-process`) is merged into `main` on GitHub. The icon passes since then
-are uncommitted; move them to a new branch from `main` (see the owner's branch question). The dev server is `npm run dev`.
+PR 1 (`area-evidence-process`) is merged. Icon work continues on branch `icons-system`
+(its own PR). Work one branch per topic, one worktree per session; system-wide files
+(icon generator, base styles, handoff) in one session at a time. The dev server is `npm run dev`.
 It started on port 3000 in the latest session (4321 by default); open
 `/gallery-components.html`. No owner completion changed; Indicator stays In review.
 
@@ -48,6 +49,8 @@ It started on port 3000 in the latest session (4321 by default); open
   - fourth/fifth pass: tiered counter scale; owner picks applied (U cup 4 × 2.5, ⌀1.5 dots,
     fold 4, tab flap); Exploration section appears only while `explore/` has candidates;
     Sizes sheets (scaled vs constant line at 12/20px);
+  - seventh pass: `gallery-icons.html` review page (one tile per icon, sizes, 4×, contexts),
+    folder 11 × 9, rotations (`data-rotations`), batch 3 (open, link, person, reset); 28 icons;
   - components: Badge dismiss, NumberField steppers, TreeView chevron and check, Composer
     send arrow now draw Area glyphs (`packages/react/src/components/glyphs.ts` + `Glyph.tsx`);
     status marks pass done (strict lint, shared inset check);
@@ -62,8 +65,8 @@ It started on port 3000 in the latest session (4321 by default); open
 
 1. Owner: confirm the size model (scale 12–20px, recommended) and the 12px glyphs in
    Badge and NumberField (`docs/specs/icons.md`, fifth pass).
-2. Next icon work: swap demo-level Fluent icons (PlusIcon, SearchIcon…) for pilot icons,
-   which changes every gallery demo — ask first.
+2. Next icon work: batch 4 (alignment) per the roadmap in `docs/specs/icons.md`; review
+   each icon on `gallery-icons.html`. Swapping demo-level Fluent imports needs the owner.
 3. Icons: replace the remaining Fluent families. Move Area's 29 marks to 1.125px at the
    same time.
 4. A stroke and type baseline across Cursor, ChatGPT, Notion and Figma. Product dark themes

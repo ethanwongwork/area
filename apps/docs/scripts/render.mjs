@@ -49,7 +49,7 @@ export async function renderDemos() {
       html: ((name.startsWith("Badge") || name.startsWith("Switch") || name.startsWith("Slider") || name.startsWith("Gallery")) ? renderToString : renderToStaticMarkup)(createElement(Component), { identifierPrefix }),
       code: sources[name] ?? "",
     };
-    if (!sources[name] && !name.startsWith("GalleryBadge")) {
+    if (!sources[name] && !name.startsWith("GalleryBadge") && !name.startsWith("GalleryIconReview")) {
       throw new Error(`Demo "${name}" rendered but its source could not be located.`);
     }
   }

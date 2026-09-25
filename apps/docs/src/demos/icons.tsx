@@ -1,7 +1,11 @@
 import { cloneElement, type CSSProperties, type ReactElement, type ReactNode } from "react";
+import { Badge, Button, Menu, MenuItem, Nav, NavItem } from "@area/react";
 import { PILOT_ICONS } from "../pilot-icons.tsx";
 import { EXPLORE } from "../pilot-explore.tsx";
-import { AlignLeftIcon, BellIcon, CheckIcon, ChevronIcon, DismissIcon, InfoIcon, MoreIcon, PlusIcon, PresenceAvailableIcon, SearchIcon, SettingsIcon, FluentEyeIcon, FluentAlignLeftFilledIcon, FluentBellFilledIcon, FluentCheckCircleFilledIcon, FluentEyeFilledIcon, FluentInfoFilledIcon, FluentSettingsFilledIcon, AlertIcon, ArrowUpIcon, DocumentIcon, FolderIcon, TrashIcon, FluentCopyIcon, FluentCopyFilledIcon, FluentDocumentFilledIcon, FluentFolderFilledIcon, FluentTrashFilledIcon, FluentWarningFilledIcon } from "../icons.tsx";
+
+/* The Iconography sheets compare base drawings; rotations appear on the per-icon review page. */
+const BASE_ICONS = PILOT_ICONS.filter(icon => !icon.derivedFrom);
+import { AlignLeftIcon, BellIcon, CheckIcon, ChevronIcon, DismissIcon, InfoIcon, MoreIcon, PlusIcon, PresenceAvailableIcon, SearchIcon, SettingsIcon, FluentEyeIcon, FluentAlignLeftFilledIcon, FluentBellFilledIcon, FluentCheckCircleFilledIcon, FluentEyeFilledIcon, FluentInfoFilledIcon, FluentSettingsFilledIcon, AlertIcon, ArrowUpIcon, ArrowIcon, LinkIcon, OpenIcon, PersonSmallIcon, FluentResetIcon, FluentChevronLeftIcon, FluentChevronRightIcon, FluentChevronUpIcon, FluentArrowLeftIcon, FluentArrowDownIcon, DocumentIcon, FolderIcon, TrashIcon, FluentCopyIcon, FluentCopyFilledIcon, FluentDocumentFilledIcon, FluentFolderFilledIcon, FluentTrashFilledIcon, FluentWarningFilledIcon } from "../icons.tsx";
 
 /* Icon pilot (docs/specs/icons.md): each icon beside a 14/20 regular label, the UI text it
    pairs with. One tile per stroke weight, plus the Fluent icons Area uses today. */
@@ -10,7 +14,7 @@ const LABELS: Record<string, string> = {
   "add": "Add", "align-left": "Align left", "bell": "Notifications", "check": "Check",
   "chevron-down": "Expand", "dismiss": "Close", "eye": "Show", "info": "Info",
   "more-horizontal": "More", "search": "Search", "settings": "Settings", "status-available": "Available",
-  "arrow-up": "Send", "copy": "Copy", "document": "Document", "folder": "Folder", "trash": "Delete", "warning": "Warning",
+  "arrow-up": "Send", "arrow-right": "Next", "arrow-down": "Down", "arrow-left": "Back", "chevron-left": "Previous", "chevron-right": "Open", "chevron-up": "Collapse", "link": "Link", "open": "Open in new tab", "person": "Profile", "reset": "Reset", "copy": "Copy", "document": "Document", "folder": "Folder", "trash": "Delete", "warning": "Warning",
 };
 
 const grid: CSSProperties = {
@@ -26,7 +30,7 @@ const Row = ({ icon, label }: { icon: ReactNode; label: string }) => (
 
 const PilotGrid = ({ weight }: { weight: number }) => (
   <div style={grid}>
-    {PILOT_ICONS.map(({ name, Icon }) => <Row key={name} icon={<Icon weight={weight} />} label={LABELS[name] ?? name} />)}
+    {BASE_ICONS.map(({ name, Icon }) => <Row key={name} icon={<Icon weight={weight} />} label={LABELS[name] ?? name} />)}
   </div>
 );
 
@@ -38,7 +42,7 @@ const FLUENT: [string, () => ReactElement][] = [
   ["add", PlusIcon], ["align-left", AlignLeftIcon], ["bell", BellIcon], ["check", CheckIcon],
   ["chevron-down", ChevronIcon], ["dismiss", DismissIcon], ["eye", FluentEyeIcon], ["info", InfoIcon],
   ["more-horizontal", MoreIcon], ["search", SearchIcon], ["settings", SettingsIcon], ["status-available", PresenceAvailableIcon],
-  ["arrow-up", ArrowUpIcon], ["copy", FluentCopyIcon], ["document", DocumentIcon], ["folder", FolderIcon], ["trash", TrashIcon], ["warning", AlertIcon],
+  ["arrow-up", ArrowUpIcon], ["arrow-right", ArrowIcon], ["copy", FluentCopyIcon], ["link", LinkIcon], ["open", OpenIcon], ["person", PersonSmallIcon], ["reset", FluentResetIcon], ["chevron-left", FluentChevronLeftIcon], ["chevron-right", FluentChevronRightIcon], ["chevron-up", FluentChevronUpIcon], ["arrow-left", FluentArrowLeftIcon], ["arrow-down", FluentArrowDownIcon], ["document", DocumentIcon], ["folder", FolderIcon], ["trash", TrashIcon], ["warning", AlertIcon],
 ];
 export const GalleryIconPilotFluent = () => (
   <div style={grid}>
@@ -78,8 +82,8 @@ const compareGrid: CSSProperties = {
 export const GalleryIconPilotCompare = () => (
   <div style={compareGrid}>
     <span>Icon</span><span>Fluent</span><span>Area</span><span>Fluent 4×</span><span>Area 4×</span><span>Area over Fluent</span>
-    {PILOT_ICONS.map(({ name, keyline, Icon }) => {
-      const Fluent = fluentFor(name)!;
+    {BASE_ICONS.map(({ name, keyline, Icon }) => {
+      const Fluent = fluentFor(name) ?? (() => <span />);
       return [
         <span key={name + "-label"}>{LABELS[name]}<br /><span style={{ color: "var(--area-fg-muted)" }}>{keyline}</span></span>,
         <Fluent key={name + "-f"} />,
@@ -105,9 +109,9 @@ export const GalleryIconPilotBalance = () => (
   <div style={balanceGrid}>
     {[16, 32].flatMap(size => [
       <span key={"a" + size}>Area {size}</span>,
-      <div key={"as" + size} style={{ ...strip, gap: `var(--area-space-${size / 2})` }}>{PILOT_ICONS.map(({ name, Icon }) => <span key={name}>{at(<Icon weight={1.125} />, size)}</span>)}</div>,
+      <div key={"as" + size} style={{ ...strip, gap: `var(--area-space-${size / 2})` }}>{BASE_ICONS.map(({ name, Icon }) => <span key={name}>{at(<Icon weight={1.125} />, size)}</span>)}</div>,
       <span key={"f" + size}>Fluent {size}</span>,
-      <div key={"fs" + size} style={{ ...strip, gap: `var(--area-space-${size / 2})` }}>{PILOT_ICONS.map(({ name }) => { const Fluent = fluentFor(name)!; return <span key={name}>{at(Fluent(), size)}</span>; })}</div>,
+      <div key={"fs" + size} style={{ ...strip, gap: `var(--area-space-${size / 2})` }}>{BASE_ICONS.map(({ name }) => { const Fluent = fluentFor(name); return <span key={name}>{Fluent ? at(Fluent(), size) : null}</span>; })}</div>,
     ])}
   </div>
 );
@@ -123,8 +127,8 @@ const FLUENT_FILLED: Record<string, () => ReactElement> = {
 export const GalleryIconPilotFilled = () => (
   <div style={compareGrid}>
     <span>Icon</span><span>Outline</span><span>Filled</span><span>Fluent filled</span><span>Area filled 4×</span><span>Fluent filled 4×</span>
-    {PILOT_ICONS.filter(({ Filled }) => Filled).map(({ name, keyline, Icon, Filled }) => {
-      const Area = Filled!, Fluent = FLUENT_FILLED[name]!;
+    {BASE_ICONS.filter(({ Filled }) => Filled).map(({ name, keyline, Icon, Filled }) => {
+      const Area = Filled!, Fluent = FLUENT_FILLED[name] ?? (() => <svg viewBox="0 0 16 16" />);
       return [
         <span key={name + "-label"}>{LABELS[name]}</span>,
         <Icon key={name + "-o"} weight={1.125} />,
@@ -162,7 +166,7 @@ const ExploreGroup = ({ group }: { group: string }) => (
 );
 /* Renders nothing when there are no candidates; the build then omits the section. */
 export const GalleryIconPilotExplore = () => (
-  <div style={{ ...exploreCell, gap: "var(--area-space-32)" }}>
+  <div style={{ ...exploreCell, gap: "var(--area-space-32)", inlineSize: "100%", alignSelf: "start" }}>
     {[...new Set(EXPLORE.map(candidate => candidate.group))].map(group => (
       <div key={group} style={exploreCell}><span style={muted}>{group}</span><ExploreGroup group={group} /></div>
     ))}
@@ -182,7 +186,7 @@ const SizeStrip = ({ size, constant }: { size: number; constant: boolean }) => {
     <div style={exploreCell}>
       <span style={muted}>{size}px, {constant ? "constant line" : "scaled"}: line {px(line)}, standard gap {px(3 * scale - line)}, tight gap {px(2.5 * scale - line)}</span>
       <div style={{ ...strip, gap: "var(--area-space-12)", font: `var(--area-weight-regular) var(--area-text-${text}-size)/var(--area-text-${text}-leading) var(--area-font-sans)` }}>
-        {PILOT_ICONS.map(({ name, Icon }) => <span key={name}>{at(<Icon weight={weight} />, size)}</span>)}
+        {BASE_ICONS.map(({ name, Icon }) => <span key={name}>{at(<Icon weight={weight} />, size)}</span>)}
         <span>Settings</span>
       </div>
     </div>
@@ -201,7 +205,7 @@ const SizeRaster = ({ size, constant, scale }: { size: number; constant: boolean
   <div style={exploreCell}>
     <span style={muted}>{size}px {constant ? "constant" : "scaled"}, {scale}×</span>
     <div style={{ ...strip, gap: "var(--area-space-8)" }}>
-      {PILOT_ICONS.map(({ name, Icon }) => (
+      {BASE_ICONS.map(({ name, Icon }) => (
         <Pixels key={name}><Icon weight={constant ? 1.125 * 16 / size : 1.125} data-scale={String(scale)} data-size={String(size)} /></Pixels>
       ))}
     </div>
@@ -230,7 +234,7 @@ const Pixels = ({ children }: { children: ReactNode }) => (
 export const GalleryIconPilotPixels = () => (
   <div style={pixelGrid}>
     <span>Icon</span><span>Area 1×</span><span>Area 2×</span><span>Fluent 1×</span><span>Fluent 2×</span>
-    {PILOT_ICONS.map(({ name, Icon }) => {
+    {BASE_ICONS.map(({ name, Icon }) => {
       const Fluent = fluentFor(name);
       return [
         <span key={name + "-label"}>{LABELS[name] ?? name}</span>,
@@ -241,4 +245,63 @@ export const GalleryIconPilotPixels = () => (
       ];
     })}
   </div>
+);
+
+/* Icon review (gallery-icons.html): one tile per pilot icon. The icon alone at every slot
+   size, beside Fluent at 4× on the pixel grid, then inside real components, first with the
+   Area icon and then with Fluent's, so each drawing is judged where it will live. Cursor's
+   icons are proprietary and are not stored in the repository; compare against the product. */
+const reviewTile: CSSProperties = {
+  display: "grid", gap: "var(--area-space-16)", color: "var(--area-fg-default)",
+  font: "var(--area-weight-regular) var(--area-text-xs-size)/var(--area-text-xs-leading) var(--area-font-sans)",
+};
+const reviewRow: CSSProperties = { display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: "var(--area-space-16)" };
+const sizeCell: CSSProperties = { display: "grid", justifyItems: "center", gap: "var(--area-space-4)" };
+const SIZES = [12, 16, 20, 24, 32];
+const Context = ({ icon, filled, label }: { icon: () => ReactElement; filled?: () => ReactElement; label: string }) => (
+  <div style={{ ...reviewRow, alignItems: "center" }}>
+    <Button variant="outline" size="sm" icon={icon()}>{label}</Button>
+    <Button variant="ghost" size="sm" iconOnly icon={icon()} aria-label={label} />
+    <Button variant="soft" size="md" icon={icon()}>{label}</Button>
+    <Badge icon={icon()}>{label}</Badge>
+    <Menu style={{ inlineSize: "calc(var(--area-space-80) * 2)" }}>
+      <MenuItem><span className="area-menu__icon">{icon()}</span><span className="area-menu__text">{label}</span></MenuItem>
+    </Menu>
+    <Nav aria-label={label} style={{ inlineSize: "calc(var(--area-space-80) * 2)" }}>
+      <NavItem href="#" icon={icon()}>{label}</NavItem>
+      <NavItem href="#" current icon={(filled ?? icon)()}>{label}</NavItem>
+    </Nav>
+  </div>
+);
+const IconReview = ({ name }: { name: string }) => {
+  const entry = PILOT_ICONS.find(icon => icon.name === name)!;
+  const { Icon, Filled, keyline } = entry;
+  const Fluent = fluentFor(name);
+  const FluentFilled = FLUENT_FILLED[name];
+  const label = LABELS[name] ?? name;
+  return (
+    <div style={reviewTile}>
+      <span style={muted}>{keyline} keyline{Filled ? " · has a filled variant" : " · line glyph, no filled variant"}</span>
+      <div style={reviewRow}>
+        {SIZES.map(size => <div key={size} style={sizeCell}>{at(<Icon />, size)}<span style={muted}>{size}</span></div>)}
+        {Filled ? SIZES.slice(1, 3).map(size => <div key={"f" + size} style={sizeCell}>{at(<Filled />, size)}<span style={muted}>filled {size}</span></div>) : null}
+      </div>
+      <div style={reviewRow}>
+        <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(<Icon weight={1.125} />)}</div><span style={muted}>Area</span></div>
+        {Fluent ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(Fluent())}</div><span style={muted}>Fluent</span></div> : null}
+        {Fluent ? <div style={sizeCell}><div style={plate}>{big(Fluent(), { color: "var(--area-fg-accent)", opacity: 0.45 })}{big(<Icon weight={1.125} />)}</div><span style={muted}>over Fluent</span></div> : null}
+        {Filled && FluentFilled ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(<Filled weight={1.125} />)}</div><span style={muted}>Area filled</span></div> : null}
+        {Filled && FluentFilled ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(FluentFilled())}</div><span style={muted}>Fluent filled</span></div> : null}
+      </div>
+      <span style={muted}>Area in context</span>
+      <Context icon={() => <Icon />} filled={Filled ? () => <Filled /> : undefined} label={label} />
+      {Fluent ? <span style={muted}>Fluent in context</span> : null}
+      {Fluent ? <Context icon={Fluent} filled={FluentFilled} label={label} /> : null}
+    </div>
+  );
+};
+const pascal = (name: string) => name.replace(/(^|-)([a-z0-9])/g, (_, __, c: string) => c.toUpperCase());
+/** One review demo per pilot icon, named GalleryIconReview<Name>; the build lays them out. */
+export const ICON_REVIEW_DEMOS: Record<string, () => ReactElement> = Object.fromEntries(
+  PILOT_ICONS.map(({ name }) => [`GalleryIconReview${pascal(name)}`, () => <IconReview name={name} />]),
 );
