@@ -1,4 +1,0 @@
-### OpenAI Apps SDK UI @ 0f00143  src/components/Transition/TransitionGroup.module.css
-.TransitionGroupChild {
-  display: block;
-}

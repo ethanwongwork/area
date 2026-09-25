@@ -1,4 +1,4 @@
-// Adapted from Mantine Indicator (MIT). Source mapping: docs/COMPONENT_ADAPTATION.md.
+// Adapted from Mantine Indicator (MIT). Source mapping: docs/specs/indicator.md.
 import { forwardRef } from "react";
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { indicatorVariants, indicatorAnchorVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -36,12 +36,13 @@ export interface IndicatorAnchorProps extends HTMLAttributes<HTMLSpanElement> {
   /** Positive CSS length moves the badge inward. Prefer an Area token expression. */
   offset?: string;
   invisible?: boolean;
-  /** Insets rectangular attachments by 4px; circular attachment follows its rim. */
+  /** Insets rectangular count and presence attachments by 4px; by default they centre on the
+   *  owner's corner. Circular owners and activity dots are placed as in docs/specs/indicator.md. */
   compact?: boolean;
 }
 /** The owner supplies the status in its accessible name; the overlay is decorative. */
 export const IndicatorAnchor = forwardRef<HTMLSpanElement, IndicatorAnchorProps>(function IndicatorAnchor(
-  { indicator, placement, overlap = "rectangular", offset, invisible, compact = true, children, className, style, ...rest }, ref,
+  { indicator, placement, overlap = "rectangular", offset, invisible, compact = false, children, className, style, ...rest }, ref,
 ) {
   return <span {...rest} ref={ref} className={indicatorAnchorVariants({ placement, overlap: `overlap-${overlap}`, compact }, className)} style={{ ...style, ...(offset ? { "--area-indicator-anchor-offset": offset } : {}) } as CSSProperties} data-invisible={invisible ? "" : undefined}>
     {children}<span className="area-indicator-anchor__indicator" aria-hidden="true" inert>{indicator}</span>

@@ -38,6 +38,7 @@ const AREA_FILLED = area("area-icons-filled");
 // name -> Fluent icon id, or a size-specific cut where a component owns a larger slot.
 const MAP = {
   PlusIcon: "add_16_regular",
+  BellIcon: "alert_16_regular",
   SearchIcon: "search_16_regular",
   CheckIcon: "checkmark_16_regular",
   InfoIcon: "info_16_regular",
@@ -56,6 +57,12 @@ const MAP = {
   AlignTopIcon: "align_top_16_regular",
   AlignMiddleIcon: "align_center_vertical_16_regular",
   AlignBottomIcon: "align_bottom_16_regular",
+  // Fluent references for the Area icon pilot (docs/specs/icons.md).
+  MoreIcon: "more_horizontal_16_regular",
+  SettingsIcon: "settings_16_regular",
+  FluentEyeIcon: "eye_16_regular",
+  AlignLeftIcon: "align_left_16_regular",
+  PresenceAvailableIcon: "presence_available_16_regular",
 };
 // Inline SVG for the documentation's own chrome: toolbars, and the sidebar's section
 // icons. Keyed by the page slug where it names one, so a new foundation page gets an icon
@@ -261,11 +268,5 @@ console.log(
   `catalogued (${Object.keys(AREA).length} Area + ${REGULAR.length} Fluent)`,
 );
 
-// Native presence cuts: preserve Fluent geometry, never resize a different cut.
-const presenceGlyphs = ["available_filled", "available_regular", "away_filled", "away_regular", "blocked_regular", "busy_filled", "dnd_filled", "dnd_regular", "offline_regular", "oof_regular", "unknown_regular"];
-const presencePaths = Object.fromEntries(presenceGlyphs.map(key => {
-  const [name, style] = key.split("_");
-  return [key, Object.fromEntries([10, 12, 16, 20].map(size => [size, path(`presence_${name}_${size}_${style}`)]))];
-}));
-writeFileSync(resolve(ROOT, "../../packages/react/src/components/presence-icons.ts"),
-  `/** Generated from @fluentui/svg-icons ${require("@fluentui/svg-icons/package.json").version}. MIT, Microsoft. See THIRD_PARTY_NOTICES.md. Regenerate: node apps/docs/scripts/gen-icons.mjs */\nexport const presencePaths = ${JSON.stringify(presencePaths, null, 2)} as const;\n`);
+// Presence status glyphs are Area-drawn since 2026-09-25: see apps/docs/assets/area-icons-pilot/status
+// and scripts/gen-pilot-icons.mjs.

@@ -1,21 +1,30 @@
-/* Fluent PresenceBadge layout and status mapping, MIT Microsoft. */
+/* Presence status (Fluent PresenceBadge mapping, MIT Microsoft). Area-drawn glyphs: the ring is
+   this shell's border and the mark a non-scaling stroke, both --area-weight-icon, so the line
+   weight matches Area's icons and text at every size (docs/specs/icons.md). */
 @layer area.components {
-  /* Fluent's 1px background clip prevents the backing from bleeding past SVG edges.
-     This is anti-aliasing geometry, not a per-glyph optical adjustment. */
-  .area-presence { --_size: var(--area-space-16); --_ink: var(--area-success-solid); --_paper: var(--area-fg-on-success); display: inline-flex; align-items: center; justify-content: center; flex: none; inline-size: var(--_size); block-size: var(--_size); box-sizing: border-box; border-radius: var(--area-radius-full); padding: 1px; background: var(--area-bg-surface); background-clip: content-box; color: var(--_ink); vertical-align: middle; }
-  .area-presence > svg { display: flex; flex: none; max-width: none; max-inline-size: none; inline-size: var(--_size); block-size: var(--_size); margin: -1px; }
+  .area-presence {
+    --_size: var(--area-space-16); --_ink: var(--area-success-solid);
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+    inline-size: var(--_size); block-size: var(--_size); box-sizing: border-box;
+    border: var(--area-weight-icon) solid var(--_ink); border-radius: var(--area-radius-full);
+    background: var(--area-bg-surface); color: var(--_ink); vertical-align: middle;
+  }
+  .area-presence > svg { display: block; flex: none; max-inline-size: none; inline-size: 100%; block-size: 100%; overflow: visible; }
+  .area-presence > svg > path { stroke-width: var(--area-weight-icon); }
+  .area-presence[data-solid] { background: var(--_ink); }
+  /* Out of office always shows its mark on the surface, including busy (Fluent's mapping). */
+  .area-presence[data-out-of-office] { background: var(--area-bg-surface); }
   .area-presence--xs { --_size: calc(var(--area-space-8) + var(--area-space-2)); }
   .area-presence--sm { --_size: var(--area-space-12); }
   .area-presence--md { --_size: var(--area-space-16); }
   .area-presence--lg { --_size: var(--area-space-20); }
-  .area-presence--available { --_ink: var(--area-success-solid); --_paper: var(--area-fg-on-success); }
-  .area-presence--away { --_ink: var(--area-warning-solid); --_paper: var(--area-fg-on-warning); }
-  .area-presence--busy { --_ink: var(--area-danger-solid); --_paper: var(--area-fg-on-danger); }
-  .area-presence--do-not-disturb { --_ink: var(--area-danger-solid); --_paper: var(--area-fg-on-danger); }
-  .area-presence--blocked { --_ink: var(--area-danger-solid); --_paper: var(--area-fg-on-danger); }
-  .area-presence--offline { --_ink: var(--area-neutral-solid); --_paper: var(--area-fg-on-neutral); }
-  .area-presence--unknown { --_ink: var(--area-neutral-solid); --_paper: var(--area-fg-on-neutral); }
-  .area-presence--out-of-office { --_ink: var(--area-discovery-solid); --_paper: var(--area-fg-on-discovery); }
-  .area-presence[data-out-of-office] { background-color: var(--area-bg-surface); }
-  @media (forced-colors: active) { .area-presence { --_ink: CanvasText; --_paper: Canvas; } }
+  .area-presence--available { --_ink: var(--area-success-solid); }
+  .area-presence--away { --_ink: var(--area-warning-solid); }
+  .area-presence--busy { --_ink: var(--area-danger-solid); }
+  .area-presence--do-not-disturb { --_ink: var(--area-danger-solid); }
+  .area-presence--blocked { --_ink: var(--area-danger-solid); }
+  .area-presence--offline { --_ink: var(--area-neutral-solid); }
+  .area-presence--unknown { --_ink: var(--area-neutral-solid); }
+  .area-presence--out-of-office { --_ink: var(--area-discovery-solid); }
+  @media (forced-colors: active) { .area-presence { --_ink: CanvasText; background: Canvas; } .area-presence[data-solid] { background: CanvasText; } }
 }

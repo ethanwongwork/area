@@ -31,9 +31,11 @@ test('anchor overlay is inert and decorative; owner retains its name', () => {
   assert.match(html,/aria-hidden="true" inert=""/); assert.match(html,/data-invisible=""/);assert.match(html,/Inbox, 3 unread/);assert.match(html,/overlap-circular/);
   assert.match(html,/area-indicator-anchor--compact/);
 });
-test('anchor overlays use the same compact attachment scale by default', () => {
+test('anchor overlays centre on the corner by default; compact is an explicit inset', () => {
   const html=render(h(IndicatorAnchor,{indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
-  assert.match(html,/area-indicator-anchor--compact/);
+  assert.doesNotMatch(html,/area-indicator-anchor--compact/);
+  const inset=render(h(IndicatorAnchor,{compact:true,indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
+  assert.match(inset,/area-indicator-anchor--compact/);
 });
 test('group limits children without losing them and uses native popover relationships', () => {
   const html=render(h(BadgeGroup,{visibleCount:1},['Draft','Reviewed','Ready'].map(label=>h(Badge,{key:label},label))));
@@ -45,7 +47,7 @@ test('group limits children without losing them and uses native popover relation
 test('Badge gallery splits the complete matrix into one specimen per tile', async () => {
   const {COMPONENT_PAGES}=await import('../../../apps/docs/src/pages.mjs');
   const examples=COMPONENT_PAGES.find(page=>page.slug==='badge').examples;
-  const gallery=readFileSync(new URL('../../../apps/docs/dist/gallery.html',import.meta.url),'utf8');
+  const gallery=readFileSync(new URL('../../../apps/docs/dist/gallery-components.html',import.meta.url),'utf8');
   assert.equal(examples[0].demo,'BadgeDefault');assert.equal(examples[1].demo,'BadgeVariants');assert.equal(examples[2].demo,'BadgeSizes');
   for(const variant of MANIFESTS.badge.variants.variant) for(const tone of MANIFESTS.badge.variants.tone) {
     const id=`gallery-badge-variant-${variant}-tone-${tone}`;

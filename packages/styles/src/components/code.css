@@ -49,7 +49,7 @@
     min-inline-size: 0;
     color: var(--area-fg-default);
     font-family: var(--area-font-mono);
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--area-weight-regular);
   }
 
   /* The language is a quiet annotation beside the filename, not a second title. */

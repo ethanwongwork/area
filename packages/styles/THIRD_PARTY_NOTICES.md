@@ -1,6 +1,6 @@
 # Third-party notices
 
-Adapted code: Mantine Indicator and Fluent UI PresenceBadge. Native presence SVGs: Microsoft Fluent System Icons (@fluentui/svg-icons, package-lock pinned). Source revisions and modifications: docs/COMPONENT_ADAPTATION.md.
+Adapted code: Mantine Indicator and Fluent UI PresenceBadge. Presence status mapping follows Fluent UI PresenceBadge; the status glyphs are Area-drawn. Source revisions and modifications: docs/specs/indicator.md (Prior implementation record).
 
 ## mantine
 

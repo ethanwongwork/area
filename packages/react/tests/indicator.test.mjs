@@ -17,10 +17,17 @@ test('activity and processing have accessible defaults and support caller labels
   assert.match(render(h(Indicator, {processing: true})), /aria-label="Processing"/);
   assert.match(render(h(Indicator, {processing: true, 'aria-label': 'Sync in progress'})), /aria-label="Sync in progress"/);
 });
-test('presence native cuts, out-of-office shapes, and accessible overrides', () => {
-  for (const [size, cut] of [['xs',10], ['sm',12], ['md',16], ['lg',20]]) {
-    assert.match(render(h(Presence, {size})), new RegExp(`viewBox="0 0 ${cut} ${cut}" width="${cut}" height="${cut}"`));
+test('presence sizes, Area-drawn marks, out-of-office shapes, and accessible overrides', () => {
+  for (const size of ['xs','sm','md','lg']) {
+    const html = render(h(Presence, {size}));
+    assert.match(html, new RegExp(`area-presence--${size}`));
+    // One 16-unit drawing at every size; strokes keep the icon line weight when scaled.
+    assert.match(html, /viewBox="0 0 16 16"/);
+    assert.match(html, /vector-effect="non-scaling-stroke"/);
   }
+  const busy = render(h(Presence, {status:'busy'}));
+  assert.match(busy, /data-solid=/);
+  assert.doesNotMatch(busy, /<svg/);
   for (const status of ['available','away','busy','do-not-disturb','blocked','offline','out-of-office','unknown']) {
     assert.match(render(h(Presence, {status})), new RegExp(`aria-label="${status.replaceAll('-', ' ')}"`));
   }
@@ -39,12 +46,12 @@ test('anchor hides decorative overlays from accessibility while preserving owner
 
 test('Indicator exposes presence status, native size and out-of-office naming', () => {
   assert.match(render(h(Indicator,{status:'away',size:'sm',outOfOffice:true})), /aria-label="away, out of office"/);
-  assert.match(render(h(Indicator,{status:'available',size:'sm'})), /viewBox="0 0 12 12"/);
+  assert.match(render(h(Indicator,{status:'available',size:'sm'})), /area-presence--sm/);
 });
 
 test('gallery presents exactly one indicator variant per specimen', async () => {
   const {readFileSync}=await import('node:fs');
-  const gallery=readFileSync(new URL('../../../apps/docs/dist/gallery.html',import.meta.url),'utf8');
+  const gallery=readFileSync(new URL('../../../apps/docs/dist/gallery-components.html',import.meta.url),'utf8');
   const tiles=[...gallery.matchAll(/<article[^>]*id="gallery-indicator-[^"]+"[^>]*>([\s\S]*?)<\/article>/g)];
   assert.ok(tiles.length > 20);
   for(const [,tile] of tiles) assert.equal((tile.match(/class="area-(?:indicator|presence) /g)||[]).length,1);

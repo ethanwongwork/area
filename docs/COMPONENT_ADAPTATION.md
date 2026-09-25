@@ -1,182 +1,253 @@
-# Adapting an open-source component
+# Building a component
 
-Use this workflow for new Area components and material component refinements. Start
-with working source, not a screenshot approximation. Keep the record short; the working
-component and examples are the deliverables. Update this document as evidence improves it.
+Every visible value in an Area component comes from a measurement of a real component,
+and is then refined so the result looks like it belongs in ChatGPT, Notion and Figma and
+beside every other Area component. That covers size, type, icon, layer structure, radius,
+padding, gap, margin, stroke, weight, fill and elevation. This guide is the process for
+new components and refinements. The owner's current direction overrides it.
 
-## Two passes, one component
+**Current phase: visual first.** Get the exact appearance of each component and variant
+right, then systematize. Spec values go into CSS as literal values with a `/* spec */`
+marker (see [Build](#5-build)). Mapping them to shared tokens is a later, separate phase.
 
-Read [Design references](DESIGN_REFERENCES.md) to choose a primary structural source.
-Use the repository’s `area-visual-language` skill for the visual pass. The existing
-DESIGN_SYSTEM.md, inset.css and CONTRAST.md remain the actual token/geometry constraints.
-Reuse Area’s existing implementation when it already has sound structure; a small fix
-only needs research when a concrete uncertainty remains.
+## What a finished component has
 
-Untitled UI is the default first reference. Gallery specimens show one variant per tile;
-compare separate tiles rather than placing a variant matrix inside a specimen.
+1. **A spec sheet:** `docs/specs/<slug>.md`, from [the template](specs/TEMPLATE.md). It holds
+   the job, variants, sources, anatomy, measurement tables, decisions with reasons, states,
+   peers, visual-pass notes, verification and the owner feedback log.
+2. **Capture files:** `docs/research/captures/<slug>/*.json`. Raw measurements from every
+   reference and from Area itself, produced by one script so they compare directly.
+3. **The implementation:** CSS, `manifest.ts`, React, source-shared demos, one variant per
+   gallery tile, and the docs page, all agreeing.
+4. **Owner acceptance,** recorded in `apps/docs/src/component-status.mjs`. Until then the
+   component is In review, however complete the evidence looks.
 
-**Structure pass:** map shell → content region → text/icon/action slots. Record which
-layer owns height, padding, gap, alignment and hit area. Preserve proven source geometry.
-**Visual pass:** apply Area type, semantic fill/ink/stroke, radius roles, icon cuts and
-state hierarchy. Check the result beside accepted Area peers at the same UI density.
-Resolve a geometry problem in the structure pass rather than hiding it with paint.
+## Evidence
 
-## Slot ownership
+Use every kind of evidence that is available for the component. Each answers a different
+question, and the most accurate result comes from combining them.
+
+| Evidence | Establishes | How to get it |
+|---|---|---|
+| **Target product, live DOM**: ChatGPT, Notion, Figma | The rendered result Area wants to match: dimensions, layer structure, type, paint, elevation and states, in context | Claude in Chrome, with the owner's logged-in sessions. Read-only. [Capture protocol](#capture-protocol) |
+| **Design system, rendered**: docs sites, Storybooks | What the source code renders, measured the same way as the products | Built-in browser for public pages. Same capture script |
+| **Design system, source**: pinned commit | Why it renders that way: DOM, slots, variant API, state mapping, token derivation, keyboard and ARIA behavior | GitHub at a pinned SHA. Clone into the ignored `.cache/sources/<system>@<sha>/` when reading many files |
+| **Design kit**: Figma files | Designer intent: variant matrix, auto-layout padding and gap, named styles | Figma in Chrome, Inspect panel, when the owner has access |
+| **Official guidance**: usage, anatomy and spec pages | Naming, anatomy, when to use a variant, accessibility requirements | Public docs |
+| **Screenshots** | Side-by-side visual comparison only | `zoom` screenshots at a known browser zoom |
+
+Rules:
+
+- **Measure, don't recall.** Every number in a spec cites a capture file or a source line.
+  Write no approximate values. If something can't be measured, write "not found" and
+  say where you looked.
+- **Computed styles are measurements; screenshots are not.** Screenshot pixels depend on
+  zoom and device scale, so use them to judge appearance, never to derive a CSS length.
+- **A product's DOM is evidence, not a code source.** Record its values. Don't copy its
+  CSS, JS, icons or other assets into Area. Adapt code only from sources whose license
+  allows it, pinned, with the required notices kept (`THIRD_PARTY_NOTICES.md` and the
+  package file lists).
+- **A kit can diverge from code.** When a Figma kit and its code disagree, record both
+  and say which one the rendered product matches.
+- **Untitled UI is the first design-system reference** for structure and visual quality.
+  [Design references](DESIGN_REFERENCES.md) lists the other sources and what each is
+  good for. Search every target product for an equivalent before deciding it has none.
+
+## Phase 0: the reference baseline
+
+[Baseline](research/BASELINE.md) records how ChatGPT, Notion and Figma build the basic
+elements that recur across components: control heights, text roles, icon sizes, radius
+steps, stroke and divider paint, fills by state, focus, and elevation. Every spec checks
+its values against it. That shared baseline is what keeps components consistent with
+each other. Extend it when a component measures a new element, and update it when
+products change. Each baseline value cites its captures, like a spec.
+
+## 1. Define the job and variants
+
+- State the component's job and what it is not (for example, Indicator marks status on
+  another element; Badge labels content). Name its related Area components: these are
+  the peers checked in the visual pass.
+- Inventory variants in every reference: each design system's variants, with links, and
+  where each target product uses the component. Keep a variant when a target product
+  uses it or a source shows a real use case. Write one justification line for each.
+- Name variant axes as in [Components](COMPONENTS.md#useful-variants). Record owner
+  decisions at the top of the spec; they override sources.
+
+## 2. Capture evidence
+
+For each variant and state, capture every reference that has it. At minimum:
+
+- the primary design system rendered, plus its source at a pinned commit;
+- every target product that has an equivalent (or a note of where you looked);
+- any other system that is the canonical implementation of the pattern (for example,
+  Fluent for presence status).
+
+### Capture protocol
+
+1. **Set up.** 100% browser zoom, window at least 1280px wide, the product's default
+   density. Captures record device pixel ratio, zoom and viewport automatically.
+2. **Load the script.** In the gallery it is already loaded (`/area-capture.js`). On any
+   other page, run the full text of `apps/docs/public/area-capture.js` with the browser
+   JavaScript tool; it defines `areaCapture`.
+3. **Find the element.** Use a selector, or `await areaCapture.pick()` and click it.
+   Shift+Up/Down moves the highlight to the parent/child, Enter selects, Escape cancels.
+   Pick the component's outermost box, not the whole row it sits in.
+4. **Map slots.** Name the layers with Area's slot vocabulary: `shell`, `content`, `text`,
+   `icon`, `action`, `media`, `indicator`, `anchor`, `track`, `thumb`, and so on. The
+   `shell` slot is required; the other slot measurements are reported relative to it.
+5. **Capture.** `areaCapture.capture(el, { source, variant, state, theme, slots, rules: true })`.
+   `rules: true` records declared CSS where the stylesheet is readable, which exposes
+   the page's own variables and utility classes.
+6. **Save.** Return `JSON.stringify(cap)`: return the string, because browser tools
+   re-serialize returned objects with sorted keys. Save it verbatim as
+   `docs/research/captures/<slug>/<source>--<variant>--<state>--<theme>.json`. Each capture
+   carries a checksum, and the comparison script rejects any file that changed in copying.
+7. **Compare.** `node scripts/capture-compare.mjs docs/research/captures/<slug>/*.json`
+   prints one table per slot and property with one column per capture. Paste it into
+   the spec rather than retyping values.
+
+**States.** Capture rest, then every state the component has: hover (move the real
+pointer over it, then capture while it is still hovered), focus-visible (reach it with
+Tab), pressed, selected, checked, expanded, disabled, invalid. Never trigger an action
+that changes the owner's data in a product: send, delete, share, invite, create,
+publish or purchase. Use UI that is already on screen.
+
+**When a product doesn't show the pattern.** Record where you looked. Don't create data to
+make it appear (an unread item, a shared page). Ask the owner whether a safe fixture
+exists, and use the design-system evidence meanwhile.
+
+**Browser tools.** The Claude in Chrome (Edge) extension truncates long results at about
+900 characters, so keep the capture in a page variable and read it back in 800-character
+chunks. A page that blocks external scripts needs the script pasted in; check
+`areaCapture.fingerprint()` against `node scripts/capture-compare.mjs --fingerprint`. A
+background window may not scroll; hide unrelated gallery sections locally instead.
+
+**Themes.** Capture light and dark. Switching a product's theme changes an account
+setting, so ask the owner to switch it, or get explicit permission first.
+
+**Privacy.** On any page other than localhost, `redact` is on by default. It removes
+text content, ids, labels and data values, and keeps only the URL origin. Pass
+`redact: false` only for public docs pages. Before committing a capture, read it and
+check that it holds no personal content.
+
+### Read the structure
+
+For each reference, write the layer tree mapped to Area slots. Record which layer owns:
+
+- outer height and width,
+- padding and each gap,
+- alignment and hit area,
+- radius and border,
+- paint and elevation.
+
+Note where a source uses absolute positioning, negative margins, transforms or magic
+offsets. Adopt a real structural reason; don't adopt a hack. A slot that needs its own
+geometry (an icon viewport, a larger hit area, a truncating text wrapper) gets its own
+element. A wrapper whose only job is a corrective offset does not.
+
+## 3. Decide spec values
+
+Build the decision table: one row per slot property. Columns hold the references'
+values, the chosen Area value, its basis, and a reason when it differs from the basis.
+Choose in this order:
+
+1. **Owner decision.**
+2. **Target-product agreement.** When two or more of ChatGPT, Notion and Figma agree,
+   adopt their value.
+3. **The primary product for this context,** as assigned in the baseline: Figma for
+   inspector and editing controls, ChatGPT for conversation and composer, Notion for
+   content, navigation and lists.
+4. **The primary design system** fills anatomy, variants and states the products don't
+   show. The rendered result wins over the Figma kit when they disagree.
+5. **Consistency.** The same role in a peer component, or in the baseline, keeps the same
+   value unless the spec gives a reason.
+
+No value is invented, and every Area cell has a basis.
+
+**Icons.** Use the Fluent cut whose native size matches the measured icon slot. Record
+the reference's icon size, stroke weight and ink box for the visual pass. Never scale a
+cut to another size or nudge a glyph.
+
+**Translate relative to the owning slot.** When the reference's slot differs in size from
+Area's (Figma's 24px icon against Area's 16px), record the position relative to that slot
+(the icon corner), not the outer shell. A shell-relative number copied across slot sizes
+lands in the wrong place.
+
+**Weight.** Record text stem, icon stroke and any cutout or ring thickness together.
+Rasterise the text at 100× to measure its stem (Geist 14px: 1.2px at 400, 1.5px at 500).
+Strokes and cutouts should sit within that range; heavier marks read as a different system.
+
+## 4. Slot ownership and insets
 
 A shell owns its outer dimensions, border and shape. A content region owns shared text
-layout. A square icon slot owns the icon viewport; an action slot can own a larger hit
-area and its own inset. A text wrapper owns truncation and multiline alignment. Use a
-wrapper when it has one of these independent jobs, not merely to add a corrective offset.
+layout. A square icon slot owns the icon viewport. An action slot owns its hit area and
+its own inset. A text wrapper owns truncation and multiline alignment. Area examples:
+InputAction (`area-input__action` → action button → action icon), Input's
+affix/control/icon slots, and InputGroupText's visual slot.
 
-Area examples: InputAction (`area-input__action` → action-button → action-icon),
-Input’s affix/control/icon slots, and InputGroupText’s visual slot. These are concrete
-examples of the nested-span pattern the owner described; the exact earlier component
-was not identified. Prefer independent slots when their geometry genuinely differs.
+Write the inset equation before adding values:
 
-Write the inset equation before adding values: outer inset = border + shell padding +
-slot inset. Count the border once. A parent gap separates siblings; it does not replace
-an edge inset. Avoid double-padding a slot already inset by its parent. Respect inset.css,
-square native icon viewports and first-line alignment; never move individual glyphs.
+    outer inset = border + shell padding + slot inset
 
-## Repeatable workflow
+Count the border once. A parent gap separates siblings; it does not replace an edge
+inset. Don't double-pad a slot its parent already insets. The capture's
+`edge from shell` values show each layer's full inset directly: compare them with the
+equation. Follow `packages/styles/src/inset.css`: square native icon viewports,
+cap-height text references, first-line alignment for multiline text, and no per-glyph
+nudges.
 
-1. **Choose a structural match.** Search official repositories for the requested component
-   and variants. Read implementation, CSS, types, tests and accessibility behavior. A
-   product screenshot can guide appearance but does not establish CSS dimensions.
-2. **Pin and attribute.** Resolve a commit SHA, record source paths and license, retain the
-   required notices with redistributed code. Verify icons separately. Do not copy code
-   whose license is unavailable or incompatible. Fetch public source directly; do not
-   scrape rendered marketing HTML as a substitute for implementation.
-3. **Capture the contract.** Note actual source dimensions, DOM structure, layout, state
-   mappings, keyboard behavior, accessible names and defaults. Distinguish source facts
-   from Area choices. Identify which variants solve real use cases.
-4. **Translate narrowly.** Preserve geometry and behavior first. Replace framework-specific
-   styling with Area CSS and tokens. Map typography, paint, radius roles and spacing;
-   reuse existing Area primitives. Keep axes independent. Any dimensional change gets a
-   concrete reason. Preserve native icon paths and size-specific cuts; no glyph nudges.
-5. **Integrate together.** Update CSS, manifest, React/types/refs, source-shared examples,
-   public docs and exports. Test the boundaries that could fail: state transitions,
-   accessible names, overflow, count formatting, disabled/hidden behavior, RTL.
-6. **Inspect and iterate.** Build/typecheck; run relevant tests and browser measurements.
-   Inspect light/dark, representative sizes and narrow layouts. Confirm behavior as well
-   as appearance. Record failures and unverified environments. Stay In review until the
-   owner accepts; passing tests alone are not visual approval.
-7. **Learn from feedback.** Add a dated, concrete lesson to the component record: observed
-   problem → change → evidence. Correct earlier assumptions explicitly. Promote a lesson
-   into this workflow only when it applies beyond that component.
+## 5. Build
 
-### Copyable record
+- **Literal spec values, marked.** Put each measured dimension, type value or shadow in
+  a component-private property set by the base rule or the variant, with a trailing
+  `/* spec */` comment:
 
-- Component and date:
-- Source repository / commit / paths / license:
-- Preserved structure and behavior:
-- Slot ownership (shell / content / icon / text / action):
-- Area substitutions and reasons:
-- Visual reference and evidence type (source / measured DOM / screenshot / design goal):
-- Excluded variants and reasons:
-- Checks / measured result / remaining limits:
-- Feedback iteration (observation → change → verification):
+      .area-indicator--count { --_height: 16px; /* spec */ }
 
-## Indicator — initial adaptation, 2026-09-24
+  Reuse an existing token only when its resolved value is exactly the spec value.
+- **Colors.** Use an existing semantic role when it matches the measured color in the
+  side-by-side comparison. When none does, use a literal `light-dark(<light>, <dark>)`
+  with a `/* spec */` marker and record the measured values in the spec. Never edit
+  `palette.json`. Never weaken contrast tests. Forced colors must keep working.
+- **Structure.** Variants set local properties and the base rule consumes them.
+  Foreground stays fixed on hover. Runtime state uses native/ARIA attributes and
+  documented `data-*` hooks. Keep size, tone, emphasis, state, layout and composition
+  independent.
+- **Integrate together.** Update CSS, `manifest.ts`, React (native props, refs, keyboard
+  behavior, accessible names), source-shared demos, gallery tiles (one variant per tile),
+  docs and exports.
 
-Source: [Mantine Indicator](https://mantine.dev/core/indicator/), MIT, Vitaly Rtishchev.
-Pinned commit: `717124296bd80131b36eefbb73f32c5ec5c7871d`.
-[Implementation](https://github.com/mantinedev/mantine/blob/717124296bd80131b36eefbb73f32c5ec5c7871d/packages/@mantine/core/src/components/Indicator/Indicator.tsx),
-[CSS](https://github.com/mantinedev/mantine/blob/717124296bd80131b36eefbb73f32c5ec5c7871d/packages/@mantine/core/src/components/Indicator/Indicator.module.css),
-[position helper](https://github.com/mantinedev/mantine/blob/717124296bd80131b36eefbb73f32c5ec5c7871d/packages/@mantine/core/src/components/Indicator/get-position-variables/get-position-variables.ts).
+## 6. Verify the structure
 
-- Translated its absolute-position / half-size-translation model to logical CSS: nine
-  positions, offset, hidden attachment. Kept a separate IndicatorAnchor for Area composition.
-- Preserved 10px activity dots, centered nowrap labels, optional cutout, max count and
-  show-zero rules, and the source's processing pulse (1s at Area default motion) (opacity .6→0, scale 0→2.8).
-- Area uses 16px count height and 5px text gutters: readable Area extra-small type, distinct
-  from the source's default 10px indicator box. The border is a 2px surface halo so it
-  does not consume the small label's box. Compact/circular attachment offsets remain
-  Area options. Surface halo, typography, full radius and six tones consume Area tokens.
-- Added full uncapped accessible count, finite/nonnegative count normalization and reduced
-  motion handling. Attached indicators are decorative; the owning control names the state.
-- No arbitrary color/radius/z-index API: semantic tones and CSS tokens own those concerns.
-  No freeform label: short numeric counts and activity dots keep the role distinct from Badge.
+- Capture every Area variant with the same script: the gallery loads it, so call
+  `areaCapture.capture` on the specimen with `source: 'area'`.
+- Run the comparison with the Area captures included. Every difference from the chosen
+  basis is either fixed or explained in the decision table.
+- Run the checks in [Development](DEVELOPMENT.md) that match the change.
 
-## Presence — initial adaptation, 2026-09-24
+## 7. Visual pass
 
-Source: Microsoft Fluent UI PresenceBadge, MIT.
-Pinned commit: `d27922755bebae866d9ffe86b7da44c27ec801ee`.
-[Status selection and semantics](https://github.com/microsoft/fluentui/blob/d27922755bebae866d9ffe86b7da44c27ec801ee/packages/react-components/react-badge/library/src/components/PresenceBadge/usePresenceBadge.tsx),
-[styles](https://github.com/microsoft/fluentui/blob/d27922755bebae866d9ffe86b7da44c27ec801ee/packages/react-components/react-badge/library/src/components/PresenceBadge/usePresenceBadgeStyles.styles.ts),
-[icon mappings](https://github.com/microsoft/fluentui/blob/d27922755bebae866d9ffe86b7da44c27ec801ee/packages/react-components/react-badge/library/src/components/PresenceBadge/presenceIcons.ts).
+Follow the `area-visual-language` skill (`.agents/skills/area-visual-language/SKILL.md`).
+It requires:
 
-- Translated the actual eight-status mapping and out-of-office alternatives. Preserved
-  role=image semantics with overridable accessible labels, circular box, centered icon
-  and source 1px background clip / -1px icon margin for antialiasing. That paired geometry
-  is not an optical nudge: it prevents backing color leaking beyond the SVG silhouette.
-- Native Fluent 10/12/16/20px cuts become Area xs/sm/md/lg. No scaled 6px tiny or 28px
-  extra-large options: upstream maps those to differently sized cuts. Geometry is generated
-  verbatim from the lockfile-pinned @fluentui/svg-icons package using gen-icons.mjs.
-- Replaced Fluent paint with Area success/warning/danger/neutral/discovery solid and paired
-  foreground tokens. Filled glyph holes show their paired foreground; out-of-office
-  variants use the surface backing. Radius stays full because these encode circular states.
-- Exported Presence separately. The old Indicator status prop delegates to Presence for
-  compatibility and is deprecated; examples now use Presence directly.
+- side-by-side screenshots against each target reference at the same zoom, in light and
+  dark;
+- a lineup against the peer components named in the spec;
+- a check against the baseline.
 
-## Lessons to carry forward
+A problem found here goes into the spec's decision table first, then the code, then a
+re-capture. Fix geometry in the structure; don't hide it with paint.
 
-- **2026-09-24 browser correction:** the global SVG max-width reset shrank Presence
-  glyphs by 2px inside Fluent’s padded backing. Removed that max-width constraint on
-  the owned SVG slot; keep the background clip and verify intrinsic/rendered sizes.
+## 8. Owner review and feedback
 
-- **Native icon cuts matter:** a 16px slot does not justify scaling a 20px SVG. Preserve
-  each supplied cut and verify both viewBox and rendered dimensions.
-- **Do not merge distinct roles:** counts/activity belong to Indicator; availability has
-  shape-specific status semantics and belongs to Presence; text tags remain Badge.
-- **Source is a starting contract:** preserve behavior, but document additions such as
-  reduced motion and logical RTL positioning. Do not silently copy source limitations.
-- **Keep provenance distributable:** required MIT notices live in the React and styles
-  package file lists as well as the repository root.
+Give the owner:
 
-## Verification for this adaptation
+- the gallery link for each variant,
+- the spec's comparison table with the Area column,
+- the side-by-side observations,
+- open questions, and anything unverified.
 
-- Build/docs audit and typecheck passed; 85 React tests passed, including count boundaries,
-  zero hiding, status semantics, native cuts and out-of-office mappings.
-- 19,491 token tests, 370 contrast assertions across 66 themes, and consumer packaging
-  checks passed. These do not establish contrast on arbitrary consumer backgrounds.
-- Browser: measured Presence box and SVG at 10/12/16/20px, dots at 10px, count height at
-  16px with 5px gutters. Inspected nine placements, light/dark and Presence at 390px;
-  zero toggle worked and motion=none produced a 0s animation. Restored light/subtle.
-- Cross-engine, native screen-reader and forced-colors execution remain unverified.
-  Both components remain In review. Existing unrelated gallery-wide narrow overflow
-  remains outside this adaptation.
-
-
-## Gallery structure mode
-
-Click **Inspect structure** in the gallery. Hover a specimen and click to pin it; select
-its DOM elements in the layer list to inspect nested divs, spans, icons and actions.
-The overlay shows margin, border, padding and content; the panel reports dimensions,
-row/column gap, alignment, radius, paint, type, shadow and SVG viewBox from computed CSS.
-**Pick another component** resumes picking; Down on that button selects the first visible
-specimen for keyboard inspection. Escape exits. Inspection captures specimen clicks;
-exit before testing their normal interaction.
-
-The tool does not modify component layout. Values are resolved CSS pixels, not token
-provenance or optical ink bounds. Axis-aligned boxes approximate transformed elements;
-negative margins and pseudo-elements are reported rather than fully visualized. Use
-browser DevTools for source-rule provenance, flex/grid tracks and accessibility trees.
-
-
-## Owner follow-up — September 24 evening (supersedes initial adaptation)
-
-- Untitled UI is the preferred starting source and visual reference.
-- Presence is now part of the Indicator family: `Indicator status="available" size="sm"`.
-  `Presence` remains a compatibility export/internal renderer; its separate gallery and
-  docs family were removed. Dot/count continue to use their own structural rendering.
-- Filled available/away/DND icons looked too heavy. Switched to unmodified native Fluent
-  Regular cuts with surface backing. Busy remains Fluent’s solid dot (no Regular cut).
-- Four corner placements suffice; removed middle/center placements and the nine-position
-  matrix. Each status, size, out-of-office state and count gets a separate gallery tile.
-- Rectangular compact inset is now a stable Area 4px token, instead of a percentage that
-  changes with label width. Circle attachment center sits on the 45-degree rim:
-  `(1 - 1/sqrt(2))/2 = 14.64466%` inset on each axis. Compact no longer cancels it.
-- Native browser inspection: @Browser can inspect DOM/applied styles; annotation Adjust
-  supports style feedback. Full CDP Developer mode is optional and permission-gated.
-  The gallery inspector remains a convenient local measurement UI, not a requirement.
+Record feedback in the spec's feedback log (observation → change → evidence) before
+changing code. When a lesson applies beyond one component, add it to this guide or the
+skill, and remove any instruction it replaces. Status stays In review until the owner
+accepts the component in `component-status.mjs`.

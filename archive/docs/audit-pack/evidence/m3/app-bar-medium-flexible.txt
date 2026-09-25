@@ -1,3 +1,0 @@
-### Material 3 tokens (material-web) @ 56a486b  tokens/versions/latest/sass/_md-comp-app-bar-medium-flexible.scss
-container-height: 112px
-with-subtitle-container-height: 136px

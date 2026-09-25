@@ -14,8 +14,8 @@ Required boundaries and state indicators need a distinct signal against their ad
 surfaces. Area's increased-contrast preference targets at least 3:1 for these roles.
 The standard soft presentation falls below that threshold in some cases and must not be
 presented as universally conforming. A token test passing is not proof of rendered
-conformance on arbitrary backgrounds. See the retained
-[paint measurements](../archive/docs/batches/V01/README.md) for historical results.
+conformance on arbitrary backgrounds. Historical paint
+measurements are in Git history (`archive/docs/batches/V01/`, removed after commit `2f90f2d`).
 
 ## Roles
 

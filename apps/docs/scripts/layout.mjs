@@ -606,9 +606,29 @@ export const DOCS_CSS = `
     margin: 0;
     font-weight: var(--area-weight-regular);
   }
+  .docs-gallery-pages {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--area-space-16);
+    margin-block-end: var(--area-space-16);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+  .docs-gallery-pages a { color: var(--area-fg-muted); text-decoration: none; }
+  .docs-gallery-pages a:hover { color: var(--area-fg-default); }
+  .docs-gallery-pages a[aria-current="page"] { color: var(--area-fg-default); }
+  .docs-gallery-foundation { max-inline-size: calc(var(--area-space-96) * 10); }
+  .docs-pixel-preview {
+    display: block;
+    inline-size: var(--area-space-64);
+    block-size: var(--area-space-64);
+    image-rendering: pixelated;
+    box-shadow: 0 0 0 var(--area-border-width) var(--area-border-decorative);
+  }
   .docs-visual-gallery__title {
-    font-size: var(--area-text-xl-size);
-    line-height: var(--area-text-xl-leading);
+    font-size: var(--area-title-sm-size);
+    line-height: var(--area-title-sm-leading);
+    letter-spacing: var(--area-title-sm-tracking);
   }
   .docs-visual-gallery__section + .docs-visual-gallery__section {
     margin-block-start: var(--area-space-8);
@@ -790,7 +810,7 @@ export const DOCS_CSS = `
 
   /* --- Content ----------------------------------------------------------- */
 
-  .docs-title { font-size: var(--area-title-lg-size); line-height: var(--area-title-lg-leading); letter-spacing: var(--area-title-lg-tracking); font-weight: var(--area-weight-strong); }
+  .docs-title { font-size: var(--area-title-lg-size); line-height: var(--area-title-lg-leading); letter-spacing: var(--area-title-lg-tracking); font-weight: var(--area-weight-regular); }
   /*
    * The lede reads at body size, not a step above it. One prose size per page: the lede is
    * already set apart by sitting under the title and taking the muted foreground, and a
@@ -798,8 +818,8 @@ export const DOCS_CSS = `
    */
   .docs-lede { margin-block-start: var(--area-space-8); color: var(--area-fg-muted); }
 
-  .docs-h2 { margin-block: var(--area-space-40) var(--area-space-12); font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); letter-spacing: var(--area-title-md-tracking); font-weight: var(--area-weight-strong); }
-  .docs-h3 { margin-block: var(--area-space-32) var(--area-space-8); font-size: var(--area-title-xs-size); line-height: var(--area-title-xs-leading); letter-spacing: var(--area-title-xs-tracking); font-weight: var(--area-weight-strong); }
+  .docs-h2 { margin-block: var(--area-space-40) var(--area-space-12); font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); letter-spacing: var(--area-title-md-tracking); font-weight: var(--area-weight-regular); }
+  .docs-h3 { margin-block: var(--area-space-32) var(--area-space-8); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading); letter-spacing: var(--area-text-md-tracking); font-weight: var(--area-weight-regular); }
   .docs-note { margin-block-end: var(--area-space-12); color: var(--area-fg-muted); }
   .docs-prose p { margin-block: var(--area-space-12); color: var(--area-fg-muted); }
   .docs-prose p strong { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
@@ -866,7 +886,7 @@ export const DOCS_CSS = `
     padding-inline: var(--area-space-16);
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
   }
-  .docs-customizer__title { font-weight: var(--area-weight-strong); }
+  .docs-customizer__title { font-weight: var(--area-weight-regular); }
   .docs-customizer__name { color: var(--area-fg-muted); font-family: var(--area-font-mono); font-size: var(--area-ui-size); }
   .docs-customizer__bar .area-button:last-child { margin-inline-start: auto; }
 

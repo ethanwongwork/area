@@ -24,7 +24,9 @@
     "test:input-field": "node --test packages/react/tests/input-field.test.mjs",
     "test:badge": "node --test packages/react/tests/badge.test.mjs",
     "test:contracts": "node --test packages/styles/scripts/manifest-parity.test.mjs apps/docs/scripts/axis-preferences.test.mjs",
-    "reference:lookup": "python3 archive/docs/audit-pack/tools/audit-evidence/lookup.py"
+    "capture:compare": "node scripts/capture-compare.mjs",
+    "icons:pilot": "node apps/docs/scripts/gen-pilot-icons.mjs",
+    "lint:icons": "node apps/docs/scripts/gen-pilot-icons.mjs --check"
   },
   "engines": {
     "node": "^22.18.0 || ^24.0.0 || >=26.0.0"

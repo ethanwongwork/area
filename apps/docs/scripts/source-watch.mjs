@@ -2,7 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 const ignored = new Set(['dist', 'node_modules', '.cache', '.git']);
-const source = path => /\.(?:tsx?|mjs|css|json|svg)$/.test(path);
+const source = path => /\.(?:tsx?|m?js|css|json|svg)$/.test(path);
 function fingerprint(path) {
   try { return createHash('sha256').update(readFileSync(path)).digest('hex'); }
   catch (error) { if (error.code === 'ENOENT' || error.code === 'EISDIR') return null; throw error; }

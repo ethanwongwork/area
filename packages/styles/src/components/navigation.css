@@ -45,7 +45,7 @@
     font-family: inherit;
     font-size: var(--_tab-text);
     line-height: var(--_tab-leading);
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--area-weight-regular);
     cursor: pointer;
     transition: var(--area-transition);
   }
@@ -160,7 +160,7 @@
   .area-table th {
     background-color: var(--area-bg-subtle);
     color: var(--area-fg-muted);
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--area-weight-regular);
     white-space: nowrap;
     vertical-align: middle;
   }
@@ -338,7 +338,7 @@
       grid-template-rows: var(--area-control-md) auto;
       padding: 0;
       color: var(--area-fg-muted);
-      font-weight: var(--area-weight-strong);
+      font-weight: var(--area-weight-regular);
     }
     .area-select optgroup option { font-weight: var(--area-weight-regular); }
   }

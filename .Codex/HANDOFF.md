@@ -1,51 +1,70 @@
-# Handoff — 2026-09-24 checkpoint
+# Handoff — 2026-09-25
 
-This checkpoint saves the full refinement session on `main`; GitHub `origin` is canonical.
-Use `git log -1` for the checkpoint SHA and `git status` for any subsequent edits.
-Local preview runs at http://localhost:4321/gallery.html#gallery-section-indicator.
-No new owner completion was granted; refined components remain In review.
+Work from 2026-09-24/25 is on branch `area-evidence-process` (see its PR); `main` holds the
+earlier checkpoint `2f90f2d` until that PR is merged. The dev server is `npm run dev`.
+It started on port 3000 in the latest session (4321 by default); open
+`/gallery-components.html`. No owner completion changed; Indicator stays In review.
 
 ## Owner direction
 
-- Untitled UI is the preferred first source for structure and visual quality. Use real
-  licensed source, explicit shell/text/icon/action slot ownership, then Area tokens.
-- Canonical process: docs/COMPONENT_ADAPTATION.md. Source shortlist:
-  docs/DESIGN_REFERENCES.md. Visual skill: .agents/skills/area-visual-language/SKILL.md.
-  AGENTS.md links them. One component variant per gallery tile.
-- ChatGPT/Notion/Cursor/Figma guide product visual language. Do not infer private tokens
-  or CSS dimensions from screenshots. Gallery Inspect structure is optional; @Browser
-  can inspect DOM/applied styles, and native annotation Adjust supports style feedback.
+- Visual-first: get every component and variant exactly right from measured evidence
+  (ChatGPT, Notion, Figma, Cursor, Untitled UI, Fluent), then systematize tokens.
+- Lighter UI: regular-weight titles, few sizes/weights/colors, one variable per distinction.
+- Area draws its own stroked icons at 1.125px (`--area-weight-icon`).
+- The documentation site is hidden. Work happens in the gallery pages until the owner
+  asks to populate the docs.
 
-## Current implementation
+## Process (read before component work)
 
-- Indicator is one family for count, activity dot and presence status. Use
-  `Indicator status="available" size="sm"`; Presence remains a compatibility export and
-  internal renderer, with its own styling manifest. No separate Presence docs/gallery.
-- Native Fluent Regular presence cuts replace heavy available/away/DND Filled glyphs;
-  busy remains Fluent’s solid dot. Status glyph sizes 10/12/16/20; counts16, activity10.
-- Four corner anchors only. Rectangular compact inset4px; circular inset14.64466% puts
-  the indicator center on the circle’s 45-degree rim. Compact no longer cancels it.
-- Indicator gallery status/size/out-of-office/count variants each occupy their own tile.
-- Badge pill-only, soft/solid/outline/color/modern, 20/24/28px. Fluent icons16 with equal
-  icon-side optical inset; dismiss native12. One neutralsoft link; dot8 slot/6 disc.
-  Custom/ghost/plain/redundant composition variants removed. BadgeGroup is separate.
-- ColorPicker solid HSV/alpha and split ColorField; actual Area palette demo swatches.
-  AlignmentPicker uses three bars, 2px dots, no selected backplate, stretch examples.
-  ButtonGroup, Toolbar, Composer, dialog inset and gallery clipping refinements included.
-- Source pins and MIT notices retained, including published-package file lists.
+- `docs/COMPONENT_ADAPTATION.md` (process), skills `area-component-build` and
+  `area-visual-language` (`.agents/skills`, linked from `.claude/skills`).
+- Capture: `apps/docs/public/area-capture.js` (checksummed, with a fingerprint check);
+  `npm run capture:compare`. The Edge extension truncates results at about 900 characters
+  (read in chunks), background tabs stall async scripts, and products are read-only (ask
+  before switching a product's theme).
+- Specs: `docs/specs/` (indicator, icons, typography, PRIOR_DECISIONS); baseline
+  `docs/research/BASELINE.md`; captures in `docs/research/captures/`.
 
-## Verification
+## Current state
 
-Build/docs audit, typecheck, 87 React tests, 14 contracts, consumer checks, 19,491 token
-checks and 370 contrast assertions across66 themes pass. Browser checked light/dark,
-exact native glyph sizes, one indicator per tile, corrected rectangle/circle anchors,
-zero visibility, motion-off and structure-inspector keyboard/picking/escape behavior.
-Earlier 390px checks covered Presence/color controls; unrelated gallery-wide narrow
-specimen overflow remains. Cross-engine, screen-reader and native forced-colors execution
-remain unverified. Skill YAML validated with Ruby; Python validator lacked PyYAML.
+- **Gallery:** eight pages with a nav: components, typeRamp, iconography, color, scale,
+  radius, surface, motion. `index.html` and `gallery.html` redirect to the components page.
+- **Type ramp (applied):**
+  - text 12/16, 14/20, 16/24; titles 20/28, 24/32, 32/40; titles fixed in compact;
+  - small controls 12/16;
+  - weight 400 everywhere except labels on fills (500).
+- **Icons:**
+  - 12-icon pilot in `apps/docs/assets/area-icons-pilot/` (`npm run icons:pilot`,
+    `npm run lint:icons`);
+  - presence status glyphs are Area-drawn: the ring is the shell's border and the mark a
+    non-scaling stroke, both at `--area-weight-icon`;
+  - the 1× / 2× pixel check is on the iconography page;
+  - Fluent remains in all other components.
+- **Indicator (pilot component):**
+  - 6px dot; 16px count with 10/14 text, weight 500;
+  - 1px surface cutout;
+  - counts centre on the corner (`compact` is opt-in); dots centre on the icon corner;
+  - tabs reserve space after the label; circular owners sit 2px outward.
 
-## Start next session
+## Next
 
-1. Read README and current owner request. Review Indicator visuals before further changes.
-2. Use Untitled UI first for the next requested component; preserve Area token/inset rules.
-3. Keep status owner-confirmed. No mandatory redesign sweep or new component inferred.
+1. Owner review: gallery pages, type ramp, and the pilot icons at 1× (see
+   `docs/specs/icons.md`, "1× pixel check").
+2. Icons: draw the 12px and 20px cuts, then replace Fluent family by family (chevron,
+   close, check, add, search first). Move Area's 29 marks to 1.125px at the same time.
+3. A stroke and type baseline across Cursor, ChatGPT, Notion and Figma. Product dark themes
+   need the owner's go-ahead, and the Figma editor needs Edge in the foreground.
+4. The next component through the process.
+
+## Verification (2026-09-25)
+
+These pass:
+- 19,491 token tests and 370 contrast assertions (66 themes);
+- 87 React tests, typecheck, docs build and audit;
+- 14 contracts, manifest parity, 4 preview tests, consumer check;
+- icon lint, 24 capture checksums, `git diff --check`.
+
+Unverified: cross-engine, screen reader, forced colors (execution) and product dark themes.
+
+About 284MB of ignored leftovers under `archive/` (old source caches and logs) remain on
+disk; delete them manually if wanted.

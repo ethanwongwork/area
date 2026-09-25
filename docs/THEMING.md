@@ -88,7 +88,8 @@ Build the packages before importing them from a fresh checkout.
 
 Saved docs preferences migrate older `brand` to `accent` and old type/density choices
 to the current UI scale. Legacy axis names are not new public API. Historical migration
-notes are retained in the archive; the current registry and public types are authoritative.
+notes are in Git history (the `archive/` folder, removed after commit `2f90f2d`); the current
+registry and public types are authoritative.
 
 The color scope model requires CSS `light-dark()` and `color-scheme`; there is no legacy
 color-injection fallback. Scope fixtures exercise nested resets and portals. A passing

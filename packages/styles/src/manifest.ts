@@ -316,7 +316,7 @@ export const indicator = {
 } as const satisfies ComponentManifest;
 
 export const presence = {
-  block: "area-presence", description: "Shows availability using native Fluent status glyphs.",
+  block: "area-presence", description: "Shows availability with Area-drawn status glyphs at the icon line weight.",
   variants: {status: ["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"], size: ["xs", "sm", "md", "lg"]},
   states: ["out-of-office"],
   defaults: {status: "available", size: "md"},

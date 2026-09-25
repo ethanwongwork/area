@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { Avatar, Badge, Presence, Indicator, IndicatorAnchor, BadgeGroup, Button, Card, CardContent, CardDescription, CardTitle, Nav, NavItem, Table, Theme } from "@area/react";
-import { ArrowIcon, CheckIcon, DismissIcon, InfoIcon, LinkIcon, PlusIcon } from "../icons.tsx";
+import { ArrowIcon, BellIcon, CheckIcon, DismissIcon, InfoIcon, LinkIcon, PlusIcon } from "../icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
 export const BadgeVariants = () => (
@@ -62,6 +62,11 @@ export const BadgeLink = () => <Badge as="a" href="#api" trailingIcon={<LinkIcon
 export const BadgeAnchorButton = () => (
   <IndicatorAnchor indicator={<Indicator count={3} />}>
     <Button aria-label="Label, 3">Button</Button>
+  </IndicatorAnchor>
+);
+export const BadgeAnchorIconButton = () => (
+  <IndicatorAnchor indicator={<Indicator />}>
+    <Button variant="ghost" tone="neutral" iconOnly icon={<BellIcon />} aria-label="Notifications, new activity" />
   </IndicatorAnchor>
 );
 export const BadgeAnchorAvatar = () => (
