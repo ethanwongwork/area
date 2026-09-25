@@ -4,18 +4,18 @@
     {
       "id": "batch-1",
       "title": "Batch 1 · Core",
-      "note": "Approved by the owner on 2026-09-25. Open (filled gap kept by retracting free ends) and reset (Fluent-style corner arrowhead) are revised and back in review. Bell's flare redrawn longer and softer (owner, same day), back in review.",
+      "note": "Approved by the owner on 2026-09-25. Back in review after round 3: open and reset (revised), bell (flare), and document, folder, copy and trash (corner radius 1.5; document fold enlarged to Fluent's size).",
       "icons": {
         "add": "approved",
         "arrow-up": "approved",
         "bell": "review",
         "check": "approved",
         "chevron-down": "approved",
-        "copy": "approved",
+        "copy": "review",
         "dismiss": "approved",
-        "document": "approved",
+        "document": "review",
         "eye": "approved",
-        "folder": "approved",
+        "folder": "review",
         "info": "approved",
         "link": "approved",
         "more-horizontal": "approved",
@@ -25,14 +25,14 @@
         "search": "approved",
         "settings": "approved",
         "status-available": "approved",
-        "trash": "approved",
+        "trash": "review",
         "warning": "approved"
       }
     },
     {
       "id": "batch-2",
       "title": "Batch 2 · Alignment",
-      "note": "Revised after review: the same 8 × 3 and 5 × 3 bars and 3px spacing throughout; the long bar comes first in reading order (align-top and align-middle now transpose instead of rotating).",
+      "note": "Revised: centre variants sized to fill the keyline like align-left (bars 11 × 3 and 7 × 3, same height, radius and spacing); long bar first in reading order.",
       "icons": {
         "align-left": "review",
         "align-center": "review"
@@ -41,7 +41,7 @@
     {
       "id": "batch-3",
       "title": "Batch 3 · Docs chrome",
-      "note": "New for review: the docs site's toolbar and sidebar icons.",
+      "note": "Revised in round 3: two-slider options, wide panels, T for text, rounded flash and droplet tip, shapes cut at the standard gap, r 1.5 corners.",
       "icons": {
         "expand": "review",
         "panel-left": "review",

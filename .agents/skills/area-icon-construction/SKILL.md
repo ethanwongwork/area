@@ -72,7 +72,13 @@ the lint prints every gap and counter with `--report`.
 - ring: r 6.5 at 8,8 (info, status-*, any circled glyph);
 - check: 45° arms in a 1:2 ratio. Standalone it is 3.5 / 7 (M3 8 L6.5 11.5 L13.5 4.5).
   Inside a ring it is 2 / 4 (M5 8 L7 10 L11 6);
-- rect radius: 1px on the centre-line;
+- corner radius, on the centre-line (slightly rounder than Fluent's minimum, well short of
+  ChatGPT's):
+  - 1.5px for containers: pages, folders, boxes, the copy sheets, the trash body;
+  - 2px for wide frames: the panel;
+  - 1px for bars 3px tall (alignment) and small parts (the trash handle);
+- overlap cut: where one shape passes behind another (copy's back sheet, shapes' circle),
+  the hidden part stops 3px short (a standard gap), the same in every icon;
 - dots: ⌀2 for standalone dots (more), on whole-pixel centres so they fill 2 × 2 pixels
   at 1×. ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning).
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
@@ -84,9 +90,19 @@ the lint prints every gap and counter with `--report`.
   both states;
 - bars: 8 × 3 and 5 × 3, r 1, 3px between centre-lines (align family).
 
+**Acute corners.** A straight join sharper than 60° pinches the negative space inside it
+into a thin, sharp wedge (flash's 16° points, the A's apex, layers' side corners). The lint
+fails any straight-to-straight join under 60°. Open the angle, or round the corner with an
+arc, r 1 or more, as a fillet between the two lines. Prefer shapes whose points stay wide:
+flash now has a flat top like Fluent's, with every corner filleted, and the droplet's tip
+is an r 1.5 arc.
+
 **Families.** Related icons share one pattern, as Figma's alignment icons do:
-- the same parts at the same sizes and spacing (the alignment icons all use the 8 × 3 and
-  5 × 3 bars, 3px spacing, and an 11px guide line);
+- the same parts at the same height, radius and spacing, and the same optical size. Every
+  alignment icon uses 3px-tall bars with r 1 at 3px spacing and an 11px guide. Bar length
+  follows the icon's space: beside a guide line the bars are 8 and 5 long; centred on the
+  guide they are 11 and 7 long, so that align-center fills the keyline like align-left.
+  With the 8 and 5 bars it read small;
 - the same reading order: the primary (longer) element comes first, at the top for
   horizontal bars and on the left for vertical bars;
 - the same derivation: one drawing, and the others as quarter turns, mirrors or a
@@ -123,6 +139,14 @@ separately. Filled is about emphasis and layers, not flooding the shape:
 - **Gaps must survive the heavier line.** The lint rechecks every gap at 1.5px; it must stay
   at least 1px (Cursor's 2.5px between centre-lines). Prefer standard gaps in line
   glyphs.
+
+**Proportions from references.** Where Fluent and ChatGPT agree on a shape, follow them:
+- panels are wide (13 × 10), not square;
+- options has two sliders with large knobs;
+- a document's fold is about 5px;
+- text is a T with end ticks and a foot (Fluent's text_t, Lucide's type), not a letter A.
+
+Check ChatGPT's icon set for proportion and roundness, but keep Area's grid and weight.
 
 **Arrows.** One arrowhead system, so arrows read as arrows at 12px:
 - standalone arrows: a 90° head with 5px legs on a 12px stem (M8 14 V2 M3 7 L8 2 L13 7),
@@ -218,6 +242,8 @@ base.css sets the line from `--area-weight-icon` and the size curve.
   layers separated, and no gap closed by a heavier line?
 - Do related icons share parts, spacing, reading order and derivation?
 - Is every arrowhead balanced about the stroke that arrives at it, and the shared size?
+- Is any corner under 60°, or any pocket thin and sharp? Is every container on the shared
+  radius?
 - Are the same parts (ring, check, dot, hub, radius) identical wherever they recur?
 - Are axis-aligned edges on the 0.5px grid, and on x.5 where the shape allows? Are
   diagonals on the lattice?

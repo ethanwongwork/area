@@ -84,35 +84,56 @@ function arcPoints(x1, y1, rx, ry, rotDeg, large, sweep, x2, y2) {
 // Absolute M/L/H/V/A/C/Z only. Returns line segments and every point that bounds the shape.
 function parsePath(name, d) {
   const tokens = d.match(/[A-Za-z]|-?\d*\.?\d+(?:e-?\d+)?/g) ?? [];
-  const segments = [], points = [], samples = [];
+  const segments = [], points = [], samples = [], joins = [];
+  // Straight-to-straight joins (no curve between), for the acute-angle rule.
+  let lastSeg = null, firstSeg = null;
+  const seg = (x1, y1, x2, y2) => {
+    const s = [x1, y1, x2, y2];
+    if (Math.hypot(x2 - x1, y2 - y1) < 1e-6) return;
+    if (lastSeg) joins.push([lastSeg, s]); else if (!firstSeg) firstSeg = s;
+    lastSeg = s;
+  };
   const line = (x1, y1, x2, y2) => { const n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / 0.05)); for (let k = 0; k <= n; k++) samples.push([x1 + (x2 - x1) * k / n, y1 + (y2 - y1) * k / n]); };
   let i = 0, cmd = "", x = 0, y = 0, sx = 0, sy = 0;
   const num = () => Number(tokens[i++]);
   while (i < tokens.length) {
     if (/[A-Za-z]/.test(tokens[i])) cmd = tokens[i++];
     if (/[a-z]/.test(cmd) && cmd !== "z") { fail(name, `relative command "${cmd}" is not allowed; author absolute paths`); return { segments, points, samples }; }
-    if (cmd === "M") { x = num(); y = num(); sx = x; sy = y; points.push([x, y]); cmd = "L"; }
-    else if (cmd === "L") { const nx = num(), ny = num(); segments.push([x, y, nx, ny]); line(x, y, nx, ny); x = nx; y = ny; points.push([x, y]); }
-    else if (cmd === "H") { const nx = num(); segments.push([x, y, nx, y]); line(x, y, nx, y); x = nx; points.push([x, y]); }
-    else if (cmd === "V") { const ny = num(); segments.push([x, y, x, ny]); line(x, y, x, ny); y = ny; points.push([x, y]); }
+    if (cmd === "M") { x = num(); y = num(); sx = x; sy = y; points.push([x, y]); cmd = "L"; lastSeg = null; firstSeg = null; }
+    else if (cmd === "L") { const nx = num(), ny = num(); segments.push([x, y, nx, ny]); seg(x, y, nx, ny); line(x, y, nx, ny); x = nx; y = ny; points.push([x, y]); }
+    else if (cmd === "H") { const nx = num(); segments.push([x, y, nx, y]); seg(x, y, nx, y); line(x, y, nx, y); x = nx; points.push([x, y]); }
+    else if (cmd === "V") { const ny = num(); segments.push([x, y, x, ny]); seg(x, y, x, ny); line(x, y, x, ny); y = ny; points.push([x, y]); }
     else if (cmd === "C") {
+      lastSeg = null; firstSeg = firstSeg ?? "curve";
       const c = [num(), num(), num(), num(), num(), num()];
       for (let k = 0; k <= 64; k++) { const t = k / 64, u = 1 - t; samples.push([u * u * u * x + 3 * u * u * t * c[0] + 3 * u * t * t * c[2] + t * t * t * c[4], u * u * u * y + 3 * u * u * t * c[1] + 3 * u * t * t * c[3] + t * t * t * c[5]]); }
       points.push(...samples.slice(-65)); x = c[4]; y = c[5];
     } else if (cmd === "Q") {
+      lastSeg = null; firstSeg = firstSeg ?? "curve";
       const c = [num(), num(), num(), num()];
       for (let k = 0; k <= 32; k++) { const t = k / 32, u = 1 - t; samples.push([u * u * x + 2 * u * t * c[0] + t * t * c[2], u * u * y + 2 * u * t * c[1] + t * t * c[3]]); }
       points.push(...samples.slice(-33)); x = c[2]; y = c[3];
     } else if (cmd === "A") {
+      lastSeg = null; firstSeg = firstSeg ?? "curve";
       const [rx, ry, rot, large, sweep] = [num(), num(), num(), num(), num()]; const nx = num(), ny = num();
       const arc = arcPoints(x, y, rx, ry, rot, large, sweep, nx, ny);
       points.push(...arc); samples.push(...arc);
       x = nx; y = ny;
-    } else if (cmd === "Z" || cmd === "z") { segments.push([x, y, sx, sy]); line(x, y, sx, sy); x = sx; y = sy; if (i < tokens.length && !/[A-Za-z]/.test(tokens[i])) i++; }
+    } else if (cmd === "Z" || cmd === "z") {
+      segments.push([x, y, sx, sy]); seg(x, y, sx, sy);
+      if (lastSeg && Array.isArray(firstSeg)) joins.push([lastSeg, firstSeg]);
+      line(x, y, sx, sy); x = sx; y = sy; if (i < tokens.length && !/[A-Za-z]/.test(tokens[i])) i++; }
     else { fail(name, `unsupported command "${cmd}"`); return { segments, points, samples }; }
   }
-  return { segments, points, samples };
+  return { segments, points, samples, joins };
 }
+
+// The angle between two joined straight segments, measured inside the corner (180 = straight).
+const joinAngle = ([ax1, ay1, ax2, ay2], [bx1, by1, bx2, by2]) => {
+  const u = [ax1 - ax2, ay1 - ay2], v = [bx2 - bx1, by2 - by1];
+  return Math.acos(Math.max(-1, Math.min(1, (u[0] * v[0] + u[1] * v[1]) / (Math.hypot(...u) * Math.hypot(...v))))) * 180 / Math.PI;
+};
+const ACUTE = 60;   // straight joins sharper than this need a fillet (an arc) or a wider angle
 
 // Filled line glyphs draw at BOLD, which grows each round cap by (BOLD − WEIGHT) / 2. Free
 // ends (touching nothing else) retract by that amount along their straight end segment, so
@@ -215,6 +236,11 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     if (tag === "path") {
       const parsed = parsePath(name, a.d);
       points = parsed.points; samples = parsed.samples;
+      // Acute corners pinch the negative space inside them into thin, sharp wedges.
+      if (strict && stroked) for (const [p, q] of parsed.joins) {
+        const angle = joinAngle(p, q);
+        if (angle < ACUTE - 1e-6) fail(name, `corner at ${r2(p[2])},${r2(p[3])} is ${r2(angle)}°; below ${ACUTE}° round it with an arc (r ≥ 1) or open the angle`);
+      }
       for (const [x1, y1, x2, y2] of parsed.segments) {
         if (Math.hypot(x2 - x1, y2 - y1) < 0.01) continue;
         if (!radial) {
