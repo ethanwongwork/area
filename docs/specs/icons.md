@@ -756,3 +756,23 @@ is symmetric about the arc's direction. The geometry was solved numerically for:
 - head to square a tight gap (1.27; 1.1 when filled);
 - no enclosed sliver;
 - ink 11.9 × 11.4, centred.
+
+**Rotate, round 3.** Owner: the problem is the angle the arrow's end faces; treat it like
+reset and get the arc right; iterate.
+- The head is now reset's corner head, mirrored: an L with equal 3px barbs, up and left,
+  whose corner is the arc's end. The arc arrives at −45°, exactly on the diagonal between
+  the barbs, so the head is balanced about its stroke.
+- A numeric search (arc centre, corner on the 0.5 grid, arc radius, square size and
+  position) kept 19,042 layouts with every gap on the scale. The five varied ones are on
+  the Exploration sheet.
+- Applied B: arc r 6.36 (centre 8, 9.5) from 225° to the corner at 12.5, 5; a rotated
+  square with an 7px diagonal at 8, 10.85, r 1 corners; head a standard 1.93 from the
+  square; arc 3.5 from the square (open); ink 10.1 × 13.1, centred.
+- A and E (a bigger square) run 13.7 tall, over the keyline. Their upper barb reaches y
+  1.5, which the first search did not count.
+
+**Document, round 4.** Owner: the fold is too big; make it slightly smaller but keep the
+negative space. The fold is now 4.5. A 45° line only lands on the lattice with the page
+top at y 2 (page 2–14, r 2): diagonal (8, 2) → (12.5, 6.5), fold corner r 1.5. Lines at
+y 9 and 11.5 (tight gaps to the fold, each other and the base). The fold pocket is 1.53
+(tight), down from 3.43.

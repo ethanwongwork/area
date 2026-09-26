@@ -548,9 +548,9 @@ export const PilotDismissFilledIcon = ({ weight, size, ...props }: PilotIconProp
 
 export const PilotDocumentIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <path d="M5.5 1.5H7.5L12.5 6.5V12.5A2 2 0 0 1 10.5 14.5H5.5A2 2 0 0 1 3.5 12.5V3.5A2 2 0 0 1 5.5 1.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M7.5 1.5V5A1.5 1.5 0 0 0 9 6.5H12.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M6.5 9H9.5M6.5 12H9.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M5.5 2H8L12.5 6.5V12A2 2 0 0 1 10.5 14H5.5A2 2 0 0 1 3.5 12V4A2 2 0 0 1 5.5 2Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 2V5A1.5 1.5 0 0 0 9.5 6.5H12.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M6.5 9H9.5M6.5 11.5H9.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -560,11 +560,11 @@ export const PilotDocumentFilledIcon = ({ weight, size, ...props }: PilotIconPro
     <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
       <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
         <rect width="16" height="16" fill="white" />
-        <path d="M7.5 -0.5L7.5 1.5V5A1.5 1.5 0 0 0 9 6.5H12.5L14.5 6.5" fill="none" stroke="black" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="butt" strokeLinejoin="miter" />
-        <path d="M6.5 9H9.5M6.5 12H9.5" fill="none" stroke="black" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M8 0L8 2V5A1.5 1.5 0 0 0 9.5 6.5H12.5L14.5 6.5" fill="none" stroke="black" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="butt" strokeLinejoin="miter" />
+        <path d="M6.5 9H9.5M6.5 11.5H9.5" fill="none" stroke="black" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
       </mask>
       <g mask={`url(#${id})`}>
-        <path d="M5.5 1.5H7.5L12.5 6.5V12.5A2 2 0 0 1 10.5 14.5H5.5A2 2 0 0 1 3.5 12.5V3.5A2 2 0 0 1 5.5 1.5Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M5.5 2H8L12.5 6.5V12A2 2 0 0 1 10.5 14H5.5A2 2 0 0 1 3.5 12V4A2 2 0 0 1 5.5 2Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
       </g>
     </svg>
   );
@@ -1114,18 +1114,18 @@ export const PilotResetFilledIcon = ({ weight, size, ...props }: PilotIconProps)
 
 export const PilotRotateIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <path d="M7.293 6.264A1 1 0 0 1 8.707 6.264L11.293 8.85A1 1 0 0 1 11.293 10.264L8.707 12.85A1 1 0 0 1 7.293 12.85L4.707 10.264A1 1 0 0 1 4.707 8.85Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M2.58 5.619A6.7 6.7 0 0 1 13.132 5.25" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M10.891 5.054L13.132 5.25L13.329 3.009" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M7.293 8.057A1 1 0 0 1 8.707 8.057L10.793 10.143A1 1 0 0 1 10.793 11.557L8.707 13.643A1 1 0 0 1 7.293 13.643L5.207 11.557A1 1 0 0 1 5.207 10.143Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M3.5 5A6.364 6.364 0 0 1 12.5 5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12.5 2V5H9.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 export const PilotRotateFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
   return (
     <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-      <path d="M7.293 6.264A1 1 0 0 1 8.707 6.264L11.293 8.85A1 1 0 0 1 11.293 10.264L8.707 12.85A1 1 0 0 1 7.293 12.85L4.707 10.264A1 1 0 0 1 4.707 8.85Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M 2.694 5.467 A 6.7 6.7 0 0 1 13.132 5.25" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M 11.078 5.07 L 13.132 5.25 L 13.313 3.196" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7.293 8.057A1 1 0 0 1 8.707 8.057L10.793 10.143A1 1 0 0 1 10.793 11.557L8.707 13.643A1 1 0 0 1 7.293 13.643L5.207 11.557A1 1 0 0 1 5.207 10.143Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M 3.726 4.785 A 6.364 6.364 0 0 1 12.5 5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M 12.5 2.188 V 5 H 9.688" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };

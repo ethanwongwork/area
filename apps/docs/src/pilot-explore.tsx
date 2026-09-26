@@ -61,26 +61,43 @@ const PilotL3FluentCardsIcon = ({ weight, size, ...props }: PilotIconProps) => (
   </svg>
 );
 
-const PilotR0PreviousIcon = ({ weight, size, ...props }: PilotIconProps) => (
+const PilotR1BigIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <path d="M5.893 6.057A1 1 0 0 1 7.307 6.057L9.893 8.643A1 1 0 0 1 9.893 10.057L7.307 12.643A1 1 0 0 1 5.893 12.643L3.307 10.057A1 1 0 0 1 3.307 8.643Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M5.471 2.949A6.5 6.5 0 0 1 12.229 6.1" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M10.056 5.518L12.229 6.1L12.812 3.927" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M7.293 7.207A1 1 0 0 1 8.707 7.207L11.293 9.793A1 1 0 0 1 11.293 11.207L8.707 13.793A1 1 0 0 1 7.293 13.793L4.707 11.207A1 1 0 0 1 4.707 9.793Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M3.5 4.5A6.364 6.364 0 0 1 12.5 4.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12.5 1.5V4.5H9.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-const PilotR1FigmaIcon = ({ weight, size, ...props }: PilotIconProps) => (
+const PilotR2StandardIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <path d="M7.293 6.264A1 1 0 0 1 8.707 6.264L11.293 8.85A1 1 0 0 1 11.293 10.264L8.707 12.85A1 1 0 0 1 7.293 12.85L4.707 10.264A1 1 0 0 1 4.707 8.85Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M2.58 5.619A6.7 6.7 0 0 1 13.132 5.25" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M10.891 5.054L13.132 5.25L13.329 3.009" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M7.293 8.057A1 1 0 0 1 8.707 8.057L10.793 10.143A1 1 0 0 1 10.793 11.557L8.707 13.643A1 1 0 0 1 7.293 13.643L5.207 11.557A1 1 0 0 1 5.207 10.143Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M3.5 5A6.364 6.364 0 0 1 12.5 5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12.5 2V5H9.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
-const PilotR3CircularIcon = ({ weight, size, ...props }: PilotIconProps) => (
+const PilotR3MidIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <path d="M 13 5.5 A 5.59 5.59 0 1 0 13.4 9.447" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M 13 2.5 V 5.5 H 10" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M7.293 8.207A1 1 0 0 1 8.707 8.207L10.793 10.293A1 1 0 0 1 10.793 11.707L8.707 13.793A1 1 0 0 1 7.293 13.793L5.207 11.707A1 1 0 0 1 5.207 10.293Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M4 5A5.657 5.657 0 0 1 12 5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 2V5H9" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const PilotR4TightIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
+    <path d="M7.293 8.207A1 1 0 0 1 8.707 8.207L10.793 10.293A1 1 0 0 1 10.793 11.707L8.707 13.793A1 1 0 0 1 7.293 13.793L5.207 11.707A1 1 0 0 1 5.207 10.293Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M4.5 5A4.95 4.95 0 0 1 11.5 5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M11.5 2V5H8.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const PilotR5ShortTailIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
+    <path d="M7.293 7.207A1 1 0 0 1 8.707 7.207L11.293 9.793A1 1 0 0 1 11.293 11.207L8.707 13.793A1 1 0 0 1 7.293 13.793L4.707 11.207A1 1 0 0 1 4.707 9.793Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2.787 5.35A6.364 6.364 0 0 1 12.5 4.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12.5 1.5V4.5H9.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -118,9 +135,11 @@ export const EXPLORE: readonly ExploreCandidate[] = [
   { group: "Hide", label: "Eye with a slash, lids cut (Lucide)", Icon: PilotH2SlashCutIcon, gaps: ["1.46 tight","1.46 tight","3.47 open"], counters: [], notes: [] },
   { group: "Book", label: "Previous: pages dip to the spine (V)", Icon: PilotK0BookVIcon, gaps: [], counters: [5.43,5.43], notes: [] },
   { group: "Layers", label: "Fluent-style diagonal cards (three sheets)", Icon: PilotL3FluentCardsIcon, gaps: ["1.38 tight","3.88 open","1.38 tight"], counters: [5.93], notes: [] },
-  { group: "Rotate", label: "Previous: square with a short arc", Icon: PilotR0PreviousIcon, gaps: ["1.79 standard","1.2 tight"], counters: [4.6], notes: ["shapes 1 and 3 close to 0.92px in the filled variant (1.5px line); keep 1"] },
-  { group: "Rotate", label: "Applied: Figma, square low, arc over the top", Icon: PilotR1FigmaIcon, gaps: ["1.99 standard","1.27 tight"], counters: [4.61], notes: [] },
-  { group: "Rotate", label: "Circular arrow, clockwise (Lucide, Fluent)", Icon: PilotR3CircularIcon, gaps: [], counters: [], notes: [] },
+  { group: "Rotate", label: "A (too tall, 13.7): big square, wide arc (r 6.36)", Icon: PilotR1BigIcon, gaps: ["3.15 open","1.6 tight"], counters: [4.53], notes: ["ink 10.13×13.71 exceeds the square keyline 13×13"] },
+  { group: "Rotate", label: "Applied, B: corner head on the diagonal, standard gaps", Icon: PilotR2StandardIcon, gaps: ["3.5 open","1.93 standard"], counters: [3.86], notes: [] },
+  { group: "Rotate", label: "C: arc r 5.66, square 7", Icon: PilotR3MidIcon, gaps: ["3.45 open","1.91 standard"], counters: [3.82], notes: [] },
+  { group: "Rotate", label: "D: tighter arc r 4.95", Icon: PilotR4TightIcon, gaps: ["3.13 open","1.82 standard"], counters: [3.82], notes: [] },
+  { group: "Rotate", label: "E: big square, shorter tail", Icon: PilotR5ShortTailIcon, gaps: ["3.15 open","1.6 tight"], counters: [4.53], notes: ["ink 10.84×13.71 exceeds the square keyline 13×13"] },
   { group: "Text", label: "Previous: letter A (49° apex)", Icon: PilotT0AIcon, gaps: [], counters: [3.02], notes: ["corner at 8,2.5 is 48.89°; below 60° round it with an arc (r ≥ 1) or open the angle"] },
   { group: "Text", label: "Applied: T with ticks and a foot", Icon: PilotT1TTicksIcon, gaps: [], counters: [], notes: [] },
   { group: "Text", label: "Plain T", Icon: PilotT2TPlainIcon, gaps: [], counters: [], notes: [] },
