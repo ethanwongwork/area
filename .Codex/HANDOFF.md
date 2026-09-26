@@ -2,9 +2,8 @@
 
 Branches: `icons-system` (icon work, this folder) and `components` (all component work,
 in its own worktree session). Both start from `main`; merge through pull requests.
-System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev`.
-It started on port 3000 in the latest session (4321 by default); open
-`/gallery-components.html`. No owner completion changed; Indicator stays In review.
+System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
+session). Open `/gallery-icons.html` for icons. No owner completion changed; Indicator stays In review.
 
 ## Owner direction
 
@@ -34,32 +33,18 @@ It started on port 3000 in the latest session (4321 by default); open
   - text 12/16, 14/20, 16/24; titles 20/28, 24/32, 32/40; titles fixed in compact;
   - small controls 12/16;
   - weight 400 everywhere except labels on fills (500).
-- **Icons:**
-  - 12-icon pilot in `apps/docs/assets/area-icons-pilot/` (`npm run icons:pilot`,
-    `npm run lint:icons`);
-  - presence status glyphs are Area-drawn: the ring is the shell's border and the mark a
-    non-scaling stroke, both at `--area-weight-icon`;
-  - the 1× / 2× pixel check is on the iconography page;
-  - second pass (2026-09-25): every icon redrawn to one system. The rules are the
-    `area-icon-construction` skill: Cursor keylines, 0.5px grid, 45° diagonals on the
-    pixel lattice, 3px gap unit, shared parts. The lint enforces them (`--report`).
-    The page has new Side by side and Optical balance sheets. Record: `docs/specs/icons.md`;
-  - third pass: negative-space lint (gap scale, counter minimum), filled variants from
-    `data-filled` roles, five more icons (copy, document, folder, trash, warning); 17 in all;
-  - fourth/fifth pass: tiered counter scale; owner picks applied (U cup 4 × 2.5, ⌀1.5 dots,
-    fold 4, tab flap); Exploration section appears only while `explore/` has candidates;
-    Sizes sheets (scaled vs constant line at 12/20px);
-  - seventh pass: `gallery-icons.html` review page (one tile per icon, sizes, 4×, contexts),
-    folder 11 × 9, rotations (`data-rotations`), batch 3 (open, link, person, reset); 28 icons;
-  - eighth pass: filled layering (`cut`, `gap` roles), line glyphs fill by weight (1.5px),
-    arrowhead system (5px standalone, 3px embedded); alignment family;
-  - ninth pass: size curve (line ∝ size^0.45), filled free-end retraction, Fluent-style
-    reset, transpose for alignment order, batch review page (`batches.json`), batch 3
-    docs chrome; 45 icons;
-  - components: Badge dismiss, NumberField steppers, TreeView chevron and check, Composer
-    send arrow now draw Area glyphs (`packages/react/src/components/glyphs.ts` + `Glyph.tsx`);
-    status marks pass done (strict lint, shared inset check);
-  - Fluent remains in all other components.
+- **Icons (branch `icons-system`, PR 3):** 82 icons in five batches; rules in the
+  `area-icon-construction` skill, record in `docs/specs/icons.md`.
+  - Sources: `apps/docs/assets/area-icons-pilot/` (`npm run icons:pilot`, `npm run lint:icons`,
+    `--report`, `--audit`). The lint checks the grid, the diagonal lattice, keylines, the
+    gap and counter scale, acute corners, filled gaps, and live area.
+  - Review: `gallery-icons.html`, grouped by `batches.json` with owner status and a
+    whole-set grid per batch; open questions go in `explore/`.
+  - Batch 1 (core) is approved except items back in review; batches 2–5 are in review.
+  - Components drawing Area glyphs: Badge dismiss, NumberField steppers, TreeView chevron
+    and check, Composer send (`glyphs.ts`, `Glyph.tsx`, with sizes on the size curve).
+    Fluent remains elsewhere and in demos.
+  - Remote review: render a sheet with headless Edge (see the batch 5 note in the spec).
 - **Indicator (pilot component):**
   - 6px dot; 16px count with 10/14 text, weight 500;
   - 1px surface cutout;
@@ -68,17 +53,13 @@ It started on port 3000 in the latest session (4321 by default); open
 
 ## Next
 
-1. Owner: confirm the size model (scale 12–20px, recommended) and the 12px glyphs in
-   Badge and NumberField (`docs/specs/icons.md`, fifth pass).
-2. Next icon work: owner review of batch 4 (inspector); auto-position needs a new concept;
-   then batch 5 (lock, star, calendar, pencil, download, sparkle…) and the demo-level
-   Fluent swap in `docs/specs/icons.md`; review
-   each icon on `gallery-icons.html`. Swapping demo-level Fluent imports needs the owner.
-3. Icons: replace the remaining Fluent families. Move Area's 29 marks to 1.125px at the
-   same time.
-4. A stroke and type baseline across Cursor, ChatGPT, Notion and Figma. Product dark themes
-   need the owner's go-ahead, and the Figma editor needs Edge in the foreground.
-5. The next component through the process.
+1. Owner review of batches 2–5 on `gallery-icons.html`: rotate (candidates on the
+   Exploration sheet), flash, hide, and the smaller document fold.
+2. Icons: auto-position needs a new concept. Then swap the demo-level Fluent imports for
+   Area icons, one family at a time with the owner's approval, and retire the Fluent map.
+3. Components happen on branch `components`, in its own worktree session.
+4. A stroke and type baseline across Cursor, ChatGPT, Notion and Figma (needs the owner's
+   go-ahead for product dark themes).
 
 ## Verification (2026-09-25)
 
