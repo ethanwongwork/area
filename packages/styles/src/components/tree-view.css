@@ -6,7 +6,12 @@
     min-inline-size: 0;
     inline-size: min(100%, calc(var(--area-space-96) * 3 + var(--area-control-md)));
     max-inline-size: 100%;
-    color: var(--area-fg-default);
+    /* spec: resting rows in secondary ink, as Nav (102) and Notion's sidebar (95); selection adds the main ink. */
+    color: var(--area-fg-muted);
+    --_tree-start: var(--area-space-8); /* spec */
+    --_tree-chevron: var(--area-icon-md); /* spec */
+    --_tree-step: calc(var(--_tree-chevron) + var(--area-space-4)); /* spec */
+    --_tree-label-inset: var(--area-space-4); /* spec */
     font-size: var(--area-control-md-text);
     line-height: var(--area-control-md-leading);
   }
@@ -19,7 +24,11 @@
     gap: var(--area-space-4);
     block-size: var(--area-control-md);
     min-inline-size: 0;
-    padding-inline-start: calc(var(--area-space-4) + var(--_tree-depth) * var(--area-space-16));
+    /*
+     * spec: 8px start, as Nav and Notion. Each level indents by the chevron slot plus its
+     * gap (16 + 4), so a child's chevron sits under its parent's icon (docs/specs/tree-view.md).
+     */
+    padding-inline-start: calc(var(--_tree-start) + var(--_tree-depth) * var(--_tree-step));
     padding-inline-end: var(--area-space-8);
     border-radius: min(var(--area-radius-row), calc(var(--area-control-md) * var(--area-radius-cap)));
     cursor: default;
@@ -27,23 +36,30 @@
   }
   .area-tree-view [role="treeitem"]:hover:not([data-disabled]) { background: var(--area-bg-component); }
   .area-tree-view [role="treeitem"][aria-selected="true"],
-  .area-tree-view [role="treeitem"][aria-current="page"] { background: var(--_tree-selection); }
+  .area-tree-view [role="treeitem"][aria-current="page"] { background: var(--_tree-selection); color: var(--area-fg-default); }
   .area-tree-view [role="treeitem"][aria-current="page"]::before { content: ""; position: absolute; inset-block: var(--area-space-4); inset-inline-start: 0; inline-size: var(--area-space-2); border-radius: var(--area-radius-small); background: var(--area-focus-color); }
   .area-tree-view [role="treeitem"]:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-tree-view [role="treeitem"][data-disabled] { color: var(--area-fg-disabled); cursor: not-allowed; }
+  /*
+   * spec: the chevron is a 16px icon slot like any other glyph (Notion 12–20px in a 22px slot).
+   * Its hover plate and pointer target stay 24px, drawn outside the slot so the row keeps its rhythm.
+   */
   .area-tree-view__chevron {
+    position: relative;
+    isolation: isolate;
     display: grid;
     place-items: center;
-    flex: 0 0 var(--area-control-sm);
-    block-size: var(--area-control-sm);
+    flex: 0 0 var(--_tree-chevron);
+    block-size: var(--_tree-chevron);
     color: var(--area-fg-muted);
-    border-radius: var(--area-radius-control);
   }
+  .area-tree-view__chevron::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-4)); z-index: -1; border-radius: var(--area-radius-small); }
   .area-tree-view [aria-expanded="false"] .area-tree-view__chevron svg { transform: rotate(-90deg); }
   .area-tree-view__chevron svg, .area-tree-view__icon svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
-  .area-tree-view__chevron:has(svg):hover { background: var(--area-bg-component-hover); }
+  .area-tree-view__chevron:has(svg):hover::before { background: var(--area-bg-component-hover); }
   .area-tree-view__icon { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
-  .area-tree-view__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* spec: 8px from the glyphs to the label (Notion): the row's 4px gap plus the label's own 4px inset. */
+  .area-tree-view__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-inline-start: var(--_tree-label-inset); }
   .area-tree-view__trailing { margin-inline-start: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
   .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-input-edge); border-radius: var(--area-radius-small); font-size: var(--area-control-sm-text); line-height: 1; }
   .area-tree-view [aria-checked="true"] .area-tree-view__check { color: var(--area-fg-default); background: var(--area-bg-component-hover); border-color: var(--area-focus-color); }

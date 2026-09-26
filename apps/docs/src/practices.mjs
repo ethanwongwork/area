@@ -89,12 +89,11 @@ export const PRACTICES = {
   badge: [
     `Use Badge for status or metadata. Classification belongs to Tag; selection and removal belong to Chip. Badge links use the same supported treatments when rendered as an anchor; static Badge never changes on hover or acts like a button.`,
     `Dot is independent of fill. Use text or an accessible name to communicate meaning without color. Icon-only and dot-only forms require an accessible name.`,
-    `Badge is always pill-shaped. Following Untitled UI, its independent small / medium / large scale is 20 / 24 / 28px; medium is the default and does not follow the control-height ramp.`,
+    `Badge is always pill-shaped. Its small / medium / large scale is 16 / 20 / 24px, the inline-chrome heights shared with Kbd and Indicator counts; medium is the default and does not follow the control-height ramp.`,
     `IndicatorAnchor hides its decorative overlay from assistive technology. Put the count or status in the owning control's accessible name. Do not put interactive children in the overlay.`,
     `BadgeGroup wraps all children by default. A numeric visibleCount or auto collapses overflow into a native popover: Enter or Space opens it, Escape and outside click close it. Inline permits wrapping; overlay preserves one row. Auto needs React hydration and ResizeObserver.`,
     `Truncation supplies title for plain text; supply title explicitly for rich content. Keep the full accessible text. Important explanations should also appear in nearby visible text.`,
-    `Custom tone uses --area-badge-bg and --area-badge-fg as a complete paint pair, including gradients. The consumer must check contrast across the entire gradient in each theme; built-in defaults use tested neutral tokens.`,
-    `Small uses --area-badge-tracking-wide and strong weight 500. Uppercase is opt-in. Foreground remains unchanged on hover.`,
+    `Labels use weight 500. Neutral badges use the secondary text colour because they are metadata; toned badges use their tone. Foreground remains unchanged on hover.`,
   ],
   alert: [
     `Only the ${code("danger")} tone uses ${code("role=alert")}, which interrupts a screen reader mid-sentence. Every other tone uses ${code("role=status")} and waits for a pause.`,

@@ -35,7 +35,7 @@ ink by state, and shadow.
 | Tab | | | | |
 | Tooltip | | | | |
 | Popover / dialog surface | | | | |
-| Badge / tag | "NEW" pill: 16px tall, 1px border rgba(0,0,0,.15), 8px/12px 600 uppercase, text rgb(143,143,143), 5px sides | Board tag: 20px tall, radius 4, 6px sides, 14px/16.8px 500, tinted fill (e.g. rgba(92,0,163,.14)) | not captured | `indicator/chatgpt--badge-new…`, `indicator/notion--board-group-tag…` |
+| Badge / tag | "NEW" pill: 16px, 1px border rgba(0,0,0,.15), 8/12 600 uppercase, rgb(143,143,143), 5px sides. Billing "Paid": 22px, radius 4, 8px sides, 14/14 400, fill rgb(243,243,243), ink rgb(93,93,93), no border | Board tag: 20px, radius 4, 6px sides, 14/16.8 500. Table select: same at 400. Status: 20px pill, 7/9px sides, 8px dot, 5px gap, 400. Alpha-tinted fills (0.14–0.28) with dark tinted ink | "AI" label: 18px (1px border rgb(230,230,230) + 16px line), radius 5, 4px padding, 11/16 400, ink 50% black, no fill. "Free" plan (dark menu): 16px, radius 5, 4px, 11/16 450, fill rgb(68,68,68) | `indicator/chatgpt--badge-new…`, `badge/chatgpt--status-paid…`, `badge/notion--*`, `badge/figma--*` |
 | Count and status indicator | none found (2026-09-25 search) | none present; board group count is plain 14px text in a 20px box, radius 4, 6px sides | unread dot 5px, #dc3412, inside the 24px icon, 9px from the 32px button's top and end | `indicator/notion--board-group-count…`, `indicator/figma--bell-unread-dot…` |
 | Avatar | | | | |
 
@@ -69,3 +69,9 @@ captures. Promote an agreement into Area only through a spec's decision table.
   its corner (Figma bell dot; Untitled avatar status). Small chrome labels are 16–20px
   tall (ChatGPT 16, Notion 20). Only Figma showed an indicator; ChatGPT and Notion showed
   none in the states available. All captures are light theme.
+- 2026-09-25 (Badge): product badges are 16–22px tall with 4–8px sides; filled tags carry
+  no border (ChatGPT, Notion), outline labels carry no fill (Figma, ChatGPT). Neutral
+  badge ink is the secondary text colour in both ChatGPT (rgb(93,93,93)) and Figma (50%
+  black). Rectangular tags use 4–5px corners; Notion draws status-with-dot as a pill.
+  Label weight is 400 in ChatGPT, Figma and Notion table cells, 500 on Notion board
+  headers. Light theme only.

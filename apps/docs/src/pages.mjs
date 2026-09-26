@@ -735,7 +735,7 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "BadgeDefault", note: "A short status beside the object it describes." },
       { id: "variants", title: "Variants", demo: "BadgeVariants", note: "Choose emphasis independently of meaning." },
-      { id: "sizes", title: "Sizes", demo: "BadgeSizes", note: "Use the dedicated 20px, 24px, or 28px metadata scale; medium is the default." },
+      { id: "sizes", title: "Sizes", demo: "BadgeSizes", note: "Use the 16px, 20px or 24px inline scale, shared with Kbd and Indicator counts; medium (20px) is the default." },
       { id: "avatar", title: "With avatar", demo: "BadgeAvatar" },
       { id: "flag", title: "With flag", demo: "BadgeFlag" },
       { id: "dismissible", title: "Dismissible", demo: "BadgeDismissible" },
@@ -748,8 +748,7 @@ export const COMPONENT_PAGES = [
       { id: "dot-outline", title: "Dot Outline", demo: "BadgeDotOutline", note: "Pair a colored indicator with a neutral outline." },
       { id: "dot-matrix", title: "Dot Matrix", demo: "BadgeDotMatrix", note: "Compare dot composition with soft and outline treatments." },
       { id: "state-labels", title: "State Labels", demo: "BadgeStateLabels", note: "Use consistent icons and words for object lifecycle." },
-      { id: "truncation", title: "Truncation", demo: "BadgeTruncation", note: "Bound long text while retaining the complete status." },
-      { id: "uppercase", title: "Uppercase", demo: "BadgeUppercase", note: "Opt into compact uppercase metadata." },
+      { id: "truncation", title: "Behavior / truncation", demo: "BadgeTruncation", note: "Bound long text while retaining the complete status." },
       { id: "link", title: "Link", demo: "BadgeLink", note: "A native link with the default neutral-soft treatment and Fluent link icon. Tone expresses status independently of navigation." },
       { id: "table-status", title: "Table Status", demo: "BadgeTableStatus", note: "Compose ordinary dot badges inside table cells; table status is not a separate Badge variant." },
       { id: "both-themes", verification: true, title: "Both Themes", demo: "BadgeBothThemes", note: "Keep the same status readable on light and dark surfaces." },

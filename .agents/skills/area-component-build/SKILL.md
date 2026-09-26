@@ -67,7 +67,9 @@ overrides both.
    the comparison with the references. Fix or explain every difference.
 2. Run the checks in `docs/DEVELOPMENT.md` for the change.
 3. Do the visual pass with the `area-visual-language` skill.
-4. Report to the owner: gallery links, the comparison table, visual-pass observations,
+4. Update the family's `GalleryReview<Name>` demo (Pass review container above the
+   variant tiles): each change in its own row, before and after, at 1× and 3×.
+5. Report to the owner: gallery links, the comparison table, visual-pass observations,
    open questions, and anything unverified. Status stays In review until the owner
    accepts it in `apps/docs/src/component-status.mjs`.
-5. Log owner feedback in the spec (observation → change → evidence) before changing code.
+6. Log owner feedback in the spec (observation → change → evidence) before changing code.

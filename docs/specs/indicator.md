@@ -1,6 +1,6 @@
 # Indicator spec
 
-**Status:** in review · 2026-09-24 (pilot for the capture workflow)
+**Status:** accepted · 2026-09-25 (pilot for the capture workflow)
 **Captures:** `docs/research/captures/indicator/`
 **Peers:** Badge (dot, count-like numerals, tone paint), Avatar (presence attachment),
 Tabs and Nav (attached counts), Button (attached dot/count)
@@ -244,7 +244,7 @@ follows RTL.
 |---|---|---|---|---|
 | Badge dot | status dot | 6px disc | 6px dot | match |
 | Badge | weight | 500 | 500 | match |
-| Badge sm | height | 20px | count 16px | intentional: counts attach to owners, badges stand alone |
+| Badge sm | height | 16px (Badge scale 16 / 20 / 24 since 2026-09-25) | count 16px | match |
 | Avatar md | owner | 32px circle | presence sm 12px flush in corner | Untitled uses an 8px dot at 32px; Area's status is a 12px glyph, kept legible |
 | Button md icon-only | owner | 32px, 16px icon at 8px inset | dot 9px from top/end | matches Figma's measured inset at the same owner size |
 
@@ -354,6 +354,7 @@ Sources:
 - 2026-09-25 · Owner chose 1.125px and Area-drawn status glyphs → Presence ring is a
   border and the mark a non-scaling stroke at `--area-weight-icon` → gallery: every status
   and size shows the same line weight as the pilot icons (Edge, 2×).
+- 2026-09-25 · owner accepted Indicator → Complete in `component-status.mjs`.
 
 ## Stroke findings (2026-09-25)
 

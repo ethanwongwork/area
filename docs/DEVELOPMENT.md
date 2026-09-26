@@ -96,6 +96,7 @@ the browser. Captures are saved under `docs/research/captures/<slug>/` and compa
 
 ```sh
 npm run capture:compare -- docs/research/captures/indicator/*.json
+node scripts/validate-badge.mjs   # every Badge gallery capture against docs/specs/badge.md
 ```
 
 The workflow is in [Building a component](COMPONENT_ADAPTATION.md#capture-protocol).
