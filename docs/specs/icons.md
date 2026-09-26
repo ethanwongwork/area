@@ -736,3 +736,23 @@ the other line glyphs. The frames sit at the full square keyline (+10%).
 | look at other hide icons | Hide is now a closed eye, a lid and three lashes (Figma, Notion, Lucide eye-closed). Candidates: the previous slash eye, and a Lucide-style slash eye with its lids cut |
 | refine flow; the arrow head is too big | 4px boxes throughout the flow family; the flow arrow's head is 2.5px. Secondary arrows (flow, rotate) now use smaller heads |
 | rotate (Figma reference) | Its own drawing instead of mirrored reset: a rotated square (r 1 corners) with a clockwise arc from −100° to −30° and a 2.25px head, the largest head that clears the square |
+
+**Rotate, round 2.** Owner: rotate needed a lot of work; see Figma's, and research others.
+
+References compared:
+- Figma: a rotated square sitting low, with a wide arc over the top and a small head on the
+  right pointing down;
+- Material rotate_90_degrees: an upright square with a corner arc;
+- Lucide rotate-cw and Fluent arrow_rotate_clockwise: a plain circular arrow.
+
+Candidates on the Exploration sheet: the previous short arc, the Figma construction, and a
+clockwise circular arrow (reset mirrored). The Material version was dropped: its arc
+could not clear the square (0.43px).
+
+Applied, Figma's construction: a rotated square with an 8px diagonal and r 1 corners,
+centred at x 8. The arc (r 6.7) runs from 216° to −40° round the top, and the 2.25px head
+is symmetric about the arc's direction. The geometry was solved numerically for:
+- arc to square a standard gap (1.99);
+- head to square a tight gap (1.27; 1.1 when filled);
+- no enclosed sliver;
+- ink 11.9 × 11.4, centred.
