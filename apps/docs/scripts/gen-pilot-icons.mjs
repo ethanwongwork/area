@@ -278,7 +278,9 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
       const parsed = parsePath(name, a.d);
       points = parsed.points; samples = parsed.samples;
       // Acute corners pinch the negative space inside them into thin, sharp wedges.
-      if (strict && stroked) for (const [p, q] of parsed.joins) {
+      // data-acute="sharp" (owner-approved, recorded in the spec): the icon's points are
+      // meant to be sharp, as a lightning bolt's are; the stroke fills the point solid.
+      if (strict && stroked && root["data-acute"] !== "sharp") for (const [p, q] of parsed.joins) {
         const angle = joinAngle(p, q);
         if (angle < ACUTE - 1e-6) fail(name, `corner at ${r2(p[2])},${r2(p[3])} is ${r2(angle)}°; below ${ACUTE}° round it with an arc (r ≥ 1) or open the angle`);
       }

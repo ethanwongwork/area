@@ -680,3 +680,15 @@ set's median (10.86 and 0.39).
 - **Accepted as is:**
   - flash reads −22% because a diagonal bolt has a small hull, but it fills its keyline;
   - layers' density (+22%) comes from its three stacked layers.
+
+**Round 6 (same day):**
+- **Flash.** Owner: still not right; sharper angles are fine. The rounded versions read
+  blobby. Now a sharp classic bolt (6, 1.5) (11, 1.5) (8.5, 6.5) (12.5, 6.5) (5.5, 14.5)
+  (7, 9) (3.5, 9), with `data-acute="sharp"`, the first owner-approved exception to the
+  60° corner rule. Its tip is 26° and the stroke fills it solid. Counter 3.24. The sharp
+  Fluent-structure version is on the Exploration sheet; a narrow variant was rejected by
+  the counter rule (a 0.18px sliver).
+- **Layers.** Owner: should the two lower layers match the top layer's width? Yes. The top
+  layer's r 1 side fillets pull its sides in 1.24px, so the lines below ran wider. The icon
+  is rebuilt so all three layers span exactly 3–13: the top layer's vertices sit at
+  8 ± 6.24 and the lines run 3–13. Ink 11.1 × 13.2, centred; gaps 1.53 (tight).

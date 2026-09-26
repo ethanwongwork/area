@@ -100,6 +100,10 @@ arc, r 1 or more, as a fillet between the two lines. Prefer shapes whose points 
 flash now has a flat top like Fluent's, with every corner filleted, and the droplet's tip
 is an r 1.5 arc.
 
+**Sharp-by-design exception.** A few objects are sharp by nature (a lightning bolt). The
+owner may approve `data-acute="sharp"` on such an icon; record it in the spec. The stroke
+fills the point solid, so no thin pocket shows. The counter rule still applies.
+
 **Families.** Related icons share one pattern, as Figma's alignment icons do:
 - the same parts at the same height, radius and spacing, and the same optical size. Every
   alignment icon uses 3px-tall bars with r 1 at 3px spacing and an 11px guide. Bar length
@@ -152,8 +156,10 @@ separately. Filled is about emphasis and layers, not flooding the shape:
 - a document's fold is about 5px;
 - text is a T with end ticks and a foot (Fluent's text_t, Lucide's type), not a letter A;
 - layers are three isometric layers facing up (Fluent's three, Area's orientation);
-- flash follows Fluent's structure (flat top, notch and shoulders) at about 80% of its
-  width, so it doesn't read fat; a pointed tip gets only a small rounding (r 0.75).
+- flash is a sharp classic bolt: a flat top, one notch and shoulder each side, and a sharp
+  tip. Rounding its points made it read blobby and fat;
+- layered shapes are the same width: when a filleted corner pulls a shape's side in, trim
+  or place the layers below so their ends line up with it.
 
 Check ChatGPT's icon set for proportion and roundness, but keep Area's grid and weight.
 
