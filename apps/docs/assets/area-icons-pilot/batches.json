@@ -55,6 +55,29 @@
         "layers": "review",
         "flash": "review"
       }
+    },
+    {
+      "id": "batch-4",
+      "title": "Batch 4 · Inspector",
+      "note": "Area's inspector marks redrawn on the system. Families derive: corner gives all four corners; flip, flow, gap and padding-sides transpose to their vertical forms; sliders is options transposed and rotate is reset mirrored (listed with their bases). Not yet redrawn: auto-position (its S-path cannot hold a standard arrowhead without near misses), bars-three (unused); eye and corner-radius duplicate existing icons.",
+      "icons": {
+        "angle": "review",
+        "aspect-ratio": "review",
+        "auto-layout": "review",
+        "corner": "review",
+        "corners": "review",
+        "dots-four": "review",
+        "eye-off": "review",
+        "flip": "review",
+        "flow": "review",
+        "flow-wrap": "review",
+        "flow-free": "review",
+        "gap": "review",
+        "opacity": "review",
+        "padding": "review",
+        "padding-sides": "review",
+        "token": "review"
+      }
     }
   ]
 }

@@ -692,3 +692,37 @@ set's median (10.86 and 0.39).
   layer's r 1 side fillets pull its sides in 1.24px, so the lines below ran wider. The icon
   is rebuilt so all three layers span exactly 3–13: the top layer's vertices sit at
   8 ± 6.24 and the lines run 3–13. Ink 11.1 × 13.2, centred; gaps 1.53 (tight).
+
+## Batch 4: inspector, 2026-09-25
+
+Area's own inspector marks (`assets/area-icons`, 1px, from Stadium) redrawn on the system.
+There are 16 drawings and 23 icons with derivations; the set is now 70.
+
+| Icon | Construction | Notes |
+|---|---|---|
+| angle | L axes (2.5, 2.5 → 2.5, 13.5 → 13.5, 13.5) and an r 6 arc from the vertical axis to the base | |
+| aspect-ratio | 11 × 11 frame r 2; inner corner brackets, arms 2 | brackets become knockouts when filled |
+| auto-layout | tall 4 × 11 bar and a 4 × 4 box, r 1.5; a check on the lattice below the box | standard and tight gaps |
+| corner (+ top-right flipx, bottom-left flipy, bottom-right 180) | one r 5 corner, 11px arms | corner-radius was a duplicate and is dropped |
+| corners | four r 2.5 corners with 1px arms, 4px apart | |
+| dots-four | four r 2 rings, standard gaps; solid when filled | was four solid discs |
+| eye-off | the pilot eye's almond with a slash from top-left to bottom-right (negation direction) | the pupil is dropped: the slash cut it into 0.47px slivers |
+| flip (+ flip-vertical transpose) | axis at 8; two triangles, sharp 90° tips 1.875 from the axis, r 1 back corners | |
+| flow (+ flow-vertical transpose) | two 3.5px boxes and a row arrow with the 3px head | |
+| flow-wrap, flow-free | 4 × 4 boxes, r 1, standard or tight gaps | |
+| gap (+ gap-vertical transpose) | two outward brackets r 1.5 and a ⌀2 dot, tight gaps | |
+| opacity | frame r 2; six ⌀1.5 dots on a 3px pitch | the pitch keeps side gaps tight and diagonals open; 2.5 put diagonals in the dead zone |
+| padding | frame and an inner 5 × 5 box, a standard gap | four side bars always collide at the corners |
+| padding-sides (+ padding-ends transpose) | frame and two inner bars | |
+| token | r 6.5 ring and r 3.5 inner ring, 3 apart (standard); the inner ring is a knockout when filled | the old r 3 inner ring was in the dead zone |
+| sliders | options, transposed | |
+| rotate | reset, mirrored (clockwise) | |
+
+Not redrawn:
+- auto-position: its S-path cannot hold the 3px embedded head without near misses, so it
+  needs a new concept;
+- bars-three: unused;
+- eye: already in the set.
+
+Audit: corner (−20%) and angle (−17%) read small by hull because each is one line, like
+the other line glyphs. The frames sit at the full square keyline (+10%).

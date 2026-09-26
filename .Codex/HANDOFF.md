@@ -70,8 +70,9 @@ It started on port 3000 in the latest session (4321 by default); open
 
 1. Owner: confirm the size model (scale 12–20px, recommended) and the 12px glyphs in
    Badge and NumberField (`docs/specs/icons.md`, fifth pass).
-2. Next icon work: owner review of batches 2–3 and the revised open/reset; then batch 4
-   (Area's 29 marks) per the roadmap in `docs/specs/icons.md`; review
+2. Next icon work: owner review of batch 4 (inspector); auto-position needs a new concept;
+   then batch 5 (lock, star, calendar, pencil, download, sparkle…) and the demo-level
+   Fluent swap in `docs/specs/icons.md`; review
    each icon on `gallery-icons.html`. Swapping demo-level Fluent imports needs the owner.
 3. Icons: replace the remaining Fluent families. Move Area's 29 marks to 1.125px at the
    same time.
