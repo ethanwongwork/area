@@ -162,12 +162,19 @@ separately. Filled is about emphasis and layers, not flooding the shape:
   or place the layers below so their ends line up with it.
 
 Check ChatGPT's icon set for proportion and roundness, but keep Area's grid and weight.
+For inspector and editing icons (flip, rotate, flow, corners, padding, hide), follow
+Figma's editor icons: small, compact shapes; triangles that point at the axis for flip; a
+rotated square with a short arc for rotate; small boxes with a short arrow for flow;
+corner arms well short of the box; a closed eye for hide.
 
 **Arrows.** One arrowhead system, so arrows read as arrows at 12px:
 - standalone arrows: a 90° head with 5px legs on a 12px stem (M8 14 V2 M3 7 L8 2 L13 7),
   Fluent's proportion; other directions are rotations;
 - arrows inside another icon (reset, open, expand, out-of-office): a 90° head with 3px
   legs, identical in every icon;
+- a secondary arrow that annotates other shapes (flow's direction arrow, rotate's arc) uses
+  a smaller head, 2.5px (flow) or 2.25px (rotate), so it doesn't outweigh the shapes it
+  describes (owner: flow's 3px head was too big);
 - a head is balanced about the stroke that arrives at it: its two barbs are equal and
   sit symmetrically either side of the arriving direction. On a curve, put the head where
   the arc's tangent bisects the barbs, or use Fluent's corner head (reset: the arc ends at

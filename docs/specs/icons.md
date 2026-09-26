@@ -726,3 +726,13 @@ Not redrawn:
 
 Audit: corner (−20%) and angle (−17%) read small by hull because each is one line, like
 the other line glyphs. The frames sit at the full square keyline (+10%).
+
+**Batch 4, round 1.** The owner pointed to Figma's editor icons as the reference.
+
+| Owner note | Change |
+|---|---|
+| flip triangles need work | Tall triangles pointing at the axis, (2, 3.5) (5.75, 8) (2, 12.5), back corners r 0.75 and tip r 0.5 (r 1 on a 3.5px triangle made a blob). Tips 1.28 from the axis (tight) |
+| corner arms too long | Span 9 instead of 11: M3.5 12.5 V8.5 A5 … 8.5 3.5 H12.5 |
+| look at other hide icons | Hide is now a closed eye, a lid and three lashes (Figma, Notion, Lucide eye-closed). Candidates: the previous slash eye, and a Lucide-style slash eye with its lids cut |
+| refine flow; the arrow head is too big | 4px boxes throughout the flow family; the flow arrow's head is 2.5px. Secondary arrows (flow, rotate) now use smaller heads |
+| rotate (Figma reference) | Its own drawing instead of mirrored reset: a rotated square (r 1 corners) with a clockwise arc from −100° to −30° and a 2.25px head, the largest head that clears the square |
