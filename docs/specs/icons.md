@@ -776,3 +776,34 @@ negative space. The fold is now 4.5. A 45° line only lands on the lattice with 
 top at y 2 (page 2–14, r 2): diagonal (8, 2) → (12.5, 6.5), fold corner r 1.5. Lines at
 y 9 and 11.5 (tight gaps to the fold, each other and the base). The fold pocket is 1.53
 (tight), down from 3.43.
+
+## Batch 5: common, 2026-09-25
+
+Twelve everyday icons (82 in the set):
+
+| Icon | Construction |
+|---|---|
+| lock | 9 × 6 body, r 1.5; r 3 shackle joined to it; keyhole stem a tight gap from both edges |
+| star | five points, R 7.4 with a 0.44 inner ratio; tips r 1, valleys r 0.5; centred by its ink box |
+| heart | two r 3.5 lobes and 45° sides meeting at a 90° point |
+| calendar | 11 × 9.5 frame, r 2; a header `cut` at y 7; binder tabs ending just below the frame edge |
+| clock | ring r 6.5; the away-status hands (a knockout when filled) |
+| pencil | a 45° body (bottom-left to top-right) with an angled tip; filleted corners |
+| download / upload | an arrow into or out of a shared tray (r 1.5); 3px head, a tight gap to the tray |
+| filter | a funnel with filleted corners |
+| sort | an up arrow and a down arrow, 2.5px heads on the lattice |
+| sparkle | a four-point star with concave sides, and a small plus |
+| pin | a droplet with its tip down (the color construction), bowl r 4.75, ring r 2 a tight gap inside |
+
+Lint fixes:
+- calendar's tabs came within 0.38px of the header;
+- lock's keyhole sat in the dead zone relative to the shackle;
+- pin's ring could not sit on the grid at the flipped droplet's height;
+- the small sparkle's pocket was a blot (0.41), so it became a plus.
+
+Audit: star, filter, pencil and heart were enlarged. Pencil still reads −15% by hull, as a
+diagonal does.
+
+**Remote review:** `batch5-sheet.png` renders the review content with headless Edge (the
+whole-set grid, then each icon's sizes, filled variant and contexts), so the owner can
+review from chat.

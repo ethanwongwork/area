@@ -79,6 +79,25 @@
         "token": "review",
         "rotate": "review"
       }
+    },
+    {
+      "id": "batch-5",
+      "title": "Batch 5 · Common",
+      "note": "Everyday icons, drawn on the system and sized by the optical audit. Pin shares the color droplet's construction with its tip down; clock uses the away-status hands; download and upload share one tray.",
+      "icons": {
+        "lock": "review",
+        "star": "review",
+        "heart": "review",
+        "calendar": "review",
+        "clock": "review",
+        "pencil": "review",
+        "download": "review",
+        "upload": "review",
+        "filter": "review",
+        "sort": "review",
+        "sparkle": "review",
+        "pin": "review"
+      }
     }
   ]
 }
