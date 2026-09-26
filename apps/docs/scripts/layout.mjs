@@ -617,6 +617,12 @@ export const DOCS_CSS = `
   .docs-gallery-pages a { color: var(--area-fg-muted); text-decoration: none; }
   .docs-gallery-pages a:hover { color: var(--area-fg-default); }
   .docs-gallery-pages a[aria-current="page"] { color: var(--area-fg-default); }
+  .docs-gallery-note {
+    margin: 0 0 var(--area-space-8);
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
   .docs-gallery-foundation { max-inline-size: calc(var(--area-space-96) * 10); }
   .docs-pixel-preview {
     display: block;
@@ -679,6 +685,8 @@ export const DOCS_CSS = `
     border-radius: var(--area-radius-container);
   }
   /* Spans are whole cells. 1x1 is the default tile and needs no rule of its own. */
+  .docs-visual-gallery__tile[data-span="1x2"] { grid-row: span 2; }
+  .docs-visual-gallery__tile[data-span="row"] { grid-column: 1 / -1; }
   .docs-visual-gallery__tile[data-span="2x1"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); }
   .docs-visual-gallery__tile[data-span="2x2"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 2; }
   .docs-visual-gallery__tile[data-span="2x3"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 3; }

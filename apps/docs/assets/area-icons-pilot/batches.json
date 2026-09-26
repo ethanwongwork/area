@@ -1,0 +1,103 @@
+{
+  "$comment": "Icon review batches and owner status (approved | revising | review). The gallery's Icons page lays tiles out by batch. Rotations and mirrors follow their base icon. Record: docs/specs/icons.md.",
+  "batches": [
+    {
+      "id": "batch-1",
+      "title": "Batch 1 · Core",
+      "note": "Approved by the owner on 2026-09-25. Back in review after round 3: open and reset (revised), bell (flare), and document, folder, copy and trash (corner radius 1.5; document fold enlarged to Fluent's size). Round 5 optical audit: person and warning enlarged.",
+      "icons": {
+        "add": "approved",
+        "arrow-up": "approved",
+        "bell": "review",
+        "check": "approved",
+        "chevron-down": "approved",
+        "copy": "review",
+        "dismiss": "approved",
+        "document": "review",
+        "eye": "approved",
+        "folder": "review",
+        "info": "approved",
+        "link": "approved",
+        "more-horizontal": "approved",
+        "open": "review",
+        "person": "review",
+        "reset": "review",
+        "search": "approved",
+        "settings": "approved",
+        "status-available": "approved",
+        "trash": "review",
+        "warning": "review"
+      }
+    },
+    {
+      "id": "batch-2",
+      "title": "Batch 2 · Alignment",
+      "note": "Revised: centre variants sized to fill the keyline like align-left (bars 11 × 3 and 7 × 3, same height, radius and spacing); long bar first in reading order.",
+      "icons": {
+        "align-left": "review",
+        "align-center": "review"
+      }
+    },
+    {
+      "id": "batch-3",
+      "title": "Batch 3 · Docs chrome",
+      "note": "Round 5: slimmer flash, M-shaped book, sharper droplet tip and a larger bowl, three layers facing up. Candidates on the Exploration sheet.",
+      "icons": {
+        "expand": "review",
+        "panel-left": "review",
+        "book": "review",
+        "options": "review",
+        "color": "review",
+        "text": "review",
+        "shapes": "review",
+        "list": "review",
+        "square-dashed": "review",
+        "layers": "review",
+        "flash": "review"
+      }
+    },
+    {
+      "id": "batch-4",
+      "title": "Batch 4 · Inspector",
+      "note": "Area's inspector marks redrawn on the system. Families derive: corner gives all four corners; flip, flow, gap and padding-sides transpose to their vertical forms; sliders is options transposed (listed with options). Rotate, flip, corner, flow and hide follow Figma's editor icons (round 1). Not yet redrawn: auto-position (its S-path cannot hold a standard arrowhead without near misses), bars-three (unused); eye and corner-radius duplicate existing icons.",
+      "icons": {
+        "angle": "review",
+        "aspect-ratio": "review",
+        "auto-layout": "review",
+        "corner": "review",
+        "corners": "review",
+        "dots-four": "review",
+        "eye-off": "review",
+        "flip": "review",
+        "flow": "review",
+        "flow-wrap": "review",
+        "flow-free": "review",
+        "gap": "review",
+        "opacity": "review",
+        "padding": "review",
+        "padding-sides": "review",
+        "token": "review",
+        "rotate": "review"
+      }
+    },
+    {
+      "id": "batch-5",
+      "title": "Batch 5 · Common",
+      "note": "Everyday icons, drawn on the system and sized by the optical audit. Pin shares the color droplet's construction with its tip down; clock uses the away-status hands; download and upload share one tray.",
+      "icons": {
+        "lock": "review",
+        "star": "review",
+        "heart": "review",
+        "calendar": "review",
+        "clock": "review",
+        "pencil": "review",
+        "download": "review",
+        "upload": "review",
+        "filter": "review",
+        "sort": "review",
+        "sparkle": "review",
+        "pin": "review"
+      }
+    }
+  ]
+}

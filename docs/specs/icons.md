@@ -485,3 +485,325 @@ Then:
 - swap the demo-level Fluent imports (PlusIcon, SearchIcon…) for Area icons, family by
   family; this changes every gallery demo, so the owner approves each family;
 - retire the Fluent map.
+
+## Eighth pass: filled layering, filled line glyphs, arrows, 2026-09-25
+
+Owner:
+- likes that Fluent's filled icons use negative space to imply layers and separation,
+  even where the outline strokes join;
+- dislikes the rounded corners the folder's knockout showed inside the fill;
+- likes Fluent's arrow size; Area's arrow got lost at small sizes;
+- asked how line icons should fill ("just thicken the stroke").
+
+**Filled roles** (generator and lint):
+- `cut` is a layer line that becomes a square-ended, sharp-cornered gap, extended 2px past
+  the silhouette along its end segments. It is used for the folder's flap and the
+  document's fold. The folder's cut now runs from outside the left edge, along the flap,
+  and out past the tab step;
+- `gap` is a filled-only separation. The bell has one at y 12.625 (x 4–12), leaving a
+  1.4px clapper below the body, like Fluent's filled alert;
+- **Line glyphs** fill by weight: every stroke at 4/3 of `--area-weight-icon` (1.5px), and
+  dots grow by the same amount. Unmarked strokes beside solids are drawn at 1.5px too.
+  Every icon now has a filled variant; `PILOT_ICONS[].fill` is `solid` or `weight`.
+- **The lint checks gaps at 1.5px:** they must stay at least 1px. Open's tight arrowhead
+  gap reaches exactly 1.0.
+
+**Arrows:**
+
+| Arrow | Change | Result |
+|---|---|---|
+| arrow-up (and its rotations) | M8 14 V2 M3 7 L8 2 L13 7: 5px legs on a 12px stem | ink 11.1 × 13.1; Fluent's head is 9 wide on 11.5, so Area's is at least as present |
+| reset | circle r 5 moved to 8, 9.5; head legs 3 (M8.5 1.5 L5.5 4.5 L8.5 7.5), apex at 5.5, 4.5 | ink 11.1 × 14.1, centred |
+
+Embedded heads (reset, open, out-of-office) all use 3px legs.
+
+**Batch 4, alignment.** `data-rotations` also accepts `flipx` / `flipy` (a mirror across the
+centre keeps the grid and swaps the two lattice conditions).
+- align-left gives align-top (90), align-bottom (270) and align-right (flipx);
+- align-center is new: bars 8 × 3 and 5 × 3 (the same parts as align-left) centred on x 8;
+  the centre line runs behind the bars as stubs (2.5–3.5, 6.5–9.5, 12.5–13.5), so it reads
+  as a layer, not a line through the counters. Ink 9.1 × 12.1; gap and counters standard;
+- align-middle is align-center at 90.
+
+Fluent references: align_right, align_top, align_bottom, align_center_vertical (for
+align-center) and align_center_horizontal (for align-middle). Distribute is left for later.
+The set has 33 icons.
+
+## Ninth pass: review round 2, 2026-09-25
+
+**Owner feedback:**
+- the first batch is approved, except the icons commented on;
+- in the filled open, the thicker stroke's cap closed the gap;
+- reset's head is unbalanced (its lower barb crowds the circle); Fluent's design is
+  preferred;
+- are align-middle's bars and gaps the same as align-left's? Figma's alignment set reads
+  as one family;
+- large icons look too thick;
+- review tiles should be smaller (two or more columns) and grouped by batch.
+
+**Filled line glyphs keep their length.** At 1.5px a round cap reaches 0.19px further, which
+lengthened lines and closed open's tight gap. The generator now retracts free ends (ends
+touching nothing else) by (1.5 − 1.125) / 2 along their end segment. Open's filled gaps
+now equal its outline gaps (1.38). The lint measures filled gaps on the retracted
+geometry. Arc ends are not retracted yet.
+
+**Reset** now uses Fluent's construction:
+- circle r 5.59 at 8, 8, with the arc from the corner (3, 5.5) round to a tail at 165°;
+- the head is an L with equal 3px barbs (M3 2.5 V5.5 H6);
+- the arc arrives at the corner between the barbs, so neither barb crowds the circle.
+
+Three candidates were compared on the Exploration sheet (barbs 3, barbs 2.5, and a lower
+corner); barbs 3 match the shared embedded head.
+
+**Alignment family.** The bars are the same, 8 × 3 and 5 × 3 with r 1, and so is the
+spacing, 3px between centre-lines (1.88 gaps). What differed was reading order: rotating
+align-left put align-top's long bar on the right. A new `transpose` derivation (mirror
+across the diagonal) keeps the long bar first. align-top and align-middle now transpose;
+align-bottom stays a 270° turn, which already puts the long bar on the left.
+
+**Size curve.** The line no longer scales with the drawing:
+
+| Size | Line | Adjacent text stem |
+|---|---|---|
+| 12 | 1.0 | 1.0 at 12/400 |
+| 16 | 1.125 | 1.2 at 14/400 |
+| 20 | 1.24 | |
+| 24 | 1.35 | 1.35 at 16/400 |
+| 32 | 1.54 | |
+
+The line grows with size^0.45, derived from Cursor's 1.25px at 16 to 1.5px at 24. Uniform
+scaling gave 1.69 at 24 and 2.25 at 32.
+- **Pilot icons:** take `size`; `sw()` in `pilot-icons.tsx` computes the line.
+- **Component glyphs:** take `size`, and `base.css` holds the factors (12: × 1.1715,
+  20: × 0.8846, 24: × 0.8000). Badge dismiss and the NumberField steppers pass 12.
+- **Gallery:** the Sizes sheet now shows the curve, with uniform scaling at 24 for
+  comparison.
+
+**Review page:**
+- one-cell tiles (`data-span="1x2"`), three columns in a 1000px pane;
+- 3× plates, and contexts trimmed to Button, icon Button, Badge, Menu item and the current
+  Nav item (filled), then Fluent's;
+- sections come from `assets/area-icons-pilot/batches.json`, which records each icon's
+  owner status. Batch 1 (core) is approved except open and reset, which are back in
+  review; batch 2 (alignment) and batch 3 (docs chrome) are in review.
+
+**Batch 3, docs chrome** (45 icons in the set):
+
+| Icon | Construction | Notes |
+|---|---|---|
+| expand | two corner arrows, open's 3px head, shafts on x + y = 16 | Fluent's is four corners ("fullscreen") |
+| panel-left / panel-right | 11 × 11 frame, 4-wide panel that fills; mirror | panel counter 2.94 |
+| list | four lines at 3px spacing, 2.5–13.5 | standard gaps |
+| square-dashed | corners (1.5 arms) and centred 3px dashes, tight gaps | |
+| flash | closed bolt with a 1.5px jog so the waist stays open (counter 1.43) | a narrower jog pinched into 0.2px slivers |
+| text | an A, crossbar at 9.5 | counter 3.02 |
+| shapes | 7 × 7 square (solid) and an r 3.5 circle cut 2.5 short of it | Cursor's overlap cut |
+| layers | isometric diamond (solid) over a chevron, 1.875 apart | |
+| book | two pages meeting at the spine; the spine is a `cut` | |
+| options | three sliders, r 1.5 knobs (solid), knob to line tight | denser than Fluent's two |
+| color | a droplet: tangents from the tip to an r 4.5 bowl | Fluent draws a palette |
+
+Roadmap renumbered to the owner's batches:
+- batch 4: Area's 29 inspector marks;
+- batch 5: new needs (lock, star, calendar, pencil, download, sparkle…);
+- then the demo-level Fluent swap.
+
+**Same day, owner:**
+- **Bell:** the flare should be more pronounced and less sharp, like Fluent's. Three
+  candidates were compared on the Exploration sheet: a soft S-curve, a longer flare, and a
+  Fluent-like straight steep flare (which breaks the angle rules). Applied the **longer
+  flare**: the sides curve out from y 8 to the base ends (C 12.5 9.5, 13.5 10.25, 13.5 11)
+  and meet the base with r 0.5 corners. The skill gains a "soft transitions" rule. The bell
+  is back in review.
+- **Review page:**
+  - status is shown in the component gallery's colours (approved = Complete, review = In
+    review, revising = Unrefined), with counts on each batch header;
+  - each batch opens with a full-width whole-set grid (`GalleryIconBatchSet<n>`): one
+    labelled row per batch up to that one, the new batch last, every icon at 16px in a
+    fixed 24px cell so columns line up (the owner replaced an earlier underlined strip
+    with this);
+  - `PILOT_BATCHES` is generated from `batches.json`.
+- The generator's path parser now supports `Q` curves.
+
+## Tenth pass: review round 3, 2026-09-25
+
+The owner's notes, and what changed for each:
+
+| Note | Change |
+|---|---|
+| align-center and align-middle look smaller | Bars resized to fill the keyline like align-left: 11 × 3 and 7 × 3, keeping bar height, radius and spacing. Ink went from 9.1 × 12.1 to 12.1 × 12.1. The family rule now says "same optical size", not "same bar length" |
+| document fold small | Fold 5, Fluent's size, on the lattice (7.5, 1.5 → 12.5, 6.5), with an r 1.5 fold corner like Fluent's. Lines moved to y 9 and 12 (tight gaps to the fold and the base). Fold counter 3.43 |
+| slightly rounder overall (Fluent is rounder; ChatGPT much rounder) | Container radius 1 → 1.5 on the centre-line (document, folder, copy, trash, open, square-dashed, shapes); wide frames 2 (panel). Bars and small parts stay 1 |
+| droplet too sharp at the top | The tip is an r 1.5 arc; bowl moved to y 9 to recentre |
+| options: two controls like Fluent | Two sliders at y 4.5 and 11.5, r 1.5 knobs at x 10 and 6 |
+| text: look at other examples | A T with end ticks and a foot (Fluent's text_t, Lucide's type). Candidates on the Exploration sheet: the previous A (fails the new acute rule), a plain T, and a T in a text box |
+| panel wider, like Fluent and ChatGPT | Frame 13 × 10 (1.5–14.5 × 3–13), r 2; the side panel is 4 wide. Horizontal keyline |
+| flash's negative space too sharp and thin; watch acute angles | New lint rule: straight joins under 60° fail unless filleted. Flash is redrawn after Fluent's: a flat top, a wider bottom point (45° before rounding), and every corner filleted (r 0.75–1). Counter 4.89. Layers' 53° side corners are filleted at r 1 |
+| overlap spacing consistent with copy | The shapes circle stops 3px short of the square (standard 1.88), as copy's back sheet does |
+
+The acute rule also flags the bell's old 45° step, which the owner had already called too
+sharp. Batch statuses are updated in `batches.json`: every touched icon is back in review.
+
+## Eleventh pass: review round 4, 2026-09-25
+
+| Owner note | Change |
+|---|---|
+| the shapes overlap gap is too far; the space should be close to the line | Overlap cut = a gap equal to the line: 2.25px between centre-lines, 1.125px of space. The circle now ends at x/y 4.25. The tight step starts at 1.125. Arc ends now retract in the filled variant too, so the gap holds at 1.5px |
+| panel: a line like Fluent's, as wide as Fluent's, no pill | Frame 2.5–13.5 × 3.5–12.5, r 2 (ink 12.1 × 10.1, Fluent's 12 × 10), divider at x 6.5. The side pane is a path whose right edge is the divider; it fills only in the filled variant |
+| book corners rounder; pages slightly more angled | Outer corners r 1.5. Pages dip 1.5px to the spine at the top (3 → 4.5) and the bottom (11.5 → 13) |
+| everything a bit softer; radii needn't be identical | Large containers r 2 (document, open, panel); mid containers r 1.5; bars and small parts r 1 |
+| flash too extreme; look at Fluent and others | Redrawn on Fluent's proportions: flat top 5.9–10.7, notch and shoulder at 5.5, left shoulder at 9, tip at 4.6, 14.5. Gentle fillets (r 0.5–0.75), centred. Candidate: the previous bolt. A Lucide-style Z bolt was tried and dropped: its 26° points lose most of their shape when rounded, which is the sharpness the owner flagged |
+| other examples for layers | Candidates: the current diamond over one layer; three layers (Lucide, Material); stacked cards (a Figma-like panel stack) |
+
+## Twelfth pass: review round 5 and the optical audit, 2026-09-25
+
+| Owner note | Change |
+|---|---|
+| flash still too fat | Fluent's structure at 82% width and 112% height, filling the vertical keyline (ink 7.7 × 13.2), centred. Previous versions on the Exploration sheet |
+| book arcs should bend down more, an M not a V | Page tops now hump up (C7 3.2 5 2.6 3 3 from the spine) and the bottoms follow them. Previous version on the sheet |
+| droplet point too rounded | Tip r 1.5 → 0.75 |
+| content should fit its containers | At four columns (282px tiles) 16 review tiles overflowed. Tiles now show four plates (Area, Fluent, over, filled) and a compact context: an outline button, icon button and badge on one line, then the current Nav item. The Menu item was dropped, since it is the same slot as the Nav item |
+| deep optical size audit | New `--audit` mode (below). Enlarged person, warning and color |
+| like Fluent's three-layer layers, facing up | Layers is now three isometric layers facing up (tight 1.53 gaps). Fluent's diagonal cards are on the sheet as an alternative |
+
+**Optical audit.** The ink is rasterised at 8 samples per px, and each icon gets an
+apparent size (√ of the convex-hull area) and a density (ink / hull), compared with the
+set's median (10.86 and 0.39).
+- **Line glyphs** have thin hulls by nature (more −55%, chevron −47%, check −41%, add,
+  arrows and expand about −18%).
+- **Full rings** run about 16% large, the intended circle compensation (info,
+  status-available).
+- **Solid shapes** below −8% were enlarged:
+  - person −11% → −5%: head r 2.5 at y 4.5; shoulders 3–13 from y 10, a standard gap;
+  - warning −8% → −5%: triangle (8, 0.75) (14.75, 13.5) (1.25, 13.5), r 1.25 corners;
+  - color −12% → −4%: bowl r 5 at y 9.25, tip at 1.5.
+- **Accepted as is:**
+  - flash reads −22% because a diagonal bolt has a small hull, but it fills its keyline;
+  - layers' density (+22%) comes from its three stacked layers.
+
+**Round 6 (same day):**
+- **Flash.** Owner: still not right; sharper angles are fine. The rounded versions read
+  blobby. Now a sharp classic bolt (6, 1.5) (11, 1.5) (8.5, 6.5) (12.5, 6.5) (5.5, 14.5)
+  (7, 9) (3.5, 9), with `data-acute="sharp"`, the first owner-approved exception to the
+  60° corner rule. Its tip is 26° and the stroke fills it solid. Counter 3.24. The sharp
+  Fluent-structure version is on the Exploration sheet; a narrow variant was rejected by
+  the counter rule (a 0.18px sliver).
+- **Layers.** Owner: should the two lower layers match the top layer's width? Yes. The top
+  layer's r 1 side fillets pull its sides in 1.24px, so the lines below ran wider. The icon
+  is rebuilt so all three layers span exactly 3–13: the top layer's vertices sit at
+  8 ± 6.24 and the lines run 3–13. Ink 11.1 × 13.2, centred; gaps 1.53 (tight).
+
+## Batch 4: inspector, 2026-09-25
+
+Area's own inspector marks (`assets/area-icons`, 1px, from Stadium) redrawn on the system.
+There are 16 drawings and 23 icons with derivations; the set is now 70.
+
+| Icon | Construction | Notes |
+|---|---|---|
+| angle | L axes (2.5, 2.5 → 2.5, 13.5 → 13.5, 13.5) and an r 6 arc from the vertical axis to the base | |
+| aspect-ratio | 11 × 11 frame r 2; inner corner brackets, arms 2 | brackets become knockouts when filled |
+| auto-layout | tall 4 × 11 bar and a 4 × 4 box, r 1.5; a check on the lattice below the box | standard and tight gaps |
+| corner (+ top-right flipx, bottom-left flipy, bottom-right 180) | one r 5 corner, 11px arms | corner-radius was a duplicate and is dropped |
+| corners | four r 2.5 corners with 1px arms, 4px apart | |
+| dots-four | four r 2 rings, standard gaps; solid when filled | was four solid discs |
+| eye-off | the pilot eye's almond with a slash from top-left to bottom-right (negation direction) | the pupil is dropped: the slash cut it into 0.47px slivers |
+| flip (+ flip-vertical transpose) | axis at 8; two triangles, sharp 90° tips 1.875 from the axis, r 1 back corners | |
+| flow (+ flow-vertical transpose) | two 3.5px boxes and a row arrow with the 3px head | |
+| flow-wrap, flow-free | 4 × 4 boxes, r 1, standard or tight gaps | |
+| gap (+ gap-vertical transpose) | two outward brackets r 1.5 and a ⌀2 dot, tight gaps | |
+| opacity | frame r 2; six ⌀1.5 dots on a 3px pitch | the pitch keeps side gaps tight and diagonals open; 2.5 put diagonals in the dead zone |
+| padding | frame and an inner 5 × 5 box, a standard gap | four side bars always collide at the corners |
+| padding-sides (+ padding-ends transpose) | frame and two inner bars | |
+| token | r 6.5 ring and r 3.5 inner ring, 3 apart (standard); the inner ring is a knockout when filled | the old r 3 inner ring was in the dead zone |
+| sliders | options, transposed | |
+| rotate | reset, mirrored (clockwise) | |
+
+Not redrawn:
+- auto-position: its S-path cannot hold the 3px embedded head without near misses, so it
+  needs a new concept;
+- bars-three: unused;
+- eye: already in the set.
+
+Audit: corner (−20%) and angle (−17%) read small by hull because each is one line, like
+the other line glyphs. The frames sit at the full square keyline (+10%).
+
+**Batch 4, round 1.** The owner pointed to Figma's editor icons as the reference.
+
+| Owner note | Change |
+|---|---|
+| flip triangles need work | Tall triangles pointing at the axis, (2, 3.5) (5.75, 8) (2, 12.5), back corners r 0.75 and tip r 0.5 (r 1 on a 3.5px triangle made a blob). Tips 1.28 from the axis (tight) |
+| corner arms too long | Span 9 instead of 11: M3.5 12.5 V8.5 A5 … 8.5 3.5 H12.5 |
+| look at other hide icons | Hide is now a closed eye, a lid and three lashes (Figma, Notion, Lucide eye-closed). Candidates: the previous slash eye, and a Lucide-style slash eye with its lids cut |
+| refine flow; the arrow head is too big | 4px boxes throughout the flow family; the flow arrow's head is 2.5px. Secondary arrows (flow, rotate) now use smaller heads |
+| rotate (Figma reference) | Its own drawing instead of mirrored reset: a rotated square (r 1 corners) with a clockwise arc from −100° to −30° and a 2.25px head, the largest head that clears the square |
+
+**Rotate, round 2.** Owner: rotate needed a lot of work; see Figma's, and research others.
+
+References compared:
+- Figma: a rotated square sitting low, with a wide arc over the top and a small head on the
+  right pointing down;
+- Material rotate_90_degrees: an upright square with a corner arc;
+- Lucide rotate-cw and Fluent arrow_rotate_clockwise: a plain circular arrow.
+
+Candidates on the Exploration sheet: the previous short arc, the Figma construction, and a
+clockwise circular arrow (reset mirrored). The Material version was dropped: its arc
+could not clear the square (0.43px).
+
+Applied, Figma's construction: a rotated square with an 8px diagonal and r 1 corners,
+centred at x 8. The arc (r 6.7) runs from 216° to −40° round the top, and the 2.25px head
+is symmetric about the arc's direction. The geometry was solved numerically for:
+- arc to square a standard gap (1.99);
+- head to square a tight gap (1.27; 1.1 when filled);
+- no enclosed sliver;
+- ink 11.9 × 11.4, centred.
+
+**Rotate, round 3.** Owner: the problem is the angle the arrow's end faces; treat it like
+reset and get the arc right; iterate.
+- The head is now reset's corner head, mirrored: an L with equal 3px barbs, up and left,
+  whose corner is the arc's end. The arc arrives at −45°, exactly on the diagonal between
+  the barbs, so the head is balanced about its stroke.
+- A numeric search (arc centre, corner on the 0.5 grid, arc radius, square size and
+  position) kept 19,042 layouts with every gap on the scale. The five varied ones are on
+  the Exploration sheet.
+- Applied B: arc r 6.36 (centre 8, 9.5) from 225° to the corner at 12.5, 5; a rotated
+  square with an 7px diagonal at 8, 10.85, r 1 corners; head a standard 1.93 from the
+  square; arc 3.5 from the square (open); ink 10.1 × 13.1, centred.
+- A and E (a bigger square) run 13.7 tall, over the keyline. Their upper barb reaches y
+  1.5, which the first search did not count.
+
+**Document, round 4.** Owner: the fold is too big; make it slightly smaller but keep the
+negative space. The fold is now 4.5. A 45° line only lands on the lattice with the page
+top at y 2 (page 2–14, r 2): diagonal (8, 2) → (12.5, 6.5), fold corner r 1.5. Lines at
+y 9 and 11.5 (tight gaps to the fold, each other and the base). The fold pocket is 1.53
+(tight), down from 3.43.
+
+## Batch 5: common, 2026-09-25
+
+Twelve everyday icons (82 in the set):
+
+| Icon | Construction |
+|---|---|
+| lock | 9 × 6 body, r 1.5; r 3 shackle joined to it; keyhole stem a tight gap from both edges |
+| star | five points, R 7.4 with a 0.44 inner ratio; tips r 1, valleys r 0.5; centred by its ink box |
+| heart | two r 3.5 lobes and 45° sides meeting at a 90° point |
+| calendar | 11 × 9.5 frame, r 2; a header `cut` at y 7; binder tabs ending just below the frame edge |
+| clock | ring r 6.5; the away-status hands (a knockout when filled) |
+| pencil | a 45° body (bottom-left to top-right) with an angled tip; filleted corners |
+| download / upload | an arrow into or out of a shared tray (r 1.5); 3px head, a tight gap to the tray |
+| filter | a funnel with filleted corners |
+| sort | an up arrow and a down arrow, 2.5px heads on the lattice |
+| sparkle | a four-point star with concave sides, and a small plus |
+| pin | a droplet with its tip down (the color construction), bowl r 4.75, ring r 2 a tight gap inside |
+
+Lint fixes:
+- calendar's tabs came within 0.38px of the header;
+- lock's keyhole sat in the dead zone relative to the shackle;
+- pin's ring could not sit on the grid at the flipped droplet's height;
+- the small sparkle's pocket was a blot (0.41), so it became a plus.
+
+Audit: star, filter, pencil and heart were enlarged. Pencil still reads −15% by hull, as a
+diagonal does.
+
+**Remote review:** `batch5-sheet.png` renders the review content with headless Edge (the
+whole-set grid, then each icon's sizes, filled variant and contexts), so the owner can
+review from chat.

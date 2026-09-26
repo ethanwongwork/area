@@ -1,11 +1,11 @@
 import { cloneElement, type CSSProperties, type ReactElement, type ReactNode } from "react";
-import { Badge, Button, Menu, MenuItem, Nav, NavItem } from "@area/react";
-import { PILOT_ICONS } from "../pilot-icons.tsx";
+import { Badge, Button, Nav, NavItem } from "@area/react";
+import { PILOT_BATCHES, PILOT_ICONS } from "../pilot-icons.tsx";
 import { EXPLORE } from "../pilot-explore.tsx";
 
 /* The Iconography sheets compare base drawings; rotations appear on the per-icon review page. */
 const BASE_ICONS = PILOT_ICONS.filter(icon => !icon.derivedFrom);
-import { AlignLeftIcon, BellIcon, CheckIcon, ChevronIcon, DismissIcon, InfoIcon, MoreIcon, PlusIcon, PresenceAvailableIcon, SearchIcon, SettingsIcon, FluentEyeIcon, FluentAlignLeftFilledIcon, FluentBellFilledIcon, FluentCheckCircleFilledIcon, FluentEyeFilledIcon, FluentInfoFilledIcon, FluentSettingsFilledIcon, AlertIcon, ArrowUpIcon, ArrowIcon, LinkIcon, OpenIcon, PersonSmallIcon, FluentResetIcon, FluentChevronLeftIcon, FluentChevronRightIcon, FluentChevronUpIcon, FluentArrowLeftIcon, FluentArrowDownIcon, DocumentIcon, FolderIcon, TrashIcon, FluentCopyIcon, FluentCopyFilledIcon, FluentDocumentFilledIcon, FluentFolderFilledIcon, FluentTrashFilledIcon, FluentWarningFilledIcon } from "../icons.tsx";
+import { AlignLeftIcon, BellIcon, CheckIcon, ChevronIcon, DismissIcon, InfoIcon, MoreIcon, PlusIcon, PresenceAvailableIcon, SearchIcon, SettingsIcon, FluentEyeIcon, FluentAlignLeftFilledIcon, FluentBellFilledIcon, FluentCheckCircleFilledIcon, FluentEyeFilledIcon, FluentInfoFilledIcon, FluentSettingsFilledIcon, AlertIcon, ArrowUpIcon, ArrowIcon, LinkIcon, OpenIcon, PersonSmallIcon, FluentResetIcon, FluentChevronLeftIcon, FluentChevronRightIcon, FluentChevronUpIcon, FluentArrowLeftIcon, FluentArrowDownIcon, FluentAlignRightIcon, FluentAlignCenterIcon, AlignTopIcon, AlignMiddleIcon, AlignBottomIcon, FluentExpandIcon, FluentExpandFilledIcon, FluentPanelLeftIcon, FluentPanelLeftFilledIcon, FluentPanelRightIcon, FluentPanelRightFilledIcon, FluentBookIcon, FluentBookFilledIcon, FluentOptionsIcon, FluentOptionsFilledIcon, FluentColorIcon, FluentColorFilledIcon, FluentTextIcon, FluentTextFilledIcon, FluentShapesIcon, FluentShapesFilledIcon, FluentListIcon, FluentListFilledIcon, FluentSquareDashedIcon, FluentSquareDashedFilledIcon, FluentLayersIcon, FluentLayersFilledIcon, FluentFlashIcon, FluentFlashFilledIcon, DocumentIcon, FolderIcon, TrashIcon, FluentCopyIcon, FluentCopyFilledIcon, FluentDocumentFilledIcon, FluentFolderFilledIcon, FluentTrashFilledIcon, FluentWarningFilledIcon } from "../icons.tsx";
 
 /* Icon pilot (docs/specs/icons.md): each icon beside a 14/20 regular label, the UI text it
    pairs with. One tile per stroke weight, plus the Fluent icons Area uses today. */
@@ -14,7 +14,7 @@ const LABELS: Record<string, string> = {
   "add": "Add", "align-left": "Align left", "bell": "Notifications", "check": "Check",
   "chevron-down": "Expand", "dismiss": "Close", "eye": "Show", "info": "Info",
   "more-horizontal": "More", "search": "Search", "settings": "Settings", "status-available": "Available",
-  "arrow-up": "Send", "arrow-right": "Next", "arrow-down": "Down", "arrow-left": "Back", "chevron-left": "Previous", "chevron-right": "Open", "chevron-up": "Collapse", "link": "Link", "open": "Open in new tab", "person": "Profile", "reset": "Reset", "copy": "Copy", "document": "Document", "folder": "Folder", "trash": "Delete", "warning": "Warning",
+  "arrow-up": "Send", "arrow-right": "Next", "arrow-down": "Down", "arrow-left": "Back", "chevron-left": "Previous", "chevron-right": "Open", "chevron-up": "Collapse", "link": "Link", "open": "Open in new tab", "person": "Profile", "reset": "Reset", "align-right": "Align right", "align-center": "Align center", "align-top": "Align top", "align-middle": "Align middle", "align-bottom": "Align bottom", "lock": "Lock", "star": "Favorite", "heart": "Like", "calendar": "Date", "clock": "Time", "pencil": "Edit", "download": "Download", "upload": "Upload", "filter": "Filter", "sort": "Sort", "sparkle": "Ask AI", "pin": "Location", "angle": "Angle", "aspect-ratio": "Ratio", "auto-layout": "Auto layout", "corner": "Radius", "corner-top-right": "Top right", "corner-bottom-left": "Bottom left", "corner-bottom-right": "Bottom right", "corners": "Corners", "dots-four": "Components", "eye-off": "Hide", "flip": "Flip", "flip-vertical": "Flip vertical", "flow": "Horizontal", "flow-vertical": "Vertical", "flow-wrap": "Wrap", "flow-free": "Freeform", "gap": "Gap", "gap-vertical": "Row gap", "opacity": "Opacity", "padding": "Padding", "padding-sides": "Side padding", "padding-ends": "End padding", "token": "Token", "sliders": "Adjust", "rotate": "Rotate", "expand": "Expand", "panel-left": "Sidebar", "panel-right": "Inspector", "book": "Docs", "options": "Options", "color": "Color", "text": "Text", "shapes": "Shapes", "list": "List", "square-dashed": "Placeholder", "layers": "Layers", "flash": "Motion", "copy": "Copy", "document": "Document", "folder": "Folder", "trash": "Delete", "warning": "Warning",
 };
 
 const grid: CSSProperties = {
@@ -42,7 +42,7 @@ const FLUENT: [string, () => ReactElement][] = [
   ["add", PlusIcon], ["align-left", AlignLeftIcon], ["bell", BellIcon], ["check", CheckIcon],
   ["chevron-down", ChevronIcon], ["dismiss", DismissIcon], ["eye", FluentEyeIcon], ["info", InfoIcon],
   ["more-horizontal", MoreIcon], ["search", SearchIcon], ["settings", SettingsIcon], ["status-available", PresenceAvailableIcon],
-  ["arrow-up", ArrowUpIcon], ["arrow-right", ArrowIcon], ["copy", FluentCopyIcon], ["link", LinkIcon], ["open", OpenIcon], ["person", PersonSmallIcon], ["reset", FluentResetIcon], ["chevron-left", FluentChevronLeftIcon], ["chevron-right", FluentChevronRightIcon], ["chevron-up", FluentChevronUpIcon], ["arrow-left", FluentArrowLeftIcon], ["arrow-down", FluentArrowDownIcon], ["document", DocumentIcon], ["folder", FolderIcon], ["trash", TrashIcon], ["warning", AlertIcon],
+  ["arrow-up", ArrowUpIcon], ["arrow-right", ArrowIcon], ["copy", FluentCopyIcon], ["link", LinkIcon], ["open", OpenIcon], ["person", PersonSmallIcon], ["reset", FluentResetIcon], ["chevron-left", FluentChevronLeftIcon], ["chevron-right", FluentChevronRightIcon], ["chevron-up", FluentChevronUpIcon], ["arrow-left", FluentArrowLeftIcon], ["arrow-down", FluentArrowDownIcon], ["align-right", FluentAlignRightIcon], ["align-center", AlignMiddleIcon], ["align-top", AlignTopIcon], ["align-middle", FluentAlignCenterIcon], ["align-bottom", AlignBottomIcon], ["expand", FluentExpandIcon], ["panel-left", FluentPanelLeftIcon], ["panel-right", FluentPanelRightIcon], ["book", FluentBookIcon], ["options", FluentOptionsIcon], ["color", FluentColorIcon], ["text", FluentTextIcon], ["shapes", FluentShapesIcon], ["list", FluentListIcon], ["square-dashed", FluentSquareDashedIcon], ["layers", FluentLayersIcon], ["flash", FluentFlashIcon], ["document", DocumentIcon], ["folder", FolderIcon], ["trash", TrashIcon], ["warning", AlertIcon],
 ];
 export const GalleryIconPilotFluent = () => (
   <div style={grid}>
@@ -122,6 +122,7 @@ export const GalleryIconPilotBalance = () => (
 const FLUENT_FILLED: Record<string, () => ReactElement> = {
   "align-left": FluentAlignLeftFilledIcon, bell: FluentBellFilledIcon, eye: FluentEyeFilledIcon,
   info: FluentInfoFilledIcon, settings: FluentSettingsFilledIcon, "status-available": FluentCheckCircleFilledIcon,
+  "expand": FluentExpandFilledIcon, "panel-left": FluentPanelLeftFilledIcon, "panel-right": FluentPanelRightFilledIcon, "book": FluentBookFilledIcon, "options": FluentOptionsFilledIcon, "color": FluentColorFilledIcon, "text": FluentTextFilledIcon, "shapes": FluentShapesFilledIcon, "list": FluentListFilledIcon, "square-dashed": FluentSquareDashedFilledIcon, "layers": FluentLayersFilledIcon, "flash": FluentFlashFilledIcon,
   copy: FluentCopyFilledIcon, document: FluentDocumentFilledIcon, folder: FluentFolderFilledIcon, trash: FluentTrashFilledIcon, warning: FluentWarningFilledIcon,
 };
 export const GalleryIconPilotFilled = () => (
@@ -173,50 +174,46 @@ export const GalleryIconPilotExplore = () => (
   </div>
 );
 
-/* Sizes (docs/specs/icons.md, "Sizes"): the 16px drawings in 12px and 20px slots, two ways.
-   Scaled: the whole drawing scales, line and gaps together (Cursor: one 16px set used from
-   12 to 20px). Constant: the line stays 1.125 screen px while the geometry scales, so gaps
-   shrink at 12px and open at 20px. Each strip sits beside the text size that slot pairs with. */
-const SIZE_TEXT: Record<number, string> = { 12: "xs", 16: "sm", 20: "md" };
+/* Sizes (docs/specs/icons.md, "Sizes"): the 16px drawings at every slot size on the size
+   curve (the line grows with size^0.45, Cursor's 1.25 → 1.5px from 16 to 24px), each strip
+   beside the text size the slot pairs with, and the old uniform scaling for comparison. */
+const SIZE_TEXT: Record<number, string> = { 12: "xs", 16: "sm", 20: "md", 24: "md" };
 const px = (value: number) => Math.round(value * 100) / 100;
-const SizeStrip = ({ size, constant }: { size: number; constant: boolean }) => {
-  const scale = size / 16, weight = constant ? 1.125 / scale : 1.125, line = weight * scale;
+const curveLine = (size: number) => 1.125 * Math.pow(size / 16, 0.45);
+const SizeStrip = ({ size, uniform = false }: { size: number; uniform?: boolean }) => {
+  const line = uniform ? 1.125 * size / 16 : curveLine(size), scale = size / 16;
   const text = SIZE_TEXT[size];
   return (
     <div style={exploreCell}>
-      <span style={muted}>{size}px, {constant ? "constant line" : "scaled"}: line {px(line)}, standard gap {px(3 * scale - line)}, tight gap {px(2.5 * scale - line)}</span>
+      <span style={muted}>{size}px{uniform ? ", uniform scaling (previous)" : ""}: line {px(line)}, standard gap {px(3 * scale - line)}, tight gap {px(2.5 * scale - line)}</span>
       <div style={{ ...strip, gap: "var(--area-space-12)", font: `var(--area-weight-regular) var(--area-text-${text}-size)/var(--area-text-${text}-leading) var(--area-font-sans)` }}>
-        {BASE_ICONS.map(({ name, Icon }) => <span key={name}>{at(<Icon weight={weight} />, size)}</span>)}
+        {BASE_ICONS.map(({ name, Icon }) => <span key={name}>{uniform ? at(<Icon weight={1.125} />, size) : <Icon size={size} />}</span>)}
         <span>Settings</span>
       </div>
     </div>
   );
 };
 export const GalleryIconPilotSizes = () => (
-  <div style={{ ...exploreCell, gap: "var(--area-space-24)" }}>
-    <SizeStrip size={12} constant={false} />
-    <SizeStrip size={12} constant />
-    <SizeStrip size={16} constant={false} />
-    <SizeStrip size={20} constant={false} />
-    <SizeStrip size={20} constant />
+  <div style={{ ...exploreCell, gap: "var(--area-space-24)", font: "var(--area-weight-regular) var(--area-text-xs-size)/var(--area-text-xs-leading) var(--area-font-sans)" }}>
+    {[12, 16, 20, 24].map(size => <SizeStrip key={size} size={size} />)}
+    <SizeStrip size={24} uniform />
   </div>
 );
-const SizeRaster = ({ size, constant, scale }: { size: number; constant: boolean; scale: number }) => (
+const SizeRaster = ({ size, scale }: { size: number; scale: number }) => (
   <div style={exploreCell}>
-    <span style={muted}>{size}px {constant ? "constant" : "scaled"}, {scale}×</span>
+    <span style={muted}>{size}px on the curve, {scale}×</span>
     <div style={{ ...strip, gap: "var(--area-space-8)" }}>
       {BASE_ICONS.map(({ name, Icon }) => (
-        <Pixels key={name}><Icon weight={constant ? 1.125 * 16 / size : 1.125} data-scale={String(scale)} data-size={String(size)} /></Pixels>
+        <Pixels key={name}><Icon weight={1.125} size={size} data-scale={String(scale)} data-size={String(size)} /></Pixels>
       ))}
     </div>
   </div>
 );
 export const GalleryIconPilotSizesRaster = () => (
   <div style={{ ...exploreCell, gap: "var(--area-space-16)" }}>
-    <SizeRaster size={12} constant={false} scale={1} />
-    <SizeRaster size={12} constant scale={1} />
-    <SizeRaster size={12} constant={false} scale={2} />
-    <SizeRaster size={12} constant scale={2} />
+    <SizeRaster size={12} scale={1} />
+    <SizeRaster size={12} scale={2} />
+    <SizeRaster size={20} scale={1} />
   </div>
 );
 
@@ -252,51 +249,59 @@ export const GalleryIconPilotPixels = () => (
    Area icon and then with Fluent's, so each drawing is judged where it will live. Cursor's
    icons are proprietary and are not stored in the repository; compare against the product. */
 const reviewTile: CSSProperties = {
-  display: "grid", gap: "var(--area-space-16)", color: "var(--area-fg-default)",
+  display: "grid", gap: "var(--area-space-12)", alignContent: "start", inlineSize: "100%", color: "var(--area-fg-default)",
   font: "var(--area-weight-regular) var(--area-text-xs-size)/var(--area-text-xs-leading) var(--area-font-sans)",
 };
-const reviewRow: CSSProperties = { display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: "var(--area-space-16)" };
+const reviewRow: CSSProperties = { display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: "var(--area-space-12)" };
 const sizeCell: CSSProperties = { display: "grid", justifyItems: "center", gap: "var(--area-space-4)" };
 const SIZES = [12, 16, 20, 24, 32];
-const Context = ({ icon, filled, label }: { icon: () => ReactElement; filled?: () => ReactElement; label: string }) => (
-  <div style={{ ...reviewRow, alignItems: "center" }}>
-    <Button variant="outline" size="sm" icon={icon()}>{label}</Button>
-    <Button variant="ghost" size="sm" iconOnly icon={icon()} aria-label={label} />
-    <Button variant="soft" size="md" icon={icon()}>{label}</Button>
-    <Badge icon={icon()}>{label}</Badge>
-    <Menu style={{ inlineSize: "calc(var(--area-space-80) * 2)" }}>
-      <MenuItem><span className="area-menu__icon">{icon()}</span><span className="area-menu__text">{label}</span></MenuItem>
-    </Menu>
-    <Nav aria-label={label} style={{ inlineSize: "calc(var(--area-space-80) * 2)" }}>
-      <NavItem href="#" icon={icon()}>{label}</NavItem>
-      <NavItem href="#" current icon={(filled ?? icon)()}>{label}</NavItem>
+/* 3× plates: small enough for two review columns, still one screen pixel per grid unit ×3. */
+const PLATE = 48;
+const plateSm: CSSProperties = { ...plate, inlineSize: "var(--area-space-48)", blockSize: "var(--area-space-48)", backgroundSize: "calc(var(--area-space-48) / 16) calc(var(--area-space-48) / 16)" };
+const mid = (element: ReactElement, style?: CSSProperties) => cloneElement(element as ReactElement<Record<string, unknown>>, { width: PLATE, height: PLATE, style: { ...layer, ...style } });
+const KeylineSm = ({ shape }: { shape: string }) => (
+  <svg viewBox="0 0 16 16" width={PLATE} height={PLATE} style={{ ...layer, color: "var(--area-fg-accent)" }} aria-hidden="true"
+    fill="currentColor" fillOpacity={0.06} stroke="currentColor" strokeWidth={0.3}>
+    {KEYLINE_SHAPES[shape]}
+  </svg>
+);
+/* Contexts that fit a one-cell tile at any column count: a button, an icon button and a
+   badge on one line, then the current Nav item (filled icon). The Nav item stands in for
+   the menu row, which uses the same 16px slot. */
+const Context = ({ icon, filled, label }: { icon: () => ReactElement; filled: () => ReactElement; label: string }) => (
+  <div style={{ display: "grid", gap: "var(--area-space-8)", justifyItems: "start" }}>
+    <div style={{ ...reviewRow, alignItems: "center", gap: "var(--area-space-8)" }}>
+      <Button variant="outline" size="sm" icon={icon()}>{label}</Button>
+      <Button variant="ghost" size="sm" iconOnly icon={icon()} aria-label={label} />
+      <Badge icon={icon()}>{label}</Badge>
+    </div>
+    <Nav aria-label={label} style={{ inlineSize: "calc(var(--area-space-64) * 2)" }}>
+      <NavItem href="#" current icon={filled()}>{label}</NavItem>
     </Nav>
   </div>
 );
 const IconReview = ({ name }: { name: string }) => {
   const entry = PILOT_ICONS.find(icon => icon.name === name)!;
-  const { Icon, Filled, keyline } = entry;
+  const { Icon, Filled, keyline, fill } = entry;
   const Fluent = fluentFor(name);
   const FluentFilled = FLUENT_FILLED[name];
   const label = LABELS[name] ?? name;
   return (
-    <div style={reviewTile}>
-      <span style={muted}>{keyline} keyline{Filled ? " · has a filled variant" : " · line glyph, no filled variant"}</span>
+    <div style={{ ...reviewTile, gap: "var(--area-space-8)" }}>
+      <span style={muted}>{keyline} · filled by {fill === "solid" ? "solid shapes and cut-outs" : "a 1.5px line"}{entry.derivedFrom ? ` · from ${entry.derivedFrom}` : ""}</span>
       <div style={reviewRow}>
-        {SIZES.map(size => <div key={size} style={sizeCell}>{at(<Icon />, size)}<span style={muted}>{size}</span></div>)}
-        {Filled ? SIZES.slice(1, 3).map(size => <div key={"f" + size} style={sizeCell}>{at(<Filled />, size)}<span style={muted}>filled {size}</span></div>) : null}
+        {SIZES.map(size => <div key={size} style={sizeCell}><Icon size={size} /><span style={muted}>{size}</span></div>)}
+        <div style={sizeCell}><Filled size={16} /><span style={muted}>filled</span></div>
       </div>
-      <div style={reviewRow}>
-        <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(<Icon weight={1.125} />)}</div><span style={muted}>Area</span></div>
-        {Fluent ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(Fluent())}</div><span style={muted}>Fluent</span></div> : null}
-        {Fluent ? <div style={sizeCell}><div style={plate}>{big(Fluent(), { color: "var(--area-fg-accent)", opacity: 0.45 })}{big(<Icon weight={1.125} />)}</div><span style={muted}>over Fluent</span></div> : null}
-        {Filled && FluentFilled ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(<Filled weight={1.125} />)}</div><span style={muted}>Area filled</span></div> : null}
-        {Filled && FluentFilled ? <div style={sizeCell}><div style={plate}><Keyline shape={keyline} />{big(FluentFilled())}</div><span style={muted}>Fluent filled</span></div> : null}
+      <div style={{ ...reviewRow, gap: "var(--area-space-8)" }}>
+        <div style={sizeCell}><div style={plateSm}><KeylineSm shape={keyline} />{mid(<Icon weight={1.125} />)}</div><span style={muted}>Area</span></div>
+        {Fluent ? <div style={sizeCell}><div style={plateSm}><KeylineSm shape={keyline} />{mid(Fluent())}</div><span style={muted}>Fluent</span></div> : null}
+        {Fluent ? <div style={sizeCell}><div style={plateSm}>{mid(Fluent(), { color: "var(--area-fg-accent)", opacity: 0.45 })}{mid(<Icon weight={1.125} />)}</div><span style={muted}>over</span></div> : null}
+        <div style={sizeCell}><div style={plateSm}><KeylineSm shape={keyline} />{mid(<Filled weight={1.125} />)}</div><span style={muted}>filled</span></div>
       </div>
-      <span style={muted}>Area in context</span>
-      <Context icon={() => <Icon />} filled={Filled ? () => <Filled /> : undefined} label={label} />
-      {Fluent ? <span style={muted}>Fluent in context</span> : null}
-      {Fluent ? <Context icon={Fluent} filled={FluentFilled} label={label} /> : null}
+      <Context icon={() => <Icon />} filled={() => <Filled />} label={label} />
+      {Fluent ? <span style={muted}>Fluent</span> : null}
+      {Fluent ? <Context icon={Fluent} filled={FluentFilled ?? Fluent} label={label} /> : null}
     </div>
   );
 };
@@ -304,4 +309,36 @@ const pascal = (name: string) => name.replace(/(^|-)([a-z0-9])/g, (_, __, c: str
 /** One review demo per pilot icon, named GalleryIconReview<Name>; the build lays them out. */
 export const ICON_REVIEW_DEMOS: Record<string, () => ReactElement> = Object.fromEntries(
   PILOT_ICONS.map(({ name }) => [`GalleryIconReview${pascal(name)}`, () => <IconReview name={name} />]),
+);
+
+/* Whole set at the top of each batch: one labelled row per batch up to this one, the new
+   batch last, every icon at 16px in a fixed cell so columns line up from row to row.
+   Rotations and mirrors follow their base icon. */
+const withDerived = (names: readonly string[]) => names.flatMap(name => [
+  ...PILOT_ICONS.filter(icon => icon.name === name),
+  ...PILOT_ICONS.filter(icon => icon.derivedFrom === name),
+]);
+const setGrid: CSSProperties = {
+  display: "grid", gridTemplateColumns: "calc(var(--area-space-64) * 2) 1fr", alignItems: "start",
+  columnGap: "var(--area-space-16)", rowGap: "var(--area-space-12)", inlineSize: "100%", color: "var(--area-fg-default)",
+  font: "var(--area-weight-regular) var(--area-text-xs-size)/var(--area-text-xs-leading) var(--area-font-sans)",
+};
+const setCells: CSSProperties = {
+  display: "grid", gridTemplateColumns: "repeat(auto-fill, var(--area-space-24))", gridAutoRows: "var(--area-space-24)",
+  placeItems: "center", gap: "var(--area-space-4)",
+};
+const BatchSet = ({ index }: { index: number }) => (
+  <div style={setGrid}>
+    {PILOT_BATCHES.slice(0, index + 1).flatMap(batch => {
+      const icons = withDerived(Object.keys(batch.icons));
+      return [
+        <span key={batch.id + "-label"} style={{ ...muted, paddingBlockStart: "var(--area-space-4)" }}>{batch.title}<br />{icons.length} icons</span>,
+        <div key={batch.id} style={setCells}>{icons.map(({ name, Icon }) => <span key={name} title={name}><Icon size={16} /></span>)}</div>,
+      ];
+    })}
+  </div>
+);
+/** One whole-set strip per batch, named GalleryIconBatchSet<index>; the build places each at the top of its batch. */
+export const ICON_BATCH_DEMOS: Record<string, () => ReactElement> = Object.fromEntries(
+  PILOT_BATCHES.map((_, index) => [`GalleryIconBatchSet${index + 1}`, () => <BatchSet index={index} />]),
 );

@@ -820,25 +820,53 @@ function iconExploreSection() {
 const iconReviewSections = () => [
   iconReviewSection("icon-compare", "Side by side", "fluent-area-keylines", "GalleryIconPilotCompare", "2x5"),
   iconReviewSection("icon-balance", "Optical balance", "set-16-32", "GalleryIconPilotBalance", "2x1"),
-  iconReviewSection("icon-filled", "Filled", "outline-filled-fluent", "GalleryIconPilotFilled", "2x4"),
-  iconReviewSection("icon-sizes", "Sizes", "scaled-vs-constant-line", "GalleryIconPilotSizes", "2x2"),
-  iconReviewSection("icon-sizes-raster", "Sizes at 12px", "raster-12-1x-2x", "GalleryIconPilotSizesRaster", "2x3"),
+  iconReviewSection("icon-filled", "Filled", "outline-filled-fluent", "GalleryIconPilotFilled", "2x5"),
+  iconReviewSection("icon-sizes", "Sizes", "size-curve", "GalleryIconPilotSizes", "2x3"),
+  iconReviewSection("icon-sizes-raster", "Sizes, raster", "raster-12-20", "GalleryIconPilotSizesRaster", "2x3"),
   iconReviewSection("icon-pixels", "Pixel check", "raster-1x-2x", "GalleryIconPilotPixels", "2x5"),
 ].join("");
 
-/** Icon review page: one tile per pilot icon (demos named GalleryIconReview<Name>). */
+/** Icon review page: one tile per pilot icon (demos named GalleryIconReview<Name>), grouped
+ *  by the batches and owner status in assets/area-icons-pilot/batches.json. Rotations and
+ *  mirrors sit beside their base icon. */
+const DERIVED_FROM = Object.fromEntries([...readFileSync(join(root, "src/pilot-icons.tsx"), "utf8")
+  .matchAll(/name: "([a-z0-9-]+)", keyline: "[a-z]+", derivedFrom: "([a-z0-9-]+)"/g)]
+  .map(([, name, base]) => [`GalleryIconReview${name.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())}`, base]));
 function iconReviewPage() {
-  const names = Object.keys(demos).filter(name => name.startsWith("GalleryIconReview")).sort();
-  const slug = name => name.replace("GalleryIconReview", "").replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-  return `<details open class="docs-visual-gallery__section" id="gallery-section-icon-review">
-      <summary class="docs-visual-gallery__section-title">Icons, one by one</summary>
-      <div class="docs-visual-gallery__grid">${names.map(name => `
-        <article class="docs-visual-gallery__tile" data-span="2x3" id="gallery-icon-review-${slug(name)}" aria-labelledby="gallery-title-icon-review-${slug(name)}">
-          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-review-${slug(name)}">${slug(name)}</h3>
-          <div class="docs-visual-gallery__tile-preview">${demos[name].html}</div>
-        </article>`).join("")}
+  const { batches } = JSON.parse(readFileSync(join(root, "assets/area-icons-pilot/batches.json"), "utf8"));
+  const pascal = name => name.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
+  const derived = Object.keys(demos).filter(name => name.startsWith("GalleryIconReview"));
+  // Owner status in the component gallery's colours: approved = Complete, review = In
+  // review, revising = Unrefined.
+  const AUDIT = { approved: "complete", review: "review", revising: "unrefined" };
+  const LABEL = { approved: "Approved", review: "In review", revising: "Revising" };
+  const tile = (name, status) => {
+    const demo = demos[name];
+    if (!demo) throw new Error(`Gallery specimen missing: ${name}`);
+    const slug = name.replace("GalleryIconReview", "").replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+    return `
+        <article class="docs-visual-gallery__tile" data-span="1x2" data-audit="${AUDIT[status]}" id="gallery-icon-review-${slug}" aria-labelledby="gallery-title-icon-review-${slug}">
+          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-review-${slug}">${slug} <span class="docs-audit-label" data-audit="${AUDIT[status]}">${LABEL[status]}</span></h3>
+          <div class="docs-visual-gallery__tile-preview">${demo.html}</div>
+        </article>`;
+  };
+  const counts = icons => Object.entries(Object.values(icons).reduce((n, status) => ({ ...n, [status]: (n[status] ?? 0) + 1 }), {}))
+    .map(([status, n]) => `<span class="docs-audit-label" data-audit="${AUDIT[status]}">${n} ${LABEL[status].toLowerCase()}</span>`).join(" ");
+  return batches.map((batch, index) => `<details open class="docs-visual-gallery__section" id="gallery-section-icon-${batch.id}">
+      <summary class="docs-visual-gallery__section-title">${batch.title} ${counts(batch.icons)}</summary>
+      <p class="docs-gallery-note">${batch.note}</p>
+      <div class="docs-visual-gallery__grid">
+        <article class="docs-visual-gallery__tile" data-span="row" id="gallery-icon-set-${batch.id}" aria-labelledby="gallery-title-icon-set-${batch.id}">
+          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-set-${batch.id}">whole set</h3>
+          <div class="docs-visual-gallery__tile-preview">${demos[`GalleryIconBatchSet${index + 1}`].html}</div>
+        </article>${Object.entries(batch.icons).map(([icon, status]) => {
+        const base = `GalleryIconReview${pascal(icon)}`;
+        // A derived icon's demo is listed after its base, found by the base's derivation.
+        const variants = derived.filter(name => name !== base && DERIVED_FROM[name] === icon);
+        return tile(base, status) + variants.map(name => tile(name, status)).join("");
+      }).join("")}
       </div>
-    </details>`;
+    </details>`).join("");
 }
 
 /** Gallery pages, in nav order. The documentation site stays hidden until it is rebuilt. */

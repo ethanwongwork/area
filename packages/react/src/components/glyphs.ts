@@ -3,7 +3,7 @@
  * Each glyph is a list of stroked centre-line paths on the 16px grid. */
 export const glyphs = {
   "arrow-up": [
-    "M8 13V3M3.5 7.5L8 3L12.5 7.5"
+    "M8 14V2M3 7L8 2L13 7"
   ],
   "check": [
     "M3 8L6.5 11.5L13.5 4.5"
