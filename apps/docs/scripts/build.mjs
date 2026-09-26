@@ -423,8 +423,7 @@ function galleryPage({ families = null } = {}) {
       { id: "avatar", title: "With avatar", demo: "BadgeAvatar" },
       { id: "flag", title: "With flag", demo: "BadgeFlag" },
       { id: "dismissible", title: "Dismissible", demo: "BadgeDismissible" },
-      { id: "truncation", title: "Truncation", demo: "BadgeTruncation" },
-      { id: "uppercase", title: "Uppercase", demo: "BadgeUppercase" },
+      { id: "behavior-truncation", title: "Behavior / truncation", demo: "BadgeTruncation" },
       { id: "link", title: "Link", demo: "BadgeLink" },
     ],
     avatar: [
@@ -648,6 +647,11 @@ function galleryPage({ families = null } = {}) {
       { id: "sequence", title: "Sequence", demo: "GalleryKbdSequence" },
       { id: "on-emphasis", title: "Appearance / on emphasis", demo: "GalleryKbdOnEmphasis" },
     ],
+    breadcrumb: [
+      { id: "default", title: "Default", demo: "GalleryBreadcrumb" },
+      { id: "composition-collapsed", title: "Composition / collapsed", demo: "GalleryBreadcrumbCollapsed" },
+      { id: "composition-icons", title: "Composition / icons", demo: "GalleryBreadcrumbIcons" },
+    ],
     tooltip: [
       { id: "open", title: "Default", demo: "GalleryTooltip" },
       { id: "arrow", title: "With indicator", demo: "GalleryTooltipArrow" },
@@ -767,8 +771,16 @@ function galleryPage({ families = null } = {}) {
         <div class="docs-visual-gallery__tile-preview">${demoMarkup(example.demo, demo.html)}</div>
       </article>`;
     }).join("\n");
+    // A family's current design pass (before / after, at 1x and at scale) sits above its
+    // variants when demos export GalleryReview<PascalSlug>, e.g. GalleryReviewBadgeGroup.
+    const reviewDemo = demos[`GalleryReview${component.slug.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase())}`];
+    const review = reviewDemo ? `<section class="docs-gallery-review" aria-labelledby="gallery-review-${component.slug}">
+        <h3 class="docs-visual-gallery__tile-title" id="gallery-review-${component.slug}">Pass review</h3>
+        <div class="docs-gallery-review__body">${reviewDemo.html}</div>
+      </section>` : "";
     return `<details open class="docs-visual-gallery__section" id="gallery-section-${component.slug}">
       <summary class="docs-visual-gallery__section-title">${escapeHtml(component.name)} <span class="docs-audit-label" data-audit="${status}">${statusLabel(status)}</span></summary>
+      ${review}
       <div class="docs-visual-gallery__grid">${tiles}</div>
     </details>`;
   }).join("\n");

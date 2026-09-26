@@ -303,7 +303,7 @@ export const badge = {
     tone: ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"],
     size: ["sm", "md", "lg"],
   },
-  booleans: ["pill", "dot", "dot-only", "icon-only", "truncate", "uppercase"],
+  booleans: ["pill", "dot", "dot-only", "icon-only", "truncate"],
   elements: ["dot", "leading-icon", "label", "trailing-icon", "avatar", "flag", "dismiss"],
   defaults: { variant: "soft", tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;

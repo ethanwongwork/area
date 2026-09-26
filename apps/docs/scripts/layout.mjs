@@ -700,6 +700,17 @@ export const DOCS_CSS = `
   .docs-visual-gallery__tile-preview > * {
     max-inline-size: 100%;
   }
+  /* Pass review: the current design pass for a family, above its variant tiles. */
+  .docs-gallery-review {
+    margin-block-end: var(--area-space-8);
+    border: 1px solid var(--area-border-decorative);
+    background: var(--area-bg-surface);
+    border-radius: var(--area-radius-container);
+  }
+  .docs-gallery-review__body {
+    padding: var(--area-space-8) var(--area-space-12) var(--area-space-24);
+    overflow-x: auto;
+  }
   .docs-visual-gallery__tile:has([data-slider-demo="GallerySliderVertical"]) .docs-visual-gallery__tile-preview > [data-slider-demo] {
     display: flex;
     align-items: center;

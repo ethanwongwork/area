@@ -624,9 +624,16 @@
    */
   .area-tooltip {
     --_tooltip-inset-block: var(--area-space-4);
-    --_tooltip-inset-inline: var(--area-space-8);
+    /* spec: owner, 10px text sides (8 read tight, ChatGPT's 12 too much); a trailing Kbd keeps the 4px block inset. */
+    --_tooltip-inset-inline: var(--area-space-10);
     --_tooltip-inset-inline-end: var(--_tooltip-inset-inline);
-    --_tooltip-radius: var(--area-radius-row);
+    /*
+     * spec: rounder than a control (8) but not a pill (14 on 28px): the owner asked for
+     * "rounder, not quite pill" (2026-09-25). 10px at Standard; a nested Kbd lands on its
+     * own 6px. Follows the radius preset, capped at half a line so it never becomes a blob.
+     */
+    --_tooltip-radius: var(--area-radius-control-lg);
+    --_tooltip-shape: min(var(--_tooltip-radius), calc((var(--area-ui-leading) + var(--_tooltip-inset-block) * 2) / 2));
 
     position: relative;
     isolation: isolate;
@@ -636,19 +643,20 @@
     padding-block: var(--_tooltip-inset-block);
     padding-inline-start: var(--_tooltip-inset-inline);
     padding-inline-end: var(--_tooltip-inset-inline-end);
-    border-radius: min(var(--_tooltip-radius), calc((var(--area-ui-leading) + var(--_tooltip-inset-block) * 2) * var(--area-radius-cap)));
+    border-radius: var(--_tooltip-shape);
     background-color: var(--area-bg-inverse);
     color: var(--area-fg-on-inverse);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     max-inline-size: calc(var(--area-space-96) * 3);
-    box-shadow: var(--area-shadow-2);
+    /* spec: Notion's geometry (Figma 0 5px 12px, ChatGPT 0 8px 18px); theme-aware colour. */
+    box-shadow: 0 4px 12px -2px var(--area-shadow-color);
   }
 
   /* The nested keycap uses the outer radius less its actual vertical inset. Its 20px
    * box is vertically centred by construction: (28px - 20px) / 2 = 4px. */
   .area-tooltip > .area-kbd {
-    border-radius: max(0px, calc(var(--_tooltip-radius) - var(--_tooltip-inset-block)));
+    border-radius: max(0px, calc(var(--_tooltip-shape) - var(--_tooltip-inset-block)));
   }
   /* A terminal Kbd's end inset equals its measured 4px block inset. The label keeps
    * its larger reading inset on the leading side. */

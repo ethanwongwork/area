@@ -3,15 +3,20 @@
     --_composer-action: var(--area-control-md);
     --_composer-inset: var(--area-space-8);
     --_composer-height: calc(var(--_composer-action) + 2 * var(--_composer-inset));
+    /* spec: ChatGPT writes at 16px; the type ramp's body is 16/24 (docs/specs/composer.md). */
+    --_composer-text: var(--area-text-md-size); --_composer-leading: var(--area-text-md-leading);
+    /* spec: ChatGPT keeps 8px between its round actions. */
+    --_composer-gap: var(--area-space-8);
     display: flex;
     flex-direction: column;
     inline-size: min(100%, calc(var(--area-space-96) * 5));
     min-inline-size: 0;
     padding: calc(var(--_composer-inset) - var(--area-stroke-width));
-    border: var(--area-stroke-width) solid var(--area-input-edge);
+    /* spec: ChatGPT floats on a 4% ring (≈ rgb 245) and a soft 0 2px 8px shadow rather than a field border. */
+    border: var(--area-stroke-width) solid var(--area-border-decorative);
     border-radius: min(calc(var(--area-radius-control) + var(--_composer-inset)), calc(var(--_composer-height) * var(--area-radius-cap)));
     background: var(--area-input-bg);
-    box-shadow: var(--area-shadow-1);
+    box-shadow: 0 2px 8px var(--area-shadow-color);
     color: var(--area-input-text);
     transition: var(--area-transition);
   }
@@ -20,18 +25,18 @@
   .area-composer:focus-within { border-color: var(--area-field-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); }
   .area-composer[data-disabled] { opacity: .6; }
   .area-composer[data-busy] { cursor: progress; }
-  .area-composer__entry { display: flex; align-items: flex-end; gap: var(--area-space-4); min-inline-size: 0; flex: 1; }
+  .area-composer__entry { display: flex; align-items: flex-end; gap: var(--_composer-gap); min-inline-size: 0; flex: 1; }
   .area-composer--stacked .area-composer__entry { align-items: stretch; }
   .area-composer__input {
     display: block; flex: 1; min-inline-size: 0; min-block-size: var(--area-control-md);
-    padding: calc((var(--_composer-action) - var(--area-control-md-leading)) / 2) var(--area-space-8); border: 0; outline: 0; background: transparent;
-    color: inherit; font-family: var(--area-font-sans); font-size: var(--area-control-md-text); line-height: var(--area-control-md-leading);
+    padding: calc((var(--_composer-action) - var(--_composer-leading)) / 2) var(--area-space-8); border: 0; outline: 0; background: transparent;
+    color: inherit; font-family: var(--area-font-sans); font-size: var(--_composer-text); line-height: var(--_composer-leading);
     resize: none; overflow-y: auto;
   }
-  .area-composer--stacked .area-composer__input { min-block-size: calc(var(--area-control-md-leading) * 2 + var(--area-space-12)); }
+  .area-composer--stacked .area-composer__input { min-block-size: calc(var(--_composer-leading) * 2 + var(--area-space-12)); }
   .area-composer__input { max-block-size: calc(var(--area-control-md) * 5); }
   .area-composer__input::placeholder { color: var(--area-input-placeholder); }
-  .area-composer__actions, .area-composer__footer { display: flex; align-items: center; gap: var(--area-space-4); min-inline-size: 0; }
+  .area-composer__actions, .area-composer__footer { display: flex; align-items: center; gap: var(--_composer-gap); min-inline-size: 0; }
   .area-composer__actions { flex-shrink: 0; }
   .area-composer__actions--leading { margin-inline-end: 0; }
   .area-composer__actions--trailing { margin-inline-start: auto; }

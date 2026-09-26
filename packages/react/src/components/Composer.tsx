@@ -35,11 +35,25 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
   const text = value === undefined ? ownValue : value;
   const id = useId();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  // Fit the height to the text. Wrapping depends on width too, so refit when the width
+  // changes (a narrow first layout, a resized panel); height-only changes are ignored.
   useLayoutEffect(() => {
     const input = inputRef.current;
     if (!input) return;
-    input.style.blockSize = "auto";
-    input.style.blockSize = `${input.scrollHeight}px`;
+    const fit = () => {
+      input.style.blockSize = "auto";
+      input.style.blockSize = `${input.scrollHeight}px`;
+    };
+    fit();
+    if (typeof ResizeObserver === "undefined") return;
+    let width = input.clientWidth;
+    const observer = new ResizeObserver(() => {
+      if (input.clientWidth === width) return;
+      width = input.clientWidth;
+      fit();
+    });
+    observer.observe(input);
+    return () => observer.disconnect();
   }, [text, layout]);
   const change = (event: ChangeEvent<HTMLTextAreaElement>) => {
     if (value === undefined) setOwnValue(event.target.value);

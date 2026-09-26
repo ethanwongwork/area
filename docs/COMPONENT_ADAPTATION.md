@@ -240,7 +240,12 @@ re-capture. Fix geometry in the structure; don't hide it with paint.
 
 ## 8. Owner review and feedback
 
-Give the owner:
+Show the pass in the gallery first. Export `GalleryReview<Name>` from the component's
+demo file; the gallery renders it in a Pass review container above that family's variant
+tiles. Give each change its own row with its basis, before and after, at 1× and at 3×
+(`ReviewPair` in `apps/docs/src/demos/review.tsx`).
+Rebuild "before" on the current component through its private properties so both columns
+run the same code, and replace the demo at the next pass. Then give the owner:
 
 - the gallery link for each variant,
 - the spec's comparison table with the Area column,

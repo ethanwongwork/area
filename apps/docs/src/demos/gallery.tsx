@@ -1,8 +1,10 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useId, useRef, useState } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { Alert, AlignmentPicker, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition } from "@area/react";
 import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon } from "../icons.tsx";
 import { SliderRangeComposition } from "./slider-range.tsx";
+import { ReviewPair } from "./review.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
 
@@ -14,6 +16,31 @@ export const GalleryBreadcrumb = () => (
     <BreadcrumbSeparator />
     <BreadcrumbItem><BreadcrumbPage>Export</BreadcrumbPage></BreadcrumbItem>
   </BreadcrumbList></Breadcrumb>
+);
+/* Breadcrumb pass review (2026-09-25, docs/specs/breadcrumb.md). "Before" restores pass-0 values. */
+const previousPage = { color: "var(--area-fg-muted)", fontWeight: "var(--area-weight-strong)" } as CSSProperties;
+const previousSeparator = { color: "var(--area-fg-muted)" } as CSSProperties;
+const reviewTrail = (page: CSSProperties | undefined, separator: CSSProperties | undefined, glyph?: ReactNode) => (
+  <Breadcrumb><BreadcrumbList>
+    <BreadcrumbItem><BreadcrumbLink href="#gallery-section-breadcrumb">Dashboard</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbSeparator style={separator}>{glyph}</BreadcrumbSeparator>
+    <BreadcrumbItem><BreadcrumbLink href="#gallery-section-breadcrumb">Reports</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbSeparator style={separator}>{glyph}</BreadcrumbSeparator>
+    <BreadcrumbItem><BreadcrumbPage style={page}>Export</BreadcrumbPage></BreadcrumbItem>
+  </BreadcrumbList></Breadcrumb>
+);
+export const GalleryReviewBreadcrumb = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Current page in the main ink, at 400"
+      basis="The page asked for --area-fg, which does not exist, so it fell back to the grey of the links and only its 500 weight set it apart. It now uses fg-default at the type ramp's 400; Notion's trail is 14px at 400."
+      before={reviewTrail(previousPage, previousSeparator)} after={reviewTrail(undefined, previousSeparator)} />
+    <ReviewPair title="Separators a step lighter, closer to the text"
+      basis="Chevrons were the link grey (102) with 8px gaps, about 13px from text to ink. Now stroke-control (131), the colour of Area's 1px control strokes, with 4px gaps: about 9px (Notion about 7, Untitled about 11)."
+      before={reviewTrail(undefined, { ...previousSeparator, marginInline: "var(--area-space-4)" })} after={reviewTrail(undefined, undefined)} />
+    <ReviewPair title="The chevron sits in the middle of its gap"
+      basis="The CSS chevron was two borders of a rotated square, so its point sat at the box's end: the next item's hover plate nearly touched it. Area's chevron glyph centres its ink (x 5.5–10), so text to ink is 8.9px before and 9.4px after, and the plate clears it by about 3px on both sides."
+      before={reviewTrail(undefined, undefined, <span className="area-breadcrumb__chevron" />)} after={reviewTrail(undefined, undefined)} />
+  </div>
 );
 export const GalleryBreadcrumbCollapsed = () => (
   <Breadcrumb><BreadcrumbList>
@@ -629,7 +656,7 @@ export const GalleryNavGrouped = () => (
   </Nav>
 );
 export const GalleryNavIcons = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-icons" icon={<DotsFourIcon />} current>Item one</NavItem><NavItem href="#gallery-nav-icons" icon={<PersonSmallIcon />}>Item two</NavItem><NavItem href="#gallery-nav-icons" icon={<TokenIcon />}>Item three</NavItem></Nav>;
-export const GalleryNavCounts = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-counts" current trailing={<Badge size="sm">1</Badge>}>Item one</NavItem><NavItem href="#gallery-nav-counts" trailing={<Badge size="sm">2</Badge>}>Item two</NavItem><NavItem href="#gallery-nav-counts">Item three</NavItem></Nav>;
+export const GalleryNavCounts = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-counts" current trailing={<Badge>1</Badge>}>Item one</NavItem><NavItem href="#gallery-nav-counts" trailing={<Badge>2</Badge>}>Item two</NavItem><NavItem href="#gallery-nav-counts">Item three</NavItem></Nav>;
 
 export const GalleryNavMarker = () => (
   <Nav aria-label="Label" selection="marker">
@@ -890,7 +917,7 @@ export const GallerySwitchOn = () => <Switch label="On" defaultChecked />;
 export const GallerySwitchDisabled = () => <Switch label="Label" disabled />;
 
 export const GalleryTable = () => (
-  <Table aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col">Status</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead><tbody><tr><td>Item one</td><td><Badge size="sm" tone="success" dot>Status</Badge></td><td className="area-table__cell--numeric">1</td></tr><tr><td>Item two</td><td><Badge size="sm">Status</Badge></td><td className="area-table__cell--numeric">2</td></tr></tbody></Table>
+  <Table aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col">Status</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead><tbody><tr><td>Item one</td><td><Badge tone="success" dot>Status</Badge></td><td className="area-table__cell--numeric">1</td></tr><tr><td>Item two</td><td><Badge>Status</Badge></td><td className="area-table__cell--numeric">2</td></tr></tbody></Table>
 );
 
 export const GalleryTableSelectable = () => {
@@ -917,7 +944,7 @@ export const GalleryTabsVertical = () => <Tabs orientation="vertical" label="Lab
 export const GalleryTabsSmall = () => <Tabs size="sm" tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
 export const GalleryTabsTrack = () => <Tabs track tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
 export const GalleryTabsIcons = () => <Tabs tabs={[{ id: "one", label: "Item one", icon: <PersonSmallIcon />, content: "Body text" }, { id: "two", label: "Item two", icon: <InfoIcon />, content: "Body text" }]} />;
-export const GalleryTabsCounts = () => <Tabs tabs={[{ id: "one", label: "Item one", trailing: <Badge size="sm">1</Badge>, content: "Body text" }, { id: "two", label: "Item two", trailing: <Badge size="sm">2</Badge>, content: "Body text" }]} />;
+export const GalleryTabsCounts = () => <Tabs tabs={[{ id: "one", label: "Item one", trailing: <Badge>1</Badge>, content: "Body text" }, { id: "two", label: "Item two", trailing: <Badge>2</Badge>, content: "Body text" }]} />;
 
 export const GalleryTextarea = () => <Textarea aria-label="Label" placeholder="Placeholder" rows={3} />;
 
@@ -952,6 +979,29 @@ export const GalleryTooltip = () => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--area-space-8)" }}>
     <Tooltip id="gallery-tooltip-copy">Description</Tooltip>
     <Button aria-describedby="gallery-tooltip-copy" variant="outline">Button</Button>
+  </div>
+);
+/* Tooltip pass review (2026-09-25, docs/specs/tooltip.md). "Before" restores the pass-0 radius and shadow. */
+const previousTooltip = { "--_tooltip-shape": "var(--area-radius-row)", "--_tooltip-inset-inline": "var(--area-space-8)", boxShadow: "var(--area-shadow-2)" } as CSSProperties;
+const previousTextSides = { "--_tooltip-inset-inline": "var(--area-space-8)" } as CSSProperties;
+export const GalleryReviewTooltip = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Radius 8 → 10px: rounder, not a pill"
+      basis="Owner: rounder than before, not a pill (14px on 28px) and not sharp. 10px sits between controls (8) and popovers (12), so a tooltip reads as its own floating label. The nested Kbd keeps the outer radius less its 4px inset: 6px, Kbd's own radius."
+      before={<><Tooltip style={previousTooltip}>Description</Tooltip><Tooltip style={previousTooltip}>Description <Kbd appearance="on-emphasis" keys={["cmd", "K"]} /></Tooltip></>}
+      after={<><Tooltip>Description</Tooltip><Tooltip>Description <Kbd appearance="on-emphasis" keys={["cmd", "K"]} /></Tooltip></>} />
+    <ReviewPair title="Text sides 8 → 10px"
+      basis="Owner: a little more room on the text sides than 8px, less than ChatGPT's 12px (13px with its border). A trailing Kbd keeps Area's equal 4px inset."
+      before={<><Tooltip style={previousTextSides}>Search</Tooltip><Tooltip style={previousTextSides}>Search <Kbd appearance="on-emphasis" keys={["cmd", "K"]} /></Tooltip></>}
+      after={<><Tooltip>Search</Tooltip><Tooltip>Search <Kbd appearance="on-emphasis" keys={["cmd", "K"]} /></Tooltip></>} />
+    <ReviewPair title="Wrapped text keeps the same corner"
+      basis="The corner is the same 10px on one line or two, so a wrapped tooltip reads as the same plate at its 288px maximum."
+      before={<Tooltip style={previousTooltip}>Duplicate this page and its sub-pages into the current workspace</Tooltip>}
+      after={<Tooltip>Duplicate this page and its sub-pages into the current workspace</Tooltip>} />
+    <ReviewPair title="A lift that reads as floating"
+      basis="Notion 0 4px 12px −2px, Figma 0 5px 12px, ChatGPT 0 8px 18px. Area's 1px shadow left the plate flat on light surfaces."
+      before={<Tooltip style={previousTooltip}>Description</Tooltip>}
+      after={<Tooltip>Description</Tooltip>} />
   </div>
 );
 export const GalleryTooltipArrow = () => (
@@ -1017,6 +1067,16 @@ export const GalleryTreeViewFiles = () => {
   const [current, setCurrent] = useState("button");
   return <TreeView aria-label="Project files" items={fileTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
 };
+/* Tree view pass review (2026-09-25, docs/specs/tree-view.md). "Before" restores pass-0 values. */
+const previousTree = { color: "var(--area-fg-default)", "--_tree-start": "var(--area-space-4)", "--_tree-chevron": "var(--area-control-sm)", "--_tree-step": "var(--area-space-16)", "--_tree-label-inset": "var(--area-space-0)" } as CSSProperties;
+export const GalleryReviewTreeView = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Secondary ink at rest, 8px start, a 16px chevron slot, 20px indent"
+      basis="Nav and Notion's sidebar set resting rows in secondary ink (102, 95) and start 8px in. The chevron was a 28px box, pushing labels 56px in; it is now a 16px slot like any glyph, its hover plate still 24px. Each level indents by chevron plus gap (20px), so a child's chevron sits under its parent's icon. Icon to label is 8px, as in Notion."
+      before={<TreeView aria-label="Project files, before" items={fileTree} defaultExpandedIds={["src", "components"]} currentId="button" selectedIds={["button"]} style={previousTree} />}
+      after={<TreeView aria-label="Project files, after" items={fileTree} defaultExpandedIds={["src", "components"]} currentId="button" selectedIds={["button"]} />} />
+  </div>
+);
 export const GalleryTreeViewFilters = () => <TreeView aria-label="Market filters" selectionMode="checkbox" items={filterTree} defaultExpandedIds={["markets", "funding"]} defaultSelectedIds={["open"]} />;
 
 export const GalleryComposerInline = () => {
@@ -1034,6 +1094,16 @@ export const GalleryComposerPrefilled = () => {
   const [sent, setSent] = useState("");
   return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Draft message" value={value} onValueChange={setValue} onSubmit={message => { setSent(message); setValue(""); }} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
+/* Composer pass review (2026-09-25, docs/specs/composer.md). "Before" restores pass-0 values. */
+const previousComposer = { "--_composer-text": "var(--area-control-md-text)", "--_composer-leading": "var(--area-control-md-leading)", "--_composer-gap": "var(--area-space-4)", borderColor: "var(--area-input-edge)", boxShadow: "var(--area-shadow-1)" } as CSSProperties;
+const reviewComposer = (style?: CSSProperties) => <div style={{ inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" }}><Composer label="Message" placeholder="Ask anything" defaultValue="" style={style} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" />} trailingActions={<Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search tools" />} onSubmit={() => {}} /></div>;
+export const GalleryReviewComposer = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Writes at 16px, floats instead of reading as a field, 8px between actions"
+      basis="ChatGPT writes at 16px (Area's body is 16/24), sits on a 4% ring with a soft 0 2px 8px shadow rather than a field border, and keeps 8px between its round actions. The row stays 48px: 32px actions and 8px insets."
+      before={reviewComposer(previousComposer)} after={reviewComposer()} />
+  </div>
+);
 export const GalleryComposerDisabled = () => <Composer label="Unavailable message" placeholder="Messaging unavailable" disabled />;
 
 export const GalleryColorFieldSplit = () => (
