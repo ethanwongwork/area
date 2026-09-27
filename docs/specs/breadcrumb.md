@@ -96,10 +96,11 @@ page `aria-current="page"`, the ellipsis `role="img"` named "More pages".
 
 ## Visual pass
 
-Pass review container (`GalleryReviewBreadcrumb`): current page before and after, and
-separators before and after, at 1× and 3×. Measured after: page rgb(40, 40, 40) at 400,
-separators rgb(131, 131, 131), 6.3px from text to chevron on each side, link plate inset
-−2px / −6px (it stops 0.3px short of the chevron).
+Pass reviews were removed at the owner's request; the family is inspected in the grouped
+gallery. The earlier before/after review compared the current page and separators at 1× and
+3×. Measured after: page rgb(40, 40, 40) at 400, separators rgb(131, 131, 131), 6.3px from
+text to chevron on each side, link plate inset −2px / −6px (it stops 0.3px short of the
+chevron).
 
 ## Verification
 
@@ -120,3 +121,5 @@ separators rgb(131, 131, 131), 6.3px from text to chevron on each side, link pla
   (RTL mirrored) → text to ink 8.9 / 9.4px, plate clears by ~3px each side; review row
   "The chevron sits in the middle of its gap" → 3 Area captures re-taken.
 - 2026-09-25 · owner approved Breadcrumb → Complete in `component-status.mjs`.
+- 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
+  gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).

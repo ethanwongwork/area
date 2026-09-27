@@ -304,11 +304,12 @@ export const TokenInProse = () => (
 export const TokenSubtle = () => <Code subtle>--area-accent-solid</Code>;
 
 /*
- * Every control the system has, in one panel, at one tier.
+ * Every control the system has, in one panel, at one tier and one field style.
  *
  * It is the size audit made visible as much as it is a demo: a select, a segmented
- * control, a chip, a slider and an input all sit on `sm`, so any one of them rendering at
- * a different height is visible as a ragged right edge rather than as a number in a table.
+ * control, a chip, a slider and an input all sit on the medium height with soft fields, so
+ * any one of them rendering at a different height is visible as a ragged right edge rather
+ * than as a number in a table.
  */
 export const PanelEverything = () => (
   <Panel
@@ -317,12 +318,12 @@ export const PanelEverything = () => (
     action={
       <Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} />
     }
-    footer={<Button variant="soft" tone="neutral" size="sm" fullWidth>Action</Button>}
-    style={{ inlineSize: 320, blockSize: 560 }}
+    footer={<Button variant="soft" tone="neutral" fullWidth>Action</Button>}
+    style={{ blockSize: 560 }}
   >
     <PanelSection heading="Label">
       <Field orientation="horizontal" label="Label" htmlFor="panel-trigger">
-        <Select size="sm" id="panel-trigger" defaultValue="one">
+        <Select variant="soft" fullWidth id="panel-trigger" defaultValue="one">
           <option value="one">Option one</option>
           <option value="two">Option two</option>
           <option value="three">Option three</option>
@@ -330,7 +331,6 @@ export const PanelEverything = () => (
       </Field>
       <Field orientation="horizontal" label="Label">
         <Segmented
-          size="sm"
           fullWidth
           label="Label"
           value="top"
@@ -343,7 +343,6 @@ export const PanelEverything = () => (
       </Field>
       <Field orientation="horizontal" label="Label">
         <Segmented
-          size="sm"
           fullWidth
           label="Label"
           value="one"
@@ -354,23 +353,23 @@ export const PanelEverything = () => (
         />
       </Field>
       <Field orientation="horizontal" label="Label" htmlFor="panel-enabled">
-        <Switch size="sm" id="panel-enabled" defaultChecked />
+        <Switch id="panel-enabled" defaultChecked />
       </Field>
     </PanelSection>
 
     <PanelSection heading="Label">
       <Field orientation="horizontal" label="Label">
-        <Slider size="sm" min={0} max={100} defaultValue={80} readout="80" />
+        <Slider min={0} max={100} defaultValue={80} readout="80" />
       </Field>
       <Field orientation="horizontal" label="Label" htmlFor="panel-radius">
-        <Input size="sm" id="panel-radius" defaultValue="22" suffix="px" />
+        <Input variant="soft" fullWidth id="panel-radius" defaultValue="22" suffix="px" />
       </Field>
       <PanelStack>
         <Label>Label</Label>
         <ChipGroup>
-          <Chip size="sm" swatch="var(--area-red-500)">Red</Chip>
-          <Chip size="sm" selected swatch="var(--area-indigo-500)">Indigo</Chip>
-          <Chip size="sm" swatch="var(--area-teal-600)">Teal</Chip>
+          <Chip swatch="var(--area-red-500)">Red</Chip>
+          <Chip selected swatch="var(--area-indigo-500)">Indigo</Chip>
+          <Chip swatch="var(--area-teal-600)">Teal</Chip>
         </ChipGroup>
       </PanelStack>
     </PanelSection>
@@ -378,13 +377,13 @@ export const PanelEverything = () => (
     <PanelSection heading="Label">
       <PanelStack>
         <Label htmlFor="panel-note">Label</Label>
-        <Textarea size="sm" id="panel-note" rows={2} placeholder="Placeholder" />
+        <Textarea variant="soft" fullWidth id="panel-note" rows={2} placeholder="Placeholder" />
       </PanelStack>
       <Field orientation="horizontal" label="Label" htmlFor="panel-loop">
         <Checkbox id="panel-loop" defaultChecked />
       </Field>
       <Field orientation="horizontal" label="Label" htmlFor="panel-ease">
-        <Select size="sm" id="panel-ease" defaultValue="one">
+        <Select variant="soft" fullWidth id="panel-ease" defaultValue="one">
           <option value="one">Option one</option>
           <option value="two">Option two</option>
         </Select>

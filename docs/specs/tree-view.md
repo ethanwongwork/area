@@ -154,3 +154,4 @@ pass-2 spacing against the even spacing at 1× and 3×. Pass 2 checked the chevr
   marker, run a variant pass → pass 3: `--_tree-gap` 6, label inset 0, marker CSS removed;
   Disabled row tile added; docs API lists `currentId` and the node fields; Variants
   section added.
+- 2026-09-27 · owner again: "i thought we removed indicators from tree view" → confirmed removed in this pass; the checked filter box paints like Checkbox (neutral solid face), from the cohesion audit.

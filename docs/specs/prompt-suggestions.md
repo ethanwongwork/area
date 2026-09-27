@@ -42,8 +42,8 @@ dismiss   36 × 36, radius 8, icon 20, ending 4 in from the row
 | width | the composer's (480) | ChatGPT: the composer's width | — |
 | offset | 24 below the composer | ChatGPT 24 | — |
 | row | 48 tall (16/24 text, 12 above and below), radius 16 (the composer's corner), 2 apart | ChatGPT 52 on 26 leading, radius 8, no gap | radius pass: the rows are the composer's height and column, so a washed row echoes its corner; 2 apart is Menu's rule so neighbouring hover plates never touch |
-| ink | muted, default on hover/focus | ChatGPT 143 muted | — |
-| hover | the 5% wash (Menu rows) | Menu | ChatGPT's hover not captured |
+| ink | muted, fixed on hover and focus | ChatGPT 143 muted; foreground fixed on hover (AGENTS.md) | Was lifted to default on hover, with no capture behind it |
+| hover | Menu's row plate, `bg-component-hover` | Menu | ChatGPT's hover not captured |
 | icon | 16 icon centred in a 32 square 8 in: centre 24 from the edge, under the composer's leading action | ChatGPT's icons align under its "+" | Area icons are 16 |
 | text | 8 after the icon slot | ChatGPT 8 | — |
 | dismiss | ghost icon Button (32) 8 in, shown on hover and focus (always on touch): centre 24 from the end, under the send button | ChatGPT 36 at 4 in | Area's md button |
@@ -74,3 +74,4 @@ can pick?" Both are built as `layout`:
   both directions, starting on the composer's edge, 24 below it; no dismiss.
 
 Measured: A rows 48, gap 2, radius 16; B 24 below, 32 tall, 8 apart, starting at 0.
+- 2026-09-27 · merge check (cohesion test) → hover no longer lifts the ink; the plate is Menu's row plate.

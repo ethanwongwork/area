@@ -22,7 +22,9 @@
     flex-direction: column;
     gap: var(--area-space-2);
     min-inline-size: 0;
-    inline-size: var(--area-nav-inline-size, 200px);
+    /* spec: 240, the width of Figma's file-browser sidebar (224px rows, 8px inset); Notion's
+       rows are 254. */
+    inline-size: var(--area-nav-inline-size, 240px);
     max-inline-size: 100%;
   }
 
@@ -66,7 +68,7 @@
   /*
    * The group heading.
    *
-   * Same size as the items beneath it, same row height, strong weight, and a quieter
+   * Same size as the items beneath it, same row height, regular weight, and a quieter
    * foreground -- which is the whole of how OpenAI distinguishes it. Measuring their
    * sidebar, a label row occupies exactly one row pitch (63px against a 62px within-group
    * pitch), so it is a row that happens not to be interactive rather than a caption
@@ -124,8 +126,10 @@
     justify-content: center;
   }
 
+  /* Row plates: the component hover fill, then the active fill for the current page. Menu,
+     Tree view, Table and Select use the same pair. */
   .area-nav__item:hover:not([data-disabled]) {
-    background-color: var(--area-bg-component);
+    background-color: var(--area-bg-component-hover);
   }
 
   /*
@@ -133,7 +137,7 @@
    * only the plate, keeping each label stable under the pointer.
    */
   .area-nav__item[aria-current]:not([aria-current="false"]) {
-    background-color: var(--area-bg-component-hover);
+    background-color: var(--area-bg-component-active);
     color: var(--area-fg-default);
   }
 
@@ -158,7 +162,8 @@
     inline-size: calc(var(--area-space-2) + var(--area-border-width));
     block-size: calc(1cap + var(--area-space-4));
     border-radius: var(--area-radius-full);
-    background-color: var(--area-accent-solid);
+    /* Neutral by default, accent by override (DESIGN_SYSTEM.md): the ink of the current label. */
+    background-color: var(--_marker, var(--area-fg-default));
   }
 
   .area-nav__item:focus-visible {
@@ -166,12 +171,14 @@
     outline-offset: var(--area-focus-offset);
   }
 
+  /* Disabled rows dim as a whole, like Menu items and every other control. */
   .area-nav__item[data-disabled] {
-    color: var(--area-fg-disabled);
     cursor: not-allowed;
+    opacity: 0.5;
   }
 
   /* The accent variant: current items carry the accent rather than the neutral. */
+  .area-nav--accent { --_marker: var(--area-accent-solid); }
   .area-nav--accent .area-nav__item[aria-current]:not([aria-current="false"]) {
     background-color: var(--area-accent-surface-hover);
     color: var(--area-fg-accent);
@@ -220,7 +227,7 @@
   .area-nav__separator {
     block-size: var(--area-border-width);
     margin-block: var(--area-space-8);
-    background-color: var(--area-border-decorative);
+    background-color: var(--area-border-divider);
   }
 
   /* The link and independent actions share one plate without nesting buttons in links. */
@@ -232,8 +239,8 @@
     padding-inline-end: calc((var(--area-control-md) - var(--area-control-sm)) / 2);
     border-radius: min(var(--area-radius-row), calc(var(--area-control-md) * var(--area-radius-cap)));
   }
-  .area-nav__row:has(> .area-nav__item:not([data-disabled])):hover { background: var(--area-bg-component); }
-  .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: var(--area-bg-component-hover); }
+  .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current="page"])):hover { background: var(--area-bg-component-hover); }
+  .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: var(--area-bg-component-active); }
   .area-nav--accent .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: var(--area-accent-surface-hover); }
   .area-nav--marker .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: transparent; }
   .area-nav .area-nav__row > .area-nav__item { background: transparent; }

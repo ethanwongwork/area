@@ -2217,6 +2217,69 @@ export const FluentArrowDownIcon = () => (
   </svg>
 );
 
+/** Fluent `play_16_filled`. */
+export const FluentPlayFilledIcon = () => (
+  <svg {...base}>
+    <path d="M6.24 2.2A1.5 1.5 0 0 0 4 3.5v9a1.5 1.5 0 0 0 2.24 1.3l8-4.5a1.5 1.5 0 0 0 0-2.6z" />
+  </svg>
+);
+
+/** Fluent `pause_16_filled`. */
+export const FluentPauseFilledIcon = () => (
+  <svg {...base}>
+    <path d="M3.75 2C2.78 2 2 2.78 2 3.75v8.5c0 .97.78 1.75 1.75 1.75h1.5C6.22 14 7 13.22 7 12.25v-8.5C7 2.78 6.22 2 5.25 2zm7 0C9.78 2 9 2.78 9 3.75v8.5c0 .97.78 1.75 1.75 1.75h1.5c.97 0 1.75-.78 1.75-1.75v-8.5C14 2.78 13.22 2 12.25 2z" />
+  </svg>
+);
+
+/** Fluent `next_16_filled`. */
+export const FluentNextFilledIcon = () => (
+  <svg {...base}>
+    <path d="M2 3a1 1 0 0 1 1.58-.81l7 4.96a1 1 0 0 1 0 1.63l-7 5.03a1 1 0 0 1-1.58-.8zm12-.5a.5.5 0 1 0-1 0v11a.5.5 0 0 0 1 0z" />
+  </svg>
+);
+
+/** Fluent `previous_16_filled`. */
+export const FluentPreviousFilledIcon = () => (
+  <svg {...base}>
+    <path d="M14 3a1 1 0 0 0-1.58-.81l-7 4.96a1 1 0 0 0 0 1.63l7 5.03a1 1 0 0 0 1.58-.8zM2 2.5a.5.5 0 0 1 1 0v11a.5.5 0 0 1-1 0z" />
+  </svg>
+);
+
+/** Fluent `weather_sunny_16_regular`. */
+export const FluentWeatherSunnyIcon = () => (
+  <svg {...base}>
+    <path d="M8 1c.28 0 .5.22.5.5v1a.5.5 0 0 1-1 0v-1c0-.28.22-.5.5-.5m0 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6m0-1a2 2 0 1 1 0-4 2 2 0 0 1 0 4m6.5-1.5a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1zM8 13c.28 0 .5.22.5.5v1a.5.5 0 0 1-1 0v-1c0-.28.22-.5.5-.5M2.5 8.5a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1zm.65-5.35c.2-.2.5-.2.7 0l1 1a.5.5 0 1 1-.7.7l-1-1a.5.5 0 0 1 0-.7m.7 9.7a.5.5 0 1 1-.7-.7l1-1a.5.5 0 0 1 .7.7zm9-9.7a.5.5 0 0 0-.7 0l-1 1a.5.5 0 0 0 .7.7l1-1a.5.5 0 0 0 0-.7m-.7 9.7a.5.5 0 0 0 .7-.7l-1-1a.5.5 0 0 0-.7.7z" />
+  </svg>
+);
+
+/** Fluent `weather_partly_cloudy_day_16_regular`. */
+export const FluentWeatherPartlyCloudyIcon = () => (
+  <svg {...base}>
+    <path d="M9 7a2.5 2.5 0 0 0-2.5 2.5v.5h-1a1.5 1.5 0 0 0 0 3h7a1.5 1.5 0 0 0 0-3h-1v-.5A2.5 2.5 0 0 0 9 7M5.53 9a3.5 3.5 0 0 1 6.93 0h.04a2.5 2.5 0 0 1 0 5h-7a2.5 2.5 0 0 1 0-5zM8.8 2.82a.5.5 0 1 0-.89-.47l-.42.8a.5.5 0 0 0 .88.47zM5 2.07a.5.5 0 1 0-.95.3l.26.87a.5.5 0 0 0 .96-.3zM6 4a3 3 0 0 1 2.29 1.06q-.6.1-1.11.32a2 2 0 0 0-2.8 2.8q-.48.15-.9.46A3 3 0 0 1 6 4m-4.18.21a.5.5 0 1 0-.47.89l.8.42a.5.5 0 0 0 .47-.88zm.42 4.47a.5.5 0 0 0-.3-.96L1.07 8a.5.5 0 1 0 .3.95z" />
+  </svg>
+);
+
+/** Fluent `arrow_trending_16_regular`. */
+export const FluentArrowTrendingIcon = () => (
+  <svg {...base}>
+    <path d="M8.5 4h5.04l.09.02.06.02.06.03.06.04.06.05.04.05.04.06.03.08.01.04.01.09V9.5a.5.5 0 0 1-.99.09V5.7l-5.15 5.15a.5.5 0 0 1-.64.06l-.07-.06L5.5 9.21l-2.65 2.64a.5.5 0 0 1-.76-.63l.06-.07 3-3a.5.5 0 0 1 .63-.06l.07.06L7.5 9.79 12.3 5H8.5a.5.5 0 0 1-.5-.41V4.5c0-.28.22-.5.5-.5" />
+  </svg>
+);
+
+/** Fluent `arrow_up_right_16_regular`. */
+export const FluentArrowUpRightIcon = () => (
+  <svg {...base}>
+    <path d="M7.5 3a.5.5 0 0 1 0-1h6c.28 0 .5.22.5.5v6a.5.5 0 0 1-1 0V3.7L2.85 13.86a.5.5 0 0 1-.7-.7L12.29 3z" />
+  </svg>
+);
+
+/** Fluent `heart_16_regular`. */
+export const FluentHeartIcon = () => (
+  <svg {...base}>
+    <path d="M7.54 3.95a3.25 3.25 0 0 0-4.6-.01 3.25 3.25 0 0 0 .02 4.6l4.7 4.7c.2.2.52.2.71 0l4.69-4.68a3.25 3.25 0 0 0-4.61-4.6l-.46.44zm4.8 3.9-4.32 4.33-4.36-4.36a2.25 2.25 0 0 1 0-3.18c.87-.87 2.3-.87 3.17.01l.81.81c.2.2.53.2.72 0l.79-.8c.88-.88 2.3-.87 3.19.01.88.88.88 2.3 0 3.18" />
+  </svg>
+);
+
 /** Fluent `align_right_16_regular`. */
 export const FluentAlignRightIcon = () => (
   <svg {...base}>

@@ -145,7 +145,8 @@ test("CommandPalette is a search combobox over a grouped listbox of Menu rows", 
   assert.match(html, /role="listbox" aria-label="Command palette" class="area-command-palette__list"/);
   assert.equal((html.match(/role="group"/g) ?? []).length, 2);
   assert.match(html, /role="option" aria-selected="false" aria-disabled="true" class="area-menu__item area-command-palette__item"/);
-  assert.match(html, /aria-label="Command plus ,"/);
+  // Kbd names its keys with visually hidden text (kbd.md), not aria-label.
+  assert.match(html, /<span class="area-sr-only">Command plus ,<\/span>/);
   const empty = renderToString(h(CommandPalette, { inline: true, items, defaultQuery: "zzz" }));
   assert.match(empty, /area-command-palette__empty" role="presentation">No results</);
 });

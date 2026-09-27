@@ -1,11 +1,11 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useId, useRef, useState } from "react";
-import type { CSSProperties, MouseEvent, ReactNode } from "react";
-import { Alert, AlignmentPicker, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, BoxField, Button, ButtonGroup, Combobox, CommandPalette, ContextMenu, HoverCard, Message, MessageActions, ModelPicker, PromptSuggestions, ScrollToLatest, SplitButton, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, PanelRow, PropertyList, PropertyListItem, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
-import { EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, FluentCopyIcon, AlertIcon, AlignBottomIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CheckIcon, ChevronIcon, CornerRadiusIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, FolderIcon, InfoIcon, LinkIcon, MoreIcon, OpacityIcon, OpenIcon, PersonIcon, PersonSmallIcon, PlusIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, SubtractIcon, TokenIcon, TrashIcon } from "../icons.tsx";
+import type { CSSProperties, ReactNode, MouseEvent } from "react";
+import { AREA_COLOR_GRID, Alert, AlignmentPicker, Avatar, Calendar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, BoxField, Combobox, CommandPalette, ContextMenu, HoverCard, Message, MessageActions, ModelPicker, PromptSuggestions, ScrollToLatest, SplitButton, PanelRow, PropertyList, PropertyListItem, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
+import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon, EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, FluentCopyIcon, AlertIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignRightIcon, AngleIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CornerRadiusIcon, CornersIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, LinkIcon, MoreIcon, SettingsIcon, SlidersIcon, SubtractIcon } from "../icons.tsx";
 import { PilotDocumentIcon, PilotFolderFilledIcon, PilotMoreHorizontalIcon } from "../pilot-icons.tsx";
-import { SliderRangeComposition } from "./slider-range.tsx";
 import { ReviewPair } from "./review.tsx";
+import { SliderRangeComposition } from "./slider-range.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
 
@@ -17,31 +17,6 @@ export const GalleryBreadcrumb = () => (
     <BreadcrumbSeparator />
     <BreadcrumbItem><BreadcrumbPage>Export</BreadcrumbPage></BreadcrumbItem>
   </BreadcrumbList></Breadcrumb>
-);
-/* Breadcrumb pass review (2026-09-25, docs/specs/breadcrumb.md). "Before" restores pass-0 values. */
-const previousPage = { color: "var(--area-fg-muted)", fontWeight: "var(--area-weight-strong)" } as CSSProperties;
-const previousSeparator = { color: "var(--area-fg-muted)" } as CSSProperties;
-const reviewTrail = (page: CSSProperties | undefined, separator: CSSProperties | undefined, glyph?: ReactNode) => (
-  <Breadcrumb><BreadcrumbList>
-    <BreadcrumbItem><BreadcrumbLink href="#gallery-section-breadcrumb">Dashboard</BreadcrumbLink></BreadcrumbItem>
-    <BreadcrumbSeparator style={separator}>{glyph}</BreadcrumbSeparator>
-    <BreadcrumbItem><BreadcrumbLink href="#gallery-section-breadcrumb">Reports</BreadcrumbLink></BreadcrumbItem>
-    <BreadcrumbSeparator style={separator}>{glyph}</BreadcrumbSeparator>
-    <BreadcrumbItem><BreadcrumbPage style={page}>Export</BreadcrumbPage></BreadcrumbItem>
-  </BreadcrumbList></Breadcrumb>
-);
-export const GalleryReviewBreadcrumb = () => (
-  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
-    <ReviewPair title="Current page in the main ink, at 400"
-      basis="The page asked for --area-fg, which does not exist, so it fell back to the grey of the links and only its 500 weight set it apart. It now uses fg-default at the type ramp's 400; Notion's trail is 14px at 400."
-      before={reviewTrail(previousPage, previousSeparator)} after={reviewTrail(undefined, previousSeparator)} />
-    <ReviewPair title="Separators a step lighter, closer to the text"
-      basis="Chevrons were the link grey (102) with 8px gaps, about 13px from text to ink. Now stroke-control (131), the colour of Area's 1px control strokes, with 4px gaps: about 9px (Notion about 7, Untitled about 11)."
-      before={reviewTrail(undefined, { ...previousSeparator, marginInline: "var(--area-space-4)" })} after={reviewTrail(undefined, undefined)} />
-    <ReviewPair title="The chevron sits in the middle of its gap"
-      basis="The CSS chevron was two borders of a rotated square, so its point sat at the box's end: the next item's hover plate nearly touched it. Area's chevron glyph centres its ink (x 5.5–10), so text to ink is 8.9px before and 9.4px after, and the plate clears it by about 3px on both sides."
-      before={reviewTrail(undefined, undefined, <span className="area-breadcrumb__chevron" />)} after={reviewTrail(undefined, undefined)} />
-  </div>
 );
 export const GalleryBreadcrumbCollapsed = () => (
   <Breadcrumb><BreadcrumbList>
@@ -298,6 +273,12 @@ export const GalleryColorSwatchPicker = () => (
   { value: "#717579", label: "Cool 500" }, { value: "#747474", label: "Neutral 500" },
 ]} />
 );
+export const GalleryColorSwatchPickerPalette = () => {
+  const [color, setColor] = useState("#006DF5");
+  return <div style={{ inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-32))", maxInlineSize: "100%" }}>
+    <ColorSwatchPicker label="Area palette" layout="palette" columns={AREA_COLOR_GRID.columns} options={AREA_COLOR_GRID.options} value={color} onValueChange={setColor} />
+  </div>;
+};
 export const GalleryColorSwatchPickerRow = () => (
 <ColorSwatchPicker label="Overlay color" layout="row" defaultValue="#8D4DF380" options={[
   { value: "#8D4DF3", label: "Solid violet" }, { value: "#8D4DF3C0", label: "Violet at 75%" },
@@ -1609,7 +1590,7 @@ export const GalleryTable = () => (
 export const GalleryTableSelectable = () => {
   const [selected, setSelected] = useState<string[]>([]);
   const rows = ["Item one", "Item two", "Item three"];
-  return <Table aria-label="Table"><thead><tr><th scope="col" className="area-table__cell--fit"><Checkbox aria-label="Select all rows" checked={selected.length === rows.length} indeterminate={selected.length > 0 && selected.length < rows.length} onChange={event => setSelected(event.target.checked ? rows : [])} /></th><th scope="col">Name</th></tr></thead><tbody>{rows.map(name => <tr key={name} aria-selected={selected.includes(name)}><td><Checkbox aria-label={`Select ${name}`} checked={selected.includes(name)} onChange={event => setSelected(event.target.checked ? [...selected, name] : selected.filter(item => item !== name))} /></td><td>{name}</td></tr>)}</tbody></Table>;
+  return <Table aria-label="Table"><thead><tr><th scope="col" className="area-table__cell--fit"><Checkbox aria-label="Select all rows" checked={selected.length === rows.length} indeterminate={selected.length > 0 && selected.length < rows.length} onChange={event => setSelected(event.target.checked ? rows : [])} /></th><th scope="col">Name</th></tr></thead><tbody>{rows.map(name => <tr key={name} data-selected={selected.includes(name) ? "" : undefined}><td><Checkbox aria-label={`Select ${name}`} checked={selected.includes(name)} onChange={event => setSelected(event.target.checked ? [...selected, name] : selected.filter(item => item !== name))} /></td><td>{name}</td></tr>)}</tbody></Table>;
 };
 export const GalleryTableSorting = () => {
   const [descending, setDescending] = useState(false);
@@ -1687,29 +1668,6 @@ export const GalleryTooltip = () => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--area-space-8)" }}>
     <Tooltip id="gallery-tooltip-copy">Description</Tooltip>
     <Button aria-describedby="gallery-tooltip-copy" variant="outline">Button</Button>
-  </div>
-);
-/* Tooltip pass review (2026-09-25, docs/specs/tooltip.md). "Before" restores the pass-0 radius and shadow. */
-const previousTooltip = { "--_tooltip-shape": "var(--area-radius-row)", "--_tooltip-inset-inline": "var(--area-space-8)", boxShadow: "var(--area-shadow-2)" } as CSSProperties;
-const previousTextSides = { "--_tooltip-inset-inline": "var(--area-space-8)" } as CSSProperties;
-export const GalleryReviewTooltip = () => (
-  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
-    <ReviewPair title="Radius 8 → 10px: rounder, not a pill"
-      basis="Owner: rounder than before, not a pill (14px on 28px) and not sharp. 10px sits between controls (8) and popovers (12), so a tooltip reads as its own floating label. The nested Kbd keeps the outer radius less its 4px inset: 6px, Kbd's own radius."
-      before={<><Tooltip style={previousTooltip}>Description</Tooltip><Tooltip style={previousTooltip}>Description <Kbd appearance="on-emphasis" keys={["cmd", "K"]} /></Tooltip></>}
-      after={<><Tooltip>Description</Tooltip><Tooltip>Description <Kbd appearance="on-emphasis" keys={["cmd", "K"]} /></Tooltip></>} />
-    <ReviewPair title="Text sides 8 → 10px"
-      basis="Owner: a little more room on the text sides than 8px, less than ChatGPT's 12px (13px with its border). A trailing Kbd keeps Area's equal 4px inset."
-      before={<><Tooltip style={previousTextSides}>Search</Tooltip><Tooltip style={previousTextSides}>Search <Kbd appearance="on-emphasis" keys={["cmd", "K"]} /></Tooltip></>}
-      after={<><Tooltip>Search</Tooltip><Tooltip>Search <Kbd appearance="on-emphasis" keys={["cmd", "K"]} /></Tooltip></>} />
-    <ReviewPair title="Wrapped text keeps the same corner"
-      basis="The corner is the same 10px on one line or two, so a wrapped tooltip reads as the same plate at its 288px maximum."
-      before={<Tooltip style={previousTooltip}>Duplicate this page and its sub-pages into the current workspace</Tooltip>}
-      after={<Tooltip>Duplicate this page and its sub-pages into the current workspace</Tooltip>} />
-    <ReviewPair title="A lift that reads as floating"
-      basis="Notion 0 4px 12px −2px, Figma 0 5px 12px, ChatGPT 0 8px 18px. Area's 1px shadow left the plate flat on light surfaces."
-      before={<Tooltip style={previousTooltip}>Description</Tooltip>}
-      after={<Tooltip>Description</Tooltip>} />
   </div>
 );
 export const GalleryTooltipArrow = () => (
@@ -1838,7 +1796,7 @@ export const GalleryComposerInline = () => {
 export const GalleryComposerStacked = () => {
   const [sent, setSent] = useState("");
   const [mode, setMode] = useState("Standard");
-  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Task" placeholder="Work on anything" mode={<Button variant="ghost" size="sm" trailingIcon={<ChevronIcon />} onClick={() => setMode(mode === "Standard" ? "Focused" : "Standard")}>{mode}</Button>} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Task" placeholder="Work on anything" mode={<Menu aria-label="Mode" side="top" trigger={<Button variant="soft" trailingIcon={<ChevronIcon />}>{mode}</Button>}>{["Standard", "Focused"].map(option => <MenuItem key={option} data-selected={option === mode ? "" : undefined} shortcut={option === mode ? <CheckIcon /> : undefined} onClick={() => setMode(option)}>{option}</MenuItem>)}</Menu>} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
 const archivedTree = [
   { id: "src", label: "src", icon: <FolderIcon />, children: [
@@ -1872,12 +1830,82 @@ export const GalleryColorFieldSplit = () => (
 );
 export const GalleryAlignmentPickerLandscape = () => <div style={{inlineSize: "220px", blockSize: "112px"}}><AlignmentPicker label="Landscape alignment" stretch defaultValue="top-left" /></div>;
 export const GalleryAlignmentPickerPortrait = () => <div style={{inlineSize: "112px", blockSize: "200px"}}><AlignmentPicker label="Portrait alignment" stretch defaultValue="bottom-right" /></div>;
+const pickerSwatches = [
+  {value: "#01AA4E", label: "Green 500"}, {value: "#006DF5", label: "Blue 500"},
+  {value: "#5C5DFE", label: "Indigo 500"}, {value: "#8D4DF3", label: "Purple 500"},
+  {value: "#DF127D", label: "Pink 500"}, {value: "#E80945", label: "Red 500"},
+  {value: "#EA7401", label: "Orange 500"}, {value: "#00A797", label: "Teal 500"},
+];
 export const GalleryColorPicker = () => {
-  const [swatches, setSwatches] = useState([
-    {value: "#01AA4E", label: "Green 500"}, {value: "#006DF5", label: "Blue 500"},
-    {value: "#5C5DFE", label: "Indigo 500"}, {value: "#8D4DF3", label: "Purple 500"},
-    {value: "#DF127D", label: "Pink 500"}, {value: "#E80945", label: "Red 500"},
-    {value: "#EA7401", label: "Orange 500"}, {value: "#00A797", label: "Teal 500"},
-  ]);
+  const [swatches, setSwatches] = useState(pickerSwatches);
   return <ColorPicker label="Fill" defaultValue="#8D4DF3" swatches={swatches} onAddSwatch={value => setSwatches(current => current.some(item => item.value === value) ? current : [...current, {value, label: value}])} />;
 };
+const allViews = ["spectrum", "grid", "sliders"] as const;
+export const GalleryColorPickerViews = () => <ColorPicker label="Fill" defaultValue="#8D4DF3" views={allViews} preview />;
+export const GalleryColorPickerGrid = () => <ColorPicker label="Fill" defaultValue="#006DF5" views={allViews} defaultView="grid" />;
+export const GalleryColorPickerSliders = () => <ColorPicker label="Fill" defaultValue="#DF127D" views={allViews} defaultView="sliders" defaultModel="oklch" />;
+export const GalleryColorPickerModelOklch = () => <ColorPicker label="Fill" defaultValue="#01AA4E" defaultModel="oklch" />;
+export const GalleryColorPickerContrast = () => <ColorPicker label="Text" defaultValue="#5C5DFE" contrast={{ background: "#FFFFFF", level: "AA" }} />;
+export const GalleryColorPickerPreview = () => <ColorPicker label="Fill" defaultValue="#EA7401" preview />;
+export const GalleryColorPickerHeader = () => {
+  const [open, setOpen] = useState(true);
+  return open
+    ? <ColorPicker label="Fill" defaultValue="#006DF5" header={<><span>Fill</span><Button variant="ghost" size="sm" iconOnly icon={<DismissIcon />} aria-label="Close fill picker" onClick={() => setOpen(false)} /></>} />
+    : <Button size="sm" variant="ghost" onClick={() => setOpen(true)}>Reopen fill picker</Button>;
+};
+export const GalleryColorPickerModelRgb = () => <ColorPicker label="Stroke" defaultValue="#EA7401" defaultModel="rgb" />;
+export const GalleryColorPickerModelHsl = () => <ColorPicker label="Shadow" defaultValue="#1E1E1E66" defaultModel="hsl" />;
+export const GalleryColorPickerModelCss = () => <ColorPicker label="Background" defaultValue="#00A79780" defaultModel="css" />;
+export const GalleryColorPickerOpaque = () => <ColorPicker label="Page background" defaultValue="#F5F5F5" alpha={false} />;
+export const GalleryColorPickerDisabled = () => <ColorPicker label="Locked fill" defaultValue="#8D4DF3" disabled swatches={pickerSwatches.slice(0, 4)} />;
+/* Color picker pass review (2026-09-26, docs/specs/color-picker.md). "Before" restores pass-0
+   geometry through private properties where a value changed; new parts have no before. */
+
+/* Calendar. A fixed "today" keeps the gallery deterministic. */
+const calendarToday = "2026-09-26";
+export const GalleryCalendar = () => <Calendar variant="surface" aria-label="Due date" today={calendarToday} defaultValue="2026-09-15" />;
+export const GalleryCalendarRange = () => <Calendar variant="surface" aria-label="Trip dates" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} />;
+export const GalleryCalendarTwoMonths = () => <Calendar variant="surface" aria-label="Report period" selectionMode="range" visibleMonths={2} today={calendarToday} defaultValue={{ start: "2026-09-24", end: "2026-10-06" }} />;
+export const GalleryCalendarMultiple = () => <Calendar variant="surface" aria-label="Office days" selectionMode="multiple" today={calendarToday} defaultValue={["2026-09-08", "2026-09-10", "2026-09-15", "2026-09-17"]} />;
+export const GalleryCalendarUnavailable = () => <Calendar variant="surface" aria-label="Booking date" today={calendarToday} defaultMonth="2026-09" min="2026-09-03" max="2026-10-10" isDateUnavailable={date => ["2026-09-12", "2026-09-13", "2026-09-22"].includes(date)} />;
+export const GalleryCalendarMonday = () => <Calendar variant="surface" aria-label="Sprint start" firstDayOfWeek={1} locale="en-GB" today={calendarToday} defaultValue="2026-09-28" />;
+export const GalleryCalendarPlain = () => <Calendar aria-label="Publish date" today={calendarToday} defaultValue="2026-09-30" />;
+export const GalleryCalendarAccent = () => <Calendar variant="surface" tone="accent" aria-label="Launch window" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} />;
+/* Calendar tone pass (2026-09-26, docs/specs/calendar.md). "Before" restores pass-1 paint
+   through private properties: accent selection and band, a dark today circle. */
+const weekend = (date: string) => [0, 6].includes(new Date(`${date}T12:00`).getDay());
+export const GalleryCalendarCircle = () => <Calendar variant="surface" days="circle" weekdayStyle="narrow" aria-label="Appointment date" today={calendarToday} defaultValue="2026-09-08" min="2026-09-08" max="2026-10-10" isDateUnavailable={weekend} />;
+export const GalleryCalendarTile = () => <Calendar variant="surface" days="tile" weekdayStyle="abbreviated" firstDayOfWeek={1} locale="en-GB" aria-label="Delivery date" today={calendarToday} defaultValue="2026-09-16" showOutsideDays={false} min="2026-09-16" isDateUnavailable={date => ["2026-09-18", "2026-09-19", "2026-09-20", "2026-09-26", "2026-09-27"].includes(date)} />;
+export const GalleryCalendarMarkers = () => <Calendar variant="surface" firstDayOfWeek={1} aria-label="Send date" today={calendarToday} defaultValue="2026-09-21" markers={{ "2026-09-04": "accent", "2026-09-14": "accent", "2026-09-29": "neutral", "2026-10-08": "neutral" }} />;
+export const GalleryCalendarWeek = () => <Calendar variant="surface" layout="week" firstDayOfWeek={1} aria-label="Visit day" today={calendarToday} defaultValue="2026-09-30" markers={{ "2026-10-01": "accent" }} />;
+const scheduleTimes = ["8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "1:00 PM"];
+export const GalleryCalendarSchedule = () => {
+  const [date, setDate] = useState<string | null>("2026-09-28");
+  const [time, setTime] = useState("10:00 AM");
+  const [scheduled, setScheduled] = useState("");
+  const label = date ? new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(`${date}T12:00`)) : "No date";
+  return <div style={{ display: "grid", border: "var(--area-border-width) solid var(--area-border-decorative)", borderRadius: "var(--area-radius-container)", background: "var(--area-bg-surface)", boxShadow: "var(--area-shadow-2)", maxInlineSize: "100%" }}>
+    <div style={{ display: "flex", minBlockSize: 0 }}>
+      <div style={{ padding: "var(--area-space-12)" }}>
+        <Calendar aria-label="Send date" firstDayOfWeek={1} today={calendarToday} value={date} onValueChange={setDate} min={calendarToday} markers={{ "2026-10-04": "accent", "2026-10-14": "accent" }} />
+      </div>
+      <div role="group" aria-label="Send time" style={{ display: "grid", alignContent: "start", gap: "var(--area-space-2)", padding: "var(--area-space-8)", borderInlineStart: "var(--area-border-width) solid var(--area-border-decorative)", overflowY: "auto", blockSize: "calc(var(--area-space-96) * 3)" }}>
+        {scheduleTimes.map(item => <Button key={item} variant="ghost" size="sm" align="start" selected={item === time} onClick={() => setTime(item)}>{item}</Button>)}
+      </div>
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-12)", borderBlockStart: "var(--area-border-width) solid var(--area-border-decorative)" }}>
+      <Button variant="ghost" size="sm" onClick={() => setScheduled("")}>Cancel</Button>
+      <span style={{ marginInlineStart: "auto", color: "var(--area-fg-muted)", fontSize: "var(--area-control-sm-text)" }}>{label} · {time}</span>
+      <Button variant="outline" size="sm" disabled={!date} onClick={() => setScheduled(`${label} ${time}`)}>Schedule</Button>
+    </div>
+    <span className="area-sr-only" role="status">{scheduled && `Scheduled for ${scheduled}`}</span>
+  </div>;
+};
+export const GalleryCalendarDisabled = () => <Calendar variant="surface" aria-label="Locked date" today={calendarToday} defaultValue="2026-09-15" disabled />;
+
+/* Neutral-by-default pass (2026-09-26, docs/DESIGN_SYSTEM.md "Neutral by default, accent by
+   override"). "Before" restores the accent defaults through each family's private properties. */
+export const GalleryCheckboxAccent = () => <Checkbox label="Label" tone="accent" defaultChecked />;
+export const GalleryRadioAccent = () => <Radio name="gallery-radio-accent" value="accent" label="Label" tone="accent" defaultChecked />;
+export const GalleryChipAccent = () => <ChipGroup><Chip tone="accent" defaultSelected>Selected</Chip><Chip tone="accent">Item</Chip></ChipGroup>;
+export const GalleryAlignmentPickerAccent = () => <AlignmentPicker label="Object alignment" tone="accent" defaultValue="top-left" />;

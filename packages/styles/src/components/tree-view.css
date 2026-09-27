@@ -22,7 +22,7 @@
     font-size: var(--area-control-md-text);
     line-height: var(--area-control-md-leading);
   }
-  .area-tree-view--navigation { --_tree-selection: var(--area-bg-component-hover); }
+  .area-tree-view--navigation { --_tree-selection: var(--area-bg-component-active); }
   .area-tree-view--checkbox { --_tree-selection: var(--area-bg-component); }
   .area-tree-view [role="treeitem"] {
     position: relative;
@@ -41,7 +41,7 @@
     cursor: default;
     outline: none;
   }
-  .area-tree-view [role="treeitem"]:hover:not([data-disabled]) { background: var(--area-bg-component); }
+  .area-tree-view [role="treeitem"]:hover:not([data-disabled], [aria-current="page"]) { background: var(--area-bg-component-hover); }
   .area-tree-view [role="treeitem"][aria-selected="true"],
   .area-tree-view [role="treeitem"][aria-current="page"] { background: var(--_tree-selection); color: var(--area-fg-default); }
   /* The current row is marked by fill and ink alone; the edge marker was removed (owner, pass 3). */
@@ -80,7 +80,9 @@
   .area-tree-view__actions > * { opacity: 0; }
   .area-tree-view__actions > [data-pinned],
   .area-tree-view [role="treeitem"]:is(:hover, :focus-visible, [aria-selected="true"]) .area-tree-view__actions > * { opacity: 1; }
-  .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-input-edge); border-radius: var(--area-radius-small); font-size: var(--area-control-sm-text); line-height: 1; }
-  .area-tree-view [aria-checked="true"] .area-tree-view__check { color: var(--area-fg-default); background: var(--area-bg-component-hover); border-color: var(--area-focus-color); }
+  .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: min(var(--area-radius-small), calc(var(--area-icon-md) / 4)); font-size: var(--area-control-sm-text); line-height: 1; }
+  /* Checked paints like Checkbox: the neutral solid face and its mark. It used a tint with a
+     focus-colour edge, which read as focus rather than as a checked box. */
+  .area-tree-view [aria-checked="true"] .area-tree-view__check { color: var(--_tree-check-mark, var(--area-fg-on-neutral)); background: var(--_tree-check, var(--area-neutral-solid)); border-color: var(--_tree-check, var(--area-neutral-solid)); }
   .area-tree-view__check svg { inline-size: 100%; block-size: 100%; }
 }

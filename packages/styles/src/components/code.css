@@ -36,7 +36,7 @@
     min-block-size: var(--area-control-md);
     padding-block: var(--area-space-4);
     padding-inline: var(--area-space-12);
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-end: var(--area-border-width) solid var(--area-border-divider);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
@@ -76,9 +76,9 @@
   }
 
   /*
-   * The tabbed switcher follows the Tabs language: transparent, hover previews the
-   * indicator, and the selected tab carries a label-width underline in the foreground
-   * rather than an accent fill, so the row does not read as a row of buttons.
+   * The tabbed switcher follows the Tabs language: transparent, a plate under the pointer,
+   * and the selected tab carries a label-width underline in the foreground rather than an
+   * accent fill, so the row does not read as a row of buttons.
    */
   .area-code-block__tab {
     position: relative;
@@ -97,9 +97,9 @@
     transition: var(--area-transition);
   }
 
+  /* Like Tabs, the label keeps its colour under the pointer; only the plate appears. */
   .area-code-block__tab:hover {
-    color: var(--area-fg-default);
-    background-color: var(--area-bg-hover);
+    background-color: var(--area-bg-component-hover);
   }
 
   .area-code-block__tab:focus-visible {
@@ -197,7 +197,7 @@
     border: 0;
     border-radius: 0;
     /* The one rule: what is above it is rendered, what is below it is source. */
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-start: var(--area-border-width) solid var(--area-border-divider);
   }
 
   /*
@@ -246,6 +246,8 @@
    */
   .area-code-block__code {
     display: block;
+    /* A <code> element resets to the browser's monospace; the block's face is Area's. */
+    font-family: inherit;
     /* One long line scrolls the whole block rather than wrapping under the gutter. */
     min-inline-size: max-content;
   }
@@ -257,6 +259,11 @@
 
   .area-code-block--unnumbered .area-code-block__line {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* spec: without the gutter, code starts where the header's filename and the numbers do (12). */
+  .area-code-block--unnumbered .area-code-block__line:not(.area-code-block__line--added, .area-code-block__line--removed) .area-code-block__text {
+    padding-inline-start: var(--area-space-12);
   }
 
   /* A diff marker keeps its own column even when the numbers are hidden. */
@@ -288,8 +295,11 @@
     border-radius: var(--area-radius-small);
   }
 
+  /* A link announces itself with an underline, not a colour change (foreground stays fixed). */
   .area-code-block__linenumber:hover {
-    color: var(--area-fg-default);
+    text-decoration: underline;
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: var(--area-space-2);
   }
 
   .area-code-block__linenumber:focus-visible {
@@ -297,8 +307,13 @@
     outline-offset: var(--area-focus-offset);
   }
 
-  /* Diff markers sit inside the gutter, before the number. */
+  /* A block with diff lines widens every gutter by the marker and its gap (8 + 4) plus room for
+     a second digit, so marker and number fit and the code column stays aligned. */
+  .area-code-block__pre:has(.area-code-block__marker) { --_code-gutter: var(--area-space-48); }
+
+  /* Diff markers sit inside the gutter, at its start; the number keeps the end. */
   .area-code-block__marker {
+    margin-inline-end: auto;
     inline-size: var(--area-space-8);
     text-align: center;
     font-weight: var(--area-weight-strong);
@@ -362,8 +377,11 @@
   /* Following a line-number link marks the line it landed on. */
   .area-code-block__line:target {
     background-color: var(--area-bg-active);
-    box-shadow: inset var(--area-space-2) 0 0 0 var(--area-accent-solid);
+    /* The current line: neutral ink, as the Nav and Tree view markers are. */
+    box-shadow: inset var(--area-space-2) 0 0 0 var(--_target-marker, var(--area-fg-default));
   }
+  /* The rail sits on the inline-start edge, which is the right in right-to-left text. */
+  .area-code-block__line:target:dir(rtl) { box-shadow: inset calc(var(--area-space-2) * -1) 0 0 0 var(--_target-marker, var(--area-fg-default)); }
 
   /*
    * Four hues, each at its scale's own vivid rung.
@@ -432,19 +450,23 @@
     block-size: var(--area-control-md);
     padding: 0;
     border: 0;
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-start: var(--area-border-width) solid var(--area-border-divider);
     background-color: var(--area-bg-code);
     color: var(--area-fg-muted);
     font-family: inherit;
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
-    font-weight: var(--area-weight-strong);
+    /* A label on a transparent control takes 400; 500 is for labels on fills. */
+    font-weight: var(--area-weight-regular);
     cursor: pointer;
     transition: var(--area-transition);
   }
 
+  /* The label keeps its ink under the pointer and takes an underline, as line links do. */
   .area-code-block__toggle:hover {
-    color: var(--area-fg-default);
+    text-decoration: underline;
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: var(--area-space-2);
   }
 
   .area-code-block__toggle:focus-visible {

@@ -31,7 +31,7 @@
     transition: var(--area-transition);
   }
   .area-number-field--outline { --_bg: var(--area-input-bg); }
-  .area-number-field--soft { --_bg: var(--area-input-bg-soft); --_border: transparent; --_border-hover: var(--area-input-edge); }
+  .area-number-field--soft { box-shadow: none; --_bg: var(--area-input-bg-soft); --_border: transparent; --_border-hover: var(--area-input-edge); }
   .area-number-field--sm { --_height: var(--area-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
   .area-number-field--md { --_height: var(--area-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-number-field--lg { --_height: var(--area-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }

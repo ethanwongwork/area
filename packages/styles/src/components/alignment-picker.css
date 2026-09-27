@@ -19,6 +19,10 @@
     --_alignment-bg: var(--area-input-bg-soft);
   }
   .area-alignment-picker--plain { --_alignment-bg: transparent; --_alignment-edge: transparent; }
+  /* Tone: the selected bars are neutral ink unless accent is asked for (DESIGN_SYSTEM.md). */
+  .area-alignment-picker,
+  .area-alignment-picker--neutral { --_selected-mark: var(--area-fg-default); }
+  .area-alignment-picker--accent { --_selected-mark: var(--area-fg-accent); }
   .area-alignment-picker__cell {
     position: relative;
     display: grid;
@@ -63,7 +67,7 @@
     block-size: var(--area-space-2);
     inline-size: var(--_line-width, 60%);
     border-radius: var(--area-radius-full);
-    background: var(--area-fg-accent);
+    background: var(--_selected-mark);
   }
   .area-alignment-picker__dot > i:nth-child(2) { --_line-width: 100%; }
   .area-alignment-picker__dot > i:nth-child(3) { --_line-width: 40%; }

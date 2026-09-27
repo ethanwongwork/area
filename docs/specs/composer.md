@@ -85,3 +85,4 @@ multi-line radius (would require typing), hover states.
 - 2026-09-25 · owner: "do the next component, I'll review all changes later" → Composer
   first pass: 16/24 text, faint ring and soft shadow, 8px action gap, auto-grow width fix →
   4 Area captures after.
+- 2026-09-27 · owner (after this pass, on the older branch): the mode control is too small and not a real button; send concentric, not a circle → the send Button of this pass already answers the second; the stacked demo's mode is a soft md Button that opens a Menu.

@@ -47,12 +47,14 @@ test("MenuItem with checked becomes a checkable row with a display-only indicato
 
 test("Popover with a trigger wires an anchored native popover dialog", () => {
   const html = renderToString(h(Popover, { side: "bottom", "aria-label": "Dimensions", trigger: h(Button, null, "Dimensions") }, "Body"));
-  assert.match(html, /^<span class="area-popover-anchor" style="--_popover-anchor:--area-popover-/);
+  // The trigger comes first, then the surface; placement is computed on open (overlay.md).
+  assert.match(html, /^<button[^>]*aria-haspopup="dialog"/);
   const id = html.match(/id="([^"]+)"[^>]*popover="auto"/)?.[1];
   assert.ok(id, "surface has an id and popover=auto");
   assert.match(html, new RegExp(`popoverTarget="${id}"`, "i"));
   assert.match(html, new RegExp(`aria-controls="${id}"`));
-  assert.match(html, /aria-haspopup="dialog"[^>]*aria-expanded="false"/);
+  assert.match(html, /aria-haspopup="dialog"/);
+  assert.match(html, /aria-expanded="false"/);
   assert.match(html, /role="dialog"/);
   assert.doesNotMatch(renderToString(h(Popover, null, "Static")), /popover=/);
 });

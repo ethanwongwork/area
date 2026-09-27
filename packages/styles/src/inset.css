@@ -54,6 +54,8 @@
    * intentionally asymmetric with generic text-only controls: in a Nav, visual scanning
    * follows the group column, not each row's cap-height-centred text inset. */
   .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-icon); }
+  /* A horizontal plate has no column to share, so a text-only item is centred like a button. */
+  .area-nav--horizontal .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-text); }
   .area-nav__item { gap: var(--area-gap-md); }
   /* spec: the shared inset puts a 16px icon 8px in (Notion 8); a 12px gap then starts the
    * label 36px in, where ChatGPT and Notion both set it (docs/specs/menu.md). */
@@ -97,6 +99,10 @@
   .area-nav__item:has(> .area-nav__icon:last-child),
   .area-menu__item:has(> .area-menu__icon:last-child) { --_box-end: var(--_box-icon); }
 
+  /* A trailing remove control is a nested square action: the chip reserves its box, as an
+     Input reserves an InputAction's, instead of nudging it with a negative margin. */
+  /* The remove circle is the end's own box: its 4px ring of chip is the end inset. */
+  .area-chip:has(> .area-chip__remove:last-child) { --_box-end: var(--_remove); }
   .area-chip:has(> :is(.area-chip__swatch, .area-chip__avatar, .area-chip__image):first-child) {
     --_box-start: var(--_visual);
   }
@@ -110,7 +116,7 @@
     --_box-end: var(--area-space-20);
   }
   .area-button:has(> .area-button__label > .area-kbd--small:last-child) {
-    --_box-end: var(--area-space-20);
+    --_box-end: var(--area-space-16);
   }
 
   .area-button--icon-only, .area-chip--swatch-only,
@@ -217,7 +223,10 @@
   }
   .area-button--align-start { margin-inline-start: calc((var(--_box-height) - var(--_box-start)) / -2); }
   .area-button--align-end { margin-inline-end: calc((var(--_box-height) - var(--_box-end)) / -2); }
-  .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-control-xs); }
+  /* A trailing pill reserves its own height, so it ends as far from the plate's edge as it
+     sits from the top (6 for the 20px Badge), like the Kbd rules below. */
+  .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-space-20); }
+  .area-nav__item:has(> .area-nav__trailing > .area-badge--sm:last-child) { --_box-end: var(--area-space-16); }
   .area-nav__item:has(> .area-nav__trailing > .area-kbd:last-child) { --_box-end: var(--area-space-20); }
   .area-nav__item:has(> .area-nav__trailing > .area-kbd--small:last-child) { --_box-end: var(--area-space-16); }
 

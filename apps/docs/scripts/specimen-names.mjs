@@ -29,3 +29,48 @@ export function specimenName(example, family) {
   if (['soft', 'solid', 'outline', 'ghost', 'plain'].includes(id)) return `variant-${id}`;
   return camel(title);
 }
+
+/*
+ * Gallery grouping. Every family shows its tiles in the same order of groups, each under a
+ * heading, and a tile is labelled by its value within the group (`sm`, not `size-sm`):
+ * Default, Variants, Tones, Sizes, Layout, Content, States, Behavior, then the full
+ * variant × tone matrix, which is a reference rather than a first read.
+ */
+export const SPECIMEN_GROUPS = ['Default', 'Variants', 'Tones', 'Sizes', 'Layout', 'Content', 'States', 'Behavior', 'Templates', 'Variant × tone'];
+// Treatments and shapes (Button pill, Switch long, Skeleton circle) are both a component's visual variants.
+const TREATMENTS = new Set(['solid', 'soft', 'outline', 'ghost', 'color', 'modern', 'dotSoft', 'dotOutline', 'pill', 'long', 'circle']);
+const LAYOUT = new Set(['horizontal', 'vertical', 'fullWidth', 'labelEnd', 'labelStart', 'right', 'bottom', 'left', 'top',
+  'landscape', 'portrait', 'twoMonths', 'monday', 'week', 'tile', 'compact', 'immersive', 'carousel', 'iconOnly',
+  'wrapped', 'hiddenLineNumbers', 'visibleRows', 'compactRows', 'columnDividers', 'striped', 'grouped', 'multiline']);
+const TONES = new Set(['accent', 'custom', 'neutral', 'info', 'success', 'warning', 'danger']);
+const STATES = new Set(['empty', 'collapsed']);
+const FAMILY_GROUPS = {
+  indicator: { presence: 'Variants', outOfOffice: 'States', count: 'Content' },
+  menu: { danger: 'Tones' },
+};
+export function specimenGroup(name, family) {
+  if (name === 'default' || name.startsWith('default-')) return 'Default';
+  const override = FAMILY_GROUPS[family]?.[name.split('-')[0]];
+  if (override) return override;
+  const [head, ...rest] = name.split('-');
+  const value = rest.join('-');
+  if (TREATMENTS.has(head) && value) return 'Variant × tone';
+  if (['variant', 'appearance', 'kind', 'shape'].includes(head) || (!value && TREATMENTS.has(head))) return 'Variants';
+  if (head === 'tone' || (!value && TONES.has(head) && family !== 'menu' && family !== 'toast')) return 'Tones';
+  if (family === 'toast' && TONES.has(head) && !value) return 'Tones';
+  if (head === 'size' || head === 'presenceSize' || head === 'sizes' || name === 'small') return 'Sizes';
+  if (['layout', 'resize', 'side', 'orientation', 'placement', 'spacing', 'horizontal', 'vertical'].includes(head) || (!value && LAYOUT.has(head))
+    || family === 'separator') return 'Layout';
+  if (['state', 'validation'].includes(head) || (!value && STATES.has(head)) || head === 'loading') return 'States';
+  if (['behavior', 'steps', 'action'].includes(head)) return 'Behavior';
+  // Compositions of a component's slots with other components, not variants of it.
+  if (head === 'template') return 'Templates';
+  return 'Content';
+}
+/** The tile label inside its group: the value without the group's own prefix. */
+export function specimenLabel(name, group) {
+  if (group === 'Default') return 'default';
+  const [head, ...rest] = name.split('-');
+  const prefixes = { Variants: ['variant', 'appearance', 'kind', 'shape', 'presence'], Tones: ['tone'], Sizes: ['size', 'presenceSize'], Layout: ['layout', 'side', 'orientation'], States: ['state'], Behavior: ['behavior'], Content: ['composition', 'content'], Templates: ['template'] };
+  return (prefixes[group] ?? []).includes(head) && rest.length ? rest.join('-') : name;
+}

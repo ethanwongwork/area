@@ -1,4 +1,4 @@
-# Handoff — 2026-09-25
+# Handoff — 2026-09-27
 
 Branches: `icons-system` (icon work, this folder) and `components` (all component work,
 in its own worktree session). Both start from `main`; merge through pull requests.
@@ -53,6 +53,83 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
   - counts centre on the corner (`compact` is opt-in); dots centre on the icon corner;
   - tabs reserve space after the label; circular owners sit 2px outward.
 
+- **2026-09-26 (branch `claude/component-variants-audit-fc1ee4`, uncommitted):**
+  - gap audit of 13 design-system catalogues: `docs/research/component-gap-audit.md`,
+    summarized in `docs/COMPONENTS.md` (Gap audit section);
+  - ColorPicker Figma pass (`docs/specs/color-picker.md`, 11 Figma captures): ten-row width,
+    16px pill tracks, ringed thumbs, eyedropper, Hex/RGB/CSS/HSL/HSB value row, header slot;
+  - Calendar, new (`docs/specs/calendar.md`, 7 Notion captures): single/range/multiple,
+    two months, bounds, APG grid keyboard; gallery tiles use the new `1x2` span;
+  - later passes: Calendar neutral tone, 12/16 days, circle/tile days, markers, week strip,
+    Schedule composition; ColorPicker views (spectrum/grid/sliders), OKLCH, contrast band,
+    preview, save; `scripts/gen-color-grid.mjs` generates the palette grid;
+  - captures from pages that block the script: paste it, then hand results over the
+    clipboard (`pbpaste` needs `LANG=en_US.UTF-8`) or a local `postMessage` relay
+    (COMPONENT_ADAPTATION.md, "Browser tools");
+  - neutral-by-default sweep: Checkbox, Radio, Chip and AlignmentPicker gained a `tone`
+    axis (neutral default);
+  - **cohesion audit** (`docs/research/cohesion-audit.md`): every family accepted before the
+    evidence process re-checked; 37 new specs; shared state paint (row plates, disabled,
+    fixed ink, neutral markers, one floating lift, one label weight) written into
+    DESIGN_SYSTEM.md and the skills; 20 families reopened for review; `check-token-refs.mjs`
+    in the styles build and `packages/react/tests/cohesion.test.mjs` guard the rules; Untitled
+    UI values pinned in `docs/research/untitled-ui-reference.md`; 23 ChatGPT baseline captures;
+  - **second and third passes (2026-09-26/27):** 77 Notion and Figma captures and 424 Area
+    recaptures; every audited spec carries them. Every open question is settled in the audit
+    ("Second pass" and "Third pass" sections): dark neutral alphas solved against the page
+    rung, `border-divider` role, Kbd filled and concentric inside Buttons, Switch travel,
+    Segmented muted ink, Card container radius and divider edge, Select `soft`, Button group
+    full-height seam, Panel all-soft rows, and more;
+  - **gallery:** Pass reviews removed at the owner's request (`cohesion.tsx` deleted). Tiles
+    are grouped per family (Default, Variants, Tones, Sizes, Layout, Content, States, Behavior,
+    Variant × tone; `specimenGroup` in `apps/docs/scripts/specimen-names.mjs`). Every
+    non-default manifest value has a tile; extra tiles live in
+    `apps/docs/src/demos/gallery-variants.tsx`.
+
+  - **Card (2026-09-27, In review):** layouts vertical, horizontal (40 / 60, media start or
+    end by order, stacks below 480px via a container query), compact, immersive; `CardMedia
+    bleed`; size (12/16/24 corners, 6/8/12 insets); linked cards (`CardLink` stretched over the
+    card, edge-step hover, card focus ring, `CardOverlay reveal`); CardHeader, CardOverlay,
+    well, CardList; eight templates in a Templates gallery group. Appearances were removed at
+    the owner's request (a later system-wide pass); their evidence stays in
+    `docs/research/captures/card/`. Spec: `docs/specs/card.md`. Paint pass: neutral 25
+    media, edge #ee, faint two-layer shadow; type audit added tracking, `CardValue`,
+    `CardCarousel`, a well that stacks its contents, and space reserved beside bottom overlays.
+
+  - **Overlay behavior (2026-09-27, In review):** `trigger` on Popover, Menu and Tooltip
+    (native popover top layer, `popovertarget` on button triggers, JS `computePosition` with
+    flip and shift, menu button keyboard, tooltip delays and hover bridge, 150ms motion).
+    Spec `docs/specs/overlay.md`; tests `packages/react/tests/overlay.test.mjs`; gallery
+    `behavior-*` tiles. Tooltip is still marked Complete; its behavior is new and unreviewed.
+
+## Merge and audit round (2026-09-27, branch `claude/component-variants-audit-fc1ee4`)
+
+- Committed this branch's work and merged `origin/main` (22 commits: inspector and Figma
+  properties panel, product components, Dialog/Popover/Menu/Toast/Button passes). Main's passes
+  won their conflicts; Card, overlay behavior (`trigger` on Popover/Menu/Tooltip) and the fixes
+  stayed on top. Not pushed.
+- After the merge: Alert takes Toast's inset (40 tall, controls 6 from the corner); Chip's
+  remove is a concentric circle 4 inside the pill; Slider hover keeps the rail; the large and
+  interactive Table tiles lost a doubled wrapper; CommandPalette and Combobox no longer scroll
+  the page on mount (the gallery jumped ~35,000px on load). Pass reviews for Card, Table, Chip,
+  Alert and Slider are in `apps/docs/src/demos/reviews.tsx` (remove once the owner has seen them).
+
+## Next
+
+1. Owner: review the 20 In-review families in the grouped gallery and confirm completion in
+   `apps/docs/src/component-status.mjs`. Slider, Separator and Panel (Complete) changed after the
+   owner accepted them.
+2. Owner: two candidates the evidence raised but that were not started: a borderless (ghost)
+   Select trigger (Notion, Figma), and Card as a link with hover actions (Notion, Figma).
+3. Product dark themes need the owner's go-ahead; then recapture the changed families dark.
+4. Owner: review Calendar and the ColorPicker pass; decide whether ColorField adopts the
+   picker's surface-gap divider.
+5. Next gap after overlay behavior (audit order): custom Select listbox, then Combobox.
+6. Owner: confirm the size model (scale 12–20px, recommended) and the 12px glyphs in
+   Badge and NumberField (`docs/specs/icons.md`, fifth pass).
+7. Icons: batch 4 (alignment) per `docs/specs/icons.md`; replace the remaining Fluent
+   families and move Area's marks to 1.125px at the same time.
+8. Compact density: 20–24px avatars, 24/28px rows (see the audit's Kept table).
 ## Tree view passes 2–3 (2026-09-25, in review)
 
 Chevron plate 20px; row `actions` slot (`data-pinned`); chevron, icon and label on shared
@@ -117,15 +194,19 @@ saved as one JSON download per product (owner-approved) and split with a scratch
 4. A stroke and type baseline across Cursor, ChatGPT, Notion and Figma (needs the owner's
    go-ahead for product dark themes).
 
-## Verification (2026-09-25)
+## Verification (2026-09-27)
 
 These pass:
-- 19,491 token tests and 370 contrast assertions (66 themes);
-- 87 React tests, typecheck, docs build and audit;
-- 14 contracts, manifest parity, 4 preview tests, consumer check;
-- icon lint, 24 capture checksums, `git diff --check`.
+- 19,491 token tests (contrast gate unchanged);
+- 114 React tests, including `tone.test.mjs` and the new `cohesion.test.mjs`;
+- typecheck, docs build and audit, manifest parity, token-reference check;
+- 14 contracts, 4 preview tests, consumer check, capture checksums, `git diff --check`.
 
-Unverified: cross-engine, screen reader, forced colors (execution) and product dark themes.
+Unverified: cross-engine, screen reader, forced colors (execution), product dark themes, and
+the third-pass changes in dark mode.
+
+The docs build can fail with "Could not resolve @area/styles/manifest" while `npm run dev`
+is rebuilding the styles package; rerun it.
 
 About 284MB of ignored leftovers under `archive/` (old source caches and logs) remain on
 disk; delete them manually if wanted.

@@ -2,6 +2,7 @@ import { forwardRef, useEffect, useId, useLayoutEffect, useMemo, useRef, useStat
 import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
 import { comboboxVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
+import { scrollOptionIntoList } from "./overlay.ts";
 import { Input, InputAction, type InputProps } from "./Input.tsx";
 
 export interface ComboboxOption {
@@ -111,7 +112,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   }, [open]);
   useEffect(() => {
     if (!open || active < 0) return;
-    listRef.current?.querySelector(`[data-index="${active}"]`)?.scrollIntoView({ block: "nearest" });
+    scrollOptionIntoList(listRef.current, listRef.current?.querySelector<HTMLElement>(`[data-index="${active}"]`));
   }, [open, active]);
 
   const openList = (all: boolean, highlight: "first" | "last" | "selected" | "none") => {

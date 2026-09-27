@@ -1,8 +1,9 @@
 /* Switch: a pill-shaped glyph with an independent native hit target. */
 @layer area.components {
   .area-switch {
-    --_width-adjust: var(--area-space-4);
-    --_w: calc(var(--area-space-40) - var(--_width-adjust));
+    /* spec: the thumb travels 12px at every size, as in ChatGPT (32 x 20) and Notion (30 x 18). */
+    --_travel: var(--area-space-12);
+    --_w: calc(var(--_h) + var(--_travel));
     --_h: var(--area-space-20);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
@@ -30,11 +31,11 @@
     cursor: pointer;
   }
 
-  .area-switch--sm { --_w: calc(var(--area-space-32) - var(--_width-adjust)); --_h: var(--area-space-16); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_gap: var(--area-gap-sm); }
-  .area-switch--md { --_w: calc(var(--area-space-40) - var(--_width-adjust)); --_h: var(--area-space-20); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-switch--lg { --_w: calc(var(--area-space-48) - var(--_width-adjust)); --_h: var(--area-space-24); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_gap: var(--area-gap-lg); }
-  .area-switch--short { --_width-adjust: var(--area-space-4); }
-  .area-switch--long { --_width-adjust: 0px; --_thumb-width: calc(var(--_thumb) + var(--area-space-8)); --_w: calc(var(--_h) * 2 + var(--area-space-4)); }
+  .area-switch--sm { --_h: var(--area-space-16); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_gap: var(--area-gap-sm); }
+  .area-switch--md { --_h: var(--area-space-20); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-switch--lg { --_h: var(--area-space-24); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_gap: var(--area-gap-lg); }
+  .area-switch--short {}
+  .area-switch--long { --_thumb-width: calc(var(--_thumb) + var(--area-space-8)); --_w: calc(var(--_h) * 2 + var(--area-space-4)); }
   .area-switch--neutral { --_on: var(--area-neutral-solid); --_on-hover: var(--area-neutral-solid-hover); }
   .area-switch--accent { --_on: var(--area-accent-solid); --_on-hover: var(--area-accent-solid-hover); }
   .area-switch--custom { --_on: var(--area-switch-color, var(--area-neutral-solid)); --_on-hover: var(--area-switch-color-hover, var(--area-switch-color, var(--area-neutral-solid-hover))); }
@@ -94,9 +95,9 @@
   .area-switch__control:focus-visible ~ .area-switch__track,
   .area-switch[data-focus-visible] .area-switch__track { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
-  .area-switch:is([data-disabled], [data-read-only]) { cursor: not-allowed; color: var(--area-fg-disabled); }
-  .area-switch:is([data-disabled], [data-read-only]) .area-switch__track { background: var(--area-bg-component); border-color: var(--area-fg-disabled); }
-  .area-switch:is([data-disabled], [data-read-only]) .area-switch__thumb { background: var(--area-fg-disabled); }
+  /* Disabled dims the whole control, like Checkbox, Radio and Button, so an on switch still
+     reads as on. It used to repaint the track grey, which hid the checked state. */
+  .area-switch[data-disabled] { cursor: not-allowed; opacity: var(--_disabled-opacity, 0.5); }
   .area-switch[data-read-only] { cursor: default; }
   .area-switch[data-loading] { cursor: progress; }
 
@@ -120,8 +121,9 @@
     .area-switch__thumb { background: CanvasText; box-shadow: none; }
     .area-switch__control:checked ~ .area-switch__track { background: Highlight; border-color: Highlight; }
     .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { background: HighlightText; }
-    .area-switch:is([data-disabled], [data-read-only]) .area-switch__track { background: Canvas; border-color: GrayText; }
-    .area-switch:is([data-disabled], [data-read-only]) .area-switch__thumb { background: GrayText; }
+    /* Read-only keeps full paint, as it does outside forced colours; only disabled greys. */
+    .area-switch[data-disabled] .area-switch__track { background: Canvas; border-color: GrayText; }
+    .area-switch[data-disabled] .area-switch__thumb { background: GrayText; }
     .area-switch__control:focus-visible ~ .area-switch__track,
     .area-switch[data-focus-visible] .area-switch__track { outline-color: Highlight; }
   }

@@ -17,6 +17,13 @@ words accompany the colors in the gallery.
 Compound parts follow their parent family. Token is a compatibility composition of Code,
 not a second completed family. A green build is not a completion signal.
 
+The [cohesion audit](research/cohesion-audit.md) (2026-09-26) re-checked every family that
+had been accepted before the evidence process. Each now has a spec. The families it changed
+(Alert, Avatar, Button, Card, Checkbox, Chip, Code block, Input, Menu, Nav, Popover,
+Progress, Radio, Segmented, Select, Skeleton, Spinner, Switch, Table and Indicator) are back in review
+awaiting the owner; the rest kept their status. The gallery shows each family's variants in
+named groups (Default, Variants, Tones, Sizes, Layout, Content, States, Behavior).
+
 ## Existing library
 
 The manifest and React exports are authoritative for supported API; the gallery shows
@@ -25,7 +32,7 @@ actual specimens. Current families include:
 - Actions and choices: Button, SplitButton, Checkbox/CheckboxGroup, Radio/RadioGroup, Switch,
   Slider, Chip/ChipGroup and Segmented.
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, Textarea,
-  Composer and native Select.
+  Composer, native Select, ColorField, ColorSwatchPicker, ColorPicker and Calendar.
 - Navigation: Nav, Tabs, Menu and TreeView.
 - Breadcrumb shows linked ancestors, a current page and an optional collapsed marker; it is in review.
 - Labels and identity: Badge/BadgeGroup, Indicator/IndicatorAnchor (Presence is its
@@ -39,10 +46,10 @@ table is not a data-grid engine.
 
 ## Specs and prior decisions
 
-Each component built or refined under the current process has a spec sheet in
-[`docs/specs/`](specs/README.md): its evidence, measurements, decisions and feedback.
-Decisions recorded before that process are in
-[prior decisions](specs/PRIOR_DECISIONS.md) until the component receives a spec.
+Every component has a spec sheet in [`docs/specs/`](specs/README.md): its evidence,
+measurements, decisions and feedback. Decisions recorded before the evidence process were
+moved into those specs; [prior decisions](specs/PRIOR_DECISIONS.md) now only maps where each
+went.
 
 ## Expansion inventory
 
@@ -78,30 +85,27 @@ built next; this list is an inventory, not an order of work.
    pinning are a separate composition because opposing anchors may be selected together.
    The single-choice contract follows the [WAI radio group pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/)
    and [Base UI radio group](https://base-ui.com/react/components/radio-group); spatial arrows follow the visible grid.
-5. **Color controls — ColorField, ColorSwatch and ColorSwatchPicker built, in review.** ColorField edits
-   canonical 6/8-digit hex with draft/commit behavior. ColorSwatch previews solid and
-   transparent values. [React Spectrum's ColorField](https://react-spectrum.adobe.com/v3/ColorField.html)
-   and [ColorSwatch](https://react-spectrum.adobe.com/v3/ColorSwatch.html) establish
-   editable color values and a transparency preview. ColorSwatchPicker offers labeled,
-   native radio choices in a token-sized row or spatial grid, including transparency,
-   form submission and reset. Its keyboard contract follows the
-   [WAI radio group pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/), while its
-   color-list structure follows [React Aria ColorSwatchPicker](https://react-aria.adobe.com/ColorSwatchPicker).
-   Next, ColorArea and
-   ColorSlider compose into ColorPicker. Include independently editable alpha,
-   hex/RGB/HSL formats, an optional eyedropper and keyboard equivalents for pointer
-   operations. [React Aria ColorPicker](https://react-aria.adobe.com/ColorPicker)
-   demonstrates this shared color-state composition. Build gradient stops and image
-   fills as later editors rather than overloading the initial solid-color field.
+5. **Color controls — ColorField, ColorSwatch, ColorSwatchPicker and ColorPicker built, in
+   review.** ColorField edits canonical 6/8-digit hex with draft/commit behavior. ColorSwatch
+   previews solid and transparent values. ColorSwatchPicker offers labeled native radio
+   choices in a row or grid. ColorPicker had a Figma pass on 2026-09-26
+   ([spec](specs/color-picker.md)): a ten-row-wide surface with a square area, an eyedropper
+   beside 16px hue and opacity tracks, a Hex/RGB/CSS/HSL/HSB value row, a header slot and
+   saved swatches; a second pass added spectrum/grid/slider views, the Area palette grid
+   (ColorSwatchPicker `palette`), OKLCH, a contrast check with its threshold band, a
+   before/after preview and a save button. Still missing against Figma: gradient stops, pattern/image/video paints,
+   blend mode, a contrast check, library colors and a popover trigger (needs overlay
+   behavior). [React Aria ColorPicker](https://react-aria.adobe.com/ColorPicker) remains the
+   behavioral reference; a ColorWheel and per-channel sliders are optional later parts.
 6. **Inspector compositions.** PanelRow (paired fields), BoxField (linked four-value
    padding/corners, [spec](specs/box-field.md)), collapsible sections and PropertyList
    (reorderable property lists) are built and accepted; Panel `resizable`
    ([spec](specs/resizable-panel.md)) is in review. Fill/stroke/effect rows combine a value editor with visibility, add/remove and
    reorder actions. Typography, shadow, layout and export editors should be recipes
    assembled from the same primitives, with their own domain validation.
-7. **Overlay behavior.** Finish trigger/anchor positioning, dismissal, focus management
-   and collision handling for Popover/Menu/Tooltip. Their existing visual surfaces
-   must not be mistaken for complete interaction systems. Color and unit pickers depend
+7. **Overlay behavior.** Built 2026-09-27, in review ([spec](specs/overlay.md)): a `trigger`
+   on Popover, Menu or Tooltip adds anchoring with flip and shift, dismissal, focus
+   management and the menu button keyboard. Next: submenus, context menus, Select's listbox. Color and unit pickers depend
    on these behaviors. [Radix Primitives](https://www.radix-ui.com/primitives/docs/overview/introduction)
    is a useful reference for composable overlays and keyboard behavior.
 
@@ -111,8 +115,12 @@ built next; this list is an inventory, not an order of work.
   TagPicker, editable text, OTP input, FileUpload/DropZone, Form validation and error
   summary. Reuse Input/Field for search and password anatomy; promote a wrapper when
   behavior such as reveal, clear, filtering or async suggestions is included.
-- **Date and time:** DateField, TimeField, Calendar, DatePicker, DateRangePicker and
-  duration input. Keep segmented date editing distinct from a text field with a mask.
+- **Date and time:** Calendar is built (in review, [spec](specs/calendar.md)): single,
+  range and multiple selection, one or two months, bounds and unavailable dates, square /
+  circle / tile days, event markers and a week strip. Next:
+  DateField (segmented entry), DatePicker and DateRangePicker (field + popover, after overlay
+  behavior), TimeField and duration input. Keep segmented date editing distinct from a text
+  field with a mask.
 - **Navigation and commands:** Link, Breadcrumbs, Pagination, Stepper, Tree,
   ContextMenu, MenuBar and CommandPalette. Add keyboard behaviors to existing Menu
   before multiplying menu-shaped components.
@@ -129,6 +137,21 @@ built next; this list is an inventory, not an order of work.
   integrations, charts, gradient editor, easing/curve editor and shortcut recorder.
   Prefer adapters to mature editing/chart engines over a superficial native reimplementation.
 
+### Gap audit, 2026-09-26
+
+[The audit](research/component-gap-audit.md) compared Area with 13 catalogues (Untitled UI,
+shadcn, React Aria, Radix, Base UI, Fluent 2, Primer, Carbon, Mantine, MUI, Ant Design,
+Chakra/Ark, Spectrum 2) across about 95 component jobs.
+
+- **Missing, shipped by 8 or more systems:** Combobox/Autocomplete (11), Accordion (10),
+  the date family (10; Calendar now built), Link (8), Pagination (8), Drawer/Sheet (8).
+- **Partial:** custom Select (all 13 ship a listbox popup; Area's is native), overlay
+  behavior for Popover, Tooltip, Menu and Dialog (surfaces without anchoring, dismissal or
+  menu keyboard), DataGrid, multi-select/tags, Toast queue, range Slider in Slider's API.
+- **Recommended order** (owner chooses): overlay behavior → custom Select → Combobox with a
+  tag mode → Menu keyboard, submenus, ContextMenu and CommandPalette → ColorPicker paints →
+  Disclosure/Accordion → DatePicker family → Resizable and ScrollArea → Drawer and
+  AlertDialog → chat message primitives → FileUpload → HoverCard and Toggletip.
 ### Product-specific components (ChatGPT, Notion, Figma), 2026-09-26
 
 Components the three target products use that neither the inventory above nor a generic

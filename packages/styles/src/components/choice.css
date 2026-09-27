@@ -1,9 +1,9 @@
-/* Checkbox and Radio retain native inputs and share icon-ramp geometry.
+/* Checkbox and Radio retain native inputs and share one glyph ladder (16 / 16 / 20px).
  * Switch has its own track/thumb construction in switch.css. */
 @layer area.components {
   .area-checkbox,
   .area-radio {
-    --_size: var(--area-icon-md);
+    --_size: var(--area-space-16);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_gap: var(--area-gap-md);
@@ -11,6 +11,27 @@
     align-items: center;
     gap: var(--_gap);
     cursor: pointer;
+  }
+
+  /* Tone: checked paint is neutral unless accent is asked for (DESIGN_SYSTEM.md, "Neutral by
+     default, accent by override"). The label carries the tone; its control consumes it. */
+  .area-checkbox,
+  .area-radio,
+  .area-checkbox--neutral,
+  .area-radio--neutral {
+    --_checked: var(--area-neutral-solid);
+    --_checked-hover: var(--area-neutral-solid-hover);
+    --_on-checked: var(--area-fg-on-neutral);
+    /* Increased contrast strengthens the checked edge toward this color. The neutral fill is
+       already the strongest ink, so it is its own edge. */
+    --_checked-edge: var(--area-neutral-solid);
+  }
+  .area-checkbox--accent,
+  .area-radio--accent {
+    --_checked: var(--area-accent-solid);
+    --_checked-hover: var(--area-accent-solid-hover);
+    --_on-checked: var(--area-fg-on-accent);
+    --_checked-edge: var(--area-stroke-selected);
   }
 
   .area-checkbox[data-disabled],
@@ -28,8 +49,11 @@
     inline-size: var(--_size);
     block-size: var(--_size);
     --_fill: var(--area-bg-surface);
-    --_edge: var(--area-edge-control);
-    --_mark: var(--area-fg-on-accent);
+    /* A 16px glyph needs a firmer edge than a 32px field: Notion's checkbox border is 19% warm
+       black and Untitled's #d4d4d4, where fields sit near #e2. The rest edge is the control
+       hover edge; hover steps to the border hover grey. */
+    --_edge: var(--area-edge-control-hover);
+    --_mark: var(--_on-checked, var(--area-fg-on-neutral));
     border: var(--area-stroke-width) solid var(--_edge);
     background-color: var(--_fill);
     /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
@@ -86,7 +110,7 @@
     border-radius: var(--area-radius-full);
   }
 
-  /* A radio and its label share the same vertical centre in a control row. */
+  /* Centred without text-box support; inset.css aligns the glyph to the first line where it is. */
   .area-radio { align-items: center; }
   .area-radio__control { margin-block-start: 0; }
 
@@ -127,9 +151,9 @@
   .area-checkbox__control:checked,
   .area-checkbox__control:is(:indeterminate, [data-indeterminate]),
   .area-radio__control:checked {
-    --_fill: var(--area-accent-solid);
+    --_fill: var(--_checked, var(--area-neutral-solid));
     /* The selected face reaches the exact same outer box as the empty control. */
-    --_edge: color-mix(in srgb, var(--_fill), var(--area-stroke-selected) calc(var(--area-contrast-more) * 100%));
+    --_edge: color-mix(in srgb, var(--_fill), var(--_checked-edge, var(--area-neutral-solid)) calc(var(--area-contrast-more) * 100%));
   }
 
   .area-checkbox__control:checked::after,
@@ -141,7 +165,7 @@
     --_edge: var(--area-fg-danger-vivid);
   }
 
-  /* A checked invalid option is one error state, not accent selection plus a red edge.
+  /* A checked invalid option is one error state, not selection plus a red edge.
      The error fill, its matching foreground, and the label agree without relying on color
      alone: the native checked mark and invalid ARIA state stay present. */
   .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):is(:checked, :indeterminate, [data-indeterminate]) {
@@ -156,7 +180,7 @@
   .area-checkbox__control:checked:hover:not(:disabled),
   .area-checkbox__control:is(:indeterminate, [data-indeterminate]):hover:not(:disabled),
   .area-radio__control:checked:hover:not(:disabled) {
-    --_fill: var(--area-accent-solid-hover);
+    --_fill: var(--_checked-hover, var(--area-neutral-solid-hover));
   }
 
   .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {
@@ -166,7 +190,7 @@
 
   .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled),
   .area-radio__control:not(:checked):hover:not(:disabled) {
-    --_edge: var(--area-edge-control-hover);
+    --_edge: color-mix(in srgb, var(--area-border-hover), var(--area-stroke-control-hover) calc(var(--area-contrast-more) * 100%));
   }
 
   .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
@@ -235,6 +259,16 @@
 
   .area-radio-group:disabled .area-radio { cursor: not-allowed; opacity: 0.5; }
   .area-radio-group[data-invalid] .area-radio__control:not(:checked) { --_edge: var(--area-fg-danger-vivid); }
+  /* Selected in an invalid group: one error state, as a single invalid Checkbox paints it. */
+  .area-radio-group[data-invalid] .area-radio__control:checked {
+    --_fill: var(--area-danger-solid);
+    --_edge: var(--area-danger-solid);
+    --_mark: var(--area-fg-on-danger);
+  }
+  .area-radio-group[data-invalid] .area-radio__control:checked:hover:not(:disabled) {
+    --_fill: var(--area-danger-solid-hover);
+    --_edge: var(--area-danger-solid-hover);
+  }
 
   .area-checkbox-group__description { color: var(--area-fg-muted); }
   .area-checkbox-group__validation { color: var(--area-fg-danger-vivid); }
@@ -263,6 +297,17 @@
     --_fill: var(--area-danger-surface-hover);
     --_edge: var(--area-danger-border-strong);
   }
+  /* Checked in an invalid group: the single invalid Checkbox's error fill, so the group reads
+     as one error state rather than selection beside red edges. */
+  .area-checkbox-group[data-invalid] .area-checkbox__control:is(:checked, :indeterminate, [data-indeterminate]) {
+    --_fill: var(--area-danger-solid);
+    --_edge: var(--area-danger-solid);
+    --_mark: var(--area-fg-on-danger);
+  }
+  .area-checkbox-group[data-invalid] .area-checkbox__control:is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {
+    --_fill: var(--area-danger-solid-hover);
+    --_edge: var(--area-danger-solid-hover);
+  }
   .area-checkbox-group__validation,
   .area-radio-group__validation { margin-block-start: var(--area-space-12); }
 
@@ -288,27 +333,26 @@
 
   /* --- Sizes -------------------------------------------------------------- */
 
+  /* One glyph ladder for both controls: 16px at sm and md, 20px at lg (Untitled UI's 16 / 20
+     boxes). Checkbox read the icon ramp, which is 16px at every tier, while Radio used 12 / 16 / 20. */
   .area-checkbox--sm, .area-radio--sm {
-    --_size: var(--area-icon-sm);
+    --_size: var(--area-space-16);
     --_text: var(--area-control-sm-text);
     --_leading: var(--area-control-sm-leading);
     --_gap: var(--area-gap-sm);
   }
   .area-checkbox--md, .area-radio--md {
-    --_size: var(--area-icon-md);
+    --_size: var(--area-space-16);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_gap: var(--area-gap-md);
   }
   .area-checkbox--lg, .area-radio--lg {
-    --_size: var(--area-icon-lg);
+    --_size: var(--area-space-20);
     --_text: var(--area-control-lg-text);
     --_leading: var(--area-control-lg-leading);
     --_gap: var(--area-gap-lg);
   }
 
   .area-radio { min-block-size: var(--area-space-24); }
-  .area-radio--sm { --_size: var(--area-space-12); }
-  .area-radio--md { --_size: var(--area-space-16); }
-  .area-radio--lg { --_size: var(--area-space-20); }
 }

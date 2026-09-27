@@ -111,3 +111,4 @@ notification" by default.
 
 - 2026-09-26 · pass 1 after the Dialog type and radius pass: Popover's inset and corner rule,
   40 tall, shared lift, strong title with a muted description.
+- 2026-09-27 · merged the cohesion-audit branch → `neutral` tone restored as the default (muted icon), per the system rule that every family defaults to neutral; info, success, warning and danger colour the icon.

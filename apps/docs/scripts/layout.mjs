@@ -645,6 +645,24 @@ export const DOCS_CSS = `
     line-height: var(--area-ui-leading);
   }
   summary.docs-visual-gallery__section-title { cursor: pointer; padding-block: var(--area-space-8); }
+  /* A family's tiles in named groups (Default, Variants, Tones, Sizes, Layout, Content, States,
+     Behavior), each a heading over its own square-celled grid. */
+  .docs-visual-gallery__groups {
+    display: grid;
+    gap: var(--area-space-24);
+  }
+  .docs-visual-gallery__group {
+    display: grid;
+    gap: var(--area-space-8);
+  }
+  .docs-visual-gallery__group-title {
+    margin: 0;
+    padding-inline: var(--area-space-4);
+    color: var(--area-fg-muted);
+    font-size: var(--area-control-sm-text);
+    line-height: var(--area-control-sm-leading);
+    font-weight: var(--area-weight-regular);
+  }
   .docs-visual-gallery__grid {
     /*
      * One cell, square, and every specimen a whole number of them: 1x1, 2x1 or 2x2. Every

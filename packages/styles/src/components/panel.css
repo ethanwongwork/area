@@ -71,7 +71,7 @@
 
     block-size: var(--_bar);
     padding-inline: var(--_inset);
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-end: var(--area-border-width) solid var(--area-border-divider);
   }
 
   /*
@@ -125,7 +125,7 @@
     margin-inline: calc(var(--_inset) * -1);
     padding-inline: var(--_inset);
     padding-block-end: var(--area-space-12);
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-end: var(--area-border-width) solid var(--area-border-divider);
   }
 
   .area-panel__section:last-child {
@@ -234,6 +234,10 @@
   .area-panel__row-action { grid-column: 3; display: flex; align-items: center; justify-content: center; }
   .area-panel__row:has(> .area-panel__row-label) > :is(.area-panel__row-controls, .area-panel__row-action) { grid-row: 2; }
 
+  /* Every field label in a panel is muted, stacked or beside its control, so the section
+     heading and the values carry the hierarchy. */
+  .area-panel .area-field__label { color: var(--area-fg-muted); }
+
   /* A row whose control needs the whole width: the label sits above it, not beside it. */
   .area-panel__stack {
     display: flex;
@@ -248,7 +252,7 @@
   .area-panel__footer {
     flex-shrink: 0;
     padding: var(--_inset);
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-start: var(--area-border-width) solid var(--area-border-divider);
   }
 
   /*

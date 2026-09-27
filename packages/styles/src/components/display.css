@@ -63,11 +63,13 @@
     --_fg: var(--area-fg-on-inverse);
   }
 
+  /* The ring is neutral unless the avatar asks for accent (DESIGN_SYSTEM.md). */
   .area-avatar--active {
     --_active-ring:
       0 0 0 var(--area-space-2) var(--area-bg-surface),
-      0 0 0 var(--area-space-4) var(--area-accent-solid);
+      0 0 0 var(--area-space-4) var(--_ring, var(--area-neutral-solid));
   }
+  .area-avatar--accent { --_ring: var(--area-accent-solid); }
 
   .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); }
   .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); }
@@ -103,7 +105,7 @@
   .area-separator {
     --_separator-gap: 0px;
     border: 0;
-    background-color: var(--area-border-decorative);
+    background-color: var(--area-border-divider);
     flex-shrink: 0;
   }
 
@@ -186,7 +188,7 @@
     inline-size: var(--_size);
     block-size: var(--_size);
     border-radius: var(--area-radius-full);
-    background: conic-gradient(var(--_indicator) 0 25%, var(--area-bg-component-active) 25% 100%);
+    background: conic-gradient(var(--_indicator) 0 25%, var(--_track, var(--area-bg-component-active)) 25% 100%);
     -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
     mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
     animation: area-spin 2s linear infinite;
@@ -203,6 +205,10 @@
     background: var(--_indicator);
     box-shadow: calc((var(--_size) - var(--_stroke)) / 2) calc((var(--_size) - var(--_stroke)) / 2) 0 var(--_indicator);
   }
+
+  /* Inside a Button the spinner takes the label's ink, so it shows on any fill: a neutral
+     spinner on a neutral solid button was the fill's own colour and disappeared. */
+  .area-button .area-spinner { --_indicator: currentColor; --_track: color-mix(in srgb, currentColor 25%, transparent); }
 
   .area-spinner--sm { --_size: var(--area-space-12); }
   .area-spinner--md { --_size: var(--area-space-16); }
@@ -221,7 +227,8 @@
     inline-size: 100%;
     block-size: var(--_progress-size);
     border-radius: var(--area-radius-full);
-    background-color: var(--area-bg-component-active);
+    /* The rail is Slider's: a fill on a rail is one role, and the two used different greys. */
+    background-color: var(--_progress-track, color-mix(in srgb, var(--area-fill-toggle), var(--area-bg-surface) 20%));
     overflow: hidden;
   }
 
@@ -251,6 +258,18 @@
     from { translate: -100% 0; }
     to { translate: 340% 0; }
   }
+  /* The segment enters from the inline start, so it runs the other way in right-to-left text. */
+  .area-progress[data-indeterminate]:dir(rtl) .area-progress__bar { animation-name: area-progress-indeterminate-rtl; }
+  @keyframes area-progress-indeterminate-rtl {
+    from { translate: 100% 0; }
+    to { translate: -340% 0; }
+  }
+
+  /* The motion axis stops the loops exactly as the reduced-motion preference does (Switch
+     already follows it); the animations are literal durations, so the axis's zeroed tokens
+     alone would not reach them. */
+  [data-area-motion="none"] :is(.area-skeleton, .area-spinner, .area-progress[data-indeterminate] .area-progress__bar) { animation: none; }
+  [data-area-motion="none"] .area-skeleton { background-image: none; }
 
   @media (prefers-reduced-motion: reduce) {
     .area-skeleton,

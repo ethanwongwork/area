@@ -190,6 +190,14 @@ export const SelectDefault = () => (
   </Select>
 );
 
+export const SelectSoft = () => (
+  <Select variant="soft" aria-label="Label" defaultValue="one">
+    <option value="one">Option one</option>
+    <option value="two">Option two</option>
+    <option value="three">Option three</option>
+  </Select>
+);
+
 export const SelectSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-select-inline-size)" }}>
     <Select size="sm" aria-label="Label" defaultValue="sm"><option value="sm">Small</option></Select>

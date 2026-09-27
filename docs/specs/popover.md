@@ -157,3 +157,4 @@ decision.
   from the side; shadcn and Primer sit theirs 8/8 (half their inset) with the title centred on
   it, titles 500 and 600. Pass 3: close 6/6 with its icon on the inset and a concentric radius,
   title centred on it (cap 15), title strong. Verified in the gallery at 1× and 3×, with hover.
+- 2026-09-27 · merged the overlay-behavior branch → a Popover `trigger` now positions with `computePosition` (flip to the side with room, shift inside an 8px viewport margin, re-placed on scroll and resize; `align`, `offset`, controlled `open`) instead of CSS anchor positioning, so the arrow follows the side it lands on → [overlay behavior](overlay.md).

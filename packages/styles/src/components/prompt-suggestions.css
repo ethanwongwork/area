@@ -42,9 +42,10 @@
     transition: var(--area-transition);
   }
   .area-prompt-suggestions__row:not(:has(.area-prompt-suggestions__dismiss)) > .area-prompt-suggestions__item { padding-inline-end: var(--area-space-8); }
-  /* spec: hover and focus wash the row and lift the prompt to the default ink. */
+  /* spec: hover and focus lay Menu's row plate under the prompt; the ink stays fixed, as on
+     every hovered control. */
   .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item,
-  .area-prompt-suggestions__item:focus-visible { background-color: var(--area-bg-hover); color: var(--area-fg-default); }
+  .area-prompt-suggestions__item:focus-visible { background-color: var(--area-bg-component-hover); }
   .area-prompt-suggestions__item:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
   /* The icon sits in a control-sized square 8 in, so its centre lines up with the composer's
    * leading action above (both 24 from the edge). */

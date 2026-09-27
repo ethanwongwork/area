@@ -29,7 +29,7 @@
       outline: var(--area-focus-width) solid Highlight;
       outline-offset: var(--area-focus-offset);
     }
-    .area-segmented__item[data-selected], .area-chip[data-selected] {
+    .area-segmented__item[data-selected], .area-chip[data-selected], .area-button[data-selected] {
       border-color: Highlight;
       background-color: Highlight;
       color: HighlightText;

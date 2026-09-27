@@ -18,6 +18,8 @@ export interface AlignmentPickerProps extends Omit<HTMLAttributes<HTMLDivElement
   onValueChange?: (value: AlignmentPosition, event: ChangeEvent<HTMLInputElement>) => void;
   variant?: VariantProps<typeof MANIFESTS.alignmentPicker>["variant"];
   size?: VariantProps<typeof MANIFESTS.alignmentPicker>["size"];
+  /** Selected paint. Neutral by default; accent is an explicit override. */
+  tone?: VariantProps<typeof MANIFESTS.alignmentPicker>["tone"];
   stretch?: boolean;
   disabled?: boolean;
   required?: boolean;
@@ -25,7 +27,7 @@ export interface AlignmentPickerProps extends Omit<HTMLAttributes<HTMLDivElement
 
 /** A physical 3×3 position choice. Arrow keys wrap within their row or column. */
 export const AlignmentPicker = forwardRef<HTMLDivElement, AlignmentPickerProps>(function AlignmentPicker(
-  { label, name, value, defaultValue = "center", onValueChange, variant, size, stretch, disabled, required, className, onKeyDown, ...rest }, ref,
+  { label, name, value, defaultValue = "center", onValueChange, variant, size, tone, stretch, disabled, required, className, onKeyDown, ...rest }, ref,
 ) {
   const generatedName = useId();
   const root = useRef<HTMLDivElement | null>(null);
@@ -69,7 +71,7 @@ export const AlignmentPicker = forwardRef<HTMLDivElement, AlignmentPickerProps>(
     if (typeof ref === "function") ref(node);
     else if (ref) ref.current = node;
   }} {...rest} role="radiogroup" aria-label={label ?? rest["aria-label"]} dir="ltr"
-    className={alignmentPickerVariants({ variant, size, stretch }, className)} onKeyDown={move}>
+    className={alignmentPickerVariants({ variant, size, tone, stretch }, className)} onKeyDown={move}>
     {ALIGNMENT_POSITIONS.map((position, index) => <label className="area-alignment-picker__cell" key={position}>
       <input ref={node => { inputs.current[index] = node; }} type="radio" name={name ?? generatedName} value={position}
         checked={selected === position} disabled={disabled} required={required} aria-label={position.replace("-", " ")}

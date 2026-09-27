@@ -49,7 +49,9 @@
   /* Explicit for manifest parity; the base class remains the framework-free default. */
   .area-input--outline { --_bg: var(--area-input-bg); }
 
+  /* Soft fields are flat, as Figma's are: the fill is the edge, so no shadow. */
   .area-input--soft {
+    box-shadow: none;
     --_bg: var(--area-input-bg-soft);
     --_border: transparent;
     --_border-hover: var(--area-input-edge);
@@ -128,14 +130,16 @@
     color: var(--area-input-placeholder);
   }
 
-  .area-input[data-disabled] .area-input__control::placeholder { color: var(--area-fg-disabled); }
+  .area-input[data-disabled] .area-input__control::placeholder,
+  .area-input[data-disabled] .area-input__affix { color: var(--area-fg-disabled); }
 
   .area-input__control::file-selector-button {
     margin-inline-end: var(--_gap);
     padding: 0;
     border: 0;
     background: transparent;
-    color: var(--area-fg-accent);
+    /* Neutral by default, like every other action label (DESIGN_SYSTEM.md). */
+    color: var(--area-fg-default);
     font: inherit;
     font-weight: var(--area-weight-strong);
     cursor: pointer;
@@ -201,28 +205,22 @@
     block-size: var(--_icon);
   }
 
-  .area-input__action-tooltip {
+  /* The hint is a Tooltip (area-tooltip supplies its type, inset, radius and lift); this only
+     places it under the action and reveals it. It used to be a second, smaller tooltip style. */
+  .area-input__action > .area-input__action-tooltip {
     position: absolute;
     z-index: 1;
     inset-block-start: calc(100% + var(--area-space-4));
     inset-inline-end: 0;
     inline-size: max-content;
-    max-inline-size: 200px;
-    padding: var(--area-space-6) var(--area-space-8);
-    border-radius: var(--area-radius-small);
-    background-color: var(--area-bg-inverse);
-    color: var(--area-fg-on-inverse);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
-    box-shadow: var(--area-shadow-2);
     opacity: 0;
     pointer-events: none;
     transform: translateY(calc(var(--area-space-2) * -1));
     transition: var(--area-transition);
   }
 
-  .area-input__action:hover .area-input__action-tooltip,
-  .area-input__action:focus-within .area-input__action-tooltip {
+  .area-input__action:hover > .area-input__action-tooltip,
+  .area-input__action:focus-within > .area-input__action-tooltip {
     opacity: 1;
     transform: translateY(0);
   }

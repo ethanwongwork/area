@@ -16,7 +16,8 @@ Area should feel like it belongs in ChatGPT, Notion and Figma: content-first, pr
 quiet, compact but readable. In practice:
 
 - neutral surfaces and ink carry most of the interface;
-- color is sparse and means something (accent for action/selection, tones for status);
+- color is sparse and means something: selection and current state are neutral, accent
+  appears only where the consumer asks for it, and tones carry status;
 - the hierarchy is clear from weight, ink strength and fill, not from decoration;
 - edges are crisp, and radius is consistent within a family;
 - icons sit at the weight of the adjacent text;
@@ -60,6 +61,15 @@ for both sides, and repeat in light and dark.
 - **Paint:** a pale fill can pair with strong ink; avoid washing every layer out with
   opacity. Don't stack fill, border and shadow unless each has a distinct job. Follow
   `docs/CONTRAST.md`.
+- **Shared state paint** (`docs/DESIGN_SYSTEM.md`, "Shared state paint" and "Elevation"):
+  hover plates are `bg-component-hover` and selection `bg-component-active`, one step
+  apart in both themes; disabled controls dim to 50% while text fields use field paint;
+  ink and weight never change on hover or selection; selection markers are neutral ink;
+  everything floating shares one lift. Check the dark theme too: a translucent tint that
+  looks right in light can outshine selection in dark.
+- **Across families, not just within one:** put the component beside every family that
+  paints the same role (a hover row in Menu, Nav, Tree view, Table and Select; a floating
+  surface in Menu, Popover, Dialog and Toast). Most drift is between families.
 - **Edges and shape:** radius follows the shape role. Nested radius is
   `max(0, outer − inset)`. Pills and circles stay full.
 - **Density:** compare at the same UI scale. Don't simulate density by shrinking glyphs

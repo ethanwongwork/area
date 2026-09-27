@@ -110,6 +110,7 @@ export const popoverVariants = /* @__PURE__ */ createVariants(manifests.popover)
 export const tooltipVariants = /* @__PURE__ */ createVariants(manifests.tooltip);
 
 export const colorPickerVariants = /* @__PURE__ */ createVariants(manifests.colorPicker);
+export const calendarVariants = /* @__PURE__ */ createVariants(manifests.calendar);
 
 export const indicatorVariants = /* @__PURE__ */ createVariants(manifests.indicator);
 

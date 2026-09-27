@@ -28,9 +28,10 @@
 Tooltip names or briefly describes a control on hover or focus, optionally with its
 keyboard shortcut. It holds no interactive content (Popover does) and no status (Toast).
 
-The Area component is the visual surface (`role="tooltip"`, sides, arrow). Showing and
-hiding on hover and focus, delay and anchoring are not implemented yet; they belong to the
-overlay behaviour work listed in [Components](../COMPONENTS.md#inspector-foundation-first-priority).
+The Area component is the visual surface (`role="tooltip"`, sides, arrow). With a `trigger`
+it shows on hover after 500ms and at once on keyboard focus, hides on Escape, press, blur or
+pointer leave, stays while hovered, and anchors and flips (2026-09-27; see
+[overlay behavior](overlay.md)).
 
 ## Variants
 
@@ -107,7 +108,7 @@ centred by construction ((28 − 20) / 2 = 4).
 
 ## States
 
-Visible only; the component has no hover, focus or delay behaviour yet (see Job).
+With a trigger: closed, delayed open (500ms), open, closing. See [overlay behavior](overlay.md).
 
 ## Behavior and accessibility
 
@@ -123,10 +124,10 @@ colors and RTL follow the surface rules in `surface.css`.
 
 ## Visual pass
 
-Pass review container (`GalleryReviewTooltip` in `apps/docs/src/demos/gallery.tsx`): radius
-(10px), text sides (10px), wrapped text and shadow, before and after, at 1× and 3×. Gallery
-after: every tile 10px radius on 28px with 10px text sides; the Kbd 6px on 20px, 4px from
-the edge; a two-line tooltip 10px on 48px.
+Pass reviews were removed at the owner's request; the family is inspected in the grouped
+gallery. The earlier before/after review compared radius (10px), text sides (10px), wrapped
+text and shadow at 1× and 3×. Gallery after: every tile 10px radius on 28px with 10px text
+sides; the Kbd 6px on 20px, 4px from the edge; a two-line tooltip 10px on 48px.
 
 ## Verification
 
@@ -149,3 +150,5 @@ the edge; a two-line tooltip 10px on 48px.
   capped at half a line (14px), Kbd a pill by the inset rule, wrapped-text review row →
   6 Area captures re-taken (14px).
 - 2026-09-25 · owner approved Tooltip with 10px text sides → Complete in `component-status.mjs`.
+- 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
+  gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).

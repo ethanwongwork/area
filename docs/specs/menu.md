@@ -126,3 +126,4 @@ SplitButton's menu uses the same handler.
   were plain divs with independent focus stops and 8px insets. Replaced by checkable
   `MenuItem`s (switch or check, row is the control), measured against Notion's toggle rows.
   Mixed controls (segmented choice, buttons) belong in a Popover, not a menu.
+- 2026-09-27 · merged the overlay-behavior branch → with a `trigger`, Menu anchors to it and follows the ARIA menu button pattern (flip and shift, arrows wrap, typeahead, Escape and Tab close); a Menu without one keeps this pass's in-menu keys for its host → [overlay behavior](overlay.md).
