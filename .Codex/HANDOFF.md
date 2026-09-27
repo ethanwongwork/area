@@ -35,7 +35,7 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
   - text 12/16, 14/20, 16/24; titles 20/28, 24/32, 32/40; titles fixed in compact;
   - small controls 12/16;
   - weight 400 everywhere except labels on fills (500).
-- **Icons (branch `icons-system`, PR 3):** 202 icons in seventeen batches; rules in the
+- **Icons (branch `icons-system`, PR 3):** 256 icons in twenty-three batches; rules in the
   `area-icon-construction` skill, record in `docs/specs/icons.md`.
   - Sources: `apps/docs/assets/area-icons-pilot/` (`npm run icons:pilot`, `npm run lint:icons`,
     `--report`, `--audit`). The lint checks the grid, the diagonal lattice, keylines, the
@@ -180,10 +180,15 @@ saved as one JSON download per product (owner-approved) and split with a scratch
 
 ## Next
 
-1. Owner review on `gallery-icons.html` (In review lists what's open): batch 17, and round 3
-   redraws (rocket, paintbrush, bug, puzzle, mic-off, car, calculator, person-add, marks and
-   arrowhead sizes). Exploration is empty. Next batch ideas: cloud-download, calendar-add,
-   folder-add, shuffle, fingerprint, gauge.
+1. Owner review on `gallery-icons.html` (In review lists what's open): batch 23 (call,
+   reply/forward, sync, eraser, text align, indent/outdent, columns/rows, container remove);
+   the negative-space round (graduation cap, bell, bell off, clipboard, car, watch: gaps on
+   the outline's lines); batch 22; keyboard and repeat; batches 18–21.
+   Rules: skill (Shared parts, Families, Filled variants: negative space on the outline's
+   lines, only where fill is on both sides) and the spec's last sections; the lint checks
+   dot sizes, the shared slash on `-off` icons and knockouts that never enter a solid.
+   Next batch ideas: bookmark add, zoom fit, paint bucket, cursor text, reply all,
+   sidebar variants, filter off, sort ascending/descending, list numbered, translate.
    The lint doesn't measure gaps within one path (paperclip's were solved by hand).
    `npm run typecheck` fails while the dev server rebuilds `packages/react/dist` (TS7016 on
    `@area/react`); rerun once the rebuild settles. Review filled variants with

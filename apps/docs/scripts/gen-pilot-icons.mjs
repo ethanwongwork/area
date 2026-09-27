@@ -53,6 +53,9 @@ const COUNTERS = { tight: [1.25, 1.625], standard: [1.75, Infinity] };
 //   wider (stroke pieces), so both keep their gap beside the slash.
 // fill: a solid drawn only in the filled variant. A slashed icon's outline is cut open
 //   round the slash (line pieces); its filled variant is the whole shape, parted by gaps.
+// A mark or arrow over a solid (a container's plus, a cloud's arrow) is a knockout too: in the
+//   filled variant every detail over a solid is negative space. Where it runs out through the
+//   silhouette's edge it leaves a notch; the part beyond the edge is not drawn.
 // Line glyphs (no solid shape) fill by weight: every stroke at FILLED_WEIGHT_RATIO.
 const FILLED_ROLES = ["solid", "knockout", "hole", "cut", "gap", "line", "fill", "stroke"];
 const SOLID_ROLES = ["solid", "fill"];
@@ -283,7 +286,8 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     if (["gap", "fill", "stroke"].includes(a["data-filled"])) {  // filled-only: no outline checks
       if (tag !== "path") fail(name, `a ${a["data-filled"]} is a path`);
       const { stroke, "stroke-width": _w, "stroke-linecap": _c, "stroke-linejoin": _j, "data-filled": filled, ...rest } = a;
-      elements.push({ tag, attrs: rest, stroked: true, samples: [], filled, filledOnly: true });
+      // A fill keeps its samples (for the knockout check); gaps and counters skip filled-only shapes.
+      elements.push({ tag, attrs: rest, stroked: true, samples: filled === "fill" ? parsePath(name, a.d).samples : [], filled, filledOnly: true });
       continue;
     }
     if (stroked) {
@@ -357,6 +361,31 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   if (!elements.length) fail(name, "no shapes found");
   if (elements.some(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)) && !elements.some(el => SOLID_ROLES.includes(el.filled))) fail(name, "cut-outs need at least one solid shape to cut");
   const drawn = elements.filter(el => !el.filledOnly);
+  // A knockout only exists inside its solid. It may run out through the silhouette's edge
+  // (cloud upload's stem, a container's plus), leaving a notch; one that never enters the
+  // solid would vanish from the filled variant entirely.
+  const solids = elements.filter(el => SOLID_ROLES.includes(el.filled));
+  const insideSolid = ([x, y]) => solids.some(el => {
+    if (el.tag === "circle") return Math.hypot(x - Number(el.attrs.cx), y - Number(el.attrs.cy)) <= Number(el.attrs.r) + WEIGHT / 2 + 0.05;
+    if (el.samples.some(([px, py]) => Math.hypot(px - x, py - y) <= WEIGHT / 2 + 0.05)) return true;
+    let inside = false; const pts = el.samples;   // even-odd over the sampled outline
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      const [xi, yi] = pts[i], [xj, yj] = pts[j];
+      if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+    }
+    return inside;
+  });
+  if (strict) for (const el of elements.filter(e => e.filled === "knockout"))
+    if (!el.samples.some(insideSolid)) fail(name, "a knockout lies outside every solid; it would vanish when filled");
+  // Dots come in two sizes (docs/specs/icons.md, "Shared parts"): ⌀2 for a dot that is the
+  // icon or one of its marks, ⌀1.5 for a dot with a stem or a detail set inside a shape.
+  // data-dot="free" records an owner-approved exception (quote's marks, rocket's window).
+  if (strict && root["data-dot"] !== "free") for (const el of elements.filter(e => e.tag === "circle" && !e.stroked))
+    if (!["1", "0.75"].includes(el.attrs.r)) fail(name, `a dot is r 1 (⌀2) or r 0.75 (⌀1.5), not r ${el.attrs.r}`);
+  // Off states share one slash (M2 2L14 14). data-off="own" records an owner-chosen form
+  // (eye-off is a closed eye, volume-off a speaker with a ×, as Fluent's mute).
+  if (strict && name.endsWith("-off") && root["data-off"] !== "own" && !elements.some(el => /M2 2L14 14\b/.test(el.attrs.d ?? "")))
+    fail(name, `an off icon draws the shared slash M2 2L14 14, or declares data-off="own"`);
   const lineGlyphIcon = !elements.some(el => SOLID_ROLES.includes(el.filled));
   for (const el of drawn) if (el.stroked && el.tag === "path" && (lineGlyphIcon || !el.filled)) {
     el.boldD = retractFreeEnds(el.attrs.d, drawn.filter(o => o !== el).flatMap(o => o.samples));
