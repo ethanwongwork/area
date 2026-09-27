@@ -1,10 +1,10 @@
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
-import type { InputHTMLAttributes, PointerEvent as ReactPointerEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
+import type { InputHTMLAttributes, PointerEvent as ReactPointerEvent, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
 import { numberFieldVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { calculateNumber, clampNumber, steppedNumber } from "./number-math.ts";
 import { Glyph } from "./Glyph.tsx";
 
-export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size" | "value" | "defaultValue" | "onChange" | "step" | "min" | "max"> {
+export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size" | "value" | "defaultValue" | "onChange" | "step" | "min" | "max" | "prefix"> {
   value?: number | null;
   defaultValue?: number | null;
   onValueChange?: (value: number | null) => void;
@@ -23,6 +23,12 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
   scrub?: boolean;
   /** Visible handle caption; aria-label still names the numeric input. */
   scrubLabel?: string;
+  /**
+   * A short leading label in the handle slot, such as X, W or a glyph, as Figma's inspector
+   * fields show. With `scrub` it is also the drag handle; it is decorative, so name the input
+   * with aria-label or a Field.
+   */
+  prefix?: ReactNode;
   /** Empty mixed selection; the next step begins at zero or the nearest bound. */
   mixed?: boolean;
   locale?: string;
@@ -35,7 +41,7 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
 /** Text-entry spinbutton with deliberate commit/cancel and bounded arithmetic entry. */
 export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(function NumberField(
   { value, defaultValue = null, onValueChange, onValueCommit, min, max, step = 1,
-    size, variant, fullWidth, unit, steppers, scrub, scrubLabel = "Drag to adjust",
+    size, variant, fullWidth, unit, steppers, scrub, scrubLabel = "Drag to adjust", prefix,
     mixed, locale, fractionDigits, validationStatus, "data-validation-status": fieldValidationStatus,
     disabled, readOnly, required, name, id,
     className, onKeyDown, onBlur, onFocus, onPointerDown, onPointerMove, onPointerUp,
@@ -146,9 +152,10 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     data-success={resolvedValidation === "success" ? "" : undefined}
     data-warning={resolvedValidation === "warning" ? "" : undefined}
     data-scrubbing={hasScrubbed ? "" : undefined}>
-    {scrub && <span className="area-number-field__scrub" aria-hidden="true" title={scrubLabel}
-      onPointerDown={startScrub} onPointerMove={moveScrub} onPointerUp={endScrub} onPointerCancel={cancelScrub}>
-      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3v10M8 3v10M11 3v10" stroke="currentColor" strokeLinecap="round" /></svg>
+    {(scrub || prefix != null) && <span className="area-number-field__scrub" aria-hidden="true" title={scrub ? scrubLabel : undefined}
+      data-static={scrub ? undefined : ""}
+      {...(scrub ? { onPointerDown: startScrub, onPointerMove: moveScrub, onPointerUp: endScrub, onPointerCancel: cancelScrub } : {})}>
+      {prefix ?? <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3v10M8 3v10M11 3v10" stroke="currentColor" strokeLinecap="round" /></svg>}
     </span>}
     <input {...rest} ref={node => { inputRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }} id={inputId} type="text" inputMode="decimal"
       role="spinbutton" className="area-number-field__control" value={display}

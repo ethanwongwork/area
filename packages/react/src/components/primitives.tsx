@@ -2,6 +2,9 @@ import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Select } from "./forms.tsx";
+import { AnchoredMenu, AnchoredPopover, AnchoredTooltip } from "./Overlays.tsx";
+import { assignRef } from "./overlay.ts";
+import type { OverlayAlign, OverlaySide } from "./overlay.ts";
 /**
  * The presentational components.
  *
@@ -17,6 +20,7 @@ import type {
   InputHTMLAttributes,
   MouseEvent,
   ReactNode,
+  Ref,
 } from "react";
 import {
   alertVariants,
@@ -195,15 +199,32 @@ const AlertDismissIcon = () => (
 
 export interface CardProps extends Div {
   layout?: VariantProps<typeof MANIFESTS.card>["layout"];
+  /** Shape and type: corner, inset and title role. */
+  size?: VariantProps<typeof MANIFESTS.card>["size"];
 }
 
 const cardVariants = createVariants(MANIFESTS.card);
-export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, className, ...rest }, ref) {
-  return <div ref={ref} className={cardVariants({ layout }, className)} {...rest} />;
+export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, size, className, ...rest }, ref) {
+  return <div ref={ref} className={cardVariants({ layout, size }, className)} {...rest} />;
 });
 
 export const CardContent = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardContent({ className, ...rest }, ref) {
   return <div ref={ref} className={cx("area-card__content", className)} {...rest} />;
+});
+
+export interface CardHeaderProps extends Div {
+  /** A Badge or an icon Button, centred on the title's first line. */
+  action?: ReactNode;
+}
+
+/** A title row: the title (and description) beside a trailing action. */
+export const CardHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, CardHeaderProps>(function CardHeader({ action, className, children, ...rest }, ref) {
+  return (
+    <div ref={ref} className={cx("area-card__header", className)} {...rest}>
+      <div className="area-card__heading">{children}</div>
+      {action ? <div className="area-card__header-action">{action}</div> : null}
+    </div>
+  );
 });
 
 export const CardTitle = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardTitle({ className, ...rest }, ref) {
@@ -217,8 +238,50 @@ export const CardDescription = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(f
   return <div ref={ref} className={cx("area-card__description", className)} {...rest} />;
 });
 
-export const CardMedia = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardMedia({ className, ...rest }, ref) {
-  return <div ref={ref} className={cx("area-card__media", className)} {...rest} />;
+/** A figure a widget leads with, such as a temperature, price or count. */
+export const CardValue = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardValue({ className, ...rest }, ref) {
+  return <div ref={ref} className={cx("area-card__value", className)} {...rest} />;
+});
+
+export interface CardMediaProps extends Div {
+  /** A recessed surface that holds a composition rather than a picture. */
+  well?: boolean;
+  /** Flush with the card's edge on the sides it touches, instead of inset. */
+  bleed?: boolean;
+}
+
+export const CardMedia = /* @__PURE__ */ forwardRef<HTMLDivElement, CardMediaProps>(function CardMedia({ well, bleed, className, ...rest }, ref) {
+  return <div ref={ref} className={cx("area-card__media", well && "area-card__media--well", bleed && "area-card__media--bleed", className)} {...rest} />;
+});
+
+export interface CardOverlayProps extends Div {
+  /** The corner it pins to, inside CardMedia or on the card itself. */
+  placement?: "top-start" | "top-end" | "bottom-start" | "bottom-end";
+  /** Hidden until the card is hovered or holds focus; always shown on touch screens. */
+  reveal?: boolean;
+}
+
+export const CardOverlay = /* @__PURE__ */ forwardRef<HTMLDivElement, CardOverlayProps>(function CardOverlay(
+  { placement = "top-end", reveal, className, ...rest },
+  ref,
+) {
+  return <div ref={ref} className={cx("area-card__overlay", `area-card__overlay--${placement}`, reveal && "area-card__overlay--reveal", className)} {...rest} />;
+});
+
+/**
+ * Makes the whole card one link: put it inside CardTitle. Its hit area covers the card, and
+ * Buttons elsewhere in the card stay separate targets above it.
+ */
+export const CardLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>(function CardLink(
+  { className, ...rest },
+  ref,
+) {
+  return <a ref={ref} className={cx("area-card__link", className)} {...rest} />;
+});
+
+/** A short list of points; lead each item with a 16px icon. */
+export const CardList = /* @__PURE__ */ forwardRef<HTMLUListElement, HTMLAttributes<HTMLUListElement>>(function CardList({ className, ...rest }, ref) {
+  return <ul ref={ref} className={cx("area-card__list", className)} {...rest} />;
 });
 
 export const CardAction = /* @__PURE__ */ forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>(function CardAction(
@@ -226,6 +289,11 @@ export const CardAction = /* @__PURE__ */ forwardRef<HTMLAnchorElement, AnchorHT
   ref,
 ) {
   return <a ref={ref} className={cx("area-card__action", className)} {...rest} />;
+});
+
+/** A row of items that scrolls sideways with scroll snap; each child is an `<li>`. Name it with `aria-label`. */
+export const CardCarousel = /* @__PURE__ */ forwardRef<HTMLUListElement, HTMLAttributes<HTMLUListElement>>(function CardCarousel({ className, tabIndex = 0, ...rest }, ref) {
+  return <ul ref={ref} tabIndex={tabIndex} className={cx("area-card__carousel", className)} {...rest} />;
 });
 
 export const CardFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardFooter({ className, ...rest }, ref) {
@@ -557,6 +625,8 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
   /** Interaction role: assist action, selectable filter, removable input, or suggestion. */
   kind?: VariantProps<typeof MANIFESTS.chip>["kind"];
   size?: VariantProps<typeof MANIFESTS.chip>["size"];
+  /** Selected paint. Neutral by default; accent is an explicit override. */
+  tone?: VariantProps<typeof MANIFESTS.chip>["tone"];
   pill?: boolean;
   /** A colour this chip stands for, shown as a dot before the label. */
   swatch?: string;
@@ -587,14 +657,14 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
 }
 
 export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(function Chip(
-  { kind = "filter", size, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onRemove, clickable, removeIcon, removeLabel = "Remove chip", invalid, swatchOnly, className, children, disabled, ...rest },
+  { kind = "filter", size, tone, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onRemove, clickable, removeIcon, removeLabel = "Remove chip", invalid, swatchOnly, className, children, disabled, ...rest },
   ref,
 ) {
   const [localSelected, setLocalSelected] = useState(defaultSelected);
   const currentSelected = selected ?? localSelected;
   const selectable = kind === "filter";
   const primaryInteractive = selectable || clickable || Boolean(onClick);
-  const classes = chipVariants({ kind, size, pill, swatchOnly }, className);
+  const classes = chipVariants({ kind, size, tone, pill, swatchOnly }, className);
   const state = {
     ...(selectable && currentSelected ? { "data-selected": "" } : {}),
     ...(disabled ? { "data-disabled": "" } : {}),
@@ -724,28 +794,56 @@ export interface TooltipProps extends Div {
   side?: VariantProps<typeof MANIFESTS.tooltip>["side"];
   /** Draws a subtly rounded pointer toward the trigger. Omitted by default. */
   arrow?: boolean;
+  /**
+   * The control it names. With a trigger, the tooltip shows after a delay on hover and at
+   * once on keyboard focus, hides on Escape, blur or pointer leave, and describes the trigger.
+   */
+  trigger?: ReactNode;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  align?: OverlayAlign;
+  offset?: number;
+  /** Hover delay before showing, in milliseconds. */
+  delay?: number;
 }
 
 export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(function Tooltip(
-  { side, arrow, className, ...rest },
+  { side, arrow, trigger, open, defaultOpen, onOpenChange, align, offset, delay, className, ...rest },
   ref,
 ) {
-  return <div ref={ref} role="tooltip" className={tooltipVariants({ side, arrow }, className)} {...rest} />;
+  const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => (
+    <div role="tooltip" className={tooltipVariants({ side, arrow }, className)} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />
+  );
+  if (trigger === undefined) return surface({});
+  return <AnchoredTooltip trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} arrow={arrow} delay={delay} surface={surface} />;
 });
 
 export interface PopoverProps extends Div {
   side?: VariantProps<typeof MANIFESTS.popover>["side"];
-  /** Draw a conventional diamond tip toward the anchored element. */
+  /** Draw a curved shoulder pointing at the anchored element. */
   arrow?: boolean;
+  /**
+   * The element that opens it. With a trigger, the popover anchors to it, flips when the
+   * preferred side lacks room, takes focus on open, and closes on Escape or an outside press.
+   */
+  trigger?: ReactNode;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  align?: OverlayAlign;
+  offset?: number;
 }
-export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(function Popover({ side, arrow, className, children, ...rest }, ref) {
-  return <div ref={ref} className={popoverVariants({ side, arrow }, className)} {...rest}>
+export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(function Popover({ side, arrow, trigger, open, defaultOpen, onOpenChange, align, offset, className, children, ...rest }, ref) {
+  const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => <div className={popoverVariants({ side, arrow }, className)} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }}>
     {children}
     {arrow ? <svg className="area-popover__arrow" viewBox="0 0 32 14" aria-hidden="true" focusable="false">
       <path d="M0 -1H32V0C24 0 23 3 20 9Q16 17 12 9C9 3 8 0 0 0Z" />
       <path className="area-popover__arrow-edge" d="M0 0C8 0 9 3 12 9Q16 17 20 9C23 3 24 0 32 0" />
     </svg> : null}
   </div>;
+  if (trigger === undefined) return surface({});
+  return <AnchoredPopover trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} arrow={arrow} surface={surface} />;
 });
 export const PopoverHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverHeader({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__header", className)} {...rest} />; });
 export const PopoverTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(function PopoverTitle({ className, ...rest }, ref) { return <h2 ref={ref} className={cx("area-popover__title", className)} {...rest} />; });
@@ -754,9 +852,25 @@ export const PopoverBody = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(funct
 export const PopoverFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverFooter({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__footer", className)} {...rest} />; });
 export const PopoverMedia = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverMedia({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__media", className)} {...rest} />; });
 
-export type MenuProps = Div;
-export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(function Menu({ className, ...rest }, ref) {
-  return <div ref={ref} role="menu" className={menuVariants({}, className)} {...rest} />;
+export interface MenuProps extends Div {
+  /**
+   * The button that opens it. With a trigger, the menu anchors to it and follows the ARIA
+   * menu button pattern: Enter, Space or ArrowDown open it on the first item and ArrowUp on
+   * the last; arrows, Home, End and typing move between items; choosing an item, Escape or
+   * Tab closes it.
+   */
+  trigger?: ReactNode;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  side?: OverlaySide;
+  align?: OverlayAlign;
+  offset?: number;
+}
+export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(function Menu({ trigger, open, defaultOpen, onOpenChange, side, align, offset, className, ...rest }, ref) {
+  const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => <div role="menu" className={menuVariants({}, className)} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />;
+  if (trigger === undefined) return surface({});
+  return <AnchoredMenu trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} surface={surface} />;
 });
 
 /** A non-interactive heading that names the following group of menu items. */
@@ -810,7 +924,7 @@ export interface ToastProps extends Omit<Div, "title"> {
 }
 
 export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(function Toast(
-  { tone = "info", icon, title, action, onDismiss, dismissLabel = "Dismiss notification", className, children, ...rest },
+  { tone = "neutral", icon, title, action, onDismiss, dismissLabel = "Dismiss notification", className, children, ...rest },
   ref,
 ) {
   return (
@@ -937,13 +1051,13 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
       {title || description || showCloseButton ? (
         <div className="area-dialog__header">
           <div className="area-dialog__heading">
-            {title ? <div className="area-dialog__title" id={`${id}-title`}>{title}</div> : null}
+            {title ? <h2 className="area-dialog__title" id={`${id}-title`}>{title}</h2> : null}
             {description ? <div className="area-dialog__description" id={`${id}-description`}>{description}</div> : null}
           </div>
           {showCloseButton ? <button type="button" className="area-dialog__close" aria-label="Close dialog" onClick={event => {
             onClose?.();
             event.currentTarget.closest("dialog")?.close();
-          }}><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 3.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg></button> : null}
+          }}><AlertDismissIcon /></button> : null}
         </div>
       ) : null}
       {children ? <div className="area-dialog__body">{children}</div> : null}
@@ -1406,9 +1520,11 @@ export const Kbd = /* @__PURE__ */ forwardRef<HTMLElement, KbdProps>(function Kb
     <span
       ref={ref}
       className={cx("area-kbd", `area-kbd--${size}`, `area-kbd--${resolvedAppearance}`, className)}
-      aria-label={spoken}
       {...rest}
     >
+      {/* A span has no role, so an aria-label on it is not reliably announced; the spoken chord
+          is visually hidden text instead, and the glyphs are hidden from assistive technology. */}
+      <span className="area-sr-only">{spoken}</span>
       {rendered.map((glyph, i) => (
         <kbd key={i} className="area-kbd__key" aria-hidden="true">
           {glyph}

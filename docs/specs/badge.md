@@ -74,7 +74,7 @@ code (Code). BadgeGroup lays badges out; it adds no badge paint.
 | treatment | modern | Neutral surface, subtle shadow, colored addon | Untitled badge-modern |
 | tone | neutral, accent, info, success, warning, caution, danger, discovery, inverted | Semantic paint | Notion's tag palette (purple, blue, yellow, green, brown, red); Untitled's twelve colors |
 | size | sm 16, md 20 (default), lg 24 | Owner (2026-09-25) | Kbd 16/20; Indicator count 16; Notion 20; ChatGPT 16 and 22; Figma 16 and 18; Untitled 22/24/28 |
-| composition | dot | Status with a colored dot | Notion status property (every status tag); Untitled with-dot |
+| composition | dot, dot only | Status with a colored dot; a dot with no label | Notion status property (every status tag); Untitled with-dot; gallery "Dot only" |
 | composition | leading/trailing icon, icon-only | Glyph plus label | Untitled with-icon; none of the target products showed one |
 | composition | avatar, flag | Person or locale | Untitled with-avatar/flag; none of the target products showed one |
 | composition | dismiss | Removable label | Untitled with-close; none of the target products showed one on a badge |
@@ -108,6 +108,12 @@ Capture conditions: light theme only (switching product themes needs the owner).
 ran at 90% browser zoom (device pixel ratio 1.8); the other products at 100%. Computed
 CSS lengths do not depend on zoom. The `zoom` field in product captures is unreliable in
 the extension (outer/inner width of a docked window); dpr is the reliable indicator.
+
+Second pass, 2026-09-26 (same "tasks" board and "returns" table, light): `notion--status-dot`
+here, and `../chip/notion--board-tag` and `../chip/notion--select-tag`, re-measure the three
+Notion forms with identical values: all 20px tall; board tag radius 4, padding 0 6, 14px 500;
+select tag radius 4, padding 0 6, 14px 400; status tag radius 10 (pill), padding 0 9 0 7,
+14px 400, an 8px dot with 5px to the label; tints 0.14–0.28 alpha. Nothing in Decisions changes.
 
 ## Anatomy
 
@@ -505,10 +511,9 @@ Notion 20, Figma 16 and 18). Area's 16 / 20 / 24 spans that range; the default s
 
 ## Visual pass
 
-The gallery's Badge section opens with a Pass review container (`GalleryReviewBadge`
-in `apps/docs/src/demos/badge.tsx`): each change isolated in its own row, before and
-after, at 1× and at 3×. "Before" rebuilds the pass-1 values on the current component
-through its private properties, so both columns run the same code.
+Pass reviews were removed at the owner's request; Badge is inspected in the grouped
+gallery, one variant per tile (the "Dot only" tile was added in the third pass). The
+2026-09-25 findings below came from the before/after review of that pass.
 
 - Neutral soft and outline badges on `fg-muted` read as metadata beside body text, the
   way ChatGPT's "Paid" and Figma's "AI" do; toned badges are unchanged, so tone now
@@ -548,3 +553,8 @@ through its private properties, so both columns run the same code.
   a Pass review row showing it in a sentence → 80 captures re-taken, validator (now also
   checking the label fills the content box) 0 failing.
 - 2026-09-25 · owner accepted Badge → Complete in `component-status.mjs`.
+- 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → evidence added,
+  no change: the re-captured board, select and status tags match the 2026-09-25 values →
+  `badge/notion--status-dot`, `chip/notion--board-tag`, `chip/notion--select-tag`.
+- 2026-09-27 · third pass → "Dot only" tile added; Pass review note replaced by the grouped
+  gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).

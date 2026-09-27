@@ -24,11 +24,13 @@
     --_leading: var(--_group-leading);
     --_gap: var(--_group-gap);
     --_radius: var(--_group-radius);
-    --_bg: var(--_group-bg);
     --_border: var(--_group-edge);
     position: relative;
     box-shadow: none;
   }
+  /* The group fill is the rest fill only: a pressed toggle keeps Button's selected fill,
+     which a same-specificity group rule loaded later used to overwrite. */
+  .area-button-group > .area-button:not([data-selected]) { --_bg: var(--_group-bg); }
   .area-button-group > .area-button:not(:first-child) {
     border-start-start-radius: 0;
     border-end-start-radius: 0;
@@ -39,9 +41,10 @@
     content: "";
     position: absolute;
     inset-inline-start: 0;
-    inset-block: var(--area-space-8);
+    /* spec: the seam runs the full height, as Notion's split button and Figma's align group do. */
+    inset-block: 0;
     inline-size: var(--area-border-width);
-    background: var(--area-border-decorative);
+    background: var(--area-border-divider);
   }
   .area-button-group > .area-button:is(:focus-visible, [data-selected]) { z-index: 1; }
 }

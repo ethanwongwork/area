@@ -217,7 +217,12 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     },
   };
 
-  const background = parseHex(PAGE_BACKGROUND[theme]);
+  // Neutral tints (hover, pressed) must composite to their opaque twin over the page the
+  // product actually renders, which in dark mode is the neutral's own page rung (900), not
+  // black: solved against black, a 20% white hover painted brighter than the selected fill on
+  // every dark surface. Chromatic alphas have no consumer and keep the pure-black reference.
+  const pageRung = spec.kind === "neutral" && theme === "dark" ? steps.find((x) => x.level === 900)?.hex : undefined;
+  const background = parseHex(pageRung ?? PAGE_BACKGROUND[theme]);
   const alphas = steps.map((s) => {
     const solution: AlphaSolution = solveAlpha(parseHex(s.hex), background);
     return {

@@ -33,6 +33,8 @@ export {
   type NavItemProps,
 } from "./components/Nav.tsx";
 export * from "./components/primitives.tsx";
+export { computePosition } from "./components/overlay.ts";
+export type { OverlayAlign, OverlaySide, Position, PositionOptions } from "./components/overlay.ts";
 export * from "./components/forms.tsx";
 export * from "./variants.ts";
 
@@ -42,6 +44,8 @@ export { Badge, type BadgeProps } from "./components/Badge.tsx";
 export { BadgeGroup, type BadgeGroupProps } from "./components/BadgeGroup.tsx";
 export { Indicator, IndicatorAnchor, type IndicatorProps, type IndicatorAnchorProps } from "./components/Indicator.tsx";
 
-export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps } from "./components/ColorPicker.tsx";
+export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps, type ColorModel, type ColorView } from "./components/ColorPicker.tsx";
+export { AREA_COLOR_GRID } from "./components/color-grid.ts";
+export { Calendar, type CalendarProps, type CalendarRange } from "./components/Calendar.tsx";
 
 export { Presence, type PresenceProps } from "./components/Presence.tsx";

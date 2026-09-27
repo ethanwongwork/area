@@ -1,0 +1,142 @@
+# Radio spec
+
+**Status:** in review · 2026-09-26 (cohesion audit, second pass)
+**Captures:** `docs/research/captures/radio/`; glyph-edge evidence in
+`checkbox/notion--checkbox--rest--light`, `checkbox/figma--checkbox-checked--rest--light`
+**Peers:** Checkbox (shared stylesheet, glyph ladder and paint), Segmented (short exclusive
+sets), ColorSwatchPicker and AlignmentPicker (radio-semantics pickers), Switch
+
+## Owner decisions
+
+- 2026-09-26: **Neutral by default, accent by override** (DESIGN_SYSTEM.md, "Color and
+  focus"). The checked face is `neutral-solid` with an `fg-on-neutral` dot; `tone="accent"`
+  opts into the accent. Recorded with the Alignment
+  picker's decisions ([alignment-picker.md](alignment-picker.md)) ("Checkbox, Radio and Chip moved the same way … all four await owner review").
+- 2026-09-26 (second pass, owner: decide every open item): choice glyphs take the control
+  hover edge at rest (#d4d4d4), with Notion and Untitled
+  ([cohesion audit](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions)).
+
+## Job and boundaries
+
+Radio picks one option from a mutually exclusive set, inside RadioGroup (a native
+`fieldset`). A short set of view modes belongs in Segmented; independent options in
+Checkbox.
+
+## Variants
+
+| Axis | Value | Justification | Where it appears |
+|---|---|---|---|
+| size | sm, md (default), lg | Label type follows the tier | Untitled sm 16 / md 20 |
+| tone | neutral (default), accent | Owner rule, 2026-09-26 | Untitled brand |
+| state | checked, disabled; group invalid | Native states; RadioGroup `error` | Untitled: checked, disabled |
+| layout (group) | vertical (default), horizontal | Settings stacks vs inline choices | Untitled group gap 16 |
+| composition | description | Option caption | Untitled label + hint |
+
+## Sources
+
+| Id | Type | What | Link / commit / path | License | Captures |
+|---|---|---|---|---|---|
+| notion | target product | No radio; the table-view checkbox is the nearest glyph (edge evidence) | app.notion.com, returns table view, 2026-09-26 | evidence only | `checkbox/notion--checkbox--rest--light` |
+| figma | target product | No radio; the inspector checkbox is the nearest glyph | figma.com editor inspector, 2026-09-26 | evidence only | `checkbox/figma--checkbox-checked--rest--light` |
+| uui | design system (source) | Radio buttons | `components/base/radio-buttons/radio-buttons.tsx:30-118` at `4702dc0` ([reference](../research/untitled-ui-reference.md)) | MIT | source reading only |
+| area | this system | 10 gallery tiles (re-captured after the second pass) | localhost gallery | — | `area--*` (10) |
+
+Target products searched without an equivalent: ChatGPT (sidebar, profile menu, model
+picker, settings card); Notion (page menu, Share popover and its permission select, tasks
+board, returns table view); Figma (file browser, editor inspector, layers, main menu). Each
+exclusive choice there is a select, a segmented control or a menu, not a radio.
+
+## Anatomy
+
+Shared with Checkbox (choice.css). Differences:
+
+```
+control  input.area-radio__control  radius-full (choice.css:108-110)
+  ::after  dot, inset 30% of the padding box, radius-full (choice.css:145-148)
+```
+
+The label's first line centres on the glyph through inset.css:185-195, which overrides
+choice.css:113 (`align-items: center`) wherever `text-box` is supported.
+
+## Measurements
+
+Read from the nodes of `area--*` (after the second pass) and the product checkbox files:
+
+| Node · property | Area sm | Area md | Area lg | Notion checkbox | Figma checkbox |
+|---|---|---|---|---|---|
+| control box | 16 × 16 | 16 × 16 | 20 × 20 | 16 × 16 | 16 × 16 |
+| rest edge | 1px rgb(212) | same | same | 1 device px, 19% warm black (≈ rgb(212, 211, 207), arithmetic) | 1px 20% black |
+| dot (checked) | 5.6 | 5.6 | 7.2 | — | — |
+| label type / cap top | 12/16 / 3.74 | 14/20 / 3.02 | 14/20 / 5.02 | — | 11/16 450 |
+| checked fill / dot | rgb(40) / rgb(250) | | | | |
+| accent fill / dot | rgb(92, 93, 254) / #fff | | | | |
+| invalid edge | rgb(207, 3, 60) | | | | |
+| group | legend 14/20; options 12px below; 8px between 24px rows; horizontal columns 16 | | | | |
+
+Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone-accent`,
+`area--invalid`, `area--horizontal`, `area--description`, `area--default`.
+
+## Decisions
+
+| Slot · property | Area value | Basis | Reason when it differs from the basis |
+|---|---|---|---|
+| control · size | **16 / 16 / 20** (choice.css:315-330) | Untitled 16 / 20; audit rule "one glyph ladder"; the products' glyphs are 16 | Was 12 / 16 / 20 |
+| rest edge | **`edge-control-hover` #d4d4d4** (choice.css:55) | Notion's glyph edge ≈ #d4; Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2 |
+| dot | 30% inset: 5.6 at 16, 7.2 at 20 | Untitled 6 / 8 | Proportional to the box rather than two literals; within 0.8px |
+| checked | `neutral-solid`, dot `fg-on-neutral` | Owner 2026-09-26 | Untitled brand-600 |
+| shadow, focus, hover | as Checkbox | Peer consistency | — |
+| group spacing | options `space-12` below the legend, `space-8` between rows, horizontal `space-16` columns (choice.css:243-256) | Untitled horizontal gap 16 | Vertical rows keep Checkbox's 8 |
+| disabled | 50% on the label; group `:disabled` the same (choice.css:37-41, 259) | Audit rule; Untitled 50% | Same element, so not doubled |
+
+## States
+
+| State | Changes | Evidence |
+|---|---|---|
+| hover, unchecked | edge → `border-hover` #b4b4b4 (choice.css:190-193) | not captured |
+| hover, checked | fill → `neutral-solid-hover` | not captured |
+| focus-visible | 2px focus outline, 2px offset (choice.css:200-204) | not captured |
+| checked | fill `neutral-solid`, dot scales 0 → 1 | `area--selected` |
+| group invalid | unchecked edges `fg-danger-vivid`; the checked option `danger-solid` with `fg-on-danger` dot; message in danger ink | `area--invalid` |
+| disabled | 50% | `area--disabled` |
+
+## Behavior and accessibility
+
+Native `input type="radio"`; RadioGroup shares `name`, controlled/uncontrolled `value` and
+`disabled` through context (forms.tsx:232-266); arrow keys are the browser's. Group
+description and error are wired through `aria-describedby`; `aria-invalid` on the fieldset.
+No forced-colors rule in choice.css (unverified).
+
+## Peers and consistency
+
+| Peer | Shared role | Area value in peer | Radio | Match / reason |
+|---|---|---|---|---|
+| Checkbox | glyph ladder, rest edge | 16 / 16 / 20, #d4d4d4 | same | match (shared choice.css) |
+| Checkbox, Switch | checked paint | `neutral-solid` | same | match (owner rule) |
+| Checkbox, Switch, Button | disabled | 50% | same | match |
+| ColorSwatchPicker, AlignmentPicker | selected marker | neutral by default, accent by tone | same | match |
+
+## Visual pass
+
+The gallery groups the tiles (Default, Tones, Sizes, Layout
+with the horizontal group, Content with the description, States with validation and
+disabled). The validation, description and horizontal tiles were added in the second
+pass. No product radio exists to compare against. Unverified: dark theme, hover and focus
+on screen.
+
+## Verification
+
+10 Area captures after the second pass read (edges rgb(212) at rest). Build and test
+results are in the [cohesion audit](../research/cohesion-audit.md#verification).
+
+## Feedback log
+
+- 2026-09-26 · neutral-by-default sweep → `tone` axis, neutral checked face →
+  `area--tone-accent`, `area--selected`.
+- 2026-09-26 · cohesion audit → sm glyph 12 → 16 (ladder 16 / 16 / 20, shared with
+  Checkbox) → `area--size-small` (16 × 16).
+- 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → rest edge
+  #e2e2e2 → #d4d4d4 and hover #b4b4b4 (shared with Checkbox); invalid, description and
+  horizontal tiles added; no product radio found → `checkbox/notion--checkbox--rest--light`,
+  `checkbox/figma--checkbox-checked--rest--light`, `area--size-medium`, `area--invalid`,
+  `area--horizontal`, `area--description`.
+- 2026-09-27 · owner flagged the invalid group → a checked option in an invalid group takes the danger fill, as a single invalid Checkbox does (`choice.css`); the group now reads as one error state → headless Chromium.

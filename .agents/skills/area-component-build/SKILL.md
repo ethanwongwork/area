@@ -13,7 +13,9 @@ overrides both.
 
 1. Read the component's spec (`docs/specs/<slug>.md`). If there is none, copy
    `docs/specs/TEMPLATE.md` and move the component's section out of
-   `docs/specs/PRIOR_DECISIONS.md` into its Owner decisions.
+   `docs/specs/PRIOR_DECISIONS.md` into its Owner decisions. For a family accepted before
+   the evidence process, follow "Auditing a component built before this process" in
+   `docs/COMPONENT_ADAPTATION.md`: capture every tile before changing anything.
 2. Read the current CSS (`packages/styles/src/components/`), React
    (`packages/react/src/components/`), manifest entry and gallery demos, so you know what
    exists and which peers share its roles.
@@ -34,6 +36,10 @@ overrides both.
   before switching a product's theme.
 - Return `JSON.stringify(cap)` as a string (browser tools re-sort returned objects) and
   save it verbatim to `docs/research/captures/<slug>/<source>--<variant>--<state>--<theme>.json`.
+  For many captures, collect them in a page variable and move them out through the
+  clipboard or the local relay described under "Browser tools" in the process doc. If the
+  window is hidden (`document.visibilityState === 'hidden'`), ask the owner to bring it
+  forward rather than working around it.
   The comparison script rejects the file if its checksum doesn't match. Check it for
   personal content first (redaction is on by default off localhost).
 - Read the source at a pinned commit for structure, variant API, state mapping and
@@ -58,6 +64,9 @@ overrides both.
   semantic role that matches side by side, otherwise `light-dark(…) /* spec */`.
 - Variants set local properties; the base rule consumes them. Keep axes independent.
 - Keep native props, refs, keyboard behavior, focus and accessible names working.
+- Paint shared roles the shared way (row plates, disabled, fixed foreground, neutral
+  markers, the floating lift): `docs/DESIGN_SYSTEM.md`, "Shared state paint". The styles
+  build rejects a `var(--area-*)` that names no token.
 - Update CSS, manifest, React, demos (one variant per gallery tile) and the docs page
   together.
 
@@ -67,7 +76,10 @@ overrides both.
    the comparison with the references. Fix or explain every difference.
 2. Run the checks in `docs/DEVELOPMENT.md` for the change.
 3. Do the visual pass with the `area-visual-language` skill.
-4. Update the family's `GalleryReview<Name>` demo (Pass review container above the
+4. Make sure every manifest value has a gallery tile, named by category (`size-sm`,
+   `tone-accent`, `state-disabled`) so the gallery groups it. A temporary
+   `GalleryReview<Name>` Pass review (removed once the owner has seen it) is only for subtle
+   side-by-sides (Pass review container above the
    variant tiles): each change in its own row, before and after, at 1× and 3×.
 5. Report to the owner: gallery links, the comparison table, visual-pass observations,
    open questions, and anything unverified. Status stays In review until the owner

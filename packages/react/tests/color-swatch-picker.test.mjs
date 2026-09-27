@@ -19,5 +19,5 @@ test("ColorSwatchPicker renders labeled native choices and a selected form value
   assert.equal((html.match(/name="fill"/g) ?? []).length, 3);
   assert.match(html, /<input[^>]*required=""[^>]*aria-label="Teal"[^>]*checked="" value="#317C6B"/);
   assert.match(html, /<input[^>]*disabled=""[^>]*aria-label="Ochre"/);
-  assert.deepEqual(MANIFESTS.colorSwatchPicker.variants, { size: ["sm", "md", "lg"], layout: ["grid", "row"] });
+  assert.deepEqual(MANIFESTS.colorSwatchPicker.variants, { size: ["sm", "md", "lg"], layout: ["grid", "row", "palette"] });
 });

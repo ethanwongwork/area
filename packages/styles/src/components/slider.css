@@ -138,9 +138,11 @@
 
   /* A collapsed range has one value and therefore one visible indicator. The focused end
      handle remains visible so its native keyboard focus is never hidden. */
-  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control::-webkit-slider-thumb,
+  /* One engine's pseudo-element per rule: a selector list mixing -webkit- and -moz- is
+     invalid as a whole in each engine, so neither applied. */
+  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control::-webkit-slider-thumb { opacity: 0; }
   .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control::-moz-range-thumb { opacity: 0; }
-  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible::-webkit-slider-thumb,
+  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible::-webkit-slider-thumb { opacity: 1; }
   .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible::-moz-range-thumb { opacity: 1; }
 
   .area-slider--neutral {
@@ -196,10 +198,8 @@
     );
   }
 
-  [dir="rtl"] .area-slider__control::-webkit-slider-runnable-track,
-  [dir="rtl"] .area-slider__control::-moz-range-track {
-    scale: -1 1;
-  }
+  [dir="rtl"] .area-slider__control::-webkit-slider-runnable-track { scale: -1 1; }
+  [dir="rtl"] .area-slider__control::-moz-range-track { scale: -1 1; }
 
   /*
    * Round by identity, like the switch thumb: a slider handle that is not a circle reads
@@ -302,5 +302,5 @@
 
   .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-icon-sm); --_gutter: var(--area-gutter-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
   .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-icon-md); --_gutter: var(--area-gutter-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-slider--lg { --_height: var(--area-control-lg); --_thumb: var(--area-icon-lg); --_gutter: var(--area-gutter-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-slider--lg { --_height: var(--area-control-lg); --_thumb: var(--area-space-20); --_gutter: var(--area-gutter-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

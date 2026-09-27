@@ -1,7 +1,6 @@
 import { useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { Avatar, Badge, Presence, Indicator, IndicatorAnchor, BadgeGroup, Button, Card, CardContent, CardDescription, CardTitle, Nav, NavItem, Table, Theme } from "@area/react";
-import { ReviewPair, reviewText } from "./review.tsx";
 import { ArrowIcon, BellIcon, CheckIcon, DismissIcon, InfoIcon, LinkIcon, PlusIcon } from "../icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
@@ -214,48 +213,7 @@ const previous = {
 const reviewSentence: CSSProperties = { margin: 0, fontSize: "var(--area-control-md-text)", lineHeight: "var(--area-control-md-leading)", boxShadow: "inset 0 -1px 0 var(--area-border-decorative)" };
 // Pass-1 label: centred by the shell and padded by inset.css, carrying no baseline.
 const previousLabel: CSSProperties = { alignSelf: "auto", paddingBlock: "0.25em" };
-export const GalleryReviewBadge = () => (
-  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
-    <ReviewPair title="Size scale 20 / 24 / 28 → 16 / 20 / 24; default 24 → 20"
-      basis="Inline chrome is already 16 / 20 (Kbd, Indicator count); ChatGPT, Notion and Figma badges are 16–22px. Medium keeps 14px text (Notion 20px and ChatGPT 22px both use 14px)."
-      before={<><Badge style={previous.sm}>Small</Badge><Badge size="lg">Medium</Badge><Badge size="lg" style={previous.lg}>Large</Badge></>}
-      after={<><Badge size="sm">Small</Badge><Badge>Medium</Badge><Badge size="lg">Large</Badge></>} />
-    <ReviewPair title="Beside body text"
-      basis="A 20px badge sits inside the 20px line of 14px text; 24px pushed the line apart."
-      before={<p style={{ margin: 0, fontSize: "var(--area-control-md-text)", lineHeight: "var(--area-control-md-leading)" }}>Invoice <Badge size="lg">Paid</Badge> due Oct 14</p>}
-      after={<p style={{ margin: 0, fontSize: "var(--area-control-md-text)", lineHeight: "var(--area-control-md-leading)" }}>Invoice <Badge>Paid</Badge> due Oct 14</p>} />
-    <ReviewPair title="Neutral labels use secondary ink"
-      basis="ChatGPT's 'Paid' (rgb 93) and Figma's 'AI' (50% black) both set neutral badges in secondary ink. Toned badges keep their tone."
-      before={<><Badge style={previous.ink}>Neutral</Badge><Badge variant="outline" style={previous.ink}>Neutral</Badge><Badge dot style={previous.ink}>Neutral</Badge></>}
-      after={<><Badge>Neutral</Badge><Badge variant="outline">Neutral</Badge><Badge dot>Neutral</Badge></>} />
-    <ReviewPair title="Dismiss sits 2px from the label"
-      basis="Untitled's close badge uses gap-0.5; the 16px box already holds 2px of air around the 12px glyph."
-      before={<Badge variant="color" tone="discovery" dismissLabel="Remove design label" onDismiss={() => {}} style={{ gap: "var(--area-space-4)" }}>Design</Badge>}
-      after={<Badge variant="color" tone="discovery" dismissLabel="Remove design label" onDismiss={() => {}}>Design</Badge>} />
-    <ReviewPair title="Composed badges sit on the text baseline"
-      basis="An inline-flex badge took its baseline from its first slot, so a leading dot, icon or avatar dropped the badge 2–3px in text and table rows. The label now carries the baseline."
-      before={<p style={reviewSentence}>Build <span className="area-badge area-badge--soft area-badge--success area-badge--md area-badge--dot"><span className="area-badge__dot" aria-hidden="true" /><span className="area-badge__label" style={previousLabel}>Passed</span></span> Deploy <span className="area-badge area-badge--soft area-badge--neutral area-badge--md"><span className="area-badge__leading-icon" aria-hidden="true"><CheckIcon /></span><span className="area-badge__label" style={previousLabel}>Done</span></span></p>}
-      after={<p style={reviewSentence}>Build <Badge dot tone="success">Passed</Badge> Deploy <Badge icon={<CheckIcon />}>Done</Badge></p>} />
-    <ReviewPair title="Uppercase removed"
-      basis="Only ChatGPT's 8px 'NEW' pill is uppercase; at 12–14px it reads louder than the label beside it. Callers can still pass uppercase text."
-      before={<Badge style={{ textTransform: "uppercase" }}>Badge</Badge>}
-      after={<p style={reviewText}>No uppercase option</p>} />
-  </div>
-);
 
 /* Badge group pass review (2026-09-25, docs/specs/badge-group.md). */
 const reviewRow: CSSProperties = { display: "flex", alignItems: "center", gap: "var(--area-space-4)", boxShadow: "0 0 0 var(--area-border-width) var(--area-border-decorative)" };
 // An array, not a fragment: BadgeGroup counts its direct children.
-const hiddenBadges = [<Badge key="discovery" tone="discovery">Discovery</Badge>, <Badge key="success" tone="success">Success</Badge>, <Badge key="warning" tone="warning">Warning</Badge>];
-export const GalleryReviewBadgeGroup = () => (
-  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
-    <ReviewPair title="The +N overflow is a badge of the group's size"
-      basis="Primer's LabelGroup uses a 28px invisible button with 12px text, which made a row of 20px badges 28px tall. AvatarGroup's overflow is an avatar of the group's size; Badge group now follows it. The outline marks the row's height."
-      before={<div style={reviewRow}><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Button size="sm" variant="ghost" aria-label="More statuses, 3 more">+3</Button></div>}
-      after={<div style={reviewRow}><BadgeGroup visibleCount={2} overflowLabel="More statuses"><Badge>Neutral</Badge><Badge tone="info">Info</Badge>{hiddenBadges}</BadgeGroup></div>} />
-    <ReviewPair title="Hidden badges stay on one line"
-      basis="The overflow asked for its content width, but Popover's 240px width won, so three badges wrapped onto two lines."
-      before={<div className="area-popover" style={{ display: "flex", flexWrap: "wrap", gap: "var(--area-space-4)" }}>{hiddenBadges}</div>}
-      after={<div className="area-popover" style={{ display: "flex", flexWrap: "wrap", gap: "var(--area-space-4)", inlineSize: "max-content" }}>{hiddenBadges}</div>} />
-  </div>
-);

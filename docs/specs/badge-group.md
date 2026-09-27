@@ -121,11 +121,11 @@ fragments: pass badges as direct children or an array.
 
 ## Visual pass
 
-Pass review container (`GalleryReviewBadgeGroup`): the "+N" before and after, with the
-row outlined to show its height (28 → 20), and the overflow content before and after
-(two lines → one). Gallery measurements after: every group is 20px tall; the trigger is
-32.6 × 20 with 14/20 500 text; the open overlay is 254.4 × 44 with its three badges on
-one line.
+Pass reviews were removed at the owner's request; the family is inspected in the grouped
+gallery. The earlier before/after review showed the "+N" with the row outlined to show its
+height (28 → 20), and the overflow content before and after (two lines → one). Gallery
+measurements after: every group is 20px tall; the trigger is 32.6 × 20 with 14/20 500 text;
+the open overlay is 254.4 × 44 with its three badges on one line.
 
 ## Verification
 
@@ -143,3 +143,5 @@ one line.
 - 2026-09-25 · owner approved Badge group; no further variants (removable or keyboard-navigable
   tag groups belong to Chip; end alignment is a wrapper; Primer's in-place expansion was
   declined by the 2026-09-24 decision) → Complete in `component-status.mjs`.
+- 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
+  gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).

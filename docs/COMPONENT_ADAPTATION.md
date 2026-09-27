@@ -117,10 +117,24 @@ make it appear (an unread item, a shared page). Ask the owner whether a safe fix
 exists, and use the design-system evidence meanwhile.
 
 **Browser tools.** The Claude in Chrome (Edge) extension truncates long results at about
-900 characters, so keep the capture in a page variable and read it back in 800-character
-chunks. A page that blocks external scripts needs the script pasted in; check
+900 characters, so keep captures in a page variable (`window.__caps[key] =
+JSON.stringify(cap)`) and move them out in one piece rather than in chunks:
+
+- *Clipboard:* inject a temporary button whose click handler calls
+  `navigator.clipboard.writeText(JSON.stringify(__caps))`, click it with the browser tool,
+  then read `pbpaste` with a UTF-8 locale (`LC_ALL=en_US.UTF-8`) so `×` and `–` survive.
+- *Local relay,* when the clipboard is refused: run a small Node server on `127.0.0.1` that
+  serves a page listening for `postMessage` and writes the posted files to a scratch
+  folder. A product page's content security policy blocks `fetch` to it, but a button click
+  can `window.open` the relay and post to it. Check the files with `capture-compare.mjs`
+  before moving them into the repo.
+
+A page that blocks external scripts needs the script pasted in; check
 `areaCapture.fingerprint()` against `node scripts/capture-compare.mjs --fingerprint`. A
-background window may not scroll; hide unrelated gallery sections locally instead.
+background window may not scroll; hide unrelated gallery sections locally instead. If
+`document.visibilityState` reads `hidden` (the window is minimised or covered), stop and ask
+the owner to bring it forward: a hidden tab does not render route changes, take
+screenshots or write the clipboard, and a timer in it can stall the tool.
 
 **Themes.** Capture light and dark. Switching a product's theme changes an account
 setting, so ask the owner to switch it, or get explicit permission first.
@@ -220,7 +234,14 @@ nudges.
 ## 6. Verify the structure
 
 - Capture every Area variant with the same script: the gallery loads it, so call
-  `areaCapture.capture` on the specimen with `source: 'area'`.
+  `areaCapture.capture` on the specimen with `source: 'area'`. To capture a whole family,
+  loop over `#gallery-section-<slug> article.docs-visual-gallery__tile`, take the first
+  `.area-*` element in each tile's preview as the shell, and name the file after the tile id
+  (`area--<tile>--rest--light.json`).
+- Check the shared state paint in [the design system guide](DESIGN_SYSTEM.md#color-and-focus):
+  row plates, disabled, fixed foreground on hover, neutral markers, one label weight, the
+  floating lift. A component that paints one of these roles differently needs a reason in
+  its spec.
 - Run the comparison with the Area captures included. Every difference from the chosen
   basis is either fixed or explained in the decision table.
 - Run the checks in [Development](DEVELOPMENT.md) that match the change.
@@ -238,14 +259,35 @@ It requires:
 A problem found here goes into the spec's decision table first, then the code, then a
 re-capture. Fix geometry in the structure; don't hide it with paint.
 
+## Auditing a component built before this process
+
+A family accepted before this process has no spec, and its values were not measured. Its
+acceptance stands until a change reopens it. To audit one:
+
+1. Capture every gallery tile of the family before changing anything.
+2. Read its CSS for each shared role and compare with its peers and the baseline, not just
+   with its own references: the 2026-09-26 [cohesion audit](research/cohesion-audit.md)
+   found most defects between families (four hover fills, three selection fills, three
+   disabled treatments), not inside one.
+3. Measure the target products for the elements the baseline lacks, and read the primary
+   design system's source ([Untitled UI reference](research/untitled-ui-reference.md)).
+4. Write the spec, moving the family's section out of [prior decisions](specs/PRIOR_DECISIONS.md).
+5. Change only what the evidence or a shared rule supports. Each visible change gets a Pass
+   review row, and the family moves from Complete to In review in `component-status.mjs`.
+   A family the audit only confirms keeps its status and gains its spec.
+6. Re-capture every tile after the change and commit the after set.
+
 ## 8. Owner review and feedback
 
-Show the pass in the gallery first. Export `GalleryReview<Name>` from the component's
-demo file; the gallery renders it in a Pass review container above that family's variant
-tiles. Give each change its own row with its basis, before and after, at 1× and at 3×
-(`ReviewPair` in `apps/docs/src/demos/review.tsx`).
-Rebuild "before" on the current component through its private properties so both columns
-run the same code, and replace the demo at the next pass. Then give the owner:
+Show the result in the gallery. Every variant the manifest exposes has a tile, grouped by
+the gallery (Default, Variants, Tones, Sizes, Layout, Content, States, Behavior; see
+`specimenGroup` in `apps/docs/scripts/specimen-names.mjs`) and named by its category so it
+lands in the right group: `size-sm`, `tone-accent`, `state-disabled`, `layout-vertical`.
+When a change is subtle enough to need a side-by-side, a temporary `GalleryReview<Name>`
+export renders a Pass review above the family (`ReviewPair` in
+`apps/docs/src/demos/review.tsx`, "before" rebuilt through private properties); delete it
+once the owner has seen it. The owner asked on 2026-09-26 not to keep Pass reviews for
+audited families. Then give the owner:
 
 - the gallery link for each variant,
 - the spec's comparison table with the Area column,

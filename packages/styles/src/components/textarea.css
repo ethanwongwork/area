@@ -47,6 +47,7 @@
   .area-textarea--outline { --_bg: var(--area-textarea-bg); }
 
   .area-textarea--soft {
+    box-shadow: none;
     --_bg: var(--area-textarea-bg-soft);
     --_border: transparent;
     --_border-hover: var(--area-textarea-edge);

@@ -65,7 +65,7 @@
 
     block-size: var(--_bar);
     padding-inline: var(--_inset);
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-end: var(--area-border-width) solid var(--area-border-divider);
   }
 
   /*
@@ -118,7 +118,7 @@
     margin-inline: calc(var(--_inset) * -1);
     padding-inline: var(--_inset);
     padding-block-end: var(--area-space-12);
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-end: var(--area-border-width) solid var(--area-border-divider);
   }
 
   .area-panel__section:last-child {
@@ -133,10 +133,18 @@
     margin: 0;
     margin-inline: calc(var(--_inset) * -1);
     padding-inline: var(--_inset);
-    font-size: var(--area-control-sm-text);
-    line-height: var(--area-control-sm-leading);
+    /* The heading outranks the rows it names by ink, not by size: the UI text in the default
+       ink over muted row labels, as Figma's section titles sit over its muted field labels.
+       It was 12px, smaller than the 14px labels beneath it. */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     font-weight: var(--area-weight-regular);
+    color: var(--area-fg-default);
   }
+
+  /* Every field label in a panel is muted, stacked or beside its control, so the section
+     heading and the values carry the hierarchy. */
+  .area-panel .area-field__label { color: var(--area-fg-muted); }
 
   /* A row whose control needs the whole width: the label sits above it, not beside it. */
   .area-panel__stack {
@@ -152,7 +160,7 @@
   .area-panel__footer {
     flex-shrink: 0;
     padding: var(--_inset);
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-start: var(--area-border-width) solid var(--area-border-divider);
   }
 
   /* --- Sizes -------------------------------------------------------------- */

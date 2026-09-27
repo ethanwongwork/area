@@ -1,0 +1,219 @@
+# Color picker spec
+
+**Status:** in review · 2026-09-26 (second pass: views, OKLCH, contrast, preview)
+**Captures:** `docs/research/captures/color-picker/`
+**Peers:** Popover (surface, Complete), Slider (thumb focus, Complete), Select (model menu,
+Complete), InputGroup and NumberField (value row, in review), ColorField, ColorSwatch and
+ColorSwatchPicker (in review), Button (eyedropper, Complete)
+
+## Owner decisions
+
+- Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)): Untitled UI's
+  solid picker was inspected directly: square saturation/value area, hue and alpha tracks,
+  joined color/opacity editing, saved colors. The picker is composed from Area's own
+  InputGroup, NumberField and ColorSwatchPicker; it keeps canonical hex callbacks and form
+  values. Swatches are document color data and must not change with the UI theme; examples
+  use exact family-500 hex values from `palette.json`.
+- 2026-09-26: "Refine the color picker to be more like Figma's."
+- 2026-09-26: "Add more controls and a swatch picker … also add OKLCH … the swatch picker can
+  look like the 4th pic … very robust in how it shows color selection and options." The
+  owner supplied four reference images (not stored): a Fill picker with a paint-type
+  segmented row and an HSL value row; a rounded picker with Hex select and "Last Colors"
+  swatches; Figma's picker with a contrast checker (ratio chip, AA mark, threshold curve with
+  a dotted failing side); and the iOS color picker (Grid / Spectrum / Sliders tabs, a 12-column
+  hue × lightness grid with a grayscale row, an opacity slider, current color and saved
+  colors with +). Screenshots are not measured; values reuse this spec's Figma measurements
+  and Area peers.
+
+## Job and boundaries
+
+Edits one solid color (with optional opacity) by area, tracks, typed channels, screen
+sampling or saved swatches. ColorField is the single-line hex field for inspector rows;
+ColorSwatchPicker is a choice among fixed colors; ColorSwatch only displays. Gradient,
+pattern, image and video paints, blend mode, contrast checks and library/variable binding
+are Figma features outside this component (see Excluded).
+
+## Variants
+
+| Axis | Value | Justification | Where it appears |
+|---|---|---|---|
+| composition | `header` | A title, tabs or close action above the editor, divided from it | Figma: every picker has a 40px header (Custom / Libraries tabs, +, close) |
+| composition | `swatches` (+ `onAddSwatch`) | Saved colors under the editor | Figma: "On this page" document colors |
+| composition | `eyedropper` | Sample a color from the screen | Figma: 24px button beside the tracks |
+| layout | `alpha={false}` | Colors without opacity (a page background in CSS, a theme color) | React Aria/Ant `disabledAlpha`; Figma's page background still shows opacity, so on by default |
+| state | `model`: hex, rgb, css, hsl, hsb | Figma's color model menu | Figma format menu (captured open) |
+| composition | `views`: spectrum, grid, sliders (+ `view`, `defaultView`, `onViewChange`) | Several ways to choose; a switcher appears with more than one | iOS picker (Grid / Spectrum / Sliders) |
+| composition | `grid` (defaults to the Area palette) | A fixed palette to pick from | iOS 12-column grid; Area's palette.json |
+| composition | `contrast`: `{ background, level: AA \| AAA }` | Text and UI colors checked while choosing | Figma contrast checker (owner reference) |
+| composition | `preview` | New color beside the original, which restores it | iOS current color; Photoshop new/current |
+| state | `model`: `oklch` | Perceptual editing; CSS Color 4 | Owner request |
+| state | `disabled` | — | Peers |
+
+Excluded: Figma's paint-type row (Solid, Gradient, Pattern, Image, Video, Shader) and blend
+mode and contrast buttons. Selecting a non-solid paint would change the owner's file, so
+they were captured only at rest (`figma--paint-type-row--rest--light`), and each needs its
+own editor (gradient stops, image fit). They are later components, not tabs over a solid
+picker. The Libraries tab needs a variable/style system Area does not have.
+
+## Sources
+
+| Id | Type | What | Link / commit / path | License | Captures |
+|---|---|---|---|---|---|
+| figma | target product | Page-background picker (solid only) and layer Fill picker, a locked frame in the owner's draft file; read-only (opened, hovered, tabbed, menu opened and closed with Escape) | figma.com editor, Edge, 2026-09-26, 100% zoom, dpr 2 | evidence only | 11 files `figma--*` |
+| area | this system | Pass 0 and this pass | localhost gallery | — | `before/area--solid--rest--light`, `area--{default,header,model-rgb,opaque}--rest--light` |
+| gap audit | catalogues | Parts per system: React Aria ColorArea/ColorSlider/ColorField/ColorWheel, Mantine, Ant Design, Ark, Fluent | react-aria.adobe.com/ColorPicker, ant.design/components/color-picker, mantine.dev/core/color-input, 2026-09-26 | — | — |
+
+ChatGPT and Notion have no color picker (Notion offers fixed text/background colors in
+menus: that is ColorSwatchPicker's job).
+
+## Anatomy
+
+```
+figma (layer Fill, 240 × 537, radius 13, white, shadow 0 2 5 .15 / 0 10 16 .12 / 0 0 .5 .12)
+header      40px, padding 0 32 0 8, inset 1px rgb(230) divider; tabs 24px; +, close 24px at 8 from the end
+paint row   41px, padding 8: six 24px paint radios (4px gap, selected fill rgb(245)); blend and contrast 24px buttons
+area        wrapper padding 16 16 0; canvas 208 × 208, radius 5, outline 1px rgba(0,0,0,.1) at -1px
+            reticle 16px: 4px white border, fill = current color, rings 1px rgba(0,0,0,.2) outside and inside,
+            lift 0 1 3 .1 / 0 5 12 .13 / 0 0 .5 .15 on an inner 12px disc
+controls    52px row, padding 0 16, gap 12: eyedropper 24px (hover fill rgba(0,0,0,.05)), tracks column 172px
+tracks      16px pills, 12px apart, hairline 1px rgba(0,0,0,.1) at -1px; hue stops start at 8px and end at 100% - 8px;
+            opacity: transparent → color over a 10.67px checker (#fff / #e1e1e1); thumbs as the reticle
+values      40px row, padding 0 16, gap 8: model select 57 × 24 (1px rgb(230), radius 5, white, text 11/16, chevron 24);
+            fields 144 × 24: hex 89 (fill rgb(245), padding 0 8), 1px surface gap, opacity 54 (8px start, % in a 14px box, ink 50%)
+swatches    1px rgb(230) top rule, padding-top 11; source select 208 × 24; grid of 24px cells from 12px, 16px chits (radius 20%)
+area (this pass)
+shell       10 rows wide (240 compact, 280 default), 1px border-decorative, radius container, the floating lift
+header      optional, min 40, padding 16 start / 8 end (border counted), border-faint rule
+body        padding 16 (border counted), gap 12: area → controls → values
+swatches    border-faint rule, padding 12 16, heading row (label + Add), ColorSwatchPicker sm, contiguous 24px cells from 12px
+```
+
+Inset equations: outer inset = border 1 + padding 15 = 16 (Figma 16, no border). Header end
+inset = 1 + 7 = 8 (Figma 8). Swatch chip = 1 + 15 − 4 (grid pull) + 4 (cell inset) = 16
+(Figma 12 + 4 = 16). Tracks: the input is the track, so a 16px thumb travels between the
+ends and gradient stops sit half a thumb in (Figma's `linear-gradient(90deg, #f00 8px, …,
+#f00 calc(100% - 8px))`).
+
+## Measurements
+
+Generated with `node scripts/capture-compare.mjs docs/research/captures/color-picker/figma--solid-layer-fill--rest--light.json docs/research/captures/color-picker/before/area--solid--rest--light.json docs/research/captures/color-picker/area--default--rest--light.json` (shell and area rows):
+
+| slot · property | figma · solid-layer-fill | area · pass 0 | area · this pass (compact width) |
+|---|---|---|---|
+| **shell** size | 240 × 537 | 288 × 460 | 240 × 417 |
+| **shell** border | 0 | 1 solid rgb(243, 243, 243) | 1 solid rgb(243, 243, 243) |
+| **shell** radius | 13px (inner layer) | 12px | 12px |
+| **track** (area) size | 208 × 208 (`figma--area`) | 254 × 254 | 208 × 208 |
+| **track** edge from shell | 16 (wrapper padding) | 17 17 189 17 | 16 16 193 16 |
+| **track** radius | 5px (canvas) | 8px | 6px |
+| **track** shadow | outline 1px rgba(0,0,0,.1) −1px | — | inset 0 0 0 1px rgba(0,0,0,.1) |
+| **thumb** border | 4 solid #fff | 2 solid #fff | 4 solid #fff |
+| **thumb** shadow | 1px .2 ring out + in, lift | 1px rgba(0,0,0,.4) | 1px .2 ring out + in, lift |
+| hue/opacity track | 172 × 16, pill | 254 × 12 | 168 × 16, pill |
+| eyedropper | 24 × 24, radius 5 | — | 28 × 28 (sm; 24 compact), radius 6 |
+| model select | 57 × 24 | — | 57.33 × 28 (sm) |
+| opacity field | 54 wide, 8 start, % box 14 | 72 wide | 54 wide, 8.74 start (inset contract), % box 14 |
+
+The Area row was captured before the width became ten rows; at the default scale the shell
+is 280px and the area 248px (verified in the browser, not re-captured).
+
+Focus (`figma--hue-slider--focus-visible--light`): Figma thickens the thumb ring to 6px and
+draws a 1px #0d99ff outline at −2px. Format menu (`figma--format-menu--open--light`): Hex,
+RGB, CSS, HSL, HSB in a dark 24px-row listbox.
+
+## Second pass: views, OKLCH, contrast, preview
+
+| Part | Area value | Basis | Reason / note |
+|---|---|---|---|
+| view switcher | Segmented sm, full width, first row of the body | iOS tabs; Area Segmented (Complete) | Shown only when `views` has more than one entry |
+| grid view | ColorSwatchPicker `layout="palette"`: contiguous square cells filling the width, container radius-control-sm with the area's hairline; selection is the thumb ring (2px white, hairline edges) inside the cell with radius-control-xs | iOS grid; this spec's thumb | Palette = `AREA_COLOR_GRID`, generated from palette.json by `scripts/gen-color-grid.mjs`: 11 hue columns (red → pink by OKLCH hue) × rungs 900 → 100, under a white → neutral → black row |
+| sliders view | a track per channel of the current model (Hex/CSS edit as RGB), a one-letter label column (icon-md wide, fg-muted), then opacity | iOS Sliders; Figma tracks | Gradients hold the other channels at the current color, computed in CSS from numeric custom properties; RGB, HSB (as HWB) and HSL S are exact two-stop sRGB gradients; OKLCH tracks interpolate `in oklch` |
+| OKLCH | L % (0–100), C % of 0.4 (0–100), H ° | CSS Color 4 (`C` percentage reference 0.4) | Integers fit the 3-field row like HSL. Out-of-sRGB input keeps L and h and reduces C (binary search); a status line says so. Conversion matches palette.json's stored OKLCH within 6e-4 for every color (test) |
+| contrast | row above the area: pair swatch (current / background), ratio `n.nn : 1`, check or dismiss glyph + level (danger ink when failing); on the area, the failing band dotted (white 55%) between two white edges | Figma contrast checker (owner reference) | Ratio uses the color composited at its opacity over the background. The band is solved per saturation column: WCAG contrast is V-shaped in luminance, so there is a dark edge and a light edge; either can be absent |
+| preview | control-sm wide, stretch to the tracks, new over original, hairline edge, checker under alpha; original is a button that restores it | iOS current swatch; Photoshop new/current | Disabled when unchanged |
+| save | ghost sm icon button (Fluent `add_16_regular`) in the swatch heading, disabled when the color is already saved | Owner references 1 and 3 (+) | Replaces the "Add" text button; the section shows when `onAddSwatch` is set even with no swatches |
+
+Not built: Figma's paint types, blend mode, library styles; the contrast checker's editable
+foreground/background popover (the background is a prop).
+
+## Decisions
+
+| Slot · property | Area value | Basis | Reason when it differs from the basis |
+|---|---|---|---|
+| shell · width | `control-sm × 10` (240 / 280) | Figma 240 = 10 × its 24px rows | The inset contract gives 28px fields an 8.74px text inset; at a fixed 240 three RGB digits clipped. Tying width to the row keeps Figma's proportions at both scales |
+| shell · surface | border-decorative, radius container (12), the floating lift (0 20px 24px, 0 5px 8px) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
+| shell · inset | 16 (border counted) | Figma 16 | — |
+| vertical rhythm | 12 | Figma: area→tracks 12, track gap 12, tracks→values 12 | — |
+| header | min 40, 16 start / 8 end, border-faint rule | Figma 40, divider rgb(230) | Figma's tab text sits at 16 (8 + tab padding); a plain title uses the same column. border-faint (226) is the role nearest rgb(230) |
+| area · size, radius | square, full width; radius-control-sm (6) | Figma 208 square, radius 5 = its control radius | Area's control radius for the sm tier |
+| area / track · hairline | inset 1px `light-dark(rgb(0 0 0 / .1), rgb(255 255 255 / .1))` spec | Figma rgba(0,0,0,.1) | Dark value not captured |
+| thumbs | 16px, 4px #fff ring, current-color fill, 1px .2 ring in and out, lift | Figma | Lift uses −2px spread to draw Figma's 12px shadow disc on one element |
+| thumb · focus | Area focus ring (2px at 2px offset) | Peer: Slider, CONTRAST.md | Figma's 1px outline is below Area's focus width |
+| tracks | 16px pills, stops half a thumb in | Figma | — |
+| opacity checker | ColorSwatch's themed checker (8px tile) | Peer: ColorSwatch | Figma 10.67px #fff/#e1e1e1 |
+| eyedropper | Button ghost sm, Fluent `eyedropper_16_regular` | Figma 24px button left of the tracks | Shown only where `window.EyeDropper` exists (Chromium); Figma samples its own canvas |
+| values · model | Select sm, content width | Figma 57 × 24 (content width) | — |
+| values · fields | InputGroup soft sm; 1px surface divider; opacity 54 with % in a 14px box; value text runs to the field end | Figma | Hex fill is bg-component (247; Figma 245) |
+| swatches | ColorSwatchPicker sm, contiguous 24px cells pulled 4px outward, border-faint rule, padding 12 16, heading row | Figma: rule, padding-top 11 + 1, 24px cells from 12, 16px chits | Heading is a label with Add instead of Figma's source select (no libraries) |
+| type | control-sm 12/16 400 | Type ramp (small controls 12/16) | Figma 11/16 450 |
+
+## States
+
+| State | Changes | Evidence |
+|---|---|---|
+| hover (eyedropper) | Button ghost hover (bg-hover, 5%) | `figma--eyedropper--hover--light`: rgba(0,0,0,.05) |
+| focus-visible | Area focus ring on the area thumb and track thumbs; field focus on the value group | Figma thumb focus captured |
+| sampling | eyedropper `aria-pressed` while the EyeDropper API is open | — |
+| disabled | whole picker 50%, not-allowed cursor | Peers |
+
+## Behavior and accessibility
+
+- `role="group"` named by `label`. The area is one tab stop: a hidden range input with
+  `aria-roledescription="2D slider"` and `aria-valuetext` naming saturation and brightness;
+  Left/Right change saturation, Up/Down brightness, Shift ×10, Page Up/Down brightness ±10,
+  mirrored in RTL. Pointer drag uses pointer capture.
+- Hue and opacity are native range inputs. Channel fields are NumberFields (commit on
+  Enter/blur, bounds, arithmetic); hex and CSS fields keep a draft while typing and commit on
+  Enter/blur, Escape restores. CSS accepts hex, `rgb()`/`rgba()` and `hsl()`/`hsla()`.
+- State is HSV, so hue survives gray and black. Values are canonical `#RRGGBB` or
+  `#RRGGBBAA`; `name` submits one hidden value; form reset restores the default.
+- Forced colors: thumbs draw Canvas/CanvasText rings.
+
+## Peers and consistency
+
+| Peer | Shared role | Peer value | Picker | Match / reason |
+|---|---|---|---|---|
+| Popover | floating surface | border-decorative, container radius, the floating lift | same | match |
+| Slider | thumb focus | focus-width at focus-offset | same | match |
+| ColorField | hex + opacity | soft InputGroup, decorative divider | soft InputGroup, surface divider | Figma's divider is a surface gap; ColorField keeps its own until it gets a pass |
+| ColorSwatchPicker | saved colors | 4px gap grid | contiguous cells inside the picker | Figma's document colors are contiguous |
+
+## Visual pass
+
+Compared at 100% zoom in light: Figma's layer Fill picker (screenshot in the capture
+session) against the gallery tiles. Structure, order and proportions match: square area,
+eyedropper left of two pill tracks, model select before joined fields, ruled swatch
+section. Area is quieter at the edge (1px decorative border, lighter shadow) and uses its
+own radius and 12px type. Observations that changed the build: the border had been counted
+twice (content at 17px), fixed with the inset equation; RGB digits clipped at the default
+scale, fixed by the ten-row width. Dark theme not compared (Figma's theme is an account
+setting).
+
+## Verification
+
+- 11 Figma captures, 1 pass-0 and 4 Area captures; checksums verified.
+- Browser: area keys (Shift+Down moved brightness 95 → 85, hex to #7E45D9), model switch to
+  RGB (126, 69, 217), no clipped value text at 280 and 240 widths.
+- Unverified: dark theme, screen readers, Firefox and Safari (no EyeDropper there), touch.
+
+## Feedback log
+
+- 2026-09-26 · owner: more controls, a grid swatch picker like iOS, OKLCH, robust selection →
+  views, palette grid, channel sliders, OKLCH, contrast band, preview, save → tests (OKLCH
+  vs palette.json, contrast math, rendering); gallery tiles Views, Grid, Sliders, Contrast,
+  Preview, OKLCH, and ColorSwatchPicker "Palette grid".
+
+- 2026-09-26 · owner: "more like Figma's" → Figma pass: ten-row width, 16px pill tracks,
+  ringed thumbs, eyedropper, color-model value row, header slot, ruled swatch section →
+  `figma--*` and `area--*` captures.
+- 2026-09-26 · cohesion audit → the surface takes the shared floating lift with Popover and Menu (was shadow-2) → [cohesion-audit.md](../research/cohesion-audit.md); Pass review row added.

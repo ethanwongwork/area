@@ -82,6 +82,16 @@ const MAP = {
   FluentChevronUpIcon: "chevron_up_16_regular",
   FluentArrowLeftIcon: "arrow_left_16_regular",
   FluentArrowDownIcon: "arrow_down_16_regular",
+  // Card templates (media controls, weather, trends).
+  FluentPlayFilledIcon: "play_16_filled",
+  FluentPauseFilledIcon: "pause_16_filled",
+  FluentNextFilledIcon: "next_16_filled",
+  FluentPreviousFilledIcon: "previous_16_filled",
+  FluentWeatherSunnyIcon: "weather_sunny_16_regular",
+  FluentWeatherPartlyCloudyIcon: "weather_partly_cloudy_day_16_regular",
+  FluentArrowTrendingIcon: "arrow_trending_16_regular",
+  FluentArrowUpRightIcon: "arrow_up_right_16_regular",
+  FluentHeartIcon: "heart_16_regular",
 };
 // Inline SVG for the documentation's own chrome: toolbars, and the sidebar's section
 // icons. Keyed by the page slug where it names one, so a new foundation page gets an icon

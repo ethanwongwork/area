@@ -62,12 +62,13 @@ export const InputAction = /* @__PURE__ */ forwardRef<HTMLButtonElement, InputAc
         type="button"
         className={cx("area-input__action-button", className)}
         aria-label={ariaLabel ?? tooltip}
-        aria-describedby={[describedBy, tooltipId].filter(Boolean).join(" ")}
+        // When the hint is also the name, describing the button with it announces it twice.
+        aria-describedby={[describedBy, ariaLabel ? tooltipId : undefined].filter(Boolean).join(" ") || undefined}
         {...rest}
       >
         <span className="area-input__action-icon" aria-hidden="true">{icon}</span>
       </button>
-      <span id={tooltipId} className="area-input__action-tooltip" role="tooltip">{tooltip}</span>
+      <span id={tooltipId} className="area-tooltip area-input__action-tooltip" role="tooltip">{tooltip}</span>
     </span>
   );
 });

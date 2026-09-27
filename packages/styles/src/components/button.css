@@ -67,7 +67,11 @@
      * browser clamps border-radius to half the shorter side. The cap keeps the smallest
      * tier a rounded rectangle rather than a lozenge. See axes/radius.ts for why 0.4.
      */
-    border-radius: min(var(--_radius), calc(var(--_height) * var(--area-radius-button-cap)));
+    --_shape: min(var(--_radius), calc(var(--_height) * var(--area-radius-button-cap)));
+    border-radius: var(--_shape);
+    /* Published under names a nested Kbd cannot shadow, so its corner can be concentric. */
+    --_button-shape: var(--_shape);
+    --_button-height: var(--_height);
 
     font-family: inherit;
     font-size: var(--_text);
@@ -350,11 +354,22 @@
     --_fg: var(--area-fg-default);
   }
 
+  /*
+   * A neutral ghost shows the row hover fill, one step deeper than the resting component
+   * fill it used. ChatGPT (5% black), Figma (5% black) and Notion (8% warm grey) all hover
+   * transparent icon and text buttons at about #f2 on white, which is `bg-component-hover`,
+   * and the same plate Menu, Nav, Tree view and Table rows show.
+   */
+  .area-button--neutral.area-button--ghost {
+    --_bg-hover: var(--area-bg-component-hover);
+    --_bg-active: var(--area-bg-component-active);
+  }
+
   /* --- Shape and alignment ---------------------------------------------------- */
 
   /* Fully round. OpenAI ships this as the default button shape; Area makes it opt-in. */
   .area-button--pill {
-    border-radius: var(--area-radius-full);
+    --_shape: var(--area-radius-full);
   }
 
   /*

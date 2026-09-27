@@ -1,0 +1,141 @@
+# ColorSwatchPicker spec
+
+**Status:** in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma)
+**Captures:** `docs/research/captures/color-swatch-picker/`
+**Peers:** ColorSwatch (cell content), ColorPicker (saved colours, grid view, thumb ring),
+Radio (single choice), AlignmentPicker and Segmented (selection marks), Chip swatch
+
+## Owner decisions
+
+- Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md), "Color picker, color
+  field and swatches"):
+  - [React Aria ColorSwatchPicker](https://react-aria.adobe.com/ColorSwatchPicker):
+    labeled radio choices and separate selected/focus states. Area uses compact square
+    cells, a legible selection ring and checkerboard transparency. ColorField inherits
+    Input's typography and inset instead of introducing an unrelated monospace field.
+  - *Color and alignment follow-up, 2026-09-24.* The earlier muted swatches were arbitrary
+    demo hex values, not palette tokens. Color examples now use exact family-500 hex values
+    from `packages/tokens/src/color/palette.json` (e.g. blue #006DF5, purple #8D4DF3, green
+    #01AA4E). Alpha examples deliberately remain translucent. Swatches represent document
+    color data and must not change with UI theme. The supplied Figma neutral values are
+    retained only in the explicitly labeled split-field reference example. The palette
+    source itself is unchanged.
+- 2026-09-26 (recorded in [color-picker.md](color-picker.md#owner-decisions)): a grid
+  swatch picker like iOS, "very robust in how it shows color selection". This added
+  `layout="palette"`.
+- Neutral by default, accent by override (2026-09-26): the selection ring is `fg-default`.
+- 2026-09-26, second pass ("decide all open items"), item 12: the cell is concentric with its
+  swatch (swatch radius + inset). The gallery gained a sizes tile.
+
+## Job and boundaries
+
+ColorSwatchPicker chooses one colour from a fixed, labelled set, backed by native radios in a
+`radiogroup`. It shows each option with a ColorSwatch and marks the checked one with a ring.
+Free editing is ColorField / ColorPicker; display only is ColorSwatch.
+
+## Variants
+
+| Axis | Value | Justification | Where it appears |
+|---|---|---|---|
+| size | sm (24 cell), md (28, default), lg (32) | Cells on the control tiers | Figma 24px cells |
+| layout | grid (default, `columns`), row (wraps), palette (contiguous, fills width) | Palettes; a compact row; the iOS-style grid in ColorPicker | Figma document colours (contiguous grid); iOS grid (owner reference) |
+
+## Sources
+
+| Id | Type | What | Link / commit / path | License | Captures |
+|---|---|---|---|---|---|
+| figma | target product | Document colours in the colour picker | from the ColorPicker pass | evidence only | `color-picker/figma--swatches--rest--light` |
+| react-aria | design system (docs) | ColorSwatchPicker | react-aria.adobe.com (owner decision above) | Apache-2.0 | — |
+| area | this system | Gallery tiles, re-taken after the second pass (sizes tile added) | localhost gallery | — | `color-swatch-picker/area--*` |
+
+Figma (`figma--swatches` nodes 9–21): 240-wide panel, 12px sides, 24 × 24 cells with no gap,
+16 × 16 chits 4px in, radius 20%, inset 2px black 10% edge. The second pass's 38 Figma
+captures add no swatch grid (the inspector colour row has one chit,
+`input-group/figma--color-row` node 4). Notion's colour menu was not captured: its 39
+captures cover tags and status dots (Badge) but no colour picker; ChatGPT has none.
+
+## Anatomy
+
+```
+area   div.area-color-swatch-picker[role=radiogroup]  inline-grid, repeat(columns, cell), gap 4
+  cell   label.area-color-swatch-picker__cell  cell square, radius = swatch radius + 4 (concentric); owns hover, ring, focus
+    input  input[type=radio]  covers the cell, opacity 0
+    swatch span.area-color-swatch  cell − 8, aria-hidden
+palette  grid of minmax(0, 1fr) columns, gap 0, radius-control-sm 6, 1px 10% hairline outline, clip
+```
+
+Inset: swatch (cell − 8) centred, 4px on every side; the 2px ring leaves 2px between ring
+and colour.
+
+## Measurements
+
+From the capture nodes:
+
+| property | area · default (grid, md) | area · row (md) | area · sizes (sm) | area · layout-palette |
+|---|---|---|---|---|
+| shell | 188 × 60, 6 columns, gap 4 | 156 × 28, inline-flex, gap 4 | 80 × 24, gap 4 | full width, gap 0, radius 6, outline 1px rgba(0, 0, 0, 0.1) |
+| cell | 28 × 28, radius 9px | 28 × 28, radius 9px | 24 × 24, radius 8px | square, radius 0 |
+| swatch | 20 × 20 at 4, radius 5px | 20 × 20 at 4 | 16 × 16 at 4, radius 4px | fills the cell |
+| checked cell | — | node 7: fill rgb(255, 255, 255), `rgb(40, 40, 40) 0 0 0 2px inset` | node 1, same ring | — |
+
+Cells were 7px (md) before the second pass.
+
+## Decisions
+
+| Slot · property | Area value | Basis | Reason when it differs from the basis |
+|---|---|---|---|
+| cell | `control-xs/sm/md` 24 / 28 / 32 (`color.css:30-32`) | Figma 24 cells | md default follows the control tier |
+| swatch | cell − 8 (16 / 20 / 24) | Figma 16 chit in 24 | — |
+| gap | 4 (grid, row); 0 (palette) | Figma contiguous | The ring needs room between separate cells; palette follows Figma / iOS |
+| cell radius | swatch radius + 4: 8 / 9 / 10 (`color.css:43`) | Nested-radius rule (DESIGN_SYSTEM "Size and shape"); second pass item 12 | Was `min(radius-small + 2, cell / 4)`: 6 / 7 / 8, not concentric |
+| hover | `bg-hover` (translucent) | Audit: translucent hover only on unknown grounds | Swatch cells sit on any surface |
+| checked | `bg-surface` fill + 2px inset `fg-default` ring (`color.css:57-60`) | Owner: neutral by default; React Aria legible ring | Figma's selected chit not captured |
+| palette · checked | thumb ring: inset 2px white, 1px 20% outside, 3px 20% inside, radius `radius-control-xs` 4 (`color.css:92-95`) | [color-picker.md](color-picker.md):129, the area thumb | Cells touch, so the ring is drawn inside the swatch rather than as a cell plate |
+| palette · hover | inset 1px white 60% (`color.css:88-90`) | ColorPicker pass | Reason not recorded in color-picker.md |
+| disabled | 50% on the cell (`color.css:66`) | Audit "Disabled": controls and pickers dim to 50% | — |
+
+## States
+
+| State | Slot · property changes | Evidence |
+|---|---|---|
+| hover | cell `bg-hover`; palette: 1px white inset on the swatch | `color.css:56, 88-90` |
+| checked | ring as above | `area--row` node 7 |
+| focus-visible | 2px focus ring at 2px offset on the cell (palette: inset) | `color.css:61-65, 96` |
+| disabled | cell 50% opacity, not-allowed | `color.css:66` |
+| forced colours | `Highlight` outline for checked and focus | `color.css:67-70` |
+
+## Behavior and accessibility
+
+Native radios named by each option's `label`; the group is named by `label` or `aria-label`.
+Arrow keys move and select (Up/Down by column in grid and palette, with RTL for Left/Right);
+Home/End reach the first and last enabled option (`ColorSwatchPicker.tsx:52-94`). `name`,
+`required` and form reset are native.
+
+## Peers and consistency
+
+| Peer | Shared role | Area value in peer | This component | Match / reason |
+|---|---|---|---|---|
+| Checkbox, Radio, AlignmentPicker | selection mark | neutral ink, accent by `tone` | `fg-default` ring, no `tone` axis | neutral match; no accent override exists |
+| Segmented | hover on an unknown ground | `bg-hover` | same | match |
+| Controls | disabled | 50% | same | match |
+| ColorSwatch in the cell | nested radius | concentric = cell radius − 4 | cell 9, swatch 5 at md | match (was 7 / 5) |
+| ColorPicker | saved colours | contiguous, 24px cells | uses this component | match |
+
+## Visual pass
+
+The gallery shows ColorSwatchPicker's tiles in named groups; the palette layout and
+the sizes each have a tile. Unverified: Figma side by side, dark theme, a selected
+Figma chit.
+
+## Verification
+
+Compared the Area captures (`color-swatch-picker/area--*`) with
+`color-picker/figma--swatches`. Build and test results are in the
+[cohesion audit](../research/cohesion-audit.md#verification).
+
+## Feedback log
+
+- 2026-09-26 · cohesion audit → no change; spec written → `color-swatch-picker/area--*`.
+- 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → cell radius
+  concentric with the swatch (8 / 9 / 10); sizes tile added; no new product swatch grid →
+  `color-swatch-picker/area--row` (cell 9px), `area--sizes` (cell 8px).

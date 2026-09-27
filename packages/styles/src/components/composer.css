@@ -14,7 +14,8 @@
     padding: calc(var(--_composer-inset) - var(--area-stroke-width));
     /* spec: ChatGPT floats on a 4% ring (≈ rgb 245) and a soft 0 2px 8px shadow rather than a field border. */
     border: var(--area-stroke-width) solid var(--area-border-decorative);
-    border-radius: min(calc(var(--area-radius-control) + var(--_composer-inset)), calc(var(--_composer-height) * var(--area-radius-cap)));
+    --_composer-radius: min(calc(var(--area-radius-control) + var(--_composer-inset)), calc(var(--_composer-height) * var(--area-radius-cap)));
+    border-radius: var(--_composer-radius);
     background: var(--area-input-bg);
     box-shadow: 0 2px 8px var(--area-shadow-color);
     color: var(--area-input-text);
@@ -43,7 +44,7 @@
   .area-composer__extras { display: contents; }
   .area-composer__footer { justify-content: space-between; }
   .area-composer__actions > .area-button { flex: none; }
-  .area-composer__submit { display: grid; place-items: center; flex: 0 0 var(--area-control-md); inline-size: var(--area-control-md); block-size: var(--area-control-md); padding: 0; border: 0; border-radius: 50%; background: var(--area-neutral-solid); color: var(--area-fg-on-neutral); cursor: pointer; }
+  .area-composer__submit { display: grid; place-items: center; flex: 0 0 var(--area-control-md); inline-size: var(--area-control-md); block-size: var(--area-control-md); padding: 0; border: 0; border-radius: max(0px, calc(var(--_composer-radius) - var(--_composer-inset))); background: var(--area-neutral-solid); color: var(--area-fg-on-neutral); cursor: pointer; }
   .area-composer__submit svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-composer__submit:hover:not(:disabled) { background: var(--area-neutral-solid-hover); }
   .area-composer__submit:disabled { background: var(--area-bg-component); color: var(--area-fg-disabled); cursor: not-allowed; }
