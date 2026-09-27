@@ -95,7 +95,8 @@ export function AnchoredPopover({ trigger, open: openProp, defaultOpen, onOpenCh
       popoverTarget: id,
       onClick: compose(t.props.onClick, toggleOnClick(setOpen, open)),
     }) : trigger}
-    {surface({ id, ref: surfaceNode, popover: "auto", tabIndex: -1 } as Div & { ref: Ref<HTMLDivElement> })}
+    {/* A non-modal dialog, as the trigger's aria-haspopup announces. */}
+    {surface({ id, ref: surfaceNode, role: "dialog", popover: "auto", tabIndex: -1 } as Div & { ref: Ref<HTMLDivElement> })}
   </>;
 }
 

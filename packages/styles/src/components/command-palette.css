@@ -1,0 +1,122 @@
+/* ---------------------------------------------------------------------------
+ * Command palette
+ *
+ * A search field over a list of actions and places, opened with a shortcut (Notion's
+ * "Search or ask", ⌘K). The field keeps focus while the arrow keys move through the list
+ * (combobox + listbox); rows are Menu's rows. docs/specs/command-palette.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-command-palette__modal {
+    /* spec: Notion opens its palette 77 from the top, not centred, so results grow downward. */
+    margin: 77px auto auto; /* spec */
+    padding: 0;
+    border: 0;
+    max-inline-size: calc(100vw - var(--area-space-32));
+    max-block-size: calc(100vh - 77px - var(--area-space-16)); /* spec */
+    background: transparent;
+    overflow: visible;
+  }
+  .area-command-palette__modal::backdrop { background: light-dark(rgb(0 0 0 / 0.133), var(--area-bg-overlay)); /* spec: Dialog's scrim */ }
+
+  .area-command-palette {
+    /* spec (list pass, 2026-09-26): Menu's list model — 4 inset, 32 rows 2 apart, radius 8 — so the
+     * corner is row radius + inset = 12, the same as Menu and the Combobox list. */
+    --_list-inset: var(--area-space-4);
+    /* Every column in the palette is the rows' column: a row's icon sits the row's own icon inset in. */
+    --_column: calc(var(--_list-inset) + (var(--area-control-md) - var(--area-icon-md)) / 2);
+    /* Rows keep Menu's icon-to-label gap, so row text starts where the typed text does. */
+    --_menu-gap: var(--area-space-12);
+    --_row-radius: min(max(0px, calc(var(--area-radius-container) - var(--area-space-4))), calc(var(--area-control-md) * var(--area-radius-cap)));
+    --_palette-radius: min(calc(var(--area-radius-container) * 2), calc(var(--_row-radius) + var(--_list-inset)));
+    display: flex;
+    flex-direction: column;
+    /* spec: Notion's list column is 600 wide. */
+    inline-size: min(calc(100vw - var(--area-space-32)), 600px); /* spec */
+    max-block-size: min(700px, calc(100vh - 77px - var(--area-space-16))); /* spec: Notion 700 */
+    overflow: hidden;
+    border: var(--area-border-width) solid var(--area-border-decorative);
+    border-radius: var(--_palette-radius);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    /* spec: Dialog's floating lift (Notion floats its palette on 24/48 and 4/12). */
+    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px var(--area-shadow-color); /* spec */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  .area-command-palette--inline { box-shadow: none; }
+
+  /* spec: Notion's search row: 48 tall, the field 12 in, 16/24 text after a 24 icon square. */
+  .area-command-palette__search {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-block-size: 48px; /* spec */
+    /* The search icon on the rows' icon column, the typed text on their text column (Menu's 12 gap). */
+    padding-inline: var(--_column);
+    gap: var(--area-space-12); /* spec: Menu's icon-to-label gap (12) */
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+  }
+  .area-command-palette__search-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    color: var(--area-fg-muted);
+  }
+  .area-command-palette__search-icon > svg { inline-size: 100%; block-size: 100%; }
+  .area-command-palette__input {
+    flex: 1;
+    min-inline-size: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+  }
+  .area-command-palette__input::placeholder { color: var(--area-input-placeholder); }
+
+  .area-command-palette__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-2);
+    flex: 1;
+    min-block-size: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--_list-inset);
+  }
+  .area-command-palette__list .area-menu__item { border-radius: var(--_row-radius); }
+  .area-command-palette__group { display: flex; flex-direction: column; gap: var(--area-space-2); }
+  /* Group headings are Menu's label rows (32, muted, on the rows' column); groups follow each
+   * other with the list's 2 gap, as a Menu's do. */
+  .area-command-palette__item[aria-disabled="true"] { cursor: not-allowed; opacity: 0.5; }
+  .area-command-palette__description { color: var(--area-fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
+  .area-command-palette__text { flex: 0 1 auto; }
+  .area-command-palette__item > .area-kbd { margin-inline-start: auto; flex-shrink: 0; }
+  .area-command-palette__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: calc(var(--area-control-md) * 3);
+    color: var(--area-fg-muted);
+  }
+
+  /* Key hints: what the keys do here, quiet, below the list. */
+  .area-command-palette__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-16);
+    flex-shrink: 0;
+    min-block-size: var(--area-control-md);
+    /* The hints start on the rows' icon column. */
+    padding-inline: var(--_column);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+  }
+  .area-command-palette__hint { display: inline-flex; align-items: center; gap: var(--area-space-6); }
+}

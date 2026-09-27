@@ -15,7 +15,8 @@
     border: var(--area-stroke-width) solid var(--area-input-edge);
     border-radius: min(var(--area-radius-control), calc(var(--_group-height) * var(--area-radius-cap)));
     background-color: var(--area-input-bg);
-    box-shadow: var(--area-shadow-1);
+    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
+    box-shadow: none;
     color: var(--area-input-text);
     font-size: var(--_group-text);
     line-height: var(--_group-leading);

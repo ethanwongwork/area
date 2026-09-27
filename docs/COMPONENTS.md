@@ -29,7 +29,7 @@ named groups (Default, Variants, Tones, Sizes, Layout, Content, States, Behavior
 The manifest and React exports are authoritative for supported API; the gallery shows
 actual specimens. Current families include:
 
-- Actions and choices: Button, Checkbox/CheckboxGroup, Radio/RadioGroup, Switch,
+- Actions and choices: Button, SplitButton, Checkbox/CheckboxGroup, Radio/RadioGroup, Switch,
   Slider, Chip/ChipGroup and Segmented.
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, Textarea,
   Composer, native Select, ColorField, ColorSwatchPicker, ColorPicker and Calendar.
@@ -75,8 +75,9 @@ built next; this list is an inventory, not an order of work.
 3. **ButtonGroup and Toolbar — built, in review.** ButtonGroup collects independent
    actions and toggles in one visual track. Toolbar adds command grouping, roving
    keyboard focus and native overflow disclosure. Alignment/distribution/flip buttons execute commands; flow direction
-   and mutually exclusive modes reuse Segmented. Add SplitButton only where a default
-   action and its menu have separate jobs. Button already supports iconOnly: no second
+   and mutually exclusive modes reuse Segmented. SplitButton (built, in review) joins a
+   default action to a menu of related actions; it is standalone, as in Fluent, Material,
+   Carbon and Atlassian ([spec](specs/split-button.md)). Button already supports iconOnly: no second
    icon-button implementation is needed. [Fluent's catalogue](https://fluent2.microsoft.design/components/web/react)
    distinguishes Toolbar, SpinButton and TagPicker from ordinary inputs.
 4. **AlignmentPicker — built, in review.** A reusable nine-position choice with spatial arrow-key navigation,
@@ -96,9 +97,10 @@ built next; this list is an inventory, not an order of work.
    blend mode, a contrast check, library colors and a popover trigger (needs overlay
    behavior). [React Aria ColorPicker](https://react-aria.adobe.com/ColorPicker) remains the
    behavioral reference; a ColorWheel and per-channel sliders are optional later parts.
-6. **Inspector compositions.** PropertyRow, paired fields, linked four-value controls
-   for padding/corners, collapsible sections, reorderable property lists, and a resizable
-   panel. Fill/stroke/effect rows combine a value editor with visibility, add/remove and
+6. **Inspector compositions.** PanelRow (paired fields), BoxField (linked four-value
+   padding/corners, [spec](specs/box-field.md)), collapsible sections and PropertyList
+   (reorderable property lists) are built and accepted; Panel `resizable`
+   ([spec](specs/resizable-panel.md)) is in review. Fill/stroke/effect rows combine a value editor with visibility, add/remove and
    reorder actions. Typography, shadow, layout and export editors should be recipes
    assembled from the same primitives, with their own domain validation.
 7. **Overlay behavior.** Built 2026-09-27, in review ([spec](specs/overlay.md)): a `trigger`
@@ -150,6 +152,39 @@ Chakra/Ark, Spectrum 2) across about 95 component jobs.
   tag mode → Menu keyboard, submenus, ContextMenu and CommandPalette → ColorPicker paints →
   Disclosure/Accordion → DatePicker family → Resizable and ScrollArea → Drawer and
   AlertDialog → chat message primitives → FileUpload → HoverCard and Toggletip.
+### Product-specific components (ChatGPT, Notion, Figma), 2026-09-26
+
+Components the three target products use that neither the inventory above nor a generic
+catalogue names. Each would be measured in its product like every other component.
+
+- **Foundations that unlock several of these:** Combobox (Figma's font picker, ChatGPT's
+  model picker, Notion's select property; filtering, async results, free text),
+  CommandPalette (Notion's slash menu and ⌘K search, Figma's quick actions; built on
+  Combobox + Menu), ContextMenu (right-click in all three; Menu at the pointer), HoverCard
+  (Notion's page peek, link previews).
+- **Conversation (ChatGPT):** Message (user bubble and assistant prose, streaming state),
+  MessageActions (copy, thumbs, regenerate, shown on hover), ThinkingDisclosure (collapsible
+  reasoning with a live timer), SourceChip / citation pill, AttachmentCard (file in the
+  composer, with upload progress and remove), PromptSuggestions (starter chips), ModelPicker
+  (a Menu recipe with descriptions and a check), ScrollToLatest (floating round button),
+  VoiceInput (record button and waveform).
+- **Documents (Notion):** EmojiPicker / IconPicker (page icons; search, categories, skin
+  tone, recent), Callout (icon + tinted block), ToggleBlock (disclosure in running text),
+  TagPicker / multi-select property (coloured option tags, create-on-type), PeoplePicker
+  (avatars, search, invite), Reactions (emoji counts, add), CommentThread, InlineEditableTitle,
+  FloatingFormatBar (selection toolbar), DatabaseCard (board card with properties),
+  PropertyValue (the typed value cell: date, select, person, checkbox, URL).
+- **Design tools (Figma):** ColorArea and ColorSlider (the picker's parts), GradientEditor
+  (stops on a track), EyedropperButton, ScrubbableAngle (dial), EasingCurveEditor,
+  ShortcutRecorder, ZoomControl (percentage menu with fit and 100%), LayerRow badges
+  (component, instance, mask markers), ConstraintsPicker (pin to edges; multi-select, unlike
+  AlignmentPicker), UnitField (px / % / auto switch inside a NumberField), FontPicker
+  (Combobox with previews and weight axis), VariableChip (a bound token in a field, detach
+  on hover).
+- **Shared and small:** Link, SearchField (clear, shortcut hint), EmptyState, KeyboardShortcut
+  overlay (a sheet of Kbd groups), Pagination, Stepper, Meter, circular Progress, ScrollArea,
+  Splitter (two resizable regions), Sheet / Drawer, Banner, Stat, DescriptionList,
+  DateField / Calendar / DatePicker.
 
 Breadth references: [Carbon](https://carbondesignsystem.com/components/overview/components/)
 for enterprise forms and structured navigation; [Primer](https://primer.style/product/components/)

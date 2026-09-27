@@ -1,0 +1,69 @@
+/* ---------------------------------------------------------------------------
+ * Message
+ *
+ * One turn in a conversation (ChatGPT): the person's words in a bubble at the end of the
+ * column, the assistant's as plain prose across it, each with a row of actions.
+ * docs/specs/message.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-message {
+    display: flex;
+    flex-direction: column;
+    /* spec: actions 12 under the last line (ChatGPT 12). */
+    gap: var(--area-space-12);
+    inline-size: 100%;
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+  }
+  .area-message--user { align-items: flex-end; }
+  .area-message--assistant { align-items: stretch; }
+  /* Actions wait until the answer is complete (ChatGPT shows them once it stops). */
+  .area-message[data-streaming] > .area-message__actions { visibility: hidden; }
+
+  /* spec: ChatGPT's bubble — padding 10/16 on 16/24 text, at most 70% of the column.
+   * Corner: the composer's (16), where the words were typed; ChatGPT's 22 is a pill at one line. */
+  .area-message__bubble {
+    max-inline-size: 70%; /* spec */
+    padding: 10px var(--area-space-16); /* spec */
+    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-button-cap))) + var(--area-space-8));
+    background-color: var(--area-bg-component);
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  /* spec: the assistant's prose runs the column, paragraphs 16 apart (ChatGPT 16). */
+  .area-message__content { min-inline-size: 0; overflow-wrap: anywhere; }
+  .area-message__content > * { margin-block: 0; }
+  .area-message__content > * + * { margin-block-start: var(--area-space-16); }
+
+  /* spec: 32 icon buttons with no gap, muted (ChatGPT 143 on 13 ink), the row pulled out by the
+   * button's own padding so the first icon sits on the text column (ChatGPT 532 / 538). */
+  .area-message__actions {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-inline: calc((var(--area-control-md) - var(--area-icon-md)) / -2);
+  }
+  .area-message__actions .area-button { --_fg: var(--area-fg-muted); }
+  /* The person's actions show on hover or focus (ChatGPT hides them until then); the latest
+   * assistant turn keeps its actions shown. */
+  .area-message--user > .area-message__actions { opacity: 0; transition: var(--area-transition); }
+  .area-message--user:is(:hover, :focus-within) > .area-message__actions { opacity: 1; }
+  @media (hover: none) { .area-message--user > .area-message__actions { opacity: 1; } }
+
+  /* While the answer streams in, a dot follows the last word. */
+  .area-message__cursor {
+    display: inline-block;
+    inline-size: var(--area-space-8);
+    block-size: var(--area-space-8);
+    margin-inline-start: var(--area-space-4);
+    border-radius: var(--area-radius-full);
+    background-color: currentColor;
+    vertical-align: middle;
+    animation: area-message-pulse 1s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) { .area-message__cursor { animation: none; } }
+  @keyframes area-message-pulse { 50% { opacity: 0.3; } }
+}

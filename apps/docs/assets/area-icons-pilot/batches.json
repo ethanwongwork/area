@@ -1,0 +1,302 @@
+{
+  "$comment": "Icon review batches and owner status (approved | revising | review). The gallery's Icons page lays tiles out by batch. Rotations and mirrors follow their base icon. Record: docs/specs/icons.md.",
+  "batches": [
+    {
+      "id": "batch-1",
+      "title": "Batch 1 · Core",
+      "note": "Approved by the owner on 2026-09-25. Back in review after round 3: open and reset (revised), bell (flare), and document, folder, copy and trash (corner radius 1.5; document fold enlarged to Fluent's size). Round 5 optical audit: person and warning enlarged. Optical balance pass: rings r 6 (info, available), folder 13.1 wide.",
+      "icons": {
+        "add": "approved",
+        "arrow-up": "approved",
+        "bell": "approved",
+        "check": "approved",
+        "chevron-down": "approved",
+        "copy": "approved",
+        "dismiss": "approved",
+        "document": "approved",
+        "eye": "approved",
+        "folder": "approved",
+        "info": "approved",
+        "link": "approved",
+        "more-horizontal": "approved",
+        "open": "approved",
+        "person": "approved",
+        "reset": "approved",
+        "search": "approved",
+        "settings": "approved",
+        "status-available": "approved",
+        "trash": "approved",
+        "warning": "approved"
+      }
+    },
+    {
+      "id": "batch-2",
+      "title": "Batch 2 · Alignment",
+      "note": "Revised: centre variants sized to fill the keyline like align-left (bars 11 × 3 and 7 × 3, same height, radius and spacing); long bar first in reading order.",
+      "icons": {
+        "align-left": "approved",
+        "align-center": "approved"
+      }
+    },
+    {
+      "id": "batch-3",
+      "title": "Batch 3 · Docs chrome",
+      "note": "Round 5: slimmer flash, M-shaped book, sharper droplet tip and a larger bowl, three layers facing up. Candidates on the Exploration sheet. Round 6: book candidates after the owner's reference on the Exploration sheet.",
+      "icons": {
+        "expand": "approved",
+        "panel-left": "approved",
+        "book": "approved",
+        "options": "approved",
+        "color": "approved",
+        "text": "approved",
+        "shapes": "approved",
+        "list": "approved",
+        "square-dashed": "approved",
+        "layers": "approved",
+        "flash": "approved"
+      }
+    },
+    {
+      "id": "batch-4",
+      "title": "Batch 4 · Inspector",
+      "note": "Area's inspector marks redrawn on the system. Families derive: corner gives all four corners; flip, flow, gap and padding-sides transpose to their vertical forms; sliders is options transposed (listed with options). Rotate, flip, corner, flow and hide follow Figma's editor icons (round 1). Not yet redrawn: auto-position (its S-path cannot hold a standard arrowhead without near misses), bars-three (unused); eye and corner-radius duplicate existing icons. Rotate, round 4: reset's own arc mirrored round the square (owner's pick B).",
+      "icons": {
+        "angle": "approved",
+        "aspect-ratio": "approved",
+        "auto-layout": "approved",
+        "corner": "approved",
+        "corners": "approved",
+        "dots-four": "approved",
+        "eye-off": "approved",
+        "flip": "approved",
+        "flow": "approved",
+        "flow-wrap": "approved",
+        "flow-free": "approved",
+        "gap": "approved",
+        "opacity": "approved",
+        "padding": "approved",
+        "padding-sides": "approved",
+        "token": "approved",
+        "rotate": "approved"
+      }
+    },
+    {
+      "id": "batch-5",
+      "title": "Batch 5 · Common",
+      "note": "Everyday icons, drawn on the system and sized by the optical audit. Pin shares the color droplet's construction with its tip down; clock uses the away-status hands; download and upload share one tray. Round 2: star D (fuller, r 0.75 tips) and one centred sparkle applied; heart candidates on the Exploration sheet.",
+      "icons": {
+        "lock": "approved",
+        "star": "approved",
+        "heart": "approved",
+        "calendar": "approved",
+        "clock": "approved",
+        "pencil": "approved",
+        "download": "approved",
+        "upload": "approved",
+        "filter": "approved",
+        "sort": "approved",
+        "sparkle": "approved",
+        "pin": "approved"
+      }
+    },
+    {
+      "id": "batch-6",
+      "title": "Batch 6 · Everyday",
+      "note": "Common component-library needs. Refresh is reset mirrored (clockwise), not a new drawing. Send, mail and bookmark use free angles with filleted corners; image's hill and mail's flap are cuts, so the filled variants separate their layers.",
+      "icons": {
+        "minus": "approved",
+        "send": "approved",
+        "home": "approved",
+        "mail": "approved",
+        "chat": "approved",
+        "image": "approved",
+        "mic": "approved",
+        "help": "approved",
+        "bookmark": "approved"
+      }
+    },
+    {
+      "id": "batch-7",
+      "title": "Batch 7 · Controls & system",
+      "note": "Toward a full set: navigation (menu, grid; more-vertical is more-horizontal turned 90°), media (play, pause), editing (undo; redo is its mirror), theme (sun, moon, desktop), development (code, terminal), status and sharing (error, unlock, share, globe). Rings at r 6. Globe A kept.",
+      "icons": {
+        "menu": "approved",
+        "grid": "approved",
+        "play": "approved",
+        "pause": "approved",
+        "undo": "approved",
+        "sun": "approved",
+        "moon": "approved",
+        "desktop": "approved",
+        "code": "approved",
+        "terminal": "approved",
+        "error": "approved",
+        "unlock": "approved",
+        "share": "approved",
+        "globe": "approved"
+      }
+    },
+    {
+      "id": "batch-8",
+      "title": "Batch 8 · Objects",
+      "note": "The deferred three (paperclip, tag, people) and zoom, flag, archive, cloud, phone, camera, cart. Round 2: people uses person's parts with the overlap cut; flag has sharp points; archive is landscape. Cloud and paperclip candidates on the Exploration sheet.",
+      "icons": {
+        "attach": "approved",
+        "tag": "approved",
+        "people": "approved",
+        "zoom-in": "approved",
+        "zoom-out": "approved",
+        "flag": "approved",
+        "archive": "approved",
+        "cloud": "approved",
+        "phone": "approved",
+        "camera": "approved",
+        "cart": "approved"
+      }
+    },
+    {
+      "id": "batch-9",
+      "title": "Batch 9 · Text & objects",
+      "note": "The rich-text toolbar (bold, italic, underline, quote, hash, at) at text's height, beside link, code and list; and key, shield, gift, map, chart and table. Round 2: bold is a solid B with even 2px walls (Fluent's weight); shield 11 wide; map and bold fill by weight; gift's filled lid separates. Quote A kept.",
+      "icons": {
+        "bold": "approved",
+        "italic": "approved",
+        "underline": "approved",
+        "quote": "approved",
+        "hash": "approved",
+        "at": "approved",
+        "key": "approved",
+        "shield": "approved",
+        "gift": "approved",
+        "map": "approved",
+        "chart": "approved",
+        "table": "approved"
+      }
+    },
+    {
+      "id": "batch-10",
+      "title": "Batch 10 · Editing & devices",
+      "note": "Strikethrough, heading and bulleted list join the text toolbar (a numbered list's numerals cannot read at 16px); wi-fi, bluetooth, battery, plug and power; printer, headphones, video and inbox. Filled review: headphones' cups fill (not the band); printer's sheet separates; battery's terminal sits a tight gap away. Owner round: battery's terminal closer (an approved close gap), bluetooth after Fluent, strikethrough as a letter S at the type glyphs' cap height.",
+      "icons": {
+        "strikethrough": "approved",
+        "heading": "approved",
+        "list-bullet": "approved",
+        "wifi": "approved",
+        "bluetooth": "approved",
+        "battery": "approved",
+        "plug": "approved",
+        "power": "approved",
+        "printer": "approved",
+        "headphones": "approved",
+        "video": "approved",
+        "inbox": "approved"
+      }
+    },
+    {
+      "id": "batch-11",
+      "title": "Batch 11 · Everyday objects",
+      "note": "Thumbs up (thumbs down is its mirror), smile, briefcase, building, compass (a solid needle, sharp by nature), crop, trophy and coffee.",
+      "icons": {
+        "thumbs-up": "approved",
+        "smile": "approved",
+        "briefcase": "approved",
+        "building": "approved",
+        "compass": "approved",
+        "crop": "approved",
+        "trophy": "approved",
+        "coffee": "approved"
+      }
+    },
+    {
+      "id": "batch-12",
+      "title": "Batch 12 · System & tools",
+      "note": "Database, server, scissors, log in and log out (a bracket and reset's-size arrow), keyboard, pointer, move (four 2px heads on the lattice), hourglass and loader.",
+      "icons": {
+        "database": "approved",
+        "server": "approved",
+        "scissors": "approved",
+        "log-in": "approved",
+        "log-out": "approved",
+        "keyboard": "approved",
+        "pointer": "approved",
+        "move": "review",
+        "hourglass": "approved",
+        "loader": "approved"
+      }
+    },
+    {
+      "id": "batch-13",
+      "title": "Batch 13 · Media & commerce",
+      "note": "Volume and volume off (one speaker), music, film; credit card, wallet, receipt; lightbulb and megaphone.",
+      "icons": {
+        "volume": "approved",
+        "volume-off": "approved",
+        "music": "approved",
+        "film": "approved",
+        "credit-card": "approved",
+        "wallet": "approved",
+        "receipt": "approved",
+        "lightbulb": "approved",
+        "megaphone": "approved"
+      }
+    },
+    {
+      "id": "batch-14",
+      "title": "Batch 14 · Tools & actions",
+      "note": "Person add (people's figure and a plus), history (reset round clock hands), save, bug, eyedropper, paintbrush, puzzle piece and ruler.",
+      "icons": {
+        "person-add": "review",
+        "history": "approved",
+        "save": "approved",
+        "bug": "review",
+        "eyedropper": "approved",
+        "paintbrush": "review",
+        "puzzle": "review",
+        "ruler": "approved"
+      }
+    },
+    {
+      "id": "batch-15",
+      "title": "Batch 15 · Off states & objects",
+      "note": "Bell off, mic off and video off (each shape cut open round one slash), calculator, graduation cap, car and package.",
+      "icons": {
+        "bell-off": "review",
+        "mic-off": "review",
+        "video-off": "review",
+        "calculator": "review",
+        "graduation-cap": "approved",
+        "car": "review",
+        "package": "review"
+      }
+    },
+    {
+      "id": "batch-16",
+      "title": "Batch 16 · Keys & connections",
+      "note": "Wi-Fi off and link off (slashed line glyphs), cloud upload (the arrow leaves through the cloud's foot), command, return, backspace and rocket.",
+      "icons": {
+        "wifi-off": "review",
+        "link-off": "review",
+        "cloud-upload": "review",
+        "command": "review",
+        "return": "review",
+        "backspace": "review",
+        "rocket": "review"
+      }
+    },
+    {
+      "id": "batch-17",
+      "title": "Batch 17 · Media & everyday",
+      "note": "Skip forward and back (one drawing, mirrored), stop, repeat, person remove, clipboard, sticky note, trending up and shopping bag.",
+      "icons": {
+        "skip-forward": "review",
+        "stop": "review",
+        "repeat": "review",
+        "person-remove": "review",
+        "clipboard": "review",
+        "sticky-note": "review",
+        "trending-up": "review",
+        "shopping-bag": "review"
+      }
+    }
+  ]
+}

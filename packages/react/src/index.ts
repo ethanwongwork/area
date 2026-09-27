@@ -11,6 +11,7 @@
  */
 export { Button, type ButtonProps } from "./components/Button.tsx";
 export { ButtonGroup, type ButtonGroupProps } from "./components/ButtonGroup.tsx";
+export { SplitButton, type SplitButtonProps } from "./components/SplitButton.tsx";
 export { Input, InputAction, type InputProps, type InputActionProps } from "./components/Input.tsx";
 export { NumberField, type NumberFieldProps } from "./components/NumberField.tsx";
 export { InputGroup, InputGroupText, type InputGroupProps, type InputGroupTextProps } from "./components/InputGroup.tsx";
@@ -20,6 +21,16 @@ export { AlignmentPicker, ALIGNMENT_POSITIONS, type AlignmentPickerProps, type A
 export { ColorSwatch, type ColorSwatchProps } from "./components/ColorSwatch.tsx";
 export { ColorSwatchPicker, type ColorSwatchPickerProps, type ColorSwatchOption } from "./components/ColorSwatchPicker.tsx";
 export { ColorField, normalizeHexColor, type ColorFieldProps } from "./components/ColorField.tsx";
+export { ModelPicker, type ModelPickerProps, type ModelOption } from "./components/ModelPicker.tsx";
+export { ScrollToLatest, type ScrollToLatestProps } from "./components/ScrollToLatest.tsx";
+export { Message, MessageActions, type MessageProps, type MessageActionsProps } from "./components/Message.tsx";
+export { PromptSuggestions, type PromptSuggestionsProps, type PromptSuggestion } from "./components/PromptSuggestions.tsx";
+export { HoverCard, type HoverCardProps } from "./components/HoverCard.tsx";
+export { ContextMenu, type ContextMenuProps } from "./components/ContextMenu.tsx";
+export { CommandPalette, type CommandPaletteProps, type CommandItem } from "./components/CommandPalette.tsx";
+export { Combobox, type ComboboxProps, type ComboboxOption } from "./components/Combobox.tsx";
+export { BoxField, type BoxFieldProps, type BoxValue } from "./components/BoxField.tsx";
+export { PropertyList, PropertyListItem, type PropertyListProps, type PropertyListItemProps } from "./components/PropertyList.tsx";
 export { TreeView, type TreeViewProps, type TreeViewNode } from "./components/TreeView.tsx";
 export { Composer, type ComposerProps } from "./components/Composer.tsx";
 export { Field, Label, type FieldProps, type LabelProps } from "./components/Field.tsx";

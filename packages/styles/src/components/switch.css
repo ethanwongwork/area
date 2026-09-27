@@ -83,7 +83,10 @@
     transition: inset-inline-start var(--area-duration-slow) var(--area-ease-out), inline-size var(--area-duration-fast) var(--area-ease-out);
   }
 
-  .area-switch__control:checked ~ .area-switch__track { background: var(--_on); border-color: var(--_on); }
+  .area-switch__control:checked ~ .area-switch__track,
+  .area-switch__track[data-checked] { background: var(--_on); border-color: var(--_on); }
+  /* data-checked: a display-only switch whose state lives on its host (a menu's checkable row). */
+  .area-switch__track[data-checked] .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width)); }
   .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width)); }
   .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); }
   .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); }
@@ -100,7 +103,7 @@
 
   .area-switch__text { display: flex; flex-direction: column; gap: var(--area-space-2); min-inline-size: 0; }
   .area-switch__label { display: block; font-size: var(--_text); line-height: var(--_leading); overflow-wrap: anywhere; }
-  .area-switch__description { display: block; font-size: var(--area-control-sm-text); line-height: var(--area-control-sm-leading); color: var(--area-fg-muted); overflow-wrap: anywhere; }
+  .area-switch__description { display: block; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); overflow-wrap: anywhere; }
   .area-switch__loading { display: inline-flex; align-items: center; min-block-size: var(--_leading); order: 1; }
   .area-switch--end .area-switch__text { order: 2; }
   .area-switch--start .area-switch__text { order: -2; }

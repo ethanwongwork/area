@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Avatar, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Input, InputAction, NumberField, Panel, PanelSection, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
-import { CheckIcon, DismissIcon, OpenIcon, SearchIcon, TrashIcon } from "../icons.tsx";
+import { CheckIcon, CornerRadiusIcon, DismissIcon, OpacityIcon, OpenIcon, RotateIcon, SearchIcon, TrashIcon } from "../icons.tsx";
 import { SliderRangeComposition } from "./slider-range.tsx";
 
 export const InputDefault = () => <Input aria-label="Label" placeholder="Placeholder" />;
@@ -58,7 +58,7 @@ export const InputRtl = () => (
 
 export const NumberFieldDefault = () => <Field label="Width"><NumberField defaultValue={240} unit="px" /></Field>;
 export const NumberFieldSteppers = () => <Field label="Opacity"><NumberField defaultValue={80} min={0} max={100} step={1} unit="%" steppers /></Field>;
-export const NumberFieldScrub = () => <Field label="Rotation"><NumberField defaultValue={15} min={-360} max={360} unit="°" scrub /></Field>;
+export const NumberFieldScrub = () => <NumberField aria-label="Rotation" defaultValue={15} min={-360} max={360} unit="°" scrub={<RotateIcon />} />;
 export const NumberFieldDecimal = () => <Field label="Scale"><NumberField defaultValue={1.25} min={0} step={0.05} fractionDigits={2} /></Field>;
 export const NumberFieldExpression = () => <Field label="Position"><NumberField defaultValue={24} unit="px" scrub steppers /></Field>;
 export const NumberFieldMixed = () => {
@@ -69,16 +69,22 @@ export const NumberFieldSoft = () => <Field label="Height"><NumberField variant=
 export const NumberFieldReadOnly = () => <Field label="Locked"><NumberField defaultValue={48} unit="px" readOnly /></Field>;
 export const NumberFieldDisabled = () => <Field label="Unavailable"><NumberField defaultValue={48} unit="px" disabled /></Field>;
 export const NumberFieldSizes = () => <div style={{ display: "grid", gap: "var(--area-space-16)", inlineSize: "var(--area-input-inline-size)" }}><NumberField size="sm" aria-label="Small" defaultValue={8} unit="px" /><NumberField size="md" aria-label="Medium" defaultValue={16} unit="px" /><NumberField size="lg" aria-label="Large" defaultValue={24} unit="px" /></div>;
+/* Figma's inspector: soft fields whose letter or icon is the scrub handle, no px, no label row. */
 export const NumberFieldInspector = () => {
   const pair = { display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--area-space-8)" };
   return <Panel size="sm" title="Frame" aria-label="Frame properties">
     <PanelSection heading="Position"><div style={pair}>
-      <Field label="X"><NumberField fullWidth defaultValue={24} unit="px" scrub /></Field>
-      <Field label="Y"><NumberField fullWidth defaultValue={48} unit="px" scrub /></Field>
+      <NumberField variant="soft" fullWidth aria-label="X position" defaultValue={24} scrub="X" />
+      <NumberField variant="soft" fullWidth aria-label="Y position" defaultValue={48} scrub="Y" />
+      <NumberField variant="soft" fullWidth aria-label="Rotation" defaultValue={0} unit="°" scrub={<RotateIcon />} />
     </div></PanelSection>
     <PanelSection heading="Size"><div style={pair}>
-      <Field label="W"><NumberField fullWidth defaultValue={320} min={0} unit="px" /></Field>
-      <Field label="H"><NumberField fullWidth defaultValue={240} min={0} unit="px" /></Field>
+      <NumberField variant="soft" fullWidth aria-label="Width" defaultValue={320} min={0} scrub="W" />
+      <NumberField variant="soft" fullWidth aria-label="Height" defaultValue={240} min={0} scrub="H" />
+    </div></PanelSection>
+    <PanelSection heading="Appearance"><div style={pair}>
+      <NumberField variant="soft" fullWidth aria-label="Opacity" defaultValue={100} min={0} max={100} unit="%" scrub={<OpacityIcon />} />
+      <NumberField variant="soft" fullWidth aria-label="Corner radius" defaultValue={8} min={0} scrub={<CornerRadiusIcon />} />
     </div></PanelSection>
   </Panel>;
 };

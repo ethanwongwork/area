@@ -35,8 +35,8 @@ export const GalleryPanelFlush = () => (
 /* Figma's inspector fields: a letter in the leading slot that also drags the value. */
 export const GalleryNumberFieldPrefix = () => (
   <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--area-space-8)", inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-16))" }}>
-    <NumberField fullWidth variant="soft" prefix="X" scrub aria-label="X" defaultValue={24} />
-    <NumberField fullWidth variant="soft" prefix="Y" scrub aria-label="Y" defaultValue={48} />
+    <NumberField fullWidth variant="soft" scrub="X" aria-label="X" defaultValue={24} />
+    <NumberField fullWidth variant="soft" scrub="Y" aria-label="Y" defaultValue={48} />
   </div>
 );
 

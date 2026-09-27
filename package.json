@@ -23,6 +23,8 @@
     "test:slider": "node --test packages/react/tests/slider.test.mjs",
     "test:input-field": "node --test packages/react/tests/input-field.test.mjs",
     "test:badge": "node --test packages/react/tests/badge.test.mjs",
+    "test:split-button": "node --test packages/react/tests/split-button.test.mjs",
+    "test:dialog": "node --test packages/react/tests/dialog.test.mjs",
     "test:contracts": "node --test packages/styles/scripts/manifest-parity.test.mjs apps/docs/scripts/axis-preferences.test.mjs",
     "capture:compare": "node scripts/capture-compare.mjs",
     "icons:pilot": "node apps/docs/scripts/gen-pilot-icons.mjs",

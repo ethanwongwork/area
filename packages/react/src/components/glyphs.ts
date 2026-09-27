@@ -2,8 +2,11 @@
  * apps/docs/scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
  * Each glyph is a list of stroked centre-line paths on the 16px grid. */
 export const glyphs = {
+  "add": [
+    "M8 2.5V13.5M2.5 8H13.5"
+  ],
   "arrow-up": [
-    "M8 13V3M3.5 7.5L8 3L12.5 7.5"
+    "M8 14V2M3 7L8 2L13 7"
   ],
   "check": [
     "M3 8L6.5 11.5L13.5 4.5"
@@ -16,6 +19,36 @@ export const glyphs = {
   ],
   "dismiss": [
     "M3 3L13 13M13 3L3 13"
+  ],
+  "grip": [
+    "M5.5 6H10.5M5.5 10H10.5"
+  ],
+  "subtract": [
+    "M2.5 8H13.5"
+  ],
+  "corner": [
+    "M3.5 12.5V8.5A5 5 0 0 1 8.5 3.5H12.5"
+  ],
+  "corners": [
+    "M6 2.5H5A2.5 2.5 0 0 0 2.5 5V6",
+    "M10 2.5H11A2.5 2.5 0 0 1 13.5 5V6",
+    "M13.5 10V11A2.5 2.5 0 0 1 11 13.5H10",
+    "M6 13.5H5A2.5 2.5 0 0 1 2.5 11V10"
+  ],
+  "padding-side": [
+    "M4.5 2.5H11.5A2 2 0 0 1 13.5 4.5V11.5A2 2 0 0 1 11.5 13.5H4.5A2 2 0 0 1 2.5 11.5V4.5A2 2 0 0 1 4.5 2.5Z",
+    "M5.5 5.5V10.5"
+  ],
+  "padding-axis": [
+    "M4.5 2.5H11.5A2 2 0 0 1 13.5 4.5V11.5A2 2 0 0 1 11.5 13.5H4.5A2 2 0 0 1 2.5 11.5V4.5A2 2 0 0 1 4.5 2.5Z",
+    "M5.5 5.5V10.5M10.5 5.5V10.5"
+  ],
+  "sides": [
+    "M5.5 2.5H10.5M13.5 5.5V10.5M10.5 13.5H5.5M2.5 10.5V5.5"
+  ],
+  "search": [
+    "M12 7A5 5 0 1 1 2 7A5 5 0 1 1 12 7Z",
+    "M10.5 10.5L14 14"
   ]
 } as const;
 export type GlyphName = keyof typeof glyphs;

@@ -4,19 +4,22 @@
  * parent family.
  */
 export const COMPLETE_COMPONENTS = new Set([
-  'badge', 'badge-group', 'breadcrumb', 'code', 'field', 'kbd', 'panel',
-  'separator', 'slider', 'tabs', 'textarea', 'tooltip',
+  'alert', 'alignment-picker', 'avatar', 'badge', 'badge-group', 'box-field', 'breadcrumb',
+  'button', 'button-group', 'checkbox', 'chip', 'code', 'code-block',
+  'color-field', 'color-picker', 'color-swatch', 'color-swatch-picker', 'composer',
+  'dialog', 'field', 'indicator', 'input', 'input-group', 'kbd', 'menu', 'nav',
+  'number-field', 'popover', 'progress', 'property-list', 'radio', 'segmented',
+  'select', 'separator', 'skeleton', 'slider', 'spinner', 'split-button', 'switch',
+  'table', 'tabs', 'textarea', 'toast', 'toolbar', 'tooltip', 'tree-view',
 ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
 export const REVIEW_COMPONENTS = new Set([
-  // Reopened by the 2026-09-26 cohesion audit (docs/research/cohesion-audit.md); each has a Pass review.
-  'alert', 'avatar', 'button', 'card', 'checkbox', 'chip', 'code-block', 'input', 'menu', 'nav',
-  'popover', 'progress', 'radio', 'segmented', 'select', 'skeleton', 'spinner', 'switch', 'table',
-  'indicator',
-  'calendar', 'color-picker', 'dialog', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'toolbar', 'button-group', 'input-group', 'number-field', 'toast', 'tree-view', 'composer']);
+  // Rebuilt after approval (layouts, sizes, linked cards, templates): docs/specs/card.md.
+  'card',
+  'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['alert', 'avatar', 'button', 'card', 'checkbox', 'chip', 'code-block', 'input', 'menu', 'nav', 'popover', 'progress', 'radio', 'segmented', 'select', 'skeleton', 'spinner', 'switch', 'table', 'tree-view', 'dialog', 'toast', 'calendar', 'color-picker', 'composer', 'breadcrumb', 'tooltip', 'badge-group', 'badge', 'indicator', 'icon-pilot', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'toolbar', 'input-group', 'number-field'];
+export const RECENT_COMPONENTS = ['card', 'switch', 'checkbox', 'radio', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'dialog', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge-group', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'toolbar', 'input-group', 'alert', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];

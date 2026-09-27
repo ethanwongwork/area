@@ -1,6 +1,6 @@
 # Composer spec
 
-**Status:** in review · 2026-09-25 (first pass under the capture workflow)
+**Status:** accepted · 2026-09-26 (was: in review · 2026-09-25 (first pass under the capture workflow))
 **Captures:** `docs/research/captures/composer/`
 **Peers:** Input and Textarea (field text and placeholder), Button (actions), Toolbar
 
@@ -13,7 +13,12 @@
   text. The textarea grows to five control rows. Attachments, form submission and model
   selection belong to the application.
 - 2026-09-25: Composer is the next component after Tree view; the owner reviews later.
-- 2026-09-27: the mode button ("Standard") is too small and doesn't look like a real button; the send button takes a normal button corner, concentric with the composer's, not a circle.
+- 2026-09-26: radius. Owner asked whether the composer should match ChatGPT's round send button
+  or the button should use the normal radius; chose the recommendation (option B): the send
+  action is an Area Button (solid neutral, icon-only, md, 8 radius) and the composer's corner is
+  concentric with it (button radius + 8 inset = 16), computed so a pill send button (`submitPill`)
+  gives a pill composer. The resting 0 2px 8px shadow is dropped (no control has a shadow at rest).
+- 2026-09-26: accepted. Owner: "consider every component that you have built to be approved. if i havent given any feedback to change anything consider them approved."
 
 ## Job and boundaries
 
@@ -39,7 +44,7 @@ chatgpt  body 768 × 52, radius 26, no border; shadow 0 0 0 1px 4%, 0 2px 8px 4%
   input  16px, 26px line, 13px from the top
   actions 36px round, ghost ink rgb(143); voice/send 36px round
 area     shell, padding 8 (7 + 1 border), radius 16, border-decorative, 0 2px 8px shadow
-  entry  flex, gap 8: leading actions, textarea, trailing actions, 32px send, radius shell − inset (8)
+  entry  flex, gap 8: leading actions, textarea, trailing actions, 32px round send
   input  16/24, 4px block padding (32px row)
 ```
 
@@ -49,13 +54,11 @@ area     shell, padding 8 (7 + 1 border), radius 16, border-decorative, 0 2px 8p
 |---|---|---|---|
 | input · type | **16/24** (`text-md`) | ChatGPT 16px (26 line); type ramp body 16/24 | Was 14/20. The row stays 48px: (32 − 24) / 2 = 4px padding |
 | shell · edge | **1px `border-decorative`** (rgb 243) | ChatGPT's 4% ring (about rgb 245) | Was the field edge (226). Focus still paints the field focus ring |
-| shell · shadow | **0 2px 8px `shadow-color`** | ChatGPT 0 2px 8px 4% | Was `shadow-1`. ChatGPT's 80px glow at 2.4% is not adopted |
+| shell · shadow | none at rest (focus keeps its halo) | owner 2026-09-26: no control has a resting shadow | ChatGPT floats on 0 2px 8px 4%; superseded |
 | actions · gap | **8** | ChatGPT 8 | Was 4 |
 | actions · size | 32 | Peer: Button md | ChatGPT 36; Area's control scale is 28 / 32 / 40 |
-| send · radius | shell radius − inset (16 − 8 = 8, the md button radius) | Owner; concentric-corner rule | ChatGPT is round inside a pill |
-| mode (gallery) | a Menu trigger: Button `soft`, md (32), trailing chevron; items mark the current mode | Owner; peers Menu, Button | Was a 28px ghost button that toggled |
 | shell · height (inline) | 48 | 32px actions + 8px insets | ChatGPT 52 (36px actions) |
-| shell · radius | 16 | Area control radius + inset | **Open question**: ChatGPT is a full pill (26 on 52). The owner chose "rounder, not pill" for Tooltip; Composer is unchanged pending review |
+| shell · radius | 16 = send Button radius (8) + inset (8), concentric | owner 2026-09-26 (option B) | ChatGPT is a pill (26 on 52 = 18 + 8, also concentric with its round button); `submitPill` reproduces it |
 | placeholder | `input-placeholder` (fg-muted 102) | Peer: Input (Complete) | ChatGPT rgb(143) |
 | textarea · auto-grow | refits on text and on width changes | Bug fix | The height was only fitted on text changes. A composer that first laid out narrow (or sat in a resized panel) kept an inflated height: the gallery inline tile measured 176px empty |
 
@@ -68,9 +71,8 @@ to 480px it returns to 48px.
 
 ## Visual pass
 
-Pass reviews were removed at the owner's request; the family is inspected in the grouped
-gallery. The earlier before/after review was at 1× and 3×. Measured after: inline 480 × 48,
-stacked 480 × 116, border rgb(243), shadow 0 2px 8px, text 16/24.
+Pass review container (`GalleryReviewComposer`): before and after at 1× and 3×. Measured
+after: inline 480 × 48, stacked 480 × 116, border rgb(243), shadow 0 2px 8px, text 16/24.
 
 ## Verification
 
@@ -83,6 +85,4 @@ multi-line radius (would require typing), hover states.
 - 2026-09-25 · owner: "do the next component, I'll review all changes later" → Composer
   first pass: 16/24 text, faint ring and soft shadow, 8px action gap, auto-grow width fix →
   4 Area captures after.
-- 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
-  gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
-- 2026-09-27 · owner: mode button too small, send should be concentric → send radius `--_composer-radius − inset`; the stacked demo's mode is a soft md Button opening a Menu → headless Chromium, menu opened.
+- 2026-09-27 · owner (after this pass, on the older branch): the mode control is too small and not a real button; send concentric, not a circle → the send Button of this pass already answers the second; the stacked demo's mode is a soft md Button that opens a Menu.

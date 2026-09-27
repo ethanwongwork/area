@@ -1,6 +1,7 @@
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
+import { Glyph } from "./Glyph.tsx";
 import { Select } from "./forms.tsx";
 import { AnchoredMenu, AnchoredPopover, AnchoredTooltip } from "./Overlays.tsx";
 import { assignRef } from "./overlay.ts";
@@ -12,13 +13,16 @@ import type { OverlayAlign, OverlaySide } from "./overlay.ts";
  * of its own. Every appearance decision lives in `@area/styles`, which is what lets a
  * consumer use the CSS without React and get an identical result.
  */
-import { Children, forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
+import { Children, cloneElement, forwardRef, useEffect, useId, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
   HTMLAttributes,
   InputHTMLAttributes,
+  CSSProperties,
+  KeyboardEvent,
   MouseEvent,
+  ReactElement,
   ReactNode,
   Ref,
 } from "react";
@@ -417,17 +421,100 @@ export interface PanelProps extends Omit<Div, "title"> {
   flush?: boolean;
   /** The bar names the panel rather than heading it, so it carries no rule under it. */
   bareBar?: boolean;
+  /**
+   * Puts a resize separator on one edge: "start" for a panel docked at the end of the page (an
+   * inspector on the right), "end" for one at the start (a sidebar). Drag it, or focus it and use
+   * the arrow keys (Shift for larger steps), Home and End.
+   */
+  resizable?: "start" | "end";
+  /** Controlled width in px. */
+  width?: number;
+  /** Initial width in px; without it the panel starts at its CSS width. */
+  defaultWidth?: number;
+  onWidthChange?: (width: number) => void;
+  /** Resize limits in px (Figma's design panel: 241 to 500). */
+  minWidth?: number;
+  maxWidth?: number;
 }
 
+/* spec (docs/specs/resizable-panel.md): keyboard steps on the spacing grid. */
+const RESIZE_STEP = 8, RESIZE_STEP_LARGE = 32;
+
 export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(function Panel(
-  { size, title, action, footer, flush, bareBar, className, children, ...rest },
+  { size, title, action, footer, flush, bareBar, resizable, width, defaultWidth, onWidthChange, minWidth = 240, maxWidth = 500,
+    className, children, style, id, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
+  const generatedId = useId();
+  const panelId = id ?? `${generatedId}-panel`;
+  const titleId = `${generatedId}-title`;
+  // A named panel is a region: its title names it unless an aria-label is given.
+  const labelledByTitle = !ariaLabel && title != null && title !== false;
+  const root = useRef<HTMLDivElement | null>(null);
+  const [ownWidth, setOwnWidth] = useState<number | null>(defaultWidth ?? null);
+  const current = width ?? ownWidth;
+  const drag = useRef<{ x: number; width: number; flip: boolean } | null>(null);
+  const [resizing, setResizing] = useState(false);
+  // Without a starting width the separator still needs a value: read the rendered one.
+  useLayoutEffect(() => {
+    if (resizable && current == null && root.current) setOwnWidth(Math.round(root.current.getBoundingClientRect().width));
+  }, [resizable, current]);
+  const clamp = (next: number) => Math.round(Math.min(maxWidth, Math.max(minWidth, next)));
+  const commit = (next: number) => {
+    const bounded = clamp(next);
+    if (width === undefined) setOwnWidth(bounded);
+    onWidthChange?.(bounded);
+  };
+  // The start edge is on the left in LTR; moving that edge left widens the panel.
+  const grows = () => {
+    const rtl = root.current ? getComputedStyle(root.current).direction === "rtl" : false;
+    return (resizable === "start") !== rtl ? -1 : 1;
+  };
+  const limit = current == null ? undefined : current <= minWidth ? "min" : current >= maxWidth ? "max" : undefined;
+  const name = typeof ariaLabel === "string" ? ariaLabel : typeof title === "string" ? title : "panel";
+  const handle = resizable ? <div role="separator" tabIndex={0} className="area-panel__resize" data-edge={resizable} data-limit={limit}
+    aria-orientation="vertical" aria-controls={panelId} aria-label={`Resize ${name}`}
+    aria-valuenow={current ?? undefined} aria-valuemin={minWidth} aria-valuemax={maxWidth}
+    aria-valuetext={current == null ? undefined : `${current} pixels${limit === "min" ? " (minimum)" : limit === "max" ? " (maximum)" : ""}`}
+    onPointerDown={event => {
+      if (event.button !== 0 || current == null) return;
+      event.preventDefault();
+      event.currentTarget.setPointerCapture(event.pointerId);
+      drag.current = { x: event.clientX, width: current, flip: grows() < 0 };
+      setResizing(true);
+    }}
+    onPointerMove={event => {
+      const state = drag.current;
+      if (!state) return;
+      const dx = event.clientX - state.x;
+      commit(state.width + (state.flip ? -dx : dx));
+    }}
+    onPointerUp={() => { drag.current = null; setResizing(false); }}
+    onPointerCancel={() => { const state = drag.current; drag.current = null; setResizing(false); if (state) commit(state.width); }}
+    onKeyDown={event => {
+      if (event.key === "Escape" && drag.current) {
+        event.preventDefault(); const state = drag.current; drag.current = null; setResizing(false); commit(state.width); return;
+      }
+      if (current == null) return;
+      const step = event.shiftKey ? RESIZE_STEP_LARGE : RESIZE_STEP;
+      const direction = grows();
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault();
+        const physical = event.key === "ArrowLeft" ? -1 : 1;
+        commit(current + physical * step * direction);
+      } else if (event.key === "Home") { event.preventDefault(); commit(minWidth); }
+      else if (event.key === "End") { event.preventDefault(); commit(maxWidth); }
+    }} /> : null;
   return (
-    <div ref={ref} className={panelVariants({ size, flush, bareBar }, className)} {...rest}>
+    <div ref={node => { root.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
+      id={resizable ? panelId : id} role={ariaLabel || labelledByTitle ? "region" : undefined} aria-label={ariaLabel}
+      aria-labelledby={labelledByTitle ? titleId : undefined} className={panelVariants({ size, flush, bareBar }, className)}
+      data-resizable={resizable ? "" : undefined} data-resizing={resizing ? "" : undefined}
+      style={current != null && resizable ? { ...style, "--area-panel-inline-size": `${current}px` } as CSSProperties : style} {...rest}>
+      {handle}
       {title || action ? (
         <header className="area-panel__bar">
-          <span className="area-panel__title">{title}</span>
+          <span className="area-panel__title" id={labelledByTitle ? titleId : undefined}>{title}</span>
           {action}
         </header>
       ) : null}
@@ -439,17 +526,86 @@ export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(func
 
 export interface PanelSectionProps extends Div {
   heading?: ReactNode;
+  /** Icon buttons at the end of the heading row (Figma: auto layout, visibility, add). */
+  actions?: ReactNode;
+  /** The heading becomes a disclosure button that shows or hides the section's rows. */
+  collapsible?: boolean;
+  /** Controlled open state for a collapsible section. */
+  open?: boolean;
+  /** Initial open state for an uncontrolled collapsible section. Defaults to open. */
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Shown in the heading while collapsed (Figma: selection colors as chips and a count). */
+  summary?: ReactNode;
+  /** The heading's level in the page outline. Defaults to 3 (a panel titled by an h2 region). */
+  headingLevel?: 2 | 3 | 4 | 5 | 6;
 }
 
 export const PanelSection = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelSectionProps>(function PanelSection(
-  { heading, className, children, ...rest },
+  { heading, actions, collapsible, open: openProp, defaultOpen = true, onOpenChange, summary, headingLevel = 3, className, children, ...rest },
   ref,
 ) {
+  const id = useId();
+  const H = `h${headingLevel}` as "h3";
+  const [openState, setOpenState] = useState(defaultOpen);
+  const open = openProp ?? openState;
+  if (collapsible && heading) {
+    const toggle = () => { const next = !open; if (openProp === undefined) setOpenState(next); onOpenChange?.(next); };
+    return (
+      <section ref={ref} className={cx("area-panel__section", className)} data-collapsed={open ? undefined : ""} {...rest}>
+        <div className="area-panel__heading">
+          <H className="area-panel__heading-text">
+            <button type="button" className="area-panel__toggle" aria-expanded={open} aria-controls={`${id}-rows`} onClick={toggle}>
+              <span className="area-panel__chevron" aria-hidden="true"><Glyph name="chevron-down" rotate={open ? undefined : 270} /></span>
+              <span className="area-panel__toggle-text">{heading}</span>
+              {!open && summary ? <span className="area-panel__summary">{summary}</span> : null}
+            </button>
+          </H>
+          {actions ? <span className="area-panel__actions">{actions}</span> : null}
+        </div>
+        <div id={`${id}-rows`} className="area-panel__rows" hidden={!open}>{children}</div>
+      </section>
+    );
+  }
   return (
     <section ref={ref} className={cx("area-panel__section", className)} {...rest}>
-      {heading ? <h3 className="area-panel__heading">{heading}</h3> : null}
+      {heading && actions ? (
+        <div className="area-panel__heading">
+          <H className="area-panel__heading-text">{heading}</H>
+          <span className="area-panel__actions">{actions}</span>
+        </div>
+      ) : heading ? <H className="area-panel__heading">{heading}</H> : null}
       {children}
     </section>
+  );
+});
+
+export interface PanelRowProps extends Omit<Div, "children"> {
+  /** Caption above the controls; pass two to caption each column (Opacity, Corner radius). */
+  label?: ReactNode | [ReactNode, ReactNode];
+  /** One icon button in the row's trailing square column, shared by every row. */
+  action?: ReactNode;
+  /** One control spans both columns; two share them equally. */
+  children?: ReactNode;
+}
+
+/**
+ * An inspector row: two equal control columns and a trailing square for an icon button, so
+ * every row in a panel lines up (Figma: 88 + 8 + 88 + 8 + 24 in its 240 panel).
+ */
+export const PanelRow = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelRowProps>(function PanelRow(
+  { label, action, className, children, ...rest },
+  ref,
+) {
+  const id = useId();
+  const labels = Array.isArray(label) ? label : label != null && label !== false ? [label] : [];
+  return (
+    <div ref={ref} role="group" aria-labelledby={labels.length ? labels.map((_, index) => `${id}-label-${index}`).join(" ") : undefined}
+      className={cx("area-panel__row", className)} {...rest}>
+      {labels.map((text, index) => <span key={index} id={`${id}-label-${index}`} className="area-panel__row-label">{text}</span>)}
+      <div className="area-panel__row-controls">{children}</div>
+      {action ? <div className="area-panel__row-action">{action}</div> : null}
+    </div>
   );
 });
 
@@ -857,7 +1013,8 @@ export interface MenuProps extends Div {
    * The button that opens it. With a trigger, the menu anchors to it and follows the ARIA
    * menu button pattern: Enter, Space or ArrowDown open it on the first item and ArrowUp on
    * the last; arrows, Home, End and typing move between items; choosing an item, Escape or
-   * Tab closes it.
+   * Tab closes it. Without one, the menu is a surface its host places (SplitButton,
+   * ContextMenu, ModelPicker) and handles the item keys itself.
    */
   trigger?: ReactNode;
   open?: boolean;
@@ -867,10 +1024,46 @@ export interface MenuProps extends Div {
   align?: OverlayAlign;
   offset?: number;
 }
-export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(function Menu({ trigger, open, defaultOpen, onOpenChange, side, align, offset, className, ...rest }, ref) {
-  const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => <div role="menu" className={menuVariants({}, className)} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />;
-  if (trigger === undefined) return surface({});
-  return <AnchoredMenu trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} surface={surface} />;
+const menuItemsOf = (menu: HTMLElement) =>
+  [...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]:not([disabled]):not([aria-disabled="true"])')]
+    .filter(item => item.closest('[role="menu"]') === menu);
+
+export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(function Menu({ trigger, open, defaultOpen, onOpenChange, side, align, offset, className, onKeyDown, ...rest }, ref) {
+  const typeahead = useRef("");
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  if (trigger !== undefined) {
+    const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => <div role="menu" className={menuVariants({}, className)} onKeyDown={onKeyDown} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />;
+    return <AnchoredMenu trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} surface={surface} />;
+  }
+  /* A hosted menu: Up/Down move between items (wrapping), Home/End jump to the ends and a
+     printable key moves to the next item starting with it, as in the WAI menu pattern. */
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown?.(event);
+    const menu = event.currentTarget;
+    // A nested submenu handles its own keys.
+    if (event.defaultPrevented || (event.target as HTMLElement).closest('[role="menu"]') !== menu) return;
+    const items = menuItemsOf(menu);
+    if (!items.length) return;
+    const index = items.indexOf(document.activeElement as HTMLElement);
+    let next: HTMLElement | undefined;
+    switch (event.key) {
+      case "ArrowDown": next = items[(index + 1) % items.length]; break;
+      case "ArrowUp": next = items[(index - 1 + items.length) % items.length]; break;
+      case "Home": next = items[0]; break;
+      case "End": next = items.at(-1); break;
+      default:
+        if (event.key.length !== 1 || event.ctrlKey || event.metaKey || event.altKey || event.key === " ") return;
+        typeahead.current += event.key.toLocaleLowerCase();
+        if (timer.current) clearTimeout(timer.current);
+        timer.current = setTimeout(() => { typeahead.current = ""; }, 500);
+        next = [...items.slice(index + 1), ...items.slice(0, index + 1)]
+          .find(item => (item.textContent ?? "").trim().toLocaleLowerCase().startsWith(typeahead.current));
+    }
+    if (!next) return;
+    event.preventDefault();
+    next.focus();
+  };
+  return <div ref={ref} role="menu" className={menuVariants({}, className)} onKeyDown={handleKeyDown} {...rest} />;
 });
 
 /** A non-interactive heading that names the following group of menu items. */
@@ -892,24 +1085,46 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
   tone?: (typeof MANIFESTS.menu.elementModifiers.item)[number];
   shortcut?: ReactNode;
   disabled?: boolean;
+  /**
+   * Makes the row a checkable item (`role="menuitemcheckbox"`). The whole row is the control:
+   * toggle `checked` in `onClick`. Hosts keep the menu open for checkable items.
+   */
+  checked?: boolean;
+  /** How a checkable row shows its state: a trailing check (default) or a switch, as Notion's toggles. */
+  indicator?: "check" | "switch";
+  /** A muted note under the label (a model's summary, a setting's effect). */
+  description?: ReactNode;
 }
 
 export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemProps>(function MenuItem(
-  { tone, shortcut, disabled, className, children, ...rest },
+  { tone, shortcut, disabled, checked, indicator = "check", description, className, children, ...rest },
   ref,
 ) {
+  const checkable = checked !== undefined;
   return (
     <button
       ref={ref}
       type="button"
-      role="menuitem"
+      role={checkable ? "menuitemcheckbox" : "menuitem"}
+      aria-checked={checkable ? checked : undefined}
       className={cx("area-menu__item", tone === "danger" && "area-menu__item--danger", className)}
       disabled={disabled}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...rest}
     >
-      {typeof children === "string" || typeof children === "number" ? <span className="area-menu__text">{children}</span> : children}
+      {description ? <span className="area-menu__lines"><span className="area-menu__text">{children}</span><span className="area-menu__description">{description}</span></span>
+        : typeof children === "string" || typeof children === "number" ? <span className="area-menu__text">{children}</span> : children}
       {shortcut ? <span className="area-menu__shortcut">{shortcut}</span> : null}
+      {checkable && indicator === "switch" ? (
+        <span className="area-switch area-switch--sm area-menu__toggle" aria-hidden="true">
+          <span className="area-switch__track" data-checked={checked ? "" : undefined}><span className="area-switch__thumb" /></span>
+        </span>
+      ) : null}
+      {checkable && indicator === "check" ? (
+        <span className="area-menu__check" aria-hidden="true">
+          <Glyph name="check" />
+        </span>
+      ) : null}
     </button>
   );
 });
@@ -934,9 +1149,9 @@ export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(func
           {icon}
         </span>
       ) : null}
-      <div className="area-toast__content" role="status" aria-atomic="true">{title ? <div className="area-toast__title">{title}</div> : null}<div>{children}</div></div>
+      <div className="area-toast__content" role="status" aria-atomic="true">{title ? <div className="area-toast__title">{title}</div> : null}<div className={title ? "area-toast__description" : undefined}>{children}</div></div>
       {action ? <div className="area-toast__action">{action}</div> : null}
-      {onDismiss ? <span className="area-toast__dismiss"><Button size="sm" variant="ghost" iconOnly icon={<ChipDismissIcon />} aria-label={dismissLabel} onClick={onDismiss} /></span> : null}
+      {onDismiss ? <span className="area-toast__dismiss"><Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<Glyph name="dismiss" />} aria-label={dismissLabel} onClick={onDismiss} /></span> : null}
     </div>
   );
 });
@@ -1023,28 +1238,39 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
   showCloseButton?: boolean;
   /** Called by the close control before closing an enclosing native dialog. */
   onClose?: () => void;
+  /**
+   * Opens the dialog as a native modal (`showModal()`) when this element is clicked. The
+   * platform supplies the focus trap, Escape, the backdrop and focus return; a click on the
+   * backdrop also closes it.
+   */
+  trigger?: ReactElement<{ onClick?: (event: MouseEvent<HTMLElement>) => void }>;
+  /** Called when the modal opened by `trigger` opens or closes. */
+  onOpenChange?: (open: boolean) => void;
 }
 
 /**
  * Interrupts with content that requires a response.
  *
- * Rendered as a plain element here so it can be shown inline in documentation. In an
- * application, render it inside a native `<dialog>` and open it with `showModal()`, which
- * supplies the focus trap, the backdrop, and Escape-to-close without any JavaScript of
- * your own.
+ * With `trigger`, it renders the trigger and a native modal `<dialog>`. Without it, it renders
+ * the surface alone so it can be shown inline in documentation, or placed inside your own
+ * `<dialog class="area-dialog__modal">` and opened with `showModal()`.
  */
 export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { title, description, footer, showCloseButton = true, onClose, className, children, ...rest },
+  { title, description, footer, showCloseButton = true, onClose, trigger, onOpenChange, className, children, ...rest },
   ref,
 ) {
   const id = useId();
-  return (
+  const modal = useRef<HTMLDialogElement | null>(null);
+  const onChange = useRef(onOpenChange);
+  onChange.current = onOpenChange;
+  const labelled = {
+    "aria-labelledby": title ? `${id}-title` : undefined,
+    "aria-describedby": description ? `${id}-description` : undefined,
+  };
+  const surface = (
     <div
       ref={ref}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={title ? `${id}-title` : undefined}
-      aria-describedby={description ? `${id}-description` : undefined}
+      {...(trigger ? {} : { role: "dialog", "aria-modal": "true" as const, ...labelled })}
       className={cx("area-dialog", className)}
       {...rest}
     >
@@ -1052,17 +1278,44 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
         <div className="area-dialog__header">
           <div className="area-dialog__heading">
             {title ? <h2 className="area-dialog__title" id={`${id}-title`}>{title}</h2> : null}
-            {description ? <div className="area-dialog__description" id={`${id}-description`}>{description}</div> : null}
+            {description ? <p className="area-dialog__description" id={`${id}-description`}>{description}</p> : null}
           </div>
-          {showCloseButton ? <button type="button" className="area-dialog__close" aria-label="Close dialog" onClick={event => {
+          {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-dialog__close" aria-label="Close dialog" icon={<Glyph name="dismiss" />} onClick={event => {
             onClose?.();
             event.currentTarget.closest("dialog")?.close();
-          }}><AlertDismissIcon /></button> : null}
+          }} /> : null}
         </div>
       ) : null}
       {children ? <div className="area-dialog__body">{children}</div> : null}
       {footer ? <div className="area-dialog__footer">{footer}</div> : null}
     </div>
+  );
+  if (!trigger) return surface;
+  const modalId = `${id}-modal`;
+  return (
+    <>
+      {cloneElement(trigger, {
+        "aria-haspopup": "dialog",
+        "aria-controls": modalId,
+        onClick: (event: MouseEvent<HTMLElement>) => {
+          trigger.props.onClick?.(event);
+          if (event.defaultPrevented || modal.current?.open) return;
+          modal.current?.showModal();
+          onChange.current?.(true);
+        },
+      } as Record<string, unknown>)}
+      <dialog
+        ref={modal}
+        id={modalId}
+        className="area-dialog__modal"
+        {...labelled}
+        onClose={() => onChange.current?.(false)}
+        // A click whose target is the <dialog> itself landed on the backdrop: the surface fills it.
+        onClick={event => { if (event.target === event.currentTarget) event.currentTarget.close(); }}
+      >
+        {surface}
+      </dialog>
+    </>
   );
 });
 

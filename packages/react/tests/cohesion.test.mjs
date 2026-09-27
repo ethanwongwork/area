@@ -11,10 +11,12 @@ const ruleFor = selector => rules.find(rule => rule.selector === selector);
 test('hover changes a plate, edge or underline, never the ink', () => {
   for (const { selector, body } of rules) {
     if (!/:hover|\[data-hover\]|\[data-highlighted\]/.test(selector)) continue;
-    // A revealed tooltip may fade in, and so may a card's revealed actions (they appear;
-    // no ink changes); an inherited colour follows its owner.
-    if (/tooltip|__overlay--reveal/.test(selector)) continue;
+    // A revealed control may fade in to full opacity (a card's actions, a tree row's controls,
+    // a section chevron, a drag handle): it appears, and no ink changes. A tooltip may fade.
+    // An inherited colour follows its owner.
+    if (/tooltip/.test(selector)) continue;
     for (const [, prop, value] of body.matchAll(/(?:^|[;\s])(color|opacity)\s*:\s*([^;]+)/g)) {
+      if (prop === 'opacity' && value.trim() === '1') continue;
       assert.ok(prop === 'color' && /^(inherit|HighlightText|LinkText|CanvasText)$/.test(value.trim()), `${selector} sets ${prop}: ${value.trim()} on hover`);
     }
   }
@@ -24,7 +26,7 @@ test('rows share one hover plate and one selection plate, and selection outranks
   // Each hover selector excludes the selected or current row, so the stronger plate stays
   // under the pointer (a hover rule of higher specificity would otherwise lighten it).
   const hover = [
-    '.area-menu__item:hover:not([data-disabled], [data-selected]), .area-menu__item:is([data-highlighted], :focus):not([data-selected])',
+    '.area-menu__item:hover:not([data-disabled], [data-selected]), .area-menu__item:is([data-highlighted], :focus-visible):not([data-selected])',
     '.area-nav__item:hover:not([data-disabled])',
     '.area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current="page"])):hover',
     '.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td',

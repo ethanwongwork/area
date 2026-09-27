@@ -26,9 +26,11 @@ ink by state, and shadow.
 
 | Element | ChatGPT | Notion | Figma | Captures |
 |---|---|---|---|---|
-| Primary button | | | | |
-| Secondary / ghost button | Model picker: 36px pill, 12/14px sides, 6px gap, 16/26 400 in tertiary ink rgb(143); hover rgba(0,0,0,.05) | | | `baseline/chatgpt--model-picker--{rest,hover}…` |
-| Icon-only button | 36px, radius 8, 20px icon in secondary ink rgb(93); the hover plate is a `::before` layer (rgba(0,0,0,.05)), which the captured hover state had not yet faded in | 24px, radius 3, hover rgba(55,53,47,.08) (calendar nav) | 24px, radius 5, hover rgba(0,0,0,.05) (eyedropper, close) | `baseline/chatgpt--icon-button-ghost--{rest,hover}…`, `calendar/notion--nav-button--hover…`, `color-picker/figma--eyedropper--hover…` |
+| Primary button | Logged in: send/voice 36 round solid; logged out "Log in" 44 pill, 14/20 600, 12px sides, no shadow, focus 2px outline offset 2 | Share "Invite" 32, radius 6, 12px sides, 14/16.8 500, solid blue, no shadow | none captured (editor not opened) | `button/chatgpt*--*solid*`, `button/notion--solid-accent--*` |
+| Secondary / ghost button | Soft pill 36, 12px sides, 14/18 400, 5% black (hover 10%); ghost 36 radius 8, icon 16 at 13, gap 4, hover 5% | Ghost 28, radius 6, 8px sides, 14/16.8 400, gap 6, hover 5% warm black; outline 32, 0.56px hairline, 500 | Pill 32 fill 245 + 1px inset ring; tabs 24, radius 5, 8px sides, 11/16 450–550 | `button/chatgpt--soft-*`, `button/notion--*ghost*`, `button/figma--*` |
+| Secondary / ghost button (cohesion audit) | Model picker: 36px pill, 12/14px sides, 6px gap, 16/26 400 in tertiary ink rgb(143); hover rgba(0,0,0,.05) | | | `baseline/chatgpt--model-picker--{rest,hover}…` |
+| Icon-only button | 36 radius 8 (20px icon, 8 in); 32 radius 8 (20px icon, 6 in); composer 36 round | 28 radius 6, 20px icon 4 in | 24 radius 5; 32 | `button/*icon-ghost*` |
+| Icon-only button (cohesion audit) | 36px, radius 8, 20px icon in secondary ink rgb(93); the hover plate is a `::before` layer (rgba(0,0,0,.05)), which the captured hover state had not yet faded in | 24px, radius 3, hover rgba(55,53,47,.08) (calendar nav) | 24px, radius 5, hover rgba(0,0,0,.05) (eyedropper, close) | `baseline/chatgpt--icon-button-ghost--{rest,hover}…`, `calendar/notion--nav-button--hover…`, `color-picker/figma--eyedropper--hover…` |
 | Text input | Search field: 36px pill, fill rgba(0,0,0,.05), no border, 16px icon 12px in, 8px gap, 14/18 | | | `baseline/chatgpt--search-field--rest…` |
 | Menu item and menu surface | Surface 324 wide, radius 16, 10px padding, white at 90%, 0.5px black-10% ring + 0 8px 16px −4px black 12%. Items 36px, radius 12, 6/10px padding, 14/20 400; hover rgba(0,0,0,.05). Separator 1px black 10% in a 17px block, 8px in from the item edge | | | `baseline/chatgpt--menu--rest…`, `baseline/chatgpt--menu-item--hover…` |
 | Sidebar / list row | 35–36px, radius 8, 6/10px padding, 20px icon 6px before the text, 14/20 400 rgb(13); hover and current both rgba(0,0,0,.05) | | | `baseline/chatgpt--sidebar-row{,-current}--…`, `baseline/chatgpt--sidebar-recent--{rest,hover}…` |
@@ -93,3 +95,7 @@ captures. Promote an agreement into Area only through a spec's decision table.
   36px and pill-shaped (segmented, select, search); Figma's inspector controls are 24px.
   ChatGPT only, light theme; Notion and Figma were not re-captured for these elements
   ([cohesion audit](cohesion-audit.md)).
+- 2026-09-25 (Button): no product shadows a button. Ghost and soft labels are 400 (ChatGPT,
+  Notion); 500 appears on filled buttons (Notion). Hover is a 5% black wash in ChatGPT and
+  Notion. Icon-to-label gaps are 4 (ChatGPT) to 6 (Notion). Controls are 24 (Figma), 28/32
+  (Notion), 32/36 (ChatGPT). Light theme only.

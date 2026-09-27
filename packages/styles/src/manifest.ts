@@ -60,7 +60,16 @@ export const buttonGroup = {
   block: "area-button-group",
   description: "Joins related full-size button actions at shared edges.",
   variants: { variant: ["soft", "outline"], size: ["sm", "md", "lg"] },
+  booleans: ["full-width"],
   defaults: { variant: "soft", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const splitButton = {
+  block: "area-split-button",
+  description: "Joins a default action to a menu of related actions.",
+  variants: { variant: ["solid", "soft", "outline"] },
+  elements: ["action", "trigger", "menu"],
+  defaults: { variant: "solid" },
 } as const satisfies ComponentManifest;
 
 export const toolbar = {
@@ -171,7 +180,7 @@ export const treeView = {
   block: "area-tree-view",
   description: "Navigates or selects items in an expandable hierarchy.",
   variants: { selectionMode: ["navigation", "checkbox"] },
-  elements: ["chevron", "check", "icon", "label", "trailing"],
+  elements: ["chevron", "check", "icon", "label", "trailing", "actions"],
   defaults: { selectionMode: "navigation" },
 } as const satisfies ComponentManifest;
 
@@ -408,7 +417,93 @@ export const panel = {
   description: "A titled surface of rows that act on something beside it.",
   variants: { size: ["xs", "sm", "md", "lg"] },
   booleans: ["flush", "bare-bar"],
-  elements: ["bar", "title", "body", "section", "heading", "stack", "footer"],
+  states: ["collapsed", "resizable", "resizing"],
+  elements: ["resize", "bar", "title", "body", "section", "heading", "heading-text", "actions", "toggle", "toggle-text", "chevron", "summary", "rows", "row", "row-label", "row-controls", "row-action", "stack", "footer"],
+  defaults: { size: "md" },
+} as const satisfies ComponentManifest;
+
+export const propertyList = {
+  block: "area-property-list",
+  description: "Orders like properties (fills, strokes, effects) and moves them by handle or keyboard.",
+  variants: {},
+  states: ["dragging", "inactive"],
+  elements: ["item", "handle", "value", "actions", "indicator"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const modelPicker = {
+  block: "area-model-picker",
+  description: "Chooses the model a message is sent with, from inside the composer.",
+  variants: {},
+  elements: ["trigger", "menu"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const scrollToLatest = {
+  block: "area-scroll-to-latest",
+  description: "Returns a long conversation to its newest message.",
+  variants: {},
+  states: ["visible"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const message = {
+  block: "area-message",
+  description: "One turn in a conversation: the person's bubble or the assistant's prose, with actions.",
+  variants: { author: ["user", "assistant"] },
+  states: ["streaming"],
+  elements: ["bubble", "content", "actions", "cursor"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const promptSuggestions = {
+  block: "area-prompt-suggestions",
+  description: "Starter prompts under an empty composer.",
+  variants: { layout: ["list", "chips"] },
+  elements: ["row", "item", "icon", "text", "dismiss"],
+  defaults: { layout: "list" },
+} as const satisfies ComponentManifest;
+
+export const hoverCard = {
+  block: "area-hover-card",
+  description: "Previews what a link points to while the pointer rests on it.",
+  variants: {},
+  elements: ["identity", "meta"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const contextMenu = {
+  block: "area-context-menu",
+  description: "Opens a Menu where you right-click.",
+  variants: {},
+  elements: ["menu"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const commandPalette = {
+  block: "area-command-palette",
+  description: "Searches actions and places from a shortcut, and runs the one you pick.",
+  variants: {},
+  booleans: ["inline"],
+  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "empty", "footer", "hint"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const combobox = {
+  block: "area-combobox",
+  description: "An editable field with suggestions that filter as you type.",
+  variants: {},
+  booleans: ["full-width"],
+  elements: ["listbox", "option", "description", "empty", "group"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const boxField = {
+  block: "area-box-field",
+  description: "Edits padding or corner radius linked, or one field per side or corner.",
+  variants: { size: ["sm", "md", "lg"] },
+  elements: ["label", "fields", "field", "toggle"],
+  elementModifiers: { field: ["wide"] },
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -454,8 +549,16 @@ export const menu = {
   description: "Lists actions triggered from a button.",
   variants: {},
   states: ["disabled", "highlighted", "selected"],
-  elements: ["item", "icon", "text", "label", "separator", "shortcut", "search-surface"],
+  elements: ["item", "icon", "text", "lines", "description", "label", "separator", "shortcut", "check", "toggle", "search-surface"],
   elementModifiers: { item: ["danger"] },
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const popoverAnchor = {
+  block: "area-popover-anchor",
+  description: "Wraps a popover's trigger so the popover can anchor to it.",
+  variants: {},
+  elements: [],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -472,7 +575,7 @@ export const toast = {
   block: "area-toast",
   description: "Reports the outcome of an action without interrupting.",
   variants: { tone: ["neutral", "info", "danger", "warning", "success"] },
-  elements: ["icon", "content", "title", "action", "dismiss"],
+  elements: ["icon", "content", "title", "description", "action", "dismiss"],
   defaults: { tone: "neutral" },
 } as const satisfies ComponentManifest;
 
@@ -575,6 +678,7 @@ export const kbdGroup = {
 export const MANIFESTS = {
   button,
   buttonGroup,
+  splitButton,
   toolbar,
   alignmentPicker,
   colorPicker,
@@ -612,10 +716,21 @@ export const MANIFESTS = {
   spinner,
   progress,
   panel,
+  propertyList,
+  boxField,
+  combobox,
+  commandPalette,
+  contextMenu,
+  hoverCard,
+  promptSuggestions,
+  message,
+  scrollToLatest,
+  modelPicker,
   card,
   alert,
   dialog,
   popover,
+  popoverAnchor,
   menu,
   tooltip,
   toast,

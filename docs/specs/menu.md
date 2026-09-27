@@ -1,199 +1,129 @@
 # Menu spec
 
-**Status:** in review · 2026-09-26 (cohesion audit, second pass)
-**Captures:** `docs/research/captures/menu/`
-**Peers:** Nav and Tree view (row plates, label rows), Select picker (option plates, lift),
-Popover (surface), Kbd (shortcut), Button ghost (hover plate)
+**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (first pass under the capture workflow; reopened from Complete))
+**Captures:** `docs/research/captures/menu/` (pass-0 in `before/`)
+**Peers:** SplitButton (hosts a Menu in a popover), Toolbar overflow, Nav (row insets),
+Tree view (row wash), Kbd (shortcuts), Popover (surface family)
 
 ## Owner decisions
 
-- No Menu section existed in [prior decisions](PRIOR_DECISIONS.md).
-- 2026-09-26: Neutral by default, accent by override ([design system](../DESIGN_SYSTEM.md#color-and-focus)).
-  Menu selection is a neutral plate; Menu has no accent option.
-- 2026-09-26: Decide every open item with the most calculated option consistent with the
-  system ([second pass](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions)).
-  For Menu: minimum width 256 (Notion's page menu), the 2px leading-icon nudge removed,
-  separators on the new `border-divider` role.
+- 2026-09-26: "build the next component" after Button, SplitButton and ButtonGroup. Menu
+  chosen: SplitButton depends on it, it had no spec, and its keyboard support was missing.
+- 2026-09-26: accepted. Owner: "consider every component that you have built to be approved. if i havent given any feedback to change anything consider them approved."
 
 ## Job and boundaries
 
-Menu lists actions opened from a trigger: rows with an optional icon and shortcut, group
-labels, separators, a destructive tone, and a searchable composition. It is not navigation
-(Nav: destinations and the current page) or a value picker (Select). Opening, anchoring,
-roving focus and dismissal belong to the consumer, as for Popover.
+A list of actions shown on demand (a popup from a trigger) or inline in a surface. Not
+navigation (Nav), not a single-value choice in a form (Select), not a searchable picker
+(Combobox, not built). Showing, positioning and dismissing the popup belong to the host
+(SplitButton today; a general menu trigger is part of the overlay work).
 
 ## Variants
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| item tone | danger | Destructive actions | Area earlier value; not in Untitled; no product capture |
-| composition | shortcuts | Name an action's key | Untitled, Notion (`notion--item-shortcut` node 11) and Figma (`figma--item--rest` node 8): plain text |
-| state | selected | An option menu's current choice | Figma format menu and main menu (24px check column, `figma--item--rest` node 2) |
-| composition | search, controls, nested submenu | Filter a long menu; toggles in a settings menu; a submenu trigger | Notion page menu: a 232 × 28 search field (`notion--page-menu--open` nodes 4-5) and switches (`switch/notion--menu-switch-off--rest`); ChatGPT 16px trailing chevron (`chatgpt--menu--rest` node 53) |
-| state | disabled | Unavailable action | Untitled (50%) |
-
-No size axis: row height follows the density axis. Gallery groups
-(`apps/docs/scripts/build.mjs:728-737`): Default; Content (shortcuts, search, nested
-submenu, controls); States (selected, disabled); Tones (danger).
+| item | text | Plain action | All products |
+| item | icon + text | Iconic actions | ChatGPT account and chat actions; Notion page actions; Figma "More" |
+| item | shortcut | Command hint | Notion page actions (⌘⌥L, ⌘D) |
+| item | danger | Destructive action | ChatGPT "Delete" (red label) |
+| item | selected | Current choice | ChatGPT model picker (check) |
+| item | disabled | Unavailable action | Area; Radix-based products support it |
+| composition | label, separator | Groups | ChatGPT chat actions (groups); Notion (groups) |
+| item | checkable (switch or check) | Settings that toggle in place | Notion "Small text", "Full width" (switch); ChatGPT model picker (check) |
+| composition | search, submenu | Existing Area compositions | Notion page actions (submenus) |
 
 ## Sources
 
-| Id | Type | What | Link / commit / path | License | Captures |
-|---|---|---|---|---|---|
-| chatgpt | target product | Profile menu, one hovered item | chatgpt.com, owner's session, 2026-09-26 | evidence only | `baseline/chatgpt--menu--rest--light`, `baseline/chatgpt--menu-item--hover--light` |
-| notion | target product | Page "…" menu open (search, toggles, grouped rows), a hovered item, a shortcut item; older date-filter preset rows | app.notion.com page menu, 2026-09-26 (second pass); Calendar pass | evidence only | `menu/notion--page-menu--open--light`, `menu/notion--item--hover--light`, `menu/notion--item-shortcut--rest--light`, `input/notion--menu-search--focus--light`, `switch/notion--menu-switch-off--rest--light`, `calendar/notion--search-date-filter-popover--rest--light` |
-| figma | target product | Editor main menu (dark), an item at rest and hovered; older colour format menu | figma.com editor, 2026-09-26 (second pass); ColorPicker pass | evidence only | `menu/figma--main-menu--open--light`, `menu/figma--item--{rest,hover}--light`, `color-picker/figma--format-menu--open--light` |
-| uui | design system (source) | Dropdown menu | [reference](../research/untitled-ui-reference.md), `dropdown.tsx:85-190` @ `4702dc0` | MIT | — |
-| area | this system | 8 gallery tiles after the second pass | localhost gallery | — | `menu/area--*` (8) |
-
-Light theme only (Figma's main menu is dark inside it). The Figma main-menu capture stops at
-its five groups, so its rows come from the item captures. No product destructive row was captured.
-
-## Anatomy
-
-```
-chatgpt  menu 324 wide, padding 10, radius 16; rows 36, radius 12; sep 1px 10% black 8px in
-notion   div[role=dialog] 256 wide, radius 10, white, lift + 1px ring          (page-menu node 0)
-  section  padding 4 (first: 8 4 4 4, holding the 232 × 28 search), row gap 1  (nodes 3, 7, 9)
-  item   div[role=option] 248 × 28, radius 6, padding 0/8, gap 8               (item--hover nodes 0-1)
-    icon 20px, rgb(56, 56, 54); text 14/16.8 400 rgb(44, 44, 43) at 36          (nodes 2-6)
-    shortcut 12px plain text rgb(161, 158, 153), 8px from the end             (item-shortcut node 11)
-  sep    1px rgba(42, 28, 0, .07), 12px in from each side, at a section's top (page-menu node 16)
-figma    194.3 wide, radius 13, rgb(30, 30, 30); items 178.3 × 24 (8px in), radius 5,
-         11/16 450; 4px lead + 24px check/icon box (70% white), text at 32   (item--rest)
-area     div.area-menu[role=menu] padding 4, 1px border, radius 12, gap 2, min 256 wide
-  item   button.area-menu__item 32px, radius 8, gap 8; text inset by inset.css
-    icon 16px slot; text truncates; shortcut 12px text in Kbd's keyboard face, a quiet Kbd or a 16px glyph
-  label  .area-menu__label 32px, fg-muted
-  sep    .area-menu__separator 1px `border-divider`, 8px margins
-```
-
-Inset equations (outer inset = border + shell padding + slot inset):
-- text start: 1 + 4 + (32 − 1cap)/2 = 1 + 4 + 11.03 = 16.03 (`area--default`: text at 16.02).
-- trailing Kbd: 1 + 4 + (32 − 20)/2 = 11 (`area--shortcuts`: Kbd ends 11px from the edge).
-- trailing 16px glyph: 1 + 4 + 8 = 13 (`area--selected`: check ends 13px from the edge).
-- leading icon: 1 + 4 + (32 − 16)/2 = 13, the inset contract (`inset.css:88`), as Nav. The
-  10px override in `surface.css` was removed in the second pass. No gallery tile has icons.
-- item radius: min(max(0, 12 − 4), 32 × 0.4) = 8 (`surface.css:493-496`; captured 8px);
-  Notion follows the same rule (10 − 4 = 6).
+| Id | Type | What | Link | Captures |
+|---|---|---|---|---|
+| chatgpt | target product | Account menu, chat actions (danger), model picker; item rest, hover, keyboard highlight, danger hover, selected | chatgpt.com, owner's session (Chrome), 2026-09-26; menus opened and hovered, nothing chosen | `chatgpt--*` (10) |
+| notion | target product | Page actions menu; items with icon, shortcut, toggle; hover, keyboard highlight | app.notion.com (Chrome), 2026-09-26 | `notion--*` (7) |
+| figma | target product | File browser "More" menu (rest) | figma.com/files (Chrome), 2026-09-26 | `figma--more-menu--open` |
+| area | this system | Before: default, shortcuts, danger; after: icons menu | localhost gallery | `before/area--*` (3), `area--menu-icons--open` |
 
 ## Measurements
 
-`node scripts/capture-compare.mjs --slots shell menu/notion--page-menu--open--light.json menu/figma--main-menu--open--light.json menu/area--default--rest--light.json` (trimmed):
+Surfaces (generated with `node scripts/capture-compare.mjs`, filtered):
 
-| slot · property | notion · page-menu · open | figma · main-menu · open | area · default |
-|---|---|---|---|
-| **shell** size | 256 × 680.89 | 194.3 × 468 | 256 × 110 |
-| **shell** padding | 0 (sections 4) | 0 | 4 |
-| **shell** border | 0 | 0 | 1 solid rgb(243, 243, 243) |
-| **shell** radius | 10px | 13px | 12px |
-| **shell** shadow | rgba(25, 25, 25, 0.05) 0px 20px 24px 0px, rgba(25, 25, 25, 0.027) 0px 5px 8px 0px, rgba(42, 28, 0, 0.07) 0px 0px 0px 1px | rgba(0, 0, 0, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.12) 0px 10px 16px 0px, rgba(0, 0, 0, 0.12) 0px 0px 0.5px 0px | rgba(0, 0, 0, 0.06) 0px 20px 24px 0px, color(srgb 0 0 0 / 0.03) 0px 5px 8px 0px |
+| slot · property | area · menu-icons · open · light | area · menu-default · open · light | chatgpt · chat-actions-menu · open · light | notion · page-actions-menu · open · light | figma · more-menu · open · light |
+|---|---|---|---|---|---|
+| **shell** size | 224 × 163 | 224 × 110 | 188.88 × 270 | 256 × 843.55 | 208 × 151 |
+| **shell** padding | 4 | 4 | 10 | 0 | 8 0 8 0 |
+| **shell** border | 1 solid rgb(243, 243, 243) | 1 solid rgb(243, 243, 243) | 0 | 0 | 0 |
+| **shell** radius | 12px | 12px | 16px | 10px | 13px |
+| **shell** background | rgb(255, 255, 255) | rgb(255, 255, 255) | oklab(0.999994 0.0000455678 0.0000200868 / 0.9) | rgb(255, 255, 255) | rgb(255, 255, 255) |
+| **shell** shadow | rgba(0, 0, 0, 0.06) 0px 1px 2px -0.5px | rgba(0, 0, 0, 0.06) 0px 1px 2px -0.5px | rgba(0, 0, 0, 0.1) 0px 0px 0px 0.5px, rgba(0, 0, 0, 0.1) 0px 0px 0px 0.5px, rgba(0, 0, 0, 0.12) 0px 8px 16px -4px | rgba(25, 25, 25, 0.05) 0px 20px 24px 0px, rgba(25, 25, 25, 0.027) 0px 5px 8px 0px, rgba(42, 28, 0, 0.07) 0px 0px 0px 1px | rgba(0, 0, 0, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.12) 0px 10px 16px 0px, rgba(0, 0, 0, 0.12) 0px 0px 0.5px 0px |
+| **item** size | 214 × 32 | 214 × 32 | 168.88 × 36 | 248.01 × 27.99 | 192 × 40 |
+| **item** edge from shell (t r b l) | 5 5 126 5 | 5 5 73 5 | 82 10 152 10 | 120.94 4 694.62 3.99 | 8 8 103 8 |
+| **item** padding | 0 11.03 0 8 | 0 11.03 0 11.03 | 6 10 6 10 | 0 | 4 0 4 0 |
+| **item** border | 0 | 0 | 0 | 0 | 0 |
+| **item** radius | 8px | 8px | 12px | 6px | 5px |
+| **item** background |  |  |  |  | rgb(255, 224, 252) |
 
-`node scripts/capture-compare.mjs --slots shell baseline/chatgpt--menu-item--hover--light.json menu/notion--item--hover--light.json menu/figma--item--{rest,hover}--light.json` (trimmed):
+Items:
 
-| slot · property | chatgpt · menu-item · hover | notion · item · hover | figma · item · rest | figma · item · hover |
-|---|---|---|---|---|
-| **shell** size | 304 × 36 | 248.01 × 27.99 | 178.3 × 24 | 178.3 × 24 |
-| **shell** padding | 6 10 6 10 | 0 (inner row 0 8) | 0 8 0 0 | 0 8 0 0 |
-| **shell** radius | 12px | 6px | 5px | 5px |
-| **shell** font | 14px/20px 400 | 16px/24px 400 (text 14/16.8) | 11px/16px 450 Inter | 11px/16px 450 Inter |
-| **shell** color | rgb(13, 13, 13) | rgb(44, 44, 43) | rgb(255, 255, 255) | rgb(255, 255, 255) |
-| **shell** background | rgba(0, 0, 0, 0.05) | color(srgb 0.129 0.106 0.090 / 0.051) | — | rgb(12, 140, 233) |
-
-Area rows (node trees): items 246 × 32, radius 8, padding 0 / 11.03, 14/20; selected fill
-rgb(238, 238, 238); danger ink rgb(207, 3, 60); disabled opacity 0.5; label rgb(102, 102, 102).
-Figma's hover also lifts the icon and shortcut ink from 70% to 80% white (`figma--item--hover` nodes 2, 7).
+| slot · property | chatgpt · menu-item-icon · rest · light | notion · menu-item-icon · rest · light | chatgpt · menu-item-icon · hover · light | notion · menu-item-icon · hover · light | chatgpt · menu-item-danger · hover · light | notion · menu-item-shortcut · rest · light |
+|---|---|---|---|---|---|---|
+| **shell** size | 304 × 36 | 248.01 × 27.99 | 304 × 36 | 248.01 × 27.99 | 168.88 × 36 | 248.01 × 27.99 |
+| **shell** padding | 6 10 6 10 | 0 | 6 10 6 10 | 0 | 6 10 6 10 | 0 |
+| **shell** font | 14px/20px 400 -apple-system-body | 16px/24px 400 ui-sans-serif | 14px/20px 400 -apple-system-body | 16px/24px 400 ui-sans-serif | 14px/20px 400 -apple-system-body | 16px/24px 400 ui-sans-serif |
+| **shell** color | rgb(13, 13, 13) | rgb(44, 44, 43) | rgb(13, 13, 13) | rgb(44, 44, 43) | rgb(224, 46, 42) | rgb(44, 44, 43) |
+| **shell** background |  |  | rgba(0, 0, 0, 0.05) | color(srgb 0.129412 0.105882 0.0901961 / 0.0509804) | rgba(0, 0, 0, 0.05) |  |
+| **icon** size | 20 × 20 | 20 × 20 | 20 × 20 | 20 × 20 | not found | 20 × 20 |
+| **icon** edge from shell (t r b l) | 8 274 8 10 | 3.99 220.02 4 7.99 | 8 274 8 10 | 3.99 220.02 4 7.99 | not found | 3.99 220.02 4 7.99 |
+| **icon** padding | 0 | 0 | 0 | 0 | not found | 0 |
+| **icon** font |  |  |  |  | not found |  |
+| **icon** color | rgb(13, 13, 13) | rgb(56, 56, 54) | rgb(13, 13, 13) | rgb(56, 56, 54) | not found | rgb(56, 56, 54) |
+| **icon** background |  |  |  |  | not found |  |
+| **text** size | 258 × 20 | 176.29 × 16.8 | 258 × 20 | 176.29 × 16.8 | 41.79 × 20 | 166.5 × 16.8 |
+| **text** edge from shell (t r b l) | 8 10 8 36 | 5.6 35.73 5.59 35.99 | 8 10 8 36 | 5.6 35.73 5.59 35.99 | 8 91.09 8 36 | 5.6 45.52 5.59 35.99 |
+| **text** padding | 0 | 0 | 0 | 0 | 0 | 0 |
+| **text** font | 14px/20px 400 -apple-system-body | 14px/16.8px 400 ui-sans-serif | 14px/20px 400 -apple-system-body | 14px/16.8px 400 ui-sans-serif | 14px/20px 400 -apple-system-body | 14px/16.8px 400 ui-sans-serif |
+| **text** color | rgb(13, 13, 13) | rgb(44, 44, 43) | rgb(13, 13, 13) | rgb(44, 44, 43) | rgb(224, 46, 42) | rgb(44, 44, 43) |
 
 ## Decisions
 
-| Slot · property | Area value | Basis | Reason when it differs from the basis |
+| Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| surface · radius | 12 (`radius-container`) | Peers Popover, Dialog, Toast (container role) | Notion 10, Figma 13, ChatGPT 16; Untitled 8 |
-| surface · inset | 4 (`space-4`) | Notion 4 (primary for lists); Untitled 4 block | ChatGPT 10; Figma 8 inline |
-| surface · edge | 1px `border-decorative` light-dark(#f3f3f3, #282828) | Notion 1px ring, ChatGPT and Figma 0.5px rings | Area paints a border rather than a ring |
-| surface · fill | `bg-surface` #ffffff (opaque) | Notion white | ChatGPT white 90% + blur; Figma's main menu is dark in light mode |
-| surface · shadow | floating lift `0 20px 24px` + `0 5px 8px`, `shadow-color` full and half | Notion page menu (same geometry, `notion--page-menu--open`) | Figma `0 2 5 .15, 0 10 16 .12` agrees on a deep soft blur |
-| surface · min width | **256** (`space-96 × 2 + space-64`, `/* spec */`, `surface.css:474`; search surface the same, `surface.css:614`) | Notion page menu 256 (primary product for menus) | Was 224, unsourced (the search surface kept 224 until the third pass); Untitled 248, Figma 194, ChatGPT 324 |
-| item · height | 32 (`control-md`) | Peers Nav, Tree view | Notion 28, Figma 24, ChatGPT 36, Untitled 36; density is the UI-scale axis's job (second pass, item 18) |
-| item · radius | 8, concentric (12 − 4) | Area concentric rule; Notion 6 = 10 − 4 | ChatGPT 12 on 16 and Figma 5 on 13 are not concentric |
-| item · pitch gap | 2 | Untitled 2 (38 pitch, 36 rows) | Notion 1, ChatGPT 0, Figma 0 |
-| item · text | 14/20 400 `fg-default` | ChatGPT 14/20 400; Notion 14 400 | Figma 11/16 450 (editor density) |
-| item · icon, gap | 16 (`icon-md`), 8 (`gap-md`) | Untitled 16 / 8; Notion gap 8 | Notion and ChatGPT icons 20; Figma 24 box with 8 to text |
-| item · leading inset | **8**, the inset contract | Second pass (item 4); Nav; Notion 8 | Was 10 (a 2px optical nudge) |
-| item · hover | `bg-component-hover` #f3f3f3 / #333333; ink fixed | Row-plate rule; Notion 5% warm (`notion--item--hover`), ChatGPT 5% black | Figma paints its accent blue (dark menu) and lifts secondary ink |
-| item · selected | `bg-component-active` #eeeeee / #3f3f3f | Selection one step above hover | ChatGPT and Untitled use one fill for both |
-| danger | ink `fg-danger` #cf033c / #ffc9cb, fixed; hover plate `danger-surface` #fbf5f5 / #820022 | Foreground fixed on hover; earlier Area value | — |
-| disabled | whole row 50% | Audit disabled rule; Untitled 50% | — |
-| separator | 1px **`border-divider`** #e2e2e2 / #333333, 8px block and inline margins | Second pass divider role (ChatGPT 10% black, Figma #e6) | Was `border-decorative`. Notion's page-menu rules are lighter, 7% (#f0); #e2 kept as the nearest rung to #e5–#e6 (third pass) |
-| shortcut | 12px `fg-muted` text in **`font-keyboard`**, Kbd's face (`surface.css:597-605`), or a quiet Kbd | Untitled, Notion, Figma: plain 12 / 11px text in the UI sans | Was monospace (third pass). Notion's ink is tertiary rgb(161, 158, 153); Area keeps `fg-muted` |
-| label | 32px, 14/20 400 `fg-muted`, text-aligned with items | Peer Nav label | Untitled's 12px bold uppercase not adopted |
-
-Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
-1. Separator ink: kept at `border-divider` #e2e2e2. Notion's page-menu separators are
-   `rgba(42, 28, 0, .07)`, about #f0efed on white (`notion--page-menu--open` nodes 16, 21),
-   not the 11% the second pass cited (that was the outline-button edge). #e2 is the divider
-   role, the nearest rung to ChatGPT, Figma and Untitled's #e5–#e6.
-2. Shortcut face: changed from monospace to Kbd's keyboard face (`font-keyboard`,
-   `surface.css:604`). Notion (12px) and Figma (11px) set shortcuts in the UI sans.
-3. Search surface width: changed from 224 to Menu's own 256 (`surface.css:614`). The two
-   surfaces are one menu.
-
-## States
-
-| State | Slot · property changes | Evidence |
-|---|---|---|
-| hover / `data-highlighted` | plate `bg-component-hover`; ink fixed; not on a selected item | `notion--item--hover` (5% warm), `chatgpt--menu-item--hover` (5% black); `surface.css:508-511` |
-| focus-visible | 2px `focus-color` ring inset by its width | `surface.css:514-517`; Notion's field focus is a 2px blue ring (`input/notion--menu-search--focus`) |
-| selected (`data-selected`) | plate `bg-component-active`, kept under the pointer | `area--selected` rgb(238); `surface.css:532-536` |
-| danger hover | plate `danger-surface`; ink fixed | `surface.css:539-543` |
-| disabled | opacity 0.5, `not-allowed` | `area--disabled` |
+| item · height | 32 (`control-md`); 28 in compact | Notion 28, ChatGPT 36, Figma 40 | Default sits between ChatGPT and Notion; compact density gives Notion's 28 |
+| item · icon inset | 8 (shared `inset.css` rule for a 16px icon in 32) | Notion 8 (20px icon) | ChatGPT 10 |
+| item · icon → label | **12** (label at 36) | ChatGPT and Notion both start the label at 36 | Was 8 (label at 32). Icons stay 16 (Area's icon sizes are 12/16/24; the products draw 20) |
+| item · text-only inset | 11 (shared rule) | ChatGPT 10 | Within 1px |
+| item · text | 14/20 400 | ChatGPT 14/20 400; Notion 14 400 | — |
+| hover, keyboard focus | **`bg-hover`** wash on hover, `data-highlighted` and `:focus-visible` | ChatGPT 5% black, Notion 5% warm black, pointer and keyboard alike | Keyboard focus had no style of its own. Forced colours draw a Highlight ring |
+| danger | red label; **neutral wash** on hover | ChatGPT "Delete" (red text, 5% wash) | Was a red-tinted row with darker red text |
+| shortcut | 12/16 in the UI font, muted | Notion (12px, tertiary ink, UI font) | Was monospace |
+| separator · spacing | **4 / 1 / 4** (2px margin plus the 2px row gap) | Notion 4 / 1 / 4 (the menus' primary product) | Owner: too big. Was 10 / 1 / 10 (21px band); ChatGPT 8 / 1 / 8. Line starts level with the icons (Notion) |
+| checkable row | `MenuItem checked` → `menuitemcheckbox`; trailing check (default) or `indicator="switch"`; indicator 8px from the end | Notion toggle rows (whole row is the control, 30×18 switch 8px from the end, input `tabindex=-1`); ChatGPT model picker (trailing check) | Area draws its sm switch (28×16) display-only, with no nested input, so the row stays the only focusable element |
+| surface · shadow | **`0 20px 24px`, `0 5px 8px`** in `shadow-color` | Notion's two layers; ChatGPT 8/16; Figma 2/5 + 10/16 | Was `shadow-2` (1–2px), a flat card edge |
+| surface · radius, inset, border | 12, 4, 1px decorative (unchanged) | Notion 10 and 4; ChatGPT 16 and 10 | Concentric item radius follows |
+| keyboard | Up/Down (wrap), Home/End, typeahead | WAI menu pattern; Radix in ChatGPT; Notion | Was none (SplitButton had its own copy) |
 
 ## Behavior and accessibility
 
-`Menu` renders `div[role=menu]`; `MenuItem` a `button[role=menuitem]`, native `disabled` plus
-`data-disabled` (`primitives.tsx:759-803`). With a `trigger` it follows the ARIA menu button
-pattern: arrows, Home, End, typeahead, Escape, Tab and item choice (2026-09-27; see
-[overlay behavior](overlay.md)). `MenuSearch` keeps the input outside `role=menu`. A selected item sets only
-`data-selected`, with no `aria-checked`/`menuitemradio`. `MenuSeparator` has
-`role=separator`. Notion's page menu is `role=dialog` with `listbox`/`option` rows; Figma's
-is `ul[role=menu]` with `group` sections. Forced colours and RTL: not verified.
-
-## Peers and consistency
-
-| Peer | Shared role | Peer value | Menu | Match / reason |
-|---|---|---|---|---|
-| Nav, Tree view | row height, radius | 32, 8 | 32, 8 | match |
-| Nav, Tree view, Table, Select | hover / selected plates | `bg-component-hover` / `-active` | same | match |
-| Nav | leading icon inset | 8 (inset contract) | 8 | match (the nudge is gone) |
-| Nav | group label | 32px, 14/20 400 `fg-muted` | same | match (Nav starts at 8, Menu at the text inset) |
-| Popover, Dialog, Toast, Select picker | floating lift, radius 12, 1px decorative edge | shared lift | same | match; inset differs by content (4 rows vs 12 prose) |
-
-Baseline ([BASELINE.md](../research/BASELINE.md)): rows are 24 (Figma), 28 (Notion), 36
-(ChatGPT), all hovering at about 5%; Area is concentric at 32.
-
-## Visual pass
-
-Not inspected in this spec pass. Unverified: Notion and Figma side by side on screen, dark
-products, keyboard focus on screen, a leading icon at the new inset (no tile has one).
+`role="menu"`, items are native buttons with `role="menuitem"`. Menu handles Up/Down
+(wrapping), Home/End and typeahead for its own items; a nested submenu handles its own keys.
+Items keep their own Tab stops (inline menus in panels rely on this); a popup host closes
+on Tab (SplitButton). Opening, anchoring and dismissal are the host's job (native popover in
+SplitButton). Verified in the gallery: arrows wrap, Home/End, typeahead ("s" → Settings), and
+SplitButton's menu uses the same handler.
 
 ## Verification
 
-Compared the ChatGPT, Notion and Figma captures above with 8 Area captures (`menu/area--*`,
-re-taken after the second pass). Build and test results are in
-[the audit](../research/cohesion-audit.md#verification). Area hover, focus and danger states
-were read from the CSS, not captured.
+- 18 product captures, 3 Area before, 1 after; checksums verified; no personal content.
+- Area after: icon 8, label 36 (was 32), text-only rows 11; shadow as specified; focus wash.
+- `typecheck`, `build:docs`, `test:contracts` (14), `test:preview` (4), React tests (90),
+  `npm test` (19,491): all pass.
+- Unverified: dark theme, screen-reader announcement of menu items, submenu keyboard (Right
+  to open, Left to close) — not implemented.
 
 ## Feedback log
 
-- 2026-09-26 · cohesion audit → hover `bg-hover` → `bg-component-hover`; danger label fixed at
-  `fg-danger`; `shadow-2` → floating lift (menu and search surface) → 8 Area captures,
-  `chatgpt--menu-item--hover`, `chatgpt--menu--rest`.
-- 2026-09-26 · found while writing this spec → the hover rule outranked `[data-selected]`, lightening a selected item under the pointer; items had no keyboard focus ring → hover excludes selected items (tested in `cohesion.test.mjs`); focus-visible draws the shared ring inset → `surface.css`.
-- 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → minimum width 224 →
-  256; leading-icon inset 10 → 8; separators `border-decorative` → `border-divider`; open
-  questions on separator ink, shortcut face and the search surface's width →
-  `notion--page-menu--open`, `notion--item--hover`, `notion--item-shortcut--rest`,
-  `figma--main-menu--open`, `figma--item--{rest,hover}`.
-- 2026-09-27 · third pass → search surface minimum 256 (was 224); shortcut text in Kbd's
-  keyboard face (was monospace); separator `border-divider` kept, Notion's rules corrected
-  to 7% → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-26 · owner: "build the next component" → Menu evidence pass: label column 36,
+  shared hover/focus wash, neutral danger hover, UI-font shortcuts, floating lift, keyboard.
+- 2026-09-26 · owner: divider gap too big; refine the menu with controls, or fix controls
+  first? → divider 4 / 1 / 4 (Notion). The controls were fine; the composition was not: rows
+  were plain divs with independent focus stops and 8px insets. Replaced by checkable
+  `MenuItem`s (switch or check, row is the control), measured against Notion's toggle rows.
+  Mixed controls (segmented choice, buttons) belong in a Popover, not a menu.
+- 2026-09-27 · merged the overlay-behavior branch → with a `trigger`, Menu anchors to it and follows the ARIA menu button pattern (flip and shift, arrows wrap, typeahead, Escape and Tab close); a Menu without one keeps this pass's in-menu keys for its host → [overlay behavior](overlay.md).

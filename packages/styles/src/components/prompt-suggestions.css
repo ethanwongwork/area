@@ -1,0 +1,81 @@
+/* ---------------------------------------------------------------------------
+ * Prompt suggestions
+ *
+ * Starter prompts under an empty composer (ChatGPT's home: one row each, full width of the
+ * composer, an icon, the prompt in muted text, a dismiss on hover). Choosing one fills or
+ * sends it; the host decides. docs/specs/prompt-suggestions.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-prompt-suggestions {
+    display: flex;
+    flex-direction: column;
+    inline-size: min(100%, calc(var(--area-space-96) * 5)); /* the composer's measure */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--area-fg-muted);
+  }
+  .area-prompt-suggestions__row { position: relative; display: flex; }
+  .area-prompt-suggestions__item {
+    display: flex;
+    align-items: center;
+    /* spec: text 8 after the icon slot (ChatGPT 52 = 8 + 36 + 8). */
+    gap: var(--area-space-8);
+    flex: 1;
+    min-inline-size: 0;
+    /* spec: the composer's height: 16/24 text and 12 above and below (ChatGPT 52 on 26 leading). */
+    min-block-size: calc(var(--area-text-md-leading) + var(--area-space-12) * 2);
+    padding-block: 0;
+    /* spec: 8 in, like ChatGPT; the end leaves room for the dismiss (ChatGPT 44). */
+    padding-inline: var(--area-space-8) calc(var(--area-control-md) + var(--area-space-8));
+    border: 0;
+    /* spec (radius pass): the composer's corner (send Button radius + 8 = 16): the rows are the
+     * composer's height and column, so a washed row reads as the composer's shape. */
+    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-button-cap))) + var(--area-space-8));
+    background: transparent;
+    color: inherit;
+    font-family: var(--area-font-sans);
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    text-align: start;
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+  .area-prompt-suggestions__row:not(:has(.area-prompt-suggestions__dismiss)) > .area-prompt-suggestions__item { padding-inline-end: var(--area-space-8); }
+  /* spec: hover and focus lay Menu's row plate under the prompt; the ink stays fixed, as on
+     every hovered control. */
+  .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item,
+  .area-prompt-suggestions__item:focus-visible { background-color: var(--area-bg-component-hover); }
+  .area-prompt-suggestions__item:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+  /* The icon sits in a control-sized square 8 in, so its centre lines up with the composer's
+   * leading action above (both 24 from the edge). */
+  .area-prompt-suggestions__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 var(--area-control-md);
+    block-size: var(--area-control-md);
+  }
+  .area-prompt-suggestions__icon > :is(svg, img) { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+  .area-prompt-suggestions__text { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* spec: the dismiss ends 4 in from the row (ChatGPT 36 square at 728 of 768), shown on hover and focus. */
+  .area-prompt-suggestions__dismiss {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: var(--area-space-8);
+    display: flex;
+    align-items: center;
+    opacity: 0;
+  }
+  .area-prompt-suggestions__row:is(:hover, :focus-within) > .area-prompt-suggestions__dismiss { opacity: 1; }
+  @media (hover: none) { .area-prompt-suggestions__dismiss { opacity: 1; } }
+
+  /* --- Layouts ------------------------------------------------------------ */
+  /* spec (spacing pass): list rows are 2 apart, Menu's rule, so neighbouring hover plates never touch. */
+  .area-prompt-suggestions--list { gap: var(--area-space-2); }
+  /* Chips: the prompts as outline Buttons that wrap, 8 apart (Button group spacing). */
+  .area-prompt-suggestions--chips { flex-direction: row; flex-wrap: wrap; gap: var(--area-space-8); color: var(--area-fg-default); }
+  .area-prompt-suggestions--chips > .area-prompt-suggestions__row { max-inline-size: 100%; }
+  .area-prompt-suggestions--chips .area-button { max-inline-size: 100%; }
+  .area-prompt-suggestions--chips .area-button__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}

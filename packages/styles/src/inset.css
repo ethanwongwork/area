@@ -35,9 +35,9 @@
     padding-block-start: var(--area-border-width);
   }
   .area-panel--bare-bar > .area-panel__bar { padding-block-start: 0; }
-  .area-panel__bar:has(> .area-button:last-child) { --_box-end: var(--area-control-md); }
-  .area-panel__bar:has(> .area-button--sm:last-child) { --_box-end: var(--area-control-sm); }
-  .area-panel__bar:has(> .area-button--lg:last-child) { --_box-end: var(--area-control-lg); }
+  /* spec (inspector.md, audit 2026-09-26): the bar's action ends on the body's action column,
+   * as Figma's header buttons sit at 208 with every section and row action. */
+  .area-panel__bar:has(> .area-button:last-child) { --_box-end: calc(var(--_box-height) - var(--_inset) * 2); }
   .area-button { --_box-border: var(--area-border-width); }
   .area-chip { --_box-icon: var(--_dot); }
   .area-segmented__item { --_box-height: var(--_item); }
@@ -56,7 +56,12 @@
   .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-icon); }
   /* A horizontal plate has no column to share, so a text-only item is centred like a button. */
   .area-nav--horizontal .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-text); }
-  .area-nav__item, .area-menu__item { gap: var(--area-gap-md); }
+  .area-nav__item { gap: var(--area-gap-md); }
+  /* spec: the shared inset puts a 16px icon 8px in (Notion 8); a 12px gap then starts the
+   * label 36px in, where ChatGPT and Notion both set it (docs/specs/menu.md). */
+  .area-menu__item { gap: var(--_menu-gap, var(--area-gap-md)); }
+  /* A trailing check or switch is a glyph edge: 8px from the row's end (Notion's toggle 8). */
+  .area-menu__item:has(> :is(.area-menu__check, .area-menu__toggle):last-child) { --_box-end: var(--_box-icon); }
   .area-tabs__tab {
     --_height: var(--_tab-height);
     --_box-border: 0px;
@@ -135,7 +140,7 @@
    * icon slot; the outer Input reserves the action's larger box, keeping both inset layers
    * optically centered instead of letting a glyph touch its hit target. */
   .area-input:has(> .area-input__action:last-child) { --_box-end: var(--_action); }
-  .area-number-field:has(> .area-number-field__steppers:last-child) { --_box-end: var(--_step-width); }
+  .area-number-field:has(> .area-number-field__steppers:last-child) { --_box-end: var(--_step); }
   .area-menu__item:has(> .area-menu__shortcut > .area-kbd) { --_box-end: var(--area-space-20); }
   .area-menu__item:has(> .area-menu__shortcut > .area-kbd--small) { --_box-end: var(--area-space-16); }
   .area-menu__item:has(> .area-menu__shortcut > svg:only-child) { --_box-end: var(--area-icon-md); }
@@ -179,21 +184,6 @@
   }
   .area-panel__title, .area-panel__heading {
     text-box: trim-both cap alphabetic;
-  }
-  /* A dialog's heading trims its outer edges only, as a choice label does: the title's cap
-     top meets the 16px inset and the description's baseline closes the heading, while the
-     leading between them stays. Trimming both inner edges left 8px from the title's baseline
-     to the description's cap height. */
-  .area-dialog__title { text-box: trim-start cap alphabetic; }
-  .area-dialog__description { text-box: trim-end cap alphabetic; }
-  .area-dialog__title:only-child, .area-dialog__description:only-child { text-box: trim-both cap alphabetic; }
-  @supports (text-box: trim-both cap alphabetic) {
-    /* The close button centres on the title's cap height, which is now where the title
-       starts; its font size only sets the cap unit. */
-    .area-dialog__close {
-      font-size: var(--area-title-sm-size);
-      margin-block-start: calc((1cap - var(--area-control-sm)) / 2);
-    }
   }
   .area-alert, .area-toast {
     font-size: var(--area-ui-size);

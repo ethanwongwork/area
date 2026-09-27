@@ -1,0 +1,55 @@
+/* ---------------------------------------------------------------------------
+ * Combobox
+ *
+ * An editable field with a list of suggestions that filters as you type (WAI combobox,
+ * list autocomplete). The field is Input; the list is Menu's surface and rows, so a
+ * combobox's options look exactly like a menu's. docs/specs/combobox.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-combobox { display: inline-flex; vertical-align: middle; min-inline-size: 0; }
+  .area-combobox--full-width { display: flex; inline-size: 100%; }
+  .area-combobox--full-width > .area-input { flex: 1; }
+
+  /* The list opens in the top layer, so a clipping ancestor (a panel body, a dialog) never cuts it. */
+  .area-combobox__listbox[popover] { margin: 0; overflow-y: auto; }
+  .area-combobox__listbox[popover]:not(:popover-open) { display: none; }
+  .area-combobox__listbox {
+    /* spec: Figma's font list shows 324 of its rows before it scrolls (captures/combobox). */
+    max-block-size: min(324px, 50vh); /* spec */
+    overscroll-behavior: contain;
+  }
+  @supports (anchor-name: --area-anchor) {
+    .area-combobox { anchor-name: var(--_combobox-anchor); }
+    .area-combobox__listbox[popover]:popover-open {
+      position-anchor: var(--_combobox-anchor);
+      inset: auto;
+      position-area: bottom span-right;
+      /* spec: 4 from the field, as every anchored surface (popover.md: shadcn 4, Notion 4). */
+      margin-block-start: 4px; /* spec */
+      min-inline-size: max(anchor-size(width), calc(var(--area-space-96) * 2 + var(--area-space-32)));
+      position-try-fallbacks: flip-block;
+    }
+  }
+
+  /* Options are Menu rows; selection shows the trailing check, as a checkable menu row. */
+  .area-combobox__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
+  .area-combobox__option[aria-disabled="true"] { cursor: not-allowed; opacity: 0.5; }
+  .area-combobox__description { margin-inline-start: auto; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); white-space: nowrap; }
+  .area-combobox__description + .area-menu__check { margin-inline-start: var(--area-space-8); }
+
+  /* Nothing matches: a quiet row the height of an option, not an option itself. */
+  .area-combobox__empty {
+    display: flex;
+    align-items: center;
+    block-size: var(--area-control-md);
+    padding-inline: var(--area-space-8);
+    color: var(--area-fg-muted);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  .area-combobox__group { display: flex; flex-direction: column; gap: var(--area-space-2); }
+}
+@layer area.components {
+  /* The toggle's tooltip names it before it opens; once the list is showing it only covers it. */
+  .area-combobox[data-open] .area-input__action-tooltip { display: none; }
+}

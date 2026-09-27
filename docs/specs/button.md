@@ -1,193 +1,296 @@
 # Button spec
 
-**Status:** in review · 2026-09-26 (cohesion audit; second pass the same day)
-**Captures:** `docs/research/captures/button/` (Area tiles, `notion--*` 7, `figma--*` 5), `docs/research/captures/baseline/chatgpt--*`
-**Peers:** Button group and Toolbar (host Buttons), Segmented, Chip, Menu / Nav / Tree view rows (hover plate), Kbd (shortcut inside), Alert and Dialog dismiss
+**Status:** accepted · 2026-09-26 (was: in review · 2026-09-25 (first pass under the capture workflow))
+**Captures:** `docs/research/captures/button/` (Area pass-0 build in `before/`)
+**Peers:** ButtonGroup and Toolbar (host Button), Composer actions, InputAction, Chip
+(pill shape, selectable), Segmented (mode choice), Kbd (shortcut inside a label), Tree view
+(6px glyph gap)
 
 ## Owner decisions
 
-- 2026-09-26: **Neutral by default, accent by override** (DESIGN_SYSTEM.md, Color and focus).
-  Button already followed it: the base tone is `neutral` (`button.css:37-45`) and `accent` is
-  opt-in (`button.css:204-214`).
-- 2026-09-26: audit every family accepted under the earlier process against the evidence
-  process (cohesion audit). Button was reopened for its neutral ghost hover.
-- 2026-09-26 (second pass): decide every open item with the most calculated option
-  consistent with the system. For Button: height, radius and weight stay (audit decision 18,
-  Primary button row); a nested Kbd is concentric with the button's corner.
-
-No Button section existed in [prior decisions](PRIOR_DECISIONS.md).
+- 2026-09-25: Button is the next component, after Tree view.
+- Type ramp (applied system-wide, `docs/specs/typography.md`): weight 400 everywhere except
+  labels on fills (500). Button still set 500 on every variant; this pass applies it.
+- 2026-09-25 (after pass 1): sizes: "do whatever you think would be best"; a compact density
+  of the whole system is planned for dense products (Cursor and other IDEs, Figma, Notion).
+  Decision: no new Button sizes. Compact density already maps sm/md/lg to 24/28/32 (Figma
+  24, Notion 28) with a 6px md gap; default keeps 28/32/40.
+- 2026-09-25: keep the soft border for now. Capture the hover colour.
+- 2026-09-26: small-size label: "do whatever you think best that fits the system; not
+  attached to previous values". Decision: default density sm (28) sets 14/20, like md and lg
+  (Notion's 28px buttons are 14px); the tiers differ by height. 12/16 stays on xs (24) and in
+  compact density. Captions that borrowed the sm control token (field descriptions and
+  errors, choice and switch descriptions, panel headings, colour-picker heading) now use the
+  caption role (text-xs, 12/16), so they do not change.
+- 2026-09-26: "do what you can for soft's hover while keeping the stroke"; show the trailing
+  icon; asked whether ButtonGroup or a split button is next.
+- 2026-09-26: accepted. Owner: "consider every component that you have built to be approved. if i havent given any feedback to change anything consider them approved."
 
 ## Job and boundaries
 
-Button triggers an action, or with `selected` shows a toggle that is on. It does not pick a
-value from a set (Segmented, Chip), navigate (Nav, Link) or host keyboard focus management
-for a row of commands (Toolbar).
+Button triggers an action, or toggles one (`selected`). It is not navigation to a place
+(a link, Nav item, Breadcrumb), not a mode choice among siblings (Segmented), and not a
+selectable filter (Chip). ButtonGroup and Toolbar arrange Buttons; they add no Button paint.
 
 ## Variants
 
-| Axis | Value | Justification | Where it appears |
+| Axis | Value | Justification | Where it appears (source / product) |
 |---|---|---|---|
-| variant | solid (default), soft, outline, ghost | Emphasis ladder; ghost is the transparent icon/text button every product uses | ChatGPT header icon buttons (ghost); Notion 28px icon and text buttons (ghost), 32px primary (solid) and outline; Figma 24px icon buttons (ghost), 32px primary (solid), 24px secondary (outline); Untitled secondary (bordered) |
-| tone | neutral (default), accent, info, success, warning, caution, danger, discovery | Meaning, independent of emphasis | OpenAI tone vocabulary (`button.css:155-160`) |
-| size | sm 28, md 32 (default), lg 40 | Control tiers | Untitled sm–lg; Notion 28 / 32, Figma 24 / 32, ChatGPT 36 |
-| shape | `pill` | Opt-in full round | ChatGPT model picker (`chatgpt--model-picker--rest`), Figma product button (`figma--product-button--rest`), both radius 9999px |
-| layout | `iconOnly`, `fullWidth`, `align` start/end | Square icon button; stretched; label aligned to text above | ChatGPT 36×36 icon button |
-| state | selected (`aria-pressed`), loading, disabled | Toggle, pending, unavailable | Untitled loading and disabled |
-| composition | leading/trailing icon, trailing Kbd | Command with glyph or shortcut | Gallery `with-icon`, `with-shortcut` |
+| variant | solid (default) | Strongest action | Notion Share popover "Invite" (blue); ChatGPT logged-out "Log in" (near-black); ChatGPT composer send/voice (round); Untitled primary |
+| variant | soft | Tinted fill, secondary action | ChatGPT Settings "Manage", "Archive all" (5% black); "Delete all" (10% red); Figma "New Design file" pills (245 fill) |
+| variant | outline | Bordered, secondary action | Notion "Copy link" (hairline); ChatGPT logged-out "Sign up", suggestions (1px 20% black); Untitled secondary |
+| variant | ghost | Quiet action in toolbars and headers | ChatGPT header Share, message actions, composer tools; Notion topbar Share, Favorite; Figma file browser icons; Untitled tertiary |
+| tone | neutral, accent, info, success, warning, caution, danger, discovery | Semantic paint | ChatGPT danger soft ("Delete all"); Notion accent solid ("Invite"); others from Area's tone axis |
+| size | sm 28, md 32 (default), lg 40 | Control scale | Notion 28 (topbar), 32 (dialog); ChatGPT 32 (message actions), 36; Figma 24, 32; Untitled 32–48 |
+| composition | leading icon | Icon before the label | ChatGPT Share; Notion Share, Advanced; Untitled icon leading |
+| composition | trailing icon | Icon after the label, usually a disclosure chevron | ChatGPT model picker |
+| composition | icon only | Square | All three products |
+| composition | shortcut (Kbd in label) | Command hint | Area addition (Tooltip/Kbd peers) |
+| shape | pill | Fully round | ChatGPT Settings pills, composer; Figma "New …" pills |
+| layout | full width, align start/end | Placement | Area layout helpers |
+| state | hover, active, focus-visible, disabled, loading, selected | Runtime | Hover captured in ChatGPT and Notion; focus in ChatGPT and Untitled |
 
-Excluded: Untitled's xs (32) and xl (48) tiers; DESIGN_SYSTEM.md (Size and shape) exposes only sm/md/lg.
+Not built: a 24px and a 36px size. The planned compact density covers dense products
+(compact sm/md/lg = 24/28/32); ChatGPT's 36 falls between md and lg in default density.
 
 ## Sources
 
 | Id | Type | What | Link / commit / path | License | Captures |
 |---|---|---|---|---|---|
-| chatgpt | target product | Header ghost icon button; model picker (transparent pill) at rest and hover | chatgpt.com, owner's session, 2026-09-26 | evidence only | `baseline/chatgpt--icon-button-ghost--{rest,hover}--light`, `baseline/chatgpt--model-picker--{rest,hover}--light` |
-| notion | target product | Share popover primary and outline buttons; page icon and text buttons at rest and hovered; a view-toolbar icon button; Calendar month nav (earlier pass) | app.notion.com, owner's workspace (page menu, Share popover, tasks board), light, read-only, 2026-09-26 | evidence only | `notion--{primary-button,outline-button,toolbar-icon}--rest`, `notion--{icon-button,text-button}--{rest,hover}`, `calendar/notion--nav-button--hover` |
-| figma | target product | Editor primary (Share) and full-width secondary buttons, inspector icon button at rest and hovered; file-browser product pill; colour picker eyedropper (earlier pass) | figma.com file browser and editor, light, read-only, 2026-09-26 | evidence only | `figma--{primary-button,secondary-button,product-button}--rest`, `figma--icon-button--{rest,hover}`, `color-picker/figma--eyedropper--hover` |
-| uui | design system (source) | Button | `untitleduico/react@4702dc0`, `components/base/buttons/button.tsx:13-127, 176-248` ([reference](../research/untitled-ui-reference.md)) | MIT | none (source reading) |
-| area | this system | Every gallery tile, re-taken after the second pass | localhost gallery | — | `button/area--*` |
+| uui | design system (rendered) | Primary sm/md, secondary sm/md (+hover, focus), tertiary md, icon leading | untitledui.com/react/components/buttons, 2026-09-25 | MIT (source) | `uui--*` (9) |
+| chatgpt | target product, logged in | Header Share (icon + label), More, composer tools, model picker, send/voice, message actions, Settings soft pills (neutral, danger) | chatgpt.com, owner's session (Chrome), 2026-09-25 | evidence only | `chatgpt--*` (19) |
+| chatgpt-loggedout | target product, logged out | Log in (solid), Sign up and suggestions (outline), composer icons | chatgpt.com in the built-in browser, 2026-09-25 | evidence only | `chatgpt-loggedout--*` (13) |
+| notion | target product | Topbar Share (ghost text), Favorite, sidebar New page; Share popover Invite (solid accent), Copy link (outline), Advanced (icon + label) | app.notion.com, owner's session (Chrome), 2026-09-25 | evidence only | `notion--*` (12) |
+| figma | target product | File browser icon buttons (24, 32), "New Design file" pill, tabs | figma.com/files, owner's session (Chrome), 2026-09-25 | evidence only | `figma--*` (5, rest only) |
+| area | this system | Pass-0 build: sizes, variants, danger, leading icon, icon only | localhost gallery | — | `before/area--*` (9) |
 
-The ChatGPT icon-button "hover" file records its 5% black `::before` plate at `opacity: 0`, the
-same as rest, so the visible hover was not caught; the model-picker hover (`background
-rgba(0, 0, 0, 0.05)`) is the measured ChatGPT hover. Product labels are redacted, so text
-widths are not comparable; heights, insets, radii and paint are.
+Capture conditions: light theme only. Notion and Figma ran at 90% browser zoom (device pixel
+ratio 1.8); computed lengths do not depend on zoom, but Notion's 0.56px outline border is a
+hairline at that zoom. Figma hover did not register (the extension could not screenshot the
+page to anchor the pointer), so Figma is rest only. Nothing was clicked except Notion's
+Share (opens a popover; no invite sent) and ChatGPT navigation.
+
+Logged-out ChatGPT uses 44px controls with 600 labels; the logged-in client uses 32–36px
+with 400 labels. The logged-in values decide.
 
 ## Anatomy
 
 ```
-chatgpt  button 36×36, radius 8, ink rgb(93); ::before 5% black plate (hover)
-  icon   svg 20×20 at 8px inset
-notion   div 28 (ghost) / 32 (primary, outline), radius 6, padding 0 8 (text) / 0 12 (primary)
-  icon   svg 20×20 at 4px (icon button) or 16×16 at 6px (toolbar icon), rgb(142,139,134)
-figma    button 24 (icon, secondary) / 32 (primary), radius 5, outline 1px at −1px offset
-  icon   svg 24×24 filling the button, glyph about 10px
-area     button.area-button  owns: height, gutter, 1px border, radius, fill, shadow, focus ring
-  icon   span.area-button__icon  square 16px viewport (all tiers)
-  label  span.area-button__label  truncation; becomes inline-flex with a 4px gap around a Kbd (`kbd.css:136-140`)
+chatgpt  button 36, border 1 transparent, padding 0 12, radius 8 (square) or 9999 (pill)
+  icon   svg 16 (with label) or 20 (icon only), 8px in on a 36 square, 6px on a 32
+  text   14/18 400, gap 4 after the icon
+notion   div[role=button] 28 or 32, no border, padding 0 8 (ghost) or 0 12 (solid, outline)
+  icon   svg 12–20; 8px from the start on 28 and 32
+  text   14/16.8, 400 ghost, 500 on solid and outline; gap 6 after the icon
+figma    button 24, radius 5, 11px type; tabs 24 with 8px sides, 450/550
+uui      button 36/40, box-shadow ring + inset bottom shade, padding 8/10 12/14, 600
+area     button.area-button   owns height, 1px border (transparent unless outline/soft), radius, fill
+  icon   span.area-button__icon 16 (md)
+  label  span.area-button__label  cap-trimmed text box, ellipsis
 ```
 
-Inset equation (`inset.css:7-19`, border counted once at `inset.css:41`): outer inset =
-(height − edge item) / 2, padding = that − 1px border. Text edge item is 1cap (Geist 14px cap
-9.94, `kbd/area--on-emphasis` capture): md (32 − 9.94) / 2 − 1 = 10.03; sm (28 − 8.52) / 2 − 1
-= 8.74; lg (40 − 9.94) / 2 − 1 = 14.03. Icon end: (32 − 16) / 2 − 1 = 7. Kbd end: (32 − 20) /
-2 − 1 = 5 (`inset.css:109-111`).
+Inset equations (outer inset = border + shell padding + slot inset; `inset.css`):
+
+| Slot (md 32) | Area | Captured | Products |
+|---|---|---|---|
+| text, both sides | 1 + (32 − cap 9.94) / 2 − 1 = 11.03 | 11.02 | Notion 12, ChatGPT 13 at 36 (1 + 12) |
+| leading icon | 1 + (32 − 16) / 2 − 1 = 8 | 8 | Notion 8 (20px icon on 32), ChatGPT 13 (16px icon on 36) |
+| icon to label | gap | 8 → **6** | Notion 6, ChatGPT 4, Untitled 4 + 2 |
+
+The shared equal-inset rule (text inset equals the space above and below the cap) stays:
+it lands within 1px of Notion's 12 and matches Notion's icon inset exactly.
 
 ## Measurements
 
-`node scripts/capture-compare.mjs` (Area, rest, re-taken after the second pass):
+Generated with `node scripts/capture-compare.mjs` from `docs/research/captures/button/`,
+filtered to the shell, text and icon rows (full tables: run the command on the same files).
 
-| slot · property | area · default | area · size-small | area · size-large | area · neutral ghost | area · selected | area · with-icon | area · with-shortcut |
+### Text buttons, 32–44px
+| slot · property | area · size-md · rest · light | notion · solid-accent · rest · light | notion · outline · rest · light | chatgpt · soft-secondary · rest · light | chatgpt-loggedout · solid · rest · light | chatgpt-loggedout · outline · rest · light | uui · secondary-md · rest · light |
 |---|---|---|---|---|---|---|---|
-| **shell** size | 65.76 × 32 | 56.94 × 28 | 73.76 × 40 | 65.76 × 32 | 80.56 × 32 | 86.73 × 32 | 100.15 × 32 |
-| **shell** padding | 0 10.03 0 10.03 | 0 8.74 0 8.74 | 0 14.03 0 14.03 | 0 10.03 0 10.03 | 0 10.03 0 10.03 | 0 10.03 0 7 | 0 5 0 10.03 |
-| **shell** radius | 8px | 6px | 10px | 8px | 8px | 8px | 8px |
-| **shell** gap | 8px | 4px | 8px | 8px | 8px | 8px | 8px |
-| **shell** font | 14px/20px 500 Geist | 12px/16px 500 Geist | 14px/20px 500 Geist | 14px/20px 500 Geist | 14px/20px 500 Geist | 14px/20px 500 Geist | 14px/20px 500 Geist |
-| **shell** color | rgb(250, 250, 250) | rgb(250, 250, 250) | rgb(250, 250, 250) | rgb(40, 40, 40) | rgb(250, 250, 250) | rgb(250, 250, 250) | rgb(250, 250, 250) |
-| **shell** background | rgb(40, 40, 40) | rgb(40, 40, 40) | rgb(40, 40, 40) |  | rgb(29, 29, 29) | rgb(40, 40, 40) | rgb(40, 40, 40) |
+| **shell** size | 65.76 × 32 | 59.99 × 32 | 108.96 × 32 | 77.48 × 36 | 64.02 × 44 | 128.79 × 44 | 101.41 × 40 |
+| **shell** padding | 0 10.03 0 10.03 | 0 12 0 12 | 0 12 0 12 | 0 12 0 12 | 0 12 0 12 | 0 12 0 12 | 10 14 10 14 |
+| **shell** border | 1 solid rgba(0, 0, 0, 0) | 0 | 0.56 solid rgba(28, 19, 1, 0.11) | 1 solid rgba(0, 0, 0, 0) | 0 | 1 solid rgba(0, 0, 0, 0.2) | 0 |
+| **shell** radius | 8px | 6px | 6px | 9999px | 999px | 999px | 8px |
+| **shell** gap (row / column) | 8px / 8px |  | 8px / 8px | 4px / 4px | 6px / 6px | 6px / 6px | 4px / 4px |
+| **shell** font | 14px/20px 500 Geist | 14px/16.8px 500 ui-sans-serif | 14px/16.8px 500 ui-sans-serif | 14px/18px 400 -apple-system-body | 14px/20px 600 -apple-system-body | 14px/20px 600 -apple-system-body | 14px/20px 600 Inter |
+| **shell** color | rgb(250, 250, 250) | rgb(243, 249, 253) | rgb(44, 44, 43) | rgb(13, 13, 13) | rgb(255, 255, 255) | oklch(0.159066 0 none) | lab(27.036 0 0) |
+| **shell** background | rgb(40, 40, 40) | rgb(39, 131, 222) |  | oklab(0.159065 0.00000723451 0.00000317395 / 0.05) | oklch(0.159066 0 none) | rgb(255, 255, 255) | rgb(255, 255, 255) |
+| **shell** shadow | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px |  |  |  |  |  | lab(84.92 0 -0.0000119209) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.05) 0px -2px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px |
+| **shell** text cap top / baseline from shell |  | cap +11.73 · baseline −10.4 · start +12 · end −12 | cap +11.73 · baseline −10.4 · start +35.46 · end −12.55 | cap +13.64 · baseline −12.5 · start +13 · end −13 | cap +17.64 · baseline −16.5 · start +12 · end −12 | cap +17.64 · baseline −16.5 · start +13 · end −13 |  |
+| **text** size | 43.71 × 16.94 | 59.99 × 32 | 108.96 × 32 | 77.48 × 36 | 64.02 × 44 | 128.79 × 44 | 73.41 × 20 |
+| **text** edge from shell (t r b l) | 7.53 11.03 7.53 11.02 |  |  |  |  |  | 10 14 10 14 |
+| **text** padding | 3.5 0 3.5 0 | 0 12 0 12 | 0 12 0 12 | 0 12 0 12 | 0 12 0 12 | 0 12 0 12 | 0 2 0 2 |
+| **text** border | 0 | 0 | 0.56 solid rgba(28, 19, 1, 0.11) | 1 solid rgba(0, 0, 0, 0) | 0 | 1 solid rgba(0, 0, 0, 0.2) | 0 |
+| **text** radius | 0px | 6px | 6px | 9999px | 999px | 999px | 0px |
+| **text** gap (row / column) |  |  | 8px / 8px | 4px / 4px | 6px / 6px | 6px / 6px |  |
+| **text** font | 14px/20px 500 Geist | 14px/16.8px 500 ui-sans-serif | 14px/16.8px 500 ui-sans-serif | 14px/18px 400 -apple-system-body | 14px/20px 600 -apple-system-body | 14px/20px 600 -apple-system-body | 14px/20px 600 Inter |
+| **text** color | rgb(250, 250, 250) | rgb(243, 249, 253) | rgb(44, 44, 43) | rgb(13, 13, 13) | rgb(255, 255, 255) | oklch(0.159066 0 none) | lab(27.036 0 0) |
+| **text** background |  | rgb(39, 131, 222) |  | oklab(0.159065 0.00000723451 0.00000317395 / 0.05) | oklch(0.159066 0 none) | rgb(255, 255, 255) |  |
+| **text** text cap top / baseline from shell | cap +11.03 · baseline −11.03 · start +11.02 · end −11.03 | cap +11.73 · baseline −10.4 · start +12 · end −12 | cap +11.73 · baseline −10.4 · start +35.46 · end −12.55 | cap +13.64 · baseline −12.5 · start +13 · end −13 | cap +17.64 · baseline −16.5 · start +12 · end −12 | cap +17.64 · baseline −16.5 · start +13 · end −13 | cap +15.31 · baseline −14.5 · start +16 · end −16 |
 
-Products (shell, `node scripts/capture-compare.mjs --slots shell`, trimmed):
+### Icon and label
+| slot · property | area · leading-icon · rest · light | notion · icon-label-ghost · rest · light | notion · text-ghost · rest · light | chatgpt · icon-label-ghost · rest · light | uui · secondary-icon-sm · rest · light |
+|---|---|---|---|---|---|
+| **shell** size | 86.73 × 32 | 106.05 × 32 | 71.3 × 27.99 | 83.26 × 36 | 120.37 × 36 |
+| **shell** padding | 0 10.03 0 7 | 0 8 0 8 | 0 8 0 8 | 0 12 0 12 | 8 12 8 12 |
+| **shell** border | 1 solid rgba(0, 0, 0, 0) | 0 | 0 | 1 solid rgba(0, 0, 0, 0) | 0 |
+| **shell** radius | 8px | 6px | 6px | 8px | 8px |
+| **shell** gap (row / column) | 8px / 8px |  | 6px / 6px | 4px / 4px | 4px / 4px |
+| **shell** font | 14px/20px 500 Geist | 14px/16.8px 400 ui-sans-serif | 14px/16.8px 400 ui-sans-serif | 14px/18px 400 -apple-system-body | 14px/20px 600 Inter |
+| **shell** color | rgb(250, 250, 250) | rgb(44, 44, 43) | rgb(44, 44, 43) | rgb(13, 13, 13) | lab(27.036 0 0) |
+| **shell** background | rgb(40, 40, 40) |  |  |  | rgb(255, 255, 255) |
+| **shell** shadow | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px |  |  |  | lab(84.92 0 -0.0000119209) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.05) 0px -2px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px |
+| **shell** text cap top / baseline from shell |  |  | cap +9.73 · baseline −8.39 · start +26.05 · end −7.99 | cap +13.64 · baseline −12.5 · start +33 · end −13 |  |
+| **icon** size | 16 × 16 | 20 × 20 | 12.06 × 20 | 16 × 16 | 20 × 20 |
+| **icon** edge from shell (t r b l) | 8 62.73 8 8 | 6 78.06 6 7.99 | 3.99 51.25 4 7.99 | 10 54.26 10 13 | 8 88.37 8 12 |
+| **icon** padding | 0 | 0 | 0 | 0 | 0 |
+| **icon** border | 0 | 0 | 0 | 0 | 0 |
+| **icon** radius | 0px | 0px | 0px | 0px | 0px |
+| **icon** color |  | rgb(142, 139, 134) | rgb(56, 56, 54) | rgb(13, 13, 13) | lab(66.128 -0.0000298023 0.0000119209) |
+| **text** size | 43.71 × 16.94 | 64.06 × 16.8 | 71.3 × 27.99 | 83.26 × 36 | 72.37 × 20 |
+| **text** edge from shell (t r b l) | 7.53 11.02 7.53 32 | 7.6 8 7.6 33.99 |  |  | 8 12 8 36 |
+| **text** padding | 3.5 0 3.5 0 | 0 | 0 8 0 8 | 0 12 0 12 | 0 2 0 2 |
+| **text** border | 0 | 0 | 0 | 1 solid rgba(0, 0, 0, 0) | 0 |
+| **text** radius | 0px | 0px | 6px | 8px | 0px |
+| **text** gap (row / column) |  | 4px / 4px | 6px / 6px | 4px / 4px |  |
+| **text** font | 14px/20px 500 Geist | 14px/16.8px 400 ui-sans-serif | 14px/16.8px 400 ui-sans-serif | 14px/18px 400 -apple-system-body | 14px/20px 600 Inter |
+| **text** color | rgb(250, 250, 250) | rgb(44, 44, 43) | rgb(44, 44, 43) | rgb(13, 13, 13) | lab(27.036 0 0) |
+| **text** text cap top / baseline from shell | cap +11.03 · baseline −11.03 · start +32 · end −11.02 | cap +11.73 · baseline −10.4 · start +33.99 · end −7.99 | cap +9.73 · baseline −8.39 · start +26.05 · end −7.99 | cap +13.64 · baseline −12.5 · start +33 · end −13 | cap +13.31 · baseline −12.5 · start +38 · end −14 |
 
-| slot · property | chatgpt · model-picker · hover | notion · primary-button | notion · outline-button | notion · text-button · hover | notion · icon-button · hover | figma · primary-button | figma · secondary-button | figma · icon-button · hover |
-|---|---|---|---|---|---|---|---|---|
-| **shell** size | 97.52 × 36 | 59.99 × 32 | 108.96 × 32 | 71.3 × 27.99 | 27.99 × 27.99 | 54.52 × 32 | 212 × 24 (fills its row) | 24 × 24 |
-| **shell** padding | 0 14 0 12 | 0 12 | 0 12 | 0 8 | 0 | 0 12 | 0 (inner 0 8) | 0 |
-| **shell** edge | — | 0 | 0.56 solid rgba(28, 19, 1, 0.11) | 0 | 0 | 0 | outline 1px rgba(0, 0, 0, 0.1) | 0 |
-| **shell** radius | 9999px | 6px | 6px | 6px | 6px | 5px | 5px | 5px |
-| **shell** gap | 6px | — | 8px | 6px | 0 | — | — | — |
-| **shell** font | 14/20 | 14px/16.8px 500 | 14px/16.8px 500 | 14px/16.8px 400 | — | 11px/16px 450 Inter | 11px/16px 450 | — |
-| **shell** color | — | rgb(243, 249, 253) | rgb(44, 44, 43) | rgb(44, 44, 43) | glyph rgb(142, 139, 134) | rgb(255, 255, 255) | rgba(0, 0, 0, 0.898) | rgb(0, 0, 0) |
-| **shell** background | rgba(0, 0, 0, 0.05) | rgb(39, 131, 222) | — | rgba(33, 27, 23, 0.05) | rgba(33, 27, 23, 0.05) | rgb(13, 153, 255) | — | rgba(0, 0, 0, 0.05) |
+### Icon only
+| slot · property | area · icon-only · rest · light | figma · icon-ghost-24 · rest · light | notion · icon-ghost · rest · light | chatgpt · icon-ghost-32 · rest · light | chatgpt · icon-ghost-square · rest · light |
+|---|---|---|---|---|---|
+| **shell** size | 32 × 32 | 23.99 × 23.99 | 27.99 × 27.99 | 32 × 32 | 36 × 36 |
+| **shell** padding | 0 | 0 | 0 | 0 | 0 |
+| **shell** border | 1 solid rgba(0, 0, 0, 0) | 0 | 0 | 1 solid rgba(0, 0, 0, 0) | 1 solid rgba(0, 0, 0, 0) |
+| **shell** radius | 8px | 5px | 6px | 8px | 8px |
+| **shell** gap (row / column) | 8px / 8px |  | 0px / 0px | 4px / 4px | 4px / 4px |
+| **shell** background | rgb(40, 40, 40) |  |  |  |  |
+| **shell** shadow | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px |  |  |  |  |
+| **shell** outline |  | 0.555556px solid rgba(0, 0, 0, 0) offset -0.555556px |  |  |  |
+| **icon** size | 16 × 16 | 23.99 × 23.99 | 20 × 20 | 20 × 20 | 20 × 20 |
+| **icon** edge from shell (t r b l) | 8 8 8 8 | 0 0 0 0 | 3.99 4 4 3.99 | 6 6 6 6 | 8 8 8 8 |
+| **icon** padding | 0 | 0 | 0 | 0 | 0 |
+| **icon** border | 0 | 0 | 0 | 0 | 0 |
+| **icon** radius | 0px | 0px | 0px | 0px | 0px |
+| **icon** color |  | rgb(0, 0, 0) | rgb(142, 139, 134) | rgb(143, 143, 143) | rgb(13, 13, 13) |
 
-On white: 5% black ≈ rgb(242); Notion's 5% warm hover ≈ rgb(244, 243, 243), its 11% hairline
-≈ rgb(230, 229, 227); Figma's 10% outline ≈ rgb(230). `notion--toolbar-icon`: 28 × 28, 16px glyph
-at 6px, ink rgb(125, 122, 117). `figma--product-button`: 32px pill, rgb(245) + inset rgb(230) ring.
+### Sizes
+| slot · property | area · size-sm · rest · light | area · size-lg · rest · light | figma · tab · rest · light | uui · primary-sm · rest · light | uui · primary-md · rest · light |
+|---|---|---|---|---|---|
+| **shell** size | 56.94 × 28 | 73.76 × 40 | 79.15 × 23.99 | 96.37 × 36 | 101.41 × 40 |
+| **shell** padding | 0 8.74 0 8.74 | 0 14.03 0 14.03 | 0 8 0 8 | 8 12 8 12 | 10 14 10 14 |
+| **shell** border | 1 solid rgba(0, 0, 0, 0) | 1 solid rgba(0, 0, 0, 0) | 0 | 0 | 0 |
+| **shell** radius | 6px | 10px | 5px | 8px | 8px |
+| **shell** gap (row / column) | 4px / 4px | 8px / 8px |  | 4px / 4px | 4px / 4px |
+| **shell** font | 12px/16px 500 Geist | 14px/20px 500 Geist | 11px/16px 450 Inter | 14px/20px 600 Inter | 14px/20px 600 Inter |
+| **shell** color | rgb(250, 250, 250) | rgb(250, 250, 250) | rgba(0, 0, 0, 0.5) | rgb(255, 255, 255) | rgb(255, 255, 255) |
+| **shell** background | rgb(40, 40, 40) | rgb(40, 40, 40) | rgb(255, 255, 255) | rgb(127, 86, 217) | rgb(127, 86, 217) |
+| **shell** shadow | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px |  | rgba(0, 0, 0, 0) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.05) 0px -2px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px | rgba(0, 0, 0, 0) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.05) 0px -2px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px |
+| **text** size | 37.47 × 14.52 | 43.71 × 16.94 | 63.16 × 16 | 72.37 × 20 | 73.41 × 20 |
+| **text** edge from shell (t r b l) | 6.73 9.74 6.75 9.73 | 11.53 15.03 11.53 15.02 | 3.99 8 4 7.99 | 8 12 8 12 | 10 14 10 14 |
+| **text** padding | 3 0 3 0 | 3.5 0 3.5 0 | 0 | 0 2 0 2 | 0 2 0 2 |
+| **text** border | 0 | 0 | 0 | 0 | 0 |
+| **text** radius | 0px | 0px | 0px | 0px | 0px |
+| **text** font | 12px/16px 500 Geist | 14px/20px 500 Geist | 11px/16px 550 Inter | 14px/20px 600 Inter | 14px/20px 600 Inter |
+| **text** color | rgb(250, 250, 250) | rgb(250, 250, 250) | rgba(0, 0, 0, 0.5) | rgb(255, 255, 255) | rgb(255, 255, 255) |
+| **text** text cap top / baseline from shell | cap +9.74 · baseline −9.74 · start +9.73 · end −9.74 | cap +15.03 · baseline −15.03 · start +15.02 · end −15.03 | cap +8.1 · baseline −7.89 · start +7.99 · end −8 | cap +13.31 · baseline −12.5 · start +14 · end −14 | cap +15.31 · baseline −14.5 · start +16 · end −16 |
+
+### Hover
+| slot · property | chatgpt · soft-secondary · hover · light | chatgpt · icon-label-ghost · hover · light | notion · text-ghost · hover · light | notion · solid-accent · hover · light | notion · outline · hover · light | uui · secondary-md · hover · light |
+|---|---|---|---|---|---|---|
+| **shell** border | 1 solid rgba(0, 0, 0, 0) | 1 solid rgba(0, 0, 0, 0) | 0 | 0 | 0.56 solid rgba(28, 19, 1, 0.11) | 0 |
+| **shell** color | rgb(13, 13, 13) | rgb(13, 13, 13) | rgb(44, 44, 43) | rgb(243, 249, 253) | rgb(44, 44, 43) | lab(15.204 0 -0.00000596046) |
+| **shell** background | oklab(0.159065 0.00000723451 0.00000317395 / 0.1) | rgba(0, 0, 0, 0.05) | color(srgb 0.129412 0.105882 0.0901961 / 0.0509804) | color(srgb 0.122395 0.463619 0.801134) | color(srgb 0.129412 0.105882 0.0901961 / 0.0509804) | lab(98.26 0 0) |
+| **shell** shadow |  |  |  |  |  | lab(84.92 0 -0.0000119209) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.05) 0px -2px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px |
+
+### Hover, Area before and after against the products
+
+| slot · property | area · ghost · hover · light | area · ghost · hover-before · light | area · outline · hover · light | area · outline · hover-before · light | area · soft · hover · light | area · solid · hover · light | chatgpt · icon-label-ghost · hover · light | notion · text-ghost · hover · light | chatgpt · soft-secondary · hover · light | chatgpt-loggedout · outline · hover · light | notion · solid-accent · hover · light |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| **shell** border | 1 solid rgba(0, 0, 0, 0) | 1 solid rgba(0, 0, 0, 0) | 1 solid color(srgb 0.831373 0.831373 0.831373) | 1 solid color(srgb 0.831373 0.831373 0.831373) | 1 solid rgb(238, 238, 238) | 1 solid rgba(0, 0, 0, 0) | 1 solid rgba(0, 0, 0, 0) | 0 | 1 solid rgba(0, 0, 0, 0) | 1 solid rgba(0, 0, 0, 0.2) | 0 |
+| **shell** background | rgba(20, 20, 20, 0.05) | rgb(247, 247, 247) | rgb(243, 243, 243) | rgb(247, 247, 247) | rgb(243, 243, 243) | rgb(29, 29, 29) | rgba(0, 0, 0, 0.05) | color(srgb 0.129412 0.105882 0.0901961 / 0.0509804) | oklab(0.159065 0.00000723451 0.00000317395 / 0.1) | oklch(0.964154 0 none) | color(srgb 0.122395 0.463619 0.801134) |
+
+### Focus-visible
+| slot · property | chatgpt · soft-secondary · focus-visible · light | chatgpt-loggedout · solid · focus-visible · light | uui · secondary-md · focus-visible · light |
+|---|---|---|---|
+| **shell** shadow | rgb(255, 255, 255) 0px 0px 0px 0px, rgb(58, 131, 247) 0px 0px 0px 2px |  | lab(84.92 0 -0.0000119209) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.05) 0px -2px 0px 0px inset, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px |
+| **shell** outline |  | 2px solid oklch(0.626176 0.205304 254.998) offset 2px | 2px solid rgb(158, 119, 237) offset 2px |
 
 ## Decisions
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| shell · height | 28 / **32** / 40 (`--area-control-sm/md/lg`, tokens.css:968-980) | Peer/baseline: control tier (DESIGN_SYSTEM.md); second pass, decision 18: unchanged | ChatGPT 36; Notion 28 ghost / 32 primary; Figma 24 icon / 32 primary. 32 sits inside that range; density belongs to the UI-scale axis |
-| shell · radius | 6 / 8 / 10 (`--area-radius-control-sm/md/lg`, tokens.css:996-998), capped at 0.4 × height (`button.css:70-71`) | ChatGPT 8 and Untitled 8 at md; second pass (Primary button row): unchanged | Notion 6 and Figma 5 at 32px; Area's radius comes from the radius axis |
-| label · type | 14/20 500 (sm 12/16) | Target-product agreement on filled buttons: ChatGPT 500, Notion 500 (primary, outline); weight policy | Figma 450 at 11px; Untitled 600. Notion's ghost text button is 400; kept at 500, one label weight (third pass) |
-| icon | 16px square at every tier (`--area-icon-*`, tokens.css:970-982) | Fluent 16 cut, inset contract | ChatGPT 20px in a 36px button |
-| gap | 4 (sm) / 8 (md, lg) | Area gap tier | ChatGPT 6, Untitled 4 (6 at lg) |
-| padding | inset equation above | `inset.css:7-19, 80-109` | — |
-| neutral ghost · hover fill | **`bg-component-hover`** light-dark(#f3f3f3, #333333) (`button.css:363-366`) | Target-product agreement: ChatGPT 5% black (`chatgpt--model-picker--hover`), Figma 5% black (`figma--icon-button--hover`), Notion 5% warm (`notion--{icon,text}-button--hover`), all about rgb(242–244) | Was `bg-component` #f7, lighter than the products and than row hover |
-| neutral ghost · pressed fill | **`bg-component-active`** light-dark(#eeeeee, #3f3f3f) | Peer rows: pressed/selected = `-active` (audit rule) | Was `bg-component-hover` |
-| neutral ghost / outline · ink | `fg-default` rgb(40) (`button.css:351-354`) | Area two-ink rule | ChatGPT icon buttons rgb(93) and Notion icon glyphs rgb(142, 139, 134) are secondary; Figma's are 90% black. Kept (third pass): Figma, the inspector reference, uses 90% ink |
-| solid neutral | `neutral-solid` #282828 / `fg-on-neutral` #fafafa | Owner: neutral default | — |
-| shadow (solid, soft, outline) | `shadow-1` 0 0.5px 1px −0.5px `shadow-color` | Untitled `shadow-xs` on secondary | Softer than Untitled's 0 1px 2px 5% |
-| outline edge | `edge-control` (#e2e2e2), hover `edge-control-hover` (#d4d4d4) (`button.css:42-43, 201-202`) | Notion outline 11% warm (about rgb 230) and Figma secondary 10% black (about rgb 230) | Area is one step lighter than both; within the divider band of the second pass |
-| nested Kbd radius | button shape − (height − keycap) / 2: 2px in a 32px button (`button.css:70-74`, `kbd.css:132-134`) | Second pass: keycaps concentric inside Buttons (DESIGN_SYSTEM.md, Keycaps) | Was the keycap's own 6px |
+| label · weight | **400** on soft, outline and ghost; **500** on solid | Owner type ramp; ChatGPT soft and ghost 400, Notion ghost 400, Notion solid 500 | Was 500 on every variant. Notion's outline is 500; the owner's rule reserves 500 for fills |
+| icon → label gap | **6** at md and lg; sm stays 4 | Notion 6 (28 and 32); peer Tree view 6 | Was 8. ChatGPT 4 and Untitled 4 + 2 bracket it. sm keeps 4 with its 12px text |
+| shadow | **none** on solid, soft and outline | ChatGPT and Notion: no shadow on any button | Was `shadow-1` (0 0.5px 1px −0.5px). Untitled's ring-and-shade is its own look |
+| height | sm 28, md 32, lg 40 (unchanged) | Notion 28/32; all three show 32 | lg 40 matches Untitled; no product shows 40 (ChatGPT 36). Open question |
+| radius | 6 / 8 / 10 (unchanged, `radius-control-*`) | ChatGPT 8 at 32–36 | Notion 6, Figma 5; follows the radius preset |
+| text inset | equal inset (11 at md) | `inset.css` shared rule | Notion 12, ChatGPT 12 + border; within 1px |
+| ghost hover (neutral) | **`bg-hover`** (rgba(20,20,20,.05)); pressed **`bg-active`** (7%) | ChatGPT 5% black, Notion 5% warm black | Was `bg-component` (247 opaque, about 3%). The shared translucent role matches within 1 level and works on any surface |
+| ghost hover (tones) | tone `surface-hover`; pressed `surface-active` | Consistency with neutral (one rung stronger) | Was `surface` / `surface-hover` |
+| outline hover | `surface-hover` (neutral 243); pressed `surface-active` (238) | ChatGPT logged-out outline 241; ghost washes 242 | Was 247 |
+| soft hover (neutral) | fill 247 + **`bg-hover` wash** (≈235); border **`bg-hover`, translucent** (≈224); pressed wash **`bg-active`** (≈231) | ChatGPT soft 242 → 230; owner: keep the stroke | Was 247 → 243 with border 238. A translucent border tints whatever the wash painted, so the stroke stays one step darker in every state and theme without a new fill rung. Tone softs keep their one-rung step (a grey wash would muddy tinted fills) |
+| trailing icon | end inset 8 at md (equal inset), gap 6 | `inset.css` shared rule; ChatGPT picker gap 6 | ChatGPT's picker chevron sits 14 from the end at 36 (text side 12). One product only; the shared rule stays |
+| solid hover | unchanged: 40 → 29 | Notion's blue darkens about 10% | — |
+| soft border | kept (hairline one rung up) | Owner (2026-09-25) | ChatGPT's soft pill has none |
 
 ## States
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
-| hover | fill → variant's `--_bg-hover`; border → `--_border-hover`; ink fixed (`button.css:128-131`) | Area hover not captured; product hovers change the plate only (`notion--text-button--hover`, `notion--icon-button--hover`, `figma--icon-button--hover`) |
-| pressed (`:active`) | fill → `--_bg-active` (`button.css:133-135`) | not captured |
-| focus-visible | 2px `focus-color` (#412dd0) outline, 2px offset (`button.css:137-141`) | not captured |
-| selected | fill `--_surface-active`; solid uses `--_solid-hover` rgb(29) (`button.css:384-392`); `aria-pressed` | `area--selected` |
-| loading | spinner replaces the leading icon; native `disabled` + `aria-busy`; hover suppressed (`Button.tsx:69-84`) | `area--loading` (opacity 0.5, as disabled) |
-| disabled | whole button 50% (`button.css:143-147`) | `area--disabled` opacity 0.5; Untitled 50% |
+| hover | ghost: 5% wash (neutral) or tone surface-hover; outline: surface-hover; soft: one rung; solid: solid-hover | ChatGPT ghost 0 → 5%, soft 5% → 10%, danger 10% → 20%; Notion ghost 0 → 5%, solid blue darkens; Untitled secondary fill to lab 98. Area: `area--*--hover`, before in `before/*hover-before*` |
+| focus-visible | 2px ring | ChatGPT 2px blue ring (box-shadow), logged-out 2px outline, offset 2; Untitled 2px outline, offset 2 |
+| disabled, loading, selected | unchanged | not captured |
 
 ## Behavior and accessibility
 
-Native `<button>`, `type="button"` by default (`Button.tsx:64`); ref and native props
-forwarded. `selected` sets `aria-pressed`; `loading` sets `aria-busy` and disables. Icon-only
-requires `aria-label`; icons are `aria-hidden`. Forced colours: focus and a selected Button
-paint Highlight (`forced-colors.css:14-26`; not inspected in forced colours).
+Unchanged: native `button`, `type="button"` by default, `aria-pressed` for `selected`,
+`aria-busy` and a spinner for `loading`, icon-only requires `aria-label`.
 
 ## Peers and consistency
 
-| Peer | Shared role | Area value in peer | Button | Match / reason |
+| Peer | Shared role | Peer value | Button | Match / reason |
 |---|---|---|---|---|
-| Menu, Nav, Tree view, Table rows | hover plate / pressed-selected plate | `bg-component-hover` / `-active` | neutral ghost same pair | match (audit row rule) |
-| Toolbar overflow trigger | transparent command hover | `bg-component-hover` (`toolbar.css:46`) | same | match |
-| Segmented item | label on a fill | 14/20 500 | 14/20 500 | match |
-| Kbd | nested keycap | concentric radius, filled, muted 500 | publishes `--_button-shape` / `--_button-height` | match (second pass) |
-| Chip | control height and inset | 32px, 10.03 text inset | 32px, 10.03 | match; Chip label 400 (a choice, not a label on a fill) |
-| Alert / Dialog dismiss | small dismiss radius | 28px Button's 6px | sm radius 6 | match |
-| All controls | disabled | 50% | 50% | match (audit rule) |
+| Tree view | glyph → label gap | 6 | 6 (md, lg) | Match |
+| Type ramp | label weight | 400; 500 on fills | 400; 500 on solid | Match |
 
 ## Visual pass
 
-The gallery shows the tiles in named groups (Default, Variants, Sizes, Layout, Content,
-States, Variant × tone); the pill shape moved from Layout to Variants in the third pass. From
-the captures: Area's ghost hover (#f3) sits between Figma's and Notion's; the md button is as
-tall as both products' primary and rounder (8 against 6 and 5). Not inspected by this spec's
-author: real pointer hover, pressed, dark theme, the other tones' ghost hovers.
+Pass review (`GalleryReviewButton`): weight, gap and shadow, before and after at 1× and 3×.
+At 400 the soft, outline and ghost labels sit closer to ChatGPT's settings pills and Notion's
+topbar; solid keeps its 500 weight against the dark fill. Without the shadow, solid and
+outline read flat, as in both products.
 
-## Settled questions
-
-Both kept in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
-
-1. **Ghost text-button weight: 500.** Notion's transparent text button is 400
-   (`notion--text-button--rest`), its filled and outline buttons 500. Area keeps one label
-   weight for every variant.
-2. **Ghost icon ink: `fg-default`.** ChatGPT (rgb 93) and Notion (glyph rgb 142, 139, 134;
-   `notion--icon-button--rest`, `notion--toolbar-icon--rest`) paint transparent icon
-   buttons in secondary ink; Figma, the inspector reference, uses 90% black
-   (`figma--icon-button--rest`).
+Soft hover now lands near ChatGPT's step (≈235 against 230) with the stroke kept; checked at
+3× in the pass review. Gallery tiles: "Leading icon" and a new "Trailing icon" (ghost with a
+chevron, as ChatGPT's model picker).
 
 ## Verification
 
-Compared `button/area--{default,size-small,size-large,tone-neutral-variant-ghost,selected,with-icon,with-shortcut}`
-with `baseline/chatgpt--icon-button-ghost--rest`, `chatgpt--model-picker--hover`, the seven
-`button/notion--*` and five `button/figma--*` captures, `calendar/notion--nav-button--hover`
-and `color-picker/figma--eyedropper--hover`. Build and test results are in
-[the audit](../research/cohesion-audit.md#verification). Unverified: Area hover and pressed
-captures, dark theme (Area and products), forced colours for a selected Button.
+- 58 reference captures (ChatGPT 19 logged in + 13 logged out, Notion 12, Figma 5,
+  Untitled 9), 9 Area before and 9 after; all checksums verified by `capture-compare`.
+  Captures were checked for personal content (redacted off localhost; no names or titles).
+- Area after (`area--*`): soft, outline and ghost labels 400, solid 500; leading-icon label at
+  30 (was 32) with the icon still at 8; no shadow on any variant; text insets unchanged.
+- Pass review checked on screen at 1× and 3×.
+- `typecheck`, `build:docs` (docs audit), `test:contracts` (14), `test:preview` (4), React
+  tests (87), `npm test` (19,491 token and contrast): all pass.
+- Hover (pass 1b): Area solid, soft, outline and ghost captured after the change; outline
+  and ghost before-states recreated through the private properties (`before/*hover-before*`).
+- Unverified: dark theme (products not switched), Figma hover, disabled/loading/selected against references, compact density
+  (the 6px gap is literal and does not follow density yet).
 
 ## Feedback log
 
-- 2026-09-26 · cohesion audit → neutral ghost hover `bg-component` → `bg-component-hover`,
-  pressed `bg-component-hover` → `bg-component-active` → ChatGPT, Notion, Figma hover
-  captures above; 43 Area captures.
-- 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → nested Kbd
-  concentric with the button (`--_button-shape`); height, radius and weight unchanged; ghost
-  text weight and ghost icon ink recorded as open → `button/notion--*` (7),
-  `button/figma--*` (5), `button/area--with-shortcut`.
-- 2026-09-27 · third pass → open questions settled, values kept (ghost label 500, ghost
-  icon ink `fg-default`); pill tile moved to Variants → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-25 · owner chose Button as the next component → evidence pass: 58 reference
+  captures, 9 Area pass-0 captures; weight, gap and shadow changed.
+- 2026-09-25 · owner: sizes are my call, a compact density is planned; keep the soft border;
+  capture the hover colour → no new sizes (compact covers 24/28/32). Hover captured: Area
+  ghost 247 vs products' 5% wash (242–243), outline 247 vs 241. Neutral ghost now uses
+  `bg-hover`/`bg-active`; ghost tones and outline move one rung up; soft unchanged.
+- 2026-09-26 · owner: stronger soft hover, keep the stroke; show trailing icon → neutral soft
+  hovers with the bg-hover wash over its fill and a translucent border (`area--soft--hover`,
+  before in `before/area--soft--hover-before`); Trailing icon tile added and captured
+  (`area--trailing-icon--rest`) against ChatGPT's picker.

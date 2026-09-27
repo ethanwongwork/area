@@ -4,6 +4,17 @@
     .area-input, .area-textarea, .area-select {
       border-color: CanvasText;
     }
+    /* Menu rows show focus with a wash, which forced colours remove; restore a ring. */
+    .area-menu__item:focus-visible {
+      outline: var(--area-focus-width) solid Highlight;
+      outline-offset: calc(-1 * var(--area-focus-width));
+    }
+    /* Joined-button dividers are painted boxes; keep them as system-coloured lines. */
+    .area-split-button > .area-split-button__trigger::before,
+    .area-button-group > .area-button + .area-button::before {
+      forced-color-adjust: none;
+      background: ButtonText;
+    }
     .area-select {
       appearance: auto;
       background-image: none;
@@ -49,5 +60,6 @@
     .area-slider__control:focus-visible::-webkit-slider-thumb { outline-color: Highlight; }
     .area-slider__control:focus-visible::-moz-range-thumb { outline-color: Highlight; }
     .area-tabs__tab[data-selected]::after { background-color: Highlight; forced-color-adjust: none; }
+    .area-property-list__indicator { background-color: Highlight; forced-color-adjust: none; }
   }
 }
