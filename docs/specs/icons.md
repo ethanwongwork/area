@@ -1334,3 +1334,271 @@ Owner round (Fluent's cloud A, rocket, paintbrush, bug, puzzle; marks; details):
   line at 7.5. **Package:** the tape runs across the whole top face at 0.45 of its depth (a
   tight and a standard pocket; at the middle both were near misses). **Car:** mirrors at 5.5
   sit on the body's top corners (Fluent's); a pixel lower but still apart left a 0.4px sliver.
+
+## Batch 18: add, sync and sensing, 2026-09-26
+
+One pattern for "add to a container" (Lucide's calendar-plus): the 4px plus (the shared mark
+beside or inside a shape) replaces the container's lower-right corner, its right and bottom
+arms ending on the container's outer edges, and the container is cut open round it (overlap
+cut, 2.25). Inside the body there is no room: calendar's band and document's fold leave 6.5
+and 7.5 between centre-lines, so a centred 4px plus sits 0.4px from them. Filled, the whole
+container fills (`fill`) and the plus is `front`: the generator cuts the fill back round it
+by the overlap cut (first drawn as a hand-solved notch; see the audit below).
+
+| Icon | Construction |
+|---|---|
+| calendar-add | calendar exactly; the plus at 11.5, 11.5 |
+| folder-add | folder exactly; the plus at 12, 11 (right 14, bottom 13) |
+| document-add | document without its text lines; the plus at 10.5, 11.5, its right arm on the page's edge and a standard gap under the fold (at 12, flush with the bottom, the fold gap was a 2.38 near miss). Filled, the notch turns straight down under the left arm tip |
+| cloud-download | the cloud exactly, the foot open: cut 2.3 round a 2.5-head arrow (8, 7.5 → 14) whose head passes through where the foot was (Lucide's open cloud). Upload's layout can't mirror: a head below the foot needs the foot at 9.75, and a head across it leaves stubs. Candidate B on the Exploration sheet keeps the whole cloud with the arrow inside (0.88px from the lobes at best). Filled, the whole cloud with the arrow `front` |
+| shuffle | two S-curves (free angles) between rails at 4.5 and 11.5 with horizontal ends; the rising one runs whole, the falling one is cut round the curve itself: 2.25 in the outline (`line`, 1.14 of space, the overlap cut), 2.5 when filled (`stroke`, 1px at 1.5), as wifi-off and link-off. Heads are 2px, as move's: two stacked 2.5 heads leave their barbs 2 apart (0.875, a near miss); at 2 they keep 3 (standard) |
+| fingerprint | after Fluent (owner round): ridges 3 apart round 8, 9.5: an r 1.5 core loop (legs to 14 and 12.5), an r 4.5 ridge wrapping it with its right shoulder broken off into a short leg, and an r 7.5 cap broken right of the top; breaks are 3 between ends (line glyph) |
+| gauge | an r 6 arc round 8, 9 open 42° below the horizontal (ends at y 13, ink centred), Fluent's inner scale (r 3, parted 2.5 round the needle so the filled line keeps 1px, its ends open 2.6 at the bottom) and a needle on the rising diagonal, a tight gap short of the arc. Candidate B on the Exploration sheet has scale ticks instead |
+
+## Batch 18 owner round and whole-set audit, 2026-09-26
+
+Owner: the shuffle crossing should match the other overlaps; fingerprint more like Fluent
+(more detail, not dense); more detail on the gauge; puzzle knobs taller, like Fluent's; then
+an audit of the whole set for cohesion, with the rules and skill updated to hold it.
+
+- **Puzzle:** knobs are Fluent's (an r 1.5 dome on a 0.5 neck, 2 tall and 3 wide on the
+  centre-line) instead of an r 2 half-dome; sockets unchanged. A 1px neck (2.5 tall) read
+  closer still but overflows the square keyline by 0.4.
+- **Audit method:** `icon-sheet.mjs filled` for every icon, a feature dump of every slash,
+  arrowhead, circle, rect, arc radius and role, and the lint's gap list.
+- **Consistent already:** the slash (all five `-off` icons share `M2 2L14 14`); arrowhead
+  sizes (5 / 3 / 2.5 and the recorded exceptions); rings r 6 at 8,8; lenses r 5; hubs and
+  pupils r 1.5; container radii 2 / 1.5 / 1; the figure (person-add, person-remove and
+  people share one small figure); folds 4.5 (document, sticky-note); overlap cuts 1.13 in
+  people, shapes and the slash icons; an arrow a tight 1.38 from its tray or box.
+- **Fixed:**
+  - *Filled clouds* lost every part of the arrow outside the cloud (a knockout has nothing
+    to cut there): upload's stem, download's head. New role `front`: a line over a solid,
+    kept at the filled weight, with the solids cut back round it by the overlap cut
+    (a halo stroke of 4/3 + 2 icon weights in the mask). The container-add icons use it
+    too, replacing the hand-solved notch. The lint now fails a knockout that leaves its
+    solid.
+  - *Shuffle* was cut round a chord of its curve (1.47 of space); it is now cut round the
+    curve (1.14), like every crossing.
+  - *Dots* were ⌀2 in building, smile and tag but ⌀1.5 in calculator, keyboard, server,
+    car and opacity for the same job (a detail inside a shape). All are ⌀1.5 now, re-seated
+    on the gap scale: building's windows at 6.25 / 9.75 × 4.75 / 8 and its door 0.5 taller,
+    smile's mouth ends at 5.25 / 10.75, y 9 (eyes unchanged), tag's eyelet at 5.75, 5.75.
+    The lint allows r 1 and r 0.75 only; quote's marks and rocket's window are
+    `data-dot="free"`.
+  - *Wallet's* solid was an open path; filled, it closed with a chord and left a wedge on
+    the flap. The solid is now the closed silhouette, the flap edge a `line`, the clasp at
+    y 10 (a standard gap from the body, open from the flap).
+- **Codified** (skill: Shared parts, Families, Filled variants, Review checklist):
+  attached parts join and crossings are overlap-cut, with copy's stack as its own pattern;
+  mark placement (beside a figure at head height, on a container's lower-right corner,
+  inside a lens); off states (the shared slash, or `data-off="own"`: eye-off, volume-off,
+  enforced by the lint); the two dot sizes by role; the fold; the figure; the arrow-to-frame
+  gap; grouped functions reuse their base exactly.
+- **Tools:** `icon-sheet.mjs` didn't define `--area-weight-icon`, so every filled line on a
+  review sheet (4/3) and every halo rendered at 1.125: filled line glyphs looked like their
+  outlines. The sheet defines it now; `filled-large` adds a 64px row; the filled mode makes
+  its cache folder in a fresh checkout.
+- Back in review: puzzle, building, smile, tag, wallet, cloud-upload.
+
+## Batch 19: open, add and devices, 2026-09-26
+
+Drawn after the audit, each from its family (skill, Families).
+
+| Icon | Construction |
+|---|---|
+| chat-add | chat exactly; the 4px plus on its lower-right corner at 11.5, 9.5 (container-add pattern, `front` when filled) |
+| cloud-off | cloud exactly and the shared slash, cut one-sided (2.25); filled, the whole cloud parted by bell-off's gap above the slash |
+| folder-open | folder's back (tab, left side, r 1.5 corners) and a front panel slanted 1 : 2 (Fluent, Lucide): the front's top edge at 7.5 runs to 14.5 (r 1 corner, ink centred), its left side a stub a tight gap (1.375) from the back's left side; the back's right side meets the front's top edge. Filled, one silhouette parted by a gap along the front's top and left edges |
+| mail-open | the flap up (Fluent's mail_read): a roof over mail's body (r 1 at the peak and shoulders, r 2 at the bottom) and mail's crease (slope 1 : 2, r 1.5) lowered to 7.5 as the letter's fold (`cut`) |
+| timer | a stopwatch: an r 5.5 ring round 8, 9, the crown joined on top (a stem and a 3px bar, an attached part), a button on the rising diagonal from the ring (x + y = 17) and a hand a tight gap short of the ring (knockout) |
+| laptop | an 11 × 7 screen (r 2, desktop's) and a base 1 wider each side, a standard gap below; horizontals on whole pixels to centre on 8 |
+
+Bell-ring was left out: the bell's dome reaches y 2 and its sides 2.5, so ringing arcs a
+tight gap outside it fall beyond the 1.5–14.5 live area.
+
+## Owner round on batches 18–19, and batch 20: devices, 2026-09-26
+
+- **Cloud download:** A (the arrow leaving through an open foot) kept, as cloud-upload's
+  construction; the candidates are gone.
+- **Fingerprint** (still not right after the first redraw) now follows what makes Fluent's
+  read as a finger: the ridge ends curve in toward the bottom like a pad, instead of
+  dropping straight (which read as arches). Round 8, 8.5: an r 1.5 core loop whose left leg
+  curves in and whose right leg flicks out; an r 4.5 ridge whose left leg curves in, ending
+  high on the right, with its lower right as a short separate piece; an r 7 cap broken right
+  of the top (2.5 from the ridge, tight). Gaps between converging ends are solved by
+  sampling (1.47 and 1.52, so the filled line keeps 1px). Ink centred at 7.76. Two other
+  drafts (Fluent's hooks at standard spacing; Fluent's density at 2.5 spacing) had
+  converging ends that closed below 1px and were dropped.
+- **Gauge:** open. The Exploration sheet has A (the inner scale, in the set) and five more:
+  B the owner's split arc (a semicircle on short feet, parted round a tapered needle that
+  reaches it, overlap-cut), C the owner's ticks and hub thinned for 16px (a 270° arc, three
+  1px ticks, a ⌀2 hub and a needle at −35°, solved so every gap is on the scale; five ticks
+  left the needle a near miss from two), D Fluent's top speed (ticks on the left half and
+  top, a tapered needle), E a dial (the ring broken where a tapered needle points out) and
+  F the arc with a tapered needle alone. Tapered needles are solid wedges (an r 1.25 base,
+  a tip the line's half width), like quote's solid marks.
+- **Laptop** redrawn after Lucide: the screen (10 wide, r 1.5 top corners) stands on a
+  keyboard deck whose sides slant out 1 : 2 to a 13-wide base (r 1); the hinge is a cut.
+
+| Icon (batch 20) | Construction |
+|---|---|
+| tablet | Fluent's landscape tablet: 12 × 9 (r 2) with phone's 3px home bar, 2.5 above the edge |
+| tv | desktop's screen (12 × 8.5, r 2) over a 6px bar a tight gap below (Fluent) |
+| watch | an 8 × 7 body (r 2) with 5-wide straps (r 1) joined above and below, 3 tall so their pockets are standard; filled, a gap parts each strap from the body (clipboard's clip) |
+| mouse | an 8 × 13 pill (r 4) with a wheel a tight gap below its top (Fluent has no mouse) |
+| speaker | phone's body (9 × 13, r 2) with an r 2 woofer (knockout) and a ⌀1.5 tweeter (hole), standard gaps (Fluent's speaker box) |
+| hard-drive | Fluent's drive: a box (r 1.5) under a top slanting in 1 : 2 (laptop's deck slope, r 1), the divider a cut, a ⌀1.5 light |
+| chip | an 8 × 8 body (r 1.5), two attached pins a side 4 apart (at 3 apart they sat a 1.65 near miss from the ring), the r 1.5 hub ring as a knockout |
+
+## Owner round on batch 20, and batch 21: checks and charts, 2026-09-27
+
+- **Gauge:** B (owner): a semicircle (r 6 round 8, 10.5) on 1px feet, parted round a tapered
+  needle (a solid wedge from an r 1.25 base at 8, 11 to a tip on the arc at −60°); the arc
+  stops 1.26 short of the wedge. The other candidates are gone.
+- **Chip:** three pins a side (owner), 3 apart at 5, 8, 11, on a 9 × 9 body (r 1.5) so the
+  pins keep a standard gap and the hub ring a standard gap from the body; pins 1.5 long.
+- **Folder open** relates to folder (owner): folder's left side, tab, top edge, r 1.5
+  corners and right side at 14 exactly; the right side runs on down the front's 1 : 2
+  slant (r 1 at the turn, r 1.5 at the bottom). The front's top edge at 7.5 and its left
+  edge run as one line to the bottom edge (owner: all the way down), meeting it at 5.25
+  (a 63° corner, clear of folder's bottom-left). Filled, that line is a cut.
+
+| Icon (batch 21) | Construction |
+|---|---|
+| calendar-check | calendar exactly; the small check (arms 1.5 / 3) with its vertex at 10, 13, 0.5 inside the corner (on the corner its tip sat a 2.38 near miss under the band); `front` |
+| document-check | document; the small check's vertex at 9.5, 13.5, its tip on the page's edge (document-add's inset); `front` |
+| person-check | person-add's figure; the small check beside it (vertex 11, 8), 1 lower than the plus so it clears the head (1.35) |
+| shield-check | shield; status's check (2 / 4) knocked out |
+| bar-chart | chart's axes and three bars 3 apart rising to the right, a tight gap above the axis |
+| pie-chart | the r 6 ring and two radii marking a quarter (a cut when filled) |
+
+Cloud check and clipboard check were left out: a check inside the cloud or the board sits
+under a tight gap from its lobes or edges at either check size (cloud download's B showed the
+same).
+
+## Owner round, 2026-09-27: filled marks, keyboard, repeat
+
+- **Filled marks are negative space** (owner). The `front` role (a mark drawn black over the
+  fill with an overlap-cut halo) made the plus, check and cloud arrows read as outlined
+  stickers, unlike every other filled detail (keys, tape, text lines). They are knockouts
+  again: calendar-add, folder-add, document-add, chat-add, calendar-check, document-check,
+  cloud-upload, cloud-download. A container mark's arms end on the outer edge, so the
+  cut-out reaches the silhouette exactly; a cloud's arrow runs out through the cloud's
+  bottom edge as a notch (upload's stem and download's head tip beyond the edge are not
+  drawn). The `front` role is removed; the lint now fails only a knockout that never
+  enters a solid.
+- **Keyboard** after Fluent: the square frame with three and two dots read as a face. A
+  13 × 10 frame (r 2), a row of four ⌀1.5 keys and a staggered row of three (2.625 apart,
+  rows 2.5 apart, tight gaps throughout, as dense as the frame allows at 1.125) and a 7px
+  space bar at 10.5.
+- **Repeat** after Fluent's loop: two rails at 4.5 and 11.5 (shuffle's) with r 3.5
+  half-circle ends round 5.5 and 10.5; each rail starts on its end 20° off the axis and
+  runs round and along to a 2.5 head (tips at 12.5 and 3.5, on the lattice), a tight 1.42
+  from the other rail's start. With the heads at the middle their inner barbs sat 0.88
+  apart.
+
+## Owner round on package and graduation cap, and batch 22: everyday UI, 2026-09-27
+
+- **Package:** the filled tape gap ran on past the V into the right face and out through
+  its edge; it now stops where the tape meets the V (as the outline's tape line does).
+- **Graduation cap** after Fluent's filled cap (owner): the skirt is solid (an open path
+  whose chord runs inside the board), and the gap under the board is offset down by half
+  a gap so it parts board and skirt without shaving the board's own edge. Centred on the
+  board's lower edge it thinned the board and left the skirt as an outline.
+- **Layout:** a cut starting on another cut is a `line` plus a `gap` extended at its free
+  end only; a cut extends 2px at both ends, and layout's sidebar poked up into its header.
+
+| Icon (batch 22) | Construction |
+|---|---|
+| add-circle, remove-circle | the r 6 ring with a 6px + / − knocked out; a 5px + (error's size) ends a 2.38 near miss from the ring, while error's × reaches further along its diagonals |
+| prohibited | the ring and a diagonal between its 45° points, top left to bottom right (the slash's direction), knocked out |
+| chevrons-up-down | two 3.5-leg chevrons, open (5) between them |
+| collapse | expand's shafts with its 3px corner heads at the inner ends |
+| trending-down | trending-up mirrored (`flipy`) |
+| alarm | an r 4.5 ring round 8, 9 with a hand (knockout), bells on the corner diagonals a tight gap off the ring, legs joined on the 45° radii; ink 0.25 low (whole-pixel steps keep every diagonal on the lattice) |
+| git-branch | r 2 nodes (solid) at 4.5, 11.5 and 11.5, 4.5, a trunk into the lower node's top, the branch curving into its side 5° low (at the side it sat 1.7 from the trunk) |
+| grip-vertical / grip-horizontal | 2 × 3 ⌀2 dots 4 apart; horizontal as a quarter turn |
+| activity | a pulse with one peak up and one down (r 1 peaks, r 0.5 shoulders), free angles |
+| layout | an 11 × 11 frame (r 2) with a header (cut) and a sidebar (line + gap) |
+| percent | two r 2 rings and a diagonal a standard gap from each |
+
+## Owner round: negative space on the outline's lines, 2026-09-27
+
+Owner: the filled variant's negative space must follow the exact shapes and lines of the
+outline. Rule (skill, Filled variants): every cut and gap runs on the outline stroke's own
+path, centred, at the icon weight, and only where that line has fill on both sides; where
+the line is the outer silhouette the gap stops at the other part's ink edge. Offset gaps
+(the cap's, the bell's, the clipboard's) sat beside the line; full-width gaps laid on a
+silhouette edge left an anti-aliased seam (the cap's board edge, the bell's base).
+
+- **Graduation cap:** the gap is the board's lower edge (its r 1 bottom corner included)
+  between the skirt's ink edges.
+- **Bell, bell off:** the gap is the base line across the clapper (5.44–10.56); the clapper
+  is its outline size again (the gap below the base had shrunk it).
+- **Clipboard:** the gap is the clip's outline where it lies over the board.
+- **Car:** the body's top edge under the cabin only. **Watch:** the body's edges across the
+  straps only.
+- Already on their lines: package, database, layout, printer, wallet, the slash icons.
+
+## Batch 23: communication and text, 2026-09-27
+
+| Icon | Construction |
+|---|---|
+| call | Fluent's handset. Its centre-line is the midline of Fluent's two contours (sampled in a headless browser; the contours sit a constant 1.0 apart), smoothed with a 7-point moving average, fitted with 24 Catmull-Rom cubics and scaled 0.97 about 8, 8 to sit inside the square keyline at 1.125. A band between two arcs (r 6.5 / 10.5) read as a bent pipe: a handset needs its lobes |
+| reply / forward | undo's 3px head on a shaft that turns down in a quarter circle (r 4.5); forward mirrors it |
+| sync | two of reset's arcs (r 5.59 round 8, 8) with reset's corner head, a half turn apart; each arc runs to the horizontal, a tight 1.44 from the other head (at −10° it sat a 2.38 near miss) |
+| eraser | a block on the rising diagonal (r 1 corners, on the lattice), a sleeve line (a cut when filled) a tight gap above a baseline drawn from its bottom corner |
+| text-align-left / -right / -center | menu's lines at 4, 8, 12: left 8, 11, 6 long; right mirrors left; center 8, 11, 6 centred |
+| indent / outdent | a 2-leg chevron beside three lines from 7.5 (tip a tight gap from the lines; outdent's arms open) |
+| columns / rows | an 11 × 11 frame (r 2) split down the middle (a cut); rows is its transpose |
+| calendar-, folder-, document-remove | the container-add pattern with a 4px minus at the plus's centre; the container is cut open round the minus only; knockout when filled |
+
+**Correction, same day (owner):** stopping each gap at the other part's ink edge left the old
+stroke showing as a ledge beside the gap (the bell's base, the board's edge, the car's
+roofline, the watch's body edges). The filled variant is shapes only: every gap runs the
+whole length of its outline line and out through the silhouette, so the parts become
+separate layers. Where it runs along outer silhouette, a second gap strip 0.9 outside the
+line removes the anti-aliased seam (bell and bell off below the base beside the clapper,
+car above the body beside the cabin, the cap below the board beside the skirt). Watch's
+gaps cross its body's corner arcs, so no strip is needed; clipboard's gap already exits
+through the board's top edge.
+
+## Car mirrors and filled windows, 2026-09-27
+
+Owner: align the mirrors with the bottom of the windshield; check how other filled sets do
+it. Fluent's vehicle car puts the mirrors on the body's top line (the windshield's bottom),
+protruding past the body's sides; Phosphor's car tabs start level with the windshield's
+bottom; Lucide's car-front mirrors spring from the windshield's bottom corners; Material's
+directions car has none. Cursor's set is not public. In every filled set the mirrors are
+part of the body and the windshield stays negative space (Fluent keeps the cabin as a
+line; Phosphor and Material cut the window out).
+
+- Mirrors on the windshield's bottom line (y 6.5), from the pillar to 0.5 past the body's
+  side (2–4 and 12–14; ink 13.12 wide, inside the square keyline).
+- Headlights at 5 and 11 (y 9.25): the one position a tight gap from the mirrors' inner
+  ends, the body's top, side and bottom and the wheels (at 5.25 and 5.75 each was a near
+  miss from the mirror or a wheel).
+- Filled: the cabin stays a line (the window open, as Fluent's), the body is solid and the
+  mirrors merge into it as tabs; the cabin/body gap and its seam strips are gone. A solid
+  cabin read as a hat.
+
+## Filled variants against Fluent, 2026-09-27
+
+Owner: drop "gaps run all the way through" (a suggestion) and check every filled variant
+against the research. `apps/docs/.cache/cmp.mjs` (a scratch tool, not committed) renders
+Area outline, Area filled, Fluent regular and Fluent filled for all 256 icons (222 have a
+Fluent reference). Findings:
+
+- Already matching Fluent's construction: details knocked out of solids, equal faces cut
+  on the line (package, mail, calendar, folder, folder open, book, laptop), line glyphs
+  filled by weight, marks on containers knocked out.
+- **A part in front of another keeps its edge; the gap is cut from the part behind:**
+  bell and bell off (the gap just below the base, cut from the clapper), graduation cap (one
+  line below the board's lower edge, its r 1 corner an r 2.125 arc, cut from the skirt),
+  clipboard (one line outside the clip), watch (one line outside the face, cut from the
+  straps). Centring these gaps on the line, or running them through, shaved the front part.
+- **Zoom in and zoom out:** the lens fills and the mark is knocked out (Fluent's zoom, and
+  add-circle's construction); search stays a line glyph, as Fluent's search.
+- The sheet tool first rendered each icon in its own React tree, so every mask shared one
+  id and all showed add-circle's plus; it renders one tree now.

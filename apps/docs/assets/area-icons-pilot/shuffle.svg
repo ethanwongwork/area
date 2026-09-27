@@ -1,0 +1,6 @@
+<svg data-set="area-pilot" data-keyline="square" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.5 11.5H3.5C6 11.5 7.5 4.5 10 4.5H13.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M2.5 4.5L3.5 4.5C4.195 4.5 4.814 5.042 5.4 5.825M8.101 10.174C8.685 10.957 9.304 11.5 10 11.5L13.5 11.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="stroke" d="M2.5 4.5L3.5 4.5C4.132 4.5 4.7 4.947 5.235 5.615M8.265 10.386C8.801 11.053 9.369 11.5 10 11.5L13.5 11.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.5 2.5L13.5 4.5L11.5 6.5M11.5 9.5L13.5 11.5L11.5 13.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

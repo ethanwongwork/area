@@ -38,6 +38,26 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   the overlap cut, 2.25 between centre-lines). Any shape passing behind another uses that
   cut.
 - **Asymmetry:** natural forms read better uneven (cloud E: a tall lobe left of centre).
+- **Detail (round 2026-09-26):** a fingerprint follows Fluent's: a tall core loop, ridges
+  wrapping it and broken like a print's, their lower ends curving in like a finger's pad
+  (straight legs read as arches), more than a few plain arcs but not dense. Puzzle knobs
+  stick out like Fluent's (an r 1.5 dome on a short neck, 2 tall and 3 wide), not a flat
+  half-dome. The gauge is B: a semicircle on short feet parted round a tapered needle
+  (owner's reference). A laptop is a screen on a keyboard deck (Lucide), not a screen over
+  a line. A chip has three pins a side.
+- **Car:** the mirrors sit on the windshield's bottom line and merge into the body when
+  filled; the window stays open (Fluent's car).
+- **Filled objects follow Fluent's filled cuts:** a graduation cap's board and skirt are both
+  solid with a V of space between them; details are negative space.
+- **Variants relate to their base:** folder-open is folder's own outline (left side, tab,
+  top, corners, right side) with the front swung down, its edge running to the bottom.
+- **Pairs match:** cloud-download follows cloud-upload's construction (the arrow crosses
+  the cloud's foot) rather than a cleaner stand-alone drawing.
+- **Devices share parts:** tablet and speaker reuse phone's body or home bar, tv reuses
+  desktop's screen, hard-drive reuses laptop's 1 : 2 slant.
+- **Cohesion (owner, 2026-09-26):** patterns are audited across the whole set (slash,
+  arrows, rings, folds, figures, overlap space, filled space, grouped functions); a new
+  icon follows the family it belongs to (Families) before any reference.
 - **Type glyphs are one family:** T, I, U, S, H share a cap height of 2.5–13.5 and the icon
   line (T keeps its serifs; bold is the solid B).
 - **Close gap:** battery's terminal sits 2 from the body (`data-gap="close"`, owner-approved),
@@ -124,15 +144,38 @@ the lint prints every gap and counter with `--report`.
   - 1px for bars 3px tall (alignment) and small parts (the trash handle);
 - overlap cut: where one shape passes behind another (shapes' circle), the hidden part
   stops so the gap equals the line (2.25px between centre-lines, 1.125px of space).
-  Owner, round 4: 3px read too far;
+  Owner, round 4: 3px read too far. Every crossing uses it: people's back figure, shapes,
+  shuffle's rails, a slash, a mark or arrow over a container (calendar-add, cloud-upload).
+  Cut round the real geometry (a curve, not its chord: shuffle's 2.7 chord cut left 1.47).
+  Two relations that are not crossings:
+  - an attached part joins the shape it belongs to: clipboard's clip, calendar's pegs,
+    lock's shackle, briefcase's handle, car's mirrors (their inks overlap, a join);
+  - a stack shows only the back copy's L round the front's top left, ending a standard gap
+    from it (copy, Fluent's and Lucide's): the hidden part is never drawn;
 - marks (owner, 2026-09-26: every +, −, × and arrowhead is one of a few intentional sizes):
   - +, − standalone 11px (add, minus); beside or inside a shape 4px (person-add, zoom-in);
   - × standalone 10px (dismiss); beside or inside a shape 3.5px (volume-off, backspace), a
     diagonal reading larger than a 4px +; in a status ring 5px (error, the ring's glyph);
+  - ✓ standalone 3.5 / 7 (check); inside a ring or shape 2 / 4 (status-available,
+    shield-check); beside or on a shape 1.5 / 3, a 4.5 × 3 check, the 4px plus's partner
+    (person-check, calendar-check, document-check). It sits where the plus would, moved
+    0.5 in or down where the lattice or a gap needs it (the lint's gap scale decides);
   - arrowheads 5px on standalone arrows, 3px on an icon's main arrow (download, open, undo,
-    log-in, return, trending-up), 2.5px on paired or contained arrows (sort, move, flow,
-    history, repeat, cloud-upload). Rotate keeps 2.25px (2.5 reaches its square) and move
-    2px (four heads on a 12px cross: 2.5 left their barbs 0.3px apart, 2 keeps a standard gap);
+    log-in, return, trending-up), 2.5px on paired or contained arrows (sort, repeat, flow,
+    history, cloud-upload, cloud-download). Rotate keeps 2.25px (2.5 reaches its square),
+    move 2px (four heads on a 12px cross: 2.5 left their barbs 0.3px apart, 2 keeps a
+    standard gap) and shuffle 2px (two heads stacked on one side, the same reason);
+  - placement (audit, 2026-09-26): beside a figure, the mark sits at head height to its
+    right (person-add, person-remove); on a container it replaces the lower-right corner,
+    its right and bottom arms on the container's outer edges, and the container is cut
+    open round it (calendar-add, folder-add, document-add; there is no room inside a band
+    or fold); inside a lens it is centred (zoom-in, zoom-out). Filled, a mark over a
+    container is a knockout (negative space, owner): its arms end on the outer edge, so the
+    cut-out reaches the silhouette exactly;
+- an arrow meeting a frame (tray, box, door) stops a gap short of it: tight, 2.5 between
+  centre-lines, where it points into a tray or out of a box (download, upload, share,
+  open); log-in and log-out stop standard (3) from the door's back, the nearest the lattice
+  allows;
 - slash ("off" icons): one slash for every icon, identical in length, angle and ends:
   `M2 2L14 14` (45°, top left to bottom right, 12√2 long), round caps, in front. Cut the
   shape with `icon-geometry.mjs slash` one-sided (Fluent's and Lucide's pattern): the shape
@@ -142,16 +185,32 @@ the lint prints every gap and counter with `--report`.
   run into (mic's capsule, where the slash runs down its length) stops short on both sides.
   Keep the base icon exactly (wifi-off is wifi; a wider one takes the circle keyline).
   Outline pieces are `line`s; a solid shape is a whole `fill` parted by one `gap` above the
-  bold slash; a line glyph's filled lines are `stroke` pieces cut 2.5
-- dots: ⌀2 for standalone dots (more), on whole-pixel centres so they fill 2 × 2 pixels
-  at 1×. ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning).
+  bold slash; a line glyph's filled lines are `stroke` pieces cut 2.5. Two off states keep
+  their own recorded form, declared `data-off="own"`: eye-off is a closed eye (owner) and
+  volume-off a speaker with a 3.5px × (Fluent's mute). The lint fails any other `-off` icon
+  without the shared slash;
+- dots, two sizes by role (the lint allows only these):
+  - ⌀2 for a dot that is the icon or one of its marks: more, list bullets, wi-fi's source,
+    gap's dot, cart's wheels; on whole-pixel centres so they fill 2 × 2 pixels at 1×;
+  - ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning, the ?)
+    and for a detail set inside a shape: keys (calculator, keyboard), lights (server, car),
+    windows (building), eyes (smile), an eyelet (tag), opacity's grid. Place them on the
+    gap scale from their frame and each other (quarter centres are fine for filled dots).
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
-  a little more width than a square to look the same size, and 1.56× read too big;
+  a little more width than a square to look the same size, and 1.56× read too big.
+  `data-dot="free"` records an owner-approved exception: quote's solid marks, rocket's ⌀2.5
+  window;
 - hub or pupil: r 1.5;
 - satellites: the bell's clapper is a U cup 4 wide and 2.5 deep, joined to the base. The !
   and the i share the ⌀1.5 dot and the tight gap to their stem;
 - layering: fold and flap lines are `cut`s in the filled variant, so the layer reads in
   both states;
+- fold: a page's folded corner is 4.5px with an r 1.5 inner corner (document,
+  document-add, sticky-note), a tight 1.53 pocket;
+- figure: person is the standalone figure (head r 2.5, a dome body 10 wide, r 3.5
+  shoulders). Beside a mark or in a group the figure is the small cut (head r 2, body 7
+  wide, r 3), identical in person-add, person-remove and people's front figure (people
+  sits 1 lower to fill the circle keyline); a second figure behind is overlap-cut;
 - bars: 8 × 3 and 5 × 3, r 1, 3px between centre-lines (align family).
 
 **Acute corners.** A straight join sharper than 60° pinches the negative space inside it
@@ -177,7 +236,18 @@ fills the point solid, so no thin pocket shows. The counter rule still applies.
   `transpose` (a mirror across the diagonal, which turns a horizontal family vertical and
   keeps its order). Never redraw a variant by hand;
 - a guide line behind bars runs as stubs between them (align-center), so it reads as a
-  layer, not a line through the counters.
+  layer, not a line through the counters;
+- grouped functions reuse their base drawing exactly and change it only by a shared
+  modifier: add and remove marks, the slash, arrows in or out, a mirror. Before drawing
+  one, find its family and copy the base path, never an approximation:
+  - calendar, folder, document → -add (mark on the corner);
+  - person → person-add, person-remove, people;
+  - cloud → cloud-upload, cloud-download (the cloud cut open where the arrow crosses it);
+  - bell, mic, video, wi-fi, link → -off (the slash); eye → eye-off; volume → volume-off;
+  - search → zoom-in, zoom-out (the r 5 lens); lock → unlock;
+  - download, upload, share (a tray and a 3px arrow); log-in, log-out (a door);
+  - play, pause, stop, skip; undo, redo, reset, refresh, history, rotate (reset's corner
+    head); repeat, shuffle (rails at 4.5 and 11.5; repeat is Fluent's loop, r 3.5 ends); thumbs-up → thumbs-down.
 
 **Filled variants.** Every icon has one, derived from the outline, never drawn
 separately. Filled is about emphasis and layers, not flooding the shape:
@@ -199,10 +269,42 @@ separately. Filled is about emphasis and layers, not flooding the shape:
     Use it for a curved layer line a cut can't extend straight out of (database's band).
     An unmarked stroke is drawn on top of the fill and would close its own gap;
   - `fill`: a solid drawn only in the filled variant (a slashed icon's whole shape).
+  - a layer line that starts on another layer line (layout's sidebar under its header)
+    is a `line` plus a `gap` extended at its free end only: a `cut` extends 2px at both
+    ends and would run on into the other layer;
+- **Where negative space goes** (researched against Fluent's filled set, with Phosphor
+  and Material where Fluent has no cut; owner, 2026-09-27). Compare every filled variant
+  with Fluent's filled cut before calling it done (`.cache/cmp.mjs` renders Area outline,
+  Area filled, Fluent regular and Fluent filled side by side):
+  - **Faces of equal standing** (a box's faces, a folder's flap, a calendar's header, a
+    book's spine, a mail's flap, a laptop's hinge): a `cut` centred on the outline's line,
+    run out through the silhouette (Fluent's box, folder, calendar, mail).
+  - **A part in front of another** (a clip on a board, a cap's board over its skirt, a
+    bell's body over its clapper, a watch's face over its straps): the front part keeps its
+    whole outline edge; one icon weight of `gap` is cut from the part behind, right
+    outside the front part's edge and following its shape (Fluent's clipboard, graduation
+    cap, bell). A gap centred on the line, or run on through the front part, shaves it.
+  - **Details inside a solid** (marks, keys, hands, text lines, a keyhole) are knockouts; a
+    mark on a container's corner notches it.
+  - **A closed shape holding a mark fills and knocks the mark out** (add-circle, error,
+    clock, zoom-in and zoom-out's lens, as Fluent's zoom). An open line glyph (search,
+    arrows, chevrons) fills by weight.
+  - **Glass stays open** in a vehicle: the car's cabin stays a line (Fluent's car).
+  A gap along a layer line stops where that line stops (package's tape at the V).
+- **Every detail over a solid is negative space** (owner, 2026-09-27): marks, arrows, keys,
+  tape, text lines. A mark or arrow that crosses the silhouette's edge is a knockout too:
+  it runs out through the edge as a notch and the part beyond the edge is not drawn
+  (cloud-upload's stem, cloud-download's head). A line drawn black over the fill with a
+  halo round it (tried as a `front` role) read as an outlined sticker, unlike every other
+  filled detail, and was removed. The lint fails a knockout that never enters a solid.
+  A mark beside a solid (person-add's plus) is not over it and stays a line.
 - **Only closed parts that are the object fill.** A band, handle or stand that joins solid
   parts stays a line (headphones' band); if one closed path would fill the space between
   parts, split it. A shape in front of another (printer's sheet) needs a `gap` where it
-  overlaps. Review every filled variant with `icon-sheet.mjs filled`.
+  overlaps. Review every filled variant with `icon-sheet.mjs filled` (`filled-large` adds
+  a 64px row for cut-outs). An open solid fills with a straight chord between its ends:
+  close the path unless that chord lies where an edge should be (printer's runs behind its
+  sheet, a strap's along the body's edge); wallet's crossed its flap and left a wedge.
 - **Line glyphs fill by weight.** An icon with no solid shape (add, check, arrows, link,
   reset…) gets its filled variant by drawing every stroke at 4/3 of the icon weight
   (1.5px, Fluent's filled line), with dots grown by the same amount. The same applies to
@@ -222,7 +324,7 @@ separately. Filled is about emphasis and layers, not flooding the shape:
 - a book's page tops hump up and meet at the spine (an M, not a V), with the bottom edges
   following them, and rounded outer corners;
 - options has two sliders with large knobs;
-- a document's fold is about 5px;
+- a document's fold is 4.5px (Shared parts, fold);
 - text is a T with end ticks and a foot (Fluent's text_t, Lucide's type), not a letter A;
 - layers are three isometric layers facing up (Fluent's three, Area's orientation);
 - flash is a sharp classic bolt: a flat top, one notch and shoulder each side, and a sharp
@@ -298,7 +400,8 @@ base.css sets the line from `--area-weight-icon` and the size curve.
    skipped silently).
 3. **Lint** with `node apps/docs/scripts/gen-pilot-icons.mjs --report`. It checks the 0.5px
    grid, the diagonal lattice, the keyline, gaps, the live area (centre-lines within
-   1.5–14.5), angles and attributes, and prints each icon's ink box and centre.
+   1.5–14.5), angles and attributes, dot sizes, the shared slash on `-off` icons, and
+   knockouts that leave their solid, and prints each icon's ink box and centre.
 4. **Review** each icon on `gallery-icons.html`. For a quick look, or to send the owner a
    batch, render `node apps/docs/scripts/icon-sheet.mjs sheet out.png <icons…>` (16, 32 and
    96px), `strip out.png <icons…>` (16 and 32px with a blurred copy, the squint test) or
@@ -343,6 +446,13 @@ base.css sets the line from `--area-weight-icon` and the size curve.
 
 ## Review checklist
 
+- Does the icon belong to a family (Families, grouped functions)? Is its base copied
+  exactly and changed only by the shared modifier?
+- Does every crossing use the overlap cut, every attached part join, and every mark sit
+  where the placement rule puts it?
+- Is every dot ⌀2 or ⌀1.5 by its role?
+- In the filled variant, is every detail over a solid negative space, and is every open
+  solid's chord where an edge should be?
 - Is every icon the same apparent size in the balance strip, at 16 and 32px?
 - Is every gap tight, standard or open, and is every counter tight (satellite pockets) or
   standard?

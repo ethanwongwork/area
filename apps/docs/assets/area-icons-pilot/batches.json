@@ -8,7 +8,7 @@
       "icons": {
         "add": "approved",
         "arrow-up": "approved",
-        "bell": "approved",
+        "bell": "review",
         "check": "approved",
         "chevron-down": "approved",
         "copy": "approved",
@@ -142,10 +142,10 @@
       "note": "The deferred three (paperclip, tag, people) and zoom, flag, archive, cloud, phone, camera, cart. Round 2: people uses person's parts with the overlap cut; flag has sharp points; archive is landscape. Cloud and paperclip candidates on the Exploration sheet.",
       "icons": {
         "attach": "approved",
-        "tag": "approved",
+        "tag": "review",
         "people": "approved",
-        "zoom-in": "approved",
-        "zoom-out": "approved",
+        "zoom-in": "review",
+        "zoom-out": "review",
         "flag": "approved",
         "archive": "approved",
         "cloud": "approved",
@@ -198,9 +198,9 @@
       "note": "Thumbs up (thumbs down is its mirror), smile, briefcase, building, compass (a solid needle, sharp by nature), crop, trophy and coffee.",
       "icons": {
         "thumbs-up": "approved",
-        "smile": "approved",
+        "smile": "review",
         "briefcase": "approved",
-        "building": "approved",
+        "building": "review",
         "compass": "approved",
         "crop": "approved",
         "trophy": "approved",
@@ -217,7 +217,7 @@
         "scissors": "approved",
         "log-in": "approved",
         "log-out": "approved",
-        "keyboard": "approved",
+        "keyboard": "review",
         "pointer": "approved",
         "move": "review",
         "hourglass": "approved",
@@ -234,7 +234,7 @@
         "music": "approved",
         "film": "approved",
         "credit-card": "approved",
-        "wallet": "approved",
+        "wallet": "review",
         "receipt": "approved",
         "lightbulb": "approved",
         "megaphone": "approved"
@@ -264,7 +264,7 @@
         "mic-off": "review",
         "video-off": "review",
         "calculator": "review",
-        "graduation-cap": "approved",
+        "graduation-cap": "review",
         "car": "review",
         "package": "review"
       }
@@ -296,6 +296,97 @@
         "sticky-note": "review",
         "trending-up": "review",
         "shopping-bag": "review"
+      }
+    },
+    {
+      "id": "batch-18",
+      "title": "Batch 18 · Add, sync & sensing",
+      "note": "Calendar, folder and document add (a 4px plus replaces the lower-right corner, the container cut open round it), cloud download (the arrow leaves through an open foot), shuffle, fingerprint and gauge.",
+      "icons": {
+        "calendar-add": "review",
+        "folder-add": "review",
+        "document-add": "review",
+        "cloud-download": "review",
+        "shuffle": "review",
+        "fingerprint": "review",
+        "gauge": "review"
+      }
+    },
+    {
+      "id": "batch-19",
+      "title": "Batch 19 · Open, add & devices",
+      "note": "Chat add (the container-add mark), cloud off (the shared slash, cut one-sided), folder open (folder's back and a slanted front), mail open (the flap up, mail's crease as the fold), timer (a stopwatch) and laptop.",
+      "icons": {
+        "chat-add": "review",
+        "cloud-off": "review",
+        "folder-open": "review",
+        "mail-open": "review",
+        "timer": "review",
+        "laptop": "review"
+      }
+    },
+    {
+      "id": "batch-20",
+      "title": "Batch 20 · Devices",
+      "note": "The desktop family: tablet (phone's home bar), TV (desktop's screen over a bar), watch (attached straps), mouse, speaker (phone's body), hard drive (laptop's 1 : 2 slant) and chip.",
+      "icons": {
+        "tablet": "review",
+        "tv": "review",
+        "watch": "review",
+        "mouse": "review",
+        "speaker": "review",
+        "hard-drive": "review",
+        "chip": "review"
+      }
+    },
+    {
+      "id": "batch-21",
+      "title": "Batch 21 · Checks & charts",
+      "note": "The check family: a 4.5 × 3 check (arms 1.5 / 3, the 4px plus's partner) on a container's corner (calendar, document) or beside a figure (person), status's check inside a shield; bar chart and pie chart from chart and the ring.",
+      "icons": {
+        "calendar-check": "review",
+        "document-check": "review",
+        "person-check": "review",
+        "shield-check": "review",
+        "bar-chart": "review",
+        "pie-chart": "review"
+      }
+    },
+    {
+      "id": "batch-22",
+      "title": "Batch 22 · Everyday UI",
+      "note": "Add, remove and prohibited in the ring (a 6px + and −), chevrons up-down, collapse (expand's heads moved inward), trending down (trending up mirrored), alarm, git branch, grip (vertical, and horizontal as a quarter turn), activity, layout and percent.",
+      "icons": {
+        "add-circle": "review",
+        "remove-circle": "review",
+        "prohibited": "review",
+        "chevrons-up-down": "review",
+        "collapse": "review",
+        "alarm": "review",
+        "git-branch": "review",
+        "grip-vertical": "review",
+        "activity": "review",
+        "layout": "review",
+        "percent": "review"
+      }
+    },
+    {
+      "id": "batch-23",
+      "title": "Batch 23 · Communication & text",
+      "note": "Call (Fluent's handset, its centre-line taken between Fluent's two contours), reply and forward (undo's head, a quarter-turn tail), sync (two of reset's arcs), eraser, text align left, right and center, indent and outdent, columns and rows, and folder, document and calendar remove (the container-add pattern with a 4px minus).",
+      "icons": {
+        "call": "review",
+        "reply": "review",
+        "sync": "review",
+        "eraser": "review",
+        "text-align-left": "review",
+        "text-align-center": "review",
+        "indent": "review",
+        "outdent": "review",
+        "columns": "review",
+        "calendar-remove": "review",
+        "folder-remove": "review",
+        "document-remove": "review"
       }
     }
   ]
