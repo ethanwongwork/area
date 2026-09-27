@@ -33,6 +33,7 @@ const KEYLINES = { square: [13, 13], circle: [14, 14], horizontal: [14, 11], ver
 // a gap equal to the line (owner, round 4); 2.25px between centre-lines at 1.125.
 const GAPS = { tight: [1.125, 1.625], standard: [1.75, 2.0] };
 const OPEN = 2.5;
+const CLOSE_GAP = 0.875;      // data-gap="close": 2 between centre-lines at 1.125, the one step under tight
 const JOIN = 0.1;              // closer than this (centre-lines) counts as a join, not a gap
 // Counters use the same scale: a satellite pocket (a clapper cup, a document's fold) may be
 // tight; every other enclosed pocket is standard or larger.
@@ -45,8 +46,16 @@ const COUNTERS = { tight: [1.25, 1.625], standard: [1.75, Infinity] };
 //   separation gap at the icon weight with square ends and sharp corners, extended past
 //   the silhouette so it runs cleanly through (Fluent's filled layering).
 // gap: a separation that exists only in the filled variant (the bell's clapper).
+// line: a layer line drawn only in the outline, where a gap takes its place in the filled
+//   variant (database's curved band, which a cut can't extend straight out of).
+// stroke: a line drawn only in the filled variant, at the filled weight. A slashed line
+//   glyph cuts its outline round the slash (line pieces) and its filled lines a little
+//   wider (stroke pieces), so both keep their gap beside the slash.
+// fill: a solid drawn only in the filled variant. A slashed icon's outline is cut open
+//   round the slash (line pieces); its filled variant is the whole shape, parted by gaps.
 // Line glyphs (no solid shape) fill by weight: every stroke at FILLED_WEIGHT_RATIO.
-const FILLED_ROLES = ["solid", "knockout", "hole", "cut", "gap"];
+const FILLED_ROLES = ["solid", "knockout", "hole", "cut", "gap", "line", "fill", "stroke"];
+const SOLID_ROLES = ["solid", "fill"];
 const FILLED_WEIGHT_RATIO = 4 / 3;
 const SIZE_CURVE = 0.45;             // line ∝ size^0.45: Cursor's 1.25px at 16 → 1.5px at 24   // 1.125 → 1.5px, Fluent's filled line weight
 const BOLD = WEIGHT * FILLED_WEIGHT_RATIO;
@@ -179,8 +188,18 @@ function retractFreeEnds(d, others) {
 
 // Circle outline samples, for gap measurement.
 const ring = (cx, cy, r) => Array.from({ length: 129 }, (_, k) => [cx + r * Math.cos(k * Math.PI / 64), cy + r * Math.sin(k * Math.PI / 64)]);
-const rectSamples = (x, y, w, h) => [[x, y, x + w, y], [x + w, y, x + w, y + h], [x + w, y + h, x, y + h], [x, y + h, x, y]]
-  .flatMap(([x1, y1, x2, y2]) => Array.from({ length: 41 }, (_, k) => [x1 + (x2 - x1) * k / 40, y1 + (y2 - y1) * k / 40]));
+// Rect outline samples with its corner radius: a square-cornered sample put mic's r 2 capsule
+// 0.8px too close to its holder.
+const rectSamples = (x, y, w, h, rx = 0) => {
+  const r = Math.min(rx, w / 2, h / 2), out = [];
+  const edge = (x1, y1, x2, y2) => { for (let k = 0; k <= 40; k++) out.push([x1 + (x2 - x1) * k / 40, y1 + (y2 - y1) * k / 40]); };
+  const corner = (cx, cy, a0) => { for (let k = 0; k <= 16; k++) { const a = a0 + Math.PI / 2 * k / 16; out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); } };
+  edge(x + r, y, x + w - r, y); corner(x + w - r, y + r, -Math.PI / 2);
+  edge(x + w, y + r, x + w, y + h - r); corner(x + w - r, y + h - r, 0);
+  edge(x + w - r, y + h, x + r, y + h); corner(x + r, y + h - r, Math.PI / 2);
+  edge(x, y + h - r, x, y + r); corner(x + r, y + r, Math.PI);
+  return out;
+};
 const r2 = v => Math.round(v * 100) / 100;
 
 // Ink membership on a RASTER-per-px grid: strokes by distance to the centre-line samples,
@@ -256,11 +275,13 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   if (strict && keylines && !KEYLINES[keyline]) fail(name, `data-keyline must be one of ${Object.keys(KEYLINES).join(", ")}`);
   const elements = [];
   const ink = [Infinity, Infinity, -Infinity, -Infinity];
+  // Only path, circle and rect are measured; anything else would be drawn but never checked.
+  for (const [, tag] of text.matchAll(/<(ellipse|line|polyline|polygon|g|use)\b/g)) fail(name, `<${tag}> is not measured by the lint; draw it as a path`);
   for (const [, tag, body] of text.matchAll(/<(path|circle|rect)\b([^>]*)\/>/g)) {
     const a = attrs(body);
     const stroked = a.stroke && a.stroke !== "none";
-    if (a["data-filled"] === "gap") {  // filled-only separation: no outline checks
-      if (tag !== "path") fail(name, "a gap is a path");
+    if (["gap", "fill", "stroke"].includes(a["data-filled"])) {  // filled-only: no outline checks
+      if (tag !== "path") fail(name, `a ${a["data-filled"]} is a path`);
       const { stroke, "stroke-width": _w, "stroke-linecap": _c, "stroke-linejoin": _j, "data-filled": filled, ...rest } = a;
       elements.push({ tag, attrs: rest, stroked: true, samples: [], filled, filledOnly: true });
       continue;
@@ -303,7 +324,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     } else {
       const [x, y, w, h] = [a.x, a.y, a.width, a.height].map(Number);
       points = [[x, y], [x + w, y + h]];
-      samples = rectSamples(x, y, w, h);
+      samples = rectSamples(x, y, w, h, Number(a.rx ?? 0));
       for (const v of [x, y, x + w, y + h]) grid(v, "rect edge");
     }
     const [lo, hi] = stroked ? LIVE : LIVE_FILL;
@@ -334,9 +355,9 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     elements.push({ tag, attrs: rest, stroked, samples, filled, cutD });
   }
   if (!elements.length) fail(name, "no shapes found");
-  if (elements.some(el => el.filled) && !elements.some(el => el.filled === "solid")) fail(name, "cut-outs need at least one solid shape to cut");
+  if (elements.some(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)) && !elements.some(el => SOLID_ROLES.includes(el.filled))) fail(name, "cut-outs need at least one solid shape to cut");
   const drawn = elements.filter(el => !el.filledOnly);
-  const lineGlyphIcon = !elements.some(el => el.filled === "solid");
+  const lineGlyphIcon = !elements.some(el => SOLID_ROLES.includes(el.filled));
   for (const el of drawn) if (el.stroked && el.tag === "path" && (lineGlyphIcon || !el.filled)) {
     el.boldD = retractFreeEnds(el.attrs.d, drawn.filter(o => o !== el).flatMap(o => o.samples));
     el.boldSamples = parsePath(name, el.boldD).samples;
@@ -345,26 +366,33 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   const gaps = [];
   const pads = drawn.map(el => el.stroked ? WEIGHT / 2 : 0);
   // In the filled variant, strokes that stay strokes are drawn at BOLD; gaps must survive it.
-  const lineGlyph = !elements.some(el => el.filled === "solid");
+  const lineGlyph = !elements.some(el => SOLID_ROLES.includes(el.filled));
   const boldPads = drawn.map(el => el.stroked && (lineGlyph || !el.filled) ? BOLD / 2 : pads[drawn.indexOf(el)]);
   for (let p = 0; p < drawn.length; p++) for (let q = p + 1; q < drawn.length; q++) {
     let d = Infinity;
     for (const [ax, ay] of drawn[p].samples) for (const [bx, by] of drawn[q].samples) d = Math.min(d, Math.hypot(ax - bx, ay - by));
     if (d <= JOIN) continue;
     const g = d - pads[p] - pads[q];
-    const negative = [drawn[p].filled, drawn[q].filled].some(role => ["knockout", "hole", "cut"].includes(role));
+    if (g <= 0) continue;  // the inks overlap: a join, not a gap
+    // Outline-only lines are not drawn in the filled variant, so they have no filled gap.
+    const negative = [drawn[p].filled, drawn[q].filled].some(role => ["knockout", "hole", "cut", "line"].includes(role));
     let dBold = Infinity;
     for (const [ax, ay] of drawn[p].boldSamples ?? drawn[p].samples) for (const [bx, by] of drawn[q].boldSamples ?? drawn[q].samples) dBold = Math.min(dBold, Math.hypot(ax - bx, ay - by));
     const gBold = dBold - boldPads[p] - boldPads[q];
-    if (!negative && gBold < BOLD_GAP_MIN - 1e-6) fail(name, `shapes ${p + 1} and ${q + 1} close to ${r2(gBold)}px in the filled variant (${BOLD}px line); keep ${BOLD_GAP_MIN}`);
-    const step = Object.entries(GAPS).find(([, [lo, hi]]) => g >= lo - 1e-6 && g <= hi + 1e-6)?.[0] ?? (g >= OPEN ? "open" : null);
+    // data-gap="close" (owner-approved, recorded in the spec): one satellite sits a step
+    // closer than tight, 2 between centre-lines on the 0.5 grid (battery's terminal).
+    const close = root["data-gap"] === "close" && g >= CLOSE_GAP - 1e-6;
+    if (!negative && !close && gBold < BOLD_GAP_MIN - 1e-6) fail(name, `shapes ${p + 1} and ${q + 1} close to ${r2(gBold)}px in the filled variant (${BOLD}px line); keep ${BOLD_GAP_MIN}`);
+    const step = Object.entries(GAPS).find(([, [lo, hi]]) => g >= lo - 1e-6 && g <= hi + 1e-6)?.[0] ?? (g >= OPEN ? "open" : close ? "close" : null);
     gaps.push(`${r2(g)}${step ? " " + step : ""}`);
     if (!step) fail(name, `shapes ${p + 1} and ${q + 1} leave a ${r2(g)}px gap; use tight ${GAPS.tight.join("–")}, standard ${GAPS.standard.join("–")}, open ≥ ${OPEN}, or join them`);
   }
   // Counters: rasterise the ink and flood the outside; every enclosed pocket of negative
   // space must hold at least a tight disc, or it reads as a blot at 16px.
   const counters = measureCounters(drawn);
-  for (const c of counters) if (!Object.values(COUNTERS).some(([lo, hi]) => c >= lo - 1e-6 && c <= hi + 1e-6))
+  // data-counter="sliver" (owner-approved, recorded in the spec): a slashed shape keeps
+  // Fluent's fuller form, and the sliver between it and the slash stays (mic-off).
+  if (root["data-counter"] !== "sliver") for (const c of counters) if (!Object.values(COUNTERS).some(([lo, hi]) => c >= lo - 1e-6 && c <= hi + 1e-6))
     fail(name, `an enclosed counter is ${r2(c)}px across; make it tight ${COUNTERS.tight.join("–")}, standard ≥ ${COUNTERS.standard[0]}, or remove it`);
   // Keyline: the ink box at WEIGHT fits the icon's optical shape, centred on 8,8.
   if (strict && keylines && KEYLINES[keyline]) {
@@ -410,10 +438,16 @@ if (process.argv.includes("--audit")) {
   for (const { icon, size, coverage, density } of rows.sort((a, b) => a.size - b.size))
     console.log(`  ${icon.name.padEnd(17)} ${icon.keyline.padEnd(10)} size ${r2(size).toFixed(2).padStart(5)} (${(size / mSize * 100 - 100).toFixed(0).padStart(3)}%)  ink ${r2(coverage).toFixed(1).padStart(5)}  density ${r2(density).toFixed(2)} (${(density / mDensity * 100 - 100).toFixed(0).padStart(3)}%)`);
 }
+// A keyline is a size to reach, not only a limit (Streamline, Cursor). The x.5 edge rule
+// leaves most icons 0.88 under on their long side; more than UNDER marks an icon that reads
+// small beside its neighbours. Line glyphs (chevron, check, more) are thin by nature.
+const UNDER = 1.5;
 if (process.argv.includes("--report")) for (const icon of icons.filter(i => !i.derivedFrom)) {
   const [x0, y0, x1, y1] = icon.ink;
+  const [kw, kh] = KEYLINES[icon.keyline] ?? [16, 16], under = r2(Math.max(kw, kh) - Math.max(x1 - x0, y1 - y0));
   console.log(`  ${icon.name.padEnd(17)} ${icon.keyline.padEnd(10)} ink ${r2(x1 - x0)}×${r2(y1 - y0)}  centre ${r2((x0 + x1) / 2)},${r2((y0 + y1) / 2)}` +
-    (icon.gaps.length ? `  gaps ${icon.gaps.join(", ")}` : "") + (icon.counters.length ? `  counters ${icon.counters.join(", ")}` : ""));
+    (icon.gaps.length ? `  gaps ${icon.gaps.join(", ")}` : "") + (icon.counters.length ? `  counters ${icon.counters.join(", ")}` : "") +
+    (under > UNDER ? `  ⚠ ${under} under its keyline` : ""));
 }
 if (process.argv.includes("--check")) process.exit(0);
 
@@ -439,11 +473,12 @@ const boldDot = el => ({ ...el, attrs: { ...el.attrs, r: String(Number(el.attrs.
 // Solids keep their stroke, so the filled silhouette has the outline's exact outer edge.
 const filledBody = icon => {
   const outline = icon.elements.filter(el => !el.filledOnly);
-  const lineGlyph = !icon.elements.some(el => el.filled === "solid");
+  const lineGlyph = !icon.elements.some(el => SOLID_ROLES.includes(el.filled));
   // A line glyph fills by weight: every stroke at BOLD, dots grown by the same amount.
   const bold = el => jsx(el, { strokeStyle: STROKE_BOLD, ...(el.boldD ? { attrs: { d: el.boldD } } : {}) });
-  if (lineGlyph) return outline.map(el => el.stroked ? bold(el) : jsx(el.tag === "circle" ? boldDot(el) : el));
-  const solid = icon.elements.filter(el => el.filled === "solid").map(el => jsx(el, { attrs: { fill: "currentColor" }, stroke: el.stroked }));
+  if (lineGlyph) return [...outline.filter(el => el.filled !== "line"), ...icon.elements.filter(el => el.filled === "stroke")]
+    .map(el => el.stroked ? bold(el) : jsx(el.tag === "circle" ? boldDot(el) : el));
+  const solid = icon.elements.filter(el => SOLID_ROLES.includes(el.filled)).map(el => jsx(el, { attrs: { fill: "currentColor" }, stroke: el.stroked }));
   const cuts = icon.elements.filter(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)).map(el =>
     el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
     : el.filled === "hole" ? jsx(el, { attrs: { fill: "black" }, stroke: false })
@@ -503,7 +538,7 @@ export const ${component(icon)}FilledIcon = ({ weight, size, ...props }: PilotIc
 export const PILOT_BATCHES = ${JSON.stringify(JSON.parse(readFileSync(join(SRC, "batches.json"), "utf8")).batches.map(({ id, title, icons }) => ({ id, title, icons })))} as const;
 
 export const PILOT_ICONS = [
-${icons.map(icon => `  { name: "${icon.name}", keyline: "${icon.keyline}", derivedFrom: ${icon.derivedFrom ? `"${icon.derivedFrom}"` : "undefined"}, Icon: ${component(icon)}Icon, Filled: ${component(icon)}FilledIcon, fill: "${icon.elements.some(el => el.filled === "solid") ? "solid" : "weight"}" },`).join("\n")}
+${icons.map(icon => `  { name: "${icon.name}", keyline: "${icon.keyline}", derivedFrom: ${icon.derivedFrom ? `"${icon.derivedFrom}"` : "undefined"}, Icon: ${component(icon)}Icon, Filled: ${component(icon)}FilledIcon, fill: "${icon.elements.some(el => SOLID_ROLES.includes(el.filled)) ? "solid" : "weight"}" },`).join("\n")}
 ] as const;
 `;
 writeFileSync(OUT, tsx);

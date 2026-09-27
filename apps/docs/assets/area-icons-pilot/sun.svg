@@ -1,0 +1,4 @@
+<svg data-set="area-pilot" data-keyline="circle" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle data-filled="solid" cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 2V3M8 13V14M2 8H3M13 8H14M3.757 3.757L4.464 4.464M12.243 12.243L11.536 11.536M12.243 3.757L11.536 4.464M3.757 12.243L4.464 11.536" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

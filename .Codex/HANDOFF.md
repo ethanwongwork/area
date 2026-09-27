@@ -35,14 +35,14 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
   - text 12/16, 14/20, 16/24; titles 20/28, 24/32, 32/40; titles fixed in compact;
   - small controls 12/16;
   - weight 400 everywhere except labels on fills (500).
-- **Icons (branch `icons-system`, PR 3):** 82 icons in five batches; rules in the
+- **Icons (branch `icons-system`, PR 3):** 202 icons in seventeen batches; rules in the
   `area-icon-construction` skill, record in `docs/specs/icons.md`.
   - Sources: `apps/docs/assets/area-icons-pilot/` (`npm run icons:pilot`, `npm run lint:icons`,
     `--report`, `--audit`). The lint checks the grid, the diagonal lattice, keylines, the
     gap and counter scale, acute corners, filled gaps, and live area.
   - Review: `gallery-icons.html`, grouped by `batches.json` with owner status and a
     whole-set grid per batch; open questions go in `explore/`.
-  - Batch 1 (core) is approved except items back in review; batches 2–5 are in review.
+  - Batch 1 (core) is approved except items back in review; batches 2–13 are in review.
   - Components drawing Area glyphs: Badge dismiss, NumberField steppers, TreeView chevron
     and check, Composer send (`glyphs.ts`, `Glyph.tsx`, with sizes on the size curve).
     Fluent remains elsewhere and in demos.
@@ -103,8 +103,14 @@ saved as one JSON download per product (owner-approved) and split with a scratch
 
 ## Next
 
-1. Owner review of batches 2–5 on `gallery-icons.html`: rotate (candidates on the
-   Exploration sheet), flash, hide, and the smaller document fold.
+1. Owner review on `gallery-icons.html` (In review lists what's open): batch 17, and round 3
+   redraws (rocket, paintbrush, bug, puzzle, mic-off, car, calculator, person-add, marks and
+   arrowhead sizes). Exploration is empty. Next batch ideas: cloud-download, calendar-add,
+   folder-add, shuffle, fingerprint, gauge.
+   The lint doesn't measure gaps within one path (paperclip's were solved by hand).
+   `npm run typecheck` fails while the dev server rebuilds `packages/react/dist` (TS7016 on
+   `@area/react`); rerun once the rebuild settles. Review filled variants with
+   `node apps/docs/scripts/icon-sheet.mjs filled out.png`.
 2. Icons: auto-position needs a new concept. Then swap the demo-level Fluent imports for
    Area icons, one family at a time with the owner's approval, and retire the Fluent map.
 3. Components happen on branch `components`, in its own worktree session.
