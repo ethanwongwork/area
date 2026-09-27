@@ -21,6 +21,7 @@ NumberField and Input (range with inputs), ColorPicker channel sliders, Segmente
 - 2026-09-26 (second pass, owner: decide every open item): the thumb follows the choice
   glyph ladder, 16 / 16 / 20 ([cohesion audit](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions),
   item 8).
+- 2026-09-27: audit Slider again, with a before-and-after at enlarged scale.
 
 ## Job and boundaries
 
@@ -43,6 +44,7 @@ sliders.
 | Id | Type | What | Link / commit / path | License | Captures |
 |---|---|---|---|---|---|
 | figma | target product | Colour picker hue and alpha sliders (channel sliders, not value sliders); plan usage bar (rail colour) | figma.com colour picker (ColorPicker pass); file browser, 2026-09-26 | evidence only | `color-picker/figma--eyedropper-and-sliders--rest--light`, `figma--hue-slider--focus-visible--light`, `progress/figma--usage-bar--rest--light` |
+| systems | design systems (source) | Radix Themes, Fluent v9, Material Web, Base UI, shadcn, Carbon sliders (track, thumb, paint, hover, focus, marks) | Primer @6794582, Material Web @cbd34a8, Fluent @8add8c8, Polaris @3f7954a, Radix Themes @1faff10, shadcn @98a1fe6, Carbon @7e8c8f7, React Spectrum @16eead6, Base UI @45a75a5 | MIT / Apache | source reading |
 | uui | design system (source) | Slider | `components/base/slider/slider.tsx:35-58` at `4702dc0` ([reference](../research/untitled-ui-reference.md)) | MIT | source reading only |
 | area | this system | 15 gallery tiles (re-captured after the second pass) | localhost gallery | — | `area--*` (15) |
 
@@ -90,7 +92,9 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | fill | `neutral-solid`; accent by tone | Owner | Untitled brand; Figma's usage fill is its blue |
 | thumb · size | **16 / 16 / 20** (`icon-sm`, `icon-md`, `space-20`; slider.css:303-305) | Second pass: the choice glyph ladder (Checkbox, Radio); Figma 16 | Was the icon ramp, 16 at every tier. Untitled 24 |
 | thumb · construction | surface ring, 1px `border-hover` mixed 35% to surface, fill dot to 42% of the radius (slider.css:29, 218-220) | Owner-confirmed; Figma's 4px white ring around the value colour | Untitled: white thumb with a 2px brand ring |
-| thumb · shadow | `shadow-1` | In-flow control | Untitled `shadow-md`; Figma a 3-layer lift |
+| thumb · shadow | `shadow-1` | In-flow control; Radix classic and shadcn shadow the thumb | Untitled `shadow-md`; Figma a 3-layer lift |
+| hover | **fill and thumb dot darken; the rail keeps its colour** | Fluent: colour on the thumb and fill only (`useSliderStyles.styles.ts L76-83`); Radix, Base UI: no hover change | Was the rail darkening too, which no source does |
+| step marks | 1 × 10 ticks behind the rail (3 show above and below) | Kept; Fluent cuts notches into the rail, Material draws 2px dots, Base UI 1 × 8 below | Open: notches would need the marks drawn into the rail itself |
 | readout | 14/20 `fg-muted`, tabular, 4ch | Area value text role | — |
 | disabled | 50% on the label (slider.css:158-160) | Audit rule | Untitled has no disabled style |
 
@@ -145,3 +149,4 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
   Progress → `progress/figma--usage-bar--rest--light`, `area--size-large`.
 - 2026-09-27 · third pass → open question settled, value kept: the shared rail stays ≈ #dd
   → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27 · owner: audit → against Radix, Fluent, Material, Base UI, shadcn and Carbon: thumb (16 / 16 / 20 round), 4px rail, fill role and focus ring confirmed; hover no longer darkens the rail → Pass review in the gallery. No target product has a value slider (earlier search).

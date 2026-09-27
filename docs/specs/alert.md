@@ -11,6 +11,7 @@ Chip remove (a tinted 12% plate), Card and Panel (container radius)
   `accent` is an explicit tone.
 
 No Alert section existed in [prior decisions](PRIOR_DECISIONS.md).
+- 2026-09-27: audit Alert again, with a before-and-after at enlarged scale.
 
 ## Job and boundaries
 
@@ -34,6 +35,8 @@ Excluded: an emphasis axis (solid banners). No target product capture shows one.
 | Id | Type | What | Link / commit / path | License | Captures |
 |---|---|---|---|---|---|
 | area | this system | Ten gallery tiles (info and warning added in the second pass) | localhost gallery | — | `area--*` (10) |
+| notion | target product | Callout block: radius 10, 12 padding inside a 1px transparent border (content 13 in), fill rgb(249, 248, 247), no visible edge, 24px icon centred on the first line, text 16/24 | notion.notion.site (public page), 2026-09-27 | evidence only | `notion--callout--rest--light` |
+| systems | design systems (source) | Primer Banner and Flash, Fluent MessageBar, Polaris Banner, Radix Callout, shadcn Alert, Carbon InlineNotification | Primer @6794582, Material Web @cbd34a8, Fluent @8add8c8, Polaris @3f7954a, Radix Themes @1faff10, shadcn @98a1fe6, Carbon @7e8c8f7, React Spectrum @16eead6, Base UI @45a75a5 | MIT / Apache | source reading |
 | uui | design system (source) | No alert component | [Untitled UI reference](../research/untitled-ui-reference.md) ("Not present") | MIT | — |
 | chatgpt | target product | Header icon button (the dismiss's peer) | chatgpt.com, logged in, 2026-09-26 | evidence only | `baseline/chatgpt--icon-button-ghost--hover--light` |
 | notion | target product | Icon button, hover (dismiss peer); no alert | app.notion.com, logged in, second pass 2026-09-26 | evidence only | `button/notion--icon-button--hover--light` |
@@ -98,7 +101,9 @@ The dismiss beside the products' icon buttons under the pointer:
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | shell · radius | `radius-container` 12 | Peer consistency: Card media, Panel, Code block, Dialog | — |
-| shell · padding / height | 8; single line 46 | Inset rule around a 28px dismiss (`surface.css:204`) | — |
+| shell · padding / height | **10 block, 12 inline (less the border); single line 40** | Toast, its peer (toast.md); Notion callout 13; Primer, Fluent, shadcn, Carbon 12–16 | Was 8 all round, 46 tall |
+| icon | 16, 12 in, centred on the first line (8 gap) | Primer, Fluent, Radix, shadcn, Carbon: 16–20 on the first line; Notion 24 on its first line | Was 13 in, centred on the row |
+| controls | 28, **6 from the top and the side** (margins −4 / −6, `--_alert-control-*`); a multiline action row ends 6 from the bottom | Toast pass; concentric with the 12 corner (12 − 6) | The dismiss sat 9 in |
 | shell · fill / edge | tone surface + tone border; neutral `bg-component` #f7f7f7 + `border-decorative` #f3f3f3 | Semantic roles (`surface.css:284-289`) | The edge is a container seam, which the second pass kept decorative (rules take `border-divider`) |
 | text · size | 14/20 (`ui-size`) | Peer: Toast (`inset.css:184-188`), menus and rows use UI body | — |
 | title · weight / ink | 400, the tone ink (`surface.css:176`) | Type ramp: 500 is for labels on fills; the title carries the tone | — |
@@ -174,3 +179,4 @@ a side-by-side with a product surface (none exists; see Sources).
   `button/figma--icon-button--hover` for the dismiss (no product alert found).
 - 2026-09-27 · third pass → open question settled, value kept: dismiss hover stays 12% of the
   alert ink → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27 · owner: audit → Toast's inset (10 / 12, 40 tall), icon on the first line, controls 6 from the corner, multiline actions 6 from the bottom → `notion--callout`, seven design systems; Pass review in the gallery.

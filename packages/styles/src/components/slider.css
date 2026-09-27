@@ -25,7 +25,9 @@
     --_fill: var(--area-neutral-solid);
     --_fill-hover: var(--area-neutral-solid-hover);
     --_track-fill: color-mix(in srgb, var(--area-fill-toggle), var(--area-bg-surface) 20%);
-    --_track-fill-hover: color-mix(in srgb, var(--area-fill-toggle-hover), var(--area-bg-surface) 20%);
+    /* spec: hover darkens the fill and the thumb's dot, never the rail (Fluent: colour on the
+       thumb and fill only; Radix and Base UI: no hover change). */
+    --_track-fill-hover: var(--_track-fill);
     --_thumb-border: color-mix(in srgb, var(--area-border-hover), var(--area-bg-surface) 35%);
     --_pct: 0%;
     --_vertical-length: var(--area-input-inline-size);

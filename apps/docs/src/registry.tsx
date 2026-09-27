@@ -19,10 +19,11 @@ import * as cards from "./demos/card.tsx";
 import * as icons from "./demos/icons.tsx";
 import * as variants from "./demos/gallery-variants.tsx";
 import * as overlays from "./demos/overlays.tsx";
+import * as reviews from "./demos/reviews.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
 const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
-export const DEMOS = { ...BADGE_GALLERY_DEMOS, ...badgeDemos, ...switches, ...button, ...form, ...display, ...nav, ...theme, ...gallery, ...cards, ...iconDemos, ...ICON_REVIEW_DEMOS, ...variants, ...overlays } as Record<string, () => unknown>;
+export const DEMOS = { ...BADGE_GALLERY_DEMOS, ...badgeDemos, ...switches, ...button, ...form, ...display, ...nav, ...theme, ...gallery, ...cards, ...iconDemos, ...ICON_REVIEW_DEMOS, ...variants, ...overlays, ...reviews } as Record<string, () => unknown>;
 
 export const SOURCES = {
   card: "src/demos/card.tsx",
@@ -37,4 +38,5 @@ export const SOURCES = {
   icons: "src/demos/icons.tsx",
   variants: "src/demos/gallery-variants.tsx",
   overlays: "src/demos/overlays.tsx",
+  reviews: "src/demos/reviews.tsx",
 };

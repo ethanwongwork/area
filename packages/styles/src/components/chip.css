@@ -21,6 +21,10 @@
     --_gutter: var(--area-gutter-md);
     --_gap: var(--area-gap-md);
     --_dot: var(--area-icon-md);
+    /* spec: the remove target is a circle concentric with the pill's end, 4px inside it
+       (Material: a 24 circle in a 32 chip; Primer, Carbon and Spectrum 2 make it the chip's
+       own height). The 16px glyph sits inside it rather than filling it (Primer 16 in 24). */
+    --_remove: calc(var(--_height) - var(--area-space-8));
     --_visual: calc(var(--_dot) + var(--area-space-4));
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
@@ -212,9 +216,9 @@
   .area-chip__action:not(button) { cursor: default; }
 
   .area-chip__remove {
-    flex: 0 0 var(--_dot);
-    inline-size: var(--_dot);
-    block-size: var(--_dot);
+    flex: 0 0 var(--_remove);
+    inline-size: var(--_remove);
+    block-size: var(--_remove);
     border-radius: var(--area-radius-full);
     color: var(--area-fg-muted);
     cursor: pointer;
@@ -223,13 +227,13 @@
   .area-chip[data-invalid] .area-chip__remove { color: var(--area-fg-danger); }
   /* Foreground stays fixed on hover; a plate in the chip's own ink shows the target, as the
      Alert dismiss does on its tinted ground. */
-  .area-chip__remove:hover { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); }
+  .area-chip__remove:is(:hover, [data-hover]) { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); }
   .area-chip__remove:focus-visible,
   .area-chip__action:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
-  .area-chip__remove > svg { inline-size: 100%; block-size: 100%; }
+  .area-chip__remove > svg { inline-size: var(--_dot); block-size: var(--_dot); }
 
   /* A chip carrying nothing but a swatch is square: there is no label to set its width. */
   .area-chip--swatch-only {

@@ -16,6 +16,7 @@
   consistent with the system. Nothing in that pass changed Chip.
 
 No Chip section existed in [prior decisions](PRIOR_DECISIONS.md).
+- 2026-09-27: "the backplate of the hover state of the close button on chip does not look correct."
 
 ## Job and boundaries
 
@@ -38,6 +39,8 @@ Badge states a value and cannot be pressed (DESIGN_SYSTEM.md, Icons and technica
 
 | Id | Type | What | Link / commit / path | License | Captures |
 |---|---|---|---|---|---|
+| chatgpt | target product | Composer tool pill ("Web search"), rest and hover: a 36 pill, 16/26 muted; hover washes the whole pill 5% black and swaps the 16px icon for a 16px × in the same slot | chatgpt.com, logged in, 2026-09-27 (UI state only; nothing sent) | evidence only | `chatgpt--composer-tool-pill--{rest,hover}--light` |
+| systems | design systems (source) | Remove button: Primer Token, Material input chip, Fluent Tag, Polaris Tag, Carbon Tag, Spectrum 2 TagGroup | Primer @6794582, Material Web @cbd34a8, Fluent @8add8c8, Polaris @3f7954a, Radix Themes @1faff10, shadcn @98a1fe6, Carbon @7e8c8f7, React Spectrum @16eead6, Base UI @45a75a5 | MIT / Apache | source reading |
 | uui | design system (source) | Tags | `untitleduico/react@4702dc0`, `components/base/tags/tags.tsx:62-172`, `tag-checkbox.tsx:17-24` ([reference](../research/untitled-ui-reference.md)) | MIT | none |
 | notion | target product | Entered values: a select-property tag on a board card and in a table cell | app.notion.com, owner's "tasks" board and "returns" table, light, read-only, 2026-09-26 | evidence only | `notion--board-tag--rest--light`, `notion--select-tag--rest--light` |
 | area | this system | Gallery tiles, re-taken after the second pass | localhost gallery | — | `chip/area--*` (22) |
@@ -107,7 +110,9 @@ rgb(238, 238, 238) (`area--avatar-initials`); disabled opacity 0.5.
 | selected (neutral) | `bg-component-active` #eeeeee, edge #d4, default ink; hover edge `border-hover` #b4b4b4 (`chip.css:98-105`) | Owner rule; audit: selection one step above hover | Untitled shows selection only in an embedded checkbox |
 | selected (accent) | `accent-surface`, `edge-accent`, `fg-accent` (`chip.css:106-112`) | Owner: accent by override | — |
 | input kind · paint | `bg-component` #f7, transparent border (`chip.css:74`; `area--input`) | Area input-chip rule | Notion's values are tone-tinted; Area chips carry no tone by value (Badge does) |
-| remove · hover | **plate `currentColor` 12%**; ink fixed `fg-muted` (`chip.css:226`) | Audit: foreground fixed; peer Alert dismiss | Was transparent with ink → `fg-danger-vivid` |
+| remove · target | **a circle 4 inside the pill: 20 / 24 / 32** (`--_remove`, chip height − 8), concentric with the pill's end; the chip's end inset is that 4 | Material 24 circle in a 32 chip (`_trailing-icon.scss L18-22`); Primer, Carbon, Spectrum 2 make it the chip's height; chip trailing padding 0 (Primer, Polaris, Carbon, Spectrum 2) | Was the 16px glyph box, so the hover plate hugged the glyph (owner: "does not look correct") |
+| remove · glyph | 16 (Fluent `dismiss_16`, ink ≈ 11) at every size | Primer 12 in 16/20, 16 in 24/32 (`_RemoveTokenButton.tsx L39,58`) | — |
+| remove · hover | **plate `currentColor` 12%** on the circle; ink fixed `fg-muted` (`chip.css`) | Audit: foreground fixed; peer Alert dismiss; systems use a subtle neutral fill on the button alone | ChatGPT washes the whole pill instead; Area keeps the remove a separate target beside the chip's own action |
 | avatar initials | **12px** (`--area-control-sm-text`, `chip.css:169-174`) | Type ramp floor 12 | Was 10px, off the ramp |
 | visual box | 20px (icon 16 + 4) | Inset contract | — |
 | group gap | 4, wrapping (`chip.css:256-260`) | Area spacing | — |
@@ -172,3 +177,4 @@ exists. Build and test results are in [the audit](../research/cohesion-audit.md#
   `chip/notion--select-tag`.
 - 2026-09-27 · third pass → open question settled, value kept (32px input chip; Notion's
   tags map to Badge); Composition / swatch only tile added → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27 · owner: remove hover plate wrong → the remove is a 20/24/32 circle 4 inside the pill, concentric with its end, holding the 16px glyph (`--_remove`, `inset.css` end box); `[data-hover]` hook for review specimens → ChatGPT tool pill (rest, hover), nine design systems; Pass review in the gallery.

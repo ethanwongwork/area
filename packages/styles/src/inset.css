@@ -101,7 +101,8 @@
 
   /* A trailing remove control is a nested square action: the chip reserves its box, as an
      Input reserves an InputAction's, instead of nudging it with a negative margin. */
-  .area-chip:has(> .area-chip__remove:last-child) { --_box-end: var(--_dot); }
+  /* The remove circle is the end's own box: its 4px ring of chip is the end inset. */
+  .area-chip:has(> .area-chip__remove:last-child) { --_box-end: var(--_remove); }
   .area-chip:has(> :is(.area-chip__swatch, .area-chip__avatar, .area-chip__image):first-child) {
     --_box-start: var(--_visual);
   }

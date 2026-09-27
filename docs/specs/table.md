@@ -174,3 +174,4 @@ read from the CSS; no Area capture shows them.
 - 2026-09-27 · third pass → open questions settled, values kept (frame, 12px cells, hover
   plate) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · third pass, follow-up → wrapper edge `border-decorative` → `border-divider`, like Card: a table's frame is never lighter than its own row rules → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27 · owner: "the large table stroke is way thicker" → the large and interactive gallery tiles wrapped a Table in a second `area-table-wrapper`, drawing the edge twice; the demos now render Table alone (component unchanged) → Pass review in the gallery.

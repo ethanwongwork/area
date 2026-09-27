@@ -2,6 +2,7 @@ import { forwardRef, useEffect, useId, useLayoutEffect, useMemo, useRef, useStat
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { commandPaletteVariants } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
+import { scrollOptionIntoList } from "./overlay.ts";
 import { Kbd } from "./primitives.tsx";
 
 export interface CommandItem {
@@ -115,7 +116,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
   });
   useEffect(() => {
     if (current < 0) return;
-    listRef.current?.querySelector(`[data-index="${current}"]`)?.scrollIntoView({ block: "nearest" });
+    scrollOptionIntoList(listRef.current, listRef.current?.querySelector<HTMLElement>(`[data-index="${current}"]`));
   }, [current]);
 
   const run = (item: CommandItem | undefined) => {

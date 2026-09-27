@@ -168,3 +168,15 @@ export function assignRef<T>(ref: ((value: T | null) => void) | { current: T | n
   if (typeof ref === "function") ref(value);
   else if (ref) ref.current = value;
 }
+
+/**
+ * Brings an option into view inside its own scrolling list. Unlike `scrollIntoView`, it never
+ * scrolls the page or any other ancestor, so a list that mounts with an active option (an
+ * inline palette, an open combobox) does not jump the document to it.
+ */
+export function scrollOptionIntoList(list: HTMLElement | null | undefined, option: HTMLElement | null | undefined) {
+  if (!list || !option) return;
+  const box = list.getBoundingClientRect(), item = option.getBoundingClientRect();
+  if (item.top < box.top) list.scrollTop -= box.top - item.top;
+  else if (item.bottom > box.bottom) list.scrollTop += item.bottom - box.bottom;
+}

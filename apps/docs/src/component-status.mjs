@@ -17,6 +17,8 @@ export const COMPLETE_COMPONENTS = new Set([
 export const REVIEW_COMPONENTS = new Set([
   // Rebuilt after approval (layouts, sizes, linked cards, templates): docs/specs/card.md.
   'card',
+  // Built on the cohesion-audit branch (docs/specs/calendar.md); never reviewed.
+  'calendar',
   'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];

@@ -420,6 +420,10 @@
     --_bg: var(--area-bg-component);
     --_fg: var(--area-fg-default);
     --_border: var(--area-border-decorative);
+    --_alert-pad-block: calc(var(--area-space-10) - var(--area-border-width));
+    --_alert-pad-inline: calc(var(--area-space-12) - var(--area-border-width));
+    --_alert-control-block: calc((var(--area-ui-leading) - var(--area-control-sm)) / 2);
+    --_alert-control-end: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2);
 
     display: grid;
     grid-template-areas: "icon content actions dismiss";
@@ -428,20 +432,26 @@
     box-sizing: border-box;
     inline-size: 100%;
     container-type: inline-size;
-    padding-block: var(--area-space-8);
-    padding-inline: var(--area-space-8);
+    /* spec: Toast's inset, its peer (toast.md): text 10 from the top and 12 from the side,
+       so one line is 40 tall; Notion's callout pads 13, and Primer, Fluent, shadcn and
+       Carbon 12-16. Controls sit 6 from the top and the side (below). */
+    padding: var(--_alert-pad-block) var(--_alert-pad-inline);
     border: var(--area-border-width) solid var(--_border);
     border-radius: var(--area-radius-container);
     background-color: var(--_bg);
     color: var(--_fg);
   }
 
+  /* The icon centres on the first line (Primer, Fluent, Radix, shadcn, Carbon; Notion's
+     callout icon centres on its first line too). */
   .area-alert__icon {
     grid-area: icon;
     flex-shrink: 0;
+    align-self: start;
     inline-size: var(--area-icon-md);
     block-size: var(--area-icon-md);
-    margin-inline-start: var(--area-space-4);
+    margin-block-start: calc((var(--area-ui-leading) - var(--area-icon-md)) / 2);
+    margin-inline-start: var(--_alert-icon-start, 0px);
   }
 
   .area-alert__content {
@@ -477,10 +487,12 @@
     gap: var(--area-gap-sm);
   }
 
-  .area-alert--single-line {
-    align-items: center;
-    min-block-size: calc(var(--area-control-sm) + var(--area-space-16) + var(--area-border-width) + var(--area-border-width));
-  }
+  /* spec: 28px controls hang over the text line by 4 each side, as Toast's do, so they sit 6
+     from the top; the last one sits 6 from the side, concentric with the 12 corner. */
+  .area-alert__actions, .area-alert__dismiss { margin-block: var(--_alert-control-block); }
+  .area-alert > :is(.area-alert__actions, .area-alert__dismiss):last-child { margin-inline-end: var(--_alert-control-end); }
+
+  .area-alert--single-line { align-items: center; }
 
   .area-alert--single-line .area-alert__content {
     overflow: hidden;
@@ -499,7 +511,6 @@
   .area-alert--single-line .area-alert__description { flex: 1 1 auto; }
 
   .area-alert--multiline {
-    --_first-row-offset: calc(var(--area-space-4) - var(--area-border-width));
     grid-template-areas:
       "icon content dismiss"
       ". actions actions";
@@ -507,23 +518,21 @@
     align-items: start;
   }
 
+  /* Title over body, 4 apart, as Toast's title and description. */
   .area-alert--multiline .area-alert__content {
     align-items: flex-start;
     flex-direction: column;
     gap: var(--area-space-4);
-    margin-block-start: var(--_first-row-offset);
-  }
-
-  .area-alert--multiline .area-alert__icon {
-    margin-block-start: calc(var(--_first-row-offset) + (var(--area-ui-leading) - var(--area-icon-md)) / 2);
   }
 
   /* Without actions the second row is absent, so the row gap does not pad the bottom. */
   .area-alert--multiline:not(:has(> .area-alert__actions)) { grid-template-areas: "icon content dismiss"; }
 
+  /* A row of actions under the text ends 6 from the bottom and the side, like the dismiss. */
   .area-alert--multiline .area-alert__actions {
     justify-self: end;
-    margin-block-start: var(--area-space-8);
+    margin-block: var(--area-space-8) var(--_alert-control-block);
+    margin-inline-end: var(--_alert-control-end);
   }
 
   .area-alert__dismiss {

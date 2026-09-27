@@ -102,6 +102,18 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     Spec `docs/specs/overlay.md`; tests `packages/react/tests/overlay.test.mjs`; gallery
     `behavior-*` tiles. Tooltip is still marked Complete; its behavior is new and unreviewed.
 
+## Merge and audit round (2026-09-27, branch `claude/component-variants-audit-fc1ee4`)
+
+- Committed this branch's work and merged `origin/main` (22 commits: inspector and Figma
+  properties panel, product components, Dialog/Popover/Menu/Toast/Button passes). Main's passes
+  won their conflicts; Card, overlay behavior (`trigger` on Popover/Menu/Tooltip) and the fixes
+  stayed on top. Not pushed.
+- After the merge: Alert takes Toast's inset (40 tall, controls 6 from the corner); Chip's
+  remove is a concentric circle 4 inside the pill; Slider hover keeps the rail; the large and
+  interactive Table tiles lost a doubled wrapper; CommandPalette and Combobox no longer scroll
+  the page on mount (the gallery jumped ~35,000px on load). Pass reviews for Card, Table, Chip,
+  Alert and Slider are in `apps/docs/src/demos/reviews.tsx` (remove once the owner has seen them).
+
 ## Next
 
 1. Owner: review the 20 In-review families in the grouped gallery and confirm completion in

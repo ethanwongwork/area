@@ -54,8 +54,8 @@ const tableBody = (interactive = false) => (
   <tbody>{tableRows.map((name, index) => <tr key={name}><td>{interactive ? <a href="#gallery-section-table">{name}</a> : name}</td><td><Badge dot tone="success">Status</Badge></td><td className="area-table__cell--numeric">{index + 1}</td></tr>)}</tbody>
 );
 const tableHead = <thead><tr><th scope="col">Name</th><th scope="col">Status</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead>;
-export const GalleryTableLarge = () => <div className="area-table-wrapper"><Table size="lg" aria-label="Table">{tableHead}{tableBody()}</Table></div>;
-export const GalleryTableInteractive = () => <div className="area-table-wrapper"><Table interactive aria-label="Table">{tableHead}{tableBody(true)}</Table></div>;
+export const GalleryTableLarge = () => <Table size="lg" aria-label="Table">{tableHead}{tableBody()}</Table>;
+export const GalleryTableInteractive = () => <Table interactive aria-label="Table">{tableHead}{tableBody(true)}</Table>;
 
 export const GallerySeparatorSpacing = () => (
   <div style={{ inlineSize: "calc(var(--area-space-96) * 2)" }}>
