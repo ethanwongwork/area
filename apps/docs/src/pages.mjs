@@ -9,12 +9,10 @@
 export const COMPONENT_PAGES = [
   {
     slug: "icon-pilot", name: "Icon pilot", docsOnly: true,
-    lede: "Twelve Area-drawn icons on a 16px grid, stroked with round caps and joins, compared at three stroke weights beside 14/20 regular text and against the Fluent icons in use today. Construction rules and measurements: docs/specs/icons.md.",
+    lede: "Area-drawn icons on a 16px grid, stroked with round caps and joins, compared at three stroke weights. Construction rules and measurements: docs/specs/icons.md.",
     examples: [
-      {id: "weight-1", title: "Weight 1px", demo: "GalleryIconPilotWeight100", note: "Figma's and Fluent's 16px weight."},
-      {id: "weight-1125", title: "Weight 1.125px", demo: "GalleryIconPilotWeight1125", note: "Chosen weight (owner, 2026-09-25): --area-weight-icon. Slightly lighter than 14px/400 text (1.2px stems)."},
-      {id: "weight-125", title: "Weight 1.25px", demo: "GalleryIconPilotWeight125", note: "Cursor's published 16px weight; Notion measures 1.27px."},
-      {id: "reference-fluent", title: "Fluent reference", demo: "GalleryIconPilotFluent", note: "The Fluent 16px Regular icons Area uses today (1px, filled outlines)."},
+      {id: "weights", title: "Weights", demo: "GalleryIconPilotWeights", note: "1px is Figma's and Fluent's 16px weight; 1.125px is chosen (owner, 2026-09-25: --area-weight-icon), slightly lighter than 14px/400 text; 1.25px is Cursor's published 16px weight."},
+      {id: "set", title: "The set", demo: "GalleryIconCatalog", note: "Every icon, outline and filled at 16px, one group per batch with the newest first."},
     ],
   },
   {

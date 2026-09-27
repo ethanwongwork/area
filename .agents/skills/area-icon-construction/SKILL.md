@@ -17,6 +17,45 @@ baseline, not an optical standard: its icons are not consistent with each other,
 its sizes and conventions where they help, and let Area's rules win where they disagree. Cursor's paths
 are proprietary. Use its rules and numbers only, and never trace its icons.
 
+## Owner preferences
+
+The owner's decisions so far, so a new batch starts from them rather than from a guess. The
+round-by-round record is in `docs/specs/icons.md`; add each new decision here too.
+
+- **References:** Fluent first for everyday objects (the heart is Fluent's: round lobes, a
+  45° V cleft, straight 45° sides). Figma for inspector and editing marks. Lucide where it
+  is cleaner (moon, code). Cursor for the system. ChatGPT for roundness. When the owner
+  names a reference, follow its construction closely.
+- **Size:** icons should read the same size as their neighbours, judged beside rings. A
+  keyline is a size to reach. The owner prefers an icon's natural proportion (folder about
+  1.2 : 1) scaled up to its keyline over a smaller icon.
+- **Shapes the owner chose:** a sharp classic bolt (flash); a closed eye with lashes (hide);
+  a T with end ticks and a foot (text); three stacked isometric layers; one centred
+  four-point sparkle, no satellites; a fuller five-point star (0.5 inner ratio, r 0.75
+  tips); rotate as reset's own arc mirrored round a small square; a book with one page each
+  side and both edges arched (an M).
+- **Families:** a figure reuses person's head and dome body (people's back figure is cut by
+  the overlap cut, 2.25 between centre-lines). Any shape passing behind another uses that
+  cut.
+- **Asymmetry:** natural forms read better uneven (cloud E: a tall lobe left of centre).
+- **Type glyphs are one family:** T, I, U, S, H share a cap height of 2.5–13.5 and the icon
+  line (T keeps its serifs; bold is the solid B).
+- **Close gap:** battery's terminal sits 2 from the body (`data-gap="close"`, owner-approved),
+  one step under tight; use it only where the owner asks for it.
+- **Solid exceptions:** quote's marks and bold's B are solid shapes, because the thing they show is
+  solid (a bold letter reads bold only when heavy). Letters otherwise fill by weight, never
+  as a solid with knockouts.
+- **Sharp by nature:** flash and flag's swallowtail points are sharp (`data-acute`).
+- **Proportions:** follow the object's real silhouette; a box that is too square and round
+  at the bottom read as a plant pot (archive is landscape, like Fluent's).
+- **Arrows:** reset's corner head is the model for every curved arrow. Heads are balanced
+  about the arriving stroke.
+- **Dislikes:** tiny satellites next to a main shape (sparkle's plus); icons that read as
+  a different object (a shield-like heart, a lens-like globe); shapes that look small
+  beside a ring; rounded points on objects that are sharp by nature.
+- **Review:** show candidates on the Exploration sheet only for open questions, and remove
+  them once the owner chooses. Send a rendered sheet with each batch.
+
 ## The system at 16px
 
 **Weight.** `--area-weight-icon`, 1.125px for Geist. Sources are authored at 1.25px and
@@ -35,11 +74,15 @@ standalone check, that lifts the solid-pixel share at 2× from 0.66 to 0.82.
 | Keyline | Ink box | Centre-line box at 1.125 | Examples |
 |---|---|---|---|
 | square | 13 × 13 | 12 × 12 (2–14) | add, align, bell |
-| circle | ⌀14 | ring r 6.5 | info, status, search, settings, close |
+| circle | ⌀14 | ring r 6 (ink 13.1) | info, status, search, settings, close |
 | horizontal | 14 × 11 | 13 × 10 | eye, check, chevron, more |
 | vertical | 11 × 14 | 10 × 13 | file, phone, pencil |
 
-Circles are drawn larger than squares so they read the same size. Dense shapes (gear,
+Circles are drawn larger than squares so they read the same size. The x.5 edge rule puts
+square icons at 12.1 ink, so rings are r 6 (13.1 ink, about 8% larger, Cursor's 14 : 13) and
+horizontal shapes run 13.1 wide (folder, mail, list, panel). A keyline is a size to reach,
+not only a limit: `--report` flags an icon whose long side is more than 1.5 under it.
+Rings at r 6.5 (14.1) read 16% larger than squares; the owner saw it beside folder. Dense shapes (gear,
 lens with handle) sit about one pixel inside their keyline. Sparse shapes, made only of
 open lines (cross, close, check), reach to within about a pixel of it.
 
@@ -69,7 +112,7 @@ the lint prints every gap and counter with `--report`.
   Grow the small one, or merge it into the large one.
 
 **Shared parts.** A part that appears in several icons is drawn once and reused exactly:
-- ring: r 6.5 at 8,8 (info, status-*, any circled glyph);
+- ring: r 6 at 8,8 (info, help, clock, token, status-available, any circled glyph);
 - check: 45° arms in a 1:2 ratio. Standalone it is 3.5 / 7 (M3 8 L6.5 11.5 L13.5 4.5).
   Inside a ring it is 2 / 4 (M5 8 L7 10 L11 6);
 - corner radius, on the centre-line. The set should feel soft: no container corner is
@@ -82,6 +125,24 @@ the lint prints every gap and counter with `--report`.
 - overlap cut: where one shape passes behind another (shapes' circle), the hidden part
   stops so the gap equals the line (2.25px between centre-lines, 1.125px of space).
   Owner, round 4: 3px read too far;
+- marks (owner, 2026-09-26: every +, −, × and arrowhead is one of a few intentional sizes):
+  - +, − standalone 11px (add, minus); beside or inside a shape 4px (person-add, zoom-in);
+  - × standalone 10px (dismiss); beside or inside a shape 3.5px (volume-off, backspace), a
+    diagonal reading larger than a 4px +; in a status ring 5px (error, the ring's glyph);
+  - arrowheads 5px on standalone arrows, 3px on an icon's main arrow (download, open, undo,
+    log-in, return, trending-up), 2.5px on paired or contained arrows (sort, move, flow,
+    history, repeat, cloud-upload). Rotate keeps 2.25px (2.5 reaches its square) and move
+    2px (four heads on a 12px cross: 2.5 left their barbs 0.3px apart, 2 keeps a standard gap);
+- slash ("off" icons): one slash for every icon, identical in length, angle and ends:
+  `M2 2L14 14` (45°, top left to bottom right, 12√2 long), round caps, in front. Cut the
+  shape with `icon-geometry.mjs slash` one-sided (Fluent's and Lucide's pattern): the shape
+  runs up to the slash from below left and stops an overlap cut short above right (2.25
+  between centre-lines; 2.5 for lines that stay lines when filled). Cutting both sides
+  removed twice as much and broke wi-fi and link apart. A shape too narrow for the slash to
+  run into (mic's capsule, where the slash runs down its length) stops short on both sides.
+  Keep the base icon exactly (wifi-off is wifi; a wider one takes the circle keyline).
+  Outline pieces are `line`s; a solid shape is a whole `fill` parted by one `gap` above the
+  bold slash; a line glyph's filled lines are `stroke` pieces cut 2.5
 - dots: ⌀2 for standalone dots (more), on whole-pixel centres so they fill 2 × 2 pixels
   at 1×. ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning).
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
@@ -134,6 +195,14 @@ separately. Filled is about emphasis and layers, not flooding the shape:
     as a notch;
   - `gap`: a separation that exists only in the filled variant, such as the line between
     the bell's body and its clapper (Fluent does the same).
+  - `line`: a layer line drawn only in the outline, whose place a `gap` takes when filled.
+    Use it for a curved layer line a cut can't extend straight out of (database's band).
+    An unmarked stroke is drawn on top of the fill and would close its own gap;
+  - `fill`: a solid drawn only in the filled variant (a slashed icon's whole shape).
+- **Only closed parts that are the object fill.** A band, handle or stand that joins solid
+  parts stays a line (headphones' band); if one closed path would fill the space between
+  parts, split it. A shape in front of another (printer's sheet) needs a `gap` where it
+  overlaps. Review every filled variant with `icon-sheet.mjs filled`.
 - **Line glyphs fill by weight.** An icon with no solid shape (add, check, arrows, link,
   reset…) gets its filled variant by drawing every stroke at 4/3 of the icon weight
   (1.5px, Fluent's filled line), with dots grown by the same amount. The same applies to
@@ -223,18 +292,27 @@ base.css sets the line from `--area-weight-icon` and the size curve.
 2. **Draw** in `apps/docs/assets/area-icons-pilot/<name>.svg`, using absolute commands and the
    attributes of the existing sources. Generate parametric shapes, such as the gear, with
    a script and solve for grid-aligned values; don't nudge by eye.
+   `apps/docs/scripts/icon-geometry.mjs` rounds a polygon's corners with arcs (`fillet`,
+   `open-fillet`) and mirrors a half-drawing across x = 8 (`mirror`). Use only path,
+   circle and rect: the lint rejects anything it cannot measure (an ellipse was once
+   skipped silently).
 3. **Lint** with `node apps/docs/scripts/gen-pilot-icons.mjs --report`. It checks the 0.5px
    grid, the diagonal lattice, the keyline, gaps, the live area (centre-lines within
    1.5–14.5), angles and attributes, and prints each icon's ink box and centre.
-4. **Review** each icon on `gallery-icons.html`. It is grouped by batch, from
+4. **Review** each icon on `gallery-icons.html`. For a quick look, or to send the owner a
+   batch, render `node apps/docs/scripts/icon-sheet.mjs sheet out.png <icons…>` (16, 32 and
+   96px), `strip out.png <icons…>` (16 and 32px with a blurred copy, the squint test) or
+   `filled out.png [icons…]` (the generated outline beside its filled variant). It is grouped by batch, from
    `apps/docs/assets/area-icons-pilot/batches.json`, which also records the owner's status
    for each icon (approved, revising, review), shown in the component gallery's status
-   colours (Complete, In review, Unrefined). Add each new batch there. Each batch opens
-   with the whole set so far as a grid, one labelled row per batch at 16px with the new
-   batch last: judge every new icon against the set it joins. A tile shows the
-   icon at every size on the size curve, 3× plates against Fluent, and the icon inside a
-   Button, Badge, Menu item and Nav item (the current item uses the filled variant) beside
-   Fluent's. Directional families are one drawing with `data-rotations` (quarter turns,
+   colours (Complete, In review, Unrefined). Add each new batch there as `review`, and set
+   an icon you change back to `review`; everything the owner has looked at is approved
+   (owner, 2026-09-26). The page opens with **In review** (a card per open icon, newest
+   batch first), then **All icons** (every icon, outline and filled at 16px, one group per
+   batch, newest first; a dot marks an icon in review; a cell links to its card), then the
+   approved cards, one closed section per batch. A card shows the icon at every size on the
+   size curve, 3× plates (Area, Fluent, Area over Fluent, filled) and the icon in a Button,
+   icon Button, Badge and the current Nav item (filled). Fluent's. Directional families are one drawing with `data-rotations` (quarter turns,
    `flipx` / `flipy` mirrors or `transpose`); never redraw a variant. Only the owner marks
    an icon approved. Then **compare** the set on `gallery-iconography.html`:
    - *Side by side*: Fluent and Area at 16px and at 4× on the pixel grid with the

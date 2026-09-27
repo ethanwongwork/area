@@ -807,3 +807,530 @@ diagonal does.
 **Remote review:** `batch5-sheet.png` renders the review content with headless Edge (the
 whole-set grid, then each icon's sizes, filled variant and contexts), so the owner can
 review from chat.
+
+## Batch 6: everyday, and owner round on batches 4–5, 2026-09-25
+
+Nine new icons (91 in the set) and one derived variant:
+
+| Icon | Construction |
+|---|---|
+| minus | add's horizontal bar, M2.5 8 H13.5 |
+| refresh | reset mirrored (`refresh:flipx` on reset), not a new drawing |
+| send | a paper plane: tip 14.5, 8, back corners 2, 2 and 2, 14, fillets r 1, notch at 4.5, 8 as an r 2 curve |
+| home | walls 2.5–13.5, a 45° roof to an apex at 8, 2 (r 1), r 1.5 base corners; a U door 3 wide (knockout) |
+| mail | 11 × 9 frame, r 2; the flap is a `cut` from the sides at y 5.5 to an r 1.5 vertex |
+| chat | 11 × 9 bubble, r 2; the tail runs at 45° from 5.5, 11.5 to 2.5, 14.5 (r 0.75) |
+| image | 11 × 11 frame, r 2; an r 1.5 sun (hole, tight to the frame); a 45° hill with an r 1 peak (a `cut`) |
+| mic | a 4 × 7.5 capsule; an r 5 holder a standard gap below it; a 1.5 stem |
+| help | ring r 6.5; an r 1.5 hook, a standard gap from the ring; info's ⌀1.5 dot and stem gap |
+| bookmark | 9 × 12.5, r 1.5 top corners; a 61° notch to 8, 12 |
+
+Notes:
+- The lint samples `rect` as square-cornered, so mic's capsule is a path; a rect with a
+  large radius near another shape measures too close.
+- Audit: send reads −16% by hull (a triangle, like pencil's diagonal) and mic −10%; image
+  is the densest (+16%).
+
+**Owner, same day:** rotate still needs work (look at reset's arrow); a different design
+for the plus beside sparkle; the star is too round; the heart is not heartlike.
+Candidates are on the Exploration sheet (round-3 rotate candidates removed):
+- **Rotate:** reset's arc is a near-full circle (318°, r 5.59 at 8, 8), with its head at
+  the circle's upper corner. A square inside a mirrored reset collides with the head's inward barb, so a
+  search placed the arc, head and square on the gap scale (37 layouts). The candidates:
+  - A: a 300° wrap (r 5.7) round a 5px square, 2.5 head (gaps 1.99, 1.41);
+  - B: reset's own arc mirrored round the square, 2.25 head;
+  - C: reset's arc and 3px head as a half-wrap over the square (Figma's layout; 1.91, open);
+  - D: reset mirrored with no square, like Fluent's and Lucide's rotate (it duplicates refresh).
+- **Sparkle:** A, a small solid sparkle (a stroked one this small leaves a pinhole); B, a
+  ⌀2 dot; C, a small sparkle and a dot; D, one larger centred sparkle.
+- **Star:** B, sharp tips (r 0.5) and valleys; C, slimmer (0.42) with r 0.25 valleys; D, a
+  fuller 0.5 ratio with r 0.75 tips. Tips under 60° need `data-acute="sharp"`, which
+  the owner must approve (as for flash).
+- **Heart:** C, a deeper cleft with straight sides and an 80° point; E, convex sides and a
+  90° point; F, convex sides and a 70° point. The current heart's lobes are under a
+  semicircle, so it reads as a shield.
+
+**Owner, round 2 (same day).** Chosen and applied:
+- flash stays the sharp classic bolt; hide stays the closed eye; text stays the T with
+  ticks and a foot; layers stays three stacked layers;
+- sparkle is D, one larger four-point sparkle centred at 8, 8 (the satellite plus is gone);
+- star is D: a 0.5 inner ratio with r 0.75 tips and r 0.25 valleys (53° tips). The fillets
+  are arcs, so it needs no `data-acute` exception;
+- rotate is B: reset's own arc (r 5.59 at 8, 8) mirrored, a 2.25 head, a 5px square at
+  8, 8.5. The owner asked for the square to be more centred. Neither centred layout holds:
+  - a concentric arc (centre 8, 8.5) brings the head's inner barb to 0.82px from the square;
+  - a smaller square (h 2) at 8, 8 leaves a 1.7px blot of a counter;
+  - a square at 8, 8 needs h 3 for a standard gap, which also meets the barb.
+  The square stays 0.5 low, the only layout on the gap scale with this head.
+
+Open, on the Exploration sheet:
+- **Heart**, deeper clefts: G (lobe centres 2.75 apart, r 3.25), H (3 apart), I (deep, 90°
+  point), J (deep, 60° point), beside round 1's E and F;
+- **Book**: A follows the owner's reference (arched pages over a cover whose bottom curves
+  down to the spine, tight gaps 1.34); B is one page each side with the top and bottom both
+  arched (a McDonald's-arch M); C has arched tops and a gentler bottom.
+
+**Owner, round 3.** Heart follows Fluent's heart: r 2.83 lobes at 5, 6 and 11, 6, a 45° V
+cleft to 8, 4.5 and straight 45° sides to an r 0.5 point at 8, 13, all on the lattice
+(ink 13.1 × 11.2, 0.23 high; a lower shift leaves the lattice). Book: A and B kept; A2–A4
+lower the pages toward the cover's size (page bottoms raised at the spine to keep the
+tight gap to the cover); C dropped.
+
+**Owner, round 4.** Book is B: one page each side, the top and bottom both arched
+(M8 5.5 C7.5 3.3 4 2.5 2 4 V11.5 C4 10.2 7.5 10.8 8 13, mirrored; the spine a cut).
+Book candidates removed; the Exploration sheet is empty.
+
+**Optical balance review (owner: folder beside info reads unbalanced).** Sources: Cursor
+(minoradventures.co, "The making of Cursor's icons": four keyline shapes, circles drawn
+larger than squares to look equal); Streamline ("Grids and key shapes": key shapes are
+sizes to reach, and a horizontal rectangle takes the circle's width); the blur test.
+Finding: the x.5 edge rule puts square icons at 12.1 ink and horizontals at 12.1 wide,
+while rings fill 14.1. Rings run about 16% larger than squares; Cursor's ratio is about
+8% (14 : 13). Proposal pending the owner: rings at r 6 (ink 13.1) and horizontals 13.1
+wide, keeping squares at 12.1.
+
+**Applied (owner: "do the changes from the audit").**
+- Rings r 6.5 → r 6 (ink 13.1): info (stem 7.5–11, dot 4.625), help, clock, token (inner
+  ring r 3, standard), status-available. Audit: +16% → +7%.
+- Horizontals to 13.1 wide: folder 12 × 10 on the centre-line (1.2 : 1, nearest the 11 × 9
+  proportion the owner liked; tab to 7, 3, a 45° step to 8.5, 4.5, flap cut at y 6), mail
+  and panel-left 12 × 9, list 12 long.
+- eye-off up 1 (centre 9.25 → 8.25; the lid carries the mass). Text's bar 11 and foot 5
+  (was 10 and 4). Send's back corners at 2, 1.5 and 2, 14.5, notch 4.5: −16% → −14%,
+  ink centred 8.11 toward the tip (a triangle's mass sits at its base).
+- `--report` flags icons more than 1.5 under their keyline. Remaining: line glyphs
+  (check, chevron, more), corner, dismiss, settings (dense, 1px inside by design), lock
+  (1.88) and reset (1.7).
+
+## Batch 7: controls and system, 2026-09-25
+
+Toward a full set (108 icons with derived variants). New drawings:
+
+| Icon | Construction |
+|---|---|
+| menu | three 11px lines at y 4, 8, 12 (open gaps; the middle line must sit on 8) |
+| grid | four 4 × 4 squares, r 1, 3 apart (standard) |
+| more-vertical | more-horizontal turned 90° (`data-rotations`) |
+| play | a triangle 3–14.5 × 1.5–14.5, fillets r 1.25 (back) and r 1 (tip); −12% by hull like send |
+| pause | two 3 × 12 bars, r 1, 3 apart |
+| undo / redo | reset's 3px corner head at 2.5, 5.5 on a line that turns down an r 4 arc; redo mirrors it |
+| sun | an r 2 disc; eight 1px rays from r 5 to r 6 (standard gap), diagonals through the centre stay on the lattice |
+| moon | Lucide's construction: an r 6 disc bitten by an r 6 circle at 14, 2; tips at 8, 2 and 14, 8 meet at 90°. A smaller bite (r 4.75) left 0.22px blots at the tips |
+| desktop | a 12 × 8.5 screen, r 2; a 2.5 stand and a 5px foot |
+| code | two chevrons with 4px legs, 4 apart |
+| terminal | panel's 12 × 9 frame; a prompt chevron (2px legs) and a 2.5 underscore (knockouts) |
+| error | dismiss's cross, 5px, inside the r 6 ring (tight gap) |
+| unlock | lock's body and keyhole; the shackle arc stops at −25° (a standard gap to the body) |
+| share | an up arrow (3px head, apex at 8, 2) out of an open box 9 × 6, r 1.5; heavy base, so the ink sits 0.25 high |
+| globe | r 6 ring, an r 3 × 6 meridian, an equator; pockets 1.86 (standard). Densest in the set (+40%); a lighter candidate without the equator is on the Exploration sheet |
+
+Deferred: paperclip, tag and people. Their nested strokes need a construction pass to hold
+the gap scale at 16px.
+
+**Tooling, same day.** The lint now samples a `rect` with its radius (it had sampled square
+corners, which hid two near misses: auto-layout's check, now 1px lower, and flow-free's
+lower box, now 0.5 right) and rejects `ellipse`, `line`, `polyline`, `polygon`, `g` and
+`use`, which it cannot measure. `scripts/icon-geometry.mjs` (fillets, mirroring) and
+`scripts/icon-sheet.mjs` (review sheet, balance strip) replace ad hoc scripts. The skill
+has an "Owner preferences" section.
+
+## Batch 8: objects, 2026-09-25
+
+| Icon | Construction |
+|---|---|
+| attach | three parallel strokes along the diagonal, 3 apart (standard): an r 1.5 inner turn and an r 3 outer turn. Spacings of 3 cannot sit on the 45° lattice (2√2 and 2.5√2 are both near misses), so it is `data-angles="free"`; lengthened once for size (−18% → −11%) |
+| tag | Lucide's pentagon on the lattice: 2.5, 2.5 → 7.5, 2.5 → 14, 9 → 9, 14 → 2.5, 7.5; r 2 at the square corner, r 1.5 at the point, r 1 elsewhere; a ⌀2 hole at 6, 6 (standard) |
+| people | two r 2 heads a tight gap apart; the front body is person's at width 7; only the back figure's shoulder shows, closed along the bottom a standard gap from the front body |
+| zoom-in / zoom-out | search's lens and handle; a 4px plus or minus inside (standard to the lens) |
+| flag | a pole at 2.5 and a cloth 2.5–14.5 × 2.5–8.5 with a 3px 90° notch on the lattice; outer corners r 1, notch r 0.5. The first cloth's shallow notch read as a P |
+| archive | an 11 × 3 lid, r 1 (a cut in the filled variant); a 9 × 8 box, r 1.5; a 3px slot (knockout) |
+| cloud | an r 4.5 and an r 2.5 circle on a flat base at 12.5 (Lucide's construction) |
+| phone | a 9 × 13 device, r 2; a 3px home bar a tight gap from the bottom |
+| camera | a 12 × 8.5 body, r 2, with a 45° viewfinder bump to y 3; an r 2 lens (tight to the body) |
+| cart | a handle into a slanted basket (free angles, filleted), ⌀2 wheels a tight gap below |
+
+**Batch 8, visual pass (owner: paperclip, people, cloud), against Fluent's 16px cuts.**
+- People follows Fluent: a front figure (r 2 head, a 7 × 4.5 body with round ends) and a
+  back figure with a smaller r 1.5 head (a standard gap from the front one) and only its
+  shoulder showing. The domed version read as two "D"s, and equal heads lost the
+  front/back order. Candidate B uses person's dome bodies for family consistency.
+- Cloud has three lobes, like Fluent: an r 4 dome on r 2.5 side lobes that form a round
+  bottom. The two-lobe Lucide cloud read as a blob.
+- Paperclip's inner strand is 1 shorter (density +22% → +19%); Fluent's topology matches.
+- Flag: candidate B has sharp swallowtail points like Fluent's; applying it needs the
+  owner's `data-acute="sharp"` approval, as flash did.
+- Tag, zoom, archive, phone, camera and cart hold up against Fluent.
+- Gallery: the whole-set tile now sits above the square-celled grid and grows with the set,
+  one row per batch labelled "Batch N".
+
+**Batch 8, owner round 2 (2026-09-26).**
+- People uses person's parts: an r 2 head and person's dome body (7 × 3.5, r 3 shoulders).
+  The back figure is the same drawing offset 5 right and 1.5 up, cut where it passes behind
+  the front one by the overlap cut (2.25 between centre-lines, 1.13 of space), as shapes
+  does. The cut is solved numerically (every visible point at least 2.25 from the front
+  figure's outline).
+- Flag's swallowtail points are sharp (`data-acute="sharp"`, owner-approved: "the ends are
+  too round"); the notch keeps r 0.5. The cloth is 11 long so the ink stays centred.
+- Archive is landscape like Fluent's: a 13 × 3 lid over an 11 × 7 box. The square,
+  narrower box with round corners read as a plant pot. The lid's cut stops at its corners.
+- Cloud is asymmetric; six candidates on the Exploration sheet after Fluent, Lucide,
+  Material, Heroicons, SF Symbols and Phosphor, built from lobes on one base.
+- Paperclip: five candidates (applied diagonal, upright on the pixel grid, Fluent's
+  proportions, inverted, slim with tight strands).
+
+**Owner, round 3.** Cloud is E (after SF Symbols): an r 2.5 left lobe, a tall r 3.5 lobe left
+of centre and an r 3 right lobe on a base at 12.5 (ink 13.1 × 10.1, centred). Paperclip:
+eight candidates varying the outer end (e 6.5 to 3) and the inner strand; G and H lengthen
+the body so a shorter end keeps the size. Each is recentred on its ink box.
+Round 4 (paperclip): the owner wants a longer inner strand and an outer end a little
+shorter than G. The inner end must clear the r 3 outer turn on the gap scale: open while it
+stops at least 2.03 short of the turn's start (a ≤ 1.97), standard once it reaches within
+0.875 of it (3.125 ≤ a ≤ 4); between is a near miss. Candidates I–L on the Exploration
+sheet. The lint measures gaps between shapes only, not within one path, so this was
+solved by hand.
+
+**Round 5 (paperclip): I applied** (inner end a 1.9, outer end e 4; candidates removed).
+
+## Batch 9: text and objects, 2026-09-26
+
+| Icon | Construction |
+|---|---|
+| bold | a B: stem at 4.5, r 2.75 bowls (the lower one 1 wider), a middle bar (cut) |
+| italic | an I slanted 11 over 3, with 6px serifs (free angles) |
+| underline | a U (r 3.5 bottom) and a 9px rule a tight gap below |
+| quote | two opening marks: solid ⌀4 drops on whole-pixel centres with r 3.5 tails. Hollow drops read as "66"; a tail that met the drop's edge trapped a 0.18px sliver, so tails start 0.5 inside |
+| hash | an upright # on the 0.5 grid |
+| at | an r 3 bowl and an r 6 outer arc (standard) with a stem and hook (Lucide's construction) |
+| key | an r 3 bow on the 45° lattice, a shaft to 13.5, 2.5, and two teeth 4.24 apart (open); a smaller bow read −24% |
+| shield | Lucide's shield: shoulders from a peaked top, sides curving to a point (free angles) |
+| gift | archive's lid-and-box on a smaller scale, a ribbon (cut) and two bow loops (tight pockets, satellites) |
+| map | three panels folded at 6.5 and 9.5 (cuts), edges sloping 1.5 |
+| chart | an L axis and three bars 3 apart (standard), a standard gap above the base; bars alone were the lightest icon (−42%) |
+| table | the r 2 frame with a header line, a row line and a column line (knockouts) |
+
+The text glyphs sit at 12.1 tall like text's T, so the toolbar family lines up; the
+keyline flag on them is expected.
+
+**Batch 9, owner round 1.** Bold's filled variant (a solid B with a cut middle bar) looked
+wrong: a letter fills by weight like the other line glyphs, applied. Candidates on the
+Exploration sheet:
+- Bold: A, the thin B; C, a solid heavy B like Fluent's (quote's solid exception). A heavy B
+  drawn as a thin contour (Phosphor) cannot hold the gap scale at 16px: its waist came
+  0.75 from the counters. Fluent's regular bold is itself heavy, so a thin B reads as
+  "B", not "bold".
+- Key: A applied; B Fluent's round head with a hole and a stepped bit (one outline, blade
+  edges on the lattice at x + y = 13 and 18, teeth stepping out to 19); C upright on the
+  grid; D horizontal.
+- Shield: A applied (Lucide); B Fluent's peaked top and flat shoulders; C a heater
+  shield (flat top, sides arcing to the point); D a soft dip at the top.
+- Chart: A applied; B three pill bars (circle keyline, 13.6 wide); C a line chart on the
+  axis; D a pie with its slice pulled out a tight gap; E a trend arrow with reset's head.
+Owner chose: bold C (a solid heavy B, counters on the 0.5 grid, like Fluent's), key A, shield
+A, chart C (a line chart on the L axis: 45° segments on the lattice, tight gaps to the axis).
+
+**Owner, round 2.** Bold's walls are even: every stroke of the solid B is 2.5 (the bowls are
+circles concentric with their r 1 counters, r 3.5, meeting at a waist at 11.4, 7.96). Its
+ink is 9 × 11.5 on the text baseline (bottom at 14, like T), so it sits 0.25 low. Shield:
+the owner wants it wider, after Fluent: candidates at 10 (applied), 11 and 12 wide (the
+Lucide drawing scaled across). Key: the owner likes the diagonal but not the style;
+candidates after the owner's reference (a round head with a solid dot, an outlined blade on
+the lattice at x + y = 14 and 19): B with a stepped bit, C with a round tip, D with steps
+cut into the upper edge.
+
+**Batch 9, owner round 3.** Bold: "too thick, go with the second one" (Fluent's weight):
+a solid B with even 2px walls (counters 3 tall, r 1.5; bowls r 3.5), 9 × 12, centred.
+Shield B (11 wide) and key A kept. Map's filled variant (three solid panels split by cuts)
+looked poor; it fills by weight. Gift's filled variant gets a cut under the lid. Quote
+candidates: A opening drops (applied), B closing drops (Fluent filled), C closing marks
+with hollow heads (Fluent regular; tails start 0.5 inside the ring, which clears a 0.18px
+sliver), D Lucide's blocks, E a block-quote bar with text lines (Notion).
+
+## Batch 10: editing and devices, 2026-09-26
+
+| Icon | Construction |
+|---|---|
+| strikethrough | an S as two r 2 quarter-hooks (Lucide) a tight gap either side of an 11px rule (2.25 failed at 1.5px) |
+| heading | an H, 9 × 11 |
+| list-bullet | ⌀2 dots at 3, 4 / 8 / 12, a standard gap from 7px lines (a numbered list's numerals cannot read at 16px) |
+| wifi | three 86° arcs, r 3.5 / 6.5 / 9.5, 3 apart (standard), and a ⌀2 dot |
+| bluetooth | the rune on the 45° lattice, spine 2–14 at x 8; r 0.5 fillets (r 1 cut the spine back, −25%) |
+| battery | a 10 × 7 body, r 2, and a 3px terminal a standard gap to the right |
+| plug | two prongs, a U body (r 4.5) and a cord |
+| power | an r 5.5 arc open ±45° at the top, a 5.5 stem (open gap to the arc ends) |
+| printer | Lucide's: a paper tray on top, a body whose lower edge runs into an output sheet |
+| headphones | an r 5.5 band into two 3.5 × 4.5 cups (Lucide) |
+| video | a 9 × 8 body, r 2, and a lens trapezoid (free angles) |
+| inbox | a trapezoid tray (filleted) with a dipped front edge (a cut) |
+
+**Filled review, 2026-09-26.** Cursor (minoradventures.co): filled icons are solid shapes
+with interior details knocked out of the fill, separations keep a minimum gap, and only the
+icons the product needs get one. Area matches the construction; it differs in giving every
+icon a filled variant and in filling line glyphs by weight (1.5px), which Cursor does not
+describe. Reviewed all 143 with `icon-sheet.mjs filled` (outline beside filled at 16 and
+32px). Fixed:
+- headphones: the band and cups were one closed shape, so the fill made an arch; only the
+  cups fill now, the band stays a line;
+- printer: the output sheet merged with the body; a `gap` (M4.5 11 V9 H11.5 V11)
+  separates it;
+- gift: a cut under the lid (with the ribbon's cut);
+- map and bold (earlier): fill by weight / stay solid.
+Quote A kept (candidates removed). Battery's body is 10.5 wide, so its terminal sits a
+tight gap (2.5) from it.
+
+**Owner questions, 2026-09-26.**
+- Globe: A (ring, meridian, equator; applied) or B (no equator; reads as a lens). Fluent's
+  two latitudes (C) cannot hold at 1.125: they leave 0.99px pockets at the ring.
+- Battery: the terminal moved from 3 to 2.5 (the tight step). Candidate B attaches a solid
+  nub, as Fluent does.
+- Bluetooth: redrawn sharp (`data-acute="sharp"`, sharp by nature like flash and flag);
+  the r 0.5 fillets read as a soft "B".
+- Strikethrough: Lucide splits the S into two hooks (A, applied); Fluent, Phosphor and
+  Heroicons draw a full S whose bowls meet the rule (B, r 2.75 bowls tangent to the rule).
+- Fluent references: the gallery compared against Fluent only for icons in its Fluent map,
+  which batches 5–12 never joined. `gen-icons.mjs` now generates FluentRef<Name>Icon and
+  its filled cut for every newer icon (20px cuts where Fluent has no 16), and the gallery's
+  side-by-side, filled and tile plates use them.
+- The intermittent typecheck failure is the dev server rebuilding `packages/react/dist`
+  (TS7016: no declaration file for `@area/react`) while tsc reads it; rerun once it settles.
+
+## Batch 11: everyday objects, and Batch 12: system and tools
+
+| Icon | Construction |
+|---|---|
+| thumbs-up / down | a 3 × 7 cuff (r 1) and a filleted hand (free angles); down mirrors up; a `gap` separates cuff and hand when filled |
+| smile | the r 6 ring, ⌀2 eyes (tight), an r 3 mouth |
+| briefcase | a 12 × 8.5 case, r 2, a handle and a belt (cut) |
+| building | a 10 × 12.5 block, r 2, four ⌀2 windows and a door |
+| compass | the r 6 ring and a solid needle with sharp tips (a hole when filled); a stroked needle trapped slivers at its tips |
+| crop | two L marks on the grid |
+| trophy | a cup (r 3.5 bowl), handles that meet the cup at 165°, a stem and a base |
+| coffee | a mug, a handle and two steam ticks (tight) |
+| database | an r 5.5 × 2 top, walls, a band (a cut with 0.25 lead-ins inside the walls) and a `gap` under the top when filled |
+| server | two 12 × 5 units, r 1.5, a ⌀1.5 light each |
+| scissors | two r 2 rings and crossing blades on the 45° lattice |
+| log-in / log-out | a bracket (r 1.5) and a 3px-head arrow into or out of it |
+| keyboard | a 12 × 10.5 body, r 2, five staggered ⌀1.5 keys and a space bar; three keys over a bar read as a face |
+| pointer | a filleted arrow cursor (free angles) |
+| move | a cross with four 2px heads on the lattice |
+| hourglass | two bars and two solid bulbs meeting at 8, 8 |
+| loader | an r 6 arc, 290° |
+
+## Consistency pass, 2026-09-26 (152 icons, then 162)
+
+- Optical size (audit, solid shapes): only quote (−15%) and flash (−12%) read small, both
+  accepted (quote marks are small in type; flash is the approved bolt); printer and
+  building +11%. Line glyphs, triangles and diagonals read small by hull, as recorded.
+- Density: globe (+53%, open) and gift (+46%, the bow) are the heaviest; corners and
+  square-dashed the lightest, by nature.
+- Centring: every off-centre icon is a recorded optical exception (pointed shapes on the
+  lattice, heavy bases sitting high).
+- Families: person and people share parts; lock and unlock; search and zoom; the r 6 ring
+  across info, help, error, available, clock, token, globe, smile, compass; arrowheads 3px
+  (rotate and sort smaller by design); ⌀2 standalone dots and ⌀1.5 dots with a stem.
+- Radii: r 2 large frames, r 1.5 mid containers, r 1 small parts. Fixed building (r 1.5 →
+  r 2) and auto-layout's 4px boxes (r 1.5 → r 1, like grid and the flow family).
+- Filled: every knockout and cut is at the icon weight; layer cuts end square, inner
+  details round; line glyphs fill at 1.5; sharp shapes only where sharp by nature (flash,
+  flag, bluetooth, compass's needle). Fixed headphones, printer, gift, thumbs and database.
+
+**Owner, round (batch 10).** Globe A kept; candidates removed. Battery A with the terminal
+closer: 2 between centre-lines (0.88 of space), one step under tight. The 0.5 grid has no
+step between 2 and 2.5, so this is an owner-approved exception, `data-gap="close"` (the
+lint allows it down to 0.875 on that icon only). Bluetooth B (Fluent's): arms from 3.5 at a
+shallow angle to loops reaching 12.5 on the lattice, spine at 8.5, sharp by nature; loops
+at 12 left 1.7px pockets. Strikethrough is a letter S built like the other type glyphs: cap
+height 2.5–13.5 (T, I, U, H), r 3.5 × 2.75 bowls meeting a 10px rule at 8, 8. T keeps its
+serifs; bold stays the solid B.
+
+**Bluetooth B applied:** Fluent's rune scaled to the 2–14 spine: arms from 4, 5 and 4, 11
+through the centre (slope 0.75, free angles) to loops at 12, 5 and 12, 11; spine at 8.
+
+## Batch 13: media and commerce, 2026-09-26
+
+| Icon | Construction |
+|---|---|
+| volume / volume-off | one filleted speaker (2–8); two waves (r 3.5 and r 6.36, tight) or a 3px × |
+| music | two r 2 heads an open gap apart, stems and a sloped beam |
+| film | the r 2 frame, two rails and perforation ticks (knockouts; 3px cells) |
+| credit-card | mail's 12 × 9 frame, a stripe (cut) and a chip line a standard gap from it |
+| wallet | a body with a rounded back flap and a clasp; a `gap` under the flap when filled |
+| receipt | a strip with a filleted zigzag foot and two lines (knockouts) |
+| lightbulb | an r 4 bulb closing into a neck, a 3px base a tight gap below |
+| megaphone | a filleted horn (free angles) and a handle hung from its lower edge (an r 2 loop; r 1.5 left a 1.66 pocket) |
+
+**Batches 11–13, owner round (2026-09-26).** Applied:
+- volume-off: a 3.5px ×; film after the owner's reference: rails, side perforations
+  every 3 and a centre divider (3 × 3 cells); database: the band is an outline stroke and
+  both layer separations are filled-only `gap`s run past the silhouette (the cut's lead-ins
+  showed in the outline); coffee: three squiggly steam lines a tight gap above a lower mug;
+  compass after Fluent: an outlined needle NW–SE, r 0.75 tips, standard to the ring;
+  briefcase after Fluent: a split band and a clasp (a hole when filled), handle 6–10;
+  thumbs after Lucide: one outline with the cuff divided by a cut (the separate cuff and
+  angular hand read wonky).
+- `icon-sheet.mjs sheet` now leaves out filled-only gap paths, which it had drawn.
+Exploration: megaphone (sound lines are on theme, like sun's rays and wi-fi; the horn
+shrinks to 8 wide to make room), receipt (Fluent's roll, and the owner's torn-top
+reference; bullets could not fit the 8px text area), lightbulb (Fluent's connected bulb,
+and a version with four rays), trophy (Fluent's pedestal, and no handles). The owner's
+trophy reference, with handles from a wide rim, left 1.06px pockets at 16px.
+
+**Batches 11–13, owner round 2 (2026-09-26).** Picks: megaphone A (no sound lines),
+receipt C (a torn top and Fluent's roll, square keyline), lightbulb B (Fluent's connected
+bulb), thumbs A (the Lucide outline), briefcase and compass after Fluent's cuts. Applied:
+- film: a square 12 × 12 frame (wider), 3px perforation columns, a 6px frame between;
+- coffee: steam as three vertical S curves (one cubic each, ±0.43 bulge, 3 tall, 3px
+  apart: standard), after the owner's reference; the mug is 6 tall (8–14) so the steam
+  sits a standard gap above it inside the keyline;
+- briefcase: body 2–14 × 5–13.5, a taller r 1.5 handle (5.5–10.5, top 2), a straight
+  full-width band (a cut) and the clasp on it (a hole when filled). Fluent's band curves
+  into the walls; that left a 0.18px sliver at our weight;
+- compass: Fluent's leafier needle: tips 4.75 from centre, sides 2, r 0.75 tips and
+  r 2.5 side corners; tight (1.31) to the r 6 ring, which keeps the set's ring size;
+- database: the filled variant drew the band stroke on top of its own gap, closing it.
+  New role `line`: a layer line drawn only in the outline, replaced by a `gap` when filled.
+Exploration: trophy with wider handles round a narrower cup (5–11): round, squared
+(Fluent's) and open loops.
+
+**Trophy (owner pick E, 2026-09-26).** Fluent's trophy: an r 1.5-shouldered cup 5–11
+(2 → 8.5), squared handles out to 2 and 14 (r 1 corners, r 2 back into the cup at y 7;
+standard pockets), a stem 8.5–11 and a pedestal base (r 2 top corners, flat foot, 11–14).
+
+## Batch 14: tools and actions, 2026-09-26
+
+| Icon | Construction |
+|---|---|
+| person-add | people's front figure (head r 2, 7-wide body), up 1; a 3px plus a standard gap from the head |
+| history | reset's arc round clock hands (8,5.5 → 8,8 → 10.5,8); the head is the 2.5px secondary size so the hand keeps a tight gap |
+| save | a 12 × 12 page with the top-right corner cut (r 1 at the cut, r 2 elsewhere), a shutter and a label (knockouts) |
+| bug | after Lucide: a U head (a tight 1.43 counter; a half-disc head closed to 0.93) on an r 1.5-shouldered body, curved legs up and down and straight middle legs; a `gap` parts head from body when filled |
+| eyedropper | along the rising diagonal (free angles): a 2.5-wide tube with an r 0.5 tip, a 6px collar line and an r 1.75 bulb |
+| paintbrush | a head with r 1 top and r 1.5 bottom corners, a ferrule (cut) and a bristle notch (knockout), a 3-wide round-ended handle |
+| puzzle | an 8.5 square (r 1.5) with r 2 knobs on the top and right edges (Lucide's layout) |
+| ruler | an upright 7 × 12 bar (r 1.5) with ticks every 3 from its left side, long, short, long (knockouts) |
+
+## Batch 15: off states and objects, 2026-09-26
+
+**Slashed icons.** One slash, 2,2 → 14,14, drawn in front. `icon-geometry.mjs slash` cuts
+the shape's outline open where it passes within 2.25 of the slash (an overlap cut: 1.125
+of space at 1.125) and drops stubs under 2px; a line that stays a line when filled (mic's
+stand) clears 2.5 so it keeps 1px beside the 1.5px slash. The pieces are `line`s (outline
+only); the whole shape is a `fill` (filled only), parted by two `gap`s either side of the
+slash (0.75 + 0.5625 off its centre-line). New role `fill` in the generator.
+
+| Icon | Construction |
+|---|---|
+| bell-off / mic-off / video-off | bell, mic and video cut round the slash; video's body narrowed to 2–10.5 so the icon fits the square keyline |
+| calculator | an 11 × 12 r 2 body, a display line an open gap above 3 × 2 ⌀1.5 keys (tight gaps; ⌀2 in 2 × 2 read as a die) |
+| graduation-cap | a flat diamond board (r 1 corners, side corners solved to reach x 2 and 14), a skirt (r 3.5 × 2 bottom), a tassel from the right corner; a `gap` under the board when filled |
+| car | a 13 × 5 r 1.5 body with headlight lines (knockouts), a cabin with sloped pillars (r 1 top corners), wheel stubs; a `gap` parts cabin and body when filled |
+| package | an isometric box (r 1 corners, free angles); its Y is a `line`, replaced by `gap`s when filled |
+
+## Batch 16: keys and connections, 2026-09-26
+
+| Icon | Construction |
+|---|---|
+| wifi-off | wifi's r 3.5 / 6.5 / 9.5 arcs trimmed to ±40° (±43° is 0.35 too wide for the square keyline), cut 2.5 round the slash (a line glyph: the lines stay lines when filled) |
+| link-off | link's brackets cut 2.5 round the slash; the bar falls wholly inside the cut |
+| cloud-upload | the cloud (up 1) cut open 2.25 round the arrow's stem where it leaves through the foot; filled, the whole cloud with the arrow knocked out through its edge |
+| command | ⌘ after Lucide: r 2 loops round a 4px square (line glyph) |
+| return | a corner arrow (r 2) with undo's 3px head, on the lattice at y 10.5 |
+| backspace | a tag pointing left (45° shoulders r 1, back corners r 2) with a 3px × (knockout) |
+| rocket | along the rising diagonal, scale 1.2: a leaf body (r 3 shoulders, r 1 nose), a ⌀2 window (hole), a fin lobe each side after Lucide (the swept edge axis-aligned, on the grid; standard pockets) and a flame line; swept straight fins read as a paper plane |
+
+`.claude/launch.json` keeps one `dev` entry; `autoPort` finds a free port, so `dev-alt` went.
+
+## Gallery cleanup, 2026-09-26
+
+Owner: the gallery overlapped, and recent work should be at the top; everything already
+looked at counts as approved (batches 1–15 approved; batch 16 in review).
+- **Iconography:** every sheet is a full-width tile that grows with its content
+  (`iconSheet` in build.mjs). The sheets sat in fixed grid cells, and at 193 icons each
+  spilled over the next. The per-weight lists (four 2×2 tiles) are one Weights sheet of
+  strips. Optical balance stays open; the long sheets (side by side, filled, sizes,
+  pixels) start closed. Strips wrap to the width.
+- **Icons:** In review first (a card per open icon, newest batch first), then All icons
+  (`GalleryIconCatalog`, replacing the per-batch whole-set strips `GalleryIconBatchSet<n>`),
+  then the approved cards in closed sections, newest batch first. Cards grow with their
+  content in their own grid (`.docs-icon-cards`), with a header (name, status for open
+  work only), a meta line, and labelled rows: Sizes, 3×, In use. The duplicate row of
+  Fluent in components went; Fluent stays on the 3× plates. A link to a card opens its
+  section (the gallery script now opens the section holding any linked element).
+
+## Batch 16, owner round (2026-09-26)
+
+- **Slash pattern.** Every "off" icon uses the same slash, `M2 2L14 14`, and a one-sided
+  cut (Fluent's and Lucide's): the shape runs up to the slash from below left and stops an
+  overlap cut short of it above right. The two-sided cut (batch 15) removed twice as much;
+  wi-fi's arcs, whose left halves lie within 3px of the slash, all but vanished, and link
+  fell into fragments. Filled, one gap parts the shape above the slash. Mic's capsule is
+  too narrow for the slash to run into (slivers), so it stops short on both sides. Bell,
+  mic and video off are redrawn to the pattern and back in review. `slashCut` gained
+  `oneSided`, drops only pieces the cut shortened (mic's stem is kept whole), and never
+  emits zero-length pieces. New role `stroke` (a filled-only line for line glyphs).
+- The lint counts overlapping inks (a gap below 0) as a join.
+- **Wi-fi off** is wifi exactly (r 3.5 / 6.5 / 9.5 at ±43°, dot at 8, 12.5; circle keyline).
+  **Link off** is link exactly; the bar keeps its lower-left half (Lucide's link-2-off).
+- **Cloud upload:** the cloud exactly as drawn (not moved up), cut open where the arrow
+  leaves through its foot; the arrowhead (2px legs) sits a tight gap from the lobes' inner
+  corner. Candidate B keeps the whole cloud with a small arrow inside.
+- **Rocket** after Fluent: one outline that flares into a small fin each side near the tail
+  (the fins' outer edges axis-aligned on the 0.5 grid), a ⌀2 window, a rounder nose and
+  three flame lines, the middle longest. Fluent's fins are separate lobes with ~0.5px
+  pockets, blots at this weight; at Fluent's size a flared outline reads boxy. Candidate B:
+  small solid fins on the body. Detached solid fins read as corner wedges.
+- **Command:** Fluent's proportions, r 1.5 loops round a 5px square. **Return:** r 2.5 corner.
+- **Car** after Fluent: an 11 × 6 body, a cabin with near-upright pillars and r 1.5 roof
+  corners, mirror tabs where cabin meets body (inks overlap: a join), ⌀1.5 headlights and
+  wheel stubs. **Package** after Fluent's box: broad r 2 top and bottom points, the Y, and a
+  tape line from the top face's edge that stops a tight gap short of the Y (across the face
+  it split it into two near-miss pockets).
+- Kbd renders ⌘ ⏎ ⌫ as text in the keyboard font, not icons; command, return and
+  backspace are for other UI unless Kbd adopts them (owner's call).
+
+## Batch 17: media and everyday, and owner round 3, 2026-09-26
+
+| Icon | Construction |
+|---|---|
+| skip-forward / skip-back | play's filleted triangle (2.5–11.5) and a bar a standard gap from its tip; skip-back mirrors it |
+| stop | an 11px r 2 square |
+| repeat | two r 2.5 rails, each ending in a 2.5px head, their ends a tight gap apart |
+| person-remove | person-add's figure and a 4px minus |
+| clipboard | an r 2 board whose top runs behind a 5 × 3 clip; filled, a gap round the clip's lower half |
+| sticky-note | an r 2 square with its lower-right corner folded (a 4.5px flap, cut when filled) |
+| trending-up | chart's zigzag on its own and a 3px corner head |
+| shopping-bag | after Lucide: sloped shoulders, a band (cut) and a handle smile (knockout) |
+
+Owner round (Fluent's cloud A, rocket, paintbrush, bug, puzzle; marks; details):
+- **Marks and arrowheads** are a few intentional sizes (skill, "Shared parts"): +/− 4px and
+  × 3.5px beside or inside a shape (person-add's plus grew from 3; backspace's × from 3);
+  arrowheads 5 / 3 / 2.5 (move's heads grew from 2, cloud-upload's from 2 with the head at
+  7.75). Rotate keeps 2.25: a 2.5 head reaches its square (1px).
+- **Rocket** after Fluent: separate outlined fin lobes on the body sides (the body line runs
+  between; tight pockets), the front edge swept and axis-aligned, the rear edge continuing
+  the tail; no nozzle; a ⌀2.5 window; three flame lines. Flared and solid fins were rejected.
+- **Paintbrush** after Fluent: one outline (r 0.5 top shoulders, r 2 ferrule, round-ended
+  handle), a bristle line (cut) and two slots of different lengths a tight gap apart.
+- **Bug** after Fluent: a U head (mandibles) on an r 1.5-shouldered body; legs out and up,
+  straight, out and down with r 1 elbows.
+- **Puzzle** after Fluent: an 8 × 8 piece (r 1), r 1.5 knobs on 0.5px necks top, bottom and
+  left, an r 1 socket right. Knobs centred on the edge (no neck) read as a blob.
+- **Mic off** after Fluent: the capsule runs into the slash like every shape. The sliver it
+  leaves under the slash is an owner-approved exception, `data-counter="sliver"` (the lint
+  skips counters for it).
+- **Calculator:** display and key rows evenly 3.25 apart. **Car:** mirrors at y 4 on the
+  pillars, a tight gap above the body (now 6.5–12).
+- Cloud upload A kept; the exploration candidates are gone.
+- **Round 4 (owner):** rocket kept (separate fins). **Car:** mirrors down to y 4.5 on the
+  pillars, the body from 7 (cabin baseline with it) so they keep a tight gap. **Puzzle** after
+  the owner's reference: a 9.5 square (r 1) with ¾-circle knobs (r 1.5, centres 1 beyond the
+  edge, a 2.24 neck) out on the top and left and the same as sockets into the right and
+  bottom, so the piece fills the keyline. **Move:** 2px heads; at 2.5 the four heads' barbs
+  sat 0.3px apart, at 2 they keep a standard 1.7 gap (expand's two 3px heads have the room a
+  four-way cross doesn't).
+- **Round 5 (owner):** **Puzzle:** half-dome knobs and sockets (r 2, centred on the edge) on
+  a 10px square (r 1): knobs top and left, sockets right and bottom. **Bug** closer to Fluent: a
+  6-wide body (r 1.5 shoulders, r 3 base), legs as Fluent's curves (top pair out and up, r 2;
+  bottom pair out and down, r 2.4 so their ends land on the grid). **Paintbrush:** the bristle
+  line at 7.5. **Package:** the tape runs across the whole top face at 0.45 of its depth (a
+  tight and a standard pocket; at the middle both were near misses). **Car:** mirrors at 5.5
+  sit on the body's top corners (Fluent's); a pixel lower but still apart left a 0.4px sliver.

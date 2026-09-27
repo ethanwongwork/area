@@ -692,6 +692,99 @@ export const DOCS_CSS = `
   .docs-visual-gallery__tile[data-span="2x3"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 3; }
   .docs-visual-gallery__tile[data-span="2x4"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 4; }
   .docs-visual-gallery__tile[data-span="2x5"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 5; }
+  /* The whole-set tile grows with the set, so it sits above the square-celled grid. */
+  .docs-visual-gallery__set { margin-block-end: var(--area-space-8); }
+  /* A sheet reads from its top left and scrolls sideways rather than overflowing its tile. */
+  .docs-visual-gallery__sheet { justify-content: flex-start; align-items: flex-start; overflow-x: auto; }
+  .docs-visual-gallery__group-title {
+    margin: var(--area-space-24) 0 var(--area-space-8);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-regular);
+    color: var(--area-fg-muted);
+  }
+  .docs-gallery-count { color: var(--area-fg-muted); }
+  /* Icon review cards: as tall as their content, in columns that fill the width. */
+  .docs-icon-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--area-space-64) * 5)), 1fr));
+    gap: var(--area-space-8);
+    margin-block-end: var(--area-space-16);
+  }
+  .docs-icon-card {
+    display: grid;
+    align-content: start;
+    gap: var(--area-space-12);
+    padding: var(--area-space-12) var(--area-space-16) var(--area-space-16);
+    border: 1px solid var(--area-border-decorative);
+    border-radius: var(--area-radius-container);
+    background: var(--area-bg-surface);
+    scroll-margin-block-start: var(--area-space-16);
+  }
+  .docs-icon-card[data-audit="review"] { border-color: var(--area-caution-border); }
+  .docs-icon-card[data-audit="unrefined"] { border-color: var(--area-red-50); }
+  .docs-icon-card:target { box-shadow: 0 0 0 2px var(--area-fg-accent); }
+  .docs-icon-card__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--area-space-8);
+    margin: 0;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-regular);
+  }
+  /* All icons: one group per batch, a cell per icon (outline and filled at 16px, the name
+     below); a dot marks an icon in review. */
+  .docs-icon-catalog { display: grid; gap: var(--area-space-24); inline-size: 100%; }
+  .docs-icon-catalog__batch { display: grid; gap: var(--area-space-8); }
+  .docs-icon-catalog__title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--area-space-8);
+    margin: 0;
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    font-weight: var(--area-weight-regular);
+    color: var(--area-fg-default);
+  }
+  .docs-icon-catalog__title span { color: var(--area-fg-muted); font-size: var(--area-text-xs-size); }
+  .docs-icon-catalog__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-space-64) + var(--area-space-24)), 1fr));
+    gap: var(--area-space-4);
+  }
+  .docs-icon-catalog__cell {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: var(--area-space-8);
+    padding: var(--area-space-12) var(--area-space-4) var(--area-space-8);
+    border-radius: var(--area-radius-small);
+    color: var(--area-fg-default);
+    text-decoration: none;
+  }
+  .docs-icon-catalog__cell:hover { background: var(--area-bg-hover); }
+  .docs-icon-catalog__cell[data-review]::after {
+    content: "";
+    position: absolute;
+    inset-block-start: var(--area-space-4);
+    inset-inline-end: var(--area-space-4);
+    inline-size: var(--area-space-6);
+    block-size: var(--area-space-6);
+    border-radius: 50%;
+    background: var(--area-fg-caution);
+  }
+  .docs-icon-catalog__icons { display: flex; gap: var(--area-space-8); }
+  .docs-icon-catalog__name {
+    max-inline-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+  }
   .docs-visual-gallery__tile-title {
     padding: var(--area-space-8) var(--area-space-12);
     font-size: var(--area-ui-size);
@@ -1357,10 +1450,13 @@ export const DOCS_SCRIPT = `
   gallery.addEventListener("keydown", function (event) {
     if (event.key === "Escape" && open) { write(false); toggle.focus(); }
   });
+  /* Open the section that holds the linked element (a section, or an icon card inside a
+     closed batch) and bring the element into view. */
   function revealSection() {
     var target = document.getElementById(location.hash.slice(1));
-    if (target && target.matches("details.docs-visual-gallery__section")) {
-      target.open = true;
+    var section = target && target.closest("details.docs-visual-gallery__section");
+    if (section) {
+      section.open = true;
       target.scrollIntoView({ block: "start" });
     }
   }
@@ -1375,7 +1471,8 @@ export const DOCS_SCRIPT = `
   var sectionState = {};
   try { sectionState = JSON.parse(localStorage.getItem("area-gallery-sections") || "{}"); } catch (e) {}
   gallery.querySelectorAll("details.docs-visual-gallery__section").forEach(function (section) {
-    if (typeof sectionState[section.id] === "boolean" && location.hash !== "#" + section.id) section.open = sectionState[section.id];
+    var linked = location.hash && document.getElementById(location.hash.slice(1));
+    if (typeof sectionState[section.id] === "boolean" && !(linked && section.contains(linked))) section.open = sectionState[section.id];
     section.addEventListener("toggle", function () {
       sectionState[section.id] = section.open;
       try { localStorage.setItem("area-gallery-sections", JSON.stringify(sectionState)); } catch (e) {}
