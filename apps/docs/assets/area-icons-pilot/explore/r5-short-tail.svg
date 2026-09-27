@@ -1,0 +1,5 @@
+<svg data-set="area-pilot" data-group="Rotate" data-label="E: big square, shorter tail" data-keyline="square" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.293 7.207A1 1 0 0 1 8.707 7.207L11.293 9.793A1 1 0 0 1 11.293 11.207L8.707 13.793A1 1 0 0 1 7.293 13.793L4.707 11.207A1 1 0 0 1 4.707 9.793Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.787 5.35A6.364 6.364 0 0 1 12.5 4.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12.5 1.5V4.5H9.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
