@@ -1,0 +1,22 @@
+/* ---------------------------------------------------------------------------
+ * Context menu
+ *
+ * A Menu opened where you right-click (or press Shift+F10 / the Menu key on a focused
+ * target). The menu is Menu, unchanged; this only places it. docs/specs/context-menu.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* The wrapper adds no box: the right-clicked area keeps its own layout. */
+  .area-context-menu { display: contents; }
+  .area-context-menu__menu[popover] {
+    position: fixed;
+    /* spec: the menu's corner at the pointer (Notion: 0 across, 1 down). */
+    /* The pointer is a physical point, so the corner is placed physically (not mirrored in RTL). */
+    inset: auto;
+    left: var(--_context-x, 0px);
+    top: var(--_context-y, 0px);
+    margin: 0;
+    max-block-size: calc(100vh - var(--area-space-16));
+    overflow-y: auto;
+  }
+  .area-context-menu__menu[popover]:not(:popover-open) { display: none; }
+}

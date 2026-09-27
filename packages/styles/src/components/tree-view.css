@@ -10,8 +10,15 @@
     color: var(--area-fg-muted);
     --_tree-start: var(--area-space-8); /* spec */
     --_tree-chevron: var(--area-icon-md); /* spec */
-    --_tree-step: calc(var(--_tree-chevron) + var(--area-space-4)); /* spec */
-    --_tree-label-inset: var(--area-space-4); /* spec */
+    /*
+     * spec (owner, pass 3): chevron, icon and label are spaced evenly, 6px apart, and each
+     * level indents by one slot plus one gap (22px). Every row then sits on one set of
+     * columns: a child's chevron under its parent's icon, its icon under the parent's label.
+     */
+    --_tree-gap: 6px; /* spec */
+    --_tree-step: calc(var(--_tree-chevron) + var(--_tree-gap)); /* spec */
+    --_tree-label-inset: var(--area-space-0); /* spec */
+    --_tree-plate-inset: calc(-1 * var(--area-space-2)); /* spec: 20px plate, 2px clear of the icon (owner, pass 2) */
     font-size: var(--area-control-md-text);
     line-height: var(--area-control-md-leading);
   }
@@ -21,12 +28,12 @@
     position: relative;
     display: flex;
     align-items: center;
-    gap: var(--area-space-4);
+    gap: var(--_tree-gap);
     block-size: var(--area-control-md);
     min-inline-size: 0;
     /*
      * spec: 8px start, as Nav and Notion. Each level indents by the chevron slot plus its
-     * gap (16 + 4), so a child's chevron sits under its parent's icon (docs/specs/tree-view.md).
+     * gap (16 + 6), so rows share columns (docs/specs/tree-view.md).
      */
     padding-inline-start: calc(var(--_tree-start) + var(--_tree-depth) * var(--_tree-step));
     padding-inline-end: var(--area-space-8);
@@ -37,12 +44,12 @@
   .area-tree-view [role="treeitem"]:hover:not([data-disabled]) { background: var(--area-bg-component); }
   .area-tree-view [role="treeitem"][aria-selected="true"],
   .area-tree-view [role="treeitem"][aria-current="page"] { background: var(--_tree-selection); color: var(--area-fg-default); }
-  .area-tree-view [role="treeitem"][aria-current="page"]::before { content: ""; position: absolute; inset-block: var(--area-space-4); inset-inline-start: 0; inline-size: var(--area-space-2); border-radius: var(--area-radius-small); background: var(--area-focus-color); }
+  /* The current row is marked by fill and ink alone; the edge marker was removed (owner, pass 3). */
   .area-tree-view [role="treeitem"]:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-tree-view [role="treeitem"][data-disabled] { color: var(--area-fg-disabled); cursor: not-allowed; }
   /*
    * spec: the chevron is a 16px icon slot like any other glyph (Notion 12–20px in a 22px slot).
-   * Its hover plate and pointer target stay 24px, drawn outside the slot so the row keeps its rhythm.
+   * Its hover plate (20px) and pointer target (24px) are drawn outside the slot so the row keeps its rhythm.
    */
   .area-tree-view__chevron {
     position: relative;
@@ -53,14 +60,26 @@
     block-size: var(--_tree-chevron);
     color: var(--area-fg-muted);
   }
-  .area-tree-view__chevron::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-4)); z-index: -1; border-radius: var(--area-radius-small); }
+  .area-tree-view__chevron::before { content: ""; position: absolute; inset: var(--_tree-plate-inset); z-index: -1; border-radius: var(--area-radius-small); }
+  /* The pointer target stays 24px; only the painted plate shrank. */
+  .area-tree-view__chevron::after { content: ""; position: absolute; inset: calc(-1 * var(--area-space-4)); }
   .area-tree-view [aria-expanded="false"] .area-tree-view__chevron svg { transform: rotate(-90deg); }
   .area-tree-view__chevron svg, .area-tree-view__icon svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-tree-view__chevron:has(svg):hover::before { background: var(--area-bg-component-hover); }
   .area-tree-view__icon { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
-  /* spec: 8px from the glyphs to the label (Notion): the row's 4px gap plus the label's own 4px inset. */
+  /* spec: the label follows the row's even 6px gap; its own inset is 0 (pass 3). */
   .area-tree-view__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-inline-start: var(--_tree-label-inset); }
   .area-tree-view__trailing { margin-inline-start: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  /*
+   * Row controls at the end (Figma's lock and visibility). Hidden until the row is hovered,
+   * focused or selected; a control that records a non-default state (locked, hidden) sets
+   * data-pinned and stays visible. The slot keeps its width, so labels never reflow.
+   */
+  .area-tree-view__actions { display: flex; align-items: center; gap: var(--area-space-2); margin-inline-start: auto; margin-inline-end: calc(-1 * var(--area-space-4)); }
+  .area-tree-view__trailing + .area-tree-view__actions { margin-inline-start: 0; }
+  .area-tree-view__actions > * { opacity: 0; }
+  .area-tree-view__actions > [data-pinned],
+  .area-tree-view [role="treeitem"]:is(:hover, :focus-visible, [aria-selected="true"]) .area-tree-view__actions > * { opacity: 1; }
   .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-input-edge); border-radius: var(--area-radius-small); font-size: var(--area-control-sm-text); line-height: 1; }
   .area-tree-view [aria-checked="true"] .area-tree-view__check { color: var(--area-fg-default); background: var(--area-bg-component-hover); border-color: var(--area-focus-color); }
   .area-tree-view__check svg { inline-size: 100%; block-size: 100%; }

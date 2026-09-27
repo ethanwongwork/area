@@ -23,13 +23,19 @@
      * agree without either restating the formula: a control, a compact header inset above and below it,
      * and the hairline under it.
      */
-    --_bar: calc(var(--area-control-sm) + var(--area-space-4) * 2 + var(--area-border-width));
+    /* spec (audit 2026-09-26): the control is the tier's row control (never below sm), so an lg
+     * panel's 40px action fits its bar: sm 37 (unchanged), md 41, lg 49. */
+    --_bar: calc(max(var(--_row), var(--area-control-sm)) + var(--area-space-4) * 2 + var(--area-border-width));
 
     display: flex;
     flex-direction: column;
     min-block-size: 0;
-    /* A compact inspector measure; consumers can override this public sizing hook. */
-    inline-size: var(--area-panel-inline-size, 280px);
+    /*
+     * A compact inspector measure; consumers (and `resizable`) set this public hook. Figma's
+     * panel is 240 at 24px rows and a 16 inset; 280 gives Area's 28px rows the same two field
+     * columns (resizable-panel.md). Resizing clamps to Figma's 240 to 500.
+     */
+    inline-size: var(--area-panel-inline-size, 280px); /* spec */
     max-inline-size: 100%;
     flex-shrink: 0;
 
@@ -81,7 +87,8 @@
   .area-panel__title {
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
-    font-weight: var(--area-weight-regular);
+    /* spec (type pass): surface title, strong at the compact size. */
+    font-weight: var(--area-weight-strong);
   }
 
   .area-panel__body {
@@ -133,10 +140,99 @@
     margin: 0;
     margin-inline: calc(var(--_inset) * -1);
     padding-inline: var(--_inset);
-    font-size: var(--area-control-sm-text);
-    line-height: var(--area-control-sm-leading);
-    font-weight: var(--area-weight-regular);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    /* spec (docs/specs/inspector.md): a section title is strong, as every title (Figma 550). */
+    font-weight: var(--area-weight-strong);
   }
+  /* With actions the heading is a row: the title, then icon buttons ending on the content edge,
+   * in the same column as every row's action (Figma: 180 and 208 in its 240 panel, 4 apart). */
+  .area-panel__heading-text { flex: 1; min-inline-size: 0; margin: 0; font: inherit; }
+  .area-panel__actions { display: flex; align-items: center; gap: var(--area-space-4); flex-shrink: 0; }
+
+  /*
+   * spec (docs/specs/inspector.md, collapsible sections): the title is a disclosure button
+   * (heading > button, as the WAI accordion). Its chevron lives in the side inset and shows on
+   * hover or focus, as Figma's (a 16px icon at x 0, hidden until hover). While collapsed a
+   * summary sits at the end of the title (Figma: selection-color chips and a count, muted).
+   */
+  .area-panel__heading { position: relative; }
+  .area-panel__toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    inline-size: 100%;
+    min-block-size: var(--_row);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+  .area-panel__toggle-text { flex: 1; min-inline-size: 0; }
+  .area-panel__toggle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-space-2); border-radius: var(--area-radius-control-xs); }
+  .area-panel__chevron {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_inset);
+    color: var(--area-fg-muted);
+    opacity: 0;
+    pointer-events: none;
+  }
+  /* The glyph fits the inset (8 in a small panel, 12 at md), as Figma's 3 x 5 chevron fits its 16. */
+  .area-panel__chevron svg { flex-shrink: 0; inline-size: min(var(--area-icon-sm), var(--_inset)); block-size: min(var(--area-icon-sm), var(--_inset)); max-inline-size: none; }
+  .area-panel__heading:hover .area-panel__chevron,
+  .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; }
+  @media (hover: none) { .area-panel__chevron { opacity: 1; } }
+  .area-panel__summary { display: flex; align-items: center; gap: var(--area-space-8); flex-shrink: 0; color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
+  /* The rows join the section's own column, so its 8px rhythm is unchanged when open. */
+  .area-panel__rows:not([hidden]) { display: contents; }
+  /* A section that is its heading alone (collapsed, or with no rows yet, like an empty Stroke)
+   * sits centred between its rules: 16 above from the body gap, 16 below. */
+  .area-panel__section:is([data-collapsed], :has(> .area-panel__rows:empty), :not(:has(> :not(.area-panel__heading)))):not(:last-child) { padding-block-end: var(--area-space-16); }
+
+  /*
+   * spec (docs/specs/inspector.md): the inspector row. Two equal control columns and a trailing
+   * square the height of a row, 8 apart, so fields, groups and icon buttons line up down the
+   * panel even where a row has no action (Figma: 88 + 8 + 88 + 8 + 24). Captions sit above
+   * their columns, 6 over the controls like a stacked row.
+   */
+  .area-panel__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_row);
+    column-gap: var(--area-space-8);
+    row-gap: var(--area-space-6);
+    align-items: center;
+  }
+  .area-panel__row-label {
+    grid-row: 1;
+    min-inline-size: 0;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .area-panel__row-label:only-of-type { grid-column: 1 / 3; }
+  .area-panel__row-controls {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: center;
+    min-inline-size: 0;
+  }
+  .area-panel__row-controls > :only-child { grid-column: 1 / -1; }
+  .area-panel__row-controls > * { min-inline-size: 0; }
+  .area-panel__row-action { grid-column: 3; display: flex; align-items: center; justify-content: center; }
+  .area-panel__row:has(> .area-panel__row-label) > :is(.area-panel__row-controls, .area-panel__row-action) { grid-row: 2; }
 
   /* A row whose control needs the whole width: the label sits above it, not beside it. */
   .area-panel__stack {
@@ -155,6 +251,46 @@
     border-block-start: var(--area-border-width) solid var(--area-border-decorative);
   }
 
+  /*
+   * spec (docs/specs/resizable-panel.md): a resizable panel has a separator on one edge. Figma's
+   * is 8 wide, 6 outside the panel's edge and 2 inside (captured); hover changes only the cursor;
+   * at a limit the cursor points the one way the panel can still go; keyboard focus draws a 4px
+   * pill, half the edge's height, centred in the handle.
+   */
+  .area-panel[data-resizable] { position: relative; }
+  /* Docked, the seam it keeps is the edge it resizes from (Figma, Notion: a rule on that edge). */
+  .area-panel--flush:has(> .area-panel__resize[data-edge="start"]) { border-inline-start: var(--area-border-width) solid var(--area-border-decorative); }
+  .area-panel--flush:has(> .area-panel__resize[data-edge="end"]) { border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+  .area-panel[data-resizing] { user-select: none; }
+  .area-panel__resize {
+    --_resize-hit: 8px; /* spec: Figma 8 */
+    --_resize-outside: 6px; /* spec: Figma 6 outside, 2 inside */
+    position: absolute;
+    inset-block: calc(var(--area-border-width) * -1);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_resize-hit);
+    cursor: ew-resize;
+    touch-action: none;
+    outline: 0;
+  }
+  .area-panel__resize[data-edge="start"] { inset-inline-start: calc((var(--_resize-outside) + var(--area-border-width)) * -1); }
+  .area-panel__resize[data-edge="end"] { inset-inline-end: calc((var(--_resize-outside) + var(--area-border-width)) * -1); }
+  /* At a limit the cursor shows the only way left to go (Figma: w-resize at its minimum). */
+  .area-panel__resize:is([data-edge="start"][data-limit="min"], [data-edge="end"][data-limit="max"]) { cursor: w-resize; }
+  .area-panel__resize:is([data-edge="start"][data-limit="max"], [data-edge="end"][data-limit="min"]) { cursor: e-resize; }
+  .area-panel__resize:dir(rtl):is([data-edge="start"][data-limit="min"], [data-edge="end"][data-limit="max"]) { cursor: e-resize; }
+  .area-panel__resize:dir(rtl):is([data-edge="start"][data-limit="max"], [data-edge="end"][data-limit="min"]) { cursor: w-resize; }
+  .area-panel__resize:focus-visible::before {
+    content: "";
+    inline-size: 4px; /* spec: Figma 4 */
+    block-size: 50%; /* spec: Figma half the edge */
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-focus-color);
+  }
+
   /* --- Sizes -------------------------------------------------------------- */
 
   /*
@@ -163,8 +299,9 @@
    * panel tightens with the system exactly as the controls in it do. The spacing ramp is
    * flat under density and would have left a compact panel padded like a default one.
    */
-  .area-panel--xs { --_inset: var(--area-gutter-xs); }
-  .area-panel--sm { --_inset: var(--area-gutter-sm); }
+  /* spec (inspector): the row (heading height, action column) follows the panel's tier. */
+  .area-panel--xs { --_inset: var(--area-gutter-xs); --_row: var(--area-control-xs); }
+  .area-panel--sm { --_inset: var(--area-gutter-sm); --_row: var(--area-control-sm); }
   .area-panel--md { --_inset: var(--area-gutter-md); --_row: var(--area-control-md); }
-  .area-panel--lg { --_inset: var(--area-gutter-lg); }
+  .area-panel--lg { --_inset: var(--area-gutter-lg); --_row: var(--area-control-lg); }
 }

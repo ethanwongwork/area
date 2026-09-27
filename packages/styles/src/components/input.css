@@ -41,7 +41,8 @@
     color: var(--area-input-text);
     font-size: var(--_text);
     line-height: var(--_leading);
-    box-shadow: var(--area-shadow-1);
+    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
+    box-shadow: none;
     transition: var(--area-transition);
   }
 

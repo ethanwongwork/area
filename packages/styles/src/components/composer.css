@@ -12,11 +12,17 @@
     inline-size: min(100%, calc(var(--area-space-96) * 5));
     min-inline-size: 0;
     padding: calc(var(--_composer-inset) - var(--area-stroke-width));
-    /* spec: ChatGPT floats on a 4% ring (≈ rgb 245) and a soft 0 2px 8px shadow rather than a field border. */
     border: var(--area-stroke-width) solid var(--area-border-decorative);
-    border-radius: min(calc(var(--area-radius-control) + var(--_composer-inset)), calc(var(--_composer-height) * var(--area-radius-cap)));
+    /*
+     * spec (composer.md, owner 2026-09-26: option B): concentric with the send Button -- its own
+     * radius (Button md, capped as Button caps it) plus the inset, 8 + 8 = 16. A pill send button
+     * makes a pill composer (below), so ChatGPT's shape is one Button option away.
+     */
+    --_composer-button-radius: min(var(--area-radius-control-md), calc(var(--_composer-action) * var(--area-radius-button-cap)));
+    border-radius: calc(var(--_composer-button-radius) + var(--_composer-inset));
     background: var(--area-input-bg);
-    box-shadow: 0 2px 8px var(--area-shadow-color);
+    /* spec (owner 2026-09-26): no shadow at rest, as every control; the border carries the edge. */
+    box-shadow: none;
     color: var(--area-input-text);
     transition: var(--area-transition);
   }
@@ -43,9 +49,6 @@
   .area-composer__extras { display: contents; }
   .area-composer__footer { justify-content: space-between; }
   .area-composer__actions > .area-button { flex: none; }
-  .area-composer__submit { display: grid; place-items: center; flex: 0 0 var(--area-control-md); inline-size: var(--area-control-md); block-size: var(--area-control-md); padding: 0; border: 0; border-radius: 50%; background: var(--area-neutral-solid); color: var(--area-fg-on-neutral); cursor: pointer; }
-  .area-composer__submit svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
-  .area-composer__submit:hover:not(:disabled) { background: var(--area-neutral-solid-hover); }
-  .area-composer__submit:disabled { background: var(--area-bg-component); color: var(--area-fg-disabled); cursor: not-allowed; }
-  .area-composer__submit:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* The send action is an Area Button (solid neutral, icon-only, md); it keeps its own shape and states. */
+  .area-composer:has(.area-composer__submit.area-button--pill) { --_composer-button-radius: calc(var(--_composer-action) / 2); }
 }

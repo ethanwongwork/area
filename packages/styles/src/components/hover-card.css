@@ -1,0 +1,37 @@
+/* ---------------------------------------------------------------------------
+ * Hover card
+ *
+ * A preview of the thing a link points to (a person, a page, a source), shown while the
+ * pointer rests on the link or keyboard focus is on it. The surface is Popover's, anchored
+ * the same way; the card is supplemental, so the link works without it.
+ * docs/specs/hover-card.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* Without hover (touch), the link is simply followed; the card never shows. */
+  @media (hover: none) { .area-hover-card { display: none; } }
+
+  /* Who or what the card is about: an avatar or icon, then its name over a quiet handle. */
+  .area-hover-card__identity { display: flex; align-items: center; gap: var(--area-space-12); min-inline-size: 0; }
+  .area-hover-card__identity > :last-child { display: grid; min-inline-size: 0; }
+
+  /* A quiet line of facts under the description (a handle, a date, a count). */
+  .area-hover-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--area-space-12);
+    row-gap: var(--area-space-4);
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+  }
+  .area-hover-card__meta > * { display: inline-flex; align-items: center; gap: var(--area-space-4); }
+}
+@layer area.components {
+  /* spec: the card starts at the link's start rather than centring on it (GitHub's card starts
+   * 20 before its link), so a card for a link near the page edge stays on the page. */
+  @supports (anchor-name: --area-anchor) {
+    .area-popover-anchor > .area-hover-card.area-popover--bottom[popover]:popover-open { position-area: bottom span-right; position-try-fallbacks: flip-block, flip-inline; }
+    .area-popover-anchor > .area-hover-card.area-popover--top[popover]:popover-open { position-area: top span-right; position-try-fallbacks: flip-block, flip-inline; }
+  }
+}

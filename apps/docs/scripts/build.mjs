@@ -55,10 +55,11 @@ const FOUNDATION_PAGES = [
 for (const slug of COMPLETE_COMPONENTS) {
   if (!COMPONENT_PAGES.some(page => page.slug === slug)) throw new Error(`Unknown completed component: ${slug}`);
 }
+// Owner (2026-09-26): the newest work leads the gallery, whatever its status.
 const orderedComponents = [...COMPONENT_PAGES].sort((a, b) =>
-  Number(COMPLETE_COMPONENTS.has(b.slug)) - Number(COMPLETE_COMPONENTS.has(a.slug)) ||
   (RECENT_COMPONENTS.includes(a.slug) ? RECENT_COMPONENTS.indexOf(a.slug) : 999) -
-  (RECENT_COMPONENTS.includes(b.slug) ? RECENT_COMPONENTS.indexOf(b.slug) : 999) || a.name.localeCompare(b.name));
+  (RECENT_COMPONENTS.includes(b.slug) ? RECENT_COMPONENTS.indexOf(b.slug) : 999) ||
+  Number(COMPLETE_COMPONENTS.has(b.slug)) - Number(COMPLETE_COMPONENTS.has(a.slug)) || a.name.localeCompare(b.name));
 
 /* --- Chrome ---------------------------------------------------------------- */
 
@@ -267,7 +268,7 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "tree-view" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${["badge", "badge-group", "indicator", "presence"].includes(slug) ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 ${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
@@ -296,6 +297,9 @@ function galleryPage({ families = null } = {}) {
       { id: "files", title: "Project files", demo: "GalleryTreeViewFiles", span: "2x2" },
       { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters", span: "2x2" },
       { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed", span: "2x1" },
+      { id: "filled-folders", title: "Filled folders", demo: "GalleryTreeViewFilledFolders", span: "2x2" },
+      { id: "layers", title: "Layers with row controls", demo: "GalleryTreeViewLayers", span: "2x2" },
+      { id: "disabled", title: "Disabled row", demo: "GalleryTreeViewDisabled", span: "2x1" },
     ],
     "color-swatch-picker": [
       { id: "default", title: "Palette", demo: "GalleryColorSwatchPicker" },
@@ -359,15 +363,90 @@ function galleryPage({ families = null } = {}) {
       { id: "actions", title: "Actions", demo: "GalleryNavActions", span: "2x2" },
       { id: "expandable", title: "Expandable", demo: "GalleryNavExpandable", span: "2x2" },
     ],
+    "model-picker": [
+      { id: "composer", title: "In the composer", demo: "GalleryModelPicker", span: "2x2" },
+      { id: "heading", title: "With a heading and a disabled row", demo: "GalleryModelPickerHeading" },
+    ],
+    "scroll-to-latest": [
+      { id: "default", title: "In a conversation", demo: "GalleryScrollToLatest", span: "2x3" },
+    ],
+    message: [
+      { id: "conversation", title: "Conversation", demo: "GalleryMessage", span: "2x2" },
+      { id: "streaming", title: "State / streaming", demo: "GalleryMessageStreaming", span: "2x1" },
+      { id: "long", title: "Long message", demo: "GalleryMessageLong", span: "2x1" },
+    ],
+    "prompt-suggestions": [
+      { id: "default", title: "List (default)", demo: "GalleryPromptSuggestions", span: "2x2" },
+      { id: "chips", title: "Layout / chips", demo: "GalleryPromptSuggestionsChips", span: "2x2" },
+      { id: "plain", title: "List without icons or dismiss", demo: "GalleryPromptSuggestionsPlain", span: "2x1" },
+    ],
+    "hover-card": [
+      { id: "person", title: "Person", demo: "GalleryHoverCard" },
+      { id: "page", title: "Page", demo: "GalleryHoverCardPage" },
+      { id: "source", title: "Source", demo: "GalleryHoverCardSource" },
+      { id: "side-top", title: "Side / top", demo: "GalleryHoverCardTop" },
+    ],
+    "context-menu": [
+      { id: "default", title: "Default", demo: "GalleryContextMenu" },
+      { id: "tree", title: "On tree rows", demo: "GalleryContextMenuTree" },
+      { id: "disabled", title: "Disabled rows", demo: "GalleryContextMenuDisabled" },
+    ],
+    "command-palette": [
+      { id: "default", title: "Default", demo: "GalleryCommandPalette", span: "2x2" },
+      { id: "modal", title: "Modal", demo: "GalleryCommandPaletteModal" },
+      { id: "empty", title: "No results", demo: "GalleryCommandPaletteEmpty", span: "2x2" },
+      { id: "no-footer", title: "Without key hints", demo: "GalleryCommandPaletteNoFooter", span: "2x2" },
+    ],
+    combobox: [
+      { id: "default", title: "Default", demo: "GalleryCombobox" },
+      { id: "custom", title: "Custom value", demo: "GalleryComboboxCustom" },
+      { id: "groups", title: "Groups", demo: "GalleryComboboxGroups" },
+      { id: "create", title: "Create", demo: "GalleryComboboxCreate" },
+      { id: "rich", title: "Icons and descriptions", demo: "GalleryComboboxRich" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryComboboxSm" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryComboboxLg" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryComboboxDisabled" },
+      { id: "state-invalid", title: "State / invalid", demo: "GalleryComboboxInvalid" },
+    ],
+    "box-field": [
+      { id: "padding", title: "Padding / linked", demo: "GalleryBoxFieldPadding" },
+      { id: "padding-individual", title: "Padding / per side", demo: "GalleryBoxFieldPaddingIndividual" },
+      { id: "padding-mixed", title: "Padding / mixed", demo: "GalleryBoxFieldPaddingMixed" },
+      { id: "corners", title: "Corners / linked", demo: "GalleryBoxFieldCorners" },
+      { id: "corners-individual", title: "Corners / per corner", demo: "GalleryBoxFieldCornersIndividual" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryBoxFieldSoft" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryBoxFieldSm" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryBoxFieldLg" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryBoxFieldDisabled" },
+    ],
+    "property-list": [
+      { id: "fills", title: "Fills", demo: "GalleryPropertyListFills", span: "2x2" },
+      { id: "single", title: "One item", demo: "GalleryPropertyListSingle", span: "2x2" },
+      { id: "effects", title: "Effects with a hidden row", demo: "GalleryPropertyListEffects", span: "2x2" },
+    ],
     panel: [
       { id: "default", title: "Default", demo: "GalleryPanel", span: "2x2" },
       { id: "sections", title: "Sections", demo: "GalleryPanelSections", span: "2x2" },
       { id: "footer", title: "Footer", demo: "GalleryPanelFooter", span: "2x2" },
+      { id: "size-xs", title: "Size / xs", demo: "GalleryPanelXs", span: "2x2" },
+      { id: "size-md", title: "Size / md", demo: "GalleryPanelMd", span: "2x2" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryPanelLg", span: "2x2" },
+      { id: "flush", title: "Flush", demo: "GalleryPanelFlush", span: "2x2" },
+      { id: "bare-bar", title: "Bare bar", demo: "GalleryPanelBareBar", span: "2x2" },
+      { id: "collapsible", title: "Collapsible sections", demo: "GalleryPanelCollapsible", span: "2x2" },
+      { id: "resizable", title: "Resizable / inspector", demo: "GalleryPanelResizable", span: "2x2" },
+      { id: "resizable-sidebar", title: "Resizable / sidebar", demo: "GalleryPanelResizableSidebar", span: "2x2" },
+      { id: "figma", title: "Recipe / Figma properties panel", demo: "GalleryPanelFigma", span: "2x4" },
     ],
     popover: [
+      { id: "anchored", title: "Anchored to a trigger", demo: "GalleryPopoverTrigger" },
       { id: "teaching", title: "Teaching step", demo: "GalleryPopover" },
       { id: "field", title: "With field", demo: "GalleryPopoverField" },
       { id: "image", title: "Composition / image", demo: "GalleryPopoverImage" },
+      { id: "arrow-top", title: "Arrow / top", demo: "GalleryPopoverArrowTop" },
+      { id: "arrow-right", title: "Arrow / right", demo: "GalleryPopoverArrowRight" },
+      { id: "arrow-bottom", title: "Arrow / bottom", demo: "GalleryPopoverArrowBottom" },
+      { id: "arrow-left", title: "Arrow / left", demo: "GalleryPopoverArrowLeft" },
     ],
 
     indicator: [
@@ -451,15 +530,33 @@ function galleryPage({ families = null } = {}) {
       ),
       { id: "pill", title: "Pill", demo: "GalleryButtonPill" },
       { id: "selected", title: "Selected", demo: "GalleryButtonSelected" },
-      { id: "with-icon", title: "With icon", demo: "GalleryButtonWithIcon" },
+      { id: "with-icon", title: "Leading icon", demo: "GalleryButtonWithIcon" },
+      { id: "trailing-icon", title: "Trailing icon", demo: "GalleryButtonTrailingIcon" },
       { id: "with-shortcut", title: "With shortcut", demo: "GalleryButtonShortcut" },
       { id: "loading", title: "Loading", demo: "GalleryButtonLoading" },
       { id: "disabled", title: "Disabled", demo: "GalleryButtonDisabled" },
       { id: "icon-only", title: "Icon only", demo: "GalleryButtonIconOnly" },
     ],
+    "split-button": [
+      { id: "default", title: "Solid / neutral", demo: "GallerySplitButton" },
+      { id: "accent", title: "Solid / accent", demo: "GallerySplitButtonAccent" },
+      { id: "soft", title: "Soft", demo: "GallerySplitButtonSoft" },
+      { id: "outline", title: "Outline", demo: "GallerySplitButtonOutline" },
+      { id: "icon", title: "Leading icon", demo: "GallerySplitButtonIcon" },
+      { id: "size-small", title: "Size / small", demo: "GallerySplitButtonSmall" },
+      { id: "size-large", title: "Size / large", demo: "GallerySplitButtonLarge" },
+      { id: "disabled", title: "Disabled", demo: "GallerySplitButtonDisabled" },
+    ],
     "button-group": [
-      { id: "commands", title: "Independent icon commands", demo: "GalleryButtonGroupCommands" },
-      { id: "text", title: "Text and toggle", demo: "GalleryButtonGroupText" },
+      { id: "soft-text", title: "Soft / text", demo: "GalleryButtonGroupSoftText" },
+      { id: "outline-text", title: "Outline / text", demo: "GalleryButtonGroupOutlineText" },
+      { id: "commands", title: "Soft / icon only", demo: "GalleryButtonGroupCommands" },
+      { id: "outline-icons", title: "Outline / icon only", demo: "GalleryButtonGroupOutlineIcons" },
+      { id: "icon-labels", title: "Icon and label", demo: "GalleryButtonGroupIconLabels" },
+      { id: "text", title: "Toggle selected", demo: "GalleryButtonGroupText" },
+      { id: "size-small", title: "Size / small", demo: "GalleryButtonGroupSmall" },
+      { id: "size-large", title: "Size / large", demo: "GalleryButtonGroupLarge" },
+      { id: "disabled", title: "Disabled button", demo: "GalleryButtonGroupDisabled" },
     ],
     checkbox: [
       { id: "default", title: "Default", demo: "GalleryCheckbox" },
@@ -656,13 +753,14 @@ function galleryPage({ families = null } = {}) {
     ],
     menu: [
       { id: "default", title: "Default", demo: "GalleryMenu", span: "2x2" },
+      { id: "icons", title: "Icons, separator and danger", demo: "GalleryMenuIcons", span: "2x2" },
       { id: "shortcuts", title: "Shortcuts", demo: "GalleryMenuShortcuts", span: "2x2" },
       { id: "selected", title: "State / selected", demo: "GalleryMenuSelected", span: "2x2" },
       { id: "search", title: "Composition / search", demo: "GalleryMenuSearch", span: "2x2" },
       { id: "submenu", title: "Composition / nested submenu", demo: "GalleryMenuSubmenu", span: "2x2" },
       { id: "disabled", title: "Disabled", demo: "GalleryMenuDisabled", span: "2x2" },
       { id: "danger", title: "Danger", demo: "GalleryMenuDanger", span: "2x2" },
-      { id: "controls", title: "Composition / controls", demo: "GalleryMenuControls", span: "2x2" },
+      { id: "controls", title: "Toggle and check items", demo: "GalleryMenuControls", span: "2x2" },
     ],
     separator: [
       { id: "full-width", title: "Horizontal / full width", demo: "GallerySeparatorFullWidth" },
@@ -939,16 +1037,19 @@ function galleryShell({ current, title, body }) {
 function demoMarkup(name, html) {
   if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryDialogModal") return `<div data-switch-demo="${name}" style="inline-size:100%;min-inline-size:0;text-align:center">${html}</div>`;
-  if (["GalleryInputPassword", "GalleryButtonGroupCommands", "GalleryButtonGroupText"].includes(name) || name.startsWith("GalleryToolbar") || name.startsWith("GalleryAlignmentPicker") || name.startsWith("GalleryColorPicker") || name.startsWith("GalleryColorField") || name.startsWith("GalleryColorSwatchPicker")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryInputPassword"].includes(name) || name.startsWith("GalleryButtonGroup") || name.startsWith("GalleryToolbar") || name.startsWith("GalleryAlignmentPicker") || name.startsWith("GalleryColorPicker") || name.startsWith("GalleryColorField") || name.startsWith("GalleryColorSwatchPicker")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // Every code block is hydrated: copy, the language picker and show/hide are behaviour.
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
   if (["GalleryTableSelectable", "GalleryTextareaCount"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelXs", "GalleryPanelMd", "GalleryPanelLg", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryMenu")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryMenuControls") return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="${["SwitchList", "SwitchSettingsRow"].includes(name) ? "inline-size:100%;" : ""}max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Slider") || name.startsWith("GallerySlider")) return `<div data-slider-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("NumberField") || name === "GalleryNumberFieldPlain" || name.startsWith("GalleryInputGroup")) return `<div data-number-field-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name === "GalleryPopoverTrigger") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GallerySplitButton")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryTreeView") || name.startsWith("GalleryComposer")) return `<div data-structure-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Chip") || name.startsWith("GalleryChip")) return `<div data-chip-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Alert") || name.startsWith("GalleryAlert")) return `<div data-alert-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;

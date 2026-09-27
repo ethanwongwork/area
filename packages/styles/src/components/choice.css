@@ -32,7 +32,8 @@
     --_mark: var(--area-fg-on-accent);
     border: var(--area-stroke-width) solid var(--_edge);
     background-color: var(--_fill);
-    box-shadow: var(--area-shadow-1);
+    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
+    box-shadow: none;
     cursor: inherit;
     transition: var(--area-transition);
     position: relative;
@@ -207,8 +208,8 @@
   .area-radio-group__validation,
   .area-checkbox-group__description,
   .area-checkbox-group__validation {
-    font-size: var(--area-control-sm-text);
-    line-height: var(--area-control-sm-leading);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
   }
 
   .area-radio-group__description,
@@ -280,8 +281,8 @@
   }
 
   .area-choice-label__description {
-    font-size: var(--area-control-sm-text);
-    line-height: var(--area-control-sm-leading);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
     color: var(--area-fg-muted);
   }
 

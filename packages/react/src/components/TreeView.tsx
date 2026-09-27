@@ -9,6 +9,13 @@ export interface TreeViewNode {
   children?: TreeViewNode[];
   icon?: ReactNode;
   trailing?: ReactNode;
+  /**
+   * Row controls at the end, such as lock and visibility toggles. Shown on hover, focus and
+   * selection; give a control `data-pinned` to keep it visible (a locked or hidden layer).
+   * The tree keeps one Tab stop, so give each control `tabIndex={-1}` and a keyboard
+   * equivalent elsewhere. Clicks on a control do not activate the row.
+   */
+  actions?: ReactNode;
   disabled?: boolean;
 }
 export interface TreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
@@ -132,6 +139,7 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
         {node.icon && <span className="area-tree-view__icon" aria-hidden="true">{node.icon}</span>}
         <span className="area-tree-view__label">{node.label}</span>
         {node.trailing && <span className="area-tree-view__trailing">{node.trailing}</span>}
+        {node.actions && <span className="area-tree-view__actions" onClick={event => event.stopPropagation()}>{node.actions}</span>}
       </div>;
     })}
   </div>;

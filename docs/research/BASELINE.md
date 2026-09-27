@@ -26,9 +26,9 @@ ink by state, and shadow.
 
 | Element | ChatGPT | Notion | Figma | Captures |
 |---|---|---|---|---|
-| Primary button | | | | |
-| Secondary / ghost button | | | | |
-| Icon-only button | | | | |
+| Primary button | Logged in: send/voice 36 round solid; logged out "Log in" 44 pill, 14/20 600, 12px sides, no shadow, focus 2px outline offset 2 | Share "Invite" 32, radius 6, 12px sides, 14/16.8 500, solid blue, no shadow | none captured (editor not opened) | `button/chatgpt*--*solid*`, `button/notion--solid-accent--*` |
+| Secondary / ghost button | Soft pill 36, 12px sides, 14/18 400, 5% black (hover 10%); ghost 36 radius 8, icon 16 at 13, gap 4, hover 5% | Ghost 28, radius 6, 8px sides, 14/16.8 400, gap 6, hover 5% warm black; outline 32, 0.56px hairline, 500 | Pill 32 fill 245 + 1px inset ring; tabs 24, radius 5, 8px sides, 11/16 450–550 | `button/chatgpt--soft-*`, `button/notion--*ghost*`, `button/figma--*` |
+| Icon-only button | 36 radius 8 (20px icon, 8 in); 32 radius 8 (20px icon, 6 in); composer 36 round | 28 radius 6, 20px icon 4 in | 24 radius 5; 32 | `button/*icon-ghost*` |
 | Text input | | | | |
 | Menu item and menu surface | | | | |
 | Sidebar / list row | | | | |
@@ -75,3 +75,7 @@ captures. Promote an agreement into Area only through a spec's decision table.
   black). Rectangular tags use 4–5px corners; Notion draws status-with-dot as a pill.
   Label weight is 400 in ChatGPT, Figma and Notion table cells, 500 on Notion board
   headers. Light theme only.
+- 2026-09-25 (Button): no product shadows a button. Ghost and soft labels are 400 (ChatGPT,
+  Notion); 500 appears on filled buttons (Notion). Hover is a 5% black wash in ChatGPT and
+  Notion. Icon-to-label gaps are 4 (ChatGPT) to 6 (Notion). Controls are 24 (Figma), 28/32
+  (Notion), 32/36 (ChatGPT). Light theme only.

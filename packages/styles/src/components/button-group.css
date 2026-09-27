@@ -7,11 +7,17 @@
     --_group-leading: var(--area-control-md-leading); --_group-gap: var(--area-gap-md); --_group-radius: var(--area-radius-control-md);
     --_group-bg: var(--area-bg-component);
     --_group-edge: var(--area-border-decorative);
+    --_group-divider: var(--area-edge-control); /* spec */
+    --_group-divider-inset: calc(-1 * var(--area-border-width)); /* spec: full height */
     display: inline-flex;
     align-items: stretch;
     max-inline-size: 100%;
     isolation: isolate;
   }
+  /* spec (docs/specs/inspector.md): fills an inspector column, buttons sharing it (Figma's
+   * alignment groups: three 29px buttons across an 88px column). */
+  .area-button-group--full-width { display: flex; inline-size: 100%; }
+  .area-button-group--full-width > * { flex: 1 1 0; min-inline-size: 0; }
   .area-button-group--soft { --_group-bg: var(--area-bg-component); --_group-edge: transparent; }
   .area-button-group--outline { --_group-bg: var(--area-bg-surface); --_group-edge: var(--area-edge-control); }
   .area-button-group--sm { --_group-height: var(--area-control-sm); --_group-icon: var(--area-icon-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-gap: var(--area-gap-sm); --_group-radius: var(--area-radius-control-sm); }
@@ -35,13 +41,21 @@
     margin-inline-start: calc(-1 * var(--area-border-width));
   }
   .area-button-group > .area-button:not(:last-child) { border-start-end-radius: 0; border-end-end-radius: 0; }
+  /*
+   * spec: a full-height divider in the control line, as SplitButton, Notion's split (1px full
+   * height) and shadcn's separator (control border, full height). Was 16px tall in the
+   * decorative line. Outline groups already share one full-height border, so they draw none.
+   * docs/specs/button-group.md.
+   */
   .area-button-group > .area-button + .area-button::before {
     content: "";
     position: absolute;
-    inset-inline-start: 0;
-    inset-block: var(--area-space-8);
+    inset-inline-start: calc(-1 * var(--area-border-width));
+    inset-block: var(--_group-divider-inset);
     inline-size: var(--area-border-width);
-    background: var(--area-border-decorative);
+    background: var(--_group-divider);
+    pointer-events: none;
   }
+  .area-button-group--outline > .area-button + .area-button::before { content: none; }
   .area-button-group > .area-button:is(:focus-visible, [data-selected]) { z-index: 1; }
 }
