@@ -1,7 +1,10 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useId, useRef, useState } from "react";
-import { Alert, AlignmentPicker, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition } from "@area/react";
-import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon } from "../icons.tsx";
+import type { CSSProperties, ReactNode, MouseEvent } from "react";
+import { AREA_COLOR_GRID, Alert, AlignmentPicker, Avatar, Calendar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, BoxField, Combobox, CommandPalette, ContextMenu, HoverCard, Message, MessageActions, ModelPicker, PromptSuggestions, ScrollToLatest, SplitButton, PanelRow, PropertyList, PropertyListItem, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
+import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon, EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, FluentCopyIcon, AlertIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignRightIcon, AngleIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CornerRadiusIcon, CornersIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, LinkIcon, MoreIcon, SettingsIcon, SlidersIcon, SubtractIcon } from "../icons.tsx";
+import { PilotDocumentIcon, PilotFolderFilledIcon, PilotMoreHorizontalIcon } from "../pilot-icons.tsx";
+import { ReviewPair } from "./review.tsx";
 import { SliderRangeComposition } from "./slider-range.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
@@ -80,6 +83,7 @@ export const GalleryButtonLarge = () => <Button size="lg">Button</Button>;
 export const GalleryButtonSuccess = () => <Button tone="success">Button</Button>;
 export const GalleryButtonAccent = () => <Button tone="accent">Button</Button>;
 export const GalleryButtonWithIcon = () => <Button icon={<PlusIcon />}>Button</Button>;
+export const GalleryButtonTrailingIcon = () => <Button variant="ghost" tone="neutral" trailingIcon={<ChevronIcon />}>Button</Button>;
 export const GalleryButtonDisabled = () => <Button disabled>Button</Button>;
 export const GalleryButtonLoading = () => <Button loading>Button</Button>;
 export const GalleryButtonIconOnly = () => <Button iconOnly icon={<PlusIcon />} aria-label="Add item" />;
@@ -89,6 +93,34 @@ export const GalleryButtonGhost = () => <Button variant="ghost">Button</Button>;
 export const GalleryButtonPill = () => <Button pill>Button</Button>;
 export const GalleryButtonSelected = () => <Button selected>Selected</Button>;
 export const GalleryButtonShortcut = () => <Button aria-keyshortcuts="Meta+Enter">Button <Kbd keys={["cmd", "enter"]} /></Button>;
+/* Split button (docs/specs/split-button.md): one variant per tile; every menu is live. */
+const SplitDemo = ({ label, items, ...props }: { label: string; items: string[] } & Omit<Parameters<typeof SplitButton>[0], "children" | "menu">) => {
+  const [done, setDone] = useState("");
+  return <div>
+    <SplitButton {...props} onClick={() => setDone(label)} menu={items.map((item) => <MenuItem key={item} onClick={() => setDone(item)}>{item}</MenuItem>)}>{label}</SplitButton>
+    <span className="area-sr-only" role="status">{done}</span>
+  </div>;
+};
+const saveItems = ["Save as…", "Save a copy", "Export"];
+export const GallerySplitButton = () => <SplitDemo label="Save" items={saveItems} menuLabel="More save options" />;
+export const GallerySplitButtonAccent = () => <SplitDemo label="New" tone="accent" items={["New from template", "Import"]} menuLabel="More ways to create" />;
+export const GallerySplitButtonSoft = () => <SplitDemo label="Save" variant="soft" tone="neutral" items={saveItems} menuLabel="More save options" />;
+export const GallerySplitButtonOutline = () => <SplitDemo label="Save" variant="outline" tone="neutral" items={saveItems} menuLabel="More save options" />;
+export const GallerySplitButtonIcon = () => <SplitDemo label="Add" variant="outline" tone="neutral" icon={<PlusIcon />} items={["Add section", "Add page"]} menuLabel="More to add" />;
+export const GallerySplitButtonSmall = () => <SplitDemo label="Save" size="sm" items={saveItems} menuLabel="More save options" />;
+export const GallerySplitButtonLarge = () => <SplitDemo label="Save" size="lg" items={saveItems} menuLabel="More save options" />;
+export const GallerySplitButtonDisabled = () => <SplitDemo label="Save" disabled items={saveItems} menuLabel="More save options" />;
+/* ButtonGroup pass review (docs/specs/button-group.md). "Before" restores the pass-0 divider. */
+const previousGroupDivider = { "--_group-divider": "var(--area-border-decorative)", "--_group-divider-inset": "var(--area-space-8)" } as CSSProperties;
+const groupSample = (style?: CSSProperties) => <ButtonGroup aria-label="Text alignment" style={style}><Button variant="ghost">Left</Button><Button variant="ghost">Center</Button><Button variant="ghost">Right</Button></ButtonGroup>;
+export const GalleryReviewButtonGroup = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Full-height divider in the control line"
+      basis="Notion's split button divides its parts with a full-height 1px line; shadcn's separator is full height in the control border colour. Area's soft group drew a 16px line in the decorative colour (243 on a 247 fill), which barely showed. Outline groups keep their shared border and no longer draw a second line."
+      before={groupSample(previousGroupDivider)}
+      after={groupSample()} />
+  </div>
+);
 export const GalleryButtonGroupCommands = () => {
   const [command, setCommand] = useState("");
   return <div><ButtonGroup aria-label="Vertical alignment"><Button variant="ghost" iconOnly icon={<AlignTopIcon />} aria-label="Align top" onClick={() => setCommand("Aligned top")} /><Button variant="ghost" iconOnly icon={<AlignMiddleIcon />} aria-label="Align middle" onClick={() => setCommand("Aligned middle")} /><Button variant="ghost" iconOnly icon={<AlignBottomIcon />} aria-label="Align bottom" onClick={() => setCommand("Aligned bottom")} /></ButtonGroup><span className="area-sr-only" role="status">{command}</span></div>;
@@ -98,6 +130,23 @@ export const GalleryButtonGroupText = () => {
   return <ButtonGroup variant="outline" aria-label="Text options"><Button variant="ghost" selected={pressed} onClick={() => setPressed(!pressed)}>Bold</Button><Button variant="ghost" onClick={() => setPressed(false)}>Reset</Button></ButtonGroup>;
 };
 
+/* ButtonGroup variants: one per tile (docs/specs/button-group.md). Each button is its own command. */
+const GroupDemo = ({ variant, size, labels, icons, disabledIndex }: { variant?: "soft" | "outline"; size?: "sm" | "md" | "lg"; labels: string[]; icons?: ReactNode[]; disabledIndex?: number }) => {
+  const [last, setLast] = useState("");
+  return <div><ButtonGroup variant={variant} size={size} aria-label="Formatting">
+    {labels.map((label, index) => icons && !label
+      ? <Button key={index} variant="ghost" iconOnly icon={icons[index]} aria-label={["Align top", "Align middle", "Align bottom"][index]} disabled={index === disabledIndex} onClick={() => setLast(String(index))} />
+      : <Button key={label} variant="ghost" icon={icons?.[index]} disabled={index === disabledIndex} onClick={() => setLast(label)}>{label}</Button>)}
+  </ButtonGroup><span className="area-sr-only" role="status">{last}</span></div>;
+};
+const alignIcons = [<AlignTopIcon key="t" />, <AlignMiddleIcon key="m" />, <AlignBottomIcon key="b" />];
+export const GalleryButtonGroupSoftText = () => <GroupDemo labels={["Left", "Center", "Right"]} />;
+export const GalleryButtonGroupOutlineText = () => <GroupDemo variant="outline" labels={["Left", "Center", "Right"]} />;
+export const GalleryButtonGroupOutlineIcons = () => <GroupDemo variant="outline" labels={["", "", ""]} icons={alignIcons} />;
+export const GalleryButtonGroupIconLabels = () => <GroupDemo variant="outline" labels={["Copy", "Link"]} icons={[<DocumentIcon key="c" />, <LinkIcon key="l" />]} />;
+export const GalleryButtonGroupSmall = () => <GroupDemo size="sm" labels={["Left", "Center", "Right"]} />;
+export const GalleryButtonGroupLarge = () => <GroupDemo size="lg" labels={["Left", "Center", "Right"]} />;
+export const GalleryButtonGroupDisabled = () => <GroupDemo variant="outline" labels={["Undo", "Redo"]} disabledIndex={1} />;
 export const GalleryToolbar = () => {
   const [command, setCommand] = useState("");
   return <div>
@@ -224,6 +273,12 @@ export const GalleryColorSwatchPicker = () => (
   { value: "#717579", label: "Cool 500" }, { value: "#747474", label: "Neutral 500" },
 ]} />
 );
+export const GalleryColorSwatchPickerPalette = () => {
+  const [color, setColor] = useState("#006DF5");
+  return <div style={{ inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-32))", maxInlineSize: "100%" }}>
+    <ColorSwatchPicker label="Area palette" layout="palette" columns={AREA_COLOR_GRID.columns} options={AREA_COLOR_GRID.options} value={color} onValueChange={setColor} />
+  </div>;
+};
 export const GalleryColorSwatchPickerRow = () => (
 <ColorSwatchPicker label="Overlay color" layout="row" defaultValue="#8D4DF380" options={[
   { value: "#8D4DF3", label: "Solid violet" }, { value: "#8D4DF3C0", label: "Violet at 75%" },
@@ -475,10 +530,53 @@ export const GalleryDialog = () => (
 export const GalleryDialogNoClose = () => <Dialog role="group" aria-modal={undefined} showCloseButton={false} title="Title" description="Description" footer={<Button>Action</Button>} style={{ inlineSize: "100%" }} />;
 export const GalleryDialogForm = () => <Dialog role="group" aria-modal={undefined} title="Title" description="Description" style={{ inlineSize: "100%" }} footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>}><Field label="Label"><Input fullWidth placeholder="Placeholder" /></Field></Dialog>;
 export const GalleryDialogScrollable = () => <Dialog role="group" aria-modal={undefined} title="Title" description="Description" footer={<Button>Action</Button>} style={{ inlineSize: "100%", maxBlockSize: "calc(var(--area-space-96) * 3)" }}><div style={{ display: "grid", gap: "var(--area-space-12)" }}>{Array.from({ length: 8 }, (_, index) => <p key={index} style={{ margin: 0 }}>Body text {index + 1}</p>)}</div></Dialog>;
-export const GalleryDialogModal = () => {
-  const modal = useRef<HTMLDialogElement>(null);
-  return <><Button onClick={() => modal.current?.showModal()}>Open dialog</Button><dialog ref={modal} className="area-dialog__modal" aria-label="Title"><Dialog role="group" aria-modal={undefined} title="Title" description="Description" footer={<><Button variant="ghost" onClick={() => modal.current?.close()}>Cancel</Button><Button onClick={() => modal.current?.close()}>Action</Button></>}>Body text</Dialog></dialog></>;
-};
+/* Footer actions close the enclosing native dialog; an app would act first. */
+const closeDialog = (event: MouseEvent<HTMLButtonElement>) => event.currentTarget.closest("dialog")?.close();
+/* Modal: the trigger opens a native modal dialog; the close, Escape or a click on the scrim closes it. */
+export const GalleryDialogModal = () => (
+  <Dialog trigger={<Button variant="outline" tone="neutral">Open dialog</Button>} title="Title" description="Description"
+    footer={<><Button variant="ghost" onClick={closeDialog}>Cancel</Button><Button onClick={closeDialog}>Action</Button></>}>Body text</Dialog>
+);
+
+/* Dialog pass review (docs/specs/dialog.md). "Before" rows rebuild earlier states inline. */
+const dialogPass0Title = { fontSize: "var(--area-title-sm-size)", lineHeight: "var(--area-title-sm-leading)", fontWeight: "var(--area-weight-regular)", textBox: "trim-both cap alphabetic" } as CSSProperties;
+const DialogPass0 = () => (
+  <div className="area-dialog" role="group" aria-label="Title" style={{ inlineSize: "100%", boxShadow: "var(--area-shadow-2)", borderRadius: "var(--area-radius-container)" }}>
+    <div className="area-dialog__header">
+      <div className="area-dialog__heading" style={{ gap: "var(--area-space-8)" }}>
+        <h2 className="area-dialog__title" style={dialogPass0Title}>Title</h2>
+        <p className="area-dialog__description" style={{ textBox: "trim-both cap alphabetic" } as CSSProperties}>Description</p>
+      </div>
+      <Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close dialog" icon={<DismissIcon />} style={{ margin: 0, color: "var(--area-fg-muted)" }} />
+    </div>
+    <div className="area-dialog__footer"><Button variant="ghost">Cancel</Button><Button>Action</Button></div>
+  </div>
+);
+/* Pass 1 as shipped: corner close, but a 20/28 regular title and a 12px corner. */
+const DialogPass1 = () => (
+  <div className="area-dialog" role="group" aria-label="Title" style={{ inlineSize: "100%", borderRadius: "var(--area-radius-container)" }}>
+    <div className="area-dialog__header" style={{ marginBlockStart: "calc((var(--area-icon-md) - var(--area-title-sm-leading)) / 2)" }}>
+      <div className="area-dialog__heading" style={{ gap: "var(--area-space-8)" }}>
+        <h2 className="area-dialog__title" style={{ ...dialogPass0Title, textBox: "none" } as CSSProperties}>Title</h2>
+        <p className="area-dialog__description" style={{ textBox: "trim-both cap alphabetic" } as CSSProperties}>Description</p>
+      </div>
+      <Button variant="ghost" tone="neutral" size="md" iconOnly aria-label="Close dialog" icon={<DismissIcon />} style={{ marginBlock: "calc((var(--area-title-sm-leading) - var(--area-control-md)) / 2)", marginInlineEnd: "calc((var(--area-icon-md) - var(--area-control-md)) / 2)" }} />
+    </div>
+    <div className="area-dialog__footer"><Button variant="ghost">Cancel</Button><Button>Action</Button></div>
+  </div>
+);
+export const GalleryReviewDialog = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Type and radius pass: 16/24 strong title, concentric 16px corner"
+      basis="Owner: the title looked too big beside the description. It was 20/28 regular, 1.4x the 14px description; ChatGPT (16/24) and shadcn (16) set dialog titles at 16. Every surface title is now strong, at 14 on compact surfaces (Popover, Panel, Alert, Toast) and 16 on standalone ones (Card, Dialog). The title group now matches Card's exactly (4 apart, baseline to cap 15.6). The corner was 12 around a close 8px in with an 8px radius, which is not concentric (12 - 8 = 4). The corner is now the close's radius plus its offset, 16 (ChatGPT 16), so the two arcs share a centre."
+      before={<DialogPass1 />}
+      after={<GalleryDialog />} />
+    <ReviewPair title="Close in an even corner, title centred on it, floating lift"
+      basis="The close sat on the 16px inset (16 from the top and side) while the title was trimmed to its cap, so the close's centre was 7px below the title's. shadcn and Primer sit their close 8px from the top and side and ChatGPT 12px (half their content inset), with the title centred on it. Area's close is now the 32px ghost Button 8px from both edges, so its icon lands on the 16px inset, and the title's line centres on it. Its foreground no longer changes on hover. The flat shadow becomes the floating lift Popover and Menu use, and the modal scrim drops from 65% to 13% black (ChatGPT 13%, shadcn 10%)."
+      before={<DialogPass0 />}
+      after={<GalleryDialog />} />
+  </div>
+);
 
 export const GalleryField = () => (
   <Field label="Label" description="Description">
@@ -505,6 +603,487 @@ export const GalleryInputPassword = () => {
   const [visible, setVisible] = useState(false);
   return <Field label="Password"><Input type={visible ? "text" : "password"} defaultValue="AreaDesign" trailingAction={<InputAction icon={visible ? <EyeSlashIcon /> : <EyeIcon />} tooltip={visible ? "Hide password" : "Show password"} onClick={() => setVisible(!visible)} />} /></Field>;
 };
+/* Figma's collapsed "Selection colors" summary: 16px chips and a muted count. */
+const SelectionColors = () => <><ColorSwatch color="#FFFFFF" size="sm" /><ColorSwatch color="#0055FF" size="sm" /><ColorSwatch color="#FFB800" size="sm" /><span>+2</span></>;
+export const GalleryPanelCollapsible = () => (
+  <Panel size="sm" title="Frame" aria-label="Collapsible sections">
+    <PanelSection collapsible heading="Layout" actions={inspectorButton("Add auto layout", <AutoLayoutIcon />)}>
+      <PanelRow label="Dimensions">
+        <NumberField size="sm" variant="soft" fullWidth aria-label="Width" defaultValue={320} grouping={false} scrub="W" />
+        <NumberField size="sm" variant="soft" fullWidth aria-label="Height" defaultValue={240} grouping={false} scrub="H" />
+      </PanelRow>
+    </PanelSection>
+    <PanelSection collapsible heading="Selection colors" defaultOpen={false} summary={<SelectionColors />}>
+      <PanelRow><ColorField size="sm" variant="soft" fullWidth aria-label="Selection color 1" defaultValue="#FFFFFF" /></PanelRow>
+      <PanelRow><ColorField size="sm" variant="soft" fullWidth aria-label="Selection color 2" defaultValue="#0055FF" /></PanelRow>
+      <PanelRow><ColorField size="sm" variant="soft" fullWidth aria-label="Selection color 3" defaultValue="#FFB800" /></PanelRow>
+    </PanelSection>
+    <PanelSection collapsible heading="Export" defaultOpen={false} actions={inspectorButton("Add export setting", <PlusIcon />)} />
+  </Panel>
+);
+
+/*
+ * Property list (docs/specs/property-list.md): Figma's fill stack. The heading's + adds a fill
+ * at the top, each row hides or removes its fill, and the handle reorders by pointer or keys.
+ */
+type Fill = { id: number; color: string; visible: boolean };
+const FillsSection = ({ initial }: { initial: string[] }) => {
+  const [fills, setFills] = useState<Fill[]>(() => initial.map((color, index) => ({ id: index, color, visible: true })));
+  const next = useRef(initial.length);
+  const add = () => setFills(list => [{ id: next.current++, color: "#D9D9D9", visible: true }, ...list]);
+  const reorder = (from: number, to: number) => setFills(list => { const copy = [...list]; const [item] = copy.splice(from, 1); if (item) copy.splice(to, 0, item); return copy; });
+  return <PanelSection collapsible heading="Fill" actions={<>{inspectorButton("Styles", <DotsFourIcon />)}{inspectorButton("Add fill", <PlusIcon />)}</>} onClick={event => { if ((event.target as HTMLElement).closest("[aria-label='Add fill']")) add(); }}>
+    {fills.length ? <PropertyList label="Fills" onReorder={reorder}>
+      {fills.map(fill => { const name = `${fill.color.slice(1, 7)} fill`; return <PropertyListItem key={fill.id} label={name} inactive={!fill.visible} actions={<>
+        <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`${fill.visible ? "Hide" : "Show"} ${name}`} aria-pressed={!fill.visible}
+          icon={fill.visible ? <EyeIcon /> : <EyeSlashIcon />} onClick={() => setFills(list => list.map(item => item.id === fill.id ? { ...item, visible: !item.visible } : item))} />
+        <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`Remove ${name}`} icon={<SubtractIcon />}
+          onClick={() => setFills(list => list.filter(item => item.id !== fill.id))} />
+      </>}>
+        <ColorField size="sm" variant="soft" alpha fullWidth aria-label={`${name} color`} defaultValue={fill.color} />
+      </PropertyListItem>; })}
+    </PropertyList> : null}
+  </PanelSection>;
+};
+export const GalleryPropertyListFills = () => (
+  <Panel size="md" title="Rectangle" aria-label="Fill properties"><FillsSection initial={["#0055FF", "#FFB800CC", "#00A797"]} /></Panel>
+);
+export const GalleryPropertyListSingle = () => (
+  <Panel size="sm" title="Rectangle" aria-label="Fill properties"><FillsSection initial={["#8D4DF3"]} /></Panel>
+);
+export const GalleryPropertyListEffects = () => {
+  const [effects, setEffects] = useState([{ id: 0, kind: "drop", visible: true }, { id: 1, kind: "inner", visible: false }]);
+  const reorder = (from: number, to: number) => setEffects(list => { const copy = [...list]; const [item] = copy.splice(from, 1); if (item) copy.splice(to, 0, item); return copy; });
+  return <Panel size="md" title="Card" aria-label="Effect properties">
+    <PanelSection heading="Effects" actions={inspectorButton("Add effect", <PlusIcon />)}>
+      <PropertyList label="Effects" onReorder={reorder}>
+        {effects.map((effect, index) => <PropertyListItem key={effect.id} label={`${effect.kind === "drop" ? "Drop shadow" : "Inner shadow"} effect`} inactive={!effect.visible} actions={<>
+          <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`${effect.visible ? "Hide" : "Show"} effect ${index + 1}`} aria-pressed={!effect.visible}
+            icon={effect.visible ? <EyeIcon /> : <EyeSlashIcon />} onClick={() => setEffects(list => list.map(item => item.id === effect.id ? { ...item, visible: !item.visible } : item))} />
+          <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`Remove effect ${index + 1}`} icon={<SubtractIcon />} onClick={() => setEffects(list => list.filter(item => item.id !== effect.id))} />
+        </>}>
+          <InputGroup size="sm" variant="soft" fullWidth aria-label={`Effect ${index + 1}`}>
+            <InputGroupText visual aria-hidden="true"><SlidersIcon /></InputGroupText>
+            <Select size="sm" aria-label={`Effect ${index + 1} type`} defaultValue={effect.kind}><option value="drop">Drop shadow</option><option value="inner">Inner shadow</option><option value="blur">Layer blur</option></Select>
+          </InputGroup>
+        </PropertyListItem>)}
+      </PropertyList>
+    </PanelSection>
+  </Panel>;
+};
+
+/*
+ * Figma's Design panel, rebuilt from Area parts (docs/specs/inspector.md): PanelSection headings
+ * with actions, PanelRow's two columns and trailing square, soft NumberFields whose letter or
+ * icon is the scrub handle, full-width ButtonGroups, Segmented and the alpha ColorField.
+ */
+const inspectorButton = (label: string, icon: ReactNode) => <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={label} icon={icon} />;
+const inspectorGroup = (label: string, items: Array<[string, ReactNode]>) => (
+  <ButtonGroup size="sm" fullWidth aria-label={label}>
+    {items.map(([name, icon]) => <Button key={name} size="sm" variant="ghost" tone="neutral" iconOnly aria-label={name} icon={icon} />)}
+  </ButtonGroup>
+);
+/*
+ * Box field in the recipe (docs/specs/box-field.md). Padding appears once the frame has a flow
+ * (Figma shows it only for auto layout) and splits in place; corner radius keeps Figma's one
+ * field beside opacity, and its Independent corners button opens the four corners in a popover
+ * (Figma's "Corner radius details panel").
+ */
+const LayoutSection = () => {
+  const [flow, setFlow] = useState("vertical");
+  return <PanelSection collapsible heading="Layout" actions={inspectorButton("Add auto layout", <AutoLayoutIcon />)}>
+    <PanelRow label="Flow">
+      <Segmented size="sm" iconOnly fullWidth label="Flow" value={flow} onSelect={setFlow} options={[
+        { value: "free", label: "Freeform", icon: <FlowFreeIcon /> },
+        { value: "vertical", label: "Vertical", icon: <FlowVerticalIcon /> },
+        { value: "horizontal", label: "Horizontal", icon: <FlowHorizontalIcon /> },
+        { value: "wrap", label: "Wrap", icon: <FlowWrapIcon /> },
+      ]} />
+    </PanelRow>
+    <PanelRow label="Dimensions" action={inspectorButton("Constrain proportions", <AspectRatioIcon />)}>
+      <NumberField size="sm" variant="soft" fullWidth aria-label="Width" defaultValue={1202} min={0} grouping={false} scrub="W" />
+      <NumberField size="sm" variant="soft" fullWidth aria-label="Height" defaultValue={815} min={0} grouping={false} scrub="H" />
+    </PanelRow>
+    {flow !== "free" ? <BoxField size="sm" variant="soft" label="Padding" defaultValue={[16, 24, 16, 24]} /> : null}
+    <PanelRow><Checkbox label="Clip content" defaultChecked /></PanelRow>
+  </PanelSection>;
+};
+const AppearanceSection = () => {
+  const [radius, setRadius] = useState<BoxValue>([8, 8, 8, 8]);
+  const [first, ...rest] = radius;
+  const mixed = rest.some(value => value !== first);
+  return <PanelSection collapsible heading="Appearance" actions={inspectorButton("Hide", <EyeIcon />)}>
+    <PanelRow label={["Opacity", "Corner radius"]} action={
+      <Popover side="bottom" aria-label="Corner radius" style={{ inlineSize: 240 } as CSSProperties}
+        trigger={<Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="Independent corners" icon={<CornersIcon />} />}>
+        <PopoverBody><BoxField kind="corners" size="sm" variant="soft" label="Corner radius" independent toggle={false} value={radius} onValueChange={setRadius} /></PopoverBody>
+      </Popover>}>
+      <NumberField size="sm" variant="soft" fullWidth aria-label="Opacity" defaultValue={100} min={0} max={100} unit="%" scrub={<OpacityIcon />} />
+      <NumberField size="sm" variant="soft" fullWidth aria-label="Corner radius" min={0} scrub={<CornerRadiusIcon />}
+        value={mixed ? null : first ?? null} mixed={mixed} onValueChange={next => setRadius([next, next, next, next])} />
+    </PanelRow>
+  </PanelSection>;
+};
+
+const BoxFieldFrame = ({ children }: { children: ReactNode }) => <div style={{ inlineSize: 240 }}>{children}</div>;
+export const GalleryBoxFieldPadding = () => <BoxFieldFrame><BoxField label="Padding" defaultValue={[16, 24, 16, 24]} /></BoxFieldFrame>;
+export const GalleryBoxFieldPaddingIndividual = () => <BoxFieldFrame><BoxField label="Padding" defaultIndependent defaultValue={[8, 24, 16, 24]} /></BoxFieldFrame>;
+export const GalleryBoxFieldPaddingMixed = () => <BoxFieldFrame><BoxField label="Padding" defaultValue={[8, 24, 16, 12]} /></BoxFieldFrame>;
+export const GalleryBoxFieldCorners = () => <BoxFieldFrame><BoxField kind="corners" label="Corner radius" defaultValue={[8, 8, 8, 8]} /></BoxFieldFrame>;
+export const GalleryBoxFieldCornersIndividual = () => <BoxFieldFrame><BoxField kind="corners" label="Corner radius" defaultIndependent defaultValue={[12, 12, 0, 0]} /></BoxFieldFrame>;
+export const GalleryBoxFieldSoft = () => <BoxFieldFrame><BoxField variant="soft" label="Padding" defaultValue={[16, 24, 16, 24]} /></BoxFieldFrame>;
+export const GalleryBoxFieldSm = () => <BoxFieldFrame><BoxField size="sm" label="Padding" defaultValue={[16, 24, 16, 24]} /></BoxFieldFrame>;
+export const GalleryBoxFieldLg = () => <BoxFieldFrame><BoxField size="lg" label="Padding" defaultValue={[16, 24, 16, 24]} /></BoxFieldFrame>;
+export const GalleryBoxFieldDisabled = () => <BoxFieldFrame><BoxField disabled label="Padding" defaultValue={[16, 24, 16, 24]} /></BoxFieldFrame>;
+
+/*
+ * Resizable panel (docs/specs/resizable-panel.md): a docked inspector with its separator on the
+ * start edge, and a sidebar with it on the end edge. The canvas beside each takes what is left.
+ */
+const resizeStage: CSSProperties = { display: "flex", inlineSize: 520, maxInlineSize: "100%", blockSize: 320 };
+const resizeCanvas: CSSProperties = { flex: 1, minInlineSize: 0, background: "var(--area-bg-subtle)" };
+const ResizableRows = () => <>
+  <PanelSection heading="Layout">
+    <PanelRow label="Dimensions">
+      <NumberField size="sm" variant="soft" fullWidth aria-label="Width" defaultValue={1202} min={0} grouping={false} scrub="W" />
+      <NumberField size="sm" variant="soft" fullWidth aria-label="Height" defaultValue={815} min={0} grouping={false} scrub="H" />
+    </PanelRow>
+    <BoxField size="sm" variant="soft" label="Padding" defaultValue={[16, 24, 16, 24]} />
+  </PanelSection>
+</>;
+export const GalleryPanelResizable = () => (
+  <div style={resizeStage}>
+    <div style={resizeCanvas} aria-hidden="true" />
+    <Panel size="sm" flush resizable="start" defaultWidth={240} maxWidth={360} title="Design" aria-label="Design">
+      <ResizableRows />
+    </Panel>
+  </div>
+);
+export const GalleryPanelResizableSidebar = () => (
+  <div style={resizeStage}>
+    <Panel size="sm" flush resizable="end" defaultWidth={240} maxWidth={360} title="Layers" aria-label="Layers">
+      <PanelSection heading="Pages"><TreeView aria-label="Pages" items={[{ id: "cover", label: "Cover" }, { id: "components", label: "Components" }]} defaultSelectedIds={["cover"]} /></PanelSection>
+    </Panel>
+    <div style={resizeCanvas} aria-hidden="true" />
+  </div>
+);
+
+/*
+ * Combobox (docs/specs/combobox.md). An editable field whose list filters as you type; the
+ * list is Menu's surface and rows. Figma's font size is the custom-value case.
+ */
+const fontOptions: ComboboxOption[] = ["Inter", "Geist", "IBM Plex Sans", "Source Sans 3", "Work Sans", "Manrope", "DM Sans", "Space Grotesk"].map(label => ({ value: label.toLowerCase().replace(/\s+/g, "-"), label }));
+const fontSizes: ComboboxOption[] = [10, 11, 12, 13, 14, 16, 20, 24, 32, 36, 40, 48, 64, 96, 128].map(size => ({ value: String(size), label: String(size) }));
+const comboFrame: CSSProperties = { inlineSize: 240 };
+export const GalleryCombobox = () => <div style={comboFrame}><Combobox fullWidth aria-label="Font" placeholder="Choose a font" options={fontOptions} defaultValue="inter" /></div>;
+export const GalleryComboboxCustom = () => <div style={comboFrame}><Combobox fullWidth aria-label="Font size" options={fontSizes} defaultValue="16" allowsCustomValue inputMode="decimal" /></div>;
+export const GalleryComboboxGroups = () => (
+  <div style={comboFrame}><Combobox fullWidth aria-label="Font" placeholder="Choose a font" options={[
+    ...["Inter", "Geist"].map(label => ({ value: `recent-${label}`, label, group: "Recent" })),
+    ...fontOptions.filter(option => !["inter", "geist"].includes(option.value)).map(option => ({ ...option, group: "All fonts" })),
+  ]} /></div>
+);
+export const GalleryComboboxCreate = () => {
+  const [tags, setTags] = useState<ComboboxOption[]>(["Design", "Engineering", "Research"].map(label => ({ value: label.toLowerCase(), label })));
+  return <div style={comboFrame}><Combobox fullWidth aria-label="Tag" placeholder="Search or create a tag" options={tags}
+    onCreate={text => setTags(list => [...list, { value: text.toLowerCase(), label: text }])} /></div>;
+};
+export const GalleryComboboxRich = () => (
+  <div style={comboFrame}><Combobox fullWidth aria-label="Assignee" placeholder="Assign to" options={[
+    { value: "ada", label: "Ada Lovelace", icon: <PersonSmallIcon />, description: "Owner" },
+    { value: "grace", label: "Grace Hopper", icon: <PersonSmallIcon />, description: "Editor" },
+    { value: "alan", label: "Alan Turing", icon: <PersonSmallIcon />, description: "Viewer" },
+    { value: "guest", label: "Guest", icon: <PersonSmallIcon />, description: "Invited", disabled: true },
+  ]} /></div>
+);
+export const GalleryComboboxSm = () => <div style={comboFrame}><Combobox fullWidth size="sm" aria-label="Font" options={fontOptions} defaultValue="geist" /></div>;
+export const GalleryComboboxLg = () => <div style={comboFrame}><Combobox fullWidth size="lg" aria-label="Font" options={fontOptions} defaultValue="geist" /></div>;
+export const GalleryComboboxDisabled = () => <div style={comboFrame}><Combobox fullWidth disabled aria-label="Font" options={fontOptions} defaultValue="inter" /></div>;
+export const GalleryComboboxInvalid = () => <div style={comboFrame}><Combobox fullWidth invalid aria-label="Font" placeholder="Choose a font" options={fontOptions} /></div>;
+
+/*
+ * Command palette (docs/specs/command-palette.md): Notion's "Search or ask" shape — a search
+ * row, grouped results, key hints — with Menu's rows.
+ */
+const paletteItems: CommandItem[] = [
+  { id: "roadmap", label: "Roadmap", description: "Product", icon: <DocumentIcon />, group: "Recent" },
+  { id: "tokens", label: "Design tokens", description: "Area", icon: <DocumentIcon />, group: "Recent" },
+  { id: "research", label: "Research notes", icon: <FolderIcon />, group: "Recent" },
+  { id: "new", label: "New page", icon: <PlusIcon />, shortcut: ["cmd", "n"], group: "Actions" },
+  { id: "link", label: "Copy link", icon: <LinkIcon />, shortcut: ["cmd", "shift", "c"], group: "Actions" },
+  { id: "settings", label: "Settings", icon: <SettingsIcon />, shortcut: ["cmd", ","], group: "Actions" },
+  { id: "trash", label: "Trash", icon: <TrashIcon />, group: "Actions", disabled: true },
+];
+export const GalleryCommandPalette = () => <CommandPalette inline items={paletteItems} placeholder="Search or ask…" />;
+export const GalleryCommandPaletteModal = () => {
+  const [open, setOpen] = useState(false);
+  return <>
+    <Button variant="outline" icon={<SearchIcon />} onClick={() => setOpen(true)}>Search<Kbd keys={["cmd", "k"]} size="small" appearance="quiet" /></Button>
+    <CommandPalette open={open} onOpenChange={setOpen} hotkey="mod+k" items={paletteItems} placeholder="Search or ask…" />
+  </>;
+};
+export const GalleryCommandPaletteEmpty = () => <CommandPalette inline items={paletteItems} defaultQuery="Quarterly plan" emptyText="No results for “Quarterly plan”" />;
+export const GalleryCommandPaletteNoFooter = () => <CommandPalette inline footer={false} items={paletteItems.filter(item => item.group === "Actions")} placeholder="Run a command…" />;
+
+/*
+ * Context menu (docs/specs/context-menu.md): Menu, opened at the pointer. Right-click the
+ * area, or focus it and press Shift+F10 (or the Menu key).
+ */
+const contextArea: CSSProperties = { display: "grid", placeItems: "center", inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-48))", minBlockSize: "var(--area-space-96)", border: "var(--area-border-width) dashed var(--area-border-default)", borderRadius: "var(--area-radius-container)", color: "var(--area-fg-muted)" };
+const pageActions = <>
+  <MenuItem shortcut={<Kbd keys={["cmd", "l"]} size="small" appearance="quiet" />}><span className="area-menu__icon"><LinkIcon /></span><span className="area-menu__text">Copy link</span></MenuItem>
+  <MenuItem><span className="area-menu__icon"><DocumentIcon /></span><span className="area-menu__text">Duplicate</span></MenuItem>
+  <MenuItem><span className="area-menu__icon"><OpenIcon /></span><span className="area-menu__text">Open in new tab</span></MenuItem>
+  <MenuSeparator />
+  <MenuItem tone="danger"><span className="area-menu__icon"><TrashIcon /></span><span className="area-menu__text">Move to Trash</span></MenuItem>
+</>;
+export const GalleryContextMenu = () => (
+  <ContextMenu label="Page actions" menu={pageActions}>
+    <div style={contextArea} tabIndex={0}>Right-click here</div>
+  </ContextMenu>
+);
+export const GalleryContextMenuTree = () => (
+  <ContextMenu label="Layer actions" menu={pageActions}>
+    <div style={{ inlineSize: 240 }}><TreeView aria-label="Layers" items={[{ id: "frame", label: "Frame 1", children: [{ id: "title", label: "Title" }, { id: "image", label: "Image" }] }]} defaultExpandedIds={["frame"]} /></div>
+  </ContextMenu>
+);
+export const GalleryContextMenuDisabled = () => (
+  <ContextMenu label="Page actions" menu={<>
+    <MenuItem><span className="area-menu__icon"><LinkIcon /></span><span className="area-menu__text">Copy link</span></MenuItem>
+    <MenuItem disabled><span className="area-menu__icon"><DocumentIcon /></span><span className="area-menu__text">Duplicate</span></MenuItem>
+    <MenuItem disabled tone="danger"><span className="area-menu__icon"><TrashIcon /></span><span className="area-menu__text">Move to Trash</span></MenuItem>
+  </>}>
+    <div style={contextArea} tabIndex={0}>Read-only page</div>
+  </ContextMenu>
+);
+
+/*
+ * Hover card (docs/specs/hover-card.md): Popover's surface, opened after the pointer rests on a
+ * link for 700ms (or on keyboard focus), closed 300ms after it leaves both.
+ */
+const personCard = <>
+  <div className="area-hover-card__identity"><Avatar size="lg" fallback="AL" /><div><PopoverTitle>Ada Lovelace</PopoverTitle><span className="area-hover-card__meta">@ada</span></div></div>
+  <PopoverDescription>Writes the analytical engine notes. Maintains the math section.</PopoverDescription>
+  <div className="area-hover-card__meta"><span>Joined 1843</span><span>12 pages</span></div>
+</>;
+export const GalleryHoverCard = () => (
+  <p>Reviewed by <HoverCard trigger={<a href="#ada">@ada</a>}>{personCard}</HoverCard> yesterday.</p>
+);
+export const GalleryHoverCardPage = () => (
+  <p>See <HoverCard trigger={<a href="#roadmap">Roadmap</a>}>
+    <div><PopoverTitle>Roadmap</PopoverTitle><PopoverDescription>What ships this quarter: the inspector foundation, overlays, and the color picker.</PopoverDescription></div>
+    <div className="area-hover-card__meta"><span><DocumentIcon />Product</span><span>Edited 2 hours ago</span></div>
+  </HoverCard> for dates.</p>
+);
+export const GalleryHoverCardSource = () => (
+  <p>Area measures every value<HoverCard trigger={<a href="#source" aria-label="Source: component adaptation">¹</a>}>
+    <div><PopoverTitle>Component adaptation</PopoverTitle><PopoverDescription>Every visible value traces to a capture or a pinned source line recorded in the spec.</PopoverDescription></div>
+    <div className="area-hover-card__meta"><span><LinkIcon />docs/COMPONENT_ADAPTATION.md</span></div>
+  </HoverCard>.</p>
+);
+export const GalleryHoverCardTop = () => (
+  <p>Owned by <HoverCard side="top" trigger={<a href="#ada-top">@ada</a>}>{personCard}</HoverCard></p>
+);
+
+/*
+ * Prompt suggestions (docs/specs/prompt-suggestions.md): ChatGPT's home rows under the
+ * composer, 24 below it; choosing one fills the composer.
+ */
+const starterPrompts = [
+  { id: "summarize", label: "Summarize the latest design review notes", icon: <DocumentIcon /> },
+  { id: "research", label: "Find references for inspector panels", icon: <SearchIcon /> },
+  { id: "tokens", label: "Explain how Area's radius tokens nest", icon: <SettingsIcon /> },
+];
+export const GalleryPromptSuggestions = () => {
+  const [draft, setDraft] = useState("");
+  const [list, setList] = useState(starterPrompts);
+  return <div style={{ display: "grid", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
+    <Composer value={draft} onValueChange={setDraft} placeholder="Ask anything" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />} />
+    {draft ? null : <PromptSuggestions suggestions={list} onSelect={item => setDraft(item.label)} onDismiss={item => setList(rows => rows.filter(row => row.id !== item.id))} />}
+  </div>;
+};
+export const GalleryPromptSuggestionsPlain = () => <PromptSuggestions suggestions={starterPrompts.map(({ icon: _icon, ...rest }) => rest)} />;
+export const GalleryPromptSuggestionsChips = () => {
+  const [draft, setDraft] = useState("");
+  return <div style={{ display: "grid", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
+    <Composer value={draft} onValueChange={setDraft} placeholder="Ask anything" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />} />
+    {draft ? null : <PromptSuggestions layout="chips" suggestions={[
+      { id: "summarize", label: "Summarize notes", icon: <DocumentIcon /> },
+      { id: "research", label: "Find references", icon: <SearchIcon /> },
+      { id: "tokens", label: "Explain radius tokens", icon: <SettingsIcon /> },
+    ]} onSelect={item => setDraft(item.label)} />}
+  </div>;
+};
+
+/*
+ * Message (docs/specs/message.md): ChatGPT's turns — the person's bubble at the end of the
+ * column, the assistant's prose across it, each with a row of muted icon actions.
+ */
+const actionButton = (label: string, icon: ReactNode) => <Button variant="ghost" tone="neutral" iconOnly aria-label={label} icon={icon} />;
+const assistantActions = <MessageActions>
+  {actionButton("Copy", <FluentCopyIcon />)}{actionButton("Good response", <ThumbLikeIcon />)}{actionButton("Bad response", <ThumbDislikeIcon />)}
+  {actionButton("Read aloud", <SpeakerIcon />)}{actionButton("Regenerate", <RegenerateIcon />)}{actionButton("More actions", <MoreIcon />)}
+</MessageActions>;
+const userActions = <MessageActions>{actionButton("Copy message", <FluentCopyIcon />)}{actionButton("Edit message", <EditIcon />)}</MessageActions>;
+const conversation: CSSProperties = { display: "grid", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" };
+export const GalleryMessage = () => (
+  <div style={conversation}>
+    <Message author="user" actions={userActions}>How should an inspector panel handle a field with mixed values?</Message>
+    <Message author="assistant" authorName="ChatGPT" actions={assistantActions}>
+      <p>Show the field empty with a “Mixed” placeholder, so nothing suggests a single value.</p>
+      <p>Typing a value or dragging the handle writes it to every selected layer at once.</p>
+    </Message>
+  </div>
+);
+export const GalleryMessageStreaming = () => (
+  <div style={conversation}>
+    <Message author="assistant" authorName="ChatGPT" streaming actions={assistantActions}>Show the field empty with a “Mixed” placeholder, so</Message>
+  </div>
+);
+export const GalleryMessageLong = () => (
+  <div style={conversation}>
+    <Message author="user" actions={userActions}>{"Here is the spec draft for the panel.\nCan you check the spacing between sections, the caption sizes, and whether the trailing action column lines up with the header buttons?"}</Message>
+  </div>
+);
+
+/*
+ * Scroll to latest (docs/specs/scroll-to-latest.md): scroll the conversation up and the round
+ * button appears 24 above the composer; it returns to the newest message.
+ */
+export const GalleryScrollToLatest = () => {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  return <div style={{ display: "grid", gridTemplateRows: "minmax(0, 1fr) auto", gap: "var(--area-space-16)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%", blockSize: "calc(var(--area-space-96) * 4)" }}>
+    <div ref={scrollRef} style={{ overflowY: "auto", display: "grid", gap: "var(--area-space-24)", alignContent: "start" }}>
+      {["What does the inspector row grid look like?", "And the captions?", "How do the sizes step?"].map((question, index) => <div key={question} style={{ display: "grid", gap: "var(--area-space-24)" }}>
+        <Message author="user">{question}</Message>
+        <Message author="assistant" authorName="ChatGPT" actions={index === 2 ? assistantActions : undefined}>
+          <p>Two equal field columns and a trailing square the height of a row, 8 apart, so every action lines up down the panel.</p>
+          <p>Captions sit 6 above their columns in the caption role, one per column or one across both.</p>
+        </Message>
+      </div>)}
+    </div>
+    <div style={{ position: "relative" }}>
+      <ScrollToLatest scrollRef={scrollRef} />
+      <Composer placeholder="Ask anything" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />} />
+    </div>
+  </div>;
+};
+
+/*
+ * Model picker (docs/specs/model-picker.md): ChatGPT's "Instant ⌄" — a ghost trigger in the
+ * composer opening a Menu of single-choice rows with notes.
+ */
+const modelOptions = [
+  { value: "auto", label: "Auto", description: "Decides how long to think" },
+  { value: "instant", label: "Instant", description: "Answers right away" },
+  { value: "thinking", label: "Thinking", description: "Thinks longer for better answers" },
+];
+export const GalleryModelPicker = () => (
+  <div style={{ inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
+    <Composer placeholder="Ask anything" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />}
+      mode={<ModelPicker models={modelOptions} defaultValue="instant" />} />
+  </div>
+);
+export const GalleryModelPickerHeading = () => (
+  <ModelPicker heading="Model" defaultValue="latest" models={[
+    { value: "latest", label: "Latest" },
+    { value: "previous", label: "Previous", description: "Leaving on October 14" },
+    { value: "legacy", label: "Legacy", description: "No longer available", disabled: true },
+  ]} />
+);
+
+export const GalleryPanelFigma = () => (
+  <Panel size="sm" title="Frame" aria-label="Design properties" action={inspectorButton("More frame actions", <MoreIcon />)}>
+    <PanelSection collapsible heading="Position">
+      <PanelRow label="Alignment" action={inspectorButton("Distribute", <BarsThreeIcon />)}>
+        {inspectorGroup("Horizontal alignment", [["Align left", <AlignLeftIcon />], ["Align horizontal centers", <AlignCenterHorizontalIcon />], ["Align right", <AlignRightIcon />]])}
+        {inspectorGroup("Vertical alignment", [["Align top", <AlignTopIcon />], ["Align vertical centers", <AlignMiddleIcon />], ["Align bottom", <AlignBottomIcon />]])}
+      </PanelRow>
+      <PanelRow label="Position">
+        <NumberField size="sm" variant="soft" fullWidth aria-label="X position" defaultValue={0} scrub="X" />
+        <NumberField size="sm" variant="soft" fullWidth aria-label="Y position" defaultValue={0} scrub="Y" />
+      </PanelRow>
+      <PanelRow label="Rotation">
+        <NumberField size="sm" variant="soft" fullWidth aria-label="Rotation" defaultValue={0} unit="°" scrub={<AngleIcon />} />
+        {inspectorGroup("Transform", [["Rotate 90°", <RotateIcon />], ["Flip horizontal", <FlipHorizontalIcon />], ["Flip vertical", <FlipVerticalIcon />]])}
+      </PanelRow>
+    </PanelSection>
+    <LayoutSection />
+    <AppearanceSection />
+    <FillsSection initial={["#0055FF"]} />
+    <PanelSection collapsible heading="Selection colors" defaultOpen={false} summary={<SelectionColors />}>
+      <PanelRow><ColorField size="sm" variant="soft" fullWidth aria-label="Selection color 1" defaultValue="#FFFFFF" /></PanelRow>
+      <PanelRow><ColorField size="sm" variant="soft" fullWidth aria-label="Selection color 2" defaultValue="#0055FF" /></PanelRow>
+    </PanelSection>
+    <PanelSection collapsible heading="Stroke" actions={inspectorButton("Add stroke", <PlusIcon />)} />
+    <PanelSection collapsible heading="Export" actions={inspectorButton("Add export setting", <PlusIcon />)} />
+  </Panel>
+);
+
+/* NumberField pass review (docs/specs/number-field.md). "Before" rebuilds pass-0 markup inline:
+ * a grip handle, a label row above, and the unit pushed to the far edge. */
+const NumberFieldPass0 = ({ value, unit, grip, soft }: { value: string; unit?: string; grip?: boolean; soft?: boolean }) => (
+  <span className={`area-number-field area-number-field--${soft ? "soft" : "outline"} area-number-field--md area-number-field--full-width`}>
+    {grip ? <span className="area-number-field__scrub" aria-hidden="true" data-glyph=""><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3v10M8 3v10M11 3v10" stroke="currentColor" strokeLinecap="round" /></svg></span> : null}
+    <input className="area-number-field__control" readOnly aria-label="Value" value={value} style={{ flex: "1", fieldSizing: "fixed" } as CSSProperties} />
+    {unit ? <span className="area-number-field__unit" aria-hidden="true" style={{ marginInlineStart: 0 }}>{unit}</span> : null}
+  </span>
+);
+const numberPair = { display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--area-space-8)" };
+const NumberFieldInspectorPass0 = () => (
+  <Panel size="sm" title="Frame" aria-label="Frame properties">
+    <PanelSection heading="Position"><div style={numberPair}>
+      <Field label="X"><NumberFieldPass0 value="24" unit="px" grip /></Field>
+      <Field label="Y"><NumberFieldPass0 value="48" unit="px" grip /></Field>
+    </div></PanelSection>
+    <PanelSection heading="Size"><div style={numberPair}>
+      <Field label="W"><NumberFieldPass0 value="320" unit="px" /></Field>
+      <Field label="H"><NumberFieldPass0 value="240" unit="px" /></Field>
+    </div></PanelSection>
+  </Panel>
+);
+const NumberFieldInspectorAfter = () => (
+  <Panel size="sm" title="Frame" aria-label="Frame properties">
+    <PanelSection heading="Position"><div style={numberPair}>
+      <NumberField variant="soft" fullWidth aria-label="X position" defaultValue={24} scrub="X" />
+      <NumberField variant="soft" fullWidth aria-label="Y position" defaultValue={48} scrub="Y" />
+    </div></PanelSection>
+    <PanelSection heading="Size"><div style={numberPair}>
+      <NumberField variant="soft" fullWidth aria-label="Width" defaultValue={320} min={0} scrub="W" />
+      <NumberField variant="soft" fullWidth aria-label="Height" defaultValue={240} min={0} scrub="H" />
+    </div></PanelSection>
+  </Panel>
+);
+/* Pass-0 steppers rebuilt inline: stacked 12px chevrons in a bordered column, flush to the edge. */
+const chevron = (up: boolean) => <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" style={{ inlineSize: "var(--area-space-12)", blockSize: "var(--area-space-12)", transform: up ? "rotate(180deg)" : undefined }}><path d="M3.5 5.5L8 10L12.5 5.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+const stepPass0 = { display: "grid", placeItems: "center", flex: "1", padding: 0, border: 0, background: "transparent", color: "var(--area-input-icon)" } as CSSProperties;
+const NumberFieldStepperPass0 = () => (
+  <span className="area-number-field area-number-field--outline area-number-field--md" style={{ paddingInlineEnd: 0, boxShadow: "var(--area-shadow-1)" }}>
+    <input className="area-number-field__control" readOnly aria-label="Opacity" value="80" style={{ flex: "1", fieldSizing: "fixed" } as CSSProperties} />
+    <span className="area-number-field__unit" aria-hidden="true" style={{ marginInlineStart: 0 }}>%</span>
+    <span style={{ display: "flex", flexDirection: "column", alignSelf: "stretch", inlineSize: "calc(var(--area-control-md) - var(--area-space-6))", borderInlineStart: "var(--area-stroke-width) solid var(--area-input-edge)" }}>
+      <span style={stepPass0}>{chevron(true)}</span>
+      <span style={{ ...stepPass0, borderBlockStart: "var(--area-stroke-width) solid var(--area-input-edge)" }}>{chevron(false)}</span>
+    </span>
+  </span>
+);
+export const GalleryReviewNumberField = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Steppers: minus and plus as nested 24px squares; no resting shadow"
+      basis="The steppers were two 12px chevrons stacked in a bordered column: each target about 15px tall, and the column split the field's outline. React Aria and Carbon put decrease then increase after the value, Base UI puts - and + around it, all as 32px squares. Area's are Input's nested action square (24px, its 6px radius, 4px in from the top and side, the same as Input's clear and reveal actions), minus then plus, with the new Area add and subtract glyphs. Press and hold repeats (one step, then every 60ms after 400ms) and stops at the bound; the buttons stay out of the tab order because the arrow keys step the value. Controls at rest no longer carry the 1px shadow, as Button (ChatGPT, Notion and Figma fields have none)."
+      before={<div style={{ inlineSize: "var(--area-input-inline-size)" }}><NumberFieldStepperPass0 /></div>}
+      after={<NumberField aria-label="Opacity" defaultValue={80} min={0} max={100} unit="%" steppers />} />
+    <ReviewPair title="The field's letter or icon is the scrub handle"
+      basis="Figma's inspector fields have no label row: the X, Y, W or H letter (or the rotation and opacity glyph) sits in a leading square and is the drag handle, in the muted icon color. Base UI's NumberField makes its label the scrub area too. Area drew a separate grip and a label above each field. scrub now takes the letter or icon; its whole square is the drag target, and the inspector uses the soft variant (Figma: #F5F5F5 fill, border on hover) without px."
+      before={<NumberFieldInspectorPass0 />}
+      after={<NumberFieldInspectorAfter />} />
+    <ReviewPair title="The unit follows the number"
+      basis="The unit sat at the far edge, away from the value it qualifies. Figma draws 100% and 0° as one string. The unit now sits against the number with only the glyphs' own spacing; the empty space after it still focuses the field. No unit is drawn beside Mixed or an empty value."
+      before={<div style={{ inlineSize: "var(--area-input-inline-size)" }}><NumberFieldPass0 value="80" unit="%" /></div>}
+      after={<NumberField aria-label="Opacity" defaultValue={80} min={0} max={100} unit="%" />} />
+  </div>
+);
+
 export const GalleryNumberFieldPlain = () => <Field label="Quantity"><NumberField defaultValue={4} min={0} steppers /></Field>;
 
 export const GalleryInputGroupAffixes = () => <InputGroup aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount in dollars" defaultValue="24.00" inputMode="decimal" /><InputGroupText aria-hidden="true">USD</InputGroupText></InputGroup>;
@@ -597,18 +1176,55 @@ export const GalleryMenuDisabled = () => (
 );
 export const GalleryMenuDanger = () => <Menu aria-label="Label"><MenuItem><span className="area-menu__text">Item one</span></MenuItem><MenuItem tone="danger"><span className="area-menu__text">Item two</span></MenuItem></Menu>;
 
-/** Embedded controls retain their own native semantics in a grouped menu surface. */
+/* Icon rows, a separator and a danger action, as ChatGPT's chat actions (docs/specs/menu.md). */
+const MenuIconRows = ({ style, dangerStyle, highlightDanger, separatorStyle }: { style?: CSSProperties; dangerStyle?: CSSProperties; highlightDanger?: boolean; separatorStyle?: CSSProperties }) => (
+  <Menu aria-label="Page actions" style={style}>
+    <MenuItem shortcut="⌘L"><span className="area-menu__icon"><LinkIcon /></span><span className="area-menu__text">Copy link</span></MenuItem>
+    <MenuItem><span className="area-menu__icon"><OpenIcon /></span><span className="area-menu__text">Open in new tab</span></MenuItem>
+    <MenuItem><span className="area-menu__icon"><SettingsIcon /></span><span className="area-menu__text">Settings</span></MenuItem>
+    <MenuSeparator style={separatorStyle} />
+    <MenuItem tone="danger" style={dangerStyle} {...(highlightDanger ? { "data-highlighted": "" } : {})}><span className="area-menu__icon"><TrashIcon /></span><span className="area-menu__text">Delete</span></MenuItem>
+  </Menu>
+);
+export const GalleryMenuIcons = () => <MenuIconRows />;
+const previousMenu = { "--_menu-gap": "var(--area-space-8)" } as CSSProperties;
+export const GalleryReviewMenu = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Label column at 36px: icon gap 8 → 12"
+      basis="ChatGPT (10 + 20px icon + 6) and Notion (8 + 20px icon + 8) both start the label 36px in. Area's shared inset already puts a 16px icon 8px in, as Notion does; the label started at 32. A 12px gap moves it to 36."
+      before={<MenuIconRows style={previousMenu} />}
+      after={<MenuIconRows />} />
+    <ReviewPair title="Divider band 21px → 9px"
+      basis="Owner: the divider gap is too big. Notion keeps 4px between the rows and the line (4 / 1 / 4); ChatGPT 8 / 1 / 8. Area had 10 / 1 / 10. It now follows Notion."
+      before={<MenuIconRows separatorStyle={{ marginBlock: "var(--area-space-8)" }} />}
+      after={<MenuIconRows />} />
+    <ReviewPair title="A floating lift instead of a card edge"
+      basis="Every product floats its menus: Notion 20/24 + 5/8 blur, ChatGPT 8/16, Figma 2/5 + 10/16. Area's 1px shadow read as a flat card. Menu now uses Notion's two layers in the theme's shadow colour."
+      before={<MenuIconRows style={{ boxShadow: "var(--area-shadow-2)" }} />}
+      after={<MenuIconRows />} />
+    <ReviewPair title="Danger keeps its red label and hovers with the neutral wash"
+      basis="ChatGPT's Delete stays red and takes the same 5% wash as every other row; Area tinted the row red on hover. Shown highlighted. Shortcuts also move from monospace to the UI font (Notion: 12px, quiet ink)."
+      before={<MenuIconRows highlightDanger dangerStyle={{ backgroundColor: "var(--area-danger-surface)", color: "var(--area-fg-danger)" }} />}
+      after={<MenuIconRows highlightDanger />} />
+  </div>
+);
+
+/*
+ * Checkable rows (docs/specs/menu.md): each row is one menu item and the control; the switch or
+ * check only shows state. Mixed controls such as a segmented choice belong in a Popover.
+ */
 export const GalleryMenuControls = () => {
-  const [option, setOption] = useState("one");
-  const row = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--area-space-16)", minBlockSize: "var(--area-control-md)", boxSizing: "border-box", paddingInline: "var(--area-space-8)" } as const;
+  const [on, setOn] = useState<Record<string, boolean>>({ small: false, full: true, comments: true, backlinks: false });
+  const toggle = (key: string) => () => setOn((state) => ({ ...state, [key]: !state[key] }));
   return (
-    <Menu role="group" aria-label="Label" style={{ marginInline: "auto", inlineSize: "100%", maxInlineSize: "calc(var(--area-space-96) * 3 + var(--area-space-32))", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)" }}>
-      <MenuLabel style={{ paddingInline: "var(--area-space-8)" }}>Label</MenuLabel>
-      <div style={row}><span>Item one</span><Switch aria-label="Item one" style={{ minBlockSize: "var(--area-space-20)" }} defaultChecked /></div>
-      <div style={row}><span>Item two</span><Segmented label="Item two" value={option} onSelect={setOption} options={[{ value: "one", label: "One" }, { value: "two", label: "Two" }]} /></div>
-      <div style={row}><span>Item three</span><Checkbox aria-label="Item three" defaultChecked /></div>
+    <Menu aria-label="Page options">
+      <MenuLabel>Page</MenuLabel>
+      <MenuItem indicator="switch" checked={on.small} onClick={toggle("small")}><span className="area-menu__text">Small text</span></MenuItem>
+      <MenuItem indicator="switch" checked={on.full} onClick={toggle("full")}><span className="area-menu__text">Full width</span></MenuItem>
       <MenuSeparator />
-      <div style={row}><span>Item four</span><Button variant="soft">Action</Button></div>
+      <MenuLabel>Show</MenuLabel>
+      <MenuItem checked={on.comments} onClick={toggle("comments")}><span className="area-menu__text">Comments</span></MenuItem>
+      <MenuItem checked={on.backlinks} onClick={toggle("backlinks")}><span className="area-menu__text">Backlinks</span></MenuItem>
     </Menu>
   );
 };
@@ -629,7 +1245,7 @@ export const GalleryNavGrouped = () => (
   </Nav>
 );
 export const GalleryNavIcons = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-icons" icon={<DotsFourIcon />} current>Item one</NavItem><NavItem href="#gallery-nav-icons" icon={<PersonSmallIcon />}>Item two</NavItem><NavItem href="#gallery-nav-icons" icon={<TokenIcon />}>Item three</NavItem></Nav>;
-export const GalleryNavCounts = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-counts" current trailing={<Badge size="sm">1</Badge>}>Item one</NavItem><NavItem href="#gallery-nav-counts" trailing={<Badge size="sm">2</Badge>}>Item two</NavItem><NavItem href="#gallery-nav-counts">Item three</NavItem></Nav>;
+export const GalleryNavCounts = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-counts" current trailing={<Badge>1</Badge>}>Item one</NavItem><NavItem href="#gallery-nav-counts" trailing={<Badge>2</Badge>}>Item two</NavItem><NavItem href="#gallery-nav-counts">Item three</NavItem></Nav>;
 
 export const GalleryNavMarker = () => (
   <Nav aria-label="Label" selection="marker">
@@ -659,65 +1275,132 @@ export const GalleryNavExpandable = () => {
 };
 
 /** Two-column inspector layout; every editable surface is an Area control. */
-export const GalleryPanel = () => {
-  const id = useId();
-  const pair = { display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--area-space-8)" };
-  return <Panel size="sm" title="Title" aria-label="Label">
-    <PanelSection heading="Label">
-      <Segmented fullWidth label="Label" defaultValue="top" options={[
-        { value: "top", icon: <AlignTopIcon />, label: <span className="area-sr-only">Align top</span> },
-        { value: "middle", icon: <AlignMiddleIcon />, label: <span className="area-sr-only">Align middle</span> },
-        { value: "bottom", icon: <AlignBottomIcon />, label: <span className="area-sr-only">Align bottom</span> },
-      ]} />
-      <div style={pair}>
-        <Input fullWidth variant="soft" type="number" prefix="X" aria-label="Label" defaultValue={0} />
-        <Input fullWidth variant="soft" type="number" prefix="Y" aria-label="Label" defaultValue={0} />
-      </div>
+/*
+ * Panel tiles (docs/specs/inspector.md, audit 2026-09-26): every body is PanelRow with controls
+ * at the panel's tier (sm panel, sm controls), so the family shows one inspector row.
+ */
+type PanelTier = "xs" | "sm" | "md" | "lg";
+const controlFor = (tier: PanelTier) => tier === "lg" ? "lg" : tier === "md" ? "md" : "sm";
+const PanelSampleRows = ({ tier = "sm" }: { tier?: PanelTier }) => {
+  const size = controlFor(tier);
+  return <>
+    <PanelSection heading="Position">
+      <PanelRow label="Alignment">
+        <Segmented size={size} iconOnly fullWidth label="Vertical alignment" defaultValue="top" options={[
+          { value: "top", label: "Align top", icon: <AlignTopIcon /> },
+          { value: "middle", label: "Align middle", icon: <AlignMiddleIcon /> },
+          { value: "bottom", label: "Align bottom", icon: <AlignBottomIcon /> },
+        ]} />
+      </PanelRow>
+      <PanelRow label="Position">
+        <NumberField size={size} variant="soft" fullWidth aria-label="X position" defaultValue={0} scrub="X" />
+        <NumberField size={size} variant="soft" fullWidth aria-label="Y position" defaultValue={0} scrub="Y" />
+      </PanelRow>
     </PanelSection>
-    <PanelSection heading="Label">
-      <Segmented fullWidth label="Label" defaultValue="one" options={[
-        { value: "one", label: "One" }, { value: "two", label: "Two" },
-      ]} />
-      <div style={pair}>
-        <Input fullWidth variant="soft" type="number" prefix="W" aria-label="Label" min={0} defaultValue={100} />
-        <Input fullWidth variant="soft" type="number" prefix="H" aria-label="Label" min={0} defaultValue={100} />
-      </div>
-      <Field orientation="horizontal" label="Label" htmlFor={id + "-gap"}><Input fullWidth variant="soft" type="number" id={id + "-gap"} min={0} defaultValue={8} /></Field>
-      <Field orientation="horizontal" label="Label"><Checkbox id={id + "-clip"} aria-label="Label" defaultChecked /></Field>
+    <PanelSection heading="Layout" actions={<Button size={size} variant="ghost" tone="neutral" iconOnly aria-label="Add auto layout" icon={<AutoLayoutIcon />} />}>
+      <PanelRow label="Dimensions" action={<Button size={size} variant="ghost" tone="neutral" iconOnly aria-label="Constrain proportions" icon={<AspectRatioIcon />} />}>
+        <NumberField size={size} variant="soft" fullWidth aria-label="Width" defaultValue={320} min={0} grouping={false} scrub="W" />
+        <NumberField size={size} variant="soft" fullWidth aria-label="Height" defaultValue={240} min={0} grouping={false} scrub="H" />
+      </PanelRow>
     </PanelSection>
-  </Panel>;
+  </>;
 };
-
+const panelMore = (size: "sm" | "md" | "lg") => <Button size={size} variant="ghost" tone="neutral" iconOnly aria-label="More actions" icon={<MoreIcon />} />;
+export const GalleryPanel = () => (
+  <Panel size="sm" title="Frame" action={panelMore("sm")}><PanelSampleRows /></Panel>
+);
 export const GalleryPanelSections = () => (
-  <Panel size="sm" title="Title" aria-label="Label">
+  <Panel size="sm" title="Motion">
     <PanelSection>
-      <Field orientation="horizontal" label="Label"><Select aria-label="Label" defaultValue="one"><option value="one">Option one</option><option value="two">Option two</option></Select></Field>
-      <Field orientation="horizontal" label="Label"><Segmented fullWidth label="Label" defaultValue="one" options={[{ value: "one", label: "One" }, { value: "two", label: "Two" }]} /></Field>
-      <Field orientation="horizontal" label="Label"><Switch aria-label="Label" defaultChecked /></Field>
+      <PanelRow label="Easing"><Select size="sm" fullWidth aria-label="Easing" defaultValue="ease-out"><option value="ease-out">Ease out</option><option value="linear">Linear</option></Select></PanelRow>
+      <PanelRow label="Direction"><Segmented size="sm" fullWidth label="Direction" defaultValue="in" options={[{ value: "in", label: "In" }, { value: "out", label: "Out" }]} /></PanelRow>
     </PanelSection>
-    <PanelSection heading="Label">
-      <Field orientation="horizontal" label="Label"><Select aria-label="Label" defaultValue="one"><option value="one">Option one</option><option value="two">Option two</option></Select></Field>
-      <Field orientation="horizontal" label="Label"><Input fullWidth variant="soft" type="number" aria-label="Label" min={0} defaultValue={300} suffix="ms" /></Field>
-      <Field orientation="horizontal" label="Label"><Slider aria-label="Label" defaultValue={75} /></Field>
+    <PanelSection heading="Timing">
+      <PanelRow label={["Duration", "Delay"]}>
+        <NumberField size="sm" variant="soft" fullWidth aria-label="Duration" defaultValue={300} min={0} unit="ms" />
+        <NumberField size="sm" variant="soft" fullWidth aria-label="Delay" defaultValue={0} min={0} unit="ms" />
+      </PanelRow>
+      <PanelRow><Checkbox label="Reduce motion" /></PanelRow>
     </PanelSection>
   </Panel>
 );
-
 export const GalleryPanelFooter = () => {
-  const [sections, setSections] = useState(2);
-  return <Panel size="sm" title="Title" aria-label="Label" footer={<Button variant="soft" fullWidth icon={<PlusIcon />} onClick={() => setSections(count => count + 1)}>Action</Button>} style={{ blockSize: 360 }}>
-    {Array.from({ length: sections }, (_, index) => <PanelSection key={index}>
-      <Field orientation="horizontal" label="Label"><Select aria-label="Label" defaultValue={String(index + 1)}>{Array.from({ length: sections + 1 }, (_, option) => <option key={option} value={String(option + 1)}>{option + 1}</option>)}</Select></Field>
-      <Field orientation="horizontal" label="Label"><Input fullWidth variant="soft" type="number" aria-label="Label" min={1} defaultValue={index + 2} /></Field>
+  const [effects, setEffects] = useState(2);
+  return <Panel size="sm" title="Effects" style={{ blockSize: 360 }}
+    footer={<Button size="sm" variant="soft" fullWidth icon={<PlusIcon />} onClick={() => setEffects(count => count + 1)}>Add effect</Button>}>
+    {Array.from({ length: effects }, (_, index) => <PanelSection key={index} heading={`Effect ${index + 1}`}>
+      <PanelRow label={["Blur", "Spread"]}>
+        <NumberField size="sm" variant="soft" fullWidth aria-label={`Effect ${index + 1} blur`} min={0} defaultValue={4 * (index + 1)} />
+        <NumberField size="sm" variant="soft" fullWidth aria-label={`Effect ${index + 1} spread`} defaultValue={0} />
+      </PanelRow>
     </PanelSection>)}
   </Panel>;
+};
+export const GalleryPanelXs = () => <Panel size="xs" title="Frame" action={panelMore("sm")}><PanelSampleRows tier="xs" /></Panel>;
+export const GalleryPanelMd = () => <Panel size="md" title="Frame" action={panelMore("md")}><PanelSampleRows tier="md" /></Panel>;
+export const GalleryPanelLg = () => <Panel size="lg" title="Frame" action={panelMore("lg")} style={{ "--area-panel-inline-size": "360px" } as CSSProperties}><PanelSampleRows tier="lg" /></Panel>;
+export const GalleryPanelFlush = () => <Panel size="sm" flush title="Frame" action={panelMore("sm")}><PanelSampleRows /></Panel>;
+export const GalleryPanelBareBar = () => <Panel size="sm" bareBar title="Frame" action={panelMore("sm")}><PanelSampleRows /></Panel>;
+
+/* Popover pass review (docs/specs/popover.md). "Before" restores the pass-0 surface inline. */
+const previousPopover = { boxShadow: "var(--area-shadow-2)", gap: "var(--area-space-12)", "--area-popover-inline-size": "calc(var(--area-space-96) * 2 + var(--area-space-48))" } as CSSProperties;
+const PopoverSample = ({ style }: { style?: CSSProperties }) => (
+  <Popover aria-label="Dimensions" role="dialog" style={style}>
+    <PopoverHeader><PopoverTitle>Dimensions</PopoverTitle><PopoverDescription>Set the size of the layer.</PopoverDescription><Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} /></PopoverHeader>
+    <PopoverBody><Input fullWidth aria-label="Width" defaultValue="320" /><Input fullWidth aria-label="Height" defaultValue="240" /></PopoverBody>
+    <PopoverFooter><Button size="sm" variant="outline">Reset</Button><Button size="sm">Apply</Button></PopoverFooter>
+  </Popover>
+);
+/* Pass 1 layout, rebuilt: description in the body under a 28px flex header, close unpulled. */
+const PopoverSamplePass1 = () => (
+  <Popover aria-label="Dimensions" role="dialog">
+    <PopoverHeader style={{ display: "flex", alignItems: "center", justifyContent: "space-between", minBlockSize: "var(--area-control-sm)", marginBlockStart: 0 }}><PopoverTitle>Dimensions</PopoverTitle><Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} style={{ margin: 0 }} /></PopoverHeader>
+    <PopoverBody><PopoverDescription>Set the size of the layer.</PopoverDescription><Input fullWidth aria-label="Width" defaultValue="320" /><Input fullWidth aria-label="Height" defaultValue="240" /></PopoverBody>
+    <PopoverFooter><Button size="sm" variant="outline">Reset</Button><Button size="sm">Apply</Button></PopoverFooter>
+  </Popover>
+);
+/* Pass 2 header, rebuilt: title at regular weight, header cap-trimmed to the inset, so the close box sits 3px from the top and 6px from the side. */
+const PopoverSamplePass2 = () => (
+  <Popover aria-label="Dimensions" role="dialog">
+    <PopoverHeader style={{ marginBlockStart: "calc((1cap - 1lh) / 2)" }}><PopoverTitle style={{ fontWeight: "var(--area-weight-regular)" }}>Dimensions</PopoverTitle><PopoverDescription>Set the size of the layer.</PopoverDescription><Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} /></PopoverHeader>
+    <PopoverBody><Input fullWidth aria-label="Width" defaultValue="320" /><Input fullWidth aria-label="Height" defaultValue="240" /></PopoverBody>
+    <PopoverFooter><Button size="sm" variant="outline">Reset</Button><Button size="sm">Apply</Button></PopoverFooter>
+  </Popover>
+);
+export const GalleryReviewPopover = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Pass 3: close in an even corner, title centred on it, title at strong weight"
+      basis="Owner: the close should sit evenly in the corner, and the title looked off beside it. It sat 3px from the top and 6px from the side. Now the close box is 6px from both (half the 12px inset, as shadcn and Primer sit theirs 8px into a 16px inset), its icon is on the 12px inset both ways, and its 6px radius is concentric with the 12px corner. The title centres on the close (cap 15 from the top). The title moves to strong (500) because it is the description's size, so weight is the only thing that separates them (shadcn 500, Primer 600)."
+      before={<PopoverSamplePass2 />}
+      after={<PopoverSample />} />
+    <ReviewPair title="Pass 2: title group, close on the title line, one spacing ladder"
+      basis="Owner: the title-to-description gap was too large and the gaps inconsistent. The description sat in the body, a 28px header and a 16px section gap below the title (baseline to cap 29; shadcn 15). It now sits in the header 6px under the title (15). The close button keeps its 28px target but no longer sets the header's height, so the title's cap is 15px from the top instead of 21, and its icon lands on the 12px inset like the text. Ladder: 12 inset, 16 between sections, 8 between items, 6 inside the title group."
+      before={<PopoverSamplePass1 />}
+      after={<PopoverSample />} />
+    <ReviewPair title="Floating lift, 320 wide, 16 between sections"
+      basis="Notion draws its popovers with the same lift as its menus (20/24 + 5/8 blur); shadcn and ChatGPT float theirs too. Width moves from 240 to 320 (shadcn 320; ChatGPT 254, Notion 456) and the gap between header, body and footer from 12 to 16 (Notion 16, shadcn 16). The 12px inset stays, between shadcn's 10 and Notion's 16."
+      before={<PopoverSample style={previousPopover} />}
+      after={<PopoverSample />} />
+  </div>
+);
+/* Anchored: the trigger opens the popover beside it, 4px away; Escape or a click outside closes it. */
+export const GalleryPopoverTrigger = () => {
+  const [size, setSize] = useState({ width: "320", height: "240" });
+  return (
+    <Popover side="bottom" aria-label="Dimensions" trigger={<Button variant="outline" tone="neutral">Dimensions</Button>}>
+      <PopoverHeader><PopoverTitle>Dimensions</PopoverTitle><PopoverDescription>Set the size of the layer.</PopoverDescription></PopoverHeader>
+      <PopoverBody>
+        <Input fullWidth aria-label="Width" value={size.width} onChange={(event) => setSize({ ...size, width: event.target.value })} />
+        <Input fullWidth aria-label="Height" value={size.height} onChange={(event) => setSize({ ...size, height: event.target.value })} />
+      </PopoverBody>
+    </Popover>
+  );
 };
 
 export const GalleryPopover = () => (
   <Popover aria-label="Label" role="dialog">
-    <PopoverHeader><PopoverTitle>Title</PopoverTitle><Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} /></PopoverHeader>
-    <PopoverBody><PopoverDescription>Description</PopoverDescription></PopoverBody>
-    <PopoverFooter><span>1 of 5</span><Button size="sm" variant="outline">Prev</Button><Button size="sm">Next</Button></PopoverFooter>
+    <PopoverHeader><PopoverTitle>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription><Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} /></PopoverHeader>
+    <PopoverFooter><span style={{ color: "var(--area-fg-muted)" }}>1 of 5</span><Button size="sm" variant="outline">Prev</Button><Button size="sm">Next</Button></PopoverFooter>
   </Popover>
 );
 
@@ -731,10 +1414,21 @@ export const GalleryPopoverField = () => (
 
 export const GalleryPopoverImage = () => (
   <Popover aria-label="Label" role="dialog">
-    <PopoverHeader><PopoverTitle>Title</PopoverTitle><Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} /></PopoverHeader>
-    <PopoverBody><PopoverDescription>Description</PopoverDescription><PopoverMedia><img src="/images/chip-pixels.png" alt="" /></PopoverMedia></PopoverBody>
+    <PopoverHeader><PopoverTitle>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription><Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close" icon={<DismissIcon />} /></PopoverHeader>
+    <PopoverBody><PopoverMedia><img src="/images/chip-pixels.png" alt="" /></PopoverMedia></PopoverBody>
   </Popover>
 );
+
+/* Arrow: one tile per side. `side` names where the popover sits, so the arrow points back at the trigger. */
+const PopoverArrowSample = ({ side }: { side: "top" | "right" | "bottom" | "left" }) => (
+  <Popover aria-label="Label" role="dialog" side={side} arrow style={{ "--area-popover-inline-size": "calc(var(--area-space-96) * 2)" } as CSSProperties}>
+    <PopoverHeader><PopoverTitle>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription></PopoverHeader>
+  </Popover>
+);
+export const GalleryPopoverArrowTop = () => <PopoverArrowSample side="top" />;
+export const GalleryPopoverArrowRight = () => <PopoverArrowSample side="right" />;
+export const GalleryPopoverArrowBottom = () => <PopoverArrowSample side="bottom" />;
+export const GalleryPopoverArrowLeft = () => <PopoverArrowSample side="left" />;
 
 export const GalleryProgress = () => (
   <Progress value={62} label="Label" />
@@ -890,13 +1584,13 @@ export const GallerySwitchOn = () => <Switch label="On" defaultChecked />;
 export const GallerySwitchDisabled = () => <Switch label="Label" disabled />;
 
 export const GalleryTable = () => (
-  <Table aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col">Status</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead><tbody><tr><td>Item one</td><td><Badge size="sm" tone="success" dot>Status</Badge></td><td className="area-table__cell--numeric">1</td></tr><tr><td>Item two</td><td><Badge size="sm">Status</Badge></td><td className="area-table__cell--numeric">2</td></tr></tbody></Table>
+  <Table aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col">Status</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead><tbody><tr><td>Item one</td><td><Badge tone="success" dot>Status</Badge></td><td className="area-table__cell--numeric">1</td></tr><tr><td>Item two</td><td><Badge>Status</Badge></td><td className="area-table__cell--numeric">2</td></tr></tbody></Table>
 );
 
 export const GalleryTableSelectable = () => {
   const [selected, setSelected] = useState<string[]>([]);
   const rows = ["Item one", "Item two", "Item three"];
-  return <Table aria-label="Table"><thead><tr><th scope="col" className="area-table__cell--fit"><Checkbox aria-label="Select all rows" checked={selected.length === rows.length} indeterminate={selected.length > 0 && selected.length < rows.length} onChange={event => setSelected(event.target.checked ? rows : [])} /></th><th scope="col">Name</th></tr></thead><tbody>{rows.map(name => <tr key={name} aria-selected={selected.includes(name)}><td><Checkbox aria-label={`Select ${name}`} checked={selected.includes(name)} onChange={event => setSelected(event.target.checked ? [...selected, name] : selected.filter(item => item !== name))} /></td><td>{name}</td></tr>)}</tbody></Table>;
+  return <Table aria-label="Table"><thead><tr><th scope="col" className="area-table__cell--fit"><Checkbox aria-label="Select all rows" checked={selected.length === rows.length} indeterminate={selected.length > 0 && selected.length < rows.length} onChange={event => setSelected(event.target.checked ? rows : [])} /></th><th scope="col">Name</th></tr></thead><tbody>{rows.map(name => <tr key={name} data-selected={selected.includes(name) ? "" : undefined}><td><Checkbox aria-label={`Select ${name}`} checked={selected.includes(name)} onChange={event => setSelected(event.target.checked ? [...selected, name] : selected.filter(item => item !== name))} /></td><td>{name}</td></tr>)}</tbody></Table>;
 };
 export const GalleryTableSorting = () => {
   const [descending, setDescending] = useState(false);
@@ -917,7 +1611,7 @@ export const GalleryTabsVertical = () => <Tabs orientation="vertical" label="Lab
 export const GalleryTabsSmall = () => <Tabs size="sm" tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
 export const GalleryTabsTrack = () => <Tabs track tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
 export const GalleryTabsIcons = () => <Tabs tabs={[{ id: "one", label: "Item one", icon: <PersonSmallIcon />, content: "Body text" }, { id: "two", label: "Item two", icon: <InfoIcon />, content: "Body text" }]} />;
-export const GalleryTabsCounts = () => <Tabs tabs={[{ id: "one", label: "Item one", trailing: <Badge size="sm">1</Badge>, content: "Body text" }, { id: "two", label: "Item two", trailing: <Badge size="sm">2</Badge>, content: "Body text" }]} />;
+export const GalleryTabsCounts = () => <Tabs tabs={[{ id: "one", label: "Item one", trailing: <Badge>1</Badge>, content: "Body text" }, { id: "two", label: "Item two", trailing: <Badge>2</Badge>, content: "Body text" }]} />;
 
 export const GalleryTextarea = () => <Textarea aria-label="Label" placeholder="Placeholder" rows={3} />;
 
@@ -931,8 +1625,8 @@ export const GalleryTextareaCount = () => {
 
 export const GalleryToast = () => <Toast tone="success" icon={<CheckIcon />}>Body text</Toast>;
 export const GalleryToastInfo = () => <Toast tone="info" icon={<InfoIcon />}>Body text</Toast>;
-export const GalleryToastWarning = () => <Toast tone="warning" icon={<InfoIcon />} >Body text</Toast>;
-export const GalleryToastDanger = () => <Toast tone="danger" icon={<DismissIcon />} >Body text</Toast>;
+export const GalleryToastWarning = () => <Toast tone="warning" icon={<AlertIcon />}>Body text</Toast>;
+export const GalleryToastDanger = () => <Toast tone="danger" icon={<AlertIcon />}>Body text</Toast>;
 export const GalleryToastTitle = () => <Toast tone="info" icon={<InfoIcon />} title="Title">Body text</Toast>;
 export const GalleryToastMultiline = () => <Toast tone="info" icon={<InfoIcon />} style={{ inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-48))" }}>Body text that wraps onto a second line</Toast>;
 export const GalleryToastAction = () => {
@@ -943,6 +1637,28 @@ export const GalleryToastDismissible = () => {
   const [visible, setVisible] = useState(true);
   return visible ? <Toast icon={<CheckIcon />} tone="success" onDismiss={() => setVisible(false)}>Body text</Toast> : <Button variant="outline" onClick={() => setVisible(true)}>Show notification</Button>;
 };
+
+/* Toast pass review (docs/specs/toast.md). "Before" rebuilds the pass-0 insets inline. */
+const toastPass0 = { padding: "var(--area-space-8) var(--area-space-10)", boxShadow: "var(--area-shadow-3)", alignItems: "center" } as CSSProperties;
+const ToastPass0Dismissible = () => (
+  <div className="area-toast area-toast--success" style={{ ...toastPass0, paddingBlock: "var(--area-space-4)" }}>
+    <span className="area-toast__icon" aria-hidden="true" style={{ marginBlockStart: 0 }}><CheckIcon /></span>
+    <div className="area-toast__content">Body text</div>
+    <span className="area-toast__dismiss" style={{ margin: 0 }}><Button size="sm" variant="ghost" iconOnly aria-label="Dismiss notification" icon={<DismissIcon />} /></span>
+  </div>
+);
+export const GalleryReviewToast = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Popover's inset and corner: 12 inset, 40 tall, dismiss 6 from the top and side"
+      basis="The dismiss sat 5 from the top and 11 from the side, and the icon 11 from both. The toast now follows Popover's numbers: text and icon on a 12px inset (the icon 12 from the top and side), one line 40 tall (Notion 43), and controls that give back their 28px box so the last one sits 6 from the top and side, its 6px radius concentric with the 12px corner. Every toast is 40 tall with or without controls. The icon gap stays 8 (Notion 8)."
+      before={<ToastPass0Dismissible />}
+      after={<GalleryToastDismissible />} />
+    <ReviewPair title="Floating lift; muted body under a title"
+      basis="The toast used a 2/4 shadow; Notion's toast uses the same 20/24 + 5/8 lift as its menus, which Popover, Menu and Dialog now share. With a title, the body becomes the description and turns muted (Sonner does the same); the title is strong, like every surface title."
+      before={<div className="area-toast area-toast--info" style={{ ...toastPass0, alignItems: "flex-start" }}><span className="area-toast__icon" aria-hidden="true"><InfoIcon /></span><div className="area-toast__content"><div style={{ fontWeight: "var(--area-weight-regular)" }}>Title</div><div>Body text</div></div></div>}
+      after={<GalleryToastTitle />} />
+  </div>
+);
 
 export const GalleryToken = () => (
   <Token swatch="var(--area-accent-solid)">--area-accent-solid</Token>
@@ -1017,6 +1733,60 @@ export const GalleryTreeViewFiles = () => {
   const [current, setCurrent] = useState("button");
   return <TreeView aria-label="Project files" items={fileTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
 };
+/*
+ * Tree view pass review, pass 3 (2026-09-25, docs/specs/tree-view.md). "Before" restores the
+ * pass-2 spacing through the private properties. The removed edge marker has no CSS left to restore.
+ */
+const previousSpacing = { "--_tree-gap": "var(--area-space-4)", "--_tree-label-inset": "var(--area-space-4)" } as CSSProperties;
+export const GalleryReviewTreeView = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Pass 3: chevron, icon and label evenly spaced on shared columns"
+      basis="Owner: space the three evenly so icons and labels align on an inset line. Gaps were 4px (chevron to icon) and 8px (icon to label), with a 20px indent, so a child's icon landed at 48 under a parent label at 52. Now 6px and 6px with a 22px indent: columns at 8, 30, 52, 74 from the row edge. A child's chevron sits under its parent's icon and its icon under the parent's label. Labels stay at 52. Also removed (owner): the current-row edge marker; the current row keeps its fill and main ink, and aria-current still announces it."
+      before={<TreeView aria-label="Spacing, before" items={fileTree} defaultExpandedIds={["src", "components"]} currentId="button" selectedIds={["button"]} style={previousSpacing} />}
+      after={<TreeView aria-label="Spacing, after" items={fileTree} defaultExpandedIds={["src", "components"]} currentId="button" selectedIds={["button"]} />} />
+  </div>
+);
+/* Folders as filled glyphs in one hue (owner, pass 2). */
+const blueFolder = <PilotFolderFilledIcon style={{ color: "var(--area-fg-info)" }} />;
+const filledTree = [
+  { id: "src", label: "src", icon: blueFolder, children: [
+    { id: "components", label: "components", icon: blueFolder, children: [
+      { id: "avatar", label: "Avatar.tsx", icon: <PilotDocumentIcon />, trailing: "A" },
+      { id: "button", label: "Button.tsx", icon: <PilotDocumentIcon />, trailing: "M" },
+    ] },
+    { id: "index", label: "index.ts", icon: <PilotDocumentIcon /> },
+  ] },
+  { id: "public", label: "public", icon: blueFolder, children: [{ id: "favicon", label: "favicon.svg", icon: <PilotDocumentIcon /> }] },
+  { id: "package", label: "package.json", icon: <PilotDocumentIcon /> },
+];
+export const GalleryTreeViewFilledFolders = () => {
+  const [current, setCurrent] = useState("button");
+  return <TreeView aria-label="Project files with filled folders" items={filledTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
+};
+/*
+ * Figma-style layers: row controls at the end. Visibility is pinned while a layer is hidden.
+ * Layer-type glyphs (frame, rectangle, component) are not drawn yet; these are stand-ins.
+ */
+const LayerControls = ({ name, hidden, onToggle }: { name: string; hidden: boolean; onToggle: () => void }) => <>
+  <Button variant="ghost" size="sm" iconOnly tabIndex={-1} icon={<PilotMoreHorizontalIcon />} aria-label={`More options for ${name}`} />
+  <Button variant="ghost" size="sm" iconOnly tabIndex={-1} data-pinned={hidden ? "" : undefined} icon={hidden ? <EyeSlashIcon /> : <EyeIcon />} aria-label={hidden ? `Show ${name}` : `Hide ${name}`} aria-pressed={hidden} onClick={onToggle} />
+</>;
+export const GalleryTreeViewLayers = () => {
+  const [hidden, setHidden] = useState<string[]>(["rect-6"]);
+  const [current, setCurrent] = useState("rect-5");
+  const layer = (id: string, label: string, icon: ReactNode, children?: TreeViewNode[]): TreeViewNode => ({ id, label, icon, children,
+    actions: <LayerControls name={label} hidden={hidden.includes(id)} onToggle={() => setHidden(list => list.includes(id) ? list.filter(item => item !== id) : [...list, id])} /> });
+  const items = [
+    layer("frame", "Frame 19", <AutoLayoutIcon />, [
+      layer("rect-5", "Rectangle 5", <CornersIcon />),
+      layer("rect-7", "Rectangle 7", <CornersIcon />),
+      layer("rect-6", "Rectangle 6", <CornersIcon />),
+      layer("rect-4", "Rectangle 4", <CornersIcon />),
+    ]),
+    layer("globe", "Globe", <span style={{ display: "contents", color: "var(--area-fg-discovery)" }}><TokenIcon /></span>),
+  ];
+  return <TreeView aria-label="Layers" items={items} defaultExpandedIds={["frame"]} selectedIds={[current]} onActivate={setCurrent} />;
+};
 export const GalleryTreeViewFilters = () => <TreeView aria-label="Market filters" selectionMode="checkbox" items={filterTree} defaultExpandedIds={["markets", "funding"]} defaultSelectedIds={["open"]} />;
 
 export const GalleryComposerInline = () => {
@@ -1026,14 +1796,31 @@ export const GalleryComposerInline = () => {
 export const GalleryComposerStacked = () => {
   const [sent, setSent] = useState("");
   const [mode, setMode] = useState("Standard");
-  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Task" placeholder="Work on anything" mode={<Button variant="ghost" size="sm" trailingIcon={<ChevronIcon />} onClick={() => setMode(mode === "Standard" ? "Focused" : "Standard")}>{mode}</Button>} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Task" placeholder="Work on anything" mode={<Menu aria-label="Mode" side="top" trigger={<Button variant="soft" trailingIcon={<ChevronIcon />}>{mode}</Button>}>{["Standard", "Focused"].map(option => <MenuItem key={option} data-selected={option === mode ? "" : undefined} shortcut={option === mode ? <CheckIcon /> : undefined} onClick={() => setMode(option)}>{option}</MenuItem>)}</Menu>} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
+const archivedTree = [
+  { id: "src", label: "src", icon: <FolderIcon />, children: [
+    { id: "button", label: "Button.tsx", icon: <DocumentIcon /> },
+    { id: "legacy", label: "Legacy.tsx", icon: <DocumentIcon />, trailing: "Locked", disabled: true },
+  ] },
+];
+export const GalleryTreeViewDisabled = () => <TreeView aria-label="Project with a locked file" items={archivedTree} defaultExpandedIds={["src"]} defaultSelectedIds={["button"]} />;
 export const GalleryTreeViewCollapsed = () => <TreeView aria-label="Collapsed project" items={fileTree} defaultSelectedIds={["src"]} />;
 export const GalleryComposerPrefilled = () => {
   const [value, setValue] = useState("Could you review this change?");
   const [sent, setSent] = useState("");
   return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Draft message" value={value} onValueChange={setValue} onSubmit={message => { setSent(message); setValue(""); }} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
+/* Composer pass review (2026-09-25, docs/specs/composer.md). "Before" restores pass-0 values. */
+const previousComposer = { "--_composer-text": "var(--area-control-md-text)", "--_composer-leading": "var(--area-control-md-leading)", "--_composer-gap": "var(--area-space-4)", borderColor: "var(--area-input-edge)", boxShadow: "var(--area-shadow-1)" } as CSSProperties;
+const reviewComposer = (style?: CSSProperties) => <div style={{ inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" }}><Composer label="Message" placeholder="Ask anything" defaultValue="" style={style} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" />} trailingActions={<Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search tools" />} onSubmit={() => {}} /></div>;
+export const GalleryReviewComposer = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Writes at 16px, corner concentric with the send Button, 8px between actions"
+      basis="ChatGPT writes at 16px (Area's body is 16/24) and keeps 8px between its actions. The send action is an Area Button (8 radius), so the corner is 8 + 8 inset = 16; no shadow at rest (owner, 2026-09-26). The row stays 48px: 32px actions and 8px insets."
+      before={reviewComposer(previousComposer)} after={reviewComposer()} />
+  </div>
+);
 export const GalleryComposerDisabled = () => <Composer label="Unavailable message" placeholder="Messaging unavailable" disabled />;
 
 export const GalleryColorFieldSplit = () => (
@@ -1043,12 +1830,82 @@ export const GalleryColorFieldSplit = () => (
 );
 export const GalleryAlignmentPickerLandscape = () => <div style={{inlineSize: "220px", blockSize: "112px"}}><AlignmentPicker label="Landscape alignment" stretch defaultValue="top-left" /></div>;
 export const GalleryAlignmentPickerPortrait = () => <div style={{inlineSize: "112px", blockSize: "200px"}}><AlignmentPicker label="Portrait alignment" stretch defaultValue="bottom-right" /></div>;
+const pickerSwatches = [
+  {value: "#01AA4E", label: "Green 500"}, {value: "#006DF5", label: "Blue 500"},
+  {value: "#5C5DFE", label: "Indigo 500"}, {value: "#8D4DF3", label: "Purple 500"},
+  {value: "#DF127D", label: "Pink 500"}, {value: "#E80945", label: "Red 500"},
+  {value: "#EA7401", label: "Orange 500"}, {value: "#00A797", label: "Teal 500"},
+];
 export const GalleryColorPicker = () => {
-  const [swatches, setSwatches] = useState([
-    {value: "#01AA4E", label: "Green 500"}, {value: "#006DF5", label: "Blue 500"},
-    {value: "#5C5DFE", label: "Indigo 500"}, {value: "#8D4DF3", label: "Purple 500"},
-    {value: "#DF127D", label: "Pink 500"}, {value: "#E80945", label: "Red 500"},
-    {value: "#EA7401", label: "Orange 500"}, {value: "#00A797", label: "Teal 500"},
-  ]);
+  const [swatches, setSwatches] = useState(pickerSwatches);
   return <ColorPicker label="Fill" defaultValue="#8D4DF3" swatches={swatches} onAddSwatch={value => setSwatches(current => current.some(item => item.value === value) ? current : [...current, {value, label: value}])} />;
 };
+const allViews = ["spectrum", "grid", "sliders"] as const;
+export const GalleryColorPickerViews = () => <ColorPicker label="Fill" defaultValue="#8D4DF3" views={allViews} preview />;
+export const GalleryColorPickerGrid = () => <ColorPicker label="Fill" defaultValue="#006DF5" views={allViews} defaultView="grid" />;
+export const GalleryColorPickerSliders = () => <ColorPicker label="Fill" defaultValue="#DF127D" views={allViews} defaultView="sliders" defaultModel="oklch" />;
+export const GalleryColorPickerModelOklch = () => <ColorPicker label="Fill" defaultValue="#01AA4E" defaultModel="oklch" />;
+export const GalleryColorPickerContrast = () => <ColorPicker label="Text" defaultValue="#5C5DFE" contrast={{ background: "#FFFFFF", level: "AA" }} />;
+export const GalleryColorPickerPreview = () => <ColorPicker label="Fill" defaultValue="#EA7401" preview />;
+export const GalleryColorPickerHeader = () => {
+  const [open, setOpen] = useState(true);
+  return open
+    ? <ColorPicker label="Fill" defaultValue="#006DF5" header={<><span>Fill</span><Button variant="ghost" size="sm" iconOnly icon={<DismissIcon />} aria-label="Close fill picker" onClick={() => setOpen(false)} /></>} />
+    : <Button size="sm" variant="ghost" onClick={() => setOpen(true)}>Reopen fill picker</Button>;
+};
+export const GalleryColorPickerModelRgb = () => <ColorPicker label="Stroke" defaultValue="#EA7401" defaultModel="rgb" />;
+export const GalleryColorPickerModelHsl = () => <ColorPicker label="Shadow" defaultValue="#1E1E1E66" defaultModel="hsl" />;
+export const GalleryColorPickerModelCss = () => <ColorPicker label="Background" defaultValue="#00A79780" defaultModel="css" />;
+export const GalleryColorPickerOpaque = () => <ColorPicker label="Page background" defaultValue="#F5F5F5" alpha={false} />;
+export const GalleryColorPickerDisabled = () => <ColorPicker label="Locked fill" defaultValue="#8D4DF3" disabled swatches={pickerSwatches.slice(0, 4)} />;
+/* Color picker pass review (2026-09-26, docs/specs/color-picker.md). "Before" restores pass-0
+   geometry through private properties where a value changed; new parts have no before. */
+
+/* Calendar. A fixed "today" keeps the gallery deterministic. */
+const calendarToday = "2026-09-26";
+export const GalleryCalendar = () => <Calendar variant="surface" aria-label="Due date" today={calendarToday} defaultValue="2026-09-15" />;
+export const GalleryCalendarRange = () => <Calendar variant="surface" aria-label="Trip dates" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} />;
+export const GalleryCalendarTwoMonths = () => <Calendar variant="surface" aria-label="Report period" selectionMode="range" visibleMonths={2} today={calendarToday} defaultValue={{ start: "2026-09-24", end: "2026-10-06" }} />;
+export const GalleryCalendarMultiple = () => <Calendar variant="surface" aria-label="Office days" selectionMode="multiple" today={calendarToday} defaultValue={["2026-09-08", "2026-09-10", "2026-09-15", "2026-09-17"]} />;
+export const GalleryCalendarUnavailable = () => <Calendar variant="surface" aria-label="Booking date" today={calendarToday} defaultMonth="2026-09" min="2026-09-03" max="2026-10-10" isDateUnavailable={date => ["2026-09-12", "2026-09-13", "2026-09-22"].includes(date)} />;
+export const GalleryCalendarMonday = () => <Calendar variant="surface" aria-label="Sprint start" firstDayOfWeek={1} locale="en-GB" today={calendarToday} defaultValue="2026-09-28" />;
+export const GalleryCalendarPlain = () => <Calendar aria-label="Publish date" today={calendarToday} defaultValue="2026-09-30" />;
+export const GalleryCalendarAccent = () => <Calendar variant="surface" tone="accent" aria-label="Launch window" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} />;
+/* Calendar tone pass (2026-09-26, docs/specs/calendar.md). "Before" restores pass-1 paint
+   through private properties: accent selection and band, a dark today circle. */
+const weekend = (date: string) => [0, 6].includes(new Date(`${date}T12:00`).getDay());
+export const GalleryCalendarCircle = () => <Calendar variant="surface" days="circle" weekdayStyle="narrow" aria-label="Appointment date" today={calendarToday} defaultValue="2026-09-08" min="2026-09-08" max="2026-10-10" isDateUnavailable={weekend} />;
+export const GalleryCalendarTile = () => <Calendar variant="surface" days="tile" weekdayStyle="abbreviated" firstDayOfWeek={1} locale="en-GB" aria-label="Delivery date" today={calendarToday} defaultValue="2026-09-16" showOutsideDays={false} min="2026-09-16" isDateUnavailable={date => ["2026-09-18", "2026-09-19", "2026-09-20", "2026-09-26", "2026-09-27"].includes(date)} />;
+export const GalleryCalendarMarkers = () => <Calendar variant="surface" firstDayOfWeek={1} aria-label="Send date" today={calendarToday} defaultValue="2026-09-21" markers={{ "2026-09-04": "accent", "2026-09-14": "accent", "2026-09-29": "neutral", "2026-10-08": "neutral" }} />;
+export const GalleryCalendarWeek = () => <Calendar variant="surface" layout="week" firstDayOfWeek={1} aria-label="Visit day" today={calendarToday} defaultValue="2026-09-30" markers={{ "2026-10-01": "accent" }} />;
+const scheduleTimes = ["8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "1:00 PM"];
+export const GalleryCalendarSchedule = () => {
+  const [date, setDate] = useState<string | null>("2026-09-28");
+  const [time, setTime] = useState("10:00 AM");
+  const [scheduled, setScheduled] = useState("");
+  const label = date ? new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(`${date}T12:00`)) : "No date";
+  return <div style={{ display: "grid", border: "var(--area-border-width) solid var(--area-border-decorative)", borderRadius: "var(--area-radius-container)", background: "var(--area-bg-surface)", boxShadow: "var(--area-shadow-2)", maxInlineSize: "100%" }}>
+    <div style={{ display: "flex", minBlockSize: 0 }}>
+      <div style={{ padding: "var(--area-space-12)" }}>
+        <Calendar aria-label="Send date" firstDayOfWeek={1} today={calendarToday} value={date} onValueChange={setDate} min={calendarToday} markers={{ "2026-10-04": "accent", "2026-10-14": "accent" }} />
+      </div>
+      <div role="group" aria-label="Send time" style={{ display: "grid", alignContent: "start", gap: "var(--area-space-2)", padding: "var(--area-space-8)", borderInlineStart: "var(--area-border-width) solid var(--area-border-decorative)", overflowY: "auto", blockSize: "calc(var(--area-space-96) * 3)" }}>
+        {scheduleTimes.map(item => <Button key={item} variant="ghost" size="sm" align="start" selected={item === time} onClick={() => setTime(item)}>{item}</Button>)}
+      </div>
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-12)", borderBlockStart: "var(--area-border-width) solid var(--area-border-decorative)" }}>
+      <Button variant="ghost" size="sm" onClick={() => setScheduled("")}>Cancel</Button>
+      <span style={{ marginInlineStart: "auto", color: "var(--area-fg-muted)", fontSize: "var(--area-control-sm-text)" }}>{label} · {time}</span>
+      <Button variant="outline" size="sm" disabled={!date} onClick={() => setScheduled(`${label} ${time}`)}>Schedule</Button>
+    </div>
+    <span className="area-sr-only" role="status">{scheduled && `Scheduled for ${scheduled}`}</span>
+  </div>;
+};
+export const GalleryCalendarDisabled = () => <Calendar variant="surface" aria-label="Locked date" today={calendarToday} defaultValue="2026-09-15" disabled />;
+
+/* Neutral-by-default pass (2026-09-26, docs/DESIGN_SYSTEM.md "Neutral by default, accent by
+   override"). "Before" restores the accent defaults through each family's private properties. */
+export const GalleryCheckboxAccent = () => <Checkbox label="Label" tone="accent" defaultChecked />;
+export const GalleryRadioAccent = () => <Radio name="gallery-radio-accent" value="accent" label="Label" tone="accent" defaultChecked />;
+export const GalleryChipAccent = () => <ChipGroup><Chip tone="accent" defaultSelected>Selected</Chip><Chip tone="accent">Item</Chip></ChipGroup>;
+export const GalleryAlignmentPickerAccent = () => <AlignmentPicker label="Object alignment" tone="accent" defaultValue="top-left" />;

@@ -43,8 +43,63 @@ and every title or heading; 500 only for labels on fills (buttons, segmented opt
 badges, counts, avatar initials). Text uses two foreground levels, default and muted;
 disabled is for disabled and placeholder text only.
 
-Use `border-decorative` for container seams and dividers only. Required control/state
-edges use `stroke-width` independently of Surface. Most controls use the shared focus
+**Neutral by default, accent by override** (owner, 2026-09-26). Selection, checked, current
+and progress paint is neutral: `neutral-solid` with `fg-on-neutral` for solid marks, and a
+neutral component fill (`bg-component-hover`/`-active`) for soft ones. Accent appears only
+when the consumer asks for it with `tone="accent"` (or an equivalent variant), never as a
+component default. Semantic tones (danger, success…) still carry meaning such as an
+invalid state. Focus uses the focus role, which is a system setting, not accent selection.
+Button, Switch, Slider, Progress, Spinner, Badge, Avatar, Nav, Tabs and Calendar follow
+this. Checkbox, Radio, Chip (selected) and AlignmentPicker were moved onto a `tone` axis
+(neutral default, accent override) on 2026-09-26 and await owner review; each family's
+gallery shows a `tone-accent` tile. Markers and rings of a current
+or selected state (the Nav rail, Tree view's current rail, a linked code line, the Avatar
+active ring) are neutral ink too; the focus colour is never a selection marker.
+
+**Shared state paint** ([cohesion audit](research/cohesion-audit.md), 2026-09-26). The same
+role paints the same way in every family:
+
+- *Row and item plates.* Hover is `bg-component-hover`; pressed, selected and current are
+  `bg-component-active`, one step above, in both themes and under the pointer. Menu, Nav,
+  Tree view, Table, Select options and neutral ghost Buttons share this pair; ChatGPT, Figma
+  and Notion all hover at about #f2–#f5 on white (and use that one fill for the current row;
+  Area keeps selection a step firmer so it survives hover). The translucent `bg-hover` is for
+  grounds a component cannot know (a segmented track, a swatch cell); its dark value is
+  solved against the dark page rung, so it composites to the same step as the opaque fill.
+- *Unselected options* in a set (Segmented, Tabs) take the muted ink and the selected one the
+  default ink, as ChatGPT and Figma do.
+- *Disabled.* Controls, rows and pickers dim to 50% as a whole, so their state stays
+  legible. Text fields keep full opacity and use their disabled field paint. Never both.
+- *Hover.* Only the plate, edge or underline changes; ink and opacity stay fixed.
+- *Labels.* A label's weight does not change with state: a selected segment is 500 because
+  every segment is.
+- *Nested dismiss and close actions* are 28px, the small-button radius, fixed ink, and a
+  plate on hover (the component hover fill, or 12% of the ink on a tinted ground).
+- *Soft fields are flat*: a soft Input, Textarea, NumberField, Select or InputGroup has its
+  fill and no shadow, as Figma's inspector fields do; outline fields keep `shadow-1`. One
+  surface uses one field style: a Panel's rows are all soft.
+- *Keycaps* are filled, not drawn: `bg-component-active`, no visible edge, radius 4, muted ink
+  at 500 (Notion's shortcut hints). Inside a Button the keycap's corner is concentric with the
+  button's (the button's shape less the keycap's inset).
+- *Tone defaults* are neutral in every family, Toast included.
+
+**Elevation.** In-flow content (fields, controls) uses `shadow-1`; a docked region
+(Panel) `shadow-2`. Card has its own faint halo (owner, 2026-09-27): a 1px contact shadow and
+a 2px-low 8px blur, both 3% black, over a lighter edge (neutral 100); it ignores the Surface
+axis until shadows are tokenised. A linked Card keeps its lift on hover and steps its edge to
+`edge-control-hover`, as Fluent's outline and Radix's surface cards do. Everything that floats over the page (Menu, Popover, the Select picker,
+Dialog, Toast, the Calendar and ColorPicker surfaces, Toolbar overflow) shares one lift,
+Notion's popover geometry: `0 20px 24px` and `0 5px 8px` in `shadow-color` at full and half
+strength, over the 1px decorative border. Tooltip keeps its own smaller lift.
+
+Use `border-decorative` for container seams and `border-divider` for rules between content
+(Separator, menu, nav and toolbar separators, table rows, panel sections, code-block
+headers): a divider has no fill or shadow to help it, so it sits a step darker, near where
+ChatGPT, Figma and Untitled draw theirs (#e5–#e6; Notion's menu rules are lighter, 7%). A
+Card's edge and a Table's frame take the divider role too: they stand alone on the page,
+with the page's fill and little or no lift, and every product draws them firmer than a seam. Choice glyphs (Checkbox,
+Radio) take the control hover edge at rest, firmer than a field's, as Notion's and
+Untitled's do. Required control/state edges use `stroke-width` independently of Surface. Most controls use the shared focus
 color/width/offset; editable fields use their field-focus roles. Preserve standard and
 increased-contrast behavior. Never weaken thresholds or add a waiver just to pass a test.
 See [Contrast](CONTRAST.md) before changing color, focus or state painting.
@@ -77,6 +132,11 @@ still need to forward native props and refs and render the right slots.
   dismissal and form contract before claiming that behavior.
 - A controlled value is owned by the parent; uncontrolled state must synchronize with
   native input and form reset. Visible, submitted and announced values must agree.
+- The base rule renders the manifest's default tier and tone, so framework-free markup
+  (`<button class="area-chip">`) matches the React default.
+- Every `var(--area-*)` names a defined token, or carries a fallback when it is a public
+  hook (`var(--area-nav-inline-size, 200px)`). `check-token-refs.mjs` enforces this in the
+  styles build: an undefined custom property fails silently in the browser.
 
 CSS and wrappers are not both generated from the manifest. The shared contract and
 checks prevent drift; they do not replace implementation or behavior tests.
@@ -99,13 +159,17 @@ Kbd labels may use their own vocabulary because they are not interchangeable con
 heights.
 
 Do not force control heights onto labels, glyphs or containers. Badge has a dedicated
-20/24/28px label ramp and pill shapes; Checkbox/Radio use the icon ramp. Switch has
+20/24/28px label ramp and pill shapes; Checkbox and Radio share one glyph ladder (16px at
+sm and md, 20px at lg), and Slider's thumb follows it. Switch's thumb travels 12px at every
+size (track = height + 12: 28, 32, 36), as ChatGPT's 32 × 20 and Notion's 30 × 18 do. Switch has
 its own track geometry. Kbd and Token have separate content roles. These current
 constructions do not confer completion on unrefined families.
 
 Radius uses the named `sharp`, `subtle`, `soft`, `standard`, `round`, `rotund` and `pill`
 presets in `axes/radius.ts`. Choose control, row, small or container roles and respect
-the box cap. Identity circles/pills use `radius-full` deliberately; never impose the
+the box cap. A radius that is not a role is derived from one (Card is twice the container
+radius), never written as a spacing token, or it ignores the presets. Every surface,
+Card included, uses the container role (Notion cards 10, Figma file cards 13). Identity circles/pills use `radius-full` deliberately; never impose the
 radius axis on every shape. Nested radius is `max(0, outer radius - actual inset)`,
 with the appropriate box cap. Measure painted bounds when browser clamping matters.
 
@@ -181,7 +245,9 @@ Use `table()` and `tokenSection()` in `layout.mjs`. A backtick inside its `DOCS_
 `DOCS_SCRIPT` template literal breaks parsing, even in a comment.
 
 Inspect default/compact, light/dark, relevant radius extremes, narrow widths and states
-for visible changes. Long labels, RTL, enlargement, reduced motion and forced colors
+for visible changes. `data-area-motion="none"` must stop every loop that
+`prefers-reduced-motion` stops; literal animation durations do not follow the motion
+tokens on their own. Long labels, RTL, enlargement, reduced motion and forced colors
 remain verification concerns even when they are not gallery tiles. Use the checks in
 [Development](DEVELOPMENT.md); record material limitations rather than claiming that
 one passing screenshot or token suite proves the whole library accessible.

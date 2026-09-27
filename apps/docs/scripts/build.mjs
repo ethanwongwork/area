@@ -1,4 +1,4 @@
-import { specimenName } from "./specimen-names.mjs";
+import { specimenName, specimenGroup, specimenLabel, SPECIMEN_GROUPS } from "./specimen-names.mjs";
 import { buildInsetFixture } from "./inset-fixture.mjs";
 import { docsOutput } from "./output.mjs";
 import { baseTokens } from "../../../packages/tokens/src/emit/base.ts";
@@ -55,10 +55,11 @@ const FOUNDATION_PAGES = [
 for (const slug of COMPLETE_COMPONENTS) {
   if (!COMPONENT_PAGES.some(page => page.slug === slug)) throw new Error(`Unknown completed component: ${slug}`);
 }
+// Owner (2026-09-26): the newest work leads the gallery, whatever its status.
 const orderedComponents = [...COMPONENT_PAGES].sort((a, b) =>
-  Number(COMPLETE_COMPONENTS.has(b.slug)) - Number(COMPLETE_COMPONENTS.has(a.slug)) ||
   (RECENT_COMPONENTS.includes(a.slug) ? RECENT_COMPONENTS.indexOf(a.slug) : 999) -
-  (RECENT_COMPONENTS.includes(b.slug) ? RECENT_COMPONENTS.indexOf(b.slug) : 999) || a.name.localeCompare(b.name));
+  (RECENT_COMPONENTS.includes(b.slug) ? RECENT_COMPONENTS.indexOf(b.slug) : 999) ||
+  Number(COMPLETE_COMPONENTS.has(b.slug)) - Number(COMPLETE_COMPONENTS.has(a.slug)) || a.name.localeCompare(b.name));
 
 /* --- Chrome ---------------------------------------------------------------- */
 
@@ -267,7 +268,7 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "tree-view" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${["badge", "badge-group", "indicator", "presence"].includes(slug) ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 ${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
@@ -280,7 +281,7 @@ ${slug === "code-block" ? '<script type="module" src="./code-block-demos.js"></s
 }
 
 /** The three tile sizes the gallery grid places: whole cells of one square unit. */
-const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2", "2x3", "2x4", "2x5"]);
+const GALLERY_SPANS = new Set(["1x1", "1x2", "2x1", "2x2", "2x3", "2x4", "2x5"]);
 
 /* One tile per public component family. Compound pieces appear inside their parent. */
 function galleryPage({ families = null } = {}) {
@@ -291,21 +292,57 @@ function galleryPage({ families = null } = {}) {
   const badgeVariants = ["soft", "solid", "outline", "color", "modern"];
   const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {
-    "color-picker": [{id: "default", title: "Solid color", demo: "GalleryColorPicker", span: "2x2"}],
+    calendar: [
+      { id: "default", title: "Date", demo: "GalleryCalendar", span: "1x2" },
+      { id: "range", title: "Range", demo: "GalleryCalendarRange", span: "1x2" },
+      { id: "range-two-months", title: "Two months", demo: "GalleryCalendarTwoMonths", span: "2x2" },
+      { id: "multiple", title: "Multiple", demo: "GalleryCalendarMultiple", span: "1x2" },
+      { id: "unavailable", title: "Unavailable", demo: "GalleryCalendarUnavailable", span: "1x2" },
+      { id: "monday", title: "Monday", demo: "GalleryCalendarMonday", span: "1x2" },
+      { id: "plain", title: "Plain", demo: "GalleryCalendarPlain", span: "1x2" },
+      { id: "tone-accent", title: "Accent", demo: "GalleryCalendarAccent", span: "1x2" },
+      { id: "days-circle", title: "Circle", demo: "GalleryCalendarCircle", span: "1x2" },
+      { id: "days-tile", title: "Tile", demo: "GalleryCalendarTile", span: "1x2" },
+      { id: "markers", title: "Markers", demo: "GalleryCalendarMarkers", span: "1x2" },
+      { id: "layout-week", title: "Week", demo: "GalleryCalendarWeek", span: "2x1" },
+      { id: "composition-schedule", title: "Schedule", demo: "GalleryCalendarSchedule", span: "2x2" },
+      { id: "disabled", title: "Disabled", demo: "GalleryCalendarDisabled", span: "1x2" },
+    ],
+    "color-picker": [
+      { id: "default", title: "Fill", demo: "GalleryColorPicker", span: "2x2" },
+      { id: "views", title: "Views", demo: "GalleryColorPickerViews", span: "2x2" },
+      { id: "view-grid", title: "Grid", demo: "GalleryColorPickerGrid", span: "2x2" },
+      { id: "view-sliders", title: "Sliders", demo: "GalleryColorPickerSliders", span: "2x2" },
+      { id: "contrast", title: "Contrast", demo: "GalleryColorPickerContrast", span: "2x2" },
+      { id: "preview", title: "Preview", demo: "GalleryColorPickerPreview", span: "2x2" },
+      { id: "model-oklch", title: "OKLCH", demo: "GalleryColorPickerModelOklch", span: "2x2" },
+      { id: "header", title: "Header", demo: "GalleryColorPickerHeader", span: "2x2" },
+      { id: "model-rgb", title: "RGB", demo: "GalleryColorPickerModelRgb", span: "2x2" },
+      { id: "model-hsl", title: "HSL", demo: "GalleryColorPickerModelHsl", span: "2x2" },
+      { id: "model-css", title: "CSS", demo: "GalleryColorPickerModelCss", span: "2x2" },
+      { id: "opaque", title: "Opaque", demo: "GalleryColorPickerOpaque", span: "2x2" },
+      { id: "disabled", title: "Disabled", demo: "GalleryColorPickerDisabled", span: "2x2" },
+    ],
     "tree-view": [
       { id: "files", title: "Project files", demo: "GalleryTreeViewFiles", span: "2x2" },
       { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters", span: "2x2" },
       { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed", span: "2x1" },
+      { id: "filled-folders", title: "Filled folders", demo: "GalleryTreeViewFilledFolders", span: "2x2" },
+      { id: "layers", title: "Layers with row controls", demo: "GalleryTreeViewLayers", span: "2x2" },
+      { id: "disabled", title: "Disabled row", demo: "GalleryTreeViewDisabled", span: "2x1" },
     ],
     "color-swatch-picker": [
       { id: "default", title: "Palette", demo: "GalleryColorSwatchPicker" },
       { id: "row", title: "Transparency", demo: "GalleryColorSwatchPickerRow" },
+      { id: "layout-palette", title: "Palette grid", demo: "GalleryColorSwatchPickerPalette", span: "2x1" },
+      { id: "sizes", title: "Sizes", demo: "GalleryColorSwatchPickerSizes", span: "2x1" },
     ],
     "color-field": [
       { id: "default", title: "Fill", demo: "GalleryColorField" },
       { id: "split", title: "Split opacity", demo: "GalleryColorFieldSplit" },
       { id: "alpha", title: "Alpha", demo: "GalleryColorFieldAlpha" },
       { id: "disabled", title: "Disabled", demo: "GalleryColorFieldDisabled" },
+      { id: "sizes", title: "Sizes", demo: "GalleryColorFieldSizes", span: "2x1" },
     ],
     "color-swatch": [
       { id: "default", title: "Transparency", demo: "GalleryColorSwatch" },
@@ -316,12 +353,15 @@ function galleryPage({ families = null } = {}) {
       { id: "landscape", title: "Landscape", demo: "GalleryAlignmentPickerLandscape" },
       { id: "portrait", title: "Portrait", demo: "GalleryAlignmentPickerPortrait" },
       { id: "plain", title: "Plain", demo: "GalleryAlignmentPickerPlain" },
+      { id: "tone-accent", title: "Tone / accent", demo: "GalleryAlignmentPickerAccent" },
       { id: "disabled", title: "Disabled", demo: "GalleryAlignmentPickerDisabled" },
+      { id: "sizes", title: "Sizes", demo: "GalleryAlignmentPickerSizes", span: "2x1" },
     ],
     toolbar: [
       { id: "default", title: "Commands", demo: "GalleryToolbar" },
       { id: "plain", title: "Plain", demo: "GalleryToolbarPlain" },
       { id: "vertical", title: "Vertical", demo: "GalleryToolbarVertical" },
+      { id: "sizes", title: "Sizes", demo: "GalleryToolbarSizes", span: "2x1" },
     ],
     composer: [
       { id: "inline", title: "Inline", demo: "GalleryComposerInline", span: "2x1" },
@@ -339,6 +379,7 @@ function galleryPage({ families = null } = {}) {
       { id: "language-tabs", title: "Language tabs", demo: "CodeBlockLanguageTabs", span: "2x2" },
       { id: "unnumbered", title: "Hidden line numbers", demo: "CodeBlockUnnumbered", span: "2x2" },
       { id: "wrap", title: "Wrapped", demo: "CodeBlockWrap", span: "2x2" },
+      { id: "flush", title: "Layout / flush", demo: "GalleryCodeBlockFlush", span: "2x2" },
       { id: "collapsed", title: "Collapsed", demo: "CodeBlockCollapsed", span: "2x2" },
     ],
     dialog: [
@@ -358,16 +399,95 @@ function galleryPage({ families = null } = {}) {
       { id: "horizontal", title: "Horizontal", demo: "GalleryNavHorizontal", span: "2x2" },
       { id: "actions", title: "Actions", demo: "GalleryNavActions", span: "2x2" },
       { id: "expandable", title: "Expandable", demo: "GalleryNavExpandable", span: "2x2" },
+      { id: "tone-accent", title: "Tone / accent", demo: "NavAccent", span: "2x2" },
+      { id: "state-disabled", title: "State / disabled", demo: "NavDisabled", span: "2x2" },
+    ],
+    "model-picker": [
+      { id: "composer", title: "In the composer", demo: "GalleryModelPicker", span: "2x2" },
+      { id: "heading", title: "With a heading and a disabled row", demo: "GalleryModelPickerHeading" },
+    ],
+    "scroll-to-latest": [
+      { id: "default", title: "In a conversation", demo: "GalleryScrollToLatest", span: "2x3" },
+    ],
+    message: [
+      { id: "conversation", title: "Conversation", demo: "GalleryMessage", span: "2x2" },
+      { id: "streaming", title: "State / streaming", demo: "GalleryMessageStreaming", span: "2x1" },
+      { id: "long", title: "Long message", demo: "GalleryMessageLong", span: "2x1" },
+    ],
+    "prompt-suggestions": [
+      { id: "default", title: "List (default)", demo: "GalleryPromptSuggestions", span: "2x2" },
+      { id: "chips", title: "Layout / chips", demo: "GalleryPromptSuggestionsChips", span: "2x2" },
+      { id: "plain", title: "List without icons or dismiss", demo: "GalleryPromptSuggestionsPlain", span: "2x1" },
+    ],
+    "hover-card": [
+      { id: "person", title: "Person", demo: "GalleryHoverCard" },
+      { id: "page", title: "Page", demo: "GalleryHoverCardPage" },
+      { id: "source", title: "Source", demo: "GalleryHoverCardSource" },
+      { id: "side-top", title: "Side / top", demo: "GalleryHoverCardTop" },
+    ],
+    "context-menu": [
+      { id: "default", title: "Default", demo: "GalleryContextMenu" },
+      { id: "tree", title: "On tree rows", demo: "GalleryContextMenuTree" },
+      { id: "disabled", title: "Disabled rows", demo: "GalleryContextMenuDisabled" },
+    ],
+    "command-palette": [
+      { id: "default", title: "Default", demo: "GalleryCommandPalette", span: "2x2" },
+      { id: "modal", title: "Modal", demo: "GalleryCommandPaletteModal" },
+      { id: "empty", title: "No results", demo: "GalleryCommandPaletteEmpty", span: "2x2" },
+      { id: "no-footer", title: "Without key hints", demo: "GalleryCommandPaletteNoFooter", span: "2x2" },
+    ],
+    combobox: [
+      { id: "default", title: "Default", demo: "GalleryCombobox" },
+      { id: "custom", title: "Custom value", demo: "GalleryComboboxCustom" },
+      { id: "groups", title: "Groups", demo: "GalleryComboboxGroups" },
+      { id: "create", title: "Create", demo: "GalleryComboboxCreate" },
+      { id: "rich", title: "Icons and descriptions", demo: "GalleryComboboxRich" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryComboboxSm" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryComboboxLg" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryComboboxDisabled" },
+      { id: "state-invalid", title: "State / invalid", demo: "GalleryComboboxInvalid" },
+    ],
+    "box-field": [
+      { id: "padding", title: "Padding / linked", demo: "GalleryBoxFieldPadding" },
+      { id: "padding-individual", title: "Padding / per side", demo: "GalleryBoxFieldPaddingIndividual" },
+      { id: "padding-mixed", title: "Padding / mixed", demo: "GalleryBoxFieldPaddingMixed" },
+      { id: "corners", title: "Corners / linked", demo: "GalleryBoxFieldCorners" },
+      { id: "corners-individual", title: "Corners / per corner", demo: "GalleryBoxFieldCornersIndividual" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryBoxFieldSoft" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryBoxFieldSm" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryBoxFieldLg" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryBoxFieldDisabled" },
+    ],
+    "property-list": [
+      { id: "fills", title: "Fills", demo: "GalleryPropertyListFills", span: "2x2" },
+      { id: "single", title: "One item", demo: "GalleryPropertyListSingle", span: "2x2" },
+      { id: "effects", title: "Effects with a hidden row", demo: "GalleryPropertyListEffects", span: "2x2" },
     ],
     panel: [
       { id: "default", title: "Default", demo: "GalleryPanel", span: "2x2" },
       { id: "sections", title: "Sections", demo: "GalleryPanelSections", span: "2x2" },
       { id: "footer", title: "Footer", demo: "GalleryPanelFooter", span: "2x2" },
+      { id: "size-xs", title: "Size / xs", demo: "GalleryPanelXs", span: "2x2" },
+      { id: "size-md", title: "Size / md", demo: "GalleryPanelMd", span: "2x2" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryPanelLg", span: "2x2" },
+      { id: "flush", title: "Flush", demo: "GalleryPanelFlush", span: "2x2" },
+      { id: "bare-bar", title: "Bare bar", demo: "GalleryPanelBareBar", span: "2x2" },
+      { id: "collapsible", title: "Collapsible sections", demo: "GalleryPanelCollapsible", span: "2x2" },
+      { id: "resizable", title: "Resizable / inspector", demo: "GalleryPanelResizable", span: "2x2" },
+      { id: "resizable-sidebar", title: "Resizable / sidebar", demo: "GalleryPanelResizableSidebar", span: "2x2" },
+      { id: "figma", title: "Recipe / Figma properties panel", demo: "GalleryPanelFigma", span: "2x4" },
     ],
     popover: [
+      { id: "anchored", title: "Anchored to a trigger", demo: "GalleryPopoverTrigger" },
       { id: "teaching", title: "Teaching step", demo: "GalleryPopover" },
       { id: "field", title: "With field", demo: "GalleryPopoverField" },
       { id: "image", title: "Composition / image", demo: "GalleryPopoverImage" },
+      { id: "arrow-top", title: "Arrow / top", demo: "GalleryPopoverArrowTop" },
+      { id: "arrow-right", title: "Arrow / right", demo: "GalleryPopoverArrowRight" },
+      { id: "arrow-bottom", title: "Arrow / bottom", demo: "GalleryPopoverArrowBottom" },
+      { id: "arrow-left", title: "Arrow / left", demo: "GalleryPopoverArrowLeft" },
+      { id: "behavior-anchored", title: "Behavior / anchored", demo: "GalleryOverlayPopover" },
+      { id: "behavior-arrow", title: "Behavior / anchored with arrow", demo: "GalleryOverlayPopoverArrow" },
     ],
 
     indicator: [
@@ -379,6 +499,7 @@ function galleryPage({ families = null } = {}) {
       {id: "processing", title: "Processing", demo: "GalleryBadgeProcessing"},
       {id: "border", title: "Surface border", demo: "GalleryBadgeBorder"},
       {id: "neutral", title: "Neutral count", demo: "GalleryBadgeCountNeutral"},
+      {id: "tone-warning", title: "Tone / warning", demo: "GalleryIndicatorWarning"},
       {id: "zero", title: "Zero visibility", demo: "BadgeIndicatorZero"},
       { id: "anchor-button", title: "Anchor Button", demo: "BadgeAnchorButton" },
       { id: "anchor-icon-button", title: "Anchor Icon button", demo: "BadgeAnchorIconButton" },
@@ -408,6 +529,7 @@ function galleryPage({ families = null } = {}) {
       { id: "leading-icon", title: "Leading Icon", demo: "BadgeLeadingIcon" },
       { id: "trailing-icon", title: "Trailing Icon", demo: "BadgeTrailingIcon" },
       { id: "icon-only", title: "Icon Only", demo: "BadgeIconOnly" },
+      { id: "dot-only", title: "Dot only", demo: "BadgeDotOnly" },
       ...["soft", "outline"].flatMap((variant) => badgeTones.map((tone) => ({
         id: `dot-${variant}-${tone}`,
         title: `Dot ${titleCase(variant)} / ${titleCase(tone)}`,
@@ -417,8 +539,7 @@ function galleryPage({ families = null } = {}) {
       { id: "avatar", title: "With avatar", demo: "BadgeAvatar" },
       { id: "flag", title: "With flag", demo: "BadgeFlag" },
       { id: "dismissible", title: "Dismissible", demo: "BadgeDismissible" },
-      { id: "truncation", title: "Truncation", demo: "BadgeTruncation" },
-      { id: "uppercase", title: "Uppercase", demo: "BadgeUppercase" },
+      { id: "behavior-truncation", title: "Behavior / truncation", demo: "BadgeTruncation" },
       { id: "link", title: "Link", demo: "BadgeLink" },
     ],
     avatar: [
@@ -452,15 +573,33 @@ function galleryPage({ families = null } = {}) {
       ),
       { id: "pill", title: "Pill", demo: "GalleryButtonPill" },
       { id: "selected", title: "Selected", demo: "GalleryButtonSelected" },
-      { id: "with-icon", title: "With icon", demo: "GalleryButtonWithIcon" },
+      { id: "with-icon", title: "Leading icon", demo: "GalleryButtonWithIcon" },
+      { id: "trailing-icon", title: "Trailing icon", demo: "GalleryButtonTrailingIcon" },
       { id: "with-shortcut", title: "With shortcut", demo: "GalleryButtonShortcut" },
       { id: "loading", title: "Loading", demo: "GalleryButtonLoading" },
       { id: "disabled", title: "Disabled", demo: "GalleryButtonDisabled" },
       { id: "icon-only", title: "Icon only", demo: "GalleryButtonIconOnly" },
     ],
+    "split-button": [
+      { id: "default", title: "Solid / neutral", demo: "GallerySplitButton" },
+      { id: "accent", title: "Solid / accent", demo: "GallerySplitButtonAccent" },
+      { id: "soft", title: "Soft", demo: "GallerySplitButtonSoft" },
+      { id: "outline", title: "Outline", demo: "GallerySplitButtonOutline" },
+      { id: "icon", title: "Leading icon", demo: "GallerySplitButtonIcon" },
+      { id: "size-small", title: "Size / small", demo: "GallerySplitButtonSmall" },
+      { id: "size-large", title: "Size / large", demo: "GallerySplitButtonLarge" },
+      { id: "disabled", title: "Disabled", demo: "GallerySplitButtonDisabled" },
+    ],
     "button-group": [
-      { id: "commands", title: "Independent icon commands", demo: "GalleryButtonGroupCommands" },
-      { id: "text", title: "Text and toggle", demo: "GalleryButtonGroupText" },
+      { id: "soft-text", title: "Soft / text", demo: "GalleryButtonGroupSoftText" },
+      { id: "outline-text", title: "Outline / text", demo: "GalleryButtonGroupOutlineText" },
+      { id: "commands", title: "Soft / icon only", demo: "GalleryButtonGroupCommands" },
+      { id: "outline-icons", title: "Outline / icon only", demo: "GalleryButtonGroupOutlineIcons" },
+      { id: "icon-labels", title: "Icon and label", demo: "GalleryButtonGroupIconLabels" },
+      { id: "text", title: "Toggle selected", demo: "GalleryButtonGroupText" },
+      { id: "size-small", title: "Size / small", demo: "GalleryButtonGroupSmall" },
+      { id: "size-large", title: "Size / large", demo: "GalleryButtonGroupLarge" },
+      { id: "disabled", title: "Disabled button", demo: "GalleryButtonGroupDisabled" },
     ],
     checkbox: [
       { id: "default", title: "Default", demo: "GalleryCheckbox" },
@@ -468,6 +607,7 @@ function galleryPage({ families = null } = {}) {
       { id: "size-medium", title: "Size / medium", demo: "GalleryCheckboxMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryCheckboxLarge" },
       { id: "selected", title: "Selected", demo: "GalleryCheckboxSelected" },
+      { id: "tone-accent", title: "Tone / accent", demo: "GalleryCheckboxAccent" },
       { id: "partial", title: "Partial selection", demo: "GalleryCheckboxIndeterminate" },
       { id: "caption", title: "With caption", demo: "GalleryCheckboxCaption" },
       { id: "leading-visual", title: "With leading visual", demo: "GalleryCheckboxLeadingVisual" },
@@ -478,6 +618,7 @@ function galleryPage({ families = null } = {}) {
       { id: "disabled-selected", title: "Disabled / selected", demo: "GalleryCheckboxDisabledChecked" },
       { id: "disabled-indeterminate", title: "Disabled / partial selection", demo: "GalleryCheckboxDisabledIndeterminate" },
       { id: "group", title: "Checkbox group", demo: "GalleryCheckboxGroup" },
+      { id: "group-horizontal", title: "Layout / horizontal group", demo: "GalleryCheckboxGroupHorizontal" },
       { id: "group-invalid", title: "Checkbox group / invalid", demo: "GalleryCheckboxGroupInvalid" },
       { id: "group-success", title: "Checkbox group / success", demo: "GalleryCheckboxGroupSuccess" },
     ],
@@ -487,7 +628,11 @@ function galleryPage({ families = null } = {}) {
       { id: "size-medium", title: "Size / medium", demo: "GalleryRadioMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryRadioLarge" },
       { id: "selected", title: "Selected", demo: "GalleryRadioSelected" },
+      { id: "tone-accent", title: "Tone / accent", demo: "GalleryRadioAccent" },
       { id: "disabled", title: "Disabled", demo: "GalleryRadioDisabled" },
+      { id: "invalid", title: "State / invalid", demo: "RadioInvalid" },
+      { id: "description", title: "Description", demo: "RadioDescription" },
+      { id: "horizontal", title: "Horizontal", demo: "RadioHorizontal" },
     ],
     field: [
       { id: "default", title: "Default", demo: "FieldDefault" },
@@ -516,6 +661,8 @@ function galleryPage({ families = null } = {}) {
       { id: "inspector", title: "Inspector composition", demo: "NumberFieldInspector", span: "2x2" },
       { id: "read-only", title: "Read only", demo: "NumberFieldReadOnly" },
       { id: "disabled", title: "Disabled", demo: "NumberFieldDisabled" },
+      { id: "prefix", title: "Prefix", demo: "GalleryNumberFieldPrefix" },
+      { id: "sizes", title: "Sizes", demo: "NumberFieldSizes", span: "2x1" },
     ],
     "input-group": [
       { id: "affixes", title: "Affixes", demo: "GalleryInputGroupAffixes" },
@@ -527,6 +674,7 @@ function galleryPage({ families = null } = {}) {
       { id: "mode", title: "Mode picker", demo: "GalleryInputGroupMode" },
       { id: "phone", title: "Phone country code", demo: "GalleryInputGroupPhone" },
       { id: "action", title: "Independent action", demo: "GalleryInputGroupAction" },
+      { id: "sizes", title: "Sizes", demo: "GalleryInputGroupSizes" },
     ],
     input: [
       { id: "default", title: "Default", demo: "InputDefault" },
@@ -558,6 +706,7 @@ function galleryPage({ families = null } = {}) {
     ],
     select: [
       { id: "default", title: "Default", demo: "SelectDefault" },
+      { id: "variant-soft", title: "Variant / soft", demo: "SelectSoft" },
       { id: "size-sm", title: "Size / small", demo: "GallerySelectSmall" },
       { id: "size-md", title: "Size / medium", demo: "GallerySelectMedium" },
       { id: "size-lg", title: "Size / large", demo: "GallerySelectLarge" },
@@ -581,6 +730,9 @@ function galleryPage({ families = null } = {}) {
       { id: "controlled", title: "Behavior / controlled", demo: "GallerySliderControlled" },
       { id: "disabled", title: "State / disabled", demo: "GallerySliderDisabled" },
       { id: "bare", title: "Composition / without readout", demo: "GallerySliderBare" },
+      { id: "size-small", title: "Size / small", demo: "GallerySliderSmall" },
+      { id: "size-medium", title: "Size / medium", demo: "GallerySliderMedium" },
+      { id: "size-large", title: "Size / large", demo: "GallerySliderLarge" },
     ],
     spinner: [
       { id: "default", title: "Default", demo: "GallerySpinner" },
@@ -599,8 +751,10 @@ function galleryPage({ families = null } = {}) {
       { id: "size-md", title: "Size / medium", demo: "GalleryChipMedium" },
       { id: "size-lg", title: "Size / large", demo: "GalleryChipLarge" },
       { id: "swatch", title: "Composition / swatch", demo: "GalleryChipSwatch" },
+      { id: "swatch-only", title: "Composition / swatch only", demo: "GalleryChipSwatchOnly" },
       { id: "icon", title: "Composition / icon", demo: "GalleryChipIcon" },
       { id: "group", title: "Composition / filter group", demo: "GalleryChipGroup" },
+      { id: "tone-accent", title: "Tone / accent", demo: "GalleryChipAccent" },
       { id: "assist", title: "Variant / assist", demo: "GalleryChipAssist" },
       { id: "filter", title: "Variant / filter", demo: "GalleryChipFilter" },
       { id: "input", title: "Variant / input", demo: "GalleryChipInput" },
@@ -622,16 +776,41 @@ function galleryPage({ families = null } = {}) {
       { id: "link", title: "Composition / text link", demo: "GalleryAlertLink", span: "2x1" },
       { id: "success", title: "Tone / success", demo: "GalleryAlertSuccess", span: "2x1" },
       { id: "danger", title: "Tone / danger", demo: "GalleryAlertDanger", span: "2x1" },
+      { id: "info", title: "Tone / info", demo: "GalleryAlertInfo", span: "2x1" },
+      { id: "warning", title: "Tone / warning", demo: "GalleryAlertWarning", span: "2x1" },
       { id: "action", title: "Composition / actions single line", demo: "GalleryAlertAction", span: "2x1" },
       { id: "multiline", title: "Layout / multiline", demo: "GalleryAlertMultiline", span: "2x1" },
       { id: "dismissible", title: "Behavior / dismissible", demo: "GalleryAlertDismissible", span: "2x1" },
     ],
     card: [
-      { id: "vertical", title: "Vertical", demo: "CardVertical", span: "2x2" },
-      { id: "horizontal", title: "Horizontal", demo: "CardHorizontal", span: "2x2" },
-      { id: "immersive", title: "Immersive", demo: "CardImmersive", span: "2x2" },
-      { id: "compact", title: "Compact", demo: "CardCompact", span: "2x2" },
-      { id: "carousel", title: "Carousel", demo: "CardCarousel", span: "2x2" },
+      { id: "default", title: "Default", demo: "CardVertical", span: "2x2" },
+      { id: "size-sm", title: "Size / sm", demo: "CardSmall", span: "2x2" },
+      { id: "size-md", title: "Size / md", demo: "CardMedium", span: "2x2" },
+      { id: "size-lg", title: "Size / lg", demo: "CardLarge", span: "2x2" },
+      { id: "layout-horizontal", title: "Layout / horizontal", demo: "CardHorizontal", span: "2x2" },
+      { id: "layout-horizontal-end", title: "Layout / horizontal, media end", demo: "CardHorizontalEnd", span: "2x2" },
+      { id: "layout-horizontal-stacked", title: "Layout / horizontal, stacked", demo: "CardHorizontalStacked", span: "2x2" },
+      { id: "layout-bleed", title: "Layout / bleed media", demo: "CardBleed", span: "2x2" },
+      { id: "layout-horizontal-bleed", title: "Layout / horizontal, bleed media", demo: "CardHorizontalBleed", span: "2x2" },
+      { id: "layout-compact", title: "Layout / compact", demo: "CardCompact", span: "2x2" },
+      { id: "layout-immersive", title: "Layout / immersive", demo: "CardImmersive", span: "2x2" },
+      { id: "content-header-action", title: "Content / header action", demo: "CardHeaderAction", span: "2x2" },
+      { id: "content-overlay", title: "Content / overlay", demo: "CardMediaOverlay", span: "2x2" },
+      { id: "content-corner-action", title: "Content / corner action", demo: "CardCornerAction", span: "2x2" },
+      { id: "content-well", title: "Content / well", demo: "CardWell", span: "2x2" },
+      { id: "content-list", title: "Content / list", demo: "CardWithList", span: "2x2" },
+      { id: "content-tags", title: "Content / tags", demo: "CardTags", span: "2x2" },
+      { id: "content-carousel", title: "Content / carousel", demo: "CardWithCarousel", span: "2x2" },
+      { id: "behavior-linked", title: "Behavior / linked", demo: "CardLinked", span: "2x2" },
+      { id: "behavior-reveal", title: "Behavior / reveal actions", demo: "CardLinkedActions", span: "2x2" },
+      { id: "template-video", title: "Template / video", demo: "CardTemplateVideo", span: "2x2" },
+      { id: "template-music", title: "Template / music", demo: "CardTemplateMusic", span: "2x2" },
+      { id: "template-weather", title: "Template / weather", demo: "CardTemplateWeather", span: "2x2" },
+      { id: "template-stat", title: "Template / stat", demo: "CardTemplateStat", span: "2x2" },
+      { id: "template-news", title: "Template / news", demo: "CardTemplateNews", span: "2x2" },
+      { id: "template-tool", title: "Template / tool", demo: "CardTemplateTool", span: "2x2" },
+      { id: "template-plan", title: "Template / plan", demo: "CardTemplatePlan", span: "2x2" },
+      { id: "template-feature", title: "Template / feature", demo: "CardTemplateFeature", span: "2x2" },
     ],
     kbd: [
       { id: "default", title: "Default", demo: "GalleryKbd" },
@@ -642,6 +821,11 @@ function galleryPage({ families = null } = {}) {
       { id: "sequence", title: "Sequence", demo: "GalleryKbdSequence" },
       { id: "on-emphasis", title: "Appearance / on emphasis", demo: "GalleryKbdOnEmphasis" },
     ],
+    breadcrumb: [
+      { id: "default", title: "Default", demo: "GalleryBreadcrumb" },
+      { id: "composition-collapsed", title: "Composition / collapsed", demo: "GalleryBreadcrumbCollapsed" },
+      { id: "composition-icons", title: "Composition / icons", demo: "GalleryBreadcrumbIcons" },
+    ],
     tooltip: [
       { id: "open", title: "Default", demo: "GalleryTooltip" },
       { id: "arrow", title: "With indicator", demo: "GalleryTooltipArrow" },
@@ -649,22 +833,28 @@ function galleryPage({ families = null } = {}) {
       { id: "side", title: "Right", demo: "GalleryTooltipSide" },
       { id: "bottom", title: "Bottom", demo: "GalleryTooltipBottom" },
       { id: "left", title: "Left", demo: "GalleryTooltipLeft" },
+      { id: "behavior-hover-focus", title: "Behavior / hover and focus", demo: "GalleryOverlayTooltip" },
+      { id: "behavior-shortcut", title: "Behavior / with shortcut", demo: "GalleryOverlayTooltipShortcut" },
     ],
     menu: [
       { id: "default", title: "Default", demo: "GalleryMenu", span: "2x2" },
+      { id: "icons", title: "Icons, separator and danger", demo: "GalleryMenuIcons", span: "2x2" },
       { id: "shortcuts", title: "Shortcuts", demo: "GalleryMenuShortcuts", span: "2x2" },
       { id: "selected", title: "State / selected", demo: "GalleryMenuSelected", span: "2x2" },
       { id: "search", title: "Composition / search", demo: "GalleryMenuSearch", span: "2x2" },
       { id: "submenu", title: "Composition / nested submenu", demo: "GalleryMenuSubmenu", span: "2x2" },
       { id: "disabled", title: "Disabled", demo: "GalleryMenuDisabled", span: "2x2" },
       { id: "danger", title: "Danger", demo: "GalleryMenuDanger", span: "2x2" },
-      { id: "controls", title: "Composition / controls", demo: "GalleryMenuControls", span: "2x2" },
+      { id: "controls", title: "Toggle and check items", demo: "GalleryMenuControls", span: "2x2" },
+      { id: "behavior-menu-button", title: "Behavior / menu button", demo: "GalleryOverlayMenu", span: "2x2" },
+      { id: "behavior-groups", title: "Behavior / icon trigger, end-aligned", demo: "GalleryOverlayMenuGroups", span: "2x2" },
     ],
     separator: [
       { id: "full-width", title: "Horizontal / full width", demo: "GallerySeparatorFullWidth" },
       { id: "inset", title: "Horizontal / inset", demo: "GallerySeparatorInset" },
       { id: "vertical-full", title: "Vertical / full width", demo: "GallerySeparatorVerticalFull" },
       { id: "vertical-inset", title: "Vertical / inset", demo: "GallerySeparatorVerticalInset" },
+      { id: "spacing-normal", title: "Spacing / normal", demo: "GallerySeparatorSpacing" },
     ],
     skeleton: [
       { id: "text", title: "Text", demo: "GallerySkeleton" },
@@ -697,22 +887,26 @@ function galleryPage({ families = null } = {}) {
       { id: "default", title: "Default", demo: "GalleryTable", span: "2x2" },
       { id: "selection", title: "Selection", demo: "GalleryTableSelectable", span: "2x2" },
       { id: "sorting", title: "Sorting", demo: "GalleryTableSorting", span: "2x2" },
-      { id: "compact", title: "Compact rows", demo: "GalleryTableCompact", span: "2x2" },
+      { id: "compact", title: "Size / small", demo: "GalleryTableCompact", span: "2x2" },
       { id: "striped", title: "Striped", demo: "GalleryTableStriped", span: "2x2" },
       { id: "column-dividers", title: "Column dividers", demo: "GalleryTableDividers", span: "2x2" },
       { id: "empty", title: "Empty", demo: "GalleryTableEmpty", span: "2x2" },
       { id: "loading", title: "Loading", demo: "GalleryTableLoading", span: "2x2" },
+      { id: "size-lg", title: "Size / large", demo: "GalleryTableLarge", span: "2x2" },
+      { id: "interactive", title: "Interactive rows", demo: "GalleryTableInteractive", span: "2x2" },
     ],
     tabs: [
       { id: "default", title: "Default", demo: "GalleryTabs", span: "2x1" },
       { id: "disabled", title: "Disabled", demo: "GalleryTabsDisabled", span: "2x1" },
       { id: "vertical", title: "Vertical", demo: "GalleryTabsVertical", span: "2x1" },
-      { id: "small", title: "Small", demo: "GalleryTabsSmall", span: "2x1" },
+      { id: "size-sm", title: "Size / small", demo: "GalleryTabsSmall", span: "2x1" },
+      { id: "size-lg", title: "Size / large", demo: "GalleryTabsLarge", span: "2x1" },
       { id: "track", title: "With track", demo: "GalleryTabsTrack", span: "2x1" },
       { id: "icons", title: "Icons", demo: "GalleryTabsIcons", span: "2x1" },
       { id: "counts", title: "Counts", demo: "GalleryTabsCounts", span: "2x1" },
     ],
     toast: [
+      { id: "neutral", title: "Default", demo: "GalleryToastNeutral", span: "2x1" },
       { id: "default", title: "Success", demo: "GalleryToast", span: "2x1" },
       { id: "info", title: "Info", demo: "GalleryToastInfo", span: "2x1" },
       { id: "warning", title: "Warning", demo: "GalleryToastWarning", span: "2x1" },
@@ -750,20 +944,41 @@ function galleryPage({ families = null } = {}) {
     const specimens = (gallerySpecimens[component.slug] ??
       [{ id: "default", title: "Default", demo: demos[fallbackName] ? fallbackName : component.examples[0].demo }])
       .filter(example => !example.verification && !/^(theme-|stress-|rtl$)/.test(example.id));
-    const tiles = specimens.map((example) => {
+    // Tiles are grouped (Default, Variants, Tones, Sizes, Layout, Content, States, Behavior) and
+    // each is labelled by its value within its group. A family without a "default" tile shows
+    // its first specimen as the default.
+    const hasDefault = specimens.some(example => specimenName(example, component.slug) === "default");
+    const grouped = new Map(SPECIMEN_GROUPS.map(group => [group, []]));
+    specimens.forEach((example, index) => {
       const demo = demos[example.demo];
       if (!demo) throw new Error(`Gallery specimen missing: ${example.demo}`);
       const id = `${component.slug}-${example.id}`;
       const span = example.span ?? "1x1";
-      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 2x1, 2x2, 2x3, 2x4 or 2x5.`);
-      return `<article class="docs-visual-gallery__tile" data-span="${span}" data-audit="${status}" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
-        <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${escapeHtml(specimenName(example, component.slug))}</h3>
+      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 1x2, 2x1, 2x2, 2x3, 2x4 or 2x5.`);
+      const name = specimenName(example, component.slug);
+      const group = !hasDefault && index === 0 ? "Default" : (example.group ?? specimenGroup(name, component.slug));
+      const label = group === "Default" && !hasDefault ? name : specimenLabel(name, group);
+      grouped.get(group).push(`<article class="docs-visual-gallery__tile" data-span="${span}" data-audit="${status}" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
+        <h4 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${escapeHtml(label)}</h4>
         <div class="docs-visual-gallery__tile-preview">${demoMarkup(example.demo, demo.html)}</div>
-      </article>`;
-    }).join("\n");
+      </article>`);
+    });
+    const groups = [...grouped].filter(([, tiles]) => tiles.length).map(([group, tiles]) => `<section class="docs-visual-gallery__group" aria-labelledby="gallery-group-${component.slug}-${group.toLowerCase().replace(/[^a-z]+/g, "-")}">
+        <h3 class="docs-visual-gallery__group-title" id="gallery-group-${component.slug}-${group.toLowerCase().replace(/[^a-z]+/g, "-")}">${escapeHtml(group)}</h3>
+        <div class="docs-visual-gallery__grid">${tiles.join("\n")}</div>
+      </section>`).join("\n");
+    // A family's current design pass (before / after, at 1x and at scale) sits above its
+    // variants while it is being reviewed, when demos export GalleryReview<PascalSlug>.
+    const reviewName = `GalleryReview${component.slug.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase())}`;
+    const reviewDemo = demos[reviewName];
+    const review = reviewDemo ? `<section class="docs-gallery-review" aria-labelledby="gallery-review-${component.slug}">
+        <h3 class="docs-visual-gallery__tile-title" id="gallery-review-${component.slug}">Pass review</h3>
+        <div class="docs-gallery-review__body">${demoMarkup(reviewName, reviewDemo.html)}</div>
+      </section>` : "";
     return `<details open class="docs-visual-gallery__section" id="gallery-section-${component.slug}">
       <summary class="docs-visual-gallery__section-title">${escapeHtml(component.name)} <span class="docs-audit-label" data-audit="${status}">${statusLabel(status)}</span></summary>
-      <div class="docs-visual-gallery__grid">${tiles}</div>
+      ${review}
+      <div class="docs-visual-gallery__groups">${groups}</div>
     </details>`;
   }).join("\n");
 
@@ -926,17 +1141,22 @@ function galleryShell({ current, title, body }) {
 
 function demoMarkup(name, html) {
   if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryOverlay")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryDialogModal") return `<div data-switch-demo="${name}" style="inline-size:100%;min-inline-size:0;text-align:center">${html}</div>`;
-  if (["GalleryInputPassword", "GalleryButtonGroupCommands", "GalleryButtonGroupText"].includes(name) || name.startsWith("GalleryToolbar") || name.startsWith("GalleryAlignmentPicker") || name.startsWith("GalleryColorPicker") || name.startsWith("GalleryColorField") || name.startsWith("GalleryColorSwatchPicker")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryInputPassword"].includes(name) || name.startsWith("GalleryButtonGroup") || name.startsWith("GalleryToolbar") || name.startsWith("GalleryAlignmentPicker") || name.startsWith("GalleryColorPicker") || name.startsWith("GalleryColorField") || name.startsWith("GalleryColorSwatchPicker")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // Every code block is hydrated: copy, the language picker and show/hide are behaviour.
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
   if (["GalleryTableSelectable", "GalleryTextareaCount"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelXs", "GalleryPanelMd", "GalleryPanelLg", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryMenu")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryMenuControls") return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="${["SwitchList", "SwitchSettingsRow"].includes(name) ? "inline-size:100%;" : ""}max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Slider") || name.startsWith("GallerySlider")) return `<div data-slider-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("NumberField") || name === "GalleryNumberFieldPlain" || name.startsWith("GalleryInputGroup")) return `<div data-number-field-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryCalendar")) return `<div data-structure-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name === "GalleryPopoverTrigger") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GallerySplitButton")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryTreeView") || name.startsWith("GalleryComposer")) return `<div data-structure-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Chip") || name.startsWith("GalleryChip")) return `<div data-chip-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Alert") || name.startsWith("GalleryAlert")) return `<div data-alert-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;

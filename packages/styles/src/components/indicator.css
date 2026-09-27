@@ -50,5 +50,6 @@
   .area-indicator-anchor:has(> .area-tabs__tab) { --_shift: 0; --_inset: 0px; padding-inline-end: calc(16px + 2px); /* spec: count height + gap */ }
   .area-indicator-anchor[data-invisible] > .area-indicator-anchor__indicator { transform: translate(calc(var(--_x) * var(--_shift)), calc(var(--_y) * var(--_shift))) scale(0); opacity: 0; }
   @media (prefers-reduced-motion: reduce) { .area-indicator[data-processing]::before { animation: none; } .area-indicator-anchor__indicator { transition: none; } }
+  [data-area-motion="none"] .area-indicator[data-processing]::before { animation: none; }
   @media (forced-colors: active) { .area-indicator { background: Highlight; color: HighlightText; } .area-indicator-anchor__indicator { outline: var(--area-space-2) solid Canvas; } }
 }

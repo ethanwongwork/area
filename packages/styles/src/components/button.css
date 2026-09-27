@@ -8,9 +8,10 @@
  *    consumes them. So a variant is three lines, not a re-declaration of the whole
  *    component, and a new tone costs one block.
  *
- * 2. Size tiers set nothing but the tier tokens. Every dimension -- height, padding,
- *    type, icon, gap -- comes from the density axis, so changing density moves every
- *    exposed tier at once and no component needs editing.
+ * 2. Size tiers set the tier tokens. Every dimension -- height, padding, type, icon --
+ *    comes from the density axis, so changing density moves every exposed tier at once.
+ *    The icon gap is a measured spec value for now (docs/specs/button.md); mapping it
+ *    back to a token belongs to the systematization phase.
  *
  * 3. Foreground does not change on hover. Only background and border move. A label
  *    that shifts colour under the cursor reads as a different control; it also makes
@@ -23,10 +24,12 @@
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
-    --_gap: var(--area-gap-md);
+    --_gap: 6px; /* spec */
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_radius: var(--area-radius-control-md);
+    /* spec: 400 on soft, outline and ghost; solid sets 500 (owner type ramp; docs/specs/button.md). */
+    --_weight: var(--area-weight-regular);
 
     /*
      * Tone: nine slots a tone repoints, and a variant reads. The base is `neutral`, which
@@ -52,6 +55,9 @@
     --_border: transparent;
     --_border-hover: transparent;
     --_shadow: none;
+    /* An optional translucent layer over the fill on hover and press (neutral soft). */
+    --_wash-hover: none;
+    --_wash-active: none;
 
     display: inline-flex;
     align-items: center;
@@ -67,12 +73,16 @@
      * browser clamps border-radius to half the shorter side. The cap keeps the smallest
      * tier a rounded rectangle rather than a lozenge. See axes/radius.ts for why 0.4.
      */
-    border-radius: min(var(--_radius), calc(var(--_height) * var(--area-radius-button-cap)));
+    --_shape: min(var(--_radius), calc(var(--_height) * var(--area-radius-button-cap)));
+    border-radius: var(--_shape);
+    /* Published under names a nested Kbd cannot shadow, so its corner can be concentric. */
+    --_button-shape: var(--_shape);
+    --_button-height: var(--_height);
 
     font-family: inherit;
     font-size: var(--_text);
     line-height: var(--_leading);
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--_weight);
     white-space: nowrap;
     text-decoration: none;
 
@@ -123,11 +133,13 @@
 
   .area-button:hover:not(:disabled):not([data-loading]) {
     background-color: var(--_bg-hover);
+    background-image: var(--_wash-hover);
     border-color: var(--_border-hover);
   }
 
   .area-button:active:not(:disabled):not([data-loading]) {
     background-color: var(--_bg-active);
+    background-image: var(--_wash-active);
   }
 
   .area-button:focus-visible {
@@ -293,12 +305,13 @@
    * colour, which is what lets a tone be added without touching a variant.
    */
 
+  /* spec: no shadow on any variant; ChatGPT and Notion draw none (docs/specs/button.md). */
   .area-button--solid {
     --_bg: var(--_solid);
     --_bg-hover: var(--_solid-hover);
     --_bg-active: var(--_solid-hover);
     --_fg: var(--_on-solid);
-    --_shadow: var(--area-shadow-1);
+    --_weight: var(--area-weight-strong);
   }
 
   /*
@@ -315,7 +328,6 @@
    * relationship constant and costs no new tokens.
    */
   .area-button--soft {
-    --_shadow: var(--area-shadow-1);
     --_bg: var(--_surface);
     --_bg-hover: var(--_surface-hover);
     --_bg-active: var(--_surface-active);
@@ -324,21 +336,44 @@
     --_border-hover: var(--_surface-active);
   }
 
+  /*
+   * spec: neutral soft keeps its stroke and hovers with the shared wash laid over its fill
+   * (247 → about 235; pressed about 231), near ChatGPT's soft step (242 → 230). The border
+   * turns translucent too, so it tints whatever the wash painted and stays one step darker
+   * than the fill in every state and theme (about 224 on hover). docs/specs/button.md.
+   */
+  .area-button--neutral.area-button--soft {
+    --_bg-hover: var(--_surface);
+    --_bg-active: var(--_surface);
+    --_wash-hover: linear-gradient(var(--area-bg-hover), var(--area-bg-hover));
+    --_wash-active: linear-gradient(var(--area-bg-active), var(--area-bg-active));
+    --_border-hover: var(--area-bg-hover);
+  }
+
+  /* spec: hover one rung up (neutral 255 → 243), as ChatGPT's outline (241) and ghost washes (242). */
   .area-button--outline {
     --_bg: var(--area-bg-surface);
-    --_bg-hover: var(--_surface);
-    --_bg-active: var(--_surface-hover);
+    --_bg-hover: var(--_surface-hover);
+    --_bg-active: var(--_surface-active);
     --_fg: var(--_tone-fg);
     --_border: var(--_line);
     --_border-hover: var(--_line-hover);
-    --_shadow: var(--area-shadow-1);
   }
 
   .area-button--ghost {
     --_bg: transparent;
-    --_bg-hover: var(--_surface);
-    --_bg-active: var(--_surface-hover);
+    --_bg-hover: var(--_surface-hover);
+    --_bg-active: var(--_surface-active);
     --_fg: var(--_tone-fg);
+  }
+
+  /*
+   * spec: neutral ghost hovers with the shared translucent wash (bg-hover, 5%; pressed bg-active,
+   * 7%), as ChatGPT (5% black) and Notion (5% warm black) do, so it reads the same on any surface.
+   */
+  .area-button--neutral.area-button--ghost {
+    --_bg-hover: var(--area-bg-hover);
+    --_bg-active: var(--area-bg-active);
   }
 
   /*
@@ -350,11 +385,22 @@
     --_fg: var(--area-fg-default);
   }
 
+  /*
+   * A neutral ghost shows the row hover fill, one step deeper than the resting component
+   * fill it used. ChatGPT (5% black), Figma (5% black) and Notion (8% warm grey) all hover
+   * transparent icon and text buttons at about #f2 on white, which is `bg-component-hover`,
+   * and the same plate Menu, Nav, Tree view and Table rows show.
+   */
+  .area-button--neutral.area-button--ghost {
+    --_bg-hover: var(--area-bg-component-hover);
+    --_bg-active: var(--area-bg-component-active);
+  }
+
   /* --- Shape and alignment ---------------------------------------------------- */
 
   /* Fully round. OpenAI ships this as the default button shape; Area makes it opt-in. */
   .area-button--pill {
-    border-radius: var(--area-radius-full);
+    --_shape: var(--area-radius-full);
   }
 
   /*
@@ -398,7 +444,7 @@
     --_radius: var(--area-radius-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
-    --_gap: var(--area-gap-md);
+    --_gap: 6px; /* spec: Notion 6 at 28 and 32; Tree view 6 */
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
   }
@@ -408,7 +454,7 @@
     --_radius: var(--area-radius-control-lg);
     --_gutter: var(--area-gutter-lg);
     --_icon: var(--area-icon-lg);
-    --_gap: var(--area-gap-lg);
+    --_gap: 6px; /* spec: Untitled lg 6 */
     --_text: var(--area-control-lg-text);
     --_leading: var(--area-control-lg-leading);
   }

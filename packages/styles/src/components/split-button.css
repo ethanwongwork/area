@@ -1,0 +1,94 @@
+/* ---------------------------------------------------------------------------
+ * Split button
+ *
+ * A default action joined to a menu of related actions. Two real Buttons share one
+ * shape: the action keeps Button's geometry, the trigger is a narrower square-ish slot
+ * for the chevron, and a full-height divider separates them. The menu is Area's Menu
+ * surface in a native popover, anchored under the group's end edge.
+ * Evidence and decisions: docs/specs/split-button.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-split-button {
+    display: inline-flex;
+    align-items: stretch;
+    max-inline-size: 100%;
+    isolation: isolate;
+    vertical-align: middle;
+  }
+
+  .area-split-button > .area-split-button__action,
+  .area-split-button > .area-split-button__trigger { position: relative; }
+  .area-split-button > :is(.area-split-button__action, .area-split-button__trigger):focus-visible { z-index: 1; }
+
+  /* The action gives up its end corners; the trigger its start corners. */
+  .area-split-button > .area-split-button__action {
+    min-inline-size: 0;
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  /*
+   * spec: the trigger is 4px narrower than the control is tall (Notion: 24 at 28), with the
+   * chevron centred. Its border overlaps the action's, so outline and soft strokes count once.
+   */
+  .area-split-button > .area-split-button__trigger {
+    inline-size: calc(var(--_height) - 4px); /* spec */
+    padding-inline: 0;
+    margin-inline-start: calc(-1 * var(--area-border-width));
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+  }
+
+  /* spec: a full-height divider (Notion: 1px inset line; shadcn: 1px separator). */
+  .area-split-button > .area-split-button__trigger::before {
+    content: "";
+    position: absolute;
+    inset-block: calc(-1 * var(--area-border-width));
+    inset-inline-start: calc(-1 * var(--area-border-width));
+    inline-size: var(--area-border-width);
+    background: var(--_split-divider);
+    pointer-events: none;
+  }
+
+  /*
+   * Divider paint by treatment. Solid fills draw the divider in their own label ink at low
+   * strength, so it reads on a near-black and on a coloured fill alike (Fluent draws its
+   * on-brand stroke the same way; Notion's darker line would vanish on Area's near-black).
+   * Soft and outline use the tone's control line (shadcn: the control border colour).
+   */
+  .area-split-button--solid > .area-split-button__trigger { --_split-divider: color-mix(in srgb, var(--_on-solid) 24%, transparent); /* spec */ }
+  .area-split-button--soft > .area-split-button__trigger,
+  .area-split-button--outline > .area-split-button__trigger { --_split-divider: var(--_line); }
+
+  .area-split-button__trigger > .area-button__icon > svg { transition: transform var(--area-duration-base) var(--area-ease-out); }
+  .area-split-button__trigger[aria-expanded="true"] > .area-button__icon > svg { transform: rotate(180deg); }
+
+  /* Native popover: reset the UA box and let Menu paint the surface. */
+  .area-split-button__menu {
+    margin: auto;
+    inset: 0;
+    min-inline-size: calc(var(--area-space-96) * 2);
+    max-inline-size: calc(100vw - var(--area-space-32));
+    max-block-size: calc(100vh - var(--area-space-32));
+    overflow: auto;
+    color: var(--area-fg-default);
+  }
+  .area-split-button__menu:not(:popover-open) { display: none; }
+
+  /* spec: 4px under the group, aligned to its end edge (Notion: 3.99 below, 0.33 from the end). */
+  @supports (anchor-name: --area-anchor) {
+    .area-split-button { anchor-name: var(--_split-anchor); }
+    .area-split-button__menu:popover-open {
+      position-anchor: var(--_split-anchor);
+      margin: 0;
+      inset: auto;
+      inset-block-start: calc(anchor(bottom) + var(--area-space-4));
+      inset-inline-end: anchor(end);
+      position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .area-split-button__trigger > .area-button__icon > svg { transition: none; }
+  }
+}

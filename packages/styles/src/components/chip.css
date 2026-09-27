@@ -16,13 +16,18 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-chip {
-    --_height: var(--area-control-sm);
-    --_gutter: var(--area-gutter-sm);
-    --_gap: var(--area-gap-sm);
-    --_dot: var(--area-icon-sm);
+    /* The md tier, the manifest default, so framework-free markup matches the React default. */
+    --_height: var(--area-control-md);
+    --_gutter: var(--area-gutter-md);
+    --_gap: var(--area-gap-md);
+    --_dot: var(--area-icon-md);
+    /* spec: the remove target is a circle concentric with the pill's end, 4px inside it
+       (Material: a 24 circle in a 32 chip; Primer, Carbon and Spectrum 2 make it the chip's
+       own height). The 16px glyph sits inside it rather than filling it (Primer 16 in 24). */
+    --_remove: calc(var(--_height) - var(--area-space-8));
     --_visual: calc(var(--_dot) + var(--area-space-4));
-    --_text: var(--area-control-sm-text);
-    --_leading: var(--area-control-sm-leading);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
 
     --_bg: var(--area-bg-surface);
     --_bg-hover: var(--area-bg-component-hover);
@@ -37,7 +42,7 @@
     block-size: var(--_height);
     padding-inline: var(--_gutter);
     border: var(--area-stroke-width) solid var(--_border);
-    /* Capped against this tier's own height; see button.css. */
+    /* A pill by identity; it does not follow the radius presets. */
     border-radius: var(--area-radius-full);
 
     background-color: var(--_bg);
@@ -89,13 +94,32 @@
    * Selected is a tonal fill rather than a solid one. A row of chips is scanned as a set,
    * and a solid fill on one member turns it into the only thing on the row with weight --
    * which reads as a call to action rather than as the current choice.
+   *
+   * Tone: neutral unless accent is asked for (DESIGN_SYSTEM.md). The neutral selection is a
+   * component fill with the hover edge; hovering it strengthens the edge, since there is no
+   * darker component fill to step to.
    */
+  .area-chip,
+  .area-chip--neutral {
+    --_selected-bg: var(--area-bg-component-active);
+    --_selected-bg-hover: var(--area-bg-component-active);
+    --_selected-border: var(--area-edge-control-hover);
+    --_selected-border-hover: color-mix(in srgb, var(--area-border-hover), var(--area-stroke-control-hover) calc(var(--area-contrast-more) * 100%));
+    --_selected-fg: var(--area-fg-default);
+  }
+  .area-chip--accent {
+    --_selected-bg: var(--area-accent-surface);
+    --_selected-bg-hover: var(--area-accent-surface-hover);
+    --_selected-border: var(--area-edge-accent);
+    --_selected-border-hover: var(--area-edge-accent);
+    --_selected-fg: var(--area-fg-accent);
+  }
   .area-chip[data-selected] {
-    --_bg: var(--area-accent-surface);
-    --_bg-hover: var(--area-accent-surface-hover);
-    --_border: var(--area-edge-accent);
-    --_border-hover: var(--area-edge-accent);
-    --_fg: var(--area-fg-accent);
+    --_bg: var(--_selected-bg);
+    --_bg-hover: var(--_selected-bg-hover);
+    --_border: var(--_selected-border);
+    --_border-hover: var(--_selected-border-hover);
+    --_fg: var(--_selected-fg);
   }
 
   .area-chip[data-disabled] {
@@ -148,7 +172,8 @@
 
   .area-chip__avatar > .area-avatar {
     --_size: 100%;
-    font-size: var(--area-size-10);
+    /* The smallest step of the type ramp; 10px was off the ramp. */
+    font-size: var(--area-control-sm-text);
     line-height: 1;
   }
 
@@ -191,23 +216,24 @@
   .area-chip__action:not(button) { cursor: default; }
 
   .area-chip__remove {
-    flex: 0 0 var(--_dot);
-    inline-size: var(--_dot);
-    block-size: var(--_dot);
-    margin-inline-start: calc(var(--_gap) * -0.25);
+    flex: 0 0 var(--_remove);
+    inline-size: var(--_remove);
+    block-size: var(--_remove);
     border-radius: var(--area-radius-full);
     color: var(--area-fg-muted);
     cursor: pointer;
   }
 
   .area-chip[data-invalid] .area-chip__remove { color: var(--area-fg-danger); }
-  .area-chip__remove:hover { background: transparent; color: var(--area-fg-danger-vivid); }
+  /* Foreground stays fixed on hover; a plate in the chip's own ink shows the target, as the
+     Alert dismiss does on its tinted ground. */
+  .area-chip__remove:is(:hover, [data-hover]) { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); }
   .area-chip__remove:focus-visible,
   .area-chip__action:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
-  .area-chip__remove > svg { inline-size: 100%; block-size: 100%; }
+  .area-chip__remove > svg { inline-size: var(--_dot); block-size: var(--_dot); }
 
   /* A chip carrying nothing but a swatch is square: there is no label to set its width. */
   .area-chip--swatch-only {

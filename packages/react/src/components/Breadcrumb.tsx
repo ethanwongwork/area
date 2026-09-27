@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 import { cx } from "../variants.ts";
+import { Glyph } from "./Glyph.tsx";
 
 export const Breadcrumb = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(function Breadcrumb(
   { className, "aria-label": ariaLabel = "Breadcrumb", ...rest }, ref,
@@ -36,7 +37,7 @@ export interface BreadcrumbSeparatorProps extends HTMLAttributes<HTMLLIElement> 
 export const BreadcrumbSeparator = forwardRef<HTMLLIElement, BreadcrumbSeparatorProps>(function BreadcrumbSeparator(
   { className, children, ...rest }, ref,
 ) {
-  return <li ref={ref} className={cx("area-breadcrumb__separator", className)} {...rest} role="presentation" aria-hidden="true">{children ?? <span className="area-breadcrumb__chevron" />}</li>;
+  return <li ref={ref} className={cx("area-breadcrumb__separator", className)} {...rest} role="presentation" aria-hidden="true">{children ?? <Glyph name="chevron-down" rotate={270} />}</li>;
 });
 
 export const BreadcrumbEllipsis = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(function BreadcrumbEllipsis(

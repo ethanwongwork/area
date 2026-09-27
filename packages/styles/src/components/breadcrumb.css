@@ -4,7 +4,8 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--area-gap-md);
+    /* spec: owner asked for chevrons closer to the text; 4px + the box's own air ≈ 9px to the ink (Notion ≈ 7, Untitled ≈ 11). */
+    gap: var(--area-space-4);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -13,11 +14,25 @@
   }
   .area-breadcrumb__item { display: inline-flex; align-items: center; min-inline-size: 0; gap: var(--area-gap-md); }
   .area-breadcrumb__item svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex: none; }
-  .area-breadcrumb__link { display: inline-flex; align-items: center; gap: var(--area-gap-md); color: inherit; text-decoration: none; border-radius: var(--area-radius-small); }
-  .area-breadcrumb__link:hover { text-decoration: underline; text-underline-offset: var(--area-space-4); }
+  /*
+   * spec: Notion's hover plate, 24px tall (2px above and below the 20px line) and 6px
+   * past the text on each side, radius 6. Painted outside the link's box, so the trail
+   * stays flush with the content it labels; ink stays fixed on hover (docs/specs/breadcrumb.md).
+   */
+  .area-breadcrumb__link { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: var(--area-gap-md); color: inherit; text-decoration: none; border-radius: var(--area-radius-small); }
+  .area-breadcrumb__link::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-small); background: transparent; transition: var(--area-transition); pointer-events: none; }
+  .area-breadcrumb__link:hover::before { background: var(--area-bg-component-hover); }
   .area-breadcrumb__link:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
-  .area-breadcrumb__page { display: inline-flex; align-items: center; gap: var(--area-gap-md); color: var(--area-fg); font-weight: 500; }
-  .area-breadcrumb__separator { display: inline-grid; place-items: center; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex: none; color: var(--area-fg-muted); }
+  /* spec: the current page is carried by colour, at the type ramp's 400 (Notion 400). `--area-fg` did not exist, so it had fallen back to the muted link colour. */
+  .area-breadcrumb__page { display: inline-flex; align-items: center; gap: var(--area-gap-md); color: var(--area-fg-default); font-weight: var(--area-weight-regular); }
+  .area-breadcrumb__separator { display: inline-grid; place-items: center; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex: none; color: var(--area-stroke-control); /* spec: a 1px stroke one step lighter than the links (131 vs 102); owner: lighter, not too light */ }
+  /*
+   * The Area chevron glyph centres its ink in the 16px box (x 5.5–10), so the gap reads the
+   * same on both sides; the older CSS chevron below put its point at the box's end edge.
+   */
+  .area-breadcrumb__separator > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+  .area-breadcrumb__separator:dir(rtl) > svg { scale: -1 1; }
+  /* Plain-HTML chevron, kept for markup that does not render the React glyph. */
   .area-breadcrumb__chevron { display: block; inline-size: var(--area-space-8); block-size: var(--area-space-8); border-block-start: var(--area-stroke-width) solid currentColor; border-inline-end: var(--area-stroke-width) solid currentColor; transform: rotate(45deg); }
   [dir="rtl"] .area-breadcrumb__chevron { transform: rotate(-135deg); }
   .area-breadcrumb__ellipsis { display: inline-grid; place-items: center; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }

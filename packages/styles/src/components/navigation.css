@@ -72,8 +72,8 @@
     background-color: var(--area-fg-muted);
   }
   .area-tabs__label { display: inline-flex; align-items: center; white-space: nowrap; }
-  .area-tabs--track .area-tabs__list { border-block-end: var(--area-border-width) solid var(--area-border-decorative); }
-  .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+  .area-tabs--track .area-tabs__list { border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+  .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-end: var(--area-border-width) solid var(--area-border-divider); }
   .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--_tab-icon); block-size: var(--_tab-icon); }
   .area-tabs__icon > svg { inline-size: 100%; block-size: 100%; }
   .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: var(--area-space-16); --_tab-icon: var(--area-icon-sm); --_tab-item-gap: var(--area-gap-sm); }
@@ -121,7 +121,9 @@
   .area-table-wrapper {
     inline-size: 100%;
     overflow-x: auto;
-    border: var(--area-border-width) solid var(--area-border-decorative);
+    /* spec: a table stands alone on the page like a Card, and its edge is never lighter than
+       the row rules inside it, so both take the divider role. */
+    border: var(--area-border-width) solid var(--area-border-divider);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
   }
@@ -149,7 +151,7 @@
     padding: var(--_cell-inset) var(--area-gutter-md);
     text-align: start;
     vertical-align: top;
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-end: var(--area-border-width) solid var(--area-border-divider);
     overflow-wrap: break-word;
   }
 
@@ -165,12 +167,14 @@
     vertical-align: middle;
   }
 
-  .area-table tbody tr {
+  /* The hover plate paints the cells, so the transition belongs on them. */
+  .area-table tbody td {
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
 
-  .area-table--interactive tbody tr:hover td {
-    background-color: var(--area-bg-hover);
+  /* Row plates follow Menu and Nav: hover is the component hover fill, selection the active fill. */
+  .area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td {
+    background-color: var(--area-bg-component-hover);
   }
 
   /* Tabular figures so columns of numbers align on the decimal. */
@@ -188,8 +192,8 @@
   .area-table--md { --_cell-inset: var(--area-space-8); }
   .area-table--lg { --_cell-inset: var(--area-space-12); }
   .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
-  .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
-  .area-table tbody tr[aria-selected="true"] { background: var(--area-bg-component-hover); }
+  .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-border-width) solid var(--area-border-divider); }
+  .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); }
   .area-table caption { padding: var(--area-space-12); text-align: start; color: var(--area-fg-muted); }
 
   /* --- Select ------------------------------------------------------------- */
@@ -199,6 +203,7 @@
    * keyboard behaviour intact.
    */
   .area-select {
+    --_bg: var(--area-select-bg);
     --_border: var(--area-select-edge);
     --_border-hover: var(--area-select-edge-hover);
     --_border-focus: var(--area-field-focus-color);
@@ -223,7 +228,7 @@
     border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
     border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
-    background-color: var(--area-select-bg);
+    background-color: var(--_bg);
     color: var(--area-select-text);
     font-size: var(--_text);
     line-height: var(--_leading);
@@ -239,6 +244,17 @@
   }
 
   [dir="rtl"] .area-select { background-position: left var(--_gutter) center; }
+
+  /* Explicit for manifest parity; the base class remains the framework-free default. */
+  .area-select--outline { --_bg: var(--area-select-bg); }
+
+  /* Soft matches Input, Textarea and NumberField soft, so an inspector holds one field style. */
+  .area-select--soft {
+    box-shadow: none;
+    --_bg: var(--area-input-bg-soft);
+    --_border: transparent;
+    --_border-hover: var(--area-input-edge);
+  }
 
   .area-select--full-width { inline-size: 100%; }
 
@@ -279,9 +295,9 @@
   .area-select:disabled {
     --_border: var(--area-border-faint);
     background-color: var(--area-select-bg-disabled);
+    /* Fields show disabled with their own paint, like Input and Textarea; no second dimming. */
     color: var(--area-fg-disabled);
     cursor: not-allowed;
-    opacity: 0.5;
   }
 
   .area-select--sm { --_height: var(--area-control-sm); --_gap: var(--area-gap-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
@@ -306,7 +322,8 @@
       border-radius: var(--area-radius-container);
       background: var(--area-bg-surface);
       color: var(--area-fg-default);
-      box-shadow: var(--area-shadow-2);
+      /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
+      box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
       font-family: var(--area-font-sans);
       font-size: var(--area-ui-size);
       line-height: var(--area-ui-leading);
@@ -329,7 +346,8 @@
       cursor: pointer;
     }
     .area-select option:first-child { margin-block-start: 0; }
-    .area-select option:is(:hover, :focus-visible, :checked) { background: var(--area-bg-component-hover); }
+    .area-select option:is(:hover, :focus-visible) { background: var(--area-bg-component-hover); }
+    .area-select option:checked { background: var(--area-bg-component-active); }
     .area-select option:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
     .area-select option:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
     .area-select option::checkmark { order: 1; margin-inline-start: auto; color: currentColor; }

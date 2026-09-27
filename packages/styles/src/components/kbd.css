@@ -22,15 +22,18 @@
     block-size: var(--_height);
     padding: var(--_padding);
 
-    border: var(--area-stroke-width) solid var(--area-border-subtle);
-    border-radius: min(var(--area-radius-small), calc(var(--_height) * var(--area-radius-cap)));
-    background-color: var(--area-bg-component-hover);
-    color: var(--area-fg-default);
+    /* A filled keycap with no drawn edge, as Notion's shortcut hints are (7% warm fill, radius
+       4, 500 muted ink). The 1px transparent border keeps the box a whole number. */
+    border: var(--area-stroke-width) solid transparent;
+    border-radius: min(var(--area-radius-control-xs), calc(var(--_height) * var(--area-radius-cap)));
+    background-color: var(--area-bg-component-active);
+    color: var(--area-fg-muted);
 
     font-family: var(--area-font-keyboard);
     font-size: var(--_font);
     line-height: var(--_leading);
-    font-weight: var(--area-weight-regular);
+    /* A label on a fill, so 500 (DESIGN_SYSTEM.md, weight policy). */
+    font-weight: var(--area-weight-strong);
     /* Keys never wrap, and never inherit italics from surrounding prose. */
     white-space: nowrap;
     font-style: normal;
@@ -71,9 +74,9 @@
 
   /* Default is a quiet keycap rather than a second control. */
   .area-kbd--default {
-    background-color: var(--area-bg-component-hover);
-    border-color: var(--area-border-subtle);
-    color: var(--area-fg-default);
+    background-color: var(--area-bg-component-active);
+    border-color: transparent;
+    color: var(--area-fg-muted);
   }
 
   /* Inside a menu item, keys are chrome: unboxed and pushed to the trailing edge. */
@@ -110,9 +113,7 @@
   /* Coloured solid actions borrow the inverse surface, which darkens in light mode and
    * lightens in dark mode. Neutral solid instead borrows its own foreground so its keycap
    * cannot disappear into the near-black/near-white action fill. */
-  .area-button--solid:not(.area-button--neutral) .area-kbd,
-  .area-menu__item--danger:hover .area-kbd:not(.area-kbd--on-color),
-  .area-menu__item--danger[data-highlighted] .area-kbd:not(.area-kbd--on-color) {
+  .area-button--solid:not(.area-button--neutral) .area-kbd:not(.area-kbd--on-color) {
     background-color: color-mix(in srgb, var(--area-bg-inverse) 16%, transparent);
     border-color: transparent;
     color: inherit;
@@ -122,6 +123,12 @@
     background-color: color-mix(in srgb, currentColor 14%, transparent);
     border-color: transparent;
     color: inherit;
+  }
+
+  /* Inside a Button the keycap's corner is concentric with the button's: the button's shape
+     less the keycap's inset from its edge ((button height - keycap height) / 2). */
+  .area-button .area-kbd {
+    border-radius: max(0px, calc(var(--_button-shape) - (var(--_button-height) - var(--_height)) / 2));
   }
 
   .area-button__label:has(> .area-kbd) {

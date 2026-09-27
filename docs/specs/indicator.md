@@ -1,6 +1,6 @@
 # Indicator spec
 
-**Status:** in review · 2026-09-24 (pilot for the capture workflow)
+**Status:** in review · 2026-09-26 (reopened by the cohesion audit: motion axis; accepted 2026-09-25 as the capture-workflow pilot)
 **Captures:** `docs/research/captures/indicator/`
 **Peers:** Badge (dot, count-like numerals, tone paint), Avatar (presence attachment),
 Tabs and Nav (attached counts), Button (attached dot/count)
@@ -32,7 +32,7 @@ the meaning. Badge labels content with text; Chip is an interactive choice.
 | kind | count | Short number on an owner | Fluent CounterBadge; Untitled avatar count; Notion board group counts (plain-text variant, not adopted) |
 | status | available, away, busy, do-not-disturb, blocked, offline, out-of-office, unknown | Availability on identity | Fluent PresenceBadge (canonical eight); Untitled online/offline |
 | size (status) | xs 10, sm 12, md 16, lg 20 | Native Fluent cuts | Fluent sizes (tiny 6 and extra-large 28 scale another cut, so excluded) |
-| tone | danger (default), accent, neutral, info, success, warning | Semantic paint | Figma danger dot, Untitled error count, Fluent brand count |
+| tone | danger (default), accent, neutral, info, success, warning | Semantic paint | Figma danger dot, Untitled error count, Fluent brand count; gallery Tone / warning |
 | anchor | four corners; rectangular or circular owner | Attachment | Untitled avatar corner; Figma icon button |
 
 Excluded: Untitled's gloss gradients and reflection SVG on the status dot (a skeuomorphic
@@ -210,7 +210,7 @@ Sources:
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| dot · size | 6px | Owner (relate to Badge): Badge dot disc is 6px; Untitled Badge Dot 6px | Figma (only target product) measures 5px. 6px keeps Indicator and Badge dots identical; an odd 5px box also has no pixel centre at 1× |
+| dot · size | 6px | Owner (relate to Badge): Badge dot disc is 6px; Untitled Badge Dot 6px | Figma measures 5px, Notion's status-tag dot 8px. Kept (third pass): 6px matches Badge's dot, and the products split either side; an odd 5px box also has no pixel centre at 1× |
 | dot · paint | danger role (`rgb(232, 9, 69)` light) | Figma danger (`#dc3412`), Untitled error | Hue differs from Figma's orange red; Area keeps its palette and semantic role |
 | count · height / min-width | 16px | Fluent small 16px | Untitled avatar count is 14px; 16px matches ChatGPT's 16px chrome pill and keeps two-digit counts round |
 | count · text | 10px / 14px, weight 500, tabular numerals | Fluent small 10/14, Untitled 10/13 (both 10px) | Weight 500 instead of 600/700: Area text weights are 400/500 and Badge uses 500 |
@@ -244,7 +244,7 @@ follows RTL.
 |---|---|---|---|---|
 | Badge dot | status dot | 6px disc | 6px dot | match |
 | Badge | weight | 500 | 500 | match |
-| Badge sm | height | 20px | count 16px | intentional: counts attach to owners, badges stand alone |
+| Badge sm | height | 16px (Badge scale 16 / 20 / 24 since 2026-09-25) | count 16px | match |
 | Avatar md | owner | 32px circle | presence sm 12px flush in corner | Untitled uses an 8px dot at 32px; Area's status is a 12px glyph, kept legible |
 | Button md icon-only | owner | 32px, 16px icon at 8px inset | dot 9px from top/end | matches Figma's measured inset at the same owner size |
 
@@ -354,6 +354,19 @@ Sources:
 - 2026-09-25 · Owner chose 1.125px and Area-drawn status glyphs → Presence ring is a
   border and the mark a non-scaling stroke at `--area-weight-icon` → gallery: every status
   and size shows the same line weight as the pilot icons (Edge, 2×).
+- 2026-09-25 · owner accepted Indicator → Complete in `component-status.mjs`.
+- 2026-09-26 · cohesion audit → the processing pulse stops under `data-area-motion="none"`
+  as it already did for reduced motion (indicator.css:53) → [cohesion-audit.md](../research/cohesion-audit.md);
+  status back to in review.
+- 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → evidence added,
+  no change. Still no Notion or Figma indicator beyond the Figma bell dot; the gallery
+  groups the tiles (Variants for presence, States for
+  out-of-office, Content for counts). Open question: Notion's status-tag dot is 8px
+  (`badge/notion--status-dot--rest--light`, in a 20px tag) and Figma's unread dot 5px
+  (`figma--bell-unread-dot--rest--light`); Area's 6px dot stays equal to Badge's, so any
+  change belongs to Badge first → `badge/notion--status-dot--rest--light`.
+- 2026-09-27 · third pass → open question settled, value kept: the dot stays 6px, equal to
+  Badge's (Notion 8, Figma 5 sit either side); Tone / warning tile added → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 
 ## Stroke findings (2026-09-25)
 

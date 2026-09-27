@@ -67,11 +67,15 @@
     border-radius: min(var(--area-radius-control), calc(var(--_item) * var(--area-radius-cap)));
 
     background: transparent;
-    color: var(--area-fg-default);
+    /* Unselected options read one step quieter, as ChatGPT (rgb 93) and Figma (50% black) set
+       theirs; the selected option takes the default ink. Tabs follow the same pair. */
+    color: var(--area-fg-muted);
     font-family: inherit;
     font-size: var(--_text);
     line-height: var(--_leading);
-    font-weight: var(--area-weight-regular);
+    /* One weight for every option, selected or not, so choosing one never reflows the track
+       (ChatGPT's Chat / Work control keeps 500 on both). Options are labels on a fill. */
+    font-weight: var(--_weight, var(--area-weight-strong));
     white-space: nowrap;
     cursor: pointer;
     transition: var(--area-transition);
@@ -87,7 +91,7 @@
    * merely tinted.
    */
   .area-segmented__item[data-selected] {
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--_selected-weight, var(--_weight, var(--area-weight-strong)));
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
     border-color: var(--area-edge-selected);

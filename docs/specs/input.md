@@ -1,0 +1,179 @@
+# Input spec
+
+**Status:** in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma)
+**Captures:** `docs/research/captures/input/`
+**Peers:** Textarea, Select, NumberField, InputGroup (field chrome), Field (label and
+validation), Tooltip (InputAction hint), Button ghost (action plate)
+
+## Owner decisions
+
+- Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)): Input and Field have
+  also received a confirmation pass. Input's error entry points now agree on native
+  `aria-invalid`, InputAction preserves external descriptions alongside its tooltip, and
+  focused tests cover the Field label, description, validation, required and disabled
+  relationships. Their existing variants remain intact and are expanded in the gallery.
+  Both are owner-confirmed complete.
+- Neutral by default, accent by override (2026-09-26): markers, rings and action labels are
+  neutral ink unless the consumer asks for accent. The file picker's button label follows it.
+- 2026-09-26, second pass ("decide all open items"): soft fields are flat (fill, no shadow),
+  as Figma's are; the InputAction hint describes the button only when a separate label names
+  it; control height stays 32px md (density is the UI-scale axis).
+
+## Job and boundaries
+
+Input accepts one line of text in a shell that owns the border, fill, focus and validation
+paint; the native `<input>` inside is bare. Slots: a leading icon or loader, a prefix, the
+control, a suffix, and one trailing icon, loader or InputAction. Multiline text is Textarea;
+numbers with stepping or scrubbing are NumberField; several independently named values in
+one shell are InputGroup; label, description and message are Field.
+
+## Variants
+
+| Axis | Value | Justification | Where it appears |
+|---|---|---|---|
+| variant | outline (default), soft | Bordered field; fill-only field on an existing surface | UUI and Notion search (outline); ChatGPT, Notion menu and Figma search fields are fill-only |
+| size | sm, md (default), lg | Control tiers | UUI sm/md/lg; Notion 28 (menu) and 32 (popover) |
+| composition | leading/trailing icon, prefix/suffix, trailing action | Purpose icon, units, one clear/reveal action | ChatGPT, Notion and Figma search (leading icon) |
+| state | read-only, disabled, invalid, success, warning, loading | Native and validation states | UUI (invalid, disabled) |
+| boolean | fullWidth, monospace | Layout; code-like values | — |
+
+## Sources
+
+| Id | Type | What | Link / commit / path | License | Captures |
+|---|---|---|---|---|---|
+| uui | design system (source) | Input, label, hint | [Untitled UI reference](../research/untitled-ui-reference.md):44-45, pinned `4702dc0` | MIT | — |
+| chatgpt | target product | Sidebar search field | chatgpt.com, owner's session, read-only | evidence only | `baseline/chatgpt--search-field--rest--light` |
+| notion | target product | Share popover field (focused); page menu search (focused); a search trigger with a shortcut hint (location not recorded in the capture) | app.notion.com, read-only, 2026-09-26 | evidence only | `input/notion--field--focus--light`, `input/notion--menu-search--focus--light`, `baseline/notion--search-field--rest--light` |
+| figma | target product | File-browser search field; inspector hex field | figma.com file browser; editor (ColorPicker pass) | evidence only | `input/figma--search-field--rest--light`, `color-picker/figma--fill-row--rest--light` |
+| area | this system | Gallery tiles, re-taken after the second pass | localhost gallery | — | `input/area--*` |
+
+Product anatomy (node numbers from the captures):
+- ChatGPT search: 36 tall, pill, fill 5% black, no border, 14/18; 16px icon 12px in, gap 8.
+- Notion menu search (nodes 0–4): 28 tall, radius 6, fill rgba(66,35,3,.03), no border;
+  16px icon 6px in (equal inset, (28 − 16) / 2), 6px gap, 14/20.
+- Notion Share field (nodes 0–3): 32 tall, radius 6, no fill or border, text 8px in.
+- Notion search trigger: 32 tall, radius 8, 0.56px rgba(28,19,1,.11) edge, no fill, text
+  8.55px in, resting text rgb(161,158,153), a 11px keycap at the end.
+- Figma search (nodes 0–6): 32 tall, radius 8, fill rgb(245), no border; 24px icon box 4px
+  in with a 12px glyph at 10 (equal inset), text at 34, 11/16.
+- Focus, both Notion fields: `rgb(35,131,226) 0 0 0 1px inset, 0 0 0 1px`, a 2px blue ring.
+
+## Anatomy
+
+```
+area   div.area-input  (shell: height, border, radius, fill, shadow-1 outline only, focus; padding by inset.css)
+  icon      span.area-input__icon     16px square slot, fg-muted
+  affix     span.area-input__affix    fg-muted, cap-trimmed
+  control   input.area-input__control bare; inherits type
+  action    span.area-input__action > button.area-input__action-button (24px, radius 6)
+            > span.area-input__action-icon (16px); hint span.area-tooltip.area-input__action-tooltip
+```
+
+Inset equation (`inset.css:17-18`): outer inset = border 1 + padding = (H − reference) / 2.
+Text reference is 1cap (9.94px at 14px): md (32 − 9.94) / 2 − 1 = 10.03; sm 8.74; lg 14.03.
+Icon reference 16: (32 − 16) / 2 − 1 = 7. Action reference 24: (32 − 24) / 2 − 1 = 3
+(`inset.css:137`).
+
+## Measurements
+
+`node scripts/capture-compare.mjs --slots shell` (trimmed; Area widths are the tile's):
+
+| slot · property | area · default | area · soft | area · size-sm | notion · search-field | notion · menu-search · focus | notion · field · focus | figma · search-field |
+|---|---|---|---|---|---|---|---|
+| **shell** size | 256 × 32 | 256 × 32 | 256 × 28 | 246.01 × 32 | 232.02 × 27.99 | 356.02 × 32 | 224 × 32 |
+| **shell** padding | 0 10.03 0 10.03 | 0 10.03 0 10.03 | 0 8.74 0 8.74 | 0 6 0 8 | 3 6 3 6 | 2 4 2 4 | 0 |
+| **shell** border | 1 solid color(srgb 0.886275 …) | 1 solid rgba(0, 0, 0, 0) | 1 solid color(srgb 0.886275 …) | 0.56 solid rgba(28, 19, 1, 0.11) | 0 | 0 | 0 |
+| **shell** radius | 8px | 8px | 8px | 8px | 6px | 6px | 8px |
+| **shell** gap | 8px | 8px | 4px | — | — (6 measured) | 0px | — (6 measured) |
+| **shell** background | rgb(255, 255, 255) | rgb(247, 247, 247) | rgb(255, 255, 255) | — | rgba(66, 35, 3, 0.03) | — | rgb(245, 245, 245) |
+| **shell** shadow | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px | — | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px | — | rgb(35, 131, 226) 0 0 0 1px inset, … 0 0 0 1px | same | — |
+
+`area--soft` has no shadow (was `shadow-1` before the second pass). `area--action` node 7 (the
+hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 at rest.
+
+## Decisions
+
+| Slot · property | Area value | Basis | Reason when it differs from the basis |
+|---|---|---|---|
+| shell · height | `control-md` 32 (sm 28, lg 40) | Notion 32 (popover, search) and 28 (menu); Figma search 32 | ChatGPT 36, UUI md 40. Density is the UI-scale axis (second pass, item 18) |
+| shell · radius | `radius-control` 8, capped at 0.4 × height (`input.css:38`) | Notion search 8, Figma search 8, UUI 8 | Notion menu and popover fields 6, ChatGPT pill |
+| shell · border | 1px `input-edge` = `border-faint` #e2e2e2 | Notion search edge (11% warm ≈ #e3); UUI 1px ring | Fill-only products map to soft |
+| shell · fill | outline `bg-surface` #fff; soft `bg-component` #f7f7f7 | Figma rgb(245), Notion 3% warm, ChatGPT 5% black for soft | — |
+| shell · shadow | outline `shadow-1`; soft none (`input.css:53`) | Second pass: soft fields are flat (Figma) | No product field draws a shadow; kept (third pass): Untitled's outline inputs carry `shadow-xs`, and soft is the flat treatment |
+| text · inset | 10.03 md (inset contract) | `inset.css:17-18` | Notion 8–8.55, Figma 8, ChatGPT 12, UUI 14: Area centres the cap height |
+| text · type | 14/20 400 (sm 12/16) | Notion 14/20 400; ChatGPT 14/18 400 | Figma 11/16; UUI md 16/24 |
+| icon | 16px square, `fg-muted` #666, equal inset (8 from the edge at md) | Notion 6 in a 28 row and Figma 10 in a 32 row are both (H − glyph) / 2 | ChatGPT 12 in |
+| gap | `gap-md` 8 (sm 4) | ChatGPT 8 at 36 | Notion 6 at 28, Figma 6 at 32; kept (third pass): `gap-sm` is shared by every small control |
+| action · box | 24px, radius `radius-small` 6, hover `bg-component-hover` | Row-plate rule | Nested radius would be 4; kept Button's small radius |
+| action · hint | Tooltip surface (`input.css:207-225`); describes the button only when `aria-label` names it (`Input.tsx:66`) | Peer: [Tooltip](tooltip.md); second pass item 17 | Was a second tooltip style; was announced twice |
+| file button · label | `fg-default`, 500 (`input.css:141`) | Owner: neutral by default | Was `fg-accent` |
+| placeholder | `fg-placeholder` #666 | UUI neutral-500; contrast | Notion's resting search text rgb(161,158,153) is 2.6:1 on white; kept (third pass): the contrast floor wins |
+
+## States
+
+| State | Slot · property changes | Evidence |
+|---|---|---|
+| hover | border → `input-edge-hover` = `border-subtle` #d4d4d4; ink fixed | `input.css:62-64` |
+| focus-within | border `field-focus-color` (#d4d4d4 at standard contrast) + 2px `shadow-color` halo; outline 0 unless increased contrast | `input.css:66-71`; Notion draws a 2px blue ring instead; kept (third pass): neutral by default |
+| read-only | fill `bg-component` #f7 | `area--readonly` |
+| disabled | field paint: fill #f7, `border-faint`, ink, placeholder and affixes `fg-disabled`; no opacity | `area--disabled`; `input.css:132-133` |
+| invalid / success / warning | border and halo in the tone colour, kept on focus | `input.css:73-95`; `area--invalid`, `--success`, `--warning` |
+| loading | Spinner in the icon slot; `aria-busy`; still editable | `area--loading`, `area--loading-leading` |
+| action hover / focus-visible | plate `bg-component-hover`; 2px focus ring; hint fades in | `input.css:197, 221-225` |
+
+## Behavior and accessibility
+
+Native `<input>`; ref and props forwarded to it, `className` to the shell (`Input.tsx:81-155`).
+`invalid`, `validationStatus="error"` and `aria-invalid` agree. InputAction is a
+`type="button"` named by `aria-label` or its tooltip text; the tooltip describes it only when
+it is not already the name, plus any external `aria-describedby`. Logical properties make RTL
+follow `dir`.
+
+## Peers and consistency
+
+| Peer | Shared role | Area value in peer | This component | Match / reason |
+|---|---|---|---|---|
+| Textarea, Select, NumberField, InputGroup | field chrome | `input-edge`, `radius-control`, `shadow-1` outline, flat soft | same | match |
+| Textarea, Select, NumberField, InputGroup | disabled | field paint, no opacity | same | match |
+| InputGroup | validation on focus | success / warning edge gives way to the focus edge | tone kept | differs; see [input-group.md](input-group.md) |
+| Tooltip | hint surface | 28px, radius 10, 4/10 | same element class | match |
+| Menu, Button ghost | hover plate | `bg-component-hover` | action plate | match |
+
+## Visual pass
+
+The gallery shows Input's tiles in named groups, one variant per tile. The action plate and hint appear only under the pointer; the file button label is
+a pseudo-element and is not in `area--file`. Unverified: Notion and Figma side by side at one
+zoom, dark theme.
+
+## Settled questions
+
+All four kept in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
+
+1. *Focus ring.* Notion focuses both fields with a 2px `rgb(35,131,226)` ring
+   (`notion--field--focus`, `notion--menu-search--focus` node 0); Area keeps the neutral
+   field-focus edge plus a 2px `shadow-color` halo. Owner rule: neutral by default.
+2. *Outline shadow.* No product field has a shadow (Notion search, Figma search and selects,
+   ChatGPT search); Area's outline fields keep `shadow-1`. Untitled's outline inputs carry
+   `shadow-xs`; soft is the flat treatment.
+3. *Small gap.* Notion's 28px menu search and Figma's search leave 6px between icon and text;
+   Area's sm gap stays 4 (`gap-sm`), shared by every small control.
+4. *Placeholder ink.* Notion's resting search text is rgb(161,158,153)
+   (`baseline/notion--search-field` node 0), 2.6:1 on white; Area's #666 holds the contrast
+   floor.
+
+## Verification
+
+Compared the Area captures (`input/area--*`) with ChatGPT's search field, the three Notion
+fields and Figma's search and hex fields. Build and test results are in the
+[cohesion audit](../research/cohesion-audit.md#verification).
+
+## Feedback log
+
+- 2026-09-26 · cohesion audit → InputAction hint renders the Tooltip surface; file button
+  label neutral → `area--action` node 7 (28px, radius 10, 4/10 inset).
+- 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → soft Input is flat
+  (no shadow); the hint is not announced twice; four open
+  questions recorded → `input/notion--field--focus`, `notion--menu-search--focus`,
+  `figma--search-field`, `baseline/notion--search-field`, `input/area--soft`.
+- 2026-09-27 · third pass → open questions settled, values kept (neutral focus, outline
+  `shadow-1`, sm gap 4, placeholder #666) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).

@@ -20,8 +20,8 @@
     "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
-    "build": "node scripts/build.mjs && node ../../scripts/build-modules.mjs . && node scripts/check-manifest-parity.mjs",
-    "lint:manifest": "node scripts/check-manifest-parity.mjs",
+    "build": "node scripts/build.mjs && node ../../scripts/build-modules.mjs . && node scripts/check-manifest-parity.mjs && node scripts/check-token-refs.mjs",
+    "lint:manifest": "node scripts/check-manifest-parity.mjs && node scripts/check-token-refs.mjs",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

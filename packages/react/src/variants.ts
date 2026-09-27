@@ -60,6 +60,7 @@ export function stateAttributes<M extends ComponentManifest>(manifest: M, state:
 }
 export const buttonVariants = /* @__PURE__ */ createVariants(manifests.button);
 export const buttonGroupVariants = /* @__PURE__ */ createVariants(manifests.buttonGroup);
+export const splitButtonVariants = /* @__PURE__ */ createVariants(manifests.splitButton);
 export const toolbarVariants = /* @__PURE__ */ createVariants(manifests.toolbar);
 export const alignmentPickerVariants = /* @__PURE__ */ createVariants(manifests.alignmentPicker);
 export const colorSwatchVariants = /* @__PURE__ */ createVariants(manifests.colorSwatch);
@@ -93,6 +94,15 @@ export const segmentedVariants = /* @__PURE__ */ createVariants(manifests.segmen
 export const sliderVariants = /* @__PURE__ */ createVariants(manifests.slider);
 export const chipVariants = /* @__PURE__ */ createVariants(manifests.chip);
 export const panelVariants = /* @__PURE__ */ createVariants(manifests.panel);
+export const propertyListVariants = /* @__PURE__ */ createVariants(manifests.propertyList);
+export const boxFieldVariants = /* @__PURE__ */ createVariants(manifests.boxField);
+export const comboboxVariants = /* @__PURE__ */ createVariants(manifests.combobox);
+export const commandPaletteVariants = /* @__PURE__ */ createVariants(manifests.commandPalette);
+export const contextMenuVariants = /* @__PURE__ */ createVariants(manifests.contextMenu);
+export const promptSuggestionsVariants = /* @__PURE__ */ createVariants(manifests.promptSuggestions);
+export const messageVariants = /* @__PURE__ */ createVariants(manifests.message);
+export const scrollToLatestVariants = /* @__PURE__ */ createVariants(manifests.scrollToLatest);
+export const modelPickerVariants = /* @__PURE__ */ createVariants(manifests.modelPicker);
 export const navVariants = /* @__PURE__ */ createVariants(manifests.nav);
 export const toastVariants = /* @__PURE__ */ createVariants(manifests.toast);
 export const menuVariants = /* @__PURE__ */ createVariants(manifests.menu);
@@ -100,6 +110,7 @@ export const popoverVariants = /* @__PURE__ */ createVariants(manifests.popover)
 export const tooltipVariants = /* @__PURE__ */ createVariants(manifests.tooltip);
 
 export const colorPickerVariants = /* @__PURE__ */ createVariants(manifests.colorPicker);
+export const calendarVariants = /* @__PURE__ */ createVariants(manifests.calendar);
 
 export const indicatorVariants = /* @__PURE__ */ createVariants(manifests.indicator);
 

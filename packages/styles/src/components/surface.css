@@ -12,11 +12,47 @@
  * shared token to hold.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  /* --- Card: optional media, content and footer slots ---------------------- */
+  /* --- Card ---------------------------------------------------------------- */
+  /*
+   * Two independent axes set private properties that one base rule consumes:
+   *   size        shape and type: corner, inset, text inset, title and body roles;
+   *   layout      arrangement: vertical, horizontal, compact, immersive.
+   * Card has one appearance, built in; appearances are deferred to a system-wide pass.
+   * Geometry (docs/specs/card.md): the card's corner less its inset is the media corner, and
+   * text sits a fixed distance from the outer edge, border counted once.
+   */
   .area-card {
-    --_card-padding: calc(var(--area-space-8) - var(--area-border-width));
-    --_card-gap: var(--area-space-8);
-    --_card-radius: var(--area-space-24);
+    /* spec: md, the default. 16 corner (ChatGPT's library card), 8 inset (Notion's promo
+       card), text 16 from the edge (Apple's standard widget margin). The corner follows the
+       radius presets as 4/3 of the container role. */
+    --_card-radius: round(nearest, calc(var(--area-radius-container) * 4 / 3), 1px);
+    --_card-inset: var(--area-space-8);
+    --_card-text-inset: var(--area-space-16);
+    --_card-border: var(--area-border-width);
+    --_card-title-size: var(--area-text-md-size);
+    --_card-title-leading: var(--area-text-md-leading);
+    --_card-title-tracking: var(--area-text-md-tracking);
+    --_card-body-size: var(--area-text-sm-size);
+    --_card-body-leading: var(--area-text-sm-leading);
+    --_card-body-tracking: var(--area-text-sm-tracking);
+    /* spec: owner (2026-09-27), a lighter edge than the divider (#e2) with a faint lift under
+       it. Light #ee (neutral 100) sits between Notion's 8% ring (#eb) and the decorative seam
+       (#f3); dark keeps the divider rung, since 800 disappears against the dark surface. */
+    --_card-edge: light-dark(var(--area-neutral-100), var(--area-neutral-750));
+    /* spec: owner's reference is Figma's 0 0 8 0 at 2%. Area's recipe keeps that halo, drawn
+       2px low so it pools under the card, and adds a 1px contact line that gives the lighter
+       edge its bottom. Tight spreads, as the Surface axis keeps its tiers. Dark needs more ink
+       to register on a dark page. */
+    --_card-shadow-ink: light-dark(rgb(0 0 0 / 0.03), rgb(0 0 0 / 0.16));
+    --_card-shadow: 0 1px 2px -1px var(--_card-shadow-ink), 0 2px 8px 0 var(--_card-shadow-ink);
+    /* spec: owner, neutral 25 for every media fill (#fa, a rung under the component fill);
+       dark takes the stripe and code slot's rung, 800. */
+    --_card-media-fill: light-dark(var(--area-neutral-25), var(--area-neutral-800));
+    /* Derived; layouts may replace them. */
+    --_card-padding: calc(var(--_card-inset) - var(--_card-border));
+    --_card-gap: var(--_card-inset);
+    --_card-content-padding: calc(var(--_card-text-inset) - var(--_card-inset));
+    --_card-media-radius: max(0px, calc(var(--_card-radius) - var(--_card-padding) - var(--_card-border)));
     --_card-columns: minmax(0, 1fr);
     display: grid;
     grid-template-columns: var(--_card-columns);
@@ -28,16 +64,63 @@
     min-inline-size: 0;
     max-inline-size: 100%;
     padding: var(--_card-padding);
-    border: var(--area-border-width) solid var(--area-border-decorative);
+    /* spec: a card's edge stands alone (same fill as the page, a 0.5px lift), so it takes the
+       divider role: Figma file cards #e6, ChatGPT settings cards 10% black, Notion board
+       cards an 8% ring; the owner took it a rung lighter, with the shadow above. */
+    border: var(--_card-border) solid var(--_card-edge);
     border-radius: var(--_card-radius);
     background: var(--area-bg-surface);
     color: var(--area-fg-default);
-    box-shadow: var(--area-shadow-1);
+    box-shadow: var(--_card-shadow);
   }
 
+  /* Size. */
+  .area-card--sm {
+    /* spec: 12 corner (the container role), 6 inset, text 12 from the edge; UI type. */
+    --_card-radius: var(--area-radius-container);
+    --_card-inset: var(--area-space-6);
+    --_card-text-inset: var(--area-space-12);
+    --_card-title-size: var(--area-text-sm-size);
+    --_card-title-leading: var(--area-text-sm-leading);
+    --_card-title-tracking: var(--area-text-sm-tracking);
+    --_card-body-size: var(--area-text-xs-size);
+    --_card-body-leading: var(--area-text-xs-leading);
+    --_card-body-tracking: var(--area-text-xs-tracking);
+  }
+  .area-card--md {
+    --_card-radius: round(nearest, calc(var(--area-radius-container) * 4 / 3), 1px);
+    --_card-inset: var(--area-space-8);
+    --_card-text-inset: var(--area-space-16);
+  }
+  .area-card--lg {
+    /* spec: 24 corner (twice the container role), 12 inset, text 24 from the edge; the
+       small title role. Apple's tight widget margin is 11. */
+    --_card-radius: calc(var(--area-radius-container) * 2);
+    --_card-inset: var(--area-space-12);
+    --_card-text-inset: var(--area-space-24);
+    --_card-title-size: var(--area-title-sm-size);
+    --_card-title-leading: var(--area-title-sm-leading);
+    --_card-title-tracking: var(--area-title-sm-tracking);
+  }
+
+  /* Layout. */
   .area-card--vertical { --_card-columns: minmax(0, 1fr); }
+  /* Media beside text, 40 / 60 (Polaris's landscape MediaCard); the media may come first or
+     last in the markup. Below 480px of card the two stack, as Polaris and Material do. The card
+     is its own size container, so give a horizontal card a width (it fills a block or grid). */
   .area-card--horizontal {
-    --_card-columns: repeat(auto-fit, minmax(min(100%, calc(var(--area-space-96) * 2)), 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    container-type: inline-size;
+  }
+  .area-card--horizontal > .area-card__media {
+    flex: 0 0 calc((100% - var(--_card-gap)) * 0.4);
+  }
+  .area-card--horizontal > :not(.area-card__media) { flex: 1 1 0; min-inline-size: 0; }
+  @container (width < 480px) { /* spec */
+    .area-card--horizontal > .area-card__media,
+    .area-card--horizontal > :not(.area-card__media) { flex-basis: 100%; }
   }
   .area-card--compact { --_card-columns: calc(var(--area-space-80) + var(--area-space-4)) minmax(0, 1fr); }
   .area-card--vertical:has(> .area-card__media) { grid-template-rows: minmax(calc(var(--area-space-64) * 2), 1fr) auto; }
@@ -45,7 +128,6 @@
     --_card-padding: 0px;
     --_card-gap: 0px;
     overflow: hidden;
-    isolation: isolate;
   }
   .area-card--immersive > .area-card__media {
     position: absolute;
@@ -58,42 +140,132 @@
     content: "";
     position: absolute;
     inset: 0;
+    border-radius: inherit;
     background: linear-gradient(180deg, transparent 25%, var(--area-bg-surface) 70%);
-    z-index: 0;
+    z-index: -1;
   }
   .area-card--immersive > .area-card__content {
     align-self: end;
-    padding: calc(var(--area-space-16) - var(--area-border-width));
+    padding: calc(var(--_card-text-inset) - var(--_card-border));
   }
   .area-card--compact > .area-card__content { justify-content: start; padding-inline-start: 0; }
+
+  /*
+   * Bleed: media flush with the card's edge on the sides it touches, by cancelling the card's
+   * padding there (Fluent's CardPreview, Primer's header image, Radix's Inset; ChatGPT's,
+   * Figma's and Notion's gallery cards). Its outer corners follow the card's. Inset stays the
+   * default.
+   */
+  .area-card__media--bleed {
+    --_card-bleed: calc(-1 * var(--_card-padding));
+    --_card-bleed-radius: max(0px, calc(var(--_card-radius) - var(--_card-border)));
+  }
+  :is(.area-card--vertical, .area-card:not(.area-card--horizontal, .area-card--compact, .area-card--immersive)) > .area-card__media--bleed:first-child {
+    margin: var(--_card-bleed) var(--_card-bleed) 0;
+    border-radius: var(--_card-bleed-radius) var(--_card-bleed-radius) 0 0;
+  }
+  :is(.area-card--vertical, .area-card:not(.area-card--horizontal, .area-card--compact, .area-card--immersive)) > .area-card__media--bleed:last-child {
+    margin: 0 var(--_card-bleed) var(--_card-bleed);
+    border-radius: 0 0 var(--_card-bleed-radius) var(--_card-bleed-radius);
+  }
+  :is(.area-card--horizontal, .area-card--compact) > .area-card__media--bleed:first-child {
+    margin-block: var(--_card-bleed);
+    margin-inline-start: var(--_card-bleed);
+    border-radius: 0;
+    border-start-start-radius: var(--_card-bleed-radius);
+    border-end-start-radius: var(--_card-bleed-radius);
+  }
+  :is(.area-card--horizontal, .area-card--compact) > .area-card__media--bleed:last-child {
+    margin-block: var(--_card-bleed);
+    margin-inline-end: var(--_card-bleed);
+    border-radius: 0;
+    border-start-end-radius: var(--_card-bleed-radius);
+    border-end-end-radius: var(--_card-bleed-radius);
+  }
+  @container (width < 480px) { /* spec: the stacking width above */
+    .area-card--horizontal > .area-card__media--bleed:first-child {
+      margin: var(--_card-bleed) var(--_card-bleed) 0;
+      border-radius: var(--_card-bleed-radius) var(--_card-bleed-radius) 0 0;
+    }
+    .area-card--horizontal > .area-card__media--bleed:last-child {
+      margin: 0 var(--_card-bleed) var(--_card-bleed);
+      border-radius: 0 0 var(--_card-bleed-radius) var(--_card-bleed-radius);
+    }
+  }
+
+  /* Slots. */
   .area-card__content {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: var(--area-space-4);
     min-inline-size: 0;
-    padding: var(--area-space-8);
+    padding: var(--_card-content-padding);
   }
   .area-card__title {
     margin: 0;
-    font-size: var(--area-size-16);
-    line-height: var(--area-leading-24);
-    font-weight: var(--area-weight-regular);
+    font-size: var(--_card-title-size);
+    line-height: var(--_card-title-leading);
+    letter-spacing: var(--_card-title-tracking);
+    /* spec (type pass): every surface title is strong; size says which surface. */
+    font-weight: var(--area-weight-strong);
     overflow-wrap: anywhere;
   }
   .area-card__description {
     margin: 0;
     color: var(--area-fg-muted);
-    font-size: var(--area-size-14);
-    line-height: var(--area-leading-20);
+    font-size: var(--_card-body-size);
+    line-height: var(--_card-body-leading);
+    letter-spacing: var(--_card-body-tracking);
     overflow-wrap: anywhere;
   }
+  /* A figure a widget leads with: a temperature, a price, a count. The large title role at
+     every card size (Apple's widgets set their figure well above the text), with digits of
+     equal width so a changing value doesn't shift. */
+  .area-card__value {
+    margin: 0;
+    font-size: var(--area-title-lg-size);
+    line-height: var(--area-title-lg-leading);
+    letter-spacing: var(--area-title-lg-tracking);
+    font-weight: var(--area-weight-regular);
+    font-variant-numeric: tabular-nums;
+  }
+  /* A title row with a trailing Badge or icon Button. The action slot is one title line tall,
+     so whatever sits in it centres on the title's first line, however the title wraps. */
+  .area-card__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--area-gap-md);
+    min-inline-size: 0;
+  }
+  .area-card__heading {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--area-space-4);
+    min-inline-size: 0;
+  }
+  .area-card__header-action {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--area-space-4);
+    block-size: var(--_card-title-leading);
+  }
+  /* A bare icon in the action slot is a marker, not a control: 16px and muted, as in the list. */
+  .area-card__header-action > svg {
+    flex: none;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    color: var(--area-fg-muted);
+  }
   .area-card__media {
+    position: relative;
     min-inline-size: 0;
     min-block-size: 0;
     overflow: hidden;
-    border-radius: max(0px, calc(var(--_card-radius) - var(--_card-padding) - var(--area-border-width)));
-    background: var(--area-bg-component);
+    border-radius: var(--_card-media-radius);
+    background: var(--_card-media-fill);
   }
   .area-card__media > img,
   .area-card__media > video {
@@ -102,8 +274,118 @@
     block-size: 100%;
     object-fit: cover;
   }
+  /* A well: a recessed surface holding a composition rather than a picture. What it holds
+     stacks at full width, centred on the block axis, spaced as the card spaces its own slots. */
+  .area-card__media--well {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: var(--_card-inset);
+    padding: var(--_card-text-inset);
+  }
   .area-card--compact > .area-card__media { aspect-ratio: 1; }
   .area-card--horizontal > .area-card__media { min-block-size: calc(var(--area-space-64) * 2); }
+
+  /* Overlay: a Badge or an icon Button pinned to a corner of the media, or of the whole card.
+     Inside media it keeps the card's inset; on the card it lines up with the text. */
+  .area-card__overlay {
+    --_card-overlay-inset: var(--_card-inset);
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    inset-block-start: var(--_card-overlay-inset);
+    inset-inline-end: var(--_card-overlay-inset);
+  }
+  .area-card > .area-card__overlay { --_card-overlay-inset: calc(var(--_card-text-inset) - var(--_card-border)); }
+  .area-card__overlay--top-start { inset-inline: var(--_card-overlay-inset) auto; }
+  .area-card__overlay--top-end { inset-inline: auto var(--_card-overlay-inset); }
+  .area-card__overlay--bottom-start { inset-block: auto var(--_card-overlay-inset); inset-inline: var(--_card-overlay-inset) auto; }
+  .area-card__overlay--bottom-end { inset-block: auto var(--_card-overlay-inset); inset-inline: auto var(--_card-overlay-inset); }
+  /* A bottom overlay on the card shares the text's last lines, so the text keeps clear of it:
+     one medium control and the slot gap. */
+  .area-card:has(> .area-card__overlay--bottom-end) > .area-card__content {
+    padding-inline-end: calc(var(--_card-content-padding) + var(--area-control-md) + var(--area-gap-md));
+  }
+  .area-card:has(> .area-card__overlay--bottom-start) > .area-card__content {
+    padding-inline-start: calc(var(--_card-content-padding) + var(--area-control-md) + var(--area-gap-md));
+  }
+  .area-card--immersive:has(> .area-card__overlay--bottom-end) > .area-card__content {
+    padding-inline-end: calc(var(--_card-text-inset) - var(--_card-border) + var(--area-control-md) + var(--area-gap-md));
+  }
+  .area-card--immersive:has(> .area-card__overlay--bottom-start) > .area-card__content {
+    padding-inline-start: calc(var(--_card-text-inset) - var(--_card-border) + var(--area-control-md) + var(--area-gap-md));
+  }
+
+  /* A short list of points, each led by a 16px icon on its first line. */
+  .area-card__list {
+    display: grid;
+    gap: var(--area-space-8);
+    margin: 0;
+    /* Set apart from the title and description like the footer is: 8 above. */
+    padding: var(--area-space-8) 0 0;
+    list-style: none;
+    font-size: var(--_card-body-size);
+    line-height: var(--_card-body-leading);
+  }
+  .area-card__list > li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--area-gap-md);
+    min-inline-size: 0;
+  }
+  .area-card__list > li > svg {
+    flex: none;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    margin-block: calc((var(--_card-body-leading) - var(--area-icon-md)) / 2);
+    color: var(--area-fg-muted);
+  }
+
+  /*
+   * Linked card: one link, in the title, whose ::after covers the whole card (the block-link
+   * pattern), so the card is one target with one accessible name and nested Buttons stay
+   * valid, focusable and clickable above it. Notion's board cards and ChatGPT's library cards
+   * are links like this.
+   */
+  .area-card:has(.area-card__link) { transition: var(--area-transition); }
+  /* Hover steps the edge to the control edge's hover, as Fluent's outline card and Radix's
+     surface card do; the fill, lift and ink stay (ChatGPT's and Figma's cards keep their paint
+     too). At rest a linked card looks like any other. */
+  .area-card:has(.area-card__link):hover { border-color: var(--area-edge-control-hover); }
+  .area-card__link {
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+  }
+  .area-card__link::after {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--_card-border));
+    z-index: 1;
+    border-radius: var(--_card-radius);
+  }
+  /* Controls inside a linked card sit above the stretched link. */
+  .area-card:has(.area-card__link) :is(.area-card__header-action, .area-card__footer, .area-card__list, .area-card__description) :is(a, button, input, select, textarea, [tabindex]) {
+    position: relative;
+    z-index: 2;
+  }
+  .area-card:has(.area-card__link) .area-card__overlay { z-index: 2; }
+  .area-card:has(.area-card__link:focus-visible) {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+  /* An overlay that appears with the pointer or keyboard focus, as Notion's and ChatGPT's
+     card actions do; always shown where there is no hover. */
+  .area-card__overlay--reveal {
+    opacity: 0;
+    /* spec: Notion's card toolbar fades in over 0.2s. */
+    transition: opacity 200ms var(--area-ease-out);
+  }
+  .area-card:is(:hover, :focus-within) .area-card__overlay--reveal { opacity: 1; }
+  @media (hover: none) { .area-card__overlay--reveal { opacity: 1; } }
+
   .area-card__footer {
     display: flex;
     flex-wrap: wrap;
@@ -116,7 +398,7 @@
   .area-card__footer > .area-button { flex: 0 0 auto; min-inline-size: 0; }
   .area-card__carousel { display: grid; grid-auto-flow: column; grid-auto-columns: max(var(--area-space-96), calc((100% - var(--area-space-12) * 3) / 4)); gap: var(--area-space-12); list-style: none; padding: 0; margin: 0; min-inline-size: 0; overflow-x: auto; scroll-snap-type: x mandatory; }
   .area-card__carousel > li { display: flex; flex-direction: column; gap: var(--area-space-8); min-inline-size: 0; scroll-snap-align: start; }
-  .area-card__carousel > li > .area-card__media { inline-size: 100%; aspect-ratio: 1; border-radius: var(--area-space-12); align-self: start; }
+  .area-card__carousel > li > .area-card__media { inline-size: 100%; aspect-ratio: 1; border-radius: var(--area-radius-container); align-self: start; }
   .area-card__carousel > li > .area-card__content { padding: 0; gap: var(--area-space-4); }
   .area-card__carousel:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
@@ -138,31 +420,38 @@
     --_bg: var(--area-bg-component);
     --_fg: var(--area-fg-default);
     --_border: var(--area-border-decorative);
+    --_alert-pad-block: calc(var(--area-space-10) - var(--area-border-width));
+    --_alert-pad-inline: calc(var(--area-space-12) - var(--area-border-width));
+    --_alert-control-block: calc((var(--area-ui-leading) - var(--area-control-sm)) / 2);
+    --_alert-control-end: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2);
 
     display: grid;
     grid-template-areas: "icon content actions dismiss";
     grid-template-columns: auto minmax(0, 1fr) auto auto;
     align-items: center;
-    gap: var(--area-space-10);
     box-sizing: border-box;
     inline-size: 100%;
     container-type: inline-size;
-    padding-block: var(--area-space-8);
-    padding-inline: var(--area-space-8);
+    /* spec: Toast's inset, its peer (toast.md): text 10 from the top and 12 from the side,
+       so one line is 40 tall; Notion's callout pads 13, and Primer, Fluent, shadcn and
+       Carbon 12-16. Controls sit 6 from the top and the side (below). */
+    padding: var(--_alert-pad-block) var(--_alert-pad-inline);
     border: var(--area-border-width) solid var(--_border);
     border-radius: var(--area-radius-container);
     background-color: var(--_bg);
     color: var(--_fg);
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
   }
 
+  /* The icon centres on the first line (Primer, Fluent, Radix, shadcn, Carbon; Notion's
+     callout icon centres on its first line too). */
   .area-alert__icon {
     grid-area: icon;
     flex-shrink: 0;
+    align-self: start;
     inline-size: var(--area-icon-md);
     block-size: var(--area-icon-md);
-    margin-inline-start: var(--area-space-4);
+    margin-block-start: calc((var(--area-ui-leading) - var(--area-icon-md)) / 2);
+    margin-inline-start: var(--_alert-icon-start, 0px);
   }
 
   .area-alert__content {
@@ -173,7 +462,7 @@
     min-inline-size: 0;
   }
 
-  .area-alert__title { font-weight: var(--area-weight-regular); }
+  .area-alert__title { font-weight: var(--area-weight-strong); } /* spec (type pass): surface title */
   .area-alert__description { color: var(--area-fg-muted); }
 
   .area-alert__link {
@@ -198,10 +487,12 @@
     gap: var(--area-gap-sm);
   }
 
-  .area-alert--single-line {
-    align-items: center;
-    min-block-size: calc(var(--area-control-sm) + var(--area-space-16) + var(--area-border-width) + var(--area-border-width));
-  }
+  /* spec: 28px controls hang over the text line by 4 each side, as Toast's do, so they sit 6
+     from the top; the last one sits 6 from the side, concentric with the 12 corner. */
+  .area-alert__actions, .area-alert__dismiss { margin-block: var(--_alert-control-block); }
+  .area-alert > :is(.area-alert__actions, .area-alert__dismiss):last-child { margin-inline-end: var(--_alert-control-end); }
+
+  .area-alert--single-line { align-items: center; }
 
   .area-alert--single-line .area-alert__content {
     overflow: hidden;
@@ -220,7 +511,6 @@
   .area-alert--single-line .area-alert__description { flex: 1 1 auto; }
 
   .area-alert--multiline {
-    --_first-row-offset: calc(var(--area-space-4) - var(--area-border-width));
     grid-template-areas:
       "icon content dismiss"
       ". actions actions";
@@ -228,20 +518,21 @@
     align-items: start;
   }
 
+  /* Title over body, 4 apart, as Toast's title and description. */
   .area-alert--multiline .area-alert__content {
     align-items: flex-start;
     flex-direction: column;
     gap: var(--area-space-4);
-    margin-block-start: var(--_first-row-offset);
   }
 
-  .area-alert--multiline .area-alert__icon {
-    margin-block-start: calc(var(--_first-row-offset) + (var(--area-ui-leading) - var(--area-icon-md)) / 2);
-  }
+  /* Without actions the second row is absent, so the row gap does not pad the bottom. */
+  .area-alert--multiline:not(:has(> .area-alert__actions)) { grid-template-areas: "icon content dismiss"; }
 
+  /* A row of actions under the text ends 6 from the bottom and the side, like the dismiss. */
   .area-alert--multiline .area-alert__actions {
     justify-self: end;
-    margin-block-start: var(--area-space-8);
+    margin-block: var(--area-space-8) var(--_alert-control-block);
+    margin-inline-end: var(--_alert-control-end);
   }
 
   .area-alert__dismiss {
@@ -255,19 +546,20 @@
     block-size: var(--area-control-sm);
     padding: 0;
     border: var(--area-border-width) solid transparent;
-    border-radius: var(--area-radius-control);
+    /* A 28px icon action, shaped like a small Button, in the alert's full ink. */
+    border-radius: var(--_dismiss-radius, var(--area-radius-control-sm));
     background-color: transparent;
     color: inherit;
+    opacity: var(--_dismiss-opacity, 1);
     cursor: pointer;
-    opacity: 0.72;
     transition: var(--area-transition);
   }
 
   .area-alert--multiline .area-alert__dismiss { align-self: start; }
 
   .area-alert__dismiss > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
-  .area-alert__dismiss:hover { background-color: color-mix(in srgb, var(--_fg) 12%, transparent); opacity: 1; }
-  .area-alert__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus); outline-offset: var(--area-focus-offset); opacity: 1; }
+  .area-alert__dismiss:hover { background-color: color-mix(in srgb, var(--_fg) 12%, transparent); }
+  .area-alert__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
   @container (max-width: 30rem) {
     .area-alert--single-line .area-alert__actions {
@@ -284,15 +576,8 @@
   .area-alert--warning { --_bg: var(--area-warning-surface); --_fg: var(--area-fg-warning); --_border: var(--area-warning-border); }
   .area-alert--success { --_bg: var(--area-success-surface); --_fg: var(--area-fg-success); --_border: var(--area-success-border); }
 
-  /* The body text stays readable rather than taking the tone colour. */
-  .area-alert--accent .area-alert__description,
-  .area-alert--info .area-alert__description,
-  .area-alert--danger .area-alert__description,
-  .area-alert--warning .area-alert__description,
-  .area-alert--success .area-alert__description {
-    color: inherit;
-    opacity: 0.85;
-  }
+  /* The title carries the tone; the description is supporting text in every tone, the muted
+     role rather than the tone ink faded by opacity. */
 
   /* --- Dialog ------------------------------------------------------------- */
   .area-dialog__modal {
@@ -304,9 +589,16 @@
     background: transparent;
     overflow: visible;
   }
-  .area-dialog__modal::backdrop { background: var(--area-bg-overlay); }
+  /* spec: a light scrim (ChatGPT 13% black, shadcn 10%); the lift separates the surface. */
+  .area-dialog__modal::backdrop { background: light-dark(rgb(0 0 0 / 0.133), var(--area-bg-overlay)); /* spec */ }
   .area-dialog {
     --_dialog-inset: calc(var(--area-space-16) - var(--area-border-width));
+    /*
+     * spec: concentric with the corner close. The close sits 8 in (inset minus half the
+     * control's padding), so the corner is its radius plus 8: 16 at the standard preset
+     * (ChatGPT 16). Capped at twice the system container radius so Sharp stays square.
+     */
+    --_dialog-radius: min(calc(var(--area-radius-container) * 2), calc(var(--area-radius-control-md) + var(--area-space-16) - (var(--area-control-md) - var(--area-icon-md)) / 2));
     display: flex;
     flex-direction: column;
     gap: var(--area-space-16);
@@ -318,17 +610,17 @@
     padding: var(--_dialog-inset);
     max-inline-size: 100%;
     border: var(--area-border-width) solid var(--area-border-decorative);
-    border-radius: var(--area-radius-container);
+    border-radius: var(--_dialog-radius);
     background-color: var(--area-bg-surface);
+    /* spec: the floating-surface lift; see Popover and Menu. */
+    --_elevation: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
     color: var(--area-fg-default);
-    box-shadow: var(--area-shadow-2);
+    /* spec: the floating lift shared with Popover and Menu. */
+    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px var(--area-shadow-color); /* spec */
     overflow: hidden;
   }
 
-  .area-dialog::backdrop {
-    background-color: var(--area-bg-overlay);
-    backdrop-filter: blur(2px);
-  }
+  .area-dialog::backdrop { background: light-dark(rgb(0 0 0 / 0.133), var(--area-bg-overlay)); /* spec */ }
 
   .area-dialog__header {
     display: flex;
@@ -338,15 +630,34 @@
     padding: 0;
     flex-shrink: 0;
   }
-  .area-dialog__heading { min-inline-size: 0; display: grid; gap: var(--area-space-8); }
+  /* spec (type pass): the same title group as Card, 16/24 over 14/20, 4 apart (title baseline to
+   * description cap 15.6). The description keeps its line box, as in Card and Popover. */
+  .area-dialog__heading { min-inline-size: 0; display: grid; gap: var(--area-space-4); }
+  /*
+   * spec (docs/specs/dialog.md): the close sits evenly in the corner, 8 from the top and the
+   * side (shadcn 8/8, Primer 8/8, ChatGPT 12/12: half the content inset), which puts its
+   * 16px icon on the 16px inset. The title's line centres on it: header top = (icon - title
+   * leading) / 2, the rule Popover uses. Without a close, the title's cap sits on the inset.
+   */
+  .area-dialog__header:has(> .area-dialog__close) {
+    margin-block-start: calc((var(--area-icon-md) - var(--area-leading-24)) / 2);
+  }
+  .area-dialog__header > .area-dialog__close {
+    margin-block: calc((var(--area-leading-24) - var(--_height)) / 2);
+    margin-inline-end: calc((var(--_icon) - var(--_height)) / 2);
+  }
+  .area-dialog__header:has(> .area-dialog__close) .area-dialog__title { text-box: none; }
 
   .area-dialog__title {
     margin: 0;
+    /* spec: without a close, the cap sits on the inset; the leading below the baseline stays. */
+    text-box: trim-start cap alphabetic;
     overflow-wrap: anywhere;
-    font-size: var(--area-title-sm-size);
-    line-height: var(--area-title-sm-leading);
-    letter-spacing: var(--area-title-sm-tracking);
-    font-weight: var(--area-weight-regular);
+    /* spec (type pass): standalone-surface title, 16/24 strong like Card (ChatGPT 16/24,
+     * shadcn 16). Was 20/28 regular, 1.4x the description beside it. */
+    font-size: var(--area-size-16);
+    line-height: var(--area-leading-24);
+    font-weight: var(--area-weight-strong);
   }
 
   .area-dialog__description {
@@ -356,25 +667,6 @@
     line-height: var(--area-ui-leading);
     color: var(--area-fg-muted);
   }
-
-  .area-dialog__close {
-    display: inline-grid;
-    place-items: center;
-    flex: 0 0 auto;
-    inline-size: var(--area-control-sm);
-    block-size: var(--area-control-sm);
-    margin-block-start: calc((var(--area-title-sm-leading) - var(--area-control-sm)) / 2);
-    padding: 0;
-    border: 0;
-    border-radius: var(--area-radius-control);
-    background: transparent;
-    color: var(--area-fg-muted);
-    cursor: pointer;
-    transition: var(--area-transition);
-  }
-  .area-dialog__close:hover { background: var(--area-bg-component); color: var(--area-fg-default); }
-  .area-dialog__close:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
-  .area-dialog__close svg { inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
 
   /* flex-basis 0 with overflow hidden is what lets the body scroll inside a flex column. */
   .area-dialog__body {
@@ -404,9 +696,13 @@
     padding: var(--_inset);
     border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
+    /* spec: floating surfaces share one lift. Notion's popover geometry (0 20 24, 0 5 8), with the
+       theme-aware shadow colour at full and half strength; ChatGPT's menu (0 8 16 -4) and Figma's
+       picker (0 10 16) agree on a soft, deep blur rather than a 1px edge shadow. */
+    --_elevation: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    box-shadow: var(--area-shadow-3);
+    box-shadow: var(--_elevation);
   }
 
   .area-popover {
@@ -415,8 +711,10 @@
     isolation: isolate;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--area-space-12);
-    inline-size: min(var(--area-popover-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-48))), 100%);
+    /* spec: 16 between header, body and footer (Notion 16, shadcn 16). docs/specs/popover.md. */
+    gap: var(--area-space-16);
+    /* spec: 320 preferred (shadcn 320; ChatGPT's panel 254, Notion's share 456). */
+    inline-size: min(var(--area-popover-inline-size, calc(var(--area-space-96) * 3 + var(--area-space-32))), 100%);
     min-inline-size: 0;
     max-inline-size: 100%;
     box-sizing: border-box;
@@ -424,11 +722,33 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     overflow-wrap: anywhere;
-    box-shadow: var(--area-shadow-2);
+    /* spec: the same floating lift as Menu (Notion draws both surfaces with one shadow). */
+    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px var(--area-shadow-color); /* spec */
   }
   /* Author display/position must preserve the native popover closed state and top layer. */
   .area-popover[popover] { position: fixed; }
   .area-popover[popover]:not(:popover-open) { display: none; }
+
+  /*
+   * Anchored popover: `trigger` wraps the trigger in this anchor and opens the surface in a
+   * native popover beside it. spec: 4px from the trigger (shadcn 4, Notion 4); with an arrow,
+   * the arrow's height instead, so its tip meets the trigger. Flips when out of room.
+   */
+  .area-popover-anchor { display: inline-flex; vertical-align: middle; }
+  @supports (anchor-name: --area-anchor) {
+    .area-popover-anchor { anchor-name: var(--_popover-anchor); }
+    .area-popover-anchor > .area-popover[popover]:popover-open {
+      --_popover-offset: 4px; /* spec */
+      position-anchor: var(--_popover-anchor);
+      inset: auto;
+      margin: 0;
+    }
+    .area-popover-anchor > .area-popover--arrow[popover]:popover-open { --_popover-offset: calc(var(--area-space-12) + var(--area-space-2)); }
+    .area-popover-anchor > .area-popover--top[popover]:popover-open { position-area: top; margin-block-end: var(--_popover-offset); position-try-fallbacks: flip-block; }
+    .area-popover-anchor > .area-popover--bottom[popover]:popover-open { position-area: bottom; margin-block-start: var(--_popover-offset); position-try-fallbacks: flip-block; }
+    .area-popover-anchor > .area-popover--left[popover]:popover-open { position-area: left; margin-inline-end: var(--_popover-offset); position-try-fallbacks: flip-inline; }
+    .area-popover-anchor > .area-popover--right[popover]:popover-open { position-area: right; margin-inline-start: var(--_popover-offset); position-try-fallbacks: flip-inline; }
+  }
   .area-popover > *, .area-popover__body > * { min-inline-size: 0; max-inline-size: 100%; }
   /* Custom SVG geometry: a 32×14 shoulder that curves smoothly out of the edge.
    * Its open stroke omits the base; the fill overlaps the shell border by one stroke. */
@@ -443,41 +763,79 @@
     pointer-events: none;
   }
   .area-popover__arrow-edge { fill: none; stroke: var(--area-border-decorative); stroke-width: var(--area-border-width); vector-effect: non-scaling-stroke; }
-  .area-popover--top > .area-popover__arrow { left: 50%; top: 100%; transform: translate(-50%, 0); }
-  .area-popover--bottom > .area-popover__arrow { left: 50%; top: 0; transform: translate(-50%, 0) rotate(180deg); transform-origin: center top; }
-  .area-popover--left > .area-popover__arrow { left: 100%; top: 50%; transform: translate(-50%, -50%) rotate(-90deg) translateY(50%); }
-  .area-popover--right > .area-popover__arrow { right: 100%; top: 50%; transform: translate(50%, -50%) rotate(90deg) translateY(50%); }
+  :is(.area-popover--top:not([data-side]), .area-popover[data-side="top"]) > .area-popover__arrow { left: 50%; top: 100%; transform: translate(-50%, 0); }
+  :is(.area-popover--bottom:not([data-side]), .area-popover[data-side="bottom"]) > .area-popover__arrow { left: 50%; top: 0; transform: translate(-50%, 0) rotate(180deg); transform-origin: center top; }
+  :is(.area-popover--left:not([data-side]), .area-popover[data-side="left"]) > .area-popover__arrow { left: 100%; top: 50%; transform: translate(-50%, -50%) rotate(-90deg) translateY(50%); }
+  :is(.area-popover--right:not([data-side]), .area-popover[data-side="right"]) > .area-popover__arrow { right: 100%; top: 50%; transform: translate(50%, -50%) rotate(90deg) translateY(50%); }
   .area-popover--arrow { overflow: visible; }
-  .area-popover__header,
   .area-popover__footer { display: flex; align-items: center; gap: var(--area-space-8); }
-  .area-popover__header { justify-content: space-between; min-block-size: var(--area-control-sm); }
-  .area-popover__title { margin: 0; font-size: inherit; line-height: var(--area-ui-leading); font-weight: var(--area-weight-regular); }
-  .area-popover__description { color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: calc(var(--area-ui-leading) - var(--area-space-2)); }
+  /*
+   * spec (pass 2, docs/specs/popover.md): the header is the title group. Title and description
+   * share the first column, 6px apart (title baseline to description cap 15, shadcn 15); any
+   * control (the close button) takes the second column on the title's line. The close keeps
+   * its 28px target but gives back its padding with negative margins, so the header is only as
+   * tall as its text and the icon's edge lands on the 12px inset, like the text opposite it.
+   */
+  .area-popover__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: var(--area-space-8);
+    row-gap: 5px; /* spec: title baseline to description cap 15 with the 20px description line */
+  }
+  .area-popover__header > :is(.area-popover__title, .area-popover__description) { grid-column: 1; }
+  .area-popover__header > :not(.area-popover__title, .area-popover__description) { grid-column: 2; grid-row: 1; }
+  .area-popover__header > .area-button {
+    margin-block: calc((var(--area-ui-leading) - var(--_height)) / 2);
+    margin-inline-end: calc((var(--_icon) - var(--_height)) / 2);
+  }
+  /* spec: the title's cap sits on the 12px inset like the sides, not 5px below it: the header
+   * gives back the leading above the cap (the cap-height reference inset.css uses). */
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-popover > .area-popover__header:first-child { margin-block-start: calc((1cap - 1lh) / 2); }
+  }
+  /*
+   * spec (pass 3): with a close button the corner sets the header. The close box sits the same
+   * distance from the top as from the side (6, half the inset; shadcn 8 and Primer 8, half
+   * their 16), so its icon is on the 12px inset both ways and its 6px radius is concentric with
+   * the 12px corner. The title centres on it: header top = (icon - title leading) / 2.
+   */
+  .area-popover > .area-popover__header:first-child:has(> .area-button) {
+    margin-block-start: calc((var(--area-icon-sm) - var(--area-ui-leading)) / 2);
+  }
+  /* spec (pass 3): strong, because the title is the description's size (shadcn 500, Primer 600). */
+  .area-popover__title { margin: 0; font-size: inherit; line-height: var(--area-ui-leading); font-weight: var(--area-weight-strong); }
+  /* spec (type pass): 14/20 like every surface description (was 14/18). */
+  .area-popover__description { color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
   .area-popover__body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); }
   .area-popover__footer { justify-content: flex-end; flex-wrap: wrap; }
   .area-popover__footer > :first-child { margin-inline-end: auto; }
   .area-popover__media { inline-size: 100%; aspect-ratio: 5 / 2; overflow: hidden; border-radius: max(0px, calc(var(--area-radius-container) - var(--_inset) - var(--area-border-width))); background: var(--area-bg-component); }
   .area-popover__media > :is(img, video) { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
   .area-menu {
+    /* spec: icon-to-label gap (docs/specs/menu.md). Row sides come from inset.css. */
+    --_menu-gap: 12px; /* spec */
     display: flex;
     flex-direction: column;
     /* A small break lets adjacent hover plates remain distinct without turning the
      * panel into a loose stack. */
     gap: var(--area-space-2);
     min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
-    /* Menus sit close to their trigger, so a lower elevation keeps them present
-     * without the hard card-like edge of the general popover shadow. */
-    box-shadow: var(--area-shadow-2);
+    /*
+     * spec: a floating lift, Notion's two layers (20/24 and 5/8 blur) in the theme's shadow
+     * colour. ChatGPT (8/16) and Figma (2/5 + 10/16) float menus the same way; Area's 1px
+     * shadow-2 read as a flat card. docs/specs/menu.md.
+     */
+    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px var(--area-shadow-color); /* spec */
   }
 
   /*
-   * Concentric corners, applied. The panel is 12px with 6px of padding, so an item is
-   * 6px -- which is exactly where OpenAI (12 less 6) and Notion (10 less 4) both land.
+   * Concentric corners, applied. The panel is 12px with 4px of padding, so an item is
+   * 8px; Notion lands on the same rule (10 less 4 is 6).
    */
   .area-menu__item {
     display: flex;
     align-items: center;
-    gap: var(--area-space-8);
     block-size: var(--area-control-md);
     padding-inline: var(--area-space-8);
     border: 0;
@@ -500,14 +858,16 @@
     transition: var(--area-transition);
   }
 
-  /* The extra 2px visually aligns a stroked icon's ink with the section label. */
-  .area-menu__item:has(> .area-menu__icon) {
-    padding-inline-start: var(--area-space-10);
-  }
-
-  .area-menu__item:hover:not([data-disabled]),
-  .area-menu__item[data-highlighted] {
-    background-color: var(--area-bg-hover);
+  /*
+   * spec: hover, keyboard focus and the highlighted item share one wash (ChatGPT 5% black,
+   * Notion 5% warm black, both for pointer and keyboard). The row is the focus indicator.
+   */
+  /* The shared row plate (Nav, Tree view, Table): the same #f3 as the 5% wash on white, and
+     opaque, so a selected row stays one step firmer under the pointer and in dark mode. */
+  .area-menu__item:hover:not([data-disabled], [data-selected]),
+  .area-menu__item:is([data-highlighted], :focus-visible):not([data-selected]) {
+    background-color: var(--area-bg-component-hover);
+    outline: none;
   }
 
   .area-menu__item[data-disabled] {
@@ -529,12 +889,22 @@
     font-weight: var(--area-weight-regular);
   }
 
-  .area-menu__item--danger { color: var(--area-fg-danger-vivid); }
-  .area-menu__item--danger:hover:not([data-disabled]),
-  .area-menu__item--danger[data-highlighted] {
-    background-color: var(--area-danger-surface);
-    color: var(--area-fg-danger);
+  /*
+   * spec (model-picker.md): a row with a note under its label (ChatGPT's model list: 14/20 label,
+   * 12/14 muted note, 6 above and below, 46 tall). The row grows to fit; the check stays centred.
+   */
+  .area-menu__item:has(.area-menu__description) { block-size: auto; min-block-size: var(--area-control-md); padding-block: 6px; /* spec */ }
+  .area-menu__lines { display: flex; flex-direction: column; min-inline-size: 0; }
+  /* Two lines stack on full line boxes (20 over 16), so the cap trim of a one-line row is off. */
+  .area-menu__lines > .area-menu__text { text-box: none; padding-block: 0; }
+  .area-menu__description {
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
   }
+
+  /* spec: danger keeps its red label and hovers with the neutral wash (ChatGPT "Delete"). */
+  .area-menu__item--danger { color: var(--area-fg-danger-vivid); }
 
   /*
    * The icon and text slots of a menu item. The icon holds its size; the label takes what
@@ -563,7 +933,7 @@
 
   /*
    * A group heading, in an inline menu the same shape as a nav's: the item's size and row
-   * height, strong weight, and a foreground a rung quieter than the items it names. See
+   * height, regular weight, and a foreground a rung quieter than the items it names. See
    * `nav.css` for the measurement this follows.
    */
   .area-menu__label {
@@ -579,20 +949,47 @@
 
   .area-menu__separator {
     block-size: 1px;
-    /* The line remains a hairline; its surrounding space is the separator's
-     * actual affordance, making distinct groups easy to scan. */
-    margin-block: var(--area-space-8);
-    margin-inline-start: var(--area-space-8);
-    margin-inline-end: var(--area-space-8);
+    /*
+     * spec: 4px from the rows on each side (the menu's 2px row gap plus 2px), as Notion
+     * (4 / 1 / 4). Was 10px each side, a 21px band; ChatGPT uses 8 (docs/specs/menu.md).
+     */
+    margin-block: 2px; /* spec */
+    margin-inline: var(--area-space-8);
     background-color: var(--area-border-decorative);
   }
 
+  /*
+   * Checkable rows. The row is the control; the trailing check or switch only shows state.
+   * spec: Notion's toggle rows end in a small switch 8px from the row's end; ChatGPT's model
+   * picker ends in a 16px check. Unchecked checks keep their column so labels do not move.
+   */
+  .area-menu__check {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 var(--area-icon-md);
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    margin-inline-start: auto;
+    color: var(--area-fg-default);
+  }
+  .area-menu__check > svg { inline-size: 100%; block-size: 100%; }
+  .area-menu__item[aria-checked="false"] > .area-menu__check { visibility: hidden; }
+  .area-menu__shortcut + :is(.area-menu__check, .area-menu__toggle) { margin-inline-start: 0; }
+  .area-menu__toggle {
+    margin-inline-start: auto;
+    min-block-size: 0;
+    align-items: center;
+    cursor: inherit;
+  }
+  .area-menu__toggle > .area-switch__track { margin-block-start: 0; }
+
+  /* spec: 12px in the UI font, quiet ink (Notion's shortcuts: 12px, tertiary, not monospace). */
   .area-menu__shortcut {
     margin-inline-start: auto;
     padding-inline-start: var(--area-space-12);
     color: var(--area-fg-muted);
     font-size: var(--area-text-xs-size);
-    font-family: var(--area-font-mono);
+    line-height: var(--area-text-xs-leading);
   }
 
   /* A searchable menu is one floating surface: the input sits above a compact menu,
@@ -601,12 +998,15 @@
     display: flex;
     flex-direction: column;
     gap: var(--area-space-4);
-    min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
+    /* spec: Menu's own minimum (256), so a searchable menu is not narrower than a plain one. */
+    min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-64));
     padding: var(--area-space-4);
     border: var(--area-border-width) solid var(--area-border-decorative);
+    /* spec: the floating-surface lift; see Popover and Menu. */
+    --_elevation: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-2);
+    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px var(--area-shadow-color); /* spec: as .area-menu */
   }
 
   .area-menu__search-surface > .area-menu {
@@ -624,9 +1024,16 @@
    */
   .area-tooltip {
     --_tooltip-inset-block: var(--area-space-4);
-    --_tooltip-inset-inline: var(--area-space-8);
+    /* spec: owner, 10px text sides (8 read tight, ChatGPT's 12 too much); a trailing Kbd keeps the 4px block inset. */
+    --_tooltip-inset-inline: var(--area-space-10);
     --_tooltip-inset-inline-end: var(--_tooltip-inset-inline);
-    --_tooltip-radius: var(--area-radius-row);
+    /*
+     * spec: rounder than a control (8) but not a pill (14 on 28px): the owner asked for
+     * "rounder, not quite pill" (2026-09-25). 10px at Standard; a nested Kbd lands on its
+     * own 6px. Follows the radius preset, capped at half a line so it never becomes a blob.
+     */
+    --_tooltip-radius: var(--area-radius-control-lg);
+    --_tooltip-shape: min(var(--_tooltip-radius), calc((var(--area-ui-leading) + var(--_tooltip-inset-block) * 2) / 2));
 
     position: relative;
     isolation: isolate;
@@ -636,19 +1043,20 @@
     padding-block: var(--_tooltip-inset-block);
     padding-inline-start: var(--_tooltip-inset-inline);
     padding-inline-end: var(--_tooltip-inset-inline-end);
-    border-radius: min(var(--_tooltip-radius), calc((var(--area-ui-leading) + var(--_tooltip-inset-block) * 2) * var(--area-radius-cap)));
+    border-radius: var(--_tooltip-shape);
     background-color: var(--area-bg-inverse);
     color: var(--area-fg-on-inverse);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     max-inline-size: calc(var(--area-space-96) * 3);
-    box-shadow: var(--area-shadow-2);
+    /* spec: Notion's geometry (Figma 0 5px 12px, ChatGPT 0 8px 18px); theme-aware colour. */
+    box-shadow: 0 4px 12px -2px var(--area-shadow-color);
   }
 
   /* The nested keycap uses the outer radius less its actual vertical inset. Its 20px
    * box is vertically centred by construction: (28px - 20px) / 2 = 4px. */
   .area-tooltip > .area-kbd {
-    border-radius: max(0px, calc(var(--_tooltip-radius) - var(--_tooltip-inset-block)));
+    border-radius: max(0px, calc(var(--_tooltip-shape) - var(--_tooltip-inset-block)));
   }
   /* A terminal Kbd's end inset equals its measured 4px block inset. The label keeps
    * its larger reading inset on the leading side. */
@@ -667,25 +1075,35 @@
     z-index: 0;
     pointer-events: none;
   }
-  .area-tooltip--top::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-end: calc(var(--area-space-8) / -2); border-bottom-right-radius: var(--area-space-2); }
-  .area-tooltip--right::after { inset-inline-start: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); border-bottom-left-radius: var(--area-space-2); }
-  .area-tooltip--bottom::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-start: calc(var(--area-space-8) / -2); border-top-left-radius: var(--area-space-2); }
-  .area-tooltip--left::after { inset-inline-end: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); border-top-right-radius: var(--area-space-2); }
-  .area-tooltip--right:dir(rtl)::after { border-bottom-left-radius: 0; border-top-right-radius: var(--area-space-2); }
-  .area-tooltip--left:dir(rtl)::after { border-top-right-radius: 0; border-bottom-left-radius: var(--area-space-2); }
+  :is(.area-tooltip--top:not([data-side]), .area-tooltip[data-side="top"])::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-end: calc(var(--area-space-8) / -2); border-bottom-right-radius: var(--area-space-2); }
+  :is(.area-tooltip--right:not([data-side]), .area-tooltip[data-side="right"])::after { inset-inline-start: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); border-bottom-left-radius: var(--area-space-2); }
+  :is(.area-tooltip--bottom:not([data-side]), .area-tooltip[data-side="bottom"])::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-start: calc(var(--area-space-8) / -2); border-top-left-radius: var(--area-space-2); }
+  :is(.area-tooltip--left:not([data-side]), .area-tooltip[data-side="left"])::after { inset-inline-end: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); border-top-right-radius: var(--area-space-2); }
+  :is(.area-tooltip--right:not([data-side]), .area-tooltip[data-side="right"]):dir(rtl)::after { border-bottom-left-radius: 0; border-top-right-radius: var(--area-space-2); }
+  :is(.area-tooltip--left:not([data-side]), .area-tooltip[data-side="left"]):dir(rtl)::after { border-top-right-radius: 0; border-bottom-left-radius: var(--area-space-2); }
 
 
   /* --- Toast -------------------------------------------------------------- */
+  /*
+   * spec (docs/specs/toast.md): the compact floating surface, on Popover's numbers. Text and
+   * icon sit on a 12px inset with the 16px icon 12 from the top and side; one 20px line makes
+   * it 40 tall. Controls take their 28px box back with negative margins (like Popover's
+   * close), so every toast stays 40 tall and the last control sits 6 from the top and side,
+   * its 6px radius concentric with the 12px corner. Lift shared with Popover, Menu and
+   * Notion's toast.
+   */
   .area-toast {
     display: flex;
     align-items: flex-start;
-    gap: var(--area-space-10);
-    padding: var(--area-space-8) var(--area-space-10);
+    gap: var(--area-space-8);
+    padding: calc(var(--area-space-10) - var(--area-border-width)) calc(var(--area-space-12) - var(--area-border-width));
     border: var(--area-border-width) solid var(--area-border-decorative);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
+    /* spec: the floating-surface lift; see Popover and Menu. */
+    --_elevation: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
     color: var(--area-fg-default);
-    box-shadow: var(--area-shadow-3);
+    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px var(--area-shadow-color); /* spec */
     inline-size: var(--area-toast-inline-size, 360px);
     min-inline-size: 0;
     max-inline-size: 100%;
@@ -694,6 +1112,8 @@
   }
 
   .area-toast__icon {
+    /* Neutral is the default tone, so the bare class paints as it does (muted icon). */
+    color: var(--area-fg-muted);
     flex-shrink: 0;
     inline-size: var(--area-icon-md);
     block-size: var(--area-icon-md);
@@ -701,14 +1121,73 @@
   }
   .area-toast__icon > svg { inline-size: 100%; block-size: 100%; }
   .area-toast__content { flex: 1; min-inline-size: 0; overflow-wrap: anywhere; display: grid; gap: var(--area-space-4); }
-  .area-toast__title { font-weight: var(--area-weight-regular); }
-  .area-toast__action { flex-shrink: 0; display: flex; align-items: center; align-self: center; }
-  .area-toast__dismiss { flex-shrink: 0; display: flex; align-items: center; align-self: center; }
-  .area-toast:has(> :is(.area-toast__action, .area-toast__dismiss)) { align-items: center; padding-block: var(--area-space-4); }
-  .area-toast:has(> :is(.area-toast__action, .area-toast__dismiss)) .area-toast__icon { margin-block-start: 0; }
+  .area-toast__title { font-weight: var(--area-weight-strong); } /* spec (type pass): surface title */
+  /* spec: with a title, the body is the description (muted), as in every surface and Sonner. */
+  .area-toast__description { color: var(--area-fg-muted); }
+  .area-toast__action, .area-toast__dismiss {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    margin-block: calc((var(--area-ui-leading) - var(--area-control-sm)) / 2);
+  }
+  .area-toast > :is(.area-toast__action, .area-toast__dismiss):last-child {
+    margin-inline-end: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2);
+  }
 
+  /* Neutral by default, like every other family: the icon takes the muted ink. */
+  .area-toast--neutral .area-toast__icon { color: var(--area-fg-muted); }
   .area-toast--danger .area-toast__icon  { color: var(--area-fg-danger); }
   .area-toast--warning .area-toast__icon { color: var(--area-fg-warning); }
   .area-toast--success .area-toast__icon { color: var(--area-fg-success); }
   .area-toast--info .area-toast__icon    { color: var(--area-fg-info); }
+
+  /* --- Anchored overlays --------------------------------------------------- */
+  /*
+   * A Popover, Menu or Tooltip opened from a trigger is a native popover in the top layer,
+   * placed by the React layer (`left`, `top`, `data-side`, `transform-origin`, the available
+   * height). These rules undo the browser's centred popover box and add the motion.
+   */
+  :is(.area-popover, .area-menu, .area-tooltip)[popover] {
+    /* spec: 150ms fade and scale from 0.97 at the trigger (shadcn 150ms; Radix Themes 0.97). */
+    --_overlay-duration: var(--area-duration-base);
+    --_overlay-scale: 0.97;
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    overflow: visible;
+    opacity: 1;
+    scale: 1;
+    transition:
+      opacity var(--_overlay-duration) var(--area-ease-out),
+      scale var(--_overlay-duration) var(--area-ease-out),
+      overlay var(--_overlay-duration) allow-discrete,
+      display var(--_overlay-duration) allow-discrete;
+  }
+  /* The surfaces set their own display, which would otherwise override the browser's hidden popover. */
+  :is(.area-popover, .area-menu, .area-tooltip)[popover]:not(:popover-open) { display: none; opacity: 0; scale: var(--_overlay-scale); }
+  @starting-style {
+    :is(.area-popover, .area-menu, .area-tooltip)[popover]:popover-open { opacity: 0; scale: var(--_overlay-scale); }
+  }
+  /* A tooltip only fades, over 100ms (Primer's tooltip); growing from its trigger reads as a jump. */
+  .area-tooltip[popover] { --_overlay-scale: 1; --_overlay-duration: var(--area-duration-fast); }
+  /* Content on hover stays while the pointer crosses the gap to it (WCAG 1.4.13): an invisible
+     bridge over the gap on the trigger's side (4, or 8 with the arrow), like Primer's. */
+  .area-tooltip[popover] { --_bridge: var(--area-space-4); }
+  .area-tooltip--arrow[popover] { --_bridge: var(--area-space-8); }
+  .area-tooltip[popover]::before { content: ""; position: absolute; }
+  .area-tooltip[popover][data-side="top"]::before { inset: 100% 0 auto; block-size: var(--_bridge); }
+  .area-tooltip[popover][data-side="bottom"]::before { inset: auto 0 100%; block-size: var(--_bridge); }
+  .area-tooltip[popover][data-side="left"]::before { inset: 0 auto 0 100%; inline-size: var(--_bridge); }
+  .area-tooltip[popover][data-side="right"]::before { inset: 0 100% 0 auto; inline-size: var(--_bridge); }
+  /* A menu longer than the room beside its trigger scrolls inside itself. */
+  .area-menu[popover] {
+    max-block-size: var(--area-overlay-available-height, none);
+    overflow-y: auto;
+  }
+  .area-popover[popover]:focus-visible,
+  .area-menu[popover]:focus-visible { outline: none; }
+  @media (prefers-reduced-motion: reduce) {
+    :is(.area-popover, .area-menu, .area-tooltip)[popover] { --_overlay-scale: 1; }
+  }
 }

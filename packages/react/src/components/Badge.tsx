@@ -16,7 +16,7 @@ type LinkProps = Options & AnchorHTMLAttributes<HTMLAnchorElement> & { as: "a"; 
 export type BadgeProps = SpanProps | LinkProps;
 /** Static metadata or a native link. Icon/dot-only forms require an accessible name. */
 export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>(function Badge(
-  { as = "span", tone, variant, size, pill, dot, dotOnly, iconOnly, truncate, uppercase, icon, trailingIcon, avatar, flag, onDismiss, dismissLabel, className, children, title, ...rest }, ref,
+  { as = "span", tone, variant, size, pill, dot, dotOnly, iconOnly, truncate, icon, trailingIcon, avatar, flag, onDismiss, dismissLabel, className, children, title, ...rest }, ref,
 ) {
   if ((iconOnly || dotOnly) && !rest["aria-label"] && !rest["aria-labelledby"] && !rest["aria-hidden"]) {
     throw new Error("Badge: iconOnly and dotOnly require aria-label or aria-labelledby (or aria-hidden when decorative).");
@@ -28,7 +28,7 @@ export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>
   if (onDismiss && !dismissLabel) throw new Error("Badge: dismissLabel is required for the dismiss button.");
   const props = {
     ...rest,
-    className: badgeVariants({ tone, variant, size, pill, dot, dotOnly, iconOnly, truncate, uppercase }, className),
+    className: badgeVariants({ tone, variant, size, pill, dot, dotOnly, iconOnly, truncate }, className),
     title: title ?? (truncate && (typeof children === "string" || typeof children === "number") ? String(children) : undefined),
     role: rest.role ?? ((iconOnly || dotOnly) && as === "span" ? "img" : undefined),
     children: <>

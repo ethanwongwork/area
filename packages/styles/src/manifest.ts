@@ -60,7 +60,16 @@ export const buttonGroup = {
   block: "area-button-group",
   description: "Joins related full-size button actions at shared edges.",
   variants: { variant: ["soft", "outline"], size: ["sm", "md", "lg"] },
+  booleans: ["full-width"],
   defaults: { variant: "soft", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const splitButton = {
+  block: "area-split-button",
+  description: "Joins a default action to a menu of related actions.",
+  variants: { variant: ["solid", "soft", "outline"] },
+  elements: ["action", "trigger", "menu"],
+  defaults: { variant: "solid" },
 } as const satisfies ComponentManifest;
 
 export const toolbar = {
@@ -75,17 +84,25 @@ export const toolbar = {
 export const alignmentPicker = {
   block: "area-alignment-picker",
   description: "Chooses one of nine physical alignment positions.",
-  variants: { variant: ["surface", "plain"], size: ["sm", "md", "lg"] },
+  variants: { variant: ["surface", "plain"], size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
   booleans: ["stretch"],
   elements: ["cell", "dot"],
-  defaults: { variant: "surface", size: "md" },
+  defaults: { variant: "surface", size: "md", tone: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const colorPicker = {
   block: "area-color-picker",
   variants: {}, defaults: {},
-  description: "Edits a solid color with saturation, brightness, hue, opacity and saved swatches.",
-  elements: ["area", "thumb", "channel", "slider", "hue", "alpha", "heading"],
+  description: "Edits a color like Figma's fill picker, with spectrum, grid and slider views, six color models, a contrast check, a before/after preview and saved swatches.",
+  elements: ["header", "body", "views", "contrast", "contrast-pair", "contrast-ratio", "contrast-unit", "contrast-level", "area", "band", "band-region", "band-edge", "thumb", "channel", "grid", "controls", "tracks", "channel-row", "channel-label", "slider", "hue", "alpha", "preview", "preview-new", "preview-original", "values", "model", "fields", "text-field", "opacity", "note", "swatches", "heading"],
+} as const satisfies ComponentManifest;
+
+export const calendar = {
+  block: "area-calendar",
+  description: "Shows a month grid for choosing a date, a range or several dates.",
+  variants: { variant: ["plain", "surface"], tone: ["neutral", "accent"], days: ["square", "circle", "tile"], layout: ["month", "week"] },
+  elements: ["months", "month", "header", "title", "nav", "grid", "weekday", "cell", "day", "day-number", "day-weekday", "day-month", "marker", "week"],
+  defaults: { variant: "plain", tone: "neutral", days: "square", layout: "month" },
 } as const satisfies ComponentManifest;
 
 export const colorSwatch = {
@@ -98,7 +115,7 @@ export const colorSwatch = {
 export const colorSwatchPicker = {
   block: "area-color-swatch-picker",
   description: "Chooses one labeled color from a row or grid of swatches.",
-  variants: { size: ["sm", "md", "lg"], layout: ["grid", "row"] },
+  variants: { size: ["sm", "md", "lg"], layout: ["grid", "row", "palette"] },
   elements: ["cell"],
   defaults: { size: "md", layout: "grid" },
 } as const satisfies ComponentManifest;
@@ -163,7 +180,7 @@ export const treeView = {
   block: "area-tree-view",
   description: "Navigates or selects items in an expandable hierarchy.",
   variants: { selectionMode: ["navigation", "checkbox"] },
-  elements: ["chevron", "check", "icon", "label", "trailing"],
+  elements: ["chevron", "check", "icon", "label", "trailing", "actions"],
   defaults: { selectionMode: "navigation" },
 } as const satisfies ComponentManifest;
 
@@ -195,21 +212,21 @@ export const textarea = {
 export const select = {
   block: "area-select",
   description: "Picks one value from a list.",
-  variants: { size: ["sm", "md", "lg"] },
+  variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
   booleans: ["full-width"],
-  states: ["invalid", "disabled"],
+  states: ["invalid", "success", "warning", "disabled"],
   stateAttributes: { disabled: "disabled", invalid: "aria-invalid" },
   elements: [],
-  defaults: { size: "md" },
+  defaults: { variant: "outline", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
-  variants: { variant: ["card"], size: ["sm", "md", "lg"] },
+  variants: { variant: ["card"], size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
   states: ["checked", "indeterminate", "disabled", "invalid"],
   elements: ["control", "visual"],
-  defaults: { size: "md" },
+  defaults: { size: "md", tone: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const checkboxGroup = {
@@ -224,10 +241,10 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { size: ["sm", "md", "lg"] },
+  variants: { size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
   states: ["disabled"],
   elements: ["control"],
-  defaults: { size: "md" },
+  defaults: { size: "md", tone: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const radioGroup = {
@@ -273,11 +290,11 @@ export const slider = {
 export const chip = {
   block: "area-chip",
   description: "Selects one value from a set too long for a segmented track.",
-  variants: { kind: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"] },
+  variants: { kind: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
   booleans: ["pill", "swatch-only", "link", "link-icon"],
   states: ["selected", "disabled", "invalid"],
   elements: ["swatch", "icon", "trailing-icon", "avatar", "image", "label", "action", "remove"],
-  defaults: { kind: "filter", size: "md" },
+  defaults: { kind: "filter", size: "md", tone: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const chipGroup = {
@@ -303,7 +320,7 @@ export const badge = {
     tone: ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"],
     size: ["sm", "md", "lg"],
   },
-  booleans: ["pill", "dot", "dot-only", "icon-only", "truncate", "uppercase"],
+  booleans: ["pill", "dot", "dot-only", "icon-only", "truncate"],
   elements: ["dot", "leading-icon", "label", "trailing-icon", "avatar", "flag", "dismiss"],
   defaults: { variant: "soft", tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
@@ -400,16 +417,106 @@ export const panel = {
   description: "A titled surface of rows that act on something beside it.",
   variants: { size: ["xs", "sm", "md", "lg"] },
   booleans: ["flush", "bare-bar"],
-  elements: ["bar", "title", "body", "section", "heading", "stack", "footer"],
+  states: ["collapsed", "resizable", "resizing"],
+  elements: ["resize", "bar", "title", "body", "section", "heading", "heading-text", "actions", "toggle", "toggle-text", "chevron", "summary", "rows", "row", "row-label", "row-controls", "row-action", "stack", "footer"],
+  defaults: { size: "md" },
+} as const satisfies ComponentManifest;
+
+export const propertyList = {
+  block: "area-property-list",
+  description: "Orders like properties (fills, strokes, effects) and moves them by handle or keyboard.",
+  variants: {},
+  states: ["dragging", "inactive"],
+  elements: ["item", "handle", "value", "actions", "indicator"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const modelPicker = {
+  block: "area-model-picker",
+  description: "Chooses the model a message is sent with, from inside the composer.",
+  variants: {},
+  elements: ["trigger", "menu"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const scrollToLatest = {
+  block: "area-scroll-to-latest",
+  description: "Returns a long conversation to its newest message.",
+  variants: {},
+  states: ["visible"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const message = {
+  block: "area-message",
+  description: "One turn in a conversation: the person's bubble or the assistant's prose, with actions.",
+  variants: { author: ["user", "assistant"] },
+  states: ["streaming"],
+  elements: ["bubble", "content", "actions", "cursor"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const promptSuggestions = {
+  block: "area-prompt-suggestions",
+  description: "Starter prompts under an empty composer.",
+  variants: { layout: ["list", "chips"] },
+  elements: ["row", "item", "icon", "text", "dismiss"],
+  defaults: { layout: "list" },
+} as const satisfies ComponentManifest;
+
+export const hoverCard = {
+  block: "area-hover-card",
+  description: "Previews what a link points to while the pointer rests on it.",
+  variants: {},
+  elements: ["identity", "meta"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const contextMenu = {
+  block: "area-context-menu",
+  description: "Opens a Menu where you right-click.",
+  variants: {},
+  elements: ["menu"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const commandPalette = {
+  block: "area-command-palette",
+  description: "Searches actions and places from a shortcut, and runs the one you pick.",
+  variants: {},
+  booleans: ["inline"],
+  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "empty", "footer", "hint"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const combobox = {
+  block: "area-combobox",
+  description: "An editable field with suggestions that filter as you type.",
+  variants: {},
+  booleans: ["full-width"],
+  elements: ["listbox", "option", "description", "empty", "group"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const boxField = {
+  block: "area-box-field",
+  description: "Edits padding or corner radius linked, or one field per side or corner.",
+  variants: { size: ["sm", "md", "lg"] },
+  elements: ["label", "fields", "field", "toggle"],
+  elementModifiers: { field: ["wide"] },
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const card = {
   block: "area-card",
   description: "Groups related media, content and actions on one surface.",
-  variants: { layout: ["vertical", "horizontal", "compact", "immersive"] },
-  elements: ["title", "description", "content", "footer", "media", "action", "carousel"],
-  defaults: { layout: "vertical" },
+  variants: {
+    layout: ["vertical", "horizontal", "compact", "immersive"],
+    size: ["sm", "md", "lg"],
+  },
+  elements: ["title", "description", "value", "content", "header", "heading", "header-action", "footer", "media", "overlay", "list", "link", "action", "carousel"],
+  elementModifiers: { media: ["well", "bleed"], overlay: ["top-start", "top-end", "bottom-start", "bottom-end", "reveal"] },
+  defaults: { layout: "vertical", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const alert = {
@@ -442,8 +549,16 @@ export const menu = {
   description: "Lists actions triggered from a button.",
   variants: {},
   states: ["disabled", "highlighted", "selected"],
-  elements: ["item", "icon", "text", "label", "separator", "shortcut", "search-surface"],
+  elements: ["item", "icon", "text", "lines", "description", "label", "separator", "shortcut", "check", "toggle", "search-surface"],
   elementModifiers: { item: ["danger"] },
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const popoverAnchor = {
+  block: "area-popover-anchor",
+  description: "Wraps a popover's trigger so the popover can anchor to it.",
+  variants: {},
+  elements: [],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -459,9 +574,9 @@ export const tooltip = {
 export const toast = {
   block: "area-toast",
   description: "Reports the outcome of an action without interrupting.",
-  variants: { tone: ["info", "danger", "warning", "success"] },
-  elements: ["icon", "content", "title", "action", "dismiss"],
-  defaults: { tone: "info" },
+  variants: { tone: ["neutral", "info", "danger", "warning", "success"] },
+  elements: ["icon", "content", "title", "description", "action", "dismiss"],
+  defaults: { tone: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const tabs = {
@@ -563,9 +678,11 @@ export const kbdGroup = {
 export const MANIFESTS = {
   button,
   buttonGroup,
+  splitButton,
   toolbar,
   alignmentPicker,
   colorPicker,
+  calendar,
   colorSwatch,
   colorSwatchPicker,
   colorField,
@@ -599,10 +716,21 @@ export const MANIFESTS = {
   spinner,
   progress,
   panel,
+  propertyList,
+  boxField,
+  combobox,
+  commandPalette,
+  contextMenu,
+  hoverCard,
+  promptSuggestions,
+  message,
+  scrollToLatest,
+  modelPicker,
   card,
   alert,
   dialog,
   popover,
+  popoverAnchor,
   menu,
   tooltip,
   toast,

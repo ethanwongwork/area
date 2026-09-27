@@ -1,6 +1,7 @@
 import { forwardRef, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ChangeEvent, HTMLAttributes, KeyboardEvent, ReactNode, TextareaHTMLAttributes } from "react";
 import { composerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 
 export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "onSubmit" | "defaultValue"> {
@@ -18,6 +19,8 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
   trailingActions?: ReactNode;
   mode?: ReactNode;
   submitLabel?: string;
+  /** A round send button (ChatGPT's); the composer's corner follows it to a pill. */
+  submitPill?: boolean;
   /** Enter submits; Shift+Enter inserts a newline. Meta/Ctrl+Enter always submits. */
   submitOnEnter?: boolean;
   inputProps?: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "defaultValue" | "onChange" | "onKeyDown" | "rows" | "disabled" | "placeholder" | "maxLength">;
@@ -28,18 +31,32 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
 export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function Composer(
   { layout = "inline", value, defaultValue = "", onValueChange, onSubmit,
     placeholder = "Write a message…", label = "Message", disabled, busy, maxLength,
-    leadingActions, trailingActions, mode, submitLabel = "Send message", submitOnEnter = true, inputProps, onInputKeyDown,
+    leadingActions, trailingActions, mode, submitLabel = "Send message", submitPill, submitOnEnter = true, inputProps, onInputKeyDown,
     className, ...rest }, ref,
 ) {
   const [ownValue, setOwnValue] = useState(defaultValue);
   const text = value === undefined ? ownValue : value;
   const id = useId();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  // Fit the height to the text. Wrapping depends on width too, so refit when the width
+  // changes (a narrow first layout, a resized panel); height-only changes are ignored.
   useLayoutEffect(() => {
     const input = inputRef.current;
     if (!input) return;
-    input.style.blockSize = "auto";
-    input.style.blockSize = `${input.scrollHeight}px`;
+    const fit = () => {
+      input.style.blockSize = "auto";
+      input.style.blockSize = `${input.scrollHeight}px`;
+    };
+    fit();
+    if (typeof ResizeObserver === "undefined") return;
+    let width = input.clientWidth;
+    const observer = new ResizeObserver(() => {
+      if (input.clientWidth === width) return;
+      width = input.clientWidth;
+      fit();
+    });
+    observer.observe(input);
+    return () => observer.disconnect();
   }, [text, layout]);
   const change = (event: ChangeEvent<HTMLTextAreaElement>) => {
     if (value === undefined) setOwnValue(event.target.value);
@@ -58,6 +75,8 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
     event.preventDefault();
     submit();
   };
+  const sendButton = <Button className="area-composer__submit" variant="solid" tone="neutral" size="md" iconOnly pill={submitPill}
+    aria-label={submitLabel} disabled={disabled || busy || !text.trim()} onClick={submit} icon={<Glyph name="arrow-up" />} />;
   return <div {...rest} className={composerVariants({ layout }, className)} data-disabled={disabled ? "" : undefined} data-busy={busy ? "" : undefined}>
     <div className="area-composer__entry">
       {layout === "inline" && leadingActions && <div className="area-composer__actions area-composer__actions--leading">{leadingActions}</div>}
@@ -66,17 +85,13 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
         onChange={change} onKeyDown={keyDown} placeholder={placeholder} disabled={disabled || busy} maxLength={maxLength} />
       {layout === "inline" && <div className="area-composer__actions area-composer__actions--trailing">
         {mode}<span className="area-composer__extras">{trailingActions}</span>
-        <button type="button" className="area-composer__submit" aria-label={submitLabel} disabled={disabled || busy || !text.trim()} onClick={submit}>
-          <Glyph name="arrow-up" />
-        </button>
+        {sendButton}
       </div>}
     </div>
     {layout === "stacked" && <div className="area-composer__footer">
       <div className="area-composer__actions area-composer__actions--leading">{leadingActions}{mode}</div>
       <div className="area-composer__actions area-composer__actions--trailing">{trailingActions}
-        <button type="button" className="area-composer__submit" aria-label={submitLabel} disabled={disabled || busy || !text.trim()} onClick={submit}>
-          <Glyph name="arrow-up" />
-        </button>
+        {sendButton}
       </div>
     </div>}
   </div>;

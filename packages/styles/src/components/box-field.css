@@ -1,0 +1,54 @@
+/* ---------------------------------------------------------------------------
+ * Box field
+ *
+ * One property with up to four parts: padding (top, right, bottom, left) or corner radius
+ * (each corner). Linked, it edits the parts together -- a horizontal and a vertical field for
+ * padding, one field for the corners; a toggle splits it into one field per part.
+ *
+ * spec (docs/specs/box-field.md): it lays out on the inspector row's grid -- two equal field
+ * columns and a trailing square the height of a control, 8 apart (Figma 88 + 8 + 88 + 8 + 24,
+ * captured) -- so the toggle sits in the same column as every row's action, and the split
+ * fields keep each axis in its column (left over right, top over bottom).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-box-field {
+    --_control: var(--area-control-md);
+
+    display: flex;
+    flex-direction: column;
+    /* spec (inspector): a caption sits 6 over its controls, as PanelRow and Panel's stack. */
+    gap: var(--area-space-6);
+    min-inline-size: 0;
+  }
+
+  .area-box-field__label {
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .area-box-field__fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_control);
+    /* spec (inspector): 8 between columns and between rows, the panel section's own rhythm. */
+    gap: var(--area-space-8);
+    align-items: center;
+  }
+
+  .area-box-field__field { grid-column: span 1; min-inline-size: 0; }
+  /* Linked corners are one value: the field takes both columns. */
+  .area-box-field__field--wide { grid-column: 1 / 3; }
+  .area-box-field__toggle { grid-column: 3; grid-row: 1; justify-self: center; }
+
+  /* A box field without a toggle (always split, or always linked) gives the square back. */
+  .area-box-field__fields:not(:has(> .area-box-field__toggle)) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+
+  /* --- Sizes -------------------------------------------------------------- */
+  /* The trailing square is the control height, so the toggle is as tall as the fields. */
+  .area-box-field--sm { --_control: var(--area-control-sm); }
+  .area-box-field--md { --_control: var(--area-control-md); }
+  .area-box-field--lg { --_control: var(--area-control-lg); }
+}

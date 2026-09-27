@@ -19,7 +19,8 @@ import { SEMANTIC_ALIASES, type Alias } from "../semantic/aliases.ts";
 function tokensForRole(theme: ResolvedTheme, role: string): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [name, alias] of Object.entries(SEMANTIC_ALIASES) as Array<[string, Alias]>) {
-    if (alias.kind === "literal" || alias.role !== role) continue;
+    // A literal belongs to the axis whose role it names (the neutral scrim); others are skipped.
+    if (alias.role !== role) continue;
     out[name] = theme.tokens[name]!;
   }
   return out;

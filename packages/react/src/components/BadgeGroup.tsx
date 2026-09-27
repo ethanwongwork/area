@@ -1,8 +1,7 @@
 "use client";
-import { Children, forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
+import { Children, forwardRef, isValidElement, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
-import { badgeGroupVariants, cx } from "../variants.ts";
-import { Button } from "./Button.tsx";
+import { badgeGroupVariants, badgeVariants, cx } from "../variants.ts";
 import { Popover } from "./primitives.tsx";
 export interface BadgeGroupProps extends HTMLAttributes<HTMLDivElement> {
   overflow?: "inline" | "overlay";
@@ -24,6 +23,8 @@ export const BadgeGroup = forwardRef<HTMLDivElement, BadgeGroupProps>(function B
   useImperativeHandle(ref, () => root.current!, []);
   const count = visibleCount === "auto" ? Math.min(fitted, items.length) : visibleCount === undefined ? items.length : Math.max(0, Math.min(items.length, Math.floor(visibleCount)));
   const hidden = items.length - count;
+  // The overflow is a badge of the group's own size (as AvatarGroup's overflow is an avatar).
+  const size = items.map(item => isValidElement<{ size?: "sm" | "md" | "lg" }>(item) ? item.props.size : undefined).find(Boolean);
   useEffect(() => {
     if (visibleCount !== "auto" || !root.current || !popup.current) return;
     let disposed = false;
@@ -46,7 +47,7 @@ export const BadgeGroup = forwardRef<HTMLDivElement, BadgeGroupProps>(function B
       probe.removeAttribute("id");
       probe.removeAttribute("popovertarget");
       probe.style.cssText = "display:inline-flex;position:fixed;visibility:hidden";
-      probe.querySelector(".area-button__label")!.textContent = `+${items.length}`;
+      probe.querySelector(".area-badge__label")!.textContent = `+${items.length}`;
       host.append(probe);
       const reserve = probe.getBoundingClientRect().width + gap;
       probe.remove();
@@ -66,7 +67,7 @@ export const BadgeGroup = forwardRef<HTMLDivElement, BadgeGroupProps>(function B
   }, [hidden]);
   return <div {...rest} ref={root} className={badgeGroupVariants({ overflow }, className)} style={{ ...style, "--_overflow-anchor": `--area-badge-${id.replace(/[^a-zA-Z0-9_-]/g, "")}` } as CSSProperties}>
     {items.slice(0, count).map((item, index) => <span className="area-badge-group__item" key={index}>{item}</span>)}
-    <Button ref={trigger} size="sm" variant="ghost" className="area-badge-group__overflow-trigger" popoverTarget={id} hidden={!hidden} aria-label={`${overflowLabel}, ${hidden} more`}>+{hidden || items.length}</Button>
+    <button ref={trigger} type="button" className={badgeVariants({ size }, "area-badge-group__overflow-trigger")} popoverTarget={id} hidden={!hidden} aria-label={`${overflowLabel}, ${hidden} more`}><span className="area-badge__label">+{hidden || items.length}</span></button>
     <Popover ref={popup} id={id} popover="auto" role="group" tabIndex={-1} autoFocus className={cx("area-badge-group__overflow-content")} aria-label={overflowLabel}>
       {items.slice(count).map((item, index) => <span className="area-badge-group__item" key={count + index}>{item}</span>)}
     </Popover>

@@ -1,0 +1,25 @@
+/* ---------------------------------------------------------------------------
+ * Scroll to latest
+ *
+ * A round button that returns a long conversation to its newest message, shown only once
+ * the reader has scrolled away (ChatGPT's "Scroll to bottom"). It sits 24 above the
+ * composer, centred on it. docs/specs/scroll-to-latest.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* Place it inside the composer's (relatively positioned) wrapper; it rises above it. */
+  .area-scroll-to-latest {
+    position: absolute;
+    inset-inline: 0;
+    /* spec: 24 above the composer, centred on it (ChatGPT 24, centre delta 0). */
+    inset-block-end: calc(100% + var(--area-space-24));
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: var(--area-transition);
+  }
+  .area-scroll-to-latest[data-visible] { opacity: 1; }
+  .area-scroll-to-latest[data-visible] > .area-button { pointer-events: auto; }
+  /* The button is Button outline neutral, icon-only, pill: 32 round with the surface fill under its
+   * ring, so it covers the prose it floats over (ChatGPT: 252 fill, 10% ring, no shadow). */
+}

@@ -62,7 +62,7 @@ export const ColorSwatchPicker = forwardRef<HTMLDivElement, ColorSwatchPickerPro
     else if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
       const horizontal = event.key === "ArrowLeft" || event.key === "ArrowRight";
       const forward = event.key === "ArrowRight" || event.key === "ArrowDown";
-      if (layout === "grid" && !horizontal) {
+      if ((layout === "grid" || layout === "palette") && !horizontal) {
         const rows = Math.ceil(options.length / count);
         const column = index % count;
         const currentRow = Math.floor(index / count);

@@ -8,6 +8,8 @@ type Size = NonNullable<VariantProps<typeof MANIFESTS.checkbox>["size"]>;
 /* --- Select / Textarea ---------------------------------------------------- */
 
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "size" | "multiple"> {
+  /** `soft` is the flat filled field, shared with Input, Textarea and NumberField. */
+  variant?: VariantProps<typeof MANIFESTS.select>["variant"];
   size?: VariantProps<typeof MANIFESTS.select>["size"];
   /** Stretch to the available inline size. The default is a contained 16rem measure. */
   fullWidth?: boolean;
@@ -20,6 +22,7 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
 
 export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>(function Select(
   {
+    variant,
     size,
     fullWidth,
     validationStatus,
@@ -37,7 +40,7 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
   return (
     <select
       ref={ref}
-      className={selectVariants({ size, fullWidth }, className)}
+      className={selectVariants({ variant, size, fullWidth }, className)}
       aria-invalid={invalidState ? true : ariaInvalid}
       {...(invalidState ? { "data-invalid": "" } : {})}
       {...(resolvedValidationStatus === "success" ? { "data-success": "" } : {})}
@@ -103,6 +106,8 @@ interface ChoiceProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"
 export interface CheckboxProps extends ChoiceProps {
   /** A contained, full-width choice row. It preserves native Checkbox behavior. */
   variant?: VariantProps<typeof MANIFESTS.checkbox>["variant"];
+  /** Checked paint. Neutral by default; accent is an explicit override. */
+  tone?: VariantProps<typeof MANIFESTS.checkbox>["tone"];
   /** Decorative context beside the mark. The visible label must still name the option. */
   leadingVisual?: ReactNode;
   /** Alias for description when the copy is presented as an option caption. */
@@ -114,7 +119,7 @@ export interface CheckboxProps extends ChoiceProps {
 }
 
 export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { variant, size, label, description, caption, leadingVisual, invalid, indeterminate = false, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
+  { variant, tone, size, label, description, caption, leadingVisual, invalid, indeterminate = false, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
   ref,
 ) {
   const resolvedCaption = caption ?? description;
@@ -133,7 +138,7 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
 
   return (
     <label
-      className={checkboxVariants({ variant, size }, className)}
+      className={checkboxVariants({ variant, tone, size }, className)}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(invalidState ? { "data-invalid": "" } : {})}
     >
@@ -264,7 +269,7 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
 });
 
 export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(function Radio(
-  { size, label, description, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
+  { size, tone, label, description, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
   ref,
 ) {
   const group = useContext(RadioGroupContext);
@@ -279,7 +284,7 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
   };
 
   return (
-    <label className={radioVariants({ size }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}>
+    <label className={radioVariants({ size, tone }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}>
       <input
         ref={ref}
         type="radio"
@@ -304,4 +309,8 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
 });
 export { Switch, type SwitchProps } from "./Switch.tsx";
 
-export type RadioProps = Omit<ChoiceProps, "size"> & { size?: VariantProps<typeof MANIFESTS.radio>["size"] };
+export type RadioProps = Omit<ChoiceProps, "size"> & {
+  size?: VariantProps<typeof MANIFESTS.radio>["size"];
+  /** Checked paint. Neutral by default; accent is an explicit override. */
+  tone?: VariantProps<typeof MANIFESTS.radio>["tone"];
+};

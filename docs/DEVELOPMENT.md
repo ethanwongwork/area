@@ -10,7 +10,8 @@ a smaller folder count would not justify coupling CSS to React or docs to token 
 - `packages/tokens/src/`: palette math, semantic resolution, axis registry and emitters.
   The build validates namespace ownership and emits CSS, JSON, config helpers and types.
 - `packages/styles/src/`: framework-free component CSS plus `manifest.ts`. Build bundles
-  the stylesheet and checks selector/manifest parity.
+  the stylesheet, checks selector/manifest parity, and checks that every `var(--area-*)`
+  names a defined token or carries a fallback (`scripts/check-token-refs.mjs`).
 - `packages/react/src/`: markup, native behavior, composition and typed variant helpers.
   `scripts/build-modules.mjs` emits ESM and declarations without bundling away boundaries.
 - `apps/docs/src/`: page metadata, practices, real demos and hydrated browser fixtures.
@@ -54,7 +55,7 @@ snapshot. Completion status is source data under `apps/docs/src`, so the watcher
 Targeted checks:
 
 ```sh
-npm run lint:manifest
+npm run lint:manifest   # manifest parity and token references
 npm run audit
 npm run test:badge
 npm run test:switch
@@ -96,6 +97,7 @@ the browser. Captures are saved under `docs/research/captures/<slug>/` and compa
 
 ```sh
 npm run capture:compare -- docs/research/captures/indicator/*.json
+node scripts/validate-badge.mjs   # every Badge gallery capture against docs/specs/badge.md
 ```
 
 The workflow is in [Building a component](COMPONENT_ADAPTATION.md#capture-protocol).

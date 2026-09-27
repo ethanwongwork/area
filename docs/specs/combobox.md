@@ -1,0 +1,80 @@
+# Combobox spec
+
+**Status:** in review · 2026-09-26
+**Captures:** `docs/research/captures/combobox/`
+**Peers:** Input (the field), Menu (the list's surface and rows), Select (no typing),
+Popover (anchoring)
+
+## Owner decisions
+
+- 2026-09-26: "do each of them subsequently" — the product-specific inventory in
+  COMPONENTS.md, starting with the recommended foundation, Combobox.
+
+## Job and boundaries
+
+An editable field with a list of suggestions that filters as you type: pick one, or (where
+allowed) keep your own text, or create a new option. Not Select (no typing, native list),
+not CommandPalette (a search surface for actions, built on this next), not Menu (actions,
+no field). Font picker, tag picker and people picker are recipes on Combobox.
+
+## Variants
+
+| Axis | Value | Justification | Where it appears |
+|---|---|---|---|
+| size | sm, md, lg | Input's sizes | Figma 24 (compact), ChatGPT/Notion 32 |
+| variant | outline, soft | Input's variants | Figma's fields are soft |
+| mode | pick (reverts unmatched text), custom value, create | Figma font size keeps any number; Notion select creates | Figma, Notion |
+| composition | icon, description, groups, disabled option | Figma font picker groups; Notion person rows | Figma, Notion |
+| state | open, highlighted, selected, empty, disabled, invalid | WAI | — |
+
+## Sources
+
+| Id | Type | What | Link | Captures |
+|---|---|---|---|---|
+| figma | target product | Typography font size: `input role=combobox aria-haspopup=listbox` 88 × 24 soft #F5F5F5 r5, icon square 24; preset options 24 tall, check column 26 | figma.com, community-file copy, text layer selected, 2026-09-26; nothing changed | `figma--font-size-combobox--rest--light` |
+| figma | target product | Font family: `button role=combobox aria-haspopup=dialog` 184 × 32 opening the font picker (240 wide, radius 13, 40 header, search row 33 with a 224 × 24 soft field, `role=listbox` of 28-tall `role=option` rows, padding 12 / 18, check column 26) | same | `figma--font-family-trigger--rest--light`, `figma--font-picker--open--light` |
+| wai | pattern | Combobox with listbox popup, list autocomplete: `aria-expanded`, `aria-controls`, `aria-activedescendant`, ↓/↑, Alt+↓, Enter, Escape | w3.org/WAI/ARIA/apg/patterns/combobox/ | — |
+| area | peers | Input (menu.md, field specs), Menu surface and rows (menu.md) | — | — |
+
+Opening Figma's font-size list needs the arrow keys, which change the value, so the preset
+list itself was measured only from its offscreen measurement nodes (24 rows, 26 check column).
+
+## Decisions
+
+| Slot · property | Area value | Basis | Reason when it differs |
+|---|---|---|---|
+| field | Input (outline default, sizes 28/32/40), `role="combobox"`, `aria-autocomplete="list"` | Figma input combobox; WAI | Area's field |
+| toggle | InputAction chevron at the end, `tabindex=-1`, "Show suggestions"; shows every option | WAI (the button is not a tab stop) | — |
+| list surface | Menu: 12 radius, 4 inset, border, floating lift | menu.md | Figma's lists are dark; Area's menus are light (ChatGPT, Notion) |
+| rows | Menu rows (32, radius 8, 5% wash on hover and highlight) | menu.md | Figma 24/28 rows belong to compact density |
+| selected | trailing check, reserved column | menu.md checkable rows; Figma's check column | Area puts the check at the end (ChatGPT's model picker) |
+| position | top layer (native popover), 4 below the field, at least its width (and Menu's 224), flips above when there is no room | popover.md (4, shadcn and Notion); Figma list ≥ field | — |
+| height | at most 324 (Figma's font list viewport) or half the viewport, then scrolls | Figma | — |
+| empty | "No results", muted, a row tall, not an option | — | — |
+| create | "Create “text”" row with the add glyph when nothing matches exactly | Notion select | — |
+| groups | Menu labels (muted, row tall) over `role=group` | Figma font picker sections | — |
+
+## Behavior and accessibility
+
+Typing opens and filters (case-insensitive contains; `filter` replaces it) and highlights
+the first match; ↓/↑ move the highlight (skipping disabled options, wrapping), Alt+↓ opens
+without highlighting, Enter picks, Tab picks the highlighted option and moves on, Escape
+closes, and Escape on a closed field clears it. Focus stays in the field
+(`aria-activedescendant`). Leaving the field: an exact label match is picked; otherwise the
+text reverts to the selection (or is kept with `allowsCustomValue`). A created option is
+selected once the host adds it. The toggle's tooltip hides while the list is open.
+
+## Verification
+
+- Headless Edge, real keys and pointer (`scratchpad/combo.mjs`): "sa" filters to four
+  fonts with the first highlighted; ↓ + Enter picks Source Sans 3; Escape twice clears; the
+  toggle shows all with groups; "Brand" offers Create and Enter creates it; "zzz" shows
+  No results; blur reverts; the custom field keeps 17; ↑ skips the disabled Guest; the list
+  is 4 below the field and as wide as it.
+- React test: roles, attributes, listbox, groups, selected option.
+- Unverified: dark theme, screen reader announcements, IME composition, RTL.
+
+## Open questions
+
+- Match highlighting (bold the typed part) was left out; none of the products measured
+  showed it in these lists.

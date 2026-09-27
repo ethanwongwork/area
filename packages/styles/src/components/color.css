@@ -39,7 +39,8 @@
     flex: none;
     inline-size: var(--_cell);
     block-size: var(--_cell);
-    border-radius: min(calc(var(--area-radius-small) + var(--area-space-2)), calc(var(--_cell) / 4));
+    /* Concentric with the swatch it frames: the swatch's own radius plus the 4px inset. */
+    border-radius: calc(min(var(--area-radius-small), calc(var(--_swatch-size) / 4)) + (var(--_cell) - var(--_swatch-size)) / 2);
     cursor: pointer;
   }
   .area-color-swatch-picker__cell > input {
@@ -68,6 +69,32 @@
     .area-color-swatch-picker__cell:has(input:focus-visible) { outline: var(--area-focus-width) solid Highlight; }
   }
 
+  /* Palette: contiguous cells filling the width, like the iOS color grid. The outer edge is
+     rounded like a color area; selection is the color picker's thumb ring, drawn inside. */
+  .area-color-swatch-picker--palette {
+    display: grid;
+    grid-template-columns: repeat(var(--_columns), minmax(0, 1fr));
+    gap: 0;
+    inline-size: 100%;
+    border-radius: var(--area-radius-control-sm);
+    overflow: clip;
+    outline: 1px solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
+    outline-offset: -1px;
+  }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell { inline-size: auto; block-size: auto; aspect-ratio: 1; border-radius: 0; }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell > .area-color-swatch {
+    inline-size: 100%; block-size: 100%; border-radius: 0; box-shadow: none;
+  }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) > .area-color-swatch {
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6); /* spec */
+  }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 1; background: none; box-shadow: none; }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) > .area-color-swatch {
+    border-radius: var(--area-radius-control-xs);
+    box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px rgb(0 0 0 / 0.2), inset 0 0 0 3px rgb(0 0 0 / 0.2); /* spec */
+  }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:focus-visible) { outline-offset: calc(var(--area-focus-width) * -1); z-index: 2; }
+
   .area-color-field {
     --_color-field-width: calc(var(--area-space-96) + var(--area-space-48));
   }
@@ -89,24 +116,170 @@
 }
 
 @layer area.components {
+  /*
+   * Figma's fill picker, measured in docs/specs/color-picker.md (captures in
+   * docs/research/captures/color-picker/). Rows use the sm control tier, which resolves to
+   * Figma's 24px in the compact UI scale and 28px by default.
+   */
   .area-color-picker {
-    display: grid; gap: var(--area-space-12);
-    inline-size: calc(3 * var(--area-space-96)); max-inline-size: 100%;
-    padding: var(--area-space-16);
+    /* Figma's picker is 240px: ten of its 24px rows. Tying the width to the row keeps the
+       value row fitting when the default scale draws 28px rows (280px). */
+    --_width: calc(var(--area-control-sm) * 10); /* spec */
+    /* Figma's 16px outer inset and 8px header end inset include Area's 1px surface border. */
+    --_inset: calc(16px /* spec */ - var(--area-border-width));
+    --_header-end: calc(8px /* spec */ - var(--area-border-width));
+    --_rhythm: 12px; /* spec */
+    --_track: 16px; /* spec */
+    --_thumb-ring: 4px; /* spec */
+    --_hairline: light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
+    --_thumb-edge: rgb(0 0 0 / 0.2); /* spec */
+    --_thumb-lift: 0 1px 3px -2px rgb(0 0 0 / 0.1), 0 5px 12px -2px rgb(0 0 0 / 0.13); /* spec */
+    --_checker: repeating-conic-gradient(color-mix(in srgb, var(--area-fg-default) 16%, var(--area-bg-surface)) 0% 25%, var(--area-bg-surface) 0% 50%) 0 / var(--area-space-8) var(--area-space-8);
+    display: grid;
+    inline-size: var(--_width); max-inline-size: 100%;
+    box-sizing: border-box;
     background: var(--area-bg-surface); border: var(--area-border-width) solid var(--area-border-decorative);
-    border-radius: var(--area-radius-container); box-shadow: var(--area-shadow-2);
+    border-radius: var(--area-radius-container);
+    /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
+    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
+    color: var(--area-fg-default);
+    font-size: var(--area-control-sm-text); line-height: var(--area-control-sm-leading);
   }
+  .area-color-picker__header {
+    display: flex; align-items: center; gap: var(--area-space-4);
+    min-block-size: 40px; /* spec */
+    padding-inline: var(--_inset) var(--_header-end);
+    border-block-end: var(--area-border-width) solid var(--area-border-faint);
+  }
+  .area-color-picker__header > :first-child { margin-inline-end: auto; }
+  .area-color-picker__body { display: grid; gap: var(--_rhythm); padding: var(--_inset); }
   /* The pure white/black and spectral stops are color-coordinate data, not UI paint. */
   .area-color-picker__area {
-    position: relative; aspect-ratio: 1; touch-action: none;
+    position: relative; aspect-ratio: 1; touch-action: none; cursor: crosshair;
     background: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), hsl(var(--_hue) 100% 50%);
-    border-radius: var(--area-radius-control); cursor: crosshair;
+    border-radius: var(--area-radius-control-sm);
+    box-shadow: inset 0 0 0 1px var(--_hairline);
   }
+  /* One thumb for the area and both tracks. Vendor pseudo-elements take separate rules:
+     an unsupported one invalidates every selector in its list. */
   .area-color-picker__thumb {
-    position: absolute; left: var(--_saturation); top: var(--_brightness); translate: -50% -50%;
-    inline-size: var(--area-space-16); block-size: var(--area-space-16);
-    border: var(--area-space-2) solid #fff; border-radius: var(--area-radius-full);
-    box-shadow: 0 0 0 var(--area-border-width) #0006; pointer-events: none;
+    box-sizing: border-box;
+    inline-size: var(--_track); block-size: var(--_track);
+    border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full);
+    background: var(--_thumb-color, var(--_swatch-color));
+    box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-edge), var(--_thumb-lift);
+  }
+  .area-color-picker__slider::-webkit-slider-thumb {
+    appearance: none;
+    box-sizing: border-box;
+    inline-size: var(--_track); block-size: var(--_track);
+    border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full);
+    background: var(--_thumb-color, var(--_swatch-color));
+    box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-edge), var(--_thumb-lift);
+  }
+  .area-color-picker__thumb { position: absolute; left: var(--_saturation); top: var(--_brightness); translate: -50% -50%; pointer-events: none; }
+  .area-color-picker__channel { position: absolute; inline-size: 1px; block-size: 1px; margin: 0; opacity: 0; pointer-events: none; }
+  .area-color-picker__area:has(:focus-visible) > .area-color-picker__thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-color-picker__slider:focus-visible::-webkit-slider-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-color-picker__controls { display: flex; align-items: center; gap: var(--_rhythm); }
+  .area-color-picker__tracks { display: grid; gap: var(--_rhythm); flex: 1 1 auto; min-inline-size: 0; }
+  /* The track is the input: its thumb travels between the ends, so spectral stops start
+     and end half a thumb in and the thumb's centre always sits on the value it shows. */
+  .area-color-picker__slider {
+    appearance: none; display: block; inline-size: 100%; block-size: var(--_track); margin: 0;
+    border-radius: var(--area-radius-full); cursor: pointer;
+    box-shadow: inset 0 0 0 1px var(--_hairline);
+  }
+  .area-color-picker__slider::-moz-range-thumb {
+    box-sizing: border-box; inline-size: var(--_track); block-size: var(--_track);
+    border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full); background: var(--_thumb-color, var(--_swatch-color));
+    box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-edge), var(--_thumb-lift);
+  }
+  .area-color-picker__slider:focus-visible { outline: none; }
+  .area-color-picker__slider:focus-visible::-moz-range-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-color-picker__hue {
+    background: linear-gradient(90deg, #f00 calc(var(--_track) / 2), #ff0, #0f0, #0ff, #00f, #f0f, #f00 calc(100% - var(--_track) / 2));
+  }
+  .area-color-picker__alpha {
+    --_thumb-color: var(--_swatch-color);
+    background: linear-gradient(90deg, transparent calc(var(--_track) / 2), var(--_swatch-color) calc(100% - var(--_track) / 2)), var(--_checker);
+  }
+  /* Channel tracks for the slider view. Each gradient varies one channel with the others
+     held at the current color, from custom properties the component sets as numbers. RGB,
+     HSB (drawn as HWB) and HSL saturation are linear in sRGB, so two stops are exact. */
+  .area-color-picker__slider[data-channel] { --_half: calc(var(--_track) / 2); }
+  .area-color-picker__slider[data-channel="rgb-r"] { background: linear-gradient(90deg, rgb(0 var(--_g) var(--_b)) var(--_half), rgb(255 var(--_g) var(--_b)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="rgb-g"] { background: linear-gradient(90deg, rgb(var(--_r) 0 var(--_b)) var(--_half), rgb(var(--_r) 255 var(--_b)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="rgb-b"] { background: linear-gradient(90deg, rgb(var(--_r) var(--_g) 0) var(--_half), rgb(var(--_r) var(--_g) 255) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="hsl-h"] { background: linear-gradient(90deg, hsl(0 var(--_hsl-s) var(--_hsl-l)) var(--_half), hsl(60 var(--_hsl-s) var(--_hsl-l)), hsl(120 var(--_hsl-s) var(--_hsl-l)), hsl(180 var(--_hsl-s) var(--_hsl-l)), hsl(240 var(--_hsl-s) var(--_hsl-l)), hsl(300 var(--_hsl-s) var(--_hsl-l)), hsl(360 var(--_hsl-s) var(--_hsl-l)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="hsl-s"] { background: linear-gradient(90deg, hsl(var(--_hue) 0% var(--_hsl-l)) var(--_half), hsl(var(--_hue) 100% var(--_hsl-l)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="hsl-l"] { background: linear-gradient(90deg, hsl(var(--_hue) var(--_hsl-s) 0%) var(--_half), hsl(var(--_hue) var(--_hsl-s) 50%), hsl(var(--_hue) var(--_hsl-s) 100%) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="hsb-h"] { background: linear-gradient(90deg, hwb(0 var(--_hwb-w) var(--_hwb-b)) var(--_half), hwb(60 var(--_hwb-w) var(--_hwb-b)), hwb(120 var(--_hwb-w) var(--_hwb-b)), hwb(180 var(--_hwb-w) var(--_hwb-b)), hwb(240 var(--_hwb-w) var(--_hwb-b)), hwb(300 var(--_hwb-w) var(--_hwb-b)), hwb(360 var(--_hwb-w) var(--_hwb-b)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="hsb-s"] { background: linear-gradient(90deg, hwb(var(--_hue) var(--_hsv-v) var(--_hwb-b)) var(--_half), hwb(var(--_hue) 0% var(--_hwb-b)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="hsb-b"] { background: linear-gradient(90deg, hwb(var(--_hue) 0% 100%) var(--_half), hwb(var(--_hue) var(--_hwb-w-top) 0%) calc(100% - var(--_half))); }
+  /* OKLCH tracks interpolate in OKLCH; colors past sRGB are drawn at the display's nearest. */
+  .area-color-picker__slider[data-channel="ok-l"] { background: linear-gradient(90deg in oklch, oklch(0 var(--_ok-c) var(--_ok-h)) var(--_half), oklch(1 var(--_ok-c) var(--_ok-h)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="ok-c"] { background: linear-gradient(90deg in oklch, oklch(var(--_ok-l) 0 var(--_ok-h)) var(--_half), oklch(var(--_ok-l) 0.4 var(--_ok-h)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="ok-h"] { background: linear-gradient(90deg in oklch, oklch(var(--_ok-l) var(--_ok-c) 0) var(--_half), oklch(var(--_ok-l) var(--_ok-c) 60), oklch(var(--_ok-l) var(--_ok-c) 120), oklch(var(--_ok-l) var(--_ok-c) 180), oklch(var(--_ok-l) var(--_ok-c) 240), oklch(var(--_ok-l) var(--_ok-c) 300), oklch(var(--_ok-l) var(--_ok-c) 360) calc(100% - var(--_half))); }
+  .area-color-picker__channel-row { display: grid; grid-template-columns: var(--area-icon-md) minmax(0, 1fr); align-items: center; gap: var(--area-space-8); }
+  .area-color-picker__channel-label { color: var(--area-fg-muted); text-align: center; font-variant-numeric: tabular-nums; }
+  .area-color-picker__views { inline-size: 100%; }
+  .area-color-picker__grid { inline-size: 100%; }
+  /* Contrast check: Figma's ratio row above the area and the failing band drawn on it. */
+  .area-color-picker__contrast { display: flex; align-items: center; gap: var(--area-space-8); min-block-size: var(--area-control-sm); }
+  .area-color-picker__contrast-pair {
+    position: relative; flex: none; overflow: clip;
+    inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: var(--area-radius-full);
+    background: var(--_swatch-color); box-shadow: inset 0 0 0 1px var(--_hairline);
+  }
+  .area-color-picker__contrast-pair > span { position: absolute; inset: 0 0 0 50%; background: var(--_swatch-color); }
+  .area-color-picker__contrast-ratio { font-variant-numeric: tabular-nums; }
+  .area-color-picker__contrast-unit { color: var(--area-fg-muted); }
+  .area-color-picker__contrast-level { display: inline-flex; align-items: center; gap: var(--area-space-4); margin-inline-start: auto; color: var(--area-fg-danger); }
+  .area-color-picker__contrast[data-pass] > .area-color-picker__contrast-level { color: var(--area-fg-default); }
+  .area-color-picker__contrast-level > svg { inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
+  .area-color-picker__band { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; pointer-events: none; border-radius: inherit; overflow: hidden; }
+  /* Figma dots the failing side of its contrast curve. The region's fill is the dot pattern. */
+  .area-color-picker__band-region { stroke: none; }
+  .area-color-picker__band pattern circle { fill: rgb(255 255 255 / 0.55); } /* spec */
+  .area-color-picker__band-edge { fill: none; stroke: #fff; stroke-width: 1px; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 1px rgb(0 0 0 / 0.5)); }
+  /* Preview: the new color over the original, which restores it (Photoshop's new/current). */
+  .area-color-picker__preview {
+    display: grid; grid-template-rows: 1fr 1fr; flex: none; align-self: stretch;
+    inline-size: var(--area-control-sm); border-radius: var(--area-radius-control-sm); overflow: clip;
+    box-shadow: inset 0 0 0 1px var(--_hairline);
+  }
+  .area-color-picker__preview-new,
+  .area-color-picker__preview-original {
+    margin: 0; padding: 0; border: 0;
+    background: linear-gradient(var(--_swatch-color), var(--_swatch-color)), var(--_checker);
+  }
+  .area-color-picker__preview-original { cursor: pointer; }
+  .area-color-picker__preview-original:disabled { cursor: default; }
+  .area-color-picker__preview-original:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+  .area-color-picker__note { margin: 0; color: var(--area-fg-muted); }
+  .area-color-picker__values { display: flex; align-items: center; gap: var(--area-space-8); }
+  .area-color-picker__model.area-select { inline-size: auto; flex: none; }
+  .area-color-picker__fields.area-input-group { flex: 1 1 auto; inline-size: auto; min-inline-size: 0; }
+  /* Figma divides the value fields with a 1px gap of the surface, not a darker rule. */
+  .area-color-picker__fields.area-input-group > :not(:first-child) { border-inline-start-color: var(--area-bg-surface); }
+  /* Figma's value text runs to the field's end; only the start keeps the 8px gutter. The
+     opacity field is 54px with its % centred in a 14px box at the end. */
+  .area-color-picker__fields.area-input-group > .area-number-field { padding-inline-end: 0; }
+  .area-color-picker__fields.area-input-group > .area-color-picker__opacity { flex: 0 0 54px; /* spec */ gap: 0; }
+  .area-color-picker__opacity .area-number-field__unit { inline-size: 14px; /* spec */ text-align: center; }
+  .area-color-picker__fields.area-input-group[data-model="hex"] > .area-color-picker__text-field { flex-grow: 2; }
+  .area-color-picker__fields input { font-variant-numeric: tabular-nums; }
+  .area-color-picker__swatches {
+    display: grid; gap: var(--area-space-4);
+    padding: var(--_rhythm) var(--_inset);
+    border-block-start: var(--area-border-width) solid var(--area-border-faint);
+  }
+  .area-color-picker__heading { display: flex; align-items: center; justify-content: space-between; min-block-size: var(--area-control-sm); color: var(--area-fg-muted); }
+  /* Contiguous cells reach 4px past the inset, so each 16px chip aligns with the area edge. */
+  .area-color-picker__swatches > .area-color-swatch-picker {
+    gap: 0; margin-inline: calc(var(--_rhythm) - var(--_inset));
+    grid-template-columns: repeat(auto-fill, var(--_cell));
   }
   .area-color-picker__channel { position: absolute; inline-size: 1px; block-size: 1px; opacity: 0; }
   .area-color-picker__area:focus-within { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
@@ -116,6 +289,11 @@
   .area-color-picker__slider::-webkit-slider-thumb { appearance: none; inline-size: var(--area-space-16); block-size: var(--area-space-16); border: var(--area-space-2) solid var(--area-bg-surface); border-radius: var(--area-radius-full); background: var(--_swatch-color); box-shadow: var(--area-shadow-1); }
   .area-color-picker__slider::-moz-range-thumb { inline-size: var(--area-space-12); block-size: var(--area-space-12); border: var(--area-space-2) solid var(--area-bg-surface); border-radius: var(--area-radius-full); background: var(--_swatch-color); }
   .area-color-picker__slider:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
-  .area-color-picker__heading { display: flex; align-items: center; justify-content: space-between; font-size: var(--area-control-sm-text); color: var(--area-fg-muted); }
+  .area-color-picker__heading { display: flex; align-items: center; justify-content: space-between; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
   .area-color-picker[aria-disabled="true"] { opacity: 0.5; }
+  .area-color-picker[aria-disabled="true"] :is(.area-color-picker__area, .area-color-picker__slider) { cursor: not-allowed; }
+  @media (forced-colors: active) {
+    .area-color-picker__thumb { forced-color-adjust: none; border-color: Canvas; box-shadow: 0 0 0 1px CanvasText; }
+    .area-color-picker__slider::-webkit-slider-thumb { forced-color-adjust: none; border-color: Canvas; box-shadow: 0 0 0 1px CanvasText; }
+  }
 }

@@ -1,0 +1,74 @@
+/*
+ * PropertyList (docs/specs/property-list.md): an ordered list of like properties, Figma's
+ * fills, strokes and effects. A row is the value, then its icon buttons: the value ends 8
+ * before the first button and the buttons sit 4 apart, so the last one lands on the panel's
+ * action column (Figma fill row: field to 172, eye at 180, remove at 208 in a 240 panel).
+ */
+@layer area.components {
+  .area-property-list {
+    position: relative;
+    display: grid;
+    gap: var(--area-space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .area-property-list__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--area-space-8);
+  }
+  /* A flex row, so the inline-flex control inside sets the row height (28, not 29 with a line box). */
+  .area-property-list__value { display: flex; align-items: center; min-inline-size: 0; }
+  .area-property-list__value > * { flex: 1; min-inline-size: 0; }
+  .area-property-list__actions { display: flex; align-items: center; gap: var(--area-space-4); }
+  /* spec: an off property (a hidden fill) dims its value; its buttons stay readable. */
+  .area-property-list__item[data-inactive] > .area-property-list__value { opacity: 0.5; /* spec */ }
+
+  /*
+   * spec: the handle fills the panel's side inset, its glyph centred there, and shows on hover or
+   * focus (Figma shows reorder only when a list has more than one item). Touch keeps it shown.
+   */
+  .area-property-list__handle {
+    position: absolute;
+    inset-inline-start: calc(var(--_inset, var(--area-space-12)) * -1);
+    inset-block: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_inset, var(--area-space-12));
+    margin: auto 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--area-radius-control-xs);
+    background: transparent;
+    color: var(--area-input-icon);
+    cursor: grab;
+    opacity: 0;
+    touch-action: none;
+    overflow: visible;
+  }
+  /* The glyph keeps its 16 slot, centred in the inset and allowed past the handle's box; its
+   * ink is 5 wide, so it fits even a small panel's 8px inset without touching the value. */
+  .area-property-list__handle svg { flex-shrink: 0; inline-size: var(--area-icon-sm); min-inline-size: var(--area-icon-sm); max-inline-size: none; block-size: var(--area-icon-sm); overflow: visible; }
+  .area-property-list__item:hover > .area-property-list__handle,
+  .area-property-list__handle:focus-visible,
+  .area-property-list__item[data-dragging] > .area-property-list__handle { opacity: 1; }
+  @media (hover: none) { .area-property-list__handle { opacity: 1; } }
+  .area-property-list__handle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  .area-property-list[data-dragging] { cursor: grabbing; }
+  .area-property-list[data-dragging] .area-property-list__handle { cursor: grabbing; }
+  /* spec: the row being moved stays in place, faded, while a line marks where it will land. */
+  .area-property-list__item[data-dragging] > :not(.area-property-list__handle) { opacity: 0.4; /* spec */ }
+  .area-property-list__indicator {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: calc(var(--_drop) - var(--area-border-width));
+    block-size: calc(var(--area-border-width) * 2);
+    border-radius: var(--area-radius-full);
+    background: var(--area-focus-color);
+    pointer-events: none;
+  }
+}

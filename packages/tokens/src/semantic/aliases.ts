@@ -51,7 +51,7 @@ export type Alias =
   /** The family's most saturated readable rung -- computed per scale, not chosen here. */
   | { kind: "vivid"; role: Role }
   | { kind: "contrast"; role: Role }
-  | { kind: "literal"; value: string };
+  | { kind: "literal"; value: string; role?: Role };
 
 const at = (role: Role, slot: Slot): Alias => ({ kind: "slot", role, slot });
 const alphaAt = (role: Role, slot: Slot): Alias => ({ kind: "alphaSlot", role, slot });
@@ -63,6 +63,7 @@ const stroke = (role: Role): Alias => ({ kind: "stroke", role });
 const strokeHover = (role: Role): Alias => ({ kind: "strokeHover", role });
 const vivid = (role: Role): Alias => ({ kind: "vivid", role });
 const contrast = (role: Role): Alias => ({ kind: "contrast", role });
+const literal = (value: string, role?: Role): Alias => ({ kind: "literal", value, role });
 
 /** The tonal block every role repeats, so `danger` and `accent` are structurally identical. */
 function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
@@ -121,8 +122,11 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   /** Translucent tints, for hover on an unknown background. */
   "bg-hover": alphaAt("neutral", "componentHover"),
   "bg-active": alphaAt("neutral", "componentActive"),
-  /** The scrim behind a modal. */
-  "bg-overlay": alphaAt("neutral", "scrim"),
+  /**
+   * The scrim behind a modal: black at 65% in both themes. A scrim darkens whatever is behind
+   * it; solved as a tint of the page rung it came out nearly transparent in dark mode.
+   */
+  "bg-overlay": literal("#000000a6", "neutral"),
 
   // --- Foreground ---------------------------------------------------------------
   /** Body copy and anything that must be read comfortably. */
@@ -148,6 +152,15 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "border-decorative": at("neutral", "borderDecorative"),
   /** For a container whose fill already separates it from its ground. See `borderFaint`. */
   "border-faint": at("neutral", "borderFaint"),
+  /**
+   * A rule between pieces of content: separators, menu and table dividers, panel sections.
+   * Darker than the decorative container seam, because a divider has no fill or shadow to help
+   * it: ChatGPT (10% black, #e6), Figma (#e6) and Untitled (#e5) draw theirs near #e5; Notion's
+   * menu rules are lighter (7%, #f0). The 150 rung (#e2) is the nearest to #e5; 100 (#ee) is
+   * twice as far. The container seam stays decorative; its surface and lift carry the edge.
+   * A Card's edge is the exception: it stands alone on the page, so it takes this role too.
+   */
+  "border-divider": at("neutral", "borderFaint"),
   /** An interactive control at rest. */
   border: at("neutral", "border"),
   /** That control on hover. */

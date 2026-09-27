@@ -41,8 +41,11 @@
     box-shadow: inset 0 0 0 var(--area-border-width) var(--area-token-swatch-ring);
   }
 
+  /* Code reads --_code-bg and Token --_token-bg; the subtle ground sets both, or <Code subtle>
+     painted the default ground. */
   .area-code--subtle,
   .area-token--subtle {
+    --_code-bg: var(--area-token-bg-subtle);
     --_token-bg: var(--area-token-bg-subtle);
   }
 

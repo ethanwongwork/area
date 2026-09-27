@@ -57,7 +57,6 @@ export const BadgeStateLabels = () => (
   </div>
 );
 export const BadgeTruncation = () => <Badge truncate title="Badge text that overflows the available space">Badge text that overflows the available space</Badge>;
-export const BadgeUppercase = () => <Badge uppercase>Badge</Badge>;
 export const BadgeLink = () => <Badge as="a" href="#api" trailingIcon={<LinkIcon />}>Link</Badge>;
 export const BadgeAnchorButton = () => (
   <IndicatorAnchor indicator={<Indicator count={3} />}>
@@ -200,3 +199,21 @@ export const BadgeIndicatorZero = () => {
   const [show, setShow] = useState(true);
   return <div style={{display: "flex", gap: "var(--area-space-16)", alignItems: "center"}}><IndicatorAnchor indicator={<Indicator count={0} showZero={show} />}><Button aria-label={show ? "Inbox, 0 notifications" : "Inbox"}>Inbox</Button></IndicatorAnchor><Button size="sm" variant="soft" onClick={() => setShow(!show)}>{show ? "Hide zero" : "Show zero"}</Button></div>;
 };
+
+/*
+ * Pass review (2026-09-25, docs/specs/badge.md). Each row isolates one change. "Before"
+ * rebuilds the previous values on the current component through its private properties,
+ * so both columns render the same code; nothing here is a public API.
+ */
+const previous = {
+  sm: { "--_text": "var(--area-control-xs-text)", "--_leading": "var(--area-control-xs-leading)" },
+  lg: { "--_height": "calc(var(--area-space-24) + var(--area-space-4))", "--_gutter": "var(--area-space-12)" },
+  ink: { "--_tone-fg": "var(--area-fg-default)" },
+} as Record<string, CSSProperties>;
+const reviewSentence: CSSProperties = { margin: 0, fontSize: "var(--area-control-md-text)", lineHeight: "var(--area-control-md-leading)", boxShadow: "inset 0 -1px 0 var(--area-border-decorative)" };
+// Pass-1 label: centred by the shell and padded by inset.css, carrying no baseline.
+const previousLabel: CSSProperties = { alignSelf: "auto", paddingBlock: "0.25em" };
+
+/* Badge group pass review (2026-09-25, docs/specs/badge-group.md). */
+const reviewRow: CSSProperties = { display: "flex", alignItems: "center", gap: "var(--area-space-4)", boxShadow: "0 0 0 var(--area-border-width) var(--area-border-decorative)" };
+// An array, not a fragment: BadgeGroup counts its direct children.
