@@ -370,12 +370,6 @@ function galleryPage({ families = null } = {}) {
       { id: "image", title: "Composition / image", demo: "GalleryPopoverImage" },
     ],
 
-    "icon-pilot": [
-      { id: "weight-1", title: "Weight / 1px", demo: "GalleryIconPilotWeight100", span: "2x2" },
-      { id: "weight-1125", title: "Weight / 1.125px", demo: "GalleryIconPilotWeight1125", span: "2x2" },
-      { id: "weight-125", title: "Weight / 1.25px", demo: "GalleryIconPilotWeight125", span: "2x2" },
-      { id: "reference-fluent", title: "Reference / Fluent", demo: "GalleryIconPilotFluent", span: "2x2" },
-    ],
     indicator: [
       ...["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"].map(status => ({id: `presence-${status}`, title: `Presence / ${status}`, demo: `GalleryBadgePresence${titleCase(status).replaceAll("-", "")}`})),
       ...["xs", "sm", "md", "lg"].map(size => ({id: `presence-size-${size}`, title: `Presence size / ${size}`, demo: `GalleryBadgePresenceSize${titleCase(size)}`})),
@@ -796,18 +790,18 @@ function redirectPage(target) {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=./${target}"><title>area</title></head><body><a href="./${target}">Gallery</a></body></html>`;
 }
 
-/** Icon review sheets: one wide tile per sheet (side by side, optical balance, 1×/2× raster). */
-function iconReviewSection(id, title, tileTitle, demoName, span) {
+/** Icon sheets (Iconography, Exploration): one full-width tile per sheet that grows with
+ *  its content. The set outgrew fixed grid cells, and a sheet in one spilled over the next. */
+function iconSheet(id, title, tileTitle, demoName, { open = true, note = "" } = {}) {
   const demo = demos[demoName];
   if (!demo) throw new Error(`Gallery specimen missing: ${demoName}`);
-  return `<details open class="docs-visual-gallery__section" id="gallery-section-${id}">
+  return `<details${open ? " open" : ""} class="docs-visual-gallery__section" id="gallery-section-${id}">
       <summary class="docs-visual-gallery__section-title">${title}</summary>
-      <div class="docs-visual-gallery__grid">
-        <article class="docs-visual-gallery__tile" data-span="${span}" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
-          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${tileTitle}</h3>
-          <div class="docs-visual-gallery__tile-preview">${demo.html}</div>
-        </article>
-      </div>
+      ${note ? `<p class="docs-gallery-note">${note}</p>` : ""}
+      <article class="docs-visual-gallery__tile docs-visual-gallery__set" id="gallery-${id}" aria-labelledby="gallery-title-${id}">
+        <h3 class="docs-visual-gallery__tile-title" id="gallery-title-${id}">${tileTitle}</h3>
+        <div class="docs-visual-gallery__tile-preview docs-visual-gallery__sheet">${demo.html}</div>
+      </article>
     </details>`;
 }
 /** Exploration: icon candidates under review (assets/area-icons-pilot/explore), shown only
@@ -815,58 +809,64 @@ function iconReviewSection(id, title, tileTitle, demoName, span) {
 function iconExploreSection() {
   const dir = join(root, "assets/area-icons-pilot/explore");
   if (!existsSync(dir) || !readdirSync(dir).some(file => file.endsWith(".svg"))) return "";
-  return iconReviewSection("icon-explore", "Exploration", "candidates", "GalleryIconPilotExplore", "2x5");
+  return iconSheet("icon-explore", "Exploration", "candidates", "GalleryIconPilotExplore");
 }
 const iconReviewSections = () => [
-  iconReviewSection("icon-compare", "Side by side", "fluent-area-keylines", "GalleryIconPilotCompare", "2x5"),
-  iconReviewSection("icon-balance", "Optical balance", "set-16-32", "GalleryIconPilotBalance", "2x1"),
-  iconReviewSection("icon-filled", "Filled", "outline-filled-fluent", "GalleryIconPilotFilled", "2x5"),
-  iconReviewSection("icon-sizes", "Sizes", "size-curve", "GalleryIconPilotSizes", "2x3"),
-  iconReviewSection("icon-sizes-raster", "Sizes, raster", "raster-12-20", "GalleryIconPilotSizesRaster", "2x3"),
-  iconReviewSection("icon-pixels", "Pixel check", "raster-1x-2x", "GalleryIconPilotPixels", "2x5"),
+  iconSheet("icon-compare", "Side by side", "fluent-area-keylines", "GalleryIconPilotCompare", { open: false }),
+  iconSheet("icon-balance", "Optical balance", "set-16-32", "GalleryIconPilotBalance"),
+  iconSheet("icon-weights", "Weights", "1-1125-125", "GalleryIconPilotWeights", { open: false }),
+  iconSheet("icon-filled", "Filled", "outline-filled-fluent", "GalleryIconPilotFilled", { open: false }),
+  iconSheet("icon-sizes", "Sizes", "size-curve", "GalleryIconPilotSizes", { open: false }),
+  iconSheet("icon-sizes-raster", "Sizes, raster", "raster-12-20", "GalleryIconPilotSizesRaster", { open: false }),
+  iconSheet("icon-pixels", "Pixel check", "raster-1x-2x", "GalleryIconPilotPixels", { open: false }),
 ].join("");
 
-/** Icon review page: one tile per pilot icon (demos named GalleryIconReview<Name>), grouped
- *  by the batches and owner status in assets/area-icons-pilot/batches.json. Rotations and
- *  mirrors sit beside their base icon. */
+/** Icon review page (gallery-icons.html), from assets/area-icons-pilot/batches.json:
+ *  - In review: a card per icon the owner hasn't approved yet, newest batch first;
+ *  - All icons: the whole set, outline and filled, one group per batch, newest first;
+ *  - Approved: the approved icons' cards, one closed section per batch, newest first.
+ *  Rotations and mirrors follow their base icon. */
 const DERIVED_FROM = Object.fromEntries([...readFileSync(join(root, "src/pilot-icons.tsx"), "utf8")
   .matchAll(/name: "([a-z0-9-]+)", keyline: "[a-z]+", derivedFrom: "([a-z0-9-]+)"/g)]
   .map(([, name, base]) => [`GalleryIconReview${name.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())}`, base]));
 function iconReviewPage() {
   const { batches } = JSON.parse(readFileSync(join(root, "assets/area-icons-pilot/batches.json"), "utf8"));
+  const newest = [...batches].reverse();
   const pascal = name => name.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
   const derived = Object.keys(demos).filter(name => name.startsWith("GalleryIconReview"));
   // Owner status in the component gallery's colours: approved = Complete, review = In
-  // review, revising = Unrefined.
+  // review, revising = Unrefined. Approved cards carry no label; only open work is marked.
   const AUDIT = { approved: "complete", review: "review", revising: "unrefined" };
   const LABEL = { approved: "Approved", review: "In review", revising: "Revising" };
-  const tile = (name, status) => {
+  const card = (name, status) => {
     const demo = demos[name];
     if (!demo) throw new Error(`Gallery specimen missing: ${name}`);
     const slug = name.replace("GalleryIconReview", "").replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
     return `
-        <article class="docs-visual-gallery__tile" data-span="1x2" data-audit="${AUDIT[status]}" id="gallery-icon-review-${slug}" aria-labelledby="gallery-title-icon-review-${slug}">
-          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-review-${slug}">${slug} <span class="docs-audit-label" data-audit="${AUDIT[status]}">${LABEL[status]}</span></h3>
-          <div class="docs-visual-gallery__tile-preview">${demo.html}</div>
+        <article class="docs-icon-card" data-audit="${AUDIT[status]}" id="gallery-icon-review-${slug}" aria-labelledby="gallery-title-icon-review-${slug}">
+          <h3 class="docs-icon-card__title" id="gallery-title-icon-review-${slug}">${slug}${status === "approved" ? "" : ` <span class="docs-audit-label" data-audit="${AUDIT[status]}">${LABEL[status]}</span>`}</h3>
+          ${demo.html}
         </article>`;
   };
-  const counts = icons => Object.entries(Object.values(icons).reduce((n, status) => ({ ...n, [status]: (n[status] ?? 0) + 1 }), {}))
-    .map(([status, n]) => `<span class="docs-audit-label" data-audit="${AUDIT[status]}">${n} ${LABEL[status].toLowerCase()}</span>`).join(" ");
-  return batches.map((batch, index) => `<details open class="docs-visual-gallery__section" id="gallery-section-icon-${batch.id}">
-      <summary class="docs-visual-gallery__section-title">${batch.title} ${counts(batch.icons)}</summary>
-      <p class="docs-gallery-note">${batch.note}</p>
-      <div class="docs-visual-gallery__grid">
-        <article class="docs-visual-gallery__tile" data-span="row" id="gallery-icon-set-${batch.id}" aria-labelledby="gallery-title-icon-set-${batch.id}">
-          <h3 class="docs-visual-gallery__tile-title" id="gallery-title-icon-set-${batch.id}">whole set</h3>
-          <div class="docs-visual-gallery__tile-preview">${demos[`GalleryIconBatchSet${index + 1}`].html}</div>
-        </article>${Object.entries(batch.icons).map(([icon, status]) => {
-        const base = `GalleryIconReview${pascal(icon)}`;
-        // A derived icon's demo is listed after its base, found by the base's derivation.
-        const variants = derived.filter(name => name !== base && DERIVED_FROM[name] === icon);
-        return tile(base, status) + variants.map(name => tile(name, status)).join("");
-      }).join("")}
-      </div>
+  const cards = (batch, keep) => Object.entries(batch.icons).filter(([, status]) => keep(status)).map(([icon, status]) => {
+    const base = `GalleryIconReview${pascal(icon)}`;
+    const variants = derived.filter(name => name !== base && DERIVED_FROM[name] === icon);
+    return card(base, status) + variants.map(name => card(name, status)).join("");
+  }).join("");
+  const open = status => status !== "approved";
+  const total = derived.length;  // every icon, rotations and mirrors included
+  const reviewing = newest.filter(batch => Object.values(batch.icons).some(open));
+  const inReview = reviewing.length ? `<details open class="docs-visual-gallery__section" id="gallery-section-icon-review">
+      <summary class="docs-visual-gallery__section-title">In review <span class="docs-audit-label" data-audit="review">${reviewing.reduce((n, batch) => n + Object.values(batch.icons).filter(open).length, 0)}</span></summary>
+      ${reviewing.map(batch => `<p class="docs-gallery-note">${batch.title}: ${batch.note}</p>
+      <div class="docs-icon-cards">${cards(batch, open)}</div>`).join("")}
+    </details>` : "";
+  const catalog = iconSheet("icon-catalog", "All icons", `${total} icons · outline and filled · newest first`, "GalleryIconCatalog");
+  const approved = newest.filter(batch => Object.values(batch.icons).some(status => !open(status))).map(batch => `<details class="docs-visual-gallery__section" id="gallery-section-icon-${batch.id}">
+      <summary class="docs-visual-gallery__section-title">${batch.title} <span class="docs-gallery-count">${Object.values(batch.icons).filter(status => !open(status)).length}</span></summary>
+      <div class="docs-icon-cards">${cards(batch, status => !open(status))}</div>
     </details>`).join("");
+  return inReview + catalog + `<h2 class="docs-visual-gallery__group-title">Approved</h2>` + approved;
 }
 
 /** Gallery pages, in nav order. The documentation site stays hidden until it is rebuilt. */
@@ -1907,7 +1907,7 @@ const pages = [
   ["gallery-components.html", galleryPage()],
   ["gallery-typeRamp.html", galleryShell({ current: "gallery-typeRamp.html", title: "Type ramp", body: `<div class="docs-gallery-foundation">${bodyOf(typographyPage)}</div>` })],
   ["gallery-icons.html", galleryShell({ current: "gallery-icons.html", title: "Icons", body: iconExploreSection() + iconReviewPage() })],
-  ["gallery-iconography.html", galleryShell({ current: "gallery-iconography.html", title: "Iconography", body: galleryPage({ families: ["icon-pilot"] }) + iconReviewSections() + `<div class="docs-gallery-foundation">${bodyOf(iconographyPage)}</div>` })],
+  ["gallery-iconography.html", galleryShell({ current: "gallery-iconography.html", title: "Iconography", body: iconReviewSections() + `<div class="docs-gallery-foundation">${bodyOf(iconographyPage)}</div>` })],
   ["gallery-color.html", galleryShell({ current: "gallery-color.html", title: "Color", body: `<div class="docs-gallery-foundation">${bodyOf(colorPage)}</div>` })],
   ["gallery-scale.html", galleryShell({ current: "gallery-scale.html", title: "UI scale", body: `<div class="docs-gallery-foundation">${bodyOf(uiScalePage)}</div>` })],
   ["gallery-radius.html", galleryShell({ current: "gallery-radius.html", title: "Radius", body: `<div class="docs-gallery-foundation">${bodyOf(radiusPage)}</div>` })],
