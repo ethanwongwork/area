@@ -7,7 +7,7 @@ spec. When a component receives `docs/specs/<slug>.md`, move its section there a
 it from this file. Indicator and Presence moved to [indicator.md](indicator.md), Badge to
 [badge.md](badge.md), Tooltip to [tooltip.md](tooltip.md),
 Breadcrumb to [breadcrumb.md](breadcrumb.md), Tree view to [tree-view.md](tree-view.md),
-Composer to [composer.md](composer.md).
+Composer to [composer.md](composer.md), Button group to [button-group.md](button-group.md), Popover to [popover.md](popover.md).
 
 ## Alignment picker
 
@@ -22,13 +22,6 @@ From the color and alignment follow-up, 2026-09-24:
 AlignmentPicker uses three rounded bars with column-dependent alignment, 2px unselected
 dots, no selected backplate, and `stretch` to fill both dimensions of a sized parent.
 Landscape and portrait examples demonstrate this independently of size/treatment variants.
-
-## Button group
-
-- [shadcn ButtonGroup](https://github.com/shadcn-ui/ui/blob/main/apps/v4/registry/new-york-v4/ui/button-group.tsx)
-  and [Untitled UI ButtonGroup](https://github.com/untitleduico/react/blob/main/components/base/button-group/button-group.tsx):
-  connected full-size buttons, collapsed shared borders and only outside corners rounded.
-  Area reuses Button typography, icons, state painting and focus behavior.
 
 ## Code block
 
@@ -67,15 +60,6 @@ format conversion UI and eyedropper are not part of this solid-color component.
 
 ColorField `alpha` joins hex and a 0–100% opacity editor in one InputGroup shell; `name`
 submits one canonical hex value. `opacityLabel` names the separate control.
-
-## Dialog
-
-Dialog follows the [shadcn/ui Dialog](https://ui.shadcn.com/docs/components/base/dialog)
-composition: a title and description above an optional scrolling body, trailing actions,
-and an optional corner close control. It uses one 16px outer inset (including the border),
-16px between sections and 8px between title and description. The footer has no divider.
-The title uses the 18/26px text role, with medium UI body type. All sections share a
-leading edge and the container radius follows the system radius axis.
 
 ## Input group
 
@@ -164,21 +148,6 @@ vertical selection marker option.
 Panel is 280px with medium control-height rows; its inset size does not resize child
 controls.
 
-## Popover
-
-Popover uses Tooltip's medium UI type and shadow-2, with a 12px border-inclusive outer
-inset. It uses the theme surface (white in light, dark in dark mode). Its preferred width
-is 240px, capped at its container for every composition. Group gaps are 12px with 8px
-inside the body. A small-control-height header contains the title and close button,
-without negative margins or trimmed title line boxes. Description leading is UI leading
-minus 2px (14/18px at default density). Examples omit pointers and share optional media,
-header, body and optional footer slots. Media corners subtract the inset and border from
-the outer radius. The optional decorative SVG pointer has a curved outline and supports
-all four sides. See [WAI Tooltip](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) and
-[Radix Popover](https://www.radix-ui.com/primitives/docs/components/popover). The existing
-Popover API supplies the surface; consumers still own trigger, positioning, focus and
-dismissal behavior.
-
 ## Segmented
 
 Segmented iconOnly keeps option labels accessible while using square inner buttons.
@@ -228,17 +197,6 @@ Textarea keeps native resizing and validation with horizontally larger insets at
 size.
 
 Reference: [Atlassian Textarea](https://atlassian.design/components/textarea/usage).
-
-## Toast
-
-Toast supports titles, actions and dismissal; it is a surface, not a global queue or
-automatic timer. Plain Toasts use 8px vertical/10px horizontal insets; action and
-dismissal Toasts use 4px vertical insets around their 28px controls. All three are 38px
-high at normal density, with centered icons and text. Multiline icons align to the first
-text line, and multiline is demonstrated separately from tone. Consumers own placement,
-lifetime and dismissal focus restoration.
-
-Reference: [Spectrum Toast](https://react-spectrum.adobe.com/v3/Toast.html).
 
 ## Toolbar
 

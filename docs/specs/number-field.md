@@ -1,0 +1,139 @@
+# NumberField spec
+
+**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 2: minus/plus steppers, no resting shadow))
+**Captures:** `docs/research/captures/number-field/` (pass-0 in `before/`)
+**Peers:** Input (shared chrome), InputGroup (letter compartments), Panel (inspector), Slider
+
+## Owner decisions
+
+- 2026-09-23 (COMPONENTS.md, inspector foundation, first priority): decimal and negative
+  values, min/max/step, keyboard increments, optional steppers, units, locale-aware
+  formatting, scrubbing, fine/coarse increments, mixed values, commit/cancel and bounded
+  arithmetic entry.
+- 2026-09-26: "do the next component". The owner plans a compact density for dense products
+  (Figma, IDEs); Figma's 24px fields are that density's target, not the default's.
+- 2026-09-26: accepted. Owner: "consider every component that you have built to be approved. if i havent given any feedback to change anything consider them approved."
+
+## Job and boundaries
+
+Edits one number with keyboard, pointer scrubbing, arithmetic and optional steppers. Not
+Slider (a range you see), not Input type=number (plain forms), not InputGroup (several
+values in one shell; it reuses NumberField).
+
+## Variants
+
+| Axis | Value | Justification | Where it appears |
+|---|---|---|---|
+| variant | outline, soft | Forms vs. inspectors | Figma inspector: soft (#F5F5F5, border on hover) |
+| size | sm, md, lg | Control tiers | System |
+| scrub | letter, icon, or grip (`true`) | The field's name as the drag handle | Figma X/Y/W/H letters, rotation and opacity glyphs; Base UI ScrubArea is the label |
+| unit | text after the number | %, °, px | Figma "100%", "0°" |
+| steppers | on/off | Forms without a pointer-drag habit | Base UI (− and +), Area |
+| mixed, read-only, disabled, validation | states | Multi-selection, locking | Figma ("Mixed") |
+
+## Sources
+
+| Id | Type | What | Link | Captures |
+|---|---|---|---|---|
+| figma | target product | Properties panel with a frame selected in a community-file copy (Hercules UI Kit, Drafts): X position, rotation, width (rest and hover), opacity. Selection only; no value edited | figma.com (Chrome), 2026-09-26 | `figma--*` (5) |
+| baseui | design system (rendered) | NumberField demo: the label "Amount" is the `ScrubArea` (`cursor: ew-resize`); 32px group with − and + | base-ui.com/react/components/number-field, 2026-09-26 (read from the rendered DOM, not captured) | — |
+| area | this system | Inspector X field and a unit field, before and after | localhost gallery | `before/area--*` (2), `area--*` (2) |
+
+ChatGPT and Notion: no numeric fields found on read-only surfaces.
+
+## Measurements
+
+Generated with `node scripts/capture-compare.mjs` and filtered. Columns: Area inspector X
+after, before; Figma X; Figma W on hover; Area unit field after, before; Figma opacity.
+
+| slot · property | area · inspector-x · rest · light | area · inspector-x · rest · light | figma · x-position · rest · light | figma · width · hover · light | area · unit · rest · light | area · unit · rest · light | figma · opacity · rest · light |
+|---|---|---|---|---|---|---|---|
+| **shell** size | 127 × 32 | 127 × 32 | 88 × 24 | 88 × 24 | 256 × 32 | 256 × 32 | 88 × 24 |
+| **shell** border | 1 solid rgba(0, 0, 0, 0) | 1 solid color(srgb 0.886275 0.886275 0.886275) | 0 | 1 solid rgb(230, 230, 230) | 1 solid color(srgb 0.886275 0.886275 0.886275) | 1 solid color(srgb 0.886275 0.886275 0.886275) | 1 solid rgb(245, 245, 245) |
+| **shell** radius | 8px | 8px | 5px | 5px | 8px | 8px | 5px |
+| **shell** font | 14px/20px 400 Geist | 14px/20px 400 Geist | 11px/16px 400 Inter | 11px/16px 400 Inter | 14px/20px 400 Geist | 14px/20px 400 Geist |  |
+| **shell** background | rgb(247, 247, 247) | rgb(255, 255, 255) | rgb(245, 245, 245) | rgb(245, 245, 245) | rgb(255, 255, 255) | rgb(255, 255, 255) | rgb(245, 245, 245) |
+| **scrub** size | 16 × 16 | 16 × 16 | 24 × 24 | 23 × 24 | not found | not found | 24 × 24 |
+| **scrub** edge from shell (t r b l) | 8 103 8 8 | 8 103 8 8 | 0 64 0 0 | 0 64 0 1 | not found | not found | 0 63 0 1 |
+| **scrub** font | 14px/14px 400 Geist |  | 11px/16px 400 Inter | 11px/16px 400 Inter | not found | not found |  |
+| **scrub** color | rgb(102, 102, 102) |  | rgba(0, 0, 0, 0.5) | rgba(0, 0, 0, 0.898) | not found | not found |  |
+| **control** size | 83.98 × 30 | 60.16 × 30 | 64 × 24 | 41 × 24 | 17.74 × 30 | 214.72 × 30 | 62 × 24 |
+| **control** edge from shell (t r b l) | 1 11.02 1 32 | 1 34.84 1 32 | 0 0 0 24 | 0 23 0 24 | 1 227.24 1 11.02 | 1 30.26 1 11.02 | 0 1 0 25 |
+| **unit** size | not found | 15.82 × 20 | — | — | 11.23 × 20 | 11.23 × 20 | — |
+| **unit** edge from shell (t r b l) | not found | 6 11.02 6 100.16 | — | — | 6 216 6 28.77 | 6 11.03 6 233.74 | — |
+
+Figma: 24 tall, 11/16 Inter, 5px radius, #F5F5F5 fill with no visible border at rest and
+`rgb(230, 230, 230)` on hover. The leading square (24 × 24) holds the letter at 50% black or
+a glyph, and is the drag handle; the text starts at 24 (the square's edge). Units are part of
+the value string. No steppers.
+
+## Decisions
+
+| Slot · property | Area value | Basis | Reason when it differs |
+|---|---|---|---|
+| scrub · content | the field's **letter or icon** (`scrub="X"`, `scrub={<RotateIcon />}`); `true` keeps a grip | Figma, Base UI | Was always a three-line grip, with the name in a label row above |
+| scrub · target | the whole leading square (control height), via `::after` | Figma (24 square) | Was the 16px glyph only |
+| scrub · geometry | glyph in the shared 16 icon slot, 8 in; text starts one control height in (32 at md) | Figma: text at the square's edge (24 at 24) | — (inset contract unchanged) |
+| scrub · color | `input-icon` (muted) | Figma 50% black | — |
+| unit · position | **directly after the number**, only glyph spacing between; the input sizes to its content (`field-sizing: content`) and a press on the empty space focuses it | Figma "100%", "0°" | Was pushed to the far edge. Browsers without `field-sizing` keep it at the edge |
+| unit · mixed/empty | not drawn | Figma shows "Mixed" alone | Was "Mixed px" |
+| inspector recipe | soft variant, letter or icon handles, no label row, no px | Figma | Was outline fields under X/Y/W/H labels with px |
+| height, type | control-md (32, 14/20) at default density | System tiers | Figma's 24 and 11/16 are the compact-density target |
+| radius, border, soft hover | unchanged (8; soft border on hover) | Input; Figma adds the border on hover too | — |
+
+## Pass 2: steppers and the outline shadow
+
+Owner: "refine the steppers arrow counters … make sure it's the correct and intentional
+experience"; "for the outline style, do whatever is consistent with the system".
+
+| Source | Stepper | Measured |
+|---|---|---|
+| React Aria (react-aria.adobe.com/NumberField, rendered) | Decrease then Increase after the input, borderless, lucide minus/plus | two 32 × 32 buttons in a 146 × 32 group, 8px outer radius |
+| Base UI (rendered) | − before, + after the input | 32px group |
+| Area pass 1 | stacked 12px chevrons in a bordered column | 26 wide, each half about 15 tall |
+
+Decisions:
+- **Minus then plus after the value**, as React Aria and Carbon. Each is Input's nested action
+  square: icon + 8 (24 at md), `radius-small` (6), 4 in from the top and side through the
+  inset contract (`--_box-end: var(--_step)`). Targets grow from about 15 to 24 tall, and
+  the field keeps one outline (no column border).
+- Glyphs: Area's pilot `add` and a new `subtract` (same 11px bar, square keyline), exported
+  as package glyphs.
+- **Press and hold repeats**: one step, then every 60ms after 400ms; it stops on release and
+  at the bound (the window's pointerup ends it when the button disables mid-press). Verified
+  in headless Edge with real mouse events: 80 → 81 on press, 86 at 700ms, 100 and disabled at
+  the max; minus stopped on release.
+- The buttons are out of the tab order (`tabIndex=-1`): the arrow keys, Home and End step the
+  value (WAI spinbutton; React Aria excludes them too). Pressing one moves focus to the input.
+- Disabled: `fg-disabled` instead of 40% opacity. Hover `bg-component-hover`, press
+  `bg-component-active`.
+- **No resting shadow** on Input, NumberField, InputGroup, Textarea, Checkbox and Radio: controls
+  at rest carry none, as Button (its pass removed `shadow-1`; ChatGPT, Notion and Figma
+  fields have none). Floating and lifted layers keep theirs (Segmented's selected thumb, menus).
+
+## Behavior and accessibility
+
+Unchanged: `role="spinbutton"` text input with `aria-valuenow/min/max` and a value text that
+includes the unit; ArrowUp/Down step (Shift ×10, Alt ×0.1), Home/End, Enter commits, Escape
+cancels; arithmetic entry; scrub by 8px per step with pointer capture, cancel restores. The
+scrub handle is `aria-hidden`; the letter is not the accessible name, so each inspector
+field needs `aria-label` (the demos give "X position", "Width" and so on).
+
+## Verification
+
+- 5 Figma captures (redacted), 2 Area before, 2 after; checksums verified.
+- Measured in the gallery: glyph gap between number and unit 0 (box), text at 32.
+- Scrub verified with a real pointer: a drag starting 3px inside the field's edge (outside
+  the glyph, inside the square) moved X from 24 to 34 over 80px (8px per step).
+- Unverified: dark theme; Safari and Firefox without `field-sizing`.
+
+## Open questions
+
+- Compact density: Figma's 24/11 fields and 5px radius belong to the compact axis.
+
+## Feedback log
+
+- 2026-09-26 · pass 1 ("do the next component, show me the images in chat"): Figma's handle
+  and unit model, inspector recipe, before/after images sent in chat.
+- 2026-09-26 · owner: outline style consistent with the system; does Button outline have a
+  shadow (no); refine the steppers → pass 2 above.

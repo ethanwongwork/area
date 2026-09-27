@@ -6,7 +6,8 @@
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
-    --_step-width: calc(var(--_height) - var(--area-space-6));
+    /* spec: a stepper is Input's nested action square (icon + 8: 24 at md), 4 in from the edge. */
+    --_step: calc(var(--_icon) + var(--area-space-8));
     --_border: var(--area-input-edge);
     --_border-hover: var(--area-input-edge-hover);
     --_border-focus: var(--area-field-focus-color);
@@ -25,7 +26,8 @@
     color: var(--area-input-text);
     font-size: var(--_text);
     line-height: var(--_leading);
-    box-shadow: var(--area-shadow-1);
+    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
+    box-shadow: none;
     transition: var(--area-transition);
   }
   .area-number-field--outline { --_bg: var(--area-input-bg); }
@@ -35,7 +37,6 @@
   .area-number-field--lg { --_height: var(--area-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
   .area-number-field--sm { padding-inline-start: var(--area-gutter-sm); padding-inline-end: var(--area-gutter-sm); }
   .area-number-field--lg { padding-inline-start: var(--area-gutter-lg); padding-inline-end: var(--area-gutter-lg); }
-  .area-number-field:has(.area-number-field__steppers) { padding-inline-end: 0; }
   .area-number-field--full-width { inline-size: 100%; }
   .area-number-field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); }
   .area-number-field:focus-within {
@@ -69,8 +70,24 @@
     outline: none;
   }
   .area-number-field__control::placeholder { color: var(--area-input-placeholder); }
-  .area-number-field__unit { flex-shrink: 0; color: var(--area-fg-muted); white-space: nowrap; user-select: none; }
+  /*
+   * spec (docs/specs/number-field.md): the unit reads as part of the value, set against the
+   * number with only the glyphs' own spacing (Figma draws "100%" and "0°" as one string), not
+   * pushed to the far edge. The input sizes to its content
+   * where supported; the shell's empty space still focuses it (NumberField handles the press).
+   */
+  .area-number-field__unit { flex-shrink: 0; margin-inline-start: calc(var(--_gap) * -1); color: var(--area-fg-muted); white-space: nowrap; user-select: none; }
+  @supports (field-sizing: content) {
+    .area-number-field:has(> .area-number-field__unit) > .area-number-field__control { flex: 0 1 auto; field-sizing: content; min-inline-size: 1ch; }
+    .area-number-field:has(> .area-number-field__unit) > .area-number-field__unit { margin-inline-end: auto; }
+  }
+  /*
+   * spec: the handle is the field's label or icon in a square the height of the control
+   * (Figma: the X / W letter or the rotation glyph in a 24px square; Base UI: the label is the
+   * scrub area). The glyph keeps the shared icon slot; ::after widens the target to the square.
+   */
   .area-number-field__scrub {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -78,38 +95,42 @@
     block-size: var(--_icon);
     flex-shrink: 0;
     color: var(--area-input-icon);
+    font-size: var(--_text);
+    line-height: 1;
     cursor: ew-resize;
     touch-action: none;
+    user-select: none;
   }
+  .area-number-field__scrub::after { content: ""; position: absolute; inset: calc((var(--_icon) - var(--_height)) / 2); }
   .area-number-field__scrub svg { inline-size: 100%; block-size: 100%; }
+  .area-number-field[data-disabled] .area-number-field__scrub { cursor: not-allowed; }
+  /*
+   * spec (docs/specs/number-field.md, steppers): minus then plus, two nested squares after the
+   * value (React Aria and Carbon: decrease, increase; Base UI: - and + around the value). Each
+   * is a 24px target instead of a 15px half-height chevron, and the field keeps one outline.
+   */
   .area-number-field__steppers {
     display: flex;
-    flex-direction: column;
-    align-self: stretch;
-    inline-size: var(--_step-width);
+    align-items: center;
     flex-shrink: 0;
-    border-inline-start: var(--area-stroke-width) solid var(--_border);
-    overflow: hidden;
-    border-start-end-radius: inherit;
-    border-end-end-radius: inherit;
-  }
-  .area-number-field__steppers:has(.area-number-field__step:hover:not(:disabled)) {
-    background: var(--area-bg-component-hover);
   }
   .area-number-field__step {
-    display: grid;
-    place-items: center;
-    flex: 1;
-    min-block-size: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_step);
+    block-size: var(--_step);
     padding: 0;
     border: 0;
+    border-radius: min(var(--area-radius-small), calc(var(--_step) / 2));
     background: transparent;
     color: var(--area-input-icon);
     cursor: pointer;
+    touch-action: manipulation;
   }
-  /* Exact Fluent chevron_up/down_12_regular geometry in the component markup. */
-  .area-number-field__step svg { display: block; inline-size: var(--area-space-12); block-size: var(--area-space-12); }
-  .area-number-field__step + .area-number-field__step { border-block-start: var(--area-stroke-width) solid var(--_border); }
-  .area-number-field__step:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: -2px; }
-  .area-number-field__step:disabled { opacity: .4; cursor: not-allowed; }
+  .area-number-field__step svg { display: block; inline-size: var(--_icon); block-size: var(--_icon); }
+  .area-number-field__step:hover:not(:disabled) { background-color: var(--area-bg-component-hover); }
+  .area-number-field__step:active:not(:disabled) { background-color: var(--area-bg-component-active); }
+  .area-number-field__step:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  .area-number-field__step:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
 }

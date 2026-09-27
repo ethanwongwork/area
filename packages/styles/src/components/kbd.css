@@ -110,9 +110,7 @@
   /* Coloured solid actions borrow the inverse surface, which darkens in light mode and
    * lightens in dark mode. Neutral solid instead borrows its own foreground so its keycap
    * cannot disappear into the near-black/near-white action fill. */
-  .area-button--solid:not(.area-button--neutral) .area-kbd,
-  .area-menu__item--danger:hover .area-kbd:not(.area-kbd--on-color),
-  .area-menu__item--danger[data-highlighted] .area-kbd:not(.area-kbd--on-color) {
+  .area-button--solid:not(.area-button--neutral) .area-kbd {
     background-color: color-mix(in srgb, var(--area-bg-inverse) 16%, transparent);
     border-color: transparent;
     color: inherit;

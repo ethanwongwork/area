@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
-import type { InputHTMLAttributes, PointerEvent as ReactPointerEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
+import type { InputHTMLAttributes, PointerEvent as ReactPointerEvent, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
 import { numberFieldVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { calculateNumber, clampNumber, steppedNumber } from "./number-math.ts";
 import { Glyph } from "./Glyph.tsx";
@@ -19,13 +19,19 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
   unit?: string;
   /** Show stacked increment and decrement buttons. */
   steppers?: boolean;
-  /** A visible leading drag handle. Pointer movement changes the value by one step per 8px. */
-  scrub?: boolean;
+  /**
+   * A leading drag handle; pointer movement changes the value by one step per 8px. Pass the
+   * field's letter or icon (Figma's X, W or rotation glyph) to make it the handle; `true`
+   * shows a grip. The whole square around it is the drag target.
+   */
+  scrub?: boolean | ReactNode;
   /** Visible handle caption; aria-label still names the numeric input. */
   scrubLabel?: string;
   /** Empty mixed selection; the next step begins at zero or the nearest bound. */
   mixed?: boolean;
   locale?: string;
+  /** Thousands separators in the resting display (locale-aware). Inspectors turn them off, as Figma shows 1202. */
+  grouping?: boolean;
   /** Number of fraction digits in the resting display. Defaults to the step's precision. */
   fractionDigits?: number;
   validationStatus?: "error" | "success" | "warning";
@@ -36,7 +42,7 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
 export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(function NumberField(
   { value, defaultValue = null, onValueChange, onValueCommit, min, max, step = 1,
     size, variant, fullWidth, unit, steppers, scrub, scrubLabel = "Drag to adjust",
-    mixed, locale, fractionDigits, validationStatus, "data-validation-status": fieldValidationStatus,
+    mixed, locale, grouping = true, fractionDigits, validationStatus, "data-validation-status": fieldValidationStatus,
     disabled, readOnly, required, name, id,
     className, onKeyDown, onBlur, onFocus, onPointerDown, onPointerMove, onPointerUp,
     "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy,
@@ -64,7 +70,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   const symbols = new Intl.NumberFormat(locale, { numberingSystem: "latn" }).formatToParts(12345.6);
   const decimal = symbols.find(part => part.type === "decimal")?.value ?? ".";
   const group = symbols.find(part => part.type === "group")?.value ?? ",";
-  const formatter = new Intl.NumberFormat(locale, { numberingSystem: "latn", maximumFractionDigits: digits, minimumFractionDigits: 0 });
+  const formatter = new Intl.NumberFormat(locale, { numberingSystem: "latn", maximumFractionDigits: digits, minimumFractionDigits: 0, useGrouping: grouping });
   const display = draft ?? (mixed ? "" : numeric == null ? "" : formatter.format(numeric));
   const disabledState = disabled || readOnly;
   const invalidState = error || validationStatus === "error" || fieldValidationStatus === "error" || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
@@ -101,7 +107,8 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
         event.preventDefault(); commitValue(max);
       } else if (event.key === "Enter") {
         event.preventDefault(); commitDraft();
-      } else if (event.key === "Escape") {
+      } else if (event.key === "Escape" && (draft !== null || error)) {
+        // Only an edit in progress claims Escape; otherwise it reaches the popover or dialog.
         event.preventDefault(); setDraft(null); setError(false);
       }
     }
@@ -139,17 +146,35 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     setHasScrubbed(false);
   };
   useEffect(() => { if (mixed) setDraft(null); }, [mixed]);
+  // Press and hold repeats, as native spinners and React Aria do: one step now, then every
+  // 60ms after 400ms. The latest stepBy is read through a ref so repeats see the new value.
+  const stepRef = useRef(stepBy);
+  stepRef.current = stepBy;
+  const repeat = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stopRepeat = () => { if (repeat.current) clearTimeout(repeat.current); repeat.current = null; };
+  const startRepeat = (delta: number) => {
+    stopRepeat();
+    // A bound disables the button mid-press, so it never sees pointerup; the window does.
+    window.addEventListener("pointerup", stopRepeat, { once: true });
+    stepRef.current(delta);
+    const tick = (wait: number) => { repeat.current = setTimeout(() => { stepRef.current(delta); tick(60); }, wait); };
+    tick(400);
+  };
+  useEffect(() => stopRepeat, []);
 
   return <span className={numberFieldVariants({ size, variant, fullWidth }, className)}
     data-disabled={disabled ? "" : undefined} data-read-only={readOnly ? "" : undefined}
     data-invalid={invalidState ? "" : undefined}
     data-success={resolvedValidation === "success" ? "" : undefined}
     data-warning={resolvedValidation === "warning" ? "" : undefined}
-    data-scrubbing={hasScrubbed ? "" : undefined}>
-    {scrub && <span className="area-number-field__scrub" aria-hidden="true" title={scrubLabel}
+    data-scrubbing={hasScrubbed ? "" : undefined}
+    // The unit follows the number, so the shell has empty space; a press there edits the value.
+    onPointerDown={event => { if (event.target === event.currentTarget && !disabled) { event.preventDefault(); inputRef.current?.focus(); } }}>
+    {scrub ? <span className="area-number-field__scrub" aria-hidden="true" title={scrubLabel}
+      data-glyph={scrub === true ? "" : undefined}
       onPointerDown={startScrub} onPointerMove={moveScrub} onPointerUp={endScrub} onPointerCancel={cancelScrub}>
-      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3v10M8 3v10M11 3v10" stroke="currentColor" strokeLinecap="round" /></svg>
-    </span>}
+      {scrub === true ? <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3v10M8 3v10M11 3v10" stroke="currentColor" strokeLinecap="round" /></svg> : scrub}
+    </span> : null}
     <input {...rest} ref={node => { inputRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }} id={inputId} type="text" inputMode="decimal"
       role="spinbutton" className="area-number-field__control" value={display}
       aria-label={ariaLabel} aria-labelledby={ariaLabelledBy} aria-describedby={[ariaDescribedBy, error ? `${inputId}-parse-error` : undefined].filter(Boolean).join(" ") || undefined}
@@ -162,10 +187,21 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
       onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} />
     {error && <span id={`${inputId}-parse-error`} className="area-sr-only">Enter a valid number or calculation</span>}
     {name && <input type="hidden" name={name} value={mixed || numeric == null ? "" : String(numeric)} disabled={disabled} />}
-    {unit && <span className="area-number-field__unit" aria-hidden="true">{unit}</span>}
+    {/* No unit beside "Mixed" or an empty value: it would read as part of the placeholder. */}
+    {unit && display !== "" && <span className="area-number-field__unit" aria-hidden="true">{unit}</span>}
     {steppers && <span className="area-number-field__steppers">
-      <button type="button" className="area-number-field__step" aria-label={ariaLabelledBy ? undefined : `Increase ${ariaLabel ?? "value"}`} aria-labelledby={ariaLabelledBy ? `${inputId}-increase ${ariaLabelledBy}` : undefined} disabled={disabledState || max !== undefined && numeric !== null && numeric !== undefined && numeric >= max} onClick={() => stepBy(1)}><span id={`${inputId}-increase`} className="area-sr-only">Increase</span><Glyph name="chevron-down" rotate={180} /></button>
-      <button type="button" className="area-number-field__step" aria-label={ariaLabelledBy ? undefined : `Decrease ${ariaLabel ?? "value"}`} aria-labelledby={ariaLabelledBy ? `${inputId}-decrease ${ariaLabelledBy}` : undefined} disabled={disabledState || min !== undefined && numeric !== null && numeric !== undefined && numeric <= min} onClick={() => stepBy(-1)}><span id={`${inputId}-decrease`} className="area-sr-only">Decrease</span><Glyph name="chevron-down" /></button>
+      {([["decrease", -1, "subtract", min !== undefined && numeric != null && numeric <= min], ["increase", 1, "add", max !== undefined && numeric != null && numeric >= max]] as const).map(([kind, delta, glyph, atBound]) => {
+        const verb = kind === "increase" ? "Increase" : "Decrease";
+        return <button key={kind} type="button" className="area-number-field__step" tabIndex={-1}
+          aria-label={ariaLabelledBy ? undefined : `${verb} ${ariaLabel ?? "value"}`}
+          aria-labelledby={ariaLabelledBy ? `${inputId}-${kind} ${ariaLabelledBy}` : undefined}
+          disabled={disabledState || atBound}
+          onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); inputRef.current?.focus(); startRepeat(delta); }}
+          onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat}
+          onClick={event => { if (event.detail === 0) stepBy(delta); }}>
+          <span id={`${inputId}-${kind}`} className="area-sr-only">{verb}</span><Glyph name={glyph} />
+        </button>;
+      })}
     </span>}
   </span>;
 });

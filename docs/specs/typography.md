@@ -70,6 +70,33 @@ Findings:
 - control-sm (13/18 at default) is the one extra size. Either keep it for small controls
   only, or move small controls to 12/16 captions. Recommendation: move them, so default
   UI uses 12, 14 and 16 only.
+- 2026-09-26 (owner delegated, Button pass): small controls (28) now use 14/20 at default
+  density; 12/16 is the caption role and the xs/compact control tiers. Captions no longer
+  borrow the control-sm token. Default UI still uses only 12, 14 and 16.
+- 2026-09-26 (owner asked, Popover pass 3): Popover's title is strong (500). It is the size
+  of the description beneath it, so size cannot carry the title and color alone read flat
+  (shadcn 500, Primer 600). Whether Alert, Toast and Card titles follow is open.
+- 2026-09-26 (owner: "make sure the type for titles, copy, descriptions, labels is
+  intentional and consistent"; Dialog pass). Gallery sweep of every title, description,
+  label and caption, then one rule per role:
+
+  | Role | Type | Where |
+  |---|---|---|
+  | Surface title, compact | 14/20 strong, default | Popover, Panel, Alert, Toast |
+  | Surface title, standalone | 16/24 strong, default | Card, Dialog |
+  | Surface description | 14/20 regular, muted | Popover, Dialog, Card, Alert |
+  | Control label | 14/20 regular, default | Field, Switch, Choice, Slider, Menu and Nav items |
+  | Control caption (helper under a control) | 12/16 regular, muted | Field, Switch, Choice, CheckboxGroup |
+  | Group label (names a list) | 14/20 regular, muted; 12/16 in inspector surfaces | Menu, Nav; Color picker |
+  | Section heading (titles controls in a panel) | 12/16 strong, default (inspector pass: every title strong; one ramp step below the panel title, as Figma 11 under 13) | Panel |
+  | Fill labels | 14/20 strong | Solid Button, Badge, selected Segmented |
+
+  Title to description: baseline to cap 15 to 15.6 on every surface (Popover 15.1, Card and
+  Dialog 15.6). Label to caption: 10.5 (tighter pair). Changes: Dialog title 20/28 regular →
+  16/24 strong (ChatGPT 16/24, shadcn 16); Card, Panel, Alert and Toast titles → strong;
+  Popover description 14/18 → 14/20 (row gap 5 keeps 15, overriding the prior 14/18
+  decision); Color picker heading leading 24 → 16. The title-sm role (20/28) is no longer
+  used by a component title.
 
 **Foreground (two levels plus state).**
 - `fg-default` for content and titles; `fg-muted` for secondary text and metadata.

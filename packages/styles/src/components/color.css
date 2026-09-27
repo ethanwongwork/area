@@ -116,6 +116,6 @@
   .area-color-picker__slider::-webkit-slider-thumb { appearance: none; inline-size: var(--area-space-16); block-size: var(--area-space-16); border: var(--area-space-2) solid var(--area-bg-surface); border-radius: var(--area-radius-full); background: var(--_swatch-color); box-shadow: var(--area-shadow-1); }
   .area-color-picker__slider::-moz-range-thumb { inline-size: var(--area-space-12); block-size: var(--area-space-12); border: var(--area-space-2) solid var(--area-bg-surface); border-radius: var(--area-radius-full); background: var(--_swatch-color); }
   .area-color-picker__slider:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
-  .area-color-picker__heading { display: flex; align-items: center; justify-content: space-between; font-size: var(--area-control-sm-text); color: var(--area-fg-muted); }
+  .area-color-picker__heading { display: flex; align-items: center; justify-content: space-between; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
   .area-color-picker[aria-disabled="true"] { opacity: 0.5; }
 }
