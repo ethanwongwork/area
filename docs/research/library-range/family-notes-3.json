@@ -1,0 +1,830 @@
+{
+  "search-field": {
+    "job": "Enter and clear a search query without promising suggestion selection.",
+    "decision": "Promote an Input recipe only when it owns clear and submit behavior; keep autocomplete in Combobox.",
+    "interaction": "React Aria documents search submission and clearing; preserve ordinary text editing. Async result announcements belong to the consuming search view.",
+    "interaction_sources": [
+      "a:SearchField",
+      "f:searchbox"
+    ],
+    "kind": "recipe"
+  },
+  "password-field": {
+    "job": "Enter a secret with an accessible visibility control.",
+    "decision": "Reuse Input and Field; include a named reveal action and an optional strength/help slot.",
+    "interaction": "GOV.UK recommends allowing paste and password-manager autocomplete. Mantine exposes controlled reveal and focusability; reveal must preserve the entered value.",
+    "interaction_sources": [
+      "g:password-input",
+      "t:PasswordInput"
+    ],
+    "kind": "recipe"
+  },
+  "multi-select": {
+    "job": "Choose several existing options from a constrained collection.",
+    "decision": "Share collection and popup behavior with Combobox; distinguish count summary from removable tokens.",
+    "interaction": "Base UI documents multiple selection, async search and virtualization. Mantine documents filtering, selected-value limits and backspace removal. Creation belongs to TagPicker.",
+    "interaction_sources": [
+      "b:combobox",
+      "t:MultiSelect"
+    ],
+    "kind": "primitive"
+  },
+  "tag-picker": {
+    "job": "Select or create removable text tokens.",
+    "decision": "Build on the MultiSelect collection contract plus Chip removal; keep creation and tokenization opt-in.",
+    "interaction": "React Aria documents tokenization and suggestions. Chakra/Ark adds delimiters, paste, blur behavior and editable tags; Fluent specifies deletion behavior.",
+    "interaction_sources": [
+      "a:TokenField",
+      "k:tags-input",
+      "f:tagpicker"
+    ],
+    "kind": "recipe"
+  },
+  "editable-text": {
+    "job": "Switch a displayed value into an editor and commit or cancel it.",
+    "decision": "Share one primitive between inline body text and InlineEditableTitle; support single-line and multiline editors.",
+    "interaction": "Chakra/Ark documents activation and submit modes. Atlassian exposes explicit save/cancel controls and whether editing survives blur; these are separate choices.",
+    "interaction_sources": [
+      "k:editable",
+      "l:inline-edit"
+    ],
+    "kind": "primitive"
+  },
+  "otp-input": {
+    "job": "Enter a verification code in visually separated slots.",
+    "decision": "Keep one form value while offering grouped slots, separators and masking; do not build separate unrelated inputs.",
+    "interaction": "Base UI and Ark document controlled values, completion and paste/navigation behavior. Expose invalid and disabled states without disabling normal copy/paste assistance.",
+    "interaction_sources": [
+      "b:otp-field",
+      "k:pin-input"
+    ],
+    "kind": "primitive"
+  },
+  "file-upload": {
+    "job": "Choose or drop files and review acceptance and upload state.",
+    "decision": "Compose a file trigger, drop target and file rows. Transport, virus scanning and persistence stay in the product adapter. The shadcn preview card is a visual analogue: its Browse button has no upload handler and is excluded from implemented-family counts.",
+    "interaction": "React Aria covers file triggers and drop targets; Chakra documents multiple files, directory selection, media capture and paste. GOV.UK lists concrete rejection/error cases.",
+    "interaction_sources": [
+      "a:DropZone",
+      "a:FileTrigger",
+      "k:file-upload",
+      "g:file-upload"
+    ],
+    "kind": "primitive"
+  },
+  "form-validation": {
+    "job": "Coordinate field validation, submission errors and recovery.",
+    "decision": "Reuse Field errors; add a form contract and linked ErrorSummary rather than a new visual input.",
+    "interaction": "React Aria distinguishes native and ARIA validation. GOV.UK's error summary links to erroneous controls; preserve values after unsuccessful submission.",
+    "interaction_sources": [
+      "a:Form",
+      "a:forms",
+      "g:error-summary"
+    ],
+    "kind": "primitive"
+  },
+  "date-field": {
+    "job": "Edit a date by named locale-aware segments, with text-entry alternatives distinguished.",
+    "decision": "Build the segmented primitive before DatePicker; keep GOV.UK's separate day/month/year inputs as an alternative recipe.",
+    "interaction": "React Aria documents locale calendars, granularity, bounds and segment editing. GOV.UK uses individually labelled date fields; a mask is not the same interaction.",
+    "interaction_sources": [
+      "a:DateField",
+      "g:date-input"
+    ],
+    "kind": "primitive"
+  },
+  "date-picker": {
+    "job": "Choose one date using a field or trigger and a calendar popup.",
+    "decision": "Compose Calendar, DateField and Popover; offer an explicit modal presentation for constrained layouts.",
+    "interaction": "React Aria supplies date/overlay behavior and validation. Mantine documents modal versus popup presentation; Material distinguishes docked, modal-calendar and text input.",
+    "interaction_sources": [
+      "a:DatePicker",
+      "t:@DatePickerInput",
+      "m:datepicker"
+    ],
+    "kind": "recipe"
+  },
+  "date-range-picker": {
+    "job": "Choose and review start and end dates as one range.",
+    "decision": "Share DatePicker pieces; define complete versus partial ranges and optional preset selection separately.",
+    "interaction": "React Aria distinguishes contiguous and noncontiguous ranges. Ant exposes separate endpoint constraints; Untitled UI and Chakra document presets.",
+    "interaction_sources": [
+      "a:DateRangePicker",
+      "n:date-picker",
+      "k:date-picker"
+    ],
+    "kind": "recipe"
+  },
+  "time-field": {
+    "job": "Edit a time of day with locale and precision controls.",
+    "decision": "Separate time-of-day from duration; offer segmented entry and a selectable time list.",
+    "interaction": "React Aria documents hour cycle, granularity and time-zone display. Mantine documents stepped segments, paste and time presets. A time list is a distinct anatomy.",
+    "interaction_sources": [
+      "a:TimeField",
+      "t:@TimePicker"
+    ],
+    "kind": "primitive"
+  },
+  "duration-input": {
+    "job": "Edit elapsed time without calendar or time-zone semantics.",
+    "decision": "Reuse NumberField and InputGroup; use Mantine's duration mode as the concrete baseline.",
+    "interaction": "Mantine TimePicker explicitly documents duration type and minimum hour digits. React Aria TimeField is an analogue, not evidence of elapsed-duration semantics.",
+    "interaction_sources": [
+      "t:@TimePicker",
+      "a:TimeField"
+    ],
+    "kind": "recipe"
+  },
+  "link": {
+    "job": "Navigate with inline text, standalone text or an icon-supported label.",
+    "decision": "Use native anchor behavior and shared text roles; avoid a second Button implementation.",
+    "interaction": "React Aria documents router integration and disabled links. Fluent and Carbon distinguish inline versus standalone use; destinations and link names remain meaningful.",
+    "interaction_sources": [
+      "a:Link",
+      "f:link",
+      "c:Link"
+    ],
+    "kind": "primitive"
+  },
+  "pagination": {
+    "job": "Move through a bounded set of result pages or a sequence of content pages.",
+    "decision": "Compose Buttons/Link plus optional page-size control; keep page index and total in product state.",
+    "interaction": "GOV.UK distinguishes content-page navigation from item-page navigation. Carbon and Ant expose page-size selection; Mantine documents URL synchronization.",
+    "interaction_sources": [
+      "g:pagination",
+      "c:Pagination",
+      "t:Pagination"
+    ],
+    "kind": "recipe"
+  },
+  "stepper": {
+    "job": "Communicate progress through named stages and optionally navigate between them.",
+    "decision": "Treat stage status separately from whether a stage is actionable; reuse Buttons and Progress.",
+    "interaction": "Mantine exposes next-step selection limits and keyboard navigation. Chakra demonstrates validation gates; Apple's numeric stepper is a different job and is not counted.",
+    "interaction_sources": [
+      "t:Stepper",
+      "k:steps"
+    ],
+    "kind": "primitive"
+  },
+  "menubar": {
+    "job": "Expose persistent desktop-style command menus.",
+    "decision": "Extend Menu behavior through a horizontal command strip; do not duplicate menu items.",
+    "interaction": "Base UI and Mantine document menubar keyboard behavior and shared menu composition. Preserve focus movement across menus and dismissal back to the invoking trigger.",
+    "interaction_sources": [
+      "b:menubar",
+      "t:Menubar"
+    ],
+    "kind": "recipe"
+  },
+  "listbox": {
+    "job": "Select values from an always-visible option collection.",
+    "decision": "Own focus, selection and typeahead independently of a popup; reuse it in MultiSelect and TransferList.",
+    "interaction": "React Aria documents selection, layouts and drag/drop. Ark supports extended selection and keyboard priority; interactive row actions require a grid-style list contract.",
+    "interaction_sources": [
+      "a:ListBox",
+      "k:listbox"
+    ],
+    "kind": "primitive"
+  },
+  "selectable-list": {
+    "job": "Present selectable rows that may also contain independent actions.",
+    "decision": "Use a distinct collection contract when a row has nested controls; compose Avatar and Checkbox slots.",
+    "interaction": "Fluent distinguishes selection as primary versus secondary action and list/listbox/grid roles. React Aria GridList supports row actions, selection and drag/drop.",
+    "interaction_sources": [
+      "f:list",
+      "a:GridList"
+    ],
+    "kind": "primitive"
+  },
+  "tree-select": {
+    "job": "Choose values from a hierarchy in a popup or cascading columns.",
+    "decision": "Reuse TreeView and Combobox; separate tree-with-checkboxes from column-by-column cascading selection.",
+    "interaction": "Mantine TreeSelect distinguishes single, multiple and checkbox modes. Ant Cascader documents change-on-select and lazy loading; parent/child selection rules need an explicit contract.",
+    "interaction_sources": [
+      "t:TreeSelect",
+      "t:Cascader",
+      "n:cascader",
+      "n:tree-select"
+    ],
+    "kind": "recipe"
+  },
+  "transfer-list": {
+    "job": "Move selected options between source and destination collections.",
+    "decision": "Compose two ListBoxes with named move actions and optional per-side filters.",
+    "interaction": "Ant exposes direction, selected keys, search and paging. Chakra has a Transfer List example; movement is distinct from selecting a row.",
+    "interaction_sources": [
+      "n:transfer",
+      "k:listbox"
+    ],
+    "kind": "recipe"
+  },
+  "rating": {
+    "job": "Enter or display a score using repeated symbols.",
+    "decision": "Separate read-only display from editable selection and expose optional fractional values.",
+    "interaction": "Mantine documents fractional ratings and custom symbols. Ark documents keyboard selection; Ant exposes clearing and half values.",
+    "interaction_sources": [
+      "t:Rating",
+      "k:rating",
+      "n:rate"
+    ],
+    "kind": "primitive"
+  },
+  "toggle-button-group": {
+    "job": "Group pressed command buttons or choose a mutually exclusive mode.",
+    "decision": "Reuse ButtonGroup and Segmented; add the missing selection contract instead of another track renderer.",
+    "interaction": "Base UI and React Aria support single/multiple pressed sets. Radix Themes SegmentedControl is a single-choice analogue within the family, not evidence of multiple selection.",
+    "interaction_sources": [
+      "b:toggle-group",
+      "a:ToggleButtonGroup",
+      "r:segmented-control"
+    ],
+    "kind": "recipe"
+  },
+  "drag-handle": {
+    "job": "Expose reordering as an explicit action with a visible insertion target.",
+    "decision": "Reuse PropertyList for local reorder; adopt an adapter for cross-list or tree movement.",
+    "interaction": "React Aria documents keyboard drag/drop. Atlassian recommends accessible move menus, announcements and focus restoration as an alternative to pointer dragging.",
+    "interaction_sources": [
+      "a:dnd",
+      "l:pragmatic-drag-and-drop"
+    ],
+    "kind": "adapter"
+  },
+  "accordion": {
+    "job": "Reveal sections while keeping headings scannable.",
+    "decision": "Factor a standalone Disclosure, then a group with single/multiple expansion; reuse Panel section anatomy.",
+    "interaction": "Mantine documents arrows, Home/End and Enter/Space. GOV.UK advises against disabled sections; Base UI additionally offers hidden-until-found panels.",
+    "interaction_sources": [
+      "t:Accordion",
+      "g:accordion",
+      "b:accordion"
+    ],
+    "kind": "primitive"
+  },
+  "drawer": {
+    "job": "Present a contextual side or bottom surface with an explicit modality contract.",
+    "decision": "Compose existing Dialog and Panel; add edge placement, modal/nonmodal behavior and optional resize/snap behavior.",
+    "interaction": "Fluent distinguishes inline and overlay drawers. Material and Apple distinguish modality and dismissal; Base UI and Ark expose swipe-related drawer behavior.",
+    "interaction_sources": [
+      "f:drawer",
+      "m:bottomsheet",
+      "h:sheets",
+      "b:drawer"
+    ],
+    "kind": "recipe"
+  },
+  "alert-dialog": {
+    "job": "Require an explicit response to an important or destructive decision.",
+    "decision": "Add a behavior specialization to Dialog, with cancel and confirm actions; keep urgent tone separate from size.",
+    "interaction": "Fluent has an alert modal type. Radix/Base UI provide AlertDialog action/cancel semantics; prevent accidental dismissal according to the chosen contract.",
+    "interaction_sources": [
+      "f:dialog",
+      "r:alert-dialog",
+      "b:alert-dialog"
+    ],
+    "kind": "recipe"
+  },
+  "splitter": {
+    "job": "Resize adjacent regions using a shared boundary.",
+    "decision": "Extend Panel resizing into a multi-region container with min/max and collapse constraints.",
+    "interaction": "Ark documents keyboard resize, collapse and resize indicators. Mantine supports multiple panes; shadcn delegates to react-resizable-panels.",
+    "interaction_sources": [
+      "k:splitter",
+      "t:Splitter",
+      "s:resizable"
+    ],
+    "kind": "primitive"
+  },
+  "scroll-area": {
+    "job": "Keep overflowing content scrollable with optional custom scrollbar presentation.",
+    "decision": "Retain native scrolling semantics and opt into custom bars only where needed.",
+    "interaction": "Mantine documents axis selection and controlled scroll position. Ark documents keyboard behavior and hover/always visibility; Apple provides platform scroll conventions.",
+    "interaction_sources": [
+      "t:ScrollArea",
+      "k:scroll-area",
+      "h:scroll-views"
+    ],
+    "kind": "primitive"
+  },
+  "responsive-layout": {
+    "job": "Arrange components in rows, stacks and responsive grids.",
+    "decision": "Add layout primitives with shared gap/alignment semantics; keep density system-wide.",
+    "interaction": "Radix, Mantine and Polaris expose layout primitives. These do not create their own selection or dismissal contract; child controls keep normal keyboard order.",
+    "interaction_sources": [
+      "r:flex",
+      "t:Grid",
+      "o:grid"
+    ],
+    "kind": "primitive"
+  },
+  "page-header": {
+    "job": "Group page identity, context, navigation and actions.",
+    "decision": "Compose Breadcrumb, title/description and action slots; avoid a separate control behavior.",
+    "interaction": "Primer explicitly exposes context, title, breadcrumbs, description and navigation areas. Polaris exposes page actions; keyboard behavior comes from composed links/buttons.",
+    "interaction_sources": [
+      "p:page-header",
+      "o:page"
+    ],
+    "kind": "recipe"
+  },
+  "sidebar": {
+    "job": "Provide grouped application navigation with optional compact presentation.",
+    "decision": "Compose Nav and Menu, then expose expanded, collapsed and overlay structures.",
+    "interaction": "shadcn documents sidebar variants and collapse behavior. Fluent describes secondary actions and grouping; Apple documents platform sidebar expectations.",
+    "interaction_sources": [
+      "s:sidebar",
+      "f:nav",
+      "h:sidebars"
+    ],
+    "kind": "recipe"
+  },
+  "app-shell": {
+    "job": "Coordinate navigation, header, content and supporting panes.",
+    "decision": "Offer recipes built from Sidebar, PageHeader and Panel; do not bake application routing into layout.",
+    "interaction": "Mantine distinguishes fixed/static shell behavior and responsive navbar/aside collapse. Primer provides resizable panes and responsive fullscreen layouts.",
+    "interaction_sources": [
+      "t:AppShell",
+      "p:page-layout"
+    ],
+    "kind": "recipe"
+  },
+  "dockable-inspector": {
+    "job": "Move or resize an inspector while retaining its editing context.",
+    "decision": "Start with a floating/resizable Panel recipe; defer a full docking engine until an owner workflow exists.",
+    "interaction": "Ark FloatingPanel and Mantine FloatingWindow document dragging and resizing. Their presence does not establish docking trees, tabbed docking or persistence.",
+    "interaction_sources": [
+      "k:floating-panel",
+      "t:FloatingWindow"
+    ],
+    "kind": "adapter"
+  },
+  "description-list": {
+    "job": "Pair labels and values without imposing table navigation.",
+    "decision": "Provide semantic term/value anatomy with inline/stacked layouts and optional row actions.",
+    "interaction": "Radix and Chakra expose orientation. GOV.UK summary lists add per-row and card actions; editing remains the responsibility of those controls.",
+    "interaction_sources": [
+      "r:data-list",
+      "k:data-list",
+      "g:summary-list"
+    ],
+    "kind": "primitive"
+  },
+  "stat": {
+    "job": "Display a key quantity with context and optional change indication.",
+    "decision": "Compose Card, text and status roles; animation is an optional behavior, not another semantic family.",
+    "interaction": "Ant Statistic documents number formatting and timer-related components. Chakra Stat provides labels, values and trends; avoid making static values interactive.",
+    "interaction_sources": [
+      "n:statistic",
+      "k:stat"
+    ],
+    "kind": "recipe"
+  },
+  "timeline": {
+    "job": "Show ordered events with markers, metadata and optional actions.",
+    "decision": "Offer simple, alternating and compact layouts; reuse Avatar/Badge/Separator.",
+    "interaction": "Primer exposes actions and breaks; Ant exposes orientation and item placement. Static timelines keep document reading order and do not imply listbox selection.",
+    "interaction_sources": [
+      "p:timeline",
+      "n:timeline"
+    ],
+    "kind": "recipe"
+  },
+  "empty-state": {
+    "job": "Explain why a collection or workflow has no content and offer the next action.",
+    "decision": "Compose icon/illustration, title, description and actions; distinguish empty, filtered-empty and first-use content.",
+    "interaction": "Untitled UI documents icon, illustration and avatar structures. Primer and Polaris provide primary/secondary actions; focus stays with the initiating workflow.",
+    "interaction_sources": [
+      "u:empty-states",
+      "p:blankslate",
+      "o:empty-state"
+    ],
+    "kind": "recipe"
+  },
+  "result": {
+    "job": "Explain a completed outcome or blocking error at page or section scale.",
+    "decision": "Reuse Alert and EmptyState pieces with explicit success/error content and recovery actions.",
+    "interaction": "Ant Result enumerates outcome and HTTP-error presentations. GOV.UK Panel is a confirmation composition; it is not evidence for every error state.",
+    "interaction_sources": [
+      "n:result",
+      "g:panel"
+    ],
+    "kind": "recipe"
+  },
+  "banner": {
+    "job": "Present a persistent page or section announcement.",
+    "decision": "Follow Area's existing decision to extend Alert layout rather than add a competing primitive.",
+    "interaction": "Fluent documents stacking, collapse and dismissal. Polaris provides dismissible banners and actions; GOV.UK separates notification and cookie-decision banners.",
+    "interaction_sources": [
+      "f:messagebar",
+      "o:banner",
+      "g:notification-banner",
+      "g:cookie-banner"
+    ],
+    "kind": "recipe"
+  },
+  "meter": {
+    "job": "Show a bounded measurement rather than task completion.",
+    "decision": "Share Progress's track rendering while keeping meter semantics and value text separate.",
+    "interaction": "Base UI and React Aria provide meter semantics and bounds; do not infer indeterminate or loading behavior from Progress.",
+    "interaction_sources": [
+      "b:meter",
+      "a:Meter"
+    ],
+    "kind": "primitive"
+  },
+  "circular-progress": {
+    "job": "Show completion on a ring or gauge.",
+    "decision": "Extend Progress with circular anatomy; preserve Spinner as the separate unknown-duration indicator where appropriate.",
+    "interaction": "Material documents determinate/indeterminate modes and transitions. Mantine adds segmented rings and semicircles; Chakra supplies value labels.",
+    "interaction_sources": [
+      "m:progressindicator",
+      "t:RingProgress",
+      "t:SemiCircleProgress",
+      "k:progress-circle"
+    ],
+    "kind": "recipe"
+  },
+  "notification-queue": {
+    "job": "Manage several transient status messages over time.",
+    "decision": "Keep Toast rendering; add a queue/manager with update, dismiss, placement and visible-limit policies.",
+    "interaction": "Base UI documents promise, deduplication and stacking. React Aria covers dismissal and announcements; Chakra exposes pause/play and maximum-visible controls.",
+    "interaction_sources": [
+      "b:toast",
+      "a:Toast",
+      "k:toast"
+    ],
+    "kind": "primitive"
+  },
+  "data-grid": {
+    "job": "Navigate, select and manipulate structured data beyond a static table.",
+    "decision": "Adopt a collection engine and reuse Table styling; build selection/sorting before editing and virtualization.",
+    "interaction": "React Aria documents keyboard navigation, resize and drag/drop. shadcn's recipe uses a table engine; Fluent exposes focus modes. Not every table source includes cell editing.",
+    "interaction_sources": [
+      "a:Table",
+      "s:data-table",
+      "f:@DataGrid"
+    ],
+    "kind": "adapter"
+  },
+  "tree-grid": {
+    "job": "Combine hierarchical expansion with columns or row actions.",
+    "decision": "Build after DataGrid and TreeView contracts; nested rows alone do not establish full treegrid semantics.",
+    "interaction": "Fluent Tree exposes tree/treegrid navigation modes. Ant supports nested table data; Atlassian TableTree supplies hierarchical table anatomy. Record engine differences explicitly.",
+    "interaction_sources": [
+      "f:tree",
+      "n:table",
+      "l:table-tree"
+    ],
+    "kind": "adapter"
+  },
+  "media-preview": {
+    "job": "Inspect an image or playable media with preview controls.",
+    "decision": "Compose Dialog for images and delegate media playback to an adapter.",
+    "interaction": "Ant Image exposes preview transforms and toolbar customization. Untitled UI supplies video-player layouts; Atlassian's viewer is a separate media integration.",
+    "interaction_sources": [
+      "n:image",
+      "u:video-players",
+      "l:@media-viewer"
+    ],
+    "kind": "adapter"
+  },
+  "carousel": {
+    "job": "Browse a sequence of cards or media through a constrained viewport.",
+    "decision": "Separate arrow/dot navigation, axis, item sizing and autoplay; reuse Card content.",
+    "interaction": "Ark documents keyboard navigation, autoplay, pause-on-hover and drag. Fluent distinguishes card/banner/gallery layouts; Material documents multi-browse, hero and fullscreen alternatives.",
+    "interaction_sources": [
+      "k:carousel",
+      "f:carousel",
+      "m:carousel"
+    ],
+    "kind": "primitive"
+  },
+  "rich-text-editor": {
+    "job": "Edit structured prose using a mature document model.",
+    "decision": "Provide an adapter plus Area toolbar/menu skins; avoid a superficial contenteditable implementation.",
+    "interaction": "Chakra documents Tiptap integration, bubble menus, mentions and slash commands. Atlassian publishes an editor model and annotation APIs; define serialization and undo boundaries per adapter.",
+    "interaction_sources": [
+      "k:rich-text-editor",
+      "l:@editor-core"
+    ],
+    "kind": "adapter"
+  },
+  "code-editor": {
+    "job": "Edit source code with language-aware behavior.",
+    "decision": "Choose an editor engine before offering language, completion or diagnostics options. JSON text entry is only a narrow analogue.",
+    "interaction": "Mantine JsonInput documents validation/formatting for JSON; Primer's Markdown switch is internal. A full code-editor contract was not found in the reviewed core catalogues.",
+    "interaction_sources": [
+      "t:JsonInput",
+      "p:markdown-editor-view-switch"
+    ],
+    "kind": "defer"
+  },
+  "charts": {
+    "job": "Render quantitative information through a themed chart engine.",
+    "decision": "Offer engine adapters with shared legend/tooltip roles and accessible alternatives; do not create a new plotting engine. Fluent evidence is its v9 charts package; Atlassian evidence is its Forge UI Kit chart extension, not an Atlaskit core chart. Availability is source-observed, not a release audit.",
+    "interaction": "shadcn and Mantine wrap chart engines. Carbon supplies chart families; Apple documents chart interpretation. Interaction, brushing and keyboard support are engine-specific.",
+    "interaction_sources": [
+      "s:chart",
+      "t:@Charts",
+      "c:@Charts",
+      "h:charts"
+    ],
+    "kind": "adapter"
+  },
+  "gradient-editor": {
+    "job": "Edit color stops and gradient geometry.",
+    "decision": "Extend ColorPicker through a stop-list/track composition; reuse ColorSwatch and NumberField.",
+    "interaction": "Untitled UI documents adding/removing stops, angle and gradient types. Ant ColorPicker exposes a gradient mode; its existence does not imply all gradient geometries.",
+    "interaction_sources": [
+      "u:gradient-pickers",
+      "n:color-picker"
+    ],
+    "kind": "recipe"
+  },
+  "easing-curve-editor": {
+    "job": "Edit the timing function used by an animation.",
+    "decision": "Defer a native curve editor until a reference contract and engine are selected.",
+    "interaction": "No dedicated editor was found in the reviewed systems. Material motion source is only an interpolation analogue; draggable control points and numeric handles remain Area proposals.",
+    "interaction_sources": [
+      "m:motion"
+    ],
+    "kind": "defer"
+  },
+  "shortcut-recorder": {
+    "job": "Capture a keyboard chord and explain conflicts.",
+    "decision": "Reuse Kbd for display but design capture, cancellation and conflict validation as a new behavior.",
+    "interaction": "Primer documents displaying sequences/chords; Apple documents keyboard conventions. Neither is evidence of a shipped recorder, reserved-key policy or conflict resolver.",
+    "interaction_sources": [
+      "p:keybinding-hint",
+      "h:keyboards"
+    ],
+    "kind": "defer"
+  },
+  "toggletip": {
+    "job": "Reveal supplementary interactive information on explicit activation.",
+    "decision": "Compose Button and Popover; retain Tooltip for noninteractive hover/focus labels.",
+    "interaction": "Carbon distinguishes toggletips from tooltips. Chakra exposes Escape/outside dismissal; Fluent InfoLabel documents focus treatment for the supplemental content.",
+    "interaction_sources": [
+      "c:Toggletip",
+      "k:toggle-tip",
+      "f:infolabel"
+    ],
+    "kind": "recipe"
+  },
+  "message-actions": {
+    "job": "Expose actions associated with one conversation turn.",
+    "decision": "Use Message's existing actions slot and Button/Toolbar; offer persistent and contextual placement as recipes.",
+    "interaction": "shadcn Message documents actions and accessible icon labels. Untitled UI includes multiple message-action examples; service operations remain application callbacks.",
+    "interaction_sources": [
+      "s:message",
+      "u:messaging"
+    ],
+    "kind": "recipe"
+  },
+  "thinking-disclosure": {
+    "job": "Reveal progress or reasoning-related content in a conversation.",
+    "decision": "Compose Disclosure, Message and Spinner; keep elapsed-time logic outside the visual primitive.",
+    "interaction": "No dedicated timed thinking disclosure was found. shadcn suggests reasoning content inside Message; Ark/React Aria disclosure behavior is a reusable analogue.",
+    "interaction_sources": [
+      "s:message",
+      "a:Disclosure",
+      "k:collapsible"
+    ],
+    "kind": "recipe"
+  },
+  "source-chip": {
+    "job": "Identify a citation and optionally preview its destination.",
+    "decision": "Compose Chip/Link and HoverCard; keep citation numbering and provenance in product data.",
+    "interaction": "No dedicated citation-pill family was found. Untitled UI's message link previews and Radix HoverCard are anatomical references, not citation semantics.",
+    "interaction_sources": [
+      "u:messaging",
+      "r:hover-card"
+    ],
+    "kind": "recipe"
+  },
+  "attachment-card": {
+    "job": "Represent a file or image with metadata, upload status and actions.",
+    "decision": "Compose Card and Progress with separate preview and remove targets.",
+    "interaction": "shadcn documents idle/uploading/processing/error/done, horizontal/vertical layouts and independently focusable actions. Untitled UI includes message attachments.",
+    "interaction_sources": [
+      "s:attachment",
+      "u:messaging"
+    ],
+    "kind": "recipe"
+  },
+  "voice-input": {
+    "job": "Record spoken input while making progress and cancellation clear.",
+    "decision": "Defer recording to a media adapter; reuse Composer and Button for the surrounding UI.",
+    "interaction": "No dedicated recorder was found. Untitled UI's message-audio presentation is playback evidence only; permission, capture, transcription and waveform behavior remain unspecified.",
+    "interaction_sources": [
+      "u:messaging"
+    ],
+    "kind": "defer"
+  },
+  "emoji-picker": {
+    "job": "Choose an emoji or icon from a searchable categorized collection.",
+    "decision": "Build a searchable selection recipe; keep emoji-specific tone/recent data separate from generic icon selection.",
+    "interaction": "Atlassian publishes emoji picker configuration and types. Chakra shows an emoji grid and editor insertion; Primer's autocomplete is internal evidence only.",
+    "interaction_sources": [
+      "l:@emoji",
+      "k:listbox",
+      "p:emoji-autocomplete"
+    ],
+    "kind": "recipe"
+  },
+  "callout": {
+    "job": "Emphasize a block of document content with an optional icon.",
+    "decision": "Reuse Alert's paint/spacing roles while preserving document semantics; tone and alert announcements are separate choices. Carbon Callout is a source-stage renamed notification component; its source marks a future move to stable. Deprecated kind aliases are not proposed new tones.",
+    "interaction": "Radix Callout exposes treatment, color and alert role examples. GOV.UK inset text is a quieter structure; Atlassian adds semantic section-message appearances.",
+    "interaction_sources": [
+      "r:callout",
+      "g:inset-text",
+      "l:section-message"
+    ],
+    "kind": "recipe"
+  },
+  "toggle-block": {
+    "job": "Hide optional content inside flowing document text.",
+    "decision": "Use Disclosure as a document recipe, with nested blocks only where the content model supports them.",
+    "interaction": "GOV.UK Details documents short optional content; Ark documents nested and partial collapse. A disclosure does not automatically implement document editing or block drag/drop.",
+    "interaction_sources": [
+      "g:details",
+      "k:collapsible"
+    ],
+    "kind": "recipe"
+  },
+  "people-picker": {
+    "job": "Find and select people with identifying metadata.",
+    "decision": "Compose Combobox, Avatar and Chip; keep inviting and account lookup in the product adapter.",
+    "interaction": "Atlassian UserPicker provides a dedicated implementation. Fluent TagPicker supports a secondary action; generic token fields are only reusable collection evidence.",
+    "interaction_sources": [
+      "l:@user-picker",
+      "f:tagpicker"
+    ],
+    "kind": "recipe"
+  },
+  "reactions": {
+    "job": "Toggle an emoji response and show aggregate participation.",
+    "decision": "Compose Chip/Button with the EmojiPicker; keep server counts and optimistic reconciliation external.",
+    "interaction": "Atlassian publishes reaction types and controls. Untitled UI includes message reactions; disabled/loading and add-reaction affordances need explicit state wiring.",
+    "interaction_sources": [
+      "l:@reactions",
+      "u:messaging"
+    ],
+    "kind": "recipe"
+  },
+  "comment-thread": {
+    "job": "Show discussion identity, body, metadata, replies and actions.",
+    "decision": "Use Avatar, Composer and Message recipes with the product owning permissions and persistence.",
+    "interaction": "Atlassian Comment exposes nested children and action/metadata slots. Untitled UI supplies message reply examples; threading depth is a content-model choice.",
+    "interaction_sources": [
+      "l:comment",
+      "u:messaging"
+    ],
+    "kind": "recipe"
+  },
+  "floating-format-bar": {
+    "job": "Offer text-formatting commands near a selection.",
+    "decision": "Reuse Toolbar and Popover with the editor adapter retaining the text selection.",
+    "interaction": "Untitled UI documents floating-toolbar sizes. Chakra's bubble-menu example anchors commands to editor selection; focus movement must preserve that selection.",
+    "interaction_sources": [
+      "u:text-editors",
+      "k:rich-text-editor"
+    ],
+    "kind": "recipe"
+  },
+  "database-card": {
+    "job": "Show a record as a card with typed properties and optional media.",
+    "decision": "Compose Card and PropertyValue; defer board-specific drag and editing to a collection adapter.",
+    "interaction": "No dedicated typed database-card contract was found. Primer Card's metadata and action slots are the closest documented anatomy.",
+    "interaction_sources": [
+      "p:card",
+      "u:card-headers"
+    ],
+    "kind": "recipe"
+  },
+  "property-value": {
+    "job": "Render and optionally edit a typed record property.",
+    "decision": "Use a renderer registry that maps existing Area controls to property types; avoid a universal untyped cell.",
+    "interaction": "No dedicated cross-type property registry was found. React Aria Table and Ant Descriptions provide container analogues, not a typed-value data model.",
+    "interaction_sources": [
+      "a:Table",
+      "n:descriptions"
+    ],
+    "kind": "adapter"
+  },
+  "color-area": {
+    "job": "Select two color channels in a spatial control.",
+    "decision": "Expose the existing ColorPicker area only if independent composition is required.",
+    "interaction": "React Aria documents axis channels and keyboard editing. Fluent provides ColorArea types; Ark exposes area/thumbnail parts within its picker.",
+    "interaction_sources": [
+      "a:ColorArea",
+      "f:@ColorArea",
+      "k:color-picker"
+    ],
+    "kind": "recipe"
+  },
+  "color-slider": {
+    "job": "Adjust one color channel along a linear track.",
+    "decision": "Expose shared ColorPicker channel behavior while preserving the color model and accessible value text.",
+    "interaction": "React Aria documents channels and orientation. Ark exposes channel sliders; a general numeric Slider alone does not supply color interpretation.",
+    "interaction_sources": [
+      "a:ColorSlider",
+      "k:color-picker"
+    ],
+    "kind": "recipe"
+  },
+  "eyedropper-button": {
+    "job": "Sample a color from outside the picker when the platform supports it.",
+    "decision": "Offer an optional ColorPicker action with an explicit unavailable state and manual-entry fallback.",
+    "interaction": "Mantine ColorInput and Ark ColorPicker expose eyedropper controls. Browser support and user-activation requirements must be checked when implementing the adapter.",
+    "interaction_sources": [
+      "t:ColorInput",
+      "k:color-picker"
+    ],
+    "kind": "recipe"
+  },
+  "scrubbable-angle": {
+    "job": "Adjust an angular value using a dial and optional numeric entry.",
+    "decision": "Reuse NumberField for exact values; add a dial only where circular manipulation is useful.",
+    "interaction": "Mantine AngleSlider documents marks, change-end and radial movement. Ark AngleSlider exposes steps and a hidden input; this is stronger evidence than a generic slider.",
+    "interaction_sources": [
+      "t:AngleSlider",
+      "k:@angle-slider"
+    ],
+    "kind": "primitive"
+  },
+  "zoom-control": {
+    "job": "Set a viewport magnification and invoke fit/reset commands.",
+    "decision": "Compose NumberField, Menu and Button; the canvas or viewer owns the transform.",
+    "interaction": "No standalone percentage/fit/reset family was found. Ant Image documents zoom transforms, but that viewer API is only an analogue for a design-canvas zoom control.",
+    "interaction_sources": [
+      "n:image"
+    ],
+    "kind": "recipe"
+  },
+  "layer-row-badges": {
+    "job": "Identify a layer's role or state inside a tree row.",
+    "decision": "Use TreeView trailing slots and Badge; do not add a second tree renderer.",
+    "interaction": "Fluent explicitly documents badges and quick actions in tree rows. Primer exposes trailing visuals; component/instance/mask meanings are Area product data.",
+    "interaction_sources": [
+      "f:tree",
+      "p:tree-view"
+    ],
+    "kind": "recipe"
+  },
+  "constraints-picker": {
+    "job": "Select independent edge constraints rather than one alignment point.",
+    "decision": "Compose CheckboxGroup in a spatial recipe; keep it distinct from AlignmentPicker's exclusive selection.",
+    "interaction": "No dedicated edge-constraint picker was found. CheckboxGroup provides independent selection semantics only; pinning relationships require a new product contract.",
+    "interaction_sources": [
+      "k:checkbox",
+      "p:checkbox-group"
+    ],
+    "kind": "recipe"
+  },
+  "unit-field": {
+    "job": "Edit a numeric value together with its unit or sizing mode.",
+    "decision": "Compose NumberField, InputGroup and Select; unit conversion and auto/fill semantics belong to the domain.",
+    "interaction": "Mantine documents numeric prefixes/suffixes and Untitled UI documents input dropdowns. Polaris MoneyField has currency semantics; it is a narrow unit-aware example.",
+    "interaction_sources": [
+      "t:NumberInput",
+      "u:inputs",
+      "o:money-field"
+    ],
+    "kind": "recipe"
+  },
+  "font-picker": {
+    "job": "Find a font family and optionally choose a weight or style.",
+    "decision": "Compose Combobox and Select; font loading, preview content and variable axes belong to an adapter.",
+    "interaction": "A dedicated preview/weight-aware FontPicker was not found. Rich-text formatting toolbars are analogues, not evidence of font discovery or variable-font support.",
+    "interaction_sources": [
+      "u:text-editors",
+      "t:@RichTextEditor",
+      "k:rich-text-editor"
+    ],
+    "kind": "adapter"
+  },
+  "variable-chip": {
+    "job": "Show that a field is bound to a design variable and allow detachment.",
+    "decision": "Compose Code/Chip/Tooltip with explicit binding state; the token resolver owns lookup and validity.",
+    "interaction": "No dedicated bound-variable chip was found. Radix Code and Ark TagsInput supply visual/removal analogues; neither establishes token binding semantics.",
+    "interaction_sources": [
+      "r:code",
+      "k:tags-input"
+    ],
+    "kind": "recipe"
+  },
+  "keyboard-shortcuts": {
+    "job": "Show discoverable keyboard commands grouped by task.",
+    "decision": "Compose Dialog/Sheet and Kbd groups; command search is an optional recipe after CommandPalette.",
+    "interaction": "Primer documents sequences/chords and shadcn documents KbdGroup. Apple provides keyboard conventions; a dedicated searchable shortcut overlay was not found.",
+    "interaction_sources": [
+      "p:keybinding-hint",
+      "s:kbd",
+      "h:keyboards"
+    ],
+    "kind": "recipe"
+  }
+}

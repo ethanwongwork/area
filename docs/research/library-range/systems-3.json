@@ -1,102 +1,99 @@
 {
   "Untitled UI": {
     "url": "https://www.untitledui.com/react/components",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "shadcn/ui": {
     "url": "https://ui.shadcn.com/docs/components",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Radix Themes": {
-    "url": "https://www.radix-ui.com/themes/docs/components/overview",
-    "status": "error",
-    "checked": "2026-09-28"
+    "url": "https://www.radix-ui.com/themes/docs/overview/getting-started",
+    "checked": "2026-09-28",
+    "status": 200,
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Base UI": {
     "url": "https://base-ui.com/react/overview/quick-start",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "React Aria / Spectrum 2": {
-    "url": "https://react-spectrum.adobe.com/s2/index.html",
+    "url": "https://react-aria.adobe.com/",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Fluent 2": {
     "url": "https://fluent2.microsoft.design/components/web/react",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Primer": {
     "url": "https://primer.style/product/components/",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Carbon": {
     "url": "https://carbondesignsystem.com/components/overview/components/",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Material 3": {
     "url": "https://m3.material.io/components",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Mantine": {
-    "url": "https://mantine.dev/core/getting-started/",
-    "status": "error",
-    "checked": "2026-09-28"
+    "url": "https://mantine.dev/core/package/",
+    "checked": "2026-09-28",
+    "status": 200,
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Ant Design": {
     "url": "https://ant.design/components/overview/",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Chakra/Ark": {
     "url": "https://www.chakra-ui.com/docs/components/concepts/overview",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Atlassian": {
     "url": "https://atlassian.design/components",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Polaris": {
-    "url": "https://polaris-react.shopify.com/components",
+    "url": "https://shopify.dev/docs/api/app-home/polaris-web-components",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "GOV.UK": {
     "url": "https://design-system.service.gov.uk/components/",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only."
   },
   "Apple HIG": {
-    "url": "https://developer.apple.com/design/human-interface-guidelines/components/",
+    "url": "https://developer.apple.com/design/human-interface-guidelines/components",
+    "checked": "2026-09-28",
     "status": 200,
-    "checked": "2026-09-28"
-  },
-  "React Aria": {
-    "url": "https://react-aria.adobe.com/components",
-    "status": "error",
-    "checked": "2026-09-28"
-  },
-  "Ark": {
-    "url": "https://ark-ui.com/docs/overview/introduction",
-    "status": "error",
-    "checked": "2026-09-28"
-  },
-  "Untitled UI root": {
-    "url": "https://www.untitledui.com/react",
-    "status": 200,
-    "checked": "2026-09-28"
-  },
-  "Material source": {
-    "url": "https://github.com/material-components/material-web/tree/main",
-    "status": 200,
-    "checked": "2026-09-28"
+    "evidence_note": "Public catalogue plus pinned source where available; reviewed scope only.",
+    "retrieved_as": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/components.json"
   }
 }

@@ -49,26 +49,7 @@ def run(urls):
     dest.write_text(json.dumps(data));print('Read',len(missing),'pages; cache',len(data),'errors',sum(v['status']=='error' for v in data.values()))
     return data
 if __name__=='__main__':
-    catalogs=json.loads((P/'.research-cache-3.json').read_text());urls={}
-    patterns={
-      'Untitled UI':r'/react/(components|marketing)/[^/]+$',
-      'Fluent 2':r'/components/web/react/core/[^/]+/usage$',
-      'Primer':r'/product/(components|internal-components)/[^/]+/$',
-      'Carbon':r'/components/[^/]+/usage/$',
-      'Chakra/Ark':r'/docs/components/[^/]+$',
-      'Atlassian':r'/components/(?:[^/]+|primitives/[^/]+)$',
-      'GOV.UK':r'/components/[^/]+/$',
-    }
-    for system,pattern in patterns.items():
-        for url in catalogs[system]['links']:
-            if re.search(pattern,urlparse(url).path): urls[system+'|'+urlparse(url).path]=url
-    urls.update({
-      'Radix Themes|catalog':'https://www.radix-ui.com/themes/docs/overview/getting-started',
-      'Mantine|catalog':'https://mantine.dev/core/package/',
-      'React Aria|catalog':'https://react-aria.adobe.com/',
-      'Polaris|catalog':'https://shopify.dev/docs/api/app-home/polaris-web-components',
-      'Apple HIG|catalog':'https://developer.apple.com/tutorials/data/design/human-interface-guidelines/components.json',
-    })
-    for name in ['sheets','date-pickers','pickers','search-fields','sidebars','lists-and-tables','text-fields','disclosure-controls','progress-indicators','ratings-and-reviews','page-controls','steppers','drag-and-drop','alerts','scroll-views','split-views','toolbars','popovers','context-menus','menus','text-editing','undo-and-redo','charts','live-activities','keyboards','color-wells','file-management','loading','accessibility','token-fields']:
-        urls['Apple HIG|'+name]='https://developer.apple.com/tutorials/data/design/human-interface-guidelines/'+name+'.json'
+    # Replay the checked URL manifest; raw page content is deliberately not committed.
+    manifest=json.loads((P/'checked-pages-3.json').read_text())
+    urls={key:value['url'] for key,value in manifest.items() if value.get('cache')=='pages'}
     run(urls)

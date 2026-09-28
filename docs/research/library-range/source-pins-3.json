@@ -82,5 +82,20 @@
     "path": ".cache/sources/material3@60ff09436d5d477a4b9d02940f31eb01e1250620",
     "url": "https://github.com/material-components/material-components-android/tree/60ff09436d5d477a4b9d02940f31eb01e1250620",
     "checked": "2026-09-28"
+  },
+  "atlassian": {
+    "repo": "atlassian/atlassian-frontend-mirror",
+    "host": "bitbucket.org",
+    "sha": "a33189b5ea7a152af1ad537c6106f803a1f7a651",
+    "path": ".cache/sources/atlassian-official@a33189b5ea7a152af1ad537c6106f803a1f7a651",
+    "url": "https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/a33189b5ea7a152af1ad537c6106f803a1f7a651",
+    "checked": "2026-09-28"
+  },
+  "carbon-charts": {
+    "repo": "carbon-design-system/carbon-charts",
+    "sha": "26a7f620248caf53db3eaabd60df7f7ff44feb21",
+    "path": ".cache/sources/carbon-charts@26a7f620248caf53db3eaabd60df7f7ff44feb21",
+    "url": "https://github.com/carbon-design-system/carbon-charts/tree/26a7f620248caf53db3eaabd60df7f7ff44feb21",
+    "checked": "2026-09-28"
   }
 }
