@@ -58,12 +58,12 @@ test('Badge gallery splits the complete matrix into one specimen per tile', asyn
 });
 
 test("badge media and dismiss actions preserve accessible native structure", () => {
-  const html = renderToString(h(Badge, { variant: "modern", avatar: h("img", {src: "avatar.png", alt: ""}), onDismiss: () => {}, dismissLabel: "Remove Irene" }, "Irene"));
+  const html = renderToString(h(Badge, { variant: "modern", avatar: h("img", {src: "avatar.png", alt: ""}), onDismiss: () => {}, dismissLabel: "Remove Irene Yamaguchi" }, "Irene Yamaguchi"));
   assert.ok(!html.includes("shape-rounded"));
   assert.match(html, /area-badge__avatar/);
-  assert.match(html, /type="button"[^>]*aria-label="Remove Irene"/);
-  assert.throws(() => renderToString(h(Badge, {onDismiss: () => {}}, "Irene")), /dismissLabel/);
-  assert.throws(() => renderToString(h(Badge, {as: "a", href: "/", onDismiss: () => {}, dismissLabel: "Remove"}, "Irene")), /non-link/);
+  assert.match(html, /type="button"[^>]*aria-label="Remove Irene Yamaguchi"/);
+  assert.throws(() => renderToString(h(Badge, {onDismiss: () => {}}, "Irene Yamaguchi")), /dismissLabel/);
+  assert.throws(() => renderToString(h(Badge, {as: "a", href: "/", onDismiss: () => {}, dismissLabel: "Remove"}, "Irene Yamaguchi")), /non-link/);
 });
 
 test('Indicator keeps the full count accessible while capping its displayed value', () => {

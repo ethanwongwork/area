@@ -5,7 +5,7 @@
  */
 export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-27 after all phases (batches 1-3).
-  'toolbar', 'segmented', 'nav', 'menu', 'alert', 'toast',
+  'toolbar', 'split-button', 'segmented', 'nav', 'menu', 'alert', 'toast',
   'alignment-picker', 'badge', 'badge-group', 'box-field', 'breadcrumb',
   'button', 'button-group', 'checkbox', 'chip', 'code',
   'color-field', 'color-picker', 'color-swatch', 'color-swatch-picker', 'composer',
@@ -16,8 +16,6 @@ export const COMPLETE_COMPONENTS = new Set([
 
 /** Built/refined and awaiting owner approval; not completion. */
 export const REVIEW_COMPONENTS = new Set([
-  // Menu placement refined after approval (2026-09-27): docs/specs/split-button.md.
-  'split-button',
   // Changed 2026-09-27 after owner feedback (dividers, indicator, loaders).
   'avatar', 'code-block', 'indicator', 'skeleton', 'spinner',
   // Rebuilt after approval (layouts, sizes, linked cards, templates): docs/specs/card.md.

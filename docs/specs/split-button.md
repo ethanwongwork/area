@@ -161,6 +161,13 @@ Area:
 - Icon tool (ghost, icon only): anchored to the chevron's start edge; on the block axis it clears
   the toolbar it sits in by 4 (Figma), so the menu never overlaps the bar. Outside a toolbar it
   clears the chevron itself.
+- Horizontal start (owner, 2026-09-27: "I meant the horizontal alignment of where it starts"):
+  a text split's menu starts where its end edge meets the group's end edge (menu right = group
+  right; Notion, and Fluent, Polaris, shadcn, Mantine, Ant and Chakra align to the chevron's end,
+  which is the group's end). An icon tool's menu starts at the chevron's start edge (Figma).
+  Near a viewport edge the menu flips to the anchor's other edge (start-aligned) before it
+  shifts, so it always shares an edge with the button; it used to shift to the viewport padding
+  and align with neither.
 - Both use the shared placement (`useAnchoredPosition`, `anchorRect` for the toolbar case).
   Verified in headless Edge with a real pointer: tool menu start 96 = chevron 96, 4 below the
   bar; text menu 4 under the group.
@@ -217,3 +224,4 @@ the iOS 27 kit, read only) and the gallery's Toolbar / Tools tile:
 - 2026-09-27 · owner: where should the open menu be? → measured Notion (group, end-aligned, 4
   below) and Figma (chevron start, clears the toolbar by 4) → icon tools anchor to the chevron and
   clear the toolbar; text splits unchanged → headless Edge check (Menu placement).
+- 2026-09-27 · owner: horizontal start → end edge under text splits, chevron start for tools; edge flip before shift in `computePosition` (test added). Approved on this choice (owner: "split will be considered approved based on what you choose").

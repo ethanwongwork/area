@@ -70,12 +70,22 @@ export function computePosition(anchor: Rect, floating: { width: number; height:
 
   // Cross axis: align, then shift inside the viewport.
   const clamp = (value: number, size: number, limit: number) => Math.min(Math.max(value, padding), Math.max(padding, limit - padding - size));
+  // An edge-aligned surface that would leave the viewport flips to the anchor's other edge
+  // before it shifts, so it keeps sharing an edge with its anchor (a menu under a button near
+  // the start of the page starts at the button instead of floating at the viewport padding).
+  const place = (start: number, end: number, center: number, size: number, limit: number) => {
+    const fits = (value: number) => value >= padding && value + size <= limit - padding;
+    let value = options.align === "start" ? start : options.align === "end" ? end : center;
+    if (options.align !== "center" && !fits(value)) {
+      const other = options.align === "start" ? end : start;
+      if (fits(other)) value = other;
+    }
+    return clamp(value, size, limit);
+  };
   if (vertical) {
-    const start = anchor.x, end = anchor.x + anchor.width - floating.width, center = anchor.x + (anchor.width - floating.width) / 2;
-    x = clamp(options.align === "start" ? start : options.align === "end" ? end : center, floating.width, viewport.width);
+    x = place(anchor.x, anchor.x + anchor.width - floating.width, anchor.x + (anchor.width - floating.width) / 2, floating.width, viewport.width);
   } else {
-    const start = anchor.y, end = anchor.y + anchor.height - floating.height, center = anchor.y + (anchor.height - floating.height) / 2;
-    y = clamp(options.align === "start" ? start : options.align === "end" ? end : center, floating.height, viewport.height);
+    y = place(anchor.y, anchor.y + anchor.height - floating.height, anchor.y + (anchor.height - floating.height) / 2, floating.height, viewport.height);
   }
 
   const availableHeight = vertical ? Math.max(0, room(side)) : Math.max(0, viewport.height - 2 * padding);

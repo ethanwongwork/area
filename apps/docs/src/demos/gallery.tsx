@@ -928,15 +928,15 @@ export const GalleryComboboxCreate = () => {
 };
 export const GalleryComboboxRich = () => (
   <div style={comboFrame}><Combobox fullWidth aria-label="Assignee" placeholder="Assign to" options={[
-    { value: "irene-park", label: "Irene Park", icon: <PersonSmallIcon />, description: "Owner" },
-    { value: "irene-chen", label: "Irene Chen", icon: <PersonSmallIcon />, description: "Editor" },
-    { value: "irene-lee", label: "Irene Lee", icon: <PersonSmallIcon />, description: "Viewer" },
+    { value: "irene-yamaguchi", label: "Irene Yamaguchi", icon: <PersonSmallIcon />, description: "Owner" },
+    { value: "design", label: "Design team", icon: <PersonSmallIcon />, description: "Editors" },
+    { value: "engineering", label: "Engineering team", icon: <PersonSmallIcon />, description: "Viewers" },
   ]} /></div>
 );
 export const GalleryComboboxDisabledOption = () => (
   <div style={comboFrame}><Combobox fullWidth aria-label="Assignee" placeholder="Assign to" options={[
-    { value: "irene-park", label: "Irene Park" },
-    { value: "irene-chen", label: "Irene Chen" },
+    { value: "irene-yamaguchi", label: "Irene Yamaguchi" },
+    { value: "design", label: "Design team" },
     { value: "guest", label: "Guest", description: "Invited", disabled: true },
   ]} /></div>
 );
@@ -1007,7 +1007,7 @@ export const GalleryContextMenuDisabled = () => (
  * link for 700ms (or on keyboard focus), closed 300ms after it leaves both.
  */
 const personCard = <>
-  <div className="area-hover-card__identity"><Avatar size="lg" fallback="I" /><div><PopoverTitle>Irene</PopoverTitle><span className="area-hover-card__meta">@irene</span></div></div>
+  <div className="area-hover-card__identity"><Avatar size="lg" fallback="IY" /><div><PopoverTitle>Irene Yamaguchi</PopoverTitle><span className="area-hover-card__meta">@irene</span></div></div>
   <PopoverDescription>Writes the analytical engine notes. Maintains the math section.</PopoverDescription>
   <div className="area-hover-card__meta"><span>Joined 1843</span><span>12 pages</span></div>
 </>;
@@ -1423,8 +1423,8 @@ export const GalleryNavSidebar = () => (
       </Nav>
     </div>
     <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-12) var(--area-space-16)" }}>
-      <Avatar size="sm" fallback="I" role="img" aria-label="Irene" />
-      <span style={{ display: "grid" }}><span>Irene</span><span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-xs-size)", lineHeight: "var(--area-text-xs-leading)" }}>Plus</span></span>
+      <Avatar size="sm" fallback="IY" role="img" aria-label="Irene Yamaguchi" />
+      <span style={{ display: "grid" }}><span>Irene Yamaguchi</span><span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-xs-size)", lineHeight: "var(--area-text-xs-leading)" }}>Plus</span></span>
     </div>
   </aside>
 );
