@@ -1,0 +1,5405 @@
+{
+  "schemaVersion": 1,
+  "checked": "2026-09-28",
+  "areaStartingCommit": "c585f8c5f38705a7efa79bf05148a8c6989b142a",
+  "briefSnapshot": {
+    "path": "/Users/ethanwong/Desktop/area/.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md",
+    "sha256": "3bd0d87904420da7aa4bee52093206737f7bb4b822539dc1fc323d984f1ac1af",
+    "checked": "2026-09-28",
+    "note": "Read-only fallback supplied by owner; absent from starting main. This working-file snapshot is not claimed to be at the Area starting commit."
+  },
+  "methodology": {
+    "scope": "Public documentation, launch pages, pricing pages and public source listings; read-only public browser inspection resolved tweakcn, 21st.dev and Lovable pricing. No logged-in product testing.",
+    "meaning": "documented means the cited page says it, not that the product was independently exercised. Vendor claims and editorial inferences are distinguished. not found is limited to listed search scope.",
+    "layers": {
+      "foundations": "Shared visual values",
+      "inventory": "Component/variant/size/tone/state inclusion and defaults",
+      "structure": "Anatomy and layout by family",
+      "patterns": "Screens, flows and layouts"
+    },
+    "github": "Distinguishes native remote writes from local code export, agent-mediated edits and read-only access.",
+    "pricing": "Snapshot of visible plan/locale/billing information; not a quote. Plan limits, taxes and enterprise terms not exhaustively normalized.",
+    "funding": "Confirmed historical events or explicitly qualified gaps; parent-company rounds, acquisitions and sponsorship are not product-specific venture totals."
+  },
+  "counts": {
+    "tools": 34,
+    "requiredFieldsPerTool": 14,
+    "toolFieldCells": 476,
+    "figmaFeatures": 6,
+    "datedClaims": 482,
+    "distinctToolSourceUrls": 131,
+    "statusCounts": {
+      "documented": 320,
+      "partial": 94,
+      "not found": 43,
+      "vendor claim": 9,
+      "reported": 5,
+      "conflicting": 1,
+      "inference": 10
+    }
+  },
+  "tools": [
+    {
+      "id": "figma",
+      "name": "Figma",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Design, prototyping, code generation and developer handoff suite for product teams.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/blog/code-on-the-figma-canvas/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Make creates a repository and pushes generated app changes. Native PR mechanics are not confirmed by this help page; broader “prompt to PR” marketing also involves agents.",
+          "sources": [
+            {
+              "url": "https://help.figma.com/hc/en-us/articles/35463818346647-Push-from-Figma-Make-to-GitHub",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.figma.com/build-ship/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Design variables/styles and reusable team Skills; Code Connect maps implementations to design components.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/blog/config-2026-recap/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://developers.figma.com/docs/code-connect/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Reusable design libraries and linked code components; Code Layers can place real code on the canvas.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/blog/code-on-the-figma-canvas/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://developers.figma.com/docs/code-connect/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Editable design anatomy; Code Layers add live code alongside native layers. These are distinct representations.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/blog/code-on-the-figma-canvas/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Make builds interactive app prototypes; Code Layers support code-backed canvas exploration.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/blog/code-on-the-figma-canvas/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://help.figma.com/hc/en-us/articles/35463818346647-Push-from-Figma-Make-to-GitHub",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Code Connect and MCP expose existing component implementations and design context; repository import is advertised for code workflows.",
+          "sources": [
+            {
+              "url": "https://developers.figma.com/docs/code-connect/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://developers.figma.com/docs/figma-mcp-server/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.figma.com/blog/code-on-the-figma-canvas/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Design libraries plus reusable code layers; maturity and availability vary by product.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/blog/code-on-the-figma-canvas/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Code Layers and Make run code. Ordinary design components remain native Figma objects.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/blog/code-on-the-figma-canvas/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Make supports app sharing/publishing and GitHub delivery; Dev Mode has ready-for-dev/completed statuses.",
+          "sources": [
+            {
+              "url": "https://help.figma.com/hc/en-us/articles/35463818346647-Push-from-Figma-Make-to-GitHub",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://help.figma.com/hc/en-us/articles/23918228264855-Dev-Mode-ready-for-dev-view",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Code Connect integrations include React/React Native, HTML-based frameworks, SwiftUI and Jetpack Compose. Mapping support is not multi-framework app generation.",
+          "sources": [
+            {
+              "url": "https://developers.figma.com/docs/code-connect/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud design/Make services; MCP has remote and desktop connection options.",
+          "sources": [
+            {
+              "url": "https://developers.figma.com/docs/figma-mcp-server/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Free Starter; Professional Full seat displayed at $16/month. Billing-toggle basis not confirmed in extracted page; seat type and AI allowances matter.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/pricing/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Public company: IPO announced July 2025. This is corporate financing, not funding for an individual feature.",
+          "sources": [
+            {
+              "url": "https://investor.figma.com/news-events/news/news-details/2025/Figma-Announces-Pricing-of-Initial-Public-Offering/default.aspx",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      },
+      "features": {
+        "Make": {
+          "status": "partial",
+          "value": "Prompted app creation, production-code workflows and repository push. Import/sync behavior differs across older help and newer launch material.",
+          "sources": [
+            {
+              "url": "https://help.figma.com/hc/en-us/articles/35463818346647-Push-from-Figma-Make-to-GitHub",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.figma.com/blog/workflow-lab-deploying-designs-directly-with-figma-make/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "Code Layers": {
+          "status": "vendor claim",
+          "value": "Figma Design announcement introduces live code and GitHub/local-folder import; Sites also has a separately documented Code Layers feature. Announcement rollout is not proof every account has access.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/blog/code-on-the-figma-canvas/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://help.figma.com/hc/en-us/articles/32641332638999-Add-a-code-layer-to-a-site",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "Skills": {
+          "status": "documented",
+          "value": "Reusable agent workflows and team conventions announced at Config 2026.",
+          "sources": [
+            {
+              "url": "https://www.figma.com/blog/config-2026-recap/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "Code Connect": {
+          "status": "documented",
+          "value": "Maps Figma components to production implementations; provides code examples/context.",
+          "sources": [
+            {
+              "url": "https://developers.figma.com/docs/code-connect/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "Dev Mode": {
+          "status": "documented",
+          "value": "Inspection and handoff with explicit ready-for-dev and completed states. These do not establish that code was merged.",
+          "sources": [
+            {
+              "url": "https://help.figma.com/hc/en-us/articles/23918228264855-Dev-Mode-ready-for-dev-view",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "MCP": {
+          "status": "documented",
+          "value": "Remote/desktop context for agents; remote server can also write native canvas content.",
+          "sources": [
+            {
+              "url": "https://developers.figma.com/docs/figma-mcp-server/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://developers.figma.com/docs/figma-mcp-server/write-to-canvas/",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "claude-design",
+      "name": "Claude Design",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Beta design creation workspace for prototypes, presentations and other visual artifacts; available on paid Claude plans.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604416-get-started-with-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Imports a system from a repository through /design-sync; hands designs to Claude Code via /design. Native Design PR/direct-push behavior: not found.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604416-get-started-with-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Reusable brand fonts, colors and system rules, extracted from code or supplied references.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Reusable system components; organizations can keep multiple systems.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Components and layouts can be generated/edited; a guarded anatomy-option schema is not documented.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Generate prototypes and presentations using the selected organization system.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604416-get-started-with-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Imports existing code assets and updates reusable design-system context.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Organization systems and generated artifacts; not evidence of a public, universally re-themed component catalog.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://support.claude.com/en/articles/14604416-get-started-with-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Interactive prototypes execute in sandboxed artifacts; PDF/PPTX exports are different output types.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604416-get-started-with-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Shared links with viewing/commenting/editing; exports include HTML/ZIP/PDF/PPTX and Claude Code handoff.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604416-get-started-with-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "partial",
+          "value": "React codebase design-sync workflow documented; general guaranteed framework-output matrix: not found.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud artifact sandbox plus local or web Claude Code handoff.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604416-get-started-with-claude-design",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://support.claude.com/en/articles/14604406-claude-design-admin-guide-for-team-and-enterprise-plans",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Included subject to usage allowances on eligible paid plans. Claude Pro $20/month monthly or $200/year; current help describes shared Claude usage.",
+          "sources": [
+            {
+              "url": "https://support.claude.com/en/articles/14604416-get-started-with-claude-design",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://claude.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Parent Anthropic announced $65B Series H on May 28, 2026; not a Claude Design-specific round.",
+          "sources": [
+            {
+              "url": "https://www.anthropic.com/news/series-h",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v0",
+      "name": "v0",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "AI app/UI builder with reusable team design-system context.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/design-systems-2",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "Imports existing repos; automatically commits/pushes a working branch. Publish creates/reuses a PR and merges subject to protection rules. Artifacts: application source, including UI.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Imports tokens and conventions from repository, Figma, Storybook or attachments into reusable system skills.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/design-systems-2",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Reuses imported components; validates system context through a starter app.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/design-systems-2",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Edits generated application/component source; fixed validated structural option coverage: not found.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/design-systems-2",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Generates apps under a saved personal/team system.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/design-systems-2",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Explicit repository/system import and persistent team reuse.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/design-systems-2",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://v0.app/docs/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Imported systems and generated starter applications.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/design-systems-2",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Source-backed app previews and CI checks before publishing.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Preview and GitHub PR publishing; Vercel deployment workflow.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Next.js is the default/recommended full-stack target; other frameworks can be used with less predictable results.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/full-stack-apps",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud app-generation and preview service; repository code remains available to local development.",
+          "sources": [
+            {
+              "url": "https://v0.app/docs/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Free tier; Plus displayed $30/user/month with a promotional crossed-out price; Business $100/user/month; Enterprise custom. Promotion duration not confirmed.",
+          "sources": [
+            {
+              "url": "https://v0.app/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Parent Vercel announced Series F at a $9.3B valuation in September 2025; not a v0-specific financing.",
+          "sources": [
+            {
+              "url": "https://vercel.com/blog/series-f",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "lovable",
+      "name": "Lovable",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "AI app builder with dedicated reusable design-system projects for teams.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "Full application source syncs both ways on the active branch. Design-system releases commit versioned system source/metadata; GitHub workflow includes branches and PRs.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.lovable.dev/integrations/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Tokens captured in .lovable/design-system.json and system rules.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Extracts component props, variants and examples; releases reusable inventories.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Author/edit component implementations in the system project; schema captures their API. Universal guarded anatomy choices: not found.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Consumer projects build screens against an attached system.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Imports repository/package systems. Consumer updates replace system-owned copied files and merge dependencies; this is not a promise to preserve manual edits inside those files.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Private team systems with documented components and examples.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "vendor claim",
+          "value": "Consumers receive real component source; adherence scanning is a vendor capability, not an independently tested conformance guarantee.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Versioned system releases and consumer update acceptance; app repository delivery.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.lovable.dev/integrations/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Native React system path; Enterprise package integration. Do not assume arbitrary framework parity.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud builder with GitHub source available for local development.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/integrations/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Free; Pro $25/workspace/month and Business $50/workspace/month at the displayed 100-credit setting, monthly billing, unlimited users. Enterprise custom. Design systems are included in paid plans.",
+          "sources": [
+            {
+              "url": "https://docs.lovable.dev/features/design-systems",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://lovable.dev/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Announced $400M Series C at $13.3B valuation, August 12, 2026.",
+          "sources": [
+            {
+              "url": "https://lovable.dev/blog/series-c",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "bolt",
+      "name": "Bolt",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "AI website/web-app/mobile-app builder for developers and non-developers.",
+          "sources": [
+            {
+              "url": "https://support.bolt.new/building/intro-bolt",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "Imports/creates full app repositories and automatically commits/syncs branch changes. PR merging takes place on GitHub, not inside Bolt.",
+          "sources": [
+            {
+              "url": "https://support.bolt.new/integrations/git",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "vendor claim",
+          "value": "Design-system agents learn existing tokens and style standards.",
+          "sources": [
+            {
+              "url": "https://bolt.new/blog/bolt-design-system-agents",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "vendor claim",
+          "value": "Agents reuse existing components rather than requiring only generated replacements.",
+          "sources": [
+            {
+              "url": "https://bolt.new/blog/bolt-design-system-agents",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "General component-source editing; constrained anatomy configurator not found.",
+          "sources": [
+            {
+              "url": "https://support.bolt.new/building/intro-bolt",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Generates complete app screens and flows.",
+          "sources": [
+            {
+              "url": "https://support.bolt.new/building/intro-bolt",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "vendor claim",
+          "value": "Design-system agent workflow explicitly targets existing systems.",
+          "sources": [
+            {
+              "url": "https://bolt.new/blog/bolt-design-system-agents",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Generated apps and imported design-system assets.",
+          "sources": [
+            {
+              "url": "https://support.bolt.new/building/intro-bolt",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://bolt.new/blog/bolt-design-system-agents",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Runnable application previews with source delivery.",
+          "sources": [
+            {
+              "url": "https://support.bolt.new/building/intro-bolt",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://support.bolt.new/integrations/git",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Application publishing plus GitHub branch workflow.",
+          "sources": [
+            {
+              "url": "https://support.bolt.new/building/intro-bolt",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://support.bolt.new/integrations/git",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "JavaScript web stacks and Expo mobile workflow.",
+          "sources": [
+            {
+              "url": "https://support.bolt.new/building/intro-bolt",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "partial",
+          "value": "Browser builder with managed services; fully offline execution not confirmed.",
+          "sources": [
+            {
+              "url": "https://support.bolt.new/building/intro-bolt",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Free; Pro starts at $25/month billed monthly; token usage limits apply.",
+          "sources": [
+            {
+              "url": "https://bolt.new/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "reported",
+          "value": "Parent StackBlitz: reported $105.5M Series B, January 2025; not a Bolt-only round.",
+          "sources": [
+            {
+              "url": "https://www.cbinsights.com/company/stackblitz/financials",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "framer",
+      "name": "Framer",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Visual website builder and publishing platform for designers and web teams.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "not found",
+          "value": "not found: native GitHub source push/PR; code-component reuse does not establish repo synchronization; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/help/articles/sharing-components/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.framer.com/help/articles/porting-your-data-from-framer/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Reusable styles within shared design/component libraries.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/help/articles/sharing-components/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Reusable components shared across projects.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/help/articles/sharing-components/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Component variants and editable website layouts.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/help/articles/sharing-components/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Websites and templates assembled in the visual editor.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "Manages Framer component libraries; arbitrary existing application-repo management not confirmed.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/help/articles/sharing-components/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Shared Framer components; code components can be distributed via import URLs.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/developers/component-sharing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Published websites and code components run; not every canvas asset is portable application source.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/developers/component-sharing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "conflicting",
+          "value": "Hosted sites/custom domains/staging. Official export pages conflict: porting guidance says HTML/CSS/JS download, while self-hosting help says no HTML export.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/pricing",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.framer.com/help/articles/porting-your-data-from-framer/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.framer.com/ja/help/articles/can-i-export-my-website-to-html-and-self-host-it/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "partial",
+          "value": "React code components inside Framer; framework-neutral whole-app export not established.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/developers/component-sharing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud editor/publishing service.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Free; Basic $10/month and Pro $30/month on yearly billing; Enterprise custom.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Announced $100M Series D at $2B valuation, August 2025.",
+          "sources": [
+            {
+              "url": "https://www.framer.com/blog/series-d/",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "paper",
+      "name": "Paper",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "HTML/CSS design canvas for designers and coding agents.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "MCP agents can bridge design and repository code. Native GitHub push/PR mechanism: not found.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "vendor claim",
+          "value": "Tokens and style synchronization advertised.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "vendor claim",
+          "value": "Reusable components and repository-aware agent workflows advertised.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "HTML/CSS canvas editing exposes real layout structure.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Compose screens and explorations on a code-based canvas.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "Agent-assisted token/style/component synchronization; merge ownership and release governance not confirmed.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Code-based designs, shader/media resources.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "partial",
+          "value": "HTML/CSS canvas is live code; full imported application behavior is not guaranteed.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Shared collaborative design work and exports.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "HTML/CSS native canvas; MCP-mediated output is agent-dependent.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Desktop and web surfaces; model/agent execution depends on connected services.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Free; Pro $20/editor/month monthly or $16/editor/month annually; Organization custom.",
+          "sources": [
+            {
+              "url": "https://paper.design/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Homepage announces $34M Series A with Accel and ICONIQ.",
+          "sources": [
+            {
+              "url": "https://paper.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "pencil",
+      "name": "Pencil (pen.dev)",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Design canvas integrated with desktop/code-editor workflows.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Agents edit local source and .pen files, which can live in Git. Native GitHub PR/direct-push control: not found.",
+          "sources": [
+            {
+              "url": "https://docs.pencil.dev/design-and-code/design-to-code",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Variables for colors, spacing and typography; agent can sync CSS tokens on request.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.pencil.dev/design-and-code/design-to-code",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Reusable symbols, slots and component libraries.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Editable component/layout anatomy and slot composition.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Screen design and agent-assisted implementation.",
+          "sources": [
+            {
+              "url": "https://docs.pencil.dev/design-and-code/design-to-code",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Reads existing workspace code; token synchronization is requested, not automatic.",
+          "sources": [
+            {
+              "url": "https://docs.pencil.dev/design-and-code/design-to-code",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Design libraries and built-in icons; .pen is a design document, separate from application source.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "partial",
+          "value": "HTML import/export and code generation; do not equate all design nodes with running product components.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.pencil.dev/design-and-code/design-to-code",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Link sharing and design/code export.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Docs describe React, Next.js, Vue, Svelte and HTML agent targets; not deterministic cross-framework conformance.",
+          "sources": [
+            {
+              "url": "https://docs.pencil.dev/design-and-code/design-to-code",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Desktop/editor integration; connected AI agents may use cloud models.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.pencil.dev/design-and-code/design-to-code",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Currently free; bring-your-own agent subscriptions/keys may cost extra.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.pen.dev/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "partial",
+          "value": "Lists a16z speedrun backing; round amount not found.",
+          "sources": [
+            {
+              "url": "https://www.pen.dev/",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "subframe",
+      "name": "Subframe",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Designer-focused macOS canvas, coding agent and browser for existing product code.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "Works on local source files, creates branches and PRs. Changes can include tokens, components and application pages.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Imports and edits existing design tokens.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.subframe.com/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Imports components and synchronizes props, slots and variants.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Canvas component/layout editing plus source changes.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Builds product screens and prototypes with the system.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Explicit import and ongoing reuse of production components/tokens.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Built-in component library plus imported team components.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Edits code files and previews them in a browser.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Share prototypes and make PRs; hosting a full production app remains a separate workflow.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Advertises web stacks, with React the best-supported experience.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Local macOS source/agent workflow with a cloud canvas.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Canonical homepage: Free one-project plan; Pro $20/editor/month. Agent subscription or credits may be additional. Older indexed pages show different prices.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: primary-source round amount or complete funding disclosure; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.subframe.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.subframe.com/design-systems",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "dessn",
+      "name": "Dessn",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Production-code design exploration for designers, PMs and engineers.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "Explicitly read-only GitHub/GitLab access: does not modify or push repository code. Exports code for handoff or opening in Cursor.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Learns and reuses the connected product’s styles/system.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Works with existing components and routes.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Explores component/layout changes on the canvas.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Flow canvas for alternative screens/states.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Uses an existing system; authoritative system-source maintenance is handed off.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "The connected product’s components, screens and explorations.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Compiles existing product code into the design environment.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Share/comment on explorations and export proposed code.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Lists React, Vue.js, Electron and React Native.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "partial",
+          "value": "Remote repository compilation without local setup is advertised; full runtime architecture not found.",
+          "sources": [
+            {
+              "url": "https://www.dessn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Free; Starter $39/user/month; Teams $139/user/month; Enterprise custom.",
+          "sources": [
+            {
+              "url": "https://www.dessn.ai/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "reported",
+          "value": "Reported $6M funding, May 12, 2026.",
+          "sources": [
+            {
+              "url": "https://techcrunch.com/2026/05/12/dessn-raises-6m-for-its-production-focused-design-tool/",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "onlook",
+      "name": "Onlook",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Open-source visual editor for designers working on real application code.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "GitHub/local code delivery advertised; exact native PR versus direct-push behavior not found.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Visual style edits and existing-system import.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Uses existing components, including shadcn/Storybook workflows.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Visual layout and component-source editing.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Build and edit application screens.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Imports existing application/system code.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Team code and component previews.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Visual editing of the actual application.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "GitHub/local export and hosted link/custom-domain options advertised.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Lists React, Next.js, Vite and Tailwind workflows.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Local-first editor; hosted service also advertised.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Free local/open-source offering; hosted/cloud pricing by inquiry.",
+          "sources": [
+            {
+              "url": "https://www.onlook.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "partial",
+          "value": "Y Combinator Winter 2025 company; round amount not found on its YC profile.",
+          "sources": [
+            {
+              "url": "https://www.ycombinator.com/companies/onlook",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "noon",
+      "name": "Noon",
+      "fields": {
+        "identity": {
+          "status": "vendor claim",
+          "value": "Early-access product design environment joining appearance and behavior on a canvas.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "not found",
+          "value": "not found: github; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "not found",
+          "value": "not found: foundations; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "not found",
+          "value": "not found: inventory; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Code-oriented canvas editing advertised; detailed anatomy controls not found.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "vendor claim",
+          "value": "Advertises building and testing product flows.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "not found",
+          "value": "not found: existingSystem; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "not found",
+          "value": "not found: content; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "partial",
+          "value": "Running product behavior is advertised; supported runtime details not found.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "not found",
+          "value": "not found: publishing; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "not found",
+          "value": "not found: frameworks; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "not found",
+          "value": "not found: execution; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "not found",
+          "value": "not found: pricing; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://noon.design/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Founder announcement reports $44M funding, April 1, 2026.",
+          "sources": [
+            {
+              "url": "https://noon.design/announcing-noon",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cursor-design",
+      "name": "Cursor Design Mode / browser visual editor",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Browser visual editing inside Cursor for people working with application code.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Agent applies visual edits to underlying workspace files. Design-mode-specific GitHub push/PR mechanism: not found.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "partial",
+          "value": "Visual property edits can update styles; dedicated system-wide parameter management not documented.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Exposes existing React component props and variants.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Rearranges elements/layouts; agent locates and edits source.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Iterates on real app screens and component states.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "Edits existing code; a separate design-system lifecycle manager is not documented.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "User’s app/components, not a first-party universal inspiration library.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Browser shows the running application.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "not found",
+          "value": "not found: Design Mode-specific public publishing workflow; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Web apps; React-specific prop inspection documented.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "partial",
+          "value": "Editor/browser workspace with agent inference; fully offline operation not established.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/browser-visual-editor",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Hobby free; Pro $20/month; higher and team plans available.",
+          "sources": [
+            {
+              "url": "https://cursor.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Parent Cursor announced $2.3B Series D at $29.3B valuation, November 2025.",
+          "sources": [
+            {
+              "url": "https://cursor.com/blog/series-d",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "builder",
+      "name": "Builder.io (Builder Code / Content)",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Visual/AI code generation plus a separate visual content platform. Fusion renamed Builder Code; Publish renamed Builder Content.",
+          "sources": [
+            {
+              "url": "https://site.builder.io/blog/builder-product-name-change",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "Connects existing application and system repos; proposes production source changes through PRs.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/c/docs/fusion-projects-overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Indexes existing design tokens for agent/visual use.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/updates",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Design-system intelligence indexes components and standards.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/c/docs/fusion-projects-overview",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.builder.io/updates",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Visual and AI edits to production component/layout code.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/c/docs/fusion-projects-overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Builds pages and product experiences using existing systems.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/c/docs/fusion-projects-overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Explicit system-repo indexing and component reuse.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/c/docs/fusion-projects-overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Existing code components; content models/templates in the separate Content product.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/c/docs/fusion-projects-overview",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://site.builder.io/fusion",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Repository-backed application previews; content runtime is a separate integration.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/c/docs/fusion-projects-overview",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://site.builder.io/fusion",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Preview URLs, review branches, PRs and local export.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/updates",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://site.builder.io/fusion",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "React/Next.js, Vue, Svelte and Angular advertised.",
+          "sources": [
+            {
+              "url": "https://site.builder.io/fusion",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud project environments; local code/agent integration via MCP.",
+          "sources": [
+            {
+              "url": "https://site.builder.io/m/pricing",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.builder.io/updates",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Free, Pro, Team and Enterprise tiers; current paid amounts not found in extracted page. Design-system intelligence listed for Enterprise.",
+          "sources": [
+            {
+              "url": "https://site.builder.io/m/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Announced $20M funding led by M12 in May 2024; a confirmed historical event, not a latest-total claim.",
+          "sources": [
+            {
+              "url": "https://www.builder.io/blog/builder-closes-20-million-funding-m12-microsoft",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "plasmic",
+      "name": "Plasmic",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Visual app/page builder integrating developers’ existing code components.",
+          "sources": [
+            {
+              "url": "https://www.plasmic.app/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "GitHub app/action can generate a new app or run plasmic sync in an existing repo. Codegen supports direct pushes or PRs.",
+          "sources": [
+            {
+              "url": "https://docs.plasmic.app/learn/github-action/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Reusable style tokens and mixins.",
+          "sources": [
+            {
+              "url": "https://github.com/elasticpath/plasmic",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Registered React components, props, variants and reusable Plasmic components.",
+          "sources": [
+            {
+              "url": "https://github.com/elasticpath/plasmic",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Slots and editable anatomy, including headless component composition.",
+          "sources": [
+            {
+              "url": "https://github.com/elasticpath/plasmic",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Compose complete pages/apps using registered components.",
+          "sources": [
+            {
+              "url": "https://www.plasmic.app/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Register existing React components and maintain generated components through codegen.",
+          "sources": [
+            {
+              "url": "https://github.com/elasticpath/plasmic",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.plasmic.app/learn/github-action/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Code-component integrations and reusable visual components/templates.",
+          "sources": [
+            {
+              "url": "https://www.plasmic.app/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://github.com/elasticpath/plasmic",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Registered React components run in the editor; generated UI runs in the target app.",
+          "sources": [
+            {
+              "url": "https://github.com/elasticpath/plasmic",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Hosted/headless publishing or repository codegen delivery.",
+          "sources": [
+            {
+              "url": "https://www.plasmic.app/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.plasmic.app/learn/github-action/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "GitHub workflow documents Next.js, Gatsby and plain React, JS/TS; not a shared native-platform conformance contract.",
+          "sources": [
+            {
+              "url": "https://docs.plasmic.app/learn/github-action/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud studio with local/hosted application integration; codegen or runtime loader.",
+          "sources": [
+            {
+              "url": "https://docs.plasmic.app/learn/codegen-guide/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Free; Starter $39/month, Pro $103/month, Scale $399/month on annual billing; Enterprise custom.",
+          "sources": [
+            {
+              "url": "https://www.plasmic.app/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: verified public round amount; funding queries also returned unrelated Plasmapp; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.plasmic.app/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.plasmic.app/blog",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "penpot",
+      "name": "Penpot",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Open-source collaborative design/prototyping for designers and developers.",
+          "sources": [
+            {
+              "url": "https://penpot.app/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Design/token export and integrations; native application-repo push/PR not found. MCP canvas editing is separate.",
+          "sources": [
+            {
+              "url": "https://penpot.app/integrations-api",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Design tokens, aliases and themes.",
+          "sources": [
+            {
+              "url": "https://help.penpot.app/user-guide/design-systems/design-tokens/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Reusable components, variants and libraries.",
+          "sources": [
+            {
+              "url": "https://github.com/penpot/penpot/blob/develop/README.md",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Editable design anatomy and web-oriented layout.",
+          "sources": [
+            {
+              "url": "https://penpot.app/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "partial",
+          "value": "Design screens and prototypes; production app source equivalence not established.",
+          "sources": [
+            {
+              "url": "https://penpot.app/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Manages design libraries/tokens; external code integrations require a separate pipeline.",
+          "sources": [
+            {
+              "url": "https://help.penpot.app/user-guide/design-systems/design-tokens/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://penpot.app/integrations-api",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Reusable design libraries/templates.",
+          "sources": [
+            {
+              "url": "https://penpot.app/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "partial",
+          "value": "Web-oriented design assets and inspectable output; not every design component is an imported production runtime.",
+          "sources": [
+            {
+              "url": "https://penpot.app/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Shared design/prototype links and asset exports.",
+          "sources": [
+            {
+              "url": "https://penpot.app/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "partial",
+          "value": "Web standards and token/API export; no guaranteed multi-framework app generator identified.",
+          "sources": [
+            {
+              "url": "https://penpot.app/integrations-api",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Hosted cloud or self-hosted open-source web application.",
+          "sources": [
+            {
+              "url": "https://penpot.app/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Professional free; Unlimited $7/editor/month capped at $175/month; Enterprise $25/member/month; Private Server from $50,000/year.",
+          "sources": [
+            {
+              "url": "https://penpot.app/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Official history reports $8M Series A in 2022 and $12M Series A+ in 2023.",
+          "sources": [
+            {
+              "url": "https://community.penpot.app/t/faq-penpots-journey-so-far-timeline/2961",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "mobbin",
+      "name": "Mobbin",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Shipped-product screenshot and flow research library for product designers.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "not found",
+          "value": "not found: github; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://mobbin.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "inference",
+          "value": "Visual references; not a token-authoring system.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "inference",
+          "value": "Screen/pattern research taxonomy, not a maintained code-component inventory.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Reference screen anatomy; code editing not documented.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Browse product screens and flows.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "not found",
+          "value": "not found: existing design-system source management; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://mobbin.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Screenshots, flow videos and navigable references; collections and Figma workflows.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "References are captured screens/flows, not installable production component implementations.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Share collections and collaborate on references.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "partial",
+          "value": "Framework-neutral reference material; executable framework output not found.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud web library.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Free access plus paid plans. Retrieved locale: Pro ¥1,500/month and Team ¥2,400/member/month with annual billing (JPY); USD price not confirmed. MCP/API availability depends on plan.",
+          "sources": [
+            {
+              "url": "https://mobbin.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "reported",
+          "value": "CB Insights reports a November 2020 grant; amount not found. This does not establish current total funding.",
+          "sources": [
+            {
+              "url": "https://www.cbinsights.com/company/mobbin/financials",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "21st",
+      "name": "21st.dev",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Component/theme/template registry and agent UI ecosystem for developers.",
+          "sources": [
+            {
+              "url": "https://docs.21st.dev/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "CLI installs source locally and publishes registry items. Native GitHub push/PR for that install workflow: not found.",
+          "sources": [
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Theme CSS, theme editor and installable themes.",
+          "sources": [
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://mcp.21st.dev/changelog",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Discover/install components and their dependencies; publish registry items.",
+          "sources": [
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Editable component source; registry-wide guarded anatomy configuration not established.",
+          "sources": [
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://mcp.21st.dev/changelog",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Templates and composed UI examples.",
+          "sources": [
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "Theme/design context can be supplied; release governance for an arbitrary external system not confirmed.",
+          "sources": [
+            {
+              "url": "https://docs.21st.dev/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://mcp.21st.dev/changelog",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "React components, themes, templates and live previews.",
+          "sources": [
+            {
+              "url": "https://docs.21st.dev/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Installable code; Studio includes live editing. “Fixed look” is too broad.",
+          "sources": [
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://mcp.21st.dev/changelog",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "CLI/Studio publication and registry distribution.",
+          "sources": [
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://mcp.21st.dev/changelog",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "React component ecosystem; agent SDK has additional targets distinct from the component registry.",
+          "sources": [
+            {
+              "url": "https://www.ycombinator.com/companies/21st",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud catalog/editor and local CLI installation.",
+          "sources": [
+            {
+              "url": "https://docs.21st.dev/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.npmjs.com/package/%4021st-dev/cli",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Public page on annual billing: Builder $6/month; Builder + AI $15/month at the selected 500-credit setting; Team $7.50/seat/month. Author-sold templates can cost extra.",
+          "sources": [
+            {
+              "url": "https://21st.dev/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "partial",
+          "value": "Y Combinator Winter 2026; round amount not found on the YC profile.",
+          "sources": [
+            {
+              "url": "https://www.ycombinator.com/companies/21st",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "supernova",
+      "name": "Supernova",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Design-system data, documentation and code-delivery platform.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "Exporter opens/updates a GitHub PR on a Supernova branch. Delivers generated token/style/asset outputs; not automatically an entire application.",
+          "sources": [
+            {
+              "url": "https://learn.supernova-docs.io/latest/code-integration/code-delivery/open-a-pull-request/git-hub-jPO6p0St",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Token management, themes and multibrand organization.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Component documentation, status/health and adoption tracking.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Documents existing anatomy; arbitrary component-structure authoring not confirmed.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "partial",
+          "value": "Documents patterns; interactive generation across all patterns not confirmed.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Imports and manages system data, documentation and delivery.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Team system documentation, tokens and components.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "partial",
+          "value": "Code delivery/embeds and machine-readable context; not all documented content is executable.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Public/private documentation and exporter PR delivery.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://learn.supernova-docs.io/latest/code-integration/code-delivery/open-a-pull-request/git-hub-jPO6p0St",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Exporter targets include web/React, iOS, Android, React Native and Flutter; export formats are not component behavior parity.",
+          "sources": [
+            {
+              "url": "https://learn.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud platform with code/export integrations.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Free; Pro displayed at $35/editor/month; Enterprise custom. Billing-toggle basis not confirmed.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Announced $4.8M seed in November 2022; historical event, not latest total.",
+          "sources": [
+            {
+              "url": "https://www.supernova.io/blog/supernovas-seed-round-and-our-new-design-token-manager",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "knapsack",
+      "name": "Knapsack",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Design-system workspace connecting documentation, tokens and production components.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "Git storage mode versions YAML/JSON docs, tokens, pattern definitions and demos with PR/CI workflows. Database storage is an alternative; do not assume every installation stores content in Git.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/get-started/storage-options",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Token import/management from design and token tooling.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Managed component/pattern inventory and documentation.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Compose production component props/slots; arbitrary anatomy changes remain implementation work.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Live component composition and prototyping.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Connects existing component libraries and token pipelines.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.knapsack.cloud/get-started/knapsack-config",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Organization-owned system documentation and production component demos.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Framework renderers execute connected production components.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/get-started/knapsack-config",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Deployed shared workspace, Git review/CI or database-backed content.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/get-started/storage-options",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "React, Vue, Twig, Web Components, Angular, HTML and Handlebars renderers.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/get-started/knapsack-config",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Local build/dev workflow and deployed cloud workspace.",
+          "sources": [
+            {
+              "url": "https://docs.knapsack.cloud/get-started/knapsack-config",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.knapsack.cloud/get-started/install",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Contact sales; public numeric pricing not found.",
+          "sources": [
+            {
+              "url": "https://www.knapsack.cloud/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "reported",
+          "value": "Reported $10M Series A, October 9, 2025.",
+          "sources": [
+            {
+              "url": "https://techcrunch.com/2025/10/09/knapsack-picks-up-10m-to-help-bridge-the-gap-between-design-and-engineering-teams/",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "zeroheight",
+      "name": "zeroheight",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Design-system documentation, token delivery and governance for teams.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "GitHub markdown synchronization and token PR automation; output is documentation/tokens, not a generated whole app.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://help.zeroheight.com/hc/en-us/articles/35886880695707",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Token sets and theme documentation/delivery.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://zeroheight.com/pricing/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Managed component documentation with embedded Storybook.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Documents anatomy; direct production-component anatomy authoring not confirmed.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Documents patterns/guidelines and embeds examples.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Connects existing Figma/Storybook/GitHub systems and tracks adoption.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Organization documentation, tokens and component examples.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Live Storybook embeds; an MCP page response does not itself execute embedded components.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://help.zeroheight.com/hc/en-us/articles/43737291730331-Set-up-the-remote-MCP-server",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Shared documentation sites and GitHub token delivery.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://help.zeroheight.com/hc/en-us/articles/35886880695707",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "inference",
+          "value": "Documentation and embeds are framework-neutral; supported output depends on the connected code/token pipeline.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/integrations/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud documentation service with remote MCP.",
+          "sources": [
+            {
+              "url": "https://help.zeroheight.com/hc/en-us/articles/43737291730331-Set-up-the-remote-MCP-server",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Free; Starter displayed at $49/editor/month; Enterprise custom. Billing-toggle basis not confirmed.",
+          "sources": [
+            {
+              "url": "https://zeroheight.com/pricing/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "reported",
+          "value": "Reported $10M Series A, August 2021.",
+          "sources": [
+            {
+              "url": "https://www.cbinsights.com/company/zeroheight/financials",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "tokens-studio",
+      "name": "Tokens Studio",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Token authoring, theming and distribution platform with a Figma plugin.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Plugin pushes/pulls token JSON on a selected GitHub branch. Native PR orchestration not confirmed in this observation; users can review branches through GitHub.",
+          "sources": [
+            {
+              "url": "https://docs.tokens.studio/token-storage/remote/sync-git-github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Aliases, conditions, inheritance and multibrand themes.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "partial",
+          "value": "Token inventory; component inclusion/variant inventory tooling not confirmed.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "not found",
+          "value": "not found: component anatomy authoring; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://tokens.studio/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "not found",
+          "value": "not found: screen/flow builder; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://tokens.studio/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Imports/manages existing tokens and synchronizes repositories.",
+          "sources": [
+            {
+              "url": "https://docs.tokens.studio/token-storage/remote/sync-git-github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Token sets, themes and transformation definitions.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Tokens become consumable code outputs; this is not a live UI component catalog.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/help-center",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Versioned token releases/export pipelines and Git delivery.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/variables",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Transforms to CSS/SCSS/JS and native-platform formats; not full component generation.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/help-center",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Figma plugin plus cloud Studio; consumers run generated outputs locally.",
+          "sources": [
+            {
+              "url": "https://docs.tokens.studio/token-storage/remote/sync-git-github",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://tokens.studio/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Variables displayed at €17/month on annual billing; other Studio/plugin tiers differ. A single price does not cover every product.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: confirmed public venture round amount; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://tokens.studio/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://tokens.studio/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "specify",
+      "name": "Specify",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Design-token/asset collection, transformation and distribution service.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "documented",
+          "value": "Automated GitHub PRs deliver configured token/asset outputs. CLI/Actions can implement additional pipelines.",
+          "sources": [
+            {
+              "url": "https://docs.specifyapp.com/distribute/available-destinations/github",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.specifyapp.com/v1/apps-and-tools/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Collects tokens and transforms them through configured parsers.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "partial",
+          "value": "Token and asset inventory; component-variant inventory not confirmed.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "not found",
+          "value": "not found: component anatomy editing; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "not found",
+          "value": "not found: screen/flow creation; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Synchronizes existing design data from sources to code destinations.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Design tokens and assets; not a screen-inspiration catalog.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "inference",
+          "value": "Generated token code/assets, not runnable component behavior.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "GitHub delivery and API/CLI distribution.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.specifyapp.com/distribute/available-destinations/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "partial",
+          "value": "Configurable output parsers for consuming platforms; no whole-component framework conformance claim.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud token service plus CLI/CI consumers.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://docs.specifyapp.com/distribute/available-destinations/github",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Public page lists Essentials $69/month and Teams $134/month; Enterprise quote. Search copy is old; present purchase availability was not tested.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "documented",
+          "value": "Company announced €4M seed on January 24, 2022.",
+          "sources": [
+            {
+              "url": "https://specifyapp.com/blog/seed",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "storybook",
+      "name": "Storybook",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Open-source component workbench, documentation and testing for frontend teams.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Stories/config/tests live in the developer’s repo and are committed through ordinary Git/CI. Native automatic source push/PR creation is not established by publishing docs.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/docs/sharing/publish-storybook",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "inference",
+          "value": "Preview themes can exercise system values; token authoring requires application/addon code.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Stories expose components, props/args and states.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Developers author anatomy in component code; interactive controls expose configured props.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Composed stories can cover screens and flows.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "documented",
+          "value": "Documents/tests existing framework components.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "The team’s executable stories and documentation.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Real components render in stories.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Build a static Storybook for any web host; optional Chromatic publishing/versioning is a separate service.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/docs/sharing/publish-storybook",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Framework adapters include React, Vue, Angular, Svelte and Web Components; check the support matrix for capability differences.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/docs/configure/integration/frameworks",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Local development/builds and static/cloud hosting.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/docs/sharing/publish-storybook",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Storybook is free/open-source. Hosted Chromatic testing has a separate pricing model.",
+          "sources": [
+            {
+              "url": "https://storybook.js.org/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://storybook.js.org/docs/sharing/publish-storybook",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "partial",
+          "value": "Public sponsorship evidence exists, including Chromatic contributions. A Storybook-specific venture round was not found.",
+          "sources": [
+            {
+              "url": "https://opencollective.com/chromatic",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "tweakcn",
+      "name": "tweakcn",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Open-source visual theme editor for Tailwind and shadcn/ui.",
+          "sources": [
+            {
+              "url": "https://github.com/jnsahaj/tweakcn",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Exports CSS variables or a shadcn registry install command for local use. Native GitHub push/PR not found; the public source repo is not that service.",
+          "sources": [
+            {
+              "url": "https://tweakcn.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Color, typography, radius, spacing and shadow controls; presets, AI generation and contrast checking.",
+          "sources": [
+            {
+              "url": "https://tweakcn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "not found",
+          "value": "not found: component/variant inclusion policy builder; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://github.com/jnsahaj/tweakcn",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "not found",
+          "value": "not found: component anatomy authoring; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://github.com/jnsahaj/tweakcn",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "partial",
+          "value": "Component/page previews demonstrate themes; arbitrary product-flow builder not confirmed.",
+          "sources": [
+            {
+              "url": "https://tweakcn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "Imports CSS variables and exports themes for shadcn/Tailwind consumers; whole-system lifecycle governance not confirmed.",
+          "sources": [
+            {
+              "url": "https://tweakcn.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Theme presets, community themes and component previews.",
+          "sources": [
+            {
+              "url": "https://tweakcn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Live component previews and executable theme/configuration output; not whole-app generation.",
+          "sources": [
+            {
+              "url": "https://tweakcn.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Save/share themes and export CSS variables or a shadcn registry command.",
+          "sources": [
+            {
+              "url": "https://tweakcn.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Tailwind CSS and shadcn/ui.",
+          "sources": [
+            {
+              "url": "https://github.com/jnsahaj/tweakcn",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Hosted web tool or local development from source.",
+          "sources": [
+            {
+              "url": "https://github.com/jnsahaj/tweakcn",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Free editor; Pro $8/month billed monthly, adding unlimited saved/shared themes and AI generation. Source is Apache-2.0.",
+          "sources": [
+            {
+              "url": "https://github.com/jnsahaj/tweakcn",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://tweakcn.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: public funding disclosure; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://github.com/jnsahaj/tweakcn",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://tweakcn.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "shadcn-create",
+      "name": "shadcn/create",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Visual configuration and CLI for creating a customized shadcn/ui codebase.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "CLI writes component/style/config files locally. Native hosted GitHub push/PR from the configurator: not found.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Choose colors, fonts, icons and visual styles including density differences.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Select Radix or Base UI implementation and install registry components.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "documented",
+          "value": "Configuration transforms component code, including spacing and structure. This exceeds color-only theming.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Registry can distribute blocks and composed UI.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/registry/examples",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "CLI adapts installed registry components to the chosen library; arbitrary upstream-change preservation is not established.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Components, blocks, styles and third-party registries.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/registry/examples",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Installed source runs in the consumer app.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Local code generation; registry distribution. Application hosting remains separate.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://ui.shadcn.com/docs/registry/examples",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Create announcement lists Next.js, Vite, TanStack Start and v0; React component ecosystem.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Browser configuration plus local CLI.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Open-source tool; separately hosted registries/services may set their own terms.",
+          "sources": [
+            {
+              "url": "https://github.com/shadcn-ui/ui",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: standalone shadcn/create financing; Vercel affiliation is not a separate funding round; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "shadcn-studio",
+      "name": "Shadcn Studio",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "shadcn component/block library and visual/AI theme generator.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://shadcnstudio.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Theme registry install command delivers local files; native GitHub push/PR not found.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Color, typography, radius/style theme controls and optional AI generation.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "partial",
+          "value": "Component and block catalog; project-wide inclusion policy not confirmed.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Editable purchased/downloaded code; guided arbitrary anatomy authoring not confirmed.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Blocks and templates for application/site composition.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "Can apply themes to shadcn consumers; full external system governance not confirmed.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Theme presets, component code, blocks, templates and Figma assets.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://shadcnstudio.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Code components/blocks and live theme previews.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://shadcnstudio.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Theme registry URLs and installation; app deployment handled separately.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "shadcn/React and Tailwind ecosystem; base-library selection is separate from cross-framework support.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud/browser generator and locally installed source; optional AI provider integration.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Free community resources; Pro displayed $199 one-time, Team $449 one-time. Promotional pricing and license scope need checkout confirmation.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: public round amount; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://shadcnstudio.com/docs/getting-started/theme-generator",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://shadcnstudio.com/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "realtime-colors",
+      "name": "Realtime Colors",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Live palette/type preview and export tool for designers/developers.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Exports CSS/SCSS/Tailwind and custom-format values; native GitHub push/PR not found.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Palette/font selection with live previews and export presets.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "not found",
+          "value": "not found: component inventory management; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "not found",
+          "value": "not found: component anatomy editor; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Example page/dashboard layouts preview palette choices.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "Can supply theme values; external system lifecycle management not confirmed.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Preview layouts and export-format presets, including shadcn.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Interactive preview website; outputs are theme values, not an arbitrary app implementation.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Exports and shareable color references/QR codes.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "partial",
+          "value": "CSS/SCSS/Tailwind/custom export presets; framework component generation not established.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Browser tool.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Official page says the tool is free.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: public financing disclosure; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.realtimecolors.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "radix-themes",
+      "name": "Radix Themes",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Styled React component system for application developers.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/overview/getting-started",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Install package/CSS in a local app; no native GitHub push/PR service documented.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/overview/getting-started",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Accent/neutral color, radius, scaling, panel background and exposed tokens.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/theme/overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Component variants and sizes through APIs; use the imports needed by the app.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/theme/overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Compose component anatomy in React; an end-user anatomy generator is not documented.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/theme/overview",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.radix-ui.com/themes/docs/overview/getting-started",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Layout utilities/examples compose application screens.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/theme/overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "Custom tokens and themed components can extend the library; arbitrary external system import not documented.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/theme/overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Executable components, examples and theme playground.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/theme/overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Real React components and CSS tokens.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/overview/getting-started",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Ship with the consumer app; docs/playground are reference surfaces.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/theme/overview",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.radix-ui.com/themes/docs/overview/getting-started",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "React; underlying CSS does not itself provide equivalent framework adapters.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/overview/getting-started",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Local/package-based integration; hosted documentation/playground.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/theme/overview",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.radix-ui.com/themes/docs/overview/getting-started",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Open-source package; no usage subscription specified.",
+          "sources": [
+            {
+              "url": "https://github.com/radix-ui/themes",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "partial",
+          "value": "WorkOS attribution is documented; standalone Radix Themes financing not found.",
+          "sources": [
+            {
+              "url": "https://www.radix-ui.com/themes/docs/theme/overview",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "untitled-ui",
+      "name": "Untitled UI",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Figma UI kit and React component/block products for designers/developers.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "partial",
+          "value": "Copy/install component source into a project; native hosted GitHub PR/push not found.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "documented",
+          "value": "Tailwind-styled source can be customized; corresponding Figma system is a separate asset.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "documented",
+          "value": "Component and block catalog with exposed source.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Owned component source can be edited; universal guarded anatomy controls not confirmed.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Application/marketing blocks and templates.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "partial",
+          "value": "Code can be adapted to an existing app; automated maintenance of an arbitrary imported system not found.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "React code, live component examples, Figma kits and icons.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "React components run; Figma assets are not those runtime components.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Install/copy code and ship through the consumer app.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "React, TypeScript, Tailwind CSS and React Aria.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Hosted catalog plus local source integration.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Free/open-source components and paid product bundles; current exact bundle amounts not confirmed in the extracted section.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: public funding disclosure; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.untitledui.com/react",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "dribbble",
+      "name": "Dribbble",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Design portfolio/discovery and client marketplace for designers.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "not found",
+          "value": "not found: github; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "partial",
+          "value": "Visual inspiration only; token editing not documented.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "inference",
+          "value": "Portfolio shots/projects, not managed component inventory.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Reference designs; editable component anatomy not documented.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "inference",
+          "value": "Published design work can inspire screens/layouts.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "not found",
+          "value": "not found: existingSystem; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Portfolio media and projects; external linked products may have separate code.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "partial",
+          "value": "No general installable/live component contract established for portfolio shots.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Public shots, portfolios and promotional/client discovery tools.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "inference",
+          "value": "Framework-neutral media/reference content.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud web platform.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "documented",
+          "value": "Pro tiers displayed: Lite $4/month, Standard $8/month, Plus $99/month, billed annually.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/pro",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "partial",
+          "value": "Announced acquisition by Tiny in January 2017; transaction amount not found. This is ownership history, not a venture-round total.",
+          "sources": [
+            {
+              "url": "https://dribbble.com/stories/2017/01/17/transition-game",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "godly",
+      "name": "Godly (redirects to Recent)",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Godly URL redirected to Recent’s design-inspiration directory during direct public HTTP inspection.",
+          "sources": [
+            {
+              "url": "https://godly.website/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "not found",
+          "value": "not found: github; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://godly.website/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "partial",
+          "value": "Visual reference categories, not documented token tooling.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "partial",
+          "value": "Browse categories/resources; component-system inventory management not found.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "not found",
+          "value": "not found: component anatomy editing; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Web/interface/product inspiration categories.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "not found",
+          "value": "not found: existing-system maintenance; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Design imagery and directories for websites, app screenshots, icons and resources.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "not found",
+          "value": "not found: general executable/reusable component contract for the inspiration feed; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "partial",
+          "value": "Public browsing and sponsorship; author publishing controls not confirmed in extracted homepage.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "partial",
+          "value": "Framework-neutral reference material; generated framework output not found.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud website.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "not found",
+          "value": "not found: paid-plan or submission amounts; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: public financing disclosure; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://recent.design/?ref=godly",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "refero",
+      "name": "Refero",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Product screen/flow inspiration and structured design research for people and AI agents.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "not found",
+          "value": "not found: github; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://refero.design/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "inference",
+          "value": "Reference design metadata; not a token-authoring system.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "partial",
+          "value": "Searchable reference library; maintained code inventory not documented.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Research screen anatomy; editing source anatomy not documented.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Search product screens and flows.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "not found",
+          "value": "not found: authoritative design-system source management; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Screenshots/flows and structured metadata exposed through MCP.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "documented",
+          "value": "Reference data for an agent to build from; not the original production component source.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "partial",
+          "value": "Research references can be supplied through MCP; app publishing capability not found.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Framework-neutral reference data; agent implementation stack is separate.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud library and remote MCP access.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "MCP included with Pro; exact current price not found in the extracted pricing page.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://refero.design/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: public funding disclosure; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://refero.design/mcp",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://refero.design/pricing",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "awwwards",
+      "name": "Awwwards",
+      "fields": {
+        "identity": {
+          "status": "documented",
+          "value": "Website awards, inspiration and professional directory for web designers/agencies.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "github": {
+          "status": "not found",
+          "value": "not found: github; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.awwwards.com/inspiration/pricing-system-one",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "foundations": {
+          "status": "partial",
+          "value": "Visual reference; token editing not documented.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "inventory": {
+          "status": "inference",
+          "value": "Curated websites/elements, not code-component system management.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.awwwards.com/inspiration/pricing-system-one",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "structure": {
+          "status": "partial",
+          "value": "Reference layouts/interactions; anatomy editor not documented.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/inspiration/pricing-system-one",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "patterns": {
+          "status": "documented",
+          "value": "Website/interaction examples and collections.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.awwwards.com/inspiration/pricing-system-one",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "existingSystem": {
+          "status": "not found",
+          "value": "not found: existing design-system source management; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "content": {
+          "status": "documented",
+          "value": "Website nominations, captured elements, linked sites, courses and a separate template marketplace.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.awwwards.com/inspiration/pricing-system-one",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "liveCode": {
+          "status": "partial",
+          "value": "Linked websites are live; captured elements are references. Marketplace templates have separate product terms.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            },
+            {
+              "url": "https://www.awwwards.com/inspiration/pricing-system-one",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "publishing": {
+          "status": "documented",
+          "value": "Submit websites for recognition and create collections; this does not deploy the submitted app.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "frameworks": {
+          "status": "documented",
+          "value": "Technology categories include React, WordPress, Shopify, Framer and Webflow; these classify references rather than supported generators.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "execution": {
+          "status": "documented",
+          "value": "Cloud directory/marketplace.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "pricing": {
+          "status": "partial",
+          "value": "Public browsing plus Pro/submission and marketplace offerings; exact plan/submission prices not found.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        },
+        "funding": {
+          "status": "not found",
+          "value": "not found: public funding disclosure; searched the linked public pages. Absence of documentation is not proof of absence.",
+          "sources": [
+            {
+              "url": "https://www.awwwards.com/",
+              "checked": "2026-09-28"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
