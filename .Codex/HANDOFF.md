@@ -1,7 +1,7 @@
 # Handoff — 2026-09-27
 
-Branches: `icons-system` (icon work, this folder) and `components` (all component work,
-in its own worktree session). Both start from `main`; merge through pull requests.
+Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
+pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. No owner completion changed; Indicator stays In review.
 
@@ -268,15 +268,16 @@ saved as one JSON download per product (owner-approved) and split with a scratch
 
 ## Next
 
-1. Owner review on `gallery-icons.html` (In review lists what's open): batch 23 (call,
+1. Owner review on `gallery-icons.html` (In review lists what's open): batch 30 (nature and tools); the list family (bullet, numbered, checklist share rows 5, 8, 11); filled lines beside solids keep the icon weight; mark placement is set by the shape; batches 27–29 (AI and chat, Figma tools, commerce; open: unpin's cut); batch 26 (checkbox, checklist, bookmark remove, filter add, top panel, pushpin, palette); batches 24–25 (lists and sorting; view and tools; clear filters and the 1's sharp flag approved; the 2 and percent (Geist's 54° slash) revised; mark placement is set by the shape; filled lines beside solids keep the icon weight); batch 23 (call,
    reply/forward, sync, eraser, text align, indent/outdent, columns/rows, container remove);
    the negative-space round (graduation cap, bell, bell off, clipboard, car, watch: gaps on
    the outline's lines); batch 22; keyboard and repeat; batches 18–21.
    Rules: skill (Shared parts, Families, Filled variants: negative space on the outline's
    lines, only where fill is on both sides) and the spec's last sections; the lint checks
    dot sizes, the shared slash on `-off` icons and knockouts that never enter a solid.
-   Next batch ideas: bookmark add, zoom fit, paint bucket, cursor text, reply all,
-   sidebar variants, filter off, sort ascending/descending, list numbered, translate.
+   Next batch ideas: translate (letters need a construction), star-off, highlighter, coin,
+   boolean ops (union, subtract), ellipse and rectangle tools, QR code (drafted, pushed),
+   coins, cloud rain and cloud lightning, wind.
    The lint doesn't measure gaps within one path (paperclip's were solved by hand).
    `npm run typecheck` fails while the dev server rebuilds `packages/react/dist` (TS7016 on
    `@area/react`); rerun once the rebuild settles. Review filled variants with

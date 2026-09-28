@@ -387,16 +387,17 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   if (strict && name.endsWith("-off") && root["data-off"] !== "own" && !elements.some(el => /M2 2L14 14\b/.test(el.attrs.d ?? "")))
     fail(name, `an off icon draws the shared slash M2 2L14 14, or declares data-off="own"`);
   const lineGlyphIcon = !elements.some(el => SOLID_ROLES.includes(el.filled));
-  for (const el of drawn) if (el.stroked && el.tag === "path" && (lineGlyphIcon || !el.filled)) {
+  for (const el of drawn) if (el.stroked && el.tag === "path" && lineGlyphIcon) {
     el.boldD = retractFreeEnds(el.attrs.d, drawn.filter(o => o !== el).flatMap(o => o.samples));
     el.boldSamples = parsePath(name, el.boldD).samples;
   }
   // Gaps: separate shapes either join or sit on the gap scale (measured ink to ink).
   const gaps = [];
   const pads = drawn.map(el => el.stroked ? WEIGHT / 2 : 0);
-  // In the filled variant, strokes that stay strokes are drawn at BOLD; gaps must survive it.
+  // In a filled line glyph every stroke is drawn at BOLD; gaps must survive it. Beside solids,
+  // strokes keep the icon weight (Fluent's filled paint bucket, align left, delete).
   const lineGlyph = !elements.some(el => SOLID_ROLES.includes(el.filled));
-  const boldPads = drawn.map(el => el.stroked && (lineGlyph || !el.filled) ? BOLD / 2 : pads[drawn.indexOf(el)]);
+  const boldPads = drawn.map(el => el.stroked && lineGlyph ? BOLD / 2 : pads[drawn.indexOf(el)]);
   for (let p = 0; p < drawn.length; p++) for (let q = p + 1; q < drawn.length; q++) {
     let d = Infinity;
     for (const [ax, ay] of drawn[p].samples) for (const [bx, by] of drawn[q].samples) d = Math.min(d, Math.hypot(ax - bx, ay - by));
@@ -512,8 +513,9 @@ const filledBody = icon => {
     el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
     : el.filled === "hole" ? jsx(el, { attrs: { fill: "black" }, stroke: false })
     : jsx(el, { attrs: { fill: "none", ...(el.cutD ? { d: el.cutD } : {}) }, stroke: true, color: "black", strokeStyle: STROKE_CUT }));
-  // Unmarked strokes stay strokes, drawn at BOLD like every other filled line.
-  const plain = icon.elements.filter(el => !el.filled).map(el => el.stroked ? bold(el) : jsx(el));
+  // Unmarked strokes beside solids stay strokes at the icon weight: the solids carry the
+  // emphasis, so the lines keep the outline's exact length and gaps (Fluent's filled cuts).
+  const plain = icon.elements.filter(el => !el.filled).map(el => jsx(el));
   if (!cuts.length) return [...solid, ...plain];
   return [
     `<mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">`,

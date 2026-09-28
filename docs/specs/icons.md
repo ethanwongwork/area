@@ -1521,7 +1521,7 @@ same).
 | grip-vertical / grip-horizontal | 2 × 3 ⌀2 dots 4 apart; horizontal as a quarter turn |
 | activity | a pulse with one peak up and one down (r 1 peaks, r 0.5 shoulders), free angles |
 | layout | an 11 × 11 frame (r 2) with a header (cut) and a sidebar (line + gap) |
-| percent | two r 2 rings and a diagonal a standard gap from each |
+| percent | two r 2 rings and a diagonal a standard gap from each (superseded: upright O's and a steeper slash, owner round on batches 24–25) |
 
 ## Owner round: negative space on the outline's lines, 2026-09-27
 
@@ -1602,3 +1602,155 @@ Fluent reference). Findings:
   add-circle's construction); search stays a line glyph, as Fluent's search.
 - The sheet tool first rendered each icon in its own React tree, so every mask shared one
   id and all showed add-circle's plus; it renders one tree now.
+
+## Batches 24 and 25: lists, sorting, view and tools, 2026-09-27
+
+| Icon (batch 24) | Construction |
+|---|---|
+| list-numbered | one family with list-checklist (owner, 2026-09-28): three lines at 5, 8, 11 (9–13.5, a standard gap apart) and a mark on the first and third rows. The 1 (a stem on 4 with a 45° flag, 3–6.5) and the 2 (a 1.25 × 1 elliptical bowl with the S's 30° terminal, a tangent diagonal and a base 2.5–5.25, 9.5–13) are 3.5 tall, a standard 1.88 apart (owner: the numerals' gap was large at 4 tall). Their 45° corners are sharp (`data-acute="sharp"`, owner-approved for the 1) |
+| sort-ascending / sort-descending | sort's up arrow (2.5 heads) at 11.5 beside three lines growing downward (3.5, 5, 6.5 long, 3 apart, ending a standard gap from the stem); descending is its `flipy` (Fluent's sort lines) |
+| filter-dismiss | filter exactly, with a 3.5px × on its lower-right corner (the container-mark placement, backspace's × size), the funnel cut open round it (2.35 clear). A slash (filter-off) ran almost parallel to the funnel's left side and left 0.2–0.3 slivers, so clear filters takes Fluent's and Lucide's × instead. The × is beside the solid, so it stays a line when filled Filled, the funnel\'s fill is cut open like its outline (its stem ends 2.35 from the ×), so the × keeps a gap from the solid |
+| bookmark-add | bookmark exactly with a 4px plus centred inside it (8, 7), knocked out when filled, as zoom-in's plus sits in its lens. Owner, 2026-09-27: the container-add corner placement cut away the bookmark's notched tail, the part that makes it a bookmark; a container whose lower edge is its identity takes the mark inside |
+| reply-all | reply with a second head 4 left of the first (tips at 2.5 and 6.5, the only lattice spacing that clears the tight gap: 3 leaves 1.0) and the shaft starting at the inner tip |
+| text-cursor | an I-beam: a stem on 8 with r 2.5 serifs curving out to 5 and 11, 2–14 tall (no Fluent equivalent; Lucide's text-cursor) |
+
+| Icon (batch 25) | Construction |
+|---|---|
+| zoom-fit | a 4 × 4 square (r 1) with move's four heads, legs 1.5 (2 left a 0.9 gap to the square); Fluent's zoom fit |
+| paint-bucket | Lucide's and Atlassian's tipped bucket (owner's choice over Fluent's upright one): a 10 × 10 diamond (r 1 corners) with the level line across its widest point, a handle stub through its upper-left wall (3, 3 → 6, 6, attached), and the set's drop (color's, scaled 0.3: r 1.5 with its rounded tip) a tight gap below its right corner. Filled fills below the level only (Fluent's filled bucket: the paint) |
+| panel-bottom | panel's frame (12 × 9, r 2) with a 3px pane at the bottom (solid when filled) |
+| panel-left-close / panel-left-open | panel-left with indent's 2-leg chevron in the main area pointing in or out (a tight gap from the pane); panel-right-close and -open mirror them |
+
+## Owner round on batches 24–25: mark placement, numerals, percent, 2026-09-27
+
+- **Mark placement is set by the shape, not the mark** (skill, Shared parts, marks):
+  inside and centred where a closed shape's interior holds the mark with a tight gap all
+  round (ring, lens, shield, bookmark, chat bubble); on the lower-right corner where a band,
+  fold or tab fills the interior (calendar, folder, document); beside a figure or an open
+  line shape (person, filter, volume). Audit of every mark icon: only chat-add changed. Its
+  plus moves from the corner to the bubble's centre (8, 7: 3.5 from each side, 2.5 from the
+  top and the tail's baseline), the bubble kept whole; filled, a knockout (Lucide's
+  message-square-plus). Folder's interior under its flap is 7 tall and a 4px mark needs 9,
+  so folder, calendar and document keep the corner.
+- **Numbered list:** both numerals are 4 tall (2–6 and 10–14) and share the sharp
+  exception: the 1 is a stem on 4 with a 45° flag (no foot; the flat flag and foot read as a
+  typewriter 1, and it was 3.5 tall beside a 4-tall 2); the lines start at 9, an open gap
+  from the 2's bowl.
+- **Percent:** upright O's, 3 × 4 capsules (rx 1.5, a standard 1.875 counter) at the
+  corners, and a steeper slash (later set to Geist's 54°, owner round on numerals and percent) in place of two r 2 rings on a 45°
+  diagonal, which read as a ratio sign.
+- **Paint bucket:** two candidates on the Exploration sheet (Fluent's upright bucket with a
+  hanger through the top; Lucide's handle stub). A bail-handle version read as a second
+  circle and was dropped.
+
+## Filled lines beside solids keep the icon weight, 2026-09-27
+
+Owner: thicken strokes only when an icon is strokes alone. Measured in Fluent: paint
+bucket's hanger, align left's guide and delete's lid are 1px in both regular and filled;
+text align left's lines go from 1 to 1.5. The generator now draws unmarked strokes in an
+icon with a solid at the icon weight (no free-end retraction), and the lint's filled-gap
+recheck applies only to line glyphs. This changes the filled variant of every mixed icon
+(align-left, trash, person-add's plus, panel chevrons, handles and similar); line glyphs are
+unchanged. Other owner calls this round: paint bucket C (the handle stub) with the set's
+rounder drop; the 2's neck is a curve; filled clear filters is cut open round its ×.
+
+## Owner round: numerals, percent, clear filters, 2026-09-27
+
+- **Clear filters:** the × on the funnel's corner (A) is approved over the shared slash.
+- **The 1:** the sharp 45° flag is approved (`data-acute="sharp"`). **The 2** now follows
+  the set's letters: the S's elliptical bowl and terminal, a straight diagonal tangent to it,
+  a flat base (Geist's 2).
+- **Percent:** upright O's approved; the slash follows a standard %: measured on canvas, Geist's
+  % slash is 55° and Avenir Next's 58°, so the slash runs 4, 13.5 → 12, 2.5 (54°). The O's
+  moved 0.5 in (x 3–6 and 10–13) to sit a standard 1.97 from it (at 2.5 / 10.5 they were a
+  2.38 near miss).
+
+## Owner round: the 2 and strikethrough, 2026-09-27
+
+- **The 2** read larger than the 1 at 3 wide: it is now 2.5 wide (2.5–5), a 1.25 × 1.2
+  elliptical bowl (centre 3.75, 11.2) with the S's 30° terminal, a straight diagonal tangent
+  to it (42°) and a base 2.5–5. The icon's ink sits 0.25 right of centre (8.25): moving the
+  lines left to 8.5 leaves a 2.38 near miss from the bowl, and the numerals cannot move
+  right on the lattice. Recorded as an optical exception.
+- **Strikethrough** takes the overlap rule, as Fluent's and Lucide's do: the S's upper half
+  stops above the line (one-sided cut, 2.5 between centre-lines, the slash's clearance for a
+  line that stays a line when filled) and its lower half grows from the line. The S had run
+  through the line at its spine.
+
+## Batch 26: lists, marks and tools, 2026-09-27
+
+The 2's base now runs to 5.25, a quarter past its bowl's right edge (owner: a real 2's base
+reaches at least as far as its curve).
+
+| Icon | Construction |
+|---|---|
+| checkbox | layout's 11 × 11 frame (r 2) with status-available's 2 / 4 check inside (the mark-inside rule); filled, the check is knocked out (Fluent's checkbox checked) |
+| list-checklist | one family with list-numbered (owner, 2026-09-28): the same three lines at 5, 8, 11 (9–13.5) and two beside-size checks (1.5 / 3) centred on the first and third rows, where the numerals sit; a standard 1.79 from the lines |
+| bookmark-remove | bookmark with a 4px minus inside at bookmark-add's centre (8, 7); knockout when filled |
+| filter-add | clear filters' construction with a 4px plus centred at 12, 12; the funnel cut open 2.35 round it, and its filled fill closed by an arc on the same clearance |
+| panel-top | panel-bottom's `flipy` |
+| pushpin | Lucide's proportions, upright (chosen for the set's grid over a 45° tilt, which puts every edge off the lattice): a 6 × 2.5 head (r 1), a 3-wide neck (r 0.5 into the head), a curved skirt (a cubic from the neck to the base's side) and a 9-wide base (r 0.5); a needle 11–14.5 that stays a line when filled. The first draft (a 7-wide pill head, 45° flare) read as a plunger |
+| palette | Lucide's palette scaled 0.6: a left semicircle r 6, a 6 × 5.5 elliptical top right, an r 3 lobe and a thumb notch (r 1 arcs); four ⌀1.5 wells on the tight and standard gaps from each other and the edge; filled, the wells are holes |
+
+## Batches 27–29: AI and chat, Figma tools, commerce, 2026-09-27
+
+| Icon (batch 27) | Construction |
+|---|---|
+| arrow-up-circle | the r 6 ring with an arrow inside (3px head, stem 5–11), knocked out when filled (the mark-inside rule; ChatGPT's send) |
+| stop-circle | the ring with a solid 4 × 4 square (r 1) inside (owner: ChatGPT's and Fluent's stop); filled, the disc with the square as a hole. A solid exception, like quote's marks: a stroked square inside the ring read as a target. The standalone stop stays an outlined square (solid only when filled). A 5px square sat a 2.42 near miss from the ring |
+| compose | open's box (the same open corner) with pencil scaled 0.6 into the opening, its tip inside the box; the pencil is solid when filled, the box stays a line |
+| waveform | five bars on whole pixels 3 apart (2, 5, 8, 11, 14), heights 3, 8, 12, 6, 3 (Lucide's audio lines, asymmetric) |
+| bot | a 12 × 7.5 face (r 2.5, the full width; owner: wider face, no ears, a taller face with a short stem) with the earlier two 1.5 eye strokes 6 apart (knocked out when filled), and an antenna (owner, after dome lights): a 1.5 stem to an open 3 × 2.5 ring, an ellipse so every extreme sits on the 0.5 grid (an r 1.25 circle would put its sides on quarter pixels). Stem and ring are one path attached to the face (an attached part joins, as clipboard's clip): the ring sits 1.5 above the face, closer than the gap scale allows for separate shapes; a 2.5 stem that cleared it read too long |
+
+| Icon (batch 28) | Construction |
+|---|---|
+| frame | Figma's frame tool: lines at 4.5 and 11.5 running the whole keyline (2–14), a 7-wide square with 2.5 overhangs; hash's square is 5 with 3 overhangs |
+| pen-tool | a nib (flat top 6.5–9.5 at 2, shoulders at 3 and 13, tip at 8, 14), an r 1.5 eye at 8, 7.5 and a slit from the tip to the eye; filled, eye and slit are knocked out |
+| hand | Lucide's structure redrawn slimmer (owner: the 2.5-wide fingers read fat; the thumb set the style): four 2-wide fingers (r 1 tips; tops at 3, 2, 3, 4.5) on 5, 7, 9, 11, a palm side at 13 into an r 4 heel, and a thumb on the diagonal lattice (x − y = −7 and −4) with an r 1.06 tip; one path, a line glyph |
+| spline | two r 1.5 nodes at 3.5, 12.5 and 12.5, 3.5 joined by an r 7.5 quarter arc (Lucide's spline); nodes solid when filled |
+| unpin | pushpin moved 0.5 left (its needle a tight gap from the slash) with the shared slash, cut one-sided. Open: the slash runs close to the skirt and head, so the cut removes more of the pin than on other off icons |
+
+| Icon (batch 29) | Construction |
+|---|---|
+| truck | side view (owner's choice after comparing Fluent's front truck, Fluent's profile truck and Lucide's), after the owner's box-truck references (the last with a window and a band): a cargo box 1.5–8.5 × 3.5–11.5 (r 1.5 top, r 1 foot) with a band across it at 8 (owner: lower; at 8.5 it would crowd the rear wheel), a cab 8.5–14 from 5, almost as tall as the box, with a round front (r 2.5) and a window in its top corner (a line down from the roof at 11 and across at 7.5 to the front; a 1.31 tight counter), and r 1.5 wheels at 4.5 and 10 joined to the base line. The front wheel sits under the box's back edge, joined to it as in the reference. The body is one path; the cab is 5.5 wide because the window needs 2.5 from the box's edge. Filled, after Fluent's filled profile truck (owner: a truck with no solid only thickened its lines, and gap rings round solid wheels left slivers): the body is a `fill` silhouette with the window wound the other way so it stays open, the wheels' rims merge into it (they stay strokes on top) and their centres are cut out by small gap circles. |
+| store | a scalloped awning (three r 2 scallops, r 1 top corners; solid when filled) over a building (r 1.5 foot corners) with a 3 × 3.5 door |
+| ticket | a 12 × 9 ticket (r 1.5) with r 1.5 notches, and Lucide's and Fluent's three-dash perforation at 9.5: the outer dashes run into the edges (notches when filled), the middle one a tight gap from each |
+| kanban | owner's choice of three: a 12 × 11 frame (r 2) with a header (a cut) and two column lines at 6 and 10 (a line plus a gap run out through the foot when filled). Frame-and-strokes and strokes-only candidates were dropped |
+
+QR code was dropped from batch 29 (owner: later).
+
+## Batch 30: nature and tools, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| highlighter | Fluent's marker in three layers (owner: add Fluent's middle layer, then wider): a cup 3–13 (r 1.5 foot corners, open at the top), a collar 4.5–11.5 hanging from it (r 1 foot corners, a tight 1.43 counter) and a chisel tip 5.5–10.5 whose slant (63° at the foot) clears the acute rule; the square keyline (11.1 wide). Filled as Fluent's: three solid blocks (the cup closed across its top by a filled-only `fill`) parted by gaps along the cup's and collar's feet. A two-layer marker (cup and tip) came first |
+| flame | one outline (Fluent's single line) with three flames: a tall centre flame whose tip leans slightly right (8.9, 1.8), a shorter flame on the left (tip 4.2, 5.4) and the smallest on the right (tip 12.1, 6.6), notches between, with S-curved sides (owner: more curvy) round an r 5.4-wide base (owner, 2026-09-28); sharp by nature (`data-acute="sharp"`), the circle keyline. A symmetric drop, a two-tongue flame with an inner flame, an upright three-point flame and a right-fanning flame came first |
+| leaf | an r 4 round with a 45° point (Fluent's leaf), a vein knocked out when filled and a stem below that stays a line |
+| umbrella | Lucide's umbrella (owner: the scalloped canopy needed work): an r 5.5 canopy with a flat underside (solid when filled), a 1px tip above it and a pole to an r 1.5 J handle turning left (owner) |
+| snowflake | three arms 12 long at 60° with branch ticks (legs 1.75 at 45°, 4.25 from the centre; owner: 1.25 legs read too small); a line glyph |
+| thermometer | a 3-wide tube (r 1.5 top) into an r 3 bulb with a ⌀2 reading, a tight gap from the bulb; solid with the reading as a hole when filled |
+| mountain | one peak shaped like Mount Fuji (owner): gently concave slopes from a 12.5-wide base (1.75–14.25; owner: wider, less curved) to a flat crater top 6.5–9.5, and a zigzag snow line meeting the slopes (a tight 1.58 pocket above it); solid when filled with the snow line as a cut. Two peaks (Lucide's) came first |
+| anchor | owner's reference: an r 1.5 ring (a standard 1.88 counter), a crossbar (stock) 5.5–10.5 at 7, a standard 1.79 from the arms, an r 5 arc from 8.5 (owner: wider; r 4 first) and a shank that ends at the arc's foot (owner: it need not run past) |
+| magnet | a horseshoe (outer r 5.5, inner r 2, arms 3.5 wide) with pole bands at 5.5: lines in the outline, one gap across both arms when filled (a cut on two separate segments left one band uncut) |
+
+Deferred to a later batch: boolean operations (Fluent hatches the result, which does not survive 16px), coins (a coin stack either thins to 0.93 at its sides or copies database's cylinder) and cloud weather (rain or a bolt must cut the cloud's foot, as cloud-download's arrow does).
+
+## Owner round: one list family, 2026-09-28
+
+Owner: list-bullet, list-numbered and list-checklist should look alike. Fluent does the same:
+its bullet, number and task lists put their lines on one set of rows with one gap, a mark
+beside each line, and the bullet list's lines start further left (a dot is narrower than a
+numeral). Area's three now share three lines at 5, 8 and 11 (a standard gap). list-bullet has
+a dot beside every line, ⌀1.5 at x 2.75 (⌀2 dots 3 apart leave a 1.0 gap, under tight; the
+three dots sit a tight 1.5 apart), its lines 6–13.5 a standard 1.94 from the dots; numbered
+and checklist keep lines 9–13.5 beside their wider marks (every line glyph ends at 13.5). The anchor's arc widened to r 5 and
+the truck's band moved down to 8 in the same round.
+
+## Owner-delegated decisions, 2026-09-28
+
+- **Truck band stays at 8.** Lower, it crowds the rear wheel (0.4 at 8.5) or needs smaller
+  wheels; both read worse than the band where it is.
+- **List and text line spacing stay separate.** Lists (bullet, numbered, checklist) keep
+  three lines 3 apart so their marks sit beside each line; menu, text align and indent keep
+  4 apart. Fluent spaces its lists and its text-align icons differently too. Every line
+  glyph ends at 13.5.
