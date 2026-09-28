@@ -165,13 +165,21 @@ the lint prints every gap and counter with `--report`.
     history, cloud-upload, cloud-download). Rotate keeps 2.25px (2.5 reaches its square),
     move 2px (four heads on a 12px cross: 2.5 left their barbs 0.3px apart, 2 keeps a
     standard gap) and shuffle 2px (two heads stacked on one side, the same reason);
-  - placement (audit, 2026-09-26): beside a figure, the mark sits at head height to its
-    right (person-add, person-remove); on a container it replaces the lower-right corner,
-    its right and bottom arms on the container's outer edges, and the container is cut
-    open round it (calendar-add, folder-add, document-add; there is no room inside a band
-    or fold); inside a lens it is centred (zoom-in, zoom-out). Filled, a mark over a
-    container is a knockout (negative space, owner): its arms end on the outer edge, so the
-    cut-out reaches the silhouette exactly;
+  - placement (audit 2026-09-26, owner 2026-09-27): the same rule for +, −, × and ✓, set by
+    the kind of shape, never by the mark:
+    - *inside, centred*: a closed shape whose open interior holds the mark with at least a
+      tight gap (2.5 between centre-lines) on every side: a ring (add-circle, error), a lens
+      (zoom-in), a shield (shield-check), a bookmark (bookmark-add), a chat bubble
+      (chat-add). The silhouette stays whole; filled, the mark is a knockout;
+    - *on the lower-right corner*: a container whose interior is taken by a band, fold or
+      tab, leaving no room (calendar under its header, folder under its flap, document
+      beside its fold): the mark replaces the corner, its right and bottom arms on the
+      container's outer edges, and the container is cut open round it. Filled, its arms end
+      on the outer edge, so the cut-out reaches the silhouette exactly;
+    - *beside*: a figure (person-add, at head height to its right) or an open line shape
+      (filter-dismiss on the funnel's lower right, volume-off);
+    Cutting a shape whose outline is its identity (a bookmark's notched tail) is never
+    right: move the mark inside or beside instead;
 - an arrow meeting a frame (tray, box, door) stops a gap short of it: tight, 2.5 between
   centre-lines, where it points into a tray or out of a box (download, upload, share,
   open); log-in and log-out stop standard (3) from the door's back, the nearest the lattice
@@ -307,8 +315,12 @@ separately. Filled is about emphasis and layers, not flooding the shape:
   sheet, a strap's along the body's edge); wallet's crossed its flap and left a wedge.
 - **Line glyphs fill by weight.** An icon with no solid shape (add, check, arrows, link,
   reset…) gets its filled variant by drawing every stroke at 4/3 of the icon weight
-  (1.5px, Fluent's filled line), with dots grown by the same amount. The same applies to
-  unmarked strokes beside solids (align-left's edge line, trash's lid).
+  (1.5px, Fluent's filled line), with dots grown by the same amount. Only line glyphs
+  thicken: in an icon with a solid, the lines beside it (align-left's edge line, trash's
+  lid, paint bucket's handle) keep the icon weight, so their lengths and gaps match the
+  outline. Fluent does the same (owner, 2026-09-27; measured: paint bucket's hanger,
+  align left's guide and delete's lid are 1px in both regular and filled, text align
+  left's lines go 1 → 1.5).
 - **A heavier line does not get longer.** A 1.5px round cap reaches 0.19px further than a
   1.125px one, which lengthens the line and closes gaps (open's arrowhead gap closed this
   way). Free ends, which touch nothing else, retract by that amount along their end

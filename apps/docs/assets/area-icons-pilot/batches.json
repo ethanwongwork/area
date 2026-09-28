@@ -180,7 +180,7 @@
       "icons": {
         "strikethrough": "approved",
         "heading": "approved",
-        "list-bullet": "approved",
+        "list-bullet": "review",
         "wifi": "approved",
         "bluetooth": "approved",
         "battery": "approved",
@@ -387,6 +387,95 @@
         "calendar-remove": "review",
         "folder-remove": "review",
         "document-remove": "review"
+      }
+    },
+    {
+      "id": "batch-24",
+      "title": "Batch 24 · Lists & sorting",
+      "note": "Numbered list (list's lines beside a 1 and 2), sort ascending (sort's up arrow beside three lines growing downward; descending is its flipy), clear filters (filter cut open round a 3.5px × on its top-right corner), bookmark add (a 4px plus inside, as zoom-in), reply all (reply with a second head 4 out) and text cursor (an I-beam with r 2.5 serifs).",
+      "icons": {
+        "list-numbered": "review",
+        "sort-ascending": "review",
+        "filter-dismiss": "approved",
+        "bookmark-add": "review",
+        "reply-all": "review",
+        "text-cursor": "review"
+      }
+    },
+    {
+      "id": "batch-25",
+      "title": "Batch 25 · View & tools",
+      "note": "Zoom to fit (a 4px square with move's four heads, legs 1.5), paint bucket (a tipped diamond with a level line, a handle stub and a solid drop; filled below the level), bottom panel (panel's frame with a 3px pane), and collapse and expand sidebar (panel-left with indent's chevron; right-hand versions mirror).",
+      "icons": {
+        "zoom-fit": "review",
+        "paint-bucket": "review",
+        "panel-bottom": "review",
+        "panel-left-close": "review",
+        "panel-left-open": "review"
+      }
+    },
+    {
+      "id": "batch-26",
+      "title": "Batch 26 · Lists, marks & tools",
+      "note": "Checkbox (layout's frame with status's 2 / 4 check inside), checklist (two 4.5 × 3 checks and two lines, rows 6 apart), bookmark remove (a 4px minus inside), filter add (clear filters' construction with a 4px plus), top panel (bottom panel's flipy), pushpin (Lucide's upright pin: a narrow head, a neck, a curved skirt, a base and a needle) and palette (Lucide's palette with four ⌀1.5 wells).",
+      "icons": {
+        "checkbox": "review",
+        "list-checklist": "review",
+        "bookmark-remove": "review",
+        "filter-add": "review",
+        "pushpin": "review",
+        "palette": "review"
+      }
+    },
+    {
+      "id": "batch-27",
+      "title": "Batch 27 · AI & chat",
+      "note": "ChatGPT's composer and chat marks: arrow up and stop in the ring (a 3px-head arrow; a solid 4px square, the stop button's), compose (open's box with pencil scaled 0.6), a voice waveform (five bars 3 apart) and a bot (a full-width face with two eye strokes and an antenna to an open ring).",
+      "icons": {
+        "arrow-up-circle": "review",
+        "stop-circle": "review",
+        "compose": "review",
+        "waveform": "review",
+        "bot": "review"
+      }
+    },
+    {
+      "id": "batch-28",
+      "title": "Batch 28 · Figma tools",
+      "note": "Frame (the frame tool's lines at 4.5 and 11.5 through the whole keyline), pen tool (a nib with an r 1.5 eye and a slit), hand (2-wide fingers and a diagonal thumb, one path), spline (two r 1.5 nodes on an r 7.5 arc) and unpin (pushpin with the shared slash).",
+      "icons": {
+        "frame": "review",
+        "pen-tool": "review",
+        "hand": "review",
+        "spline": "review",
+        "unpin": "review"
+      }
+    },
+    {
+      "id": "batch-29",
+      "title": "Batch 29 · Commerce & objects",
+      "note": "Truck (side view, shorter and wider), store (a scalloped awning over a building with a door), ticket (notched sides, a three-dash perforation) and kanban (a frame with a header and three columns).",
+      "icons": {
+        "truck": "review",
+        "store": "review",
+        "ticket": "review",
+        "kanban": "review"
+      }
+    },
+    {
+      "id": "batch-30",
+      "title": "Batch 30 · Nature & tools",
+      "note": "Highlighter (Fluent's marker: a cup, a collar and a chisel tip), flame (one outline: a tall centre flame between two smaller ones), leaf (a pointed top, a vein and stem), umbrella (Lucide's: a flat-bottomed canopy, a tip and a J handle), snowflake (three arms with branch ticks), thermometer (a tube and bulb with a ⌀2 reading), mountain (Mount Fuji with a snow line), anchor (a ring, stock, shank and arc) and magnet (a horseshoe with pole bands).",
+      "icons": {
+        "highlighter": "review",
+        "flame": "review",
+        "leaf": "review",
+        "umbrella": "review",
+        "snowflake": "review",
+        "thermometer": "review",
+        "mountain": "review",
+        "anchor": "review",
+        "magnet": "review"
       }
     }
   ]
