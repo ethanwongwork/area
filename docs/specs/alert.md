@@ -7,6 +7,14 @@ Chip remove (a tinted 12% plate), Card and Panel (container radius)
 
 ## Owner decisions
 
+- 2026-09-27 (given as "toast fill colors can be lighter and maybe the foreground a bit more
+  vibrant"; Toast has no tinted fill, so it applies to Alert's tones and to both families'
+  icons): each tone's fill is its semantic surface mixed 50% toward `bg-surface` in oklab
+  (keeps the hue; the 25 rungs of blue and red read grey); icons take a brighter rung (info
+  and danger 500, success and warning 550, 3.5:1 or more). Text keeps the tone ink: one rung
+  lighter measured 4.33–4.47:1 on the lighter fills, under the 4.5:1 text minimum. Dark keeps
+  the semantic roles.
+
 - 2026-09-26: Neutral by default, accent by override. Alert's default tone is `neutral`;
   `accent` is an explicit tone.
 
@@ -152,10 +160,19 @@ to a second row (`surface.css:276-282`). Forced colours: no Alert-specific rule.
 
 ## Visual pass
 
+2026-09-27, Claude in Chrome, side by side with Notion's callout block (the public Responsible
+Disclosure Policy page, `notion--callout`) beside the gallery's Default and Tones tiles, at 2×:
+
+- The neutral Alert is Notion's callout in Area's terms: a quiet fill (#f7 against Notion's warm
+  rgb(249, 248, 247)), no visible edge (Area's decorative seam reads as none), the icon on the
+  first line. Area sets the text at 14/20 where Notion's block text is 16/24 (a callout is body
+  text in Notion; an Alert is UI text), and the corner is 12 against Notion's 10.
+- Toned alerts have no product counterpart. After the lighter-fill change the fills read as a
+  tint, the icon carries the colour, the title keeps the tone ink and the body is muted.
+- Unverified: dismiss hover and focus on screen, dark theme.
+
 The gallery shows Alert in grouped tiles: Default, Tones (accent, info, danger, warning,
-success), Layout (multiline), Content (link, dismissible) and Behavior (action). This spec's author
-did not inspect screenshots. Unverified: dismiss hover and focus on screen, dark theme, and
-a side-by-side with a product surface (none exists; see Sources).
+success), Layout (multiline), Content (link, dismissible) and Behavior (action).
 
 ## Verification
 
@@ -180,3 +197,7 @@ a side-by-side with a product surface (none exists; see Sources).
 - 2026-09-27 · third pass → open question settled, value kept: dismiss hover stays 12% of the
   alert ink → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner: audit → Toast's inset (10 / 12, 40 tall), icon on the first line, controls 6 from the corner, multiline actions 6 from the bottom → `notion--callout`, seven design systems; Pass review in the gallery.
+- 2026-09-27 · owner: lighter fills, more vivid ink → fills mixed halfway to the surface,
+  brighter icon rungs, text ink unchanged for contrast → headless Edge screenshot of the Tones
+  group; contrast computed (text ≥ 5.3:1 on the new fills).
+- 2026-09-27 · batch 3 → Claude in Chrome side by side with Notion's callout recorded; Validated.

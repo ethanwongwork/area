@@ -56,28 +56,21 @@
   /*
    * The separation between runs, measured rather than picked.
    *
-   * In OpenAI's sidebar a group's first row sits 87px below the previous group's last,
-   * against a 62px within-group pitch -- 24.6px of extra space. Scaled to Area's 34px pitch
-   * (a 32px row plus the 2px item gap) that is 13.4px of separation, which is the 2px gap
-   * already there plus 12 here. It read as 16, which is a third too much.
+   * spec (docs/specs/nav.md, 2026-09-27): ChatGPT leaves 21 between its top rows and a
+   * section label (chatgpt--sidebar-top-group, --sidebar-projects-section: 35px rows 1 apart),
+   * Notion 4 between sections of 30px rows. Scaled to Area's 32px rows, the 2px item gap plus
+   * 12 here puts the label's cap about 26 under the last row, ChatGPT's proportion.
    */
   .area-nav__group + .area-nav__group {
-    margin-block-start: var(--area-space-8);
+    margin-block-start: var(--area-space-12); /* spec */
   }
 
   /*
-   * The group heading.
-   *
-   * Same size as the items beneath it, same row height, regular weight, and a quieter
-   * foreground -- which is the whole of how OpenAI distinguishes it. Measuring their
-   * sidebar, a label row occupies exactly one row pitch (63px against a 62px within-group
-   * pitch), so it is a row that happens not to be interactive rather than a caption
-   * squeezed between two.
-   *
-   * The colour is `fg-muted`, which is what "quieter than body copy" means now that the
-   * foreground ladder is four tokens rather than five. A heading that names a run of links
-   * should recede behind them, and against `fg-default` items at 14.13:1 a muted heading at
-   * 5.50:1 is a clear step back.
+   * The group heading: ChatGPT's sidebar section title (owner, 2026-09-27: "get the nav titles
+   * from ChatGPT"; nav/chatgpt--sidebar-section-label, --sidebar-projects-section): the rows'
+   * own 14px size at weight 500 in a quieter ink, a row pitch tall, the text on the rows' start
+   * column. ChatGPT's ink is rgb(143), 3.3:1 on white; Area keeps `fg-muted` (5.7:1) for text
+   * contrast, so weight and ink together set the title apart from rows in the default ink.
    */
   .area-nav__label {
     display: flex;
@@ -87,7 +80,7 @@
     color: var(--area-fg-muted);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
-    font-weight: var(--area-weight-regular);
+    font-weight: var(--area-weight-strong); /* spec: ChatGPT 500 */
   }
 
   .area-nav__item {
@@ -104,7 +97,10 @@
       calc(var(--area-control-md) * var(--area-radius-cap))
     );
     background: transparent;
-    color: var(--area-fg-muted);
+    /* spec: ChatGPT's rows are the default ink (rgb 13, chatgpt--sidebar-top-group); the
+       label, not the rows, carries the quieter ink. The marker variant keeps muted rows,
+       since its current row has no plate and is told apart by ink. */
+    color: var(--area-fg-default);
     font-family: inherit;
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
@@ -144,12 +140,14 @@
   /* A marker is navigation's quiet current-location treatment. Unlike a menu's action
    * highlight, it persists as the reader moves through an outline or sidebar. */
   .area-nav--marker .area-nav__item {
+    color: var(--area-fg-muted);
     position: relative;
     padding-inline-start: var(--area-space-16);
   }
 
   .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"]) {
     background-color: transparent;
+    color: var(--area-fg-default);
     font-weight: var(--area-weight-regular);
   }
 

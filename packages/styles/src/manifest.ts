@@ -67,7 +67,8 @@ export const buttonGroup = {
 export const splitButton = {
   block: "area-split-button",
   description: "Joins a default action to a menu of related actions.",
-  variants: { variant: ["solid", "soft", "outline"] },
+  variants: { variant: ["solid", "soft", "outline", "ghost"] },
+  booleans: ["icon-only"],
   elements: ["action", "trigger", "menu"],
   defaults: { variant: "solid" },
 } as const satisfies ComponentManifest;
@@ -78,7 +79,6 @@ export const toolbar = {
   variants: { variant: ["plain", "surface"], size: ["sm", "md", "lg"], orientation: ["horizontal", "vertical"] },
   booleans: ["full-width"],
   elements: ["group", "separator", "overflow", "overflow-trigger", "overflow-dots", "overflow-content"],
-  elementModifiers: { group: ["track"] },
   defaults: { variant: "plain", size: "md", orientation: "horizontal" },
 } as const satisfies ComponentManifest;
 
@@ -416,8 +416,8 @@ export const progress = {
 export const panel = {
   block: "area-panel",
   description: "A titled surface of rows that act on something beside it.",
-  variants: { size: ["xs", "sm", "md", "lg"] },
-  booleans: ["flush", "bare-bar"],
+  variants: { size: ["sm", "md"] },
+  booleans: ["flush", "bare-bar", "action-column"],
   states: ["collapsed", "resizable", "resizing"],
   elements: ["resize", "bar", "title", "body", "section", "heading", "heading-text", "actions", "toggle", "toggle-text", "chevron", "summary", "rows", "row", "row-label", "row-controls", "row-action", "stack", "footer"],
   defaults: { size: "md" },
@@ -486,7 +486,7 @@ export const commandPalette = {
   description: "Searches actions and places from a shortcut, and runs the one you pick.",
   variants: {},
   booleans: ["inline"],
-  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "empty", "footer", "hint"],
+  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "empty", "footer", "hint", "hint-button"],
   defaults: {},
 } as const satisfies ComponentManifest;
 

@@ -141,3 +141,8 @@ colours, any product inline code.
   `area--*` re-captures.
 - 2026-09-27 · third pass → open question settled, value kept: edge stays `border-decorative`
   → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27 · owner: audit against other design systems → [survey](../research/skeleton-spinner-code-slider-survey.md):
+  no change. 0.875em sits between Primer / antd (85%) and Radix (0.9025em); weight 400 matches
+  most; only Untitled and antd draw a border. Open: em-based padding so inline code scales in
+  headings (Primer, antd, Radix). Claude in Chrome capture of ChatGPT's inline code pending
+  (the window was in the background).

@@ -72,7 +72,7 @@ export type CalendarProps = Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" 
 export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calendar(props, ref) {
   const { selectionMode = "single", value, defaultValue, onValueChange, variant, tone, days, layout = "month", weekdayStyle = "short", markers, month, defaultMonth, onMonthChange,
     visibleMonths = 1, min, max, isDateUnavailable, firstDayOfWeek = 0, locale = "en-US", showOutsideDays = true,
-    fixedWeeks = true, today: todayProp, name, disabled, className, "aria-label": ariaLabel = "Calendar", ...rest } = props as CalendarProps & {
+    fixedWeeks = false, today: todayProp, name, disabled, className, "aria-label": ariaLabel = "Calendar", ...rest } = props as CalendarProps & {
       selectionMode?: "single" | "range" | "multiple"; value?: unknown; defaultValue?: unknown; onValueChange?: (value: unknown) => void };
   const id = useId();
   // Today is read after mount so server and client render the same markup.

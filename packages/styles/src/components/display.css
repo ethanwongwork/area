@@ -163,9 +163,15 @@
    * skeleton kept its 2px round even at the sharp preset while everything around it went
    * square.
    */
+  /* spec (docs/specs/skeleton.md, 2026-09-27 audit): a text line is the glyph height centred in
+     its line box, so stacked lines take the paragraph's own height (Primer SkeletonText: height
+     font-size, margin leading / 2; MUI scales the line box). Corners cap at 4, where Primer,
+     Radix, Fluent, MUI, Mantine, Chakra and antd sit (3-4); the axis radius read rounder on a
+     12-14px bar. */
   .area-skeleton--text {
     block-size: 1em;
-    border-radius: var(--area-radius-small);
+    margin-block: calc((1lh - 1em) / 2);
+    border-radius: min(var(--area-radius-small), 4px); /* spec */
   }
 
   .area-skeleton--circle { border-radius: var(--area-radius-full); }
@@ -188,10 +194,13 @@
     inline-size: var(--_size);
     block-size: var(--_size);
     border-radius: var(--area-radius-full);
-    background: conic-gradient(var(--_indicator) 0 25%, var(--_track, var(--area-bg-component-active)) 25% 100%);
+    /* spec (docs/specs/spinner.md, 2026-09-27 audit): the track is the arc's own ink at 25%
+       (Primer; Area's Button spinner already did this), so the ring shows on any ground. */
+    background: conic-gradient(var(--_indicator) 0 25%, color-mix(in srgb, var(--_indicator) 25%, transparent) 25% 100%);
     -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
     mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
-    animation: area-spin 2s linear infinite;
+    /* spec: 1s a turn (Untitled, Primer, shadcn, Spectrum); 2s read as stalled beside all of them. */
+    animation: area-spin 1s linear infinite; /* spec */
   }
 
   .area-spinner::after {
@@ -208,7 +217,7 @@
 
   /* Inside a Button the spinner takes the label's ink, so it shows on any fill: a neutral
      spinner on a neutral solid button was the fill's own colour and disappeared. */
-  .area-button .area-spinner { --_indicator: currentColor; --_track: color-mix(in srgb, currentColor 25%, transparent); }
+  .area-button .area-spinner { --_indicator: currentColor; }
 
   .area-spinner--sm { --_size: var(--area-space-12); }
   .area-spinner--md { --_size: var(--area-space-16); }
@@ -273,10 +282,12 @@
 
   @media (prefers-reduced-motion: reduce) {
     .area-skeleton,
-    .area-spinner,
     .area-progress[data-indeterminate] .area-progress__bar {
       animation: none;
     }
+    /* spec: a still quarter arc reads as a frozen screen, so the spinner slows instead of
+       stopping (Fluent 1.8s; Carbon and Primer keep turning). The motion axis still stops it. */
+    .area-spinner { animation-duration: 1.8s; } /* spec */
     .area-skeleton { background-image: none; }
   }
 }

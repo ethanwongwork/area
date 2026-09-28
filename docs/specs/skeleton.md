@@ -120,3 +120,10 @@ Unverified: dark theme, the card tile's media corners at the new Card radius on 
   searched, none found; no change to Skeleton; the card composition follows Card's new
   12px radius (media corners 16 → 4) → `area--card`, `area--rounded`.
 - 2026-09-27 · third pass → shape tiles moved from Layout to Variants → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27 · owner: audit against other design systems → [survey](../research/skeleton-spinner-code-slider-survey.md):
+  text lines reserve their line box (1em bar, half the leading above and below; Primer, MUI),
+  so a skeleton paragraph matches the paragraph's height; line corners capped at 4 (seven
+  systems at 3-4). Kept: the travelling sweep (Fluent, Primer, Carbon, antd, Spectrum), 1.4s
+  (antd), the light #f7 fill (lightest of all; owner's lighter-UI direction). Open: page-wide
+  phase sync (Spectrum), a shortened last line and show delay (Primer). Claude in Chrome:
+  products show skeletons only while loading; not captured.

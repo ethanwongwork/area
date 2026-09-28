@@ -97,7 +97,7 @@ rgb(207, 3, 60), tag rgb(125, 65, 218), string rgb(81, 80, 229). Tabs (`area--la
 | unnumbered · text inset | **12 start** (`code.css:264-267`) | Third pass: code starts where the header's filename and the numbers do | Was 0: hidden numbers left the code at the block's edge. Diff lines keep their marker column (`code.css:269-273`) |
 | shell radius / edge / ground | `radius-container` 12, `border-decorative`, `bg-code` #fafafa | Peers: Card media, Panel, Alert; Code | — |
 | header | min `control-md` 32, padding 4/12 (`code.css:36-38`) | Toolbar rhythm | — |
-| rules (header, flush top, toggle) | **`border-divider` #e2e2e2** (`code.css:39, 200, 443`) | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
+| rules (header, flush top, toggle) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 200, 443`) | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
 | code · face | `font-family: inherit` (`code.css:250`) | Owner (prior): one monospace | `<code>` reset to the browser's monospace |
 | tab · hover | **plate `bg-component-hover`, ink fixed** (`code.css:101-103`) | Shared rules: foreground fixed; opaque plate on a known ground | Was muted → default ink on `bg-hover` |
 | line number · hover | **underline, ink fixed** (`code.css:294-298`) | Shared rule; a link marks itself with an underline | Was muted → default ink |
@@ -169,3 +169,5 @@ captured).
 - 2026-09-27 · third pass → unnumbered code starts 12px in, under the filename (was the
   block's edge); Layout / flush tile added → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner flagged the diff tile → gutter widens to 48 for blocks with diff lines, marker pinned to the start → headless Chromium, `diff` tile.
+- 2026-09-27 · owner (on Panel): divider strokes are never darker than the container's →
+  header, flush and toggle rules take `border-decorative`; DESIGN_SYSTEM.md rule updated.

@@ -11,11 +11,6 @@
     /* spec (toolbar.md, redesign 2026-09-27): Figma's tools sit 8 apart and 8 either side of the
        divider (figma--tool-group--*, figma--mode-switch--rest). */
     --_toolbar-space: var(--area-space-8); /* spec */
-    /* spec: a pressed toggle is a raised plate, Figma's selected mode option (white, a 0.5px
-       30% halo and a 1px / 3px 15% shadow; figma--mode-switch--rest). In dark the plate takes
-       the selection fill, since a surface-coloured plate would vanish into the bar. */
-    --_toolbar-plate: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec */
-    --_toolbar-plate-shadow: 0 0 0.5px rgb(0 0 0 / 0.3), 0 1px 3px rgb(0 0 0 / 0.15); /* spec */
     display: inline-flex;
     align-items: center;
     gap: var(--_toolbar-space);
@@ -59,39 +54,17 @@
     min-inline-size: var(--_item);
     block-size: var(--_item);
   }
-  /* A pressed toggle rises out of the bar: the plate stays under the pointer and while pressed. */
-  .area-toolbar :is(.area-toolbar__group > .area-button, .area-toolbar > .area-button).area-button--ghost[data-selected] {
-    --_bg: var(--_toolbar-plate);
-    --_bg-hover: var(--_toolbar-plate);
-    --_bg-active: var(--_toolbar-plate);
-    box-shadow: var(--_toolbar-plate-shadow);
-  }
   /*
-   * A track groups one-of-several toggles, as Figma's mode switch does (figma--mode-switch--*):
-   * a filled groove the command height, options 2 in and 2 apart, the chosen one raised.
-   * Radii are concentric (option = groove − inset). Hover inside the groove is the translucent
-   * wash, the shared rule for grounds a control sits on (Segmented's track).
+   * A pressed toggle keeps Button's selected fill (owner, 2026-09-27: a shadow-only plate is
+   * not a state the system draws anywhere else). One-of-several choices (Figma's mode switch,
+   * text alignment) are a Segmented control in the toolbar, painted as Segmented everywhere;
+   * a tool with a menu is an icon-only ghost SplitButton (Figma's tool groups).
    */
-  .area-toolbar__group--track {
-    --_track-inset: var(--area-space-2); /* spec: Figma 2 */
-    gap: var(--_track-inset);
-    block-size: var(--_item);
-    padding: var(--_track-inset);
-    box-sizing: border-box;
-    border-radius: min(var(--_toolbar-radius), calc(var(--_item) * var(--area-radius-button-cap)));
-    /* spec: Figma's groove #f5; dark takes the component fill. */
-    background: light-dark(rgb(245 245 245), var(--area-bg-component)); /* spec */
-  }
-  .area-toolbar .area-toolbar__group--track > .area-button {
-    --_height: calc(var(--_item) - 2 * var(--_track-inset));
-    --_radius: max(0px, calc(min(var(--_toolbar-radius), calc(var(--_item) * var(--area-radius-button-cap))) - var(--_track-inset)));
-    --_bg-hover: var(--area-bg-hover);
-    min-inline-size: calc(var(--_item) - 2 * var(--_track-inset));
-    block-size: calc(var(--_item) - 2 * var(--_track-inset));
-  }
   /* spec (owner references, 2026-09-27): the rule spans the commands, not the bar; Figma runs
      its divider the full 48. */
-  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-stroke-width); block-size: var(--_item); background: var(--area-border-divider); }
+  /* Owner (2026-09-27): keep the command height, lighter stroke: the bar's seam role, as the rules
+     inside Panel and Code block (a rule is never heavier than the surface it divides). */
+  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-stroke-width); block-size: var(--_item); background: var(--area-border-decorative); }
   .area-toolbar--vertical .area-toolbar__separator { inline-size: var(--_item); block-size: var(--area-stroke-width); }
   .area-toolbar__overflow { position: relative; flex: none; }
   .area-toolbar__overflow-trigger { display: grid; place-items: center; inline-size: var(--_item); block-size: var(--_item); border-radius: min(var(--_toolbar-radius), calc(var(--_item) * var(--area-radius-button-cap))); color: var(--area-fg-default); cursor: pointer; list-style: none; }

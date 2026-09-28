@@ -21,6 +21,9 @@ export interface PositionOptions {
   offset: number;
   /** Space kept between the surface and the viewport edge. */
   padding: number;
+  /** The box to place against, when it is not the trigger's own box (a menu that clears the
+   * toolbar its trigger sits in). Defaults to the trigger's bounding box. */
+  anchorRect?: (trigger: HTMLElement) => Rect;
 }
 
 export interface Rect { x: number; y: number; width: number; height: number }
@@ -130,7 +133,7 @@ export function useNativePopover(surface: RefObject<HTMLElement | null>, trigger
  */
 export function useAnchoredPosition(trigger: RefObject<HTMLElement | null>, surface: RefObject<HTMLElement | null>, open: boolean, options: PositionOptions) {
   const frame = useRef(0);
-  const { side, align, offset, padding } = options;
+  const { side, align, offset, padding, anchorRect } = options;
   useIsoLayoutEffect(() => {
     if (!open) return;
     const place = () => {
@@ -138,7 +141,7 @@ export function useAnchoredPosition(trigger: RefObject<HTMLElement | null>, surf
       if (!anchor || !node) return;
       const rtl = getComputedStyle(anchor).direction === "rtl";
       const mirrored = rtl && align !== "center" ? (align === "start" ? "end" : "start") : align;
-      const box = anchor.getBoundingClientRect();
+      const box = anchorRect ? anchorRect(anchor) : anchor.getBoundingClientRect();
       const position = computePosition(box, { width: node.offsetWidth, height: node.offsetHeight }, { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight }, { side, align: mirrored, offset, padding });
       node.style.setProperty("left", `${position.x}px`);
       node.style.setProperty("top", `${position.y}px`);

@@ -153,3 +153,5 @@ avatar-bearing control, a side-by-side with Figma's initials avatar.
   → `figma--avatar-initial`.
 - 2026-09-27 · third pass → open questions settled, values kept (28px smallest, neutral
   fallback, initials 500) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27 · owner: the notification count sits too far in → a count on a circular owner
+  centres on the circle's edge at 45° (1.3 further out on a 32px avatar); `indicator.css`.

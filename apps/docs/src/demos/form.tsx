@@ -69,6 +69,15 @@ export const NumberFieldSoft = () => <Field label="Height"><NumberField variant=
 export const NumberFieldReadOnly = () => <Field label="Locked"><NumberField defaultValue={48} unit="px" readOnly /></Field>;
 export const NumberFieldDisabled = () => <Field label="Unavailable"><NumberField defaultValue={48} unit="px" disabled /></Field>;
 export const NumberFieldSizes = () => <div style={{ display: "grid", gap: "var(--area-space-16)", inlineSize: "var(--area-input-inline-size)" }}><NumberField size="sm" aria-label="Small" defaultValue={8} unit="px" /><NumberField size="md" aria-label="Medium" defaultValue={16} unit="px" /><NumberField size="lg" aria-label="Large" defaultValue={24} unit="px" /></div>;
+export const NumberFieldSizeSm = () => (
+  <NumberField size="sm" aria-label="Width" defaultValue={16} unit="px" />
+);
+export const NumberFieldSizeMd = () => (
+  <NumberField size="md" aria-label="Width" defaultValue={16} unit="px" />
+);
+export const NumberFieldSizeLg = () => (
+  <NumberField size="lg" aria-label="Width" defaultValue={16} unit="px" />
+);
 /* Figma's inspector: soft fields whose letter or icon is the scrub handle, no px, no label row. */
 export const NumberFieldInspector = () => {
   const pair = { display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--area-space-8)" };

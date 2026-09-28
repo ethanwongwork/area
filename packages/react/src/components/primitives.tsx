@@ -1,4 +1,5 @@
 import type { VariantProps } from "../variants.ts";
+import { InToolbar, toolbarItemProps } from "./toolbar-context.ts";
 import { MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
@@ -13,7 +14,7 @@ import type { OverlayAlign, OverlaySide } from "./overlay.ts";
  * of its own. Every appearance decision lives in `@area/styles`, which is what lets a
  * consumer use the CSS without React and get an identical result.
  */
-import { Children, cloneElement, forwardRef, useEffect, useId, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import { Children, cloneElement, forwardRef, useContext, useEffect, useId, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -408,7 +409,7 @@ export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps
  * horizontal Field rows. A props API for the rows would have to grow a case for every
  * control the system has, which is the API the CSS deliberately does not have either.
  */
-/** Fixed 280px inspector by default; override --area-panel-inline-size to customize. */
+/** Fixed 240px inspector by default; override --area-panel-inline-size to customize. */
 export interface PanelProps extends Omit<Div, "title"> {
   size?: VariantProps<typeof MANIFESTS.panel>["size"];
   /** Shadows the DOM `title` attribute deliberately: a panel's title is content, not a tooltip. */
@@ -421,6 +422,9 @@ export interface PanelProps extends Omit<Div, "title"> {
   flush?: boolean;
   /** The bar names the panel rather than heading it, so it carries no rule under it. */
   bareBar?: boolean;
+  /** Every PanelRow keeps a trailing action square, so controls line up down the panel even
+   * where a row has no action (Figma's properties panel). Otherwise rows fill the width. */
+  actionColumn?: boolean;
   /**
    * Puts a resize separator on one edge: "start" for a panel docked at the end of the page (an
    * inspector on the right), "end" for one at the start (a sidebar). Drag it, or focus it and use
@@ -441,7 +445,7 @@ export interface PanelProps extends Omit<Div, "title"> {
 const RESIZE_STEP = 8, RESIZE_STEP_LARGE = 32;
 
 export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(function Panel(
-  { size, title, action, footer, flush, bareBar, resizable, width, defaultWidth, onWidthChange, minWidth = 240, maxWidth = 500,
+  { size, title, action, footer, flush, bareBar, actionColumn, resizable, width, defaultWidth, onWidthChange, minWidth = 240, maxWidth = 500,
     className, children, style, id, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
@@ -508,7 +512,7 @@ export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(func
   return (
     <div ref={node => { root.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
       id={resizable ? panelId : id} role={ariaLabel || labelledByTitle ? "region" : undefined} aria-label={ariaLabel}
-      aria-labelledby={labelledByTitle ? titleId : undefined} className={panelVariants({ size, flush, bareBar }, className)}
+      aria-labelledby={labelledByTitle ? titleId : undefined} className={panelVariants({ size, flush, bareBar, actionColumn }, className)}
       data-resizable={resizable ? "" : undefined} data-resizing={resizing ? "" : undefined}
       style={current != null && resizable ? { ...style, "--area-panel-inline-size": `${current}px` } as CSSProperties : style} {...rest}>
       {handle}
@@ -1350,6 +1354,9 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
   const value = controlledValue ?? localValue;
   const entry = options.find(option => option.value === value && !option.disabled) ?? options.find(option => !option.disabled);
   const buttons = useRef(new Map<string, HTMLButtonElement>());
+  // In a toolbar every option is a roving item: the toolbar's arrows move focus across the
+  // options and the other commands, Space or Enter chooses (WAI-ARIA toolbar with a radio group).
+  const inToolbar = useContext(InToolbar);
   const select = (next: string) => {
     if (controlledValue === undefined) setLocalValue(next);
     onSelect?.(next);
@@ -1371,9 +1378,10 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
           disabled={option.disabled}
           className="area-segmented__item"
           ref={node => { if (node) buttons.current.set(option.value, node); else buttons.current.delete(option.value); }}
-          tabIndex={option.value === entry?.value ? 0 : -1}
+          {...(inToolbar ? toolbarItemProps : { tabIndex: option.value === entry?.value ? 0 : -1 })}
           onClick={() => select(option.value)}
           onKeyDown={event => {
+            if (inToolbar) return;
             if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
             event.preventDefault();
             const enabled = options.filter(item => !item.disabled);

@@ -116,6 +116,12 @@ Pass review container (`GalleryReviewTreeView`), replaced each pass: pass 3 show
 pass-2 spacing against the even spacing at 1× and 3×. Pass 2 checked the chevron plate at
 3× on screen (2px clear of the folder).
 
+2026-09-27, Claude in Chrome, side by side with Notion's sidebar tree (page rows, hover) beside
+the gallery's default tile: same row model (16/20 icons, 8 between icon and label, a neutral
+hover plate, actions at the row's end). Notion swaps the page icon for the chevron on hover
+and reveals + and ··· there; Area keeps a chevron column visible at rest, as Figma's layers
+panel does, so nesting reads without hovering. Area's rows are 32 against Notion's 30.
+
 ## Verification
 
 - 1 Notion capture; 3 Area captures before and 3 after; checksums verified.
@@ -155,3 +161,4 @@ pass-2 spacing against the even spacing at 1× and 3×. Pass 2 checked the chevr
   Disabled row tile added; docs API lists `currentId` and the node fields; Variants
   section added.
 - 2026-09-27 · owner again: "i thought we removed indicators from tree view" → confirmed removed in this pass; the checked filter box paints like Checkbox (neutral solid face), from the cohesion audit.
+- 2026-09-27 · batch 2 → Claude in Chrome side by side with Notion's sidebar tree recorded; Validated.

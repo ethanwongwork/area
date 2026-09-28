@@ -94,6 +94,16 @@ Content is a `role="status"` region with `aria-atomic`. Placement, timing, stack
 return stay with the consumer (prior decision). The dismiss button is named "Dismiss
 notification" by default.
 
+## Visual pass
+
+2026-09-27, Claude in Chrome, side by side with Notion's "Link copied" toast (the page's Copy link
+button, which only copies the URL) beside the gallery's Warning tile at 2×: the same one-line
+shape (40 tall, a 16px icon 12 in, the text on one line, an action at the end). Notion's toast is
+inverse: a near-black fill, white text, a yellow warning icon and a blue text action. Area's
+stays on the page's surface with the floating lift and colours only the icon, which matches the
+owner's lighter-fill direction; an inverse toast remains an open option. Unverified: dark theme,
+the action and dismiss hover on screen.
+
 ## Verification
 
 - 4 shadcn/Notion captures, 4 Area before, 2 Area after; checksums verified; Notion capture
@@ -112,3 +122,7 @@ notification" by default.
 - 2026-09-26 · pass 1 after the Dialog type and radius pass: Popover's inset and corner rule,
   40 tall, shared lift, strong title with a muted description.
 - 2026-09-27 · merged the cohesion-audit branch → `neutral` tone restored as the default (muted icon), per the system rule that every family defaults to neutral; info, success, warning and danger colour the icon.
+- 2026-09-27 · owner: "toast fill colors can be lighter and the foreground more vibrant" → toast
+  has no tinted fill (surface in every tone); its tone icons take Alert's brighter rungs (info
+  and danger 500, success and warning 550; dark unchanged). Fills were changed on Alert.
+- 2026-09-27 · batch 3 → Claude in Chrome side by side with Notion's toast recorded (Visual pass); Validated.

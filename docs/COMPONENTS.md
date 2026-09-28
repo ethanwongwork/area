@@ -152,6 +152,19 @@ Chakra/Ark, Spectrum 2) across about 95 component jobs.
   tag mode → Menu keyboard, submenus, ContextMenu and CommandPalette → ColorPicker paints →
   Disclosure/Accordion → DatePicker family → Resizable and ScrollArea → Drawer and
   AlertDialog → chat message primitives → FileUpload → HoverCard and Toggletip.
+### Proposals from the 2026-09-27 survey (not started; owner decides)
+
+[Survey](research/split-count-banner-survey.md):
+- **Count:** counts next to a label (Nav, Tabs, Segmented, filter chips) become their own small
+  element, not a Badge: 16 / 20 tall, 12px tabular numerals, pill, `soft` or `plain`, following
+  the owner row's selected and hover paint, sharing Indicator's number formatting (99+). Six
+  systems separate it (Primer CounterLabel, Atlassian, Carbon, Ant, Spectrum, shadcn). The Nav
+  and Tabs demos use a plain Badge today.
+- **Banner:** a page or section announcement (OpenAI business and Daybreak banners) is an Alert
+  layout (`layout="banner"`: section width, one line, action or status at the end), not a new
+  component and not a Toast (Primer Banner, Fluent MessageBar, Polaris, Ant Alert `banner`).
+  A bold, promotional fill waits for an owner request.
+
 ### Product-specific components (ChatGPT, Notion, Figma), 2026-09-26
 
 Components the three target products use that neither the inventory above nor a generic
@@ -213,7 +226,7 @@ Offer broad useful coverage without multiplying aliases or making every componen
 unrelated controls. Shared light/dark and compact/default settings are not variants.
 Gallery names use lowerCamelCase segments: `soft-accent`, `dotOutline-accent`,
 `state-queued`, `size-md`, `group-inline`, `composition-tableStatus`.
-One tile shows one specimen; genuine groups and size comparisons may contain multiple items.
+One tile shows one specimen; genuine groups may contain multiple items, but every size gets its own tile (owner, 2026-09-27).
 Long text, RTL and enlargement are verification cases, not public variants.
 
 ## Build workflow

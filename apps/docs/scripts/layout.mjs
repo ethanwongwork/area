@@ -597,6 +597,35 @@ export const DOCS_CSS = `
     flex-wrap: wrap;
     gap: var(--area-space-8);
   }
+  .docs-gallery-index__batches {
+    display: grid;
+    gap: var(--area-space-8);
+    margin: var(--area-space-8) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .docs-gallery-index__batch {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--area-space-12);
+  }
+  .docs-gallery-index__batch-name {
+    min-inline-size: calc(var(--area-space-96) * 2.5);
+    color: var(--area-fg-default);
+    text-decoration: none;
+  }
+  .docs-gallery-batch {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    margin: var(--area-space-40) 0 var(--area-space-12);
+    padding-block-start: var(--area-space-16);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    font-weight: var(--area-weight-strong);
+  }
   .docs-visual-gallery__header {
     margin-block-end: var(--area-space-8);
   }
