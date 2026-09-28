@@ -1,0 +1,120 @@
+# ColorArea
+
+## Job
+
+Select two color channels in a spatial control.
+
+Observed family coverage: **4 / 15 implementation systems** (2 with a component source; 2 recipe-only). Apple HIG is checked separately as platform guidance. Counts are evidence-based lower bounds; see Sources.
+
+Expose the existing ColorPicker area only if independent composition is required.
+
+## Variant axes
+
+The native inventory below preserves source names and literal values. Counts refer to the **exact axis/value**, not matching pixel dimensions. Boolean values are runtime/configuration choices; mode and density remain system settings. A named type or open parameter is not an invented enum; its value list is **not found in this declaration** unless a linked enum row supplies it. Source owners distinguish root props from subparts.
+
+<details>
+<summary>Verified native appearance and state options</summary>
+
+- **MantineSize**: `xs` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/core/MantineProvider/theme.types.ts#L159)); `sm` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/core/MantineProvider/theme.types.ts#L159)); `md` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/core/MantineProvider/theme.types.ts#L159)); `lg` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/core/MantineProvider/theme.types.ts#L159)); `xl` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/core/MantineProvider/theme.types.ts#L159)).
+- **colorPalette**: `gray` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `red` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `orange` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `yellow` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `green` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `teal` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `blue` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `cyan` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `purple` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `pink` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **disabled**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **invalid**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **isDisabled**: `false` — 1 system ([React Aria / Spectrum 2](https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/react-aria-components/src/ColorArea.tsx#L25)); `true` — 1 system ([React Aria / Spectrum 2](https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/react-aria-components/src/ColorArea.tsx#L25)).
+- **open**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **readOnly**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **size**: `MantineSize | (string & {})` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/components/ColorPicker/ColorPicker.tsx#L79)); `2xs` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `xs` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `sm` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `md` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `lg` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `xl` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `2xl` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **variant**: `outline` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `subtle` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+
+</details>
+
+## Structural alternatives
+
+- **Area with thumb and accessible value** — 2 observed implementation systems. [React Aria / Spectrum 2](https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/dev/s2-docs/pages/react-aria/ColorArea.mdx#L88), [Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker).
+
+<details>
+<summary>Additional named examples in the reviewed documentation</summary>
+
+These are source-labelled compositions or demonstrations, not inferred anatomy from screenshots. Their names alone do not establish a new primitive or a complete behavior contract.
+
+- **With swatches** — 1 system(s): [Mantine](https://mantine.dev/core/color-picker/).
+- **Disabled** — 1 system(s): [Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker).
+- **Inline** — 1 system(s): [Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker).
+- **ReadOnly** — 1 system(s): [Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker).
+
+</details>
+
+<details>
+<summary>Native layout and anatomy declarations</summary>
+
+- **fullWidth**: `false` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/components/ColorPicker/ColorPicker.tsx#L82)); `true` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/components/ColorPicker/ColorPicker.tsx#L82)).
+- **inputX**: `NonNullable&lt;Slot&lt;'input'&gt;&gt;` — 1 system ([Fluent 2](https://github.com/microsoft/fluentui/blob/8add8c8750c34c85acd811e32ab324abf8f1562e/packages/react-components/react-color-picker/library/src/components/ColorArea/ColorArea.types.ts#L13)).
+- **inputY**: `NonNullable&lt;Slot&lt;'input'&gt;&gt;` — 1 system ([Fluent 2](https://github.com/microsoft/fluentui/blob/8add8c8750c34c85acd811e32ab324abf8f1562e/packages/react-components/react-color-picker/library/src/components/ColorArea/ColorArea.types.ts#L14)).
+- **thumb**: `NonNullable&lt;Slot&lt;'div'&gt;&gt;` — 1 system ([Fluent 2](https://github.com/microsoft/fluentui/blob/8add8c8750c34c85acd811e32ab324abf8f1562e/packages/react-components/react-color-picker/library/src/components/ColorArea/ColorArea.types.ts#L12)).
+
+</details>
+
+## Interaction patterns
+
+React Aria documents axis channels and keyboard editing. Fluent provides ColorArea types; Ark exposes area/thumbnail parts within its picker.
+
+Evidence: [React Aria / Spectrum 2](https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/dev/s2-docs/pages/s2/ColorArea.mdx#L1-L61), [Fluent 2](https://github.com/microsoft/fluentui/blob/8add8c8750c34c85acd811e32ab324abf8f1562e/packages/react-components/react-color-picker/library/src/components/ColorArea/ColorArea.types.ts#L1-L51), [Chakra/Ark](https://github.com/chakra-ui/ark/blob/b561e95d20d6bd0e75cdc08e762e881628b110f7/website/src/content/pages/components/color-picker.mdx#L1-L142).
+
+Keyboard, selection, dismissal, loading and drag are separate contracts. Options below are only the declarations found in these sources; an absent contract is **not found**, not implicitly implemented by a visual composition. Static content inherits interaction from its child controls.
+
+<details>
+<summary>Native behavioral options and open parameters</summary>
+
+- **closeOnSelect**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **focusable**: `false` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/components/ColorPicker/ColorPicker.tsx#L94)); `true` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/components/ColorPicker/ColorPicker.tsx#L94)).
+- **hideMode**: `HideMode` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **immediate**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **inline**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **lazyMount**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **openAutoFocus**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **present**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **required**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **skipAnimationOnMount**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **unmountOnExit**: `false` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)); `true` — 1 system ([Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker)).
+- **withPicker**: `false` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/components/ColorPicker/ColorPicker.tsx#L70)); `true` — 1 system ([Mantine](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/components/ColorPicker/ColorPicker.tsx#L70)).
+
+</details>
+
+## Reuses in Area
+
+[ColorPicker](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L94). These are existing manifest families at the pinned base; reuse is a proposal, not proof that the composed behavior is already complete.
+
+New prerequisites are recorded in [README-3.md](README-3.md#build-order-proposal); they are not counted as existing Area reuse.
+
+## Proposed range
+
+Expose the existing ColorPicker area only if independent composition is required.
+
+Start with the following layer 2/3 categories. A category count means the system documents at least one alternative in that category; it does **not** claim every named alternative is shared. Exact per-value counts are in the native inventory and [index-3.json](index-3.json). No public geometry is inferred from screenshots.
+
+- **Layer 2 — Selectable channel axes**: 1 observed systems. [React Aria / Spectrum 2](https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/dev/s2-docs/pages/s2/ColorArea.mdx#L19), [React Aria / Spectrum 2](https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/dev/s2-docs/pages/s2/ColorArea.mdx#L19).
+- **Layer 3 — Area with thumb and accessible value**: 2 observed systems. [React Aria / Spectrum 2](https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/dev/s2-docs/pages/react-aria/ColorArea.mdx#L88), [Chakra/Ark](https://www.chakra-ui.com/docs/components/color-picker).
+
+Layer 2 also includes the linked native treatment/size/state alternatives above where compatible with this job. Do not take the Cartesian product: preserve the source-specific applicability and validate combinations during the later component-build process.
+
+## Sources
+
+Checked **2026-09-28**. Public pages are date-stamped; code links pin the commit and line. Full pins: [source-pins-3.json](source-pins-3.json). Full evidence: [source-ledger-3.json](source-ledger-3.json). The checked job is `ColorArea`; aliases appear in the JSON coverage record.
+
+- **Untitled UI**: **not found** for this job in the reviewed [catalogue](https://www.untitledui.com/react/components) and [pinned source inventory](https://github.com/untitleduico/react/tree/4702dc0ea8d140c3491a85670c7b4fab47b722da).
+- **shadcn/ui**: **not found** for this job in the reviewed [catalogue](https://ui.shadcn.com/docs/components) and [pinned source inventory](https://github.com/shadcn-ui/ui/tree/db2db460a26fa84fb65c8d903b213925fbdee9ed).
+- **Radix Themes**: **not found** for this job in the reviewed [catalogue](https://www.radix-ui.com/themes/docs/overview/getting-started) and [pinned source inventory](https://github.com/radix-ui/themes/tree/1faff10ac26ae17f09944d418c6949b93fc6b566).
+- **Base UI**: **not found** for this job in the reviewed [catalogue](https://base-ui.com/react/overview/quick-start) and [pinned source inventory](https://github.com/mui/base-ui/tree/62b54e8c944784c4de992eb424286b77cea4415a).
+- **React Aria / Spectrum 2**: [ColorArea — component](https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/dev/s2-docs/pages/s2/ColorArea.mdx#L1-L61).
+- **Fluent 2**: [@ColorArea — component](https://github.com/microsoft/fluentui/blob/8add8c8750c34c85acd811e32ab324abf8f1562e/packages/react-components/react-color-picker/library/src/components/ColorArea/ColorArea.types.ts#L1-L51).
+- **Primer**: **not found** for this job in the reviewed [catalogue](https://primer.style/product/components/) and [pinned source inventory](https://github.com/primer/react/tree/a89299ae77e8f444599f94d7e9ca368c17be3f9a).
+- **Carbon**: **not found** for this job in the reviewed [catalogue](https://carbondesignsystem.com/components/overview/components/) and [pinned source inventory](https://github.com/carbon-design-system/carbon/tree/650fcf4a8c5f86c5fdaa255d59229fe70fdb9757).
+- **Material 3**: **not found** for this job in the reviewed [catalogue](https://m3.material.io/components) and [pinned source inventory](https://github.com/material-components/material-components-android/tree/60ff09436d5d477a4b9d02940f31eb01e1250620).
+- **Mantine**: [ColorPicker — recipe](https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/packages/@mantine/core/src/components/ColorPicker/ColorPicker.tsx#L1-L300).
+- **Ant Design**: **not found** for this job in the reviewed [catalogue](https://ant.design/components/overview/) and [pinned source inventory](https://github.com/ant-design/ant-design/tree/7ad64087106acd078dcc7d91a4adfdf38f5ce172).
+- **Chakra/Ark**: [color-picker — recipe](https://github.com/chakra-ui/ark/blob/b561e95d20d6bd0e75cdc08e762e881628b110f7/website/src/content/pages/components/color-picker.mdx#L1-L142).
+- **Atlassian**: **not found** for this job in the reviewed [catalogue](https://atlassian.design/components) and [pinned source inventory](https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/a33189b5ea7a152af1ad537c6106f803a1f7a651).
+- **Polaris**: **not found** for this job in the reviewed [catalogue](https://shopify.dev/docs/api/app-home/polaris-web-components).
+- **GOV.UK**: **not found** for this job in the reviewed [catalogue](https://design-system.service.gov.uk/components/).
+- **Apple HIG**: [color-wells — platform-guidance](https://developer.apple.com/design/human-interface-guidelines/color-wells).
+
+Area scope and reuse baseline: [COMPONENTS.md](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/COMPONENTS.md#L112-L215), [manifest.ts](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L680-L749). Proposals and build priorities are research judgments, not owner approval.

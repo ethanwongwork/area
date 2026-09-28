@@ -1,0 +1,1207 @@
+[
+  {
+    "rank": 1,
+    "family": "alert-dialog",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 13,
+    "dependency_priority": 13,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Dialog",
+      "Button"
+    ],
+    "source": "alert-dialog.md#sources"
+  },
+  {
+    "rank": 2,
+    "family": "accordion",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 11,
+    "dependency_priority": 11,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Button",
+      "Panel"
+    ],
+    "source": "accordion.md#sources"
+  },
+  {
+    "rank": 3,
+    "family": "drawer",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 11,
+    "dependency_priority": 11,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Dialog",
+      "Panel",
+      "Button"
+    ],
+    "source": "drawer.md#sources"
+  },
+  {
+    "rank": 4,
+    "family": "link",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 11,
+    "dependency_priority": 11,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Code",
+      "Button"
+    ],
+    "source": "link.md#sources"
+  },
+  {
+    "rank": 5,
+    "family": "date-field",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 6,
+    "dependency_priority": 11,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Field",
+      "Input"
+    ],
+    "source": "date-field.md#sources"
+  },
+  {
+    "rank": 6,
+    "family": "date-picker",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 11,
+    "dependency_priority": 11,
+    "new_prerequisites": [
+      "date-field"
+    ],
+    "existing_reuses": [
+      "Calendar",
+      "Popover",
+      "Input",
+      "Field"
+    ],
+    "source": "date-picker.md#sources"
+  },
+  {
+    "rank": 7,
+    "family": "toggle-button-group",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 10,
+    "dependency_priority": 10,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "ButtonGroup",
+      "Segmented"
+    ],
+    "source": "toggle-button-group.md#sources"
+  },
+  {
+    "rank": 8,
+    "family": "listbox",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 7,
+    "dependency_priority": 10,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Checkbox",
+      "Chip"
+    ],
+    "source": "listbox.md#sources"
+  },
+  {
+    "rank": 9,
+    "family": "multi-select",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 10,
+    "dependency_priority": 10,
+    "new_prerequisites": [
+      "listbox"
+    ],
+    "existing_reuses": [
+      "Combobox",
+      "Chip",
+      "Checkbox",
+      "Popover"
+    ],
+    "source": "multi-select.md#sources"
+  },
+  {
+    "rank": 10,
+    "family": "date-range-picker",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 9,
+    "dependency_priority": 9,
+    "new_prerequisites": [
+      "date-picker"
+    ],
+    "existing_reuses": [
+      "Calendar",
+      "Popover",
+      "Input",
+      "Field"
+    ],
+    "source": "date-range-picker.md#sources"
+  },
+  {
+    "rank": 11,
+    "family": "file-upload",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 9,
+    "dependency_priority": 9,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Input",
+      "Button",
+      "Progress",
+      "Alert"
+    ],
+    "source": "file-upload.md#sources"
+  },
+  {
+    "rank": 12,
+    "family": "form-validation",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 9,
+    "dependency_priority": 9,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Field",
+      "Input",
+      "Alert",
+      "Button"
+    ],
+    "source": "form-validation.md#sources"
+  },
+  {
+    "rank": 13,
+    "family": "pagination",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 9,
+    "dependency_priority": 9,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Button",
+      "Select",
+      "Input"
+    ],
+    "source": "pagination.md#sources"
+  },
+  {
+    "rank": 14,
+    "family": "sidebar",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 9,
+    "dependency_priority": 9,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Nav",
+      "Button",
+      "Menu"
+    ],
+    "source": "sidebar.md#sources"
+  },
+  {
+    "rank": 15,
+    "family": "banner",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 8,
+    "dependency_priority": 8,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Alert",
+      "Button"
+    ],
+    "source": "banner.md#sources"
+  },
+  {
+    "rank": 16,
+    "family": "empty-state",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 8,
+    "dependency_priority": 8,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Button",
+      "Card"
+    ],
+    "source": "empty-state.md#sources"
+  },
+  {
+    "rank": 17,
+    "family": "notification-queue",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 8,
+    "dependency_priority": 8,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Toast"
+    ],
+    "source": "notification-queue.md#sources"
+  },
+  {
+    "rank": 18,
+    "family": "tag-picker",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 8,
+    "dependency_priority": 8,
+    "new_prerequisites": [
+      "multi-select"
+    ],
+    "existing_reuses": [
+      "Combobox",
+      "Chip",
+      "Popover"
+    ],
+    "source": "tag-picker.md#sources"
+  },
+  {
+    "rank": 19,
+    "family": "time-field",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 8,
+    "dependency_priority": 8,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Field",
+      "Input",
+      "NumberField"
+    ],
+    "source": "time-field.md#sources"
+  },
+  {
+    "rank": 20,
+    "family": "responsive-layout",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 7,
+    "dependency_priority": 8,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Panel",
+      "Card",
+      "Separator"
+    ],
+    "source": "responsive-layout.md#sources"
+  },
+  {
+    "rank": 21,
+    "family": "selectable-list",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 7,
+    "dependency_priority": 8,
+    "new_prerequisites": [
+      "listbox"
+    ],
+    "existing_reuses": [
+      "Checkbox",
+      "Radio",
+      "Avatar"
+    ],
+    "source": "selectable-list.md#sources"
+  },
+  {
+    "rank": 22,
+    "family": "page-header",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 5,
+    "dependency_priority": 8,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Breadcrumb",
+      "Button",
+      "Input"
+    ],
+    "source": "page-header.md#sources"
+  },
+  {
+    "rank": 23,
+    "family": "app-shell",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 8,
+    "dependency_priority": 8,
+    "new_prerequisites": [
+      "sidebar",
+      "page-header",
+      "responsive-layout"
+    ],
+    "existing_reuses": [
+      "Nav",
+      "Panel",
+      "Toolbar"
+    ],
+    "source": "app-shell.md#sources"
+  },
+  {
+    "rank": 24,
+    "family": "carousel",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 7,
+    "dependency_priority": 7,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Card",
+      "Button"
+    ],
+    "source": "carousel.md#sources"
+  },
+  {
+    "rank": 25,
+    "family": "circular-progress",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 6,
+    "dependency_priority": 6,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Progress",
+      "Spinner"
+    ],
+    "source": "circular-progress.md#sources"
+  },
+  {
+    "rank": 26,
+    "family": "otp-input",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 6,
+    "dependency_priority": 6,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Input",
+      "Field"
+    ],
+    "source": "otp-input.md#sources"
+  },
+  {
+    "rank": 27,
+    "family": "password-field",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 6,
+    "dependency_priority": 6,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Input",
+      "Field",
+      "Button"
+    ],
+    "source": "password-field.md#sources"
+  },
+  {
+    "rank": 28,
+    "family": "splitter",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 6,
+    "dependency_priority": 6,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Panel"
+    ],
+    "source": "splitter.md#sources"
+  },
+  {
+    "rank": 29,
+    "family": "scroll-area",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 6,
+    "dependency_priority": 6,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Panel"
+    ],
+    "source": "scroll-area.md#sources"
+  },
+  {
+    "rank": 30,
+    "family": "search-field",
+    "phase": 1,
+    "kind": "recipe",
+    "observed_system_count": 6,
+    "dependency_priority": 6,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Input",
+      "Field",
+      "Button",
+      "Kbd"
+    ],
+    "source": "search-field.md#sources"
+  },
+  {
+    "rank": 31,
+    "family": "stepper",
+    "phase": 1,
+    "kind": "primitive",
+    "observed_system_count": 6,
+    "dependency_priority": 6,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Button",
+      "Progress"
+    ],
+    "source": "stepper.md#sources"
+  },
+  {
+    "rank": 32,
+    "family": "description-list",
+    "phase": 2,
+    "kind": "primitive",
+    "observed_system_count": 5,
+    "dependency_priority": 5,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Code",
+      "Badge"
+    ],
+    "source": "description-list.md#sources"
+  },
+  {
+    "rank": 33,
+    "family": "rating",
+    "phase": 2,
+    "kind": "primitive",
+    "observed_system_count": 5,
+    "dependency_priority": 5,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "RadioGroup",
+      "Button"
+    ],
+    "source": "rating.md#sources"
+  },
+  {
+    "rank": 34,
+    "family": "timeline",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 5,
+    "dependency_priority": 5,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Avatar",
+      "Badge",
+      "Separator"
+    ],
+    "source": "timeline.md#sources"
+  },
+  {
+    "rank": 35,
+    "family": "toggle-block",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 5,
+    "dependency_priority": 5,
+    "new_prerequisites": [
+      "accordion"
+    ],
+    "existing_reuses": [
+      "Panel",
+      "Button"
+    ],
+    "source": "toggle-block.md#sources"
+  },
+  {
+    "rank": 36,
+    "family": "callout",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Alert",
+      "Code"
+    ],
+    "source": "callout.md#sources"
+  },
+  {
+    "rank": 37,
+    "family": "color-area",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "ColorPicker"
+    ],
+    "source": "color-area.md#sources"
+  },
+  {
+    "rank": 38,
+    "family": "color-slider",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "ColorPicker",
+      "Slider"
+    ],
+    "source": "color-slider.md#sources"
+  },
+  {
+    "rank": 39,
+    "family": "editable-text",
+    "phase": 2,
+    "kind": "primitive",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Input",
+      "Field",
+      "Button"
+    ],
+    "source": "editable-text.md#sources"
+  },
+  {
+    "rank": 40,
+    "family": "menubar",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Menu",
+      "Toolbar"
+    ],
+    "source": "menubar.md#sources"
+  },
+  {
+    "rank": 41,
+    "family": "people-picker",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [
+      "tag-picker"
+    ],
+    "existing_reuses": [
+      "Combobox",
+      "Avatar",
+      "Chip"
+    ],
+    "source": "people-picker.md#sources"
+  },
+  {
+    "rank": 42,
+    "family": "result",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Alert",
+      "Button"
+    ],
+    "source": "result.md#sources"
+  },
+  {
+    "rank": 43,
+    "family": "stat",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Card",
+      "Progress"
+    ],
+    "source": "stat.md#sources"
+  },
+  {
+    "rank": 44,
+    "family": "toggletip",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Popover",
+      "Button"
+    ],
+    "source": "toggletip.md#sources"
+  },
+  {
+    "rank": 45,
+    "family": "unit-field",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "NumberField",
+      "InputGroup",
+      "Select"
+    ],
+    "source": "unit-field.md#sources"
+  },
+  {
+    "rank": 46,
+    "family": "emoji-picker",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 3,
+    "dependency_priority": 3,
+    "new_prerequisites": [
+      "listbox"
+    ],
+    "existing_reuses": [
+      "Combobox",
+      "Popover",
+      "Tabs",
+      "Button"
+    ],
+    "source": "emoji-picker.md#sources"
+  },
+  {
+    "rank": 47,
+    "family": "meter",
+    "phase": 2,
+    "kind": "primitive",
+    "observed_system_count": 3,
+    "dependency_priority": 3,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Progress"
+    ],
+    "source": "meter.md#sources"
+  },
+  {
+    "rank": 48,
+    "family": "transfer-list",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 3,
+    "dependency_priority": 3,
+    "new_prerequisites": [
+      "listbox"
+    ],
+    "existing_reuses": [
+      "Checkbox",
+      "Input",
+      "Button"
+    ],
+    "source": "transfer-list.md#sources"
+  },
+  {
+    "rank": 49,
+    "family": "attachment-card",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 2,
+    "dependency_priority": 2,
+    "new_prerequisites": [
+      "file-upload"
+    ],
+    "existing_reuses": [
+      "Card",
+      "Progress",
+      "Button"
+    ],
+    "source": "attachment-card.md#sources"
+  },
+  {
+    "rank": 50,
+    "family": "comment-thread",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 2,
+    "dependency_priority": 2,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Avatar",
+      "Composer",
+      "Message",
+      "Button"
+    ],
+    "source": "comment-thread.md#sources"
+  },
+  {
+    "rank": 51,
+    "family": "eyedropper-button",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 2,
+    "dependency_priority": 2,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Button",
+      "ColorPicker"
+    ],
+    "source": "eyedropper-button.md#sources"
+  },
+  {
+    "rank": 52,
+    "family": "gradient-editor",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 2,
+    "dependency_priority": 2,
+    "new_prerequisites": [
+      "color-area",
+      "color-slider"
+    ],
+    "existing_reuses": [
+      "ColorPicker",
+      "ColorSwatch",
+      "Slider"
+    ],
+    "source": "gradient-editor.md#sources"
+  },
+  {
+    "rank": 53,
+    "family": "message-actions",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 2,
+    "dependency_priority": 2,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Message",
+      "Button",
+      "Toolbar"
+    ],
+    "source": "message-actions.md#sources"
+  },
+  {
+    "rank": 54,
+    "family": "reactions",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 2,
+    "dependency_priority": 2,
+    "new_prerequisites": [
+      "emoji-picker"
+    ],
+    "existing_reuses": [
+      "Chip",
+      "Button"
+    ],
+    "source": "reactions.md#sources"
+  },
+  {
+    "rank": 55,
+    "family": "scrubbable-angle",
+    "phase": 2,
+    "kind": "primitive",
+    "observed_system_count": 2,
+    "dependency_priority": 2,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "NumberField",
+      "Slider"
+    ],
+    "source": "scrubbable-angle.md#sources"
+  },
+  {
+    "rank": 56,
+    "family": "tree-select",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 2,
+    "dependency_priority": 2,
+    "new_prerequisites": [
+      "listbox"
+    ],
+    "existing_reuses": [
+      "TreeView",
+      "Combobox",
+      "Popover",
+      "Chip"
+    ],
+    "source": "tree-select.md#sources"
+  },
+  {
+    "rank": 57,
+    "family": "duration-input",
+    "phase": 2,
+    "kind": "recipe",
+    "observed_system_count": 1,
+    "dependency_priority": 1,
+    "new_prerequisites": [
+      "time-field"
+    ],
+    "existing_reuses": [
+      "NumberField",
+      "InputGroup",
+      "Field"
+    ],
+    "source": "duration-input.md#sources"
+  },
+  {
+    "rank": 58,
+    "family": "charts",
+    "phase": 3,
+    "kind": "adapter",
+    "observed_system_count": 8,
+    "dependency_priority": 8,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Tooltip",
+      "Card"
+    ],
+    "source": "charts.md#sources"
+  },
+  {
+    "rank": 59,
+    "family": "data-grid",
+    "phase": 3,
+    "kind": "adapter",
+    "observed_system_count": 8,
+    "dependency_priority": 8,
+    "new_prerequisites": [
+      "selectable-list"
+    ],
+    "existing_reuses": [
+      "Table",
+      "Checkbox",
+      "Input",
+      "Menu"
+    ],
+    "source": "data-grid.md#sources"
+  },
+  {
+    "rank": 60,
+    "family": "rich-text-editor",
+    "phase": 3,
+    "kind": "adapter",
+    "observed_system_count": 4,
+    "dependency_priority": 4,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Toolbar",
+      "Menu",
+      "Popover"
+    ],
+    "source": "rich-text-editor.md#sources"
+  },
+  {
+    "rank": 61,
+    "family": "drag-handle",
+    "phase": 3,
+    "kind": "adapter",
+    "observed_system_count": 3,
+    "dependency_priority": 3,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "PropertyList",
+      "Button"
+    ],
+    "source": "drag-handle.md#sources"
+  },
+  {
+    "rank": 62,
+    "family": "floating-format-bar",
+    "phase": 3,
+    "kind": "recipe",
+    "observed_system_count": 3,
+    "dependency_priority": 3,
+    "new_prerequisites": [
+      "rich-text-editor"
+    ],
+    "existing_reuses": [
+      "Toolbar",
+      "Popover"
+    ],
+    "source": "floating-format-bar.md#sources"
+  },
+  {
+    "rank": 63,
+    "family": "media-preview",
+    "phase": 3,
+    "kind": "adapter",
+    "observed_system_count": 3,
+    "dependency_priority": 3,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Dialog",
+      "Button"
+    ],
+    "source": "media-preview.md#sources"
+  },
+  {
+    "rank": 64,
+    "family": "tree-grid",
+    "phase": 3,
+    "kind": "adapter",
+    "observed_system_count": 3,
+    "dependency_priority": 3,
+    "new_prerequisites": [
+      "data-grid"
+    ],
+    "existing_reuses": [
+      "Table",
+      "TreeView"
+    ],
+    "source": "tree-grid.md#sources"
+  },
+  {
+    "rank": 65,
+    "family": "dockable-inspector",
+    "phase": 3,
+    "kind": "adapter",
+    "observed_system_count": 2,
+    "dependency_priority": 2,
+    "new_prerequisites": [
+      "splitter",
+      "app-shell"
+    ],
+    "existing_reuses": [
+      "Panel",
+      "PropertyList",
+      "Toolbar"
+    ],
+    "source": "dockable-inspector.md#sources"
+  },
+  {
+    "rank": 66,
+    "family": "code-editor",
+    "phase": 4,
+    "kind": "defer",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "CodeBlock",
+      "Toolbar"
+    ],
+    "source": "code-editor.md#sources"
+  },
+  {
+    "rank": 67,
+    "family": "constraints-picker",
+    "phase": 4,
+    "kind": "recipe",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "CheckboxGroup",
+      "AlignmentPicker"
+    ],
+    "source": "constraints-picker.md#sources"
+  },
+  {
+    "rank": 68,
+    "family": "easing-curve-editor",
+    "phase": 4,
+    "kind": "defer",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "NumberField",
+      "InputGroup"
+    ],
+    "source": "easing-curve-editor.md#sources"
+  },
+  {
+    "rank": 69,
+    "family": "font-picker",
+    "phase": 4,
+    "kind": "adapter",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [
+      "listbox"
+    ],
+    "existing_reuses": [
+      "Combobox",
+      "Select"
+    ],
+    "source": "font-picker.md#sources"
+  },
+  {
+    "rank": 70,
+    "family": "keyboard-shortcuts",
+    "phase": 4,
+    "kind": "recipe",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [
+      "description-list"
+    ],
+    "existing_reuses": [
+      "Dialog",
+      "Kbd"
+    ],
+    "source": "keyboard-shortcuts.md#sources"
+  },
+  {
+    "rank": 71,
+    "family": "layer-row-badges",
+    "phase": 4,
+    "kind": "recipe",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "TreeView",
+      "Badge"
+    ],
+    "source": "layer-row-badges.md#sources"
+  },
+  {
+    "rank": 72,
+    "family": "property-value",
+    "phase": 4,
+    "kind": "adapter",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [
+      "unit-field",
+      "people-picker",
+      "date-field"
+    ],
+    "existing_reuses": [
+      "Field",
+      "Input",
+      "Badge",
+      "Avatar",
+      "Checkbox"
+    ],
+    "source": "property-value.md#sources"
+  },
+  {
+    "rank": 73,
+    "family": "database-card",
+    "phase": 4,
+    "kind": "recipe",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [
+      "property-value"
+    ],
+    "existing_reuses": [
+      "Card",
+      "Badge",
+      "Avatar"
+    ],
+    "source": "database-card.md#sources"
+  },
+  {
+    "rank": 74,
+    "family": "shortcut-recorder",
+    "phase": 4,
+    "kind": "defer",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Kbd",
+      "Input",
+      "Button"
+    ],
+    "source": "shortcut-recorder.md#sources"
+  },
+  {
+    "rank": 75,
+    "family": "source-chip",
+    "phase": 4,
+    "kind": "recipe",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Chip",
+      "HoverCard"
+    ],
+    "source": "source-chip.md#sources"
+  },
+  {
+    "rank": 76,
+    "family": "thinking-disclosure",
+    "phase": 4,
+    "kind": "recipe",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [
+      "accordion"
+    ],
+    "existing_reuses": [
+      "Message",
+      "Panel",
+      "Spinner"
+    ],
+    "source": "thinking-disclosure.md#sources"
+  },
+  {
+    "rank": 77,
+    "family": "variable-chip",
+    "phase": 4,
+    "kind": "recipe",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Chip",
+      "Code",
+      "Tooltip"
+    ],
+    "source": "variable-chip.md#sources"
+  },
+  {
+    "rank": 78,
+    "family": "voice-input",
+    "phase": 4,
+    "kind": "defer",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Button",
+      "Progress",
+      "Composer"
+    ],
+    "source": "voice-input.md#sources"
+  },
+  {
+    "rank": 79,
+    "family": "zoom-control",
+    "phase": 4,
+    "kind": "recipe",
+    "observed_system_count": 0,
+    "dependency_priority": 0,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "NumberField",
+      "Menu",
+      "Button"
+    ],
+    "source": "zoom-control.md#sources"
+  }
+]
