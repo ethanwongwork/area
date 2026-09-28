@@ -1,0 +1,102 @@
+{
+  "Untitled UI": {
+    "url": "https://www.untitledui.com/react/components",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "shadcn/ui": {
+    "url": "https://ui.shadcn.com/docs/components",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Radix Themes": {
+    "url": "https://www.radix-ui.com/themes/docs/components/overview",
+    "status": "error",
+    "checked": "2026-09-28"
+  },
+  "Base UI": {
+    "url": "https://base-ui.com/react/overview/quick-start",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "React Aria / Spectrum 2": {
+    "url": "https://react-spectrum.adobe.com/s2/index.html",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Fluent 2": {
+    "url": "https://fluent2.microsoft.design/components/web/react",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Primer": {
+    "url": "https://primer.style/product/components/",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Carbon": {
+    "url": "https://carbondesignsystem.com/components/overview/components/",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Material 3": {
+    "url": "https://m3.material.io/components",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Mantine": {
+    "url": "https://mantine.dev/core/getting-started/",
+    "status": "error",
+    "checked": "2026-09-28"
+  },
+  "Ant Design": {
+    "url": "https://ant.design/components/overview/",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Chakra/Ark": {
+    "url": "https://www.chakra-ui.com/docs/components/concepts/overview",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Atlassian": {
+    "url": "https://atlassian.design/components",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Polaris": {
+    "url": "https://polaris-react.shopify.com/components",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "GOV.UK": {
+    "url": "https://design-system.service.gov.uk/components/",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Apple HIG": {
+    "url": "https://developer.apple.com/design/human-interface-guidelines/components/",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "React Aria": {
+    "url": "https://react-aria.adobe.com/components",
+    "status": "error",
+    "checked": "2026-09-28"
+  },
+  "Ark": {
+    "url": "https://ark-ui.com/docs/overview/introduction",
+    "status": "error",
+    "checked": "2026-09-28"
+  },
+  "Untitled UI root": {
+    "url": "https://www.untitledui.com/react",
+    "status": 200,
+    "checked": "2026-09-28"
+  },
+  "Material source": {
+    "url": "https://github.com/material-components/material-web/tree/main",
+    "status": 200,
+    "checked": "2026-09-28"
+  }
+}
