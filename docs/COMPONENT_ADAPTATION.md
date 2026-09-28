@@ -283,11 +283,16 @@ Show the result in the gallery. Every variant the manifest exposes has a tile, g
 the gallery (Default, Variants, Tones, Sizes, Layout, Content, States, Behavior; see
 `specimenGroup` in `apps/docs/scripts/specimen-names.mjs`) and named by its category so it
 lands in the right group: `size-sm`, `tone-accent`, `state-disabled`, `layout-vertical`.
-When a change is subtle enough to need a side-by-side, a temporary `GalleryReview<Name>`
-export renders a Pass review above the family (`ReviewPair` in
-`apps/docs/src/demos/review.tsx`, "before" rebuilt through private properties); delete it
-once the owner has seen it. The owner asked on 2026-09-26 not to keep Pass reviews for
-audited families. Then give the owner:
+Every family opens with a **Pass review** (owner, 2026-09-27; supersedes the 2026-09-26 request
+to drop them). The gallery build reads the repository and shows three steps with their
+evidence: the audit (a spec covered by the cohesion audit), the visual pass (the spec's Visual
+pass section) and Claude in Chrome (target-product captures in `captures/<slug>/`), then the
+family's default tile enlarged 2× as an inert copy. A family reads **Validated** only when
+`apps/docs/src/pass-status.mjs` records that its visual pass compared Area and the product side
+by side in Claude in Chrome; the build fails if that entry's evidence is missing. Validated is
+not owner acceptance. A change subtle enough to need before / after rows adds a
+`GalleryReview<Name>` export (`ReviewPair` in `apps/docs/src/demos/review.tsx`), which renders
+inside the Pass review; delete those rows once the owner has seen them. Then give the owner:
 
 - the gallery link for each variant,
 - the spec's comparison table with the Area column,

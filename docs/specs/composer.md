@@ -43,8 +43,8 @@ chatgpt  body 768 × 52, radius 26, no border; shadow 0 0 0 1px 4%, 0 2px 8px 4%
   footer grid, padding 8, column-gap 8: [36px action] [input] [actions]
   input  16px, 26px line, 13px from the top
   actions 36px round, ghost ink rgb(143); voice/send 36px round
-area     shell, padding 8 (7 + 1 border), radius 16, border-decorative, 0 2px 8px shadow
-  entry  flex, gap 8: leading actions, textarea, trailing actions, 32px round send
+area     shell, padding 8 (7 + 1 border), radius 16, border-decorative, no resting shadow
+  entry  flex, gap 8: leading actions, textarea, trailing actions, 32px send Button (radius 8; `submitPill` makes it round)
   input  16/24, 4px block padding (32px row)
 ```
 
@@ -55,6 +55,7 @@ area     shell, padding 8 (7 + 1 border), radius 16, border-decorative, 0 2px 8p
 | input · type | **16/24** (`text-md`) | ChatGPT 16px (26 line); type ramp body 16/24 | Was 14/20. The row stays 48px: (32 − 24) / 2 = 4px padding |
 | shell · edge | **1px `border-decorative`** (rgb 243) | ChatGPT's 4% ring (about rgb 245) | Was the field edge (226). Focus still paints the field focus ring |
 | shell · shadow | none at rest (focus keeps its halo) | owner 2026-09-26: no control has a resting shadow | ChatGPT floats on 0 2px 8px 4%; superseded |
+| disabled / busy | disabled: Textarea's field paint (`textarea-bg-disabled`, `border-faint`, `fg-disabled` text and placeholder), no opacity; busy: `cursor: progress`, send disabled | Cohesion audit: text fields keep full opacity with field paint | Was `opacity: .6`, which compounded with the send Button's own 50% (about 30%) |
 | actions · gap | **8** | ChatGPT 8 | Was 4 |
 | actions · size | 32 | Peer: Button md | ChatGPT 36; Area's control scale is 28 / 32 / 40 |
 | shell · height (inline) | 48 | 32px actions + 8px insets | ChatGPT 52 (36px actions) |
@@ -72,7 +73,8 @@ to 480px it returns to 48px.
 ## Visual pass
 
 Pass review container (`GalleryReviewComposer`): before and after at 1× and 3×. Measured
-after: inline 480 × 48, stacked 480 × 116, border rgb(243), shadow 0 2px 8px, text 16/24.
+after: inline 480 × 48, stacked 480 × 116, border rgb(243), shadow 0 2px 8px, text 16/24
+(the shadow was dropped 2026-09-26; see Decisions).
 
 ## Verification
 

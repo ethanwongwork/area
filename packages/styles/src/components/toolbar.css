@@ -8,9 +8,17 @@
     --_toolbar-inset: 0px;
     --_toolbar-bg: transparent;
     --_toolbar-shadow: none;
+    /* spec (toolbar.md, redesign 2026-09-27): Figma's tools sit 8 apart and 8 either side of the
+       divider (figma--tool-group--*, figma--mode-switch--rest). */
+    --_toolbar-space: var(--area-space-8); /* spec */
+    /* spec: a pressed toggle is a raised plate, Figma's selected mode option (white, a 0.5px
+       30% halo and a 1px / 3px 15% shadow; figma--mode-switch--rest). In dark the plate takes
+       the selection fill, since a surface-coloured plate would vanish into the bar. */
+    --_toolbar-plate: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec */
+    --_toolbar-plate-shadow: 0 0 0.5px rgb(0 0 0 / 0.3), 0 1px 3px rgb(0 0 0 / 0.15); /* spec */
     display: inline-flex;
     align-items: center;
-    gap: var(--area-space-4);
+    gap: var(--_toolbar-space);
     block-size: calc(var(--_height) + 2 * var(--_toolbar-inset));
     max-inline-size: 100%;
     padding: var(--_toolbar-inset);
@@ -19,14 +27,27 @@
     box-shadow: var(--_toolbar-shadow);
   }
   .area-toolbar--plain { --_toolbar-inset: 0px; }
-  .area-toolbar--surface { --_toolbar-inset: var(--area-space-4); --_toolbar-bg: var(--area-bg-surface); --_toolbar-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-decorative), var(--area-shadow-1); }
+  /*
+   * spec: Figma's toolbelt. The bar pads its controls 8 (48 around 32 commands) and floats on
+   * three soft layers: a 0.5px 18% halo, 3px / 8px and 1px / 3px at 10% (figma--bottom-toolbar).
+   * The dark theme adds the decorative ring, which the halo cannot draw on a dark page.
+   */
+  .area-toolbar--surface {
+    --_toolbar-inset: var(--area-space-8); /* spec */
+    --_toolbar-bg: var(--area-bg-surface);
+    --_toolbar-shadow: inset 0 0 0 var(--area-border-width) light-dark(transparent, var(--area-border-decorative)), 0 0 0.5px rgb(0 0 0 / 0.18), 0 3px 8px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.1); /* spec */
+  }
   .area-toolbar--sm { --_height: var(--area-control-sm); --_toolbar-icon: var(--area-icon-sm); --_toolbar-text: var(--area-control-sm-text); --_toolbar-leading: var(--area-control-sm-leading); --_toolbar-gap: var(--area-gap-sm); --_toolbar-radius: var(--area-radius-control-sm); }
   .area-toolbar--md { --_height: var(--area-control-md); --_toolbar-icon: var(--area-icon-md); --_toolbar-text: var(--area-control-md-text); --_toolbar-leading: var(--area-control-md-leading); --_toolbar-gap: var(--area-gap-md); --_toolbar-radius: var(--area-radius-control-md); }
   .area-toolbar--lg { --_height: var(--area-control-lg); --_toolbar-icon: var(--area-icon-lg); --_toolbar-text: var(--area-control-lg-text); --_toolbar-leading: var(--area-control-lg-leading); --_toolbar-gap: var(--area-gap-lg); --_toolbar-radius: var(--area-radius-control-lg); }
   .area-toolbar--horizontal { flex-direction: row; }
   .area-toolbar--vertical { flex-direction: column; inline-size: fit-content; block-size: auto; }
   .area-toolbar--full-width { inline-size: 100%; }
-  .area-toolbar__group { display: inline-flex; align-items: center; gap: var(--area-space-2); min-inline-size: 0; }
+  /* A group keeps its content's width: shrinking it only overlapped its commands. */
+  .area-toolbar__group { display: inline-flex; flex: none; align-items: center; gap: var(--_toolbar-space); }
+  /* A select in a toolbar is as wide as its options, not the form default (16rem): Figma's font
+     and size fields hug their text. */
+  .area-toolbar .area-select:not(.area-select--full-width) { inline-size: auto; }
   .area-toolbar--vertical .area-toolbar__group { flex-direction: column; }
   .area-toolbar__group > .area-button, .area-toolbar > .area-button {
     --_height: var(--_item);
@@ -38,8 +59,40 @@
     min-inline-size: var(--_item);
     block-size: var(--_item);
   }
-  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-stroke-width); block-size: var(--_toolbar-icon); background: var(--area-border-divider); }
-  .area-toolbar--vertical .area-toolbar__separator { inline-size: var(--_toolbar-icon); block-size: var(--area-stroke-width); }
+  /* A pressed toggle rises out of the bar: the plate stays under the pointer and while pressed. */
+  .area-toolbar :is(.area-toolbar__group > .area-button, .area-toolbar > .area-button).area-button--ghost[data-selected] {
+    --_bg: var(--_toolbar-plate);
+    --_bg-hover: var(--_toolbar-plate);
+    --_bg-active: var(--_toolbar-plate);
+    box-shadow: var(--_toolbar-plate-shadow);
+  }
+  /*
+   * A track groups one-of-several toggles, as Figma's mode switch does (figma--mode-switch--*):
+   * a filled groove the command height, options 2 in and 2 apart, the chosen one raised.
+   * Radii are concentric (option = groove − inset). Hover inside the groove is the translucent
+   * wash, the shared rule for grounds a control sits on (Segmented's track).
+   */
+  .area-toolbar__group--track {
+    --_track-inset: var(--area-space-2); /* spec: Figma 2 */
+    gap: var(--_track-inset);
+    block-size: var(--_item);
+    padding: var(--_track-inset);
+    box-sizing: border-box;
+    border-radius: min(var(--_toolbar-radius), calc(var(--_item) * var(--area-radius-button-cap)));
+    /* spec: Figma's groove #f5; dark takes the component fill. */
+    background: light-dark(rgb(245 245 245), var(--area-bg-component)); /* spec */
+  }
+  .area-toolbar .area-toolbar__group--track > .area-button {
+    --_height: calc(var(--_item) - 2 * var(--_track-inset));
+    --_radius: max(0px, calc(min(var(--_toolbar-radius), calc(var(--_item) * var(--area-radius-button-cap))) - var(--_track-inset)));
+    --_bg-hover: var(--area-bg-hover);
+    min-inline-size: calc(var(--_item) - 2 * var(--_track-inset));
+    block-size: calc(var(--_item) - 2 * var(--_track-inset));
+  }
+  /* spec (owner references, 2026-09-27): the rule spans the commands, not the bar; Figma runs
+     its divider the full 48. */
+  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-stroke-width); block-size: var(--_item); background: var(--area-border-divider); }
+  .area-toolbar--vertical .area-toolbar__separator { inline-size: var(--_item); block-size: var(--area-stroke-width); }
   .area-toolbar__overflow { position: relative; flex: none; }
   .area-toolbar__overflow-trigger { display: grid; place-items: center; inline-size: var(--_item); block-size: var(--_item); border-radius: min(var(--_toolbar-radius), calc(var(--_item) * var(--area-radius-button-cap))); color: var(--area-fg-default); cursor: pointer; list-style: none; }
   .area-toolbar__overflow-trigger::-webkit-details-marker { display: none; }

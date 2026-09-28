@@ -141,14 +141,14 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     index += 1;
     const i = index;
     return <div key={item.id} id={`${id}-item-${i}`} data-index={i} role="option" aria-selected={i === current}
-      aria-disabled={item.disabled || undefined} className="area-menu__item area-command-palette__item"
+      aria-disabled={item.disabled || undefined} data-disabled={item.disabled ? "" : undefined} className="area-menu__item area-command-palette__item"
       data-highlighted={i === current ? "" : undefined}
       onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!item.disabled && i !== current) setActive(i); }}
       onClick={() => run(item)}>
       {item.icon ? <span className="area-menu__icon" aria-hidden="true">{item.icon}</span> : null}
       <span className="area-menu__text area-command-palette__text">{item.label}</span>
       {item.description ? <span className="area-command-palette__description">{item.description}</span> : null}
-      {item.shortcut ? <Kbd keys={item.shortcut} size="small" appearance="quiet" /> : null}
+      {item.shortcut ? <span className="area-menu__shortcut"><Kbd keys={item.shortcut} size="small" appearance="quiet" /></span> : null}
     </div>;
   };
   const groups: Array<[string | undefined, CommandItem[]]> = [];

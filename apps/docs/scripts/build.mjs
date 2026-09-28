@@ -32,6 +32,7 @@ import { CATALOG } from "./icons.catalog.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
 import { COMPLETE_COMPONENTS, RECENT_COMPONENTS, componentStatus, statusLabel } from "../src/component-status.mjs";
 import { PRACTICES } from "../src/practices.mjs";
+import { VALIDATED_PASSES } from "../src/pass-status.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = resolve(root, "..", "..");
@@ -358,16 +359,20 @@ function galleryPage({ families = null } = {}) {
       { id: "sizes", title: "Sizes", demo: "GalleryAlignmentPickerSizes", span: "2x1" },
     ],
     toolbar: [
-      { id: "default", title: "Commands", demo: "GalleryToolbar" },
-      { id: "plain", title: "Plain", demo: "GalleryToolbarPlain" },
-      { id: "vertical", title: "Vertical", demo: "GalleryToolbarVertical" },
+      { id: "default", title: "Tools", demo: "GalleryToolbar", span: "2x1" },
+      { id: "content-formatting", title: "Content / text formatting", demo: "GalleryToolbarFormatting", span: "2x1" },
+      { id: "variant-plain", title: "Variant / plain", demo: "GalleryToolbarPlain" },
+      { id: "layout-vertical", title: "Layout / vertical", demo: "GalleryToolbarVertical" },
       { id: "sizes", title: "Sizes", demo: "GalleryToolbarSizes", span: "2x1" },
+      { id: "behavior-overflow", title: "Behavior / overflow", demo: "GalleryToolbarOverflow" },
     ],
     composer: [
       { id: "inline", title: "Inline", demo: "GalleryComposerInline", span: "2x1" },
       { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked", span: "2x2" },
       { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled", span: "2x2" },
       { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled", span: "2x1" },
+      { id: "busy", title: "State / busy", demo: "GalleryComposerBusy", span: "2x1" },
+      { id: "pill", title: "Send / pill", demo: "GalleryComposerPill", span: "2x1" },
     ],
     "code-block": [
       { id: "default", title: "Default", demo: "CodeBlockDefault", span: "2x2" },
@@ -410,7 +415,8 @@ function galleryPage({ families = null } = {}) {
       { id: "default", title: "In a conversation", demo: "GalleryScrollToLatest", span: "2x3" },
     ],
     message: [
-      { id: "conversation", title: "Conversation", demo: "GalleryMessage", span: "2x2" },
+      { id: "author-user", title: "Author / user", demo: "GalleryMessageUser", span: "2x1" },
+      { id: "author-assistant", title: "Author / assistant", demo: "GalleryMessageAssistant", span: "2x1" },
       { id: "streaming", title: "State / streaming", demo: "GalleryMessageStreaming", span: "2x1" },
       { id: "long", title: "Long message", demo: "GalleryMessageLong", span: "2x1" },
     ],
@@ -442,6 +448,8 @@ function galleryPage({ families = null } = {}) {
       { id: "groups", title: "Groups", demo: "GalleryComboboxGroups" },
       { id: "create", title: "Create", demo: "GalleryComboboxCreate" },
       { id: "rich", title: "Icons and descriptions", demo: "GalleryComboboxRich" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryComboboxSoft" },
+      { id: "state-disabled-option", title: "State / disabled option", demo: "GalleryComboboxDisabledOption" },
       { id: "size-sm", title: "Size / sm", demo: "GalleryComboboxSm" },
       { id: "size-lg", title: "Size / lg", demo: "GalleryComboboxLg" },
       { id: "state-disabled", title: "State / disabled", demo: "GalleryComboboxDisabled" },
@@ -454,6 +462,7 @@ function galleryPage({ families = null } = {}) {
       { id: "corners", title: "Corners / linked", demo: "GalleryBoxFieldCorners" },
       { id: "corners-individual", title: "Corners / per corner", demo: "GalleryBoxFieldCornersIndividual" },
       { id: "variant-soft", title: "Variant / soft", demo: "GalleryBoxFieldSoft" },
+      { id: "toggle-off", title: "Toggle / off", demo: "GalleryBoxFieldNoToggle" },
       { id: "size-sm", title: "Size / sm", demo: "GalleryBoxFieldSm" },
       { id: "size-lg", title: "Size / lg", demo: "GalleryBoxFieldLg" },
       { id: "state-disabled", title: "State / disabled", demo: "GalleryBoxFieldDisabled" },
@@ -785,30 +794,25 @@ function galleryPage({ families = null } = {}) {
     card: [
       { id: "default", title: "Default", demo: "CardVertical", span: "2x2" },
       { id: "size-sm", title: "Size / sm", demo: "CardSmall", span: "2x2" },
-      { id: "size-md", title: "Size / md", demo: "CardMedium", span: "2x2" },
       { id: "size-lg", title: "Size / lg", demo: "CardLarge", span: "2x2" },
       { id: "layout-horizontal", title: "Layout / horizontal", demo: "CardHorizontal", span: "2x2" },
       { id: "layout-horizontal-end", title: "Layout / horizontal, media end", demo: "CardHorizontalEnd", span: "2x2" },
-      { id: "layout-horizontal-stacked", title: "Layout / horizontal, stacked", demo: "CardHorizontalStacked", span: "2x2" },
-      { id: "layout-bleed", title: "Layout / bleed media", demo: "CardBleed", span: "2x2" },
-      { id: "layout-horizontal-bleed", title: "Layout / horizontal, bleed media", demo: "CardHorizontalBleed", span: "2x2" },
       { id: "layout-compact", title: "Layout / compact", demo: "CardCompact", span: "2x2" },
       { id: "layout-immersive", title: "Layout / immersive", demo: "CardImmersive", span: "2x2" },
+      { id: "layout-bleed", title: "Layout / bleed media", demo: "CardBleed", span: "2x2" },
       { id: "content-header-action", title: "Content / header action", demo: "CardHeaderAction", span: "2x2" },
       { id: "content-overlay", title: "Content / overlay", demo: "CardMediaOverlay", span: "2x2" },
       { id: "content-corner-action", title: "Content / corner action", demo: "CardCornerAction", span: "2x2" },
       { id: "content-well", title: "Content / well", demo: "CardWell", span: "2x2" },
       { id: "content-list", title: "Content / list", demo: "CardWithList", span: "2x2" },
       { id: "content-tags", title: "Content / tags", demo: "CardTags", span: "2x2" },
-      { id: "content-carousel", title: "Content / carousel", demo: "CardWithCarousel", span: "2x2" },
+      { id: "content-carousel", title: "Content / carousel", demo: "GalleryCardCarousel", span: "2x2" },
       { id: "behavior-linked", title: "Behavior / linked", demo: "CardLinked", span: "2x2" },
       { id: "behavior-reveal", title: "Behavior / reveal actions", demo: "CardLinkedActions", span: "2x2" },
       { id: "template-video", title: "Template / video", demo: "CardTemplateVideo", span: "2x2" },
       { id: "template-music", title: "Template / music", demo: "CardTemplateMusic", span: "2x2" },
       { id: "template-weather", title: "Template / weather", demo: "CardTemplateWeather", span: "2x2" },
       { id: "template-stat", title: "Template / stat", demo: "CardTemplateStat", span: "2x2" },
-      { id: "template-news", title: "Template / news", demo: "CardTemplateNews", span: "2x2" },
-      { id: "template-tool", title: "Template / tool", demo: "CardTemplateTool", span: "2x2" },
       { id: "template-plan", title: "Template / plan", demo: "CardTemplatePlan", span: "2x2" },
       { id: "template-feature", title: "Template / feature", demo: "CardTemplateFeature", span: "2x2" },
     ],
@@ -938,6 +942,7 @@ function galleryPage({ families = null } = {}) {
       demo: name,
     })),
   };
+  const passes = [];
   const sections = orderedComponents.filter((component) => families ? families.includes(component.slug) : !component.docsOnly).map((component) => {
     const status = componentStatus(component.slug);
     const fallbackName = `Gallery${component.exportName ?? component.name.replaceAll(" ", "")}`;
@@ -967,16 +972,17 @@ function galleryPage({ families = null } = {}) {
         <h3 class="docs-visual-gallery__group-title" id="gallery-group-${component.slug}-${group.toLowerCase().replace(/[^a-z]+/g, "-")}">${escapeHtml(group)}</h3>
         <div class="docs-visual-gallery__grid">${tiles.join("\n")}</div>
       </section>`).join("\n");
-    // A family's current design pass (before / after, at 1x and at scale) sits above its
-    // variants while it is being reviewed, when demos export GalleryReview<PascalSlug>.
+    // Every family opens with its Pass review: whether its design pass is validated (audit,
+    // visual pass, Claude in Chrome), the evidence behind each step, the default specimen
+    // enlarged, and any before / after rows the family exports as GalleryReview<PascalSlug>.
     const reviewName = `GalleryReview${component.slug.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase())}`;
     const reviewDemo = demos[reviewName];
-    const review = reviewDemo ? `<section class="docs-gallery-review" aria-labelledby="gallery-review-${component.slug}">
-        <h3 class="docs-visual-gallery__tile-title" id="gallery-review-${component.slug}">Pass review</h3>
-        <div class="docs-gallery-review__body">${demoMarkup(reviewName, reviewDemo.html)}</div>
-      </section>` : "";
-    return `<details open class="docs-visual-gallery__section" id="gallery-section-${component.slug}">
-      <summary class="docs-visual-gallery__section-title">${escapeHtml(component.name)} <span class="docs-audit-label" data-audit="${status}">${statusLabel(status)}</span></summary>
+    const pass = passEvidence(component);
+    passes.push({ component, pass });
+    const defaultSpecimen = specimens.find(example => specimenName(example, component.slug) === "default") ?? specimens[0];
+    const review = passReview(component, pass, demos[defaultSpecimen.demo].html, reviewDemo ? demoMarkup(reviewName, reviewDemo.html) : "");
+    return `<details open class="docs-visual-gallery__section" id="gallery-section-${component.slug}" data-pass="${pass.state}">
+      <summary class="docs-visual-gallery__section-title">${escapeHtml(component.name)} <span class="docs-audit-label" data-audit="${status}">${statusLabel(status)}</span>${pass.state === "validated" ? ` ${passBadge("success", "Pass validated")}` : ""}</summary>
       ${review}
       <div class="docs-visual-gallery__groups">${groups}</div>
     </details>`;
@@ -985,6 +991,7 @@ function galleryPage({ families = null } = {}) {
   if (families) return sections;
   const indexNav = `    <nav class="docs-gallery-index" aria-label="Components by audit status">
       ${["complete", "review", "unrefined"].map(status => `<div><h2 class="docs-visual-gallery__section-title">${statusLabel(status)}</h2><div class="docs-gallery-index__links">${orderedComponents.filter(component => componentStatus(component.slug) === status).map(component => `<a class="docs-audit-label" data-audit="${status}" href="#gallery-section-${component.slug}">${escapeHtml(component.name)}</a>`).join("")}</div></div>`).join("")}
+      <div><h2 class="docs-visual-gallery__section-title">Pass validated <span class="docs-pass__count">${passes.filter(entry => entry.pass.state === "validated").length} of ${passes.length}</span></h2><div class="docs-gallery-index__links">${passes.filter(entry => entry.pass.state === "validated").map(({ component }) => `<a class="docs-audit-label" data-pass="validated" href="#gallery-section-${component.slug}">${escapeHtml(component.name)}</a>`).join("") || `<span class="docs-pass__evidence">None yet</span>`}</div></div>
     </nav>`;
   return galleryShell({ current: "gallery-components.html", title: "Components", body: indexNav + sections });
 }
@@ -1139,6 +1146,62 @@ function galleryShell({ current, title, body }) {
 
 /* --- Component pages -------------------------------------------------------- */
 
+/* --- Pass review ------------------------------------------------------------
+ * What each family's design pass has behind it, read from the repository so the gallery can't
+ * claim more than exists: a spec covered by the cohesion audit, a "Visual pass" section in the
+ * spec, and target-product captures (ChatGPT, Notion, Figma) taken in Claude in Chrome.
+ * Validated additionally needs an entry in src/pass-status.mjs, the claim that the visual pass
+ * compared Area and the product side by side there; the build fails if its evidence is absent.
+ */
+const COHESION_AUDIT = readFileSync(join(repo, "docs/research/cohesion-audit.md"), "utf8").toLowerCase().replace(/[^a-z]/g, "");
+const PRODUCTS = { chatgpt: "ChatGPT", notion: "Notion", figma: "Figma" };
+function passEvidence(component) {
+  const { slug } = component;
+  const specPath = join(repo, "docs/specs", `${slug}.md`);
+  const spec = existsSync(specPath) ? readFileSync(specPath, "utf8") : "";
+  const audited = Boolean(spec) && COHESION_AUDIT.includes(component.name.toLowerCase().replace(/[^a-z]/g, ""));
+  const visual = /\n##+ Visual pass[^\n]*\n([\s\S]*?)(?=\n## |$)/.exec(spec);
+  const visualPass = Boolean(visual && visual[1].trim().length > 40);
+  const captures = {};
+  let latest = "";
+  const dir = join(repo, "docs/research/captures", slug);
+  if (existsSync(dir)) for (const file of readdirSync(dir)) {
+    const source = file.split("--")[0];
+    if (!PRODUCTS[source] || !file.endsWith(".json")) continue;
+    captures[source] = (captures[source] ?? 0) + 1;
+    const captured = JSON.parse(readFileSync(join(dir, file), "utf8")).meta?.captured ?? "";
+    if (captured > latest) latest = captured;
+  }
+  const measured = Object.keys(captures).length > 0;
+  const claim = VALIDATED_PASSES[slug];
+  if (claim && !(audited && visualPass && measured)) throw new Error(`pass-status.mjs validates ${slug}, but its evidence is missing (audit ${audited}, visual pass ${visualPass}, product captures ${measured})`);
+  const done = [audited, visualPass, measured].filter(Boolean).length;
+  return { audited, visualPass, captures, latest: latest.slice(0, 10), claim, state: claim ? "validated" : done ? "partial" : "none" };
+}
+const passBadge = (tone, text) => `<span class="area-badge area-badge--soft area-badge--${tone} area-badge--md"><span class="area-badge__label">${escapeHtml(text)}</span></span>`;
+/** A static, inert copy for enlarging: no ids, id references, shared radio names or hydration hooks. */
+const inertCopy = html => html
+  .replace(/\s(id|for|aria-labelledby|aria-describedby|aria-controls|aria-activedescendant|aria-owns|popovertarget|list)="[^"]*"/g, "")
+  .replace(/\sname="([^"]*)"/g, ' name="pass-$1"')
+  .replace(/\sdata-[a-z-]+-demo="[^"]*"/g, "");
+function passReview(component, pass, specimenHtml, beforeAfter) {
+  const products = Object.entries(pass.captures).map(([source, count]) => `${PRODUCTS[source]} ${count}`).join(", ");
+  const checks = [
+    ["Audit", pass.audited, pass.audited ? `Shared-rule audit (docs/research/cohesion-audit.md); spec docs/specs/${component.slug}.md` : "No audited spec"],
+    ["Visual pass", pass.visualPass, pass.visualPass ? `Recorded in the spec's Visual pass section` : "No Visual pass section in the spec"],
+    ["Claude in Chrome", pass.claim ? true : Object.keys(pass.captures).length > 0,
+      pass.claim ? `Side by side with ${pass.claim.against}, ${pass.claim.date}; ${products} captures`
+        : products ? `${products} captures (latest ${pass.latest}); no side-by-side validation recorded` : "No target-product captures"],
+  ];
+  const label = { validated: ["success", `Validated ${pass.claim?.date ?? ""}`.trim()], partial: ["neutral", "Partial"], none: ["neutral", "Not validated"] }[pass.state];
+  return `<section class="docs-gallery-review docs-pass" data-pass="${pass.state}" aria-labelledby="gallery-review-${component.slug}">
+        <div class="docs-pass__head"><h3 class="docs-visual-gallery__tile-title" id="gallery-review-${component.slug}">Pass review</h3>${passBadge(...label)}</div>
+        <ul class="docs-pass__checks">${checks.map(([name, done, evidence]) => `<li class="docs-pass__check" data-done="${done}"><span class="docs-pass__status">${passBadge(done ? "success" : "neutral", done ? "Done" : "Missing")}</span><span class="docs-pass__check-name">${name}</span><span class="docs-pass__evidence">${escapeHtml(evidence)}</span></li>`).join("")}</ul>
+        <div class="docs-pass__stage" inert aria-hidden="true"><div class="docs-pass__zoom">${inertCopy(specimenHtml)}</div></div>
+        ${beforeAfter ? `<div class="docs-gallery-review__body">${beforeAfter}</div>` : ""}
+      </section>`;
+}
+
 function demoMarkup(name, html) {
   if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryOverlay")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
@@ -1149,6 +1212,8 @@ function demoMarkup(name, html) {
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
   if (["GalleryTableSelectable", "GalleryTextareaCount"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelXs", "GalleryPanelMd", "GalleryPanelLg", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  // The carousel's previous / next Buttons page the row.
+  if (name === "GalleryCardCarousel") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryMenu")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryMenuControls") return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="${["SwitchList", "SwitchSettingsRow"].includes(name) ? "inline-size:100%;" : ""}max-inline-size:100%;min-inline-size:0">${html}</div>`;

@@ -78,6 +78,7 @@ export const toolbar = {
   variants: { variant: ["plain", "surface"], size: ["sm", "md", "lg"], orientation: ["horizontal", "vertical"] },
   booleans: ["full-width"],
   elements: ["group", "separator", "overflow", "overflow-trigger", "overflow-dots", "overflow-content"],
+  elementModifiers: { group: ["track"] },
   defaults: { variant: "plain", size: "md", orientation: "horizontal" },
 } as const satisfies ComponentManifest;
 
@@ -494,6 +495,7 @@ export const combobox = {
   description: "An editable field with suggestions that filter as you type.",
   variants: {},
   booleans: ["full-width"],
+  states: ["open"],
   elements: ["listbox", "option", "description", "empty", "group"],
   defaults: {},
 } as const satisfies ComponentManifest;

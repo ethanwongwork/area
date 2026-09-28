@@ -57,7 +57,7 @@ button named "Dismiss “prompt”". Nothing happens on hover alone.
 
 - Headless Edge (`scratchpad/measure-sugg.mjs`): list 24 below the composer, rows 480 × 48,
   icon centre 24 = the composer's "+" centre 24; hover washes the row (5%), lifts the text
-  and shows the dismiss.
+  and shows the dismiss (the text lift was removed 2026-09-27; see below).
 - React test: list and buttons, dismiss optional.
 - Unverified: dark theme; ChatGPT's hover state (not captured).
 

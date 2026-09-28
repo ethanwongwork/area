@@ -5,7 +5,7 @@
       border-color: CanvasText;
     }
     /* Menu rows show focus with a wash, which forced colours remove; restore a ring. */
-    .area-menu__item:focus-visible {
+    .area-menu__item:is(:focus-visible, [data-highlighted]) {
       outline: var(--area-focus-width) solid Highlight;
       outline-offset: calc(-1 * var(--area-focus-width));
     }
@@ -24,7 +24,7 @@
     }
     .area-button:focus-visible, .area-chip:focus-visible, .area-tabs__tab:focus-visible,
     .area-segmented__item:focus-visible, .area-select:focus-visible, .area-textarea:focus,
-    .area-input:focus-within, .area-checkbox__control:focus-visible,
+    .area-input:focus-within, .area-composer:focus-within, .area-checkbox__control:focus-visible,
     .area-radio__control:focus-visible {
       outline: var(--area-focus-width) solid Highlight;
       outline-offset: var(--area-focus-offset);

@@ -30,7 +30,9 @@ export const ScrollToLatest = forwardRef<HTMLDivElement, ScrollToLatestProps>(fu
   const scroll = () => {
     const element = scrollRef.current;
     if (!element) return;
-    const reduce = typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // The system setting and Area's motion axis both turn the smooth scroll into a jump.
+    const reduce = (typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches)
+      || element.closest('[data-area-motion="none"]') !== null;
     element.scrollTo({ top: element.scrollHeight, behavior: reduce ? "auto" : "smooth" });
   };
   return <div ref={ref} className={scrollToLatestVariants({}, className)} data-visible={visible ? "" : undefined} {...rest}>

@@ -45,6 +45,12 @@ Popover (opened by a click, may hold a form).
 | keyboard | opens on focus-visible after the delay; Escape and blur close | Radix | — |
 | semantics | no role and no `aria-describedby` on the link | Radix: supplemental | a whole card read as a link's description is noise |
 
+**Server rendering.** The card renders next to its link and holds block content (Popover's
+title and description). Inside a `<p>`, an HTML parser closes the paragraph at the card's first
+block, so server-rendered HTML no longer matches the React tree and hydration fails (React
+#418). Server-rendered pages place a hover card in flow content (a `div`), as the gallery
+demos now do (2026-09-27); client-only rendering is unaffected.
+
 ## Verification
 
 - Headless Edge, real pointer and keys (`scratchpad/hover.mjs`): opens after 751–754 ms;

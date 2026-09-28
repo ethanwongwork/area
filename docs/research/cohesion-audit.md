@@ -269,6 +269,56 @@ What remains untiled is not visual: full-width and alignment booleans, Textarea 
 directions, Badge and Chip `pill` (both are already pills), Panel xs and lg (equal to sm and
 md at default density), Table md (the unset size) and the deprecated Token.
 
+## Fourth pass: families built after the audit (2026-09-27)
+
+**Request (owner):** "work on any components that have not been audited yet." Twelve families
+reached main after this audit and were never checked against its shared rules: Box field,
+Property list, Combobox, Command palette, Context menu, Hover card, Message, Model picker,
+Prompt suggestions, Scroll to latest, Split button and Composer. Each was read (CSS, manifest,
+React, demos, docs, spec) against the rules above, and the fixes were checked in the gallery.
+
+**Fixed**
+
+| Family | Defect | Fix |
+|---|---|---|
+| Menu, Popover, Dialog, Toast, search menu, Command palette | A later literal `box-shadow` overrode the shared lift, drawing the second layer (`0 5px 8px`) at full strength (6%) instead of half (3%); the cohesion test matched the unused `--_elevation` declaration and passed | Each block paints `var(--_elevation)` (the palette spells out the half-strength layer); the test now resolves the last `box-shadow` each block paints |
+| Button (Box field toggle, every pressed Button) | A selected toggle dropped to the hover step under the pointer (`--_bg-hover` was not overridden) | Selected keeps its plate on hover and press; solid keeps `solid-hover` |
+| Property list | The drop line was the focus colour | Neutral ink (`fg-default`); forced colours keep Highlight |
+| Property list | The live announcement replaced the list's instructions after the first move | Static description and a separate live region |
+| Property list (demo) | Visibility toggles swapped their name and were also pressed ("Show…, pressed") | Fixed name with `aria-pressed` |
+| Combobox | Menu's popover height outranked the 324 cap, so long lists never capped | Cap on the `[popover]` rule |
+| Combobox, Command palette | Disabled options got the hover plate (only `aria-disabled` was set) | `data-disabled` joins Menu's disabled rule; duplicate rules removed |
+| Combobox | List anchored physically (`bottom span-right`) | Self-logical `position-area`; checked in RTL |
+| Combobox | Empty row text 8 in, off the text-only row inset (11) | The shared cap inset |
+| Combobox, Command palette | Keyboard-highlighted option invisible in forced colours | Highlight ring on `[data-highlighted]` |
+| Combobox | `open` state missing from the manifest | Added |
+| Command palette | Shortcut sat 11 from the row end (inset.css rule never matched) | Wrapped in `area-menu__shortcut`; ends 8 in, as small keys do in Menu |
+| Context menu | Keyboard open in RTL anchored at the element's left | Anchors at its start edge |
+| Hover card | Physical `position-area`; `onOpenChange(false)` fired on mount | Self-logical placement (checked in RTL); reports changes only |
+| Message | Streaming dot ignored `data-area-motion="none"` and vanished in forced colours; user actions did not actually fade (`--area-transition` has no opacity) | Stops under the motion axis; CanvasText dot; opacity transition |
+| Scroll to latest | Hidden with opacity only, so plain HTML kept an invisible button in the tab order; no real fade; smooth scroll ignored the motion axis | `visibility` with the fade; opacity transition; motion axis counts as reduce |
+| Prompt suggestions | The dismiss's hover plate equalled the hovered row's | Dismiss hovers one step firmer; stale "lifts the text" wording and the `onDismiss` API row corrected |
+| Split button | ArrowUp opened on the first item (the toggle handler overrode the last-item focus); a bare `.area-split-button` drew no divider; a dead 192 min-width | Focus placed once in the toggle handler; solid divider on the base rule; rule removed |
+| Composer | Disabled was `opacity: .6` (compounding with the send Button to about 30%); no forced-colours ring; the field named the font again | Textarea's disabled field paint; Highlight ring; the root names the font once |
+| Gallery | Missing tiles | Combobox soft and disabled option (split from Icons and descriptions), Box field toggle off, Message by author (the Conversation tile showed both), Composer busy and pill send |
+| Docs | Composer API table listed six of fifteen props; Composer and Menu specs described pre-pass values | Completed and corrected |
+
+**Confirmed:** row plates and fixed ink in every list family (they are Menu's rows), neutral
+markers, one weight per label, radius from roles or concentric derivations, token references,
+manifest parity.
+
+**Open for the owner**
+
+| Question | Evidence | Options |
+|---|---|---|
+| Menu keyboard focus ring | The cohesion branch added an inset ring; Menu's own pass (Complete) says the plate is the focus indicator, as ChatGPT and Notion do; the merge kept Menu's | Keep plate-only (current) or restore the ring |
+| Scroll to latest shadow | ChatGPT's button has none (captured); it floats over prose | Keep none, or give it the floating lift |
+| Combobox selected option | Check only; Select's picker paints the selection plate as well | Keep check-only, or add the plate |
+| Message bubble and prompt row radius | Derived from the composer (control + 8), so at Sharp they stay 8, not 0 | Keep concentric with the composer, or follow the container role |
+| Model picker `size` | Forwarded to the trigger Button; not a manifest variant, no tiles | Keep as a pass-through prop, or make it a variant |
+| Split button / Button group disabled | Each Button dims on its own, so the 1px overlap seam shows at about 75% | Dim the group as a whole |
+| Complete families changed here | Box field and Button (selected hover), Property list, Composer, Split button, Menu, Popover, Dialog, Toast (lift restored to the documented value) | Re-review, or accept as bug fixes |
+
 ## Verification
 
 `npm run build` (including the new token-reference check), `npm run build:docs` (dogfood
