@@ -102,6 +102,61 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     Spec `docs/specs/overlay.md`; tests `packages/react/tests/overlay.test.mjs`; gallery
     `behavior-*` tiles. Tooltip is still marked Complete; its behavior is new and unreviewed.
 
+## Count and Banner (2026-09-28, branch `claude/component-banner-count-81af92`, in review)
+
+- **Count** (new, `count.css`, `Count.tsx`, manifest `count`, spec `count.md`): plain (default,
+  Notion) / soft (Primer, 6% black translucent plate), neutral / accent, sm 16 / md 20, 12/16
+  tabular, `max+` via `count-format.ts` shared with Indicator, hidden `label`. Nav and Tabs demos
+  use it.
+- **Banner** = Alert `layout="banner"` + `flush` (spec `alert.md`, Banner): OpenAI 12 / 16 inset,
+  44 tall, corner 6, flex row, link at the end on the inset. Alert moved Complete → In review; new
+  batch "Counts and banners".
+- Captures: `captures/count/`, `captures/alert/*banner*` (OpenAI business and Daybreak, Primer). Route
+  for public pages in the built-in browser: paste the script, put captures in `window.name`, then
+  navigate to a 127.0.0.1 relay page that POSTs them (popups open in the same tab there).
+- Chrome side by side done (Notion board counts, OpenAI Daybreak); open: Count text 14 (Notion) vs 12;
+  dark theme; no target product showed a banner. `npm run test:consumer` fails on an old
+  `Panel size="xs"` in its fixture (unrelated).
+
+## Batch 4 approved, batch 5 Chrome pass (2026-09-28)
+
+- Owner approved batch 4 (Count, Alert with banner). Count stays a pill.
+- Batch 5 (Avatar, Indicator, Badge): Claude in Chrome side by side done and recorded in
+  `pass-status.mjs` (Figma avatars, bell and AI label; Notion person and workspace avatars, help
+  dot, tags). No change to the three families; awaiting owner approval.
+- Avatar in Chip: the initials overflowed (Chip used `control-sm-text`, 14 since small controls
+  moved to 14/20); now `control-xs-text` like Badge, and the slot is `aria-hidden`. Chip moved
+  Complete → In review. Avatar and Chip demos use Irene Yamaguchi (group: Irene + teams).
+
+## Batch 5 approved, batch 6 Chrome pass (2026-09-28)
+
+- Owner approved batch 5 (Avatar, Indicator, Badge).
+- Batch 6 (Loading): transient states caught with a MutationObserver installed alongside the
+  capture script; ChatGPT and Notion clear `window.name` (COOP), so their captures leave through
+  the clipboard (injected button, real click, `LC_ALL=en_US.UTF-8 pbpaste`). Skeleton now takes
+  ChatGPT's 10% / 16% grey and 3s linear shimmer (Figma agrees); Spinner unchanged (owner's 1s
+  over ChatGPT's 2s). Progress: no product bar found again; not validated.
+- Owner feedback: Spinner redrawn as SVG masks with round caps, stroke 1/8 of size (lg 3); a
+  2.5px md option waits in `GalleryReviewSpinner`. Skeleton: rectangle 4px corner, `animated`,
+  `lines`, wrap mode (children + `loading`), list tile; `skeleton.test.mjs`.
+- Skeleton rethink (owner chose option A from `research/skeleton-rethink-survey.md`): shapes block
+  (default) / text / circle; `rounded` and `rectangle` removed; wrap paints the child (utilities
+  layer); compositions omit control placeholders.
+
+## Gallery tiles and batches 6-7 (2026-09-28)
+
+- The tall single-column tile (1x2) is gone (`GALLERY_SPANS`): Calendar tiles are 2x2 (two
+  months 2x3), Count nav 2x1, every Skeleton tile 2x1. The Pass review's 2x copy now has the
+  tile's content width (it collapsed full-width specimens). A DOM audit found no clipped tiles.
+- Port 3000 serves a different worktree (`icons-branch-strategy-a94020`); this branch is on 4331.
+  The dev server reads `pass-status.mjs`, `component-status.mjs` and the capture folders once at
+  start: restart it after changing them, or the Pass review shows stale phases.
+- Batch 6: Progress validated against Figma's AI-credits meter (open: Figma's tracks #f5 / #e6
+  are lighter than Area's shared rail #dd). Batch 7: Popover validated against Notion's Share
+  popover; Calendar against Notion's search Date filter (month label now 500). Batch 6 approved.
+  Chrome tip: Notion's menus open reliably with synthetic pointer events dispatched to the
+  element (`pointerdown`/`mousedown`/`pointerup`/`mouseup`/`click`); zoomed tabs misplace clicks.
+
 ## Owner feedback round (2026-09-27, branch `claude/component-gallery-status-4b51ac`, uncommitted)
 
 - Message action plates align to the text / bubble edge; Card carousel 18.3 under the header;

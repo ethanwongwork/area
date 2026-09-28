@@ -1,7 +1,7 @@
 # Avatar spec
 
-**Status:** in review · 2026-09-26 (cohesion audit)
-**Captures:** `docs/research/captures/avatar/` (Area and `figma--avatar-initial`), `docs/research/captures/baseline/chatgpt--avatar-initials--rest--light.json`, `…/chatgpt--account-row--rest--light.json`
+**Status:** accepted · 2026-09-28 (owner, batch 5)
+**Captures:** `docs/research/captures/avatar/` (Area, `figma--avatar-initial`, `notion--avatar-person-initial`, `notion--avatar-workspace-square`), `docs/research/captures/baseline/chatgpt--avatar-initials--rest--light.json`, `…/chatgpt--account-row--rest--light.json`
 **Peers:** Indicator and IndicatorAnchor (status and count on an avatar), Chip and Badge
 avatars (initials at 12px), Nav and Tree view markers (neutral selection), Button (focus ring)
 
@@ -132,6 +132,30 @@ image, the `img` keeps its native `alt` (`avatar.test.mjs:7, 14`). Initials and 
 
 ## Visual pass
 
+2026-09-28, Claude in Chrome (batch 5), zoomed side by side: the gallery's Avatar tiles beside
+Figma's file-browser avatars (account and file owner) and Notion's Updates-panel and workspace
+avatars.
+
+| | Figma initials | Notion person | Notion workspace | Area default | Area square |
+|---|---|---|---|---|---|
+| size | 24 | 24 | 20 | 32 (sm 28) | 32 |
+| shape | circle | circle | square, radius 3.5 | circle | square |
+| fill | rgb(102, 119, 153) per user | white + 0 2 4 10% shadow | rgba(42, 28, 0, 0.07) | #ee (`bg-component-active`) | #ee |
+| initial | 12 / 400 white | 11 / 400 rgb(142, 139, 134) | 14 / 500 rgb(125, 122, 117) | 12 / 500 `fg-muted` | 12 / 500 |
+
+- Area's neutral plate with a muted initial is Notion's workspace icon in Area's greys (a tinted
+  7% plate, muted ink); Notion's people avatars float on white with a shadow and Figma's take a
+  per-user hue. The owner's neutral-by-default decision stands; a per-user hue stays the
+  consumer's `tone`/image choice.
+- Products use 20-24 avatars in rows; Area's smallest is 28 (control tiers). The 20-24 sizes
+  belong to compact density (owner plan).
+- Initials weight: products 400, Area 500 (the type ramp's label-on-fill rule). Kept.
+- Square: Notion's workspace corner is 3.5 on 20 (0.18 of the side); Area's square keeps its
+  control radius. No change.
+- Demos now use Irene Yamaguchi, and a group of Irene plus teams (square), per AGENTS.md.
+
+Earlier note:
+
 The gallery shows Avatar in grouped tiles: Default, Tones (accent, inverse), Sizes (small,
 medium, large), Layout (square), Content (icon, image, two initials, availability,
 notification, group), States (active) and Behavior (image fallback). This spec's author
@@ -155,3 +179,5 @@ avatar-bearing control, a side-by-side with Figma's initials avatar.
   fallback, initials 500) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner: the notification count sits too far in → a count on a circular owner
   centres on the circle's edge at 45° (1.3 further out on a 32px avatar); `indicator.css`.
+- 2026-09-28 · batch 5 Claude in Chrome side by side → no Avatar change; Notion person and workspace avatars captured; demos moved to Irene Yamaguchi; Chip's nested avatar fixed (see chip.md).
+- 2026-09-28 · owner: approved (batch 5).

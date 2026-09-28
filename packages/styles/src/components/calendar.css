@@ -51,7 +51,9 @@
     min-block-size: var(--area-control-sm);
     padding-inline: var(--area-space-4) var(--_day-inset);
   }
-  .area-calendar__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-regular); }
+  /* spec (batch 7): the month label is a surface title, strong as every surface title is (Notion
+     "Sep 2026" 500, shadcn caption 500; typography.md role table). */
+  .area-calendar__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
   .area-calendar__nav { display: flex; margin-inline-start: auto; }
   .area-calendar__grid { border-collapse: collapse; border-spacing: 0; table-layout: fixed; }
   .area-calendar__weekday {

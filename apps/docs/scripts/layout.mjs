@@ -732,7 +732,6 @@ export const DOCS_CSS = `
     border-radius: var(--area-radius-container);
   }
   /* Spans are whole cells. 1x1 is the default tile and needs no rule of its own. */
-  .docs-visual-gallery__tile[data-span="1x2"] { grid-row: span 2; }
   .docs-visual-gallery__tile[data-span="row"] { grid-column: 1 / -1; }
   .docs-visual-gallery__tile[data-span="2x1"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); }
   .docs-visual-gallery__tile[data-span="2x2"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 2; }
@@ -893,7 +892,16 @@ export const DOCS_CSS = `
     overflow-x: auto;
     border-block-start: var(--area-border-width) solid var(--area-border-decorative);
   }
-  .docs-pass__zoom { zoom: 2; max-inline-size: none; }
+  /* The 2x copy is as wide as a tile's content (224 for one cell, 504 for two), so a specimen that
+     fills its width (a Skeleton block, an Alert) has a width to fill instead of collapsing. */
+  .docs-pass__zoom {
+    zoom: 2;
+    display: flex;
+    justify-content: center;
+    inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
+    max-inline-size: none;
+  }
+  .docs-pass__zoom[data-span^="2"] { inline-size: calc(var(--area-space-96) * 5 + var(--area-space-24)); }
   .docs-gallery-review.docs-pass > .docs-gallery-review__body { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
   .docs-audit-label[data-pass="validated"] { color: var(--area-fg-success); }
   .docs-visual-gallery__tile:has([data-slider-demo="GallerySliderVertical"]) .docs-visual-gallery__tile-preview > [data-slider-demo] {
