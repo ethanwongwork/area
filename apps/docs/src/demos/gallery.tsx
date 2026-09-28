@@ -1,7 +1,7 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
-import { AREA_COLOR_GRID, Alert, AlignmentPicker, Avatar, Calendar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, BoxField, Combobox, CommandPalette, ContextMenu, HoverCard, Message, MessageActions, ModelPicker, PromptSuggestions, ScrollToLatest, SplitButton, PanelRow, PropertyList, PropertyListItem, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
+import { AREA_COLOR_GRID, Alert, AlignmentPicker, Avatar, Calendar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, Count, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, BoxField, Combobox, CommandPalette, ContextMenu, HoverCard, Message, MessageActions, ModelPicker, PromptSuggestions, ScrollToLatest, SplitButton, PanelRow, PropertyList, PropertyListItem, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
 import { FluentPanelLeftIcon, FluentRefPointerIcon, FluentFrameIcon, FluentRectangleIcon, FluentPenIcon, FluentTextTIcon, FluentCommentIcon, FluentRefPaintbrushIcon, FluentDesignIcon, FluentPlayIcon, FluentRefCodeIcon, FluentBoldIcon, FluentRefItalicIcon, FluentRefUnderlineIcon, FluentStrikethroughIcon, FluentTextAlignLeftIcon, FluentTextAlignCenterIcon, FluentTextAlignRightIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon, EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, FluentCopyIcon, AlertIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignRightIcon, AngleIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CornerRadiusIcon, CornersIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, LinkIcon, MoreIcon, SettingsIcon, SlidersIcon, SubtractIcon } from "../icons.tsx";
 import { PilotDocumentIcon, PilotFolderFilledIcon, PilotMoreHorizontalIcon } from "../pilot-icons.tsx";
 import { ReviewPair } from "./review.tsx";
@@ -44,6 +44,16 @@ export const GalleryAlertSuccess = () => <Alert tone="success" icon={<CheckIcon 
 export const GalleryAlertDanger = () => <Alert tone="danger" icon={<DismissIcon />} title="Title">Body text</Alert>;
 export const GalleryAlertLink = () => <Alert icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-multiline">Link</a>}>Body text</Alert>;
 export const GalleryAlertAction = () => <Alert icon={<InfoIcon />} title="Title" action={<Button size="sm">Action</Button>}>Body text</Alert>;
+export const GalleryAlertBanner = () => <Alert layout="banner" title="Title" link={<a href="#gallery-alert-layout-banner">Learn more</a>}>Body text</Alert>;
+export const GalleryAlertBannerIcon = () => <Alert layout="banner" tone="info" icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-banner-icon">Learn more</a>}>Body text</Alert>;
+export const GalleryAlertBannerStatus = () => <Alert layout="banner" title="Title" action={<Badge variant="solid" tone="accent">Status</Badge>}>Body text</Alert>;
+export const GalleryAlertBannerFlush = () => <Alert layout="banner" flush title="Title" link={<a href="#gallery-alert-layout-banner-flush">Learn more</a>}>Body text</Alert>;
+export const GalleryAlertBannerDismissible = () => {
+  const [open, setOpen] = useState(true);
+  return open
+    ? <Alert layout="banner" title="Title" action={<Button size="sm">Action</Button>} onDismiss={() => setOpen(false)}>Body text</Alert>
+    : <Button size="sm" onClick={() => setOpen(true)}>Show banner</Button>;
+};
 export const GalleryAlertMultiline = () => <Alert layout="multiline" icon={<InfoIcon />} title="Title">Body text that wraps onto a second line</Alert>;
 export const GalleryAlertDismissible = () => {
   const [visible, setVisible] = useState(true);
@@ -51,23 +61,23 @@ export const GalleryAlertDismissible = () => {
 };
 
 export const GalleryAvatar = () => (
-  <Avatar fallback="A" alt="Avatar" />
+  <Avatar fallback="I" alt="Irene Yamaguchi" />
 );
 
-export const GalleryAvatarImage = () => <Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar" />;
-export const GalleryAvatarImageFallback = () => <Avatar src="/images/avatar-missing.png" fallback="A" alt="Avatar" />;
-export const GalleryAvatarTwoInitials = () => <Avatar fallback="AV" alt="Avatar" />;
-export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Avatar" />;
-export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="Avatars"><Avatar fallback="A" alt="Avatar" /><Avatar src="/images/chip-avatar.png" fallback="B" alt="Avatar" /><Avatar fallback="C" alt="Avatar" /><Avatar fallback="D" alt="Avatar" /><Avatar fallback="E" alt="Avatar" /></AvatarGroup>;
-export const GalleryAvatarActive = () => <Avatar active fallback="A" alt="Avatar" />;
-export const GalleryAvatarAvailability = () => <IndicatorAnchor compact placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="A" role="img" aria-label="Avatar, available" /></IndicatorAnchor>;
-export const GalleryAvatarNotification = () => <IndicatorAnchor compact placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/chip-avatar.png" fallback="A" alt="Avatar, 2 notifications" /></IndicatorAnchor>;
-export const GalleryAvatarAccent = () => <Avatar tone="accent" fallback="A" alt="Avatar" />;
-export const GalleryAvatarInverse = () => <Avatar tone="inverse" fallback="A" alt="Avatar" />;
-export const GalleryAvatarSquare = () => <Avatar shape="square" fallback="A" alt="Avatar" />;
-export const GalleryAvatarSmall = () => <Avatar size="sm" fallback="S" alt="Small avatar" />;
-export const GalleryAvatarMedium = () => <Avatar size="md" fallback="M" alt="Medium avatar" />;
-export const GalleryAvatarLarge = () => <Avatar size="lg" fallback="L" alt="Large avatar" />;
+export const GalleryAvatarImage = () => <Avatar src="/images/chip-avatar.png" fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarImageFallback = () => <Avatar src="/images/avatar-missing.png" fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarTwoInitials = () => <Avatar fallback="IY" alt="Irene Yamaguchi" />;
+export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Irene Yamaguchi" />;
+export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="Irene Yamaguchi and 4 teams"><Avatar src="/images/chip-avatar.png" fallback="IY" alt="Irene Yamaguchi" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>;
+export const GalleryAvatarActive = () => <Avatar active fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarAvailability = () => <IndicatorAnchor compact placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="I" role="img" aria-label="Irene Yamaguchi, available" /></IndicatorAnchor>;
+export const GalleryAvatarNotification = () => <IndicatorAnchor compact placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/chip-avatar.png" fallback="I" alt="Irene Yamaguchi, 2 notifications" /></IndicatorAnchor>;
+export const GalleryAvatarAccent = () => <Avatar tone="accent" fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarInverse = () => <Avatar tone="inverse" fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarSquare = () => <Avatar shape="square" fallback="D" alt="Design team" />;
+export const GalleryAvatarSmall = () => <Avatar size="sm" fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarMedium = () => <Avatar size="md" fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarLarge = () => <Avatar size="lg" fallback="I" alt="Irene Yamaguchi" />;
 
 export const GalleryBadge = () => (
   <Badge tone="success" dot>Badge</Badge>
@@ -535,8 +545,8 @@ export const GalleryChipClickableDelete = () => <Chip kind="input" clickable onC
 export const GalleryChipCustomDelete = () => <Chip kind="input" onRemove={() => {}} removeIcon={<TrashIcon />} removeLabel="Delete">Chip</Chip>;
 export const GalleryChipLinkUnderline = () => <ChipLink href="#gallery-section-chip">Link</ChipLink>;
 export const GalleryChipLinkIcon = () => <ChipLink href="#gallery-section-chip" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
-export const GalleryChipAvatarInitials = () => <Chip avatar={<Avatar fallback="AV" alt="Avatar" />}>Avatar</Chip>;
-export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="/images/chip-avatar.png" alt="Avatar" />}>Avatar</Chip>;
+export const GalleryChipAvatarInitials = () => <Chip avatar={<Avatar fallback="IY" alt="" />}>Irene Yamaguchi</Chip>;
+export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="/images/chip-avatar.png" alt="" />}>Irene Yamaguchi</Chip>;
 export const GalleryChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
 export const GalleryChipInvalid = () => <Chip kind="input" invalid onRemove={() => {}}>Chip</Chip>;
 
@@ -1439,7 +1449,7 @@ export const GalleryNavGrouped = () => (
   </Nav>
 );
 export const GalleryNavIcons = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-icons" icon={<DotsFourIcon />} current>Item one</NavItem><NavItem href="#gallery-nav-icons" icon={<PersonSmallIcon />}>Item two</NavItem><NavItem href="#gallery-nav-icons" icon={<TokenIcon />}>Item three</NavItem></Nav>;
-export const GalleryNavCounts = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-counts" current trailing={<Badge>1</Badge>}>Item one</NavItem><NavItem href="#gallery-nav-counts" trailing={<Badge>2</Badge>}>Item two</NavItem><NavItem href="#gallery-nav-counts">Item three</NavItem></Nav>;
+export const GalleryNavCounts = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-counts" current trailing={<Count count={12} />}>Item one</NavItem><NavItem href="#gallery-nav-counts" trailing={<Count count={3} />}>Item two</NavItem><NavItem href="#gallery-nav-counts">Item three</NavItem></Nav>;
 
 export const GalleryNavMarker = () => (
   <Nav aria-label="Label" selection="marker">
@@ -1700,29 +1710,53 @@ export const GallerySeparatorVerticalInset = () => (
   </div>
 );
 
-export const GallerySkeleton = () => <Skeleton style={{ inlineSize: "100%", fontSize: "var(--area-ui-size)" }} />;
-export const GallerySkeletonCircle = () => <Skeleton shape="circle" style={{ inlineSize: "var(--area-control-lg)", blockSize: "var(--area-control-lg)" }} />;
-export const GallerySkeletonMedia = () => <Skeleton shape="rectangle" style={{ inlineSize: "100%", aspectRatio: "16 / 9" }} />;
-export const GallerySkeletonRounded = () => <Skeleton shape="rounded" style={{ inlineSize: "100%", aspectRatio: "16 / 9" }} />;
+export const GallerySkeleton = () => <Skeleton />;
+export const GallerySkeletonText = () => <Skeleton shape="text" style={{ fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)" }} />;
+export const GallerySkeletonCircle = () => <Skeleton shape="circle" />;
 export const GallerySkeletonType = () => (
   <div style={{ display: "grid", gap: "var(--area-space-16)", inlineSize: "100%" }}>
     {[{ name: "Display", token: "display-sm" }, { name: "Title", token: "title-md" }, { name: "Body", token: "text-md" }].map(({ name, token }) => (
       <div key={name} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", alignItems: "center", gap: "var(--area-space-12)", fontSize: `var(--area-${token}-size)`, lineHeight: `var(--area-${token}-leading)`, letterSpacing: `var(--area-${token}-tracking)` }}>
-        <span>{name}</span><Skeleton style={{ inlineSize: "100%", justifySelf: "end" }} />
+        <span>{name}</span><Skeleton shape="text" />
       </div>
     ))}
   </div>
 );
-export const GallerySkeletonCard = () => (
-  <div style={{ inlineSize: 300, blockSize: 300, maxInlineSize: "100%" }}><Card aria-label="Loading card" style={{ inlineSize: "100%", blockSize: "100%", gridTemplateRows: "var(--area-space-96) minmax(0, 1fr)" }}>
-    <CardMedia><Skeleton shape="rectangle" style={{ inlineSize: "100%", blockSize: "100%" }} /></CardMedia>
-    <CardContent style={{ gap: "var(--area-space-12)" }}>
-      <Skeleton shape="circle" style={{ inlineSize: "var(--area-control-lg)", blockSize: "var(--area-control-lg)" }} />
-      <div style={{ display: "grid", gap: "var(--area-space-8)" }}>
-        <Skeleton style={{ inlineSize: "56%", fontSize: "var(--area-text-md-size)" }} />
-        <Skeleton style={{ inlineSize: "100%", fontSize: "var(--area-ui-size)" }} />
+export const GallerySkeletonStatic = () => <Skeleton animated={false} />;
+export const GallerySkeletonParagraph = () => <Skeleton lines={3} style={{ inlineSize: "100%", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)" }} />;
+/* The placeholder painted on the real element: it keeps the Button's size and corner. */
+export const GallerySkeletonWrap = () => <Skeleton><Button size="md">Action</Button></Skeleton>;
+/* A nav or history list while it loads: an icon placeholder and a label line per 32px row
+   (Notion's sidebar placeholders, ChatGPT's history shimmer). */
+export const GallerySkeletonList = () => (
+  <div style={{ display: "grid", inlineSize: "100%", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)" }}>
+    {["72%", "54%", "64%"].map(width => (
+      <div key={width} style={{ display: "flex", alignItems: "center", gap: "var(--area-gap-md)", blockSize: "var(--area-control-md)", paddingInline: "var(--area-space-8)" }}>
+        <Skeleton style={{ inlineSize: "var(--area-icon-md)", blockSize: "var(--area-icon-md)", flex: "none" }} />
+        <Skeleton shape="text" style={{ inlineSize: width }} />
       </div>
-      <CardFooter><Skeleton shape="rounded" style={{ inlineSize: "var(--area-space-80)", blockSize: "var(--area-control-md)" }} /></CardFooter>
+    ))}
+  </div>
+);
+/* A media object while it loads (Primer's comment skeleton, MUI's media example): avatar, a
+   title line, then two lines of text. */
+export const GallerySkeletonMediaObject = () => (
+  <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--area-space-12)", inlineSize: "100%", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)" }}>
+    <Skeleton shape="circle" style={{ flex: "none" }} />
+    <div style={{ flex: "1 1 auto", minInlineSize: 0 }}>
+      <Skeleton shape="text" style={{ inlineSize: "40%" }} />
+      <Skeleton lines={2} />
+    </div>
+  </div>
+);
+/* A card while it loads: the media box, the title and a paragraph, on the card's own insets;
+   controls are left out (Primer, MUI, Carbon; owner 2026-09-28). */
+export const GallerySkeletonCard = () => (
+  <div style={{ inlineSize: 210, maxInlineSize: "100%" }}><Card aria-label="Loading card" style={{ inlineSize: "100%" }}>
+    <CardMedia><Skeleton style={{ blockSize: "100%" }} /></CardMedia>
+    <CardContent>
+      <Skeleton shape="text" style={{ inlineSize: "56%", fontSize: "var(--area-text-md-size)", lineHeight: "var(--area-text-md-leading)" }} />
+      <Skeleton lines={2} style={{ fontSize: "var(--area-text-sm-size)", lineHeight: "var(--area-text-sm-leading)" }} />
     </CardContent>
   </Card></div>
 );
@@ -1803,7 +1837,7 @@ export const GalleryTabsVertical = () => <Tabs orientation="vertical" label="Lab
 export const GalleryTabsSmall = () => <Tabs size="sm" tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
 export const GalleryTabsTrack = () => <Tabs track tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
 export const GalleryTabsIcons = () => <Tabs tabs={[{ id: "one", label: "Item one", icon: <PersonSmallIcon />, content: "Body text" }, { id: "two", label: "Item two", icon: <InfoIcon />, content: "Body text" }]} />;
-export const GalleryTabsCounts = () => <Tabs tabs={[{ id: "one", label: "Item one", trailing: <Badge>1</Badge>, content: "Body text" }, { id: "two", label: "Item two", trailing: <Badge>2</Badge>, content: "Body text" }]} />;
+export const GalleryTabsCounts = () => <Tabs tabs={[{ id: "one", label: "Item one", trailing: <Count variant="soft" count={12} />, content: "Body text" }, { id: "two", label: "Item two", trailing: <Count variant="soft" count={3} />, content: "Body text" }]} />;
 
 export const GalleryTextarea = () => <Textarea aria-label="Label" placeholder="Placeholder" rows={3} />;
 

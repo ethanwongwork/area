@@ -497,7 +497,7 @@
        Carbon 12-16. Controls sit 6 from the top and the side (below). */
     padding: var(--_alert-pad-block) var(--_alert-pad-inline);
     border: var(--area-border-width) solid var(--_border);
-    border-radius: var(--area-radius-container);
+    border-radius: var(--_alert-radius, var(--area-radius-container));
     background-color: var(--_bg);
     color: var(--_fg);
   }
@@ -555,21 +555,74 @@
 
   .area-alert--single-line { align-items: center; }
 
-  .area-alert--single-line .area-alert__content {
+  :is(.area-alert--single-line, .area-alert--banner) .area-alert__content {
     overflow: hidden;
     white-space: nowrap;
   }
 
-  .area-alert--single-line .area-alert__title,
-  .area-alert--single-line .area-alert__description {
+  :is(.area-alert--single-line, .area-alert--banner) :is(.area-alert__title, .area-alert__description) {
     min-inline-size: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .area-alert--single-line .area-alert__title { flex: 0 1 auto; }
-  .area-alert--single-line .area-alert__description { flex: 1 1 auto; }
+  :is(.area-alert--single-line, .area-alert--banner) .area-alert__title { flex: 0 1 auto; }
+  :is(.area-alert--single-line, .area-alert--banner) .area-alert__description { flex: 1 1 auto; }
+
+  /*
+   * Banner (docs/specs/alert.md, "Banner"): a one-line announcement across a page or section,
+   * persistent, its link or status at the end (OpenAI's business and Daybreak banners, Primer's
+   * Banner). Same tones, icon, actions and dismiss as the in-place layouts.
+   */
+  .area-alert--banner {
+    /* spec: text 12 from the top and 16 from the side (OpenAI Daybreak 12 / 16), so one line is
+       44 tall; OpenAI business 10 / 14 on a 28 line (48), Primer 8 + 1 border (55 with 36
+       actions). Corner 6: OpenAI 6 on both banners, Primer 6. */
+    --_alert-pad-block: calc(var(--area-space-12) - var(--area-border-width));
+    --_alert-pad-inline: calc(var(--area-space-16) - var(--area-border-width));
+    --_alert-radius: var(--area-radius-control-sm);
+    /* 28px controls hang 4 over the line, so they sit 8 from the top; the last one sits 8 from
+       the end too (8 into the 16 inset). */
+    --_alert-control-end: calc(var(--area-space-8) - var(--area-space-16));
+    /* A row, not the grid: absent slots (no icon, no actions) must not leave their gaps, so text
+       starts on the 16 inset and a closing link ends on it. */
+    display: flex;
+    align-items: center;
+  }
+  .area-alert--banner > .area-alert__content { flex: 1 1 auto; }
+  .area-alert--banner > :not(.area-alert__content) { flex: none; }
+  /* The corner offset is a 28px control's; a Badge or text at the end stays on the inset
+     (OpenAI business: the status pill 14 in, on its 14 inset). */
+  .area-alert--banner > .area-alert__actions:last-child:not(:has(> :is(button, .area-button):last-child)) { margin-inline-end: 0; }
+  /* spec: the link ends the row, 16 from the end when nothing follows it (OpenAI Daybreak's
+     "Learn more": 14/20 regular, underlined, 16 from the end). */
+  .area-alert--banner > .area-alert__link {
+    grid-area: link;
+    margin-inline-start: 0;
+  }
+  .area-alert--banner > .area-alert__link a {
+    color: inherit;
+    font-weight: var(--area-weight-regular);
+    text-decoration: underline;
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: var(--area-space-2);
+  }
+  .area-alert--banner > .area-alert__link a:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+
+  /* Flush: square and without side or top edges, for a banner that meets its container's
+     edges (Primer `flush`, Fluent `shape="square"`, Polaris on small screens, Ant `banner`).
+     The inset keeps its full value, the border it no longer has added back. */
+  .area-alert--flush {
+    --_alert-radius: 0px;
+    border-inline-width: 0;
+    border-block-start-width: 0;
+    padding-block-start: calc(var(--_alert-pad-block) + var(--area-border-width));
+    padding-inline: calc(var(--_alert-pad-inline) + var(--area-border-width));
+  }
 
   .area-alert--multiline {
     grid-template-areas:

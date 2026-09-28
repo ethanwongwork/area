@@ -1,6 +1,6 @@
 # Indicator spec
 
-**Status:** in review · 2026-09-26 (reopened by the cohesion audit: motion axis; accepted 2026-09-25 as the capture-workflow pilot)
+**Status:** accepted · 2026-09-28 (owner, batch 5)
 **Captures:** `docs/research/captures/indicator/`
 **Peers:** Badge (dot, count-like numerals, tone paint), Avatar (presence attachment),
 Tabs and Nav (attached counts), Button (attached dot/count)
@@ -250,6 +250,14 @@ follows RTL.
 
 ## Visual pass
 
+2026-09-28, Claude in Chrome (batch 5), zoomed: Area's bell and activity tiles beside Figma's
+file-browser bell (red dot on the glyph's upper right) and Notion's sidebar help button, which
+carries a blue activity dot on its top-end corner. Notion's dot, read live: 8 including a
+0.56px cutout in the sidebar colour, rgb(39, 131, 222), radius 50%; Area's is a 6 dot plus a
+1px surface cutout, 8 in all, the same footprint. Placement matches both products. No change.
+
+Earlier pass:
+
 Compared in Edge at the same zoom, light theme:
 - Area bell tile vs Figma bell: same placement over the glyph's upper right; Area's dot
   is 1px larger and a pinker red; Figma's knockout and Area's ring read the same.
@@ -485,3 +493,5 @@ Pinned commit: `d27922755bebae866d9ffe86b7da44c27ec801ee`.
 - 2026-09-27 · owner (Avatar): count too far in on a circle → `overlap="circular"` counts centre
   on the circle's edge at 45°: inset = r(1 − 1/√2) − 8 (50% of the owner box in the calc);
   dots keep the 2px outward rule → headless Edge screenshot at 4×.
+- 2026-09-28 · batch 5 Claude in Chrome side by side (Figma bell, Notion help-button dot) → no change.
+- 2026-09-28 · owner: approved (batch 5).

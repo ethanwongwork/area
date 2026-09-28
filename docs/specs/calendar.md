@@ -175,6 +175,23 @@ Third-pass additions:
 
 ## Visual pass
 
+2026-09-28, Claude in Chrome (batch 7): Notion's search Date filter calendar (Search → Filter →
+Date; ephemeral search state, nothing picked) beside the gallery's Calendar tile, both zoomed.
+
+| | Notion | Area |
+|---|---|---|
+| surface | popover, radius 10, presets above the grid | the tile's popover-style surface, radius 12 |
+| month label | "Sep 2026", 500 | "September 2026", **was 400, now 500** |
+| cells | 32 (224 grid / 7) | 36 / 32 (owner, 2026-09-27) |
+| weeks | always 6 | the month's weeks (`fixedWeeks` off, owner) |
+| today | filled red circle, white number (Notion's brand) | neutral 1px outline (neutral by default) |
+| outside days | muted | muted |
+
+Changed: the month label takes the strong weight (surface-title rule; Notion and shadcn 500). The
+rest are owner decisions or Notion's brand colour. Dark theme not compared.
+
+Earlier note:
+
 Pass reviews were removed at the owner's request; the family is inspected in the grouped
 gallery. Second pass (tone): the before/after review compared pass 1 (accent selection,
 dark today circle) with neutral selection and a soft today circle. The neutral selected day
@@ -213,3 +230,4 @@ on outside days, fixed (see Decisions). Dark theme not compared.
   moved to 14 with the small-control change; back to 12/16, cells 36 / days 32, `fixedWeeks`
   off by default → headless Edge screenshots before / after; React test updated (35 days for
   September 2026, 42 with `fixedWeeks`).
+- 2026-09-28 · batch 7 Claude in Chrome (Notion search Date filter) → month label 400 → 500; other differences kept.

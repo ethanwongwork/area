@@ -1,6 +1,6 @@
 # Badge spec
 
-**Status:** accepted · 2026-09-25 (pass 2: size scale, neutral ink, dismiss gap and
+**Status:** accepted · 2026-09-28 (owner, batch 5)
 uppercase removal built and validated)
 **Captures:** `docs/research/captures/badge/`
 **Peers:** Indicator (dot, count numerals, tone paint), Chip (pill shape, interactive
@@ -527,8 +527,11 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
 - With a 2px gap the dismiss glyph reads as part of the label.
 - At 20px the default badge sits inside a line of 14/20 text without opening the line;
   24px pushed the line apart.
-- Not yet compared: product screenshots side by side at equal zoom, dark theme in the
-  products.
+- 2026-09-28, Claude in Chrome (batch 5), zoomed: the default Badge beside Figma's "AI" label
+  (outline, small) and Notion's select tags (tinted, radius 3-4, 14px). Figma's label is
+  Badge `outline`; Notion's tags are Badge `soft` with a tone, set larger and squarer than
+  Area's 12/16 pill (the owner's 2026-09-27 md size). No change.
+- Not yet compared: dark theme in the products.
 
 ## Verification
 
@@ -564,3 +567,5 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
   `badge/notion--status-dot`, `chip/notion--board-tag`, `chip/notion--select-tag`.
 - 2026-09-27 · third pass → "Dot only" tile added; Pass review note replaced by the grouped
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-28 · batch 5 Claude in Chrome side by side (Figma "AI" label, Notion tags) → no change.
+- 2026-09-28 · owner: approved (batch 5).

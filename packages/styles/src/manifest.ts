@@ -333,6 +333,13 @@ export const indicator = {
   defaults: {kind: "dot", tone: "danger"},
 } as const satisfies ComponentManifest;
 
+export const count = {
+  block: "area-count", description: "Shows how many items the element it sits in holds, beside that element's label.",
+  variants: { variant: ["plain", "soft"], tone: ["neutral", "accent"], size: ["sm", "md"] },
+  elements: ["label"],
+  defaults: { variant: "plain", tone: "neutral", size: "md" },
+} as const satisfies ComponentManifest;
+
 export const presence = {
   block: "area-presence", description: "Shows availability with Area-drawn status glyphs at the icon line weight.",
   variants: {status: ["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"], size: ["xs", "sm", "md", "lg"]},
@@ -391,9 +398,10 @@ export const separator = {
 export const skeleton = {
   block: "area-skeleton",
   description: "Stands in for content that has not loaded.",
-  variants: { shape: ["text", "circle", "rectangle", "rounded"] },
-  elements: [],
-  defaults: { shape: "text" },
+  variants: { shape: ["block", "text", "circle"] },
+  booleans: ["static", "wrap"],
+  elements: ["lines"],
+  defaults: { shape: "block" },
 } as const satisfies ComponentManifest;
 
 export const spinner = {
@@ -524,7 +532,8 @@ export const card = {
 export const alert = {
   block: "area-alert",
   description: "Draws attention to an important message in place.",
-  variants: { tone: ["neutral", "accent", "info", "danger", "warning", "success"], layout: ["single-line", "multiline"] },
+  variants: { tone: ["neutral", "accent", "info", "danger", "warning", "success"], layout: ["single-line", "multiline", "banner"] },
+  booleans: ["flush"],
   elements: ["icon", "content", "title", "description", "link", "actions", "dismiss"],
   defaults: { tone: "neutral", layout: "single-line" },
 } as const satisfies ComponentManifest;
@@ -710,6 +719,7 @@ export const MANIFESTS = {
   presence,
   indicatorAnchor,
   indicator,
+  count,
   badgeGroup,
   avatar,
   avatarGroup,

@@ -33,8 +33,44 @@ export const VALIDATED_PASSES = {
     against: "Notion's sidebar tree (rows, hover, row actions)",
   },
   alert: {
-    date: "2026-09-27",
-    against: "Notion's callout block (fill, edge, icon on the first line)",
+    date: "2026-09-28",
+    against: "Notion's callout block (fill, edge, icon on the first line); banner layout against OpenAI's Daybreak banner (height, corner, 16 inset, end link)",
+  },
+  avatar: {
+    date: "2026-09-28",
+    against: "Figma's file-browser avatars and Notion's person and workspace avatars (size, shape, fill, initial)",
+  },
+  indicator: {
+    date: "2026-09-28",
+    against: "Figma's notification bell dot and Notion's help-button activity dot (size, cutout, placement)",
+  },
+  badge: {
+    date: "2026-09-28",
+    against: "Figma's AI label and Notion's select tags",
+  },
+  skeleton: {
+    date: "2026-09-28",
+    against: "ChatGPT's results shimmer, Figma's tab shimmer and Notion's startup placeholders (fill, band, speed, shape)",
+  },
+  spinner: {
+    date: "2026-09-28",
+    against: "ChatGPT's conversation spinner (ring, track, sizes, speed)",
+  },
+  progress: {
+    date: "2026-09-28",
+    against: "Figma's AI-credits usage meter (height, shape, track, neutral fill)",
+  },
+  calendar: {
+    date: "2026-09-28",
+    against: "Notion's search Date filter calendar (surface, month label, cells, weeks, today, outside days)",
+  },
+  popover: {
+    date: "2026-09-28",
+    against: "Notion's Share popover (surface, ring, lift, corner)",
+  },
+  count: {
+    date: "2026-09-28",
+    against: "Notion's board group counts (neutral and tinted groups: size, gutter, ink, place after the label)",
   },
   toast: {
     date: "2026-09-27",
