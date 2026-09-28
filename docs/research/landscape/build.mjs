@@ -74,7 +74,7 @@ text.push('## Data and reproducibility\n',
 '### Verification and DONE\n',
 '- [x] Every named tool is covered; additional shadcn editors and an additional inspiration site are included.\n- [x] Every required field is filled or explicitly says “not found”; every claim has dated URLs, including the searched pages for gaps.\n- [x] All Figma subfeatures are separately identified.\n- [x] All nine Differentiation rows are assessed; exact brief lines are quoted for corrections.\n- [x] Three closest competitors are selected with sourced reasons and limits.\n- [x] `npm ci` and `npm run build` succeeded in the isolated worktree before research writing.\n- [x] Scope is restricted to this output folder; no CSS or brief edits.\n- [x] Deterministic regeneration and JSON/README count agreement are enforced by the build/check command.\n',
 'Commit/push/PR identity is reported in the task’s final handoff; no merge is authorized.\n');
-const outputs=new Map([['tools.json',JSON.stringify(data,null,2)+'\n'],['README.md',text.join('\n')+'\n']]);
+const outputs=new Map([['tools.json',JSON.stringify(data,null,2)+'\n'],['README.md',text.join('\n').trimEnd()+'\n']]);
 if(process.argv.includes('--check')){
  for(const [name,content]of outputs)assert(await readFile(out+name,'utf8')===content,`${name} differs from deterministic generation`);
 }else for(const [name,content]of outputs)await writeFile(out+name,content);

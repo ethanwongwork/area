@@ -258,4 +258,3 @@ Current generated counts: 34 tools; 14 required fields each; 476 tool-field cell
 - [x] Deterministic regeneration and JSON/README count agreement are enforced by the build/check command.
 
 Commit/push/PR identity is reported in the task’s final handoff; no merge is authorized.
-
