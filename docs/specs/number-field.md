@@ -1,6 +1,6 @@
 # NumberField spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 2: minus/plus steppers, no resting shadow))
+**Status:** accepted · 2026-09-26; batch 8 side by side 2026-09-28, no change
 **Captures:** `docs/research/captures/number-field/` (pass-0 in `before/`)
 **Peers:** Input (shared chrome), InputGroup (letter compartments), Panel (inspector), Slider
 
@@ -119,6 +119,22 @@ cancels; arithmetic entry; scrub by 8px per step with pointer capture, cancel re
 scrub handle is `aria-hidden`; the letter is not the accessible name, so each inspector
 field needs `aria-label` (the demos give "X position", "Width" and so on).
 
+## Visual pass
+
+2026-09-28, Claude in Chrome (batch 8): Figma's Design panel fields (X, W with its menu, Rotation, Gap;
+`figma--number-field-letter`, `-menu`, `-icon`, `figma--gap-field`) beside the gallery's Number field
+tiles and the Panel recipe at 2x.
+
+- Figma's field is 88 x 24, radius 5, #f5 fill, no edge, 11/16 at 450; the letter or icon takes a
+  24px leading slot (the field's height), the value starts right after it, 8 of padding at the end.
+  Area's sm field is the same model at default density: 28 tall, the 16px scrub glyph in a slot as
+  wide as the field is tall, the value after it, soft fill, no resting edge.
+- Figma draws X and Y in full ink and W / H in muted ink (W and H carry a size menu); Area's scrub
+  letters are muted throughout, one role for one job.
+- Figma's Gap field splits a value from a menu chevron; Area composes that from a field and a
+  Select, not a NumberField variant.
+- No change. Dark theme not compared.
+
 ## Verification
 
 - 5 Figma captures (redacted), 2 Area before, 2 after; checksums verified.
@@ -137,3 +153,5 @@ field needs `aria-label` (the demos give "X position", "Width" and so on).
   and unit model, inspector recipe, before/after images sent in chat.
 - 2026-09-26 · owner: outline style consistent with the system; does Button outline have a
   shadow (no); refine the steppers → pass 2 above.
+- 2026-09-28 · batch 8 Claude in Chrome side by side (Figma X, W, Rotation, Gap fields) → no change →
+  `figma--number-field-*`, `figma--gap-field`.

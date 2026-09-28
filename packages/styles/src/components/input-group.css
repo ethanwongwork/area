@@ -101,8 +101,12 @@
   }
   .area-input-group__text[data-visual] > svg { display: block; inline-size: var(--_group-icon); block-size: var(--_group-icon); flex: none; }
   .area-input-group > .area-select:first-child { flex: 0 0 calc(var(--_group-height) * 3); }
+  /* spec (batch 9, figma--number-field-menu: the value box ends on the chevron's 16px box): in a
+     group the option text runs up to the chevron's box; the glyph's side-bearing leaves ~4.5 of air.
+     A standalone Select keeps 4 more. */
+  .area-input-group > .area-select { padding-inline-end: calc(var(--_gutter) + var(--_icon)); }
   .area-input-group > :not(:first-child) { border-inline-start: var(--area-stroke-width) solid var(--area-border-decorative); }
-  .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field) { border-inline-start: 0; }
-  .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field) { padding-inline-start: 0; }
+  .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field, .area-select) { border-inline-start: 0; }
+  .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field, .area-select) { padding-inline-start: 0; }
   .area-input-group > .area-number-field:has(.area-number-field__steppers) { padding-inline-end: 0; }
 }

@@ -102,6 +102,36 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     Spec `docs/specs/overlay.md`; tests `packages/react/tests/overlay.test.mjs`; gallery
     `behavior-*` tiles. Tooltip is still marked Complete; its behavior is new and unreviewed.
 
+## Avatar photo, initials, Calendar cleanup (2026-09-28, branch `claude/component-variants-gallery-f433f2`, uncommitted)
+
+- This branch fast-forwarded to main at PR 15; a parallel batch 4 pass was dropped and only its
+  new pieces re-applied. Owner approved them: Avatar initials 12 / 14 / 16 by size (Notion 14 on
+  32); Irene's photo `apps/docs/public/images/irene-yamaguchi.jpg` (owner-supplied, replaces
+  `chip-avatar.png`); the avatar badge shows one initial in its 16px disc; dot placement kept.
+- Calendar (batch 7, owner): Schedule time list on the grid's rhythm (md rows 4 apart, 13 from each
+  side, the calendar's height, shared lift; `align="start"` was pulling the plate onto the rule);
+  week strip 12 all round; the two-month tile is a new full-width `4x2` gallery span.
+- Batch 7 approved (Calendar). Batch 8 (Panel, Number field, Box field): Claude in Chrome side by
+  side with Figma's Design panel; Panel section rules now sit midway (16 below the last field, the
+  next title's cap 16 below the rule, via `(row - 1cap) / 2`); Number field and Box field unchanged.
+  Panel is Ready for approval; the other two were already approved and are now officially complete.
+- Batch 9 (owner feedback): Color field opacity sized to content with "%" anchored at the end (plain
+  NumberFields keep "%" after the number); Select single-line with ellipsis, in-group text runs to the
+  chevron box; InputGroup visual + Select joins like visual + Input; Property list tiles at 280 (240
+  cannot hold hex + opacity at 14px). Gallery-wide check: no clipped input or select text.
+- Color swatch (batch 9, approved): solid neutral-50 edge drawn as the swatch's background, layers
+  1px inside concentric (radius - edge), corner 20% of the side, Area's own pixel checker (2 x 2 SVG
+  mask, 5 cells, meets the edges). Swatch-picker cells concentric with it.
+- Batch 10 (Color swatch picker, Color picker, Alignment picker): Claude in Chrome vs Figma's picker
+  and Alignment grid; picker opacity sized like Color field, channel fields hug their digits, alpha
+  checker 3 rows; a stale 2026-09-24 slider block that overrode the picker's 16px tracks removed.
+  Questions: Figma's split translucent chits; Alignment grid sized to the layout (88 x 56).
+- Panel (batch 8, approved 2026-09-28): insets 12 sm / 16 md; headings and the bar are rows whose button has one
+  field gap above and below (8 / 12, Figma 8 / 8); actions one field gap after the fields; panel text and
+  gaps step by tier (sm labels 12/16, gaps 8; md 14/20, 12), shared with BoxField and PropertyList via
+  --_panel-*; md size tile shown at 280 (default width stays 240).
+- The dev server rebuilds only when a source file's content changes (touch is ignored) and copies `public/` then; restart it after changing an image.
+
 ## Count and Banner (2026-09-28, branch `claude/component-banner-count-81af92`, in review)
 
 - **Count** (new, `count.css`, `Count.tsx`, manifest `count`, spec `count.md`): plain (default,

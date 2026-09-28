@@ -127,6 +127,13 @@ tab stop and name.
 
 ## Visual pass
 
+2026-09-28 (batch 9): a decorative visual (`InputGroupText visual`) before a Select drew a rule and an
+8px start inset, unlike the same visual before an Input or NumberField. The visual now seats a
+following Select the same way (no rule, no start padding): one rule for one role, and the Effects
+rows' "Inner shadow" fits.
+
+Earlier note:
+
 The gallery shows InputGroup's tiles in named groups; the sizes tile was added in the
 second pass. Unverified: Figma side by side at one zoom, dark theme, a
 disabled group, a group with one of two children disabled (the whole group paints disabled).
@@ -159,3 +166,4 @@ row and value row. Build and test results are in the
   questions recorded → `input-group/figma--icon-field`, `figma--color-row`, `area--sizes`.
 - 2026-09-27 · third pass → success and warning hold their tone through focus (the focus
   edge replaced them); letter ink and hex / opacity rule kept → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-28 · batch 9 → visual + Select joins like visual + Input (no rule, no start inset).

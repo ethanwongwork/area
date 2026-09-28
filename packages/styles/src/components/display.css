@@ -23,7 +23,8 @@
     background-color: var(--_bg);
     color: var(--_fg);
     box-shadow: var(--_group-ring), var(--_active-ring);
-    font-size: var(--area-text-xs-size);
+    /* Initials step with the disc: 12 / 14 / 16 at 28 / 32 / 40 (Notion 14 at 32, docs/specs/avatar.md). */
+    font-size: var(--_text, var(--area-text-sm-size));
     font-weight: var(--area-weight-strong);
     overflow: hidden;
     user-select: none;
@@ -71,12 +72,12 @@
   }
   .area-avatar--accent { --_ring: var(--area-accent-solid); }
 
-  .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); }
-  .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); }
+  .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); --_text: var(--area-text-xs-size); }
+  .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); --_text: var(--area-text-sm-size); }
   .area-avatar--lg {
     --_size: var(--area-control-lg);
     --_icon: var(--area-space-24);
-    font-size: var(--area-text-sm-size);
+    --_text: var(--area-text-md-size);
   }
 
   .area-avatar-group {
