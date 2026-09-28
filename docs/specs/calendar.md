@@ -1,6 +1,6 @@
 # Calendar spec
 
-**Status:** in review · 2026-09-26 (third pass: smaller numbers, day treatments, week strip)
+**Status:** accepted · 2026-09-28 (owner, batch 7)
 **Captures:** `docs/research/captures/calendar/`
 **Peers:** Popover (surface, Complete), Button (navigation, Complete), Menu and Nav (hover
 fill, Complete), Breadcrumb (chevron glyph, Complete), Badge/Indicator (today marker)
@@ -138,7 +138,9 @@ Third-pass additions:
 | tile | choosable in-month days: 1px border-subtle inset edge; unavailable in-month days: bg-component, no strike | Owner reference (outlined vs filled tiles) | The fill already says unavailable |
 | marker | 4px dot, 3px above the day's bottom (week strip: top end corner), fg-muted by default, tone per date, on-selected ink when selected; `aria-description` "Has events" | Owner references (dots under 4 and 14; today dot) | — |
 | week strip | ghost sm arrows either side of a one-row grid; each day a column: weekday and month in fg-muted 12/16, number 16/24; min width 44 | Owner reference (strip) | Up/Down and Page keys move by week |
-| schedule | gallery composition: plain Calendar, a scrolling list of ghost sm Buttons (selected = current time), footer with Cancel, summary and an outline Schedule | Owner reference (send later) | A real TimeField/ListBox is future work |
+| schedule | gallery composition on the calendar surface (8 top, 12 sides, the floating lift); a rule; a time list of ghost **md** Buttons, full width, **4 apart** (the grid's 36px cells around 32px plates), **13 from the rule and from the edge** (12 surface inset + the day plates' 2 cell inset, border counted once), scrolling inside the calendar's height; the selected time is Button `selected` (`bg-component-active`, the shared row selection; ink and weight fixed); footer 8 / 12 with Cancel, a tabular summary and an outline Schedule | Owner reference (send later); owner (2026-09-28): "clean up the time backplate" | Was sm rows 2 apart with `align="start"`, whose optical pull put the plate 2.5px from the rule and 24 from the edge; the list was 288 tall whatever the calendar's height, and the shell used `shadow-2`. A real TimeField/ListBox is future work |
+| week strip · inset | 12 all round on the surface | Surface inset | The 8px top inset seats the month header; the strip has none (was 8 top / 12 bottom) |
+| two months · gallery | a full-width `4x2` tile | — | A 2-column tile (537px inside) is narrower than two months side by side (546), so they stacked inside a surface that kept its two-month width |
 
 ## States
 
@@ -231,3 +233,9 @@ on outside days, fixed (see Decisions). Dark theme not compared.
   off by default → headless Edge screenshots before / after; React test updated (35 days for
   September 2026, 42 with `fixedWeeks`).
 - 2026-09-28 · batch 7 Claude in Chrome (Notion search Date filter) → month label 400 → 500; other differences kept.
+- 2026-09-28 · owner: "clean up the time backplate, refine any of the calendar variants for size and
+  quality consistency" → Schedule time list rebuilt on the grid's rhythm (32 plates, 36 pitch, 13
+  from each side, calendar height, shared lift); week strip 12 all round; two-month tile full width
+  so the months sit side by side → headless Edge shots of every tile at 2x; Circle, Tile, Markers,
+  Plain, Monday, Accent and Disabled checked, unchanged.
+- 2026-09-28 · owner: approved (batch 7).

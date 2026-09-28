@@ -12,6 +12,10 @@ export const COMPLETE_COMPONENTS = new Set([
   'avatar', 'indicator', // badge was already approved
   // Approved 2026-09-28 (batch 6; progress was already approved).
   'skeleton', 'spinner',
+  // Approved 2026-09-28 (batch 7; popover was already approved).
+  'calendar',
+  // Approved 2026-09-28 (batch 8; number-field and box-field were already approved).
+  'panel',
   'alignment-picker', 'badge', 'badge-group', 'box-field', 'breadcrumb',
   'button', 'button-group', 'checkbox', 'code',
   'color-field', 'color-picker', 'color-swatch', 'color-swatch-picker', 'composer',
@@ -26,11 +30,9 @@ export const REVIEW_COMPONENTS = new Set([
   'code-block',
   // Rebuilt after approval (layouts, sizes, linked cards, templates): docs/specs/card.md.
   'card',
-  // Built on the cohesion-audit branch (docs/specs/calendar.md); never reviewed.
-  'calendar',
   // Changed 2026-09-28: avatar initials size in the chip (docs/specs/chip.md).
   'chip',
-  'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel']);
+  'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

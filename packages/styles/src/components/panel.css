@@ -16,16 +16,33 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-panel {
-    --_inset: var(--area-gutter-md);
+    /* spec (owner, 2026-09-28, three rounds: consistent spacing; "look at what Figma and Cursor do";
+       "the margins are too big … make sure the padding for the inset buttons is even"): the inset is
+       12 at sm and 16 at md, for the sides and the last field above a rule. A section heading and the
+       bar are rows (Figma's header is 40: a 24 button with 8 above and below; VS Code's pane header a
+       22 row) whose button has one field gap above and below (8 / 12), the title centred on it. */
+    --_inset: var(--area-space-16);
+    /* spec (owner, 2026-09-28: "shouldn't there be differences in text size and gaps between medium and
+       small?"): the panel's own text and gaps step with the tier; controls keep their tier's text (14/20
+       at sm and md, the control scale). Published as --_panel-* so BoxField and PropertyList rows inside
+       a panel follow them. md: section titles and labels 14/20, bar title 16/24, fields 12 apart (and
+       from their row's action), rows 12 apart, labels 6 over their controls. */
+    --_panel-gap: var(--area-space-12);
+    --_panel-row-gap: var(--area-space-12);
+    --_panel-label-gap: var(--area-space-6);
+    --_panel-label-text: var(--area-text-sm-size);
+    --_panel-label-leading: var(--area-text-sm-leading);
+    --_panel-title-text: var(--area-text-md-size);
+    --_panel-title-leading: var(--area-text-md-leading);
     --_row: var(--area-control-md);
     /*
      * The bar's height, published so a docked panel's bar and whatever sits beside it can
      * agree without either restating the formula: a control, a compact header inset above and below it,
      * and the hairline under it.
      */
-    /* spec (audit 2026-09-26): the control is the tier's row control (never below sm), so an lg
-     * panel's 40px action fits its bar: sm 37 (unchanged), md 41, lg 49. */
-    --_bar: calc(max(var(--_row), var(--area-control-sm)) + var(--area-space-4) * 2 + var(--area-border-width));
+    /* The bar's button has one field gap above and below, the title centred: sm 8 + 28 + 8 + 1 = 45,
+       md 12 + 32 + 12 + 1 = 57. */
+    --_bar: calc(var(--_row) + var(--_panel-gap) * 2 + var(--area-border-width));
 
     display: flex;
     flex-direction: column;
@@ -71,6 +88,8 @@
 
     block-size: var(--_bar);
     padding-inline: var(--_inset);
+    font-size: var(--_panel-title-text);
+    line-height: var(--_panel-title-leading);
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
   }
 
@@ -85,8 +104,8 @@
   }
 
   .area-panel__title {
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
+    font-size: var(--_panel-title-text);
+    line-height: var(--_panel-title-leading);
     /* spec (type pass): surface title, strong at the compact size. */
     font-weight: var(--area-weight-strong);
   }
@@ -95,11 +114,15 @@
     flex: 1;
     min-block-size: 0;
     overflow-y: auto;
-    padding: var(--_inset);
+    /* The first heading row brings its own air from the bar; a section's padding and the next heading's
+       air make the space around each rule. */
+    padding: 0 var(--_inset) var(--_inset);
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-16);
+    gap: 0;
   }
+  /* A section without a heading starts one inset below the bar or rule. */
+  .area-panel__section:not(:has(> .area-panel__heading:first-child)) { padding-block-start: var(--_inset); }
 
   /*
    * A section is a rule and a name, not a box. Every inspector worth copying separates its
@@ -121,10 +144,12 @@
   .area-panel__section {
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-8);
+    gap: var(--_panel-row-gap);
     margin-inline: calc(var(--_inset) * -1);
     padding-inline: var(--_inset);
-    padding-block-end: var(--area-space-12);
+    /* spec (batch 8, figma--section-auto-layout): the rule sits midway, one inset below the last field
+       and one inset above the next title's cap (Figma 16 / 16.5). */
+    padding-block-end: var(--_inset);
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
   }
 
@@ -134,14 +159,19 @@
   }
 
   .area-panel__heading {
+    /* The heading row: the row control with one field gap above and below (Figma 8 / 8), title and
+       buttons centred. The section's row gap completes the space below. */
+    --_air: var(--_panel-gap);
     display: flex;
     align-items: center;
     min-block-size: var(--_row);
+    box-sizing: content-box;
     margin: 0;
+    padding-block: var(--_air) calc(var(--_air) - var(--_panel-row-gap));
     margin-inline: calc(var(--_inset) * -1);
     padding-inline: var(--_inset);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--_panel-label-text);
+    line-height: var(--_panel-label-leading);
     /* spec (docs/specs/inspector.md): a section title is strong, as every title (Figma 550). */
     font-weight: var(--area-weight-strong);
   }
@@ -195,8 +225,12 @@
   /* The rows join the section's own column, so its 8px rhythm is unchanged when open. */
   .area-panel__rows:not([hidden]) { display: contents; }
   /* A section that is its heading alone (collapsed, or with no rows yet, like an empty Stroke)
-   * sits centred between its rules: 16 above from the body gap, 16 below. */
-  .area-panel__section:is([data-collapsed], :has(> .area-panel__rows:empty), :not(:has(> :not(.area-panel__heading)))):not(:last-child) { padding-block-end: var(--area-space-16); }
+   * sits centred between its rules: its cap one inset below the rule above and one inset above the rule below
+   * (Figma: 40px heading-only sections, text centred). */
+  .area-panel__section:is([data-collapsed], :has(> .area-panel__rows:empty), :not(:has(> :not(.area-panel__heading)))):not(:last-child) { padding-block-end: 0; }
+  .area-panel__section:is([data-collapsed], :has(> .area-panel__rows:empty), :not(:has(> :not(.area-panel__heading)))):not(:last-child) > .area-panel__heading {
+    padding-block-end: var(--_air);
+  }
 
   /*
    * spec (docs/specs/inspector.md): the inspector row. Two equal control columns, 8 apart,
@@ -208,16 +242,16 @@
   .area-panel__row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    column-gap: var(--area-space-8);
-    row-gap: var(--area-space-6);
+    column-gap: var(--_panel-gap);
+    row-gap: var(--_panel-label-gap);
     align-items: center;
   }
   .area-panel__row-label {
     grid-row: 1;
     min-inline-size: 0;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--_panel-label-text);
+    line-height: var(--_panel-label-leading);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -235,6 +269,8 @@
   .area-panel__row:has(> .area-panel__row-action),
   .area-panel--action-column .area-panel__row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_row); }
   .area-panel__row-action { grid-column: 3; display: flex; align-items: center; justify-content: center; }
+  /* Actions end on the inset like the fields, one field gap after them (owner, 2026-09-28: "use the same
+     gaps between the inputs … and the button"; Figma: 8 between H and its action). */
   .area-panel__row:has(> .area-panel__row-label) > :is(.area-panel__row-controls, .area-panel__row-action) { grid-row: 2; }
 
   /* Every field label in a panel is muted, stacked or beside its control, so the section
@@ -245,7 +281,7 @@
   .area-panel__stack {
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-6);
+    gap: var(--_panel-label-gap);
   }
 
   /*
@@ -309,6 +345,12 @@
   /* spec (inspector): the row (heading height, action column) follows the panel's tier. Two
    * tiers (owner, 2026-09-27): sm, Figma's inspector density, and md, the default. 24px rows
    * belong to compact density, not to a smaller panel; 40px rows were too loose for an inspector. */
-  .area-panel--sm { --_inset: var(--area-gutter-sm); --_row: var(--area-control-sm); }
-  .area-panel--md { --_inset: var(--area-gutter-md); --_row: var(--area-control-md); }
+  /* sm: section titles and labels 12/16, bar title 14/20, fields 8 apart, rows 8 apart, labels 4 over. */
+  .area-panel--sm {
+    --_inset: var(--area-space-12); --_row: var(--area-control-sm);
+    --_panel-gap: var(--area-space-8); --_panel-row-gap: var(--area-space-8); --_panel-label-gap: var(--area-space-4);
+    --_panel-label-text: var(--area-text-xs-size); --_panel-label-leading: var(--area-text-xs-leading);
+    --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
+  }
+  .area-panel--md { --_inset: var(--area-space-16); --_row: var(--area-control-md); }
 }
