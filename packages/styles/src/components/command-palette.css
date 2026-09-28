@@ -39,7 +39,7 @@
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
     /* spec: Dialog's floating lift (Notion floats its palette on 24/48 and 4/12). */
-    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px var(--area-shadow-color); /* spec */
+    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent); /* spec */
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
@@ -88,14 +88,12 @@
     overscroll-behavior: contain;
     padding: var(--_list-inset);
   }
-  .area-command-palette__list .area-menu__item { border-radius: var(--_row-radius); }
+  .area-command-palette__list .area-command-palette__item { border-radius: var(--_row-radius); }
   .area-command-palette__group { display: flex; flex-direction: column; gap: var(--area-space-2); }
   /* Group headings are Menu's label rows (32, muted, on the rows' column); groups follow each
    * other with the list's 2 gap, as a Menu's do. */
-  .area-command-palette__item[aria-disabled="true"] { cursor: not-allowed; opacity: 0.5; }
   .area-command-palette__description { color: var(--area-fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
   .area-command-palette__text { flex: 0 1 auto; }
-  .area-command-palette__item > .area-kbd { margin-inline-start: auto; flex-shrink: 0; }
   .area-command-palette__empty {
     display: flex;
     align-items: center;
@@ -106,17 +104,44 @@
 
   /* Key hints: what the keys do here, quiet, below the list. */
   .area-command-palette__footer {
+    /* Hint plates: keycap 16 + 4 each side = 24, Button's xs height. */
+    --_hint-inset: var(--area-space-4);
     display: flex;
     align-items: center;
-    gap: var(--area-space-16);
+    /* 16 between one hint's ink and the next; the plates' insets come out of it. */
+    gap: calc(var(--area-space-16) - var(--_hint-inset) * 2);
     flex-shrink: 0;
     min-block-size: var(--area-control-md);
-    /* The hints start on the rows' icon column. */
-    padding-inline: var(--_column);
+    /* The hints' keycaps start on the rows' icon column; their plates reach past it by their inset. */
+    padding-inline: calc(var(--_column) - var(--_hint-inset));
     border-block-start: var(--area-border-width) solid var(--area-border-decorative);
     color: var(--area-fg-muted);
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
   }
   .area-command-palette__hint { display: inline-flex; align-items: center; gap: var(--area-space-6); }
+  /* Each hint is also a quiet button: pointer users click what the keys do. Menu's hover wash,
+   * ink fixed, a 24 plate with the keycap on its 4 inset. */
+  .area-command-palette__hint-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-6);
+    block-size: var(--area-control-xs);
+    min-inline-size: var(--area-control-xs);
+    padding-inline: var(--_hint-inset);
+    border: 0;
+    border-radius: var(--area-radius-control-xs);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-command-palette__hint-button:hover:not(:disabled) { background-color: var(--area-bg-hover); }
+  /* DESIGN_SYSTEM: disabled controls dim to 50% as a whole (Button's value). */
+  .area-command-palette__hint-button:disabled { cursor: not-allowed; opacity: 0.5; }
+  /* The Move hint holds two plates; they touch, and its label keeps the hint gap after them. */
+  /* Its unplated label keeps a plate's end inset, so every hint's ink is 16 from the next. */
+  .area-command-palette__hint:has(> .area-command-palette__hint-button) { gap: 0; padding-inline-end: var(--_hint-inset); }
+  .area-command-palette__hint > .area-command-palette__hint-button:last-of-type { margin-inline-end: calc(var(--area-space-6) - var(--_hint-inset)); }
 }

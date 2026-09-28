@@ -41,7 +41,9 @@ color, focus or state painting. `docs/COMPONENTS.md` is the inventory and backlo
   written as border + shell padding + slot inset with borders counted once, and
   first-line alignment for multiline text. Never nudge individual glyphs. Radius follows
   the component's documented shape role. Use native Fluent icon cuts at their size.
-- Demos and snippets share their real source. One variant per gallery tile. Use
+- Demos and snippets share their real source. One variant per gallery tile, and one size per
+  tile (`size-sm`, `size-md`, `size-lg`; never several sizes in one container). Example people are
+  always Irene Yamaguchi (a list of several people uses teams for the others). Use
   `table()`/`tokenSection()` in docs. Docs CSS cannot override `.area-*`; do not put
   backticks inside `DOCS_CSS`/`DOCS_SCRIPT`.
 - Regenerate icons with `apps/docs/scripts/gen-icons.mjs`; preserve vendored geometry.

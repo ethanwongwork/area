@@ -61,7 +61,7 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 | group headings | Menu's label rows: 32 tall, 14/20 muted, on the icon column; groups 2 apart like rows | list pass: one list model | Notion 12/14.4 medium |
 | description | muted, after the label | Notion (a page's parent) | — |
 | shortcut | Kbd small, quiet, at the end | Kbd | — |
-| footer | key hints (↑ ↓ Move, ⏎ Open, ⎋ Close) — not controls: quiet 16 keycaps, 12/16 muted labels, `aria-hidden`; 32 tall, starting on the icon column, rule above | Notion's hint row | — |
+| footer | key hints (↑ ↓ Move, ⏎ Open, ⎋ Close), each also a button: ↑ and ↓ move the highlight, Open runs it, Close closes; 24 plates (Button xs height and radius) with the keycap on their 4 inset, the `bg-hover` wash, ink fixed; disabled (50%) with no results; out of the tab order and focus kept in the field; `aria-hidden` (the keys are announced by the field); quiet 16 keycaps, 12/16 muted labels; 32 tall, keycaps starting on the icon column, 16 between hints, rule above | Notion's hint row; owner: "the controls … still don't do anything" (2026-09-27) | Notion's hints are text only |
 
 ## Behavior and accessibility
 
@@ -98,3 +98,12 @@ search icon 16, footer 13, group labels 24 tall at 12px. After, one list model f
 Combobox, Command palette and Context menu: inset 4, rows 32 two apart, row radius 8,
 corner 12, labels as 32 rows on the icon column, icon-to-label 12. Palette columns measured:
 search icon 13 = row icon 13 = label 13 = footer 13; typed text 41 = row text 41.
+
+## Working footer (2026-09-27)
+
+Owner: "the controls at the bottom of command palette still don't do anything." The hints
+are now pointer buttons for the same actions as their keys (`area-command-palette__hint-button`).
+Verified in the gallery with pointerdown + click: ↓ moves Roadmap → Design tokens → Research
+notes, ↑ moves back, Close closes the modal, Open runs the highlighted row and closes; focus
+stays in the field throughout. Measured: first keycap on the rows' icon column (46 = 46),
+"Move" ink to the Open keycap 16. Unverified: hover paint by eye, dark theme.

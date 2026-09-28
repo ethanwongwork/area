@@ -1,4 +1,5 @@
 import type { VariantProps } from "../variants.ts";
+import { InToolbar, toolbarItemProps } from "./toolbar-context.ts";
 import { MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
@@ -13,7 +14,7 @@ import type { OverlayAlign, OverlaySide } from "./overlay.ts";
  * of its own. Every appearance decision lives in `@area/styles`, which is what lets a
  * consumer use the CSS without React and get an identical result.
  */
-import { Children, cloneElement, forwardRef, useEffect, useId, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import { Children, cloneElement, forwardRef, useContext, useEffect, useId, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -138,8 +139,13 @@ export const AvatarGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarGrou
 
 export interface AlertProps extends Omit<Div, "title"> {
   tone?: VariantProps<typeof MANIFESTS.alert>["tone"];
-  /** Omit for automatic layout: compact by default, multiline for multiple actions. */
+  /**
+   * single-line (default), multiline (title over wrapping body, actions below), or banner: a
+   * one-line announcement across a page or section, its link at the end.
+   */
   layout?: VariantProps<typeof MANIFESTS.alert>["layout"];
+  /** Square, without side edges, for a banner that meets its container's edges. */
+  flush?: boolean;
   icon?: ReactNode;
   /** Shadows the native `title` attribute deliberately: an Alert's title is content. */
   title?: ReactNode;
@@ -156,17 +162,19 @@ export interface AlertProps extends Omit<Div, "title"> {
 }
 
 export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { tone, layout, icon, title, action, link, onDismiss, dismissIcon, dismissLabel = "Dismiss alert", className, children, ...rest },
+  { tone, layout, flush = false, icon, title, action, link, onDismiss, dismissIcon, dismissLabel = "Dismiss alert", className, children, ...rest },
   ref,
 ) {
   const resolvedLayout = layout ?? "single-line";
+  // A banner's link ends the row (OpenAI's announcement banners); elsewhere it follows the text.
+  const endLink = resolvedLayout === "banner";
   return (
     <div
       ref={ref}
       // `alert` interrupts a screen reader; `status` waits for a pause. Only danger earns
       // the interruption.
       role={tone === "danger" ? "alert" : "status"}
-      className={alertVariants({ tone, layout: resolvedLayout }, className)}
+      className={alertVariants({ tone, layout: resolvedLayout, flush }, className)}
       {...rest}
     >
       {icon ? (
@@ -176,13 +184,14 @@ export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(func
       ) : null}
       <div className="area-alert__content">
         {title ? <div className="area-alert__title">{title}</div> : null}
-        {children || link ? (
+        {children || (link && !endLink) ? (
           <div className="area-alert__description">
             {children}
-            {link ? <span className="area-alert__link">{link}</span> : null}
+            {link && !endLink ? <span className="area-alert__link">{link}</span> : null}
           </div>
         ) : null}
       </div>
+      {link && endLink ? <span className="area-alert__link">{link}</span> : null}
       {action ? <div className="area-alert__actions">{action}</div> : null}
       {onDismiss ? (
         <button type="button" className="area-alert__dismiss" aria-label={dismissLabel} onClick={onDismiss}>
@@ -332,15 +341,43 @@ export const Separator = /* @__PURE__ */ forwardRef<HTMLDivElement, SeparatorPro
 /* --- Skeleton, Spinner, Progress ------------------------------------------ */
 
 export interface SkeletonProps extends Div {
+  /** block (default): a box the host sizes; text: a line of type; circle: a 1:1 disc. */
   shape?: VariantProps<typeof MANIFESTS.skeleton>["shape"];
+  /** Stand-in lines for a paragraph; implies the text shape. The last line is shorter. */
+  lines?: number;
+  /** false draws a still placeholder, without the shimmer. */
+  animated?: boolean;
+  /**
+   * With children: while true the placeholder is painted on the child, which keeps its size and
+   * corner, hidden and inert; when false the children render as they are.
+   */
+  loading?: boolean;
 }
 
 export const Skeleton = /* @__PURE__ */ forwardRef<HTMLDivElement, SkeletonProps>(function Skeleton(
-  { shape, className, ...rest },
+  { shape, lines, animated = true, loading = true, className, children, ...rest },
   ref,
 ) {
+  const still = !animated;
+  if (children !== undefined && children !== null && children !== false) {
+    if (!loading) return <>{children}</>;
+    return (
+      <div ref={ref} aria-hidden="true" inert className={skeletonVariants({ shape, static: still, wrap: true }, className)} {...rest}>
+        {children}
+      </div>
+    );
+  }
+  if (lines !== undefined && lines > 1) {
+    return (
+      <div ref={ref} aria-hidden="true" className={["area-skeleton__lines", className].filter(Boolean).join(" ")} {...rest}>
+        {Array.from({ length: Math.floor(lines) }, (_, index) => (
+          <div key={index} className={skeletonVariants({ shape: "text", static: still })} />
+        ))}
+      </div>
+    );
+  }
   return (
-    <div ref={ref} aria-hidden="true" className={skeletonVariants({ shape }, className)} {...rest} />
+    <div ref={ref} aria-hidden="true" className={skeletonVariants({ shape: lines !== undefined ? "text" : shape, static: still }, className)} {...rest} />
   );
 });
 
@@ -408,7 +445,7 @@ export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps
  * horizontal Field rows. A props API for the rows would have to grow a case for every
  * control the system has, which is the API the CSS deliberately does not have either.
  */
-/** Fixed 280px inspector by default; override --area-panel-inline-size to customize. */
+/** Fixed 240px inspector by default; override --area-panel-inline-size to customize. */
 export interface PanelProps extends Omit<Div, "title"> {
   size?: VariantProps<typeof MANIFESTS.panel>["size"];
   /** Shadows the DOM `title` attribute deliberately: a panel's title is content, not a tooltip. */
@@ -421,6 +458,9 @@ export interface PanelProps extends Omit<Div, "title"> {
   flush?: boolean;
   /** The bar names the panel rather than heading it, so it carries no rule under it. */
   bareBar?: boolean;
+  /** Every PanelRow keeps a trailing action square, so controls line up down the panel even
+   * where a row has no action (Figma's properties panel). Otherwise rows fill the width. */
+  actionColumn?: boolean;
   /**
    * Puts a resize separator on one edge: "start" for a panel docked at the end of the page (an
    * inspector on the right), "end" for one at the start (a sidebar). Drag it, or focus it and use
@@ -441,7 +481,7 @@ export interface PanelProps extends Omit<Div, "title"> {
 const RESIZE_STEP = 8, RESIZE_STEP_LARGE = 32;
 
 export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(function Panel(
-  { size, title, action, footer, flush, bareBar, resizable, width, defaultWidth, onWidthChange, minWidth = 240, maxWidth = 500,
+  { size, title, action, footer, flush, bareBar, actionColumn, resizable, width, defaultWidth, onWidthChange, minWidth = 240, maxWidth = 500,
     className, children, style, id, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
@@ -508,7 +548,7 @@ export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(func
   return (
     <div ref={node => { root.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
       id={resizable ? panelId : id} role={ariaLabel || labelledByTitle ? "region" : undefined} aria-label={ariaLabel}
-      aria-labelledby={labelledByTitle ? titleId : undefined} className={panelVariants({ size, flush, bareBar }, className)}
+      aria-labelledby={labelledByTitle ? titleId : undefined} className={panelVariants({ size, flush, bareBar, actionColumn }, className)}
       data-resizable={resizable ? "" : undefined} data-resizing={resizing ? "" : undefined}
       style={current != null && resizable ? { ...style, "--area-panel-inline-size": `${current}px` } as CSSProperties : style} {...rest}>
       {handle}
@@ -829,7 +869,7 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
   const contents = (
     <>
       {swatch ? <span className="area-chip__swatch" style={{ background: swatch }} aria-hidden="true" /> : null}
-      {avatar ? <span className="area-chip__avatar">{avatar}</span> : null}
+      {avatar ? <span className="area-chip__avatar" aria-hidden="true">{avatar}</span> : null}
       {image ? <span className="area-chip__image"><img src={image} alt={imageAlt ?? ""} /></span> : null}
       {icon ? <span className="area-chip__icon" aria-hidden="true">{icon}</span> : null}
       {swatchOnly ? null : <span className="area-chip__label">{children}</span>}
@@ -894,7 +934,7 @@ export const ChipLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, ChipLinkPr
 ) {
   return (
     <a ref={ref} className={chipVariants({ kind: "suggestion", size, pill, link: treatment === "underline", linkIcon: treatment === "icon" }, className)} {...rest}>
-      {avatar ? <span className="area-chip__avatar">{avatar}</span> : null}
+      {avatar ? <span className="area-chip__avatar" aria-hidden="true">{avatar}</span> : null}
       {image ? <span className="area-chip__image"><img src={image} alt={imageAlt ?? ""} /></span> : null}
       {icon ? <span className="area-chip__icon" aria-hidden="true">{icon}</span> : null}
       <span className="area-chip__label">{children}</span>
@@ -1350,6 +1390,9 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
   const value = controlledValue ?? localValue;
   const entry = options.find(option => option.value === value && !option.disabled) ?? options.find(option => !option.disabled);
   const buttons = useRef(new Map<string, HTMLButtonElement>());
+  // In a toolbar every option is a roving item: the toolbar's arrows move focus across the
+  // options and the other commands, Space or Enter chooses (WAI-ARIA toolbar with a radio group).
+  const inToolbar = useContext(InToolbar);
   const select = (next: string) => {
     if (controlledValue === undefined) setLocalValue(next);
     onSelect?.(next);
@@ -1371,9 +1414,10 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
           disabled={option.disabled}
           className="area-segmented__item"
           ref={node => { if (node) buttons.current.set(option.value, node); else buttons.current.delete(option.value); }}
-          tabIndex={option.value === entry?.value ? 0 : -1}
+          {...(inToolbar ? toolbarItemProps : { tabIndex: option.value === entry?.value ? 0 : -1 })}
           onClick={() => select(option.value)}
           onKeyDown={event => {
+            if (inToolbar) return;
             if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
             event.preventDefault();
             const enabled = options.filter(item => !item.disabled);

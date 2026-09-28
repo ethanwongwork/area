@@ -20,10 +20,19 @@ import * as icons from "./demos/icons.tsx";
 import * as variants from "./demos/gallery-variants.tsx";
 import * as overlays from "./demos/overlays.tsx";
 import * as reviews from "./demos/reviews.tsx";
+import * as counts from "./demos/count.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
 const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
-export const DEMOS = { ...BADGE_GALLERY_DEMOS, ...badgeDemos, ...switches, ...button, ...form, ...display, ...nav, ...theme, ...gallery, ...cards, ...iconDemos, ...ICON_REVIEW_DEMOS, ...variants, ...overlays, ...reviews } as Record<string, () => unknown>;
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, reviews, counts };
+// One name, one demo. The server renders from this merged map, while hydration clients import a
+// module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
+const demoOwner = new Map<string, string>();
+for (const [module, exports] of Object.entries(DEMO_MODULES)) for (const name of Object.keys(exports)) {
+  if (demoOwner.has(name)) throw new Error(`Demo ${name} is exported by both ${demoOwner.get(name)} and ${module}`);
+  demoOwner.set(name, module);
+}
+export const DEMOS = Object.assign({}, ...Object.values(DEMO_MODULES)) as Record<string, () => unknown>;
 
 export const SOURCES = {
   card: "src/demos/card.tsx",
@@ -39,4 +48,5 @@ export const SOURCES = {
   variants: "src/demos/gallery-variants.tsx",
   overlays: "src/demos/overlays.tsx",
   reviews: "src/demos/reviews.tsx",
+  counts: "src/demos/count.tsx",
 };

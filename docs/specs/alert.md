@@ -1,11 +1,19 @@
 # Alert spec
 
-**Status:** in review · 2026-09-26 (cohesion audit)
+**Status:** accepted · 2026-09-28 (owner, batch 4; banner layout added)
 **Captures:** `docs/research/captures/alert/`
 **Peers:** Toast (shared inset rule), Button sm ghost and Dialog close (the dismiss control),
 Chip remove (a tinted 12% plate), Card and Panel (container radius)
 
 ## Owner decisions
+
+- 2026-09-27 (given as "toast fill colors can be lighter and maybe the foreground a bit more
+  vibrant"; Toast has no tinted fill, so it applies to Alert's tones and to both families'
+  icons): each tone's fill is its semantic surface mixed 50% toward `bg-surface` in oklab
+  (keeps the hue; the 25 rungs of blue and red read grey); icons take a brighter rung (info
+  and danger 500, success and warning 550, 3.5:1 or more). Text keeps the tone ink: one rung
+  lighter measured 4.33–4.47:1 on the lighter fills, under the 4.5:1 text minimum. Dark keeps
+  the semantic roles.
 
 - 2026-09-26: Neutral by default, accent by override. Alert's default tone is `neutral`;
   `accent` is an explicit tone.
@@ -25,7 +33,9 @@ whether a dismissed alert stays rendered.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | tone | neutral (default), accent, info, danger, warning, success | Meaning, not emphasis; one family of semantic surfaces | Area's semantic tones; Untitled has no alert |
-| layout | single-line (default), multiline | A one-row banner, or a title over wrapping body with actions below | Gallery tiles `default`, `multiline` |
+| layout | single-line (default), multiline | A one-row message, or a title over wrapping body with actions below | Gallery tiles `default`, `multiline` |
+| layout | banner | A persistent one-line announcement across a page or section, link or status at the end | OpenAI business and Daybreak banners (owner references), Primer Banner, Fluent MessageBar, Polaris Banner, Ant `banner`; see Banner |
+| flush | boolean | A banner that meets its container's edges | Primer `flush`, Fluent `shape="square"`, Ant `banner` |
 | composition | icon, link, action(s), dismiss | Independent slots | Gallery tiles `link`, `action`, `dismissible` |
 
 Excluded: an emphasis axis (solid banners). No target product capture shows one.
@@ -152,10 +162,19 @@ to a second row (`surface.css:276-282`). Forced colours: no Alert-specific rule.
 
 ## Visual pass
 
+2026-09-27, Claude in Chrome, side by side with Notion's callout block (the public Responsible
+Disclosure Policy page, `notion--callout`) beside the gallery's Default and Tones tiles, at 2×:
+
+- The neutral Alert is Notion's callout in Area's terms: a quiet fill (#f7 against Notion's warm
+  rgb(249, 248, 247)), no visible edge (Area's decorative seam reads as none), the icon on the
+  first line. Area sets the text at 14/20 where Notion's block text is 16/24 (a callout is body
+  text in Notion; an Alert is UI text), and the corner is 12 against Notion's 10.
+- Toned alerts have no product counterpart. After the lighter-fill change the fills read as a
+  tint, the icon carries the colour, the title keeps the tone ink and the body is muted.
+- Unverified: dismiss hover and focus on screen, dark theme.
+
 The gallery shows Alert in grouped tiles: Default, Tones (accent, info, danger, warning,
-success), Layout (multiline), Content (link, dismissible) and Behavior (action). This spec's author
-did not inspect screenshots. Unverified: dismiss hover and focus on screen, dark theme, and
-a side-by-side with a product surface (none exists; see Sources).
+success), Layout (multiline), Content (link, dismissible) and Behavior (action).
 
 ## Verification
 
@@ -167,6 +186,40 @@ a side-by-side with a product surface (none exists; see Sources).
   actions) is 65 tall, content 12 from the top and 9 from the bottom (was 73 and 17).
 - `.area-alert__description { color: fg-muted }` is declared twice (`surface.css:177` and
   `:293`); harmless, but one can go.
+
+## Banner (2026-09-28)
+
+Built from the [survey](../research/split-count-banner-survey.md) (section 3): a banner is an
+Alert layout, not a new component and not a Toast. Captures in `docs/research/captures/alert/` (`*banner*`).
+
+| slot · property | area · layout-banner | area · banner-status | area · banner-dismissible | openai · business | openai · daybreak | primer · hidden title, actions, dismiss |
+|---|---|---|---|---|---|---|
+| shell size | 514.8 × 44 | 514.8 × 44 | 514.8 × 44 | 1376 × 48 | 1376 × 50 | 1408 × 55 |
+| shell padding + border | 11 15 + 1 | 11 15 + 1 | 11 15 + 1 | 10 14 | 12 16 | 8 + 1 |
+| radius | 6 | 6 | 6 | 6 | 6.08 | 6 |
+| type | 14/20 | 14/20 | 14/20 | 17/28 | 14/20, title 600 | 14/21 |
+| end slot from the end | link 16 | badge 16 | button 44 (dismiss 8) | pill 14 | link 16 | dismiss 9 |
+| end slot from the top | link 12 | badge 12 | button 8 | pill 14 | link 10 | dismiss 11 |
+
+| Slot · property | Area value | Basis | Reason when it differs |
+|---|---|---|---|
+| inset | 12 block, 16 inline (less the border); one line 44 | OpenAI Daybreak 12 / 16 (owner reference) | Business 10 / 14 sits on a 28 line |
+| corner | `radius-control-sm` 6 | OpenAI 6 on both, Primer 6 | Not the container 12 of in-place alerts: a banner is a bar; the end controls (8 in) are not concentric with it |
+| arrangement | a flex row: icon, content, link, actions, dismiss | Daybreak flex row | The grid left gaps for absent slots (text 22 in, link 29 from the end) |
+| link | ends the row, 16 from the end, 14/20 regular, underlined, alert ink | Daybreak "Learn more" 16 from the end, underlined | Elsewhere the link follows the description |
+| status | a Badge in `action` stays on the 16 inset | OpenAI business pill on its 14 inset | — |
+| controls | 28, 8 from the top and the end | Alert's hang (−4 over the line) | 8 instead of 6: the banner's inset is 12 / 16 |
+| fill, edge, tones, title, description | Alert's | Alert (above) | Daybreak's artwork and sky ring are marketing paint; the business banner's black fill is a bold emphasis Alert excludes |
+| flush | radius 0, no side or top edge, inset kept (border added back) | Primer `flush`, Fluent square, Ant `banner` | — |
+| placement | consumer's; one at a time; persistent | Survey (Atlassian, Polaris) | — |
+
+Visual pass (2026-09-28, Claude in Chrome, openai.com/daybreak beside the gallery's banner tiles,
+both zoomed; headless Edge at 2× too): the same bar: one line, corner 6, text and link on the 16
+inset, link at the end. Differences kept on purpose: Daybreak's title is 600 and its only text
+(Area: 500 title, muted description, per the type ramp); Daybreak's underline sits lower (a
+0.1px rule under a 26px link box; Area keeps Alert's 2px offset); its sky artwork and ring are
+marketing paint. Dark theme unchecked. No target product (ChatGPT, Notion, Figma) showed a banner during this
+session: ChatGPT reserves an empty root banner slot and a composer banner portal.
 
 ## Feedback log
 
@@ -180,3 +233,10 @@ a side-by-side with a product surface (none exists; see Sources).
 - 2026-09-27 · third pass → open question settled, value kept: dismiss hover stays 12% of the
   alert ink → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner: audit → Toast's inset (10 / 12, 40 tall), icon on the first line, controls 6 from the corner, multiline actions 6 from the bottom → `notion--callout`, seven design systems; Pass review in the gallery.
+- 2026-09-27 · owner: lighter fills, more vivid ink → fills mixed halfway to the surface,
+  brighter icon rungs, text ink unchanged for contrast → headless Edge screenshot of the Tones
+  group; contrast computed (text ≥ 5.3:1 on the new fills).
+- 2026-09-27 · batch 3 → Claude in Chrome side by side with Notion's callout recorded; Validated.
+- 2026-09-28 · owner: build Banner → `layout="banner"` and `flush` on Alert (Banner section);
+  Alert returns to In review.
+- 2026-09-28 · owner: approved (batch 4); Count keeps the pill shape.

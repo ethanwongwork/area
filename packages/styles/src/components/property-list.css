@@ -68,7 +68,8 @@
     inset-block-start: calc(var(--_drop) - var(--area-border-width));
     block-size: calc(var(--area-border-width) * 2);
     border-radius: var(--area-radius-full);
-    background: var(--area-focus-color);
+    /* Neutral ink: a drop line marks a position, not focus (cohesion audit, neutral markers). */
+    background: var(--area-fg-default);
     pointer-events: none;
   }
 }

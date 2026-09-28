@@ -144,7 +144,7 @@ test("CommandPalette is a search combobox over a grouped listbox of Menu rows", 
   assert.match(html, /<input class="area-command-palette__input" role="combobox" aria-label="Command palette" aria-expanded="true" aria-controls="([^"]+)" aria-autocomplete="list" aria-activedescendant="[^"]+-item-0"/);
   assert.match(html, /role="listbox" aria-label="Command palette" class="area-command-palette__list"/);
   assert.equal((html.match(/role="group"/g) ?? []).length, 2);
-  assert.match(html, /role="option" aria-selected="false" aria-disabled="true" class="area-menu__item area-command-palette__item"/);
+  assert.match(html, /role="option" aria-selected="false" aria-disabled="true" data-disabled="" class="area-menu__item area-command-palette__item"/);
   // Kbd names its keys with visually hidden text (kbd.md), not aria-label.
   assert.match(html, /<span class="area-sr-only">Command plus ,<\/span>/);
   const empty = renderToString(h(CommandPalette, { inline: true, items, defaultQuery: "zzz" }));
@@ -159,9 +159,9 @@ test("ContextMenu wraps its area without a box and keeps a closed, named popover
 
 test("HoverCard anchors a Popover-surface card to its link and adds nothing to the link's name", async () => {
   const { HoverCard } = await import("../dist/modules/index.js");
-  const html = renderToString(h(HoverCard, { trigger: h("a", { href: "#ada" }, "@ada") }, "Ada Lovelace"));
-  assert.match(html, /^<span class="area-popover-anchor" style="--_popover-anchor:--area-hover-card-[^"]+"><a href="#ada">@ada<\/a>/);
-  assert.match(html, /<div id="[^"]+-hover-card" popover="manual" class="area-popover area-popover--bottom area-hover-card">Ada Lovelace<\/div>/);
+  const html = renderToString(h(HoverCard, { trigger: h("a", { href: "#irene" }, "@irene") }, "Irene Yamaguchi"));
+  assert.match(html, /^<span class="area-popover-anchor" style="--_popover-anchor:--area-hover-card-[^"]+"><a href="#irene">@irene<\/a>/);
+  assert.match(html, /<div id="[^"]+-hover-card" popover="manual" class="area-popover area-popover--bottom area-hover-card">Irene Yamaguchi<\/div>/);
   assert.doesNotMatch(html, /aria-describedby|role="tooltip"/);
 });
 

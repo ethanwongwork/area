@@ -102,6 +102,94 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     Spec `docs/specs/overlay.md`; tests `packages/react/tests/overlay.test.mjs`; gallery
     `behavior-*` tiles. Tooltip is still marked Complete; its behavior is new and unreviewed.
 
+## Count and Banner (2026-09-28, branch `claude/component-banner-count-81af92`, in review)
+
+- **Count** (new, `count.css`, `Count.tsx`, manifest `count`, spec `count.md`): plain (default,
+  Notion) / soft (Primer, 6% black translucent plate), neutral / accent, sm 16 / md 20, 12/16
+  tabular, `max+` via `count-format.ts` shared with Indicator, hidden `label`. Nav and Tabs demos
+  use it.
+- **Banner** = Alert `layout="banner"` + `flush` (spec `alert.md`, Banner): OpenAI 12 / 16 inset,
+  44 tall, corner 6, flex row, link at the end on the inset. Alert moved Complete → In review; new
+  batch "Counts and banners".
+- Captures: `captures/count/`, `captures/alert/*banner*` (OpenAI business and Daybreak, Primer). Route
+  for public pages in the built-in browser: paste the script, put captures in `window.name`, then
+  navigate to a 127.0.0.1 relay page that POSTs them (popups open in the same tab there).
+- Chrome side by side done (Notion board counts, OpenAI Daybreak); open: Count text 14 (Notion) vs 12;
+  dark theme; no target product showed a banner. `npm run test:consumer` fails on an old
+  `Panel size="xs"` in its fixture (unrelated).
+
+## Batch 4 approved, batch 5 Chrome pass (2026-09-28)
+
+- Owner approved batch 4 (Count, Alert with banner). Count stays a pill.
+- Batch 5 (Avatar, Indicator, Badge): Claude in Chrome side by side done and recorded in
+  `pass-status.mjs` (Figma avatars, bell and AI label; Notion person and workspace avatars, help
+  dot, tags). No change to the three families; awaiting owner approval.
+- Avatar in Chip: the initials overflowed (Chip used `control-sm-text`, 14 since small controls
+  moved to 14/20); now `control-xs-text` like Badge, and the slot is `aria-hidden`. Chip moved
+  Complete → In review. Avatar and Chip demos use Irene Yamaguchi (group: Irene + teams).
+
+## Batch 5 approved, batch 6 Chrome pass (2026-09-28)
+
+- Owner approved batch 5 (Avatar, Indicator, Badge).
+- Batch 6 (Loading): transient states caught with a MutationObserver installed alongside the
+  capture script; ChatGPT and Notion clear `window.name` (COOP), so their captures leave through
+  the clipboard (injected button, real click, `LC_ALL=en_US.UTF-8 pbpaste`). Skeleton now takes
+  ChatGPT's 10% / 16% grey and 3s linear shimmer (Figma agrees); Spinner unchanged (owner's 1s
+  over ChatGPT's 2s). Progress: no product bar found again; not validated.
+- Owner feedback: Spinner redrawn as SVG masks with round caps, stroke 1/8 of size (lg 3); a
+  2.5px md option waits in `GalleryReviewSpinner`. Skeleton: rectangle 4px corner, `animated`,
+  `lines`, wrap mode (children + `loading`), list tile; `skeleton.test.mjs`.
+- Skeleton rethink (owner chose option A from `research/skeleton-rethink-survey.md`): shapes block
+  (default) / text / circle; `rounded` and `rectangle` removed; wrap paints the child (utilities
+  layer); compositions omit control placeholders.
+
+## Gallery tiles and batches 6-7 (2026-09-28)
+
+- The tall single-column tile (1x2) is gone (`GALLERY_SPANS`): Calendar tiles are 2x2 (two
+  months 2x3), Count nav 2x1, every Skeleton tile 2x1. The Pass review's 2x copy now has the
+  tile's content width (it collapsed full-width specimens). A DOM audit found no clipped tiles.
+- Port 3000 serves a different worktree (`icons-branch-strategy-a94020`); this branch is on 4331.
+  The dev server reads `pass-status.mjs`, `component-status.mjs` and the capture folders once at
+  start: restart it after changing them, or the Pass review shows stale phases.
+- Batch 6: Progress validated against Figma's AI-credits meter (open: Figma's tracks #f5 / #e6
+  are lighter than Area's shared rail #dd). Batch 7: Popover validated against Notion's Share
+  popover; Calendar against Notion's search Date filter (month label now 500). Batch 6 approved.
+  Chrome tip: Notion's menus open reliably with synthetic pointer events dispatched to the
+  element (`pointerdown`/`mousedown`/`pointerup`/`mouseup`/`click`); zoomed tabs misplace clicks.
+
+## Owner feedback round (2026-09-27, branch `claude/component-gallery-status-4b51ac`, uncommitted)
+
+- Message action plates align to the text / bubble edge; Card carousel 18.3 under the header;
+  Command palette footer hints are working buttons (↑ ↓ Open Close).
+- Panel: sizes sm / md only, rows fill the width, `actionColumn` (Figma recipe), width 240.
+  Rule: a divider is never darker than its container (Panel, Code block → `border-decorative`).
+- Toolbar: pressed = Button selected fill; track painted as Segmented (stroke, no shadow plate).
+- Alert fills mixed 50% to surface, brighter icon rungs (Toast icons too); text ink kept (4.5:1).
+- Avatar count centred on the circle edge; Calendar 36 / 32 cells, 12/16 numbers, `fixedWeeks` off.
+- Nav from ChatGPT / Notion captures (`captures/nav/`): items default ink, labels 12/16 muted, 12
+  between groups. Open: Menu's label still 14/20.
+- Spinner 1s, track = arc ink 25%, reduced motion slows; Skeleton text keeps its line box, 4
+  corners. Survey: `docs/research/skeleton-spinner-code-slider-survey.md`.
+- Eight Complete families moved to In review (status file). Headless screenshots:
+  `scratchpad/shot.mjs` pattern (Edge + CDP). Relay for Chrome captures: postMessage page on 3199.
+- Claude in Chrome round 2: 37 captures (Figma split tools, sliders, design-panel rows, library
+  swatches, divider; ChatGPT code block, textarea, stacked field, mode radio cards, colour field;
+  Notion link preview). Not found in the owner's pages: inline code, a badge group; skeleton and
+  spinner only appear while loading.
+- **Approval batches** (`APPROVAL_BATCHES`, 21 batches of 2-3): phases audit → visual pass →
+  Chrome side by side → owner approval; gallery leads with the current batch, officially complete
+  at the bottom. Batch 1 (Toolbar, Split button, Segmented) is Ready for approval.
+- Round 3: one size per gallery tile (7 families split; rule in AGENTS.md); Split button menus
+  placed by `useAnchoredPosition` (were CSS anchor, misplaced); toolbar separator lighter
+  (`border-decorative`). Batch 2 side by side done: Nav, Menu (labels now 12/16, back to review)
+  ready; Tree view officially complete (approved earlier, unchanged). Batches 1-2 await approval.
+- Round 4: Nav titles from ChatGPT (14/20 500 muted; Menu keeps 12/16), Nav recipe tile
+  "sidebar in context"; batch 3 side by side (Alert vs Notion callout, Toast vs Notion toast).
+  Ready for approval: Toolbar, Split button, Segmented, Nav, Menu, Alert, Toast.
+- Toolbar: track group removed (Segmented in the toolbar, joins its roving); Figma tools are
+  icon-only ghost SplitButtons (no drawn divider, 1px gap). `toolbar-context.ts` makes composite
+  controls roving items inside a Toolbar.
+
 ## Merge and audit round (2026-09-27, branch `claude/component-variants-audit-fc1ee4`)
 
 - Committed this branch's work and merged `origin/main` (22 commits: inspector and Figma
@@ -333,3 +421,50 @@ differ between frames, so click by accessible name, not coordinates.
 - Remaining ChatGPT pieces: ThinkingDisclosure, SourceChip, AttachmentCard, VoiceInput — need a
   chat that shows them and Chrome in front (hidden tabs stall timers; ChatGPT does not render
   turns while hidden). The user bubble's blue is the owner's accent setting, not ChatGPT's default.
+
+## Badge md text (2026-09-27)
+
+Owner: md badges read too large on Card; md text is now 12/16 (was 14/20) at 20px, weight
+500; lg keeps 14/20. Gallery audit: all 120 md badges render 20px and no demo passes a stale
+size or inline size override. Open: the 12px label hangs 0.7px below a 14/20 line (spec).
+
+## Audit of post-audit families (2026-09-27)
+
+Owner: "work on any components that have not been audited yet." The twelve families that
+reached main after the cohesion audit were checked against its rules and fixed: see
+`docs/research/cohesion-audit.md`, "Fourth pass". Biggest find: a later literal shadow drew the
+shared lift's second layer at full strength on Menu, Popover, Dialog, Toast and the palette; the
+cohesion test now checks the painted `box-shadow`. Seven owner questions are listed there.
+Complete families touched: Box field, Button, Property list, Composer, Split button, and the
+lift on Menu/Popover/Dialog/Toast. Status in `component-status.mjs` unchanged.
+
+## Toolbar redesign and Pass reviews (2026-09-27)
+
+- Toolbar redesigned from Figma's toolbelt (7 Claude in Chrome captures) and the owner's three
+  reference shots: 8 inset, Figma's bar shadow, 8 spacing, command-height separators, a raised
+  plate for pressed toggles (dark: `bg-component-active`), `ToolbarGroup variant="track"`
+  (Figma's mode switch), selects hug their options. Tiles Tools, Content / text formatting,
+  Behavior / overflow. Back In review. Spec `toolbar.md`.
+- Every family now opens with a Pass review: audit, visual pass and Claude in Chrome evidence
+  read from the repo, the default tile at 2x (inert copy). Validated needs an entry in
+  `apps/docs/src/pass-status.mjs`; only Toolbar has one. Process doc and both skills updated.
+- Chrome notes: the gallery uses smooth scrolling, so scroll with `behavior: "instant"`; the
+  gallery tab can freeze the extension, so move captures out with the 127.0.0.1 relay.
+- Open: Segmented's selected shadow vs the toolbar plate; a 24px-icon "tools" size (Figma).
+- Hydration (#418) fixed: GalleryPanelFlush / BareBar were exported by both gallery.tsx and
+  gallery-variants.tsx (server rendered one, client hydrated the other; registry.tsx now throws
+  on a duplicate demo name), and HoverCard demos sat in a <p> the HTML parser split. A fresh
+  gallery load logs no #418; the two remaining 404s are the Avatar fallback demo's missing image.
+
+## Card consistency pass (2026-09-27, in review)
+
+One geometry rule: text inset = inset + (control − cap) / 2 with the first line trimmed to the
+cap and the last to the baseline, so a title is as far from the top as from the side (18.3 at
+md); header and footer controls sit on the inset, concentric. One type ramp (title 16/24, body
+14/20, value 32/40) at every size; size is corner and inset only. Media inset everywhere but
+bleed (immersive too), 16:9 by default. Templates: video, music, weather, stat, plan, feature,
+all md (news and tool removed); tiles size-md, horizontal-stacked, horizontal-bleed removed.
+Carousel rebuilt (reaches the inset, 3.25 items, header paging; demo `GalleryCardCarousel`,
+hydrated; only Gallery/Badge/Switch/Slider demo names render with hydration markers, see
+`render.mjs`). Spec `card.md`. Unverified: smooth paging (browser windows were in the
+background), Firefox and Safari.

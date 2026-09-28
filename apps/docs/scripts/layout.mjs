@@ -597,6 +597,35 @@ export const DOCS_CSS = `
     flex-wrap: wrap;
     gap: var(--area-space-8);
   }
+  .docs-gallery-index__batches {
+    display: grid;
+    gap: var(--area-space-8);
+    margin: var(--area-space-8) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .docs-gallery-index__batch {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--area-space-12);
+  }
+  .docs-gallery-index__batch-name {
+    min-inline-size: calc(var(--area-space-96) * 2.5);
+    color: var(--area-fg-default);
+    text-decoration: none;
+  }
+  .docs-gallery-batch {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    margin: var(--area-space-40) 0 var(--area-space-12);
+    padding-block-start: var(--area-space-16);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    font-weight: var(--area-weight-strong);
+  }
   .docs-visual-gallery__header {
     margin-block-end: var(--area-space-8);
   }
@@ -703,7 +732,6 @@ export const DOCS_CSS = `
     border-radius: var(--area-radius-container);
   }
   /* Spans are whole cells. 1x1 is the default tile and needs no rule of its own. */
-  .docs-visual-gallery__tile[data-span="1x2"] { grid-row: span 2; }
   .docs-visual-gallery__tile[data-span="row"] { grid-column: 1 / -1; }
   .docs-visual-gallery__tile[data-span="2x1"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); }
   .docs-visual-gallery__tile[data-span="2x2"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 2; }
@@ -830,6 +858,52 @@ export const DOCS_CSS = `
     padding: var(--area-space-8) var(--area-space-12) var(--area-space-24);
     overflow-x: auto;
   }
+  /* Every family's Pass review: status, the evidence for each step, the default specimen at 2x. */
+  .docs-pass__head {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    padding: var(--area-space-12) var(--area-space-12) 0;
+  }
+  .docs-pass__head > .docs-visual-gallery__tile-title { margin: 0; }
+  .docs-pass__checks {
+    display: grid;
+    gap: var(--area-space-6);
+    margin: 0;
+    padding: var(--area-space-12);
+    list-style: none;
+  }
+  .docs-pass__check {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+  }
+  .docs-pass__status { display: flex; flex: none; min-inline-size: calc(var(--area-space-48) + var(--area-space-16)); }
+  .docs-pass__check-name { flex: none; min-inline-size: calc(var(--area-space-96) + var(--area-space-12)); color: var(--area-fg-default); }
+  .docs-pass__evidence { color: var(--area-fg-muted); }
+  .docs-pass__count { color: var(--area-fg-muted); }
+  .docs-pass__stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--area-space-40) var(--area-space-24);
+    overflow-x: auto;
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+  }
+  /* The 2x copy is as wide as a tile's content (224 for one cell, 504 for two), so a specimen that
+     fills its width (a Skeleton block, an Alert) has a width to fill instead of collapsing. */
+  .docs-pass__zoom {
+    zoom: 2;
+    display: flex;
+    justify-content: center;
+    inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
+    max-inline-size: none;
+  }
+  .docs-pass__zoom[data-span^="2"] { inline-size: calc(var(--area-space-96) * 5 + var(--area-space-24)); }
+  .docs-gallery-review.docs-pass > .docs-gallery-review__body { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+  .docs-audit-label[data-pass="validated"] { color: var(--area-fg-success); }
   .docs-visual-gallery__tile:has([data-slider-demo="GallerySliderVertical"]) .docs-visual-gallery__tile-preview > [data-slider-demo] {
     display: flex;
     align-items: center;

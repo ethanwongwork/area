@@ -21,6 +21,9 @@ export interface PositionOptions {
   offset: number;
   /** Space kept between the surface and the viewport edge. */
   padding: number;
+  /** The box to place against, when it is not the trigger's own box (a menu that clears the
+   * toolbar its trigger sits in). Defaults to the trigger's bounding box. */
+  anchorRect?: (trigger: HTMLElement) => Rect;
 }
 
 export interface Rect { x: number; y: number; width: number; height: number }
@@ -67,12 +70,22 @@ export function computePosition(anchor: Rect, floating: { width: number; height:
 
   // Cross axis: align, then shift inside the viewport.
   const clamp = (value: number, size: number, limit: number) => Math.min(Math.max(value, padding), Math.max(padding, limit - padding - size));
+  // An edge-aligned surface that would leave the viewport flips to the anchor's other edge
+  // before it shifts, so it keeps sharing an edge with its anchor (a menu under a button near
+  // the start of the page starts at the button instead of floating at the viewport padding).
+  const place = (start: number, end: number, center: number, size: number, limit: number) => {
+    const fits = (value: number) => value >= padding && value + size <= limit - padding;
+    let value = options.align === "start" ? start : options.align === "end" ? end : center;
+    if (options.align !== "center" && !fits(value)) {
+      const other = options.align === "start" ? end : start;
+      if (fits(other)) value = other;
+    }
+    return clamp(value, size, limit);
+  };
   if (vertical) {
-    const start = anchor.x, end = anchor.x + anchor.width - floating.width, center = anchor.x + (anchor.width - floating.width) / 2;
-    x = clamp(options.align === "start" ? start : options.align === "end" ? end : center, floating.width, viewport.width);
+    x = place(anchor.x, anchor.x + anchor.width - floating.width, anchor.x + (anchor.width - floating.width) / 2, floating.width, viewport.width);
   } else {
-    const start = anchor.y, end = anchor.y + anchor.height - floating.height, center = anchor.y + (anchor.height - floating.height) / 2;
-    y = clamp(options.align === "start" ? start : options.align === "end" ? end : center, floating.height, viewport.height);
+    y = place(anchor.y, anchor.y + anchor.height - floating.height, anchor.y + (anchor.height - floating.height) / 2, floating.height, viewport.height);
   }
 
   const availableHeight = vertical ? Math.max(0, room(side)) : Math.max(0, viewport.height - 2 * padding);
@@ -130,7 +143,7 @@ export function useNativePopover(surface: RefObject<HTMLElement | null>, trigger
  */
 export function useAnchoredPosition(trigger: RefObject<HTMLElement | null>, surface: RefObject<HTMLElement | null>, open: boolean, options: PositionOptions) {
   const frame = useRef(0);
-  const { side, align, offset, padding } = options;
+  const { side, align, offset, padding, anchorRect } = options;
   useIsoLayoutEffect(() => {
     if (!open) return;
     const place = () => {
@@ -138,7 +151,7 @@ export function useAnchoredPosition(trigger: RefObject<HTMLElement | null>, surf
       if (!anchor || !node) return;
       const rtl = getComputedStyle(anchor).direction === "rtl";
       const mirrored = rtl && align !== "center" ? (align === "start" ? "end" : "start") : align;
-      const box = anchor.getBoundingClientRect();
+      const box = anchorRect ? anchorRect(anchor) : anchor.getBoundingClientRect();
       const position = computePosition(box, { width: node.offsetWidth, height: node.offsetHeight }, { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight }, { side, align: mirrored, offset, padding });
       node.style.setProperty("left", `${position.x}px`);
       node.style.setProperty("top", `${position.y}px`);

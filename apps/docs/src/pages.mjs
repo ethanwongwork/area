@@ -16,6 +16,17 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "count", name: "Count", manifest: "count", imports: "Count",
+    api: [["count / max / showZero", "nonnegative number, display cap (max+), zero visibility", "— / 99 / true"], ["label", "words a screen reader hears after the number (\"unread\")", "—"], ["variant", "plain | soft", "plain"], ["tone", "neutral | accent", "neutral"], ["size", "sm (16) | md (20)", "md"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryCount", note: "A number beside its owner's label: a nav row, a tab, a filter, a group heading. Plain by default, as Notion's board counts."},
+      {id: "soft", title: "Soft", demo: "GalleryCountSoft", note: "On a translucent plate (Primer's CounterLabel), so it stays visible on a hovered or selected row."},
+      {id: "overflow", title: "Overflow", demo: "GalleryCountOverflow", note: "Above max the count reads max+, formatted as Indicator's count."},
+      {id: "nav", title: "In a nav", demo: "GalleryCountNav", note: "The count keeps its muted ink on the current row: it annotates the row rather than naming it."},
+      {id: "tabs", title: "In tabs", demo: "GalleryCountTabs"},
+    ],
+  },
+  {
     slug: "indicator", name: "Indicator", manifest: "indicator", imports: "Indicator, IndicatorAnchor",
     api: [["status / size / outOfOffice", "availability variant; xs10 / sm12 / md16 / lg20; optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "accent | neutral | info | success | warning | danger", "danger"], ["processing / withBorder / disabled", "pulse / surface cutout / hide indicator", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["compact", "inset rectangular count and presence attachments by 4px", "false"]],
     examples: [
@@ -91,7 +102,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "calendar", name: "Calendar", exportName: "Calendar", manifest: "calendar",
-    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, true"], ["variant", '"plain" | "surface"', '"plain"'], ["tone", '"neutral" | "accent"', '"neutral"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
+    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, false"], ["variant", '"plain" | "surface"', '"plain"'], ["tone", '"neutral" | "accent"', '"neutral"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
     examples: [
       { id: "default", title: "Date", note: "Arrow keys move by day and week, Home and End to the week's edges, Page Up and Page Down by month (with Shift, by year). Enter or Space selects.", demo: "GalleryCalendar" },
       { id: "range", title: "Range", note: "The first choice anchors the range; hovering or moving focus previews it until the second choice. Escape cancels.", demo: "GalleryCalendarRange" },
@@ -126,12 +137,14 @@ export const COMPONENT_PAGES = [
   {
     slug: "toolbar", name: "Toolbar", manifest: "toolbar",
     imports: "Toolbar, ToolbarGroup, ToolbarItem, ToolbarSeparator, ToolbarOverflow, Button",
-    api: [["variant", '"plain" | "surface"', '"plain"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["orientation", '"horizontal" | "vertical"', '"horizontal"'], ["fullWidth", "boolean", "false"], ["ToolbarItem", "one focusable child", "—"], ["ToolbarOverflow", "label, optional icon, children", '"More actions"']],
+    api: [["variant", '"plain" | "surface"', '"plain"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["orientation", '"horizontal" | "vertical"', '"horizontal"'], ["fullWidth", "boolean", "false"], ["ToolbarGroup variant", '"track" (one-of-several toggles in a groove)', "—"], ["ToolbarItem", "one focusable child", "—"], ["ToolbarOverflow", "label, optional icon, children", '"More actions"'], ["Button selected", "a pressed toggle rises as a plate", "false"]],
     examples: [
-      { id: "default", title: "Grouped commands and overflow", note: "Tab enters once; arrow keys and Home/End move among enabled commands without activating them. Overflow is a native disclosure for secondary actions.", demo: "GalleryToolbar" },
+      { id: "default", title: "Tools", note: "Figma's toolbelt: tools 8 apart on a floating bar, the chosen tool raised, a divider, and the mode switch as a track. Tab enters once; arrow keys and Home/End move among enabled commands without activating them.", demo: "GalleryToolbar" },
+      { id: "formatting", title: "Text formatting", note: "Soft fields for font and size, pressed style toggles, and alignment as a track.", demo: "GalleryToolbarFormatting" },
       { id: "plain", title: "Plain", note: "Use a light command row within an existing surface.", demo: "GalleryToolbarPlain" },
       { id: "vertical", title: "Vertical", note: "Up and Down move focus through a vertical group.", demo: "GalleryToolbarVertical" },
-      { id: "sizes", title: "Sizes", note: "Commands retain their full control-tier height. Surface toolbars add a 4px inset around them; plain toolbars add none.", demo: "GalleryToolbarSizes" },
+      { id: "sizes", title: "Sizes", note: "Commands keep their control-tier height. Surface toolbars add an 8px inset around them (Figma's 48 around 32); plain toolbars add none.", demo: "GalleryToolbarSizes" },
+      { id: "overflow", title: "Overflow", note: "A native disclosure for secondary actions.", demo: "GalleryToolbarOverflow" },
     ],
   },
   {
@@ -151,8 +164,8 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "composer", name: "Composer", manifest: "composer",
-    api: [["layout", '"inline" | "stacked"', '"inline"'], ["value / defaultValue", "string", "—"], ["onValueChange", "(value: string) => void", "—"], ["onSubmit", "(value: string) => void", "—"], ["leadingActions / trailingActions / mode", "ReactNode", "—"], ["submitOnEnter", "boolean", "true"]],
-    examples: [{ id: "inline", title: "Inline", demo: "GalleryComposerInline" }, { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked" }, { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled" }, { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled" }],
+    api: [["layout", '"inline" | "stacked"', '"inline"'], ["value / defaultValue", "string", "—"], ["onValueChange", "(value: string) => void", "—"], ["onSubmit", "(value: string) => void", "—"], ["leadingActions / trailingActions / mode", "ReactNode", "—"], ["submitOnEnter", "boolean", "true"], ["label", "string (the field's accessible name)", '"Message"'], ["placeholder", "string", '"Write a message…"'], ["submitLabel", "string (names the send Button)", '"Send message"'], ["submitPill", "boolean (round send; the corner follows, making a pill composer)", "false"], ["disabled", "boolean (field paint; actions dim)", "false"], ["busy", "boolean (sending: the field and send pause)", "false"], ["maxLength", "number", "—"], ["inputProps / onInputKeyDown", "textarea props and key handler", "—"], ["ref", "HTMLTextAreaElement", "—"]],
+    examples: [{ id: "inline", title: "Inline", demo: "GalleryComposerInline" }, { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked" }, { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled" }, { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled" }, { id: "busy", title: "Busy", note: "While a message sends, the field and the send action pause.", demo: "GalleryComposerBusy" }, { id: "pill", title: "Pill send", note: "A round send makes the whole composer a pill, ChatGPT's shape.", demo: "GalleryComposerPill" }],
   },
   {
     slug: "code", name: "Code", manifest: "code",
@@ -901,12 +914,12 @@ export const COMPONENT_PAGES = [
     api: [
       ["suggestions", "{ id, label, icon? }[]", "—"],
       ["onSelect", "(suggestion) => void (fill or send; the host decides)", "—"],
-      ["onDismiss", "(suggestion) => void (shows a dismiss on each row)", "—"],
+      ["onDismiss", "(suggestion) => void (shows a dismiss on each row; list layout only)", "—"],
       ["label", "string (names the list)", '"Suggestions"'],
       ["layout", '"list" | "chips" (chips for narrow or inline places)', '"list"'],
     ],
     examples: [
-      { id: "default", title: "Under the composer", note: "ChatGPT's home: rows as wide as the composer, 24 below it, the prompt in muted text that lifts on hover. Choosing one fills the composer here; the list hides once there is a draft.", demo: "GalleryPromptSuggestions" },
+      { id: "default", title: "Under the composer", note: "ChatGPT's home: rows as wide as the composer, 24 below it, the prompt in muted text on Menu's hover plate. Choosing one fills the composer here; the list hides once there is a draft.", demo: "GalleryPromptSuggestions" },
     ],
   },
   {
@@ -1029,12 +1042,13 @@ export const COMPONENT_PAGES = [
     name: "Panel",
     manifest: "panel",
     api: [
-      ["size", '"xs" | "sm" | "md" | "lg"', '"md"'],
+      ["size", '"sm" | "md"', '"md"'],
       ["title", "ReactNode", "—"],
       ["action", "ReactNode", "—"],
       ["footer", "ReactNode", "—"],
       ["flush", "boolean", "false"],
       ["bareBar", "boolean (a bar that names rather than heads: no rule under it)", "false"],
+      ["actionColumn", "boolean (every row keeps a trailing action square, as in Figma's properties panel; otherwise rows fill the width)", "false"],
       ["aria-label", "string (else the title names the panel region)", "—"],
       ["PanelSection.heading", "ReactNode", "—"],
       ["PanelSection.headingLevel", "2 | 3 | 4 | 5 | 6", "3"],
@@ -1049,7 +1063,7 @@ export const COMPONENT_PAGES = [
       ["PanelStack", "a caption above a control that needs the whole width", "—"],
     ],
     examples: [
-      { id: "inspector", title: "Inspector", note: "Sections of PanelRows: captions above two equal field columns and a trailing square for an action, controls at the panel's tier. The bar's action ends on the same column.", demo: "GalleryPanel" },
+      { id: "inspector", title: "Inspector", note: "Sections of PanelRows: captions above two equal field columns that fill the row; a row with an action adds a trailing square. Controls follow the panel's tier.", demo: "GalleryPanel" },
       { id: "sections", title: "Sections", demo: "GalleryPanelSections" },
       { id: "collapsible", title: "Collapsible sections", note: "A section heading becomes a disclosure button; its chevron shows in the side inset on hover or focus, and a summary shows while it is collapsed.", demo: "GalleryPanelCollapsible" },
       { id: "footer", title: "Footer", note: "The footer stays pinned below the scrolling body.", demo: "GalleryPanelFooter" },
@@ -1068,7 +1082,7 @@ export const COMPONENT_PAGES = [
     manifest: "card",
     imports: "Card, CardContent, CardHeader, CardLink, CardMedia, CardOverlay, CardList, CardCarousel, CardTitle, CardDescription, CardValue, CardFooter, Button, Badge",
     api: [
-      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["size", '"sm" | "md" | "lg" (corner and inset; type is the same at every size)', '"md"'],
       ["layout", '"vertical" | "horizontal" | "compact" | "immersive"', '"vertical"'],
       ["CardLink", "Anchor attributes. Inside CardTitle it makes the whole card one link", "—"],
       ["CardHeader action", "ReactNode: a Badge or icon Button on the title's first line", "—"],
@@ -1079,22 +1093,22 @@ export const COMPONENT_PAGES = [
       ["CardCarousel", "List attributes: a row of <li> items that scrolls sideways; name it with aria-label", "tabIndex 0"],
     ],
     examples: [
-      { id: "vertical", title: "Vertical", demo: "CardVertical", note: "The default: media above text. A 16px corner holds media 8px in, whose corner is the card's less that inset; text sits 16px from the edge." },
+      { id: "vertical", title: "Vertical", demo: "CardVertical", note: "The default: 16:9 media above text. A 16px corner holds media 8px in, whose corner is the card's less that inset. Text sits half a control's space around the title's cap inside that inset, so the title is as far from the top as from the side; footer Buttons sit on the inset, concentric with the corners." },
       { id: "horizontal", title: "Horizontal", demo: "CardHorizontal", note: "Media beside text, 40 / 60. Put CardMedia after CardContent to place it at the end. Below 480px of card the two stack; the card is its own size container, so give it a width." },
       { id: "horizontal-end", title: "Media at the end", demo: "CardHorizontalEnd" },
-      { id: "bleed", title: "Bleed media", demo: "CardBleed", note: "CardMedia bleed runs flush with the card's edge on the sides it touches, its corners following the card's. Inset is the default." },
-      { id: "compact", title: "Compact", demo: "CardCompact", note: "An 84px thumbnail beside top-aligned text, for lists of cards." },
-      { id: "immersive", title: "Immersive", demo: "CardImmersive", note: "Edge-to-edge media with text over a readability gradient." },
+      { id: "bleed", title: "Bleed media", demo: "CardBleed", note: "CardMedia bleed runs flush with the card's edge on the sides it touches, its corners following the card's. It is the only media that meets the edge; every other card insets its media, immersive included." },
+      { id: "compact", title: "Compact", demo: "CardCompact", note: "An 84px thumbnail beside top-aligned text, for lists of cards. The text keeps the same inset from the thumbnail as from the edge." },
+      { id: "immersive", title: "Immersive", demo: "CardImmersive", note: "Media behind the text, inset like any media, with a readability gradient." },
       { id: "linked", title: "Linked", demo: "CardLinked", note: "CardLink in the title makes the whole card one link with one accessible name. Hover steps the edge; keyboard focus outlines the card. Text in a linked card can't be selected by dragging." },
       { id: "reveal", title: "Actions on a linked card", demo: "CardLinkedActions", note: "Buttons stay separate targets above the link. CardOverlay reveal shows them on hover or focus, and always on touch screens. Keep them few: most systems forbid actions in a clickable card." },
-      { id: "sizes", title: "Sizes", demo: "CardLarge", note: "sm, md and lg set the corner (12, 16, 24), the inset (6, 8, 12), the text inset (12, 16, 24) and the title role." },
-      { id: "header", title: "Header action", demo: "CardHeaderAction", note: "CardHeader puts a Badge, an icon Button or a 16px muted icon on the title's first line, however the title wraps." },
+      { id: "sizes", title: "Sizes", demo: "CardLarge", note: "sm, md and lg set the corner (12, 16, 24) and the inset (6, 8, 12). The title, description and value roles are the same at every size; a card nested in another card is one size down." },
+      { id: "header", title: "Header action", demo: "CardHeaderAction", note: "CardHeader centres a Badge, an icon Button or a 16px muted icon on the title's first line. A Button sits in the corner on the inset, concentric with it; a Badge or icon stays on the text's edge." },
       { id: "overlay", title: "Overlay", demo: "CardMediaOverlay" },
-      { id: "well", title: "Well", demo: "CardWell", note: "A media slot holding a composition, such as nested cards, instead of a picture. What it holds stacks at full width." },
+      { id: "well", title: "Well", demo: "CardWell", note: "A media slot holding a composition, such as nested cards (one size down), instead of a picture. It pads what it holds onto the card's text column." },
       { id: "list", title: "List", demo: "CardWithList" },
-      { id: "carousel", title: "Carousel", demo: "CardWithCarousel", note: "Native horizontal scrolling with scroll snap; no autoplay." },
+      { id: "carousel", title: "Carousel", demo: "GalleryCardCarousel", note: "Item cards without frames, about a third of the row with the next one showing, reaching the inset like media. Native scrolling with scroll snap; previous and next Buttons in the header page the row. No autoplay." },
       { id: "template-music", title: "Template: music player", demo: "CardTemplateMusic", note: "Templates are compositions, not variants: Card's slots with Slider, Toolbar and Button. Copy and adapt them." },
-      { id: "template-weather", title: "Template: weather widget", demo: "CardTemplateWeather", note: "Sized as Apple's small widget, 170 square. CardValue carries the figure." },
+      { id: "template-weather", title: "Template: weather widget", demo: "CardTemplateWeather", note: "Sized as Apple's small widget, 170 square, at the default card size. CardValue carries the figure." },
     ],
   },
   {
@@ -1103,7 +1117,8 @@ export const COMPONENT_PAGES = [
     manifest: "alert",
     api: [
       ["tone", '"neutral" | "accent" | "info" | "danger" | "warning" | "success"', '"neutral"'],
-      ["layout", '"single-line" | "multiline"', '"single-line"'],
+      ["layout", '"single-line" | "multiline" | "banner"', '"single-line"'],
+      ["flush", "boolean: square, no side or top edges (a banner that meets its container's edges)", "false"],
       ["icon", "ReactNode", "—"],
       ["title", "ReactNode", "—"],
       ["action", "ReactNode", "—"],
@@ -1123,6 +1138,8 @@ export const COMPONENT_PAGES = [
       { id: "action", title: "Action", demo: "AlertAction" },
       { id: "multiline", title: "Multiline actions", demo: "AlertMultiline" },
       { id: "dismissible", title: "Dismissible", note: "The parent removes the alert after the optional dismiss action fires.", demo: "AlertDismissible" },
+      { id: "banner", title: "Banner", note: "A persistent, one-line announcement across a page or section, its link or status at the end. Show one at a time; placement belongs to the page.", demo: "GalleryAlertBanner" },
+      { id: "banner-flush", title: "Flush banner", note: "Flush squares the corners and drops the side and top edges, for a banner that meets its container's edges.", demo: "GalleryAlertBannerFlush" },
     ],
   },
   {
@@ -1136,8 +1153,8 @@ export const COMPONENT_PAGES = [
     slug: "skeleton",
     name: "Skeleton",
     manifest: "skeleton",
-    api: [["shape", '"text" | "circle" | "rectangle" | "rounded"', '"text"']],
-    examples: [{ id: "default", title: "Default", demo: "SkeletonDefault" }],
+    api: [["shape", '"block" | "text" | "circle"', '"block"'], ["lines", "number: paragraph lines, the last shorter", "—"], ["animated", "boolean: false draws a still placeholder", "true"], ["children / loading", "wrap the real element: it keeps its size, hidden, until loading is false", "— / true"]],
+    examples: [{ id: "default", title: "Default", demo: "SkeletonDefault" }, { id: "paragraph", title: "Paragraph", demo: "GallerySkeletonParagraph" }, { id: "wrap", title: "Wrap", demo: "GallerySkeletonWrap", note: "The placeholder takes the wrapped element's size and corner, so the layout does not move when it loads." }],
   },
   {
     slug: "spinner",

@@ -136,19 +136,21 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     }
   };
 
+  const keepFocus = (event: { preventDefault(): void }) => event.preventDefault();
+
   let index = -1;
   const renderRow = (item: CommandItem) => {
     index += 1;
     const i = index;
     return <div key={item.id} id={`${id}-item-${i}`} data-index={i} role="option" aria-selected={i === current}
-      aria-disabled={item.disabled || undefined} className="area-menu__item area-command-palette__item"
+      aria-disabled={item.disabled || undefined} data-disabled={item.disabled ? "" : undefined} className="area-menu__item area-command-palette__item"
       data-highlighted={i === current ? "" : undefined}
       onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!item.disabled && i !== current) setActive(i); }}
       onClick={() => run(item)}>
       {item.icon ? <span className="area-menu__icon" aria-hidden="true">{item.icon}</span> : null}
       <span className="area-menu__text area-command-palette__text">{item.label}</span>
       {item.description ? <span className="area-command-palette__description">{item.description}</span> : null}
-      {item.shortcut ? <Kbd keys={item.shortcut} size="small" appearance="quiet" /> : null}
+      {item.shortcut ? <span className="area-menu__shortcut"><Kbd keys={item.shortcut} size="small" appearance="quiet" /></span> : null}
     </div>;
   };
   const groups: Array<[string | undefined, CommandItem[]]> = [];
@@ -178,9 +180,19 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     </div>
     {footer === false ? null : <div className="area-command-palette__footer" aria-hidden={footer ? undefined : true}>
       {footer ?? <>
-        <span className="area-command-palette__hint"><Kbd keys={["up"]} size="small" appearance="quiet" /><Kbd keys={["down"]} size="small" appearance="quiet" />Move</span>
-        <span className="area-command-palette__hint"><Kbd keys={["enter"]} size="small" appearance="quiet" />Open</span>
-        {inline ? null : <span className="area-command-palette__hint"><Kbd keys={["esc"]} size="small" appearance="quiet" />Close</span>}
+        {/* The hints also work by pointer. They stay out of the tab order and keep focus in the
+            field; keyboard users press the keys themselves, so assistive tech skips the row. */}
+        <span className="area-command-palette__hint">
+          <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
+            onClick={() => setActive(step(current < 0 ? 0 : current, -1))} disabled={current < 0}><Kbd keys={["up"]} size="small" appearance="quiet" /></button>
+          <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
+            onClick={() => setActive(step(current, 1))} disabled={current < 0}><Kbd keys={["down"]} size="small" appearance="quiet" /></button>
+          Move
+        </span>
+        <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
+          onClick={() => run(rows[current])} disabled={current < 0}><Kbd keys={["enter"]} size="small" appearance="quiet" />Open</button>
+        {inline ? null : <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
+          onClick={() => setOpen(false)}><Kbd keys={["esc"]} size="small" appearance="quiet" />Close</button>}
       </>}
     </div>}
   </div>;

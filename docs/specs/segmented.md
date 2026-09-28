@@ -138,6 +138,12 @@ toolbar mode switch the construction is the same (flat track, white raised item,
 icon cells); Area's track is rounder and carries a faint ring. Not inspected by this spec's
 author: hover in the browser, dark theme (selected #1d1d1d on a #282828 track).
 
+2026-09-27 (Claude in Chrome, side by side): ChatGPT's Chat / Work switch and Figma's mode
+switch against the gallery's Default tile and the Toolbar's mode and alignment controls. Same
+structure in all three (groove, 2px inset, the chosen option raised on the surface, the others
+muted). ChatGPT rounds the whole control to a pill; Area follows the control radius. Area's
+chosen option keeps a 1px selected edge where Figma relies on shadow alone.
+
 ## Verification
 
 Compared `segmented/area--{size-small,size-medium,size-large,icon-only,default,disabled}` with
@@ -155,3 +161,10 @@ captures, dark theme.
   `fg-default` → `fg-muted`, fixed on hover; dark `bg-hover` 20% → 14% white →
   `figma--view-toggle`, `figma--panel-tabs`, `toolbar/figma--bottom-toolbar`,
   `tabs/notion--view-tab*`, `segmented/area--*`.
+- 2026-09-27 · owner (Toolbar): "shouldn't that be a segmented control?" → the toolbar's track
+  group is gone; Toolbar hosts a real Segmented. Inside a Toolbar its options leave the Tab order
+  and join the toolbar's arrows (WAI-ARIA toolbar with a radio group; Space or Enter chooses).
+  Side by side in Claude in Chrome with ChatGPT's Chat / Work switch (2px inset, a raised white
+  option, muted unselected label: same structure; ChatGPT is a pill with no track hairline) and
+  Figma's mode switch (same; Figma draws no stroke on the chosen option, Area keeps its selected
+  edge as the owner asked for strokes).

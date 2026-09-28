@@ -7,6 +7,19 @@ marker), Breadcrumb (hover plate), Button ghost (row actions)
 
 ## Owner decisions
 
+- 2026-09-27 (second message): "get the nav titles from ChatGPT for nav and show the nav in full
+  context" → group titles take ChatGPT's section title: the rows' 14px size at weight 500 in a
+  quieter ink, a row pitch tall (`nav/chatgpt--sidebar-section-label`: 14/18 500 rgb(143) in a
+  36 row); Area's ink stays `fg-muted` for contrast. Supersedes the 12/16 label of the first
+  message. New tile Recipe / sidebar in context: ChatGPT's sidebar layout (header, icon rows,
+  titled Projects and Recents, a row action, the account row) from Area components.
+
+- 2026-09-27: "look into openai chatgpt, notion nav for design reference" → items take the
+  default ink (ChatGPT rgb 13); group labels step back by size and ink, 12/16 `fg-muted`
+  (Notion 12/16 rgb 161, ChatGPT 14/18 rgb 143; both under 4.5:1, so Area keeps `fg-muted`);
+  12 between groups (ChatGPT 21 at 35px rows). The marker variant keeps muted rows, its
+  current row in the default ink.
+
 - Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)): Current refinements:
   Nav has a 200px default vertical measure, content-width horizontal layout, decorative
   trailing annotations and independent action slots. Nav uses filled rows for destinations,
@@ -103,7 +116,7 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 | row · start inset | 8, the icon column | Notion 8 (primary for navigation); Figma page rows 8 | ChatGPT 10; Figma sidebar 4 + 24px icon box |
 | icon · size, gap | 16 (`icon-md`), 8 (`gap-md`) | Notion and Figma 8 icon-to-text | Product icons 20–24; Area icon slots are 16 |
 | text | 14/20 400 | ChatGPT 14/20 400; Notion 14/21 400 | Figma 11/16 (editor density) |
-| rest ink | `fg-muted` #666666 / #c5c5c5 | Notion rgb(95, 94, 89) | ChatGPT 85% ink; Figma 90% black (default ink) |
+| rest ink | **`fg-default`** (marker variant `fg-muted`) | Owner (2026-09-27); ChatGPT rgb(13) (`nav/chatgpt--sidebar-top-group`) | Notion rgb(95, 94, 89); the label carries the quieter ink |
 | hover plate | `bg-component-hover` #f3f3f3 / #333333; ink fixed | Row-plate rule; ChatGPT 5% black; Figma page row #f5 | — |
 | current | `bg-component-active` #eeeeee / #3f3f3f, ink `fg-default` | Selection one step above hover; Notion and ChatGPT current ink is the default ink | Notion, ChatGPT and Figma pages use the hover fill for current |
 | current weight | 400 | One weight per label (second pass) | Figma pages 550 current, 400 rest |
@@ -112,7 +125,8 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 | disabled | whole row 50% | Audit disabled rule; Untitled 50% | — |
 | item gap | 2 | Untitled 2 (38 pitch, 36 rows) | Notion, Figma single-row captures only |
 | separator | 1px `border-divider` #e2e2e2 / #333333 | Second pass divider role | Was `border-decorative` |
-| group label | 32px, 14/20 400 `fg-muted`, start 8 | Peer Menu label | Notion 12/16 in a lighter ink; kept (third pass): Menu's label is the same, and the two stay one pattern |
+| group label | 32px row, **14/20 500** `fg-muted`, start 8 | Owner (2026-09-27, second message): ChatGPT's section title 14/18 500 rgb(143) (`nav/chatgpt--sidebar-section-label`) | Area's 14 leading is 20; rgb(143) is 3.3:1, so the ink is `fg-muted`. Notion's 12/16 was the first message's choice. Menu keeps 12/16 (Notion's menus) |
+| group gap | **12** + the 2px item gap | ChatGPT 21 between sections at 35px rows (`nav/chatgpt--sidebar-projects-section`) | Notion 4; was 8 |
 | width | **240** (`--area-nav-inline-size` fallback, `/* spec */`, `nav.css:27`) | Figma file-browser sidebar: 224 rows + 8 inset | Was 200 (prior decision); Notion rows 254. Docs demos render at this width, no longer framed at 260 (`apps/docs/src/demos/nav.tsx:4`, third pass) |
 | row actions | 28px ghost buttons, always shown | Prior decision (independent action slots) | ChatGPT (20px pills) and Figma (24px) show actions only on hover |
 
@@ -157,8 +171,18 @@ scroll rather than wrap. RTL uses logical properties; not verified.
 
 ## Visual pass
 
-Not inspected in this spec pass. Unverified: Notion and Figma sidebars side by side on
-screen, dark products, the accent tone on screen.
+2026-09-27, Claude in Chrome, side by side at 100%: ChatGPT's sidebar (top rows, Projects and
+Recents sections) and Notion's sidebar (Recents / Private sections, page rows) beside the
+gallery's Grouped and Icons tiles.
+
+- Hierarchy now matches both products: section labels are smaller and quieter than the rows,
+  rows sit in the default ink, and space rather than a rule separates the sections.
+- Row pitch: Area 34 (32 + 2) between Notion's 31 and ChatGPT's 36; current plate a neutral
+  rounded fill in all three (Area and ChatGPT radius 8, Notion 6).
+- Icons: the products draw 20px icons; Area's 16px icon slot reads lighter but keeps the grid.
+- Label ink: Area's `fg-muted` is darker than both products' label inks (143 / 161), kept for
+  4.5:1 text contrast.
+- Unverified: dark products, the accent tone beside a product.
 
 ## Verification
 
@@ -182,3 +206,11 @@ specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
 - 2026-09-27 · third pass → docs demos render at Nav's own 240 (were framed at 260); group
   label kept → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · third pass, follow-up → trailing Badge reserves its own 20px height, end inset 4 → 6 (measured 6 / 6 / 6 in the gallery) → `inset.css:221-224`.
+- 2026-09-27 · owner: refine from ChatGPT and Notion → Claude in Chrome captures of both
+  sidebars (`nav/chatgpt--sidebar-{top-group,section-label,projects-section,recents-section}`,
+  `nav/notion--sidebar-{sections,private-section}`, redacted) → items default ink, labels 12/16
+  muted, 12 between groups → headless Edge screenshot of the Grouped tile.
+- 2026-09-27 · batch 2 → Claude in Chrome side by side with ChatGPT and Notion sidebars
+  recorded (Visual pass); Validated.
+- 2026-09-27 · owner: titles from ChatGPT, nav in full context → labels 14/20 500 muted, sidebar
+  recipe tile → headless Edge screenshot of the recipe.

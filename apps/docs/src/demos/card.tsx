@@ -1,9 +1,12 @@
+import { useEffect, useRef, useState } from "react";
 import { Badge, BadgeGroup, Button, Card, CardCarousel, CardContent, CardDescription, CardFooter, CardHeader, CardLink, CardList, CardMedia, CardOverlay, CardTitle, CardValue, Slider, Toolbar, ToolbarItem } from "@area/react";
 import {
   ArrowIcon,
   CheckIcon,
   FluentArrowTrendingIcon,
   FluentArrowUpRightIcon,
+  FluentChevronLeftIcon,
+  FluentChevronRightIcon,
   FluentHeartIcon,
   FluentNextFilledIcon,
   FluentPauseFilledIcon,
@@ -13,12 +16,19 @@ import {
   PlusIcon,
 } from "../icons.tsx";
 
-const square = { inlineSize: 300, minBlockSize: 300 };
+/*
+ * Every card here is the default size (md) unless its tile shows a size, with inset media
+ * (16:9 in a vertical card) unless its tile shows bleed. Widths are demo framing: 300 for a
+ * vertical card, 600 for a horizontal one, 170 square for a widget (Apple's small widget).
+ */
+const vertical = { inlineSize: 300 };
+const horizontal = { inlineSize: 600 };
+const widget = { inlineSize: 170, blockSize: 170 };
 
 /* --- Layout ---------------------------------------------------------------- */
 
 export const CardVertical = () => (
-  <Card style={{ inlineSize: 300, minBlockSize: 300 }}>
+  <Card style={vertical}>
     <CardMedia aria-hidden="true" />
     <CardContent>
       <CardTitle>Title</CardTitle>
@@ -29,18 +39,18 @@ export const CardVertical = () => (
 );
 
 export const CardHorizontal = () => (
-  <Card layout="horizontal" style={{ inlineSize: 600 }}>
+  <Card layout="horizontal" style={horizontal}>
     <CardMedia aria-hidden="true" />
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
-      <CardFooter><Button variant="outline">Secondary</Button><Button>Action</Button></CardFooter>
+      <CardFooter><Button>Action</Button></CardFooter>
     </CardContent>
   </Card>
 );
 
 export const CardHorizontalEnd = () => (
-  <Card layout="horizontal" style={{ inlineSize: 600 }}>
+  <Card layout="horizontal" style={horizontal}>
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
@@ -50,42 +60,18 @@ export const CardHorizontalEnd = () => (
   </Card>
 );
 
-/* Below 480px of card, a horizontal card stacks. */
-export const CardHorizontalStacked = () => (
-  <Card layout="horizontal" style={{ inlineSize: 300 }}>
+export const CardCompact = () => (
+  <Card layout="compact" style={vertical}>
     <CardMedia aria-hidden="true" />
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
-      <CardFooter><Button>Action</Button></CardFooter>
-    </CardContent>
-  </Card>
-);
-
-export const CardBleed = () => (
-  <Card style={{ inlineSize: 300 }}>
-    <CardMedia bleed aria-hidden="true" style={{ aspectRatio: "16 / 9" }} />
-    <CardContent>
-      <CardTitle>Title</CardTitle>
-      <CardDescription>Description</CardDescription>
-      <CardFooter><Button>Action</Button></CardFooter>
-    </CardContent>
-  </Card>
-);
-
-export const CardHorizontalBleed = () => (
-  <Card layout="horizontal" style={{ inlineSize: 600 }}>
-    <CardMedia bleed aria-hidden="true" />
-    <CardContent>
-      <CardTitle>Title</CardTitle>
-      <CardDescription>Description</CardDescription>
-      <CardFooter><Button variant="outline">Secondary</Button><Button>Action</Button></CardFooter>
     </CardContent>
   </Card>
 );
 
 export const CardImmersive = () => (
-  <Card layout="immersive" style={square}>
+  <Card layout="immersive" style={{ inlineSize: 300, blockSize: 300 }}>
     <CardMedia aria-hidden="true" />
     <CardContent>
       <CardTitle>Title</CardTitle>
@@ -94,61 +80,37 @@ export const CardImmersive = () => (
   </Card>
 );
 
-export const CardCompact = () => (
-  <Card layout="compact" style={{ inlineSize: 300, minBlockSize: 100 }}>
-    <CardMedia aria-hidden="true" />
+/* Bleed is the one media option that meets the card's edge. */
+export const CardBleed = () => (
+  <Card style={vertical}>
+    <CardMedia bleed aria-hidden="true" />
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
+      <CardFooter><Button>Action</Button></CardFooter>
     </CardContent>
   </Card>
 );
 
-export const CardWithCarousel = () => (
-  <Card role="region" aria-label="Collection" aria-roledescription="carousel" style={{ inlineSize: 600, minBlockSize: 300 }}>
-    <CardContent>
-      <CardTitle>Title</CardTitle>
-      <CardCarousel aria-label="Items; scroll horizontally for more">
-        {[1, 2, 3, 4, 5, 6].map((item) => (
-          <li key={item}>
-            <CardMedia aria-hidden="true" />
-            <CardContent><CardTitle>Item {item}</CardTitle><CardDescription>Description</CardDescription></CardContent>
-          </li>
-        ))}
-      </CardCarousel>
-    </CardContent>
-  </Card>
-);
-
-/* --- Size ------------------------------------------------------------------ */
+/* --- Size: corner and inset; type is the same at every size. ------------------ */
 
 export const CardSmall = () => (
-  <Card size="sm" style={{ inlineSize: 240 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "16 / 9" }} />
+  <Card size="sm" style={vertical}>
+    <CardMedia aria-hidden="true" />
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
-      <CardFooter><Button size="sm">Action</Button></CardFooter>
-    </CardContent>
-  </Card>
-);
-export const CardMedium = () => (
-  <Card size="md" style={{ inlineSize: 300 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "16 / 9" }} />
-    <CardContent>
-      <CardTitle>Title</CardTitle>
-      <CardDescription>Description</CardDescription>
-      <CardFooter><Button size="md">Action</Button></CardFooter>
+      <CardFooter><Button>Action</Button></CardFooter>
     </CardContent>
   </Card>
 );
 export const CardLarge = () => (
-  <Card size="lg" style={{ inlineSize: 364 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "16 / 9" }} />
+  <Card size="lg" style={vertical}>
+    <CardMedia aria-hidden="true" />
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
-      <CardFooter><Button size="lg">Action</Button></CardFooter>
+      <CardFooter><Button>Action</Button></CardFooter>
     </CardContent>
   </Card>
 );
@@ -156,7 +118,7 @@ export const CardLarge = () => (
 /* --- Content --------------------------------------------------------------- */
 
 export const CardHeaderAction = () => (
-  <Card style={{ inlineSize: 300 }}>
+  <Card style={vertical}>
     <CardContent>
       <CardHeader action={<Badge variant="outline" tone="info">Label</Badge>}>
         <CardTitle>Title</CardTitle>
@@ -167,8 +129,8 @@ export const CardHeaderAction = () => (
 );
 
 export const CardMediaOverlay = () => (
-  <Card style={{ inlineSize: 300 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "16 / 9" }}>
+  <Card style={vertical}>
+    <CardMedia aria-hidden="true">
       <CardOverlay><Badge variant="solid" tone="inverted">Label</Badge></CardOverlay>
     </CardMedia>
     <CardContent>
@@ -178,13 +140,31 @@ export const CardMediaOverlay = () => (
   </Card>
 );
 
+export const CardCornerAction = () => (
+  <Card layout="immersive" style={{ inlineSize: 300, blockSize: 300 }}>
+    <CardMedia aria-hidden="true" />
+    <CardOverlay placement="bottom-end"><Button iconOnly aria-label="Open" icon={<ArrowIcon />} /></CardOverlay>
+    <CardContent>
+      <CardTitle>Title</CardTitle>
+      <CardDescription>Description</CardDescription>
+    </CardContent>
+  </Card>
+);
+
+/* A card in a well is one size down. */
+const wellRow = (title: string) => (
+  <Card key={title} size="sm">
+    <CardContent>
+      <CardHeader action={<Button variant="soft" iconOnly aria-label={`Open ${title}`} icon={<FluentArrowUpRightIcon />} />}>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+    </CardContent>
+  </Card>
+);
+
 export const CardWell = () => (
-  <Card style={{ inlineSize: 300 }}>
-    <CardMedia well>
-      <Card size="sm">
-        <CardContent><CardHeader action={<Badge>Label</Badge>}><CardTitle>Title</CardTitle></CardHeader></CardContent>
-      </Card>
-    </CardMedia>
+  <Card style={vertical}>
+    <CardMedia well>{wellRow("Item one")}</CardMedia>
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
@@ -193,7 +173,7 @@ export const CardWell = () => (
 );
 
 export const CardWithList = () => (
-  <Card style={{ inlineSize: 300 }}>
+  <Card style={vertical}>
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
@@ -207,31 +187,53 @@ export const CardWithList = () => (
 );
 
 export const CardTags = () => (
-  <Card style={{ inlineSize: 300 }}>
+  <Card style={vertical}>
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
-      <CardFooter><BadgeGroup><Badge tone="accent">Label</Badge><Badge tone="accent">Label</Badge></BadgeGroup></CardFooter>
+      <BadgeGroup><Badge tone="accent">Label</Badge><Badge tone="accent">Label</Badge></BadgeGroup>
     </CardContent>
   </Card>
 );
 
-export const CardCornerAction = () => (
-  <Card layout="immersive" style={square}>
-    <CardMedia aria-hidden="true" />
-    <CardOverlay placement="bottom-end"><Button iconOnly aria-label="Open" icon={<ArrowIcon />} /></CardOverlay>
+/* The row scrolls natively (scroll snap, arrow keys on the focused row); the header's
+   Buttons page it and turn off at either end. */
+export const GalleryCardCarousel = () => {
+  const row = useRef<HTMLUListElement | null>(null);
+  const [edges, setEdges] = useState({ start: true, end: false });
+  const update = () => {
+    const element = row.current;
+    if (!element) return;
+    const max = element.scrollWidth - element.clientWidth;
+    setEdges({ start: element.scrollLeft <= 1, end: element.scrollLeft >= max - 1 });
+  };
+  useEffect(update, []);
+  const page = (direction: 1 | -1) => row.current?.scrollBy({ left: direction * row.current.clientWidth * 0.75, behavior: "smooth" });
+  return <Card role="region" aria-label="Collection" aria-roledescription="carousel" style={horizontal}>
     <CardContent>
-      <CardTitle>Title</CardTitle>
-      <CardDescription>Description</CardDescription>
+      <CardHeader action={<>
+        <Button variant="ghost" iconOnly aria-label="Previous items" icon={<FluentChevronLeftIcon />} disabled={edges.start} onClick={() => page(-1)} />
+        <Button variant="ghost" iconOnly aria-label="Next items" icon={<FluentChevronRightIcon />} disabled={edges.end} onClick={() => page(1)} />
+      </>}>
+        <CardTitle>Title</CardTitle>
+      </CardHeader>
+      <CardCarousel ref={row} aria-label="Items" onScroll={update}>
+        {[1, 2, 3, 4, 5, 6].map((item) => (
+          <li key={item}>
+            <CardMedia aria-hidden="true" />
+            <CardContent><CardTitle>Item {item}</CardTitle><CardDescription>Description</CardDescription></CardContent>
+          </li>
+        ))}
+      </CardCarousel>
     </CardContent>
-  </Card>
-);
+  </Card>;
+};
 
 /* --- Behavior ------------------------------------------------------------- */
 
 export const CardLinked = () => (
-  <Card style={{ inlineSize: 300 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "16 / 9" }} />
+  <Card style={vertical}>
+    <CardMedia aria-hidden="true" />
     <CardContent>
       <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
       <CardDescription>Description</CardDescription>
@@ -240,30 +242,31 @@ export const CardLinked = () => (
 );
 
 export const CardLinkedActions = () => (
-  <Card style={{ inlineSize: 300 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "16 / 9" }}>
+  <Card style={vertical}>
+    <CardMedia aria-hidden="true">
       <CardOverlay reveal><Button variant="soft" size="sm" iconOnly aria-label="More" icon={<MoreIcon />} /></CardOverlay>
     </CardMedia>
     <CardContent>
       <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
       <CardDescription>Description</CardDescription>
-      <CardFooter><BadgeGroup><Badge>Label</Badge><Badge>Label</Badge></BadgeGroup></CardFooter>
     </CardContent>
   </Card>
 );
 
-/* --- Templates: compositions of the slots above and other components. ---------- */
-
-/* Apple's small widget is 170pt square and the medium 364 × 170 (HIG, iOS dimensions). */
-const widget = { inlineSize: 170, blockSize: 170 };
+/*
+ * --- Templates ---------------------------------------------------------------
+ * Compositions of the slots above and other components, not variants. Each is the default
+ * size and follows one order: media, header (title with description, an action on the right),
+ * value, body blocks, footer controls.
+ */
 
 export const CardTemplateVideo = () => (
-  <Card style={{ inlineSize: 300 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "16 / 9" }}>
+  <Card style={vertical}>
+    <CardMedia aria-hidden="true">
       <CardOverlay placement="bottom-end"><Badge variant="solid" tone="inverted">12:04</Badge></CardOverlay>
     </CardMedia>
     <CardContent>
-      <CardHeader action={<Button variant="ghost" size="sm" iconOnly aria-label="More" icon={<MoreIcon />} />}>
+      <CardHeader action={<Button variant="ghost" iconOnly aria-label="More" icon={<MoreIcon />} />}>
         <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
         <CardDescription>Channel · 2 days ago</CardDescription>
       </CardHeader>
@@ -272,10 +275,10 @@ export const CardTemplateVideo = () => (
 );
 
 export const CardTemplateMusic = () => (
-  <Card style={{ inlineSize: 300 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "2 / 1" }} />
+  <Card style={vertical}>
+    <CardMedia aria-hidden="true" />
     <CardContent>
-      <CardHeader action={<Button variant="ghost" size="sm" iconOnly aria-label="Like" icon={<FluentHeartIcon />} />}>
+      <CardHeader action={<Button variant="ghost" iconOnly aria-label="Like" icon={<FluentHeartIcon />} />}>
         <CardTitle>Title</CardTitle>
         <CardDescription>Artist</CardDescription>
       </CardHeader>
@@ -292,65 +295,37 @@ export const CardTemplateMusic = () => (
 );
 
 export const CardTemplateWeather = () => (
-  <Card size="sm" style={widget}>
+  <Card style={widget}>
     <CardContent>
       <CardHeader action={<FluentWeatherSunnyIcon />}>
         <CardTitle>City</CardTitle>
       </CardHeader>
       <CardValue>21°</CardValue>
-      <CardFooter><CardDescription>Sunny · H 24° L 16°</CardDescription></CardFooter>
+      <CardDescription>Sunny · H 24° L 16°</CardDescription>
     </CardContent>
   </Card>
 );
 
 export const CardTemplateStat = () => (
-  <Card size="sm" style={widget}>
+  <Card style={widget}>
     <CardContent>
       <CardHeader action={<FluentArrowTrendingIcon />}>
         <CardTitle>Label</CardTitle>
       </CardHeader>
-      <CardFooter>
-        <CardValue>309.5</CardValue>
-        <Badge tone="success">+1.9%</Badge>
-      </CardFooter>
-    </CardContent>
-  </Card>
-);
-
-export const CardTemplateNews = () => (
-  <Card size="lg" style={{ inlineSize: 364 }}>
-    <CardMedia bleed aria-hidden="true" style={{ aspectRatio: "16 / 9" }}>
-      <CardOverlay placement="top-start"><Badge variant="solid" tone="inverted">Category</Badge></CardOverlay>
-    </CardMedia>
-    <CardContent>
-      <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
-      <CardDescription>Description of the story, long enough to wrap onto a second line.</CardDescription>
-      <CardFooter><CardDescription>5 min read</CardDescription></CardFooter>
-    </CardContent>
-  </Card>
-);
-
-export const CardTemplateTool = () => (
-  <Card style={{ inlineSize: 300 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "16 / 9" }}>
-      <CardOverlay><Badge>Label</Badge></CardOverlay>
-    </CardMedia>
-    <CardContent>
-      <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
-      <CardDescription>Description</CardDescription>
-      <CardFooter><BadgeGroup><Badge tone="accent">Label</Badge><Badge tone="accent">Label</Badge></BadgeGroup></CardFooter>
+      <CardValue>309.5</CardValue>
+      <CardDescription>+1.9% this week</CardDescription>
     </CardContent>
   </Card>
 );
 
 export const CardTemplatePlan = () => (
-  <Card size="lg" style={{ inlineSize: 364 }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "2 / 1" }} />
+  <Card style={vertical}>
     <CardContent>
-      <CardHeader action={<Badge variant="outline" tone="info">Free</Badge>}>
+      <CardHeader action={<Badge variant="outline" tone="info">Popular</Badge>}>
         <CardTitle>Title</CardTitle>
-        <CardDescription>Description</CardDescription>
       </CardHeader>
+      <CardValue>$20</CardValue>
+      <CardDescription>Description</CardDescription>
       <CardList>
         <li><CheckIcon />Item one</li>
         <li><CheckIcon />Item two</li>
@@ -361,22 +336,12 @@ export const CardTemplatePlan = () => (
 );
 
 export const CardTemplateFeature = () => (
-  <Card layout="horizontal" size="lg" style={{ inlineSize: 600 }}>
-    <CardMedia well>
-      {["Item one", "Item two"].map((item) => (
-        <Card key={item} size="sm">
-          <CardContent>
-            <CardHeader action={<Button variant="soft" size="sm" iconOnly aria-label="Open" icon={<FluentArrowUpRightIcon />} />}>
-              <CardTitle>{item}</CardTitle>
-            </CardHeader>
-          </CardContent>
-        </Card>
-      ))}
-    </CardMedia>
+  <Card layout="horizontal" style={horizontal}>
+    <CardMedia well>{["Item one", "Item two"].map(wellRow)}</CardMedia>
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
-      <CardFooter><Button variant="outline" pill icon={<PlusIcon />}>Action</Button></CardFooter>
+      <CardFooter><Button variant="outline" icon={<PlusIcon />}>Action</Button></CardFooter>
     </CardContent>
   </Card>
 );

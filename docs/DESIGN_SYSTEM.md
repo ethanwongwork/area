@@ -92,9 +92,10 @@ Dialog, Toast, the Calendar and ColorPicker surfaces, Toolbar overflow) shares o
 Notion's popover geometry: `0 20px 24px` and `0 5px 8px` in `shadow-color` at full and half
 strength, over the 1px decorative border. Tooltip keeps its own smaller lift.
 
-Use `border-decorative` for container seams and `border-divider` for rules between content
-(Separator, menu, nav and toolbar separators, table rows, panel sections, code-block
-headers): a divider has no fill or shadow to help it, so it sits a step darker, near where
+A rule inside a container is never darker than the container's edge (owner, 2026-09-27):
+Panel bar, section and footer rules, Code block header and toggle rules and Menu separators
+take the container's `border-decorative`. Use `border-divider` for rules that stand on their
+own (Separator, nav and toolbar separators, tab tracks, table rows): a divider has no fill or shadow to help it, so it sits a step darker, near where
 ChatGPT, Figma and Untitled draw theirs (#e5–#e6; Notion's menu rules are lighter, 7%). A
 Card's edge and a Table's frame take the divider role too: they stand alone on the page,
 with the page's fill and little or no lift, and every product draws them firmer than a seam. Choice glyphs (Checkbox,

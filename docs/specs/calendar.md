@@ -7,6 +7,12 @@ fill, Complete), Breadcrumb (chevron glyph, Complete), Badge/Indicator (today ma
 
 ## Owner decisions
 
+- 2026-09-27: "refine the visual and optical balance … very busy and difficult to read, maybe
+  the dates are too compact?" → cells 36 around 32 days (were 32 / 28); numbers and weekdays
+  back on the 12/16 caption role (small controls moving to 14/20 had carried them to 14);
+  `fixedWeeks` off by default, so a five-week month draws five rows instead of a sixth row of
+  next month's dates.
+
 - 2026-09-26: Calendar is a gap the owner named ("things like calendar and color picker
   come to mind"); build it with its variants.
 - 2026-09-26: "Why is purple being used? … I'd prefer if neutral was used all the time and
@@ -106,9 +112,9 @@ Day states: `notion--day--hover--light`, `notion--day-today--rest--light`,
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| cell, day | 32, 28 | Notion 32 / 28; shadcn `--cell-size` 32 | — |
+| cell, day | **36, 32** | Owner (2026-09-27: too compact) | Notion 32 / 28; shadcn `--cell-size` 32 |
 | day · radius | radius-control-sm (6) | Notion 6 | — |
-| day · type | **12/16** 400, tabular (`--_day-text`) | Owner (third pass): numbers too large | Notion 14; the month title keeps 14/20 |
+| day · type | **12/16** 400, tabular (`--_day-text`), the caption role, not the small control text | Owner (third pass): numbers too large | Notion 14; the month title keeps 14/20 |
 | weekday | 12/16 400, fg-muted | Notion 12/18 in a tertiary ink | Area small text; secondary ink is fg-muted |
 | month label | 14/20 **400** | Notion 500 | Owner direction: regular weight except labels on fills |
 | nav | Button ghost sm (28; 24 compact), Area chevron | Notion 24px, radius 3 | Area's control tier; Breadcrumb's chevron |
@@ -122,7 +128,7 @@ Day states: `notion--day--hover--light`, `notion--day-today--rest--light`,
 | today | 1px stroke-control ring in the day's shape | Owner reference (outlined today tile) | Pass 2's soft circle would disappear among circle-style available days; a ring stays distinct from selection, the band, fills and outlines in every treatment |
 | outside days | fg-disabled ink, clickable, no selection paint | Notion ink rgb(161,158,153) | Two-month ranges repeated the range and end on outside days; only the owning month paints |
 | unavailable | fg-disabled, struck through | React Aria unavailable dates | Bounds (min/max) only dim, like Notion |
-| fixed weeks | on | Notion (six rows) | — |
+| fixed weeks | **off** (`fixedWeeks` opt-in) | Owner (2026-09-27: busy); shadcn and rdp default | Notion draws six rows |
 
 Third-pass additions:
 
@@ -169,6 +175,23 @@ Third-pass additions:
 
 ## Visual pass
 
+2026-09-28, Claude in Chrome (batch 7): Notion's search Date filter calendar (Search → Filter →
+Date; ephemeral search state, nothing picked) beside the gallery's Calendar tile, both zoomed.
+
+| | Notion | Area |
+|---|---|---|
+| surface | popover, radius 10, presets above the grid | the tile's popover-style surface, radius 12 |
+| month label | "Sep 2026", 500 | "September 2026", **was 400, now 500** |
+| cells | 32 (224 grid / 7) | 36 / 32 (owner, 2026-09-27) |
+| weeks | always 6 | the month's weeks (`fixedWeeks` off, owner) |
+| today | filled red circle, white number (Notion's brand) | neutral 1px outline (neutral by default) |
+| outside days | muted | muted |
+
+Changed: the month label takes the strong weight (surface-title rule; Notion and shadcn 500). The
+rest are owner decisions or Notion's brand colour. Dark theme not compared.
+
+Earlier note:
+
 Pass reviews were removed at the owner's request; the family is inspected in the grouped
 gallery. Second pass (tone): the before/after review compared pass 1 (accent selection,
 dark today circle) with neutral selection and a soft today circle. The neutral selected day
@@ -203,3 +226,8 @@ on outside days, fixed (see Decisions). Dark theme not compared.
 - 2026-09-26 · cohesion audit → the surface takes the shared floating lift with Popover and Menu (was shadow-2) → [cohesion-audit.md](../research/cohesion-audit.md); Pass review row added.
 - 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27 · owner: busy, hard to read, dates too compact → found the day and weekday text had
+  moved to 14 with the small-control change; back to 12/16, cells 36 / days 32, `fixedWeeks`
+  off by default → headless Edge screenshots before / after; React test updated (35 days for
+  September 2026, 42 with `fixedWeeks`).
+- 2026-09-28 · batch 7 Claude in Chrome (Notion search Date filter) → month label 400 → 500; other differences kept.

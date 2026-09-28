@@ -1,6 +1,6 @@
 # Card spec
 
-**Status:** in review · 2026-09-27 (layouts, linked cards, size, slots, templates)
+**Status:** in review · 2026-09-27 (consistency pass: one geometry rule, one type ramp, inset media, templates, carousel)
 **Captures:** `docs/research/captures/card/`, `docs/research/captures/baseline/chatgpt--settings-card--rest--light.json`
 **Peers:** Panel (inspector surface), Dialog and Popover (floating surfaces), Alert and Code
 block (container radius), Badge and Button (slots), Slider (templates)
@@ -22,6 +22,12 @@ block (container radius), Badge and Button (slots), Slider (templates)
   and a **very soft drop shadow** (reference: Figma's 0 0 8 0, #000 at 2%; "come up with your
   own recipe"); check that every type size, style and component inside the cards maps to a
   real component.
+- 2026-09-27 (fourth message, consistency pass): only bleed media meets the edge, every other
+  variant insets its media; templates consistent and generic; one type ramp, consistent and
+  intentional gaps; every card the same default size; remove duplicate variants; fix the
+  carousel; titles equally spaced on each side. May rewrite the earlier size rules.
+- Superseded: the size axis's type steps (title 14 → 16 → 20, sm body 12) and fixed text
+  insets 12 / 16 / 24 (2026-09-27, second entry above), by the consistency pass.
 - Superseded: the appearance axis (outline, raised, filled, inverted, glass, plain) added
   earlier the same day; the 2026-09-26 container-radius decision.
 
@@ -39,12 +45,12 @@ interrupt (Dialog). A widget is a card whose content is live data; its layout is
 | layout | horizontal | Media beside text, 40 / 60, stacks below 480px; media start or end by order | Polaris MediaCard landscape, Fluent `orientation`, M3 adaptive |
 | layout | compact | 84px thumbnail beside text, for lists | Primer `layout="compact"`, Notion board card |
 | layout | immersive | Media behind text with a readability gradient | M3 (scrim over images), owner references |
-| media | inset (default), bleed | Bleed cancels the padding on the sides it touches | Fluent CardPreview, Primer, Radix Inset; ChatGPT, Figma, Notion gallery |
-| size | sm, md (default), lg | Owner ladder | Fluent 8/12/16, Radix 12–48 step padding with size |
+| media | inset (default, every layout including immersive), bleed | Bleed cancels the padding on the sides it touches; it is the only media that meets the edge | Fluent CardPreview, Primer, Radix Inset; ChatGPT, Figma, Notion gallery |
+| size | sm, md (default), lg: corner and inset only | Owner ladder | Fluent 8/12/16, Radix 12–48 step padding with size |
 | behavior | linked (CardLink), reveal (CardOverlay) | One link for the whole card; actions on hover | Notion, ChatGPT; Carbon ClickableTile, Radix `asChild` |
 | slots | header (+ action), overlay, well, list, footer, carousel | Owner (content slots) | shadcn CardAction, Fluent CardHeader action |
 
-Templates: video, music, weather, stat, news, tool, plan, feature (`card.tsx`).
+Templates: video, music, weather, stat, plan, feature (`card.tsx`), all the default size, in one slot order (media, header, value, body blocks, footer). Removed in the consistency pass as duplicates: news (the linked card with an overlay), tool (reveal plus tags); tiles removed: size md (the default tile), horizontal stacked (a behaviour of horizontal, documented), horizontal bleed (bleed is one option; the vertical tile shows it).
 
 ## Sources
 
@@ -72,28 +78,43 @@ Apple's glass) stays on file for the system-wide appearance pass.
 
 ```
 area  div.area-card grid (flex + container when horizontal): border + padding (= inset) + gap (= inset)
-  media        inset: radius = card radius − inset; bleed: negative margin = −padding on the
-               sides it touches, outer corners = card radius − border
-    overlay    absolute corner at the card inset; --reveal fades in on hover or focus-within
-  content      padding = text inset − inset
-    title
+  media        inset: radius = card radius − inset; 16:9 when vertical; immersive: absolute at
+               the inset; bleed: negative margin = −padding on the sides it touches, outer
+               corners = card radius − border
+    overlay    absolute corner at the card inset (inside media); on the card, two insets in
+  content      padding = (control-md − 1cap) / 2 on every side ("content pad")
+    title      trimmed to its cap on top; the last text line trimmed to its baseline
       link     a.area-card__link; ::after absolute, inset −border, card radius, z 1
-    header     heading + action slot one title line tall
-    list, footer   8 above; controls inside are z 2, above the link
+    header     heading + action slot: one control tall, overhanging the content pad; a control
+               in it reaches the inset at the end
+    list, badges, slider, carousel   12 above (block gap)
+    footer     last: reaches the inset on the sides and bottom; 12 above
 ```
+
+Text inset = inset + content pad: the title's cap is as far from the top as its start is from
+the side (18.3 at md: 8 + (32 − 11.4) / 2), and a header Button in the 8/8 corner centres on
+the cap. sm 16.3, lg 22.3.
 
 ## Measurements
 
-Rest geometry, from `area--*` (headless Chromium, 2026-09-27):
+Consistency pass, every gallery tile, built-in browser (Chromium 152) and Claude in Chrome,
+light and dark, 2026-09-27. Distances from the card's outer edge.
 
-| Tile | Card | Media edges t r b l | Media | Media radius |
-|---|---|---|---|---|
-| horizontal (tile-limited) | 499 × 144 | 8 8 301 8 | 190 × 128 (40%) | 8 |
-| horizontal, media end | 499 × 144 | 8 8 8 301 | 190 × 128 | 8 |
-| horizontal, stacked (300) | 300 wide | media 284 × 128 above, text 8 below | — | 8 |
-| bleed (vertical) | 300 × 293 | 1 1 124 1 | 298 × 168 | 15 15 0 0 |
-| bleed (horizontal) | 499 × 130 | 1 308 1 1 | 190 × 128 | 15 0 0 15 |
-| compact | 300 × 100 | 8 8 8 208 | 84 × 84 | 8 |
+| Tile | Title cap from top / start | Last baseline to bottom | Header action t / r | Footer l / b | Media |
+|---|---|---|---|---|---|
+| before (default) | 22.1 / 16 | — | — | — | — |
+| before (well row, sm) | 17.1 / 12 | — | 8 / 12 | — | — |
+| default, linked, overlay, reveal | 18.3 / 18.3 (below media) | 18.3 (text last) | — | 8 / 8 | 8 8, 284 × 160, r 8 |
+| header action (Badge) | 18.3 / 18.3 | 18.3 | 14 / 18.3 (on the text edge) | — | — |
+| video, music (Button) | 18.3 / 18.3 | 18.3 | 8 from end, cap centre = action centre | 8 / 8 | 8 8, r 8 |
+| well row (sm, nested) | 16.3 / 16.3 | — | 6 / 6 / 6 (bottom) | — | row 44 tall, 18.3 from the host's edge |
+| weather, stat (170) | 18.3 / 18.3 | 18.3 | icon on the text edge | — | value at 101 |
+| horizontal | 18.3 from top; 18.3 after the media | — | — | on the inset after the media | 8 8, 40% |
+| compact | 18.3; 18.3 after the thumbnail | — | — | — | 84 × 84 at 8 8 |
+| immersive, corner action | text 18.3 from start and bottom | 18.3 | — | Button 16 from the corner | inset 8, r 8 |
+| bleed | 18.3 / 18.3 | — | — | 8 / 8 | 1 1 (flush inside the border), r 15 |
+| sm / lg | 16.3 / 16.3; 22.3 / 22.3 | — | — | 6 / 6; 12 / 12 | inset 6 / 12 |
+| carousel | 18.3 / 18.3 | 18.3 (items) | Buttons 8 from end | — | row at the inset both sides; items 148 (3.25 visible), 8 apart, media 1:1 r 8 |
 
 Linked card, hover (pointer over the card; before the lighter edge): edge #e2 → #d4; fill #fff, ink rgb(40), shadow
 unchanged. Focus (Tab): 2px solid outline on the card. Hit test: card corners, body and a
@@ -110,7 +131,11 @@ no change in any of 30 nodes (hidden window).
 |---|---|---|---|
 | paint | `bg-surface`; edge neutral 100 (#ee; dark 750); shadow `0 1px 2px -1px` + `0 2px 8px 0`, 3% black (dark 16%) | Owner (lighter edge, faint shadow); Notion's 8% ring composites to #eb; Figma reference 0 0 8 0 at 2% | The halo drops 2px so it pools under the card, and a contact line gives the lighter edge a bottom. Literal until shadows are tokenised, so the Surface axis's Flat preset doesn't remove it |
 | media fill | neutral 25 (#fa; dark 800), media and well alike | Owner | The same rung as the stripe and code slots, but those roles mean something else, so a private property |
-| radius / inset / text inset | 12·16·24 / 6·8·12 / 12·16·24 | Owner ladder; ChatGPT 16, Apple 16 margin | Corners derive from the container role |
+| radius / inset | 12·16·24 / 6·8·12 | Owner ladder; ChatGPT 16 | Corners derive from the container role |
+| text inset | **inset + (control-md − 1cap) / 2**: 16.3 / 18.3 / 22.3; the first line trimmed to the cap, the last to the baseline | Owner (consistency pass: titles equally spaced on each side); inset.css's cap-centred text; Popover / Toast corner controls | Replaces the fixed 12 / 16 / 24 (the title's cap sat 22 from the top, 16 from the side) |
+| header action | one control tall, overhanging the content pad; a Button or link reaches the inset at the end (concentric); a Badge or marker stays on the text edge | Popover, Toast, Dialog: a corner control on the inset with the title centred on it | Was a title-line-tall slot inside the text frame |
+| footer | last slot: reaches the inset on the sides and bottom; 12 above | Same corner rule | Was on the text frame, 8 + 4 above |
+| block gap | 12 above a list, badge row, slider, carousel or footer; 4 between lines of a text group (title to description baseline-to-cap 15, as Popover) | Owner (intentional gaps) | Was 12 via mixed padding |
 | horizontal split | media 40%, text 60% | Polaris landscape 40 / 60 | — |
 | horizontal stacking | below 480px of card content box, via container query | Polaris md-down; M3 adaptive | The card itself is the container, so it needs a definite width |
 | media end | DOM order | Fluent horizontal preview first or last | No prop: order is the API |
@@ -122,12 +147,17 @@ no change in any of 30 nodes (hidden window).
 | pressed | none | Not every system has one; none of the products | — |
 | reveal | opacity 0 → 1 over 200ms on hover or focus-within; always on with no hover | Notion 0.2s; ChatGPT reveals actions | — |
 | nested actions | allowed, few | Apple widgets, Notion, ChatGPT; block-link pattern | Fluent, Carbon and M3 say a clickable card holds no actions; documented as a trade-off |
-| title / description | sm `text-sm` · `text-xs`; md `text-md` · `text-sm`; lg `title-sm` · `text-sm`; 400; each role's size, leading and tracking | Owner; type ramp; Dialog's title takes `title-sm` with its tracking | Tracking was missing before the type audit |
-| value (CardValue) | `title-lg` (32/40, −0.02em), 400, tabular figures, every size | Apple widgets set the figure well above the text | Replaces an inline style in the weather and stat templates |
+| type | **three roles at every size**: title `text-md` 16/24 500; description `text-sm` 14/20 muted; value `title-lg` 32/40; lists take the body size in content ink | Owner (simplify the ramp) | Replaces per-size titles (14 / 16 / 20) and the sm description (12) |
+| default size | md for every tile and template; a card nested in a card is one size down | Owner | Weather and stat were sm, news, plan and feature lg |
+| vertical media | 16:9 | Every system's default card image | Demos set aspect ratios inline (16:9, 2:1) |
+| immersive media | inset like any media, gradient over it | Owner (only bleed meets the edge) | Was edge to edge |
+| compact text | the text inset from the thumbnail | Horizontal's rule | Was 8 from the thumbnail |
+| value (CardValue) | `title-lg` (32/40, −0.02em), 400, tabular figures, every size; as a widget's last figure (at most one line after it) it sits at the bottom of a taller card | Apple widgets set the figure well above the text, low in the widget | Replaces an inline style in the weather and stat templates |
 | header action icon | a bare icon is 16px, `fg-muted`, like list markers | CardList markers | — |
-| well | contents stack at full width, centred on the block axis, gap = card inset | Nested cards in the owner's references | Replaces wrapper `div`s and width overrides in the demos |
+| well | contents stack at full width, centred on the block axis, gap = card inset, padded by the content pad onto the text column | Nested cards in the owner's references | Was padded by the text inset |
 | bottom card overlay | text keeps clear of it: one `control-md` plus `gap-md` on that side | — | Replaces an inline padding in the corner-action demo |
-| carousel | `CardCarousel` (`ul`, tabIndex 0, needs `aria-label`) | Manifest element had no component | — |
+| carousel | `CardCarousel` (`ul`, tabIndex 0, `aria-label`): reaches the inset on both sides like media; items (100% − 3 gaps) / 3.25 wide so the next one shows, 8 apart; media 1:1 at the media radius; hidden scrollbar; previous / next ghost Buttons in the header page 75% of the row and turn off at the ends (demo) | Owner (fix the carousel) | Was a row inside the text frame, four items exactly filling it (no sign of more), media radius 12, descenders clipped once trimmed (fixed: the row extends into the content pad) |
+| carousel under a header | the title's baseline sits the text inset (18.3 at md) above the pictures, as far as its cap sits from the top | Owner: "a bit more room below the title" (2026-09-27) | Was the 12 block gap |
 
 ## States
 
@@ -153,9 +183,14 @@ users see the actions. `@media (hover: none)` keeps them visible on touch.
 
 ## Visual pass
 
-Checked in headless Chromium at 1400px, light and dark, every tile, with real pointer hover
-and Tab focus. Unverified: Firefox and Safari (container queries, `round()`, `:has()`),
-forced colours, screen readers, radius presets other than Standard.
+Consistency pass, 2026-09-27: every tile measured in the built-in browser; templates, carousel,
+well, immersive and horizontal inspected side by side in Claude in Chrome, light and dark.
+Seen and fixed on the way: carousel item descriptions clipped by the scroller once their last
+line was trimmed; a plan card's price dropped mid-card when the value-to-bottom rule applied to
+any value (now only a widget's closing figure). Carousel paging logic verified by dispatching
+scroll events; smooth scrolling itself was not observed (both browser windows were in the
+background). Unverified: Firefox and Safari (`text-box`, `cap`, container queries, `:has()`),
+forced colours, screen readers.
 
 ## Feedback log
 
@@ -170,3 +205,8 @@ forced colours, screen readers, radius presets other than Standard.
   type audit: title and body tracking added, `CardValue` for widget figures, bare header icons
   16 muted, well stacks its contents, bottom overlays reserve text space, `CardCarousel`, music
   transport in a `Toolbar` (roving arrow keys) → headless Chromium, light and dark.
+- 2026-09-27 · owner: consistency pass (screenshots: well rows, carousel, a title's corner) →
+  text inset = inset + (control − cap) / 2 with trimmed first and last lines, corner controls
+  on the inset, one type ramp, md everywhere, inset immersive media, 16:9 media, block gap 12,
+  carousel rebuilt, templates reduced to six in one slot order, duplicate tiles removed →
+  built-in browser measurements (table above), Claude in Chrome light and dark.

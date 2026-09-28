@@ -1,6 +1,6 @@
 /** Gallery specimens that complete each family's variant coverage: one per missing manifest value. */
 import type { ReactNode } from "react";
-import { Alert, Badge, Button, ButtonGroup, Checkbox, CheckboxGroup, Chip, CodeBlock, Indicator, Input, InputGroup, InputGroupText, NumberField, Panel, PanelSection, Field, Popover, PopoverBody, PopoverDescription, PopoverHeader, PopoverTitle, Separator, Table, Tabs, Toast } from "@area/react";
+import { Alert, Badge, Button, ButtonGroup, Checkbox, CheckboxGroup, Chip, CodeBlock, Indicator, Input, InputGroup, InputGroupText, NumberField, Popover, PopoverBody, PopoverDescription, PopoverHeader, PopoverTitle, Separator, Table, Tabs, Toast } from "@area/react";
 import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, InfoIcon } from "../icons.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
@@ -23,15 +23,6 @@ export const GalleryPopoverArrow = () => (
   </Popover>
 );
 
-export const GalleryPanelFlush = () => (
-  <Panel size="sm" flush title="Title" aria-label="Label">
-    <PanelSection heading="Label">
-      <Field orientation="horizontal" label="Label"><NumberField fullWidth variant="soft" aria-label="Label" defaultValue={8} unit="px" /></Field>
-      <Field orientation="horizontal" label="Label"><NumberField fullWidth variant="soft" aria-label="Label" defaultValue={100} unit="%" /></Field>
-    </PanelSection>
-  </Panel>
-);
-
 /* Figma's inspector fields: a letter in the leading slot that also drags the value. */
 export const GalleryNumberFieldPrefix = () => (
   <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--area-space-8)", inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-16))" }}>
@@ -44,6 +35,16 @@ export const GalleryInputGroupSizes = () => (
   <div style={{ display: "grid", gap: "var(--area-space-8)" }}>
     {sizes.map(size => <InputGroup key={size} size={size} aria-label={`Price, ${size}`}><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label={`Amount, ${size}`} defaultValue="24.00" inputMode="decimal" /></InputGroup>)}
   </div>
+);
+
+export const GalleryInputGroupSizeSm = () => (
+  <InputGroup size="sm" aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount" defaultValue="24.00" inputMode="decimal" /></InputGroup>
+);
+export const GalleryInputGroupSizeMd = () => (
+  <InputGroup size="md" aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount" defaultValue="24.00" inputMode="decimal" /></InputGroup>
+);
+export const GalleryInputGroupSizeLg = () => (
+  <InputGroup size="lg" aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount" defaultValue="24.00" inputMode="decimal" /></InputGroup>
 );
 
 const alignButtons = <><Button variant="ghost" iconOnly icon={<AlignTopIcon />} aria-label="Align top" /><Button variant="ghost" iconOnly icon={<AlignMiddleIcon />} aria-label="Align middle" /><Button variant="ghost" iconOnly icon={<AlignBottomIcon />} aria-label="Align bottom" /></>;
@@ -63,14 +64,6 @@ export const GallerySeparatorSpacing = () => (
     <Separator spacing="normal" />
     <p style={{ margin: 0 }}>Body text</p>
   </div>
-);
-
-export const GalleryPanelBareBar = () => (
-  <Panel size="sm" bareBar title="Title" aria-label="Label">
-    <PanelSection heading="Label">
-      <Field orientation="horizontal" label="Label"><NumberField fullWidth variant="soft" aria-label="Label" defaultValue={8} unit="px" /></Field>
-    </PanelSection>
-  </Panel>
 );
 
 export const GalleryPopoverLeft = () => (

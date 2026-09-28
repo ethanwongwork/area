@@ -2,8 +2,10 @@
  * and shadcn's Calendar source; behavior follows the WAI-ARIA date grid. */
 @layer area.components {
   .area-calendar {
-    --_cell: 32px; /* spec */
-    --_day: 28px; /* spec */
+    /* spec (owner, 2026-09-27: "busy … the dates are too compact"): 36 cells around 32 days, so
+       12px numbers keep 4 of air between plates and 20 around each digit pair. Was 32 / 28. */
+    --_cell: 36px; /* spec */
+    --_day: 32px; /* spec */
     --_day-inset: calc((var(--_cell) - var(--_day)) / 2);
     --_day-radius: var(--area-radius-control-sm);
     /* Today is a date marker, not a selection or availability: a 1px ring in the day's shape. */
@@ -49,17 +51,21 @@
     min-block-size: var(--area-control-sm);
     padding-inline: var(--area-space-4) var(--_day-inset);
   }
-  .area-calendar__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-regular); }
+  /* spec (batch 7): the month label is a surface title, strong as every surface title is (Notion
+     "Sep 2026" 500, shadcn caption 500; typography.md role table). */
+  .area-calendar__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
   .area-calendar__nav { display: flex; margin-inline-start: auto; }
   .area-calendar__grid { border-collapse: collapse; border-spacing: 0; table-layout: fixed; }
   .area-calendar__weekday {
     inline-size: var(--_cell); block-size: var(--_cell); padding: 0;
     color: var(--area-fg-muted); font-weight: var(--area-weight-regular);
-    font-size: var(--area-control-sm-text); line-height: var(--area-control-sm-leading);
+    /* The caption role, not the small control's text: small controls moved to 14/20, which had
+       carried the weekdays and numbers from 12 to 14 with them. */
+    font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading);
     text-align: center;
   }
   .area-calendar__cell { position: relative; inline-size: var(--_cell); block-size: var(--_cell); padding: 0; text-align: center; }
-  /* Day numbers use the small control text (12/16); the month title keeps 14/20. */
+  /* Day numbers use the caption text (12/16); the month title keeps 14/20. */
   .area-calendar__day {
     position: relative; isolation: isolate;
     display: inline-grid; place-items: center;
@@ -68,7 +74,7 @@
     border-radius: var(--_day-radius);
     background: var(--_day-fill, transparent); color: inherit;
     box-shadow: var(--_day-edge, none);
-    font: inherit; font-size: var(--_day-text, var(--area-control-sm-text)); line-height: var(--_day-leading, var(--area-control-sm-leading));
+    font: inherit; font-size: var(--_day-text, var(--area-text-xs-size)); line-height: var(--_day-leading, var(--area-text-xs-leading));
     font-variant-numeric: tabular-nums;
     cursor: pointer;
   }

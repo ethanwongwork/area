@@ -8,9 +8,12 @@
     --_toolbar-inset: 0px;
     --_toolbar-bg: transparent;
     --_toolbar-shadow: none;
+    /* spec (toolbar.md, redesign 2026-09-27): Figma's tools sit 8 apart and 8 either side of the
+       divider (figma--tool-group--*, figma--mode-switch--rest). */
+    --_toolbar-space: var(--area-space-8); /* spec */
     display: inline-flex;
     align-items: center;
-    gap: var(--area-space-4);
+    gap: var(--_toolbar-space);
     block-size: calc(var(--_height) + 2 * var(--_toolbar-inset));
     max-inline-size: 100%;
     padding: var(--_toolbar-inset);
@@ -19,14 +22,27 @@
     box-shadow: var(--_toolbar-shadow);
   }
   .area-toolbar--plain { --_toolbar-inset: 0px; }
-  .area-toolbar--surface { --_toolbar-inset: var(--area-space-4); --_toolbar-bg: var(--area-bg-surface); --_toolbar-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-decorative), var(--area-shadow-1); }
+  /*
+   * spec: Figma's toolbelt. The bar pads its controls 8 (48 around 32 commands) and floats on
+   * three soft layers: a 0.5px 18% halo, 3px / 8px and 1px / 3px at 10% (figma--bottom-toolbar).
+   * The dark theme adds the decorative ring, which the halo cannot draw on a dark page.
+   */
+  .area-toolbar--surface {
+    --_toolbar-inset: var(--area-space-8); /* spec */
+    --_toolbar-bg: var(--area-bg-surface);
+    --_toolbar-shadow: inset 0 0 0 var(--area-border-width) light-dark(transparent, var(--area-border-decorative)), 0 0 0.5px rgb(0 0 0 / 0.18), 0 3px 8px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.1); /* spec */
+  }
   .area-toolbar--sm { --_height: var(--area-control-sm); --_toolbar-icon: var(--area-icon-sm); --_toolbar-text: var(--area-control-sm-text); --_toolbar-leading: var(--area-control-sm-leading); --_toolbar-gap: var(--area-gap-sm); --_toolbar-radius: var(--area-radius-control-sm); }
   .area-toolbar--md { --_height: var(--area-control-md); --_toolbar-icon: var(--area-icon-md); --_toolbar-text: var(--area-control-md-text); --_toolbar-leading: var(--area-control-md-leading); --_toolbar-gap: var(--area-gap-md); --_toolbar-radius: var(--area-radius-control-md); }
   .area-toolbar--lg { --_height: var(--area-control-lg); --_toolbar-icon: var(--area-icon-lg); --_toolbar-text: var(--area-control-lg-text); --_toolbar-leading: var(--area-control-lg-leading); --_toolbar-gap: var(--area-gap-lg); --_toolbar-radius: var(--area-radius-control-lg); }
   .area-toolbar--horizontal { flex-direction: row; }
   .area-toolbar--vertical { flex-direction: column; inline-size: fit-content; block-size: auto; }
   .area-toolbar--full-width { inline-size: 100%; }
-  .area-toolbar__group { display: inline-flex; align-items: center; gap: var(--area-space-2); min-inline-size: 0; }
+  /* A group keeps its content's width: shrinking it only overlapped its commands. */
+  .area-toolbar__group { display: inline-flex; flex: none; align-items: center; gap: var(--_toolbar-space); }
+  /* A select in a toolbar is as wide as its options, not the form default (16rem): Figma's font
+     and size fields hug their text. */
+  .area-toolbar .area-select:not(.area-select--full-width) { inline-size: auto; }
   .area-toolbar--vertical .area-toolbar__group { flex-direction: column; }
   .area-toolbar__group > .area-button, .area-toolbar > .area-button {
     --_height: var(--_item);
@@ -38,8 +54,18 @@
     min-inline-size: var(--_item);
     block-size: var(--_item);
   }
-  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-stroke-width); block-size: var(--_toolbar-icon); background: var(--area-border-divider); }
-  .area-toolbar--vertical .area-toolbar__separator { inline-size: var(--_toolbar-icon); block-size: var(--area-stroke-width); }
+  /*
+   * A pressed toggle keeps Button's selected fill (owner, 2026-09-27: a shadow-only plate is
+   * not a state the system draws anywhere else). One-of-several choices (Figma's mode switch,
+   * text alignment) are a Segmented control in the toolbar, painted as Segmented everywhere;
+   * a tool with a menu is an icon-only ghost SplitButton (Figma's tool groups).
+   */
+  /* spec (owner references, 2026-09-27): the rule spans the commands, not the bar; Figma runs
+     its divider the full 48. */
+  /* Owner (2026-09-27): keep the command height, lighter stroke: the bar's seam role, as the rules
+     inside Panel and Code block (a rule is never heavier than the surface it divides). */
+  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-stroke-width); block-size: var(--_item); background: var(--area-border-decorative); }
+  .area-toolbar--vertical .area-toolbar__separator { inline-size: var(--_item); block-size: var(--area-stroke-width); }
   .area-toolbar__overflow { position: relative; flex: none; }
   .area-toolbar__overflow-trigger { display: grid; place-items: center; inline-size: var(--_item); block-size: var(--_item); border-radius: min(var(--_toolbar-radius), calc(var(--_item) * var(--area-radius-button-cap))); color: var(--area-fg-default); cursor: pointer; list-style: none; }
   .area-toolbar__overflow-trigger::-webkit-details-marker { display: none; }

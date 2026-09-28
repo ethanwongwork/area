@@ -93,7 +93,7 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | thumb · size | **16 / 16 / 20** (`icon-sm`, `icon-md`, `space-20`; slider.css:303-305) | Second pass: the choice glyph ladder (Checkbox, Radio); Figma 16 | Was the icon ramp, 16 at every tier. Untitled 24 |
 | thumb · construction | surface ring, 1px `border-hover` mixed 35% to surface, fill dot to 42% of the radius (slider.css:29, 218-220) | Owner-confirmed; Figma's 4px white ring around the value colour | Untitled: white thumb with a 2px brand ring |
 | thumb · shadow | `shadow-1` | In-flow control; Radix classic and shadcn shadow the thumb | Untitled `shadow-md`; Figma a 3-layer lift |
-| hover | **fill and thumb dot darken; the rail keeps its colour** | Fluent: colour on the thumb and fill only (`useSliderStyles.styles.ts L76-83`); Radix, Base UI: no hover change | Was the rail darkening too, which no source does |
+| hover | **fill and thumb dot darken; the rail keeps its colour** | Fluent: colour on the thumb and fill only (`useSliderStyles.styles.ts L76-83`); Radix, Base UI: no hover change | Was the rail darkening too. Correction (2026-09-27 survey): antd does darken its rail on hover (`slider/style/index.ts:489-492`); Radix, Fluent and Base UI do not, so the choice stands on the majority |
 | step marks | 1 × 10 ticks behind the rail (3 show above and below) | Kept; Fluent cuts notches into the rail, Material draws 2px dots, Base UI 1 × 8 below | Open: notches would need the marks drawn into the rail itself |
 | readout | 14/20 `fg-muted`, tabular, 4ch | Area value text role | — |
 | disabled | 50% on the label (slider.css:158-160) | Audit rule | Untitled has no disabled style |
@@ -150,3 +150,9 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
 - 2026-09-27 · third pass → open question settled, value kept: the shared rail stays ≈ #dd
   → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner: audit → against Radix, Fluent, Material, Base UI, shadcn and Carbon: thumb (16 / 16 / 20 round), 4px rail, fill role and focus ring confirmed; hover no longer darkens the rail → Pass review in the gallery. No target product has a value slider (earlier search).
+- 2026-09-27 · owner: design-system audit → [survey](../research/skeleton-spinner-code-slider-survey.md): the
+  "no source darkens the rail" claim corrected (antd does); open for the owner: thumb 16 against
+  the common 20 at md, a hover/drag response on the thumb (halo, scale or shadow), a value
+  tooltip, Shift+arrow large steps (Carbon a quarter, MUI 10). Spectrum 2's neutral fill with
+  accent on emphasis supports the neutral-default rule. Claude in Chrome: no target-product
+  value slider yet; Figma's colour-picker tracks are in `color-picker/`.

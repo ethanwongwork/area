@@ -133,7 +133,10 @@ export const PropertyList = forwardRef<HTMLUListElement, PropertyListProps>(func
       {items.map((item, index) => <ItemIndex.Provider key={item.key ?? index} value={index}>{item}</ItemIndex.Provider>)}
       {drop ? <li className="area-property-list__indicator" aria-hidden="true" style={{ "--_drop": `${drop.top}px` } as CSSProperties} /> : null}
     </ul>
-    {reorderable ? <span id={statusId} className="area-sr-only" aria-live="polite">{message || `Use the arrow keys on a handle to move ${label.toLowerCase()}.`}</span> : null}
+    {/* The instructions stay the list's description; moves are announced in a separate live
+        region, so the description is not replaced by the last announcement. */}
+    {reorderable ? <span id={statusId} className="area-sr-only">{`Use the arrow keys on a handle to move ${label.toLowerCase()}.`}</span> : null}
+    {reorderable ? <span className="area-sr-only" aria-live="polite">{message}</span> : null}
   </PropertyListContext.Provider>;
 });
 

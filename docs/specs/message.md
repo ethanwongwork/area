@@ -6,6 +6,8 @@
 
 ## Owner decisions
 
+- 2026-09-27: "the buttons and controls don't line up" → action plates align with the text
+  edge and the bubble's edge instead of hanging 8 outside them.
 - 2026-09-26: "do each of them subsequently" — ChatGPT conversation group (Message and
   MessageActions together).
 
@@ -52,7 +54,7 @@ actions     six 32 × 32 buttons, radius 8, no gap, icons 20 (16 for regenerate 
 | bubble corner | 16, the composer's (send Button 8 + 8) | the words were typed in the composer | ChatGPT 22 is a full pill at one line; owner: rounder, not pill |
 | bubble fill | neutral component fill, default ink | ChatGPT's default is neutral | the blue came from the owner's accent setting |
 | prose | 16/24, paragraphs 16 apart | Area body; ChatGPT 16 apart | ChatGPT 26 leading; Area's ramp is 24 |
-| actions | ghost neutral icon Buttons (md, 32), no gap, muted ink; row pulled out by the button padding so the first icon sits on the text edge; 12 below | ChatGPT | 16 icons (Area) instead of 20 |
+| actions | ghost neutral icon Buttons (md, 32), no gap, muted ink; the plates line up with the turn (assistant: first plate on the text edge; person: last plate on the bubble's edge); 12 below | ChatGPT (row, sizes); owner (alignment) | 16 icons (Area) instead of 20. ChatGPT pulls the row out 6 so its icons sit on the edge; the owner read the overhanging hover plates as misaligned (2026-09-27) |
 | user actions | shown on hover and focus (always on touch), at the bubble's end; same row geometry | ChatGPT hides them until hover | the hover-state offset was not measurable in ChatGPT's markup |
 | streaming | 8 dot 4 after the last word, pulsing (still under reduced motion); actions hidden until done; `aria-busy` | ChatGPT's dot | size not measured |
 
@@ -64,7 +66,8 @@ labelled buttons.
 ## Verification
 
 - Headless Edge (`scratchpad/msg.mjs`): bubble 70% of the column, flush to its end, padding
-  10 16, corner 16; the first assistant icon on the text edge (0); actions 12 below; user
-  actions shown on hover.
+  10 16, corner 16; actions 12 below; user actions shown on hover.
+- 2026-09-27 alignment change, measured in the gallery: assistant first plate starts on the
+  text edge (43.8 = 43.8); the person's last plate ends on the bubble's edge (523.8 = 523.8).
 - React test: names, structure, streaming cursor.
 - Unverified: dark theme, screen readers, RTL (the bubble moves to the start).

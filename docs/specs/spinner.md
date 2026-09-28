@@ -1,6 +1,6 @@
 # Spinner spec
 
-**Status:** in review · 2026-09-26 (cohesion audit, second pass)
+**Status:** accepted · 2026-09-28 (owner, batch 6)
 **Captures:** `docs/research/captures/spinner/`
 **Peers:** Progress (known or unknown duration on a rail), Skeleton (content placeholder),
 Button, Input, Badge and Switch (host a Spinner when loading)
@@ -64,7 +64,8 @@ Read from the nodes of `area--size-small`, `area--default`, `area--size-large`,
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | size | 12 / 16 / 24 (`space-*`, display.css:213-215); md = `icon-md` | Icon slot it stands in for (Button, Input, Badge icon slots are 16) | Untitled's standalone indicator starts at 32; its button spinner is 20 because its button icons are 20 |
-| stroke | `space-2` 2px at every size (display.css:183) | Untitled 4 on a 32 viewBox (1/8), 2px in buttons | Same 1/8 ratio at md; thinner relative to lg |
+| stroke | **1/8 of the size: 1.5 / 2 / 3** (one 16-unit SVG mask, stroke 2) | Primer 16 / 2, Untitled 4 on 32 | Was 2px at every size, thin at lg. A 2.5px md option is in the Pass review, not applied |
+| construction | **SVG masks for ring and arc; round caps** | ChatGPT draws its spinner as SVG | Owner 2026-09-28: the conic gradient and hard-edged radial mask looked pixelated, and 2px cap dots did not read as round |
 | arc | 25% | Untitled ~28% (indicator), ~25% (button) | — |
 | arc ink | `neutral-solid`; accent by tone | Owner | Untitled brand |
 | in a Button | **arc `currentColor`, track `currentColor` at 25%** (display.css:211) | The host's label ink, so it shows on any fill (audit spec pass) | Was `neutral-solid` on a `neutral-solid` button: only the light track showed |
@@ -98,6 +99,15 @@ With `label`, the Spinner is `role="status"` with `aria-label`; without it, it i
 
 ## Visual pass
 
+2026-09-28, Claude in Chrome (batch 6): ChatGPT's spinner caught while opening conversations
+(`chatgpt--spinner-{18x18,24x24,28x28}`): an SVG ring in the text ink with its track the same
+path at 30% opacity, `spin 2s steps(60)`, at 18 (icon-sm) and 24. Area: arc and track from one
+ink (track 25%), 1s linear, 12 / 16 / 24. Same construction; the 1s speed is the owner's
+2026-09-27 decision (Untitled, Primer, shadcn, Spectrum) and stays over ChatGPT's 2s. Notion
+and Figma showed no spinner during these loads (they use skeletons). No change.
+
+Earlier note:
+
 The gallery groups the tiles (Default, Tones, Sizes,
 Content). The spinner inside a neutral solid button now shows its arc in the label's ink.
 Nothing in Notion or Figma to compare. Unverified: dark theme, forced colours.
@@ -115,3 +125,13 @@ Nothing in Notion or Figma to compare. Unverified: dark theme, forced colours.
   25% track (it vanished on a neutral solid button) → display.css:211, `area--button`.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → evidence
   searched, none found (no loading state in any capture); no change → —.
+- 2026-09-27 · owner: audit against other design systems → [survey](../research/skeleton-spinner-code-slider-survey.md):
+  1s a turn (was 2s, the slowest of 14 systems; Untitled, Primer, shadcn, Spectrum 1s); the
+  track is the arc's ink at 25% everywhere (Primer; was a fixed `bg-component-active` outside
+  Buttons); reduced motion slows to 1.8s instead of stopping (Fluent; `motion="none"` still
+  stops). Open for the owner: a default "Loading" name (shadcn, Primer, Carbon), a show delay
+  (Primer 300 / 1000ms), a 32px page-level size. Claude in Chrome: products show spinners only
+  while loading; not captured.
+- 2026-09-28 · batch 6 Claude in Chrome (ChatGPT spinners) → no change; 1s kept (owner) over ChatGPT's 2s.
+- 2026-09-28 · owner: "slightly pixelated … cant really tell that its pill shaped inside, should it be slightly wider track?" → ring and arc redrawn as anti-aliased SVG masks with round caps; stroke 1/8 of the size (lg 2 → 3, md stays 2, sm 1.5); a 2.5px md option shown in the Pass review (`GalleryReviewSpinner`) for the owner to choose → headless Edge 2x/4x comparison; `area--*` recaptured; motion rules moved to the arc (`::before`), lab probe updated.
+- 2026-09-28 · owner: approved (batch 6). The md stroke stays 2px (1/8); the 2.5px option was not taken.

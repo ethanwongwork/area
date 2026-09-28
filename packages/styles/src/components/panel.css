@@ -32,10 +32,10 @@
     min-block-size: 0;
     /*
      * A compact inspector measure; consumers (and `resizable`) set this public hook. Figma's
-     * panel is 240 at 24px rows and a 16 inset; 280 gives Area's 28px rows the same two field
-     * columns (resizable-panel.md). Resizing clamps to Figma's 240 to 500.
+     * panel is 240 (owner, 2026-09-27: smaller by default, now that rows fill the width; was
+     * 280, which made room for the action column). Resizing clamps to Figma's 240 to 500.
      */
-    inline-size: var(--area-panel-inline-size, 280px); /* spec */
+    inline-size: var(--area-panel-inline-size, 240px); /* spec */
     max-inline-size: 100%;
     flex-shrink: 0;
 
@@ -71,7 +71,7 @@
 
     block-size: var(--_bar);
     padding-inline: var(--_inset);
-    border-block-end: var(--area-border-width) solid var(--area-border-divider);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
   }
 
   /*
@@ -125,7 +125,7 @@
     margin-inline: calc(var(--_inset) * -1);
     padding-inline: var(--_inset);
     padding-block-end: var(--area-space-12);
-    border-block-end: var(--area-border-width) solid var(--area-border-divider);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
   }
 
   .area-panel__section:last-child {
@@ -199,14 +199,15 @@
   .area-panel__section:is([data-collapsed], :has(> .area-panel__rows:empty), :not(:has(> :not(.area-panel__heading)))):not(:last-child) { padding-block-end: var(--area-space-16); }
 
   /*
-   * spec (docs/specs/inspector.md): the inspector row. Two equal control columns and a trailing
-   * square the height of a row, 8 apart, so fields, groups and icon buttons line up down the
-   * panel even where a row has no action (Figma: 88 + 8 + 88 + 8 + 24). Captions sit above
-   * their columns, 6 over the controls like a stacked row.
+   * spec (docs/specs/inspector.md): the inspector row. Two equal control columns, 8 apart,
+   * filling the row; a row with an action adds a trailing square the height of a row. With
+   * `action-column` every row keeps that square, so fields, groups and icon buttons line up down
+   * the panel even where a row has no action (Figma: 88 + 8 + 88 + 8 + 24; owner 2026-09-27:
+   * only the Figma recipe reserves it). Captions sit above their columns, 6 over the controls.
    */
   .area-panel__row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_row);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: var(--area-space-8);
     row-gap: var(--area-space-6);
     align-items: center;
@@ -231,6 +232,8 @@
   }
   .area-panel__row-controls > :only-child { grid-column: 1 / -1; }
   .area-panel__row-controls > * { min-inline-size: 0; }
+  .area-panel__row:has(> .area-panel__row-action),
+  .area-panel--action-column .area-panel__row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_row); }
   .area-panel__row-action { grid-column: 3; display: flex; align-items: center; justify-content: center; }
   .area-panel__row:has(> .area-panel__row-label) > :is(.area-panel__row-controls, .area-panel__row-action) { grid-row: 2; }
 
@@ -252,7 +255,7 @@
   .area-panel__footer {
     flex-shrink: 0;
     padding: var(--_inset);
-    border-block-start: var(--area-border-width) solid var(--area-border-divider);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
   }
 
   /*
@@ -303,9 +306,9 @@
    * panel tightens with the system exactly as the controls in it do. The spacing ramp is
    * flat under density and would have left a compact panel padded like a default one.
    */
-  /* spec (inspector): the row (heading height, action column) follows the panel's tier. */
-  .area-panel--xs { --_inset: var(--area-gutter-xs); --_row: var(--area-control-xs); }
+  /* spec (inspector): the row (heading height, action column) follows the panel's tier. Two
+   * tiers (owner, 2026-09-27): sm, Figma's inspector density, and md, the default. 24px rows
+   * belong to compact density, not to a smaller panel; 40px rows were too loose for an inspector. */
   .area-panel--sm { --_inset: var(--area-gutter-sm); --_row: var(--area-control-sm); }
   .area-panel--md { --_inset: var(--area-gutter-md); --_row: var(--area-control-md); }
-  .area-panel--lg { --_inset: var(--area-gutter-lg); --_row: var(--area-control-lg); }
 }

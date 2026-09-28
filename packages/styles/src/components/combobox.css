@@ -11,19 +11,20 @@
   .area-combobox--full-width > .area-input { flex: 1; }
 
   /* The list opens in the top layer, so a clipping ancestor (a panel body, a dialog) never cuts it. */
-  .area-combobox__listbox[popover] { margin: 0; overflow-y: auto; }
-  .area-combobox__listbox[popover]:not(:popover-open) { display: none; }
-  .area-combobox__listbox {
-    /* spec: Figma's font list shows 324 of its rows before it scrolls (captures/combobox). */
+  .area-combobox__listbox[popover] {
+    margin: 0; overflow-y: auto; overscroll-behavior: contain;
+    /* spec: Figma's font list shows 324 of its rows before it scrolls (captures/combobox).
+       On the [popover] rule so it outranks Menu's popover height, which Combobox never sets. */
     max-block-size: min(324px, 50vh); /* spec */
-    overscroll-behavior: contain;
   }
+  .area-combobox__listbox[popover]:not(:popover-open) { display: none; }
   @supports (anchor-name: --area-anchor) {
     .area-combobox { anchor-name: var(--_combobox-anchor); }
     .area-combobox__listbox[popover]:popover-open {
       position-anchor: var(--_combobox-anchor);
       inset: auto;
-      position-area: bottom span-right;
+      /* Logical, so the list starts at the field's start in right-to-left text too. */
+      position-area: self-block-end span-self-inline-end;
       /* spec: 4 from the field, as every anchored surface (popover.md: shadcn 4, Notion 4). */
       margin-block-start: 4px; /* spec */
       min-inline-size: max(anchor-size(width), calc(var(--area-space-96) * 2 + var(--area-space-32)));
@@ -33,7 +34,6 @@
 
   /* Options are Menu rows; selection shows the trailing check, as a checkable menu row. */
   .area-combobox__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
-  .area-combobox__option[aria-disabled="true"] { cursor: not-allowed; opacity: 0.5; }
   .area-combobox__description { margin-inline-start: auto; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); white-space: nowrap; }
   .area-combobox__description + .area-menu__check { margin-inline-start: var(--area-space-8); }
 
@@ -42,7 +42,8 @@
     display: flex;
     align-items: center;
     block-size: var(--area-control-md);
-    padding-inline: var(--area-space-8);
+    /* The text-only row inset (inset.css): the cap centred in the 32px row's square. */
+    padding-inline: calc((var(--area-control-md) - 1cap) / 2);
     color: var(--area-fg-muted);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);

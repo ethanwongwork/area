@@ -37,6 +37,8 @@
     margin-inline-start: calc(-1 * var(--area-border-width));
     border-start-start-radius: 0;
     border-end-start-radius: 0;
+    /* The default treatment (solid) draws its divider without the modifier class too. */
+    --_split-divider: color-mix(in srgb, var(--_on-solid) 24%, transparent); /* spec */
   }
 
   /* spec: a full-height divider (Notion: 1px inset line; shadcn: 1px separator). */
@@ -60,33 +62,42 @@
   .area-split-button--soft > .area-split-button__trigger,
   .area-split-button--outline > .area-split-button__trigger { --_split-divider: var(--_line); }
 
+  /*
+   * spec (docs/specs/split-button.md, Figma toolbelt 2026-09-27; figma--split-tool--*): ghost is
+   * Figma's tool with its menu. The parts are two plates 1px apart, each keeping its own corners
+   * and hover (#f5 on either half, the other half unchanged); there is no drawn divider, since the
+   * gap is the division. Icon-only, the trigger is half the control's height wide (Figma 16 at
+   * 32) and its chevron sits in a 12px box.
+   */
+  .area-split-button--ghost { gap: var(--area-border-width); }
+  .area-split-button--ghost > :is(.area-split-button__action, .area-split-button__trigger) { border-radius: var(--_radius); }
+  .area-split-button--ghost > .area-split-button__trigger { margin-inline-start: 0; }
+  .area-split-button--ghost > .area-split-button__trigger::before { content: none; }
+  .area-split-button--icon-only > .area-split-button__trigger {
+    inline-size: calc(var(--_height) / 2); /* spec: Figma 16 at 32 */
+    --_icon: var(--area-icon-xs);
+  }
+  /* A plate half as wide takes Button's radius cap against its own width, so it keeps corners
+     instead of turning into a pill (Figma 5 on its 16px chevron plate). */
+  .area-split-button--ghost.area-split-button--icon-only > .area-split-button__trigger {
+    border-radius: min(var(--_radius), calc(var(--_height) / 2 * var(--area-radius-button-cap)));
+  }
+
   .area-split-button__trigger > .area-button__icon > svg { transition: transform var(--area-duration-base) var(--area-ease-out); }
   .area-split-button__trigger[aria-expanded="true"] > .area-button__icon > svg { transform: rotate(180deg); }
 
-  /* Native popover: reset the UA box and let Menu paint the surface. */
+  /* Native popover in the top layer, placed by the React layer like every anchored menu
+     (left / top, flip and shift; surface.css "Anchored overlays"); Menu paints the surface. */
   .area-split-button__menu {
-    margin: auto;
-    inset: 0;
-    min-inline-size: calc(var(--area-space-96) * 2);
+    position: fixed;
+    inset: auto;
+    margin: 0;
     max-inline-size: calc(100vw - var(--area-space-32));
-    max-block-size: calc(100vh - var(--area-space-32));
+    max-block-size: var(--area-overlay-available-height, calc(100vh - var(--area-space-32)));
     overflow: auto;
     color: var(--area-fg-default);
   }
   .area-split-button__menu:not(:popover-open) { display: none; }
-
-  /* spec: 4px under the group, aligned to its end edge (Notion: 3.99 below, 0.33 from the end). */
-  @supports (anchor-name: --area-anchor) {
-    .area-split-button { anchor-name: var(--_split-anchor); }
-    .area-split-button__menu:popover-open {
-      position-anchor: var(--_split-anchor);
-      margin: 0;
-      inset: auto;
-      inset-block-start: calc(anchor(bottom) + var(--area-space-4));
-      inset-inline-end: anchor(end);
-      position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
-    }
-  }
 
   @media (prefers-reduced-motion: reduce) {
     .area-split-button__trigger > .area-button__icon > svg { transition: none; }

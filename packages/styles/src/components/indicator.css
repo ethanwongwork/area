@@ -30,6 +30,12 @@
      flush, and dots are centred on the owner's 16px icon viewport corner (8px icon inset
      minus half the 6px dot). */
   .area-indicator-anchor--overlap-circular { --_shift: 0; --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) - 2px); /* spec */ }
+  /* Owner feedback 2026-09-27: a count on a circle read as too far in. Its centre now sits on the
+     circle's edge at 45°: r(1 − 1/√2) from the corner, less half the 16px count (32px avatar: 1.3
+     further out than the 2px rule). Insets in % resolve against the owner's box. */
+  .area-indicator-anchor--overlap-circular:has(> .area-indicator-anchor__indicator > .area-indicator--count) {
+    --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + 50% * (1 - 0.7071) - 8px); /* spec */
+  }
   .area-indicator-anchor--overlap-rectangular:has(> .area-indicator-anchor__indicator > .area-indicator--dot) {
     --_shift: 0; --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + 5px); /* spec */
   }

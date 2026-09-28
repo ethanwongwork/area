@@ -1,6 +1,6 @@
 # Badge spec
 
-**Status:** accepted · 2026-09-25 (pass 2: size scale, neutral ink, dismiss gap and
+**Status:** accepted · 2026-09-28 (owner, batch 5)
 uppercase removal built and validated)
 **Captures:** `docs/research/captures/badge/`
 **Peers:** Indicator (dot, count numerals, tone paint), Chip (pill shape, interactive
@@ -51,6 +51,12 @@ this spec were not captured with the script; the Measurements section re-verifie
   default (supersedes the 20 / 24 / 28 Untitled scale), neutral badges in secondary ink,
   a 2px dismiss gap, uppercase removed, truncation kept as a behaviour. Each design pass
   is shown before/after, at 1× and at scale, in a container above the variant tiles.
+- 2026-09-27: md labels read too large on cards (14/500 text equalled the card description
+  and outweighed it). Owner chose md text **12/16** at 20px, keeping weight 500; lg keeps
+  14/20. Supersedes the 14/20 md row in Decisions. Measured after: every md badge in the
+  gallery is 20px with 12/16 500 text; the label still shares the sentence baseline (0.00px),
+  but a 12px cap centred in 20px hangs 0.7px below a 14/20 line, so a sentence line is 20.7
+  and table rows with badges grow by the same 0.7px. Open: whether to absorb it.
 
 ## Job and boundaries
 
@@ -441,7 +447,7 @@ by `node scripts/validate-badge.mjs`. Pass-1 Area captures are in `before/`.
 | shell · text gutter sm/md/lg | 6 / 8 / 10 (border counted once) | md: ChatGPT "Paid" 8px at 14px text; sm: ChatGPT "NEW" 6, Figma 5; lg: previous md (Untitled md) | — |
 | shell · border (soft) | 1px transparent | Target products: Notion, ChatGPT "Paid" have no border on a filled badge | Untitled rings every badge (inset box-shadow); not adopted for soft |
 | shell · border (outline, neutral) | `edge-control` rgb(226) | Figma "AI" border rgb(230) | Within 4 levels; kept |
-| text · size / line | 12/16 sm; 14/20 md and lg | md: Notion (14px in 20) and ChatGPT (14px in 22) agree; badge text equals the body size in all three products (Figma 11 beside 11) | sm keeps the caption size, as Figma's 16px badges do |
+| text · size / line | **12/16 sm and md; 14/20 lg** | Owner (2026-09-27), after viewing md labels on Card; Untitled sm (12px in a 20–22px pill); Figma 11px in 16–18 | Notion (14 in 20) and ChatGPT (14 in 22) set badge text at body size; beside a 14px description that made the label as large as the text it annotates and heavier. lg keeps 14/20 so the size steps stay distinct |
 | text · weight | 500 | Type ramp (badge labels are one of the 500 roles); Untitled 500; Notion board tags 500 | Notion table cells, ChatGPT "Paid" and Figma "AI" use 400; recorded, not adopted |
 | text · ink, neutral tone | **`fg-muted`** rgb(102) light, rgb(197) dark | Target-product agreement: ChatGPT "Paid" rgb(93), Figma "AI" 50% black | Applies to neutral soft, outline, color and dot badges; solid keeps its on-solid ink and modern keeps `fg-default`. Contrast 5.36:1 (soft) and 5.74:1 (outline) light, 8.54:1 and 9.77:1 dark |
 | shell · fill, neutral soft | `bg-component` rgb(247) | Between Untitled lab 98.3 and ChatGPT rgb(243) | ChatGPT's 243 equals Area's `bg-component-hover`; a rest fill should not borrow a hover role |
@@ -521,8 +527,11 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
 - With a 2px gap the dismiss glyph reads as part of the label.
 - At 20px the default badge sits inside a line of 14/20 text without opening the line;
   24px pushed the line apart.
-- Not yet compared: product screenshots side by side at equal zoom, dark theme in the
-  products.
+- 2026-09-28, Claude in Chrome (batch 5), zoomed: the default Badge beside Figma's "AI" label
+  (outline, small) and Notion's select tags (tinted, radius 3-4, 14px). Figma's label is
+  Badge `outline`; Notion's tags are Badge `soft` with a tone, set larger and squarer than
+  Area's 12/16 pill (the owner's 2026-09-27 md size). No change.
+- Not yet compared: dark theme in the products.
 
 ## Verification
 
@@ -558,3 +567,5 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
   `badge/notion--status-dot`, `chip/notion--board-tag`, `chip/notion--select-tag`.
 - 2026-09-27 · third pass → "Dot only" tile added; Pass review note replaced by the grouped
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-28 · batch 5 Claude in Chrome side by side (Figma "AI" label, Notion tags) → no change.
+- 2026-09-28 · owner: approved (batch 5).

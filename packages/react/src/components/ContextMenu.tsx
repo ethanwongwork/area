@@ -14,6 +14,13 @@ export interface ContextMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   disabled?: boolean;
 }
 
+/** Below the focused element, from its start edge (left, or right in right-to-left text). */
+const anchorAt = (target: HTMLElement) => {
+  const rect = target.getBoundingClientRect();
+  const rtl = getComputedStyle(target).direction === "rtl";
+  return { x: rtl ? rect.right : rect.left, y: rect.bottom, keyboard: true, rtl };
+};
+
 const itemsOf = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>('[role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"]')]
   .filter(item => !item.hasAttribute("disabled") && item.closest('[role="menu"]') === menu);
 
@@ -26,7 +33,7 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
 ) {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
-  const [point, setPoint] = useState<{ x: number; y: number; keyboard: boolean } | null>(null);
+  const [point, setPoint] = useState<{ x: number; y: number; keyboard: boolean; rtl?: boolean } | null>(null);
 
   // Open at the point, then pull the menu back inside the viewport (flip across the pointer).
   useLayoutEffect(() => {
@@ -36,6 +43,8 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
     const rect = element.getBoundingClientRect();
     const margin = 8;
     let { x, y } = point;
+    // A keyboard-opened menu starts at the element's start edge, which is its right in RTL.
+    if (point.rtl) x -= rect.width;
     if (x + rect.width > innerWidth - margin) x = Math.max(margin, x - rect.width);
     if (y + rect.height > innerHeight - margin) y = Math.max(margin, y - rect.height);
     element.style.setProperty("--_context-x", `${x}px`);
@@ -57,8 +66,7 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
     // A keyboard-opened context menu reports no pointer: anchor it to the focused element.
     const keyboard = event.clientX === 0 && event.clientY === 0 || event.nativeEvent.button === -1;
     const target = event.target as HTMLElement;
-    const rect = target.getBoundingClientRect();
-    setPoint(keyboard ? { x: rect.left, y: rect.bottom, keyboard } : { x: event.clientX, y: event.clientY, keyboard });
+    setPoint(keyboard ? anchorAt(target) : { x: event.clientX, y: event.clientY, keyboard });
     onOpenChange?.(true);
   };
 
@@ -71,8 +79,7 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
     if ((event.target as HTMLElement).closest(".area-context-menu__menu")) return;
     event.preventDefault();
     returnFocus.current = document.activeElement as HTMLElement | null;
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    setPoint({ x: rect.left, y: rect.bottom, keyboard: true });
+    setPoint(anchorAt(event.target as HTMLElement));
     onOpenChange?.(true);
   };
 

@@ -7,11 +7,13 @@ import { Calendar, MANIFESTS, calendarVariants } from '../dist/modules/index.js'
 const render = props => renderToString(h(Calendar, { today: '2026-09-26', 'aria-label': 'Due date', ...props }), { identifierPrefix: 'calendar-test-' });
 const days = html => [...html.matchAll(/data-date="([\d-]+)"/g)].map(m => m[1]);
 
-test('a month is a labelled grid of six weeks with one tab stop', () => {
+test('a month is a labelled grid of its own weeks with one tab stop', () => {
   const html = render({ defaultValue: '2026-09-15' });
   assert.match(html, /role="grid"/);
   assert.match(html, /September 2026/);
-  assert.equal(days(html).length, 42);
+  // Five weeks for September 2026; fixedWeeks keeps six.
+  assert.equal(days(html).length, 35);
+  assert.equal(days(render({ defaultValue: '2026-09-15', fixedWeeks: true })).length, 42);
   assert.equal(days(html)[0], '2026-08-30');
   assert.equal((html.match(/tabindex="0"/gi) || []).length, 1);
   assert.match(html, /aria-selected="true"[^>]*><button[^>]*data-date="2026-09-15"/);
