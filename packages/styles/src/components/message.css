@@ -38,13 +38,14 @@
   .area-message__content > * { margin-block: 0; }
   .area-message__content > * + * { margin-block-start: var(--area-space-16); }
 
-  /* spec: 32 icon buttons with no gap, muted (ChatGPT 143 on 13 ink), the row pulled out by the
-   * button's own padding so the first icon sits on the text column (ChatGPT 532 / 538). */
+  /* spec: 32 icon buttons with no gap, muted (ChatGPT 143 on 13 ink). The buttons' plates line
+   * up with the turn: the assistant's first plate starts on the text edge, the person's last
+   * plate ends on the bubble's edge (owner, 2026-09-27; ChatGPT pulls the row out so its icons,
+   * not its plates, sit on the edge, and a hover plate then hangs outside the column). */
   .area-message__actions {
     display: flex;
     align-items: center;
     gap: 0;
-    margin-inline: calc((var(--area-control-md) - var(--area-icon-md)) / -2);
   }
   .area-message__actions .area-button { --_fg: var(--area-fg-muted); }
   /* The person's actions show on hover or focus (ChatGPT hides them until then); the latest

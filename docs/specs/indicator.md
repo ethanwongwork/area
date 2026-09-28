@@ -482,3 +482,6 @@ Pinned commit: `d27922755bebae866d9ffe86b7da44c27ec801ee`.
 - Native browser inspection: @Browser can inspect DOM/applied styles; annotation Adjust
   supports style feedback. Full CDP Developer mode is optional and permission-gated.
   The gallery inspector remains a convenient local measurement UI, not a requirement.
+- 2026-09-27 · owner (Avatar): count too far in on a circle → `overlap="circular"` counts centre
+  on the circle's edge at 45°: inset = r(1 − 1/√2) − 8 (50% of the owner box in the calc);
+  dots keep the 2px outward rule → headless Edge screenshot at 4×.

@@ -299,6 +299,15 @@ inside the Pass review; delete those rows once the owner has seen them. Then giv
 - the side-by-side observations,
 - open questions, and anything unverified.
 
+**Approval batches** (owner, 2026-09-27). Families are approved in batches of two or three
+(`APPROVAL_BATCHES` in `apps/docs/src/component-status.mjs`), each after four phases the gallery
+reads from the repository: 1 audit (audited spec), 2 visual pass (the spec's section), 3 Claude
+in Chrome side by side (captures plus an entry in `pass-status.mjs`), 4 owner approval (the slug
+in `COMPLETE_COMPONENTS`). The gallery leads with the first batch that is not officially complete,
+labels each family with its phase, and moves officially complete families to the bottom. Work
+the current batch through phases 1-3 before starting the next; a family changed after approval
+returns to In review.
+
 Record feedback in the spec's feedback log (observation → change → evidence) before
 changing code. When a lesson applies beyond one component, add it to this guide or the
 skill, and remove any instruction it replaces. Status stays In review until the owner

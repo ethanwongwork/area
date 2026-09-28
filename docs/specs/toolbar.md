@@ -6,6 +6,19 @@
 
 ## Owner decisions
 
+- 2026-09-27 (second message): "the toolbar segmented control stroke looks wrong, why is the
+  stroke so inset? shouldn't that be a segmented control?" → the track group variant is removed;
+  one-of-several choices are a Segmented control in the toolbar (its options join the toolbar's
+  roving). Figma's tool groups are icon-only ghost SplitButtons (tool + chevron, 1px apart, no
+  divider). Separators keep the command height (earlier owner references); Figma's toolbelt
+  divider runs the full 48 (`figma--bottom-toolbar`), recorded as the alternative.
+
+- 2026-09-27: "can you use strokes for the selected states? or real segmented controls, the
+  drop shadow only visual doesn't really fit in the design system" → a pressed toggle keeps
+  Button's selected fill (`bg-component-active`); a track group is painted as Segmented
+  (`bg-subtle` groove with a decorative hairline, chosen option `bg-surface` with the
+  `edge-selected` stroke and `shadow-1`). The Figma plate shadow is gone.
+
 - Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)):
   [Primer ActionBar CSS](https://github.com/primer/react/blob/main/packages/react/src/ActionBar/ActionBar.module.css):
   command sizing follows the control tier. Area's surface toolbar adds 4px around full-size
@@ -183,6 +196,11 @@ Validated 2026-09-27 in Claude in Chrome: Area's gallery tab beside Figma's edit
   is Segmented's selected construction with Figma's stronger shadow. Open: whether Segmented
   adopts the same shadow (it uses `shadow-1`).
 
+2026-09-27 re-check after the Segmented and SplitButton change (Claude in Chrome, Figma toolbelt
+beside the gallery's Tools tile): tool and chevron plates, 8 between tools and one divider match;
+Area's chosen tool is neutral where Figma's is blue (owner rule); Area's icons are 16 in 32
+plates where Figma's are 24; the mode switch reads as the same object, with Area's selected edge.
+
 ## Settled questions
 
 The third pass's kept values (4 inset, `shadow-1`, icon-height separator) are superseded by the
@@ -211,3 +229,13 @@ semantics (toggles are `aria-pressed`; a track is not a radio group).
   plate, `ToolbarGroup variant="track"`, selects hug their options; tiles Tools, Content / text
   formatting, Behavior / overflow → `figma--tool*`, `figma--mode-switch--*`, `area--*` light and
   dark; validated side by side in Claude in Chrome.
+- 2026-09-27 · owner: shadow-only selected plate doesn't fit → pressed toggles use Button's
+  selected fill; track = Segmented's paint (stroke on the chosen option) → headless Edge
+  screenshot of the Tools tile. The Validated entry predates this change.
+- 2026-09-27 · owner: segmented stroke, Figma's tool dropdowns, divider lengths → track removed for
+  Segmented, split tools as ghost icon SplitButtons, one roving order across them → captures
+  `figma--split-tool--*`, `figma--toolbelt-row`; keyboard checked (Move → Move tools → … → Dev
+  Mode, Home, End wrap; ArrowDown opens a tool's menu).
+- 2026-09-27 · owner: keep the separator's height, lighter stroke → `border-decorative` (was
+  `border-divider`), the seam role Panel and Code block rules now use; Sizes split into one tile
+  per size.

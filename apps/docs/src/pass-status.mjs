@@ -14,6 +14,34 @@
 export const VALIDATED_PASSES = {
   toolbar: {
     date: "2026-09-27",
-    against: "Figma toolbelt (bar, tools at rest, hover and selected, split chevron, mode switch)",
+    against: "Figma toolbelt, re-checked after the Segmented and split-tool change (tools, chevrons, divider, mode switch)",
+  },
+  "split-button": {
+    date: "2026-09-27",
+    against: "Figma's toolbelt tool groups (tool and chevron plates, hover, selected)",
+  },
+  nav: {
+    date: "2026-09-27",
+    against: "ChatGPT's and Notion's sidebars (sections, labels, rows, current plate)",
+  },
+  menu: {
+    date: "2026-09-27",
+    against: "Notion's page menu (icons, shortcuts, rules, danger row, lift)",
+  },
+  "tree-view": {
+    date: "2026-09-27",
+    against: "Notion's sidebar tree (rows, hover, row actions)",
+  },
+  alert: {
+    date: "2026-09-27",
+    against: "Notion's callout block (fill, edge, icon on the first line)",
+  },
+  toast: {
+    date: "2026-09-27",
+    against: "Notion's Link copied toast (shape, icon, action; Notion's is inverse)",
+  },
+  segmented: {
+    date: "2026-09-27",
+    against: "ChatGPT's Chat / Work switch and Figma's mode switch",
   },
 };

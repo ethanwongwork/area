@@ -115,3 +115,10 @@ Nothing in Notion or Figma to compare. Unverified: dark theme, forced colours.
   25% track (it vanished on a neutral solid button) → display.css:211, `area--button`.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → evidence
   searched, none found (no loading state in any capture); no change → —.
+- 2026-09-27 · owner: audit against other design systems → [survey](../research/skeleton-spinner-code-slider-survey.md):
+  1s a turn (was 2s, the slowest of 14 systems; Untitled, Primer, shadcn, Spectrum 1s); the
+  track is the arc's ink at 25% everywhere (Primer; was a fixed `bg-component-active` outside
+  Buttons); reduced motion slows to 1.8s instead of stopping (Fluent; `motion="none"` still
+  stops). Open for the owner: a default "Loading" name (shadcn, Primer, Carbon), a show delay
+  (Primer 300 / 1000ms), a 32px page-level size. Claude in Chrome: products show spinners only
+  while loading; not captured.

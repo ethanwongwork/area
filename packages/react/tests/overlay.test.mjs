@@ -30,6 +30,13 @@ test('aligns on the cross axis and shifts inside the padded viewport', () => {
   assert.equal(place({ x: 980, y: 100, width: 20, height: 20 }).x, 1000 - 8 - 200);
 });
 
+test('an edge-aligned surface flips to the other edge before shifting', () => {
+  // End-aligned under a button near the start: starts at the button instead of the viewport padding.
+  assert.equal(place({ x: 60, y: 100, width: 80, height: 32 }, { align: 'end' }).x, 60);
+  // Start-aligned near the end: ends at the button's end.
+  assert.equal(place({ x: 900, y: 100, width: 80, height: 32 }).x, 900 + 80 - 200);
+});
+
 test('reports the height left on its side and an origin at the trigger', () => {
   const p = place({ x: 100, y: 100, width: 80, height: 32 });
   assert.equal(p.availableHeight, 800 - 132 - 4 - 8);

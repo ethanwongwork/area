@@ -157,6 +157,7 @@ no change in any of 30 nodes (hidden window).
 | well | contents stack at full width, centred on the block axis, gap = card inset, padded by the content pad onto the text column | Nested cards in the owner's references | Was padded by the text inset |
 | bottom card overlay | text keeps clear of it: one `control-md` plus `gap-md` on that side | — | Replaces an inline padding in the corner-action demo |
 | carousel | `CardCarousel` (`ul`, tabIndex 0, `aria-label`): reaches the inset on both sides like media; items (100% − 3 gaps) / 3.25 wide so the next one shows, 8 apart; media 1:1 at the media radius; hidden scrollbar; previous / next ghost Buttons in the header page 75% of the row and turn off at the ends (demo) | Owner (fix the carousel) | Was a row inside the text frame, four items exactly filling it (no sign of more), media radius 12, descenders clipped once trimmed (fixed: the row extends into the content pad) |
+| carousel under a header | the title's baseline sits the text inset (18.3 at md) above the pictures, as far as its cap sits from the top | Owner: "a bit more room below the title" (2026-09-27) | Was the 12 block gap |
 
 ## States
 

@@ -453,6 +453,9 @@
     scrollbar-width: none;
   }
   .area-card__content > .area-card__carousel:last-child { margin-block-end: calc(-1 * var(--_card-content-padding)); }
+  /* Under a header the title gets the room it has above: its baseline sits as far from the
+     pictures as its cap sits from the card's top (the text inset; owner: more room below the title). */
+  .area-card__content > .area-card__header + .area-card__carousel { margin-block-start: calc(var(--_card-text-inset) - var(--area-space-4)); }
   .area-card__carousel::-webkit-scrollbar { display: none; }
   .area-card__carousel > li { display: flex; flex-direction: column; gap: var(--_card-content-padding); min-inline-size: 0; scroll-snap-align: start; }
   .area-card__carousel > li > .area-card__media { inline-size: 100%; aspect-ratio: 1; border-radius: var(--_card-media-radius); }
@@ -509,6 +512,7 @@
     block-size: var(--area-icon-md);
     margin-block-start: calc((var(--area-ui-leading) - var(--area-icon-md)) / 2);
     margin-inline-start: var(--_alert-icon-start, 0px);
+    color: var(--_alert-icon, var(--_fg));
   }
 
   .area-alert__content {
@@ -626,12 +630,20 @@
     }
   }
 
+  /* spec (owner, 2026-09-27: lighter fills, a more vivid ink): each tone's fill is its surface
+     mixed halfway to the page surface, which keeps the hue (the 25 rungs of blue and red read
+     grey), and the icon takes a brighter rung (info and danger 500, success and warning 550)
+     at 3.5:1 or more. The text keeps its tone ink: one rung lighter would drop it under 4.5:1
+     (4.3-4.5, docs/specs/alert.md). Dark keeps the semantic roles. */
+  .area-alert {
+    --_alert-tint: 50%; /* spec */
+  }
   .area-alert--neutral { --_bg: var(--area-bg-component);    --_fg: var(--area-fg-default); --_border: var(--area-border-decorative); }
-  .area-alert--accent  { --_bg: var(--area-accent-surface);  --_fg: var(--area-fg-accent);  --_border: var(--area-edge-accent); }
-  .area-alert--info    { --_bg: var(--area-info-surface);    --_fg: var(--area-fg-info);    --_border: var(--area-info-border); }
-  .area-alert--danger  { --_bg: var(--area-danger-surface);  --_fg: var(--area-fg-danger);  --_border: var(--area-danger-border); }
-  .area-alert--warning { --_bg: var(--area-warning-surface); --_fg: var(--area-fg-warning); --_border: var(--area-warning-border); }
-  .area-alert--success { --_bg: var(--area-success-surface); --_fg: var(--area-fg-success); --_border: var(--area-success-border); }
+  .area-alert--accent  { --_bg: light-dark(color-mix(in oklab, var(--area-accent-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-accent-surface)); /* spec */ --_fg: var(--area-fg-accent); --_border: var(--area-edge-accent); }
+  .area-alert--info    { --_bg: light-dark(color-mix(in oklab, var(--area-info-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-info-surface)); /* spec */ --_fg: var(--area-fg-info); --_alert-icon: light-dark(var(--area-blue-500), var(--area-fg-info)); /* spec */ --_border: var(--area-info-border); }
+  .area-alert--danger  { --_bg: light-dark(color-mix(in oklab, var(--area-danger-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-danger-surface)); /* spec */ --_fg: var(--area-fg-danger); --_alert-icon: light-dark(var(--area-red-500), var(--area-fg-danger)); /* spec */ --_border: var(--area-danger-border); }
+  .area-alert--warning { --_bg: light-dark(color-mix(in oklab, var(--area-warning-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-warning-surface)); /* spec */ --_fg: var(--area-fg-warning); --_alert-icon: light-dark(var(--area-orange-550), var(--area-fg-warning)); /* spec */ --_border: var(--area-warning-border); }
+  .area-alert--success { --_bg: light-dark(color-mix(in oklab, var(--area-success-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-success-surface)); /* spec */ --_fg: var(--area-fg-success); --_alert-icon: light-dark(var(--area-green-550), var(--area-fg-success)); /* spec */ --_border: var(--area-success-border); }
 
   /* The title carries the tone; the description is supporting text in every tone, the muted
      role rather than the tone ink faded by opacity. */
@@ -992,14 +1004,18 @@
    * height, regular weight, and a foreground a rung quieter than the items it names. See
    * `nav.css` for the measurement this follows.
    */
+  /* spec (2026-09-27, one label pattern with Nav): a row-pitch label in the caption size and the
+     muted ink, stepping back from the rows by size as well as ink (Notion's menu and palette
+     labels 12px; nav/notion--sidebar-sections). Menu, Combobox, Command palette and Context menu
+     share it. */
   .area-menu__label {
     display: flex;
     align-items: center;
     block-size: var(--area-control-md);
     padding-inline: var(--area-space-8);
     color: var(--area-fg-muted);
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
     font-weight: var(--area-weight-regular);
   }
 
@@ -1193,10 +1209,11 @@
 
   /* Neutral by default, like every other family: the icon takes the muted ink. */
   .area-toast--neutral .area-toast__icon { color: var(--area-fg-muted); }
-  .area-toast--danger .area-toast__icon  { color: var(--area-fg-danger); }
-  .area-toast--warning .area-toast__icon { color: var(--area-fg-warning); }
-  .area-toast--success .area-toast__icon { color: var(--area-fg-success); }
-  .area-toast--info .area-toast__icon    { color: var(--area-fg-info); }
+  /* spec (owner, 2026-09-27: more vivid): Alert's brighter icon rungs, 3.5:1 or more on white. */
+  .area-toast--danger .area-toast__icon  { color: light-dark(var(--area-red-500), var(--area-fg-danger)); /* spec */ }
+  .area-toast--warning .area-toast__icon { color: light-dark(var(--area-orange-550), var(--area-fg-warning)); /* spec */ }
+  .area-toast--success .area-toast__icon { color: light-dark(var(--area-green-550), var(--area-fg-success)); /* spec */ }
+  .area-toast--info .area-toast__icon    { color: light-dark(var(--area-blue-500), var(--area-fg-info)); /* spec */ }
 
   /* --- Anchored overlays --------------------------------------------------- */
   /*

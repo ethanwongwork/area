@@ -7,6 +7,16 @@ menu surface), Popover (native top layer), Toolbar overflow (another menu trigge
 
 ## Owner decisions
 
+- 2026-09-27: "figma has this icon button with a side dropdown. can you add this as like a split
+  button icon button? make sure the divider lengths are being used correctly here" → `variant=
+  "ghost"` with `iconOnly` (and `selected` for the current tool). Measured in Figma's toolbelt
+  (`figma--split-tool--*`, Claude in Chrome): tool 32 × 32 and chevron 16 × 32, 1px apart, radius
+  5 on each; each half hovers alone (#f5), the selected tool keeps its fill while the chevron
+  hovers; **no drawn divider**, the 1px gap divides. Area: the same geometry at the control
+  height (trigger = height / 2), each part keeps its own corners (the trigger's capped by its
+  width, 6.4 at 32), 12px chevron glyph, no divider line. The solid, soft and outline treatments
+  keep their full-height divider.
+
 - 2026-09-26: build split button as a separate component if other design systems more often
   do; say where it usually lives (Button variant, ButtonGroup, or standalone); build
   ButtonGroup and SplitButton either way.
@@ -134,6 +144,34 @@ Notion's menu surface:
 | menu position | 4px below, aligned to the group's end edge; flips when it would overflow | Notion 3.99 below, 0.33 from the end | — |
 | menu surface | Area Menu (radius, shadow, inset) | Peer Menu | Notion 10px radius, 360 wide |
 
+## Menu placement
+
+Owner (2026-09-27): "look into the specific positioning of the split button menu when it's open,
+where should it be?" Measured live in Claude in Chrome (read only; menus opened and dismissed):
+
+| Reference | Anchor | Side | Cross-axis alignment | Distance |
+|---|---|---|---|---|
+| Notion, database "New ▾" (text split) | the whole group (1414.8–1484.1) | below | menu end = group end (0.3 earlier capture) | 4 (earlier capture `notion--*`) |
+| Figma toolbelt, Move tools (icon split) | the chevron (537–553) | above (bar at the bottom of the canvas) | menu start = chevron start (537 = 537) | 4 from the toolbar bar, 12 from the tool |
+
+Area:
+
+- Text split (solid, soft, outline): anchored to the group, below, end-aligned, 4 away, flipping
+  above without room and shifting inside the viewport (Notion).
+- Icon tool (ghost, icon only): anchored to the chevron's start edge; on the block axis it clears
+  the toolbar it sits in by 4 (Figma), so the menu never overlaps the bar. Outside a toolbar it
+  clears the chevron itself.
+- Horizontal start (owner, 2026-09-27: "I meant the horizontal alignment of where it starts"):
+  a text split's menu starts where its end edge meets the group's end edge (menu right = group
+  right; Notion, and Fluent, Polaris, shadcn, Mantine, Ant and Chakra align to the chevron's end,
+  which is the group's end). An icon tool's menu starts at the chevron's start edge (Figma).
+  Near a viewport edge the menu flips to the anchor's other edge (start-aligned) before it
+  shifts, so it always shares an edge with the button; it used to shift to the viewport padding
+  and align with neither.
+- Both use the shared placement (`useAnchoredPosition`, `anchorRect` for the toolbar case).
+  Verified in headless Edge with a real pointer: tool menu start 96 = chevron 96, 4 below the
+  bar; text menu 4 under the group.
+
 ## Behavior and accessibility
 
 - Group: `role="group"`. Both parts are native buttons in the Tab order.
@@ -145,6 +183,21 @@ Notion's menu surface:
   Choosing an item runs it, closes the menu and returns focus to the trigger (verified in the
   gallery 2026-09-26).
 - Disabled disables both parts. Reduced motion stops the chevron's turn.
+
+## Visual pass
+
+2026-09-27, Claude in Chrome, side by side with Figma's toolbelt at 100% (the owner's draft of
+the iOS 27 kit, read only) and the gallery's Toolbar / Tools tile:
+
+- Geometry matches: two plates 1px apart, the chevron plate half the tool's width, tools 8
+  apart, nothing drawn between the halves.
+- Selected: Figma fills the tool blue; Area uses Button's neutral selected fill (the owner's
+  neutral-by-default rule). The chevron stays unfilled in both until hovered.
+- Chevron: Figma's ink is about 8px wide in a 16px box; Area's 12px glyph (the Badge dismiss and
+  NumberField size) reads slightly larger but keeps the Area icon grid.
+- Corners: Figma 5 on both plates; Area 8 on the tool (the control radius) and 6.4 on the
+  chevron (capped by its width), so the narrow plate does not become a pill.
+- Solid, soft and outline treatments are unchanged; their divider still runs the full height.
 
 ## Verification
 
@@ -159,3 +212,16 @@ Notion's menu surface:
 - 2026-09-26 · owner: separate component if systems usually do; build ButtonGroup and
   SplitButton → survey (4 standalone, 5 composition, 1 dropdown prop, 5 none, 0 Button
   variant); SplitButton built standalone.
+- 2026-09-27 · owner: Figma's icon button with a side dropdown → ghost icon-only split, no drawn
+  divider (Figma's 1px gap), each half its own plate; tiles Ghost / icon only (selected) and
+  (rest); inside a Toolbar both halves join its arrow-key roving → `figma--split-tool--*`
+  (5 captures), side by side in Claude in Chrome.
+- 2026-09-27 · owner: the dropdown menus did not open next to the button (split button and
+  toolbar) → the menu is placed by the shared anchored-overlay code (`useAnchoredPosition`: 4
+  under the group, flip above without room, shift inside the viewport; text splits align to the
+  group's end, icon tools to their start) instead of CSS anchor positioning → headless Edge with a
+  real pointer: menu 4 below the group in both tiles, tool menu flush with the tool's start.
+- 2026-09-27 · owner: where should the open menu be? → measured Notion (group, end-aligned, 4
+  below) and Figma (chevron start, clears the toolbar by 4) → icon tools anchor to the chevron and
+  clear the toolbar; text splits unchanged → headless Edge check (Menu placement).
+- 2026-09-27 · owner: horizontal start → end edge under text splits, chevron start for tools; edge flip before shift in `computePosition` (test added). Approved on this choice (owner: "split will be considered approved based on what you choose").

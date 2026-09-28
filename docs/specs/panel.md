@@ -8,6 +8,16 @@
 
 ## Owner decisions
 
+- 2026-09-27: "does there need to be multiple sizes for panel? … does panel really need xs?"
+  → two sizes, **sm** (Figma's inspector density) and **md** (default); xs and lg removed
+  (24px rows belong to compact density; 40px rows are too loose for an inspector). The Sizes
+  group shows both, the default included. "Only have the controls set to not full width in
+  the Figma control panel example" → rows fill the width; `actionColumn` reserves the trailing
+  square on every row (the Figma recipe and the resizable Design panel use it); a row with its
+  own action still gets the square. Default width 240 (Figma), was 280. "The divider strokes
+  should not be darker than the container strokes" → bar, section and footer rules take the
+  panel's own `border-decorative` edge.
+
 - Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)): Panel is 280px with
   medium control-height rows; its inset size does not resize child controls.
 - 2026-09-26 (second pass, owner: decide all open items): section headings are the UI text
@@ -31,7 +41,8 @@ Popover float over the page. A panel stays beside its subject.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | xs, sm, md (default), lg | Inset tier on the density gutter ramp, not a control height | Gallery tiles use `sm` |
+| size | sm, md (default) | Inset and row tier; sm is Figma's inspector density | Gallery Sizes / sm, md; the Figma recipe uses sm |
+| actionColumn | boolean | Every row keeps a trailing action square, so controls line up where a row has no action | Figma's properties panel (recipe); otherwise rows fill the width |
 | flush | boolean | Docked to an edge: no radius, border or elevation, `bg-page` | Gallery Layout / flush; docs site right rail; Figma's docked inspector |
 | bare-bar | boolean | A bar that names the panel carries no rule | Gallery Layout / bare bar; docs site sidebar |
 | composition | sections, heading, stack, footer | Grouping and a pinned action | Gallery `default`, `sections`, `footer` |
@@ -99,7 +110,7 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| shell · width | 280, public hook `--area-panel-inline-size` (`panel.css:32`) | Owner (prior) | Figma's inspector rows are 240 |
+| shell · width | **240**, public hook `--area-panel-inline-size` | Owner (2026-09-27: smaller by default); Figma's inspector 240 | Was 280, which made room for the action column; the Figma recipe sets 280 for its 28px rows |
 | rows | `control-md` 32 (`panel.css:20, 132`) | Owner (prior; confirmed in the third pass) | Figma's rows are 32 (`figma--color-row`) with 24px fields inside; Area's controls fill the row |
 | field style | **soft for every field, Select included** (`apps/docs/src/demos/gallery.tsx:700-719`) | Third pass: one field style per surface | Was outline Selects beside soft NumberFields; Select gained `variant="soft"` ([select.md](select.md)) |
 | shell · radius / edge / fill | `radius-container` 12, `border-decorative` #f3f3f3, `bg-surface` #ffffff (`panel.css:36-38`) | Peers: Alert, Code block, Dialog; container seams stay decorative | Card's edge took `border-divider` in the third pass (it stands alone on the page); a panel's lift carries its seam |
@@ -110,7 +121,7 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | heading | **UI 14/20 400, `fg-default`** (`panel.css:139-142`) | Second pass: the heading outranks muted labels by ink | Was 12/16, smaller than the 14px labels under it. Figma's title is 11/16 550 at the same ink as its field text; kept (third pass): one label weight, so ink sets headings apart |
 | field labels | **`fg-muted` #666666** (`panel.css:147`) | Second pass | Was the Field default ink |
 | numeric rows | **NumberField soft with letter prefixes** X / Y / W / H (`apps/docs/src/demos/gallery.tsx:680-690`) | Figma's letter-prefixed number fields (`figma--number-field`) | Prefix ink and box differ from Figma; see [number-field.md](number-field.md) |
-| rules (bar, section, footer) | **`border-divider` #e2e2e2** (dark #333333) (`panel.css:68, 121, 163`) | Second pass: new divider role for rules; Figma #e6 (`figma--size-select` edge), ChatGPT 10% black; Notion's menu rules are lighter, 7% (#f0, `menu/notion--page-menu--open`); #e2 is the nearest rung to #e5 | Was `border-decorative` #f3f3f3 |
+| rules (bar, section, footer) | **`border-decorative`**, the panel's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 | Second pass: new divider role for rules; Figma #e6 (`figma--size-select` edge), ChatGPT 10% black; Notion's menu rules are lighter, 7% (#f0, `menu/notion--page-menu--open`); #e2 is the nearest rung to #e5 | Was `border-decorative` #f3f3f3 |
 | section rule extent | full width; last section none (`panel.css:114-127`) | Area's own | — |
 | body gap / section gap / stack gap | 16 / 8 / 6 (`panel.css:94, 117, 153`) | Stack 6 matches Field's label gap (Untitled 6) | — |
 | inset tiers | `gutter-xs/sm/md/lg` (`panel.css:174-177`) | Density axis | Figma insets 16 start, 8 end |
@@ -172,3 +183,7 @@ Unverified: dark theme and a side-by-side with Figma's inspector at the same zoo
 - 2026-09-27 · third pass → gallery Selects soft (one field style per surface); docs example
   at the default 280 with medium rows and soft fields (was 320, small controls); Layout /
   bare bar tile added; heading row and weight kept → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27 · owner: sizes, full-width controls, divider ink (screenshots of Motion,
+  Layout and Effects panels) → size sm / md only, rows fill the width, `actionColumn` for the
+  Figma recipe, width 240, rules `border-decorative` → gallery Sizes tiles, headless Edge
+  screenshots of Sections and the Figma recipe.

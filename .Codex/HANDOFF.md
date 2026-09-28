@@ -102,6 +102,39 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     Spec `docs/specs/overlay.md`; tests `packages/react/tests/overlay.test.mjs`; gallery
     `behavior-*` tiles. Tooltip is still marked Complete; its behavior is new and unreviewed.
 
+## Owner feedback round (2026-09-27, branch `claude/component-gallery-status-4b51ac`, uncommitted)
+
+- Message action plates align to the text / bubble edge; Card carousel 18.3 under the header;
+  Command palette footer hints are working buttons (↑ ↓ Open Close).
+- Panel: sizes sm / md only, rows fill the width, `actionColumn` (Figma recipe), width 240.
+  Rule: a divider is never darker than its container (Panel, Code block → `border-decorative`).
+- Toolbar: pressed = Button selected fill; track painted as Segmented (stroke, no shadow plate).
+- Alert fills mixed 50% to surface, brighter icon rungs (Toast icons too); text ink kept (4.5:1).
+- Avatar count centred on the circle edge; Calendar 36 / 32 cells, 12/16 numbers, `fixedWeeks` off.
+- Nav from ChatGPT / Notion captures (`captures/nav/`): items default ink, labels 12/16 muted, 12
+  between groups. Open: Menu's label still 14/20.
+- Spinner 1s, track = arc ink 25%, reduced motion slows; Skeleton text keeps its line box, 4
+  corners. Survey: `docs/research/skeleton-spinner-code-slider-survey.md`.
+- Eight Complete families moved to In review (status file). Headless screenshots:
+  `scratchpad/shot.mjs` pattern (Edge + CDP). Relay for Chrome captures: postMessage page on 3199.
+- Claude in Chrome round 2: 37 captures (Figma split tools, sliders, design-panel rows, library
+  swatches, divider; ChatGPT code block, textarea, stacked field, mode radio cards, colour field;
+  Notion link preview). Not found in the owner's pages: inline code, a badge group; skeleton and
+  spinner only appear while loading.
+- **Approval batches** (`APPROVAL_BATCHES`, 21 batches of 2-3): phases audit → visual pass →
+  Chrome side by side → owner approval; gallery leads with the current batch, officially complete
+  at the bottom. Batch 1 (Toolbar, Split button, Segmented) is Ready for approval.
+- Round 3: one size per gallery tile (7 families split; rule in AGENTS.md); Split button menus
+  placed by `useAnchoredPosition` (were CSS anchor, misplaced); toolbar separator lighter
+  (`border-decorative`). Batch 2 side by side done: Nav, Menu (labels now 12/16, back to review)
+  ready; Tree view officially complete (approved earlier, unchanged). Batches 1-2 await approval.
+- Round 4: Nav titles from ChatGPT (14/20 500 muted; Menu keeps 12/16), Nav recipe tile
+  "sidebar in context"; batch 3 side by side (Alert vs Notion callout, Toast vs Notion toast).
+  Ready for approval: Toolbar, Split button, Segmented, Nav, Menu, Alert, Toast.
+- Toolbar: track group removed (Segmented in the toolbar, joins its roving); Figma tools are
+  icon-only ghost SplitButtons (no drawn divider, 1px gap). `toolbar-context.ts` makes composite
+  controls roving items inside a Toolbar.
+
 ## Merge and audit round (2026-09-27, branch `claude/component-variants-audit-fc1ee4`)
 
 - Committed this branch's work and merged `origin/main` (22 commits: inspector and Figma

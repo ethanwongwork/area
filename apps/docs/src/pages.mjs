@@ -91,7 +91,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "calendar", name: "Calendar", exportName: "Calendar", manifest: "calendar",
-    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, true"], ["variant", '"plain" | "surface"', '"plain"'], ["tone", '"neutral" | "accent"', '"neutral"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
+    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, false"], ["variant", '"plain" | "surface"', '"plain"'], ["tone", '"neutral" | "accent"', '"neutral"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
     examples: [
       { id: "default", title: "Date", note: "Arrow keys move by day and week, Home and End to the week's edges, Page Up and Page Down by month (with Shift, by year). Enter or Space selects.", demo: "GalleryCalendar" },
       { id: "range", title: "Range", note: "The first choice anchors the range; hovering or moving focus previews it until the second choice. Escape cancels.", demo: "GalleryCalendarRange" },
@@ -1031,12 +1031,13 @@ export const COMPONENT_PAGES = [
     name: "Panel",
     manifest: "panel",
     api: [
-      ["size", '"xs" | "sm" | "md" | "lg"', '"md"'],
+      ["size", '"sm" | "md"', '"md"'],
       ["title", "ReactNode", "—"],
       ["action", "ReactNode", "—"],
       ["footer", "ReactNode", "—"],
       ["flush", "boolean", "false"],
       ["bareBar", "boolean (a bar that names rather than heads: no rule under it)", "false"],
+      ["actionColumn", "boolean (every row keeps a trailing action square, as in Figma's properties panel; otherwise rows fill the width)", "false"],
       ["aria-label", "string (else the title names the panel region)", "—"],
       ["PanelSection.heading", "ReactNode", "—"],
       ["PanelSection.headingLevel", "2 | 3 | 4 | 5 | 6", "3"],
@@ -1051,7 +1052,7 @@ export const COMPONENT_PAGES = [
       ["PanelStack", "a caption above a control that needs the whole width", "—"],
     ],
     examples: [
-      { id: "inspector", title: "Inspector", note: "Sections of PanelRows: captions above two equal field columns and a trailing square for an action, controls at the panel's tier. The bar's action ends on the same column.", demo: "GalleryPanel" },
+      { id: "inspector", title: "Inspector", note: "Sections of PanelRows: captions above two equal field columns that fill the row; a row with an action adds a trailing square. Controls follow the panel's tier.", demo: "GalleryPanel" },
       { id: "sections", title: "Sections", demo: "GalleryPanelSections" },
       { id: "collapsible", title: "Collapsible sections", note: "A section heading becomes a disclosure button; its chevron shows in the side inset on hover or focus, and a summary shows while it is collapsed.", demo: "GalleryPanelCollapsible" },
       { id: "footer", title: "Footer", note: "The footer stays pinned below the scrolling body.", demo: "GalleryPanelFooter" },

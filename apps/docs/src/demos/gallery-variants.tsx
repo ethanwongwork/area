@@ -37,6 +37,16 @@ export const GalleryInputGroupSizes = () => (
   </div>
 );
 
+export const GalleryInputGroupSizeSm = () => (
+  <InputGroup size="sm" aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount" defaultValue="24.00" inputMode="decimal" /></InputGroup>
+);
+export const GalleryInputGroupSizeMd = () => (
+  <InputGroup size="md" aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount" defaultValue="24.00" inputMode="decimal" /></InputGroup>
+);
+export const GalleryInputGroupSizeLg = () => (
+  <InputGroup size="lg" aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount" defaultValue="24.00" inputMode="decimal" /></InputGroup>
+);
+
 const alignButtons = <><Button variant="ghost" iconOnly icon={<AlignTopIcon />} aria-label="Align top" /><Button variant="ghost" iconOnly icon={<AlignMiddleIcon />} aria-label="Align middle" /><Button variant="ghost" iconOnly icon={<AlignBottomIcon />} aria-label="Align bottom" /></>;
 export const GalleryButtonGroupOutline = () => <ButtonGroup variant="outline" aria-label="Vertical alignment">{alignButtons}</ButtonGroup>;
 export const GalleryButtonGroupSizes = () => row(sizes.map(size => <ButtonGroup key={size} size={size} aria-label={`Vertical alignment, ${size}`}>{alignButtons}</ButtonGroup>));

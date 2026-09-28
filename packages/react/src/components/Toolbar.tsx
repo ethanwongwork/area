@@ -1,6 +1,7 @@
 import { cloneElement, createContext, forwardRef, useContext, useRef } from "react";
 import type { HTMLAttributes, KeyboardEvent, ReactElement, ReactNode } from "react";
 import { cx, toolbarVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { InToolbar } from "./toolbar-context.ts";
 
 export interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
   variant?: VariantProps<typeof MANIFESTS.toolbar>["variant"];
@@ -40,7 +41,7 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
     event.preventDefault();
     items[next]?.focus();
   }
-  return <ToolbarOrientation.Provider value={orientation}><div ref={ref} {...rest} role="toolbar" aria-orientation={orientation} tabIndex={0}
+  return <InToolbar.Provider value={true}><ToolbarOrientation.Provider value={orientation}><div ref={ref} {...rest} role="toolbar" aria-orientation={orientation} tabIndex={0}
     className={toolbarVariants({ variant, size, orientation, fullWidth }, className)}
     onFocusCapture={event => {
       onFocusCapture?.(event);
@@ -59,7 +60,7 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
       onBlurCapture?.(event);
       if (!event.currentTarget.contains(event.relatedTarget as Node | null)) event.currentTarget.tabIndex = 0;
     }}
-    onKeyDown={handleKeyDown} /></ToolbarOrientation.Provider>;
+    onKeyDown={handleKeyDown} /></ToolbarOrientation.Provider></InToolbar.Provider>;
 });
 
 export interface ToolbarItemProps { children: ReactElement<{ tabIndex?: number; "data-area-toolbar-item"?: string }> }
@@ -68,15 +69,13 @@ export function ToolbarItem({ children }: ToolbarItemProps) {
   return cloneElement(children, { tabIndex: -1, "data-area-toolbar-item": "" });
 }
 
-export interface ToolbarGroupProps extends HTMLAttributes<HTMLDivElement> {
-  /** `track` sets one-of-several toggles in a filled groove with the chosen one raised
-   * (Figma's mode switch). Mark the chosen Button `selected`. */
-  variant?: "track";
-}
+/** Groups related commands. One-of-several choices (Figma's mode switch, text alignment) are a
+ * Segmented control placed in the toolbar, not a group variant. */
+export type ToolbarGroupProps = HTMLAttributes<HTMLDivElement>;
 export const ToolbarGroup = forwardRef<HTMLDivElement, ToolbarGroupProps>(function ToolbarGroup(
-  { variant, className, ...rest }, ref,
+  { className, ...rest }, ref,
 ) {
-  return <div ref={ref} role="group" className={cx("area-toolbar__group", variant === "track" && "area-toolbar__group--track", className)} {...rest} />;
+  return <div ref={ref} role="group" className={cx("area-toolbar__group", className)} {...rest} />;
 });
 
 export const ToolbarSeparator = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(function ToolbarSeparator(

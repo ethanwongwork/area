@@ -36,7 +36,7 @@
     min-block-size: var(--area-control-md);
     padding-block: var(--area-space-4);
     padding-inline: var(--area-space-12);
-    border-block-end: var(--area-border-width) solid var(--area-border-divider);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
@@ -197,7 +197,7 @@
     border: 0;
     border-radius: 0;
     /* The one rule: what is above it is rendered, what is below it is source. */
-    border-block-start: var(--area-border-width) solid var(--area-border-divider);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
   }
 
   /*
@@ -450,7 +450,7 @@
     block-size: var(--area-control-md);
     padding: 0;
     border: 0;
-    border-block-start: var(--area-border-width) solid var(--area-border-divider);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
     background-color: var(--area-bg-code);
     color: var(--area-fg-muted);
     font-family: inherit;

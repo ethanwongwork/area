@@ -30,7 +30,7 @@ import {
 import { ICONS } from "./icons.generated.mjs";
 import { CATALOG } from "./icons.catalog.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
-import { COMPLETE_COMPONENTS, RECENT_COMPONENTS, componentStatus, statusLabel } from "../src/component-status.mjs";
+import { APPROVAL_BATCHES, COMPLETE_COMPONENTS, RECENT_COMPONENTS, batchOf, componentStatus, statusLabel } from "../src/component-status.mjs";
 import { PRACTICES } from "../src/practices.mjs";
 import { VALIDATED_PASSES } from "../src/pass-status.mjs";
 
@@ -55,6 +55,14 @@ const FOUNDATION_PAGES = [
 // Only owner-confirmed families receive completion styling.
 for (const slug of COMPLETE_COMPONENTS) {
   if (!COMPONENT_PAGES.some(page => page.slug === slug)) throw new Error(`Unknown completed component: ${slug}`);
+}
+// Every gallery family belongs to exactly one approval batch (component-status.mjs).
+for (const page of COMPONENT_PAGES.filter(page => !page.docsOnly)) {
+  const count = APPROVAL_BATCHES.filter(batch => batch.families.includes(page.slug)).length;
+  if (count !== 1) throw new Error(`${page.slug} is in ${count} approval batches; it needs exactly one (component-status.mjs).`);
+}
+for (const slug of APPROVAL_BATCHES.flatMap(batch => batch.families)) {
+  if (!COMPONENT_PAGES.some(page => page.slug === slug)) throw new Error(`Unknown family in an approval batch: ${slug}`);
 }
 // Owner (2026-09-26): the newest work leads the gallery, whatever its status.
 const orderedComponents = [...COMPONENT_PAGES].sort((a, b) =>
@@ -336,18 +344,24 @@ function galleryPage({ families = null } = {}) {
       { id: "default", title: "Palette", demo: "GalleryColorSwatchPicker" },
       { id: "row", title: "Transparency", demo: "GalleryColorSwatchPickerRow" },
       { id: "layout-palette", title: "Palette grid", demo: "GalleryColorSwatchPickerPalette", span: "2x1" },
-      { id: "sizes", title: "Sizes", demo: "GalleryColorSwatchPickerSizes", span: "2x1" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryColorSwatchPickerSizeSm" },
+      { id: "size-md", title: "Size / md (default)", demo: "GalleryColorSwatchPickerSizeMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryColorSwatchPickerSizeLg" },
     ],
     "color-field": [
       { id: "default", title: "Fill", demo: "GalleryColorField" },
       { id: "split", title: "Split opacity", demo: "GalleryColorFieldSplit" },
       { id: "alpha", title: "Alpha", demo: "GalleryColorFieldAlpha" },
       { id: "disabled", title: "Disabled", demo: "GalleryColorFieldDisabled" },
-      { id: "sizes", title: "Sizes", demo: "GalleryColorFieldSizes", span: "2x1" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryColorFieldSizeSm" },
+      { id: "size-md", title: "Size / md (default)", demo: "GalleryColorFieldSizeMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryColorFieldSizeLg" },
     ],
     "color-swatch": [
       { id: "default", title: "Transparency", demo: "GalleryColorSwatch" },
-      { id: "sizes", title: "Sizes", demo: "GalleryColorSwatchSizes" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryColorSwatchSizeSm" },
+      { id: "size-md", title: "Size / md (default)", demo: "GalleryColorSwatchSizeMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryColorSwatchSizeLg" },
     ],
     "alignment-picker": [
       { id: "default", title: "Alignment", demo: "GalleryAlignmentPickerDefault" },
@@ -356,14 +370,18 @@ function galleryPage({ families = null } = {}) {
       { id: "plain", title: "Plain", demo: "GalleryAlignmentPickerPlain" },
       { id: "tone-accent", title: "Tone / accent", demo: "GalleryAlignmentPickerAccent" },
       { id: "disabled", title: "Disabled", demo: "GalleryAlignmentPickerDisabled" },
-      { id: "sizes", title: "Sizes", demo: "GalleryAlignmentPickerSizes", span: "2x1" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryAlignmentPickerSizeSm" },
+      { id: "size-md", title: "Size / md (default)", demo: "GalleryAlignmentPickerSizeMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryAlignmentPickerSizeLg" },
     ],
     toolbar: [
       { id: "default", title: "Tools", demo: "GalleryToolbar", span: "2x1" },
       { id: "content-formatting", title: "Content / text formatting", demo: "GalleryToolbarFormatting", span: "2x1" },
       { id: "variant-plain", title: "Variant / plain", demo: "GalleryToolbarPlain" },
       { id: "layout-vertical", title: "Layout / vertical", demo: "GalleryToolbarVertical" },
-      { id: "sizes", title: "Sizes", demo: "GalleryToolbarSizes", span: "2x1" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryToolbarSizeSm", span: "2x1" },
+      { id: "size-md", title: "Size / md (default)", demo: "GalleryToolbarSizeMd", span: "2x1" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryToolbarSizeLg", span: "2x1" },
       { id: "behavior-overflow", title: "Behavior / overflow", demo: "GalleryToolbarOverflow" },
     ],
     composer: [
@@ -397,6 +415,7 @@ function galleryPage({ families = null } = {}) {
     code: COMPONENT_PAGES.find(page => page.slug === "code").examples,
     nav: [
       { id: "default", title: "Default", demo: "GalleryNav", span: "2x2" },
+      { id: "sidebar", title: "Recipe / sidebar in context (ChatGPT)", demo: "GalleryNavSidebar", span: "2x3", group: "Default" },
       { id: "grouped", title: "Grouped", demo: "GalleryNavGrouped", span: "2x2" },
       { id: "icons", title: "Icons", demo: "GalleryNavIcons", span: "2x2" },
       { id: "counts", title: "Counts", demo: "GalleryNavCounts", span: "2x2" },
@@ -476,9 +495,8 @@ function galleryPage({ families = null } = {}) {
       { id: "default", title: "Default", demo: "GalleryPanel", span: "2x2" },
       { id: "sections", title: "Sections", demo: "GalleryPanelSections", span: "2x2" },
       { id: "footer", title: "Footer", demo: "GalleryPanelFooter", span: "2x2" },
-      { id: "size-xs", title: "Size / xs", demo: "GalleryPanelXs", span: "2x2" },
-      { id: "size-md", title: "Size / md", demo: "GalleryPanelMd", span: "2x2" },
-      { id: "size-lg", title: "Size / lg", demo: "GalleryPanelLg", span: "2x2" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryPanelSm", span: "2x2" },
+      { id: "size-md", title: "Size / md (default)", demo: "GalleryPanelMd", span: "2x2" },
       { id: "flush", title: "Flush", demo: "GalleryPanelFlush", span: "2x2" },
       { id: "bare-bar", title: "Bare bar", demo: "GalleryPanelBareBar", span: "2x2" },
       { id: "collapsible", title: "Collapsible sections", demo: "GalleryPanelCollapsible", span: "2x2" },
@@ -595,6 +613,8 @@ function galleryPage({ families = null } = {}) {
       { id: "soft", title: "Soft", demo: "GallerySplitButtonSoft" },
       { id: "outline", title: "Outline", demo: "GallerySplitButtonOutline" },
       { id: "icon", title: "Leading icon", demo: "GallerySplitButtonIcon" },
+      { id: "ghost-icon", title: "Ghost / icon only, selected", demo: "GallerySplitButtonGhostIcon" },
+      { id: "ghost-icon-rest", title: "Ghost / icon only", demo: "GallerySplitButtonGhostIconRest" },
       { id: "size-small", title: "Size / small", demo: "GallerySplitButtonSmall" },
       { id: "size-large", title: "Size / large", demo: "GallerySplitButtonLarge" },
       { id: "disabled", title: "Disabled", demo: "GallerySplitButtonDisabled" },
@@ -671,7 +691,9 @@ function galleryPage({ families = null } = {}) {
       { id: "read-only", title: "Read only", demo: "NumberFieldReadOnly" },
       { id: "disabled", title: "Disabled", demo: "NumberFieldDisabled" },
       { id: "prefix", title: "Prefix", demo: "GalleryNumberFieldPrefix" },
-      { id: "sizes", title: "Sizes", demo: "NumberFieldSizes", span: "2x1" },
+      { id: "size-sm", title: "Size / sm", demo: "NumberFieldSizeSm" },
+      { id: "size-md", title: "Size / md (default)", demo: "NumberFieldSizeMd" },
+      { id: "size-lg", title: "Size / lg", demo: "NumberFieldSizeLg" },
     ],
     "input-group": [
       { id: "affixes", title: "Affixes", demo: "GalleryInputGroupAffixes" },
@@ -683,7 +705,9 @@ function galleryPage({ families = null } = {}) {
       { id: "mode", title: "Mode picker", demo: "GalleryInputGroupMode" },
       { id: "phone", title: "Phone country code", demo: "GalleryInputGroupPhone" },
       { id: "action", title: "Independent action", demo: "GalleryInputGroupAction" },
-      { id: "sizes", title: "Sizes", demo: "GalleryInputGroupSizes" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryInputGroupSizeSm" },
+      { id: "size-md", title: "Size / md (default)", demo: "GalleryInputGroupSizeMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryInputGroupSizeLg" },
     ],
     input: [
       { id: "default", title: "Default", demo: "InputDefault" },
@@ -943,7 +967,17 @@ function galleryPage({ families = null } = {}) {
     })),
   };
   const passes = [];
-  const sections = orderedComponents.filter((component) => families ? families.includes(component.slug) : !component.docsOnly).map((component) => {
+  // Approval order (owner, 2026-09-27): the current batch first, then the batches after it,
+  // officially complete families (every phase done and approved) at the bottom.
+  const phaseOf = component => phases(component, passEvidence(component));
+  const shown = orderedComponents.filter((component) => families ? families.includes(component.slug) : !component.docsOnly);
+  const finished = new Set(shown.filter(component => phaseOf(component).official).map(component => component.slug));
+  const currentBatch = APPROVAL_BATCHES.findIndex(batch => batch.families.some(slug => !finished.has(slug)));
+  const ordered = [...shown].sort((a, b) =>
+    Number(finished.has(a.slug)) - Number(finished.has(b.slug)) || batchOf(a.slug) - batchOf(b.slug) ||
+    APPROVAL_BATCHES[batchOf(a.slug)].families.indexOf(a.slug) - APPROVAL_BATCHES[batchOf(b.slug)].families.indexOf(b.slug));
+  let lastHeading = null;
+  const sections = ordered.map((component) => {
     const status = componentStatus(component.slug);
     const fallbackName = `Gallery${component.exportName ?? component.name.replaceAll(" ", "")}`;
     const specimens = (gallerySpecimens[component.slug] ??
@@ -978,20 +1012,36 @@ function galleryPage({ families = null } = {}) {
     const reviewName = `GalleryReview${component.slug.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase())}`;
     const reviewDemo = demos[reviewName];
     const pass = passEvidence(component);
-    passes.push({ component, pass });
+    const phase = phases(component, pass);
+    passes.push({ component, pass, phase });
     const defaultSpecimen = specimens.find(example => specimenName(example, component.slug) === "default") ?? specimens[0];
-    const review = passReview(component, pass, demos[defaultSpecimen.demo].html, reviewDemo ? demoMarkup(reviewName, reviewDemo.html) : "");
-    return `<details open class="docs-visual-gallery__section" id="gallery-section-${component.slug}" data-pass="${pass.state}">
-      <summary class="docs-visual-gallery__section-title">${escapeHtml(component.name)} <span class="docs-audit-label" data-audit="${status}">${statusLabel(status)}</span>${pass.state === "validated" ? ` ${passBadge("success", "Pass validated")}` : ""}</summary>
+    const review = passReview(component, pass, demos[defaultSpecimen.demo].html, reviewDemo ? demoMarkup(reviewName, reviewDemo.html) : "", phase);
+    const batchIndex = batchOf(component.slug);
+    const headingKey = finished.has(component.slug) ? "complete" : batchIndex;
+    let heading = "";
+    if (!families && headingKey !== lastHeading) {
+      lastHeading = headingKey;
+      heading = headingKey === "complete"
+        ? `<h2 class="docs-gallery-batch" id="gallery-batch-complete">Officially complete</h2>`
+        : `<h2 class="docs-gallery-batch" id="gallery-batch-${batchIndex + 1}">Batch ${batchIndex + 1} · ${escapeHtml(APPROVAL_BATCHES[batchIndex].name)}${batchIndex === currentBatch ? ` ${passBadge("neutral", "Current")}` : ""}</h2>`;
+    }
+    return `${heading}<details open class="docs-visual-gallery__section" id="gallery-section-${component.slug}" data-pass="${pass.state}" data-phase="${phase.key}">
+      <summary class="docs-visual-gallery__section-title">${escapeHtml(component.name)} <span class="docs-audit-label" data-audit="${status}">${statusLabel(status)}</span> ${passBadge(phase.tone, phase.label)}</summary>
       ${review}
       <div class="docs-visual-gallery__groups">${groups}</div>
     </details>`;
   }).join("\n");
 
   if (families) return sections;
-  const indexNav = `    <nav class="docs-gallery-index" aria-label="Components by audit status">
-      ${["complete", "review", "unrefined"].map(status => `<div><h2 class="docs-visual-gallery__section-title">${statusLabel(status)}</h2><div class="docs-gallery-index__links">${orderedComponents.filter(component => componentStatus(component.slug) === status).map(component => `<a class="docs-audit-label" data-audit="${status}" href="#gallery-section-${component.slug}">${escapeHtml(component.name)}</a>`).join("")}</div></div>`).join("")}
-      <div><h2 class="docs-visual-gallery__section-title">Pass validated <span class="docs-pass__count">${passes.filter(entry => entry.pass.state === "validated").length} of ${passes.length}</span></h2><div class="docs-gallery-index__links">${passes.filter(entry => entry.pass.state === "validated").map(({ component }) => `<a class="docs-audit-label" data-pass="validated" href="#gallery-section-${component.slug}">${escapeHtml(component.name)}</a>`).join("") || `<span class="docs-pass__evidence">None yet</span>`}</div></div>
+  const byslug = new Map(passes.map(entry => [entry.component.slug, entry]));
+  const familyLink = slug => { const entry = byslug.get(slug); return entry ? `<a class="docs-audit-label" data-audit="${componentStatus(slug)}" href="#gallery-section-${slug}">${escapeHtml(entry.component.name)} <span class="docs-pass__count">${escapeHtml(entry.phase.short)}</span></a>` : ""; };
+  const batchRow = (batch, index) => `<li class="docs-gallery-index__batch"><a class="docs-gallery-index__batch-name" href="#gallery-batch-${index + 1}">Batch ${index + 1} · ${escapeHtml(batch.name)}</a><span class="docs-gallery-index__links">${batch.families.filter(slug => !finished.has(slug)).map(familyLink).join("")}</span></li>`;
+  const indexNav = `    <nav class="docs-gallery-index" aria-label="Approval batches">
+      <div><h2 class="docs-visual-gallery__section-title">Current batch <span class="docs-pass__count">approve once each family reads Ready for approval</span></h2>
+        <ol class="docs-gallery-index__batches">${currentBatch >= 0 ? batchRow(APPROVAL_BATCHES[currentBatch], currentBatch) : `<li class="docs-pass__evidence">Every batch is complete</li>`}</ol></div>
+      <div><h2 class="docs-visual-gallery__section-title">Up next <span class="docs-pass__count">${APPROVAL_BATCHES.length - Math.max(currentBatch + 1, 0)} batches</span></h2>
+        <ol class="docs-gallery-index__batches">${APPROVAL_BATCHES.map((batch, index) => index > currentBatch && batch.families.some(slug => !finished.has(slug)) ? batchRow(batch, index) : "").join("")}</ol></div>
+      <div><h2 class="docs-visual-gallery__section-title">Officially complete <span class="docs-pass__count">${finished.size} of ${shown.length}</span></h2><div class="docs-gallery-index__links">${[...finished].map(slug => `<a class="docs-audit-label" data-audit="complete" href="#gallery-section-${slug}">${escapeHtml(byslug.get(slug)?.component.name ?? slug)}</a>`).join("") || `<span class="docs-pass__evidence">None yet</span>`}</div></div>
     </nav>`;
   return galleryShell({ current: "gallery-components.html", title: "Components", body: indexNav + sections });
 }
@@ -1161,7 +1211,8 @@ function passEvidence(component) {
   const spec = existsSync(specPath) ? readFileSync(specPath, "utf8") : "";
   const audited = Boolean(spec) && COHESION_AUDIT.includes(component.name.toLowerCase().replace(/[^a-z]/g, ""));
   const visual = /\n##+ Visual pass[^\n]*\n([\s\S]*?)(?=\n## |$)/.exec(spec);
-  const visualPass = Boolean(visual && visual[1].trim().length > 40);
+  // A placeholder ("Not inspected …") is not a visual pass.
+  const visualPass = Boolean(visual && visual[1].trim().length > 40 && !/^(not inspected|not yet|none|todo)/i.test(visual[1].trim()));
   const captures = {};
   let latest = "";
   const dir = join(repo, "docs/research/captures", slug);
@@ -1178,25 +1229,38 @@ function passEvidence(component) {
   const done = [audited, visualPass, measured].filter(Boolean).length;
   return { audited, visualPass, captures, latest: latest.slice(0, 10), claim, state: claim ? "validated" : done ? "partial" : "none" };
 }
+/** The four approval phases (component-status.mjs, APPROVAL_BATCHES). */
+function phases(component, pass) {
+  const chrome = pass.claim ? "done" : Object.keys(pass.captures).length ? "half" : "missing";
+  const approved = COMPLETE_COMPONENTS.has(component.slug);
+  const done = [pass.audited, pass.visualPass, chrome === "done"];
+  const ready = done.every(Boolean);
+  const next = ["Audit", "Visual pass", "Claude in Chrome side by side"][done.indexOf(false)];
+  const count = done.filter(Boolean).length;
+  if (ready && approved) return { key: "complete", official: true, tone: "success", label: "Officially complete", short: "complete", chrome, approved };
+  if (ready) return { key: "ready", official: false, tone: "success", label: "Ready for approval", short: "ready", chrome, approved };
+  return { key: `phase-${count + 1}`, official: false, tone: "neutral", label: `Phase ${count + 1} of 4 · ${next}${approved ? " · approved before the phases" : ""}`, short: `${count}/3`, chrome, approved };
+}
 const passBadge = (tone, text) => `<span class="area-badge area-badge--soft area-badge--${tone} area-badge--md"><span class="area-badge__label">${escapeHtml(text)}</span></span>`;
 /** A static, inert copy for enlarging: no ids, id references, shared radio names or hydration hooks. */
 const inertCopy = html => html
   .replace(/\s(id|for|aria-labelledby|aria-describedby|aria-controls|aria-activedescendant|aria-owns|popovertarget|list)="[^"]*"/g, "")
   .replace(/\sname="([^"]*)"/g, ' name="pass-$1"')
   .replace(/\sdata-[a-z-]+-demo="[^"]*"/g, "");
-function passReview(component, pass, specimenHtml, beforeAfter) {
+function passReview(component, pass, specimenHtml, beforeAfter, phase = phases(component, pass)) {
   const products = Object.entries(pass.captures).map(([source, count]) => `${PRODUCTS[source]} ${count}`).join(", ");
   const checks = [
     ["Audit", pass.audited, pass.audited ? `Shared-rule audit (docs/research/cohesion-audit.md); spec docs/specs/${component.slug}.md` : "No audited spec"],
     ["Visual pass", pass.visualPass, pass.visualPass ? `Recorded in the spec's Visual pass section` : "No Visual pass section in the spec"],
-    ["Claude in Chrome", pass.claim ? true : Object.keys(pass.captures).length > 0,
+    ["Claude in Chrome", phase.chrome,
       pass.claim ? `Side by side with ${pass.claim.against}, ${pass.claim.date}; ${products} captures`
-        : products ? `${products} captures (latest ${pass.latest}); no side-by-side validation recorded` : "No target-product captures"],
+        : products ? `${products} captures (latest ${pass.latest}); side by side not yet recorded` : "No target-product captures"],
+    ["Owner approval", phase.approved, phase.official ? "Approved; every phase done" : phase.approved ? "Approved before the phases; confirm once phases 1-3 are done" : phase.key === "ready" ? "Ready: approve in component-status.mjs" : "Waits for phases 1-3"],
   ];
-  const label = { validated: ["success", `Validated ${pass.claim?.date ?? ""}`.trim()], partial: ["neutral", "Partial"], none: ["neutral", "Not validated"] }[pass.state];
+  const label = [phase.tone, phase.label];
   return `<section class="docs-gallery-review docs-pass" data-pass="${pass.state}" aria-labelledby="gallery-review-${component.slug}">
-        <div class="docs-pass__head"><h3 class="docs-visual-gallery__tile-title" id="gallery-review-${component.slug}">Pass review</h3>${passBadge(...label)}</div>
-        <ul class="docs-pass__checks">${checks.map(([name, done, evidence]) => `<li class="docs-pass__check" data-done="${done}"><span class="docs-pass__status">${passBadge(done ? "success" : "neutral", done ? "Done" : "Missing")}</span><span class="docs-pass__check-name">${name}</span><span class="docs-pass__evidence">${escapeHtml(evidence)}</span></li>`).join("")}</ul>
+        <div class="docs-pass__head"><h3 class="docs-visual-gallery__tile-title" id="gallery-review-${component.slug}">Phases</h3>${passBadge(...label)}</div>
+        <ol class="docs-pass__checks">${checks.map(([name, done, evidence]) => `<li class="docs-pass__check" data-done="${done === true || done === "done"}"><span class="docs-pass__status">${passBadge(done === true || done === "done" ? "success" : "neutral", done === true || done === "done" ? "Done" : done === "half" ? "Captured" : "To do")}</span><span class="docs-pass__check-name">${name}</span><span class="docs-pass__evidence">${escapeHtml(evidence)}</span></li>`).join("")}</ol>
         <div class="docs-pass__stage" inert aria-hidden="true"><div class="docs-pass__zoom">${inertCopy(specimenHtml)}</div></div>
         ${beforeAfter ? `<div class="docs-gallery-review__body">${beforeAfter}</div>` : ""}
       </section>`;
@@ -1211,7 +1275,7 @@ function demoMarkup(name, html) {
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
   if (["GalleryTableSelectable", "GalleryTextareaCount"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelXs", "GalleryPanelMd", "GalleryPanelLg", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // The carousel's previous / next Buttons page the row.
   if (name === "GalleryCardCarousel") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryMenu")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;

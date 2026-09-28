@@ -136,6 +136,8 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     }
   };
 
+  const keepFocus = (event: { preventDefault(): void }) => event.preventDefault();
+
   let index = -1;
   const renderRow = (item: CommandItem) => {
     index += 1;
@@ -178,9 +180,19 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     </div>
     {footer === false ? null : <div className="area-command-palette__footer" aria-hidden={footer ? undefined : true}>
       {footer ?? <>
-        <span className="area-command-palette__hint"><Kbd keys={["up"]} size="small" appearance="quiet" /><Kbd keys={["down"]} size="small" appearance="quiet" />Move</span>
-        <span className="area-command-palette__hint"><Kbd keys={["enter"]} size="small" appearance="quiet" />Open</span>
-        {inline ? null : <span className="area-command-palette__hint"><Kbd keys={["esc"]} size="small" appearance="quiet" />Close</span>}
+        {/* The hints also work by pointer. They stay out of the tab order and keep focus in the
+            field; keyboard users press the keys themselves, so assistive tech skips the row. */}
+        <span className="area-command-palette__hint">
+          <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
+            onClick={() => setActive(step(current < 0 ? 0 : current, -1))} disabled={current < 0}><Kbd keys={["up"]} size="small" appearance="quiet" /></button>
+          <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
+            onClick={() => setActive(step(current, 1))} disabled={current < 0}><Kbd keys={["down"]} size="small" appearance="quiet" /></button>
+          Move
+        </span>
+        <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
+          onClick={() => run(rows[current])} disabled={current < 0}><Kbd keys={["enter"]} size="small" appearance="quiet" />Open</button>
+        {inline ? null : <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
+          onClick={() => setOpen(false)}><Kbd keys={["esc"]} size="small" appearance="quiet" />Close</button>}
       </>}
     </div>}
   </div>;

@@ -108,6 +108,16 @@ on Tab (SplitButton). Opening, anchoring and dismissal are the host's job (nativ
 SplitButton). Verified in the gallery: arrows wrap, Home/End, typeahead ("s" → Settings), and
 SplitButton's menu uses the same handler.
 
+## Visual pass
+
+2026-09-27, Claude in Chrome, side by side with Notion's page menu (read only, opened and
+dismissed) beside the gallery's Content / icons tile: same anatomy (leading icons on one column,
+muted shortcuts at the end, inset rules between groups, the floating lift). Notion's rows are
+denser (about 28 against Area's 32 tier) and it keeps "Move to Trash" in the default ink where
+Area colours the danger row, as ChatGPT does. Group labels now follow Nav's: 12/16 in the muted
+ink (Notion's menu and palette labels are 12px), one pattern across Menu, Combobox, Command
+palette and Context menu.
+
 ## Verification
 
 - 18 product captures, 3 Area before, 1 after; checksums verified; no personal content.
@@ -127,3 +137,5 @@ SplitButton's menu uses the same handler.
   `MenuItem`s (switch or check, row is the control), measured against Notion's toggle rows.
   Mixed controls (segmented choice, buttons) belong in a Popover, not a menu.
 - 2026-09-27 · merged the overlay-behavior branch → with a `trigger`, Menu anchors to it and follows the ARIA menu button pattern (flip and shift, arrows wrap, typeahead, Escape and Tab close); a Menu without one keeps this pass's in-menu keys for its host → [overlay behavior](overlay.md).
+- 2026-09-27 · batch 2 visual pass → group labels 12/16 muted, one pattern with Nav (was 14/20)
+  → side by side with Notion's page menu in Claude in Chrome.
