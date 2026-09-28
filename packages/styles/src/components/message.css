@@ -49,7 +49,7 @@
   .area-message__actions .area-button { --_fg: var(--area-fg-muted); }
   /* The person's actions show on hover or focus (ChatGPT hides them until then); the latest
    * assistant turn keeps its actions shown. */
-  .area-message--user > .area-message__actions { opacity: 0; transition: var(--area-transition); }
+  .area-message--user > .area-message__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
   .area-message--user:is(:hover, :focus-within) > .area-message__actions { opacity: 1; }
   @media (hover: none) { .area-message--user > .area-message__actions { opacity: 1; } }
 
@@ -65,5 +65,8 @@
     animation: area-message-pulse 1s ease-in-out infinite;
   }
   @media (prefers-reduced-motion: reduce) { .area-message__cursor { animation: none; } }
+  [data-area-motion="none"] .area-message__cursor { animation: none; }
+  /* Forced colours drop authored backgrounds; keep the dot in the text colour. */
+  @media (forced-colors: active) { .area-message__cursor { forced-color-adjust: none; background-color: CanvasText; } }
   @keyframes area-message-pulse { 50% { opacity: 0.3; } }
 }

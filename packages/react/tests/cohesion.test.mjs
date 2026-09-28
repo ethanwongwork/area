@@ -44,15 +44,25 @@ test('rows share one hover plate and one selection plate, and selection outranks
 
 test('every floating surface shares the lift', () => {
   const lift = /0 20px 24px var\(--area-shadow-color\), 0 5px 8px color-mix\(in srgb, var\(--area-shadow-color\) 50%, transparent\)/;
-  for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar--surface', '.area-toolbar__overflow-content']) {
+  for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar--surface', '.area-toolbar__overflow-content', '.area-command-palette']) {
     const rule = ruleFor(block);
     assert.ok(rule, `${block} missing`);
     assert.match(rule.body, lift, `${block} does not use the floating lift`);
   }
+  // The shadow that paints is the last box-shadow on the block, in any rule: a later literal
+  // once overrode the shared lift with a full-strength second layer and this test still passed.
+  const elevation = rule => rule.body.match(/--_elevation\s*:\s*([^;]+)/)?.[1].trim();
+  for (const block of ['.area-popover', '.area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-command-palette']) {
+    const own = rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block) && /(^|[;\s])box-shadow\s*:/.test(rule.body));
+    assert.ok(own.length, `${block} has no box-shadow`);
+    const value = [...own.at(-1).body.matchAll(/(?:^|[;\s])box-shadow\s*:\s*([^;]+)/g)].at(-1)[1].trim();
+    const resolved = value === 'var(--_elevation)' ? rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block)).map(elevation).filter(Boolean).at(-1) : value;
+    assert.match(resolved ?? '', lift, `${block} paints ${value}, not the floating lift`);
+  }
 });
 
 test('text fields show disabled with field paint, not opacity', () => {
-  for (const selector of ['.area-input[data-disabled]', '.area-textarea:disabled', '.area-select:disabled']) {
+  for (const selector of ['.area-input[data-disabled]', '.area-textarea:disabled', '.area-select:disabled', '.area-composer[data-disabled]']) {
     const rule = ruleFor(selector);
     assert.ok(rule, `${selector} missing`);
     assert.doesNotMatch(rule.body, /opacity/, `${selector} dims a field twice`);

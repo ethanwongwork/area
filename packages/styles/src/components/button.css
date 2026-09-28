@@ -411,14 +411,23 @@
   .area-button--align-start { margin-inline-start: calc(var(--_gutter) * -1); }
   .area-button--align-end { margin-inline-end: calc(var(--_gutter) * -1); }
 
-  /* A toggle that is currently on. Distinct from hover, and it persists. */
+  /*
+   * A toggle that is currently on. Distinct from hover, and it persists: the selected plate
+   * stays under the pointer and while pressed, as a selected row does (cohesion audit), so
+   * hovering an on toggle never lightens it to the hover step.
+   */
   .area-button[data-selected] {
     --_bg: var(--_surface-active);
+    --_bg-hover: var(--_surface-active);
+    --_bg-active: var(--_surface-active);
+    --_wash-hover: none;
     --_fg: var(--_tone-fg);
   }
 
   .area-button--solid[data-selected] {
     --_bg: var(--_solid-hover);
+    --_bg-hover: var(--_solid-hover);
+    --_bg-active: var(--_solid-hover);
     --_fg: var(--_on-solid);
   }
 

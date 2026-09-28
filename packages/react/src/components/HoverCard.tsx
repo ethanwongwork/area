@@ -25,6 +25,8 @@ export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function Hov
   const surface = useRef<HTMLDivElement | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [open, setOpen] = useState(false);
+  // Report changes only: the first render is closed and was never open.
+  const reported = useRef(false);
   const clear = () => { if (timer.current) clearTimeout(timer.current); timer.current = null; };
   const show = (delay: number) => { clear(); timer.current = setTimeout(() => setOpen(true), delay); };
   const hide = (delay: number) => { clear(); timer.current = setTimeout(() => setOpen(false), delay); };
@@ -35,7 +37,7 @@ export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function Hov
     const shown = element.matches(":popover-open");
     if (open && !shown) element.showPopover();
     if (!open && shown) element.hidePopover();
-    onOpenChange?.(open);
+    if (reported.current !== open) { reported.current = open; onOpenChange?.(open); }
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!open) return;

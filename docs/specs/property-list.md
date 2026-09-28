@@ -33,7 +33,7 @@ everywhere in Area. Not TreeView (hierarchy), not Menu (commands), not PanelRow 
 | row | value, then the row's buttons: value ends 8 before the first button, buttons 4 apart, the last on the content edge | Figma: field to 172, eye 180, remove 208 (8, then 4) |
 | rows | 8 apart | Panel section gap; Figma rows pitch 32 around 24px controls |
 | handle | fills the panel's side inset, glyph (16 slot, new `grip`: two 5px bars) centred; shown on hover, focus or drag; always shown on touch; only when `onReorder` is set and there are two or more items | Figma: reorder handle in the margin, only with more than one item |
-| drag | pointer capture on the handle; the moving row stays in place at 40%; a 2px focus-colored line marks the landing gap; no line beside the row's own position; Escape cancels | Common sortable-list pattern (Figma, Framer layer rows) |
+| drag | pointer capture on the handle; the moving row stays in place at 40%; a 2px neutral-ink line (`fg-default`) marks the landing gap (was the focus colour; neutral per the cohesion audit, 2026-09-27); no line beside the row's own position; Escape cancels | Common sortable-list pattern (Figma, Framer layer rows) |
 | keyboard | the handle is a button: ArrowUp/Down move one place, Home/End to the ends; focus stays on the moved row's handle; the move is announced ("00A797 fill moved to position 1 of 3") | WAI live-region announcement; keyboard parity with the pointer |
 | inactive | `inactive` dims the value to 50%; the buttons stay full strength so the row can be turned back on | Figma dims hidden fills |
 | names | each item's `label` names its handle ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move |

@@ -830,6 +830,43 @@ export const DOCS_CSS = `
     padding: var(--area-space-8) var(--area-space-12) var(--area-space-24);
     overflow-x: auto;
   }
+  /* Every family's Pass review: status, the evidence for each step, the default specimen at 2x. */
+  .docs-pass__head {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    padding: var(--area-space-12) var(--area-space-12) 0;
+  }
+  .docs-pass__head > .docs-visual-gallery__tile-title { margin: 0; }
+  .docs-pass__checks {
+    display: grid;
+    gap: var(--area-space-6);
+    margin: 0;
+    padding: var(--area-space-12);
+    list-style: none;
+  }
+  .docs-pass__check {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+  }
+  .docs-pass__status { display: flex; flex: none; min-inline-size: calc(var(--area-space-48) + var(--area-space-16)); }
+  .docs-pass__check-name { flex: none; min-inline-size: calc(var(--area-space-96) + var(--area-space-12)); color: var(--area-fg-default); }
+  .docs-pass__evidence { color: var(--area-fg-muted); }
+  .docs-pass__count { color: var(--area-fg-muted); }
+  .docs-pass__stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--area-space-40) var(--area-space-24);
+    overflow-x: auto;
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+  }
+  .docs-pass__zoom { zoom: 2; max-inline-size: none; }
+  .docs-gallery-review.docs-pass > .docs-gallery-review__body { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+  .docs-audit-label[data-pass="validated"] { color: var(--area-fg-success); }
   .docs-visual-gallery__tile:has([data-slider-demo="GallerySliderVertical"]) .docs-visual-gallery__tile-preview > [data-slider-demo] {
     display: flex;
     align-items: center;

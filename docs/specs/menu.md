@@ -90,7 +90,7 @@ Items:
 | item · icon → label | **12** (label at 36) | ChatGPT and Notion both start the label at 36 | Was 8 (label at 32). Icons stay 16 (Area's icon sizes are 12/16/24; the products draw 20) |
 | item · text-only inset | 11 (shared rule) | ChatGPT 10 | Within 1px |
 | item · text | 14/20 400 | ChatGPT 14/20 400; Notion 14 400 | — |
-| hover, keyboard focus | **`bg-hover`** wash on hover, `data-highlighted` and `:focus-visible` | ChatGPT 5% black, Notion 5% warm black, pointer and keyboard alike | Keyboard focus had no style of its own. Forced colours draw a Highlight ring |
+| hover, keyboard focus | **`bg-component-hover`** plate (the shared row plate since the cohesion audit; was the `bg-hover` wash) on hover, `data-highlighted` and `:focus-visible` | ChatGPT 5% black, Notion 5% warm black, pointer and keyboard alike | Keyboard focus had no style of its own. Forced colours draw a Highlight ring |
 | danger | red label; **neutral wash** on hover | ChatGPT "Delete" (red text, 5% wash) | Was a red-tinted row with darker red text |
 | shortcut | 12/16 in the UI font, muted | Notion (12px, tertiary ink, UI font) | Was monospace |
 | separator · spacing | **4 / 1 / 4** (2px margin plus the 2px row gap) | Notion 4 / 1 / 4 (the menus' primary product) | Owner: too big. Was 10 / 1 / 10 (21px band); ChatGPT 8 / 1 / 8. Line starts level with the icons (Notion) |

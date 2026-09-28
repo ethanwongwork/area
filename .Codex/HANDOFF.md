@@ -327,3 +327,50 @@ differ between frames, so click by accessible name, not coordinates.
 - Remaining ChatGPT pieces: ThinkingDisclosure, SourceChip, AttachmentCard, VoiceInput — need a
   chat that shows them and Chrome in front (hidden tabs stall timers; ChatGPT does not render
   turns while hidden). The user bubble's blue is the owner's accent setting, not ChatGPT's default.
+
+## Badge md text (2026-09-27)
+
+Owner: md badges read too large on Card; md text is now 12/16 (was 14/20) at 20px, weight
+500; lg keeps 14/20. Gallery audit: all 120 md badges render 20px and no demo passes a stale
+size or inline size override. Open: the 12px label hangs 0.7px below a 14/20 line (spec).
+
+## Audit of post-audit families (2026-09-27)
+
+Owner: "work on any components that have not been audited yet." The twelve families that
+reached main after the cohesion audit were checked against its rules and fixed: see
+`docs/research/cohesion-audit.md`, "Fourth pass". Biggest find: a later literal shadow drew the
+shared lift's second layer at full strength on Menu, Popover, Dialog, Toast and the palette; the
+cohesion test now checks the painted `box-shadow`. Seven owner questions are listed there.
+Complete families touched: Box field, Button, Property list, Composer, Split button, and the
+lift on Menu/Popover/Dialog/Toast. Status in `component-status.mjs` unchanged.
+
+## Toolbar redesign and Pass reviews (2026-09-27)
+
+- Toolbar redesigned from Figma's toolbelt (7 Claude in Chrome captures) and the owner's three
+  reference shots: 8 inset, Figma's bar shadow, 8 spacing, command-height separators, a raised
+  plate for pressed toggles (dark: `bg-component-active`), `ToolbarGroup variant="track"`
+  (Figma's mode switch), selects hug their options. Tiles Tools, Content / text formatting,
+  Behavior / overflow. Back In review. Spec `toolbar.md`.
+- Every family now opens with a Pass review: audit, visual pass and Claude in Chrome evidence
+  read from the repo, the default tile at 2x (inert copy). Validated needs an entry in
+  `apps/docs/src/pass-status.mjs`; only Toolbar has one. Process doc and both skills updated.
+- Chrome notes: the gallery uses smooth scrolling, so scroll with `behavior: "instant"`; the
+  gallery tab can freeze the extension, so move captures out with the 127.0.0.1 relay.
+- Open: Segmented's selected shadow vs the toolbar plate; a 24px-icon "tools" size (Figma).
+- Hydration (#418) fixed: GalleryPanelFlush / BareBar were exported by both gallery.tsx and
+  gallery-variants.tsx (server rendered one, client hydrated the other; registry.tsx now throws
+  on a duplicate demo name), and HoverCard demos sat in a <p> the HTML parser split. A fresh
+  gallery load logs no #418; the two remaining 404s are the Avatar fallback demo's missing image.
+
+## Card consistency pass (2026-09-27, in review)
+
+One geometry rule: text inset = inset + (control − cap) / 2 with the first line trimmed to the
+cap and the last to the baseline, so a title is as far from the top as from the side (18.3 at
+md); header and footer controls sit on the inset, concentric. One type ramp (title 16/24, body
+14/20, value 32/40) at every size; size is corner and inset only. Media inset everywhere but
+bleed (immersive too), 16:9 by default. Templates: video, music, weather, stat, plan, feature,
+all md (news and tool removed); tiles size-md, horizontal-stacked, horizontal-bleed removed.
+Carousel rebuilt (reaches the inset, 3.25 items, header paging; demo `GalleryCardCarousel`,
+hydrated; only Gallery/Badge/Switch/Slider demo names render with hydration markers, see
+`render.mjs`). Spec `card.md`. Unverified: smooth paging (browser windows were in the
+background), Firefox and Safari.

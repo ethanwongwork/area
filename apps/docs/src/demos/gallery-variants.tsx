@@ -1,6 +1,6 @@
 /** Gallery specimens that complete each family's variant coverage: one per missing manifest value. */
 import type { ReactNode } from "react";
-import { Alert, Badge, Button, ButtonGroup, Checkbox, CheckboxGroup, Chip, CodeBlock, Indicator, Input, InputGroup, InputGroupText, NumberField, Panel, PanelSection, Field, Popover, PopoverBody, PopoverDescription, PopoverHeader, PopoverTitle, Separator, Table, Tabs, Toast } from "@area/react";
+import { Alert, Badge, Button, ButtonGroup, Checkbox, CheckboxGroup, Chip, CodeBlock, Indicator, Input, InputGroup, InputGroupText, NumberField, Popover, PopoverBody, PopoverDescription, PopoverHeader, PopoverTitle, Separator, Table, Tabs, Toast } from "@area/react";
 import { AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, InfoIcon } from "../icons.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
@@ -21,15 +21,6 @@ export const GalleryPopoverArrow = () => (
     <PopoverHeader><PopoverTitle>Title</PopoverTitle></PopoverHeader>
     <PopoverBody><PopoverDescription>Description</PopoverDescription></PopoverBody>
   </Popover>
-);
-
-export const GalleryPanelFlush = () => (
-  <Panel size="sm" flush title="Title" aria-label="Label">
-    <PanelSection heading="Label">
-      <Field orientation="horizontal" label="Label"><NumberField fullWidth variant="soft" aria-label="Label" defaultValue={8} unit="px" /></Field>
-      <Field orientation="horizontal" label="Label"><NumberField fullWidth variant="soft" aria-label="Label" defaultValue={100} unit="%" /></Field>
-    </PanelSection>
-  </Panel>
 );
 
 /* Figma's inspector fields: a letter in the leading slot that also drags the value. */
@@ -63,14 +54,6 @@ export const GallerySeparatorSpacing = () => (
     <Separator spacing="normal" />
     <p style={{ margin: 0 }}>Body text</p>
   </div>
-);
-
-export const GalleryPanelBareBar = () => (
-  <Panel size="sm" bareBar title="Title" aria-label="Label">
-    <PanelSection heading="Label">
-      <Field orientation="horizontal" label="Label"><NumberField fullWidth variant="soft" aria-label="Label" defaultValue={8} unit="px" /></Field>
-    </PanelSection>
-  </Panel>
 );
 
 export const GalleryPopoverLeft = () => (

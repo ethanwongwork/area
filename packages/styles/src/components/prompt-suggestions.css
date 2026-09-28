@@ -58,7 +58,7 @@
   }
   .area-prompt-suggestions__icon > :is(svg, img) { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-prompt-suggestions__text { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* spec: the dismiss ends 4 in from the row (ChatGPT 36 square at 728 of 768), shown on hover and focus. */
+  /* spec: the dismiss ends 8 in from the row (ChatGPT 36 square at 728 of 768), shown on hover and focus. */
   .area-prompt-suggestions__dismiss {
     position: absolute;
     inset-block: 0;
@@ -68,6 +68,8 @@
     opacity: 0;
   }
   .area-prompt-suggestions__row:is(:hover, :focus-within) > .area-prompt-suggestions__dismiss { opacity: 1; }
+  /* The row under it already shows the hover plate, so the dismiss hovers one step firmer. */
+  .area-prompt-suggestions__dismiss .area-button { --_bg-hover: var(--area-bg-component-active); }
   @media (hover: none) { .area-prompt-suggestions__dismiss { opacity: 1; } }
 
   /* --- Layouts ------------------------------------------------------------ */

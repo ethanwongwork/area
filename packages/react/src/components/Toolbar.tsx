@@ -68,10 +68,15 @@ export function ToolbarItem({ children }: ToolbarItemProps) {
   return cloneElement(children, { tabIndex: -1, "data-area-toolbar-item": "" });
 }
 
-export const ToolbarGroup = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function ToolbarGroup(
-  { className, ...rest }, ref,
+export interface ToolbarGroupProps extends HTMLAttributes<HTMLDivElement> {
+  /** `track` sets one-of-several toggles in a filled groove with the chosen one raised
+   * (Figma's mode switch). Mark the chosen Button `selected`. */
+  variant?: "track";
+}
+export const ToolbarGroup = forwardRef<HTMLDivElement, ToolbarGroupProps>(function ToolbarGroup(
+  { variant, className, ...rest }, ref,
 ) {
-  return <div ref={ref} role="group" className={cx("area-toolbar__group", className)} {...rest} />;
+  return <div ref={ref} role="group" className={cx("area-toolbar__group", variant === "track" && "area-toolbar__group--track", className)} {...rest} />;
 });
 
 export const ToolbarSeparator = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(function ToolbarSeparator(

@@ -197,7 +197,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     const { option } = row;
     const isSelected = option.value === selected;
     return <div key={option.value} id={`${id}-option-${current}`} data-index={current} role="option" aria-selected={isSelected}
-      aria-disabled={option.disabled || undefined} className="area-menu__item area-combobox__option"
+      aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? "" : undefined} className="area-menu__item area-combobox__option"
       data-highlighted={highlighted ? "" : undefined} data-selected={undefined}
       onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!option.disabled) setActive(current); }}
       onClick={() => { if (!option.disabled) commitRow(row); }}>

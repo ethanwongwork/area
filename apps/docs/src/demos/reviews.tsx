@@ -25,22 +25,24 @@ export const GalleryReviewTable = () => (
 );
 
 /* --- Card ------------------------------------------------------------------- */
-const previousCard = { "--_card-edge": "var(--area-border-divider)", "--_card-shadow": "var(--area-shadow-1)" } as CSSProperties;
-const card = (style?: CSSProperties, art?: string, weight?: number) => (
-  <Card style={{ inlineSize: 200, ...style }}>
-    <CardMedia aria-hidden="true" style={{ aspectRatio: "16 / 9", ...(art ? { background: art } : {}) }} />
-    <CardContent><CardTitle style={weight ? { fontWeight: weight } : undefined}>Title</CardTitle><CardDescription>Description</CardDescription></CardContent>
+/* Consistency pass (2026-09-27). "Before" restores the previous content pad, untrimmed text and
+   the sm type roles through private properties. */
+const cardSample = (card?: CSSProperties, title?: CSSProperties, size?: "sm") => (
+  <Card size={size} style={{ inlineSize: 200, ...card }}>
+    <CardMedia aria-hidden="true" />
+    <CardContent><CardTitle style={title}>Title</CardTitle><CardDescription style={title}>Description</CardDescription></CardContent>
   </Card>
 );
+const untrimmed = { textBox: "normal" } as CSSProperties;
+const previousSmallType = { "--_card-title-size": "var(--area-text-sm-size)", "--_card-title-leading": "var(--area-text-sm-leading)", "--_card-body-size": "var(--area-text-xs-size)", "--_card-body-leading": "var(--area-text-xs-leading)" } as CSSProperties;
 export const GalleryReviewCard = () => (
   <div style={stack}>
-    <ReviewPair title="Neutral 25 media, a lighter edge and a faint shadow"
-      basis="Owner: every image fill is neutral 25 (#fa); a lighter stroke with a very soft drop shadow (reference: Figma 0 0 8 0 at 2%). Edge #e2 → #ee; shadow-1 → 0 1px 2px −1px and 0 2px 8px, both 3% black; gradient placeholders removed."
-      before={card(previousCard, "linear-gradient(180deg, var(--area-blue-400), var(--area-neutral-25))", 400)}
-      after={card()} scale={2} />
-    <ReviewPair title="Titles take the strong weight and their role's tracking"
-      basis="Type pass: every surface title is strong (500); size says which surface. Card titles also take their role's letter-spacing (lg: −0.01em), which they had skipped."
-      before={card(undefined, undefined, 400)} after={card()} scale={2} />
+    <ReviewPair title="The title is as far from the top as from the side"
+      basis="Before: text 16 from the side but the title's cap 22 from the top (the line box's half-leading sat above it). After: the first and last lines are trimmed to cap and baseline, and the text sits half a control's space around the cap inside the inset (about 18 on every side at md), so a header Button centres on the cap in the corner."
+      before={cardSample({ "--_card-content-padding": "var(--area-space-8)" } as CSSProperties, untrimmed)} after={cardSample()} scale={2} />
+    <ReviewPair title="One type ramp at every size"
+      basis="Before: a small card stepped its title to 14 and description to 12, a large one its title to 20. After: title 16/24 (500), description 14/20, value 32/40 at every size; size sets only the corner and inset."
+      before={cardSample(previousSmallType, undefined, "sm")} after={cardSample(undefined, undefined, "sm")} scale={2} />
   </div>
 );
 

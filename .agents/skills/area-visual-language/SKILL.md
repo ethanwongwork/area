@@ -85,6 +85,9 @@ for both sides, and repeat in light and dark.
 4. Fix geometry in the structure (slot ownership, insets). Never hide it with paint or
    per-glyph offsets.
 
-Write down what you compared, what you saw, and what changed. Screenshot impressions are
+Write down what you compared, what you saw, and what changed, in the spec's Visual pass
+section. When the comparison was side by side with the live product in Claude in Chrome and its
+captures are committed, add the family to `apps/docs/src/pass-status.mjs` (date and what was
+compared); the gallery's Pass review then reads Validated. Screenshot impressions are
 observations, not measurements. Promote a lesson that applies beyond one component into
 this skill, and remove any instruction it replaces.

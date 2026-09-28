@@ -42,6 +42,9 @@ export const SplitButton = /* @__PURE__ */ forwardRef<HTMLDivElement, SplitButto
   const menuId = `${id}-menu`;
   const popup = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
+  // ArrowUp opens on the last item. The popover's toggle event fires after the key handler,
+  // so the handler records the wish and the toggle handler places focus once.
+  const focusLast = useRef(false);
 
   useEffect(() => {
     const element = popup.current;
@@ -49,7 +52,8 @@ export const SplitButton = /* @__PURE__ */ forwardRef<HTMLDivElement, SplitButto
     const onToggle = (event: Event) => {
       const next = (event as ToggleEvent).newState === "open";
       setOpen(next);
-      if (next) items(element)[0]?.focus();
+      if (next) items(element).at(focusLast.current ? -1 : 0)?.focus();
+      focusLast.current = false;
     };
     element.addEventListener("toggle", onToggle);
     return () => element.removeEventListener("toggle", onToggle);
@@ -60,8 +64,8 @@ export const SplitButton = /* @__PURE__ */ forwardRef<HTMLDivElement, SplitButto
   const onTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if ((event.key === "ArrowDown" || event.key === "ArrowUp") && !disabled) {
       event.preventDefault();
+      focusLast.current = event.key === "ArrowUp";
       popup.current?.showPopover();
-      if (event.key === "ArrowUp") items(popup.current).at(-1)?.focus();
     }
   };
 
