@@ -123,6 +123,14 @@ Home/End reach the first and last enabled option (`ColorSwatchPicker.tsx:52-94`)
 
 ## Visual pass
 
+2026-09-28, Claude in Chrome (batch 10): Figma's "On this page" swatches (16px chits in 24px cells,
+radius 20%, a 2px 10% black inner edge drawn only on light chits such as #FAFAFA and #F5F5F5) beside
+the gallery's grid and row at 2x. Area's chits share the shape (Color swatch's 20% corner) and show
+their edge mainly on white (neutral 50). No change. Observed: Figma splits translucent chits (opaque
+half, checker half). Dark theme not compared.
+
+Earlier note:
+
 The gallery shows ColorSwatchPicker's tiles in named groups; the palette layout and
 the sizes each have a tile. Unverified: Figma side by side, dark theme, a selected
 Figma chit.
@@ -139,3 +147,7 @@ Compared the Area captures (`color-swatch-picker/area--*`) with
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → cell radius
   concentric with the swatch (8 / 9 / 10); sizes tile added; no new product swatch grid →
   `color-swatch-picker/area--row` (cell 9px), `area--sizes` (cell 8px).
+- 2026-09-28 · batch 10 Claude in Chrome side by side (Figma swatch grid) → no change.
+- 2026-09-28 · owner: match the pickers to the latest Color swatch → cell corner (hover plate, selected
+  ring) concentric with the swatch's 20% corner (`swatch x 0.2 + inset`); was the old `min(radius-small,
+  size / 4)` → 4x shots of the grid and Color picker's saved colours.

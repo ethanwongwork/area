@@ -1,7 +1,7 @@
 # Box field spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26)
-**Captures:** `docs/research/captures/inspector/` (the Figma Design panel capture; no new capture)
+**Status:** accepted · 2026-09-26; batch 8 side by side 2026-09-28, no change
+**Captures:** `docs/research/captures/inspector/` (Figma Design panel, padding row, opacity / radius row)
 **Peers:** NumberField (each field), PanelRow (the grid), Button (the toggle), Popover (Figma's
 corner panel in the recipe)
 
@@ -96,6 +96,21 @@ Corner radius keeps Figma's one field beside Opacity; its Independent corners bu
 Popover holding a split, toggle-less BoxField, sharing the value, so the row shows Mixed when
 the corners differ.
 
+## Visual pass
+
+2026-09-28, Claude in Chrome (batch 8): Figma's Padding row and Opacity / Corner radius row
+(`../research/captures/inspector/figma--padding-row`, `figma--opacity-radius-row`) beside the gallery's
+Box field tiles and the Panel recipe at 2x.
+
+- Same structure: a label line, two equal fields with the padding-axis (or corner) glyph in the
+  leading slot, and the per-side toggle as a square on the row's action column (Figma 24 at 208 in a
+  240 panel; Area 28 on the action column).
+- Figma's padding glyphs are its horizontal / vertical padding marks; Area's package glyphs draw the
+  same two marks at the same weight as the field text.
+- The rows sit in the section rhythm that Panel's batch 8 change fixed (rule midway between the last
+  field and the next title).
+- No change. Dark theme not compared.
+
 ## Verification
 
 - Headless Edge with real mouse and keys (`scratchpad/boxfield.mjs`): typing 40 in
@@ -113,3 +128,9 @@ the corners differ.
 - May I open Figma's Independent corners panel and a frame's Individual padding (view-only
   panels, no value changed) to measure the split layouts?
 - CSS shorthand entry in a linked field.
+
+## Feedback log
+
+- 2026-09-28 · batch 8 Claude in Chrome side by side (Figma padding and radius rows) → no change →
+  `inspector/figma--padding-row`, `inspector/figma--opacity-radius-row`.
+- 2026-09-28 · inside a panel the label, its gap and the field gap follow the panel tier (`--_panel-*`).

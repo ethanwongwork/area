@@ -26,6 +26,7 @@ import type {
   ReactElement,
   ReactNode,
   Ref,
+  RefObject,
 } from "react";
 import {
   alertVariants,
@@ -139,8 +140,13 @@ export const AvatarGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarGrou
 
 export interface AlertProps extends Omit<Div, "title"> {
   tone?: VariantProps<typeof MANIFESTS.alert>["tone"];
-  /** Omit for automatic layout: compact by default, multiline for multiple actions. */
+  /**
+   * single-line (default), multiline (title over wrapping body, actions below), or banner: a
+   * one-line announcement across a page or section, its link at the end.
+   */
   layout?: VariantProps<typeof MANIFESTS.alert>["layout"];
+  /** Square, without side edges, for a banner that meets its container's edges. */
+  flush?: boolean;
   icon?: ReactNode;
   /** Shadows the native `title` attribute deliberately: an Alert's title is content. */
   title?: ReactNode;
@@ -157,17 +163,19 @@ export interface AlertProps extends Omit<Div, "title"> {
 }
 
 export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { tone, layout, icon, title, action, link, onDismiss, dismissIcon, dismissLabel = "Dismiss alert", className, children, ...rest },
+  { tone, layout, flush = false, icon, title, action, link, onDismiss, dismissIcon, dismissLabel = "Dismiss alert", className, children, ...rest },
   ref,
 ) {
   const resolvedLayout = layout ?? "single-line";
+  // A banner's link ends the row (OpenAI's announcement banners); elsewhere it follows the text.
+  const endLink = resolvedLayout === "banner";
   return (
     <div
       ref={ref}
       // `alert` interrupts a screen reader; `status` waits for a pause. Only danger earns
       // the interruption.
       role={tone === "danger" ? "alert" : "status"}
-      className={alertVariants({ tone, layout: resolvedLayout }, className)}
+      className={alertVariants({ tone, layout: resolvedLayout, flush }, className)}
       {...rest}
     >
       {icon ? (
@@ -177,13 +185,14 @@ export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(func
       ) : null}
       <div className="area-alert__content">
         {title ? <div className="area-alert__title">{title}</div> : null}
-        {children || link ? (
+        {children || (link && !endLink) ? (
           <div className="area-alert__description">
             {children}
-            {link ? <span className="area-alert__link">{link}</span> : null}
+            {link && !endLink ? <span className="area-alert__link">{link}</span> : null}
           </div>
         ) : null}
       </div>
+      {link && endLink ? <span className="area-alert__link">{link}</span> : null}
       {action ? <div className="area-alert__actions">{action}</div> : null}
       {onDismiss ? (
         <button type="button" className="area-alert__dismiss" aria-label={dismissLabel} onClick={onDismiss}>
@@ -333,15 +342,43 @@ export const Separator = /* @__PURE__ */ forwardRef<HTMLDivElement, SeparatorPro
 /* --- Skeleton, Spinner, Progress ------------------------------------------ */
 
 export interface SkeletonProps extends Div {
+  /** block (default): a box the host sizes; text: a line of type; circle: a 1:1 disc. */
   shape?: VariantProps<typeof MANIFESTS.skeleton>["shape"];
+  /** Stand-in lines for a paragraph; implies the text shape. The last line is shorter. */
+  lines?: number;
+  /** false draws a still placeholder, without the shimmer. */
+  animated?: boolean;
+  /**
+   * With children: while true the placeholder is painted on the child, which keeps its size and
+   * corner, hidden and inert; when false the children render as they are.
+   */
+  loading?: boolean;
 }
 
 export const Skeleton = /* @__PURE__ */ forwardRef<HTMLDivElement, SkeletonProps>(function Skeleton(
-  { shape, className, ...rest },
+  { shape, lines, animated = true, loading = true, className, children, ...rest },
   ref,
 ) {
+  const still = !animated;
+  if (children !== undefined && children !== null && children !== false) {
+    if (!loading) return <>{children}</>;
+    return (
+      <div ref={ref} aria-hidden="true" inert className={skeletonVariants({ shape, static: still, wrap: true }, className)} {...rest}>
+        {children}
+      </div>
+    );
+  }
+  if (lines !== undefined && lines > 1) {
+    return (
+      <div ref={ref} aria-hidden="true" className={["area-skeleton__lines", className].filter(Boolean).join(" ")} {...rest}>
+        {Array.from({ length: Math.floor(lines) }, (_, index) => (
+          <div key={index} className={skeletonVariants({ shape: "text", static: still })} />
+        ))}
+      </div>
+    );
+  }
   return (
-    <div ref={ref} aria-hidden="true" className={skeletonVariants({ shape }, className)} {...rest} />
+    <div ref={ref} aria-hidden="true" className={skeletonVariants({ shape: lines !== undefined ? "text" : shape, static: still }, className)} {...rest} />
   );
 });
 
@@ -833,7 +870,7 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
   const contents = (
     <>
       {swatch ? <span className="area-chip__swatch" style={{ background: swatch }} aria-hidden="true" /> : null}
-      {avatar ? <span className="area-chip__avatar">{avatar}</span> : null}
+      {avatar ? <span className="area-chip__avatar" aria-hidden="true">{avatar}</span> : null}
       {image ? <span className="area-chip__image"><img src={image} alt={imageAlt ?? ""} /></span> : null}
       {icon ? <span className="area-chip__icon" aria-hidden="true">{icon}</span> : null}
       {swatchOnly ? null : <span className="area-chip__label">{children}</span>}
@@ -898,7 +935,7 @@ export const ChipLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, ChipLinkPr
 ) {
   return (
     <a ref={ref} className={chipVariants({ kind: "suggestion", size, pill, link: treatment === "underline", linkIcon: treatment === "icon" }, className)} {...rest}>
-      {avatar ? <span className="area-chip__avatar">{avatar}</span> : null}
+      {avatar ? <span className="area-chip__avatar" aria-hidden="true">{avatar}</span> : null}
       {image ? <span className="area-chip__image"><img src={image} alt={imageAlt ?? ""} /></span> : null}
       {icon ? <span className="area-chip__icon" aria-hidden="true">{icon}</span> : null}
       <span className="area-chip__label">{children}</span>
@@ -993,8 +1030,10 @@ export interface PopoverProps extends Div {
   onOpenChange?: (open: boolean) => void;
   align?: OverlayAlign;
   offset?: number;
+  /** Position against this element instead of the trigger, such as the field around an input. */
+  anchor?: RefObject<HTMLElement | null>;
 }
-export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(function Popover({ side, arrow, trigger, open, defaultOpen, onOpenChange, align, offset, className, children, ...rest }, ref) {
+export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(function Popover({ side, arrow, trigger, open, defaultOpen, onOpenChange, align, offset, anchor, className, children, ...rest }, ref) {
   const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => <div className={popoverVariants({ side, arrow }, className)} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }}>
     {children}
     {arrow ? <svg className="area-popover__arrow" viewBox="0 0 32 14" aria-hidden="true" focusable="false">
@@ -1003,7 +1042,7 @@ export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(
     </svg> : null}
   </div>;
   if (trigger === undefined) return surface({});
-  return <AnchoredPopover trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} arrow={arrow} surface={surface} />;
+  return <AnchoredPopover trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} anchor={anchor} arrow={arrow} surface={surface} />;
 });
 export const PopoverHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverHeader({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__header", className)} {...rest} />; });
 export const PopoverTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(function PopoverTitle({ className, ...rest }, ref) { return <h2 ref={ref} className={cx("area-popover__title", className)} {...rest} />; });

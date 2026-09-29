@@ -123,6 +123,14 @@ only), composition / image (media), and arrow on each side (top, right, bottom, 
 arrow points back at the trigger, and its curved outline joins the border at 3×). The docs
 page's Default example now uses the real header slots instead of ad-hoc markup.
 
+## Visual pass
+
+2026-09-28, Claude in Chrome (batch 7): Notion's Share popover open beside the gallery's field
+popover, both zoomed. Same white surface, 1px ring and two-layer lift (Area's lift is Notion's);
+Notion's corner reads about 10 against Area's 12 (the container role). No change. The zoom held
+personal data and was not kept. Earlier passes (2, 3) compared shadcn and Primer headers; see
+Decisions.
+
 ## Verification
 
 - 3 reference captures, 3 Area before, 1 after; checksums verified; no personal content.
@@ -158,3 +166,4 @@ decision.
   it, titles 500 and 600. Pass 3: close 6/6 with its icon on the inset and a concentric radius,
   title centred on it (cap 15), title strong. Verified in the gallery at 1× and 3×, with hover.
 - 2026-09-27 · merged the overlay-behavior branch → a Popover `trigger` now positions with `computePosition` (flip to the side with room, shift inside an 8px viewport margin, re-placed on scroll and resize; `align`, `offset`, controlled `open`) instead of CSS anchor positioning, so the arrow follows the side it lands on → [overlay behavior](overlay.md).
+- 2026-09-28 · batch 7 Claude in Chrome (Notion Share popover) → no change.

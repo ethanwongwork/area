@@ -30,6 +30,16 @@ block (container radius), Badge and Button (slots), Slider (templates)
   insets 12 / 16 / 24 (2026-09-27, second entry above), by the consistency pass.
 - Superseded: the appearance axis (outline, raised, filled, inverted, glass, plain) added
   earlier the same day; the 2026-09-26 container-radius decision.
+- 2026-09-28: "i dont like how the buttons and text are offset, maybe the text and buttons can
+  be aligned and slightly less offset from images by like 4px? … corner radius math of the card
+  based on the default button size and the padding around it equaling the card corner radius
+  … center the play pause controls." Decision: text, header actions and footer buttons share one
+  column, 4 inside the media's inset (sm 10, md 12, lg 16 from the edge); the corner is the
+  default Button's radius plus that distance (sm 18, md 20, lg 24; was 12 / 16 / 24), so every
+  button on the column and the inset media (radius 20 − 8 = 12) are concentric. Kept a 4 step
+  rather than none: flush text would sit 8 from a 20 corner, inside the curve's reach, while 4
+  reads as one column with the picture. Over a picture (immersive) the text keeps the overlay
+  controls' line, two insets in.
 
 ## Job and boundaries
 
@@ -193,6 +203,14 @@ background). Unverified: Firefox and Safari (`text-box`, `cap`, container querie
 forced colours, screen readers.
 
 ## Feedback log
+
+- 2026-09-28 · owner: text and buttons offset, less offset from images, corner from the button,
+  centre the music controls → `--_card-step` 4 (content pad, was (32 − 1cap) / 2 ≈ 11); corner
+  `radius-control-md + inset + step`; footer no longer pulled out to the inset; a header action's
+  heading drops by (32 − 1cap) / 2 so the cap centres on it; a footer holding only a Toolbar is
+  centred; immersive text on two insets. Measured in the gallery (md): media 8 / corner 12, title,
+  like button, slider and footer buttons 12 from the edge, footer 12 from the bottom, transport
+  centred (94 either side).
 
 - 2026-09-26 · cohesion audit, second and third passes → radius and edge changes (see the audit).
 - 2026-09-27 · owner references → size, slots, templates; appearances added.

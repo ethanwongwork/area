@@ -4,7 +4,7 @@
  * follows the trigger in the tab order while the Popover API lifts it into the top layer.
  */
 import { cloneElement, isValidElement, useEffect, useId, useRef } from "react";
-import type { FocusEvent as ReactFocusEvent, HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactElement, ReactNode, Ref } from "react";
+import type { FocusEvent as ReactFocusEvent, HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactElement, ReactNode, Ref, RefObject } from "react";
 import { assignRef, useAnchoredPosition, useNativePopover, useOpenState } from "./overlay.ts";
 import type { OverlayAlign, OverlaySide } from "./overlay.ts";
 
@@ -43,6 +43,8 @@ export interface AnchoredProps {
   align?: OverlayAlign;
   /** Gap between the trigger and the surface, in pixels. */
   offset?: number;
+  /** Position against this element instead of the trigger: a field whose input opens it. */
+  anchor?: RefObject<HTMLElement | null>;
 }
 
 const compose = <E,>(theirs: unknown, ours: (event: E) => void) => (event: E) => {
@@ -70,13 +72,13 @@ const toggleOnClick = (setOpen: (open: boolean) => void, open: boolean) => (even
 
 /* --- Popover -------------------------------------------------------------- */
 
-export function AnchoredPopover({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "center", offset, arrow, surface }: AnchoredProps & { arrow?: boolean; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
+export function AnchoredPopover({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "center", offset, anchor, arrow, surface }: AnchoredProps & { arrow?: boolean; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
   const id = useId();
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const [triggerNode, triggerRef] = useTriggerRef(trigger);
   const surfaceNode = useRef<HTMLDivElement | null>(null);
   useNativePopover(surfaceNode, triggerNode, open, setOpen);
-  useAnchoredPosition(triggerNode, surfaceNode, open, { side, align, offset: offset ?? POPOVER_OFFSET + (arrow ? POPOVER_ARROW_REACH : 0), padding: OVERLAY_PADDING });
+  useAnchoredPosition(anchor ?? triggerNode, surfaceNode, open, { side, align, offset: offset ?? POPOVER_OFFSET + (arrow ? POPOVER_ARROW_REACH : 0), padding: OVERLAY_PADDING });
   // A non-modal popover takes focus on open: its first control, or the surface itself.
   useEffect(() => {
     if (!open) return;

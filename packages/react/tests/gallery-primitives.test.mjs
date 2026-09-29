@@ -90,9 +90,9 @@ test("renamed variant axes retain their corresponding component classes", () => 
   assert.match(renderToString(h(Table, { interactive: true }, h("tbody"))), /area-table--interactive/);
 });
 
-test("skeleton exposes distinct rectangle and rounded shapes", () => {
-  assert.deepEqual(MANIFESTS.skeleton.variants.shape, ["text", "circle", "rectangle", "rounded"]);
-  assert.match(renderToString(h(Skeleton, { shape: "rounded" })), /area-skeleton--rounded/);
+test("skeleton exposes block, text and circle shapes (owner, 2026-09-28: option A)", () => {
+  assert.deepEqual(MANIFESTS.skeleton.variants.shape, ["block", "text", "circle"]);
+  assert.match(renderToString(h(Skeleton, { shape: "circle" })), /area-skeleton--circle/);
   assert.match(renderToString(h(Skeleton)), /aria-hidden="true"/);
 });
 

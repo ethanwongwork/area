@@ -139,6 +139,15 @@ native; an uncontrolled picker restores `defaultValue` on form reset.
 
 ## Visual pass
 
+2026-09-28, Claude in Chrome (batch 10): Figma's auto-layout Alignment grid (a frame selected, nothing
+edited) beside the gallery's default tile at 3x. Same control: soft grey ground, grey dots, the chosen
+position as three short bars. Differences, all owner decisions or earlier passes: Figma's grid is
+88 x 56 (one field column by two field rows, non-square cells) where Area's is square 24px cells;
+Figma draws no edge and a blue mark; Area keeps a decorative edge and a neutral mark. No change; the
+grid-to-layout sizing is raised with the owner. Dark theme not compared.
+
+Earlier note:
+
 The gallery shows the tiles in named groups (Default, Variants, Tones, Sizes, Layout, States).
 Beside Figma's inspector row the picker reads as the same soft control: a flat grey ground
 and black marks, with Area's larger radius. Not inspected by this spec's author: hover, dark
@@ -168,3 +177,5 @@ Unverified: Figma's nine-position control, hover and focus captures.
   `button-group/figma--align-group`, `number-field/figma--number-field`, `area--sizes`.
 - 2026-09-27 · third pass → open question settled, value kept: the 1px decorative edge
   stays → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-28 · batch 10 Claude in Chrome side by side (Figma auto-layout Alignment grid) → no change;
+  question: size the grid to one field column by two rows, as Figma does?

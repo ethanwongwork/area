@@ -44,6 +44,8 @@
     /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
     box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
   }
+  /* The 8px top inset seats the month header; a week strip has none, so it takes 12 all round. */
+  .area-calendar--surface.area-calendar--week { padding-block-start: calc(12px /* spec */ - var(--area-border-width)); }
   .area-calendar__months { display: flex; flex-wrap: wrap; gap: var(--area-space-16); }
   .area-calendar__month { display: grid; align-content: start; }
   .area-calendar__header {
@@ -51,7 +53,9 @@
     min-block-size: var(--area-control-sm);
     padding-inline: var(--area-space-4) var(--_day-inset);
   }
-  .area-calendar__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-regular); }
+  /* spec (batch 7): the month label is a surface title, strong as every surface title is (Notion
+     "Sep 2026" 500, shadcn caption 500; typography.md role table). */
+  .area-calendar__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
   .area-calendar__nav { display: flex; margin-inline-start: auto; }
   .area-calendar__grid { border-collapse: collapse; border-spacing: 0; table-layout: fixed; }
   .area-calendar__weekday {

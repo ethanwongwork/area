@@ -1,7 +1,6 @@
 # Panel spec
 
-**Status:** accepted (Complete in `component-status.mjs`) · changed in the second pass,
-2026-09-26, and not yet re-reviewed by the owner
+**Status:** accepted · 2026-09-28 (owner, batch 8)
 **Captures:** `docs/research/captures/panel/`
 **Peers:** Card (in-flow surface), Popover, Menu and Dialog (floating surfaces), Field
 (inline rows), NumberField (numeric rows), Separator (divider role), Toolbar (inspector chrome)
@@ -123,7 +122,13 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | numeric rows | **NumberField soft with letter prefixes** X / Y / W / H (`apps/docs/src/demos/gallery.tsx:680-690`) | Figma's letter-prefixed number fields (`figma--number-field`) | Prefix ink and box differ from Figma; see [number-field.md](number-field.md) |
 | rules (bar, section, footer) | **`border-decorative`**, the panel's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 | Second pass: new divider role for rules; Figma #e6 (`figma--size-select` edge), ChatGPT 10% black; Notion's menu rules are lighter, 7% (#f0, `menu/notion--page-menu--open`); #e2 is the nearest rung to #e5 | Was `border-decorative` #f3f3f3 |
 | section rule extent | full width; last section none (`panel.css:114-127`) | Area's own | — |
-| body gap / section gap / stack gap | 16 / 8 / 6 (`panel.css:94, 117, 153`) | Stack 6 matches Field's label gap (Untitled 6) | — |
+| inset (sides, last field to a rule) | **sm 12, md 16** (`--_inset`) | Owner (2026-09-28: "the margins are too big for both") | Was 16 / 20 for one round, 12 / 16 before that |
+| section heading and bar | **a row: the button with one field gap above and below** (8 / 12), title centred; heading row sm 44, md 56; bar sm 45, md 57 | Figma's header row 40 = 8 + 24 + 8; VS Code's pane header (Cursor) a 22 row with centred actions; owner (2026-09-28: "make sure the padding for the inset buttons is even") | Was sized from the title (cap one inset below the rule), which left the button 6.3 above and ~11 below |
+| end-of-row buttons (bar, heading actions, row action) | **box on the inset, one field gap after the last field** | Owner (2026-09-28: "use the same gaps between the inputs … and the button"); Figma 8 between H and its action | A glyph-on-inset pull (tried the same day) widened the gap after H |
+| md width in the gallery | the md size tile at 280 | Owner (2026-09-28: "show a slightly larger width of the container for medium") | The component default stays 240 (owner, 2026-09-27) |
+| type and gaps by size | **sm**: bar title 14/20, section titles and labels 12/16, fields and their action 8 apart, rows 8 apart, labels 4 over; **md**: 16/24, 14/20, 12, 12, 6. Controls keep their tier's text (14/20). Published as `--_panel-*` for BoxField and PropertyList inside a panel | Owner (2026-09-28: "shouldn't there be differences in text size and gaps between medium and small?"); the control scale's gaps (4 / 8) and gutters (8 / 12) step the same way | Was one type ramp at both sizes (Card's rule), 8 / 6 gaps |
+| section gap / stack gap | 8 / 6 (`panel.css`) | Stack 6 matches Field's label gap (Untitled 6) | — |
+| section rule placement | **midway: 16 below the last field, the next title's cap 16 below the rule**; a heading after a rule rises by `(row − 1cap) / 2`; a heading-only section's cap sits 16 above the rule below (`panel.css`) | Figma (batch 8, `figma--section-auto-layout`): 16 from the last field to the rule, 16.5 from the rule to the title's cap; heading-only sections 40 tall, text centred | Was 12 below the last field and about 26 from the rule to the cap (the 16 body gap plus half the heading row), so rules read as belonging to the section above |
 | inset tiers | `gutter-xs/sm/md/lg` (`panel.css:174-177`) | Density axis | Figma insets 16 start, 8 end |
 
 Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)); both kept:
@@ -158,6 +163,25 @@ outside the scroll so its action never reads as the last row's.
 
 ## Visual pass
 
+2026-09-28, Claude in Chrome (batch 8): Figma's Design panel (owner's file, a frame selected, nothing
+edited) beside the gallery's Figma recipe tile, both at 2x. Captures: `figma--section-auto-layout`
+here, field rows in `../number-field/` and `../inspector/`.
+
+| | Figma | Area |
+|---|---|---|
+| panel / field | 240 wide, fields 88 x 24, 11/16 | 280, fields 28, 14/20 (default density; compact density is planned for Figma's size) |
+| section | 40px header row, label + field rows 48 apart, 12 below | 28 heading, rows 58 apart (48 scaled to 28px fields is 56) |
+| rule | 16 below the last field, 16.5 to the next title's cap | **was 12 / ~26, now 16 / 15.7** |
+| heading-only section | 40, text centred | cap 15.7 below the rule above, 16.3 above the rule below |
+| row action column | 24 square at 208 | 28 square on the action column |
+
+Changed: the rule placement (Decisions). Measured on every Panel tile after the change (default,
+sizes sm and md, sections, footer, flush, bare bar, collapsible, Figma recipe): 16.0 / 15.7, and 16.3
+under collapsed headings. Unchanged by evidence: labels stay `fg-muted` (Figma's are lighter, ~50%
+black; the muted role is system-wide). Dark theme not compared.
+
+Earlier note:
+
 The gallery shows Panel in Default (every control, with prefixed NumberField pairs),
 Content (sections, footer) and Layout (flush, bare bar) groups; every field is soft. The
 docs example (`PanelEverything`, `apps/docs/src/demos/display.tsx:316`) is the default 280px
@@ -187,3 +211,24 @@ Unverified: dark theme and a side-by-side with Figma's inspector at the same zoo
   Layout and Effects panels) → size sm / md only, rows fill the width, `actionColumn` for the
   Figma recipe, width 240, rules `border-decorative` → gallery Sizes tiles, headless Edge
   screenshots of Sections and the Figma recipe.
+- 2026-09-28 · batch 8 Claude in Chrome side by side (Figma Design panel) → section rules sit midway
+  (16 below the last field, the next cap 16 below the rule) → `figma--section-auto-layout`, every Panel
+  tile measured.
+- 2026-09-28 · owner: sm and md spacing inconsistent around labels and controls; should text differ? →
+  one inset per size on every side (12 / 16, Figma 16); type the same at both sizes → every Panel tile
+  measured: sm 12.0 sides, bar cap 11.5, first cap 11.7, field→rule 12.0, rule→cap 11.7; md 16.0,
+  15.5, 15.7, 16.0, 15.7; no input or select clipped.
+- 2026-09-28 · owner: look at Figma and Cursor; title and buttons in one row; adjust padding for both
+  sizes → heading as a row with centred title and buttons (Figma 40 / 8 air; VS Code pane header), insets
+  16 / 20, end icons on the inset by their glyph → measured on every tile: title cap 15.7 / 19.7 below
+  its rule, button air 6.3 / 8.3, title baseline to first label cap 21.5 (Figma 21.5) / 23.7, last field
+  to rule 16 / 20, glyphs 16 / 20 from the edge; no clipped value.
+- 2026-09-28 · owner: same gap between the inputs and the button; sm and md should differ in text and
+  gaps → buttons on the inset one field gap after the fields; the panel's own text and gaps step with
+  the tier (above) → measured: sm field gap 8 = field→button 8, labels 12/16 4 over, rows 8; md 12 = 12,
+  labels 14/20 6 over, rows 12; titles one inset below rules, no clipped value.
+- 2026-09-28 · owner: margins too big; show md wider; even padding around the inset buttons → insets 12 /
+  16; headings and bar are rows with one field gap above and below their button; md tile 280 →
+  measured: header button 8 / 8 (sm) and 12 / 12 (md) above and below, 12 / 16 from the right edge;
+  field gap = field-to-button gap (8 / 12); last field to rule 12 / 16; no clipped value.
+- 2026-09-28 · owner: approved (batch 8).
