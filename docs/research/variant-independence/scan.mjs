@@ -6,7 +6,7 @@ import {execFileSync} from 'node:child_process';
 import ts from 'typescript';
 import {parseCSS,split,closeParen,lineAt} from './css.mjs';
 export const root=path.resolve(fileURLToPath(new URL('../../..',import.meta.url)));
-export const BASE='c585f8c5f38705a7efa79bf05148a8c6989b142a';
+export const BASE='7dae828e7af1daf9d26b663d34335121156606f7';
 const read=f=>fs.readFileSync(path.join(root,f),'utf8');
 export const unique=xs=>[...new Set(xs)];
 const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(dir+'/'+e.name):[dir+'/'+e.name]).sort();

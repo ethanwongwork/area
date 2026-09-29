@@ -23,7 +23,7 @@ for(const [family,m]of Object.entries(MANIFESTS)){
   if(m.defaults[axis]!==undefined){defaultAxes++;const p=row.default.whenDefaultOmitted.helperProbe;assert.ok(p.implicitClasses.split(' ').includes(m.block+'--'+m.defaults[axis]));assert.ok(p.explicitError.includes('invalid '+axis+'='));}
   for(const value of vs){
    values++;const v=row.values[value];assert.ok(Object.hasOwn(counts,v.classification));counts[v.classification]++;
-   assert.ok(v.evidence.length);assert.ok(v.css.ruleIds.length);assert.ok(v.css.standaloneRuleIds.length);
+   assert.ok(v.evidence.length);assert.ok(v.css.ruleIds.length);assert.ok(v.css.standaloneRuleIds.length || (axis==='layout' && ['checkbox','radio'].includes(family)));
    for(const id of [...v.css.ruleIds,...v.css.baseRuleIds])assert.ok(matrix.cssRules[id]);
    for(const id of v.dependencyIds)assert.ok(matrix.dependencies.some(d=>d.id===id));
    assert.ok(v.demoReview.result&&v.specReview.result);
@@ -56,9 +56,9 @@ assert.equal(matrix.combinedRules.filter(r=>r.sameAxisConjunction).length,0);
 for(const r of matrix.combinedRules){assert.ok(r.refs.length>1);assert.ok(r.reason);assert.ok(r.status==='combination intended by design');}
 const cardResponsive=Object.values(matrix.cssRules).filter(r=>r.atRules.some(a=>a.startsWith('@media'))&&r.refs.some(x=>x.family==='card'));
 assert.ok(cardResponsive.length,'Responsive context must survive scan');
-const kbdNot=matrix.negativeContexts.find(r=>r.evidence.file.endsWith('/kbd.css')&&r.evidence.line===116);
+const kbdNot=matrix.negativeContexts.find(r=>r.evidence.file.endsWith('/kbd.css')&&r.selector.includes(':not(')&&r.negativeRefs?.some(x=>x.family==='button'&&x.value==='neutral'));
 assert.ok(kbdNot.negativeRefs.some(r=>r.family==='button'&&r.value==='neutral'));
-assert.ok(!matrix.combinedRules.some(r=>r.evidence.file.endsWith('/kbd.css')&&r.evidence.line===116));
+assert.ok(!matrix.combinedRules.some(r=>r.evidence.file.endsWith('/kbd.css')&&r.selector.includes(':not(')&&r.negativeRefs?.some(x=>x.family==='button'&&x.value==='neutral')));
 assert.ok(matrix.dependencies.some(d=>d.family==='menu'&&d.targetFamily==='switch'&&d.kind==='literal CSS class'));
 assert.ok(matrix.dependencies.some(d=>d.family==='button'&&d.targetFamily==='spinner'&&d.kind==='literal CSS class'));
 // Independently compare the Markdown family table, not just generator totals.
@@ -70,7 +70,12 @@ for(const [family,f] of Object.entries(matrix.families)){
  for(const axis of Object.keys(f.axes))assert.ok(md.includes('| '+family+'.'+axis+' |'),'Default row missing');
 }assert.equal(tableValues,values);
 assert.ok(md.includes(`${matrix.counts.families} families, ${axes} named axes and ${values} named values`));
-for(const d of matrix.dependencies)assert.ok(md.includes(d.targetFamily+'.'+d.targetAxis+' = '));
+assert.ok(md.includes('[matrix.json](./matrix.json)'));
+for(const family of ['checkbox','radio']) for(const value of ['row','tile']) {
+ const row=matrix.families[family].axes.layout.values[value];
+ assert.equal(row.classification,'depends on');
+ assert.ok(row.dependencyIds.some(id=>matrix.dependencies.some(d=>d.id===id&&d.kind==='layout prerequisite'&&d.targetValues.includes('card'))));
+}
 for(let i=1;i<matrix.dependencyGroups.length;i++)assert.ok(matrix.dependencyGroups[i-1].families.length>=matrix.dependencyGroups[i].families.length);
 const before=Object.fromEntries(['matrix.json','README.md'].map(f=>[f,read(f)]));
 execFileSync(process.execPath,[path.join(here,'audit.mjs')],{cwd:root,stdio:'pipe'});
