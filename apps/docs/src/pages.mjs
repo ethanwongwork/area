@@ -658,7 +658,7 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "CheckboxDefault" },
       { id: "caption", title: "With caption", demo: "CheckboxDescription" },
-      { id: "sizes", title: "Sizes", note: "Checkbox and Radio share one glyph ladder: 16px at small and medium, 20px at large. Label type and spacing follow the tier.", demo: "CheckboxSizes" },
+      { id: "sizes", title: "Sizes", note: "Checkbox and Radio share one glyph ladder: 16px at medium, 20px at large. Label type and spacing follow the tier.", demo: "CheckboxSizes" },
       { id: "states", title: "States", demo: "CheckboxStates" },
       { id: "invalid", title: "Invalid", note: "Use this only for an independently required option. A multiple-choice requirement belongs on CheckboxGroup.", demo: "CheckboxInvalid" },
       { id: "indeterminate", title: "Partial selection", note: "Use indeterminate only for a parent whose related choices are partly selected. It is a visual state, not a submitted value.", demo: "CheckboxIndeterminate" },
@@ -686,7 +686,7 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "RadioDefault" },
       { id: "orientation", title: "Horizontal orientation", demo: "RadioHorizontal" },
-      { id: "sizes", title: "Sizes", note: "Radio shares Checkbox's glyph ladder: 16px at small and medium, 20px at large. Label type and spacing follow the tier.", demo: "RadioSizes" },
+      { id: "sizes", title: "Sizes", note: "Radio shares Checkbox's glyph ladder: 16px at medium, 20px at large. Label type and spacing follow the tier.", demo: "RadioSizes" },
       { id: "selected", title: "Selected", note: "Selection fills the existing circle; it does not change the control’s outer geometry.", demo: "RadioChecked" },
       { id: "disabled", title: "Disabled", demo: "RadioDisabled" },
       { id: "description", title: "Descriptions", demo: "RadioDescription" },

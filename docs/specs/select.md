@@ -149,6 +149,13 @@ The gallery shows Select's tiles in named groups, one variant per tile. The pick
 and checked fill appear only with the picker open in a supporting browser. Unverified: the
 open picker on screen, a Notion or Figma picker side by side, dark theme.
 
+2026-09-28 (batch 13, Claude in Chrome): beside ChatGPT's settings dropdown (Personalization: a
+36px pill, #f3 fill, 0.56px 10% edge, 0 12, 14/18) and the Figma and Notion selects on file.
+Area's outline and soft Selects (32, corner 8, 11 text inset) sit between Figma's 24–32 fields
+and ChatGPT's 36 pill; its chevron is 16 wide, 6 / 8 / 12 from the end at sm / md / lg,
+exactly where Combobox's chevron and Input's trailing icons sit. ChatGPT's hover is a 5% black
+wash (≈ #f2 against its #f3 rest). No change. Captures: `chatgpt--settings-select--{rest,hover}--light`.
+
 ## Settled questions
 
 Both kept in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):

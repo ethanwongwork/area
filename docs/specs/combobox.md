@@ -64,6 +64,19 @@ closes, and Escape on a closed field clears it. Focus stays in the field
 text reverts to the selection (or is kept with `allowsCustomValue`). A created option is
 selected once the host adds it. The toggle's tooltip hides while the list is open.
 
+## Visual pass
+
+2026-09-28 (batch 13): gallery tiles (default, soft, sm, lg, custom value, groups, create, icons
+and descriptions, disabled option, disabled, invalid) beside Figma's font-family trigger and
+font-size combobox (`figma--font-*`: 32 rows, 11/16 Inter, no edge; the open picker a
+floating list). Area's field is Input's (32, corner 8, `input-edge`, 11 text inset) with the
+chevron as a 24px action whose 16 glyph lands 6 / 8 / 12 from the end at sm / md / lg, the
+same place as Select's chevron and Input's trailing icons, centred vertically. Figma's 11px
+text is compact density. Open list: ChatGPT's settings dropdown menu (`chatgpt--settings-select-menu--open`)
+is 172 wide, 10 padding, corner 16, 90% white, 2 below its trigger, two-line rows 50 tall with a
+12 corner; Area's listbox is Menu's (4 padding, corner 12, 32 rows with an 8 corner, 4 below the
+field), matched to Notion's menu when Menu was approved. No change. Unverified: dark theme.
+
 ## Verification
 
 - Headless Edge, real keys and pointer (`scratchpad/combo.mjs`): "sa" filters to four

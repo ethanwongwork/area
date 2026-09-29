@@ -21,7 +21,7 @@ export const PRACTICES = {
     `Prefer a vertical group. Use ${code('orientation="horizontal"')} only for short, immediately comparable labels with enough room to wrap the whole option without truncating it.`,
     `Give every Radio a distinct ${code("value")}. The group supports ${code("value")} / ${code("onValueChange")} for controlled use or ${code("defaultValue")} for native-like uncontrolled selection.`,
     `Use Checkbox for multiple choices, Switch for an immediate on/off setting, and Select or Combobox when the list is too long to scan.`,
-    `Selection fills the existing outer circle. The five size tiers follow the same icon and label ramps as Checkbox.`,
+    `Selection fills the existing outer circle. Its two sizes (16px md, 20px lg) follow the same ramps as Checkbox.`,
   ],
   switch: [
     `Use Switch for settings that take effect immediately. Give it a stable label; use Checkbox for deferred submission.`,

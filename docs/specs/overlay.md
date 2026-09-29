@@ -110,3 +110,9 @@ Safari, touch, screen readers, RTL alignment on screen, nested popovers.
 
 - 2026-09-27 · owner chose overlay behavior → built as above → research report (Radix, React
   Aria, Base UI, Fluent, Primer, shadcn, Floating UI, Ariakit, MUI), `chatgpt--chat-actions-menu`.
+
+- 2026-09-28 · Popover `anchor` (a ref): position against that element instead of the trigger, for
+  a field whose input opens the surface (the gallery date field anchors Calendar to the Input's
+  shell while the inner input is the trigger). Menu and Tooltip do not take it.
+- 2026-09-28 · a Popover whose only child is a Calendar hugs it (`inline-size: max-content`) instead of
+  the 320 reading width (owner: the date picker "extends too big").
