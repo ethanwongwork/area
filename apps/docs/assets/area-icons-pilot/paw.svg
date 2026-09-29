@@ -1,7 +1,7 @@
 <svg data-set="area-pilot" data-keyline="square" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M4.5 11.5A3.5 3.5 0 0 1 11.5 11.5A1 1 0 0 1 10.5 12.5H5.5A1 1 0 0 1 4.5 11.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="3" cy="7.5" r="1" fill="currentColor"/>
-<circle cx="6" cy="4" r="1" fill="currentColor"/>
-<circle cx="10" cy="4" r="1" fill="currentColor"/>
-<circle cx="13" cy="7.5" r="1" fill="currentColor"/>
+<path data-filled="solid" d="M5 12A3 3 0 0 1 11 12A1.5 1.5 0 0 1 9.5 13.5H6.5A1.5 1.5 0 0 1 5 12Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="solid" cx="3.25" cy="7.75" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="solid" cx="5.75" cy="3.75" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="solid" cx="10.25" cy="3.75" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="solid" cx="12.75" cy="7.75" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
