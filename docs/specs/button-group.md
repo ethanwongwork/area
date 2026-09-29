@@ -37,6 +37,7 @@ button with its own name and Tab stop. Not Toolbar (roving focus, overflow), not
 |---|---|---|---|---|
 | shadcn | design system (rendered) | Outline groups (shared borders), split with separator | ui.shadcn.com/docs/components/button-group, 2026-09-26 | `shadcn--group-*` (2), `../split-button/shadcn--*` |
 | notion | target product | Split button divider (full-height inset line) | app.notion.com, 2026-09-26 | `../split-button/notion--split-*` |
+| figma | target product | Present / Prototype view pair: 32 tall, 5px outer corners, square inner edges, 1px apart, transparent plates | figma.com editor, owner's session, 2026-09-28 | `figma--present-split-group--rest--light` |
 | area | this system | Soft group before and after | localhost gallery | `before/area--group-soft-divider--before`, `area--group-soft-divider--rest` |
 
 ChatGPT, Notion and Figma show no general button group outside toolbars and segmented
@@ -51,6 +52,15 @@ controls; Figma's alignment row is a Toolbar in Area.
 | outline divider | the shared border only | shadcn outline groups (inner border collapsed) | Was a second 16px line drawn over the shared border |
 | children | Button unchanged (400 labels, 6px icon gap, no shadow) | Button spec | — |
 
+## Visual pass
+
+2026-09-28, batch 11, gallery tiles (default soft, sm, lg, icon and label, toggle, disabled,
+outline) beside Figma's Present / Prototype view pair in Claude in Chrome. Same construction:
+outer corners only, square inner edges, one shape. Figma parts its ghost plates by 1px with no
+drawn line (SplitButton's ghost icon tile already follows it); Area's soft group keeps Notion's
+full-height divider in the control line and the outline group its shared border. Sizes step
+cleanly (sm 28, lg 40 keep the same divider). No change.
+
 ## Verification
 
 - `area--group-soft-divider`: divider 32px tall, `edge-control`; before 14px (8px insets) in
@@ -58,6 +68,9 @@ controls; Figma's alignment row is a Toolbar in Area.
 - Unverified: dark theme, focus ring over the divider in every size.
 
 ## Feedback log
+
+- 2026-09-28 · batch 11 Chrome side by side (Figma's Present pair) → no change; visual pass
+  recorded → `figma--present-split-group--rest--light`.
 
 - 2026-09-26 · owner: build ButtonGroup and SplitButton → divider aligned with SplitButton
   and the references.

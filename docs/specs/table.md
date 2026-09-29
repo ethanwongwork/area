@@ -151,8 +151,14 @@ still paints for grid and treegrid rows. Notion's cells are `role=button` inside
 
 ## Visual pass
 
-Not inspected in this spec pass. Unverified: a selected row under the pointer, Notion's
-table side by side on screen, dark theme.
+2026-09-28 (batch 16, Claude in Chrome): Notion's table view ("returns", read-only): rows 36.6,
+0.56px rules at 7% warm (row and column), header 14/21 muted with no fill, cells without
+padding of their own. Area's md row is 36 with 12 inline insets, a framed wrapper, a
+`bg-subtle` header and horizontal rules only: the three differences settled in the third pass
+(frame, inset, hover) stand. Selected row under the pointer: the hover rule excludes selected
+rows (`.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover`),
+so the #ee selection plate stays; checked in the gallery's selection tile by rule and computed
+paint, not with a real pointer (the preview pane was hidden). Unverified: dark theme.
 
 ## Verification
 
