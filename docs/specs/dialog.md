@@ -136,6 +136,16 @@ on the scrim closes it. The close button closes the enclosing native dialog. Ver
 gallery with a real pointer: opens modal with the 13% scrim, focus on the close, Escape
 closes and refocuses the trigger, a scrim click closes, a click inside does not.
 
+## Visual pass
+
+2026-09-28 (batch 17, gallery): 480 preferred (502 in the tile), corner 16, a 32 close 8 from the
+top and side (concentric: 8 + 8), title and footer buttons on the 16 inset. Beside ChatGPT's
+dialogs on file (`chatgpt--shortcuts-dialog`: 600 wide, corner 16, #fcfcfc, a 4/8 lift;
+`chatgpt--dialog-overlay`: 13.3% scrim). Open for the owner: Card's new corner rule (a
+button's radius plus its distance from the edge, 2026-09-28) would make Dialog's corner 24
+(8 + 16) for its footer buttons, where the close button's rule gives 16. Not compared live:
+the Claude in Chrome tab was hidden.
+
 ## Verification
 
 - 3 reference captures plus the ChatGPT overlay, Area before and after; checksums verified;

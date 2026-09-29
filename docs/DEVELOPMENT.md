@@ -85,6 +85,18 @@ checked-in generated sprites, `src/icons.tsx`, `scripts/icons.generated.mjs` and
 node apps/docs/scripts/gen-icons.mjs
 ```
 
+Area's own icons (`apps/docs/assets/area-icons-pilot/`) have their own tools; the process is
+the `area-icon-construction` skill's quick path.
+
+```sh
+npm run icons:find -- brain "paper plane"          # does Area have it already?
+npm run icons:geometry                             # fillets, cuts, lobes, gaps (prints usage)
+node apps/docs/scripts/gen-pilot-icons.mjs --only a,b   # lint just these icons in a second
+npm run icons:batch -- batch.json                  # record a batch everywhere it belongs
+npm run icons:sheet -- compare out.png batch-43    # Area beside Fluent, outline and filled
+npm run icons:pilot                                # full lint (about a minute) and generate
+```
+
 Do not commit `dist/`, `.cache/`, `node_modules/`, test output or logs. Source checkouts
 cloned for research go in the ignored `.cache/sources/<system>@<sha>/`.
 

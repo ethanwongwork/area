@@ -232,6 +232,10 @@
     color: var(--area-select-text);
     font-size: var(--_text);
     line-height: var(--_leading);
+    /* One line: a long option ends in an ellipsis instead of wrapping inside the control. */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     box-shadow: var(--area-shadow-1);
     cursor: pointer;
     outline: none;
