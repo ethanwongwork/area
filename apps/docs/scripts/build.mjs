@@ -290,7 +290,7 @@ ${slug === "code-block" ? '<script type="module" src="./code-block-demos.js"></s
 }
 
 /** The three tile sizes the gallery grid places: whole cells of one square unit. */
-const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2", "2x3", "2x4", "2x5"]);
+const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2", "2x3", "2x4", "2x5", "4x2"]);
 
 /* One tile per public component family. Compound pieces appear inside their parent. */
 function galleryPage({ families = null } = {}) {
@@ -304,7 +304,7 @@ function galleryPage({ families = null } = {}) {
     calendar: [
       { id: "default", title: "Date", demo: "GalleryCalendar", span: "2x2" },
       { id: "range", title: "Range", demo: "GalleryCalendarRange", span: "2x2" },
-      { id: "range-two-months", title: "Two months", demo: "GalleryCalendarTwoMonths", span: "2x3" },
+      { id: "range-two-months", title: "Two months", demo: "GalleryCalendarTwoMonths", span: "4x2" },
       { id: "multiple", title: "Multiple", demo: "GalleryCalendarMultiple", span: "2x2" },
       { id: "unavailable", title: "Unavailable", demo: "GalleryCalendarUnavailable", span: "2x2" },
       { id: "monday", title: "Monday", demo: "GalleryCalendarMonday", span: "2x2" },
@@ -1016,7 +1016,7 @@ function galleryPage({ families = null } = {}) {
       if (!demo) throw new Error(`Gallery specimen missing: ${example.demo}`);
       const id = `${component.slug}-${example.id}`;
       const span = example.span ?? "1x1";
-      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 2x1, 2x2, 2x3, 2x4 or 2x5 (no tall single-column tiles).`);
+      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 2x1, 2x2, 2x3, 2x4, 2x5 or 4x2 (no tall single-column tiles).`);
       const name = specimenName(example, component.slug);
       const group = !hasDefault && index === 0 ? "Default" : (example.group ?? specimenGroup(name, component.slug));
       const label = group === "Default" && !hasDefault ? name : specimenLabel(name, group);

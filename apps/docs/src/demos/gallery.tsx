@@ -64,14 +64,14 @@ export const GalleryAvatar = () => (
   <Avatar fallback="I" alt="Irene Yamaguchi" />
 );
 
-export const GalleryAvatarImage = () => <Avatar src="/images/chip-avatar.png" fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarImage = () => <Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi" />;
 export const GalleryAvatarImageFallback = () => <Avatar src="/images/avatar-missing.png" fallback="I" alt="Irene Yamaguchi" />;
 export const GalleryAvatarTwoInitials = () => <Avatar fallback="IY" alt="Irene Yamaguchi" />;
 export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Irene Yamaguchi" />;
-export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="Irene Yamaguchi and 4 teams"><Avatar src="/images/chip-avatar.png" fallback="IY" alt="Irene Yamaguchi" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>;
+export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="Irene Yamaguchi and 4 teams"><Avatar src="/images/irene-yamaguchi.jpg" fallback="IY" alt="Irene Yamaguchi" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>;
 export const GalleryAvatarActive = () => <Avatar active fallback="I" alt="Irene Yamaguchi" />;
 export const GalleryAvatarAvailability = () => <IndicatorAnchor compact placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="I" role="img" aria-label="Irene Yamaguchi, available" /></IndicatorAnchor>;
-export const GalleryAvatarNotification = () => <IndicatorAnchor compact placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/chip-avatar.png" fallback="I" alt="Irene Yamaguchi, 2 notifications" /></IndicatorAnchor>;
+export const GalleryAvatarNotification = () => <IndicatorAnchor compact placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi, 2 notifications" /></IndicatorAnchor>;
 export const GalleryAvatarAccent = () => <Avatar tone="accent" fallback="I" alt="Irene Yamaguchi" />;
 export const GalleryAvatarInverse = () => <Avatar tone="inverse" fallback="I" alt="Irene Yamaguchi" />;
 export const GalleryAvatarSquare = () => <Avatar shape="square" fallback="D" alt="Design team" />;
@@ -546,7 +546,7 @@ export const GalleryChipCustomDelete = () => <Chip kind="input" onRemove={() => 
 export const GalleryChipLinkUnderline = () => <ChipLink href="#gallery-section-chip">Link</ChipLink>;
 export const GalleryChipLinkIcon = () => <ChipLink href="#gallery-section-chip" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
 export const GalleryChipAvatarInitials = () => <Chip avatar={<Avatar fallback="IY" alt="" />}>Irene Yamaguchi</Chip>;
-export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="/images/chip-avatar.png" alt="" />}>Irene Yamaguchi</Chip>;
+export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="/images/irene-yamaguchi.jpg" alt="" />}>Irene Yamaguchi</Chip>;
 export const GalleryChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
 export const GalleryChipInvalid = () => <Chip kind="input" invalid onRemove={() => {}}>Chip</Chip>;
 
@@ -792,16 +792,18 @@ const FillsSection = ({ initial }: { initial: string[] }) => {
     </PropertyList> : null}
   </PanelSection>;
 };
+/* Inspector tiles take the Figma recipe's 280: at default density (14px text) a 240 panel's value
+   column cannot hold a six-digit hex beside its opacity (docs/specs/property-list.md). */
 export const GalleryPropertyListFills = () => (
-  <Panel size="md" title="Rectangle" aria-label="Fill properties"><FillsSection initial={["#0055FF", "#FFB800CC", "#00A797"]} /></Panel>
+  <Panel size="md" title="Rectangle" aria-label="Fill properties" style={{ "--area-panel-inline-size": "280px" } as CSSProperties}><FillsSection initial={["#0055FF", "#FFB800CC", "#00A797"]} /></Panel>
 );
 export const GalleryPropertyListSingle = () => (
-  <Panel size="sm" title="Rectangle" aria-label="Fill properties"><FillsSection initial={["#8D4DF3"]} /></Panel>
+  <Panel size="sm" title="Rectangle" aria-label="Fill properties" style={{ "--area-panel-inline-size": "280px" } as CSSProperties}><FillsSection initial={["#8D4DF3"]} /></Panel>
 );
 export const GalleryPropertyListEffects = () => {
   const [effects, setEffects] = useState([{ id: 0, kind: "drop", visible: true }, { id: 1, kind: "inner", visible: false }]);
   const reorder = (from: number, to: number) => setEffects(list => { const copy = [...list]; const [item] = copy.splice(from, 1); if (item) copy.splice(to, 0, item); return copy; });
-  return <Panel size="md" title="Card" aria-label="Effect properties">
+  return <Panel size="md" title="Card" aria-label="Effect properties" style={{ "--area-panel-inline-size": "280px" } as CSSProperties}>
     <PanelSection heading="Effects" actions={inspectorButton("Add effect", <PlusIcon />)}>
       <PropertyList label="Effects" onReorder={reorder}>
         {effects.map((effect, index) => <PropertyListItem key={effect.id} label={`${effect.kind === "drop" ? "Drop shadow" : "Inner shadow"} effect`} inactive={!effect.visible} actions={<>
@@ -1540,7 +1542,8 @@ export const GalleryPanelFooter = () => {
   </Panel>;
 };
 export const GalleryPanelSm = () => <Panel size="sm" title="Frame" action={panelMore("sm")}><PanelSampleRows tier="sm" /></Panel>;
-export const GalleryPanelMd = () => <Panel size="md" title="Frame" action={panelMore("md")}><PanelSampleRows tier="md" /></Panel>;
+/* md shown a little wider than the 240 default (owner, 2026-09-28): the roomier tier at a roomier width. */
+export const GalleryPanelMd = () => <Panel size="md" title="Frame" action={panelMore("md")} style={{ "--area-panel-inline-size": "280px" } as CSSProperties}><PanelSampleRows tier="md" /></Panel>;
 export const GalleryPanelFlush = () => <Panel flush title="Frame" action={panelMore("md")}><PanelSampleRows /></Panel>;
 export const GalleryPanelBareBar = () => <Panel bareBar title="Frame" action={panelMore("md")}><PanelSampleRows /></Panel>;
 
@@ -2107,23 +2110,29 @@ export const GalleryCalendarTile = () => <Calendar variant="surface" days="tile"
 export const GalleryCalendarMarkers = () => <Calendar variant="surface" firstDayOfWeek={1} aria-label="Send date" today={calendarToday} defaultValue="2026-09-21" markers={{ "2026-09-04": "accent", "2026-09-14": "accent", "2026-09-29": "neutral", "2026-10-08": "neutral" }} />;
 export const GalleryCalendarWeek = () => <Calendar variant="surface" layout="week" firstDayOfWeek={1} aria-label="Visit day" today={calendarToday} defaultValue="2026-09-30" markers={{ "2026-10-01": "accent" }} />;
 const scheduleTimes = ["8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "1:00 PM"];
+/* Schedule: the calendar surface (Calendar variant="surface": 8 top, 12 sides, the floating lift)
+   split by a rule; the time list is a column of the grid's 36px cells holding 32px plates, 14 from
+   each side like the day plates, and scrolls within the calendar's height. docs/specs/calendar.md. */
 export const GalleryCalendarSchedule = () => {
   const [date, setDate] = useState<string | null>("2026-09-28");
   const [time, setTime] = useState("10:00 AM");
   const [scheduled, setScheduled] = useState("");
   const label = date ? new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(`${date}T12:00`)) : "No date";
-  return <div style={{ display: "grid", border: "var(--area-border-width) solid var(--area-border-decorative)", borderRadius: "var(--area-radius-container)", background: "var(--area-bg-surface)", boxShadow: "var(--area-shadow-2)", maxInlineSize: "100%" }}>
-    <div style={{ display: "flex", minBlockSize: 0 }}>
-      <div style={{ padding: "var(--area-space-12)" }}>
+  const rule = "var(--area-border-width) solid var(--area-border-decorative)";
+  return <div className="area-calendar area-calendar--surface" style={{ display: "grid", padding: 0 }}>
+    <div style={{ display: "flex" }}>
+      <div style={{ padding: "calc(var(--area-space-8) - var(--area-border-width)) calc(var(--area-space-12) - var(--area-border-width)) var(--area-space-12)" }}>
         <Calendar aria-label="Send date" firstDayOfWeek={1} today={calendarToday} value={date} onValueChange={setDate} min={calendarToday} markers={{ "2026-10-04": "accent", "2026-10-14": "accent" }} />
       </div>
-      <div role="group" aria-label="Send time" style={{ display: "grid", alignContent: "start", gap: "var(--area-space-2)", padding: "var(--area-space-8)", borderInlineStart: "var(--area-border-width) solid var(--area-border-decorative)", overflowY: "auto", blockSize: "calc(var(--area-space-96) * 3)" }}>
-        {scheduleTimes.map(item => <Button key={item} variant="ghost" size="sm" align="start" selected={item === time} onClick={() => setTime(item)}>{item}</Button>)}
+      <div style={{ position: "relative", inlineSize: "calc(var(--area-space-96) + var(--area-space-24))", borderInlineStart: rule }}>
+        <div role="group" aria-label="Send time" style={{ position: "absolute", inset: 0, display: "grid", alignContent: "start", gap: "var(--area-space-4)", padding: "var(--area-space-8) calc(var(--area-space-12) - var(--area-border-width) + var(--area-space-2))", overflowY: "auto", scrollPaddingBlock: "var(--area-space-8)" }}>
+          {scheduleTimes.map(item => <Button key={item} variant="ghost" size="md" fullWidth selected={item === time} onClick={() => setTime(item)}>{item}</Button>)}
+        </div>
       </div>
     </div>
-    <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-12)", borderBlockStart: "var(--area-border-width) solid var(--area-border-decorative)" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-8) calc(var(--area-space-12) - var(--area-border-width))", borderBlockStart: rule }}>
       <Button variant="ghost" size="sm" onClick={() => setScheduled("")}>Cancel</Button>
-      <span style={{ marginInlineStart: "auto", color: "var(--area-fg-muted)", fontSize: "var(--area-control-sm-text)" }}>{label} · {time}</span>
+      <span style={{ marginInlineStart: "auto", color: "var(--area-fg-muted)", fontSize: "var(--area-control-sm-text)", lineHeight: "var(--area-control-sm-leading)", fontVariantNumeric: "tabular-nums" }}>{label} · {time}</span>
       <Button variant="outline" size="sm" disabled={!date} onClick={() => setScheduled(`${label} ${time}`)}>Schedule</Button>
     </div>
     <span className="area-sr-only" role="status">{scheduled && `Scheduled for ${scheduled}`}</span>

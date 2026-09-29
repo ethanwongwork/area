@@ -531,6 +531,11 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
   (outline, small) and Notion's select tags (tinted, radius 3-4, 14px). Figma's label is
   Badge `outline`; Notion's tags are Badge `soft` with a tone, set larger and squarer than
   Area's 12/16 pill (the owner's 2026-09-27 md size). No change.
+- 2026-09-28, second pass (Figma file browser: "Free" plan badge 16 tall, 11/16 500, radius 4, 6
+  sides, pale blue tint; "AI" 18 tall, 1px #e6 outline, 11/16 400, 50% ink; `figma--plan-badge`,
+  `figma--ai-badge`): the avatar badge's two initials ("IY", 12px) filled its 16px disc edge to edge
+  and read as loose text. A 16px avatar holds one initial (Figma's 16px team avatar does the same),
+  so the demo shows "I"; an image is the usual content (Untitled's avatar badge). Pill kept.
 - Not yet compared: dark theme in the products.
 
 ## Verification
@@ -569,3 +574,5 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-28 · batch 5 Claude in Chrome side by side (Figma "AI" label, Notion tags) → no change.
 - 2026-09-28 · owner: approved (batch 5).
+- 2026-09-28 · second pass → avatar badge demo shows one initial in its 16px disc (owner approved
+  the recommendation) → `figma--plan-badge`, `figma--ai-badge`, `area--avatar` re-captured.

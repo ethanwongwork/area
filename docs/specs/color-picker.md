@@ -190,6 +190,26 @@ foreground/background popover (the background is a prop).
 
 ## Visual pass
 
+2026-09-28, Claude in Chrome (batch 10): Figma's colour picker opened from the Page colour row
+(nothing edited) beside the gallery's picker at 2x. Structure, order and proportions match (area,
+eyedropper beside two pill tracks, model select before joined value fields, rule, swatch source and
+16px chits in 24 cells). Changed:
+
+- The opacity part takes Color field's rule (batch 9): sized to three tabular digits and "%", the
+  number 9 from the rule and "%" 8 from the end (Figma: "100" ~9 after the rule, "%" at the end).
+  The fixed 54 (Figma's, at 11px) squeezed "100" under the "%" at 14px.
+- Channel fields hug their digits and share the rest: OKLCH's three fields were 23px each beside its
+  wider select and clipped "150"; Figma fits equal shares only at 11px with a fixed 57px select.
+  Every picker tile measured: no value clipped.
+- The alpha track's checker has three rows (Figma's ~5px cells), from Color swatch's checker ink.
+- Found and removed: an older slider block later in `color.css` that overrode this spec's 16px tracks
+  and ringed thumbs (see the feedback log).
+
+Observed, not changed: Figma splits a translucent colour's chit (opaque half, checker half); Area
+shows the colour over the checker across the whole chit. Dark theme not compared.
+
+Earlier note:
+
 Compared at 100% zoom in light: Figma's layer Fill picker (screenshot in the capture
 session) against the gallery tiles. Structure, order and proportions match: square area,
 eyedropper left of two pill tracks, model select before joined fields, ruled swatch
@@ -217,3 +237,9 @@ setting).
   ringed thumbs, eyedropper, color-model value row, header slot, ruled swatch section →
   `figma--*` and `area--*` captures.
 - 2026-09-26 · cohesion audit → the surface takes the shared floating lift with Popover and Menu (was shadow-2) → [cohesion-audit.md](../research/cohesion-audit.md); Pass review row added.
+- 2026-09-28 · found while replacing the checker: a 2026-09-24 slider block later in `color.css` (12px
+  tracks, #ccc / #fff checker, 2px-ring thumbs) overrode this spec's 16px pill tracks and ringed
+  thumbs; removed, the measured tracks render again. Preview chips and the alpha track take Color
+  swatch's pixel checker (see color-swatch.md).
+- 2026-09-28 · batch 10 Claude in Chrome side by side (Figma picker) → opacity sized to content, channel
+  fields hug their digits, alpha checker 3 rows → every picker tile measured, no clipped value.

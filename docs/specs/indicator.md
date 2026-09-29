@@ -495,3 +495,6 @@ Pinned commit: `d27922755bebae866d9ffe86b7da44c27ec801ee`.
   dots keep the 2px outward rule → headless Edge screenshot at 4×.
 - 2026-09-28 · batch 5 Claude in Chrome side by side (Figma bell, Notion help-button dot) → no change.
 - 2026-09-28 · owner: approved (batch 5).
+- 2026-09-28 · second pass → Notion's help dot saved as `notion--help-dot--rest--light` (8px, no
+  ring, its corner on the 20px icon box's corner). Both products keep the dot inside the icon box;
+  Area keeps centring it on the corner (owner, 2026-09-25; owner took the recommendation to keep it).

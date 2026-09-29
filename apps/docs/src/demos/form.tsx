@@ -427,8 +427,8 @@ export const ChipCustomDelete = () => <Chip kind="input" onRemove={() => {}} rem
 
 export const ChipAvatars = () => (
   <ChipGroup>
-    <Chip avatar={<Avatar fallback="AV" alt="Avatar" />}>Avatar</Chip>
-    <Chip avatar={<Avatar src="/images/chip-avatar.png" alt="Avatar" />}>Avatar</Chip>
+    <Chip avatar={<Avatar fallback="IY" alt="" />}>Irene Yamaguchi</Chip>
+    <Chip avatar={<Avatar src="/images/irene-yamaguchi.jpg" alt="" />}>Irene Yamaguchi</Chip>
   </ChipGroup>
 );
 

@@ -1,12 +1,15 @@
 # Avatar spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 5)
+**Status:** accepted · 2026-09-28 (owner, batch 5; initials scale and Irene photo approved the same day)
 **Captures:** `docs/research/captures/avatar/` (Area, `figma--avatar-initial`, `notion--avatar-person-initial`, `notion--avatar-workspace-square`), `docs/research/captures/baseline/chatgpt--avatar-initials--rest--light.json`, `…/chatgpt--account-row--rest--light.json`
 **Peers:** Indicator and IndicatorAnchor (status and count on an avatar), Chip and Badge
 avatars (initials at 12px), Nav and Tree view markers (neutral selection), Button (focus ring)
 
 ## Owner decisions
 
+- 2026-09-28: Approved the initials scale 12 / 14 / 16 at sm / md / lg (was 12 / 12 / 14), from a
+  second Claude in Chrome pass run in parallel with batch 5, and supplied the photo used for
+  Irene Yamaguchi (`apps/docs/public/images/irene-yamaguchi.jpg`, replacing `chip-avatar.png`).
 - 2026-09-26: Neutral by default, accent by override. The active ring is `neutral-solid`;
   an avatar with `tone="accent"` keeps an accent ring.
 
@@ -38,6 +41,8 @@ remainder as one more Avatar.
 |---|---|---|---|---|---|
 | chatgpt | target product | Profile-menu account avatar (image, 20px); account row avatar (image, 24px) | chatgpt.com, logged in, 2026-09-26 | evidence only | `baseline/chatgpt--avatar-initials--rest--light`, `baseline/chatgpt--account-row--rest--light` |
 | figma | target product | Initials avatar, 24px | figma.com, logged in, second pass 2026-09-26 | evidence only | `figma--avatar-initial--rest--light` |
+| notion (Share) | target product | Share popover: person initials avatar 32, workspace avatar 32 (radius 6); sidebar workspace avatar 20 | app.notion.com, Claude in Chrome, 2026-09-28 | evidence only | `notion--share-person-avatar`, `notion--share-workspace-avatar`, `notion--workspace-avatar` |
+| figma (files) | target product | File browser: account 24, team 16, file-card owner 24 | figma.com, Claude in Chrome, 2026-09-28 | evidence only | `figma--account-avatar`, `figma--team-avatar`, `figma--file-card-avatar` |
 | uui | design system (source) | Avatar sizes, initials, fill, hairline | `components/base/avatar/avatar.tsx:72-153` at `4702dc0` ([reference](../research/untitled-ui-reference.md)) | MIT | — |
 | area | this system | 15 gallery tiles after the audit | localhost gallery | — | `area--*` (15) |
 
@@ -87,7 +92,8 @@ icon content: 20px viewport at md, ink 14 × 16 (`area--content-icon`). Group: i
 | shell · radius | `radius-full`; square `radius-control` 8 (`display.css:22, 49`) | ChatGPT, Figma and Untitled round | — |
 | fill · neutral | `bg-component-active` #eeeeee (dark #3f3f3f) | Untitled neutral-100 #f5f5f5 | One step darker, so the disc reads on `bg-component` rows. Figma paints a per-user hue, rgb(102, 119, 153); neutral kept (third pass) |
 | initials · ink | `fg-muted` #666666 | Untitled neutral-500 #737373 | Area's muted role; Figma white on its hue |
-| initials · size / weight | 12 at sm and md, 14 at lg; 500 (`display.css:26-27, 79`) | Type ramp (500 for labels on fills, DESIGN_SYSTEM "Color and focus") | Untitled 12 / 14 / 16 at 600; Figma 12 at 400; one label weight (third pass) |
+| initials · size | **12 / 14 / 16 at sm / md / lg** (`--_text`, `display.css`) | Notion 14 on its 32 Share-list avatar (`notion--share-person-avatar`, initials layer 14px/32px); Untitled 12 / 14 / 16 by size; owner (2026-09-28) | Was 12 at sm and md, 14 at lg: two initials read small on the 32 disc (37% of the side against Notion's 44% and Figma's 50%) |
+| initials · weight | 500 | Type ramp (500 for labels on fills, DESIGN_SYSTEM "Color and focus") | Notion 400 (person), 500 (workspace); Figma 400; Untitled 600; one label weight (third pass) |
 | icon · size | 16 / 20 / 24 at sm / md / lg | Native Fluent cuts at their size | — |
 | edge | none | ChatGPT and Figma (none) | Untitled draws a 0.5px black-16% hairline |
 | active ring | **2px `bg-surface` gap + 2px `neutral-solid`** #282828 (dark #f3f3f3) (`display.css:67-71`) | Owner (2026-09-26) | Was `accent-solid` #5c5dfe on every avatar |
@@ -131,6 +137,19 @@ image, the `img` keeps its native `alt` (`avatar.test.mjs:7, 14`). Initials and 
 | Badge | label on a fill | 500 | 500 | match |
 
 ## Visual pass
+
+2026-09-28, second Claude in Chrome pass (Notion's Share popover lists people at 32, the size of
+Area md), with a 3x headless sheet of Area sm / md / lg / square / accent beside reconstructions of
+Notion's 32 person and workspace avatars and Figma's 24:
+
+- At 32, Notion sets initials at 14 (a white disc with a one-device-pixel hairline, 400, tertiary
+  ink). Area's 12 read small beside it and beside a 14/20 name in a row; initials now step with
+  the disc, 12 / 14 / 16, so an md avatar's initials equal the adjacent name's size.
+- Notion's 32 workspace avatar is a 7% warm tint with 6px corners; Area's square keeps 8, the
+  control radius, so it shares a corner with a 32px button.
+- Image tiles use the owner's photo for Irene Yamaguchi, cropped square around the face so it
+  reads in a circle at 28–40.
+
 
 2026-09-28, Claude in Chrome (batch 5), zoomed side by side: the gallery's Avatar tiles beside
 Figma's file-browser avatars (account and file owner) and Notion's Updates-panel and workspace
@@ -181,3 +200,5 @@ avatar-bearing control, a side-by-side with Figma's initials avatar.
   centres on the circle's edge at 45° (1.3 further out on a 32px avatar); `indicator.css`.
 - 2026-09-28 · batch 5 Claude in Chrome side by side → no Avatar change; Notion person and workspace avatars captured; demos moved to Irene Yamaguchi; Chip's nested avatar fixed (see chip.md).
 - 2026-09-28 · owner: approved (batch 5).
+- 2026-09-28 · second pass (Notion Share popover) → initials 12 / 14 / 16 by size; owner approved
+  and supplied Irene's photo → `notion--share-person-avatar`, `area--size-*` re-captured.

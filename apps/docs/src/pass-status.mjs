@@ -80,4 +80,40 @@ export const VALIDATED_PASSES = {
     date: "2026-09-27",
     against: "ChatGPT's Chat / Work switch and Figma's mode switch",
   },
+  panel: {
+    date: "2026-09-28",
+    against: "Figma's Design panel (section header, label and field rows, rules, row action column)",
+  },
+  "number-field": {
+    date: "2026-09-28",
+    against: "Figma's Design panel fields (X / Y letters, W / H with a menu, Rotation, Gap)",
+  },
+  "box-field": {
+    date: "2026-09-28",
+    against: "Figma's Padding and Corner radius rows (paired fields, per-side toggle on the action column)",
+  },
+  "property-list": {
+    date: "2026-09-28",
+    against: "Figma's Fill and Effects rows (hex and opacity, effect type, row actions); owner screenshots",
+  },
+  "color-field": {
+    date: "2026-09-28",
+    against: "Figma's Page colour row (hex, opacity anchored with % at the end)",
+  },
+  "color-swatch": {
+    date: "2026-09-28",
+    against: "The swatch in Figma's Page colour row (leading slot, hairline edge)",
+  },
+  "color-picker": {
+    date: "2026-09-28",
+    against: "Figma's colour picker from the Page colour row (area, tracks, value row, swatches)",
+  },
+  "color-swatch-picker": {
+    date: "2026-09-28",
+    against: "Figma's On this page swatch grid (chit size, cell, corner, light-chit edge)",
+  },
+  "alignment-picker": {
+    date: "2026-09-28",
+    against: "Figma's auto-layout Alignment grid (ground, dots, selected bars)",
+  },
 };

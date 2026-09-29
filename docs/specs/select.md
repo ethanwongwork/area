@@ -137,6 +137,14 @@ Keyboard, typeahead and dismissal are the browser's. Option focus uses the focus
 
 ## Visual pass
 
+2026-09-28 (batch 9, owner: truncation errors): a narrow Select wrapped its option onto a second line
+inside the 28px control (Property list Effects, "Drop shadow"). The value is now one line with an
+ellipsis, and inside an InputGroup the text runs up to the chevron's 16px box, as Figma's W / H menu
+fields do (`number-field/figma--number-field-menu`: value box 17 from the end = chevron 16 + 1); the
+chevron's side-bearing keeps about 4.5 of air. A standalone Select keeps its extra 4.
+
+Earlier note:
+
 The gallery shows Select's tiles in named groups, one variant per tile. The picker lift
 and checked fill appear only with the picker open in a supporting browser. Unverified: the
 open picker on screen, a Notion or Figma picker side by side, dark theme.
@@ -168,3 +176,5 @@ select and Figma's filter, size, zoom and format selects. Build and test results
 - 2026-09-27 · third pass → `variant: outline | soft` added, outline default (was outline
   only), so a Panel holds one field style; Variant / soft tile added; borderless trigger and
   outline shadow kept → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-28 · owner: truncation errors → nowrap + ellipsis; in-group end padding = gutter + chevron
+  → gallery measured, no Select text overflows.
