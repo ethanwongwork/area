@@ -1,12 +1,12 @@
 # Radio — library range
 
-Baseline `c585f8c5f38705a7efa79bf05148a8c6989b142a` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
+Baseline `7dae828e7af1daf9d26b663d34335121156606f7` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
 
 ## Job
 
-Picks one option from a mutually exclusive set. [Area manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249).
+Picks one option from a mutually exclusive set. [Area manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249).
 
-Boundary: Native radio inputs and fieldset group; sm/md/lg and neutral/accent; vertical/horizontal layout and descriptions. No Radio choice-card treatment is declared (Checkbox card is a different family). [Area spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1).
+Boundary: Native radio inputs and fieldset group; md/lg and neutral/accent. Radio and Checkbox both support variant=card and layout=row/tile; layout applies only with card. Group orientation is independently horizontal/vertical; leading visuals and captions are supported. [Area spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1).
 
 ## Variant axes
 
@@ -50,51 +50,35 @@ Boundary: Native radio inputs and fieldset group; sm/md/lg and neutral/accent; v
 
 ## Interaction patterns
 
-- **Untitled UI** (component): single-selection. [Source](https://www.untitledui.com/react/components/radio-buttons) (checked 2026-09-28).
-- **shadcn/ui** (component): single-selection. [Source](https://ui.shadcn.com/docs/components/radio-group) (checked 2026-09-28).
-- **Radix Themes** (component): single-selection. [Source](https://www.radix-ui.com/themes/docs/components/radio-group) (checked 2026-09-28).
-- **Radix Themes** (component): single-selection. [Source](https://www.radix-ui.com/themes/docs/components/radio-cards) (checked 2026-09-28).
-- **Base UI** (component): single-selection. [Source](https://base-ui.com/react/components/radio-group) (checked 2026-09-28).
-- **React Aria / Spectrum 2** (component): single-selection. [Source](https://react-spectrum.adobe.com/RadioGroup) (checked 2026-09-28).
-- **Fluent 2** (component): single-selection. [Source](https://fluent2.microsoft.design/components/web/react/core/radiogroup/usage) (checked 2026-09-28).
-- **Primer** (component): single-selection. [Source](https://primer.style/product/components/radio-group/) (checked 2026-09-28).
-- **Carbon** (component): single-selection. [Source](https://carbondesignsystem.com/components/radio-button/usage/) (checked 2026-09-28).
-- **Material 3** (component): single-selection. [Source](https://developer.android.com/develop/ui/compose/components/radio-button) (checked 2026-09-28).
-- **Mantine** (component): single-selection. [Source](https://mantine.dev/core/radio) (checked 2026-09-28).
-- **Ant Design** (component): single-selection. [Source](https://ant.design/components/radio) (checked 2026-09-28).
-- **Chakra/Ark** (component): single-selection. [Source](https://chakra-ui.com/docs/components/radio) (checked 2026-09-28).
-- **Chakra/Ark** (component): single-selection. [Source](https://chakra-ui.com/docs/components/radio-card) (checked 2026-09-28).
-- **Atlassian** (component): single-selection. [Source](https://atlassian.design/components/radio/examples) (checked 2026-09-28).
-- **Polaris** (component): single-selection. [Source](https://shopify.dev/docs/api/app-home/latest/web-components/forms/choice-list) (checked 2026-09-28).
-- **GOV.UK** (component): single-selection. [Source](https://design-system.service.gov.uk/components/radios/) (checked 2026-09-28).
+- **single-selection**: [Untitled UI](https://www.untitledui.com/react/components/radio-buttons), [shadcn/ui](https://ui.shadcn.com/docs/components/radio-group), [Radix Themes](https://www.radix-ui.com/themes/docs/components/radio-group), [Radix Themes](https://www.radix-ui.com/themes/docs/components/radio-cards), [Base UI](https://base-ui.com/react/components/radio-group), [React Aria / Spectrum 2](https://react-spectrum.adobe.com/RadioGroup), [Fluent 2](https://fluent2.microsoft.design/components/web/react/core/radiogroup/usage), [Primer](https://primer.style/product/components/radio-group/), [Carbon](https://carbondesignsystem.com/components/radio-button/usage/), [Material 3](https://developer.android.com/develop/ui/compose/components/radio-button), [Mantine](https://mantine.dev/core/radio), [Ant Design](https://ant.design/components/radio), [Chakra/Ark](https://chakra-ui.com/docs/components/radio), [Chakra/Ark](https://chakra-ui.com/docs/components/radio-card), [Atlassian](https://atlassian.design/components/radio/examples), [Polaris](https://shopify.dev/docs/api/app-home/latest/web-components/forms/choice-list), [GOV.UK](https://design-system.service.gov.uk/components/radios/) (checked 2026-09-28).
 
 ## Area today
 
-Native radio inputs and fieldset group; sm/md/lg and neutral/accent; vertical/horizontal layout and descriptions. No Radio choice-card treatment is declared (Checkbox card is a different family). [Baseline spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1).
+Native radio inputs and fieldset group; md/lg and neutral/accent. Radio and Checkbox both support variant=card and layout=row/tile; layout applies only with card. Group orientation is independently horizontal/vertical; leading visuals and captions are supported. [Baseline spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1).
 
-- Exact manifest axes: size = sm, md, lg; tone = neutral, accent. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249).
-- Boolean modifiers: none declared. Runtime state hooks: disabled. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249).
-- Slots: control. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249).
+- Exact manifest axes: variant = card; layout = row, tile; size = md, lg; tone = neutral, accent. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249).
+- Boolean modifiers: none declared. Runtime state hooks: disabled. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249).
+- Slots: control, visual. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249).
 
-RadioGroup separately declares horizontal/vertical orientation and disabled/invalid states. [RadioGroup manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L251-L258).
+RadioGroup separately declares horizontal/vertical orientation and disabled/invalid states. [RadioGroup manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L251-L259).
 
 Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):
 
-- **yes**: `interaction:single-selection`, `orientation:horizontal`, `orientation:vertical`, `size:lg`, `size:md`, `size:sm`, `state:checked`, `state:disabled`, `state:invalid`, `structure:description`, `structure:label`, `tone:accent`, `tone:neutral`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1-L142).
-- **not found**: `button-style:outline`, `button-style:solid`, `indicator-placement:end`, `indicator-placement:inside`, `indicator-placement:start`, `option-type:button`, `option-type:default`, `size:XL`, `size:default`, `size:xl`, `size:xs`, `state:error`, `state:read-only`, `state:warning`, `structure:ai-label`, `structure:button-options`, `structure:choice-cards`, `structure:conditional-content`, `structure:contextual-help`, `structure:hide-indicator`, `structure:icons`, `structure:label-below`, `structure:label-beside`, `structure:or-divider`, `structure:rich-options`, `variant:classic`, `variant:filled`, `variant:outline`, `variant:soft`, `variant:solid`, `variant:subtle`, `variant:surface`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1-L142).
-- **equivalent tier / geometry not asserted**: `size:1`, `size:2`, `size:3`, `size:L`, `size:M`, `size:S`, `size:large`, `size:medium`, `size:small`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1-L142).
-- **system-level / not this exact option**: `contrast:high`, `contrast:normal`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1-L142).
-- **equivalent concept / source styling differs**: `emphasis:default`, `emphasis:emphasized`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1-L142).
-- **composition**: `structure:helper-error`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1-L142).
+- **yes**: `interaction:single-selection`, `layout:row`, `layout:tile`, `orientation:horizontal`, `orientation:vertical`, `size:lg`, `size:md`, `state:checked`, `state:disabled`, `state:invalid`, `structure:choice-cards`, `structure:description`, `structure:icons`, `structure:label`, `structure:rich-options`, `tone:accent`, `tone:neutral`, `variant:card`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1-L154).
+- **not found**: `button-style:outline`, `button-style:solid`, `indicator-placement:end`, `indicator-placement:inside`, `indicator-placement:start`, `option-type:button`, `option-type:default`, `size:1`, `size:S`, `size:XL`, `size:default`, `size:sm`, `size:small`, `size:xl`, `size:xs`, `state:error`, `state:read-only`, `state:warning`, `structure:ai-label`, `structure:button-options`, `structure:conditional-content`, `structure:contextual-help`, `structure:hide-indicator`, `structure:label-below`, `structure:label-beside`, `structure:or-divider`, `variant:classic`, `variant:filled`, `variant:outline`, `variant:soft`, `variant:solid`, `variant:subtle`, `variant:surface`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1-L154).
+- **equivalent tier / geometry not asserted**: `size:2`, `size:3`, `size:L`, `size:M`, `size:large`, `size:medium`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1-L154).
+- **system-level / not this exact option**: `contrast:high`, `contrast:normal`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1-L154).
+- **equivalent concept / source styling differs**: `emphasis:default`, `emphasis:emphasized`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1-L154).
+- **composition**: `structure:helper-error`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1-L154).
 
 ## Proposed range
 
 Recommendations for owner selection, not implementation commitments. Direct counts include official components/examples/recipes; experimental, adjacent and guidance counts are separate. Each bundle count is a union (at least one listed alternative); exact individual counts are in [index-2.json](index-2.json).
 
-- **Layer 2 · Retain the documented baseline inventory** — 2 direct systems. Direct: Chakra/Ark, Mantine. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249), [2](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1).
-  - Individual options: `size:sm` (2 direct; Area: yes); `size:md` (2 direct; Area: yes); `size:lg` (2 direct; Area: yes); `tone:neutral` (0 direct; Area: yes); `tone:accent` (0 direct; Area: yes).
+- **Layer 2 · Retain the documented baseline inventory** — 2 direct systems. Direct: Chakra/Ark, Mantine. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249), [2](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1).
+  - Individual options: `variant:card` (0 direct; Area: yes); `layout:row` (0 direct; Area: yes); `layout:tile` (0 direct; Area: yes); `size:md` (2 direct; Area: yes); `size:lg` (2 direct; Area: yes); `tone:neutral` (0 direct; Area: yes); `tone:accent` (0 direct; Area: yes).
 - **Layer 3 · Choice cards with optional indicator and rich content** — 5 direct systems. Direct: Chakra/Ark, Mantine, Radix Themes, Untitled UI, shadcn/ui. The principal radio anatomy gap; retain native mutually exclusive form semantics. Evidence: [1](https://chakra-ui.com/docs/components/radio-card), [2](https://mantine.dev/core/radio), [3](https://ui.shadcn.com/docs/components/radio-group), [4](https://www.radix-ui.com/themes/docs/components/radio-cards), [5](https://www.untitledui.com/react/components/radio-groups).
-  - Individual options: `structure:choice-cards` (5 direct; Area: not found); `structure:hide-indicator` (1 direct; Area: not found); `structure:rich-options` (3 direct; Area: not found).
+  - Individual options: `structure:choice-cards` (5 direct; Area: yes); `structure:hide-indicator` (1 direct; Area: not found); `structure:rich-options` (3 direct; Area: yes).
 - **Layer 2 · Outline/soft/solid appearances** — 3 direct systems. Direct: Chakra/Ark, Mantine, Radix Themes. Keep tone separate; avoid making the choice-card structure a tone modifier. Evidence: [1](https://chakra-ui.com/docs/components/radio), [2](https://chakra-ui.com/docs/components/radio-card), [3](https://mantine.dev/core/radio), [4](https://www.radix-ui.com/themes/docs/components/radio-group).
   - Individual options: `variant:outline` (2 direct; Area: not found); `variant:soft` (1 direct; Area: not found); `variant:subtle` (1 direct; Area: not found); `variant:solid` (1 direct; Area: not found).
 - **Layer 3 · Conditional supporting field** — 2 direct systems. Direct: GOV.UK, Polaris. A form recipe, with expansion and validation tied to the chosen option. Evidence: [1](https://design-system.service.gov.uk/components/radios/), [2](https://shopify.dev/docs/api/app-home/latest/web-components/forms/choice-list).
@@ -102,7 +86,7 @@ Recommendations for owner selection, not implementation commitments. Direct coun
 
 ## Sources
 
-- Area: [manifest, lines 242–249](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/radio.md#L1). All Area judgments refer to starting commit `c585f8c5f38705a7efa79bf05148a8c6989b142a`, not concurrent work.
+- Area: [manifest, lines 242–249](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L242-L249); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/radio.md#L1). All Area judgments refer to starting commit `7dae828e7af1daf9d26b663d34335121156606f7`, not concurrent work.
 - Research method and version boundaries: [README-2.md](README-2.md). URL check log: [source-audit-2.json](source-audit-2.json).
 
 Searched terms: radio, radio group, radio cards, choice list. The following list accounts for all 16 requested systems. “Not found” never counts as a missing component proved absent.

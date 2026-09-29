@@ -1,12 +1,12 @@
 # Segmented — library range
 
-Baseline `c585f8c5f38705a7efa79bf05148a8c6989b142a` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
+Baseline `7dae828e7af1daf9d26b663d34335121156606f7` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
 
 ## Job
 
-Picks one value from a small set of options. [Area manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621).
+Picks one value from a small set of options. [Area manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630).
 
-Boundary: One raised-track appearance; three sizes; fullWidth and iconOnly. Radio semantics with RTL-aware arrows, Home/End and disabled-item skipping. Multiple independent toggles belong to a separate semantic mode, not an interchangeable radio state. [Area spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/segmented.md#L1).
+Boundary: One raised-track appearance; three sizes; fullWidth and iconOnly. Radio semantics with RTL-aware arrows, Home/End and disabled-item skipping. Multiple independent toggles belong to a separate semantic mode, not an interchangeable radio state. [Area spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/segmented.md#L1).
 
 ## Variant axes
 
@@ -39,40 +39,32 @@ Boundary: One raised-track appearance; three sizes; fullWidth and iconOnly. Radi
 
 ## Interaction patterns
 
-- **Untitled UI** (example): single-selection, multiple-selection. [Source](https://www.untitledui.com/react/components/button-groups) (checked 2026-09-28).
-- **shadcn/ui** (primitive): single-selection. [Source](https://ui.shadcn.com/docs/components/toggle-group) (checked 2026-09-28).
-- **Radix Themes** (component): single-selection. [Source](https://www.radix-ui.com/themes/docs/components/segmented-control) (checked 2026-09-28).
-- **Base UI** (primitive): single-selection, multiple-selection, roving-focus. [Source](https://base-ui.com/react/components/toggle-group) (checked 2026-09-28).
-- **React Aria / Spectrum 2** (component): single-selection. [Source](https://react-spectrum.adobe.com/SegmentedControl) (checked 2026-09-28).
-- **Primer** (component): single-selection. [Source](https://primer.style/product/components/segmented-control/) (checked 2026-09-28).
-- **Carbon** (component): single-selection. [Source](https://carbondesignsystem.com/components/content-switcher/usage/) (checked 2026-09-28).
-- **Material 3** (component): single-selection, multiple-selection. [Source](https://developer.android.com/develop/ui/compose/components/segmented-button) (checked 2026-09-28).
-- **Mantine** (component): single-selection, animated-indicator. [Source](https://mantine.dev/core/segmented-control) (checked 2026-09-28).
-- **Ant Design** (component): single-selection. [Source](https://ant.design/components/segmented) (checked 2026-09-28).
-- **Chakra/Ark** (component): single-selection. [Source](https://chakra-ui.com/docs/components/segmented-control) (checked 2026-09-28).
-- **Apple HIG** (guidance): single-selection, multiple-selection. [Source](https://developer.apple.com/design/human-interface-guidelines/segmented-controls) (checked 2026-09-28).
+- **single-selection**: [Untitled UI](https://www.untitledui.com/react/components/button-groups), [shadcn/ui](https://ui.shadcn.com/docs/components/toggle-group), [Radix Themes](https://www.radix-ui.com/themes/docs/components/segmented-control), [Base UI](https://base-ui.com/react/components/toggle-group), [React Aria / Spectrum 2](https://react-spectrum.adobe.com/SegmentedControl), [Carbon](https://carbondesignsystem.com/components/content-switcher/usage/), [Material 3](https://developer.android.com/develop/ui/compose/components/segmented-button), [Mantine](https://mantine.dev/core/segmented-control), [Ant Design](https://ant.design/components/segmented), [Chakra/Ark](https://chakra-ui.com/docs/components/segmented-control), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/segmented-controls), [Primer](https://primer.style/product/components/segmented-control/) (checked 2026-09-28).
+- **multiple-selection**: [Untitled UI](https://www.untitledui.com/react/components/button-groups), [Base UI](https://base-ui.com/react/components/toggle-group), [Material 3](https://developer.android.com/develop/ui/compose/components/segmented-button), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/segmented-controls) (checked 2026-09-28).
+- **roving-focus**: [Base UI](https://base-ui.com/react/components/toggle-group) (checked 2026-09-28).
+- **animated-indicator**: [Mantine](https://mantine.dev/core/segmented-control) (checked 2026-09-28).
 
 ## Area today
 
-One raised-track appearance; three sizes; fullWidth and iconOnly. Radio semantics with RTL-aware arrows, Home/End and disabled-item skipping. Multiple independent toggles belong to a separate semantic mode, not an interchangeable radio state. [Baseline spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/segmented.md#L1).
+One raised-track appearance; three sizes; fullWidth and iconOnly. Radio semantics with RTL-aware arrows, Home/End and disabled-item skipping. Multiple independent toggles belong to a separate semantic mode, not an interchangeable radio state. [Baseline spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/segmented.md#L1).
 
-- Exact manifest axes: size = sm, md, lg. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621).
-- Boolean modifiers: full-width, icon-only. Runtime state hooks: selected, disabled. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621).
-- Slots: item, icon, label. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621).
+- Exact manifest axes: size = sm, md, lg. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630).
+- Boolean modifiers: full-width, icon-only. Runtime state hooks: selected, disabled. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630).
+- Slots: item, icon, label. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630).
 
 Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):
 
-- **yes**: `interaction:roving-focus`, `interaction:single-selection`, `orientation:horizontal`, `size:lg`, `size:md`, `size:sm`, `state:disabled`, `state:selected`, `structure:equal-width`, `structure:icons`, `structure:text-options`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/segmented.md#L1-L170).
-- **not found**: `interaction:animated-indicator`, `interaction:multiple-selection`, `orientation:vertical`, `shape:default`, `shape:round`, `size:default`, `size:xl`, `size:xs`, `state:read-only`, `structure:joined-outline`, `structure:rich-options`, `variant:default`, `variant:outline`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/segmented.md#L1-L170).
-- **equivalent concept / source styling differs**: `variant:classic`, `variant:surface`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/segmented.md#L1-L170).
-- **equivalent tier / geometry not asserted**: `size:1`, `size:2`, `size:3`, `size:large`, `size:medium`, `size:small`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/segmented.md#L1-L170).
-- **system-level / not this exact option**: `radius:full`, `radius:large`, `radius:medium`, `radius:none`, `radius:small`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/segmented.md#L1-L170).
+- **yes**: `interaction:roving-focus`, `interaction:single-selection`, `orientation:horizontal`, `size:lg`, `size:md`, `size:sm`, `state:disabled`, `state:selected`, `structure:equal-width`, `structure:icons`, `structure:text-options`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/segmented.md#L1-L170).
+- **not found**: `interaction:animated-indicator`, `interaction:multiple-selection`, `orientation:vertical`, `shape:default`, `shape:round`, `size:default`, `size:xl`, `size:xs`, `state:read-only`, `structure:joined-outline`, `structure:rich-options`, `variant:default`, `variant:outline`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/segmented.md#L1-L170).
+- **equivalent concept / source styling differs**: `variant:classic`, `variant:surface`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/segmented.md#L1-L170).
+- **equivalent tier / geometry not asserted**: `size:1`, `size:2`, `size:3`, `size:large`, `size:medium`, `size:small`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/segmented.md#L1-L170).
+- **system-level / not this exact option**: `radius:full`, `radius:large`, `radius:medium`, `radius:none`, `radius:small`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/segmented.md#L1-L170).
 
 ## Proposed range
 
 Recommendations for owner selection, not implementation commitments. Direct counts include official components/examples/recipes; experimental, adjacent and guidance counts are separate. Each bundle count is a union (at least one listed alternative); exact individual counts are in [index-2.json](index-2.json).
 
-- **Layer 2 · Retain the documented baseline inventory** — 2 direct systems; 1 supporting/adjacent systems. Direct: Chakra/Ark, Mantine. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621), [2](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/segmented.md#L1).
+- **Layer 2 · Retain the documented baseline inventory** — 2 direct systems; 1 supporting/adjacent systems. Direct: Chakra/Ark, Mantine. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630), [2](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/segmented.md#L1).
   - Individual options: `size:sm` (2 direct; Area: yes); `size:md` (2 direct; Area: yes); `size:lg` (2 direct; Area: yes).
 - **Layer 3 · Raised track and joined outline** — 2 direct systems; 1 supporting/adjacent systems. Direct: Material 3, Radix Themes. Offer a second anatomy without merging it with underline Tabs. Evidence: [1](https://developer.android.com/develop/ui/compose/components/segmented-button), [2](https://ui.shadcn.com/docs/components/toggle-group), [3](https://www.radix-ui.com/themes/docs/components/segmented-control).
   - Individual options: `variant:surface` (1 direct; Area: equivalent concept / source styling differs); `variant:classic` (1 direct; Area: equivalent concept / source styling differs); `structure:joined-outline` (1 direct; Area: not found); `variant:outline` (0 direct; Area: not found).
@@ -83,7 +75,7 @@ Recommendations for owner selection, not implementation commitments. Direct coun
 
 ## Sources
 
-- Area: [manifest, lines 612–621](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L612-L621); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/segmented.md#L1). All Area judgments refer to starting commit `c585f8c5f38705a7efa79bf05148a8c6989b142a`, not concurrent work.
+- Area: [manifest, lines 621–630](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L621-L630); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/segmented.md#L1). All Area judgments refer to starting commit `7dae828e7af1daf9d26b663d34335121156606f7`, not concurrent work.
 - Research method and version boundaries: [README-2.md](README-2.md). URL check log: [source-audit-2.json](source-audit-2.json).
 
 Searched terms: segmented control, segmented button, content switcher, toggle group. The following list accounts for all 16 requested systems. “Not found” never counts as a missing component proved absent.

@@ -1,12 +1,12 @@
 # PromptSuggestions — library range
 
-Baseline `c585f8c5f38705a7efa79bf05148a8c6989b142a` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
+Baseline `7dae828e7af1daf9d26b663d34335121156606f7` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
 
 ## Job
 
-Starter prompts under an empty composer. [Area manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L460-L466).
+Starter prompts under an empty composer. [Area manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L468-L474).
 
-Boundary: List is the default; chips are the second layout. List items have optional dismiss controls; the chip recipe has no dismiss. Activation is consumer-owned (fill or send). Descriptions and grouped suggestion cards are not declared. [Area spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/prompt-suggestions.md#L1).
+Boundary: List is the default; chips are the second layout. List items have optional dismiss controls; the chip recipe has no dismiss. Activation is consumer-owned (fill or send). Descriptions and grouped suggestion cards are not declared. [Area spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/prompt-suggestions.md#L1).
 
 ## Variant axes
 
@@ -20,28 +20,27 @@ Boundary: List is the default; chips are the second layout. List items have opti
 
 ## Interaction patterns
 
-- **shadcn/ui** (recipe): activate-prompt. [Source](https://ui.shadcn.com/docs/components/bubble) (checked 2026-09-28).
-- **Ant Design** (component): activate-prompt. [Source](https://x.ant.design/components/prompts) (checked 2026-09-28).
+- **activate-prompt**: [Ant Design](https://x.ant.design/components/prompts), [shadcn/ui](https://ui.shadcn.com/docs/components/bubble) (checked 2026-09-28).
 
 ## Area today
 
-List is the default; chips are the second layout. List items have optional dismiss controls; the chip recipe has no dismiss. Activation is consumer-owned (fill or send). Descriptions and grouped suggestion cards are not declared. [Baseline spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/prompt-suggestions.md#L1).
+List is the default; chips are the second layout. List items have optional dismiss controls; the chip recipe has no dismiss. Activation is consumer-owned (fill or send). Descriptions and grouped suggestion cards are not declared. [Baseline spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/prompt-suggestions.md#L1).
 
-- Exact manifest axes: layout = list, chips. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L460-L466).
-- Boolean modifiers: none declared. Runtime state hooks: none declared. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L460-L466).
-- Slots: row, item, icon, text, dismiss. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L460-L466).
+- Exact manifest axes: layout = list, chips. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L468-L474).
+- Boolean modifiers: none declared. Runtime state hooks: none declared. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L468-L474).
+- Slots: row, item, icon, text, dismiss. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L468-L474).
 
 Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):
 
-- **not found**: `orientation:horizontal`, `orientation:vertical`, `state:disabled`, `structure:description`, `variant:default`, `variant:destructive`, `variant:ghost`, `variant:muted`, `variant:outline`, `variant:secondary`, `variant:tinted`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L460-L466); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/prompt-suggestions.md#L1-L77).
-- **yes**: `interaction:activate-prompt`, `layout:chips`, `layout:list`, `structure:icons`, `structure:wrap`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L460-L466); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/prompt-suggestions.md#L1-L77).
-- **partial**: `structure:button-bubble`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L460-L466); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/prompt-suggestions.md#L1-L77).
+- **not found**: `orientation:horizontal`, `orientation:vertical`, `state:disabled`, `structure:description`, `variant:default`, `variant:destructive`, `variant:ghost`, `variant:muted`, `variant:outline`, `variant:secondary`, `variant:tinted`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L468-L474); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/prompt-suggestions.md#L1-L77).
+- **yes**: `interaction:activate-prompt`, `layout:chips`, `layout:list`, `structure:icons`, `structure:wrap`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L468-L474); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/prompt-suggestions.md#L1-L77).
+- **partial**: `structure:button-bubble`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L468-L474); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/prompt-suggestions.md#L1-L77).
 
 ## Proposed range
 
 Recommendations for owner selection, not implementation commitments. Direct counts include official components/examples/recipes; experimental, adjacent and guidance counts are separate. Each bundle count is a union (at least one listed alternative); exact individual counts are in [index-2.json](index-2.json).
 
-- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L460-L466), [2](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/prompt-suggestions.md#L1).
+- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L468-L474), [2](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/prompt-suggestions.md#L1).
   - Individual options: `layout:list` (0 direct; Area: yes); `layout:chips` (0 direct; Area: yes).
 - **Layer 3 · Optional icon and description cards** — 1 direct systems. Direct: Ant Design. Add a richer anatomy to list/chips while preserving button activation. Evidence: [1](https://x.ant.design/components/prompts).
   - Individual options: `structure:description` (1 direct; Area: not found); `structure:icons` (1 direct; Area: yes).
@@ -52,7 +51,7 @@ Recommendations for owner selection, not implementation commitments. Direct coun
 
 ## Sources
 
-- Area: [manifest, lines 460–466](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L460-L466); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/prompt-suggestions.md#L1). All Area judgments refer to starting commit `c585f8c5f38705a7efa79bf05148a8c6989b142a`, not concurrent work.
+- Area: [manifest, lines 468–474](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L468-L474); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/prompt-suggestions.md#L1). All Area judgments refer to starting commit `7dae828e7af1daf9d26b663d34335121156606f7`, not concurrent work.
 - Research method and version boundaries: [README-2.md](README-2.md). URL check log: [source-audit-2.json](source-audit-2.json).
 
 Searched terms: prompt suggestions, prompts, suggested reply. The following list accounts for all 16 requested systems. “Not found” never counts as a missing component proved absent.

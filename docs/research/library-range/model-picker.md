@@ -1,12 +1,12 @@
 # ModelPicker — library range
 
-Baseline `c585f8c5f38705a7efa79bf05148a8c6989b142a` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
+Baseline `7dae828e7af1daf9d26b663d34335121156606f7` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
 
 ## Job
 
-Chooses the model a message is sent with, from inside the composer. [Area manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L435-L441).
+Chooses the model a message is sent with, from inside the composer. [Area manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L443-L449).
 
-Boundary: Composer trigger opens a Menu of model radio items, with notes and a selected check. Opens on the current item; choosing closes and returns focus. No design-time axes in the manifest. [Area spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/model-picker.md#L1).
+Boundary: Composer trigger opens a Menu of model radio items, with notes and a selected check. Opens on the current item; choosing closes and returns focus. No design-time axes in the manifest. [Area spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/model-picker.md#L1).
 
 ## Variant axes
 
@@ -24,31 +24,26 @@ No additional named variant axes found in the checked public sources. Area’s c
 
 ## Interaction patterns
 
-- **Untitled UI** (primitive): single-selection. [Source](https://www.untitledui.com/react/components/dropdowns) (checked 2026-09-28).
-- **shadcn/ui** (primitive): single-selection. [Source](https://ui.shadcn.com/docs/components/dropdown-menu) (checked 2026-09-28).
-- **Radix Themes** (primitive): single-selection. [Source](https://www.radix-ui.com/themes/docs/components/dropdown-menu) (checked 2026-09-28).
-- **Base UI** (primitive): single-selection. [Source](https://base-ui.com/react/components/menu) (checked 2026-09-28).
-- **React Aria / Spectrum 2** (primitive): single-selection. [Source](https://react-spectrum.adobe.com/Menu) (checked 2026-09-28).
-- **Chakra/Ark** (primitive): single-selection. [Source](https://chakra-ui.com/docs/components/menu) (checked 2026-09-28).
+- **single-selection**: [Untitled UI](https://www.untitledui.com/react/components/dropdowns), [shadcn/ui](https://ui.shadcn.com/docs/components/dropdown-menu), [Radix Themes](https://www.radix-ui.com/themes/docs/components/dropdown-menu), [Base UI](https://base-ui.com/react/components/menu), [React Aria / Spectrum 2](https://react-spectrum.adobe.com/Menu), [Chakra/Ark](https://chakra-ui.com/docs/components/menu) (checked 2026-09-28).
 
 ## Area today
 
-Composer trigger opens a Menu of model radio items, with notes and a selected check. Opens on the current item; choosing closes and returns focus. No design-time axes in the manifest. [Baseline spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/model-picker.md#L1).
+Composer trigger opens a Menu of model radio items, with notes and a selected check. Opens on the current item; choosing closes and returns focus. No design-time axes in the manifest. [Baseline spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/model-picker.md#L1).
 
-- Exact manifest axes: none. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L435-L441).
-- Boolean modifiers: none declared. Runtime state hooks: none declared. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L435-L441).
-- Slots: trigger, menu. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L435-L441).
+- Exact manifest axes: none. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L443-L449).
+- Boolean modifiers: none declared. Runtime state hooks: none declared. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L443-L449).
+- Slots: trigger, menu. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L443-L449).
 
 Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):
 
-- **not found**: `structure:groups`, `structure:icons`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L435-L441); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/model-picker.md#L1-L50).
-- **yes**: `interaction:single-selection`, `structure:descriptions`, `structure:radio-items`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L435-L441); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/model-picker.md#L1-L50).
+- **not found**: `structure:groups`, `structure:icons`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L443-L449); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/model-picker.md#L1-L50).
+- **yes**: `interaction:single-selection`, `structure:descriptions`, `structure:radio-items`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L443-L449); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/model-picker.md#L1-L50).
 
 ## Proposed range
 
 Recommendations for owner selection, not implementation commitments. Direct counts include official components/examples/recipes; experimental, adjacent and guidance counts are separate. Each bundle count is a union (at least one listed alternative); exact individual counts are in [index-2.json](index-2.json).
 
-- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. No design-time variant axis is declared today; keep this focused recipe and choose structural extensions below before introducing additional paint axes. Evidence: [1](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L435-L441), [2](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/model-picker.md#L1).
+- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. No design-time variant axis is declared today; keep this focused recipe and choose structural extensions below before introducing additional paint axes. Evidence: [1](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L443-L449), [2](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/model-picker.md#L1).
 - **Layer 3 · Single-choice menu with descriptions** — 0 direct systems; 5 supporting/adjacent systems. Direct: none verified as a direct implementation/example. Retain the current recipe. Counts here establish supporting menu primitives, not dedicated model selectors. Evidence: [1](https://base-ui.com/react/components/menu), [2](https://chakra-ui.com/docs/components/menu), [3](https://react-spectrum.adobe.com/Menu), [4](https://ui.shadcn.com/docs/components/dropdown-menu), [5](https://www.radix-ui.com/themes/docs/components/dropdown-menu).
   - Individual options: `structure:descriptions` (0 direct; Area: yes); `structure:radio-items` (0 direct; Area: yes).
 - **Layer 3 · Grouped model choices** — 0 direct systems; 5 supporting/adjacent systems. Direct: none verified as a direct implementation/example. Useful when modes or providers create meaningful groups; do not expose arbitrary nested menus before Menu supports them. Evidence: [1](https://base-ui.com/react/components/menu), [2](https://chakra-ui.com/docs/components/menu), [3](https://react-spectrum.adobe.com/Menu), [4](https://ui.shadcn.com/docs/components/dropdown-menu), [5](https://www.radix-ui.com/themes/docs/components/dropdown-menu).
@@ -58,7 +53,7 @@ Recommendations for owner selection, not implementation commitments. Direct coun
 
 ## Sources
 
-- Area: [manifest, lines 435–441](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L435-L441); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/model-picker.md#L1). All Area judgments refer to starting commit `c585f8c5f38705a7efa79bf05148a8c6989b142a`, not concurrent work.
+- Area: [manifest, lines 443–449](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L443-L449); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/model-picker.md#L1). All Area judgments refer to starting commit `7dae828e7af1daf9d26b663d34335121156606f7`, not concurrent work.
 - Research method and version boundaries: [README-2.md](README-2.md). URL check log: [source-audit-2.json](source-audit-2.json).
 
 Searched terms: model picker, model select; single-choice menu as a primitive. The following list accounts for all 16 requested systems. “Not found” never counts as a missing component proved absent.

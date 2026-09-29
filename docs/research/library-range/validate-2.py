@@ -35,6 +35,14 @@ def check_source(url):
         assert url in AUDIT['pages'], url
         assert AUDIT['pages'][url]['evidence_available'], url
 
+current=json.loads(subprocess.check_output(['node','--input-type=module','--eval',"import {MANIFESTS} from './packages/styles/src/manifest.ts';console.log(JSON.stringify(MANIFESTS))"],cwd=REPO,text=True))
+for family in ['radio','skeleton']:
+ assert INDEX['families'][family]['area_manifest']['variants']==current[family]['variants']
+assert INDEX['_meta']['supplements']['checkbox']['area_manifest']['variants']==current['checkbox']['variants']
+menu=INDEX['families']['menu']['options']
+for key in ['interaction:outside-dismiss','interaction:single-selection','placement:top']:
+ assert menu[key]['area_has_it']['status']=='yes'
+assert menu['structure:submenus']['area_has_it']['status']=='partial'
 options_count = proposals_count = observations_count = 0
 for slug, family in INDEX['families'].items():
     page = ROOT / f'{slug}.md'
@@ -100,7 +108,7 @@ for page in [ROOT / f'{s}.md' for s in EXPECTED] + [ROOT / 'README-2.md']:
         elif link.startswith(prefix):
             check_source(link)
 
-for command in (['git', 'diff', '--name-only', SHA], ['git', 'ls-files', '--others', '--exclude-standard']):
+for command in (['git', 'diff', '--name-only', 'origin/main'], ['git', 'ls-files', '--others', '--exclude-standard']):
     changed = subprocess.check_output(command, cwd=REPO, text=True).splitlines()
     assert all(p.startswith('docs/research/library-range/') for p in changed), changed
 assert subprocess.check_output(['git', 'branch', '--show-current'], cwd=REPO, text=True).strip() == 'astra/library-range-2'

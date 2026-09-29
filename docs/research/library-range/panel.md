@@ -1,12 +1,12 @@
 # Panel — library range
 
-Baseline `c585f8c5f38705a7efa79bf05148a8c6989b142a` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
+Baseline `7dae828e7af1daf9d26b663d34335121156606f7` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
 
 ## Job
 
-A titled surface of rows that act on something beside it. [Area manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424).
+A titled surface of rows that act on something beside it. [Area manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432).
 
-Boundary: sm/md inspector, flush docking, bare bar, action column, sections and pinned footer. Start/end edge width resizing has pointer/keyboard bounds and cancellation. Collapsible sections exist; collapse-to-zero and height resizing are explicitly excluded. General split panes remain a different job. [Area spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/panel.md#L1).
+Boundary: sm/md inspector, flush docking, bare bar, action column, sections and pinned footer. Start/end edge width resizing has pointer/keyboard bounds and cancellation. Collapsible sections exist; collapse-to-zero and height resizing are explicitly excluded. General split panes remain a different job. [Area spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/panel.md#L1).
 
 ## Variant axes
 
@@ -31,37 +31,37 @@ Boundary: sm/md inspector, flush docking, bare bar, action column, sections and 
 
 ## Interaction patterns
 
-- **shadcn/ui** (primitive): pointer-resize, keyboard-resize. [Source](https://ui.shadcn.com/docs/components/resizable) (checked 2026-09-28).
-- **Mantine** (primitive): pointer-resize, collapse-expand. [Source](https://mantine.dev/core/splitter) (checked 2026-09-28).
-- **Ant Design** (primitive): pointer-resize, collapse-expand, lazy-resize, double-click-reset. [Source](https://ant.design/components/splitter) (checked 2026-09-28).
-- **Chakra/Ark** (primitive): pointer-resize, keyboard-resize, collapse-expand. [Source](https://chakra-ui.com/docs/components/splitter) (checked 2026-09-28).
-- **Chakra/Ark** (adjacent): pointer-resize, pointer-move, minimize-maximize. [Source](https://chakra-ui.com/docs/components/floating-panel) (checked 2026-09-28).
-- **Atlassian** (component): pointer-resize, collapse-expand. [Source](https://atlassian.design/components/panel/examples) (checked 2026-09-28).
-- **GOV.UK** (different-job): confirm-completion. [Source](https://design-system.service.gov.uk/components/panel/) (checked 2026-09-28).
-- **Apple HIG** (guidance): pointer-resize, collapse-expand. [Source](https://developer.apple.com/design/human-interface-guidelines/split-views) (checked 2026-09-28).
+- **pointer-resize**: [shadcn/ui](https://ui.shadcn.com/docs/components/resizable), [Mantine](https://mantine.dev/core/splitter), [Ant Design](https://ant.design/components/splitter), [Chakra/Ark](https://chakra-ui.com/docs/components/splitter), [Atlassian](https://atlassian.design/components/panel/examples), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/split-views), [Chakra/Ark](https://chakra-ui.com/docs/components/floating-panel) (checked 2026-09-28).
+- **keyboard-resize**: [shadcn/ui](https://ui.shadcn.com/docs/components/resizable), [Chakra/Ark](https://chakra-ui.com/docs/components/splitter) (checked 2026-09-28).
+- **collapse-expand**: [Mantine](https://mantine.dev/core/splitter), [Ant Design](https://ant.design/components/splitter), [Chakra/Ark](https://chakra-ui.com/docs/components/splitter), [Atlassian](https://atlassian.design/components/panel/examples), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/split-views) (checked 2026-09-28).
+- **lazy-resize**: [Ant Design](https://ant.design/components/splitter) (checked 2026-09-28).
+- **double-click-reset**: [Ant Design](https://ant.design/components/splitter) (checked 2026-09-28).
+- **pointer-move**: [Chakra/Ark](https://chakra-ui.com/docs/components/floating-panel) (checked 2026-09-28).
+- **minimize-maximize**: [Chakra/Ark](https://chakra-ui.com/docs/components/floating-panel) (checked 2026-09-28).
+- **confirm-completion**: [GOV.UK](https://design-system.service.gov.uk/components/panel/) (checked 2026-09-28).
 
 ## Area today
 
-sm/md inspector, flush docking, bare bar, action column, sections and pinned footer. Start/end edge width resizing has pointer/keyboard bounds and cancellation. Collapsible sections exist; collapse-to-zero and height resizing are explicitly excluded. General split panes remain a different job. [Baseline spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/panel.md#L1).
+sm/md inspector, flush docking, bare bar, action column, sections and pinned footer. Start/end edge width resizing has pointer/keyboard bounds and cancellation. Collapsible sections exist; collapse-to-zero and height resizing are explicitly excluded. General split panes remain a different job. [Baseline spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/panel.md#L1).
 
-- Exact manifest axes: size = sm, md. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424).
-- Boolean modifiers: flush, bare-bar, action-column. Runtime state hooks: collapsed, resizable, resizing. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424).
-- Slots: resize, bar, title, body, section, heading, heading-text, actions, toggle, toggle-text, chevron, summary, rows, row, row-label, row-controls, row-action, stack, footer. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424).
+- Exact manifest axes: size = sm, md. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432).
+- Boolean modifiers: flush, bare-bar, action-column. Runtime state hooks: collapsed, resizable, resizing. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432).
+- Slots: resize, bar, title, body, section, heading, heading-text, actions, toggle, toggle-text, chevron, summary, rows, row, row-label, row-controls, row-action, stack, footer. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432).
 
-Resizing scope and exclusions: [resizable-panel spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/resizable-panel.md#L12-L29).
+Resizing scope and exclusions: [resizable-panel spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/resizable-panel.md#L12-L29).
 
 Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):
 
-- **not found**: `interaction:confirm-completion`, `interaction:double-click-reset`, `interaction:lazy-resize`, `interaction:minimize-maximize`, `interaction:pointer-move`, `orientation:horizontal`, `orientation:vertical`, `resize-axis:e`, `resize-axis:n`, `resize-axis:ne`, `resize-axis:nw`, `resize-axis:s`, `resize-axis:se`, `resize-axis:sw`, `resize-axis:w`, `stage:default`, `stage:maximized`, `stage:minimized`, `structure:close-button`, `structure:confirmation-panel`, `structure:floating-surface`, `structure:interruption-panel`, `structure:split-panes`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/panel.md#L1-L189).
-- **yes**: `interaction:keyboard-resize`, `interaction:pointer-resize`, `size:md`, `size:sm`, `structure:footer`, `structure:header`, `structure:resizable-panel`, `structure:resize-handle`, `structure:row-actions`, `structure:sections`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/panel.md#L1-L189).
-- **composition**: `structure:sidebar`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/panel.md#L1-L189).
-- **partial**: `interaction:collapse-expand`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/panel.md#L1-L189).
+- **not found**: `interaction:confirm-completion`, `interaction:double-click-reset`, `interaction:lazy-resize`, `interaction:minimize-maximize`, `interaction:pointer-move`, `orientation:horizontal`, `orientation:vertical`, `resize-axis:e`, `resize-axis:n`, `resize-axis:ne`, `resize-axis:nw`, `resize-axis:s`, `resize-axis:se`, `resize-axis:sw`, `resize-axis:w`, `stage:default`, `stage:maximized`, `stage:minimized`, `structure:close-button`, `structure:confirmation-panel`, `structure:floating-surface`, `structure:interruption-panel`, `structure:split-panes`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/panel.md#L1-L234).
+- **yes**: `interaction:keyboard-resize`, `interaction:pointer-resize`, `size:md`, `size:sm`, `structure:footer`, `structure:header`, `structure:resizable-panel`, `structure:resize-handle`, `structure:row-actions`, `structure:sections`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/panel.md#L1-L234).
+- **composition**: `structure:sidebar`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/panel.md#L1-L234).
+- **partial**: `interaction:collapse-expand`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/panel.md#L1-L234).
 
 ## Proposed range
 
 Recommendations for owner selection, not implementation commitments. Direct counts include official components/examples/recipes; experimental, adjacent and guidance counts are separate. Each bundle count is a union (at least one listed alternative); exact individual counts are in [index-2.json](index-2.json).
 
-- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424), [2](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/panel.md#L1).
+- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432), [2](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/panel.md#L1).
   - Individual options: `size:sm` (0 direct; Area: yes); `size:md` (0 direct; Area: yes).
 - **Layer 3 · Header, sections, action column and pinned footer** — 1 direct systems; 3 supporting/adjacent systems. Direct: Atlassian. Keep Area’s inspector job; general splitters are supporting primitives rather than equivalent inspectors. Evidence: [1](https://atlassian.design/components/panel/examples), [2](https://chakra-ui.com/docs/components/floating-panel), [3](https://primer.style/product/components/split-page-layout/), [4](https://shopify.dev/docs/api/app-home/latest/web-components/layout-and-structure/section).
   - Individual options: `structure:header` (1 direct; Area: yes); `structure:footer` (1 direct; Area: yes); `structure:sections` (0 direct; Area: yes).
@@ -74,7 +74,7 @@ Recommendations for owner selection, not implementation commitments. Direct coun
 
 ## Sources
 
-- Area: [manifest, lines 416–424](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L416-L424); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/panel.md#L1). All Area judgments refer to starting commit `c585f8c5f38705a7efa79bf05148a8c6989b142a`, not concurrent work.
+- Area: [manifest, lines 424–432](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L424-L432); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/panel.md#L1). All Area judgments refer to starting commit `7dae828e7af1daf9d26b663d34335121156606f7`, not concurrent work.
 - Research method and version boundaries: [README-2.md](README-2.md). URL check log: [source-audit-2.json](source-audit-2.json).
 
 Searched terms: panel, inspector, splitter, split view (exclude confirmation Panel). The following list accounts for all 16 requested systems. “Not found” never counts as a missing component proved absent.

@@ -1,12 +1,12 @@
 # Message — library range
 
-Baseline `c585f8c5f38705a7efa79bf05148a8c6989b142a` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
+Baseline `7dae828e7af1daf9d26b663d34335121156606f7` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
 
 ## Job
 
-One turn in a conversation: the person's bubble or the assistant's prose, with actions. [Area manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L451-L458).
+One turn in a conversation: the person's bubble or the assistant's prose, with actions. [Area manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L459-L466).
 
-Boundary: User bubble and assistant prose, named articles, action rows and streaming state are built. Rich content composes other components. Avatar/header/footer/reactions and sender grouping are not declared slots. [Area spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/message.md#L1).
+Boundary: User bubble and assistant prose, named articles, action rows and streaming state are built. Rich content composes other components. Avatar/header/footer/reactions and sender grouping are not declared slots. [Area spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/message.md#L1).
 
 ## Variant axes
 
@@ -24,31 +24,32 @@ Boundary: User bubble and assistant prose, named articles, action rows and strea
 
 ## Interaction patterns
 
-- **Untitled UI** (example): conversation-layout. [Source](https://www.untitledui.com/react/components/messaging) (checked 2026-09-28).
-- **shadcn/ui** (component): conversation-layout. [Source](https://ui.shadcn.com/docs/components/message) (checked 2026-09-28).
-- **shadcn/ui** (component): collapse-expand. [Source](https://ui.shadcn.com/docs/components/bubble) (checked 2026-09-28).
-- **Ant Design** (component): streaming, typing-animation, auto-scroll. [Source](https://x.ant.design/components/bubble) (checked 2026-09-28).
-- **Atlassian** (adjacent): comment-actions. [Source](https://atlassian.design/components/comment/examples) (checked 2026-09-28).
+- **conversation-layout**: [Untitled UI](https://www.untitledui.com/react/components/messaging), [shadcn/ui](https://ui.shadcn.com/docs/components/message) (checked 2026-09-28).
+- **collapse-expand**: [shadcn/ui](https://ui.shadcn.com/docs/components/bubble) (checked 2026-09-28).
+- **streaming**: [Ant Design](https://x.ant.design/components/bubble) (checked 2026-09-28).
+- **typing-animation**: [Ant Design](https://x.ant.design/components/bubble) (checked 2026-09-28).
+- **auto-scroll**: [Ant Design](https://x.ant.design/components/bubble) (checked 2026-09-28).
+- **comment-actions**: [Atlassian](https://atlassian.design/components/comment/examples) (checked 2026-09-28).
 
 ## Area today
 
-User bubble and assistant prose, named articles, action rows and streaming state are built. Rich content composes other components. Avatar/header/footer/reactions and sender grouping are not declared slots. [Baseline spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/message.md#L1).
+User bubble and assistant prose, named articles, action rows and streaming state are built. Rich content composes other components. Avatar/header/footer/reactions and sender grouping are not declared slots. [Baseline spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/message.md#L1).
 
-- Exact manifest axes: author = user, assistant. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L451-L458).
-- Boolean modifiers: none declared. Runtime state hooks: streaming. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L451-L458).
-- Slots: bubble, content, actions, cursor. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L451-L458).
+- Exact manifest axes: author = user, assistant. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L459-L466).
+- Boolean modifiers: none declared. Runtime state hooks: streaming. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L459-L466).
+- Slots: bubble, content, actions, cursor. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L459-L466).
 
 Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):
 
-- **yes**: `alignment:end`, `alignment:start`, `author:assistant`, `author:user`, `interaction:streaming`, `structure:action-row`, `structure:bubble`, `structure:unframed-prose`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L451-L458); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/message.md#L1-L73).
-- **not found**: `interaction:auto-scroll`, `interaction:collapse-expand`, `interaction:comment-actions`, `interaction:conversation-layout`, `interaction:typing-animation`, `placement:end`, `placement:start`, `shape:corner`, `shape:default`, `shape:round`, `state:abort`, `state:error`, `state:loading`, `state:success`, `state:updating`, `structure:author`, `structure:avatar`, `structure:collapsible-content`, `structure:footer`, `structure:header`, `structure:nested-replies`, `structure:reactions`, `structure:sender-group`, `structure:timestamp`, `variant:borderless`, `variant:default`, `variant:destructive`, `variant:filled`, `variant:ghost`, `variant:muted`, `variant:outline`, `variant:outlined`, `variant:secondary`, `variant:shadow`, `variant:tinted`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L451-L458); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/message.md#L1-L73).
-- **composition**: `structure:attachments`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L451-L458); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/message.md#L1-L73).
+- **yes**: `alignment:end`, `alignment:start`, `author:assistant`, `author:user`, `interaction:streaming`, `structure:action-row`, `structure:bubble`, `structure:unframed-prose`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L459-L466); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/message.md#L1-L73).
+- **not found**: `interaction:auto-scroll`, `interaction:collapse-expand`, `interaction:comment-actions`, `interaction:conversation-layout`, `interaction:typing-animation`, `placement:end`, `placement:start`, `shape:corner`, `shape:default`, `shape:round`, `state:abort`, `state:error`, `state:loading`, `state:success`, `state:updating`, `structure:author`, `structure:avatar`, `structure:collapsible-content`, `structure:footer`, `structure:header`, `structure:nested-replies`, `structure:reactions`, `structure:sender-group`, `structure:timestamp`, `variant:borderless`, `variant:default`, `variant:destructive`, `variant:filled`, `variant:ghost`, `variant:muted`, `variant:outline`, `variant:outlined`, `variant:secondary`, `variant:shadow`, `variant:tinted`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L459-L466); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/message.md#L1-L73).
+- **composition**: `structure:attachments`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L459-L466); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/message.md#L1-L73).
 
 ## Proposed range
 
 Recommendations for owner selection, not implementation commitments. Direct counts include official components/examples/recipes; experimental, adjacent and guidance counts are separate. Each bundle count is a union (at least one listed alternative); exact individual counts are in [index-2.json](index-2.json).
 
-- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L451-L458), [2](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/message.md#L1).
+- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L459-L466), [2](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/message.md#L1).
   - Individual options: `author:user` (0 direct; Area: yes); `author:assistant` (0 direct; Area: yes).
 - **Layer 2 · Bubble surface choices: filled, quiet, outline and unframed** — 2 direct systems. Direct: Ant Design, shadcn/ui. Separate author identity from visual treatment and alignment. Evidence: [1](https://ui.shadcn.com/docs/components/bubble), [2](https://x.ant.design/components/bubble).
   - Individual options: `variant:filled` (1 direct; Area: not found); `variant:muted` (1 direct; Area: not found); `variant:tinted` (1 direct; Area: not found); `variant:outline` (1 direct; Area: not found); `variant:outlined` (1 direct; Area: not found); `variant:ghost` (1 direct; Area: not found); `variant:borderless` (1 direct; Area: not found).
@@ -61,7 +62,7 @@ Recommendations for owner selection, not implementation commitments. Direct coun
 
 ## Sources
 
-- Area: [manifest, lines 451–458](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L451-L458); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/message.md#L1). All Area judgments refer to starting commit `c585f8c5f38705a7efa79bf05148a8c6989b142a`, not concurrent work.
+- Area: [manifest, lines 459–466](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L459-L466); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/message.md#L1). All Area judgments refer to starting commit `7dae828e7af1daf9d26b663d34335121156606f7`, not concurrent work.
 - Research method and version boundaries: [README-2.md](README-2.md). URL check log: [source-audit-2.json](source-audit-2.json).
 
 Searched terms: message, messaging, bubble, comment (exclude status Message). The following list accounts for all 16 requested systems. “Not found” never counts as a missing component proved absent.

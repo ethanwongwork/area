@@ -1,12 +1,12 @@
 # SplitButton — library range
 
-Baseline `c585f8c5f38705a7efa79bf05148a8c6989b142a` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
+Baseline `7dae828e7af1daf9d26b663d34335121156606f7` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
 
 ## Job
 
-Joins a default action to a menu of related actions. [Area manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L67-L74).
+Joins a default action to a menu of related actions. [Area manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L67-L74).
 
-Boundary: Manifest declares solid/soft/outline/ghost plus icon-only. Spec inherits Button sizes and tones, documents two tab stops and menu keys, but explicitly excludes ghost. Treat that disagreement as an open contract question, not a completed range decision. [Area spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/split-button.md#L1).
+Boundary: Manifest declares solid/soft/outline/ghost plus icon-only. Spec inherits Button sizes and tones, documents two tab stops and menu keys, but explicitly excludes ghost. Treat that disagreement as an open contract question, not a completed range decision. [Area spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/split-button.md#L1).
 
 ## Variant axes
 
@@ -26,30 +26,30 @@ Boundary: Manifest declares solid/soft/outline/ghost plus icon-only. Spec inheri
 
 ## Interaction patterns
 
-- **shadcn/ui** (recipe): two-tab-stops, menu-keyboard. [Source](https://ui.shadcn.com/docs/components/button-group) (checked 2026-09-28).
-- **Material 3** (experimental-component): shape-animation. [Source](https://raw.githubusercontent.com/androidx/androidx/fd0608f8a32b70fc7f145d258fc46e6d15b5f007/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/SplitButton.kt) (checked 2026-09-28).
-- **Ant Design** (component): two-actions. [Source](https://ant.design/components/dropdown) (checked 2026-09-28).
-- **Atlassian** (component): two-actions. [Source](https://atlassian.design/components/button/split-button/examples) (checked 2026-09-28).
+- **two-tab-stops**: [shadcn/ui](https://ui.shadcn.com/docs/components/button-group) (checked 2026-09-28).
+- **menu-keyboard**: [shadcn/ui](https://ui.shadcn.com/docs/components/button-group) (checked 2026-09-28).
+- **two-actions**: [Ant Design](https://ant.design/components/dropdown), [Atlassian](https://atlassian.design/components/button/split-button/examples) (checked 2026-09-28).
+- **shape-animation**: [Material 3](https://raw.githubusercontent.com/androidx/androidx/fd0608f8a32b70fc7f145d258fc46e6d15b5f007/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/SplitButton.kt) (checked 2026-09-28).
 
 ## Area today
 
-Manifest declares solid/soft/outline/ghost plus icon-only. Spec inherits Button sizes and tones, documents two tab stops and menu keys, but explicitly excludes ghost. Treat that disagreement as an open contract question, not a completed range decision. [Baseline spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/split-button.md#L1).
+Manifest declares solid/soft/outline/ghost plus icon-only. Spec inherits Button sizes and tones, documents two tab stops and menu keys, but explicitly excludes ghost. Treat that disagreement as an open contract question, not a completed range decision. [Baseline spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/split-button.md#L1).
 
-- Exact manifest axes: variant = solid, soft, outline, ghost. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L67-L74).
-- Boolean modifiers: icon-only. Runtime state hooks: none declared. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L67-L74).
-- Slots: action, trigger, menu. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L67-L74).
+- Exact manifest axes: variant = solid, soft, outline, ghost. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L67-L74).
+- Boolean modifiers: icon-only. Runtime state hooks: none declared. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L67-L74).
+- Slots: action, trigger, menu. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L67-L74).
 
 Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):
 
-- **not found**: `appearance:default`, `appearance:elevated`, `appearance:subtle`, `appearance:transparent`, `icon-position:after`, `icon-position:before`, `interaction:shape-animation`, `orientation:horizontal`, `orientation:vertical`, `shape:circular`, `shape:rounded`, `shape:square`, `size:extra-large`, `size:extra-small`, `size:large`, `size:medium`, `size:small`, `spacing:compact`, `spacing:default`, `state:disabled-focusable`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L67-L74); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/split-button.md#L1-L227).
-- **yes**: `appearance:outline`, `interaction:menu-keyboard`, `interaction:two-actions`, `interaction:two-tab-stops`, `state:disabled`, `structure:icons`, `structure:menu-trigger`, `structure:primary-action`, `structure:separator`, `variant:ghost`, `variant:outline`, `variant:soft`, `variant:solid`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L67-L74); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/split-button.md#L1-L227).
-- **equivalent concept / source styling differs**: `appearance:filled`, `appearance:outlined`, `appearance:primary`, `appearance:secondary`, `appearance:tonal`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L67-L74); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/split-button.md#L1-L227).
+- **not found**: `appearance:default`, `appearance:elevated`, `appearance:subtle`, `appearance:transparent`, `icon-position:after`, `icon-position:before`, `interaction:shape-animation`, `orientation:horizontal`, `orientation:vertical`, `shape:circular`, `shape:rounded`, `shape:square`, `size:extra-large`, `size:extra-small`, `size:large`, `size:medium`, `size:small`, `spacing:compact`, `spacing:default`, `state:disabled-focusable`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L67-L74); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/split-button.md#L1-L227).
+- **yes**: `appearance:outline`, `interaction:menu-keyboard`, `interaction:two-actions`, `interaction:two-tab-stops`, `state:disabled`, `structure:icons`, `structure:menu-trigger`, `structure:primary-action`, `structure:separator`, `variant:ghost`, `variant:outline`, `variant:soft`, `variant:solid`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L67-L74); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/split-button.md#L1-L227).
+- **equivalent concept / source styling differs**: `appearance:filled`, `appearance:outlined`, `appearance:primary`, `appearance:secondary`, `appearance:tonal`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L67-L74); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/split-button.md#L1-L227).
 
 ## Proposed range
 
 Recommendations for owner selection, not implementation commitments. Direct counts include official components/examples/recipes; experimental, adjacent and guidance counts are separate. Each bundle count is a union (at least one listed alternative); exact individual counts are in [index-2.json](index-2.json).
 
-- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L67-L74), [2](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/split-button.md#L1).
+- **Layer 2 · Retain the documented baseline inventory** — 0 direct systems. Direct: none verified as a direct implementation/example. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L67-L74), [2](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/split-button.md#L1).
   - Individual options: `variant:solid` (0 direct; Area: yes); `variant:soft` (0 direct; Area: yes); `variant:outline` (0 direct; Area: yes); `variant:ghost` (0 direct; Area: yes).
 - **Layer 2 · Primary/soft/outline and an owner decision on ghost** — 2 direct systems; 1 experimental implementation. Direct: Atlassian, Fluent 2. Resolve the manifest/spec conflict. Fluent supplies quiet styles while Area’s spec rejects ghost. Evidence: [1](https://atlassian.design/components/button/split-button/examples), [2](https://raw.githubusercontent.com/androidx/androidx/fd0608f8a32b70fc7f145d258fc46e6d15b5f007/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/SplitButton.kt), [3](https://raw.githubusercontent.com/microsoft/fluentui/8add8c8750c34c85acd811e32ab324abf8f1562e/packages/react-components/react-button/library/src/components/Button/Button.types.ts).
   - Individual options: `appearance:primary` (2 direct; Area: equivalent concept / source styling differs); `appearance:secondary` (1 direct; Area: equivalent concept / source styling differs); `appearance:outline` (1 direct; Area: yes); `appearance:subtle` (1 direct; Area: not found); `appearance:transparent` (1 direct; Area: not found); `appearance:filled` (0 direct; Area: equivalent concept / source styling differs); `appearance:tonal` (0 direct; Area: equivalent concept / source styling differs); `appearance:outlined` (0 direct; Area: equivalent concept / source styling differs).
@@ -60,7 +60,7 @@ Recommendations for owner selection, not implementation commitments. Direct coun
 
 ## Sources
 
-- Area: [manifest, lines 67–74](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L67-L74); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/split-button.md#L1). All Area judgments refer to starting commit `c585f8c5f38705a7efa79bf05148a8c6989b142a`, not concurrent work.
+- Area: [manifest, lines 67–74](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L67-L74); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/split-button.md#L1). All Area judgments refer to starting commit `7dae828e7af1daf9d26b663d34335121156606f7`, not concurrent work.
 - Research method and version boundaries: [README-2.md](README-2.md). URL check log: [source-audit-2.json](source-audit-2.json).
 
 Searched terms: split button, dropdown button, button with dropdown, button group split. The following list accounts for all 16 requested systems. “Not found” never counts as a missing component proved absent.

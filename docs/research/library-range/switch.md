@@ -1,12 +1,12 @@
 # Switch — library range
 
-Baseline `c585f8c5f38705a7efa79bf05148a8c6989b142a` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
+Baseline `7dae828e7af1daf9d26b663d34335121156606f7` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
 
 ## Job
 
-Toggles a setting that takes effect immediately. [Area manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275).
+Toggles a setting that takes effect immediately. [Area manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275).
 
-Boundary: sm/md/lg; label start/end; short/long track; neutral/accent/custom tone; fullWidth; disabled/read-only/loading. Track labels and icons in the thumb are not declared slots. [Area spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1).
+Boundary: sm/md/lg; label start/end; short/long track; neutral/accent/custom tone; fullWidth; disabled/read-only/loading. Track labels and icons in the thumb are not declared slots. [Area spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1).
 
 ## Variant axes
 
@@ -45,44 +45,32 @@ Boundary: sm/md/lg; label start/end; short/long track; neutral/accent/custom ton
 
 ## Interaction patterns
 
-- **Untitled UI** (component): toggle. [Source](https://www.untitledui.com/react/components/toggles) (checked 2026-09-28).
-- **shadcn/ui** (component): toggle. [Source](https://ui.shadcn.com/docs/components/switch) (checked 2026-09-28).
-- **Radix Themes** (component): toggle. [Source](https://www.radix-ui.com/themes/docs/components/switch) (checked 2026-09-28).
-- **Base UI** (component): toggle. [Source](https://base-ui.com/react/components/switch) (checked 2026-09-28).
-- **React Aria / Spectrum 2** (component): toggle. [Source](https://react-spectrum.adobe.com/Switch) (checked 2026-09-28).
-- **Fluent 2** (component): toggle. [Source](https://fluent2.microsoft.design/components/web/react/core/switch/usage) (checked 2026-09-28).
-- **Primer** (component): toggle. [Source](https://primer.style/product/components/toggle-switch/) (checked 2026-09-28).
-- **Carbon** (component): toggle. [Source](https://carbondesignsystem.com/components/toggle/usage/) (checked 2026-09-28).
-- **Material 3** (component): toggle, thumb-drag. [Source](https://developer.android.com/develop/ui/compose/components/switch) (checked 2026-09-28).
-- **Mantine** (component): toggle, group-selection. [Source](https://mantine.dev/core/switch) (checked 2026-09-28).
-- **Ant Design** (component): toggle. [Source](https://ant.design/components/switch) (checked 2026-09-28).
-- **Chakra/Ark** (component): toggle. [Source](https://chakra-ui.com/docs/components/switch) (checked 2026-09-28).
-- **Atlassian** (component): toggle. [Source](https://atlassian.design/components/toggle/examples) (checked 2026-09-28).
-- **Polaris** (component): toggle. [Source](https://shopify.dev/docs/api/app-home/latest/web-components/forms/switch) (checked 2026-09-28).
-- **Apple HIG** (guidance): toggle. [Source](https://developer.apple.com/design/human-interface-guidelines/toggles) (checked 2026-09-28).
+- **toggle**: [Untitled UI](https://www.untitledui.com/react/components/toggles), [shadcn/ui](https://ui.shadcn.com/docs/components/switch), [Radix Themes](https://www.radix-ui.com/themes/docs/components/switch), [Base UI](https://base-ui.com/react/components/switch), [React Aria / Spectrum 2](https://react-spectrum.adobe.com/Switch), [Fluent 2](https://fluent2.microsoft.design/components/web/react/core/switch/usage), [Primer](https://primer.style/product/components/toggle-switch/), [Carbon](https://carbondesignsystem.com/components/toggle/usage/), [Material 3](https://developer.android.com/develop/ui/compose/components/switch), [Mantine](https://mantine.dev/core/switch), [Ant Design](https://ant.design/components/switch), [Chakra/Ark](https://chakra-ui.com/docs/components/switch), [Atlassian](https://atlassian.design/components/toggle/examples), [Polaris](https://shopify.dev/docs/api/app-home/latest/web-components/forms/switch), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/toggles) (checked 2026-09-28).
+- **thumb-drag**: [Material 3](https://developer.android.com/develop/ui/compose/components/switch) (checked 2026-09-28).
+- **group-selection**: [Mantine](https://mantine.dev/core/switch) (checked 2026-09-28).
 
 ## Area today
 
-sm/md/lg; label start/end; short/long track; neutral/accent/custom tone; fullWidth; disabled/read-only/loading. Track labels and icons in the thumb are not declared slots. [Baseline spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1).
+sm/md/lg; label start/end; short/long track; neutral/accent/custom tone; fullWidth; disabled/read-only/loading. Track labels and icons in the thumb are not declared slots. [Baseline spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1).
 
-- Exact manifest axes: size = sm, md, lg; labelPosition = end, start; track = short, long; tone = neutral, accent, custom. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275).
-- Boolean modifiers: full-width. Runtime state hooks: checked, disabled, read-only, loading, hover, active, focus-visible. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275).
-- Slots: control, track, thumb, text, label, description, loading. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275).
+- Exact manifest axes: size = sm, md, lg; labelPosition = end, start; track = short, long; tone = neutral, accent, custom. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275).
+- Boolean modifiers: full-width. Runtime state hooks: checked, disabled, read-only, loading, hover, active, focus-visible. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275).
+- Slots: control, track, thumb, text, label, description, loading. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275).
 
 Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):
 
-- **equivalent concept / source styling differs**: `track:default`, `track:slim`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1-L171).
-- **yes**: `interaction:toggle`, `label-position:left`, `label-position:right`, `labelPosition:end`, `labelPosition:start`, `size:lg`, `size:md`, `size:sm`, `state:checked`, `state:disabled`, `state:loading`, `state:read-only`, `structure:description`, `structure:label`, `tone:accent`, `tone:custom`, `tone:neutral`, `track:long`, `track:short`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1-L171).
-- **not found**: `emphasis:default`, `emphasis:emphasized`, `interaction:group-selection`, `interaction:thumb-drag`, `label-position:top`, `label-visibility:exclusive`, `label-visibility:visible`, `size:XL`, `size:default`, `size:regular`, `size:xl`, `size:xs`, `state:error`, `state:invalid`, `structure:checkbox`, `structure:switch`, `structure:thumb-icon`, `structure:toggle-button`, `structure:track-label`, `variant:classic`, `variant:raised`, `variant:soft`, `variant:solid`, `variant:surface`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1-L171).
-- **equivalent tier / geometry not asserted**: `size:1`, `size:2`, `size:3`, `size:L`, `size:M`, `size:S`, `size:large`, `size:medium`, `size:small`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1-L171).
-- **system-level / not this exact option**: `contrast:high`, `contrast:normal`, `radius:full`, `radius:large`, `radius:medium`, `radius:none`, `radius:small`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1-L171).
-- **composition**: `structure:status-label`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1-L171).
+- **equivalent concept / source styling differs**: `track:default`, `track:slim`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1-L184).
+- **yes**: `interaction:toggle`, `label-position:left`, `label-position:right`, `labelPosition:end`, `labelPosition:start`, `size:lg`, `size:md`, `size:sm`, `state:checked`, `state:disabled`, `state:loading`, `state:read-only`, `structure:description`, `structure:label`, `tone:accent`, `tone:custom`, `tone:neutral`, `track:long`, `track:short`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1-L184).
+- **not found**: `emphasis:default`, `emphasis:emphasized`, `interaction:group-selection`, `interaction:thumb-drag`, `label-position:top`, `label-visibility:exclusive`, `label-visibility:visible`, `size:XL`, `size:default`, `size:regular`, `size:xl`, `size:xs`, `state:error`, `state:invalid`, `structure:checkbox`, `structure:switch`, `structure:thumb-icon`, `structure:toggle-button`, `structure:track-label`, `variant:classic`, `variant:raised`, `variant:soft`, `variant:solid`, `variant:surface`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1-L184).
+- **equivalent tier / geometry not asserted**: `size:1`, `size:2`, `size:3`, `size:L`, `size:M`, `size:S`, `size:large`, `size:medium`, `size:small`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1-L184).
+- **system-level / not this exact option**: `contrast:high`, `contrast:normal`, `radius:full`, `radius:large`, `radius:medium`, `radius:none`, `radius:small`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1-L184).
+- **composition**: `structure:status-label`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1-L184).
 
 ## Proposed range
 
 Recommendations for owner selection, not implementation commitments. Direct counts include official components/examples/recipes; experimental, adjacent and guidance counts are separate. Each bundle count is a union (at least one listed alternative); exact individual counts are in [index-2.json](index-2.json).
 
-- **Layer 2 · Retain the documented baseline inventory** — 3 direct systems. Direct: Chakra/Ark, Mantine, shadcn/ui. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275), [2](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1).
+- **Layer 2 · Retain the documented baseline inventory** — 3 direct systems. Direct: Chakra/Ark, Mantine, shadcn/ui. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275), [2](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1).
   - Individual options: `size:sm` (3 direct; Area: yes); `size:md` (2 direct; Area: yes); `size:lg` (2 direct; Area: yes); `labelPosition:end` (0 direct; Area: yes); `labelPosition:start` (0 direct; Area: yes); `track:short` (0 direct; Area: yes); `track:long` (0 direct; Area: yes); `tone:neutral` (0 direct; Area: yes); `tone:accent` (0 direct; Area: yes); `tone:custom` (0 direct; Area: yes).
 - **Layer 2 · Flat/soft and raised appearances** — 2 direct systems. Direct: Chakra/Ark, Radix Themes. Keep appearance independent of the current short/long track option. Evidence: [1](https://chakra-ui.com/docs/components/switch), [2](https://www.radix-ui.com/themes/docs/components/switch).
   - Individual options: `variant:surface` (1 direct; Area: not found); `variant:classic` (1 direct; Area: not found); `variant:soft` (1 direct; Area: not found); `variant:raised` (1 direct; Area: not found).
@@ -93,7 +81,7 @@ Recommendations for owner selection, not implementation commitments. Direct coun
 
 ## Sources
 
-- Area: [manifest, lines 260–275](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/switch.md#L1). All Area judgments refer to starting commit `c585f8c5f38705a7efa79bf05148a8c6989b142a`, not concurrent work.
+- Area: [manifest, lines 260–275](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L260-L275); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/switch.md#L1). All Area judgments refer to starting commit `7dae828e7af1daf9d26b663d34335121156606f7`, not concurrent work.
 - Research method and version boundaries: [README-2.md](README-2.md). URL check log: [source-audit-2.json](source-audit-2.json).
 
 Searched terms: switch, toggle. The following list accounts for all 16 requested systems. “Not found” never counts as a missing component proved absent.

@@ -1,12 +1,12 @@
 # Textarea — library range
 
-Baseline `c585f8c5f38705a7efa79bf05148a8c6989b142a` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
+Baseline `7dae828e7af1daf9d26b663d34335121156606f7` · public references checked 2026-09-28. Counts and scope rules: [README-2](README-2.md).
 
 ## Job
 
-Accepts multiple lines of text. [Area manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211).
+Accepts multiple lines of text. [Area manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211).
 
-Boundary: Native textarea; outline/soft, sm/md/lg, all four resize policies, fullWidth, readonly/disabled and validation. Rows own height. No autosize or character counter API in the spec. [Area spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1).
+Boundary: Native textarea; outline/soft, sm/md/lg, all four resize policies, fullWidth, readonly/disabled and validation. Rows own height. No autosize or character counter API in the spec. [Area spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1).
 
 ## Variant axes
 
@@ -45,43 +45,38 @@ Boundary: Native textarea; outline/soft, sm/md/lg, all four resize policies, ful
 
 ## Interaction patterns
 
-- **Radix Themes** (component): native-editing. [Source](https://www.radix-ui.com/themes/docs/components/text-area) (checked 2026-09-28).
-- **React Aria / Spectrum 2** (component): native-editing, validation. [Source](https://react-spectrum.adobe.com/TextArea) (checked 2026-09-28).
-- **Fluent 2** (component): native-editing. [Source](https://fluent2.microsoft.design/components/web/react/core/textarea/usage) (checked 2026-09-28).
-- **Primer** (component): native-editing. [Source](https://primer.style/product/components/textarea/) (checked 2026-09-28).
-- **Carbon** (component): native-editing. [Source](https://carbondesignsystem.com/components/text-input/usage/) (checked 2026-09-28).
-- **Material 3** (component): native-editing, min-max-rows. [Source](https://developer.android.com/develop/ui/compose/text/user-input) (checked 2026-09-28).
-- **Mantine** (component): autosize, min-max-rows, native-editing. [Source](https://mantine.dev/core/textarea) (checked 2026-09-28).
-- **Ant Design** (component): autosize, min-max-rows, native-editing. [Source](https://ant.design/components/input) (checked 2026-09-28).
-- **Chakra/Ark** (component): autosize, native-editing. [Source](https://chakra-ui.com/docs/components/textarea) (checked 2026-09-28).
-- **Atlassian** (component): autosize, native-editing. [Source](https://atlassian.design/components/textarea/examples) (checked 2026-09-28).
-- **Polaris** (component): rows, max-length, native-editing. [Source](https://shopify.dev/docs/api/app-home/latest/web-components/forms/text-area) (checked 2026-09-28).
-- **GOV.UK** (component): rows, native-editing. [Source](https://design-system.service.gov.uk/components/textarea/) (checked 2026-09-28).
-- **GOV.UK** (component): limit-announcement. [Source](https://design-system.service.gov.uk/components/character-count/) (checked 2026-09-28).
-- **Apple HIG** (guidance): native-editing, selection, scrolling. [Source](https://developer.apple.com/design/human-interface-guidelines/text-views) (checked 2026-09-28).
+- **native-editing**: [Radix Themes](https://www.radix-ui.com/themes/docs/components/text-area), [React Aria / Spectrum 2](https://react-spectrum.adobe.com/TextArea), [Fluent 2](https://fluent2.microsoft.design/components/web/react/core/textarea/usage), [Primer](https://primer.style/product/components/textarea/), [Carbon](https://carbondesignsystem.com/components/text-input/usage/), [Mantine](https://mantine.dev/core/textarea), [Ant Design](https://ant.design/components/input), [Chakra/Ark](https://chakra-ui.com/docs/components/textarea), [Atlassian](https://atlassian.design/components/textarea/examples), [Polaris](https://shopify.dev/docs/api/app-home/latest/web-components/forms/text-area), [GOV.UK](https://design-system.service.gov.uk/components/textarea/), [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/text-views), [Material 3](https://developer.android.com/develop/ui/compose/text/user-input) (checked 2026-09-28).
+- **validation**: [React Aria / Spectrum 2](https://react-spectrum.adobe.com/TextArea) (checked 2026-09-28).
+- **autosize**: [Mantine](https://mantine.dev/core/textarea), [Ant Design](https://ant.design/components/input), [Chakra/Ark](https://chakra-ui.com/docs/components/textarea), [Atlassian](https://atlassian.design/components/textarea/examples) (checked 2026-09-28).
+- **min-max-rows**: [Mantine](https://mantine.dev/core/textarea), [Ant Design](https://ant.design/components/input), [Material 3](https://developer.android.com/develop/ui/compose/text/user-input) (checked 2026-09-28).
+- **rows**: [Polaris](https://shopify.dev/docs/api/app-home/latest/web-components/forms/text-area), [GOV.UK](https://design-system.service.gov.uk/components/textarea/) (checked 2026-09-28).
+- **max-length**: [Polaris](https://shopify.dev/docs/api/app-home/latest/web-components/forms/text-area) (checked 2026-09-28).
+- **limit-announcement**: [GOV.UK](https://design-system.service.gov.uk/components/character-count/) (checked 2026-09-28).
+- **selection**: [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/text-views) (checked 2026-09-28).
+- **scrolling**: [Apple HIG](https://developer.apple.com/design/human-interface-guidelines/text-views) (checked 2026-09-28).
 
 ## Area today
 
-Native textarea; outline/soft, sm/md/lg, all four resize policies, fullWidth, readonly/disabled and validation. Rows own height. No autosize or character counter API in the spec. [Baseline spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1).
+Native textarea; outline/soft, sm/md/lg, all four resize policies, fullWidth, readonly/disabled and validation. Rows own height. No autosize or character counter API in the spec. [Baseline spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1).
 
-- Exact manifest axes: variant = outline, soft; size = sm, md, lg; resize = vertical, horizontal, both, none. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211).
-- Boolean modifiers: full-width. Runtime state hooks: invalid, success, warning, disabled, read-only. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211).
-- Slots: none declared. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211).
+- Exact manifest axes: variant = outline, soft; size = sm, md, lg; resize = vertical, horizontal, both, none. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211).
+- Boolean modifiers: full-width. Runtime state hooks: invalid, success, warning, disabled, read-only. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211).
+- Slots: none declared. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211).
 
 Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):
 
-- **yes**: `interaction:max-length`, `interaction:native-editing`, `interaction:rows`, `resize:both`, `resize:horizontal`, `resize:none`, `resize:vertical`, `size:lg`, `size:md`, `size:sm`, `state:disabled`, `state:invalid`, `state:read-only`, `state:warning`, `structure:placeholder`, `variant:outline`, `variant:soft`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1-L134).
-- **composition**: `interaction:validation`, `structure:description`, `structure:helper-error`, `structure:label`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1-L134).
-- **equivalent concept / source styling differs**: `variant:filled`, `variant:outlined`, `variant:subtle`, `variant:surface`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1-L134).
-- **not found**: `appearance:none`, `appearance:standard`, `appearance:subtle`, `interaction:autosize`, `interaction:limit-announcement`, `interaction:min-max-rows`, `interaction:scrolling`, `interaction:selection`, `label-position:side`, `label-position:top`, `label-visibility:exclusive`, `label-visibility:visible`, `resize:auto`, `resize:smart`, `size:XL`, `size:xl`, `size:xs`, `state:error`, `state:loading`, `structure:ai-label`, `structure:character-count`, `structure:clear-button`, `structure:contextual-help`, `structure:label-above`, `structure:label-inside`, `structure:left-right-sections`, `structure:multiline-text`, `structure:word-count`, `style:default`, `style:fluid`, `variant:borderless`, `variant:classic`, `variant:default`, `variant:flushed`, `variant:underlined`, `variant:unstyled`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1-L134).
-- **equivalent tier / geometry not asserted**: `size:1`, `size:2`, `size:3`, `size:L`, `size:M`, `size:S`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1-L134).
-- **system-level / not this exact option**: `radius:full`, `radius:large`, `radius:medium`, `radius:none`, `radius:small`. [Manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1-L134).
+- **yes**: `interaction:max-length`, `interaction:native-editing`, `interaction:rows`, `resize:both`, `resize:horizontal`, `resize:none`, `resize:vertical`, `size:lg`, `size:md`, `size:sm`, `state:disabled`, `state:invalid`, `state:read-only`, `state:warning`, `structure:placeholder`, `variant:outline`, `variant:soft`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1-L147).
+- **composition**: `interaction:validation`, `structure:description`, `structure:helper-error`, `structure:label`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1-L147).
+- **equivalent concept / source styling differs**: `variant:filled`, `variant:outlined`, `variant:subtle`, `variant:surface`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1-L147).
+- **not found**: `appearance:none`, `appearance:standard`, `appearance:subtle`, `interaction:autosize`, `interaction:limit-announcement`, `interaction:min-max-rows`, `interaction:scrolling`, `interaction:selection`, `label-position:side`, `label-position:top`, `label-visibility:exclusive`, `label-visibility:visible`, `resize:auto`, `resize:smart`, `size:XL`, `size:xl`, `size:xs`, `state:error`, `state:loading`, `structure:ai-label`, `structure:character-count`, `structure:clear-button`, `structure:contextual-help`, `structure:label-above`, `structure:label-inside`, `structure:left-right-sections`, `structure:multiline-text`, `structure:word-count`, `style:default`, `style:fluid`, `variant:borderless`, `variant:classic`, `variant:default`, `variant:flushed`, `variant:underlined`, `variant:unstyled`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1-L147).
+- **equivalent tier / geometry not asserted**: `size:1`, `size:2`, `size:3`, `size:L`, `size:M`, `size:S`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1-L147).
+- **system-level / not this exact option**: `radius:full`, `radius:large`, `radius:medium`, `radius:none`, `radius:small`. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1-L147).
 
 ## Proposed range
 
 Recommendations for owner selection, not implementation commitments. Direct counts include official components/examples/recipes; experimental, adjacent and guidance counts are separate. Each bundle count is a union (at least one listed alternative); exact individual counts are in [index-2.json](index-2.json).
 
-- **Layer 2 · Retain the documented baseline inventory** — 5 direct systems. Direct: Atlassian, Chakra/Ark, Fluent 2, Mantine, Radix Themes. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211), [2](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1).
+- **Layer 2 · Retain the documented baseline inventory** — 5 direct systems. Direct: Atlassian, Chakra/Ark, Fluent 2, Mantine, Radix Themes. Retain the current size/tone/state inventory while the owner selects additions below. No removal is inferred from a zero exact-spelling external count. Evidence: [1](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211), [2](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1).
   - Individual options: `variant:outline` (1 direct; Area: yes); `variant:soft` (1 direct; Area: yes); `size:sm` (2 direct; Area: yes); `size:md` (2 direct; Area: yes); `size:lg` (2 direct; Area: yes); `resize:vertical` (5 direct; Area: yes); `resize:horizontal` (4 direct; Area: yes); `resize:both` (4 direct; Area: yes); `resize:none` (4 direct; Area: yes).
 - **Layer 3 · Outline/soft plus underlined or borderless** — 3 direct systems. Direct: Ant Design, Chakra/Ark, Mantine. Choose field-wide treatment semantics rather than isolated textarea paint. Evidence: [1](https://ant.design/components/input), [2](https://chakra-ui.com/docs/components/textarea), [3](https://mantine.dev/core/textarea).
   - Individual options: `variant:flushed` (1 direct; Area: not found); `variant:underlined` (1 direct; Area: not found); `variant:borderless` (1 direct; Area: not found); `variant:unstyled` (1 direct; Area: not found).
@@ -92,7 +87,7 @@ Recommendations for owner selection, not implementation commitments. Direct coun
 
 ## Sources
 
-- Area: [manifest, lines 198–211](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/textarea.md#L1). All Area judgments refer to starting commit `c585f8c5f38705a7efa79bf05148a8c6989b142a`, not concurrent work.
+- Area: [manifest, lines 198–211](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L198-L211); [spec](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/textarea.md#L1). All Area judgments refer to starting commit `7dae828e7af1daf9d26b663d34335121156606f7`, not concurrent work.
 - Research method and version boundaries: [README-2.md](README-2.md). URL check log: [source-audit-2.json](source-audit-2.json).
 
 Searched terms: textarea, text area, multiline text field, text view. The following list accounts for all 16 requested systems. “Not found” never counts as a missing component proved absent.

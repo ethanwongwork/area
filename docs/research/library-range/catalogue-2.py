@@ -3,7 +3,7 @@ from pathlib import Path
 import json,re,subprocess
 from functools import lru_cache
 ROOT=Path(__file__).parent
-SHA='c585f8c5f38705a7efa79bf05148a8c6989b142a'
+SHA='7dae828e7af1daf9d26b663d34335121156606f7'
 DATE='2026-09-28'
 SYSTEMS={
 'U':('Untitled UI','https://www.untitledui.com/react/components/','https://www.untitledui.com/react/components'),
@@ -414,12 +414,12 @@ AREA={
 'progress':dict(yes='structure:linear interaction:determinate interaction:indeterminate',composition='structure:label structure:value-label',note='Linear determinate or indeterminate progress, sm/md/lg rail tiers, neutral/accent. Label and numeric output are composed outside the component. No circular, segmented or semantic error/success API.'),
 'prompt-suggestions':dict(yes='structure:icons structure:wrap interaction:activate-prompt state:disabled',partial='structure:button-bubble',note='List is the default; chips are the second layout. List items have optional dismiss controls; the chip recipe has no dismiss. Activation is consumer-owned (fill or send). Descriptions and grouped suggestion cards are not declared.'),
 'property-list':dict(yes='structure:drag-handle structure:drop-indicator interaction:drag-reorder interaction:keyboard-reorder interaction:drop-announcement interaction:keyboard-alternative',composition='structure:rich-rows structure:move-actions',note='Ordered flat properties with handle, value/actions, inactive state, pointer capture and Escape cancel. Keyboard arrows/Home/End move items while preserving focus and announcing position. Nesting and multi-selection are explicitly out of scope.'),
-'radio':dict(yes='orientation:horizontal orientation:vertical state:disabled state:checked state:invalid structure:label structure:description interaction:single-selection interaction:arrow-navigation',composition='structure:helper-error',note='Native radio inputs and fieldset group; sm/md/lg and neutral/accent; vertical/horizontal layout and descriptions. No Radio choice-card treatment is declared (Checkbox card is a different family).'),
+'radio':dict(yes='structure:choice-cards structure:icons structure:rich-options orientation:horizontal orientation:vertical state:disabled state:checked state:invalid structure:label structure:description interaction:single-selection interaction:arrow-navigation',composition='structure:helper-error',note='Native radio inputs and fieldset group; md/lg and neutral/accent. Radio and Checkbox both support variant=card and layout=row/tile; layout applies only with card. Group orientation is independently horizontal/vertical; leading visuals and captions are supported.'),
 'scroll-to-latest':dict(yes='structure:floating-button interaction:scroll-to-latest shape:circle',note='Round outline button appears away from the end, is unfocusable when hidden, scrolls smoothly or instantly with reduced motion. Stream following, history anchoring and arbitrary-message navigation are not described.'),
 'segmented':dict(yes='structure:icons structure:text-options structure:equal-width interaction:single-selection interaction:arrow-navigation interaction:roving-focus state:disabled state:selected orientation:horizontal',partial='orientation:vertical',note='One raised-track appearance; three sizes; fullWidth and iconOnly. Radio semantics with RTL-aware arrows, Home/End and disabled-item skipping. Multiple independent toggles belong to a separate semantic mode, not an interchangeable radio state.'),
 'select':dict(yes='variant:outline variant:soft state:disabled state:invalid state:warning structure:native-picker structure:groups interaction:single-selection interaction:native-keyboard interaction:typeahead',composition='structure:label structure:description',partial='structure:custom-listbox',note='Native select, outline/soft, three tiers, fullWidth, optgroups and validation. appearance: base-select styles the native popup where supported; this is not a headless custom-listbox implementation. Search, multiple and rich options are explicitly excluded; borderless/ghost is a candidate.'),
 'separator':dict(yes='orientation:horizontal orientation:vertical structure:inset interaction:semantic-separator',partial='interaction:semantic-or-decorative',note='Horizontal/vertical rule, spacing none/normal and optional inset. Always renders separator semantics in the documented API; no labeled, dashed or dotted variant.'),
-'skeleton':dict(yes='structure:text structure:circle structure:rectangle interaction:loading-placeholder',composition='structure:card-composition structure:content-layout',note='Text/circle/rectangle/rounded placeholders; aria-hidden, with the host responsible for busy state. No public pulse/shine/static axis or replacement wrapper is declared.'),
+'skeleton':dict(yes='animation:off animation:on variant:none interaction:shimmer interaction:disable-children structure:replace-children structure:multiline interaction:preserve-layout structure:text structure:circle structure:rectangle interaction:loading-placeholder',composition='structure:card-composition structure:content-layout',note='Shapes are block (default), text and circle. Boolean static disables shimmer; wrap preserves child layout and makes the placeholder subtree inert. Multiline text uses lines. Placeholders are aria-hidden; the host owns busy announcements.'),
 'slider':dict(yes='orientation:horizontal orientation:vertical state:disabled structure:single-thumb structure:range-thumbs structure:step-marks structure:value-label interaction:pointer-drag interaction:keyboard-step interaction:min-max-step',composition='structure:number-input structure:min-max-labels',note='Native range-based slider; sm/md/lg, neutral/accent, inline/top label, vertical orientation, readout and marks. Range with inputs is documented as a composition; see the Area status on that option rather than inferring a general arbitrary-thumb engine.'),
 'spinner':dict(yes='structure:circular structure:inline interaction:indeterminate interaction:status-announcement',composition='structure:label structure:region-centered',note='One rotating shape; sm/md/lg, neutral/accent. Labeled spinners announce status; unlabeled ones are decorative and the host announces busy state. Bars/dots and overlay ownership are not public variants.'),
 'split-button':dict(yes='structure:primary-action structure:menu-trigger structure:icons structure:separator interaction:two-actions interaction:two-tab-stops interaction:menu-keyboard state:disabled appearance:outline',note='Manifest declares solid/soft/outline/ghost plus icon-only. Spec inherits Button sizes and tones, documents two tab stops and menu keys, but explicitly excludes ghost. Treat that disagreement as an open contract question, not a completed range decision.'),
@@ -436,7 +436,8 @@ AREA['slider']['yes']=AREA['slider']['yes'].replace('structure:range-thumbs','')
 AREA['slider']['composition']+=' structure:range-thumbs'
 AREA['table']['yes']=AREA['table']['yes'].replace('stripe:odd','')
 AREA['prompt-suggestions']['yes']=AREA['prompt-suggestions']['yes'].replace('state:disabled','')
-AREA['menu']['partial']=''
+AREA['menu']['partial']='structure:submenus'
+AREA['menu']['yes']+=' interaction:outside-dismiss interaction:single-selection placement:top placement:bottom placement:left placement:right'
 AREA['segmented']['partial']=''
 # Additional catalogue entries whose names differ from Area's.
 R('tabs','P','underline-panels/','','underline;icons;counts','single-selection')
@@ -569,7 +570,7 @@ def option_area_sources(slug,observation,manifest_link):
  refs=[manifest_link,spec_section(slug,heading),spec_section(slug,'Decisions')]
  if observation['axis']=='state':refs.append(spec_section(slug,'States'))
  if slug=='panel':refs.append(source_link('docs/specs/resizable-panel.md',12,29))
- if slug=='radio':refs.append(source_link('packages/styles/src/manifest.ts',251,258))
+ if slug=='radio':refs.append(source_link('packages/styles/src/manifest.ts',251,259))
  return list(dict.fromkeys(refs))
 def keys(text):return set(text.split())
 def area_status(f,oid,manifest):
@@ -657,6 +658,13 @@ def render():
    out+=['## '+section,'']
    obs=[o for o in DATA[f] if o['section']==section]
    if not obs:out += [f'No additional named {section.lower()} found in the checked public sources. Area’s current contract is listed below; the complete system-by-system search record is in Sources.','']
+   if section=='Interaction patterns':
+    for value in dict.fromkeys(o['value'] for o in obs):
+     matches=[o for o in obs if o['value']==value]
+     refs=list(dict.fromkeys((SYSTEMS[o['system']][0],o['url']) for o in matches))
+     out.append('- **'+value+'**: '+', '.join(f'[{system}]({url})' for system,url in refs)+f' (checked {DATE}).')
+    out.append('')
+    continue
    for code,(system,base,catalog) in SYSTEMS.items():
     oo=[o for o in obs if o['system']==code]
     if not oo:continue
@@ -668,7 +676,7 @@ def render():
      out.append(f'- **{system}** ({kinds}): {summary}. [Source]({url}) (checked {DATE}).')
    out.append('')
   out += ['## Area today','',AREA[f]['note']+f' [Baseline spec]({sl}).','',f'- Exact manifest axes: '+('; '.join(k+' = '+', '.join(v) for k,v in man['variants'].items()) or 'none')+f'. [Manifest]({ml}).',f'- Boolean modifiers: '+(', '.join(man.get('booleans',[])) or 'none declared')+f'. Runtime state hooks: '+(', '.join(man.get('states',[])) or 'none declared')+f'. [Manifest]({ml}).',f'- Slots: '+(', '.join(man.get('elements',[])) or 'none declared')+f'. [Manifest]({ml}).','']
-  if f=='radio':out += [f'RadioGroup separately declares horizontal/vertical orientation and disabled/invalid states. [RadioGroup manifest]({source_link("packages/styles/src/manifest.ts",251,258)}).','']
+  if f=='radio':out += [f'RadioGroup separately declares horizontal/vertical orientation and disabled/invalid states. [RadioGroup manifest]({source_link("packages/styles/src/manifest.ts",251,259)}).','']
   if f=='panel':out += [f'Resizing scope and exclusions: [resizable-panel spec]({source_link("docs/specs/resizable-panel.md",12,29)}).','']
   out += ['Per-option Area results (all at the baseline; “not found” is scoped to the manifest and spec):','']
   statuses={}
@@ -692,6 +700,42 @@ def render():
   if f=='message':out += ['', 'Ant Design’s core Message is status feedback, not a conversation turn; Ant Design X Bubble is the direct comparison used here. Atlassian Comment is adjacent, not an assistant message runtime.']
   if f=='panel':out += ['', 'GOV.UK Panel is a confirmation/interruption message, not an inspector. Splitter references establish resizing primitives, not a complete inspector.']
   (ROOT/(f+'.md')).write_text('\n'.join(out).rstrip()+'\n')
+ man=manifest_map['checkbox'];start,end=blocks['checkbox'];ml=source_link('packages/styles/src/manifest.ts',start,end)
+ idx['_meta']['supplements']={'checkbox':{'scope':'Current-main manifest companion; outside-system survey remains in run 1.','area_manifest':{'source':ml,**man}}}
+ (ROOT/'checkbox.md').write_text(f"""# Checkbox — current-main companion
+
+Snapshot of commit `{SHA}`. [Run 2](README-2.md). Outside-system comparison remains in the run-1 catalogue; this supplement refreshes only the Area contract.
+
+## Job
+
+{man['description']}
+
+## Variant axes
+
+{'; '.join(k+' = '+', '.join(v) for k,v in man['variants'].items())}. [Manifest]({ml}).
+
+## Structural alternatives
+
+Standard native checkbox or card with leading visual, text/caption and control. Card layout is row or tile.
+
+## Interaction patterns
+
+Native checked/indeterminate, disabled and invalid states. Layout is forwarded only when variant=card. Group orientation is independent.
+
+## Area today
+
+Defaults: size=md and tone=neutral. No sm size remains. Elements: control and visual. [Manifest]({ml}); [React layout guard]({source_link('packages/react/src/components/forms.tsx',143)}).
+
+## Proposed range
+
+Retain the built card anatomy and expose row/tile only when card is selected. No new outside prevalence count is asserted here.
+
+## Sources
+
+- [Current manifest]({ml}).
+- [Checkbox spec]({source_link('docs/specs/checkbox.md',1)}).
+- [React implementation]({source_link('packages/react/src/components/forms.tsx',143)}).
+""")
  (ROOT/'index-2.json').write_text(json.dumps(idx,ensure_ascii=False,indent=2)+'\n')
  print(json.dumps({'families':len(DATA),'observations':sum(map(len,DATA.values())),'options':sum(len(f['options']) for f in idx['families'].values()),'proposals':sum(len(f['proposed_range']) for f in idx['families'].values())}))
 if __name__=='__main__':render()
