@@ -1,9 +1,9 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
 import { AREA_COLOR_GRID, Alert, AlignmentPicker, Avatar, Calendar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardAction, CardContent, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, CheckboxGroup, Chip, Count, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSearch, MenuSeparator, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Token, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, BoxField, Combobox, CommandPalette, ContextMenu, HoverCard, Message, MessageActions, ModelPicker, PromptSuggestions, ScrollToLatest, SplitButton, PanelRow, PropertyList, PropertyListItem, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
-import { FluentPanelLeftIcon, FluentRefPointerIcon, FluentFrameIcon, FluentRectangleIcon, FluentPenIcon, FluentTextTIcon, FluentCommentIcon, FluentRefPaintbrushIcon, FluentDesignIcon, FluentPlayIcon, FluentRefCodeIcon, FluentBoldIcon, FluentRefItalicIcon, FluentRefUnderlineIcon, FluentStrikethroughIcon, FluentTextAlignLeftIcon, FluentTextAlignCenterIcon, FluentTextAlignRightIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon, EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, FluentCopyIcon, AlertIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignRightIcon, AngleIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CornerRadiusIcon, CornersIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, LinkIcon, MoreIcon, SettingsIcon, SlidersIcon, SubtractIcon } from "../icons.tsx";
-import { PilotDocumentIcon, PilotFolderFilledIcon, PilotMoreHorizontalIcon } from "../pilot-icons.tsx";
+import { FluentPanelLeftIcon, FluentRefPointerIcon, FluentFrameIcon, FluentRectangleIcon, FluentPenIcon, FluentTextTIcon, FluentCommentIcon, FluentRefPaintbrushIcon, FluentDesignIcon, FluentPlayIcon, FluentRefCodeIcon, FluentBoldIcon, FluentRefItalicIcon, FluentRefUnderlineIcon, FluentStrikethroughIcon, FluentTextAlignLeftIcon, FluentTextAlignCenterIcon, FluentTextAlignRightIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon, EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, FluentCopyIcon, AlertIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignRightIcon, AngleIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CornerRadiusIcon, CornersIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, LinkIcon, MoreIcon, SettingsIcon, SlidersIcon, SubtractIcon, FluentRefCalendarIcon } from "../icons.tsx";
+import { PilotDocumentIcon, PilotFolderFilledIcon, PilotMoreHorizontalIcon, PilotPaletteIcon, PilotCornerIcon, PilotTextIcon, PilotGridIcon, PilotLayersIcon, PilotSunIcon, PilotListIcon, PilotKanbanIcon } from "../pilot-icons.tsx";
 import { ReviewPair } from "./review.tsx";
 import { SliderRangeComposition } from "./slider-range.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
@@ -493,14 +493,36 @@ export const GalleryCheckbox = () => (
   <Checkbox label="Label" defaultChecked />
 );
 
-export const GalleryCheckboxSmall = () => <Checkbox size="sm" label="Small" />;
 export const GalleryCheckboxMedium = () => <Checkbox size="md" label="Medium" />;
 export const GalleryCheckboxLarge = () => <Checkbox size="lg" label="Large" />;
 export const GalleryCheckboxSelected = () => <Checkbox label="Label" defaultChecked />;
 export const GalleryCheckboxIndeterminate = () => <Checkbox label="Label" indeterminate />;
 export const GalleryCheckboxCaption = () => <Checkbox label="Label" caption="Description" />;
 export const GalleryCheckboxLeadingVisual = () => <Checkbox label="Label" leadingVisual={<CheckIcon />} />;
-export const GalleryCheckboxCard = () => <Checkbox variant="card" label="Label" caption="Description" leadingVisual={<CheckIcon />} />;
+/* Checkbox and Radio cards (owner, 2026-09-28: references with the control at the end and a
+   chosen card outlined). One layout per tile. */
+export const GalleryCheckboxCard = () => (
+  <CheckboxGroup label="Notifications" style={{ inlineSize: "320px" }}>
+    <Checkbox variant="card" label="Mentions" caption="When someone @mentions you" leadingVisual={<PersonIcon />} defaultChecked />
+    <Checkbox variant="card" label="Page updates" caption="Edits to pages you follow" leadingVisual={<DocumentIcon />} />
+  </CheckboxGroup>
+);
+export const GalleryCheckboxCardTile = () => (
+  <CheckboxGroup label="Customize" style={{ inlineSize: "520px" }}>
+    <Checkbox variant="card" layout="tile" label="Colors" leadingVisual={<PilotPaletteIcon size={20} />} defaultChecked />
+    <Checkbox variant="card" layout="tile" label="Corners" leadingVisual={<PilotCornerIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Typography" leadingVisual={<PilotTextIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Spacing" leadingVisual={<PilotGridIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Layers" leadingVisual={<PilotLayersIcon size={20} />} defaultChecked />
+    <Checkbox variant="card" layout="tile" label="Theming" leadingVisual={<PilotSunIcon size={20} />} />
+  </CheckboxGroup>
+);
+export const GalleryCheckboxCardAccent = () => (
+  <CheckboxGroup label="Notifications" style={{ inlineSize: "320px" }}>
+    <Checkbox variant="card" tone="accent" label="Mentions" caption="When someone @mentions you" leadingVisual={<PersonIcon />} defaultChecked />
+    <Checkbox variant="card" tone="accent" label="Page updates" caption="Edits to pages you follow" leadingVisual={<DocumentIcon />} />
+  </CheckboxGroup>
+);
 export const GalleryCheckboxInvalid = () => <Checkbox label="Label" invalid />;
 export const GalleryCheckboxInvalidChecked = () => <Checkbox label="Label" defaultChecked invalid />;
 export const GalleryCheckboxDisabled = () => <Checkbox label="Label" disabled />;
@@ -744,7 +766,30 @@ export const GalleryInputMedium = () => <Input size="md" aria-label="Label" plac
 export const GalleryInputLarge = () => <Input size="lg" aria-label="Label" placeholder="Large" />;
 export const GalleryInputText = () => <Field label="Full name"><Input defaultValue="Value" /></Field>;
 export const GalleryInputSearch = () => <Field label="Search"><Input type="search" leadingIcon={<SearchIcon />} placeholder="Search" /></Field>;
-export const GalleryInputDate = () => <Field label="Date"><Input type="date" defaultValue="2026-09-23" /></Field>;
+/*
+ * A date field built from the system's own parts (owner, 2026-09-28: "use the real one"): the
+ * Input shows the date and opens Calendar in a Popover anchored to the whole field, and the
+ * calendar glyph is a trailing icon in the shared icon slot. Field's ids reach the Input.
+ */
+const formatDate = (iso: string) => new Date(`${iso}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+const DateInput = ({ defaultValue, ...field }: { defaultValue: string } & Record<string, unknown>) => {
+  const [value, setValue] = useState(defaultValue);
+  const [open, setOpen] = useState(false);
+  const shell = useRef<HTMLElement | null>(null);
+  const input = useRef<HTMLInputElement | null>(null);
+  const surface = useRef<HTMLDivElement | null>(null);
+  // Open on the chosen day, the grid's roving stop, rather than the first button (Previous month).
+  useEffect(() => { if (open) surface.current?.querySelector<HTMLElement>("[role=grid] [tabindex='0']")?.focus(); }, [open]);
+  return <Popover ref={surface} open={open} onOpenChange={setOpen} anchor={shell} align="start" aria-label="Choose date"
+    trigger={<Input {...field} ref={(node: HTMLInputElement | null) => { input.current = node; shell.current = node?.closest(".area-input") ?? null; }}
+      readOnly value={formatDate(value)} trailingIcon={<FluentRefCalendarIcon />}
+      /* A text input is not a popover invoker: open it here rather than through popovertarget. */
+      onClick={event => { event.preventDefault(); setOpen(true); }}
+      onKeyDown={event => { if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") { event.preventDefault(); setOpen(true); } }} />}>
+    <Calendar aria-label="Date" today={calendarToday} value={value} onValueChange={next => { if (next) setValue(next as string); setOpen(false); input.current?.focus(); }} />
+  </Popover>;
+};
+export const GalleryInputDate = () => <Field label="Date"><DateInput defaultValue="2026-09-23" /></Field>;
 export const GalleryInputPhone = () => <Field label="Phone"><Input type="tel" prefix="+1" defaultValue="555 0100" autoComplete="tel" /></Field>;
 export const GalleryInputPassword = () => {
   const [visible, setVisible] = useState(false);
@@ -1278,6 +1323,29 @@ export const GalleryKbdChord = () => <Kbd keys={["cmd", "shift", "P"]} />;
 export const GalleryKbdSequence = () => (
   <KbdGroup><Kbd keys={["cmd", "K"]} /><Kbd keys={["P"]} /></KbdGroup>
 );
+/* Kbd pass review (2026-09-28, docs/specs/kbd.md). "Before" restores the previous corner through
+   the private property and the old concentric Button rule; the edge row is a proposal. */
+const kbdBefore = { "--_radius": "var(--area-radius-control-xs)" } as CSSProperties;
+const kbdBeforeInButton = { borderRadius: "calc(var(--_button-shape) - (var(--_button-height) - var(--_height)) / 2)" } as CSSProperties;
+const kbdEdge = { backgroundColor: "var(--area-bg-surface)", borderColor: "var(--area-edge-control)" } as CSSProperties;
+const kbdSamples = (style?: CSSProperties, inButton?: CSSProperties) => <>
+  <Kbd keys={["cmd", "K"]} style={style} />
+  <Kbd keys={["cmd", "K"]} size="small" style={style} />
+  <Button tone="neutral" aria-keyshortcuts="Meta+Enter">Send <Kbd keys={["cmd", "enter"]} style={inButton ?? style} /></Button>
+  <Button variant="outline" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} style={inButton ?? style} /></Button>
+</>;
+export const GalleryReviewKbd = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-32)" }}>
+    <ReviewPair title="Corner 4 → 6, and 6 inside Buttons (was 2)"
+      basis="Owner: the keycap read too sharp. Inside Buttons the concentric corner (button shape less the 6px inset) came to 2px at every size. ChatGPT's tooltip chip is 8 on 18; Notion's keycap keeps 4 inside its 8px search field rather than going concentric. The keycap now keeps 6 everywhere, which is also what the Tooltip already gave it."
+      before={kbdSamples(kbdBefore, kbdBeforeInButton)}
+      after={kbdSamples()} />
+    <ReviewPair title="Proposal, not applied: a drawn edge"
+      basis="Notion's and ChatGPT's inline hints are filled with no edge. Figma's keyboard-shortcuts panel draws each key with a 1px 70% stroke and a 2px corner; Untitled UI rings its keycap in neutral-200. Area drew a 1px border-subtle ring before the second pass. After: surface fill with the outline Button's edge."
+      before={kbdSamples()}
+      after={kbdSamples(kbdEdge, {})} />
+  </div>
+);
 export const GalleryKbdOnColor = () => (
   <Button tone="accent" aria-keyshortcuts="Meta+K">
     Button <Kbd appearance="on-color" keys={["cmd", "K"]} />
@@ -1287,6 +1355,51 @@ export const GalleryKbdOnEmphasis = () => (
   <Tooltip>
     Description <Kbd appearance="on-emphasis" keys={["cmd", "B"]} />
   </Tooltip>
+);
+
+/* Kbd in context (owner, 2026-09-28: "show as many examples to show it in context"). One host per
+   tile; the host decides the keycap's appearance, the corner is 6 everywhere. */
+export const GalleryKbdInMenu = () => (
+  <Menu aria-label="Page actions">
+    <MenuItem shortcut={<Kbd keys={["cmd", "L"]} />}><span className="area-menu__icon"><LinkIcon /></span><span className="area-menu__text">Copy link</span></MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "D"]} />}><span className="area-menu__icon"><DocumentIcon /></span><span className="area-menu__text">Duplicate</span></MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "shift", "P"]} />}><span className="area-menu__icon"><OpenIcon /></span><span className="area-menu__text">Move to</span></MenuItem>
+    <MenuSeparator />
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} />}><span className="area-menu__icon"><TrashIcon /></span><span className="area-menu__text">Delete</span></MenuItem>
+  </Menu>
+);
+export const GalleryKbdInCommandPalette = () => <CommandPalette inline items={paletteItems.filter(item => item.group === "Actions" && !item.disabled)} placeholder="Run a command…" />;
+export const GalleryKbdInSearchField = () => <Input type="search" aria-label="Search" placeholder="Search or ask" aria-keyshortcuts="Meta+K" leadingIcon={<SearchIcon />} suffix={<Kbd keys={["cmd", "K"]} size="small" />} />;
+export const GalleryKbdInNav = () => (
+  <Nav aria-label="Workspace">
+    <NavItem href="#gallery-kbd-template-in-nav" icon={<SearchIcon />} trailing={<Kbd keys={["cmd", "K"]} size="small" />}>Search</NavItem>
+    <NavItem href="#gallery-kbd-template-in-nav" icon={<EditIcon />} trailing={<Kbd keys={["cmd", "N"]} size="small" />}>New page</NavItem>
+    <NavItem href="#gallery-kbd-template-in-nav" icon={<SettingsIcon />} trailing={<Kbd keys={["cmd", ","]} size="small" />}>Settings</NavItem>
+  </Nav>
+);
+export const GalleryKbdInOutlineButton = () => <Button variant="outline" tone="neutral" icon={<SearchIcon />} aria-keyshortcuts="Meta+K">Search <Kbd keys={["cmd", "K"]} /></Button>;
+export const GalleryKbdInGhostButton = () => <Button variant="ghost" tone="neutral" icon={<PlusIcon />} aria-keyshortcuts="Meta+N">New page <Kbd keys={["cmd", "N"]} /></Button>;
+export const GalleryKbdInSoftButton = () => <Button variant="soft" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} /></Button>;
+export const GalleryKbdInSmallButton = () => <Button size="sm" variant="outline" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} size="small" /></Button>;
+export const GalleryKbdInLargeButton = () => <Button size="lg" aria-keyshortcuts="Meta+Enter">Send <Kbd keys={["cmd", "enter"]} /></Button>;
+export const GalleryKbdInFooter = () => (
+  <div style={{ display: "flex", gap: "var(--area-space-8)" }}>
+    <Button variant="outline" tone="neutral" aria-keyshortcuts="Escape">Cancel <Kbd keys={["escape"]} /></Button>
+    <Button aria-keyshortcuts="Meta+Enter">Save <Kbd keys={["cmd", "enter"]} /></Button>
+  </div>
+);
+export const GalleryKbdInText = () => (
+  <div style={{ maxInlineSize: "240px" }}>Press <Kbd keys={["cmd", "K"]} /> to search, then <Kbd keys={["enter"]} /> to open the first result.</div>
+);
+export const GalleryKbdInTable = () => (
+  <Table aria-label="Keyboard shortcuts">
+    <thead><tr><th scope="col">Action</th><th scope="col">Shortcut</th></tr></thead>
+    <tbody>
+      <tr><td>Search</td><td><Kbd keys={["cmd", "K"]} /></td></tr>
+      <tr><td>New page</td><td><Kbd keys={["cmd", "N"]} /></td></tr>
+      <tr><td>Go to settings</td><td><KbdGroup><Kbd keys={["G"]} /><Kbd keys={["S"]} /></KbdGroup></td></tr>
+    </tbody>
+  </Table>
 );
 
 export const GalleryMenu = () => (
@@ -1650,6 +1763,20 @@ export const GalleryProgressSmall = () => <Progress value={62} label="Small prog
 export const GalleryProgressMedium = () => <Progress value={62} label="Medium progress" size="md" />;
 export const GalleryProgressLarge = () => <Progress value={62} label="Large progress" size="lg" />;
 
+export const GalleryRadioCard = () => (
+  <RadioGroup label="Plan" name="gallery-radio-card" defaultValue="basic" style={{ inlineSize: "320px" }}>
+    <Radio variant="card" value="basic" label="Basic" caption="Up to 10 members and 20 GB" leadingVisual={<PersonIcon />} />
+    <Radio variant="card" value="business" label="Business" caption="Up to 20 members and 40 GB" leadingVisual={<FolderIcon />} />
+    <Radio variant="card" value="enterprise" label="Enterprise" caption="Unlimited members and storage" leadingVisual={<TokenIcon />} />
+  </RadioGroup>
+);
+export const GalleryRadioCardTile = () => (
+  <RadioGroup label="Layout" name="gallery-radio-card-tile" defaultValue="grid" style={{ inlineSize: "520px" }}>
+    <Radio variant="card" layout="tile" value="list" label="List" leadingVisual={<PilotListIcon size={20} />} />
+    <Radio variant="card" layout="tile" value="grid" label="Grid" leadingVisual={<PilotGridIcon size={20} />} />
+    <Radio variant="card" layout="tile" value="board" label="Board" leadingVisual={<PilotKanbanIcon size={20} />} />
+  </RadioGroup>
+);
 export const GalleryRadio = () => (
   <RadioGroup label="Label" name="gallery-plan" defaultValue="one">
     <Radio value="one" label="Option one" />
@@ -1657,7 +1784,6 @@ export const GalleryRadio = () => (
   </RadioGroup>
 );
 
-export const GalleryRadioSmall = () => <Radio size="sm" name="gallery-radio-small" value="small" label="Small" />;
 export const GalleryRadioMedium = () => <Radio size="md" name="gallery-radio-medium" value="medium" label="Medium" />;
 export const GalleryRadioLarge = () => <Radio size="lg" name="gallery-radio-large" value="large" label="Large" />;
 export const GalleryRadioSelected = () => <Radio name="gallery-radio-selected" value="selected" label="Label" defaultChecked />;

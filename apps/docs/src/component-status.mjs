@@ -16,12 +16,18 @@ export const COMPLETE_COMPONENTS = new Set([
   'calendar',
   // Approved 2026-09-28 (batch 8; number-field and box-field were already approved).
   'panel',
+  // Approved 2026-09-28 (batch 11: 6px keycap everywhere, no stroke, plain menu shortcuts).
+  'kbd',
+  // Approved 2026-09-28 (batch 12; input-group was already approved).
+  'input', 'textarea',
+  // Approved 2026-09-28 (batch 14: cards, sm removed, lighter Switch off track).
+  'checkbox', 'radio', 'switch',
   'alignment-picker', 'badge', 'badge-group', 'box-field', 'breadcrumb',
-  'button', 'button-group', 'checkbox', 'code',
+  'button', 'button-group', 'code',
   'color-field', 'color-picker', 'color-swatch', 'color-swatch-picker', 'composer',
-  'dialog', 'field', 'input', 'input-group', 'kbd',
-  'number-field', 'popover', 'progress', 'property-list', 'radio', 'select', 'separator', 'slider', 'switch',
-  'table', 'tabs', 'textarea', 'tooltip', 'tree-view',
+  'dialog', 'field', 'input-group',
+  'number-field', 'popover', 'progress', 'property-list', 'select', 'separator', 'slider',
+  'table', 'tabs', 'tooltip', 'tree-view',
 ]);
 
 /** Built/refined and awaiting owner approval; not completion. */

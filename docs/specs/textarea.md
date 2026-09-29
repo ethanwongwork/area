@@ -81,10 +81,10 @@ The size tiles set `rows={3}` (`apps/docs/src/demos/gallery.tsx:957-959`): sm is
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| inline inset | 12 md/lg, 8 sm, border counted once | Owner: larger horizontal insets; UUI sm 12 | UUI md 14 |
-| block inset | gutter − 4 (8 md, 4 sm) | Owner (leading supplies vertical room, `textarea.css:117-119`) | UUI 12 at md |
+| inline inset | **Input's equal inset at each size: 9 sm, 11 md, 15 lg** ((height − 1cap) / 2, border counted once; `textarea.css`) | Owner 2026-09-28 ("do whatever makes the most sense"): text starts where a same-size Input's does, and each size is distinct | Was 8 sm / 12 md / 12 lg (lg matched md); ChatGPT 10–12, UUI md 14 |
+| block inset | inline − 4, rounded to a whole pixel: 5 sm, 7 md, 11 lg | Owner (leading supplies vertical room); whole-pixel box | Was 4 sm / 8 md / 8 lg |
 | type | 14/20 400 (sm 12/16) | Notion fields 14/20 400; peer Input | UUI md 16/24; Figma 11/16 |
-| radius, border, fill, shadow | as Input: 8, `input-edge` #e2e2e2, `bg-surface`, `shadow-1`; soft #f7 with no shadow (`textarea.css:50`) | Peer: [Input](input.md); second pass: soft fields are flat (Figma) | Products draw no field shadow; kept with Input ([input.md](input.md#settled-questions) 2) |
+| radius, border, fill, shadow | as Input: 8, `input-edge` #e2e2e2, `bg-surface`, no resting shadow (`textarea.css:37`); soft #f7 | Peer: [Input](input.md); second pass: soft fields are flat (Figma) | Products draw no field shadow; kept with Input ([input.md](input.md#settled-questions) 2) |
 | default rows | four lines | Existing Area default (`textarea.css:4-6`) | — |
 | resize | vertical | Native; conservative default | — |
 
@@ -116,7 +116,13 @@ values stay focusable and are submitted; disabled values are not.
 ## Visual pass
 
 The gallery shows Textarea's tiles in named groups, one variant per tile.
-Unverified: a product multiline field side by side (none captured), dark theme.
+2026-09-28 (batch 12): beside ChatGPT's settings multiline fields (`chatgpt--textarea--focus`,
+`chatgpt--textarea-short`): 8 block and 10–12 inline insets, corners 6–8, a 1px edge at 15%
+black, no shadow. Area md is 8 block / 12 inline, corner 8, `input-edge`, no shadow: a match.
+Found: sm, md and lg now share 14/20 text (small controls moved to 14/20) and md and lg share
+the 12 inline inset, so lg differs from md only by its two-row minimum (80 against 76 at three
+rows); an lg Input's text starts at 15. Owner: "do whatever makes the most sense" → resolved by the inset change above (sm 70, md 74, lg
+82 at three rows). Unverified: dark theme.
 
 ## Verification
 
@@ -125,6 +131,13 @@ fields named in Sources. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
 ## Feedback log
+
+- 2026-09-28 · owner approved batch 12 → Complete.
+
+- 2026-09-28 · batch 12 side by side with ChatGPT → match; open: lg is barely distinct from md
+  → `area--*` retaken.
+- 2026-09-28 · owner: "do whatever makes the most sense for textarea" → inline inset follows
+  Input's equal inset per size (9 / 11 / 15), block = inline − 4 rounded → `area--*` retaken.
 
 - 2026-09-26 · cohesion audit → no change (disabled field paint confirmed) → `area--disabled`.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → soft Textarea is

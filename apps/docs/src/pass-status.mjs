@@ -116,4 +116,68 @@ export const VALIDATED_PASSES = {
     date: "2026-09-28",
     against: "Figma's auto-layout Alignment grid (ground, dots, selected bars)",
   },
+  button: {
+    date: "2026-09-28",
+    against: "Figma's Share (32, corner 5, 12 inset), Notion's Share popover buttons and ChatGPT's solid and outline pills (height, inset, weight, no shadow)",
+  },
+  "button-group": {
+    date: "2026-09-28",
+    against: "Figma's Present / Prototype view pair (outer corners only, square inner edges) and Notion's split divider",
+  },
+  kbd: {
+    date: "2026-09-28",
+    against: "Notion's search ⌘K hint, ChatGPT's tooltip chip and Figma's keyboard-shortcuts panel keys (fill, edge, corner, nesting)",
+  },
+  input: {
+    date: "2026-09-28",
+    against: "Notion's sidebar search field (with its ⌘K hint) and Share invite field, Figma's file-browser search (height, corner, edge, fill, text inset)",
+  },
+  "input-group": {
+    date: "2026-09-28",
+    against: "Notion's Share invite row (field and button) and Figma's design-panel icon and colour fields",
+  },
+  textarea: {
+    date: "2026-09-28",
+    against: "ChatGPT's settings multiline fields (insets, corner, edge, no shadow)",
+  },
+  select: {
+    date: "2026-09-28",
+    against: "ChatGPT's settings dropdown (read live), Figma's zoom, size and filter selects, Notion's inline select (height, fill, edge, chevron place)",
+  },
+  combobox: {
+    date: "2026-09-28",
+    against: "Figma's font-family trigger, font-size combobox and open font picker (row, text, chevron place)",
+  },
+  field: {
+    date: "2026-09-28",
+    against: "ChatGPT's settings row (read live) and stacked field (label, description, gaps)",
+  },
+  checkbox: {
+    date: "2026-09-28",
+    against: "Notion's and Figma's 16px checkboxes (size, corner, edge, checked face, label alignment)",
+  },
+  radio: {
+    date: "2026-09-28",
+    against: "No product radio exists; ChatGPT's mode radio cards and Checkbox's product evidence (control, label alignment)",
+  },
+  switch: {
+    date: "2026-09-28",
+    against: "ChatGPT's settings switches off and on, rest and hover, and Notion's page-menu toggle (track, thumb, off fill)",
+  },
+  slider: {
+    date: "2026-09-28",
+    against: "Figma's colour-picker sliders (reopened) and adjustment slider (rail, thumb, hit row)",
+  },
+  chip: {
+    date: "2026-09-28",
+    against: "ChatGPT's composer tool pill (rest, hover) and Notion's select tags (shape, height, paint)",
+  },
+  card: {
+    date: "2026-09-27",
+    against: "Notion board cards, ChatGPT library cards and Figma file and community cards, light and dark (consistency pass)",
+  },
+  table: {
+    date: "2026-09-28",
+    against: "Notion's table view (row height, rules, header ink, cells)",
+  },
 };

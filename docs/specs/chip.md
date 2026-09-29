@@ -153,6 +153,11 @@ Behavior); the "Composition / swatch only" tile was added in the third pass. Bes
 grey fill, default ink, against Notion's 20px tinted tag. Not inspected by this spec's
 author: hover, remove hover, dark theme.
 
+2026-09-28 (batch 15): beside ChatGPT's composer tool pill (36 pill, 12 / 14 sides, bare at rest,
+5% black on hover) and Notion's select tags (20, corner 4, tinted; Badge's role in Area). Area's
+chip is a 28 / 32 / 40 pill with a hairline outline, one size step per tier, avatar and remove
+slots concentric. No change.
+
 ## Settled questions
 
 1. **Entered values: kept as a control.** Notion shows a multi-select's values as 20px tags,

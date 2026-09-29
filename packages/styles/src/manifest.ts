@@ -224,7 +224,7 @@ export const select = {
 export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
-  variants: { variant: ["card"], size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
+  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"], tone: ["neutral", "accent"] },
   states: ["checked", "indeterminate", "disabled", "invalid"],
   elements: ["control", "visual"],
   defaults: { size: "md", tone: "neutral" },
@@ -242,9 +242,9 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
+  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"], tone: ["neutral", "accent"] },
   states: ["disabled"],
-  elements: ["control"],
+  elements: ["control", "visual"],
   defaults: { size: "md", tone: "neutral" },
 } as const satisfies ComponentManifest;
 
