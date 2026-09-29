@@ -8,7 +8,7 @@ for (const [axis, values] of Object.entries(MANIFESTS.checkbox.variants)) {
   for (const value of values) {
     // packages/styles/src/manifest.ts:227; packages/react/src/components/forms.tsx:140.
     test(`Checkbox ${axis}=${value} renders its manifest hook`, () => {
-      const html = renderToString(h(Checkbox, { label: "Enable", [axis]: value }));
+      const html = renderToString(h(Checkbox, { label: "Enable", ...(axis === "layout" ? { variant: "card" } : {}), [axis]: value }));
       const root = html.match(/<label\b[^>]*>/)?.[0];
       assert.ok(root, html);
       assert.ok(root.match(/class="([^"]*)"/)[1].split(" ").includes(`${MANIFESTS.checkbox.block}--${value}`), root);

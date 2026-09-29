@@ -1,7 +1,9 @@
 # React server-render coverage
 
-Baseline HEAD: `18b86465d542f620d532fee351c4f28d50c8ac3a` (`git rev-parse HEAD` before test changes).
+Inventory snapshot of commit: `18b86465d542f620d532fee351c4f28d50c8ac3a` (`git rev-parse HEAD` before test changes).
 Branch: `astra/react-tests`. Inventory recorded before writing tests.
+
+Review verification uses current main `7dae828e7af1daf9d26b663d34335121156606f7`. Checkbox/Radio layout cases render with `variant="card"`, as required by their React layout guards. All four original bug skips remain unchanged.
 
 ## Inventory and counting
 
@@ -74,7 +76,7 @@ names, keyboard interaction, focus, layout, hydration, effects or browser-only s
 
 ## Results
 
-31 new files contain **185 tests: 181 pass, 4 skip, 0 fail**. Counts below are
+31 new files contain **188 tests: 184 pass, 4 skip, 0 fail**. Counts below are
 node:test cases (each enumerated axis/value is a separate case); a compound-family
 case can check multiple parts or supported usage forms. Every skip first failed
 unskipped against the baseline build. No production changes were made.
@@ -84,7 +86,7 @@ New coverage per family, with total / passing / skipped counts:
 - BoxField: **5 / 5 / 0** — `box-field.test.mjs`.
 - Button: **19 / 19 / 0** — `button.test.mjs`.
 - Card: **9 / 9 / 0** — `card.test.mjs`.
-- Checkbox, including CheckboxGroup and ChoiceLabel: **12 / 12 / 0** — `checkbox.test.mjs`.
+- Checkbox, including CheckboxGroup and ChoiceLabel: **13 / 13 / 0** — `checkbox.test.mjs`.
 - CodeBlock: **4 / 4 / 0** — `code-block.test.mjs`.
 - Code, including Token: **6 / 6 / 0** — `code.test.mjs`.
 - ColorSwatch: **4 / 4 / 0** — `color-swatch.test.mjs`.
@@ -103,7 +105,7 @@ New coverage per family, with total / passing / skipped counts:
 - Progress: **7 / 7 / 0** — `progress.test.mjs`.
 - PromptSuggestions: **4 / 4 / 0** — `prompt-suggestions.test.mjs`.
 - PropertyList: **2 / 2 / 0** — `property-list.test.mjs`.
-- Radio, including RadioGroup and ChoiceLabel: **10 / 10 / 0** — `radio.test.mjs`.
+- Radio, including RadioGroup and ChoiceLabel: **12 / 12 / 0** — `radio.test.mjs`.
 - ScrollToLatest: **2 / 2 / 0** — `scroll-to-latest.test.mjs`.
 - Select: **7 / 7 / 0** — `select.test.mjs`.
 - Separator: **5 / 5 / 0** — `separator.test.mjs`.
@@ -121,7 +123,7 @@ family's variants or browser behavior are exhaustively tested.
 
 ## Skips and evidence
 
-All source lines refer to the baseline SHA above; these source files are unchanged.
+Historical suspected-cause line references below refer to the inventory snapshot above. The unchanged skipped assertions remain regression specifications.
 The skipped assertions retain the expected contract, not the observed faulty output.
 
 - **Composer — 1 skip**, `packages/react/tests/composer.test.mjs:48`.
@@ -156,13 +158,13 @@ relationships, className, ARIA attributes and expanded state remain active tests
 
 ## Verification
 
-- `npm ci` and `npm run build` passed in the isolated worktree (Node 26.7.0).
+- Review run: `npm run build:docs` passed using existing dependencies (Node 26.7.0); no dependencies installed.
 - Each new file passed separately with `node --test packages/react/tests/<slug>.test.mjs`
   (TAP reporter used to collect exact counts).
-- All 31 new files passed together: **185 total, 181 pass, 4 skip**.
+- All 31 new files passed together: **188 total, 184 pass, 4 skip**.
 - The full React suite initially lacked `apps/docs/dist/gallery-components.html`,
   required by two existing gallery tests. After `npm run build:docs` passed
-  (including the docs audit), the full suite passed: **339 total, 335 pass, 4 skip**.
+  (including the docs audit), the full suite passed: **342 total, 338 pass, 4 skip**.
 - An inventory check maps all 69 manifests to 57 families and verifies each family's
   dedicated file exists: **zero missing**.
 - `git diff --check` passed. Only the 31 new tests and this README are in the change.
@@ -174,7 +176,7 @@ Reproduce after the documented build steps:
 node --test packages/react/tests/button.test.mjs
 
 # All new files, excluding pre-existing tests:
-node --test $(git diff --name-only --diff-filter=A 18b86465d542f620d532fee351c4f28d50c8ac3a -- 'packages/react/tests/*.test.mjs')
+node --test $(git diff --name-only --diff-filter=A origin/main -- 'packages/react/tests/*.test.mjs')
 
 # Full React suite (requires npm run build:docs):
 node --test packages/react/tests/*.test.mjs
