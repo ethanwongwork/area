@@ -18,7 +18,7 @@ const norm = ([x, y]) => { const l = Math.hypot(x, y); return [x / l, y / l]; };
 const WEIGHT = 1.125;            // --area-weight-icon at 16px; gaps are judged in ink at this weight
 const OVERLAP = 2.25;            // the overlap cut: a line's width of space at WEIGHT
 // The gap scale in ink (docs/specs/icons.md, "Negative space"); anything else is a near miss.
-const GAP_STEPS = [["tight", 1.125, 1.625], ["standard", 1.75, 2.0], ["open", 2.5, Infinity]];
+const GAP_STEPS = [["detail", 0.875, 1.125], ["tight", 1.125, 1.75], ["standard", 1.75, 2.0], ["open", 2.5, Infinity]];
 export const gapStep = g => GAP_STEPS.find(([, lo, hi]) => g >= lo - 1e-6 && g <= hi + 1e-6)?.[0] ?? null;
 
 /** A polygon whose corners are rounded by the given radii (0 keeps a corner sharp). The

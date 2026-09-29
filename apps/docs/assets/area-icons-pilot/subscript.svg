@@ -1,4 +1,4 @@
 <svg data-set="area-pilot" data-keyline="square" data-angles="free" data-acute="sharp" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path  d="M2.5 4.5L8.5 10.5M8.5 4.5L2.5 10.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path  d="M11.167 11A1.25 1 0 1 1 13.155 12.19L11 14H13.75" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.5 5.5V4.5H8.5V5.5M5.5 4.5V10.5M4 10.5H7" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.167 11A1.25 1 0 1 1 13.155 12.19L11 14H13.75" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

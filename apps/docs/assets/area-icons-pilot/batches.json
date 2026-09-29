@@ -218,7 +218,7 @@
         "log-in": "approved",
         "log-out": "approved",
         "keyboard": "review",
-        "pointer": "approved",
+        "pointer": "review",
         "move": "review",
         "hourglass": "approved",
         "loader": "approved"
@@ -396,7 +396,7 @@
       "icons": {
         "list-numbered": "review",
         "sort-ascending": "review",
-        "filter-dismiss": "approved",
+        "filter-dismiss": "review",
         "bookmark-add": "review",
         "reply-all": "review",
         "text-cursor": "review"
@@ -619,6 +619,222 @@
         "line-height": "review",
         "letter-spacing": "review",
         "translate": "review"
+      }
+    },
+    {
+      "id": "batch-44",
+      "title": "Batch 44 · Square containers",
+      "note": "Stop's square (11 × 11, r 2, checkbox's) holding the ring's marks unchanged (delegated decision: one mark set for both containers, a tight 1.38 to the sides as checkbox and Fluent's add-square).",
+      "icons": {
+        "square-dot": "review",
+        "square-slash": "review",
+        "square-plus": "review",
+        "square-minus": "review",
+        "square-arrow-up": "review",
+        "square-arrow-up-right": "review",
+        "square-text": "review",
+        "square-text-cursor": "review",
+        "square-list": "review",
+        "square-search": "review"
+      }
+    },
+    {
+      "id": "batch-45",
+      "title": "Batch 45 · Circle containers and status rings",
+      "note": "The r 6 ring holding a mark (add-circle's construction), and a dashed ring on square-dashed's rhythm. arrow-up-circle gains its turns and info its flip (alert-circle).",
+      "icons": {
+        "chevron-down-circle": "review",
+        "play-circle": "review",
+        "pause-circle": "review",
+        "circle-dashed": "review",
+        "circle-dot-dashed": "review",
+        "circle-check-dashed": "review"
+      }
+    },
+    {
+      "id": "batch-46",
+      "title": "Batch 46 · Notification dot",
+      "note": "A new shared part (delegated decision): a solid ⌀3 dot (Fluent's bell badge, Cursor's ratio) on the host's top-right corner, its edge flush with the host's ink; the host is cut round it by the overlap cut (1.125). In the filled variant a `gap` ring parts it from the solid host. On a ring it sits at the 45° point.",
+      "icons": {
+        "bell-dot": "review",
+        "chat-dot": "review",
+        "mail-dot": "review",
+        "square-badge": "review",
+        "compass-dot": "review"
+      }
+    },
+    {
+      "id": "batch-47",
+      "title": "Batch 47 · Checks, plays and off states",
+      "note": "Delegated decisions: no prohibited ring (flask-off takes the shared slash; search-off a short slash inside the lens, since the shared slash would lie along its handle) and no small bug; marks follow the placement rule (inside a screen, on a folder's corner).",
+      "icons": {
+        "folder-check": "review",
+        "scan-check": "review",
+        "desktop-check": "review",
+        "desktop-play": "review",
+        "search-off": "review",
+        "flask-off": "review"
+      }
+    },
+    {
+      "id": "batch-48",
+      "title": "Batch 48 · Agents and sparkles",
+      "note": "The agent mark (owner round: not the pointer, which read as Cursor’s cursor) is Fluent’s agents shape: a hexagon split by a steep slash into two halves. The sparkle sits on chat’s corner as Fluent’s chat sparkle.",
+      "icons": {
+        "agent": "review",
+        "agent-circle": "review",
+        "agent-square": "review",
+        "chat-sparkle": "review",
+        "grid-sparkle": "review",
+        "grid-plus": "review",
+        "corners-sparkle": "review"
+      }
+    },
+    {
+      "id": "batch-49",
+      "title": "Batch 49 · Arrows 2",
+      "note": "Turns and mirrors first: shift gains arrow-big-right, down and left; chevrons-up-down gains chevrons-left-right; refresh (reset's flip) already covers refresh-cw.",
+      "icons": {
+        "arrow-left-right": "review",
+        "arrow-right-left": "review",
+        "arrow-right-to-line": "review",
+        "caps-lock": "review",
+        "chevrons-right": "review",
+        "chevrons-down-up": "review"
+      }
+    },
+    {
+      "id": "batch-50",
+      "title": "Batch 50 · Files",
+      "note": "Document and the copy stack.",
+      "icons": {
+        "files": "review",
+        "file-export": "review",
+        "clipboard-list": "review"
+      }
+    },
+    {
+      "id": "batch-51",
+      "title": "Batch 51 · Code, git and shapes 2",
+      "note": "Git's r 1.5 nodes and the hexagon.",
+      "icons": {
+        "hexagon": "review",
+        "cube": "review",
+        "asterisk": "review",
+        "plus-minus": "review",
+        "brackets": "review",
+        "split": "review",
+        "git-pull-request-closed": "review",
+        "git-pull-request-draft": "review"
+      }
+    },
+    {
+      "id": "batch-53",
+      "title": "Batch 53 · Data and money",
+      "note": "First part of the queue's batch 53.",
+      "icons": {
+        "dollar": "review",
+        "chart-scatter": "review",
+        "layout-dashboard": "review",
+        "network": "review"
+      }
+    },
+    {
+      "id": "batch-54",
+      "title": "Batch 54 · Messages",
+      "note": "Marks inside chat's bubble (the inside-centred rule).",
+      "icons": {
+        "chat-more": "review",
+        "chat-code": "review"
+      }
+    },
+    {
+      "id": "batch-55",
+      "title": "Batch 55 · Objects 2",
+      "note": "First part of the queue's batch 55.",
+      "icons": {
+        "target": "review",
+        "crosshair": "review",
+        "disc": "review",
+        "infinity": "review"
+      }
+    },
+    {
+      "id": "batch-56",
+      "title": "Batch 56 · Objects 3",
+      "note": "The rest of the queue's objects, first part.",
+      "icons": {
+        "check-check": "review",
+        "presentation": "review",
+        "blocks": "review",
+        "badge-check": "review",
+        "cookie": "review",
+        "clapperboard": "review",
+        "route": "review",
+        "vault": "review"
+      }
+    },
+    {
+      "id": "batch-57",
+      "title": "Batch 57 · Queue remainder",
+      "note": "The queue's remaining files, messages, calls, letters and objects.",
+      "icons": {
+        "bug-off": "review",
+        "file-lock": "review",
+        "folders": "review",
+        "chat-warning": "review",
+        "call-incoming": "review",
+        "call-outgoing": "review",
+        "app-window": "review",
+        "gallery": "review",
+        "markdown": "review",
+        "case-upper": "review",
+        "case-sensitive": "review",
+        "wrench": "review",
+        "bandage": "review",
+        "atom": "review"
+      }
+    },
+    {
+      "id": "batch-58",
+      "title": "Batch 58 · AI, people and exploring",
+      "note": "The brain family (brain-thinking left for later) and the last queue items that fit.",
+      "icons": {
+        "brain": "review",
+        "brain-off": "review",
+        "waypoints": "review",
+        "smile-plus": "review",
+        "person-chat": "review",
+        "binoculars": "review"
+      }
+    },
+    {
+      "id": "batch-59",
+      "title": "Batch 59 · Leisure",
+      "note": "First icons from the later list.",
+      "icons": {
+        "dumbbell": "review",
+        "piano": "review",
+        "toy-brick": "review",
+        "square-smile": "review",
+        "crystal-ball": "review",
+        "utensils": "review",
+        "basketball": "review"
+      }
+    },
+    {
+      "id": "batch-60",
+      "title": "Batch 60 · Later list and debugger",
+      "note": "The rest of the later list that fits, and the IDE set's step, breakpoint and stack frame.",
+      "icons": {
+        "chef-hat": "review",
+        "chess-rook": "review",
+        "vr-goggles": "review",
+        "circuit-board": "review",
+        "cube-wireframe": "review",
+        "debug-step-over": "review",
+        "breakpoint": "review",
+        "stack-frame": "review"
       }
     }
   ]
