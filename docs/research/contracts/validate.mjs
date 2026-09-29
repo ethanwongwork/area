@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 export const DIR = resolve(ROOT, 'docs/research/contracts');
-export const START = '7b5ec4c59276cd3e251207326a3250a68ccedbe1';
+export const START = '7dae828e7af1daf9d26b663d34335121156606f7';
 const git = (...args) => execFileSync('git', args, {cwd: ROOT, encoding:'utf8', maxBuffer: 40e6});
 const cache = new Map();
 export function source(path) {
