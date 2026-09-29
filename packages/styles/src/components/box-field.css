@@ -16,15 +16,16 @@
 
     display: flex;
     flex-direction: column;
-    /* spec (inspector): a caption sits 6 over its controls, as PanelRow and Panel's stack. */
-    gap: var(--area-space-6);
+    /* spec (inspector): a caption sits over its controls as PanelRow's does; inside a panel it follows
+       the panel tier (4 at sm, 6 at md), outside it 6. */
+    gap: var(--_panel-label-gap, var(--area-space-6));
     min-inline-size: 0;
   }
 
   .area-box-field__label {
     color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--_panel-label-text, var(--area-text-xs-size));
+    line-height: var(--_panel-label-leading, var(--area-text-xs-leading));
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -33,8 +34,8 @@
   .area-box-field__fields {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_control);
-    /* spec (inspector): 8 between columns and between rows, the panel section's own rhythm. */
-    gap: var(--area-space-8);
+    /* spec (inspector): the panel's field gap between columns and rows (8 at sm, 12 at md; 8 outside). */
+    gap: var(--_panel-gap, var(--area-space-8));
     align-items: center;
   }
 

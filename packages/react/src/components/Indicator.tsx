@@ -3,6 +3,7 @@ import { forwardRef } from "react";
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { indicatorVariants, indicatorAnchorVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Presence, type PresenceProps } from "./Presence.tsx";
+import { formatCount, normalizeCount } from "./count-format.ts";
 export interface IndicatorProps extends HTMLAttributes<HTMLSpanElement> {
   count?: number;
   max?: number;
@@ -19,14 +20,13 @@ export interface IndicatorProps extends HTMLAttributes<HTMLSpanElement> {
 export const Indicator = forwardRef<HTMLSpanElement, IndicatorProps>(function Indicator(
   {count, max = 99, showZero = true, disabled = false, processing = false, withBorder = false, tone, status, size, outOfOffice, className, ...rest}, ref,
 ) {
-  const number = count === undefined ? undefined : Math.max(0, Math.floor(Number.isFinite(count) ? count : 0));
-  const limit = Math.max(0, Math.floor(Number.isFinite(max) ? max : 99));
+  const number = count === undefined ? undefined : normalizeCount(count);
   if (disabled || (!showZero && number === 0)) return null;
   if (status && number === undefined) return <Presence ref={ref} status={status === "online" ? "available" : status} size={size} outOfOffice={outOfOffice} className={className} {...rest} />;
   return <span ref={ref} role="img" aria-label={number === undefined ? (processing ? "Processing" : "New activity") : `${number} notifications`} {...rest}
     className={indicatorVariants({kind: number === undefined ? "dot" : "count", tone}, className)}
     data-processing={processing || undefined} data-border={withBorder || undefined}>
-    {number === undefined ? null : number > limit ? `${limit}+` : number}
+    {number === undefined ? null : formatCount(number, max)}
   </span>;
 });
 export interface IndicatorAnchorProps extends HTMLAttributes<HTMLSpanElement> {

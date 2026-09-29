@@ -28,6 +28,10 @@
     "test:contracts": "node --test packages/styles/scripts/manifest-parity.test.mjs apps/docs/scripts/axis-preferences.test.mjs",
     "capture:compare": "node scripts/capture-compare.mjs",
     "icons:pilot": "node apps/docs/scripts/gen-pilot-icons.mjs",
+    "icons:find": "node apps/docs/scripts/icon-find.mjs",
+    "icons:batch": "node apps/docs/scripts/icon-batch.mjs",
+    "icons:sheet": "node apps/docs/scripts/icon-sheet.mjs",
+    "icons:geometry": "node apps/docs/scripts/icon-geometry.mjs",
     "lint:icons": "node apps/docs/scripts/gen-pilot-icons.mjs --check"
   },
   "engines": {

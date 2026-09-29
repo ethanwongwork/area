@@ -22,7 +22,7 @@ export function runChecks(): Check[] {
   const ids = Array.from(document.querySelectorAll('#tabs-first [id], #tabs-second [id]'),n=>n.id);
   check('F04/tab-ids','Multiple Tabs instances have unique relationships',new Set(ids).size,ids.length);
   check('F04/segmented-tabstops','Segmented has one tab stop',Array.from(el('lab-segmented').querySelectorAll('button')).filter(n=>n.tabIndex===0).length,1);
-  const spinner = getComputedStyle(el('motion-probe'));
+  const spinner = getComputedStyle(el('motion-probe'), '::before');
   check('F05/motion-none','Explicit motion none stops the spinner',spinner.animationName==='none'||spinner.animationDuration.split(',').every(n=>parseFloat(n)===0),true);
   const ui = el('comparison').dataset.areaUi;
   const height = ui==='compact'?28:32;

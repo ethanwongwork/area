@@ -3,6 +3,8 @@
 //   node apps/docs/scripts/gen-pilot-icons.mjs          # lint + generate
 //   node apps/docs/scripts/gen-pilot-icons.mjs --check  # lint only
 //   add --report to list each icon's keyline, ink box and centre
+//   --only name,name  lint and report just these icons (and their turns), writing nothing:
+//                     the quick loop while drawing; the full run still gates every icon
 // Construction rules: docs/specs/icons.md. Sources are stroked centre-line drawings on a
 // 16px grid; the generated component takes the stroke width as a prop.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -31,13 +33,18 @@ const KEYLINES = { square: [13, 13], circle: [14, 14], horizontal: [14, 11], ver
 // bars), or open (≥ 2.5, no longer read as a gap). Cursor: cuts of 2.5 grid units or less blur.
 // tight starts at the stroke weight: an overlap cut (a shape passing behind another) leaves
 // a gap equal to the line (owner, round 4); 2.25px between centre-lines at 1.125.
-const GAPS = { tight: [1.125, 1.625], standard: [1.75, 2.0] };
+// Detail (owner, 2026-09-28): more detail beats the strict minimum, so a gap may fall to
+// 0.875 (2 between centre-lines) where it adds detail, and tight runs straight into
+// standard (1.625–1.75 read the same). The overlap cut stays 1.125 everywhere.
+const GAPS = { detail: [0.875, 1.125], tight: [1.125, 1.75], standard: [1.75, 2.0] };
 const OPEN = 2.5;
 const CLOSE_GAP = 0.875;      // data-gap="close": 2 between centre-lines at 1.125, the one step under tight
 const JOIN = 0.1;              // closer than this (centre-lines) counts as a join, not a gap
 // Counters use the same scale: a satellite pocket (a clapper cup, a document's fold) may be
 // tight; every other enclosed pocket is standard or larger.
-const COUNTERS = { tight: [1.25, 1.625], standard: [1.75, Infinity] };
+// Detail (owner, 2026-09-28): any pocket as wide as the detail gap (0.875) passes, so small rings
+// (paw's toes, git's nodes) can stay outlined instead of becoming dots.
+const COUNTERS = { detail: [0.875, 1.25], tight: [1.25, 1.75], standard: [1.75, Infinity] };
 // Filled variant (docs/specs/icons.md, "Filled"): each shape declares its role. solid fills
 // the shape inside its outline edge; knockout cuts the stroke out of the solids at the icon
 // weight; hole cuts the shape's interior out. Unmarked shapes are drawn as in the outline.
@@ -57,14 +64,19 @@ const COUNTERS = { tight: [1.25, 1.625], standard: [1.75, Infinity] };
 //   filled variant every detail over a solid is negative space. Where it runs out through the
 //   silhouette's edge it leaves a notch; the part beyond the edge is not drawn.
 // Line glyphs (no solid shape) fill by weight: every stroke at FILLED_WEIGHT_RATIO.
-const FILLED_ROLES = ["solid", "knockout", "hole", "cut", "gap", "line", "fill", "stroke"];
+const FILLED_ROLES = ["solid", "knockout", "hole", "cut", "gap", "line", "fill", "stroke", "halo"];
 const SOLID_ROLES = ["solid", "fill"];
 const FILLED_WEIGHT_RATIO = 4 / 3;
 const SIZE_CURVE = 0.45;             // line ∝ size^0.45: Cursor's 1.25px at 16 → 1.5px at 24   // 1.125 → 1.5px, Fluent's filled line weight
 const BOLD = WEIGHT * FILLED_WEIGHT_RATIO;
-const BOLD_GAP_MIN = 1.0;            // 2.5px between centre-lines at 1.5px: Cursor's floor
+const BOLD_GAP_MIN = 0.875;          // detail round (owner, 2026-09-28): the detail step survives the filled line (was 1.0, Cursor's floor)
 const RASTER = 8;              // samples per px for the counter check
 const onGrid = (v, step) => Math.abs(v / step - Math.round(v / step)) < 1e-6;
+const ONLY = (i => i >= 0 ? new Set(process.argv[i + 1].split(",")) : null)(process.argv.indexOf("--only"));
+// A near miss names the nearest steps and how far each is, so a fix is a known distance
+// (move the shapes, change a radius) rather than trial and error.
+const toSteps = (v, steps) => steps.map(([label, lo, hi]) => v < lo ? [label, lo - v, "apart"] : v > hi ? [label, v - hi, "closer"] : null)
+  .filter(Boolean).sort((a, b) => a[1] - b[1]).slice(0, 2).map(([label, dv, dir]) => `${r2(dv)} ${dir} for ${label}`).join(", or ");
 
 const attrs = tag => Object.fromEntries([...tag.matchAll(/([A-Za-z-]+)="([^"]*)"/g)].map(m => [m[1], m[2]]));
 const errors = [];
@@ -98,7 +110,9 @@ function arcPoints(x1, y1, rx, ry, rotDeg, large, sweep, x2, y2) {
 // Absolute M/L/H/V/A/C/Z only. Returns line segments and every point that bounds the shape.
 function parsePath(name, d) {
   const tokens = d.match(/[A-Za-z]|-?\d*\.?\d+(?:e-?\d+)?/g) ?? [];
-  const segments = [], points = [], samples = [], joins = [];
+  const segments = [], points = [], samples = [], joins = [], rings = [];
+  let ring = [];  // samples per subpath, for inside tests on filled shapes
+  const add = (...ps) => { samples.push(...ps); ring.push(...ps); };
   // Straight-to-straight joins (no curve between), for the acute-angle rule.
   let lastSeg = null, firstSeg = null;
   const seg = (x1, y1, x2, y2) => {
@@ -107,31 +121,35 @@ function parsePath(name, d) {
     if (lastSeg) joins.push([lastSeg, s]); else if (!firstSeg) firstSeg = s;
     lastSeg = s;
   };
-  const line = (x1, y1, x2, y2) => { const n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / 0.05)); for (let k = 0; k <= n; k++) samples.push([x1 + (x2 - x1) * k / n, y1 + (y2 - y1) * k / n]); };
-  let i = 0, cmd = "", x = 0, y = 0, sx = 0, sy = 0;
+  const line = (x1, y1, x2, y2) => { const n = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1) / 0.05)); for (let k = 0; k <= n; k++) add([x1 + (x2 - x1) * k / n, y1 + (y2 - y1) * k / n]); };
+  let i = 0, cmd = "", x = 0, y = 0, sx = 0, sy = 0, lastCtrl = null;
+  const cubic = c => {
+    lastSeg = null; firstSeg = firstSeg ?? "curve";
+    const pts = []; for (let k = 0; k <= 64; k++) { const t = k / 64, u = 1 - t; pts.push([u * u * u * x + 3 * u * u * t * c[0] + 3 * u * t * t * c[2] + t * t * t * c[4], u * u * u * y + 3 * u * u * t * c[1] + 3 * u * t * t * c[3] + t * t * t * c[5]]); }
+    add(...pts); points.push(...pts); x = c[4]; y = c[5];
+  };
   const num = () => Number(tokens[i++]);
   while (i < tokens.length) {
     if (/[A-Za-z]/.test(tokens[i])) cmd = tokens[i++];
     if (/[a-z]/.test(cmd) && cmd !== "z") { fail(name, `relative command "${cmd}" is not allowed; author absolute paths`); return { segments, points, samples }; }
-    if (cmd === "M") { x = num(); y = num(); sx = x; sy = y; points.push([x, y]); cmd = "L"; lastSeg = null; firstSeg = null; }
+    const ctrl = lastCtrl; lastCtrl = null;
+    if (cmd === "M") { x = num(); y = num(); sx = x; sy = y; points.push([x, y]); cmd = "L"; lastSeg = null; firstSeg = null; ring = []; rings.push(ring); }
     else if (cmd === "L") { const nx = num(), ny = num(); segments.push([x, y, nx, ny]); seg(x, y, nx, ny); line(x, y, nx, ny); x = nx; y = ny; points.push([x, y]); }
     else if (cmd === "H") { const nx = num(); segments.push([x, y, nx, y]); seg(x, y, nx, y); line(x, y, nx, y); x = nx; points.push([x, y]); }
     else if (cmd === "V") { const ny = num(); segments.push([x, y, x, ny]); seg(x, y, x, ny); line(x, y, x, ny); y = ny; points.push([x, y]); }
-    else if (cmd === "C") {
-      lastSeg = null; firstSeg = firstSeg ?? "curve";
-      const c = [num(), num(), num(), num(), num(), num()];
-      for (let k = 0; k <= 64; k++) { const t = k / 64, u = 1 - t; samples.push([u * u * u * x + 3 * u * u * t * c[0] + 3 * u * t * t * c[2] + t * t * t * c[4], u * u * u * y + 3 * u * u * t * c[1] + 3 * u * t * t * c[3] + t * t * t * c[5]]); }
-      points.push(...samples.slice(-65)); x = c[4]; y = c[5];
-    } else if (cmd === "Q") {
+    else if (cmd === "C") { const c = [num(), num(), num(), num(), num(), num()]; cubic(c); lastCtrl = [c[2], c[3]]; }
+    // S: the first control point mirrors the previous curve's last one (Lucide's paths use it).
+    else if (cmd === "S") { const c = [...(ctrl ? [2 * x - ctrl[0], 2 * y - ctrl[1]] : [x, y]), num(), num(), num(), num()]; cubic(c); lastCtrl = [c[2], c[3]]; }
+    else if (cmd === "Q") {
       lastSeg = null; firstSeg = firstSeg ?? "curve";
       const c = [num(), num(), num(), num()];
-      for (let k = 0; k <= 32; k++) { const t = k / 32, u = 1 - t; samples.push([u * u * x + 2 * u * t * c[0] + t * t * c[2], u * u * y + 2 * u * t * c[1] + t * t * c[3]]); }
+      for (let k = 0; k <= 32; k++) { const t = k / 32, u = 1 - t; add([u * u * x + 2 * u * t * c[0] + t * t * c[2], u * u * y + 2 * u * t * c[1] + t * t * c[3]]); }
       points.push(...samples.slice(-33)); x = c[2]; y = c[3];
     } else if (cmd === "A") {
       lastSeg = null; firstSeg = firstSeg ?? "curve";
       const [rx, ry, rot, large, sweep] = [num(), num(), num(), num(), num()]; const nx = num(), ny = num();
       const arc = arcPoints(x, y, rx, ry, rot, large, sweep, nx, ny);
-      points.push(...arc); samples.push(...arc);
+      points.push(...arc); add(...arc);
       x = nx; y = ny;
     } else if (cmd === "Z" || cmd === "z") {
       segments.push([x, y, sx, sy]); seg(x, y, sx, sy);
@@ -139,15 +157,34 @@ function parsePath(name, d) {
       line(x, y, sx, sy); x = sx; y = sy; if (i < tokens.length && !/[A-Za-z]/.test(tokens[i])) i++; }
     else { fail(name, `unsupported command "${cmd}"`); return { segments, points, samples }; }
   }
-  return { segments, points, samples, joins };
+  return { segments, points, samples, joins, rings };
 }
+// Even-odd inside test over a filled shape's rings (its subpaths' samples).
+const insideRings = (rings, x, y) => {
+  let inside = false;
+  for (const pts of rings) for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i], [xj, yj] = pts[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+};
+// How each drawn element puts down ink, for the raster checks: a stroke by distance to its
+// centre-line, a dot by radius, a filled path or rect by its inside (bold, stroke-weight).
+const inkShapes = elements => elements.map(el => el.stroked ? { pts: el.samples, pad: WEIGHT / 2 }
+  : el.tag === "circle" ? { pts: [[Number(el.attrs.cx), Number(el.attrs.cy)]], pad: Number(el.attrs.r) }
+  : { pts: el.samples, pad: 0, rings: el.rings ?? [el.samples] });
+const inkDistance = ({ pts, pad, rings }, x, y) => {
+  if (rings && insideRings(rings, x, y)) return -1;
+  let d = Infinity; for (const [px, py] of pts) { const e = Math.hypot(px - x, py - y) - pad; if (e < d) d = e; }
+  return d;
+};
 
 // The angle between two joined straight segments, measured inside the corner (180 = straight).
 const joinAngle = ([ax1, ay1, ax2, ay2], [bx1, by1, bx2, by2]) => {
   const u = [ax1 - ax2, ay1 - ay2], v = [bx2 - bx1, by2 - by1];
   return Math.acos(Math.max(-1, Math.min(1, (u[0] * v[0] + u[1] * v[1]) / (Math.hypot(...u) * Math.hypot(...v))))) * 180 / Math.PI;
 };
-const ACUTE = 60;   // straight joins sharper than this need a fillet (an arc) or a wider angle
+const ACUTE = 45;   // (60 before the detail round, owner 2026-09-28) straight joins sharper than this need a fillet (an arc) or a wider angle
 
 // Filled line glyphs draw at BOLD, which grows each round cap by (BOLD − WEIGHT) / 2. Free
 // ends (touching nothing else) retract by that amount along their straight end segment, so
@@ -209,14 +246,11 @@ const r2 = v => Math.round(v * 100) / 100;
 // filled circles by radius. Returns each enclosed counter's widest inscribed disc.
 function measureCounters(elements) {
   const n = 16 * RASTER, ink = new Uint8Array(n * n), near = new Float32Array(n * n).fill(Infinity);
-  const shapes = elements.map(el => el.stroked ? { pts: el.samples, pad: WEIGHT / 2 }
-    : el.tag === "circle" ? { pts: [[Number(el.attrs.cx), Number(el.attrs.cy)]], pad: Number(el.attrs.r) } : { pts: el.samples, pad: 0 });
+  const shapes = inkShapes(elements);
   for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
     const x = (i + 0.5) / RASTER, y = (j + 0.5) / RASTER;
     let d = Infinity;
-    for (const { pts, pad } of shapes) for (const [px, py] of pts) {
-      const e = Math.hypot(px - x, py - y) - pad; if (e < d) d = e;
-    }
+    for (const shape of shapes) { const e = inkDistance(shape, x, y); if (e < d) d = e; if (d < 0) break; }
     near[j * n + i] = d; if (d <= 0) ink[j * n + i] = 1;
   }
   const seen = new Uint8Array(n * n), flood = (start, visit) => {
@@ -241,15 +275,14 @@ function measureCounters(elements) {
 // area; density = coverage / hull (how heavy the icon reads inside its own outline).
 function opticalAudit(elements) {
   const n = 16 * RASTER, rows = [];
-  const shapes = elements.map(el => el.stroked ? { pts: el.samples, pad: WEIGHT / 2 }
-    : el.tag === "circle" ? { pts: [[Number(el.attrs.cx), Number(el.attrs.cy)]], pad: Number(el.attrs.r) } : { pts: el.samples, pad: 0 });
+  const shapes = inkShapes(elements);
   let coverage = 0;
   for (let j = 0; j < n; j++) {
     let lo = -1, hi = -1;
     for (let i = 0; i < n; i++) {
       const x = (i + 0.5) / RASTER, y = (j + 0.5) / RASTER;
       let inside = false;
-      for (const { pts, pad } of shapes) { for (const [px, py] of pts) if (Math.hypot(px - x, py - y) <= pad) { inside = true; break; } if (inside) break; }
+      for (const shape of shapes) { if (shape.rings ? insideRings(shape.rings, x, y) : shape.pts.some(([px, py]) => Math.hypot(px - x, py - y) <= shape.pad)) { inside = true; break; } }
       if (inside) { coverage++; if (lo < 0) lo = i; hi = i; }
     }
     if (lo >= 0) rows.push([lo / RASTER, j / RASTER], [(hi + 1) / RASTER, j / RASTER], [lo / RASTER, (j + 1) / RASTER], [(hi + 1) / RASTER, (j + 1) / RASTER]);
@@ -268,6 +301,7 @@ function load(dir, { strict, soft = false, keylines = true }) {
 const icons = [];
 for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   const name = file.replace(/\.svg$/, "");
+  if (ONLY && !ONLY.has(name)) continue;
   const text = readFileSync(join(dir, file), "utf8");
   const root = attrs(text.match(/<svg[^>]*>/)[0]);
   if (root.viewBox !== "0 0 16 16") fail(name, `viewBox must be "0 0 16 16"`);
@@ -283,7 +317,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   for (const [, tag, body] of text.matchAll(/<(path|circle|rect)\b([^>]*)\/>/g)) {
     const a = attrs(body);
     const stroked = a.stroke && a.stroke !== "none";
-    if (["gap", "fill", "stroke"].includes(a["data-filled"])) {  // filled-only: no outline checks
+    if (["gap", "fill", "stroke", "halo"].includes(a["data-filled"])) {  // filled-only: no outline checks
       if (tag !== "path") fail(name, `a ${a["data-filled"]} is a path`);
       const { stroke, "stroke-width": _w, "stroke-linecap": _c, "stroke-linejoin": _j, "data-filled": filled, ...rest } = a;
       // A fill keeps its samples (for the knockout check); gaps and counters skip filled-only shapes.
@@ -296,12 +330,12 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
       if (a["stroke-linecap"] !== "round" || a["stroke-linejoin"] !== "round") fail(name, "caps and joins must be round");
       if (a.fill !== "none") fail(name, "stroked shapes must have fill=none");
     } else if (a.fill !== "currentColor") fail(name, "a shape is either stroked or filled with currentColor");
-    let points = [], samples = [];
+    let points = [], samples = [], rings;
     // Axis-aligned edges on the 0.5px grid: crisp at 2×, and at 1× when on a pixel centre (x.5).
     const grid = (v, what) => { if (strict && !onGrid(v, 0.5)) fail(name, `${what} ${v} is off the 0.5px grid`); };
     if (tag === "path") {
       const parsed = parsePath(name, a.d);
-      points = parsed.points; samples = parsed.samples;
+      points = parsed.points; samples = parsed.samples; rings = parsed.rings;
       // Acute corners pinch the negative space inside them into thin, sharp wedges.
       // data-acute="sharp" (owner-approved, recorded in the spec): the icon's points are
       // meant to be sharp, as a lightning bolt's are; the stroke fills the point solid.
@@ -328,7 +362,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     } else {
       const [x, y, w, h] = [a.x, a.y, a.width, a.height].map(Number);
       points = [[x, y], [x + w, y + h]];
-      samples = rectSamples(x, y, w, h, Number(a.rx ?? 0));
+      samples = rectSamples(x, y, w, h, Number(a.rx ?? 0)); rings = [samples];
       for (const v of [x, y, x + w, y + h]) grid(v, "rect edge");
     }
     const [lo, hi] = stroked ? LIVE : LIVE_FILL;
@@ -356,7 +390,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
         cutD = `M${ax} ${ay}L${a.d.replace(/^M/, "")}L${bx} ${by}`;
       }
     }
-    elements.push({ tag, attrs: rest, stroked, samples, filled, cutD });
+    elements.push({ tag, attrs: rest, stroked, samples, rings, filled, cutD });
   }
   if (!elements.length) fail(name, "no shapes found");
   if (elements.some(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)) && !elements.some(el => SOLID_ROLES.includes(el.filled))) fail(name, "cut-outs need at least one solid shape to cut");
@@ -387,16 +421,17 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   if (strict && name.endsWith("-off") && root["data-off"] !== "own" && !elements.some(el => /M2 2L14 14\b/.test(el.attrs.d ?? "")))
     fail(name, `an off icon draws the shared slash M2 2L14 14, or declares data-off="own"`);
   const lineGlyphIcon = !elements.some(el => SOLID_ROLES.includes(el.filled));
-  for (const el of drawn) if (el.stroked && el.tag === "path" && (lineGlyphIcon || !el.filled)) {
+  for (const el of drawn) if (el.stroked && el.tag === "path" && lineGlyphIcon) {
     el.boldD = retractFreeEnds(el.attrs.d, drawn.filter(o => o !== el).flatMap(o => o.samples));
     el.boldSamples = parsePath(name, el.boldD).samples;
   }
   // Gaps: separate shapes either join or sit on the gap scale (measured ink to ink).
   const gaps = [];
   const pads = drawn.map(el => el.stroked ? WEIGHT / 2 : 0);
-  // In the filled variant, strokes that stay strokes are drawn at BOLD; gaps must survive it.
+  // In a filled line glyph every stroke is drawn at BOLD; gaps must survive it. Beside solids,
+  // strokes keep the icon weight (Fluent's filled paint bucket, align left, delete).
   const lineGlyph = !elements.some(el => SOLID_ROLES.includes(el.filled));
-  const boldPads = drawn.map(el => el.stroked && (lineGlyph || !el.filled) ? BOLD / 2 : pads[drawn.indexOf(el)]);
+  const boldPads = drawn.map(el => el.stroked && lineGlyph ? BOLD / 2 : pads[drawn.indexOf(el)]);
   for (let p = 0; p < drawn.length; p++) for (let q = p + 1; q < drawn.length; q++) {
     let d = Infinity;
     for (const [ax, ay] of drawn[p].samples) for (const [bx, by] of drawn[q].samples) d = Math.min(d, Math.hypot(ax - bx, ay - by));
@@ -411,10 +446,13 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     // data-gap="close" (owner-approved, recorded in the spec): one satellite sits a step
     // closer than tight, 2 between centre-lines on the 0.5 grid (battery's terminal).
     const close = root["data-gap"] === "close" && g >= CLOSE_GAP - 1e-6;
-    if (!negative && !close && gBold < BOLD_GAP_MIN - 1e-6) fail(name, `shapes ${p + 1} and ${q + 1} close to ${r2(gBold)}px in the filled variant (${BOLD}px line); keep ${BOLD_GAP_MIN}`);
-    const step = Object.entries(GAPS).find(([, [lo, hi]]) => g >= lo - 1e-6 && g <= hi + 1e-6)?.[0] ?? (g >= OPEN ? "open" : close ? "close" : null);
+    if (!negative && !close && gBold < BOLD_GAP_MIN - 1e-6) fail(name, `shapes ${p + 1} and ${q + 1} close to ${r2(gBold)}px in the filled variant (${BOLD}px line); keep ${BOLD_GAP_MIN}: move them ${r2(BOLD_GAP_MIN - gBold)} apart`);
+    // data-gap="aligned" (owner-approved, recorded in the spec): shapes kept on one edge line
+    // leave a diagonal gap between standard and open where a rounded corner meets them (qr-code).
+    const aligned = root["data-gap"] === "aligned" && g > GAPS.standard[1] && g < OPEN;
+    const step = Object.entries(GAPS).find(([, [lo, hi]]) => g >= lo - 1e-6 && g <= hi + 1e-6)?.[0] ?? (g >= OPEN ? "open" : close ? "close" : aligned ? "aligned" : null);
     gaps.push(`${r2(g)}${step ? " " + step : ""}`);
-    if (!step) fail(name, `shapes ${p + 1} and ${q + 1} leave a ${r2(g)}px gap; use tight ${GAPS.tight.join("–")}, standard ${GAPS.standard.join("–")}, open ≥ ${OPEN}, or join them`);
+    if (!step) fail(name, `shapes ${p + 1} and ${q + 1} leave a ${r2(g)}px gap; move them ${toSteps(g, [["detail", ...GAPS.detail], ["tight", ...GAPS.tight], ["standard", ...GAPS.standard], ["open", OPEN, Infinity]])} (or join them)`);
   }
   // Counters: rasterise the ink and flood the outside; every enclosed pocket of negative
   // space must hold at least a tight disc, or it reads as a blot at 16px.
@@ -422,7 +460,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   // data-counter="sliver" (owner-approved, recorded in the spec): a slashed shape keeps
   // Fluent's fuller form, and the sliver between it and the slash stays (mic-off).
   if (root["data-counter"] !== "sliver") for (const c of counters) if (!Object.values(COUNTERS).some(([lo, hi]) => c >= lo - 1e-6 && c <= hi + 1e-6))
-    fail(name, `an enclosed counter is ${r2(c)}px across; make it tight ${COUNTERS.tight.join("–")}, standard ≥ ${COUNTERS.standard[0]}, or remove it`);
+    fail(name, `an enclosed counter is ${r2(c)}px across; make it ${toSteps(c, [["detail", ...COUNTERS.detail], ["tight", ...COUNTERS.tight], ["standard", COUNTERS.standard[0], Infinity]]).replaceAll("apart", "larger").replaceAll("closer", "smaller")} (or remove it)`);
   // Keyline: the ink box at WEIGHT fits the icon's optical shape, centred on 8,8.
   if (strict && keylines && KEYLINES[keyline]) {
     const [kw, kh] = KEYLINES[keyline];
@@ -471,19 +509,22 @@ if (process.argv.includes("--audit")) {
 // leaves most icons 0.88 under on their long side; more than UNDER marks an icon that reads
 // small beside its neighbours. Line glyphs (chevron, check, more) are thin by nature.
 const UNDER = 1.5;
-if (process.argv.includes("--report")) for (const icon of icons.filter(i => !i.derivedFrom)) {
+if (process.argv.includes("--report") || ONLY) for (const icon of icons.filter(i => !i.derivedFrom)) {
   const [x0, y0, x1, y1] = icon.ink;
   const [kw, kh] = KEYLINES[icon.keyline] ?? [16, 16], under = r2(Math.max(kw, kh) - Math.max(x1 - x0, y1 - y0));
   console.log(`  ${icon.name.padEnd(17)} ${icon.keyline.padEnd(10)} ink ${r2(x1 - x0)}×${r2(y1 - y0)}  centre ${r2((x0 + x1) / 2)},${r2((y0 + y1) / 2)}` +
     (icon.gaps.length ? `  gaps ${icon.gaps.join(", ")}` : "") + (icon.counters.length ? `  counters ${icon.counters.join(", ")}` : "") +
     (under > UNDER ? `  ⚠ ${under} under its keyline` : ""));
 }
-if (process.argv.includes("--check")) process.exit(0);
+if (process.argv.includes("--check") || ONLY) process.exit(0);
 
 const camel = s => s.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
 const STROKE = `style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round"`;
 const STROKE_BOLD = `style={{ strokeWidth: sw(weight, size, ${FILLED_WEIGHT_RATIO.toFixed(4)}) }} strokeLinecap="round" strokeLinejoin="round"`;
 const STROKE_CUT = `style={{ strokeWidth: sw(weight, size) }} strokeLinecap="butt" strokeLinejoin="miter"`;
+// A halo cuts the solids back round a line in front of them by one icon weight each side
+// (Fluent's thunderstorm bolt): three weights wide, round, under the line drawn on top.
+const STROKE_HALO = `style={{ strokeWidth: sw(weight, size, 3) }} strokeLinecap="round" strokeLinejoin="round"`;
 const jsx = (el, paint) => {
   const attrs = { ...el.attrs, ...paint?.attrs };
   const props = Object.entries(attrs).map(([k, v]) => `${camel(k)}="${v}"`);
@@ -508,12 +549,14 @@ const filledBody = icon => {
   if (lineGlyph) return [...outline.filter(el => el.filled !== "line"), ...icon.elements.filter(el => el.filled === "stroke")]
     .map(el => el.stroked ? bold(el) : jsx(el.tag === "circle" ? boldDot(el) : el));
   const solid = icon.elements.filter(el => SOLID_ROLES.includes(el.filled)).map(el => jsx(el, { attrs: { fill: "currentColor" }, stroke: el.stroked }));
-  const cuts = icon.elements.filter(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)).map(el =>
-    el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
+  const cuts = icon.elements.filter(el => ["knockout", "hole", "cut", "gap", "halo"].includes(el.filled)).map(el =>
+    el.filled === "halo" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_HALO })
+    : el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
     : el.filled === "hole" ? jsx(el, { attrs: { fill: "black" }, stroke: false })
     : jsx(el, { attrs: { fill: "none", ...(el.cutD ? { d: el.cutD } : {}) }, stroke: true, color: "black", strokeStyle: STROKE_CUT }));
-  // Unmarked strokes stay strokes, drawn at BOLD like every other filled line.
-  const plain = icon.elements.filter(el => !el.filled).map(el => el.stroked ? bold(el) : jsx(el));
+  // Unmarked strokes beside solids stay strokes at the icon weight: the solids carry the
+  // emphasis, so the lines keep the outline's exact length and gaps (Fluent's filled cuts).
+  const plain = icon.elements.filter(el => !el.filled).map(el => jsx(el));
   if (!cuts.length) return [...solid, ...plain];
   return [
     `<mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">`,

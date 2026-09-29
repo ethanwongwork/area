@@ -13,8 +13,12 @@
     --_gap: var(--area-gap-md);
     --_on: var(--area-neutral-solid);
     --_on-hover: var(--area-neutral-solid-hover);
-    --_off: var(--area-fill-toggle);
-    --_off-hover: var(--area-fill-toggle-hover);
+    /* spec (owner 2026-09-28, "lighten is better"): the off track takes the control edge's rung,
+       #e2 (ChatGPT ≈ #e6, Notion ≈ #db; was fill-toggle #d4), and hovers one rung up to #d4.
+       Both keep the increased-contrast mix. The edge equals the fill, so none shows, as in
+       both products. */
+    --_off: var(--area-edge-control);
+    --_off-hover: var(--area-edge-control-hover);
     --_edge: var(--area-edge-control);
     display: inline-flex;
     align-items: flex-start;
@@ -88,8 +92,8 @@
   /* data-checked: a display-only switch whose state lives on its host (a menu's checkable row). */
   .area-switch__track[data-checked] .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width)); }
   .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width)); }
-  .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); }
-  .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); }
+  .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); border-color: var(--_off-hover); }
+  .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); border-color: var(--_on-hover); }
   .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__thumb { inline-size: calc(var(--_thumb-width) + var(--area-space-2)); }
   .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width) - var(--area-space-2)); }
   .area-switch__control:focus-visible ~ .area-switch__track,
