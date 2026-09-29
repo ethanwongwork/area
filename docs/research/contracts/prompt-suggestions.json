@@ -1,0 +1,439 @@
+{
+  "slug": "prompt-suggestions",
+  "manifest": "promptSuggestions",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "ul"
+      ],
+      "class": "area-prompt-suggestions",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-prompt-suggestions--chips"
+          ]
+        },
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-prompt-suggestions"
+          ]
+        },
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-prompt-suggestions--list"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-prompt-suggestions--chips"
+          ]
+        },
+        {
+          "name": "--area-space-96",
+          "selectors": [
+            ".area-prompt-suggestions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "row",
+      "element": [
+        "li"
+      ],
+      "class": "area-prompt-suggestions__row",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "item",
+      "element": [
+        "button"
+      ],
+      "class": "area-prompt-suggestions__item",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-bg-component-hover",
+          "selectors": [
+            ".area-prompt-suggestions__row:hover > .area-prompt-suggestions__item",
+            ".area-prompt-suggestions__item:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-prompt-suggestions__item"
+          ]
+        },
+        {
+          "name": "--area-focus-color",
+          "selectors": [
+            ".area-prompt-suggestions__item:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-focus-width",
+          "selectors": [
+            ".area-prompt-suggestions__item:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-font-sans",
+          "selectors": [
+            ".area-prompt-suggestions__item"
+          ]
+        },
+        {
+          "name": "--area-radius-button-cap",
+          "selectors": [
+            ".area-prompt-suggestions__item"
+          ]
+        },
+        {
+          "name": "--area-radius-control-md",
+          "selectors": [
+            ".area-prompt-suggestions__item"
+          ]
+        },
+        {
+          "name": "--area-space-12",
+          "selectors": [
+            ".area-prompt-suggestions__item"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-prompt-suggestions__item",
+            ".area-prompt-suggestions__row:not(:has(.area-prompt-suggestions__dismiss)) > .area-prompt-suggestions__item"
+          ]
+        },
+        {
+          "name": "--area-text-md-leading",
+          "selectors": [
+            ".area-prompt-suggestions__item"
+          ]
+        },
+        {
+          "name": "--area-text-md-size",
+          "selectors": [
+            ".area-prompt-suggestions__item"
+          ]
+        },
+        {
+          "name": "--area-transition",
+          "selectors": [
+            ".area-prompt-suggestions__item"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "icon",
+      "element": [
+        "span"
+      ],
+      "class": "area-prompt-suggestions__icon",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-prompt-suggestions__icon"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "text",
+      "element": [
+        "span"
+      ],
+      "class": "area-prompt-suggestions__text",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "dismiss",
+      "element": [
+        "span"
+      ],
+      "class": "area-prompt-suggestions__dismiss",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-prompt-suggestions__dismiss"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {
+    "layout": {
+      "values": [
+        "list",
+        "chips"
+      ],
+      "default": "list"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "hidden",
+      "part": "icon",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "focus-visible",
+      "part": "item",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-prompt-suggestions__item:focus-visible"
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [
+    {
+      "part": "root",
+      "rule": "Reference wiring: aria-label={label}."
+    },
+    {
+      "part": "root",
+      "rule": "Reference wiring: aria-label={label}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "Button",
+      "Glyph"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:1106",
+      "apps/docs/src/demos/gallery.tsx:1109",
+      "apps/docs/src/demos/gallery.tsx:1114"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/prompt-suggestions.css"
+    ],
+    "spec": [
+      "docs/specs/prompt-suggestions.md"
+    ],
+    "reactExport": [
+      "PromptSuggestions"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:469"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:468"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:468","packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:37","packages/react/src/components/PromptSuggestions.tsx:38","packages/react/src/components/PromptSuggestions.tsx:39","packages/react/src/components/PromptSuggestions.tsx:40","packages/react/src/components/PromptSuggestions.tsx:41","packages/react/src/components/PromptSuggestions.tsx:43"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:37"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:37"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:79"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:77"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:79"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:12","packages/styles/src/components/prompt-suggestions.css:16","packages/styles/src/components/prompt-suggestions.css:77","packages/styles/src/components/prompt-suggestions.css:79"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:38"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:38"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:38"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:38"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:38"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:38"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:38"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/1/tokens": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:38"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:39"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:39"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:39"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:39"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:39"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:39"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:39"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/7": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/8": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:23","packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34","packages/styles/src/components/prompt-suggestions.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/9": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:27","packages/styles/src/components/prompt-suggestions.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/10": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/11": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:23","packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34","packages/styles/src/components/prompt-suggestions.css:44","packages/styles/src/components/prompt-suggestions.css:27","packages/styles/src/components/prompt-suggestions.css:39","packages/styles/src/components/prompt-suggestions.css:37","packages/styles/src/components/prompt-suggestions.css:38","packages/styles/src/components/prompt-suggestions.css:42","packages/styles/src/components/prompt-suggestions.css:48","packages/styles/src/components/prompt-suggestions.css:49"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/3/allowedContent": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/3/customProperties": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3/tokens/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:56","packages/styles/src/components/prompt-suggestions.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:56","packages/styles/src/components/prompt-suggestions.css:57"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:41"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:41"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:41"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:41"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:41"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/4/allowedContent": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:41"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/4/customProperties": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:41"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4/tokens": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:41"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/5": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:43"],"note":"Direct source declaration or implementation."},
+    "/parts/5/id": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:43"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/5/class": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:43"],"note":"Direct source declaration or implementation."},
+    "/parts/5/element": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:43"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/required": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:43"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/5/allowedContent": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:43"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/5/customProperties": {"status":"not found","sources":["packages/react/src/components/PromptSuggestions.tsx:43"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/5/tokens/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:65"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:468","packages/react/src/components/PromptSuggestions.tsx:27","docs/specs/prompt-suggestions.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:471"],"note":"Direct source declaration or implementation."},
+    "/options/layout": {"status":"found","sources":["packages/styles/src/manifest.ts:471"],"note":"Direct source declaration or implementation."},
+    "/options/layout/default": {"status":"found","sources":["packages/styles/src/manifest.ts:473"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:468"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:468"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:47"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40","packages/styles/src/components/prompt-suggestions.css:47"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:468","packages/react/src/components/PromptSuggestions.tsx:27","docs/specs/prompt-suggestions.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:468","packages/react/src/components/PromptSuggestions.tsx:27","docs/specs/prompt-suggestions.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:468","packages/react/src/components/PromptSuggestions.tsx:27","docs/specs/prompt-suggestions.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:468","packages/react/src/components/PromptSuggestions.tsx:27","docs/specs/prompt-suggestions.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:33"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/1": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:45"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:468","packages/react/src/components/PromptSuggestions.tsx:27","docs/specs/prompt-suggestions.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1106"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1109"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1114"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1106","apps/docs/src/demos/gallery.tsx:1109","apps/docs/src/demos/gallery.tsx:1114"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:9","packages/styles/src/components/prompt-suggestions.css:18","packages/styles/src/components/prompt-suggestions.css:19","packages/styles/src/components/prompt-suggestions.css:44","packages/styles/src/components/prompt-suggestions.css:47","packages/styles/src/components/prompt-suggestions.css:49","packages/styles/src/components/prompt-suggestions.css:52","packages/styles/src/components/prompt-suggestions.css:59","packages/styles/src/components/prompt-suggestions.css:60","packages/styles/src/components/prompt-suggestions.css:62","packages/styles/src/components/prompt-suggestions.css:70","packages/styles/src/components/prompt-suggestions.css:72","packages/styles/src/components/prompt-suggestions.css:73","packages/styles/src/components/prompt-suggestions.css:77","packages/styles/src/components/prompt-suggestions.css:79","packages/styles/src/components/prompt-suggestions.css:80","packages/styles/src/components/prompt-suggestions.css:81","packages/styles/src/components/prompt-suggestions.css:82"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:9"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/prompt-suggestions.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:27","packages/react/src/index.ts:27"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:27","packages/react/src/index.ts:27"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:468","packages/styles/src/components/prompt-suggestions.css:1","docs/specs/prompt-suggestions.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31","packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:79"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:79"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:79"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:77"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:77"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:77"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:79"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:79"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:79"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:32","packages/react/src/components/PromptSuggestions.tsx:38"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:39"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:23","packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34","packages/styles/src/components/prompt-suggestions.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:23","packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34","packages/styles/src/components/prompt-suggestions.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:23","packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34","packages/styles/src/components/prompt-suggestions.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/8/selectors/1": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:23","packages/styles/src/components/prompt-suggestions.css:30","packages/styles/src/components/prompt-suggestions.css:34","packages/styles/src/components/prompt-suggestions.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/9/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:27","packages/styles/src/components/prompt-suggestions.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/9/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:27","packages/styles/src/components/prompt-suggestions.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:27","packages/styles/src/components/prompt-suggestions.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/10/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/10/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/11/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/11/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:56","packages/styles/src/components/prompt-suggestions.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:56","packages/styles/src/components/prompt-suggestions.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:56","packages/styles/src/components/prompt-suggestions.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:41"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/element/0": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:43"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/options/layout/values": {"status":"found","sources":["packages/styles/src/manifest.ts:471"],"note":"Direct source declaration or implementation."},
+    "/options/layout/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:471"],"note":"Direct source declaration or implementation."},
+    "/options/layout/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:471"],"note":"Direct source declaration or implementation."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:47"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/part": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:47"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/kind": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:47"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/hook": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:47"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/value": {"status":"found","sources":["packages/styles/src/components/prompt-suggestions.css:47"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:31"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/part": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/rule": {"status":"found","sources":["packages/react/src/components/PromptSuggestions.tsx:37"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/prompt-suggestions.md:1"],"note":"Dedicated family spec."}
+  }
+}

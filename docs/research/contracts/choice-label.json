@@ -1,0 +1,238 @@
+{
+  "slug": "choice-label",
+  "manifest": "choiceLabel",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "span"
+      ],
+      "class": "area-choice-label",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_leading",
+          "selectors": [
+            ".area-choice-label"
+          ]
+        },
+        {
+          "name": "--_size",
+          "selectors": [
+            ".area-choice-label"
+          ]
+        },
+        {
+          "name": "--_text",
+          "selectors": [
+            ".area-choice-label"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-choice-label"
+          ]
+        },
+        {
+          "name": "--area-text-xs-size",
+          "selectors": [
+            ".area-choice-label:has(> .area-choice-label__description:only-child)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "element": [
+        "span"
+      ],
+      "class": "area-choice-label__title",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_leading",
+          "selectors": [
+            ".area-choice-label__title"
+          ]
+        },
+        {
+          "name": "--_text",
+          "selectors": [
+            ".area-choice-label__title"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-fg-danger-vivid",
+          "selectors": [
+            ".area-checkbox[data-invalid] .area-choice-label__title"
+          ]
+        },
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-choice-label__title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "description",
+      "element": [
+        "span"
+      ],
+      "class": "area-choice-label__description",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-choice-label__description"
+          ]
+        },
+        {
+          "name": "--area-text-xs-leading",
+          "selectors": [
+            ".area-choice-label__description"
+          ]
+        },
+        {
+          "name": "--area-text-xs-size",
+          "selectors": [
+            ".area-choice-label__description"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {},
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [],
+  "keyboard": [],
+  "accessibleName": [],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": []
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/choice.css",
+      "packages/styles/src/inset.css"
+    ],
+    "spec": [
+      "docs/specs/checkbox.md"
+    ],
+    "reactExport": "not found"
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:309"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:308"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:160","packages/react/src/components/forms.tsx:161","packages/react/src/components/forms.tsx:162","packages/react/src/components/forms.tsx:306","packages/react/src/components/forms.tsx:307","packages/react/src/components/forms.tsx:308"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:160","packages/react/src/components/forms.tsx:306"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/forms.tsx:160","packages/react/src/components/forms.tsx:306"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/forms.tsx:160","packages/react/src/components/forms.tsx:306"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/forms.tsx:160","packages/react/src/components/forms.tsx:306"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/forms.tsx:160","packages/react/src/components/forms.tsx:306"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/forms.tsx:160","packages/react/src/components/forms.tsx:306"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/inset.css:204"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/inset.css:205"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2": {"status":"found","sources":["packages/styles/src/inset.css:203"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/inset.css:203","packages/styles/src/inset.css:204","packages/styles/src/inset.css:205"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/choice.css:388"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/inset.css:207"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/choice.css:388","packages/styles/src/inset.css:207"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/forms.tsx:161","packages/react/src/components/forms.tsx:307"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/forms.tsx:161","packages/react/src/components/forms.tsx:307"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/forms.tsx:161","packages/react/src/components/forms.tsx:307"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/forms.tsx:161","packages/react/src/components/forms.tsx:307"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/forms.tsx:161","packages/react/src/components/forms.tsx:307"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/forms.tsx:161","packages/react/src/components/forms.tsx:307"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/choice.css:393"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1": {"status":"found","sources":["packages/styles/src/components/choice.css:392"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/choice.css:392","packages/styles/src/components/choice.css:393"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/choice.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1": {"status":"found","sources":["packages/styles/src/components/choice.css:394"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/choice.css:231","packages/styles/src/components/choice.css:394"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/forms.tsx:162","packages/react/src/components/forms.tsx:308"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/forms.tsx:162","packages/react/src/components/forms.tsx:308"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/forms.tsx:162","packages/react/src/components/forms.tsx:308"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/forms.tsx:162","packages/react/src/components/forms.tsx:308"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/forms.tsx:162","packages/react/src/components/forms.tsx:308"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/forms.tsx:162","packages/react/src/components/forms.tsx:308"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties": {"status":"not found","sources":["packages/react/src/components/forms.tsx:162","packages/react/src/components/forms.tsx:308"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/choice.css:400"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1": {"status":"found","sources":["packages/styles/src/components/choice.css:399"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2": {"status":"found","sources":["packages/styles/src/components/choice.css:398"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/choice.css:398","packages/styles/src/components/choice.css:399","packages/styles/src/components/choice.css:400"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:311"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:308"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:308"],"note":"Direct source declaration or implementation."},
+    "/states": {"status":"not found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"not found: No runtime hooks found in manifest, family markup or directly targeted CSS selectors."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName": {"status":"not found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"not found: No explicit accessible-name rule or naming attribute found in scoped implementation; inherited native props are not treated as naming requirements."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples": {"status":"not found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"not found: No direct family element/export use in apps/docs/src/demos; wrappers and computed galleries are not interpreted."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/choice.css:122","packages/styles/src/components/choice.css:160","packages/styles/src/components/choice.css:231","packages/styles/src/components/choice.css:385","packages/styles/src/components/choice.css:391","packages/styles/src/components/choice.css:397","packages/styles/src/inset.css:202","packages/styles/src/inset.css:207","packages/styles/src/inset.css:208","packages/styles/src/inset.css:209","packages/styles/src/inset.css:210"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/choice.css:122"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/inset.css:202"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/checkbox.md:1"],"note":"Shared family spec; dedicated slug spec not found."},
+    "/reference/reactExport": {"status":"not found","sources":["packages/styles/src/manifest.ts:308","packages/react/src/components/forms.tsx:123","packages/react/src/components/forms.tsx:273","docs/specs/checkbox.md:1"],"note":"not found: No family export found in packages/react/src/index.ts and component declarations."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:308","packages/styles/src/components/choice.css:1","packages/styles/src/inset.css:1","docs/specs/checkbox.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:160","packages/react/src/components/forms.tsx:306"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/inset.css:204"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/inset.css:204"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:204"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/inset.css:205"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/inset.css:205"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:205"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/name": {"status":"found","sources":["packages/styles/src/inset.css:203"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/inset.css:203"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:203"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/choice.css:388"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/choice.css:388"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/choice.css:388"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/inset.css:207"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/inset.css:207"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:207"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:161","packages/react/src/components/forms.tsx:307"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/choice.css:393"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/choice.css:393"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/choice.css:393"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/choice.css:392"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/choice.css:392"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/choice.css:392"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/choice.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/choice.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/choice.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/choice.css:394"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/choice.css:394"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/choice.css:394"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:162","packages/react/src/components/forms.tsx:308"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/choice.css:400"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/choice.css:400"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/choice.css:400"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/choice.css:399"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/choice.css:399"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/choice.css:399"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/choice.css:398"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/choice.css:398"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/choice.css:398"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/checkbox.md:1"],"note":"Shared family spec; dedicated slug spec not found."}
+  }
+}

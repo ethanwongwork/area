@@ -1,0 +1,851 @@
+{
+  "slug": "tree-view",
+  "manifest": "treeView",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-tree-view",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_tree-chevron",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        },
+        {
+          "name": "--_tree-gap",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-bg-component",
+          "selectors": [
+            ".area-tree-view--checkbox"
+          ]
+        },
+        {
+          "name": "--area-bg-component-active",
+          "selectors": [
+            ".area-tree-view--navigation"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        },
+        {
+          "name": "--area-control-md-leading",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        },
+        {
+          "name": "--area-control-md-text",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        },
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        },
+        {
+          "name": "--area-icon-md",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        },
+        {
+          "name": "--area-space-0",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        },
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        },
+        {
+          "name": "--area-space-96",
+          "selectors": [
+            ".area-tree-view"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chevron",
+      "element": [
+        "span"
+      ],
+      "class": "area-tree-view__chevron",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_tree-chevron",
+          "selectors": [
+            ".area-tree-view__chevron"
+          ]
+        },
+        {
+          "name": "--_tree-plate-inset",
+          "selectors": [
+            ".area-tree-view__chevron::before"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-bg-component-hover",
+          "selectors": [
+            ".area-tree-view__chevron:has(svg):hover::before"
+          ]
+        },
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-tree-view__chevron"
+          ]
+        },
+        {
+          "name": "--area-radius-small",
+          "selectors": [
+            ".area-tree-view__chevron::before"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-tree-view__chevron::after"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "element": [
+        "span"
+      ],
+      "class": "area-tree-view__check",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_tree-check",
+          "selectors": [
+            ".area-tree-view [aria-checked=\"true\"] .area-tree-view__check"
+          ]
+        },
+        {
+          "name": "--_tree-check-mark",
+          "selectors": [
+            ".area-tree-view [aria-checked=\"true\"] .area-tree-view__check"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-control-sm-text",
+          "selectors": [
+            ".area-tree-view__check"
+          ]
+        },
+        {
+          "name": "--area-edge-control",
+          "selectors": [
+            ".area-tree-view__check"
+          ]
+        },
+        {
+          "name": "--area-fg-on-neutral",
+          "selectors": [
+            ".area-tree-view [aria-checked=\"true\"] .area-tree-view__check"
+          ]
+        },
+        {
+          "name": "--area-icon-md",
+          "selectors": [
+            ".area-tree-view__check"
+          ]
+        },
+        {
+          "name": "--area-neutral-solid",
+          "selectors": [
+            ".area-tree-view [aria-checked=\"true\"] .area-tree-view__check"
+          ]
+        },
+        {
+          "name": "--area-radius-small",
+          "selectors": [
+            ".area-tree-view__check"
+          ]
+        },
+        {
+          "name": "--area-stroke-width",
+          "selectors": [
+            ".area-tree-view__check"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "icon",
+      "element": [
+        "span"
+      ],
+      "class": "area-tree-view__icon",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-tree-view__icon"
+          ]
+        },
+        {
+          "name": "--area-icon-md",
+          "selectors": [
+            ".area-tree-view__icon"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "label",
+      "element": [
+        "span"
+      ],
+      "class": "area-tree-view__label",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_tree-label-inset",
+          "selectors": [
+            ".area-tree-view__label"
+          ]
+        }
+      ],
+      "tokens": []
+    },
+    {
+      "id": "trailing",
+      "element": [
+        "span"
+      ],
+      "class": "area-tree-view__trailing",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-tree-view__trailing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "actions",
+      "element": [
+        "span"
+      ],
+      "class": "area-tree-view__actions",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-tree-view__actions"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-tree-view__actions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unclassed-div-127",
+      "element": [
+        "div"
+      ],
+      "class": "not found",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    }
+  ],
+  "slots": [],
+  "options": {
+    "selectionMode": {
+      "values": [
+        "navigation",
+        "checkbox"
+      ],
+      "default": "navigation"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "hidden",
+      "part": "chevron",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "hidden",
+      "part": "check",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "hidden",
+      "part": "icon",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "tree-id",
+      "part": "unclassed-div-127",
+      "kind": "data",
+      "hook": "data-tree-id",
+      "value": "{node.id}"
+    },
+    {
+      "name": "disabled",
+      "part": "unclassed-div-127",
+      "kind": "data",
+      "hook": "data-disabled",
+      "value": "{node.disabled ? \"\" : undefined}"
+    },
+    {
+      "name": "level",
+      "part": "unclassed-div-127",
+      "kind": "aria",
+      "hook": "aria-level",
+      "value": "{depth}"
+    },
+    {
+      "name": "posinset",
+      "part": "unclassed-div-127",
+      "kind": "aria",
+      "hook": "aria-posinset",
+      "value": "{position}"
+    },
+    {
+      "name": "setsize",
+      "part": "unclassed-div-127",
+      "kind": "aria",
+      "hook": "aria-setsize",
+      "value": "{count}"
+    },
+    {
+      "name": "expanded",
+      "part": "unclassed-div-127",
+      "kind": "aria",
+      "hook": "aria-expanded",
+      "value": "{branch ? open : undefined}"
+    },
+    {
+      "name": "selected",
+      "part": "unclassed-div-127",
+      "kind": "aria",
+      "hook": "aria-selected",
+      "value": "{selectionMode === \"navigation\" ? selected.has(node.id) : undefined}"
+    },
+    {
+      "name": "checked",
+      "part": "unclassed-div-127",
+      "kind": "aria",
+      "hook": "aria-checked",
+      "value": "{selectionMode === \"checkbox\" ? selected.has(node.id) : undefined}"
+    },
+    {
+      "name": "current",
+      "part": "unclassed-div-127",
+      "kind": "aria",
+      "hook": "aria-current",
+      "value": "{currentId === node.id ? \"page\" : undefined}"
+    },
+    {
+      "name": "disabled",
+      "part": "unclassed-div-127",
+      "kind": "aria",
+      "hook": "aria-disabled",
+      "value": "{node.disabled || undefined}"
+    },
+    {
+      "name": "hover",
+      "part": "chevron",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-tree-view__chevron:has(svg):hover::before"
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "ArrowUp / ArrowDown",
+      "part": "unclassed-div-127",
+      "action": "Focus the previous or next enabled visible row, clamped at the edges.",
+      "condition": "Tree item has focus."
+    },
+    {
+      "key": "Home / End",
+      "part": "unclassed-div-127",
+      "action": "Focus the first or last enabled visible row.",
+      "condition": "Tree item has focus."
+    },
+    {
+      "key": "ArrowRight",
+      "part": "unclassed-div-127",
+      "action": "Expand a closed branch, or focus its first enabled child when already open.",
+      "condition": "Tree item has focus."
+    },
+    {
+      "key": "ArrowLeft",
+      "part": "unclassed-div-127",
+      "action": "Collapse an open branch, otherwise focus its parent.",
+      "condition": "Tree item has focus."
+    },
+    {
+      "key": "Enter / Space",
+      "part": "unclassed-div-127",
+      "action": "Activate the focused row using the configured selection mode.",
+      "condition": "Enabled row."
+    },
+    {
+      "key": "Printable character",
+      "part": "unclassed-div-127",
+      "action": "Focus a matching enabled visible row using buffered typeahead.",
+      "condition": "No Control, Alt or Meta modifier."
+    }
+  ],
+  "accessibleName": [],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "Glyph"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:960",
+      "apps/docs/src/demos/gallery.tsx:1049",
+      "apps/docs/src/demos/gallery.tsx:2089",
+      "apps/docs/src/demos/gallery.tsx:2100",
+      "apps/docs/src/demos/gallery.tsx:2101",
+      "apps/docs/src/demos/gallery.tsx:2119",
+      "apps/docs/src/demos/gallery.tsx:2143",
+      "apps/docs/src/demos/gallery.tsx:2145",
+      "apps/docs/src/demos/gallery.tsx:2162",
+      "apps/docs/src/demos/gallery.tsx:2163"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/tree-view.css"
+    ],
+    "spec": [
+      "docs/specs/tree-view.md"
+    ],
+    "reactExport": [
+      "TreeView"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:181"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:180"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:180","packages/react/src/components/TreeView.tsx:123","packages/react/src/components/TreeView.tsx:135","packages/react/src/components/TreeView.tsx:138","packages/react/src/components/TreeView.tsx:139","packages/react/src/components/TreeView.tsx:140","packages/react/src/components/TreeView.tsx:141","packages/react/src/components/TreeView.tsx:142"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:123"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:123"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:123"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:123"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:123"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:123"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/tree-view.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/tree-view.css:19"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/tree-view.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/tree-view.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/tree-view.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/tree-view.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/tree-view.css:10"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/tree-view.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/components/tree-view.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8": {"status":"found","sources":["packages/styles/src/components/tree-view.css:5","packages/styles/src/components/tree-view.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9": {"status":"found","sources":["packages/styles/src/components/tree-view.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10": {"status":"found","sources":["packages/styles/src/components/tree-view.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/tree-view.css:5","packages/styles/src/components/tree-view.css:21","packages/styles/src/components/tree-view.css:7","packages/styles/src/components/tree-view.css:10","packages/styles/src/components/tree-view.css:11","packages/styles/src/components/tree-view.css:12","packages/styles/src/components/tree-view.css:20","packages/styles/src/components/tree-view.css:22","packages/styles/src/components/tree-view.css:23","packages/styles/src/components/tree-view.css:25","packages/styles/src/components/tree-view.css:26"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:59","packages/styles/src/components/tree-view.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1": {"status":"found","sources":["packages/styles/src/components/tree-view.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/tree-view.css:59","packages/styles/src/components/tree-view.css:60","packages/styles/src/components/tree-view.css:63"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1": {"status":"found","sources":["packages/styles/src/components/tree-view.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2": {"status":"found","sources":["packages/styles/src/components/tree-view.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3": {"status":"found","sources":["packages/styles/src/components/tree-view.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/tree-view.css:61","packages/styles/src/components/tree-view.css:63","packages/styles/src/components/tree-view.css:65","packages/styles/src/components/tree-view.css:68"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83","packages/styles/src/components/tree-view.css:86"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/3/allowedContent": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/3/customProperties": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3/tokens/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1": {"status":"found","sources":["packages/styles/src/components/tree-view.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens": {"status":"found","sources":["packages/styles/src/components/tree-view.css:69"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:140"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:140"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:140"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:140"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:140"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/4/allowedContent": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:140"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/4/customProperties/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties": {"status":"found","sources":["packages/styles/src/components/tree-view.css:71"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/4/tokens": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:140"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/5": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:141"],"note":"Direct source declaration or implementation."},
+    "/parts/5/id": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:141"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/5/class": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:141"],"note":"Direct source declaration or implementation."},
+    "/parts/5/element": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:141"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/required": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:141"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/5/allowedContent": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:141"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/5/customProperties": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:141"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/5/tokens/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens": {"status":"found","sources":["packages/styles/src/components/tree-view.css:72"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/6": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:142"],"note":"Direct source declaration or implementation."},
+    "/parts/6/id": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:142"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/6/class": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:142"],"note":"Direct source declaration or implementation."},
+    "/parts/6/element": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:142"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/6/required": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:142"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/6/allowedContent": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:142"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/6/customProperties": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:142"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/6/tokens/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1": {"status":"found","sources":["packages/styles/src/components/tree-view.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens": {"status":"found","sources":["packages/styles/src/components/tree-view.css:78"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/7": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Direct source declaration or implementation."},
+    "/parts/7/id": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/7/class": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"not found: No class assigned at this native element; callers may supply one through forwarded props."},
+    "/parts/7/element": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/7/required": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/7/allowedContent": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/7/customProperties": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/7/tokens": {"status":"not found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:180","packages/react/src/components/TreeView.tsx:44","docs/specs/tree-view.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:183"],"note":"Direct source declaration or implementation."},
+    "/options/selectionMode": {"status":"found","sources":["packages/styles/src/manifest.ts:183"],"note":"Direct source declaration or implementation."},
+    "/options/selectionMode/default": {"status":"found","sources":["packages/styles/src/manifest.ts:185"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:180"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:180"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/5": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/6": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/7": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/8": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/9": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:129"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/10": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:130"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/11": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/12": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/13": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135","packages/react/src/components/TreeView.tsx:138","packages/react/src/components/TreeView.tsx:139","packages/react/src/components/TreeView.tsx:127","packages/react/src/components/TreeView.tsx:128","packages/react/src/components/TreeView.tsx:129","packages/react/src/components/TreeView.tsx:130","packages/react/src/components/TreeView.tsx:131","packages/react/src/components/TreeView.tsx:132","packages/styles/src/components/tree-view.css:68"],"note":"Direct source declaration or implementation."},
+    "/keyboard/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:92"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:94"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:96"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:102"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:106"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:108"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:92","packages/react/src/components/TreeView.tsx:94","packages/react/src/components/TreeView.tsx:96","packages/react/src/components/TreeView.tsx:102","packages/react/src/components/TreeView.tsx:106","packages/react/src/components/TreeView.tsx:108"],"note":"Direct source declaration or implementation."},
+    "/accessibleName": {"status":"not found","sources":["packages/styles/src/manifest.ts:180","packages/react/src/components/TreeView.tsx:44","docs/specs/tree-view.md:1"],"note":"not found: No explicit accessible-name rule or naming attribute found in scoped implementation; inherited native props are not treated as naming requirements."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:180","packages/react/src/components/TreeView.tsx:44","docs/specs/tree-view.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:180","packages/react/src/components/TreeView.tsx:44","docs/specs/tree-view.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:180","packages/react/src/components/TreeView.tsx:44","docs/specs/tree-view.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:136"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:180","packages/react/src/components/TreeView.tsx:44","docs/specs/tree-view.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:960"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1049"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2089"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2100"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2101"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2119"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2143"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2145"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2162"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2163"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:960","apps/docs/src/demos/gallery.tsx:1049","apps/docs/src/demos/gallery.tsx:2089","apps/docs/src/demos/gallery.tsx:2100","apps/docs/src/demos/gallery.tsx:2101","apps/docs/src/demos/gallery.tsx:2119","apps/docs/src/demos/gallery.tsx:2143","apps/docs/src/demos/gallery.tsx:2145","apps/docs/src/demos/gallery.tsx:2162","apps/docs/src/demos/gallery.tsx:2163"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/tree-view.css:2","packages/styles/src/components/tree-view.css:25","packages/styles/src/components/tree-view.css:26","packages/styles/src/components/tree-view.css:27","packages/styles/src/components/tree-view.css:44","packages/styles/src/components/tree-view.css:45","packages/styles/src/components/tree-view.css:48","packages/styles/src/components/tree-view.css:49","packages/styles/src/components/tree-view.css:54","packages/styles/src/components/tree-view.css:63","packages/styles/src/components/tree-view.css:65","packages/styles/src/components/tree-view.css:66","packages/styles/src/components/tree-view.css:67","packages/styles/src/components/tree-view.css:68","packages/styles/src/components/tree-view.css:69","packages/styles/src/components/tree-view.css:71","packages/styles/src/components/tree-view.css:72","packages/styles/src/components/tree-view.css:78","packages/styles/src/components/tree-view.css:79","packages/styles/src/components/tree-view.css:80","packages/styles/src/components/tree-view.css:81","packages/styles/src/components/tree-view.css:83","packages/styles/src/components/tree-view.css:86","packages/styles/src/components/tree-view.css:87"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:2"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/tree-view.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:44","packages/react/src/index.ts:34"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:44","packages/react/src/index.ts:34"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:180","packages/styles/src/components/tree-view.css:1","docs/specs/tree-view.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:123"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:10"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:10"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:10"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:5","packages/styles/src/components/tree-view.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:5","packages/styles/src/components/tree-view.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:5","packages/styles/src/components/tree-view.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:59","packages/styles/src/components/tree-view.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:59","packages/styles/src/components/tree-view.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:59","packages/styles/src/components/tree-view.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:86"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:140"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/element/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:141"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/element/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:142"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/6/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/tree-view.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/tree-view.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/7/element/0": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/options/selectionMode/values": {"status":"found","sources":["packages/styles/src/manifest.ts:183"],"note":"Direct source declaration or implementation."},
+    "/options/selectionMode/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:183"],"note":"Direct source declaration or implementation."},
+    "/options/selectionMode/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:183"],"note":"Direct source declaration or implementation."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:135"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:138"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:139"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:127"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/5/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/5/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/5/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/5/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/5/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/6/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/6/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/6/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/6/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/6/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/7/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/7/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/7/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/7/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/7/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/8/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/8/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/8/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/8/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/8/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:128"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/9/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:129"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/9/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:129"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/9/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:129"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/9/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:129"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/9/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:129"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/10/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:130"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/10/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:130"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/10/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:130"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/10/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:130"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/10/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:130"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/11/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/11/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/11/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/11/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/11/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/12/name": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/12/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/12/kind": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/12/hook": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/12/value": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/13/name": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/part": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/kind": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/hook": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/value": {"status":"found","sources":["packages/styles/src/components/tree-view.css:68"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/keyboard/0/key": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:92"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:92"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/action": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:92"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/condition": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:92"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/key": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:94"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:94"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/action": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:94"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/condition": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:94"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/key": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:96"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:96"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/action": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:96"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/condition": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:96"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3/key": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:102"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:102"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3/action": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:102"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3/condition": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:102"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4/key": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:106"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:106"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4/action": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:106"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4/condition": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:106"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5/key": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:108"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5/part": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:108"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5/action": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:108"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5/condition": {"status":"found","sources":["packages/react/src/components/TreeView.tsx:108"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/tree-view.md:1"],"note":"Dedicated family spec."}
+  }
+}

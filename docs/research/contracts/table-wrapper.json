@@ -1,0 +1,115 @@
+{
+  "slug": "table-wrapper",
+  "manifest": "tableWrapper",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-table-wrapper",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-bg-surface",
+          "selectors": [
+            ".area-table-wrapper"
+          ]
+        },
+        {
+          "name": "--area-border-divider",
+          "selectors": [
+            ".area-table-wrapper"
+          ]
+        },
+        {
+          "name": "--area-border-width",
+          "selectors": [
+            ".area-table-wrapper"
+          ]
+        },
+        {
+          "name": "--area-radius-container",
+          "selectors": [
+            ".area-table-wrapper"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {},
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [],
+  "keyboard": [],
+  "accessibleName": [],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/reviews.tsx:22"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/navigation.css"
+    ],
+    "spec": [
+      "docs/specs/table.md"
+    ],
+    "reactExport": "not found"
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:614"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:613"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:977"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:977"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/primitives.tsx:977"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/primitives.tsx:977"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/primitives.tsx:977"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:977"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/primitives.tsx:977"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties": {"status":"not found","sources":["packages/react/src/components/primitives.tsx:977"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/navigation.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/navigation.css:127"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/navigation.css:126","packages/styles/src/components/navigation.css:127","packages/styles/src/components/navigation.css:128"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:972","docs/specs/table.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:616"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:613"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:613"],"note":"Direct source declaration or implementation."},
+    "/states": {"status":"not found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:972","docs/specs/table.md:1"],"note":"not found: No runtime hooks found in manifest, family markup or directly targeted CSS selectors."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:972","docs/specs/table.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName": {"status":"not found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:972","docs/specs/table.md:1"],"note":"not found: No explicit accessible-name rule or naming attribute found in scoped implementation; inherited native props are not treated as naming requirements."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:972","docs/specs/table.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:972","docs/specs/table.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:972","docs/specs/table.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:972","docs/specs/table.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/reviews.tsx:22"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/reviews.tsx:22"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/navigation.css:121"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:121"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/table.md:1"],"note":"Shared family spec; dedicated slug spec not found."},
+    "/reference/reactExport": {"status":"not found","sources":["packages/styles/src/manifest.ts:613","packages/react/src/components/primitives.tsx:972","docs/specs/table.md:1"],"note":"not found: No family export found in packages/react/src/index.ts and component declarations."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:613","packages/styles/src/components/navigation.css:1","docs/specs/table.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:977"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:127"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:127"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:127"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/table.md:1"],"note":"Shared family spec; dedicated slug spec not found."}
+  }
+}

@@ -1,0 +1,548 @@
+{
+  "slug": "split-button",
+  "manifest": "splitButton",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-split-button",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-border-width",
+          "selectors": [
+            ".area-split-button--ghost"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "action",
+      "element": [
+        "button"
+      ],
+      "class": "area-split-button__action",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_radius",
+          "selectors": [
+            ".area-split-button--ghost > :is(.area-split-button__action, .area-split-button__trigger)"
+          ]
+        }
+      ],
+      "tokens": []
+    },
+    {
+      "id": "trigger",
+      "element": [
+        "button"
+      ],
+      "class": "area-split-button__trigger",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_height",
+          "selectors": [
+            ".area-split-button > .area-split-button__trigger",
+            ".area-split-button--icon-only > .area-split-button__trigger",
+            ".area-split-button--ghost.area-split-button--icon-only > .area-split-button__trigger"
+          ]
+        },
+        {
+          "name": "--_line",
+          "selectors": [
+            ".area-split-button--soft > .area-split-button__trigger",
+            ".area-split-button--outline > .area-split-button__trigger"
+          ]
+        },
+        {
+          "name": "--_on-solid",
+          "selectors": [
+            ".area-split-button > .area-split-button__trigger",
+            ".area-split-button--solid > .area-split-button__trigger"
+          ]
+        },
+        {
+          "name": "--_radius",
+          "selectors": [
+            ".area-split-button--ghost > :is(.area-split-button__action, .area-split-button__trigger)",
+            ".area-split-button--ghost.area-split-button--icon-only > .area-split-button__trigger"
+          ]
+        },
+        {
+          "name": "--_split-divider",
+          "selectors": [
+            ".area-split-button > .area-split-button__trigger::before"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-border-width",
+          "selectors": [
+            ".area-split-button > .area-split-button__trigger",
+            ".area-split-button > .area-split-button__trigger::before"
+          ]
+        },
+        {
+          "name": "--area-icon-xs",
+          "selectors": [
+            ".area-split-button--icon-only > .area-split-button__trigger"
+          ]
+        },
+        {
+          "name": "--area-radius-button-cap",
+          "selectors": [
+            ".area-split-button--ghost.area-split-button--icon-only > .area-split-button__trigger"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "element": [
+        "div"
+      ],
+      "class": "area-split-button__menu",
+      "required": true,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ],
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-split-button__menu"
+          ]
+        },
+        {
+          "name": "--area-overlay-available-height",
+          "selectors": [
+            ".area-split-button__menu"
+          ]
+        },
+        {
+          "name": "--area-space-32",
+          "selectors": [
+            ".area-split-button__menu"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "name": "SplitButton.children",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": true,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "SplitButton.icon",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "SplitButton.menu",
+      "part": "menu",
+      "element": [
+        "div"
+      ],
+      "class": "area-split-button__menu",
+      "required": true,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    }
+  ],
+  "options": {
+    "variant": {
+      "values": [
+        "solid",
+        "soft",
+        "outline",
+        "ghost"
+      ],
+      "default": "solid"
+    }
+  },
+  "booleans": [
+    "icon-only"
+  ],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "selected",
+      "part": "not found",
+      "kind": "not found",
+      "hook": "not found",
+      "value": "{selected}"
+    },
+    {
+      "name": "disabled",
+      "part": "not found",
+      "kind": "not found",
+      "hook": "not found",
+      "value": "{disabled}"
+    },
+    {
+      "name": "haspopup",
+      "part": "not found",
+      "kind": "not found",
+      "hook": "not found",
+      "value": "\"menu\""
+    },
+    {
+      "name": "expanded",
+      "part": "not found",
+      "kind": "not found",
+      "hook": "not found",
+      "value": "{open}"
+    },
+    {
+      "name": "focus-visible",
+      "part": "action",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-split-button > :is(.area-split-button__action, .area-split-button__trigger):focus-visible"
+    },
+    {
+      "name": "focus-visible",
+      "part": "trigger",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-split-button > :is(.area-split-button__action, .area-split-button__trigger):focus-visible"
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "Enter / Space / ArrowDown",
+      "part": "trigger",
+      "action": "Open the menu and focus its first item.",
+      "condition": "Trigger has focus."
+    },
+    {
+      "key": "ArrowUp",
+      "part": "trigger",
+      "action": "Open the menu and focus its last item.",
+      "condition": "Trigger has focus."
+    },
+    {
+      "key": "ArrowUp / ArrowDown",
+      "part": "menu",
+      "action": "Focus adjacent enabled menu items, wrapping.",
+      "condition": "Menu open."
+    },
+    {
+      "key": "Home / End",
+      "part": "menu",
+      "action": "Focus the first or last enabled menu item.",
+      "condition": "Menu open."
+    },
+    {
+      "key": "Tab",
+      "part": "menu",
+      "action": "Close the menu.",
+      "condition": "Menu open."
+    },
+    {
+      "key": "Escape",
+      "part": "menu",
+      "action": "Dismiss the native popover and return focus.",
+      "condition": "Menu open."
+    }
+  ],
+  "accessibleName": [
+    {
+      "part": "action",
+      "rule": "Reference wiring: aria-label={iconOnly && typeof children === \"string\" ? children : actionProps?.[\"aria-label\"]}."
+    },
+    {
+      "part": "trigger",
+      "rule": "Reference wiring: aria-label={menuLabel}."
+    },
+    {
+      "part": "menu",
+      "rule": "Reference wiring: aria-label={menuLabel}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "Button",
+      "Glyph",
+      "Menu"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:110",
+      "apps/docs/src/demos/gallery.tsx:125",
+      "apps/docs/src/demos/gallery.tsx:130",
+      "apps/docs/src/demos/gallery.tsx:196"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/split-button.css",
+      "packages/styles/src/forced-colors.css"
+    ],
+    "spec": [
+      "docs/specs/split-button.md"
+    ],
+    "reactExport": [
+      "SplitButton"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:68"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:67"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:103","packages/react/src/components/SplitButton.tsx:110","packages/react/src/components/SplitButton.tsx:115","packages/react/src/components/SplitButton.tsx:118"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:103"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:103"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:103"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:103"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:103"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:103"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:103"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/split-button.css:72"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:110"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:110"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:110"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:110","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:110"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:110"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/split-button.css:73"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:110"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:115"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:115"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:115"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:115","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:115"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:115"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:35","packages/styles/src/components/split-button.css:77","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1": {"status":"found","sources":["packages/styles/src/components/split-button.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2": {"status":"found","sources":["packages/styles/src/components/split-button.css:41","packages/styles/src/components/split-button.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3": {"status":"found","sources":["packages/styles/src/components/split-button.css:73","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/4": {"status":"found","sources":["packages/styles/src/components/split-button.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties": {"status":"found","sources":["packages/styles/src/components/split-button.css:35","packages/styles/src/components/split-button.css:77","packages/styles/src/components/split-button.css:83","packages/styles/src/components/split-button.css:41","packages/styles/src/components/split-button.css:61","packages/styles/src/components/split-button.css:51","packages/styles/src/components/split-button.css:63","packages/styles/src/components/split-button.css:73"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:37","packages/styles/src/components/split-button.css:48","packages/styles/src/components/split-button.css:49","packages/styles/src/components/split-button.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1": {"status":"found","sources":["packages/styles/src/components/split-button.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2": {"status":"found","sources":["packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/split-button.css:37","packages/styles/src/components/split-button.css:48","packages/styles/src/components/split-button.css:49","packages/styles/src/components/split-button.css:50","packages/styles/src/components/split-button.css:78","packages/styles/src/components/split-button.css:83"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118","packages/react/src/components/Combobox.tsx:230","packages/react/src/components/primitives.tsx:1078","packages/react/src/components/primitives.tsx:1109"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/3/allowedContent": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:28"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/3/customProperties": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3/tokens/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:98"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1": {"status":"found","sources":["packages/styles/src/components/split-button.css:96"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2": {"status":"found","sources":["packages/styles/src/components/split-button.css:95","packages/styles/src/components/split-button.css:96"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens": {"status":"found","sources":["packages/styles/src/components/split-button.css:95","packages/styles/src/components/split-button.css:96","packages/styles/src/components/split-button.css:98"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:22"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: No single direct part resolved for SplitButton.children; conditional/delegated rendering requires review."},
+    "/slots/0/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: No resolved part for SplitButton.children."},
+    "/slots/0/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: No resolved part for SplitButton.children."},
+    "/slots/1": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: No single direct part resolved for SplitButton.icon; conditional/delegated rendering requires review."},
+    "/slots/1/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: No resolved part for SplitButton.icon."},
+    "/slots/1/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: No resolved part for SplitButton.icon."},
+    "/slots/2": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:28"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/element": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118","packages/react/src/components/Combobox.tsx:230","packages/react/src/components/primitives.tsx:1078","packages/react/src/components/primitives.tsx:1109"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/2/class": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"Direct source declaration or implementation."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:22","packages/react/src/components/SplitButton.tsx:24","packages/react/src/components/SplitButton.tsx:28"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:70"],"note":"Direct source declaration or implementation."},
+    "/options/variant": {"status":"found","sources":["packages/styles/src/manifest.ts:70"],"note":"Direct source declaration or implementation."},
+    "/options/variant/default": {"status":"found","sources":["packages/styles/src/manifest.ts:73"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:71"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:67"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/0/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: Carrier for not found is not resolved."},
+    "/states/1": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: Carrier for not found is not resolved."},
+    "/states/2": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: Carrier for not found is not resolved."},
+    "/states/3": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: Carrier for not found is not resolved."},
+    "/states/4": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:111","packages/react/src/components/SplitButton.tsx:116","packages/styles/src/components/split-button.css:21"],"note":"Direct source declaration or implementation."},
+    "/keyboard/0": {"status":"found","sources":["docs/specs/split-button.md:181"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5": {"status":"found","sources":["docs/specs/split-button.md:180"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard": {"status":"found","sources":["docs/specs/split-button.md:181","docs/specs/split-button.md:182","docs/specs/split-button.md:180"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:112"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/2": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:112","packages/react/src/components/SplitButton.tsx:116","packages/react/src/components/SplitButton.tsx:118"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:110"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/1": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/2": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:67","packages/react/src/components/SplitButton.tsx:45","docs/specs/split-button.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:110"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:125"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:130"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:196"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:110","apps/docs/src/demos/gallery.tsx:125","apps/docs/src/demos/gallery.tsx:130","apps/docs/src/demos/gallery.tsx:196"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/split-button.css:11","packages/styles/src/components/split-button.css:19","packages/styles/src/components/split-button.css:21","packages/styles/src/components/split-button.css:24","packages/styles/src/components/split-button.css:34","packages/styles/src/components/split-button.css:45","packages/styles/src/components/split-button.css:61","packages/styles/src/components/split-button.css:62","packages/styles/src/components/split-button.css:72","packages/styles/src/components/split-button.css:73","packages/styles/src/components/split-button.css:74","packages/styles/src/components/split-button.css:75","packages/styles/src/components/split-button.css:76","packages/styles/src/components/split-button.css:82","packages/styles/src/components/split-button.css:86","packages/styles/src/components/split-button.css:87","packages/styles/src/components/split-button.css:91","packages/styles/src/components/split-button.css:100","packages/styles/src/components/split-button.css:103","packages/styles/src/forced-colors.css:13"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:11"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/forced-colors.css:13"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/split-button.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:45","packages/react/src/index.ts:14"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:45","packages/react/src/index.ts:14"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:67","packages/styles/src/components/split-button.css:1","packages/styles/src/forced-colors.css:1","docs/specs/split-button.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:103"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:110","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:115","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:35","packages/styles/src/components/split-button.css:77","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:35","packages/styles/src/components/split-button.css:77","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:35","packages/styles/src/components/split-button.css:77","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/split-button.css:35","packages/styles/src/components/split-button.css:77","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/2": {"status":"found","sources":["packages/styles/src/components/split-button.css:35","packages/styles/src/components/split-button.css:77","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/split-button.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:41","packages/styles/src/components/split-button.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:41","packages/styles/src/components/split-button.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:41","packages/styles/src/components/split-button.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/selectors/1": {"status":"found","sources":["packages/styles/src/components/split-button.css:41","packages/styles/src/components/split-button.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:73","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:73","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:73","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/1": {"status":"found","sources":["packages/styles/src/components/split-button.css:73","packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/4/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/4/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:37","packages/styles/src/components/split-button.css:48","packages/styles/src/components/split-button.css:49","packages/styles/src/components/split-button.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:37","packages/styles/src/components/split-button.css:48","packages/styles/src/components/split-button.css:49","packages/styles/src/components/split-button.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:37","packages/styles/src/components/split-button.css:48","packages/styles/src/components/split-button.css:49","packages/styles/src/components/split-button.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/split-button.css:37","packages/styles/src/components/split-button.css:48","packages/styles/src/components/split-button.css:49","packages/styles/src/components/split-button.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118","packages/react/src/components/Combobox.tsx:230","packages/react/src/components/primitives.tsx:1078","packages/react/src/components/primitives.tsx:1109"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/allowedContent/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:28"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/3/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:98"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:98"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:98"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:96"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:96"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:96"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:95","packages/styles/src/components/split-button.css:96"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/split-button.css:95","packages/styles/src/components/split-button.css:96"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/split-button.css:95","packages/styles/src/components/split-button.css:96"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:22"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:22"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:22"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:22"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/name": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/required": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/name": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:28"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/part": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:28"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/element/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118","packages/react/src/components/Combobox.tsx:230","packages/react/src/components/primitives.tsx:1078","packages/react/src/components/primitives.tsx:1109"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/2/required": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:28"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/allowedContent": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:28"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/allowedContent/0": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:28"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/options/variant/values": {"status":"found","sources":["packages/styles/src/manifest.ts:70"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:70"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:70"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:70"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/3": {"status":"found","sources":["packages/styles/src/manifest.ts:70"],"note":"Direct source declaration or implementation."},
+    "/booleans/0": {"status":"found","sources":["packages/styles/src/manifest.ts:71"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/states/0/name": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/0/kind": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/0/hook": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/0/value": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/name": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/kind": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/hook": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/value": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:111"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/name": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/kind": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/hook": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/value": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/name": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/kind": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/hook": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/value": {"status":"not found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/4/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/part": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/kind": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/hook": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/value": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/name": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/part": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/kind": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/hook": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/value": {"status":"found","sources":["packages/styles/src/components/split-button.css:21"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/keyboard/0/key": {"status":"found","sources":["docs/specs/split-button.md:181"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/part": {"status":"found","sources":["docs/specs/split-button.md:181"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/action": {"status":"found","sources":["docs/specs/split-button.md:181"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/condition": {"status":"found","sources":["docs/specs/split-button.md:181"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/key": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/part": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/action": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/condition": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/key": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/part": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/action": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/condition": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3/key": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3/part": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3/action": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/3/condition": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4/key": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4/part": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4/action": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/4/condition": {"status":"found","sources":["docs/specs/split-button.md:182"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5/key": {"status":"found","sources":["docs/specs/split-button.md:180"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5/part": {"status":"found","sources":["docs/specs/split-button.md:180"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5/action": {"status":"found","sources":["docs/specs/split-button.md:180"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/5/condition": {"status":"found","sources":["docs/specs/split-button.md:180"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:112"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:112"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/part": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/rule": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:116"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/2/part": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/2/rule": {"status":"found","sources":["packages/react/src/components/SplitButton.tsx:118"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/split-button.md:1"],"note":"Dedicated family spec."}
+  }
+}

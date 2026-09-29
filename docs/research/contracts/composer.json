@@ -1,0 +1,872 @@
+{
+  "slug": "composer",
+  "manifest": "composer",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-composer",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_composer-action",
+          "selectors": [
+            ".area-composer",
+            ".area-composer:has(.area-composer__submit.area-button--pill)"
+          ]
+        },
+        {
+          "name": "--_composer-button-radius",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--_composer-height",
+          "selectors": [
+            ".area-composer--inline"
+          ]
+        },
+        {
+          "name": "--_composer-inset",
+          "selectors": [
+            ".area-composer"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-border-decorative",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-border-faint",
+          "selectors": [
+            ".area-composer[data-disabled]"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-fg-disabled",
+          "selectors": [
+            ".area-composer[data-disabled]"
+          ]
+        },
+        {
+          "name": "--area-field-focus-color",
+          "selectors": [
+            ".area-composer:focus-within"
+          ]
+        },
+        {
+          "name": "--area-field-focus-halo-width",
+          "selectors": [
+            ".area-composer:focus-within"
+          ]
+        },
+        {
+          "name": "--area-field-focus-outline-width",
+          "selectors": [
+            ".area-composer:focus-within"
+          ]
+        },
+        {
+          "name": "--area-focus-offset",
+          "selectors": [
+            ".area-composer:focus-within"
+          ]
+        },
+        {
+          "name": "--area-focus-width",
+          "selectors": [
+            ".area-composer:focus-within"
+          ]
+        },
+        {
+          "name": "--area-font-sans",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-input-bg",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-input-text",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-radius-button-cap",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-radius-control-md",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-shadow-color",
+          "selectors": [
+            ".area-composer:focus-within"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-composer",
+            ".area-composer--stacked"
+          ]
+        },
+        {
+          "name": "--area-space-96",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-stroke-width",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-text-md-leading",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-text-md-size",
+          "selectors": [
+            ".area-composer"
+          ]
+        },
+        {
+          "name": "--area-textarea-bg-disabled",
+          "selectors": [
+            ".area-composer[data-disabled]"
+          ]
+        },
+        {
+          "name": "--area-transition",
+          "selectors": [
+            ".area-composer"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "entry",
+      "element": [
+        "div"
+      ],
+      "class": "area-composer__entry",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_composer-gap",
+          "selectors": [
+            ".area-composer__entry"
+          ]
+        }
+      ],
+      "tokens": []
+    },
+    {
+      "id": "input",
+      "element": [
+        "textarea"
+      ],
+      "class": "area-composer__input",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_composer-action",
+          "selectors": [
+            ".area-composer__input"
+          ]
+        },
+        {
+          "name": "--_composer-leading",
+          "selectors": [
+            ".area-composer__input",
+            ".area-composer--stacked .area-composer__input"
+          ]
+        },
+        {
+          "name": "--_composer-text",
+          "selectors": [
+            ".area-composer__input"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-composer__input"
+          ]
+        },
+        {
+          "name": "--area-fg-disabled",
+          "selectors": [
+            ".area-composer[data-disabled] .area-composer__input::placeholder"
+          ]
+        },
+        {
+          "name": "--area-input-placeholder",
+          "selectors": [
+            ".area-composer__input::placeholder"
+          ]
+        },
+        {
+          "name": "--area-space-12",
+          "selectors": [
+            ".area-composer--stacked .area-composer__input"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-composer__input"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "actions",
+      "element": [
+        "div"
+      ],
+      "class": "area-composer__actions",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ],
+      "customProperties": [
+        {
+          "name": "--_composer-gap",
+          "selectors": [
+            ".area-composer__actions"
+          ]
+        }
+      ],
+      "tokens": []
+    },
+    {
+      "id": "extras",
+      "element": [
+        "span"
+      ],
+      "class": "area-composer__extras",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ],
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "footer",
+      "element": [
+        "div"
+      ],
+      "class": "area-composer__footer",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_composer-gap",
+          "selectors": [
+            ".area-composer__footer"
+          ]
+        }
+      ],
+      "tokens": []
+    },
+    {
+      "id": "submit",
+      "element": [
+        "button"
+      ],
+      "class": "area-composer__submit",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "actions--leading",
+      "element": [
+        "div"
+      ],
+      "class": "area-composer__actions--leading",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "actions--trailing",
+      "element": [
+        "div"
+      ],
+      "class": "area-composer__actions--trailing",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    }
+  ],
+  "slots": [
+    {
+      "name": "Composer.leadingActions",
+      "part": "actions",
+      "element": [
+        "div"
+      ],
+      "class": "area-composer__actions",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "Composer.trailingActions",
+      "part": "extras",
+      "element": [
+        "span"
+      ],
+      "class": "area-composer__extras",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "Composer.mode",
+      "part": "actions",
+      "element": [
+        "div"
+      ],
+      "class": "area-composer__actions",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    }
+  ],
+  "options": {
+    "layout": {
+      "values": [
+        "inline",
+        "stacked"
+      ],
+      "default": "inline"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {
+    "actions": [
+      "leading",
+      "trailing"
+    ]
+  },
+  "states": [
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-disabled",
+      "value": "{disabled ? \"\" : undefined}"
+    },
+    {
+      "name": "busy",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-busy",
+      "value": "{busy ? \"\" : undefined}"
+    },
+    {
+      "name": "disabled",
+      "part": "input",
+      "kind": "native",
+      "hook": "disabled",
+      "value": "{disabled || busy}"
+    },
+    {
+      "name": "disabled",
+      "part": "not found",
+      "kind": "not found",
+      "hook": "not found",
+      "value": "{disabled || busy || !text.trim()}"
+    },
+    {
+      "name": "focus-within",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus-within",
+      "value": ".area-composer:focus-within"
+    },
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-disabled",
+      "value": "present"
+    },
+    {
+      "name": "busy",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-busy",
+      "value": "present"
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "Enter",
+      "part": "input",
+      "action": "Submit trimmed nonempty text; clear an uncontrolled value.",
+      "condition": "submitOnEnter enabled; not busy, disabled, composing, prevented, or Shift-modified."
+    },
+    {
+      "key": "Control+Enter / Meta+Enter",
+      "part": "input",
+      "action": "Submit trimmed nonempty text.",
+      "condition": "Also works when submitOnEnter is off; the same submission guards apply."
+    },
+    {
+      "key": "Shift+Enter",
+      "part": "input",
+      "action": "Allow the native textarea to insert a line break.",
+      "condition": "No submission."
+    }
+  ],
+  "accessibleName": [
+    {
+      "part": "submit",
+      "rule": "Reference wiring: aria-label={submitLabel}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "Button",
+      "Glyph"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:1105",
+      "apps/docs/src/demos/gallery.tsx:1113",
+      "apps/docs/src/demos/gallery.tsx:1181",
+      "apps/docs/src/demos/gallery.tsx:1197",
+      "apps/docs/src/demos/gallery.tsx:2149",
+      "apps/docs/src/demos/gallery.tsx:2154",
+      "apps/docs/src/demos/gallery.tsx:2167",
+      "apps/docs/src/demos/gallery.tsx:2171",
+      "apps/docs/src/demos/gallery.tsx:2179",
+      "apps/docs/src/demos/gallery.tsx:2180",
+      "apps/docs/src/demos/gallery.tsx:2181"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/composer.css",
+      "packages/styles/src/forced-colors.css"
+    ],
+    "spec": [
+      "docs/specs/composer.md"
+    ],
+    "reactExport": [
+      "Composer"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:189"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:188"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:188","packages/react/src/components/Composer.tsx:78","packages/react/src/components/Composer.tsx:80","packages/react/src/components/Composer.tsx:81","packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:84","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:87","packages/react/src/components/Composer.tsx:91","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:21","packages/styles/src/components/composer.css:58"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/composer.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2": {"status":"found","sources":["packages/styles/src/components/composer.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:21","packages/styles/src/components/composer.css:58","packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:22","packages/styles/src/components/composer.css:30"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/composer.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/composer.css:3"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9": {"status":"found","sources":["packages/styles/src/components/composer.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10": {"status":"found","sources":["packages/styles/src/components/composer.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11": {"status":"found","sources":["packages/styles/src/components/composer.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12": {"status":"found","sources":["packages/styles/src/components/composer.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13": {"status":"found","sources":["packages/styles/src/components/composer.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15": {"status":"found","sources":["packages/styles/src/components/composer.css:4","packages/styles/src/components/composer.css:9","packages/styles/src/components/composer.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16": {"status":"found","sources":["packages/styles/src/components/composer.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17": {"status":"found","sources":["packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18": {"status":"found","sources":["packages/styles/src/components/composer.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19": {"status":"found","sources":["packages/styles/src/components/composer.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21": {"status":"found","sources":["packages/styles/src/components/composer.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/composer.css:3","packages/styles/src/components/composer.css:4","packages/styles/src/components/composer.css:9","packages/styles/src/components/composer.css:31","packages/styles/src/components/composer.css:7","packages/styles/src/components/composer.css:12","packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:15","packages/styles/src/components/composer.css:21","packages/styles/src/components/composer.css:23","packages/styles/src/components/composer.css:26","packages/styles/src/components/composer.css:27","packages/styles/src/components/composer.css:28","packages/styles/src/components/composer.css:32","packages/styles/src/components/composer.css:35","packages/styles/src/forced-colors.css:29","packages/styles/src/forced-colors.css:30"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/Composer.tsx:81"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/Composer.tsx:81"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:81"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:81"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:81"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:81"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/composer.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/composer.css:39"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:81"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/Composer.tsx:84"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/Composer.tsx:84"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:84"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:84"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:84"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:84"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties/0": {"status":"found","sources":["packages/styles/src/components/composer.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1": {"status":"found","sources":["packages/styles/src/components/composer.css:43","packages/styles/src/components/composer.css:44","packages/styles/src/components/composer.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2": {"status":"found","sources":["packages/styles/src/components/composer.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties": {"status":"found","sources":["packages/styles/src/components/composer.css:43","packages/styles/src/components/composer.css:44","packages/styles/src/components/composer.css:47"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/composer.css:42","packages/styles/src/components/composer.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1": {"status":"found","sources":["packages/styles/src/components/composer.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2": {"status":"found","sources":["packages/styles/src/components/composer.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3": {"status":"found","sources":["packages/styles/src/components/composer.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4": {"status":"found","sources":["packages/styles/src/components/composer.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/composer.css:37","packages/styles/src/components/composer.css:42","packages/styles/src/components/composer.css:48","packages/styles/src/components/composer.css:43","packages/styles/src/components/composer.css:47","packages/styles/src/components/composer.css:49"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/3/allowedContent": {"status":"found","sources":["packages/react/src/components/Composer.tsx:20"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/3/customProperties/0": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3/tokens": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/4/allowedContent": {"status":"found","sources":["packages/react/src/components/Composer.tsx:19"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/4/customProperties": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4/tokens": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/5": {"status":"found","sources":["packages/react/src/components/Composer.tsx:91"],"note":"Direct source declaration or implementation."},
+    "/parts/5/id": {"status":"found","sources":["packages/react/src/components/Composer.tsx:91"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/5/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:91"],"note":"Direct source declaration or implementation."},
+    "/parts/5/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:91"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:91"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/5/allowedContent": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:91"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/5/customProperties/0": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/customProperties": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/5/tokens": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:91"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/6": {"status":"found","sources":["packages/react/src/components/Composer.tsx:78"],"note":"Direct source declaration or implementation."},
+    "/parts/6/id": {"status":"found","sources":["packages/react/src/components/Composer.tsx:78"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/6/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:78"],"note":"Direct source declaration or implementation."},
+    "/parts/6/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:78","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/6/required": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:78"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/6/allowedContent": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:78"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/6/customProperties": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:78"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/6/tokens": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:78"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/7": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:92"],"note":"Direct source declaration or implementation."},
+    "/parts/7/id": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:92"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/7/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:92"],"note":"Direct source declaration or implementation."},
+    "/parts/7/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:92"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/7/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:92"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/7/allowedContent": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:92"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/7/customProperties": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:92"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/7/tokens": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:92"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/8": {"status":"found","sources":["packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:93"],"note":"Direct source declaration or implementation."},
+    "/parts/8/id": {"status":"found","sources":["packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:93"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/8/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:93"],"note":"Direct source declaration or implementation."},
+    "/parts/8/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:93"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/8/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:93"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/8/allowedContent": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:93"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/8/customProperties": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:93"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/8/tokens": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:93"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:18"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Direct source declaration or implementation."},
+    "/slots/1": {"status":"found","sources":["packages/react/src/components/Composer.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/1/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"Direct source declaration or implementation."},
+    "/slots/2": {"status":"found","sources":["packages/react/src/components/Composer.tsx:20"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/element": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/2/class": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Direct source declaration or implementation."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/Composer.tsx:18","packages/react/src/components/Composer.tsx:19","packages/react/src/components/Composer.tsx:20"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:191"],"note":"Direct source declaration or implementation."},
+    "/options/layout": {"status":"found","sources":["packages/styles/src/manifest.ts:191"],"note":"Direct source declaration or implementation."},
+    "/options/layout/default": {"status":"found","sources":["packages/styles/src/manifest.ts:195"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:188"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:194"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/Composer.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:188","packages/react/src/components/Composer.tsx:31","docs/specs/composer.md:1"],"note":"not found: Carrier for not found is not resolved."},
+    "/states/4": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6": {"status":"found","sources":["packages/styles/src/components/composer.css:38"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80","packages/react/src/components/Composer.tsx:85","packages/react/src/components/Composer.tsx:79","packages/styles/src/components/composer.css:32","packages/styles/src/components/composer.css:35","packages/styles/src/components/composer.css:38"],"note":"Direct source declaration or implementation."},
+    "/keyboard/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1": {"status":"found","sources":["packages/react/src/components/Composer.tsx:74"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73","packages/react/src/components/Composer.tsx:74"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:188","packages/react/src/components/Composer.tsx:31","docs/specs/composer.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:188","packages/react/src/components/Composer.tsx:31","docs/specs/composer.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:188","packages/react/src/components/Composer.tsx:31","docs/specs/composer.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:78"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/1": {"status":"found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:188","packages/react/src/components/Composer.tsx:31","docs/specs/composer.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1105"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1113"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1181"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1197"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2149"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2154"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2167"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2171"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2179"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2180"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:2181"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1105","apps/docs/src/demos/gallery.tsx:1113","apps/docs/src/demos/gallery.tsx:1181","apps/docs/src/demos/gallery.tsx:1197","apps/docs/src/demos/gallery.tsx:2149","apps/docs/src/demos/gallery.tsx:2154","apps/docs/src/demos/gallery.tsx:2167","apps/docs/src/demos/gallery.tsx:2171","apps/docs/src/demos/gallery.tsx:2179","apps/docs/src/demos/gallery.tsx:2180","apps/docs/src/demos/gallery.tsx:2181"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/composer.css:2","packages/styles/src/components/composer.css:30","packages/styles/src/components/composer.css:31","packages/styles/src/components/composer.css:32","packages/styles/src/components/composer.css:35","packages/styles/src/components/composer.css:36","packages/styles/src/components/composer.css:37","packages/styles/src/components/composer.css:38","packages/styles/src/components/composer.css:39","packages/styles/src/components/composer.css:40","packages/styles/src/components/composer.css:41","packages/styles/src/components/composer.css:47","packages/styles/src/components/composer.css:48","packages/styles/src/components/composer.css:49","packages/styles/src/components/composer.css:50","packages/styles/src/components/composer.css:51","packages/styles/src/components/composer.css:52","packages/styles/src/components/composer.css:53","packages/styles/src/components/composer.css:54","packages/styles/src/components/composer.css:55","packages/styles/src/components/composer.css:56","packages/styles/src/components/composer.css:58","packages/styles/src/forced-colors.css:25"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/composer.css:2"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/forced-colors.css:25"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/composer.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:31","packages/react/src/index.ts:35"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/Composer.tsx:31","packages/react/src/index.ts:35"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:188","packages/styles/src/components/composer.css:1","packages/styles/src/forced-colors.css:1","docs/specs/composer.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:21","packages/styles/src/components/composer.css:58"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:21","packages/styles/src/components/composer.css:58"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:21","packages/styles/src/components/composer.css:58"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:21","packages/styles/src/components/composer.css:58"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/composer.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/composer.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:5","packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/composer.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/composer.css:3"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:3"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:3"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/name": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/name": {"status":"found","sources":["packages/styles/src/components/composer.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/name": {"status":"found","sources":["packages/styles/src/components/composer.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/name": {"status":"found","sources":["packages/styles/src/components/composer.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/name": {"status":"found","sources":["packages/styles/src/components/composer.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/name": {"status":"found","sources":["packages/styles/src/components/composer.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/name": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/name": {"status":"found","sources":["packages/styles/src/components/composer.css:4","packages/styles/src/components/composer.css:9","packages/styles/src/components/composer.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:4","packages/styles/src/components/composer.css:9","packages/styles/src/components/composer.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:4","packages/styles/src/components/composer.css:9","packages/styles/src/components/composer.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors/1": {"status":"found","sources":["packages/styles/src/components/composer.css:4","packages/styles/src/components/composer.css:9","packages/styles/src/components/composer.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/name": {"status":"found","sources":["packages/styles/src/components/composer.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/name": {"status":"found","sources":["packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:14","packages/styles/src/components/composer.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/name": {"status":"found","sources":["packages/styles/src/components/composer.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/name": {"status":"found","sources":["packages/styles/src/components/composer.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:7"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/name": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/name": {"status":"found","sources":["packages/styles/src/components/composer.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:81"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/composer.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:84"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/composer.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/composer.css:43","packages/styles/src/components/composer.css:44","packages/styles/src/components/composer.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:43","packages/styles/src/components/composer.css:44","packages/styles/src/components/composer.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:43","packages/styles/src/components/composer.css:44","packages/styles/src/components/composer.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/composer.css:43","packages/styles/src/components/composer.css:44","packages/styles/src/components/composer.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/composer.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/composer.css:42","packages/styles/src/components/composer.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:42","packages/styles/src/components/composer.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:42","packages/styles/src/components/composer.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/composer.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/composer.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/composer.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/composer.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:20"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/3/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:19"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/5/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:91"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/composer.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:78","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/7/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:92"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/8/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:93"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/Composer.tsx:18"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:18"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:18"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/Composer.tsx:18"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:18"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/name": {"status":"found","sources":["packages/react/src/components/Composer.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:87"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/1/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent": {"status":"found","sources":["packages/react/src/components/Composer.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/name": {"status":"found","sources":["packages/react/src/components/Composer.tsx:20"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:20"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/element/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:82","packages/react/src/components/Composer.tsx:86","packages/react/src/components/Composer.tsx:92","packages/react/src/components/Composer.tsx:93"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/2/required": {"status":"found","sources":["packages/react/src/components/Composer.tsx:20"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/allowedContent": {"status":"found","sources":["packages/react/src/components/Composer.tsx:20"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Composer.tsx:20"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/options/layout/values": {"status":"found","sources":["packages/styles/src/manifest.ts:191"],"note":"Direct source declaration or implementation."},
+    "/options/layout/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:191"],"note":"Direct source declaration or implementation."},
+    "/options/layout/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:191"],"note":"Direct source declaration or implementation."},
+    "/elementModifiers/actions": {"status":"found","sources":["packages/styles/src/manifest.ts:194"],"note":"Direct source declaration or implementation."},
+    "/elementModifiers/actions/0": {"status":"found","sources":["packages/styles/src/manifest.ts:194"],"note":"Direct source declaration or implementation."},
+    "/elementModifiers/actions/1": {"status":"found","sources":["packages/styles/src/manifest.ts:194"],"note":"Direct source declaration or implementation."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/Composer.tsx:80"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/Composer.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/Composer.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/Composer.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/Composer.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/name": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/kind": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/hook": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/value": {"status":"not found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"not found: Forwarded disabled prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/4/name": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/part": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/kind": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/hook": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/value": {"status":"found","sources":["packages/styles/src/components/composer.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/name": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/part": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/kind": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/hook": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/value": {"status":"found","sources":["packages/styles/src/components/composer.css:35"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/name": {"status":"found","sources":["packages/styles/src/components/composer.css:38"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/part": {"status":"found","sources":["packages/styles/src/components/composer.css:38"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/kind": {"status":"found","sources":["packages/styles/src/components/composer.css:38"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/hook": {"status":"found","sources":["packages/styles/src/components/composer.css:38"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/value": {"status":"found","sources":["packages/styles/src/components/composer.css:38"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/keyboard/0/key": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/action": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/condition": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/key": {"status":"found","sources":["packages/react/src/components/Composer.tsx:74"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:74"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/action": {"status":"found","sources":["packages/react/src/components/Composer.tsx:74"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/condition": {"status":"found","sources":["packages/react/src/components/Composer.tsx:74"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/key": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/action": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/condition": {"status":"found","sources":["packages/react/src/components/Composer.tsx:73"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/Composer.tsx:79"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/composer.md:1"],"note":"Dedicated family spec."}
+  }
+}

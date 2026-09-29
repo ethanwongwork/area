@@ -1,0 +1,1141 @@
+{
+  "slug": "toolbar",
+  "manifest": "toolbar",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-toolbar",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_height",
+          "selectors": [
+            ".area-toolbar"
+          ]
+        },
+        {
+          "name": "--_toolbar-bg",
+          "selectors": [
+            ".area-toolbar"
+          ]
+        },
+        {
+          "name": "--_toolbar-inset",
+          "selectors": [
+            ".area-toolbar"
+          ]
+        },
+        {
+          "name": "--_toolbar-radius",
+          "selectors": [
+            ".area-toolbar"
+          ]
+        },
+        {
+          "name": "--_toolbar-shadow",
+          "selectors": [
+            ".area-toolbar"
+          ]
+        },
+        {
+          "name": "--_toolbar-space",
+          "selectors": [
+            ".area-toolbar"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-bg-surface",
+          "selectors": [
+            ".area-toolbar--surface"
+          ]
+        },
+        {
+          "name": "--area-border-decorative",
+          "selectors": [
+            ".area-toolbar--surface"
+          ]
+        },
+        {
+          "name": "--area-border-width",
+          "selectors": [
+            ".area-toolbar--surface"
+          ]
+        },
+        {
+          "name": "--area-control-lg",
+          "selectors": [
+            ".area-toolbar--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-leading",
+          "selectors": [
+            ".area-toolbar--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-text",
+          "selectors": [
+            ".area-toolbar--lg"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-toolbar",
+            ".area-toolbar--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-leading",
+          "selectors": [
+            ".area-toolbar",
+            ".area-toolbar--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-text",
+          "selectors": [
+            ".area-toolbar",
+            ".area-toolbar--md"
+          ]
+        },
+        {
+          "name": "--area-control-sm",
+          "selectors": [
+            ".area-toolbar--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-leading",
+          "selectors": [
+            ".area-toolbar--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-text",
+          "selectors": [
+            ".area-toolbar--sm"
+          ]
+        },
+        {
+          "name": "--area-focus-color",
+          "selectors": [
+            ".area-toolbar:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-focus-offset",
+          "selectors": [
+            ".area-toolbar:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-focus-width",
+          "selectors": [
+            ".area-toolbar:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-gap-lg",
+          "selectors": [
+            ".area-toolbar--lg"
+          ]
+        },
+        {
+          "name": "--area-gap-md",
+          "selectors": [
+            ".area-toolbar",
+            ".area-toolbar--md"
+          ]
+        },
+        {
+          "name": "--area-gap-sm",
+          "selectors": [
+            ".area-toolbar--sm"
+          ]
+        },
+        {
+          "name": "--area-icon-lg",
+          "selectors": [
+            ".area-toolbar--lg"
+          ]
+        },
+        {
+          "name": "--area-icon-md",
+          "selectors": [
+            ".area-toolbar",
+            ".area-toolbar--md"
+          ]
+        },
+        {
+          "name": "--area-icon-sm",
+          "selectors": [
+            ".area-toolbar--sm"
+          ]
+        },
+        {
+          "name": "--area-radius-cap",
+          "selectors": [
+            ".area-toolbar"
+          ]
+        },
+        {
+          "name": "--area-radius-control-lg",
+          "selectors": [
+            ".area-toolbar--lg"
+          ]
+        },
+        {
+          "name": "--area-radius-control-md",
+          "selectors": [
+            ".area-toolbar",
+            ".area-toolbar--md"
+          ]
+        },
+        {
+          "name": "--area-radius-control-sm",
+          "selectors": [
+            ".area-toolbar--sm"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-toolbar",
+            ".area-toolbar--surface"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "group",
+      "element": [
+        "div"
+      ],
+      "class": "area-toolbar__group",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_toolbar-space",
+          "selectors": [
+            ".area-toolbar__group"
+          ]
+        }
+      ],
+      "tokens": []
+    },
+    {
+      "id": "separator",
+      "element": [
+        "span"
+      ],
+      "class": "area-toolbar__separator",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_item",
+          "selectors": [
+            ".area-toolbar__separator",
+            ".area-toolbar--vertical .area-toolbar__separator"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-border-decorative",
+          "selectors": [
+            ".area-toolbar__separator"
+          ]
+        },
+        {
+          "name": "--area-stroke-width",
+          "selectors": [
+            ".area-toolbar__separator",
+            ".area-toolbar--vertical .area-toolbar__separator"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "overflow",
+      "element": [
+        "details"
+      ],
+      "class": "area-toolbar__overflow",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "overflow-trigger",
+      "element": [
+        "summary"
+      ],
+      "class": "area-toolbar__overflow-trigger",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_item",
+          "selectors": [
+            ".area-toolbar__overflow-trigger"
+          ]
+        },
+        {
+          "name": "--_toolbar-radius",
+          "selectors": [
+            ".area-toolbar__overflow-trigger"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-bg-component-hover",
+          "selectors": [
+            ".area-toolbar__overflow-trigger:hover",
+            ".area-toolbar__overflow[open] > .area-toolbar__overflow-trigger"
+          ]
+        },
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-toolbar__overflow-trigger"
+          ]
+        },
+        {
+          "name": "--area-focus-color",
+          "selectors": [
+            ".area-toolbar__overflow-trigger:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-focus-offset",
+          "selectors": [
+            ".area-toolbar__overflow-trigger:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-focus-width",
+          "selectors": [
+            ".area-toolbar__overflow-trigger:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-radius-button-cap",
+          "selectors": [
+            ".area-toolbar__overflow-trigger"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "overflow-dots",
+      "element": [
+        "span"
+      ],
+      "class": "area-toolbar__overflow-dots",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_toolbar-icon",
+          "selectors": [
+            ".area-toolbar__overflow-dots"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-radius-full",
+          "selectors": [
+            ".area-toolbar__overflow-dots::before"
+          ]
+        },
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-toolbar__overflow-dots",
+            ".area-toolbar__overflow-dots::before"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-toolbar__overflow-dots::before"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "overflow-content",
+      "element": [
+        "div"
+      ],
+      "class": "area-toolbar__overflow-content",
+      "required": "not found",
+      "allowedContent": [
+        "element"
+      ],
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-bg-surface",
+          "selectors": [
+            ".area-toolbar__overflow-content"
+          ]
+        },
+        {
+          "name": "--area-border-decorative",
+          "selectors": [
+            ".area-toolbar__overflow-content"
+          ]
+        },
+        {
+          "name": "--area-radius-container",
+          "selectors": [
+            ".area-toolbar__overflow-content"
+          ]
+        },
+        {
+          "name": "--area-shadow-color",
+          "selectors": [
+            ".area-toolbar__overflow-content"
+          ]
+        },
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-toolbar__overflow-content"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-toolbar__overflow-content",
+            ".area-toolbar--vertical .area-toolbar__overflow-content"
+          ]
+        },
+        {
+          "name": "--area-stroke-width",
+          "selectors": [
+            ".area-toolbar__overflow-content"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "name": "ToolbarItem.children",
+      "part": "overflow-content",
+      "element": [
+        "div"
+      ],
+      "class": "area-toolbar__overflow-content",
+      "required": true,
+      "allowedContent": [
+        "element"
+      ]
+    },
+    {
+      "name": "ToolbarOverflow.icon",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "ToolbarOverflow.children",
+      "part": "overflow-content",
+      "element": [
+        "div"
+      ],
+      "class": "area-toolbar__overflow-content",
+      "required": "not found",
+      "allowedContent": "not found"
+    }
+  ],
+  "options": {
+    "variant": {
+      "values": [
+        "plain",
+        "surface"
+      ],
+      "default": "plain"
+    },
+    "size": {
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "orientation": {
+      "values": [
+        "horizontal",
+        "vertical"
+      ],
+      "default": "horizontal"
+    }
+  },
+  "booleans": [
+    "full-width"
+  ],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "orientation",
+      "part": "root",
+      "kind": "aria",
+      "hook": "aria-orientation",
+      "value": "{orientation}"
+    },
+    {
+      "name": "orientation",
+      "part": "separator",
+      "kind": "aria",
+      "hook": "aria-orientation",
+      "value": "{orientation === \"horizontal\" ? \"vertical\" : \"horizontal\"}"
+    },
+    {
+      "name": "area-toolbar-item",
+      "part": "overflow-trigger",
+      "kind": "data",
+      "hook": "data-area-toolbar-item",
+      "value": "\"\""
+    },
+    {
+      "name": "hidden",
+      "part": "overflow-dots",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "focus-visible",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-toolbar:focus-visible"
+    },
+    {
+      "name": "hover",
+      "part": "overflow-trigger",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-toolbar__overflow-trigger:hover"
+    },
+    {
+      "name": "focus-visible",
+      "part": "overflow-trigger",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-toolbar__overflow-trigger:focus-visible"
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "ArrowLeft / ArrowRight / ArrowUp / ArrowDown",
+      "part": "root",
+      "action": "Move focus among enabled marked items, wrapping; use the orientation and reverse horizontal direction in RTL.",
+      "condition": "Does not activate items."
+    },
+    {
+      "key": "Home / End",
+      "part": "root",
+      "action": "Focus the first or last enabled marked item.",
+      "condition": "Toolbar key handler."
+    },
+    {
+      "key": "Escape",
+      "part": "overflow",
+      "action": "Close the overflow and return focus to its summary.",
+      "condition": "Overflow details are open."
+    }
+  ],
+  "accessibleName": [
+    {
+      "part": "overflow-trigger",
+      "rule": "Reference wiring: aria-label={label}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "InToolbar.Provider",
+      "ToolbarOrientation.Provider"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/card.tsx:287",
+      "apps/docs/src/demos/card.tsx:288",
+      "apps/docs/src/demos/card.tsx:289",
+      "apps/docs/src/demos/card.tsx:290",
+      "apps/docs/src/demos/gallery.tsx:193",
+      "apps/docs/src/demos/gallery.tsx:194",
+      "apps/docs/src/demos/gallery.tsx:199",
+      "apps/docs/src/demos/gallery.tsx:201",
+      "apps/docs/src/demos/gallery.tsx:210",
+      "apps/docs/src/demos/gallery.tsx:211",
+      "apps/docs/src/demos/gallery.tsx:212",
+      "apps/docs/src/demos/gallery.tsx:213",
+      "apps/docs/src/demos/gallery.tsx:215",
+      "apps/docs/src/demos/gallery.tsx:216",
+      "apps/docs/src/demos/gallery.tsx:217",
+      "apps/docs/src/demos/gallery.tsx:220",
+      "apps/docs/src/demos/gallery.tsx:225",
+      "apps/docs/src/demos/gallery.tsx:226",
+      "apps/docs/src/demos/gallery.tsx:227",
+      "apps/docs/src/demos/gallery.tsx:228",
+      "apps/docs/src/demos/gallery.tsx:229",
+      "apps/docs/src/demos/gallery.tsx:230",
+      "apps/docs/src/demos/gallery.tsx:232",
+      "apps/docs/src/demos/gallery.tsx:233",
+      "apps/docs/src/demos/gallery.tsx:237",
+      "apps/docs/src/demos/gallery.tsx:238",
+      "apps/docs/src/demos/gallery.tsx:239",
+      "apps/docs/src/demos/gallery.tsx:240",
+      "apps/docs/src/demos/gallery.tsx:241",
+      "apps/docs/src/demos/gallery.tsx:247",
+      "apps/docs/src/demos/gallery.tsx:248",
+      "apps/docs/src/demos/gallery.tsx:249",
+      "apps/docs/src/demos/gallery.tsx:250",
+      "apps/docs/src/demos/gallery.tsx:252",
+      "apps/docs/src/demos/gallery.tsx:260",
+      "apps/docs/src/demos/gallery.tsx:261",
+      "apps/docs/src/demos/gallery.tsx:262",
+      "apps/docs/src/demos/gallery.tsx:263",
+      "apps/docs/src/demos/gallery.tsx:264",
+      "apps/docs/src/demos/gallery.tsx:266",
+      "apps/docs/src/demos/gallery.tsx:290",
+      "apps/docs/src/demos/gallery.tsx:291",
+      "apps/docs/src/demos/gallery.tsx:292",
+      "apps/docs/src/demos/gallery.tsx:293",
+      "apps/docs/src/demos/gallery.tsx:295",
+      "apps/docs/src/demos/gallery.tsx:314",
+      "apps/docs/src/demos/gallery.tsx:315",
+      "apps/docs/src/demos/gallery.tsx:316",
+      "apps/docs/src/demos/gallery.tsx:317",
+      "apps/docs/src/demos/gallery.tsx:319",
+      "apps/docs/src/demos/gallery.tsx:338",
+      "apps/docs/src/demos/gallery.tsx:339",
+      "apps/docs/src/demos/gallery.tsx:340",
+      "apps/docs/src/demos/gallery.tsx:341",
+      "apps/docs/src/demos/gallery.tsx:343"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/surface.css",
+      "packages/styles/src/components/toolbar.css"
+    ],
+    "spec": [
+      "docs/specs/toolbar.md"
+    ],
+    "reactExport": [
+      "Toolbar",
+      "ToolbarItem",
+      "ToolbarGroup",
+      "ToolbarSeparator",
+      "ToolbarOverflow"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:77"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:76"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:76","packages/react/src/components/Toolbar.tsx:44","packages/react/src/components/Toolbar.tsx:78","packages/react/src/components/Toolbar.tsx:85","packages/react/src/components/Toolbar.tsx:97","packages/react/src/components/Toolbar.tsx:117","packages/react/src/components/Toolbar.tsx:118","packages/react/src/components/Toolbar.tsx:120"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:7","packages/styles/src/components/toolbar.css:17","packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2": {"status":"found","sources":["packages/styles/src/components/toolbar.css:17","packages/styles/src/components/toolbar.css:19","packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3": {"status":"found","sources":["packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4": {"status":"found","sources":["packages/styles/src/components/toolbar.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5": {"status":"found","sources":["packages/styles/src/components/toolbar.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/toolbar.css:7","packages/styles/src/components/toolbar.css:17","packages/styles/src/components/toolbar.css:20","packages/styles/src/components/toolbar.css:16","packages/styles/src/components/toolbar.css:19","packages/styles/src/components/toolbar.css:21","packages/styles/src/components/toolbar.css:22"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/toolbar.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/toolbar.css:3","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8": {"status":"found","sources":["packages/styles/src/components/toolbar.css:5","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19": {"status":"found","sources":["packages/styles/src/components/toolbar.css:4","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21": {"status":"found","sources":["packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25": {"status":"found","sources":["packages/styles/src/components/toolbar.css:13","packages/styles/src/components/toolbar.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/toolbar.css:3","packages/styles/src/components/toolbar.css:36","packages/styles/src/components/toolbar.css:4","packages/styles/src/components/toolbar.css:5","packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:13","packages/styles/src/components/toolbar.css:31","packages/styles/src/components/toolbar.css:20","packages/styles/src/components/toolbar.css:32","packages/styles/src/components/toolbar.css:33","packages/styles/src/components/toolbar.css:35","packages/styles/src/components/toolbar.css:37","packages/styles/src/components/toolbar.css:73"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:78"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:78"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:78"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:78"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:78"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:78"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/toolbar.css:42"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:78"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:97"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:97"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:97"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:97"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:97"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/3/allowedContent": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:97"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/3/customProperties": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:97"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3/tokens": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:97"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/4/allowedContent": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/4/customProperties/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/4/tokens/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/3": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/4": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/5": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70","packages/styles/src/components/toolbar.css:72","packages/styles/src/components/toolbar.css:73"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/5": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Direct source declaration or implementation."},
+    "/parts/5/id": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/5/class": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Direct source declaration or implementation."},
+    "/parts/5/element": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/required": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/5/allowedContent": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/5/customProperties/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/customProperties": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/5/tokens/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74","packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2": {"status":"found","sources":["packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74","packages/styles/src/components/toolbar.css:75"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/6": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Direct source declaration or implementation."},
+    "/parts/6/id": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/6/class": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Direct source declaration or implementation."},
+    "/parts/6/element": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/6/required": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/6/allowedContent": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:66"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/6/customProperties": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/6/tokens/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/2": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/3": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/4": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/5": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76","packages/styles/src/components/toolbar.css:77"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/6": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76","packages/styles/src/components/toolbar.css:77"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:66"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/class": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Direct source declaration or implementation."},
+    "/slots/1": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:91"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:76","packages/react/src/components/Toolbar.tsx:18","packages/react/src/components/Toolbar.tsx:68","packages/react/src/components/Toolbar.tsx:75","packages/react/src/components/Toolbar.tsx:81","packages/react/src/components/Toolbar.tsx:94","docs/specs/toolbar.md:1"],"note":"not found: No single direct part resolved for ToolbarOverflow.icon; conditional/delegated rendering requires review."},
+    "/slots/1/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:76","packages/react/src/components/Toolbar.tsx:18","packages/react/src/components/Toolbar.tsx:68","packages/react/src/components/Toolbar.tsx:75","packages/react/src/components/Toolbar.tsx:81","packages/react/src/components/Toolbar.tsx:94","docs/specs/toolbar.md:1"],"note":"not found: No resolved part for ToolbarOverflow.icon."},
+    "/slots/1/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:76","packages/react/src/components/Toolbar.tsx:18","packages/react/src/components/Toolbar.tsx:68","packages/react/src/components/Toolbar.tsx:75","packages/react/src/components/Toolbar.tsx:81","packages/react/src/components/Toolbar.tsx:94","docs/specs/toolbar.md:1"],"note":"not found: No resolved part for ToolbarOverflow.icon."},
+    "/slots/2": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:95"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/2/required": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:95"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/Toolbar.tsx:95"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/2/element": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/2/class": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Direct source declaration or implementation."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:66","packages/react/src/components/Toolbar.tsx:91","packages/react/src/components/Toolbar.tsx:95"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/variant": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/variant/default": {"status":"found","sources":["packages/styles/src/manifest.ts:82"],"note":"Direct source declaration or implementation."},
+    "/options/size": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/size/default": {"status":"found","sources":["packages/styles/src/manifest.ts:82"],"note":"Direct source declaration or implementation."},
+    "/options/orientation": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/default": {"status":"found","sources":["packages/styles/src/manifest.ts:82"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:80"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:76"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44","packages/react/src/components/Toolbar.tsx:85","packages/react/src/components/Toolbar.tsx:117","packages/react/src/components/Toolbar.tsx:118","packages/styles/src/components/toolbar.css:73","packages/styles/src/components/toolbar.css:72"],"note":"Direct source declaration or implementation."},
+    "/keyboard/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:36"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:38"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:100"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:36","packages/react/src/components/Toolbar.tsx:38","packages/react/src/components/Toolbar.tsx:100"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:76","packages/react/src/components/Toolbar.tsx:18","packages/react/src/components/Toolbar.tsx:68","packages/react/src/components/Toolbar.tsx:75","packages/react/src/components/Toolbar.tsx:81","packages/react/src/components/Toolbar.tsx:94","docs/specs/toolbar.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:76","packages/react/src/components/Toolbar.tsx:18","packages/react/src/components/Toolbar.tsx:68","packages/react/src/components/Toolbar.tsx:75","packages/react/src/components/Toolbar.tsx:81","packages/react/src/components/Toolbar.tsx:94","docs/specs/toolbar.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:76","packages/react/src/components/Toolbar.tsx:18","packages/react/src/components/Toolbar.tsx:68","packages/react/src/components/Toolbar.tsx:75","packages/react/src/components/Toolbar.tsx:81","packages/react/src/components/Toolbar.tsx:94","docs/specs/toolbar.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/1": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:76","packages/react/src/components/Toolbar.tsx:18","packages/react/src/components/Toolbar.tsx:68","packages/react/src/components/Toolbar.tsx:75","packages/react/src/components/Toolbar.tsx:81","packages/react/src/components/Toolbar.tsx:94","docs/specs/toolbar.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/card.tsx:287"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/card.tsx:288"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/card.tsx:289"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/card.tsx:290"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:193"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:194"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:199"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:201"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:210"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:211"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:212"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/11": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:213"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/12": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:215"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/13": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:216"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/14": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:217"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/15": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:220"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/16": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:225"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/17": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:226"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/18": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:227"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/19": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:228"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/20": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:229"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/21": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:230"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/22": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:232"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/23": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:233"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/24": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:237"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/25": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:238"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/26": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:239"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/27": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:240"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/28": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:241"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/29": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:247"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/30": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:248"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/31": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:249"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/32": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:250"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/33": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:252"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/34": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:260"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/35": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:261"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/36": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:262"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/37": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:263"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/38": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:264"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/39": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:266"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/40": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:290"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/41": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:291"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/42": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:292"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/43": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:293"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/44": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:295"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/45": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:314"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/46": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:315"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/47": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:316"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/48": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:317"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/49": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:319"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/50": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:338"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/51": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:339"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/52": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:340"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/53": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:341"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/54": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:343"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/card.tsx:287","apps/docs/src/demos/card.tsx:288","apps/docs/src/demos/card.tsx:289","apps/docs/src/demos/card.tsx:290","apps/docs/src/demos/gallery.tsx:193","apps/docs/src/demos/gallery.tsx:194","apps/docs/src/demos/gallery.tsx:199","apps/docs/src/demos/gallery.tsx:201","apps/docs/src/demos/gallery.tsx:210","apps/docs/src/demos/gallery.tsx:211","apps/docs/src/demos/gallery.tsx:212","apps/docs/src/demos/gallery.tsx:213","apps/docs/src/demos/gallery.tsx:215","apps/docs/src/demos/gallery.tsx:216","apps/docs/src/demos/gallery.tsx:217","apps/docs/src/demos/gallery.tsx:220","apps/docs/src/demos/gallery.tsx:225","apps/docs/src/demos/gallery.tsx:226","apps/docs/src/demos/gallery.tsx:227","apps/docs/src/demos/gallery.tsx:228","apps/docs/src/demos/gallery.tsx:229","apps/docs/src/demos/gallery.tsx:230","apps/docs/src/demos/gallery.tsx:232","apps/docs/src/demos/gallery.tsx:233","apps/docs/src/demos/gallery.tsx:237","apps/docs/src/demos/gallery.tsx:238","apps/docs/src/demos/gallery.tsx:239","apps/docs/src/demos/gallery.tsx:240","apps/docs/src/demos/gallery.tsx:241","apps/docs/src/demos/gallery.tsx:247","apps/docs/src/demos/gallery.tsx:248","apps/docs/src/demos/gallery.tsx:249","apps/docs/src/demos/gallery.tsx:250","apps/docs/src/demos/gallery.tsx:252","apps/docs/src/demos/gallery.tsx:260","apps/docs/src/demos/gallery.tsx:261","apps/docs/src/demos/gallery.tsx:262","apps/docs/src/demos/gallery.tsx:263","apps/docs/src/demos/gallery.tsx:264","apps/docs/src/demos/gallery.tsx:266","apps/docs/src/demos/gallery.tsx:290","apps/docs/src/demos/gallery.tsx:291","apps/docs/src/demos/gallery.tsx:292","apps/docs/src/demos/gallery.tsx:293","apps/docs/src/demos/gallery.tsx:295","apps/docs/src/demos/gallery.tsx:314","apps/docs/src/demos/gallery.tsx:315","apps/docs/src/demos/gallery.tsx:316","apps/docs/src/demos/gallery.tsx:317","apps/docs/src/demos/gallery.tsx:319","apps/docs/src/demos/gallery.tsx:338","apps/docs/src/demos/gallery.tsx:339","apps/docs/src/demos/gallery.tsx:340","apps/docs/src/demos/gallery.tsx:341","apps/docs/src/demos/gallery.tsx:343"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/surface.css:431","packages/styles/src/components/toolbar.css:2","packages/styles/src/components/toolbar.css:24","packages/styles/src/components/toolbar.css:30","packages/styles/src/components/toolbar.css:35","packages/styles/src/components/toolbar.css:36","packages/styles/src/components/toolbar.css:37","packages/styles/src/components/toolbar.css:38","packages/styles/src/components/toolbar.css:39","packages/styles/src/components/toolbar.css:40","packages/styles/src/components/toolbar.css:42","packages/styles/src/components/toolbar.css:45","packages/styles/src/components/toolbar.css:46","packages/styles/src/components/toolbar.css:47","packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68","packages/styles/src/components/toolbar.css:69","packages/styles/src/components/toolbar.css:70","packages/styles/src/components/toolbar.css:71","packages/styles/src/components/toolbar.css:72","packages/styles/src/components/toolbar.css:73","packages/styles/src/components/toolbar.css:74","packages/styles/src/components/toolbar.css:75","packages/styles/src/components/toolbar.css:76","packages/styles/src/components/toolbar.css:77","packages/styles/src/components/toolbar.css:78"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/surface.css:431"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:2"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/toolbar.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:18","packages/react/src/index.ts:19"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/1": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:68","packages/react/src/index.ts:19"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/2": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:75","packages/react/src/index.ts:19"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/3": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:81","packages/react/src/index.ts:19"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/4": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:94","packages/react/src/index.ts:19"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:18","packages/react/src/index.ts:19","packages/react/src/components/Toolbar.tsx:68","packages/react/src/components/Toolbar.tsx:75","packages/react/src/components/Toolbar.tsx:81","packages/react/src/components/Toolbar.tsx:94"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:76","packages/styles/src/components/surface.css:1","packages/styles/src/components/toolbar.css:1","docs/specs/toolbar.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:7","packages/styles/src/components/toolbar.css:17","packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:7","packages/styles/src/components/toolbar.css:17","packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:7","packages/styles/src/components/toolbar.css:17","packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:17","packages/styles/src/components/toolbar.css:19","packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:17","packages/styles/src/components/toolbar.css:19","packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:17","packages/styles/src/components/toolbar.css:19","packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:3","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:3","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:3","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:3","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:5","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:5","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:5","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:5","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:4","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:4","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:4","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:4","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:6","packages/styles/src/components/toolbar.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:13","packages/styles/src/components/toolbar.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:13","packages/styles/src/components/toolbar.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:13","packages/styles/src/components/toolbar.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:13","packages/styles/src/components/toolbar.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:78"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:67","packages/styles/src/components/toolbar.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:97"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/element/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74","packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74","packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74","packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:74","packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/element/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/6/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:66"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/6/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76","packages/styles/src/components/toolbar.css:77"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76","packages/styles/src/components/toolbar.css:77"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76","packages/styles/src/components/toolbar.css:77"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/5/selectors/1": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76","packages/styles/src/components/toolbar.css:77"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/toolbar.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:66"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:66"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:66"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:66"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:66"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/name": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:91"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/required": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:91"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:91"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:91"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/name": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:95"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/2/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:95"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/2/element/0": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:120"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/options/variant/values": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/size/values": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/values": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:79"],"note":"Direct source declaration or implementation."},
+    "/booleans/0": {"status":"found","sources":["packages/styles/src/manifest.ts:80"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:85"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/name": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/kind": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/hook": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/value": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/part": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/kind": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/hook": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/value": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/part": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/kind": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/hook": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/value": {"status":"found","sources":["packages/styles/src/components/toolbar.css:72"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/name": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/part": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/kind": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/hook": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/value": {"status":"found","sources":["packages/styles/src/components/toolbar.css:73"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/keyboard/0/key": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:36"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:36"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/action": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:36"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/condition": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:36"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/key": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:38"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:38"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/action": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:38"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/condition": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:38"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/key": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:100"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:100"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/action": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:100"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/condition": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:100"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/Toolbar.tsx:117"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/toolbar.md:1"],"note":"Dedicated family spec."}
+  }
+}

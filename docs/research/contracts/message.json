@@ -1,0 +1,442 @@
+{
+  "slug": "message",
+  "manifest": "message",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "article"
+      ],
+      "class": "area-message",
+      "required": true,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ],
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-message"
+          ]
+        },
+        {
+          "name": "--area-space-12",
+          "selectors": [
+            ".area-message"
+          ]
+        },
+        {
+          "name": "--area-text-md-leading",
+          "selectors": [
+            ".area-message"
+          ]
+        },
+        {
+          "name": "--area-text-md-size",
+          "selectors": [
+            ".area-message"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bubble",
+      "element": [
+        "div"
+      ],
+      "class": "area-message__bubble",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-bg-component",
+          "selectors": [
+            ".area-message__bubble"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-message__bubble"
+          ]
+        },
+        {
+          "name": "--area-radius-button-cap",
+          "selectors": [
+            ".area-message__bubble"
+          ]
+        },
+        {
+          "name": "--area-radius-control-md",
+          "selectors": [
+            ".area-message__bubble"
+          ]
+        },
+        {
+          "name": "--area-space-16",
+          "selectors": [
+            ".area-message__bubble"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-message__bubble"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "content",
+      "element": [
+        "div"
+      ],
+      "class": "area-message__content",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "actions",
+      "element": [
+        "div"
+      ],
+      "class": "area-message__actions",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-duration-fast",
+          "selectors": [
+            ".area-message--user > .area-message__actions"
+          ]
+        },
+        {
+          "name": "--area-ease-out",
+          "selectors": [
+            ".area-message--user > .area-message__actions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cursor",
+      "element": [
+        "span"
+      ],
+      "class": "area-message__cursor",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-radius-full",
+          "selectors": [
+            ".area-message__cursor"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-message__cursor"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-message__cursor"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "name": "Message.actions",
+      "part": "root",
+      "element": [
+        "article"
+      ],
+      "class": "area-message",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "Message.children",
+      "part": "bubble",
+      "element": [
+        "div"
+      ],
+      "class": "area-message__bubble",
+      "required": "not found",
+      "allowedContent": "not found"
+    }
+  ],
+  "options": {
+    "author": {
+      "values": [
+        "user",
+        "assistant"
+      ],
+      "default": "not found"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "busy",
+      "part": "root",
+      "kind": "aria",
+      "hook": "aria-busy",
+      "value": "{streaming || undefined}"
+    },
+    {
+      "name": "streaming",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-streaming",
+      "value": "{streaming ? \"\" : undefined}"
+    },
+    {
+      "name": "hidden",
+      "part": "cursor",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [
+    {
+      "part": "root",
+      "rule": "Reference wiring: aria-label={`${name} said`}."
+    },
+    {
+      "part": "actions",
+      "rule": "Reference wiring: aria-label={label}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:1127",
+      "apps/docs/src/demos/gallery.tsx:1131",
+      "apps/docs/src/demos/gallery.tsx:1135",
+      "apps/docs/src/demos/gallery.tsx:1136",
+      "apps/docs/src/demos/gallery.tsx:1143",
+      "apps/docs/src/demos/gallery.tsx:1147",
+      "apps/docs/src/demos/gallery.tsx:1154",
+      "apps/docs/src/demos/gallery.tsx:1159",
+      "apps/docs/src/demos/gallery.tsx:1172",
+      "apps/docs/src/demos/gallery.tsx:1173"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/message.css"
+    ],
+    "spec": [
+      "docs/specs/message.md"
+    ],
+    "reactExport": [
+      "Message",
+      "MessageActions"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:460"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:459"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:459","packages/react/src/components/Message.tsx:21","packages/react/src/components/Message.tsx:23","packages/react/src/components/Message.tsx:26","packages/react/src/components/Message.tsx:27","packages/react/src/components/Message.tsx:41"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"found","sources":["packages/react/src/components/Message.tsx:11"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/0/customProperties": {"status":"not found","sources":["packages/react/src/components/Message.tsx:23"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/message.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/message.css:13"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/message.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/message.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/message.css:13","packages/styles/src/components/message.css:16","packages/styles/src/components/message.css:17","packages/styles/src/components/message.css:18"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/Message.tsx:26"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/Message.tsx:26"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/Message.tsx:26"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/Message.tsx:26"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/Message.tsx:26"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/Message.tsx:26"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties": {"status":"not found","sources":["packages/react/src/components/Message.tsx:26"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/message.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/4": {"status":"found","sources":["packages/styles/src/components/message.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/message.css:29","packages/styles/src/components/message.css:30","packages/styles/src/components/message.css:31"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/Message.tsx:27"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/Message.tsx:27"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/Message.tsx:27"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/Message.tsx:27"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/Message.tsx:27"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/Message.tsx:27"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties": {"status":"not found","sources":["packages/react/src/components/Message.tsx:27"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2/tokens": {"status":"not found","sources":["packages/react/src/components/Message.tsx:27"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/Message.tsx:41"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/Message.tsx:41"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/Message.tsx:41"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/Message.tsx:41"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"not found","sources":["packages/react/src/components/Message.tsx:41"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/3/allowedContent": {"status":"not found","sources":["packages/react/src/components/Message.tsx:41"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/3/customProperties": {"status":"not found","sources":["packages/react/src/components/Message.tsx:41"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3/tokens/0": {"status":"found","sources":["packages/styles/src/components/message.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1": {"status":"found","sources":["packages/styles/src/components/message.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens": {"status":"found","sources":["packages/styles/src/components/message.css:53"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/4/allowedContent": {"status":"not found","sources":["packages/react/src/components/Message.tsx:21"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/4/customProperties": {"status":"not found","sources":["packages/react/src/components/Message.tsx:21"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4/tokens/0": {"status":"found","sources":["packages/styles/src/components/message.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1": {"status":"found","sources":["packages/styles/src/components/message.css:62"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2": {"status":"found","sources":["packages/styles/src/components/message.css:60","packages/styles/src/components/message.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens": {"status":"found","sources":["packages/styles/src/components/message.css:60","packages/styles/src/components/message.css:61","packages/styles/src/components/message.css:62","packages/styles/src/components/message.css:63"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:11"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/class": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/slots/1": {"status":"found","sources":["packages/react/src/components/Message.tsx:18"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/required": {"status":"not found","sources":["packages/react/src/components/Message.tsx:18"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/Message.tsx:18"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/1/element": {"status":"found","sources":["packages/react/src/components/Message.tsx:26"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/1/class": {"status":"found","sources":["packages/react/src/components/Message.tsx:26"],"note":"Direct source declaration or implementation."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/Message.tsx:11","packages/react/src/components/Message.tsx:18"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:462"],"note":"Direct source declaration or implementation."},
+    "/options/author": {"status":"found","sources":["packages/styles/src/manifest.ts:462"],"note":"Direct source declaration or implementation."},
+    "/options/author/default": {"status":"not found","sources":["packages/styles/src/manifest.ts:465"],"note":"not found: No manifest default for this axis; does not assert that the effective CSS or React default is absent."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:459"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:459"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/Message.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states": {"status":"found","sources":["packages/react/src/components/Message.tsx:23","packages/react/src/components/Message.tsx:24","packages/react/src/components/Message.tsx:21"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:459","packages/react/src/components/Message.tsx:17","packages/react/src/components/Message.tsx:38","docs/specs/message.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1": {"status":"found","sources":["packages/react/src/components/Message.tsx:41"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/Message.tsx:23","packages/react/src/components/Message.tsx:41"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:459","packages/react/src/components/Message.tsx:17","packages/react/src/components/Message.tsx:38","docs/specs/message.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:459","packages/react/src/components/Message.tsx:17","packages/react/src/components/Message.tsx:38","docs/specs/message.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:459","packages/react/src/components/Message.tsx:17","packages/react/src/components/Message.tsx:38","docs/specs/message.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:459","packages/react/src/components/Message.tsx:17","packages/react/src/components/Message.tsx:38","docs/specs/message.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1127"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1131"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1135"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1136"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1143"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1147"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1154"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1159"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1172"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1173"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1127","apps/docs/src/demos/gallery.tsx:1131","apps/docs/src/demos/gallery.tsx:1135","apps/docs/src/demos/gallery.tsx:1136","apps/docs/src/demos/gallery.tsx:1143","apps/docs/src/demos/gallery.tsx:1147","apps/docs/src/demos/gallery.tsx:1154","apps/docs/src/demos/gallery.tsx:1159","apps/docs/src/demos/gallery.tsx:1172","apps/docs/src/demos/gallery.tsx:1173"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/message.css:9","packages/styles/src/components/message.css:20","packages/styles/src/components/message.css:21","packages/styles/src/components/message.css:23","packages/styles/src/components/message.css:27","packages/styles/src/components/message.css:37","packages/styles/src/components/message.css:38","packages/styles/src/components/message.css:39","packages/styles/src/components/message.css:45","packages/styles/src/components/message.css:50","packages/styles/src/components/message.css:53","packages/styles/src/components/message.css:54","packages/styles/src/components/message.css:55","packages/styles/src/components/message.css:58","packages/styles/src/components/message.css:68","packages/styles/src/components/message.css:69","packages/styles/src/components/message.css:71"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/message.css:9"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/message.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:17","packages/react/src/index.ts:26"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/1": {"status":"found","sources":["packages/react/src/components/Message.tsx:38","packages/react/src/index.ts:26"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/Message.tsx:17","packages/react/src/index.ts:26","packages/react/src/components/Message.tsx:38"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:459","packages/styles/src/components/message.css:1","docs/specs/message.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:11"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/message.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/message.css:13"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:13"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:13"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/message.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/message.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:26"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/message.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/message.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:27"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:41"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/message.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/message.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/message.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/message.css:62"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:62"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:62"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/message.css:60","packages/styles/src/components/message.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/message.css:60","packages/styles/src/components/message.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/message.css:60","packages/styles/src/components/message.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/Message.tsx:11"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"found","sources":["packages/react/src/components/Message.tsx:11"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/Message.tsx:11"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/Message.tsx:11"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:11"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/name": {"status":"found","sources":["packages/react/src/components/Message.tsx:18"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/part": {"status":"found","sources":["packages/react/src/components/Message.tsx:18"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/element/0": {"status":"found","sources":["packages/react/src/components/Message.tsx:26"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/options/author/values": {"status":"found","sources":["packages/styles/src/manifest.ts:462"],"note":"Direct source declaration or implementation."},
+    "/options/author/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:462"],"note":"Direct source declaration or implementation."},
+    "/options/author/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:462"],"note":"Direct source declaration or implementation."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/Message.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/Message.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/Message.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/Message.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/Message.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/Message.tsx:21"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/Message.tsx:23"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/part": {"status":"found","sources":["packages/react/src/components/Message.tsx:41"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/rule": {"status":"found","sources":["packages/react/src/components/Message.tsx:41"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/message.md:1"],"note":"Dedicated family spec."}
+  }
+}

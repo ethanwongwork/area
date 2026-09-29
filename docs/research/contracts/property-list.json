@@ -1,0 +1,555 @@
+{
+  "slug": "property-list",
+  "manifest": "propertyList",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "ul"
+      ],
+      "class": "area-property-list",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_panel-row-gap",
+          "selectors": [
+            ".area-property-list"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-property-list"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "item",
+      "element": [
+        "li"
+      ],
+      "class": "area-property-list__item",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_panel-gap",
+          "selectors": [
+            ".area-property-list__item"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-property-list__item"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "handle",
+      "element": [
+        "button"
+      ],
+      "class": "area-property-list__handle",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_inset",
+          "selectors": [
+            ".area-property-list__handle"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-focus-color",
+          "selectors": [
+            ".area-property-list__handle:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-focus-width",
+          "selectors": [
+            ".area-property-list__handle:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-input-icon",
+          "selectors": [
+            ".area-property-list__handle"
+          ]
+        },
+        {
+          "name": "--area-radius-control-xs",
+          "selectors": [
+            ".area-property-list__handle"
+          ]
+        },
+        {
+          "name": "--area-space-12",
+          "selectors": [
+            ".area-property-list__handle"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "value",
+      "element": [
+        "div"
+      ],
+      "class": "area-property-list__value",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "actions",
+      "element": [
+        "div"
+      ],
+      "class": "area-property-list__actions",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ],
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-property-list__actions"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "indicator",
+      "element": [
+        "li"
+      ],
+      "class": "area-property-list__indicator",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_drop",
+          "selectors": [
+            ".area-property-list__indicator"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-border-width",
+          "selectors": [
+            ".area-property-list__indicator"
+          ]
+        },
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-property-list__indicator"
+          ]
+        },
+        {
+          "name": "--area-radius-full",
+          "selectors": [
+            ".area-property-list__indicator"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "name": "PropertyListItem.actions",
+      "part": "actions",
+      "element": [
+        "div"
+      ],
+      "class": "area-property-list__actions",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "PropertyList.children",
+      "part": "value",
+      "element": [
+        "div"
+      ],
+      "class": "area-property-list__value",
+      "required": "not found",
+      "allowedContent": "not found"
+    },
+    {
+      "name": "PropertyListItem.children",
+      "part": "value",
+      "element": [
+        "div"
+      ],
+      "class": "area-property-list__value",
+      "required": "not found",
+      "allowedContent": "not found"
+    }
+  ],
+  "options": {},
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "dragging",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-dragging",
+      "value": "{dragging !== null ? \"\" : undefined}"
+    },
+    {
+      "name": "inactive",
+      "part": "item",
+      "kind": "data",
+      "hook": "data-inactive",
+      "value": "{inactive ? \"\" : undefined}"
+    },
+    {
+      "name": "dragging",
+      "part": "item",
+      "kind": "data",
+      "hook": "data-dragging",
+      "value": "{list?.dragging === index ? \"\" : undefined}"
+    },
+    {
+      "name": "label",
+      "part": "handle",
+      "kind": "data",
+      "hook": "data-label",
+      "value": "{label}"
+    },
+    {
+      "name": "hidden",
+      "part": "indicator",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "dragging",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-dragging",
+      "value": "present"
+    },
+    {
+      "name": "focus-visible",
+      "part": "handle",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-property-list__handle:focus-visible"
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "ArrowUp / ArrowDown",
+      "part": "handle",
+      "action": "Move the item one position; announce the move and preserve handle focus.",
+      "condition": "Reordering enabled; valid destination."
+    },
+    {
+      "key": "Home / End",
+      "part": "handle",
+      "action": "Move the item to the first or last position.",
+      "condition": "Reordering enabled; valid destination."
+    },
+    {
+      "key": "Escape",
+      "part": "handle",
+      "action": "Cancel the active drag.",
+      "condition": "A pointer drag is in progress."
+    }
+  ],
+  "accessibleName": [
+    {
+      "part": "root",
+      "rule": "Reference wiring: aria-label={label}."
+    },
+    {
+      "part": "handle",
+      "rule": "Reference wiring: aria-label={`Reorder ${label}, position ${index + 1} of ${list.count}`}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "PropertyListContext.Provider",
+      "ItemIndex.Provider",
+      "Glyph"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:828",
+      "apps/docs/src/demos/gallery.tsx:829",
+      "apps/docs/src/demos/gallery.tsx:853",
+      "apps/docs/src/demos/gallery.tsx:854"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/property-list.css",
+      "packages/styles/src/forced-colors.css"
+    ],
+    "spec": [
+      "docs/specs/property-list.md"
+    ],
+    "reactExport": [
+      "PropertyList",
+      "PropertyListItem"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:435"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:434"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:434","packages/react/src/components/PropertyList.tsx:130","packages/react/src/components/PropertyList.tsx:134","packages/react/src/components/PropertyList.tsx:148","packages/react/src/components/PropertyList.tsx:150","packages/react/src/components/PropertyList.tsx:159","packages/react/src/components/PropertyList.tsx:160"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:130"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:130"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:130"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:130"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:130"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:130"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:148"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:148"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:148"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:148"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:148"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:148"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:150"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:150"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:150"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:150"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:150"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:150"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1": {"status":"found","sources":["packages/styles/src/components/property-list.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2": {"status":"found","sources":["packages/styles/src/components/property-list.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3": {"status":"found","sources":["packages/styles/src/components/property-list.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42","packages/styles/src/components/property-list.css:46","packages/styles/src/components/property-list.css:48","packages/styles/src/components/property-list.css:61"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/3/allowedContent": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/3/customProperties": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3/tokens": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/4/allowedContent": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:19"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/4/customProperties": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4/tokens/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens": {"status":"found","sources":["packages/styles/src/components/property-list.css:27"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/5": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Direct source declaration or implementation."},
+    "/parts/5/id": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/5/class": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Direct source declaration or implementation."},
+    "/parts/5/element": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/required": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/5/allowedContent": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/5/customProperties/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/customProperties": {"status":"found","sources":["packages/styles/src/components/property-list.css:69"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/5/tokens/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:69","packages/styles/src/components/property-list.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1": {"status":"found","sources":["packages/styles/src/components/property-list.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2": {"status":"found","sources":["packages/styles/src/components/property-list.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens": {"status":"found","sources":["packages/styles/src/components/property-list.css:69","packages/styles/src/components/property-list.css:70","packages/styles/src/components/property-list.css:71","packages/styles/src/components/property-list.css:73"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/class": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"Direct source declaration or implementation."},
+    "/slots/1": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:42"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/required": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:42"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:42"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/1/element": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/1/class": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Direct source declaration or implementation."},
+    "/slots/2": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:144"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/2/required": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:144"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/PropertyList.tsx:144"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/2/element": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/2/class": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Direct source declaration or implementation."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:19","packages/react/src/components/PropertyList.tsx:42","packages/react/src/components/PropertyList.tsx:144"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:437"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:434"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:434"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:151"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/5": {"status":"found","sources":["packages/styles/src/components/property-list.css:62"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6": {"status":"found","sources":["packages/styles/src/components/property-list.css:57"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:132","packages/react/src/components/PropertyList.tsx:149","packages/react/src/components/PropertyList.tsx:151","packages/react/src/components/PropertyList.tsx:134","packages/styles/src/components/property-list.css:62","packages/styles/src/components/property-list.css:57"],"note":"Direct source declaration or implementation."},
+    "/keyboard/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:123"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115","packages/react/src/components/PropertyList.tsx:123"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:131"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:152"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:131","packages/react/src/components/PropertyList.tsx:152"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:434","packages/react/src/components/PropertyList.tsx:41","packages/react/src/components/PropertyList.tsx:143","docs/specs/property-list.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:434","packages/react/src/components/PropertyList.tsx:41","packages/react/src/components/PropertyList.tsx:143","docs/specs/property-list.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:434","packages/react/src/components/PropertyList.tsx:41","packages/react/src/components/PropertyList.tsx:143","docs/specs/property-list.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:129"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/1": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:133"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/2": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:157"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:434","packages/react/src/components/PropertyList.tsx:41","packages/react/src/components/PropertyList.tsx:143","docs/specs/property-list.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:828"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:829"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:853"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:854"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:828","apps/docs/src/demos/gallery.tsx:829","apps/docs/src/demos/gallery.tsx:853","apps/docs/src/demos/gallery.tsx:854"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/property-list.css:8","packages/styles/src/components/property-list.css:17","packages/styles/src/components/property-list.css:25","packages/styles/src/components/property-list.css:26","packages/styles/src/components/property-list.css:27","packages/styles/src/components/property-list.css:29","packages/styles/src/components/property-list.css:35","packages/styles/src/components/property-list.css:56","packages/styles/src/components/property-list.css:57","packages/styles/src/components/property-list.css:60","packages/styles/src/components/property-list.css:61","packages/styles/src/components/property-list.css:62","packages/styles/src/components/property-list.css:63","packages/styles/src/components/property-list.css:65","packages/styles/src/components/property-list.css:66","packages/styles/src/forced-colors.css:63"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:8"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/forced-colors.css:63"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/property-list.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:41","packages/react/src/index.ts:33"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/1": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:143","packages/react/src/index.ts:33"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:41","packages/react/src/index.ts:33","packages/react/src/components/PropertyList.tsx:143"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:434","packages/styles/src/components/property-list.css:1","packages/styles/src/forced-colors.css:1","docs/specs/property-list.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:130"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:148"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:150"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:37","packages/styles/src/components/property-list.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/allowedContent/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:19"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/4/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/element/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:69","packages/styles/src/components/property-list.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:69","packages/styles/src/components/property-list.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:69","packages/styles/src/components/property-list.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:73"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/property-list.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/property-list.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:160"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:19"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/name": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:42"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:42"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/element/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/2/name": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:144"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/2/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:144"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/2/element/0": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:159"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:132"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:149"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/name": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:151"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:151"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/kind": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:151"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/hook": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:151"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/value": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:151"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/name": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/kind": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/hook": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/value": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:134"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/5/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:62"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/part": {"status":"found","sources":["packages/styles/src/components/property-list.css:62"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/kind": {"status":"found","sources":["packages/styles/src/components/property-list.css:62"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/hook": {"status":"found","sources":["packages/styles/src/components/property-list.css:62"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/value": {"status":"found","sources":["packages/styles/src/components/property-list.css:62"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/name": {"status":"found","sources":["packages/styles/src/components/property-list.css:57"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/part": {"status":"found","sources":["packages/styles/src/components/property-list.css:57"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/kind": {"status":"found","sources":["packages/styles/src/components/property-list.css:57"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/hook": {"status":"found","sources":["packages/styles/src/components/property-list.css:57"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/value": {"status":"found","sources":["packages/styles/src/components/property-list.css:57"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/keyboard/0/key": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/action": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/condition": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/key": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/action": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/1/condition": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:115"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/key": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:123"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:123"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/action": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:123"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/2/condition": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:123"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:131"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:131"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/part": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:152"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/rule": {"status":"found","sources":["packages/react/src/components/PropertyList.tsx:152"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/property-list.md:1"],"note":"Dedicated family spec."}
+  }
+}
