@@ -120,8 +120,10 @@ No forced-colors rule in choice.css (unverified).
 The gallery groups the tiles (Default, Tones, Sizes, Layout
 with the horizontal group, Content with the description, States with validation and
 disabled). The validation, description and horizontal tiles were added in the second
-pass. No product radio exists to compare against. Unverified: dark theme, hover and focus
-on screen.
+pass. No product radio exists to compare against (ChatGPT's mode choice is radio cards,
+`chatgpt--mode-radio-cards`). 2026-09-28 (batch 14): control and label centre on each other at
+every size; sm and md differ only by the label gap, as Checkbox (settled 2026-09-28: sm removed).
+Unverified: dark theme, hover and focus in a product.
 
 ## Verification
 
@@ -129,6 +131,16 @@ on screen.
 results are in the [cohesion audit](../research/cohesion-audit.md#verification).
 
 ## Feedback log
+
+- 2026-09-28 · owner approved batch 14 → Complete.
+
+- 2026-09-28 · owner references (plan and registration pickers) → Radio gains Checkbox's card
+  variant and row / tile layouts, with `leadingVisual` and `caption` (docs/specs/checkbox.md,
+  feedback log) → gallery `card`, `card-tile`.
+
+- 2026-09-28 · owner: "do whatever you think would be best, maybe dropping small?" → `size`
+  is md (16) and lg (20); sm removed from the manifest, CSS, demos and docs, since with 14/20
+  small-control text it differed from md only by a 4px gap. Notion and Figma ship one 16px size.
 
 - 2026-09-26 · neutral-by-default sweep → `tone` axis, neutral checked face →
   `area--tone-accent`, `area--selected`.

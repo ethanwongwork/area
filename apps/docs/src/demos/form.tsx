@@ -438,7 +438,7 @@ export const ChipInvalidInput = () => <Chip kind="input" invalid onRemove={() =>
 
 export const CheckboxSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    {(["sm", "md", "lg"] as const).map((size) => (
+    {(["md", "lg"] as const).map((size) => (
       <Checkbox key={size} size={size} label={size} />
     ))}
   </div>
@@ -455,7 +455,7 @@ export const CheckboxStates = () => (
 
 export const RadioSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    {([["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] as const).map(([size, label]) => (
+    {([["md", "Medium"], ["lg", "Large"]] as const).map(([size, label]) => (
       <Radio key={size} size={size} name={`radio-size-${size}`} value={size} label={label} />
     ))}
   </div>

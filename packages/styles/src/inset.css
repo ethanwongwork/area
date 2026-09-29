@@ -142,6 +142,11 @@
    * optically centered instead of letting a glyph touch its hit target. */
   .area-input:has(> .area-input__action:last-child) { --_box-end: var(--_action); }
   .area-number-field:has(> .area-number-field__steppers:last-child) { --_box-end: var(--_step); }
+  /* A shortcut in an Input's suffix is a nested backplate, placed like a Button's: the space
+   * after it equals the space above and below it (Notion's search field ⌘K). */
+  .area-input:has(> .area-input__affix:last-child > .area-kbd) { --_box-end: var(--area-space-20); }
+  .area-input:has(> .area-input__affix:last-child > .area-kbd--small) { --_box-end: var(--area-space-16); }
+  .area-input__affix:has(> .area-kbd) { display: inline-flex; text-box: none; padding-block: 0; }
   .area-menu__item:has(> .area-menu__shortcut > .area-kbd) { --_box-end: var(--area-space-20); }
   .area-menu__item:has(> .area-menu__shortcut > .area-kbd--small) { --_box-end: var(--area-space-16); }
   .area-menu__item:has(> .area-menu__shortcut > svg:only-child) { --_box-end: var(--area-icon-md); }

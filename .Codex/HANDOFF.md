@@ -107,6 +107,53 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     Spec `docs/specs/overlay.md`; tests `packages/react/tests/overlay.test.mjs`; gallery
     `behavior-*` tiles. Tooltip is still marked Complete; its behavior is new and unreviewed.
 
+## Batch 11 Chrome pass and Kbd corner (2026-09-28, branch `claude/kbd-button-refinement-21fa0c`)
+
+- Owner: Kbd "looks too sharp", "thought kbd had a stroke?". Corner 4 → 6 (`--_radius`), no longer
+  concentric in Buttons (was 2 at every size); Tooltip takes max(own, concentric). Kbd moved back to
+  In review. The stroke is not applied: `GalleryReviewKbd` shows it as a proposal (surface fill +
+  `edge-control`). Evidence: Notion and ChatGPT inline hints have no edge (ChatGPT forces
+  `!border-0`); Figma's keyboard-shortcuts panel outlines each key (1px 70%, corner 2); Untitled rings.
+- Batch 11 side by side recorded in `pass-status.mjs` (Button vs Figma Share, Notion, ChatGPT;
+  Button group vs Figma's Present pair; Kbd). Button and Button group unchanged, now officially
+  complete; Kbd awaits the owner's decision on the stroke and approval of the corner.
+- Owner follow-up: 6px keycap corner everywhere as a rule (token `radius-control-sm`); Kbd
+  Templates tiles show it in twelve hosts; Input suffix now centres a keycap (inset.css).
+  Open: menus and the command palette show shortcuts unboxed (quiet, as Notion and Figma);
+  Escape renders as the ⎋ glyph where ChatGPT and Notion write "Esc".
+- Batch 11 approved (Kbd complete as shown). Batch 12 (Text entry) side by side recorded: Notion's
+  search and invite fields, Figma search, ChatGPT multiline fields; no paint change; specs' stale
+  resting shadow corrected; 51 Area tiles retaken. Input back to In review (Kbd suffix fix).
+  Open: Textarea lg is barely distinct from md (same 14/20 and 12 inset).
+- Batch 12 approved (date picker: a Popover holding only a Calendar hugs it). Textarea inline
+  inset follows Input's per size; gallery date field = Input + Calendar in a Popover (`anchor`).
+- Batch 13 (Select, Combobox, Field): no changes; visual passes written; side by side with
+  ChatGPT's settings dropdown (rest, hover, open menu) and settings row, saved after the owner
+  brought the Claude tab group's window forward (a hidden tab never reaches idle).
+- Batch 14 (Checkbox, Radio, Switch) side by side recorded; no code change. ChatGPT switches (off /
+  on, rest / hover) saved. Open for the owner: Switch off fill #d4 is darker than ChatGPT (≈#e6) and
+  Notion (≈#db); Checkbox / Radio sm equals md except the label gap since small text became 14/20.
+  Specs' stale control shadows corrected. Combobox (batch 13) still awaits approval.
+- Owner: Switch off track lightened (#e2, hover #d4, local to Switch; fill-toggle unchanged for
+  Slider); Checkbox / Radio sm removed. Batch 14 back to ready. Batch 15 side by side recorded, no
+  change (Slider sm kept: row height differs).
+- Checkbox / Radio card rebuilt from owner references + shadcn Choice Card: control at the end,
+  chosen card outlined 2px in the checked colour, `layout` row / tile (tile grid 144 min), Radio
+  gained card, leadingVisual and caption. Both remain In review.
+- Batch 14 approved. Batch 16: Table compared with Notion's table view (returns), Card's 09-27
+  Chrome pass recorded; no change. Card awaits approval. Dev server hang: `apps/docs/dist` held
+  an iCloud duplicate ("… 2.html") whose read blocked readSnapshot; it cleared after ~80s.
+- Card (owner): one text/button column 4 inside the media inset; corner = default Button radius +
+  column distance (sm 18, md 20, lg 24); footer on the column; transport footers centred;
+  immersive text on two insets. Card stays In review.
+- Batch 17: visual passes written for Dialog and Hover card from the gallery + captures on file;
+  live Chrome check blocked (tab hidden again). Open: Dialog's corner under Card's new rule
+  (16 by the close vs 24 by the footer buttons).
+- Clipboard hand-off failed once (clipboard held other content); the postMessage relay page
+  (scratchpad relay.mjs on 3197, window.open + postMessage) works from Notion.
+- Chrome was a background window (`visibilityState` hidden): rest captures and clipboard worked,
+  hover states were not retaken. Local captures leave through a relay on 127.0.0.1 (CORS `*`).
+
 ## Avatar photo, initials, Calendar cleanup (2026-09-28, branch `claude/component-variants-gallery-f433f2`, uncommitted)
 
 - This branch fast-forwarded to main at PR 15; a parallel batch 4 pass was dropped and only its
