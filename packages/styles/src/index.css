@@ -76,4 +76,5 @@
 @import "./forced-colors.css";
 
 @import "./components/indicator.css";
+@import "./components/count.css";
 @import "./components/presence.css";

@@ -25,7 +25,7 @@ test("keeps action content and all semantic tones in the public contract", () =>
   assert.match(html, /area-alert__actions/);
   assert.match(html, /href="#review"/);
   assert.deepEqual(MANIFESTS.alert.variants.tone, ["neutral", "accent", "info", "danger", "warning", "success"]);
-  assert.deepEqual(MANIFESTS.alert.variants.layout, ["single-line", "multiline"]);
+  assert.deepEqual(MANIFESTS.alert.variants.layout, ["single-line", "multiline", "banner"]);
   assert.match(render({}), /area-alert--single-line/);
   assert.match(render({ layout: "multiline" }), /area-alert--multiline/);
 });
@@ -39,4 +39,13 @@ test("keeps an optional text link inline with the body copy", () => {
   const html = render({ link: h("a", { href: "#details" }, "Text link") });
   assert.match(html, /area-alert__description[^>]*>Details<span class="area-alert__link">/);
   assert.match(html, /href="#details"/);
+});
+
+test("banner ends the row with its link, and flush is a boolean modifier", () => {
+  const html = renderToString(h(Alert, { layout: "banner", flush: true, title: "Title", link: h("a", { href: "#" }, "Learn more") }, "Body"));
+  assert.match(html, /area-alert--banner/);
+  assert.match(html, /area-alert--flush/);
+  // The link is the content's sibling, not inside the description.
+  assert.match(html, /<\/div><\/div><span class="area-alert__link">/);
+  assert.doesNotMatch(renderToString(h(Alert, { title: "Title" }, "Body")), /area-alert--flush/);
 });

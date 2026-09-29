@@ -1,0 +1,94 @@
+/* ---------------------------------------------------------------------------
+ * Count
+ *
+ * A number that quantifies the element it sits in: a nav row, a tab, a filter chip, a
+ * board group heading. It is not a Badge (which labels content) and not an Indicator
+ * (which attaches to a corner and signals). Its geometry is Badge's inline scale; its
+ * number formatting is Indicator's. See docs/specs/count.md.
+ *
+ * Three axes set private properties that the base rule consumes:
+ *   variant  plain (Notion's board counts: no plate) or soft (Primer's CounterLabel);
+ *   tone     neutral or accent;
+ *   size     sm 16 / md 20, Badge's sm and md heights.
+ * The ink stays fixed with the owner's hover and selection, as Nav's trailing slot does.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-count {
+    /* spec: md, the default. 20 tall (Notion's board count, Fluent medium, shadcn's sidebar
+       count; Primer 18), 6 at the sides (Notion 6, Primer 6, Fluent medium 6). */
+    --_count-height: var(--area-space-20);
+    --_count-gutter: var(--area-space-6);
+    /* spec: 12/16 (Primer 12, shadcn 12, Fluent medium 12; Notion sets its board count in the
+       14px heading text). Badge's caption text. */
+    --_count-text: var(--area-control-xs-text);
+    --_count-leading: var(--area-control-xs-leading);
+    --_count-ink: var(--area-fg-muted);
+    --_count-plate: transparent;
+    --_count-weight: var(--area-weight-regular);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    box-sizing: border-box;
+    min-inline-size: var(--_count-height);
+    block-size: var(--_count-height);
+    padding-inline: var(--_count-gutter);
+    border-radius: var(--area-radius-full);
+    background: var(--_count-plate);
+    color: var(--_count-ink);
+    font-family: var(--area-font-sans);
+    font-size: var(--_count-text);
+    line-height: var(--_count-leading);
+    font-weight: var(--_count-weight);
+    /* Digits of equal width, so a changing count doesn't move what follows it. */
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  /* Size. */
+  .area-count--sm {
+    /* spec: 16 tall with 4 at the sides (Fluent small, Area's Indicator count). */
+    --_count-height: var(--area-space-16);
+    --_count-gutter: var(--area-space-4);
+  }
+  .area-count--md {
+    --_count-height: var(--area-space-20);
+    --_count-gutter: var(--area-space-6);
+  }
+
+  /* Tone: the ink, and the plate a soft count mixes from it. */
+  .area-count--neutral { --_count-ink: var(--area-fg-muted); }
+  .area-count--accent { --_count-ink: var(--area-fg-accent); }
+
+  /* Variant. A plain count is ink only (Notion's board groups: no plate, the heading's muted
+     ink). A soft count sits on a translucent plate, so it stays visible on a hovered or
+     selected row plate as well as on the page. */
+  .area-count--plain { --_count-plate: transparent; --_count-weight: var(--area-weight-regular); }
+  .area-count--soft {
+    /* spec: Primer's CounterLabel fill, neutral 8 at 12% (#f0 on white): 6% black; dark takes
+       10% white to register on the dark page. The accent plate is the accent surface. */
+    --_count-plate: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); /* spec */
+    /* The type ramp's one exception: a label on a fill is 500 (Badge, Button solid). */
+    --_count-weight: var(--area-weight-strong);
+  }
+  .area-count--soft.area-count--accent { --_count-plate: var(--area-accent-surface); }
+
+  /* The text a screen reader hears after the number ("3 unread"). */
+  .area-count__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (forced-colors: active) {
+    .area-count--soft { border: var(--area-border-width) solid CanvasText; }
+  }
+}

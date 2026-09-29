@@ -16,6 +16,17 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "count", name: "Count", manifest: "count", imports: "Count",
+    api: [["count / max / showZero", "nonnegative number, display cap (max+), zero visibility", "— / 99 / true"], ["label", "words a screen reader hears after the number (\"unread\")", "—"], ["variant", "plain | soft", "plain"], ["tone", "neutral | accent", "neutral"], ["size", "sm (16) | md (20)", "md"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryCount", note: "A number beside its owner's label: a nav row, a tab, a filter, a group heading. Plain by default, as Notion's board counts."},
+      {id: "soft", title: "Soft", demo: "GalleryCountSoft", note: "On a translucent plate (Primer's CounterLabel), so it stays visible on a hovered or selected row."},
+      {id: "overflow", title: "Overflow", demo: "GalleryCountOverflow", note: "Above max the count reads max+, formatted as Indicator's count."},
+      {id: "nav", title: "In a nav", demo: "GalleryCountNav", note: "The count keeps its muted ink on the current row: it annotates the row rather than naming it."},
+      {id: "tabs", title: "In tabs", demo: "GalleryCountTabs"},
+    ],
+  },
+  {
     slug: "indicator", name: "Indicator", manifest: "indicator", imports: "Indicator, IndicatorAnchor",
     api: [["status / size / outOfOffice", "availability variant; xs10 / sm12 / md16 / lg20; optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "accent | neutral | info | success | warning | danger", "danger"], ["processing / withBorder / disabled", "pulse / surface cutout / hide indicator", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["compact", "inset rectangular count and presence attachments by 4px", "false"]],
     examples: [
@@ -647,7 +658,7 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "CheckboxDefault" },
       { id: "caption", title: "With caption", demo: "CheckboxDescription" },
-      { id: "sizes", title: "Sizes", note: "Checkbox and Radio share one glyph ladder: 16px at small and medium, 20px at large. Label type and spacing follow the tier.", demo: "CheckboxSizes" },
+      { id: "sizes", title: "Sizes", note: "Checkbox and Radio share one glyph ladder: 16px at medium, 20px at large. Label type and spacing follow the tier.", demo: "CheckboxSizes" },
       { id: "states", title: "States", demo: "CheckboxStates" },
       { id: "invalid", title: "Invalid", note: "Use this only for an independently required option. A multiple-choice requirement belongs on CheckboxGroup.", demo: "CheckboxInvalid" },
       { id: "indeterminate", title: "Partial selection", note: "Use indeterminate only for a parent whose related choices are partly selected. It is a visual state, not a submitted value.", demo: "CheckboxIndeterminate" },
@@ -675,7 +686,7 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "RadioDefault" },
       { id: "orientation", title: "Horizontal orientation", demo: "RadioHorizontal" },
-      { id: "sizes", title: "Sizes", note: "Radio shares Checkbox's glyph ladder: 16px at small and medium, 20px at large. Label type and spacing follow the tier.", demo: "RadioSizes" },
+      { id: "sizes", title: "Sizes", note: "Radio shares Checkbox's glyph ladder: 16px at medium, 20px at large. Label type and spacing follow the tier.", demo: "RadioSizes" },
       { id: "selected", title: "Selected", note: "Selection fills the existing circle; it does not change the control’s outer geometry.", demo: "RadioChecked" },
       { id: "disabled", title: "Disabled", demo: "RadioDisabled" },
       { id: "description", title: "Descriptions", demo: "RadioDescription" },
@@ -1106,7 +1117,8 @@ export const COMPONENT_PAGES = [
     manifest: "alert",
     api: [
       ["tone", '"neutral" | "accent" | "info" | "danger" | "warning" | "success"', '"neutral"'],
-      ["layout", '"single-line" | "multiline"', '"single-line"'],
+      ["layout", '"single-line" | "multiline" | "banner"', '"single-line"'],
+      ["flush", "boolean: square, no side or top edges (a banner that meets its container's edges)", "false"],
       ["icon", "ReactNode", "—"],
       ["title", "ReactNode", "—"],
       ["action", "ReactNode", "—"],
@@ -1126,6 +1138,8 @@ export const COMPONENT_PAGES = [
       { id: "action", title: "Action", demo: "AlertAction" },
       { id: "multiline", title: "Multiline actions", demo: "AlertMultiline" },
       { id: "dismissible", title: "Dismissible", note: "The parent removes the alert after the optional dismiss action fires.", demo: "AlertDismissible" },
+      { id: "banner", title: "Banner", note: "A persistent, one-line announcement across a page or section, its link or status at the end. Show one at a time; placement belongs to the page.", demo: "GalleryAlertBanner" },
+      { id: "banner-flush", title: "Flush banner", note: "Flush squares the corners and drops the side and top edges, for a banner that meets its container's edges.", demo: "GalleryAlertBannerFlush" },
     ],
   },
   {
@@ -1139,8 +1153,8 @@ export const COMPONENT_PAGES = [
     slug: "skeleton",
     name: "Skeleton",
     manifest: "skeleton",
-    api: [["shape", '"text" | "circle" | "rectangle" | "rounded"', '"text"']],
-    examples: [{ id: "default", title: "Default", demo: "SkeletonDefault" }],
+    api: [["shape", '"block" | "text" | "circle"', '"block"'], ["lines", "number: paragraph lines, the last shorter", "—"], ["animated", "boolean: false draws a still placeholder", "true"], ["children / loading", "wrap the real element: it keeps its size, hidden, until loading is false", "— / true"]],
+    examples: [{ id: "default", title: "Default", demo: "SkeletonDefault" }, { id: "paragraph", title: "Paragraph", demo: "GallerySkeletonParagraph" }, { id: "wrap", title: "Wrap", demo: "GallerySkeletonWrap", note: "The placeholder takes the wrapped element's size and corner, so the layout does not move when it loads." }],
   },
   {
     slug: "spinner",

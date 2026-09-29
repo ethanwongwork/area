@@ -1,6 +1,6 @@
 # PropertyList spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 1: built))
+**Status:** accepted · 2026-09-26; batch 9 tiles refined 2026-09-28
 **Captures:** `docs/research/captures/inspector/figma--design-panel-frame--rest--light.json`
 (the fill row inside the Design panel capture)
 **Peers:** Panel (PanelSection actions, PanelRow's action column), ColorField, Button
@@ -38,6 +38,14 @@ everywhere in Area. Not TreeView (hierarchy), not Menu (commands), not PanelRow 
 | inactive | `inactive` dims the value to 50%; the buttons stay full strength so the row can be turned back on | Figma dims hidden fills |
 | names | each item's `label` names its handle ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move |
 
+## Visual pass
+
+2026-09-28 (batch 9, owner screenshots: clipped hex, wrapped effect names): the gallery's Fills, One
+item and Effects tiles take the Figma recipe's 280px panel. At default density (14px text) a 240
+panel's value column (146) cannot hold a six-digit hex beside its opacity, nor "Inner shadow" beside
+its icon; the default panel stays 240 (owner, 2026-09-27) and compact density returns inspector
+panels to Figma's 240. With the Color field and Select fixes, every row shows its whole value.
+
 ## Verification
 
 Headless Edge with real mouse and key events (`scratchpad/plist.mjs`): dragging the third fill
@@ -53,3 +61,10 @@ Unverified: touch drag on a device; screen reader output of the live region; dar
   value. The demos use a medium panel (12px inset). Options: a 12px minimum inset for panels
   with reorderable lists, or the compact-density inspector adopting Figma's 16.
 - Nesting (effects with sub-settings popovers) and multi-select are out of scope.
+
+## Feedback log
+
+- 2026-09-28 · owner: truncation in this batch → inspector tiles at 280, Color field and Select fixes
+  → no clipped value in the gallery.
+- 2026-09-28 · owner: approved (batch 9).
+- 2026-09-28 · inside a panel, items are a row gap apart and values a field gap from their actions (`--_panel-*`).

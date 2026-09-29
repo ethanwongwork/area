@@ -31,10 +31,14 @@
    * Type is three roles at every size: title, description, value.
    */
   .area-card {
-    /* spec: md, the default. 16 corner (ChatGPT's library card), 8 inset (Notion's promo
-       card). The corner follows the radius presets as 4/3 of the container role. */
-    --_card-radius: round(nearest, calc(var(--area-radius-container) * 4 / 3), 1px);
+    /* spec: md, the default. 8 inset (Notion's promo card) for media; text and controls share
+       one column 4 further in (owner 2026-09-28: "the text and buttons can be aligned and
+       slightly less offset from images by like 4px"). The corner is concentric with a default
+       Button on that column: its radius plus the column's distance from the edge (8 + 12 = 20,
+       was 16), and it follows the radius presets through the Button's radius. */
     --_card-inset: var(--area-space-8);
+    --_card-step: var(--area-space-4);
+    --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
     --_card-border: var(--area-border-width);
     /* spec (consistency pass): one title role and one body role at every size. */
     --_card-title-size: var(--area-text-md-size);
@@ -54,11 +58,9 @@
     --_card-shadow: 0 1px 2px -1px var(--_card-shadow-ink), 0 2px 8px 0 var(--_card-shadow-ink);
     /* spec: owner, neutral 25 for every media fill (#fa); dark takes the 800 rung. */
     --_card-media-fill: light-dark(var(--area-neutral-25), var(--area-neutral-800));
-    /* Derived. The content pad is half a medium control's space around the title's cap (the
-       card's font is the title's, so 1cap is the title's cap wherever this resolves): a header
-       action one control tall then centres on the cap, and text sits as far from the top as
-       from the side. */
-    --_card-content-padding: calc((var(--area-control-md) - 1cap) / 2);
+    /* Derived. The content pad is the step from the media's inset to the text column; text
+       (trimmed to its cap and baseline) sits as far from the top and bottom as from the side. */
+    --_card-content-padding: var(--_card-step);
     --_card-text-inset: calc(var(--_card-inset) + var(--_card-content-padding));
     --_card-padding: calc(var(--_card-inset) - var(--_card-border));
     --_card-gap: var(--_card-inset);
@@ -87,19 +89,19 @@
   }
 
   /* Size: corner and inset only. */
+  /* Every size keeps the 4 step and the default Button's corner: sm 8 + 6 + 4 = 18,
+     md 20, lg 8 + 12 + 4 = 24 (was 12 / 16 / 24). */
   .area-card--sm {
-    /* spec: 12 corner (the container role), 6 inset. */
-    --_card-radius: var(--area-radius-container);
     --_card-inset: var(--area-space-6);
+    --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
   }
   .area-card--md {
-    --_card-radius: round(nearest, calc(var(--area-radius-container) * 4 / 3), 1px);
     --_card-inset: var(--area-space-8);
+    --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
   }
   .area-card--lg {
-    /* spec: 24 corner (twice the container role), 12 inset. */
-    --_card-radius: calc(var(--area-radius-container) * 2);
     --_card-inset: var(--area-space-12);
+    --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
   }
 
   /* Layout. */
@@ -151,9 +153,11 @@
     background: linear-gradient(180deg, transparent 25%, var(--area-bg-surface) 70%);
     z-index: -1;
   }
+  /* Over a picture the text keeps the overlay controls' line, two insets from the card's edge
+     (one inside the media), rather than the 4 step, which would crowd the picture's edge. */
   .area-card--immersive > .area-card__content {
     align-self: end;
-    padding: calc(var(--_card-text-inset) - var(--_card-border));
+    padding: calc(var(--_card-inset) * 2 - var(--_card-border));
   }
 
   /*
@@ -281,14 +285,13 @@
     .area-card__title { text-box: trim-start cap alphabetic; }
     :is(.area-card__content > :last-child, .area-card__content > .area-card__header:last-child > .area-card__heading > :last-child):is(.area-card__description, .area-card__value) { text-box: trim-end cap alphabetic; }
     :is(.area-card__content > :last-child, .area-card__content > .area-card__header:last-child > .area-card__heading > :last-child).area-card__title { text-box: trim-both cap alphabetic; }
-    /* The action slot is one medium control tall, overhanging the content pad above and below
-       the cap it centres on; a control in it reaches the inset at the end too, concentric with
-       the corner. A Badge or marker stays on the text's edge. */
-    .area-card__header-action {
-      block-size: var(--area-control-md);
-      margin-block: calc(-1 * var(--_card-content-padding));
+    /* A control in the action slot sits on the text column's corner, concentric with the card
+       (radius 8 + 12 = 20), and the title's cap centres on it: the heading drops by half the
+       control's space around the cap. A Badge or marker stays one title line tall. */
+    .area-card__header-action:has(> :is(button, a, .area-button)) { block-size: var(--area-control-md); }
+    .area-card__header:has(> .area-card__header-action > :is(button, a, .area-button)) > .area-card__heading {
+      padding-block-start: calc((var(--area-control-md) - 1cap) / 2);
     }
-    .area-card__header-action:has(> :is(button, a, .area-button)) { margin-inline-end: calc(-1 * var(--_card-content-padding)); }
   }
   .area-card__media {
     position: relative;
@@ -410,9 +413,9 @@
   .area-card:is(:hover, :focus-within) .area-card__overlay--reveal { opacity: 1; }
   @media (hover: none) { .area-card__overlay--reveal { opacity: 1; } }
 
-  /* A row of controls at the bottom. It drops to the bottom of a taller card and, as the last
-     slot, reaches the inset on the sides and bottom, concentric with the corners (as a header
-     action does at the top). */
+  /* A row of controls at the bottom. It drops to the bottom of a taller card and sits on the
+     text column, so buttons and text share one edge and the last button is concentric with the
+     corner (as a header action is at the top). */
   .area-card__footer {
     display: flex;
     flex-wrap: wrap;
@@ -422,11 +425,10 @@
     margin-block-start: auto;
     padding-block-start: calc(var(--_card-block-gap) - var(--area-space-4));
   }
-  .area-card__content > .area-card__footer:last-child {
-    margin-inline: calc(-1 * var(--_card-content-padding));
-    margin-block-end: calc(-1 * var(--_card-content-padding));
-  }
   .area-card__footer > .area-button { flex: 0 0 auto; min-inline-size: 0; }
+  /* A footer holding only a Toolbar is a transport (the music template): centred under the
+     content rather than left-aligned (owner 2026-09-28). */
+  .area-card__footer:has(> .area-toolbar:only-child) { justify-content: center; }
   /*
    * Carousel: a row of item cards without frames that scrolls sideways. It reaches the inset
    * on both sides, like media, so its pictures line up with the card's media; items are about a
@@ -497,7 +499,7 @@
        Carbon 12-16. Controls sit 6 from the top and the side (below). */
     padding: var(--_alert-pad-block) var(--_alert-pad-inline);
     border: var(--area-border-width) solid var(--_border);
-    border-radius: var(--area-radius-container);
+    border-radius: var(--_alert-radius, var(--area-radius-container));
     background-color: var(--_bg);
     color: var(--_fg);
   }
@@ -555,21 +557,74 @@
 
   .area-alert--single-line { align-items: center; }
 
-  .area-alert--single-line .area-alert__content {
+  :is(.area-alert--single-line, .area-alert--banner) .area-alert__content {
     overflow: hidden;
     white-space: nowrap;
   }
 
-  .area-alert--single-line .area-alert__title,
-  .area-alert--single-line .area-alert__description {
+  :is(.area-alert--single-line, .area-alert--banner) :is(.area-alert__title, .area-alert__description) {
     min-inline-size: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .area-alert--single-line .area-alert__title { flex: 0 1 auto; }
-  .area-alert--single-line .area-alert__description { flex: 1 1 auto; }
+  :is(.area-alert--single-line, .area-alert--banner) .area-alert__title { flex: 0 1 auto; }
+  :is(.area-alert--single-line, .area-alert--banner) .area-alert__description { flex: 1 1 auto; }
+
+  /*
+   * Banner (docs/specs/alert.md, "Banner"): a one-line announcement across a page or section,
+   * persistent, its link or status at the end (OpenAI's business and Daybreak banners, Primer's
+   * Banner). Same tones, icon, actions and dismiss as the in-place layouts.
+   */
+  .area-alert--banner {
+    /* spec: text 12 from the top and 16 from the side (OpenAI Daybreak 12 / 16), so one line is
+       44 tall; OpenAI business 10 / 14 on a 28 line (48), Primer 8 + 1 border (55 with 36
+       actions). Corner 6: OpenAI 6 on both banners, Primer 6. */
+    --_alert-pad-block: calc(var(--area-space-12) - var(--area-border-width));
+    --_alert-pad-inline: calc(var(--area-space-16) - var(--area-border-width));
+    --_alert-radius: var(--area-radius-control-sm);
+    /* 28px controls hang 4 over the line, so they sit 8 from the top; the last one sits 8 from
+       the end too (8 into the 16 inset). */
+    --_alert-control-end: calc(var(--area-space-8) - var(--area-space-16));
+    /* A row, not the grid: absent slots (no icon, no actions) must not leave their gaps, so text
+       starts on the 16 inset and a closing link ends on it. */
+    display: flex;
+    align-items: center;
+  }
+  .area-alert--banner > .area-alert__content { flex: 1 1 auto; }
+  .area-alert--banner > :not(.area-alert__content) { flex: none; }
+  /* The corner offset is a 28px control's; a Badge or text at the end stays on the inset
+     (OpenAI business: the status pill 14 in, on its 14 inset). */
+  .area-alert--banner > .area-alert__actions:last-child:not(:has(> :is(button, .area-button):last-child)) { margin-inline-end: 0; }
+  /* spec: the link ends the row, 16 from the end when nothing follows it (OpenAI Daybreak's
+     "Learn more": 14/20 regular, underlined, 16 from the end). */
+  .area-alert--banner > .area-alert__link {
+    grid-area: link;
+    margin-inline-start: 0;
+  }
+  .area-alert--banner > .area-alert__link a {
+    color: inherit;
+    font-weight: var(--area-weight-regular);
+    text-decoration: underline;
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: var(--area-space-2);
+  }
+  .area-alert--banner > .area-alert__link a:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+
+  /* Flush: square and without side or top edges, for a banner that meets its container's
+     edges (Primer `flush`, Fluent `shape="square"`, Polaris on small screens, Ant `banner`).
+     The inset keeps its full value, the border it no longer has added back. */
+  .area-alert--flush {
+    --_alert-radius: 0px;
+    border-inline-width: 0;
+    border-block-start-width: 0;
+    padding-block-start: calc(var(--_alert-pad-block) + var(--area-border-width));
+    padding-inline: calc(var(--_alert-pad-inline) + var(--area-border-width));
+  }
 
   .area-alert--multiline {
     grid-template-areas:
@@ -818,6 +873,9 @@
     .area-popover-anchor > .area-popover--right[popover]:popover-open { position-area: right; margin-inline-start: var(--_popover-offset); position-try-fallbacks: flip-inline; }
   }
   .area-popover > *, .area-popover__body > * { min-inline-size: 0; max-inline-size: 100%; }
+  /* A popover that holds only a Calendar (a date field's picker) hugs the month grid rather than
+     taking the reading width, as Notion's date picker does (owner 2026-09-28: "extends too big"). */
+  .area-popover:has(> .area-calendar:only-child) { inline-size: max-content; }
   /* Custom SVG geometry: a 32×14 shoulder that curves smoothly out of the edge.
    * Its open stroke omits the base; the fill overlaps the shell border by one stroke. */
   .area-popover__arrow {
@@ -1125,11 +1183,8 @@
     box-shadow: 0 4px 12px -2px var(--area-shadow-color);
   }
 
-  /* The nested keycap uses the outer radius less its actual vertical inset. Its 20px
-   * box is vertically centred by construction: (28px - 20px) / 2 = 4px. */
-  .area-tooltip > .area-kbd {
-    border-radius: max(0px, calc(var(--_tooltip-shape) - var(--_tooltip-inset-block)));
-  }
+  /* The nested keycap keeps its own 6px corner (kbd.css). Its 20px box is vertically centred by
+   * construction: (28px - 20px) / 2 = 4px. */
   /* A terminal Kbd's end inset equals its measured 4px block inset. The label keeps
    * its larger reading inset on the leading side. */
   .area-tooltip:has(> .area-kbd:last-child) {

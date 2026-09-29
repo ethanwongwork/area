@@ -1,6 +1,6 @@
 # ColorField spec
 
-**Status:** in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma)
+**Status:** accepted · 2026-09-28 (owner, batch 9)
 **Captures:** `docs/research/captures/color-field/`
 **Peers:** Input (the hex field), InputGroup and NumberField (split opacity), ColorSwatch
 (preview), ColorPicker (value row), Field
@@ -87,7 +87,9 @@ From the capture nodes (the component is node 0 in each):
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | width | 144 md (`96 + 48`), 128 sm, 160 lg (`color.css:106-108`) | Figma value fields 144 wide | Figma's inspector rows stretch (156, 184) |
-| alpha width | + 64 (208 md); opacity 72 (`color.css:109-113`) | Figma opacity 54 | Reason for 72 not found (searched `color.css`, PRIOR_DECISIONS.md, `pages.mjs`); Area's 14px type is wider than Figma's 11px |
+| alpha width | + 48 (192 md); **opacity sized to its content**: 8 inset, three tabular digits (3ch), 4, "%", 8 inset (60 at 14px) (`color.css`) | Owner (2026-09-28: "the percentage fields … seem too large"); Figma opacity 54 with "%" in a box at the end (`input-group/figma--color-row`, live Page row) | Was a fixed 72, which left the hex 39px in a 146px Fill row, so every hex clipped |
+| opacity · unit | **"%" anchored at the end; the number starts at the inset** in a fixed three-digit box | Owner (2026-09-28): Figma anchors "%" right in colour rows; its Opacity field keeps "%" after the number | A plain NumberField keeps its unit right after the number (Opacity) |
+| hex · overflow | ellipsis at rest (full value while editing) | — | Digits are tabular; letter-heavy values such as DDDDDD (68px at 14) are wider than a narrow row |
 | chrome | Input / InputGroup; soft is flat | Owner: inherits Input's typography and inset; second pass: soft fields are flat (Figma) | Figma 24px, radius 5 |
 | swatch | ColorSwatch sm 16, radius 4, 8px inset | Input icon slot; Figma chit 14 at 5px | Area keeps its 16px icon slot |
 | type | 14/20 Geist, tabular numerals | Owner: not a monospace field | Figma 11/16 450 |
@@ -120,6 +122,14 @@ The hex input forwards its ref and native props (`ColorField.tsx:67-79`). Accept
 
 ## Visual pass
 
+2026-09-28, owner feedback and Claude in Chrome (batch 9): Figma's Page colour row live (hex, then
+"100" 8 after the rule and "%" at the end) beside the gallery's Fill rows and alpha tile at 2x. The
+opacity part now hugs "100 %", "%" ends on the inset, and every Fill row shows its full hex (real
+text 57-59px; the rows had 39-51). Measured across the gallery: no Color field hex, NumberField or
+Select text overflows its box. Dark theme not compared.
+
+Earlier note:
+
 The gallery shows ColorField's tiles in named groups; the sizes tile is new.
 Unverified: Figma side by side at the same zoom, dark theme.
 
@@ -144,3 +154,7 @@ Compared the Area captures (`color-field/area--*`) with `input-group/figma--colo
   `color-field/area--sizes`, `area--alpha`.
 - 2026-09-27 · third pass → open question settled, value kept: the hex / opacity rule stays
   → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-28 · owner: percentage fields too large, anchor "%" right as Figma's colour rows do, truncation
+  in this batch → opacity sized to its content with "%" at the end; hex ellipsis at rest → every
+  gallery Color field measured, no hex clipped; Figma Page row compared live.
+- 2026-09-28 · owner: approved (batch 9).

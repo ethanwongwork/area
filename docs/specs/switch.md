@@ -96,7 +96,7 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 | track · long | 2 × height + 4 (44 at md), thumb +8 (switch.css:38) | Area composition | — |
 | on fill | `neutral-solid` | Owner 2026-09-26 | ChatGPT and Untitled use brand blue; `tone="accent"` |
 | on hover | `neutral-solid-hover` #1d1d1d | Untitled darkens on hover | ChatGPT does not change |
-| off fill | `fill-toggle` #d4d4d4, edge `edge-control` #e2e2e2 | Notion's off track ≈ rgb(219, 218, 215); Area toggle-fill role | Area is about one step darker than Notion; edge kept (third pass), see below |
+| off fill | **`edge-control` #e2e2e2, edge the same** (owner 2026-09-28: lighter); hover `edge-control-hover` #d4 | Notion's off track ≈ rgb(219, 218, 215); Area toggle-fill role | Area is about one step darker than Notion; edge kept (third pass), see below |
 | thumb | `bg-surface`, `shadow-1` | ChatGPT white thumb with an 8% shadow | Notion's thumb has no shadow |
 | disabled | 50% on the whole label (switch.css:97) | Audit shared rule; Untitled 50% | — |
 | read-only | **full paint, default cursor** (switch.css:98), in forced colours too (switch.css:121-123); changes blocked | Second pass, item 9; third pass for forced colours | Was the disabled 50%, which hid that the value is set |
@@ -149,7 +149,14 @@ The gallery groups the tiles (Default, Variants, Tones,
 Sizes, Layout, States, Behavior); the long track moved from Layout to Variants in the third
 pass. Beside ChatGPT's 32 × 20 the md track now matches exactly;
 beside Notion's 30 × 18 it is 2px longer and taller with the same travel. Read-only now
-reads as set. Unverified: dark theme captures, Notion and ChatGPT hover.
+reads as set.
+
+2026-09-28 (batch 14, Claude in Chrome): ChatGPT's settings switches (`chatgpt--switch-{off,on}--
+{rest,hover}--light`): 32 × 20, off track 10% black (≈ #e6 on white), on #3a83f7, and hover
+changes neither. Area's md track matches in size; its off fill #d4 is darker than both ChatGPT
+(≈ #e6) and Notion (≈ #dbdad7): open for the owner (the fill is the shared toggle role and the
+edge carries contrast). Owner: "lighten is better" → off track #e2 (was #d4), hover #d4 (was
+#c5), edge equal to the fill so none shows. Unverified: dark theme.
 
 ## Verification
 
@@ -158,6 +165,12 @@ captures. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
 ## Feedback log
+
+- 2026-09-28 · owner approved batch 14 → Complete.
+
+- 2026-09-28 · owner: lighten the off track → `--_off` = `edge-control` (#e2, contrast-more mix
+  kept), hover `edge-control-hover` (#d4), track edge follows the fill (checked hover too).
+  `fill-toggle` is unchanged for Slider and the other shared users.
 
 - 2026-09-26 · cohesion audit → disabled dims to 50% and keeps the on fill (was a grey
   track) → `area--disabledchecked` (opacity 0.5, fill rgb(40)).

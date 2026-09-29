@@ -35,7 +35,7 @@ actual specimens. Current families include:
   Composer, native Select, ColorField, ColorSwatchPicker, ColorPicker and Calendar.
 - Navigation: Nav, Tabs, Menu and TreeView.
 - Breadcrumb shows linked ancestors, a current page and an optional collapsed marker; it is in review.
-- Labels and identity: Badge/BadgeGroup, Indicator/IndicatorAnchor (Presence is its
+- Labels and identity: Badge/BadgeGroup, Count, Indicator/IndicatorAnchor (Presence is its
   compatibility export), Avatar, Kbd/KbdGroup and Code/Token.
 - Feedback: Alert, Toast, Tooltip, Progress, Spinner and Skeleton.
 - Structure and content: Card, Panel, Dialog, Popover, Separator, Table and CodeBlock.
@@ -152,18 +152,20 @@ Chakra/Ark, Spectrum 2) across about 95 component jobs.
   tag mode → Menu keyboard, submenus, ContextMenu and CommandPalette → ColorPicker paints →
   Disclosure/Accordion → DatePicker family → Resizable and ScrollArea → Drawer and
   AlertDialog → chat message primitives → FileUpload → HoverCard and Toggletip.
-### Proposals from the 2026-09-27 survey (not started; owner decides)
+### Count and Banner, from the 2026-09-27 survey (built 2026-09-28, in review)
 
 [Survey](research/split-count-banner-survey.md):
-- **Count:** counts next to a label (Nav, Tabs, Segmented, filter chips) become their own small
+- **Count — built** ([spec](specs/count.md)): counts next to a label (Nav, Tabs, Segmented, filter chips) become their own small
   element, not a Badge: 16 / 20 tall, 12px tabular numerals, pill, `soft` or `plain`, following
   the owner row's selected and hover paint, sharing Indicator's number formatting (99+). Six
   systems separate it (Primer CounterLabel, Atlassian, Carbon, Ant, Spectrum, shadcn). The Nav
-  and Tabs demos use a plain Badge today.
-- **Banner:** a page or section announcement (OpenAI business and Daybreak banners) is an Alert
+  and Tabs demos now use Count. Plain is the default (Notion); the ink stays fixed on the owner's
+  current row.
+- **Banner — built** ([Alert spec](specs/alert.md#banner-2026-09-28)): a page or section announcement (OpenAI business and Daybreak banners) is an Alert
   layout (`layout="banner"`: section width, one line, action or status at the end), not a new
   component and not a Toast (Primer Banner, Fluent MessageBar, Polaris, Ant Alert `banner`).
-  A bold, promotional fill waits for an owner request.
+  Built with OpenAI's 12 / 16 inset and 6 corners, plus `flush`. A bold, promotional fill waits
+  for an owner request.
 
 ### Product-specific components (ChatGPT, Notion, Figma), 2026-09-26
 

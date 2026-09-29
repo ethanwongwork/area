@@ -54,6 +54,7 @@ export { Theme, useTheme, type ThemeProps, type AxisSelection } from "./componen
 export { Badge, type BadgeProps } from "./components/Badge.tsx";
 export { BadgeGroup, type BadgeGroupProps } from "./components/BadgeGroup.tsx";
 export { Indicator, IndicatorAnchor, type IndicatorProps, type IndicatorAnchorProps } from "./components/Indicator.tsx";
+export { Count, type CountProps } from "./components/Count.tsx";
 
 export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps, type ColorModel, type ColorView } from "./components/ColorPicker.tsx";
 export { AREA_COLOR_GRID } from "./components/color-grid.ts";

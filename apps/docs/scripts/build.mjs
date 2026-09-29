@@ -290,7 +290,7 @@ ${slug === "code-block" ? '<script type="module" src="./code-block-demos.js"></s
 }
 
 /** The three tile sizes the gallery grid places: whole cells of one square unit. */
-const GALLERY_SPANS = new Set(["1x1", "1x2", "2x1", "2x2", "2x3", "2x4", "2x5"]);
+const GALLERY_SPANS = new Set(["1x1", "2x1", "2x2", "2x3", "2x4", "2x5", "4x2"]);
 
 /* One tile per public component family. Compound pieces appear inside their parent. */
 function galleryPage({ families = null } = {}) {
@@ -302,20 +302,20 @@ function galleryPage({ families = null } = {}) {
   const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {
     calendar: [
-      { id: "default", title: "Date", demo: "GalleryCalendar", span: "1x2" },
-      { id: "range", title: "Range", demo: "GalleryCalendarRange", span: "1x2" },
-      { id: "range-two-months", title: "Two months", demo: "GalleryCalendarTwoMonths", span: "2x2" },
-      { id: "multiple", title: "Multiple", demo: "GalleryCalendarMultiple", span: "1x2" },
-      { id: "unavailable", title: "Unavailable", demo: "GalleryCalendarUnavailable", span: "1x2" },
-      { id: "monday", title: "Monday", demo: "GalleryCalendarMonday", span: "1x2" },
-      { id: "plain", title: "Plain", demo: "GalleryCalendarPlain", span: "1x2" },
-      { id: "tone-accent", title: "Accent", demo: "GalleryCalendarAccent", span: "1x2" },
-      { id: "days-circle", title: "Circle", demo: "GalleryCalendarCircle", span: "1x2" },
-      { id: "days-tile", title: "Tile", demo: "GalleryCalendarTile", span: "1x2" },
-      { id: "markers", title: "Markers", demo: "GalleryCalendarMarkers", span: "1x2" },
-      { id: "layout-week", title: "Week", demo: "GalleryCalendarWeek", span: "2x1" },
+      { id: "default", title: "Date", demo: "GalleryCalendar", span: "2x2" },
+      { id: "range", title: "Range", demo: "GalleryCalendarRange", span: "2x2" },
+      { id: "range-two-months", title: "Two months", demo: "GalleryCalendarTwoMonths", span: "4x2" },
+      { id: "multiple", title: "Multiple", demo: "GalleryCalendarMultiple", span: "2x2" },
+      { id: "unavailable", title: "Unavailable", demo: "GalleryCalendarUnavailable", span: "2x2" },
+      { id: "monday", title: "Monday", demo: "GalleryCalendarMonday", span: "2x2" },
+      { id: "plain", title: "Plain", demo: "GalleryCalendarPlain", span: "2x2" },
+      { id: "tone-accent", title: "Accent", demo: "GalleryCalendarAccent", span: "2x2" },
+      { id: "days-circle", title: "Circle", demo: "GalleryCalendarCircle", span: "2x2" },
+      { id: "days-tile", title: "Tile", demo: "GalleryCalendarTile", span: "2x2" },
+      { id: "markers", title: "Markers", demo: "GalleryCalendarMarkers", span: "2x2" },
+      { id: "layout-week", title: "Week", demo: "GalleryCalendarWeek", span: "2x2" },
       { id: "composition-schedule", title: "Schedule", demo: "GalleryCalendarSchedule", span: "2x2" },
-      { id: "disabled", title: "Disabled", demo: "GalleryCalendarDisabled", span: "1x2" },
+      { id: "disabled", title: "Disabled", demo: "GalleryCalendarDisabled", span: "2x2" },
     ],
     "color-picker": [
       { id: "default", title: "Fill", demo: "GalleryColorPicker", span: "2x2" },
@@ -632,7 +632,6 @@ function galleryPage({ families = null } = {}) {
     ],
     checkbox: [
       { id: "default", title: "Default", demo: "GalleryCheckbox" },
-      { id: "size-small", title: "Size / small", demo: "GalleryCheckboxSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GalleryCheckboxMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryCheckboxLarge" },
       { id: "selected", title: "Selected", demo: "GalleryCheckboxSelected" },
@@ -640,7 +639,9 @@ function galleryPage({ families = null } = {}) {
       { id: "partial", title: "Partial selection", demo: "GalleryCheckboxIndeterminate" },
       { id: "caption", title: "With caption", demo: "GalleryCheckboxCaption" },
       { id: "leading-visual", title: "With leading visual", demo: "GalleryCheckboxLeadingVisual" },
-      { id: "card", title: "Variant / card", demo: "GalleryCheckboxCard" },
+      { id: "card", title: "Variant / card", demo: "GalleryCheckboxCard", span: "2x1" },
+      { id: "card-tile", title: "Layout / card tile", demo: "GalleryCheckboxCardTile", span: "2x1" },
+      { id: "card-accent", title: "Card / accent", demo: "GalleryCheckboxCardAccent", span: "2x1" },
       { id: "invalid", title: "Invalid", demo: "GalleryCheckboxInvalid" },
       { id: "invalid-selected", title: "Invalid / selected", demo: "GalleryCheckboxInvalidChecked" },
       { id: "disabled", title: "Disabled", demo: "GalleryCheckboxDisabled" },
@@ -653,7 +654,6 @@ function galleryPage({ families = null } = {}) {
     ],
     radio: [
       { id: "default", title: "Default", demo: "GalleryRadio" },
-      { id: "size-small", title: "Size / small", demo: "GalleryRadioSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GalleryRadioMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryRadioLarge" },
       { id: "selected", title: "Selected", demo: "GalleryRadioSelected" },
@@ -662,6 +662,8 @@ function galleryPage({ families = null } = {}) {
       { id: "invalid", title: "State / invalid", demo: "RadioInvalid" },
       { id: "description", title: "Description", demo: "RadioDescription" },
       { id: "horizontal", title: "Horizontal", demo: "RadioHorizontal" },
+      { id: "card", title: "Variant / card", demo: "GalleryRadioCard", span: "2x1" },
+      { id: "card-tile", title: "Layout / card tile", demo: "GalleryRadioCardTile", span: "2x1" },
     ],
     field: [
       { id: "default", title: "Default", demo: "FieldDefault" },
@@ -814,6 +816,25 @@ function galleryPage({ families = null } = {}) {
       { id: "action", title: "Composition / actions single line", demo: "GalleryAlertAction", span: "2x1" },
       { id: "multiline", title: "Layout / multiline", demo: "GalleryAlertMultiline", span: "2x1" },
       { id: "dismissible", title: "Behavior / dismissible", demo: "GalleryAlertDismissible", span: "2x1" },
+      { id: "layout-banner", title: "Layout / banner", demo: "GalleryAlertBanner", span: "2x1" },
+      { id: "layout-banner-flush", title: "Layout / banner flush", demo: "GalleryAlertBannerFlush", span: "2x1" },
+      { id: "banner-icon", title: "Composition / banner icon", demo: "GalleryAlertBannerIcon", span: "2x1" },
+      { id: "banner-status", title: "Composition / banner status", demo: "GalleryAlertBannerStatus", span: "2x1" },
+      { id: "banner-dismissible", title: "Behavior / banner dismissible", demo: "GalleryAlertBannerDismissible", span: "2x1" },
+    ],
+    count: [
+      { id: "default", title: "Default", demo: "GalleryCount" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryCountSoft" },
+      { id: "tone-accent", title: "Tone / accent", demo: "GalleryCountAccent" },
+      { id: "variant-soft-tone-accent", title: "Soft / accent", demo: "GalleryCountSoftAccent" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryCountSizeSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryCountSizeMd" },
+      { id: "single-digit", title: "Content / single digit", demo: "GalleryCountSingleDigit" },
+      { id: "overflow", title: "Content / overflow", demo: "GalleryCountOverflow" },
+      { id: "label", title: "Content / screen reader label", demo: "GalleryCountLabel" },
+      { id: "zero-hidden", title: "State / zero hidden", demo: "GalleryCountZeroHidden" },
+      { id: "nav", title: "Composition / nav", demo: "GalleryCountNav", span: "2x1" },
+      { id: "tabs", title: "Composition / tabs", demo: "GalleryCountTabs", span: "2x1" },
     ],
     card: [
       { id: "default", title: "Default", demo: "CardVertical", span: "2x2" },
@@ -848,6 +869,18 @@ function galleryPage({ families = null } = {}) {
       { id: "chord", title: "Chord", demo: "GalleryKbdChord" },
       { id: "sequence", title: "Sequence", demo: "GalleryKbdSequence" },
       { id: "on-emphasis", title: "Appearance / on emphasis", demo: "GalleryKbdOnEmphasis" },
+      { id: "template-in-menu", title: "Template / menu", demo: "GalleryKbdInMenu", span: "2x2" },
+      { id: "template-in-command-palette", title: "Template / command palette", demo: "GalleryKbdInCommandPalette", span: "2x2" },
+      { id: "template-in-search-field", title: "Template / search field", demo: "GalleryKbdInSearchField" },
+      { id: "template-in-nav", title: "Template / nav", demo: "GalleryKbdInNav", span: "2x1" },
+      { id: "template-in-outline-button", title: "Template / outline button", demo: "GalleryKbdInOutlineButton" },
+      { id: "template-in-ghost-button", title: "Template / ghost button", demo: "GalleryKbdInGhostButton" },
+      { id: "template-in-soft-button", title: "Template / soft button", demo: "GalleryKbdInSoftButton" },
+      { id: "template-in-small-button", title: "Template / small button", demo: "GalleryKbdInSmallButton" },
+      { id: "template-in-large-button", title: "Template / large button", demo: "GalleryKbdInLargeButton" },
+      { id: "template-in-footer", title: "Template / dialog footer", demo: "GalleryKbdInFooter", span: "2x1" },
+      { id: "template-in-text", title: "Template / running text", demo: "GalleryKbdInText", span: "2x1" },
+      { id: "template-in-table", title: "Template / shortcut table", demo: "GalleryKbdInTable", span: "2x1" },
     ],
     breadcrumb: [
       { id: "default", title: "Default", demo: "GalleryBreadcrumb" },
@@ -885,12 +918,16 @@ function galleryPage({ families = null } = {}) {
       { id: "spacing-normal", title: "Spacing / normal", demo: "GallerySeparatorSpacing" },
     ],
     skeleton: [
-      { id: "text", title: "Text", demo: "GallerySkeleton" },
-      { id: "circle", title: "Circle", demo: "GallerySkeletonCircle" },
-      { id: "rectangle", title: "Rectangle", demo: "GallerySkeletonMedia" },
-      { id: "rounded", title: "Rounded", demo: "GallerySkeletonRounded" },
-      { id: "type-height", title: "Type height", demo: "GallerySkeletonType", span: "2x2" },
-      { id: "card", title: "Card composition", demo: "GallerySkeletonCard", span: "2x2" },
+      { id: "default", title: "Default", demo: "GallerySkeleton", span: "2x1" },
+      { id: "shape-text", title: "Shape / text", demo: "GallerySkeletonText", span: "2x1" },
+      { id: "shape-circle", title: "Shape / circle", demo: "GallerySkeletonCircle", span: "2x1" },
+      { id: "variant-static", title: "Variant / static", demo: "GallerySkeletonStatic", span: "2x1" },
+      { id: "paragraph", title: "Content / paragraph", demo: "GallerySkeletonParagraph", span: "2x1" },
+      { id: "type-height", title: "Content / type height", demo: "GallerySkeletonType", span: "2x1" },
+      { id: "wrap", title: "Behavior / wrap", demo: "GallerySkeletonWrap", span: "2x1" },
+      { id: "list", title: "Composition / list", demo: "GallerySkeletonList", span: "2x1" },
+      { id: "media-object", title: "Composition / media object", demo: "GallerySkeletonMediaObject", span: "2x1" },
+      { id: "card", title: "Composition / card", demo: "GallerySkeletonCard", span: "2x1" },
     ],
     progress: [
       { id: "default", title: "Default", demo: "GalleryProgress" },
@@ -993,7 +1030,7 @@ function galleryPage({ families = null } = {}) {
       if (!demo) throw new Error(`Gallery specimen missing: ${example.demo}`);
       const id = `${component.slug}-${example.id}`;
       const span = example.span ?? "1x1";
-      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 1x2, 2x1, 2x2, 2x3, 2x4 or 2x5.`);
+      if (!GALLERY_SPANS.has(span)) throw new Error(`Gallery specimen "${example.demo}" spans ${span}; tiles are 1x1, 2x1, 2x2, 2x3, 2x4, 2x5 or 4x2 (no tall single-column tiles).`);
       const name = specimenName(example, component.slug);
       const group = !hasDefault && index === 0 ? "Default" : (example.group ?? specimenGroup(name, component.slug));
       const label = group === "Default" && !hasDefault ? name : specimenLabel(name, group);
@@ -1015,7 +1052,7 @@ function galleryPage({ families = null } = {}) {
     const phase = phases(component, pass);
     passes.push({ component, pass, phase });
     const defaultSpecimen = specimens.find(example => specimenName(example, component.slug) === "default") ?? specimens[0];
-    const review = passReview(component, pass, demos[defaultSpecimen.demo].html, reviewDemo ? demoMarkup(reviewName, reviewDemo.html) : "", phase);
+    const review = passReview(component, pass, demos[defaultSpecimen.demo].html, reviewDemo ? demoMarkup(reviewName, reviewDemo.html) : "", phase, defaultSpecimen.span ?? "1x1");
     const batchIndex = batchOf(component.slug);
     const headingKey = finished.has(component.slug) ? "complete" : batchIndex;
     let heading = "";
@@ -1247,7 +1284,7 @@ const inertCopy = html => html
   .replace(/\s(id|for|aria-labelledby|aria-describedby|aria-controls|aria-activedescendant|aria-owns|popovertarget|list)="[^"]*"/g, "")
   .replace(/\sname="([^"]*)"/g, ' name="pass-$1"')
   .replace(/\sdata-[a-z-]+-demo="[^"]*"/g, "");
-function passReview(component, pass, specimenHtml, beforeAfter, phase = phases(component, pass)) {
+function passReview(component, pass, specimenHtml, beforeAfter, phase = phases(component, pass), span = "1x1") {
   const products = Object.entries(pass.captures).map(([source, count]) => `${PRODUCTS[source]} ${count}`).join(", ");
   const checks = [
     ["Audit", pass.audited, pass.audited ? `Shared-rule audit (docs/research/cohesion-audit.md); spec docs/specs/${component.slug}.md` : "No audited spec"],
@@ -1261,7 +1298,7 @@ function passReview(component, pass, specimenHtml, beforeAfter, phase = phases(c
   return `<section class="docs-gallery-review docs-pass" data-pass="${pass.state}" aria-labelledby="gallery-review-${component.slug}">
         <div class="docs-pass__head"><h3 class="docs-visual-gallery__tile-title" id="gallery-review-${component.slug}">Phases</h3>${passBadge(...label)}</div>
         <ol class="docs-pass__checks">${checks.map(([name, done, evidence]) => `<li class="docs-pass__check" data-done="${done === true || done === "done"}"><span class="docs-pass__status">${passBadge(done === true || done === "done" ? "success" : "neutral", done === true || done === "done" ? "Done" : done === "half" ? "Captured" : "To do")}</span><span class="docs-pass__check-name">${name}</span><span class="docs-pass__evidence">${escapeHtml(evidence)}</span></li>`).join("")}</ol>
-        <div class="docs-pass__stage" inert aria-hidden="true"><div class="docs-pass__zoom">${inertCopy(specimenHtml)}</div></div>
+        <div class="docs-pass__stage" inert aria-hidden="true"><div class="docs-pass__zoom" data-span="${span}">${inertCopy(specimenHtml)}</div></div>
         ${beforeAfter ? `<div class="docs-gallery-review__body">${beforeAfter}</div>` : ""}
       </section>`;
 }
@@ -1274,8 +1311,8 @@ function demoMarkup(name, html) {
   // Every code block is hydrated: copy, the language picker and show/hide are behaviour.
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
-  if (["GalleryTableSelectable", "GalleryTextareaCount"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryTableSelectable", "GalleryTextareaCount", "GalleryInputDate"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // The carousel's previous / next Buttons page the row.
   if (name === "GalleryCardCarousel") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryMenu")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
