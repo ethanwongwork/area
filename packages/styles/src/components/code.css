@@ -137,7 +137,8 @@
    * lines and a badge with a swatch must not.
    */
   .area-code {
-    --_code-bg: var(--area-bg-code);
+    /* spec: inline code keeps the 25 rung (#fafafa) now that the block's ground is the page. */
+    --_code-bg: var(--area-bg-stripe);
     --_code-edge: var(--area-border-decorative);
     --_code-text: var(--area-fg-default);
 

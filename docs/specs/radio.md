@@ -134,6 +134,9 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
 
 - 2026-09-28 · owner approved batch 14 → Complete.
 
+- 2026-09-28 · owner: chosen card stroke darker, not thicker → 1px border in the checked colour,
+  inset ring removed (shared with Checkbox, `choice.css`; see checkbox.md).
+
 - 2026-09-28 · owner references (plan and registration pickers) → Radio gains Checkbox's card
   variant and row / tile layouts, with `leadingVisual` and `caption` (docs/specs/checkbox.md,
   feedback log) → gallery `card`, `card-tile`.

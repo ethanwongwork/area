@@ -180,4 +180,68 @@ export const VALIDATED_PASSES = {
     date: "2026-09-28",
     against: "Notion's table view (row height, rules, header ink, cells)",
   },
+  "badge-group": {
+    date: "2026-09-28",
+    against: "Notion's multi-select table cells on a public page (tag geometry, gap between tags and between wrapped lines)",
+  },
+  "hover-card": {
+    date: "2026-09-28",
+    against: "Notion's sub-page link preview, live (surface, corner, ring, lift, type), and the web link preview on file",
+  },
+  "context-menu": {
+    date: "2026-09-28",
+    against: "Notion's sidebar page menu, right-click, live (position, lift, rows, icons, type, shortcuts)",
+  },
+  "command-palette": {
+    date: "2026-09-28",
+    against: "Notion's search and ChatGPT's search-chats palettes, live via cmd+K (surface, field, headings, rows, highlight)",
+  },
+  message: {
+    date: "2026-09-28",
+    against: "ChatGPT's conversation, live (user bubble rest and hover actions, prose, assistant actions)",
+  },
+  composer: {
+    date: "2026-09-28",
+    against: "ChatGPT's home composer, live (size, corner, ring and lift, text)",
+  },
+  "prompt-suggestions": {
+    date: "2026-09-28",
+    against: "ChatGPT's home suggestions, live (rows, offset, hover wash, ink, dismiss)",
+  },
+  "model-picker": {
+    date: "2026-09-28",
+    against: "ChatGPT's composer model picker, live (trigger, menu surface, rows with notes, check)",
+  },
+  "scroll-to-latest": {
+    date: "2026-09-28",
+    against: "ChatGPT's scroll-to-bottom button, live (size, ring, fill, glyph, position, hover)",
+  },
+  tabs: {
+    date: "2026-09-28",
+    against: "Notion's database view tabs, live (size, corner, type, selected and hover wash, ink)",
+  },
+  breadcrumb: {
+    date: "2026-09-28",
+    against: "Notion's topbar page path, live (items, type, separator, hover plate)",
+  },
+  code: {
+    date: "2026-09-28",
+    against: "ChatGPT's inline code in a conversation, live (size, fill, corner, inset)",
+  },
+  "code-block": {
+    date: "2026-09-28",
+    against: "ChatGPT's code block in a conversation, live (shell, header, buttons, code type)",
+  },
+  separator: {
+    date: "2026-09-28",
+    against: "Notion's page-menu rules, live, and ChatGPT's settings dividers on file (weight, ink, inset)",
+  },
+  dialog: {
+    date: "2026-09-28",
+    against: "ChatGPT's keyboard-shortcuts dialog, live (width, corner, lift, title, close rest and hover, footer button inset)",
+  },
+  tooltip: {
+    date: "2026-09-28",
+    against: "ChatGPT's sidebar-toggle tooltip with its shortcut, live (height, corner, type, fill, inline keycap); unchanged since 2026-09-25",
+  },
 };

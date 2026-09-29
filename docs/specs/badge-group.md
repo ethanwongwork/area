@@ -1,6 +1,6 @@
 # Badge group spec
 
-**Status:** accepted · 2026-09-25 (first pass under the capture workflow)
+**Status:** accepted · 2026-09-28 (batch 15, group gap 6 / 8; first accepted 2026-09-25)
 **Captures:** `docs/research/captures/badge-group/`
 **Peers:** Badge (items and the overflow), AvatarGroup (overflow as a member of the
 group), Popover (overflow surface), Table and Card (host compositions)
@@ -33,7 +33,7 @@ its own; the overflow is a badge. Not Badge group: a filter bar of selectable ch
 | Id | Type | What | Link / commit / path | License | Captures |
 |---|---|---|---|---|---|
 | primer | design system (rendered) | LabelGroup truncated after 5 labels, overflow opened | primer.style/product/components/label-group (2026-09-25). Source not pinned in this pass | MIT | `primer--group-truncated-5--expanded--light` |
-| notion | target product | Multi-select tags would show group spacing | app.notion.com, logged in (Edge), 2026-09-25 | evidence only | none |
+| notion | target product | Multi-select cells in a table view (3 tags wrapping to two lines; 11 tags) on a public Notion page, since the owner's workspace has no multi-select | thomasfrank.notion.site "Count multi-select tags", Claude in Chrome, 2026-09-28 | evidence only | `notion--multi-select-wrap--rest--light`, `notion--multi-select-many--rest--light` |
 | area | this system | The four gallery tiles after this pass | localhost gallery | — | `area--group-*` (4) |
 
 Target products searched without an equivalent:
@@ -56,7 +56,7 @@ overlay   dialog 12px radius, 8px padding, all labels, close button
 
 ```
 area BadgeGroup
-shell     div.area-badge-group flex, gap 4 (wraps unless overlay)   owns: gap
+shell     div.area-badge-group flex, gap 6 / 8 (wraps unless overlay)  owns: gap
   item    span.area-badge-group__item inline-flex                    owns: nothing visual
   action  button.area-badge.area-badge-group__overflow-trigger      a Badge of the group's size
 overlay   div.area-popover.area-badge-group__overflow-content        Popover surface, hidden items only
@@ -85,7 +85,7 @@ The Area action padding is 7px plus the 1px border, the Badge md gutter of 8.
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| shell · gap | 4 (both axes) | Primer 4 | — |
+| shell · gap | **6 between lines, 8 between badges** (the overflow Popover the same) | Notion multi-select cell: row 6, column 8, set as flex gaps; two lines of 20px tags 46 tall (`notion--multi-select-wrap`) | Was Primer's 4 both ways; the target product outranks the design system |
 | action · shape and size | A neutral soft Badge at the group's size ("+N"; md 20 by default) | Peer: AvatarGroup renders its overflow as an avatar of the group's size | Primer uses a 28px invisible small button with 12px text. Beside 20px badges it made the row 28px tall and set the count smaller than the labels |
 | action · size source | The first child's `size` prop | — | Groups mix sizes rarely; the first badge sets the row |
 | action · ink | `fg-muted` (neutral Badge) | Badge spec | — |
@@ -133,14 +133,20 @@ corner 4) the tag geometry matches (Badge). Not validated: no product shows a gr
 owner's workspace (Notion's tasks board has single tags per group header). Unverified: a Notion multi-select cell's tag gap
 (no multi-select was reachable in the owner's workspace), dark theme.
 
+2026-09-28, live in Claude in Chrome: Notion's multi-select cell (public page, see Sources) beside
+the gallery. Tags match Badge md (20 tall, corner 4, 6 sides); the spacing did not: Notion sets 8
+between tags and 6 between wrapped lines, Area 4 and 4. Changed to 6 / 8; the wrap tile is now 46
+tall, as Notion's two-line cell. The "+N" trigger keeps the column gap.
+
 ## Verification
 
 - 1 Primer capture and 4 Area captures, checksums verified.
 - `npm run build:docs` (docs audit), `test:badge` (9), `typecheck`, `test:contracts` (14),
   `test:preview` (4), `scripts/validate-badge.mjs` (80 Badge captures, 0 failing): all pass.
 - Unverified: keyboard focus ring on the trigger (not reached with the real Tab key in
-  this pass), dark theme, Notion multi-select spacing (no data), Primer source at a
-  pinned commit.
+  this pass), dark theme, Primer source at a pinned commit.
+- 2026-09-28: 2 Notion captures (public page, redacted) and the 4 Area captures retaken after
+  the gap change; checksums verified. The wrap tile is 46 tall, as Notion's two-line cell.
 
 ## Feedback log
 
@@ -151,3 +157,8 @@ owner's workspace (Notion's tasks board has single tags per group header). Unver
   declined by the 2026-09-24 decision) → Complete in `component-status.mjs`.
 - 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-28 · owner: "do claude chrome for badge group" → the owner's workspace has no
+  multi-select (sidebar databases scanned read-only), so a public Notion page was measured:
+  multi-select tags 20 tall, corner 4, 6 sides (Badge md matches), flex gaps 6 between lines and
+  8 between tags. Area's group gap 4 / 4 (Primer) → 6 / 8, in the group and its overflow
+  Popover. Back to In review.

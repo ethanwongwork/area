@@ -377,12 +377,15 @@
   }
 
   /*
-   * An outline or ghost button in the neutral family reads better with body-text
-   * foreground than with the muted tone colour, since there is no hue to carry meaning.
+   * spec (owner, 2026-09-28: "lighten all ghost and outline buttons slightly, since i prefer
+   * lighter colors"): the quieter neighbours of solid take an ink between body text and muted,
+   * three quarters of the way to muted (#28 → about #58 in light). ChatGPT's quiet controls sit
+   * there too: scroll-to-bottom glyph #5d, composer icons #5d. Derived from the two roles so it
+   * follows every theme and contrast scope; a selected toggle returns to body ink below.
    */
   .area-button--neutral.area-button--outline,
   .area-button--neutral.area-button--ghost {
-    --_fg: var(--area-fg-default);
+    --_fg: color-mix(in oklab, var(--area-fg-default), var(--area-fg-muted) 75%); /* spec */
   }
 
   /*

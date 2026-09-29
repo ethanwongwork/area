@@ -153,7 +153,13 @@ Forced colours: tab focus is listed in `forced-colors.css:14`; the indicator is 
 
 ## Visual pass
 
-Not inspected in this spec pass. Unverified: Notion's Share tabs side by side on screen,
+2026-09-28 (batch 21), live in Claude in Chrome on the owner's "returns" database (read only): the
+view tabs re-measured as 2026-09-26 (32 tall, corner 20, 6 / 12, 14/16.8 500; selected a 5% warm
+wash in default ink, rest muted #7d, 1 apart). Hover, first captured (`notion--view-tab--hover`):
+the same 5% wash, the ink stays muted, as Area's foreground-fixed rule. Notion's view tabs are
+pills, Area's Segmented shape; Area's Tabs follow Notion's underline tabs (Share popover): in the
+gallery 32 tall, 20 apart, 14/20 400, selected #28 over rest #66 with the 2px rounded indicator.
+Type size matches (14); weight stays 400 by the type ramp (Notion 500). No change. Unverified:
 dark theme.
 
 ## Verification

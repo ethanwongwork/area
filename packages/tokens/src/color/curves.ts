@@ -129,8 +129,14 @@ export const INVERSION = {
   inverseText: { light: 25, dark: 900 },
   secondaryFill: { light: 700, dark: 200 },
   secondaryFillHover: { light: 750, dark: 100 },
-  /** Code sits one rung off the page; vivid text is measured against this actual ground. */
-  code: { light: 25, dark: 800 },
+  /**
+   * A code block's ground; vivid syntax text is measured against it. Light is the page itself
+   * (owner 2026-09-28: "can you lighten the background at all? … make the colors more
+   * vibrant/lighter"), so each syntax family clears 4.6:1 one rung lighter, at its most
+   * saturated legible rung; was 25. The block keeps its seam and header rule. Inline code keeps
+   * the 25 rung through `bg-stripe`. Dark stays one rung off the page.
+   */
+  code: { light: "white", dark: 800 },
   /** The level a translucent scrim is solved from. */
   scrim: { light: 600, dark: 950 },
 } as const satisfies Record<string, Inversion>;

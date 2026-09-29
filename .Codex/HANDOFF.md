@@ -154,6 +154,62 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
 - Chrome was a background window (`visibilityState` hidden): rest captures and clipboard worked,
   hover states were not retaken. Local captures leave through a relay on 127.0.0.1 (CORS `*`).
 
+## Batch 17 live check (2026-09-28, branch `claude/components-work-continuation-3d0d7d`)
+
+- Started from main at PR 24 (`7b5ec4c`). Dialog and Tooltip compared live with ChatGPT in Claude in
+  Chrome and recorded in `pass-status.mjs`; new capture `dialog/chatgpt--close-button--hover--light`.
+  ChatGPT's tooltip re-measured identical to the 09-25 file. No CSS change.
+- Dialog corner decided: stays 16 (set by the close, 8 + 8). ChatGPT's corner is concentric with
+  neither its close (12 + 8) nor its pill footer button; Card's rule stays Card's. Owner deferred
+  the call ("do whatever you think is best").
+- Hover card: still no live side-by-side. The Chrome window went hidden again after the relay popup
+  opened (the relay opens a window; close it, then ask the owner to bring Chrome forward).
+- Relay for captures: scratchpad `relay.mjs` on 3201. `.claude/launch.json` has `autoPort` (3000
+  is held by another session's server).
+- Owner round: Dialog body bleeds by the focus ring (a full-width field's halo was clipped);
+  chosen Checkbox / Radio card = 1px edge in the checked colour (no 2px ring); batch 13 approved
+  (Combobox Complete); Card title + description join (baseline to cap 15 → 11.6) and the last line
+  ends at its descent (md 12 → 16 below the baseline). Card stays In review.
+- Badge group Chrome pass: the owner's Notion has no multi-select, so a public page
+  (thomasfrank.notion.site) was measured: gap 6 between lines / 8 between tags (was 4 / 4, Primer).
+  Badge group back to In review. Captures from a hidden window leave through the relay by
+  `window.name` + navigating the tab to the relay (popups need a visible window).
+- Batches 15 and 16 approved (Chip, Badge group, Card Complete). Batch 17 type checked against the
+  captures; Hover card description stays 14 (owner, over Notion's 12). Palette footer plates now 8 on every side.
+- Hover card live (Notion sub-page preview) and batch 18 live (Notion context menu and search,
+  ChatGPT search palette, first capture) recorded; no CSS change. Batches 17 and 18 ready for
+  approval. Open: both products draw the palette larger than their menus (corner 16–20, rows
+  36–48); Area keeps the list model (12 / 32).
+- Chrome must stay uncovered (macOS reports a covered window as hidden). ChatGPT clears
+  `window.name` on navigation, so use the popup relay there (needs a visible window).
+- Palette footer: plates 8 on every side; the Move label 6 from the ↓ plate (was 2).
+- Batch 19 live on ChatGPT: composer and suggestions unchanged; new captures of a suggestion's
+  hover (5% wash + ink lift, which Area does not follow) and the user message's hover actions.
+  No CSS change; ready for approval.
+- Batches 17-19 approved (Hover card, Context menu, Command palette, Message, Prompt suggestions
+  Complete). Batch 20 live on ChatGPT: picker and scroll button unchanged since 09-26; new capture
+  of the scroll button's hover (no paint change). No CSS change; ready for approval. Open: both
+  ChatGPT controls use muted ink (trigger 16 #8f, glyph #5d) where Area's Buttons use default ink.
+- Owner: all neutral ghost / outline Buttons a step lighter for consistency: ink = fg-default
+  mixed 75% toward fg-muted (#56 light, 7.3:1; #cf dark, 10.8:1); selected toggles keep body ink.
+  This settles batch 20's ink question.
+- Card (owner): step 8, so text and controls sit 16 from the edge on every md card (14 / 20 at
+  sm / lg), corners 22 / 24 / 28; carousel items on the title's column with 14/20 item titles;
+  ghost header controls centre on the title's cap; a card in a well is a compact 44 row. Card
+  back to In review.
+- Batches 16 (Card again) and 20 approved. Batch 21 live on Notion: view tabs and topbar path
+  unchanged; new hover captures (view tab, path item: 5% warm wash, ink fixed, as Area). No
+  change; Tabs and Breadcrumb were already Complete.
+- Batch 22 live: ChatGPT inline code (first capture) and code block, Notion menu rules. No change;
+  Code block ready for approval (the last family in review). Open: ChatGPT's code block uses a 24
+  corner and 12/20 code where Area keeps 12 and 14/20 (owner decisions).
+- The dev server restarted on port 3000 (same worktree) after the app stopped 51597.
+- Code block pass (owner: lighter ground, more vibrant colours): `INVERSION.code.light` = white, so
+  the vivid syntax rungs moved 550 → 500 on their own (all ≥ 4.6:1); inline Code and `token-bg`
+  keep #fafafa via `bg-stripe`.
+- Batch 22 approved: every family in the approval batches is Complete.
+- Next: the owner's call (docs site, dark themes, compact density, or new components).
+
 ## Avatar photo, initials, Calendar cleanup (2026-09-28, branch `claude/component-variants-gallery-f433f2`, uncommitted)
 
 - This branch fast-forwarded to main at PR 15; a parallel batch 4 pass was dropped and only its

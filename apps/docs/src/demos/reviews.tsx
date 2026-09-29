@@ -38,7 +38,7 @@ const previousSmallType = { "--_card-title-size": "var(--area-text-sm-size)", "-
 export const GalleryReviewCard = () => (
   <div style={stack}>
     <ReviewPair title="The title is as far from the top as from the side"
-      basis="Before: text 16 from the side but the title's cap 22 from the top (the line box's half-leading sat above it). After: the first and last lines are trimmed to cap and baseline, and the text sits half a control's space around the cap inside the inset (about 18 on every side at md), so a header Button centres on the cap in the corner."
+      basis="Before: text 16 from the side but the title's cap 22 from the top (the line box's half-leading sat above it). After: the first line is trimmed to its cap and the last to its descent, and the text sits half a control's space around the cap inside the inset (about 18 on every side at md), so a header Button centres on the cap in the corner."
       before={cardSample({ "--_card-content-padding": "var(--area-space-8)" } as CSSProperties, untrimmed)} after={cardSample()} scale={2} />
     <ReviewPair title="One type ramp at every size"
       basis="Before: a small card stepped its title to 14 and description to 12, a large one its title to 20. After: title 16/24 (500), description 14/20, value 32/40 at every size; size sets only the corner and inset."

@@ -1,6 +1,6 @@
 # Combobox spec
 
-**Status:** in review · 2026-09-26
+**Status:** accepted · 2026-09-28 (batch 13; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/combobox/`
 **Peers:** Input (the field), Menu (the list's surface and rows), Select (no typing),
 Popover (anchoring)

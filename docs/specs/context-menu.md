@@ -1,6 +1,6 @@
 # Context menu spec
 
-**Status:** in review · 2026-09-26
+**Status:** accepted · 2026-09-28 (batch 18; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/context-menu/`
 **Peers:** Menu (the surface and rows, unchanged), Popover (top layer)
 
@@ -25,7 +25,7 @@ Menu. Not a dropdown Menu (opened from a button), not a Popover (content, not ac
 
 | Id | Type | What | Link | Captures |
 |---|---|---|---|---|
-| notion | target product | Right-click on a sidebar page: page menu, nothing chosen | app.notion.com, 2026-09-26 | `notion--context-menu--open--light` |
+| notion | target product | Right-click on a sidebar page: page menu, nothing chosen (re-measured live 2026-09-28, unchanged) | app.notion.com, 2026-09-26 | `notion--context-menu--open--light` |
 
 ## Measurements (Notion)
 
@@ -42,6 +42,16 @@ Menu. Not a dropdown Menu (opened from a button), not a Popover (content, not ac
 | layer | native `popover="auto"` (top layer; Escape and click outside close it) | Popover |
 | focus | pointer: the menu takes focus, nothing highlighted; keyboard: the first row | WAI menu |
 | close | choosing a row (not checkable rows), Escape, Tab, click outside; focus returns to where it was | WAI menu |
+
+## Visual pass
+
+2026-09-28 (batch 18), live in Claude in Chrome: right-click on a Notion sidebar page (then
+Escape). The menu matches the 2026-09-27 capture exactly: 265 wide, corner 10, white, lift 0 20 24
+at 5% + 0 5 8 at 2.7% + the 7% ring; rows 28 tall, corner 6, 4 from the edge, 1 apart; icon 20 at
+8; label 14/16.8 at 36; shortcuts and footer 12 muted; the section label 12/14.4 500. Area's
+context menu is Menu (approved batch 2): the same lift and 4 inset, 32 rows with an 8 corner, 16
+icons, 14/20 labels, 12/16 section labels, quiet 12 keycaps; the type matches, the rows are one
+step larger on Area's scale (Notion's 28 rows belong to the compact density). No change.
 
 ## Verification
 

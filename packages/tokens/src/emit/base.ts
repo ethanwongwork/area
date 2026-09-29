@@ -171,7 +171,8 @@ export function derivedTokens(): Record<string, string> {
     // These aliases let a documentation surface tune that reference without changing Code,
     // Badge, or Chip. The on-color values intentionally stay local: they must derive from
     // the surrounding foreground rather than from a global page colour.
-    [`${PREFIX}token-bg`]: `var(${PREFIX}bg-code)`,
+    // The 25 rung, as inline Code: the code block's ground became the page (2026-09-28).
+    [`${PREFIX}token-bg`]: `var(${PREFIX}bg-stripe)`,
     [`${PREFIX}token-bg-subtle`]: `var(${PREFIX}bg-subtle)`,
     [`${PREFIX}token-edge`]: `var(${PREFIX}border-decorative)`,
     [`${PREFIX}token-text`]: `var(${PREFIX}fg-default)`,

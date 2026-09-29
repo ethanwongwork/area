@@ -300,3 +300,12 @@ chevron, as ChatGPT's model picker).
   hovers with the bg-hover wash over its fill and a translucent border (`area--soft--hover`,
   before in `before/area--soft--hover-before`); Trailing icon tile added and captured
   (`area--trailing-icon--rest`) against ChatGPT's picker.
+
+- 2026-09-28 · owner (batch 20, after ChatGPT's quiet controls showed muted ink: model-picker
+  label #8f, scroll-to-bottom glyph #5d): "i just want consistency overall, is it possible to
+  lighten all ghost and outline buttons slightly, since i prefer lighter colors anyway" → neutral
+  ghost and outline ink is `color-mix(in oklab, fg-default, fg-muted 75%)`: #565656 on white
+  (7.34:1, was #282828), #cfcfcf on the dark surface (10.8:1). Icons follow (`currentColor`).
+  A selected toggle (`data-selected`) keeps body ink; solid and the accent / status tones are
+  unchanged. Every ghost and outline use across the system (Toolbar, Dialog close, Message
+  actions, Model picker, Scroll to latest, chips) takes it at once.

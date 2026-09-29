@@ -1,6 +1,6 @@
 # Code block spec
 
-**Status:** in review · 2026-09-26 (cohesion audit)
+**Status:** accepted · 2026-09-28 (batch 22, lighter ground and brighter syntax; was: in review · 2026-09-26 (cohesion audit))
 **Captures:** `docs/research/captures/code-block/`
 **Peers:** Code (inline form, shared ground), Tabs (language tabs), Select (language picker),
 Button sm ghost (copy), Nav and Tree view (neutral current marker), Card and Panel (container)
@@ -95,7 +95,7 @@ rgb(207, 3, 60), tag rgb(125, 65, 218), string rgb(81, 80, 229). Tabs (`area--la
 | block inset | 12 (`code.css:227`) | Owner (prior: Area tokens, not Geist's 16) | — |
 | gutter | 32 (`code.css:226`) | Owner (prior) | — |
 | unnumbered · text inset | **12 start** (`code.css:264-267`) | Third pass: code starts where the header's filename and the numbers do | Was 0: hidden numbers left the code at the block's edge. Diff lines keep their marker column (`code.css:269-273`) |
-| shell radius / edge / ground | `radius-container` 12, `border-decorative`, `bg-code` #fafafa | Peers: Card media, Panel, Alert; Code | — |
+| shell radius / edge / ground | `radius-container` 12, `border-decorative`, `bg-code`: the page white in light (dark: neutral 800) | Peers: Card media, Panel, Alert; owner 2026-09-28 (lighter ground, more vibrant syntax) | Was #fafafa (neutral 25) |
 | header | min `control-md` 32, padding 4/12 (`code.css:36-38`) | Toolbar rhythm | — |
 | rules (header, flush top, toggle) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 200, 443`) | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
 | code · face | `font-family: inherit` (`code.css:250`) | Owner (prior): one monospace | `<code>` reset to the browser's monospace |
@@ -106,7 +106,7 @@ rgb(207, 3, 60), tag rgb(125, 65, 218), string rgb(81, 80, 229). Tabs (`area--la
 | highlighted line | `bg-active` #00000011 (`code.css:345-347`) | Translucent over any ground | — |
 | diff lines | success / danger surface, vivid markers (`code.css:349-363`) | Semantic tones | — |
 | diff gutter | 48 when the block has diff lines; marker at the gutter's start, number at its end | Fit: 6 + 8 marker + 4 + two digits + 12 | The 32px gutter could not hold a marker and a number, so the marker overflowed to the block's edge |
-| syntax | danger, discovery, info, accent vivid; punctuation and comments muted (`code.css:397-402`) | Owner (prior) | — |
+| syntax | danger, discovery, info, accent vivid; punctuation and comments muted | Owner (prior); the vivid rung is each family's most saturated rung that clears 4.6:1 on the block's ground | On the white ground every family lands one rung lighter (500): keyword #e80945 4.61, tag #8d4df3 4.68, attr #006df5 4.66, string #5c5dfe 4.72 (was 550 on #fafafa, 5.4-5.5) |
 | toggle · label | UI 14/20, `fg-muted`, **400** (`code.css:447-450`) | Type ramp: 500 is for labels on fills; the toggle is transparent | Was 500 |
 | collapsed | 8 lines; toggle floats with a `bg-code` fade (`code.css:425-481`) | Area's own | — |
 
@@ -144,9 +144,17 @@ failure is not announced separately. The show / hide toggle is a button with
 
 The gallery shows Code block in Default, Content (no filename, languages, language tabs,
 unnumbered, highlighted, diff, linked, wrap), Layout (flush) and States (collapsed)
-groups. This spec's author did not inspect screenshots. Unverified: hover and `:target`
-paint on screen (not rendered at rest), dark theme, RTL, and any product comparison (none
-captured).
+groups.
+
+2026-09-28 (batch 22), live in Claude in Chrome on an existing ChatGPT conversation (read only;
+`chatgpt--code-block--rest` 2026-09-27 and `chatgpt--code-block-full--rest`): shell 768 wide,
+corner 24, 5% black fill and edge; a 48 header (#fc, padding 6 / 20) with a 20 language icon and
+a 14/20 label; two 36 round buttons 7 from the top and end, 1 apart; code 12/20 mono from 20 in,
+lines 20 apart. Area: corner 12 (`radius-container`, as Card media and Panel), #fa fill with the
+#f3 seam, a 32 header (4 / 12) with a 28 copy Button, code 14/20 mono 12 in with a 32 gutter.
+Line pitch (20) matches; the corner, header scale and code size are the recorded owner decisions
+(Area tokens over ChatGPT's pill scale; 14 mono throughout). No change. Unverified: hover and
+`:target` paint on screen, dark theme, RTL.
 
 ## Verification
 
@@ -171,3 +179,12 @@ captured).
 - 2026-09-27 · owner flagged the diff tile → gutter widens to 48 for blocks with diff lines, marker pinned to the start → headless Chromium, `diff` tile.
 - 2026-09-27 · owner (on Panel): divider strokes are never darker than the container's →
   header, flush and toggle rules take `border-decorative`; DESIGN_SYSTEM.md rule updated.
+
+- 2026-09-28 · owner (batch 22): "do another pass on code block, can you lighten the background
+  at all? can you make the colors more vibrant/lighter?" → the code ground (`INVERSION.code`,
+  curves.ts) is the page white in light (was neutral 25, #fafafa; the ladder has no lighter
+  rung). The syntax walk (`chooseVivid`, scale.ts) measures against that ground, so each family's
+  vivid rung moved from 550 to 500 on its own: brighter and lighter, each still over 4.6:1, and
+  a light accent hue still gets a readable rung. The block keeps its #f3 seam and header rule;
+  the collapsed fade follows the ground. Inline Code and the `token-bg` alias keep #fafafa via
+  `bg-stripe` (the same 25 rung). Dark unchanged. 19,491 token and contrast tests pass.

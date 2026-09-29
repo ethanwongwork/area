@@ -111,9 +111,11 @@
     /* 16 between one hint's ink and the next; the plates' insets come out of it. */
     gap: calc(var(--area-space-16) - var(--_hint-inset) * 2);
     flex-shrink: 0;
-    min-block-size: var(--area-control-md);
-    /* The hints' keycaps start on the rows' icon column; their plates reach past it by their inset. */
-    padding-inline: calc(var(--_column) - var(--_hint-inset));
+    /* The hints' keycaps start on the rows' icon column; their plates reach past it by their inset.
+     * spec (owner, 2026-09-28: "is this spacing at the bottom correct?"): the plates keep that
+     * 8 from the rule and the bottom edge too, so they sit evenly in the corner and concentric
+     * with it (plate 4 + 8 = the palette's 12). Was a 32 row: 3.5 above and below a 24 plate. */
+    padding: calc(var(--_column) - var(--_hint-inset));
     border-block-start: var(--area-border-width) solid var(--area-border-decorative);
     color: var(--area-fg-muted);
     font-size: var(--area-text-xs-size);
@@ -140,8 +142,11 @@
   .area-command-palette__hint-button:hover:not(:disabled) { background-color: var(--area-bg-hover); }
   /* DESIGN_SYSTEM: disabled controls dim to 50% as a whole (Button's value). */
   .area-command-palette__hint-button:disabled { cursor: not-allowed; opacity: 0.5; }
-  /* The Move hint holds two plates; they touch, and its label keeps the hint gap after them. */
-  /* Its unplated label keeps a plate's end inset, so every hint's ink is 16 from the next. */
+  /* The Move hint holds two plates; they touch. Its label names both, so it sits outside them,
+   * 6 from the last plate's edge (owner, 2026-09-28: the label looked too close to the arrow; it
+   * was 6 from the keycap ink, 2 from the plate, so the hover wash met the text). That is the
+   * keycap-to-label gap inside a plate, measured from what shows. Its unplated label keeps a
+   * plate's end inset, so every hint's ink is 16 from the next. */
   .area-command-palette__hint:has(> .area-command-palette__hint-button) { gap: 0; padding-inline-end: var(--_hint-inset); }
-  .area-command-palette__hint > .area-command-palette__hint-button:last-of-type { margin-inline-end: calc(var(--area-space-6) - var(--_hint-inset)); }
+  .area-command-palette__hint > .area-command-palette__hint-button:last-of-type { margin-inline-end: var(--area-space-6); }
 }

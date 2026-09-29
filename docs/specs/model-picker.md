@@ -1,6 +1,6 @@
 # Model picker spec
 
-**Status:** in review · 2026-09-26
+**Status:** accepted · 2026-09-28 (batch 20; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/model-picker/`
 **Peers:** Menu (rows, surface; gains an optional note line), Button (ghost trigger), Composer (`mode` slot)
 
@@ -41,6 +41,17 @@ rows      36 tall (46 with a note), radius 12, padding 6 10, label 14/20, note 1
 
 Menu gained `MenuItem.description` (`.area-menu__lines`, `.area-menu__description`) for this;
 two-line rows keep full line boxes (the one-line cap trim is off inside them).
+
+## Visual pass
+
+2026-09-28 (batch 20), live in Claude in Chrome on an existing conversation (opened, then Escape,
+nothing chosen): trigger 36 pill, 0 14 0 12, 16/26 muted #8f; menu 254 wide, corner 16, 90% white
+with a 0.5px 10% ring, 9 above the trigger; rows 36 (46 with a note), corner 12, 6 / 10, label
+14/20, note 12/14 muted, the check on the current model: all as 2026-09-26. Area: a ghost
+neutral md Button (32, corner 8, 14/20 in default ink) and the Menu list (rows 32 / 48 with a
+note, corner 12, 4 from the trigger). Row type matches; the geometry follows the list model.
+ChatGPT sets the trigger's label in muted ink at 16; owner (2026-09-28) lightened every neutral
+ghost and outline Button instead (#56, button.md), so the trigger reads quiet, at 14.
 
 ## Verification
 

@@ -1,6 +1,6 @@
 # Chip spec
 
-**Status:** in review · 2026-09-26 (cohesion audit; second pass the same day, no change)
+**Status:** accepted · 2026-09-28 (batch 15; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/chip/` (Area tiles, `notion--board-tag`, `notion--select-tag`)
 **Peers:** Badge (display counterpart), Segmented (one-track choice), Button (control tier and inset), Avatar (initials), Alert / Badge dismiss (remove plate), Checkbox / Radio (neutral selection)
 
