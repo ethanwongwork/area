@@ -133,7 +133,7 @@ test('README category/component/file numbers match independent JSON recounts; cl
     assert.deepEqual(g.components, [...new Set(g.rowIds.flatMap(id => rowMap.get(id).components))].sort());
   }
   for (const g of c.foundationParameters) {
-    assert.deepEqual(g.currentValues, [...new Set(g.rowIds.map(id => rowMap.get(id).value))].sort());
+    assert.deepEqual(g.currentValues, [...new Set(g.rowIds.map(id => rowMap.get(id).value))].sort().slice(0, 8));
     assert.ok(g.rowIds.every(id => rowMap.get(id).category === g.category));
   }
   for (const g of c.inconsistencyCandidates) assert.ok(g.rowIds.every(id => rowMap.has(id)));
@@ -170,5 +170,22 @@ test('keyframes have animation evidence, and token JSON pointers locate their ex
     assert.ok(r.animationReferences.length, r.id);
     assert.ok(r.manifestEntries.length, r.id);
     assert.equal(r.manifestStatus, 'matched via animation reference');
+  }
+});
+
+
+test('icon paint follows color consumption and Foundation proposals stay scalar and bounded', () => {
+  const rows = load('literals.json').rows;
+  const iconPaint = rows.filter(r => r.property === '--_alert-icon');
+  assert.ok(iconPaint.length);
+  for (const row of iconPaint) assert.equal(row.category, 'color');
+  const proposals = load('clusters.json').foundationParameters;
+  assert.ok(proposals.length <= 25);
+  for (const p of proposals) {
+    assert.ok(p.currentValues.length <= 8);
+    for (const v of p.currentValues) {
+      assert.match(v, /^(?:-?\d*\.?\d+(?:px|rem|em|ms|s)?|#[0-9a-f]{3,8})$/i);
+      assert.doesNotMatch(v, /^0(?:px|rem|em|ms|s)?$/);
+    }
   }
 });
