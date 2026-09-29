@@ -477,6 +477,149 @@
         "anchor": "review",
         "magnet": "review"
       }
+    },
+    {
+      "id": "batch-31",
+      "title": "Batch 31 · Weather, shapes & money",
+      "note": "Cloud rain and cloud lightning (the cloud moved up: angled rain hanging from its foot; a bolt leaving through the foot, haloed when filled as Fluent's thunderstorm), wind (three lines with curls), star off (the shared slash), QR code (three finder squares with a dot each and three dots, rows even), rectangle and ellipse (Figma's shape tools) and coins (two r 4 coins, the back one overlap-cut).",
+      "icons": {
+        "cloud-rain": "review",
+        "cloud-lightning": "review",
+        "wind": "review",
+        "star-off": "review",
+        "qr-code": "review",
+        "rectangle": "review",
+        "ellipse": "review",
+        "coins": "review"
+      }
+    },
+    {
+      "id": "batch-32",
+      "title": "Batch 32 · Demo gaps & arrows",
+      "note": "Arrow up-right (the standalone arrow on the diagonal, with its three turns), cloud-sun (the cloud at 2/3 in front of a sun whose ring and rays stop an overlap cut short of it), wand (a stick and a small sparkle), distribute horizontal and vertical (two guides and a bar) and record (the ring with a solid disc, as stop-circle).",
+      "icons": {
+        "arrow-up-right": "review",
+        "cloud-sun": "review",
+        "wand": "review",
+        "distribute-horizontal": "review",
+        "record": "review"
+      }
+    },
+    {
+      "id": "batch-33",
+      "title": "Batch 33 · Figma tools 2",
+      "note": "Line (the tool's diagonal), polygon (warning's triangle), diamond (an instance, a square turned 45°), mask (stop's square with a round hole) and the four boolean operations: two 7 × 7 squares overlapping 3 × 3, with the result solid (Figma's convention; Fluent's hatching does not survive 16px). Open question: the booleans are a solid exception in the outline style.",
+      "icons": {
+        "line": "review",
+        "polygon": "review",
+        "diamond": "review",
+        "mask": "review",
+        "boolean-union": "review",
+        "boolean-subtract": "review",
+        "boolean-intersect": "review",
+        "boolean-exclude": "review"
+      }
+    },
+    {
+      "id": "batch-34",
+      "title": "Batch 34 · Code & git",
+      "note": "Git commit and git merge (git-branch's r 2 nodes), braces, variable (parentheses round a 4px ×), function (an ƒ with two hooks) and sigma.",
+      "icons": {
+        "git-commit": "review",
+        "git-merge": "review",
+        "braces": "review",
+        "variable": "review",
+        "function": "review",
+        "sigma": "review"
+      }
+    },
+    {
+      "id": "batch-35",
+      "title": "Batch 35 · Media & capture",
+      "note": "Fast-forward (two 45° triangles joined tip to back; rewind is its mirror), screen share (desktop with a contained arrow), picture-in-picture and captions (terminal's frame with a small window or caption dashes), images (copy's stack with an image on the front sheet) and camera off (the shared slash).",
+      "icons": {
+        "fast-forward": "review",
+        "screen-share": "review",
+        "picture-in-picture": "review",
+        "images": "review",
+        "captions": "review",
+        "camera-off": "review"
+      }
+    },
+    {
+      "id": "batch-38",
+      "title": "Batch 38 · Documents, money & awards",
+      "note": "Library (three books and a leaning one), code block (terminal's frame with two small chevrons), banknote (a note with a round seal), bank (a roof, three columns and a base), barcode (five bars, tight and standard gaps), award (a ring with a notched ribbon) and crown.",
+      "icons": {
+        "library": "review",
+        "code-block": "review",
+        "banknote": "review",
+        "bank": "review",
+        "barcode": "review",
+        "award": "review",
+        "crown": "review"
+      }
+    },
+    {
+      "id": "batch-39",
+      "title": "Batch 39 · People & talk",
+      "note": "Frown (smile with its mouth turned over), person in a circle, chat multiple (a smaller bubble in front of copy's L) and end call (Fluent's hang-up handset).",
+      "icons": {
+        "frown": "review",
+        "person-circle": "review",
+        "chat-multiple": "review",
+        "call-end": "review"
+      }
+    },
+    {
+      "id": "batch-40",
+      "title": "Batch 40 · Nature & science",
+      "note": "Contrast (the ring half solid), flask (a cone with a neck and a liquid line) and tree (a three-lobed crown on a trunk, the cloud's construction upright).",
+      "icons": {
+        "contrast": "review",
+        "flask": "review",
+        "tree": "review"
+      }
+    },
+    {
+      "id": "batch-42",
+      "title": "Batch 42 · Keys & effects",
+      "note": "Shift (the outlined up arrow of the key cap), option (the Mac option key's switch) and stroke weight (three bars 1, 2 and 3 tall).",
+      "icons": {
+        "shift": "review",
+        "option": "review",
+        "stroke-weight": "review"
+      }
+    },
+    {
+      "id": "batch-41",
+      "title": "Batch 41 · Type",
+      "note": "Text size (text's T large and small), superscript and subscript (an X with list-numbered's 2).",
+      "icons": {
+        "text-size": "review",
+        "superscript": "review",
+        "subscript": "review"
+      }
+    },
+    {
+      "id": "batch-43",
+      "title": "Batch 43 · Simplified returns",
+      "note": "Thirteen icons first dropped as too dense for 16px, redrawn with one simplification each (owner: can they be simplified so they fit?): id-card, newspaper, file-image, file-code, git pull request, plane, paw, escape, shadow, blur, line height, letter spacing and translate.",
+      "icons": {
+        "id-card": "review",
+        "newspaper": "review",
+        "file-image": "review",
+        "file-code": "review",
+        "git-pull-request": "review",
+        "plane": "review",
+        "paw": "review",
+        "escape": "review",
+        "shadow": "review",
+        "blur": "review",
+        "line-height": "review",
+        "letter-spacing": "review",
+        "translate": "review"
+      }
     }
   ]
 }

@@ -1,12 +1,21 @@
-# Icon set spec (proposal)
+# Icon set spec
 
-**Status:** pilot built; weight chosen · 2026-09-25 (owner-approved). Twelve icons in
+**Status (2026-09-28):** 43 review batches, 376 icons with their turns and mirrors, in
 `apps/docs/assets/area-icons-pilot/`, generated to `apps/docs/src/pilot-icons.tsx` by
-`npm run icons:pilot`, linted by `npm run lint:icons`, shown in the gallery's Icon pilot
-section at 1, 1.125 and 1.25px beside the Fluent icons in use today. The weight is the
-owner's choice; nothing outside the pilot uses these icons yet.
-**Evidence:** measured in the browser on 2026-09-25 (method below). ChatGPT's sprite was
-fetched for measurement only and is not stored in the repository.
+`npm run icons:pilot` and linted by `npm run lint:icons`. Owner status per icon is in
+`batches.json` and on `gallery-icons.html`. The weight (1.125px) was the owner's choice on
+2026-09-25; components draw a few glyphs through `Glyph`, and demos still use Fluent until
+the swap. **Evidence:** measured in the browser on 2026-09-25 (method below). ChatGPT's
+sprite was fetched for measurement only and is not stored in the repository.
+
+**Start here.** The process is the `area-icon-construction` skill (`.agents/skills/`):
+its quick path covers finding, referencing, drawing, the lint loop, sheets and recording,
+and it holds the rules and the owner's decisions. This file is the record: the
+construction system's evidence (below), then one section per batch or owner round in date
+order, each icon's construction line in its batch's table. The build queue (concepts still
+to draw, with references and uses) is `docs/research/icon-inventory.md`. Tools:
+`icons:find` (does it exist?), `icons:geometry`, `gen-pilot-icons.mjs --only`,
+`icons:sheet`, `icons:batch` (docs/DEVELOPMENT.md lists the commands).
 
 ## Why draw our own
 
@@ -1754,3 +1763,187 @@ the truck's band moved down to 8 in the same round.
   three lines 3 apart so their marks sit beside each line; menu, text align and indent keep
   4 apart. Fluent spaces its lists and its text-align icons differently too. Every line
   glyph ends at 13.5.
+
+## Batch 31: weather, shapes and money, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| cloud-rain | the cloud exactly (owner: every cloud one shape), moved up 1.5 (2–11) so the rain has room: three angled rain lines (owner: angled, as Fluent's) hanging from the foot, joined to it (owner: rain touches the cloud), tops at 5, 8 and 11 on the foot, 1.5 across and 3 down to 14, 3 apart (a tight 1.56). Filled, the cloud is solid and the rain stays attached lines at the icon weight. A compact Fluent-style cloud with the rain a gap below it was dropped (owner: the clouds should all be the same shape) |
+| cloud-lightning | the same raised cloud, its foot cut open (overlap cut 2.25) round a line bolt that starts inside it and leaves through the foot, `M9 8L7 10H10L6.5 13.5` (legs 2 and 3.5 on the lattice, sharp turns as flash, `data-acute`); the ink sits 0.24 high (a tail to 14 read as a stick). Filled as Fluent's thunderstorm: the whole cloud solid, the bolt in ink, and the cloud cut back one icon weight round it by a `halo` (a filled-only role: the bolt's path, three weights wide, round, in the mask). A bolt hanging from the foot was 3 tall and read as a hook |
+| wind | owner's reference, three lines: 5.5 (2.5–6.25, curling up), 8 (5–11.75, curling up) and 10.5 (2.5–10.25, curling down), 2.5 apart (tight 1.38), each curl r 1.75 with its extremes on the 0.5 grid, ending at 200° / 160°, a tight gap from its own line; a line glyph (1.0 at the filled weight) |
+| star-off | star kept exactly, with the shared slash cut one-sided; filled as cloud-off (a whole `fill` parted by one `gap` above the slash) |
+| qr-code | owner's reference: three 5 × 5 finder squares (r 2) at 1.5 and 9.5, each with a ⌀1.5 dot inside (a tight 1.19), and three ⌀2 dots at 10, 10 · 10, 14 · 14, 14 whose ink spans the same box as the squares, so both rows are even. The circle keyline (14.1 ink): 5 × 5 is the smallest finder that holds a dot a tight gap from its ring. r 2: at r 1–1.75 the ring's corner pockets beside the dot are a 1.68 near miss. Where the dots meet the squares' rounded corners the diagonal gap is 2.14, between standard and open; the owner asked for the aligned rows, so it is declared `data-gap="aligned"` (the lint accepts gaps between 2 and 2.5 there only). Corner brackets were tried and dropped (owner) |
+| rectangle | Figma's rectangle tool: 12 × 9 (2–14 × 3.5–12.5, the horizontal keyline), r 1.5 (the shapes radius); landscape so it is not stop's square |
+| ellipse | Figma's ellipse tool: the shared r 6 ring |
+| coins | two r 4 coins (Lucide's coins without its detail): the front at 6, 6 and the one behind at 10, 10, overlap-cut where it passes behind (a 202° arc). Filled, both are solid, the back one parted from the front by one icon weight of `gap` round the front's edge (clipboard's pattern). An inner rim ring does not fit an r 4 coin (a 0.88 gap at r 2) |
+
+Still deferred: boolean operations (Fluent hatches the result, which does not survive 16px;
+Figma's solid result would be a solid exception) and translate (letters need a construction).
+
+## Full set roadmap, part 2 (2026-09-28)
+
+The first roadmap is drawn (313 icons with variants). The set is finished when every product
+surface Area targets (ChatGPT, Notion, Figma, the gallery demos) has its icon; the gaps, from
+the demos' remaining Fluent imports and the three products' toolbars, menus and inspectors:
+
+| Batch | Icons |
+|---|---|
+| 32: demo gaps and arrows | arrow-up-right (+ rotations), chevrons-left (+ right), cloud-sun, wand, distribute-horizontal (+ vertical), record |
+| 33: Figma tools 2 | line, polygon, component, group, mask, boolean union, subtract, intersect, exclude |
+| 34: code and git | git-commit, git-merge, git-pull-request, file-code, braces, variable, function, sigma |
+| 35: media and capture | rewind, fast-forward, screen-share, picture-in-picture, images, captions, camera-off |
+| 36: windows | window, browser, tabs, minimize, maximize, split |
+| 37: documents | document-text, file-zip, file-image, newspaper, library, clipboard-check, divider, code-block |
+| 38: money and awards | banknote, bank, barcode, badge, crown, medal |
+| 39: people and talk | person-circle, id-card, chat-multiple, call-end, frown |
+| 40: nature and science | droplet, tree, contrast, flask, atom, plane, paw |
+| 41: type | text-size, line-height, letter-spacing, subscript, superscript, translate |
+| 42: keys and effects | shift, option, escape, shadow, blur, stroke-weight |
+
+About 75 icons. Then the swap: demo-level Fluent imports replaced by Area icons, family by
+family with the owner's approval, and the Fluent map retired.
+
+Status (2026-09-28): drawn as batches 32–42 (45 icons, 50 with turns and mirrors), all in
+review. Batch 43 then redrew thirteen of the dropped ones with one simplification each
+(owner: can they be simplified so they fit?): id-card, newspaper, file-image, file-code,
+git-pull-request, plane, paw, escape, shadow, blur, line-height, letter-spacing, translate.
+Still out: chevrons-left (lattice), atom (rotated ellipses), file-zip (no room for teeth);
+covered by existing icons: component, group, the window batch, document-text, divider,
+clipboard-check, droplet. The audit cannot size stroke-weight or shadow's band (solids).
+
+## Full set roadmap, part 3: the Cursor references (2026-09-28)
+
+The owner's Cursor sheets were catalogued icon by icon (about 860 cells; the catalogues are in
+`docs/research/icon-inventory/`). The build queue is `docs/research/icon-inventory.md`:
+109 concepts in batches 44–55 (square and circle containers, the notification dot, corner
+badges, agents and AI, arrows, files, code and git, text, data and money, messages, objects),
+21 for later and 6 not planned, each with its Lucide and Fluent references and uses. Its
+"To settle with the owner" section lists the system questions to answer before drawing
+(the notification dot's size, the square container, the agent mark, corner badges,
+chevrons-right). `npm run icons:find` searches the queue with Area's icons.
+
+## Batch 32: Demo gaps & arrows, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| arrow-up-right | the standalone arrow on the rising diagonal: stem 2.5, 13.5 → 13.5, 2.5 (x + y = 16), a 90° head with 5.5px legs along the axes (`M8 2.5H13.5V8`), Fluent's corner head; turns give down-right, down-left and up-left. At 3.5–12.5 it sat 2.9 under the keyline |
+| cloud-sun | Fluent's partly cloudy: the cloud (the one cloud shape, scaled 2/3: lobes r 1.67, 2.33, 2, extremes on the 0.5 grid at 6–14 × 8–14) in front of a sun at 7, 7 (an r 1.5 ring, rays 1 long from r 4, sun's 1 : 2 spacing); the ring and rays stop an overlap cut (2.25) short of the cloud, leaving a 175° arc and five rays up and left. Filled, the cloud is solid and the sun stays a line |
+| wand | a stick on the rising diagonal (2, 14 → 7.5, 8.5) and the sparkle scaled to r 2.75 at 11.25, 4.75 (tips on the 0.5 grid), an open 2.76 from the stick's tip: one sparkle, no satellites (owner). Filled, the sparkle is solid |
+| distribute-horizontal | Figma's distribute spacing: guides at 2.5 and 13.5 (the align family's guide) and a 3 × 7 bar (r 1, the family's bar) centred between them, an open 2.88 from each; distribute-vertical is its transpose |
+| record | the ring with a solid disc inside (r 2.5, an open 2.94 from the ring): a solid exception like stop-circle, declared `data-dot="free"`; filled, the disc is cut out of the solid ring's disc, as stop-circle |
+
+Chevrons-left (a double chevron) was dropped: two 45° chevrons shifted along x keep the diagonal lattice only at whole shifts, and 3, 4 and 5 leave 1.0, 1.70 and 2.41 (all off the gap scale); 6 reads as two chevrons. chevrons-up-down covers the need.
+
+## Batch 33: Figma tools 2, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| line | Figma's line tool: one rising diagonal 2.5, 13.5 → 13.5, 2.5 (x + y = 16), arrow-up-right's stem; a line glyph |
+| polygon | warning's triangle exactly (r 1.25 fillets, 12.98 × 12.45), without the mark; solid when filled |
+| diamond | Figma's instance: a square turned 45° with vertices at 8, 2 · 14, 8 · 8, 14 · 2, 8 (edges on the lattice) and r 1 fillets; 1.7 under the circle keyline by its box, but a turned square reads larger than its box |
+| mask | Figma's mask: stop's 11 × 11 square (r 2) with an r 3 ring inside (a tight 1.38); filled, the square is solid with the circle cut out as a hole |
+| boolean-union | two 7 × 7 squares (r 1.5) at 2.5 and 6.5 overlapping 3 × 3, drawn as the union's one outline (r 0.5 in the two inner corners, a soft transition); solid when filled |
+| boolean-subtract | both squares outlined, the result (back minus front) solid, Figma's convention; the front square's rounded corner bounds the solid |
+| boolean-intersect | both squares outlined, the 3 × 3 overlap solid (its two rounded corners are the squares' own) |
+| boolean-exclude | the union solid with the overlap left open (a standard 1.93 counter), both outlines drawn through it |
+
+Component was dropped (dots-four is Area's component icon) and group too (square-dashed). The booleans are the second solid exception in the outline style after stop-circle and record: the result has to read as the thing selected, and Fluent's hatching fills in at 16px. Their filled variants equal the outline, except union (solid).
+
+## Batch 34: Code & git, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| git-commit | git-branch's r 2 node at 8, 8 with a line out each side to 2 and 14, joined to it; the horizontal keyline (5.12 tall, a line glyph's natural height) |
+| git-merge | git-branch's nodes at 4.5, 4.5 and 11.5, 11.5; a trunk from the top node to 13.5 and an r 5 quarter arc from the node's foot into the second node (Lucide's merge) |
+| braces | a pair of braces 2.5–6 and 10–13.5, r 1.5 bends and a point at 8 (Lucide's construction); a line glyph |
+| variable | Lucide's variable: parentheses (r 6.54 arcs from 5.5 / 10.5 at the ends to 2.5 / 13.5 at 8) round a 4px ×, a standard 1.78 from them (a 3.5px × left a 2.12 near miss) |
+| function | an ƒ: a stem at 8 from 4.5 to 11.5 with r 2 hooks to 11, 2.5 and 5, 13.5, and a crossbar at 6.5 (5.5–10.5); the type family's cap height 2.5–13.5 |
+| sigma | Σ after Lucide: arms at 2.5 and 13.5 from 6 to 10.5 with 1px serifs down and up at 11.5, the diagonals meeting at 7.7, 8 (r 0.75), their outer corners r 1 fillets (the 54° corners are under the acute limit otherwise); centre 8.23, 0.23 right (a quarter shift would leave the grid) |
+
+Dropped: git-pull-request (its arrowhead must sit on the diagonal lattice and clear the top node by a tight gap; every lattice point either touches the node or runs into the right-hand line) and file-code (two 1.5px chevrons need 7 across; the page's inside is 9 with 2.25 needed from each edge).
+
+## Batch 35: Media & capture, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| fast-forward | two triangles 2.5–8 and 8–13.5, 11 tall with 45° sides on the lattice (a 90° tip, r 0.75; back corners r 1), the first's tip joined to the second's back (Fluent); rewind is the flipx mirror. With play's r 1.25 corners the 47° back corners shrank it to 7.4 tall |
+| screen-share | desktop exactly with a contained arrow inside (stem 8.5 → 5, a 2.5 head on the lattice), a tight 1.38 from the screen's edges; knocked out when filled |
+| picture-in-picture | terminal's 12 × 9 frame (r 2) with a 3.5 × 2.5 window (r 0.5) in its lower right, a tight 1.38 from the frame; filled, the frame is solid and the window a knockout ring |
+| images | copy exactly (front 8 × 8 r 1.5 at 5.5, the back sheet's L) with the front showing an image: a mountain cut (image's, on the lattice) and a ⌀1.5 sun at 8.25, 8.25 (a tight 1.44 from the frame, open from the mountain) |
+| captions | terminal's frame with two rows of caption dashes at 6.5 and 9.5 (a standard 1.88 from the frame), parted by tight 1.38 gaps (Lucide's captions); knocked out when filled |
+| camera-off | camera exactly with the shared slash, cut one-sided; the lens is cut the same way. Filled as video-off: the body a `fill` parted by one `gap`, the lens not drawn |
+
+## Batch 38: Documents, money & awards, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| library | Lucide's library: books at 2.5, 5.5 and 8.5 (tops 2.5, 4.5, 3.5), 3 apart (standard), and a fourth leaning from 11, 4 to 13.5, 13.5 (a tight 1.38 from the third at the top); a line glyph |
+| code-block | terminal's frame with two 1.5-leg chevrons pointing out (tips at 5 and 11, a standard 1.88 from the frame; the lattice allows no larger pair with a gap between them); knocked out when filled |
+| banknote | a 12 × 8 note (r 1.5, the horizontal keyline) with an r 1.5 seal in the middle, a tight 1.38 from its long edges; filled, the seal is knocked out |
+| bank | Lucide's landmark: a roof 1.5–14.5 rising 4 to a point at 8, 2.5 (r 1 at the apex, r 0.5 at its 32° eaves; r 1 there pulled it in to 5–11), three columns at 4.5, 8 and 11.5 joined to the roof and to a base at 13.5; the roof is solid when filled |
+| barcode | five bars 3.5–12.5 at 2.5, 5, 8, 10.5 and 13.5: gaps alternate tight (1.38) and standard (1.88), the pattern that makes it a code rather than columns; a line glyph |
+| award | Lucide's award: an r 4 ring at 8, 6.5 and a ribbon joined under it, legs to 5, 14 and 11, 14 and a notch at 8, 13 (r 0.75 corners); the pocket under the ring is a standard 1.95 (a notch at 12.5 left a 1.68 near miss). The ring is solid when filled |
+| crown | a band 2.5–13.5 with three points (4 at the sides, 3 in the middle, r 0.75 fillets: the 53° points are sharper than the acute limit), dips at 8 and r 1.5 foot corners; the ink sits 0.21 low, a heavy base's optical allowance. Solid when filled |
+
+Batch 36 (windows) is covered by existing icons: panel-top is an app window, columns and rows split it, stop is maximize and minus minimize. From batch 37, document already carries text lines (document-text); newspaper, file-zip and file-image need more detail than a 9 × 12 page holds at 16px, divider is minus, and clipboard-check was ruled out earlier (the check sits under a tight gap from the board).
+
+## Batch 39: People & talk, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| frown | smile exactly (ring, ⌀1.5 eyes) with the mouth turned over: ends at 5.25 and 10.75 on y 10.5 (a tight 1.16 from the ring), an r 3.25 arc (at r 3 the eyes sat a 1.73 near miss; 3.25 is a standard 1.98) |
+| person-circle | the ring with a small figure: an r 1.5 head at 8, 6 (a tight 1.38 from the ring) and shoulders (r 2, 6.5–9.5 at 10, a tight 1.38 under the head) whose sides end on the ring (Lucide's circle-user); knocked out of the disc when filled |
+| chat-multiple | a front bubble 2.5–10.5 × 5.5–11.5 (r 1.5) with chat's own tail, and the bubble behind drawn as copy's stack does, an L round its top right (5.5 → 13.5, 2.5 → 8.5), a standard 1.88 from the front; the front is solid when filled |
+| call-end | Fluent's hang-up handset: an arch 2.5–13.5 from 5 to 10.5 with two ear pads (r 1 corners) and a shallow inner curve; free angles, solid when filled. The ink sits 0.25 high, as a heavy base does |
+
+Id-card was dropped: a head, shoulders and text lines need more than a 12 × 9 card holds with every gap on the scale.
+
+## Batch 40: Nature & science, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| contrast | the r 6 ring with its right half solid (Lucide's contrast, Fluent's half fill): a solid exception like record, the half being the thing it shows; the filled variant equals the outline |
+| flask | Lucide's conical flask: a neck 6.5–9.5 from 2.5 to 6.5, sides 60° down to a base at 13.5 (2.5–13.5; r 1 fillets), a lip 5.5–10.5 joined to the neck, and a liquid line at 10.5 wall to wall, a `cut` when filled (Fluent's filled beaker) |
+| tree | a crown built as the cloud is (three lobes on a flat foot: r 2.5 at 5, 8.5 and 11, 8.5, r 3 at 8, 5; 2.5–13.5 × 2–11) on a trunk to 14, joined to its foot; the square keyline. An r 4.5 disc on a trunk read as a lollipop or a map pin. Solid when filled, the trunk a line |
+
+Dropped from the plan: droplet (color is the droplet), atom (its orbits are rotated ellipses, which the lint cannot measure; drawn as axis-aligned ellipses it read as a plus), plane and paw (too much detail for 16px with every gap on the scale).
+
+## Batch 41: Type, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| text-size | text's T twice: a large one (bar 2.5–9.5 with end ticks to 4.5, stem 6, foot 4–8) and a small one (bar 10.5–13.5 at 7.5 with 1px ticks, stem 12, foot 11–13), a standard 1.88 apart at the feet and a tight 1.38 at the small bar |
+| superscript | a 6 × 6 X on the lattice (2.5–8.5 × 5.5–11.5) and list-numbered's 2 (its 1.25 × 1 bowl and sharp foot, `data-acute` as there) raised to 3–6 at 11–13.75, a tight 1.42 from the X (1 when filled: at 11 it closed to 0.91 under the heavier line). The ink sits high by design |
+| subscript | the X at 4.5–10.5 and the same 2 lowered to 11–14, a tight 1.59 apart; the ink sits low by design |
+
+Line height and letter spacing were dropped: Figma draws both as a letter between guides with arrows, which at 16px is padding-axis with a letter in it; translate still needs a letter construction.
+
+## Batch 42: Keys & effects, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| shift | the shift key's arrow: a head 2–14 from a point at 8, 2 (45° on the lattice) to 8, a stem 5.5–10.5 down to 13.5; r 1 at the point and the stem's foot, r 0.75 at the barbs, r 0.5 in the necks; solid when filled; 0.04 high |
+| option | ⌥: a line from 2.5 to 5.5 at 4.5, a free-angle diagonal to 10.5, 11.5 and on to 13.5 (the switch), and a separate bar 9.5–13.5 at 4.5, open from the diagonal; a line glyph |
+| stroke-weight | Figma's stroke weight: three bars 2.5–13.5, 1, 2 and 3 tall (fully round ends), open 2.5 apart; drawn as solids, the one icon whose meaning is line thickness, so it cannot use the icon line; the filled variant equals the outline |
+
+Escape, shadow and blur were dropped: the escape glyph is a broken circle with an arrow into it (dense at 16px), a drop shadow drawn as an offset back shape reads as copy, and blur has no outline form.
+
+## Batch 43: Simplified returns, 2026-09-28
+
+| Icon | Construction |
+|---|---|
+| id-card | Simplification: a solid person (Fluent's contact card). The card uses the whole horizontal keyline (13 × 10, r 2), and a ⌀3 head (r 1.5 at 5.5, 7, `data-dot="free"`) and an r 2 dome of shoulders resting on the card's foot are solids, so no pocket forms under the shoulders (an outlined head and shoulders left a 0.94 pocket; the card is too short for both). Two lines 9.25–12 at 5.5 and 8.5, a standard 1.97 from the head. Filled, the person and lines are cut out of the card |
+| newspaper | Simplification: Lucide's curl instead of a cover with a picture. A page 5–14 × 3–13 whose left edge curls under into a flap 2–5 (an r 1.5 turn at the foot, the flap's top joined to the page at 7), and three lines 7.5–11.5 at 5.5, 8 and 10.5 (tight throughout). Filled, the silhouette is a `fill`, the page's edge a `gap` over the flap, the lines knockouts |
+| file-image | Simplification: the text lines give way to image's own content. Document exactly, with image's mountain (45° legs on the lattice, an r 1 peak, from the foot at 6, 14 to the foot's corner at 12.14, 13.14) as a `cut` and a ⌀1.5 sun at 6, 7, a tight gap from the edge and the fold |
+| file-code | Simplification: the mark moves onto the corner (Fluent's document code, the corner-mark pattern). Document exactly with two 2-leg chevrons (6–8 and 11–13, rows 9–13, a standard 3 apart on the lattice) over its lower right; the page is cut open round them (2.3) and filled with a `halo`, since the right chevron runs past the page. Two chevrons cannot fit inside the 9-wide page (they need 5.25 between tips; the page leaves 4.5) |
+| git-pull-request | Simplification: no arrowhead (Lucide's current pull request). git-branch's r 2 nodes at 4.5, 4.5 and 11.5, 11.5, a trunk to 13.5, and a hook from 9, 4.5 (a tight 1.38 from the node) turning down an r 2.5 quarter into the second node. A 2px head on the lattice either touches the node or crowds the hook |
+| plane | Simplification: a line glyph after Cursor's plane. One path: a body 3.5, 12.5 → 13.5, 2.5 (x + y = 16), swept wings from 9, 7 to 2.5, 6 and 10, 13.5 and a tail pair from 5, 11 to 2.5, 10.5 and 5.5, 13.5 (each pair mirrored across the body); free angles, wedges only (no counters) |
+| paw | Simplification: solid toes. Four ⌀2 dots at 3, 7.5 · 6, 4 · 10, 4 · 13, 7.5 (2 standard, 2.61 open apart) over an r 3.5 pad dome 4.5–11.5 from 8 to 12.5 (r 1 feet), a tight 1.34 from the outer toes. Outlined toes (Fluent's rings) leave blot counters at this size. The pad is solid when filled |
+| escape | Simplification: open's arrow in a ring (the Mac escape key). An r 5 ring at 8.5, 8.5 open round an up-left arrow from its centre to a 3px corner head at 2.5, 2.5 (tight 2.5 cut, as open's arrow leaves its box); a line glyph |
+| shadow | Simplification: the shadow is a solid band, not a second outline (a second outline is copy). A square 2.5–10.5 (r 1.5) and a solid L 1.5 thick along its lower right (12.5–14, from 5 down and round to 5 along the foot; an r 3.5 inner corner, r 2 outer), a tight 1.44 from the square; a solid exception like the booleans. Its edges are ink edges on the 0.5 grid, so the band does not grow with the line weight |
+| blur | Fluent's blur: the r 6 ring's left half and three lines at 5, 8 and 11 from the axis to where the ring would be (standard 1.88 apart); filled, the half-disc is solid and the lines keep the icon weight |
+| line-height | Simplification: text's own T between guides instead of arrows (a double arrow's heads meet between guides 11 apart). Guides at 2.5 and 13.5 (2.5–13.5) and a T 6 wide and 6 tall (ticks 1, foot 3), a tight 1.38 from each guide; a line glyph |
+| letter-spacing | line-height turned: guides at 2.5 and 13.5 (vertical) and the same T 9 tall (3.5–12.5), a tight 1.38 from each guide (Figma's |A|) |
+| translate | Simplification: two letterforms of the icon line (Lucide's languages): a 文 of a bar 2–8 at 4.5 with a stroke above, a down-right stroke and an up-right stroke that climbs into the bar, and an A 8.25–13.75 from 7.5 (r 0.75 apex) with a crossbar at 11.5, a tight 1.25 from the 文; free angles |
+
+File-zip stays out: a zipper needs a column of teeth with tight gaps on both sides, and no column fits between the page's left edge and its fold (1.5 wide at most); a column below the fold holds two teeth. Use archive for compressed files, or a later file-type family with short labels (ZIP, PDF, CSV), as Cursor's file icons do.

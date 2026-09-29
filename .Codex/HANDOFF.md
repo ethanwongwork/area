@@ -7,6 +7,11 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
 
 ## Owner direction
 
+- **Icon sessions open with the owner's decisions** (owner, 2026-09-28): before drawing, list
+  the decisions pending for the next icon batches, with options and a recommendation (the
+  "To settle with the owner" section of `docs/research/icon-inventory.md` and open questions
+  below). Work starts once they are made.
+
 - Visual-first: get every component and variant exactly right from measured evidence
   (ChatGPT, Notion, Figma, Cursor, Untitled UI, Fluent), then systematize tokens.
 - Lighter UI: regular-weight titles, few sizes/weights/colors, one variable per distinction.
@@ -298,16 +303,23 @@ saved as one JSON download per product (owner-approved) and split with a scratch
 
 ## Next
 
-1. Owner review on `gallery-icons.html` (In review lists what's open): batch 30 (nature and tools); the list family (bullet, numbered, checklist share rows 5, 8, 11); filled lines beside solids keep the icon weight; mark placement is set by the shape; batches 27–29 (AI and chat, Figma tools, commerce; open: unpin's cut); batch 26 (checkbox, checklist, bookmark remove, filter add, top panel, pushpin, palette); batches 24–25 (lists and sorting; view and tools; clear filters and the 1's sharp flag approved; the 2 and percent (Geist's 54° slash) revised; mark placement is set by the shape; filled lines beside solids keep the icon weight); batch 23 (call,
+1. Owner review on `gallery-icons.html` (In review lists what's open): batches 32–42 (the full-set roadmap, part 2 in `docs/specs/icons.md`: demo gaps, Figma tools 2 with the boolean operations as solid results, code and git, media, documents/money/awards, people, nature, type, keys; open: the booleans and contrast are solid exceptions in the outline style, filled tree reads as a club); batch 31 (weather, shapes and money: cloud rain and cloud lightning on cloud-download's open cloud, wind, star off, QR code on grid's squares, rectangle, ellipse, coins); batch 30 (nature and tools); the list family (bullet, numbered, checklist share rows 5, 8, 11); filled lines beside solids keep the icon weight; mark placement is set by the shape; batches 27–29 (AI and chat, Figma tools, commerce; open: unpin's cut); batch 26 (checkbox, checklist, bookmark remove, filter add, top panel, pushpin, palette); batches 24–25 (lists and sorting; view and tools; clear filters and the 1's sharp flag approved; the 2 and percent (Geist's 54° slash) revised; mark placement is set by the shape; filled lines beside solids keep the icon weight); batch 23 (call,
    reply/forward, sync, eraser, text align, indent/outdent, columns/rows, container remove);
    the negative-space round (graduation cap, bell, bell off, clipboard, car, watch: gaps on
    the outline's lines); batch 22; keyboard and repeat; batches 18–21.
    Rules: skill (Shared parts, Families, Filled variants: negative space on the outline's
    lines, only where fill is on both sides) and the spec's last sections; the lint checks
    dot sizes, the shared slash on `-off` icons and knockouts that never enter a solid.
-   Next batch ideas: translate (letters need a construction), star-off, highlighter, coin,
-   boolean ops (union, subtract), ellipse and rectangle tools, QR code (drafted, pushed),
-   coins, cloud rain and cloud lightning, wind.
+   Batch 43 redrew thirteen dropped icons with one simplification each (skill: Fitting a dense
+   idea at 16px). Process tools (2026-09-28): `icons:find` (does it exist?), `icons:geometry`
+   (fillet, cut, behind, lobes, transform, gap), `gen-pilot-icons.mjs --only a,b` (a second,
+   not a minute; near misses name the distance to fix), `icons:sheet compare out.png batch-NN`
+   (beside Fluent), `icons:batch batch.json` (records a batch everywhere). The build queue from
+   the owner's Cursor references is `docs/research/icon-inventory.md`.
+   The drawing roadmap is done; what remains is the swap below. New rules this round: every
+   cloud is the one shape (weather clouds moved up, rain hangs from the foot, the bolt crosses it
+   with a filled-only `halo`); qr-code's `data-gap="aligned"`. Batch sheets:
+   `icon-sheet.mjs filled out.png <icons…>`.
    The lint doesn't measure gaps within one path (paperclip's were solved by hand).
    `npm run typecheck` fails while the dev server rebuilds `packages/react/dist` (TS7016 on
    `@area/react`); rerun once the rebuild settles. Review filled variants with
