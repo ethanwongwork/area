@@ -2,9 +2,9 @@
 
 Layer 4 research · checked **2026-09-28** · branch `astra/patterns`.
 
-Starting `git rev-parse HEAD`: **`18b86465d542f620d532fee351c4f28d50c8ac3a`**. This is the fetched `origin/main` used to create the isolated worktree. Findings stay pinned here even if main or another working branch advances.
+Snapshot of commit **`18b86465d542f620d532fee351c4f28d50c8ac3a`**. This is the fetched `origin/main` used to create the isolated worktree. Findings stay pinned here even if main or another working branch advances.
 
-The catalogue contains **52 patterns across 18 requested categories**, grounded in **52 public reference pages**. Counts are computed from [coverage.json](coverage.json). All entries contain purpose, ordered anatomy, Area mappings, gaps, variations, responsive recommendations and dated sources.
+The catalogue contains **52 patterns across 18 requested categories**, grounded in **51 cited public reference pages**. Counts are computed from [coverage.json](coverage.json). All entries contain purpose, ordered anatomy, Area mappings, gaps, variations, responsive recommendations and dated sources.
 
 ## Scope and evidence
 

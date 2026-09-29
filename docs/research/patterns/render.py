@@ -49,10 +49,10 @@ def render():
       categories={k:dict(title=v,file=k+'.md',pattern_ids=[p['id'] for p in PATTERNS if p['category']==k]) for k,v in CATEGORIES.items()},
       components=registry,patterns=patterns,priorities=reach,
       showcase=[dict(pattern_id=id,reason=reason) for id,reason in SHOWCASE],
-      counts=dict(categories=len(CATEGORIES),patterns=len(patterns),sources=len(SOURCES),showcase_patterns=len(SHOWCASE),
+      counts=dict(categories=len(CATEGORIES),patterns=len(patterns),sources=len({s for p in patterns.values() for s in p['source_ids']}),showcase_patterns=len(SHOWCASE),
                   built_families_in_catalogue=len(all_built),built_families_in_showcase=len(shown)),
       provenance=dict(brief='Absent from base main; read-only user-specified fallback. No commit provenance asserted for that working file.',
-        brief_fallback='/Users/ethanwong/Desktop/area/.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md',
+        brief_fallback='.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md',
         brief_sections='Customization model, lines 109–123; Library, lines 213–223. Checked 2026-09-28.',
         sources='sources.py and source-checks.json',scope='Only docs/research/patterns; public sources; no product UI or owner completion state changed.'))
     (ROOT/'coverage.json').write_text(json.dumps(coverage,indent=2,ensure_ascii=False)+'\n')
@@ -87,8 +87,8 @@ def render():
             lines+=['']
         (ROOT/(cat+'.md')).write_text('\n'.join(lines).rstrip()+'\n')
     lines=['# Patterns and screens catalogue','',f'Layer 4 research · checked **{DATE}** · branch `astra/patterns`.','',
-      f'Starting `git rev-parse HEAD`: **`{BASE}`**. This is the fetched `origin/main` used to create the isolated worktree. Findings stay pinned here even if main or another working branch advances.','',
-      f'The catalogue contains **{len(patterns)} patterns across {len(CATEGORIES)} requested categories**, grounded in **{len(SOURCES)} public reference pages**. Counts are computed from '+link('coverage.json','coverage.json')+'. All entries contain purpose, ordered anatomy, Area mappings, gaps, variations, responsive recommendations and dated sources.','',
+      f'Snapshot of commit **`{BASE}`**. This is the fetched `origin/main` used to create the isolated worktree. Findings stay pinned here even if main or another working branch advances.','',
+      f'The catalogue contains **{len(patterns)} patterns across {len(CATEGORIES)} requested categories**, grounded in **{coverage['counts']['sources']} cited public reference pages**. Counts are computed from '+link('coverage.json','coverage.json')+'. All entries contain purpose, ordered anatomy, Area mappings, gaps, variations, responsive recommendations and dated sources.','',
       '## Scope and evidence','',
       'The brief puts screens, flows and layouts in layer 4. It was absent from main, so the user-specified `docs/BRIEF.md` in the `astra-6-usage-tasks-17a367` worktree was read only (2026-09-28; customization model lines 109–123). That working-file fallback is a scope input, not evidence for today’s component availability.','',
       'Area evidence uses '+link('COMPONENTS.md',evidence(BASE,'docs/COMPONENTS.md',27)['url'])+', the pinned manifest/React exports and the '+link('owner registry',evidence(BASE,'apps/docs/src/component-status.mjs',6)['url'])+'. Each component record has exact pinned file/line links. The three range branches were read without checkout:','']

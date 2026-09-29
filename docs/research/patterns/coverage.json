@@ -12088,14 +12088,14 @@
   "counts": {
     "categories": 18,
     "patterns": 52,
-    "sources": 52,
+    "sources": 51,
     "showcase_patterns": 20,
     "built_families_in_catalogue": 58,
     "built_families_in_showcase": 58
   },
   "provenance": {
     "brief": "Absent from base main; read-only user-specified fallback. No commit provenance asserted for that working file.",
-    "brief_fallback": "/Users/ethanwong/Desktop/area/.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md",
+    "brief_fallback": ".claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md",
     "brief_sections": "Customization model, lines 109–123; Library, lines 213–223. Checked 2026-09-28.",
     "sources": "sources.py and source-checks.json",
     "scope": "Only docs/research/patterns; public sources; no product UI or owner completion state changed."

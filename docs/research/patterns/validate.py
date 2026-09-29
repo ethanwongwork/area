@@ -74,7 +74,7 @@ def check():
     shown={c['component_id'] for id,_ in SHOWCASE for c in ps[id]['required_components'] if c['area_status']=='built'}
     assert d['counts']['built_families_in_showcase']==len(shown)
     assert d['counts']['categories']==len(EXPECTED) and d['counts']['patterns']==len(ps)
-    assert d['counts']['sources']==len(SOURCES)
+    assert d['counts']['sources']==len({s for p in ps.values() for s in p['source_ids']})
     # Check local links and pinned GitHub source line bounds, including Markdown-only links.
     links=0
     for path in ROOT.glob('*.md'):
@@ -96,7 +96,7 @@ def check():
     from render import render
     render()
     assert all(x.read_bytes()==data for x,data in before.items()),'Generated output drift'
-    paths=subprocess.check_output(['git','diff',BASE,'--name-only'],text=True).splitlines()
+    paths=subprocess.check_output(['git','diff','origin/main','--name-only'],text=True).splitlines()
     paths+=subprocess.check_output(['git','ls-files','--others','--exclude-standard'],text=True).splitlines()
     assert all(p.startswith('docs/research/patterns/') for p in paths),paths
     assert not list(ROOT.rglob('__pycache__')),'Do not commit Python cache files'
