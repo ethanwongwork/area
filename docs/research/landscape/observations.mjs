@@ -367,7 +367,7 @@ patterns:c('Documents patterns; interactive generation across all patterns not c
 existingSystem:c('Imports and manages system data, documentation and delivery.',h),
 content:c('Team system documentation, tokens and components.',h),
 liveCode:c('Code delivery/embeds and machine-readable context; not all documented content is executable.',h,'partial'),
-publishing:c('Public/private documentation and exporter PR delivery.',[h,g]),
+publishing:c('Public/private documentation is described publicly. Exporter PR delivery remains unverified because the cited delivery page redirects to login.',[h,g],'partial'),
 frameworks:c('Exporter targets include web/React, iOS, Android, React Native and Flutter; export formats are not component behavior parity.','https://learn.supernova.io/'),
 execution:c('Cloud platform with code/export integrations.',h),
 pricing:c('Free; Pro displayed at $35/editor/month; Enterprise custom. Billing-toggle basis not confirmed.','https://www.supernova.io/pricing','partial'),

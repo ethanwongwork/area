@@ -29,8 +29,8 @@
     "datedClaims": 482,
     "distinctToolSourceUrls": 131,
     "statusCounts": {
-      "documented": 319,
-      "partial": 95,
+      "documented": 318,
+      "partial": 96,
       "not found": 43,
       "vendor claim": 9,
       "reported": 5,
@@ -3020,8 +3020,8 @@
           ]
         },
         "publishing": {
-          "status": "documented",
-          "value": "Public/private documentation and exporter PR delivery.",
+          "status": "partial",
+          "value": "Public/private documentation is described publicly. Exporter PR delivery remains unverified because the cited delivery page redirects to login.",
           "sources": [
             {
               "url": "https://www.supernova.io/",
