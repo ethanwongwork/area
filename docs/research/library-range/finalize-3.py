@@ -40,6 +40,7 @@ while changed:
         for dep in items:
             if priority[dep]<priority[slug]:priority[dep]=priority[slug];changed=True
 phases={slug:(4 if row['family_system_count']==0 else 3 if row['kind']=='adapter' else 1 if priority[slug]>=6 else 2) for slug,row in index.items()}
+phases['banner']=0
 # Lift dependants to the phase of their latest prerequisite, then topologically sort.
 changed=True
 while changed:
@@ -52,7 +53,7 @@ while len(order)<len(index):
     ready=[slug for slug in index if slug not in order and all(d in order for d in deps.get(slug,[]))]
     assert ready,'Dependency cycle'
     order.append(min(ready,key=lambda slug:(phases[slug],-priority[slug],-index[slug]['family_system_count'],index[slug]['name'])))
-plan=[dict(rank=i+1,family=slug,phase=phases[slug],kind=index[slug]['kind'],observed_system_count=index[slug]['family_system_count'],dependency_priority=priority[slug],new_prerequisites=deps.get(slug,[]),existing_reuses=index[slug]['reuses'],source=slug+'.md#sources') for i,slug in enumerate(order)]
+plan=[dict(rank=i+1,family=slug,phase=phases[slug],kind=index[slug]['kind'],observed_system_count=index[slug]['family_system_count'],dependency_priority=priority[slug],new_prerequisites=deps.get(slug,[]),existing_reuses=index[slug]['reuses'],source=index[slug].get('page',slug+'.md#sources')) for i,slug in enumerate(order)]
 write('build-order-3.json',plan)
 readme=(P/'README-3.md').read_text().split('## Evidence and counting')[0]
 options=sum(len(v['options']) for v in index.values());proposals=sum(sum(o['proposed'] for o in v['options'].values()) for v in index.values());units=len(load('source-ledger-3.json'))
@@ -99,7 +100,7 @@ layer 2 is local variation and layer 3 is anatomy/composition. Avoid a Cartesian
 of all upstream choices.
 
 '''
-readme+=f'The deliverable contains **{len(index)} families**, **{options} linked option/example/category records**,\n**{proposals} proposed range categories** and **{units} source units**. These are computed\nfrom the committed JSON, not market-share estimates. Every family has the seven requested\nsections, every option has evidence, and all existing reuses resolve in the pinned Area manifest.\n\n'
+readme+=f'The deliverable contains **{len(index)} families**, **{options} linked option/example/category records**,\n**{proposals} proposed range categories** and **{units} source units**. These are computed\nfrom the committed JSON, not market-share estimates. Evidence-backed family pages have the seven requested\nsections; 13 deferred families share no-evidence.md. Every retained option has evidence, and all existing reuses resolve in the pinned Area manifest.\n\n'
 readme+='''## Build-order proposal
 
 Prioritize common jobs and their prerequisites, then narrower reusable families,
@@ -114,13 +115,14 @@ Counts include functional recipes as described above; follow each family link fo
 its component/recipe split, system names, variants and citations.
 
 '''
-labels={1:'Common jobs and enabling primitives',2:'Narrower reusable families and compositions',3:'Adapters and engine-dependent work',4:'Owner contract and evidence needed'}
+labels={0:'Already built on current main',1:'Common jobs and enabling primitives',2:'Narrower reusable families and compositions',3:'Adapters and engine-dependent work',4:'Owner contract and evidence needed'}
 last=None
 for row in plan:
     slug=row['family'];v=index[slug]
     if row['phase']!=last:readme+='### '+labels[row['phase']]+'\n\n';last=row['phase']
     new='; new prerequisites: '+', '.join(index[d]['name'] for d in row['new_prerequisites']) if row['new_prerequisites'] else ''
-    readme+=f"{row['rank']}. [{v['name']}]({slug}.md) — **{v['family_system_count']}/15**; {v['kind']}; reuse {', '.join(v['reuses'])}{new}.\n"
+    target=v.get('page',slug+'.md')
+    readme+=f"{row['rank']}. [{v['name']}]({target}) — **{v['family_system_count']}/15**; {v['kind']}; reuse {', '.join(v['reuses'])}{new}.\n"
     if row==plan[-1] or plan[row['rank']]['phase']!=row['phase']:readme+='\n'
 readme+='''## Owner decisions
 

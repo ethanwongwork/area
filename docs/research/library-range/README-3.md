@@ -1,7 +1,9 @@
 # Library range catalogue — run 3
 
-Research worktree: `astra/library-range-3`. Base (`git rev-parse HEAD` before research):
+Research worktree: `astra/library-range-3`. Snapshot of commit
 `c585f8c5f38705a7efa79bf05148a8c6989b142a`.
+
+Thirteen evidence-free family stubs are consolidated in [no-evidence.md](no-evidence.md); full lookup coverage remains in the index.
 
 ## Exact scope
 
@@ -56,14 +58,14 @@ Research worktree: `astra/library-range-3`. Base (`git rev-parse HEAD` before re
 49. [Code editor integration](code-editor.md)
 50. [Chart integrations](charts.md)
 51. [GradientEditor](gradient-editor.md)
-52. [EasingCurveEditor](easing-curve-editor.md)
-53. [ShortcutRecorder](shortcut-recorder.md)
+52. [EasingCurveEditor](no-evidence.md#easing-curve-editor)
+53. [ShortcutRecorder](no-evidence.md#shortcut-recorder)
 54. [Toggletip](toggletip.md)
 55. [MessageActions](message-actions.md)
-56. [ThinkingDisclosure](thinking-disclosure.md)
-57. [SourceChip / citation pill](source-chip.md)
+56. [ThinkingDisclosure](no-evidence.md#thinking-disclosure)
+57. [SourceChip / citation pill](no-evidence.md#source-chip)
 58. [AttachmentCard](attachment-card.md)
-59. [VoiceInput](voice-input.md)
+59. [VoiceInput](no-evidence.md#voice-input)
 60. [EmojiPicker / IconPicker](emoji-picker.md)
 61. [Callout](callout.md)
 62. [ToggleBlock](toggle-block.md)
@@ -71,19 +73,19 @@ Research worktree: `astra/library-range-3`. Base (`git rev-parse HEAD` before re
 64. [Reactions](reactions.md)
 65. [CommentThread](comment-thread.md)
 66. [FloatingFormatBar](floating-format-bar.md)
-67. [DatabaseCard](database-card.md)
-68. [PropertyValue](property-value.md)
+67. [DatabaseCard](no-evidence.md#database-card)
+68. [PropertyValue](no-evidence.md#property-value)
 69. [ColorArea](color-area.md)
 70. [ColorSlider](color-slider.md)
 71. [EyedropperButton](eyedropper-button.md)
 72. [ScrubbableAngle / dial](scrubbable-angle.md)
-73. [ZoomControl](zoom-control.md)
-74. [LayerRow badges](layer-row-badges.md)
-75. [ConstraintsPicker](constraints-picker.md)
+73. [ZoomControl](no-evidence.md#zoom-control)
+74. [LayerRow badges](no-evidence.md#layer-row-badges)
+75. [ConstraintsPicker](no-evidence.md#constraints-picker)
 76. [UnitField](unit-field.md)
-77. [FontPicker](font-picker.md)
-78. [VariableChip](variable-chip.md)
-79. [KeyboardShortcut overlay](keyboard-shortcuts.md)
+77. [FontPicker](no-evidence.md#font-picker)
+78. [VariableChip](no-evidence.md#variable-chip)
+79. [KeyboardShortcut overlay](no-evidence.md#keyboard-shortcuts)
 
 ## Scope decisions
 
@@ -97,7 +99,8 @@ Custom Select and overlay/submenu behavior stay with the existing Select/Menu/Po
 Tooltip/Dialog families covered by the other runs. ColorPicker paints stay with that
 family; GradientEditor is retained because the inventory separately names its editing job.
 
-Retained named extensions such as Banner, circular Progress, MessageActions,
+Banner is now built and approved as Alert layout="banner" (current-main review 7dae828e7af1daf9d26b663d34335121156606f7).
+Retained named extensions such as circular Progress, MessageActions,
 ColorArea and ColorSlider are catalogued as **extension/composition candidates**, not
 claims that Area has no corresponding rendering. The same rule applies to UnitField,
 ToggleButtonGroup and Splitter. Their standalone names are absent from the manifest.
@@ -106,7 +109,7 @@ Count is outside the three requested inventory sections and is not in this run.
 Duplicate mentions and slash aliases share one file. Editable text includes InlineEditableTitle.
 
 `docs/BRIEF.md` is absent from the base. Read-only fallback used:
-`/Users/ethanwong/Desktop/area/.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md`
+`.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md`
 (checked 2026-09-28). Layers 2–3 and Library guide proposals; no changes to that checkout.
 
 ## Evidence and counting
@@ -151,10 +154,10 @@ Reuse and build priorities are design judgments. Density and mode remain system-
 layer 2 is local variation and layer 3 is anatomy/composition. Avoid a Cartesian product
 of all upstream choices.
 
-The deliverable contains **79 families**, **6376 linked option/example/category records**,
-**160 proposed range categories** and **435 source units**. These are computed
-from the committed JSON, not market-share estimates. Every family has the seven requested
-sections, every option has evidence, and all existing reuses resolve in the pinned Area manifest.
+The deliverable contains **79 families**, **6363 linked option/example/category records**,
+**147 proposed range categories** and **435 source units**. These are computed
+from the committed JSON, not market-share estimates. Evidence-backed family pages have the seven requested
+sections; 13 deferred families share no-evidence.md. Every retained option has evidence, and all existing reuses resolve in the pinned Area manifest.
 
 ## Build-order proposal
 
@@ -169,23 +172,26 @@ phase. This is a recommendation, not an externally sourced score. The machine-re
 Counts include functional recipes as described above; follow each family link for
 its component/recipe split, system names, variants and citations.
 
+### Already built on current main
+
+1. [Banner](banner.md) — **8/15**; built; reuse Alert, Button.
+
 ### Common jobs and enabling primitives
 
-1. [AlertDialog](alert-dialog.md) — **13/15**; recipe; reuse Dialog, Button.
-2. [Accordion / Disclosure](accordion.md) — **11/15**; primitive; reuse Button, Panel.
-3. [Drawer / Sheet](drawer.md) — **11/15**; recipe; reuse Dialog, Panel, Button.
-4. [Link](link.md) — **11/15**; primitive; reuse Code, Button.
-5. [DateField](date-field.md) — **6/15**; primitive; reuse Field, Input.
-6. [DatePicker](date-picker.md) — **11/15**; recipe; reuse Calendar, Popover, Input, Field; new prerequisites: DateField.
-7. [ToggleButtonGroup](toggle-button-group.md) — **10/15**; recipe; reuse ButtonGroup, Segmented.
-8. [ListBox](listbox.md) — **7/15**; primitive; reuse Checkbox, Chip.
-9. [MultiSelect](multi-select.md) — **10/15**; primitive; reuse Combobox, Chip, Checkbox, Popover; new prerequisites: ListBox.
-10. [DateRangePicker](date-range-picker.md) — **9/15**; recipe; reuse Calendar, Popover, Input, Field; new prerequisites: DatePicker.
-11. [FileUpload / DropZone](file-upload.md) — **9/15**; primitive; reuse Input, Button, Progress, Alert.
-12. [Form validation / Error summary](form-validation.md) — **9/15**; primitive; reuse Field, Input, Alert, Button.
-13. [Pagination](pagination.md) — **9/15**; recipe; reuse Button, Select, Input.
-14. [Sidebar](sidebar.md) — **9/15**; recipe; reuse Nav, Button, Menu.
-15. [Banner](banner.md) — **8/15**; recipe; reuse Alert, Button.
+2. [AlertDialog](alert-dialog.md) — **13/15**; recipe; reuse Dialog, Button.
+3. [Accordion / Disclosure](accordion.md) — **11/15**; primitive; reuse Button, Panel.
+4. [Drawer / Sheet](drawer.md) — **11/15**; recipe; reuse Dialog, Panel, Button.
+5. [Link](link.md) — **11/15**; primitive; reuse Code, Button.
+6. [DateField](date-field.md) — **6/15**; primitive; reuse Field, Input.
+7. [DatePicker](date-picker.md) — **11/15**; recipe; reuse Calendar, Popover, Input, Field; new prerequisites: DateField.
+8. [ToggleButtonGroup](toggle-button-group.md) — **10/15**; recipe; reuse ButtonGroup, Segmented.
+9. [ListBox](listbox.md) — **7/15**; primitive; reuse Checkbox, Chip.
+10. [MultiSelect](multi-select.md) — **10/15**; primitive; reuse Combobox, Chip, Checkbox, Popover; new prerequisites: ListBox.
+11. [DateRangePicker](date-range-picker.md) — **9/15**; recipe; reuse Calendar, Popover, Input, Field; new prerequisites: DatePicker.
+12. [FileUpload / DropZone](file-upload.md) — **9/15**; primitive; reuse Input, Button, Progress, Alert.
+13. [Form validation / Error summary](form-validation.md) — **9/15**; primitive; reuse Field, Input, Alert, Button.
+14. [Pagination](pagination.md) — **9/15**; recipe; reuse Button, Select, Input.
+15. [Sidebar](sidebar.md) — **9/15**; recipe; reuse Nav, Button, Menu.
 16. [EmptyState](empty-state.md) — **8/15**; recipe; reuse Button, Card.
 17. [Live notification queue](notification-queue.md) — **8/15**; primitive; reuse Toast.
 18. [TagPicker](tag-picker.md) — **8/15**; recipe; reuse Combobox, Chip, Popover; new prerequisites: MultiSelect.
@@ -246,19 +252,19 @@ its component/recipe split, system names, variants and citations.
 ### Owner contract and evidence needed
 
 66. [Code editor integration](code-editor.md) — **0/15**; defer; reuse CodeBlock, Toolbar.
-67. [ConstraintsPicker](constraints-picker.md) — **0/15**; recipe; reuse CheckboxGroup, AlignmentPicker.
-68. [EasingCurveEditor](easing-curve-editor.md) — **0/15**; defer; reuse NumberField, InputGroup.
-69. [FontPicker](font-picker.md) — **0/15**; adapter; reuse Combobox, Select; new prerequisites: ListBox.
-70. [KeyboardShortcut overlay](keyboard-shortcuts.md) — **0/15**; recipe; reuse Dialog, Kbd; new prerequisites: DescriptionList.
-71. [LayerRow badges](layer-row-badges.md) — **0/15**; recipe; reuse TreeView, Badge.
-72. [PropertyValue](property-value.md) — **0/15**; adapter; reuse Field, Input, Badge, Avatar, Checkbox; new prerequisites: UnitField, PeoplePicker, DateField.
-73. [DatabaseCard](database-card.md) — **0/15**; recipe; reuse Card, Badge, Avatar; new prerequisites: PropertyValue.
-74. [ShortcutRecorder](shortcut-recorder.md) — **0/15**; defer; reuse Kbd, Input, Button.
-75. [SourceChip / citation pill](source-chip.md) — **0/15**; recipe; reuse Chip, HoverCard.
-76. [ThinkingDisclosure](thinking-disclosure.md) — **0/15**; recipe; reuse Message, Panel, Spinner; new prerequisites: Accordion / Disclosure.
-77. [VariableChip](variable-chip.md) — **0/15**; recipe; reuse Chip, Code, Tooltip.
-78. [VoiceInput](voice-input.md) — **0/15**; defer; reuse Button, Progress, Composer.
-79. [ZoomControl](zoom-control.md) — **0/15**; recipe; reuse NumberField, Menu, Button.
+67. [ConstraintsPicker](no-evidence.md#constraints-picker) — **0/15**; recipe; reuse CheckboxGroup, AlignmentPicker.
+68. [EasingCurveEditor](no-evidence.md#easing-curve-editor) — **0/15**; defer; reuse NumberField, InputGroup.
+69. [FontPicker](no-evidence.md#font-picker) — **0/15**; adapter; reuse Combobox, Select; new prerequisites: ListBox.
+70. [KeyboardShortcut overlay](no-evidence.md#keyboard-shortcuts) — **0/15**; recipe; reuse Dialog, Kbd; new prerequisites: DescriptionList.
+71. [LayerRow badges](no-evidence.md#layer-row-badges) — **0/15**; recipe; reuse TreeView, Badge.
+72. [PropertyValue](no-evidence.md#property-value) — **0/15**; adapter; reuse Field, Input, Badge, Avatar, Checkbox; new prerequisites: UnitField, PeoplePicker, DateField.
+73. [DatabaseCard](no-evidence.md#database-card) — **0/15**; recipe; reuse Card, Badge, Avatar; new prerequisites: PropertyValue.
+74. [ShortcutRecorder](no-evidence.md#shortcut-recorder) — **0/15**; defer; reuse Kbd, Input, Button.
+75. [SourceChip / citation pill](no-evidence.md#source-chip) — **0/15**; recipe; reuse Chip, HoverCard.
+76. [ThinkingDisclosure](no-evidence.md#thinking-disclosure) — **0/15**; recipe; reuse Message, Panel, Spinner; new prerequisites: Accordion / Disclosure.
+77. [VariableChip](no-evidence.md#variable-chip) — **0/15**; recipe; reuse Chip, Code, Tooltip.
+78. [VoiceInput](no-evidence.md#voice-input) — **0/15**; defer; reuse Button, Progress, Composer.
+79. [ZoomControl](no-evidence.md#zoom-control) — **0/15**; recipe; reuse NumberField, Menu, Button.
 
 ## Owner decisions
 

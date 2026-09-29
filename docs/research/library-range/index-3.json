@@ -51520,11 +51520,14 @@
         "category": "range-category",
         "proposed": true,
         "systems": [
+          "Ant Design",
+          "Carbon",
           "Chakra/Ark",
+          "Fluent 2",
           "Mantine",
           "React Aria / Spectrum 2"
         ],
-        "system_count": 3,
+        "system_count": 6,
         "analogue_systems": [],
         "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
         "reuses": [
@@ -51556,6 +51559,30 @@
             "url": "https://github.com/mantinedev/mantine/blob/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4/apps/mantine.dev/src/pages/dates/date-picker-input.mdx#L77",
             "checked": "2026-09-28",
             "locator": "Min and max dates",
+            "analogue": false
+          },
+          {
+            "unit": "n:date-picker",
+            "system": "Ant Design",
+            "url": "https://github.com/ant-design/ant-design/blob/7ad64087106acd078dcc7d91a4adfdf38f5ce172/components/date-picker/index.en-US.md#L115",
+            "checked": "2026-09-28",
+            "locator": "minDate",
+            "analogue": false
+          },
+          {
+            "unit": "f:@DatePicker",
+            "system": "Fluent 2",
+            "url": "https://github.com/microsoft/fluentui/blob/8add8c8750c34c85acd811e32ab324abf8f1562e/packages/react-components/react-datepicker-compat/library/src/components/DatePicker/DatePicker.types.ts#L196",
+            "checked": "2026-09-28",
+            "locator": "minDate",
+            "analogue": false
+          },
+          {
+            "unit": "c:DatePicker",
+            "system": "Carbon",
+            "url": "https://github.com/carbon-design-system/carbon/blob/650fcf4a8c5f86c5fdaa255d59229fe70fdb9757/packages/react/src/components/DatePicker/DatePicker.tsx#L327",
+            "checked": "2026-09-28",
+            "locator": "minDate",
             "analogue": false
           }
         ]
@@ -149058,7 +149085,7 @@
   },
   "banner": {
     "name": "Banner",
-    "kind": "recipe",
+    "kind": "built",
     "base_commit": "c585f8c5f38705a7efa79bf05148a8c6989b142a",
     "checked": "2026-09-28",
     "family_systems": [
@@ -151986,7 +152013,9 @@
           }
         ]
       }
-    }
+    },
+    "area_status": "built",
+    "area_review_commit": "7dae828e7af1daf9d26b663d34335121156606f7"
   },
   "meter": {
     "name": "Meter",
@@ -182783,34 +182812,9 @@
         ]
       }
     },
-    "options": {
-      "range-engine-backed-timing-function-editor": {
-        "label": "Engine-backed timing-function editor",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Material 3"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "NumberField",
-          "InputGroup"
-        ],
-        "evidence": [
-          {
-            "unit": "m:motion",
-            "system": "Material 3",
-            "url": "https://github.com/material-components/material-components-android/blob/60ff09436d5d477a4b9d02940f31eb01e1250620/lib/java/com/google/android/material/motion/MaterialBackAnimationHelper.java#L20",
-            "checked": "2026-09-28",
-            "locator": "Interpolator",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#easing-curve-editor",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "shortcut-recorder": {
     "name": "ShortcutRecorder",
@@ -183073,44 +183077,9 @@
         ]
       }
     },
-    "options": {
-      "range-recorder-paired-with-chord-display": {
-        "label": "Recorder paired with chord display",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Apple HIG",
-          "Primer"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "Kbd",
-          "Input",
-          "Button"
-        ],
-        "evidence": [
-          {
-            "unit": "p:keybinding-hint",
-            "system": "Primer",
-            "url": "https://primer.style/product/components/keybinding-hint/",
-            "checked": "2026-09-28",
-            "locator": "Sequences and chords",
-            "analogue": true
-          },
-          {
-            "unit": "h:keyboards",
-            "system": "Apple HIG",
-            "url": "https://developer.apple.com/design/human-interface-guidelines/keyboards",
-            "checked": "2026-09-28",
-            "locator": "shortcuts",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#shortcut-recorder",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "toggletip": {
     "name": "Toggletip",
@@ -185918,44 +185887,9 @@
         ]
       }
     },
-    "options": {
-      "range-disclosure-containing-live-message-status": {
-        "label": "Disclosure containing live message status",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "React Aria / Spectrum 2",
-          "shadcn/ui"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "Message",
-          "Panel",
-          "Spinner"
-        ],
-        "evidence": [
-          {
-            "unit": "a:Disclosure",
-            "system": "React Aria / Spectrum 2",
-            "url": "https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/react-aria-components/src/Disclosure.tsx#L76",
-            "checked": "2026-09-28",
-            "locator": "Disclosure",
-            "analogue": true
-          },
-          {
-            "unit": "s:message",
-            "system": "shadcn/ui",
-            "url": "https://github.com/shadcn-ui/ui/blob/db2db460a26fa84fb65c8d903b213925fbdee9ed/apps/v4/content/docs/components/base/message.mdx#L16",
-            "checked": "2026-09-28",
-            "locator": "reasoning",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#thinking-disclosure",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "source-chip": {
     "name": "SourceChip / citation pill",
@@ -186259,43 +186193,9 @@
         ]
       }
     },
-    "options": {
-      "range-linked-citation-with-optional-preview": {
-        "label": "Linked citation with optional preview",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Radix Themes",
-          "Untitled UI"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "Chip",
-          "HoverCard"
-        ],
-        "evidence": [
-          {
-            "unit": "r:hover-card",
-            "system": "Radix Themes",
-            "url": "https://www.radix-ui.com/themes/docs/components/hover-card",
-            "checked": "2026-09-28",
-            "locator": "Hover Card",
-            "analogue": true
-          },
-          {
-            "unit": "u:messaging",
-            "system": "Untitled UI",
-            "url": "https://www.untitledui.com/react/components/messaging",
-            "checked": "2026-09-28",
-            "locator": "Message link preview",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#source-chip",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "attachment-card": {
     "name": "AttachmentCard",
@@ -187443,35 +187343,9 @@
         ]
       }
     },
-    "options": {
-      "range-recorder-adapter-with-transport-controls": {
-        "label": "Recorder adapter with transport controls",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Untitled UI"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "Button",
-          "Progress",
-          "Composer"
-        ],
-        "evidence": [
-          {
-            "unit": "u:messaging",
-            "system": "Untitled UI",
-            "url": "https://www.untitledui.com/react/components/messaging",
-            "checked": "2026-09-28",
-            "locator": "Message audio",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#voice-input",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "emoji-picker": {
     "name": "EmojiPicker / IconPicker",
@@ -198606,43 +198480,9 @@
         ]
       }
     },
-    "options": {
-      "range-record-card-with-metadata-and-actions": {
-        "label": "Record card with metadata and actions",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Primer"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "Card",
-          "Badge",
-          "Avatar"
-        ],
-        "evidence": [
-          {
-            "unit": "p:card",
-            "system": "Primer",
-            "url": "https://primer.style/product/components/card/",
-            "checked": "2026-09-28",
-            "locator": "With metadata",
-            "analogue": true
-          },
-          {
-            "unit": "p:card",
-            "system": "Primer",
-            "url": "https://primer.style/product/components/card/",
-            "checked": "2026-09-28",
-            "locator": "With action",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#database-card",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "property-value": {
     "name": "PropertyValue",
@@ -198982,46 +198822,9 @@
         ]
       }
     },
-    "options": {
-      "range-typed-value-renderer-registry": {
-        "label": "Typed value renderer registry",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Ant Design",
-          "React Aria / Spectrum 2"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "Field",
-          "Input",
-          "Badge",
-          "Avatar",
-          "Checkbox"
-        ],
-        "evidence": [
-          {
-            "unit": "a:Table",
-            "system": "React Aria / Spectrum 2",
-            "url": "https://github.com/adobe/react-spectrum/blob/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783/packages/react-aria/src/table/useTableColumnHeader.ts#L43",
-            "checked": "2026-09-28",
-            "locator": "Cell",
-            "analogue": true
-          },
-          {
-            "unit": "n:descriptions",
-            "system": "Ant Design",
-            "url": "https://github.com/ant-design/ant-design/blob/7ad64087106acd078dcc7d91a4adfdf38f5ce172/components/descriptions/index.en-US.md#L98",
-            "checked": "2026-09-28",
-            "locator": "DescriptionItem",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#property-value",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "color-area": {
     "name": "ColorArea",
@@ -207250,35 +207053,9 @@
         ]
       }
     },
-    "options": {
-      "range-percentage-field-and-zoom-commands": {
-        "label": "Percentage field and zoom commands",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Ant Design"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "NumberField",
-          "Menu",
-          "Button"
-        ],
-        "evidence": [
-          {
-            "unit": "n:image",
-            "system": "Ant Design",
-            "url": "https://github.com/ant-design/ant-design/blob/7ad64087106acd078dcc7d91a4adfdf38f5ce172/components/image/index.en-US.md#L153",
-            "checked": "2026-09-28",
-            "locator": "TransformAction",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#zoom-control",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "layer-row-badges": {
     "name": "LayerRow badges",
@@ -207553,43 +207330,9 @@
         ]
       }
     },
-    "options": {
-      "range-trailing-layer-status-markers": {
-        "label": "Trailing layer-status markers",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Fluent 2",
-          "Primer"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "TreeView",
-          "Badge"
-        ],
-        "evidence": [
-          {
-            "unit": "f:tree",
-            "system": "Fluent 2",
-            "url": "https://fluent2.microsoft.design/components/web/react/core/tree/usage",
-            "checked": "2026-09-28",
-            "locator": "Badges",
-            "analogue": true
-          },
-          {
-            "unit": "p:tree-view",
-            "system": "Primer",
-            "url": "https://github.com/primer/react/blob/a89299ae77e8f444599f94d7e9ca368c17be3f9a/packages/react/src/TreeView/TreeView.tsx#L59",
-            "checked": "2026-09-28",
-            "locator": "TrailingVisual",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#layer-row-badges",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "constraints-picker": {
     "name": "ConstraintsPicker",
@@ -207864,43 +207607,9 @@
         ]
       }
     },
-    "options": {
-      "range-independent-spatial-edge-toggles": {
-        "label": "Independent spatial edge toggles",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Chakra/Ark",
-          "Primer"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "CheckboxGroup",
-          "AlignmentPicker"
-        ],
-        "evidence": [
-          {
-            "unit": "k:checkbox",
-            "system": "Chakra/Ark",
-            "url": "https://github.com/chakra-ui/ark/blob/b561e95d20d6bd0e75cdc08e762e881628b110f7/website/src/content/pages/components/checkbox.mdx#L79",
-            "checked": "2026-09-28",
-            "locator": "Checkbox Group",
-            "analogue": true
-          },
-          {
-            "unit": "p:checkbox-group",
-            "system": "Primer",
-            "url": "https://primer.style/product/components/checkbox-group/",
-            "checked": "2026-09-28",
-            "locator": "CheckboxGroup",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#constraints-picker",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "unit-field": {
     "name": "UnitField",
@@ -212264,43 +211973,9 @@
         ]
       }
     },
-    "options": {
-      "range-font-family-lookup-with-preview-adapter": {
-        "label": "Font-family lookup with preview adapter",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Chakra/Ark",
-          "Untitled UI"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "Combobox",
-          "Select"
-        ],
-        "evidence": [
-          {
-            "unit": "u:text-editors",
-            "system": "Untitled UI",
-            "url": "https://www.untitledui.com/react/components/text-editors",
-            "checked": "2026-09-28",
-            "locator": "Text editor",
-            "analogue": true
-          },
-          {
-            "unit": "k:rich-text-editor",
-            "system": "Chakra/Ark",
-            "url": "https://www.chakra-ui.com/docs/components/rich-text-editor",
-            "checked": "2026-09-28",
-            "locator": "Custom Controls",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#font-picker",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "variable-chip": {
     "name": "VariableChip",
@@ -212616,44 +212291,9 @@
         ]
       }
     },
-    "options": {
-      "range-bound-token-display-and-detach-action": {
-        "label": "Bound-token display and detach action",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Chakra/Ark",
-          "Radix Themes"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "Chip",
-          "Code",
-          "Tooltip"
-        ],
-        "evidence": [
-          {
-            "unit": "r:code",
-            "system": "Radix Themes",
-            "url": "https://www.radix-ui.com/themes/docs/components/code",
-            "checked": "2026-09-28",
-            "locator": "Code",
-            "analogue": true
-          },
-          {
-            "unit": "k:tags-input",
-            "system": "Chakra/Ark",
-            "url": "https://www.chakra-ui.com/docs/components/tags-input",
-            "checked": "2026-09-28",
-            "locator": "Item",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#variable-chip",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   },
   "keyboard-shortcuts": {
     "name": "KeyboardShortcut overlay",
@@ -212957,42 +212597,8 @@
         ]
       }
     },
-    "options": {
-      "range-grouped-shortcut-reference-in-an-overlay": {
-        "label": "Grouped shortcut reference in an overlay",
-        "layer": 3,
-        "category": "range-category",
-        "proposed": true,
-        "systems": [],
-        "system_count": 0,
-        "analogue_systems": [
-          "Primer",
-          "shadcn/ui"
-        ],
-        "support_scope": "At least one documented alternative in this category; exact native axis/value support is indexed separately.",
-        "reuses": [
-          "Dialog",
-          "Kbd"
-        ],
-        "evidence": [
-          {
-            "unit": "p:keybinding-hint",
-            "system": "Primer",
-            "url": "https://primer.style/product/components/keybinding-hint/",
-            "checked": "2026-09-28",
-            "locator": "Sequences and chords",
-            "analogue": true
-          },
-          {
-            "unit": "s:kbd",
-            "system": "shadcn/ui",
-            "url": "https://github.com/shadcn-ui/ui/blob/db2db460a26fa84fb65c8d903b213925fbdee9ed/apps/v4/content/docs/components/base/kbd.mdx#L111",
-            "checked": "2026-09-28",
-            "locator": "KbdGroup",
-            "analogue": true
-          }
-        ]
-      }
-    }
+    "options": {},
+    "page": "no-evidence.md#keyboard-shortcuts",
+    "evidence_status": "No dedicated outside implementation evidence; only analogues/guidance. Range deferred."
   }
 }

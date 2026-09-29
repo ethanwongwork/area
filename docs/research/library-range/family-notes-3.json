@@ -413,7 +413,7 @@
   },
   "banner": {
     "job": "Present a persistent page or section announcement.",
-    "decision": "Follow Area's existing decision to extend Alert layout rather than add a competing primitive.",
+    "decision": "Built on current main as Alert layout=\"banner\", with an independent flush boolean; owner approved. Retain this Alert extension rather than planning a new Banner primitive.",
     "interaction": "Fluent documents stacking, collapse and dismissal. Polaris provides dismissible banners and actions; GOV.UK separates notification and cookie-decision banners.",
     "interaction_sources": [
       "f:messagebar",
@@ -421,7 +421,7 @@
       "g:notification-banner",
       "g:cookie-banner"
     ],
-    "kind": "recipe"
+    "kind": "built"
   },
   "meter": {
     "job": "Show a bounded measurement rather than task completion.",

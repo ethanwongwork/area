@@ -1,12 +1,13 @@
 # Banner
 
+Current-main snapshot `7dae828e7af1daf9d26b663d34335121156606f7`: built and approved as Alert `layout="banner"`; `flush` is a separate boolean. [Manifest](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L532), [owner registry](https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/apps/docs/src/component-status.mjs#L10).
 ## Job
 
 Present a persistent page or section announcement.
 
 Observed family coverage: **8 / 15 implementation systems** (7 with a component source; 1 recipe-only). Apple HIG is checked separately as platform guidance. Counts are evidence-based lower bounds; see Sources.
 
-Follow Area's existing decision to extend Alert layout rather than add a competing primitive.
+Built on current main as Alert layout="banner", with an independent flush boolean; owner approved. Retain this Alert extension rather than planning a new Banner primitive.
 
 ## Variant axes
 
@@ -106,7 +107,7 @@ New prerequisites are recorded in [README-3.md](README-3.md#build-order-proposal
 
 ## Proposed range
 
-Follow Area's existing decision to extend Alert layout rather than add a competing primitive.
+Built on current main as Alert layout="banner", with an independent flush boolean; owner approved. Retain this Alert extension rather than planning a new Banner primitive.
 
 Start with the following layer 2/3 categories. A category count means the system documents at least one alternative in that category; it does **not** claim every named alternative is shared. Exact per-value counts are in the native inventory and [index-3.json](index-3.json). No public geometry is inferred from screenshots.
 

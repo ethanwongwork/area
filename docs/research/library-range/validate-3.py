@@ -7,6 +7,11 @@ P=Path(__file__).resolve().parent;ROOT=P.parents[2]
 load=lambda name:json.loads((P/name).read_text())
 index=load('index-3.json');scope=load('scope-3.json');pins=load('source-pins-3.json');ledger=load('source-ledger-3.json');pages=load('checked-pages-3.json');plan=load('build-order-3.json')
 errors=[]
+assert len([r for r in index.values() if r.get('page','').startswith('no-evidence.md#')])==13
+assert index['banner']['area_status']=='built'
+bounded=next(o for o in index['date-picker']['options'].values() if o['label']=='Bounded and unavailable dates')
+assert bounded['system_count']==6
+assert {'Ant Design','Fluent 2','Carbon'} <= set(bounded['systems'])
 def check(value,message):
     if not value:errors.append(message)
 check(subprocess.check_output(['git','branch','--show-current'],cwd=ROOT,text=True).strip()=='astra/library-range-3','Wrong branch')
@@ -17,9 +22,9 @@ manifest=(ROOT/'packages/styles/src/manifest.ts').read_text();built={x.lower() f
 headings=['Job','Variant axes','Structural alternatives','Interaction patterns','Reuses in Area','Proposed range','Sources']
 urls=set();option_count=0
 for slug,row in index.items():
-    path=P/(slug+'.md');check(path.exists(),slug+' missing file')
+    path=P/row.get('page',slug+'.md').split('#')[0];check(path.exists(),slug+' missing file')
     if not path.exists():continue
-    md=path.read_text();check(re.findall(r'^## (.+)$',md,re.M)==headings,slug+' wrong sections')
+    md=path.read_text();check(row.get('page','').startswith('no-evidence.md#') or re.findall(r'^## (.+)$',md,re.M)==headings,slug+' wrong sections')
     check(len(row['coverage'])==16,slug+' lacks system checks')
     check(row['family_system_count']==len(set(row['family_systems'])),slug+' family count')
     check(row['component_system_count']+len(row['recipe_only_systems'])==row['family_system_count'],slug+' component/recipe split')
@@ -29,7 +34,7 @@ for slug,row in index.items():
         check(cov.get('checked') and cov.get('catalog') and cov.get('queries'),slug+' incomplete lookup')
         if any(f['status'] in ['component','recipe'] for f in cov['findings']):observed.add(system)
     check(observed==set(row['family_systems']),slug+' family support mismatch')
-    check(any(o['proposed'] for o in row['options'].values()),slug+' missing proposal')
+    check((not row['options'] and row.get('evidence_status')) or any(o['proposed'] for o in row['options'].values()),slug+' missing proposal')
     for oid,opt in row['options'].items():
         option_count+=1;name=slug+'/'+oid
         check(bool(opt['evidence']),name+' missing evidence')
@@ -59,7 +64,12 @@ for url in urls:
         sha,file=match.groups()
         pin=next((v for v in pins.values() if v['sha']==sha),None)
         if pin:local=ROOT/pin['path']/file
-        elif sha==next(iter(index.values()))['base_commit']:local=ROOT/file
+        elif sha in {next(iter(index.values()))['base_commit'],index['banner']['area_review_commit']}:
+            content=subprocess.check_output(['git','show',sha+':'+file],cwd=ROOT,text=True)
+            nums=[int(n) for n in re.findall(r'\d+',parsed.fragment)]
+            check(bool(nums) and all(1<=n<=len(content.splitlines()) for n in nums),'Invalid Area line: '+url)
+            line_checks+=1
+            continue
         else:check(False,'Unpinned commit: '+url);continue
         check(local.is_file(),'Missing cached cited file: '+url)
         if local.is_file():
@@ -74,7 +84,7 @@ for url in urls:
     else:
         check(url.split('#')[0].rstrip('/') in checked,'Unverified public page: '+url);web_checks+=1
 # Shared files, caches and generated build output must never enter this branch's diff.
-changed=subprocess.check_output(['git','diff','--name-only',next(iter(index.values()))['base_commit']],cwd=ROOT,text=True).splitlines()
+changed=subprocess.check_output(['git','diff','--name-only','origin/main'],cwd=ROOT,text=True).splitlines()
 for file in changed:
     check(file.startswith('docs/research/library-range/'),'Outside scope: '+file)
     check(not any(part.startswith('.') or part=='__pycache__' for part in Path(file).parts),'Cache in diff: '+file)

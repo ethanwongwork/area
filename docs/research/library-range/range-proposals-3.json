@@ -476,6 +476,21 @@
         "unit": "t:@DatePickerInput",
         "needle": "Min and max dates",
         "analogue": false
+      },
+      {
+        "unit": "n:date-picker",
+        "needle": "minDate",
+        "analogue": false
+      },
+      {
+        "unit": "f:@DatePicker",
+        "needle": "minDate",
+        "analogue": false
+      },
+      {
+        "unit": "c:DatePicker",
+        "needle": "minDate",
+        "analogue": false
       }
     ]
   },

@@ -1,6 +1,20 @@
 [
   {
     "rank": 1,
+    "family": "banner",
+    "phase": 0,
+    "kind": "built",
+    "observed_system_count": 8,
+    "dependency_priority": 8,
+    "new_prerequisites": [],
+    "existing_reuses": [
+      "Alert",
+      "Button"
+    ],
+    "source": "banner.md#sources"
+  },
+  {
+    "rank": 2,
     "family": "alert-dialog",
     "phase": 1,
     "kind": "recipe",
@@ -14,7 +28,7 @@
     "source": "alert-dialog.md#sources"
   },
   {
-    "rank": 2,
+    "rank": 3,
     "family": "accordion",
     "phase": 1,
     "kind": "primitive",
@@ -28,7 +42,7 @@
     "source": "accordion.md#sources"
   },
   {
-    "rank": 3,
+    "rank": 4,
     "family": "drawer",
     "phase": 1,
     "kind": "recipe",
@@ -43,7 +57,7 @@
     "source": "drawer.md#sources"
   },
   {
-    "rank": 4,
+    "rank": 5,
     "family": "link",
     "phase": 1,
     "kind": "primitive",
@@ -57,7 +71,7 @@
     "source": "link.md#sources"
   },
   {
-    "rank": 5,
+    "rank": 6,
     "family": "date-field",
     "phase": 1,
     "kind": "primitive",
@@ -71,7 +85,7 @@
     "source": "date-field.md#sources"
   },
   {
-    "rank": 6,
+    "rank": 7,
     "family": "date-picker",
     "phase": 1,
     "kind": "recipe",
@@ -89,7 +103,7 @@
     "source": "date-picker.md#sources"
   },
   {
-    "rank": 7,
+    "rank": 8,
     "family": "toggle-button-group",
     "phase": 1,
     "kind": "recipe",
@@ -103,7 +117,7 @@
     "source": "toggle-button-group.md#sources"
   },
   {
-    "rank": 8,
+    "rank": 9,
     "family": "listbox",
     "phase": 1,
     "kind": "primitive",
@@ -117,7 +131,7 @@
     "source": "listbox.md#sources"
   },
   {
-    "rank": 9,
+    "rank": 10,
     "family": "multi-select",
     "phase": 1,
     "kind": "primitive",
@@ -135,7 +149,7 @@
     "source": "multi-select.md#sources"
   },
   {
-    "rank": 10,
+    "rank": 11,
     "family": "date-range-picker",
     "phase": 1,
     "kind": "recipe",
@@ -153,7 +167,7 @@
     "source": "date-range-picker.md#sources"
   },
   {
-    "rank": 11,
+    "rank": 12,
     "family": "file-upload",
     "phase": 1,
     "kind": "primitive",
@@ -169,7 +183,7 @@
     "source": "file-upload.md#sources"
   },
   {
-    "rank": 12,
+    "rank": 13,
     "family": "form-validation",
     "phase": 1,
     "kind": "primitive",
@@ -185,7 +199,7 @@
     "source": "form-validation.md#sources"
   },
   {
-    "rank": 13,
+    "rank": 14,
     "family": "pagination",
     "phase": 1,
     "kind": "recipe",
@@ -200,7 +214,7 @@
     "source": "pagination.md#sources"
   },
   {
-    "rank": 14,
+    "rank": 15,
     "family": "sidebar",
     "phase": 1,
     "kind": "recipe",
@@ -213,20 +227,6 @@
       "Menu"
     ],
     "source": "sidebar.md#sources"
-  },
-  {
-    "rank": 15,
-    "family": "banner",
-    "phase": 1,
-    "kind": "recipe",
-    "observed_system_count": 8,
-    "dependency_priority": 8,
-    "new_prerequisites": [],
-    "existing_reuses": [
-      "Alert",
-      "Button"
-    ],
-    "source": "banner.md#sources"
   },
   {
     "rank": 16,
@@ -1013,7 +1013,7 @@
       "CheckboxGroup",
       "AlignmentPicker"
     ],
-    "source": "constraints-picker.md#sources"
+    "source": "no-evidence.md#constraints-picker"
   },
   {
     "rank": 68,
@@ -1027,7 +1027,7 @@
       "NumberField",
       "InputGroup"
     ],
-    "source": "easing-curve-editor.md#sources"
+    "source": "no-evidence.md#easing-curve-editor"
   },
   {
     "rank": 69,
@@ -1043,7 +1043,7 @@
       "Combobox",
       "Select"
     ],
-    "source": "font-picker.md#sources"
+    "source": "no-evidence.md#font-picker"
   },
   {
     "rank": 70,
@@ -1059,7 +1059,7 @@
       "Dialog",
       "Kbd"
     ],
-    "source": "keyboard-shortcuts.md#sources"
+    "source": "no-evidence.md#keyboard-shortcuts"
   },
   {
     "rank": 71,
@@ -1073,7 +1073,7 @@
       "TreeView",
       "Badge"
     ],
-    "source": "layer-row-badges.md#sources"
+    "source": "no-evidence.md#layer-row-badges"
   },
   {
     "rank": 72,
@@ -1094,7 +1094,7 @@
       "Avatar",
       "Checkbox"
     ],
-    "source": "property-value.md#sources"
+    "source": "no-evidence.md#property-value"
   },
   {
     "rank": 73,
@@ -1111,7 +1111,7 @@
       "Badge",
       "Avatar"
     ],
-    "source": "database-card.md#sources"
+    "source": "no-evidence.md#database-card"
   },
   {
     "rank": 74,
@@ -1126,7 +1126,7 @@
       "Input",
       "Button"
     ],
-    "source": "shortcut-recorder.md#sources"
+    "source": "no-evidence.md#shortcut-recorder"
   },
   {
     "rank": 75,
@@ -1140,7 +1140,7 @@
       "Chip",
       "HoverCard"
     ],
-    "source": "source-chip.md#sources"
+    "source": "no-evidence.md#source-chip"
   },
   {
     "rank": 76,
@@ -1157,7 +1157,7 @@
       "Panel",
       "Spinner"
     ],
-    "source": "thinking-disclosure.md#sources"
+    "source": "no-evidence.md#thinking-disclosure"
   },
   {
     "rank": 77,
@@ -1172,7 +1172,7 @@
       "Code",
       "Tooltip"
     ],
-    "source": "variable-chip.md#sources"
+    "source": "no-evidence.md#variable-chip"
   },
   {
     "rank": 78,
@@ -1187,7 +1187,7 @@
       "Progress",
       "Composer"
     ],
-    "source": "voice-input.md#sources"
+    "source": "no-evidence.md#voice-input"
   },
   {
     "rank": 79,
@@ -1202,6 +1202,6 @@
       "Menu",
       "Button"
     ],
-    "source": "zoom-control.md#sources"
+    "source": "no-evidence.md#zoom-control"
   }
 ]

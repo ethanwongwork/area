@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Render run-3 research. Uses reviewed notes, proposals and pinned source ledger."""
-import json,re,hashlib,importlib.util
+import json,re,hashlib,importlib.util,subprocess
 from pathlib import Path
 from collections import defaultdict
 P=Path(__file__).resolve().parent
@@ -13,7 +13,8 @@ CATALOGS={
 PINKEY={'s':'shadcn','r':'radix-themes','b':'base-ui','a':'react-spectrum','f':'fluent','p':'primer','c':'carbon','m':'material3','t':'mantine','n':'ant-design','k':'ark','l':'atlassian','u':'untitled'}
 BASE='c585f8c5f38705a7efa79bf05148a8c6989b142a'
 AREA='https://github.com/ethanwongwork/area/blob/'+BASE+'/'
-MANIFEST=(ROOT/'packages/styles/src/manifest.ts').read_text()
+REVIEW='7dae828e7af1daf9d26b663d34335121156606f7'
+MANIFEST=subprocess.check_output(['git','show',BASE+':packages/styles/src/manifest.ts'],cwd=ROOT,text=True)
 AREA_REFS={}
 for m in re.finditer(r'export const (\w+) = \{',MANIFEST):AREA_REFS[m[1].lower()]=AREA+'packages/styles/src/manifest.ts#L'+str(MANIFEST[:m.start()].count('\n')+1)
 CACHE=load('.units-cache-3.json');PAGES=load('.pages-cache-3.json')
@@ -99,6 +100,7 @@ def native_options(family):
     for opt in options.values():opt['systems'].sort();opt['system_count']=len(opt['systems'])
     return options
 
+NO_EVIDENCE=['easing-curve-editor', 'shortcut-recorder', 'thinking-disclosure', 'source-chip', 'voice-input', 'database-card', 'property-value', 'zoom-control', 'layer-row-badges', 'constraints-picker', 'font-picker', 'variable-chip', 'keyboard-shortcuts']
 index={};failures=[]
 for family in SCOPE:
     slug=family['slug'];note=NOTES[slug];coverage={};direct=[];recipes=[]
@@ -124,6 +126,14 @@ for family in SCOPE:
     for opt in options.values():opt['reuses']=family['reuses']
     family_systems=sorted(set(direct+recipes));rec_only=sorted(set(recipes)-set(direct))
     index[slug]=dict(name=family['name'],kind=note['kind'],base_commit=BASE,checked='2026-09-28',family_systems=family_systems,family_system_count=len(family_systems),component_system_count=len(set(direct)),recipe_only_systems=rec_only,reuses=family['reuses'],coverage=coverage,options=options)
+    if slug in NO_EVIDENCE:
+        index[slug]['options']={}
+        index[slug]['page']='no-evidence.md#'+slug
+        index[slug]['evidence_status']='No dedicated outside implementation evidence; only analogues/guidance. Range deferred.'
+        continue
+    if slug=='banner':
+        index[slug]['area_status']='built'
+        index[slug]['area_review_commit']=REVIEW
     lines=['# '+family['name'],'','## Job','',note['job'],'',f'Observed family coverage: **{len(family_systems)} / 15 implementation systems** ({len(set(direct))} with a component source; {len(rec_only)} recipe-only). Apple HIG is checked separately as platform guidance. Counts are evidence-based lower bounds; see Sources.','',note['decision'],'','## Variant axes','',
     'The native inventory below preserves source names and literal values. Counts refer to the **exact axis/value**, not matching pixel dimensions. Boolean values are runtime/configuration choices; mode and density remain system settings. A named type or open parameter is not an invented enum; its value list is **not found in this declaration** unless a linked enum row supplies it. Source owners distinguish root props from subparts.','']
     # Collapse exact native values back into per-axis summaries for readable Markdown.
@@ -206,8 +216,14 @@ for family in SCOPE:
             if sys in PINKEY:extra=' and [pinned source inventory]('+PINS[PINKEY[sys]]['url']+')'
             lines.append('- **'+name+'**: **not found** for this job in the reviewed [catalogue]('+c['catalog']+')'+extra+'.'+(' Related lookup(s) also unresolved: '+', '.join(f.get('looked_for','') for f in findings if f.get('looked_for'))+'.' if any(f.get('looked_for') for f in findings) else ''))
     lines+=['','Area scope and reuse baseline: [COMPONENTS.md]('+AREA+'docs/COMPONENTS.md#L112-L215), [manifest.ts]('+AREA+'packages/styles/src/manifest.ts#L680-L749). Proposals and build priorities are research judgments, not owner approval.','']
+    if slug=='banner':
+        lines.insert(2,'Current-main snapshot `'+REVIEW+'`: built and approved as Alert `layout="banner"`; `flush` is a separate boolean. [Manifest](https://github.com/ethanwongwork/area/blob/'+REVIEW+'/packages/styles/src/manifest.ts#L532), [owner registry](https://github.com/ethanwongwork/area/blob/'+REVIEW+'/apps/docs/src/component-status.mjs#L10).')
     (P/(slug+'.md')).write_text('\n'.join(lines))
 (P/'index-3.json').write_text(json.dumps(index,indent=2)+'\n')
-(P/'.evidence-failures-3.json').write_text(json.dumps(failures,indent=2)+'\n')
+if failures:raise AssertionError(failures)
+summary=['# Families without dedicated outside evidence','','These 13 families have no dedicated implementation evidence in the reviewed 15-system corpus. Analogues and platform guidance do not establish their range. The complete dated lookup records remain in index-3.json; detailed proposals are deferred. Code editor remains separate because its JSON-editor analogue has a concrete integration boundary.','']
+for slug in NO_EVIDENCE:
+    summary += ['<a id="'+slug+'"></a>', '- **'+index[slug]['name']+'** — '+NOTES[slug]['job']+' '+NOTES[slug]['decision'], '']
+(P/'no-evidence.md').write_text('\n'.join(summary)+'\n')
 print('Rendered',len(index),'families;',sum(len(v['options']) for v in index.values()),'indexed native options/range categories')
 print('Unresolved proposed evidence:',len(failures));print('\n'.join(failures))
