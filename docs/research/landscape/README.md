@@ -4,9 +4,9 @@ Checked **2026-09-28**. **34 tools**, **476 required field cells**, plus **6 Fig
 
 ## Scope and provenance
 
-- Task branch: `astra/landscape`; worktree: `/Users/ethanwong/Desktop/area-astra/landscape`.
-- Area starting commit: `c585f8c5f38705a7efa79bf05148a8c6989b142a`. No component code or shared-checkout files changed.
-- `docs/BRIEF.md` is absent from that commit. Reviewed the owner-supplied read-only fallback: `/Users/ethanwong/Desktop/area/.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md`.
+- Task branch: `astra/landscape`; worktree: `area-astra/landscape`.
+- Area snapshot of commit: `c585f8c5f38705a7efa79bf05148a8c6989b142a`. No component code or shared-checkout files changed.
+- `docs/BRIEF.md` is absent from that commit. Reviewed the owner-supplied read-only fallback: `.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md`.
 - Fallback SHA-256 on 2026-09-28: `3bd0d87904420da7aa4bee52093206737f7bb4b822539dc1fc323d984f1ac1af`. Line numbers/quotes below refer to that working-file snapshot, not to a claimed committed version.
 - Four layers follow fallback lines 109–121; proposed differentiation follows lines 393–405. The fallback itself lists the generator/studio/GitHub/MCP/publishing work as missing at lines 375–391. **Area’s scope below is proposed, not shipped.**
 
@@ -90,8 +90,8 @@ Framer and Plasmic already publish interactive work. State-preserving system rev
 
 > | One definition, many frameworks, checked by a conformance suite | Most libraries are one framework, most often React |
 
-The “most” frequency claim was not measured by this tool survey. Multi-framework rendering and token export exist; neither establishes a shared component definition with conformance.
-[docs.knapsack.cloud: knapsack config](https://docs.knapsack.cloud/get-started/knapsack-config) (checked 2026-09-28); [learn.supernova.io: homepage](https://learn.supernova.io/) (checked 2026-09-28)
+The import-survey framework cells support a React-oriented scope for 14/16 named libraries and 17/19 total subjects (including three products). This selected corpus supports a React-first import priority, not a population-wide claim that most libraries are single-framework. See docs/research/import-survey/matrix.json and its eligible-system list. Multi-framework rendering and token export exist; neither establishes a shared component definition with conformance.
+[github.com: matrix.json](https://github.com/ethanwongwork/area/blob/992377a/docs/research/import-survey/matrix.json) (checked 2026-09-28); [docs.knapsack.cloud: knapsack config](https://docs.knapsack.cloud/get-started/knapsack-config) (checked 2026-09-28); [learn.supernova.io: homepage](https://learn.supernova.io/) (checked 2026-09-28)
 
 ### Lines 405 — Overbroad
 
@@ -139,7 +139,7 @@ Retain the distinction; add flows/research services for Mobbin and theme/templat
 >   (token sync with Git), and shadcn theme editors. Check their current capabilities before
 >   relying on this table.
 
-Supernova delivers code through PRs, Knapsack runs production components, zeroheight delivers tokens, and shadcn/create transforms structure. These are material overlaps.
+Supernova PR delivery remains unverified because the cited documentation redirects to login; Knapsack runs production components, zeroheight delivers tokens, and shadcn/create transforms structure. These are material overlaps.
 [learn.supernova-docs.io: git hub jPO6p0St](https://learn.supernova-docs.io/latest/code-integration/code-delivery/open-a-pull-request/git-hub-jPO6p0St) (checked 2026-09-28); [docs.knapsack.cloud: knapsack config](https://docs.knapsack.cloud/get-started/knapsack-config) (checked 2026-09-28); [zeroheight.com: integrations](https://zeroheight.com/integrations/) (checked 2026-09-28); [ui.shadcn.com: 12 shadcn create](https://ui.shadcn.com/docs/changelog/2025-12-shadcn-create) (checked 2026-09-28)
 
 ## Three closest competitors to the proposed scope
@@ -191,7 +191,7 @@ Each row links to evidence. Status labels summarize documentation certainty, **n
 | Noon — `noon` | not found ([evidence](https://noon.design/)) | not found ([evidence](https://noon.design/)) | partial ([evidence](https://noon.design/)) | vendor claim ([evidence](https://noon.design/)) |
 | Cursor Design Mode / browser visual editor — `cursor-design` | partial ([evidence](https://cursor.com/blog/browser-visual-editor)) | documented ([evidence](https://cursor.com/blog/browser-visual-editor)) | documented ([evidence](https://cursor.com/blog/browser-visual-editor)) | documented ([evidence](https://cursor.com/blog/browser-visual-editor)) |
 | Builder.io (Builder Code / Content) — `builder` | documented ([evidence](https://www.builder.io/updates)) | documented ([evidence](https://www.builder.io/c/docs/fusion-projects-overview)) | documented ([evidence](https://www.builder.io/c/docs/fusion-projects-overview)) | documented ([evidence](https://www.builder.io/c/docs/fusion-projects-overview)) |
-| Plasmic — `plasmic` | documented ([evidence](https://github.com/elasticpath/plasmic)) | documented ([evidence](https://github.com/elasticpath/plasmic)) | documented ([evidence](https://github.com/elasticpath/plasmic)) | documented ([evidence](https://www.plasmic.app/)) |
+| Plasmic — `plasmic` | documented ([evidence](https://github.com/plasmicapp/plasmic)) | documented ([evidence](https://github.com/plasmicapp/plasmic)) | documented ([evidence](https://github.com/plasmicapp/plasmic)) | documented ([evidence](https://www.plasmic.app/)) |
 | Penpot — `penpot` | documented ([evidence](https://help.penpot.app/user-guide/design-systems/design-tokens/)) | documented ([evidence](https://github.com/penpot/penpot/blob/develop/README.md)) | documented ([evidence](https://penpot.app/)) | partial ([evidence](https://penpot.app/)) |
 | Mobbin — `mobbin` | inference ([evidence](https://mobbin.com/)) | inference ([evidence](https://mobbin.com/)) | partial ([evidence](https://mobbin.com/)) | documented ([evidence](https://mobbin.com/)) |
 | 21st.dev — `21st` | documented ([evidence](https://www.npmjs.com/package/%4021st-dev/cli)) | documented ([evidence](https://www.npmjs.com/package/%4021st-dev/cli)) | partial ([evidence](https://www.npmjs.com/package/%4021st-dev/cli)) | documented ([evidence](https://www.npmjs.com/package/%4021st-dev/cli)) |

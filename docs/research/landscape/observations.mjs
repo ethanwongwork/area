@@ -2,7 +2,7 @@
 export const checked = '2026-09-28';
 export const base = 'c585f8c5f38705a7efa79bf05148a8c6989b142a';
 export const brief = {
-  path: '/Users/ethanwong/Desktop/area/.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md',
+  path: '.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md',
   sha256: '3bd0d87904420da7aa4bee52093206737f7bb4b822539dc1fc323d984f1ac1af',
   checked, note: 'Read-only fallback supplied by owner; absent from starting main. This working-file snapshot is not claimed to be at the Area starting commit.'
 };
@@ -281,7 +281,7 @@ funding:c('Announced $20M funding led by M12 in May 2024; a confirmed historical
 });
 }
 {
-const h='https://www.plasmic.app/',g='https://docs.plasmic.app/learn/github-action/',d='https://github.com/elasticpath/plasmic';
+const h='https://www.plasmic.app/',g='https://docs.plasmic.app/learn/github-action/',d='https://github.com/plasmicapp/plasmic';
 add('plasmic','Plasmic',[h,g,d],{
 identity:c('Visual app/page builder integrating developers’ existing code components.',h),
 github:c('GitHub app/action can generate a new app or run plasmic sync in an existing repo. Codegen supports direct pushes or PRs.',g),
@@ -359,7 +359,7 @@ funding:c('Y Combinator Winter 2026; round amount not found on the YC profile.',
 const h='https://www.supernova.io/',g='https://learn.supernova-docs.io/latest/code-integration/code-delivery/open-a-pull-request/git-hub-jPO6p0St';
 add('supernova','Supernova',[h,g],{
 identity:c('Design-system data, documentation and code-delivery platform.',h),
-github:c('Exporter opens/updates a GitHub PR on a Supernova branch. Delivers generated token/style/asset outputs; not automatically an entire application.',g),
+github:c('Unverified: the previously cited delivery documentation redirects to login; exporter opening/updating GitHub PRs and the exact delivered artifacts were not verified from public evidence.',g,'partial'),
 foundations:c('Token management, themes and multibrand organization.',h),
 inventory:c('Component documentation, status/health and adoption tracking.',h),
 structure:c('Documents existing anatomy; arbitrary component-structure authoring not confirmed.',h,'partial'),

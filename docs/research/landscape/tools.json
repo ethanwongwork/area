@@ -3,7 +3,7 @@
   "checked": "2026-09-28",
   "areaStartingCommit": "c585f8c5f38705a7efa79bf05148a8c6989b142a",
   "briefSnapshot": {
-    "path": "/Users/ethanwong/Desktop/area/.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md",
+    "path": ".claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md",
     "sha256": "3bd0d87904420da7aa4bee52093206737f7bb4b822539dc1fc323d984f1ac1af",
     "checked": "2026-09-28",
     "note": "Read-only fallback supplied by owner; absent from starting main. This working-file snapshot is not claimed to be at the Area starting commit."
@@ -29,8 +29,8 @@
     "datedClaims": 482,
     "distinctToolSourceUrls": 131,
     "statusCounts": {
-      "documented": 320,
-      "partial": 94,
+      "documented": 319,
+      "partial": 95,
       "not found": 43,
       "vendor claim": 9,
       "reported": 5,
@@ -2310,7 +2310,7 @@
           "value": "Reusable style tokens and mixins.",
           "sources": [
             {
-              "url": "https://github.com/elasticpath/plasmic",
+              "url": "https://github.com/plasmicapp/plasmic",
               "checked": "2026-09-28"
             }
           ]
@@ -2320,7 +2320,7 @@
           "value": "Registered React components, props, variants and reusable Plasmic components.",
           "sources": [
             {
-              "url": "https://github.com/elasticpath/plasmic",
+              "url": "https://github.com/plasmicapp/plasmic",
               "checked": "2026-09-28"
             }
           ]
@@ -2330,7 +2330,7 @@
           "value": "Slots and editable anatomy, including headless component composition.",
           "sources": [
             {
-              "url": "https://github.com/elasticpath/plasmic",
+              "url": "https://github.com/plasmicapp/plasmic",
               "checked": "2026-09-28"
             }
           ]
@@ -2350,7 +2350,7 @@
           "value": "Register existing React components and maintain generated components through codegen.",
           "sources": [
             {
-              "url": "https://github.com/elasticpath/plasmic",
+              "url": "https://github.com/plasmicapp/plasmic",
               "checked": "2026-09-28"
             },
             {
@@ -2368,7 +2368,7 @@
               "checked": "2026-09-28"
             },
             {
-              "url": "https://github.com/elasticpath/plasmic",
+              "url": "https://github.com/plasmicapp/plasmic",
               "checked": "2026-09-28"
             }
           ]
@@ -2378,7 +2378,7 @@
           "value": "Registered React components run in the editor; generated UI runs in the target app.",
           "sources": [
             {
-              "url": "https://github.com/elasticpath/plasmic",
+              "url": "https://github.com/plasmicapp/plasmic",
               "checked": "2026-09-28"
             }
           ]
@@ -2940,8 +2940,8 @@
           ]
         },
         "github": {
-          "status": "documented",
-          "value": "Exporter opens/updates a GitHub PR on a Supernova branch. Delivers generated token/style/asset outputs; not automatically an entire application.",
+          "status": "partial",
+          "value": "Unverified: the previously cited delivery documentation redirects to login; exporter opening/updating GitHub PRs and the exact delivered artifacts were not verified from public evidence.",
           "sources": [
             {
               "url": "https://learn.supernova-docs.io/latest/code-integration/code-delivery/open-a-pull-request/git-hub-jPO6p0St",
