@@ -57,7 +57,7 @@ Notion and ChatGPT: no grouped field among their captures (searched every `notio
 ## Anatomy
 
 ```
-area   div.area-input-group  (shell: height, border, radius, fill, shadow-1 outline only, one focus ring, overflow clip)
+area   div.area-input-group  (shell: height, border, radius, fill, no resting shadow, one focus ring, overflow clip)
   text     span.area-input-group__text          gutter padding, fg-muted
   visual   span.area-input-group__text[data-visual]  H wide, 16px icon or a letter, centred
   child    .area-input / .area-number-field / .area-select  chrome stripped, flex 1, 1px decorative rule before it
@@ -89,7 +89,7 @@ the visual. Figma's icon glyph is 50% black, its letter prefix 89.8% (see Settle
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| shell · chrome | Input's: 32, radius 8, `input-edge`, `shadow-1`; soft = `bg-component` #f7, no border, no shadow (`input-group.css:26`) | Peer: [Input](input.md); Figma fill-only for soft; second pass: soft is flat | Figma 24px, radius 5: density is the UI-scale axis |
+| shell · chrome | Input's: 32, radius 8, `input-edge`, no resting shadow; soft = `bg-component` #f7, no border, no shadow (`input-group.css:26`) | Peer: [Input](input.md); Figma fill-only for soft; second pass: soft is flat | Figma 24px, radius 5: density is the UI-scale axis |
 | focus | one ring on the group (`:focus-within`); children lose theirs | Owner: one focus shell | — |
 | visual | H wide, 16px icon or control-size letter, `fg-muted`; value follows with no rule | Owner: square compartment; Figma 24 × 24 icon box = row height, no rule | Figma letter ink is near-default; kept (third pass): the prefix names the value, it is not the value |
 | segment rule | 1px `border-decorative` before each other child (`input-group.css:103`) | Figma value row: 1px gap between hex and opacity | Figma's colour row has none; kept (third pass): two fields in one group, and the rule marks where each edits |
@@ -127,9 +127,22 @@ tab stop and name.
 
 ## Visual pass
 
+2026-09-28 (batch 9): a decorative visual (`InputGroupText visual`) before a Select drew a rule and an
+8px start inset, unlike the same visual before an Input or NumberField. The visual now seats a
+following Select the same way (no rule, no start padding): one rule for one role, and the Effects
+rows' "Inner shadow" fits.
+
+Earlier note:
+
 The gallery shows InputGroup's tiles in named groups; the sizes tile was added in the
 second pass. Unverified: Figma side by side at one zoom, dark theme, a
 disabled group, a group with one of two children disabled (the whole group paints disabled).
+
+2026-09-28 (batch 12, Claude in Chrome): beside Notion's Share invite row (field and Invite
+button side by side, 32 tall, the field's corner 6 and its 2px accent focus ring) and Figma's
+design-panel fields (`figma--icon-field`, `figma--color-row`). Area joins the parts into one
+shell with one focus ring, where Notion keeps the button outside the field; both are 32 tall.
+No change. `area--*` retaken (51 tiles across the batch).
 
 ## Settled questions
 
@@ -153,9 +166,13 @@ row and value row. Build and test results are in the
 
 ## Feedback log
 
+- 2026-09-28 · batch 12 Chrome side by side → no change; spec's resting shadow corrected to none
+  (the CSS had dropped it) → `notion--invite-row--focus--light`, `area--*` retaken.
+
 - 2026-09-26 · cohesion audit → no change; spec written → `input-group/area--*`.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → disabled field
   paint, success and warning edges, hover skipped when disabled, sizes tile; three open
   questions recorded → `input-group/figma--icon-field`, `figma--color-row`, `area--sizes`.
 - 2026-09-27 · third pass → success and warning hold their tone through focus (the focus
   edge replaced them); letter ink and hex / opacity rule kept → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-28 · batch 9 → visual + Select joins like visual + Input (no rule, no start inset).

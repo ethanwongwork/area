@@ -1,11 +1,16 @@
 # Skeleton spec
 
-**Status:** in review · 2026-09-26 (cohesion audit, second pass)
+**Status:** accepted · 2026-09-28 (owner, batch 6)
 **Captures:** `docs/research/captures/skeleton/`
 **Peers:** Spinner and Progress (loading motion), Card (composition), Avatar (circle
 placeholder), Typography (text-line heights)
 
 ## Owner decisions
+
+- 2026-09-28: rethink Skeleton from the research ([survey](../research/skeleton-rethink-survey.md)),
+  ignoring earlier ideas. Chose **option A**: one `Skeleton`, `shape` = `block` (default) |
+  `text` | `circle`; `rounded` and `rectangle` removed. Control placeholders are **omitted** from
+  compositions (Primer, MUI, Carbon).
 
 - Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)): Skeleton cards have
   two text lines; type samples share the trailing half of the tile.
@@ -23,8 +28,18 @@ action in progress is Spinner; task progress is Progress.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| shape | text (default), circle, rectangle, rounded | Line of type, avatar, media, card-like block | Gallery tiles; no design-system source (Untitled has no skeleton) |
-| composition | type heights, card | Owner decision above | `area--type-height`, `area--card` |
+| shape | **block** (default) | A box the host sizes: media, icons, bars. 100% × 16 until sized | Default in Primer SkeletonBox, Fluent (rectangle 100% × 16), Radix, Mantine, Chakra |
+| shape | text | A line of type: glyph height in the host's line box | Primer SkeletonText, MUI `text`, Carbon, Chakra SkeletonText |
+| shape | circle | An avatar or icon disc, 1:1, 32 until sized | Every system (Fluent circle, Mantine `circle`, MUI circular, Primer avatar) |
+| static | boolean (`animated={false}`) | A still placeholder for dense lists | Notion; antd, Polaris, Atlassian are still by default |
+| lines | number | A paragraph; implies text; last line 65% (min 50px) | Primer `lines`; Chakra `noOfLines`; antd rows; Polaris `lines` |
+| wrap (children + `loading`) | behaviour | Painted on the real element, which keeps its size, place and corner | Radix, Spectrum (child radius), MUI, Chakra, Mantine, Geist |
+| composition | list, media object, card, type heights | Notion sidebar, ChatGPT history; Primer comments, MUI media; the card with controls omitted | `area--list`, `area--media-object`, `area--card`, `area--type-height` |
+
+Removed: `rounded` (a shape only in MUI, where it is the block at 4px; everywhere else a corner
+comes from a radius prop or the wrapped element) and `rectangle` (renamed `block`, the default).
+Not added: separate SkeletonText / SkeletonAvatar parts (option B), wrap-first as the only mode
+(option C), pulse, show-delay, page-wide phase sync.
 
 ## Sources
 
@@ -72,12 +87,17 @@ an 80 × 32 rounded block.
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| fill | `bg-component` #f7f7f7 | Area's resting component fill | No reference measured |
-| highlight | `bg-component-active` #eee, travelling | Travel reads as loading; a pulse reads as a state change (display.css:140-144) | — |
-| text height | `1em` (display.css:166-170) | The host's font size, not its line box (`area--text` 14 at 14px, `area--type-height` 56 at 56px) | — |
-| text radius | `radius-small` (6 at Standard) | Radius follows the axis | Was the `radius-2` primitive |
-| rounded radius | `radius-container` 12 (display.css:173) | Card-like block; Card now uses the same role | — |
-| motion | shimmer and gradient removed under `data-area-motion="none"` and reduced motion (display.css:271-272, 274-281) | Audit rule "motion setting" | Before the audit only reduced motion stopped it |
+| model | one component, `shape` block / text / circle, block default | Owner option A; block default in 5 systems, text in 2, none in 3 (survey) | Text was the default |
+| fill | `light-dark(rgb(143 143 143 / 0.1), bg-component)` /* spec */ | ChatGPT (`chatgpt--skeleton-*`); Notion #f1 | Was #f7, a step lighter than every product |
+| band | `light-dark(rgb(143 143 143 / 0.16), bg-component-active)`, travelling, 3s linear | ChatGPT, Figma | Travel reads as loading |
+| corner | `min(radius-small, 4px)` for block and text | Primer 3, Radix 3, Fluent 4, MUI 4, Mantine 4, Chakra 4, antd 4, Polaris 4, Atlassian 4 | — |
+| block size | 100% × 16 until the host sizes it | Primer 1rem, Fluent 100% × 16 | — |
+| text height | `1em` centred in the line box (`margin-block: (1lh − 1em) / 2`) | Primer SkeletonText | — |
+| circle size | `control-md` 32, `aspect-ratio: 1` | Avatar md; Mantine and Fluent take one dimension | — |
+| paragraph | text lines in a column (both half-leadings kept); last 65%, min 50px | Primer SkeletonText | — |
+| wrap | the wrapper takes no box (`display: contents`); the child is painted and its contents hidden, in the `area.utilities` layer | Radix and Spectrum keep the child's radius | Was a wrapper box with a `:has()` list of control radii |
+| controls in compositions | omitted | Primer, MUI, Carbon ("actions need no skeleton"); Spectrum disables the real one | The card tile drew a button plate on the card's 8px control inset, 10px outside the text's 18px inset |
+| motion | shimmer and band removed under `data-area-motion="none"` and reduced motion, wrap included | Audit rule "motion setting" | — |
 
 ## States
 
@@ -101,6 +121,24 @@ busy or labels it (`area--card`: `aria-label="Loading card"`).
 | Avatar | circle | `radius-full` | same | match |
 
 ## Visual pass
+
+2026-09-28, Claude in Chrome (batch 6). Loading states were caught as they appeared (a
+MutationObserver installed with the capture script, then read-only page switches):
+
+| | ChatGPT (sidebar results) | Figma (file browser tabs) | Notion (startup sidebar) | Area before | Area now |
+|---|---|---|---|---|---|
+| bar | 16 tall, radius 6 | 32 tall | text 10 tall, pill; icon 20-22, radius 4 | 1em (14), radius 4 | unchanged |
+| fill | rgb(143 143 143 / 0.1), about #f4 on white | rgba(255, 255, 255, 0.1) over its plate | rgba(227, 226, 224, 0.5), about #f1, flat | `bg-component` #f7 | **ChatGPT's 10%** |
+| band | 16% (#ee) | — | none (a fade-in on the group) | `bg-component-active` #ee | **16%** |
+| motion | 3s linear | 3s linear | none | 1.4s ease-in-out | **3s linear** |
+
+Captures: `chatgpt--skeleton-*`, `figma--skeleton-tab`, `notion--skeleton-{text,icon,group}`
+(redacted). The products' resting placeholder is a step darker than Area's was, and the two that
+shimmer agree on 3s linear, so Area takes ChatGPT's paint (translucent, so it reads on a card
+too) and its speed. Line height and the 4px corner cap stay (owner, 2026-09-27). Dark keeps the
+component roles (not measured). Recaptured: `area--*`.
+
+Earlier note:
 
 The gallery groups the tiles (Default, Variants for the
 shapes, Content for type heights and the card); the shapes moved from Layout to Variants in
@@ -127,3 +165,7 @@ Unverified: dark theme, the card tile's media corners at the new Card radius on 
   (antd), the light #f7 fill (lightest of all; owner's lighter-UI direction). Open: page-wide
   phase sync (Spectrum), a shortened last line and show delay (Primer). Claude in Chrome:
   products show skeletons only while loading; not captured.
+- 2026-09-28 · batch 6 Claude in Chrome → fill and band from ChatGPT (10% / 16% grey), shimmer 3s linear (ChatGPT and Figma; was 1.4s ease-in-out) → `chatgpt--skeleton-*`, `figma--skeleton-tab`, `notion--skeleton-*`.
+- 2026-09-28 · owner: "fix the variants in skeleton, go through all of them and add any if necessary" → rectangle takes the 4px corner (was square); added `animated={false}` (static), `lines` (paragraph), wrap mode (children + `loading`); list tile; the Card tile's button placeholder now wraps a real Button (was the 12px container corner on a 32px control) → survey (`research/skeleton-spinner-code-slider-survey.md` §1), batch 6 captures, `area--*` recaptured, `skeleton.test.mjs`.
+- 2026-09-28 · owner: "not sure if this card composition is accurate, the button is too close to the edge. shouldnt rectangle and rounded be variants? is text really considered default? … rethink the entire skeleton component" → survey of 14 systems (`research/skeleton-rethink-survey.md`) and an options sheet (A / B / C, card compositions) → owner chose A and omitted controls → shapes block (default) / text / circle, `rounded` and `rectangle` removed, wrap painted on the child, card tile without a control, new media-object tile → `area--*` recaptured (retired tiles' captures removed), tests updated.
+- 2026-09-28 · owner: approved (batch 6).

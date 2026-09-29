@@ -61,7 +61,7 @@ Product anatomy (node numbers from the captures):
 ## Anatomy
 
 ```
-area   div.area-input  (shell: height, border, radius, fill, shadow-1 outline only, focus; padding by inset.css)
+area   div.area-input  (shell: height, border, radius, fill, no resting shadow, focus; padding by inset.css)
   icon      span.area-input__icon     16px square slot, fg-muted
   affix     span.area-input__affix    fg-muted, cap-trimmed
   control   input.area-input__control bare; inherits type
@@ -99,7 +99,7 @@ hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 a
 | shell · radius | `radius-control` 8, capped at 0.4 × height (`input.css:38`) | Notion search 8, Figma search 8, UUI 8 | Notion menu and popover fields 6, ChatGPT pill |
 | shell · border | 1px `input-edge` = `border-faint` #e2e2e2 | Notion search edge (11% warm ≈ #e3); UUI 1px ring | Fill-only products map to soft |
 | shell · fill | outline `bg-surface` #fff; soft `bg-component` #f7f7f7 | Figma rgb(245), Notion 3% warm, ChatGPT 5% black for soft | — |
-| shell · shadow | outline `shadow-1`; soft none (`input.css:53`) | Second pass: soft fields are flat (Figma) | No product field draws a shadow; kept (third pass): Untitled's outline inputs carry `shadow-xs`, and soft is the flat treatment |
+| shell · shadow | none at rest, outline and soft (`input.css:45, 54`); focus halo only | Outline pass (number-field.md): controls at rest carry no shadow; no product field draws one (Notion, Figma, ChatGPT) | Untitled's `shadow-xs`; the third pass had kept `shadow-1`, since removed |
 | text · inset | 10.03 md (inset contract) | `inset.css:17-18` | Notion 8–8.55, Figma 8, ChatGPT 12, UUI 14: Area centres the cap height |
 | text · type | 14/20 400 (sm 12/16) | Notion 14/20 400; ChatGPT 14/18 400 | Figma 11/16; UUI md 16/24 |
 | icon | 16px square, `fg-muted` #666, equal inset (8 from the edge at md) | Notion 6 in a 28 row and Figma 10 in a 32 row are both (H − glyph) / 2 | ChatGPT 12 in |
@@ -142,8 +142,16 @@ follow `dir`.
 ## Visual pass
 
 The gallery shows Input's tiles in named groups, one variant per tile. The action plate and hint appear only under the pointer; the file button label is
-a pseudo-element and is not in `area--file`. Unverified: Notion and Figma side by side at one
-zoom, dark theme.
+a pseudo-element and is not in `area--file`.
+
+2026-09-28 (batch 12, Claude in Chrome): beside Notion's sidebar search field (32, corner 8,
+0.56px 11% warm edge, ⌘K keycap 6.9 from the top and 6.6 from the end), Notion's Share invite
+field (32, corner 6, 2px accent focus ring, 8 text inset) and Figma's search (32, corner 8,
+#f5 fill, no edge). Area outline and soft match on height, corner and paint; the 11 text inset
+is the shared equal-inset rule. The Kbd templates found that a keycap in `suffix` sat off
+centre; Input now reserves its box (8 / 8 / 8, `inset.css`). All `area--*` retaken with no
+resting shadow. Unverified: hover and focus in the products (Chrome was a background window),
+dark theme.
 
 ## Settled questions
 
@@ -168,6 +176,19 @@ fields and Figma's search and hex fields. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
 ## Feedback log
+
+- 2026-09-28 · batch 12 Chrome side by side → Input `suffix` centres a Kbd (found by the Kbd
+  templates); spec's resting shadow corrected to none → `notion--search-field-kbd--rest--light`,
+  `notion--invite-field--focus--light`, `area--*` retaken.
+- 2026-09-28 · owner: "the calendar icon doesnt look aligned like the other trailing icon inputs
+  … use the real one" → the native date input (its picker glyph sat at the 11 text inset) is
+  replaced in the gallery by a composition: read-only Input showing the date, the calendar glyph
+  as a trailing icon (8 from the end, like every trailing icon), opening Calendar in a Popover
+  anchored to the whole field (new Popover `anchor` prop), focus on the chosen day, Enter,
+  Space or ArrowDown open it → `area--date--rest--light` retaken.
+- 2026-09-28 · owner: "the date picker extends too big. other than that its approved" → the
+  Popover took its 320 reading width around a 252 grid (44 empty on the right); a Popover holding
+  only a Calendar now hugs it (276, 12 all round; `surface.css`). Batch 12 approved.
 
 - 2026-09-26 · cohesion audit → InputAction hint renders the Tooltip surface; file button
   label neutral → `area--action` node 7 (28px, radius 10, 4/10 inset).

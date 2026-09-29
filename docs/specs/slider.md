@@ -133,6 +133,13 @@ States), with the size tiles added in the second pass. The lg thumb now grows wi
 tier as Checkbox and Radio do. Unverified on screen: the RTL mirror and the collapsed-range
 thumb in Firefox and Safari; dark theme.
 
+2026-09-28 (batch 15, Claude in Chrome): Figma's colour picker reopened (hue and opacity sliders,
+16px pill tracks, the ColorPicker's evidence) and its adjustment slider on file
+(`figma--adjustment-slider*`: 16 tall shell, 24 hit). Area's generic Slider keeps a 4px rail and a
+16 thumb (20 at lg); sm and md share both and differ by the row height (28 / 32), which is what
+lines a slider up with the same-size controls beside it, so sm stays. The hover review row
+(fill and thumb darken, rail kept) is still shown for the owner. No change.
+
 ## Verification
 
 15 Area captures read (shell and readout; see Sources on pseudo-elements). Build and test

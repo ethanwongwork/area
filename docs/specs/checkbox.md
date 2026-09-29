@@ -28,7 +28,8 @@ token (Chip). CheckboxGroup owns the legend, group description and group validat
 |---|---|---|---|
 | size | sm, md (default), lg | Label type follows the control tier; lg is the 20px glyph | Untitled sm 16 / md 20; Notion and Figma one size, 16 |
 | tone | neutral (default), accent | Owner rule, 2026-09-26 | Notion checks in its blue; Figma checks neutral |
-| variant | card | A contained option with its own caption and visual | Area composition (gallery `card`) |
+| variant | card | A contained option: visual, text, control at the end; the chosen card outlined | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
+| layout (card) | row (default), tile | Row: one line; tile: a 20px visual above the label, control in the corner, cards in a grid | Owner reference 1 (tile grid); references 2, 3 and shadcn (rows) |
 | state | checked, indeterminate, invalid, disabled | Native states plus `aria-invalid` | Untitled: checked, indeterminate, disabled; no invalid |
 | composition | caption, leading visual, group (vertical, horizontal; invalid, success) | — | Untitled label + hint; Figma label beside the box; gallery Layout / horizontal group |
 
@@ -87,12 +88,12 @@ Read from the nodes (Notion and Figma files above; Area `area--size-*`, `area--s
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| control · size | **16 / 16 / 20** (`space-16`, `space-20`; choice.css:315-330) | Notion and Figma 16; Untitled sm 16, md 20; audit rule "one glyph ladder" | lg takes Untitled's 20 |
+| control · size | **16 / 20** md / lg (sm removed 2026-09-28; `choice.css`) | Notion and Figma 16; Untitled sm 16, md 20; audit rule "one glyph ladder" | lg takes Untitled's 20 |
 | control · radius | min(`radius-small` 6, size / 4): 4 / 4 / 5 (choice.css:67) | Untitled 4 at 16 | Notion 3 and Figma 2 are squarer; kept (third pass), see below |
 | control · rest edge | **`edge-control-hover` #d4d4d4** (choice.css:55) | Notion 19% warm ≈ #d4, Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2, a field's edge, faint on a 16px box |
 | control · checked | `neutral-solid` #282828, mark `fg-on-neutral` #fafafa | Owner 2026-09-26 | Notion fills its blue; Figma keeps a light face with a dark check. Accent as `tone="accent"` (choice.css:29-35) |
 | mark · geometry | 1.75 stroke on a 16 viewBox, masked at 75% of the padding box (choice.css:132-140) | — | Derived: Notion's filled glyph is 9.17px, Figma's stroked path 6.5px, Untitled's check 12px |
-| control · shadow | `shadow-1` (0 0.5px 1px −0.5px, 6%) | In-flow control elevation (DESIGN_SYSTEM.md) | Neither product nor Untitled has one |
+| control · shadow | none (computed 2026-09-28) | Outline pass: controls at rest carry no shadow; neither product nor Untitled has one | The audit had `shadow-1`; since removed |
 | gap | `gap-sm` 4 / `gap-md` 8 / `gap-lg` 8 | Control tier | Untitled 8 / 12 |
 | hit area | label, min-block 24 (choice.css:74) | WCAG 2.5.8 target; Figma's 24px row | — |
 | invalid | edge `fg-danger-vivid`; checked = `danger-solid` fill | Area field validation | No product or Untitled invalid checkbox |
@@ -140,7 +141,11 @@ painted `--_mark`); forced colours are unverified. The mark transition uses
 The gallery shows the tiles in groups (Default, Tones, Sizes,
 Content, States, Layout; Layout now includes the horizontal group). Against the products at 16px: Area's edge now reads as firm as
 Notion's; its checked face is darker than either product by the owner's neutral rule.
-Unverified: dark theme, hover and focus on screen.
+2026-09-28 (batch 14): control and label centre on each other at every size (16 / 16 / 20
+control, 14/20 label). Against Notion's and Figma's 16px checkboxes on file. Found: since small
+controls moved to 14/20, sm differs from md only by its 4px label gap (was also 12/16 text);
+settled 2026-09-28: sm removed. No product checkbox hover could be reached (the owner's board has none).
+Unverified: dark theme, hover and focus in a product.
 
 ## Verification
 
@@ -149,6 +154,24 @@ above is from `area--size-medium` (edge rgb(212)). Build and test results are in
 [cohesion audit](../research/cohesion-audit.md#verification).
 
 ## Feedback log
+
+- 2026-09-28 · owner approved batch 14 → Complete.
+
+- 2026-09-28 · owner: "look into checkbox card, maybe these layouts are better?" (three
+  screenshots: a tile grid with the check in the corner; a plan list and a registration list
+  with the control at the top end; chosen cards outlined 2px) → card rebuilt for Checkbox and,
+  as the references are radio lists, added to Radio: control moved to the end (DOM order kept),
+  12 to the content with the border counted once (shadcn 11), 1px `edge-control` at rest (was
+  `border-decorative` #f3; shadcn ≈ #e3), hover `edge-control-hover`, chosen = 2px edge in the
+  checked colour (border + 1px inset ring, neutral by default, accent by tone), focus ring on the
+  card; `layout="tile"` stacks a 20px visual 16 above the label with the control in the corner
+  and lays cards out in a grid (144 minimum columns); rows in a group stretch, 8 apart. Not
+  adopted: tinting the label or the fill (foreground stays fixed; two of three references keep
+  the fill white). Evidence: `shadcn--choice-card-radio-{0,1}` (ui.shadcn.com Field, Choice Card).
+
+- 2026-09-28 · owner: "do whatever you think would be best, maybe dropping small?" → `size`
+  is md (16) and lg (20); sm removed from the manifest, CSS, demos and docs, since with 14/20
+  small-control text it differed from md only by a 4px gap. Notion and Figma ship one 16px size.
 
 - 2026-09-26 · neutral-by-default sweep → `tone` axis, neutral checked face, accent
   override → `area--tone-accent`, `area--selected`.
