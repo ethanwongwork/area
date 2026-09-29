@@ -34,7 +34,7 @@
       "job": "Communicate contextual feedback without leaving the current content.",
       "area": {
         "job": "Communicate contextual feedback without leaving the current content.",
-        "today": "Semantic tones; icon, title, description, links, actions and optional dismissal; single-line and multiline layouts. Parent owns removal; status role normally, alert role for danger.",
+        "today": "Semantic tones; icon, title, description, links, actions and optional dismissal; single-line and multiline layouts. Parent owns removal; status role normally, alert role for danger. Current-main update: layout=\"banner\" is built; flush is an independent boolean (not a layout value).",
         "gaps": "No independent treatment/size axis is registered. Toast and blocking dialog are separate families.",
         "decision": "Solid emphasis was explicitly excluded; reopening it requires an owner choice.",
         "manifest": {
@@ -52,9 +52,13 @@
               ],
               "layout": [
                 "single-line",
-                "multiline"
+                "multiline",
+                "banner"
               ]
             },
+            "booleans": [
+              "flush"
+            ],
             "elements": [
               "icon",
               "content",
@@ -112,8 +116,13 @@
             "url": "https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/alert.md#L141",
             "path": "docs/specs/alert.md",
             "line": 141
+          },
+          {
+            "url": "https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L532",
+            "checked": "2026-09-29"
           }
-        ]
+        ],
+        "review_commit": "7dae828e7af1daf9d26b663d34335121156606f7"
       },
       "system_catalogue": {
         "Untitled UI": {
@@ -2224,8 +2233,8 @@
         "full-width-page-banner-recipe": {
           "label": "Full-width page banner recipe",
           "layer": 3,
-          "area_has_it": "partial",
-          "recommendation": "consider",
+          "area_has_it": "yes",
+          "recommendation": "retain",
           "comparison": "Width can compose; explicit page-banner recipe and focus policy are not documented.",
           "systems": {
             "Untitled UI": {
@@ -2266,13 +2275,7 @@
             }
           },
           "area_sources": [
-            "https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L524",
-            "https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/alert.md#L1",
-            "https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/alert.md#L8",
-            "https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/alert.md#L24",
-            "https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/alert.md#L31",
-            "https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/alert.md#L107",
-            "https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/specs/alert.md#L141"
+            "https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L532"
           ],
           "sources": [
             "https://www.untitledui.com/react/components/alerts",
@@ -2282,7 +2285,8 @@
             "https://atlassian.design/components/section-message/examples",
             "https://design-system.service.gov.uk/components/notification-banner"
           ],
-          "system_count": 5
+          "system_count": 5,
+          "rationale": "Built as Alert layout=\"banner\" with independent flush boolean; application-specific focus policy remains a separate concern."
         }
       }
     },
@@ -39953,7 +39957,7 @@
               ]
             }
           ],
-          "note": "Only message-action composer examples are included; message display patterns belong to the M–Z run.",
+          "note": "Only message-action composer examples are included; message display patterns belong to the M\u2013Z run.",
           "sources": [
             {
               "id": "s1-1",
@@ -56182,14 +56186,66 @@
           "system_count": 0
         }
       }
+    },
+    "count": {
+      "job": "Quantify the contents of a labeled owner, such as a tab, navigation row or group heading.",
+      "survey_scope": "Current-main Area-only supplement; no additional outside systems surveyed or counted. See the pinned Count spec and its linked source survey.",
+      "area": {
+        "today": "Built and owner approved. Plain/soft treatments, neutral/accent tones, sm/md sizes; overflow and optional accessible label.",
+        "manifest": {
+          "count": {
+            "block": "area-count",
+            "description": "Shows how many items the element it sits in holds, beside that element's label.",
+            "variants": {
+              "variant": [
+                "plain",
+                "soft"
+              ],
+              "tone": [
+                "neutral",
+                "accent"
+              ],
+              "size": [
+                "sm",
+                "md"
+              ]
+            },
+            "elements": [
+              "label"
+            ],
+            "defaults": {
+              "variant": "plain",
+              "tone": "neutral",
+              "size": "md"
+            }
+          }
+        },
+        "sources": [
+          {
+            "url": "https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/packages/styles/src/manifest.ts#L336",
+            "checked": "2026-09-29"
+          },
+          {
+            "url": "https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/docs/specs/count.md#L3",
+            "checked": "2026-09-29"
+          },
+          {
+            "url": "https://github.com/ethanwongwork/area/blob/7dae828e7af1daf9d26b663d34335121156606f7/apps/docs/src/component-status.mjs#L10",
+            "checked": "2026-09-29"
+          }
+        ]
+      },
+      "system_catalogue": {},
+      "options": {}
     }
   },
   "totals": {
-    "families": 30,
+    "families": 31,
     "systems": 16,
     "coverage_cells": 480,
     "observed_system_family_records": 291,
     "proposed_options": 214,
     "api_enum_records": 1043
-  }
+  },
+  "review_commit": "7dae828e7af1daf9d26b663d34335121156606f7"
 }

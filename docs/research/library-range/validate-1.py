@@ -12,7 +12,7 @@ BASE = 'c585f8c5f38705a7efa79bf05148a8c6989b142a'
 EXPECTED = set('''alert alignment-picker avatar badge badge-group box-field breadcrumb button
 button-group calendar card checkbox chip code code-block color-field color-picker
 color-swatch color-swatch-picker combobox command-palette composer context-menu dialog
-field hover-card indicator input input-group kbd'''.split())
+field hover-card count indicator input input-group kbd'''.split())
 SECTIONS = ['Job', 'Variant axes', 'Structural alternatives', 'Interaction patterns',
             'Area today', 'Proposed range', 'Sources']
 STATUSES = {'yes', 'partial', 'not-found', 'owner-decision', 'not-applicable'}
@@ -50,7 +50,7 @@ for family, data in index['families'].items():
     markdown = (HERE / (family + '.md')).read_text()
     check(re.findall(r'^## (.+)$', markdown, re.M) == SECTIONS,
           family + ': section order differs')
-    check(set(data['system_catalogue']) == set(index['systems']),
+    check(set(data['system_catalogue']) == (set() if family == 'count' else set(index['systems'])),
           family + ': required system missing')
     for system, record in data['system_catalogue'].items():
         check(record['sources'], family + ': no source/search record for ' + system)
@@ -93,11 +93,10 @@ for family, data in index['families'].items():
 
 # Check cited Area paths/lines against the actual starting Git objects.
 for url in area_sources:
-    match = re.fullmatch(r'https://github.com/ethanwongwork/area/blob/' + BASE
-                         + r'/([^#]+)#L(\d+)', url)
+    match = re.fullmatch(r'https://github.com/ethanwongwork/area/blob/(' + BASE + '|' + index['review_commit'] + r')/([^#]+)#L(\d+)', url)
     check(match is not None, 'Area evidence is not pinned to a file and line: ' + url)
-    content = git('show', BASE + ':' + match[1])
-    check(1 <= int(match[2]) <= len(content.splitlines()), 'Invalid Area line: ' + url)
+    content = git('show', match[1] + ':' + match[2])
+    check(1 <= int(match[3]) <= len(content.splitlines()), 'Invalid Area line: ' + url)
 
 check(index['totals']['proposed_options'] == options, 'Option total mismatch')
 check(index['totals']['observed_system_family_records'] == native_records,
@@ -105,11 +104,11 @@ check(index['totals']['observed_system_family_records'] == native_records,
 check(index['totals']['api_enum_records'] == api_records, 'API record total mismatch')
 
 # Check committed, unstaged and untracked paths without touching other worktrees.
-changed = set(git('diff', '--name-only', BASE).splitlines())
+changed = set(git('diff', '--name-only', 'origin/main').splitlines())
 changed.update(git('ls-files', '--others', '--exclude-standard').splitlines())
 check(all(path.startswith('docs/research/library-range/') for path in changed),
       'Out-of-scope path: ' + ', '.join(sorted(changed)))
-print(f'PASS: {len(EXPECTED)} families, {len(EXPECTED) * 16} system checks, '
+print(f'PASS: {len(EXPECTED)} families, {index['totals']['coverage_cells']} system checks, '
       f'{options} proposed options, {api_records} API enum records; '
       f'{len(source_urls)} external URLs and {len(area_sources)} pinned Area references. '
       'Section order, source presence, counting rules and path scope agree.')

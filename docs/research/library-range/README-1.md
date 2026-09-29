@@ -1,6 +1,8 @@
 # Library range — run 1
 
-Research date: 2026-09-28. Starting commit: `c585f8c5f38705a7efa79bf05148a8c6989b142a`. Branch: `astra/library-range-1`.
+Research date: 2026-09-28. Snapshot of commit: `c585f8c5f38705a7efa79bf05148a8c6989b142a`. Branch: `astra/library-range-1`.
+
+Count and Alert were refreshed against current main `7dae828e7af1daf9d26b663d34335121156606f7` on 2026-09-29. Count is an Area-only supplement; the 480 outside-system checks remain the original 30-family snapshot. Other families remain pinned to the snapshot above.
 
 ## Exact scope
 
@@ -27,6 +29,7 @@ Research date: 2026-09-28. Starting commit: `c585f8c5f38705a7efa79bf05148a8c6989
 - [command-palette](command-palette.md)
 - [composer](composer.md)
 - [context-menu](context-menu.md)
+- [count](count.md)
 - [dialog](dialog.md)
 - [field](field.md)
 - [hover-card](hover-card.md)
@@ -35,7 +38,7 @@ Research date: 2026-09-28. Starting commit: `c585f8c5f38705a7efa79bf05148a8c6989
 - [input-group](input-group.md)
 - [kbd](kbd.md)
 
-30 built families, including owner-accepted and in-review families. Compound parts stay with their parent, except BadgeGroup, which has its own spec and registry family. No standalone Link family exists at this commit.
+31 built families, including owner-accepted and in-review families. Compound parts stay with their parent, except BadgeGroup, which has its own spec and registry family. No standalone Link family exists at this commit.
 
 Sources: [inventory](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/COMPONENTS.md#L27-L45), [expansion inventory](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/docs/COMPONENTS.md#L60-L138), [manifest](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/packages/styles/src/manifest.ts#L680-L749), [built registry](https://github.com/ethanwongwork/area/blob/c585f8c5f38705a7efa79bf05148a8c6989b142a/apps/docs/src/component-status.mjs#L6-L30). Where inventory prose is stale, executable manifest plus spec and registry establishes built status.
 
@@ -45,7 +48,7 @@ Each family has the requested sections: Job, Variant axes, Structural alternativ
 
 [index-1.json](index-1.json) is the machine-readable companion. `families[slug].options[option]` contains the layer, systems with links, computed system count, Area status and evidence, recommendation and rationale. `system_catalogue` preserves the native axes/values, additional API enum inventories, anatomy, interactions and all sixteen search records. `area.manifest` is an exact data extraction from the unchanged starting manifest, including compound parts.
 
-This run records **30 families**, **480 family/system checks**, **291 positive or adjacent/guidance records**, **1040 source-part API enum records**, and **214 normalized proposed options**. These are catalogue counts computed from the [index](index-1.json), not counts of independent components or a quality ranking.
+This run records **31 families**, **480 family/system checks**, **291 positive or adjacent/guidance records**, **1043 source-part API enum records**, and **214 normalized proposed options**. These are catalogue counts computed from the [index](index-1.json), not counts of independent components or a quality ranking.
 
 ## Biggest gaps
 
@@ -94,7 +97,7 @@ Several superficially similar names need separate jobs: Untitled UI BadgeGroup i
 
 ## Brief provenance
 
-`docs/BRIEF.md` was not present at the starting commit. As instructed, the brief was read read-only from `/Users/ethanwong/Desktop/area/.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md`: Library at lines 23–26 and customization layers at lines 109–123. This fallback was not copied or edited and no commit provenance is asserted for it. The catalogue's layer framing follows the user's task; all Area implementation claims use pinned starting-commit files.
+`docs/BRIEF.md` was not present at the starting commit. As instructed, the brief was read read-only from `.claude/worktrees/astra-6-usage-tasks-17a367/docs/BRIEF.md`: Library at lines 23–26 and customization layers at lines 109–123. This fallback was not copied or edited and no commit provenance is asserted for it. The catalogue's layer framing follows the user's task; all Area implementation claims use pinned starting-commit files.
 
 ## DONE and verification
 
