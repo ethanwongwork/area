@@ -21,12 +21,11 @@ are proprietary. Use its rules and numbers only, and never trace its icons.
 
 A new icon or batch, start to finish. Each step's detail is further down.
 
-**Start every icon session with the owner's decisions (owner, 2026-09-28).** Before any
-drawing, give the owner the decisions pending for the work ahead, each with its options and a
-recommendation: the "To settle with the owner" list in `docs/research/icon-inventory.md`, the
-open questions in the handoff's icon line (`.Codex/HANDOFF.md`), and any open question in a
-batch still in review that the next batch depends on. Draw a batch only once its decisions
-are made, then record each decision in Owner preferences and strike it from the list.
+**Keep drawing; decisions on request (owner, 2026-09-28).** Don't wait on open system
+questions: take the recommended option, record it as delegated here (Owner preferences) and in
+`docs/research/icon-inventory.md` ("To settle"), and say so in the reply so the owner can
+overturn it. When the owner asks for decisions, send a simple decision sheet that shows each
+option rendered (explore candidates or `icon-sheet.mjs`), not a text list.
 
 0. **Set up** a fresh worktree with `npm ci`. Serve the gallery with `PORT=<free port> npm run
    dev` (other worktrees may hold 3000 and 4321). In zsh a `$VAR` holding several icon names
@@ -123,10 +122,30 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   beside a ring; rounded points on objects that are sharp by nature.
 - **Review:** show candidates on the Exploration sheet only for open questions, and remove
   them once the owner chooses. Send a rendered sheet with each batch.
-- **Open system questions** (pending the owner, from the Cursor references): the notification
-  dot, the square container's inside marks, the agent mark, corner badges beyond + − × ✓, and
-  chevrons-right; see "To settle with the owner" in `docs/research/icon-inventory.md`. Settle
-  one before drawing its batch, then record the decision here.
+- **System choices (owner-confirmed 2026-09-28):** the notification dot is ⌀3 on the host's
+  top-right, the host cut round it by the overlap cut (on a ring at 45°); square containers
+  are stop's square with the ring's marks unchanged; small shapes inside containers (the
+  play, dots) are solid exceptions like stop-circle's square; chevrons-right keeps Fluent's
+  4px spacing; no prohibited ring or small bug as corner marks. The agent mark is Fluent's
+  agents shape (a hexagon split by a slash), never a cursor or pointer (it read as Cursor's
+  brand). search-off is a full rising slash through the lens (an inside slash read as
+  zoom-out). Follow Fluent closely for objects the owner compares with it (contact card,
+  news, money, captions, exclude's hatching, chat sparkle's corner sparkle).
+- **Detail first (owner, 2026-09-28):** more detail is better than the strict minimum. The
+  lint's floors are lower: a *detail* gap of 0.875–1.125 (2 between centre-lines), tight
+  running on to 1.75, counters from 1.0, straight corners down to 45°, and 0.875 in the
+  filled variant. Use outlined rings rather than dots where a ring reads better (paw's
+  toes, r 1.25; git's nodes, r 1.5), and give objects their characteristic details (the
+  plane's silhouette, crown's balls and band, the banknote's dots and stack, the bank's
+  plinth, the tree's branch, the pull request's arrowhead). Detail must still read with
+  the family. The overlap cut is not relaxed: every crossing leaves exactly 1.125.
+- **Type family (owner, 2026-09-28):** every type icon uses text's T built one way: bar,
+  end ticks, stem and a foot about 0.45 of the bar. Sizes: text 11 (ticks 2, foot 5), the
+  medium 6 × 6 T (ticks 1, foot 3) in line-height, letter-spacing, superscript and
+  subscript, and text-size's pair (7 with ticks 1.5 and foot 3; 4 with ticks 1 and foot 2).
+- **Rain** lines are different lengths (owner). qr-code is square like a real code (owner,
+  2026-09-28): finders 5 × 5 at r 1 (not the container radius), square 2 × 2 modules (r 0.25)
+  for the finders' centres and the four data modules, 3 apart.
 - **Simplify before dropping (owner, 2026-09-28):** an idea too dense for 16px is simplified
   (Fitting a dense idea at 16px) before it is dropped; drop it only with the owner, and give
   an alternative (file-zip: archive, or a labelled file type).
@@ -167,7 +186,8 @@ open lines (cross, close, check), reach to within about a pixel of it.
 
 **Negative space.** Negative space is designed like ink. Measure it in ink at 1.125px;
 the lint prints every gap and counter with `--report`.
-- **Gaps** between separate shapes come from a two-step scale:
+- **Gaps** between separate shapes come from a scale (a *detail* step, 0.875–1.125, sits under
+  tight since the owner's detail round; tight now runs to 1.75):
   - *tight*, 1.125–1.625px: satellites such as the bell's clapper, the dot of an i or !,
     and a gear's hub, and overlap cuts (a gap equal to the line, 1.125px);
   - *standard*, 1.75–2px (3px between centre-lines): parallel strokes, bars, a pupil or

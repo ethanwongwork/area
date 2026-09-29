@@ -33,13 +33,18 @@ const KEYLINES = { square: [13, 13], circle: [14, 14], horizontal: [14, 11], ver
 // bars), or open (≥ 2.5, no longer read as a gap). Cursor: cuts of 2.5 grid units or less blur.
 // tight starts at the stroke weight: an overlap cut (a shape passing behind another) leaves
 // a gap equal to the line (owner, round 4); 2.25px between centre-lines at 1.125.
-const GAPS = { tight: [1.125, 1.625], standard: [1.75, 2.0] };
+// Detail (owner, 2026-09-28): more detail beats the strict minimum, so a gap may fall to
+// 0.875 (2 between centre-lines) where it adds detail, and tight runs straight into
+// standard (1.625–1.75 read the same). The overlap cut stays 1.125 everywhere.
+const GAPS = { detail: [0.875, 1.125], tight: [1.125, 1.75], standard: [1.75, 2.0] };
 const OPEN = 2.5;
 const CLOSE_GAP = 0.875;      // data-gap="close": 2 between centre-lines at 1.125, the one step under tight
 const JOIN = 0.1;              // closer than this (centre-lines) counts as a join, not a gap
 // Counters use the same scale: a satellite pocket (a clapper cup, a document's fold) may be
 // tight; every other enclosed pocket is standard or larger.
-const COUNTERS = { tight: [1.25, 1.625], standard: [1.75, Infinity] };
+// Detail (owner, 2026-09-28): any pocket as wide as the detail gap (0.875) passes, so small rings
+// (paw's toes, git's nodes) can stay outlined instead of becoming dots.
+const COUNTERS = { detail: [0.875, 1.25], tight: [1.25, 1.75], standard: [1.75, Infinity] };
 // Filled variant (docs/specs/icons.md, "Filled"): each shape declares its role. solid fills
 // the shape inside its outline edge; knockout cuts the stroke out of the solids at the icon
 // weight; hole cuts the shape's interior out. Unmarked shapes are drawn as in the outline.
@@ -64,7 +69,7 @@ const SOLID_ROLES = ["solid", "fill"];
 const FILLED_WEIGHT_RATIO = 4 / 3;
 const SIZE_CURVE = 0.45;             // line ∝ size^0.45: Cursor's 1.25px at 16 → 1.5px at 24   // 1.125 → 1.5px, Fluent's filled line weight
 const BOLD = WEIGHT * FILLED_WEIGHT_RATIO;
-const BOLD_GAP_MIN = 1.0;            // 2.5px between centre-lines at 1.5px: Cursor's floor
+const BOLD_GAP_MIN = 0.875;          // detail round (owner, 2026-09-28): the detail step survives the filled line (was 1.0, Cursor's floor)
 const RASTER = 8;              // samples per px for the counter check
 const onGrid = (v, step) => Math.abs(v / step - Math.round(v / step)) < 1e-6;
 const ONLY = (i => i >= 0 ? new Set(process.argv[i + 1].split(",")) : null)(process.argv.indexOf("--only"));
@@ -179,7 +184,7 @@ const joinAngle = ([ax1, ay1, ax2, ay2], [bx1, by1, bx2, by2]) => {
   const u = [ax1 - ax2, ay1 - ay2], v = [bx2 - bx1, by2 - by1];
   return Math.acos(Math.max(-1, Math.min(1, (u[0] * v[0] + u[1] * v[1]) / (Math.hypot(...u) * Math.hypot(...v))))) * 180 / Math.PI;
 };
-const ACUTE = 60;   // straight joins sharper than this need a fillet (an arc) or a wider angle
+const ACUTE = 45;   // (60 before the detail round, owner 2026-09-28) straight joins sharper than this need a fillet (an arc) or a wider angle
 
 // Filled line glyphs draw at BOLD, which grows each round cap by (BOLD − WEIGHT) / 2. Free
 // ends (touching nothing else) retract by that amount along their straight end segment, so
@@ -447,7 +452,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     const aligned = root["data-gap"] === "aligned" && g > GAPS.standard[1] && g < OPEN;
     const step = Object.entries(GAPS).find(([, [lo, hi]]) => g >= lo - 1e-6 && g <= hi + 1e-6)?.[0] ?? (g >= OPEN ? "open" : close ? "close" : aligned ? "aligned" : null);
     gaps.push(`${r2(g)}${step ? " " + step : ""}`);
-    if (!step) fail(name, `shapes ${p + 1} and ${q + 1} leave a ${r2(g)}px gap; move them ${toSteps(g, [["tight", ...GAPS.tight], ["standard", ...GAPS.standard], ["open", OPEN, Infinity]])} (or join them)`);
+    if (!step) fail(name, `shapes ${p + 1} and ${q + 1} leave a ${r2(g)}px gap; move them ${toSteps(g, [["detail", ...GAPS.detail], ["tight", ...GAPS.tight], ["standard", ...GAPS.standard], ["open", OPEN, Infinity]])} (or join them)`);
   }
   // Counters: rasterise the ink and flood the outside; every enclosed pocket of negative
   // space must hold at least a tight disc, or it reads as a blot at 16px.
@@ -455,7 +460,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   // data-counter="sliver" (owner-approved, recorded in the spec): a slashed shape keeps
   // Fluent's fuller form, and the sliver between it and the slash stays (mic-off).
   if (root["data-counter"] !== "sliver") for (const c of counters) if (!Object.values(COUNTERS).some(([lo, hi]) => c >= lo - 1e-6 && c <= hi + 1e-6))
-    fail(name, `an enclosed counter is ${r2(c)}px across; make it ${toSteps(c, [["tight", ...COUNTERS.tight], ["standard", COUNTERS.standard[0], Infinity]]).replaceAll("apart", "larger").replaceAll("closer", "smaller")} (or remove it)`);
+    fail(name, `an enclosed counter is ${r2(c)}px across; make it ${toSteps(c, [["detail", ...COUNTERS.detail], ["tight", ...COUNTERS.tight], ["standard", COUNTERS.standard[0], Infinity]]).replaceAll("apart", "larger").replaceAll("closer", "smaller")} (or remove it)`);
   // Keyline: the ink box at WEIGHT fits the icon's optical shape, centred on 8,8.
   if (strict && keylines && KEYLINES[keyline]) {
     const [kw, kh] = KEYLINES[keyline];
