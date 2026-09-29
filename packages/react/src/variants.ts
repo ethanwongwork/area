@@ -113,5 +113,6 @@ export const colorPickerVariants = /* @__PURE__ */ createVariants(manifests.colo
 export const calendarVariants = /* @__PURE__ */ createVariants(manifests.calendar);
 
 export const indicatorVariants = /* @__PURE__ */ createVariants(manifests.indicator);
+export const countVariants = /* @__PURE__ */ createVariants(manifests.count);
 
 export const presenceVariants = /* @__PURE__ */ createVariants(manifests.presence);

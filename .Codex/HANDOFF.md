@@ -1,11 +1,16 @@
 # Handoff — 2026-09-27
 
-Branches: `icons-system` (icon work, this folder) and `components` (all component work,
-in its own worktree session). Both start from `main`; merge through pull requests.
+Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
+pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. No owner completion changed; Indicator stays In review.
 
 ## Owner direction
+
+- **Icon sessions open with the owner's decisions** (owner, 2026-09-28): before drawing, list
+  the decisions pending for the next icon batches, with options and a recommendation (the
+  "To settle with the owner" section of `docs/research/icon-inventory.md` and open questions
+  below). Work starts once they are made.
 
 - Visual-first: get every component and variant exactly right from measured evidence
   (ChatGPT, Notion, Figma, Cursor, Untitled UI, Fluent), then systematize tokens.
@@ -101,6 +106,138 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     flip and shift, menu button keyboard, tooltip delays and hover bridge, 150ms motion).
     Spec `docs/specs/overlay.md`; tests `packages/react/tests/overlay.test.mjs`; gallery
     `behavior-*` tiles. Tooltip is still marked Complete; its behavior is new and unreviewed.
+
+## Batch 11 Chrome pass and Kbd corner (2026-09-28, branch `claude/kbd-button-refinement-21fa0c`)
+
+- Owner: Kbd "looks too sharp", "thought kbd had a stroke?". Corner 4 → 6 (`--_radius`), no longer
+  concentric in Buttons (was 2 at every size); Tooltip takes max(own, concentric). Kbd moved back to
+  In review. The stroke is not applied: `GalleryReviewKbd` shows it as a proposal (surface fill +
+  `edge-control`). Evidence: Notion and ChatGPT inline hints have no edge (ChatGPT forces
+  `!border-0`); Figma's keyboard-shortcuts panel outlines each key (1px 70%, corner 2); Untitled rings.
+- Batch 11 side by side recorded in `pass-status.mjs` (Button vs Figma Share, Notion, ChatGPT;
+  Button group vs Figma's Present pair; Kbd). Button and Button group unchanged, now officially
+  complete; Kbd awaits the owner's decision on the stroke and approval of the corner.
+- Owner follow-up: 6px keycap corner everywhere as a rule (token `radius-control-sm`); Kbd
+  Templates tiles show it in twelve hosts; Input suffix now centres a keycap (inset.css).
+  Open: menus and the command palette show shortcuts unboxed (quiet, as Notion and Figma);
+  Escape renders as the ⎋ glyph where ChatGPT and Notion write "Esc".
+- Batch 11 approved (Kbd complete as shown). Batch 12 (Text entry) side by side recorded: Notion's
+  search and invite fields, Figma search, ChatGPT multiline fields; no paint change; specs' stale
+  resting shadow corrected; 51 Area tiles retaken. Input back to In review (Kbd suffix fix).
+  Open: Textarea lg is barely distinct from md (same 14/20 and 12 inset).
+- Batch 12 approved (date picker: a Popover holding only a Calendar hugs it). Textarea inline
+  inset follows Input's per size; gallery date field = Input + Calendar in a Popover (`anchor`).
+- Batch 13 (Select, Combobox, Field): no changes; visual passes written; side by side with
+  ChatGPT's settings dropdown (rest, hover, open menu) and settings row, saved after the owner
+  brought the Claude tab group's window forward (a hidden tab never reaches idle).
+- Batch 14 (Checkbox, Radio, Switch) side by side recorded; no code change. ChatGPT switches (off /
+  on, rest / hover) saved. Open for the owner: Switch off fill #d4 is darker than ChatGPT (≈#e6) and
+  Notion (≈#db); Checkbox / Radio sm equals md except the label gap since small text became 14/20.
+  Specs' stale control shadows corrected. Combobox (batch 13) still awaits approval.
+- Owner: Switch off track lightened (#e2, hover #d4, local to Switch; fill-toggle unchanged for
+  Slider); Checkbox / Radio sm removed. Batch 14 back to ready. Batch 15 side by side recorded, no
+  change (Slider sm kept: row height differs).
+- Checkbox / Radio card rebuilt from owner references + shadcn Choice Card: control at the end,
+  chosen card outlined 2px in the checked colour, `layout` row / tile (tile grid 144 min), Radio
+  gained card, leadingVisual and caption. Both remain In review.
+- Batch 14 approved. Batch 16: Table compared with Notion's table view (returns), Card's 09-27
+  Chrome pass recorded; no change. Card awaits approval. Dev server hang: `apps/docs/dist` held
+  an iCloud duplicate ("… 2.html") whose read blocked readSnapshot; it cleared after ~80s.
+- Card (owner): one text/button column 4 inside the media inset; corner = default Button radius +
+  column distance (sm 18, md 20, lg 24); footer on the column; transport footers centred;
+  immersive text on two insets. Card stays In review.
+- Batch 17: visual passes written for Dialog and Hover card from the gallery + captures on file;
+  live Chrome check blocked (tab hidden again). Open: Dialog's corner under Card's new rule
+  (16 by the close vs 24 by the footer buttons).
+- Clipboard hand-off failed once (clipboard held other content); the postMessage relay page
+  (scratchpad relay.mjs on 3197, window.open + postMessage) works from Notion.
+- Chrome was a background window (`visibilityState` hidden): rest captures and clipboard worked,
+  hover states were not retaken. Local captures leave through a relay on 127.0.0.1 (CORS `*`).
+
+## Avatar photo, initials, Calendar cleanup (2026-09-28, branch `claude/component-variants-gallery-f433f2`, uncommitted)
+
+- This branch fast-forwarded to main at PR 15; a parallel batch 4 pass was dropped and only its
+  new pieces re-applied. Owner approved them: Avatar initials 12 / 14 / 16 by size (Notion 14 on
+  32); Irene's photo `apps/docs/public/images/irene-yamaguchi.jpg` (owner-supplied, replaces
+  `chip-avatar.png`); the avatar badge shows one initial in its 16px disc; dot placement kept.
+- Calendar (batch 7, owner): Schedule time list on the grid's rhythm (md rows 4 apart, 13 from each
+  side, the calendar's height, shared lift; `align="start"` was pulling the plate onto the rule);
+  week strip 12 all round; the two-month tile is a new full-width `4x2` gallery span.
+- Batch 7 approved (Calendar). Batch 8 (Panel, Number field, Box field): Claude in Chrome side by
+  side with Figma's Design panel; Panel section rules now sit midway (16 below the last field, the
+  next title's cap 16 below the rule, via `(row - 1cap) / 2`); Number field and Box field unchanged.
+  Panel is Ready for approval; the other two were already approved and are now officially complete.
+- Batch 9 (owner feedback): Color field opacity sized to content with "%" anchored at the end (plain
+  NumberFields keep "%" after the number); Select single-line with ellipsis, in-group text runs to the
+  chevron box; InputGroup visual + Select joins like visual + Input; Property list tiles at 280 (240
+  cannot hold hex + opacity at 14px). Gallery-wide check: no clipped input or select text.
+- Color swatch (batch 9, approved): solid neutral-50 edge drawn as the swatch's background, layers
+  1px inside concentric (radius - edge), corner 20% of the side, Area's own pixel checker (2 x 2 SVG
+  mask, 5 cells, meets the edges). Swatch-picker cells concentric with it.
+- Batch 10 (Color swatch picker, Color picker, Alignment picker): Claude in Chrome vs Figma's picker
+  and Alignment grid; picker opacity sized like Color field, channel fields hug their digits, alpha
+  checker 3 rows; a stale 2026-09-24 slider block that overrode the picker's 16px tracks removed.
+  Questions: Figma's split translucent chits; Alignment grid sized to the layout (88 x 56).
+- Panel (batch 8, approved 2026-09-28): insets 12 sm / 16 md; headings and the bar are rows whose button has one
+  field gap above and below (8 / 12, Figma 8 / 8); actions one field gap after the fields; panel text and
+  gaps step by tier (sm labels 12/16, gaps 8; md 14/20, 12), shared with BoxField and PropertyList via
+  --_panel-*; md size tile shown at 280 (default width stays 240).
+- The dev server rebuilds only when a source file's content changes (touch is ignored) and copies `public/` then; restart it after changing an image.
+
+## Count and Banner (2026-09-28, branch `claude/component-banner-count-81af92`, in review)
+
+- **Count** (new, `count.css`, `Count.tsx`, manifest `count`, spec `count.md`): plain (default,
+  Notion) / soft (Primer, 6% black translucent plate), neutral / accent, sm 16 / md 20, 12/16
+  tabular, `max+` via `count-format.ts` shared with Indicator, hidden `label`. Nav and Tabs demos
+  use it.
+- **Banner** = Alert `layout="banner"` + `flush` (spec `alert.md`, Banner): OpenAI 12 / 16 inset,
+  44 tall, corner 6, flex row, link at the end on the inset. Alert moved Complete → In review; new
+  batch "Counts and banners".
+- Captures: `captures/count/`, `captures/alert/*banner*` (OpenAI business and Daybreak, Primer). Route
+  for public pages in the built-in browser: paste the script, put captures in `window.name`, then
+  navigate to a 127.0.0.1 relay page that POSTs them (popups open in the same tab there).
+- Chrome side by side done (Notion board counts, OpenAI Daybreak); open: Count text 14 (Notion) vs 12;
+  dark theme; no target product showed a banner. `npm run test:consumer` fails on an old
+  `Panel size="xs"` in its fixture (unrelated).
+
+## Batch 4 approved, batch 5 Chrome pass (2026-09-28)
+
+- Owner approved batch 4 (Count, Alert with banner). Count stays a pill.
+- Batch 5 (Avatar, Indicator, Badge): Claude in Chrome side by side done and recorded in
+  `pass-status.mjs` (Figma avatars, bell and AI label; Notion person and workspace avatars, help
+  dot, tags). No change to the three families; awaiting owner approval.
+- Avatar in Chip: the initials overflowed (Chip used `control-sm-text`, 14 since small controls
+  moved to 14/20); now `control-xs-text` like Badge, and the slot is `aria-hidden`. Chip moved
+  Complete → In review. Avatar and Chip demos use Irene Yamaguchi (group: Irene + teams).
+
+## Batch 5 approved, batch 6 Chrome pass (2026-09-28)
+
+- Owner approved batch 5 (Avatar, Indicator, Badge).
+- Batch 6 (Loading): transient states caught with a MutationObserver installed alongside the
+  capture script; ChatGPT and Notion clear `window.name` (COOP), so their captures leave through
+  the clipboard (injected button, real click, `LC_ALL=en_US.UTF-8 pbpaste`). Skeleton now takes
+  ChatGPT's 10% / 16% grey and 3s linear shimmer (Figma agrees); Spinner unchanged (owner's 1s
+  over ChatGPT's 2s). Progress: no product bar found again; not validated.
+- Owner feedback: Spinner redrawn as SVG masks with round caps, stroke 1/8 of size (lg 3); a
+  2.5px md option waits in `GalleryReviewSpinner`. Skeleton: rectangle 4px corner, `animated`,
+  `lines`, wrap mode (children + `loading`), list tile; `skeleton.test.mjs`.
+- Skeleton rethink (owner chose option A from `research/skeleton-rethink-survey.md`): shapes block
+  (default) / text / circle; `rounded` and `rectangle` removed; wrap paints the child (utilities
+  layer); compositions omit control placeholders.
+
+## Gallery tiles and batches 6-7 (2026-09-28)
+
+- The tall single-column tile (1x2) is gone (`GALLERY_SPANS`): Calendar tiles are 2x2 (two
+  months 2x3), Count nav 2x1, every Skeleton tile 2x1. The Pass review's 2x copy now has the
+  tile's content width (it collapsed full-width specimens). A DOM audit found no clipped tiles.
+- Port 3000 serves a different worktree (`icons-branch-strategy-a94020`); this branch is on 4331.
+  The dev server reads `pass-status.mjs`, `component-status.mjs` and the capture folders once at
+  start: restart it after changing them, or the Pass review shows stale phases.
+- Batch 6: Progress validated against Figma's AI-credits meter (open: Figma's tracks #f5 / #e6
+  are lighter than Area's shared rail #dd). Batch 7: Popover validated against Notion's Share
+  popover; Calendar against Notion's search Date filter (month label now 500). Batch 6 approved.
+  Chrome tip: Notion's menus open reliably with synthetic pointer events dispatched to the
+  element (`pointerdown`/`mousedown`/`pointerup`/`mouseup`/`click`); zoomed tabs misplace clicks.
 
 ## Owner feedback round (2026-09-27, branch `claude/component-gallery-status-4b51ac`, uncommitted)
 
@@ -213,15 +350,24 @@ saved as one JSON download per product (owner-approved) and split with a scratch
 
 ## Next
 
-1. Owner review on `gallery-icons.html` (In review lists what's open): batch 23 (call,
+1. **Icons, next session (2026-09-28):** the owner rejected the last refinement round (vault, blocks, clapperboard filled, check-check, bandage, case-upper and case-sensitive A, folders, bug-off, person-chat, binoculars, brain, waypoints, toy-brick, dumbbell, debug step-over, VR goggles, chef hat, chess rook): redo them, and show the owner candidates before settling. The 18 undrawn concepts have a decision sheet (spec "Refinement round" and the owner's pending answer; recommendations: draw plug-off, binary, cost tiers, chat-dashed, folder-dashed, goal, radar, broom, satellite; use existing for chat-question, file-diff, deck-chair, head-thinking; drop braces-dot, compass-check, bug-play, brain-thinking, file-pdf).
+   Owner review on `gallery-icons.html` (In review lists what's open): the detail round (2026-09-28: lint floors relaxed, bank, banknote, crown, tree, paw, plane, git, rain, QR and the type family redrawn, overlap cuts evened; spec "Owner round: detail"); then build-queue batches 44–51 and 53–56 (the owner confirmed the system choices; the owner round after them redrew the agent family as Fluent's agents shape, chat-sparkle, search-off, square-list, dollar, id-card, newspaper, plane (side view), translate, text-size, banknote, bank, award, captions, variable, qr-code and boolean-exclude: spec "Owner round: decisions, agents, Fluent likeness"); then batches 57–60 (queue remainder, AI and people, leisure, debugger); still undrawn (need a new idea or the owner): chat-question, file-diff, plug-off, braces-dot, compass-check, bug-play, binary, cost tiers, chat-dashed, folder-dashed, goal, radar, broom, brain-thinking, deck-chair, satellite, head-thinking, file-pdf; batches 32–42 (the full-set roadmap, part 2 in `docs/specs/icons.md`: demo gaps, Figma tools 2 with the boolean operations as solid results, code and git, media, documents/money/awards, people, nature, type, keys; open: the booleans and contrast are solid exceptions in the outline style, filled tree reads as a club); batch 31 (weather, shapes and money: cloud rain and cloud lightning on cloud-download's open cloud, wind, star off, QR code on grid's squares, rectangle, ellipse, coins); batch 30 (nature and tools); the list family (bullet, numbered, checklist share rows 5, 8, 11); filled lines beside solids keep the icon weight; mark placement is set by the shape; batches 27–29 (AI and chat, Figma tools, commerce; open: unpin's cut); batch 26 (checkbox, checklist, bookmark remove, filter add, top panel, pushpin, palette); batches 24–25 (lists and sorting; view and tools; clear filters and the 1's sharp flag approved; the 2 and percent (Geist's 54° slash) revised; mark placement is set by the shape; filled lines beside solids keep the icon weight); batch 23 (call,
    reply/forward, sync, eraser, text align, indent/outdent, columns/rows, container remove);
    the negative-space round (graduation cap, bell, bell off, clipboard, car, watch: gaps on
    the outline's lines); batch 22; keyboard and repeat; batches 18–21.
    Rules: skill (Shared parts, Families, Filled variants: negative space on the outline's
    lines, only where fill is on both sides) and the spec's last sections; the lint checks
    dot sizes, the shared slash on `-off` icons and knockouts that never enter a solid.
-   Next batch ideas: bookmark add, zoom fit, paint bucket, cursor text, reply all,
-   sidebar variants, filter off, sort ascending/descending, list numbered, translate.
+   Batch 43 redrew thirteen dropped icons with one simplification each (skill: Fitting a dense
+   idea at 16px). Process tools (2026-09-28): `icons:find` (does it exist?), `icons:geometry`
+   (fillet, cut, behind, lobes, transform, gap), `gen-pilot-icons.mjs --only a,b` (a second,
+   not a minute; near misses name the distance to fix), `icons:sheet compare out.png batch-NN`
+   (beside Fluent), `icons:batch batch.json` (records a batch everywhere). The build queue from
+   the owner's Cursor references is `docs/research/icon-inventory.md`.
+   The drawing roadmap is done; what remains is the swap below. New rules this round: every
+   cloud is the one shape (weather clouds moved up, rain hangs from the foot, the bolt crosses it
+   with a filled-only `halo`); qr-code's `data-gap="aligned"`. Batch sheets:
+   `icon-sheet.mjs filled out.png <icons…>`.
    The lint doesn't measure gaps within one path (paperclip's were solved by hand).
    `npm run typecheck` fails while the dev server rebuilds `packages/react/dist` (TS7016 on
    `@area/react`); rerun once the rebuild settles. Review filled variants with

@@ -23,7 +23,8 @@
     background-color: var(--_bg);
     color: var(--_fg);
     box-shadow: var(--_group-ring), var(--_active-ring);
-    font-size: var(--area-text-xs-size);
+    /* Initials step with the disc: 12 / 14 / 16 at 28 / 32 / 40 (Notion 14 at 32, docs/specs/avatar.md). */
+    font-size: var(--_text, var(--area-text-sm-size));
     font-weight: var(--area-weight-strong);
     overflow: hidden;
     user-select: none;
@@ -71,12 +72,12 @@
   }
   .area-avatar--accent { --_ring: var(--area-accent-solid); }
 
-  .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); }
-  .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); }
+  .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); --_text: var(--area-text-xs-size); }
+  .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); --_text: var(--area-text-sm-size); }
   .area-avatar--lg {
     --_size: var(--area-control-lg);
     --_icon: var(--area-space-24);
-    font-size: var(--area-text-sm-size);
+    --_text: var(--area-text-md-size);
   }
 
   .area-avatar-group {
@@ -138,45 +139,69 @@
 
   /* --- Skeleton ----------------------------------------------------------- */
   /*
-   * The shimmer travels rather than pulsing, because a pulse reads as a state change
-   * while a travelling highlight reads as loading. It is suppressed entirely when the
-   * motion axis is off.
+   * One placeholder with three shapes (docs/specs/skeleton.md, rethink 2026-09-28, owner option A;
+   * research: docs/research/skeleton-rethink-survey.md):
+   *   block   the default: a box the host sizes (Primer SkeletonBox, Fluent's rectangle, Radix,
+   *           Mantine and Chakra all default to a block);
+   *   text    a line of type: the glyph height centred in the host's line box;
+   *   circle  an avatar or icon disc, 1:1.
+   * Two behaviours: still (no shimmer) and wrap (painted on a real element, which keeps its size
+   * and its own corner). The shimmer travels rather than pulsing: travel reads as loading.
    */
   .area-skeleton {
+    /* spec (batch 6): ChatGPT's paint, a translucent grey at 10% (#f4 on white; Notion's flat
+       placeholder is #f1) with a 16% band (#ee), so a placeholder reads on a card as well as the
+       page. Dark keeps the component roles (not measured). */
+    --_skeleton-fill: light-dark(rgb(143 143 143 / 0.1), var(--area-bg-component)); /* spec */
+    --_skeleton-band: light-dark(rgb(143 143 143 / 0.16), var(--area-bg-component-active)); /* spec */
+    /* spec: corners cap at 4 (Primer 3, Radix 3, Fluent 4, MUI 4, Mantine 4, Chakra 4, antd 4,
+       Polaris 4, Atlassian 4); the radius axis still squares them at the sharp preset. */
+    --_skeleton-radius: min(var(--area-radius-small), 4px); /* spec */
     display: block;
-    border-radius: var(--area-radius-small);
-    background-color: var(--area-bg-component);
-    background-image: linear-gradient(
-      90deg,
-      transparent,
-      var(--area-bg-component-active),
-      transparent
-    );
+    border-radius: var(--_skeleton-radius);
+    background-color: var(--_skeleton-fill);
+    background-image: linear-gradient(90deg, transparent, var(--_skeleton-band), transparent);
     background-size: 200% 100%;
     background-repeat: no-repeat;
-    animation: area-shimmer 1.4s ease-in-out infinite;
+    /* spec: 3s linear, ChatGPT's and Figma's shimmer. */
+    animation: area-shimmer 3s linear infinite; /* spec */
   }
 
-  /*
-   * The small radius, not a rung of the ramp. This read `--area-radius-2` -- the only one
-   * of the system's radius declarations that named a primitive directly, which meant a
-   * skeleton kept its 2px round even at the sharp preset while everything around it went
-   * square.
-   */
-  /* spec (docs/specs/skeleton.md, 2026-09-27 audit): a text line is the glyph height centred in
-     its line box, so stacked lines take the paragraph's own height (Primer SkeletonText: height
-     font-size, margin leading / 2; MUI scales the line box). Corners cap at 4, where Primer,
-     Radix, Fluent, MUI, Mantine, Chakra and antd sit (3-4); the axis radius read rounder on a
-     12-14px bar. */
+  /* spec: a block fills the width and is 16 tall until the host sizes it (Primer 1rem, Fluent
+     16). */
+  .area-skeleton--block {
+    inline-size: 100%;
+    block-size: var(--area-space-16); /* spec */
+  }
+
+  /* spec (2026-09-27 audit): a text line is the glyph height centred in its line box, so stacked
+     lines take the paragraph's own height (Primer SkeletonText; MUI scales the line box). */
   .area-skeleton--text {
+    inline-size: 100%;
     block-size: 1em;
     margin-block: calc((1lh - 1em) / 2);
-    border-radius: min(var(--area-radius-small), 4px); /* spec */
   }
 
-  .area-skeleton--circle { border-radius: var(--area-radius-full); }
-  .area-skeleton--rectangle { border-radius: 0; }
-  .area-skeleton--rounded { border-radius: var(--area-radius-container); }
+  /* spec: a disc, 32 (Avatar md) until the host sizes it; one dimension is enough (Mantine,
+     Fluent). */
+  .area-skeleton--circle {
+    inline-size: var(--area-control-md);
+    aspect-ratio: 1;
+    border-radius: var(--area-radius-full);
+  }
+
+  /* Still: a flat placeholder (Notion; antd, Polaris and Atlassian are still by default). */
+  .area-skeleton--static { animation: none; background-image: none; }
+
+  /*
+   * Paragraph (`lines`): text lines in a column, so each keeps both half-leadings. spec: the last
+   * line is 65% wide, at least 50px (Primer SkeletonText; antd 61%, Polaris and Chakra 80%).
+   */
+  .area-skeleton__lines { display: flex; flex-direction: column; align-items: stretch; min-inline-size: 0; }
+  .area-skeleton__lines > .area-skeleton--text:last-child:not(:first-child) {
+    inline-size: 65%; /* spec */
+    min-inline-size: 50px; /* spec */
+  }
 
   @keyframes area-shimmer {
     from { background-position: 200% 0; }
@@ -184,35 +209,42 @@
   }
 
   /* --- Spinner ------------------------------------------------------------ */
+  /*
+   * spec (docs/specs/spinner.md, 2026-09-28 owner feedback: "slightly pixelated", ends not read
+   * as round): the ring and the arc are SVG masks, rasterised with anti-aliasing at any scale,
+   * and the arc has round caps (ChatGPT draws its spinner as SVG). Both are drawn on a 16 unit
+   * box with a 2 unit stroke, so the stroke is 1/8 of the size at every size (Primer 16 / 2,
+   * Untitled 4 on 32): 1.5 at sm, 2 at md, 3 at lg.
+   */
   .area-spinner {
     --_size: var(--area-icon-md);
-    --_stroke: var(--area-space-2);
     --_indicator: var(--area-neutral-solid);
+    --_ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E"); /* spec */
+    --_arc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 0 1 7 7' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"); /* spec */
     position: relative;
     display: inline-block;
     box-sizing: border-box;
     inline-size: var(--_size);
     block-size: var(--_size);
-    border-radius: var(--area-radius-full);
-    /* spec (docs/specs/spinner.md, 2026-09-27 audit): the track is the arc's own ink at 25%
-       (Primer; Area's Button spinner already did this), so the ring shows on any ground. */
-    background: conic-gradient(var(--_indicator) 0 25%, color-mix(in srgb, var(--_indicator) 25%, transparent) 25% 100%);
-    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
-    mask: radial-gradient(farthest-side, transparent calc(100% - var(--_stroke)), #000 calc(100% - var(--_stroke)));
-    /* spec: 1s a turn (Untitled, Primer, shadcn, Spectrum); 2s read as stalled beside all of them. */
-    animation: area-spin 1s linear infinite; /* spec */
+    flex: none;
+    vertical-align: middle;
+    /* spec (2026-09-27 audit): the track is the arc's own ink at 25% (Primer; ChatGPT 30%), so
+       the ring shows on any ground. */
+    background: color-mix(in srgb, var(--_indicator) 25%, transparent);
+    -webkit-mask: var(--_ring) center / 100% 100% no-repeat;
+    mask: var(--_ring) center / 100% 100% no-repeat;
   }
 
-  .area-spinner::after {
+  /* The arc: a quarter turn with round caps, turning over the still track. */
+  .area-spinner::before {
     content: "";
     position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: calc(50% - var(--_stroke) / 2);
-    inline-size: var(--_stroke);
-    block-size: var(--_stroke);
-    border-radius: var(--area-radius-full);
+    inset: 0;
     background: var(--_indicator);
-    box-shadow: calc((var(--_size) - var(--_stroke)) / 2) calc((var(--_size) - var(--_stroke)) / 2) 0 var(--_indicator);
+    -webkit-mask: var(--_arc) center / 100% 100% no-repeat;
+    mask: var(--_arc) center / 100% 100% no-repeat;
+    /* spec: 1s a turn (Untitled, Primer, shadcn, Spectrum; owner 2026-09-27). */
+    animation: area-spin 1s linear infinite; /* spec */
   }
 
   /* Inside a Button the spinner takes the label's ink, so it shows on any fill: a neutral
@@ -277,7 +309,7 @@
   /* The motion axis stops the loops exactly as the reduced-motion preference does (Switch
      already follows it); the animations are literal durations, so the axis's zeroed tokens
      alone would not reach them. */
-  [data-area-motion="none"] :is(.area-skeleton, .area-spinner, .area-progress[data-indeterminate] .area-progress__bar) { animation: none; }
+  [data-area-motion="none"] :is(.area-skeleton, .area-spinner::before, .area-progress[data-indeterminate] .area-progress__bar) { animation: none; }
   [data-area-motion="none"] .area-skeleton { background-image: none; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -287,7 +319,38 @@
     }
     /* spec: a still quarter arc reads as a frozen screen, so the spinner slows instead of
        stopping (Fluent 1.8s; Carbon and Primer keep turning). The motion axis still stops it. */
-    .area-spinner { animation-duration: 1.8s; } /* spec */
+    .area-spinner::before { animation-duration: 1.8s; } /* spec */
     .area-skeleton { background-image: none; }
+  }
+}
+
+/*
+ * Skeleton wrap (docs/specs/skeleton.md): the placeholder is painted on the wrapped element
+ * itself, so it keeps that element's size, place and its own corner (Radix and Spectrum keep the
+ * child's radius). The wrapper takes no box. This sits in the utilities layer because it has to
+ * win over whatever paint the wrapped component draws, without !important or specificity games.
+ */
+@layer area.utilities {
+  .area-skeleton--wrap { display: contents; }
+  .area-skeleton--wrap > * {
+    background-color: var(--_skeleton-fill);
+    background-image: linear-gradient(90deg, transparent, var(--_skeleton-band), transparent);
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    border-color: transparent;
+    box-shadow: none;
+    outline: none;
+    color: transparent;
+    pointer-events: none;
+    animation: area-shimmer 3s linear infinite; /* spec: as the base skeleton */
+  }
+  /* What the element holds keeps its space but does not paint. */
+  .area-skeleton--wrap > * > *,
+  .area-skeleton--wrap > *::before,
+  .area-skeleton--wrap > *::after { visibility: hidden; }
+  .area-skeleton--wrap.area-skeleton--static > * { animation: none; background-image: none; }
+  [data-area-motion="none"] .area-skeleton--wrap > * { animation: none; background-image: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .area-skeleton--wrap > * { animation: none; background-image: none; }
   }
 }

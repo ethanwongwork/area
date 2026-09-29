@@ -427,8 +427,8 @@ export const ChipCustomDelete = () => <Chip kind="input" onRemove={() => {}} rem
 
 export const ChipAvatars = () => (
   <ChipGroup>
-    <Chip avatar={<Avatar fallback="AV" alt="Avatar" />}>Avatar</Chip>
-    <Chip avatar={<Avatar src="/images/chip-avatar.png" alt="Avatar" />}>Avatar</Chip>
+    <Chip avatar={<Avatar fallback="IY" alt="" />}>Irene Yamaguchi</Chip>
+    <Chip avatar={<Avatar src="/images/irene-yamaguchi.jpg" alt="" />}>Irene Yamaguchi</Chip>
   </ChipGroup>
 );
 
@@ -438,7 +438,7 @@ export const ChipInvalidInput = () => <Chip kind="input" invalid onRemove={() =>
 
 export const CheckboxSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    {(["sm", "md", "lg"] as const).map((size) => (
+    {(["md", "lg"] as const).map((size) => (
       <Checkbox key={size} size={size} label={size} />
     ))}
   </div>
@@ -455,7 +455,7 @@ export const CheckboxStates = () => (
 
 export const RadioSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    {([["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] as const).map(([size, label]) => (
+    {([["md", "Medium"], ["lg", "Large"]] as const).map(([size, label]) => (
       <Radio key={size} size={size} name={`radio-size-${size}`} value={size} label={label} />
     ))}
   </div>

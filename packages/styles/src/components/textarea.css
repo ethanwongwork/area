@@ -14,8 +14,13 @@
     --_focus-outline: var(--area-field-focus-color);
     --_focus-halo: var(--area-shadow-color);
     --_bg: var(--area-textarea-bg);
-    --_gutter-inline: var(--area-gutter-md);
-    --_gutter-block: max(var(--area-space-2), calc(var(--_gutter-inline) - var(--area-space-4)));
+    /* spec (owner 2026-09-28, "do whatever makes the most sense"): the text starts where a
+       same-size Input's does, by the shared equal-inset rule (inset.css), so stacked fields
+       align and each size is distinct: sm 9, md 11, lg 15. The block inset stays 4 less. */
+    --_box-text: 1lh;
+    --_gutter-inline: calc((var(--_height) - var(--_box-text)) / 2);
+    /* Rounded so the box stays a whole number of pixels. */
+    --_gutter-block: max(var(--area-space-2), round(nearest, calc(var(--_gutter-inline) - var(--area-space-4)), 1px));
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
 
@@ -38,6 +43,10 @@
     resize: vertical;
     outline: none;
     transition: var(--area-transition);
+  }
+
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-textarea { --_box-text: 1cap; }
   }
 
   .area-textarea:not([rows]) {
@@ -116,10 +125,9 @@
 
   .area-textarea:disabled::placeholder { color: var(--area-fg-disabled); }
 
-  /* Multiline fields use a tighter content inset than a one-line control: the text's
-     own leading already supplies vertical breathing room. Each tier remains visible when
-     a fixed row count is used in a compact composition. */
-  .area-textarea--sm { --_height: var(--area-control-sm); --_gutter-inline: var(--area-gutter-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-textarea--md { --_height: var(--area-control-md); --_gutter-inline: var(--area-gutter-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-textarea--lg { --_height: var(--area-control-lg); --_gutter-inline: var(--area-gutter-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  /* Multiline fields use a tighter block inset than a one-line control: the text's own
+     leading already supplies vertical breathing room. The inline inset follows the height. */
+  .area-textarea--sm { --_height: var(--area-control-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-textarea--md { --_height: var(--area-control-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-textarea--lg { --_height: var(--area-control-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

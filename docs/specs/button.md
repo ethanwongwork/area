@@ -284,6 +284,12 @@ chevron, as ChatGPT's model picker).
 
 ## Feedback log
 
+- 2026-09-28 · batch 11 Chrome side by side: Figma's Share (32 tall, corner 5, 0 12, 11/16 450,
+  solid #0d99ff) beside Area md (32, corner 8, 11 inset, 14/20 500), Notion solid and outline
+  (32, corner 6, 12) and ChatGPT pills → no change: height matches, the 11 inset is the shared
+  equal-inset rule (within 1px), Figma's 11px label belongs to compact density →
+  `figma--share-solid--rest--light`. Kbd inside Buttons now keeps its own 6px corner (kbd.md).
+
 - 2026-09-25 · owner chose Button as the next component → evidence pass: 58 reference
   captures, 9 Area pass-0 captures; weight, gap and shadow changed.
 - 2026-09-25 · owner: sizes are my call, a compact density is planned; keep the soft border;

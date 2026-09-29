@@ -70,7 +70,7 @@ export const BadgeAnchorIconButton = () => (
 );
 export const BadgeAnchorAvatar = () => (
   <IndicatorAnchor placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}>
-    <Avatar fallback="A" role="img" aria-label="Avatar, available" />
+    <Avatar fallback="I" role="img" aria-label="Irene Yamaguchi, available" />
   </IndicatorAnchor>
 );
 export const BadgeAnchorTab = () => (
@@ -177,7 +177,7 @@ export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromE
   ["GalleryBadgeTableBuilding", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item two</td><td><Badge dot tone="warning">Status</Badge></td></tr></tbody></Table>],
 ]);
 
-export const BadgeAvatar = () => <Badge variant="modern" avatar={<Avatar fallback="IY" />}>Irene Yamaguchi</Badge>;
+export const BadgeAvatar = () => <Badge variant="modern" avatar={<Avatar fallback="I" />}>Irene Yamaguchi</Badge>;
 export const BadgeFlag = () => <Badge variant="color" flag={<svg viewBox="0 0 16 16"><rect width="16" height="16" fill="white" /><circle cx="8" cy="8" r="4" fill="#BC002D" /></svg>}>Japan</Badge>;
 export const BadgeDismissible = () => {
   const [visible, setVisible] = useState(true);

@@ -104,8 +104,10 @@ interface ChoiceProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"
 }
 
 export interface CheckboxProps extends ChoiceProps {
-  /** A contained, full-width choice row. It preserves native Checkbox behavior. */
+  /** A contained, full-width option with its control at the end. It preserves native Checkbox behavior. */
   variant?: VariantProps<typeof MANIFESTS.checkbox>["variant"];
+  /** Card layout: `row` (visual, text, control on one line) or `tile` (visual above the label, control in the corner). */
+  layout?: VariantProps<typeof MANIFESTS.checkbox>["layout"];
   /** Checked paint. Neutral by default; accent is an explicit override. */
   tone?: VariantProps<typeof MANIFESTS.checkbox>["tone"];
   /** Decorative context beside the mark. The visible label must still name the option. */
@@ -119,7 +121,7 @@ export interface CheckboxProps extends ChoiceProps {
 }
 
 export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { variant, tone, size, label, description, caption, leadingVisual, invalid, indeterminate = false, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
+  { variant, layout, tone, size, label, description, caption, leadingVisual, invalid, indeterminate = false, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
   ref,
 ) {
   const resolvedCaption = caption ?? description;
@@ -138,7 +140,7 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
 
   return (
     <label
-      className={checkboxVariants({ variant, tone, size }, className)}
+      className={checkboxVariants({ variant, layout: variant === "card" ? layout : undefined, tone, size }, className)}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(invalidState ? { "data-invalid": "" } : {})}
     >
@@ -269,7 +271,7 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
 });
 
 export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(function Radio(
-  { size, tone, label, description, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
+  { variant, layout, size, tone, label, description, caption, leadingVisual, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
   ref,
 ) {
   const group = useContext(RadioGroupContext);
@@ -277,14 +279,15 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
   const resolvedDisabled = disabled ?? group?.disabled;
   const resolvedName = name ?? group?.name;
   const resolvedChecked = checked ?? (group?.value !== undefined && value !== undefined ? group.value === value : undefined);
-  const resolvedDescription = description ? [describedBy, descriptionId].filter(Boolean).join(" ") : describedBy;
+  const resolvedCaption = caption ?? description;
+  const resolvedDescription = resolvedCaption ? [describedBy, descriptionId].filter(Boolean).join(" ") : describedBy;
   const change = (event: ChangeEvent<HTMLInputElement>) => {
     onChange?.(event);
     group?.onChange?.(event);
   };
 
   return (
-    <label className={radioVariants({ size, tone }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}>
+    <label className={radioVariants({ variant, layout: variant === "card" ? layout : undefined, size, tone }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}>
       <input
         ref={ref}
         type="radio"
@@ -298,10 +301,11 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
         onChange={change}
         {...rest}
       />
-      {label || description ? (
+      {leadingVisual ? <span className="area-radio__visual" aria-hidden="true">{leadingVisual}</span> : null}
+      {label || resolvedCaption ? (
         <span className="area-choice-label">
           {label ? <span className="area-choice-label__title">{label}</span> : null}
-          {description ? <span className="area-choice-label__description" id={descriptionId}>{description}</span> : null}
+          {resolvedCaption ? <span className="area-choice-label__description" id={descriptionId}>{resolvedCaption}</span> : null}
         </span>
       ) : null}
     </label>
@@ -310,6 +314,14 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
 export { Switch, type SwitchProps } from "./Switch.tsx";
 
 export type RadioProps = Omit<ChoiceProps, "size"> & {
+  /** A contained, full-width option with its control at the end. */
+  variant?: VariantProps<typeof MANIFESTS.radio>["variant"];
+  /** Card layout: `row` or `tile`, as Checkbox. */
+  layout?: VariantProps<typeof MANIFESTS.radio>["layout"];
+  /** Decorative context beside the text. The visible label must still name the option. */
+  leadingVisual?: ReactNode;
+  /** Alias for description, as Checkbox. */
+  caption?: ReactNode;
   size?: VariantProps<typeof MANIFESTS.radio>["size"];
   /** Checked paint. Neutral by default; accent is an explicit override. */
   tone?: VariantProps<typeof MANIFESTS.radio>["tone"];
