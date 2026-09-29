@@ -80,7 +80,8 @@
     margin-block-start: 0;
   }
 
-  .area-checkbox__visual {
+  .area-checkbox__visual,
+  .area-radio__visual {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -91,20 +92,73 @@
     color: var(--area-fg-muted);
   }
 
-  .area-checkbox__visual > svg {
+  .area-checkbox__visual > svg,
+  .area-radio__visual > svg {
     inline-size: 100%;
     block-size: 100%;
   }
 
-  /* Card is a contained Checkbox composition, not a competing choice control. The label
-     * remains the native click target, including its optional caption and leading visual. */
-  .area-checkbox--card {
+  /* Card: a contained option (docs/specs/checkbox.md, "Card"). The label stays the native
+     click target. The control moves to the end, where the owner's references and shadcn's
+     Choice Card put it; DOM order is unchanged, so keyboard order and the accessible name
+     are too. A chosen card draws a 2px edge in the checked colour (owner references), made of
+     the 1px border plus a 1px inset ring so nothing shifts. */
+  .area-checkbox--card,
+  .area-radio--card {
+    --_card-inset: calc(var(--area-space-12) - var(--area-border-width)); /* spec: 12 to the content, border counted once (shadcn 11) */
+    --_card-edge: var(--area-edge-control); /* spec: shadcn ≈ #e3; was border-decorative #f3 */
+    --_card-edge-hover: var(--area-edge-control-hover);
+    box-sizing: border-box;
     inline-size: 100%;
-    padding: var(--area-space-12);
-    border: var(--area-border-width) solid var(--area-border-decorative);
+    padding: var(--_card-inset);
+    border: var(--area-border-width) solid var(--_card-edge);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
+    transition: var(--area-transition);
   }
+  /* Double class: Radio's base rule centres its row, a card aligns to the first line. */
+  .area-checkbox.area-checkbox--card,
+  .area-radio.area-radio--card { align-items: flex-start; }
+  .area-checkbox--card > .area-choice-label,
+  .area-radio--card > .area-choice-label { flex: 1 1 auto; min-inline-size: 0; }
+  .area-checkbox--card > .area-checkbox__control,
+  .area-radio--card > .area-radio__control { order: 1; }
+  .area-checkbox--card:hover:not([data-disabled]),
+  .area-radio--card:hover:not([data-disabled]) { border-color: var(--_card-edge-hover); }
+  .area-checkbox--card:has(> .area-checkbox__control:checked),
+  .area-radio--card:has(> .area-radio__control:checked) {
+    border-color: var(--_checked);
+    box-shadow: inset 0 0 0 var(--area-border-width) var(--_checked);
+  }
+  /* The card is the focus target the eye follows; the glyph keeps its own ring too. */
+  .area-checkbox--card:has(> .area-checkbox__control:focus-visible),
+  .area-radio--card:has(> .area-radio__control:focus-visible) {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+
+  /* Layout: row (default) keeps visual, text and control on one line; tile stacks a larger
+     visual above the label with the control in the top-end corner (owner reference 1). */
+  /* Explicit for manifest parity: row is the base card layout. */
+  .area-checkbox--row, .area-radio--row { --_layout: row; }
+  .area-checkbox--card.area-checkbox--tile,
+  .area-radio--card.area-radio--tile {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    row-gap: var(--area-space-16); /* spec: owner reference 1 separates the icon from the label */
+  }
+  .area-checkbox--tile > .area-checkbox__visual,
+  .area-radio--tile > .area-radio__visual {
+    grid-row: 1; grid-column: 1;
+    inline-size: var(--area-space-20); /* spec: a 20px visual; icon-lg is 16 */
+    block-size: var(--area-space-20);
+    color: var(--area-fg-default);
+  }
+  .area-checkbox--tile > .area-checkbox__control,
+  .area-radio--tile > .area-radio__control { grid-row: 1; grid-column: 2; }
+  .area-checkbox--tile > .area-choice-label,
+  .area-radio--tile > .area-choice-label { grid-row: 2; grid-column: 1 / -1; }
 
   .area-radio__control {
     border-radius: var(--area-radius-full);
@@ -292,6 +346,21 @@
   }
 
   .area-checkbox-group:disabled .area-checkbox { cursor: not-allowed; opacity: 0.5; }
+
+  /* Cards in a group: rows stretch to the group's width; tiles form a grid of equal columns
+     at least 144 wide (spec: owner reference 1, three across). One 8px gap between cards. */
+  :is(.area-checkbox-group__options, .area-radio-group__options):has(> :is(.area-checkbox--card, .area-radio--card)) {
+    align-items: stretch;
+    gap: var(--area-space-8);
+  }
+  :is(.area-checkbox-group--horizontal, .area-radio-group--horizontal) > * > :is(.area-checkbox--card, .area-radio--card) {
+    flex: 1 1 0;
+    min-inline-size: 0;
+  }
+  :is(.area-checkbox-group__options, .area-radio-group__options):has(> :is(.area-checkbox--tile, .area-radio--tile)) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-space-96) * 1.5), 1fr));
+  }
   .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]) { --_edge: var(--area-fg-danger-vivid); }
   .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
     --_fill: var(--area-danger-surface-hover);
@@ -333,14 +402,9 @@
 
   /* --- Sizes -------------------------------------------------------------- */
 
-  /* One glyph ladder for both controls: 16px at sm and md, 20px at lg (Untitled UI's 16 / 20
-     boxes). Checkbox read the icon ramp, which is 16px at every tier, while Radio used 12 / 16 / 20. */
-  .area-checkbox--sm, .area-radio--sm {
-    --_size: var(--area-space-16);
-    --_text: var(--area-control-sm-text);
-    --_leading: var(--area-control-sm-leading);
-    --_gap: var(--area-gap-sm);
-  }
+  /* One glyph ladder for both controls: 16px at md, 20px at lg (Untitled UI's 16 / 20 boxes;
+     Notion and Figma ship one 16px size). sm was removed (owner 2026-09-28): once small
+     controls moved to 14/20 text it differed from md only by a 4px label gap. */
   .area-checkbox--md, .area-radio--md {
     --_size: var(--area-space-16);
     --_text: var(--area-control-md-text);

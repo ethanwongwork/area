@@ -632,7 +632,6 @@ function galleryPage({ families = null } = {}) {
     ],
     checkbox: [
       { id: "default", title: "Default", demo: "GalleryCheckbox" },
-      { id: "size-small", title: "Size / small", demo: "GalleryCheckboxSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GalleryCheckboxMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryCheckboxLarge" },
       { id: "selected", title: "Selected", demo: "GalleryCheckboxSelected" },
@@ -640,7 +639,9 @@ function galleryPage({ families = null } = {}) {
       { id: "partial", title: "Partial selection", demo: "GalleryCheckboxIndeterminate" },
       { id: "caption", title: "With caption", demo: "GalleryCheckboxCaption" },
       { id: "leading-visual", title: "With leading visual", demo: "GalleryCheckboxLeadingVisual" },
-      { id: "card", title: "Variant / card", demo: "GalleryCheckboxCard" },
+      { id: "card", title: "Variant / card", demo: "GalleryCheckboxCard", span: "2x1" },
+      { id: "card-tile", title: "Layout / card tile", demo: "GalleryCheckboxCardTile", span: "2x1" },
+      { id: "card-accent", title: "Card / accent", demo: "GalleryCheckboxCardAccent", span: "2x1" },
       { id: "invalid", title: "Invalid", demo: "GalleryCheckboxInvalid" },
       { id: "invalid-selected", title: "Invalid / selected", demo: "GalleryCheckboxInvalidChecked" },
       { id: "disabled", title: "Disabled", demo: "GalleryCheckboxDisabled" },
@@ -653,7 +654,6 @@ function galleryPage({ families = null } = {}) {
     ],
     radio: [
       { id: "default", title: "Default", demo: "GalleryRadio" },
-      { id: "size-small", title: "Size / small", demo: "GalleryRadioSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GalleryRadioMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryRadioLarge" },
       { id: "selected", title: "Selected", demo: "GalleryRadioSelected" },
@@ -662,6 +662,8 @@ function galleryPage({ families = null } = {}) {
       { id: "invalid", title: "State / invalid", demo: "RadioInvalid" },
       { id: "description", title: "Description", demo: "RadioDescription" },
       { id: "horizontal", title: "Horizontal", demo: "RadioHorizontal" },
+      { id: "card", title: "Variant / card", demo: "GalleryRadioCard", span: "2x1" },
+      { id: "card-tile", title: "Layout / card tile", demo: "GalleryRadioCardTile", span: "2x1" },
     ],
     field: [
       { id: "default", title: "Default", demo: "FieldDefault" },
@@ -867,6 +869,18 @@ function galleryPage({ families = null } = {}) {
       { id: "chord", title: "Chord", demo: "GalleryKbdChord" },
       { id: "sequence", title: "Sequence", demo: "GalleryKbdSequence" },
       { id: "on-emphasis", title: "Appearance / on emphasis", demo: "GalleryKbdOnEmphasis" },
+      { id: "template-in-menu", title: "Template / menu", demo: "GalleryKbdInMenu", span: "2x2" },
+      { id: "template-in-command-palette", title: "Template / command palette", demo: "GalleryKbdInCommandPalette", span: "2x2" },
+      { id: "template-in-search-field", title: "Template / search field", demo: "GalleryKbdInSearchField" },
+      { id: "template-in-nav", title: "Template / nav", demo: "GalleryKbdInNav", span: "2x1" },
+      { id: "template-in-outline-button", title: "Template / outline button", demo: "GalleryKbdInOutlineButton" },
+      { id: "template-in-ghost-button", title: "Template / ghost button", demo: "GalleryKbdInGhostButton" },
+      { id: "template-in-soft-button", title: "Template / soft button", demo: "GalleryKbdInSoftButton" },
+      { id: "template-in-small-button", title: "Template / small button", demo: "GalleryKbdInSmallButton" },
+      { id: "template-in-large-button", title: "Template / large button", demo: "GalleryKbdInLargeButton" },
+      { id: "template-in-footer", title: "Template / dialog footer", demo: "GalleryKbdInFooter", span: "2x1" },
+      { id: "template-in-text", title: "Template / running text", demo: "GalleryKbdInText", span: "2x1" },
+      { id: "template-in-table", title: "Template / shortcut table", demo: "GalleryKbdInTable", span: "2x1" },
     ],
     breadcrumb: [
       { id: "default", title: "Default", demo: "GalleryBreadcrumb" },
@@ -1297,8 +1311,8 @@ function demoMarkup(name, html) {
   // Every code block is hydrated: copy, the language picker and show/hide are behaviour.
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
-  if (["GalleryTableSelectable", "GalleryTextareaCount"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryTableSelectable", "GalleryTextareaCount", "GalleryInputDate"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // The carousel's previous / next Buttons page the row.
   if (name === "GalleryCardCarousel") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryMenu")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;

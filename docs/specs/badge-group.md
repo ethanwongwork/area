@@ -127,6 +127,12 @@ height (28 → 20), and the overflow content before and after (two lines → one
 measurements after: every group is 20px tall; the trigger is 32.6 × 20 with 14/20 500 text;
 the open overlay is 254.4 × 44 with its three badges on one line.
 
+2026-09-28 (batch 15): tags wrap with 4px row and column gaps, every group 20 tall, the "+N"
+trigger on the same line; beside Notion's select tags (`../chip/notion--select-tag`, 20 tall,
+corner 4) the tag geometry matches (Badge). Not validated: no product shows a group of tags in the
+owner's workspace (Notion's tasks board has single tags per group header). Unverified: a Notion multi-select cell's tag gap
+(no multi-select was reachable in the owner's workspace), dark theme.
+
 ## Verification
 
 - 1 Primer capture and 4 Area captures, checksums verified.
