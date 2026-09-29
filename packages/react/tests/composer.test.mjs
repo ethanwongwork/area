@@ -43,3 +43,12 @@ test("Composer serializes empty, disabled and busy initial states", () => {
   }
   assert.doesNotMatch(renderToString(h(Composer, { value: "Hello" })), /disabled=""/);
 });
+
+// packages/react/src/components/Composer.tsx:26 accepts native inputProps; :84 overwrites their id and className.
+test.skip("Composer preserves native inputProps id and className (known bug: both are overwritten at Composer.tsx:84)", () => {
+  const html = renderToString(h(Composer, { inputProps: { id: "draft", className: "custom-input" } }));
+  const input = html.match(/<textarea[^>]*>/)[0];
+  assert.match(input, / id="draft"/);
+  assert.ok(input.match(/class="([^"]+)"/)[1].split(" ").includes("custom-input"));
+  assert.match(html, /<label for="draft"/);
+});

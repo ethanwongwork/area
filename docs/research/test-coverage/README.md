@@ -27,7 +27,7 @@ Spinner, SplitButton, Switch, Toolbar. The other four files are cross-family
 
 ## Families without a dedicated test file at baseline
 
-The following 31 families will get new files. Some have incidental assertions in
+The following 31 families were identified for new files before implementation. Some have incidental assertions in
 `dialog`, `gallery-primitives`, `overlay`, or `tone`; those existing files stay intact.
 
 - Button — `button.test.mjs`
@@ -74,4 +74,138 @@ names, keyboard interaction, focus, layout, hydration, effects or browser-only s
 
 ## Results
 
-Pending implementation and verification.
+31 new files contain **185 tests: 181 pass, 4 skip, 0 fail**. Counts below are
+node:test cases (each enumerated axis/value is a separate case); a compound-family
+case can check multiple parts or supported usage forms. Every skip first failed
+unskipped against the baseline build. No production changes were made.
+
+New coverage per family, with total / passing / skipped counts:
+
+- BoxField: **5 / 5 / 0** — `box-field.test.mjs`.
+- Button: **19 / 19 / 0** — `button.test.mjs`.
+- Card: **9 / 9 / 0** — `card.test.mjs`.
+- Checkbox, including CheckboxGroup and ChoiceLabel: **12 / 12 / 0** — `checkbox.test.mjs`.
+- CodeBlock: **4 / 4 / 0** — `code-block.test.mjs`.
+- Code, including Token: **6 / 6 / 0** — `code.test.mjs`.
+- ColorSwatch: **4 / 4 / 0** — `color-swatch.test.mjs`.
+- Combobox: **8 / 8 / 0** — `combobox.test.mjs` (includes inherited Input axes).
+- CommandPalette: **3 / 3 / 0** — `command-palette.test.mjs`.
+- Composer: **5 / 4 / 1** — `composer.test.mjs`.
+- ContextMenu: **2 / 2 / 0** — `context-menu.test.mjs`.
+- HoverCard: **5 / 5 / 0** — `hover-card.test.mjs` (includes borrowed Popover sides).
+- Kbd, including KbdGroup: **7 / 7 / 0** — `kbd.test.mjs`.
+- Menu: **4 / 3 / 1** — `menu.test.mjs`.
+- Message, including MessageActions: **4 / 4 / 0** — `message.test.mjs`.
+- ModelPicker: **2 / 2 / 0** — `model-picker.test.mjs`.
+- Nav: **4 / 4 / 0** — `nav.test.mjs`.
+- Panel: **5 / 5 / 0** — `panel.test.mjs`.
+- Popover: **7 / 6 / 1** — `popover.test.mjs`.
+- Progress: **7 / 7 / 0** — `progress.test.mjs`.
+- PromptSuggestions: **4 / 4 / 0** — `prompt-suggestions.test.mjs`.
+- PropertyList: **2 / 2 / 0** — `property-list.test.mjs`.
+- Radio, including RadioGroup and ChoiceLabel: **10 / 10 / 0** — `radio.test.mjs`.
+- ScrollToLatest: **2 / 2 / 0** — `scroll-to-latest.test.mjs`.
+- Select: **7 / 7 / 0** — `select.test.mjs`.
+- Separator: **5 / 5 / 0** — `separator.test.mjs`.
+- Table: **4 / 4 / 0** — `table.test.mjs`.
+- Textarea: **11 / 11 / 0** — `textarea.test.mjs`.
+- Toast: **7 / 7 / 0** — `toast.test.mjs`.
+- Tooltip: **7 / 6 / 1** — `tooltip.test.mjs`.
+- TreeView: **4 / 4 / 0** — `tree-view.test.mjs`.
+
+The 26 already-covered families in the baseline inventory retain their existing
+files unchanged; this PR adds zero cases to those families. Total repository test
+files are now 59: 55 dedicated files cover the 57 families (two paired files), plus
+the four cross-family files. This is file coverage, not a claim that every legacy
+family's variants or browser behavior are exhaustively tested.
+
+## Skips and evidence
+
+All source lines refer to the baseline SHA above; these source files are unchanged.
+The skipped assertions retain the expected contract, not the observed faulty output.
+
+- **Composer — 1 skip**, `packages/react/tests/composer.test.mjs:48`.
+  `ComposerProps.inputProps` accepts native textarea `id` and `className`
+  (`packages/react/src/components/Composer.tsx:26`), but the textarea spreads
+  `inputProps` before replacing both at `Composer.tsx:84`. Passing `id="draft"`
+  and `className="custom-input"` produces a generated id and only
+  `area-composer__input`; the associated label also uses the generated id
+  (`Composer.tsx:83`). Expected: retain the custom id, point the label to it,
+  and merge the custom class with the component class.
+- **Menu — 1 skip**, `packages/react/tests/menu.test.mjs:52`.
+  Menu accepts native div attributes (`packages/react/src/components/primitives.tsx:1051`).
+  With a trigger, the surface spreads `rest` then `extra` (`primitives.tsx:1075`);
+  `packages/react/src/components/Overlays.tsx:179` supplies a generated id that
+  replaces `id="actions-menu"`. Expected: preserve the caller id and use it in
+  the trigger's `aria-controls`.
+- **Popover — 1 skip**, `packages/react/tests/popover.test.mjs:45`.
+  Native div attributes are accepted at `packages/react/src/components/primitives.tsx:1018`,
+  then overwritten by `extra` at `primitives.tsx:1034`.
+  `packages/react/src/components/Overlays.tsx:99` supplies the generated id.
+  Expected: preserve `id="caller-surface"` and use it in `aria-controls`.
+- **Tooltip — 1 skip**, `packages/react/tests/tooltip.test.mjs:42`.
+  Native div attributes are accepted at `packages/react/src/components/primitives.tsx:988`,
+  then overwritten by `extra` at `primitives.tsx:1012`.
+  `packages/react/src/components/Overlays.tsx:234` supplies the generated id.
+  Expected: preserve `id="caller-surface"` and use it in the trigger's
+  `aria-describedby`.
+
+The three overlay cases keep their internal generated associations intact today;
+the disagreement is the lost caller id. Hosted/inline id passthrough, generated
+relationships, className, ARIA attributes and expanded state remain active tests.
+
+## Verification
+
+- `npm ci` and `npm run build` passed in the isolated worktree (Node 26.7.0).
+- Each new file passed separately with `node --test packages/react/tests/<slug>.test.mjs`
+  (TAP reporter used to collect exact counts).
+- All 31 new files passed together: **185 total, 181 pass, 4 skip**.
+- The full React suite initially lacked `apps/docs/dist/gallery-components.html`,
+  required by two existing gallery tests. After `npm run build:docs` passed
+  (including the docs audit), the full suite passed: **339 total, 335 pass, 4 skip**.
+- An inventory check maps all 69 manifests to 57 families and verifies each family's
+  dedicated file exists: **zero missing**.
+- `git diff --check` passed. Only the 31 new tests and this README are in the change.
+
+Reproduce after the documented build steps:
+
+```sh
+# A single new family:
+node --test packages/react/tests/button.test.mjs
+
+# All new files, excluding pre-existing tests:
+node --test $(git diff --name-only --diff-filter=A 18b86465d542f620d532fee351c4f28d50c8ac3a -- 'packages/react/tests/*.test.mjs')
+
+# Full React suite (requires npm run build:docs):
+node --test packages/react/tests/*.test.mjs
+```
+
+SSR boundaries: ContextMenu rows mount only after a browser event
+(`ContextMenu.tsx:97`); ScrollToLatest becomes visible in an effect
+(`ScrollToLatest.tsx:19-28`); Checkbox sets the native indeterminate DOM property
+in its ref (`forms.tsx:129-137`). Tests verify their initial serialized contracts
+without claiming to exercise those transitions. Native popover/modal visibility,
+keyboard navigation, focus, copying, resizing, reordering and accessibility-tree
+name computation require browser tests and are not skips or simulated here.
+
+## DONE
+
+- [x] Inventory committed before adding tests, with baseline HEAD recorded.
+- [x] Every implemented family maps to a dedicated test file.
+- [x] Every new test cites source, manifest or spec evidence.
+- [x] Each new manifest axis value renders its documented hook.
+- [x] Supported native props, roles/naming markup, initial states and compound parts covered.
+- [x] Each new file and all new files together pass, excluding documented skips.
+- [x] Counts and all four skips recorded with suspected cause lines.
+- [x] Only permitted new files changed; production and existing test files untouched.
+
+## Open questions for the owner
+
+1. Should triggered Menu/Popover/Tooltip preserve the caller's surface id and use it
+   for their trigger relationships, or should the API explicitly disallow custom ids
+   when a trigger is supplied?
+2. Should Composer honor `inputProps.id` and merge `inputProps.className`, or explicitly
+   exclude those properties from its public type?
+
+These questions do not block the test-only draft. No fixes or owner completion
+status changes are included.
