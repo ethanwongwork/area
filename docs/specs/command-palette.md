@@ -1,6 +1,6 @@
 # Command palette spec
 
-**Status:** in review · 2026-09-26
+**Status:** accepted · 2026-09-28 (batch 18; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/command-palette/`
 **Peers:** Combobox (the field–list contract), Menu (rows), Dialog (scrim, lift, corner), Kbd
 
@@ -32,8 +32,10 @@ this shape.
 | notion | target product (primary) | "Search or ask" palette, opened from the sidebar, nothing typed or opened | app.notion.com, 2026-09-26 | `notion--search-palette--open--light` |
 | wai | pattern | combobox with a listbox that is always shown | w3.org/WAI/ARIA/apg/patterns/combobox/ | — |
 
-ChatGPT's search could not be captured (the tab stopped responding); an attempt collapsed
-its sidebar, which was restored immediately.
+| chatgpt | target product | "Search chats" palette, ⌘K, nothing typed (titles redacted) | chatgpt.com, 2026-09-28 | `chatgpt--search-palette--open--light` |
+
+ChatGPT's search could not be captured on 2026-09-26 (the tab stopped responding); captured on
+2026-09-28 with the window visible.
 
 ## Measurements (Notion)
 
@@ -58,10 +60,28 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 | corner | row radius + list inset = 8 + 4 = 12 (Menu's and the Combobox list's) | list pass: one list model | Notion 20 with 12 rows in a 10 inset |
 | search row | 48 tall, 16/24 text; the glyph on the rows' icon column (13 from the edge), the typed text on their text column (41), rule under it | list pass | Notion puts its field 12 in |
 | rows | Menu rows (32, 8 radius, 5% wash), icon 16, 12 gap | menu.md | Notion's 36 rows and 20 icons belong to its larger scale |
-| group headings | Menu's label rows: 32 tall, 14/20 muted, on the icon column; groups 2 apart like rows | list pass: one list model | Notion 12/14.4 medium |
+| group headings | Menu's label rows: 32 tall, 12/16 muted, on the icon column; groups 2 apart like rows | list pass: one list model; Menu labels 12/16 (2026-09-27) | Notion 12/14.4 medium; ChatGPT 14/20 regular |
 | description | muted, after the label | Notion (a page's parent) | — |
 | shortcut | Kbd small, quiet, at the end | Kbd | — |
-| footer | key hints (↑ ↓ Move, ⏎ Open, ⎋ Close), each also a button: ↑ and ↓ move the highlight, Open runs it, Close closes; 24 plates (Button xs height and radius) with the keycap on their 4 inset, the `bg-hover` wash, ink fixed; disabled (50%) with no results; out of the tab order and focus kept in the field; `aria-hidden` (the keys are announced by the field); quiet 16 keycaps, 12/16 muted labels; 32 tall, keycaps starting on the icon column, 16 between hints, rule above | Notion's hint row; owner: "the controls … still don't do anything" (2026-09-27) | Notion's hints are text only |
+| footer | key hints (↑ ↓ Move, ⏎ Open, ⎋ Close), each also a button: ↑ and ↓ move the highlight, Open runs it, Close closes; 24 plates (Button xs height and radius) with the keycap on their 4 inset, the `bg-hover` wash, ink fixed; disabled (50%) with no results; out of the tab order and focus kept in the field; `aria-hidden` (the keys are announced by the field); quiet 16 keycaps, 12/16 muted labels; plates 8 from the rule, the side and the bottom (concentric with the corner: 4 + 8 = 12; 40 tall + the rule), keycaps starting on the icon column, 16 between hints | Notion's hint row; owner: "the controls … still don't do anything" (2026-09-27) | Notion's hints are text only |
+
+## Visual pass
+
+2026-09-28 (batch 18), live in Claude in Chrome, opened with ⌘K and closed with Escape:
+
+| | Notion (search) | ChatGPT (search chats) | Area |
+|---|---|---|---|
+| surface | 1006 × 700, corner 20, white 90% + blur 40, 0 24 48 24% lift | 720 × 460, corner 16, white, 1px 10% edge | 600 wide (modal), corner 12, Dialog's surface and lift |
+| field | 16/24, 12 in, text at 50 | 16/24, 24 in; a 65-tall header with a rule and a 36 close | 16/24, 48 row, glyph on the icon column, rule under it |
+| headings | 12/14.4 500 muted | 14/20 400 muted, 24 in | 12/16 400 muted, 32 rows |
+| rows | 36, corner 12, icon 20, 14/16.8 | 48, corner 12, 12 in, icon 20 at 18, 14/20 at 56 | 32, corner 8, 4 in, icon 16, 14/20 |
+| highlight | 5% warm black | (none until hovered) | 5% wash (`bg-hover`) |
+
+Notion re-measured the same as 2026-09-27. Type matches both products (16/24 field, 14 rows,
+muted headings between Notion's 12 and ChatGPT's 14). Area's rows and corner follow the one list
+model (Menu, Combobox, Context menu); both products draw the palette larger than their menus
+(corner 16–20, rows 36–48). No change; open for the owner: a palette-specific scale (larger
+corner and rows) would part it from the list model.
 
 ## Behavior and accessibility
 
@@ -107,3 +127,17 @@ Verified in the gallery with pointerdown + click: ↓ moves Roadmap → Design t
 notes, ↑ moves back, Close closes the modal, Open runs the highlighted row and closes; focus
 stays in the field throughout. Measured: first keycap on the rows' icon column (46 = 46),
 "Move" ink to the Open keycap 16. Unverified: hover paint by eye, dark theme.
+
+## Footer inset (2026-09-28)
+
+Owner (screenshot of a hovered ↓ plate): "is this spacing at the bottom correct?" It was not:
+the plates sat 8 from the side but 3.5 from the rule and from the bottom edge (a 24 plate in a
+32 row). The footer now pads 8 on every side, so a plate sits evenly in the corner and
+concentric with it (plate radius 4 + 8 = the palette's 12). Measured after, every gallery
+palette: plate 8 below the rule, 8 above the inner bottom edge, 8 from the inner side; footer
+41 with the rule.
+
+Owner, same day: "should the move text be further away? or part of the backplate? it looks off
+with the text so close to the arrow." The label names both arrows, so it cannot join one plate;
+it now sits 6 from the ↓ plate's edge (was 2, so the hover wash met the text). 6 is the
+keycap-to-label gap inside the Open plate, taken from the visible plate here.

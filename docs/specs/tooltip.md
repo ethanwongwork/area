@@ -129,6 +129,12 @@ gallery. The earlier before/after review compared radius (10px), text sides (10p
 text and shadow at 1× and 3×. Gallery after: every tile 10px radius on 28px with 10px text
 sides; the Kbd 6px on 20px, 4px from the edge; a two-line tooltip 10px on 48px.
 
+2026-09-28 (batch 17), live in Claude in Chrome: ChatGPT's sidebar-toggle tooltip re-measured
+matches `chatgpt--shortcut--rest--light` exactly (171.92 × 30, 5/12 padding, corner 16, 14/18 600
+on rgb(13), a 1px white-5% ring, 0 8 18 at 20%, inline keycap 18 tall, corner 8, 8 gap), so no
+new file was saved. Area keeps its documented differences (28 tall, corner 10, 14/20 400 on
+`bg-inverse`, no ring). No change.
+
 ## Verification
 
 - ChatGPT 2 and Notion 1 captures; 6 Area captures before and 6 after; checksums verified.

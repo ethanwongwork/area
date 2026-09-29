@@ -76,6 +76,11 @@ Pass review container (`GalleryReviewComposer`): before and after at 1× and 3×
 after: inline 480 × 48, stacked 480 × 116, border rgb(243), shadow 0 2px 8px, text 16/24
 (the shadow was dropped 2026-09-26; see Decisions).
 
+2026-09-28 (batch 19), live in Claude in Chrome: ChatGPT's empty home composer re-measured identical
+to `chatgpt--inline-empty--rest` (768 × 52, corner 26, white, 4% ring + 0 2 8 4% + 0 4 80 8 2.4%,
+16/26 text), so no new file was saved. Area (480 × 48, corner 16, the 1px decorative edge, 16/24)
+keeps its recorded decisions. No change.
+
 ## Verification
 
 `npm run build`, all 87 React tests, `build:docs` (docs audit), `test:contracts`, `test:preview`,

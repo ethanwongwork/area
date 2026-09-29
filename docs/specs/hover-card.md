@@ -1,6 +1,6 @@
 # Hover card spec
 
-**Status:** in review · 2026-09-26
+**Status:** accepted · 2026-09-28 (batch 17; was: in review · 2026-09-26)
 **Captures:** timing measured live (below); no capture file (GitHub is a design-system reference, not a target product)
 **Peers:** Popover (surface, anchoring, slots), Tooltip (a label, not a preview), Avatar
 
@@ -57,7 +57,14 @@ demos now do (2026-09-27); client-only rendering is unaffected.
 the shared floating lift), opened by hover or focus. Beside Notion's link preview on file
 (`notion--link-preview--open`: 280 × 268, corner 10, a 7% warm ring and a two-layer 3% lift):
 Area's corner is two larger and its lift is the one used by every floating surface. No change.
-Not compared live: the Claude in Chrome tab was hidden.
+2026-09-28, live in Claude in Chrome: Notion's sub-page link preview (`notion--page-preview--open`,
+pointer on the link): 260 × 179, corner 10, white, the 7% warm ring, and a lift of 0 20 24 at 5%
+plus 0 5 8 at 2.7%, the same two-layer geometry as Area's floating lift (0 20 24 + 0 5 8). Its
+text is small: a 12/18 muted path over a 13 semibold title. Area keeps the Popover surface
+(corner 12, 12 inset) and its type roles: title 14/20 500 (Notion 14/20 600 in the link preview),
+meta 12/16, description 14/20. Notion sets the preview's secondary text at 12 in both previews;
+owner decision (2026-09-28, "go with your recommendation"): the description stays 14, one
+description size across Popover, Card, Dialog and Hover card.
 
 ## Verification
 

@@ -79,7 +79,7 @@ area     nav > ol.area-breadcrumb__list flex, gap 8, 14/20
 
 | State | Changes | Evidence |
 |---|---|---|
-| link hover | plate `bg-component-hover` | Notion hover plate; not captured (the pane was hidden) |
+| link hover | plate `bg-component-hover` | Notion hover plate: 5% warm wash on the 24 item, corner 6, ink fixed (`notion--path-2--hover`, 2026-09-28) |
 | link focus-visible | focus ring | unchanged |
 
 ## Behavior and accessibility
@@ -101,6 +101,13 @@ gallery. The earlier before/after review compared the current page and separator
 3×. Measured after: page rgb(40, 40, 40) at 400, separators rgb(131, 131, 131), 6.3px from
 text to chevron on each side, link plate inset −2px / −6px (it stops 0.3px short of the
 chevron).
+
+2026-09-28 (batch 21), live in Claude in Chrome on a sub-page of the owner's archive (read only):
+the topbar path re-measured as 2026-09-25 (items 24 tall, 2 / 6, corner 6, 14/16.8 400 in one ink,
+"/" separators #e6). Hover, first captured (`notion--path-2--hover`): a 5% warm plate on the item,
+ink fixed. Area in the gallery: 14/20 400, links #66 and the page #28, chevrons #83, a plate 2 / 6
+past the text with a 6 corner on hover. Size, weight, plate geometry and the fixed ink match; the
+muted ancestors and chevron separator are the recorded decisions. No change.
 
 ## Verification
 

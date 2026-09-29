@@ -1,6 +1,6 @@
 # Message spec
 
-**Status:** in review · 2026-09-26
+**Status:** accepted · 2026-09-28 (batch 19; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/message/`
 **Peers:** Composer (the bubble's corner), Button (ghost icon actions), Prompt suggestions
 
@@ -30,7 +30,7 @@ the turn.
 
 | Id | Type | What | Link | Captures |
 |---|---|---|---|---|
-| chatgpt | target product | An existing conversation, read only (text redacted) | chatgpt.com/c/…, 2026-09-26 | `chatgpt--user-message--rest`, `--assistant-prose--rest`, `--assistant-actions--rest` |
+| chatgpt | target product | An existing conversation, read only (text redacted) | chatgpt.com/c/…, 2026-09-26; hover 2026-09-28 | `chatgpt--user-message--rest`, `--assistant-prose--rest`, `--assistant-actions--rest`, `chatgpt--user-message--hover` |
 
 ## Measurements (ChatGPT)
 
@@ -55,8 +55,20 @@ actions     six 32 × 32 buttons, radius 8, no gap, icons 20 (16 for regenerate 
 | bubble fill | neutral component fill, default ink | ChatGPT's default is neutral | the blue came from the owner's accent setting |
 | prose | 16/24, paragraphs 16 apart | Area body; ChatGPT 16 apart | ChatGPT 26 leading; Area's ramp is 24 |
 | actions | ghost neutral icon Buttons (md, 32), no gap, muted ink; the plates line up with the turn (assistant: first plate on the text edge; person: last plate on the bubble's edge); 12 below | ChatGPT (row, sizes); owner (alignment) | 16 icons (Area) instead of 20. ChatGPT pulls the row out 6 so its icons sit on the edge; the owner read the overhanging hover plates as misaligned (2026-09-27) |
-| user actions | shown on hover and focus (always on touch), at the bubble's end; same row geometry | ChatGPT hides them until hover | the hover-state offset was not measurable in ChatGPT's markup |
+| user actions | shown on hover and focus (always on touch), at the bubble's end; same row geometry | ChatGPT hides them until hover; measured 2026-09-28: three 32 plates, no gap, 4 below the bubble, the last ending 4 inside its edge | the plates end on the bubble's edge (owner, 2026-09-27: plates line up with the turn) |
 | streaming | 8 dot 4 after the last word, pulsing (still under reduced motion); actions hidden until done; `aria-busy` | ChatGPT's dot | size not measured |
+
+## Visual pass
+
+2026-09-28 (batch 19), live in Claude in Chrome on an existing conversation (read only):
+the user bubble, prose and assistant actions re-measured the same as 2026-09-26 (bubble corner
+22, 10 / 16 padding, 16/24; prose 16/26, paragraphs 4 + margins; actions 32, corner 8, icons 20,
+muted #8f, no gap). New: the user turn's hover actions (`chatgpt--user-message--hover`): three
+32 plates, no gap, 4 below the bubble, the last 4 inside its edge. Area in the gallery: bubble
+corner 16, 10 / 16, neutral #f7, 16/24; prose 16/24; 32 plates with 16 icons, muted, no gap. The
+type and row geometry match; the differences are the recorded decisions (corner 16 over the
+pill, the neutral fill over the owner's accent personalization, 24 leading, 16 icons, plates on
+the edge). No change.
 
 ## Behavior and accessibility
 

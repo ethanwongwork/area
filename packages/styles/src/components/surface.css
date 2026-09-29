@@ -32,12 +32,15 @@
    */
   .area-card {
     /* spec: md, the default. 8 inset (Notion's promo card) for media; text and controls share
-       one column 4 further in (owner 2026-09-28: "the text and buttons can be aligned and
-       slightly less offset from images by like 4px"). The corner is concentric with a default
-       Button on that column: its radius plus the column's distance from the edge (8 + 12 = 20,
-       was 16), and it follows the radius presets through the Button's radius. */
+       one column 8 further in, 16 from the edge on every card, with or without media (owner
+       2026-09-28: "the padding for text and buttons being 16 total distance shouldnt only apply
+       when there is an image or container"; was 4 further in, 12). The corner is concentric
+       with a default Button on that column: its radius plus the column's distance from the edge
+       (8 + 16 = 24, was 20), and it follows the radius presets through the Button's radius. */
     --_card-inset: var(--area-space-8);
-    --_card-step: var(--area-space-4);
+    --_card-step: var(--area-space-8);
+    /* The control a header action holds: a default Button, a small one in a small card. */
+    --_card-action: var(--area-control-md);
     --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
     --_card-border: var(--area-border-width);
     /* spec (consistency pass): one title role and one body role at every size. */
@@ -89,10 +92,11 @@
   }
 
   /* Size: corner and inset only. */
-  /* Every size keeps the 4 step and the default Button's corner: sm 8 + 6 + 4 = 18,
-     md 20, lg 8 + 12 + 4 = 24 (was 12 / 16 / 24). */
+  /* Every size keeps the 8 step and the default Button's corner: sm 8 + 6 + 8 = 22,
+     md 24, lg 8 + 12 + 8 = 28; text 14 / 16 / 20 from the edge (was 18 / 20 / 24 and 10 / 12 / 16). */
   .area-card--sm {
     --_card-inset: var(--area-space-6);
+    --_card-action: var(--area-control-sm);
     --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
   }
   .area-card--md {
@@ -237,6 +241,10 @@
     letter-spacing: var(--_card-body-tracking);
     overflow-wrap: anywhere;
   }
+  /* spec (owner, 2026-09-28: "the gap between the title and description is too big"): a
+     description under its title joins it with no gap, so the title's baseline sits 11 above
+     the description's cap (Figma community tile 11.5, Notion promo card 11.5; was 15). */
+  .area-card__title + .area-card__description { margin-block-start: calc(-1 * var(--area-space-4)); }
   /* A figure a widget leads with: a temperature, a price, a count. The large title role
      (Apple's widgets set their figure well above the text), with digits of equal width so a
      changing value doesn't shift. */
@@ -280,18 +288,28 @@
     color: var(--area-fg-muted);
   }
   @supports (text-box: trim-both cap alphabetic) {
-    /* The first line starts at the title's cap and the last line ends on its baseline, so the
-       content pad is the whole distance from the inset to the text on every side. */
+    /* The first line starts at the title's cap and the last line ends at its descent, so the
+       content pad is the distance from the inset to the ink on every side: descenders keep the
+       pad below them (owner, 2026-09-28: the description sat too close to the bottom; last
+       baseline to edge now 15.4 at md, Notion promo card 15.4, ChatGPT library card 18; was 12
+       below the descenders). A figure (value) has no descenders and still ends on its baseline. */
     .area-card__title { text-box: trim-start cap alphabetic; }
-    :is(.area-card__content > :last-child, .area-card__content > .area-card__header:last-child > .area-card__heading > :last-child):is(.area-card__description, .area-card__value) { text-box: trim-end cap alphabetic; }
-    :is(.area-card__content > :last-child, .area-card__content > .area-card__header:last-child > .area-card__heading > :last-child).area-card__title { text-box: trim-both cap alphabetic; }
+    :is(.area-card__content > :last-child, .area-card__content > .area-card__header:last-child > .area-card__heading > :last-child).area-card__description { text-box: trim-end cap text; }
+    :is(.area-card__content > :last-child, .area-card__content > .area-card__header:last-child > .area-card__heading > :last-child).area-card__value { text-box: trim-end cap alphabetic; }
+    :is(.area-card__content > :last-child, .area-card__content > .area-card__header:last-child > .area-card__heading > :last-child).area-card__title { text-box: trim-both cap text; }
     /* A control in the action slot sits on the text column's corner, concentric with the card
        (radius 8 + 12 = 20), and the title's cap centres on it: the heading drops by half the
        control's space around the cap. A Badge or marker stays one title line tall. */
-    .area-card__header-action:has(> :is(button, a, .area-button)) { block-size: var(--area-control-md); }
+    .area-card__header-action:has(> :is(button, a, .area-button)) { block-size: var(--_card-action); }
     .area-card__header:has(> .area-card__header-action > :is(button, a, .area-button)) > .area-card__heading {
-      padding-block-start: calc((var(--area-control-md) - 1cap) / 2);
+      padding-block-start: calc((var(--_card-action) - 1cap) / 2);
     }
+    /* A ghost control shows no plate at rest, so the title keeps the card's cap line and the
+       control centres on the cap instead, its plate ending on the text column (owner
+       2026-09-28: the carousel title sat 26 from the top beside 16 on every other card). The
+       action box is one cap tall; the control overflows it evenly. */
+    .area-card__header-action:has(> .area-button--ghost):not(:has(> :not(.area-button--ghost))) { block-size: 1cap; }
+    .area-card__header:has(> .area-card__header-action > .area-button--ghost):not(:has(> .area-card__header-action > :not(.area-button--ghost))) > .area-card__heading { padding-block-start: 0; }
   }
   .area-card__media {
     position: relative;
@@ -317,6 +335,16 @@
     align-content: center;
     gap: var(--_card-inset);
     padding: var(--_card-content-padding);
+  }
+  /* A card in a well is a compact row (owner 2026-09-28: "the button on the inside seems way too
+     large"): a small control, text and control 8 inside it, and a corner concentric with that
+     control (6 + 8 = 14), one step under the well's 16. 44 tall with one line (was 52, a 32
+     control). */
+  .area-card__media--well > .area-card {
+    --_card-inset: var(--area-space-4);
+    --_card-step: var(--area-space-4);
+    --_card-action: var(--area-control-sm);
+    --_card-radius: calc(var(--area-radius-control-sm) + var(--_card-inset) + var(--_card-step));
   }
 
   /* Overlay: a Badge or an icon Button pinned to a corner of the media, or of the whole card.
@@ -458,10 +486,24 @@
   /* Under a header the title gets the room it has above: its baseline sits as far from the
      pictures as its cap sits from the card's top (the text inset; owner: more room below the title). */
   .area-card__content > .area-card__header + .area-card__carousel { margin-block-start: calc(var(--_card-text-inset) - var(--area-space-4)); }
+  /* The header above a carousel ends on its title's baseline, so that distance is exact. */
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-card__header:has(+ .area-card__carousel) .area-card__title { text-box: trim-both cap alphabetic; }
+  }
   .area-card__carousel::-webkit-scrollbar { display: none; }
-  .area-card__carousel > li { display: flex; flex-direction: column; gap: var(--_card-content-padding); min-inline-size: 0; scroll-snap-align: start; }
+  /* An item is a card without a frame: its text sits on the card's text column, one step inside
+     its picture, and its title cap is as far below the picture as a card's is below its media
+     (owner 2026-09-28: "should the text in the carousel be aligned to the title?"; was on the
+     picture's edge, 4 below it). Items take the body role for their titles, a step under the
+     card's title (ChatGPT library cards 14 over 12, Figma tiles 13 over 11). */
+  .area-card__carousel > li { display: flex; flex-direction: column; gap: var(--_card-gap); min-inline-size: 0; scroll-snap-align: start; }
   .area-card__carousel > li > .area-card__media { inline-size: 100%; aspect-ratio: 1; border-radius: var(--_card-media-radius); }
-  .area-card__carousel > li > .area-card__content { padding: 0; }
+  .area-card__carousel > li > .area-card__content { padding: var(--_card-content-padding) var(--_card-content-padding) 0; }
+  .area-card__carousel .area-card__title {
+    font-size: var(--_card-body-size);
+    line-height: var(--_card-body-leading);
+    letter-spacing: var(--_card-body-tracking);
+  }
   .area-card__carousel:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
@@ -791,12 +833,16 @@
     color: var(--area-fg-muted);
   }
 
-  /* flex-basis 0 with overflow hidden is what lets the body scroll inside a flex column. */
+  /* flex-basis 0 with overflow hidden is what lets the body scroll inside a flex column.
+   * The scroll box clips, so it reaches a focus ring beyond the content edge (padding in,
+   * the same margin out): a full-width field's halo is no longer cut at the sides. */
   .area-dialog__body {
+    --_dialog-bleed: calc(var(--area-focus-width) + var(--area-focus-offset));
     flex: 1 1 auto;
     min-block-size: 0;
     min-inline-size: 0;
-    padding: 0;
+    padding: var(--_dialog-bleed);
+    margin: calc(-1 * var(--_dialog-bleed));
     overflow-y: auto;
   }
 

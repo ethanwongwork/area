@@ -143,12 +143,22 @@ top and side (concentric: 8 + 8), title and footer buttons on the 16 inset. Besi
 dialogs on file (`chatgpt--shortcuts-dialog`: 600 wide, corner 16, #fcfcfc, a 4/8 lift;
 `chatgpt--dialog-overlay`: 13.3% scrim). Open for the owner: Card's new corner rule (a
 button's radius plus its distance from the edge, 2026-09-28) would make Dialog's corner 24
-(8 + 16) for its footer buttons, where the close button's rule gives 16. Not compared live:
-the Claude in Chrome tab was hidden.
+(8 + 16) for its footer buttons, where the close button's rule gives 16.
+
+2026-09-28, live in Claude in Chrome (ChatGPT's keyboard-shortcuts dialog, cmd+/): 600 wide,
+corner 16, #fcfcfc, lift 0 4 8 −2 at 10%, title 16/24 600 on a 24 top. The close is 32 with an
+8 corner, 12 from the top and side; hover paints 5% black and keeps its ink 80%
+(`chatgpt--close-button--hover--light`). The footer's pill button also sits 12 from the bottom
+and side. ChatGPT's corner is concentric with neither control (12 + 8 = 20, and a pill), so
+the corner does not follow the button inside it. **Decision: the corner stays 16**, set by the
+close (8 + 8); Card's button-plus-distance rule applies to Card and does not extend to Dialog.
+Area's close hover (#f3f3f3 on white) is within a step of ChatGPT's (≈ #efefef on #fcfcfc). No
+change.
 
 ## Verification
 
-- 3 reference captures plus the ChatGPT overlay, Area before and after; checksums verified;
+- 3 reference captures plus the ChatGPT overlay and close hover (live, 2026-09-28), Area before
+  and after; checksums verified;
   ChatGPT captures redacted, no personal content.
 - React tests: `packages/react/tests/dialog.test.mjs` (3).
 - The Dialog and Popover docs pages now load the demo hydration script, so their modal and
@@ -171,3 +181,8 @@ the Claude in Chrome tab was hidden.
   title 20/28 regular was the only surface title above 16. Pass 2: 16/24 strong (surface
   title rule in typography.md), title group as Card (15.6), corner 16 = close radius +
   offset (concentric). Radius audit above.
+
+- 2026-09-28 · owner (screenshot of the `withField` tile): "the field is cutoff" → the scrolling
+  body clipped a full-width field's focus halo at its sides. The body now reaches out by the
+  focus ring's extent (`--area-focus-width` + `--area-focus-offset`, padding in and the same
+  margin out), so content keeps the 16 inset and focus rings paint whole.

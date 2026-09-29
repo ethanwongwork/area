@@ -84,7 +84,7 @@ In a 14px table cell: 12.25px/16.54px, 22px tall (`area--table`).
 | shell · radius | min(`radius-small` 6, (1em + 10) × `radius-cap`) (`code.css:152-155`) | Untitled 6 | Capped so a small reference cannot become a pill |
 | shell · inline inset | 6 incl. border (`code.css:149`) | Untitled 6 | — |
 | shell · block inset | 3 incl. border | Untitled 2 (ring inside padding) | Area's edge is a real border; 1px more, 24.9px tall at 14px |
-| fill | `bg-code` #fafafa (dark #282828) (`code.css:140`) | Untitled neutral-50 #fafafa | — |
+| fill | `bg-stripe` #fafafa (dark #282828), the 25 rung; was `bg-code` until the block's ground became the page (2026-09-28) | Untitled neutral-50 #fafafa | — |
 | edge | `border-decorative` #f3f3f3 (`code.css:141`) | Untitled neutral-200 #e5e5e5 | Area's decorative seam role; lighter. Kept (third pass): the token has a fill, so its edge is a seam, not a rule |
 | text · size | 0.875em (`code.css:174`) | Untitled 14 in 16px prose | Relative so one reference reads right in prose and in 14px chrome |
 | text · leading | 1.35 (`code.css:175`) | Area's own | Untitled 20px; a unitless tight leading keeps lines from spreading |
@@ -119,8 +119,15 @@ no Code-specific rule; the border keeps the box visible.
 ## Visual pass
 
 The gallery shows Code in Default and Content (treatments, on-color, swatch, prose, table)
-groups. This spec's author did not inspect screenshots. Unverified: dark theme, forced
-colours, any product inline code.
+groups.
+
+2026-09-28 (batch 22), live in Claude in Chrome: ChatGPT's inline code in an assistant paragraph
+(`chatgpt--inline-code`, first product capture): a span at 0.92em (14.72 in 16/26 prose),
+ui-monospace 400, padding 1 / 6, corner 6, a 9% black fill (about #e9 on white), no edge, 19
+tall. Area in the gallery: 0.875em (14), padding 2 / 5 plus a 1px #f3 edge (3 / 6), corner 6,
+#fa fill, 25 tall at 14px. Size, corner and inline inset match; Area's ground is lighter and
+edged (the owner prefers lighter colours; the edge keeps it visible on white). No change.
+Unverified: dark theme, forced colours.
 
 ## Verification
 

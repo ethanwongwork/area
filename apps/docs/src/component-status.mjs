@@ -22,7 +22,17 @@ export const COMPLETE_COMPONENTS = new Set([
   'input', 'textarea',
   // Approved 2026-09-28 (batch 14: cards, sm removed, lighter Switch off track).
   'checkbox', 'radio', 'switch',
-  'alignment-picker', 'badge', 'badge-group', 'box-field', 'breadcrumb',
+  // Approved 2026-09-28 (batch 13; select and field were already approved).
+  'combobox',
+  // Approved 2026-09-28 (batch 15: group gap 6 / 8; slider was already approved).
+  'chip', 'badge-group',
+  // Approved 2026-09-28 (batches 17-19; dialog, tooltip and composer were already approved).
+  'hover-card', 'context-menu', 'command-palette', 'message', 'prompt-suggestions',
+  // Approved 2026-09-28 (batch 16 again after the 16 column; batch 20).
+  'card', 'model-picker', 'scroll-to-latest',
+  // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
+  'code-block',
+  'alignment-picker', 'badge', 'box-field', 'breadcrumb',
   'button', 'button-group', 'code',
   'color-field', 'color-picker', 'color-swatch', 'color-swatch-picker', 'composer',
   'dialog', 'field', 'input-group',
@@ -31,14 +41,7 @@ export const COMPLETE_COMPONENTS = new Set([
 ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-export const REVIEW_COMPONENTS = new Set([
-  // Changed 2026-09-27 after owner feedback (dividers, indicator, loaders).
-  'code-block',
-  // Rebuilt after approval (layouts, sizes, linked cards, templates): docs/specs/card.md.
-  'card',
-  // Changed 2026-09-28: avatar initials size in the chip (docs/specs/chip.md).
-  'chip',
-  'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox']);
+export const REVIEW_COMPONENTS = new Set([]);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -86,4 +89,4 @@ export const APPROVAL_BATCHES = [
 export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.families.includes(slug));
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['count', 'alert', 'toolbar', 'card', 'switch', 'checkbox', 'radio', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'dialog', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge-group', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];
+export const RECENT_COMPONENTS = ['badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];

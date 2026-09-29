@@ -28,7 +28,7 @@ token (Chip). CheckboxGroup owns the legend, group description and group validat
 |---|---|---|---|
 | size | sm, md (default), lg | Label type follows the control tier; lg is the 20px glyph | Untitled sm 16 / md 20; Notion and Figma one size, 16 |
 | tone | neutral (default), accent | Owner rule, 2026-09-26 | Notion checks in its blue; Figma checks neutral |
-| variant | card | A contained option: visual, text, control at the end; the chosen card outlined | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
+| variant | card | A contained option: visual, text, control at the end; the chosen card's 1px edge darkens to the checked colour | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
 | layout (card) | row (default), tile | Row: one line; tile: a 20px visual above the label, control in the corner, cards in a grid | Owner reference 1 (tile grid); references 2, 3 and shadcn (rows) |
 | state | checked, indeterminate, invalid, disabled | Native states plus `aria-invalid` | Untitled: checked, indeterminate, disabled; no invalid |
 | composition | caption, leading visual, group (vertical, horizontal; invalid, success) | — | Untitled label + hint; Figma label beside the box; gallery Layout / horizontal group |
@@ -156,6 +156,10 @@ above is from `area--size-medium` (edge rgb(212)). Build and test results are in
 ## Feedback log
 
 - 2026-09-28 · owner approved batch 14 → Complete.
+
+- 2026-09-28 · owner: "the selected card stroke for radio and checkbox should just be darker not
+  thicker than rest" → the chosen card keeps the 1px border and takes the checked colour; the
+  1px inset ring that made it 2px is removed (Checkbox and Radio share `choice.css`).
 
 - 2026-09-28 · owner: "look into checkbox card, maybe these layouts are better?" (three
   screenshots: a tile grid with the check in the corner; a plan list and a registration list

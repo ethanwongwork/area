@@ -115,6 +115,12 @@ unverified).
 The gallery groups the tiles (Default, Layout for orientation and inset,
 Variants for spacing, the spacing tile added in the second pass). Beside the Notion page
 menu the rule now reads firmer than Notion's; beside ChatGPT's menu it reads about the same.
+2026-09-28 (batch 22), live in Claude in Chrome: Notion's page-menu rules (right-click on a
+sidebar page, then Escape) are 1px at 7% warm black (about #ef on white), 12 from each side of the
+265 menu. Area in the gallery: the default rule 1px `border-divider` #e2; inside Menu 1px #f3,
+13 from each side. The menu rule matches Notion within a step; the standalone rule stays the
+firmer divider role. No change.
+
 Unverified: dark theme (#333 on the dark surface), forced colours.
 
 ## Verification

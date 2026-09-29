@@ -1,6 +1,6 @@
 # Card spec
 
-**Status:** in review · 2026-09-27 (consistency pass: one geometry rule, one type ramp, inset media, templates, carousel)
+**Status:** accepted · 2026-09-28 (batch 16, 16 text column; was: in review · 2026-09-28 (16 text column, carousel and well; was: accepted · 2026-09-28, batch 16))
 **Captures:** `docs/research/captures/card/`, `docs/research/captures/baseline/chatgpt--settings-card--rest--light.json`
 **Peers:** Panel (inspector surface), Dialog and Popover (floating surfaces), Alert and Code
 block (container radius), Badge and Button (slots), Slider (templates)
@@ -93,7 +93,7 @@ area  div.area-card grid (flex + container when horizontal): border + padding (=
                corners = card radius − border
     overlay    absolute corner at the card inset (inside media); on the card, two insets in
   content      padding = (control-md − 1cap) / 2 on every side ("content pad")
-    title      trimmed to its cap on top; the last text line trimmed to its baseline
+    title      trimmed to its cap on top; the last text line trimmed to its descent
       link     a.area-card__link; ::after absolute, inset −border, card radius, z 1
     header     heading + action slot: one control tall, overhanging the content pad; a control
                in it reaches the inset at the end
@@ -142,10 +142,10 @@ no change in any of 30 nodes (hidden window).
 | paint | `bg-surface`; edge neutral 100 (#ee; dark 750); shadow `0 1px 2px -1px` + `0 2px 8px 0`, 3% black (dark 16%) | Owner (lighter edge, faint shadow); Notion's 8% ring composites to #eb; Figma reference 0 0 8 0 at 2% | The halo drops 2px so it pools under the card, and a contact line gives the lighter edge a bottom. Literal until shadows are tokenised, so the Surface axis's Flat preset doesn't remove it |
 | media fill | neutral 25 (#fa; dark 800), media and well alike | Owner | The same rung as the stripe and code slots, but those roles mean something else, so a private property |
 | radius / inset | 12·16·24 / 6·8·12 | Owner ladder; ChatGPT 16 | Corners derive from the container role |
-| text inset | **inset + (control-md − 1cap) / 2**: 16.3 / 18.3 / 22.3; the first line trimmed to the cap, the last to the baseline | Owner (consistency pass: titles equally spaced on each side); inset.css's cap-centred text; Popover / Toast corner controls | Replaces the fixed 12 / 16 / 24 (the title's cap sat 22 from the top, 16 from the side) |
-| header action | one control tall, overhanging the content pad; a Button or link reaches the inset at the end (concentric); a Badge or marker stays on the text edge | Popover, Toast, Dialog: a corner control on the inset with the title centred on it | Was a title-line-tall slot inside the text frame |
+| text inset | **inset + 8**: 14 / 16 / 20 from the edge on every card, with or without media (media and wells stay on the inset: 6 / 8 / 12); the first line trimmed to its cap, the last to its descent (a closing value to its baseline); media to the title's cap the same 16 at md | Owner 2026-09-28: "the padding for text and buttons being 16 total distance shouldnt only apply when there is an image or container" (asked: 16 everywhere) | Was inset + 4 (10 / 12 / 16), and before that inset + (control-md − 1cap) / 2 |
+| header action | a visible control (soft, solid, outline) sits on the text column's corner, concentric with the card (8 + 16 = 24 at md), with the title centred on it; ghost controls (no plate at rest) centre on the title's cap instead, so the title keeps the 16 cap line, their plate ending on the text column; a small card's action is a small control | Popover, Toast, Dialog corner controls; owner 2026-09-28 (the carousel title sat 26 from the top) | Ghost controls used the corner rule too |
 | footer | last slot: reaches the inset on the sides and bottom; 12 above | Same corner rule | Was on the text frame, 8 + 4 above |
-| block gap | 12 above a list, badge row, slider, carousel or footer; 4 between lines of a text group (title to description baseline-to-cap 15, as Popover) | Owner (intentional gaps) | Was 12 via mixed padding |
+| block gap | 12 above a list, badge row, slider, carousel or footer; 4 between lines of a text group, except a description directly under its title, which joins it with no gap (title baseline to description cap 11.6) | Owner (intentional gaps; 2026-09-28 "the gap between the title and description is too big"); Figma community tile and Notion promo card 11.5 (`figma--community-tile`, `notion--sidebar-promo-card`) | Was 12 via mixed padding; the title-to-description step was 15, as Popover |
 | horizontal split | media 40%, text 60% | Polaris landscape 40 / 60 | — |
 | horizontal stacking | below 480px of card content box, via container query | Polaris md-down; M3 adaptive | The card itself is the container, so it needs a definite width |
 | media end | DOM order | Fluent horizontal preview first or last | No prop: order is the API |
@@ -228,3 +228,30 @@ forced colours, screen readers.
   on the inset, one type ramp, md everywhere, inset immersive media, 16:9 media, block gap 12,
   carousel rebuilt, templates reduced to six in one slot order, duplicate tiles removed →
   built-in browser measurements (table above), Claude in Chrome light and dark.
+
+- 2026-09-28 · owner (screenshot of the Card review): "the gap between the title and description
+  is too big, and the description text seems too close to the bottom of the container stroke" →
+  a description directly under its title joins it (baseline to cap 15 → 11.6; Figma and Notion
+  11.5), and the last text line ends at its descent instead of its baseline, so descenders keep
+  the pad below them (md last baseline to edge 12 → 16; Notion 15.4, ChatGPT 18). A closing
+  value still ends on its baseline. Card stays In review.
+
+- 2026-09-28 · owner (screenshots of the list, tags, well and carousel cards): "the texts inset
+  distance from the corners is not very consistent across cards … should the text in the carousel
+  be aligned to the title? are the text sizes here consistent and correct?", then "the padding for
+  text and buttons being 16 total distance shouldnt only apply when there is an image or
+  container … the button on the inside [of the well] seems way too large" (asked; chose 16
+  everywhere) →
+  - the card step is 8: text, footers and header controls 16 from the edge at md (sm 14, lg 20),
+    media and wells stay on the 8 inset; corners 22 / 24 / 28 (a default Button's 8 + the
+    column). Measured after, every md gallery card: title cap 16, text 16 from the side, the last
+    line's descent or the last control 16 from the bottom; media to the title's cap 16.
+  - carousel: items' text on the card's column (16, aligned with the header title, was on the
+    picture's edge at 8), the item title's cap 16 below its picture (was 4), item titles take the
+    body role 14/20 medium under the card's 16 title (ChatGPT library cards 14 / 12, Figma tiles
+    13 / 11); the header's small ghost paging controls centre on the title's cap, so the title
+    keeps the 16 cap line (was 26), and the title's baseline sits 16 above the pictures.
+  - well: a nested card is a compact row, a small (28) control, text and control 8 inside it,
+    corner 14 concentric with the control, 44 tall (was a 32 control, 52 tall, corner 18 in a 12
+    well); the well's corner is 16.
+  Card moves back to In review.

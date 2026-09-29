@@ -101,8 +101,8 @@
   /* Card: a contained option (docs/specs/checkbox.md, "Card"). The label stays the native
      click target. The control moves to the end, where the owner's references and shadcn's
      Choice Card put it; DOM order is unchanged, so keyboard order and the accessible name
-     are too. A chosen card draws a 2px edge in the checked colour (owner references), made of
-     the 1px border plus a 1px inset ring so nothing shifts. */
+     are too. A chosen card keeps the 1px edge and darkens it to the checked colour (owner,
+     2026-09-28: darker, not thicker; was a 2px edge from the owner references). */
   .area-checkbox--card,
   .area-radio--card {
     --_card-inset: calc(var(--area-space-12) - var(--area-border-width)); /* spec: 12 to the content, border counted once (shadcn 11) */
@@ -128,7 +128,6 @@
   .area-checkbox--card:has(> .area-checkbox__control:checked),
   .area-radio--card:has(> .area-radio__control:checked) {
     border-color: var(--_checked);
-    box-shadow: inset 0 0 0 var(--area-border-width) var(--_checked);
   }
   /* The card is the focus target the eye follows; the glyph keeps its own ring too. */
   .area-checkbox--card:has(> .area-checkbox__control:focus-visible),

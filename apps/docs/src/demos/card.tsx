@@ -155,7 +155,7 @@ export const CardCornerAction = () => (
 const wellRow = (title: string) => (
   <Card key={title} size="sm">
     <CardContent>
-      <CardHeader action={<Button variant="soft" iconOnly aria-label={`Open ${title}`} icon={<FluentArrowUpRightIcon />} />}>
+      <CardHeader action={<Button size="sm" variant="soft" iconOnly aria-label={`Open ${title}`} icon={<FluentArrowUpRightIcon />} />}>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
     </CardContent>
@@ -212,8 +212,8 @@ export const GalleryCardCarousel = () => {
   return <Card role="region" aria-label="Collection" aria-roledescription="carousel" style={horizontal}>
     <CardContent>
       <CardHeader action={<>
-        <Button variant="ghost" iconOnly aria-label="Previous items" icon={<FluentChevronLeftIcon />} disabled={edges.start} onClick={() => page(-1)} />
-        <Button variant="ghost" iconOnly aria-label="Next items" icon={<FluentChevronRightIcon />} disabled={edges.end} onClick={() => page(1)} />
+        <Button size="sm" variant="ghost" iconOnly aria-label="Previous items" icon={<FluentChevronLeftIcon />} disabled={edges.start} onClick={() => page(-1)} />
+        <Button size="sm" variant="ghost" iconOnly aria-label="Next items" icon={<FluentChevronRightIcon />} disabled={edges.end} onClick={() => page(1)} />
       </>}>
         <CardTitle>Title</CardTitle>
       </CardHeader>
