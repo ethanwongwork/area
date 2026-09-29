@@ -1,6 +1,6 @@
 # Progress spec
 
-**Status:** in review · 2026-09-26 (cohesion audit, second pass)
+**Status:** accepted · 2026-09-28 (owner, batch 6)
 **Captures:** `docs/research/captures/progress/` (Area, Figma)
 **Peers:** Slider (shares the rail), Spinner (unknown duration, small spaces), Skeleton
 (content placeholder), Field (label and value above)
@@ -109,6 +109,23 @@ No forced-colors rule in display.css (unverified).
 
 ## Visual pass
 
+2026-09-28, batch 6, Claude in Chrome: Figma's Starter hub → Usage (Ethan's Team, read-only)
+shows an AI-credits meter (`figma--usage-meter-ai-credits`, `figma--usage-meter-card`): 617 ×
+10, track #f5, radius 6 (a pill at 10 tall), fill rgb(44, 44, 44). Beside Area's tiles:
+
+| | Figma meter | Figma usage bar (09-27) | Area md / lg |
+|---|---|---|---|
+| height | 10 | 4 | 6 / 8 (sm 4) |
+| shape | pill | 4px top corners | pill |
+| track | #f5 | #e6 | about #dd (shared rail) |
+| fill | rgb(44, 44, 44), neutral | #0d99ff | `neutral-solid`, about #28 |
+
+The neutral fill and the pill match. Figma's tracks are lighter than Area's shared rail (#f5 and
+#e6 against #dd; Untitled #e5): **open for the owner**, since the rail is shared with Slider and
+Switch (third pass kept it).
+
+Earlier note:
+
 The gallery groups the tiles (Default, Tones, Sizes, Content,
 States). Beside Figma's usage bar the sm rail has the same thickness and shape; Area's rail
 reads one step darker. Not checked on screen: the RTL segment, dark theme.
@@ -128,3 +145,5 @@ in the [cohesion audit](../research/cohesion-audit.md#verification).
   no change; rail colour lighter in Figma recorded as open → `figma--usage-bar--rest--light`.
 - 2026-09-27 · third pass → open question settled, value kept: the rail stays the
   toggle-off fill lightened (≈ #dd) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-28 · batch 6 Claude in Chrome (Figma usage meter) → no change; lighter track raised as an open question.
+- 2026-09-28 · owner: approved (batch 6).

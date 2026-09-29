@@ -113,7 +113,7 @@ rgb(238, 238, 238) (`area--avatar-initials`); disabled opacity 0.5.
 | remove · target | **a circle 4 inside the pill: 20 / 24 / 32** (`--_remove`, chip height − 8), concentric with the pill's end; the chip's end inset is that 4 | Material 24 circle in a 32 chip (`_trailing-icon.scss L18-22`); Primer, Carbon, Spectrum 2 make it the chip's height; chip trailing padding 0 (Primer, Polaris, Carbon, Spectrum 2) | Was the 16px glyph box, so the hover plate hugged the glyph (owner: "does not look correct") |
 | remove · glyph | 16 (Fluent `dismiss_16`, ink ≈ 11) at every size | Primer 12 in 16/20, 16 in 24/32 (`_RemoveTokenButton.tsx L39,58`) | — |
 | remove · hover | **plate `currentColor` 12%** on the circle; ink fixed `fg-muted` (`chip.css`) | Audit: foreground fixed; peer Alert dismiss; systems use a subtle neutral fill on the button alone | ChatGPT washes the whole pill instead; Area keeps the remove a separate target beside the chip's own action |
-| avatar initials | **12px** (`--area-control-sm-text`, `chip.css:169-174`) | Type ramp floor 12 | Was 10px, off the ramp |
+| avatar initials | **12px** (`--area-control-xs-text`: 12 default, 11 compact), as Badge's avatar | Type ramp floor 12; Figma 12 and Notion 11 on a 24 avatar | Was 10px, off the ramp; then 14 when `control-sm-text` moved to 14/20 for small controls (2026-09-26), which overflowed the 20 plate (fixed 2026-09-28) |
 | visual box | 20px (icon 16 + 4) | Inset contract | — |
 | group gap | 4, wrapping (`chip.css:256-260`) | Area spacing | — |
 
@@ -153,6 +153,11 @@ Behavior); the "Composition / swatch only" tile was added in the third pass. Bes
 grey fill, default ink, against Notion's 20px tinted tag. Not inspected by this spec's
 author: hover, remove hover, dark theme.
 
+2026-09-28 (batch 15): beside ChatGPT's composer tool pill (36 pill, 12 / 14 sides, bare at rest,
+5% black on hover) and Notion's select tags (20, corner 4, tinted; Badge's role in Area). Area's
+chip is a 28 / 32 / 40 pill with a hairline outline, one size step per tier, avatar and remove
+slots concentric. No change.
+
 ## Settled questions
 
 1. **Entered values: kept as a control.** Notion shows a multi-select's values as 20px tags,
@@ -178,3 +183,4 @@ exists. Build and test results are in [the audit](../research/cohesion-audit.md#
 - 2026-09-27 · third pass → open question settled, value kept (32px input chip; Notion's
   tags map to Badge); Composition / swatch only tile added → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner: remove hover plate wrong → the remove is a 20/24/32 circle 4 inside the pill, concentric with its end, holding the 16px glyph (`--_remove`, `inset.css` end box); `[data-hover]` hook for review specimens → ChatGPT tool pill (rest, hover), nine design systems; Pass review in the gallery.
+- 2026-09-28 · batch 5 avatar check (owner: "check avatar in chip") → two initials overflowed the 20px plate: `--area-control-sm-text` had become 14 at default density; now `--area-control-xs-text` (12), as Badge; the avatar slot is `aria-hidden` (the label names the person, as in Badge); demos use Irene Yamaguchi → Claude in Chrome zoom of `chip-avatar-initials` (12px, 10.3 wide in the 20 circle). No product showed a person chip (Notion person properties absent from the owner's databases; Figma and ChatGPT none).

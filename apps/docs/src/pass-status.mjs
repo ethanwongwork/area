@@ -33,8 +33,44 @@ export const VALIDATED_PASSES = {
     against: "Notion's sidebar tree (rows, hover, row actions)",
   },
   alert: {
-    date: "2026-09-27",
-    against: "Notion's callout block (fill, edge, icon on the first line)",
+    date: "2026-09-28",
+    against: "Notion's callout block (fill, edge, icon on the first line); banner layout against OpenAI's Daybreak banner (height, corner, 16 inset, end link)",
+  },
+  avatar: {
+    date: "2026-09-28",
+    against: "Figma's file-browser avatars and Notion's person and workspace avatars (size, shape, fill, initial)",
+  },
+  indicator: {
+    date: "2026-09-28",
+    against: "Figma's notification bell dot and Notion's help-button activity dot (size, cutout, placement)",
+  },
+  badge: {
+    date: "2026-09-28",
+    against: "Figma's AI label and Notion's select tags",
+  },
+  skeleton: {
+    date: "2026-09-28",
+    against: "ChatGPT's results shimmer, Figma's tab shimmer and Notion's startup placeholders (fill, band, speed, shape)",
+  },
+  spinner: {
+    date: "2026-09-28",
+    against: "ChatGPT's conversation spinner (ring, track, sizes, speed)",
+  },
+  progress: {
+    date: "2026-09-28",
+    against: "Figma's AI-credits usage meter (height, shape, track, neutral fill)",
+  },
+  calendar: {
+    date: "2026-09-28",
+    against: "Notion's search Date filter calendar (surface, month label, cells, weeks, today, outside days)",
+  },
+  popover: {
+    date: "2026-09-28",
+    against: "Notion's Share popover (surface, ring, lift, corner)",
+  },
+  count: {
+    date: "2026-09-28",
+    against: "Notion's board group counts (neutral and tinted groups: size, gutter, ink, place after the label)",
   },
   toast: {
     date: "2026-09-27",
@@ -43,5 +79,105 @@ export const VALIDATED_PASSES = {
   segmented: {
     date: "2026-09-27",
     against: "ChatGPT's Chat / Work switch and Figma's mode switch",
+  },
+  panel: {
+    date: "2026-09-28",
+    against: "Figma's Design panel (section header, label and field rows, rules, row action column)",
+  },
+  "number-field": {
+    date: "2026-09-28",
+    against: "Figma's Design panel fields (X / Y letters, W / H with a menu, Rotation, Gap)",
+  },
+  "box-field": {
+    date: "2026-09-28",
+    against: "Figma's Padding and Corner radius rows (paired fields, per-side toggle on the action column)",
+  },
+  "property-list": {
+    date: "2026-09-28",
+    against: "Figma's Fill and Effects rows (hex and opacity, effect type, row actions); owner screenshots",
+  },
+  "color-field": {
+    date: "2026-09-28",
+    against: "Figma's Page colour row (hex, opacity anchored with % at the end)",
+  },
+  "color-swatch": {
+    date: "2026-09-28",
+    against: "The swatch in Figma's Page colour row (leading slot, hairline edge)",
+  },
+  "color-picker": {
+    date: "2026-09-28",
+    against: "Figma's colour picker from the Page colour row (area, tracks, value row, swatches)",
+  },
+  "color-swatch-picker": {
+    date: "2026-09-28",
+    against: "Figma's On this page swatch grid (chit size, cell, corner, light-chit edge)",
+  },
+  "alignment-picker": {
+    date: "2026-09-28",
+    against: "Figma's auto-layout Alignment grid (ground, dots, selected bars)",
+  },
+  button: {
+    date: "2026-09-28",
+    against: "Figma's Share (32, corner 5, 12 inset), Notion's Share popover buttons and ChatGPT's solid and outline pills (height, inset, weight, no shadow)",
+  },
+  "button-group": {
+    date: "2026-09-28",
+    against: "Figma's Present / Prototype view pair (outer corners only, square inner edges) and Notion's split divider",
+  },
+  kbd: {
+    date: "2026-09-28",
+    against: "Notion's search ⌘K hint, ChatGPT's tooltip chip and Figma's keyboard-shortcuts panel keys (fill, edge, corner, nesting)",
+  },
+  input: {
+    date: "2026-09-28",
+    against: "Notion's sidebar search field (with its ⌘K hint) and Share invite field, Figma's file-browser search (height, corner, edge, fill, text inset)",
+  },
+  "input-group": {
+    date: "2026-09-28",
+    against: "Notion's Share invite row (field and button) and Figma's design-panel icon and colour fields",
+  },
+  textarea: {
+    date: "2026-09-28",
+    against: "ChatGPT's settings multiline fields (insets, corner, edge, no shadow)",
+  },
+  select: {
+    date: "2026-09-28",
+    against: "ChatGPT's settings dropdown (read live), Figma's zoom, size and filter selects, Notion's inline select (height, fill, edge, chevron place)",
+  },
+  combobox: {
+    date: "2026-09-28",
+    against: "Figma's font-family trigger, font-size combobox and open font picker (row, text, chevron place)",
+  },
+  field: {
+    date: "2026-09-28",
+    against: "ChatGPT's settings row (read live) and stacked field (label, description, gaps)",
+  },
+  checkbox: {
+    date: "2026-09-28",
+    against: "Notion's and Figma's 16px checkboxes (size, corner, edge, checked face, label alignment)",
+  },
+  radio: {
+    date: "2026-09-28",
+    against: "No product radio exists; ChatGPT's mode radio cards and Checkbox's product evidence (control, label alignment)",
+  },
+  switch: {
+    date: "2026-09-28",
+    against: "ChatGPT's settings switches off and on, rest and hover, and Notion's page-menu toggle (track, thumb, off fill)",
+  },
+  slider: {
+    date: "2026-09-28",
+    against: "Figma's colour-picker sliders (reopened) and adjustment slider (rail, thumb, hit row)",
+  },
+  chip: {
+    date: "2026-09-28",
+    against: "ChatGPT's composer tool pill (rest, hover) and Notion's select tags (shape, height, paint)",
+  },
+  card: {
+    date: "2026-09-27",
+    against: "Notion board cards, ChatGPT library cards and Figma file and community cards, light and dark (consistency pass)",
+  },
+  table: {
+    date: "2026-09-28",
+    against: "Notion's table view (row height, rules, header ink, cells)",
   },
 };

@@ -172,8 +172,10 @@
 
   .area-chip__avatar > .area-avatar {
     --_size: 100%;
-    /* The smallest step of the type ramp; 10px was off the ramp. */
-    font-size: var(--area-control-sm-text);
+    /* spec: the caption step (12 at default, 11 compact), as Badge's avatar: two initials fit the
+       20px plate with room at the sides (Figma 12 and Notion 11 on 24). control-sm-text is 14
+       at default and overflowed the plate. */
+    font-size: var(--area-control-xs-text);
     line-height: 1;
   }
 

@@ -128,7 +128,12 @@ roots need an `identifierPrefix` (`Field.tsx:55-59`).
 ## Visual pass
 
 The gallery shows Field's tiles in named groups, one variant per tile.
-Unverified: a product form label side by side (none captured), dark theme.
+Unverified: dark theme.
+
+2026-09-28 (batch 13, Claude in Chrome): beside ChatGPT's settings row (label 14/20 500,
+description 12/16 rgb(93) 2 below, control at the end, 24 apart) and its stacked field (label,
+8, a 38 control). Area's stacked Field keeps 6 between label, control and message (UUI) and the
+400 label (type rule); its description matches ChatGPT's 12/16 muted. No change. Capture: `chatgpt--settings-row--rest--light`.
 
 ## Verification
 

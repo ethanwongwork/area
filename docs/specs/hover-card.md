@@ -51,6 +51,14 @@ block, so server-rendered HTML no longer matches the React tree and hydration fa
 #418). Server-rendered pages place a hover card in flow content (a `div`), as the gallery
 demos now do (2026-09-27); client-only rendering is unaffected.
 
+## Visual pass
+
+2026-09-28 (batch 17, gallery): the Popover surface (corner 12, 12 inset with the border,
+the shared floating lift), opened by hover or focus. Beside Notion's link preview on file
+(`notion--link-preview--open`: 280 × 268, corner 10, a 7% warm ring and a two-layer 3% lift):
+Area's corner is two larger and its lift is the one used by every floating surface. No change.
+Not compared live: the Claude in Chrome tab was hidden.
+
 ## Verification
 
 - Headless Edge, real pointer and keys (`scratchpad/hover.mjs`): opens after 751–754 ms;
