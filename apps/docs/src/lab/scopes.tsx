@@ -9,7 +9,7 @@ function Sample({ name }: { name: string }) {
     <span>Project settings</span>
     <Input aria-label={`${name} project`} defaultValue="Area" />
     <Select aria-label={`${name} access`} defaultValue="team"><option value="team">Workspace members</option></Select>
-    <Button tone="accent" variant="outline">Save changes</Button>
+    <Button>Save changes</Button>
   </div>;
 }
 export function ScopeBoard() {

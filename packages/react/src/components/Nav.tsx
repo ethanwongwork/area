@@ -13,20 +13,18 @@ import { cx, navVariants, MANIFESTS, type VariantProps } from "../variants.ts";
 export interface NavProps extends HTMLAttributes<HTMLElement> {
   /** The axis. Vertical is the sidebar case and the default. */
   orientation?: "vertical" | VariantProps<typeof MANIFESTS.nav>["orientation"];
-  /** What a current item's plate carries. Neutral by default. */
-  tone?: "neutral" | VariantProps<typeof MANIFESTS.nav>["tone"];
   /** Renders the current location as a compact rail instead of a filled plate. */
   selection?: VariantProps<typeof MANIFESTS.nav>["selection"];
 }
 
 export const Nav = /* @__PURE__ */ forwardRef<HTMLElement, NavProps>(function Nav(
-  { orientation = "vertical", tone = "neutral", selection, className, children, ...rest },
+  { orientation = "vertical", selection, className, children, ...rest },
   ref,
 ) {
   return (
     <nav
       ref={ref}
-      className={navVariants({ orientation: orientation === "vertical" ? undefined : orientation, tone: tone === "neutral" ? undefined : tone, selection }, className)}
+      className={navVariants({ orientation: orientation === "vertical" ? undefined : orientation, selection }, className)}
       {...rest}
     >
       {children}

@@ -6,20 +6,8 @@
  * rows with notes. docs/specs/model-picker.md.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  .area-model-picker { display: inline-flex; anchor-name: var(--_model-anchor); }
-  /* spec: the trigger keeps the wash while its menu is open (ChatGPT 5% while open). */
+  .area-model-picker { display: inline-flex; }
+  /* spec: the trigger keeps the wash while its menu is open (ChatGPT 5% while open). The menu
+     is placed by Menu's trigger path, like every anchored surface (audit G-11). */
   .area-model-picker__trigger[aria-expanded="true"] { --_bg: var(--_bg-hover); }
-  .area-model-picker__menu[popover] { margin: 0; }
-  .area-model-picker__menu[popover]:not(:popover-open) { display: none; }
-  @supports (anchor-name: --area-anchor) {
-    .area-model-picker__menu[popover]:popover-open {
-      position-anchor: var(--_model-anchor);
-      inset: auto;
-      /* It ends under the trigger's end (ChatGPT's menu opens back across the composer) and
-       * flips above when the composer sits at the bottom of the page. */
-      position-area: bottom span-left;
-      margin-block: 4px; /* spec: every anchored surface is 4 from its trigger (popover.md) */
-      position-try-fallbacks: flip-block;
-    }
-  }
 }

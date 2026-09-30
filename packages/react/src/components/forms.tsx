@@ -108,8 +108,6 @@ export interface CheckboxProps extends ChoiceProps {
   variant?: VariantProps<typeof MANIFESTS.checkbox>["variant"];
   /** Card layout: `row` (visual, text, control on one line) or `tile` (visual above the label, control in the corner). */
   layout?: VariantProps<typeof MANIFESTS.checkbox>["layout"];
-  /** Checked paint. Neutral by default; accent is an explicit override. */
-  tone?: VariantProps<typeof MANIFESTS.checkbox>["tone"];
   /** Decorative context beside the mark. The visible label must still name the option. */
   leadingVisual?: ReactNode;
   /** Alias for description when the copy is presented as an option caption. */
@@ -121,7 +119,7 @@ export interface CheckboxProps extends ChoiceProps {
 }
 
 export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { variant, layout, tone, size, label, description, caption, leadingVisual, invalid, indeterminate = false, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
+  { variant, layout, size, label, description, caption, leadingVisual, invalid, indeterminate = false, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
   ref,
 ) {
   const resolvedCaption = caption ?? description;
@@ -140,7 +138,7 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
 
   return (
     <label
-      className={checkboxVariants({ variant, layout: variant === "card" ? layout : undefined, tone, size }, className)}
+      className={checkboxVariants({ variant, layout: variant === "card" ? layout : undefined, size }, className)}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(invalidState ? { "data-invalid": "" } : {})}
     >
@@ -224,7 +222,8 @@ export interface RadioGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSe
   label: ReactNode;
   description?: ReactNode;
   error?: ReactNode;
-  /** Shared native radio name. An individual Radio name takes precedence. */
+  /** Shared native radio name. Generated when omitted, so the options always form one native
+   * group (one Tab stop, arrow keys, form submission). An individual Radio name takes precedence. */
   name?: string;
   /** Controlled selected value. */
   value?: string;
@@ -241,6 +240,8 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   const descriptionId = useId();
   const errorId = useId();
+  const generatedName = useId();
+  const groupName = name ?? generatedName;
   const selectedValue = value ?? uncontrolledValue;
   const resolvedDescription = [describedBy, description ? descriptionId : undefined, error ? errorId : undefined].filter(Boolean).join(" ") || undefined;
   const change = (event: ChangeEvent<HTMLInputElement>) => {
@@ -261,7 +262,7 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
       <legend className="area-radio-group__legend">{label}</legend>
       {description ? <span className="area-radio-group__description" id={descriptionId}>{description}</span> : null}
       <div className="area-radio-group__options">
-        <RadioGroupContext.Provider value={{ name, value: selectedValue, disabled, onChange: change }}>
+        <RadioGroupContext.Provider value={{ name: groupName, value: selectedValue, disabled, onChange: change }}>
           {children}
         </RadioGroupContext.Provider>
       </div>
@@ -271,7 +272,7 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
 });
 
 export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(function Radio(
-  { variant, layout, size, tone, label, description, caption, leadingVisual, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
+  { variant, layout, size, label, description, caption, leadingVisual, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
   ref,
 ) {
   const group = useContext(RadioGroupContext);
@@ -287,7 +288,7 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
   };
 
   return (
-    <label className={radioVariants({ variant, layout: variant === "card" ? layout : undefined, size, tone }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}>
+    <label className={radioVariants({ variant, layout: variant === "card" ? layout : undefined, size }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}>
       <input
         ref={ref}
         type="radio"
@@ -323,6 +324,4 @@ export type RadioProps = Omit<ChoiceProps, "size"> & {
   /** Alias for description, as Checkbox. */
   caption?: ReactNode;
   size?: VariantProps<typeof MANIFESTS.radio>["size"];
-  /** Checked paint. Neutral by default; accent is an explicit override. */
-  tone?: VariantProps<typeof MANIFESTS.radio>["tone"];
 };

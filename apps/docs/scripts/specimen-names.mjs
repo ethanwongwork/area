@@ -56,6 +56,8 @@ export function specimenGroup(name, family) {
   const value = rest.join('-');
   if (TREATMENTS.has(head) && value) return 'Variant × tone';
   if (['variant', 'appearance', 'kind', 'shape'].includes(head) || (!value && TREATMENTS.has(head))) return 'Variants';
+  // Emphasis-role tiles (Action / accent, Selection / accent) sit with the tones.
+  if (head === 'action' || head === 'selection') return 'Tones';
   if (head === 'tone' || (!value && TONES.has(head) && family !== 'menu' && family !== 'toast')) return 'Tones';
   if (family === 'toast' && TONES.has(head) && !value) return 'Tones';
   if (head === 'size' || head === 'presenceSize' || head === 'sizes' || name === 'small') return 'Sizes';

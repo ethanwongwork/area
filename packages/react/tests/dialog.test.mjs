@@ -200,7 +200,8 @@ test("ScrollToLatest renders a hidden round outline button until the reader scro
 test("ModelPicker is a ghost menu button over single-choice Menu rows with notes", async () => {
   const { ModelPicker } = await import("../dist/modules/index.js");
   const html = renderToString(h(ModelPicker, { defaultValue: "b", models: [{ value: "a", label: "Auto" }, { value: "b", label: "Instant", description: "Answers right away" }] }));
-  assert.match(html, /aria-haspopup="menu" aria-expanded="false" aria-controls="[^"]+-menu" aria-label="Model: Instant"/);
-  assert.match(html, /<div role="menu" class="area-menu area-model-picker__menu" id="[^"]+-menu" popover="auto" aria-label="Model">/);
+  // Menu's own trigger path (audit G-11): one placement engine and one menu-button contract.
+  assert.match(html, /aria-label="Model: Instant" id="([^"]+)-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="\1"/);
+  assert.match(html, /<div role="menu" class="area-menu" aria-label="Model" id="[^"]+" popover="auto" tabindex="-1" aria-labelledby="[^"]+-trigger">/);
   assert.match(html, /role="menuitemradio" aria-checked="true"[^>]*><span class="area-menu__lines"><span class="area-menu__text">Instant<\/span><span class="area-menu__description">Answers right away<\/span><\/span>/);
 });

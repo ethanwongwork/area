@@ -83,6 +83,16 @@ export function baseTokens(): Record<string, string> {
   return out;
 }
 
+/** Role tokens: `name: color-mix(neutral endpoint, accent endpoint by the switch)`. */
+function role(_id: string, switchName: string, map: Record<string, [string, string]>): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [name, [neutral, accent]] of Object.entries(map)) {
+    out[`${PREFIX}${name}`] =
+      `color-mix(in srgb, var(${PREFIX}${neutral}), var(${PREFIX}${accent}) calc(var(${PREFIX}${switchName}) * 100%))`;
+  }
+  return out;
+}
+
 /**
  * Cross-axis derivations.
  *
@@ -110,6 +120,26 @@ export function derivedTokens(): Record<string, string> {
       `calc(var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,
     [`${PREFIX}field-focus-halo-width`]:
       `calc(var(${PREFIX}space-2) + var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,
+    // Emphasis roles (axes/emphasis.ts). Each role is its neutral endpoint mixed toward the
+    // accent by the role's 0/1 switch, so the default renders exactly the neutral paint and
+    // a subtree that changes theme, neutral or accent re-derives the role here.
+    ...role("action", "action-accent", {
+      "action-solid": ["neutral-solid", "accent-solid"],
+      "action-solid-hover": ["neutral-solid-hover", "accent-solid-hover"],
+      "fg-on-action": ["fg-on-neutral", "fg-on-accent"],
+      "fg-action": ["fg-default", "fg-accent"],
+    }),
+    ...role("selection", "selection-accent", {
+      "selection-solid": ["neutral-solid", "accent-solid"],
+      "selection-solid-hover": ["neutral-solid-hover", "accent-solid-hover"],
+      "fg-on-selection": ["fg-on-neutral", "fg-on-accent"],
+      "fg-selection": ["fg-default", "fg-accent"],
+      "selection-surface": ["bg-component-active", "accent-surface"],
+      "selection-surface-hover": ["bg-component-active", "accent-surface-hover"],
+      "selection-band": ["bg-component-hover", "accent-surface"],
+      "selection-band-hover": ["bg-component-active", "accent-surface-hover"],
+      "selection-edge": ["edge-control-hover", "edge-accent"],
+    }),
     // Badge brand paint is an opt-in product seam, re-derived at axis boundaries.
     [`${PREFIX}badge-bg`]: `var(${PREFIX}bg-component)`,
     [`${PREFIX}badge-fg`]: `var(${PREFIX}fg-default)`,
@@ -174,7 +204,8 @@ export function derivedTokens(): Record<string, string> {
     // The 25 rung, as inline Code: the code block's ground became the page (2026-09-28).
     [`${PREFIX}token-bg`]: `var(${PREFIX}bg-stripe)`,
     [`${PREFIX}token-bg-subtle`]: `var(${PREFIX}bg-subtle)`,
-    [`${PREFIX}token-edge`]: `var(${PREFIX}border-decorative)`,
+    // Dark `border-decorative` equals the stripe fill, so dark takes the faint edge (audit G-3).
+    [`${PREFIX}token-edge`]: `light-dark(var(${PREFIX}border-decorative), var(${PREFIX}border-faint))`,
     [`${PREFIX}token-text`]: `var(${PREFIX}fg-default)`,
     [`${PREFIX}token-swatch-ring`]: `color-mix(in oklab, var(${PREFIX}token-text) 15%, transparent)`,
     // A control nested inside a container keeps concentric corners: the inner radius is the

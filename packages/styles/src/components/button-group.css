@@ -8,7 +8,7 @@
     --_group-bg: var(--area-bg-component);
     --_group-edge: var(--area-border-decorative);
     --_group-divider: var(--area-edge-control); /* spec */
-    --_group-divider-inset: calc(-1 * var(--area-border-width)); /* spec: full height */
+    --_group-divider-inset: calc(-1 * var(--area-stroke-width)); /* spec: full height */
     display: inline-flex;
     align-items: stretch;
     max-inline-size: 100%;
@@ -31,8 +31,29 @@
     --_gap: var(--_group-gap);
     --_radius: var(--_group-radius);
     --_border: var(--_group-edge);
+    /* The group owns the edge at rest and under the pointer: a ghost child's transparent
+       hover edge used to open the outline group's top, bottom and outer lines (audit A-1). */
+    --_border-hover: var(--_group-edge);
     position: relative;
     box-shadow: none;
+  }
+  /*
+   * The group paints its children, so a child keeps the group's quiet skin whatever variant
+   * it names: a default (solid) Button reads as a ghost child, not a white label on the
+   * group fill (audit A-2). Ghost, outline and soft children already resolve to this.
+   */
+  .area-button-group > .area-button--solid {
+    --_fg: var(--_tone-fg);
+    --_bg-hover: var(--_surface-hover);
+    --_bg-active: var(--_surface-active);
+  }
+  .area-button-group > .area-button--solid.area-button--neutral:not([data-selected]) {
+    --_fg: color-mix(in oklab, var(--area-fg-default), var(--area-fg-muted) 75%); /* spec: button.css quiet ink */
+  }
+  .area-button-group > .area-button--solid[data-selected] {
+    --_bg: var(--_surface-active);
+    --_bg-hover: var(--_surface-active);
+    --_bg-active: var(--_surface-active);
   }
   /* The group fill is the rest fill only: a pressed toggle keeps Button's selected fill,
      which a same-specificity group rule loaded later used to overwrite. */
@@ -40,7 +61,7 @@
   .area-button-group > .area-button:not(:first-child) {
     border-start-start-radius: 0;
     border-end-start-radius: 0;
-    margin-inline-start: calc(-1 * var(--area-border-width));
+    margin-inline-start: calc(-1 * var(--area-stroke-width));
   }
   .area-button-group > .area-button:not(:last-child) { border-start-end-radius: 0; border-end-end-radius: 0; }
   /*
@@ -52,9 +73,9 @@
   .area-button-group > .area-button + .area-button::before {
     content: "";
     position: absolute;
-    inset-inline-start: calc(-1 * var(--area-border-width));
+    inset-inline-start: calc(-1 * var(--area-stroke-width));
     inset-block: var(--_group-divider-inset);
-    inline-size: var(--area-border-width);
+    inline-size: var(--area-stroke-width);
     background: var(--_group-divider);
     pointer-events: none;
   }

@@ -139,7 +139,8 @@
   .area-code {
     /* spec: inline code keeps the 25 rung (#fafafa) now that the block's ground is the page. */
     --_code-bg: var(--area-bg-stripe);
-    --_code-edge: var(--area-border-decorative);
+    /* spec (audit G-3): dark `border-decorative` equals the stripe fill, so dark takes the faint edge. */
+    --_code-edge: light-dark(var(--area-border-decorative), var(--area-border-faint));
     --_code-text: var(--area-fg-default);
 
     display: inline;
@@ -379,10 +380,10 @@
   .area-code-block__line:target {
     background-color: var(--area-bg-active);
     /* The current line: neutral ink, as the Nav and Tree view markers are. */
-    box-shadow: inset var(--area-space-2) 0 0 0 var(--_target-marker, var(--area-fg-default));
+    box-shadow: inset var(--area-space-2) 0 0 0 var(--_target-marker, var(--area-fg-selection));
   }
   /* The rail sits on the inline-start edge, which is the right in right-to-left text. */
-  .area-code-block__line:target:dir(rtl) { box-shadow: inset calc(var(--area-space-2) * -1) 0 0 0 var(--_target-marker, var(--area-fg-default)); }
+  .area-code-block__line:target:dir(rtl) { box-shadow: inset calc(var(--area-space-2) * -1) 0 0 0 var(--_target-marker, var(--area-fg-selection)); }
 
   /*
    * Four hues, each at its scale's own vivid rung.

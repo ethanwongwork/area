@@ -5,9 +5,9 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { buttonVariants, cx } from "../variants.ts";
 
 /**
- * The eight tones. `neutral` is not an accent colour -- a near-black
- * button is the strongest call to action a neutral palette can make, and it stays the
- * strongest whatever the accent axis is set to.
+ * The seven tones. `neutral` carries no meaning: its solid fill is the Action role, neutral
+ * ink by default and the accent when a theme sets `action: "accent"`. The others are
+ * semantic and keep their colour in every theme.
  */
 export type ButtonTone = VariantProps<typeof MANIFESTS.button>["tone"];
 

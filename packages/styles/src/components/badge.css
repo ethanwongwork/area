@@ -70,19 +70,6 @@
     --_on-solid: var(--area-fg-on-neutral);
   }
 
-  /* The accent hue. Follows the accent axis. */
-  .area-badge--accent {
-    --_solid: var(--area-accent-solid);
-    --_solid-hover: var(--area-accent-solid-hover);
-    --_surface: var(--area-accent-surface);
-    --_surface-hover: var(--area-accent-surface-hover);
-    --_surface-active: var(--area-accent-surface-active);
-    --_line: var(--area-accent-border);
-    --_line-hover: var(--area-accent-border-strong);
-    --_tone-fg: var(--area-fg-accent);
-    --_on-solid: var(--area-fg-on-accent);
-  }
-
   /* Fixed blue. Informational, never the primary action. */
   .area-badge--info {
     --_solid: var(--area-info-solid);

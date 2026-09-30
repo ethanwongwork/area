@@ -25,7 +25,7 @@ export const BadgeToneMatrix = () => (
       <section key={variant} aria-label={variant}>
         <p>{variant}</p>
         <BadgeGroup>
-          {(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => false
+          {(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => false
             ? <Badge key={tone} as="a" href="#api" variant={variant} tone={tone}>{tone}</Badge>
             : <Badge key={tone} variant={variant} tone={tone}>{tone}</Badge>)}
         </BadgeGroup>
@@ -34,7 +34,7 @@ export const BadgeToneMatrix = () => (
   </div>
 );
 export const BadgeTones = () => (
-  <BadgeGroup>{(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => <Badge key={tone} tone={tone}>{tone}</Badge>)}</BadgeGroup>
+  <BadgeGroup>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => <Badge key={tone} tone={tone}>{tone}</Badge>)}</BadgeGroup>
 );
 export const BadgeLeadingIcon = () => <Badge icon={<CheckIcon />}>Badge</Badge>;
 export const BadgeTrailingIcon = () => <Badge trailingIcon={<InfoIcon />}>Badge</Badge>;
@@ -44,7 +44,7 @@ export const BadgeDotOutline = () => <Badge dot variant="outline" tone="warning"
 export const BadgeDotOnly = () => <Badge dotOnly tone="success" aria-label="Available" />;
 export const BadgeDotMatrix = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)" }}>
-    {(["soft", "outline"] as const).map(variant => <BadgeGroup key={variant}>{(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => <Badge key={tone} dot variant={variant} tone={tone}>{tone}</Badge>)}</BadgeGroup>)}
+    {(["soft", "outline"] as const).map(variant => <BadgeGroup key={variant}>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => <Badge key={tone} dot variant={variant} tone={tone}>{tone}</Badge>)}</BadgeGroup>)}
   </div>
 );
 export const BadgeStateLabels = () => (
@@ -141,7 +141,7 @@ export const BadgeAuditControls = () => {
   </div>;
 };
 
-const galleryTones = ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const;
+const galleryTones = ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const;
 const galleryVariants = ["soft", "solid", "outline", "color", "modern"] as const;
 const galleryName = (value: string) => value[0]!.toUpperCase() + value.slice(1);
 const galleryBadge = (variant: typeof galleryVariants[number], tone: typeof galleryTones[number]) => () => false
@@ -155,7 +155,7 @@ export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromE
   ...(["xs", "sm", "md", "lg"] as const).map(size => [`GalleryBadgePresenceSize${galleryName(size)}`, () => <Indicator status="available" size={size} />]),
   ...(["available", "away", "busy", "do-not-disturb", "offline"] as const).map(status => [`GalleryBadgePresenceOutside${galleryName(status).replaceAll("-", "")}`, () => <Indicator status={status} outOfOffice />]),
   ...[0, 3, 24, 125].map(count => [`GalleryBadgeCount${count}`, () => <Indicator count={count} />]),
-  ["GalleryBadgeActivity", () => <Indicator tone="accent" />],
+  ["GalleryBadgeActivity", () => <Indicator tone="info" />],
   ["GalleryBadgeProcessing", () => <Indicator tone="info" processing />],
   ["GalleryBadgeBorder", () => <Indicator tone="success" withBorder />],
   ["GalleryBadgeCountNeutral", () => <Indicator count={8} tone="neutral" />],
@@ -194,7 +194,7 @@ export const BadgePresenceOutside = () => <div style={{display: "flex", flexWrap
 export const BadgeCountIndicators = () => (
   <div style={{display: "flex", gap: "var(--area-space-16)"}}><Indicator count={0} /><Indicator count={3} /><Indicator count={24} /><Indicator count={125} /></div>
 );
-export const BadgeIndicatorActivity = () => <div style={{display: "flex", gap: "var(--area-space-24)", alignItems: "center"}}><Indicator tone="accent" /><Indicator tone="info" processing /><Indicator tone="success" withBorder /><Indicator count={8} tone="neutral" /></div>;
+export const BadgeIndicatorActivity = () => <div style={{display: "flex", gap: "var(--area-space-24)", alignItems: "center"}}><Indicator tone="info" /><Indicator tone="info" processing /><Indicator tone="success" withBorder /><Indicator count={8} tone="neutral" /></div>;
 export const BadgeIndicatorZero = () => {
   const [show, setShow] = useState(true);
   return <div style={{display: "flex", gap: "var(--area-space-16)", alignItems: "center"}}><IndicatorAnchor indicator={<Indicator count={0} showZero={show} />}><Button aria-label={show ? "Inbox, 0 notifications" : "Inbox"}>Inbox</Button></IndicatorAnchor><Button size="sm" variant="soft" onClick={() => setShow(!show)}>{show ? "Hide zero" : "Show zero"}</Button></div>;

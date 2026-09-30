@@ -58,22 +58,17 @@
     --_count-gutter: var(--area-space-6);
   }
 
-  /* Tone: the ink, and the plate a soft count mixes from it. */
-  .area-count--neutral { --_count-ink: var(--area-fg-muted); }
-  .area-count--accent { --_count-ink: var(--area-fg-accent); }
-
   /* Variant. A plain count is ink only (Notion's board groups: no plate, the heading's muted
      ink). A soft count sits on a translucent plate, so it stays visible on a hovered or
      selected row plate as well as on the page. */
   .area-count--plain { --_count-plate: transparent; --_count-weight: var(--area-weight-regular); }
   .area-count--soft {
     /* spec: Primer's CounterLabel fill, neutral 8 at 12% (#f0 on white): 6% black; dark takes
-       10% white to register on the dark page. The accent plate is the accent surface. */
+       10% white to register on the dark page. */
     --_count-plate: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); /* spec */
     /* The type ramp's one exception: a label on a fill is 500 (Badge, Button solid). */
     --_count-weight: var(--area-weight-strong);
   }
-  .area-count--soft.area-count--accent { --_count-plate: var(--area-accent-surface); }
 
   /* The text a screen reader hears after the number ("3 unread"). */
   .area-count__label {

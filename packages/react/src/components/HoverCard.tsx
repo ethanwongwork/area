@@ -41,9 +41,16 @@ export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function Hov
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!open) return;
-    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") { clear(); setOpen(false); } };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    // As Tooltip: Escape closes only the card, never the surface it sits in (audit E-4).
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented) return;
+      event.preventDefault();
+      event.stopPropagation();
+      clear();
+      setOpen(false);
+    };
+    addEventListener("keydown", onKey, true);
+    return () => removeEventListener("keydown", onKey, true);
   }, [open]);
 
   const setRef = (element: HTMLDivElement | null) => {

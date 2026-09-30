@@ -47,30 +47,25 @@
   .area-avatar__icon > svg { inline-size: 100%; block-size: 100%; }
 
   .area-avatar--circle { border-radius: var(--area-radius-full); }
-  .area-avatar--square { border-radius: var(--area-radius-control); }
+  .area-avatar--square { border-radius: min(var(--area-radius-control), calc(var(--_size) * var(--area-radius-cap))); }
 
   .area-avatar--neutral {
     --_bg: var(--area-bg-component-active);
     --_fg: var(--area-fg-muted);
   }
 
-  .area-avatar--accent {
-    --_bg: var(--area-accent-solid);
-    --_fg: var(--area-fg-on-accent);
-  }
 
   .area-avatar--inverse {
     --_bg: var(--area-bg-inverse);
     --_fg: var(--area-fg-on-inverse);
   }
 
-  /* The ring is neutral unless the avatar asks for accent (DESIGN_SYSTEM.md). */
+  /* The active ring is the Selection role (DESIGN_SYSTEM.md, "Emphasis roles"). */
   .area-avatar--active {
     --_active-ring:
       0 0 0 var(--area-space-2) var(--area-bg-surface),
-      0 0 0 var(--area-space-4) var(--_ring, var(--area-neutral-solid));
+      0 0 0 var(--area-space-4) var(--_ring, var(--area-selection-solid));
   }
-  .area-avatar--accent { --_ring: var(--area-accent-solid); }
 
   .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); --_text: var(--area-text-xs-size); }
   .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); --_text: var(--area-text-sm-size); }
@@ -218,7 +213,7 @@
    */
   .area-spinner {
     --_size: var(--area-icon-md);
-    --_indicator: var(--area-neutral-solid);
+    --_indicator: var(--area-selection-solid);
     --_ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E"); /* spec */
     --_arc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 0 1 7 7' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"); /* spec */
     position: relative;
@@ -254,8 +249,6 @@
   .area-spinner--sm { --_size: var(--area-space-12); }
   .area-spinner--md { --_size: var(--area-space-16); }
   .area-spinner--lg { --_size: var(--area-space-24); }
-  .area-spinner--neutral { --_indicator: var(--area-neutral-solid); }
-  .area-spinner--accent { --_indicator: var(--area-accent-solid); }
 
   @keyframes area-spin {
     to { rotate: 360deg; }
@@ -264,7 +257,7 @@
   /* --- Progress ----------------------------------------------------------- */
   .area-progress {
     --_progress-size: var(--area-space-6);
-    --_progress-fill: var(--area-neutral-solid);
+    --_progress-fill: var(--area-selection-solid);
     inline-size: 100%;
     block-size: var(--_progress-size);
     border-radius: var(--area-radius-full);
@@ -283,8 +276,6 @@
   .area-progress--sm { --_progress-size: var(--area-space-4); }
   .area-progress--md { --_progress-size: var(--area-space-6); }
   .area-progress--lg { --_progress-size: var(--area-space-8); }
-  .area-progress--accent { --_progress-fill: var(--area-accent-solid); }
-  .area-progress--neutral { --_progress-fill: var(--area-neutral-solid); }
 
   /*
    * Indeterminate is a travelling segment rather than a full-width pulse, so it cannot
@@ -311,12 +302,21 @@
      alone would not reach them. */
   [data-area-motion="none"] :is(.area-skeleton, .area-spinner::before, .area-progress[data-indeterminate] .area-progress__bar) { animation: none; }
   [data-area-motion="none"] .area-skeleton { background-image: none; }
+  /* A stopped 35% segment reads as 35% done (audit E-9). With motion off, the indeterminate
+     bar fills the track with a still stripe, which no determinate value looks like. */
+  [data-area-motion="none"] .area-progress[data-indeterminate] .area-progress__bar {
+    inline-size: 100%;
+    translate: none;
+    background: repeating-linear-gradient(-45deg, var(--_progress-fill) 0 var(--area-space-4), transparent var(--area-space-4) var(--area-space-8)); /* spec */
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .area-skeleton,
-    .area-progress[data-indeterminate] .area-progress__bar {
+    .area-skeleton {
       animation: none;
     }
+    /* As the spinner: the segment keeps travelling, slowly, so it never rests where a value
+       would (audit E-9). The motion axis still stops it, above. */
+    .area-progress[data-indeterminate] .area-progress__bar { animation-duration: 5.4s; } /* spec: 3 x 1.8s */
     /* spec: a still quarter arc reads as a frozen screen, so the spinner slows instead of
        stopping (Fluent 1.8s; Carbon and Primer keep turning). The motion axis still stops it. */
     .area-spinner::before { animation-duration: 1.8s; } /* spec */

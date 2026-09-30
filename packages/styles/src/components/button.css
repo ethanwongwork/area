@@ -32,20 +32,20 @@
     --_weight: var(--area-weight-regular);
 
     /*
-     * Tone: nine slots a tone repoints, and a variant reads. The base is `neutral`, which
-     * is the neutral one -- almost every button in a product should be one, and a button
-     * that names no tone should be the one you reach for without thinking. `accent` is
-     * opt-in, for a moment that is genuinely about identity.
+     * Tone: nine slots a tone repoints, and a variant reads. The base is `neutral`, the
+     * tone that carries no meaning. Its solid fill is the Action role (neutral by default,
+     * the accent when a theme sets data-area-action="accent"); soft, outline and ghost stay
+     * neutral, since the quiet neighbours of an action are not the action.
      */
-    --_solid: var(--area-neutral-solid);
-    --_solid-hover: var(--area-neutral-solid-hover);
+    --_solid: var(--area-action-solid);
+    --_solid-hover: var(--area-action-solid-hover);
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
     --_line: var(--area-edge-control);
     --_line-hover: var(--area-edge-control-hover);
     --_tone-fg: var(--area-fg-default);
-    --_on-solid: var(--area-fg-on-neutral);
+    --_on-solid: var(--area-fg-on-action);
 
     /* Skin: what a variant resolves the tone into. */
     --_bg: transparent;
@@ -66,7 +66,8 @@
 
     block-size: var(--_height);
     padding-inline: var(--_gutter);
-    border: var(--area-border-width) solid var(--_border);
+    /* A required control edge: stroke width, which the Surface axis never zeroes (audit H-3). */
+    border: var(--area-stroke-width) solid var(--_border);
     /*
      * Capped against this tier's own height. A radius is an absolute length and a control
      * is not: the same 12px is a gentle round at 48px and a pill at 20px, because the
@@ -193,8 +194,8 @@
    * the base default ever moves. The manifest declares it; the parity check requires it.
    */
   .area-button--neutral {
-    --_solid: var(--area-neutral-solid);
-    --_solid-hover: var(--area-neutral-solid-hover);
+    --_solid: var(--area-action-solid);
+    --_solid-hover: var(--area-action-solid-hover);
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
@@ -209,20 +210,7 @@
     --_line: var(--area-edge-control);
     --_line-hover: var(--area-edge-control-hover);
     --_tone-fg: var(--area-fg-default);
-    --_on-solid: var(--area-fg-on-neutral);
-  }
-
-  /* The accent hue. Follows the accent axis. */
-  .area-button--accent {
-    --_solid: var(--area-accent-solid);
-    --_solid-hover: var(--area-accent-solid-hover);
-    --_surface: var(--area-accent-surface);
-    --_surface-hover: var(--area-accent-surface-hover);
-    --_surface-active: var(--area-accent-surface-active);
-    --_line: var(--area-accent-border);
-    --_line-hover: var(--area-accent-border-strong);
-    --_tone-fg: var(--area-fg-accent);
-    --_on-solid: var(--area-fg-on-accent);
+    --_on-solid: var(--area-fg-on-action);
   }
 
   /* Fixed blue. Informational, never the primary action. */

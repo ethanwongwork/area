@@ -203,7 +203,7 @@
     cursor: pointer;
   }
   .area-panel__toggle-text { flex: 1; min-inline-size: 0; }
-  .area-panel__toggle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-space-2); border-radius: var(--area-radius-control-xs); }
+  .area-panel__toggle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-space-2); border-radius: min(var(--area-radius-control-xs), calc(var(--area-control-xs) * var(--area-radius-cap))); }
   .area-panel__chevron {
     position: absolute;
     inset-inline-start: 0;

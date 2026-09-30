@@ -3,8 +3,6 @@ import { Count, Nav, NavItem, Tabs } from "@area/react";
 
 export const GalleryCount = () => <Count count={12} />;
 export const GalleryCountSoft = () => <Count variant="soft" count={12} />;
-export const GalleryCountAccent = () => <Count tone="accent" count={12} />;
-export const GalleryCountSoftAccent = () => <Count variant="soft" tone="accent" count={12} />;
 export const GalleryCountSizeSm = () => <Count size="sm" variant="soft" count={12} />;
 export const GalleryCountSizeMd = () => <Count size="md" variant="soft" count={12} />;
 export const GalleryCountSingleDigit = () => <Count variant="soft" count={3} />;

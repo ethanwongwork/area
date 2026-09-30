@@ -5,6 +5,29 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. No owner completion changed; Indicator stays In review.
 
+## Audit, emphasis roles and fix-first (2026-09-29, branch `claude/component-audit-visual-guide-ac7bc4`, uncommitted)
+
+- Whole-library audit (8 parallel audits, 239 findings) published as the "Area Audit Decisions"
+  artifact (https://claude.ai/artifact/6mjomgM6ZogMfoHX6BvFXR): 21 system decisions, 59 family
+  decisions, 99 fixes, docs drift. Reports were kept in the session scratchpad only.
+- **Emphasis roles (owner):** accent is no longer a component variant. New axes `action` and
+  `selection` (neutral | accent, default neutral; `tokens/src/axes/emphasis.ts`) switch role
+  tokens derived in `emit/base.ts` (`action-solid`, `fg-on-action`, `selection-solid`,
+  `fg-selection`, `selection-surface`, `-band`, `-edge`…). Action = solid neutral Buttons (and
+  Split button, send); Selection = checked/on/filled/current marks. Row plates, Segmented thumb,
+  soft/outline/ghost Buttons stay neutral. `tone="accent"` removed everywhere; single-value tone
+  axes dropped (Checkbox, Radio, Chip, AlignmentPicker, Calendar, Slider, Progress, Spinner,
+  Count, Nav). Gallery "Tone / accent" tiles became "Selection / accent" and "Action / accent"
+  (scoped `data-area-*`). DESIGN_SYSTEM "Emphasis roles" and THEMING updated; per-family specs
+  still mention accent tones (drift).
+- **Fix-first applied:** Button group hover edge and solid children (A-1/A-2), Tree selected row
+  under hover (D-4), dark code rules (G-3: dark code ground 850, inline Code faint edge),
+  reduced-motion Progress (E-9), Pill caps on uncapped shapes and Card (H-1; Sharp is still
+  decision S3), required edges on `stroke-width` (H-3, F-5), RadioGroup generated name (C-8),
+  Calendar unavailable days focusable via aria-disabled (F-9), tooltip/hover-card Escape no
+  longer closes the parent surface (E-4), Model picker on Menu's trigger path (G-11). Consumer
+  fixture updated; `test:consumer` passes again. Families keep their Complete status.
+
 ## Owner direction
 
 - **Icon sessions open with the owner's decisions** (owner, 2026-09-28): before drawing, list

@@ -24,7 +24,7 @@ const monthStart = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1, 12);
 const sameMonth = (a: Date, b: Date) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
 
 export interface CalendarRange { start: string; end: string }
-export type CalendarMarkerTone = "neutral" | "accent" | "info" | "success" | "warning" | "danger";
+export type CalendarMarkerTone = "neutral" | "info" | "success" | "warning" | "danger";
 const weekOf = (d: Date, firstDay: number) => addDays(d, -((d.getDay() - firstDay + 7) % 7));
 type Selection =
   | { selectionMode?: "single"; value?: string | null; defaultValue?: string | null; onValueChange?: (value: string | null) => void }
@@ -35,8 +35,6 @@ export type CalendarProps = Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" 
   /** Accessible name of the calendar group. */
   "aria-label"?: string;
   variant?: VariantProps<typeof MANIFESTS.calendar>["variant"];
-  /** Selection paint. Neutral by default; accent is an explicit override. */
-  tone?: VariantProps<typeof MANIFESTS.calendar>["tone"];
   /** Day treatment: rounded squares, circles that mark available days, or outlined tiles. */
   days?: VariantProps<typeof MANIFESTS.calendar>["days"];
   /** A month grid, or a one-week strip. */
@@ -70,7 +68,7 @@ export type CalendarProps = Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" 
 
 /** Month grid for choosing a date, a range or several dates, with the WAI-ARIA grid keyboard. */
 export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calendar(props, ref) {
-  const { selectionMode = "single", value, defaultValue, onValueChange, variant, tone, days, layout = "month", weekdayStyle = "short", markers, month, defaultMonth, onMonthChange,
+  const { selectionMode = "single", value, defaultValue, onValueChange, variant, days, layout = "month", weekdayStyle = "short", markers, month, defaultMonth, onMonthChange,
     visibleMonths = 1, min, max, isDateUnavailable, firstDayOfWeek = 0, locale = "en-US", showOutsideDays = true,
     fixedWeeks = false, today: todayProp, name, disabled, className, "aria-label": ariaLabel = "Calendar", ...rest } = props as CalendarProps & {
       selectionMode?: "single" | "range" | "multiple"; value?: unknown; defaultValue?: unknown; onValueChange?: (value: unknown) => void };
@@ -187,7 +185,8 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
     const marker = markers?.[iso];
     return <td key={iso} role="gridcell" className="area-calendar__cell" aria-selected={isSelected || undefined} aria-disabled={isOff || undefined}
       data-range={inRange ? iso === shownRange![0] ? "start" : iso === shownRange![1] ? "end" : "middle" : undefined}>
-      <button type="button" className="area-calendar__day" data-date={iso} tabIndex={tabbable ? 0 : -1} disabled={isOff}
+      <button type="button" className="area-calendar__day" data-date={iso} tabIndex={tabbable ? 0 : -1} disabled={!!disabled}
+        aria-disabled={(isOff && !disabled) || undefined}
         aria-label={formatDay.format(d)} aria-current={iso === today ? "date" : undefined} aria-description={marker ? "Has events" : undefined}
         data-outside={outside || undefined} data-today={iso === today || undefined}
         data-unavailable={(!disabled && isDateUnavailable?.(iso)) || undefined}
@@ -248,7 +247,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   };
 
   return <div {...rest} ref={node => { grid.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
-    role="group" aria-label={ariaLabel} aria-disabled={disabled || undefined} className={calendarVariants({ variant, tone, days, layout }, className)}>
+    role="group" aria-label={ariaLabel} aria-disabled={disabled || undefined} className={calendarVariants({ variant, days, layout }, className)}>
     {week ? renderWeek() : <div className="area-calendar__months">{Array.from({ length: visibleMonths }, (_, i) => renderMonth(addMonths(visible, i), i))}</div>}
     {name && selectionMode === "single" && <input type="hidden" name={name} value={single ?? ""} />}
     {name && selectionMode === "range" && <><input type="hidden" name={`${name}-start`} value={range?.start ?? ""} /><input type="hidden" name={`${name}-end`} value={range?.end ?? ""} /></>}

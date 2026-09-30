@@ -21,10 +21,10 @@ test("SplitButton renders two named buttons and a menu popover", () => {
 });
 
 test("SplitButton passes variant, tone and size to both parts and disables both", () => {
-  const html = render({ variant: "outline", tone: "accent", size: "sm", disabled: true });
+  const html = render({ variant: "outline", tone: "danger", size: "sm", disabled: true });
   assert.match(html, /area-split-button--outline/);
   assert.equal((html.match(/area-button--outline/g) ?? []).length, 2);
-  assert.equal((html.match(/area-button--accent/g) ?? []).length, 2);
+  assert.equal((html.match(/area-button--danger/g) ?? []).length, 2);
   assert.equal((html.match(/area-button--sm/g) ?? []).length, 2);
   assert.equal((html.match(/disabled=""/g) ?? []).length, 2);
 });

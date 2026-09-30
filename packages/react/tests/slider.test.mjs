@@ -33,16 +33,15 @@ test("a custom readout is hidden from accessibility APIs to avoid duplicate valu
   assert.match(html, /area-slider__value" aria-hidden="true">25%/);
 });
 
-test("supports neutral and accent tones with label and orientation compositions", () => {
-  const html = render({ label: "Temperature", tone: "accent", labelPosition: "top", orientation: "vertical", defaultValue: 42, readout: true });
-  assert.match(html, /area-slider--accent/);
+test("supports label and orientation compositions", () => {
+  const html = render({ label: "Temperature", labelPosition: "top", orientation: "vertical", defaultValue: 42, readout: true });
   assert.match(html, /area-slider--top/);
   assert.match(html, /area-slider--vertical/);
   assert.match(html, /area-slider__label">Temperature/);
   assert.match(html, /type="range"/);
   assert.deepEqual(MANIFESTS.slider.variants.labelPosition, ["top"]);
   assert.deepEqual(MANIFESTS.slider.variants.orientation, ["vertical"]);
-  assert.deepEqual(MANIFESTS.slider.variants.tone, ["neutral", "accent"]);
+  assert.equal(MANIFESTS.slider.variants.tone, undefined);
 });
 
 test("renders interior marks only for an explicit discrete range", () => {

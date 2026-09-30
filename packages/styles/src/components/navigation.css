@@ -86,9 +86,9 @@
   .area-tabs--vertical .area-tabs__panel { padding-block-start: var(--area-space-6); min-inline-size: 0; }
 
   /*
-   * The active indicator is the foreground colour, not the accent. Reserving accent for
-   * things that are genuinely actionable keeps a page of tabs from reading as a page of
-   * buttons -- and it means the accent axis cannot accidentally recolour navigation.
+   * The active indicator is the Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"):
+   * the foreground colour by default. The label keeps the default ink in every theme, so a
+   * page of tabs never reads as a page of buttons.
    */
   .area-tabs__tab[data-selected] {
     color: var(--area-fg-default);
@@ -96,7 +96,7 @@
 
   .area-tabs__tab[data-selected]::after,
   .area-tabs--vertical .area-tabs__tab[data-selected]::after {
-    background-color: var(--area-fg-default);
+    background-color: var(--area-fg-selection);
   }
 
   .area-tabs__tab:focus-visible {

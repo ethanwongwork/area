@@ -9,6 +9,10 @@ import { SliderRangeComposition } from "./slider-range.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
 
+/* Emphasis roles (DESIGN_SYSTEM.md): a tile shows the accent by scoping the role, not by a tone. */
+const ActionAccent = ({ children }: { children: ReactNode }) => <div data-area-action="accent" style={{ display: "contents" }}>{children}</div>;
+const SelectionAccent = ({ children }: { children: ReactNode }) => <div data-area-selection="accent" style={{ display: "contents" }}>{children}</div>;
+
 export const GalleryBreadcrumb = () => (
   <Breadcrumb><BreadcrumbList>
     <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-default">Dashboard</BreadcrumbLink></BreadcrumbItem>
@@ -39,14 +43,13 @@ export const GalleryBreadcrumbIcons = () => (
 export const GalleryAlert = () => (
   <Alert icon={<InfoIcon />} title="Title">Body text</Alert>
 );
-export const GalleryAlertAccent = () => <Alert tone="accent" icon={<InfoIcon />} title="Title">Body text</Alert>;
 export const GalleryAlertSuccess = () => <Alert tone="success" icon={<CheckIcon />} title="Title">Body text</Alert>;
 export const GalleryAlertDanger = () => <Alert tone="danger" icon={<DismissIcon />} title="Title">Body text</Alert>;
 export const GalleryAlertLink = () => <Alert icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-multiline">Link</a>}>Body text</Alert>;
 export const GalleryAlertAction = () => <Alert icon={<InfoIcon />} title="Title" action={<Button size="sm">Action</Button>}>Body text</Alert>;
 export const GalleryAlertBanner = () => <Alert layout="banner" title="Title" link={<a href="#gallery-alert-layout-banner">Learn more</a>}>Body text</Alert>;
 export const GalleryAlertBannerIcon = () => <Alert layout="banner" tone="info" icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-banner-icon">Learn more</a>}>Body text</Alert>;
-export const GalleryAlertBannerStatus = () => <Alert layout="banner" title="Title" action={<Badge variant="solid" tone="accent">Status</Badge>}>Body text</Alert>;
+export const GalleryAlertBannerStatus = () => <Alert layout="banner" title="Title" action={<Badge variant="solid">Status</Badge>}>Body text</Alert>;
 export const GalleryAlertBannerFlush = () => <Alert layout="banner" flush title="Title" link={<a href="#gallery-alert-layout-banner-flush">Learn more</a>}>Body text</Alert>;
 export const GalleryAlertBannerDismissible = () => {
   const [open, setOpen] = useState(true);
@@ -72,7 +75,6 @@ export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="Irene Y
 export const GalleryAvatarActive = () => <Avatar active fallback="I" alt="Irene Yamaguchi" />;
 export const GalleryAvatarAvailability = () => <IndicatorAnchor compact placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="I" role="img" aria-label="Irene Yamaguchi, available" /></IndicatorAnchor>;
 export const GalleryAvatarNotification = () => <IndicatorAnchor compact placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi, 2 notifications" /></IndicatorAnchor>;
-export const GalleryAvatarAccent = () => <Avatar tone="accent" fallback="I" alt="Irene Yamaguchi" />;
 export const GalleryAvatarInverse = () => <Avatar tone="inverse" fallback="I" alt="Irene Yamaguchi" />;
 export const GalleryAvatarSquare = () => <Avatar shape="square" fallback="D" alt="Design team" />;
 export const GalleryAvatarSmall = () => <Avatar size="sm" fallback="I" alt="Irene Yamaguchi" />;
@@ -91,7 +93,7 @@ export const GalleryButtonSmall = () => <Button size="sm">Button</Button>;
 export const GalleryButtonMedium = () => <Button size="md">Button</Button>;
 export const GalleryButtonLarge = () => <Button size="lg">Button</Button>;
 export const GalleryButtonSuccess = () => <Button tone="success">Button</Button>;
-export const GalleryButtonAccent = () => <Button tone="accent">Button</Button>;
+export const GalleryButtonActionAccent = () => <ActionAccent><Button>Button</Button></ActionAccent>;
 export const GalleryButtonWithIcon = () => <Button icon={<PlusIcon />}>Button</Button>;
 export const GalleryButtonTrailingIcon = () => <Button variant="ghost" tone="neutral" trailingIcon={<ChevronIcon />}>Button</Button>;
 export const GalleryButtonDisabled = () => <Button disabled>Button</Button>;
@@ -113,7 +115,7 @@ const SplitDemo = ({ label, items, ...props }: { label: string; items: string[] 
 };
 const saveItems = ["Save as…", "Save a copy", "Export"];
 export const GallerySplitButton = () => <SplitDemo label="Save" items={saveItems} menuLabel="More save options" />;
-export const GallerySplitButtonAccent = () => <SplitDemo label="New" tone="accent" items={["New from template", "Import"]} menuLabel="More ways to create" />;
+export const GallerySplitButtonAccent = () => <ActionAccent><SplitDemo label="New" items={["New from template", "Import"]} menuLabel="More ways to create" /></ActionAccent>;
 export const GallerySplitButtonSoft = () => <SplitDemo label="Save" variant="soft" tone="neutral" items={saveItems} menuLabel="More save options" />;
 export const GallerySplitButtonOutline = () => <SplitDemo label="Save" variant="outline" tone="neutral" items={saveItems} menuLabel="More save options" />;
 export const GallerySplitButtonIcon = () => <SplitDemo label="Add" variant="outline" tone="neutral" icon={<PlusIcon />} items={["Add section", "Add page"]} menuLabel="More to add" />;
@@ -459,10 +461,6 @@ export const GalleryButtonNeutralSolid = () => <Button tone="neutral">Button</Bu
 export const GalleryButtonNeutralSoft = () => <Button tone="neutral" variant="soft">Button</Button>;
 export const GalleryButtonNeutralOutline = () => <Button tone="neutral" variant="outline">Button</Button>;
 export const GalleryButtonNeutralGhost = () => <Button tone="neutral" variant="ghost">Button</Button>;
-export const GalleryButtonAccentSolid = () => <Button tone="accent">Button</Button>;
-export const GalleryButtonAccentSoft = () => <Button tone="accent" variant="soft">Button</Button>;
-export const GalleryButtonAccentOutline = () => <Button tone="accent" variant="outline">Button</Button>;
-export const GalleryButtonAccentGhost = () => <Button tone="accent" variant="ghost">Button</Button>;
 export const GalleryButtonInfoSolid = () => <Button tone="info">Button</Button>;
 export const GalleryButtonInfoSoft = () => <Button tone="info" variant="soft">Button</Button>;
 export const GalleryButtonInfoOutline = () => <Button tone="info" variant="outline">Button</Button>;
@@ -518,10 +516,10 @@ export const GalleryCheckboxCardTile = () => (
   </CheckboxGroup>
 );
 export const GalleryCheckboxCardAccent = () => (
-  <CheckboxGroup label="Notifications" style={{ inlineSize: "320px" }}>
-    <Checkbox variant="card" tone="accent" label="Mentions" caption="When someone @mentions you" leadingVisual={<PersonIcon />} defaultChecked />
-    <Checkbox variant="card" tone="accent" label="Page updates" caption="Edits to pages you follow" leadingVisual={<DocumentIcon />} />
-  </CheckboxGroup>
+  <SelectionAccent><CheckboxGroup label="Notifications" style={{ inlineSize: "320px" }}>
+    <Checkbox variant="card" label="Mentions" caption="When someone @mentions you" leadingVisual={<PersonIcon />} defaultChecked />
+    <Checkbox variant="card" label="Page updates" caption="Edits to pages you follow" leadingVisual={<DocumentIcon />} />
+  </CheckboxGroup></SelectionAccent>
 );
 export const GalleryCheckboxInvalid = () => <Checkbox label="Label" invalid />;
 export const GalleryCheckboxInvalidChecked = () => <Checkbox label="Label" defaultChecked invalid />;
@@ -1347,9 +1345,9 @@ export const GalleryReviewKbd = () => (
   </div>
 );
 export const GalleryKbdOnColor = () => (
-  <Button tone="accent" aria-keyshortcuts="Meta+K">
+  <ActionAccent><Button aria-keyshortcuts="Meta+K">
     Button <Kbd appearance="on-color" keys={["cmd", "K"]} />
-  </Button>
+  </Button></ActionAccent>
 );
 export const GalleryKbdOnEmphasis = () => (
   <Tooltip>
@@ -1758,7 +1756,7 @@ export const GalleryProgressLabeled = () => (
   </div>
 );
 export const GalleryProgressIndeterminate = () => <Progress label="Label" />;
-export const GalleryProgressAccent = () => <Progress value={45} label="Label, 45 percent" tone="accent" />;
+export const GalleryProgressAccent = () => <SelectionAccent><Progress value={45} label="Label, 45 percent" /></SelectionAccent>;
 export const GalleryProgressSmall = () => <Progress value={62} label="Small progress" size="sm" />;
 export const GalleryProgressMedium = () => <Progress value={62} label="Medium progress" size="md" />;
 export const GalleryProgressLarge = () => <Progress value={62} label="Large progress" size="lg" />;
@@ -1894,8 +1892,7 @@ export const GallerySlider = () => <Slider aria-label="Label" min={0} max={100} 
 export const GallerySliderSmall = () => <Slider aria-label="Label" size="sm" defaultValue={40} readout={value => `${value}%`} />;
 export const GallerySliderMedium = () => <Slider aria-label="Label" size="md" defaultValue={60} readout={value => `${value}%`} />;
 export const GallerySliderLarge = () => <Slider aria-label="Label" size="lg" defaultValue={80} readout={value => `${value}%`} />;
-export const GallerySliderNeutral = () => <Slider aria-label="Label" tone="neutral" defaultValue={45} readout={value => `${value}%`} />;
-export const GallerySliderAccent = () => <Slider aria-label="Label" tone="accent" defaultValue={65} readout={value => `${value}%`} />;
+export const GallerySliderAccent = () => <SelectionAccent><Slider aria-label="Label" defaultValue={65} readout={value => `${value}%`} /></SelectionAccent>;
 export const GallerySliderWithLabel = () => <Slider label="Label" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
 export const GallerySliderLabelOnly = () => <Slider label="Label" labelPosition="top" defaultValue={50} />;
 export const GallerySliderSteps = () => <Slider aria-label="Label" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
@@ -1916,7 +1913,7 @@ export const GallerySpinner = () => (
 export const GallerySpinnerSmall = () => <Spinner size="sm" />;
 export const GallerySpinnerMedium = () => <Spinner size="md" />;
 export const GallerySpinnerLarge = () => <Spinner size="lg" />;
-export const GallerySpinnerAccent = () => <Spinner tone="accent" />;
+export const GallerySpinnerAccent = () => <SelectionAccent><Spinner /></SelectionAccent>;
 export const GallerySpinnerButton = () => <Button loading>Button</Button>;
 export const GallerySpinnerBadge = () => <Badge icon={<Spinner />} tone="neutral">Badge</Badge>;
 export const GallerySpinnerInput = () => <Input aria-label="Label" placeholder="Placeholder" loading loaderPosition="trailing" />;
@@ -2227,14 +2224,14 @@ export const GalleryCalendarMultiple = () => <Calendar variant="surface" aria-la
 export const GalleryCalendarUnavailable = () => <Calendar variant="surface" aria-label="Booking date" today={calendarToday} defaultMonth="2026-09" min="2026-09-03" max="2026-10-10" isDateUnavailable={date => ["2026-09-12", "2026-09-13", "2026-09-22"].includes(date)} />;
 export const GalleryCalendarMonday = () => <Calendar variant="surface" aria-label="Sprint start" firstDayOfWeek={1} locale="en-GB" today={calendarToday} defaultValue="2026-09-28" />;
 export const GalleryCalendarPlain = () => <Calendar aria-label="Publish date" today={calendarToday} defaultValue="2026-09-30" />;
-export const GalleryCalendarAccent = () => <Calendar variant="surface" tone="accent" aria-label="Launch window" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} />;
+export const GalleryCalendarAccent = () => <SelectionAccent><Calendar variant="surface" aria-label="Launch window" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} /></SelectionAccent>;
 /* Calendar tone pass (2026-09-26, docs/specs/calendar.md). "Before" restores pass-1 paint
    through private properties: accent selection and band, a dark today circle. */
 const weekend = (date: string) => [0, 6].includes(new Date(`${date}T12:00`).getDay());
 export const GalleryCalendarCircle = () => <Calendar variant="surface" days="circle" weekdayStyle="narrow" aria-label="Appointment date" today={calendarToday} defaultValue="2026-09-08" min="2026-09-08" max="2026-10-10" isDateUnavailable={weekend} />;
 export const GalleryCalendarTile = () => <Calendar variant="surface" days="tile" weekdayStyle="abbreviated" firstDayOfWeek={1} locale="en-GB" aria-label="Delivery date" today={calendarToday} defaultValue="2026-09-16" showOutsideDays={false} min="2026-09-16" isDateUnavailable={date => ["2026-09-18", "2026-09-19", "2026-09-20", "2026-09-26", "2026-09-27"].includes(date)} />;
-export const GalleryCalendarMarkers = () => <Calendar variant="surface" firstDayOfWeek={1} aria-label="Send date" today={calendarToday} defaultValue="2026-09-21" markers={{ "2026-09-04": "accent", "2026-09-14": "accent", "2026-09-29": "neutral", "2026-10-08": "neutral" }} />;
-export const GalleryCalendarWeek = () => <Calendar variant="surface" layout="week" firstDayOfWeek={1} aria-label="Visit day" today={calendarToday} defaultValue="2026-09-30" markers={{ "2026-10-01": "accent" }} />;
+export const GalleryCalendarMarkers = () => <Calendar variant="surface" firstDayOfWeek={1} aria-label="Send date" today={calendarToday} defaultValue="2026-09-21" markers={{ "2026-09-04": "info", "2026-09-14": "info", "2026-09-29": "neutral", "2026-10-08": "neutral" }} />;
+export const GalleryCalendarWeek = () => <Calendar variant="surface" layout="week" firstDayOfWeek={1} aria-label="Visit day" today={calendarToday} defaultValue="2026-09-30" markers={{ "2026-10-01": "info" }} />;
 const scheduleTimes = ["8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "1:00 PM"];
 /* Schedule: the calendar surface (Calendar variant="surface": 8 top, 12 sides, the floating lift)
    split by a rule; the time list is a column of the grid's 36px cells holding 32px plates, 14 from
@@ -2248,7 +2245,7 @@ export const GalleryCalendarSchedule = () => {
   return <div className="area-calendar area-calendar--surface" style={{ display: "grid", padding: 0 }}>
     <div style={{ display: "flex" }}>
       <div style={{ padding: "calc(var(--area-space-8) - var(--area-border-width)) calc(var(--area-space-12) - var(--area-border-width)) var(--area-space-12)" }}>
-        <Calendar aria-label="Send date" firstDayOfWeek={1} today={calendarToday} value={date} onValueChange={setDate} min={calendarToday} markers={{ "2026-10-04": "accent", "2026-10-14": "accent" }} />
+        <Calendar aria-label="Send date" firstDayOfWeek={1} today={calendarToday} value={date} onValueChange={setDate} min={calendarToday} markers={{ "2026-10-04": "info", "2026-10-14": "info" }} />
       </div>
       <div style={{ position: "relative", inlineSize: "calc(var(--area-space-96) + var(--area-space-24))", borderInlineStart: rule }}>
         <div role="group" aria-label="Send time" style={{ position: "absolute", inset: 0, display: "grid", alignContent: "start", gap: "var(--area-space-4)", padding: "var(--area-space-8) calc(var(--area-space-12) - var(--area-border-width) + var(--area-space-2))", overflowY: "auto", scrollPaddingBlock: "var(--area-space-8)" }}>
@@ -2266,9 +2263,9 @@ export const GalleryCalendarSchedule = () => {
 };
 export const GalleryCalendarDisabled = () => <Calendar variant="surface" aria-label="Locked date" today={calendarToday} defaultValue="2026-09-15" disabled />;
 
-/* Neutral-by-default pass (2026-09-26, docs/DESIGN_SYSTEM.md "Neutral by default, accent by
-   override"). "Before" restores the accent defaults through each family's private properties. */
-export const GalleryCheckboxAccent = () => <Checkbox label="Label" tone="accent" defaultChecked />;
-export const GalleryRadioAccent = () => <Radio name="gallery-radio-accent" value="accent" label="Label" tone="accent" defaultChecked />;
-export const GalleryChipAccent = () => <ChipGroup><Chip tone="accent" defaultSelected>Selected</Chip><Chip tone="accent">Item</Chip></ChipGroup>;
-export const GalleryAlignmentPickerAccent = () => <AlignmentPicker label="Object alignment" tone="accent" defaultValue="top-left" />;
+/* The Selection role in the accent (DESIGN_SYSTEM.md, "Emphasis roles"): scoped with
+   data-area-selection="accent", as a theme would set it. */
+export const GalleryCheckboxAccent = () => <SelectionAccent><Checkbox label="Label" defaultChecked /></SelectionAccent>;
+export const GalleryRadioAccent = () => <SelectionAccent><Radio name="gallery-radio-accent" value="accent" label="Label" defaultChecked /></SelectionAccent>;
+export const GalleryChipAccent = () => <SelectionAccent><ChipGroup><Chip defaultSelected>Selected</Chip><Chip>Item</Chip></ChipGroup></SelectionAccent>;
+export const GalleryAlignmentPickerAccent = () => <SelectionAccent><AlignmentPicker label="Object alignment" defaultValue="top-left" /></SelectionAccent>;
