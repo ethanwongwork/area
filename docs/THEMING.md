@@ -9,7 +9,7 @@ The registry in `packages/tokens/src/axes/registry.ts` defines nine axes:
 
 - `theme`: light or dark color polarity.
 - `neutral`: neutral, cool or warm neutral colors.
-- `accent`: configurable chromatic accent; indigo is the default.
+- `accent`: configurable chromatic accent; blue is the default (owner, 2026-09-29; was indigo). The focus ring follows it.
 - `action`: neutral or accent, the colour of committing actions (solid Buttons). Neutral is the default.
 - `selection`: neutral or accent, the colour of state (checked, on, selected, current, filled). Neutral is the default.
 - `ui`: default or compact, combining typography, control sizes, icons, gaps and padding.

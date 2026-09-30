@@ -80,6 +80,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
 
   const [local, setLocal] = useState<unknown>(defaultValue ?? (selectionMode === "multiple" ? [] : null));
   const selected = value === undefined ? local : value;
+  const initial = useRef(defaultValue ?? (selectionMode === "multiple" ? [] : null));
   const single = selectionMode === "single" ? selected as string | null : null;
   const range = selectionMode === "range" ? selected as CalendarRange | null : null;
   const many = selectionMode === "multiple" ? new Set(selected as readonly string[] ?? []) : null;
@@ -98,6 +99,15 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   const [hovered, setHovered] = useState<string | null>(null);
   const grid = useRef<HTMLDivElement | null>(null);
   const moveFocus = useRef(false);
+
+  // A form reset returns an uncontrolled calendar to its first value, as the other pickers do (audit F-13).
+  useEffect(() => {
+    const form = grid.current?.closest("form");
+    if (!form || value !== undefined) return;
+    const reset = (event: Event) => queueMicrotask(() => { if (!event.defaultPrevented) { setLocal(initial.current); setPendingStart(null); } });
+    form.addEventListener("reset", reset);
+    return () => form.removeEventListener("reset", reset);
+  }, [value]);
 
   const minDate = min ? fromIso(min) : null, maxDate = max ? fromIso(max) : null;
   const unavailable = (d: Date) => !!disabled || (minDate !== null && d < minDate && toIso(d) !== min) || (maxDate !== null && d > maxDate && toIso(d) !== max) || !!isDateUnavailable?.(toIso(d));

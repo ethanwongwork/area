@@ -14,7 +14,7 @@ import type { OverlayAlign, OverlaySide } from "./overlay.ts";
  * of its own. Every appearance decision lives in `@area/styles`, which is what lets a
  * consumer use the CSS without React and get an identical result.
  */
-import { Children, cloneElement, forwardRef, useContext, useEffect, useId, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import { Children, cloneElement, createContext, forwardRef, useContext, useEffect, useId, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -788,6 +788,8 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
       {markCount > 0 ? <span className="area-slider__marks" aria-hidden="true">{Array.from({ length: markCount }, (_, index) => <i key={index} style={{ ["--_mark" as string]: `${((index + 1) / (markCount + 1)) * 100}%` }} />)}</span> : null}
       <input
         {...rest}
+        // The visible readout ("60%", "1.25×") is what a screen reader should say too (audit C-10).
+        aria-valuetext={rest["aria-valuetext"] ?? (typeof renderedReadout === "string" ? renderedReadout : undefined)}
         ref={input}
         type="range"
         className="area-slider__control"
@@ -1026,9 +1028,16 @@ export interface PopoverProps extends Div {
   /** Position against this element instead of the trigger, such as the field around an input. */
   anchor?: RefObject<HTMLElement | null>;
 }
+/** A PopoverTitle names the Popover it sits in, unless the Popover is named some other way. */
+const PopoverTitleContext = /* @__PURE__ */ createContext<{ id: string; register: (id: string | null) => void } | null>(null);
+
 export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(function Popover({ side, arrow, trigger, open, defaultOpen, onOpenChange, align, offset, anchor, className, children, ...rest }, ref) {
-  const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => <div className={popoverVariants({ side, arrow }, className)} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }}>
-    {children}
+  const fallbackTitleId = `${useId()}-title`;
+  const [titleId, setTitleId] = useState<string | null>(null);
+  const titleContext = useMemo(() => ({ id: fallbackTitleId, register: setTitleId }), [fallbackTitleId]);
+  const named = rest["aria-label"] || rest["aria-labelledby"] || !titleId ? {} : { "aria-labelledby": titleId };
+  const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => <div className={popoverVariants({ side, arrow }, className)} {...named} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }}>
+    <PopoverTitleContext.Provider value={titleContext}>{children}</PopoverTitleContext.Provider>
     {arrow ? <svg className="area-popover__arrow" viewBox="0 0 32 14" aria-hidden="true" focusable="false">
       <path d="M0 -1H32V0C24 0 23 3 20 9Q16 17 12 9C9 3 8 0 0 0Z" />
       <path className="area-popover__arrow-edge" d="M0 0C8 0 9 3 12 9Q16 17 20 9C23 3 24 0 32 0" />
@@ -1038,7 +1047,16 @@ export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(
   return <AnchoredPopover trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} anchor={anchor} arrow={arrow} surface={surface} />;
 });
 export const PopoverHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverHeader({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__header", className)} {...rest} />; });
-export const PopoverTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(function PopoverTitle({ className, ...rest }, ref) { return <h2 ref={ref} className={cx("area-popover__title", className)} {...rest} />; });
+export const PopoverTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(function PopoverTitle({ className, id, ...rest }, ref) {
+  const context = useContext(PopoverTitleContext);
+  const titleId = id ?? context?.id;
+  useLayoutEffect(() => {
+    if (!context || !titleId) return;
+    context.register(titleId);
+    return () => context.register(null);
+  }, [context, titleId]);
+  return <h2 ref={ref} id={titleId} className={cx("area-popover__title", className)} {...rest} />;
+});
 export const PopoverDescription = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverDescription({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__description", className)} {...rest} />; });
 export const PopoverBody = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverBody({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__body", className)} {...rest} />; });
 export const PopoverFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverFooter({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__footer", className)} {...rest} />; });
@@ -1299,16 +1317,20 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
   const modal = useRef<HTMLDialogElement | null>(null);
   const onChange = useRef(onOpenChange);
   onChange.current = onOpenChange;
+  // The name belongs to the element with the dialog role: the surface inline, the native
+  // <dialog> with a trigger. A consumer's aria-label names a dialog without a title.
+  const { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy, ...surfaceRest } = rest;
   const labelled = {
-    "aria-labelledby": title ? `${id}-title` : undefined,
-    "aria-describedby": description ? `${id}-description` : undefined,
+    "aria-label": ariaLabel,
+    "aria-labelledby": ariaLabelledBy ?? (title ? `${id}-title` : undefined),
+    "aria-describedby": ariaDescribedBy ?? (description ? `${id}-description` : undefined),
   };
   const surface = (
     <div
       ref={ref}
       {...(trigger ? {} : { role: "dialog", "aria-modal": "true" as const, ...labelled })}
       className={cx("area-dialog", className)}
-      {...rest}
+      {...surfaceRest}
     >
       {title || description || showCloseButton ? (
         <div className="area-dialog__header">

@@ -5,6 +5,36 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. No owner completion changed; Indicator stays In review.
 
+## Audit medium fixes, batch 1 (2026-09-29, branch `claude/component-audit-progress-60ca4b`, uncommitted)
+
+- Owner decisions from the audit (emphasis roles; fix all of section 1) are recorded on the
+  "Area Audit Decisions" artifact with their status; before/after page: "Area Audit Progress"
+  (https://claude.ai/artifact/DUUr5tgGFccjFaKNnhStzj). No system rule (S1–S21) or family call is
+  decided yet.
+- Fixed (no taste call): B-2 Select rests without shadow-1; F-11 circle calendar days hover to
+  bg-component-active; D-5 disabled tree rows dim to 50%; B-8 InputAction pressed/disabled paint;
+  E-7 a triggered Dialog takes aria-label on the native dialog; E-8 (partly) PopoverTitle labels its
+  Popover (no PopoverClose, title still a fixed h2); C-9 RadioGroup and F-13 Calendar reset with
+  their form; B-12 Combobox submits the option value through a hidden input and resets; B-13 IME
+  Enter guard in Combobox and NumberField; C-10 Slider aria-valuetext from its readout; A-12
+  icon-only Button keeps children as its name. Tests in `packages/react/tests/audit-medium.test.mjs`;
+  specs (select, calendar, tree-view, input) and DESIGN_SYSTEM updated. Form resets verified live.
+- `node --test packages/react/tests` fails on Node 26 (directory argument); use
+  `node --test packages/react/tests/*.test.mjs` (166 pass after `build:docs`).
+- Next (owner, 2026-09-29): restructure the audit workflow before more fixes:
+  1. Move the audit into `docs/research/audit-2026-09-29.md` (or .json + md): every finding ID,
+     severity, status (done PR 28 / done batch 1 / partly / open), the 21 system rules and 59 family
+     calls with options and recommendation, and owner picks. Data source today: the "Area Audit
+     Decisions" artifact's FIXES / DRIFT / SMALL arrays and S-cards.
+  2. Generate the decisions page from that file with a script; publish Area's stylesheet as a
+     separate file (`files`), not inlined (the inlined 590 KB made each republish cost ~350k tokens).
+  3. Then one phase per session: owner picks → implement ~10 fixes or ~3 rules → docs → page update.
+     Broad reading (spec drift sweeps) goes to subagents.
+- Default accent is now blue (owner, 2026-09-29; was indigo): `ROLE_SCALES.accent` and
+  `DEFAULT_SELECTION.accent`. Focus follows the accent (`tokens/src/semantic/aliases.ts:181`), so
+  rings are blue (#004cb0 light, #c1d9fd dark). Blue now equals `info`; accepted. Whether focus
+  becomes its own `focus: neutral | accent` role is still open (S1 field focus reads it either way).
+
 ## Audit, emphasis roles and fix-first (2026-09-29, branch `claude/component-audit-visual-guide-ac7bc4`, uncommitted)
 
 - Whole-library audit (8 parallel audits, 239 findings) published as the "Area Audit Decisions"

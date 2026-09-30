@@ -10,7 +10,7 @@ export function ContrastBoard() {
   const [report,setReport]=useState<PaintReport|null>(null);
   const [theme,setTheme]=useState('light');
   const [surface,setSurface]=useState('outlined');
-  const [accent,setAccent]=useState('indigo');
+  const [accent,setAccent]=useState('blue');
   const [contrast,setContrast]=useState('standard');
   const [selection,setSelection]=useState('design');
   return <>

@@ -104,7 +104,7 @@ hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 a
 | text · type | 14/20 400 (sm 12/16) | Notion 14/20 400; ChatGPT 14/18 400 | Figma 11/16; UUI md 16/24 |
 | icon | 16px square, `fg-muted` #666, equal inset (8 from the edge at md) | Notion 6 in a 28 row and Figma 10 in a 32 row are both (H − glyph) / 2 | ChatGPT 12 in |
 | gap | `gap-md` 8 (sm 4) | ChatGPT 8 at 36 | Notion 6 at 28, Figma 6 at 32; kept (third pass): `gap-sm` is shared by every small control |
-| action · box | 24px, radius `radius-small` 6, hover `bg-component-hover` | Row-plate rule | Nested radius would be 4; kept Button's small radius |
+| action · box | 24px, radius `radius-small` 6, hover `bg-component-hover`, pressed `bg-component-active`; disabled: `fg-disabled` ink, no hover, not-allowed cursor (audit B-8) | Row-plate rule; NumberField steppers | Nested radius would be 4; kept Button's small radius |
 | action · hint | Tooltip surface (`input.css:207-225`); describes the button only when `aria-label` names it (`Input.tsx:66`) | Peer: [Tooltip](tooltip.md); second pass item 17 | Was a second tooltip style; was announced twice |
 | file button · label | `fg-default`, 500 (`input.css:141`) | Owner: neutral by default | Was `fg-accent` |
 | placeholder | `fg-placeholder` #666 | UUI neutral-500; contrast | Notion's resting search text rgb(161,158,153) is 2.6:1 on white; kept (third pass): the contrast floor wins |

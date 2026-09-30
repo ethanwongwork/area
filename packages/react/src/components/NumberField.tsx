@@ -96,7 +96,8 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     commitValue(next);
   };
   const handleKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
-    if (!disabledState && !event.defaultPrevented) {
+    // Keys while an input method is composing belong to the composition (audit B-13).
+    if (!disabledState && !event.defaultPrevented && !event.nativeEvent.isComposing && event.keyCode !== 229) {
       const multiplier = event.shiftKey ? 10 : event.altKey ? 0.1 : 1;
       if (event.key === "ArrowUp" || event.key === "ArrowDown") {
         event.preventDefault();

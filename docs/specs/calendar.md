@@ -134,7 +134,7 @@ Third-pass additions:
 
 | Part | Area value | Basis | Reason |
 |---|---|---|---|
-| circle | radius full on days and band ends; choosable in-month days fill bg-component-hover | Google (soft circles on available days) | Neutral per the tone rule |
+| circle | radius full on days and band ends; choosable in-month days fill bg-component-hover; hover steps to bg-component-active (the translucent wash showed nothing on the #f3 rest, audit F-11) | Google (soft circles on available days) | Neutral per the tone rule |
 | tile | choosable in-month days: 1px border-subtle inset edge; unavailable in-month days: bg-component, no strike | Owner reference (outlined vs filled tiles) | The fill already says unavailable |
 | marker | 4px dot, 3px above the day's bottom (week strip: top end corner), fg-muted by default, tone per date, on-selected ink when selected; `aria-description` "Has events" | Owner references (dots under 4 and 14; today dot) | — |
 | week strip | ghost sm arrows either side of a one-row grid; each day a column: weekday and month in fg-muted 12/16, number 16/24; min width 44 | Owner reference (strip) | Up/Down and Page keys move by week |

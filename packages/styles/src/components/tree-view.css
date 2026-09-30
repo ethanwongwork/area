@@ -47,7 +47,8 @@
   .area-tree-view [role="treeitem"][aria-current="page"] { background: var(--_tree-selection); color: var(--area-fg-default); }
   /* The current row is marked by fill and ink alone; the edge marker was removed (owner, pass 3). */
   .area-tree-view [role="treeitem"]:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
-  .area-tree-view [role="treeitem"][data-disabled] { color: var(--area-fg-disabled); cursor: not-allowed; }
+  /* Disabled rows dim as a whole, icon and chevron included, as Nav, Menu and Tabs rows do (audit D-5). */
+  .area-tree-view [role="treeitem"][data-disabled] { cursor: not-allowed; opacity: 0.5; }
   /*
    * spec: the chevron is a 16px icon slot like any other glyph (Notion 12–20px in a 22px slot).
    * Its hover plate (20px) and pointer target (24px) are drawn outside the slot so the row keeps its rhythm.

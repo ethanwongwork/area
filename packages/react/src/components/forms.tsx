@@ -1,4 +1,5 @@
-import { createContext, forwardRef, useContext, useEffect, useId, useState } from "react";
+import { createContext, forwardRef, useContext, useEffect, useId, useRef, useState } from "react";
+import { assignRef } from "./overlay.ts";
 import type { FieldsetHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ChangeEvent, ReactNode } from "react";
 import { MANIFESTS, selectVariants, textareaVariants, checkboxVariants, checkboxGroupVariants, radioGroupVariants, radioVariants } from "../variants.ts";
 import type { VariantProps } from "../variants.ts";
@@ -238,6 +239,8 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
   ref,
 ) {
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+  const root = useRef<HTMLFieldSetElement | null>(null);
+  const initial = useRef(defaultValue);
   const descriptionId = useId();
   const errorId = useId();
   const generatedName = useId();
@@ -249,9 +252,19 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
     onValueChange?.(event.target.value, event);
   };
 
+  // A form reset returns an uncontrolled group to its first value, as Switch and Slider do
+  // (audit C-9); the radios are controlled by the group, so the native reset alone can't.
+  useEffect(() => {
+    const form = root.current?.form ?? root.current?.closest("form");
+    if (!form || value !== undefined) return;
+    const reset = (event: Event) => queueMicrotask(() => { if (!event.defaultPrevented) setUncontrolledValue(initial.current); });
+    form.addEventListener("reset", reset);
+    return () => form.removeEventListener("reset", reset);
+  }, [value]);
+
   return (
     <fieldset
-      ref={ref}
+      ref={node => { root.current = node; assignRef(ref, node); }}
       className={radioGroupVariants({ orientation }, className)}
       disabled={disabled}
       aria-describedby={resolvedDescription}

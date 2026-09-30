@@ -72,8 +72,8 @@ export const SCALE_DESCRIPTIONS: Record<string, string> = {
   green: "The success tone. Completion, health, and positive confirmation.",
   teal: "A blue-green, distinct from both success and info.",
   cyan: "A light blue, distinct from the accent and info tones.",
-  blue: "The fixed info tone. Links and the focus ring draw from it.",
-  indigo: "The default accent hue. A blue-violet, set apart from the fixed blue of info.",
+  blue: "The default accent hue, and the fixed info tone. The focus ring follows the accent.",
+  indigo: "A blue-violet, set apart from the blue of info and the default accent.",
   purple: "The discovery tone. Marks AI features and newly-introduced surfaces.",
   pink: "A warm magenta. Not bound to a semantic role.",
 };
@@ -84,19 +84,14 @@ export type NeutralScaleId = (typeof NEUTRAL_SCALES)[number]["id"];
 /**
  * Semantic role -> scale. The colour axis repoints `accent`; the rest are fixed.
  *
- * Accent defaults to indigo rather than blue so it does not ship identical to `info`, which
- * is pinned to blue. OpenAI never has this collision because they have no accent hue at all:
- * their accent is the neutral near-black button, and blue is reserved for info, links and the
- * focus ring. Area does have one, because the accent is an axis a consumer chooses -- and a
- * default that happens to equal a fixed tone makes the axis look like it does nothing.
- *
- * The separation is real but modest: indigo's solid sits 17 degrees from blue's at a
- * measured OKLab distance of 0.068, about three and a half times the 0.02 JND. Purple
- * separates twice as well and is the obvious alternative, but it is already `discovery`, so
- * taking it for accent would move the collision rather than remove it.
+ * Accent defaults to blue (owner, 2026-09-29). Since the emphasis roles, action and selection
+ * are neutral by default, so the accent's main default use is the focus ring, which reads blue
+ * as it does in ChatGPT and Notion. Blue is also `info`: the collision the earlier indigo default
+ * avoided is accepted, because a consumer who turns the roles to accent picks their own hue.
+ * (Indigo was the default until then: 17 degrees from blue, OKLab distance 0.068.)
  */
 export const ROLE_SCALES = {
-  accent: "indigo",
+  accent: "blue",
   danger: "red",
   warning: "orange",
   caution: "yellow",
