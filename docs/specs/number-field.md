@@ -78,8 +78,9 @@ the value string. No steppers.
 | unit · position | **directly after the number**, only glyph spacing between; the input sizes to its content (`field-sizing: content`) and a press on the empty space focuses it | Figma "100%", "0°" | Was pushed to the far edge. Browsers without `field-sizing` keep it at the edge |
 | unit · mixed/empty | not drawn | Figma shows "Mixed" alone | Was "Mixed px" |
 | inspector recipe | soft variant, letter or icon handles, no label row, no px | Figma | Was outline fields under X/Y/W/H labels with px |
+| parts gap | 6 at sm, md and lg, the density tokens (`number-field.css:6, :17, :36-38`); the unit cancels it to sit against the number (`:80`); compact sm 4 | Peer: Input, Button (audit S14) | Was 4 / 8 / 8 |
 | height, type | control-md (32, 14/20) at default density | System tiers | Figma's 24 and 11/16 are the compact-density target |
-| radius, border, soft hover | unchanged (8; soft border on hover) | Input; Figma adds the border on hover too | — |
+| radius, border, soft hover | radius per tier as Input and Button: 6 sm, 8 md, 10 lg (`number-field.css:25`, `:36-38`); soft border on hover | Input; Figma adds the border on hover too | Was 8 at every size before audit S4 |
 
 ## Pass 2: steppers and the outline shadow
 
@@ -155,3 +156,5 @@ tiles and the Panel recipe at 2x.
   shadow (no); refine the steppers → pass 2 above.
 - 2026-09-28 · batch 8 Claude in Chrome side by side (Figma X, W, Rotation, Gap fields) → no change →
   `figma--number-field-*`, `figma--gap-field`.
+- 2026-09-30 · audit S4 (owner) → radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `number-field.css:25`, `:36-38`); was 8 at every size. The md captures above are unchanged.
+- 2026-09-30 · audit S14 (owner) → the gap between the field's parts is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`number-field.css:6, :36-38`; density.ts:80-82), as Input.

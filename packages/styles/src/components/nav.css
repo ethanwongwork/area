@@ -167,7 +167,8 @@
 
   .area-nav__item:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    /* Inset, as Tabs: rows 2 apart would otherwise overlap the ring into their neighbours (audit S11b). */
+    outline-offset: calc(-1 * var(--area-focus-width));
   }
 
   /* Disabled rows dim as a whole, like Menu items and every other control. */
@@ -238,6 +239,8 @@
 
   .area-nav__row > .area-nav__item { flex: 1; }
   .area-nav__actions { display: flex; align-items: center; gap: var(--area-space-2); flex-shrink: 0; }
+  /* Nested row controls hover with the translucent wash (audit S11c). */
+  .area-nav__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-active); }
   .area-nav__actions [aria-expanded="false"] svg { rotate: -90deg; }
 
   .area-nav--horizontal .area-nav__separator {

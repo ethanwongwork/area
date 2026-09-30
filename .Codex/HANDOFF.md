@@ -5,6 +5,79 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. No owner completion changed; Indicator stays In review.
 
+## Audit moved into the repo (2026-09-29, branch `claude/cool-kirch-9facec`)
+
+- The audit lives in `docs/research/audit-2026-09-29.json` (source of truth: 239 findings with
+  route, status and resolving PR; 21 rules / 32 choices and 59 family calls with options,
+  recommendation and `pick`; owner decisions D1–D4; docs drift; checks). The original eight
+  reports are in `docs/research/audit-2026-09-29/reports/` (evidence with file:line refs).
+- `npm run audit:page` regenerates `docs/research/audit-2026-09-29.md` (committed; `--check`
+  verifies it) and the decisions page in `.cache/audit-2026-09-29/` (`index.html` + `area.css`
+  from `packages/styles/dist`, so run `npm run build` first). Page templates (specimen markup,
+  CSS, script) are in `docs/research/audit-2026-09-29/page/`.
+- Page: https://claude.ai/artifact/HPeEX5JVpgzugs4uJMQV7i (new link; the old "Area Audit
+  Decisions" artifact is frozen). Republish with `files: { "area.css": ".cache/audit-2026-09-29/area.css" }`
+  and the page URL as `url` — the page alone is ~250 KB.
+- Owner picks (2026-09-30): the recommended option on all 91 choices (32 rule choices, 59 family
+  calls), recorded as `pick` in the JSON (D5); every rule is `decided`. Page republished.
+- Phase 1 done (2026-09-30):
+  - **S1** field focus: `field-focus-color` = `focus-color`, new `field-focus-halo-color` (focus at
+    14%) on Input, Textarea, Select, NumberField, InputGroup; Composer keeps the quiet neutral edge
+    via `composer-focus-color`. Verified live: light #004cb0, dark #c1d9fd, both with the halo.
+  - **S2** weight 500: docs rewritten to match the code (DESIGN_SYSTEM, typography, alert, panel,
+    calendar). No CSS changed.
+  - **S3** corners: radius axis token `radius-concentric` (0 at Sharp, 1 otherwise) scales the
+    distance in Card (all sizes and well), Composer, Message, Prompt suggestions, Toolbar,
+    Segmented track and the ColorSwatch shape. Verified live: Standard unchanged (card 24/28,
+    composer 16, toolbar 16, segmented 10), Sharp 0 everywhere. DESIGN_SYSTEM radius rule rewritten
+    (S3b). F-1 stays partly open: a small card still derives from the md control radius.
+- Phase 2 done (2026-09-30):
+  - **S5** off greys: Slider rail and range rail, Progress rail → `edge-control` #e2 (as Switch);
+    Slider thumb edge → `edge-control-hover` #d4 (as Checkbox/Radio). Spinner track unchanged, so
+    E-22 is partly open.
+  - **S6a** Badge soft neutral and Chip input → Count's 6% translucent plate (hover 10.7%, press
+    12.3%; dark 10/22.6/27.9% white). **S6b** Message actions drop their fg-muted override.
+  - **S7a** Composer and Code block edge → Card edge (neutral 100 / dark 750); Composer hover →
+    `input-edge-hover`. **S7b** documented (Card #ee with halo, Table frame #e2).
+  - Verified live in the gallery (computed values). DESIGN_SYSTEM "Shared state paint" and the
+    edges paragraph rewritten; specs updated by a subagent pass.
+- Phase 3 done (2026-09-30):
+  - **S4** per-tier radius (6/8/10) on Input, Textarea, NumberField, Select (`--_radius` per size)
+    and InputGroup (`--_group-radius`); Segmented track takes the tier radius, items concentric
+    inside (md 8 around 6; was 10 around 8); Calendar days control-md 8 (F-12).
+  - **S8** joined-control seams keep #e2: written exception in DESIGN_SYSTEM (docs only).
+  - **S9** Alert close is a ghost sm Button with the Area glyph (tinted: tone ink, 12% ink plate);
+    Chip remove uses the Area glyph; `onDismiss`/`dismissLabel` on Chip and Dialog (old
+    `onRemove`/`removeIcon`/`removeLabel` and `onClose` are deprecated aliases). Demos and
+    pages.mjs moved to the new names. Tests: `packages/react/tests/audit-rules.test.mjs`.
+  - Also F-6 (ColorPicker inner rules → border-decorative) and G-18 (prompt-suggestion dismiss sm,
+    pressed plate).
+- Phase 4 done (2026-09-30):
+  - **S10** Surface axis roles `shadow-card` and `shadow-float` (none at Flat); nine floating
+    literals and Card's halo read them; Table frame on `stroke-width` (keeps its edge at Elevated);
+    cohesion test now asserts the role. Tooltip and the Toolbar floating bar keep own recipes.
+  - **S11a** density token `gap-row` (12) puts every icon row's label at 36: Menu, Palette,
+    Combobox, Select options, and Nav via `inset.css` (row gaps live there, not in nav.css).
+    **S11b** Nav/Tree inset focus ring; Breadcrumb ring on its plate. **S11c** nested row controls
+    hover with `bg-hover`.
+  - **S12** quiet Kbd = string shortcut (Geist 12/16 400 muted, danger row ink); "Esc"; keycap in
+    any Button `currentColor` 14%.
+  - Verified live (computed values); gallery "before" review demo still pins the old 8 menu gap.
+- Phase 4 follow-up: a quiet Kbd in a menu takes the text end inset (inset.css reserves the
+  keycap box only for `--on-color`) and has no border: ends 11 from the row like a string.
+- Phase 5 done (2026-09-30):
+  - **S13** menus check-only (MenuItem `radio` → menuitemradio; ModelPicker uses it); value
+    pickers plate + check (Combobox sets `data-selected`); gallery Selected tile and Composer mode
+    menu moved off raw data-selected.
+  - **S14** density gap sm/md/lg → 6 (default); Button reads tokens; Button group and Toolbar stop
+    overriding child gaps; layout uses of the gap tokens pinned to space-8/space-4 (Card header,
+    footer, overlay pad, horizontal Field, Alert/Toast row, Slider range, Breadcrumb items, Alert
+    actions, Kbd chords). Unused `--_group-gap` / `--_toolbar-gap` declarations remain.
+  - **S15a** Segmented thumb `light-dark(bg-surface, bg-component-active)` (dark #3f on #28).
+    **S15b** neutral soft Split button = soft Button group recipe.
+- Next: phase 6, i.e. S16 one floating engine, S17 API vocabulary, S18 loading and busy. Same loop:
+  implement → docs → JSON status → `npm run audit:page` → republish.
+
 ## Audit medium fixes, batch 1 (2026-09-29, branch `claude/component-audit-progress-60ca4b`, uncommitted)
 
 - Owner decisions from the audit (emphasis roles; fix all of section 1) are recorded on the

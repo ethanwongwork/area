@@ -41,7 +41,7 @@ export const PromptSuggestions = forwardRef<HTMLUListElement, PromptSuggestionsP
         <span className="area-prompt-suggestions__text">{suggestion.label}</span>
       </button>
       {onDismiss ? <span className="area-prompt-suggestions__dismiss">
-        <Button size="md" variant="ghost" tone="neutral" iconOnly aria-label={`Dismiss “${suggestion.label}”`}
+        <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`Dismiss “${suggestion.label}”`}
           icon={<Glyph name="dismiss" />} onClick={() => onDismiss(suggestion)} />
       </span> : null}
     </li>)}

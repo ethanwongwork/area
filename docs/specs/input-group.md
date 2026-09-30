@@ -84,16 +84,18 @@ its rule and start padding (`input-group.css:101-102`), as Figma's value follows
 Nodes: visual box 32 × 30 with the 16px icon at x 9, y 8 and ink rgb(102) (`area--opacity`
 1–2); the letter visual is rgb(102) (`area--letter` 1); the value starts at x 33, right after
 the visual. Figma's icon glyph is 50% black, its letter prefix 89.8% (see Settled questions 1).
+The sizes (sm) radius was 8 at capture; since audit S4 it is 6.
 
 ## Decisions
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| shell · chrome | Input's: 32, radius 8, `input-edge`, no resting shadow; soft = `bg-component` #f7, no border, no shadow (`input-group.css:26`) | Peer: [Input](input.md); Figma fill-only for soft; second pass: soft is flat | Figma 24px, radius 5: density is the UI-scale axis |
+| shell · chrome | Input's: 32, radius per tier 6 sm, 8 md, 10 lg (`--_group-radius`, `input-group.css:17`, `:29-31`), `input-edge`, no resting shadow; soft = `bg-component` #f7, no border, no shadow (`input-group.css:26`) | Peer: [Input](input.md); Figma fill-only for soft; second pass: soft is flat | Figma 24px, radius 5: density is the UI-scale axis |
 | focus | one ring on the group (`:focus-within`); children lose theirs | Owner: one focus shell | — |
 | visual | H wide, 16px icon or control-size letter, `fg-muted`; value follows with no rule | Owner: square compartment; Figma 24 × 24 icon box = row height, no rule | Figma letter ink is near-default; kept (third pass): the prefix names the value, it is not the value |
 | segment rule | 1px `border-decorative` before each other child (`input-group.css:103`) | Figma value row: 1px gap between hex and opacity | Figma's colour row has none; kept (third pass): two fields in one group, and the rule marks where each edits |
 | affix | gutter sides (12 md), `fg-muted` | Peer: Input affix; Figma "%" at 50% | — |
+| child gap | children read the group's gap tier, 6 at sm, md and lg (`--_group-gap`, `input-group.css:8, :29-31`; passed on at `:53`, `:77`); compact sm 4 | Peer: Input, Button (audit S14) | Was 4 / 8 / 8 |
 | mode select | 3 × H wide first child (`input-group.css:102`) | Existing Area recipe | — |
 | validation | invalid: danger edge, danger halo on focus; success / warning: tone edge, **held through focus with the tone halo** (`input-group.css:34-35, 41-45`) | Peer: Input and Select hold the tone; second pass item 11; third pass | Success and warning gave way to the focus edge on focus until the third pass |
 | disabled | field paint when a direct child is disabled: fill `input-bg-disabled`, `border-faint`, `fg-disabled`, no hover (`input-group.css:31, 33`) | Audit "Disabled" (text fields); second pass item 11 | Was no group paint |
@@ -103,7 +105,7 @@ the visual. Figma's icon glyph is 50% black, its letter prefix 89.8% (see Settle
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | hover | border → `input-edge-hover` #d4d4d4; skipped while focused or disabled | `input-group.css:31` |
-| focus-within | border `field-focus-color` + 2px halo + outline | `input-group.css:36-40` |
+| focus-within | border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo; outline in increased contrast (audit S1) | `input-group.css:36-40` |
 | invalid | danger border; danger halo on focus | `input-group.css:44-45` |
 | success / warning | tone border at rest; tone border, outline and halo on focus | `input-group.css:34-35, 42-43` |
 | disabled | field paint on the group; children keep stripped chrome | `input-group.css:33`; no disabled tile |
@@ -118,7 +120,7 @@ tab stop and name.
 
 | Peer | Shared role | Area value in peer | This component | Match / reason |
 |---|---|---|---|---|
-| Input, NumberField, Select | field chrome and focus | edge, radius 8, halo | same, drawn once on the group | match |
+| Input, NumberField, Select | field chrome and focus | edge, radius 6 / 8 / 10 per tier, halo | same, drawn once on the group | match |
 | Input soft | soft shadow | none (`input.css:53`) | none | match (was an open question) |
 | Input, Select, NumberField | disabled | field paint | field paint on the group | match (was open) |
 | Input, Select | success / warning on focus | tone edge and halo kept | tone edge and halo kept | match (third pass) |
@@ -176,3 +178,5 @@ row and value row. Build and test results are in the
 - 2026-09-27 · third pass → success and warning hold their tone through focus (the focus
   edge replaced them); letter ink and hex / opacity rule kept → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-28 · batch 9 → visual + Select joins like visual + Input (no rule, no start inset).
+- 2026-09-30 · audit S4 (owner) → group radius follows the tier as Button: sm 6, md 8, lg 10 (`--_group-radius` per size, `input-group.css:17`, `:29-31`); was 8 at every size.
+- 2026-09-30 · audit S14 (owner) → the gap tier the group passes to its children is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`input-group.css:8, :29-31`; density.ts:80-82).

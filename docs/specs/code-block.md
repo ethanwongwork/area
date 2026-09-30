@@ -55,7 +55,7 @@ editor inspector (Dev Mode, where code is shown, was not opened).
 ## Anatomy
 
 ```
-area   div.area-code-block  1px border-decorative, radius-container, bg-code, overflow hidden
+area   div.area-code-block  1px Card's edge (#ee), radius-container, bg-code, overflow hidden
   header   min 32, padding 4/12, gap 8, bottom rule (border-divider); 14/20
     title     Geist Mono 400, fg-default;  language  14/20 fg-muted
     tab       28 tall, 6px sides, radius-small, mono 14/20; selected: 1px underline, 6px in
@@ -95,9 +95,9 @@ rgb(207, 3, 60), tag rgb(125, 65, 218), string rgb(81, 80, 229). Tabs (`area--la
 | block inset | 12 (`code.css:227`) | Owner (prior: Area tokens, not Geist's 16) | — |
 | gutter | 32 (`code.css:226`) | Owner (prior) | — |
 | unnumbered · text inset | **12 start** (`code.css:264-267`) | Third pass: code starts where the header's filename and the numbers do | Was 0: hidden numbers left the code at the block's edge. Diff lines keep their marker column (`code.css:269-273`) |
-| shell radius / edge / ground | `radius-container` 12, `border-decorative`, `bg-code`: the page white in light (dark: neutral 800) | Peers: Card media, Panel, Alert; owner 2026-09-28 (lighter ground, more vibrant syntax) | Was #fafafa (neutral 25) |
+| shell radius / edge / ground | `radius-container` 12, Card's edge `light-dark(neutral-100, neutral-750)` #ee (`code.css:188`), `bg-code`: the page white in light (dark: neutral 800) | Peers: Card media, Panel, Alert; owner 2026-09-28 (lighter ground, more vibrant syntax); audit S7a (owner 2026-09-30): a block standing alone takes Card's edge | Ground was #fafafa (neutral 25); edge was `border-decorative` #f3 |
 | header | min `control-md` 32, padding 4/12 (`code.css:36-38`) | Toolbar rhythm | — |
-| rules (header, flush top, toggle) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 200, 443`) | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
+| rules (header, flush top, toggle) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 203, 456`); since audit S7a they sit one step lighter than the #ee edge | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
 | code · face | `font-family: inherit` (`code.css:250`) | Owner (prior): one monospace | `<code>` reset to the browser's monospace |
 | tab · hover | **plate `bg-component-hover`, ink fixed** (`code.css:101-103`) | Shared rules: foreground fixed; opaque plate on a known ground | Was muted → default ink on `bg-hover` |
 | line number · hover | **underline, ink fixed** (`code.css:294-298`) | Shared rule; a link marks itself with an underline | Was muted → default ink |
@@ -188,3 +188,4 @@ Line pitch (20) matches; the corner, header scale and code size are the recorded
   a light accent hue still gets a readable rung. The block keeps its #f3 seam and header rule;
   the collapsed fade follows the ground. Inline Code and the `token-bg` alias keep #fafafa via
   `bg-stripe` (the same 25 rung). Dark unchanged. 19,491 token and contrast tests pass.
+- 2026-09-30 · audit S7a (owner) → shell edge is Card's `light-dark(neutral-100, neutral-750)` #ee (was `border-decorative` #f3); header, flush and toggle rules keep `border-decorative`; tabs keep `fg-muted` → code.css:188.

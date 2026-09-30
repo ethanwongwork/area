@@ -61,7 +61,7 @@ area     button.area-chip (or span wrapper when removable)  owns: tier height, 1
   visual span __swatch / __avatar / __image  20px (icon 16 + 4) · __icon 16px, fg-muted
   label  span __label
   action button __action  (removable + clickable)
-  remove button __remove  16px, radius full, fg-muted
+  remove button __remove  circle 20 / 24 / 32 (`--_remove`), radius full, fg-muted, Area dismiss glyph 16
 ```
 
 Inset equation (`inset.css:7-19, 42, 85-105`): text (32 − 9.94) / 2 − 1 = 10.03; icon
@@ -84,7 +84,7 @@ is gone (cohesion audit, spec defects).
 | **shell** color | rgb(40, 40, 40) | rgb(40, 40, 40) | rgb(40, 40, 40) | rgb(40, 40, 40) | rgb(207, 3, 60) | rgb(40, 40, 40) | rgb(40, 40, 40) |
 | **shell** background | rgb(255, 255, 255) | rgb(255, 255, 255) | rgb(255, 255, 255) | rgb(247, 247, 247) | rgb(251, 245, 245) | rgb(255, 255, 255) | rgb(255, 255, 255) |
 
-(The capture writes the border as `color(srgb 0.886275 …)`, which is #e2e2e2.)
+(The capture writes the border as `color(srgb 0.886275 …)`, which is #e2e2e2.) The shell gaps predate audit S14: the gap is now 6 at sm, md and lg.
 
 Notion (shell): `notion--board-tag` 44.17 × 20, padding 0 6, radius 4, 14px/20px 500, fill
 rgba(92, 0, 163, 0.14), ink rgb(85, 59, 105); `notion--select-tag` 39.69 × 20, padding 0 6,
@@ -109,12 +109,13 @@ rgb(238, 238, 238) (`area--avatar-initials`); disabled opacity 0.5.
 | hover | `bg-component-hover` #f3, edge `edge-control-hover` #d4 (`chip.css:56-59`) | Audit row/control hover | — |
 | selected (neutral) | `bg-component-active` #eeeeee, edge #d4, default ink; hover edge `border-hover` #b4b4b4 (`chip.css:98-105`) | Owner rule; audit: selection one step above hover | Untitled shows selection only in an embedded checkbox |
 | selected (accent) | `accent-surface`, `edge-accent`, `fg-accent` (`chip.css:106-112`) | Owner: accent by override | — |
-| input kind · paint | `bg-component` #f7, transparent border (`chip.css:74`; `area--input`) | Area input-chip rule | Notion's values are tone-tinted; Area chips carry no tone by value (Badge does) |
+| input kind · paint | **Count's translucent plate `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))`**, hover 0.107 / 0.226, transparent border, hover edge `edge-control-hover` (`chip.css:78-84`) | Area input-chip rule; audit S6a (owner 2026-09-30), shared with Badge neutral soft and Count soft | Was `bg-component` #f7 (`area--input`), a lighter hole on a hovered #f3 row. Notion's values are tone-tinted; Area chips carry no tone by value (Badge does) |
 | remove · target | **a circle 4 inside the pill: 20 / 24 / 32** (`--_remove`, chip height − 8), concentric with the pill's end; the chip's end inset is that 4 | Material 24 circle in a 32 chip (`_trailing-icon.scss L18-22`); Primer, Carbon, Spectrum 2 make it the chip's height; chip trailing padding 0 (Primer, Polaris, Carbon, Spectrum 2) | Was the 16px glyph box, so the hover plate hugged the glyph (owner: "does not look correct") |
-| remove · glyph | 16 (Fluent `dismiss_16`, ink ≈ 11) at every size | Primer 12 in 16/20, 16 in 24/32 (`_RemoveTokenButton.tsx L39,58`) | — |
-| remove · hover | **plate `currentColor` 12%** on the circle; ink fixed `fg-muted` (`chip.css`) | Audit: foreground fixed; peer Alert dismiss; systems use a subtle neutral fill on the button alone | ChatGPT washes the whole pill instead; Area keeps the remove a separate target beside the chip's own action |
+| remove · glyph | 16, the Area `dismiss` Glyph, at every size (`primitives.tsx:893`) | Primer 12 in 16/20, 16 in 24/32 (`_RemoveTokenButton.tsx L39,58`) | Was a Fluent `dismiss_16` path until audit S9 |
+| remove · hover | **plate `currentColor` 12%** on the circle; ink fixed `fg-muted` (`chip.css:225`) | Audit: foreground fixed; peer Alert dismiss; systems use a subtle neutral fill on the button alone | ChatGPT washes the whole pill instead; Area keeps the remove a separate target beside the chip's own action |
 | avatar initials | **12px** (`--area-control-xs-text`: 12 default, 11 compact), as Badge's avatar | Type ramp floor 12; Figma 12 and Notion 11 on a 24 avatar | Was 10px, off the ramp; then 14 when `control-sm-text` moved to 14/20 for small controls (2026-09-26), which overflowed the 20 plate (fixed 2026-09-28) |
 | visual box | 20px (icon 16 + 4) | Inset contract | — |
+| icon → label gap | 6 at sm, md and lg, the density tokens `--area-gap-sm/md/lg` (`chip.css:22, :244-246`); compact sm 4 | Peer: Button (audit S14) | Was 4 / 8 / 8 |
 | group gap | 4, wrapping (`chip.css:256-260`) | Area spacing | — |
 
 ## States
@@ -131,7 +132,10 @@ rgb(238, 238, 238) (`area--avatar-initials`); disabled opacity 0.5.
 
 Filter chips are `button` with `aria-pressed`, controlled or uncontrolled
 (`primitives.tsx:591-650`). A removable chip is a `span` holding an optional action button
-and a separate remove button named by `removeLabel`, so both are focusable peers. ChipLink is
+and a separate remove button, so both are focusable peers. The API is Area's one dismiss API:
+`onDismiss` shows the remove button, `dismissLabel` names it (default "Remove chip") and
+`dismissIcon` replaces the glyph. `onRemove`, `removeLabel` and `removeIcon` remain as
+deprecated aliases (`primitives.tsx:833-845`, `:883-893`). ChipLink is
 an `a`. Forced colours paint selected chips Highlight (`forced-colors.css:21-26`).
 
 ## Peers and consistency
@@ -140,8 +144,9 @@ an `a`. Forced colours paint selected chips Highlight (`forced-colors.css:21-26`
 |---|---|---|---|---|
 | Button | tier height and text inset | 32, 10.03 | 32, 10.03 | match |
 | Menu / Nav / Table rows | hover / selected plates | `bg-component-hover` / `-active` | same pair | match |
-| Alert dismiss | dismiss hover | ink 12% plate | ink 12% plate | match |
-| Badge dismiss | dismiss hover | the badge's own `--_bg-hover` (`badge.css:202`) | ink 12% | differs; the CSS comment (`chip.css:224-225`) names both as precedent |
+| Alert dismiss | dismiss hover | ink 12% plate on tinted alerts; `bg-component-hover` on neutral (a ghost sm Button, audit S9) | ink 12% plate | match on tones; Alert is a rectangle and closes with a Button |
+| Badge dismiss | dismiss hover | ink 12% (`badge.css:194`, audit S9) | ink 12% | match |
+| Badge neutral soft, Count soft | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))` (badge.css:58, count.css:68) | input kind, chip.css:80 | match (audit S6a) |
 | Badge | a value shown as a tag | 20 / 24 / 28, Notion tag geometry (badge.md) | 28 / 32 / 40 pill | different job: Badge displays, Chip is pressed |
 | Avatar | initials | 500, ramp sizes | 12px 500 | match |
 | Checkbox / Radio / AlignmentPicker | selection tone | neutral, accent override | same | match |
@@ -184,3 +189,6 @@ exists. Build and test results are in [the audit](../research/cohesion-audit.md#
   tags map to Badge); Composition / swatch only tile added → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner: remove hover plate wrong → the remove is a 20/24/32 circle 4 inside the pill, concentric with its end, holding the 16px glyph (`--_remove`, `inset.css` end box); `[data-hover]` hook for review specimens → ChatGPT tool pill (rest, hover), nine design systems; Pass review in the gallery.
 - 2026-09-28 · batch 5 avatar check (owner: "check avatar in chip") → two initials overflowed the 20px plate: `--area-control-sm-text` had become 14 at default density; now `--area-control-xs-text` (12), as Badge; the avatar slot is `aria-hidden` (the label names the person, as in Badge); demos use Irene Yamaguchi → Claude in Chrome zoom of `chip-avatar-initials` (12px, 10.3 wide in the 20 circle). No product showed a person chip (Notion person properties absent from the owner's databases; Figma and ChatGPT none).
+- 2026-09-30 · audit S6a (owner) → input kind takes Count's translucent plate (6% black / 10% white; hover 0.107 / 0.226), was `bg-component` #f7 → chip.css:80-81.
+- 2026-09-30 · audit S9 (owner) → the remove glyph is the Area `dismiss` Glyph (was a Fluent path); pills close with a concentric circle, the Area glyph and a 12% ink plate. `onDismiss`, `dismissIcon`, `dismissLabel` added (default label still "Remove chip"); `onRemove`, `removeIcon`, `removeLabel` kept as deprecated aliases → `primitives.tsx:833-845`, `:883-893`.
+- 2026-09-30 · audit S14 (owner) → the icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`chip.css:22, :244-246`; density.ts:80-82), as Button.

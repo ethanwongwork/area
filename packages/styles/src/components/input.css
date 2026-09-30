@@ -22,7 +22,7 @@
     --_border-hover: var(--area-input-edge-hover);
     --_border-focus: var(--area-field-focus-color);
     --_focus-outline: var(--area-field-focus-color);
-    --_focus-halo: var(--area-shadow-color);
+    --_focus-halo: var(--area-field-focus-halo-color);
     --_bg: var(--area-input-bg);
 
     display: inline-flex;
@@ -35,7 +35,8 @@
     padding-inline: var(--_gutter);
     border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
-    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
+    /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
+    border-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap)));
 
     background-color: var(--_bg);
     color: var(--area-input-text);
@@ -230,7 +231,7 @@
 
   /* Outer-edge optical insets are shared in inset.css. */
 
-  .area-input--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-input--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-input--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-input--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-input--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-input--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

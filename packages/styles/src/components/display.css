@@ -262,7 +262,7 @@
     block-size: var(--_progress-size);
     border-radius: var(--area-radius-full);
     /* The rail is Slider's: a fill on a rail is one role, and the two used different greys. */
-    background-color: var(--_progress-track, color-mix(in srgb, var(--area-fill-toggle), var(--area-bg-surface) 20%));
+    background-color: var(--_progress-track, var(--area-edge-control)); /* spec (audit S5): the Switch and Slider off track */
     overflow: hidden;
   }
 

@@ -56,8 +56,8 @@ its values (below) come from the same session's computed-style readout.
 notion   div flex, 14/16.8 400 rgb(44, 44, 43)
   item   a, 24px, padding 2/6, radius 6 (hover plate)      text at 6px inside
   sep    span "/", 13px, rgb(230, 229, 227), 6px wide
-area     nav > ol.area-breadcrumb__list flex, gap 8, 14/20
-  link   a.area-breadcrumb__link, muted; ::before hover plate 2px / 6px past the text, radius 6
+area     nav > ol.area-breadcrumb__list flex, gap 4, 14/20
+  link   a.area-breadcrumb__link, muted; ::before hover plate 2px / 6px past the text, radius 6; focus ring drawn on the plate
   sep    li 16×16, Area chevron glyph (svg, ink centred)
   page   span[aria-current=page]
 ```
@@ -73,6 +73,7 @@ area     nav > ol.area-breadcrumb__list flex, gap 8, 14/20
 | separator · ink | **`stroke-control`** rgb(131) | Owner (2026-09-25): lighter, but not too light; Area's 1px control-stroke role for a 1px stroke | Was the link grey rgb(102); `border-subtle` rgb(212, as Untitled 213 and Notion 230) was tried and judged too light |
 | separator · glyph | **Area `chevron-down` glyph rotated 270°** (ink x 5.5–10 in a 16px box, `--area-weight-icon` line), mirrored in RTL | Owner (2026-09-25): the plate sat too close to the chevron on one side; peer TreeView uses the same glyph | The CSS chevron (two borders of a rotated square) put its point at the box's end edge. `.area-breadcrumb__chevron` stays for plain-HTML markup. Notion uses "/" |
 | gap | **4** | Owner (2026-09-25): chevrons closer to the text | With the centred glyph: 8.9px text to ink, 9.4px ink to the next text; the hover plate clears the ink by about 3px on both sides. Was 8 |
+| link / page · icon gap | 6, `gap-md` (`breadcrumb.css:22`, `:29`); the item's own gap is pinned to 8 (`breadcrumb.css:15`) | Peer: Button (audit S14) | The icon gap was 8. The item gap had read `gap-md` and was pinned so it did not move |
 | link · hover | **background plate** `bg-component-hover`, 24px (2px above and below), 6px past the text, radius 6; ink fixed | Notion (primary product for navigation): 24px items, 2/6 padding, radius 6 | Was an underline. Painted outside the link box so the trail stays flush with the content below |
 
 ## States
@@ -80,7 +81,7 @@ area     nav > ol.area-breadcrumb__list flex, gap 8, 14/20
 | State | Changes | Evidence |
 |---|---|---|
 | link hover | plate `bg-component-hover` | Notion hover plate: 5% warm wash on the 24 item, corner 6, ink fixed (`notion--path-2--hover`, 2026-09-28) |
-| link focus-visible | focus ring | unchanged |
+| link focus-visible | 2px `focus-color` ring on the `::before` plate (24 tall, 6 past the text, radius 6), offset 0; the link's own outline is removed | audit S11b (owner): the ring follows the hover plate (`breadcrumb.css:26-27`). Was the link's own outline on the text box |
 
 ## Behavior and accessibility
 
@@ -130,3 +131,5 @@ muted ancestors and chevron separator are the recorded decisions. No change.
 - 2026-09-25 · owner approved Breadcrumb → Complete in `component-status.mjs`.
 - 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-30 · audit S11b (owner) → the focus ring follows the hover plate: drawn on `::before` at offset 0, the link's own outline removed → `breadcrumb.css:26-27`.
+- 2026-09-30 · audit S14 (owner) → a link or page icon sits 6 from its label (`gap-md`, was 8; `breadcrumb.css:22`, `:29`); the item gap is pinned to 8 (`breadcrumb.css:15`) and the 4 list gap is unchanged.

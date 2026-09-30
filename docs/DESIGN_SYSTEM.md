@@ -38,9 +38,12 @@ Component CSS consumes semantic colors, not numbered palette rungs. During the v
 phase, a measured color with no matching role may be a `light-dark()` spec literal. Tone means meaning;
 treatment means emphasis. Reuse `neutral`, `accent`, `info`, `success`, `warning`,
 `caution`, `danger` and `discovery` where applicable. Additional roles require a clear job.
-Foreground does not change on hover. Text weight is independent of type role: 400 for text
-and every title or heading; 500 only for labels on fills (buttons, segmented options,
-badges, counts, avatar initials). Text uses two foreground levels, default and muted;
+Foreground does not change on hover. Weight (owner, audit S2, 2026-09-30): 400 for running
+text, descriptions, field labels, rows and titles set larger than the body; 500 for surface
+titles set at body size (14/20, 16/24), where size cannot set them apart: Popover, Dialog,
+Toast, Alert, Card, Panel bar and headings, Calendar month, Nav group titles. Labels are 500
+on solid fills, tracks and static marks: solid Buttons, Segmented options, every Badge, soft
+Count, Kbd, Indicator counts and Avatar initials; every other label is 400. Text uses two foreground levels, default and muted;
 disabled is for disabled and placeholder text only.
 
 **Emphasis roles** (owner, 2026-09-29; replaces "neutral by default, accent by override").
@@ -80,40 +83,84 @@ role paints the same way in every family:
   Area keeps selection a step firmer so it survives hover). The translucent `bg-hover` is for
   grounds a component cannot know (a segmented track, a swatch cell); its dark value is
   solved against the dark page rung, so it composites to the same step as the opaque fill.
+- *Selected rows* (audit S13, owner 2026-09-30) split by job. Menus of commands and choices
+  show a trailing check only (MenuItem `checked`, or `radio` for one of several), and the
+  plate is the highlight. Value pickers (Select, Combobox) show their value with the active
+  plate and the check. The raw `data-selected` row plate is the value pickers' hook.
+- *Icon-to-label gap* (audit S14): 6 at sm, md and lg (`gap-sm/md/lg`; Notion 6, Untitled 6),
+  4 at xs and compact sm. Hosts (Button group, Toolbar) never re-tier a child's gap, and
+  layout spacing never reads the gap tokens. List rows are the exception, `gap-row` 12.
+- *Joined soft controls* (audit S15b): a soft Button group and a soft Split button paint the
+  same way, the component fill with the quiet ink, no hairline and the row plates on hover
+  and press.
+- *Off states* (audit S5, owner 2026-09-30): one off-track grey, `edge-control` (#e2), for the
+  Switch track, the Slider rail and the Progress rail; one glyph-edge grey,
+  `edge-control-hover` (#d4), for Checkbox and Radio edges and the Slider thumb. The Spinner
+  track is its own ink at 25%.
+- *Neutral soft marks* (audit S6a): Badge soft, Chip input and soft Count sit on one
+  translucent plate, 6% black (10% white in dark), so they stay visible on a hovered or
+  selected row plate; hover lays the `bg-hover` wash over it. Avatar and a selected Chip keep
+  `bg-component-active`.
+- *Quiet ink* (audit S6b): icon actions (ghost icon Buttons, Message actions included) use the
+  Button's quiet 75% ink; text-like rows (prompt suggestions, Code block tabs) use `fg-muted`.
 - *Unselected options* in a set (Segmented, Tabs) take the muted ink and the selected one the
-  default ink, as ChatGPT and Figma do.
+  default ink, as ChatGPT and Figma do. The Segmented thumb is raised: the white surface
+  in light (ChatGPT, Figma) and `bg-component-active` in dark, where the surface rung sits
+  below the groove (audit S15a).
 - *Disabled.* Controls, rows and pickers dim to 50% as a whole, so their state stays
   legible. Text fields keep full opacity and use their disabled field paint. Never both.
 - *Hover.* Only the plate, edge or underline changes; ink and opacity stay fixed.
 - *Labels.* A label's weight does not change with state: a selected segment is 500 because
   every segment is.
-- *Nested dismiss and close actions* are 28px, the small-button radius, fixed ink, and a
-  plate on hover (the component hover fill, or 12% of the ink on a tinted ground).
+- *Close and dismiss* (audit S9, owner 2026-09-30): one recipe per shape, always the Area
+  `dismiss` glyph and fixed ink. Rectangular surfaces (Popover, Toast, Alert) use a ghost
+  small Button (28, radius 6) with its row hover plate; on a tinted ground it keeps the tone
+  ink and hovers to 12% of it. Dialog's close is the exception, a 32px md ghost Button.
+  Pills (Chip, Badge) use a concentric circle with a 12%-ink plate. The API is `onDismiss`
+  and `dismissLabel` everywhere (Chip's `onRemove` and Dialog's `onClose` are deprecated
+  aliases).
 - *Soft fields are flat*: a soft Input, Textarea, NumberField, Select or InputGroup has its
   fill and no shadow, as Figma's inspector fields do. Outline fields have no shadow either
   (outline pass; Select followed on 2026-09-29, audit B-2), as no product field has one. One
   surface uses one field style: a Panel's rows are all soft.
-- *Keycaps* are filled, not drawn: `bg-component-active`, no visible edge, radius 4, muted ink
-  at 500 (Notion's shortcut hints). Inside a Button the keycap's corner is concentric with the
-  button's (the button's shape less the keycap's inset).
+- *Keycaps* are filled, not drawn: `bg-component-active`, no visible edge, radius 6 in every
+  host (owner 2026-09-28), muted ink at 500 in the keyboard face (Notion's shortcut hints).
+  Inside any Button the keycap is `currentColor` at 14% with the Button's ink, so it survives
+  hover, press and selection (audit S12c). In lists a shortcut is quiet: string or Kbd, it is
+  the UI font at 12/16 and 400 in muted ink on the text slot's inset, and takes a danger
+  row's ink (S12a). Escape is written "Esc" (S12b).
+- *List rows* (audit S11, owner 2026-09-30): every icon row puts its label on one 36px column
+  (8 inset + 16 icon + `gap-row` 12): Menu, Command palette, Combobox, Select options and
+  Nav; Tree keeps its own grid. Keyboard focus is the plate alone in menus (active
+  descendant, as the products do); Nav and Tree rows draw an inset ring, as Tabs; a
+  Breadcrumb's ring follows its plate. Controls nested on a row hover with the translucent
+  `bg-hover` and press with `bg-active`, so they show on a hovered or current row.
 - *Tone defaults* are neutral in every family, Toast included.
 
 **Elevation.** In-flow content (fields, controls) uses `shadow-1`; a docked region
 (Panel) `shadow-2`. Card has its own faint halo (owner, 2026-09-27): a 1px contact shadow and
-a 2px-low 8px blur, both 3% black, over a lighter edge (neutral 100); it ignores the Surface
-axis until shadows are tokenised. A linked Card keeps its lift on hover and steps its edge to
+a 2px-low 8px blur, both 3% black, over a lighter edge (neutral 100). A linked Card keeps its lift on hover and steps its edge to
 `edge-control-hover`, as Fluent's outline and Radix's surface cards do. Everything that floats over the page (Menu, Popover, the Select picker,
 Dialog, Toast, the Calendar and ColorPicker surfaces, Toolbar overflow) shares one lift,
 Notion's popover geometry: `0 20px 24px` and `0 5px 8px` in `shadow-color` at full and half
-strength, over the 1px decorative border. Tooltip keeps its own smaller lift.
+strength, over the 1px decorative border. Both are Surface axis roles (audit S10, owner
+2026-09-30): `shadow-card` and `shadow-float`, `none` under Flat. Tooltip keeps its own smaller
+lift, and the Toolbar's floating bar its own four-layer recipe. The Table frame is a required
+edge (`stroke-width`), so it stays under Elevated.
 
-A rule inside a container is never darker than the container's edge (owner, 2026-09-27):
+A rule inside a container is never darker than the container's edge (owner, 2026-09-27;
+one exception, audit S8: seams inside joined controls, soft Button group and Split button,
+are control edges and keep `edge-control` #e2):
 Panel bar, section and footer rules, Code block header and toggle rules and Menu separators
 take the container's `border-decorative`. Use `border-divider` for rules that stand on their
 own (Separator, nav and toolbar separators, tab tracks, table rows): a divider has no fill or shadow to help it, so it sits a step darker, near where
 ChatGPT, Figma and Untitled draw theirs (#e5–#e6; Notion's menu rules are lighter, 7%). A
-Card's edge and a Table's frame take the divider role too: they stand alone on the page,
-with the page's fill and little or no lift, and every product draws them firmer than a seam. Choice glyphs (Checkbox,
+Table's frame takes the divider role too: it stands alone on the page,
+with the page's fill and no lift, and every product draws it firmer than a seam.
+Surfaces that stand alone (audit S7, owner 2026-09-30) are never on `border-decorative`:
+Card, Composer and Code block take the Card edge (neutral 100 #ee; dark 750), lighter than
+the divider because Card's halo carries it; the Table frame keeps the divider (#e2), since it
+has no shadow. Composer also steps to the Input hover edge. Choice glyphs (Checkbox,
 Radio) take the control hover edge at rest, firmer than a field's, as Notion's and
 Untitled's do. Required control/state edges use `stroke-width` independently of Surface. Most controls use the shared focus
 color/width/offset; editable fields use their field-focus roles. Preserve standard and
@@ -182,10 +229,19 @@ its own track geometry. Kbd and Token have separate content roles. These current
 constructions do not confer completion on unrefined families.
 
 Radius uses the named `sharp`, `subtle`, `soft`, `standard`, `round`, `rotund` and `pill`
-presets in `axes/radius.ts`. Choose control, row, small or container roles and respect
-the box cap. A radius that is not a role is derived from one (Card is twice the container
-radius), never written as a spacing token, or it ignores the presets. Every surface,
-Card included, uses the container role (Notion cards 10, Figma file cards 13). Identity circles/pills use `radius-full` deliberately; never impose the
+presets in `axes/radius.ts`. Every control reads the per-tier control radius, sm 6, md 8,
+lg 10 at Standard (audit S4): Button, fields, Select, InputGroup and the Segmented track,
+whose items sit concentric inside it; Calendar's 32px days take md. Choose control, row, small or container roles and respect
+the box cap. A radius that is not a role is derived from one, never written as a spacing
+token, or it ignores the presets. Surface corners (owner, audit S3/S3b, 2026-09-30):
+containers use the container role at any inset (Popover, Menu, Panel). A shell whose corner
+holds a control is concentric with it: the control's capped radius plus its distance from
+the edge, the distance scaled by `radius-concentric` (0 at Sharp, so Sharp shells are square).
+Card md is 8 + 16 = 24 (sm 22, lg 28), Composer, Message and Prompt suggestions 8 + 8 = 16,
+Toolbar and the Segmented track the control plus their inset; Dialog is the corner close plus
+8 (16), capped at twice the container radius; Tooltip 10; the Alert banner the small control.
+The control radius is capped by `radius-cap` or `radius-button-cap`, so Pill shells stay
+finite. Identity circles/pills use `radius-full` deliberately; never impose the
 radius axis on every shape. Nested radius is `max(0, outer radius - actual inset)`,
 with the appropriate box cap. Measure painted bounds when browser clamping matters.
 

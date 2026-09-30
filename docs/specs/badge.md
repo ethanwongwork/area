@@ -449,8 +449,8 @@ by `node scripts/validate-badge.mjs`. Pass-1 Area captures are in `before/`.
 | shell · border (outline, neutral) | `edge-control` rgb(226) | Figma "AI" border rgb(230) | Within 4 levels; kept |
 | text · size / line | **12/16 sm and md; 14/20 lg** | Owner (2026-09-27), after viewing md labels on Card; Untitled sm (12px in a 20–22px pill); Figma 11px in 16–18 | Notion (14 in 20) and ChatGPT (14 in 22) set badge text at body size; beside a 14px description that made the label as large as the text it annotates and heavier. lg keeps 14/20 so the size steps stay distinct |
 | text · weight | 500 | Type ramp (badge labels are one of the 500 roles); Untitled 500; Notion board tags 500 | Notion table cells, ChatGPT "Paid" and Figma "AI" use 400; recorded, not adopted |
-| text · ink, neutral tone | **`fg-muted`** rgb(102) light, rgb(197) dark | Target-product agreement: ChatGPT "Paid" rgb(93), Figma "AI" 50% black | Applies to neutral soft, outline, color and dot badges; solid keeps its on-solid ink and modern keeps `fg-default`. Contrast 5.36:1 (soft) and 5.74:1 (outline) light, 8.54:1 and 9.77:1 dark |
-| shell · fill, neutral soft | `bg-component` rgb(247) | Between Untitled lab 98.3 and ChatGPT rgb(243) | ChatGPT's 243 equals Area's `bg-component-hover`; a rest fill should not borrow a hover role |
+| text · ink, neutral tone | **`fg-muted`** rgb(102) light, rgb(197) dark | Target-product agreement: ChatGPT "Paid" rgb(93), Figma "AI" 50% black | Applies to neutral soft, outline, color and dot badges; solid keeps its on-solid ink and modern keeps `fg-default`. Contrast ≈ 5.04:1 on the soft plate over white (arithmetic; 5.36:1 on the former #f7) and 5.74:1 (outline) light, 8.54:1 and 9.77:1 dark |
+| shell · fill, neutral soft | **Count's translucent plate `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))`** ≈ rgb(240) on white; hover 0.107 / 0.226, active 0.123 / 0.279 (badge.css:17, 58-60) | Audit S6a (owner 2026-09-30); Count soft (count.css:68); between Untitled lab 98.3 and ChatGPT rgb(243) | Was `bg-component` rgb(247): on a hovered #f3 row it read as a lighter hole. Hover and press lay the bg-hover / bg-active wash over the 6% plate |
 | text · vertical position | cap centred (cap-height box) | `inset.css` rule | Better centred than Untitled's line box |
 | dot · slot / disc / start / gap | 8 / 6 / 4·6·8 / 4·4·6 | Owner (6px disc); start equals the slot's vertical inset | Notion paints an 8px dot with a 5px gap |
 | icon · slot / inset | 12 at sm; 16 at md, lg; inset (height − slot) / 2 = 2 / 2 / 4 | Owner (16px Fluent at md and above); sm uses native 12px cuts | Callers pass 12px artwork at sm; no current composition uses sm with an icon |
@@ -511,6 +511,8 @@ readers, forced colors execution, cross-engine rendering.
 | Button | label weight | 500 | 500 | match |
 | Button | icon viewport | 16 | 16 at md, lg | match |
 | Chip | shape | pill | pill | match; Chip is the interactive choice |
+| Chip remove | pill close (audit S9) | concentric circle, Area `dismiss` glyph, `currentColor` 12% plate; `onDismiss` + `dismissLabel` | circle (`_badge-radius` full), Area `dismiss` glyph 12, hover `currentColor` 12% (`badge.css:191-194`, audit S9); `onDismiss` + `dismissLabel` | match |
+| Count soft, Chip input | neutral soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))` (count.css:68, chip.css:80) | same | match (audit S6a) |
 
 Baseline checks: small chrome labels are 16–22px in the products (ChatGPT 16 and 22,
 Notion 20, Figma 16 and 18). Area's 16 / 20 / 24 spans that range; the default sits in it.
@@ -576,3 +578,6 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
 - 2026-09-28 · owner: approved (batch 5).
 - 2026-09-28 · second pass → avatar badge demo shows one initial in its 16px disc (owner approved
   the recommendation) → `figma--plan-badge`, `figma--ai-badge`, `area--avatar` re-captured.
+- 2026-09-30 · audit S6a (owner) → neutral soft plate is Count's translucent 6% black / 10% white (was `bg-component` #f7, a lighter hole on a hovered #f3 row); hover 0.107 / 0.226, active 0.123 / 0.279 → badge.css:17, 58-60.
+- 2026-09-30 · audit S9 (owner) → pills close with a concentric circle and the Area glyph, and every dismiss uses `onDismiss` + `dismissLabel`; Badge already did, no code change. Its hover plate is the badge's `--_bg-hover`, not Chip's 12% ink (`badge.css:193`).
+- 2026-09-30 · audit S9 (owner) → the dismiss hovers to 12% of its ink, the pill close recipe (was the badge's own hover plate) (badge.css:194).

@@ -88,7 +88,8 @@ Icon reference 16: (32 − 16) / 2 − 1 = 7. Action reference 24: (32 − 24) /
 | **shell** background | rgb(255, 255, 255) | rgb(247, 247, 247) | rgb(255, 255, 255) | — | rgba(66, 35, 3, 0.03) | — | rgb(245, 245, 245) |
 | **shell** shadow | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px | — | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px | — | rgb(35, 131, 226) 0 0 0 1px inset, … 0 0 0 1px | same | — |
 
-`area--soft` has no shadow (was `shadow-1` before the second pass). `area--action` node 7 (the
+`area--soft` has no shadow (was `shadow-1` before the second pass). The shell gaps predate audit S14: the gap is now 6 at sm, md and lg. The size-sm radius was 8
+at capture; since audit S4 it is 6. `area--action` node 7 (the
 hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 at rest.
 
 ## Decisions
@@ -96,14 +97,14 @@ hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 a
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | shell · height | `control-md` 32 (sm 28, lg 40) | Notion 32 (popover, search) and 28 (menu); Figma search 32 | ChatGPT 36, UUI md 40. Density is the UI-scale axis (second pass, item 18) |
-| shell · radius | `radius-control` 8, capped at 0.4 × height (`input.css:38`) | Notion search 8, Figma search 8, UUI 8 | Notion menu and popover fields 6, ChatGPT pill |
+| shell · radius | per tier as Button: sm `radius-control-sm` 6, md `radius-control-md` 8, lg `radius-control-lg` 10, each capped at 0.4 × height (`input.css:39`, `:234-236`) | Notion search 8, Figma search 8, UUI 8; Notion's 28px menu field 6 | ChatGPT pill. Was 8 at every size before audit S4 |
 | shell · border | 1px `input-edge` = `border-faint` #e2e2e2 | Notion search edge (11% warm ≈ #e3); UUI 1px ring | Fill-only products map to soft |
 | shell · fill | outline `bg-surface` #fff; soft `bg-component` #f7f7f7 | Figma rgb(245), Notion 3% warm, ChatGPT 5% black for soft | — |
 | shell · shadow | none at rest, outline and soft (`input.css:45, 54`); focus halo only | Outline pass (number-field.md): controls at rest carry no shadow; no product field draws one (Notion, Figma, ChatGPT) | Untitled's `shadow-xs`; the third pass had kept `shadow-1`, since removed |
 | text · inset | 10.03 md (inset contract) | `inset.css:17-18` | Notion 8–8.55, Figma 8, ChatGPT 12, UUI 14: Area centres the cap height |
 | text · type | 14/20 400 (sm 12/16) | Notion 14/20 400; ChatGPT 14/18 400 | Figma 11/16; UUI md 16/24 |
 | icon | 16px square, `fg-muted` #666, equal inset (8 from the edge at md) | Notion 6 in a 28 row and Figma 10 in a 32 row are both (H − glyph) / 2 | ChatGPT 12 in |
-| gap | `gap-md` 8 (sm 4) | ChatGPT 8 at 36 | Notion 6 at 28, Figma 6 at 32; kept (third pass): `gap-sm` is shared by every small control |
+| gap | **6** at sm, md and lg (`gap-sm/md/lg`, `input.css:18`, `:234-236`); also the file button's end margin (`input.css:138`); compact sm 4 | Notion 6 at 28, Figma 6 at 32 | ChatGPT 8 at 36. Was 8 (sm 4) until audit S14 |
 | action · box | 24px, radius `radius-small` 6, hover `bg-component-hover`, pressed `bg-component-active`; disabled: `fg-disabled` ink, no hover, not-allowed cursor (audit B-8) | Row-plate rule; NumberField steppers | Nested radius would be 4; kept Button's small radius |
 | action · hint | Tooltip surface (`input.css:207-225`); describes the button only when `aria-label` names it (`Input.tsx:66`) | Peer: [Tooltip](tooltip.md); second pass item 17 | Was a second tooltip style; was announced twice |
 | file button · label | `fg-default`, 500 (`input.css:141`) | Owner: neutral by default | Was `fg-accent` |
@@ -114,7 +115,7 @@ hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 a
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | hover | border → `input-edge-hover` = `border-subtle` #d4d4d4; ink fixed | `input.css:62-64` |
-| focus-within | border `field-focus-color` (#d4d4d4 at standard contrast) + 2px `shadow-color` halo; outline 0 unless increased contrast | `input.css:66-71`; Notion draws a 2px blue ring instead; kept (third pass): neutral by default |
+| focus-within | border `field-focus-color` = `focus-color` (#004cb0 light, #c1d9fd dark) + 2px `field-focus-halo-color` halo (the same at 14%); outline 0 unless increased contrast | `input.css:66-71`; ChatGPT textarea focus: 1px `rgb(58,131,247)` edge (`chatgpt--textarea--focus`); Notion a 2px blue ring. Audit S1 (owner 2026-09-30): the focus role colours the edge |
 | read-only | fill `bg-component` #f7 | `area--readonly` |
 | disabled | field paint: fill #f7, `border-faint`, ink, placeholder and affixes `fg-disabled`; no opacity | `area--disabled`; `input.css:132-133` |
 | invalid / success / warning | border and halo in the tone colour, kept on focus | `input.css:73-95`; `area--invalid`, `--success`, `--warning` |
@@ -133,7 +134,8 @@ follow `dir`.
 
 | Peer | Shared role | Area value in peer | This component | Match / reason |
 |---|---|---|---|---|
-| Textarea, Select, NumberField, InputGroup | field chrome | `input-edge`, `radius-control`, `shadow-1` outline, flat soft | same | match |
+| Textarea, Select, NumberField, InputGroup | field chrome | `input-edge`, per-tier `radius-control-sm/md/lg`, `shadow-1` outline, flat soft | same | match |
+| Button | radius per tier | 6 / 8 / 10 | 6 / 8 / 10 | match (audit S4) |
 | Textarea, Select, NumberField, InputGroup | disabled | field paint, no opacity | same | match |
 | InputGroup | validation on focus | success / warning edge gives way to the focus edge | tone kept | differs; see [input-group.md](input-group.md) |
 | Tooltip | hint surface | 28px, radius 10, 4/10 | same element class | match |
@@ -160,11 +162,15 @@ All four kept in the third pass ([cohesion audit](../research/cohesion-audit.md#
 1. *Focus ring.* Notion focuses both fields with a 2px `rgb(35,131,226)` ring
    (`notion--field--focus`, `notion--menu-search--focus` node 0); Area keeps the neutral
    field-focus edge plus a 2px `shadow-color` halo. Owner rule: neutral by default.
+   *Superseded 2026-09-30 (audit S1):* the edge takes the focus colour and the halo is that
+   colour at 14%, since focus is a system role, not an accent choice, and the neutral edge
+   equalled hover (and rest, in dark).
 2. *Outline shadow.* No product field has a shadow (Notion search, Figma search and selects,
    ChatGPT search); Area's outline fields keep `shadow-1`. Untitled's outline inputs carry
    `shadow-xs`; soft is the flat treatment.
 3. *Small gap.* Notion's 28px menu search and Figma's search leave 6px between icon and text;
    Area's sm gap stays 4 (`gap-sm`), shared by every small control.
+   *Superseded 2026-09-30 (audit S14):* the gap is 6 at sm, md and lg, as Notion and Figma.
 4. *Placeholder ink.* Notion's resting search text is rgb(161,158,153)
    (`baseline/notion--search-field` node 0), 2.6:1 on white; Area's #666 holds the contrast
    floor.
@@ -198,3 +204,5 @@ fields and Figma's search and hex fields. Build and test results are in the
   `figma--search-field`, `baseline/notion--search-field`, `input/area--soft`.
 - 2026-09-27 · third pass → open questions settled, values kept (neutral focus, outline
   `shadow-1`, sm gap 4, placeholder #666) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-30 · audit S4 (owner) → radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `input.css:39`, `:234-236`); was 8 at every size.
+- 2026-09-30 · audit S14 (owner) → the icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`input.css:18`, `:234-236`; density.ts:80-82); settles third-pass question 3 toward Notion and Figma.

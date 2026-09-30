@@ -54,7 +54,7 @@ actions     six 32 × 32 buttons, radius 8, no gap, icons 20 (16 for regenerate 
 | bubble corner | 16, the composer's (send Button 8 + 8) | the words were typed in the composer | ChatGPT 22 is a full pill at one line; owner: rounder, not pill |
 | bubble fill | neutral component fill, default ink | ChatGPT's default is neutral | the blue came from the owner's accent setting |
 | prose | 16/24, paragraphs 16 apart | Area body; ChatGPT 16 apart | ChatGPT 26 leading; Area's ramp is 24 |
-| actions | ghost neutral icon Buttons (md, 32), no gap, muted ink; the plates line up with the turn (assistant: first plate on the text edge; person: last plate on the bubble's edge); 12 below | ChatGPT (row, sizes); owner (alignment) | 16 icons (Area) instead of 20. ChatGPT pulls the row out 6 so its icons sit on the edge; the owner read the overhanging hover plates as misaligned (2026-09-27) |
+| actions | ghost neutral icon Buttons (md, 32), no gap, the ghost Button's quiet ink (button.css:374-377; audit S6b, was `fg-muted`, message.css:50); the plates line up with the turn (assistant: first plate on the text edge; person: last plate on the bubble's edge); 12 below | ChatGPT (row, sizes); owner (alignment) | 16 icons (Area) instead of 20. ChatGPT pulls the row out 6 so its icons sit on the edge; the owner read the overhanging hover plates as misaligned (2026-09-27) |
 | user actions | shown on hover and focus (always on touch), at the bubble's end; same row geometry | ChatGPT hides them until hover; measured 2026-09-28: three 32 plates, no gap, 4 below the bubble, the last ending 4 inside its edge | the plates end on the bubble's edge (owner, 2026-09-27: plates line up with the turn) |
 | streaming | 8 dot 4 after the last word, pulsing (still under reduced motion); actions hidden until done; `aria-busy` | ChatGPT's dot | size not measured |
 
@@ -65,7 +65,7 @@ the user bubble, prose and assistant actions re-measured the same as 2026-09-26 
 22, 10 / 16 padding, 16/24; prose 16/26, paragraphs 4 + margins; actions 32, corner 8, icons 20,
 muted #8f, no gap). New: the user turn's hover actions (`chatgpt--user-message--hover`): three
 32 plates, no gap, 4 below the bubble, the last 4 inside its edge. Area in the gallery: bubble
-corner 16, 10 / 16, neutral #f7, 16/24; prose 16/24; 32 plates with 16 icons, muted, no gap. The
+corner 16, 10 / 16, neutral #f7, 16/24; prose 16/24; 32 plates with 16 icons, muted, no gap (since audit S6b the ghost Button's quiet ink, about #58). The
 type and row geometry match; the differences are the recorded decisions (corner 16 over the
 pill, the neutral fill over the owner's accent personalization, 24 leading, 16 icons, plates on
 the edge). No change.
@@ -83,3 +83,7 @@ labelled buttons.
   text edge (43.8 = 43.8); the person's last plate ends on the bubble's edge (523.8 = 523.8).
 - React test: names, structure, streaming cursor.
 - Unverified: dark theme, screen readers, RTL (the bubble moves to the start).
+
+## Feedback log
+
+- 2026-09-30 · audit S6b (owner) → actions no longer override Button ink to `fg-muted`; they take the ghost icon Button's quiet ink as every icon action does. Suggestion rows and Code block tabs keep `fg-muted` → message.css:50.

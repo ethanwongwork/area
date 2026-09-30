@@ -75,7 +75,7 @@ figma    sidebar row 224 × 28, padding 0/4, radius 5; 24px icon box, gap 8, tex
          11/16 400; a 24px trailing action at opacity 0 until hover       (sidebar-row--hover node 10)
   page   button 224 × 24, radius 5; text at 8, 11px; current 550, rest 400
 area     nav.area-nav flex column, gap 2, 240 wide
-  item   a.area-nav__item 32px, radius 8, gap 8, fg-muted; aria-current draws current
+  item   a.area-nav__item 32px, radius 8, gap 12 (gap-row; horizontal 6), fg-muted; aria-current draws current
     icon 16px (.area-nav__icon); text truncates; trailing fg-muted
   row    .area-nav__row: item + .area-nav__actions (28px buttons), one shared plate
   label  .area-nav__label 32px, fg-muted
@@ -114,7 +114,7 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 | row · height | 32 (`control-md`) | Peers Menu, Tree view | Notion 30, Figma 28 / 24, ChatGPT 35, Untitled 36; density is the UI-scale axis's job (second pass, item 18) |
 | row · radius | 8 (`radius-row`, capped at 0.4 × 32) | ChatGPT 8 | Notion 6, Figma 5, Untitled 6 |
 | row · start inset | 8, the icon column | Notion 8 (primary for navigation); Figma page rows 8 | ChatGPT 10; Figma sidebar 4 + 24px icon box |
-| icon · size, gap | 16 (`icon-md`), 8 (`gap-md`) | Notion and Figma 8 icon-to-text | Product icons 20–24; Area icon slots are 16 |
+| icon · size, gap | 16 (`icon-md`), **12** (`--area-gap-row`, `inset.css:62`), so labels sit at 36 as Menu's; horizontal items take `gap-md`, 6 since audit S14 (`inset.css:64`) | ChatGPT and Notion labels at 36; Menu | Was 8 (labels at 32) until audit S11a. Product icons 20–24; Area icon slots are 16 |
 | text | 14/20 400 | ChatGPT 14/20 400; Notion 14/21 400 | Figma 11/16 (editor density) |
 | rest ink | **`fg-default`** (marker variant `fg-muted`) | Owner (2026-09-27); ChatGPT rgb(13) (`nav/chatgpt--sidebar-top-group`) | Notion rgb(95, 94, 89); the label carries the quieter ink |
 | hover plate | `bg-component-hover` #f3f3f3 / #333333; ink fixed | Row-plate rule; ChatGPT 5% black; Figma page row #f5 | — |
@@ -128,7 +128,7 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 | group label | 32px row, **14/20 500** `fg-muted`, start 8 | Owner (2026-09-27, second message): ChatGPT's section title 14/18 500 rgb(143) (`nav/chatgpt--sidebar-section-label`) | Area's 14 leading is 20; rgb(143) is 3.3:1, so the ink is `fg-muted`. Notion's 12/16 was the first message's choice. Menu keeps 12/16 (Notion's menus) |
 | group gap | **12** + the 2px item gap | ChatGPT 21 between sections at 35px rows (`nav/chatgpt--sidebar-projects-section`) | Notion 4; was 8 |
 | width | **240** (`--area-nav-inline-size` fallback, `/* spec */`, `nav.css:27`) | Figma file-browser sidebar: 224 rows + 8 inset | Was 200 (prior decision); Notion rows 254. Docs demos render at this width, no longer framed at 260 (`apps/docs/src/demos/nav.tsx:4`, third pass) |
-| row actions | 28px ghost buttons, always shown | Prior decision (independent action slots) | ChatGPT (20px pills) and Figma (24px) show actions only on hover |
+| row actions | 28px ghost buttons, always shown; hover `bg-hover`, press `bg-active` (`nav.css:243`), so they show on a hovered or current row | Prior decision (independent action slots); audit S11c | ChatGPT (20px pills) and Figma (24px) show actions only on hover |
 
 Third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
 1. Group label: kept. Notion's sidebar label is 12/16 in its tertiary ink rgb(161, 158, 153)
@@ -145,7 +145,7 @@ Third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questi
 |---|---|---|
 | rest | transparent, `fg-muted` | `area--default` rows 2–3 |
 | hover | plate `bg-component-hover` (row or `.area-nav__row`); not on the current row | `chatgpt--sidebar-row--hover`, `figma--page-row--hover`; `nav.css:131, 242` |
-| focus-visible | 2px `focus-color` outline, 2px offset | `nav.css:169-172` |
+| focus-visible | 2px `focus-color` outline, inset (offset −2), as Tabs, so rows 2 apart don't overlap the ring (audit S11b) | `nav.css:168-172` |
 | current (`aria-current`) | plate `bg-component-active`, `fg-default`, kept under the pointer; marker: no plate, rail | `area--default` row 1, `area--marker`; `notion--sidebar-row-current--hover` |
 | disabled (`data-disabled`) | opacity 0.5, no hover plate, `not-allowed` | `area--state-disabled`; `nav.css:175-178` |
 
@@ -168,6 +168,8 @@ scroll rather than wrap. RTL uses logical properties; not verified.
 | Tabs, Tree view | current marker | `fg-default` underline / rail | `fg-default` rail | match (neutral) |
 | Menu, Button, Tabs | disabled | 50% | 50% | match |
 | Menu | group label, leading icon inset | 32px 14/20 `fg-muted`; 8 | same | match |
+| Menu, Command palette, Select | icon-to-label gap | `--area-gap-row` 12, labels at 36 | same (vertical) | match (audit S11a) |
+| Menu | keyboard focus | plate only | inset 2px ring | differs by owner call (audit S11b): Menu keeps plate-only focus |
 
 ## Visual pass
 
@@ -214,3 +216,5 @@ specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
   recorded (Visual pass); Validated.
 - 2026-09-27 · owner: titles from ChatGPT, nav in full context → labels 14/20 500 muted, sidebar
   recipe tile → headless Edge screenshot of the recipe.
+- 2026-09-30 · audit S11 (owner) → vertical items take `--area-gap-row` 12, labels at 36 (was `gap-md` 8, labels at 32; `inset.css:62`); focus ring inset (offset −2, was +2; `nav.css:171`); ghost row actions hover `bg-hover` and press `bg-active` (was `bg-component-hover`, invisible on a hovered row; `nav.css:243`).
+- 2026-09-30 · audit S14 (owner) → horizontal items read `gap-md`, now 6 (was 8; `inset.css:64`); vertical items keep `--area-gap-row` 12.

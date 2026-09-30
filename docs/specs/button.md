@@ -223,7 +223,7 @@ filtered to the shell, text and icon rows (full tables: run the command on the s
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | label · weight | **400** on soft, outline and ghost; **500** on solid | Owner type ramp; ChatGPT soft and ghost 400, Notion ghost 400, Notion solid 500 | Was 500 on every variant. Notion's outline is 500; the owner's rule reserves 500 for fills |
-| icon → label gap | **6** at md and lg; sm stays 4 | Notion 6 (28 and 32); peer Tree view 6 | Was 8. ChatGPT 4 and Untitled 4 + 2 bracket it. sm keeps 4 with its 12px text |
+| icon → label gap | **6** at sm, md and lg, the density tokens `--area-gap-sm/md/lg` (button.css:26, :436, :446, :456; density.ts:80-82); compact sm 4 | Notion 6 (28 and 32); peer Tree view 6 | Was 8, then a literal 6 at md and lg with sm at 4 (audit S14 moved sm to 6 and put the value in the tokens). ChatGPT 4 and Untitled 4 + 2 bracket it |
 | shadow | **none** on solid, soft and outline | ChatGPT and Notion: no shadow on any button | Was `shadow-1` (0 0.5px 1px −0.5px). Untitled's ring-and-shade is its own look |
 | height | sm 28, md 32, lg 40 (unchanged) | Notion 28/32; all three show 32 | lg 40 matches Untitled; no product shows 40 (ChatGPT 36). Open question |
 | radius | 6 / 8 / 10 (unchanged, `radius-control-*`) | ChatGPT 8 at 32–36 | Notion 6, Figma 5; follows the radius preset |
@@ -253,8 +253,10 @@ Unchanged: native `button`, `type="button"` by default, `aria-pressed` for `sele
 
 | Peer | Shared role | Peer value | Button | Match / reason |
 |---|---|---|---|---|
-| Tree view | glyph → label gap | 6 | 6 (md, lg) | Match |
+| Tree view | glyph → label gap | 6 | 6 (sm, md, lg) | Match |
 | Type ramp | label weight | 400; 500 on fills | 400; 500 on solid | Match |
+| Kbd | nested shortcut | `currentColor` 14% plate, inherited ink, own 6 corner (`kbd.css:131-135`) | every variant and state | Match (audit S12c): the plate follows the Button's ink, so it survives hover, press and selected fills |
+| Tree view, Nav | ghost Button on a row | hover `bg-hover`, press `bg-active` (`tree-view.css:74`, `nav.css:243`) | neutral ghost default `bg-component-hover` (`button.css:385-388`) | Row hosts override (audit S11c), so the plate shows on a hovered or current row |
 
 ## Visual pass
 
@@ -280,7 +282,7 @@ chevron, as ChatGPT's model picker).
 - Hover (pass 1b): Area solid, soft, outline and ghost captured after the change; outline
   and ghost before-states recreated through the private properties (`before/*hover-before*`).
 - Unverified: dark theme (products not switched), Figma hover, disabled/loading/selected against references, compact density
-  (the 6px gap is literal and does not follow density yet).
+  (the gap follows density since audit S14; compact sm is 4).
 
 ## Feedback log
 
@@ -309,3 +311,5 @@ chevron, as ChatGPT's model picker).
   A selected toggle (`data-selected`) keeps body ink; solid and the accent / status tones are
   unchanged. Every ghost and outline use across the system (Toolbar, Dialog close, Message
   actions, Model picker, Scroll to latest, chips) takes it at once.
+- 2026-09-30 · audit S11c, S12c (owner) → a Kbd inside any Button is a `currentColor` 14% plate with inherited ink (was neutral-solid only, with a `bg-inverse` 16% plate on coloured solids; `kbd.css:131-135`); ghost Buttons in Tree view and Nav row actions hover `bg-hover` and press `bg-active` (`tree-view.css:74`, `nav.css:243`).
+- 2026-09-30 · audit S14 (owner) → the icon-to-label gap reads the density tokens (button.css:26, :436, :446, :456), 6 at sm, md and lg (density.ts:80-82; sm was 4). Button group and Toolbar no longer override a child's `--_gap`, so hosted Buttons keep 6.

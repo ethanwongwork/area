@@ -6,9 +6,9 @@
  * picks a value and marks it with a raised fill. Giving both a fill is the most common
  * way those two end up indistinguishable.
  *
- * The track's radius is the inverse concentric rule: outer = inner + inset. Because the
- * item radius is itself derived from control height, the whole control stays correct
- * under every density and radius combination without a single fixed value.
+ * The track is the control, so it takes the per-tier control radius, and the items sit
+ * concentric inside it: inner = outer - inset (audit S4). Both follow the tier and the
+ * radius axis, so the control stays correct under every density and radius combination.
  *
  * The track's outline is an inset box-shadow rather than a border, so the 1px does not
  * participate in layout -- the items sit flush against the padding box and the track
@@ -43,13 +43,12 @@
     block-size: var(--_height);
     padding: var(--_inset);
     /*
-     * Concentric, outward: the track is the item's radius plus the inset it pads by, so the
-     * two curves stay parallel. Capped against the track's own height, which is the tier.
+     * The track is the control and takes the per-tier control radius, as Button and the
+     * fields do; the items sit concentric inside it, the track's radius less the inset (audit
+     * S4, owner 2026-09-30; was the item's radius plus the inset, 10 around 8 at md).
      */
-    border-radius: min(
-      calc(var(--area-radius-control) + var(--_inset)),
-      calc(var(--_height) * var(--area-radius-cap))
-    );
+    --_track-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap)));
+    border-radius: var(--_track-radius);
     background-color: var(--area-bg-subtle);
     box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-decorative);
   }
@@ -64,7 +63,7 @@
     padding-inline: var(--_gutter);
     border: var(--area-stroke-width) solid transparent;
     /* Capped against the item's own height; see button.css. */
-    border-radius: min(var(--area-radius-control), calc(var(--_item) * var(--area-radius-cap)));
+    border-radius: max(0px, calc(var(--_track-radius) - var(--_inset)));
 
     background: transparent;
     /* Unselected options read one step quieter, as ChatGPT (rgb 93) and Figma (50% black) set
@@ -88,11 +87,13 @@
   /*
    * The selected item lifts off the track: a surface fill, a hairline of its own, and the
    * lightest elevation. That is what reads as "raised out of the groove" rather than
-   * merely tinted.
+   * merely tinted. In dark the surface rung (#1d) sits below the #28 groove and read as
+   * sunken, so the thumb takes the active fill there (audit S15a, owner 2026-09-30; light
+   * keeps the white thumb, as ChatGPT and Figma).
    */
   .area-segmented__item[data-selected] {
     font-weight: var(--_selected-weight, var(--_weight, var(--area-weight-strong)));
-    background-color: var(--area-bg-surface);
+    background-color: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec */
     color: var(--area-fg-default);
     border-color: var(--area-edge-selected);
     box-shadow: var(--area-shadow-1);
@@ -138,7 +139,7 @@
   .area-segmented--full-width { display: flex; }
   .area-segmented--full-width .area-segmented__item { flex: 1; min-inline-size: 0; }
 
-  .area-segmented--sm { --_height: var(--area-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-segmented--md { --_height: var(--area-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-segmented--lg { --_height: var(--area-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-segmented--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-segmented--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-segmented--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

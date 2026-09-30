@@ -69,7 +69,7 @@ Read from the nodes of `area--size-small`, `area--default`, `area--size-large`,
 | arc | 25% | Untitled ~28% (indicator), ~25% (button) | — |
 | arc ink | `neutral-solid`; accent by tone | Owner | Untitled brand |
 | in a Button | **arc `currentColor`, track `currentColor` at 25%** (display.css:211) | The host's label ink, so it shows on any fill (audit spec pass) | Was `neutral-solid` on a `neutral-solid` button: only the light track showed |
-| track | `bg-component-active` #eee | Untitled neutral-100 (#f5) | A light guide ring, lighter than the rail (≈ #ddd), as Untitled's spinner track (100) is lighter than its rail (200) |
+| track | the arc's ink at 25% (≈ #c9 on white; display.css:226-229) | Primer; ChatGPT 30% (2026-09-27 audit) | Darker than the rail (`edge-control` #e2); audit E-22 left open. Was `bg-component-active` #eee |
 | speed | 2s per turn, linear (display.css:194) | — | Untitled 1s |
 | motion | stops under `data-area-motion="none"` and reduced motion (display.css:271, 274-281) | Audit rule "motion setting" | Before the audit only reduced motion stopped it |
 
@@ -93,7 +93,7 @@ With `label`, the Spinner is `role="status"` with `aria-label`; without it, it i
 |---|---|---|---|---|
 | Progress, Skeleton | motion axis | stop under `motion="none"` | same | match (audit) |
 | Progress, Slider | fill / arc | `neutral-solid` | same | match |
-| Progress, Slider | track | rail ≈ #ddd | #eee | differs by design (above) |
+| Progress, Slider | track | rail `edge-control` #e2 (audit S5) | ink at 25% ≈ #c9 | differs (E-22 open) |
 | Button (any fill) | ink on the fill | label ink | arc = label ink, 25% track | match (fixed in the audit's spec pass; `area--button`) |
 | Input, Badge, Switch | icon slot | 16 | 16 | match |
 
@@ -135,3 +135,4 @@ Nothing in Notion or Figma to compare. Unverified: dark theme, forced colours.
 - 2026-09-28 · batch 6 Claude in Chrome (ChatGPT spinners) → no change; 1s kept (owner) over ChatGPT's 2s.
 - 2026-09-28 · owner: "slightly pixelated … cant really tell that its pill shaped inside, should it be slightly wider track?" → ring and arc redrawn as anti-aliased SVG masks with round caps; stroke 1/8 of the size (lg 2 → 3, md stays 2, sm 1.5); a 2.5px md option shown in the Pass review (`GalleryReviewSpinner`) for the owner to choose → headless Edge 2x/4x comparison; `area--*` recaptured; motion rules moved to the arc (`::before`), lab probe updated.
 - 2026-09-28 · owner: approved (batch 6). The md stroke stays 2px (1/8); the 2.5px option was not taken.
+- 2026-09-30 · audit S5 (owner) → no Spinner change; the Progress and Slider rail it is compared with is now `edge-control` #e2 (was ≈ #dd) → display.css:265.

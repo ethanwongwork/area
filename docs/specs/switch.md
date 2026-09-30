@@ -75,8 +75,8 @@ Read from the nodes. Composites on white are arithmetic, not captured.
 | track | 28 × 16 | 32 × 20 | 36 × 24 | 44 × 20 | 32 × 20 | 30 × 18 |
 | thumb / inset | 12 / 2 | 16 / 2 | 20 / 2 | 24 × 16 / 2 | 16 / 2 | 14 / 2 |
 | travel | 12 | 12 | 12 | 18 | 12 | 12 |
-| off fill / edge | #d4d4d4 / 1px #e2e2e2 | | | | not captured | 30% warm grey (≈ rgb(219, 218, 215)) / none |
-| off hover fill | #c5c5c5 | | | | — | not captured |
+| off fill / edge | #d4d4d4 / 1px #e2e2e2 (before 2026-09-28; now #e2 / #e2) | | | | not captured | 30% warm grey (≈ rgb(219, 218, 215)) / none |
+| off hover fill | #c5c5c5 (before 2026-09-28; now #d4) | | | | — | not captured |
 | on fill | rgb(40) (neutral), rgb(92, 93, 254) (accent) | | | | rgb(58, 131, 247) | not captured |
 | on hover | `neutral-solid-hover` (not captured) | | | | unchanged | — |
 | thumb paint | #fff, `shadow-1` | | | | #fff, 1px white border, 8% shadow | #fff, no shadow |
@@ -96,18 +96,19 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 | track · long | 2 × height + 4 (44 at md), thumb +8 (switch.css:38) | Area composition | — |
 | on fill | `neutral-solid` | Owner 2026-09-26 | ChatGPT and Untitled use brand blue; `tone="accent"` |
 | on hover | `neutral-solid-hover` #1d1d1d | Untitled darkens on hover | ChatGPT does not change |
-| off fill | **`edge-control` #e2e2e2, edge the same** (owner 2026-09-28: lighter); hover `edge-control-hover` #d4 | Notion's off track ≈ rgb(219, 218, 215); Area toggle-fill role | Area is about one step darker than Notion; edge kept (third pass), see below |
+| off fill | **`edge-control` #e2e2e2, edge the same** (owner 2026-09-28: lighter); hover `edge-control-hover` #d4 (switch.css:20-22) | Notion's off track ≈ rgb(219, 218, 215); the one off-track grey shared with the Slider and Progress rails (audit S5) | Area is about one step darker than Notion; edge kept (third pass), see below |
 | thumb | `bg-surface`, `shadow-1` | ChatGPT white thumb with an 8% shadow | Notion's thumb has no shadow |
 | disabled | 50% on the whole label (switch.css:97) | Audit shared rule; Untitled 50% | — |
 | read-only | **full paint, default cursor** (switch.css:98), in forced colours too (switch.css:121-123); changes blocked | Second pass, item 9; third pass for forced colours | Was the disabled 50%, which hid that the value is set |
+| label gap | 6 at sm, md and lg, the density tokens (switch.css:13, :38, :40); compact sm 4 | Peer: Checkbox, Button (audit S14) | Was 4 / 8 / 8 |
 | label alignment | track centred on the first 20px line (switch.css:65) | inset contract | ChatGPT centres on a two-line row; Notion centres in a 28px row |
 
 **Settled in the third pass** ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
 
 1. *Track edge: kept.* Neither ChatGPT nor Notion draws an edge on the track
    (`notion--switch-off`: transparent outline only). Area keeps 1px `edge-control`
-   #e2e2e2 (switch.css:18, 66): the edge carries the contrast-more mix, and at rest it sits
-   lighter than the off fill.
+   #e2e2e2 (switch.css:22, 69): the edge carries the contrast-more mix. Since the owner's
+   2026-09-28 lightening it equals the off fill, so none shows.
 2. *Forced colours: changed.* Read-only no longer paints like disabled (GrayText); only
    disabled greys (switch.css:121-123), matching the normal theme.
 
@@ -115,7 +116,7 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover | off `fill-toggle-hover` #c5c5c5; on `neutral-solid-hover`; ink fixed | `area--hover` |
+| hover | off `edge-control-hover` #d4, edge the same (switch.css:94); on `neutral-solid-hover`; ink fixed | `area--hover` |
 | pressed | thumb +2px wide | `area--active` |
 | focus-visible | 2px `focus-color` outline, 2px offset, on the track | `area--focus` (outline rgb(65, 45, 208)) |
 | checked | track and edge `--_on`; thumb moves 12px to the end | `area--checked` (thumb x 2 → 14) |
@@ -138,7 +139,8 @@ input (opacity 0) over the drawn track.
 |---|---|---|---|---|
 | Checkbox, Radio, Button | disabled | 50% whole control | same | match (audit) |
 | Checkbox, Radio, Slider | on paint | `neutral-solid` | same | match |
-| Checkbox, Radio | off glyph grey | rest edge #d4d4d4 | off fill #d4d4d4 | match |
+| Slider, Progress | off track / rail | `edge-control` #e2 (slider.css:29, display.css:265) | off fill #e2 | match (audit S5) |
+| Checkbox, Radio | glyph edge | rest edge `edge-control-hover` #d4 | off fill #e2, hover #d4 | differs by design (audit S5): a track is a fill, a 16px glyph needs the firmer edge |
 | Slider | thumb | surface, `shadow-1`, 16 at md | same | match |
 | Checkbox | row type | 14/20 + 12/16 | same | match |
 | Menu | trailing control in a row | 28px row (Notion) | 20px track | fits with 4px to spare |
@@ -182,3 +184,5 @@ captures. Build and test results are in the
 - 2026-09-27 · third pass → forced colours no longer grey read-only (only disabled); track
   edge kept → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner: brighter green → the `custom` tile uses green 500 (#01aa4e; hover 550), 3.06:1 on white for the track and for the white thumb on it (success solid, #00853c, was 4.75:1) → headless Chromium.
+- 2026-09-30 · audit S5 (owner) → no Switch change; its off track #e2 is now the one off-track grey, shared by the Slider and Progress rails; Checkbox and Radio keep #d4 as the glyph edge → slider.css:29, display.css:265.
+- 2026-09-30 · audit S14 (owner) → the track-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (switch.css:13, :38, :40; density.ts:80-82).

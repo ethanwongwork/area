@@ -56,14 +56,14 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 |---|---|---|---|
 | width | 600 | Notion's list column | Notion's preview pane (406) is left out |
 | position | 77 from the top, centred; max 700 tall | Notion | results grow downward from a fixed field |
-| surface | Dialog's: border, opaque surface, floating lift, scrim 13% | dialog.md | Notion's translucent blur is not in Area's surfaces |
+| surface | Dialog's: border, opaque surface, floating lift `--area-shadow-float` (command-palette.css:42; `none` under Flat), scrim 13% | dialog.md | Notion's translucent blur is not in Area's surfaces |
 | corner | row radius + list inset = 8 + 4 = 12 (Menu's and the Combobox list's) | list pass: one list model | Notion 20 with 12 rows in a 10 inset |
-| search row | 48 tall, 16/24 text; the glyph on the rows' icon column (13 from the edge), the typed text on their text column (41), rule under it | list pass | Notion puts its field 12 in |
-| rows | Menu rows (32, 8 radius, 5% wash), icon 16, 12 gap | menu.md | Notion's 36 rows and 20 icons belong to its larger scale |
+| search row | 48 tall, 16/24 text; the glyph on the rows' icon column (13 from the edge), the typed text on their text column (41), `--area-gap-row` after the glyph (command-palette.css:56), rule under it | list pass | Notion puts its field 12 in |
+| rows | Menu rows (32, 8 radius, 5% wash), icon 16, 12 gap (`--area-gap-row`, command-palette.css:28; labels at 36) | menu.md | Notion's 36 rows and 20 icons belong to its larger scale |
 | group headings | Menu's label rows: 32 tall, 12/16 muted, on the icon column; groups 2 apart like rows | list pass: one list model; Menu labels 12/16 (2026-09-27) | Notion 12/14.4 medium; ChatGPT 14/20 regular |
 | description | muted, after the label | Notion (a page's parent) | — |
-| shortcut | Kbd small, quiet, at the end | Kbd | — |
-| footer | key hints (↑ ↓ Move, ⏎ Open, ⎋ Close), each also a button: ↑ and ↓ move the highlight, Open runs it, Close closes; 24 plates (Button xs height and radius) with the keycap on their 4 inset, the `bg-hover` wash, ink fixed; disabled (50%) with no results; out of the tab order and focus kept in the field; `aria-hidden` (the keys are announced by the field); quiet 16 keycaps, 12/16 muted labels; plates 8 from the rule, the side and the bottom (concentric with the corner: 4 + 8 = 12; 40 tall + the rule), keycaps starting on the icon column, 16 between hints | Notion's hint row; owner: "the controls … still don't do anything" (2026-09-27) | Notion's hints are text only |
+| shortcut | Kbd small, quiet, at the end; renders like Menu's string shortcut (UI font 12/16 400, muted, unboxed; kbd.css:89-102) | Kbd; Menu | Was the keyboard face at 500 until audit S12a |
+| footer | key hints (↑ ↓ Move, ⏎ Open, Esc Close), each also a button: ↑ and ↓ move the highlight, Open runs it, Close closes; 24 plates (Button xs height and radius) with the keycap on their 4 inset, the `bg-hover` wash, ink fixed; disabled (50%) with no results; out of the tab order and focus kept in the field; `aria-hidden` (the keys are announced by the field); quiet keys (unboxed UI font 12/16, as the row shortcuts), 12/16 muted labels; plates 8 from the rule, the side and the bottom (concentric with the corner: 4 + 8 = 12; 40 tall + the rule), keycaps starting on the icon column, 16 between hints | Notion's hint row; owner: "the controls … still don't do anything" (2026-09-27) | Notion's hints are text only |
 
 ## Visual pass
 
@@ -141,3 +141,7 @@ Owner, same day: "should the move text be further away? or part of the backplate
 with the text so close to the arrow." The label names both arrows, so it cannot join one plate;
 it now sits 6 from the ↓ plate's edge (was 2, so the hover wash met the text). 6 is the
 keycap-to-label gap inside the Open plate, taken from the visible plate here.
+
+## Feedback log
+
+- 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (command-palette.css:42); rows and the search row take the density token `--area-gap-row` (12, labels at 36; command-palette.css:28, :56); quiet keys render in the UI font 12/16 400, and Escape is written "Esc" (kbd.css:89-102).

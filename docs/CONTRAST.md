@@ -42,9 +42,11 @@ Never lower a floor or add a waiver to hide a failure.
 ## Focus
 
 Use `focus-color`, `focus-width` and `focus-offset` for ordinary control focus. Required
-focus geometry is independent of elevation. Editable fields use `field-focus-*` roles:
-a neutral opaque edge and translucent halo in standard mode, returning to an accent
-outline in increased contrast. Invalid inputs retain their danger edge/context.
+focus geometry is independent of elevation. Editable fields use `field-focus-*` roles
+(audit S1, owner 2026-09-30): the 1px edge takes `focus-color` and a 2px halo of the same
+colour at 14% (`field-focus-halo-color`, the tone halos' alpha; ChatGPT's 1px blue focus
+edge), in light and dark. Increased contrast adds the 2px outline and widens the halo.
+Composer keeps the quiet neutral edge (`composer-focus-color`). Invalid inputs retain their danger edge/context.
 
 Measure the actual painted opaque edge/outline against its ground. Measuring only the
 source color of a translucent halo is insufficient. Preserve focus and selected/invalid

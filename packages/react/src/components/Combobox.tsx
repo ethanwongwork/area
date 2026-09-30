@@ -213,7 +213,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     const isSelected = option.value === selected;
     return <div key={option.value} id={`${id}-option-${current}`} data-index={current} role="option" aria-selected={isSelected}
       aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? "" : undefined} className="area-menu__item area-combobox__option"
-      data-highlighted={highlighted ? "" : undefined} data-selected={undefined}
+      data-highlighted={highlighted ? "" : undefined} data-selected={isSelected ? "" : undefined}
       onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!option.disabled) setActive(current); }}
       onClick={() => { if (!option.disabled) commitRow(row); }}>
       {option.icon ? <span className="area-menu__icon" aria-hidden="true">{option.icon}</span> : null}

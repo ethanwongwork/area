@@ -92,9 +92,9 @@ footer action in the opposite corner by the same rule (12/12).
 | surface · inset, gap | 16 (border included), 16 between sections (unchanged) | shadcn 16/16; Primer 16 | ChatGPT 24 |
 | surface · width | 480 preferred (unchanged) | Between shadcn 384 and ChatGPT 600 / Primer 640 | — |
 | surface · border | 1px decorative (unchanged) | All use a 1px ring | — |
-| surface · shadow | **`0 20px 24px`, `0 5px 8px`** in `shadow-color` | The lift Popover and Menu use | Was `shadow-2` (1–2px). References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |
+| surface · shadow | **`--area-shadow-float`**: `0 20px 24px` in `shadow-color`, `0 5px 8px` at half strength (surface.css:777); `none` under the Flat preset | The lift Popover and Menu use | Was `shadow-2` (1–2px). A Surface axis role since audit S10. References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |
 | scrim | **`rgb(0 0 0 / 0.133)`** in light, no blur; dark keeps `bg-overlay` | ChatGPT 13.3%; shadcn 10% | Was 65% with a 2px blur. Dark value not measured |
-| close · control | **32px ghost neutral Button** (md), Fluent dismiss glyph | ChatGPT 32, Primer 32; shadcn 28 | Was a bespoke 28px button whose foreground changed on hover (against the fixed-foreground rule) |
+| close · control | **32px ghost neutral Button** (md), Area `dismiss` glyph (`primitives.tsx:1341`) | ChatGPT 32, Primer 32; shadcn 28 | Was a bespoke 28px button whose foreground changed on hover (against the fixed-foreground rule). The written exception to the rectangular-surface close (ghost sm, 28), which Popover, Toast and Alert use (audit S9, owner) |
 | close · position | **8 from the top and 8 from the side**; icon on the 16 inset both ways | shadcn 8/8, Primer 8/8 (half the inset); ChatGPT 12/12 | Was 16/16 (box on the inset, icon at 22) |
 | title · alignment | line centred on the close (centres 24 and 24; cap 16.8) | Popover rule: header top = (icon − title leading) / 2 | Was trimmed to its cap on the inset, so the close's centre sat 7 below the title's |
 | title · without close | cap on the 16 inset (`text-box: trim-start`) | Popover | — |
@@ -113,12 +113,12 @@ Rule: a child that sits in a corner at offset o shares the corner's centre when 
 R − o. Swept every rounded container in the gallery:
 
 - Concentric: Popover close (12 − 6 = 6), Dialog close (16 − 8 = 8, after this pass), Card
-  media (24 − 8 = 16), Toolbar buttons (12 − 4 = 8), Segmented items (10 − 2 = 8), Nav row
+  media (24 − 8 = 16), Toolbar buttons (12 − 4 = 8), Segmented items (8 − 2 = 6), Nav row
   buttons, Tooltip keycaps, Composer buttons (16 − 8 = 8).
 - Within 1px: Menu items and search (8 against 12 − 5 = 7), NumberField steppers (8 vs 7),
   Toolbar overflow buttons (6 vs 7). Left as they are.
 - Not concentric, child well inside the corner (offset ≥ R/2, where the arcs do not read as
-  nested): Alert dismiss (9 in a 12 corner), Code block copy (9 in 12), Input action (4 in
+  nested): Code block copy (9 in 12), Input action (4 in
   8), ColorSwatchPicker cells. Flagged, not changed.
 
 Insets pair with radii: Popover 12 inset / 12 corner, close 6 in; Dialog 16 inset / 16
@@ -132,7 +132,9 @@ name and description (for documentation, or inside your own `<dialog>`). With `t
 it renders the trigger (`aria-haspopup="dialog"`, `aria-controls`) and a native
 `<dialog class="area-dialog__modal">` that carries the name and description; the trigger
 calls `showModal()`. The platform supplies the focus trap, Escape and focus return; a click
-on the scrim closes it. The close button closes the enclosing native dialog. Verified in the
+on the scrim closes it. The close button calls `onDismiss`, then closes the enclosing native
+dialog; `dismissLabel` names it (default "Close dialog"). `onClose` remains as a deprecated
+alias (`primitives.tsx:1289-1294`, `:1341-1344`). Verified in the
 gallery with a real pointer: opens modal with the 13% scrim, focus on the close, Escape
 closes and refocuses the trigger, a scrim click closes, a click inside does not.
 
@@ -186,3 +188,5 @@ change.
   body clipped a full-width field's focus halo at its sides. The body now reaches out by the
   focus ring's extent (`--area-focus-width` + `--area-focus-offset`, padding in and the same
   margin out), so content keeps the 16 inset and focus rings paint whole.
+- 2026-09-30 · audit S9 (owner) → the 32px md ghost close is written as the exception to the rectangular-surface close (ghost sm). `onDismiss` and `dismissLabel` added (default "Close dialog"); `onClose` kept as a deprecated alias → `primitives.tsx:1289-1294`, `:1341-1344`.
+- 2026-09-30 · audit S10 (owner) → the lift is the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → surface.css:777.

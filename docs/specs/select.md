@@ -65,8 +65,8 @@ Product triggers (node numbers from the captures):
 chatgpt  button  36px pill, padding 0 12, gap 4, fill rgb(243) (hover 5% black), 1px 10% ring
 notion   div[role=button]  28px, radius 6, no chrome; text span; 14px chevron svg, margin-start 4
 area     select.area-select  owns: height, border, radius, fill, focus (no resting shadow, audit B-2); chevron = background image
-  picker ::picker(select)   4px below, padding 4, radius 12, bg-surface, decorative border, floating lift
-  option option             min 32, padding 6 8, radius 8, 2px apart, ::checkmark at the end
+  picker ::picker(select)   4px below, padding 4, radius 12, bg-surface, decorative border, floating lift (--area-shadow-float)
+  option option             min 32, padding 6 8, radius 8, 2px apart, icon-to-label gap-row 12, ::checkmark at the end
 ```
 
 Insets (`inset.css:120-125`): text start (H − 1cap) / 2 − 1 = 10.03 at md; chevron inset
@@ -89,20 +89,21 @@ Area widths are the tile's):
 | **shell** shadow | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px | same | — | — | — | rgb(230, 230, 230) 0 0 0 1px inset | — |
 
 `area--default` node 1 (the checked option): fill rgb(238, 238, 238) (`bg-component-active`),
-padding 6 8, radius 8, gap 8. `area--disabled` has no opacity (0.5 before the audit).
+padding 6 8, radius 8, gap 8. `area--disabled` has no opacity (0.5 before the audit). The
+size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 
 ## Decisions
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| trigger · chrome | Input's: 32 / 28 / 40, radius 8, `input-edge`, `bg-surface`, `shadow-1` | Peer: [Input](input.md); Figma's outline selects (1px rgb(230), white) | ChatGPT 36 pill with a fill; Figma 24, radius 5; no product select has a shadow; kept with Input (Settled questions 2) |
+| trigger · chrome | Input's: 32 / 28 / 40, radius per tier 8 / 6 / 10 (`navigation.css:231`, `:310-312`), `input-edge`, `bg-surface`, `shadow-1` | Peer: [Input](input.md); Figma's outline selects (1px rgb(230), white) | ChatGPT 36 pill with a fill; Figma 24, radius 5; no product select has a shadow; kept with Input (Settled questions 2) |
 | trigger · soft | **`input-bg-soft` fill, transparent edge, no shadow; hover edge `input-edge`** (`.area-select--soft`, `navigation.css:250-255`); `variant` in the manifest (`manifest.ts:206, 211`) and React (`forms.tsx:12, 43`) | Third pass: the one field without soft, so a Panel mixed two field styles; peer Input soft (`input.css:52-57`) | — |
 | trigger · chevron | 16px, 1.5 stroke, `#888`, 8px from the outer end | Notion rgb(142,139,134) 8px from the end; ChatGPT 16px rgb(143); UUI 16px; second pass item 10 | A literal in a data URI (`navigation.css:237`), not a role; Figma 50–90% black |
 | trigger · text | 14/20 400 `fg-default`, 11.03 from the edge | Notion 14 400, ChatGPT 14/18 400 | Notion's permission select uses muted ink as an inline trigger; Figma 11/16 450 |
 | picker · offset | 4px below, no flip | Owner; UUI 4px offset | — |
 | picker · surface | padding 4, `radius-container` 12, `border-decorative`, `bg-surface` | Peer: Menu (4px inset) | UUI radius 8 |
-| picker · lift | `0 20px 24px` + `0 5px 8px` at half strength, `shadow-color` (`navigation.css:312`) | Audit "Floating lift" (Notion popover; Menu, Popover) | Was `shadow-2` |
-| option · row | min 32, padding 6 8, radius `radius-row` 8, 2px apart | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6 |
+| picker · lift | `--area-shadow-float`: `0 20px 24px` + `0 5px 8px` at half strength, `shadow-color` (`navigation.css:334`); `none` under the Flat preset | Audit "Floating lift" (Notion popover; Menu, Popover) | Was `shadow-2`. A Surface axis role since audit S10 |
+| option · row | min 32, padding 6 8, radius `radius-row` 8, 2px apart; icon-to-label gap `--area-gap-row` 12 (`navigation.css:342`), labels at 36 as Menu's | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6 |
 | option · hover / focus | `bg-component-hover` #f3 | Audit row-plate rule | — |
 | option · checked | `bg-component-active` #eee; check at the end in `currentColor` | Audit: selection one step above hover | Figma's check sits before the label; UUI one fill for both |
 | disabled | field paint only (`navigation.css:281-287`) | Audit "Disabled" rule for text fields | Was field paint and 50% opacity |
@@ -112,7 +113,7 @@ padding 6 8, radius 8, gap 8. `area--disabled` has no opacity (0.5 before the au
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | hover | border → `border-subtle` #d4d4d4; ink fixed | `navigation.css:247` |
-| focus | border `field-focus-color` + 2px halo | `navigation.css:249-254`; Notion fields use a 2px blue ring; neutral kept ([input.md](input.md#settled-questions) 1) |
+| focus | border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo | `navigation.css:249-254`; audit S1, as [input.md](input.md) |
 | invalid / success / warning | border and halo in the tone colour; `aria-invalid` or `data-*` | `area--error`, `area--success`, `area--warning` |
 | disabled | fill #f7, `border-faint`, ink `fg-disabled` rgb(164); no opacity | `area--disabled` |
 | option hover / checked / disabled | #f3 / #eee / `fg-disabled` | `navigation.css:335-338`; `area--default` node 1 |
@@ -130,9 +131,10 @@ Keyboard, typeahead and dismissal are the browser's. Option focus uses the focus
 |---|---|---|---|---|
 | Input, Textarea, NumberField | field chrome and disabled | field paint, no opacity | same | match |
 | Input, Textarea, NumberField | soft variant | flat fill, transparent edge, no shadow | same (`navigation.css:250-255`) | match (third pass) |
-| Menu | row plates | hover #f3, selected #eee, 32px rows, 4px inset | same | match |
-| Popover, Menu, Dialog | floating lift | Notion geometry | same | match |
-| Menu | selected mark | neutral | `currentColor` check | match |
+| Menu | row plates | hover #f3, 32px rows, 4px inset, icon gap `--area-gap-row` 12; the #eee `data-selected` plate is the value-picker hook (surface.css:1045-1058) | same | match (audit S11a; option gap was 8) |
+| Popover, Menu, Dialog | floating lift | `--area-shadow-float` | same | match |
+| Menu | selected mark | check only, no plate (commands and choices: `checked`, `radio checked`) | #eee plate plus `currentColor` check | differs by job (audit S13 C): a value picker shows its value with the plate |
+| Combobox | selected option | #eee plate (`data-selected`) plus check | same | match (audit S13 C; Combobox was check only) |
 | InputGroup | mode picker | first child 3 × height wide (`input-group.css:102`) | chrome stripped inside the group | match |
 
 ## Visual pass
@@ -186,3 +188,6 @@ select and Figma's filter, size, zoom and format selects. Build and test results
   outline shadow kept → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-28 · owner: truncation errors → nowrap + ellipsis; in-group end padding = gutter + chevron
   → gallery measured, no Select text overflows.
+- 2026-09-30 · audit S4 (owner) → trigger radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `navigation.css:231`, `:310-312`); was 8 at every size.
+- 2026-09-30 · audit S10, S11a (owner) → the picker reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat; `navigation.css:334`); option icon-to-label gap is `--area-gap-row` 12 (was 8), labels at 36 as Menu's (`navigation.css:342`).
+- 2026-09-30 · audit S13, S14 (owner) → Select keeps the plate plus the check; Menu rows of commands and choices now show the check only, and Combobox matches Select (peer rows). The density gap moved to 6 at sm/md/lg, but the trigger sets `--_gap` without reading it (navigation.css:216, :311-313), so nothing visible changes.

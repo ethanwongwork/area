@@ -123,7 +123,8 @@
     overflow-x: auto;
     /* spec: a table stands alone on the page like a Card, and its edge is never lighter than
        the row rules inside it, so both take the divider role. */
-    border: var(--area-border-width) solid var(--area-border-divider);
+    /* A required frame: it keeps its edge under the Elevated preset (audit S10). */
+    border: var(--area-stroke-width) solid var(--area-border-divider);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
   }
@@ -208,7 +209,7 @@
     --_border-hover: var(--area-select-edge-hover);
     --_border-focus: var(--area-field-focus-color);
     --_focus-outline: var(--area-field-focus-color);
-    --_focus-halo: var(--area-shadow-color);
+    --_focus-halo: var(--area-field-focus-halo-color);
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
@@ -227,7 +228,8 @@
 
     border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
-    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
+    /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
+    border-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap)));
     background-color: var(--_bg);
     color: var(--area-select-text);
     font-size: var(--_text);
@@ -306,9 +308,9 @@
     cursor: not-allowed;
   }
 
-  .area-select--sm { --_height: var(--area-control-sm); --_gap: var(--area-gap-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-select--md { --_height: var(--area-control-md); --_gap: var(--area-gap-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-select--lg { --_height: var(--area-control-lg); --_gap: var(--area-gap-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-select--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_gap: var(--area-gap-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-select--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_gap: var(--area-gap-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-select--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_gap: var(--area-gap-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 
   /* Native customizable picker preserves form values, groups, typeahead and dismissal.
    * Unsupported browsers keep the ordinary native picker above. */
@@ -329,7 +331,7 @@
       background: var(--area-bg-surface);
       color: var(--area-fg-default);
       /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
-      box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
+      box-shadow: var(--area-shadow-float);
       font-family: var(--area-font-sans);
       font-size: var(--area-ui-size);
       line-height: var(--area-ui-leading);
@@ -337,7 +339,7 @@
     .area-select option {
       display: flex;
       align-items: center;
-      gap: var(--area-space-8);
+      gap: var(--area-gap-row); /* the list label column (audit S11a) */
       box-sizing: border-box;
       flex-shrink: 0;
       min-block-size: max(var(--_height), var(--area-control-md));

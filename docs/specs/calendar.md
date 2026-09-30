@@ -77,15 +77,15 @@ days     outside and disabled ink rgb(161,158,153); hover rgba(35,131,226,.15) w
          today: white text on a 24px rgb(229,100,88) circle; selected / range start rgb(39,131,222), white text;
          range middle: a continuous rgba(35,131,226,.21) band 28px tall, rounded 6 at its ends; range end rgba(35,131,226,.43)
 area
-shell    plain: no box; surface: padding 8 top, 12 elsewhere (border counted), border-decorative, radius container, the floating lift
-header   min control-sm (28), padding 4 start / 2 end; title 14/20 400; nav Button ghost sm, Area chevron glyph
-grid     cells 32; weekday 12/16 fg-muted; day 28, radius-control-sm (6), 14/20 tabular
+shell    plain: no box; surface: padding 8 top, 12 elsewhere (border counted), border-decorative, radius container, the floating lift (`--area-shadow-float`, calendar.css:37)
+header   min control-sm (28), padding 4 start / 2 end; title 14/20 500; nav Button ghost sm, Area chevron glyph
+grid     cells 36; weekday 12/16 fg-muted; day 32, radius-control-md (8), 12/16 tabular
 ```
 
 Inset equations: surface side inset = border 1 + padding 11 = 12 (Notion 4 + 8). Top =
-1 + 7 = 8 (Notion 4 + 4). Nav end = header padding 2 = (cell 32 − day 28) / 2, so the last
-button's edge lines up with the last day's edge. Range band insets = (32 − 28) / 2 = 2,
-the day inset.
+1 + 7 = 8 (Notion 4 + 4). Nav end = header padding 2 = (cell 36 − day 32) / 2, so the last
+button's edge lines up with the last day's edge. Range band insets = (36 − 32) / 2 = 2,
+the day inset (cells 36 and days 32 since 2026-09-27).
 
 ## Measurements
 
@@ -113,10 +113,10 @@ Day states: `notion--day--hover--light`, `notion--day-today--rest--light`,
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | cell, day | **36, 32** | Owner (2026-09-27: too compact) | Notion 32 / 28; shadcn `--cell-size` 32 |
-| day · radius | radius-control-sm (6) | Notion 6 | — |
+| day · radius | radius-control-md (8), capped at 0.4 × the day (`calendar.css:10`) | Button md beside it (32, radius 8); audit S4 and F-12 (owner) | Notion 6 at 28px days. Was radius-control-sm (6) |
 | day · type | **12/16** 400, tabular (`--_day-text`), the caption role, not the small control text | Owner (third pass): numbers too large | Notion 14; the month title keeps 14/20 |
 | weekday | 12/16 400, fg-muted | Notion 12/18 in a tertiary ink | Area small text; secondary ink is fg-muted |
-| month label | 14/20 **400** | Notion 500 | Owner direction: regular weight except labels on fills |
+| month label | 14/20 **500** | Notion 500 | Surface title at body size (batch 7; audit S2) |
 | nav | Button ghost sm (28; 24 compact), Area chevron | Notion 24px, radius 3 | Area's control tier; Breadcrumb's chevron |
 | surface | padding 8 / 12, popover surface | Notion 4 + 4 / 4 + 8; shadcn p-3 (12) | — |
 | months gap | 16 | shadcn `gap-4` | Notion shows one month |
@@ -170,7 +170,7 @@ Third-pass additions:
 
 | Peer | Shared role | Peer value | Calendar | Match / reason |
 |---|---|---|---|---|
-| Popover | surface | border-decorative, container radius, the floating lift (cohesion audit, 2026-09-26) | `surface` | match |
+| Popover | surface | border-decorative, container radius, the floating lift `--area-shadow-float` (cohesion audit, 2026-09-26; a Surface axis role since audit S10) | `surface` | match |
 | Menu / Nav | row hover | bg-hover | day hover | match |
 | Breadcrumb | chevron | Area chevron glyph | nav icons (rotated) | match |
 | Button | small icon action | ghost sm | nav | match |
@@ -239,3 +239,5 @@ on outside days, fixed (see Decisions). Dark theme not compared.
   so the months sit side by side → headless Edge shots of every tile at 2x; Circle, Tile, Markers,
   Plain, Monday, Accent and Disabled checked, unchanged.
 - 2026-09-28 · owner: approved (batch 7).
+- 2026-09-30 · audit S4 (owner) → 32px days take `radius-control-md` 8 (was control-sm 6), matching 32px Buttons; settles family call F-12 → `calendar.css:10`.
+- 2026-09-30 · audit S10 (owner) → the surface reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → `calendar.css:37`.

@@ -27,6 +27,7 @@
     "test:dialog": "node --test packages/react/tests/dialog.test.mjs",
     "test:contracts": "node --test packages/styles/scripts/manifest-parity.test.mjs apps/docs/scripts/axis-preferences.test.mjs",
     "capture:compare": "node scripts/capture-compare.mjs",
+    "audit:page": "node scripts/audit-page.mjs",
     "icons:pilot": "node apps/docs/scripts/gen-pilot-icons.mjs",
     "icons:find": "node apps/docs/scripts/icon-find.mjs",
     "icons:batch": "node apps/docs/scripts/icon-batch.mjs",

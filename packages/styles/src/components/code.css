@@ -184,7 +184,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    border: var(--area-border-width) solid var(--area-border-decorative);
+    /* spec (audit S7a): Card's edge for a block standing alone; was border-decorative #f3. */
+    border: var(--area-border-width) solid light-dark(var(--area-neutral-100), var(--area-neutral-750)); /* spec */
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-code);
     overflow: hidden;

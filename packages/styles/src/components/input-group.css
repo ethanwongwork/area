@@ -13,7 +13,8 @@
     block-size: var(--_group-height);
     max-inline-size: 100%;
     border: var(--area-stroke-width) solid var(--area-input-edge);
-    border-radius: min(var(--area-radius-control), calc(var(--_group-height) * var(--area-radius-cap)));
+    /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
+    border-radius: min(var(--_group-radius, var(--area-radius-control-md)), calc(var(--_group-height) * var(--area-radius-cap)));
     background-color: var(--area-input-bg);
     /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
     box-shadow: none;
@@ -25,9 +26,9 @@
   }
   .area-input-group--outline { background-color: var(--area-input-bg); }
   .area-input-group--soft { background-color: var(--area-input-bg-soft); border-color: transparent; box-shadow: none; }
-  .area-input-group--sm { --_group-height: var(--area-control-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-icon: var(--area-icon-sm); --_group-gap: var(--area-gap-sm); --_group-gutter: var(--area-gutter-sm); }
-  .area-input-group--md { --_group-height: var(--area-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); --_group-gutter: var(--area-gutter-md); }
-  .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); --_group-gutter: var(--area-gutter-lg); }
+  .area-input-group--sm { --_group-height: var(--area-control-sm); --_group-radius: var(--area-radius-control-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-icon: var(--area-icon-sm); --_group-gap: var(--area-gap-sm); --_group-gutter: var(--area-gutter-sm); }
+  .area-input-group--md { --_group-height: var(--area-control-md); --_group-radius: var(--area-radius-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); --_group-gutter: var(--area-gutter-md); }
+  .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-radius: var(--area-radius-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); --_group-gutter: var(--area-gutter-lg); }
   .area-input-group--full-width { inline-size: 100%; }
   .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])) { border-color: var(--area-input-edge-hover); }
   /* Disabled uses field paint, like Input: the disabled fill, a faint edge and disabled ink. */
@@ -36,7 +37,7 @@
   .area-input-group:has([data-warning]) { border-color: var(--area-input-warning-color); }
   .area-input-group:focus-within {
     border-color: var(--area-field-focus-color);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
     outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
   }
   /* A validation tone holds through focus, as it does on Input and Select. */

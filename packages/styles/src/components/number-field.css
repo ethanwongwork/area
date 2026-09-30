@@ -21,7 +21,8 @@
     padding-inline-start: var(--area-gutter-md);
     padding-inline-end: var(--area-gutter-md);
     border: var(--area-stroke-width) solid var(--_border);
-    border-radius: min(var(--area-radius-control), calc(var(--_height) * var(--area-radius-cap)));
+    /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
+    border-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap)));
     background-color: var(--_bg);
     color: var(--area-input-text);
     font-size: var(--_text);
@@ -32,16 +33,16 @@
   }
   .area-number-field--outline { --_bg: var(--area-input-bg); }
   .area-number-field--soft { box-shadow: none; --_bg: var(--area-input-bg-soft); --_border: transparent; --_border-hover: var(--area-input-edge); }
-  .area-number-field--sm { --_height: var(--area-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-number-field--md { --_height: var(--area-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-number-field--lg { --_height: var(--area-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-number-field--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-number-field--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-number-field--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
   .area-number-field--sm { padding-inline-start: var(--area-gutter-sm); padding-inline-end: var(--area-gutter-sm); }
   .area-number-field--lg { padding-inline-start: var(--area-gutter-lg); padding-inline-end: var(--area-gutter-lg); }
   .area-number-field--full-width { inline-size: 100%; }
   .area-number-field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); }
   .area-number-field:focus-within {
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
     outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
     outline-offset: 0;
   }

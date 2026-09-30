@@ -414,16 +414,16 @@ export const ChipVariants = () => (
 
 export const ChipDeletable = () => {
   const [chips, setChips] = useState(["Item one", "Item two", "Item three"]);
-  return <ChipGroup>{chips.map(chip => <Chip key={chip} kind="input" onRemove={() => setChips(current => current.filter(item => item !== chip))}>{chip}</Chip>)}</ChipGroup>;
+  return <ChipGroup>{chips.map(chip => <Chip key={chip} kind="input" onDismiss={() => setChips(current => current.filter(item => item !== chip))}>{chip}</Chip>)}</ChipGroup>;
 };
 
-export const ChipClickableDeletable = () => <Chip kind="input" clickable onClick={() => {}} onRemove={() => {}}>Chip</Chip>;
+export const ChipClickableDeletable = () => <Chip kind="input" clickable onClick={() => {}} onDismiss={() => {}}>Chip</Chip>;
 
 export const ChipLinkUnderline = () => <ChipLink href="#chip-api">Link</ChipLink>;
 
 export const ChipLinkIcon = () => <ChipLink href="#chip-api" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
 
-export const ChipCustomDelete = () => <Chip kind="input" onRemove={() => {}} removeIcon={<TrashIcon />} removeLabel="Delete">Chip</Chip>;
+export const ChipCustomDelete = () => <Chip kind="input" onDismiss={() => {}} dismissIcon={<TrashIcon />} dismissLabel="Delete">Chip</Chip>;
 
 export const ChipAvatars = () => (
   <ChipGroup>
@@ -434,7 +434,7 @@ export const ChipAvatars = () => (
 
 export const ChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
 
-export const ChipInvalidInput = () => <Chip kind="input" invalid onRemove={() => {}}>Chip</Chip>;
+export const ChipInvalidInput = () => <Chip kind="input" invalid onDismiss={() => {}}>Chip</Chip>;
 
 export const CheckboxSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>

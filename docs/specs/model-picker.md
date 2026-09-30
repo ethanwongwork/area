@@ -36,7 +36,7 @@ rows      36 tall (46 with a note), radius 12, padding 6 10, label 14/20, note 1
 | trigger | ghost neutral Button (md 32, radius 8) with a trailing chevron; the wash stays while open | ChatGPT; Composer's mode slot | Area buttons are not pills (owner: rounder, not pill) |
 | menu | Menu: 4 inset, rows 32, radius 8, corner 12; 4 from the trigger, ending under its end, flips above | list model (command-palette.md list pass); popover.md 4 | ChatGPT 16/12 and 9 |
 | rows with a note | label 14/20 over note 12/16 muted, 6 above and below (48) | ChatGPT 6 padding, 14 + 12 | Area's ramp: 16 leading for 12px |
-| choice | `menuitemradio`, trailing check on the current model | Menu checkable rows; ChatGPT check | — |
+| choice | `MenuItem radio checked` → `menuitemradio` (ModelPicker.tsx:52); trailing check on the current model, no plate at rest | Menu checkable rows; ChatGPT check | A menu of choices shows the check only (audit S13 C) |
 | focus | opens on the current model; choosing closes and returns focus | WAI menu button | — |
 
 Menu gained `MenuItem.description` (`.area-menu__lines`, `.area-menu__description`) for this;
@@ -59,3 +59,7 @@ ghost and outline Button instead (#56, button.md), so the trigger reads quiet, a
   under the trigger (delta 0), rows 48; focus on Instant; ↓ to Thinking; Enter chooses it,
   closes and returns focus to the trigger, which now reads Thinking.
 - React test: trigger semantics, menu, radio row with its note.
+
+## Feedback log
+
+- 2026-09-30 · audit S13 (owner) → rows use `MenuItem radio` instead of passing `role` (ModelPicker.tsx:52; primitives.tsx:1143-1161). A menu of choices shows the check only; no visible change.

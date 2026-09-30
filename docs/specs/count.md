@@ -119,6 +119,7 @@ Forced colours: the soft plate gains a 1px CanvasText border.
 | Badge md / sm | inline scale, text | 20 / 16, 12/16 500 on a fill | 20 / 16, 12/16 (500 soft, 400 plain) | match |
 | Indicator count | formatting | 99+, tabular | same helper, tabular | match |
 | Nav trailing | ink on the current row | muted, fixed | muted, fixed | match |
+| Badge neutral soft, Chip input | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))` (badge.css:17, 58; chip.css:80) | count.css:68 | match (audit S6a) |
 
 ## Visual pass
 
@@ -147,3 +148,4 @@ tabs compositions), both zoomed:
 - 2026-09-27 · owner: build Count → built from the survey's proposal; Nav and Tabs demos now use
   Count instead of a plain Badge.
 - 2026-09-28 · owner: approved (batch 4); Count keeps the pill shape.
+- 2026-09-30 · audit S6a (owner) → no Count change; Badge neutral soft and Chip input now take Count's soft plate (were `bg-component` #f7) → badge.css:17, 58; chip.css:80.

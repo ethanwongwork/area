@@ -27,7 +27,7 @@
   .area-message__bubble {
     max-inline-size: 70%; /* spec */
     padding: 10px var(--area-space-16); /* spec */
-    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-button-cap))) + var(--area-space-8));
+    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-button-cap))) + var(--area-space-8) * var(--area-radius-concentric));
     background-color: var(--area-bg-component);
     overflow-wrap: anywhere;
     white-space: pre-wrap;
@@ -47,7 +47,7 @@
     align-items: center;
     gap: 0;
   }
-  .area-message__actions .area-button { --_fg: var(--area-fg-muted); }
+  /* Actions take the quiet ghost Button ink as every icon action does (audit S6b, owner 2026-09-30); was fg-muted. */
   /* The person's actions show on hover or focus (ChatGPT hides them until then); the latest
    * assistant turn keeps its actions shown. */
   .area-message--user > .area-message__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }

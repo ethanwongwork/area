@@ -68,7 +68,7 @@ figma    button 24 tall, padding 0/8, radius 5, 11/16 450; rest 50% black;
          selected 550, 90% black on #f5; a hidden 550 copy reserves the bold width (tab-selected node 1)
 area  div.area-tabs (column; row when vertical, gap 16)
   list  div.area-tabs__list[role=tablist] flex, gap 20 (md); 1px border-divider when track
-    tab   button.area-tabs__tab[role=tab] 32px, padding 0, gap 8, fg-muted, 14/20 400
+    tab   button.area-tabs__tab[role=tab] 32px, padding 0, gap 6, fg-muted, 14/20 400
       icon  .area-tabs__icon 16px;  label .area-tabs__label (trimmed text)
       ::after indicator 2px, radius-full, full tab width, at the tab's bottom edge
   panel div.area-tabs__panel[role=tabpanel] padding-top 16 (6 vertical)
@@ -111,7 +111,7 @@ Area (node trees): md 32px tall, 20px apart, selected ink rgb(40, 40, 40), rest 
 | track | 1px **`border-divider`** #e2e2e2 / #333333 below the list | Second pass divider role; Untitled 1px baseline; Notion's hairline | Was `border-decorative`; Area's indicator sits above the divider |
 | focus | 2px `focus-color` inset (offset −2), radius min(8, 0.4 × height) | Untitled 2px inset focus | — |
 | disabled | 50% | Audit disabled rule; Untitled 50% | — |
-| icon, gap | icon tier per size; gap 4 (sm) / 8 (md, lg) | Area icon and gap tiers | — |
+| icon, gap | icon tier per size; icon-to-label gap 6 at sm, md and lg (`--_tab-item-gap`, navigation.css:16, :38, :79-81); compact sm 4 | Area icon and gap tiers; peer Button (audit S14) | Was 4 (sm) / 8 (md, lg) |
 | vertical | list gap 4, text start 10, rail 2px inset 4, panel top 6 | Owner (vertical orientation) | — |
 
 Settled in the third pass (kept; [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
@@ -176,3 +176,4 @@ in [the audit](../research/cohesion-audit.md#verification).
   spacing → `notion--tabs-underline`, `notion--view-tab*`, `figma--tab*`, `figma--panel-tab*`.
 - 2026-09-27 · third pass → open question settled, values kept: no tab padding, underline
   the tab's own width; the 20px gap recorded as unsourced → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-30 · audit S14 (owner) → a tab's icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`--_tab-item-gap`, navigation.css:16, :79-81; density.ts:80-82). The 16 / 20 / 24 gap between tabs is unchanged.

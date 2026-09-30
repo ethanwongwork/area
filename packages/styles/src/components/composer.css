@@ -12,14 +12,17 @@
     inline-size: min(100%, calc(var(--area-space-96) * 5));
     min-inline-size: 0;
     padding: calc(var(--_composer-inset) - var(--area-stroke-width));
-    border: var(--area-stroke-width) solid var(--area-border-decorative);
+    /* spec (audit S7a, owner 2026-09-30): a surface standing alone on the page takes Card's
+       edge (#ee, dark 750); was border-decorative #f3, the faintest edge in the system. */
+    --_composer-edge: light-dark(var(--area-neutral-100), var(--area-neutral-750)); /* spec */
+    border: var(--area-stroke-width) solid var(--_composer-edge);
     /*
      * spec (composer.md, owner 2026-09-26: option B): concentric with the send Button -- its own
      * radius (Button md, capped as Button caps it) plus the inset, 8 + 8 = 16. A pill send button
      * makes a pill composer (below), so ChatGPT's shape is one Button option away.
      */
     --_composer-button-radius: min(var(--area-radius-control-md), calc(var(--_composer-action) * var(--area-radius-button-cap)));
-    border-radius: calc(var(--_composer-button-radius) + var(--_composer-inset));
+    border-radius: calc(var(--_composer-button-radius) + var(--_composer-inset) * var(--area-radius-concentric));
     background: var(--area-input-bg);
     /* spec (owner 2026-09-26): no shadow at rest, as every control; the border carries the edge. */
     box-shadow: none;
@@ -29,7 +32,9 @@
   }
   .area-composer--inline { min-block-size: var(--_composer-height); }
   .area-composer--stacked { gap: var(--area-space-8); }
-  .area-composer:focus-within { border-color: var(--area-field-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); }
+  /* The Input hover step (audit S7a). */
+  .area-composer:hover:not(:focus-within, [data-disabled]) { border-color: var(--area-input-edge-hover); }
+  .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); }
   /* A text field shows disabled with Textarea's field paint, not opacity (cohesion audit), so the
      actions keep Button's own 50% instead of compounding to about 30%. */
   .area-composer[data-disabled] { background: var(--area-textarea-bg-disabled); border-color: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }

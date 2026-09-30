@@ -24,11 +24,14 @@
     --_leading: var(--area-control-md-leading);
     --_fill: var(--area-selection-solid);
     --_fill-hover: var(--area-selection-solid-hover);
-    --_track-fill: color-mix(in srgb, var(--area-fill-toggle), var(--area-bg-surface) 20%);
+    /* spec (audit S5, owner 2026-09-30): one off-track grey, the control edge #e2, shared with
+       Switch and Progress (Figma rails #e6, ChatGPT off track ≈ #e6); was fill-toggle at 80%, ≈ #dd. */
+    --_track-fill: var(--area-edge-control);
     /* spec: hover darkens the fill and the thumb's dot, never the rail (Fluent: colour on the
        thumb and fill only; Radix and Base UI: no hover change). */
     --_track-fill-hover: var(--_track-fill);
-    --_thumb-border: color-mix(in srgb, var(--area-border-hover), var(--area-bg-surface) 35%);
+    /* spec (audit S5): the glyph-edge grey #d4 of Checkbox and Radio; was ≈ #ce. */
+    --_thumb-border: var(--area-edge-control-hover);
     --_pct: 0%;
     --_vertical-length: var(--area-input-inline-size);
 
@@ -88,11 +91,11 @@
 
   .area-slider-range {
     --_range-fill: var(--area-selection-solid);
-    --_range-track-fill: color-mix(in srgb, var(--area-fill-toggle), var(--area-bg-surface) 20%);
+    --_range-track-fill: var(--area-edge-control); /* spec (audit S5): as the single rail */
     display: grid;
     grid-template-columns: max-content minmax(80px, 1fr) max-content;
     align-items: center;
-    gap: var(--area-gap-md);
+    gap: var(--area-space-8);
     inline-size: 100%;
   }
   .area-slider-range__track {

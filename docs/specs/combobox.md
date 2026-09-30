@@ -45,9 +45,9 @@ list itself was measured only from its offscreen measurement nodes (24 rows, 26 
 |---|---|---|---|
 | field | Input (outline default, sizes 28/32/40), `role="combobox"`, `aria-autocomplete="list"` | Figma input combobox; WAI | Area's field |
 | toggle | InputAction chevron at the end, `tabindex=-1`, "Show suggestions"; shows every option | WAI (the button is not a tab stop) | — |
-| list surface | Menu: 12 radius, 4 inset, border, floating lift | menu.md | Figma's lists are dark; Area's menus are light (ChatGPT, Notion) |
-| rows | Menu rows (32, radius 8, 5% wash on hover and highlight) | menu.md | Figma 24/28 rows belong to compact density |
-| selected | trailing check, reserved column | menu.md checkable rows; Figma's check column | Area puts the check at the end (ChatGPT's model picker) |
+| list surface | Menu: 12 radius, 4 inset, border, floating lift (`--area-shadow-float`) | menu.md | Figma's lists are dark; Area's menus are light (ChatGPT, Notion) |
+| rows | Menu rows (32, radius 8, 5% wash on hover and highlight); an icon takes Menu's `--area-gap-row` gap (12), so labels sit at 36 | menu.md | Figma 24/28 rows belong to compact density |
+| selected | active plate (`bg-component-active`, via `data-selected` on the chosen option; Combobox.tsx:216, surface.css:1055) plus the trailing check in a reserved column | Select's value rows; Figma's check column | A value picker, so it shows its value as Select does (audit S13 C, family call B-6 settled). Was the check alone. Area puts the check at the end (ChatGPT's model picker) |
 | position | top layer (native popover), 4 below the field, at least its width (and Menu's 224), flips above when there is no room | popover.md (4, shadcn and Notion); Figma list ≥ field | — |
 | height | at most 324 (Figma's font list viewport) or half the viewport, then scrolls | Figma | — |
 | empty | "No results", muted, a row tall, not an option | — | — |
@@ -91,3 +91,8 @@ field), matched to Notion's menu when Menu was approved. No change. Unverified: 
 
 - Match highlighting (bold the typed part) was left out; none of the products measured
   showed it in these lists.
+
+## Feedback log
+
+- 2026-09-30 · audit S11a (owner) → no Combobox change; options use Menu's rows, so an icon's label sits on the shared 36 column (`--area-gap-row`, surface.css:984).
+- 2026-09-30 · audit S13 (owner) → the chosen option shows the active plate plus the check, as Select does; Combobox sets `data-selected` on it (Combobox.tsx:216; combobox.css:35-37). Settles family call B-6. Was the check alone.

@@ -41,8 +41,9 @@
     --_card-step: var(--area-space-8);
     /* The control a header action holds: a default Button, a small one in a small card. */
     --_card-action: var(--area-control-md);
-    /* The control radius is capped as Button caps its own, so the Pill preset keeps cards finite (audit H-1). */
-    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
+    /* The control radius is capped as Button caps its own, so the Pill preset keeps cards finite (audit H-1);
+       the distance joins the corner through radius-concentric, so Sharp cards are square (audit S3). */
+    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + (var(--_card-inset) + var(--_card-step)) * var(--area-radius-concentric));
     --_card-border: var(--area-border-width);
     /* spec (consistency pass): one title role and one body role at every size. */
     --_card-title-size: var(--area-text-md-size);
@@ -58,8 +59,7 @@
     /* spec: owner's reference is Figma's 0 0 8 0 at 2%. Area's recipe keeps that halo, drawn
        2px low so it pools under the card, and adds a 1px contact line that gives the lighter
        edge its bottom. Dark needs more ink to register on a dark page. */
-    --_card-shadow-ink: light-dark(rgb(0 0 0 / 0.03), rgb(0 0 0 / 0.16));
-    --_card-shadow: 0 1px 2px -1px var(--_card-shadow-ink), 0 2px 8px 0 var(--_card-shadow-ink);
+    --_card-shadow: var(--area-shadow-card); /* the Surface axis role (audit S10); none at Flat */
     /* spec: owner, neutral 25 for every media fill (#fa); dark takes the 800 rung. */
     --_card-media-fill: light-dark(var(--area-neutral-25), var(--area-neutral-800));
     /* Derived. The content pad is the step from the media's inset to the text column; text
@@ -98,15 +98,15 @@
   .area-card--sm {
     --_card-inset: var(--area-space-6);
     --_card-action: var(--area-control-sm);
-    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
+    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + (var(--_card-inset) + var(--_card-step)) * var(--area-radius-concentric));
   }
   .area-card--md {
     --_card-inset: var(--area-space-8);
-    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
+    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + (var(--_card-inset) + var(--_card-step)) * var(--area-radius-concentric));
   }
   .area-card--lg {
     --_card-inset: var(--area-space-12);
-    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
+    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + (var(--_card-inset) + var(--_card-step)) * var(--area-radius-concentric));
   }
 
   /* Layout. */
@@ -264,7 +264,7 @@
   .area-card__header {
     display: flex;
     align-items: flex-start;
-    gap: var(--area-gap-md);
+    gap: var(--area-space-8);
     min-inline-size: 0;
   }
   .area-card__heading {
@@ -345,7 +345,7 @@
     --_card-inset: var(--area-space-4);
     --_card-step: var(--area-space-4);
     --_card-action: var(--area-control-sm);
-    --_card-radius: calc(min(var(--area-radius-control-sm), calc(var(--area-control-sm) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
+    --_card-radius: calc(min(var(--area-radius-control-sm), calc(var(--area-control-sm) * var(--area-radius-cap))) + (var(--_card-inset) + var(--_card-step)) * var(--area-radius-concentric));
   }
 
   /* Overlay: a Badge or an icon Button pinned to a corner of the media, or of the whole card.
@@ -369,10 +369,10 @@
   /* A bottom overlay on the card shares the text's last lines, so the text keeps clear of it:
      one medium control and the slot gap. */
   .area-card--immersive:has(> .area-card__overlay--bottom-end) > .area-card__content {
-    padding-inline-end: calc(var(--_card-inset) * 2 - var(--_card-border) + var(--area-control-md) + var(--area-gap-md));
+    padding-inline-end: calc(var(--_card-inset) * 2 - var(--_card-border) + var(--area-control-md) + var(--area-space-8));
   }
   .area-card--immersive:has(> .area-card__overlay--bottom-start) > .area-card__content {
-    padding-inline-start: calc(var(--_card-inset) * 2 - var(--_card-border) + var(--area-control-md) + var(--area-gap-md));
+    padding-inline-start: calc(var(--_card-inset) * 2 - var(--_card-border) + var(--area-control-md) + var(--area-space-8));
   }
 
   /* A short list of points, each led by a 16px icon on its first line; body size, content ink. */
@@ -450,7 +450,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-start;
-    gap: var(--area-gap-md);
+    gap: var(--area-space-8);
     margin-block-start: auto;
     padding-block-start: calc(var(--_card-block-gap) - var(--area-space-4));
   }
@@ -590,7 +590,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--area-gap-sm);
+    gap: var(--area-space-4);
   }
 
   /* spec: 28px controls hang over the text line by 4 each side, as Toast's do, so they sit 6
@@ -694,31 +694,26 @@
     margin-inline-end: var(--_alert-control-end);
   }
 
+  /* The close recipe for rectangular surfaces (audit S9, owner 2026-09-30): a ghost small
+     Button with the Area glyph, as Popover and Toast. A neutral alert keeps the Button's own
+     quiet ink and row hover plate; a tinted alert keeps its tone ink and hovers to 12% of it,
+     since a grey plate reads as a hole on a colour. Was a hand-built button in full ink with a
+     Fluent glyph and the 12% plate on every tone. */
   .area-alert__dismiss {
     grid-area: dismiss;
     display: inline-flex;
     flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    inline-size: var(--area-control-sm);
-    block-size: var(--area-control-sm);
-    padding: 0;
-    border: var(--area-border-width) solid transparent;
-    /* A 28px icon action, shaped like a small Button, in the alert's full ink. */
-    border-radius: var(--_dismiss-radius, var(--area-radius-control-sm));
-    background-color: transparent;
-    color: inherit;
-    opacity: var(--_dismiss-opacity, 1);
-    cursor: pointer;
-    transition: var(--area-transition);
+    --_dismiss-ink: var(--_fg);
+    --_dismiss-plate: color-mix(in srgb, var(--_fg) 12%, transparent);
   }
 
   .area-alert--multiline .area-alert__dismiss { align-self: start; }
 
-  .area-alert__dismiss > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
-  .area-alert__dismiss:hover { background-color: color-mix(in srgb, var(--_fg) 12%, transparent); }
-  .area-alert__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-alert:not(.area-alert--neutral) .area-alert__dismiss > .area-button {
+    --_fg: var(--_dismiss-ink);
+    --_bg-hover: var(--_dismiss-plate);
+    --_bg-active: var(--_dismiss-plate);
+  }
 
   @container (max-width: 30rem) {
     .area-alert--single-line .area-alert__actions {
@@ -779,7 +774,7 @@
     border-radius: var(--_dialog-radius);
     background-color: var(--area-bg-surface);
     /* spec: the floating-surface lift; see Popover and Menu. */
-    --_elevation: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
+    --_elevation: var(--area-shadow-float);
     color: var(--area-fg-default);
     box-shadow: var(--_elevation);
     overflow: hidden;
@@ -868,7 +863,7 @@
     /* spec: floating surfaces share one lift. Notion's popover geometry (0 20 24, 0 5 8), with the
        theme-aware shadow colour at full and half strength; ChatGPT's menu (0 8 16 -4) and Figma's
        picker (0 10 16) agree on a soft, deep blur rather than a 1px edge shadow. */
-    --_elevation: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
+    --_elevation: var(--area-shadow-float);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
     box-shadow: var(--_elevation);
@@ -986,7 +981,7 @@
   .area-popover__media > :is(img, video) { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
   .area-menu {
     /* spec: icon-to-label gap (docs/specs/menu.md). Row sides come from inset.css. */
-    --_menu-gap: 12px; /* spec */
+    --_menu-gap: var(--area-gap-row); /* the list label column, 36 (audit S11a) */
     display: flex;
     flex-direction: column;
     /* A small break lets adjacent hover plates remain distinct without turning the
@@ -1048,7 +1043,9 @@
   }
 
   /*
-   * The current item in an inline menu. Selection, not hover.
+   * The chosen value in a value picker (Combobox sets it; Select paints its own options the
+   * same way). Menus of commands and choices never use it: they show a check (MenuItem
+   * `checked`, `radio`) and the highlight is the plate (audit S13 C, owner 2026-09-30).
    *
    * Reads the *active* fill rather than the resting one. When the component band moved down
    * to the softest rungs, a selected plate at the resting fill landed 0.009 of lightness
@@ -1180,7 +1177,7 @@
     padding: var(--area-space-4);
     border: var(--area-border-width) solid var(--area-border-decorative);
     /* spec: the floating-surface lift; see Popover and Menu. */
-    --_elevation: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
+    --_elevation: var(--area-shadow-float);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     box-shadow: var(--_elevation);
@@ -1275,7 +1272,7 @@
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     /* spec: the floating-surface lift; see Popover and Menu. */
-    --_elevation: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
+    --_elevation: var(--area-shadow-float);
     color: var(--area-fg-default);
     box-shadow: var(--_elevation);
     inline-size: var(--area-toast-inline-size, 360px);

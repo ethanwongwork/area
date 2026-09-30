@@ -43,7 +43,11 @@ test('rows share one hover plate and one selection plate, and selection outranks
 });
 
 test('every floating surface shares the lift', () => {
-  const lift = /0 20px 24px var\(--area-shadow-color\), 0 5px 8px color-mix\(in srgb, var\(--area-shadow-color\) 50%, transparent\)/;
+  // The lift is the Surface axis role (audit S10): Notion's geometry by default, none at Flat.
+  const lift = /var\(--area-shadow-float\)/;
+  const role = [...css.matchAll(/--area-shadow-float:\s*([^;]+);/g)].map(match => match[1].trim());
+  assert.ok(role.includes('0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)'), 'shadow-float lost its recipe');
+  assert.ok(role.includes('none'), 'the Flat preset should drop the lift');
   for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar--surface', '.area-toolbar__overflow-content', '.area-command-palette']) {
     const rule = ruleFor(block);
     assert.ok(rule, `${block} missing`);

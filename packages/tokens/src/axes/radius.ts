@@ -70,9 +70,16 @@ interface RadiusPreset {
    * editable fields and navigation rows stay recognisably rectangular.
    */
   buttonCap: number;
+  /**
+   * How much of a shell's distance joins its corner (audit S3, owner 2026-09-30). A shell
+   * that holds a control (Card, Composer, Message, Toolbar, Segmented track) is concentric
+   * with it: control radius + distance. At Sharp the control radius is 0 but the distance is
+   * not, so shells stayed rounded; 0 here makes them square with everything else.
+   */
+  concentric: 0 | 1;
 }
 
-function radiusTokens({ control, container, small, row, cap, buttonCap }: RadiusPreset) {
+function radiusTokens({ control, container, small, row, cap, buttonCap, concentric }: RadiusPreset) {
   return {
     "radius-control": `${control.md}px`,
     "radius-control-xs": `${control.xs}px`,
@@ -87,6 +94,7 @@ function radiusTokens({ control, container, small, row, cap, buttonCap }: Radius
     // both caps: UI scale owns box dimensions, never a shape decision.
     "radius-cap": String(cap),
     "radius-button-cap": String(buttonCap),
+    "radius-concentric": String(concentric),
   };
 }
 
@@ -96,12 +104,12 @@ function radiusTokens({ control, container, small, row, cap, buttonCap }: Radius
  * and Pill. Standard is the default family.
  */
 const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
-  { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, buttonCap: 0.4, note: "Square corners throughout." },
-  { id: "subtle", control: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }, small: 2, row: 4, container: 6, cap: 0.4, buttonCap: 0.4, note: "A restrained 4px medium-control family." },
-  { id: "soft", control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, small: 4, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, note: "A soft 6px medium-control family." },
-  { id: "standard", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
-  { id: "round", control: { xs: 5, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, note: "A round 10px medium-control family." },
-  { id: "rotund", control: { xs: 6, sm: 10, md: 12, lg: 14, xl: 16 }, small: 10, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, note: "The roundest finite family: 12px at medium." },
+  { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, buttonCap: 0.4, concentric: 0, note: "Square corners throughout." },
+  { id: "subtle", control: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }, small: 2, row: 4, container: 6, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "A restrained 4px medium-control family." },
+  { id: "soft", control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, small: 4, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "A soft 6px medium-control family." },
+  { id: "standard", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
+  { id: "round", control: { xs: 5, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "A round 10px medium-control family." },
+  { id: "rotund", control: { xs: 6, sm: 10, md: 12, lg: 14, xl: 16 }, small: 10, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "The roundest finite family: 12px at medium." },
   {
     id: "pill",
     control: { xs: 999, sm: 999, md: 999, lg: 999, xl: 999 },
@@ -110,6 +118,7 @@ const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
     container: 24,
     cap: 0.4,
     buttonCap: 0.5,
+    concentric: 1,
     note: "Fully round buttons. Other controls and containers stay finite, since a pill field or card obscures its role.",
   },
 ];
@@ -127,6 +136,7 @@ export const RADIUS_AXIS: AxisDefinition = {
     "--area-radius-row",
     "--area-radius-cap",
     "--area-radius-button-cap",
+    "--area-radius-concentric",
   ],
   presets: PRESETS.map(({ id, note, ...preset }) => ({
     id,
