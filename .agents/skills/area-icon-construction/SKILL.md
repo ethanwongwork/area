@@ -128,8 +128,8 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   play, dots) are solid exceptions like stop-circle's square; chevrons-right keeps Fluent's
   4px spacing; no prohibited ring or small bug as corner marks. The agent mark is Fluent's
   agents shape (a hexagon split by a slash), never a cursor or pointer (it read as Cursor's
-  brand). search-off is a full rising slash through the lens (an inside slash read as
-  zoom-out). Follow Fluent closely for objects the owner compares with it (contact card,
+  brand). search-off's slash is the shared slash mirrored (14, 2 → 2, 14; owner, 2026-09-29),
+  since the normal one runs along the handle; the cut is the mirror of the one-sided cut. Follow Fluent closely for objects the owner compares with it (contact card,
   news, money, captions, exclude's hatching, chat sparkle's corner sparkle).
 - **Detail first (owner, 2026-09-28):** more detail is better than the strict minimum. The
   lint's floors are lower: a *detail* gap of 0.875–1.125 (2 between centre-lines), tight
@@ -231,6 +231,10 @@ the lint prints every gap and counter with `--report`.
     lock's shackle, briefcase's handle, car's mirrors (their inks overlap, a join);
   - a stack shows only the back copy's L round the front's top left, ending a standard gap
     from it (copy, Fluent's and Lucide's): the hidden part is never drawn;
+  - multiples of an object (folders, files; owner, 2026-09-29) follow Fluent's: the back copy
+    2.5 lower right, cut round the front by the overlap cut, its right corners concentric and
+    larger so its ends curve in behind the front; gallery follows the owner's reference (one
+    back layer up and left);
 - marks (owner, 2026-09-26: every +, −, × and arrowhead is one of a few intentional sizes):
   - +, − standalone 11px (add, minus); beside or inside a shape 4px (person-add, zoom-in);
   - × standalone 10px (dismiss); beside or inside a shape 3.5px (volume-off, backspace), a

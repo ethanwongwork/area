@@ -1,5 +1,5 @@
-<svg data-set="area-pilot" data-keyline="square" data-counter="sliver" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M3 9A4.5 4.5 0 0 1 12 9" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M10 7L12 9L14 7" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="7.5" cy="12.5" r="1" fill="currentColor"/>
+<svg data-set="area-pilot" data-keyline="square" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.697 8.5A5.303 5.303 0 0 1 11.75 4.75L13.5 6.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.5 3.5V6.5H10.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="8" cy="12" r="1" fill="currentColor"/>
 </svg>
