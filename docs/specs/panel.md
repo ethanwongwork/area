@@ -73,10 +73,10 @@ figma  inspector 240 wide, rows own their insets (padding 0 8 0 16)
   number field    88 × 24, radius 5, #f5, 24px prefix box ("W"), 64px input, 11/16
   size select     88 × 24, radius 5, white, 1px #e6 edge, 11/16 450
 area   div.area-panel flex column, 280 wide; border, radius, surface, shadow-2
-  bar      header 28 + 4 × 2 + 1 rule = 37; padding-inline = inset; title UI 14/20 400
+  bar      header 28 + 4 × 2 + 1 rule = 37; padding-inline = inset; title UI 14/20 500
   body     padding = inset, gap 16, scrolls
     section   gap 8, 12 below, full-width divider (negative margins, inset returned as padding)
-      heading   min 32 (row), UI 14/20 400, fg-default
+      heading   min 32 (row), UI 14/20 500, fg-default
       rows      Field horizontal, label fg-muted; NumberField soft with X / Y / W / H prefixes
       stack     label above a full-width control, gap 6
   footer   pinned, padding = inset, top divider
@@ -116,8 +116,8 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | shell · shadow | `shadow-2`, 0 1px 2px −0.5px `shadow-color` 6% (`panel.css:40`) | Shared rule: the floating lift is for overlays | A panel sits in the page flow; Notion's 20px-blur geometry would read as an overlay |
 | flush | no border, radius or shadow; `bg-page` (`panel.css:49-54`) | Figma's docked inspector: no radius, edge or shadow on any row (`figma--section-title`, `figma--color-row`) | — |
 | bar | `control-sm` + 2 × 4 + rule = 37 (`panel.css:26`) | Area's own; fixed across inset tiers | — |
-| title | UI 14/20 400 (`panel.css:81-85`) | Type ramp (400 for titles) | — |
-| heading | **UI 14/20 400, `fg-default`** (`panel.css:139-142`) | Second pass: the heading outranks muted labels by ink | Was 12/16, smaller than the 14px labels under it. Figma's title is 11/16 550 at the same ink as its field text; kept (third pass): one label weight, so ink sets headings apart |
+| title | UI 14/20 500 (`panel.css:105-111`) | Surface title at body size (audit S2, owner 2026-09-30) | — |
+| heading | **UI 14/20 500, `fg-default`** (`panel.css:172-177`; audit S2) | Second pass: the heading outranks muted labels by ink | Was 12/16, smaller than the 14px labels under it. Figma's title is 11/16 550 at the same ink as its field text; kept (third pass): one label weight, so ink sets headings apart |
 | field labels | **`fg-muted` #666666** (`panel.css:147`) | Second pass | Was the Field default ink |
 | numeric rows | **NumberField soft with letter prefixes** X / Y / W / H (`apps/docs/src/demos/gallery.tsx:680-690`) | Figma's letter-prefixed number fields (`figma--number-field`) | Prefix ink and box differ from Figma; see [number-field.md](number-field.md) |
 | rules (bar, section, footer) | **`border-decorative`**, the panel's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 | Second pass: new divider role for rules; Figma #e6 (`figma--size-select` edge), ChatGPT 10% black; Notion's menu rules are lighter, 7% (#f0, `menu/notion--page-menu--open`); #e2 is the nearest rung to #e5 | Was `border-decorative` #f3f3f3 |
@@ -135,10 +135,10 @@ Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-
 
 1. Heading row height stays 32 (`panel.css:132`). Figma's section titles are 40px rows
    (`figma--section-title`, `figma--section-header`); the owner chose medium rows.
-2. The heading outranks its rows by ink, not weight. Figma sets its title apart by weight
-   550 at the same 90% ink as its field text (`rgba(0, 0, 0, 0.898)` in all three rows), so
-   the Figma citation does not support the ink split; Area keeps one label weight, so ink
-   sets headings apart.
+2. The heading outranks its rows by weight (500) and ink. Figma sets its title apart by
+   weight 550 at the same 90% ink as its field text (`rgba(0, 0, 0, 0.898)` in all three
+   rows); the code followed in the type pass, and audit S2 (owner, 2026-09-30) made surface
+   titles at body size 500.
 
 ## States
 

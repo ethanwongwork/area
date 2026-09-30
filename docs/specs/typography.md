@@ -44,11 +44,13 @@ Findings:
 ## Proposal
 
 **Weights (one variable at a time).**
-- 400 for all running text and **all titles and headings**.
-- 500 only where a label must hold its own against a fill or a selected state: button,
-  segmented, badge and count labels.
-- Nav items, tabs, field labels and surface titles move to 400. Selection is carried by
-  color and the selected fill; a title is carried by size or color.
+- 400 for all running text, descriptions, field labels, rows, and titles set larger than
+  the body (the title ramp).
+- 500 for surface titles set at body size (Popover, Dialog, Toast, Alert, Card, Panel bar
+  and headings, Calendar month, Nav group titles), and for labels on solid fills, tracks and
+  static marks (solid Button, Segmented, Badge, soft Count, Kbd, Indicator, Avatar initials).
+- Nav items, tabs and field labels stay 400. Selection is carried by color and the selected
+  fill. Settled by audit S2 (owner, 2026-09-30).
 
 **Sizes and line heights (six UI sizes, one leading each, all on a 4px grid).**
 
@@ -75,7 +77,8 @@ Findings:
   borrow the control-sm token. Default UI still uses only 12, 14 and 16.
 - 2026-09-26 (owner asked, Popover pass 3): Popover's title is strong (500). It is the size
   of the description beneath it, so size cannot carry the title and color alone read flat
-  (shadcn 500, Primer 600). Whether Alert, Toast and Card titles follow is open.
+  (shadcn 500, Primer 600). Alert, Toast, Card, Panel, Calendar and Nav group titles followed
+  in the type pass; audit S2 (2026-09-30) wrote it into the rule.
 - 2026-09-26 (owner: "make sure the type for titles, copy, descriptions, labels is
   intentional and consistent"; Dialog pass). Gallery sweep of every title, description,
   label and caption, then one rule per role:

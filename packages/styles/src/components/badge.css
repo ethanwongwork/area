@@ -11,7 +11,10 @@
     --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); /* spec */
     --_badge-radius: var(--area-radius-full);
     --_solid: var(--area-neutral-solid); --_solid-hover: var(--area-neutral-solid-hover);
-    --_surface: var(--area-bg-component); --_surface-hover: var(--area-bg-component-hover);
+    /* spec (audit S6a, owner 2026-09-30): Count's translucent soft plate (6% black, 10% white
+       in dark), so a Badge stays visible on a hovered or selected row; hover and press lay the
+       bg-hover / bg-active wash over it (1 - 0.94 x 0.95, about 10.7%). Was bg-component #f7. */
+    --_surface: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); --_surface-hover: light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226)); /* spec */
     --_tone-fg: var(--area-fg-default); --_on-solid: var(--area-fg-on-neutral);
     --_line: var(--area-edge-control); --_line-hover: var(--area-edge-control-hover);
     --_bg: var(--_surface); --_bg-hover: var(--_surface-hover); --_fg: var(--_tone-fg);
@@ -52,9 +55,9 @@
   .area-badge--neutral {
     --_solid: var(--area-neutral-solid);
     --_solid-hover: var(--area-neutral-solid-hover);
-    --_surface: var(--area-bg-component);
-    --_surface-hover: var(--area-bg-component-hover);
-    --_surface-active: var(--area-bg-component-active);
+    --_surface: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); /* spec (audit S6a) */
+    --_surface-hover: light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226)); /* spec */
+    --_surface-active: light-dark(rgb(0 0 0 / 0.123), rgb(255 255 255 / 0.279)); /* spec */
     /*
      * A step lighter than the control border, at rest and on hover alike.
      *
@@ -187,7 +190,8 @@
   .area-badge:has(> .area-badge__dismiss) { gap: var(--area-space-2); }
   .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; }
   .area-badge__dismiss > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
-  .area-badge__dismiss:hover { background: var(--_bg-hover); }
+  /* The pill close recipe (audit S9): a concentric circle hovering to 12% of the ink. */
+  .area-badge__dismiss:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
   .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* spec: Notion's multi-select cell, 6 between lines and 8 between tags
      (notion--multi-select-wrap; was Primer's 4 both ways). */

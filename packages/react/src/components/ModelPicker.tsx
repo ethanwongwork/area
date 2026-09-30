@@ -49,7 +49,7 @@ export const ModelPicker = forwardRef<HTMLDivElement, ModelPickerProps>(function
         {currentModel?.label}
       </Button>}>
       {heading ? <MenuLabel>{heading}</MenuLabel> : null}
-      {models.map(model => <MenuItem key={model.value} role="menuitemradio" checked={model.value === current}
+      {models.map(model => <MenuItem key={model.value} radio checked={model.value === current}
         description={model.description} disabled={model.disabled} onClick={() => choose(model.value)}>{model.label}</MenuItem>)}
     </Menu>
   </div>;

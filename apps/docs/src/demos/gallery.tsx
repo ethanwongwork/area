@@ -560,15 +560,15 @@ export const GalleryChipAssist = () => <Chip kind="assist" icon={<SearchIcon />}
 export const GalleryChipFilter = () => <Chip icon={<CheckIcon />}>Filter</Chip>;
 export const GalleryChipInput = () => <Chip kind="input">Input</Chip>;
 export const GalleryChipSuggestion = () => <Chip kind="suggestion">Suggestion</Chip>;
-export const GalleryChipDelete = () => <Chip kind="input" onRemove={() => {}}>Chip</Chip>;
-export const GalleryChipClickableDelete = () => <Chip kind="input" clickable onClick={() => {}} onRemove={() => {}}>Chip</Chip>;
-export const GalleryChipCustomDelete = () => <Chip kind="input" onRemove={() => {}} removeIcon={<TrashIcon />} removeLabel="Delete">Chip</Chip>;
+export const GalleryChipDelete = () => <Chip kind="input" onDismiss={() => {}}>Chip</Chip>;
+export const GalleryChipClickableDelete = () => <Chip kind="input" clickable onClick={() => {}} onDismiss={() => {}}>Chip</Chip>;
+export const GalleryChipCustomDelete = () => <Chip kind="input" onDismiss={() => {}} dismissIcon={<TrashIcon />} dismissLabel="Delete">Chip</Chip>;
 export const GalleryChipLinkUnderline = () => <ChipLink href="#gallery-section-chip">Link</ChipLink>;
 export const GalleryChipLinkIcon = () => <ChipLink href="#gallery-section-chip" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
 export const GalleryChipAvatarInitials = () => <Chip avatar={<Avatar fallback="IY" alt="" />}>Irene Yamaguchi</Chip>;
 export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="/images/irene-yamaguchi.jpg" alt="" />}>Irene Yamaguchi</Chip>;
 export const GalleryChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
-export const GalleryChipInvalid = () => <Chip kind="input" invalid onRemove={() => {}}>Chip</Chip>;
+export const GalleryChipInvalid = () => <Chip kind="input" invalid onDismiss={() => {}}>Chip</Chip>;
 
 export const GalleryCode = () => <Code>Code</Code>;
 export const CodeSubtle = () => <Code subtle>Code</Code>;
@@ -1412,9 +1412,9 @@ export const GalleryMenuShortcuts = () => <Menu aria-label="Label"><MenuItem sho
 export const GalleryMenuSelected = () => (
   <Menu aria-label="Label">
     <MenuLabel>Label</MenuLabel>
-    <MenuItem data-selected shortcut={<CheckIcon />}><span className="area-menu__text">Option one</span></MenuItem>
-    <MenuItem><span className="area-menu__text">Option two</span></MenuItem>
-    <MenuItem><span className="area-menu__text">Option three</span></MenuItem>
+    <MenuItem radio checked><span className="area-menu__text">Option one</span></MenuItem>
+    <MenuItem radio checked={false}><span className="area-menu__text">Option two</span></MenuItem>
+    <MenuItem radio checked={false}><span className="area-menu__text">Option three</span></MenuItem>
   </Menu>
 );
 
@@ -2148,7 +2148,7 @@ export const GalleryComposerInline = () => {
 export const GalleryComposerStacked = () => {
   const [sent, setSent] = useState("");
   const [mode, setMode] = useState("Standard");
-  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Task" placeholder="Work on anything" mode={<Menu aria-label="Mode" side="top" trigger={<Button variant="soft" trailingIcon={<ChevronIcon />}>{mode}</Button>}>{["Standard", "Focused"].map(option => <MenuItem key={option} data-selected={option === mode ? "" : undefined} shortcut={option === mode ? <CheckIcon /> : undefined} onClick={() => setMode(option)}>{option}</MenuItem>)}</Menu>} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Task" placeholder="Work on anything" mode={<Menu aria-label="Mode" side="top" trigger={<Button variant="soft" trailingIcon={<ChevronIcon />}>{mode}</Button>}>{["Standard", "Focused"].map(option => <MenuItem key={option} radio checked={option === mode} onClick={() => setMode(option)}>{option}</MenuItem>)}</Menu>} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
 const archivedTree = [
   { id: "src", label: "src", icon: <FolderIcon />, children: [

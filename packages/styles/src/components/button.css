@@ -10,8 +10,7 @@
  *
  * 2. Size tiers set the tier tokens. Every dimension -- height, padding, type, icon --
  *    comes from the density axis, so changing density moves every exposed tier at once.
- *    The icon gap is a measured spec value for now (docs/specs/button.md); mapping it
- *    back to a token belongs to the systematization phase.
+ *    The icon gap is the density's gap token, 6 at sm/md/lg (audit S14).
  *
  * 3. Foreground does not change on hover. Only background and border move. A label
  *    that shifts colour under the cursor reads as a different control; it also makes
@@ -24,7 +23,7 @@
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
-    --_gap: 6px; /* spec */
+    --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_radius: var(--area-radius-control-md);
@@ -356,15 +355,6 @@
   }
 
   /*
-   * spec: neutral ghost hovers with the shared translucent wash (bg-hover, 5%; pressed bg-active,
-   * 7%), as ChatGPT (5% black) and Notion (5% warm black) do, so it reads the same on any surface.
-   */
-  .area-button--neutral.area-button--ghost {
-    --_bg-hover: var(--area-bg-hover);
-    --_bg-active: var(--area-bg-active);
-  }
-
-  /*
    * spec (owner, 2026-09-28: "lighten all ghost and outline buttons slightly, since i prefer
    * lighter colors"): the quieter neighbours of solid take an ink between body text and muted,
    * three quarters of the way to muted (#28 → about #58 in light). ChatGPT's quiet controls sit
@@ -444,7 +434,7 @@
     --_radius: var(--area-radius-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
-    --_gap: 6px; /* spec: Notion 6 at 28 and 32; Tree view 6 */
+    --_gap: var(--area-gap-md); /* Notion 6 at 28 and 32; Tree view 6 */
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
   }
@@ -454,7 +444,7 @@
     --_radius: var(--area-radius-control-lg);
     --_gutter: var(--area-gutter-lg);
     --_icon: var(--area-icon-lg);
-    --_gap: 6px; /* spec: Untitled lg 6 */
+    --_gap: var(--area-gap-lg); /* Untitled lg 6 */
     --_text: var(--area-control-lg-text);
     --_leading: var(--area-control-lg-leading);
   }

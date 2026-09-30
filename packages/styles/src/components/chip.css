@@ -76,8 +76,9 @@
   .area-chip--filter { /* The neutral, selectable chip contract is the base treatment. */ }
 
   .area-chip--input {
-    --_bg: var(--area-bg-component);
-    --_bg-hover: var(--area-bg-component-hover);
+    /* spec (audit S6a): the translucent soft plate of Count and Badge; was bg-component #f7. */
+    --_bg: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); /* spec */
+    --_bg-hover: light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226)); /* spec */
     --_border: transparent;
     --_border-hover: var(--area-edge-control-hover);
   }

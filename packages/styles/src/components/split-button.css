@@ -63,6 +63,20 @@
   .area-split-button--outline > .area-split-button__trigger { --_split-divider: var(--_line); }
 
   /*
+   * One soft joined recipe (audit S15b, owner 2026-09-30): a neutral soft Split button paints as
+   * a soft Button group does, the component fill with the quiet ink, no hairline, and the row
+   * hover and press plates. Was two soft Buttons: body ink, a #f3 hairline and a translucent wash.
+   */
+  .area-split-button--soft > .area-button--neutral:not([data-selected]) {
+    --_fg: color-mix(in oklab, var(--area-fg-default), var(--area-fg-muted) 75%); /* spec: button.css quiet ink */
+    --_bg: var(--area-bg-component);
+    --_bg-hover: var(--area-bg-component-hover);
+    --_bg-active: var(--area-bg-component-active);
+    --_border: transparent;
+    --_border-hover: transparent;
+  }
+
+  /*
    * spec (docs/specs/split-button.md, Figma toolbelt 2026-09-27; figma--split-tool--*): ghost is
    * Figma's tool with its menu. The parts are two plates 1px apart, each keeping its own corners
    * and hover (#f5 on either half, the other half unchanged); there is no drawn divider, since the

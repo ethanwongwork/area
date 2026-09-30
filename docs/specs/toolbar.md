@@ -129,17 +129,18 @@ captures were lost with a frozen tab and are not in the folder. Other tiles:
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | command size | Button tier (28 / 32 / 40) | Owner (prior decision, Primer); audit decision 18 | Figma's tools are 32 at its one size |
+| command icon → label gap | Button's own, 6 at sm, md and lg; the toolbar no longer sets a child's `--_gap` (toolbar.css:47-55) | Peer: Button (audit S14) | Was the toolbar's gap tier, 4 / 8 / 8 |
 | icon | 16 at md (Button's tier) | Button, Menu peers | Figma draws 24px icons in its 32 tools (4 padding); Area keeps the control icon ladder. Open: a canvas "tools" size |
 | surface inset | **8** | Figma toolbelt (48 around 32); owner references | Was 4 (third pass) |
 | surface radius | concentric: 16 at md | Radius rule, command radius + inset (Figma 13 = 5 + 8) | — |
-| surface paint | `bg-surface`; Figma's shadow `0 0 0.5px 18%, 0 3px 8px 10%, 0 1px 3px 10%`; a 1px decorative inset ring in dark only | Figma toolbelt (light); the halo cannot draw on a dark page | Was a hairline and `shadow-1`. A raised bar is not the overlay lift (Menu, Popover), which stays deeper |
+| surface paint | `bg-surface`; Figma's shadow `0 0 0.5px 18%, 0 3px 8px 10%, 0 1px 3px 10%`; a 1px decorative inset ring in dark only | Figma toolbelt (light); the halo cannot draw on a dark page | Was a hairline and `shadow-1`. A raised bar is not the overlay lift (Menu, Popover), which stays deeper. Its four-layer recipe is its own (toolbar.css:33), a documented exception to `--area-shadow-float` (audit S10); a literal, so the Flat preset keeps it |
 | spacing | **8** between commands, groups and separators | Figma tool row 8 and 8 either side of its divider | Was 2 in a group, 4 between groups |
 | separator | 1px × **command height**, `border-divider` | Owner references (rule spans the controls) | Figma runs it the full 48 |
 | hover | `bg-component-hover`, ink fixed | Shared rule; Figma #f5 | #f3 vs #f5: the shared plate wins |
 | pressed toggle | **raised plate**: `bg-surface` + `0 0 0.5px 30%, 0 1px 3px 15%`; dark `bg-component-active`; kept under the pointer and while pressed | Figma's selected mode option; owner references (Bold) | Figma paints a selected *tool* in its blue accent; neutral by default (owner) |
 | track group | groove the command height, #f5 (dark `bg-component`), 2 inset and gap, options 28, concentric 8 / 6, option hover `bg-hover`, chosen option raised | Figma mode switch (`figma--mode-switch--*`) | Figma radius 5 / 3 (radius axis) |
 | fields | Select soft at the tier, as wide as its options | Owner references; Figma's type fields | Select's form default is 16rem |
-| overflow lift | `0 20px 24px shadow-color, 0 5px 8px shadow-color at 50%` | Audit floating-lift rule | — |
+| overflow lift | `--area-shadow-float`: `0 20px 24px shadow-color, 0 5px 8px shadow-color at 50%` (toolbar.css:76); `none` under the Flat preset | Audit floating-lift rule | A Surface axis role since audit S10 |
 | overflow surface | radius-container 12, 1px `border-decorative`, 4px padding | Popover and Menu peers | — |
 
 ## States
@@ -169,12 +170,12 @@ on one Tab stop; a form value that must submit is a Segmented placed inside the 
 
 | Peer | Shared role | Area value in peer | Toolbar | Match / reason |
 |---|---|---|---|---|
-| Menu, Popover, Select picker, Dialog, Toast, Calendar, ColorPicker | floating lift | 0 20 24 / 0 5 8 `shadow-color` over a 1px decorative border | overflow content same | match (audit rule) |
+| Menu, Popover, Select picker, Dialog, Toast, Calendar, ColorPicker, Command palette | floating lift | `--area-shadow-float` (0 20 24 / 0 5 8 `shadow-color`) over a 1px decorative border | overflow content same | match (audit rule); the surface bar keeps its own recipe |
 | Menu / Popover | floating radius | `radius-container` 12 | 12 | match |
 | Panel | docked surface | `shadow-2`, decorative edge | surface toolbar floats on Figma's bar shadow | the bar floats over a canvas; Panel docks |
 | Button (neutral ghost) | transparent command hover | `bg-component-hover` | trigger same | match |
 | Separator, Button group | divider paint | `border-divider` 1px | same | match (second pass) |
-| Segmented | raised choice in a groove | 2px inset and gap, concentric radius, selected `bg-surface` + hairline + `shadow-1` | track: same geometry, raised plate with Figma's shadow | open: align Segmented's shadow |
+| Segmented | raised choice in a groove | 2px inset and gap, concentric radius, selected `light-dark(bg-surface, bg-component-active)` + hairline + `shadow-1` (segmented.css:94-100) | track: same geometry, raised plate with Figma's shadow; dark `bg-component-active` | dark fill matches since audit S15a; open: align Segmented's shadow |
 | Button | pressed toggle | `bg-component-active` fill, kept on hover | raised plate inside a toolbar | a toolbar toggle rises, as Figma's and the owner's references do |
 
 ## Visual pass
@@ -239,3 +240,5 @@ semantics (toggles are `aria-pressed`; a track is not a radio group).
 - 2026-09-27 · owner: keep the separator's height, lighter stroke → `border-decorative` (was
   `border-divider`), the seam role Panel and Code block rules now use; Sizes split into one tile
   per size.
+- 2026-09-30 · audit S10 (owner) → the overflow reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat; toolbar.css:76); the surface bar keeps its own four-layer recipe as a documented exception (toolbar.css:33).
+- 2026-09-30 · audit S14, S15a (owner) → a command's icon-to-label gap is Button's own 6; the toolbar no longer overrides `--_gap` (toolbar.css:47-55; was 4 / 8 / 8). Segmented's selected thumb takes `bg-component-active` in dark, the same fill as the toolbar's pressed plate (peer row).

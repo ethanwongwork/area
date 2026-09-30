@@ -12,7 +12,7 @@
     font-size: var(--area-control-md-text);
     line-height: var(--area-control-md-leading);
   }
-  .area-breadcrumb__item { display: inline-flex; align-items: center; min-inline-size: 0; gap: var(--area-gap-md); }
+  .area-breadcrumb__item { display: inline-flex; align-items: center; min-inline-size: 0; gap: var(--area-space-8); }
   .area-breadcrumb__item svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex: none; }
   /*
    * spec: Notion's hover plate, 24px tall (2px above and below the 20px line) and 6px
@@ -22,7 +22,9 @@
   .area-breadcrumb__link { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: var(--area-gap-md); color: inherit; text-decoration: none; border-radius: var(--area-radius-small); }
   .area-breadcrumb__link::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-small); background: transparent; transition: var(--area-transition); pointer-events: none; }
   .area-breadcrumb__link:hover::before { background: var(--area-bg-component-hover); }
-  .area-breadcrumb__link:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* The ring follows the plate, not the text box (audit S11b). */
+  .area-breadcrumb__link:focus-visible { outline: none; }
+  .area-breadcrumb__link:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
   /* spec: the current page is carried by colour, at the type ramp's 400 (Notion 400). `--area-fg` did not exist, so it had fallen back to the muted link colour. */
   .area-breadcrumb__page { display: inline-flex; align-items: center; gap: var(--area-gap-md); color: var(--area-fg-default); font-weight: var(--area-weight-regular); }
   .area-breadcrumb__separator { display: inline-grid; place-items: center; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex: none; color: var(--area-stroke-control); /* spec: a 1px stroke one step lighter than the links (131 vs 102); owner: lighter, not too light */ }

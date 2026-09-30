@@ -16,7 +16,7 @@
 - 2026-09-26: radius. Owner asked whether the composer should match ChatGPT's round send button
   or the button should use the normal radius; chose the recommendation (option B): the send
   action is an Area Button (solid neutral, icon-only, md, 8 radius) and the composer's corner is
-  concentric with it (button radius + 8 inset = 16), computed so a pill send button (`submitPill`)
+  concentric with it (button radius + 8 inset × `radius-concentric` = 16; 0 at Sharp since audit S3), computed so a pill send button (`submitPill`)
   gives a pill composer. The resting 0 2px 8px shadow is dropped (no control has a shadow at rest).
 - 2026-09-26: accepted. Owner: "consider every component that you have built to be approved. if i havent given any feedback to change anything consider them approved."
 
@@ -43,7 +43,7 @@ chatgpt  body 768 × 52, radius 26, no border; shadow 0 0 0 1px 4%, 0 2px 8px 4%
   footer grid, padding 8, column-gap 8: [36px action] [input] [actions]
   input  16px, 26px line, 13px from the top
   actions 36px round, ghost ink rgb(143); voice/send 36px round
-area     shell, padding 8 (7 + 1 border), radius 16, border-decorative, no resting shadow
+area     shell, padding 8 (7 + 1 border), radius 16, Card's edge (#ee), no resting shadow
   entry  flex, gap 8: leading actions, textarea, trailing actions, 32px send Button (radius 8; `submitPill` makes it round)
   input  16/24, 4px block padding (32px row)
 ```
@@ -53,7 +53,9 @@ area     shell, padding 8 (7 + 1 border), radius 16, border-decorative, no resti
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | input · type | **16/24** (`text-md`) | ChatGPT 16px (26 line); type ramp body 16/24 | Was 14/20. The row stays 48px: (32 − 24) / 2 = 4px padding |
-| shell · edge | **1px `border-decorative`** (rgb 243) | ChatGPT's 4% ring (about rgb 245) | Was the field edge (226). Focus still paints the field focus ring |
+| shell · edge | **1px Card's edge `light-dark(neutral-100, neutral-750)`** (rgb 238; composer.css:17-18) | Audit S7a (owner 2026-09-30): a surface standing alone on the page takes Card's edge; ChatGPT's 4% ring (about rgb 245) | Was `border-decorative` rgb 243, the faintest edge in the system, and before that the field edge (226) |
+| shell · hover | edge `input-edge-hover` #d4, not while focused or disabled (composer.css:36) | Audit S7a: Input's hover step | — |
+| shell · focus | edge and outline `composer-focus-color`, the quiet neutral (`border-subtle` at default contrast), plus the field halo (composer.css:37) | Audit S1 left Composer out of the blue field focus: a surface that holds a field | Input, Textarea and Select take the blue `field-focus-color` |
 | shell · shadow | none at rest (focus keeps its halo) | owner 2026-09-26: no control has a resting shadow | ChatGPT floats on 0 2px 8px 4%; superseded |
 | disabled / busy | disabled: Textarea's field paint (`textarea-bg-disabled`, `border-faint`, `fg-disabled` text and placeholder), no opacity; busy: `cursor: progress`, send disabled | Cohesion audit: text fields keep full opacity with field paint | Was `opacity: .6`, which compounded with the send Button's own 50% (about 30%) |
 | actions · gap | **8** | ChatGPT 8 | Was 4 |
@@ -93,3 +95,5 @@ multi-line radius (would require typing), hover states.
   first pass: 16/24 text, faint ring and soft shadow, 8px action gap, auto-grow width fix →
   4 Area captures after.
 - 2026-09-27 · owner (after this pass, on the older branch): the mode control is too small and not a real button; send concentric, not a circle → the send Button of this pass already answers the second; the stacked demo's mode is a soft md Button that opens a Menu.
+- 2026-09-30 · audit S7a (owner) → edge is Card's `light-dark(neutral-100, neutral-750)` #ee (was `border-decorative` #f3); hover steps the edge to `input-edge-hover` #d4, as Input; focus keeps the quiet `composer-focus-color` → composer.css:17-18, 36-37.
+- 2026-09-30 · audit S13 (owner) → the stacked demo's mode menu uses `MenuItem radio checked` (`menuitemradio`, a check only, no plate; gallery.tsx:2151). Was the raw `data-selected` plate plus a Fluent check in the shortcut slot.

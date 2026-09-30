@@ -46,7 +46,7 @@ dismiss   36 × 36, radius 8, icon 20, ending 4 in from the row
 | hover | Menu's row plate, `bg-component-hover` | Menu; ChatGPT washes the row 5% black (captured 2026-09-28) | — |
 | icon | 16 icon centred in a 32 square 8 in: centre 24 from the edge, under the composer's leading action | ChatGPT's icons align under its "+" | Area icons are 16 |
 | text | 8 after the icon slot | ChatGPT 8 | — |
-| dismiss | ghost icon Button (32) 8 in, shown on hover and focus (always on touch): centre 24 from the end, under the send button | ChatGPT 36 at 4 in | Area's md button |
+| dismiss | ghost small icon Button (28, radius 6, Area glyph) 8 in, shown on hover and focus (always on touch); the row end reserves 28 + 8 | Audit S9 / G-18 (owner 2026-09-30): the close recipe for rectangular shapes. ChatGPT 36 | Was a 32 md Button |
 
 ## Visual pass
 
@@ -84,3 +84,4 @@ can pick?" Both are built as `layout`:
 
 Measured: A rows 48, gap 2, radius 16; B 24 below, 32 tall, 8 apart, starting at 0.
 - 2026-09-27 · merge check (cohesion test) → hover no longer lifts the ink; the plate is Menu's row plate.
+- 2026-09-30 · audit S9 / G-18 (owner) → the dismiss is a ghost small Button (28; was md 32) and the end padding follows; pressed rows take `bg-component-active` (prompt-suggestions.css).

@@ -64,19 +64,19 @@ Notion's callout block remains unmeasured.
 area   div.area-alert[role=status|alert]  grid "icon content actions dismiss"; owns height,
        padding 8, 1px tone border, radius-container, tone fill and ink
   icon     span.area-alert__icon 16px, 4px leading margin (surface.css:161-167)
-  content  div flex, baseline, gap 4; title (400, tone ink) + description (fg-muted)
+  content  div flex, baseline, gap 4; title (500, tone ink) + description (fg-muted)
   link     span inline after the description, 4px before it, underlined
-  actions  div flex, gap-sm 4
-  dismiss  button 28 × 28, 1px transparent border, radius-control-sm, 16px glyph
+  actions  div flex, gap 4
+  dismiss  span.area-alert__dismiss > Button sm ghost neutral iconOnly: 28 × 28, radius-control-sm, Area dismiss glyph 16
 ```
 
-Font and gap come from `inset.css:184-188` (`ui-size`/`ui-leading` 14/20, `gap-md` 8); the
+Font and gap come from `inset.css:199-203` (`ui-size`/`ui-leading` 14/20, gap 8); the
 dead `text-md` and `space-10` declarations were removed from `surface.css`.
 
 Inset equations (single line, measured in `area--dismissible--rest--light`):
 - block: 1 border + 8 padding + (28 − 20) / 2 = 13 to the text; shell 28 + 16 + 2 = 46
   (`surface.css:203`).
-- icon start: 1 + 8 + 4 margin = 13. Dismiss end: 1 + 8 = 9, glyph 6 inside it.
+- icon start: 1 + 8 + 4 margin = 13. Dismiss end: the 28px ghost sm Button sits 6 from the corner, radius 6, concentric with the 12 corner (2026-09-27; audit S9).
 - multiline first line: 1 + 8 + 3 (`--_first-row-offset` = 4 − 1, `surface.css:223`) = 12;
   icon 12 + (20 − 16) / 2 = 14 (`surface.css:239`), measured 14. Without actions the row is
   dropped (`surface.css:243`): content ends 9 from the bottom (8 + 1), shell 65.
@@ -116,35 +116,38 @@ The dismiss beside the products' icon buttons under the pointer:
 | controls | 28, **6 from the top and the side** (margins −4 / −6, `--_alert-control-*`); a multiline action row ends 6 from the bottom | Toast pass; concentric with the 12 corner (12 − 6) | The dismiss sat 9 in |
 | shell · fill / edge | tone surface + tone border; neutral `bg-component` #f7f7f7 + `border-decorative` #f3f3f3 | Semantic roles (`surface.css:284-289`) | The edge is a container seam, which the second pass kept decorative (rules take `border-divider`) |
 | text · size | 14/20 (`ui-size`) | Peer: Toast (`inset.css:184-188`), menus and rows use UI body | — |
-| title · weight / ink | 400, the tone ink (`surface.css:176`) | Type ramp: 500 is for labels on fills; the title carries the tone | — |
+| title · weight / ink | 500, the tone ink (`surface.css:571`) | Surface title at body size (audit S2, owner 2026-09-30) | Was 400 before the type pass |
 | description · ink | **`fg-muted` #666666 in every tone** (`surface.css:177, 293`) | Second pass, decision 5: supporting text takes the muted role | Was the tone ink at 0.85 opacity on tones, an opacity rather than a role |
+| dismiss · control | **a ghost small Button** (`size="sm" variant="ghost" tone="neutral" iconOnly`) with the Area `dismiss` glyph, in a `span.area-alert__dismiss` wrapper (`primitives.tsx:197-201`, `surface.css:703-709`) | The close recipe for rectangular surfaces (audit S9, owner): Popover and Toast | Was a hand-built button with a Fluent filled glyph |
 | dismiss · size | 28 (`control-sm`) | Button sm; Notion's icon button is 28 (`notion--icon-button--hover`) | Figma 24, ChatGPT 36 |
-| dismiss · radius | **`radius-control-sm` 6** (`surface.css:262`) | Notion 6 on 28; peers a 28px Button, Dialog close | Was `radius-control` 8, a 32px button's radius on a 28px box |
-| dismiss · ink | **alert ink at full opacity** (`surface.css:263-265`) | Shared rule: foreground fixed on hover | Was 0.72, raised to 1 on hover and focus |
-| dismiss · hover | `color-mix(_fg 12%, transparent)` (`surface.css:273`) | Peer: Chip remove (12% of its ink) | Tinted, because the alert ground is a tone surface; `bg-component-hover` would read grey on blue or red. The products use a 5% plate; kept (third pass) |
-| dismiss · focus | **`focus-color`** #412dd0, 2px, offset 2 (`surface.css:274`) | Shared focus role | Was `--area-focus`, an undefined token, so the ring drew in the text colour |
+| dismiss · radius | **`radius-control-sm` 6**, Button's own | Notion 6 on 28; peers Popover and Toast close | — |
+| dismiss · ink | neutral: the Button's quiet ghost ink (`button.css:374-377`). Tinted: the alert's tone ink (`surface.css:713-717`) | Shared rule: foreground fixed on hover | Was the alert ink at full opacity on every tone |
+| dismiss · hover | neutral: the Button's row plate `bg-component-hover` (`button.css:385-388`). Tinted: `color-mix(_fg 12%, transparent)`, also when pressed (`surface.css:708`, `:713-717`) | Neutral: Popover and Toast close. Tinted: Chip remove (12% of its ink) | A grey plate reads as a hole on blue or red. Was 12% of the ink on every tone, much darker on the neutral grey |
+| dismiss · focus | Button's focus ring, `focus-color`, 2px, offset 2 (`button.css:146-149`) | Shared focus role | — |
 
 Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
 
-1. Dismiss hover strength: kept at 12% of the alert ink. ChatGPT, Notion and Figma hover
-   icon buttons at 5% (`baseline/chatgpt--icon-button-ghost--hover`,
+1. Dismiss hover strength: kept at 12% of the alert ink on tinted alerts. ChatGPT, Notion and
+   Figma hover icon buttons at 5% (`baseline/chatgpt--icon-button-ghost--hover`,
    `button/notion--icon-button--hover`, `button/figma--icon-button--hover`), but an opaque
-   neutral plate would grey a tinted ground; the ink mix scales with each tone.
+   neutral plate would grey a tinted ground; the ink mix scales with each tone. Since audit S9
+   the neutral alert uses the Button's `bg-component-hover` plate instead.
 
 ## States
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | rest | as above | `area--*` captures |
-| dismiss hover | plate 12% of the alert ink; ink unchanged | CSS; hover not captured. Products: 5% plate, ink unchanged (Measurements) |
+| dismiss hover | neutral: `bg-component-hover`; tinted: plate 12% of the alert ink; ink unchanged | CSS; hover not captured. Products: 5% plate, ink unchanged (Measurements) |
 | dismiss focus-visible | 2px `focus-color` outline, 2px offset | CSS; not captured |
-| dismiss pressed | no separate paint | — |
+| dismiss pressed | neutral: `bg-component-active`; tinted: the same 12% plate | CSS; not captured |
 
 ## Behavior and accessibility
 
 `role="status"` for every tone except danger, which uses `role="alert"`
-(`packages/react/src/components/primitives.tsx:158-160`; `alert.test.mjs:9`). The dismiss is a native button named by
-`dismissLabel` ("Dismiss alert"). The icon is `aria-hidden`. The single-line layout
+(`packages/react/src/components/primitives.tsx:158-160`; `alert.test.mjs:9`). The dismiss is an Area Button named by
+`dismissLabel` ("Dismiss alert"); `onDismiss` shows it and `dismissIcon` replaces the glyph
+(`primitives.tsx:158-162`, `:197-201`). The icon is `aria-hidden`. The single-line layout
 truncates title and description with an ellipsis; below a 30rem container the actions move
 to a second row (`surface.css:276-282`). Forced colours: no Alert-specific rule.
 
@@ -152,11 +155,12 @@ to a second row (`surface.css:276-282`). Forced colours: no Alert-specific rule.
 
 | Peer | Shared role | Peer value | Alert | Match |
 |---|---|---|---|---|
-| Toast | UI body, gap | 14/20, `gap-md` 8 (`inset.css:184-188`) | same rule | match |
+| Toast | UI body, gap | 14/20, gap 8 (`inset.css:199-203`) | same rule | match |
 | Toast | description ink | `fg-muted`; neutral tone is the default (second pass) | `fg-muted` in every tone | match |
-| Button sm ghost | 28px icon action | radius-control-sm 6, fixed ink | 28, 6, fixed ink | match |
-| Dialog close | icon action radius | radius-control-sm | same | match |
-| Chip remove | tinted hover plate | 12% of its ink (`chip.css:227`) | 12% of the alert ink | match |
+| Button sm ghost | 28px icon action | radius-control-sm 6, fixed ink | the dismiss is this Button | match |
+| Popover, Toast close | rectangular-surface close | ghost sm Button, Area glyph | same | match (audit S9) |
+| Dialog close | icon action | ghost md Button, 32, radius-control-md 8 | ghost sm, 28, 6 | differs: Dialog is the written exception (audit S9) |
+| Chip remove | tinted hover plate | 12% of its ink | 12% of the alert ink on tinted alerts; `bg-component-hover` on neutral | match on tones |
 | Card media / Panel / Code block | container radius | 12 at Standard | 12 | match |
 | Product icon buttons | hover plate | 5% on 28 / 24 / 36, radius 6 / 5 / 8 (Notion, Figma, ChatGPT) | 12% of ink on 28, radius 6 | size and radius match Notion; strength kept (third pass) |
 
@@ -240,3 +244,5 @@ session: ChatGPT reserves an empty root banner slot and a composer banner portal
 - 2026-09-28 · owner: build Banner → `layout="banner"` and `flush` on Alert (Banner section);
   Alert returns to In review.
 - 2026-09-28 · owner: approved (batch 4); Count keeps the pill shape.
+- 2026-09-30 · audit S9 (owner) → the dismiss is a ghost small Button (28, radius 6) with the Area `dismiss` glyph, as Popover and Toast (`primitives.tsx:197-201`); neutral keeps the Button's quiet ink and `bg-component-hover` plate, tinted keeps the tone ink and a 12% ink plate (`surface.css:703-717`). Was a hand-built button: full ink, a Fluent filled glyph, the 12% plate on every tone.
+- 2026-09-30 · audit S14 (owner) → no visible change; the row gap and the actions gap no longer read the density gap tokens and are pinned to 8 and 4 (`inset.css:202`, surface.css:593), since those tokens moved to 6.

@@ -139,9 +139,9 @@ no change in any of 30 nodes (hidden window).
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| paint | `bg-surface`; edge neutral 100 (#ee; dark 750); shadow `0 1px 2px -1px` + `0 2px 8px 0`, 3% black (dark 16%) | Owner (lighter edge, faint shadow); Notion's 8% ring composites to #eb; Figma reference 0 0 8 0 at 2% | The halo drops 2px so it pools under the card, and a contact line gives the lighter edge a bottom. Literal until shadows are tokenised, so the Surface axis's Flat preset doesn't remove it |
+| paint | `bg-surface`; edge neutral 100 (#ee; dark 750); shadow `--area-shadow-card`: `0 1px 2px -1px` + `0 2px 8px 0`, 3% black (dark 16%) (surface.ts:15, surface.css:62) | Owner (lighter edge, faint shadow); Notion's 8% ring composites to #eb; Figma reference 0 0 8 0 at 2% | The halo drops 2px so it pools under the card, and a contact line gives the lighter edge a bottom. A Surface axis role since audit S10: the Flat preset sets it to `none`, the other presets keep the recipe. The edge stays lighter than Table's #e2 frame because the halo carries it (audit S7b, surface.css:58); Composer and Code block share this edge (audit S7a) |
 | media fill | neutral 25 (#fa; dark 800), media and well alike | Owner | The same rung as the stripe and code slots, but those roles mean something else, so a private property |
-| radius / inset | 12·16·24 / 6·8·12 | Owner ladder; ChatGPT 16 | Corners derive from the container role |
+| radius / inset | 22·24·28 / 6·8·12: Button md radius (capped) + (inset + 8) × `radius-concentric` | Owner rule 2026-09-28; audit S3 (2026-09-30): square at Sharp, finite at Pill | Was 12·16·24 from the container role |
 | text inset | **inset + 8**: 14 / 16 / 20 from the edge on every card, with or without media (media and wells stay on the inset: 6 / 8 / 12); the first line trimmed to its cap, the last to its descent (a closing value to its baseline); media to the title's cap the same 16 at md | Owner 2026-09-28: "the padding for text and buttons being 16 total distance shouldnt only apply when there is an image or container" (asked: 16 everywhere) | Was inset + 4 (10 / 12 / 16), and before that inset + (control-md − 1cap) / 2 |
 | header action | a visible control (soft, solid, outline) sits on the text column's corner, concentric with the card (8 + 16 = 24 at md), with the title centred on it; ghost controls (no plate at rest) centre on the title's cap instead, so the title keeps the 16 cap line, their plate ending on the text column; a small card's action is a small control | Popover, Toast, Dialog corner controls; owner 2026-09-28 (the carousel title sat 26 from the top) | Ghost controls used the corner rule too |
 | footer | last slot: reaches the inset on the sides and bottom; 12 above | Same corner rule | Was on the text frame, 8 + 4 above |
@@ -165,7 +165,7 @@ no change in any of 30 nodes (hidden window).
 | value (CardValue) | `title-lg` (32/40, −0.02em), 400, tabular figures, every size; as a widget's last figure (at most one line after it) it sits at the bottom of a taller card | Apple widgets set the figure well above the text, low in the widget | Replaces an inline style in the weather and stat templates |
 | header action icon | a bare icon is 16px, `fg-muted`, like list markers | CardList markers | — |
 | well | contents stack at full width, centred on the block axis, gap = card inset, padded by the content pad onto the text column | Nested cards in the owner's references | Was padded by the text inset |
-| bottom card overlay | text keeps clear of it: one `control-md` plus `gap-md` on that side | — | Replaces an inline padding in the corner-action demo |
+| bottom card overlay | text keeps clear of it: one `control-md` plus 8 on that side (surface.css:372, :375) | — | Replaces an inline padding in the corner-action demo |
 | carousel | `CardCarousel` (`ul`, tabIndex 0, `aria-label`): reaches the inset on both sides like media; items (100% − 3 gaps) / 3.25 wide so the next one shows, 8 apart; media 1:1 at the media radius; hidden scrollbar; previous / next ghost Buttons in the header page 75% of the row and turn off at the ends (demo) | Owner (fix the carousel) | Was a row inside the text frame, four items exactly filling it (no sign of more), media radius 12, descenders clipped once trimmed (fixed: the row extends into the content pad) |
 | carousel under a header | the title's baseline sits the text inset (18.3 at md) above the pictures, as far as its cap sits from the top | Owner: "a bit more room below the title" (2026-09-27) | Was the 12 block gap |
 
@@ -189,7 +189,7 @@ users see the actions. `@media (hover: none)` keeps them visible on touch.
 | Checkbox, Badge (interactive) | control edge hover | `edge-control-hover` | same, when linked; rest is the lighter card edge | owner (lighter edge) |
 | Popover | media placeholder | `bg-component` #f7 | neutral 25 #fa | open: align Popover media if the owner wants one placeholder fill |
 | Nav, Menu, Table rows | hover plate | `bg-component-hover` | edge step | intentional: a card with media is not a row |
-| Panel, Dialog, Popover | radius | 12 | 12 / 16 / 24 | owner ladder; sm matches |
+| Panel, Dialog, Popover | radius | 12 / 16 / 12 | 22 / 24 / 28 | Card holds a Button; containers use the container role (DESIGN_SYSTEM, audit S3b) |
 
 ## Visual pass
 
@@ -255,3 +255,7 @@ forced colours, screen readers.
     corner 14 concentric with the control, 44 tall (was a 32 control, 52 tall, corner 18 in a 12
     well); the well's corner is 16.
   Card moves back to In review.
+- 2026-09-30 · audit S3 (owner picked C) → the distance joins the corner through `radius-concentric`, so Sharp cards are square; Standard stays 22 / 24 / 28 and Pill stays capped (H-1).
+- 2026-09-30 · audit S7b (owner picked C) → no change; the edge stays #ee because the halo carries it, where Table's unshadowed frame keeps #e2. Composer and Code block now take this edge (S7a) → surface.css:58.
+- 2026-09-30 · audit S10 (owner) → the halo is the Surface axis role `--area-shadow-card` (same recipe; `none` under Flat), read by `--_card-shadow` → surface.css:62, surface.ts:15.
+- 2026-09-30 · audit S14 (owner) → the density gap moved to 6, so layout spacing that had borrowed `gap-md` is pinned to 8: the header, the footer actions and the overlay clearance (surface.css:267, :372, :375, :453). CardList markers still read `gap-md` and now sit 6 from their text (surface.css:391).

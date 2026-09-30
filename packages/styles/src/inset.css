@@ -56,9 +56,12 @@
   .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-icon); }
   /* A horizontal plate has no column to share, so a text-only item is centred like a button. */
   .area-nav--horizontal .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-text); }
-  .area-nav__item { gap: var(--area-gap-md); }
-  /* spec: the shared inset puts a 16px icon 8px in (Notion 8); a 12px gap then starts the
-   * label 36px in, where ChatGPT and Notion both set it (docs/specs/menu.md). */
+  /* spec: the shared inset puts a 16px icon 8px in (Notion 8); the row gap (12) then starts the
+   * label 36px in, where ChatGPT and Notion both set it (docs/specs/menu.md). Every icon row
+   * shares that column: Nav moved from gap-md (labels at 32) in audit S11a. */
+  .area-nav__item { gap: var(--area-gap-row); }
+  /* A horizontal plate is tab-like, not a list row: no label column. */
+  .area-nav--horizontal .area-nav__item { gap: var(--area-gap-md); }
   .area-menu__item { gap: var(--_menu-gap, var(--area-gap-md)); }
   /* A trailing check or switch is a glyph edge: 8px from the row's end (Notion's toggle 8). */
   .area-menu__item:has(> :is(.area-menu__check, .area-menu__toggle):last-child) { --_box-end: var(--_box-icon); }
@@ -147,8 +150,10 @@
   .area-input:has(> .area-input__affix:last-child > .area-kbd) { --_box-end: var(--area-space-20); }
   .area-input:has(> .area-input__affix:last-child > .area-kbd--small) { --_box-end: var(--area-space-16); }
   .area-input__affix:has(> .area-kbd) { display: inline-flex; text-box: none; padding-block: 0; }
-  .area-menu__item:has(> .area-menu__shortcut > .area-kbd) { --_box-end: var(--area-space-20); }
-  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--small) { --_box-end: var(--area-space-16); }
+  /* A quiet Kbd in a menu is set like the string shortcut (audit S12a), so it takes the text
+     end inset; only a filled keycap (on-color) reserves its own box. */
+  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--on-color) { --_box-end: var(--area-space-20); }
+  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--on-color.area-kbd--small) { --_box-end: var(--area-space-16); }
   .area-menu__item:has(> .area-menu__shortcut > svg:only-child) { --_box-end: var(--area-icon-md); }
   .area-menu__shortcut { display: inline-flex; align-items: center; padding-inline-start: 0; }
   .area-menu__shortcut > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex-shrink: 0; }
@@ -194,7 +199,7 @@
   .area-alert, .area-toast {
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
-    gap: var(--area-gap-md);
+    gap: var(--area-space-8);
   }
   @supports (text-box: trim-both cap alphabetic) {
     .area-checkbox, .area-radio { align-items: flex-start; }

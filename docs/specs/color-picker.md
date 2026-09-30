@@ -82,7 +82,7 @@ values      40px row, padding 0 16, gap 8: model select 57 × 24 (1px rgb(230), 
             fields 144 × 24: hex 89 (fill rgb(245), padding 0 8), 1px surface gap, opacity 54 (8px start, % in a 14px box, ink 50%)
 swatches    1px rgb(230) top rule, padding-top 11; source select 208 × 24; grid of 24px cells from 12px, 16px chits (radius 20%)
 area (this pass)
-shell       10 rows wide (240 compact, 280 default), 1px border-decorative, radius container, the floating lift
+shell       10 rows wide (240 compact, 280 default), 1px border-decorative, radius container, the floating lift (`--area-shadow-float`)
 header      optional, min 40, padding 16 start / 8 end (border counted), border-faint rule
 body        padding 16 (border counted), gap 12: area → controls → values
 swatches    border-faint rule, padding 12 16, heading row (label + Add), ColorSwatchPicker sm, contiguous 24px cells from 12px
@@ -141,7 +141,7 @@ foreground/background popover (the background is a prop).
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | shell · width | `control-sm × 10` (240 / 280) | Figma 240 = 10 × its 24px rows | The inset contract gives 28px fields an 8.74px text inset; at a fixed 240 three RGB digits clipped. Tying width to the row keeps Figma's proportions at both scales |
-| shell · surface | border-decorative, radius container (12), the floating lift (0 20px 24px, 0 5px 8px) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
+| shell · surface | border-decorative, radius container (12), the floating lift `--area-shadow-float` (0 20px 24px, 0 5px 8px at half strength; `none` under Flat) (color.css:214) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
 | shell · inset | 16 (border counted) | Figma 16 | — |
 | vertical rhythm | 12 | Figma: area→tracks 12, track gap 12, tracks→values 12 | — |
 | header | min 40, 16 start / 8 end, border-faint rule | Figma 40, divider rgb(230) | Figma's tab text sits at 16 (8 + tab padding); a plain title uses the same column. border-faint (226) is the role nearest rgb(230) |
@@ -183,7 +183,7 @@ foreground/background popover (the background is a prop).
 
 | Peer | Shared role | Peer value | Picker | Match / reason |
 |---|---|---|---|---|
-| Popover | floating surface | border-decorative, container radius, the floating lift | same | match |
+| Popover | floating surface | border-decorative, container radius, `--area-shadow-float` | same | match |
 | Slider | thumb focus | focus-width at focus-offset | same | match |
 | ColorField | hex + opacity | soft InputGroup, decorative divider | soft InputGroup, surface divider | Figma's divider is a surface gap; ColorField keeps its own until it gets a pass |
 | ColorSwatchPicker | saved colors | 4px gap grid | contiguous cells inside the picker | Figma's document colors are contiguous |
@@ -243,3 +243,5 @@ setting).
   swatch's pixel checker (see color-swatch.md).
 - 2026-09-28 · batch 10 Claude in Chrome side by side (Figma picker) → opacity sized to content, channel
   fields hug their digits, alpha checker 3 rows → every picker tile measured, no clipped value.
+- 2026-09-30 · audit F-6 (owner rule 09-27) → header and swatch rules take `border-decorative` #f3 (was `border-faint` #e2, darker than the container edge) (color.css:222, 359).
+- 2026-09-30 · audit S10 (owner) → the surface reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) (color.css:214).

@@ -46,7 +46,8 @@
   .area-tree-view [role="treeitem"][aria-selected="true"],
   .area-tree-view [role="treeitem"][aria-current="page"] { background: var(--_tree-selection); color: var(--area-fg-default); }
   /* The current row is marked by fill and ink alone; the edge marker was removed (owner, pass 3). */
-  .area-tree-view [role="treeitem"]:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* Inset ring, as Nav and Tabs (audit S11b). */
+  .area-tree-view [role="treeitem"]:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
   /* Disabled rows dim as a whole, icon and chevron included, as Nav, Menu and Tabs rows do (audit D-5). */
   .area-tree-view [role="treeitem"][data-disabled] { cursor: not-allowed; opacity: 0.5; }
   /*
@@ -67,7 +68,10 @@
   .area-tree-view__chevron::after { content: ""; position: absolute; inset: calc(-1 * var(--area-space-4)); }
   .area-tree-view [aria-expanded="false"] .area-tree-view__chevron svg { transform: rotate(-90deg); }
   .area-tree-view__chevron svg, .area-tree-view__icon svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
-  .area-tree-view__chevron:has(svg):hover::before { background: var(--area-bg-component-hover); }
+  /* Controls nested on a row hover with the translucent wash, so they show on a hovered or
+     current row plate (audit S11c; was bg-component-hover, invisible there). */
+  .area-tree-view__chevron:has(svg):hover::before { background: var(--area-bg-hover); }
+  .area-tree-view__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-active); }
   .area-tree-view__icon { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
   /* spec: the label follows the row's even 6px gap; its own inset is 0 (pass 3). */
   .area-tree-view__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-inline-start: var(--_tree-label-inset); }

@@ -46,6 +46,10 @@ export function densityTokens(tiers: Record<Tier, TierSpec>) {
   // that is UI rather than prose -- a table, a menu, a caption in a toolbar -- can follow
   // the density without reaching into a specific control tier.
   const medium = tiers.md;
+  // The icon-to-label gap of a list row (audit S11a, owner 2026-09-30): with an 8 row inset and
+  // a 16 icon it puts every icon row's label on one 36 column, where ChatGPT's and Notion's
+  // menus and sidebars start theirs. Notion is the compact calibration, so compact keeps it.
+  out["gap-row"] = "12px";
   out["ui-size"] = `var(--area-size-${medium.size})`;
   out["ui-leading"] = `var(--area-leading-${medium.leading})`;
   return out;
@@ -64,17 +68,18 @@ export function densityTokens(tiers: Record<Tier, TierSpec>) {
  * the same with 24 added for the large tier. An earlier version of this ladder used 14
  * and 20; both are off every published ramp.
  *
- * Gap follows the tier rather than holding constant: compact controls use 4px, while
- * medium and larger controls use Primer's 8px control gap.
+ * The icon-to-label gap is 6 at sm, md and lg (audit S14, owner 2026-09-30: Notion 6 at 28
+ * and 32, Untitled lg 6, Tree view 6; was 4 / 8 / 8, while Button wrote a literal 6). xs and
+ * compact sm keep 4. Layout spacing never reads these tokens.
  */
 export const DEFAULT_TIERS: Record<Tier, TierSpec> = {
   xs: { height: 24, gutter: 8, icon: 12, gap: 4, size: 12, leading: 16 },
   // Small controls keep the UI size, 14/20: Notion's 28px buttons set 14px, and the tiers
   // differ by height, not by shrinking the label. 12px belongs to xs and to compact density
   // (docs/specs/button.md, owner 2026-09-26; supersedes the 2026-09-25 caption pairing).
-  sm: { height: 28, gutter: 8, icon: 16, gap: 4, size: 14, leading: 20 },
-  md: { height: 32, gutter: 12, icon: 16, gap: 8, size: 14, leading: 20 },
-  lg: { height: 40, gutter: 12, icon: 16, gap: 8, size: 14, leading: 20 },
+  sm: { height: 28, gutter: 8, icon: 16, gap: 6, size: 14, leading: 20 },
+  md: { height: 32, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
+  lg: { height: 40, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
   xl: { height: 48, gutter: 16, icon: 24, gap: 8, size: 16, leading: 24 },
 };
 

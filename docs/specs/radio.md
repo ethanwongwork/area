@@ -81,10 +81,11 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | control · size | **16 / 16 / 20** (choice.css:315-330) | Untitled 16 / 20; audit rule "one glyph ladder"; the products' glyphs are 16 | Was 12 / 16 / 20 |
-| rest edge | **`edge-control-hover` #d4d4d4** (choice.css:55) | Notion's glyph edge ≈ #d4; Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2 |
+| rest edge | **`edge-control-hover` #d4d4d4** (choice.css:48) | Notion's glyph edge ≈ #d4; Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2 |
 | dot | 30% inset: 5.6 at 16, 7.2 at 20 | Untitled 6 / 8 | Proportional to the box rather than two literals; within 0.8px |
 | checked | `neutral-solid`, dot `fg-on-neutral` | Owner 2026-09-26 | Untitled brand-600 |
 | shadow, focus, hover | as Checkbox | Peer consistency | — |
+| label gap | 6 at md and lg, as Checkbox (choice.css:9, :404, :410) | Peer: Checkbox, Button (audit S14) | Was 8 |
 | group spacing | options `space-12` below the legend, `space-8` between rows, horizontal `space-16` columns (choice.css:243-256) | Untitled horizontal gap 16 | Vertical rows keep Checkbox's 8 |
 | disabled | 50% on the label; group `:disabled` the same (choice.css:37-41, 259) | Audit rule; Untitled 50% | Same element, so not doubled |
 
@@ -155,3 +156,4 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
   `checkbox/figma--checkbox-checked--rest--light`, `area--size-medium`, `area--invalid`,
   `area--horizontal`, `area--description`.
 - 2026-09-27 · owner flagged the invalid group → a checked option in an invalid group takes the danger fill, as a single invalid Checkbox does (`choice.css`); the group now reads as one error state → headless Chromium.
+- 2026-09-30 · audit S14 (owner) → the label gap is 6 at md and lg (was 8), shared with Checkbox (choice.css:9, :404, :410; density.ts:81-82).

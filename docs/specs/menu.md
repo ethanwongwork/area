@@ -26,7 +26,7 @@ navigation (Nav), not a single-value choice in a form (Select), not a searchable
 | item | icon + text | Iconic actions | ChatGPT account and chat actions; Notion page actions; Figma "More" |
 | item | shortcut | Command hint | Notion page actions (⌘⌥L, ⌘D) |
 | item | danger | Destructive action | ChatGPT "Delete" (red label) |
-| item | selected | Current choice | ChatGPT model picker (check) |
+| item | selected (`radio checked`) | Current choice among several | ChatGPT model picker (check) |
 | item | disabled | Unavailable action | Area; Radix-based products support it |
 | composition | label, separator | Groups | ChatGPT chat actions (groups); Notion (groups) |
 | item | checkable (switch or check) | Settings that toggle in place | Notion "Small text", "Full width" (switch); ChatGPT model picker (check) |
@@ -87,15 +87,16 @@ Items:
 |---|---|---|---|
 | item · height | 32 (`control-md`); 28 in compact | Notion 28, ChatGPT 36, Figma 40 | Default sits between ChatGPT and Notion; compact density gives Notion's 28 |
 | item · icon inset | 8 (shared `inset.css` rule for a 16px icon in 32) | Notion 8 (20px icon) | ChatGPT 10 |
-| item · icon → label | **12** (label at 36) | ChatGPT and Notion both start the label at 36 | Was 8 (label at 32). Icons stay 16 (Area's icon sizes are 12/16/24; the products draw 20) |
+| item · icon → label | **12**, the density token `--area-gap-row` (label at 36; `--_menu-gap`, surface.css:984) | ChatGPT and Notion both start the label at 36 | Was 8 (label at 32), then a literal 12 until audit S11a. Nav, Command palette and the Select picker share the token, so every icon row's label sits at 36. Icons stay 16 (Area's icon sizes are 12/16/24; the products draw 20) |
 | item · text-only inset | 11 (shared rule) | ChatGPT 10 | Within 1px |
 | item · text | 14/20 400 | ChatGPT 14/20 400; Notion 14 400 | — |
-| hover, keyboard focus | **`bg-component-hover`** plate (the shared row plate since the cohesion audit; was the `bg-hover` wash) on hover, `data-highlighted` and `:focus-visible` | ChatGPT 5% black, Notion 5% warm black, pointer and keyboard alike | Keyboard focus had no style of its own. Forced colours draw a Highlight ring |
+| hover, keyboard focus | **`bg-component-hover`** plate (the shared row plate since the cohesion audit; was the `bg-hover` wash) on hover, `data-highlighted` and `:focus-visible` | ChatGPT 5% black, Notion 5% warm black, pointer and keyboard alike | Keyboard focus had no style of its own. Focus is the plate only, with no ring (audit S11b; Nav and Tree rows draw an inset ring). Forced colours draw a Highlight ring |
 | danger | red label; **neutral wash** on hover | ChatGPT "Delete" (red text, 5% wash) | Was a red-tinted row with darker red text |
-| shortcut | 12/16 in the UI font, muted | Notion (12px, tertiary ink, UI font) | Was monospace |
+| shortcut | 12/16 400 in the UI font, muted; a Kbd in a row renders the same, unboxed (kbd.css:89-102); on a danger row it takes the row ink (kbd.css:104) | Notion (12px, tertiary ink, UI font) | Was monospace. A Kbd here was the keyboard face at 500 until audit S12a |
 | separator · spacing | **4 / 1 / 4** (2px margin plus the 2px row gap) | Notion 4 / 1 / 4 (the menus' primary product) | Owner: too big. Was 10 / 1 / 10 (21px band); ChatGPT 8 / 1 / 8. Line starts level with the icons (Notion) |
-| checkable row | `MenuItem checked` → `menuitemcheckbox`; trailing check (default) or `indicator="switch"`; indicator 8px from the end | Notion toggle rows (whole row is the control, 30×18 switch 8px from the end, input `tabindex=-1`); ChatGPT model picker (trailing check) | Area draws its sm switch (28×16) display-only, with no nested input, so the row stays the only focusable element |
-| surface · shadow | **`0 20px 24px`, `0 5px 8px`** in `shadow-color` | Notion's two layers; ChatGPT 8/16; Figma 2/5 + 10/16 | Was `shadow-2` (1–2px), a flat card edge |
+| checkable row | `MenuItem checked` → `menuitemcheckbox`; with `radio`, `menuitemradio` (primitives.tsx:1143-1161); trailing check (default) or `indicator="switch"`; indicator 8px from the end | Notion toggle rows (whole row is the control, 30×18 switch 8px from the end, input `tabindex=-1`); ChatGPT model picker (trailing check) | Area draws its sm switch (28×16) display-only, with no nested input, so the row stays the only focusable element |
+| selected row | **check only**: `radio checked` (one of several) or `checked`; no plate at rest, the plate stays the highlight. The raw `data-selected` plate (`bg-component-active`, surface.css:1055) is the value-picker hook only (Select, Combobox) | ChatGPT model picker (check, no plate) | Audit S13 C. The Selected tile and the Composer mode menu drew the plate plus a Fluent check in the shortcut slot |
+| surface · shadow | **`--area-shadow-float`**: `0 20px 24px` in `shadow-color`, `0 5px 8px` at half strength (surface.css:866, surface.ts:16); `none` under the Flat preset | Notion's two layers; ChatGPT 8/16; Figma 2/5 + 10/16 | Was `shadow-2` (1–2px), a flat card edge. A Surface axis role since audit S10 |
 | surface · radius, inset, border | 12, 4, 1px decorative (unchanged) | Notion 10 and 4; ChatGPT 16 and 10 | Concentric item radius follows |
 | keyboard | Up/Down (wrap), Home/End, typeahead | WAI menu pattern; Radix in ChatGPT; Notion | Was none (SplitButton had its own copy) |
 
@@ -139,3 +140,5 @@ palette and Context menu.
 - 2026-09-27 · merged the overlay-behavior branch → with a `trigger`, Menu anchors to it and follows the ARIA menu button pattern (flip and shift, arrows wrap, typeahead, Escape and Tab close); a Menu without one keeps this pass's in-menu keys for its host → [overlay behavior](overlay.md).
 - 2026-09-27 · batch 2 visual pass → group labels 12/16 muted, one pattern with Nav (was 14/20)
   → side by side with Notion's page menu in Claude in Chrome.
+- 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (`none` under Flat; surface.css:866, :1178); the icon-to-label gap is the density token `--area-gap-row` (12), shared with Nav, Command palette and the Select picker (surface.css:984); rows keep plate-only focus; a Kbd in a row renders like a string shortcut, and Escape is written "Esc" (kbd.css:89-104).
+- 2026-09-30 · audit S13 (owner) → a selected row in a menu of commands or choices shows the check only and the plate stays the highlight; `MenuItem radio` with `checked` gives `menuitemradio` (primitives.tsx:1143-1161); the `data-selected` plate is the value-picker hook only (surface.css:1045-1055); the Selected tile now uses `radio checked`.

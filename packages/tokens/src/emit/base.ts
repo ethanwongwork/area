@@ -111,10 +111,14 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle-hover`]: `color-mix(in srgb, var(${PREFIX}border), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
-    // Editable fields keep their existing 1px edge in the quiet presentation: focus moves
-    // it one neutral step darker and adds a tight translucent halo. Increased contrast
-    // restores the regular 2px accent outline and expands the halo by that same width.
-    [`${PREFIX}field-focus-color`]:
+    // Editable fields keep their 1px edge and colour it with the focus role, plus a halo of
+    // the same colour at the tone halos' 14% (audit S1, ChatGPT's 1px focus edge). Increased
+    // contrast adds the regular 2px outline and expands the halo by that same width.
+    [`${PREFIX}field-focus-color`]: `var(${PREFIX}focus-color)`,
+    [`${PREFIX}field-focus-halo-color`]:
+      `color-mix(in srgb, var(${PREFIX}field-focus-color) 14%, transparent)`,
+    // Composer is a surface that holds a field; it keeps the quiet neutral focus edge.
+    [`${PREFIX}composer-focus-color`]:
       `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}focus-color) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}field-focus-outline-width`]:
       `calc(var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,

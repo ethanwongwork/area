@@ -61,7 +61,7 @@ Read from the nodes of `area--size-small`, `-medium`, `-large`, `area--accent`,
 |---|---|---|---|---|
 | rail | 260 × 4 | 260 × 6 | 260 × 8 | 224 × 4 |
 | radius | 9999 | 9999 | 9999 | 4 (a pill at 4px) |
-| rail colour | `color(srgb 0.865)` ≈ rgb(221) | same | same | rgb(230, 230, 230) |
+| rail colour | `color(srgb 0.865)` ≈ rgb(221) (before audit S5; now `edge-control` #e2) | same | same | rgb(230, 230, 230) |
 | fill | rgb(40) at 62% (161.2) | same | same | rgb(13, 153, 255) at 66% |
 | accent fill | rgb(92, 93, 254) at 45% (117) | | | — |
 | indeterminate | 35% segment (91), `area-progress-indeterminate` | | | — |
@@ -70,17 +70,17 @@ Read from the nodes of `area--size-small`, `-medium`, `-large`, `area--accent`,
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| rail · colour | `fill-toggle` mixed 20% toward `bg-surface`, ≈ rgb(221) (display.css:231) | Audit rule "one rail": Slider's rail (slider.css:27) | Was `bg-component-active` #eee. Figma #e6 and Untitled #e5 are lighter; kept (third pass), see below |
+| rail · colour | **`edge-control` #e2e2e2** (display.css:265) | Audit S5 (owner 2026-09-30): one off-track grey with Switch and Slider (slider.css:29, switch.css:20) | Figma #e6 and Untitled #e5. Was `fill-toggle` mixed 20% toward `bg-surface` ≈ #dd, and before that `bg-component-active` #eee |
 | rail · thickness | 4 / 6 / 8 (display.css:242-244) | Figma 4 = sm; Untitled 8 = lg | Default md sits between |
 | radius | `radius-full` | Figma and Untitled both round a thin bar to a pill | — |
 | fill | `neutral-solid`; accent by tone | Owner | Figma and Untitled use brand blue |
 | indeterminate | 35% segment travelling −100% → 340% of its width, 1.8s linear (display.css:252-260); mirrored in RTL (262-266) | Distinguishable from a full bar | — |
 | label composition | 14/20 row, 8px above the bar (gallery `labeled`) | Untitled 8px below / 12px beside, 14/20 500 | Weight 400 (Area label rule); consumer layout, not the component |
 
-**Settled in the third pass (kept):** rail colour. Figma's rail is #e6 (`figma--usage-bar`)
-and Untitled's neutral-200 #e5; Area's shared rail is about #dd. The rail is the toggle-off
-fill lightened, shared with Switch and Slider, and sits within 8 levels of the products
-([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)).
+**Settled by audit S5 (owner 2026-09-30):** rail colour. Figma's rail is #e6 (`figma--usage-bar`)
+and Untitled's neutral-200 #e5. The third pass kept about #dd; S5 moved the rail to
+`edge-control` #e2, the one off-track grey shared with Switch and Slider, within 4 levels of
+Figma.
 
 ## States
 
@@ -101,10 +101,10 @@ No forced-colors rule in display.css (unverified).
 
 | Peer | Shared role | Area value in peer | Progress | Match / reason |
 |---|---|---|---|---|
-| Slider | rail | `fill-toggle` 80% + surface 20% | same | match (audit) |
+| Slider, Switch | rail / off track | `edge-control` #e2 | same | match (audit S5) |
 | Slider | rail thickness | 4 | sm 4 | match at sm |
 | Slider, Switch, Spinner | fill | `neutral-solid` | same | match |
-| Spinner | track | `bg-component-active` #eee | ≈ #ddd | differs by design (see Spinner) |
+| Spinner | track | ink at 25% ≈ #c9 | #e2 | differs (audit E-22 open) |
 | Skeleton, Spinner | motion axis | stop under `motion="none"` | same | match (audit) |
 
 ## Visual pass
@@ -117,12 +117,12 @@ shows an AI-credits meter (`figma--usage-meter-ai-credits`, `figma--usage-meter-
 |---|---|---|---|
 | height | 10 | 4 | 6 / 8 (sm 4) |
 | shape | pill | 4px top corners | pill |
-| track | #f5 | #e6 | about #dd (shared rail) |
+| track | #f5 | #e6 | #e2 (shared rail; was about #dd) |
 | fill | rgb(44, 44, 44), neutral | #0d99ff | `neutral-solid`, about #28 |
 
-The neutral fill and the pill match. Figma's tracks are lighter than Area's shared rail (#f5 and
-#e6 against #dd; Untitled #e5): **open for the owner**, since the rail is shared with Slider and
-Switch (third pass kept it).
+The neutral fill and the pill match. Figma's tracks were lighter than Area's shared rail (#f5 and
+#e6 against #dd; Untitled #e5). Settled by audit S5: the rail is now `edge-control` #e2, shared
+with Slider and Switch.
 
 Earlier note:
 
@@ -147,3 +147,4 @@ in the [cohesion audit](../research/cohesion-audit.md#verification).
   toggle-off fill lightened (≈ #dd) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-28 · batch 6 Claude in Chrome (Figma usage meter) → no change; lighter track raised as an open question.
 - 2026-09-28 · owner: approved (batch 6).
+- 2026-09-30 · audit S5 (owner) → rail fallback `edge-control` #e2 (was ≈ #dd), the one off-track grey of Switch and Slider; the open Figma #e6 against #dd question is settled → display.css:265.

@@ -72,7 +72,8 @@ readonly and error tiles match default except fill #f7 and border rgb(207, 3, 60
 | **shell** background | rgb(255, 255, 255) | rgb(255, 255, 255) | rgb(255, 255, 255) | rgb(247, 247, 247) | rgb(247, 247, 247) |
 | **shell** shadow | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px | same | same | — | rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px |
 
-`area--soft` has no shadow (it had `shadow-1` before the second pass).
+`area--soft` has no shadow (it had `shadow-1` before the second pass). The radius was 8 at every
+size at capture; since audit S4 it is 6 sm, 8 md, 10 lg.
 
 The size tiles set `rows={3}` (`apps/docs/src/demos/gallery.tsx:957-959`): sm is 3 × 16 + 6 +
 2 = 56; lg reaches its 2 × `control-lg` floor (80).
@@ -84,7 +85,7 @@ The size tiles set `rows={3}` (`apps/docs/src/demos/gallery.tsx:957-959`): sm is
 | inline inset | **Input's equal inset at each size: 9 sm, 11 md, 15 lg** ((height − 1cap) / 2, border counted once; `textarea.css`) | Owner 2026-09-28 ("do whatever makes the most sense"): text starts where a same-size Input's does, and each size is distinct | Was 8 sm / 12 md / 12 lg (lg matched md); ChatGPT 10–12, UUI md 14 |
 | block inset | inline − 4, rounded to a whole pixel: 5 sm, 7 md, 11 lg | Owner (leading supplies vertical room); whole-pixel box | Was 4 sm / 8 md / 8 lg |
 | type | 14/20 400 (sm 12/16) | Notion fields 14/20 400; peer Input | UUI md 16/24; Figma 11/16 |
-| radius, border, fill, shadow | as Input: 8, `input-edge` #e2e2e2, `bg-surface`, no resting shadow (`textarea.css:37`); soft #f7 | Peer: [Input](input.md); second pass: soft fields are flat (Figma) | Products draw no field shadow; kept with Input ([input.md](input.md#settled-questions) 2) |
+| radius, border, fill, shadow | as Input: per-tier radius 6 sm, 8 md, 10 lg (`textarea.css:36`, `:131-133`), `input-edge` #e2e2e2, `bg-surface`, no resting shadow; soft #f7 | Peer: [Input](input.md); second pass: soft fields are flat (Figma) | Products draw no field shadow; kept with Input ([input.md](input.md#settled-questions) 2) |
 | default rows | four lines | Existing Area default (`textarea.css:4-6`) | — |
 | resize | vertical | Native; conservative default | — |
 
@@ -93,7 +94,7 @@ The size tiles set `rows={3}` (`apps/docs/src/demos/gallery.tsx:957-959`): sm is
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | hover | border → `border-subtle` #d4d4d4; ink fixed | `textarea.css:67-69` |
-| focus | border `field-focus-color` + 2px `shadow-color` halo | `textarea.css:71-76`; Notion's fields use a 2px blue ring; neutral kept ([input.md](input.md#settled-questions) 1) |
+| focus | border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo | `textarea.css:71-76`; audit S1, as [input.md](input.md) |
 | read-only | fill `bg-component` #f7 | `area--readonly` |
 | disabled | field paint: fill #f7, `border-faint`, `fg-disabled` ink, resize none; no opacity | `area--disabled`; audit "Disabled" rule (confirmed, no change) |
 | invalid / success / warning | border and halo in the validation colour | `area--error` rgb(207, 3, 60); `area--success`, `area--warning` |
@@ -108,7 +109,7 @@ values stay focusable and are submitted; disabled values are not.
 
 | Peer | Shared role | Area value in peer | This component | Match / reason |
 |---|---|---|---|---|
-| Input, Select, NumberField | field chrome | `input-edge`, radius 8, `shadow-1` outline, flat soft | same (`textarea-*` aliases of `input-*`) | match |
+| Input, Select, NumberField | field chrome | `input-edge`, radius 6 / 8 / 10 per tier, `shadow-1` outline, flat soft | same (`textarea-*` aliases of `input-*`) | match |
 | Input, Select, NumberField | disabled | field paint, no opacity | same | match |
 | Input | inline inset | 10.03 (cap-centred) | 11 (gutter − border) | multiline text has no single-line cap reference; differs by 1px |
 | Field | description / count | 12/16 `fg-muted` | beneath | match |
@@ -145,3 +146,4 @@ fields named in Sources. Build and test results are in the
   `input/notion--field--focus`, `input/figma--search-field`.
 - 2026-09-27 · third pass → no change; Input's open questions settled with values kept
   (outline shadow, neutral focus) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-30 · audit S4 (owner) → radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `textarea.css:36`, `:131-133`); was 8 at every size.

@@ -4,7 +4,7 @@
     --_group-height: var(--area-control-md);
     --_group-icon: var(--area-icon-md);
     --_group-text: var(--area-control-md-text);
-    --_group-leading: var(--area-control-md-leading); --_group-gap: var(--area-gap-md); --_group-radius: var(--area-radius-control-md);
+    --_group-leading: var(--area-control-md-leading); --_group-radius: var(--area-radius-control-md);
     --_group-bg: var(--area-bg-component);
     --_group-edge: var(--area-border-decorative);
     --_group-divider: var(--area-edge-control); /* spec */
@@ -20,15 +20,14 @@
   .area-button-group--full-width > * { flex: 1 1 0; min-inline-size: 0; }
   .area-button-group--soft { --_group-bg: var(--area-bg-component); --_group-edge: transparent; }
   .area-button-group--outline { --_group-bg: var(--area-bg-surface); --_group-edge: var(--area-edge-control); }
-  .area-button-group--sm { --_group-height: var(--area-control-sm); --_group-icon: var(--area-icon-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-gap: var(--area-gap-sm); --_group-radius: var(--area-radius-control-sm); }
-  .area-button-group--md { --_group-height: var(--area-control-md); --_group-icon: var(--area-icon-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-gap: var(--area-gap-md); --_group-radius: var(--area-radius-control-md); }
-  .area-button-group--lg { --_group-height: var(--area-control-lg); --_group-icon: var(--area-icon-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-gap: var(--area-gap-lg); --_group-radius: var(--area-radius-control-lg); }
+  .area-button-group--sm { --_group-height: var(--area-control-sm); --_group-icon: var(--area-icon-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-radius: var(--area-radius-control-sm); }
+  .area-button-group--md { --_group-height: var(--area-control-md); --_group-icon: var(--area-icon-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-radius: var(--area-radius-control-md); }
+  .area-button-group--lg { --_group-height: var(--area-control-lg); --_group-icon: var(--area-icon-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-radius: var(--area-radius-control-lg); }
   .area-button-group > .area-button {
     --_height: var(--_group-height);
     --_icon: var(--_group-icon);
     --_text: var(--_group-text);
     --_leading: var(--_group-leading);
-    --_gap: var(--_group-gap);
     --_radius: var(--_group-radius);
     --_border: var(--_group-edge);
     /* The group owns the edge at rest and under the pointer: a ghost child's transparent

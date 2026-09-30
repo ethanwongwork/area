@@ -32,7 +32,8 @@
     }
   }
 
-  /* Options are Menu rows; selection shows the trailing check, as a checkable menu row. */
+  /* Options are Menu rows. A value picker shows its value with the active plate and the check,
+     as Select does (audit S13 C, owner 2026-09-30; was the check alone). */
   .area-combobox__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
   .area-combobox__description { margin-inline-start: auto; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); white-space: nowrap; }
   .area-combobox__description + .area-menu__check { margin-inline-start: var(--area-space-8); }

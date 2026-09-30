@@ -72,7 +72,7 @@
   .area-kbd-group {
     display: inline-flex;
     align-items: center;
-    gap: var(--area-gap-sm);
+    gap: var(--area-space-4);
   }
 
   /* Default is a quiet keycap rather than a second control. */
@@ -82,14 +82,26 @@
     color: var(--area-fg-muted);
   }
 
-  /* Inside a menu item, keys are chrome: unboxed and pushed to the trailing edge. */
+  /* Inside a menu item, keys are chrome: unboxed and pushed to the trailing edge. A quiet
+     Kbd renders exactly like a string shortcut (audit S12a, owner 2026-09-30): the UI font at
+     12/16 and 400 in muted ink, on the text slot's inset. 500 and the keyboard face belong to
+     the filled keycap only. Was system-ui 500 at 12, or 11 when small. */
   .area-menu__item .area-kbd,
   .area-kbd--quiet {
+    min-inline-size: 0;
+    block-size: auto;
+    padding: 0;
     background-color: transparent;
-    border-color: transparent;
+    border-width: 0;
     box-shadow: none;
     color: var(--area-fg-muted);
+    font-family: var(--area-font-sans);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-weight: var(--area-weight-regular);
   }
+  /* A destructive row's shortcut takes the row's ink, string or Kbd alike. */
+  .area-menu__item--danger .area-kbd { color: inherit; }
 
   /* On a strong fill, the keycap is a translucent plate rather than a nested outlined control. */
   .area-kbd--on-color,
@@ -113,16 +125,10 @@
     color: inherit;
   }
 
-  /* Coloured solid actions borrow the inverse surface, which darkens in light mode and
-   * lightens in dark mode. Neutral solid instead borrows its own foreground so its keycap
-   * cannot disappear into the near-black/near-white action fill. */
-  .area-button--solid:not(.area-button--neutral) .area-kbd:not(.area-kbd--on-color) {
-    background-color: color-mix(in srgb, var(--area-bg-inverse) 16%, transparent);
-    border-color: transparent;
-    color: inherit;
-  }
-
-  .area-button--solid.area-button--neutral .area-kbd {
+  /* Inside any Button the keycap is a translucent plate of the Button's own ink (audit S12c,
+   * owner 2026-09-30), the recipe solid Buttons used, so it survives hover, press and the
+   * selected fill (a #ee keycap vanished on a pressed or selected ghost Button). */
+  .area-button .area-kbd {
     background-color: color-mix(in srgb, currentColor 14%, transparent);
     border-color: transparent;
     color: inherit;
@@ -134,7 +140,7 @@
   .area-button__label:has(> .area-kbd) {
     display: inline-flex;
     align-items: center;
-    gap: var(--area-gap-sm);
+    gap: var(--area-space-4);
   }
 
 }

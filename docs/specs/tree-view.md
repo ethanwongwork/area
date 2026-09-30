@@ -88,12 +88,13 @@ chevron on column n, its icon on n + 1 and its label on n + 2.
 | row · ink selected/current | `fg-default` + `bg-component-hover` | Peer Nav current | — |
 | row · start padding | **8** | Nav 8; Notion 8 | Was 4 |
 | chevron · slot | **16** (Area chevron glyph), 24px hover plate and target | Area icon slots; Notion's 12px chevron in a 22px slot | Was a 28px box, pushing labels to 56px. Notion shows the chevron only on hover, sharing the icon's slot; Area keeps it visible, since a file or filter tree must show what expands |
-| chevron → icon → label | **6 and 6** (row gap 6, label inset 0) | Owner (pass 3): evenly spaced on shared columns | Was 4 and 8 (pass 1, Notion's 8 to the label). Box gaps are equal; visible ink gaps are about 11 and 9, since the chevron's ink sits about 3px inside its box and the folder's about 2px. Not corrected per glyph (inset rules) |
+| chevron → icon → label | **6 and 6** (row gap 6, label inset 0) | Owner (pass 3): evenly spaced on shared columns | Was 4 and 8 (pass 1, Notion's 8 to the label). Tree keeps its own grid, not the `--area-gap-row` 12 that puts Menu, Nav, Command palette and Select labels at 36 (audit S11a). Box gaps are equal; visible ink gaps are about 11 and 9, since the chevron's ink sits about 3px inside its box and the folder's about 2px. Not corrected per glyph (inset rules) |
 | indent · per level | **22** (slot 16 + gap 6) | Owner (pass 3): a child's chevron under its parent's icon, its icon under the parent's label | Was 20: a child's icon landed at 48 under a parent label at 52 |
 | label · text | 14/20 400 | Notion 14/21 400 | — |
-| chevron · hover plate | **20** (inset −2), pointer target 24 (`::after`) | Owner (pass 2) | Was 24: its edge met the icon box (0px). Now 2px clear of the icon, 6px from the row edge |
+| chevron · hover plate | **20** (inset −2), pointer target 24 (`::after`); painted `bg-hover`, so it shows on a hovered or current row (`tree-view.css:73`) | Owner (pass 2); audit S11c | Was 24: its edge met the icon box (0px). Now 2px clear of the icon, 6px from the row edge. The paint was `bg-component-hover`, invisible on a hovered row and a lighter hole on a current one |
+| focus-visible | 2px `focus-color` outline, inset (offset −2), as Nav and Tabs (`tree-view.css:50`) | Audit S11b (owner) | Was a 2px offset. Menu keeps plate-only focus |
 | current marker | **none** | Owner (pass 3) | Pass 2 made it a 3 × 16 pill. Notion and Figma draw none; fill, main ink and `aria-current` remain |
-| actions · slot | end of row, 2px between controls, −4px end margin (a 16px glyph in a 24px sm button lands 8px from the edge, as the row's text) | Owner (pass 2); Figma layers (owner screenshot, not captured) | Hidden until hover, focus-visible or selection; `data-pinned` keeps a state control visible |
+| actions · slot | end of row, 2px between controls, −4px end margin (a 16px glyph in a 24px sm button lands 8px from the edge, as the row's text) | Owner (pass 2); Figma layers (owner screenshot, not captured) | Hidden until hover, focus-visible or selection; `data-pinned` keeps a state control visible. Ghost Buttons here hover `bg-hover` and press `bg-active` (`tree-view.css:74`; audit S11c) |
 | folders (gallery) | Area filled folder, `fg-info` | Owner (pass 2) | Demo content; the component does not colour icons |
 
 Measured after pass 1: depth 1 chevron at 8, icon at 28, label at 52; depth 2 chevron at
@@ -162,3 +163,4 @@ panel does, so nesting reads without hovering. Area's rows are 32 against Notion
   section added.
 - 2026-09-27 · owner again: "i thought we removed indicators from tree view" → confirmed removed in this pass; the checked filter box paints like Checkbox (neutral solid face), from the cohesion audit.
 - 2026-09-27 · batch 2 → Claude in Chrome side by side with Notion's sidebar tree recorded; Validated.
+- 2026-09-30 · audit S11 (owner) → rows draw an inset focus ring (offset −2, was +2; `tree-view.css:50`); the chevron plate and ghost row actions hover `bg-hover` (press `bg-active`), so they show on a hovered or current row (`tree-view.css:73-74`); the 6 and 6 grid stays, apart from the 36 label column.

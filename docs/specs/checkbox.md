@@ -84,17 +84,19 @@ Read from the nodes (Notion and Figma files above; Area `area--size-*`, `area--s
 | label type | 12/16 · 14/20 · 14/20, 400 | not in capture | 11/16, 450 |
 | row / gap | min 24; gap 4 / 8 / 8 | — | 24; label column at the box edge |
 
+The gaps above predate audit S14: the label gap is now 6 at md and lg.
+
 ## Decisions
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | control · size | **16 / 20** md / lg (sm removed 2026-09-28; `choice.css`) | Notion and Figma 16; Untitled sm 16, md 20; audit rule "one glyph ladder" | lg takes Untitled's 20 |
 | control · radius | min(`radius-small` 6, size / 4): 4 / 4 / 5 (choice.css:67) | Untitled 4 at 16 | Notion 3 and Figma 2 are squarer; kept (third pass), see below |
-| control · rest edge | **`edge-control-hover` #d4d4d4** (choice.css:55) | Notion 19% warm ≈ #d4, Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2, a field's edge, faint on a 16px box |
+| control · rest edge | **`edge-control-hover` #d4d4d4** (choice.css:48) | Notion 19% warm ≈ #d4, Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2, a field's edge, faint on a 16px box |
 | control · checked | `neutral-solid` #282828, mark `fg-on-neutral` #fafafa | Owner 2026-09-26 | Notion fills its blue; Figma keeps a light face with a dark check. Accent as `tone="accent"` (choice.css:29-35) |
 | mark · geometry | 1.75 stroke on a 16 viewBox, masked at 75% of the padding box (choice.css:132-140) | — | Derived: Notion's filled glyph is 9.17px, Figma's stroked path 6.5px, Untitled's check 12px |
 | control · shadow | none (computed 2026-09-28) | Outline pass: controls at rest carry no shadow; neither product nor Untitled has one | The audit had `shadow-1`; since removed |
-| gap | `gap-sm` 4 / `gap-md` 8 / `gap-lg` 8 | Control tier | Untitled 8 / 12 |
+| gap | 6 at md and lg, `gap-md` / `gap-lg` (choice.css:9, :404, :410); compact md 6 | Control tier; peer Button (audit S14) | Untitled 8 / 12. Was 8 / 8 until audit S14 |
 | hit area | label, min-block 24 (choice.css:74) | WCAG 2.5.8 target; Figma's 24px row | — |
 | invalid | edge `fg-danger-vivid`; checked = `danger-solid` fill | Area field validation | No product or Untitled invalid checkbox |
 | disabled | 50% on the label (choice.css:37-41) | Audit shared rule; Untitled 50% | — |
@@ -132,7 +134,8 @@ painted `--_mark`); forced colours are unverified. The mark transition uses
 | Radio, Switch, Slider | checked / on paint | `neutral-solid` | same | match (owner rule) |
 | Switch, Radio, Button | disabled | 50% whole control | same | match (audit rule) |
 | Input | rest edge | `edge-control` #e2e2e2 | #d4d4d4 | differs by design: a 16px glyph needs a firmer edge than a 32px field |
-| Switch | off fill | `fill-toggle` #d4d4d4 | edge #d4d4d4 | same grey for an off glyph |
+| Switch | off fill | `edge-control` #e2e2e2, hover #d4 | edge #d4d4d4 | differs by design (audit S5): the off track is the rail grey, a glyph edge is one rung firmer |
+| Slider | thumb edge | `edge-control-hover` #d4 (slider.css:34) | edge #d4d4d4 | match (audit S5) |
 | Switch | row type | 14/20 label, 12/16 description | same | match |
 | Table | selection column | Checkbox md | — | Table composes this component |
 
@@ -189,3 +192,5 @@ above is from `area--size-medium` (edge rgb(212)). Build and test results are in
 - 2026-09-27 · third pass → open question settled, value kept: radius stays `radius-small`;
   Layout / horizontal group tile added → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner flagged the invalid group → a checked option in an invalid group takes the danger fill, as a single invalid Checkbox does (`choice.css`); the group now reads as one error state → headless Chromium.
+- 2026-09-30 · audit S5 (owner) → no Checkbox change; the #d4 glyph edge is now shared with the Slider thumb edge, and Switch's off track is #e2 (the peer row said #d4) → choice.css:48, slider.css:34.
+- 2026-09-30 · audit S14 (owner) → the label gap is 6 at md and lg (was 8), from the density tokens (choice.css:9, :404, :410; density.ts:81-82); Radio and the choice labels follow.

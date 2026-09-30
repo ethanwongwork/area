@@ -100,7 +100,7 @@ centred by construction ((28 − 20) / 2 = 4).
 | text · size | 14/20 | ChatGPT and Figma set tooltips at their body size (14, 11); Area's body is 14 | Notion uses 12 under a 14 body |
 | text · weight | 400 | Type ramp (500 is reserved for labels on fills and selected states); Notion 400 | ChatGPT 600, Figma 450 |
 | shell · fill / ink | `bg-inverse` rgb(40) / `fg-on-inverse` | Products rgb(13), rgb(44), rgb(30) | Within the range; semantic role kept |
-| shell · shadow | **0 4px 12px −2px** `shadow-color` | Target-product agreement on a ~12px blur, 4–8px down; Notion's geometry | Was `shadow-2` (1px). Colour stays theme-aware (6% / 8%) rather than Notion's 8% literal |
+| shell · shadow | **0 4px 12px −2px** `shadow-color` | Target-product agreement on a ~12px blur, 4–8px down; Notion's geometry | Was `shadow-2` (1px). Colour stays theme-aware (6% / 8%) rather than Notion's 8% literal. Tooltip keeps this smaller lift as a documented exception to `--area-shadow-float` (audit S10; surface.css:1225) |
 | shell · ring | none | — | ChatGPT and Notion add a 1px white-5% ring so their dark tooltips separate from dark pages. Area's tooltip inverts in dark theme, so the ring has no job |
 | kbd · layout | inline, 20px, radius = tooltip shape − 4 = 6 (Kbd's own radius) | ChatGPT inline chip (18px, radius 8); inset rule | Notion stacks the shortcut on a second line |
 | max width | 288 | ChatGPT 320, Notion 300 | — |
@@ -120,7 +120,7 @@ colors and RTL follow the surface rules in `surface.css`.
 | Peer | Shared role | Peer value | Tooltip | Match |
 |---|---|---|---|---|
 | Kbd on-emphasis | nested chip | 20px | 20px, radius 2 | inset rule |
-| Popover | overlay lift | container radius, `shadow-*` | radius 6, 12px blur | a tooltip is smaller and floats further |
+| Popover | overlay lift | container radius, `--area-shadow-float` (20/24 + 5/8) | radius 10, 0 4px 12px −2px | a tooltip is smaller; its own lift (audit S10 exception) |
 
 ## Visual pass
 
@@ -158,3 +158,4 @@ new file was saved. Area keeps its documented differences (28 tall, corner 10, 1
 - 2026-09-25 · owner approved Tooltip with 10px text sides → Complete in `component-status.mjs`.
 - 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-30 · audit S10 (owner) → no change; Tooltip keeps its own 0 4px 12px −2px lift as a documented exception to the shared `--area-shadow-float` (surface.css:1225).

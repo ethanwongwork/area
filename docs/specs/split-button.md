@@ -118,6 +118,8 @@ filtered to the shell, action, trigger ("menu") and icon rows.
 | **icon** border | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | **icon** radius | 0px | 0px | 0px | 0px | 0px | 0px | 0px |
 
+The `area · split-soft` column predates audit S15b: its parts no longer draw the #f3 border, and the label takes the quiet ink.
+
 Notion's menu surface:
 
 | slot · property | notion · split-menu-surface · open · light |
@@ -138,8 +140,9 @@ Notion's menu surface:
 | chevron | Area chevron glyph, 16, centred | Notion 16px chevron centred in 24 | — |
 | divider | **1px, full height** | Notion (inset line, full height); shadcn separator (full height) | — |
 | divider paint · solid | label ink at 24% | Fluent draws its on-brand stroke; Area's near-black solid would lose Notion's dark 11% line | Notion is darker than its fill; one rule must serve near-black and coloured fills |
-| divider paint · soft, outline | tone control line (`--_line`, neutral 226) | shadcn separator and outline borders (lab 90.95 ≈ 226) | — |
+| divider paint · soft, outline | tone control line (`--_line`, neutral 226) | shadcn separator and outline borders (lab 90.95 ≈ 226) | The seam counts as a control edge, a written exception to "a rule inside a container is never darker than its edge" (audit S8, owner) |
 | action | Button unchanged (label, icon, insets) | Button spec | Notion's 28px part is 8px sides with 14px text; Area's sm is 12px text (Button's scale) |
+| paint · soft (neutral) | a soft Button group's: `bg-component` fill, the quiet ink (75% mix toward muted), no hairline; hover `bg-component-hover`, press `bg-component-active` (split-button.css:70-77) | Peer: [Button group](button-group.md) soft | Audit S15b (owner). Was two soft Buttons: body ink, a #f3 hairline and a translucent hover wash. The divider stays `edge-control` #e2 (S8) |
 | hover | each part on its own | Notion: hovering one part leaves the other at rest | — |
 | menu position | 4px below, aligned to the group's end edge; flips when it would overflow | Notion 3.99 below, 0.33 from the end | — |
 | menu surface | Area Menu (radius, shadow, inset) | Peer Menu | Notion 10px radius, 360 wide |
@@ -225,3 +228,5 @@ the iOS 27 kit, read only) and the gallery's Toolbar / Tools tile:
   below) and Figma (chevron start, clears the toolbar by 4) → icon tools anchor to the chevron and
   clear the toolbar; text splits unchanged → headless Edge check (Menu placement).
 - 2026-09-27 · owner: horizontal start → end edge under text splits, chevron start for tools; edge flip before shift in `computePosition` (test added). Approved on this choice (owner: "split will be considered approved based on what you choose").
+- 2026-09-30 · audit S8 (owner) → the seam between the halves counts as a control edge and keeps #e2 (`edge-control`); a written exception to the inner-rule rule. No code change.
+- 2026-09-30 · audit S15b (owner) → a neutral soft Split button paints as a soft Button group: `bg-component` fill, the quiet ink, no hairline, hover `bg-component-hover`, press `bg-component-active` (split-button.css:66-77). Was two soft Buttons with body ink, a #f3 hairline and a translucent wash. The divider stays #e2.

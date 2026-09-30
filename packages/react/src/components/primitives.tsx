@@ -195,19 +195,14 @@ export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(func
       {link && endLink ? <span className="area-alert__link">{link}</span> : null}
       {action ? <div className="area-alert__actions">{action}</div> : null}
       {onDismiss ? (
-        <button type="button" className="area-alert__dismiss" aria-label={dismissLabel} onClick={onDismiss}>
-          {dismissIcon ?? <AlertDismissIcon />}
-        </button>
+        // The close recipe for rectangular surfaces (audit S9): a ghost small Button with the Area glyph.
+        <span className="area-alert__dismiss">
+          <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={dismissIcon ?? <Glyph name="dismiss" />} aria-label={dismissLabel} onClick={onDismiss} />
+        </span>
       ) : null}
     </div>
   );
 });
-
-const AlertDismissIcon = () => (
-  <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" focusable="false" aria-hidden="true">
-    <path d="m2.59 2.72.06-.07a.5.5 0 0 1 .63-.06l.07.06L8 7.29l4.65-4.64a.5.5 0 0 1 .7.7L8.71 8l4.64 4.65c.18.17.2.44.06.63l-.06.07a.5.5 0 0 1-.63.06l-.07-.06L8 8.71l-4.65 4.64a.5.5 0 0 1-.7-.7L7.29 8 2.65 3.35a.5.5 0 0 1-.06-.63l.06-.07z" />
-  </svg>
-);
 
 /* --- Card ----------------------------------------------------------------- */
 
@@ -834,13 +829,19 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
   /** A small visual filter thumbnail. `imageAlt` is optional when the label names it. */
   image?: string;
   imageAlt?: string;
-  /** Adds an independently focusable remove action using a standard dismiss icon by default. */
+  /** Adds an independently focusable dismiss action (a circle with the Area dismiss glyph). */
+  onDismiss?: () => void;
+  /** @deprecated Use `onDismiss` (audit S9: one dismiss API). */
   onRemove?: () => void;
   /** Makes the label an action when a removable input chip would otherwise only expose dismiss. */
   clickable?: boolean;
-  /** Replaces the standard dismiss icon in the remove action, for example with a trash can. */
+  /** Replaces the standard dismiss icon, for example with a trash can. */
+  dismissIcon?: ReactNode;
+  /** Accessible name for the dismiss action. */
+  dismissLabel?: string;
+  /** @deprecated Use `dismissIcon`. */
   removeIcon?: ReactNode;
-  /** Accessible name for the remove action. */
+  /** @deprecated Use `dismissLabel`. */
   removeLabel?: string;
   /** Marks an input chip whose value was not recognized. */
   invalid?: boolean;
@@ -849,7 +850,7 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
 }
 
 export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(function Chip(
-  { kind = "filter", size, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onRemove, clickable, removeIcon, removeLabel = "Remove chip", invalid, swatchOnly, className, children, disabled, ...rest },
+  { kind = "filter", size, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onDismiss: onDismissProp, onRemove, clickable, dismissIcon, removeIcon, dismissLabel, removeLabel, invalid, swatchOnly, className, children, disabled, ...rest },
   ref,
 ) {
   const [localSelected, setLocalSelected] = useState(defaultSelected);
@@ -879,7 +880,8 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
     onSelectedChange?.(next);
   };
 
-  if (onRemove) {
+  const onDismiss = onDismissProp ?? onRemove;
+  if (onDismiss) {
     return (
       <span className={classes} {...state}>
         {primaryInteractive ? (
@@ -887,8 +889,8 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
             {contents}
           </button>
         ) : <span className="area-chip__action">{contents}</span>}
-        <button ref={primaryInteractive ? undefined : ref} type="button" className="area-chip__remove" aria-label={removeLabel} disabled={disabled} onClick={event => { event.stopPropagation(); onRemove(); }}>
-          {removeIcon ?? <ChipDismissIcon />}
+        <button ref={primaryInteractive ? undefined : ref} type="button" className="area-chip__remove" aria-label={dismissLabel ?? removeLabel ?? "Remove chip"} disabled={disabled} onClick={event => { event.stopPropagation(); onDismiss(); }}>
+          {dismissIcon ?? removeIcon ?? <Glyph name="dismiss" />}
         </button>
       </span>
     );
@@ -938,12 +940,6 @@ export const ChipLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, ChipLinkPr
     </a>
   );
 });
-
-const ChipDismissIcon = () => (
-  <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" focusable="false" aria-hidden="true">
-    <path d="m2.59 2.72.06-.07a.5.5 0 0 1 .63-.06l.07.06L8 7.29l4.65-4.64a.5.5 0 0 1 .7.7L8.71 8l4.64 4.65c.18.17.2.44.06.63l-.06.07a.5.5 0 0 1-.63.06l-.07-.06L8 8.71l-4.65 4.64a.5.5 0 0 1-.7-.7L7.29 8 2.65 3.35a.5.5 0 0 1-.06-.63l.06-.07z" />
-  </svg>
-);
 
 export type ChipGroupProps = Div;
 
@@ -1144,6 +1140,8 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
    * toggle `checked` in `onClick`. Hosts keep the menu open for checkable items.
    */
   checked?: boolean;
+  /** With `checked`, makes the row one choice of several (`role="menuitemradio"`), as a mode or model menu. */
+  radio?: boolean;
   /** How a checkable row shows its state: a trailing check (default) or a switch, as Notion's toggles. */
   indicator?: "check" | "switch";
   /** A muted note under the label (a model's summary, a setting's effect). */
@@ -1151,7 +1149,7 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
 }
 
 export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemProps>(function MenuItem(
-  { tone, shortcut, disabled, checked, indicator = "check", description, className, children, ...rest },
+  { tone, shortcut, disabled, checked, radio, indicator = "check", description, className, children, ...rest },
   ref,
 ) {
   const checkable = checked !== undefined;
@@ -1159,7 +1157,7 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
     <button
       ref={ref}
       type="button"
-      role={checkable ? "menuitemcheckbox" : "menuitem"}
+      role={checkable ? (radio ? "menuitemradio" : "menuitemcheckbox") : "menuitem"}
       aria-checked={checkable ? checked : undefined}
       className={cx("area-menu__item", tone === "danger" && "area-menu__item--danger", className)}
       disabled={disabled}
@@ -1291,6 +1289,10 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
   /** Shows the corner close control. On by default. */
   showCloseButton?: boolean;
   /** Called by the close control before closing an enclosing native dialog. */
+  onDismiss?: () => void;
+  /** Accessible name for the close control. */
+  dismissLabel?: string;
+  /** @deprecated Use `onDismiss` (audit S9: one dismiss API). */
   onClose?: () => void;
   /**
    * Opens the dialog as a native modal (`showModal()`) when this element is clicked. The
@@ -1310,7 +1312,7 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
  * `<dialog class="area-dialog__modal">` and opened with `showModal()`.
  */
 export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { title, description, footer, showCloseButton = true, onClose, trigger, onOpenChange, className, children, ...rest },
+  { title, description, footer, showCloseButton = true, onDismiss, dismissLabel = "Close dialog", onClose, trigger, onOpenChange, className, children, ...rest },
   ref,
 ) {
   const id = useId();
@@ -1338,8 +1340,8 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
             {title ? <h2 className="area-dialog__title" id={`${id}-title`}>{title}</h2> : null}
             {description ? <p className="area-dialog__description" id={`${id}-description`}>{description}</p> : null}
           </div>
-          {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-dialog__close" aria-label="Close dialog" icon={<Glyph name="dismiss" />} onClick={event => {
-            onClose?.();
+          {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-dialog__close" aria-label={dismissLabel} icon={<Glyph name="dismiss" />} onClick={event => {
+            (onDismiss ?? onClose)?.();
             event.currentTarget.closest("dialog")?.close();
           }} /> : null}
         </div>
@@ -1778,8 +1780,9 @@ const KEY_GLYPHS: Record<string, string> = {
   return: "⏎",
   backspace: "⌫",
   delete: "⌦",
-  escape: "⎋",
-  esc: "⎋",
+  // Written out, as ChatGPT and Notion do (audit S12b).
+  escape: "Esc",
+  esc: "Esc",
   tab: "⇥",
   space: "␣",
   up: "↑",
@@ -1798,6 +1801,7 @@ const KEY_LABELS: Record<string, string> = {
   "⌫": "Backspace",
   "⌦": "Delete",
   "⎋": "Escape",
+  Esc: "Escape",
   "⇥": "Tab",
   "␣": "Space",
   "↑": "Up arrow",

@@ -1,0 +1,5686 @@
+{
+  "audit": "2026-09-29",
+  "about": "Whole-library audit of Area's 58 approved families: consistency, visual quality, agreement with DESIGN_SYSTEM.md and owner decisions, interaction and accessibility. Eight read-only audits (A buttons, B fields, C choices and marks, D navigation, E overlays and feedback, F surfaces and colour, G conversation and code, H system). Evidence per finding is in reports/.",
+  "page": "https://claude.ai/artifact/HPeEX5JVpgzugs4uJMQV7i",
+  "sessions": [
+    {
+      "id": "PR 28",
+      "date": "2026-09-29",
+      "branch": "claude/component-audit-visual-guide-ac7bc4",
+      "summary": "Audit, emphasis roles (action and selection axes), section 1 fix-first defects"
+    },
+    {
+      "id": "PR 29 (batch 1)",
+      "date": "2026-09-29",
+      "branch": "claude/audit-medium-fixes-batch-1",
+      "summary": "Eleven clear fixes, E-8 partly; default accent blue"
+    },
+    {
+      "id": "this branch (phase 1)",
+      "date": "2026-09-30",
+      "branch": "claude/cool-kirch-9facec",
+      "summary": "Audit moved into the repo; owner picks recorded; S1 field focus, S2 weight rule, S3 concentric corners"
+    },
+    {
+      "id": "this branch (phase 2)",
+      "date": "2026-09-30",
+      "branch": "claude/cool-kirch-9facec",
+      "summary": "S5 off-state greys, S6 soft plates and quiet ink, S7 standalone edges"
+    },
+    {
+      "id": "this branch (phase 3)",
+      "date": "2026-09-30",
+      "branch": "claude/cool-kirch-9facec",
+      "summary": "S4 radius by tier, S8 joined seams, S9 close and dismiss recipe"
+    },
+    {
+      "id": "this branch (phase 4)",
+      "date": "2026-09-30",
+      "branch": "claude/cool-kirch-9facec",
+      "summary": "S10 elevation roles, S11 list rows, S12 shortcuts and keycaps"
+    },
+    {
+      "id": "this branch (phase 5)",
+      "date": "2026-09-30",
+      "branch": "claude/cool-kirch-9facec",
+      "summary": "S13 selected rows, S14 icon-to-label gap, S15 Segmented thumb and soft joins"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D1",
+      "date": "2026-09-29",
+      "title": "Emphasis roles replace accent variants",
+      "decision": "Two emphasis colours, action and selection, each neutral or accent, both neutral by default; accent variants removed from every component. Solid Buttons, Split button and Send follow action; checked, on, selected, current and filled marks follow selection. Row plates, the Segmented thumb and soft, outline and ghost Buttons stay neutral.",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "D2",
+      "date": "2026-09-29",
+      "title": "Fix everything in section 1",
+      "decision": "The fix-first defects need no taste call: A-1, A-2, D-4, G-3, E-9, H-1, H-3, F-5, C-8, F-9, E-4, G-11 and H-15. The Card corner under Pill is capped; the Card corner rule itself stays S3.",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "D3",
+      "date": "2026-09-29",
+      "title": "Default accent is blue",
+      "decision": "The default accent is blue (was indigo). Focus follows the accent, so rings are blue. Blue now equals info; accepted. Whether focus becomes its own role stays open (S1).",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "D4",
+      "date": "2026-09-29",
+      "title": "Audit workflow",
+      "decision": "The audit lives in the repo (this file); the decisions page is generated from it with Area's stylesheet published as a separate file. One phase per session: owner picks, then about ten fixes or three rules, then docs, then a page update.",
+      "status": "done",
+      "resolved": "this branch"
+    },
+    {
+      "id": "D5",
+      "date": "2026-09-30",
+      "title": "Audit picks",
+      "decision": "The owner took the recommended option on every system rule (32 choices) and family call (59).",
+      "status": "done",
+      "resolved": "recorded"
+    }
+  ],
+  "rules": [
+    {
+      "id": "S1",
+      "title": "Field focus is barely visible",
+      "severity": "high",
+      "sources": [
+        "B-1",
+        "a11y"
+      ],
+      "what": "At standard contrast, a focused field's edge is the hover grey (#d4, about 1.5:1 on white) plus a 2px halo of 6% black. In dark mode the rest, hover and focus edges are all the same rung. Buttons, Checkboxes and InputAction in the same form use the 2px focus ring. Notion draws a 2px blue ring on fields, and ChatGPT a 1px blue edge. Verified live: the field focus colour mixes in the focus hue at 0%.",
+      "why": "Recommended B: both products colour the focus edge, the design system says focus is a system role rather than an accent choice, and it fixes dark mode. D is the minimum.",
+      "choices": [
+        {
+          "id": "S1",
+          "title": "Field focus visibility",
+          "rec": "B",
+          "opts": [
+            [
+              "A",
+              "Keep the quiet edge + 6% halo (current, documented in CONTRAST.md)"
+            ],
+            [
+              "B",
+              "1px focus-colour edge + focus-colour halo at low alpha (ChatGPT). Keeps 1px geometry and fixes dark"
+            ],
+            [
+              "C",
+              "Make the increased-contrast 2px ring the default for fields (Notion)"
+            ],
+            [
+              "D",
+              "Keep A for text fields; Select alone takes the ordinary control ring"
+            ]
+          ],
+          "pick": "B",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)"
+    },
+    {
+      "id": "S2",
+      "title": "Where 500 applies: surface titles and labels",
+      "severity": "high",
+      "sources": [
+        "E-1",
+        "F-8",
+        "D-1",
+        "H-6",
+        "A-21",
+        "C-3"
+      ],
+      "what": "DESIGN_SYSTEM.md says 400 for text and every title, and 500 only for labels on fills. In the approved code, 500 is used on the titles of Popover, Dialog, Toast, Alert, Card, Panel (bar and headings) and Calendar, and on Nav group titles; typography.md agrees with the code. Labels apply the rule four ways: solid Button only, every Badge (outline included), soft Count only, and every Segmented option on a transparent track.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S2a",
+          "title": "Surface title weight",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Keep 500 for surface titles set at body size (14/20, 16/24); rewrite DESIGN_SYSTEM and fix alert.md, panel.md, calendar.md"
+            ],
+            [
+              "B",
+              "Return every surface title to 400; distinguish by ink or size (undoes the Popover pass-3 request)"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S2b",
+          "title": "Which labels are 500",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Write the rule as the code does: labels on solid fills, tracks and static marks (Badge, Count soft, Segmented, Avatar) are 500; everything else 400"
+            ],
+            [
+              "B",
+              "Strictly solid fills: outline Badge and Segmented move to 400"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)"
+    },
+    {
+      "id": "S3",
+      "title": "Card's corner rule ignores the radius presets",
+      "severity": "high",
+      "sources": [
+        "F-1",
+        "H-1",
+        "H-2",
+        "E-14",
+        "F-33"
+      ],
+      "what": "The owner's rule gives Card control-md + inset + step (22/24/28). It has no cap. Under Sharp the card stays rounded at 16, and under Pill the corner becomes 1015px, so the card turns into a stadium. Dialog uses the same idea with a cap, min(container × 2, …). The same leak affects Composer, Message and Toolbar under Sharp.",
+      "why": "Recommended C (the system audit) or A (the surfaces audit). They look identical. C also fixes Sharp for Composer, Message, Toolbar and Segmented, and gives DESIGN_SYSTEM a written rule to replace \"Card is twice the container radius\".",
+      "choices": [
+        {
+          "id": "S3",
+          "title": "Card corner under radius presets",
+          "rec": "C",
+          "opts": [
+            [
+              "A",
+              "Keep the owner formula; add the Dialog-style cap min(container x 2, ...). Standard stays 22/24/28"
+            ],
+            [
+              "B",
+              "Go back to container x 2 (drops concentricity with the header Button)"
+            ],
+            [
+              "C",
+              "A, implemented as derived roles on the radius axis (radius-card, radius-shell) that Card, Dialog, Composer, Message and Toolbar all read"
+            ]
+          ],
+          "pick": "C",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S3b",
+          "title": "Surface corner rule in DESIGN_SYSTEM",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Write it down: containers use the container role at any inset; a corner that holds a control (Card, Dialog, Composer) derives from that control plus its distance, capped"
+            ],
+            [
+              "B",
+              "Harmonise the insets and corners first"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)"
+    },
+    {
+      "id": "S4",
+      "title": "Control corners: stepped by tier, or one value",
+      "severity": "medium",
+      "sources": [
+        "A-5",
+        "B-17",
+        "F-12"
+      ],
+      "what": "Button, Button group, Toolbar and Split button use radius-control-sm/md/lg (6/8/10). Input, Select, Textarea, NumberField, InputGroup and the Segmented track stay 8 at every size. Calendar's 32px days use 6. In a small form row or toolbar, the corners disagree by 2px.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S4",
+          "title": "Control radius by tier",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Every control reads the per-tier radius; Segmented items concentric inside; Calendar days take control-md (8)"
+            ],
+            [
+              "B",
+              "Every control uses one radius-control (Button included)"
+            ],
+            [
+              "C",
+              "Keep as is"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "S5",
+      "title": "The \"off\" greys have split into four values",
+      "severity": "medium",
+      "sources": [
+        "C-1",
+        "E-22"
+      ],
+      "what": "After the Switch off track was lightened to #e2, the empty state of a choice control reads four ways: #d4 for the Checkbox and Radio edge, about #dd for the Slider and Progress rail, about #ce for the Slider thumb edge, and #e2 for the Switch and Chip. The Spinner track, at 25% ink (about #c9), is now darker than the rail, the reverse of what its spec says. Figma's rails are #e6 and #f5, and ChatGPT's off track is about #e6.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S5",
+          "title": "Off-state greys",
+          "rec": "B",
+          "opts": [
+            [
+              "A",
+              "Keep; fix switch.md and progress.md"
+            ],
+            [
+              "B",
+              "One track grey #e2 (edge-control) for Switch, Slider and Progress; one glyph-edge grey #d4 for Checkbox, Radio and the Slider thumb"
+            ],
+            [
+              "C",
+              "Lighten the rail to about #e6 (Figma, Untitled) and leave the rest"
+            ]
+          ],
+          "pick": "B",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 2)"
+    },
+    {
+      "id": "S6",
+      "title": "Neutral soft plates and the second quiet ink",
+      "severity": "medium",
+      "sources": [
+        "C-2",
+        "G-1"
+      ],
+      "what": "Neutral soft marks are #f7 (Badge, Chip input), about #f0 (Count's 6% translucent plate) and #ee (Avatar, selected Chip). A #f7 Badge on a hovered #f3 row reads as a lighter hole. Count chose a translucent plate for exactly this reason. Separately, the owner lightened quiet Button ink to a 75% mix (#56), but Message actions override it back to #66, as do suggestion rows and Code block tabs.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S6a",
+          "title": "Neutral soft plates",
+          "rec": "B",
+          "opts": [
+            [
+              "A",
+              "Keep"
+            ],
+            [
+              "B",
+              "Badge soft (and Chip input) use the translucent 6% plate, as Count does"
+            ],
+            [
+              "C",
+              "All static marks on #ee"
+            ]
+          ],
+          "pick": "B",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S6b",
+          "title": "Quiet ink for icon actions",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Message actions drop their override and use the Button ink; text-like rows (suggestions, code tabs) keep fg-muted"
+            ],
+            [
+              "B",
+              "Everything quiet uses the 75% mix"
+            ],
+            [
+              "C",
+              "Keep both"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 2)"
+    },
+    {
+      "id": "S7",
+      "title": "Standalone surfaces have the faintest edges",
+      "severity": "high",
+      "sources": [
+        "G-2",
+        "F-3"
+      ],
+      "what": "Composer and Code block sit directly on the page as white with a #f3 edge and no shadow. Card is #ee with a halo, the Table frame #e2, and Input #e2. DESIGN_SYSTEM says surfaces that stand alone take a firmer edge. It also says Card's edge is both \"neutral 100\" and \"the divider role\", which contradict each other.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S7a",
+          "title": "Composer and Code block edge",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Card edge (#ee) for Composer and Code block; Composer also gets the Input hover step"
+            ],
+            [
+              "B",
+              "Divider role (#e2), as Table"
+            ],
+            [
+              "C",
+              "Keep #f3"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S7b",
+          "title": "Card edge vs Table frame",
+          "rec": "C",
+          "opts": [
+            [
+              "A",
+              "Table frame takes Card lighter #ee (would sit lighter than its own #e2 row rules)"
+            ],
+            [
+              "B",
+              "Card returns to the divider role"
+            ],
+            [
+              "C",
+              "Keep both and document: Card lighter because its halo carries it; Table frame has no shadow"
+            ]
+          ],
+          "pick": "C",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 2)"
+    },
+    {
+      "id": "S8",
+      "title": "Seams inside joined controls vs the \"never darker than the container\" rule",
+      "severity": "medium",
+      "sources": [
+        "A-10",
+        "F-6 (fix)"
+      ],
+      "what": "The owner moved toolbar separators to border-decorative (#f3) under the 09-27 rule. Soft Button group and Split button seams stay #e2 on a #f7 fill that has no edge. The Button group spec found a #f3 seam \"barely visible\" on #f7. ColorPicker's inner #e2 rules are a clear violation and are listed as a fix.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S8",
+          "title": "Joined-control seams",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Seams in joined controls count as control edges: keep #e2, write the exception into DESIGN_SYSTEM"
+            ],
+            [
+              "B",
+              "Soft seams drop to border-decorative (#f3)"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "S9",
+      "title": "Close and dismiss are built five ways",
+      "severity": "medium",
+      "sources": [
+        "C-4",
+        "E-2",
+        "E-3",
+        "G-18",
+        "H-11"
+      ],
+      "what": "Popover and Toast use a ghost small Button (28, radius 6, Area glyph, #56 ink). Dialog uses a medium Button (32, radius 8). Alert builds its own button: full ink, a Fluent filled glyph, and a 12%-ink hover plate that is much darker on the neutral grey. Chip uses a muted circle with a Fluent glyph; Badge a 12–16px circle with an Area glyph. The rule says \"28px, small-button radius\". The API names are onDismiss, onRemove and onClose.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S9",
+          "title": "Close and dismiss recipe",
+          "rec": "B",
+          "opts": [
+            [
+              "A",
+              "Follow the written rule literally: every close is a 28px small Button"
+            ],
+            [
+              "B",
+              "One recipe per shape: rectangular surfaces use the ghost small Button with the Area glyph (Alert adopts it); pills use a concentric circle with the Area glyph and a 12%-ink plate; Dialog 32 written as the exception; one onDismiss + dismissLabel API"
+            ],
+            [
+              "C",
+              "Keep and document"
+            ]
+          ],
+          "pick": "B",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "S10",
+      "title": "Elevation roles and the Surface axis",
+      "severity": "medium",
+      "sources": [
+        "E-15",
+        "F-4",
+        "A-20",
+        "H-3",
+        "H-9"
+      ],
+      "what": "The shared floating lift is written as a literal in nine places. Card's halo, Tooltip's lift and the Toolbar's four-layer shadow are literals too. So the Flat preset (\"no elevation anywhere\") still lifts every overlay, and Elevated erases the Table frame. shadow-3 and shadow-4 are unused.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S10",
+          "title": "Elevation roles",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Add shadow-card and shadow-float roles on the Surface axis (none at Flat); document the Toolbar floating bar; Table keeps an edge under Elevated"
+            ],
+            [
+              "B",
+              "Keep the literals; document Card and floating surfaces as exempt from Surface"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "S11",
+      "title": "List rows: label column, keyboard focus and nested hover",
+      "severity": "medium",
+      "sources": [
+        "D-2",
+        "D-7",
+        "D-6"
+      ],
+      "what": "All list families read the same product evidence (labels at about 36 in ChatGPT and Notion). Menu, Palette and Combobox start icon-row labels at 36 (a literal 12 gap that ignores compact). Nav starts at 32 (8 gap), Tree at 52 (chevron, then a 6 gap), and Select options at 32. The offsets below are measured live.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S11a",
+          "title": "Label column for icon rows",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "One label column of 36 for every icon row (Nav, Menu, Palette, Combobox, Select); Tree keeps its own grid; the gap becomes a density token"
+            ],
+            [
+              "B",
+              "One 8 gap everywhere (labels at 32, follows density)"
+            ],
+            [
+              "C",
+              "Keep; Menu is a surface, Nav a sidebar"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S11b",
+          "title": "Row keyboard focus",
+          "rec": "B",
+          "opts": [
+            [
+              "A",
+              "One treatment everywhere: inset 2px ring plus the hover plate"
+            ],
+            [
+              "B",
+              "Menus keep plate-only (products, APG active descendant); Nav, Tree and Table move to an inset ring (offset -2, as Tabs); Breadcrumb ring follows its plate"
+            ]
+          ],
+          "pick": "B",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S11c",
+          "title": "Nested controls on rows",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Nested row controls hover with the translucent bg-hover, which the rule reserves for unknown grounds"
+            ],
+            [
+              "B",
+              "Nested controls hover with bg-component-active (still invisible on current rows)"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "S12",
+      "title": "Shortcuts in lists, and keycaps inside Buttons",
+      "severity": "medium",
+      "sources": [
+        "D-8",
+        "A-14"
+      ],
+      "what": "You approved \"plain menu shortcuts\". A string shortcut renders in Geist 12/16 at 400. A Kbd shortcut renders in system-ui at 500, at 12px, or 11px when small (off the ramp). On a danger row the string turns red but the Kbd stays muted. The Escape glyph (⎋ vs \"Esc\") is still open. Separately, the keycap fill #ee equals a pressed or selected ghost Button, so the keycap disappears there.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S12a",
+          "title": "Menu shortcut style",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "One quiet style in lists: a quiet Kbd renders like the string (UI font 12/16, 400, muted, text-slot inset); 500 and the keycap face only when filled"
+            ],
+            [
+              "B",
+              "Keep the Kbd face (system-ui 500) but always 12px; no small Kbd in menus"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S12b",
+          "title": "Escape label",
+          "rec": "A1",
+          "opts": [
+            [
+              "A1",
+              "Write Esc (ChatGPT, Notion)"
+            ],
+            [
+              "A2",
+              "Keep the ⎋ glyph"
+            ]
+          ],
+          "pick": "A1",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S12c",
+          "title": "Keycap inside Buttons",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Inside any Button the keycap uses currentColor at 10-14% (the recipe solid Buttons already use), so it survives hover, press and selection"
+            ],
+            [
+              "B",
+              "Keep"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "S13",
+      "title": "How a selected row looks in menus and pickers",
+      "severity": "medium",
+      "sources": [
+        "D-9",
+        "B-6"
+      ],
+      "what": "There are five patterns. The Menu \"Selected\" tile and the Composer mode menu use a raw data-selected plate plus a Fluent check that screen readers don't announce. MenuItem checked shows an Area check and no plate. ModelPicker (radio) and Combobox show a check only, and Select a plate plus a check. The written rule says selected rows take the active plate.",
+      "why": "The navigation audit recommends check-only for menus, and the fields audit plate + check for Combobox. C reconciles both and makes Combobox match Select.",
+      "choices": [
+        {
+          "id": "S13",
+          "title": "Selected rows in lists",
+          "rec": "C",
+          "opts": [
+            [
+              "A",
+              "Check only everywhere (Menu, Combobox, ModelPicker; Select too); add MenuItem selected / radio"
+            ],
+            [
+              "B",
+              "Plate + check everywhere (the written rule)"
+            ],
+            [
+              "C",
+              "Split by job: menus of commands and choices show a check only (the plate is the highlight); value pickers (Select, Combobox) show plate + check. Add MenuItem radio; retire raw data-selected"
+            ]
+          ],
+          "pick": "C",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 5)"
+    },
+    {
+      "id": "S14",
+      "title": "Icon-to-label gap changes with the host",
+      "severity": "medium",
+      "sources": [
+        "A-4",
+        "H-8"
+      ],
+      "what": "Button measured 6 at md and lg (Notion), set as a literal. Inside a Button group or Toolbar the same Button is re-tiered to gap-md (8). Chip, Segmented, Input and Select use 8 (6 in compact), Tree 6, Menu 12, and a small Button still has 4.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S14",
+          "title": "Icon-to-label gap",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "6 everywhere at md/lg: set gap-md and gap-lg to 6, Button sm to 6, hosts stop overriding"
+            ],
+            [
+              "B",
+              "8 everywhere: Button drops its literal"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 5)"
+    },
+    {
+      "id": "S15",
+      "title": "Selection inside the Toolbar, and two \"soft\" joined buttons",
+      "severity": "medium",
+      "sources": [
+        "A-6",
+        "A-3"
+      ],
+      "what": "In one Toolbar, the selected tool is Button's #ee fill, while the Segmented beside it raises a white plate with an edge and shadow-1. In dark the Segmented plate (#1d) sits below its groove (#28), so it reads sunken. Separately, Button group soft and Split button soft paint \"soft\" differently: a different ink, edge and hover.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S15a",
+          "title": "Segmented thumb",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Keep the raised white thumb in light (ChatGPT, Figma); in dark paint it bg-component-active"
+            ],
+            [
+              "B",
+              "One selection paint (#ee, no shadow) everywhere"
+            ],
+            [
+              "C",
+              "Keep"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S15b",
+          "title": "Soft joined buttons",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Split button soft adopts the Button group recipe (quiet ink, no hairline, row hover)"
+            ],
+            [
+              "B",
+              "Button group children render as real soft Buttons"
+            ],
+            [
+              "C",
+              "Keep both, document why"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 5)"
+    },
+    {
+      "id": "S16",
+      "title": "One engine for everything that floats",
+      "severity": "medium",
+      "sources": [
+        "E-5",
+        "A-8",
+        "G-11",
+        "B-15",
+        "B-5",
+        "H-10"
+      ],
+      "what": "The overlay work gave Popover, Menu and Tooltip one JS engine with flip, shift, side and origin. Five surfaces still position themselves another way.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S16",
+          "title": "One floating engine",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Everything anchored uses useAnchoredPosition; list overlays are Menus (Toolbar overflow becomes a ghost icon Button + Menu); Hover card at 8; InputAction hint becomes a Tooltip"
+            ],
+            [
+              "B",
+              "Fix the defects in place and document each engine"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "decided"
+    },
+    {
+      "id": "S17",
+      "title": "API vocabulary: normalise once while unpublished",
+      "severity": "medium",
+      "sources": [
+        "E-6",
+        "C-7",
+        "A-17",
+        "F-19",
+        "F-20",
+        "G-24",
+        "D-18",
+        "B-20",
+        "H-12",
+        "H-13",
+        "H-14"
+      ],
+      "what": "",
+      "why": "",
+      "choices": [
+        {
+          "id": "S17",
+          "title": "API vocabulary",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Normalise in one pass as proposed, keeping deprecated aliases for a release"
+            ],
+            [
+              "B",
+              "Document the differences only"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "decided"
+    },
+    {
+      "id": "S18",
+      "title": "Loading and busy are implemented as disabled",
+      "severity": "medium",
+      "sources": [
+        "A-11",
+        "G-13"
+      ],
+      "what": "A loading Button sets native disabled. Focus drops to the body, the button leaves the tab order and dims like a disabled one. A busy Composer disables its textarea, so nobody can type while an answer streams. ChatGPT keeps the field editable and turns Send into Stop.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S18",
+          "title": "Loading and busy",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Loading keeps focus: aria-disabled + data-loading, clicks suppressed, full opacity; Composer busy keeps typing and turns Send into Stop"
+            ],
+            [
+              "B",
+              "Keep native disabled but paint loading at full opacity"
+            ],
+            [
+              "C",
+              "Keep"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "decided"
+    },
+    {
+      "id": "S19",
+      "title": "Tone sets and defaults",
+      "severity": "low",
+      "sources": [
+        "E-12",
+        "C-16",
+        "C-14"
+      ],
+      "what": "Accent is no longer a tone (your emphasis-roles decision), so the accent entries below are gone. The rest of the question is open: one feedback set for Alert and Toast, inverse vs inverted, and the Indicator default.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S19",
+          "title": "Tone sets",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "One feedback set for Alert and Toast in Badge order; neutral icon ink muted in both; inverse everywhere; Indicator keeps danger as a written exception"
+            ],
+            [
+              "B",
+              "Keep and document"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "decided",
+      "note": "Accent is gone from every tone list (D1); the rest of the rule is open."
+    },
+    {
+      "id": "S20",
+      "title": "The 16px numeric marks disagree",
+      "severity": "medium",
+      "sources": [
+        "C-15"
+      ],
+      "what": "Three marks share a 16px height but not the type. The Indicator count is 10/14, below the 12px floor already enforced on Chip initials. Count sm and Badge sm are 12/16 with gutters of 4 and 6.",
+      "why": "",
+      "choices": [
+        {
+          "id": "S20",
+          "title": "Numeric marks",
+          "rec": "B",
+          "opts": [
+            [
+              "A",
+              "Keep 10px and name it a ramp exception"
+            ],
+            [
+              "B",
+              "Indicator count takes Count sm (12/16, 500); check two digits on a 32px avatar"
+            ],
+            [
+              "C",
+              "B, and align the Badge sm and Count sm gutters"
+            ]
+          ],
+          "pick": "B",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "decided"
+    },
+    {
+      "id": "S21",
+      "title": "Compact density, dark mode and the token phase",
+      "severity": "medium",
+      "sources": [
+        "H-4",
+        "H-5",
+        "H-9",
+        "H-17"
+      ],
+      "what": "About 41% of dimension declarations (471 of 1,158) are fixed and won't compress in compact density. Mostly fixed: Badge, Nav, Tooltip, choice controls, Code block, Card, Calendar, Panel, Menu. Nearly all density-driven: Button, fields, Segmented, Chip. Dark rests on 26 literals that were never captured. The value clusters ready to become tokens with no visual change: the floating lift (×9), the scrim (×3), disabled opacity 0.5 (×16), the 16/20/24 mark ladder, and z-index (a token scale exists but isn't used). None of the 63 :hover rules sit inside @media (hover: hover).",
+      "why": "",
+      "choices": [
+        {
+          "id": "S21a",
+          "title": "Compact density scope",
+          "rec": "C",
+          "opts": [
+            [
+              "A",
+              "Compress everything"
+            ],
+            [
+              "B",
+              "Compress controls and rows only (today)"
+            ],
+            [
+              "C",
+              "Add density-scaled mark-* and surface-inset roles (the handoff plan for dense products)"
+            ]
+          ],
+          "pick": "C",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S21b",
+          "title": "Token phase, first step",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Now: opacity-disabled, shadow-float, scrim, mark-*, z-* roles (no visual change); prune or park unused tokens; hover rules move under hover: hover"
+            ],
+            [
+              "B",
+              "Wait for the full token phase"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        },
+        {
+          "id": "S21c",
+          "title": "Dark mode",
+          "rec": "A",
+          "opts": [
+            [
+              "A",
+              "Run a dark capture pass next, overlays and Card first"
+            ],
+            [
+              "B",
+              "Stay light-only until the docs site"
+            ]
+          ],
+          "pick": "A",
+          "note": null,
+          "pickedOn": "2026-09-30"
+        }
+      ],
+      "status": "decided"
+    }
+  ],
+  "calls": [
+    {
+      "id": "A-13",
+      "group": "Buttons and toolbar",
+      "title": "Selected Button paint: solid selected equals hover; soft selected's edge is lighter than its fill",
+      "severity": "low",
+      "what": "Solid selected is solid-hover, identical to hover and press, and that is the gallery's Selected tile. Neutral soft selected keeps a #f3 hairline over an #ee fill, and pressing it adds the wash again.",
+      "opts": [
+        [
+          "A",
+          "Move the Selected tile to ghost (every real toggle is ghost); soft selected takes its fill as edge and resets the press wash"
+        ],
+        [
+          "B",
+          "Give solid selected its own colour step"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "A-15",
+      "group": "Buttons and toolbar",
+      "title": "Kbd API vocabulary",
+      "severity": "low",
+      "what": "Sizes are small/normal where everything else is sm/md; the treatment axis is appearance where Code calls it ground; on-emphasis has the same CSS as on-color; a deprecated quiet prop remains; Kbd adapts in Menu rows and solid Buttons but not in Tooltip.",
+      "opts": [
+        [
+          "A",
+          "Merge on-emphasis into on-color, adapt automatically in Tooltip, remove quiet"
+        ],
+        [
+          "B",
+          "A, plus rename sizes to sm / md"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "A-16",
+      "group": "Buttons and toolbar",
+      "title": "Kbd's spoken chord joins the host's accessible name",
+      "severity": "low",
+      "what": "The hidden chord text makes a Button's name \"Button Command plus Enter\", and the spec also asks for aria-keyshortcuts, so the shortcut is announced twice.",
+      "opts": [
+        [
+          "A",
+          "Hide the chord inside interactive hosts and rely on aria-keyshortcuts"
+        ],
+        [
+          "B",
+          "Keep it in the name and drop the aria-keyshortcuts advice"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "A-23",
+      "group": "Buttons and toolbar",
+      "title": "Open owner questions from earlier passes",
+      "severity": "medium",
+      "what": "1 Disabled seam in a group shows at ~75%. 2 Button lg 40 vs ChatGPT 36. 3 Toolbar \"tools\" size with 24px icons. 4 Button and Split button \"re-review or accept as bug fixes\".",
+      "opts": [
+        [
+          "A",
+          "Seam drawn by the enabled neighbour; keep lg 40; route 24px tools to compact density; accept as bug fixes"
+        ],
+        [
+          "B",
+          "Discuss individually"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "B-3",
+      "group": "Fields",
+      "title": "Select chevron and check are not Area glyphs",
+      "severity": "medium",
+      "what": "Select draws a #888, 1.5-stroke data-URI chevron (stays #888 when disabled) and the browser's checkmark; Combobox beside it uses Area's 1.125 chevron and check in fg-muted.",
+      "opts": [
+        [
+          "A",
+          "Keep the data URI"
+        ],
+        [
+          "B",
+          "Under appearance: base-select, draw ::picker-icon and ::checkmark from Area glyphs; keep #888 only as the native fallback"
+        ]
+      ],
+      "rec": "B",
+      "pick": "B",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "B-5",
+      "group": "Fields",
+      "title": "Select picker and Combobox list follow different placement rules",
+      "severity": "medium",
+      "what": "Select never flips (pre-09-24 owner decision), is trigger-wide (a 96px mode Select opens a 96px list), max 288, ring + plate focus. Combobox flips, is at least 224 wide, max 324, plate-only focus.",
+      "opts": [
+        [
+          "A",
+          "Keep them separate"
+        ],
+        [
+          "B",
+          "One rule set: flip, at least Menu's width, max 324, one focus paint (revisits the no-flip decision)"
+        ]
+      ],
+      "rec": "B",
+      "pick": "B",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "B-6",
+      "group": "Fields",
+      "title": "Combobox selected option: check only, or plate + check like Select",
+      "severity": "medium",
+      "what": "The row rule says selected rows take bg-component-active; Select does (plate + check), Combobox forces check only. Left open by the cohesion audit's fourth pass. Menu selection (S13) is the same question.",
+      "opts": [
+        [
+          "A",
+          "Check only (ChatGPT's picker, Menu checkable rows)"
+        ],
+        [
+          "B",
+          "Plate + check (the written rule, matches Select)"
+        ]
+      ],
+      "rec": "B",
+      "pick": "B",
+      "note": null,
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 5)"
+    },
+    {
+      "id": "B-7",
+      "group": "Fields",
+      "title": "Nested field actions and steppers are 24px at every size",
+      "severity": "medium",
+      "what": "The action box is 2px from the edge at sm, 4 at md, 8 at lg, radius 6 (not concentric), and its #f3 hover on a #f7 soft field is ~1.03:1.",
+      "opts": [
+        [
+          "A",
+          "Keep 24 everywhere"
+        ],
+        [
+          "B",
+          "Action = height − 8 (20/24/32) with corner = field radius − 4"
+        ],
+        [
+          "C",
+          "Keep 24 but hover with translucent bg-hover on soft fields"
+        ],
+        [
+          "B+C",
+          "Both"
+        ]
+      ],
+      "rec": "B+C",
+      "pick": "B+C",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "B-9",
+      "group": "Fields",
+      "title": "Read-only vs disabled paint",
+      "severity": "medium",
+      "what": "Outline read-only and disabled draw the same #f7 fill and #e2 edge; soft read-only looks exactly like an editable soft field and still hovers; soft disabled gains an edge the enabled soft field doesn't have.",
+      "opts": [
+        [
+          "A",
+          "Keep"
+        ],
+        [
+          "B",
+          "Read-only keeps rest paint with no hover edge and a default cursor (as Switch read-only); disabled never adds an edge to soft"
+        ]
+      ],
+      "rec": "B",
+      "pick": "B",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "B-19",
+      "group": "Fields",
+      "title": "Select placeholder state",
+      "severity": "low",
+      "what": "An empty-valued \"Placeholder\" option renders in default ink and reads as a chosen value.",
+      "opts": [
+        [
+          "A",
+          "Leave it; consumers pick a real default"
+        ],
+        [
+          "B",
+          ".area-select:has(option:checked[value=\"\"]) takes placeholder ink"
+        ]
+      ],
+      "rec": "B",
+      "pick": "B",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "B-24",
+      "group": "Fields",
+      "title": "Textarea lg differs from md only by 4px of inset",
+      "severity": "low",
+      "what": "Same 14/20 text and height behaviour; the owner already delegated this one.",
+      "opts": [
+        [
+          "A",
+          "Remove Textarea lg"
+        ],
+        [
+          "B",
+          "Give lg a real step (16/24 text)"
+        ],
+        [
+          "C",
+          "Keep"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "C-12",
+      "group": "Choices and marks",
+      "title": "Range slider lives outside the manifest",
+      "severity": "medium",
+      "what": ".area-slider-range ships as CSS with no manifest entry and no React component; its fill is fixed neutral and its size fixed at md.",
+      "opts": [
+        [
+          "A",
+          "Promote to a SliderRange component"
+        ],
+        [
+          "B",
+          "Document as a recipe and add to the manifest"
+        ],
+        [
+          "C",
+          "Keep as is"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "C-19",
+      "group": "Choices and marks",
+      "title": "Checkbox/Radio lg only changes the glyph; Presence exposes xs",
+      "severity": "medium",
+      "what": "lg keeps 14/20 text and an 8 gap, the same reasoning that removed sm. Presence exposes xs against the no-xs rule.",
+      "opts": [
+        [
+          "A",
+          "Keep lg (a real glyph step) and drop Presence xs"
+        ],
+        [
+          "B",
+          "One Checkbox/Radio size, as Notion and Figma"
+        ],
+        [
+          "C",
+          "Keep lg with a real type step"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "C-20",
+      "group": "Choices and marks",
+      "title": "Choice card shares nothing with Card",
+      "severity": "low",
+      "what": "Choice card: 12 corner, 12 inset, #e2 edge. Card: 24 corner, 16 inset, #ee edge and halo.",
+      "opts": [
+        [
+          "A",
+          "Keep and record the difference"
+        ],
+        [
+          "B",
+          "Align with Card"
+        ],
+        [
+          "C",
+          "Rename the variant (tile/option)"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "C-21",
+      "group": "Choices and marks",
+      "title": "Avatar tone also switches treatment",
+      "severity": "low",
+      "what": "Neutral avatar is a soft plate; accent and inverse are solid. Badge accent is soft.",
+      "opts": [
+        [
+          "A",
+          "Keep and document"
+        ],
+        [
+          "B",
+          "Make accent soft, as in Badge"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "C-23",
+      "group": "Choices and marks",
+      "title": "ChipGroup semantics",
+      "severity": "medium",
+      "what": "ChipGroup is a plain div with no role, label or roving focus; the manifest says it \"selects one value\" and the CSS promises a radio group.",
+      "opts": [
+        [
+          "A",
+          "role=group with a required label; fix both descriptions"
+        ],
+        [
+          "B",
+          "Add single/multiple modes with radiogroup semantics"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "C-25",
+      "group": "Choices and marks",
+      "title": "Indicator disabled means hide; labels are hard-coded English",
+      "severity": "low",
+      "what": "disabled returns null, and \"N notifications\" is a literal with no label prop (Count has one).",
+      "opts": [
+        [
+          "A",
+          "Rename to hidden (keep an alias) and add label"
+        ],
+        [
+          "B",
+          "Keep"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "C-27",
+      "group": "Choices and marks",
+      "title": "Group spacing, legends and disabled groups",
+      "severity": "low",
+      "what": "ChipGroup gap 4/4 vs BadgeGroup 6/8; legend to options 12 vs Field label to control 6; a disabled fieldset dims options but not the legend.",
+      "opts": [
+        [
+          "A",
+          "ChipGroup 8/8, legend gap 6, dim the whole disabled fieldset"
+        ],
+        [
+          "B",
+          "Keep and document"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "C-32",
+      "group": "Choices and marks",
+      "title": "Chip assist, suggestion and filter look identical at rest",
+      "severity": "low",
+      "what": "kind is an interaction role, but the tiles present them as visual variants.",
+      "opts": [
+        [
+          "A",
+          "Keep; regroup the tiles under Behavior"
+        ],
+        [
+          "B",
+          "Give assist/suggestion a bare rest like ChatGPT's tool pill"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "C-31",
+      "group": "Choices and marks",
+      "title": "Open owner questions",
+      "severity": "medium",
+      "what": "Count text 14 or 12; Badge md 0.7px hang; Slider thumb 16 vs 20, drag response, value tooltip, Shift+arrow; 12px glyphs in Badge and NumberField.",
+      "opts": [
+        [
+          "A",
+          "Count 12; add Shift+arrow; keep thumb 16; keep 12px glyphs"
+        ],
+        [
+          "B",
+          "Discuss individually"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "D-10",
+      "group": "Navigation and menus",
+      "title": "Submenu is tiled but not built",
+      "severity": "medium",
+      "what": "The tile is two static menus with an arrow in the shortcut slot and a forced highlight; no aria-haspopup, no Right/Left keys, no RTL mirroring.",
+      "opts": [
+        [
+          "A",
+          "Build MenuSub (haspopup, Right/Enter opens, Left/Escape closes, hover intent, mirrored chevron)"
+        ],
+        [
+          "B",
+          "Remove the tile until it's built"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "D-19",
+      "group": "Navigation and menus",
+      "title": "Collapsed breadcrumb marker isn't reachable",
+      "severity": "low",
+      "what": "The ellipsis is a static span: no keyboard stop, nothing opens.",
+      "opts": [
+        [
+          "A",
+          "Make it a button that opens a Menu of the hidden ancestors"
+        ],
+        [
+          "B",
+          "Keep decorative and document"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "D-20",
+      "group": "Navigation and menus",
+      "title": "Nav expandable children aren't indented and repeat Tree view",
+      "severity": "low",
+      "what": "Nested nav children sit on the parent's column.",
+      "opts": [
+        [
+          "A",
+          "Indent children like Tree view"
+        ],
+        [
+          "B",
+          "Drop expandable Nav; use Tree view"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "D-22",
+      "group": "Navigation and menus",
+      "title": "MenuSearch is a third search-plus-list pattern with no keyboard wiring",
+      "severity": "low",
+      "what": "Combobox and Command palette already own filtered lists with active-descendant.",
+      "opts": [
+        [
+          "A",
+          "Retire MenuSearch in favour of Combobox / Command palette"
+        ],
+        [
+          "B",
+          "Wire its keyboard"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "D-23",
+      "group": "Navigation and menus",
+      "title": "Command palette scale vs products",
+      "severity": "low",
+      "what": "ChatGPT and Notion draw the palette larger than their menus (corner 16–20, rows 36–48); Area keeps the list model (12 / 32).",
+      "opts": [
+        [
+          "A",
+          "Keep the list model"
+        ],
+        [
+          "B",
+          "Scale the palette up"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "D-24",
+      "group": "Navigation and menus",
+      "title": "Descriptions and empty states in three places",
+      "severity": "low",
+      "what": "Row descriptions are placed three ways; empty states differ between Combobox, Command palette and Menu search.",
+      "opts": [
+        [
+          "A",
+          "Keep the three description placements; one empty-state row everywhere"
+        ],
+        [
+          "B",
+          "Unify both"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "D-3",
+      "group": "Navigation and menus",
+      "title": "Tree view rests in muted ink; Nav moved to default",
+      "severity": "medium",
+      "what": "Tree rows rest in fg-muted \"as Nav\", but Nav switched to fg-default on 09-27. Tree is now the only muted list.",
+      "opts": [
+        [
+          "A",
+          "Tree rests in fg-default like Nav"
+        ],
+        [
+          "B",
+          "Keep muted with Notion as the recorded basis"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "D-16",
+      "group": "Navigation and menus",
+      "title": "Row radius comes from different roles",
+      "severity": "low",
+      "what": "Rows in floating surfaces are concentric; standalone rows use radius-row; Select options become capsules under Pill.",
+      "opts": [
+        [
+          "A",
+          "Concentric inside floating surfaces, radius-row for standalone rows, cap Select options"
+        ],
+        [
+          "B",
+          "Keep"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "E-11",
+      "group": "Overlays and feedback",
+      "title": "Toast announcements, timing and stacking",
+      "severity": "medium",
+      "what": "Each Toast creates its own filled live region (often not announced), a danger Toast is status while a danger Alert is alert, and there's no region, timer, pause or stacking.",
+      "opts": [
+        [
+          "A",
+          "Add a Toaster region (live region first, pause on hover/focus, default duration, stacking, hotkey)"
+        ],
+        [
+          "B",
+          "Keep Toast presentational; document the required region and timing recipe"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "E-18",
+      "group": "Overlays and feedback",
+      "title": "Tooltip and Hover card respond to input differently",
+      "severity": "low",
+      "what": "Tooltip opens for mouse only, Hover card also for pen; focus opens Tooltip at once but Hover card after 700ms; two Escape handlers.",
+      "opts": [
+        [
+          "A",
+          "One shared hover-intent helper"
+        ],
+        [
+          "B",
+          "Keep and document"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "E-19",
+      "group": "Overlays and feedback",
+      "title": "Dialog has no enter/exit motion",
+      "severity": "low",
+      "what": "Anchored surfaces fade and scale over 150ms; the modal Dialog and its scrim appear instantly.",
+      "opts": [
+        [
+          "A",
+          "Same 150ms fade + 0.97 scale; fade the scrim; gated by the motion axis"
+        ],
+        [
+          "B",
+          "Keep instant"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "E-23",
+      "group": "Overlays and feedback",
+      "title": "Alert links: muted in place, tone ink in the banner",
+      "severity": "low",
+      "what": "The same link prop renders in two colours depending on layout.",
+      "opts": [
+        [
+          "A",
+          "Tone ink in every layout"
+        ],
+        [
+          "B",
+          "Muted everywhere"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "E-26",
+      "group": "Overlays and feedback",
+      "title": "Pass-review rows and dead demos still in the gallery source",
+      "severity": "low",
+      "what": "GalleryReview rows for Dialog, Popover, Toast (and Alert in reviews.tsx) still render; three unused Popover arrow demos.",
+      "opts": [
+        [
+          "A",
+          "Remove them now that the families are Complete"
+        ],
+        [
+          "B",
+          "Keep until confirmed"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "E-5",
+      "group": "Overlays and feedback",
+      "title": "Hover card still uses the old CSS-anchor path",
+      "severity": "medium",
+      "what": "Popover/Menu/Tooltip use JS computePosition (flip, shift, data-side). Hover card uses CSS position-area 4px from its link and scales from its centre; Popover sits 8px away.",
+      "opts": [
+        [
+          "A",
+          "Move Hover card onto useAnchoredPosition (align start, offset 8); delete the anchor rules"
+        ],
+        [
+          "B",
+          "Keep CSS anchoring but match the 8px gap"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-7",
+      "group": "Surfaces, inspector and colour",
+      "title": "ColorField vs ColorPicker seam in the hex/opacity row",
+      "severity": "low",
+      "what": "ColorField divides hex and opacity with a #f3 rule; ColorPicker uses a 1px surface gap like Figma. Open since the ColorPicker pass.",
+      "opts": [
+        [
+          "A",
+          "ColorField adopts the surface gap"
+        ],
+        [
+          "B",
+          "ColorPicker adopts the rule"
+        ],
+        [
+          "C",
+          "Keep both"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-10",
+      "group": "Surfaces, inspector and colour",
+      "title": "Calendar outside days select invisibly and use disabled ink",
+      "severity": "medium",
+      "what": "Clicking 1 October in September commits a value with no visible change; outside days use fg-disabled, which is reserved for disabled text.",
+      "opts": [
+        [
+          "A",
+          "Clicking an outside day selects it and moves to its month; outside days in fg-muted"
+        ],
+        [
+          "B",
+          "Make outside days inert"
+        ],
+        [
+          "C",
+          "Paint their selection"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-12",
+      "group": "Surfaces, inspector and colour",
+      "title": "Calendar 32px days use the 28px control radius",
+      "severity": "low",
+      "what": "Days grew to 32 but kept radius 6; the Schedule puts them beside 32px Buttons at 8.",
+      "opts": [
+        [
+          "A",
+          "Days take radius-control-md (8)"
+        ],
+        [
+          "B",
+          "Keep 6 and record the exception"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "F-18",
+      "group": "Surfaces, inspector and colour",
+      "title": "ColorPicker's model Select is outline among soft fields",
+      "severity": "low",
+      "what": "Copies Figma but breaks \"one surface, one field style\" that Panel applied to the same evidence.",
+      "opts": [
+        [
+          "A",
+          "Make it soft"
+        ],
+        [
+          "B",
+          "Keep outline, write the exception"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-20",
+      "group": "Surfaces, inspector and colour",
+      "title": "variant=\"surface\" means two things; ColorPicker has no plain",
+      "severity": "medium",
+      "what": "surface is a lifted plate in Calendar and Toolbar but a soft fill in AlignmentPicker. ColorPicker always paints a floating surface, so inside a Popover it draws a second frame.",
+      "opts": [
+        [
+          "A",
+          "surface = floating plate everywhere; AlignmentPicker values become soft/plain; add plain to ColorPicker"
+        ],
+        [
+          "B",
+          "Keep names, document per family"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-21",
+      "group": "Surfaces, inspector and colour",
+      "title": "Calendar gallery default isn't the manifest default",
+      "severity": "low",
+      "what": "Manifest default is plain; every tile except \"Plain\" passes surface.",
+      "opts": [
+        [
+          "A",
+          "Make surface the default (if F-20 A)"
+        ],
+        [
+          "B",
+          "Show plain in the Default tile"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-23",
+      "group": "Surfaces, inspector and colour",
+      "title": "Interactive Table rows",
+      "severity": "medium",
+      "what": "The whole row hovers but only a first-cell link is clickable; the scroll wrapper isn't focusable.",
+      "opts": [
+        [
+          "A",
+          "Stretched row link like CardLink + focusable labelled wrapper + forced-colours row rule"
+        ],
+        [
+          "B",
+          "Document as the consumer's job"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-26",
+      "group": "Surfaces, inspector and colour",
+      "title": "Panel insets don't follow density (comment says they do)",
+      "severity": "low",
+      "what": "Insets 12/16 and gaps 8/12 are flat spacing; under compact the controls shrink and insets stay.",
+      "opts": [
+        [
+          "A",
+          "Move to the gutter and gap ramps now"
+        ],
+        [
+          "B",
+          "Keep fixed, fix the comments, set compact values in the density pass"
+        ]
+      ],
+      "rec": "B",
+      "pick": "B",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-28",
+      "group": "Surfaces, inspector and colour",
+      "title": "Property list tiles mix md panels with sm controls",
+      "severity": "low",
+      "what": "Panel audit rule: controls at the panel's tier. Panel has no size context.",
+      "opts": [
+        [
+          "A",
+          "Panel provides its tier through context"
+        ],
+        [
+          "B",
+          "Fix the demos now; raise A with compact density"
+        ]
+      ],
+      "rec": "B",
+      "pick": "B",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-30",
+      "group": "Surfaces, inspector and colour",
+      "title": "Four swatch shapes; ColorSwatch corner isn't a radius role",
+      "severity": "low",
+      "what": "ColorSwatch 20% of side (rounds under Sharp), Chip swatches are circles, Token swatches radius-small − 2, the palette's checked cell switches role. Figma's split chit still open.",
+      "opts": [
+        [
+          "A",
+          "Keep 20% as an identity shape exempt from presets; Chip and Token adopt the swatch edge recipe; no split chits unless asked"
+        ],
+        [
+          "B",
+          "Derive the corner from radius-small"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-31",
+      "group": "Surfaces, inspector and colour",
+      "title": "Picker cells: two ladders; Alignment grid 88 × 56",
+      "severity": "low",
+      "what": "Swatch cells 24/28/32, alignment cells 20/24/32; plate+ring vs bars. Figma sizes the alignment grid to the layout (88 × 56).",
+      "opts": [
+        [
+          "A",
+          "Keep both; answer 88 × 56 as a separate layout option"
+        ],
+        [
+          "B",
+          "Unify the ladders"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-32",
+      "group": "Surfaces, inspector and colour",
+      "title": "ColorPicker tracks and thumbs differ from Slider",
+      "severity": "low",
+      "what": "16px pill tracks and ringed thumbs vs Slider's 4px rail. Deliberate (Figma).",
+      "opts": [
+        [
+          "A",
+          "Keep (a colour track shows data)"
+        ],
+        [
+          "B",
+          "Share one thumb"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "F-38",
+      "group": "Surfaces, inspector and colour",
+      "title": "Reveal-on-hover affordances fade at different speeds",
+      "severity": "low",
+      "what": "Card overlay fades over 200ms; Panel chevron and PropertyList handle appear instantly.",
+      "opts": [
+        [
+          "A",
+          "One timing (--area-transition)"
+        ],
+        [
+          "B",
+          "Keep"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "G-4",
+      "group": "Conversation and code",
+      "title": "Code subtle is darker than default",
+      "severity": "medium",
+      "what": "subtle is #f7, darker than the default #fa, and identical to default in dark.",
+      "opts": [
+        [
+          "A",
+          "subtle = no fill, edge only"
+        ],
+        [
+          "B",
+          "Swap the two fills"
+        ],
+        [
+          "C",
+          "Remove subtle"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "G-5",
+      "group": "Conversation and code",
+      "title": "Syntax colours share semantic roles",
+      "severity": "medium",
+      "what": "Keywords use danger-vivid (the same red as the diff \"removed\" marker) and strings follow the accent axis.",
+      "opts": [
+        [
+          "A",
+          "Add syntax role aliases so code colours stop meaning danger/accent"
+        ],
+        [
+          "B",
+          "Keep"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "G-6",
+      "group": "Conversation and code",
+      "title": "Code block language tabs vs Tabs",
+      "severity": "medium",
+      "what": "1px inset underline vs Tabs' 2px bar, a plate vs pending bar on hover, +2 vs inset focus, no forced-colours rule; the spec calls it a match.",
+      "opts": [
+        [
+          "A",
+          "Reuse Tabs sm"
+        ],
+        [
+          "B",
+          "Keep and correct the spec"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "G-10",
+      "group": "Conversation and code",
+      "title": "Code and Kbd take corners from different roles; Kbd has no cap",
+      "severity": "low",
+      "what": "Kbd becomes a pill under the Pill preset.",
+      "opts": [
+        [
+          "A",
+          "Both from radius-small, capped"
+        ],
+        [
+          "B",
+          "Keep"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "G-12",
+      "group": "Conversation and code",
+      "title": "Only Model picker paints its trigger while the menu is open",
+      "severity": "low",
+      "what": "SplitButton, Menu triggers and Select don't show an open state.",
+      "opts": [
+        [
+          "A",
+          "Every menu trigger takes the pressed plate while open"
+        ],
+        [
+          "B",
+          "Drop it from Model picker"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "G-17",
+      "group": "Conversation and code",
+      "title": "Composer-derived 16 corner on bubbles and suggestion rows",
+      "severity": "medium",
+      "what": "Suggestion rows use 16 instead of the row role (8, as ChatGPT); composer, bubble and rows stay 8 under Sharp.",
+      "opts": [
+        [
+          "A",
+          "Rows to 8; concentric shapes go square under Sharp"
+        ],
+        [
+          "B",
+          "Keep"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "G-23",
+      "group": "Conversation and code",
+      "title": "Conversation demos use product copy and \"ChatGPT\" as the author",
+      "severity": "low",
+      "what": "Against DESIGN_SYSTEM's Example copy.",
+      "opts": [
+        [
+          "A",
+          "Placeholder vocabulary; author \"Assistant\""
+        ],
+        [
+          "B",
+          "Keep realistic copy for conversation demos and write the exception"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "G-26",
+      "group": "Conversation and code",
+      "title": "Inline Code sizing sits off the ramp",
+      "severity": "low",
+      "what": "0.875em / 1.35 (renders 14 / 18.9 in body text, 12.25 / 16.5 in small text); diff markers are 500.",
+      "opts": [
+        [
+          "A",
+          "Keep em-relative sizing (it follows the prose it sits in)"
+        ],
+        [
+          "B",
+          "Snap to the ramp per context"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "G-27",
+      "group": "Conversation and code",
+      "title": "Code block corner and code size vs ChatGPT",
+      "severity": "medium",
+      "what": "ChatGPT's code block uses a 24 corner and 12/20 code; Area keeps 12 and 14/20.",
+      "opts": [
+        [
+          "A",
+          "Card's 24 corner, keep 14/20"
+        ],
+        [
+          "B",
+          "24 corner and 12/20 code"
+        ],
+        [
+          "C",
+          "Keep 12 and 14/20"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "H-25",
+      "group": "System",
+      "title": "Presence and Token \"compatibility\" isn't reflected in code",
+      "severity": "low",
+      "what": "Presence is a full public component (xs–lg) that Indicator duplicates; the Token manifest says deprecated but the React export isn't marked.",
+      "opts": [
+        [
+          "A",
+          "Deprecate Token; keep Presence as the status mark"
+        ],
+        [
+          "B",
+          "Fold Presence into Indicator"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "H-10",
+      "group": "System",
+      "title": "Anchored gap: 4 or 8",
+      "severity": "low",
+      "what": "Popover JS uses 8; the CSS anchor path, Model picker and popover.md use 4; Menu and Tooltip use 4.",
+      "opts": [
+        [
+          "A",
+          "8 for popovers, 4 for menus and tooltips; align CSS and spec"
+        ],
+        [
+          "B",
+          "4 everywhere"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    },
+    {
+      "id": "H-26",
+      "group": "System",
+      "title": "Disabled Split button / Button group double-dims the seam",
+      "severity": "low",
+      "what": "Each Button dims separately, so the shared seam and overlapped border show at ~75%.",
+      "opts": [
+        [
+          "A",
+          "Dim the group as a whole"
+        ],
+        [
+          "B",
+          "Draw the seam from the enabled neighbour"
+        ]
+      ],
+      "rec": "A",
+      "pick": "A",
+      "note": null,
+      "pickedOn": "2026-09-30"
+    }
+  ],
+  "findings": [
+    {
+      "id": "A-1",
+      "title": "Outline Button group: the hovered button loses its border",
+      "report": "A-buttons.md",
+      "families": "Button group",
+      "category": "visual",
+      "severity": "high",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "An outline group loses its top, bottom and outer border on the hovered button: the group never sets --_border-hover, so ghost's transparent wins (button-group.css:33, button.css:56).",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "A-2",
+      "title": "Button group repaints a child's fill but not its ink, so a default Button in a group reads white on grey",
+      "report": "A-buttons.md",
+      "families": "Button group",
+      "category": "api",
+      "severity": "high",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "A default Button in a group renders a white label on the #f7 group fill: the group repaints --_bg but not ink. Every demo hides it by passing variant=\"ghost\" (button-group.css:39).",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "A-3",
+      "title": "\"Soft\" joined buttons look different in Button group and Split button",
+      "report": "A-buttons.md",
+      "families": "Button group, Split button, Button",
+      "category": "consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S15"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 5)"
+    },
+    {
+      "id": "A-4",
+      "title": "The icon-to-label gap changes with the host, and small Button keeps a stale 4",
+      "report": "A-buttons.md",
+      "families": "Button, Button group, Toolbar, Segmented, Split button (peer: Chip)",
+      "category": "consistency",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "rule",
+      "rules": [
+        "S14"
+      ],
+      "status": "done",
+      "typeNote": "fix (hosts) + decision (sm and peers)",
+      "resolved": "this branch (phase 5)"
+    },
+    {
+      "id": "A-5",
+      "title": "Radius steps by tier only in Button and its hosts",
+      "report": "A-buttons.md",
+      "families": "Button, Button group, Split button, Toolbar, Segmented (peers: Input, Select)",
+      "category": "consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S4"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "A-6",
+      "title": "Two selection paints inside one Toolbar, and Segmented's reads sunken in dark",
+      "report": "A-buttons.md",
+      "families": "Toolbar, Segmented, Button, Split button",
+      "category": "visual",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S15"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 5)",
+      "note": "Owner kept the raised thumb in light beside the #ee Button selection (S15a A); dark no longer reads sunken"
+    },
+    {
+      "id": "A-7",
+      "title": "`Toolbar size` does not reach Split button, Segmented or Select",
+      "report": "A-buttons.md",
+      "families": "Toolbar",
+      "category": "api",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Toolbar size reaches only direct Buttons: SplitButtons, Segmented and Selects inside keep their own size.",
+      "status": "open"
+    },
+    {
+      "id": "A-8",
+      "title": "Toolbar overflow is a hand-built second ghost button and the one non-Menu floating list",
+      "report": "A-buttons.md",
+      "families": "Toolbar (peers: Split button menu, Menu, ghost icon Button)",
+      "category": "consistency / interaction",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S16"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "A-9",
+      "title": "Forced colours: the toolbar separator and overflow dots have no system paint",
+      "report": "A-buttons.md",
+      "families": "Toolbar",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Forced colours: the toolbar separator has no rule, and the overflow dots are two box-shadow copies that drop out.",
+      "status": "open"
+    },
+    {
+      "id": "A-10",
+      "title": "Divider paint disagrees across joined controls, separators and the 09-27 owner rule",
+      "report": "A-buttons.md",
+      "families": "Toolbar, Button group, Split button (peers: Separator, Menu)",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S8"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "A-11",
+      "title": "Loading is implemented as disabled",
+      "report": "A-buttons.md",
+      "families": "Button (Split button inherits)",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S18"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "A-12",
+      "title": "Icon-only Button silently drops its children (no accessible name)",
+      "report": "A-buttons.md",
+      "families": "Button",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "iconOnly silently discards children, so <Button iconOnly>Add</Button> has no name; SplitButton iconOnly turns children into the name.",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "A-13",
+      "title": "Selected Button paints: solid is the same as hover; soft's edge inverts",
+      "report": "A-buttons.md",
+      "families": "Button (Split button, Button group, Toolbar inherit)",
+      "category": "visual",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Solid selected is solid-hover, identical to hover and press, and that is the gallery's Selected tile. Neutral soft selected keeps a #f3 hairline over an #ee fill, and pressing it adds the wash again.",
+      "status": "open"
+    },
+    {
+      "id": "A-14",
+      "title": "The Kbd keycap disappears in pressed or selected Buttons and inverts on soft hover",
+      "report": "A-buttons.md",
+      "families": "Kbd, Button",
+      "category": "visual",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S12"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "A-15",
+      "title": "Kbd's API vocabulary diverges from the rest of the system",
+      "report": "A-buttons.md",
+      "families": "Kbd (peers: Code, every sized family)",
+      "category": "api",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Sizes are small/normal where everything else is sm/md; the treatment axis is appearance where Code calls it ground; on-emphasis has the same CSS as on-color; a deprecated quiet prop remains; Kbd adapts in Menu rows and solid Buttons but not in Tooltip.",
+      "status": "open"
+    },
+    {
+      "id": "A-16",
+      "title": "Kbd's spoken chord becomes part of the host's accessible name",
+      "report": "A-buttons.md",
+      "families": "Kbd, Button, Menu (host)",
+      "category": "a11y",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "The hidden chord text makes a Button's name \"Button Command plus Enter\", and the spec also asks for aria-keyshortcuts, so the shortcut is announced twice.",
+      "status": "open"
+    },
+    {
+      "id": "A-17",
+      "title": "API naming across value, toggle and label props",
+      "report": "A-buttons.md",
+      "families": "Segmented",
+      "category": "api",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Segmented has no name, required or group disabled, so it can't submit, though the Toolbar spec says a submitted mode is a Segmented; onSelect vs everyone's onValueChange.",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "A-18",
+      "title": "Dead or contradicting CSS in Button and Button group",
+      "report": "A-buttons.md",
+      "families": "Button, Button group",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Neutral ghost hover declared twice; --align-start/end in two files; [data-disabled] dims but still hovers; bare .area-button-group has an edge React's default lacks.",
+      "status": "open"
+    },
+    {
+      "id": "A-19",
+      "title": "Stale docs: specs, DESIGN_SYSTEM and the docs page against the code and owner decisions",
+      "report": "A-buttons.md",
+      "families": "all six",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "A-20",
+      "title": "Toolbar surface adds a fifth elevation recipe outside the documented set",
+      "report": "A-buttons.md",
+      "families": "Toolbar",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S10"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "A-21",
+      "title": "\"Labels on fills are 500\" applies unevenly",
+      "report": "A-buttons.md",
+      "families": "Button, Segmented (peers: Chip, Tabs, Badge)",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S2"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)",
+      "note": "S2: rule rewritten to match the code"
+    },
+    {
+      "id": "A-22",
+      "title": "Gallery hygiene",
+      "report": "A-buttons.md",
+      "families": "all six",
+      "category": "gallery",
+      "severity": "low",
+      "type": "FIX",
+      "route": "hygiene",
+      "status": "open"
+    },
+    {
+      "id": "A-23",
+      "title": "Owner questions still open for these families",
+      "report": "A-buttons.md",
+      "families": "Button group, Split button, Button, Toolbar, Segmented",
+      "category": "docs-drift (open decisions)",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "1 Disabled seam in a group shows at ~75%. 2 Button lg 40 vs ChatGPT 36. 3 Toolbar \"tools\" size with 24px icons. 4 Button and Split button \"re-review or accept as bug fixes\".",
+      "status": "open"
+    },
+    {
+      "id": "A-24",
+      "title": "Test coverage is thin for Button and keyboard models",
+      "report": "A-buttons.md",
+      "families": "Button, Kbd, Toolbar, Segmented",
+      "category": "tests",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "No Button test file; Toolbar and Segmented tests only render on the server, so arrows, Home/End and RTL are unguarded.",
+      "status": "open"
+    },
+    {
+      "id": "B-1",
+      "title": "Field focus is barely visible, and in dark mode hover and focus look like rest",
+      "report": "B-fields.md",
+      "families": "Input, Textarea, Select, NumberField, InputGroup, Combobox (through Input)",
+      "category": "a11y",
+      "severity": "high",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S1"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)"
+    },
+    {
+      "id": "B-2",
+      "title": "Select is the only outline field that still has a resting shadow; DESIGN_SYSTEM says all of them should",
+      "report": "B-fields.md",
+      "families": "Select",
+      "category": "consistency",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Select is the only outline field with a resting shadow-1 (navigation.css:239); Input, Textarea, NumberField and InputGroup dropped it in the outline pass. Verified live: 25 of 32 gallery Selects draw it.",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "B-3",
+      "title": "Select's chevron and check are not Area glyphs, and they differ from Combobox beside it",
+      "report": "B-fields.md",
+      "families": "Select vs Combobox (and InputAction, Tree view and Split button chevrons)",
+      "category": "visual, consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Select draws a #888, 1.5-stroke data-URI chevron (stays #888 when disabled) and the browser's checkmark; Combobox beside it uses Area's 1.125 chevron and check in fg-muted.",
+      "status": "open"
+    },
+    {
+      "id": "B-4",
+      "title": "Select option rows do not follow the \"one list model\" that Menu and Combobox share",
+      "report": "B-fields.md",
+      "families": "Select",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Select options leave the list model: text 8 from the row edge (Menu 11), 40px rows inside an lg Select, radius-row (a capsule under Pill), 14/20 group labels.",
+      "status": "open"
+    },
+    {
+      "id": "B-5",
+      "title": "Select picker and Combobox list place, size and focus differently",
+      "report": "B-fields.md",
+      "families": "Select, Combobox (Menu for reference)",
+      "category": "consistency, interaction",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Select never flips (pre-09-24 owner decision), is trigger-wide (a 96px mode Select opens a 96px list), max 288, ring + plate focus. Combobox flips, is at least 224 wide, max 324, plate-only focus.",
+      "rules": [
+        "S16"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "B-6",
+      "title": "Combobox marks the selected option with a check only; Select and the row rule use a plate",
+      "report": "B-fields.md",
+      "families": "Combobox, Select",
+      "category": "consistency, system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "The row rule says selected rows take bg-component-active; Select does (plate + check), Combobox forces check only. Left open by the cohesion audit's fourth pass. Menu selection (S13) is the same question.",
+      "rules": [
+        "S13"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 5)"
+    },
+    {
+      "id": "B-7",
+      "title": "Nested field actions are 24px at every size and their hover almost disappears on soft fields",
+      "report": "B-fields.md",
+      "families": "Input (InputAction, and Combobox's toggle), NumberField steppers",
+      "category": "visual, system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "The action box is 2px from the edge at sm, 4 at md, 8 at lg, radius 6 (not concentric), and its #f3 hover on a #f7 soft field is ~1.03:1.",
+      "status": "open"
+    },
+    {
+      "id": "B-8",
+      "title": "InputAction has no pressed or disabled paint",
+      "report": "B-fields.md",
+      "families": "Input",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "InputAction has no :active plate and no disabled paint; a disabled action still hovers (input.css:183-199).",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "B-9",
+      "title": "Read-only and disabled look alike, soft read-only looks editable, and soft disabled gains an edge",
+      "report": "B-fields.md",
+      "families": "Input, Textarea, NumberField (Select has no read-only; InputGroup paints none)",
+      "category": "visual",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Outline read-only and disabled draw the same #f7 fill and #e2 edge; soft read-only looks exactly like an editable soft field and still hovers; soft disabled gains an edge the enabled soft field doesn't have.",
+      "status": "open"
+    },
+    {
+      "id": "B-10",
+      "title": "Disabled fields leave icons, units and affixes in muted ink",
+      "report": "B-fields.md",
+      "families": "Input, Number field, Input group",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Disabled fields leave icons, units, scrub handles and InputGroupText in muted ink; the cohesion audit lists this as fixed.",
+      "status": "open"
+    },
+    {
+      "id": "B-11",
+      "title": "Forced colours: NumberField and InputGroup have no edge, focus or invalid rules",
+      "report": "B-fields.md",
+      "families": "Number field, Input group",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "No forced-colors edge, focus or invalid rules; a focused NumberField shows nothing in High Contrast.",
+      "status": "open"
+    },
+    {
+      "id": "B-12",
+      "title": "Combobox and BoxField do not meet the form contract",
+      "report": "B-fields.md",
+      "families": "Combobox, Box field",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Combobox submits the option's label, not its value, and neither Combobox nor BoxField handles form reset.",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "B-13",
+      "title": "Enter during IME composition picks or commits in Combobox and NumberField",
+      "report": "B-fields.md",
+      "families": "Combobox, Number field",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Enter during IME composition picks an option or commits a draft; Composer already guards isComposing.",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "B-14",
+      "title": "Field cannot disable or invalidate an InputGroup",
+      "report": "B-fields.md",
+      "families": "Field, Input group",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Field's error and disabled land on the group div, which paints only from descendants: the edge stays neutral, children stay editable, <label for> targets a div.",
+      "status": "open"
+    },
+    {
+      "id": "B-15",
+      "title": "Combobox list relies only on CSS anchor positioning",
+      "report": "B-fields.md",
+      "families": "Combobox",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "The list is positioned only inside @supports (anchor-name); elsewhere it likely opens at the viewport origin (unverified).",
+      "rules": [
+        "S16"
+      ],
+      "status": "open",
+      "severityNote": "medium (unverified in a browser without support)"
+    },
+    {
+      "id": "B-16",
+      "title": "InputAction's hint does not behave like Tooltip",
+      "report": "B-fields.md",
+      "families": "Input",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "(see E-16) InputAction hint: no delay, no bridge, no Escape, no fade.",
+      "status": "open"
+    },
+    {
+      "id": "B-17",
+      "title": "Fields keep one corner at every size; Button steps with size",
+      "report": "B-fields.md",
+      "families": "Input, Textarea, Select, NumberField, InputGroup (vs Button, ButtonGroup, Toolbar)",
+      "category": "consistency, visual",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S4"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "B-18",
+      "title": "InputGroup affix text ignores the inset contract",
+      "report": "B-fields.md",
+      "families": "Input group",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "InputGroupText pads with the gutter (13 at md) while an Input prefix follows the inset contract (11.03); the same \"$\" sits in two places.",
+      "status": "open"
+    },
+    {
+      "id": "B-19",
+      "title": "Select has no placeholder state",
+      "report": "B-fields.md",
+      "families": "Select vs Input, Textarea",
+      "category": "visual, consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "An empty-valued \"Placeholder\" option renders in default ink and reads as a chosen value.",
+      "status": "open"
+    },
+    {
+      "id": "B-20",
+      "title": "API inconsistencies across the field family",
+      "report": "B-fields.md",
+      "families": "NumberField, Input, Combobox, BoxField, Field",
+      "category": "api",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "rule",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "B-21",
+      "title": "Native browser chrome shows through Input",
+      "report": "B-fields.md",
+      "families": "Input (and InputGroup, Combobox)",
+      "category": "visual",
+      "severity": "low",
+      "type": "FIX",
+      "route": "report",
+      "status": "open",
+      "severityNote": "low (unverified in a browser)"
+    },
+    {
+      "id": "B-22",
+      "title": "Field caption type and ink vary by composition",
+      "report": "B-fields.md",
+      "families": "Field, BoxField, CheckboxGroup and RadioGroup, Panel rows",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "report",
+      "status": "open"
+    },
+    {
+      "id": "B-23",
+      "title": "Horizontal Field centres its label on multiline controls",
+      "report": "B-fields.md",
+      "families": "Field (with Textarea, and Composer-like children)",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "report",
+      "status": "open"
+    },
+    {
+      "id": "B-24",
+      "title": "Textarea lg differs from md only by 4px of inset",
+      "report": "B-fields.md",
+      "families": "Textarea",
+      "category": "visual",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Same 14/20 text and height behaviour; the owner already delegated this one.",
+      "status": "open"
+    },
+    {
+      "id": "B-25",
+      "title": "Only Input recolours its icons with the validation tone",
+      "report": "B-fields.md",
+      "families": "Input vs NumberField, Select, InputGroup, Combobox (toggle)",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "report",
+      "status": "open"
+    },
+    {
+      "id": "B-26",
+      "title": "Stale docs, specs and claims",
+      "report": "B-fields.md",
+      "families": "all eight",
+      "category": "docs-drift",
+      "severity": "low",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "B-27",
+      "title": "Dead and duplicated CSS",
+      "report": "B-fields.md",
+      "families": "Input, Number field",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Dead CSS that inset.css overrides; three patterns for variant and state rules (B-28).",
+      "status": "open"
+    },
+    {
+      "id": "B-28",
+      "title": "Variant and state rules follow three patterns",
+      "report": "B-fields.md",
+      "families": "InputGroup, NumberField vs Input, Textarea, Select",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "report",
+      "status": "open"
+    },
+    {
+      "id": "B-29",
+      "title": "Gallery hygiene",
+      "report": "B-fields.md",
+      "families": "all eight",
+      "category": "gallery",
+      "severity": "low",
+      "type": "FIX",
+      "route": "hygiene",
+      "status": "open"
+    },
+    {
+      "id": "B-30",
+      "title": "NumberField: read-only steppers look disabled; Enter blocks form submit; Escape does not cancel a scrub",
+      "report": "B-fields.md",
+      "families": "Number field",
+      "category": "interaction",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "fix",
+      "summary": "Read-only shows disabled steppers; Enter blocks form submit; Escape doesn't cancel a scrub.",
+      "status": "open"
+    },
+    {
+      "id": "B-31",
+      "title": "Combobox accessibility details",
+      "report": "B-fields.md",
+      "families": "Combobox",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "The list is unnamed when Field labels the input, and \"No results\" isn't announced.",
+      "status": "open"
+    },
+    {
+      "id": "B-32",
+      "title": "Tests do not guard the field family's behaviour or shared paint",
+      "report": "B-fields.md",
+      "families": "Fields",
+      "category": "tests",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "No tests guard field behaviour, the Select picker lift or field shadows.",
+      "status": "open"
+    },
+    {
+      "id": "B-33",
+      "title": "The file input's button label is 500 on a transparent control",
+      "report": "B-fields.md",
+      "families": "Input (file)",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "fix",
+      "summary": "The file button label is 500 on a transparent control.",
+      "status": "open"
+    },
+    {
+      "id": "C-1",
+      "title": "The choice controls' \"off\" greys have drifted apart",
+      "report": "C-choices-marks.md",
+      "families": "switch, slider (and progress), checkbox, radio, chip",
+      "category": "consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S5"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 2)"
+    },
+    {
+      "id": "C-2",
+      "title": "Neutral soft plates: #f7, ≈#f0 and #ee, and a Badge disappears on a hovered row",
+      "report": "C-choices-marks.md",
+      "families": "badge, count, avatar, chip",
+      "category": "consistency / visual",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S6"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 2)"
+    },
+    {
+      "id": "C-3",
+      "title": "\"500 only for labels on fills\" is applied four different ways",
+      "report": "C-choices-marks.md",
+      "families": "badge, count, chip, avatar (vs button, segmented)",
+      "category": "system-rule / consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S2"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)",
+      "note": "S2: rule rewritten to match the code"
+    },
+    {
+      "id": "C-4",
+      "title": "Nested dismiss comes in three constructions, and neither Chip nor Badge follows the DS rule",
+      "report": "C-choices-marks.md",
+      "families": "chip, badge (vs alert)",
+      "category": "system-rule / consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S9"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "C-5",
+      "title": "Badge dismiss is a 12–16px target with no 24px hit extension",
+      "report": "C-choices-marks.md",
+      "families": "Badge",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Badge dismiss is a 12–16px target with no 24px hit extension; Badge links in the same component have one.",
+      "status": "open"
+    },
+    {
+      "id": "C-6",
+      "title": "Chip remove has no content-aware name, no Backspace/Delete, and no focus hand-off",
+      "report": "C-choices-marks.md",
+      "families": "Chip",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Chip remove defaults to the name \"Remove chip\", has no Backspace/Delete, and drops focus after removal.",
+      "status": "open"
+    },
+    {
+      "id": "C-7",
+      "title": "The dismiss and change APIs are named differently in each family",
+      "report": "C-choices-marks.md",
+      "families": "chip, badge, switch, checkbox, radio, slider (vs alert)",
+      "category": "api",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "C-8",
+      "title": "RadioGroup doesn't generate a `name`",
+      "report": "C-choices-marks.md",
+      "families": "Radio",
+      "category": "interaction",
+      "severity": "high",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "RadioGroup never generates a name. Without one, each radio is its own Tab stop, arrows don't move selection and nothing submits (forms.tsx:228,280,296).",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "C-9",
+      "title": "The uncontrolled RadioGroup ignores form reset (Switch and Slider handle it)",
+      "report": "C-choices-marks.md",
+      "families": "Radio",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Uncontrolled RadioGroup ignores form reset; Switch and Slider handle it.",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "C-10",
+      "title": "Slider readout formatting never reaches assistive tech",
+      "report": "C-choices-marks.md",
+      "families": "Slider",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "The visible readout (60%, 1.25×) is aria-hidden and no aria-valuetext is set, so it is announced as 60 or 1.25.",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "C-11",
+      "title": "Slider RTL is likely wrong in Chromium; the range composition is LTR-only",
+      "report": "C-choices-marks.md",
+      "families": "Slider",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "RTL is likely wrong in Chromium: scale:-1 mirrors the thumb with the track, and the rtl rule only matches an ancestor, not <Slider dir=rtl> (verify first).",
+      "status": "open",
+      "typeNote": "fix (verify first)"
+    },
+    {
+      "id": "C-12",
+      "title": "The range slider is a demo-only composition outside the manifest",
+      "report": "C-choices-marks.md",
+      "families": "slider",
+      "category": "api / system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": ".area-slider-range ships as CSS with no manifest entry and no React component; its fill is fixed neutral and its size fixed at md.",
+      "status": "open"
+    },
+    {
+      "id": "C-13",
+      "title": "Chip and Slider recolour an edge on focus; the other families draw only the ring",
+      "report": "C-choices-marks.md",
+      "families": "Chip, Slider, Checkbox card",
+      "category": "consistency",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Chip and the Slider thumb recolour their edge on focus as well as drawing the ring; choice cards draw two rings.",
+      "status": "open"
+    },
+    {
+      "id": "C-14",
+      "title": "Indicator defaults to danger, against \"Tone defaults are neutral in every family\"",
+      "report": "C-choices-marks.md",
+      "families": "indicator",
+      "category": "system-rule / docs-drift",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S19"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "C-15",
+      "title": "The small numeric and label marks disagree at 16/20px, and the Indicator count is off the type ramp",
+      "report": "C-choices-marks.md",
+      "families": "indicator, count, badge (vs kbd)",
+      "category": "consistency / system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S20"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "C-16",
+      "title": "Tone sets range from 2 to 9 values, and one tone has two spellings",
+      "report": "C-choices-marks.md",
+      "families": "badge, indicator, count, chip, checkbox, radio, switch, slider, avatar (vs alert, button)",
+      "category": "api / consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S19"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "C-17",
+      "title": "Badge base rule differs from the React default (muted vs default ink)",
+      "report": "C-choices-marks.md",
+      "families": "Badge",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "A bare .area-badge renders default ink; the React default is muted.",
+      "status": "open"
+    },
+    {
+      "id": "C-18",
+      "title": "Dead or no-op API and CSS",
+      "report": "C-choices-marks.md",
+      "families": "Badge, Chip, Switch",
+      "category": "api",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "No-op API and CSS: the pill boolean, unread --_dot and --_surface-active, an empty .area-switch--short, a legend weight set twice.",
+      "status": "open"
+    },
+    {
+      "id": "C-19",
+      "title": "Size tiers differ between choices, and Checkbox/Radio lg repeats the reasoning that removed sm",
+      "report": "C-choices-marks.md",
+      "families": "checkbox, radio, switch, slider, chip, badge, count, presence",
+      "category": "consistency / api",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "lg keeps 14/20 text and an 8 gap, the same reasoning that removed sm. Presence exposes xs against the no-xs rule.",
+      "status": "open"
+    },
+    {
+      "id": "C-20",
+      "title": "Checkbox/Radio \"card\" shares nothing with Card",
+      "report": "C-choices-marks.md",
+      "families": "checkbox, radio (vs card)",
+      "category": "visual / consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Choice card: 12 corner, 12 inset, #e2 edge. Card: 24 corner, 16 inset, #ee edge and halo.",
+      "status": "open"
+    },
+    {
+      "id": "C-21",
+      "title": "Avatar's tone axis also switches treatment",
+      "report": "C-choices-marks.md",
+      "families": "avatar (vs badge)",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Neutral avatar is a soft plate; accent and inverse are solid. Badge accent is soft.",
+      "status": "open"
+    },
+    {
+      "id": "C-22",
+      "title": "Avatar renders a `<div>` that is nested inside Chip's `<button>` and Badge's `<span>`",
+      "report": "C-choices-marks.md",
+      "families": "Avatar",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Avatar renders a <div> inside Chip's <button> and Badge's <span> (invalid nesting).",
+      "status": "open"
+    },
+    {
+      "id": "C-23",
+      "title": "ChipGroup has no group semantics, and the docs describe single selection that doesn't exist",
+      "report": "C-choices-marks.md",
+      "families": "chip",
+      "category": "a11y / docs-drift",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "ChipGroup is a plain div with no role, label or roving focus; the manifest says it \"selects one value\" and the CSS promises a radio group.",
+      "status": "open"
+    },
+    {
+      "id": "C-24",
+      "title": "Removable Chip: native props land on the wrong element or are dropped",
+      "report": "C-choices-marks.md",
+      "families": "Chip",
+      "category": "api",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "A removable Chip spreads native props onto the inner action button (or drops them) and moves the ref to the remove button.",
+      "status": "open"
+    },
+    {
+      "id": "C-25",
+      "title": "Indicator `disabled` means \"hide\", and its labels are hard-coded",
+      "report": "C-choices-marks.md",
+      "families": "indicator (vs count)",
+      "category": "api",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "disabled returns null, and \"N notifications\" is a literal with no label prop (Count has one).",
+      "status": "open"
+    },
+    {
+      "id": "C-26",
+      "title": "Stale docs, where code or owner decisions have moved on",
+      "report": "C-choices-marks.md",
+      "families": "all",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "C-27",
+      "title": "Group spacing, legends and disabled groups differ across families",
+      "report": "C-choices-marks.md",
+      "families": "chip, badge-group, checkbox, radio (vs field)",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "ChipGroup gap 4/4 vs BadgeGroup 6/8; legend to options 12 vs Field label to control 6; a disabled fieldset dims options but not the legend.",
+      "status": "open"
+    },
+    {
+      "id": "C-28",
+      "title": "Forced-colours gaps in the marks",
+      "report": "C-choices-marks.md",
+      "families": "Avatar, Badge, choice cards",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Forced colours (unverified): the Avatar active ring is a box-shadow, the Badge dot is likely a square, a chosen card looks unchosen.",
+      "status": "open",
+      "typeNote": "fix (unverified)"
+    },
+    {
+      "id": "C-29",
+      "title": "Unmarked literals in Slider; compact density splits the thumb from the glyph ladder",
+      "report": "C-choices-marks.md",
+      "families": "Slider",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "6px and 80px unmarked literals; compact density makes the sm thumb 12 while checkbox glyphs stay 16.",
+      "status": "open"
+    },
+    {
+      "id": "C-30",
+      "title": "Gallery hygiene",
+      "report": "C-choices-marks.md",
+      "families": "checkbox, radio, switch, count, indicator, badge",
+      "category": "gallery",
+      "severity": "low",
+      "type": "FIX",
+      "route": "hygiene",
+      "status": "open"
+    },
+    {
+      "id": "C-31",
+      "title": "Open owner questions still unresolved in specs and handoff",
+      "report": "C-choices-marks.md",
+      "families": "count, badge, slider/progress, icons",
+      "category": "docs-drift",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Count text 14 or 12; Badge md 0.7px hang; Slider thumb 16 vs 20, drag response, value tooltip, Shift+arrow; 12px glyphs in Badge and NumberField.",
+      "status": "open"
+    },
+    {
+      "id": "C-32",
+      "title": "Chip `assist`, `suggestion` and `filter` look identical",
+      "report": "C-choices-marks.md",
+      "families": "chip",
+      "category": "visual",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "kind is an interaction role, but the tiles present them as visual variants.",
+      "status": "open"
+    },
+    {
+      "id": "D-1",
+      "title": "Nav section title weight 500 breaks the weight rule and splits the \"one label pattern\"",
+      "report": "D-navigation.md",
+      "families": "nav, menu, command-palette, context-menu (Combobox and Select peers)",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S2"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)",
+      "note": "S2: rule rewritten to match the code"
+    },
+    {
+      "id": "D-2",
+      "title": "List rows put the label column in different places",
+      "report": "D-navigation.md",
+      "families": "nav, menu, command-palette, context-menu, tree-view (Select, Combobox peers)",
+      "category": "consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S11"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "D-3",
+      "title": "Tree view rests in muted ink; Nav moved to default",
+      "report": "D-navigation.md",
+      "families": "tree-view, nav (Menu, Palette, Table peers)",
+      "category": "consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Tree rows rest in fg-muted \"as Nav\", but Nav switched to fg-default on 09-27. Tree is now the only muted list.",
+      "status": "open"
+    },
+    {
+      "id": "D-4",
+      "title": "A selected Tree row loses its plate under the pointer",
+      "report": "D-navigation.md",
+      "families": "Tree view",
+      "category": "system-rule",
+      "severity": "high",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "A selected (not current) row drops from #ee to #f3 under the pointer: the hover rule excludes aria-current but not aria-selected and outranks selection (tree-view.css:44-46). The cohesion test misses it.",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "D-5",
+      "title": "Tree view disabled rows use disabled ink, not the 50% dim",
+      "report": "D-navigation.md",
+      "families": "Tree view",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Disabled rows grey only the text; icon and chevron stay full strength. Nav, Menu and Tabs dim the whole row to 50%.",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "D-6",
+      "title": "Hover plates of nested controls vanish on a hovered row and show as holes on a current row",
+      "report": "D-navigation.md",
+      "families": "tree-view, nav (ghost Button inside rows)",
+      "category": "visual",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S11"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "D-7",
+      "title": "Four different focus indicators on list rows",
+      "report": "D-navigation.md",
+      "families": "menu, command-palette, nav, tree-view, tabs, breadcrumb (Select peer)",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S11"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "D-8",
+      "title": "Menu shortcuts render four ways, two of which break the type rules",
+      "report": "D-navigation.md",
+      "families": "menu, context-menu, command-palette, nav (Kbd peer)",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S12"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "D-9",
+      "title": "Menus have three selection models, and the one in the gallery is not announced",
+      "report": "D-navigation.md",
+      "families": "menu (Combobox, Select, ModelPicker, Composer peers)",
+      "category": "api / a11y",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S13"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 5)"
+    },
+    {
+      "id": "D-10",
+      "title": "Submenu is listed and tiled but not built",
+      "report": "D-navigation.md",
+      "families": "menu, context-menu",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "The tile is two static menus with an arrow in the shortcut slot and a forced highlight; no aria-haspopup, no Right/Left keys, no RTL mirroring.",
+      "status": "open"
+    },
+    {
+      "id": "D-11",
+      "title": "Three menu keyboard handlers diverge",
+      "report": "D-navigation.md",
+      "families": "Menu, Context menu, Command palette",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Three keyboard handlers: typeahead resets at 500, 1000 or 300ms; a checkable row closes an anchored Menu but not a Context menu.",
+      "status": "open"
+    },
+    {
+      "id": "D-12",
+      "title": "Menu with `trigger` silently drops consumer props",
+      "report": "D-navigation.md",
+      "families": "Menu",
+      "category": "api",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Menu with trigger overwrites the consumer's onKeyDown, onClick, id and aria-labelledby (primitives.tsx:1077).",
+      "status": "open"
+    },
+    {
+      "id": "D-13",
+      "title": "RTL: chevrons do not mirror; Tree arrows do not reverse",
+      "report": "D-navigation.md",
+      "families": "Tree view, Nav, Calendar, Panel",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Chevrons rotate by a fixed angle, so they point the physical way in RTL; Tree's Left/Right keys don't swap.",
+      "status": "open"
+    },
+    {
+      "id": "D-14",
+      "title": "Forced colors erase current, selected and marker states",
+      "report": "D-navigation.md",
+      "families": "Nav, Tree view, Menu",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Forced colours erase Nav current, the Nav marker, Tree selection and Menu data-selected (backgrounds only).",
+      "status": "open"
+    },
+    {
+      "id": "D-15",
+      "title": "Menu group labels are off the icon column; the Palette spec says otherwise",
+      "report": "D-navigation.md",
+      "families": "Menu, Command palette",
+      "category": "visual",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Menu group labels are cap-centred at ~11.7, not on the icon column the Palette spec claims.",
+      "status": "open"
+    },
+    {
+      "id": "D-16",
+      "title": "Row radius comes from different roles; they diverge off the Standard preset",
+      "report": "D-navigation.md",
+      "families": "menu, command-palette, nav, tree-view (Select peer)",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Rows in floating surfaces are concentric; standalone rows use radius-row; Select options become capsules under Pill.",
+      "status": "open"
+    },
+    {
+      "id": "D-17",
+      "title": "Menu minimum width is stated as 256 in one place and built as 224 in another",
+      "report": "D-navigation.md",
+      "families": "Menu",
+      "category": "consistency",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Menu minimum width is 256 in one place and 224 in another.",
+      "status": "open"
+    },
+    {
+      "id": "D-18",
+      "title": "API vocabulary differs across the families",
+      "report": "D-navigation.md",
+      "families": "nav, menu, context-menu, tree-view, tabs, breadcrumb, command-palette (Segmented, Combobox peers)",
+      "category": "api",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "D-19",
+      "title": "The collapsed breadcrumb marker is not reachable",
+      "report": "D-navigation.md",
+      "families": "breadcrumb",
+      "category": "a11y",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "The ellipsis is a static span: no keyboard stop, nothing opens.",
+      "status": "open"
+    },
+    {
+      "id": "D-20",
+      "title": "Nav \"expandable\" children are not indented and repeat Tree view's job",
+      "report": "D-navigation.md",
+      "families": "nav, tree-view",
+      "category": "visual",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Nested nav children sit on the parent's column.",
+      "status": "open"
+    },
+    {
+      "id": "D-21",
+      "title": "Vertical tabs with a track put the indicator and the track on opposite sides",
+      "report": "D-navigation.md",
+      "families": "Tabs",
+      "category": "visual",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Vertical tabs with a track put the indicator and the track on opposite sides.",
+      "status": "open"
+    },
+    {
+      "id": "D-22",
+      "title": "MenuSearch is a third search-plus-list pattern with no keyboard wiring",
+      "report": "D-navigation.md",
+      "families": "menu (Combobox, Command palette peers)",
+      "category": "interaction",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Combobox and Command palette already own filtered lists with active-descendant.",
+      "status": "open"
+    },
+    {
+      "id": "D-23",
+      "title": "Command palette scale: the list model vs the products (owner question still open)",
+      "report": "D-navigation.md",
+      "families": "command-palette",
+      "category": "visual",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "ChatGPT and Notion draw the palette larger than their menus (corner 16–20, rows 36–48); Area keeps the list model (12 / 32).",
+      "status": "open"
+    },
+    {
+      "id": "D-24",
+      "title": "Descriptions and empty states appear in three different places",
+      "report": "D-navigation.md",
+      "families": "menu, command-palette (Combobox peer)",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Row descriptions are placed three ways; empty states differ between Combobox, Command palette and Menu search.",
+      "status": "open"
+    },
+    {
+      "id": "D-25",
+      "title": "Palette footer hints hover with the translucent wash on a known ground",
+      "report": "D-navigation.md",
+      "families": "Command palette",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Footer hints hover with the translucent wash on a known ground (should be the opaque row pair).",
+      "status": "open"
+    },
+    {
+      "id": "D-26",
+      "title": "Specs and docs contradict the code and later owner decisions",
+      "report": "D-navigation.md",
+      "families": "all seven",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "D-27",
+      "title": "Gallery hygiene",
+      "report": "D-navigation.md",
+      "families": "breadcrumb, command-palette, tree-view, menu, tabs, nav",
+      "category": "gallery",
+      "severity": "low",
+      "type": "FIX",
+      "route": "hygiene",
+      "status": "open"
+    },
+    {
+      "id": "D-28",
+      "title": "Tests do not guard Tree view, Nav keyboard, or selection-under-hover",
+      "report": "D-navigation.md",
+      "families": "Tree view, Nav",
+      "category": "tests",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "No test guards Tree view, Nav keyboard, or selection-under-hover.",
+      "status": "open"
+    },
+    {
+      "id": "D-29",
+      "title": "Small CSS and a11y leftovers",
+      "report": "D-navigation.md",
+      "families": "Lists",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Small CSS and a11y leftovers (see report).",
+      "status": "open"
+    },
+    {
+      "id": "E-1",
+      "title": "Surface titles are weight 500; DESIGN_SYSTEM says titles are 400",
+      "report": "E-overlays-feedback.md",
+      "families": "Popover, Dialog, Alert, Toast, Hover card (shared with Card and Panel)",
+      "category": "docs-drift / system-rule",
+      "severity": "high",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S2"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)",
+      "note": "S2: rule rewritten to match the code"
+    },
+    {
+      "id": "E-2",
+      "title": "Dialog's close button is 32px; the nested-close rule says 28px",
+      "report": "E-overlays-feedback.md",
+      "families": "Dialog (against Popover, Toast, Alert)",
+      "category": "system-rule / consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S9"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)",
+      "note": "Dialog 32 written as the exception (S9)"
+    },
+    {
+      "id": "E-3",
+      "title": "Alert's dismiss is built differently from every other close",
+      "report": "E-overlays-feedback.md",
+      "families": "Alert (against Toast, Popover, Dialog, Badge)",
+      "category": "consistency / visual",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "rule",
+      "rules": [
+        "S9"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "E-4",
+      "title": "Escape on a tooltip also closes the Popover or Dialog underneath (from code reading)",
+      "report": "E-overlays-feedback.md",
+      "families": "Tooltip, Hover card",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Escape to hide a tooltip also closes the Popover or modal Dialog underneath: the capture listener neither stops nor prevents the event (Overlays.tsx:216-221, HoverCard.tsx:44-46).",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "E-5",
+      "title": "Hover card uses the old positioning path, 4px from its link, while Popover uses 8px",
+      "report": "E-overlays-feedback.md",
+      "families": "Hover card, Popover (overlay behavior)",
+      "category": "consistency / docs-drift",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Popover/Menu/Tooltip use JS computePosition (flip, shift, data-side). Hover card uses CSS position-area 4px from its link and scales from its centre; Popover sits 8px away.",
+      "rules": [
+        "S16"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "E-6",
+      "title": "The overlay and feedback APIs name the same ideas differently",
+      "report": "E-overlays-feedback.md",
+      "families": "all overlays, Alert, Toast",
+      "category": "api",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "E-7",
+      "title": "A Dialog opened from a trigger without a title has no name; its props reach the wrong element",
+      "report": "E-overlays-feedback.md",
+      "families": "Dialog",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "With trigger and no title the native dialog has no name, and rest/ref (aria-label included) land on the inner roleless div (primitives.tsx:1314-1354).",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "E-8",
+      "title": "Popover is not labelled by its title, has no close part, and uses a fixed h2",
+      "report": "E-overlays-feedback.md",
+      "families": "Popover, Hover card",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "PopoverTitle is never wired to aria-labelledby, there is no PopoverClose, and PopoverTitle is a fixed h2 that Hover card drops into running text.",
+      "status": "partly",
+      "resolved": "PR 29 (batch 1)",
+      "note": "PopoverTitle labels its Popover (batch 1); PopoverClose and the fixed h2 are still open"
+    },
+    {
+      "id": "E-9",
+      "title": "Reduced motion freezes indeterminate Progress into what looks like 35% done",
+      "report": "E-overlays-feedback.md",
+      "families": "Progress",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Under reduced motion the indeterminate 35% segment stops at the start and looks exactly like value={35}. Spinner slows instead; Progress should too, or show a still full stripe.",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "E-10",
+      "title": "Progress, Spinner and Tooltip have no forced-colors rules",
+      "report": "E-overlays-feedback.md",
+      "families": "Progress, Spinner, Tooltip",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "No forced-colors rules: the fill and the masked arc are backgrounds (likely erased), and Tooltip has no border to keep an edge (forced-colors.css).",
+      "status": "open"
+    },
+    {
+      "id": "E-11",
+      "title": "Toast's announcements, timing and stacking are left entirely to consumers",
+      "report": "E-overlays-feedback.md",
+      "families": "Toast (against Alert)",
+      "category": "a11y / interaction",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Each Toast creates its own filled live region (often not announced), a danger Toast is status while a danger Alert is alert, and there's no region, timer, pause or stacking.",
+      "status": "open"
+    },
+    {
+      "id": "E-12",
+      "title": "Tone sets and neutral icon ink differ between Alert, Toast and Badge",
+      "report": "E-overlays-feedback.md",
+      "families": "Alert, Toast (Badge peer)",
+      "category": "consistency / api",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S19"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "E-13",
+      "title": "Alert and Toast set the title-to-description gap 1px tighter than Popover's rule",
+      "report": "E-overlays-feedback.md",
+      "families": "Alert, Toast",
+      "category": "visual",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Title → description gap 4 vs Popover's 5 (the typography rule's baseline-to-cap 15).",
+      "status": "open"
+    },
+    {
+      "id": "E-14",
+      "title": "DESIGN_SYSTEM's radius text no longer describes the surfaces",
+      "report": "E-overlays-feedback.md",
+      "families": "all surfaces",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "rule",
+      "rules": [
+        "S3"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)"
+    },
+    {
+      "id": "E-15",
+      "title": "The floating lift is a literal written out nine times",
+      "report": "E-overlays-feedback.md",
+      "families": "Popover, Menu, Dialog, Toast, Hover card (and peers)",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S10"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "E-16",
+      "title": "Input's action hint is a second tooltip without the Tooltip's behavior",
+      "report": "E-overlays-feedback.md",
+      "families": "Input (action hint)",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "InputAction's hint is a CSS :hover tooltip: no delay, shows on click, no Escape (WCAG 1.4.13), not in the top layer, and its fade never runs (input.css:210-226).",
+      "status": "open"
+    },
+    {
+      "id": "E-17",
+      "title": "A trailing keycap in a tooltip is not centred when it uses the small Kbd",
+      "report": "E-overlays-feedback.md",
+      "families": "Tooltip",
+      "category": "visual",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "A 16px keycap in a tooltip sits 4 from the end but 6 top and bottom; inset.css has kbd--small rules for Button, Input, Menu but not Tooltip.",
+      "status": "open"
+    },
+    {
+      "id": "E-18",
+      "title": "Tooltip and Hover card respond to input differently",
+      "report": "E-overlays-feedback.md",
+      "families": "Tooltip, Hover card",
+      "category": "interaction",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Tooltip opens for mouse only, Hover card also for pen; focus opens Tooltip at once but Hover card after 700ms; two Escape handlers.",
+      "status": "open"
+    },
+    {
+      "id": "E-19",
+      "title": "Dialog has no enter or exit motion; the anchored surfaces fade and scale",
+      "report": "E-overlays-feedback.md",
+      "families": "Dialog, Toast (against Popover, Menu, Tooltip, Hover card)",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Anchored surfaces fade and scale over 150ms; the modal Dialog and its scrim appear instantly.",
+      "status": "open"
+    },
+    {
+      "id": "E-20",
+      "title": "Modal Dialog leaves page scroll and a few edge cases to the browser",
+      "report": "E-overlays-feedback.md",
+      "families": "Dialog",
+      "category": "interaction",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Page behind a modal still scrolls; sizes use 100vh; a drag from inside to the scrim closes the dialog.",
+      "status": "open"
+    },
+    {
+      "id": "E-21",
+      "title": "Status semantics for Spinner and Progress are fragile",
+      "report": "E-overlays-feedback.md",
+      "families": "Spinner, Progress",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "A labelled Spinner is an empty status region named only by aria-label (likely silent); Progress has no name without label and announces the raw, unclamped value.",
+      "status": "open"
+    },
+    {
+      "id": "E-22",
+      "title": "The Progress rail question is still open, and Spinner's track is now darker than the rail",
+      "report": "E-overlays-feedback.md",
+      "families": "Progress, Spinner (Slider and Switch as peers)",
+      "category": "visual",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S5"
+      ],
+      "status": "partly",
+      "resolved": "this branch (phase 2)",
+      "note": "Rail settled at #e2 (S5); the Spinner track stays its ink at 25% (about #c9), darker than the rail, which S5 B did not cover"
+    },
+    {
+      "id": "E-23",
+      "title": "Alert links take different ink in-place and in the banner",
+      "report": "E-overlays-feedback.md",
+      "families": "Alert",
+      "category": "visual",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "The same link prop renders in two colours depending on layout.",
+      "status": "open"
+    },
+    {
+      "id": "E-24",
+      "title": "Specs and the handoff are stale for these families",
+      "report": "E-overlays-feedback.md",
+      "families": "all nine plus overlay behavior",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "E-25",
+      "title": "Gallery copy and icons break the demo vocabulary",
+      "report": "E-overlays-feedback.md",
+      "families": "Hover card, Popover, Alert, Toast",
+      "category": "gallery",
+      "severity": "low",
+      "type": "FIX",
+      "route": "hygiene",
+      "status": "open"
+    },
+    {
+      "id": "E-26",
+      "title": "Pass-review components and unused demos are still in the gallery source",
+      "report": "E-overlays-feedback.md",
+      "families": "Dialog, Popover, Toast, Alert",
+      "category": "gallery",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "GalleryReview rows for Dialog, Popover, Toast (and Alert in reviews.tsx) still render; three unused Popover arrow demos.",
+      "status": "open"
+    },
+    {
+      "id": "E-27",
+      "title": "Demo accessibility and tile naming",
+      "report": "E-overlays-feedback.md",
+      "families": "Skeleton, Tooltip, Toast",
+      "category": "gallery",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Skeleton card's aria-label sits on a roleless div; tile titles use three vocabularies; ToastDefault on the docs page is the success tone.",
+      "status": "open"
+    },
+    {
+      "id": "E-28",
+      "title": "Literal values outside private slots, and palette rungs, in these families",
+      "report": "E-overlays-feedback.md",
+      "families": "Popover, Skeleton, Toast, Spinner",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "fix",
+      "summary": "Literals on real properties outside --_* slots (row-gap 5px, 65%, 50px, 360px, 1.8s).",
+      "status": "open"
+    },
+    {
+      "id": "F-1",
+      "title": "Card corner ignores the radius presets (Sharp stays round, Pill turns cards into stadiums)",
+      "report": "F-surfaces-inspector.md",
+      "families": "card (compared with dialog, popover, panel, table)",
+      "category": "system-rule",
+      "severity": "high",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S3"
+      ],
+      "status": "partly",
+      "resolved": "this branch (phase 1)",
+      "note": "Sharp and Pill fixed (S3); a small card still derives from the medium control radius"
+    },
+    {
+      "id": "F-2",
+      "title": "Card radius docs still describe \"container × 2\" and 12/16/24",
+      "report": "F-surfaces-inspector.md",
+      "families": "card, panel, table",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "F-3",
+      "title": "Card edge versus Table frame: DESIGN_SYSTEM says both \"neutral 100\" and \"divider role\"",
+      "report": "F-surfaces-inspector.md",
+      "families": "card, table",
+      "category": "docs-drift / consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S7"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 2)"
+    },
+    {
+      "id": "F-4",
+      "title": "Elevation that bypasses the Surface axis: Card halo and floating lift are literals, and the Elevated preset erases Table's frame",
+      "report": "F-surfaces-inspector.md",
+      "families": "card, table, panel, calendar, color-picker",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S10"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "id": "F-5",
+      "title": "ColorSwatch edge is drawn with the decorative `border-width`, so it disappears under Elevated",
+      "report": "F-surfaces-inspector.md",
+      "families": "Color swatch",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "The swatch edge reads --area-border-width, which the Elevated surface preset sets to 0; a white swatch then disappears. Required edges use stroke-width (color.css:33).",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "F-6",
+      "title": "ColorPicker's internal rules are darker than its container edge",
+      "report": "F-surfaces-inspector.md",
+      "families": "Color picker",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Header and swatch rules are border-faint #e2 inside a #f3 edge, breaking the owner's 09-27 rule that inner rules are never darker than the container (color.css:221,357).",
+      "rules": [
+        "S8"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "F-7",
+      "title": "ColorField and ColorPicker draw different seams in the same hex-and-opacity row (open owner question)",
+      "report": "F-surfaces-inspector.md",
+      "families": "color-field, color-picker",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "ColorField divides hex and opacity with a #f3 rule; ColorPicker uses a 1px surface gap like Figma. Open since the ColorPicker pass.",
+      "status": "open"
+    },
+    {
+      "id": "F-8",
+      "title": "Surface titles are 500 in code, while DESIGN_SYSTEM and several specs say 400",
+      "report": "F-surfaces-inspector.md",
+      "families": "card, panel, calendar (also alert, toast, popover, outside this scope)",
+      "category": "system-rule / docs-drift",
+      "severity": "high",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S2"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)",
+      "note": "S2: rule rewritten to match the code"
+    },
+    {
+      "id": "F-9",
+      "title": "Calendar keyboard focus gets stuck in front of an unavailable date",
+      "report": "F-surfaces-inspector.md",
+      "families": "Calendar",
+      "category": "a11y",
+      "severity": "high",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Arrowing onto an unavailable date traps focus: disabled days are native disabled buttons, .focus() fails, and the next arrow computes from the same date (Calendar.tsx:164-190). APG keeps them focusable with aria-disabled.",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "F-10",
+      "title": "Calendar outside days are clickable but painted with disabled ink, and clicking one selects a date the user can't see",
+      "report": "F-surfaces-inspector.md",
+      "families": "calendar",
+      "category": "interaction / system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Clicking 1 October in September commits a value with no visible change; outside days use fg-disabled, which is reserved for disabled text.",
+      "status": "open"
+    },
+    {
+      "id": "F-11",
+      "title": "Hover is invisible on Calendar's circle days",
+      "report": "F-surfaces-inspector.md",
+      "families": "Calendar",
+      "category": "visual",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Hover is invisible on circle days: they rest on #f3 and the hover rule paints translucent bg-hover, which composites to the same #f3 (calendar.css:84,121).",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "F-12",
+      "title": "Calendar's 32px day plates use the small-control radius, beside 32px Buttons at radius 8",
+      "report": "F-surfaces-inspector.md",
+      "families": "calendar (compared with button and the Schedule composition)",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Days grew to 32 but kept radius 6; the Schedule puts them beside 32px Buttons at 8.",
+      "rules": [
+        "S4"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "F-13",
+      "title": "Calendar ignores form reset; its sibling pickers handle it",
+      "report": "F-surfaces-inspector.md",
+      "families": "Calendar",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Uncontrolled Calendar ignores form reset; ColorField, ColorSwatchPicker, AlignmentPicker and ColorPicker all listen for it.",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)"
+    },
+    {
+      "id": "F-14",
+      "title": "Disabled paint: double dimming in Calendar and ColorPicker, and an undimmed frame in AlignmentPicker",
+      "report": "F-surfaces-inspector.md",
+      "families": "Calendar, Color picker, Alignment picker",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Disabled dims twice (nested Buttons end at 25%, fields get field paint × 50%) and AlignmentPicker's frame stays at 100%.",
+      "status": "open"
+    },
+    {
+      "id": "F-15",
+      "title": "ColorPicker's area shows a focus ring on pointer use and doubles it on keyboard",
+      "report": "F-surfaces-inspector.md",
+      "families": "Color picker",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "The 2D area keeps a focus ring after any mouse drag and shows two rings on keyboard focus.",
+      "status": "open"
+    },
+    {
+      "id": "F-16",
+      "title": "ColorPicker controls reverse in RTL while their gradients stay physical",
+      "report": "F-surfaces-inspector.md",
+      "families": "Color picker",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "In RTL the area's arrow keys flip while its gradient stays physical; native range tracks mirror over physical 90deg gradients, so thumbs leave their colours. AlignmentPicker forces dir=ltr.",
+      "status": "open"
+    },
+    {
+      "id": "F-17",
+      "title": "Panel's Sections tile mixes an outline Select into an all-soft panel",
+      "report": "F-surfaces-inspector.md",
+      "families": "Panel",
+      "category": "gallery",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "The Sections tile puts an outline Select among soft NumberFields, breaking \"a Panel's rows are all soft\".",
+      "status": "open"
+    },
+    {
+      "id": "F-18",
+      "title": "ColorPicker's model Select is outline among soft value fields",
+      "report": "F-surfaces-inspector.md",
+      "families": "color-picker",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Copies Figma but breaks \"one surface, one field style\" that Panel applied to the same evidence.",
+      "status": "open"
+    },
+    {
+      "id": "F-19",
+      "title": "The pickers name themselves differently, and ColorPicker overrides a consumer's `aria-label`",
+      "report": "F-surfaces-inspector.md",
+      "families": "Pickers, Property list",
+      "category": "api",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Five families, four naming contracts; ColorPicker overwrites a consumer's aria-label; onValueChange passes (value, event) in two and (value) in three; ColorSwatchPicker always preselects so required can't fail.",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "F-20",
+      "title": "`variant=\"surface\"` has two meanings, and ColorPicker has no plain treatment",
+      "report": "F-surfaces-inspector.md",
+      "families": "calendar, alignment-picker, color-picker (plus toolbar)",
+      "category": "api / consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "surface is a lifted plate in Calendar and Toolbar but a soft fill in AlignmentPicker. ColorPicker always paints a floating surface, so inside a Popover it draws a second frame.",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "F-21",
+      "title": "Calendar's gallery default is not the manifest default",
+      "report": "F-surfaces-inspector.md",
+      "families": "calendar",
+      "category": "gallery",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Manifest default is plain; every tile except \"Plain\" passes surface.",
+      "status": "open"
+    },
+    {
+      "id": "F-22",
+      "title": "Heading semantics are inconsistent: CardTitle is a div, the Panel title is a span, and Calendar months are always h2",
+      "report": "F-surfaces-inspector.md",
+      "families": "Card, Panel, Calendar",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "CardTitle is a div, Panel's title a span above h3 sections, Calendar months a hard-coded h2 with aria-live on every month.",
+      "status": "open"
+    },
+    {
+      "id": "F-23",
+      "title": "Table: the scroll wrapper can't be reached by keyboard, and interactive rows promise a click only one cell keeps",
+      "report": "F-surfaces-inspector.md",
+      "families": "Table",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "The horizontal scroll wrapper can't be focused or named (axe scrollable-region-focusable); ref and props only reach <table>; interactive rows paint a whole-row hover for a first-cell link.",
+      "status": "open"
+    },
+    {
+      "id": "F-24",
+      "title": "Table's sort header: a padded Button in a padded cell misaligns the label and makes the header taller",
+      "report": "F-surfaces-inspector.md",
+      "families": "Table",
+      "category": "visual",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "A ghost sm Button in a padded th makes the sort header ~44 tall (36 elsewhere) and moves the label off the column edge; the arrow is a text character.",
+      "status": "open"
+    },
+    {
+      "id": "F-25",
+      "title": "Stale specs, statuses and system text in these families",
+      "report": "F-surfaces-inspector.md",
+      "families": "all ten",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "F-26",
+      "title": "Panel insets don't follow density, although the code comment says they do",
+      "report": "F-surfaces-inspector.md",
+      "families": "panel (also property-list and box-field through `--_panel-*`)",
+      "category": "system-rule / docs-drift",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Insets 12/16 and gaps 8/12 are flat spacing; under compact the controls shrink and insets stay.",
+      "status": "open"
+    },
+    {
+      "id": "F-27",
+      "title": "PropertyList and the Panel chevron read Panel's generic private `--_inset`",
+      "report": "F-surfaces-inspector.md",
+      "families": "Property list, Panel",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "The handle reads the generic private --_inset, which ColorPicker (15) and Popover (11) also define.",
+      "status": "open"
+    },
+    {
+      "id": "F-28",
+      "title": "Property list tiles mix tiers: md panels with sm controls",
+      "report": "F-surfaces-inspector.md",
+      "families": "property-list, panel",
+      "category": "gallery / consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Panel audit rule: controls at the panel's tier. Panel has no size context.",
+      "status": "open"
+    },
+    {
+      "id": "F-29",
+      "title": "A linked Card covers controls outside four named slots",
+      "report": "F-surfaces-inspector.md",
+      "families": "Card",
+      "category": "interaction",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "A linked Card only lifts controls in four named slots above its stretched link; a control in a well, carousel or a direct-child Slider becomes unclickable.",
+      "status": "open"
+    },
+    {
+      "id": "F-30",
+      "title": "Four swatch shapes across the system; ColorSwatch's corner is not a radius role",
+      "report": "F-surfaces-inspector.md",
+      "families": "color-swatch, color-swatch-picker, color-field (compared with chip and token)",
+      "category": "consistency / system-rule",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "ColorSwatch 20% of side (rounds under Sharp), Chip swatches are circles, Token swatches radius-small − 2, the palette's checked cell switches role. Figma's split chit still open.",
+      "status": "open"
+    },
+    {
+      "id": "F-31",
+      "title": "Picker cells: two size ladders and two selection models, and the Alignment grid question is still open",
+      "report": "F-surfaces-inspector.md",
+      "families": "color-swatch-picker, alignment-picker",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Swatch cells 24/28/32, alignment cells 20/24/32; plate+ring vs bars. Figma sizes the alignment grid to the layout (88 × 56).",
+      "status": "open"
+    },
+    {
+      "id": "F-32",
+      "title": "ColorPicker tracks and thumbs differ from Slider's",
+      "report": "F-surfaces-inspector.md",
+      "families": "color-picker (compared with slider)",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "16px pill tracks and ringed thumbs vs Slider's 4px rail. Deliberate (Figma).",
+      "status": "open"
+    },
+    {
+      "id": "F-33",
+      "title": "Surface geometry map (corners and insets) for the guide",
+      "report": "F-surfaces-inspector.md",
+      "families": "card, panel, table, calendar, color-picker (compared with dialog, popover)",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S3"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)"
+    },
+    {
+      "id": "F-34",
+      "title": "RTL chevrons point the physical way in Calendar and Panel",
+      "report": "F-surfaces-inspector.md",
+      "families": "calendar, panel",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "report",
+      "status": "open"
+    },
+    {
+      "id": "F-35",
+      "title": "Test and guard gaps for these families",
+      "report": "F-surfaces-inspector.md",
+      "families": "Calendar, Card, Table, Color picker",
+      "category": "tests",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "No Calendar keyboard test (the source of F-9); the cohesion lift guard omits .area-color-picker; nothing tests inner-rule vs container-edge.",
+      "status": "open"
+    },
+    {
+      "id": "F-36",
+      "title": "Palette rungs used directly where a semantic role exists or is needed",
+      "report": "F-surfaces-inspector.md",
+      "families": "Card, Color swatch",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Card edge and media, and the swatch edge, read neutral palette rungs where bg-component and bg-stripe already match.",
+      "status": "open"
+    },
+    {
+      "id": "F-37",
+      "title": "Gallery hygiene in these families",
+      "report": "F-surfaces-inspector.md",
+      "families": "all ten",
+      "category": "gallery",
+      "severity": "low",
+      "type": "FIX",
+      "route": "hygiene",
+      "status": "open"
+    },
+    {
+      "id": "F-38",
+      "title": "Reveal-on-hover affordances fade at different speeds",
+      "report": "F-surfaces-inspector.md",
+      "families": "card, panel, property-list",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Card overlay fades over 200ms; Panel chevron and PropertyList handle appear instantly.",
+      "status": "open"
+    },
+    {
+      "id": "G-1",
+      "title": "Quiet controls use two different inks",
+      "report": "G-conversation-code.md",
+      "families": "Message, Prompt suggestions, Code block (compared with Model picker, Scroll to latest, Composer actions and Button)",
+      "category": "consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S6"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 2)"
+    },
+    {
+      "id": "G-2",
+      "title": "Composer and Code block sit on the page with the faintest edge",
+      "report": "G-conversation-code.md",
+      "families": "Composer, Code block (compared with Card, Input and Textarea)",
+      "category": "visual / system-rule",
+      "severity": "high",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S7"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 2)"
+    },
+    {
+      "id": "G-3",
+      "title": "Dark mode: Code block rules and inline Code edge match their own fill",
+      "report": "G-conversation-code.md",
+      "families": "Code block, Code",
+      "category": "theming",
+      "severity": "high",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "In dark, bg-code, bg-stripe, bg-subtle and border-decorative are all #282828: header, toggle and flush rules vanish, inline Code loses its edge, Code subtle equals default (code.css:39,201,454).",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "G-4",
+      "title": "Code `subtle` is darker than the default in light, and identical in dark",
+      "report": "G-conversation-code.md",
+      "families": "Code, Token",
+      "category": "visual",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "subtle is #f7, darker than the default #fa, and identical to default in dark.",
+      "status": "open"
+    },
+    {
+      "id": "G-5",
+      "title": "The syntax palette reuses the danger tone and the accent",
+      "report": "G-conversation-code.md",
+      "families": "Code block",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Keywords use danger-vivid (the same red as the diff \"removed\" marker) and strings follow the accent axis.",
+      "status": "open"
+    },
+    {
+      "id": "G-6",
+      "title": "Code block language tabs look different from Tabs",
+      "report": "G-conversation-code.md",
+      "families": "Code block (compared with Tabs)",
+      "category": "consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "1px inset underline vs Tabs' 2px bar, a plate vs pending bar on hover, +2 vs inset focus, no forced-colours rule; the spec calls it a match.",
+      "status": "open"
+    },
+    {
+      "id": "G-7",
+      "title": "Code block and Code specs describe values the code no longer has",
+      "report": "G-conversation-code.md",
+      "families": "Code block, Code",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "G-8",
+      "title": "Separator spec and the DESIGN_SYSTEM divider list are stale",
+      "report": "G-conversation-code.md",
+      "families": "Separator (compared with the Menu, Toolbar and Nav separators)",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "G-9",
+      "title": "DESIGN_SYSTEM's keycap rule contradicts the approved Kbd",
+      "report": "G-conversation-code.md",
+      "families": "Kbd (the Code vs Kbd jobs)",
+      "category": "docs-drift",
+      "severity": "low",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "G-10",
+      "title": "Code and Kbd corners come from different radius roles, and Kbd has no cap",
+      "report": "G-conversation-code.md",
+      "families": "Code, Kbd",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Kbd becomes a pill under the Pill preset.",
+      "status": "open"
+    },
+    {
+      "id": "G-11",
+      "title": "Model picker has its own menu button without the shared overlay behaviour",
+      "report": "G-conversation-code.md",
+      "families": "Model picker",
+      "category": "interaction",
+      "severity": "high",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Hand-built menu button: CSS-anchor-only placement with margin 0, physical span-left, no ArrowDown/Up to open, no close on Tab. Menu trigger and SplitButton already use useAnchoredPosition (model-picker.css:12-23).",
+      "rules": [
+        "S16"
+      ],
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "G-12",
+      "title": "Only Model picker paints its trigger while the menu is open",
+      "report": "G-conversation-code.md",
+      "families": "Model picker (compared with Menu trigger Buttons, Split button, Select)",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "SplitButton, Menu triggers and Select don't show an open state.",
+      "status": "open"
+    },
+    {
+      "id": "G-13",
+      "title": "Composer `busy` disables the field, which removes focus and blocks typing",
+      "report": "G-conversation-code.md",
+      "families": "Composer",
+      "category": "interaction",
+      "severity": "high",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S18"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "G-14",
+      "title": "A disabled Composer doesn't disable its actions, though the docs say it does",
+      "report": "G-conversation-code.md",
+      "families": "Composer",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Composer disabled doesn't disable its actions, though the docs say \"actions dim\".",
+      "status": "open"
+    },
+    {
+      "id": "G-15",
+      "title": "Composer: IME guard, form reset, prop/ref targets and tests",
+      "report": "G-conversation-code.md",
+      "families": "Composer",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "IME guard reads isComposing only; always internally controlled so form reset won't clear it; ref goes to the textarea but rest to the outer div; no Composer tests.",
+      "status": "open"
+    },
+    {
+      "id": "G-16",
+      "title": "Prompt text doesn't line up with the composer's text (off by 8)",
+      "report": "G-conversation-code.md",
+      "families": "Prompt suggestions",
+      "category": "visual",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Suggestion text starts at 48, the composer's text at 56; ChatGPT aligns both at 52 (computed from CSS).",
+      "status": "open"
+    },
+    {
+      "id": "G-17",
+      "title": "The composer-derived 16 corner: rows, bubble and the Sharp preset",
+      "report": "G-conversation-code.md",
+      "families": "Prompt suggestions, Message, Composer",
+      "category": "system-rule",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Suggestion rows use 16 instead of the row role (8, as ChatGPT); composer, bubble and rows stay 8 under Sharp.",
+      "status": "open"
+    },
+    {
+      "id": "G-18",
+      "title": "Prompt-suggestion rows: no pressed plate and an oversized dismiss",
+      "report": "G-conversation-code.md",
+      "families": "Prompt suggestions",
+      "category": "visual",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Suggestion rows have no pressed plate, and the dismiss is 32 where the nested-action rule says 28.",
+      "rules": [
+        "S9"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "G-19",
+      "title": "Scroll to latest ignores content growth and drops focus",
+      "report": "G-conversation-code.md",
+      "families": "Scroll to latest",
+      "category": "interaction",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "The ResizeObserver watches only the container, so streamed growth is missed; focus drops to body after a click; no visible-state tile.",
+      "status": "open"
+    },
+    {
+      "id": "G-20",
+      "title": "Forced colours: separators, the selected language tab and line marks disappear",
+      "report": "G-conversation-code.md",
+      "families": "Separator, Code block",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Separators, the selected language-tab underline, the :target rail and highlight tints are backgrounds or shadows and vanish in forced colours.",
+      "status": "open"
+    },
+    {
+      "id": "G-21",
+      "title": "Code block: copy, toggle and link semantics",
+      "report": "G-conversation-code.md",
+      "families": "Code block",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Copy is likely announced twice and failure has no visual state; the toggle changes label and aria-expanded; collapsed lines stay focusable; every linked line number is a tab stop; \"Language\" is hard-coded.",
+      "status": "open"
+    },
+    {
+      "id": "G-22",
+      "title": "The stacked Composer's mode demo copies ModelPicker without its semantics",
+      "report": "G-conversation-code.md",
+      "families": "Composer",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "The stacked Composer demo's mode menu has no aria-checked, unlike ModelPicker.",
+      "status": "open"
+    },
+    {
+      "id": "G-23",
+      "title": "Example copy in conversation demos uses a product story and a real product name",
+      "report": "G-conversation-code.md",
+      "families": "Message, Prompt suggestions, Model picker, Scroll to latest, Composer",
+      "category": "gallery",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Against DESIGN_SYSTEM's Example copy.",
+      "status": "open"
+    },
+    {
+      "id": "G-24",
+      "title": "API naming and targets differ across the conversation and code families",
+      "report": "G-conversation-code.md",
+      "families": "all eight",
+      "category": "api",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "G-25",
+      "title": "Message: small spec and DS mismatches",
+      "report": "G-conversation-code.md",
+      "families": "Message",
+      "category": "docs-drift",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Small Message spec and DESIGN_SYSTEM mismatches.",
+      "status": "open"
+    },
+    {
+      "id": "G-26",
+      "title": "Code: inline type sizes and a 500 weight outside the ramp",
+      "report": "G-conversation-code.md",
+      "families": "Code, Code block",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "0.875em / 1.35 (renders 14 / 18.9 in body text, 12.25 / 16.5 in small text); diff markers are 500.",
+      "status": "open"
+    },
+    {
+      "id": "G-27",
+      "title": "Code block corner and code size against ChatGPT (open owner question)",
+      "report": "G-conversation-code.md",
+      "families": "Code block (compared with Card, Panel, Dialog)",
+      "category": "visual",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "ChatGPT's code block uses a 24 corner and 12/20 code; Area keeps 12 and 14/20.",
+      "status": "open"
+    },
+    {
+      "id": "G-28",
+      "title": "Separator: always a semantic separator; the inset hook is one-sided",
+      "report": "G-conversation-code.md",
+      "families": "Separator",
+      "category": "api",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "No decorative option; vertical rules need a flex parent; only the vertical inset has a hook.",
+      "status": "open"
+    },
+    {
+      "id": "H-1",
+      "title": "Pill preset turns non-Button shapes into capsules",
+      "report": "H-system.md",
+      "families": "Card, Color picker, Alignment picker, Kbd, Calendar, Alert banner, square Avatar",
+      "category": "theming",
+      "severity": "high",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Under the Pill preset every uncapped radius-control-* shape becomes a capsule: Card (1015px corner), the colour area (a circle), the alignment grid, Kbd, Calendar days, banner. The preset promises finite containers.",
+      "rules": [
+        "S3"
+      ],
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "H-2",
+      "title": "Sharp preset is not sharp: concentric derivations keep the inset as a radius",
+      "report": "H-system.md",
+      "families": "Card (12/16/20), Composer (8), Message bubble and Prompt suggestions (8), Toolbar surface (8), Segmented track (2), ColorSwatch (20% of side)",
+      "category": "theming",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S3"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)"
+    },
+    {
+      "id": "H-3",
+      "title": "Surface axis: shadows ignore `flat`, and required edges vanish at `elevated`",
+      "report": "H-system.md",
+      "families": "Button, choice card, Button group, Split button, Kbd, Nav",
+      "category": "theming",
+      "severity": "high",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Under the Elevated surface preset (border-width 0) required edges vanish: outline Buttons look ghost, the checked choice card loses its edge, joined-control dividers disappear, Kbd shrinks 20 → 18. Required edges should use stroke-width.",
+      "rules": [
+        "S10"
+      ],
+      "status": "done",
+      "resolved": "PR 28",
+      "typeNote": "fix (edges), decision (lift token)"
+    },
+    {
+      "id": "H-4",
+      "title": "Compact density readiness: about 41% of dimensions are fixed",
+      "report": "H-system.md",
+      "families": "all families. Worst ratios: Badge, Nav, Tooltip, Choice, Code block, Card, Calendar, Panel, ColorPicker, CommandPalette, Menu, Switch, Popover, Kbd, Dialog, Tabs, Indicator",
+      "category": "theming",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S21"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "H-5",
+      "title": "Dark mode depends on unmeasured `light-dark()` literals and a single shadow ink",
+      "report": "H-system.md",
+      "families": "Card, Alert, Toast, Dialog, CommandPalette, Skeleton, Count, the colour family, Toolbar",
+      "category": "theming",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S21"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "H-6",
+      "title": "Title weight: rule says 400, approved code says 500",
+      "report": "H-system.md",
+      "families": "Card, Dialog, Popover, Toast, Alert, Panel (title and section heading), Nav group label, Calendar month title, Code block marker",
+      "category": "consistency, docs-drift",
+      "severity": "high",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S2"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 1)",
+      "note": "S2: rule rewritten to match the code"
+    },
+    {
+      "id": "H-7",
+      "title": "Surface titles split in compact: Card shrinks, Dialog does not",
+      "report": "H-system.md",
+      "families": "Card, Dialog",
+      "category": "theming",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Card's title uses text-md (14/20 in compact) while Dialog's uses fixed 16/24; typography.md gives both the same role.",
+      "status": "open"
+    },
+    {
+      "id": "H-8",
+      "title": "Icon-to-label gap: 6 in Button, 8 in every other control, 12 in Menu",
+      "report": "H-system.md",
+      "families": "Button, Tree view vs Chip, Input, Select, Segmented, Nav, Tabs, Toolbar; Menu and CommandPalette",
+      "category": "consistency, tokens",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S14"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 5)"
+    },
+    {
+      "id": "H-9",
+      "title": "Value clusters that should become tokens (systematization input)",
+      "report": "H-system.md",
+      "families": "system",
+      "category": "tokens",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S10",
+        "S21"
+      ],
+      "status": "partly",
+      "resolved": "this branch (phase 4)",
+      "note": "Shadows became Surface roles (S10); the other value clusters wait for the token phase (S21b)"
+    },
+    {
+      "id": "H-10",
+      "title": "Anchored gap: Popover spec says 4, overlay spec and JS say 8",
+      "report": "H-system.md",
+      "families": "Popover (React `trigger`), CSS-anchored Popover, Model picker",
+      "category": "consistency, docs-drift",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Popover JS uses 8; the CSS anchor path, Model picker and popover.md use 4; Menu and Tooltip use 4.",
+      "rules": [
+        "S16"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "H-11",
+      "title": "Close and dismiss: three prop names, four sizes, three constructions",
+      "report": "H-system.md",
+      "families": "Alert, Toast, Badge, PromptSuggestions (`onDismiss`); Chip (`onRemove`); Dialog (`onClose`)",
+      "category": "api, consistency",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S9"
+      ],
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "id": "H-12",
+      "title": "Value, checked and open callbacks are inconsistent",
+      "report": "H-system.md",
+      "families": "Segmented, Switch, Checkbox, Chip, RadioGroup, Dialog, HoverCard, ContextMenu, Tooltip",
+      "category": "api",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "rule",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "H-13",
+      "title": "Axis vocabulary drift in the manifest",
+      "report": "H-system.md",
+      "families": "Kbd, Code/Token, Avatar/Badge, Button, IndicatorAnchor, Nav, Slider, Tabs, Table, Checkbox/Radio, Indicator, Toast, Alert, Card, Presence",
+      "category": "api",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "H-14",
+      "title": "Slot and collection naming",
+      "report": "H-system.md",
+      "families": "all composites",
+      "category": "api",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "rule",
+      "rules": [
+        "S17"
+      ],
+      "status": "open"
+    },
+    {
+      "id": "H-15",
+      "title": "Packaging gate red; React tests depend on the docs build",
+      "report": "H-system.md",
+      "families": "Packaging",
+      "category": "tests",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "test:consumer is red (stale Panel xs and Checkbox sm fixture) and two React tests depend on apps/docs/dist existing; the handoff still says the consumer check passes.",
+      "status": "done",
+      "resolved": "PR 28"
+    },
+    {
+      "id": "H-16",
+      "title": "Forced colours: fill-only states with no system-colour fallback",
+      "report": "H-system.md",
+      "families": "Progress, Spinner, Nav (current plate and marker), Tree view (selected and current), Table (selected rows), Code block (selected tab), Panel (resize focus pill), Avatar (active ring)",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "report",
+      "status": "open",
+      "typeNote": "fix (verify in emulation first)"
+    },
+    {
+      "id": "H-17",
+      "title": "Hover on touch: no `(hover: hover)` guard; Tree view actions unreachable",
+      "report": "H-system.md",
+      "families": "All hover plates",
+      "category": "a11y",
+      "severity": "medium",
+      "type": "DECISION",
+      "route": "fix",
+      "summary": "None of 63 :hover rules sit inside @media (hover: hover), so plates stick after a tap; Tree view row actions have no hover:none or focus-within reveal.",
+      "rules": [
+        "S21"
+      ],
+      "status": "open",
+      "typeNote": "decision + fix"
+    },
+    {
+      "id": "H-18",
+      "title": "Tree view disabled rows repaint instead of dimming",
+      "report": "H-system.md",
+      "families": "Tree view",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "report",
+      "status": "done",
+      "resolved": "PR 29 (batch 1)",
+      "note": "Same defect as D-5"
+    },
+    {
+      "id": "H-19",
+      "title": "Physical placement and dead RTL rules",
+      "report": "H-system.md",
+      "families": "Model picker, Select",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Physical position-area span-left; two dead RTL rules in navigation.css that inset.css overrides.",
+      "status": "open"
+    },
+    {
+      "id": "H-20",
+      "title": "Motion: one literal transition, and literal loops ignore `expressive`",
+      "report": "H-system.md",
+      "families": "Card, loops",
+      "category": "system-rule",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Card reveal uses a literal 200ms that ignores motion=none and reduced motion; literal loops don't follow the expressive preset.",
+      "status": "open"
+    },
+    {
+      "id": "H-21",
+      "title": "DESIGN_SYSTEM.md contradicts code and owner decisions",
+      "report": "H-system.md",
+      "families": "`docs/DESIGN_SYSTEM.md`",
+      "category": "docs-drift",
+      "severity": "medium",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "H-22",
+      "title": "COMPONENTS.md, specs/README.md and spec headers still say \"in review\"",
+      "report": "H-system.md",
+      "families": "`docs/COMPONENTS.md`, `docs/specs/README.md`, 15 spec headers, `docs/specs/checkbox.md`",
+      "category": "docs-drift",
+      "severity": "low",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "H-23",
+      "title": "Handoff contains stale and contradictory sections",
+      "report": "H-system.md",
+      "families": "`.Codex/HANDOFF.md`",
+      "category": "docs-drift",
+      "severity": "low",
+      "type": "FIX",
+      "route": "drift",
+      "status": "open"
+    },
+    {
+      "id": "H-24",
+      "title": "Gallery: leftover review rows, dead demos, off-vocabulary copy",
+      "report": "H-system.md",
+      "families": "Gallery",
+      "category": "gallery",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "15 GalleryReview rows still render (including the rejected Kbd edge proposal and a three-size Chip row); ~40 dead demo exports; practices.mjs uses \"Jane Doe\".",
+      "status": "open"
+    },
+    {
+      "id": "H-25",
+      "title": "Presence and Token \"compatibility\" is not reflected in code",
+      "report": "H-system.md",
+      "families": "Presence, Indicator, Token, Code",
+      "category": "api, docs-drift",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Presence is a full public component (xs–lg) that Indicator duplicates; the Token manifest says deprecated but the React export isn't marked.",
+      "status": "open"
+    },
+    {
+      "id": "H-26",
+      "title": "Open owner questions from cohesion-audit pass 4 still unanswered",
+      "report": "H-system.md",
+      "families": "Menu, ScrollToLatest, Combobox, Message, ModelPicker, SplitButton, ButtonGroup",
+      "category": "consistency",
+      "severity": "low",
+      "type": "DECISION",
+      "route": "call",
+      "summary": "Each Button dims separately, so the shared seam and overlapped border show at ~75%.",
+      "status": "open"
+    },
+    {
+      "id": "H-27",
+      "title": "Hard-coded English accessible names",
+      "report": "H-system.md",
+      "families": "Dialog, Calendar, Code block, Model picker",
+      "category": "a11y",
+      "severity": "low",
+      "type": "FIX",
+      "route": "fix",
+      "summary": "Hard-coded English accessible names: \"Close dialog\", \"Previous/Next month\", \"Language\", \"Model\".",
+      "status": "open"
+    }
+  ],
+  "drift": [
+    {
+      "where": "DESIGN_SYSTEM.md:81-83",
+      "says": "Keycaps radius 4, concentric inside Buttons",
+      "now": "6px everywhere, not concentric (owner 09-28)",
+      "status": "done",
+      "resolved": "this branch (phase 4)"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:41-43 · typography.md:47,50",
+      "says": "Every title and heading is 400",
+      "now": "Popover, Dialog, Toast, Alert, Card, Panel, Calendar titles are 500 (see S2)",
+      "status": "done",
+      "resolved": "this branch (phase 1)"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:79,86",
+      "says": "Outline fields keep shadow-1",
+      "now": "Only Select does (B-2)",
+      "status": "open"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:96-98",
+      "says": "Toolbar and menu separators use border-divider",
+      "now": "Both use border-decorative (owner 09-27)",
+      "status": "open"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:171-173 · cohesion-audit.md:53,68",
+      "says": "Every surface uses the container role; Card is twice the container radius",
+      "now": "Card = control-md + inset + step (22/24/28); Dialog 16; Tooltip 10; banner 6",
+      "status": "done",
+      "resolved": "this branch (phase 1)"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:88 vs :100-101",
+      "says": "Card edge is neutral 100 and also the divider role",
+      "now": "Card #ee (neutral 100), Table #e2 (divider)",
+      "status": "done",
+      "resolved": "this branch (phase 2)"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:52-55,163-164",
+      "says": "Checkbox/Radio 16px at sm and md; Badge 20/24/28; four families await owner review",
+      "now": "sm removed; Badge ramp changed; all Complete",
+      "status": "open"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:76-77",
+      "says": "Nested dismiss is 28px, small-button radius",
+      "now": "Dialog 32 (by decision), Chip 20/24/32 circles, Badge 12/16 circles (S9)",
+      "status": "done",
+      "resolved": "this branch (phase 3)"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:44",
+      "says": "Placeholder uses the disabled level",
+      "now": "Placeholder uses fg-placeholder / muted",
+      "status": "open"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:84",
+      "says": "Tone defaults are neutral in every family",
+      "now": "Indicator defaults to danger (C-14)",
+      "status": "open"
+    },
+    {
+      "where": "DESIGN_SYSTEM.md:149",
+      "says": "Compact md type 13/18",
+      "now": "Not on the six-size ramp",
+      "status": "open"
+    },
+    {
+      "where": "COMPONENTS.md:75-80 · Breadcrumb line",
+      "says": "ButtonGroup, Toolbar, SplitButton, NumberField, InputGroup, Breadcrumb \"in review\"",
+      "now": "All Complete",
+      "status": "open"
+    },
+    {
+      "where": "Specs status lines",
+      "says": "toolbar, segmented, table, overlay, color-swatch-picker, color-picker, alignment-picker, input, input-group, select: \"in review\"",
+      "now": "Complete",
+      "status": "open"
+    },
+    {
+      "where": "toolbar.md · pages.mjs:140",
+      "says": "Track variant, raised-plate toggle, ToolbarGroup variant=\"track\"",
+      "now": "Removed; pressed = Button selected fill",
+      "status": "open"
+    },
+    {
+      "where": "button.md:226,231 · split-button.md:60,142",
+      "says": "Ghost hover bg-hover; sm keeps 4 with 12px text; ghost excluded",
+      "now": "bg-component-hover; sm is 14/20; ghost exists",
+      "status": "open"
+    },
+    {
+      "where": "tooltip.md:71,122-123,143,115",
+      "says": "Padding 4/8, radius 6, Kbd radius 2, behaviour not implemented, forced colours covered",
+      "now": "4/10, 10, 6, implemented 09-27, no rules",
+      "status": "open"
+    },
+    {
+      "where": "spinner.md · skeleton.md · progress.md",
+      "says": "2s, conic arc, track #eee, reduced motion stops; 1.4s, rectangle/rounded",
+      "now": "1s SVG masks, 25% ink track, slows; 3s, block/text/circle",
+      "status": "open"
+    },
+    {
+      "where": "alert.md:65-67,119,158",
+      "says": "Padding 8, title 400, Dialog close radius-control-sm",
+      "now": "10/12, 500, 8",
+      "status": "open"
+    },
+    {
+      "where": "popover.md:104-109 · hover-card.md:40",
+      "says": "4px offset, CSS anchor, .area-popover-anchor wrapper",
+      "now": "8px, JS computePosition, no wrapper (Hover card still on the old path, E-5)",
+      "status": "open"
+    },
+    {
+      "where": "panel.md · calendar.md · table.md · card.md:144,192",
+      "says": "Bar 37, titles 400, rules border-divider; cells 28, 14/20; border rgb(243); radius 12·16·24",
+      "now": "Current values in code (see F-25)",
+      "status": "open"
+    },
+    {
+      "where": "color-swatch.md · color-swatch-picker.md · alignment-picker.md · inspector.md",
+      "says": "22% hairline, radius 4, cell 8/9/10, sm 22, xs/lg tiers",
+      "now": "Solid edge, 20% corner, 7.2/8/8.8, 20, sm/md",
+      "status": "open"
+    },
+    {
+      "where": "code-block.md · code.md · separator.md",
+      "says": "border-divider rules, #fafafa ground, 550 syntax, Kbd control-xs",
+      "now": "border-decorative, white, 500 rungs, 6px keycap",
+      "status": "open"
+    },
+    {
+      "where": "switch.md:141 · slider.md · pages.mjs:714",
+      "says": "Switch off matches Checkbox #d4; rail shared with Switch; Switch 28×16/36×20/44×24",
+      "now": "Switch off #e2; rail #dd; 28/32/36 tracks",
+      "status": "open"
+    },
+    {
+      "where": "input-group.md · gallery tile",
+      "says": "NumberField prefix",
+      "now": "Renamed scrub",
+      "status": "open"
+    },
+    {
+      "where": "HANDOFF.md:6,42,108,278,344-352",
+      "says": "Indicator In review; small controls 12/16; Tooltip unreviewed; GalleryReviewSpinner; Next = review In-review families",
+      "now": "All Complete; 14/20; removed; stale list",
+      "status": "open"
+    },
+    {
+      "where": "COMPONENTS.md · specs/README.md",
+      "says": "\"In review\" throughout; Existing library omits 13 families; 34 README rows say in review; count.md has no row",
+      "now": "All 58 Complete",
+      "status": "open"
+    },
+    {
+      "where": "Per-family specs",
+      "says": "Accent tones and tone=\"accent\"",
+      "now": "Accent is an emphasis role, not a variant (D1)",
+      "status": "open"
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm run build",
+      "result": "pass",
+      "note": "Styles 573.5 kB, manifest parity (69 components), token refs (48 files)"
+    },
+    {
+      "command": "npm test",
+      "result": "pass",
+      "note": "19,491 token tests"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "note": ""
+    },
+    {
+      "command": "npm run test:contracts",
+      "result": "pass",
+      "note": "14 / 14"
+    },
+    {
+      "command": "npm run lint:manifest",
+      "result": "pass",
+      "note": "Parity ok; all token references defined"
+    },
+    {
+      "command": "node --test packages/react/tests",
+      "result": "fail → pass",
+      "note": "2 of 154 fail after build alone (badge, indicator read apps/docs/dist); all 154 pass after build:docs"
+    },
+    {
+      "command": "npm run test:consumer",
+      "result": "fail → pass",
+      "note": "Was red on a stale fixture (Panel size=\"xs\", Checkbox size=\"sm\"); fixture updated in PR 28 (H-15), passes"
+    },
+    {
+      "command": "npm run lint:icons",
+      "result": "pass",
+      "note": "504 icons, 7 status marks"
+    },
+    {
+      "command": "npm run build:docs (with audit)",
+      "result": "pass",
+      "note": "83 pages, 1,413 demos, 69 / 69 components used"
+    },
+    {
+      "command": "npm run test:preview",
+      "result": "pass",
+      "note": "4 / 4"
+    },
+    {
+      "command": "contrast report",
+      "result": "pass",
+      "note": "370 passing, 0 failing, 66 themes"
+    },
+    {
+      "command": "Browser: live gallery sweep",
+      "result": "done",
+      "note": "72 blocks measured for height, radius, type, fill, edge, shadow; every focus rule listed (this session)"
+    },
+    {
+      "command": "Browser: forced colours, RTL, touch, dark captures",
+      "result": "not run",
+      "note": "Reviewed from code only; flagged as unverified"
+    }
+  ]
+}

@@ -12,9 +12,13 @@ The registry in `packages/tokens/src/axes/registry.ts` defines nine axes:
 - `accent`: configurable chromatic accent; blue is the default (owner, 2026-09-29; was indigo). The focus ring follows it.
 - `action`: neutral or accent, the colour of committing actions (solid Buttons). Neutral is the default.
 - `selection`: neutral or accent, the colour of state (checked, on, selected, current, filled). Neutral is the default.
-- `ui`: default or compact, combining typography, control sizes, icons, gaps and padding.
-- `radius`: sharp, subtle, soft, standard, round, rotund or pill.
-- `surface`: flat, outlined, raised or elevated.
+- `ui`: default or compact, combining typography, control sizes, icons, gaps (including `gap-row`, the list-row icon gap) and padding.
+- `radius`: sharp, subtle, soft, standard, round, rotund or pill. Besides the corner roles it
+  owns `radius-cap`, `radius-button-cap` and `radius-concentric` (0 at Sharp: how much of a
+  shell's distance joins its concentric corner).
+- `surface`: flat, outlined, raised or elevated. Besides `border-width` and `shadow-1`…`4` it
+  owns `shadow-card` (Card's halo) and `shadow-float` (the shared floating lift); Flat sets
+  both to `none`.
 - `motion`: none, subtle or expressive.
 
 Keep the name `accent`: it is the system-selected chromatic role and may represent a

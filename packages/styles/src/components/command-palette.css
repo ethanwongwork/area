@@ -25,7 +25,7 @@
     /* Every column in the palette is the rows' column: a row's icon sits the row's own icon inset in. */
     --_column: calc(var(--_list-inset) + (var(--area-control-md) - var(--area-icon-md)) / 2);
     /* Rows keep Menu's icon-to-label gap, so row text starts where the typed text does. */
-    --_menu-gap: var(--area-space-12);
+    --_menu-gap: var(--area-gap-row);
     --_row-radius: min(max(0px, calc(var(--area-radius-container) - var(--area-space-4))), calc(var(--area-control-md) * var(--area-radius-cap)));
     --_palette-radius: min(calc(var(--area-radius-container) * 2), calc(var(--_row-radius) + var(--_list-inset)));
     display: flex;
@@ -39,7 +39,7 @@
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
     /* spec: Dialog's floating lift (Notion floats its palette on 24/48 and 4/12). */
-    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent); /* spec */
+    box-shadow: var(--area-shadow-float); /* spec */
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
@@ -53,7 +53,7 @@
     min-block-size: 48px; /* spec */
     /* The search icon on the rows' icon column, the typed text on their text column (Menu's 12 gap). */
     padding-inline: var(--_column);
-    gap: var(--area-space-12); /* spec: Menu's icon-to-label gap (12) */
+    gap: var(--area-gap-row); /* Menu's icon-to-label gap (audit S11a) */
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
   }
   .area-command-palette__search-icon {
@@ -104,7 +104,7 @@
 
   /* Key hints: what the keys do here, quiet, below the list. */
   .area-command-palette__footer {
-    /* Hint plates: keycap 16 + 4 each side = 24, Button's xs height. */
+    /* Hint plates: at least Button's xs height (24); quiet keys are unboxed text (audit S12a). */
     --_hint-inset: var(--area-space-4);
     display: flex;
     align-items: center;

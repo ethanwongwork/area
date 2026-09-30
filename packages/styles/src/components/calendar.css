@@ -7,7 +7,7 @@
     --_cell: 36px; /* spec */
     --_day: 32px; /* spec */
     --_day-inset: calc((var(--_cell) - var(--_day)) / 2);
-    --_day-radius: min(var(--area-radius-control-sm), calc(var(--_day) * var(--area-radius-cap))); /* finite under Pill (audit H-1) */
+    --_day-radius: min(var(--area-radius-control-md), calc(var(--_day) * var(--area-radius-cap))); /* 32px days take the md radius (audit S4, F-12); finite under Pill (H-1) */
     /* Today is a date marker, not a selection or availability: a 1px ring in the day's shape. */
     --_today-edge: var(--area-stroke-control);
     display: inline-block;
@@ -34,7 +34,7 @@
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
-    box-shadow: 0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent);
+    box-shadow: var(--area-shadow-float);
   }
   /* The 8px top inset seats the month header; a week strip has none, so it takes 12 all round. */
   .area-calendar--surface.area-calendar--week { padding-block-start: calc(12px /* spec */ - var(--area-border-width)); }

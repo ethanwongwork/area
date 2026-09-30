@@ -91,7 +91,7 @@ sides, then 8px-inset list rows (menu-like). shadcn's content is a grid with 16p
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| surface · shadow | **`0 20px 24px`, `0 5px 8px`** in `shadow-color` (as Menu) | Notion (same lift on popovers and menus); ChatGPT 8/16; shadcn 4/6 + 2/4 | Was `shadow-2` (1–2px). One lift for both floating surfaces |
+| surface · shadow | **`--area-shadow-float`**: `0 20px 24px` in `shadow-color`, `0 5px 8px` at half strength, as Menu (surface.css:866); `none` under the Flat preset | Notion (same lift on popovers and menus); ChatGPT 8/16; shadcn 4/6 + 2/4 | Was `shadow-2` (1–2px). One lift for every floating surface, a Surface axis role since audit S10 |
 | surface · preferred width | **320** | shadcn 320; ChatGPT 254; Notion 456 | Was 240. Still capped at the container |
 | sections · gap | **16** | Notion 16 (header to field); shadcn 16 | Was 12 |
 | surface · inset | 12 (border included, unchanged) | Between shadcn 10 and Notion 16 | — |
@@ -147,6 +147,9 @@ decision.
 ## Open questions
 
 - The header offset assumes a small (28px) icon-only close, the only close Area's demos use.
+  Settled by audit S9 (owner): rectangular surfaces close with a ghost small Button (28, radius
+  6) and the Area `dismiss` glyph, as Popover, Toast and Alert do; Dialog's 32px close is the
+  written exception.
 
 - Dialog's title group measures title baseline to description cap 8 (title 20/28, gap 8);
   Popover's is 15. Worth one rule for both in the Dialog pass.
@@ -167,3 +170,5 @@ decision.
   title centred on it (cap 15), title strong. Verified in the gallery at 1× and 3×, with hover.
 - 2026-09-27 · merged the overlay-behavior branch → a Popover `trigger` now positions with `computePosition` (flip to the side with room, shift inside an 8px viewport margin, re-placed on scroll and resize; `align`, `offset`, controlled `open`) instead of CSS anchor positioning, so the arrow follows the side it lands on → [overlay behavior](overlay.md).
 - 2026-09-28 · batch 7 Claude in Chrome (Notion Share popover) → no change.
+- 2026-09-30 · audit S9 (owner) → Popover's ghost small Button close with the Area glyph is the rectangular-surface close recipe, now shared by Toast and Alert; Dialog keeps a 32px md close as the exception. No code change.
+- 2026-09-30 · audit S10 (owner) → the lift is the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat), shared by every floating surface → surface.css:866.

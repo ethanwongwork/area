@@ -48,9 +48,10 @@ controls; Figma's alignment row is a Toolbar in Area.
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
 | divider · height | **full height** (32 on md) | Notion split (inset line, full height); shadcn separator (full height inside borders) | Was 16px (8px in from top and bottom) |
-| divider · paint | **`edge-control`** (226) | shadcn separator lab 90.95 (≈226); SplitButton soft/outline | Was `border-decorative` (243 on a 247 fill), barely visible |
+| divider · paint | **`edge-control`** (226) | shadcn separator lab 90.95 (≈226); SplitButton soft/outline | Was `border-decorative` (243 on a 247 fill), barely visible. The seam counts as a control edge, a written exception to "a rule inside a container is never darker than its edge" (audit S8, owner) |
 | outline divider | the shared border only | shadcn outline groups (inner border collapsed) | Was a second 16px line drawn over the shared border |
-| children | Button unchanged (400 labels, 6px icon gap, no shadow) | Button spec | — |
+| children | Button unchanged (400 labels, 6px icon gap, no shadow); the group no longer sets a child's `--_gap` (button-group.css:26-38) | Button spec | Was the group's gap tier, 4 / 8 / 8, until audit S14 |
+| peer · SplitButton soft | a neutral soft Split button paints as this group: `bg-component` fill, the quiet ink, no hairline, hover `bg-component-hover`, press `bg-component-active` (split-button.css:70-77); same `edge-control` divider | Audit S15b (owner) | Was two soft Buttons with body ink, a #f3 hairline and a translucent hover wash |
 
 ## Visual pass
 
@@ -75,3 +76,5 @@ cleanly (sm 28, lg 40 keep the same divider). No change.
 - 2026-09-26 · owner: build ButtonGroup and SplitButton → divider aligned with SplitButton
   and the references.
 - 2026-09-26 · owner: show more ButtonGroup variants → nine tiles: soft/outline × text, soft/outline × icon only, icon and label, toggle selected, small, large, disabled button.
+- 2026-09-30 · audit S8 (owner) → the soft group's seam counts as a control edge and keeps #e2 (`edge-control`); a written exception to the inner-rule rule. No code change.
+- 2026-09-30 · audit S14, S15b (owner) → children keep Button's own 6 icon gap; the group no longer overrides `--_gap` (button-group.css:26-38; was 4 / 8 / 8). A neutral soft Split button now paints as the soft group (split-button.css:70-77; peer row).

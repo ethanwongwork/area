@@ -99,7 +99,7 @@ selected or hovered row.
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| wrapper | 1px **`border-divider`** #e2e2e2, radius 12 (`radius-container`), no shadow (`navigation.css:121-128`) | Peer Card edge (third pass); Untitled radius 12 | Was `border-decorative` #f3, lighter than the row rules inside it. Untitled adds `shadow-xs`; Notion is full-bleed |
+| wrapper | 1px **`border-divider`** #e2e2e2 at `stroke-width`, so the frame keeps its edge under the Elevated preset (where `border-width` is 0); radius 12 (`radius-container`), no shadow (`navigation.css:121-130`) | Peer Card edge (third pass); Untitled radius 12 | Was `border-decorative` #f3, lighter than the row rules inside it. Untitled adds `shadow-xs`; Notion is full-bleed. The frame stays darker than Card's #ee edge because it has no shadow to carry it (audit S7b) |
 | text | 14/20 (`ui-size`) | Untitled body 14/20; Notion cells 14 | Follows the density axis |
 | cell inset | 4 / 8 / 12 block, 12 inline | Owner (three insets) | Notion 7.5 / 8; Untitled 24 sides; kept (third pass) |
 | header | `bg-subtle` #f7f7f7 / #282828, `fg-muted`, 400, middle | Untitled neutral-50 header, neutral-500 ink; owner (middle); Notion muted 400 ink | Notion has no header fill; kept (third pass) |
@@ -145,7 +145,7 @@ still paints for grid and treegrid rows. Notion's cells are `role=button` inside
 |---|---|---|---|---|
 | Menu, Nav, Tree view, Select | hover / selected plates | `bg-component-hover` / `-active` | same | match |
 | Panel | container edge, radius | 1px `border-decorative`; `radius-container` 12 | `border-divider`, 12, no shadow | edge differs: Panel's lift carries its seam; a table has none |
-| Card | container edge | 1px `border-divider` #e2 | same | match (third pass): both stand alone on the page |
+| Card | container edge | 1px neutral 100 #ee with a halo (`--area-shadow-card`) | `border-divider` #e2, no shadow | differs by design (audit S7b): Card's halo carries its lighter edge; a table has none |
 | Separator, Menu, Nav | rule | 1px `border-divider` | same | match |
 | Menu, Nav | row height at md | 32 | 37 | a data row carries 8px block insets and a divider, not a control height (Notion 36) |
 
@@ -181,3 +181,5 @@ read from the CSS; no Area capture shows them.
   plate) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · third pass, follow-up → wrapper edge `border-decorative` → `border-divider`, like Card: a table's frame is never lighter than its own row rules → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-27 · owner: "the large table stroke is way thicker" → the large and interactive gallery tiles wrapped a Table in a second `area-table-wrapper`, drawing the edge twice; the demos now render Table alone (component unchanged) → Pass review in the gallery.
+- 2026-09-30 · audit S7b (owner picked C) → no change; the frame keeps `border-divider` #e2 with no shadow, where Card keeps #ee carried by its halo → navigation.css:126.
+- 2026-09-30 · audit S10, S11b (owner) → the frame's border uses `stroke-width`, so it keeps its edge under the Elevated preset (`navigation.css:127`); no focus change, since rows are not focusable yet (family call F-23 open).

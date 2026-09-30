@@ -78,7 +78,7 @@ Notion's shadow is the 20/24 + 5/8 lift Area uses for Popover, Menu and Dialog, 
 | surface · inset | **12** (border included), icon **12** from the top and side | Popover (the compact floating surface) | Was 10 (icon 11 from both). Notion 16, shadcn 16: Area keeps its compact-surface inset |
 | surface · height | **40** for one line, with or without controls | Notion 43; Popover's numbers (20 line + 2 × 10) | Was 38. Controls no longer change the height |
 | surface · radius | 12 (unchanged) | Container radius; concentric with the controls (12 − 6 = 6) | Notion 8, shadcn 18 |
-| surface · shadow | **20/24 + 5/8 lift** | Notion (same lift); Popover, Menu, Dialog | Was a 2/4 shadow |
+| surface · shadow | **20/24 + 5/8 lift**, the Surface axis role `--area-shadow-float` (surface.css:1273); `none` under the Flat preset | Notion (same lift); Popover, Menu, Dialog | Was a 2/4 shadow. A role since audit S10 |
 | icon · gap | 8 | Notion 8 | — |
 | controls | 28px box, negative block margins; the last sits **6 from the top and side** (6 from the bottom on one line) | Popover close rule; concentric with the corner | Was 5 top / 11 side; the dismiss was a bespoke-toned ghost button, now neutral with the dismiss glyph |
 | title | 14/20 strong | Typography: compact surface title; shadcn 500 | Was regular |
@@ -91,8 +91,10 @@ Inset equations: text top = 1 + 9 = 10; icon = 10 + (20 − 16)/2 = 12; last con
 ## Behavior and accessibility
 
 Content is a `role="status"` region with `aria-atomic`. Placement, timing, stacking and focus
-return stay with the consumer (prior decision). The dismiss button is named "Dismiss
-notification" by default.
+return stay with the consumer (prior decision). The dismiss is a ghost small Button
+(28, radius 6) with the Area `dismiss` glyph, shown by `onDismiss` and named by `dismissLabel`
+("Dismiss notification" by default; `primitives.tsx:1187-1188`, `:1204`). It is the close
+recipe for rectangular surfaces, shared with Popover and Alert (audit S9).
 
 ## Visual pass
 
@@ -126,3 +128,5 @@ the action and dismiss hover on screen.
   has no tinted fill (surface in every tone); its tone icons take Alert's brighter rungs (info
   and danger 500, success and warning 550; dark unchanged). Fills were changed on Alert.
 - 2026-09-27 · batch 3 → Claude in Chrome side by side with Notion's toast recorded (Visual pass); Validated.
+- 2026-09-30 · audit S9 (owner) → Toast's ghost small Button close with the Area glyph is the rectangular-surface close recipe, now shared by Alert; `onDismiss` + `dismissLabel` is the one dismiss API. No code change.
+- 2026-09-30 · audit S10 (owner) → the lift is the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → surface.css:1273.

@@ -1,6 +1,6 @@
 # Kbd spec
 
-**Status:** Complete · owner approved batch 11, 2026-09-28 (6px corner everywhere, filled with no stroke, plain text in menus, ⎋ glyph for Escape)
+**Status:** Complete · owner approved batch 11, 2026-09-28 (6px corner everywhere, filled with no stroke, plain text in menus, ⎋ glyph for Escape; Escape written "Esc" since audit S12b, 2026-09-30)
 **Captures:** `docs/research/captures/kbd/` (Area tiles, `notion--shortcut-hint`, `chatgpt--shortcut-chip`, `figma--shortcut-panel-*`), `menu/notion--item-shortcut`, `menu/figma--item`, `tooltip/*--shortcut*`
 **Peers:** Tooltip (on-emphasis shortcut), Button (trailing shortcut), Menu and Nav (quiet trailing shortcut), Code (inline technical label), Badge (small chrome)
 
@@ -67,8 +67,9 @@ area     span.area-kbd  owns: height, min width, padding, 1px transparent border
 ```
 
 Height is built, not set from a tier: 10px line box + 2 × 4 padding + 2 × 1 border = 20
-(`kbd.css:12`); small 10 + 2 × 2 + 2 = 16 (`kbd.css:62`). The border is transparent but kept,
-so the box stays a whole number (`kbd.css:25-27`).
+(`kbd.css:12`); small 10 + 2 × 2 + 2 = 16 (`kbd.css:65`). The border is transparent but kept,
+so the box stays a whole number (`kbd.css:30`). A quiet Kbd has no box: no padding, no min
+width, height from its 16px line (`kbd.css:89-102`).
 
 ## Measurements
 
@@ -84,7 +85,8 @@ so the box stays a whole number (`kbd.css:25-27`).
 | **shell** color | rgb(102, 102, 102) | rgb(102, 102, 102) | rgb(102, 102, 102) | rgb(102, 102, 102) | rgb(255, 255, 255) | rgb(250, 250, 250) | rgb(142, 139, 134) |
 | **shell** background | rgb(238, 238, 238) | rgb(238, 238, 238) |  | rgb(238, 238, 238) | white 14% | rgb(250) 14% | rgba(42, 28, 0, 0.07) |
 
-Notion's 7% warm fill composites on white to about rgb(240, 239, 237). Placement: in the
+The quiet column predates audit S12a (not recaptured): quiet now renders 12/16 400 in the UI
+font with no padding. Notion's 7% warm fill composites on white to about rgb(240, 239, 237). Placement: in the
 Button the keycap sits 6px from the top, bottom and end (32 − 20 = 12; end padding 5 + 1
 border) with its own 6px corner (was a concentric 2); in the Tooltip 4px with a 6px corner.
 Radius row retaken 2026-09-28 (`area--*` recaptures). ChatGPT's chip: 47.48 × 18, radius 8,
@@ -96,18 +98,19 @@ padding 0 6, 14/18 600, white 25%; Figma's panel key: 32 × 31, 1px rgba(255,255
 |---|---|---|---|
 | normal height | 20 | Inset rule: centred in a 28px Tooltip (4) and a 32px Button (6) | Notion 18.29, ChatGPT 18; kept at `control-xs`, the smallest control rung (third pass) |
 | small height | 16 | Dense trailing metadata (docs practices) | — |
-| font | `--area-font-keyboard` (system-ui), 12px (`--area-text-xs-size`) | System face carries native modifier glyphs | Notion 11px |
-| small font | 11px (`--area-size-11`, `kbd.css:64`) | Second pass, decision 3: Notion's and Figma's shortcut text is 11px, and keycaps are the tiny-chrome role the type policy names | Below the ramp's 12px floor by design |
-| weight | **500** (`kbd.css:35-36`) | Notion 500; weight policy (a label on a fill) | Was 400 |
-| fill / edge | **`bg-component-active` #eeeeee, no visible edge** (`kbd.css:25-29`, `76-80`) | Notion 7% warm fill, no border (about rgb 240) | Was `bg-component-hover` #f3 with a 1px `border-subtle` #d4 ring |
-| ink | **`fg-muted` rgb(102)** (`kbd.css:30, 79`) | Notion muted rgb(142, 139, 134) | Was `fg-default` |
+| font | filled keycaps: `--area-font-keyboard` (system-ui), 12px (`--area-text-xs-size`); quiet: the UI font (`--area-font-sans`, Geist) at 12/16 (`kbd.css:98-100`) | System face carries native modifier glyphs; a quiet Kbd renders like a string shortcut (audit S12a) | Notion 11px |
+| small font | 11px on a filled keycap (`--area-size-11`, `kbd.css:67`); a quiet small Kbd is 12/16 like any quiet one | Second pass, decision 3: Notion's and Figma's shortcut text is 11px, and keycaps are the tiny-chrome role the type policy names | Below the ramp's 12px floor by design |
+| weight | **500** on a filled keycap (`kbd.css:39`); **400** when quiet (`kbd.css:101`) | Notion 500; weight policy (a label on a fill); a quiet key has no fill | Was 400. Quiet was 500 until audit S12a |
+| fill / edge | **`bg-component-active` #eeeeee, no visible edge** (`kbd.css:30-32`, `79-83`) | Notion 7% warm fill, no border (about rgb 240) | Was `bg-component-hover` #f3 with a 1px `border-subtle` #d4 ring |
+| ink | **`fg-muted` rgb(102)** (`kbd.css:33, 82`) | Notion muted rgb(142, 139, 134) | Was `fg-default` |
 | radius | **`radius-control-sm` 6** at every size and in every host (`kbd.css`, `--_radius`; owner rule) | Owner 2026-09-28 (4 read too sharp); ChatGPT 8 on 18 | Notion 4, Untitled 4, Figma's panel 2 |
 | radius in a Button | **the keycap's own 6** | Owner 2026-09-28; Notion keeps its 4 inside an 8px field (not concentric) | The concentric corner came to 2 at every Button size |
 | radius in a Tooltip | own 6 (the concentric Tooltip rule removed) | Owner rule | — |
 | in an Input suffix | nested box: end inset = block inset (8 in a 32 field with the small keycap; `inset.css`) | Notion's search field ⌘K; same rule as Button | — |
-| quiet | transparent, `fg-muted` (`kbd.css:82-89`); automatic in Menu items | Notion menu shortcut plain 12px muted; Figma menu shortcut plain 11px at 70% | — |
-| on-color / on-emphasis | `currentColor` 14% plate, no edge, inherited ink (`kbd.css:91-97`) | ChatGPT translucent white 25% chip | Lighter plate |
-| in solid Buttons | tonal solid: `bg-inverse` 16%, unless `on-color` is asked for; neutral solid: `currentColor` 14% (`kbd.css:113-128`) | Contrast on the fill | — |
+| quiet | renders like a string shortcut: transparent, no padding or min width, UI font 12/16 400, `fg-muted` (`kbd.css:89-102`); automatic in Menu items; a danger menu row's Kbd takes the row ink (`kbd.css:104`) | Notion menu shortcut plain 12px muted; Figma menu shortcut plain 11px at 70% | Owner audit S12a. Was the keyboard face at 500, 12 or 11 when small |
+| on-color / on-emphasis | `currentColor` 14% plate, no edge, inherited ink (`kbd.css:107-112`) | ChatGPT translucent white 25% chip | Lighter plate |
+| in any Button | `currentColor` 14% plate, no edge, inherited ink (`.area-button .area-kbd`, `kbd.css:131-135`) | Survives hover, press and selected fills | Owner audit S12c. Replaced the neutral-solid-only `currentColor` rule and the coloured-solid `bg-inverse` 16% rule; a #ee keycap vanished on a pressed or selected ghost Button |
+| Escape | written **"Esc"**, spoken "Escape" (`primitives.tsx:1782-1783`, `:1802`) | ChatGPT and Notion write it out | Owner audit S12b. Was the ⎋ glyph |
 
 ## States
 
@@ -116,7 +119,7 @@ None: Kbd is not interactive.
 ## Behavior and accessibility
 
 `span.area-kbd` holds the spoken chord ("Command plus K") as `area-sr-only` text and each key
-as a `kbd` with `aria-hidden` (`primitives.tsx:1399-1421`). It replaced an `aria-label` on the
+as a `kbd` with `aria-hidden` (`primitives.tsx:1828-1852`). It replaced an `aria-label` on the
 span, which ARIA does not reliably announce on an element with no role (audit decision 14).
 Key names map to native glyphs. Consumers expose the binding with `aria-keyshortcuts` on the
 action. Screen-reader output has not been checked.
@@ -126,8 +129,8 @@ action. Screen-reader output has not been checked.
 | Peer | Shared role | Area value in peer | Kbd | Match / reason |
 |---|---|---|---|---|
 | Tooltip | nested chip | radius tooltip − 4, end inset 4 | 20px, radius 6 there | match (inset rule) |
-| Button | trailing nested box | end reserve 20; small 16 (`inset.css:109-114`) | 20 / 16, radius 6 | corner not concentric (owner, 2026-09-28) |
-| Menu / Nav | trailing shortcut | quiet appearance | quiet | match; Notion and Figma menus agree |
+| Button | trailing nested box | end reserve 20; small 16 (`inset.css:118-123`); `currentColor` 14% plate in every variant | 20 / 16, radius 6 | corner not concentric (owner, 2026-09-28) |
+| Menu / Nav | trailing shortcut | quiet appearance: UI font 12/16 400 muted, as a string shortcut | quiet | match; Notion and Figma menus agree (audit S12a) |
 | Badge | small chrome | 16 / 20 / 24, 12px min text | 16 / 20; small 11px | small text differs by decision 3 |
 | Code | technical label | radius 6, mono | radius 6, keyboard font | match (corner since 2026-09-28) |
 | Row plates (Menu, Nav, Table) | selected fill | `bg-component-active` | same fill | shared role, used here as a quiet ground |
@@ -182,3 +185,4 @@ Compared all seven `kbd/area--*` captures with `notion--shortcut-hint`,
   plain-text shortcuts, Escape keeps ⎋ (the open questions settle on the current state).
 - 2026-09-27 · third pass → open question settled, value kept: keycap height 20
   (`control-xs`); Menu's text shortcuts now use Kbd's keyboard face → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-30 · audit S12 (owner) → quiet renders like a string shortcut (UI font 12/16 400, muted, no padding or min width; row ink on a danger menu row; `kbd.css:89-104`); filled keycaps keep the keyboard face at 500; Escape is written "Esc", spoken "Escape" (`primitives.tsx:1782`); inside any Button the keycap is a `currentColor` 14% plate with inherited ink (`kbd.css:131-135`).
