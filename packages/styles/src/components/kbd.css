@@ -9,13 +9,13 @@
 @layer area.components {
   .area-kbd {
     --_min: var(--area-space-20);
-    --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-border-width) + var(--area-border-width));
+    --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-stroke-width) + var(--area-stroke-width));
     --_padding: var(--area-space-4);
     --_font: var(--area-text-xs-size);
     --_leading: var(--area-size-10);
     /* spec: 6 at every size and in every host (owner 2026-09-28: "keep 6px for everything as a
        rule"; 4 read too sharp, a concentric 2 far too sharp). */
-    --_radius: var(--area-radius-control-sm);
+    --_radius: min(var(--area-radius-control-sm), calc(var(--_height) * var(--area-radius-cap))); /* finite under Pill (audit H-1) */
 
     display: inline-flex;
     align-items: center;
@@ -54,7 +54,7 @@
 
   .area-kbd--normal {
     --_min: var(--area-space-20);
-    --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-border-width) + var(--area-border-width));
+    --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-stroke-width) + var(--area-stroke-width));
     --_padding: var(--area-space-4);
     --_font: var(--area-text-xs-size);
     --_leading: var(--area-size-10);
@@ -62,7 +62,7 @@
 
   .area-kbd--small {
     --_min: var(--area-space-16);
-    --_height: calc(var(--area-size-10) + var(--area-space-4) + var(--area-border-width) + var(--area-border-width));
+    --_height: calc(var(--area-size-10) + var(--area-space-4) + var(--area-stroke-width) + var(--area-stroke-width));
     --_padding: var(--area-space-2);
     --_font: var(--area-size-11);
     --_leading: var(--area-size-10);

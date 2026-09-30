@@ -39,7 +39,6 @@ export const button = {
     variant: ["solid", "soft", "outline", "ghost"],
     tone: [
       "neutral",
-      "accent",
       "info",
       "success",
       "warning",
@@ -85,10 +84,10 @@ export const toolbar = {
 export const alignmentPicker = {
   block: "area-alignment-picker",
   description: "Chooses one of nine physical alignment positions.",
-  variants: { variant: ["surface", "plain"], size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
+  variants: { variant: ["surface", "plain"], size: ["sm", "md", "lg"] },
   booleans: ["stretch"],
   elements: ["cell", "dot"],
-  defaults: { variant: "surface", size: "md", tone: "neutral" },
+  defaults: { variant: "surface", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const colorPicker = {
@@ -101,9 +100,9 @@ export const colorPicker = {
 export const calendar = {
   block: "area-calendar",
   description: "Shows a month grid for choosing a date, a range or several dates.",
-  variants: { variant: ["plain", "surface"], tone: ["neutral", "accent"], days: ["square", "circle", "tile"], layout: ["month", "week"] },
+  variants: { variant: ["plain", "surface"], days: ["square", "circle", "tile"], layout: ["month", "week"] },
   elements: ["months", "month", "header", "title", "nav", "grid", "weekday", "cell", "day", "day-number", "day-weekday", "day-month", "marker", "week"],
-  defaults: { variant: "plain", tone: "neutral", days: "square", layout: "month" },
+  defaults: { variant: "plain", days: "square", layout: "month" },
 } as const satisfies ComponentManifest;
 
 export const colorSwatch = {
@@ -224,10 +223,10 @@ export const select = {
 export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
-  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"], tone: ["neutral", "accent"] },
+  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"] },
   states: ["checked", "indeterminate", "disabled", "invalid"],
   elements: ["control", "visual"],
-  defaults: { size: "md", tone: "neutral" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const checkboxGroup = {
@@ -242,10 +241,10 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"], tone: ["neutral", "accent"] },
+  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"] },
   states: ["disabled"],
   elements: ["control", "visual"],
-  defaults: { size: "md", tone: "neutral" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const radioGroup = {
@@ -265,7 +264,7 @@ export const switchControl = {
     size: ["sm", "md", "lg"],
     labelPosition: ["end", "start"],
     track: ["short", "long"],
-    tone: ["neutral", "accent", "custom"],
+    tone: ["neutral", "custom"],
   },
   booleans: ["full-width"],
   states: ["checked", "disabled", "read-only", "loading", "hover", "active", "focus-visible"],
@@ -278,24 +277,23 @@ export const slider = {
   block: "area-slider",
   description: "Picks a value from an ordered range.",
   variants: {
-    tone: ["neutral", "accent"],
     size: ["sm", "md", "lg"],
     labelPosition: ["top"],
     orientation: ["vertical"],
   },
   states: ["disabled", "hover", "focus-visible"],
   elements: ["label", "control", "value", "marks"],
-  defaults: { tone: "neutral", size: "md" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const chip = {
   block: "area-chip",
   description: "Selects one value from a set too long for a segmented track.",
-  variants: { kind: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
+  variants: { kind: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"] },
   booleans: ["pill", "swatch-only", "link", "link-icon"],
   states: ["selected", "disabled", "invalid"],
   elements: ["swatch", "icon", "trailing-icon", "avatar", "image", "label", "action", "remove"],
-  defaults: { kind: "filter", size: "md", tone: "neutral" },
+  defaults: { kind: "filter", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const chipGroup = {
@@ -318,7 +316,7 @@ export const badge = {
   description: "Labels an item with a short status or metadata; optionally links to its details.",
   variants: {
     variant: ["soft", "solid", "outline", "color", "modern"],
-    tone: ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"],
+    tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"],
     size: ["sm", "md", "lg"],
   },
   booleans: ["pill", "dot", "dot-only", "icon-only", "truncate"],
@@ -328,16 +326,16 @@ export const badge = {
 
 export const indicator = {
   block: "area-indicator", description: "Displays a compact notification count or activity dot.",
-  variants: {kind: ["count", "dot"], tone: ["accent", "neutral", "info", "success", "warning", "danger"]},
+  variants: {kind: ["count", "dot"], tone: ["neutral", "info", "success", "warning", "danger"]},
   states: ["processing", "border"],
   defaults: {kind: "dot", tone: "danger"},
 } as const satisfies ComponentManifest;
 
 export const count = {
   block: "area-count", description: "Shows how many items the element it sits in holds, beside that element's label.",
-  variants: { variant: ["plain", "soft"], tone: ["neutral", "accent"], size: ["sm", "md"] },
+  variants: { variant: ["plain", "soft"], size: ["sm", "md"] },
   elements: ["label"],
-  defaults: { variant: "plain", tone: "neutral", size: "md" },
+  defaults: { variant: "plain", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const presence = {
@@ -371,7 +369,7 @@ export const avatar = {
   variants: {
     size: ["sm", "md", "lg"],
     shape: ["circle", "square"],
-    tone: ["neutral", "accent", "inverse"],
+    tone: ["neutral", "inverse"],
   },
   booleans: ["active"],
   elements: ["image", "icon"],
@@ -407,18 +405,18 @@ export const skeleton = {
 export const spinner = {
   block: "area-spinner",
   description: "Indicates an action in progress with no known duration.",
-  variants: { size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
+  variants: { size: ["sm", "md", "lg"] },
   elements: [],
-  defaults: { size: "md", tone: "neutral" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const progress = {
   block: "area-progress",
   description: "Shows how far along a task is.",
-  variants: { size: ["sm", "md", "lg"], tone: ["neutral", "accent"] },
+  variants: { size: ["sm", "md", "lg"] },
   states: ["indeterminate"],
   elements: ["bar"],
-  defaults: { size: "md", tone: "neutral" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const panel = {
@@ -444,7 +442,7 @@ export const modelPicker = {
   block: "area-model-picker",
   description: "Chooses the model a message is sent with, from inside the composer.",
   variants: {},
-  elements: ["trigger", "menu"],
+  elements: ["trigger"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -532,7 +530,7 @@ export const card = {
 export const alert = {
   block: "area-alert",
   description: "Draws attention to an important message in place.",
-  variants: { tone: ["neutral", "accent", "info", "danger", "warning", "success"], layout: ["single-line", "multiline", "banner"] },
+  variants: { tone: ["neutral", "info", "danger", "warning", "success"], layout: ["single-line", "multiline", "banner"] },
   booleans: ["flush"],
   elements: ["icon", "content", "title", "description", "link", "actions", "dismiss"],
   defaults: { tone: "neutral", layout: "single-line" },
@@ -652,9 +650,10 @@ export const codeBlock = {
 export const nav = {
   block: "area-nav",
   description: "Site navigation, vertical or horizontal.",
-  // `orientation` is the axis; `tone` decides what a current item's plate carries. A nav
-  // with neither modifier is vertical and neutral, which is the sidebar case.
-  variants: { orientation: ["horizontal"], tone: ["accent"], selection: ["marker"] },
+  // `orientation` is the axis; `selection` chooses a plate or a marker for the current item.
+  // A nav with neither modifier is vertical with a plate, which is the sidebar case. The
+  // marker's colour is the Selection role, not a variant.
+  variants: { orientation: ["horizontal"], selection: ["marker"] },
   elements: ["group", "label", "item", "icon", "text", "trailing", "separator", "row", "actions"],
   defaults: {},
 } as const satisfies ComponentManifest;

@@ -13,25 +13,18 @@
     cursor: pointer;
   }
 
-  /* Tone: checked paint is neutral unless accent is asked for (DESIGN_SYSTEM.md, "Neutral by
-     default, accent by override"). The label carries the tone; its control consumes it. */
+  /* Checked paint is the Selection role (DESIGN_SYSTEM.md, "Emphasis roles"): neutral by
+     default, the accent when a theme sets data-area-selection="accent". The label carries it;
+     its control consumes it. */
   .area-checkbox,
-  .area-radio,
-  .area-checkbox--neutral,
-  .area-radio--neutral {
-    --_checked: var(--area-neutral-solid);
-    --_checked-hover: var(--area-neutral-solid-hover);
-    --_on-checked: var(--area-fg-on-neutral);
+  .area-radio {
+    --_checked: var(--area-selection-solid);
+    --_checked-hover: var(--area-selection-solid-hover);
+    --_on-checked: var(--area-fg-on-selection);
     /* Increased contrast strengthens the checked edge toward this color. The neutral fill is
-       already the strongest ink, so it is its own edge. */
-    --_checked-edge: var(--area-neutral-solid);
-  }
-  .area-checkbox--accent,
-  .area-radio--accent {
-    --_checked: var(--area-accent-solid);
-    --_checked-hover: var(--area-accent-solid-hover);
-    --_on-checked: var(--area-fg-on-accent);
-    --_checked-edge: var(--area-stroke-selected);
+       already the strongest ink, so it is its own edge; an accent fill reaches for the
+       selected stroke. */
+    --_checked-edge: color-mix(in srgb, var(--area-neutral-solid), var(--area-stroke-selected) calc(var(--area-selection-accent) * 100%));
   }
 
   .area-checkbox[data-disabled],
@@ -53,7 +46,7 @@
        black and Untitled's #d4d4d4, where fields sit near #e2. The rest edge is the control
        hover edge; hover steps to the border hover grey. */
     --_edge: var(--area-edge-control-hover);
-    --_mark: var(--_on-checked, var(--area-fg-on-neutral));
+    --_mark: var(--_on-checked, var(--area-fg-on-selection));
     border: var(--area-stroke-width) solid var(--_edge);
     background-color: var(--_fill);
     /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
@@ -105,13 +98,13 @@
      2026-09-28: darker, not thicker; was a 2px edge from the owner references). */
   .area-checkbox--card,
   .area-radio--card {
-    --_card-inset: calc(var(--area-space-12) - var(--area-border-width)); /* spec: 12 to the content, border counted once (shadcn 11) */
+    --_card-inset: calc(var(--area-space-12) - var(--area-stroke-width)); /* spec: 12 to the content, border counted once (shadcn 11) */
     --_card-edge: var(--area-edge-control); /* spec: shadcn ≈ #e3; was border-decorative #f3 */
     --_card-edge-hover: var(--area-edge-control-hover);
     box-sizing: border-box;
     inline-size: 100%;
     padding: var(--_card-inset);
-    border: var(--area-border-width) solid var(--_card-edge);
+    border: var(--area-stroke-width) solid var(--_card-edge); /* required: the chosen edge is state (audit H-3) */
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     transition: var(--area-transition);
@@ -204,9 +197,9 @@
   .area-checkbox__control:checked,
   .area-checkbox__control:is(:indeterminate, [data-indeterminate]),
   .area-radio__control:checked {
-    --_fill: var(--_checked, var(--area-neutral-solid));
+    --_fill: var(--_checked, var(--area-selection-solid));
     /* The selected face reaches the exact same outer box as the empty control. */
-    --_edge: color-mix(in srgb, var(--_fill), var(--_checked-edge, var(--area-neutral-solid)) calc(var(--area-contrast-more) * 100%));
+    --_edge: color-mix(in srgb, var(--_fill), var(--_checked-edge, var(--area-selection-solid)) calc(var(--area-contrast-more) * 100%));
   }
 
   .area-checkbox__control:checked::after,
@@ -233,7 +226,7 @@
   .area-checkbox__control:checked:hover:not(:disabled),
   .area-checkbox__control:is(:indeterminate, [data-indeterminate]):hover:not(:disabled),
   .area-radio__control:checked:hover:not(:disabled) {
-    --_fill: var(--_checked-hover, var(--area-neutral-solid-hover));
+    --_fill: var(--_checked-hover, var(--area-selection-solid-hover));
   }
 
   .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {

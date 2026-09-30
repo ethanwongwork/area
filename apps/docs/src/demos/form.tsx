@@ -349,8 +349,8 @@ export const SliderSizes = () => (
 
 export const SliderTones = () => (
   <>
-    <Slider aria-label="Label" tone="neutral" defaultValue={40} readout={value => `${value}%`} />
-    <Slider aria-label="Label" tone="accent" defaultValue={70} readout={value => `${value}%`} />
+    <Slider aria-label="Label" defaultValue={40} readout={value => `${value}%`} />
+    <div data-area-selection="accent" style={{ display: "contents" }}><Slider aria-label="Label" defaultValue={70} readout={value => `${value}%`} /></div>
   </>
 );
 

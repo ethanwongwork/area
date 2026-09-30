@@ -11,8 +11,8 @@
     --_thumb: calc(var(--_h) - var(--_inset) * 2);
     --_thumb-width: var(--_thumb);
     --_gap: var(--area-gap-md);
-    --_on: var(--area-neutral-solid);
-    --_on-hover: var(--area-neutral-solid-hover);
+    --_on: var(--area-selection-solid);
+    --_on-hover: var(--area-selection-solid-hover);
     /* spec (owner 2026-09-28, "lighten is better"): the off track takes the control edge's rung,
        #e2 (ChatGPT ≈ #e6, Notion ≈ #db; was fill-toggle #d4), and hovers one rung up to #d4.
        Both keep the increased-contrast mix. The edge equals the fill, so none shows, as in
@@ -40,9 +40,8 @@
   .area-switch--lg { --_h: var(--area-space-24); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_gap: var(--area-gap-lg); }
   .area-switch--short {}
   .area-switch--long { --_thumb-width: calc(var(--_thumb) + var(--area-space-8)); --_w: calc(var(--_h) * 2 + var(--area-space-4)); }
-  .area-switch--neutral { --_on: var(--area-neutral-solid); --_on-hover: var(--area-neutral-solid-hover); }
-  .area-switch--accent { --_on: var(--area-accent-solid); --_on-hover: var(--area-accent-solid-hover); }
-  .area-switch--custom { --_on: var(--area-switch-color, var(--area-neutral-solid)); --_on-hover: var(--area-switch-color-hover, var(--area-switch-color, var(--area-neutral-solid-hover))); }
+  .area-switch--neutral { --_on: var(--area-selection-solid); --_on-hover: var(--area-selection-solid-hover); }
+  .area-switch--custom { --_on: var(--area-switch-color, var(--area-selection-solid)); --_on-hover: var(--area-switch-color-hover, var(--area-switch-color, var(--area-selection-solid-hover))); }
 
   .area-switch__control {
     appearance: none;

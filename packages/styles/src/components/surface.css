@@ -41,7 +41,8 @@
     --_card-step: var(--area-space-8);
     /* The control a header action holds: a default Button, a small one in a small card. */
     --_card-action: var(--area-control-md);
-    --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
+    /* The control radius is capped as Button caps its own, so the Pill preset keeps cards finite (audit H-1). */
+    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
     --_card-border: var(--area-border-width);
     /* spec (consistency pass): one title role and one body role at every size. */
     --_card-title-size: var(--area-text-md-size);
@@ -97,15 +98,15 @@
   .area-card--sm {
     --_card-inset: var(--area-space-6);
     --_card-action: var(--area-control-sm);
-    --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
+    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
   }
   .area-card--md {
     --_card-inset: var(--area-space-8);
-    --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
+    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
   }
   .area-card--lg {
     --_card-inset: var(--area-space-12);
-    --_card-radius: calc(var(--area-radius-control-md) + var(--_card-inset) + var(--_card-step));
+    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
   }
 
   /* Layout. */
@@ -344,7 +345,7 @@
     --_card-inset: var(--area-space-4);
     --_card-step: var(--area-space-4);
     --_card-action: var(--area-control-sm);
-    --_card-radius: calc(var(--area-radius-control-sm) + var(--_card-inset) + var(--_card-step));
+    --_card-radius: calc(min(var(--area-radius-control-sm), calc(var(--area-control-sm) * var(--area-radius-cap))) + var(--_card-inset) + var(--_card-step));
   }
 
   /* Overlay: a Badge or an icon Button pinned to a corner of the media, or of the whole card.
@@ -625,7 +626,7 @@
        actions). Corner 6: OpenAI 6 on both banners, Primer 6. */
     --_alert-pad-block: calc(var(--area-space-12) - var(--area-border-width));
     --_alert-pad-inline: calc(var(--area-space-16) - var(--area-border-width));
-    --_alert-radius: var(--area-radius-control-sm);
+    --_alert-radius: min(var(--area-radius-control-sm), calc(var(--area-control-sm) * var(--area-radius-cap)));
     /* 28px controls hang 4 over the line, so they sit 8 from the top; the last one sits 8 from
        the end too (8 into the 16 inset). */
     --_alert-control-end: calc(var(--area-space-8) - var(--area-space-16));
@@ -736,7 +737,6 @@
     --_alert-tint: 50%; /* spec */
   }
   .area-alert--neutral { --_bg: var(--area-bg-component);    --_fg: var(--area-fg-default); --_border: var(--area-border-decorative); }
-  .area-alert--accent  { --_bg: light-dark(color-mix(in oklab, var(--area-accent-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-accent-surface)); /* spec */ --_fg: var(--area-fg-accent); --_border: var(--area-edge-accent); }
   .area-alert--info    { --_bg: light-dark(color-mix(in oklab, var(--area-info-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-info-surface)); /* spec */ --_fg: var(--area-fg-info); --_alert-icon: light-dark(var(--area-blue-500), var(--area-fg-info)); /* spec */ --_border: var(--area-info-border); }
   .area-alert--danger  { --_bg: light-dark(color-mix(in oklab, var(--area-danger-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-danger-surface)); /* spec */ --_fg: var(--area-fg-danger); --_alert-icon: light-dark(var(--area-red-500), var(--area-fg-danger)); /* spec */ --_border: var(--area-danger-border); }
   .area-alert--warning { --_bg: light-dark(color-mix(in oklab, var(--area-warning-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-warning-surface)); /* spec */ --_fg: var(--area-fg-warning); --_alert-icon: light-dark(var(--area-orange-550), var(--area-fg-warning)); /* spec */ --_border: var(--area-warning-border); }
@@ -1146,7 +1146,8 @@
     inline-size: var(--area-icon-md);
     block-size: var(--area-icon-md);
     margin-inline-start: auto;
-    color: var(--area-fg-default);
+    /* A state mark: the Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"). */
+    color: var(--area-fg-selection);
   }
   .area-menu__check > svg { inline-size: 100%; block-size: 100%; }
   .area-menu__item[aria-checked="false"] > .area-menu__check { visibility: hidden; }

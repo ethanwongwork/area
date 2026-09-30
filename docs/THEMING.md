@@ -5,22 +5,33 @@ for specific roles. Components do not need separate light/dark variants.
 
 ## Shared settings
 
-The registry in `packages/tokens/src/axes/registry.ts` defines seven axes:
+The registry in `packages/tokens/src/axes/registry.ts` defines nine axes:
 
 - `theme`: light or dark color polarity.
 - `neutral`: neutral, cool or warm neutral colors.
 - `accent`: configurable chromatic accent; indigo is the default.
+- `action`: neutral or accent, the colour of committing actions (solid Buttons). Neutral is the default.
+- `selection`: neutral or accent, the colour of state (checked, on, selected, current, filled). Neutral is the default.
 - `ui`: default or compact, combining typography, control sizes, icons, gaps and padding.
 - `radius`: sharp, subtle, soft, standard, round, rotund or pill.
 - `surface`: flat, outlined, raised or elevated.
 - `motion`: none, subtle or expressive.
 
 Keep the name `accent`: it is the system-selected chromatic role and may represent a
-product brand. `custom` means a per-instance value outside that role, so renaming accent
-to custom would blur two different contracts. Components with meaningful chromatic
-emphasis expose `neutral` and `accent` treatments explicitly; neutral remains stable,
-while the product chooses the accent preset and which component instances opt into it.
-Button and Badge expose both as part of their core variant families.
+product brand. Components never ask for it with a variant. They paint one of two emphasis
+roles, and `action` and `selection` decide whether each role is neutral or the accent
+(owner, 2026-09-29):
+
+| `action` | `selection` | Result |
+|---|---|---|
+| neutral | neutral | Everything neutral (default) |
+| accent | accent | Everything in the accent |
+| accent | neutral | Accent leads: coloured actions, calm controls |
+| neutral | accent | Neutral leads: neutral actions, coloured state |
+
+`custom` (Switch) means a per-instance colour outside both roles. Semantic tones (info,
+success, warning, caution, danger, discovery) carry meaning and keep their colour in
+every combination. See DESIGN_SYSTEM.md, "Emphasis roles", for what each role paints.
 
 Use `data-area-<axis>` on any ancestor. Missing settings inherit; explicit settings form
 a local boundary. `data-area-contrast="more"` is a separate accessibility preference;
@@ -54,8 +65,8 @@ the appropriate foreground/background/type roles itself.
 `Theme`, `useTheme` and `AxisSelection` are public exports from `@area/react`.
 
 ```tsx
-<Theme value={{ theme: "dark", accent: "teal" }}>
-  <Button tone="accent">Save</Button>
+<Theme value={{ theme: "dark", accent: "teal", action: "accent" }}>
+  <Button>Save</Button>
 </Theme>
 ```
 

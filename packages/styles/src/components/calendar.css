@@ -7,7 +7,7 @@
     --_cell: 36px; /* spec */
     --_day: 32px; /* spec */
     --_day-inset: calc((var(--_cell) - var(--_day)) / 2);
-    --_day-radius: var(--area-radius-control-sm);
+    --_day-radius: min(var(--area-radius-control-sm), calc(var(--_day) * var(--area-radius-cap))); /* finite under Pill (audit H-1) */
     /* Today is a date marker, not a selection or availability: a 1px ring in the day's shape. */
     --_today-edge: var(--area-stroke-control);
     display: inline-block;
@@ -16,22 +16,14 @@
     line-height: var(--area-control-md-leading);
   }
   .area-calendar--plain { padding: 0; }
-  /* Tone: selection is neutral unless accent is asked for, like Button, Switch, Slider and
-     Nav. The range band is the matching soft fill. */
-  .area-calendar,
-  .area-calendar--neutral {
-    --_selected: var(--area-neutral-solid);
-    --_selected-hover: var(--area-neutral-solid-hover);
-    --_on-selected: var(--area-fg-on-neutral);
-    --_band: var(--area-bg-component-hover);
-    --_band-hover: var(--area-bg-component-active);
-  }
-  .area-calendar--accent {
-    --_selected: var(--area-accent-solid);
-    --_selected-hover: var(--area-accent-solid-hover);
-    --_on-selected: var(--area-accent-contrast);
-    --_band: var(--area-accent-surface);
-    --_band-hover: var(--area-accent-surface-hover);
+  /* Selection role (DESIGN_SYSTEM.md, "Emphasis roles"). The range band is the matching
+     soft fill: a neutral step, or the accent surface when selection is accent. */
+  .area-calendar {
+    --_selected: var(--area-selection-solid);
+    --_selected-hover: var(--area-selection-solid-hover);
+    --_on-selected: var(--area-fg-on-selection);
+    --_band: var(--area-selection-band);
+    --_band-hover: var(--area-selection-band-hover);
   }
   /* The surface is the popover's: Notion's calendar sits 8px from its top and 12px from the
      other edges, border included. */
@@ -81,15 +73,17 @@
     cursor: pointer;
   }
   .area-calendar__day[data-outside] { color: var(--area-fg-disabled); }
-  .area-calendar__day:hover:not(:disabled, [data-selected]) { background: var(--area-bg-hover); }
+  .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-hover); }
   .area-calendar__day:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); z-index: 1; }
   .area-calendar__day[data-today]:not([data-selected]) { box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_today-edge); }
   .area-calendar__day[data-selected] { background: var(--_selected); color: var(--_on-selected); box-shadow: none; }
-  .area-calendar__day[data-selected]:hover:not(:disabled) { background: var(--_selected-hover); }
-  .area-calendar__day:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
+  .area-calendar__day[data-selected]:hover:not(:disabled, [aria-disabled="true"]) { background: var(--_selected-hover); }
+  /* An unavailable day stays focusable (aria-disabled, APG date grid) so the arrow keys can
+     cross it; only a disabled calendar uses native disabled (audit F-9). */
+  .area-calendar__day:is(:disabled, [aria-disabled="true"]) { color: var(--area-fg-disabled); cursor: not-allowed; }
   .area-calendar__day[data-unavailable]:not([data-outside]) { text-decoration: line-through; }
   /* A disabled calendar dims as a whole, like other controls, rather than per day. */
-  .area-calendar[aria-disabled="true"] .area-calendar__day:disabled:not([data-outside]) { color: inherit; }
+  .area-calendar[aria-disabled="true"] .area-calendar__day:is(:disabled, [aria-disabled="true"]):not([data-outside]) { color: inherit; }
   .area-calendar[aria-disabled="true"] .area-calendar__day[data-selected]:disabled { color: var(--_on-selected); }
   /* Event markers: a 4px dot under the number, in the marker's tone. */
   .area-calendar__marker {
@@ -97,7 +91,6 @@
     inline-size: var(--area-space-4); block-size: var(--area-space-4); border-radius: var(--area-radius-full);
     background: var(--_marker, var(--area-fg-muted));
   }
-  .area-calendar__marker[data-tone="accent"] { --_marker: var(--area-fg-accent); }
   .area-calendar__marker[data-tone="info"] { --_marker: var(--area-fg-info); }
   .area-calendar__marker[data-tone="success"] { --_marker: var(--area-fg-success); }
   .area-calendar__marker[data-tone="warning"] { --_marker: var(--area-fg-warning); }
@@ -112,15 +105,15 @@
   .area-calendar__cell[data-range="start"]::before { inset-inline-start: var(--_day-inset); border-start-start-radius: var(--_day-radius); border-end-start-radius: var(--_day-radius); }
   .area-calendar__cell[data-range="end"]::before { inset-inline-end: var(--_day-inset); border-start-end-radius: var(--_day-radius); border-end-end-radius: var(--_day-radius); }
   .area-calendar__cell[data-range] > .area-calendar__day { z-index: 1; --_day-fill: transparent; --_day-edge: none; }
-  .area-calendar__cell[data-range="middle"] > .area-calendar__day:hover:not(:disabled) { background: var(--_band-hover); }
+  .area-calendar__cell[data-range="middle"] > .area-calendar__day:hover:not(:disabled, [aria-disabled="true"]) { background: var(--_band-hover); }
 
   /* Day treatments. Square is the default. Circle (Google's booking calendar) fills the days
      that can be chosen; tile outlines them and fills the ones that cannot. */
   .area-calendar--square {}
   .area-calendar--circle { --_day-radius: var(--area-radius-full); }
-  .area-calendar--circle .area-calendar__day:not(:disabled, [data-outside]) { --_day-fill: var(--area-bg-component-hover); }
-  .area-calendar--tile .area-calendar__day:not(:disabled, [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle); }
-  .area-calendar--tile .area-calendar__day:disabled:not([data-outside]) { --_day-fill: var(--area-bg-component); text-decoration: none; }
+  .area-calendar--circle .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-fill: var(--area-bg-component-hover); }
+  .area-calendar--tile .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle); }
+  .area-calendar--tile .area-calendar__day:is(:disabled, [aria-disabled="true"]):not([data-outside]) { --_day-fill: var(--area-bg-component); text-decoration: none; }
 
   /* Week strip: one row of days between the week arrows, each day with its weekday above and
      its month below, the number at the body size. */

@@ -26,7 +26,7 @@ export const AvatarAvailability = () => <IndicatorAnchor compact placement="bott
 
 export const AvatarNotification = () => <IndicatorAnchor compact placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi, 2 notifications" /></IndicatorAnchor>;
 
-export const AvatarTones = () => <><Avatar tone="accent" fallback="I" alt="Irene Yamaguchi" /><Avatar tone="inverse" fallback="I" alt="Irene Yamaguchi" /></>;
+export const AvatarTones = () => <><Avatar fallback="I" alt="Irene Yamaguchi" /><Avatar tone="inverse" fallback="I" alt="Irene Yamaguchi" /></>;
 
 export const AvatarShapes = () => (
   <>
@@ -46,12 +46,6 @@ export const AvatarSizes = () => (
 
 export const AlertDefault = () => (
   <Alert icon={<InfoIcon />} title="Title" style={{ maxInlineSize: 720 }}>
-    Body text
-  </Alert>
-);
-
-export const AlertAccent = () => (
-  <Alert tone="accent" icon={<InfoIcon />} title="Title" style={{ maxInlineSize: 720 }}>
     Body text
   </Alert>
 );

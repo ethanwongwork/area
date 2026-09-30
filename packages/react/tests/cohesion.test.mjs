@@ -30,7 +30,7 @@ test('rows share one hover plate and one selection plate, and selection outranks
     '.area-nav__item:hover:not([data-disabled])',
     '.area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current="page"])):hover',
     '.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td',
-    '.area-tree-view [role="treeitem"]:hover:not([data-disabled], [aria-current="page"])',
+    '.area-tree-view [role="treeitem"]:hover:not([data-disabled], [aria-current="page"], [aria-selected="true"])',
   ];
   for (const selector of hover) assert.match(ruleFor(selector)?.body ?? '', /var\(--area-bg-component-hover\)/, `${selector} is not the row hover plate`);
   const selected = [
@@ -69,10 +69,9 @@ test('text fields show disabled with field paint, not opacity', () => {
   }
 });
 
-test('selection markers are neutral unless accent is asked for', () => {
+test('selection markers never paint the accent or focus colour directly', () => {
   for (const { selector, body } of rules) {
     if (!/area-(nav|tree-view|avatar|code-block)/.test(selector)) continue;
-    if (/--accent/.test(selector)) continue;
     assert.doesNotMatch(body, /--area-(accent-solid|focus-color)\)\s*;?\s*$|background(-color)?:\s*var\(--area-(accent-solid|focus-color)\)/, `${selector} paints a marker in accent or focus colour`);
   }
 });

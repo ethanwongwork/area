@@ -38,7 +38,7 @@
   /* spec (inspector.md, audit 2026-09-26): the bar's action ends on the body's action column,
    * as Figma's header buttons sit at 208 with every section and row action. */
   .area-panel__bar:has(> .area-button:last-child) { --_box-end: calc(var(--_box-height) - var(--_inset) * 2); }
-  .area-button { --_box-border: var(--area-border-width); }
+  .area-button { --_box-border: var(--area-stroke-width); }
   .area-chip { --_box-icon: var(--_dot); }
   .area-segmented__item { --_box-height: var(--_item); }
   .area-nav__item, .area-nav__label, .area-menu__item, .area-menu__label {

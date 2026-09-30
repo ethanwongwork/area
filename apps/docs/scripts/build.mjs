@@ -110,7 +110,7 @@ function axisSelect(axis) {
 }
 
 const AXIS_SECTIONS = [
-  { title: "Appearance", axes: ["theme", "neutral", "accent"] },
+  { title: "Appearance", axes: ["theme", "neutral", "accent", "action", "selection"] },
   { title: "Scale", axes: ["ui"] },
   { title: "Layout", axes: ["radius", "surface"] },
   { title: "Accessibility", axes: ["contrast"] },
@@ -297,7 +297,7 @@ function galleryPage({ families = null } = {}) {
   // Every component receives its own compact section. The section supplies the component
   // name; a tile therefore names only its single specimen (default, soft-success,
   // size-md) and never repeats the family name just to fill space.
-  const badgeTones = ["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery", "inverted"];
+  const badgeTones = ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"];
   const badgeVariants = ["soft", "solid", "outline", "color", "modern"];
   const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {
@@ -309,7 +309,7 @@ function galleryPage({ families = null } = {}) {
       { id: "unavailable", title: "Unavailable", demo: "GalleryCalendarUnavailable", span: "2x2" },
       { id: "monday", title: "Monday", demo: "GalleryCalendarMonday", span: "2x2" },
       { id: "plain", title: "Plain", demo: "GalleryCalendarPlain", span: "2x2" },
-      { id: "tone-accent", title: "Accent", demo: "GalleryCalendarAccent", span: "2x2" },
+      { id: "selection-accent", title: "Selection / accent", demo: "GalleryCalendarAccent", span: "2x2" },
       { id: "days-circle", title: "Circle", demo: "GalleryCalendarCircle", span: "2x2" },
       { id: "days-tile", title: "Tile", demo: "GalleryCalendarTile", span: "2x2" },
       { id: "markers", title: "Markers", demo: "GalleryCalendarMarkers", span: "2x2" },
@@ -368,7 +368,7 @@ function galleryPage({ families = null } = {}) {
       { id: "landscape", title: "Landscape", demo: "GalleryAlignmentPickerLandscape" },
       { id: "portrait", title: "Portrait", demo: "GalleryAlignmentPickerPortrait" },
       { id: "plain", title: "Plain", demo: "GalleryAlignmentPickerPlain" },
-      { id: "tone-accent", title: "Tone / accent", demo: "GalleryAlignmentPickerAccent" },
+      { id: "selection-accent", title: "Selection / accent", demo: "GalleryAlignmentPickerAccent" },
       { id: "disabled", title: "Disabled", demo: "GalleryAlignmentPickerDisabled" },
       { id: "size-sm", title: "Size / sm", demo: "GalleryAlignmentPickerSizeSm" },
       { id: "size-md", title: "Size / md (default)", demo: "GalleryAlignmentPickerSizeMd" },
@@ -423,7 +423,7 @@ function galleryPage({ families = null } = {}) {
       { id: "horizontal", title: "Horizontal", demo: "GalleryNavHorizontal", span: "2x2" },
       { id: "actions", title: "Actions", demo: "GalleryNavActions", span: "2x2" },
       { id: "expandable", title: "Expandable", demo: "GalleryNavExpandable", span: "2x2" },
-      { id: "tone-accent", title: "Tone / accent", demo: "NavAccent", span: "2x2" },
+      { id: "selection-accent", title: "Marker / selection accent", demo: "NavAccent", span: "2x2" },
       { id: "state-disabled", title: "State / disabled", demo: "NavDisabled", span: "2x2" },
     ],
     "model-picker": [
@@ -579,7 +579,6 @@ function galleryPage({ families = null } = {}) {
       { id: "state-active", title: "State / active", demo: "GalleryAvatarActive" },
       { id: "composition-availability", title: "Composition / availability", demo: "GalleryAvatarAvailability" },
       { id: "composition-notification", title: "Composition / notification", demo: "GalleryAvatarNotification" },
-      { id: "tone-accent", title: "Tone / accent", demo: "GalleryAvatarAccent" },
       { id: "tone-inverse", title: "Tone / inverse", demo: "GalleryAvatarInverse" },
       { id: "shape-square", title: "Shape / square", demo: "GalleryAvatarSquare" },
       { id: "size-small", title: "Size / small", demo: "GalleryAvatarSmall" },
@@ -591,7 +590,8 @@ function galleryPage({ families = null } = {}) {
       { id: "size-small", title: "Size / small", demo: "GalleryButtonSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GalleryButtonMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryButtonLarge" },
-      ...["Neutral", "Accent", "Info", "Success", "Warning", "Caution", "Danger", "Discovery"].flatMap((tone) =>
+      { id: "action-accent", title: "Action / accent", demo: "GalleryButtonActionAccent" },
+      ...["Neutral", "Info", "Success", "Warning", "Caution", "Danger", "Discovery"].flatMap((tone) =>
         ["Solid", "Soft", "Outline", "Ghost"].map((variant) => ({
           id: `tone-${tone.toLowerCase()}-variant-${variant.toLowerCase()}`,
           title: `${tone} / ${variant}`,
@@ -609,7 +609,7 @@ function galleryPage({ families = null } = {}) {
     ],
     "split-button": [
       { id: "default", title: "Solid / neutral", demo: "GallerySplitButton" },
-      { id: "accent", title: "Solid / accent", demo: "GallerySplitButtonAccent" },
+      { id: "action-accent", title: "Action / accent", demo: "GallerySplitButtonAccent" },
       { id: "soft", title: "Soft", demo: "GallerySplitButtonSoft" },
       { id: "outline", title: "Outline", demo: "GallerySplitButtonOutline" },
       { id: "icon", title: "Leading icon", demo: "GallerySplitButtonIcon" },
@@ -635,13 +635,13 @@ function galleryPage({ families = null } = {}) {
       { id: "size-medium", title: "Size / medium", demo: "GalleryCheckboxMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryCheckboxLarge" },
       { id: "selected", title: "Selected", demo: "GalleryCheckboxSelected" },
-      { id: "tone-accent", title: "Tone / accent", demo: "GalleryCheckboxAccent" },
+      { id: "selection-accent", title: "Selection / accent", demo: "GalleryCheckboxAccent" },
       { id: "partial", title: "Partial selection", demo: "GalleryCheckboxIndeterminate" },
       { id: "caption", title: "With caption", demo: "GalleryCheckboxCaption" },
       { id: "leading-visual", title: "With leading visual", demo: "GalleryCheckboxLeadingVisual" },
       { id: "card", title: "Variant / card", demo: "GalleryCheckboxCard", span: "2x1" },
       { id: "card-tile", title: "Layout / card tile", demo: "GalleryCheckboxCardTile", span: "2x1" },
-      { id: "card-accent", title: "Card / accent", demo: "GalleryCheckboxCardAccent", span: "2x1" },
+      { id: "card-selection-accent", title: "Card / selection accent", demo: "GalleryCheckboxCardAccent", span: "2x1" },
       { id: "invalid", title: "Invalid", demo: "GalleryCheckboxInvalid" },
       { id: "invalid-selected", title: "Invalid / selected", demo: "GalleryCheckboxInvalidChecked" },
       { id: "disabled", title: "Disabled", demo: "GalleryCheckboxDisabled" },
@@ -657,7 +657,7 @@ function galleryPage({ families = null } = {}) {
       { id: "size-medium", title: "Size / medium", demo: "GalleryRadioMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryRadioLarge" },
       { id: "selected", title: "Selected", demo: "GalleryRadioSelected" },
-      { id: "tone-accent", title: "Tone / accent", demo: "GalleryRadioAccent" },
+      { id: "selection-accent", title: "Selection / accent", demo: "GalleryRadioAccent" },
       { id: "disabled", title: "Disabled", demo: "GalleryRadioDisabled" },
       { id: "invalid", title: "State / invalid", demo: "RadioInvalid" },
       { id: "description", title: "Description", demo: "RadioDescription" },
@@ -754,8 +754,7 @@ function galleryPage({ families = null } = {}) {
     ],
     slider: [
       { id: "default", title: "Default", demo: "GallerySlider" },
-      { id: "tone-neutral", title: "Tone / neutral", demo: "GallerySliderNeutral" },
-      { id: "tone-accent", title: "Tone / accent", demo: "GallerySliderAccent" },
+      { id: "selection-accent", title: "Selection / accent", demo: "GallerySliderAccent" },
       { id: "with-label", title: "Composition / top label + value", demo: "GallerySliderWithLabel" },
       { id: "label-only", title: "Composition / top label", demo: "GallerySliderLabelOnly" },
       { id: "steps", title: "Steps / fractional", demo: "GallerySliderSteps" },
@@ -774,7 +773,7 @@ function galleryPage({ families = null } = {}) {
       { id: "size-small", title: "Size / small", demo: "GallerySpinnerSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GallerySpinnerMedium" },
       { id: "size-large", title: "Size / large", demo: "GallerySpinnerLarge" },
-      { id: "tone-accent", title: "Tone / accent", demo: "GallerySpinnerAccent" },
+      { id: "selection-accent", title: "Selection / accent", demo: "GallerySpinnerAccent" },
       { id: "button", title: "In button", demo: "GallerySpinnerButton" },
       { id: "badge", title: "In badge", demo: "GallerySpinnerBadge" },
       { id: "input", title: "In input", demo: "GallerySpinnerInput" },
@@ -789,7 +788,7 @@ function galleryPage({ families = null } = {}) {
       { id: "swatch-only", title: "Composition / swatch only", demo: "GalleryChipSwatchOnly" },
       { id: "icon", title: "Composition / icon", demo: "GalleryChipIcon" },
       { id: "group", title: "Composition / filter group", demo: "GalleryChipGroup" },
-      { id: "tone-accent", title: "Tone / accent", demo: "GalleryChipAccent" },
+      { id: "selection-accent", title: "Selection / accent", demo: "GalleryChipAccent" },
       { id: "assist", title: "Variant / assist", demo: "GalleryChipAssist" },
       { id: "filter", title: "Variant / filter", demo: "GalleryChipFilter" },
       { id: "input", title: "Variant / input", demo: "GalleryChipInput" },
@@ -807,7 +806,6 @@ function galleryPage({ families = null } = {}) {
     ],
     alert: [
       { id: "default", title: "Default / single line", demo: "GalleryAlert", span: "2x1" },
-      { id: "accent", title: "Tone / accent", demo: "GalleryAlertAccent", span: "2x1" },
       { id: "link", title: "Composition / text link", demo: "GalleryAlertLink", span: "2x1" },
       { id: "success", title: "Tone / success", demo: "GalleryAlertSuccess", span: "2x1" },
       { id: "danger", title: "Tone / danger", demo: "GalleryAlertDanger", span: "2x1" },
@@ -825,8 +823,6 @@ function galleryPage({ families = null } = {}) {
     count: [
       { id: "default", title: "Default", demo: "GalleryCount" },
       { id: "variant-soft", title: "Variant / soft", demo: "GalleryCountSoft" },
-      { id: "tone-accent", title: "Tone / accent", demo: "GalleryCountAccent" },
-      { id: "variant-soft-tone-accent", title: "Soft / accent", demo: "GalleryCountSoftAccent" },
       { id: "size-sm", title: "Size / sm", demo: "GalleryCountSizeSm" },
       { id: "size-md", title: "Size / md", demo: "GalleryCountSizeMd" },
       { id: "single-digit", title: "Content / single digit", demo: "GalleryCountSingleDigit" },
@@ -933,7 +929,7 @@ function galleryPage({ families = null } = {}) {
       { id: "default", title: "Default", demo: "GalleryProgress" },
       { id: "labeled", title: "Composition / label and value", demo: "GalleryProgressLabeled" },
       { id: "indeterminate", title: "State / indeterminate", demo: "GalleryProgressIndeterminate" },
-      { id: "accent", title: "Tone / accent", demo: "GalleryProgressAccent" },
+      { id: "selection-accent", title: "Selection / accent", demo: "GalleryProgressAccent" },
       { id: "size-small", title: "Size / small", demo: "GalleryProgressSmall" },
       { id: "size-medium", title: "Size / medium", demo: "GalleryProgressMedium" },
       { id: "size-large", title: "Size / large", demo: "GalleryProgressLarge" },

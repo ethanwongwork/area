@@ -132,7 +132,7 @@
     min-inline-size: var(--area-control-xs);
     padding-inline: var(--_hint-inset);
     border: 0;
-    border-radius: var(--area-radius-control-xs);
+    border-radius: min(var(--area-radius-control-xs), calc(var(--area-control-xs) * var(--area-radius-cap)));
     background: transparent;
     color: inherit;
     font: inherit;

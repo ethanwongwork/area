@@ -43,7 +43,7 @@
     margin: auto 0;
     padding: 0;
     border: 0;
-    border-radius: var(--area-radius-control-xs);
+    border-radius: min(var(--area-radius-control-xs), calc(var(--area-control-xs) * var(--area-radius-cap)));
     background: transparent;
     color: var(--area-input-icon);
     cursor: grab;

@@ -191,7 +191,7 @@ export const CardTags = () => (
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
-      <BadgeGroup><Badge tone="accent">Label</Badge><Badge tone="accent">Label</Badge></BadgeGroup>
+      <BadgeGroup><Badge>Label</Badge><Badge>Label</Badge></BadgeGroup>
     </CardContent>
   </Card>
 );

@@ -50,12 +50,14 @@ export const NavHorizontal = () => (
 export const NavSeparated = () => <Nav orientation="horizontal" aria-label="Label"><NavItem href="#" current>Item one</NavItem><NavSeparator /><NavItem href="#">Item two</NavItem></Nav>;
 
 export const NavAccent = () => (
-  <Nav tone="accent" aria-label="Label">
-    <NavItem href="#" current>
-      Item one
-    </NavItem>
-    <NavItem href="#">Item two</NavItem>
-  </Nav>
+  <div data-area-selection="accent" style={{ display: "contents" }}>
+    <Nav selection="marker" aria-label="Label">
+      <NavItem href="#" current>
+        Item one
+      </NavItem>
+      <NavItem href="#">Item two</NavItem>
+    </Nav>
+  </div>
 );
 
 export const NavDisabled = () => (

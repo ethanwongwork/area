@@ -4,10 +4,9 @@ import { createElement as h } from "react";
 import { renderToString } from "react-dom/server";
 import { MANIFESTS, Spinner } from "../dist/modules/index.js";
 
-test("defaults to neutral and exposes accent as an opt-in tone", () => {
-  assert.deepEqual(MANIFESTS.spinner.variants.tone, ["neutral", "accent"]);
-  assert.equal(MANIFESTS.spinner.defaults.tone, "neutral");
-  assert.match(renderToString(h(Spinner, { tone: "accent" })), /area-spinner--accent/);
+test("has no tone: the arc is the Selection role", () => {
+  assert.equal(MANIFESTS.spinner.variants.tone, undefined);
+  assert.doesNotMatch(renderToString(h(Spinner)), /area-spinner--(neutral|accent)/);
 });
 
 test("is decorative without a label and a status region when named", () => {

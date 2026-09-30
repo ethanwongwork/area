@@ -13,9 +13,9 @@ test('formats like Indicator: whole numbers, max+ above the cap, zero hiding opt
 });
 test('defaults to plain, neutral, md and maps each axis to its modifier', () => {
   const html = render(h(Count, { count: 1 }));
-  for (const cls of ['area-count--plain', 'area-count--neutral', 'area-count--md']) assert.match(html, new RegExp(cls));
-  const soft = render(h(Count, { count: 1, variant: 'soft', tone: 'accent', size: 'sm' }));
-  for (const cls of ['area-count--soft', 'area-count--accent', 'area-count--sm']) assert.match(soft, new RegExp(cls));
+  for (const cls of ['area-count--plain', 'area-count--md']) assert.match(html, new RegExp(cls));
+  const soft = render(h(Count, { count: 1, variant: 'soft', size: 'sm' }));
+  for (const cls of ['area-count--soft', 'area-count--sm']) assert.match(soft, new RegExp(cls));
 });
 test('label adds visually hidden words after the number and passes native props', () => {
   const html = render(h(Count, { count: 3, label: 'unread', id: 'c' }));

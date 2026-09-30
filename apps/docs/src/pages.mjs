@@ -17,7 +17,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "count", name: "Count", manifest: "count", imports: "Count",
-    api: [["count / max / showZero", "nonnegative number, display cap (max+), zero visibility", "— / 99 / true"], ["label", "words a screen reader hears after the number (\"unread\")", "—"], ["variant", "plain | soft", "plain"], ["tone", "neutral | accent", "neutral"], ["size", "sm (16) | md (20)", "md"]],
+    api: [["count / max / showZero", "nonnegative number, display cap (max+), zero visibility", "— / 99 / true"], ["label", "words a screen reader hears after the number (\"unread\")", "—"], ["variant", "plain | soft", "plain"], ["size", "sm (16) | md (20)", "md"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryCount", note: "A number beside its owner's label: a nav row, a tab, a filter, a group heading. Plain by default, as Notion's board counts."},
       {id: "soft", title: "Soft", demo: "GalleryCountSoft", note: "On a translucent plate (Primer's CounterLabel), so it stays visible on a hovered or selected row."},
@@ -28,7 +28,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "indicator", name: "Indicator", manifest: "indicator", imports: "Indicator, IndicatorAnchor",
-    api: [["status / size / outOfOffice", "availability variant; xs10 / sm12 / md16 / lg20; optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "accent | neutral | info | success | warning | danger", "danger"], ["processing / withBorder / disabled", "pulse / surface cutout / hide indicator", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["compact", "inset rectangular count and presence attachments by 4px", "false"]],
+    api: [["status / size / outOfOffice", "availability variant; xs10 / sm12 / md16 / lg20; optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "neutral | info | success | warning | danger", "danger"], ["processing / withBorder / disabled", "pulse / surface cutout / hide indicator", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["compact", "inset rectangular count and presence attachments by 4px", "false"]],
     examples: [
       {id: "presence", title: "Presence", demo: "GalleryBadgePresenceAvailable", note: "Presence is the status variant of Indicator. Area-drawn glyphs: the ring and mark share the 1.125px icon line weight at every size, following Fluent’s status mapping. Presence remains a compatibility export."},
       {id: "activity", title: "Activity dots", demo: "GalleryBadgeActivity", note: "A 6px dot, matching the Badge dot and Untitled UI; Figma’s unread dot measures 5px. The pulse keeps Mantine’s structure and respects reduced motion."},
@@ -102,7 +102,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "calendar", name: "Calendar", exportName: "Calendar", manifest: "calendar",
-    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, false"], ["variant", '"plain" | "surface"', '"plain"'], ["tone", '"neutral" | "accent"', '"neutral"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
+    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, false"], ["variant", '"plain" | "surface"', '"plain"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
     examples: [
       { id: "default", title: "Date", note: "Arrow keys move by day and week, Home and End to the week's edges, Page Up and Page Down by month (with Shift, by year). Enter or Space selects.", demo: "GalleryCalendar" },
       { id: "range", title: "Range", note: "The first choice anchors the range; hovering or moving focus previews it until the second choice. Escape cancels.", demo: "GalleryCalendarRange" },
@@ -111,7 +111,7 @@ export const COMPONENT_PAGES = [
       { id: "unavailable", title: "Bounds and unavailable dates", note: "Dates outside min and max, and dates the predicate rejects, are disabled; unavailable days inside the month are struck through.", demo: "GalleryCalendarUnavailable" },
       { id: "monday", title: "Week starts Monday", demo: "GalleryCalendarMonday" },
       { id: "plain", title: "Plain", note: "Without a surface, for a popover, panel or card that already has one.", demo: "GalleryCalendarPlain" },
-      { id: "tone-accent", title: "Accent", note: "Selection is neutral by default. tone=\"accent\" paints the selected days and range band with the accent, for a product whose selection color is its brand.", demo: "GalleryCalendarAccent" },
+      { id: "selection-accent", title: "Selection / accent", note: "Selection is neutral by default. A theme with selection set to accent paints the selected days and the range band with the accent.", demo: "GalleryCalendarAccent" },
       { id: "days-circle", title: "Circle", note: "Round days; days that can be chosen carry a soft fill, as in booking calendars. Unavailable days are struck through.", demo: "GalleryCalendarCircle" },
       { id: "days-tile", title: "Tile", note: "Days that can be chosen are outlined tiles; days that cannot are filled and quiet.", demo: "GalleryCalendarTile" },
       { id: "markers", title: "Markers", note: "Dots under days that carry events, in a tone per date. They are announced as a description.", demo: "GalleryCalendarMarkers" },
@@ -122,7 +122,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "alignment-picker", name: "Alignment picker", exportName: "AlignmentPicker", manifest: "alignmentPicker",
-    api: [["label", "string (accessible group name)", "—"], ["stretch", "fill parent width and height (set parent dimensions)", "false"], ["value / defaultValue", "nine physical positions", '"center"'], ["onValueChange", "(position, event) => void", "—"], ["variant", '"surface" | "plain"', '"surface"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["tone", '"neutral" | "accent"', '"neutral"'], ["name / required / disabled", "native radio form props", "—"]],
+    api: [["label", "string (accessible group name)", "—"], ["stretch", "fill parent width and height (set parent dimensions)", "false"], ["value / defaultValue", "nine physical positions", '"center"'], ["onValueChange", "(position, event) => void", "—"], ["variant", '"surface" | "plain"', '"surface"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled", "native radio form props", "—"]],
     examples: [
       { id: "default", title: "Default", note: "Choose one of nine physical points. Arrow keys move within a row or column and wrap at its edge; Home and End reach the first and last point.", demo: "GalleryAlignmentPickerDefault" },
       { id: "landscape", title: "Stretch landscape", demo: "GalleryAlignmentPickerLandscape" },
@@ -254,7 +254,7 @@ export const COMPONENT_PAGES = [
       {
         id: "tones",
         title: "Tones",
-        note: "Eight tones. Neutral carries no hue and is the default \u2014 a near-black button is the strongest call to action a neutral palette can make, and it stays strongest whatever the accent axis is set to. Accent is reserved for moments that are genuinely about identity.",
+        note: "Seven tones. Neutral carries no meaning and is the default. Its solid fill is the Action role: near-black by default, the accent when a theme sets action to accent. The other tones are semantic and keep their colour in every theme.",
         demo: "ButtonTones",
       },
       {
@@ -334,7 +334,7 @@ export const COMPONENT_PAGES = [
     ],
     examples: [
       { id: "default", title: "Solid / neutral", note: "Two buttons in one shape. The trigger has its own name, reports aria-expanded and opens the menu with Enter, Space or the arrow keys; Escape closes it and returns focus.", demo: "GallerySplitButton" },
-      { id: "accent", title: "Solid / accent", demo: "GallerySplitButtonAccent" },
+      { id: "action-accent", title: "Action / accent", demo: "GallerySplitButtonAccent" },
       { id: "soft", title: "Soft", demo: "GallerySplitButtonSoft" },
       { id: "outline", title: "Outline", demo: "GallerySplitButtonOutline" },
       { id: "icon", title: "Leading icon", demo: "GallerySplitButtonIcon" },
@@ -645,7 +645,6 @@ export const COMPONENT_PAGES = [
     manifest: "checkbox",
     api: [
       ["variant", '"card"', "—"],
-      ["tone", '"neutral" | "accent"', '"neutral"'],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
       ["caption / description", "ReactNode", "—"],
@@ -677,7 +676,6 @@ export const COMPONENT_PAGES = [
     manifest: "radio",
     api: [
       ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["tone", '"neutral" | "accent"', '"neutral"'],
       ["label", "ReactNode", "—"],
       ["name", "string", "—"],
       ["description", "ReactNode", "—"],
@@ -704,7 +702,7 @@ export const COMPONENT_PAGES = [
       ["onCheckedChange", "(checked: boolean) => void", "—"],
       ["loading / readOnly", "boolean", "false"],
       ["labelPosition", '"end" | "start"', '"end"'],
-      ["tone", '"neutral" | "accent" | "custom"', '"neutral"'],
+      ["tone", '"neutral" | "custom"', '"neutral"'],
       ["track", '"short" | "long"', '"short"'],
       ["fullWidth", "boolean", "false"],
       ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
@@ -724,7 +722,6 @@ export const COMPONENT_PAGES = [
     name: "Slider",
     manifest: "slider",
     api: [
-      ["tone", '"neutral" | "accent"', '"neutral"'],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
       ["labelPosition", '"inline" | "top"', '"inline"'],
@@ -741,7 +738,7 @@ export const COMPONENT_PAGES = [
     ],
     examples: [
       { id: "default", title: "Default", demo: "SliderDefault" },
-      { id: "tones", title: "Neutral and accent", note: "Neutral is the stable default. Opt a Slider into the selected system accent when its value should carry product emphasis.", demo: "SliderTones" },
+      { id: "tones", title: "Selection role", note: "The fill is the Selection role: neutral by default, the accent when a theme sets selection to accent (second slider).", demo: "SliderTones" },
       { id: "label", title: "Label and value above", demo: "SliderWithLabel" },
       { id: "label-only", title: "Label above", demo: "SliderLabelOnly" },
       { id: "steps", title: "Steps and formatting", note: "The fill and optional formatter use the same normalized native value, including fractional steps.", demo: "SliderSteps" },
@@ -759,7 +756,6 @@ export const COMPONENT_PAGES = [
     imports: "Chip, ChipGroup, ChipLink",
     api: [
       ["kind", '"assist" | "filter" | "input" | "suggestion"', '"filter"'],
-      ["tone", '"neutral" | "accent"', '"neutral"'],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["selected", "boolean", "false"],
       ["defaultSelected", "boolean", "false"],
@@ -799,7 +795,7 @@ export const COMPONENT_PAGES = [
     imports: "Badge",
     api: [
       ["variant", '"soft" | "solid" | "outline" | "color" | "modern"', '"soft"'],
-      ["tone", '"neutral" | "accent" | "info" | "success" | "warning" | "caution" | "danger" | "discovery" | "inverted"', '"neutral"'],
+      ["tone", '"neutral" | "info" | "success" | "warning" | "caution" | "danger" | "discovery" | "inverted"', '"neutral"'],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["pill (forces pill shape) / dot / dotOnly / iconOnly / truncate / uppercase", "boolean", "false"],
       ["avatar / flag", "decorative ReactNode", "—"],
@@ -840,7 +836,7 @@ export const COMPONENT_PAGES = [
     api: [
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["shape", '"circle" | "square"', '"circle"'],
-      ["tone", '"neutral" | "accent" | "inverse"', '"neutral"'],
+      ["tone", '"neutral" | "inverse"', '"neutral"'],
       ["active", "boolean", "false"],
       ["src", "string", "—"],
       ["alt", "string", "—"],
@@ -1116,7 +1112,7 @@ export const COMPONENT_PAGES = [
     name: "Alert",
     manifest: "alert",
     api: [
-      ["tone", '"neutral" | "accent" | "info" | "danger" | "warning" | "success"', '"neutral"'],
+      ["tone", '"neutral" | "info" | "danger" | "warning" | "success"', '"neutral"'],
       ["layout", '"single-line" | "multiline" | "banner"', '"single-line"'],
       ["flush", "boolean: square, no side or top edges (a banner that meets its container's edges)", "false"],
       ["icon", "ReactNode", "—"],
@@ -1127,7 +1123,6 @@ export const COMPONENT_PAGES = [
     ],
     examples: [
       { id: "default", title: "Default", demo: "AlertDefault" },
-      { id: "accent", title: "Accent", demo: "AlertAccent" },
       { id: "link", title: "Single line with text link", demo: "AlertWithLink" },
       {
         id: "tones",
@@ -1162,7 +1157,6 @@ export const COMPONENT_PAGES = [
     manifest: "spinner",
     api: [
       ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["tone", '"neutral" | "accent"', '"neutral"'],
       ["label", "string", "—"],
     ],
     examples: [{ id: "default", title: "Default", demo: "SpinnerDefault" }],
@@ -1176,7 +1170,6 @@ export const COMPONENT_PAGES = [
       ["max", "number", "100"],
       ["label", "string", "—"],
       ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["tone", '"neutral" | "accent"', '"neutral"'],
     ],
     examples: [
       { id: "default", title: "Default", demo: "ProgressDefault" },
@@ -1312,7 +1305,6 @@ export const COMPONENT_PAGES = [
     manifest: "nav",
     api: [
       ["orientation", '"vertical" | "horizontal"', '"vertical"'],
-      ["tone", '"neutral" | "accent"', '"neutral"'],
       ["selection", '"marker"', "—"],
       ["current", "boolean", "false"],
       ["icon", "ReactNode", "\u2014"],
@@ -1325,7 +1317,6 @@ export const COMPONENT_PAGES = [
       "Label every nav. Two or three <code class='area-code'>&lt;nav&gt;</code> landmarks on one page are indistinguishable without <code class='area-code'>aria-label</code>, and a sidebar plus a top bar is the common case.",
       "Group vertically, never horizontally. A group label needs a line of its own, which a horizontal nav does not have.",
       "Let long labels truncate. The row reserves space for the icon and anything trailing and gives the rest to the label, so a long document title shortens instead of wrapping the row to two lines.",
-      "Reach for <code class='area-code'>tone=\"accent\"</code> only where the nav is the page's primary structure. On a sidebar beside accent-coloured content it competes.",
     ],
     examples: [
       { id: "default", title: "Default", demo: "NavDefault" },
@@ -1346,9 +1337,9 @@ export const COMPONENT_PAGES = [
       },
       { id: "separator", title: "Separator", demo: "NavSeparated" },
       {
-        id: "accent",
-        title: "Accent",
-        note: "Use the tone prop to carry the accent hue on the current item instead of the neutral.",
+        id: "selection-accent",
+        title: "Marker / selection accent",
+        note: "The current item's marker is the Selection role; its plate stays neutral in every theme.",
         demo: "NavAccent",
       },
       { id: "disabled", title: "Disabled", demo: "NavDisabled" },

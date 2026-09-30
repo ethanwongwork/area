@@ -95,24 +95,16 @@
    * and a solid fill on one member turns it into the only thing on the row with weight --
    * which reads as a call to action rather than as the current choice.
    *
-   * Tone: neutral unless accent is asked for (DESIGN_SYSTEM.md). The neutral selection is a
+   * Selection role (DESIGN_SYSTEM.md, "Emphasis roles"). The neutral selection is a
    * component fill with the hover edge; hovering it strengthens the edge, since there is no
-   * darker component fill to step to.
+   * darker component fill to step to. With selection in the accent, the accent surface.
    */
-  .area-chip,
-  .area-chip--neutral {
-    --_selected-bg: var(--area-bg-component-active);
-    --_selected-bg-hover: var(--area-bg-component-active);
-    --_selected-border: var(--area-edge-control-hover);
-    --_selected-border-hover: color-mix(in srgb, var(--area-border-hover), var(--area-stroke-control-hover) calc(var(--area-contrast-more) * 100%));
-    --_selected-fg: var(--area-fg-default);
-  }
-  .area-chip--accent {
-    --_selected-bg: var(--area-accent-surface);
-    --_selected-bg-hover: var(--area-accent-surface-hover);
-    --_selected-border: var(--area-edge-accent);
-    --_selected-border-hover: var(--area-edge-accent);
-    --_selected-fg: var(--area-fg-accent);
+  .area-chip {
+    --_selected-bg: var(--area-selection-surface);
+    --_selected-bg-hover: var(--area-selection-surface-hover);
+    --_selected-border: var(--area-selection-edge);
+    --_selected-border-hover: color-mix(in srgb, color-mix(in srgb, var(--area-border-hover), var(--area-stroke-control-hover) calc(var(--area-contrast-more) * 100%)), var(--area-edge-accent) calc(var(--area-selection-accent) * 100%));
+    --_selected-fg: var(--area-fg-selection);
   }
   .area-chip[data-selected] {
     --_bg: var(--_selected-bg);

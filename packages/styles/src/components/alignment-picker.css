@@ -9,7 +9,7 @@
     gap: 0;
     padding: calc(var(--area-space-4) - var(--area-stroke-width));
     border: var(--area-stroke-width) solid var(--_alignment-edge);
-    border-radius: var(--area-radius-control);
+    border-radius: min(var(--area-radius-control), calc(var(--area-control-md) * var(--area-radius-cap))); /* finite under Pill (audit H-1) */
     background: var(--_alignment-bg);
   }
   .area-alignment-picker--sm { --_cell: max(var(--area-space-20), calc((var(--area-control-sm) + var(--area-icon-sm)) / 2)); }
@@ -19,17 +19,15 @@
     --_alignment-bg: var(--area-input-bg-soft);
   }
   .area-alignment-picker--plain { --_alignment-bg: transparent; --_alignment-edge: transparent; }
-  /* Tone: the selected bars are neutral ink unless accent is asked for (DESIGN_SYSTEM.md). */
-  .area-alignment-picker,
-  .area-alignment-picker--neutral { --_selected-mark: var(--area-fg-default); }
-  .area-alignment-picker--accent { --_selected-mark: var(--area-fg-accent); }
+  /* The selected bars are the Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"). */
+  .area-alignment-picker { --_selected-mark: var(--area-fg-selection); }
   .area-alignment-picker__cell {
     position: relative;
     display: grid;
     place-items: center;
     inline-size: var(--_cell);
     block-size: var(--_cell);
-    border-radius: max(0px, calc(var(--area-radius-control) - var(--area-space-4)));
+    border-radius: max(0px, calc(min(var(--area-radius-control), calc(var(--area-control-md) * var(--area-radius-cap))) - var(--area-space-4)));
     cursor: pointer;
   }
   .area-alignment-picker__cell > input {

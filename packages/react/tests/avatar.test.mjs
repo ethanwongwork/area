@@ -28,7 +28,7 @@ test("tone and active ring remain independent visual axes", () => {
   const html = renderToString(h(Avatar, { tone: "inverse", active: true, fallback: "IN" }));
   assert.match(html, /area-avatar--inverse/);
   assert.match(html, /area-avatar--active/);
-  assert.deepEqual(MANIFESTS.avatar.variants.tone, ["neutral", "accent", "inverse"]);
+  assert.deepEqual(MANIFESTS.avatar.variants.tone, ["neutral", "inverse"]);
   assert.deepEqual(MANIFESTS.avatar.booleans, ["active"]);
 });
 

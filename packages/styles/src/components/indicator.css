@@ -13,7 +13,6 @@
   .area-indicator[data-border] { box-shadow: 0 0 0 var(--area-space-2) var(--area-bg-surface); }
   .area-indicator[data-processing]::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--_bg); z-index: -1; animation: area-indicator-pulse calc(var(--area-duration-slow) * 4) linear infinite; }
   @keyframes area-indicator-pulse { from { opacity: .6; transform: scale(0); } to { opacity: 0; transform: scale(2.8); } }
-  .area-indicator--accent { --_bg: var(--area-accent-solid); --_fg: var(--area-fg-on-accent); }
   .area-indicator--neutral { --_bg: var(--area-neutral-solid); --_fg: var(--area-fg-on-neutral); }
   .area-indicator--info { --_bg: var(--area-info-solid); --_fg: var(--area-fg-on-info); }
   .area-indicator--success { --_bg: var(--area-success-solid); --_fg: var(--area-fg-on-success); }

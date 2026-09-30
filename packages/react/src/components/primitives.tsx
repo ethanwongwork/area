@@ -384,13 +384,12 @@ export const Skeleton = /* @__PURE__ */ forwardRef<HTMLDivElement, SkeletonProps
 
 export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
   size?: VariantProps<typeof MANIFESTS.spinner>["size"];
-  tone?: VariantProps<typeof MANIFESTS.spinner>["tone"];
   /** Announced to assistive tech. Omit when a nearby element already says it. */
   label?: string;
 }
 
 export const Spinner = /* @__PURE__ */ forwardRef<HTMLSpanElement, SpinnerProps>(function Spinner(
-  { size, tone, label, className, ...rest },
+  { size, label, className, ...rest },
   ref,
 ) {
   return (
@@ -399,7 +398,7 @@ export const Spinner = /* @__PURE__ */ forwardRef<HTMLSpanElement, SpinnerProps>
       role={label ? "status" : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : "true"}
-      className={spinnerVariants({ size, tone }, className)}
+      className={spinnerVariants({ size }, className)}
       {...rest}
     />
   );
@@ -411,11 +410,10 @@ export interface ProgressProps extends Omit<Div, "children"> {
   max?: number;
   label?: string;
   size?: VariantProps<typeof MANIFESTS.progress>["size"];
-  tone?: VariantProps<typeof MANIFESTS.progress>["tone"];
 }
 
 export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps>(function Progress(
-  { value, max = 100, label, size, tone, className, ...rest },
+  { value, max = 100, label, size, className, ...rest },
   ref,
 ) {
   const indeterminate = value == null;
@@ -429,7 +427,7 @@ export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps
       aria-valuemax={max}
       aria-valuenow={indeterminate ? undefined : value}
       aria-label={label}
-      className={progressVariants({ size, tone }, className)}
+      className={progressVariants({ size }, className)}
       {...(indeterminate ? { "data-indeterminate": "" } : {})}
       {...rest}
     >
@@ -667,7 +665,6 @@ export const PanelStack = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(functi
  * than a length it survives a density change without recomputing.
  */
 export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
-  tone?: VariantProps<typeof MANIFESTS.slider>["tone"];
   size?: VariantProps<typeof MANIFESTS.slider>["size"];
   /** Visible label for the range. */
   label?: ReactNode;
@@ -719,7 +716,6 @@ function normalizeSliderValue(
 
 export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(function Slider(
   {
-    tone,
     size,
     label,
     labelPosition = "inline",
@@ -781,7 +777,6 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
   return (
     <label
       className={sliderVariants({
-        tone,
         size,
         labelPosition: labelPosition === "top" ? "top" : undefined,
         orientation: orientation === "vertical" ? "vertical" : undefined,
@@ -822,8 +817,6 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
   /** Interaction role: assist action, selectable filter, removable input, or suggestion. */
   kind?: VariantProps<typeof MANIFESTS.chip>["kind"];
   size?: VariantProps<typeof MANIFESTS.chip>["size"];
-  /** Selected paint. Neutral by default; accent is an explicit override. */
-  tone?: VariantProps<typeof MANIFESTS.chip>["tone"];
   pill?: boolean;
   /** A colour this chip stands for, shown as a dot before the label. */
   swatch?: string;
@@ -854,14 +847,14 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
 }
 
 export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(function Chip(
-  { kind = "filter", size, tone, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onRemove, clickable, removeIcon, removeLabel = "Remove chip", invalid, swatchOnly, className, children, disabled, ...rest },
+  { kind = "filter", size, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onRemove, clickable, removeIcon, removeLabel = "Remove chip", invalid, swatchOnly, className, children, disabled, ...rest },
   ref,
 ) {
   const [localSelected, setLocalSelected] = useState(defaultSelected);
   const currentSelected = selected ?? localSelected;
   const selectable = kind === "filter";
   const primaryInteractive = selectable || clickable || Boolean(onClick);
-  const classes = chipVariants({ kind, size, tone, pill, swatchOnly }, className);
+  const classes = chipVariants({ kind, size, pill, swatchOnly }, className);
   const state = {
     ...(selectable && currentSelected ? { "data-selected": "" } : {}),
     ...(disabled ? { "data-disabled": "" } : {}),

@@ -134,9 +134,11 @@ export const INVERSION = {
    * (owner 2026-09-28: "can you lighten the background at all? … make the colors more
    * vibrant/lighter"), so each syntax family clears 4.6:1 one rung lighter, at its most
    * saturated legible rung; was 25. The block keeps its seam and header rule. Inline code keeps
-   * the 25 rung through `bg-stripe`. Dark stays one rung off the page.
+   * the 25 rung through `bg-stripe`. Dark mirrors light: the ground is the surface rung, so
+   * the seam and header rule (`border-decorative`, 800) stay visible on it; at 800 they
+   * matched the fill and vanished (audit G-3).
    */
-  code: { light: "white", dark: 800 },
+  code: { light: "white", dark: 850 },
   /** The level a translucent scrim is solved from. */
   scrim: { light: 600, dark: 950 },
 } as const satisfies Record<string, Inversion>;

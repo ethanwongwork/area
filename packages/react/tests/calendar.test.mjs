@@ -20,9 +20,7 @@ test('a month is a labelled grid of its own weeks with one tab stop', () => {
   assert.match(html, /aria-current="date"[^>]*data-date="2026-09-26"|data-date="2026-09-26"[^>]*aria-current="date"/);
   assert.match(html, /abbr="Sunday"/);
   assert.equal(MANIFESTS.calendar.defaults.variant, 'plain');
-  assert.equal(MANIFESTS.calendar.defaults.tone, 'neutral');
-  assert.match(html, /area-calendar--neutral/);
-  assert.match(render({ tone: 'accent' }), /area-calendar--accent/);
+  assert.equal(MANIFESTS.calendar.variants.tone, undefined);
   assert.throws(() => calendarVariants({ variant: 'card' }), RangeError);
 });
 
@@ -45,8 +43,13 @@ test('outside days never repeat the selection of a neighbouring month', () => {
 
 test('bounds disable days; unavailable days are marked for strike-through', () => {
   const html = render({ defaultMonth: '2026-09', min: '2026-09-03', max: '2026-09-28', isDateUnavailable: d => d === '2026-09-12' });
-  assert.match(html, /data-date="2026-09-02"[^>]*disabled=""|disabled=""[^>]*data-date="2026-09-02"/);
-  assert.doesNotMatch(html, /data-date="2026-09-03"[^>]*disabled=""/);
+  // Unavailable days stay focusable (aria-disabled, APG date grid) so the arrows can cross them (audit F-9).
+  const day = iso => html.match(new RegExp(`<button[^>]*data-date="${iso}"[^>]*>`))[0];
+  assert.match(day('2026-09-02'), /aria-disabled="true"/);
+  assert.doesNotMatch(day('2026-09-02'), /disabled=""/);
+  assert.match(day('2026-09-12'), /aria-disabled="true"/);
+  assert.doesNotMatch(day('2026-09-03'), /disabled/);
+  assert.match(render({ disabled: true }), /data-date="[^"]+"[^>]*disabled=""|disabled=""[^>]*data-date=/);
   assert.match(html, /data-date="2026-09-12"[^>]*data-unavailable="true"|data-unavailable="true"[^>]*data-date="2026-09-12"/);
 });
 
@@ -63,11 +66,11 @@ test('multiple selection submits one field per date', () => {
 });
 
 test('day treatments, markers and weekday styles', () => {
-  const html = render({ days: 'circle', weekdayStyle: 'narrow', markers: { '2026-09-14': 'accent' } });
+  const html = render({ days: 'circle', weekdayStyle: 'narrow', markers: { '2026-09-14': 'info' } });
   assert.match(html, /area-calendar--circle/);
   assert.match(html, /abbr="Sunday"[^>]*>S</);
   assert.match(html, /data-date="2026-09-14"[^>]*aria-description="Has events"|aria-description="Has events"[^>]*data-date="2026-09-14"/);
-  assert.match(html, /area-calendar__marker" data-tone="accent"/);
+  assert.match(html, /area-calendar__marker" data-tone="info"/);
   assert.match(render({ days: 'tile', weekdayStyle: 'abbreviated' }), />Sun</);
 });
 

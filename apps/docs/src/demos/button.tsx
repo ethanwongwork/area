@@ -17,7 +17,6 @@ export const ButtonVariants = () => (
 export const ButtonTones = () => (
   <>
     <Button tone="neutral">Neutral</Button>
-    <Button tone="accent">Accent</Button>
     <Button tone="info">Info</Button>
     <Button tone="success">Success</Button>
     <Button tone="warning">Warning</Button>
@@ -29,7 +28,7 @@ export const ButtonTones = () => (
 
 export const ButtonToneMatrix = () => (
   <>
-    {(["neutral", "accent", "info", "success", "warning", "caution", "danger", "discovery"] as const).map(
+    {(["neutral", "info", "success", "warning", "caution", "danger", "discovery"] as const).map(
       (tone) => (
         <div key={tone} style={{ display: "flex", gap: "var(--area-space-8)" }}>
           <Button tone={tone} variant="solid" size="sm">

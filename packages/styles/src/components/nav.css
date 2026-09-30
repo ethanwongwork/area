@@ -157,11 +157,12 @@
     inset-inline-start: var(--area-space-6);
     inset-block-start: 50%;
     translate: 0 -50%;
-    inline-size: calc(var(--area-space-2) + var(--area-border-width));
+    inline-size: calc(var(--area-space-2) + var(--area-stroke-width));
     block-size: calc(1cap + var(--area-space-4));
     border-radius: var(--area-radius-full);
-    /* Neutral by default, accent by override (DESIGN_SYSTEM.md): the ink of the current label. */
-    background-color: var(--_marker, var(--area-fg-default));
+    /* The Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"): the current label's ink
+       by default. The current row's plate stays neutral in every theme. */
+    background-color: var(--_marker, var(--area-fg-selection));
   }
 
   .area-nav__item:focus-visible {
@@ -173,13 +174,6 @@
   .area-nav__item[data-disabled] {
     cursor: not-allowed;
     opacity: 0.5;
-  }
-
-  /* The accent variant: current items carry the accent rather than the neutral. */
-  .area-nav--accent { --_marker: var(--area-accent-solid); }
-  .area-nav--accent .area-nav__item[aria-current]:not([aria-current="false"]) {
-    background-color: var(--area-accent-surface-hover);
-    color: var(--area-fg-accent);
   }
 
   .area-nav__icon {
@@ -239,7 +233,6 @@
   }
   .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current="page"])):hover { background: var(--area-bg-component-hover); }
   .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: var(--area-bg-component-active); }
-  .area-nav--accent .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: var(--area-accent-surface-hover); }
   .area-nav--marker .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: transparent; }
   .area-nav .area-nav__row > .area-nav__item { background: transparent; }
 

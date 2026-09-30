@@ -19,16 +19,15 @@ export interface CountProps extends Omit<HTMLAttributes<HTMLSpanElement>, "child
    */
   label?: ReactNode;
   variant?: CountVariants["variant"];
-  tone?: CountVariants["tone"];
   size?: CountVariants["size"];
 }
 
 export const Count = forwardRef<HTMLSpanElement, CountProps>(function Count(
-  { count, max = 99, showZero = true, label, variant, tone, size, className, ...rest }, ref,
+  { count, max = 99, showZero = true, label, variant, size, className, ...rest }, ref,
 ) {
   if (!showZero && normalizeCount(count) === 0) return null;
   return (
-    <span ref={ref} {...rest} className={countVariants({ variant, tone, size }, className)}>
+    <span ref={ref} {...rest} className={countVariants({ variant, size }, className)}>
       {formatCount(count, max)}
       {label ? <span className="area-count__label"> {label}</span> : null}
     </span>

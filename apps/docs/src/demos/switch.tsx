@@ -6,7 +6,7 @@ export const SwitchSizeSm = () => <Switch size="sm" label="Label" />;
 export const SwitchSizeMd = () => <Switch size="md" label="Label" />;
 export const SwitchSizeLg = () => <Switch size="lg" label="Label" />;
 export const SwitchChecked = () => <Switch label="Label" defaultChecked />;
-export const SwitchAccent = () => <Switch label="Label" tone="accent" defaultChecked />;
+export const SwitchAccent = () => <div data-area-selection="accent" style={{ display: "contents" }}><Switch label="Label" defaultChecked /></div>;
 export const SwitchCustom = () => <Switch label="Custom" tone="custom" defaultChecked style={{ "--area-switch-color": "var(--area-green-500)", "--area-switch-color-hover": "var(--area-green-550)" } as CSSProperties} />;
 export const SwitchLong = () => <Switch label="Label" track="long" defaultChecked />;
 export const SwitchHover = () => <Switch label="Label" data-hover="" />;

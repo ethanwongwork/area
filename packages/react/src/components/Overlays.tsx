@@ -215,7 +215,15 @@ export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenCh
   useEffect(() => () => clearTimeout(timer.current), []);
   useEffect(() => {
     if (!open) return;
-    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") hide(0); };
+    // Escape dismisses only the tooltip (WCAG 1.4.13). Consuming the event keeps it from also
+    // closing the Popover or modal Dialog the trigger sits in: a cancelled keydown is not a
+    // close request for the native top layer (audit E-4).
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented) return;
+      event.preventDefault();
+      event.stopPropagation();
+      hide(0);
+    };
     addEventListener("keydown", onKey, true);
     return () => removeEventListener("keydown", onKey, true);
   }, [open]);

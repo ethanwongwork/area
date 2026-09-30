@@ -4,7 +4,7 @@ import { mergeAxes, type AxisSelection } from '@area/tokens';
 import type { AreaToken } from '@area/tokens/types';
 const selection: Partial<AxisSelection> = {accent:'green',ui:'compact'};
 const token: AreaToken = '--area-accent-solid';
-export const valid = <Theme value={mergeAxes(undefined,selection)}><Button tone="accent" size="lg"/><Badge tone="neutral"/><Select size="lg"/><Panel size="xs"/><Slider size="lg"/><Chip size="lg"/><Checkbox size="sm"/><Switch size="lg"/><Nav tone="accent"/><CodeBlock wrap code={token}/></Theme>;
+export const valid = <Theme value={mergeAxes(undefined,selection)}><Button tone="danger" size="lg"/><Badge tone="neutral"/><Select size="lg"/><Panel size="sm"/><Slider size="lg"/><Chip size="lg"/><Checkbox size="lg"/><Switch size="lg"/><Nav selection="marker"/><CodeBlock wrap code={token}/></Theme>;
 buttonVariants({tone:'neutral',fullWidth:true}); selectVariants({size:'lg'});
 classesFor(MANIFESTS.button,{variant:'outline'});stateAttributes(MANIFESTS.button,{disabled:true});
 // @ts-expect-error retired vocabulary
@@ -13,7 +13,7 @@ buttonVariants({tone:'primary'});
 buttonVariants({fulWidth:true});
 // @ts-expect-error boolean API is camelCase
 buttonVariants({'full-width':true});
-checkboxVariants({size:'sm'});
+checkboxVariants({size:'lg'});
 // @ts-expect-error public choice controls start at sm; UI scale owns density
 checkboxVariants({size:'xs'});
 // @ts-expect-error no choice control has an xxl tier

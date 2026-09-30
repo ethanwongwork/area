@@ -17,8 +17,8 @@ Reuse a semantic role when the job is the same. Add a component token when the r
 stable meaning and needs independent customization. Give it a sensible existing-token
 fallback, a consumer and checks. Do not add aliases merely to hide unexplained literals.
 
-The registered axes are `theme`, `neutral`, `accent`, `ui`, `radius`, `surface` and
-`motion`. UI scale combines type and density. `data-area-contrast` is a separate
+The registered axes are `theme`, `neutral`, `accent`, `action`, `selection`, `ui`,
+`radius`, `surface` and `motion`. UI scale combines type and density. `data-area-contrast` is a separate
 accessibility preference. See [Theming](THEMING.md) for inheritance and custom values.
 
 Axis namespaces are disjoint. Interactions belong in `packages/tokens/src/emit/base.ts`;
@@ -43,18 +43,32 @@ and every title or heading; 500 only for labels on fills (buttons, segmented opt
 badges, counts, avatar initials). Text uses two foreground levels, default and muted;
 disabled is for disabled and placeholder text only.
 
-**Neutral by default, accent by override** (owner, 2026-09-26). Selection, checked, current
-and progress paint is neutral: `neutral-solid` with `fg-on-neutral` for solid marks, and a
-neutral component fill (`bg-component-hover`/`-active`) for soft ones. Accent appears only
-when the consumer asks for it with `tone="accent"` (or an equivalent variant), never as a
-component default. Semantic tones (danger, success…) still carry meaning such as an
-invalid state. Focus uses the focus role, which is a system setting, not accent selection.
-Button, Switch, Slider, Progress, Spinner, Badge, Avatar, Nav, Tabs and Calendar follow
-this. Checkbox, Radio, Chip (selected) and AlignmentPicker were moved onto a `tone` axis
-(neutral default, accent override) on 2026-09-26 and await owner review; each family's
-gallery shows a `tone-accent` tile. Markers and rings of a current
-or selected state (the Nav rail, Tree view's current rail, a linked code line, the Avatar
-active ring) are neutral ink too; the focus colour is never a selection marker.
+**Emphasis roles** (owner, 2026-09-29; replaces "neutral by default, accent by override").
+Area has one chosen colour, the `accent` axis, and neutral. Components never offer an
+accent tone. They paint one of two roles, and the `action` and `selection` axes decide
+whether each is neutral or the accent. Both default to neutral, so an unthemed product is
+all neutral; a theme can make everything the accent, or lead with either.
+
+- *Action* (`action-solid`, `-solid-hover`, `fg-on-action`, `fg-action`): what you press to
+  commit. The solid fill of a neutral-tone Button, and everything built on it (Split
+  button, Composer send, footer actions). Soft, outline and ghost Buttons stay neutral: the
+  quiet neighbours of an action are not the action.
+- *Selection* (`selection-solid`, `-solid-hover`, `fg-on-selection`, `fg-selection`,
+  `selection-surface`, `-band`, `-edge`): what shows state. Checkbox and Radio checked,
+  Switch on, Slider, Progress and Spinner fills, Calendar selected days and range band,
+  Chip selected, Tabs indicator, the Nav marker, Menu, Select, Combobox and Model picker
+  checks, Tree view checks, AlignmentPicker bars, the swatch picker ring, the Avatar
+  active ring and a linked code line.
+- *Neither*: row plates (hover, current and selected rows in Nav, Tree view, Table,
+  Menu, Select), the Segmented thumb, surfaces, text, dividers and field chrome stay
+  neutral in every theme; only the mark on a row takes the role. Badge, Count, Alert,
+  Toast and Indicator carry semantic tones or stay neutral.
+
+Each role token is its neutral endpoint mixed toward the accent by the axis's 0/1 switch
+(`emit/base.ts`), so the default renders exactly the neutral paint. Semantic tones
+(danger, success…) still carry meaning such as an invalid state, and `tone` on Button,
+Badge, Alert, Toast and Indicator means meaning only. Focus uses the focus role, a system
+setting, and is never a selection marker.
 
 **Shared state paint** ([cohesion audit](research/cohesion-audit.md), 2026-09-26). The same
 role paints the same way in every family:

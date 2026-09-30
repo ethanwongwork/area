@@ -22,8 +22,8 @@
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
-    --_fill: var(--area-neutral-solid);
-    --_fill-hover: var(--area-neutral-solid-hover);
+    --_fill: var(--area-selection-solid);
+    --_fill-hover: var(--area-selection-solid-hover);
     --_track-fill: color-mix(in srgb, var(--area-fill-toggle), var(--area-bg-surface) 20%);
     /* spec: hover darkens the fill and the thumb's dot, never the rail (Fluent: colour on the
        thumb and fill only; Radix and Base UI: no hover change). */
@@ -87,7 +87,7 @@
   .area-slider--vertical .area-slider__control::-moz-range-track { background: linear-gradient(to top, var(--_fill) 0 var(--_pct), var(--_track-fill) var(--_pct) 100%); }
 
   .area-slider-range {
-    --_range-fill: var(--area-neutral-solid);
+    --_range-fill: var(--area-selection-solid);
     --_range-track-fill: color-mix(in srgb, var(--area-fill-toggle), var(--area-bg-surface) 20%);
     display: grid;
     grid-template-columns: max-content minmax(80px, 1fr) max-content;
@@ -147,15 +147,6 @@
   .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible::-webkit-slider-thumb { opacity: 1; }
   .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible::-moz-range-thumb { opacity: 1; }
 
-  .area-slider--neutral {
-    --_fill: var(--area-neutral-solid);
-    --_fill-hover: var(--area-neutral-solid-hover);
-  }
-
-  .area-slider--accent {
-    --_fill: var(--area-accent-solid);
-    --_fill-hover: var(--area-accent-solid-hover);
-  }
 
   .area-slider[data-disabled] {
     cursor: not-allowed;
