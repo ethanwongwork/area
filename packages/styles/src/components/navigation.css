@@ -236,7 +236,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    box-shadow: var(--area-shadow-1);
+    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Input,
+       Textarea, NumberField and InputGroup (audit B-2: Select was the one field that kept shadow-1). */
+    box-shadow: none;
     cursor: pointer;
     outline: none;
     transition: var(--area-transition);

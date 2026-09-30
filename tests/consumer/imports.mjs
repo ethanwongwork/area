@@ -8,7 +8,7 @@ import { DEFAULT_AXES, mergeAxes } from '@area/tokens';
 import { buttonVariants, selectVariants, checkboxVariants, classesFor, stateAttributes } from '@area/react/variants';
 import { build } from 'esbuild';
 assert.equal(typeof window,'undefined');
-assert.equal(DEFAULT_AXES.accent,'indigo');
+assert.equal(DEFAULT_AXES.accent,'blue');
 assert.ok(!Object.hasOwn(DEFAULT_AXES,'brand'));
 assert.equal((await import('@area/react/theme')).Theme,Area.Theme);
 assert.equal((await import('@area/tokens/config')).mergeAxes,mergeAxes);

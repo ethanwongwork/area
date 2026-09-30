@@ -39,7 +39,7 @@ in the manifest where the manifest can express it.
 | state | expanded / collapsed | Branches | Project files / Collapsed |
 | state | selected, current | `aria-selected`, `aria-current` (fill and main ink) | Project files |
 | state | checked | `aria-checked` in checkbox mode | Checkbox filters |
-| state | disabled | Skipped by arrows and typeahead | Disabled row |
+| state | disabled | Skipped by arrows and typeahead; the whole row dims to 50%, icon and chevron included, as Nav, Menu and Tabs (audit D-5) | Disabled row |
 | state | hover, focus-visible, action pinned | Runtime; `data-pinned` on a control | Layers with row controls |
 
 Manifest: `selectionMode` and the elements `chevron`, `check`, `icon`, `label`, `trailing`,

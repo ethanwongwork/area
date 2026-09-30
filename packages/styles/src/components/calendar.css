@@ -112,6 +112,9 @@
   .area-calendar--square {}
   .area-calendar--circle { --_day-radius: var(--area-radius-full); }
   .area-calendar--circle .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-fill: var(--area-bg-component-hover); }
+  /* A circle day already rests on the hover plate, so hover steps to the next opaque rung (the row
+     pair #f3 → #ee); the translucent wash composited to the same #f3 and showed nothing (audit F-11). */
+  .area-calendar--circle .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-outside], [data-selected]) { background: var(--area-bg-component-active); }
   .area-calendar--tile .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle); }
   .area-calendar--tile .area-calendar__day:is(:disabled, [aria-disabled="true"]):not([data-outside]) { --_day-fill: var(--area-bg-component); text-decoration: none; }
 

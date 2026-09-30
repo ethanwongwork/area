@@ -195,7 +195,10 @@
     cursor: pointer;
   }
 
-  .area-input__action-button:hover { background-color: var(--area-bg-component-hover); }
+  /* The row pair: hover #f3, pressed #ee, as the NumberField steppers beside it (audit B-8). */
+  .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-component-hover); }
+  .area-input__action-button:active:not(:disabled) { background-color: var(--area-bg-component-active); }
+  .area-input__action-button:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
   .area-input__action-button:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
 
   .area-input__action-icon,

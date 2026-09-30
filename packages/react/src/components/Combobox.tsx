@@ -51,7 +51,7 @@ type Row = { kind: "option"; option: ComboboxOption } | { kind: "create"; text: 
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Combobox(
   { options, value, defaultValue = null, onValueChange, inputValue, defaultInputValue, onInputChange,
     allowsCustomValue, onCreate, filter = contains, emptyText = "No results", size, toggleLabel = "Show suggestions",
-    fullWidth, disabled, readOnly, className, onKeyDown, onBlur, onFocus, placeholder, ...rest }, ref,
+    fullWidth, disabled, readOnly, className, onKeyDown, onBlur, onFocus, placeholder, name, form, ...rest }, ref,
 ) {
   const id = useId();
   const listId = `${id}-listbox`;
@@ -67,6 +67,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   const [active, setActive] = useState(-1);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const initial = useRef({ value: defaultValue, text: defaultInputValue ?? selectedOption?.label ?? "" });
 
   const setText = (next: string) => {
     if (inputValue === undefined) setOwnText(next);
@@ -77,6 +78,19 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     onValueChange?.(next?.value ?? null);
     setText(next?.label ?? "");
   };
+  // A form reset returns an uncontrolled combobox to its first value and text (audit B-12).
+  useEffect(() => {
+    const owner = inputRef.current?.form;
+    if (!owner) return;
+    const reset = (event: Event) => queueMicrotask(() => {
+      if (event.defaultPrevented) return;
+      if (value === undefined) setOwnValue(initial.current.value);
+      if (inputValue === undefined) setOwnText(initial.current.text);
+      setOpen(false); setActive(-1); setShowAll(false);
+    });
+    owner.addEventListener("reset", reset);
+    return () => owner.removeEventListener("reset", reset);
+  }, [value, inputValue]);
   // A selection made from outside (controlled value) shows its label in the field.
   useEffect(() => {
     if (value !== undefined && inputValue === undefined) setOwnText(selectedOption?.label ?? "");
@@ -154,7 +168,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(event);
-    if (event.defaultPrevented) return;
+    // Enter while an input method is composing confirms the composition, not an option (audit B-13).
+    if (event.defaultPrevented || event.nativeEvent.isComposing || event.keyCode === 229) return;
     switch (event.key) {
       case "ArrowDown":
         event.preventDefault();
@@ -216,7 +231,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   return <div className={comboboxVariants({ fullWidth }, className)} style={{ "--_combobox-anchor": anchor } as CSSProperties}
     data-open={open ? "" : undefined}>
     <Input ref={node => { inputRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
-      {...rest} size={size} fullWidth={fullWidth} disabled={disabled} readOnly={readOnly} placeholder={placeholder}
+      {...rest} form={form} size={size} fullWidth={fullWidth} disabled={disabled} readOnly={readOnly} placeholder={placeholder}
       role="combobox" aria-autocomplete="list" aria-expanded={open} aria-controls={listId} aria-activedescendant={activeId}
       autoComplete="off" value={text}
       onChange={event => { setText(event.target.value); setShowAll(false); if (!open) setOpen(true); setActive(event.target.value.trim() ? 0 : -1); }}
@@ -227,6 +242,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
         onPointerDown={event => event.preventDefault()}
         onClick={() => { if (open) close(); else { inputRef.current?.focus(); openList(true, "selected"); } }}
         icon={<Glyph name="chevron-down" />} />} />
+    {/* The form gets the option's value, not its label; typed text only where custom values are allowed (audit B-12). */}
+    {name ? <input type="hidden" name={name} form={form} disabled={disabled} value={selected ?? (allowsCustomValue ? text : "")} /> : null}
     <div ref={listRef} id={listId} role="listbox" aria-label={typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined}
       popover="manual" className="area-menu area-combobox__listbox" tabIndex={-1}>
       {rows.length === 0 ? <div className="area-combobox__empty" role="presentation">{emptyText}</div> : null}

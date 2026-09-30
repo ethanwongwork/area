@@ -11,7 +11,7 @@ const resources = [
 /** A working composition of public Area components, not an alternative component skin. */
 export function Workbench() {
   const [theme,setTheme]=useState('light');
-  const [accent,setAccent]=useState('indigo');
+  const [accent,setAccent]=useState('blue');
   const [contrast,setContrast]=useState('standard');
   const [ui,setUi]=useState('compact');
   const [view,setView]=useState('cards');

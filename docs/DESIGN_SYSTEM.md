@@ -90,7 +90,8 @@ role paints the same way in every family:
 - *Nested dismiss and close actions* are 28px, the small-button radius, fixed ink, and a
   plate on hover (the component hover fill, or 12% of the ink on a tinted ground).
 - *Soft fields are flat*: a soft Input, Textarea, NumberField, Select or InputGroup has its
-  fill and no shadow, as Figma's inspector fields do; outline fields keep `shadow-1`. One
+  fill and no shadow, as Figma's inspector fields do. Outline fields have no shadow either
+  (outline pass; Select followed on 2026-09-29, audit B-2), as no product field has one. One
   surface uses one field style: a Panel's rows are all soft.
 - *Keycaps* are filled, not drawn: `bg-component-active`, no visible edge, radius 4, muted ink
   at 500 (Notion's shortcut hints). Inside a Button the keycap's corner is concentric with the

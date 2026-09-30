@@ -91,6 +91,8 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
         </span>
       ) : null}
       {children != null && !iconOnly ? <span className="area-button__label">{children}</span> : null}
+      {/* Icon-only keeps its children as the accessible name, as SplitButton does (audit A-12). */}
+      {children != null && iconOnly ? <span className="area-sr-only">{children}</span> : null}
       {trailingIcon ? (
         <span className="area-button__icon" aria-hidden="true">
           {trailingIcon}

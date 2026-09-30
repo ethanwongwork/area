@@ -64,7 +64,7 @@ Product triggers (node numbers from the captures):
 ```
 chatgpt  button  36px pill, padding 0 12, gap 4, fill rgb(243) (hover 5% black), 1px 10% ring
 notion   div[role=button]  28px, radius 6, no chrome; text span; 14px chevron svg, margin-start 4
-area     select.area-select  owns: height, border, radius, fill, shadow-1, focus; chevron = background image
+area     select.area-select  owns: height, border, radius, fill, focus (no resting shadow, audit B-2); chevron = background image
   picker ::picker(select)   4px below, padding 4, radius 12, bg-surface, decorative border, floating lift
   option option             min 32, padding 6 8, radius 8, 2px apart, ::checkmark at the end
 ```
@@ -163,8 +163,9 @@ Both kept in the third pass ([cohesion audit](../research/cohesion-audit.md#thir
 1. *Borderless trigger: none.* Notion's permission select (no fill or border, muted ink) and
    Figma's zoom select (no border) are inline triggers. A ghost variant is a candidate, not
    started without the owner.
-2. *Outline shadow.* No product select has a shadow; Area keeps `shadow-1` on outline fields
-   with Input ([input.md](input.md#settled-questions) 2). The soft variant is flat.
+2. *Outline shadow.* No product select has a shadow. Input, Textarea, NumberField and InputGroup
+   dropped `shadow-1` in the outline pass and Select followed on 2026-09-29 (audit B-2): every
+   field rests flat.
 
 ## Verification
 
