@@ -2236,3 +2236,146 @@ Checked against Fluent and Area's own families for quality, detail, consistency 
 | debug-step-over | a balanced 2px head pointing down at the arc's end (`data-counter="sliver"`: the inner barb's pocket) |
 | vr-goggles | strap stubs at the sides and two lens lines |
 | chef-hat | Lucide's construction: puffs rising straight from a band as wide as the hat (the earlier crown over a narrow band read as a mushroom) |
+
+## Owner round, batches 44–60 (2026-09-29)
+
+Owner notes, each answered with Fluent's construction or the owner's reference; all stay in review.
+
+| Icon | Change |
+|---|---|
+| chef-hat | the band line is a filled-only `gap` (it ran past the hat in the outline as a `cut`) |
+| chess-rook | wider crenellations: top 3–13, merlons 1.5 / 2 / 1.5 with 2.5 notches (tight 1.38; were 0.88) 2 deep, base 3.5–12.5 |
+| vr-goggles | no lenses; Fluent's rounder body 11 × 7 (r 2.5) with a trapezoid nose (r 1), tabs joined to the top and sides as small bumps (detached tabs read as ears) |
+| debug-step-over | rotate's corner head: an r 5.66 arc from the left over the top arriving at 45° into a 3px L at 13, 5.5; the ⌀2 dot under the arc |
+| dumbbell | Fluent's diagonal dumbbell: each end a large plate stepped into a smaller one (one outline, detail counters), a bar between and a short bar end past each small plate; filled, the plates are solid and the bar stays a line |
+| brain | one fold a side, hooking in from the middle lobe junction (owner's reference; 3 of 4 candidates) |
+| brain-off | brain exactly, slash-cut; circle keyline (the lobes and slash exceed the square); the left fold falls inside the slash's clearance and is dropped |
+| folders | Fluent's folder multiple: a 9.5 × 8.5 folder in front, the back copy 2.5 lower right, cut round the front by the overlap cut, its right corners concentric (r 3 and 4) so its ends curve in behind the front |
+| files | the same stack with a 7.5 × 10.5 page (fold 4, the lattice at this width) |
+| gallery | the owner's reference: an image (image's mountain as a `cut`, a ⌀1.5 sun) in front of one back layer 2.5 up and left |
+| bug-off | the top-left leg and the floating right leg removed (they touched or sat in the slash's clearance); the rest is bug cut one-sided |
+| case-upper, case-sensitive | taller letters (cap 4.5–11.5), a narrower A with an r 0.5 apex that overshoots to 4.68, the crossbar at 9.5; B's bowls r 1.75; a's bowl r 2 |
+| wrench | Fluent's wrench: an r 3.5 head with a square jaw on the axis (walls 2.5 apart, a flat floor at the head's centre, r 0.5 corners), a handle 2.2 wide with an r 1.1 end, r 1 joins; every join tangent |
+| check-check | both checks on one baseline (11.5); the second check's short arm is a stub a tight 1.35 from the first's long arm (Lucide's), its long arm a lattice step lower (open 3.1) |
+| clapperboard | three 45° stripes 3 apart (a detail 1.0 gap); filled, the stripes are gaps run up through the top edge from the band cut, so the band reads as painted stripes |
+| cookie | six ⌀1.5 dots spaced by search (neighbour gaps 1.35–1.98, none near misses) |
+| vault | Fluent's dial: an r 1.5 ring with four spokes out along the diagonals, no hub |
+| infinity | two r 2.5 loops joined by straight tangents crossing at the centre (45.6°), every join tangent |
+| search-off | the normal slash mirrored: 14, 2 → 2, 14, the lens running up to it from the lower right and stopping 2.25 short above left; the handle starts at 10.63 (a 2.59 open gap from the slash) |
+| arrow-left-right | heads 3 (the main-arrow size; 4 crowded a double arrow) |
+| arrow-right-left | heads 2.5 (paired), rows at 5.5 and 10.5 so the pair centres |
+
+### Second pass (owner, 2026-09-29)
+
+| Icon | Change |
+|---|---|
+| folders, files, gallery | the back copy follows the stack rule (copy's L): straight legs with the front's own corner radius, a tight 2.5 away, ending level with the front's corner tangents; the curled ends (larger concentric corners cut round the front) read as hooks |
+| bug-off | all six legs: the two corner legs lie along the slash's path, so they run up to it (the one-sided rule's lower-left side) and the middle right leg stops 2.25 short; `data-counter="sliver"` covers the wedges where legs meet the slash |
+| brain | mismatched folds: a hook from the left side's middle lobe, a stub off the midline low on the left, a hook up from the right side's lower lobe, a stub off the midline high on the right |
+| brain-off | brain exactly; the slash's clearance takes the right hook and the right stub, the left hook falls within 0.56 of it and goes too |
+| vr-goggles | the owner's reference: a 9 × 6 body with round corners (r 2.5 top, 2 bottom) running tangent into an r 1.5 nose curve, one line inside near the top, short strap lines at the sides a detail 0.87 away |
+| debug-step-over | Lucide's redo-dot: an r 5.3 arc from the left over the top that runs straight on at 45° into a 3px corner head at 13.5, 6.5, the dot centred under the arc |
+
+Agent candidates on the Exploration sheet (`explore/agent-*.svg`, owner: not the sparkle
+antenna): bot's face in sunglasses under a fedora (the pinched crown on a brim wider than the
+face; filled, a gap parts crown from brim), and bot's face in sunglasses wearing a headset (a
+band concentric with the face, solid ear cups joined to it, a mic boom from the right cup).
+Also still offered: infinity (Cursor's agent mark) and the current hexagon. The lenses are solids
+(sunglasses are dark by nature) and knock out when filled.
+
+### Third pass (owner, 2026-09-29)
+
+| Icon | Change |
+|---|---|
+| folders, files, gallery | the back L's corner is concentric with the front's (r 4, 4.5, 4.5 round the front's corner centres), legs straight as before |
+| vr-goggles | Vision Pro's outline: an r 12.5 arc across the top meeting r 2 corners internally tangent, the inner line an arc concentric with it (r 10) |
+| bug-off | back to the three legs clear of the slash (owner: the extra legs are not needed) |
+
+vr-goggles, fourth pass (owner): no side lines; Vision Pro's rounder outline: an r 10 top arc tangent
+inside r 3.5 upper corners, r 2 lower corners, an r 1.75 nose (1.25 deep), the inner arc
+concentric (r 7.5) and a short concentric arc above the top (r 12.5, a tight 1.38 away).
+
+Agent (owner: keep bot's head exactly): hats on bot's own 12 × 7.5 head, all in sunglasses with the
+bridge flush with the lenses: fedora, hard hat (the owner's reference: dome, two ridges, brim), cap,
+top hat, beanie, and the headset twice: on the full head the band must run in front of the head's
+top corners (the head is cut round it), because a band outside a full-width head leaves the canvas;
+the narrower-head headset is shown beside it for comparison. `explore/agent-hat-*.svg`.
+
+### Fourth pass (owner, 2026-09-29)
+
+- vr-goggles: softer bottom (r 3 lower corners, the nose tangent to them), the inner arc runs 5–11,
+  and the arc above sits a detail 0.92 from the top.
+- Agent cast (`explore/agent-cast-*.svg`), each on bot's own head with bot's eyes unless the role
+  changes them; the owner keeps the hard hat and likes the fedora (only it keeps sunglasses, the
+  bridge now at the lenses' middle). Roles: Agent (fedora, sunglasses: the default agent), Builder
+  (hard hat: writes and changes code), Researcher (glasses: reads, searches, explains; keeps the
+  antenna), Guard (peaked cap with a badge: review, security, permissions), Lead (crown: orchestrates
+  other agents), Designer (beret), Generator (wizard hat: images and content), Automator (chef hat:
+  recipes and workflows), Assistant (beanie: everyday help). Headsets and the top hat are dropped.
+  A hat has 4.5px above the head (1.5–6), so tall hats (wizard, chef) read squat.
+
+### Fifth pass: the agent cast (owner, 2026-09-29)
+
+Hats now cover the top of the head instead of sitting on it: the head is bot's 12 × 7.5 face cut flat
+at y 7 (its sides join the hat there), which gives a hat 5.5px (1.5–7). Filled, a gap parts the
+head from the hat just below the brim. Eyes and lenses moved 0.5 lower to clear the brim (lenses
+9–11.5, the bridge at their middle, 10.25). The cast (`explore/agent-cast-*.svg`): Agent (fedora and
+sunglasses), Builder (hard hat, kept), Researcher (a mortarboard; glasses read as a robot's eyes),
+Guard (a police cap: a crown flaring to the full width, a solid bill, a badge), Lead (crown),
+Designer (a plain hat with a band), Generator (wizard hat), Automator (a toque: three puffs on a
+band). The beanie was removed.
+
+Sixth pass (owner): narrow hats widened to 3.5–12.5 (fedora, plain hat, wizard; the chef's puffs
+2.75–13.25, the mortarboard's cap 4–12); two small sparkles on the wizard hat (the sparkle scaled,
+holes when filled); sleek sunglasses as one solid (flat top across both lenses, a thin bridge,
+round lower corners); the Lead's crown follows the crown icon (three points with balls above them).
+Face variants for comparison: `agent-cast-*-mouth.svg` (a ⌀1.2 dot mouth, eyes 0.5 higher) and
+`agent-cast-*-line.svg` (a line joining the eyes at their middle; not for the sunglasses).
+
+Seventh pass (owner): every bot has the dot mouth in one place (⌀1 at 8, 12; eyes 9–10.5, lenses
+9–11); the eye-line variant is dropped. Designer wears a baseball cap (a dome with a button and a
+solid bill that curves down in front); Generator's wizard hat has a band and a tip bent over to the
+right, no stars; the sunglasses are two lenses joined by a stroked bridge (1.125, flush with their
+tops); the fedora has a stroked band (a knockout when filled); Guard's pilot cap is taller (crown
+1.75–5 flaring to the full width, a solid band, a solid bill) with a winged badge.
+
+Eighth pass (owner): one hat line for every hat: a standard stroke that curves round the head (a
+quadratic from 1.5, 6.25 sagging to 7.25 at the centre). Brimmed hats (fedora, hard hat, cap, pilot
+cap, wizard) draw it full width as the brim or bill; the others (crown, mortarboard, chef hat) draw
+it across the head. Every hat's crown ends on it, and the head's outline stops where its corners
+meet it (2.85, 6.62). Bands are the same curve 2 higher. Filled, a gap follows the curve one weight
+below. The mouth is ⌀1.5 at 8, 11.25 on every bot, and `bot` itself gained it (a detail 0.94 from the
+face's foot; bot goes back to review).
+
+Ninth pass (owner): Guard's badge is a small solid star (the star icon at 0.2); the cap has a
+centre seam from its button to the bill; the wizard hat is taller and narrower (to 1.5) and its band
+ends on the hat's sides; the chef hat's three puffs sit level at the top over a taller band; the
+crown's points rise to 3.25 with smaller balls (r 0.6) above; the Researcher wears round glasses
+(r 1.25 rings joined by a bridge, the mouth below them) under the mortarboard; the sunglasses are
+larger (3.75 × 2.25 lenses 2.5 apart, the bridge 1 below their tops).
+
+Tenth pass (owner): the Lead wears the crown icon itself at 0.55 and the Automator the chef-hat icon
+at 0.5 (their proportions and details unchanged), each seated on the head's top edge, the head
+open where the hat covers it; the cap and pilot cap have a small solid bill (a crescent under the
+hat line, 3–13, 1.25 deep at the centre); the sunglasses' bridge is an arch (r 1.25); two
+Researcher candidates: A, lab goggles (a wide frame with a nose notch and strap stubs to the head's
+sides, no eyes); B, big round glasses (r 1.75 rings with ⌀1 pupils, an arched bridge).
+
+Eleventh pass (owner): the mouth never moves (⌀1.5 at 8, 11.25) and faces keep clear of it.
+Researcher is now bot itself (antenna kept) in large lab goggles (a frame 3–13 × 7.5–10.25 with a
+nose notch, strap stubs to the head's sides, no eyes); Scholar is a separate character: the
+mortarboard with glasses frames only (two rounded frames 3.25 × 2 and a bridge, no eyes). Lead's
+crown is the crown icon stretched wider (0.9 × 0.55) so it spans the head; Automator's hat is the
+chef-hat icon at 0.6 × 0.5. The baseball cap has its own crown (upright sides under a round top, a
+seam) and the military cap its own (flaring to a wide flat top); both sit on the hat line raised
+0.75 so a solid crescent bill (1.5 and 1.75 deep) clears the eyes. Two Guard options: A with a star,
+B with a stripe.
+
+Twelfth pass (owner): the baseball cap's crown has upright sides, r 2.5 corners and a flat top,
+with a button (a short stroke on top); Guard A's star is larger (0.3) and lower; Lead's crown is the
+crown icon's own parts across the head (1.0 × 0.55: its rounded points, band and balls); Automator's
+chef hat is the icon's puffs at 0.75 × 0.47 over a band whose foot follows the hat line; the
+Researcher's goggles run past the head's sides and overlap its outline (the head is hidden only
+inside the frame); Scholar has plain eyes. Explorations without a mouth: the agent, then six
+sunglasses (wayfarer, aviator, round, shield, slim, sport; `agent-cast-agent-sun-*`) and six goggles
+on the Researcher (wide, swim, strap, split, dark, forehead; `agent-cast-researcher-gog-*`).
