@@ -66,7 +66,7 @@ area   div.area-input  (shell: height, border, radius, fill, no resting shadow, 
   affix     span.area-input__affix    fg-muted, cap-trimmed
   control   input.area-input__control bare; inherits type
   action    span.area-input__action > button.area-input__action-button (24px, radius 6)
-            > span.area-input__action-icon (16px); hint span.area-tooltip.area-input__action-tooltip
+            > span.area-input__action-icon (16px); hint div.area-tooltip.area-input__action-tooltip[popover] (Tooltip)
 ```
 
 Inset equation (`inset.css:17-18`): outer inset = border 1 + padding = (H − reference) / 2.
@@ -106,7 +106,7 @@ hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 a
 | icon | 16px square, `fg-muted` #666, equal inset (8 from the edge at md) | Notion 6 in a 28 row and Figma 10 in a 32 row are both (H − glyph) / 2 | ChatGPT 12 in |
 | gap | **6** at sm, md and lg (`gap-sm/md/lg`, `input.css:18`, `:234-236`); also the file button's end margin (`input.css:138`); compact sm 4 | Notion 6 at 28, Figma 6 at 32 | ChatGPT 8 at 36. Was 8 (sm 4) until audit S14 |
 | action · box | 24px, radius `radius-small` 6, hover `bg-component-hover`, pressed `bg-component-active`; disabled: `fg-disabled` ink, no hover, not-allowed cursor (audit B-8) | Row-plate rule; NumberField steppers | Nested radius would be 4; kept Button's small radius |
-| action · hint | Tooltip surface (`input.css:207-225`); describes the button only when `aria-label` names it (`Input.tsx:66`) | Peer: [Tooltip](tooltip.md); second pass item 17 | Was a second tooltip style; was announced twice |
+| action · hint | A real Tooltip (`AnchoredTooltip`, Input.tsx): top layer, 4 under the action and centred on it, Tooltip's 500ms hover delay (at once on keyboard focus), Escape, pointer bridge; describes the button only when `aria-label` names it | Peer: [Tooltip](tooltip.md); audit S16 (owner 2026-09-30) | Was the Tooltip surface CSS-placed inside the field (absolute, instant on hover, end-aligned), which a clipping ancestor could cut; before that a second tooltip style |
 | file button · label | `fg-default`, 500 (`input.css:141`) | Owner: neutral by default | Was `fg-accent` |
 | placeholder | `fg-placeholder` #666 | UUI neutral-500; contrast | Notion's resting search text rgb(161,158,153) is 2.6:1 on white; kept (third pass): the contrast floor wins |
 
@@ -120,11 +120,12 @@ hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 a
 | disabled | field paint: fill #f7, `border-faint`, ink, placeholder and affixes `fg-disabled`; no opacity | `area--disabled`; `input.css:132-133` |
 | invalid / success / warning | border and halo in the tone colour, kept on focus | `input.css:73-95`; `area--invalid`, `--success`, `--warning` |
 | loading | Spinner in the icon slot; `aria-busy`; still editable | `area--loading`, `area--loading-leading` |
-| action hover / focus-visible | plate `bg-component-hover`; 2px focus ring; hint fades in | `input.css:197, 221-225` |
+| action hover / focus-visible | plate `bg-component-hover`; 2px focus ring; the hint Tooltip opens (after 500ms on hover) | `input.css:197`; gallery 2026-09-30: open 4 below, centred, 28 tall |
 
 ## Behavior and accessibility
 
-Native `<input>`; ref and props forwarded to it, `className` to the shell (`Input.tsx:81-155`).
+Native `<input>`; ref and props forwarded to it, `className` and `style` to the shell, the same
+box (`Input.tsx:84-162`; `style` used to reach the input).
 `invalid`, `validationStatus="error"` and `aria-invalid` agree. InputAction is a
 `type="button"` named by `aria-label` or its tooltip text; the tooltip describes it only when
 it is not already the name, plus any external `aria-describedby`. Logical properties make RTL
@@ -206,3 +207,5 @@ fields and Figma's search and hex fields. Build and test results are in the
   `shadow-1`, sm gap 4, placeholder #666) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S4 (owner) → radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `input.css:39`, `:234-236`); was 8 at every size.
 - 2026-09-30 · audit S14 (owner) → the icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`input.css:18`, `:234-236`; density.ts:80-82); settles third-pass question 3 toward Notion and Figma.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `style` goes to the shell with `className` (it used to reach the inner input).
+- 2026-09-30 · S17 owner calls (owner: "go with your recs") → the leading slot is `icon` again, the same `icon` / `trailingIcon` pair as Button; `leadingIcon` is the deprecated alias.

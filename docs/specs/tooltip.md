@@ -37,7 +37,7 @@ pointer leave, stays while hovered, and anchors and flips (2026-09-27; see
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| side | top, right, bottom, left | Placement around the trigger | All three products place tooltips by available space |
+| side | top (default), right, bottom, left | Placement around the trigger | All three products place tooltips by available space |
 | arrow | off (default), on | Owner: opt-in | Figma draws an arrow; ChatGPT and Notion do not |
 | composition | label + shortcut | Name a command and its key | ChatGPT (inline chip), Notion (second line) |
 
@@ -108,7 +108,8 @@ centred by construction ((28 − 20) / 2 = 4).
 
 ## States
 
-With a trigger: closed, delayed open (500ms), open, closing. See [overlay behavior](overlay.md).
+With a trigger: closed, delayed open (500ms, `delay`), open, closing (`closeDelay`, default 0).
+See [overlay behavior](overlay.md).
 
 ## Behavior and accessibility
 
@@ -159,3 +160,5 @@ new file was saved. Area keeps its documented differences (28 tall, corner 10, 1
 - 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S10 (owner) → no change; Tooltip keeps its own 0 4px 12px −2px lift as a documented exception to the shared `--area-shadow-float` (surface.css:1225).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Tooltip gains `closeDelay` (default 0) beside `delay`.
+- 2026-09-30 · audit S21c dark capture pass (owner go-ahead; [dark-pass](../research/dark-pass-2026-09-30.md)) → in dark the tooltip stays dark: #282828 (neutral-800), default ink, a 5% white 1px inset edge, 20% shadow ink; it inverted to a light #f3 plate. ChatGPT #212121, Notion #2c2c2b, Figma #1e1e1e (captures/tooltip/*--dark). Light unchanged; the on-emphasis keycap is a currentColor plate and reads on both.

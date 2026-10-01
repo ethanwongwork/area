@@ -34,8 +34,8 @@ technical labels).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | normal 20 (default), small 16 | Standalone hints and Buttons; dense trailing metadata | Notion keycap 18.29 (`notion--shortcut-hint`); ChatGPT tooltip chip 18; Figma 11px shortcut text |
-| appearance | default, quiet, on-color, on-emphasis | Keycap; menu chrome; on a coloured action; in an inverse Tooltip | Notion filled keycap (default); Notion and Figma menu shortcuts as plain text (quiet); ChatGPT tooltip chip (translucent) |
+| size | md 20 (default), sm 16 (`.area-kbd--md`, `--sm`; React still accepts `normal` / `small` as deprecated aliases) | Standalone hints and Buttons; dense trailing metadata | Notion keycap 18.29 (`notion--shortcut-hint`); ChatGPT tooltip chip 18; Figma 11px shortcut text |
+| variant | default, quiet, on-color, on-emphasis (the `appearance` prop is a deprecated alias) | Keycap; menu chrome; on a coloured action; in an inverse Tooltip | Notion filled keycap (default); Notion and Figma menu shortcuts as plain text (quiet); ChatGPT tooltip chip (translucent) |
 | composition | chord, sequence (KbdGroup) | Modifier chords; "⌘K then P" | Gallery `chord`, `sequence` |
 
 ## Sources
@@ -67,7 +67,7 @@ area     span.area-kbd  owns: height, min width, padding, 1px transparent border
 ```
 
 Height is built, not set from a tier: 10px line box + 2 × 4 padding + 2 × 1 border = 20
-(`kbd.css:12`); small 10 + 2 × 2 + 2 = 16 (`kbd.css:65`). The border is transparent but kept,
+(`kbd.css:12`); sm 10 + 2 × 2 + 2 = 16 (`kbd.css:65`). The border is transparent but kept,
 so the box stays a whole number (`kbd.css:30`). A quiet Kbd has no box: no padding, no min
 width, height from its 16px line (`kbd.css:89-102`).
 
@@ -96,17 +96,17 @@ padding 0 6, 14/18 600, white 25%; Figma's panel key: 32 × 31, 1px rgba(255,255
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| normal height | 20 | Inset rule: centred in a 28px Tooltip (4) and a 32px Button (6) | Notion 18.29, ChatGPT 18; kept at `control-xs`, the smallest control rung (third pass) |
-| small height | 16 | Dense trailing metadata (docs practices) | — |
+| md height | 20 | Inset rule: centred in a 28px Tooltip (4) and a 32px Button (6) | Notion 18.29, ChatGPT 18; kept at `control-xs`, the smallest control rung (third pass) |
+| sm height | 16 | Dense trailing metadata (docs practices) | — |
 | font | filled keycaps: `--area-font-keyboard` (system-ui), 12px (`--area-text-xs-size`); quiet: the UI font (`--area-font-sans`, Geist) at 12/16 (`kbd.css:98-100`) | System face carries native modifier glyphs; a quiet Kbd renders like a string shortcut (audit S12a) | Notion 11px |
-| small font | 11px on a filled keycap (`--area-size-11`, `kbd.css:67`); a quiet small Kbd is 12/16 like any quiet one | Second pass, decision 3: Notion's and Figma's shortcut text is 11px, and keycaps are the tiny-chrome role the type policy names | Below the ramp's 12px floor by design |
+| sm font | 11px on a filled keycap (`--area-size-11`, `kbd.css:67`); a quiet sm Kbd is 12/16 like any quiet one | Second pass, decision 3: Notion's and Figma's shortcut text is 11px, and keycaps are the tiny-chrome role the type policy names | Below the ramp's 12px floor by design |
 | weight | **500** on a filled keycap (`kbd.css:39`); **400** when quiet (`kbd.css:101`) | Notion 500; weight policy (a label on a fill); a quiet key has no fill | Was 400. Quiet was 500 until audit S12a |
 | fill / edge | **`bg-component-active` #eeeeee, no visible edge** (`kbd.css:30-32`, `79-83`) | Notion 7% warm fill, no border (about rgb 240) | Was `bg-component-hover` #f3 with a 1px `border-subtle` #d4 ring |
 | ink | **`fg-muted` rgb(102)** (`kbd.css:33, 82`) | Notion muted rgb(142, 139, 134) | Was `fg-default` |
 | radius | **`radius-control-sm` 6** at every size and in every host (`kbd.css`, `--_radius`; owner rule) | Owner 2026-09-28 (4 read too sharp); ChatGPT 8 on 18 | Notion 4, Untitled 4, Figma's panel 2 |
 | radius in a Button | **the keycap's own 6** | Owner 2026-09-28; Notion keeps its 4 inside an 8px field (not concentric) | The concentric corner came to 2 at every Button size |
 | radius in a Tooltip | own 6 (the concentric Tooltip rule removed) | Owner rule | — |
-| in an Input suffix | nested box: end inset = block inset (8 in a 32 field with the small keycap; `inset.css`) | Notion's search field ⌘K; same rule as Button | — |
+| in an Input suffix | nested box: end inset = block inset (8 in a 32 field with the sm keycap; `inset.css`) | Notion's search field ⌘K; same rule as Button | — |
 | quiet | renders like a string shortcut: transparent, no padding or min width, UI font 12/16 400, `fg-muted` (`kbd.css:89-102`); automatic in Menu items; a danger menu row's Kbd takes the row ink (`kbd.css:104`) | Notion menu shortcut plain 12px muted; Figma menu shortcut plain 11px at 70% | Owner audit S12a. Was the keyboard face at 500, 12 or 11 when small |
 | on-color / on-emphasis | `currentColor` 14% plate, no edge, inherited ink (`kbd.css:107-112`) | ChatGPT translucent white 25% chip | Lighter plate |
 | in any Button | `currentColor` 14% plate, no edge, inherited ink (`.area-button .area-kbd`, `kbd.css:131-135`) | Survives hover, press and selected fills | Owner audit S12c. Replaced the neutral-solid-only `currentColor` rule and the coloured-solid `bg-inverse` 16% rule; a #ee keycap vanished on a pressed or selected ghost Button |
@@ -129,9 +129,9 @@ action. Screen-reader output has not been checked.
 | Peer | Shared role | Area value in peer | Kbd | Match / reason |
 |---|---|---|---|---|
 | Tooltip | nested chip | radius tooltip − 4, end inset 4 | 20px, radius 6 there | match (inset rule) |
-| Button | trailing nested box | end reserve 20; small 16 (`inset.css:118-123`); `currentColor` 14% plate in every variant | 20 / 16, radius 6 | corner not concentric (owner, 2026-09-28) |
-| Menu / Nav | trailing shortcut | quiet appearance: UI font 12/16 400 muted, as a string shortcut | quiet | match; Notion and Figma menus agree (audit S12a) |
-| Badge | small chrome | 16 / 20 / 24, 12px min text | 16 / 20; small 11px | small text differs by decision 3 |
+| Button | trailing nested box | end reserve 20; sm 16 (`inset.css:118-123`); `currentColor` 14% plate in every variant | 20 / 16, radius 6 | corner not concentric (owner, 2026-09-28) |
+| Menu / Nav | trailing shortcut | quiet variant: UI font 12/16 400 muted, as a string shortcut | quiet | match; Notion and Figma menus agree (audit S12a) |
+| Badge | small chrome | 16 / 20 / 24, 12px min text | 16 / 20; sm 11px | sm text differs by decision 3 |
 | Code | technical label | radius 6, mono | radius 6, keyboard font | match (corner since 2026-09-28) |
 | Row plates (Menu, Nav, Table) | selected fill | `bg-component-active` | same fill | shared role, used here as a quiet ground |
 
@@ -139,7 +139,7 @@ action. Screen-reader output has not been checked.
 
 The gallery shows the tiles in named groups (Default, Variants, Sizes, Content). Beside
 Notion's shortcut hint, Area's keycap is the same construction (filled, borderless, muted 500; radius 6 since
-2026-09-28, Notion 4), 1.7px taller and a step darker in ink. `appearance="on-color"` in an accent
+2026-09-28, Notion 4), 1.7px taller and a step darker in ink. `variant="on-color"` in an accent
 solid Button now keeps its own `currentColor` plate (`area--on-color`, white 14%); it was
 overridden by the solid-button rule before the audit's spec fixes. Not inspected by this
 spec's author: dark theme.
@@ -147,7 +147,7 @@ spec's author: dark theme.
 ## Settled questions
 
 1. **Keycap height: kept at 20.** Notion's keycap is 18.29 high (2px block padding around an
-   11px line; `notion--shortcut-hint`) and ChatGPT's 18; Area's normal keycap is
+   11px line; `notion--shortcut-hint`) and ChatGPT's 18; Area's md keycap is
    `control-xs`, the smallest control rung, which also centres it inside Tooltip and Button
    ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)).
 
@@ -186,3 +186,4 @@ Compared all seven `kbd/area--*` captures with `notion--shortcut-hint`,
 - 2026-09-27 · third pass → open question settled, value kept: keycap height 20
   (`control-xs`); Menu's text shortcuts now use Kbd's keyboard face → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S12 (owner) → quiet renders like a string shortcut (UI font 12/16 400, muted, no padding or min width; row ink on a danger menu row; `kbd.css:89-104`); filled keycaps keep the keyboard face at 500; Escape is written "Esc", spoken "Escape" (`primitives.tsx:1782`); inside any Button the keycap is a `currentColor` 14% plate with inherited ink (`kbd.css:131-135`).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → size values are `sm` | `md` (classes `.area-kbd--sm` / `--md`; were `small` | `normal`, kept as deprecated React aliases) and the `appearance` axis is `variant` (values unchanged; `appearance` prop deprecated); spec wording follows.

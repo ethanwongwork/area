@@ -415,9 +415,11 @@ decision. They are simple marks inside a ring, so the constant line holds up the
 **Components.** The first Fluent family is replaced in components that draw their own
 glyphs:
 - `apps/docs/scripts/gen-pilot-icons.mjs` writes `packages/react/src/components/glyphs.ts`
-  (PACKAGE_GLYPHS: check, check-inset (the check inside the Available ring), chevron-down,
-  dismiss);
-- `Glyph.tsx` renders them, with `rotate` for 90/180/270;
+  (PACKAGE_GLYPHS: add, arrow-up, check, check-inset (the check inside the Available ring),
+  chevron-down, dismiss, grip, subtract, corner, corners, padding-side, padding-axis, sides,
+  search, stop). A rounded `rect` source becomes the same centre-line path (stop);
+- `Glyph.tsx` renders them, with `rotate` for 90/180/270 and `filled` for a solid shape (the
+  Composer's Stop: the outline filled inside its own stroke, as the filled variant's solid role);
 - base.css sets the line: `[data-area-glyph] path { stroke-width: var(--area-weight-icon) }`.
 
 | Component | Was (Fluent) | Now |

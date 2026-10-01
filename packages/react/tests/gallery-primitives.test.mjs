@@ -83,7 +83,9 @@ test("independent code block options can be combined", () => {
 
 test("renamed variant axes retain their corresponding component classes", () => {
   assert.match(renderToString(h(Card, { layout: "horizontal" })), /area-card--horizontal/);
-  assert.match(renderToString(h(Card, { layout: "compact" })), /area-card--compact/);
+  assert.match(renderToString(h(Card, { layout: "list" })), /area-card--list/);
+  // The old name is a deprecated alias (audit S17).
+  assert.match(renderToString(h(Card, { layout: "compact" })), /area-card--list/);
   assert.match(renderToString(h(Chip, { kind: "assist" }, "Search")), /area-chip--assist/);
   assert.match(renderToString(h(Slider, { labelPosition: "top", "aria-label": "Volume" })), /area-slider--top/);
   assert.match(renderToString(h(Switch, { labelPosition: "start", label: "Sync" })), /area-switch--start/);

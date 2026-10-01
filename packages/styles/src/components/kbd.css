@@ -8,7 +8,7 @@
  */
 @layer area.components {
   .area-kbd {
-    --_min: var(--area-space-20);
+    --_min: var(--area-mark-md);
     --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-stroke-width) + var(--area-stroke-width));
     --_padding: var(--area-space-4);
     --_font: var(--area-text-xs-size);
@@ -52,16 +52,16 @@
     line-height: inherit;
   }
 
-  .area-kbd--normal {
-    --_min: var(--area-space-20);
+  .area-kbd--md {
+    --_min: var(--area-mark-md);
     --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-stroke-width) + var(--area-stroke-width));
     --_padding: var(--area-space-4);
     --_font: var(--area-text-xs-size);
     --_leading: var(--area-size-10);
   }
 
-  .area-kbd--small {
-    --_min: var(--area-space-16);
+  .area-kbd--sm {
+    --_min: var(--area-mark-sm);
     --_height: calc(var(--area-size-10) + var(--area-space-4) + var(--area-stroke-width) + var(--area-stroke-width));
     --_padding: var(--area-space-2);
     --_font: var(--area-size-11);

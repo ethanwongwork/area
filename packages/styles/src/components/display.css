@@ -245,6 +245,8 @@
   /* Inside a Button the spinner takes the label's ink, so it shows on any fill: a neutral
      spinner on a neutral solid button was the fill's own colour and disappeared. */
   .area-button .area-spinner { --_indicator: currentColor; }
+  /* It fills the Button's icon box at every tier (audit A-11: a fixed 16 overflowed a 12 box). */
+  .area-button__icon > .area-spinner { --_size: 100%; }
 
   .area-spinner--sm { --_size: var(--area-space-12); }
   .area-spinner--md { --_size: var(--area-space-16); }

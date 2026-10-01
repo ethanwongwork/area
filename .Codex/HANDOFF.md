@@ -1,9 +1,63 @@
-# Handoff — 2026-09-27
+# Handoff — 2026-09-30
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. No owner completion changed; Indicator stays In review.
+
+## Audit phase 6 (2026-09-30, branch `claude/component-work-continuation-aef804`, uncommitted)
+
+- **S18** pending is not disabled: a loading Button is `aria-disabled` + `aria-busy` +
+  `data-loading`, keeps focus and full opacity, swallows its click; the spinner fills the
+  tier's icon box. Composer `loading` (`busy` deprecated) keeps the textarea editable and turns
+  send into **Stop** (`onStop`, `stopLabel`; Area `stop` glyph, filled). ChatGPT's Stop glyph
+  size is not captured (needs a streaming reply in the owner's account).
+- **S16** one floating engine: Hover card (8, start-aligned), Combobox list (4, flips),
+  BadgeGroup overflow (8) and the InputAction hint (a real Tooltip) use `useAnchoredPosition`;
+  `.area-popover-anchor` and its manifest entry are gone. Toolbar overflow is a ghost More
+  Button (Area `more-horizontal` glyph) opening a Menu (`clearToolbar` in toolbar-context.ts,
+  shared with SplitButton). Select's native picker follows Combobox's list (flip, ≥224, ≤324,
+  plate-only focus). Found and fixed: triggered Tooltips had the browser's 3px popover border
+  (34 tall, not 28).
+- Glyph generator: `rect` sources and filled dots (`{ fill }` entries) are supported; `Glyph`
+  takes `filled`. New package glyphs `stop`, `more-horizontal`.
+- **S17** API vocabulary (rule written in DESIGN_SYSTEM "CSS, manifest and React"): value
+  callbacks pass the event; Checkbox `onCheckedChange`; Segmented `onValueChange` + form props;
+  Button uncontrolled toggle; `aria-label` replaces name-only `label` in 15 components; Dialog
+  and Hover card controllable; Tooltip `closeDelay`; MenuItem `icon`; Kbd `sm`/`md` + `variant`;
+  Code/Token `ground`; Badge `inverse`; Button align `start`/`end`; IndicatorAnchor
+  `rectangular`/`circular`; every default axis value has a class; AlignmentPicker `soft`;
+  ColorPicker `plain`; NumberField `invalid`; `style` on field shells; bare Field validation
+  is neutral; Message defaults to assistant; `--area-composer-inline-size`. Deprecated aliases
+  kept. Specs updated by a subagent pass.
+- Open for the owner (S17): H-14 (collections as `items`? Input `leadingIcon` vs `icon`), the
+  Nav fill-selection value name, Card `layout="compact"` vs compact density, Presence `xs`.
+- Checks: build, typecheck, 175 React tests, contracts 14, preview 4, consumer, 19,491 token
+  tests, parity, icons, docs audit. Verified live: Composer Stop, loading Button focus, Toolbar
+  overflow, Hover card, Combobox flip, InputAction tooltip, BadgeGroup overflow, renamed classes.
+- Phase 7 done in the same branch:
+  - **S19** Alert and Toast share neutral, info, success, warning, danger (Badge order); Alert's
+    neutral icon is muted ink; Indicator's danger default is the written exception (DESIGN_SYSTEM).
+  - **S20** the Indicator count is Count sm's 12/16 500. On a 32px avatar "24" is 23 wide; "99+"
+    is 29 wide and covers the top of the initials (open for the owner).
+  - **S21a** density roles `mark-sm/md/lg` (Badge, Count, Kbd, Indicator) and
+    `inset-surface-sm/md` (Popover, Dialog); compact values equal default until measured.
+  - **S21b** `opacity-disabled` (16 sites) and `scrim` (3 backdrops); every `:hover` rule is in
+    `@media (hover: hover)` (transformer split `:is(:hover, …)` so focus and `data-hover` stay;
+    a test fails on an ungated hover); Tree view actions show on focus-within and on touch.
+    Unused tokens are parked, listed in THEMING.md; `z-*` stays for apps.
+  - **S21c** dark pass done (owner go-ahead; products switched back to their system themes):
+    19 captures, `docs/research/dark-pass-2026-09-30.md`. Floating surfaces read `edge-float`
+    (#333 in dark), dark `shadow-color` is 20% (was 8%), the tooltip stays dark in dark
+    (#282828 + 5% white inset), Card has no halo in dark; scrim, fills and row hover unchanged.
+    Captures must be exported right after each batch: a page navigation drops `window.__caps`.
+- Owner calls (2026-09-30, "go with your recs"): `options` for value choices and `items` for
+  collections (ModelPicker `options`, Tabs and PromptSuggestions `items`); Input `icon` (was
+  `leadingIcon`); Nav selection `plate`; Card `layout="list"` (was `compact`); Presence keeps
+  `xs` as a written exception; "99+" stays on small avatars. Old names are deprecated aliases.
+- Next: compact calibration of the mark and inset roles (a compact capture pass); a toast and
+  Figma dialog in dark if one can be opened read-only; the audit's remaining clear fixes and
+  docs drift rows.
 
 ## Audit moved into the repo (2026-09-29, branch `claude/cool-kirch-9facec`)
 
@@ -75,8 +129,7 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     actions, Kbd chords). Unused `--_group-gap` / `--_toolbar-gap` declarations remain.
   - **S15a** Segmented thumb `light-dark(bg-surface, bg-component-active)` (dark #3f on #28).
     **S15b** neutral soft Split button = soft Button group recipe.
-- Next: phase 6, i.e. S16 one floating engine, S17 API vocabulary, S18 loading and busy. Same loop:
-  implement → docs → JSON status → `npm run audit:page` → republish.
+- Phase 6 done: see the next section.
 
 ## Audit medium fixes, batch 1 (2026-09-29, branch `claude/component-audit-progress-60ca4b`, uncommitted)
 

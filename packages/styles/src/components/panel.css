@@ -218,8 +218,8 @@
   }
   /* The glyph fits the inset (8 in a small panel, 12 at md), as Figma's 3 x 5 chevron fits its 16. */
   .area-panel__chevron svg { flex-shrink: 0; inline-size: min(var(--area-icon-sm), var(--_inset)); block-size: min(var(--area-icon-sm), var(--_inset)); max-inline-size: none; }
-  .area-panel__heading:hover .area-panel__chevron,
   .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; }
+  @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; } }
   @media (hover: none) { .area-panel__chevron { opacity: 1; } }
   .area-panel__summary { display: flex; align-items: center; gap: var(--area-space-8); flex-shrink: 0; color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
   /* The rows join the section's own column, so its 8px rhythm is unchanged when open. */

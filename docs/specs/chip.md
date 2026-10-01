@@ -130,8 +130,8 @@ rgb(238, 238, 238) (`area--avatar-initials`); disabled opacity 0.5.
 
 ## Behavior and accessibility
 
-Filter chips are `button` with `aria-pressed`, controlled or uncontrolled
-(`primitives.tsx:591-650`). A removable chip is a `span` holding an optional action button
+Filter chips are `button` with `aria-pressed`, controlled or uncontrolled; a press calls
+`onSelectedChange(selected, event)` (`primitives.tsx:858-890`). A removable chip is a `span` holding an optional action button
 and a separate remove button, so both are focusable peers. The API is Area's one dismiss API:
 `onDismiss` shows the remove button, `dismissLabel` names it (default "Remove chip") and
 `dismissIcon` replaces the glyph. `onRemove`, `removeLabel` and `removeIcon` remain as
@@ -192,3 +192,4 @@ exists. Build and test results are in [the audit](../research/cohesion-audit.md#
 - 2026-09-30 · audit S6a (owner) → input kind takes Count's translucent plate (6% black / 10% white; hover 0.107 / 0.226), was `bg-component` #f7 → chip.css:80-81.
 - 2026-09-30 · audit S9 (owner) → the remove glyph is the Area `dismiss` Glyph (was a Fluent path); pills close with a concentric circle, the Area glyph and a 12% ink plate. `onDismiss`, `dismissIcon`, `dismissLabel` added (default label still "Remove chip"); `onRemove`, `removeIcon`, `removeLabel` kept as deprecated aliases → `primitives.tsx:833-845`, `:883-893`.
 - 2026-09-30 · audit S14 (owner) → the icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`chip.css:22, :244-246`; density.ts:80-82), as Button.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onSelectedChange(selected, event)` passes the click event.

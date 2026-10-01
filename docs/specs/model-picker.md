@@ -38,6 +38,7 @@ rows      36 tall (46 with a note), radius 12, padding 6 10, label 14/20, note 1
 | rows with a note | label 14/20 over note 12/16 muted, 6 above and below (48) | ChatGPT 6 padding, 14 + 12 | Area's ramp: 16 leading for 12px |
 | choice | `MenuItem radio checked` → `menuitemradio` (ModelPicker.tsx:52); trailing check on the current model, no plate at rest | Menu checkable rows; ChatGPT check | A menu of choices shows the check only (audit S13 C) |
 | focus | opens on the current model; choosing closes and returns focus | WAI menu button | — |
+| name, props | `aria-label` names the menu and the trigger (default "Model"; `label` is a deprecated alias); a choice calls `onValueChange(value, event)`; `triggerProps` reach the trigger Button, while the ref and the other props go to the wrapper (ModelPicker.tsx:17-29) | Audit S17 | — |
 
 Menu gained `MenuItem.description` (`.area-menu__lines`, `.area-menu__description`) for this;
 two-line rows keep full line boxes (the one-line cap trim is off inside them).
@@ -63,3 +64,5 @@ ghost and outline Button instead (#56, button.md), so the trigger reads quiet, a
 ## Feedback log
 
 - 2026-09-30 · audit S13 (owner) → rows use `MenuItem radio` instead of passing `role` (ModelPicker.tsx:52; primitives.tsx:1143-1161). A menu of choices shows the check only; no visible change.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the menu and trigger (default "Model"; `label` deprecated alias); `onValueChange(value, event)`; `triggerProps` added (ref and rest go to the wrapper).
+- 2026-09-30 · S17 owner calls (owner: "go with your recs") → the model list prop is `options` (a value choice); `models` is the deprecated alias.

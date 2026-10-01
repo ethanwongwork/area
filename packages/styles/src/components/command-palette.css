@@ -16,7 +16,7 @@
     background: transparent;
     overflow: visible;
   }
-  .area-command-palette__modal::backdrop { background: light-dark(rgb(0 0 0 / 0.133), var(--area-bg-overlay)); /* spec: Dialog's scrim */ }
+  .area-command-palette__modal::backdrop { background: var(--area-scrim); /* Dialog's scrim (audit S21b role) */ }
 
   .area-command-palette {
     /* spec (list pass, 2026-09-26): Menu's list model — 4 inset, 32 rows 2 apart, radius 8 — so the
@@ -34,7 +34,7 @@
     inline-size: min(calc(100vw - var(--area-space-32)), 600px); /* spec */
     max-block-size: min(700px, calc(100vh - 77px - var(--area-space-16))); /* spec: Notion 700 */
     overflow: hidden;
-    border: var(--area-border-width) solid var(--area-border-decorative);
+    border: var(--area-border-width) solid var(--area-edge-float);
     border-radius: var(--_palette-radius);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -139,9 +139,9 @@
     cursor: pointer;
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
-  .area-command-palette__hint-button:hover:not(:disabled) { background-color: var(--area-bg-hover); }
+  @media (hover: hover) { .area-command-palette__hint-button:hover:not(:disabled) { background-color: var(--area-bg-hover); } }
   /* DESIGN_SYSTEM: disabled controls dim to 50% as a whole (Button's value). */
-  .area-command-palette__hint-button:disabled { cursor: not-allowed; opacity: 0.5; }
+  .area-command-palette__hint-button:disabled { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
   /* The Move hint holds two plates; they touch. Its label names both, so it sits outside them,
    * 6 from the last plate's edge (owner, 2026-09-28: the label looked too close to the arrow; it
    * was 6 from the keycap ink, 2 from the plate, so the hover wash met the text). That is the

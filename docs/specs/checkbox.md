@@ -26,9 +26,9 @@ token (Chip). CheckboxGroup owns the legend, group description and group validat
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | sm, md (default), lg | Label type follows the control tier; lg is the 20px glyph | Untitled sm 16 / md 20; Notion and Figma one size, 16 |
+| size | md (default), lg (manifest `["md", "lg"]`) | Label type follows the control tier; lg is the 20px glyph | Untitled sm 16 / md 20; Notion and Figma one size, 16 |
 | tone | neutral (default), accent | Owner rule, 2026-09-26 | Notion checks in its blue; Figma checks neutral |
-| variant | card | A contained option: visual, text, control at the end; the chosen card's 1px edge darkens to the checked colour | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
+| variant | plain (default; `.area-checkbox--plain` restates the base), card | Card is a contained option: visual, text, control at the end; the chosen card's 1px edge darkens to the checked colour | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
 | layout (card) | row (default), tile | Row: one line; tile: a 20px visual above the label, control in the corner, cards in a grid | Owner reference 1 (tile grid); references 2, 3 and shadcn (rows) |
 | state | checked, indeterminate, invalid, disabled | Native states plus `aria-invalid` | Untitled: checked, indeterminate, disabled; no invalid |
 | composition | caption, leading visual, group (vertical, horizontal; invalid, success) | — | Untitled label + hint; Figma label beside the box; gallery Layout / horizontal group |
@@ -119,7 +119,8 @@ Area keeps `radius-small`, shared with every small control ([cohesion audit](../
 ## Behavior and accessibility
 
 Native `input type="checkbox"` inside its `label`; `indeterminate` is set on the DOM node
-and mirrored as `data-indeterminate` (forms.tsx:126-150). Caption is wired through
+and mirrored as `data-indeterminate` (forms.tsx:126-160). A change calls
+`onCheckedChange(checked, event)`; the native `onChange` still fires. Caption is wired through
 `aria-describedby`; `invalid` sets `aria-invalid`. CheckboxGroup is a native `fieldset` with
 `legend` (forms.tsx:188-203). choice.css has no forced-colors rule (the mark is a mask
 painted `--_mark`); forced colours are unverified. The mark transition uses
@@ -194,3 +195,4 @@ above is from `area--size-medium` (edge rgb(212)). Build and test results are in
 - 2026-09-27 · owner flagged the invalid group → a checked option in an invalid group takes the danger fill, as a single invalid Checkbox does (`choice.css`); the group now reads as one error state → headless Chromium.
 - 2026-09-30 · audit S5 (owner) → no Checkbox change; the #d4 glyph edge is now shared with the Slider thumb edge, and Switch's off track is #e2 (the peer row said #d4) → choice.css:48, slider.css:34.
 - 2026-09-30 · audit S14 (owner) → the label gap is 6 at md and lg (was 8), from the density tokens (choice.css:9, :404, :410; density.ts:81-82); Radio and the choice labels follow.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onCheckedChange(checked, event)` added (native `onChange` still fires); `variant` is `plain` (default, class `.area-checkbox--plain` restating the base) | `card`.

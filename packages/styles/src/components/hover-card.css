@@ -27,12 +27,3 @@
   }
   .area-hover-card__meta > * { display: inline-flex; align-items: center; gap: var(--area-space-4); }
 }
-@layer area.components {
-  /* spec: the card starts at the link's start rather than centring on it (GitHub's card starts
-   * 20 before its link), so a card for a link near the page edge stays on the page. Self-logical
-   * keywords, so "start" is the link's right edge in right-to-left text. */
-  @supports (anchor-name: --area-anchor) {
-    .area-popover-anchor > .area-hover-card.area-popover--bottom[popover]:popover-open { position-area: self-block-end span-self-inline-end; position-try-fallbacks: flip-block, flip-inline; }
-    .area-popover-anchor > .area-hover-card.area-popover--top[popover]:popover-open { position-area: self-block-start span-self-inline-end; position-try-fallbacks: flip-block, flip-inline; }
-  }
-}

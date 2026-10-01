@@ -3,8 +3,9 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { messageVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 
 export interface MessageProps extends Omit<HTMLAttributes<HTMLElement>, "role"> {
-  /** Who wrote it: the person (a bubble at the end) or the assistant (prose across the column). */
-  author: VariantProps<typeof MANIFESTS.message>["author"];
+  /** Who wrote it: the person (a bubble at the end) or the assistant (prose across the column,
+   * the default). */
+  author?: VariantProps<typeof MANIFESTS.message>["author"];
   /** Names the author for assistive tech ("You", "ChatGPT"). */
   authorName?: string;
   /** A MessageActions row under the message. */
@@ -15,7 +16,7 @@ export interface MessageProps extends Omit<HTMLAttributes<HTMLElement>, "role"> 
 
 /** One turn in a conversation. */
 export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
-  { author, authorName, actions, streaming, className, children, ...rest }, ref,
+  { author = "assistant", authorName, actions, streaming, className, children, ...rest }, ref,
 ) {
   const name = authorName ?? (author === "user" ? "You" : "Assistant");
   const cursor = streaming ? <span className="area-message__cursor" aria-hidden="true" /> : null;
@@ -30,13 +31,13 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
 });
 
 export interface MessageActionsProps extends HTMLAttributes<HTMLDivElement> {
-  /** Names the group ("Message actions"). */
+  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
   label?: string;
 }
 
 /** Copy, rate, read aloud, regenerate: ghost icon Buttons with no gap, muted. */
 export const MessageActions = forwardRef<HTMLDivElement, MessageActionsProps>(function MessageActions(
-  { label = "Message actions", className, ...rest }, ref,
+  { label, "aria-label": ariaLabel = label ?? "Message actions", className, ...rest }, ref,
 ) {
-  return <div ref={ref} role="group" aria-label={label} className={["area-message__actions", className].filter(Boolean).join(" ")} {...rest} />;
+  return <div ref={ref} role="group" aria-label={ariaLabel} className={["area-message__actions", className].filter(Boolean).join(" ")} {...rest} />;
 });

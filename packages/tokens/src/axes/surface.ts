@@ -12,7 +12,9 @@
  * overflow): Notion's popover geometry, 0 20px 24px and 0 5px 8px at full and half strength.
  * Flat removes both; the other presets keep the measured recipes.
  */
-const CARD = "0 1px 2px -1px light-dark(rgb(0 0 0 / 0.03), rgb(0 0 0 / 0.16)), 0 2px 8px 0 light-dark(rgb(0 0 0 / 0.03), rgb(0 0 0 / 0.16))";
+// Dark: no halo (audit S21c, dark captures 2026-09-30: Notion's and Figma's cards have none; the
+// edge carries the card). Was 16% black, invisible on the dark page anyway.
+const CARD = "0 1px 2px -1px light-dark(rgb(0 0 0 / 0.03), transparent), 0 2px 8px 0 light-dark(rgb(0 0 0 / 0.03), transparent)";
 const FLOAT = "0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)";
 import { type AxisDefinition, tokens } from "./schema.ts";
 

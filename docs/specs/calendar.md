@@ -162,7 +162,7 @@ Third-pass additions:
 - One tab stop (roving tabindex). Arrows move by day and week (mirrored in RTL), Home/End to
   the week's edges, Page Up/Down by month, Shift+Page by year; focus crosses months and
   clamps to min/max. Enter/Space selects; in range mode Escape cancels a pending anchor.
-- Dates are ISO strings (no time zone). `name` submits the date, `name-start`/`name-end`
+- Dates are ISO strings (no time zone); a pick calls `onValueChange(value, event)`. `name` submits the date, `name-start`/`name-end`
   for a range, or one field per date for multiple.
 - Today is read after mount (or from `today`), so server and client markup match.
 
@@ -241,3 +241,4 @@ on outside days, fixed (see Decisions). Dark theme not compared.
 - 2026-09-28 · owner: approved (batch 7).
 - 2026-09-30 · audit S4 (owner) → 32px days take `radius-control-md` 8 (was control-sm 6), matching 32px Buttons; settles family call F-12 → `calendar.css:10`.
 - 2026-09-30 · audit S10 (owner) → the surface reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → `calendar.css:37`.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(value, event)` passes the day button's click event.

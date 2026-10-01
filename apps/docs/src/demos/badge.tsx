@@ -25,7 +25,7 @@ export const BadgeToneMatrix = () => (
       <section key={variant} aria-label={variant}>
         <p>{variant}</p>
         <BadgeGroup>
-          {(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => false
+          {(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const).map(tone => false
             ? <Badge key={tone} as="a" href="#api" variant={variant} tone={tone}>{tone}</Badge>
             : <Badge key={tone} variant={variant} tone={tone}>{tone}</Badge>)}
         </BadgeGroup>
@@ -34,7 +34,7 @@ export const BadgeToneMatrix = () => (
   </div>
 );
 export const BadgeTones = () => (
-  <BadgeGroup>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => <Badge key={tone} tone={tone}>{tone}</Badge>)}</BadgeGroup>
+  <BadgeGroup>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const).map(tone => <Badge key={tone} tone={tone}>{tone}</Badge>)}</BadgeGroup>
 );
 export const BadgeLeadingIcon = () => <Badge icon={<CheckIcon />}>Badge</Badge>;
 export const BadgeTrailingIcon = () => <Badge trailingIcon={<InfoIcon />}>Badge</Badge>;
@@ -44,7 +44,7 @@ export const BadgeDotOutline = () => <Badge dot variant="outline" tone="warning"
 export const BadgeDotOnly = () => <Badge dotOnly tone="success" aria-label="Available" />;
 export const BadgeDotMatrix = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)" }}>
-    {(["soft", "outline"] as const).map(variant => <BadgeGroup key={variant}>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const).map(tone => <Badge key={tone} dot variant={variant} tone={tone}>{tone}</Badge>)}</BadgeGroup>)}
+    {(["soft", "outline"] as const).map(variant => <BadgeGroup key={variant}>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const).map(tone => <Badge key={tone} dot variant={variant} tone={tone}>{tone}</Badge>)}</BadgeGroup>)}
   </div>
 );
 export const BadgeStateLabels = () => (
@@ -141,7 +141,7 @@ export const BadgeAuditControls = () => {
   </div>;
 };
 
-const galleryTones = ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"] as const;
+const galleryTones = ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const;
 const galleryVariants = ["soft", "solid", "outline", "color", "modern"] as const;
 const galleryName = (value: string) => value[0]!.toUpperCase() + value.slice(1);
 const galleryBadge = (variant: typeof galleryVariants[number], tone: typeof galleryTones[number]) => () => false

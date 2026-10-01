@@ -1,5 +1,5 @@
 import { forwardRef, useId, useState } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, SyntheticEvent } from "react";
 import { boxFieldVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
@@ -17,7 +17,7 @@ export interface BoxFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "def
   hideLabel?: boolean;
   value?: BoxValue;
   defaultValue?: BoxValue;
-  onValueChange?: (value: BoxValue) => void;
+  onValueChange?: (value: BoxValue, event?: SyntheticEvent) => void;
   /** One field per side or corner; otherwise linked (a horizontal and vertical pair, or one radius). */
   independent?: boolean;
   defaultIndependent?: boolean;
@@ -25,12 +25,16 @@ export interface BoxFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "def
   /** Show the toggle between linked and independent. Off keeps the current mode fixed. */
   toggle?: boolean;
   size?: VariantProps<typeof MANIFESTS.boxField>["size"];
-  variant?: "outline" | "soft";
+  /** The fields' treatment, passed to each NumberField (a composition prop, not a CSS axis of
+   * the group: framework-free markup sets it on each field). */
+  variant?: VariantProps<typeof MANIFESTS.numberField>["variant"];
   min?: number;
   max?: number;
   step?: number;
   unit?: string;
   disabled?: boolean;
+  /** Values can be read and copied but not changed; the linked toggle is unavailable (audit B-20). */
+  readOnly?: boolean;
   /** Submits the four values as one CSS shorthand ("8 16 8 16"). */
   name?: string;
 }
@@ -74,7 +78,7 @@ const EMPTY: BoxValue = [0, 0, 0, 0];
 export const BoxField = forwardRef<HTMLDivElement, BoxFieldProps>(function BoxField(
   { kind = "sides", label, hideLabel, value, defaultValue = EMPTY, onValueChange,
     independent, defaultIndependent = false, onIndependentChange, toggle = true,
-    size, variant, min = 0, max, step, unit, disabled, name, className, ...rest }, ref,
+    size, variant, min = 0, max, step, unit, disabled, readOnly, name, className, ...rest }, ref,
 ) {
   const labelId = useId();
   const [internal, setInternal] = useState<BoxValue>(defaultValue);
@@ -83,11 +87,11 @@ export const BoxField = forwardRef<HTMLDivElement, BoxFieldProps>(function BoxFi
   const split = independent ?? internalIndependent;
   const noun = label.toLowerCase();
 
-  const update = (indices: number[], next: number | null) => {
+  const update = (indices: number[], next: number | null, event?: SyntheticEvent) => {
     const copy = [...values] as [number | null, number | null, number | null, number | null];
     for (const index of indices) copy[index] = next;
     if (value === undefined) setInternal(copy);
-    onValueChange?.(copy);
+    onValueChange?.(copy, event);
   };
   const setSplit = (next: boolean) => {
     if (independent === undefined) setInternalIndependent(next);
@@ -99,9 +103,9 @@ export const BoxField = forwardRef<HTMLDivElement, BoxFieldProps>(function BoxFi
     const [first, ...others] = part.indices.map(index => values[index] ?? null);
     const mixed = others.some(other => other !== first);
     return <NumberField key={part.key} className={part.wide ? `${boxFieldVariants.element("field")} ${boxFieldVariants.element("field")}--wide` : boxFieldVariants.element("field")}
-      size={size} variant={variant} fullWidth min={min} max={max} step={step} unit={unit} disabled={disabled}
+      size={size} variant={variant} fullWidth min={min} max={max} step={step} unit={unit} disabled={disabled} readOnly={readOnly}
       aria-label={part.label ? `${part.label} ${noun}` : label} scrub={part.icon}
-      value={mixed ? null : first ?? null} mixed={mixed} onValueChange={next => update(part.indices, next)} />;
+      value={mixed ? null : first ?? null} mixed={mixed} onValueChange={(next, event) => update(part.indices, next, event)} />;
   });
   const toggleLabel = kind === "sides" ? `Individual ${noun} per side` : `Individual ${noun} per corner`;
 
@@ -111,7 +115,7 @@ export const BoxField = forwardRef<HTMLDivElement, BoxFieldProps>(function BoxFi
     <div className={boxFieldVariants.element("fields")}>
       {fields.slice(0, 2)}
       {toggle ? <Button className={boxFieldVariants.element("toggle")} size={size} variant="ghost" tone="neutral" iconOnly
-        aria-label={toggleLabel} selected={split} disabled={disabled} onClick={() => setSplit(!split)}
+        aria-label={toggleLabel} selected={split} disabled={disabled || readOnly} onClick={() => setSplit(!split)}
         icon={<Glyph name={kind === "sides" ? "sides" : "corners"} />} /> : null}
       {fields.slice(2)}
     </div>

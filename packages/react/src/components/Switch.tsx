@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
-import type { InputHTMLAttributes, ReactNode } from "react";
+import type { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
 import { Spinner } from "./primitives.tsx";
 import { MANIFESTS, switchVariants, type VariantProps } from "../variants.ts";
 
@@ -8,7 +8,7 @@ export type SwitchProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "
   label?: ReactNode;
   description?: ReactNode;
   loading?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;
   "data-hover"?: string;
   "data-active"?: string;
   "data-focus-visible"?: string;
@@ -86,7 +86,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
           onChange?.(event);
           if (event.defaultPrevented) return;
           if (checked === undefined) setLocal(event.target.checked);
-          onCheckedChange?.(event.target.checked);
+          onCheckedChange?.(event.target.checked, event);
         }}
         onClick={event => {
           if (blocked) {

@@ -6,7 +6,7 @@
 import { cloneElement, isValidElement, useEffect, useId, useRef } from "react";
 import type { FocusEvent as ReactFocusEvent, HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactElement, ReactNode, Ref, RefObject } from "react";
 import { assignRef, useAnchoredPosition, useNativePopover, useOpenState } from "./overlay.ts";
-import type { OverlayAlign, OverlaySide } from "./overlay.ts";
+import type { OverlayAlign, OverlaySide, Rect } from "./overlay.ts";
 
 /*
  * spec: docs/specs/overlay.md, "Decisions". Menus and tooltips sit 4px from their trigger
@@ -47,12 +47,15 @@ export interface AnchoredProps {
   anchor?: RefObject<HTMLElement | null>;
 }
 
+/** Internal: the box a menu places against (a toolbar menu clears its bar). */
+type AnchorRect = { anchorRect?: (trigger: HTMLElement) => Rect };
+
 const compose = <E,>(theirs: unknown, ours: (event: E) => void) => (event: E) => {
   if (typeof theirs === "function") theirs(event);
   if (!(event as { defaultPrevented?: boolean }).defaultPrevented) ours(event);
 };
 
-function useTriggerRef(trigger: ReactNode) {
+export function useTriggerRef(trigger: ReactNode) {
   const node = useRef<HTMLElement | null>(null);
   const theirs = isValidElement(trigger) ? (trigger as Trigger).props.ref : undefined;
   const ref = (value: HTMLElement | null) => { node.current = value; assignRef(theirs as never, value); };
@@ -107,7 +110,7 @@ export function AnchoredPopover({ trigger, open: openProp, defaultOpen, onOpenCh
 const ITEM = "[role^='menuitem']";
 const enabledItems = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>(ITEM)].filter(item => !item.matches(":disabled, [aria-disabled='true'], [data-disabled]"));
 
-export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "start", offset = MENU_OFFSET, surface }: AnchoredProps & { surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
+export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "start", offset = MENU_OFFSET, anchorRect, surface }: AnchoredProps & AnchorRect & { surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
   const id = useId();
   const triggerId = `${id}-trigger`;
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
@@ -117,7 +120,7 @@ export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChang
   const entry = useRef<"surface" | "first" | "last">("surface");
   const typed = useRef({ text: "", at: 0 });
   useNativePopover(surfaceNode, triggerNode, open, setOpen);
-  useAnchoredPosition(triggerNode, surfaceNode, open, { side, align, offset, padding: OVERLAY_PADDING });
+  useAnchoredPosition(triggerNode, surfaceNode, open, { side, align, offset, padding: OVERLAY_PADDING, anchorRect });
   useEffect(() => {
     if (!open || !surfaceNode.current) return;
     const items = enabledItems(surfaceNode.current);
@@ -198,7 +201,7 @@ const within = (node: Element | null, target: EventTarget | null) => target inst
 // When a tooltip closed recently, the next one opens without the delay.
 let lastClosed = 0;
 
-export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenChange, side = "top", align = "center", offset, arrow, delay = TOOLTIP_DELAY, surface }: AnchoredProps & { arrow?: boolean; delay?: number; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
+export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenChange, side = "top", align = "center", offset, arrow, delay = TOOLTIP_DELAY, closeDelay = TOOLTIP_CLOSE_DELAY, describe = true, surface }: AnchoredProps & { arrow?: boolean; delay?: number; closeDelay?: number; /** Internal: false when the tooltip's text is already the trigger's name (InputAction), so it isn't announced twice. */ describe?: boolean; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
   const id = useId();
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const [triggerNode, triggerRef] = useTriggerRef(trigger);
@@ -207,7 +210,7 @@ export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenCh
   useNativePopover(surfaceNode, { current: null }, open, setOpen);
   useAnchoredPosition(triggerNode, surfaceNode, open, { side, align, offset: offset ?? TOOLTIP_OFFSET + (arrow ? TOOLTIP_ARROW_REACH : 0), padding: OVERLAY_PADDING });
   const show = (wait: number) => { clearTimeout(timer.current); if (wait <= 0) setOpen(true); else timer.current = setTimeout(() => setOpen(true), wait); };
-  const hide = (wait = TOOLTIP_CLOSE_DELAY) => {
+  const hide = (wait = closeDelay) => {
     clearTimeout(timer.current);
     const close = () => { lastClosed = Date.now(); setOpen(false); };
     if (wait <= 0) close(); else timer.current = setTimeout(close, wait);
@@ -228,7 +231,7 @@ export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenCh
     return () => removeEventListener("keydown", onKey, true);
   }, [open]);
   const t = trigger as Trigger;
-  const describedBy = [t.props?.["aria-describedby"], id].filter(Boolean).join(" ");
+  const describedBy = [t.props?.["aria-describedby"], describe ? id : undefined].filter(Boolean).join(" ") || undefined;
   return <>
     {isValidElement(trigger) ? cloneElement(t, {
       ref: triggerRef,

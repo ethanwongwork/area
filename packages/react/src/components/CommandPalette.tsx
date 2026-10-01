@@ -36,7 +36,9 @@ export interface CommandPaletteProps extends Omit<HTMLAttributes<HTMLDivElement>
   defaultQuery?: string;
   onQueryChange?: (query: string) => void;
   placeholder?: string;
-  /** Names the palette and its search field. */
+  /** Names the palette and its search field ("Command palette"). */
+  "aria-label"?: string;
+  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
   label?: string;
   emptyText?: ReactNode;
   /** Replaces the key hints below the list; `false` removes them. */
@@ -57,7 +59,7 @@ const isApple = () => typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test
  */
 export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(function CommandPalette(
   { items, open: openProp, defaultOpen = false, onOpenChange, inline, hotkey, query: queryProp, defaultQuery = "",
-    onQueryChange, placeholder = "Search or run a command…", label = "Command palette", emptyText = "No results",
+    onQueryChange, placeholder = "Search or run a command…", "aria-label": ariaLabel, label: labelProp, emptyText = "No results",
     footer, filter = matches, className, ...rest }, ref,
 ) {
   const id = useId();
@@ -150,7 +152,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
       {item.icon ? <span className="area-menu__icon" aria-hidden="true">{item.icon}</span> : null}
       <span className="area-menu__text area-command-palette__text">{item.label}</span>
       {item.description ? <span className="area-command-palette__description">{item.description}</span> : null}
-      {item.shortcut ? <span className="area-menu__shortcut"><Kbd keys={item.shortcut} size="small" appearance="quiet" /></span> : null}
+      {item.shortcut ? <span className="area-menu__shortcut"><Kbd keys={item.shortcut} size="sm" variant="quiet" /></span> : null}
     </div>;
   };
   const groups: Array<[string | undefined, CommandItem[]]> = [];
@@ -159,6 +161,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     if (last && last[0] === item.group) last[1].push(item); else groups.push([item.group, [item]]);
   }
 
+  const label = ariaLabel ?? labelProp ?? "Command palette";
   const surface = <div ref={ref} role={inline ? "search" : undefined} aria-label={inline ? label : undefined}
     className={commandPaletteVariants({ inline }, className)} {...rest}>
     <div className="area-command-palette__search">
@@ -184,15 +187,15 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
             field; keyboard users press the keys themselves, so assistive tech skips the row. */}
         <span className="area-command-palette__hint">
           <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
-            onClick={() => setActive(step(current < 0 ? 0 : current, -1))} disabled={current < 0}><Kbd keys={["up"]} size="small" appearance="quiet" /></button>
+            onClick={() => setActive(step(current < 0 ? 0 : current, -1))} disabled={current < 0}><Kbd keys={["up"]} size="sm" variant="quiet" /></button>
           <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
-            onClick={() => setActive(step(current, 1))} disabled={current < 0}><Kbd keys={["down"]} size="small" appearance="quiet" /></button>
+            onClick={() => setActive(step(current, 1))} disabled={current < 0}><Kbd keys={["down"]} size="sm" variant="quiet" /></button>
           Move
         </span>
         <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
-          onClick={() => run(rows[current])} disabled={current < 0}><Kbd keys={["enter"]} size="small" appearance="quiet" />Open</button>
+          onClick={() => run(rows[current])} disabled={current < 0}><Kbd keys={["enter"]} size="sm" variant="quiet" />Open</button>
         {inline ? null : <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
-          onClick={() => setOpen(false)}><Kbd keys={["esc"]} size="small" appearance="quiet" />Close</button>}
+          onClick={() => setOpen(false)}><Kbd keys={["esc"]} size="sm" variant="quiet" />Close</button>}
       </>}
     </div>}
   </div>;

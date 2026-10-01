@@ -29,7 +29,7 @@ values in one shell; it reuses NumberField).
 | scrub | letter, icon, or grip (`true`) | The field's name as the drag handle | Figma X/Y/W/H letters, rotation and opacity glyphs; Base UI ScrubArea is the label |
 | unit | text after the number | %, °, px | Figma "100%", "0°" |
 | steppers | on/off | Forms without a pointer-drag habit | Base UI (− and +), Area |
-| mixed, read-only, disabled, validation | states | Multi-selection, locking | Figma ("Mixed") |
+| mixed, read-only, disabled, validation, `invalid` | states | Multi-selection, locking; `invalid` gives the error paint and `aria-invalid`, as Input | Figma ("Mixed") |
 
 ## Sources
 
@@ -118,7 +118,9 @@ Unchanged: `role="spinbutton"` text input with `aria-valuenow/min/max` and a val
 includes the unit; ArrowUp/Down step (Shift ×10, Alt ×0.1), Home/End, Enter commits, Escape
 cancels; arithmetic entry; scrub by 8px per step with pointer capture, cancel restores. The
 scrub handle is `aria-hidden`; the letter is not the accessible name, so each inspector
-field needs `aria-label` (the demos give "X position", "Width" and so on).
+field needs `aria-label` (the demos give "X position", "Width" and so on). `onValueChange` and
+`onValueCommit` take `(value, event)`; the event is absent for held-stepper repeats. `className`
+and `style` go to the shell (the same box; `style` used to reach the inner input).
 
 ## Visual pass
 
@@ -158,3 +160,4 @@ tiles and the Panel recipe at 2x.
   `figma--number-field-*`, `figma--gap-field`.
 - 2026-09-30 · audit S4 (owner) → radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `number-field.css:25`, `:36-38`); was 8 at every size. The md captures above are unchanged.
 - 2026-09-30 · audit S14 (owner) → the gap between the field's parts is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`number-field.css:6, :36-38`; density.ts:80-82), as Input.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → new `invalid` prop; `onValueChange` / `onValueCommit` take `(value, event)` (event absent for held-stepper repeats); `style` goes to the shell with `className`.

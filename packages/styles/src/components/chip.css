@@ -57,9 +57,11 @@
   }
 
   /* Background and border move; the label does not. See button.css. */
-  .area-chip:hover:not([data-disabled]) {
-    background-color: var(--_bg-hover);
-    border-color: var(--_border-hover, var(--area-edge-control-hover));
+  @media (hover: hover) {
+    .area-chip:hover:not([data-disabled]) {
+      background-color: var(--_bg-hover);
+      border-color: var(--_border-hover, var(--area-edge-control-hover));
+    }
   }
 
   .area-chip:focus-visible {
@@ -117,7 +119,7 @@
 
   .area-chip[data-disabled] {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--area-opacity-disabled);
   }
 
   /*
@@ -180,11 +182,17 @@
     text-underline-offset: var(--area-space-2);
   }
 
-  .area-chip--link-icon:hover .area-chip__label,
   .area-chip--link-icon:focus-visible .area-chip__label {
     text-decoration: underline;
     text-decoration-thickness: var(--area-stroke-width);
     text-underline-offset: var(--area-space-2);
+  }
+  @media (hover: hover) {
+    .area-chip--link-icon:hover .area-chip__label {
+      text-decoration: underline;
+      text-decoration-thickness: var(--area-stroke-width);
+      text-underline-offset: var(--area-space-2);
+    }
   }
 
   /* A removable chip is a composition: its primary action and removal action stay peers. */
@@ -222,7 +230,8 @@
   .area-chip[data-invalid] .area-chip__remove { color: var(--area-fg-danger); }
   /* Foreground stays fixed on hover; a plate in the chip's own ink shows the target, as the
      Alert dismiss does on its tinted ground. */
-  .area-chip__remove:is(:hover, [data-hover]) { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); }
+  .area-chip__remove[data-hover] { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); }
+  @media (hover: hover) { .area-chip__remove:hover { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); } }
   .area-chip__remove:focus-visible,
   .area-chip__action:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);

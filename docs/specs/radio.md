@@ -26,8 +26,9 @@ Checkbox.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | sm, md (default), lg | Label type follows the tier | Untitled sm 16 / md 20 |
+| size | md (default), lg (sm removed 2026-09-28; manifest `["md", "lg"]`) | Label type follows the tier | Untitled sm 16 / md 20 |
 | tone | neutral (default), accent | Owner rule, 2026-09-26 | Untitled brand |
+| variant | plain (default; `.area-radio--plain` restates the base), card | Card: as Checkbox's card variant | Owner references (2026-09-28) |
 | state | checked, disabled; group invalid | Native states; RadioGroup `error` | Untitled: checked, disabled |
 | layout (group) | vertical (default), horizontal | Settings stacks vs inline choices | Untitled group gap 16 |
 | composition | description | Option caption | Untitled label + hint |
@@ -103,7 +104,8 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 ## Behavior and accessibility
 
 Native `input type="radio"`; RadioGroup shares `name`, controlled/uncontrolled `value` and
-`disabled` through context (forms.tsx:232-266); arrow keys are the browser's. Group
+`disabled` through context (forms.tsx:232-266); a choice calls `onValueChange(value, event)`;
+arrow keys are the browser's. Group
 description and error are wired through `aria-describedby`; `aria-invalid` on the fieldset.
 No forced-colors rule in choice.css (unverified).
 
@@ -157,3 +159,4 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
   `area--horizontal`, `area--description`.
 - 2026-09-27 · owner flagged the invalid group → a checked option in an invalid group takes the danger fill, as a single invalid Checkbox does (`choice.css`); the group now reads as one error state → headless Chromium.
 - 2026-09-30 · audit S14 (owner) → the label gap is 6 at md and lg (was 8), shared with Checkbox (choice.css:9, :404, :410; density.ts:81-82).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → RadioGroup `onValueChange(value, event)`; `variant` is `plain` (default, class `.area-radio--plain` restating the base) | `card`.

@@ -91,8 +91,10 @@
   /* data-checked: a display-only switch whose state lives on its host (a menu's checkable row). */
   .area-switch__track[data-checked] .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width)); }
   .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width)); }
-  .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); border-color: var(--_off-hover); }
-  .area-switch:is(:hover, [data-hover]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); border-color: var(--_on-hover); }
+  .area-switch[data-hover]:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); border-color: var(--_off-hover); }
+  @media (hover: hover) { .area-switch:hover:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); border-color: var(--_off-hover); } }
+  .area-switch[data-hover]:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); border-color: var(--_on-hover); }
+  @media (hover: hover) { .area-switch:hover:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); border-color: var(--_on-hover); } }
   .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__thumb { inline-size: calc(var(--_thumb-width) + var(--area-space-2)); }
   .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width) - var(--area-space-2)); }
   .area-switch__control:focus-visible ~ .area-switch__track,

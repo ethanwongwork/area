@@ -94,7 +94,8 @@ No hover, focus or disabled: Progress is not interactive.
 ## Behavior and accessibility
 
 `role="progressbar"` with `aria-valuemin`, `aria-valuemax`, `aria-valuenow` (omitted when
-indeterminate) and `aria-label` (primitives.tsx:307-329). The value is clamped to 0–100%.
+indeterminate) and `aria-label`, set directly (`label` is a deprecated alias;
+primitives.tsx:405-435). The value is clamped to 0–100%.
 No forced-colors rule in display.css (unverified).
 
 ## Peers and consistency
@@ -148,3 +149,4 @@ in the [cohesion audit](../research/cohesion-audit.md#verification).
 - 2026-09-28 · batch 6 Claude in Chrome (Figma usage meter) → no change; lighter track raised as an open question.
 - 2026-09-28 · owner: approved (batch 6).
 - 2026-09-30 · audit S5 (owner) → rail fallback `edge-control` #e2 (was ≈ #dd), the one off-track grey of Switch and Slider; the open Figma #e6 against #dd question is settled → display.css:265.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Progress is named with `aria-label` (`label` deprecated alias).

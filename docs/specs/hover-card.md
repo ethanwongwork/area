@@ -21,6 +21,8 @@ Popover (opened by a click, may hold a form).
 | Axis | Value | Justification |
 |---|---|---|
 | side | bottom (default), top, left, right | Popover's sides |
+| align | start (default), center, end | The card starts at the link |
+| state | `open` / `defaultOpen` / `onOpenChange` | Controlled or uncontrolled, as every overlay |
 | content | person (identity row, description, facts), page, source | Notion, ChatGPT, GitHub |
 
 ## Sources
@@ -29,16 +31,16 @@ Popover (opened by a click, may hold a form).
 |---|---|---|---|
 | github | design-system reference (Primer hovercard) | user hovercard on a public commit list, timed in headless Edge with a real pointer: opens ≈ 750 ms after the pointer arrives (includes loading), closes ≈ 115 ms after it leaves; card 360 wide, radius 6, starts 20 before its link, 12 from it | github.com/nodejs/node/commits/main, 2026-09-26 |
 | radix | design-system source | HoverCard defaults: openDelay 700, closeDelay 300; no focus trap; touch ignored | radix-ui.com/primitives/docs/components/hover-card |
-| area | peer | Popover: 320 wide, 4 from its anchor, slots | popover.md |
+| area | peer | Popover: 320 wide, 8 from its trigger (overlay.md), slots | popover.md |
 
 ## Decisions
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| open delay | 700 ms | Radix 700; GitHub ≈ 750 | — |
-| close delay | 300 ms, cancelled while the pointer is on the card | Radix 300 | GitHub's 115 gives too little time to cross onto the card |
-| surface, width, offset | Popover: 320, 4 from the link | popover.md | GitHub 360 and 12 (its caret) |
-| alignment | the card starts at the link's start; flips on both axes | GitHub starts its card at the link | Popover centres, which pinned edge links' cards to the viewport |
+| open delay | 700 ms (`delay`; `openDelay` is a deprecated alias) | Radix 700; GitHub ≈ 750 | — |
+| close delay | 300 ms (`closeDelay`), cancelled while the pointer is on the card | Radix 300 | GitHub's 115 gives too little time to cross onto the card |
+| surface, width, offset | Popover: 320, **8** from the link (`offset`) | overlay.md popover gap; audit S16 / E-5 (owner 2026-09-30, option A) | GitHub 360 and 12 (its caret). Was 4, on the old CSS-anchor path |
+| alignment | the card starts at the link's start (`align="start"`); flips to the other side and edge, shifts inside the viewport; `data-side` and the transform origin set by the shared engine (`useAnchoredPosition`, HoverCard.tsx) | GitHub starts its card at the link; overlay.md engine | Popover centres, which pinned edge links' cards to the viewport. Was CSS `position-area` in a `.area-popover-anchor` wrapper, which scaled from its centre and could not report its side; the wrapper and its manifest entry are gone |
 | identity row | avatar, then name (Popover title) over a muted handle, 12 apart | people cards (GitHub, Notion) | — |
 | meta | 12/16 muted facts, 12 apart | caption role | — |
 | touch | never opens (`hover: none` hides it) | Radix | the link is followed instead |
@@ -69,7 +71,11 @@ description size across Popover, Card, Dialog and Hover card.
 ## Verification
 
 - Headless Edge, real pointer and keys (`scratchpad/hover.mjs`): opens after 751–754 ms;
-  4 below the link, 320 wide, starting at the link (x 136); stays open with the pointer on
+  4 below the link (8 since audit S16; gallery 2026-09-30: 8 below, start edges equal, origin at the link), 320 wide, starting at the link (x 136); stays open with the pointer on
   it; closes 333 ms after the pointer leaves both; Tab to the link opens it; Escape closes.
-- React test: anchor, manual popover, no added semantics.
+- React test: no wrapper, manual popover, no added semantics.
 - Unverified: dark theme, screen readers (by design the card is not announced).
+
+## Feedback log
+
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `open` / `defaultOpen` / `onOpenChange`, `align` (default start) and `offset` (default 8) are props; the open delay is `delay` (`openDelay` deprecated alias) beside `closeDelay`.

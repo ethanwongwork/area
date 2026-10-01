@@ -26,7 +26,8 @@ test('rows share one hover plate and one selection plate, and selection outranks
   // Each hover selector excludes the selected or current row, so the stronger plate stays
   // under the pointer (a hover rule of higher specificity would otherwise lighten it).
   const hover = [
-    '.area-menu__item:hover:not([data-disabled], [data-selected]), .area-menu__item:is([data-highlighted], :focus-visible):not([data-selected])',
+    '.area-menu__item:hover:not([data-disabled], [data-selected])',
+    '.area-menu__item:is([data-highlighted], :focus-visible):not([data-selected])',
     '.area-nav__item:hover:not([data-disabled])',
     '.area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current="page"])):hover',
     '.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td',
@@ -48,7 +49,7 @@ test('every floating surface shares the lift', () => {
   const role = [...css.matchAll(/--area-shadow-float:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.ok(role.includes('0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)'), 'shadow-float lost its recipe');
   assert.ok(role.includes('none'), 'the Flat preset should drop the lift');
-  for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar--surface', '.area-toolbar__overflow-content', '.area-command-palette']) {
+  for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar--surface', '.area-command-palette']) {
     const rule = ruleFor(block);
     assert.ok(rule, `${block} missing`);
     assert.match(rule.body, lift, `${block} does not use the floating lift`);

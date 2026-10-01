@@ -1,5 +1,5 @@
 import { forwardRef, useMemo, useRef, useState } from "react";
-import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
+import type { HTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { treeViewVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 
@@ -24,10 +24,10 @@ export interface TreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, "onS
   selectionMode?: VariantProps<typeof MANIFESTS.treeView>["selectionMode"];
   expandedIds?: string[];
   defaultExpandedIds?: string[];
-  onExpandedChange?: (ids: string[]) => void;
+  onExpandedChange?: (ids: string[], event: SyntheticEvent) => void;
   selectedIds?: string[];
   defaultSelectedIds?: string[];
-  onSelectedChange?: (ids: string[]) => void;
+  onSelectedChange?: (ids: string[], event: SyntheticEvent) => void;
   onActivate?: (id: string) => void;
   currentId?: string;
 }
@@ -62,21 +62,21 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
     setFocused(id);
     root.current?.querySelector<HTMLElement>(`[role="treeitem"][data-tree-id="${CSS.escape(id)}"]`)?.focus();
   };
-  const setExpansion = (id: string, open: boolean) => {
+  const setExpansion = (id: string, open: boolean, event: SyntheticEvent) => {
     const next = new Set(expanded);
     if (open) next.add(id); else next.delete(id);
     if (expandedIds === undefined) setOwnExpanded([...next]);
-    onExpandedChange?.([...next]);
+    onExpandedChange?.([...next], event);
   };
-  const activate = (id: string) => {
+  const activate = (id: string, event: SyntheticEvent) => {
     if (selectionMode === "checkbox") {
       const next = new Set(selected);
       if (next.has(id)) next.delete(id); else next.add(id);
       if (selectedIds === undefined) setOwnSelected([...next]);
-      onSelectedChange?.([...next]);
+      onSelectedChange?.([...next], event);
     } else {
       if (selectedIds === undefined) setOwnSelected([id]);
-      onSelectedChange?.([id]);
+      onSelectedChange?.([id], event);
       onActivate?.(id);
     }
   };
@@ -95,15 +95,15 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
       case "End": next = enabled.at(-1)?.node.id; break;
       case "ArrowRight":
         if (current.node.children?.length) {
-          if (!expanded.has(eventId)) setExpansion(eventId, true);
+          if (!expanded.has(eventId)) setExpansion(eventId, true, event);
           else next = current.node.children.find(child => !child.disabled)?.id;
         }
         break;
       case "ArrowLeft":
-        if (current.node.children?.length && expanded.has(eventId)) setExpansion(eventId, false);
+        if (current.node.children?.length && expanded.has(eventId)) setExpansion(eventId, false, event);
         else next = current.parentId;
         break;
-      case "Enter": case " ": activate(eventId); break;
+      case "Enter": case " ": activate(eventId, event); break;
       default:
         if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
           typeahead.current += event.key.toLocaleLowerCase();
@@ -131,8 +131,8 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
         aria-current={currentId === node.id ? "page" : undefined}
         aria-disabled={node.disabled || undefined} tabIndex={node.id === activeId ? 0 : -1}
         style={{ "--_tree-depth": depth - 1 } as React.CSSProperties}
-        onFocus={() => setFocused(node.id)} onClick={() => { if (!node.disabled) { focusItem(node.id); activate(node.id); } }}>
-        <span className="area-tree-view__chevron" aria-hidden="true" onClick={event => { if (!branch || node.disabled) return; event.stopPropagation(); setExpansion(node.id, !open); focusItem(node.id); }}>
+        onFocus={() => setFocused(node.id)} onClick={event => { if (!node.disabled) { focusItem(node.id); activate(node.id, event); } }}>
+        <span className="area-tree-view__chevron" aria-hidden="true" onClick={event => { if (!branch || node.disabled) return; event.stopPropagation(); setExpansion(node.id, !open, event); focusItem(node.id); }}>
           {branch && <Glyph name="chevron-down" />}
         </span>
         {selectionMode === "checkbox" && <span className="area-tree-view__check" aria-hidden="true">{selected.has(node.id) && <Glyph name="check-inset" />}</span>}

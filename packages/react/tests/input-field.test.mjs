@@ -39,11 +39,13 @@ test("InputAction keeps external descriptions and announces its hint once", () =
   const named = render(h(InputAction, { icon: h("svg"), tooltip: "Clear domain", "aria-describedby": "keyboard-help" }));
   assert.match(named, /aria-label="Clear domain"/);
   assert.match(named, /aria-describedby="keyboard-help"/);
-  assert.match(named, /role="tooltip">Clear domain/);
+  // The hint is a real Tooltip in the top layer (audit S16).
+  assert.match(named, /role="tooltip" id="[^"]+" popover="manual" class="area-tooltip area-tooltip--bottom area-input__action-tooltip">Clear domain/);
   // With a separate label, the hint describes it alongside the external description.
   const labelled = render(h(InputAction, { icon: h("svg"), tooltip: "Removes the domain", "aria-label": "Clear", "aria-describedby": "keyboard-help" }));
   assert.match(labelled, /aria-label="Clear"/);
-  assert.match(labelled, /aria-describedby="keyboard-help area-input-action-/);
+  const tip = labelled.match(/role="tooltip" id="([^"]+)"/)[1];
+  assert.ok(labelled.includes(`aria-describedby="keyboard-help ${tip}"`));
 });
 
 test("Field connects label, description, error, and required state to its control", () => {

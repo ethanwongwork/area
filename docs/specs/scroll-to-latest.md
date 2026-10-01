@@ -28,7 +28,7 @@ rgb(93); centred on the composer (delta 0), 24 above it; hidden with opacity 0 a
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| button | Button outline neutral, icon-only, pill (32 round, surface fill, border ring) | ChatGPT | 16 icon (Area) |
+| button | Button outline neutral, icon-only, pill (32 round, surface fill, border ring), named by `aria-label` (default "Scroll to latest"; `label` is a deprecated alias); `buttonProps` reach the Button, while the ref and other props go to the wrapper | ChatGPT; audit S17 | 16 icon (Area) |
 | glyph | package arrow, pointing down | — | — |
 | position | 24 above the composer, centred on it | ChatGPT 24, delta 0 | the same 24 as Prompt suggestions |
 | visibility | fades in when the reader is more than 200 from the end; hidden: not focusable, `aria-hidden` | ChatGPT hides it at the end | threshold not measurable in ChatGPT |
@@ -49,3 +49,7 @@ lightened every neutral ghost and outline Button to #56 (button.md), which now m
 - Headless Edge, real click (`scratchpad/stl.mjs`): shown 336 from the end, 32 round, 24
   above the composer, centre delta 0; a click scrolls to the end (0) and hides it.
 - React test: hidden, unfocusable round outline button.
+
+## Feedback log
+
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the button (default "Scroll to latest"; `label` deprecated alias); `buttonProps` added (ref and rest go to the wrapper).

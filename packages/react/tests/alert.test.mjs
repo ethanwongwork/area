@@ -24,7 +24,9 @@ test("keeps action content and all semantic tones in the public contract", () =>
   const html = render({ action: h("a", { href: "#review" }, "Review") });
   assert.match(html, /area-alert__actions/);
   assert.match(html, /href="#review"/);
-  assert.deepEqual(MANIFESTS.alert.variants.tone, ["neutral", "info", "danger", "warning", "success"]);
+  // One feedback tone set with Toast, in Badge's order (audit S19).
+  assert.deepEqual(MANIFESTS.alert.variants.tone, ["neutral", "info", "success", "warning", "danger"]);
+  assert.deepEqual(MANIFESTS.toast.variants.tone, MANIFESTS.alert.variants.tone);
   assert.deepEqual(MANIFESTS.alert.variants.layout, ["single-line", "multiline", "banner"]);
   assert.match(render({}), /area-alert--single-line/);
   assert.match(render({ layout: "multiline" }), /area-alert--multiline/);

@@ -98,9 +98,7 @@
   }
 
   /* Like Tabs, the label keeps its colour under the pointer; only the plate appears. */
-  .area-code-block__tab:hover {
-    background-color: var(--area-bg-component-hover);
-  }
+  @media (hover: hover) { .area-code-block__tab:hover { background-color: var(--area-bg-component-hover); } }
 
   .area-code-block__tab:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
@@ -299,10 +297,12 @@
   }
 
   /* A link announces itself with an underline, not a colour change (foreground stays fixed). */
-  .area-code-block__linenumber:hover {
-    text-decoration: underline;
-    text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: var(--area-space-2);
+  @media (hover: hover) {
+    .area-code-block__linenumber:hover {
+      text-decoration: underline;
+      text-decoration-thickness: var(--area-stroke-width);
+      text-underline-offset: var(--area-space-2);
+    }
   }
 
   .area-code-block__linenumber:focus-visible {
@@ -466,10 +466,12 @@
   }
 
   /* The label keeps its ink under the pointer and takes an underline, as line links do. */
-  .area-code-block__toggle:hover {
-    text-decoration: underline;
-    text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: var(--area-space-2);
+  @media (hover: hover) {
+    .area-code-block__toggle:hover {
+      text-decoration: underline;
+      text-decoration-thickness: var(--area-stroke-width);
+      text-underline-offset: var(--area-space-2);
+    }
   }
 
   .area-code-block__toggle:focus-visible {

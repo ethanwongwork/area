@@ -63,10 +63,7 @@
   }
 
   /* Transparent tabs use a pending indicator instead of a hover backplate. */
-  .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after,
-  .area-tabs--vertical .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after {
-    background-color: var(--area-border-hover);
-  }
+  @media (hover: hover) { .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after, .area-tabs--vertical .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after { background-color: var(--area-border-hover); } }
   .area-tabs__tab:active:not([data-disabled]):not([data-selected])::after,
   .area-tabs--vertical .area-tabs__tab:active:not([data-disabled]):not([data-selected])::after {
     background-color: var(--area-fg-muted);
@@ -79,6 +76,9 @@
   .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: var(--area-space-16); --_tab-icon: var(--area-icon-sm); --_tab-item-gap: var(--area-gap-sm); }
   .area-tabs--md { --_tab-height: var(--area-control-md); }
   .area-tabs--lg { --_tab-height: var(--area-control-lg); --_tab-text: var(--area-control-lg-text); --_tab-leading: var(--area-control-lg-leading); --_tab-gap: var(--area-space-24); --_tab-icon: var(--area-icon-lg); --_tab-item-gap: var(--area-gap-lg); }
+  /* Restates the base: every default value has a class (audit S17 / H-13), so the manifest names
+     it and framework-free markup can say it. */
+  .area-tabs--horizontal { flex-direction: column; }
   .area-tabs--vertical { flex-direction: row; gap: var(--area-space-16); }
   .area-tabs--vertical .area-tabs__list { flex-direction: column; gap: var(--area-space-4); flex-shrink: 0; border-block-end: 0; border-inline-end: 0; }
   .area-tabs--vertical .area-tabs__tab { justify-content: flex-start; padding-inline-start: var(--area-space-10); }
@@ -108,7 +108,7 @@
 
   .area-tabs__tab[data-disabled] {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--area-opacity-disabled);
   }
 
   .area-tabs__panel {
@@ -174,9 +174,7 @@
   }
 
   /* Row plates follow Menu and Nav: hover is the component hover fill, selection the active fill. */
-  .area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td {
-    background-color: var(--area-bg-component-hover);
-  }
+  @media (hover: hover) { .area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td { background-color: var(--area-bg-component-hover); } }
 
   /* Tabular figures so columns of numbers align on the decimal. */
   .area-table .area-table__cell--numeric {
@@ -266,7 +264,7 @@
 
   .area-select--full-width { inline-size: 100%; }
 
-  .area-select:hover:not(:disabled):not(:focus) { border-color: var(--_border-hover); }
+  @media (hover: hover) { .area-select:hover:not(:disabled):not(:focus) { border-color: var(--_border-hover); } }
 
   .area-select:focus {
     border-color: var(--_border-focus);
@@ -317,16 +315,22 @@
   @supports (appearance: base-select) {
     .area-select, .area-select::picker(select) { appearance: base-select; }
     .area-select::picker-icon { display: none; }
+    /* The one anchored surface the React engine can't place: the platform owns the native
+       picker. spec (audit B-5, owner 2026-09-30): Combobox's list rules -- 4 from the field (as
+       every list), flips above when there is no room below (was never; revisits the pre-09-24
+       decision), at least Menu's 224 and the field's width (a 96px mode Select opened a 96px
+       list), 324 tall at most (Figma's font list; was 288). */
     .area-select::picker(select) {
-      margin: var(--area-space-4) 0 0;
+      margin: 0;
       inset: auto;
       position-area: block-end span-inline-end;
-      position-try-fallbacks: none;
-      min-inline-size: anchor-size(self-inline);
-      max-block-size: min(calc(var(--area-space-96) * 3), 100%);
+      margin-block-start: var(--area-space-4);
+      position-try-fallbacks: flip-block;
+      min-inline-size: max(anchor-size(self-inline), calc(var(--area-space-96) * 2 + var(--area-space-32)));
+      max-block-size: min(324px, 100%); /* spec */
       overflow: auto;
       padding: var(--area-space-4);
-      border: var(--area-border-width) solid var(--area-border-decorative);
+      border: var(--area-border-width) solid var(--area-edge-float);
       border-radius: var(--area-radius-container);
       background: var(--area-bg-surface);
       color: var(--area-fg-default);
@@ -354,9 +358,10 @@
       cursor: pointer;
     }
     .area-select option:first-child { margin-block-start: 0; }
-    .area-select option:is(:hover, :focus-visible) { background: var(--area-bg-component-hover); }
+    .area-select option:focus-visible { background: var(--area-bg-component-hover); }
+    @media (hover: hover) { .area-select option:hover { background: var(--area-bg-component-hover); } }
     .area-select option:checked { background: var(--area-bg-component-active); }
-    .area-select option:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+    /* Keyboard focus is the plate alone, as Menu and Combobox rows (audit B-5: one focus paint). */
     .area-select option:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
     .area-select option::checkmark { order: 1; margin-inline-start: auto; color: currentColor; }
     .area-select optgroup {

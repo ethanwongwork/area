@@ -94,4 +94,7 @@ export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProp
 });
 
 /** A rule between runs of items. Horizontal navs get a vertical hairline instead. */
-export const NavSeparator = () => <div className="area-nav__separator" role="separator" />;
+/** A rule between runs. Takes a ref and native props, as MenuSeparator does (audit S17). */
+export const NavSeparator = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function NavSeparator({ className, ...rest }, ref) {
+  return <div ref={ref} role="separator" className={cx("area-nav__separator", className)} {...rest} />;
+});

@@ -36,7 +36,7 @@ everywhere in Area. Not TreeView (hierarchy), not Menu (commands), not PanelRow 
 | drag | pointer capture on the handle; the moving row stays in place at 40%; a 2px neutral-ink line (`fg-default`) marks the landing gap (was the focus colour; neutral per the cohesion audit, 2026-09-27); no line beside the row's own position; Escape cancels | Common sortable-list pattern (Figma, Framer layer rows) |
 | keyboard | the handle is a button: ArrowUp/Down move one place, Home/End to the ends; focus stays on the moved row's handle; the move is announced ("00A797 fill moved to position 1 of 3") | WAI live-region announcement; keyboard parity with the pointer |
 | inactive | `inactive` dims the value to 50%; the buttons stay full strength so the row can be turned back on | Figma dims hidden fills |
-| names | each item's `label` names its handle ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move |
+| names | the list is named by `aria-label` ("Fills"; `label` on the list is a deprecated alias); each item's `label` names its handle ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move |
 
 ## Visual pass
 
@@ -68,3 +68,4 @@ Unverified: touch drag on a device; screen reader output of the live region; dar
   → no clipped value in the gallery.
 - 2026-09-28 · owner: approved (batch 9).
 - 2026-09-28 · inside a panel, items are a row gap apart and values a field gap from their actions (`--_panel-*`).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → the list is named by `aria-label` (`label` on the list is a deprecated alias); an item's `label` still names its handle.

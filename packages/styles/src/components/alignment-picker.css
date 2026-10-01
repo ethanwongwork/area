@@ -15,7 +15,9 @@
   .area-alignment-picker--sm { --_cell: max(var(--area-space-20), calc((var(--area-control-sm) + var(--area-icon-sm)) / 2)); }
   .area-alignment-picker--md { --_cell: calc((var(--area-control-md) + var(--area-icon-md)) / 2); }
   .area-alignment-picker--lg { --_cell: calc((var(--area-control-lg) + var(--area-icon-lg)) / 2); }
-  .area-alignment-picker--surface {
+  /* spec (audit F-20, owner 2026-09-30): the soft field fill it borrows, named `soft` as the
+     fields name it; `surface` means a floating plate everywhere else (Calendar, Toolbar). */
+  .area-alignment-picker--soft {
     --_alignment-bg: var(--area-input-bg-soft);
   }
   .area-alignment-picker--plain { --_alignment-bg: transparent; --_alignment-edge: transparent; }
@@ -46,7 +48,7 @@
     background: var(--area-fg-muted);
     pointer-events: none;
   }
-  .area-alignment-picker__cell:hover:not(:has(input:checked, input:disabled)) { background: var(--area-bg-hover); }
+  @media (hover: hover) { .area-alignment-picker__cell:hover:not(:has(input:checked, input:disabled)) { background: var(--area-bg-hover); } }
   .area-alignment-picker__cell:has(input:checked) {
     background: transparent;
   }
@@ -84,7 +86,7 @@
     outline-offset: var(--area-focus-offset);
     z-index: 1;
   }
-  .area-alignment-picker__cell:has(input:disabled) { opacity: 0.5; cursor: not-allowed; }
+  .area-alignment-picker__cell:has(input:disabled) { opacity: var(--area-opacity-disabled); cursor: not-allowed; }
   @media (forced-colors: active) {
     .area-alignment-picker__cell:has(input:checked) { outline: var(--area-stroke-width) solid Highlight; }
     .area-alignment-picker__cell:has(input:checked) .area-alignment-picker__dot > i { background: Highlight; }

@@ -53,7 +53,7 @@ interrupt (Dialog). A widget is a card whose content is live data; its layout is
 |---|---|---|---|
 | layout | vertical (default) | Media above text | Every system; Figma file card, Notion gallery |
 | layout | horizontal | Media beside text, 40 / 60, stacks below 480px; media start or end by order | Polaris MediaCard landscape, Fluent `orientation`, M3 adaptive |
-| layout | compact | 84px thumbnail beside text, for lists | Primer `layout="compact"`, Notion board card |
+| layout | list (was `compact`) | 84px thumbnail beside text, for lists | Primer `layout="compact"`, Notion board card |
 | layout | immersive | Media behind text with a readability gradient | M3 (scrim over images), owner references |
 | media | inset (default, every layout including immersive), bleed | Bleed cancels the padding on the sides it touches; it is the only media that meets the edge | Fluent CardPreview, Primer, Radix Inset; ChatGPT, Figma, Notion gallery |
 | size | sm, md (default), lg: corner and inset only | Owner ladder | Fluent 8/12/16, Radix 12–48 step padding with size |
@@ -259,3 +259,5 @@ forced colours, screen readers.
 - 2026-09-30 · audit S7b (owner picked C) → no change; the edge stays #ee because the halo carries it, where Table's unshadowed frame keeps #e2. Composer and Code block now take this edge (S7a) → surface.css:58.
 - 2026-09-30 · audit S10 (owner) → the halo is the Surface axis role `--area-shadow-card` (same recipe; `none` under Flat), read by `--_card-shadow` → surface.css:62, surface.ts:15.
 - 2026-09-30 · audit S14 (owner) → the density gap moved to 6, so layout spacing that had borrowed `gap-md` is pinned to 8: the header, the footer actions and the overlay clearance (surface.css:267, :372, :375, :453). CardList markers still read `gap-md` and now sit 6 from their text (surface.css:391).
+- 2026-09-30 · S17 owner calls (owner: "go with your recs") → `layout="compact"` is now `layout="list"` (class `.area-card--list`), since compact names the dense UI scale; `compact` stays a deprecated React alias. No visual change.
+- 2026-09-30 · audit S21c dark capture pass (owner go-ahead; [dark-pass](../research/dark-pass-2026-09-30.md)) → no halo in dark (`shadow-card` dark → transparent); the #333 edge stays. Notion's cards have none (5% white fill), Figma's a 1px #444 edge (captures/card/*--dark).

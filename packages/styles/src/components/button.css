@@ -131,10 +131,12 @@
 
   /* --- States ------------------------------------------------------------- */
 
-  .area-button:hover:not(:disabled):not([data-loading]) {
-    background-color: var(--_bg-hover);
-    background-image: var(--_wash-hover);
-    border-color: var(--_border-hover);
+  @media (hover: hover) {
+    .area-button:hover:not(:disabled):not([data-loading]) {
+      background-color: var(--_bg-hover);
+      background-image: var(--_wash-hover);
+      border-color: var(--_border-hover);
+    }
   }
 
   .area-button:active:not(:disabled):not([data-loading]) {
@@ -151,9 +153,11 @@
   .area-button:disabled,
   .area-button[data-disabled] {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--area-opacity-disabled);
   }
 
+  /* spec (audit S18, owner 2026-09-30): loading keeps full opacity and focus; only the cursor
+     and the spinner in the icon slot change. Hover and press stay off (above). */
   .area-button[data-loading] {
     cursor: progress;
   }
@@ -389,8 +393,8 @@
    * it rather than its box. Only correct on ghost and other unfilled variants, where
    * there is no visible edge for the padding to belong to.
    */
-  .area-button--align-start { margin-inline-start: calc(var(--_gutter) * -1); }
-  .area-button--align-end { margin-inline-end: calc(var(--_gutter) * -1); }
+  .area-button--start { margin-inline-start: calc(var(--_gutter) * -1); }
+  .area-button--end { margin-inline-end: calc(var(--_gutter) * -1); }
 
   /*
    * A toggle that is currently on. Distinct from hover, and it persists: the selected plate

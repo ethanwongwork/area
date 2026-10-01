@@ -5,7 +5,7 @@ import { SliderRangeComposition } from "./slider-range.tsx";
 
 export const InputDefault = () => <Input aria-label="Label" placeholder="Placeholder" />;
 
-export const InputLeadingVisual = () => <Input leadingIcon={<SearchIcon />} placeholder="Placeholder" aria-label="Label" />;
+export const InputLeadingVisual = () => <Input icon={<SearchIcon />} placeholder="Placeholder" aria-label="Label" />;
 
 export const InputTrailingVisual = () => <Input trailingIcon={<CheckIcon />} defaultValue="Value" aria-label="Label" />;
 
@@ -35,7 +35,7 @@ export const InputDisabled = () => <Input disabled placeholder="Disabled" aria-l
 
 export const InputLoading = () => <Input loading loadingText="Loading" defaultValue="Value" aria-label="Label" />;
 
-export const InputLoadingLeading = () => <Input leadingIcon={<SearchIcon />} loading loaderPosition="leading" loadingText="Loading" placeholder="Placeholder" aria-label="Label" />;
+export const InputLoadingLeading = () => <Input icon={<SearchIcon />} loading loaderPosition="leading" loadingText="Loading" placeholder="Placeholder" aria-label="Label" />;
 
 export const InputTrailingAction = () => <Input defaultValue="Value" aria-label="Label" trailingAction={<InputAction icon={<DismissIcon />} tooltip="Clear" />} />;
 
@@ -48,7 +48,7 @@ export const InputFile = () => <Input type="file" aria-label="Label" />;
 export const InputRtl = () => (
   <div dir="rtl" style={{ inlineSize: "var(--area-input-inline-size)" }}>
     <Input
-      leadingIcon={<SearchIcon />}
+      icon={<SearchIcon />}
       trailingIcon={<CheckIcon />}
       defaultValue="اسم مساحة عمل طويل لاختبار الاتجاه"
       aria-label="Label"

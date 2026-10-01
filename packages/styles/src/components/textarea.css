@@ -75,9 +75,7 @@
     color: var(--area-textarea-placeholder);
   }
 
-  .area-textarea:hover:not(:disabled):not(:focus) {
-    border-color: var(--_border-hover);
-  }
+  @media (hover: hover) { .area-textarea:hover:not(:disabled):not(:focus) { border-color: var(--_border-hover); } }
 
   .area-textarea:focus {
     border-color: var(--_border-focus);

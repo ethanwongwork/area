@@ -1,7 +1,11 @@
 import { cloneElement, createContext, forwardRef, useContext, useRef } from "react";
 import type { HTMLAttributes, KeyboardEvent, ReactElement, ReactNode } from "react";
-import { cx, toolbarVariants, type VariantProps, MANIFESTS } from "../variants.ts";
-import { InToolbar } from "./toolbar-context.ts";
+import { cx, menuVariants, toolbarVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { Button } from "./Button.tsx";
+import { Glyph } from "./Glyph.tsx";
+import { AnchoredMenu } from "./Overlays.tsx";
+import { assignRef } from "./overlay.ts";
+import { InToolbar, clearToolbar, toolbarItemProps } from "./toolbar-context.ts";
 
 export interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
   variant?: VariantProps<typeof MANIFESTS.toolbar>["variant"];
@@ -86,37 +90,29 @@ export const ToolbarSeparator = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLS
     className={cx("area-toolbar__separator", className)} {...rest} />;
 });
 
-export interface ToolbarOverflowProps extends HTMLAttributes<HTMLDetailsElement> {
+export interface ToolbarOverflowProps extends HTMLAttributes<HTMLDivElement> {
+  /** Names the More button, and so the menu ("More actions"). */
+  "aria-label"?: string;
+  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
   label?: string;
+  /** Replaces the three dots. */
   icon?: ReactNode;
+  /** The commands that don't fit in the row: MenuItems. */
+  children?: ReactNode;
 }
-/** A native disclosure for commands that do not fit in the primary row. */
-export const ToolbarOverflow = forwardRef<HTMLDetailsElement, ToolbarOverflowProps>(function ToolbarOverflow(
-  { label = "More actions", icon, className, children, onKeyDown, onClick, onBlur, ...rest }, ref,
+/**
+ * Commands that don't fit in the primary row: a ghost "More" icon Button, one of the toolbar's
+ * roving items, opening a Menu (audit S16 / A-8, owner 2026-09-30). The menu is a native
+ * popover placed by the shared overlay engine, clearing the bar by 4 at its end edge, with
+ * Menu's keys: Enter, Space or ArrowDown open on the first item, ArrowUp on the last.
+ */
+export const ToolbarOverflow = forwardRef<HTMLDivElement, ToolbarOverflowProps>(function ToolbarOverflow(
+  { label, "aria-label": ariaLabel = label ?? "More actions", icon, className, children, ...rest }, ref,
 ) {
-  return <details ref={ref} className={cx("area-toolbar__overflow", className)}
-    onKeyDown={event => {
-      onKeyDown?.(event);
-      if (event.key === "Escape" && event.currentTarget.open) {
-        event.currentTarget.open = false;
-        event.currentTarget.querySelector<HTMLElement>("summary")?.focus();
-        event.stopPropagation();
-      }
-    }}
-    onClick={event => {
-      onClick?.(event);
-      if ((event.target as HTMLElement).closest(".area-toolbar__overflow-content button, .area-toolbar__overflow-content a")) {
-        event.currentTarget.open = false;
-        event.currentTarget.querySelector<HTMLElement>("summary")?.focus();
-      }
-    }}
-    onBlur={event => {
-      onBlur?.(event);
-      if (!event.currentTarget.contains(event.relatedTarget as Node | null)) event.currentTarget.open = false;
-    }} {...rest}>
-    <summary className="area-toolbar__overflow-trigger" aria-label={label} data-area-toolbar-item="" tabIndex={-1}>
-      {icon ?? <span className="area-toolbar__overflow-dots" aria-hidden="true" />}
-    </summary>
-    <div className="area-toolbar__overflow-content">{children}</div>
-  </details>;
+  const orientation = useContext(ToolbarOrientation);
+  return <AnchoredMenu
+    trigger={<Button variant="ghost" iconOnly icon={icon ?? <Glyph name="more-horizontal" />} aria-label={ariaLabel} {...toolbarItemProps} />}
+    side={orientation === "vertical" ? "right" : "bottom"} align="end" anchorRect={clearToolbar}
+    surface={props => <div role="menu" {...rest} {...props} className={menuVariants({}, className)}
+      ref={node => { assignRef(ref, node); assignRef(props.ref as never, node); }}>{children}</div>} />;
 });

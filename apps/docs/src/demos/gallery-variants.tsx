@@ -9,7 +9,7 @@ const row = (children: ReactNode) => <div style={{ display: "flex", alignItems: 
 const sizes = ["sm", "md", "lg"] as const;
 const tableRows = ["Item one", "Item two", "Item three"];
 
-export const GalleryTabsLarge = () => <Tabs size="lg" tabs={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
+export const GalleryTabsLarge = () => <Tabs size="lg" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
 
 export const GalleryToastNeutral = () => <Toast icon={<InfoIcon />}>Body text</Toast>;
 

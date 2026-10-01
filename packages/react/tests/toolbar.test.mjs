@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToString } from "react-dom/server";
-import { Button, Toolbar, ToolbarGroup, ToolbarItem, ToolbarSeparator, ToolbarOverflow, MANIFESTS } from "../dist/modules/index.js";
+import { Button, MenuItem, Toolbar, ToolbarGroup, ToolbarItem, ToolbarSeparator, ToolbarOverflow, MANIFESTS } from "../dist/modules/index.js";
 
 test("Toolbar creates one entry stop while keeping native command buttons", () => {
   const html = renderToString(h(Toolbar, { "aria-label": "Arrange", variant: "surface" },
@@ -11,13 +11,19 @@ test("Toolbar creates one entry stop while keeping native command buttons", () =
       h(ToolbarItem, null, h(Button, { variant: "ghost", "aria-label": "Middle", disabled: true })),
     ),
     h(ToolbarSeparator),
-    h(ToolbarOverflow, null, h(Button, { variant: "ghost" }, "Duplicate")),
+    h(ToolbarOverflow, null, h(MenuItem, null, "Duplicate")),
   ));
   assert.match(html, /role="toolbar" aria-orientation="horizontal" tabindex="0"/);
   assert.equal((html.match(/data-area-toolbar-item=""/g) ?? []).length, 3);
   assert.match(html, /disabled="" aria-label="Middle"/);
   assert.match(html, /role="separator" aria-orientation="vertical"/);
-  assert.match(html, /<details[^>]*area-toolbar__overflow/);
+  // Overflow is a ghost More Button opening a Menu (audit S16 / A-8).
+  const more = html.match(/<button[^>]*aria-label="More actions"[^>]*>/)[0];
+  assert.match(more, /class="area-button area-button--ghost[^"]*area-button--icon-only"/);
+  assert.match(more, /tabindex="-1" data-area-toolbar-item=""/);
+  assert.match(more, /aria-haspopup="menu"/);
+  assert.match(html, /data-area-glyph="more-horizontal"/);
+  assert.match(html, /<div role="menu" id="[^"]+" popover="auto"[^>]*class="area-menu">/);
   assert.deepEqual(MANIFESTS.toolbar.variants.size, ["sm", "md", "lg"]);
 });
 

@@ -41,7 +41,7 @@ expansion state (Tree view) or a view switcher inside a page (Tabs).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| orientation | vertical (default), horizontal | Sidebar; top-level routes | ChatGPT, Notion and Figma sidebars; prior decision |
+| orientation | vertical (default; `.area-nav--vertical` restates the base), horizontal | Sidebar; top-level routes | ChatGPT, Notion and Figma sidebars; prior decision |
 | tone | neutral (default), accent | Owner rule | ChatGPT and Notion current rows are neutral 5%; Figma's file-browser current row is a blue tint |
 | selection | plate (default), marker | Quiet current-location rail for outlines | Prior decision |
 | composition | groups, icons, counts, row actions, expandable | Sidebar content | ChatGPT recents (hover actions), Notion sidebar (icon rows, group labels), Figma sidebar (24px trailing action at opacity 0) |
@@ -155,7 +155,8 @@ Third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questi
 which is also the paint selector (Figma's page rows use the same attribute). Disabled items
 drop `href`, set `aria-disabled`, `tabIndex=-1` and cancel clicks (`Nav.tsx:68-96`). Labelled
 groups are `role=group` with `aria-labelledby` (Notion's label is a `role=button` with
-`aria-expanded`). Row actions are sibling buttons, never nested in the link. Horizontal navs
+`aria-expanded`). Row actions are sibling buttons, never nested in the link. `NavSeparator` forwards its ref and
+native props (`Nav.tsx:98-100`). Horizontal navs
 scroll rather than wrap. RTL uses logical properties; not verified.
 
 ## Peers and consistency
@@ -218,3 +219,5 @@ specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
   recipe tile → headless Edge screenshot of the recipe.
 - 2026-09-30 · audit S11 (owner) → vertical items take `--area-gap-row` 12, labels at 36 (was `gap-md` 8, labels at 32; `inset.css:62`); focus ring inset (offset −2, was +2; `nav.css:171`); ghost row actions hover `bg-hover` and press `bg-active` (was `bg-component-hover`, invisible on a hovered row; `nav.css:243`).
 - 2026-09-30 · audit S14 (owner) → horizontal items read `gap-md`, now 6 (was 8; `inset.css:64`); vertical items keep `--area-gap-row` 12.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → the manifest names `orientation` `vertical` (default, class `.area-nav--vertical` restating the base) | `horizontal`; `NavSeparator` takes a ref and native props.
+- 2026-09-30 · S17 owner calls (owner: "go with your recs") → the default selection is named `plate` (`.area-nav--plate` restates the base current-row plate); `marker` unchanged.

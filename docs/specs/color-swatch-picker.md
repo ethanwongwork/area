@@ -106,7 +106,10 @@ Cells were 7px (md) before the second pass.
 
 ## Behavior and accessibility
 
-Native radios named by each option's `label`; the group is named by `label` or `aria-label`.
+Native radios named by each option's `label`; the group is named by `aria-label` (`label` is a
+deprecated alias and no longer required). Nothing is preselected: with no `value` or
+`defaultValue` no swatch is chosen until one is picked, so `required` can fail. A choice calls
+`onValueChange(value, event)`; `disabled` sets `aria-disabled` on the group.
 Arrow keys move and select (Up/Down by column in grid and palette, with RTL for Left/Right);
 Home/End reach the first and last enabled option (`ColorSwatchPicker.tsx:52-94`). `name`,
 `required` and form reset are native.
@@ -151,3 +154,4 @@ Compared the Area captures (`color-swatch-picker/area--*`) with
 - 2026-09-28 · owner: match the pickers to the latest Color swatch → cell corner (hover plate, selected
   ring) concentric with the swatch's 20% corner (`swatch x 0.2 + inset`); was the old `min(radius-small,
   size / 4)` → 4x shots of the grid and Color picker's saved colours.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the group (`label` deprecated, no longer required); no swatch is preselected (was the first), so `required` can fail; `onValueChange(value, event)`; `aria-disabled` on the group when disabled.

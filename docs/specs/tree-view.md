@@ -104,7 +104,8 @@ are under Verification.
 ## Behavior and accessibility
 
 Unchanged: `role="tree"`/`treeitem`, one tab stop, arrow keys, typeahead, `aria-level`,
-`aria-expanded`, `aria-selected` or `aria-checked`. The chevron's 24px pointer target is
+`aria-expanded`, `aria-selected` or `aria-checked`. `onExpandedChange(ids, event)` and
+`onSelectedChange(ids, event)` pass the originating event (TreeView.tsx:27-30). The chevron's 24px pointer target is
 its `::after`; the painted plate (`::before`) is 20px. Keyboard users expand with Left/Right.
 Row `actions` are outside the single Tab stop: consumers give each control `tabIndex={-1}`
 and a keyboard equivalent (as Figma's shortcuts for hide and lock). Screen readers still
@@ -164,3 +165,4 @@ panel does, so nesting reads without hovering. Area's rows are 32 against Notion
 - 2026-09-27 · owner again: "i thought we removed indicators from tree view" → confirmed removed in this pass; the checked filter box paints like Checkbox (neutral solid face), from the cohesion audit.
 - 2026-09-27 · batch 2 → Claude in Chrome side by side with Notion's sidebar tree recorded; Validated.
 - 2026-09-30 · audit S11 (owner) → rows draw an inset focus ring (offset −2, was +2; `tree-view.css:50`); the chevron plate and ghost row actions hover `bg-hover` (press `bg-active`), so they show on a hovered or current row (`tree-view.css:73-74`); the 6 and 6 grid stays, apart from the 36 label column.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onExpandedChange` and `onSelectedChange` take `(ids, event)`.
