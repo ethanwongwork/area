@@ -109,13 +109,13 @@ export const SpinnerDefault = () => (
 
 export const ProgressDefault = () => (
   <div style={{ inlineSize: 280 }}>
-    <Progress value={62} label="Label" />
+    <Progress value={62} aria-label="Label" />
   </div>
 );
 
 export const ProgressIndeterminate = () => (
   <div style={{ inlineSize: 280 }}>
-    <Progress label="Label" />
+    <Progress aria-label="Label" />
   </div>
 );
 
@@ -123,27 +123,12 @@ export const TooltipDefault = () => <Tooltip>Description</Tooltip>;
 
 export const MenuDefault = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />}>
-      <span className="area-menu__icon"><SearchIcon /></span>
-      <span className="area-menu__text">Item one</span>
-    </MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />}>
-      <span className="area-menu__icon"><PlusIcon /></span>
-      <span className="area-menu__text">Item two</span>
-    </MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />} icon={<SearchIcon />}>Item one</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />} icon={<PlusIcon />}>Item two</MenuItem>
     <div className="area-menu__separator" />
-    <MenuItem>
-      <span className="area-menu__icon"><TokenIcon /></span>
-      <span className="area-menu__text">Item three</span>
-    </MenuItem>
-    <MenuItem shortcut={<ArrowIcon />}>
-      <span className="area-menu__icon"><DotsFourIcon /></span>
-      <span className="area-menu__text">Item four</span>
-    </MenuItem>
-    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />}>
-      <span className="area-menu__icon"><DismissIcon /></span>
-      <span className="area-menu__text">Item five</span>
-    </MenuItem>
+    <MenuItem icon={<TokenIcon />}>Item three</MenuItem>
+    <MenuItem shortcut={<ArrowIcon />} icon={<DotsFourIcon />}>Item four</MenuItem>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />} icon={<DismissIcon />}>Item five</MenuItem>
   </Menu>
 );
 
@@ -224,7 +209,7 @@ export const DialogDefault = () => (
 export const KbdDefault = () => <Kbd keys={["cmd", "K"]} />;
 
 export const KbdSizes = () => (
-  <><Kbd keys={["cmd", "K"]} size="small" /> <Kbd keys={["cmd", "K"]} /></>
+  <><Kbd keys={["cmd", "K"]} size="sm" /> <Kbd keys={["cmd", "K"]} /></>
 );
 
 export const KbdButton = () => (
@@ -237,7 +222,7 @@ export const KbdButton = () => (
 
 export const KbdOnEmphasis = () => (
   <Tooltip>
-    Description <Kbd appearance="on-emphasis" keys={["cmd", "B"]} />
+    Description <Kbd variant="on-emphasis" keys={["cmd", "B"]} />
   </Tooltip>
 );
 
@@ -261,19 +246,10 @@ export const KbdKeyMap = () => (
 
 export const MenuWithShortcuts = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />}>
-      <span className="area-menu__icon"><SearchIcon /></span>
-      <span className="area-menu__text">Item one</span>
-    </MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />}>
-      <span className="area-menu__icon"><PlusIcon /></span>
-      <span className="area-menu__text">Item two</span>
-    </MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />} icon={<SearchIcon />}>Item one</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />} icon={<PlusIcon />}>Item two</MenuItem>
     <div className="area-menu__separator" />
-    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />}>
-      <span className="area-menu__icon"><DismissIcon /></span>
-      <span className="area-menu__text">Item three</span>
-    </MenuItem>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />} icon={<DismissIcon />}>Item three</MenuItem>
   </Menu>
 );
 
@@ -285,7 +261,7 @@ export const TokenSwatch = () => (
 
 export const TokenOnColor = () => (
   <div style={{ background: "var(--area-accent-solid)", color: "var(--area-fg-on-accent)", padding: "var(--area-space-12)", inlineSize: "fit-content", borderRadius: "var(--area-radius-container)" }}>
-    <Code onColor>--area-fg-on-accent</Code>
+    <Code ground="on-color">--area-fg-on-accent</Code>
   </div>
 );
 
@@ -295,7 +271,7 @@ export const TokenInProse = () => (
   </div>
 );
 
-export const TokenSubtle = () => <Code subtle>--area-accent-solid</Code>;
+export const TokenSubtle = () => <Code ground="subtle">--area-accent-solid</Code>;
 
 /*
  * Every control the system has, in one panel, at one tier and one field style.
@@ -326,7 +302,7 @@ export const PanelEverything = () => (
       <Field orientation="horizontal" label="Label">
         <Segmented
           fullWidth
-          label="Label"
+          aria-label="Label"
           value="top"
           options={[
             { value: "top", icon: <AlignTopIcon />, label: <span className="area-sr-only">Align top</span> },
@@ -338,7 +314,7 @@ export const PanelEverything = () => (
       <Field orientation="horizontal" label="Label">
         <Segmented
           fullWidth
-          label="Label"
+          aria-label="Label"
           value="one"
           options={[
             { value: "one", label: "One" },

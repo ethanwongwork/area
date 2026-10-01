@@ -53,7 +53,7 @@ export const PRACTICES = {
   ],
   input: [
     `Always pair an Input with a ${code("Field")}, or give it an ${code("aria-label")}. A placeholder is not a label — it disappears the moment someone types.`,
-    `Use ${code("leadingIcon")} or ${code("trailingIcon")} for decorative context. The old ${code("icon")} prop remains a deprecated leading alias. Use ${code("InputAction")} in ${code("trailingAction")} for one named icon action: it has a density-owned square slot and an accessible hover/focus tooltip. Grouped actions belong in a separately audited input-group composition.`,
+    `Use ${code("icon")} or ${code("trailingIcon")} for decorative context, the same pair as Button. ${code("leadingIcon")} remains a deprecated alias. Use ${code("InputAction")} in ${code("trailingAction")} for one named icon action: it has a density-owned square slot and an accessible hover/focus tooltip. Grouped actions belong in a separately audited input-group composition.`,
     `Use ${code("prefix")} and ${code("suffix")} for units and symbols that are not editable, such as a currency mark or a domain.`,
     `Set ${code("invalid")} or ${code("validationStatus")} rather than colouring the border yourself. Error, success, and warning keep the 1px edge and soft halo in the same context color.`,
     `Focus preserves the 1px boundary, moves it one neutral step darker, and adds a soft 2px halo. Increased contrast adds the stronger 2px accent outline.`,
@@ -114,7 +114,7 @@ export const PRACTICES = {
   kbd: [
     `Pass ${code("keys")} as names, not glyphs. ${code("cmd")}, ${code("shift")}, ${code("alt")}, ${code("ctrl")}, ${code("enter")} / ${code("return")} and the arrows become symbols automatically.`,
     `One flat chord contains the keys, matching Primer’s KeybindingHint. The visual symbols remain individual semantic key elements, and the chord supplies one useful spoken label.`,
-    `Use ${code("quiet")} and ${code('size="small"')} inside a menu item, where the keycap is dense chrome rather than standalone content.`,
+    `Use ${code("quiet")} and ${code('size="sm"')} inside a menu item, where the keycap is dense chrome rather than standalone content.`,
     `The chord uses a flat outline with no inset or drop shadow. Modifier symbols and letters share ${code("--area-font-keyboard")}, a native UI font, at the same size and weight; Fluent icons are unnecessary.`,
   ],
   dialog: [

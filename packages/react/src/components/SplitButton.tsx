@@ -4,7 +4,7 @@ import { Button, type ButtonProps, type ButtonTone } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Menu } from "./primitives.tsx";
 import { MANIFESTS, splitButtonVariants, type VariantProps } from "../variants.ts";
-import { InToolbar, toolbarItemProps } from "./toolbar-context.ts";
+import { InToolbar, clearToolbar, toolbarItemProps } from "./toolbar-context.ts";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
 import { assignRef, useAnchoredPosition } from "./overlay.ts";
 
@@ -60,11 +60,6 @@ export const SplitButton = /* @__PURE__ */ forwardRef<HTMLDivElement, SplitButto
   //   4 below, 0.3 from the end).
   // - An icon tool's menu starts at its chevron's start edge and clears the toolbar it sits in
   //   by 4 (Figma's toolbelt: menu left = chevron left, 4 from the bar, 12 from the tool).
-  const clearToolbar = (node: HTMLElement) => {
-    const own = node.getBoundingClientRect();
-    const bar = node.closest(".area-toolbar")?.getBoundingClientRect();
-    return bar ? { x: own.x, y: bar.y, width: own.width, height: bar.height } : own;
-  };
   useAnchoredPosition(iconOnly ? trigger : group, popup, open, {
     side: "bottom", align: iconOnly ? "start" : "end", offset: MENU_OFFSET, padding: OVERLAY_PADDING,
     anchorRect: iconOnly ? clearToolbar : undefined,

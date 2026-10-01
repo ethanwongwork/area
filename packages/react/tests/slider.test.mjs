@@ -39,8 +39,9 @@ test("supports label and orientation compositions", () => {
   assert.match(html, /area-slider--vertical/);
   assert.match(html, /area-slider__label">Temperature/);
   assert.match(html, /type="range"/);
-  assert.deepEqual(MANIFESTS.slider.variants.labelPosition, ["top"]);
-  assert.deepEqual(MANIFESTS.slider.variants.orientation, ["vertical"]);
+  // Every default value has a class too (audit S17 / H-13).
+  assert.deepEqual(MANIFESTS.slider.variants.labelPosition, ["inline", "top"]);
+  assert.deepEqual(MANIFESTS.slider.variants.orientation, ["horizontal", "vertical"]);
   assert.equal(MANIFESTS.slider.variants.tone, undefined);
 });
 

@@ -39,9 +39,10 @@
 ## Job and boundaries
 
 Toolbar groups commands into one tab stop with arrow-key movement, optional groups,
-separators and an overflow disclosure for secondary commands. It does not choose a value
-(Segmented) or join edges (Button group). Its overflow is a disclosure of Buttons, not a
-Menu with menu semantics.
+separators and an overflow Menu for secondary commands. It does not choose a value
+(Segmented) or join edges (Button group). Its overflow is a ghost icon "More" Button opening
+a Menu (audit S16 / A-8, owner 2026-09-30), the model SplitButton already used in the same
+bar; it was a `details` disclosure of Buttons.
 
 ## Variants
 
@@ -90,9 +91,8 @@ area       div.area-toolbar[role=toolbar]  owns: tier, inset (0 plain / 8 surfac
     item   .area-button (ghost)  height/icon/text/radius from --_toolbar-*; pressed: raised plate
     field  .area-select (soft)  as wide as its options
   sep      span.area-toolbar__separator  1px × command height, border-divider
-  overflow details.area-toolbar__overflow
-    trigger summary  square item, 2px dots ±4px
-    content div  floating surface: 1px border-decorative, radius-container, 4px padding, 2px gap
+  overflow button.area-button--ghost.area-button--icon-only  an item; Area `more-horizontal` glyph
+    menu   div.area-menu[popover=auto]  Menu's surface and 32px rows, placed by useAnchoredPosition
 ```
 
 Inset equation, surface: outer 48 = 32 command + 2 × 8 inset (Figma 48 = 32 + 2 × 8); radius
@@ -140,8 +140,8 @@ captures were lost with a frozen tab and are not in the folder. Other tiles:
 | pressed toggle | **raised plate**: `bg-surface` + `0 0 0.5px 30%, 0 1px 3px 15%`; dark `bg-component-active`; kept under the pointer and while pressed | Figma's selected mode option; owner references (Bold) | Figma paints a selected *tool* in its blue accent; neutral by default (owner) |
 | track group | groove the command height, #f5 (dark `bg-component`), 2 inset and gap, options 28, concentric 8 / 6, option hover `bg-hover`, chosen option raised | Figma mode switch (`figma--mode-switch--*`) | Figma radius 5 / 3 (radius axis) |
 | fields | Select soft at the tier, as wide as its options | Owner references; Figma's type fields | Select's form default is 16rem |
-| overflow lift | `--area-shadow-float`: `0 20px 24px shadow-color, 0 5px 8px shadow-color at 50%` (toolbar.css:76); `none` under the Flat preset | Audit floating-lift rule | A Surface axis role since audit S10 |
-| overflow surface | radius-container 12, 1px `border-decorative`, 4px padding | Popover and Menu peers | — |
+| overflow trigger | ghost icon-only Button at the toolbar tier, Area `more-horizontal` glyph (three 2px dots, 5 apart) | Audit S16 / A-8 (owner 2026-09-30, option A): "More" is a ghost icon Button everywhere in the gallery | Was a `summary` with its own paint: default ink (#28 vs the ghost #56), no press plate, CSS dots (one survived forced colours, A-9) |
+| overflow menu | Menu (surface, lift, 32px rows, keys) at the bar's end edge, 4 clear of the whole bar (`clearToolbar`, toolbar-context.ts), beside the bar when vertical; flips and shifts | overlay.md menu gap; SplitButton's icon tool menu (Figma's toolbelt: 4 from the bar) | Was an absolutely positioned box of 28px sm Buttons that a clipping ancestor could cut |
 
 ## States
 
@@ -150,18 +150,23 @@ captures were lost with a frozen tab and are not in the folder. Other tiles:
 | command hover / pressed / disabled | Button's states (neutral ghost: #f3 / #ee / 50%) | [button.md](button.md) |
 | command selected (toggle) | raised plate (above), kept under the pointer | `area--default--rest--*`; Chrome computed styles |
 | track option hover | `bg-hover` over the groove | Chrome computed style |
-| overflow trigger hover or open | `bg-component-hover` plate; ink fixed | `toolbar.css:46`; not captured |
+| overflow trigger hover / pressed | ghost Button's (neutral #f3 / #ee); ink fixed | [button.md](button.md) |
 | focus-visible | 2px focus ring on items, trigger and the toolbar root (`toolbar.css:47`) | not captured |
-| overflow open | floating surface below (horizontal) or beside (vertical, `toolbar.css:51`) | earlier `area--default` capture with the overflow open |
+| overflow open | Menu 4 under the bar, end edges equal (horizontal) or 4 beside it (vertical) | gallery, 2026-09-30: 4 below the bar, menu end = trigger end (249 / 249), rows 32 |
 
 ## Behavior and accessibility
 
 `role="toolbar"`, `aria-orientation`; the root is one tab stop that forwards focus to the
 last-focused or first enabled item (`Toolbar.tsx:43-61`). Arrow keys (RTL-aware), Home and
 End move without activating (`Toolbar.tsx:21-42`). `ToolbarItem` marks focusable children.
-Separators have `role="separator"` with the cross orientation. Overflow is a native
-`details` whose `summary` carries the accessible name ("More actions"); Escape and choosing
-an item close it and return focus (`Toolbar.tsx:90-118`). Figma's mode switch is a
+Separators have `role="separator"` with the cross orientation. Overflow is Menu's trigger
+path (`AnchoredMenu`): the More Button carries the name (`ToolbarOverflow` `aria-label`, default
+"More actions"; `label` is a deprecated alias), `aria-haspopup`,
+`aria-expanded` and `aria-controls`, and is one of the toolbar's roving items; Enter, Space
+or ArrowDown open on the first item, ArrowUp on the last; arrows, Home, End and typeahead
+move; choosing an item, Escape or Tab close it and focus returns to More. Children are
+MenuItems. In a vertical toolbar ArrowDown on More opens the menu rather than moving on
+(Menu's trigger keys win; unverified with a screen reader). Figma's mode switch is a
 `fieldset` of radios with a visually hidden legend. Area's `ToolbarGroup variant="track"`
 draws the same groove from toggle Buttons (`aria-pressed`), so its options stay toolbar items
 on one Tab stop; a form value that must submit is a Segmented placed inside the Toolbar.
@@ -242,3 +247,4 @@ semantics (toggles are `aria-pressed`; a track is not a radio group).
   per size.
 - 2026-09-30 · audit S10 (owner) → the overflow reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat; toolbar.css:76); the surface bar keeps its own four-layer recipe as a documented exception (toolbar.css:33).
 - 2026-09-30 · audit S14, S15a (owner) → a command's icon-to-label gap is Button's own 6; the toolbar no longer overrides `--_gap` (toolbar.css:47-55; was 4 / 8 / 8). Segmented's selected thumb takes `bg-component-active` in dark, the same fill as the toolbar's pressed plate (peer row).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `ToolbarOverflow` `aria-label` names the More button (default "More actions"; `label` deprecated alias).

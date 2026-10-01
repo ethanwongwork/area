@@ -9,7 +9,7 @@
   .area-prompt-suggestions {
     display: flex;
     flex-direction: column;
-    inline-size: min(100%, calc(var(--area-space-96) * 5)); /* the composer's measure */
+    inline-size: min(100%, var(--area-composer-inline-size, calc(var(--area-space-96) * 5))); /* the composer's measure and hook */
     margin: 0;
     padding: 0;
     list-style: none;
@@ -44,8 +44,8 @@
   .area-prompt-suggestions__row:not(:has(.area-prompt-suggestions__dismiss)) > .area-prompt-suggestions__item { padding-inline-end: var(--area-space-8); }
   /* spec: hover and focus lay Menu's row plate under the prompt; the ink stays fixed, as on
      every hovered control. */
-  .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item,
   .area-prompt-suggestions__item:focus-visible { background-color: var(--area-bg-component-hover); }
+  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item { background-color: var(--area-bg-component-hover); } }
   /* Pressed takes the shared pressed plate, one step firmer (audit G-18). */
   .area-prompt-suggestions__item:active { background-color: var(--area-bg-component-active); }
   .area-prompt-suggestions__item:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
@@ -70,7 +70,8 @@
     align-items: center;
     opacity: 0;
   }
-  .area-prompt-suggestions__row:is(:hover, :focus-within) > .area-prompt-suggestions__dismiss { opacity: 1; }
+  .area-prompt-suggestions__row:focus-within > .area-prompt-suggestions__dismiss { opacity: 1; }
+  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__dismiss { opacity: 1; } }
   /* The row under it already shows the hover plate, so the dismiss hovers one step firmer. */
   .area-prompt-suggestions__dismiss .area-button { --_bg-hover: var(--area-bg-component-active); }
   @media (hover: none) { .area-prompt-suggestions__dismiss { opacity: 1; } }

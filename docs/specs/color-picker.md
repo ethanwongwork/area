@@ -37,6 +37,7 @@ are Figma features outside this component (see Excluded).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
+| variant | surface (default), plain | Standalone floating plate; `plain` (transparent background and border, radius 0, no shadow) for a Popover or Panel that already frames it | Audit S17 (owner 2026-09-30) |
 | composition | `header` | A title, tabs or close action above the editor, divided from it | Figma: every picker has a 40px header (Custom / Libraries tabs, +, close) |
 | composition | `swatches` (+ `onAddSwatch`) | Saved colors under the editor | Figma: "On this page" document colors |
 | composition | `eyedropper` | Sample a color from the screen | Figma: 24px button beside the tracks |
@@ -168,7 +169,9 @@ foreground/background popover (the background is a prop).
 
 ## Behavior and accessibility
 
-- `role="group"` named by `label`. The area is one tab stop: a hidden range input with
+- `role="group"` named by `aria-label` (default "Color"; a consumer's `aria-label` is never
+  overridden; `label` is a deprecated alias). Sub-controls are named after it ("Fill hue",
+  "Fill opacity"). The area is one tab stop: a hidden range input with
   `aria-roledescription="2D slider"` and `aria-valuetext` naming saturation and brightness;
   Left/Right change saturation, Up/Down brightness, Shift ×10, Page Up/Down brightness ±10,
   mirrored in RTL. Pointer drag uses pointer capture.
@@ -176,7 +179,8 @@ foreground/background popover (the background is a prop).
   Enter/blur, bounds, arithmetic); hex and CSS fields keep a draft while typing and commit on
   Enter/blur, Escape restores. CSS accepts hex, `rgb()`/`rgba()` and `hsl()`/`hsla()`.
 - State is HSV, so hue survives gray and black. Values are canonical `#RRGGBB` or
-  `#RRGGBBAA`; `name` submits one hidden value; form reset restores the default.
+  `#RRGGBBAA`; a change calls `onValueChange(value, event)`, with no event for the eyedropper
+  and the hex / CSS text fields; `name` submits one hidden value; form reset restores the default.
 - Forced colors: thumbs draw Canvas/CanvasText rings.
 
 ## Peers and consistency
@@ -245,3 +249,4 @@ setting).
   fields hug their digits, alpha checker 3 rows → every picker tile measured, no clipped value.
 - 2026-09-30 · audit F-6 (owner rule 09-27) → header and swatch rules take `border-decorative` #f3 (was `border-faint` #e2, darker than the container edge) (color.css:222, 359).
 - 2026-09-30 · audit S10 (owner) → the surface reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) (color.css:214).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the picker (default "Color", no longer overridden; `label` deprecated alias) and its sub-controls are named after it; `onValueChange(value, event)` (event absent for the eyedropper and hex / CSS text fields); new `variant` `surface` (default) | `plain` (transparent background and border, radius 0, no shadow).

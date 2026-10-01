@@ -12,8 +12,8 @@ export interface ColorSwatchOption {
 }
 
 export interface ColorSwatchPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
-  /** Accessible name for the color choice. */
-  label: string;
+  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
+  label?: string;
   options: readonly ColorSwatchOption[];
   name?: string;
   value?: string;
@@ -35,7 +35,9 @@ export const ColorSwatchPicker = forwardRef<HTMLDivElement, ColorSwatchPickerPro
   const generatedName = useId();
   const root = useRef<HTMLDivElement | null>(null);
   const inputs = useRef<Array<HTMLInputElement | null>>([]);
-  const initial = defaultValue ?? options.find(option => !option.disabled)?.value ?? "";
+  // No choice until one is made or given (audit F-19): `required` can then fail, and "none" is
+  // a state the picker can show. It used to preselect the first enabled swatch.
+  const initial = defaultValue ?? "";
   const [localValue, setLocalValue] = useState(initial);
   const selected = value ?? localValue;
   const count = Math.max(1, Math.floor(Number.isFinite(columns) ? columns : 6));
@@ -44,7 +46,7 @@ export const ColorSwatchPicker = forwardRef<HTMLDivElement, ColorSwatchPickerPro
     if (value !== undefined) return;
     const form = root.current?.closest("form");
     if (!form) return;
-    const reset = () => setLocalValue(defaultValue ?? options.find(option => !option.disabled)?.value ?? "");
+    const reset = () => setLocalValue(defaultValue ?? "");
     form.addEventListener("reset", reset);
     return () => form.removeEventListener("reset", reset);
   }, [value, defaultValue, options]);
@@ -97,7 +99,7 @@ export const ColorSwatchPicker = forwardRef<HTMLDivElement, ColorSwatchPickerPro
     root.current = node;
     if (typeof ref === "function") ref(node);
     else if (ref) ref.current = node;
-  }} {...rest} role="radiogroup" aria-label={rest["aria-label"] ?? label}
+  }} {...rest} role="radiogroup" aria-label={rest["aria-label"] ?? label} aria-disabled={disabled || undefined}
     className={colorSwatchPickerVariants({ size, layout }, className)}
     style={{ ...style, "--_columns": count } as CSSProperties} onKeyDown={move}>
     {options.map((option, index) => <label className="area-color-swatch-picker__cell" key={option.value}>

@@ -39,7 +39,7 @@ dismiss   36 × 36, radius 8, icon 20, ending 4 in from the row
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| width | the composer's (480) | ChatGPT: the composer's width | — |
+| width | the composer's: the shared public hook `--area-composer-inline-size` (fallback 480; prompt-suggestions.css:12) | ChatGPT: the composer's width | — |
 | offset | 24 below the composer | ChatGPT 24 | — |
 | row | 48 tall (16/24 text, 12 above and below), radius 16 (the composer's corner), 2 apart | ChatGPT 52 on 26 leading, radius 8, no gap | radius pass: the rows are the composer's height and column, so a washed row echoes its corner; 2 apart is Menu's rule so neighbouring hover plates never touch |
 | ink | muted, fixed on hover and focus | ChatGPT 143 muted; foreground fixed on hover (AGENTS.md) | ChatGPT lifts the ink to default (#0d) on hover (`chatgpt--suggestion-row--hover`); Area's rule keeps the foreground fixed, the wash carries the state |
@@ -59,8 +59,9 @@ the one ChatGPT behaviour Area deliberately does not follow.
 
 ## Behavior and accessibility
 
-A list (`ul`, named "Suggestions") of buttons named by their prompt; each dismiss is its own
-button named "Dismiss “prompt”". Nothing happens on hover alone.
+A list (`ul`, named by `aria-label`, default "Suggestions"; `label` is a deprecated alias) of
+buttons named by their prompt; in the `list` layout each dismiss is its own button named
+"Dismiss “prompt”". The `chips` layout has no dismiss: a removable suggestion is a Chip. Nothing happens on hover alone.
 
 ## Verification
 
@@ -85,3 +86,5 @@ can pick?" Both are built as `layout`:
 Measured: A rows 48, gap 2, radius 16; B 24 below, 32 tall, 8 apart, starting at 0.
 - 2026-09-27 · merge check (cohesion test) → hover no longer lifts the ink; the plate is Menu's row plate.
 - 2026-09-30 · audit S9 / G-18 (owner) → the dismiss is a ghost small Button (28; was md 32) and the end padding follows; pressed rows take `bg-component-active` (prompt-suggestions.css).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the list (default "Suggestions"; `label` deprecated alias); width is the shared hook `--area-composer-inline-size` (fallback 480); the chips layout has no dismiss (a removable suggestion is a Chip).
+- 2026-09-30 · S17 owner calls (owner: "go with your recs") → the list prop is `items` (a collection you act on); `suggestions` is the deprecated alias.

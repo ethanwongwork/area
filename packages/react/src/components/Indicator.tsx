@@ -44,7 +44,7 @@ export interface IndicatorAnchorProps extends HTMLAttributes<HTMLSpanElement> {
 export const IndicatorAnchor = forwardRef<HTMLSpanElement, IndicatorAnchorProps>(function IndicatorAnchor(
   { indicator, placement, overlap = "rectangular", offset, invisible, compact = false, children, className, style, ...rest }, ref,
 ) {
-  return <span {...rest} ref={ref} className={indicatorAnchorVariants({ placement, overlap: `overlap-${overlap}`, compact }, className)} style={{ ...style, ...(offset ? { "--area-indicator-anchor-offset": offset } : {}) } as CSSProperties} data-invisible={invisible ? "" : undefined}>
+  return <span {...rest} ref={ref} className={indicatorAnchorVariants({ placement, overlap, compact }, className)} style={{ ...style, ...(offset ? { "--area-indicator-anchor-offset": offset } : {}) } as CSSProperties} data-invisible={invisible ? "" : undefined}>
     {children}<span className="area-indicator-anchor__indicator" aria-hidden="true" inert>{indicator}</span>
   </span>;
 });

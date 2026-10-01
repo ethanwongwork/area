@@ -32,8 +32,8 @@ the meaning. Badge labels content with text; Chip is an interactive choice.
 | kind | count | Short number on an owner | Fluent CounterBadge; Untitled avatar count; Notion board group counts (plain-text variant, not adopted) |
 | status | available, away, busy, do-not-disturb, blocked, offline, out-of-office, unknown | Availability on identity | Fluent PresenceBadge (canonical eight); Untitled online/offline |
 | size (status) | xs 10, sm 12, md 16, lg 20 | Native Fluent cuts | Fluent sizes (tiny 6 and extra-large 28 scale another cut, so excluded) |
-| tone | danger (default), accent, neutral, info, success, warning | Semantic paint | Figma danger dot, Untitled error count, Fluent brand count; gallery Tone / warning |
-| anchor | four corners; rectangular or circular owner | Attachment | Untitled avatar corner; Figma icon button |
+| tone | danger (default), neutral, info, success, warning | Semantic paint. Danger by default is the written exception to "neutral by default" (audit S19 / C-14, owner 2026-09-30): a notification mark is red in every reference, and Count is the neutral counterpart | Figma danger dot, Untitled error count, Fluent brand count; gallery Tone / warning |
+| anchor | four corners (`placement`); rectangular (default) or circular owner (`overlap`, classes `.area-indicator-anchor--rectangular` / `--circular`) | Attachment | Untitled avatar corner; Figma icon button |
 
 Excluded: Untitled's gloss gradients and reflection SVG on the status dot (a skeuomorphic
 treatment none of the target products use); Fluent tiny/extra-large presence (scaled cuts).
@@ -213,7 +213,7 @@ Sources:
 | dot · size | 6px | Owner (relate to Badge): Badge dot disc is 6px; Untitled Badge Dot 6px | Figma measures 5px, Notion's status-tag dot 8px. Kept (third pass): 6px matches Badge's dot, and the products split either side; an odd 5px box also has no pixel centre at 1× |
 | dot · paint | danger role (`rgb(232, 9, 69)` light) | Figma danger (`#dc3412`), Untitled error | Hue differs from Figma's orange red; Area keeps its palette and semantic role |
 | count · height / min-width | 16px | Fluent small 16px | Untitled avatar count is 14px; 16px matches ChatGPT's 16px chrome pill and keeps two-digit counts round |
-| count · text | 10px / 14px, weight 500, tabular numerals | Fluent small 10/14, Untitled 10/13 (both 10px) | Weight 500 instead of 600/700: Area text weights are 400/500 and Badge uses 500 |
+| count · text | **12px / 16px** (Count sm, `control-xs`), weight 500, tabular numerals | Audit S20 (owner 2026-09-30, option B): one 16px numeric mark, on the type ramp's 12 floor (Chip initials moved to it too); Count and Indicator share count-format.ts | Fluent small and Untitled set 10px; was 10/14. Weight 500 instead of 600/700: Area text weights are 400/500 and Badge uses 500. On a 32px avatar (gallery, 2026-09-30): "3" 16 wide, "24" 23 wide (0.71 of the avatar), "99+" 29 wide (0.92), which covers the top of the initials |
 | count · padding-inline | 4px | Fluent small | — |
 | attached cutout (ring) | 1px surface | Owner 2026-09-25: match the 1px icon stroke | Untitled uses 1.5px; read as heavier than the rest of the system |
 | circular owner · placement | 2px outside the bounding-box corner | Owner 2026-09-25 (Untitled flush corner, moved 2px from centre) | — |
@@ -498,3 +498,6 @@ Pinned commit: `d27922755bebae866d9ffe86b7da44c27ec801ee`.
 - 2026-09-28 · second pass → Notion's help dot saved as `notion--help-dot--rest--light` (8px, no
   ring, its corner on the 20px icon box's corner). Both products keep the dot inside the icon box;
   Area keeps centring it on the corner (owner, 2026-09-25; owner took the recommendation to keep it).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → IndicatorAnchor `overlap` values `rectangular` | `circular` map to classes `.area-indicator-anchor--rectangular` / `--circular` (were `--overlap-rectangular` / `--overlap-circular`); the React prop is unchanged.
+- 2026-09-30 · audit S20 (owner, option B) → the count takes Count sm's type, 12/16 500 (`control-xs`, indicator.css); was 10/14. Checked on a 32px avatar: "24" is 23 wide; "99+" is 29 wide and covers the top of the initials (open for the owner). Audit S19 → danger stays the default as the written exception to neutral defaults.
+- 2026-09-30 · S17 owner calls (owner: "go with your recs") → "99+" stays the overflow on every owner, including a 32px avatar: every reference shows 99+, the surface ring separates it from the avatar, and "9+" would hide the count. Presence keeps `xs` (the native Fluent 10px status cut for small avatars), written into DESIGN_SYSTEM as the exception to "no xs".

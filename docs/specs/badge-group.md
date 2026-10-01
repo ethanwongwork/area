@@ -90,7 +90,8 @@ The Area action padding is 7px plus the 1px border, the Badge md gutter of 8.
 | action · size source | The first child's `size` prop | — | Groups mix sizes rarely; the first badge sets the row |
 | action · ink | `fg-muted` (neutral Badge) | Badge spec | — |
 | action · hover, focus | Badge link states: `_bg-hover` fill, focus ring; 24px (44px coarse) hit area | Badge | — |
-| overlay · width | Content width (`max-content`), capped at the viewport less 32px | Owner decision (overflow lists the hidden badges) | Popover's 240px width overrode it and wrapped three badges onto two lines |
+| overlay · width | Content width (`max-content`), capped at the viewport less 16px (the engine's 8 each side) | Owner decision (overflow lists the hidden badges) | Popover's 240px width overrode it and wrapped three badges onto two lines. Was less 32 |
+| overlay · placement | **8** under the "+N" badge, starting at its start edge, flips and shifts inside the viewport; scrolls past the room on its side; the shared engine `useAnchoredPosition` (BadgeGroup.tsx) | overlay.md popover gap; audit S16 and H-10 (owner 2026-09-30) | Was CSS anchor positioning 4 below, centred in the viewport where anchors are unsupported |
 | overlay · inset, radius, shadow | Popover's (12px inset, container radius) | Popover (Complete) | Primer's overlay uses 8px; Area keeps its own popover surface |
 | overlay · content | Hidden badges only | Owner decision (2026-09-24) | Primer lists every label plus a close button |
 

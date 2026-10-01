@@ -29,7 +29,7 @@ interactive content).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| tone | info, success, warning, danger (icon color) | Outcome | Sonner types (success, info, warning, error); Notion (warning icon) |
+| tone | neutral (default, muted icon), info, success, warning, danger (icon color); the same set and order as Alert (audit S19) | Outcome | Sonner types (success, info, warning, error); Notion (warning icon) |
 | composition | icon, title + description, action, dismiss | Undo, follow-up | Sonner (title, description, Undo, close); Notion (text action) |
 | layout | single line, multiline | Long messages | Sonner, Notion |
 
@@ -130,3 +130,4 @@ the action and dismiss hover on screen.
 - 2026-09-27 · batch 3 → Claude in Chrome side by side with Notion's toast recorded (Visual pass); Validated.
 - 2026-09-30 · audit S9 (owner) → Toast's ghost small Button close with the Area glyph is the rectangular-surface close recipe, now shared by Alert; `onDismiss` + `dismissLabel` is the one dismiss API. No code change.
 - 2026-09-30 · audit S10 (owner) → the lift is the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → surface.css:1273.
+- 2026-09-30 · audit S19 (owner) → the manifest lists Alert's set in Badge order (neutral, info, success, warning, danger); no visual change.

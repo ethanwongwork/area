@@ -23,6 +23,8 @@ export const UI_SCALE_AXIS: AxisDefinition = {
     "--area-icon-",
     "--area-gap-",
     "--area-ui-",
+    "--area-mark-",
+    "--area-inset-surface-",
   ],
   presets: [
     {

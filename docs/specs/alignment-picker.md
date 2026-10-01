@@ -39,7 +39,7 @@ one-dimensional choice (Segmented).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| variant | surface (default), plain | Standalone, or inside an existing inspector surface | Figma auto-layout alignment control (guidance above) |
+| variant | soft (default; `.area-alignment-picker--soft`), plain | Standalone on the soft field fill, or inside an existing inspector surface. `surface` is a deprecated React alias of `soft` | Figma auto-layout alignment control (guidance above) |
 | size | sm, md (default), lg | Cell sits between its control and icon tiers | Gallery `sizes`; Figma inspector controls are 24 high |
 | tone | neutral (default), accent | Owner rule | Gallery `tone-accent` |
 | boolean | `stretch` | Fill a sized parent (landscape, portrait) | Owner (prior decision) |
@@ -122,11 +122,12 @@ cells meet with no gap. md: 4 + 3 × 24 + 4 = 80. Cell radius = container 8 − 
 
 ## Behavior and accessibility
 
-`role="radiogroup"` with `label`; nine native radios named "top left" … "bottom right"
+`role="radiogroup"` named by `aria-label` (`label` is a deprecated alias); nine native radios named "top left" … "bottom right"
 (`AlignmentPicker.tsx:75-83`). The group is forced `dir="ltr"` because the positions are
 physical. Arrow keys wrap within a row or column, Home and End reach the corners, and
-selection follows focus (`AlignmentPicker.tsx:47-67`). `name`, `required` and `disabled` are
-native; an uncontrolled picker restores `defaultValue` on form reset.
+selection follows focus (`AlignmentPicker.tsx:47-67`) and calls `onValueChange(value, event)`.
+`name`, `required` and `disabled` are native, and `disabled` also sets `aria-disabled` on the
+group; an uncontrolled picker restores `defaultValue` on form reset.
 
 ## Peers and consistency
 
@@ -179,3 +180,4 @@ Unverified: Figma's nine-position control, hover and focus captures.
   stays → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-28 · batch 10 Claude in Chrome side by side (Figma auto-layout Alignment grid) → no change;
   question: size the grid to one field column by two rows, as Figma does?
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → variant values are `soft` (default, `.area-alignment-picker--soft`) | `plain`; `surface` is a deprecated React alias of `soft`; `aria-label` names the group (`label` deprecated); `onValueChange(value, event)`; `aria-disabled` on the group when disabled.

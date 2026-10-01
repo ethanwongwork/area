@@ -22,7 +22,7 @@ optionally with a colour swatch. It is not a keyboard shortcut (Kbd), a status l
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| ground | default | Inline reference on a page | Gallery `default`, `prose`, `table` |
+| ground (`ground` prop) | default (unset) | Inline reference on a page | Gallery `default`, `prose`, `table` |
 | ground | subtle | Quieter derived reference | Gallery `treatments` (#f7f7f7 since the audit fix) |
 | ground | on-color | On a coloured ground, ink inherited | Gallery `on-color` |
 | swatch | boolean | A token that resolves to a colour | Gallery `swatch` |
@@ -104,7 +104,9 @@ None. Code is not interactive.
 
 ## Behavior and accessibility
 
-Native `code` element; the swatch is `aria-hidden` (`primitives.tsx`, `Code`). Forced colours:
+Native `code` element; the swatch is `aria-hidden` (`primitives.tsx`, `Code`). Code and Token
+take `ground="subtle" | "on-color"`, the manifest's axis as a prop; the `subtle` and `onColor`
+booleans are deprecated aliases. Forced colours:
 no Code-specific rule; the border keeps the box visible.
 
 ## Peers and consistency
@@ -153,3 +155,4 @@ Unverified: dark theme, forced colours.
   most; only Untitled and antd draw a border. Open: em-based padding so inline code scales in
   headings (Primer, antd, Radix). Claude in Chrome capture of ChatGPT's inline code pending
   (the window was in the background).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Code and Token take `ground: "subtle" | "on-color"`; the `subtle` / `onColor` booleans are deprecated aliases.

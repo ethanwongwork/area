@@ -28,7 +28,8 @@ commands are Toolbar or Button group.
 | size | sm 28, md 32 (default), lg 40 | Outer height is the control tier (`segmented.css:17-22`) | ChatGPT 36; Figma 32 (toolbar mode switch), 24 (view toggle) |
 | layout | `fullWidth` | Align with a field's edge on a panel row | ChatGPT options share the width equally (112 + 112) |
 | composition | text, icon + text, `iconOnly` | Inspector alignment choices | Figma view toggle and toolbar mode switch (icon only) |
-| state | selected, disabled option | — | Gallery `disabled` |
+| state | selected, disabled option, `disabled` (whole group) | — | Gallery `disabled` |
+| form | `name`, `form`, `required` | A hidden input submits the value; form reset restores the initial choice (audit S17) | As AlignmentPicker and ColorSwatchPicker |
 
 ## Sources
 
@@ -95,7 +96,7 @@ tab keeps its 50% ink and gains an rgb(245) plate (`tabs/figma--panel-tab--hover
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| item · weight | 500 for every option (`segmented.css:76-77, 95`) | ChatGPT and Notion view tabs keep one 500 weight; weight policy (labels on fills) | Figma switches 450 → 550 and reserves the bold width; one weight needs no reserve |
+| item · weight | 500 for every option, no selected-weight hook (`segmented.css:75-77, 95-96`) | ChatGPT and Notion view tabs keep one 500 weight; weight policy (labels on fills) | Figma switches 450 → 550 and reserves the bold width; one weight needs no reserve |
 | item · unselected ink | **`fg-muted` rgb(102)** (`segmented.css:70-72`) | Target-product agreement: ChatGPT rgb(93), Figma 50% black, Notion view tabs rgb(125, 122, 117) | Was `fg-default` (second pass, decision 2) |
 | item · selected ink | `fg-default` rgb(40) (`segmented.css:97`) | Two-ink rule: selected default, unselected muted (DESIGN_SYSTEM.md, Shared state paint) | — |
 | item · hover ink | fixed | Area rule: foreground fixed on hover; Figma panel tab keeps its ink | ChatGPT darkens 93 → 13 (decision 16) |
@@ -120,9 +121,13 @@ tab keeps its 50% ink and gains an rgb(245) plate (`tabs/figma--panel-tab--hover
 
 ## Behavior and accessibility
 
-`role="radiogroup"` named by `label`; options are `button role="radio"` with `aria-checked`
-and a roving tab stop (`primitives.tsx:980-1030`). Arrow keys (RTL-aware), Home and End move
-and select, skipping disabled options. Icon-only labels stay in `area-sr-only`. Forced
+`role="radiogroup"` named by `aria-label` (`label` is a deprecated alias); options are
+`button role="radio"` with `aria-checked` and a roving tab stop (`primitives.tsx:1414-1525`).
+Arrow keys (RTL-aware), Home and End move and select, skipping disabled options. A choice
+calls `onValueChange(value, event)` (`onSelect` is a deprecated alias). `name` renders a
+hidden input that submits the value; a form reset restores the initial choice. `required`
+sets `aria-required` and `disabled` sets `aria-disabled` on the radiogroup (and disables
+every option). Icon-only labels stay in `area-sr-only`. Forced
 colours paint the selected item Highlight (`forced-colors.css:21-26`). Figma's view toggle
 and mode switch are native radios in a `fieldset` with a hidden legend: the same semantics.
 
@@ -177,3 +182,4 @@ captures, dark theme.
   edge as the owner asked for strokes).
 - 2026-09-30 · audit S4 (owner) → the track takes the per-tier control radius (`--_track-radius`, md 8; was item radius + inset, 10) and items sit concentric inside it, track less the 2px inset (md 6; was 8) → `segmented.css:50`, `:66`, `:140-142`.
 - 2026-09-30 · audit S14, S15a (owner) → the icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8; `segmented.css:36, :142-144`); the selected thumb keeps the white surface in light and takes `bg-component-active` in dark, #3f on the #28 groove (was #1d, below the groove, reading sunken; `segmented.css:94-100`).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(value, event)` replaces `onSelect` (deprecated alias); `aria-label` names the group (`label` deprecated); new `name`, `form`, `required` and group `disabled` (hidden input, form reset, `aria-required` / `aria-disabled`); the `--_selected-weight` hook is gone (one weight).

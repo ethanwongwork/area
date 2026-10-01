@@ -117,10 +117,12 @@ export interface CheckboxProps extends ChoiceProps {
   invalid?: boolean;
   /** Shows the native mixed state; useful for a parent that represents a partial selection. */
   indeterminate?: boolean;
+  /** Called with the new checked state (audit S17: as Switch). Native `onChange` still fires. */
+  onCheckedChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { variant, layout, size, label, description, caption, leadingVisual, invalid, indeterminate = false, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
+  { variant, layout, size, label, description, caption, leadingVisual, invalid, indeterminate = false, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, onChange, onCheckedChange, ...rest },
   ref,
 ) {
   const resolvedCaption = caption ?? description;
@@ -153,6 +155,7 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
         {...(invalidState ? { "data-invalid": "" } : {})}
         {...(indeterminate ? { "data-indeterminate": "" } : {})}
         {...rest}
+        onChange={onChange || onCheckedChange ? event => { onChange?.(event); onCheckedChange?.(event.target.checked, event); } : undefined}
       />
       {leadingVisual ? <span className="area-checkbox__visual" aria-hidden="true">{leadingVisual}</span> : null}
       {label || resolvedCaption ? (

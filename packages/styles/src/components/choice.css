@@ -30,7 +30,7 @@
   .area-checkbox[data-disabled],
   .area-radio[data-disabled] {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--area-opacity-disabled);
   }
 
   .area-checkbox__control,
@@ -96,6 +96,10 @@
      Choice Card put it; DOM order is unchanged, so keyboard order and the accessible name
      are too. A chosen card keeps the 1px edge and darkens it to the checked colour (owner,
      2026-09-28: darker, not thicker; was a 2px edge from the owner references). */
+  /* Restates the base: every default value has a class (audit S17 / H-13), so the manifest names
+     it and framework-free markup can say it. */
+  .area-checkbox--plain,
+  .area-radio--plain { display: inline-flex; }
   .area-checkbox--card,
   .area-radio--card {
     --_card-inset: calc(var(--area-space-12) - var(--area-stroke-width)); /* spec: 12 to the content, border counted once (shadcn 11) */
@@ -116,8 +120,7 @@
   .area-radio--card > .area-choice-label { flex: 1 1 auto; min-inline-size: 0; }
   .area-checkbox--card > .area-checkbox__control,
   .area-radio--card > .area-radio__control { order: 1; }
-  .area-checkbox--card:hover:not([data-disabled]),
-  .area-radio--card:hover:not([data-disabled]) { border-color: var(--_card-edge-hover); }
+  @media (hover: hover) { .area-checkbox--card:hover:not([data-disabled]), .area-radio--card:hover:not([data-disabled]) { border-color: var(--_card-edge-hover); } }
   .area-checkbox--card:has(> .area-checkbox__control:checked),
   .area-radio--card:has(> .area-radio__control:checked) {
     border-color: var(--_checked);
@@ -223,25 +226,22 @@
   .area-checkbox[data-invalid] .area-choice-label__title { color: var(--area-fg-danger-vivid); }
 
   /* Checked controls darken on hover. Lightening washes the fill out. */
-  .area-checkbox__control:checked:hover:not(:disabled),
-  .area-checkbox__control:is(:indeterminate, [data-indeterminate]):hover:not(:disabled),
-  .area-radio__control:checked:hover:not(:disabled) {
-    --_fill: var(--_checked-hover, var(--area-selection-solid-hover));
+  @media (hover: hover) { .area-checkbox__control:checked:hover:not(:disabled), .area-checkbox__control:is(:indeterminate, [data-indeterminate]):hover:not(:disabled), .area-radio__control:checked:hover:not(:disabled) { --_fill: var(--_checked-hover, var(--area-selection-solid-hover)); } }
+
+  @media (hover: hover) {
+    .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {
+      --_fill: var(--area-danger-solid-hover);
+      --_edge: var(--area-danger-solid-hover);
+    }
   }
 
-  .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {
-    --_fill: var(--area-danger-solid-hover);
-    --_edge: var(--area-danger-solid-hover);
-  }
+  @media (hover: hover) { .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled), .area-radio__control:not(:checked):hover:not(:disabled) { --_edge: color-mix(in srgb, var(--area-border-hover), var(--area-stroke-control-hover) calc(var(--area-contrast-more) * 100%)); } }
 
-  .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled),
-  .area-radio__control:not(:checked):hover:not(:disabled) {
-    --_edge: color-mix(in srgb, var(--area-border-hover), var(--area-stroke-control-hover) calc(var(--area-contrast-more) * 100%));
-  }
-
-  .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
-    --_fill: var(--area-danger-surface-hover);
-    --_edge: var(--area-danger-border-strong);
+  @media (hover: hover) {
+    .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
+      --_fill: var(--area-danger-surface-hover);
+      --_edge: var(--area-danger-border-strong);
+    }
   }
 
   .area-checkbox__control:focus-visible,
@@ -303,7 +303,7 @@
     column-gap: var(--area-space-16);
   }
 
-  .area-radio-group:disabled .area-radio { cursor: not-allowed; opacity: 0.5; }
+  .area-radio-group:disabled .area-radio { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
   .area-radio-group[data-invalid] .area-radio__control:not(:checked) { --_edge: var(--area-fg-danger-vivid); }
   /* Selected in an invalid group: one error state, as a single invalid Checkbox paints it. */
   .area-radio-group[data-invalid] .area-radio__control:checked {
@@ -311,9 +311,11 @@
     --_edge: var(--area-danger-solid);
     --_mark: var(--area-fg-on-danger);
   }
-  .area-radio-group[data-invalid] .area-radio__control:checked:hover:not(:disabled) {
-    --_fill: var(--area-danger-solid-hover);
-    --_edge: var(--area-danger-solid-hover);
+  @media (hover: hover) {
+    .area-radio-group[data-invalid] .area-radio__control:checked:hover:not(:disabled) {
+      --_fill: var(--area-danger-solid-hover);
+      --_edge: var(--area-danger-solid-hover);
+    }
   }
 
   .area-checkbox-group__description { color: var(--area-fg-muted); }
@@ -337,7 +339,7 @@
     column-gap: var(--area-space-16);
   }
 
-  .area-checkbox-group:disabled .area-checkbox { cursor: not-allowed; opacity: 0.5; }
+  .area-checkbox-group:disabled .area-checkbox { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
 
   /* Cards in a group: rows stretch to the group's width; tiles form a grid of equal columns
      at least 144 wide (spec: owner reference 1, three across). One 8px gap between cards. */
@@ -354,9 +356,11 @@
     grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-space-96) * 1.5), 1fr));
   }
   .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]) { --_edge: var(--area-fg-danger-vivid); }
-  .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
-    --_fill: var(--area-danger-surface-hover);
-    --_edge: var(--area-danger-border-strong);
+  @media (hover: hover) {
+    .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
+      --_fill: var(--area-danger-surface-hover);
+      --_edge: var(--area-danger-border-strong);
+    }
   }
   /* Checked in an invalid group: the single invalid Checkbox's error fill, so the group reads
      as one error state rather than selection beside red edges. */
@@ -365,9 +369,11 @@
     --_edge: var(--area-danger-solid);
     --_mark: var(--area-fg-on-danger);
   }
-  .area-checkbox-group[data-invalid] .area-checkbox__control:is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {
-    --_fill: var(--area-danger-solid-hover);
-    --_edge: var(--area-danger-solid-hover);
+  @media (hover: hover) {
+    .area-checkbox-group[data-invalid] .area-checkbox__control:is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {
+      --_fill: var(--area-danger-solid-hover);
+      --_edge: var(--area-danger-solid-hover);
+    }
   }
   .area-checkbox-group__validation,
   .area-radio-group__validation { margin-block-start: var(--area-space-12); }

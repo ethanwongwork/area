@@ -32,7 +32,7 @@ whether a dismissed alert stays rendered.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| tone | neutral (default), accent, info, danger, warning, success | Meaning, not emphasis; one family of semantic surfaces | Area's semantic tones; Untitled has no alert |
+| tone | neutral (default), info, success, warning, danger | Meaning, not emphasis; one feedback set with Toast in Badge's order (audit S19); accent left with the emphasis-roles decision | Area's semantic tones; Untitled has no alert |
 | layout | single-line (default), multiline | A one-row message, or a title over wrapping body with actions below | Gallery tiles `default`, `multiline` |
 | layout | banner | A persistent one-line announcement across a page or section, link or status at the end | OpenAI business and Daybreak banners (owner references), Primer Banner, Fluent MessageBar, Polaris Banner, Ant `banner`; see Banner |
 | flush | boolean | A banner that meets its container's edges | Primer `flush`, Fluent `shape="square"`, Ant `banner` |
@@ -246,3 +246,4 @@ session: ChatGPT reserves an empty root banner slot and a composer banner portal
 - 2026-09-28 · owner: approved (batch 4); Count keeps the pill shape.
 - 2026-09-30 · audit S9 (owner) → the dismiss is a ghost small Button (28, radius 6) with the Area `dismiss` glyph, as Popover and Toast (`primitives.tsx:197-201`); neutral keeps the Button's quiet ink and `bg-component-hover` plate, tinted keeps the tone ink and a 12% ink plate (`surface.css:703-717`). Was a hand-built button: full ink, a Fluent filled glyph, the 12% plate on every tone.
 - 2026-09-30 · audit S14 (owner) → no visible change; the row gap and the actions gap no longer read the density gap tokens and are pinned to 8 and 4 (`inset.css:202`, surface.css:593), since those tokens moved to 6.
+- 2026-09-30 · audit S19 (owner) → one feedback tone set with Toast in Badge order (neutral, info, success, warning, danger); the neutral icon takes muted ink as Toast's (`--_alert-icon: fg-muted`, surface.css), text stays default ink. Was fg-default.

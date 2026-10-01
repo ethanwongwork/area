@@ -123,7 +123,8 @@ rgb(207, 3, 60), tag rgb(125, 65, 218), string rgb(81, 80, 229). Tabs (`area--la
 ## Behavior and accessibility
 
 Language tabs are a `tablist` named "Language" with Arrow, Home and End keys (mirrored in
-RTL); the body is the `tabpanel`. The picker alternative is the shared Select. Line numbers
+RTL); the body is the `tabpanel`. The picker alternative is the shared Select. A language
+change calls `onValueChange(language, event)` (`onLanguageChange` is a deprecated alias). Line numbers
 are `user-select: none`; with `linkLines` each is a link named "Line n" to its own
 `#<id>-L<n>` fragment. The copy button's name becomes "Copied" after a successful copy; a
 failure is not announced separately. The show / hide toggle is a button with
@@ -189,3 +190,4 @@ Line pitch (20) matches; the corner, header scale and code size are the recorded
   the collapsed fade follows the ground. Inline Code and the `token-bg` alias keep #fafafa via
   `bg-stripe` (the same 25 rung). Dark unchanged. 19,491 token and contrast tests pass.
 - 2026-09-30 · audit S7a (owner) → shell edge is Card's `light-dark(neutral-100, neutral-750)` #ee (was `border-decorative` #f3); header, flush and toggle rules keep `border-decorative`; tabs keep `fg-muted` → code.css:188.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(language, event)` replaces `onLanguageChange` (deprecated alias).

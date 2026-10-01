@@ -30,7 +30,7 @@
   .area-calendar--surface {
     padding: calc(12px /* spec */ - var(--area-border-width));
     padding-block-start: calc(8px /* spec */ - var(--area-border-width));
-    border: var(--area-border-width) solid var(--area-border-decorative);
+    border: var(--area-border-width) solid var(--area-edge-float);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
@@ -73,11 +73,11 @@
     cursor: pointer;
   }
   .area-calendar__day[data-outside] { color: var(--area-fg-disabled); }
-  .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-hover); }
+  @media (hover: hover) { .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-hover); } }
   .area-calendar__day:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); z-index: 1; }
   .area-calendar__day[data-today]:not([data-selected]) { box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_today-edge); }
   .area-calendar__day[data-selected] { background: var(--_selected); color: var(--_on-selected); box-shadow: none; }
-  .area-calendar__day[data-selected]:hover:not(:disabled, [aria-disabled="true"]) { background: var(--_selected-hover); }
+  @media (hover: hover) { .area-calendar__day[data-selected]:hover:not(:disabled, [aria-disabled="true"]) { background: var(--_selected-hover); } }
   /* An unavailable day stays focusable (aria-disabled, APG date grid) so the arrow keys can
      cross it; only a disabled calendar uses native disabled (audit F-9). */
   .area-calendar__day:is(:disabled, [aria-disabled="true"]) { color: var(--area-fg-disabled); cursor: not-allowed; }
@@ -105,7 +105,7 @@
   .area-calendar__cell[data-range="start"]::before { inset-inline-start: var(--_day-inset); border-start-start-radius: var(--_day-radius); border-end-start-radius: var(--_day-radius); }
   .area-calendar__cell[data-range="end"]::before { inset-inline-end: var(--_day-inset); border-start-end-radius: var(--_day-radius); border-end-end-radius: var(--_day-radius); }
   .area-calendar__cell[data-range] > .area-calendar__day { z-index: 1; --_day-fill: transparent; --_day-edge: none; }
-  .area-calendar__cell[data-range="middle"] > .area-calendar__day:hover:not(:disabled, [aria-disabled="true"]) { background: var(--_band-hover); }
+  @media (hover: hover) { .area-calendar__cell[data-range="middle"] > .area-calendar__day:hover:not(:disabled, [aria-disabled="true"]) { background: var(--_band-hover); } }
 
   /* Day treatments. Square is the default. Circle (Google's booking calendar) fills the days
      that can be chosen; tile outlines them and fills the ones that cannot. */
@@ -114,7 +114,7 @@
   .area-calendar--circle .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-fill: var(--area-bg-component-hover); }
   /* A circle day already rests on the hover plate, so hover steps to the next opaque rung (the row
      pair #f3 → #ee); the translucent wash composited to the same #f3 and showed nothing (audit F-11). */
-  .area-calendar--circle .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-outside], [data-selected]) { background: var(--area-bg-component-active); }
+  @media (hover: hover) { .area-calendar--circle .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-outside], [data-selected]) { background: var(--area-bg-component-active); } }
   .area-calendar--tile .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle); }
   .area-calendar--tile .area-calendar__day:is(:disabled, [aria-disabled="true"]):not([data-outside]) { --_day-fill: var(--area-bg-component); text-decoration: none; }
 
@@ -133,7 +133,7 @@
   .area-calendar--week .area-calendar__day-number { font-size: var(--area-control-xl-text); line-height: var(--area-control-xl-leading); }
   .area-calendar__day[data-selected] > :is(.area-calendar__day-weekday, .area-calendar__day-month) { color: inherit; }
   .area-calendar--week .area-calendar__marker { inset-block-end: auto; inset-block-start: var(--area-space-4); inset-inline-start: auto; inset-inline-end: var(--area-space-4); translate: none; }
-  .area-calendar[aria-disabled="true"] { opacity: 0.5; }
+  .area-calendar[aria-disabled="true"] { opacity: var(--area-opacity-disabled); }
   @media (forced-colors: active) {
     .area-calendar__day[data-selected] { forced-color-adjust: none; background-color: Highlight; color: HighlightText; }
     .area-calendar__day[data-today]:not([data-selected]) { outline: 1px solid CanvasText; outline-offset: -2px; }

@@ -9,7 +9,8 @@
 
 - Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)): Select's enhanced
   native picker opens below with a 4px gap and no above-input fallback; unsupported browsers
-  retain their platform-native picker placement.
+  retain their platform-native picker placement. **Superseded 2026-09-30** (audit B-5, option
+  B): the picker follows Combobox's list rules and flips above when there is no room below.
 - Neutral by default, accent by override (2026-09-26): the checked option is marked with the
   neutral selection fill and a `currentColor` check, not accent.
 - 2026-09-26, second pass ("decide all open items"), item 10: the chevron stays a
@@ -100,11 +101,13 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 | trigger · soft | **`input-bg-soft` fill, transparent edge, no shadow; hover edge `input-edge`** (`.area-select--soft`, `navigation.css:250-255`); `variant` in the manifest (`manifest.ts:206, 211`) and React (`forms.tsx:12, 43`) | Third pass: the one field without soft, so a Panel mixed two field styles; peer Input soft (`input.css:52-57`) | — |
 | trigger · chevron | 16px, 1.5 stroke, `#888`, 8px from the outer end | Notion rgb(142,139,134) 8px from the end; ChatGPT 16px rgb(143); UUI 16px; second pass item 10 | A literal in a data URI (`navigation.css:237`), not a role; Figma 50–90% black |
 | trigger · text | 14/20 400 `fg-default`, 11.03 from the edge | Notion 14 400, ChatGPT 14/18 400 | Notion's permission select uses muted ink as an inline trigger; Figma 11/16 450 |
-| picker · offset | 4px below, no flip | Owner; UUI 4px offset | — |
+| picker · offset | 4px below; flips above when out of room (`position-try-fallbacks: flip-block`) | Audit B-5 (owner 2026-09-30): one rule set with Combobox; UUI 4px offset | Was no flip (pre-09-24 decision) |
+| picker · width | at least the field and Menu's 224 (`max(anchor-size(self-inline), 224)`) | Audit B-5: Combobox's list | Was the field's width: a 96px mode Select opened a 96px list |
+| picker · height | at most **324** | Audit B-5: Figma's font list (Combobox) | Was 288 |
 | picker · surface | padding 4, `radius-container` 12, `border-decorative`, `bg-surface` | Peer: Menu (4px inset) | UUI radius 8 |
 | picker · lift | `--area-shadow-float`: `0 20px 24px` + `0 5px 8px` at half strength, `shadow-color` (`navigation.css:334`); `none` under the Flat preset | Audit "Floating lift" (Notion popover; Menu, Popover) | Was `shadow-2`. A Surface axis role since audit S10 |
 | option · row | min 32, padding 6 8, radius `radius-row` 8, 2px apart; icon-to-label gap `--area-gap-row` 12 (`navigation.css:342`), labels at 36 as Menu's | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6 |
-| option · hover / focus | `bg-component-hover` #f3 | Audit row-plate rule | — |
+| option · hover / focus | `bg-component-hover` #f3, no ring | Audit row-plate rule; B-5: one focus paint with Menu and Combobox rows | Keyboard focus drew a 2px inset ring as well |
 | option · checked | `bg-component-active` #eee; check at the end in `currentColor` | Audit: selection one step above hover | Figma's check sits before the label; UUI one fill for both |
 | disabled | field paint only (`navigation.css:281-287`) | Audit "Disabled" rule for text fields | Was field paint and 50% opacity |
 
@@ -121,8 +124,9 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 ## Behavior and accessibility
 
 Native `<select>`, ref forwarded (`forms.tsx:21-48`); validation props mirror Input.
-Keyboard, typeahead and dismissal are the browser's. Option focus uses the focus ring inset
-2px. RTL moves the chevron (`navigation.css:243`). Notion's inline trigger is a
+Keyboard, typeahead and dismissal are the browser's. Option focus is the hover plate, as a
+Menu or Combobox row (audit B-5). The picker is the one anchored surface the shared React
+engine (audit S16) doesn't place: the platform owns it, so its rules mirror Combobox's in CSS. RTL moves the chevron (`navigation.css:243`). Notion's inline trigger is a
 `div role="button" aria-haspopup="dialog"`, not a select; Area keeps the native element.
 
 ## Peers and consistency

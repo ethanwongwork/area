@@ -34,7 +34,7 @@ Area that treatment belongs to Segmented or a horizontal Nav.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | sm 28, md 32 (default), lg 40 | Owner (three sizes) | Untitled underline tabs 32 / 36; Notion underline tab 28 in a 40 row; Figma 24 |
-| orientation | horizontal, vertical | Settings views | Owner; ChatGPT settings uses a vertical list (captured as a nav row) |
+| orientation | horizontal (default), vertical | Settings views | Owner; ChatGPT settings uses a vertical list (captured as a nav row) |
 | track | off, on | Optional baseline divider | Untitled 1px neutral-200; Notion's Share tabs sit on a hairline (`popover/notion--share-popover--open` node 4) |
 | composition | icons, counts | Owner | Untitled; Notion view tabs carry a 20px icon (`notion--view-tab--rest`) |
 | state | disabled | Owner | Untitled |
@@ -134,10 +134,12 @@ Settled in the third pass (kept; [cohesion audit](../research/cohesion-audit.md#
 
 ## Behavior and accessibility
 
-`role=tablist` with `aria-orientation`; tabs are buttons with `aria-selected` and
+`role=tablist` with `aria-orientation`, named by `aria-label` (default "Views"; `label` is a
+deprecated alias), which goes on the tablist, not the wrapper; tabs are buttons with `aria-selected` and
 `aria-controls`; panels are `tabpanel`, `aria-labelledby`, `tabIndex=0`. Roving tab stop;
 Left/Right (Up/Down vertically), Home and End, reversed in RTL for horizontal lists;
-automatic or manual activation (`primitives.tsx:847-902`). Notion's tabs are `div[role=tab]`
+automatic or manual activation; a change calls `onValueChange(value, event)`
+(`primitives.tsx:1225-1295`). Notion's tabs are `div[role=tab]`
 with `aria-selected` and every tab at `tabindex=0` (`notion--tabs-underline` nodes 3, 6).
 Forced colours: tab focus is listed in `forced-colors.css:14`; the indicator is not verified.
 
@@ -177,3 +179,5 @@ in [the audit](../research/cohesion-audit.md#verification).
 - 2026-09-27 · third pass → open question settled, values kept: no tab padding, underline
   the tab's own width; the 20px gap recorded as unsourced → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S14 (owner) → a tab's icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`--_tab-item-gap`, navigation.css:16, :79-81; density.ts:80-82). The 16 / 20 / 24 gap between tabs is unchanged.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the tablist (default "Views"; `label` deprecated alias); `onValueChange(value, event)`; the manifest defaults `orientation` to `horizontal` (class `.area-tabs--horizontal` restating the base) and `size` to `md`.
+- 2026-09-30 · S17 owner calls (owner: "go with your recs") → the tab list prop is `items` (a collection you move through); `tabs` is the deprecated alias.

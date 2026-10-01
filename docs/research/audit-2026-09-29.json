@@ -44,6 +44,18 @@
       "date": "2026-09-30",
       "branch": "claude/cool-kirch-9facec",
       "summary": "S13 selected rows, S14 icon-to-label gap, S15 Segmented thumb and soft joins"
+    },
+    {
+      "id": "this branch (phase 6)",
+      "date": "2026-09-30",
+      "branch": "claude/component-work-continuation-aef804",
+      "summary": "S18 loading and busy; S16 one floating engine (B-5, E-5, H-10 calls); S17 API vocabulary (H-14 and part of H-13 open)"
+    },
+    {
+      "id": "this branch (phase 7)",
+      "date": "2026-09-30",
+      "branch": "claude/component-work-continuation-aef804",
+      "summary": "S19 tone sets, S20 numeric marks, S21a/b density roles, token roles and hover gating (S21c dark pass awaits the owner's go-ahead)"
     }
   ],
   "decisions": [
@@ -851,7 +863,8 @@
           "pickedOn": "2026-09-30"
         }
       ],
-      "status": "decided"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "S17",
@@ -892,7 +905,9 @@
           "pickedOn": "2026-09-30"
         }
       ],
-      "status": "decided"
+      "status": "done",
+      "resolved": "this branch (phase 6)",
+      "note": "Owner took the recommendations on the open names (2026-09-30): options vs items, Input icon, Nav plate, Card list, Presence xs kept as a written exception"
     },
     {
       "id": "S18",
@@ -928,7 +943,8 @@
           "pickedOn": "2026-09-30"
         }
       ],
-      "status": "decided"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "S19",
@@ -961,8 +977,9 @@
           "pickedOn": "2026-09-30"
         }
       ],
-      "status": "decided",
-      "note": "Accent is gone from every tone list (D1); the rest of the rule is open."
+      "status": "done",
+      "note": "Accent is gone from every tone list (D1); the rest of the rule is open.",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "S20",
@@ -997,7 +1014,9 @@
           "pickedOn": "2026-09-30"
         }
       ],
-      "status": "decided"
+      "status": "done",
+      "resolved": "this branch (phase 7)",
+      "note": "99+ kept on small avatars (owner: Claude's call)"
     },
     {
       "id": "S21",
@@ -1071,7 +1090,9 @@
           "pickedOn": "2026-09-30"
         }
       ],
-      "status": "decided"
+      "status": "done",
+      "resolved": "this branch (phase 7)",
+      "note": "Dark pass done (docs/research/dark-pass-2026-09-30.md, 19 captures); compact values for the new mark and inset roles are uncalibrated"
     }
   ],
   "calls": [
@@ -1220,9 +1241,7 @@
       "rec": "B",
       "pick": "B",
       "note": null,
-      "pickedOn": "2026-09-30",
-      "status": "done",
-      "resolved": "this branch (phase 5)"
+      "pickedOn": "2026-09-30"
     },
     {
       "id": "B-7",
@@ -1884,9 +1903,7 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30",
-      "status": "done",
-      "resolved": "this branch (phase 3)"
+      "pickedOn": "2026-09-30"
     },
     {
       "id": "F-18",
@@ -2472,7 +2489,8 @@
       "rules": [
         "S16"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "A-9",
@@ -2513,7 +2531,8 @@
       "rules": [
         "S18"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "A-12",
@@ -2592,7 +2611,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "A-18",
@@ -2748,7 +2768,8 @@
       "rules": [
         "S16"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "B-6",
@@ -2878,8 +2899,9 @@
       "rules": [
         "S16"
       ],
-      "status": "open",
-      "severityNote": "medium (unverified in a browser without support)"
+      "status": "done",
+      "severityNote": "medium (unverified in a browser without support)",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "B-16",
@@ -2944,7 +2966,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "B-21",
@@ -3193,7 +3216,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "C-8",
@@ -3283,7 +3307,8 @@
       "rules": [
         "S19"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-15",
@@ -3297,7 +3322,9 @@
       "rules": [
         "S20"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)",
+      "note": "12/16 checked on a 32px avatar: 24 is 23 wide; 99+ is 29 wide, kept (every reference shows 99+; the ring separates it)"
     },
     {
       "id": "C-16",
@@ -3311,7 +3338,9 @@
       "rules": [
         "S19"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)",
+      "note": "S19 A: inverse everywhere, one feedback set; caution/discovery not added to Alert or Indicator and Switch custom unchanged (outside the pick)"
     },
     {
       "id": "C-17",
@@ -3741,7 +3770,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "D-19",
@@ -3946,7 +3976,8 @@
       "rules": [
         "S16"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "E-6",
@@ -3960,7 +3991,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "E-7",
@@ -4038,7 +4070,8 @@
       "rules": [
         "S19"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-13",
@@ -4494,7 +4527,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "F-20",
@@ -4509,7 +4543,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "F-21",
@@ -4891,7 +4926,8 @@
       "rules": [
         "S18"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "G-14",
@@ -5029,7 +5065,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "G-25",
@@ -5139,7 +5176,9 @@
       "rules": [
         "S21"
       ],
-      "status": "open"
+      "status": "partly",
+      "resolved": "this branch (phase 7)",
+      "note": "mark-* and inset-surface-* roles exist and Badge, Count, Kbd, Indicator, Popover, Dialog read them; compact values await measurement; Card, Panel, Tooltip insets still fixed"
     },
     {
       "id": "H-5",
@@ -5153,7 +5192,9 @@
       "rules": [
         "S21"
       ],
-      "status": "open"
+      "status": "done",
+      "note": "19 dark captures; edge-float, 20% dark shadow ink, dark tooltip, no Card halo in dark; scrim kept",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-6",
@@ -5211,8 +5252,8 @@
         "S10",
         "S21"
       ],
-      "status": "partly",
-      "resolved": "this branch (phase 4)",
+      "status": "done",
+      "resolved": "this branch (phase 7)",
       "note": "Shadows became Surface roles (S10); the other value clusters wait for the token phase (S21b)"
     },
     {
@@ -5228,7 +5269,8 @@
       "rules": [
         "S16"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "H-11",
@@ -5257,7 +5299,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "H-13",
@@ -5271,7 +5314,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-14",
@@ -5285,7 +5329,8 @@
       "rules": [
         "S17"
       ],
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-15",
@@ -5325,8 +5370,9 @@
       "rules": [
         "S21"
       ],
-      "status": "open",
-      "typeNote": "decision + fix"
+      "status": "done",
+      "typeNote": "decision + fix",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-18",

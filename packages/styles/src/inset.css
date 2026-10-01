@@ -118,7 +118,7 @@
   .area-button:has(> .area-button__label > .area-kbd:last-child) {
     --_box-end: var(--area-space-20);
   }
-  .area-button:has(> .area-button__label > .area-kbd--small:last-child) {
+  .area-button:has(> .area-button__label > .area-kbd--sm:last-child) {
     --_box-end: var(--area-space-16);
   }
 
@@ -148,12 +148,12 @@
   /* A shortcut in an Input's suffix is a nested backplate, placed like a Button's: the space
    * after it equals the space above and below it (Notion's search field ⌘K). */
   .area-input:has(> .area-input__affix:last-child > .area-kbd) { --_box-end: var(--area-space-20); }
-  .area-input:has(> .area-input__affix:last-child > .area-kbd--small) { --_box-end: var(--area-space-16); }
+  .area-input:has(> .area-input__affix:last-child > .area-kbd--sm) { --_box-end: var(--area-space-16); }
   .area-input__affix:has(> .area-kbd) { display: inline-flex; text-box: none; padding-block: 0; }
   /* A quiet Kbd in a menu is set like the string shortcut (audit S12a), so it takes the text
      end inset; only a filled keycap (on-color) reserves its own box. */
   .area-menu__item:has(> .area-menu__shortcut > .area-kbd--on-color) { --_box-end: var(--area-space-20); }
-  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--on-color.area-kbd--small) { --_box-end: var(--area-space-16); }
+  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--on-color.area-kbd--sm) { --_box-end: var(--area-space-16); }
   .area-menu__item:has(> .area-menu__shortcut > svg:only-child) { --_box-end: var(--area-icon-md); }
   .area-menu__shortcut { display: inline-flex; align-items: center; padding-inline-start: 0; }
   .area-menu__shortcut > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex-shrink: 0; }
@@ -231,13 +231,13 @@
       (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--area-border-width)
     );
   }
-  .area-button--align-start { margin-inline-start: calc((var(--_box-height) - var(--_box-start)) / -2); }
-  .area-button--align-end { margin-inline-end: calc((var(--_box-height) - var(--_box-end)) / -2); }
+  .area-button--start { margin-inline-start: calc((var(--_box-height) - var(--_box-start)) / -2); }
+  .area-button--end { margin-inline-end: calc((var(--_box-height) - var(--_box-end)) / -2); }
   /* A trailing pill reserves its own height, so it ends as far from the plate's edge as it
      sits from the top (6 for the 20px Badge), like the Kbd rules below. */
   .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-space-20); }
   .area-nav__item:has(> .area-nav__trailing > .area-badge--sm:last-child) { --_box-end: var(--area-space-16); }
   .area-nav__item:has(> .area-nav__trailing > .area-kbd:last-child) { --_box-end: var(--area-space-20); }
-  .area-nav__item:has(> .area-nav__trailing > .area-kbd--small:last-child) { --_box-end: var(--area-space-16); }
+  .area-nav__item:has(> .area-nav__trailing > .area-kbd--sm:last-child) { --_box-end: var(--area-space-16); }
 
 }

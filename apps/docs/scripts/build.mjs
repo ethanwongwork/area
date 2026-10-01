@@ -297,7 +297,7 @@ function galleryPage({ families = null } = {}) {
   // Every component receives its own compact section. The section supplies the component
   // name; a tile therefore names only its single specimen (default, soft-success,
   // size-md) and never repeats the family name just to fill space.
-  const badgeTones = ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverted"];
+  const badgeTones = ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"];
   const badgeVariants = ["soft", "solid", "outline", "color", "modern"];
   const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {

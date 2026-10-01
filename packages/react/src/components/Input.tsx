@@ -1,16 +1,18 @@
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
-import { forwardRef, useId } from "react";
+import { forwardRef } from "react";
 import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactElement, ReactNode } from "react";
-import { cx, inputVariants } from "../variants.ts";
+import { cx, inputVariants, tooltipVariants } from "../variants.ts";
+import { AnchoredTooltip } from "./Overlays.tsx";
 import { Spinner } from "./primitives.tsx";
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   variant?: VariantProps<typeof MANIFESTS.input>["variant"];
   size?: VariantProps<typeof MANIFESTS.input>["size"];
-  /** @deprecated Use `leadingIcon`. */
+  /** Decorative visual at the logical start of the input; `icon` + `trailingIcon`, as Button
+   * (audit S17 / H-14, owner 2026-09-30). */
   icon?: ReactNode;
-  /** Decorative visual at the logical start of the input. */
+  /** @deprecated Use `icon`. */
   leadingIcon?: ReactNode;
   /** Decorative visual at the logical end of the input. */
   trailingIcon?: ReactNode;
@@ -40,8 +42,9 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 /**
- * A single icon action at an Input's logical end. It owns a square icon slot and a
- * focusable tooltip; a regular ghost Button is too large to be a reliable inset action.
+ * A single icon action at an Input's logical end. It owns a square icon slot and a Tooltip
+ * (audit S16: the shared overlay, in the top layer, so a clipping panel never cuts it); a
+ * regular ghost Button is too large to be a reliable inset action.
  */
 export interface InputActionProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "type"> {
   icon: ReactNode;
@@ -53,22 +56,22 @@ export const InputAction = /* @__PURE__ */ forwardRef<HTMLButtonElement, InputAc
   { icon, tooltip, "aria-label": ariaLabel, "aria-describedby": describedBy, className, ...rest },
   ref,
 ) {
-  const tooltipId = `area-input-action-${useId().replace(/:/g, "")}`;
-
   return (
     <span className="area-input__action">
-      <button
-        ref={ref}
-        type="button"
-        className={cx("area-input__action-button", className)}
-        aria-label={ariaLabel ?? tooltip}
-        // When the hint is also the name, describing the button with it announces it twice.
-        aria-describedby={[describedBy, ariaLabel ? tooltipId : undefined].filter(Boolean).join(" ") || undefined}
-        {...rest}
-      >
-        <span className="area-input__action-icon" aria-hidden="true">{icon}</span>
-      </button>
-      <span id={tooltipId} className="area-tooltip area-input__action-tooltip" role="tooltip">{tooltip}</span>
+      {/* Under the action, 4 away, as the hint always sat; a Tooltip's delay and keys. When the
+          hint is also the name, describing the button with it would announce it twice. */}
+      <AnchoredTooltip side="bottom" describe={Boolean(ariaLabel)}
+        trigger={<button
+          ref={ref}
+          type="button"
+          className={cx("area-input__action-button", className)}
+          aria-label={ariaLabel ?? tooltip}
+          aria-describedby={describedBy}
+          {...rest}
+        >
+          <span className="area-input__action-icon" aria-hidden="true">{icon}</span>
+        </button>}
+        surface={props => <div role="tooltip" {...props} className={tooltipVariants({ side: "bottom" }, "area-input__action-tooltip")}>{tooltip}</div>} />
     </span>
   );
 });
@@ -99,6 +102,7 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
     disabled,
     readOnly,
     className,
+    style,
     "aria-invalid": ariaInvalid,
     "aria-busy": ariaBusy,
     "data-validation-status": fieldValidationStatus,
@@ -108,13 +112,16 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
 ) {
   const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
-  const startIcon = leadingIcon ?? icon;
+  const startIcon = icon ?? leadingIcon;
   const spinnerSize = size === "sm" ? "sm" : size === "lg" ? "lg" : "md";
   const resolvedLoaderPosition = loaderPosition === "auto" ? (startIcon ? "leading" : "trailing") : loaderPosition;
 
   return (
+    // className and style both land on the shell, the box a width or margin override means
+    // (audit B-20; style used to reach the inner input).
     <div
       className={inputVariants({ variant, size, fullWidth, monospace }, className)}
+      style={style}
       {...(invalidState ? { "data-invalid": "" } : {})}
       {...(resolvedValidationStatus === "success" ? { "data-success": "" } : {})}
       {...(resolvedValidationStatus === "warning" ? { "data-warning": "" } : {})}
@@ -123,7 +130,7 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
       {...(loading ? { "data-loading": "" } : {})}
     >
       {loading && resolvedLoaderPosition === "leading" ? (
-        <span className="area-input__icon"><Spinner size={spinnerSize} label={loadingText} /></span>
+        <span className="area-input__icon"><Spinner size={spinnerSize} aria-label={loadingText} /></span>
       ) : startIcon ? (
         <span className="area-input__icon" aria-hidden="true">
           {startIcon}
@@ -142,7 +149,7 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
       {suffix ? <span className="area-input__affix">{suffix}</span> : null}
       {loading && resolvedLoaderPosition === "trailing" ? (
         <span className="area-input__icon">
-          <Spinner size={spinnerSize} label={loadingText} />
+          <Spinner size={spinnerSize} aria-label={loadingText} />
         </span>
       ) : trailingAction ? (
         trailingAction

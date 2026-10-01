@@ -28,7 +28,7 @@ test('unlabelled icon/dot-only badges fail, named forms carry image semantics', 
 });
 test('anchor overlay is inert and decorative; owner retains its name', () => {
   const html=render(h(IndicatorAnchor,{compact:true,invisible:true,placement:'bottom-start',overlap:'circular',indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
-  assert.match(html,/aria-hidden="true" inert=""/); assert.match(html,/data-invisible=""/);assert.match(html,/Inbox, 3 unread/);assert.match(html,/overlap-circular/);
+  assert.match(html,/aria-hidden="true" inert=""/); assert.match(html,/data-invisible=""/);assert.match(html,/Inbox, 3 unread/);assert.match(html,/area-indicator-anchor--circular/);
   assert.match(html,/area-indicator-anchor--compact/);
 });
 test('anchor overlays centre on the corner by default; compact is an explicit inset', () => {

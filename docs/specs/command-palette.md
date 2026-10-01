@@ -90,7 +90,8 @@ The dialog is a native modal `<dialog>` (focus trapped, inert page); the field i
 `role=listbox` of grouped `role=option` rows. Focus stays in the field. ↓/↑ move (wrapping,
 skipping disabled rows), Ctrl+Home/End jump, Enter runs the highlighted row and closes
 (unless `keepOpen`), Escape clears the query and then closes, a click on the scrim closes.
-`hotkey="mod+k"` toggles it (⌘ on Apple platforms, Ctrl elsewhere).
+`hotkey="mod+k"` toggles it (⌘ on Apple platforms, Ctrl elsewhere). `aria-label` names the
+palette and its search field (default "Command palette"; `label` is a deprecated alias).
 
 ## Verification
 
@@ -145,3 +146,4 @@ keycap-to-label gap inside the Open plate, taken from the visible plate here.
 ## Feedback log
 
 - 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (command-palette.css:42); rows and the search row take the density token `--area-gap-row` (12, labels at 36; command-palette.css:28, :56); quiet keys render in the UI font 12/16 400, and Escape is written "Esc" (kbd.css:89-102).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the palette and its search field (default "Command palette"; `label` deprecated alias).

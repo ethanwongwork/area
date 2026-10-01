@@ -32,6 +32,9 @@
    * Horizontal: a row of plates. Scrolls rather than wraps, because a nav that reflows to
    * a second line moves every item below it and changes the height of the page chrome.
    */
+  /* Restates the base: every default value has a class (audit S17 / H-13), so the manifest names
+     it and framework-free markup can say it. */
+  .area-nav--vertical { flex-direction: column; }
   .area-nav--horizontal {
     inline-size: max-content;
     flex-direction: row;
@@ -124,9 +127,7 @@
 
   /* Row plates: the component hover fill, then the active fill for the current page. Menu,
      Tree view, Table and Select use the same pair. */
-  .area-nav__item:hover:not([data-disabled]) {
-    background-color: var(--area-bg-component-hover);
-  }
+  @media (hover: hover) { .area-nav__item:hover:not([data-disabled]) { background-color: var(--area-bg-component-hover); } }
 
   /*
    * Current. The foreground goes to full strength and the plate fills. Hover changes
@@ -136,6 +137,9 @@
     background-color: var(--area-bg-component-active);
     color: var(--area-fg-default);
   }
+  /* `plate`, the default selection (audit S17 / H-13: every default value has a class), restates
+     the base: the current row is the selection plate. `marker` replaces it below. */
+  .area-nav--plate .area-nav__item[aria-current]:not([aria-current="false"]) { background-color: var(--area-bg-component-active); }
 
   /* A marker is navigation's quiet current-location treatment. Unlike a menu's action
    * highlight, it persists as the reader moves through an outline or sidebar. */
@@ -174,7 +178,7 @@
   /* Disabled rows dim as a whole, like Menu items and every other control. */
   .area-nav__item[data-disabled] {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--area-opacity-disabled);
   }
 
   .area-nav__icon {
@@ -232,7 +236,7 @@
     padding-inline-end: calc((var(--area-control-md) - var(--area-control-sm)) / 2);
     border-radius: min(var(--area-radius-row), calc(var(--area-control-md) * var(--area-radius-cap)));
   }
-  .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current="page"])):hover { background: var(--area-bg-component-hover); }
+  @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current="page"])):hover { background: var(--area-bg-component-hover); } }
   .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: var(--area-bg-component-active); }
   .area-nav--marker .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: transparent; }
   .area-nav .area-nav__row > .area-nav__item { background: transparent; }

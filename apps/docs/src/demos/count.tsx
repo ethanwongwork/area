@@ -18,7 +18,7 @@ export const GalleryCountNav = () => (
   </Nav>
 );
 export const GalleryCountTabs = () => (
-  <Tabs tabs={[
+  <Tabs items={[
     { id: "one", label: "Item one", trailing: <Count variant="soft" count={12} />, content: "Body text" },
     { id: "two", label: "Item two", trailing: <Count variant="soft" count={3} />, content: "Body text" },
   ]} />

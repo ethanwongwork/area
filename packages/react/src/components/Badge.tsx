@@ -5,7 +5,9 @@ import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode, Ref, RefAttribute
 import { badgeVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 
-type Options = VariantProps<typeof MANIFESTS.badge> & {
+type Options = Omit<VariantProps<typeof MANIFESTS.badge>, "tone"> & {
+  /** `"inverted"` is a deprecated alias of `"inverse"` (audit S17: Avatar's word). */
+  tone?: VariantProps<typeof MANIFESTS.badge>["tone"] | "inverted";
   icon?: ReactNode; trailingIcon?: ReactNode;
   avatar?: ReactNode; flag?: ReactNode;
   onDismiss?: () => void;
@@ -28,7 +30,7 @@ export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>
   if (onDismiss && !dismissLabel) throw new Error("Badge: dismissLabel is required for the dismiss button.");
   const props = {
     ...rest,
-    className: badgeVariants({ tone, variant, size, pill, dot, dotOnly, iconOnly, truncate }, className),
+    className: badgeVariants({ tone: tone === "inverted" ? "inverse" : tone, variant, size, pill, dot, dotOnly, iconOnly, truncate }, className),
     title: title ?? (truncate && (typeof children === "string" || typeof children === "number") ? String(children) : undefined),
     role: rest.role ?? ((iconOnly || dotOnly) && as === "span" ? "img" : undefined),
     children: <>

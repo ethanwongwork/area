@@ -60,6 +60,9 @@ export function baseTokens(): Record<string, string> {
   // keyboard glyphs, causing individual characters to fall back at different metrics.
   out["--area-font-keyboard"] = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
   out["--area-keyboard-gap"] = "0.25ch";
+  // A disabled control dims to half (audit S21b: the 0.5 written at 17 sites). Fields and
+  // text use their own disabled paint instead; this is for whole controls.
+  out["--area-opacity-disabled"] = "0.5";
 
   // Pure black and white. Named because they are real answers, not placeholders: every
   // `fg-on-*` token resolves to one of these two after the scale measures which is
@@ -144,6 +147,14 @@ export function derivedTokens(): Record<string, string> {
       "selection-band-hover": ["bg-component-active", "accent-surface-hover"],
       "selection-edge": ["edge-control-hover", "edge-accent"],
     }),
+    // The edge of everything that floats (audit S21c, owner 2026-09-30, dark captures): the
+    // decorative edge in light; in dark Card's standalone edge, neutral-750 (Notion's menus and
+    // dialogs ring #383836 on #252525; ChatGPT and Figma draw a 15-35% white hairline). The
+    // dark decorative edge (#282828 on a #1d1d1d surface) disappeared.
+    [`${PREFIX}edge-float`]: `light-dark(var(${PREFIX}border-decorative), var(${PREFIX}neutral-750))`,
+    // The modal scrim (audit S21b; Dialog and Command palette): 13% black in light, the
+    // overlay role in dark. Derived, so a themed subtree re-derives its dark side.
+    [`${PREFIX}scrim`]: `light-dark(rgb(0 0 0 / 0.133), var(${PREFIX}bg-overlay))`,
     // Badge brand paint is an opt-in product seam, re-derived at axis boundaries.
     [`${PREFIX}badge-bg`]: `var(${PREFIX}bg-component)`,
     [`${PREFIX}badge-fg`]: `var(${PREFIX}fg-default)`,

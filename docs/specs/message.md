@@ -22,7 +22,7 @@ the turn.
 
 | Axis | Value | Justification |
 |---|---|---|
-| author | user, assistant | ChatGPT |
+| author | assistant (default), user | ChatGPT; optional, the manifest default too |
 | state | streaming (dot after the last word; actions wait) | ChatGPT |
 | actions | assistant: copy, rate, read aloud, regenerate, more; user: copy, edit (hover) | ChatGPT |
 
@@ -73,7 +73,8 @@ the edge). No change.
 ## Behavior and accessibility
 
 Each turn is an `article` named "You said" / "ChatGPT said"; actions are a named group of
-labelled buttons.
+labelled buttons (`MessageActions`, named by `aria-label`, default "Message actions"; `label`
+is a deprecated alias).
 
 ## Verification
 
@@ -87,3 +88,4 @@ labelled buttons.
 ## Feedback log
 
 - 2026-09-30 · audit S6b (owner) → actions no longer override Button ink to `fg-muted`; they take the ghost icon Button's quiet ink as every icon action does. Suggestion rows and Code block tabs keep `fg-muted` → message.css:50.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `author` is optional and defaults to `assistant` (manifest default too); `MessageActions` is named by `aria-label` (default "Message actions"; `label` deprecated alias).

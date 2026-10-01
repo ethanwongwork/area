@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useState } from "react";
 import type { HTMLAttributes, RefObject } from "react";
+import type { ButtonProps } from "./Button.tsx";
 import { scrollToLatestVariants } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
@@ -9,13 +10,19 @@ export interface ScrollToLatestProps extends HTMLAttributes<HTMLDivElement> {
   scrollRef: RefObject<HTMLElement | null>;
   /** Show once the reader is this far (px) from the end. */
   threshold?: number;
+  /** Names the button ("Scroll to latest"). */
+  "aria-label"?: string;
+  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
   label?: string;
+  /** Props for the Button inside (ref and rest go to the wrapper, audit G-24). */
+  buttonProps?: Omit<ButtonProps, "onClick" | "icon" | "iconOnly">;
 }
 
 /** Returns a long conversation to its newest message; shown only after scrolling away. */
 export const ScrollToLatest = forwardRef<HTMLDivElement, ScrollToLatestProps>(function ScrollToLatest(
-  { scrollRef, threshold = 200, label = "Scroll to latest", className, ...rest }, ref,
+  { scrollRef, threshold = 200, "aria-label": ariaLabel, label: labelProp, buttonProps, className, ...rest }, ref,
 ) {
+  const label = ariaLabel ?? labelProp ?? "Scroll to latest";
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const element = scrollRef.current;
@@ -36,7 +43,7 @@ export const ScrollToLatest = forwardRef<HTMLDivElement, ScrollToLatestProps>(fu
     element.scrollTo({ top: element.scrollHeight, behavior: reduce ? "auto" : "smooth" });
   };
   return <div ref={ref} className={scrollToLatestVariants({}, className)} data-visible={visible ? "" : undefined} {...rest}>
-    <Button variant="outline" tone="neutral" iconOnly pill aria-label={label} tabIndex={visible ? undefined : -1}
+    <Button variant="outline" tone="neutral" pill {...buttonProps} iconOnly aria-label={label} tabIndex={visible ? undefined : -1}
       aria-hidden={visible ? undefined : true} icon={<Glyph name="arrow-up" rotate={180} />} onClick={scroll} />
   </div>;
 });

@@ -39,7 +39,7 @@
   .area-number-field--sm { padding-inline-start: var(--area-gutter-sm); padding-inline-end: var(--area-gutter-sm); }
   .area-number-field--lg { padding-inline-start: var(--area-gutter-lg); padding-inline-end: var(--area-gutter-lg); }
   .area-number-field--full-width { inline-size: 100%; }
-  .area-number-field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); }
+  @media (hover: hover) { .area-number-field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); } }
   .area-number-field:focus-within {
     border-color: var(--_border-focus);
     box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
@@ -130,7 +130,7 @@
     touch-action: manipulation;
   }
   .area-number-field__step svg { display: block; inline-size: var(--_icon); block-size: var(--_icon); }
-  .area-number-field__step:hover:not(:disabled) { background-color: var(--area-bg-component-hover); }
+  @media (hover: hover) { .area-number-field__step:hover:not(:disabled) { background-color: var(--area-bg-component-hover); } }
   .area-number-field__step:active:not(:disabled) { background-color: var(--area-bg-component-active); }
   .area-number-field__step:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
   .area-number-field__step:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }

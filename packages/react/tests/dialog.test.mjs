@@ -157,10 +157,11 @@ test("ContextMenu wraps its area without a box and keeps a closed, named popover
   assert.match(html, /^<div class="area-context-menu"><div>Area<\/div><div role="menu" class="area-menu area-context-menu__menu" popover="auto" aria-label="Page actions" tabindex="-1"><\/div><\/div>$/);
 });
 
-test("HoverCard anchors a Popover-surface card to its link and adds nothing to the link's name", async () => {
+test("HoverCard places a Popover-surface card beside its link and adds nothing to the link's name", async () => {
   const { HoverCard } = await import("../dist/modules/index.js");
   const html = renderToString(h(HoverCard, { trigger: h("a", { href: "#irene" }, "@irene") }, "Irene Yamaguchi"));
-  assert.match(html, /^<span class="area-popover-anchor" style="--_popover-anchor:--area-hover-card-[^"]+"><a href="#irene">@irene<\/a>/);
+  // No anchor wrapper: the shared engine places the card (audit S16).
+  assert.match(html, /^<a href="#irene">@irene<\/a><div id=/);
   assert.match(html, /<div id="[^"]+-hover-card" popover="manual" class="area-popover area-popover--bottom area-hover-card">Irene Yamaguchi<\/div>/);
   assert.doesNotMatch(html, /aria-describedby|role="tooltip"/);
 });

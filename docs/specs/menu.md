@@ -23,7 +23,7 @@ navigation (Nav), not a single-value choice in a form (Select), not a searchable
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | item | text | Plain action | All products |
-| item | icon + text | Iconic actions | ChatGPT account and chat actions; Notion page actions; Figma "More" |
+| item | icon + text (`MenuItem icon`, the leading glyph column) | Iconic actions | ChatGPT account and chat actions; Notion page actions; Figma "More" |
 | item | shortcut | Command hint | Notion page actions (⌘⌥L, ⌘D) |
 | item | danger | Destructive action | ChatGPT "Delete" (red label) |
 | item | selected (`radio checked`) | Current choice among several | ChatGPT model picker (check) |
@@ -102,7 +102,9 @@ Items:
 
 ## Behavior and accessibility
 
-`role="menu"`, items are native buttons with `role="menuitem"`. Menu handles Up/Down
+`role="menu"`, items are native buttons with `role="menuitem"`. `MenuItem icon` renders the
+leading glyph column (`span.area-menu__icon`, `aria-hidden`; primitives.tsx:1158-1178), so
+consumers no longer write the span by hand. Menu handles Up/Down
 (wrapping), Home/End and typeahead for its own items; a nested submenu handles its own keys.
 Items keep their own Tab stops (inline menus in panels rely on this); a popup host closes
 on Tab (SplitButton). Opening, anchoring and dismissal are the host's job (native popover in
@@ -142,3 +144,5 @@ palette and Context menu.
   → side by side with Notion's page menu in Claude in Chrome.
 - 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (`none` under Flat; surface.css:866, :1178); the icon-to-label gap is the density token `--area-gap-row` (12), shared with Nav, Command palette and the Select picker (surface.css:984); rows keep plate-only focus; a Kbd in a row renders like a string shortcut, and Escape is written "Esc" (kbd.css:89-104).
 - 2026-09-30 · audit S13 (owner) → a selected row in a menu of commands or choices shows the check only and the plate stays the highlight; `MenuItem radio` with `checked` gives `menuitemradio` (primitives.tsx:1143-1161); the `data-selected` plate is the value-picker hook only (surface.css:1045-1055); the Selected tile now uses `radio checked`.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `MenuItem` gains `icon`, the leading glyph column (replaces a hand-written `span.area-menu__icon`).
+- 2026-09-30 · audit S21c dark capture pass (owner go-ahead; [dark-pass](../research/dark-pass-2026-09-30.md)) → the edge is `edge-float` (#333 in dark, was #282828) and the dark lift ink is 20% (was 8%, invisible). Notion: ring #383836 + 0 14 28 −6 20%; ChatGPT: 20% white hairline; Figma: 35% shadows (captures/menu/*--dark). Fill and row hover unchanged.

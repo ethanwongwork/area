@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from "react";
-import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
+import type { HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { calendarVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -27,9 +27,9 @@ export interface CalendarRange { start: string; end: string }
 export type CalendarMarkerTone = "neutral" | "info" | "success" | "warning" | "danger";
 const weekOf = (d: Date, firstDay: number) => addDays(d, -((d.getDay() - firstDay + 7) % 7));
 type Selection =
-  | { selectionMode?: "single"; value?: string | null; defaultValue?: string | null; onValueChange?: (value: string | null) => void }
-  | { selectionMode: "range"; value?: CalendarRange | null; defaultValue?: CalendarRange | null; onValueChange?: (value: CalendarRange | null) => void }
-  | { selectionMode: "multiple"; value?: readonly string[]; defaultValue?: readonly string[]; onValueChange?: (value: string[]) => void };
+  | { selectionMode?: "single"; value?: string | null; defaultValue?: string | null; onValueChange?: (value: string | null, event: MouseEvent<HTMLButtonElement>) => void }
+  | { selectionMode: "range"; value?: CalendarRange | null; defaultValue?: CalendarRange | null; onValueChange?: (value: CalendarRange | null, event: MouseEvent<HTMLButtonElement>) => void }
+  | { selectionMode: "multiple"; value?: readonly string[]; defaultValue?: readonly string[]; onValueChange?: (value: string[], event: MouseEvent<HTMLButtonElement>) => void };
 
 export type CalendarProps = Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> & Selection & {
   /** Accessible name of the calendar group. */
@@ -71,7 +71,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   const { selectionMode = "single", value, defaultValue, onValueChange, variant, days, layout = "month", weekdayStyle = "short", markers, month, defaultMonth, onMonthChange,
     visibleMonths = 1, min, max, isDateUnavailable, firstDayOfWeek = 0, locale = "en-US", showOutsideDays = true,
     fixedWeeks = false, today: todayProp, name, disabled, className, "aria-label": ariaLabel = "Calendar", ...rest } = props as CalendarProps & {
-      selectionMode?: "single" | "range" | "multiple"; value?: unknown; defaultValue?: unknown; onValueChange?: (value: unknown) => void };
+      selectionMode?: "single" | "range" | "multiple"; value?: unknown; defaultValue?: unknown; onValueChange?: (value: unknown, event: MouseEvent<HTMLButtonElement>) => void };
   const id = useId();
   // Today is read after mount so server and client render the same markup.
   const [clientToday, setClientToday] = useState<string | null>(null);
@@ -137,23 +137,23 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
     if (month === undefined) setLocalMonth(start);
     onMonthChange?.(`${start.getFullYear()}-${pad(start.getMonth() + 1)}`);
   }
-  function commit(next: unknown) {
+  function commit(next: unknown, event: MouseEvent<HTMLButtonElement>) {
     if (value === undefined) setLocal(next);
-    onValueChange?.(next);
+    onValueChange?.(next, event);
   }
-  function choose(d: Date) {
+  function choose(d: Date, event: MouseEvent<HTMLButtonElement>) {
     if (unavailable(d)) return;
     const iso = toIso(d);
     setFocused(d);
-    if (selectionMode === "single") { if (single !== iso) commit(iso); }
+    if (selectionMode === "single") { if (single !== iso) commit(iso, event); }
     else if (selectionMode === "multiple") {
       const next = new Set(many); if (next.has(iso)) next.delete(iso); else next.add(iso);
-      commit([...next].sort());
+      commit([...next].sort(), event);
     } else if (!pendingStart) { setPendingStart(iso); setHovered(iso); }
     else {
       const [start, end] = [pendingStart, iso].sort() as [string, string];
       setPendingStart(null); setHovered(null);
-      commit({ start, end });
+      commit({ start, end }, event);
     }
   }
   function key(event: KeyboardEvent<HTMLButtonElement>, d: Date) {
@@ -201,7 +201,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
         data-outside={outside || undefined} data-today={iso === today || undefined}
         data-unavailable={(!disabled && isDateUnavailable?.(iso)) || undefined}
         data-selected={(isSelected && !(inRange && iso !== shownRange![0] && iso !== shownRange![1])) || undefined}
-        onClick={() => choose(d)} onKeyDown={event => key(event, d)} onFocus={() => { if (pendingStart) setHovered(iso); }}
+        onClick={event => choose(d, event)} onKeyDown={event => key(event, d)} onFocus={() => { if (pendingStart) setHovered(iso); }}
         onPointerEnter={() => { if (pendingStart) setHovered(iso); }}>
         {content}
         {marker && <span className="area-calendar__marker" data-tone={marker} aria-hidden="true" />}

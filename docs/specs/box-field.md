@@ -29,8 +29,8 @@ spacing-box diagram (Webflow): the parts are fields on the inspector grid.
 | kind | corners | corner radius | Figma: one Corner radius field + "Independent corners" |
 | mode | linked (default) / independent | the toggle | both |
 | size | sm, md, lg | NumberField and Button sizes | Figma's panel is sm (24 → compact) |
-| variant | outline, soft | NumberField's variants | Figma's fields are soft (#F5F5F5) |
-| state | disabled, mixed | NumberField states | Figma shows "Mixed" |
+| variant | outline, soft | NumberField's variants, passed to each field (a composition prop typed from NumberField, not a BoxField CSS axis) | Figma's fields are soft (#F5F5F5) |
+| state | disabled, read-only, mixed | NumberField states; read-only makes every field read-only and the linked toggle unavailable | Figma shows "Mixed" |
 | toggle | on (default) / off | a fixed mode (Figma's corner panel is always split) | Figma's corner details panel |
 
 Excluded: corner smoothing (Figma puts it in the same panel; it is a separate property);
@@ -87,7 +87,8 @@ is Button icon-only at the same size, centred in a square the control's height.
 field is named by part and property ("Left padding", "Top left corner radius"); the toggle
 is "Individual padding per side" / "Individual corner radius per corner" with `aria-pressed`.
 Focus stays on the toggle when it splits or joins. Tab order follows the grid: row 1, the
-toggle, row 2. Editing a linked field writes every part it covers. NumberField Escape now
+toggle, row 2. Editing a linked field writes every part it covers and calls
+`onValueChange(value, event)`. NumberField Escape now
 claims the key only while an edit is in progress, so a second Escape closes a surrounding
 popover or dialog (it used to swallow every Escape).
 
@@ -134,3 +135,4 @@ Box field tiles and the Panel recipe at 2x.
 - 2026-09-28 · batch 8 Claude in Chrome side by side (Figma padding and radius rows) → no change →
   `inspector/figma--padding-row`, `inspector/figma--opacity-radius-row`.
 - 2026-09-28 · inside a panel the label, its gap and the field gap follow the panel tier (`--_panel-*`).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `readOnly` added (fields read-only, linked toggle unavailable); `variant` is typed from NumberField's and passed to each field (a composition prop, not a CSS axis); `onValueChange(value, event)`.

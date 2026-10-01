@@ -21,7 +21,7 @@ export const GalleryOverlayPopoverArrow = () => (
 
 export const GalleryOverlayMenu = () => (
   <Menu trigger={<Button variant="outline" trailingIcon={<ChevronIcon />}>Options</Button>}>
-    <MenuItem shortcut={<Kbd keys={["cmd", "D"]} appearance="quiet" />}>Duplicate</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "D"]} variant="quiet" />}>Duplicate</MenuItem>
     <MenuItem>Rename</MenuItem>
     <MenuItem disabled>Move</MenuItem>
     <MenuSeparator />
@@ -45,5 +45,5 @@ export const GalleryOverlayTooltip = () => (
 );
 
 export const GalleryOverlayTooltipShortcut = () => (
-  <Tooltip trigger={<Button variant="outline">Save</Button>} side="bottom">Save <Kbd keys={["cmd", "S"]} appearance="on-emphasis" size="small" /></Tooltip>
+  <Tooltip trigger={<Button variant="outline">Save</Button>} side="bottom">Save <Kbd keys={["cmd", "S"]} variant="on-emphasis" size="sm" /></Tooltip>
 );

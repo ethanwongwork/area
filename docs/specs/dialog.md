@@ -33,6 +33,7 @@ Sheet or Drawer (edge-anchored; backlog).
 | composition | without close | Forced choice (confirmation) | shadcn `showCloseButton={false}` |
 | composition | with field, scrollable body | Forms and long content | shadcn (form), Primer (scrolling body) |
 | behaviour | modal with `trigger` | Opens itself as a native modal | shadcn `DialogTrigger`; ChatGPT, Primer |
+| behaviour | controlled modal (`open` / `defaultOpen` / `onOpenChange`), with or without `trigger` | A menu item or any other action opens a confirmation | shadcn and Radix `open` / `onOpenChange` |
 
 Excluded: a divided or tinted footer (shadcn's new base footer is a muted strip with a top
 border; Primer divides the header). The prior decision keeps the footer undivided, and
@@ -127,9 +128,11 @@ half the corner.
 
 ## Behavior and accessibility
 
-Without `trigger`, Dialog renders the surface with `role="dialog"`, `aria-modal` and its
-name and description (for documentation, or inside your own `<dialog>`). With `trigger`,
-it renders the trigger (`aria-haspopup="dialog"`, `aria-controls`) and a native
+Without `trigger`, `open` or `defaultOpen`, Dialog renders the surface with `role="dialog"`,
+`aria-modal` and its name and description (for documentation, or inside your own `<dialog>`).
+With `open` or `defaultOpen` and no trigger it is a controlled native modal that follows
+`open` and reports every close (close control, Escape, scrim) through `onOpenChange`. With
+`trigger`, it renders the trigger (`aria-haspopup="dialog"`, `aria-controls`) and a native
 `<dialog class="area-dialog__modal">` that carries the name and description; the trigger
 calls `showModal()`. The platform supplies the focus trap, Escape and focus return; a click
 on the scrim closes it. The close button calls `onDismiss`, then closes the enclosing native
@@ -190,3 +193,5 @@ change.
   margin out), so content keeps the 16 inset and focus rings paint whole.
 - 2026-09-30 · audit S9 (owner) → the 32px md ghost close is written as the exception to the rectangular-surface close (ghost sm). `onDismiss` and `dismissLabel` added (default "Close dialog"); `onClose` kept as a deprecated alias → `primitives.tsx:1289-1294`, `:1341-1344`.
 - 2026-09-30 · audit S10 (owner) → the lift is the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → surface.css:777.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Dialog takes `open` / `defaultOpen` / `onOpenChange` and can be a controlled modal without a trigger (a menu item can open a confirmation).
+- 2026-09-30 · audit S21c dark capture pass (owner go-ahead; [dark-pass](../research/dark-pass-2026-09-30.md)) → `edge-float` (#333 in dark) and the 20% dark lift; scrim unchanged at 65% (Notion 80% #0f0f0f, ChatGPT transparent). Captures: captures/dialog/*--dark.

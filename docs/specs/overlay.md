@@ -23,7 +23,10 @@ listbox, modal Dialog wiring (native `<dialog>` already supplies it), hover card
 |---|---|---|
 | Popover | `trigger`, `open`, `defaultOpen`, `onOpenChange`, `side` (bottom), `align` (center), `offset` | non-modal dialog, `popover="auto"` |
 | Menu | same; `align` (start) | ARIA menu button, `popover="auto"`, roving focus |
-| Tooltip | same; `side` (top), `delay` | `role="tooltip"`, `aria-describedby`, `popover="manual"` |
+| Tooltip | same; `side` (top), `delay`, `closeDelay` (0) | `role="tooltip"`, `aria-describedby`, `popover="manual"` |
+| Hover card | `trigger`, `open`, `defaultOpen`, `onOpenChange`, `side` (bottom), `align` (start), `offset` (8), `delay` (700; `openDelay` deprecated), `closeDelay` (300) | `popover="manual"`, no added semantics |
+| Dialog | `trigger` (optional), `open`, `defaultOpen`, `onOpenChange` | native modal `<dialog>`; controlled without a trigger, so a menu item can open a confirmation |
+| Context menu | `onOpenChange` only | uncontrolled for opening: the position comes from the pointer or the focused element (a documented exception) |
 | `computePosition` | anchor, surface and viewport sizes; side, align, offset, padding | exported pure function |
 
 A button trigger gets `popovertarget`, so the browser toggles the surface, treats the trigger
@@ -74,7 +77,7 @@ Area, headless Chromium (2026-09-27, gallery `behavior-*` tiles):
 | Behavior | Area | Basis | Reason when it differs |
 |---|---|---|---|
 | layer | native popover, top layer | Popover API baseline; BadgeGroup precedent | — |
-| positioning | JS `computePosition` + `position: fixed`, re-run on scroll, resize and size changes | Radix, React Aria, Fluent, Base UI all position in JS | CSS anchor positioning cannot report the side it chose, which the arrow and origin need; Primer's CSS path is flag-gated |
+| positioning | JS `computePosition` + `position: fixed`, re-run on scroll, resize and size changes; **every anchored surface** (Popover, Menu, Tooltip, Hover card, Combobox list, Split button and Toolbar overflow menus, Model picker) uses it, audit S16 (owner 2026-09-30) | Radix, React Aria, Fluent, Base UI all position in JS | CSS anchor positioning cannot report the side it chose, which the arrow and origin need; Primer's CSS path is flag-gated. The one exception is Select's native picker, which the platform places (its CSS mirrors Combobox's list) |
 | menu gap | 4 | Radix Themes, Fluent, Primer, shadcn | ChatGPT (Radix default) ~1 |
 | popover gap | 8; + 17 with the arrow | Radix Themes, React Aria, Spectrum 2 (adds arrow size) | — |
 | tooltip gap | 4; + 4 with the arrow | Radix Themes, Fluent, Primer; Spectrum 2 adds the arrow | shadcn, Base UI 0 |
@@ -116,3 +119,5 @@ Safari, touch, screen readers, RTL alignment on screen, nested popovers.
   shell while the inner input is the trigger). Menu and Tooltip do not take it.
 - 2026-09-28 · a Popover whose only child is a Calendar hugs it (`inline-size: max-content`) instead of
   the 320 reading width (owner: the date picker "extends too big").
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → every overlay takes `open` / `defaultOpen` / `onOpenChange`: Dialog (controlled modal without a trigger) and Hover card join Popover, Menu and Tooltip; one delay vocabulary (`delay` + `closeDelay`; Tooltip `closeDelay` default 0, Hover card `openDelay` deprecated); Context menu stays uncontrolled for opening, a documented exception.
+- 2026-09-30 · audit S21c dark capture pass (owner go-ahead; [dark-pass](../research/dark-pass-2026-09-30.md)) → every floating surface reads `edge-float` (Menu, Popover and its arrow edge, Dialog, Toast, the Select picker, Command palette, ColorPicker, Calendar surface, menu search surface).

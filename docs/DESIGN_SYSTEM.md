@@ -135,13 +135,16 @@ role paints the same way in every family:
   descendant, as the products do); Nav and Tree rows draw an inset ring, as Tabs; a
   Breadcrumb's ring follows its plate. Controls nested on a row hover with the translucent
   `bg-hover` and press with `bg-active`, so they show on a hovered or current row.
-- *Tone defaults* are neutral in every family, Toast included.
+- *Tone defaults* are neutral in every family, Toast included. The one exception is Indicator,
+  danger by default (audit S19): a notification mark is red in every reference, and Count is
+  its neutral counterpart. Feedback surfaces share one tone set in Badge's order: Alert and
+  Toast take neutral, info, success, warning, danger, and their neutral icon is muted ink.
 
 **Elevation.** In-flow content (fields, controls) uses `shadow-1`; a docked region
 (Panel) `shadow-2`. Card has its own faint halo (owner, 2026-09-27): a 1px contact shadow and
 a 2px-low 8px blur, both 3% black, over a lighter edge (neutral 100). A linked Card keeps its lift on hover and steps its edge to
 `edge-control-hover`, as Fluent's outline and Radix's surface cards do. Everything that floats over the page (Menu, Popover, the Select picker,
-Dialog, Toast, the Calendar and ColorPicker surfaces, Toolbar overflow) shares one lift,
+Dialog, Toast, the Calendar and ColorPicker surfaces, the Toolbar overflow Menu) shares one lift,
 Notion's popover geometry: `0 20px 24px` and `0 5px 8px` in `shadow-color` at full and half
 strength, over the 1px decorative border. Both are Surface axis roles (audit S10, owner
 2026-09-30): `shadow-card` and `shadow-float`, `none` under Flat. Tooltip keeps its own smaller
@@ -190,9 +193,52 @@ still need to forward native props and refs and render the right slots.
   when it prevents a collision with another modifier on the same block.
 - Use native state/ARIA for behavior and accessible meaning; documented `data-*`
   attributes are painting hooks. A data-disabled flag cannot disable a native button.
+- One API vocabulary (audit S17, owner 2026-09-30; old names stay as deprecated aliases for
+  a release):
+  - A single value is `value` / `defaultValue` / `onValueChange(value, event)`; a boolean is
+    `checked` / `onCheckedChange` (Checkbox, Switch) or `selected` / `defaultSelected` /
+    `onSelectedChange` (Button, Chip). The event is the one that caused the change; it is
+    absent only when no event did (a timer, the eyedropper, a created option).
+  - Every overlay is `open` / `defaultOpen` / `onOpenChange`, with `delay` / `closeDelay`
+    where it opens on hover. Every close is `onDismiss` / `dismissLabel`. Pending is
+    `loading`. ContextMenu is the exception: it opens only where the pointer or focus is.
+  - A value choice's list is `options` (Segmented, Combobox, ColorSwatchPicker, ModelPicker); a
+    collection you move through or act on is `items` (Tabs, TreeView, CommandPalette, Prompt
+    suggestions). A glyph slot is `icon` / `trailingIcon` (Button, Input, Chip, MenuItem…);
+    media beside a choice is `leadingVisual`. Owner, 2026-09-30.
+  - `label` is visible text. `aria-label` names the component, and goes to its element with
+    the role (the tablist, the menu, the textarea), never overridden. `<part>Label` names a
+    control inside (`dismissLabel`, `menuLabel`, `submitLabel`, `stopLabel`, `toggleLabel`).
+  - `ref` and `...rest` go to the root, with `triggerProps` / `buttonProps` / `inputProps`
+    for a wrapped control. Fields keep the field pattern: `ref` on the control, `className`
+    and `style` on the shell (Input, NumberField, Combobox; Composer's ref is its textarea).
+  - Size axes are `sm` / `md` / `lg`; a treatment axis is `variant`, and a value means one
+    thing everywhere (`surface` is a floating plate, `soft` the soft field fill, `plain` no
+    frame). Every default value has its own class restating the base, so the manifest names
+    it. Props that configure child components (BoxField `variant`, SplitButton `tone` and
+    `size`, ModelPicker `size`) are composition, not CSS axes, and stay out of the manifest.
 - Use logical properties so direction follows the enclosing scope.
 - Prefer native behavior. A custom composite needs a complete keyboard, focus, value,
   dismissal and form contract before claiming that behavior.
+- Anything anchored to a trigger floats in the top layer (native popover) and is placed by
+  one engine, `useAnchoredPosition` (overlay.ts): flip, shift, `data-side`, origin (audit
+  S16). Gaps: menus, lists and tooltips 4, popovers and cards 8 (overlay.md). A floating list
+  of commands is a Menu. The one exception is Select's native picker, which the platform
+  places; its CSS mirrors Combobox's list.
+- Dark mode is measured (audit S21c, dark captures 2026-09-30,
+  [dark-pass](research/dark-pass-2026-09-30.md)): floating surfaces take `edge-float` (the
+  decorative edge in light, neutral-750 in dark) and a 20% dark shadow ink; the tooltip stays a
+  dark annotation in dark (#282828, 5% white inset edge) instead of inverting; Card has no
+  halo in dark. The scrim, row hover and surface fills are unchanged.
+- Hover paint is for pointers that hover (audit S21b, owner 2026-09-30): every `:hover`
+  rule sits in `@media (hover: hover)`, so a tap never leaves a plate behind. Split a
+  selector list instead of gating it whole: focus, `[data-hover]` simulations and
+  `[data-highlighted]` stay outside. A control revealed on hover also shows on focus-within
+  and always under `(hover: none)` (Message, Panel, Prompt suggestions, Property list, Tree
+  view). A test fails on any ungated `:hover`.
+- Pending is not disabled (audit S18). A loading Button keeps focus and the Tab order
+  (`aria-disabled`, `aria-busy`, `data-loading`, click swallowed) at full opacity; a loading
+  field stays editable (Input, Composer). A Composer waiting on a reply turns send into Stop.
 - A controlled value is owned by the parent; uncontrolled state must synchronize with
   native input and form reset. Visible, submitted and announced values must agree.
 - The base rule renders the manifest's default tier and tone, so framework-free markup
@@ -215,7 +261,9 @@ in `axes/density.ts` rather than copying tables into each component.
 
 Public component size families default to `md`. Expose `sm` when a component has a real
 compact-composition use case and `lg` when it needs a more prominent or touch-oriented
-target; do not expose `xs`/`xl` merely because the internal token ramp contains them.
+target; do not expose `xs`/`xl` merely because the internal token ramp contains them. Presence keeps `xs`
+because it is a native Fluent status cut (10px) for small avatars, not a ramp step (owner,
+2026-09-30).
 Product-wide compactness belongs to the UI-scale axis, so consumers do not have to set a
 smaller size on every instance. Specialized layout/content roles such as Panel insets and
 Kbd labels may use their own vocabulary because they are not interchangeable control

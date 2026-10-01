@@ -5,7 +5,7 @@ import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Select } from "./forms.tsx";
 import { AnchoredMenu, AnchoredPopover, AnchoredTooltip } from "./Overlays.tsx";
-import { assignRef } from "./overlay.ts";
+import { assignRef, useOpenState } from "./overlay.ts";
 import type { OverlayAlign, OverlaySide } from "./overlay.ts";
 /**
  * The presentational components.
@@ -21,12 +21,14 @@ import type {
   HTMLAttributes,
   InputHTMLAttributes,
   CSSProperties,
+  FormEvent,
   KeyboardEvent,
   MouseEvent,
   ReactElement,
   ReactNode,
   Ref,
   RefObject,
+  SyntheticEvent,
 } from "react";
 import {
   alertVariants,
@@ -207,14 +209,15 @@ export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(func
 /* --- Card ----------------------------------------------------------------- */
 
 export interface CardProps extends Div {
-  layout?: VariantProps<typeof MANIFESTS.card>["layout"];
+  /** `"compact"` is a deprecated alias of `"list"` (audit S17: compact names the dense UI scale). */
+  layout?: VariantProps<typeof MANIFESTS.card>["layout"] | "compact";
   /** Shape and type: corner, inset and title role. */
   size?: VariantProps<typeof MANIFESTS.card>["size"];
 }
 
 const cardVariants = createVariants(MANIFESTS.card);
 export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, size, className, ...rest }, ref) {
-  return <div ref={ref} className={cardVariants({ layout, size }, className)} {...rest} />;
+  return <div ref={ref} className={cardVariants({ layout: layout === "compact" ? "list" : layout, size }, className)} {...rest} />;
 });
 
 export const CardContent = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardContent({ className, ...rest }, ref) {
@@ -379,14 +382,17 @@ export const Skeleton = /* @__PURE__ */ forwardRef<HTMLDivElement, SkeletonProps
 
 export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
   size?: VariantProps<typeof MANIFESTS.spinner>["size"];
-  /** Announced to assistive tech. Omit when a nearby element already says it. */
+  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
   label?: string;
 }
 
+/** Named with `aria-label`, it is a status that is announced; unnamed, it is decoration (a
+ * nearby element already says what is loading). */
 export const Spinner = /* @__PURE__ */ forwardRef<HTMLSpanElement, SpinnerProps>(function Spinner(
-  { size, label, className, ...rest },
+  { size, label: labelProp, "aria-label": ariaLabel, className, ...rest },
   ref,
 ) {
+  const label = ariaLabel ?? labelProp;
   return (
     <span
       ref={ref}
@@ -403,12 +409,13 @@ export interface ProgressProps extends Omit<Div, "children"> {
   /** 0 to `max`. Omit for an indeterminate bar. */
   value?: number;
   max?: number;
+  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
   label?: string;
   size?: VariantProps<typeof MANIFESTS.progress>["size"];
 }
 
 export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps>(function Progress(
-  { value, max = 100, label, size, className, ...rest },
+  { value, max = 100, label, "aria-label": ariaLabel = label, size, className, ...rest },
   ref,
 ) {
   const indeterminate = value == null;
@@ -421,7 +428,7 @@ export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps
       aria-valuemin={0}
       aria-valuemax={max}
       aria-valuenow={indeterminate ? undefined : value}
-      aria-label={label}
+      aria-label={ariaLabel}
       className={progressVariants({ size }, className)}
       {...(indeterminate ? { "data-indeterminate": "" } : {})}
       {...rest}
@@ -675,7 +682,7 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
    */
   readout?: boolean | ReactNode | ((value: number) => ReactNode);
   /** Called with the normalized native value for every input event. */
-  onValueChange?: (value: number) => void;
+  onValueChange?: (value: number, event: FormEvent<HTMLInputElement>) => void;
   disabled?: boolean;
 }
 
@@ -798,7 +805,7 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
           onInput?.(event);
           const nextValue = event.currentTarget.valueAsNumber;
           if (value === undefined) setLocalValue(nextValue);
-          onValueChange?.(nextValue);
+          onValueChange?.(nextValue, event);
         }}
       />
       {readout === false || readout === undefined ? null : (
@@ -823,7 +830,7 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
   /** Initial selected state for an uncontrolled chip. */
   defaultSelected?: boolean;
   /** Called after a user toggles an enabled chip. */
-  onSelectedChange?: (selected: boolean) => void;
+  onSelectedChange?: (selected: boolean, event: MouseEvent<HTMLButtonElement>) => void;
   /** A person or entity visual, usually an Avatar. */
   avatar?: ReactNode;
   /** A small visual filter thumbnail. `imageAlt` is optional when the label names it. */
@@ -877,7 +884,7 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
     if (event.defaultPrevented || disabled || !selectable) return;
     const next = !currentSelected;
     if (selected === undefined) setLocalSelected(next);
-    onSelectedChange?.(next);
+    onSelectedChange?.(next, event);
   };
 
   const onDismiss = onDismissProp ?? onRemove;
@@ -994,17 +1001,19 @@ export interface TooltipProps extends Div {
   offset?: number;
   /** Hover delay before showing, in milliseconds. */
   delay?: number;
+  /** Delay before hiding once the pointer leaves, in milliseconds (0 by default). */
+  closeDelay?: number;
 }
 
 export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(function Tooltip(
-  { side, arrow, trigger, open, defaultOpen, onOpenChange, align, offset, delay, className, ...rest },
+  { side, arrow, trigger, open, defaultOpen, onOpenChange, align, offset, delay, closeDelay, className, ...rest },
   ref,
 ) {
   const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => (
     <div role="tooltip" className={tooltipVariants({ side, arrow }, className)} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />
   );
   if (trigger === undefined) return surface({});
-  return <AnchoredTooltip trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} arrow={arrow} delay={delay} surface={surface} />;
+  return <AnchoredTooltip trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} arrow={arrow} delay={delay} closeDelay={closeDelay} surface={surface} />;
 });
 
 export interface PopoverProps extends Div {
@@ -1146,10 +1155,13 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
   indicator?: "check" | "switch";
   /** A muted note under the label (a model's summary, a setting's effect). */
   description?: ReactNode;
+  /** A leading glyph in the row's icon column (audit S17: as NavItem, Tabs and palette items;
+   * replaces a hand-written `area-menu__icon` span). */
+  icon?: ReactNode;
 }
 
 export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemProps>(function MenuItem(
-  { tone, shortcut, disabled, checked, radio, indicator = "check", description, className, children, ...rest },
+  { tone, shortcut, disabled, checked, radio, indicator = "check", description, icon, className, children, ...rest },
   ref,
 ) {
   const checkable = checked !== undefined;
@@ -1164,6 +1176,7 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
       {...(disabled ? { "data-disabled": "" } : {})}
       {...rest}
     >
+      {icon ? <span className="area-menu__icon" aria-hidden="true">{icon}</span> : null}
       {description ? <span className="area-menu__lines"><span className="area-menu__text">{children}</span><span className="area-menu__description">{description}</span></span>
         : typeof children === "string" || typeof children === "number" ? <span className="area-menu__text">{children}</span> : children}
       {shortcut ? <span className="area-menu__shortcut">{shortcut}</span> : null}
@@ -1210,12 +1223,20 @@ export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(func
 
 /* --- Tabs ----------------------------------------------------------------- */
 
+export type TabsItem = { id: string; label: ReactNode; icon?: ReactNode; trailing?: ReactNode; disabled?: boolean; content?: ReactNode };
+
 export interface TabsProps extends Omit<Div, "defaultValue"> {
   /** Tab labels, in order. */
-  tabs: Array<{ id: string; label: ReactNode; icon?: ReactNode; trailing?: ReactNode; disabled?: boolean; content?: ReactNode }>;
+  /** The tabs, in order (audit S17 / H-14: a collection you move through is `items`). */
+  items?: TabsItem[];
+  /** @deprecated Use `items`. */
+  tabs?: TabsItem[];
   value?: string;
   defaultValue?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, event: SyntheticEvent) => void;
+  /** Names the tab list ("Views"); it goes on the tablist, not the wrapper. */
+  "aria-label"?: string;
+  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
   label?: string;
   size?: VariantProps<typeof MANIFESTS.tabs>["size"];
   orientation?: "horizontal" | "vertical";
@@ -1224,21 +1245,22 @@ export interface TabsProps extends Omit<Div, "defaultValue"> {
 }
 
 export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(function Tabs(
-  { tabs, value: controlledValue, defaultValue, onValueChange, label = "Views", size = "md", orientation = "horizontal", activationMode = "automatic", track, className, children, ...rest },
+  { items, tabs: tabsProp, value: controlledValue, defaultValue, onValueChange, label, "aria-label": ariaLabel = label ?? "Views", size = "md", orientation = "horizontal", activationMode = "automatic", track, className, children, ...rest },
   ref,
 ) {
   const id = useId();
+  const tabs = items ?? tabsProp ?? [];
   const [localValue, setLocalValue] = useState(defaultValue ?? tabs.find(tab => !tab.disabled)?.id);
   const candidate = controlledValue ?? localValue;
   const value = tabs.find(tab => tab.id === candidate && !tab.disabled)?.id ?? tabs.find(tab => !tab.disabled)?.id;
   const buttons = useRef(new Map<string, HTMLButtonElement>());
-  const select = (next: string) => {
+  const select = (next: string, event: SyntheticEvent) => {
     if (controlledValue === undefined) setLocalValue(next);
-    onValueChange?.(next);
+    onValueChange?.(next, event);
   };
   return (
     <div ref={ref} className={tabsVariants({ size, track, orientation: orientation === "vertical" ? orientation : undefined }, className)} {...rest}>
-      <div className="area-tabs__list" role="tablist" aria-label={label} aria-orientation={orientation}>
+      <div className="area-tabs__list" role="tablist" aria-label={ariaLabel} aria-orientation={orientation}>
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -1248,7 +1270,7 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
             ref={node => { if (node) buttons.current.set(tab.id, node); else buttons.current.delete(tab.id); }}
             aria-selected={tab.id === value}
             aria-controls={`${id}-panel-${tab.id}`}
-            onClick={() => select(tab.id)}
+            onClick={event => select(tab.id, event)}
             onKeyDown={event => {
               const keys = orientation === "vertical" ? ["ArrowUp", "ArrowDown", "Home", "End"] : ["ArrowLeft", "ArrowRight", "Home", "End"];
               if (!keys.includes(event.key)) return;
@@ -1258,7 +1280,7 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
               const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
               const step = (event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1) * (orientation === "horizontal" && rtl ? -1 : 1);
               const next = enabled[event.key === "Home" ? 0 : event.key === "End" ? enabled.length - 1 : (index + step + enabled.length) % enabled.length];
-              if (next) { if (activationMode === "automatic") select(next.id); buttons.current.get(next.id)?.focus(); }
+              if (next) { if (activationMode === "automatic") select(next.id, event); buttons.current.get(next.id)?.focus(); }
             }}
             // Only the selected tab is in the tab order; arrow keys move between them.
             tabIndex={tab.id === value ? 0 : -1}
@@ -1300,7 +1322,14 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
    * backdrop also closes it.
    */
   trigger?: ReactElement<{ onClick?: (event: MouseEvent<HTMLElement>) => void }>;
-  /** Called when the modal opened by `trigger` opens or closes. */
+  /**
+   * The modal's open state, with or without a `trigger` (audit S17: every overlay takes
+   * open / defaultOpen / onOpenChange). A controlled Dialog with no trigger is how a menu item
+   * or any other action opens a confirmation.
+   */
+  open?: boolean;
+  defaultOpen?: boolean;
+  /** Called when the modal opens or closes (trigger, close control, Escape, backdrop). */
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -1312,13 +1341,20 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
  * `<dialog class="area-dialog__modal">` and opened with `showModal()`.
  */
 export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { title, description, footer, showCloseButton = true, onDismiss, dismissLabel = "Close dialog", onClose, trigger, onOpenChange, className, children, ...rest },
+  { title, description, footer, showCloseButton = true, onDismiss, dismissLabel = "Close dialog", onClose, trigger, open: openProp, defaultOpen, onOpenChange, className, children, ...rest },
   ref,
 ) {
   const id = useId();
   const modal = useRef<HTMLDialogElement | null>(null);
-  const onChange = useRef(onOpenChange);
-  onChange.current = onOpenChange;
+  const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
+  const isModal = trigger !== undefined || openProp !== undefined || defaultOpen !== undefined;
+  // The native dialog follows `open`; showModal() supplies the focus trap, Escape and backdrop.
+  useLayoutEffect(() => {
+    const node = modal.current;
+    if (!node || typeof node.showModal !== "function") return;
+    if (open && !node.open) node.showModal();
+    if (!open && node.open) node.close();
+  }, [open]);
   // The name belongs to the element with the dialog role: the surface inline, the native
   // <dialog> with a trigger. A consumer's aria-label names a dialog without a title.
   const { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy, ...surfaceRest } = rest;
@@ -1342,6 +1378,8 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
           </div>
           {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-dialog__close" aria-label={dismissLabel} icon={<Glyph name="dismiss" />} onClick={event => {
             (onDismiss ?? onClose)?.();
+            // The dialog's own close event reports the change (and a controlled parent's
+            // open={false} is already satisfied by then).
             event.currentTarget.closest("dialog")?.close();
           }} /> : null}
         </div>
@@ -1350,26 +1388,25 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
       {footer ? <div className="area-dialog__footer">{footer}</div> : null}
     </div>
   );
-  if (!trigger) return surface;
+  if (!isModal) return surface;
   const modalId = `${id}-modal`;
   return (
     <>
-      {cloneElement(trigger, {
+      {trigger ? cloneElement(trigger, {
         "aria-haspopup": "dialog",
         "aria-controls": modalId,
         onClick: (event: MouseEvent<HTMLElement>) => {
           trigger.props.onClick?.(event);
           if (event.defaultPrevented || modal.current?.open) return;
-          modal.current?.showModal();
-          onChange.current?.(true);
+          setOpen(true);
         },
-      } as Record<string, unknown>)}
+      } as Record<string, unknown>) : null}
       <dialog
         ref={modal}
         id={modalId}
         className="area-dialog__modal"
         {...labelled}
-        onClose={() => onChange.current?.(false)}
+        onClose={() => { if (open) setOpen(false); }}
         // A click whose target is the <dialog> itself landed on the backdrop: the surface fills it.
         onClick={event => { if (event.target === event.currentTarget) event.currentTarget.close(); }}
       >
@@ -1390,9 +1427,19 @@ export interface SegmentedProps extends Omit<Div, "onChange" | "onSelect" | "def
   options: Array<{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }>;
   value?: string;
   defaultValue?: string;
-  /** Accessible name for the group. */
-  label?: string;
+  /** Called with the chosen value (audit S17: every single choice is `value` / `onValueChange`). */
+  onValueChange?: (value: string, event: SyntheticEvent) => void;
+  /** @deprecated Use `onValueChange`. */
   onSelect?: (value: string) => void;
+  /** @deprecated Name the group with `aria-label` (audit S17: `label` is visible text elsewhere). */
+  label?: string;
+  /** Submits the chosen value with a form, as AlignmentPicker and ColorSwatchPicker do. */
+  name?: string;
+  form?: string;
+  /** Marks the choice required for assistive tech; a Segmented always holds a value. */
+  required?: boolean;
+  /** Disables every option. */
+  disabled?: boolean;
 }
 
 /**
@@ -1403,39 +1450,54 @@ export interface SegmentedProps extends Omit<Div, "onChange" | "onSelect" | "def
  * convey.
  */
 export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedProps>(function Segmented(
-  { size, fullWidth, iconOnly, options, value: controlledValue, defaultValue, label, onSelect, className, ...rest },
+  { size, fullWidth, iconOnly, options, value: controlledValue, defaultValue, label, onValueChange, onSelect, name, form, required, disabled, "aria-label": ariaLabel, className, ...rest },
   ref,
 ) {
-  const [localValue, setLocalValue] = useState(defaultValue ?? options.find(option => !option.disabled)?.value);
+  const initial = defaultValue ?? options.find(option => !option.disabled)?.value;
+  const [localValue, setLocalValue] = useState(initial);
+  const root = useRef<HTMLDivElement | null>(null);
+  // A form reset restores the initial choice, as the other pickers do.
+  useEffect(() => {
+    if (controlledValue !== undefined) return;
+    const owner = root.current?.closest("form");
+    if (!owner) return;
+    const reset = () => setLocalValue(initial);
+    owner.addEventListener("reset", reset);
+    return () => owner.removeEventListener("reset", reset);
+  }, [controlledValue, initial]);
   const value = controlledValue ?? localValue;
   const entry = options.find(option => option.value === value && !option.disabled) ?? options.find(option => !option.disabled);
   const buttons = useRef(new Map<string, HTMLButtonElement>());
   // In a toolbar every option is a roving item: the toolbar's arrows move focus across the
   // options and the other commands, Space or Enter chooses (WAI-ARIA toolbar with a radio group).
   const inToolbar = useContext(InToolbar);
-  const select = (next: string) => {
+  const select = (next: string, event: SyntheticEvent) => {
     if (controlledValue === undefined) setLocalValue(next);
+    onValueChange?.(next, event);
     onSelect?.(next);
   };
   return (
     <div
-      ref={ref}
+      ref={node => { root.current = node; assignRef(ref, node); }}
       role="radiogroup"
-      aria-label={label}
+      aria-label={ariaLabel ?? label}
+      aria-required={required || undefined}
+      aria-disabled={disabled || undefined}
       className={segmentedVariants({ size, fullWidth, iconOnly }, className)}
       {...rest}
     >
+      {name ? <input type="hidden" name={name} form={form} value={value ?? ""} disabled={disabled} /> : null}
       {options.map((option) => (
         <button
           key={option.value}
           type="button"
           role="radio"
           aria-checked={option.value === value}
-          disabled={option.disabled}
+          disabled={disabled || option.disabled}
           className="area-segmented__item"
           ref={node => { if (node) buttons.current.set(option.value, node); else buttons.current.delete(option.value); }}
           {...(inToolbar ? toolbarItemProps : { tabIndex: option.value === entry?.value ? 0 : -1 })}
-          onClick={() => select(option.value)}
+          onClick={event => select(option.value, event)}
           onKeyDown={event => {
             if (inToolbar) return;
             if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
@@ -1445,7 +1507,7 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
             const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
             const step = event.key === "ArrowDown" ? 1 : event.key === "ArrowUp" ? -1 : (event.key === "ArrowRight" ? 1 : -1) * (rtl ? -1 : 1);
             const next = enabled[event.key === "Home" ? 0 : event.key === "End" ? enabled.length - 1 : (index + step + enabled.length) % enabled.length];
-            if (next) { select(next.value); buttons.current.get(next.value)?.focus(); }
+            if (next) { select(next.value, event); buttons.current.get(next.value)?.focus(); }
           }}
           {...(option.value === value ? { "data-selected": "" } : {})}
         >
@@ -1466,16 +1528,20 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
 export interface CodeProps extends HTMLAttributes<HTMLElement> {
   /** A CSS colour the reference resolves to. Adds a decorative swatch. */
   swatch?: string;
-  /** A quieter treatment for a derived reference. */
+  /** `subtle`: a quieter treatment for a derived reference; `on-color`: the surrounding
+   * foreground on a coloured ground (audit S17: the manifest's axis, as a prop). */
+  ground?: VariantProps<typeof MANIFESTS.code>["ground"];
+  /** @deprecated Use `ground="subtle"`. */
   subtle?: boolean;
-  /** Uses the surrounding foreground on a coloured ground. */
+  /** @deprecated Use `ground="on-color"`. */
   onColor?: boolean;
 }
 
 export const Code = /* @__PURE__ */ forwardRef<HTMLElement, CodeProps>(function Code(
-  { children, swatch, subtle, onColor, className, ...rest }, ref,
+  { children, swatch, ground: groundProp, subtle, onColor, className, ...rest }, ref,
 ) {
-  return <code ref={ref} className={cx("area-code", swatch && "area-code--swatch", subtle && "area-code--subtle", onColor && "area-code--on-color", className)} {...rest}>
+  const ground = groundProp ?? (onColor ? "on-color" : subtle ? "subtle" : undefined);
+  return <code ref={ref} className={cx("area-code", swatch && "area-code--swatch", ground && `area-code--${ground}`, className)} {...rest}>
     {swatch ? <span className="area-code__swatch" style={{ background: swatch }} aria-hidden="true" /> : null}
     {swatch ? <span className="area-code__label">{children}</span> : children}
   </code>;
@@ -1540,6 +1606,9 @@ export interface CodeBlockProps extends Omit<Div, "title"> {
   languageTabs?: boolean;
   /** Controlled active language. Omit for an uncontrolled picker. */
   value?: string;
+  /** Called with the chosen language (audit S17: every value is `value` / `onValueChange`). */
+  onValueChange?: (language: string, event: SyntheticEvent) => void;
+  /** @deprecated Use `onValueChange`. */
   onLanguageChange?: (language: string) => void;
   /** Line numbers. On by default; turn them off for a short excerpt. */
   lineNumbers?: boolean;
@@ -1573,6 +1642,7 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
     languages,
     languageTabs,
     value,
+    onValueChange,
     onLanguageChange,
     lineNumbers = true,
     highlightLines,
@@ -1606,8 +1676,9 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
   const highlighted = parseLineNumbers(highlightLines);
   const lines = (html ?? code ?? "").split("\n");
 
-  const selectLanguage = (next: string) => {
+  const selectLanguage = (next: string, event: SyntheticEvent) => {
     if (value === undefined) setLocalLanguage(next);
+    onValueChange?.(next, event);
     onLanguageChange?.(next);
   };
 
@@ -1656,10 +1727,10 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
                 const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
                 const step = (event.key === "ArrowRight" ? 1 : -1) * (rtl ? -1 : 1);
                 const next = languages[event.key === "Home" ? 0 : event.key === "End" ? languages.length - 1 : (index + step + languages.length) % languages.length]!;
-                selectLanguage(next);
+                selectLanguage(next, event);
                 tabButtons.current.get(next)?.focus();
               }}
-              onClick={() => selectLanguage(item)}
+              onClick={event => selectLanguage(item, event)}
             >
               {item}
             </button>
@@ -1673,7 +1744,7 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
           size="sm"
           aria-label="Language"
           value={activeLanguage}
-          onChange={event => selectLanguage(event.currentTarget.value)}
+          onChange={event => selectLanguage(event.currentTarget.value, event)}
         >
           {languages.map(item => <option key={item} value={item}>{item}</option>)}
         </Select>
@@ -1813,11 +1884,14 @@ const KEY_LABELS: Record<string, string> = {
 export interface KbdProps extends HTMLAttributes<HTMLElement> {
   /** Key names, in order. Modifiers, arrows and common special keys become native legends. */
   keys: string[];
-  /** Normal (20px) suits standalone hints; small (16px) fits compact control chrome. */
-  size?: VariantProps<typeof MANIFESTS.kbd>["size"];
+  /** md (20px) suits standalone hints; sm (16px) fits compact control chrome. `"normal"` and
+   * `"small"` are deprecated aliases (audit S17: every size axis is sm / md / lg). */
+  size?: VariantProps<typeof MANIFESTS.kbd>["size"] | "normal" | "small";
   /** Surface treatment for standalone, compact chrome, coloured, or emphasized backgrounds. */
-  appearance?: VariantProps<typeof MANIFESTS.kbd>["appearance"];
-  /** @deprecated Use `appearance="quiet"`. */
+  variant?: VariantProps<typeof MANIFESTS.kbd>["variant"];
+  /** @deprecated Use `variant` (audit S17: every treatment axis is `variant`). */
+  appearance?: VariantProps<typeof MANIFESTS.kbd>["variant"];
+  /** @deprecated Use `variant="quiet"`. */
   quiet?: boolean;
 }
 
@@ -1828,17 +1902,18 @@ export interface KbdProps extends HTMLAttributes<HTMLElement> {
  * spoken label because bare modifier glyphs are not announced usefully.
  */
 export const Kbd = /* @__PURE__ */ forwardRef<HTMLElement, KbdProps>(function Kbd(
-  { keys, size = "normal", appearance = "default", quiet, className, ...rest },
+  { keys, size = "md", variant, appearance, quiet, className, ...rest },
   ref,
 ) {
   const rendered = keys.map((key) => KEY_GLYPHS[key.toLowerCase()] ?? key.toUpperCase());
   const spoken = rendered.map((glyph) => KEY_LABELS[glyph] ?? glyph).join(" plus ");
-  const resolvedAppearance = quiet ? "quiet" : appearance;
+  const resolvedVariant = quiet ? "quiet" : variant ?? appearance ?? "default";
+  const resolvedSize = size === "small" ? "sm" : size === "normal" ? "md" : size;
 
   return (
     <span
       ref={ref}
-      className={cx("area-kbd", `area-kbd--${size}`, `area-kbd--${resolvedAppearance}`, className)}
+      className={cx("area-kbd", `area-kbd--${resolvedSize}`, `area-kbd--${resolvedVariant}`, className)}
       {...rest}
     >
       {/* A span has no role, so an aria-label on it is not reliably announced; the spoken chord
@@ -1873,9 +1948,12 @@ export interface TokenProps extends HTMLAttributes<HTMLElement> {
    * else does; a hex here would show what the token meant when the page was written.
    */
   swatch?: string;
-  /** For a token naming something derived rather than primitive. */
+  /** `subtle` for a token naming something derived rather than primitive; `on-color` on a
+   * coloured ground, taking the surrounding foreground. */
+  ground?: VariantProps<typeof MANIFESTS.token>["ground"];
+  /** @deprecated Use `ground="subtle"`. */
   subtle?: boolean;
-  /** On a coloured ground: takes the surrounding foreground instead of the page's. */
+  /** @deprecated Use `ground="on-color"`. */
   onColor?: boolean;
 }
 
@@ -1887,18 +1965,14 @@ export interface TokenProps extends HTMLAttributes<HTMLElement> {
  * preserves the more specific swatch composition.
  */
 export const Token = /* @__PURE__ */ forwardRef<HTMLElement, TokenProps>(function Token(
-  { children, swatch, subtle, onColor, className, ...rest },
+  { children, swatch, ground: groundProp, subtle, onColor, className, ...rest },
   ref,
 ) {
+  const ground = groundProp ?? (onColor ? "on-color" : subtle ? "subtle" : undefined);
   return (
     <Code
       ref={ref}
-      className={cx(
-        "area-token",
-        subtle && "area-token--subtle",
-        onColor && "area-token--on-color",
-        className,
-      )}
+      className={cx("area-token", ground && `area-token--${ground}`, className)}
       {...rest}
     >
       {swatch ? (

@@ -78,7 +78,7 @@ code (Code). BadgeGroup lays badges out; it adds no badge paint.
 | treatment | solid | Strong fill for a state that must read at a glance | Figma plan and role badges ("Free", "Guest") on its dark menu |
 | treatment | color | Tinted fill plus tinted border | Untitled badge-color (Area keeps it pill-shaped) |
 | treatment | modern | Neutral surface, subtle shadow, colored addon | Untitled badge-modern |
-| tone | neutral, accent, info, success, warning, caution, danger, discovery, inverted | Semantic paint | Notion's tag palette (purple, blue, yellow, green, brown, red); Untitled's twelve colors |
+| tone | neutral, accent, info, success, warning, caution, danger, discovery, inverse (`.area-badge--inverse`; `inverted` is a deprecated React alias) | Semantic paint | Notion's tag palette (purple, blue, yellow, green, brown, red); Untitled's twelve colors |
 | size | sm 16, md 20 (default), lg 24 | Owner (2026-09-25) | Kbd 16/20; Indicator count 16; Notion 20; ChatGPT 16 and 22; Figma 16 and 18; Untitled 22/24/28 |
 | composition | dot, dot only | Status with a colored dot; a dot with no label | Notion status property (every status tag); Untitled with-dot; gallery "Dot only" |
 | composition | leading/trailing icon, icon-only | Glyph plus label | Untitled with-icon; none of the target products showed one |
@@ -581,3 +581,4 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
 - 2026-09-30 · audit S6a (owner) → neutral soft plate is Count's translucent 6% black / 10% white (was `bg-component` #f7, a lighter hole on a hovered #f3 row); hover 0.107 / 0.226, active 0.123 / 0.279 → badge.css:17, 58-60.
 - 2026-09-30 · audit S9 (owner) → pills close with a concentric circle and the Area glyph, and every dismiss uses `onDismiss` + `dismissLabel`; Badge already did, no code change. Its hover plate is the badge's `--_bg-hover`, not Chip's 12% ink (`badge.css:193`).
 - 2026-09-30 · audit S9 (owner) → the dismiss hovers to 12% of its ink, the pill close recipe (was the badge's own hover plate) (badge.css:194).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → tone `inverted` is now `inverse` (class `.area-badge--inverse`, matching Avatar); `inverted` stays a deprecated alias.

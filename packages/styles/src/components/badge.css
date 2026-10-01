@@ -4,7 +4,7 @@
     /* Size scale 16 / 20 / 24 (sm / md / lg), shared with Kbd (16/20) and the Indicator
        count (16). The base rule is md, the default: caption text 12/16, so a label sits a
        step below the text it annotates (owner 2026-09-27). See docs/specs/badge.md. */
-    --_height: var(--area-space-20); /* spec */
+    --_height: var(--area-mark-md); /* spec: 20, the mark ladder role (audit S21a) */
     --_icon: var(--area-icon-md); --_media: var(--area-space-16); /* spec */
     --_gap: var(--area-space-4); --_gutter: var(--area-space-8); /* spec */
     --_icon-gutter: var(--area-space-6); --_media-gutter: var(--area-space-2); --_media-gap: var(--area-space-4); /* spec */
@@ -148,7 +148,7 @@
   }
 
 
-  .area-badge--inverted {
+  .area-badge--inverse {
     --_solid: var(--area-bg-inverse); --_solid-hover: var(--area-bg-inverse);
     --_surface: var(--area-bg-inverse); --_surface-hover: var(--area-bg-inverse);
     --_on-solid: var(--area-fg-on-inverse); --_tone-fg: var(--area-fg-on-inverse);
@@ -157,28 +157,28 @@
   .area-badge--soft { --_bg: var(--_surface); --_bg-hover: var(--_surface-hover); --_fg: var(--_tone-fg); }
   .area-badge--solid { --_bg: var(--_solid); --_bg-hover: var(--_solid-hover); --_fg: var(--_on-solid); --_dot-color: var(--_on-solid); }
   .area-badge--outline { --_bg: transparent; --_bg-hover: var(--_surface); --_fg: var(--_tone-fg); --_border: var(--_line); --_border-hover: var(--_line-hover); }
-  /* Transparent inverted treatments use inverse ink (the background endpoint). */
-  .area-badge--inverted.area-badge--outline { --_tone-fg: var(--area-bg-inverse); }
-  .area-badge--dot.area-badge--inverted { --_dot-color: var(--_fg); }
+  /* Transparent inverse treatments use inverse ink (the background endpoint). */
+  .area-badge--inverse.area-badge--outline { --_tone-fg: var(--area-bg-inverse); }
+  .area-badge--dot.area-badge--inverse { --_dot-color: var(--_fg); }
   .area-badge--pill { border-radius: var(--area-radius-full); }
   .area-badge--icon-only, .area-badge--dot-only { inline-size: var(--_height); padding-inline: 0; }
   .area-badge--dot-only { --_bg: transparent; --_bg-hover: transparent; --_border: transparent; }
   .area-badge--dot-only .area-badge__dot { --_dot-color: var(--_tone-fg); }
-  .area-badge--dot-only.area-badge--inverted .area-badge__dot { --_dot-color: var(--area-bg-inverse); }
+  .area-badge--dot-only.area-badge--inverse .area-badge__dot { --_dot-color: var(--area-bg-inverse); }
   .area-badge--truncate { max-inline-size: min(100%, var(--area-badge-max-width)); flex-shrink: 1; }
   .area-badge--truncate .area-badge__label { overflow: hidden; text-overflow: ellipsis; }
   /* Interactive badges: native links, and the button BadgeGroup renders for its overflow. */
   :is(a, button).area-badge { position: relative; cursor: pointer; }
   button.area-badge { margin: 0; appearance: none; }
-  :is(a, button).area-badge:hover { background: var(--_bg-hover); border-color: var(--_border-hover); }
+  @media (hover: hover) { :is(a, button).area-badge:hover { background: var(--_bg-hover); border-color: var(--_border-hover); } }
   :is(a, button).area-badge:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   :is(a, button).area-badge::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; min-inline-size: var(--area-space-24); min-block-size: var(--area-space-24); inline-size: 100%; block-size: 100%; }
   @media (pointer: coarse) { :is(a, button).area-badge::after { min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); min-block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
   /* spec: 16px, 12/16 text, 12px icon/media/dismiss slots, 2px slot insets. */
-  .area-badge--sm { --_height: var(--area-space-16); --_icon: var(--area-icon-xs); --_media: var(--area-icon-xs); --_gap: var(--area-space-2); --_gutter: var(--area-space-6); --_icon-gutter: var(--area-space-4); --_media-gutter: var(--area-space-2); --_media-gap: var(--area-space-4); }
-  .area-badge--md { --_height: var(--area-space-20); /* spec */ }
+  .area-badge--sm { --_height: var(--area-mark-sm); --_icon: var(--area-icon-xs); --_media: var(--area-icon-xs); --_gap: var(--area-space-2); --_gutter: var(--area-space-6); --_icon-gutter: var(--area-space-4); --_media-gutter: var(--area-space-2); --_media-gap: var(--area-space-4); }
+  .area-badge--md { --_height: var(--area-mark-md); /* spec */ }
   /* spec: 24px, the previous md geometry. */
-  .area-badge--lg { --_height: var(--area-space-24); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); --_gutter: var(--area-space-10); --_icon-gutter: var(--area-space-8); --_media-gutter: var(--area-space-4); --_media-gap: var(--area-space-6); }
+  .area-badge--lg { --_height: var(--area-mark-lg); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); --_gutter: var(--area-space-10); --_icon-gutter: var(--area-space-8); --_media-gutter: var(--area-space-4); --_media-gap: var(--area-space-6); }
   .area-badge--color { --_border: var(--_line); --_border-hover: var(--_line-hover); --_dot-color: var(--_solid); }
   .area-badge--modern { --_bg: var(--area-bg-surface); --_bg-hover: var(--area-bg-component-hover); --_fg: var(--area-fg-default); --_border: var(--area-border-decorative); --_border-hover: var(--area-edge-control); --_dot-color: var(--_solid); box-shadow: var(--area-shadow-1); }
   .area-badge:is(.area-badge--color, .area-badge--modern) :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_solid); }
@@ -191,7 +191,7 @@
   .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; }
   .area-badge__dismiss > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   /* The pill close recipe (audit S9): a concentric circle hovering to 12% of the ink. */
-  .area-badge__dismiss:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+  @media (hover: hover) { .area-badge__dismiss:hover { background: color-mix(in srgb, currentColor 12%, transparent); } }
   .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* spec: Notion's multi-select cell, 6 between lines and 8 between tags
      (notion--multi-select-wrap; was Primer's 4 both ways). */
@@ -201,25 +201,14 @@
   .area-badge-group__item { display: inline-flex; flex-shrink: 0; }
   .area-badge-group__overflow-trigger[hidden] { display: none; }
   .area-badge-group__overflow-trigger { flex-shrink: 0; }
-  /* One line of hidden badges where they fit: Popover's own 240px width wrapped three. */
-  .area-popover.area-badge-group__overflow-content { margin: auto; inline-size: max-content; max-inline-size: calc(100vw - var(--area-space-32)); max-block-size: calc(100% - var(--area-space-32)); overflow: auto; }
+  /* One line of hidden badges where they fit: Popover's own 240px width wrapped three. Placed by
+     the shared overlay engine (BadgeGroup.tsx, audit S16); scrolls past the room it has. */
+  .area-popover.area-badge-group__overflow-content { inline-size: max-content; max-inline-size: calc(100vw - var(--area-space-16)); max-block-size: var(--area-overlay-available-height, calc(100vh - var(--area-space-16))); overflow: auto; }
   .area-badge-group__overflow-content:popover-open { display: flex; flex-wrap: wrap; gap: var(--area-space-6) var(--area-space-8); /* spec: as the group */ }
-  /* Native top-layer overflow stays attached to its own trigger where anchors exist. */
-  @supports (anchor-name: --area-anchor) {
-    .area-badge-group__overflow-trigger { anchor-name: var(--_overflow-anchor); }
-    .area-badge-group__overflow-content {
-      position-anchor: var(--_overflow-anchor);
-      inset: auto;
-      inset-block-start: calc(anchor(bottom) + var(--area-space-4));
-      inset-inline-start: anchor(start);
-      margin: 0;
-      position-try-fallbacks: flip-block, flip-inline;
-    }
-  }
   @media (forced-colors: active) {
     .area-badge { background: Canvas; color: CanvasText; border-color: CanvasText; }
     .area-badge__dot { background: CanvasText; }
-    :is(a, button).area-badge:hover { background: Canvas; border-color: LinkText; }
+    @media (hover: hover) { :is(a, button).area-badge:hover { background: Canvas; border-color: LinkText; } }
     :is(a, button).area-badge:focus-visible { outline-color: Highlight; }
   }
 }

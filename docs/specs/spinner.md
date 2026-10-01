@@ -82,8 +82,8 @@ Read from the nodes of `area--size-small`, `area--default`, `area--size-large`,
 
 ## Behavior and accessibility
 
-With `label`, the Spinner is `role="status"` with `aria-label`; without it, it is
-`aria-hidden` and the host announces (primitives.tsx:282-296): Button sets `aria-busy`
+Named with `aria-label` (`label` is a deprecated alias), the Spinner is `role="status"`; unnamed,
+it is `aria-hidden` and the host announces (primitives.tsx:380-405): Button sets `aria-busy`
 (Button.tsx:69-84), Input names it with `loadingText` (Input.tsx:125, 144), Switch sets
 `aria-busy` on its input. No forced-colors rule (unverified).
 
@@ -136,3 +136,4 @@ Nothing in Notion or Figma to compare. Unverified: dark theme, forced colours.
 - 2026-09-28 · owner: "slightly pixelated … cant really tell that its pill shaped inside, should it be slightly wider track?" → ring and arc redrawn as anti-aliased SVG masks with round caps; stroke 1/8 of the size (lg 2 → 3, md stays 2, sm 1.5); a 2.5px md option shown in the Pass review (`GalleryReviewSpinner`) for the owner to choose → headless Edge 2x/4x comparison; `area--*` recaptured; motion rules moved to the arc (`::before`), lab probe updated.
 - 2026-09-28 · owner: approved (batch 6). The md stroke stays 2px (1/8); the 2.5px option was not taken.
 - 2026-09-30 · audit S5 (owner) → no Spinner change; the Progress and Slider rail it is compared with is now `edge-control` #e2 (was ≈ #dd) → display.css:265.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → the Spinner is named with `aria-label` (`label` deprecated alias).

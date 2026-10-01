@@ -54,9 +54,8 @@
   /* The glyph keeps its 16 slot, centred in the inset and allowed past the handle's box; its
    * ink is 5 wide, so it fits even a small panel's 8px inset without touching the value. */
   .area-property-list__handle svg { flex-shrink: 0; inline-size: var(--area-icon-sm); min-inline-size: var(--area-icon-sm); max-inline-size: none; block-size: var(--area-icon-sm); overflow: visible; }
-  .area-property-list__item:hover > .area-property-list__handle,
-  .area-property-list__handle:focus-visible,
-  .area-property-list__item[data-dragging] > .area-property-list__handle { opacity: 1; }
+  .area-property-list__handle:focus-visible, .area-property-list__item[data-dragging] > .area-property-list__handle { opacity: 1; }
+  @media (hover: hover) { .area-property-list__item:hover > .area-property-list__handle { opacity: 1; } }
   @media (hover: none) { .area-property-list__handle { opacity: 1; } }
   .area-property-list__handle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
   .area-property-list[data-dragging] { cursor: grabbing; }

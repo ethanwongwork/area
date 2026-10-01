@@ -48,6 +48,7 @@
     color: var(--area-field-error-color);
   }
 
+  .area-field__validation[data-tone="neutral"] { color: var(--area-fg-muted); }
   .area-field__validation[data-tone="success"] { color: var(--area-fg-success-vivid); }
   .area-field__validation[data-tone="warning"] { color: var(--area-fg-warning-vivid); }
 

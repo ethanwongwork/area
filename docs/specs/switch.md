@@ -127,7 +127,7 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 ## Behavior and accessibility
 
 Native checkbox with `role="switch"` covering the label; controlled or uncontrolled with form
-reset (Switch.tsx:44-57). Read-only and loading block changes in `onChange`/`onClick`;
+reset (Switch.tsx:44-57); a change calls `onCheckedChange(checked, event)`. Read-only and loading block changes in `onChange`/`onClick`;
 read-only sets `aria-readonly`. Thumb travel honours `data-area-motion="none"` and reduced
 motion (switch.css:112-113). Forced colours: Highlight/Canvas paint; only disabled greys (switch.css:115-125).
 Coarse pointers get a 44px minimum target (switch.css:114). Notion also keeps a native
@@ -186,3 +186,4 @@ captures. Build and test results are in the
 - 2026-09-27 · owner: brighter green → the `custom` tile uses green 500 (#01aa4e; hover 550), 3.06:1 on white for the track and for the white thumb on it (success solid, #00853c, was 4.75:1) → headless Chromium.
 - 2026-09-30 · audit S5 (owner) → no Switch change; its off track #e2 is now the one off-track grey, shared by the Slider and Progress rails; Checkbox and Radio keep #d4 as the glyph edge → slider.css:29, display.css:265.
 - 2026-09-30 · audit S14 (owner) → the track-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (switch.css:13, :38, :40; density.ts:80-82).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onCheckedChange(checked, event)` passes the change event.

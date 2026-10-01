@@ -111,7 +111,8 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 
 Native `input type="range"`: keyboard, value and announcements are the browser's. The fill is
 `--_pct` set by React from the normalized value, kept in sync on input and form reset
-(primitives.tsx:455-552). The readout is `aria-hidden` (the input announces the value).
+(primitives.tsx:680-815); a change calls `onValueChange(value, event)`. The readout is
+`aria-hidden` (the input announces the value).
 Vertical uses `writing-mode: vertical-lr; direction: rtl`. The right-to-left mirror and the
 collapsed-range thumb are now one engine's pseudo-element per rule (slider.css:143-146,
 201-202), so each applies in its engine (audit, "Found while writing the specs").
@@ -167,3 +168,4 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
   value slider yet; Figma's colour-picker tracks are in `color-picker/`.
 - 2026-09-30 · audit S5 (owner) → one off-track grey: rail and range rail `edge-control` #e2 (was ≈ #dd), thumb edge `edge-control-hover` #d4 (was ≈ #ce), shared with Switch, Progress, Checkbox and Radio → slider.css:29, 34, 94.
 - 2026-09-30 · audit S14 (owner) → the control-to-readout gap is 6 at sm, md and lg (was 4 / 8 / 8; slider.css:22, :299-301); the range row is pinned to 8 so it does not move (slider.css:98).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(value, event)` passes the input event; the manifest defaults `labelPosition` to `inline` and `orientation` to `horizontal`, each with a class restating the base.

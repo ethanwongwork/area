@@ -28,7 +28,7 @@
 
 ## Job and boundaries
 
-Button triggers an action, or toggles one (`selected`). It is not navigation to a place
+Button triggers an action, or toggles one (`selected`, or `defaultSelected` uncontrolled). It is not navigation to a place
 (a link, Nav item, Breadcrumb), not a mode choice among siblings (Segmented), and not a
 selectable filter (Chip). ButtonGroup and Toolbar arrange Buttons; they add no Button paint.
 
@@ -47,7 +47,7 @@ selectable filter (Chip). ButtonGroup and Toolbar arrange Buttons; they add no B
 | composition | icon only | Square | All three products |
 | composition | shortcut (Kbd in label) | Command hint | Area addition (Tooltip/Kbd peers) |
 | shape | pill | Fully round | ChatGPT Settings pills, composer; Figma "New …" pills |
-| layout | full width, align start/end | Placement | Area layout helpers |
+| layout | full width, `align` start / end (`.area-button--start`, `--end`) | Placement | Area layout helpers |
 | state | hover, active, focus-visible, disabled, loading, selected | Runtime | Hover captured in ChatGPT and Notion; focus in ChatGPT and Untitled |
 
 Not built: a 24px and a 36px size. The planned compact density covers dense products
@@ -242,12 +242,19 @@ filtered to the shell, text and icon rows (full tables: run the command on the s
 |---|---|---|
 | hover | ghost: 5% wash (neutral) or tone surface-hover; outline: surface-hover; soft: one rung; solid: solid-hover | ChatGPT ghost 0 → 5%, soft 5% → 10%, danger 10% → 20%; Notion ghost 0 → 5%, solid blue darkens; Untitled secondary fill to lab 98. Area: `area--*--hover`, before in `before/*hover-before*` |
 | focus-visible | 2px ring | ChatGPT 2px blue ring (box-shadow), logged-out 2px outline, offset 2; Untitled 2px outline, offset 2 |
-| disabled, loading, selected | unchanged | not captured |
+| disabled, selected | unchanged | not captured |
+| loading | full opacity, `cursor: progress`, no hover or press; the spinner fills the tier's icon box in the label ink (display.css) | Audit S18 (owner 2026-09-30, option A); Input's `loading` already stays editable. Not captured in a product | Was native `disabled` at 50% with a fixed 16px spinner (overflowed a 12px compact sm box) |
 
 ## Behavior and accessibility
 
 Unchanged: native `button`, `type="button"` by default, `aria-pressed` for `selected`,
 `aria-busy` and a spinner for `loading`, icon-only requires `aria-label`.
+A Button is a toggle when `selected` (controlled) or `defaultSelected` (uncontrolled) is set;
+a press calls `onSelectedChange(selected, event)` (audit S17).
+`loading` is not native `disabled` (audit S18): the button sets `aria-disabled="true"` and
+`data-loading`, keeps focus and its place in the Tab order, and swallows its click
+(`preventDefault`, which also stops a form's implicit submit). `disabled` together with
+`loading` stays natively disabled. Split button inherits this through its action Button.
 
 ## Peers and consistency
 
@@ -313,3 +320,4 @@ chevron, as ChatGPT's model picker).
   actions, Model picker, Scroll to latest, chips) takes it at once.
 - 2026-09-30 · audit S11c, S12c (owner) → a Kbd inside any Button is a `currentColor` 14% plate with inherited ink (was neutral-solid only, with a `bg-inverse` 16% plate on coloured solids; `kbd.css:131-135`); ghost Buttons in Tree view and Nav row actions hover `bg-hover` and press `bg-active` (`tree-view.css:74`, `nav.css:243`).
 - 2026-09-30 · audit S14 (owner) → the icon-to-label gap reads the density tokens (button.css:26, :436, :446, :456), 6 at sm, md and lg (density.ts:80-82; sm was 4). Button group and Toolbar no longer override a child's `--_gap`, so hosted Buttons keep 6.
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `defaultSelected` + `onSelectedChange(selected, event)` give an uncontrolled toggle; `align` values are `start` / `end` with classes `.area-button--start` / `--end` (were `align-start` / `align-end`).

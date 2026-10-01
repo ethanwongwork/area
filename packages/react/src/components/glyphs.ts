@@ -1,6 +1,6 @@
 /** Area-drawn component glyphs, generated from apps/docs/assets/area-icons-pilot by
  * apps/docs/scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
- * Each glyph is a list of stroked centre-line paths on the 16px grid. */
+ * Each glyph is a list of stroked centre-line paths on the 16px grid; { fill } is a solid dot. */
 export const glyphs = {
   "add": [
     "M8 2.5V13.5M2.5 8H13.5"
@@ -49,6 +49,20 @@ export const glyphs = {
   "search": [
     "M12 7A5 5 0 1 1 2 7A5 5 0 1 1 12 7Z",
     "M10.5 10.5L14 14"
+  ],
+  "stop": [
+    "M4.5 2.5H11.5A2 2 0 0 1 13.5 4.5V11.5A2 2 0 0 1 11.5 13.5H4.5A2 2 0 0 1 2.5 11.5V4.5A2 2 0 0 1 4.5 2.5Z"
+  ],
+  "more-horizontal": [
+    {
+      "fill": "M2 8A1 1 0 1 0 4 8A1 1 0 1 0 2 8Z"
+    },
+    {
+      "fill": "M7 8A1 1 0 1 0 9 8A1 1 0 1 0 7 8Z"
+    },
+    {
+      "fill": "M12 8A1 1 0 1 0 14 8A1 1 0 1 0 12 8Z"
+    }
   ]
 } as const;
 export type GlyphName = keyof typeof glyphs;

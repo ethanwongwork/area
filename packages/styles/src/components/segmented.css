@@ -80,9 +80,7 @@
     transition: var(--area-transition);
   }
 
-  .area-segmented__item:hover:not([data-selected]):not(:disabled) {
-    background-color: var(--area-bg-hover);
-  }
+  @media (hover: hover) { .area-segmented__item:hover:not([data-selected]):not(:disabled) { background-color: var(--area-bg-hover); } }
 
   /*
    * The selected item lifts off the track: a surface fill, a hairline of its own, and the
@@ -92,7 +90,8 @@
    * keeps the white thumb, as ChatGPT and Figma).
    */
   .area-segmented__item[data-selected] {
-    font-weight: var(--_selected-weight, var(--_weight, var(--area-weight-strong)));
+    /* One weight in every state (audit A-17: the old --_selected-weight hook is gone). */
+    font-weight: var(--_weight, var(--area-weight-strong));
     background-color: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec */
     color: var(--area-fg-default);
     border-color: var(--area-edge-selected);
@@ -106,7 +105,7 @@
 
   .area-segmented__item:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--area-opacity-disabled);
   }
 
   .area-segmented__icon {

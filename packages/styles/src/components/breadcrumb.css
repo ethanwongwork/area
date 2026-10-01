@@ -21,7 +21,7 @@
    */
   .area-breadcrumb__link { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: var(--area-gap-md); color: inherit; text-decoration: none; border-radius: var(--area-radius-small); }
   .area-breadcrumb__link::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-small); background: transparent; transition: var(--area-transition); pointer-events: none; }
-  .area-breadcrumb__link:hover::before { background: var(--area-bg-component-hover); }
+  @media (hover: hover) { .area-breadcrumb__link:hover::before { background: var(--area-bg-component-hover); } }
   /* The ring follows the plate, not the text box (audit S11b). */
   .area-breadcrumb__link:focus-visible { outline: none; }
   .area-breadcrumb__link:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
