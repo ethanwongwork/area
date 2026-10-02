@@ -151,9 +151,10 @@
     flex-direction: column;
     /* spec (audit S7a): Card's edge for a block standing alone; was border-decorative #f3. */
     border: var(--area-border-width) solid light-dark(var(--area-neutral-100), var(--area-neutral-750)); /* spec */
-    /* Card md's corner: the standalone content surfaces share one (24 at Standard, square at Sharp,
-       finite at Pill; audit G-27 B, owner 2026-09-30; ChatGPT 24). Code stays 14/20, on the ramp. */
-    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + (var(--area-space-8) + var(--area-space-8)) * var(--area-radius-concentric));
+    /* spec: the container corner, 12 / compact 8, as Panel. Concentric with the header's copy
+       action (radius 6, 5 in = 11); ChatGPT's 24 wraps a 48 header with 36 round buttons 7 in,
+       which Area doesn't have (owner, 2026-10-02; reverses audit G-27 A). Code stays 14/20. */
+    border-radius: var(--area-radius-container);
     background-color: var(--area-bg-code);
     overflow: hidden;
   }
