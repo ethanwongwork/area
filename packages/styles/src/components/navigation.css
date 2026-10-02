@@ -80,7 +80,7 @@
   .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-start: var(--area-border-width) solid var(--area-border-divider); }
   .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--_tab-icon); block-size: var(--_tab-icon); }
   .area-tabs__icon > svg { inline-size: 100%; block-size: 100%; }
-  .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: var(--area-space-16); --_tab-icon: var(--area-icon-sm); --_tab-item-gap: var(--area-gap-sm); }
+  .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); --_tab-icon: var(--area-icon-sm); --_tab-item-gap: var(--area-gap-sm); }
   .area-tabs--md { --_tab-height: var(--area-control-md); }
   .area-tabs--lg { --_tab-height: var(--area-control-lg); --_tab-text: var(--area-control-lg-text); --_tab-leading: var(--area-control-lg-leading); --_tab-gap: var(--area-space-24); --_tab-icon: var(--area-icon-lg); --_tab-item-gap: var(--area-gap-lg); }
   .area-tabs--vertical { flex-direction: row; gap: var(--area-inset-surface-md); }
@@ -116,7 +116,7 @@
   }
 
   .area-tabs__panel {
-    padding-block-start: var(--area-space-16);
+    padding-block-start: var(--area-inset-surface-md); /* 16, compact 12 */
   }
 
   /* --- Table -------------------------------------------------------------- */

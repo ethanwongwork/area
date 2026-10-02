@@ -201,3 +201,4 @@ Line pitch (20) matches; the corner, header scale and code size are the recorded
 - 2026-10-01 · audit G-21 → copy button keeps one name (`copyLabel`) with the result in a live region and `data-copy-state`; `languageLabel` names the tabs or picker; the `pre` is focusable without tabs; line links leave the tab order; the toggle drops `aria-expanded` → primitives.tsx:1823-2043.
 - 2026-10-01 · compact pass round 7 → block and header insets 12 → 8, inline end 16 → 12 at compact; header text, unnumbered code and the gutter keep one column. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-01 · equal-inset sweep → the header's trailing action ends as far from the edge as it sits from the top (4, compact 4; ChatGPT 7 / 7); was 12, on the filename's column, which it keeps. docs/research/compact-pass-2026-10-01.md.
+- 2026-10-02 · compact pass round 9 → the title's icon gap and the expand toggle read `gap-md` (6 / 4). docs/research/compact-pass-2026-10-01.md (round 9).

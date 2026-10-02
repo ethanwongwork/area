@@ -45,6 +45,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   4px action ring (B-7 B), `border-float` and the pruned tokens are kept.
 - Dialog inset decided (owner, 2026-10-02): holds at 16 in compact, corner 16 concentric with the
   close, section gap 12 (`surface.css` `--_dialog-outer`).
+- Round 9 (2026-10-02, second both-density sweep): choice groups and cards, Chip/Badge groups,
+  Box field, Panel labels, Tabs sm and panel, Command palette hints, Code block gaps now step down;
+  default identical (0 gallery differences). Remaining holds are listed in the compact note.
 - Open: tooltip sides 10;
   whether changed approved families (Menu, Nav, …) return to In review; Cursor itself.
 

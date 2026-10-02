@@ -136,3 +136,4 @@ Box field tiles and the Panel recipe at 2x.
   `inspector/figma--padding-row`, `inspector/figma--opacity-radius-row`.
 - 2026-09-28 · inside a panel the label, its gap and the field gap follow the panel tier (`--_panel-*`).
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → new `readOnly`, forwarded to each NumberField, with the link toggle disabled (BoxField.tsx:36, :105, :117); `variant` is typed from NumberField's manifest, a forwarding prop rather than a BoxField axis (BoxField.tsx:29).
+- 2026-10-02 · compact pass round 9 → outside a panel, the label gap reads `ui-stack` (6 / 4) and the field gap `ui-cluster` (8 / 6). docs/research/compact-pass-2026-10-01.md (round 9).

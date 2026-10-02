@@ -32,7 +32,7 @@
        from their row's action), rows 12 apart, labels 6 over their controls. */
     --_panel-gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
     --_panel-row-gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
-    --_panel-label-gap: var(--area-space-6);
+    --_panel-label-gap: var(--area-ui-stack); /* Field's label gap, 6 / compact 4 */
     --_panel-label-text: var(--area-text-sm-size);
     --_panel-label-leading: var(--area-text-sm-leading);
     --_panel-title-text: var(--area-text-md-size);

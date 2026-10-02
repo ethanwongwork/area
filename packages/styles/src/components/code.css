@@ -51,7 +51,7 @@
   .area-code-block__title {
     display: flex;
     align-items: center;
-    gap: var(--area-space-6);
+    gap: var(--area-gap-md);
     min-inline-size: 0;
     color: var(--area-fg-default);
     font-family: var(--area-font-mono);
@@ -417,7 +417,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--area-space-6);
+    gap: var(--area-gap-md);
     inline-size: 100%;
     block-size: var(--area-control-md);
     padding: 0;

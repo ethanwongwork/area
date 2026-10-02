@@ -202,7 +202,7 @@
   .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* spec: Notion's multi-select cell, 6 between lines and 8 between tags
      (notion--multi-select-wrap; was Primer's 4 both ways). */
-  .area-badge-group { --_group-gap: var(--area-space-6) var(--area-space-8); display: flex; align-items: center; flex-wrap: wrap; gap: var(--_group-gap); min-inline-size: 0; max-inline-size: 100%; }
+  .area-badge-group { --_group-gap: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)) var(--area-ui-cluster); /* 6 × 8, compact 4 × 6 */ display: flex; align-items: center; flex-wrap: wrap; gap: var(--_group-gap); min-inline-size: 0; max-inline-size: 100%; }
   .area-badge-group--inline { flex-wrap: wrap; }
   .area-badge-group--overlay { flex-wrap: nowrap; }
   .area-badge-group__item { display: inline-flex; flex-shrink: 0; }
@@ -210,7 +210,7 @@
   .area-badge-group__overflow-trigger { flex-shrink: 0; }
   /* One line of hidden badges where they fit: Popover's own 240px width wrapped three. */
   .area-popover.area-badge-group__overflow-content { margin: auto; inline-size: max-content; max-inline-size: calc(100vw - var(--area-space-32)); max-block-size: calc(100% - var(--area-space-32)); overflow: auto; }
-  .area-badge-group__overflow-content:popover-open { display: flex; flex-wrap: wrap; gap: var(--area-space-6) var(--area-space-8); /* spec: as the group */ }
+  .area-badge-group__overflow-content:popover-open { display: flex; flex-wrap: wrap; gap: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)) var(--area-ui-cluster); /* spec: as the group */ }
   /* Native top-layer overflow stays attached to its own trigger where anchors exist. */
   @supports (anchor-name: --area-anchor) {
     .area-badge-group__overflow-trigger { anchor-name: var(--_overflow-anchor); }
