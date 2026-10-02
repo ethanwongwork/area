@@ -1,7 +1,9 @@
-<svg data-set="area-pilot" data-keyline="square" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle data-filled="solid" cx="6.5" cy="9.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="hole" cx="5" cy="8" r="0.75" fill="currentColor"/>
-<circle data-filled="hole" cx="8" cy="8" r="0.75" fill="currentColor"/>
-<path data-filled="knockout" d="M4.438 10.25A2.25 2.25 0 0 0 8.563 10.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M12.5 2V5M11 3.5H14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<svg data-set="area-pilot" data-keyline="circle" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path data-filled="fill" d="M2 8A6 6 0 1 0 14 8A6 6 0 1 0 2 8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M13.957 8.72A6 6 0 0 0 14 8A6 6 0 0 0 2 8A6 6 0 0 0 8.72 13.957" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="hole" cx="6" cy="6" r="0.75" fill="currentColor"/>
+<circle data-filled="hole" cx="10" cy="6" r="0.75" fill="currentColor"/>
+<path data-filled="knockout" d="M5.25 9A3 3 0 0 0 10.75 9" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="knockout" d="M12.5 10.5V14.5M10.5 12.5H14.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M14.5 12.5H16M12.5 14.5V16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

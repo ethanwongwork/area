@@ -2475,3 +2475,182 @@ smile's eyes and building's windows are ⌀1.5; list-bullet's bullets are ⌀1.5
 list runs 2–14; repeat's rails end r 3.5; git-branch's nodes are r 1.5; git-pull-request has a 2px
 head; text-size's T is 8 × 10 with a 4 foot. Not changed: outdent (mirroring indent's chevron in
 place leaves a 2.08 near miss; move indent and outdent together if wanted).
+
+## Audit follow-up, 2026-10-02
+
+The audit's questions for the owner, drawn on the recommendations (delegated, owner to confirm or
+overturn; sheet `docs/research/icon-review/2026-10-02/1-before-after.png`). Every icon below went
+back to review. Values here supersede earlier construction lines for the same icon.
+
+| Batch | Icon | Now |
+|---|---|---|
+| 5 | calendar | Fluent's date grid: ⌀1.5 holes at 5.5, 8, 10.5 × 8.75 and 5.5, 8 × 11.25 (3 + 2, detail 0.94 apart, tight 1.69 to the sides). To fit two rows the body is 2.5–13.5 × 3.5–13.5 (r 2), the header 6.5 (on a pixel centre; was 7) and the pegs 2–4. The grid's diagonals are 2.04 apart, so the icon takes `data-gap="aligned"` (an even grid, as qr-code) |
+| 18, 21, 23 | calendar-add, -check, -remove | calendar's new body, header and pegs; no grid (Fluent drops it in its variants too). calendar-check's ✓ moved 0.5 right and down (`M9 12L10.5 13.5L13.5 10.5`, its arms on the outer edges like the plus): at the old place the new header left a 2.38 near miss above it; cut re-solved at 2.3 |
+| 6 | chat | Fluent's text lines: `M5.5 5.5H10.5M5.5 8.5H8.5`, standard 1.88 to the bubble, knockouts when filled |
+| 6 | send | a centre fold `M4.5 8H8.5` from the notch, as every library; outline only (Fluent's filled send has none) |
+| 5 | pencil | a ferrule band `M8.75 3.75L12.125 7.125` across the body (a 2.05 pocket below the end); a `cut` when filled |
+| 23 | indent, outdent | centred on 8: indent's chevron 2–4 with lines 6.5–14 (tight 1.38 to the tip), outdent's chevron 2–4 with lines 7.5–14 (open 2.91). Mirroring the chevron in place leaves outdent a 2.08 near miss, and a half-pixel shift leaves the lattice, so the line starts differ by 1 |
+| 23 | eraser | about 1:2 like the references: a 7 × 3.5 block on the diagonal (corners 2.5, 9.5 · 9.5, 2.5 · 13, 6 · 6, 13; r 1), band at 2.5 from the tip (`M5 7L8.5 10.5`), base line `M6 13H13` (on a whole pixel so the icon centres) |
+| 31 | coins | a rim on the front coin: an r 2 ring at 6, 6 (detail 0.875 inside the r 4 edge), a knockout when filled |
+| 35 | picture-in-picture | a larger window, 6.5–11.5 × 6.5–10 (r 1), still a tight 1.38 from the frame's corner |
+| 55 | crosshair | fills by weight (a reticle is a line drawing; flooding the ring knocked it out) |
+| 35 | camera-off | the lens stays when filled (its two arcs are knockouts) |
+| 48 | agent | filled as Fluent's agents: the hexagon fills and the slash parts it (a filled-only gap along the slash, run out through the silhouette) |
+| 8 | people | filled, both figures fill; the back figure is cut round the front by the overlap cut (filled-only gaps at r 3.125 round the head and 1.125 outside the body) |
+| 11 | building | three rows of ⌀1.5 windows (5.75 and 10.25 × 4, 6.5, 9; detail 1.0 between rows, tight 1.14 to the door): the 2 × 2 over the arched door read as a face |
+| 61 | bot-guard | the cap's flat top narrowed to 3–13 (flare to 2, was 1.5): apparent size +14% → +12%, inside the cast (agent-cast.py) |
+
+Booleans (owner, 2026-10-02, the recommendation): two 8 × 8 squares (r 1.5) at 2.5 and 5.5,
+every edge on x.5, overlapping 5 × 5 (the 3 × 3 overlap was a speck at 16px). Union is the one
+outline (r 0.5 inner corners), solid when filled; subtract and intersect keep both outlines with
+the result solid; exclude is now solid too, the union with the overlap open (an even-odd fill,
+counter 3.93), both outlines drawn: at 5 × 5 the hatching's arms were 3px and left 0.18 and 0.47
+counters. All four back in review; sheet `9-booleans-before-after.png`. indent and outdent stay as
+drawn above (owner, 2026-10-02).
+
+## Batch 62: Coverage round 1, 2026-10-02
+
+| Icon | Construction |
+|---|---|
+| corner-down-right | return mirrored: stem 2.5–8, r 2.5 turn into a run to 13.5 at y 10.5, 3px corner head (10.5,7.5 → 13.5,10.5 → 10.5,13.5); line glyph, fills by weight |
+| chevron-last | the shared chevron (4.5 wide, 9 tall, tip at 9, 8) and a 10px bar at x 12 (3–13, like Fluent's arrow_next and arrow-right-to-line), 3 apart (standard 1.88); data-rotations chevron-first:flipx; ink centred at 8.25 to keep the chevron on the lattice; under its keyline like chevrons-right; fills by weight |
+| navigation | send's dart (same radii) turned 45° to point up-right and centred, without send's fold; data-angles free; filled solid |
+| mouse-pointer-click | pointer's polygon scaled 0.76 about its tip with its own radii kept (0.75, 0.75, 1, 0.75), tip at 5.5, 5.5 (ink to 12.95, centred 7.92); three 1.5px click rays symmetric about the pointer's diagonal (up at x 6.5, left at y 6.5, a diagonal 3,3–4,4), tight 1.46 from the tip; filled: the pointer solid, rays stay lines. Scaled radii left a 0.26 sliver |
+| import | Lucide's import: open's r 2 box at 4.5–13.5, its top opened 2.5 each side of the stem (5.5 and 10.5); a 3px arrow from y 2 into the box, tip at 10 (tight 1.38 from the opening); filled: the box fills and the arrow is a knockout, the stem above the box dropping out as in cloud-download |
+| signature | pencil scaled 0.7 (about 14, 2, then 0.5 left) with its ferrule cut, writing over a two-hump wave (2.5–13.5, y 12–13.5) a tight 1.31 below the tip; data-angles free; filled: the pencil solid, the wave a line; ink centred at 7.72 (the wave is at the keyline floor) |
+| text-color | text-size's 8-wide T (ticks 1.5, foot 4) shortened to 2.5–9.5, over a solid 11 × 2 swatch (r 1, y 12–14), standard 1.94 apart; the swatch is a solid exception (it is the colour, like shadow's band), so filled equals the outline |
+| bring-to-front | Lucide's arrangement: a 5 × 5 front square (5.5–10.5, r 1.5) with back copies shown as r 1.5 L's at the top left (2.5, ends at 8.5) and the bottom right (13.5, ends at 7.5), each a standard 3 from the front; filled: only the front square fills |
+| group | corners' frame unchanged, holding Lucide's two stacked 4.5 × 3 boxes (5–9.5 × 5–8 and 6.5–11 × 8–11, r 1) as one union outline with a cut on the shared line y 8; tight 1.38 from the frame's arms; filled: the union solid, the cut its layer gap |
+| remove-formatting | text-size's 8 × 10 T (ticks 1.5, foot 4) at 2–10 × 2.5–12.5 with the 3.5px × (volume-off's) centred at 12, 12, a tight 1.45 from the foot; line glyph, fills by weight |
+| clipboard-check | clipboard exactly (10 × 11 board r 2, 5 × 3 clip r 1) with the ✓ 1.5/3 on the lower-right corner (M8.5 12.5 L10 14 L13 11) as document-check and calendar-check, arms on the board's right and bottom edges, the board cut open round it (overlap cut); filled: the board fills, the check a knockout carried out through the edge. Inside the board only a tight gap was left under the clip |
+| clipboard-paste | clipboard moved 1 left (board 2–12) with Fluent's pasted sheet in front: 6 × 7, r 1.5, at 8, 7; the board overlap-cut behind it (its right side ends in the corner arc, the bottom stops at 6.06); the sheet a tight 1.47 from the clip; circle keyline (13.1 × 13.6). Filled: board, clip and sheet solid, each part behind cut 1.125 round the front |
+| list-plus | list's four 12px lines (3.5, 6.5, 9.5, 12.5), the bottom two stopping at 7.5 so the 4px + (centre 12, 11) sits beside them with tight gaps; line glyph, fills by weight; centred at 8.25 for the mark |
+| list-tree | Lucide's list-tree on list's span: a trunk at x 2 from the first row, two r 2 elbows ending in 1px stubs at rows 8 and 12.5, lines 7.5–14 after a tight gap; the first row's line 5–14; the trunk on a whole pixel so the shape centres; line glyph, fills by weight |
+| workflow | Lucide's workflow from flow's parts: two 4 × 4 r 1 boxes at the top left and bottom right (2.5 and 9.5) joined by a connector from the top box's foot through an r 2 elbow into the lower box's side; filled: the boxes solid, the connector a line |
+| cloud-check | the one cloud shape, unmoved, with the ✓ 1.5/3 replacing its lower-right corner (M9 11 L10.5 12.5 L13.5 9.5, 0.5 in for the lattice), the cloud overlap-cut round it; square keyline like cloud-upload; filled: the cloud fills, the check a knockout run out through the edge. A 2/4 check inside crossed the lobes |
+| archive-restore | archive exactly (13 × 3 lid r 1, box r 1.5) with Lucide's up arrow for the slot: a contained 2.5px head, apex at 8, the stem rising from the floor, which is overlap-cut round it; detail gaps (apex to lid 0.88, barbs to floor 1.13); filled: lid and box solid with the flap cut, the arrow a knockout through the floor |
+| headset | headphones' r 5.5 band and 3.5-wide r 1.5 cups, the band raised 0.5 and the cups shortened to 8–11.5 so Lucide's boom fits: the right band line runs on down through an r 2 corner to end at 8.5 along y 14, a tight gap under the cup; circle keyline; filled: cups solid, band and boom lines. Exception: shorter cups than headphones, for the boom |
+| person-settings | person-add's small figure exactly (head r 2, body 7 wide r 3) with a gear at head height (centre 12, 5.5): an r 2 ring with six 0.75 radial teeth at settings' angles (data-angles radial); circle keyline; filled: the ring fills round a ⌀2 hub hole, teeth stay lines. Exception: settings' gear at 0.5 scale left 0.21 tooth counters, so a ring with teeth (Lucide's construction) |
+| bell-ring | bell exactly (body, clapper cup, filled gap) with two ringing arcs concentric with the dome (r 7 about 8, 6.5, 23°–45°) at the top corners, a tight gap from the dome; circle keyline (the arcs reach the live edge); filled: the bell solid as bell, the arcs lines |
+| life-buoy | the r 6 ring with an inner r 2 ring joined by four 45° straps (on the lattice through 8, 8), band counters 3.05; r 2.5 left a 2.37 near miss and r 3 thinned the band; filled: the left and right band segments fill (filled-only solids), the top and bottom stay open like a buoy's alternating colours |
+| square-x | stop's square (11 × 11 r 2 at 2.5) with error's 5px × (M5.5 5.5 L10.5 10.5 and its mirror), the ring's mark unchanged as square-slash; standard 1.88 gap; filled: square solid, × knocked out |
+| more-circle | the r 6 ring with more's three ⌀2 dots on whole centres at 5, 8, 11 (dots 1.0 apart, a detail gap; 1.44 tight to the ring); filled: ring solid, dots are holes (true marks in a closed shape) |
+| radio-button | the r 6 ring and a solid r 3.5 centre disc (data-dot="free", a solid exception like record's disc, larger so the two stay distinct), a standard 1.94 gap; r 3 would leave 2.44, a near miss; filled follows record (the ring thickens by weight) |
+| star-half | star's outline exactly, plus a solid left half (fill only) along the star's own centre-line, closed by the vertical at x = 8 from the top tip's apex (2.386) to the bottom notch's apex (12.35); filled: whole star solid |
+| shield-alert | shield exactly with warning's ! (⌀1.5 dot at 8, 10.25; warning's 1.44 stem-to-dot gap). Exception: the stem is 2.25 long (M8 5.25 V7.5), not warning's 1.75: the shorter stem left a 2.43 near miss to the shield's peak; this is standard 1.99. Filled: shield solid, stem knockout, dot hole |
+| image-plus | image exactly with the 4px + on the top-right corner (centre 11.5, 4.5; top and right arms on the frame's outer edges), the frame cut open round it (overlap cut); filled: mountain stays a cut, sun a hole, + knockout with a gap run out through the edges. Exception: top right, not lower right, because the lower right is the mountain (Lucide's placement); the sun sits a 0.98 detail gap from the plus |
+| cart-add | cart exactly with the 4px + on the basket's top-right corner (centre 11.5, 4.5; top arm level with the handle at 2.5), the basket cut open round it (overlap cut); wheels and handle unchanged; filled: basket fill + line, + knockout with an out-running gap. The 5.5-tall basket cannot hold the + inside |
+| calendar-clock | calendar's body (2.5–13.5 × 3.5–13.5 r 2) and pegs (2–4), no date grid (variants drop content); an r 3.5 clock ring at 10, 10 on the lower-right corner (right and bottom on the body's outer edges) with 1.25px hands (M10 8.75 V10 H11.25, 1.13 tight to the ring); body and header cut round the ring with behind. Filled: body fill + line, ring solid with hands knocked out, a gap circle r 4.625 parting it from the body (bell-dot's pattern). r 3 left no room for hands |
+| octagon-alert | octagon with flats 2–14 (ink 13.1 like the ring), corners at 5 / 11 so the 45° sides sit on the lattice, every corner r 1 as hexagon; alert's ! (stem 5–8.5, ⌀1.5 dot at 11.375); filled: octagon solid, ! knockout and hole. Lucide octagon-alert reference (Fluent has no cut) |
+| toggle | pill track 12 × 8 (2–14 × 4–12, rx 4) with a solid ⌀3 knob concentric with the right end (10, 8; data-dot="free", a small solid in a container like stop-circle's square), standard 1.94 all round; filled: track solid, knob a hole. A 7-tall track read short beside folder |
+| accessibility | Fluent's and Phosphor's arms-spread figure: head r 1.5 ring at 8, 3.5; arms raised at 45° from 2.5, 5.5 and 13.5, 5.5 to shoulders at 4.5 / 11.5, 7.5; torso 7.5–10; 45° legs to 4.5 / 11.5, 13.5 on the lattice; head to arms 1.38 tight. Line glyph: fills by weight, the head solid. Horizontal arms read as a T |
+| discount | badge-check's badge exactly with a % inside: a 45° bar M6 10 L10 6 and ⌀1.5 dots at 6, 6 and 10, 10 (1.52 tight from the bar); filled: badge solid, bar knockout, dots holes. A badge, not a tag (Lucide badge-percent, Phosphor seal-percent): the tag's eyelet leaves no room for the % |
+| currency-euro | € as an elliptical C (rx 4.5, ry 5.5, centre 9.5, 8; extremes on the type family's 2.5–13.5), ends at 45°; two bars 3 apart at 6.5 and 9.5 from 3.5 to 9.5 crossing the C's left side; vertical keyline like dollar; a line glyph (fills by weight); dollar's apparent size |
+| cards | Phosphor's cards-three (owner, 2026-10-02): a card 2.5–13.5 × 7–13.5 (r 2) with two shorter lines above for the cards behind (3.5–12.5 at 4.5, 4.5–11.5 at 2), tight 1.38 apart; filled: the front card fills, the lines stay lines; ink centred at 7.75 (sits high, like a heavy base) |
+
+Skipped: file-text (document has two text lines), chat-text (chat has two text lines), contact (id-card, Fluent's contact card), book-open (book is an open book). file-zip: a tooth column at x 6.5 leaves 0.19 to the fold; at 5.75 only two teeth fit above the fold; a column below the fold holds one tooth and the tab; a solid strip reads as a line, so archive or a later labelled file-type family (ZIP, PDF, CSV) stands in. chevron-first is chevron-last flipped. For the owner: image-plus and cart-add put the + top right (the lower right is the mountain, and the basket has no room); shield-alert's stem is 0.5 longer than warning's; toggle's knob, radio-button's centre and text-color's swatch are solid exceptions; headset's cups are shorter than headphones' for the boom; person-settings' gear is a ring with teeth (settings' gear at half size left 0.21 counters); navigation is send's dart turned 45°, a location arrow (all five libraries draw it), not an agent mark.
+
+## Owner round, 2026-10-02
+
+The owner's picks from the review sheets (`docs/research/icon-review/2026-10-02/`, sheet 10);
+everything else on the recommendations. All back in review; values supersede earlier lines.
+
+| Batch | Icon | Now |
+|---|---|---|
+| 50, 57, 1, 39, 57 | files, folders, copy, chat-multiple, gallery | Phosphor's layering (owner's pick over Fluent's halo): the back copy is the same shape and radius offset 3 along the diagonal, its visible edges joining the front's outline (`behind … 0`); generated by `multiples-phosphor.py`. files: a 7 × 10 page (3–10 × 4.5–14.5, r 2) with a 3.5 fold (r 1 inside; r 1.5 left a 0.82 pocket) and two text lines (5–8 at 10.5, 5–7 at 12.5), the copy up and right. folders: a 9 × 8 folder (2–11 × 5.5–13.5, tab to 5.5, step to 7, flap at 8.5), the copy up and right. copy: an 8 × 8 square (2.5–10.5 × 5.5–13.5, r 1.5), the copy up and right. chat-multiple: the bubble at 2.5–10.5 × 2.5–8.5, the second bubble mirrored (tail right) 3 down and right. gallery: a 9 × 8 picture (5–14 × 2.5–10.5, r 2, image's mountain and sun) with the copy down and left |
+| 38 | library | Phosphor's books: an upright 3.5 × 10.5 book (2.5–6 × 3–13.5, r 1) and a leaning one (3.5 × 10.5, r 1, leaning 1 : 5 with its foot at 10.5, 13.5; data-angles free), bands 3 from each end (cuts when filled); standard 1.82–1.91 between the books |
+| 62 | cards | new: Phosphor's cards-three (batch 62) |
+| 28 | hand | filled: the palm fills (the silhouette as one solid), the finger lines stay in the outline and become filled-only gaps run up between the fingers |
+| 23 | text-align-left, text-align-center | lines at 3.5, 7.5, 11.5 (x.5; the stack sits 0.5 high) |
+| 23 | indent, outdent | lines at 3.5, 7.5, 11.5; chevrons moved 0.5 right to stay on the lattice (2.5–4.5, tip at 7.5); indent's lines 7–13.5 (tight 1.38), outdent's 8–13.5 (open 2.91; 7.5 left a 2.48 near miss); both centred at 8 across |
+| 27 | waveform | bars at 2.5, 5.5, 8.5, 11.5, 14.5 (x.5; 0.5 right) |
+| 58 | waypoints | Fluent's route: r 2 rings at 4, 11 and 12, 5 joined by an S of two r 2 quarter arcs (`M6 11A2 2 0 0 0 8 9V7A2 2 0 0 1 10 5`); filled: the rings fill |
+| 58 | binoculars | Lucide's: barrels 2–6.5 (mirrored 9.5–14), 4.5 wide at the foot and 3.5 at the top, flaring at 8–10.5, top corners r 1 outside and r 1.5 inside, eyepieces 2.5 × 2.5 (3.5–6, r 1); a bridge at 7.5 and a band across both at 10.5 (a cut when filled) |
+| 58 | person-chat | Hugeicons': chat's bubble holding a person (head r 1.5 at 8, 6; shoulders 5–11 from 9.5 to the bubble's foot, r 1.5); filled: the bubble stays a line and the person fills (a subject in a frame) |
+| 57 | bandage | Hugeicons': a band 7.07 wide on the diagonal (corners 1.5, 9.5 · 9.5, 1.5 · 14.5, 6.5 · 6.5, 14.5; r 2), the pad between cuts at x − y = ±5, four ⌀1.5 holes at 8 ± 1.75 on both axes (detail 0.97 apart) |
+| 5 | location (was pin) | renamed: it is the map pin (Fluent location); the pushpin is `pushpin`, slashed as `unpin` |
+| —, —, 4 | subtract, padding-axis, flow-wrap | aliases (`data-alias-of`) of minus, padding-sides and grid: the lint holds each body identical to its base. subtract and padding-axis are in no batch (component glyphs). Components keep their names (NumberField's subtract, BoxField's padding-axis) |
+
+Fixes the same day (owner: library, the filled hand, the filled bandage and binoculars looked
+wrong; sheet 14):
+
+- **library:** Phosphor's proportions: an upright 5 × 11 book (2.5–7.5, r 1) and a 3.5-wide book
+  leaning 1 : 5 with its foot at 10.2, 13.5, its top corner touching the upright's (a join, as
+  Phosphor's); bands 2.5 from each end. A standard gap between the books read as two capsules.
+- **hand, filled:** the whole hand fills; the finger lines stay in the outline, and filled-only
+  gaps run from the palm (8–8.5) up through each fingertip junction (to 1.5–4), so every finger
+  reads. A palm-only fill read as a glove.
+- **bandage, filled:** the band fills with the four dots as holes. The pad lines are outline-only;
+  as cuts they split the band into three pieces.
+- **binoculars:** square-ish caps (r 0.5 at the top corners and eyepieces), eyepieces 2.5 wide flush
+  with the barrels' inner edges (4–6.5), bottoms r 1.5. The r 1–1.5 caps read as bottles.
+
+Dots by role (owner, 2026-10-02, Cursor's roles; sheet 13): list-bullet's bullets ⌀2 (cx 3,
+detail 1.0 apart, tight 1.44 to the lines; was ⌀1.5 at 2.75), crosshair's centre ⌀2, square-dot's
+and circle-dot-dashed's centres ⌀2 (were ⌀3, the badge size). Dots grouped inside a container
+(square-list, chat-more, app-window) stay ⌀1.5.
+
+The overlap rule (owner, 2026-10-02, from Cursor's set; sheets 15 and 17): a gap is information,
+never style.
+
+| Icons | Now |
+|---|---|
+| files, folders, copy, chat-multiple, gallery | the back copy keeps Phosphor's geometry (same shape and radius, offset 3) but stops one overlap cut short of the front, an open L as Cursor's copy and folders (`behind … 2.3`; tight 1.17–1.18). The joins of the first pass are gone |
+| bell-off, bug-off, brain-off, camera-off, cloud-off, flask-off, link-off, mic-off, star-off, unpin, video-off, wifi-off | outline: the base drawn whole (outline-only `line`s) with the slash flat on top, no gap (`flat-slash.py`); filled unchanged (fill parted by a gap, lines cut one-sided). Slivers against the slash recorded with `data-counter="sliver"` (camera-off, flask-off, unpin, as mic-off); video-off takes the circle keyline (the whole video under the slash is 13.6 × 13.1) |
+| alarm | closed bells: r 2 lobes at 4, 5 and 12, 5 joined to the ring (filled: solid, parted from the ring by a gap at r 5.625) |
+| strikethrough | one continuous S (the upper bowl runs on through C4.5 7.25 6.25 8 8 8 into the lower) crossed by the bar |
+| shapes | circle (6, 6, r 3.5) and square both whole, crossing; filled, the square fills and the circle stays a line with a `halo` |
+
+Kept with the overlap cut: people, coins, cloud-sun (layers), every corner mark and badge.
+
+Still open: the list family's three-line stacks (list-bullet, list-checklist, list-numbered at
+5, 8, 11) and chip's pins on whole pixels; blocks and toy-brick from the rejected round.
+
+## Batch 63: Coverage round 2, 2026-10-02
+
+| Icon | Construction |
+|---|---|
+| exit-door | Lucide's door-open simplified: a frame (left post at x 3.5, r 1.5 top corner, a 1-long top stub to x 6) on a floor line 2–6 at y 13.5; the open leaf a perspective quadrilateral (8.5,2.5)(13.5,5)(13.5,12.5)(8.5,14) with r 1 fillets (top 1:2, bottom 3:10, one vanishing point; data-angles free); a ⌀1.5 knob at 11, 8.5, 2.5 from both leaf edges (tight 1.19). Filled: the leaf solid, the knob a hole; frame and floor lines. Centre x 7.75 |
+| locate | Lucide's locate-fixed: an r 4.5 ring at 8, 8 with four 1.5 outer ticks to 2 and 14, and the shared r 1.5 hub ring 3 inside it (standard 1.87); distinct from crosshair, whose ticks cross its r 6 ring. Filled: ring and ticks by weight, the hub solid |
+| lasso | Lucide's lasso: an ellipse (centre 8, 6, rx 5.5, ry 3.5) as one large arc whose ends join an r 1.5 knot ring at 4, 10 at its solved intersections, and a short r 3 tail from the ring's foot to 5.5, 13.5. Line glyph; data-angles free |
+| pilcrow | On the type family's 2.5–13.5 cap height: stems at 8.5 and 11.5 (standard), the top bar to 12.5, an r 3 bowl from 8.5 round to 6.5 and down to 8.5 closed against the stem. Filled: the bowl solid (a typeset pilcrow's), the stems lines |
+| insert-row | Lucide's between-horizontal-start: two 7 × 4 r 1 row cards at 6.5–13.5 × 2.5 and 9.5 (standard 1.88 apart) and a 2.5px contained chevron M2.5 5.5L5 8L2.5 10.5 pointing into the gap (tight 1.41). Filled: the cards solid, the chevron a line |
+| spell-check | text-size's large T exactly (ticks 1.5, foot 4) with the beside-a-shape check 1.5/3 at M9.5 10.5L11 12L14 9, 0.5 above the foot for the gap scale (tight 1.7); Area's T, not the libraries' A (type family). Line glyph; horizontal keyline |
+| text-wrap | Lines at 2.5, 6.5, 11.5: a full line 2.5–13.5; the middle line wrapping through an r 2.5 arc (extreme 13.5) back to 8.5 at 11.5, ending in a 2.5px contained head (11,9)(8.5,11.5)(11,14); a short last line 2.5–5.5, 3 from the head. Line glyph; centre y 8.25 |
+| file-search | document's base and fold exactly with an r 2 lens at 10, 11 and a 45° handle to 13, 14 replacing the lower-right corner, the page cut round the lens by the overlap cut. Filled: page fill + line, the fold a cut, the lens solid, parted from the page by a filled-only gap circle r 3.125, the handle a line. Centre x 8.25 |
+| file-spreadsheet | document's base and fold exactly; Lucide's four cell dashes in two columns (5.5–6.5 and 9.5–10.5) on document's text rows (9 and 11.5), 1.88 apart, detail 0.88 to the page edges. Filled: dashes knocked out like document's lines |
+| rss | Two quarter arcs about the corner 2.5, 13.5 (r 6.5 and r 11, ending on 2.5 and 13.5) and a ⌀2 source dot (the mark size, wifi's) at 4, 12, open 2.82 from the inner arc. Line glyph |
+| file-pen | document's base and fold exactly with a small 45° pencil on the lower-right corner (sides x + y = 20 and 25, back x − y = 3, a square tip at 8.5, 14; r 1 back corners, r 0.75 tip), the page cut behind it by the overlap cut, a tight 1.29 from the fold. Filled: page fill + line, fold a cut, the pencil solid, a filled-only gap round it. No ferrule (no room). Centre x 8.55 |
+| folder-lock | folder's base and flap exactly with file-lock's lock (4 × 3 r 0.5 body, r 1 shackle) and its filled-only gaps moved (+1, −1), 0.5 inside the folder's lower-right corner as on file-lock's page; the folder cut behind the lock; the shackle counter 0.93 as file-lock's |
+| chart-gantt | chart's axis exactly (M2.5 2.5V13.5H13.5) with three staggered task bars as lines at 4.5, 7.5, 10.5 (standard; the last 3 above the axis): 7.5–12.5, 5.5–9.5, 9.5–13.5 (Lucide's stagger). Line glyph |
+| webhook | Lucide's webhook by a rule: three r 2 hook loops at 8, 4.5 · 11.5, 11 · 4.5, 11; each arm runs from one loop's centre straight to its tangent on the next and wraps 200° round its outside; the arms never cross (data-angles free). Sits 0.25 high (centre 7.75). Line glyph; reads light beside its neighbours |
+| voicemail | Two r 2.25 reels at 4.25, 7.75 and 11.75, 7.75 joined by a tangent foot 4.25–11.75 at y 10 (Lucide's, Phosphor's and Hugeicons' symbol); r 2.5 reels 7 apart closed to 0.5 when filled; the ink sits 0.25 high to keep circle extremes on the grid. Line glyph; horizontal keyline |
+| phone-missed | call's handset exactly (solid) with the 3.5px × beside it, centred at 12, 4 where call-incoming's arrow sits (volume-off's construction); centre 8.68, 8.08 like the call family. Filled: handset solid, × a line |
+| broadcast | A ⌀2 centre dot (a mark) and paired arcs at r 3 and r 6 about 8, 8, each ±45° about the horizontal, extremes on 2, 5, 11, 14; dot to arc 1.44 tight, arcs 3 apart (standard, wifi's). Line glyph; circle keyline |
+| cast | A screen frame 2.5–14 × 2.5–13 (r 2) cut open at its lower-left corner for the waves (a mark on the host's corner): quarter arcs r 2.5 and r 5 about 2.5, 13 and a ⌀1.5 source dot, every gap tight 1.375; the frame resumes at y 5.5 and x 10. Filled: the frame fills, cut back along r 7.5 about the corner (Phosphor's screencast-fill); waves and dot lines |
+| image-off | image whole as outline-only lines under the shared slash, flat (data-counter sliver). Filled: a fill parted by the slash's gap, the mountain's left leg a knockout, the sun a hole. Exception: the slash runs 1.41 from the mountain's right leg (a 0.29 sliver) and through the sun's centre |
+| radio | A 12 × 8 body at 2, 5 (r 2) with a 45° antenna M5 5L7 3 joined to its top; an r 1.5 speaker ring at 10.5, 9 and two dial lines 4.5–6.5 at 7.5 and 10.5 (Phosphor's radio, two lines); the ring a detail 0.88 from the right wall. Filled: body solid, ring and lines knockouts, antenna a line; horizontal keyline |
+| battery-charging | battery exactly (data-gap close, inherited) with a line bolt M7.5 6.5L6 8H8L6.5 9.5 inside (detail 0.88, data-acute sharp), a 2 × 3 cut of cloud-lightning's bolt. Fluent's bolt over the top edge opened 6.4 of its 11 under the overlap cut. Filled: body solid, bolt knockout |
+| battery-low | battery exactly (data-gap close) with a level line M4.5 7V9 at the left (tight 1.38 top and bottom, standard 1.88 to the wall). Filled: body solid, the level knocked out (Fluent's battery_1) |
+| brightness | Lucide's and Phosphor's sun-dim: an r 2.5 core and eight ⌀1.5 dot rays on r 5.75 (axis dots on the grid, core to dot 1.94 standard, dots 2.9 apart open); distinct from sun's line rays on purpose. Filled: core solid |
+| devices | A small desktop behind (screen 2–11 × 2.5–9.5 r 1.5, stand M6.5 9.5V12, foot 5–8) and a phone in front (10.5–14 × 6.5–13.5 r 1), the desktop overlap-cut round the phone (a layer). Filled: both fill, a gap round the phone, the stand a line |
+| gamepad | Fluent's games stadium (12 × 9 at 2, 3.5, r 3.5) with a 3px d-pad + at 6, 8 and ⌀1.5 buttons at 10, 9.5 and 11.5, 7 (tight 1.19–1.6). Exception: a 3px plus; the shared 4px has no room. Filled: body solid, d-pad knockout, buttons holes |
+| signal | Four bars at 3.5, 6.5, 9.5, 12.5 (bar-chart's 3 spacing, standard) ending at 13.5, 2, 5, 8 and 11 tall. Line glyph |
+| usb | Fluent's usb_stick: a 7 × 9 body at 4.5, 5.5 (r 2) with a 5 × 4 plug shell open at its foot (r 1) joined to the body's top. Filled: body solid, the plug a line (hollow); vertical keyline |
+| scan-face | scan-check's four r 2.5 corner brackets exactly with smile's mouth and ⌀1.5 eyes at 5.75 and 10.25, 6.5 (0.25 in from smile's: 2.22 to the brackets was a near miss; now 1.98 standard). Line glyph |
+| shield-off | shield exactly, drawn whole as outline-only lines under the shared slash, flat; filled: the shield a fill parted by the slash's gap (camera-off's model) |
+| badge | badge-check's scalloped seal alone (path exactly), solid when filled |
+| handshake | line glyph: two vertical cuffs; the left hand's top line and diagonal palm with an r 1.06 finger bump, the right hand along the top to an r 1.06 thumb loop and finger arc, a second bump below; 45° lattice; the touching hands join; centre x 8.25; fills by weight |
+| meh | smile's ring and ⌀1.5 eyes exactly with a straight 5px mouth at y 10.5 (knockout) |
+| basket | a tapered body 11 wide at the rim and 7 at the base (r 1.5 foot, r 0.5 rim corners) with slats at 6.5 and 9.5 (knockouts) and a 90° handle peak from 3.5 to 12.5 on the lattice |
+| piggy-bank | one silhouette: a round back (r 5), a pointed ear, a 1 × 3 snout, two U feet 2 wide; a ⌀1.5 eye (hole) and a 2px coin slot (knockout) |
+| scale | post at x 8 (2.5–13.5), beam at 4.5 (4–12), a 6px base; two pans, each a 60° V from the beam's end closed by an r 1.75 bowl (solid; the 60° apex keeps the acute rule, shallower than Lucide's); lines stay lines when filled |
+| cloud-snow | cloud-rain's cloud (foot 11) moved, never redrawn; one row of three ⌀1.5 flakes at y 13.5 (x 5, 8, 11), tight to the foot; two rows don't fit the keyline |
+| dice | an 11 × 11 square (r 2) with five ⌀1.5 pips (holes) at 5, 8, 11, tight to the frame and open between pips |
+| hammer | a head drawn in a 45° frame: a flat face end (r 1 corners) and a claw end curving to a tip (r 4 and r 7 arcs); a single-line handle to the lower left (an outlined handle doesn't fit the lattice at a readable width); head solid, handle a line; centre x 7.8 |
+| notebook | a 7 × 12 page (r 2, x 5.5–12.5) with three ring ticks crossing its left edge (3.5–7 at 5, 8, 11); filled: the ticks a halo plus line so the rings read |
+| party-popper | a cone from an r 1 filleted tip at the lower left to a convex r 6 mouth (solid); confetti of three short lines (vertical, 45°, horizontal) and two ⌀1.5 dots on tight gaps; every line on x.5 (0.4 off centre) |
+| pentagon | a regular pentagon with r 1 corners (hexagon's), 2 to 14 like octagon-alert, circumradius 6.76, ink centred |
+| octagon | octagon-alert's outline alone (path exactly) |
+
+For the owner: spell-check is Area's T with a check (the libraries use an A); pilcrow's bowl fills solid; file-pen's small pencil has no ferrule; webhook reads light; image-off's slash runs close to the mountain's leg and through the sun; battery-charging's bolt sits inside the battery (Fluent's over the edge lost the top under the overlap cut); gamepad's d-pad is 3px; cloud-snow has one row of flakes; hammer's handle is a line; several sit off centre for their marks (exit-door, file-pen, file-search, handshake, party-popper). Candidates for the rejected blocks and toy-brick are on the Exploration sheet (blocks-pyramid, blocks-pyramid-joined, toy-brick-lego).

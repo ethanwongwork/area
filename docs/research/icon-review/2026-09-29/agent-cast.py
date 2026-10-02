@@ -131,7 +131,7 @@ CAP_HEAD,CAP_LH=HEAD,LINE_HEAD
 CAP_CROWN='M3 %sV4.5A5 3 0 0 1 13 4.5V%s'%(f(y_at(3)),f(y_at(13)))+seg(13,3)+'Z'
 CAP_BILL='<path data-filled="solid" d="%s" fill="currentColor"/>'%crescent(2.5,13.5,1.5)
 # military cap: a crown flaring to a wide flat top, a solid visor under the hat line
-MIL_CROWN=g('open-fillet','%s,%s 1.5,3.25 2.5,2 13.5,2 14.5,3.25 %s,%s'%(f(3.5),f(y_at(3.5)),f(12.5),f(y_at(12.5))),'0,0.75,0.75,0.75,0.75,0')+seg(12.5,3.5)+'Z'
+MIL_CROWN=g('open-fillet','%s,%s 2,3.25 3,2 13,2 14,3.25 %s,%s'%(f(3.5),f(y_at(3.5)),f(12.5),f(y_at(12.5))),'0,0.75,0.75,0.75,0.75,0')+seg(12.5,3.5)+'Z'
 VISOR='<path d="%s" fill="currentColor"/>'%crescent(4,12,1.5)
 SHIELD='<path data-filled="hole" d="%s" fill="currentColor"/>'%STARD
 # filled (audit, 2026-10-01): the visor is in front of the crown, so a gap one weight above the hat

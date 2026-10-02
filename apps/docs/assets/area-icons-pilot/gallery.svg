@@ -1,6 +1,6 @@
 <svg data-set="area-pilot" data-keyline="square" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M6.5 5H12A2 2 0 0 1 14 7V11.5A2 2 0 0 1 12 13.5H6.5A2 2 0 0 1 4.5 11.5V7A2 2 0 0 1 6.5 5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="cut" d="M6.5 13.5L9.793 10.207A1 1 0 0 1 11.207 10.207L13.64 12.64" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="hole" cx="7.75" cy="8.25" r="0.75" fill="currentColor"/>
-<path d="M2 11.5V7A4.5 4.5 0 0 1 6.5 2.5H12" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M7 2.5H12A2 2 0 0 1 14 4.5V8.5A2 2 0 0 1 12 10.5H7A2 2 0 0 1 5 8.5V4.5A2 2 0 0 1 7 2.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="cut" d="M6.5 10.5L9.793 7.207A1 1 0 0 1 11.207 7.207L13.64 9.64" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="hole" cx="7.75" cy="5.25" r="0.75" fill="currentColor"/>
+<path d="M10.52 12.8A2 2 0 0 1 9 13.5L4 13.5A2 2 0 0 1 2 11.5L2 7.5A2 2 0 0 1 2.7 5.98" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
