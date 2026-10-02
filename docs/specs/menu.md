@@ -173,3 +173,4 @@ palette and Context menu.
 - 2026-10-01 · audit D-14 → forced colours paint a selected row `Highlight` / `HighlightText` → forced-colors.css.
 - 2026-10-01 · audit D-22 (owner pick A) → `MenuSearch` and `.area-menu__search-surface` deprecated (`@deprecated` JSDoc; use Combobox or Command palette); kept so existing markup renders; its gallery tile is removed → primitives.tsx:1342-1346, surface.css:1217-1219.
 - 2026-10-02 · compact evidence audit → the row glyph edge holds at 8 at compact (was 6; Figma 8, VS Code 9), label column 32 (R1) docs/research/compact-evidence-2026-10-02/README.md.
+- 2026-10-02 · compact evidence audit → rows stack flush at compact: new density role `ui-row-gap` (2, compact 0; VS Code and Figma menus 0); the separator keeps 4 / 1 / 4 by taking the gap back into its margin (R7) docs/research/compact-evidence-2026-10-02/README.md.

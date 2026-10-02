@@ -81,7 +81,7 @@
   .area-command-palette__list {
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-2);
+    gap: var(--area-ui-row-gap); /* 2, compact 0 */
     flex: 1;
     min-block-size: 0;
     overflow-y: auto;
@@ -89,7 +89,7 @@
     padding: var(--_list-inset);
   }
   .area-command-palette__list .area-command-palette__item { border-radius: var(--_row-radius); }
-  .area-command-palette__group { display: flex; flex-direction: column; gap: var(--area-space-2); }
+  .area-command-palette__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
   /* Group headings are Menu's label rows (32, muted, on the rows' column); groups follow each
    * other with the list's 2 gap, as a Menu's do. */
   .area-command-palette__description { color: var(--area-fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }

@@ -52,8 +52,8 @@ the data disagrees with what ships.
 
 ## Recommendations
 
-Applied 2026-10-02: R1–R6 (high confidence). Default density unchanged (gallery stylesheet swap,
-0 differences). R7–R12 wait for the owner.
+Applied 2026-10-02: R1–R6 (high confidence), then R7 and R8 (owner yes). Default density
+unchanged. R9–R12 keep what ships.
 
 | # | Value | Ships (default → compact) | Evidence | Recommend | Confidence |
 |---|---|---|---|---|---|
@@ -63,8 +63,8 @@ Applied 2026-10-02: R1–R6 (high confidence). Default density unchanged (galler
 | R4 | Panel md sides | 16 → 12 | Figma inspector 16 | **hold 16** | High |
 | R5 | Color picker body inset | 16 → 12 | Figma color picker 16 | **hold 16** | High |
 | R6 | `control-xl` / `gutter-xl` | 48 / 16 → 36 / 14 | none; off the ladder and the 4px grid | **40 / 12** (one rung: compact xl = default lg) | High |
-| R7 | Menu row gap | 2 → 2 | VS Code 0, Figma 0 | **0 at compact** | Medium |
-| R8 | Dialog inset · corner | 16 · 16 → 16 · 16 | VS Code save dialog: content 13 / 21, actions 9, corner 8; antd 24 → 16; Material holds 24 | **inset 12, corner 12** (the compact close sits 8 in at radius 4: 12 concentric; VS Code 8) | Medium |
+| R7 | Menu row gap | 2 → 2 | VS Code 0, Figma 0 | **0 at compact**: new role `ui-row-gap` (2 / 0) in Menu, Nav, Tree view, Command palette, Combobox; separator keeps 4 / 1 / 4 | Medium |
+| R8 | Dialog inset · corner | 16 · 16 → 16 · 16 | VS Code save dialog: content 13 / 21, actions 9, corner 8; antd 24 → 16; Material holds 24 | **inset 12, corner 12** (the compact close sits 6 in at radius 6: 12 concentric; VS Code 8) | Medium |
 | R9 | Popover inset | 12 → 8 | VS Code editor hover 8 + 1 sides; antd and Spectrum hold; Figma color picker 16 | **keep 8** (VS Code hover is the closest surface) | Medium |
 | R10 | Menu separator | 4 / 1 / 4 | VS Code 5 / 1 / 5, Figma 7 / 1 / 7 | **keep** (both products are larger than Area at default too; a default change, not a compact one) | Low |
 | R11 | One-rung spacing (≈47 gaps) | e.g. 8 → 6, 16 → 12 | systems split; products bracket 4–8 | **keep**, re-check against a Cursor capture | Low |

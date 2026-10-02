@@ -815,9 +815,9 @@
   /* The page behind a modal doesn't scroll: showModal() leaves it to the page (audit E-20). */
   html:has(.area-dialog__modal:modal) { overflow: hidden; }
   .area-dialog {
-    /* spec: 16 at both densities, border included. Compact keeps it (owner, 2026-10-02: Notion and
-     * Figma dialogs 16, VS Code's settings dialog 24); the proportional rung would be 12. */
-    --_dialog-outer: var(--area-space-16);
+    /* spec: the md surface inset, border included: 16, compact 12 (evidence audit R8, 2026-10-02:
+     * VS Code's save dialog sets content 13 in and actions 9 from the edges; antd compact 16). */
+    --_dialog-outer: var(--area-inset-surface-md);
     --_dialog-inset: calc(var(--_dialog-outer) - var(--area-border-width));
     /*
      * spec: concentric with the corner close. The close sits 8 in (inset minus half the
@@ -825,7 +825,7 @@
      * (ChatGPT 16). Capped at twice the system container radius so Sharp stays square. Reads
      * the dialog's own inset, so the corner stays concentric when the close's radius changes.
      */
-    --_dialog-radius: min(calc(var(--area-radius-container) * 2), calc(var(--area-radius-control-md) + var(--_dialog-outer) - (var(--area-control-md) - var(--area-icon-md)) / 2)); /* compact: 6 + 16 - 6 = 16 */
+    --_dialog-radius: min(calc(var(--area-radius-container) * 2), calc(var(--area-radius-control-md) + var(--_dialog-outer) - (var(--area-control-md) - var(--area-icon-md)) / 2)); /* compact: 6 + 12 - 6 = 12 (VS Code 8) */
     display: flex;
     flex-direction: column;
     gap: var(--area-inset-surface-md);
@@ -1038,8 +1038,8 @@
     display: flex;
     flex-direction: column;
     /* A small break lets adjacent hover plates remain distinct without turning the
-     * panel into a loose stack. */
-    gap: var(--area-space-2);
+     * panel into a loose stack; compact stacks rows flush, as VS Code and Figma (ui-row-gap). */
+    gap: var(--area-ui-row-gap);
     min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
     /*
      * spec: a floating lift, Notion's two layers (20/24 and 5/8 blur) in the theme's shadow
@@ -1181,10 +1181,10 @@
   .area-menu__separator {
     block-size: 1px;
     /*
-     * spec: 4px from the rows on each side (the menu's 2px row gap plus 2px), as Notion
+     * spec: 4px from the rows on each side (the menu's row gap plus the rest), as Notion
      * (4 / 1 / 4). Was 10px each side, a 21px band; ChatGPT uses 8 (docs/specs/menu.md).
      */
-    margin-block: 2px; /* spec */
+    margin-block: calc(var(--area-space-4) - var(--area-ui-row-gap)); /* spec */
     margin-inline: var(--area-space-8);
     background-color: var(--area-border-decorative);
   }

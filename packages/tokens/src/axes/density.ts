@@ -39,6 +39,9 @@ interface DensityRoles {
   row: number;
   /** A row's glyph edge: the leading icon's distance from the row's start. */
   rowInset: number;
+  /** The gap between stacked rows: 2 keeps default hover plates apart; dense products stack
+   *  rows flush (VS Code menus and quick pick 0, Figma menus and layers 0; evidence audit R7). */
+  rowGap: number;
   /** A row's icon-to-label gap. */
   gapRow: number;
   /** Floating-surface insets: Popover (sm), Dialog (md). */
@@ -55,7 +58,7 @@ interface DensityRoles {
   dense: 0 | 1;
 }
 
-export const DEFAULT_ROLES: DensityRoles = { row: 32, rowInset: 8, gapRow: 12, insetSurfaceSm: 12, insetSurfaceMd: 16, stack: 6, cluster: 8, mark: { sm: 16, md: 20, lg: 24 }, dense: 0 };
+export const DEFAULT_ROLES: DensityRoles = { row: 32, rowInset: 8, rowGap: 2, gapRow: 12, insetSurfaceSm: 12, insetSurfaceMd: 16, stack: 6, cluster: 8, mark: { sm: 16, md: 20, lg: 24 }, dense: 0 };
 /*
  * Compact rows are 24 (owner 2026-10-01; VS Code menus 24, Figma 24): 16/24 type leading plus
  * 4 above and below, as a default row is 20 plus 6. The glyph edge holds at 8 (Figma 8, VS Code 9;
@@ -64,7 +67,7 @@ export const DEFAULT_ROLES: DensityRoles = { row: 32, rowInset: 8, gapRow: 12, i
  * and lg 24 -> 20; sm stays 16, the floor of a 12/16 label (VS Code's key labels 18 at 11px and
  * count badges 19 at 10px are smaller type than the ramp allows).
  */
-export const COMPACT_ROLES: DensityRoles = { row: 24, rowInset: 8, gapRow: 8, insetSurfaceSm: 8, insetSurfaceMd: 12, stack: 4, cluster: 6, mark: { sm: 16, md: 16, lg: 20 }, dense: 1 };
+export const COMPACT_ROLES: DensityRoles = { row: 24, rowInset: 8, rowGap: 0, gapRow: 8, insetSurfaceSm: 8, insetSurfaceMd: 12, stack: 4, cluster: 6, mark: { sm: 16, md: 16, lg: 20 }, dense: 1 };
 
 export function densityTokens(tiers: Record<Tier, TierSpec>, roles: DensityRoles) {
   const out: Record<string, string | number> = {};
@@ -90,6 +93,7 @@ export function densityTokens(tiers: Record<Tier, TierSpec>, roles: DensityRoles
   out["gap-row"] = `${roles.gapRow}px`;
   out["ui-row"] = `${roles.row}px`;
   out["ui-row-inset"] = `${roles.rowInset}px`;
+  out["ui-row-gap"] = `${roles.rowGap}px`;
   out["ui-dense"] = String(roles.dense);
   out["ui-stack"] = `${roles.stack}px`;
   out["ui-cluster"] = `${roles.cluster}px`;

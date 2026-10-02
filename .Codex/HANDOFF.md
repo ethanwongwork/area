@@ -43,13 +43,19 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Merge with main (phases 6–7): main's S21a C held marks under compact; the owner's later
   proportional direction steps them down (16/16/20). Main's titles-hold rule (H-7 A), Input's
   4px action ring (B-7 B), `border-float` and the pruned tokens are kept.
-- Dialog inset decided (owner, 2026-10-02): holds at 16 in compact, corner 16 concentric with the
-  close, section gap 12 (`surface.css` `--_dialog-outer`).
+- **Compact evidence audit (2026-10-02, PR 37):** `docs/research/compact-evidence-2026-10-02/`
+  classifies all 119 compact values (22 measured, 81 rule-only, 11 conflicts, 4 picks) and pins
+  how antd, Material, Spectrum, Carbon and Primer step down. Applied R1–R8: row glyph edge 8,
+  tooltip sides 8 / corner 4, Panel md and Color picker hold 16, xl 40 / 12, `ui-row-gap` 2 / 0,
+  Dialog 12 / 12. Code block corner 12 / 8. Owner rule: values follow measured data and system
+  coherence; picks are adjustments. Open: Cursor capture, a Figma dialog and sectioned popover.
+- Measuring at compact: tiles that pin `data-area-ui="default"` don't follow the root switch;
+  filter by `closest('[data-area-ui]') === <html>` before reading values.
 - Round 9 (2026-10-02, second both-density sweep): choice groups and cards, Chip/Badge groups,
   Box field, Panel labels, Tabs sm and panel, Command palette hints, Code block gaps now step down;
   default identical (0 gallery differences). Remaining holds are listed in the compact note.
-- Open: tooltip sides 10;
-  whether changed approved families (Menu, Nav, …) return to In review; Cursor itself.
+- Open: whether changed approved families (Menu, Nav, Dialog, Tooltip, …) return to In review;
+  Cursor itself.
 
 ## Start here (next session)
 

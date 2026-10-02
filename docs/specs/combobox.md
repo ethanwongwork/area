@@ -98,3 +98,4 @@ field), matched to Notion's menu when Menu was approved. No change. Unverified: 
 - 2026-09-30 · audit S11a (owner) → no Combobox change; options use Menu's rows, so an icon's label sits on the shared 36 column (`--area-gap-row`, surface.css:984).
 - 2026-09-30 · audit S13 (owner) → the chosen option shows the active plate plus the check, as Select does; Combobox sets `data-selected` on it (Combobox.tsx:216; combobox.css:35-37). Settles family call B-6. Was the check alone.
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → `style` lands on the root with `className` (Combobox.tsx:235; was forwarded through Input to the inner input).
+- 2026-10-02 · compact evidence audit → groups stack flush at compact (`ui-row-gap` 2 / 0; R7) docs/research/compact-evidence-2026-10-02/README.md.
