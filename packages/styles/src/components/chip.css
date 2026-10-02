@@ -259,6 +259,6 @@
   .area-chip-group {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--area-space-8); /* Material's chip set, 8 / 8 (audit C-27 A; was 4) */
+    gap: var(--area-ui-cluster); /* Material's chip set, 8 / 8, compact 6 (audit C-27 A; was 4) */
   }
 }

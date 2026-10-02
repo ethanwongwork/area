@@ -205,3 +205,4 @@ exists. Build and test results are in [the audit](../research/cohesion-audit.md#
 - 2026-10-01 · audit C-24 → on a removable chip, `ref` and native props land on the primary control (action, or the remove button when it is the only control); `className` and `style` on the chip span → primitives.tsx:916-923.
 - 2026-09-30 · audit C-32 (owner pick A) → kept: assist, suggestion and filter share one rest paint; `kind` is an interaction role, and its gallery tiles are grouped under Behavior.
 - 2026-10-01 · audit C-27 (owner pick A) → ChipGroup gap 8 / 8, Material's chip set (was 4) → chip.css:259-262.
+- 2026-10-02 · compact pass round 9 → ChipGroup gap reads `ui-cluster` (8, compact 6). docs/research/compact-pass-2026-10-01.md (round 9).

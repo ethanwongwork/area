@@ -39,6 +39,9 @@ interface DensityRoles {
   row: number;
   /** A row's glyph edge: the leading icon's distance from the row's start. */
   rowInset: number;
+  /** The gap between stacked rows: 2 keeps default hover plates apart; dense products stack
+   *  rows flush (VS Code menus and quick pick 0, Figma menus and layers 0; evidence audit R7). */
+  rowGap: number;
   /** A row's icon-to-label gap. */
   gapRow: number;
   /** Floating-surface insets: Popover (sm), Dialog (md). */
@@ -55,16 +58,16 @@ interface DensityRoles {
   dense: 0 | 1;
 }
 
-export const DEFAULT_ROLES: DensityRoles = { row: 32, rowInset: 8, gapRow: 12, insetSurfaceSm: 12, insetSurfaceMd: 16, stack: 6, cluster: 8, mark: { sm: 16, md: 20, lg: 24 }, dense: 0 };
+export const DEFAULT_ROLES: DensityRoles = { row: 32, rowInset: 8, rowGap: 2, gapRow: 12, insetSurfaceSm: 12, insetSurfaceMd: 16, stack: 6, cluster: 8, mark: { sm: 16, md: 20, lg: 24 }, dense: 0 };
 /*
  * Compact rows are 24 (owner 2026-10-01; VS Code menus 24, Figma 24): 16/24 type leading plus
- * 4 above and below, as a default row is 20 plus 6. The glyph edge (8 -> 6) and the icon gap
- * (12 -> 8) step down with it, so labels sit on a 30 column. Surface insets step down one rung
+ * 4 above and below, as a default row is 20 plus 6. The glyph edge holds at 8 (Figma 8, VS Code 9;
+ * evidence audit 2026-10-02) and the icon gap steps 12 -> 8, so labels sit on a 32 column. Surface insets step down one rung
  * each (VS Code's hover insets its text 9, its quick pick 7). Marks step down one rung, md 20 -> 16
  * and lg 24 -> 20; sm stays 16, the floor of a 12/16 label (VS Code's key labels 18 at 11px and
  * count badges 19 at 10px are smaller type than the ramp allows).
  */
-export const COMPACT_ROLES: DensityRoles = { row: 24, rowInset: 6, gapRow: 8, insetSurfaceSm: 8, insetSurfaceMd: 12, stack: 4, cluster: 6, mark: { sm: 16, md: 16, lg: 20 }, dense: 1 };
+export const COMPACT_ROLES: DensityRoles = { row: 24, rowInset: 8, rowGap: 0, gapRow: 8, insetSurfaceSm: 8, insetSurfaceMd: 12, stack: 4, cluster: 6, mark: { sm: 16, md: 16, lg: 20 }, dense: 1 };
 
 export function densityTokens(tiers: Record<Tier, TierSpec>, roles: DensityRoles) {
   const out: Record<string, string | number> = {};
@@ -86,10 +89,11 @@ export function densityTokens(tiers: Record<Tier, TierSpec>, roles: DensityRoles
   const medium = tiers.md;
   // The icon-to-label gap of a list row (audit S11a, owner 2026-09-30): with an 8 row inset and
   // a 16 icon it puts every icon row's label on one 36 column, where ChatGPT's and Notion's
-  // menus and sidebars start theirs. Compact steps it down with the row (30 column).
+  // menus and sidebars start theirs. Compact steps the gap to 8 with the inset held at 8 (32 column).
   out["gap-row"] = `${roles.gapRow}px`;
   out["ui-row"] = `${roles.row}px`;
   out["ui-row-inset"] = `${roles.rowInset}px`;
+  out["ui-row-gap"] = `${roles.rowGap}px`;
   out["ui-dense"] = String(roles.dense);
   out["ui-stack"] = `${roles.stack}px`;
   out["ui-cluster"] = `${roles.cluster}px`;
@@ -156,7 +160,7 @@ export const COMPACT_TIERS: Record<Tier, TierSpec> = {
   sm: { height: 24, gutter: 8, icon: 16, gap: 4, size: 12, leading: 16 },
   md: { height: 28, gutter: 8, icon: 16, gap: 4, size: 12, leading: 16 },
   lg: { height: 32, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
-  xl: { height: 36, gutter: 14, icon: 16, gap: 8, size: 14, leading: 20 },
+  xl: { height: 40, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 }, // one rung: compact xl = default lg (evidence audit 2026-10-02; was 36 / 14, off the ladder)
 };
 
 export const DENSITY_AXIS: AxisDefinition = {

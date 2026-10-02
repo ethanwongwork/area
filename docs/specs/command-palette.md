@@ -150,3 +150,5 @@ keycap-to-label gap inside the Open plate, taken from the visible plate here.
 - 2026-09-30 · audit D-23 (owner pick A) → kept the list model (12 corner, 32 rows) rather than ChatGPT's and Notion's larger palette (corner 16–20, rows 36–48).
 - 2026-10-01 · audit D-24 (owner pick A) → the empty state is the Combobox row: 32 tall, muted, at the text inset (was a centred 96 block); the description stays after the label → command-palette.css:97-105.
 - 2026-10-01 · compact pass round 7 → the search row is 48, compact 40. docs/research/compact-pass-2026-10-01.md.
+- 2026-10-02 · compact pass round 9 → footer hints 16 → 12 ink to ink; hint key-to-label gap reads `gap-md` (6 / 4). docs/research/compact-pass-2026-10-01.md (round 9).
+- 2026-10-02 · compact evidence audit → list rows and groups stack flush at compact (`ui-row-gap` 2 / 0; VS Code quick pick rows abut; R7) docs/research/compact-evidence-2026-10-02/README.md.

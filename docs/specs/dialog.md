@@ -90,6 +90,7 @@ footer action in the opposite corner by the same rule (12/12).
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
 | surface · inset, gap | 16 (border included), 16 between sections (unchanged) | shadcn 16/16; Primer 16 | ChatGPT 24 |
+| surface · compact | inset **12** (border included), corner **12**, section gap 12 (`inset-surface-md`); close 6 in at radius 6, concentric | VS Code save dialog (`compact/vscode--save-dialog--open--dark`): corner 8, content 13 from the side, actions and close 9 from the edges; antd compact modal 16; Material holds 24 | Evidence audit R8, 2026-10-02 (the earlier hold at 16 cited unmeasured Notion/Figma values) |
 | surface · width | 480 preferred (unchanged) | Between shadcn 384 and ChatGPT 600 / Primer 640 | — |
 | surface · border | 1px decorative (unchanged) | All use a 1px ring | — |
 | surface · shadow | **`--area-shadow-float`**: `0 20px 24px` in `shadow-color`, `0 5px 8px` at half strength (surface.css:777); `none` under the Flat preset | The lift Popover and Menu use | Was `shadow-2` (1–2px). A Surface axis role since audit S10. References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |
@@ -202,3 +203,4 @@ change.
 - 2026-09-30 · audit S10 (owner) → the lift is the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → surface.css:777.
 - 2026-09-30 · audit S17 (API vocabulary, slice 1) → `open` / `defaultOpen` added (shared `useOpenState`); without a trigger, `open` opens the native modal (a menu item asking for confirmation); Escape, the close control and the backdrop report `false` through `onOpenChange` → `primitives.tsx:1311-1324`.
 - 2026-10-01 · audit E-19 (owner pick A) → the modal and its scrim fade (and the modal scales from 0.97) over 150ms on open and close via `@starting-style` and `allow-discrete` transitions; instant under the "none" motion preset, no scale under reduced motion → surface.css:767-797.
+- 2026-10-02 · compact evidence audit → compact inset 16 → 12 and corner 16 → 12, concentric with the close (6 in, radius 6); reverses the morning's hold, whose Notion/Figma 16 was never measured. VS Code's save dialog: corner 8, content 13 in, actions 9 from the edges; antd compact 16 (R8) docs/research/compact-evidence-2026-10-02/README.md.

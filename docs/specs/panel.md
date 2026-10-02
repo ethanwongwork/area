@@ -47,8 +47,8 @@ Popover float over the page. A panel stays beside its subject.
 | composition | sections, heading, stack, footer | Grouping and a pinned action | Gallery `default`, `sections`, `footer` |
 
 Panel insets (sm 12, md 16) and gaps (sm 8, md 12) are fixed spacing, not the gutter or gap
-ramps: they do not follow density, so under compact the controls shrink and the insets stay.
-Compact values are set in the density pass (owner, audit F-26 B, 2026-09-30; `panel.css:340-357`).
+ramps. The compact pass steps them down one rung (insets read `inset-surface-sm/md`, 12 / 16 →
+8 / 12; gaps 8 / 12 → 6 / 8; the md label gap reads `ui-stack`, 6 / 4); see the feedback log.
 
 ## Sources
 
@@ -238,3 +238,5 @@ Unverified: dark theme and a side-by-side with Figma's inspector at the same zoo
 - 2026-09-28 · owner: approved (batch 8).
 - 2026-09-30 · audit F-26 (owner pick B) → insets 12 / 16 and gaps 8 / 12 stay fixed spacing, not density-following; the code comment and this spec no longer claim the gutter ramp; compact values come with the density pass → panel.css:340-357.
 - 2026-10-01 · compact pass round 6 → the sides read the surface insets (`inset-surface-md/sm`: 16 / 12, compact 12 / 8); gaps 12 / 8 step to 8 / 6. Default unchanged. docs/research/compact-pass-2026-10-01.md.
+- 2026-10-02 · compact pass round 9 → the md label gap reads `ui-stack` (6, compact 4). docs/research/compact-pass-2026-10-01.md (round 9).
+- 2026-10-02 · compact evidence audit → md sides hold at 16 at compact (was 12; Figma's inspector 16) (R4) docs/research/compact-evidence-2026-10-02/README.md.

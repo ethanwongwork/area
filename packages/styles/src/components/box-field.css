@@ -18,7 +18,7 @@
     flex-direction: column;
     /* spec (inspector): a caption sits over its controls as PanelRow's does; inside a panel it follows
        the panel tier (4 at sm, 6 at md), outside it 6. */
-    gap: var(--_panel-label-gap, var(--area-space-6));
+    gap: var(--_panel-label-gap, var(--area-ui-stack));
     min-inline-size: 0;
   }
 
@@ -39,7 +39,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_control);
     /* spec (inspector): the panel's field gap between columns and rows (8 at sm, 12 at md; 8 outside). */
-    gap: var(--_panel-gap, var(--area-space-8));
+    gap: var(--_panel-gap, var(--area-ui-cluster));
     align-items: center;
   }
 

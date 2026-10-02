@@ -3,6 +3,9 @@
  * families stay in review until the owner accepts them. Compound parts follow their
  * parent family.
  */
+// Re-confirmed 2026-10-02 after the compact evidence audit (PR 37): menu, nav, tree-view,
+// command-palette, combobox, tooltip, dialog, code-block, panel, color-picker, checkbox, radio,
+// chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
 export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-27 after all phases (batches 1-3).
   'toolbar', 'split-button', 'segmented', 'nav', 'menu', 'toast',

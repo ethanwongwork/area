@@ -815,14 +815,17 @@
   /* The page behind a modal doesn't scroll: showModal() leaves it to the page (audit E-20). */
   html:has(.area-dialog__modal:modal) { overflow: hidden; }
   .area-dialog {
-    --_dialog-inset: calc(var(--area-inset-surface-md) - var(--area-border-width)); /* 16, compact 12: the md surface inset */
+    /* spec: the md surface inset, border included: 16, compact 12 (evidence audit R8, 2026-10-02:
+     * VS Code's save dialog sets content 13 in and actions 9 from the edges; antd compact 16). */
+    --_dialog-outer: var(--area-inset-surface-md);
+    --_dialog-inset: calc(var(--_dialog-outer) - var(--area-border-width));
     /*
      * spec: concentric with the corner close. The close sits 8 in (inset minus half the
      * control's padding), so the corner is its radius plus 8: 16 at the standard preset
      * (ChatGPT 16). Capped at twice the system container radius so Sharp stays square. Reads
-     * the inset role, not a literal 16, so compact's corner steps down with it (was 18).
+     * the dialog's own inset, so the corner stays concentric when the close's radius changes.
      */
-    --_dialog-radius: min(calc(var(--area-radius-container) * 2), calc(var(--area-radius-control-md) + var(--area-inset-surface-md) - (var(--area-control-md) - var(--area-icon-md)) / 2)); /* compact: 6 + 12 - 6 = 12 */
+    --_dialog-radius: min(calc(var(--area-radius-container) * 2), calc(var(--area-radius-control-md) + var(--_dialog-outer) - (var(--area-control-md) - var(--area-icon-md)) / 2)); /* compact: 6 + 12 - 6 = 12 (VS Code 8) */
     display: flex;
     flex-direction: column;
     gap: var(--area-inset-surface-md);
@@ -1035,8 +1038,8 @@
     display: flex;
     flex-direction: column;
     /* A small break lets adjacent hover plates remain distinct without turning the
-     * panel into a loose stack. */
-    gap: var(--area-space-2);
+     * panel into a loose stack; compact stacks rows flush, as VS Code and Figma (ui-row-gap). */
+    gap: var(--area-ui-row-gap);
     min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
     /*
      * spec: a floating lift, Notion's two layers (20/24 and 5/8 blur) in the theme's shadow
@@ -1178,10 +1181,10 @@
   .area-menu__separator {
     block-size: 1px;
     /*
-     * spec: 4px from the rows on each side (the menu's 2px row gap plus 2px), as Notion
+     * spec: 4px from the rows on each side (the menu's row gap plus the rest), as Notion
      * (4 / 1 / 4). Was 10px each side, a 21px band; ChatGPT uses 8 (docs/specs/menu.md).
      */
-    margin-block: 2px; /* spec */
+    margin-block: calc(var(--area-space-4) - var(--area-ui-row-gap)); /* spec */
     margin-inline: var(--area-space-8);
     background-color: var(--area-border-decorative);
   }
@@ -1268,14 +1271,15 @@
   .area-tooltip {
     --_tooltip-inset-block: var(--area-space-4);
     /* spec: owner, 10px text sides (8 read tight, ChatGPT's 12 too much); a trailing Kbd keeps the 4px block inset. */
-    --_tooltip-inset-inline: var(--area-space-10);
+    --_tooltip-inset-inline: calc(var(--area-space-10) - var(--area-space-2) * var(--area-ui-dense)); /* compact 8: VS Code 9, Figma 8 (evidence audit 2026-10-02) */
     --_tooltip-inset-inline-end: var(--_tooltip-inset-inline);
     /*
      * spec: rounder than a control (8) but not a pill (14 on 28px): the owner asked for
      * "rounder, not quite pill" (2026-09-25). 10px at Standard; a nested Kbd lands on its
      * own 6px. Follows the radius preset, capped at half a line so it never becomes a blob.
      */
-    --_tooltip-radius: var(--area-radius-control-lg);
+    /* compact: the 24 box reads the sm control corner, 4 (VS Code 3, Figma 5; evidence audit 2026-10-02). */
+    --_tooltip-radius: calc(var(--area-radius-control-lg) * (1 - var(--area-ui-dense)) + var(--area-radius-control-sm) * var(--area-ui-dense));
     --_tooltip-shape: min(var(--_tooltip-radius), calc((var(--area-ui-leading) + var(--_tooltip-inset-block) * 2) / 2));
 
     position: relative;

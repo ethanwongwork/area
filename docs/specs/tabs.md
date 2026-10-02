@@ -183,3 +183,4 @@ in [the audit](../research/cohesion-audit.md#verification).
 - 2026-09-30 · audit S14 (owner) → a tab's icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`--_tab-item-gap`, navigation.css:16, :79-81; density.ts:80-82). The 16 / 20 / 24 gap between tabs is unchanged.
 - 2026-09-30 · audit S17 (API vocabulary, slice 1) → `onValueChange(value, event)` passes the click or key event → `primitives.tsx:1221`.
 - 2026-09-30 · audit S17 (API vocabulary, slice 2, H-13) → manifest default `size: "md"` added (manifest.ts:590); the md modifier equals the base rule, no visual change.
+- 2026-10-02 · compact pass round 9 → sm tab gap 16 → 12 and the panel's top inset reads `inset-surface-md` (16 / 12) at compact. docs/research/compact-pass-2026-10-01.md (round 9).

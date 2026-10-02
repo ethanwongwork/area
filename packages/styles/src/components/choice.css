@@ -99,7 +99,7 @@
      2026-09-28: darker, not thicker; was a 2px edge from the owner references). */
   .area-checkbox--card,
   .area-radio--card {
-    --_card-inset: calc(var(--area-space-12) - var(--area-stroke-width)); /* spec: 12 to the content, border counted once (shadcn 11) */
+    --_card-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense) - var(--area-stroke-width)); /* spec: 12 to the content, compact 8, border counted once (shadcn 11) */
     --_card-edge: var(--area-edge-control); /* spec: shadcn ≈ #e3; was border-decorative #f3 */
     --_card-edge-hover: var(--area-edge-control-hover);
     box-sizing: border-box;
@@ -140,7 +140,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: start;
-    row-gap: var(--area-space-16); /* spec: owner reference 1 separates the icon from the label */
+    row-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* spec: owner reference 1 separates the icon from the label; compact 12 */
   }
   .area-checkbox--tile > .area-checkbox__visual,
   .area-radio--tile > .area-radio__visual {
@@ -308,7 +308,7 @@
   .area-radio-group--horizontal .area-radio-group__options {
     flex-direction: row;
     flex-wrap: wrap;
-    column-gap: var(--area-space-16);
+    column-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12 */
   }
 
   /* A disabled group dims once as a whole, legend included (audit C-27 A; the options dimmed alone). */
@@ -337,8 +337,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--area-space-8);
-    margin-block-start: var(--area-space-6); /* Field label to control, 6 (audit C-27 A; was 12) */
+    gap: var(--area-ui-cluster);
+    margin-block-start: var(--area-ui-stack); /* Field label to control, 6 / compact 4 (audit C-27 A; was 12) */
   }
 
   .area-checkbox-group--vertical .area-checkbox-group__options { flex-direction: column; }
@@ -346,7 +346,7 @@
   .area-checkbox-group--horizontal .area-checkbox-group__options {
     flex-direction: row;
     flex-wrap: wrap;
-    column-gap: var(--area-space-16);
+    column-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12 */
   }
 
   .area-checkbox-group:disabled { cursor: not-allowed; opacity: var(--area-opacity-disabled); }

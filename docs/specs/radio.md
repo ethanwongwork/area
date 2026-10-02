@@ -156,3 +156,4 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
   `area--horizontal`, `area--description`.
 - 2026-09-27 · owner flagged the invalid group → a checked option in an invalid group takes the danger fill, as a single invalid Checkbox does (`choice.css`); the group now reads as one error state → headless Chromium.
 - 2026-09-30 · audit S14 (owner) → the label gap is 6 at md and lg (was 8), shared with Checkbox (choice.css:9, :404, :410; density.ts:81-82).
+- 2026-10-02 · compact pass round 9 → horizontal options 16 → 12; the choice card inset 12 → 8 and the tile's icon gap 16 → 12 at compact (choice.css). Default unchanged. docs/research/compact-pass-2026-10-01.md (round 9).

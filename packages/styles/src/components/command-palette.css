@@ -81,7 +81,7 @@
   .area-command-palette__list {
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-2);
+    gap: var(--area-ui-row-gap); /* 2, compact 0 */
     flex: 1;
     min-block-size: 0;
     overflow-y: auto;
@@ -89,7 +89,7 @@
     padding: var(--_list-inset);
   }
   .area-command-palette__list .area-command-palette__item { border-radius: var(--_row-radius); }
-  .area-command-palette__group { display: flex; flex-direction: column; gap: var(--area-space-2); }
+  .area-command-palette__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
   /* Group headings are Menu's label rows (32, muted, on the rows' column); groups follow each
    * other with the list's 2 gap, as a Menu's do. */
   .area-command-palette__description { color: var(--area-fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
@@ -111,7 +111,7 @@
     display: flex;
     align-items: center;
     /* 16 between one hint's ink and the next; the plates' insets come out of it. */
-    gap: calc(var(--area-space-16) - var(--_hint-inset) * 2);
+    gap: calc(calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)) - var(--_hint-inset) * 2); /* compact 12 */
     flex-shrink: 0;
     /* The hints' keycaps start on the rows' icon column; their plates reach past it by their inset.
      * spec (owner, 2026-09-28: "is this spacing at the bottom correct?"): the plates keep that
@@ -123,13 +123,13 @@
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
   }
-  .area-command-palette__hint { display: inline-flex; align-items: center; gap: var(--area-space-6); }
+  .area-command-palette__hint { display: inline-flex; align-items: center; gap: var(--area-gap-md); }
   /* Each hint is also a quiet button: pointer users click what the keys do. Menu's hover wash,
    * ink fixed, a 24 plate with the keycap on its 4 inset. */
   .area-command-palette__hint-button {
     display: inline-flex;
     align-items: center;
-    gap: var(--area-space-6);
+    gap: var(--area-gap-md);
     block-size: var(--area-control-xs);
     min-inline-size: var(--area-control-xs);
     padding-inline: var(--_hint-inset);
