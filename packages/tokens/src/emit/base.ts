@@ -223,6 +223,10 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}token-edge`]: `light-dark(var(${PREFIX}border-decorative), var(${PREFIX}border-faint))`,
     [`${PREFIX}token-text`]: `var(${PREFIX}fg-default)`,
     [`${PREFIX}token-swatch-ring`]: `color-mix(in oklab, var(${PREFIX}token-text) 15%, transparent)`,
+    // Corners follow the UI scale (compact pass, owner 2026-10-01). The radius axis publishes a
+    // default and a dense ladder; the UI scale's `ui-dense` flag (0 or 1) picks one. A live
+    // calc, so a `data-area-ui` or `data-area-radius` subtree re-derives its own corners.
+    ...radiusDerivations(),
     // A control nested inside a container keeps concentric corners: the inner radius is the
     // outer radius less the inset. This is the forward form of the concentric rule; the
     // inset varies per component, so components apply it themselves against this token.
@@ -233,6 +237,18 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}transition`]:
       `background-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), border-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), box-shadow var(${PREFIX}duration-fast) var(${PREFIX}ease-out)`,
   };
+}
+
+function radiusDerivations(): Record<string, string> {
+  const pick = (name: string) =>
+    `calc(var(${PREFIX}radius-base-${name}) + (var(${PREFIX}radius-dense-${name}) - var(${PREFIX}radius-base-${name})) * var(${PREFIX}ui-dense))`;
+  const out: Record<string, string> = {};
+  for (const tier of ["xs", "sm", "md", "lg", "xl"]) out[`${PREFIX}radius-control-${tier}`] = pick(`control-${tier}`);
+  out[`${PREFIX}radius-control`] = `var(${PREFIX}radius-control-md)`;
+  out[`${PREFIX}radius-container`] = pick("container");
+  out[`${PREFIX}radius-small`] = pick("small");
+  out[`${PREFIX}radius-row`] = pick("row");
+  return out;
 }
 
 /**
@@ -253,8 +269,9 @@ export function derivedTokens(): Record<string, string> {
  * plausible-looking wrong number. Both are reasons to register sparingly.
  */
 export const REGISTERED_PROPERTIES = [
-  { name: `${PREFIX}radius-container`, syntax: "<length>", initial: "12px" },
-  { name: `${PREFIX}radius-small`, syntax: "<length>", initial: "4px" },
+  // The leaves of the radius derivation; the public radius tokens are derived and unregistered.
+  { name: `${PREFIX}radius-base-container`, syntax: "<length>", initial: "12px" },
+  { name: `${PREFIX}radius-base-small`, syntax: "<length>", initial: "6px" },
   { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}border-width`, syntax: "<length>", initial: "1px" },

@@ -99,7 +99,7 @@
     display: grid;
     grid-template-columns: max-content minmax(80px, 1fr) max-content;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     inline-size: 100%;
   }
   .area-slider-range__track {

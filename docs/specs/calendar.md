@@ -242,3 +242,4 @@ on outside days, fixed (see Decisions). Dark theme not compared.
 - 2026-09-30 · audit S4 (owner) → 32px days take `radius-control-md` 8 (was control-sm 6), matching 32px Buttons; settles family call F-12 → `calendar.css:10`.
 - 2026-09-30 · audit S10 (owner) → the surface reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → `calendar.css:37`.
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(value, event)` passes the day button's click event.
+- 2026-10-01 · compact pass (owner: "do what's right with compact for calendar") → compact takes Notion's date picker geometry, the compact calibration: cells 32 around days 28 (corner 6 via the dense radius ladder), surface sides on `inset-surface-sm` (12, compact 8) and top 8 → 6. Default stays 36 / 32: the 2026-09-27 "too compact" call is about default density, where days sit beside 32px Buttons. docs/research/compact-pass-2026-10-01.md.

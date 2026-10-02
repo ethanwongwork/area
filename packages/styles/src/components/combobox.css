@@ -33,9 +33,9 @@
   .area-combobox__empty {
     display: flex;
     align-items: center;
-    block-size: var(--area-control-md);
-    /* The text-only row inset (inset.css): the cap centred in the 32px row's square. */
-    padding-inline: calc((var(--area-control-md) - 1cap) / 2);
+    block-size: var(--area-ui-row);
+    /* The text-only row inset (inset.css): the cap centred in the row's square. */
+    padding-inline: calc((var(--area-ui-row) - 1cap) / 2);
     color: var(--area-fg-muted);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);

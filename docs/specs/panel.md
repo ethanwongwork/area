@@ -232,3 +232,4 @@ Unverified: dark theme and a side-by-side with Figma's inspector at the same zoo
   measured: header button 8 / 8 (sm) and 12 / 12 (md) above and below, 12 / 16 from the right edge;
   field gap = field-to-button gap (8 / 12); last field to rule 12 / 16; no clipped value.
 - 2026-09-28 · owner: approved (batch 8).
+- 2026-10-01 · compact pass round 6 → the sides read the surface insets (`inset-surface-md/sm`: 16 / 12, compact 12 / 8); gaps 12 / 8 step to 8 / 6. Default unchanged. docs/research/compact-pass-2026-10-01.md.

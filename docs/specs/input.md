@@ -209,3 +209,4 @@ fields and Figma's search and hex fields. Build and test results are in the
 - 2026-09-30 · audit S14 (owner) → the icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`input.css:18`, `:234-236`; density.ts:80-82); settles third-pass question 3 toward Notion and Figma.
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `style` goes to the shell with `className` (it used to reach the inner input).
 - 2026-09-30 · S17 owner calls (owner: "go with your recs") → the leading slot is `icon` again, the same `icon` / `trailingIcon` pair as Button; `leadingIcon` is the deprecated alias.
+- 2026-10-01 · compact pass → the inline action button is `min(icon + 8, height − 4)`: compact sm (24 with a 16 icon) made it 24, filling the field (0 from the top, 1 from the end); it is now 20, 2 clear on every side. Default unchanged. docs/research/compact-pass-2026-10-01.md.

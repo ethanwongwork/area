@@ -20,7 +20,7 @@
     display: flex;
     align-items: center;
     /* spec: text 8 after the icon slot (ChatGPT 52 = 8 + 36 + 8). */
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     flex: 1;
     min-inline-size: 0;
     /* spec: the composer's height: 16/24 text and 12 above and below (ChatGPT 52 on 26 leading). */
@@ -80,7 +80,7 @@
   /* spec (spacing pass): list rows are 2 apart, Menu's rule, so neighbouring hover plates never touch. */
   .area-prompt-suggestions--list { gap: var(--area-space-2); }
   /* Chips: the prompts as outline Buttons that wrap, 8 apart (Button group spacing). */
-  .area-prompt-suggestions--chips { flex-direction: row; flex-wrap: wrap; gap: var(--area-space-8); color: var(--area-fg-default); }
+  .area-prompt-suggestions--chips { flex-direction: row; flex-wrap: wrap; gap: var(--area-ui-cluster); color: var(--area-fg-default); }
   .area-prompt-suggestions--chips > .area-prompt-suggestions__row { max-inline-size: 100%; }
   .area-prompt-suggestions--chips .area-button { max-inline-size: 100%; }
   .area-prompt-suggestions--chips .area-button__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

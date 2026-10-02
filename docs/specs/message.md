@@ -89,3 +89,4 @@ is a deprecated alias).
 
 - 2026-09-30 · audit S6b (owner) → actions no longer override Button ink to `fg-muted`; they take the ghost icon Button's quiet ink as every icon action does. Suggestion rows and Code block tabs keep `fg-muted` → message.css:50.
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `author` is optional and defaults to `assistant` (manifest default too); `MessageActions` is named by `aria-label` (default "Message actions"; `label` deprecated alias).
+- 2026-10-01 · compact pass round 7 → gap 12 → 8 and bubble 10 × 16 → 6 × 12 at compact; the corner is the Composer's (control radius + `ui-cluster`), 16 / 12 (a literal +8 made it 14 at compact). docs/research/compact-pass-2026-10-01.md.

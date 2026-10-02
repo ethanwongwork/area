@@ -42,9 +42,12 @@
   .area-chip { --_box-icon: var(--_dot); }
   .area-segmented__item { --_box-height: var(--_item); }
   .area-nav__item, .area-nav__label, .area-menu__item, .area-menu__label {
-    --_box-height: var(--area-control-md);
+    --_box-height: var(--area-ui-row);
     --_box-border: 0px;
-    --_box-icon: var(--area-icon-md);
+    /* A row's glyph edge is the density's row inset (8 default, as Tree view and Notion; 6
+     * compact), not the icon centred in the row. The reserved box is the row less that inset
+     * each side: 16 at default, the icon itself. docs/research/compact-pass-2026-10-01.md. */
+    --_box-icon: calc(var(--area-ui-row) - var(--area-ui-row-inset) * 2);
   }
   /* A Nav heading names rows that may lead with an icon. Its content edge therefore
    * follows the icon viewport rather than a font-specific cap measurement: group names,
@@ -116,10 +119,10 @@
   /* A shortcut is a nested backplate. Reserve its actual outer box so the space after it
    * equals the vertical space above and below it in the Button. */
   .area-button:has(> .area-button__label > .area-kbd:last-child) {
-    --_box-end: var(--area-space-20);
+    --_box-end: var(--area-mark-md);
   }
   .area-button:has(> .area-button__label > .area-kbd--sm:last-child) {
-    --_box-end: var(--area-space-16);
+    --_box-end: var(--area-mark-sm);
   }
 
   .area-button--icon-only, .area-chip--swatch-only,
@@ -147,14 +150,14 @@
   .area-number-field:has(> .area-number-field__steppers:last-child) { --_box-end: var(--_step); }
   /* A shortcut in an Input's suffix is a nested backplate, placed like a Button's: the space
    * after it equals the space above and below it (Notion's search field ⌘K). */
-  .area-input:has(> .area-input__affix:last-child > .area-kbd) { --_box-end: var(--area-space-20); }
-  .area-input:has(> .area-input__affix:last-child > .area-kbd--sm) { --_box-end: var(--area-space-16); }
+  .area-input:has(> .area-input__affix:last-child > .area-kbd) { --_box-end: var(--area-mark-md); }
+  .area-input:has(> .area-input__affix:last-child > .area-kbd--sm) { --_box-end: var(--area-mark-sm); }
   .area-input__affix:has(> .area-kbd) { display: inline-flex; text-box: none; padding-block: 0; }
   /* A quiet Kbd in a menu is set like the string shortcut (audit S12a), so it takes the text
      end inset; only a filled keycap (on-color) reserves its own box. */
-  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--on-color) { --_box-end: var(--area-space-20); }
-  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--on-color.area-kbd--sm) { --_box-end: var(--area-space-16); }
-  .area-menu__item:has(> .area-menu__shortcut > svg:only-child) { --_box-end: var(--area-icon-md); }
+  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--on-color) { --_box-end: var(--area-mark-md); }
+  .area-menu__item:has(> .area-menu__shortcut > .area-kbd--on-color.area-kbd--sm) { --_box-end: var(--area-mark-sm); }
+  .area-menu__item:has(> .area-menu__shortcut > svg:only-child) { --_box-end: var(--_box-icon); }
   .area-menu__shortcut { display: inline-flex; align-items: center; padding-inline-start: 0; }
   .area-menu__shortcut > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex-shrink: 0; }
   .area-menu__shortcut:not(:has(> *)), .area-nav__trailing:not(:has(> *)) {
@@ -162,7 +165,7 @@
     text-box: trim-both cap alphabetic;
     padding-block: 0.25em;
   }
-  .area-nav__item:has(> .area-nav__trailing > svg:only-child) { --_box-end: var(--area-icon-md); }
+  .area-nav__item:has(> .area-nav__trailing > svg:only-child) { --_box-end: var(--_box-icon); }
   .area-nav__trailing > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex-shrink: 0; }
 
   /* The marker is a separate navigation rail, with room reserved ahead of the label. */
@@ -199,7 +202,7 @@
   .area-alert, .area-toast {
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster); /* 8, compact 6 (compact pass) */
   }
   @supports (text-box: trim-both cap alphabetic) {
     .area-checkbox, .area-radio { align-items: flex-start; }
@@ -235,9 +238,18 @@
   .area-button--end { margin-inline-end: calc((var(--_box-height) - var(--_box-end)) / -2); }
   /* A trailing pill reserves its own height, so it ends as far from the plate's edge as it
      sits from the top (6 for the 20px Badge), like the Kbd rules below. */
-  .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-space-20); }
-  .area-nav__item:has(> .area-nav__trailing > .area-badge--sm:last-child) { --_box-end: var(--area-space-16); }
-  .area-nav__item:has(> .area-nav__trailing > .area-kbd:last-child) { --_box-end: var(--area-space-20); }
-  .area-nav__item:has(> .area-nav__trailing > .area-kbd--sm:last-child) { --_box-end: var(--area-space-16); }
+  .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-mark-md); }
+  .area-nav__item:has(> .area-nav__trailing > .area-badge--sm:last-child) { --_box-end: var(--area-mark-sm); }
+  .area-nav__item:has(> .area-nav__trailing > .area-kbd:last-child) { --_box-end: var(--area-mark-md); }
+  .area-nav__item:has(> .area-nav__trailing > .area-kbd--sm:last-child) { --_box-end: var(--area-mark-sm); }
+  /* A soft Count is a plate, so it ends as far from the row's end as it sits from the top, as a
+     Badge does. A plain Count has no plate: its digits are what the eye reads, so they end on
+     the row's glyph edge, mirroring where the label starts (8 default, 6 compact). It drops
+     its gutter and minimum width so the box is the ink (owner 2026-10-01: the digits sat 17
+     from the end against a label 8 in). */
+  .area-nav__item:has(> .area-nav__trailing > .area-count--soft:last-child) { --_box-end: var(--area-mark-md); }
+  .area-nav__item:has(> .area-nav__trailing > .area-count--soft.area-count--sm:last-child) { --_box-end: var(--area-mark-sm); }
+  .area-nav__item:has(> .area-nav__trailing > .area-count--plain:last-child) { --_box-end: var(--_box-icon); }
+  .area-nav__trailing > .area-count--plain:last-child { min-inline-size: 0; padding-inline: 0; }
 
 }

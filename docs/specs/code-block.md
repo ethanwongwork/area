@@ -191,3 +191,5 @@ Line pitch (20) matches; the corner, header scale and code size are the recorded
   `bg-stripe` (the same 25 rung). Dark unchanged. 19,491 token and contrast tests pass.
 - 2026-09-30 · audit S7a (owner) → shell edge is Card's `light-dark(neutral-100, neutral-750)` #ee (was `border-decorative` #f3); header, flush and toggle rules keep `border-decorative`; tabs keep `fg-muted` → code.css:188.
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(language, event)` replaces `onLanguageChange` (deprecated alias).
+- 2026-10-01 · compact pass round 7 → block and header insets 12 → 8, inline end 16 → 12 at compact; header text, unnumbered code and the gutter keep one column. docs/research/compact-pass-2026-10-01.md.
+- 2026-10-01 · equal-inset sweep → the header's trailing action ends as far from the edge as it sits from the top (4, compact 4; ChatGPT 7 / 7); was 12, on the filename's column, which it keeps. docs/research/compact-pass-2026-10-01.md.

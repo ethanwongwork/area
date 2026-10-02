@@ -8,7 +8,7 @@
     max-inline-size: 100%;
     /* spec: resting rows in secondary ink, as Nav (102) and Notion's sidebar (95); selection adds the main ink. */
     color: var(--area-fg-muted);
-    --_tree-start: var(--area-space-8); /* spec */
+    --_tree-start: var(--area-ui-row-inset); /* spec: Nav's glyph edge, 8 default, 6 compact */
     --_tree-chevron: var(--area-icon-md); /* spec */
     /*
      * spec (owner, pass 3): chevron, icon and label are spaced evenly, 6px apart, and each
@@ -29,7 +29,7 @@
     display: flex;
     align-items: center;
     gap: var(--_tree-gap);
-    block-size: var(--area-control-md);
+    block-size: var(--area-ui-row);
     min-inline-size: 0;
     /*
      * spec: 8px start, as Nav and Notion. Each level indents by the chevron slot plus its
@@ -37,7 +37,7 @@
      */
     padding-inline-start: calc(var(--_tree-start) + var(--_tree-depth) * var(--_tree-step));
     padding-inline-end: var(--area-space-8);
-    border-radius: min(var(--area-radius-row), calc(var(--area-control-md) * var(--area-radius-cap)));
+    border-radius: min(var(--area-radius-row), calc(var(--area-ui-row) * var(--area-radius-cap)));
     cursor: default;
     outline: none;
   }
@@ -81,7 +81,16 @@
    * focused or selected; a control that records a non-default state (locked, hidden) sets
    * data-pinned and stays visible. The slot keeps its width, so labels never reflow.
    */
-  .area-tree-view__actions { display: flex; align-items: center; gap: var(--area-space-2); margin-inline-start: auto; margin-inline-end: calc(-1 * var(--area-space-4)); }
+  /* The last action ends as far from the row's end as it sits from the top, as Nav's row
+     actions and Figma's visibility toggle do: (row - action) / 2, so 2 at default and flush at
+     compact, giving back the row's 8px end padding (owner 2026-10-01; was 4 at both). Actions
+     are concentric with the row: its radius less that inset. */
+  .area-tree-view__actions {
+    --_action-inset: calc((var(--area-ui-row) - var(--area-control-sm)) / 2);
+    display: flex; align-items: center; gap: var(--area-space-2); margin-inline-start: auto;
+    margin-inline-end: calc(var(--_action-inset) - var(--area-space-8));
+  }
+  .area-tree-view__actions > .area-button { --_radius: max(0px, calc(var(--area-radius-row) - var(--_action-inset))); }
   .area-tree-view__trailing + .area-tree-view__actions { margin-inline-start: 0; }
   .area-tree-view__actions > * { opacity: 0; }
   /* :focus-within too, so an action that holds focus is never invisible; on touch (no hover)

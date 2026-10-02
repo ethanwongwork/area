@@ -11,7 +11,7 @@
   @media (hover: none) { .area-hover-card { display: none; } }
 
   /* Who or what the card is about: an avatar or icon, then its name over a quiet handle. */
-  .area-hover-card__identity { display: flex; align-items: center; gap: var(--area-space-12); min-inline-size: 0; }
+  .area-hover-card__identity { display: flex; align-items: center; gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); min-inline-size: 0; }
   .area-hover-card__identity > :last-child { display: grid; min-inline-size: 0; }
 
   /* A quiet line of facts under the description (a handle, a date, a count). */
@@ -19,7 +19,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    column-gap: var(--area-space-12);
+    column-gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
     row-gap: var(--area-space-4);
     color: var(--area-fg-muted);
     font-size: var(--area-text-xs-size);

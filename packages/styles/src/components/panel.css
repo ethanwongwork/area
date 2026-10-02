@@ -21,14 +21,14 @@
        12 at sm and 16 at md, for the sides and the last field above a rule. A section heading and the
        bar are rows (Figma's header is 40: a 24 button with 8 above and below; VS Code's pane header a
        22 row) whose button has one field gap above and below (8 / 12), the title centred on it. */
-    --_inset: var(--area-space-16);
+    --_inset: var(--area-inset-surface-md); /* 16, compact 12: the surface inset (compact pass) */
     /* spec (owner, 2026-09-28: "shouldn't there be differences in text size and gaps between medium and
        small?"): the panel's own text and gaps step with the tier; controls keep their tier's text (14/20
        at sm and md, the control scale). Published as --_panel-* so BoxField and PropertyList rows inside
        a panel follow them. md: section titles and labels 14/20, bar title 16/24, fields 12 apart (and
        from their row's action), rows 12 apart, labels 6 over their controls. */
-    --_panel-gap: var(--area-space-12);
-    --_panel-row-gap: var(--area-space-12);
+    --_panel-gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
+    --_panel-row-gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
     --_panel-label-gap: var(--area-space-6);
     --_panel-label-text: var(--area-text-sm-size);
     --_panel-label-leading: var(--area-text-sm-leading);
@@ -83,7 +83,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     flex-shrink: 0;
 
     block-size: var(--_bar);
@@ -190,7 +190,7 @@
   .area-panel__toggle {
     display: flex;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     inline-size: 100%;
     min-block-size: var(--_row);
     margin: 0;
@@ -221,7 +221,7 @@
   .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; }
   @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; } }
   @media (hover: none) { .area-panel__chevron { opacity: 1; } }
-  .area-panel__summary { display: flex; align-items: center; gap: var(--area-space-8); flex-shrink: 0; color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
+  .area-panel__summary { display: flex; align-items: center; gap: var(--area-ui-cluster); flex-shrink: 0; color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
   /* The rows join the section's own column, so its 8px rhythm is unchanged when open. */
   .area-panel__rows:not([hidden]) { display: contents; }
   /* A section that is its heading alone (collapsed, or with no rows yet, like an empty Stroke)
@@ -347,10 +347,10 @@
    * belong to compact density, not to a smaller panel; 40px rows were too loose for an inspector. */
   /* sm: section titles and labels 12/16, bar title 14/20, fields 8 apart, rows 8 apart, labels 4 over. */
   .area-panel--sm {
-    --_inset: var(--area-space-12); --_row: var(--area-control-sm);
-    --_panel-gap: var(--area-space-8); --_panel-row-gap: var(--area-space-8); --_panel-label-gap: var(--area-space-4);
+    --_inset: var(--area-inset-surface-sm); --_row: var(--area-control-sm); /* 12, compact 8 */
+    --_panel-gap: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); --_panel-row-gap: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); --_panel-label-gap: var(--area-space-4); /* spec: 8, compact 6 */
     --_panel-label-text: var(--area-text-xs-size); --_panel-label-leading: var(--area-text-xs-leading);
     --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
   }
-  .area-panel--md { --_inset: var(--area-space-16); --_row: var(--area-control-md); }
+  .area-panel--md { --_inset: var(--area-inset-surface-md); --_row: var(--area-control-md); }
 }

@@ -28,7 +28,45 @@ interface TierSpec {
   leading: number;
 }
 
-export function densityTokens(tiers: Record<Tier, TierSpec>) {
+/**
+ * Roles a density sets outside the control ladder: list rows, floating-surface insets, and
+ * the flag the radius derivation reads (emit/base.ts). Compact pass (owner, 2026-10-01): compact
+ * is a proportional step-down, checked against VS Code's workbench (vscode.dev captures in
+ * docs/research/captures/compact/): rows 22-24, hover inset 8-9, corners one step smaller.
+ */
+interface DensityRoles {
+  /** A list row's height (Menu, Nav, Tree view, Command palette, pickers). */
+  row: number;
+  /** A row's glyph edge: the leading icon's distance from the row's start. */
+  rowInset: number;
+  /** A row's icon-to-label gap. */
+  gapRow: number;
+  /** Floating-surface insets: Popover (sm), Dialog (md). */
+  insetSurfaceSm: number;
+  insetSurfaceMd: number;
+  /** Layout steps around controls (compact pass, round 5): a stacked label-to-control gap
+   *  (Field), and the gap between clustered items and the inset of a bar (Toolbar, horizontal
+   *  Field). Layout spacing never reads the icon gaps (audit S14), so these are their own roles. */
+  stack: number;
+  cluster: number;
+  /** Pill marks: Badge, Count, Kbd and the Indicator count. */
+  mark: { sm: number; md: number; lg: number };
+  /** 1 when corners take the dense radius ladder (emit/base.ts). */
+  dense: 0 | 1;
+}
+
+export const DEFAULT_ROLES: DensityRoles = { row: 32, rowInset: 8, gapRow: 12, insetSurfaceSm: 12, insetSurfaceMd: 16, stack: 6, cluster: 8, mark: { sm: 16, md: 20, lg: 24 }, dense: 0 };
+/*
+ * Compact rows are 24 (owner 2026-10-01; VS Code menus 24, Figma 24): 16/24 type leading plus
+ * 4 above and below, as a default row is 20 plus 6. The glyph edge (8 -> 6) and the icon gap
+ * (12 -> 8) step down with it, so labels sit on a 30 column. Surface insets step down one rung
+ * each (VS Code's hover insets its text 9, its quick pick 7). Marks step down one rung, md 20 -> 16
+ * and lg 24 -> 20; sm stays 16, the floor of a 12/16 label (VS Code's key labels 18 at 11px and
+ * count badges 19 at 10px are smaller type than the ramp allows).
+ */
+export const COMPACT_ROLES: DensityRoles = { row: 24, rowInset: 6, gapRow: 8, insetSurfaceSm: 8, insetSurfaceMd: 12, stack: 4, cluster: 6, mark: { sm: 16, md: 16, lg: 20 }, dense: 1 };
+
+export function densityTokens(tiers: Record<Tier, TierSpec>, roles: DensityRoles) {
   const out: Record<string, string | number> = {};
   for (const [name, tier] of Object.entries(tiers)) {
     out[`control-${name}`] = `${tier.height}px`;
@@ -48,18 +86,21 @@ export function densityTokens(tiers: Record<Tier, TierSpec>) {
   const medium = tiers.md;
   // The icon-to-label gap of a list row (audit S11a, owner 2026-09-30): with an 8 row inset and
   // a 16 icon it puts every icon row's label on one 36 column, where ChatGPT's and Notion's
-  // menus and sidebars start theirs. Notion is the compact calibration, so compact keeps it.
-  out["gap-row"] = "12px";
+  // menus and sidebars start theirs. Compact steps it down with the row (30 column).
+  out["gap-row"] = `${roles.gapRow}px`;
+  out["ui-row"] = `${roles.row}px`;
+  out["ui-row-inset"] = `${roles.rowInset}px`;
+  out["ui-dense"] = String(roles.dense);
+  out["ui-stack"] = `${roles.stack}px`;
+  out["ui-cluster"] = `${roles.cluster}px`;
   // Marks and surface insets (audit S21a, owner 2026-09-30: option C). The 16 / 20 / 24 ladder
-  // of pill marks (Badge, Count, Kbd, the Indicator count) and the 12 / 16 insets of floating
-  // surfaces (Popover, Dialog) were fixed primitives that compact density could not reach.
-  // Compact carries the same values until its capture pass measures them; they are roles now,
-  // so that pass changes one table, not every component.
-  out["mark-sm"] = "16px";
-  out["mark-md"] = "20px";
-  out["mark-lg"] = "24px";
-  out["inset-surface-sm"] = "12px";
-  out["inset-surface-md"] = "16px";
+  // of pill marks (Badge, Count, Kbd, the Indicator count) and the insets of floating surfaces
+  // (Popover, Dialog) are roles so compact density can reach them.
+  out["mark-sm"] = `${roles.mark.sm}px`;
+  out["mark-md"] = `${roles.mark.md}px`;
+  out["mark-lg"] = `${roles.mark.lg}px`;
+  out["inset-surface-sm"] = `${roles.insetSurfaceSm}px`;
+  out["inset-surface-md"] = `${roles.insetSurfaceMd}px`;
   out["ui-size"] = `var(--area-size-${medium.size})`;
   out["ui-leading"] = `var(--area-leading-${medium.leading})`;
   return out;
@@ -94,18 +135,19 @@ export const DEFAULT_TIERS: Record<Tier, TierSpec> = {
 };
 
 /**
- * Compact: the dense ladder, calibrated to Notion.
+ * Compact: the dense ladder, a proportional step-down (owner, 2026-10-01).
  *
- * Notion's measured in-app ladder is 24 for an icon-only button, 28 for a menu row or a
- * standard button, and 32 for a filled call to action -- so 28 is the medium here.
- *
- * Chrome steps down with the box: medium is 13/18 rather than 14/20. Content type
- * remains on the independent typography axis, so a compact interface keeps readable prose.
+ * Every tier is one rung shorter, and chrome type steps down to the ramp's 12/16 at xs, sm and
+ * md (owner: 12/16, on the 4px ramp; replaces 13/18 and 11/14, which were off it). Checked
+ * against VS Code's workbench: 26px buttons and inputs with 8px sides and 12/16 labels, 22px
+ * icon buttons around a 16px icon, 13px list text (docs/research/compact-pass-2026-10-01.md).
+ * Icons keep their native 16 from sm up, as VS Code's 22px buttons do; the icon gap is 4.
+ * Content type remains on the independent typography axis.
  */
 export const COMPACT_TIERS: Record<Tier, TierSpec> = {
-  xs: { height: 20, gutter: 6, icon: 12, gap: 4, size: 11, leading: 14 },
-  sm: { height: 24, gutter: 8, icon: 12, gap: 4, size: 12, leading: 16 },
-  md: { height: 28, gutter: 10, icon: 16, gap: 6, size: 13, leading: 18 },
+  xs: { height: 20, gutter: 6, icon: 12, gap: 4, size: 12, leading: 16 },
+  sm: { height: 24, gutter: 8, icon: 16, gap: 4, size: 12, leading: 16 },
+  md: { height: 28, gutter: 8, icon: 16, gap: 4, size: 12, leading: 16 },
   lg: { height: 32, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
   xl: { height: 36, gutter: 14, icon: 16, gap: 8, size: 14, leading: 20 },
 };
@@ -120,14 +162,14 @@ export const DENSITY_AXIS: AxisDefinition = {
     {
       id: "compact",
       label: "Compact",
-      description: "28px controls. Calibrated to Notion. For dense, tool-shaped interfaces.",
-      tokens: tokens(densityTokens(COMPACT_TIERS)),
+      description: "28px controls, 24px rows and 12/16 UI type. A proportional step-down for dense tools.",
+      tokens: tokens(densityTokens(COMPACT_TIERS, COMPACT_ROLES)),
     },
     {
       id: "default",
       label: "Default",
       description: "32px controls. Calibrated to Primer, OpenAI and Vercel.",
-      tokens: tokens(densityTokens(DEFAULT_TIERS)),
+      tokens: tokens(densityTokens(DEFAULT_TIERS, DEFAULT_ROLES)),
     },
   ],
 };

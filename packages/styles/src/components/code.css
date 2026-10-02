@@ -32,13 +32,19 @@
     text-align: start;
     display: flex;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     min-block-size: var(--area-control-md);
     padding-block: var(--area-space-4);
-    padding-inline: var(--area-space-12);
+    padding-inline: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8: the code column (compact pass) */
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
+  }
+  /* The trailing action ends as far from the edge as it sits from the top (4), as ChatGPT's header
+     buttons sit 7 from the top and the end; the filename keeps the code column (owner 2026-10-01,
+     equal insets; was 12 at the end). */
+  .area-code-block__header > .area-code-block__actions:last-child {
+    margin-inline-end: calc(var(--area-space-4) - (var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)));
   }
 
   /* The filename is a literal, so it is set in the same face as the code it names. */
@@ -170,8 +176,11 @@
      *
      * The leading is unitless and tighter than body copy on purpose: an inline badge that
      * inherits a 1.5 line-height pushes the lines around it apart.
+     *
+     * Floored at the caption size (compact pass, 2026-10-01): in compact's 12px chrome the
+     * ratio gave 10.5, under the type ramp's smallest step. Above 13.7px it is the ratio alone.
      */
-    font-size: 0.875em;
+    font-size: max(var(--area-text-xs-size), 0.875em);
     line-height: 1.35;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
@@ -225,8 +234,8 @@
 
   .area-code-block__pre {
     --_code-gutter: calc(var(--area-space-24) + var(--area-space-8));
-    --_code-block-inset: var(--area-space-12);
-    --_code-inline-inset: var(--area-space-16);
+    --_code-block-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8 */
+    --_code-inline-inset: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12 */
 
     margin: 0;
     padding-block: var(--_code-block-inset);
@@ -264,7 +273,7 @@
 
   /* spec: without the gutter, code starts where the header's filename and the numbers do (12). */
   .area-code-block--unnumbered .area-code-block__line:not(.area-code-block__line--added, .area-code-block__line--removed) .area-code-block__text {
-    padding-inline-start: var(--area-space-12);
+    padding-inline-start: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
   }
 
   /* A diff marker keeps its own column even when the numbers are hidden. */
@@ -279,7 +288,7 @@
     justify-content: flex-end;
     gap: var(--area-space-4);
     /* The gap between number and code, and the row's leading inset when it is a link. */
-    padding-inline: var(--area-space-6) var(--area-space-12);
+    padding-inline: var(--area-space-6) calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
     color: var(--area-fg-muted);
     font-variant-numeric: tabular-nums;
     /* Numbers are chrome: they must not land in a copied selection. */

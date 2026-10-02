@@ -156,3 +156,4 @@ Unverified: dark theme, forced colours.
   headings (Primer, antd, Radix). Claude in Chrome capture of ChatGPT's inline code pending
   (the window was in the background).
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Code and Token take `ground: "subtle" | "on-color"`; the `subtle` / `onColor` booleans are deprecated aliases.
+- 2026-10-01 · compact pass → inline Code is `max(text-xs, 0.875em)`: compact's 12px chrome made it 10.5, under the ramp; unchanged wherever the surrounding text is 14 or larger. docs/research/compact-pass-2026-10-01.md.

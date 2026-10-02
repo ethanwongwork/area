@@ -1,12 +1,12 @@
 @layer area.components {
   .area-composer {
     --_composer-action: var(--area-control-md);
-    --_composer-inset: var(--area-space-8);
+    --_composer-inset: var(--area-ui-cluster); /* 8, compact 6: a bar's inset (compact pass) */
     --_composer-height: calc(var(--_composer-action) + 2 * var(--_composer-inset));
     /* spec: ChatGPT writes at 16px; the type ramp's body is 16/24 (docs/specs/composer.md). */
     --_composer-text: var(--area-text-md-size); --_composer-leading: var(--area-text-md-leading);
     /* spec: ChatGPT keeps 8px between its round actions. */
-    --_composer-gap: var(--area-space-8);
+    --_composer-gap: var(--area-ui-cluster); /* 8, compact 6 */
     display: flex;
     flex-direction: column;
     /* A public hook, shared with Prompt suggestions (audit S17 / G-24), as Input's width is. */
@@ -32,7 +32,7 @@
     transition: var(--area-transition);
   }
   .area-composer--inline { min-block-size: var(--_composer-height); }
-  .area-composer--stacked { gap: var(--area-space-8); }
+  .area-composer--stacked { gap: var(--area-ui-cluster); }
   /* The Input hover step (audit S7a). */
   @media (hover: hover) { .area-composer:hover:not(:focus-within, [data-disabled]) { border-color: var(--area-input-edge-hover); } }
   .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); }

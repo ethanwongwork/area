@@ -69,3 +69,4 @@ Unverified: touch drag on a device; screen reader output of the live region; dar
 - 2026-09-28 · owner: approved (batch 9).
 - 2026-09-28 · inside a panel, items are a row gap apart and values a field gap from their actions (`--_panel-*`).
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → the list is named by `aria-label` (`label` on the list is a deprecated alias); an item's `label` still names its handle.
+- 2026-10-01 · compact pass round 6 → standalone gaps 8 → 6 at compact; inside a Panel it reads the Panel's gaps. docs/research/compact-pass-2026-10-01.md.

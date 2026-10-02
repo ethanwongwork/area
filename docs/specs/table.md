@@ -183,3 +183,4 @@ read from the CSS; no Area capture shows them.
 - 2026-09-27 · owner: "the large table stroke is way thicker" → the large and interactive gallery tiles wrapped a Table in a second `area-table-wrapper`, drawing the edge twice; the demos now render Table alone (component unchanged) → Pass review in the gallery.
 - 2026-09-30 · audit S7b (owner picked C) → no change; the frame keeps `border-divider` #e2 with no shadow, where Card keeps #ee carried by its halo → navigation.css:126.
 - 2026-09-30 · audit S10, S11b (owner) → the frame's border uses `stroke-width`, so it keeps its edge under the Elevated preset (`navigation.css:127`); no focus change, since rows are not focusable yet (family call F-23 open).
+- 2026-10-01 · compact pass round 6 → cell padding above and below steps down at compact (sm 4 → 2, md 8 → 6, lg 12 → 8); the side padding already followed `gutter-md` (12 → 8). docs/research/compact-pass-2026-10-01.md.

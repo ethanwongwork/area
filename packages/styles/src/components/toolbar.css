@@ -10,7 +10,7 @@
     --_toolbar-shadow: none;
     /* spec (toolbar.md, redesign 2026-09-27): Figma's tools sit 8 apart and 8 either side of the
        divider (figma--tool-group--*, figma--mode-switch--rest). */
-    --_toolbar-space: var(--area-space-8); /* spec */
+    --_toolbar-space: var(--area-ui-cluster); /* spec: 8, compact 6 (compact pass) */
     display: inline-flex;
     align-items: center;
     gap: var(--_toolbar-space);
@@ -28,7 +28,7 @@
    * The dark theme adds the decorative ring, which the halo cannot draw on a dark page.
    */
   .area-toolbar--surface {
-    --_toolbar-inset: var(--area-space-8); /* spec */
+    --_toolbar-inset: var(--area-ui-cluster); /* spec: 8, compact 6 (compact pass) */
     --_toolbar-bg: var(--area-bg-surface);
     --_toolbar-shadow: inset 0 0 0 var(--area-border-width) light-dark(transparent, var(--area-border-decorative)), 0 0 0.5px rgb(0 0 0 / 0.18), 0 3px 8px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.1); /* spec */
   }

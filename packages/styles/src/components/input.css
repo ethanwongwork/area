@@ -14,7 +14,9 @@
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
-    --_action: calc(var(--_icon) + var(--area-space-8));
+    /* The icon plus 4 each side, capped so the box keeps 2 clear of the field's edge (compact sm
+       is 24 with a 16 icon; uncapped, the button filled it and sat 0 from the top, 1 from the end). */
+    --_action: min(calc(var(--_icon) + var(--area-space-8)), calc(var(--_height) - var(--area-space-4)));
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);

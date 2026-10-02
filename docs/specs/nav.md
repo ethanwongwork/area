@@ -113,7 +113,7 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 |---|---|---|---|
 | row · height | 32 (`control-md`) | Peers Menu, Tree view | Notion 30, Figma 28 / 24, ChatGPT 35, Untitled 36; density is the UI-scale axis's job (second pass, item 18) |
 | row · radius | 8 (`radius-row`, capped at 0.4 × 32) | ChatGPT 8 | Notion 6, Figma 5, Untitled 6 |
-| row · start inset | 8, the icon column | Notion 8 (primary for navigation); Figma page rows 8 | ChatGPT 10; Figma sidebar 4 + 24px icon box |
+| row · start inset | 8 default, 6 compact (`ui-row-inset`), the icon column | Notion 8 (primary for navigation); Figma page rows 8 | ChatGPT 10; Figma sidebar 4 + 24px icon box. Compact rows are 24 (docs/research/compact-pass-2026-10-01.md); Tree view reads the same inset |
 | icon · size, gap | 16 (`icon-md`), **12** (`--area-gap-row`, `inset.css:62`), so labels sit at 36 as Menu's; horizontal items take `gap-md`, 6 since audit S14 (`inset.css:64`) | ChatGPT and Notion labels at 36; Menu | Was 8 (labels at 32) until audit S11a. Product icons 20–24; Area icon slots are 16 |
 | text | 14/20 400 | ChatGPT 14/20 400; Notion 14/21 400 | Figma 11/16 (editor density) |
 | rest ink | **`fg-default`** (marker variant `fg-muted`) | Owner (2026-09-27); ChatGPT rgb(13) (`nav/chatgpt--sidebar-top-group`) | Notion rgb(95, 94, 89); the label carries the quieter ink |
@@ -221,3 +221,4 @@ specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
 - 2026-09-30 · audit S14 (owner) → horizontal items read `gap-md`, now 6 (was 8; `inset.css:64`); vertical items keep `--area-gap-row` 12.
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → the manifest names `orientation` `vertical` (default, class `.area-nav--vertical` restating the base) | `horizontal`; `NavSeparator` takes a ref and native props.
 - 2026-09-30 · S17 owner calls (owner: "go with your recs") → the default selection is named `plate` (`.area-nav--plate` restates the base current-row plate); `marker` unchanged.
+- 2026-10-01 · owner: "the counts even on the default component look off from an inset equal padding view" → a plain Count has no plate, so its digits end on the row's glyph edge (8 default, 6 compact), mirroring the label's start; it was placed by its invisible box plus its 6px gutter (digits 17 from the end). A soft Count ends as far from the end as it sits from the top, as a Badge does. Row actions are concentric with the row plate (compact: 6 in a 6 row, was 4). Trailing Kbd and Badge rules read the mark roles, not literal 20/16. docs/research/compact-pass-2026-10-01.md.

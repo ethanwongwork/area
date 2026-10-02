@@ -196,3 +196,4 @@ above is from `area--size-medium` (edge rgb(212)). Build and test results are in
 - 2026-09-30 · audit S5 (owner) → no Checkbox change; the #d4 glyph edge is now shared with the Slider thumb edge, and Switch's off track is #e2 (the peer row said #d4) → choice.css:48, slider.css:34.
 - 2026-09-30 · audit S14 (owner) → the label gap is 6 at md and lg (was 8), from the density tokens (choice.css:9, :404, :410; density.ts:81-82); Radio and the choice labels follow.
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onCheckedChange(checked, event)` added (native `onChange` still fires); `variant` is `plain` (default, class `.area-checkbox--plain` restating the base) | `card`.
+- 2026-10-01 · compact pass round 5 → the 24px activation lane stays at compact (WCAG 2.5.8); type steps to 12/16, the 16px glyph stays. docs/research/compact-pass-2026-10-01.md.

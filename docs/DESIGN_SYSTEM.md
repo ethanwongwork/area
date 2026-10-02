@@ -88,7 +88,7 @@ role paints the same way in every family:
   plate is the highlight. Value pickers (Select, Combobox) show their value with the active
   plate and the check. The raw `data-selected` row plate is the value pickers' hook.
 - *Icon-to-label gap* (audit S14): 6 at sm, md and lg (`gap-sm/md/lg`; Notion 6, Untitled 6),
-  4 at xs and compact sm. Hosts (Button group, Toolbar) never re-tier a child's gap, and
+  4 at xs and at compact xs, sm and md. Hosts (Button group, Toolbar) never re-tier a child's gap, and
   layout spacing never reads the gap tokens. List rows are the exception, `gap-row` 12.
 - *Joined soft controls* (audit S15b): a soft Button group and a soft Split button paint the
   same way, the component fill with the quiet ink, no hairline and the row plates on hover
@@ -254,7 +254,8 @@ checks prevent drift; they do not replace implementation or behavior tests.
 
 A control tier describes its outer row/control height where that family uses the control
 ramp. Shared controls use the same tier's icon, text and gap tokens. Default medium is
-32px with 14/20px type; compact medium is 28px with 13/18px type. The UI type ramp is six
+32px with 14/20px type; compact medium is 28px with 12/16px type, list rows 24px, and corners one
+step smaller ([compact pass](research/compact-pass-2026-10-01.md)). The UI type ramp is six
 sizes with one leading each on the 4px grid: 12/16, 14/20, 16/24, and titles 20/28, 24/32,
 32/40 (see [the type spec](specs/typography.md)). Read the current ramps
 in `axes/density.ts` rather than copying tables into each component.

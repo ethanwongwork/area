@@ -1,9 +1,48 @@
-# Handoff — 2026-09-30
+# Handoff — 2026-10-01
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. No owner completion changed; Indicator stays In review.
+
+## Compact pass: tokens, rows and floating surfaces (2026-10-01, branch `claude/family-compact-pass-150bc8`, uncommitted)
+
+- Owner: compact is a proportional step-down of the whole set (`data-area-ui="compact"`), UI type
+  12/16, rows 24, corners one step down; checked against vscode.dev until Cursor is measured.
+  Note with tables: `docs/research/compact-pass-2026-10-01.md`; captures in
+  `docs/research/captures/compact/` (14 vscode.dev, 3 Figma, Area compact after).
+- Tokens: `COMPACT_TIERS` md 28/8/16/4 at 12/16, sm icon 16, xs 12/16; new density roles
+  `ui-row` (32/24), `ui-row-inset` (8/6), `ui-dense` (0/1); `gap-row` 12/8; `inset-surface-sm/md`
+  12/16 and 8/12. Text scales along the UI ramp (compact 12/16, 12/16, 14/20).
+- Radius: the radius axis publishes `radius-base-*` and `radius-dense-*` (a compact tier reads the
+  curve's value for its painted height); `emit/base.ts` derives `radius-control*`,
+  `radius-container`, `radius-small`, `radius-row` from them and `ui-dense`. Leaves registered,
+  derived tokens not.
+- Rows read `ui-row` / `ui-row-inset` (inset.css, Menu, Nav, Tree view, Combobox, Command palette,
+  Select picker); Popover gap and Dialog corner read `inset-surface-md`, Toast `inset-surface-sm`.
+  Default density renders exactly as before (verified live).
+- Comparison page: https://claude.ai/artifact/ULwhW84UswgMc9NY1dBLci (republish from the
+  scratchpad builder with `packages/styles/dist/area.css`).
+- Round 3 (smallest-first, owner): compact marks 16/16/20; Badge, Count and Kbd inner values are
+  functions of their height (default identical, compact md drawn as default sm); inline Code
+  floored at 12; Toast block inset derived so the last control is concentric (compact 32 tall).
+- Round 4 (owner: equal insets): trailing plates end as far from the end as from the top, trailing
+  ink ends on the glyph edge; fixed Nav plain counts, Tree view and Nav row actions (concentric),
+  mark-height literals in inset.css, Alert's phantom grid gap (default action 14 -> 6) and insets,
+  the banner Badge, the compact sm field action. A sweep script in the session checks all tiles.
+- Round 5 (controls): inputs and controls already scale via the control ladder; new layout roles
+  `ui-stack` (Field label gap 6/4) and `ui-cluster` (Toolbar inset and gaps, horizontal Field 8/6);
+  choice rows keep the 24px WCAG target. Start and end equal-inset sweeps: zero mismatches.
+- Round 6 (containers): Card inset/step, Panel sides (surface insets) and gaps, Property list and
+  Table cell padding step down one rung; component values written `default − diff × ui-dense`.
+- Round 7 (conversation and tools): Message, Composer, Code block, Command palette search row step
+  down; bubble corner = Composer corner. Calendar compact 32/28 (Notion), default 36/32 kept.
+- Round 8 (sweep): fixed 8 / 16 / 12 / 20 gaps across the gallery read `ui-cluster`,
+  `inset-surface-md` or step one rung; Code block header action 4 / 4. Default verified against
+  HEAD (11,584 elements; 120 intended differences in 14 tiles).
+- Open: dialog inset (12 proportional vs VS Code 24); tooltip sides 10;
+  other families still use literal spacing (Card, Panel, Alert, fields) and need their round;
+  Menu and Nav are Officially complete and changed at compact only.
 
 ## Audit phase 6 (2026-09-30, branch `claude/component-work-continuation-aef804`, uncommitted)
 

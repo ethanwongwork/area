@@ -11,7 +11,7 @@
     --_tab-height: var(--area-control-md);
     --_tab-text: var(--area-control-md-text);
     --_tab-leading: var(--area-control-md-leading);
-    --_tab-gap: var(--area-space-20);
+    --_tab-gap: calc(var(--area-space-20) - var(--area-space-4) * var(--area-ui-dense));
     --_tab-icon: var(--area-icon-md);
     --_tab-item-gap: var(--area-gap-md);
     display: flex;
@@ -79,7 +79,7 @@
   /* Restates the base: every default value has a class (audit S17 / H-13), so the manifest names
      it and framework-free markup can say it. */
   .area-tabs--horizontal { flex-direction: column; }
-  .area-tabs--vertical { flex-direction: row; gap: var(--area-space-16); }
+  .area-tabs--vertical { flex-direction: row; gap: var(--area-inset-surface-md); }
   .area-tabs--vertical .area-tabs__list { flex-direction: column; gap: var(--area-space-4); flex-shrink: 0; border-block-end: 0; border-inline-end: 0; }
   .area-tabs--vertical .area-tabs__tab { justify-content: flex-start; padding-inline-start: var(--area-space-10); }
   .area-tabs--vertical .area-tabs__tab::after { inset-block: var(--area-space-4); inset-inline: 0 auto; inline-size: var(--area-space-2); block-size: auto; }
@@ -135,7 +135,8 @@
    * values look sparse. Primer, OpenAI and shadcn all set tables at 14.
    */
   .area-table {
-    --_cell-inset: var(--area-space-8);
+    /* Above and below a cell: 8, compact 6 (sm 4 / 2, lg 12 / 8; compact pass, round 6). */
+    --_cell-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
     inline-size: 100%;
     border-collapse: collapse;
     /*
@@ -187,9 +188,9 @@
     inline-size: 1%;
     white-space: nowrap;
   }
-  .area-table--sm { --_cell-inset: var(--area-space-4); }
-  .area-table--md { --_cell-inset: var(--area-space-8); }
-  .area-table--lg { --_cell-inset: var(--area-space-12); }
+  .area-table--sm { --_cell-inset: calc(var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)); }
+  .area-table--md { --_cell-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); }
+  .area-table--lg { --_cell-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); }
   .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
   .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-border-width) solid var(--area-border-divider); }
   .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); }
@@ -346,7 +347,7 @@
       gap: var(--area-gap-row); /* the list label column (audit S11a) */
       box-sizing: border-box;
       flex-shrink: 0;
-      min-block-size: max(var(--_height), var(--area-control-md));
+      min-block-size: max(var(--_height), var(--area-ui-row));
       padding: var(--area-space-6) var(--area-space-8);
       font-size: var(--area-ui-size);
       line-height: var(--area-ui-leading);
@@ -366,7 +367,7 @@
     .area-select option::checkmark { order: 1; margin-inline-start: auto; color: currentColor; }
     .area-select optgroup {
       display: grid;
-      grid-template-rows: var(--area-control-md) auto;
+      grid-template-rows: var(--area-ui-row) auto;
       padding: 0;
       color: var(--area-fg-muted);
       font-weight: var(--area-weight-regular);

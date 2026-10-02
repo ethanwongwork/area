@@ -5,9 +5,17 @@
        count (16). The base rule is md, the default: caption text 12/16, so a label sits a
        step below the text it annotates (owner 2026-09-27). See docs/specs/badge.md. */
     --_height: var(--area-mark-md); /* spec: 20, the mark ladder role (audit S21a) */
-    --_icon: var(--area-icon-md); --_media: var(--area-space-16); /* spec */
-    --_gap: var(--area-space-4); --_gutter: var(--area-space-8); /* spec */
-    --_icon-gutter: var(--area-space-6); --_media-gutter: var(--area-space-2); --_media-gap: var(--area-space-4); /* spec */
+    /* Every inner value is a function of the height (compact pass, 2026-10-01), restating the
+     * measured 16 / 20 / 24 rows exactly: gutter 6 / 8 / 10, icon gutter 4 / 6 / 8, icon and
+     * media 12 / 16 / 16, gap 2 / 4 / 4, media gutter 2 / 2 / 4, media gap 4 / 4 / 6. So a mark
+     * the UI scale shortens (compact md is 16) is drawn as the default mark of that height. */
+    --_icon: min(var(--area-icon-md), calc(var(--_height) - var(--area-space-4))); /* spec */
+    --_media: var(--_icon); /* spec */
+    --_gap: min(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
+    --_gutter: calc(var(--_height) / 2 - var(--area-space-2)); /* spec */
+    --_icon-gutter: calc(var(--_height) / 2 - var(--area-space-4)); /* spec */
+    --_media-gutter: max(var(--area-space-2), calc(var(--_height) / 2 - var(--area-space-8))); /* spec */
+    --_media-gap: max(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
     --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); /* spec */
     --_badge-radius: var(--area-radius-full);
     --_solid: var(--area-neutral-solid); --_solid-hover: var(--area-neutral-solid-hover);
@@ -175,10 +183,10 @@
   :is(a, button).area-badge::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; min-inline-size: var(--area-space-24); min-block-size: var(--area-space-24); inline-size: 100%; block-size: 100%; }
   @media (pointer: coarse) { :is(a, button).area-badge::after { min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); min-block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
   /* spec: 16px, 12/16 text, 12px icon/media/dismiss slots, 2px slot insets. */
-  .area-badge--sm { --_height: var(--area-mark-sm); --_icon: var(--area-icon-xs); --_media: var(--area-icon-xs); --_gap: var(--area-space-2); --_gutter: var(--area-space-6); --_icon-gutter: var(--area-space-4); --_media-gutter: var(--area-space-2); --_media-gap: var(--area-space-4); }
+  .area-badge--sm { --_height: var(--area-mark-sm); }
   .area-badge--md { --_height: var(--area-mark-md); /* spec */ }
   /* spec: 24px, the previous md geometry. */
-  .area-badge--lg { --_height: var(--area-mark-lg); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); --_gutter: var(--area-space-10); --_icon-gutter: var(--area-space-8); --_media-gutter: var(--area-space-4); --_media-gap: var(--area-space-6); }
+  .area-badge--lg { --_height: var(--area-mark-lg); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-badge--color { --_border: var(--_line); --_border-hover: var(--_line-hover); --_dot-color: var(--_solid); }
   .area-badge--modern { --_bg: var(--area-bg-surface); --_bg-hover: var(--area-bg-component-hover); --_fg: var(--area-fg-default); --_border: var(--area-border-decorative); --_border-hover: var(--area-edge-control); --_dot-color: var(--_solid); box-shadow: var(--area-shadow-1); }
   .area-badge:is(.area-badge--color, .area-badge--modern) :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_solid); }

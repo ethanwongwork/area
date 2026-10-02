@@ -147,3 +147,4 @@ keycap-to-label gap inside the Open plate, taken from the visible plate here.
 
 - 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (command-palette.css:42); rows and the search row take the density token `--area-gap-row` (12, labels at 36; command-palette.css:28, :56); quiet keys render in the UI font 12/16 400, and Escape is written "Esc" (kbd.css:89-102).
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the palette and its search field (default "Command palette"; `label` deprecated alias).
+- 2026-10-01 · compact pass round 7 → the search row is 48, compact 40. docs/research/compact-pass-2026-10-01.md.

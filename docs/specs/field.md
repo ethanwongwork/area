@@ -153,3 +153,4 @@ Build and test results are in the
 - 2026-09-27 · third pass → open question settled, value kept: horizontal label 400
   `fg-muted` → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → a bare `validation` with no `validationStatus` is neutral (muted ink, `data-tone="neutral"`, no `aria-invalid`); it used to default to error.
+- 2026-10-01 · compact pass round 5 → the label-to-control gap reads `ui-stack` (6, compact 4) and a horizontal Field's gap `ui-cluster` (8, compact 6). Default unchanged. docs/research/compact-pass-2026-10-01.md.

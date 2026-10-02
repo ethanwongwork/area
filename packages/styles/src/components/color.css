@@ -192,9 +192,9 @@
        value row fitting when the default scale draws 28px rows (280px). */
     --_width: calc(var(--area-control-sm) * 10); /* spec */
     /* Figma's 16px outer inset and 8px header end inset include Area's 1px surface border. */
-    --_inset: calc(16px /* spec */ - var(--area-border-width));
+    --_inset: calc(var(--area-inset-surface-md) - var(--area-border-width)); /* spec: 16, compact 12 (the surface inset) */
     --_header-end: calc(8px /* spec */ - var(--area-border-width));
-    --_rhythm: 12px; /* spec */
+    --_rhythm: calc(12px - 4px * var(--area-ui-dense)); /* spec: 12, compact 8 */
     --_track: 16px; /* spec */
     --_thumb-ring: 4px; /* spec */
     --_hairline: light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
@@ -295,12 +295,12 @@
   .area-color-picker__slider[data-channel="ok-l"] { background: linear-gradient(90deg in oklch, oklch(0 var(--_ok-c) var(--_ok-h)) var(--_half), oklch(1 var(--_ok-c) var(--_ok-h)) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="ok-c"] { background: linear-gradient(90deg in oklch, oklch(var(--_ok-l) 0 var(--_ok-h)) var(--_half), oklch(var(--_ok-l) 0.4 var(--_ok-h)) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="ok-h"] { background: linear-gradient(90deg in oklch, oklch(var(--_ok-l) var(--_ok-c) 0) var(--_half), oklch(var(--_ok-l) var(--_ok-c) 60), oklch(var(--_ok-l) var(--_ok-c) 120), oklch(var(--_ok-l) var(--_ok-c) 180), oklch(var(--_ok-l) var(--_ok-c) 240), oklch(var(--_ok-l) var(--_ok-c) 300), oklch(var(--_ok-l) var(--_ok-c) 360) calc(100% - var(--_half))); }
-  .area-color-picker__channel-row { display: grid; grid-template-columns: var(--area-icon-md) minmax(0, 1fr); align-items: center; gap: var(--area-space-8); }
+  .area-color-picker__channel-row { display: grid; grid-template-columns: var(--area-icon-md) minmax(0, 1fr); align-items: center; gap: var(--area-ui-cluster); }
   .area-color-picker__channel-label { color: var(--area-fg-muted); text-align: center; font-variant-numeric: tabular-nums; }
   .area-color-picker__views { inline-size: 100%; }
   .area-color-picker__grid { inline-size: 100%; }
   /* Contrast check: Figma's ratio row above the area and the failing band drawn on it. */
-  .area-color-picker__contrast { display: flex; align-items: center; gap: var(--area-space-8); min-block-size: var(--area-control-sm); }
+  .area-color-picker__contrast { display: flex; align-items: center; gap: var(--area-ui-cluster); min-block-size: var(--area-control-sm); }
   .area-color-picker__contrast-pair {
     position: relative; flex: none; overflow: clip;
     inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: var(--area-radius-full);
@@ -335,7 +335,7 @@
   .area-color-picker__preview-original:disabled { cursor: default; }
   .area-color-picker__preview-original:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
   .area-color-picker__note { margin: 0; color: var(--area-fg-muted); }
-  .area-color-picker__values { display: flex; align-items: center; gap: var(--area-space-8); }
+  .area-color-picker__values { display: flex; align-items: center; gap: var(--area-ui-cluster); }
   .area-color-picker__model.area-select { inline-size: auto; flex: none; }
   .area-color-picker__fields.area-input-group { flex: 1 1 auto; inline-size: auto; min-inline-size: 0; }
   /* Figma divides the value fields with a 1px gap of the surface, not a darker rule. */

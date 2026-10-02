@@ -10,7 +10,7 @@
     display: flex;
     flex-direction: column;
     /* spec: actions 12 under the last line (ChatGPT 12). */
-    gap: var(--area-space-12);
+    gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8 (compact pass) */
     inline-size: 100%;
     min-inline-size: 0;
     color: var(--area-fg-default);
@@ -27,8 +27,9 @@
    * Corner: the composer's (16), where the words were typed; ChatGPT's 22 is a pill at one line. */
   .area-message__bubble {
     max-inline-size: 70%; /* spec */
-    padding: 10px var(--area-space-16); /* spec */
-    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-button-cap))) + var(--area-space-8) * var(--area-radius-concentric));
+    padding: calc(10px - var(--area-space-4) * var(--area-ui-dense)) calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10 × 16, compact 6 × 12 on 14/20 */
+    /* The composer's corner: its control radius plus its inset (16, compact 12). */
+    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-button-cap))) + var(--area-ui-cluster) * var(--area-radius-concentric));
     background-color: var(--area-bg-component);
     overflow-wrap: anywhere;
     white-space: pre-wrap;

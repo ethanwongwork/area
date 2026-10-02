@@ -12,7 +12,7 @@
     font-size: var(--area-control-md-text);
     line-height: var(--area-control-md-leading);
   }
-  .area-breadcrumb__item { display: inline-flex; align-items: center; min-inline-size: 0; gap: var(--area-space-8); }
+  .area-breadcrumb__item { display: inline-flex; align-items: center; min-inline-size: 0; gap: var(--area-ui-cluster); }
   .area-breadcrumb__item svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex: none; }
   /*
    * spec: Notion's hover plate, 24px tall (2px above and below the 20px line) and 6px
