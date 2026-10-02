@@ -21,7 +21,7 @@
        12 at sm and 16 at md, for the sides and the last field above a rule. A section heading and the
        bar are rows (Figma's header is 40: a 24 button with 8 above and below; VS Code's pane header a
        22 row) whose button has one field gap above and below (8 / 12), the title centred on it. */
-    --_inset: var(--area-inset-surface-md); /* 16, compact 12: the surface inset (compact pass) */
+    --_inset: var(--area-space-16); /* spec: 16 at both densities; Figma's inspector keeps 16 (evidence audit 2026-10-02) */
     /* Published under the panel prefix for nested parts (PropertyList), so a Popover's or a
        ColorPicker's own --_inset can't leak into them (audit F-27). */
     --_panel-inset: var(--_inset);
@@ -356,7 +356,7 @@
     --_panel-label-text: var(--area-text-xs-size); --_panel-label-leading: var(--area-text-xs-leading);
     --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
   }
-  .area-panel--md { --_inset: var(--area-inset-surface-md); --_row: var(--area-control-md); }
+  .area-panel--md { --_inset: var(--area-space-16); --_row: var(--area-control-md); }
 }
 
 @layer area.components {

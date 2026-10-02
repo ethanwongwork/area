@@ -42,12 +42,12 @@ surfaces (Popover, Menu, Tooltip, Hover card, Toast, Dialog).
 | Icon-to-label gap (md) | 6 | 6 | — | **4** |
 | Icon-only button (sm) | 28, icon 16 | 24, icon 12 | 22, icon 16 | 24, **icon 16** |
 | List and menu rows | 32 | 28 | lists 22, menus 24 | **24** (`ui-row`) |
-| Row glyph edge · icon gap | 8 · 12 | 8 · 12 | quick pick text 6 + 1 border + 9 | **6 · 8** (labels at 30) |
+| Row glyph edge · icon gap | 8 · 12 | 8 · 12 | quick pick text 6 + 1 border + 9 | **8 · 8** (labels at 32; edge held after the 2026-10-02 evidence audit) |
 | Menu inset · row gap | 4 · 2 | 4 · 2 | 4 (+1 border) · 0 | 4 · 2 |
 | Separator | 4 / 1 / 4 | same | 5 / 1 / 5 | same |
-| Tooltip | 28, 14/20, sides 10 | 26 | 25, 12/19, sides 9 | **24**, 12/16, sides 10 |
+| Tooltip | 28, 14/20, sides 10 | 26 | 25, 12/19, sides 9 | **24**, 12/16, sides 8, corner 4 (evidence audit 2026-10-02) |
 | Popover inset · section gap | 12 · 16 | 12 · 16 | hover 9 | **8 · 12** |
-| Toast inset | 10 × 12 | same | — | **6 × 8** (28 tall) |
+| Toast inset | 10 × 12 | same | — | **8 × 8** (32 tall; round 3) |
 | Dialog inset | 16 | 16 | settings dialog 24 | **16** (held; owner 2026-10-02) |
 | Surface corner | 12 | 12 | 8 | **8** |
 | Row corner · md control corner | 8 · 8 | 8 · 8 | 4–6 · 4 | **6 · 6** (menu rows 4, concentric) |
@@ -233,6 +233,8 @@ this branch's intended fixes (Nav and Count counts, Tree view action, Alert empt
 block header action), plus Progress's animation and the Badge group's overflow popover state.
 
 ## Open
+
+Superseded in part by the evidence audit: `docs/research/compact-evidence-2026-10-02/README.md`.
 
 
 - ~~Dialog inset~~: decided 2026-10-02, holds at 16 (owner); `area--compact-dialog` predates it.

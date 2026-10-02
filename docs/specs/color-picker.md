@@ -250,3 +250,4 @@ setting).
 - 2026-09-30 · audit S10 (owner) → the surface reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) (color.css:214).
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → `variant`: `surface` (default, the floating plate) or `plain` (no background, edge or lift, for a picker inside a Popover or Panel; color.css:217-225), gallery tile "Variant / plain"; a consumer's `aria-label` names the group and every inner control ("Fill colour hue"), `label` is the fallback (ColorPicker.tsx:141; it used to override `aria-label`).
 - 2026-09-30 · audit F-32 (owner pick A) → kept: tracks and thumbs stay Figma's (16px pills, ringed thumbs), deliberately unlike Slider's 4px rail; recorded under Peers.
+- 2026-10-02 · compact evidence audit → the body inset holds at 16 at compact (was 12; Figma's color picker 16) (R5) docs/research/compact-evidence-2026-10-02/README.md.

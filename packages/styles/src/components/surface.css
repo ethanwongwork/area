@@ -1271,14 +1271,15 @@
   .area-tooltip {
     --_tooltip-inset-block: var(--area-space-4);
     /* spec: owner, 10px text sides (8 read tight, ChatGPT's 12 too much); a trailing Kbd keeps the 4px block inset. */
-    --_tooltip-inset-inline: var(--area-space-10);
+    --_tooltip-inset-inline: calc(var(--area-space-10) - var(--area-space-2) * var(--area-ui-dense)); /* compact 8: VS Code 9, Figma 8 (evidence audit 2026-10-02) */
     --_tooltip-inset-inline-end: var(--_tooltip-inset-inline);
     /*
      * spec: rounder than a control (8) but not a pill (14 on 28px): the owner asked for
      * "rounder, not quite pill" (2026-09-25). 10px at Standard; a nested Kbd lands on its
      * own 6px. Follows the radius preset, capped at half a line so it never becomes a blob.
      */
-    --_tooltip-radius: var(--area-radius-control-lg);
+    /* compact: the 24 box reads the sm control corner, 4 (VS Code 3, Figma 5; evidence audit 2026-10-02). */
+    --_tooltip-radius: calc(var(--area-radius-control-lg) * (1 - var(--area-ui-dense)) + var(--area-radius-control-sm) * var(--area-ui-dense));
     --_tooltip-shape: min(var(--_tooltip-radius), calc((var(--area-ui-leading) + var(--_tooltip-inset-block) * 2) / 2));
 
     position: relative;

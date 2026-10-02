@@ -201,7 +201,7 @@
        value row fitting when the default scale draws 28px rows (280px). */
     --_width: calc(var(--area-control-sm) * 10); /* spec */
     /* Figma's 16px outer inset and 8px header end inset include Area's 1px surface border. */
-    --_inset: calc(var(--area-inset-surface-md) - var(--area-border-width)); /* spec: 16, compact 12 (the surface inset) */
+    --_inset: calc(var(--area-space-16) - var(--area-border-width)); /* spec: 16 at both densities; Figma's color picker keeps 16 (evidence audit 2026-10-02) */
     --_header-end: calc(8px /* spec */ - var(--area-border-width));
     --_rhythm: calc(12px - 4px * var(--area-ui-dense)); /* spec: 12, compact 8 */
     --_track: 16px; /* spec */

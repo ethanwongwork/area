@@ -172,3 +172,4 @@ palette and Context menu.
 - 2026-10-01 · audit D-12 → with a trigger, consumer handlers run first and can cancel; consumer `id` is used for `aria-controls`; consumer `aria-label` / `aria-labelledby` wins over the trigger's labelledby → primitives.tsx:1119-1130, Overlays.tsx.
 - 2026-10-01 · audit D-14 → forced colours paint a selected row `Highlight` / `HighlightText` → forced-colors.css.
 - 2026-10-01 · audit D-22 (owner pick A) → `MenuSearch` and `.area-menu__search-surface` deprecated (`@deprecated` JSDoc; use Combobox or Command palette); kept so existing markup renders; its gallery tile is removed → primitives.tsx:1342-1346, surface.css:1217-1219.
+- 2026-10-02 · compact evidence audit → the row glyph edge holds at 8 at compact (was 6; Figma 8, VS Code 9), label column 32 (R1) docs/research/compact-evidence-2026-10-02/README.md.

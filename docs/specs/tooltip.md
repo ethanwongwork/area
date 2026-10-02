@@ -163,3 +163,4 @@ new file was saved. Area keeps its documented differences (28 tall, corner 10, 1
 - 2026-09-30 · audit S10 (owner) → no change; Tooltip keeps its own 0 4px 12px −2px lift as a documented exception to the shared `--area-shadow-float` (surface.css:1225).
 - 2026-09-30 · audit S17 (API vocabulary, slice 1) → `closeDelay` added (default 0) beside `delay` (500), Hover card's name → `primitives.tsx:999`.
 - 2026-10-01 · audit E-18 (owner pick A) → Tooltip and Hover card share `useHoverIntent`: mouse and pen open after the delay (was mouse only), touch never, `:focus-visible` at once, blur closes at once, one consuming capture-phase Escape → overlay.ts:108-145, Overlays.tsx:214-234.
+- 2026-10-02 · compact evidence audit → compact sides 10 → 8 (VS Code 9, Figma 8) and corner 8 → 4, the sm control corner of its 24 box (VS Code 3, Figma 5); default unchanged (R2, R3) docs/research/compact-evidence-2026-10-02/README.md.
