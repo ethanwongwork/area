@@ -58,10 +58,11 @@ area     shell, padding 8 (7 + 1 border), radius 16, Card's edge (#ee), no resti
 | shell · focus | edge and outline `composer-focus-color`, the quiet neutral (`border-subtle` at default contrast), plus the field halo (composer.css:37) | Audit S1 left Composer out of the blue field focus: a surface that holds a field | Input, Textarea and Select take the blue `field-focus-color` |
 | shell · shadow | none at rest (focus keeps its halo) | owner 2026-09-26: no control has a resting shadow | ChatGPT floats on 0 2px 8px 4%; superseded |
 | disabled | Textarea's field paint (`textarea-bg-disabled`, `border-faint`, `fg-disabled` text and placeholder), no opacity | Cohesion audit: text fields keep full opacity with field paint | Was `opacity: .6`, which compounded with the send Button's own 50% (about 30%) |
-| loading | field keeps its paint, value and caret; Enter doesn't send; send becomes **Stop** (same solid neutral md Button, Area `stop` glyph filled, `stopLabel` "Stop") when `onStop` is given, otherwise send is disabled; `aria-busy` on the shell | Audit S18 / G-13 (owner 2026-09-30, option A): ChatGPT keeps typing open while a reply streams and turns send into Stop | Was `busy`: the textarea went native disabled (focus lost after each send, no drafting). `busy` stays as a deprecated alias. ChatGPT's Stop glyph size not captured (would need a streaming reply) |
+| loading | `loading` prop (`busy` is a deprecated alias): textarea stays editable and focused, Enter doesn't send, `aria-busy` on the root; the send slot becomes a Stop Button (same solid neutral icon-only Button, `aria-label` from `stopLabel`, default "Stop", calls `onStop`, disabled without `onStop`). No composer-wide cursor or `data-busy` hook | Audit S18 (owner 2026-09-30); ChatGPT keeps the field editable and swaps send for stop | Was `busy`: textarea disabled, `cursor: progress`, send disabled |
+| loading · stop glyph | Area pilot `stop` (11 × 11 square, radius 2; `area-icons-pilot/stop.svg`), drawn filled (the solid role) | Not captured, pending a capture: ChatGPT's stop state needs a sent message | — |
 | actions · gap | **8** | ChatGPT 8 | Was 4 |
 | actions · size | 32 | Peer: Button md | ChatGPT 36; Area's control scale is 28 / 32 / 40 |
-| shell · width | `min(100%, var(--area-composer-inline-size, 480))` (composer.css:13) | Public hook shared with Prompt suggestions (audit S17) | — |
+| shell · width | `min(100%, var(--area-composer-inline-size, 480))`, 480 = `space-96` × 5 (composer.css:13); the public hook also sets Prompt suggestions' width | Audit S17: one measure for the composer column | — |
 | shell · height (inline) | 48 | 32px actions + 8px insets | ChatGPT 52 (36px actions) |
 | shell · radius | 16 = send Button radius (8) + inset (8), concentric | owner 2026-09-26 (option B) | ChatGPT is a pill (26 on 52 = 18 + 8, also concentric with its round button); `submitPill` reproduces it |
 | placeholder | `input-placeholder` (fg-muted 102) | Peer: Input (Complete) | ChatGPT rgb(143) |
@@ -69,10 +70,13 @@ area     shell, padding 8 (7 + 1 border), radius 16, Card's edge (#ee), no resti
 
 ## Behavior and accessibility
 
-Unchanged keyboard and submission contract. The textarea is named through a visually hidden
-label from `aria-label` (default "Message"; `label` is a deprecated alias); typing calls
-`onValueChange(value, event)`. The ref goes to the textarea (the field pattern) and the other
-native props to the shell. The auto-grow now also observes the
+Unchanged keyboard and submission contract, except while `loading`: Enter doesn't send and
+the send slot is Stop (see Decisions). The action slots are `fieldset`s, so `disabled`
+disables every nested action natively (audit G-14; Composer.tsx:110-124). Enter during IME
+composition never sends, including Safari's late commit Enter (`keyCode` 229); a form reset
+restores an uncontrolled composer's `defaultValue`; the sent text drops leading blank lines
+and trailing whitespace but keeps a pasted block's indentation; a consumer's `inputProps.id`
+wins over the generated one (audit G-15; Composer.tsx:51, :78-97). Gallery tile: "State / loading" (`GalleryComposerLoading`). The auto-grow now also observes the
 textarea's width (ResizeObserver, width-only, so fitting the height cannot loop).
 Measured: at 134px wide the empty inline composer grows as its placeholder wraps; widened
 to 480px it returns to 48px.
@@ -101,6 +105,11 @@ multi-line radius (would require typing), hover states.
   4 Area captures after.
 - 2026-09-27 · owner (after this pass, on the older branch): the mode control is too small and not a real button; send concentric, not a circle → the send Button of this pass already answers the second; the stacked demo's mode is a soft md Button that opens a Menu.
 - 2026-09-30 · audit S7a (owner) → edge is Card's `light-dark(neutral-100, neutral-750)` #ee (was `border-decorative` #f3); hover steps the edge to `input-edge-hover` #d4, as Input; focus keeps the quiet `composer-focus-color` → composer.css:17-18, 36-37.
+- 2026-09-30 · audit S18 (owner) → `loading` replaces `busy` (kept as a deprecated alias): field stays editable, send becomes Stop (`onStop`, `stopLabel`), `aria-busy` on the root; `data-busy`, the composer-wide `cursor: progress` and the manifest `busy` state removed.
 - 2026-09-30 · audit S13 (owner) → the stacked demo's mode menu uses `MenuItem radio checked` (`menuitemradio`, a check only, no plate; gallery.tsx:2151). Was the raw `data-selected` plate plus a Fluent check in the shortcut slot.
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the textarea through a visually hidden label (default "Message"; `label` deprecated alias); `onValueChange(value, event)`; ref stays on the textarea, rest on the shell; the width is the public hook `--area-composer-inline-size` (fallback 480), shared with Prompt suggestions.
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → new public hook `--area-composer-inline-size` (default 480 = 96 × 5) sets the composer's and Prompt suggestions' width together (composer.css:13; prompt-suggestions.css:13).
+- 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.
+- 2026-10-01 · audit G-14 → leading and trailing action slots are `fieldset disabled={disabled}`, so a disabled composer disables every nested action → Composer.tsx:110-124.
+- 2026-10-01 · audit G-15 → IME-safe Enter (`isComposing` or keyCode 229), form reset restores `defaultValue`, sent text trimmed (leading blank lines, trailing whitespace), consumer `inputProps.id` wins → Composer.tsx:51, :78-97.
+- 2026-10-01 · owner: ChatGPT's Stop state is the send button showing the filled stop square (owner screenshot of the composer while a reply streams; the circle there is ChatGPT's blue accent). Area keeps the `stop` glyph in the send Button, which follows the Action role, so the Composer Stop glyph needs no further capture.
 - 2026-10-01 · compact pass round 7 → inset and gap read `ui-cluster` (8, compact 6); corner 16 → 12, the last action 6 from the top and the end at compact. Default unchanged. docs/research/compact-pass-2026-10-01.md.

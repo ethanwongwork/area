@@ -1,17 +1,22 @@
 /* System colors preserve required information when shadows and authored fills disappear. */
 @layer area.utilities {
   @media (forced-colors: active) {
-    .area-input, .area-textarea, .area-select {
+    /* Every field shell keeps a system edge, soft variants included (audit B-11). */
+    .area-input, .area-textarea, .area-select, .area-number-field, .area-input-group {
       border-color: CanvasText;
     }
+    /* Inside a group the children draw no edge; the group's edge is the field's. */
+    .area-input-group > :is(.area-input, .area-number-field, .area-select) { border-color: transparent; }
     /* Menu rows show focus with a wash, which forced colours remove; restore a ring. */
     .area-menu__item:is(:focus-visible, [data-highlighted]) {
       outline: var(--area-focus-width) solid Highlight;
       outline-offset: calc(-1 * var(--area-focus-width));
     }
-    /* Joined-button dividers are painted boxes; keep them as system-coloured lines. */
+    /* Joined-button dividers and the toolbar separator are painted boxes; keep them as
+       system-coloured lines (audit A-9). */
     .area-split-button > .area-split-button__trigger::before,
-    .area-button-group > .area-button + .area-button::before {
+    .area-button-group > .area-button + .area-button::before,
+    .area-toolbar__separator, .area-separator, .area-menu__separator, .area-nav__separator {
       forced-color-adjust: none;
       background: ButtonText;
     }
@@ -19,22 +24,29 @@
       appearance: auto;
       background-image: none;
     }
-    .area-input[data-invalid], .area-textarea:is([data-invalid], [aria-invalid="true"]), .area-select[aria-invalid="true"] {
+    .area-input[data-invalid], .area-textarea:is([data-invalid], [aria-invalid="true"]), .area-select:is([data-invalid], [aria-invalid="true"]),
+    .area-number-field[data-invalid], .area-input-group:has([aria-invalid="true"], [data-invalid]) {
       border-style: dashed;
     }
     .area-button:focus-visible, .area-chip:focus-visible, .area-tabs__tab:focus-visible,
     .area-segmented__item:focus-visible, .area-select:focus-visible, .area-textarea:focus,
     .area-input:focus-within, .area-composer:focus-within, .area-checkbox__control:focus-visible,
+    .area-number-field:focus-within, .area-input-group:focus-within,
     .area-radio__control:focus-visible {
       outline: var(--area-focus-width) solid Highlight;
       outline-offset: var(--area-focus-offset);
     }
+    /* The group draws the one ring; its children do not add a second. */
+    .area-input-group > :is(.area-input, .area-number-field, .area-select):is(:focus, :focus-within) { outline: none; }
     .area-segmented__item[data-selected], .area-chip[data-selected], .area-button[data-selected] {
       border-color: Highlight;
       background-color: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
     }
+    /* A chosen card keeps a chosen edge, not CanvasText like every other card (audit C-28). */
+    .area-checkbox--card:has(> .area-checkbox__control:checked),
+    .area-radio--card:has(> .area-radio__control:checked) { border-color: Highlight; }
     .area-checkbox__control, .area-radio__control {
       forced-color-adjust: none;
       border-color: CanvasText;
@@ -52,6 +64,23 @@
     .area-checkbox__control::after, .area-radio__control::after {
       background-color: HighlightText;
     }
+    /* Progress, Spinner and Tooltip (audit E-10): the fill and the arc are painted backgrounds,
+       which forced colours replace, and the tooltip has no edge once its fill and shadow go. */
+    .area-progress { forced-color-adjust: none; background-color: Canvas; outline: var(--area-stroke-width) solid CanvasText; }
+    .area-progress__bar { background-color: Highlight; }
+    .area-spinner { forced-color-adjust: none; --_indicator: CanvasText; }
+    .area-tooltip { border: var(--area-stroke-width) solid CanvasText; }
+    /* Code block lines (audit G-20): tints and the :target rail are painted fills and shadows,
+       so a highlighted, added or removed line keeps a system-coloured rail instead. */
+    .area-code-block__line:is(.area-code-block__line--highlighted, .area-code-block__line--added, .area-code-block__line--removed, :target) {
+      forced-color-adjust: none;
+      box-shadow: none;
+      border-inline-start: var(--area-space-2) solid Highlight;
+    }
+    /* The Avatar active ring is a shadow and the Panel resize pill a fill (audit H-16): both get
+       system paint. */
+    .area-avatar--active { outline: var(--area-space-2) solid Highlight; outline-offset: var(--area-space-2); }
+    .area-panel__resize:focus-visible::before { forced-color-adjust: none; background-color: Highlight; }
     .area-slider__control { forced-color-adjust: none; }
     .area-slider__control::-webkit-slider-runnable-track { background: CanvasText; }
     .area-slider__control::-moz-range-track { background: CanvasText; }
@@ -60,6 +89,20 @@
     .area-slider__control:focus-visible::-webkit-slider-thumb { outline-color: Highlight; }
     .area-slider__control:focus-visible::-moz-range-thumb { outline-color: Highlight; }
     .area-tabs__tab[data-selected]::after { background-color: Highlight; forced-color-adjust: none; }
+    /* Current and selected rows were a plate alone, which forced colours remove (audit D-14):
+       paint them with the system selection pair, and draw the Nav marker in Highlight. */
+    .area-nav:not(.area-nav--marker) .area-nav__item[aria-current]:not([aria-current="false"]),
+    .area-tree-view [role="treeitem"]:is([aria-selected="true"], [aria-current="page"]),
+    .area-table tbody tr:is([data-selected], [aria-selected="true"]) td,
+    .area-menu__item[data-selected] {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+    .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"])::before {
+      forced-color-adjust: none;
+      background-color: Highlight;
+    }
     .area-property-list__indicator { background-color: Highlight; forced-color-adjust: none; }
   }
 }

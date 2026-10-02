@@ -51,7 +51,8 @@ export type Alias =
   /** The family's most saturated readable rung -- computed per scale, not chosen here. */
   | { kind: "vivid"; role: Role }
   | { kind: "contrast"; role: Role }
-  | { kind: "literal"; value: string; role?: Role };
+  /** A fixed value, or one per theme where the two were measured apart (the scrim). */
+  | { kind: "literal"; value: string | Record<Theme, string>; role?: Role };
 
 const at = (role: Role, slot: Slot): Alias => ({ kind: "slot", role, slot });
 const alphaAt = (role: Role, slot: Slot): Alias => ({ kind: "alphaSlot", role, slot });
@@ -63,7 +64,7 @@ const stroke = (role: Role): Alias => ({ kind: "stroke", role });
 const strokeHover = (role: Role): Alias => ({ kind: "strokeHover", role });
 const vivid = (role: Role): Alias => ({ kind: "vivid", role });
 const contrast = (role: Role): Alias => ({ kind: "contrast", role });
-const literal = (value: string, role?: Role): Alias => ({ kind: "literal", value, role });
+const literal = (value: string | Record<Theme, string>, role?: Role): Alias => ({ kind: "literal", value, role });
 
 /** The tonal block every role repeats, so `danger` and `accent` are structurally identical. */
 function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
@@ -127,6 +128,12 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
    * it; solved as a tint of the page rung it came out nearly transparent in dark mode.
    */
   "bg-overlay": literal("#000000a6", "neutral"),
+  /**
+   * The modal backdrop (Dialog, Command palette; audit S21b): black at 13.3% in light, the
+   * measured scrim (dialog.md), and 50% in dark, ChatGPT's dark `simple-scrim` (#00000080,
+   * read from its tokens 2026-10-01, audit S21c); was 65%.
+   */
+  "scrim": literal({ light: "#00000022", dark: "#00000080" }, "neutral"),
 
   // --- Foreground ---------------------------------------------------------------
   /** Body copy and anything that must be read comfortably. */
@@ -152,6 +159,7 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "border-decorative": at("neutral", "borderDecorative"),
   /** For a container whose fill already separates it from its ground. See `borderFaint`. */
   "border-faint": at("neutral", "borderFaint"),
+  "border-float": at("neutral", "borderFloat"),
   /**
    * A rule between pieces of content: separators, menu and table dividers, panel sections.
    * Darker than the decorative container seam, because a divider has no fill or shadow to help
@@ -298,7 +306,7 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
     case "contrast":
       return scales[aliasValue.role].contrast.hex;
     case "literal":
-      return aliasValue.value;
+      return typeof aliasValue.value === "string" ? aliasValue.value : aliasValue.value[theme];
   }
 }
 

@@ -1,0 +1,36 @@
+{
+  "$comment": "Concept table for the icon audit (owner, 2026-10-01): each concept's Area icon and its counterpart in Fluent (stem), Lucide, Phosphor and Hugeicons (free, stroke). Rendered by apps/docs/scripts/icon-refs.mjs. Grows into the whole-set audit; a missing key means the library has no counterpart.",
+  "bots": {
+    "$title": "Bots and hats",
+    "robot": { "area": "bot", "fluent": "bot", "lucide": "bot", "phosphor": "robot", "huge": "Robot01" },
+    "agent · detective": { "area": "bot-agent", "fluent": "incognito", "lucide": "hat-glasses", "phosphor": "detective", "huge": "HatGlasses" },
+    "builder · hard hat": { "area": "bot-builder", "lucide": "hard-hat", "phosphor": "hard-hat", "huge": "HardHat" },
+    "researcher · goggles": { "area": "bot-researcher", "fluent": "headset_vr", "lucide": "rectangle-goggles", "phosphor": "goggles", "huge": "VrGlasses" },
+    "scholar · mortarboard": { "area": "bot-scholar", "fluent": "hat_graduation", "lucide": "graduation-cap", "phosphor": "graduation-cap", "huge": "GraduationCap" },
+    "guard · shield person": { "area": "bot-guard", "lucide": "shield-user", "phosphor": "shield-check", "huge": "Cap" },
+    "lead · crown": { "area": "bot-lead", "fluent": "crown", "lucide": "crown", "phosphor": "crown", "huge": "Crown" },
+    "designer · cap": { "area": "bot-designer", "phosphor": "baseball-cap", "huge": "BaseballHelmet" },
+    "generator · wand": { "area": "bot-generator", "fluent": "wand", "lucide": "wand-sparkles", "phosphor": "magic-wand", "huge": "MagicWand01" },
+    "automator · chef hat": { "area": "bot-automator", "lucide": "chef-hat", "phosphor": "chef-hat", "huge": "ChefHat" },
+    "sunglasses": { "fluent": "glasses", "lucide": "glasses", "phosphor": "sunglasses", "huge": "Sunglasses" }
+  },
+  "everyday": {
+    "$title": "Everyday: each library's character",
+    "folder": { "area": "folder", "fluent": "folder", "lucide": "folder", "phosphor": "folder", "huge": "Folder01" },
+    "file": { "area": "document", "fluent": "document", "lucide": "file", "phosphor": "file", "huge": "File01" },
+    "calendar": { "area": "calendar", "fluent": "calendar", "lucide": "calendar", "phosphor": "calendar", "huge": "Calendar03" },
+    "bell": { "area": "bell", "fluent": "alert", "lucide": "bell", "phosphor": "bell", "huge": "Notification01" },
+    "search": { "area": "search", "fluent": "search", "lucide": "search", "phosphor": "magnifying-glass", "huge": "Search01" },
+    "settings": { "area": "settings", "fluent": "settings", "lucide": "settings", "phosphor": "gear", "huge": "Settings01" },
+    "trash": { "area": "trash", "fluent": "delete", "lucide": "trash-2", "phosphor": "trash", "huge": "Delete02" },
+    "home": { "area": "home", "fluent": "home", "lucide": "house", "phosphor": "house", "huge": "Home01" },
+    "person": { "area": "person", "fluent": "person", "lucide": "user", "phosphor": "user", "huge": "User" },
+    "heart": { "area": "heart", "fluent": "heart", "lucide": "heart", "phosphor": "heart", "huge": "Favourite" },
+    "star": { "area": "star", "fluent": "star", "lucide": "star", "phosphor": "star", "huge": "Star" },
+    "chat": { "area": "chat", "fluent": "chat", "lucide": "message-circle", "phosphor": "chat-circle", "huge": "BubbleChat" },
+    "mail": { "area": "mail", "fluent": "mail", "lucide": "mail", "phosphor": "envelope", "huge": "Mail01" },
+    "lock": { "area": "lock", "fluent": "lock_closed", "lucide": "lock", "phosphor": "lock", "huge": "SquareLock01" },
+    "camera": { "area": "camera", "fluent": "camera", "lucide": "camera", "phosphor": "camera", "huge": "Camera01" },
+    "cloud": { "area": "cloud", "fluent": "cloud", "lucide": "cloud", "phosphor": "cloud", "huge": "Cloud" }
+  }
+}

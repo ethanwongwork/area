@@ -432,6 +432,13 @@ glyphs:
 At 12px the scaled line is 0.84px against Fluent's 1px 12px cut. Composer's send arrow
 and the icons that demos pass in (folders, files) are still Fluent.
 
+2026-09-30 (audit S16, S18): PACKAGE_GLYPHS now also exports `stop` (Composer's Stop) and
+`more` (ToolbarOverflow's trigger, the dots of more-horizontal). The generator accepts stroked
+paths and rects, or filled circles alone, and writes a `glyphPaint` map to `glyphs.ts`:
+`solid` glyphs (stop) also fill inside the centre-line, as the filled variant's solid role;
+`fill` glyphs (more) are filled with no stroke, so the dots keep their drawn radius.
+`Glyph.tsx` paints by that map; every other glyph stays a stroked line.
+
 **Sixth pass, same day: status marks and arrow.**
 - The lint now holds status marks to every rule except keylines (grid, lattice, gaps,
   counters).
@@ -2381,3 +2388,90 @@ Researcher's goggles run past the head's sides and overlap its outline (the head
 inside the frame); Scholar has plain eyes. Explorations without a mouth: the agent, then six
 sunglasses (wayfarer, aviator, round, shield, slim, sport; `agent-cast-agent-sun-*`) and six goggles
 on the Researcher (wide, swim, strap, split, dark, forehead; `agent-cast-researcher-gog-*`).
+
+## Batch 61: Bot cast, 2026-09-30
+
+| Icon | Construction |
+|---|---|
+| bot-agent | Fedora with a knockout band over the hat line; one wrap-around shield lens (3.5–12.5 × 9–11.5) with a 45° nose dip to 9.75, a thin bridge; no mouth |
+| bot-builder | Hard hat: a 5.75 × 4.75 dome from 2.25 to 13.75 on the hat line, two knockout ribs at 6.5 and 9.5 |
+| bot-researcher | bot with its antenna, behind lab goggles wider than the head (1.5–14.5 × 8–11.5, r 1.25) with a nose notch; the head cut round them; no mouth |
+| bot-scholar | Mortarboard 12 × 3.25 (r 0.5) on a skull cap 7 wide whose foot follows the hat line; the head whole, the cap on its top |
+| bot-guard | Military cap: a crown flaring to a flat top at 2 (1.5–14.5), a knockout stripe, a solid visor 4–12 narrower than the crown under a hat line raised 0.75 |
+| bot-lead | The crown icon's body across the head at 1 × 0.345, its foot at 7; three ⌀1.5 balls a detail gap over its tips (2.5, 2.75; 8, 2.25; 13.5, 2.75); the head whole |
+| bot-designer | Baseball cap: the crown's sides run on from the head's (2 and 14), curving in very slightly to r 2.5 corners and a flat top at 2.5, a button and a knockout seam; the brim a stroked lens arched over the face (top 5.5, bottom 6.375 at the centre), its ends on the head's sides at 8.25 |
+| bot-generator | Wizard hat with a bent tip, its feet joined to the head where it meets the hat line (3.25 and 12.75), a knockout band |
+| bot-automator | Chef hat: three round puffs (r 1.25, 2, 1.25; lobes on a foot at 4) on a band 5–11 whose foot follows the hat line; the head whole |
+
+Owner round 2026-09-30: no mouths on the glasses wearers; the wrap-around lens over round ones; Guard B (stripe) over the star; the crown's band line removed; the Designer's brim arched from the owner's reference (a front-view cap) and the cap's sides lined up with the head's; Scholar M of four board sizes (13, 12, 10, 8). The Lead's balls grew from ⌀1.2 toward the crown icon's ⌀2 (owner): ⌀2 fits only set on the tips, where they blurred into them, or over a crown 0.28 tall, so ⌀1.5 floats over a crown 0.345 tall. Strict-lint fixes on promotion: the hat line 0.125 flatter, bands 2.25 above it, edges moved to the 0.5 grid (the guard's top, the crown's foot, the chef's band and puff foot), the hard hat's dome widened to an open gap from the eyes, the chef's puffs raised and narrowed (the side puffs 2 clear of the head's top), the lens set inside the head's sides. Exceptions carried from the cast: data-angles, data-dot and data-counter free/sliver (the wizard hat's tip pockets). Filled (owner, 2026-10-01: more ink, never a negative; Fluent's incognito and video_person): the hat fills and the head, eyes, mouth, lenses and visor stay exactly as drawn, so dark glasses stay dark and nothing crowds the eyes. Only the hats' own parts are parted (the board from the skull cap, the puffs from the band, the crown behind the brim); knockouts stay inside the hat's silhouette (bands, ribs, stripe); the cap's seam is outline-only. Earlier rounds flooded the head and knocked the face out, then parted hat from head with seams; both read as negatives. The plain bot keeps its filled head: the head is its identity.
+
+## Audit, 2026-10-01
+
+The whole set compared with Fluent, Lucide, Phosphor, Hugeicons and SF Symbols (and Cursor's
+rules); method, coverage and open questions in `docs/research/icon-audit/`. Cleanup only: no
+concept changed. Every icon below went back to review. Values here supersede earlier construction
+lines for the same icon.
+
+Filled, under "more ink, never a negative" (the outline is unchanged unless noted):
+
+| Batch | Icon | Filled now |
+|---|---|---|
+| 4 | token | the r 6 ring stays a line; the r 3 circle fills (a standard 1.875 to the ring) |
+| 5 | pin | the r 2 circle is a hole (an opening, as Fluent's location) |
+| 6 | home | the door is a hole through the base (`M6.5 13.5V10A1.5 1.5 0 0 1 9.5 10V13.5Z` plus a gap through the base line) |
+| 8 | cart | the basket fills; the handle stays a line; the ⌀2 wheels stay |
+| 9 | key | a ⌀2 hole in the bow at 5.5, 10.5 (the outline gains the dot, as Fluent's key) |
+| 11 | compass | the needle is a hole |
+| 13 | film | the perforation rails fill, their ticks knocked out; the frame and centre stay lines |
+| 18, 21 | document-add, document-check, calendar-check | filled-only gaps carry the corner mark's arms to the silhouette (they stopped 0.5 short) |
+| 22 | prohibited | fills by weight (the slash split the disc) |
+| 27, 32 | stop-circle, record | the ring fills by weight and the square or disc stays solid |
+| 28 | unpin | the filled-only fill keeps only what the outline keeps |
+| 30 | thermometer | the glass stays a line; a filled bulb swallows the reading dot |
+| 31 | qr-code | filled equals the outline (finder centres stay solid) |
+| 35 | picture-in-picture | the frame stays a line; the window fills |
+| 38 | bank | a filled-only gap at 7.125 parts the roof from the pillars |
+| 38 | award | the medal ring stays a line; the inner ring becomes a solid disc |
+| 39 | person-circle | the figure is a solid negative silhouette (head and shoulders holes), as id-card's person |
+| 47 | flask-off | flask's liquid gap carried to the slash, one-sided |
+| 55 | target | fills by weight |
+| 55 | disc | the centre is a true r 2 hole |
+| 57 | file-lock | the lock body fills, cut a weight from the page; the shackle stays ink |
+| 58 | brain-off | brain's midline gap (`M8 1V15`) |
+| 60 | cube-wireframe | cube's outline and Y with the hidden inverted Y; fills by weight (a see-through frame stays open) |
+| 61 | bot-guard | a gap one weight above the hat line parts the crown from the visor; the stripe is outline-only |
+
+Outline (family drift, pixel grid, optical size):
+
+| Batch | Icon | Now |
+|---|---|---|
+| 7 | menu | lines 2–14, as list |
+| 12 | server | square keyline; units 12 × 4.5 at 2–6.5 and 9.5–14, r 1.5; ⌀1.5 lights at 5, 4.25 and 5, 11.75 (detail 0.94) |
+| 12 | pointer | scaled 1.1 about 8,8 (ink 11.9; was 2.24 under its keyline), fillets re-solved at the same radii |
+| 13 | volume-off | the 3.5 × on the diagonal lattice, 10.25–13.75 × 6.25–9.75 |
+| 14 | save | body 2.5–13.5 r 2 like the square containers; corner cut r 1; shutter 5–10 from 2.5; label 5–11 × 8.5–13.5 |
+| 17 | skip-forward | play's triangle scaled 10/13, back at 2.5, 1.82 to the bar |
+| 21 | bar-chart | bar tops 8.5, 6, 3.5 (even 2.5 steps) |
+| 22 | activity | peaks reach 3 and 13 (r 1 peaks, r 0.5 shoulders, ends 1.5 and 14.5) |
+| 23 | document-remove | the corner-arc hook removed; the bottom edge starts at 8.306, 14 like document-add |
+| 29 | kanban | the shared square container (2.5–13.5, r 2), header at 6, columns at 6 and 10 |
+| 30 | leaf | body r 4.5 at 8,8 (point 8, 1.636), stem 12.5–14.5 |
+| 30 | mountain | crater 3.5, base 12.5 (was whole pixels), width kept |
+| 32 | wand | sparkle r 3 at 11, 5; stick from 2, 14 to 7.25, 8.75 (open 2.7) |
+| 34 | git-commit | node r 1.5 like the git family; lines to 6.5 and from 9.5 |
+| 43 | translate | 文 bar at 3.5 |
+| 44 | square-slash | the slash falls (5.5, 5.5 to 10.5, 10.5) like every slash |
+| 46 | mail-dot | the dot at 13, 4.5, 1 in from the side like the other hosts; cut re-solved |
+| 51 | git-pull-request-draft | dashes 3.5–4.5 and 7–8 (even, 1.38) |
+| 51 | git-pull-request-closed | × 3.5 (10.25–13.75 × 2.25–5.75) |
+| 53 | network | axis edges on x.5: top box 6–10 × 2.5–5.5, boxes 2.5–6.5 and 9.5–13.5 × 10.5–13.5, bracket row 7.5 |
+| 57 | app-window | bar at 7.5, dots at 5 |
+| 57 | call-incoming, call-outgoing | 3px corner heads, the main-arrow size |
+| 60 | stack-frame | 3px head (`M2.5 8H7M4 5L7 8L4 11`); frame 9.5–13.5 × 2.5–13.5, r 1.5 |
+| 61 | bots | only the lint exceptions each needs (free angles; the Generator's sliver pockets) |
+
+Earlier lines corrected by this audit (the sources were right): tag's eyelet is ⌀1.5 at 5.75;
+smile's eyes and building's windows are ⌀1.5; list-bullet's bullets are ⌀1.5 at 2.75 and 5, 8, 11;
+list runs 2–14; repeat's rails end r 3.5; git-branch's nodes are r 1.5; git-pull-request has a 2px
+head; text-size's T is 8 × 10 with a 4 foot. Not changed: outdent (mirroring indent's chevron in
+place leaves a 2.08 near miss; move indent and outdent together if wanted).

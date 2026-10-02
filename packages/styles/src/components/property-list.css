@@ -34,12 +34,12 @@
    */
   .area-property-list__handle {
     position: absolute;
-    inset-inline-start: calc(var(--_inset, var(--area-space-12)) * -1);
+    inset-inline-start: calc(var(--_panel-inset, var(--area-space-12)) * -1);
     inset-block: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--_inset, var(--area-space-12));
+    inline-size: var(--_panel-inset, var(--area-space-12));
     margin: auto 0;
     padding: 0;
     border: 0;
@@ -72,4 +72,6 @@
     background: var(--area-fg-default);
     pointer-events: none;
   }
+  /* Reveal-on-hover fades on the one shared timing (audit F-38). */
+  .area-property-list__handle { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
 }

@@ -3,10 +3,10 @@
   .area-indicator { --_bg: var(--area-danger-solid); --_fg: var(--area-fg-on-danger); position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; flex: none; box-sizing: border-box; border-radius: var(--area-radius-full); vertical-align: middle; background: var(--_bg); color: var(--_fg); white-space: nowrap; }
   .area-indicator--dot { --_dot: 6px; /* spec: indicator.md dot size */ inline-size: var(--_dot); block-size: var(--_dot); }
   .area-indicator--count {
-    --_height: var(--area-mark-sm); /* spec: 16, indicator.md count height (Fluent small); the mark role (audit S21a) */
+    --_height: var(--area-mark-sm); /* spec: indicator.md count height (Fluent small), the 16 mark rung */
     --_gutter: 4px; /* spec: Fluent small padding-inline */
-    /* spec (audit S20, owner 2026-09-30): Count sm's type, 12/16, the type ramp's floor (Chip
-       initials moved to it too), so there is one 16px numeric mark. Was 10/14 (Fluent small). */
+    /* Count sm's type, 12/16 at weight 500 (audit S20 B, owner 2026-09-30): the 12px floor Chip
+       initials already keep; was Fluent small's 10/14. */
     --_text: var(--area-control-xs-text);
     --_leading: var(--area-control-xs-leading);
     min-inline-size: var(--_height); block-size: var(--_height); padding-inline: var(--_gutter);
@@ -22,7 +22,7 @@
   .area-indicator--danger { --_bg: var(--area-danger-solid); --_fg: var(--area-fg-on-danger); }
   .area-indicator-anchor { position: relative; display: inline-flex; vertical-align: middle; --_overlap: 0%; --_x: 50%; --_y: -50%; --_shift: 1; --_inset: var(--area-indicator-anchor-offset, var(--area-space-0)); }
   .area-indicator-anchor--rectangular { --_overlap: 0%; }
-  .area-indicator-anchor--compact { --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + var(--area-space-4)); }
+  .area-indicator-anchor--inset { --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + var(--area-space-4)); }
   /* Contained attachments sit inside the owner's box instead of straddling its corner.
      Circular owners: flush in the bounding-box corner (Untitled avatar status, right 0 / bottom 0).
      Rectangular owners with an activity dot: the dot overlaps the icon's top-end corner, as

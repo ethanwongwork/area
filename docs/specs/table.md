@@ -1,6 +1,6 @@
 # Table spec
 
-**Status:** in review · 2026-09-26 (cohesion audit, second pass)
+**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit, second pass))
 **Captures:** `docs/research/captures/table/`
 **Peers:** Menu, Nav, Tree view and Select (row plates), Card and Panel (container edge),
 Checkbox (row selection), Badge and Skeleton (cell content), Separator (dividers)
@@ -83,7 +83,7 @@ Row height md = 8 + 20 + 8 + 1 divider = 37 (Notion 36 + hairline = 36.55).
 | slot · property | notion · header-row | notion · header-cell | notion · body-row | notion · body-row · hover | area · default |
 |---|---|---|---|---|---|
 | **shell** size | 1151.98 × 36 | 124.01 × 23.99 | 1151.98 × 36.55 | 1151.98 × 36.55 | 578 × 112.08 |
-| **shell** border | 0 | 0 | 0 | 0 | 1 solid rgb(243, 243, 243) |
+| **shell** border | 0 | 0 | 0 | 0 | 1 solid rgb(243, 243, 243) (at capture; now `border-divider` #e2) |
 | **shell** radius | 0px | 0px | 0px | 0px | 12px |
 | **shell** gap | — | 6px / 6px | — | — | — |
 | **shell** font | 16px/24px (cells 14/21) | 14px/16.8px 400 | 16px/24px (cells 14/21) | same | 16px/24px (table 14/20) |
@@ -107,7 +107,7 @@ selected or hovered row.
 | divider | 1px **`border-divider`** #e2e2e2 / #333333 below each row but the last | Second pass divider role; Untitled 1px neutral-200 | Was `border-decorative` |
 | hover (interactive) | `bg-component-hover` #f3f3f3 / #333333 on the cells | Row-plate rule; Untitled row hover | Notion paints no plate; kept (third pass): shared row plates |
 | selected (`data-selected`) | `bg-component-active` #eeeeee / #3f3f3f, kept under the pointer | Selection one step above hover | Untitled uses neutral-50 for both |
-| stripes | `bg-stripe` #fafafa / #282828 on even rows | Owner | Selection wins over a stripe (same specificity, later rule, `navigation.css:192, 194`) |
+| stripes | `bg-stripe` #fafafa / #282828 on even rows | Owner | Selection wins over a stripe (same specificity, later rule, `navigation.css:211, 213`) |
 | numeric | end-aligned, `tabular-nums` | Earlier Area value | Notion sets tabular figures on the whole view |
 
 Settled in the third pass, all kept: Notion's is a database grid; Area's Table is a data
@@ -126,8 +126,8 @@ table with shared row plates ([cohesion audit](../research/cohesion-audit.md#thi
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | rest | no fill | `area--default`; `notion--body-row--rest` |
-| hover (`--interactive`, unselected rows) | cells `bg-component-hover`; transition on the cells | `navigation.css:169-176`; not captured |
-| selected (`tr[data-selected]`, or `aria-selected` in a grid) | row `bg-component-active`; no hover over it | `navigation.css:194`; not captured selected |
+| hover (`--interactive`, unselected rows) | cells `bg-component-hover`; transition on the cells | `navigation.css:175-184`; not captured |
+| selected (`tr[data-selected]`, or `aria-selected` in a grid) | row `bg-component-active`; no hover over it | `navigation.css:213`; not captured selected |
 | focus-visible | on the composed controls (Checkbox, Button) only | — |
 | loading | `aria-busy` with Skeleton cells | `area--loading` |
 
@@ -135,7 +135,14 @@ table with shared row plates ([cohesion audit](../research/cohesion-audit.md#thi
 
 A native `table`; React forwards props and the ref to the `table` and always wraps it in
 `.area-table-wrapper` (`primitives.tsx:699-720`). Headers use `scope="col"`, sorting sets
-`aria-sort` on the header with a Button inside. The selection tile marks rows with
+`aria-sort` on the header with a Button inside; the header Button overhangs the cell's block
+padding so the row keeps its text height and the label sits on the column's text edge
+(`navigation.css:197-200`, audit F-24). A clickable row holds one `TableLink`
+(`.area-table__link`), stretched over the row as CardLink covers a card, so the `interactive`
+hover plate keeps its promise; other controls in the row sit above it, and the row draws the
+link's focus ring (`navigation.css:186-193`, audit F-23 A, owner 2026-09-30). `wrapperProps` go to
+the scrolling wrapper, which becomes a focusable region named after the table only while it
+overflows (`primitives.tsx:1025-1060`). The selection tile marks rows with
 `data-selected` (a paint hook) and the row Checkbox carries the accessible state; `aria-selected`
 still paints for grid and treegrid rows. Notion's cells are `role=button` inside a custom grid.
 
@@ -153,7 +160,7 @@ still paints for grid and treegrid rows. Notion's cells are `role=button` inside
 
 2026-09-28 (batch 16, Claude in Chrome): Notion's table view ("returns", read-only): rows 36.6,
 0.56px rules at 7% warm (row and column), header 14/21 muted with no fill, cells without
-padding of their own. Area's md row is 36 with 12 inline insets, a framed wrapper, a
+padding of their own. Area's md row is 37 (36 + the rule) with 12 inline insets, a framed wrapper, a
 `bg-subtle` header and horizontal rules only: the three differences settled in the third pass
 (frame, inset, hover) stand. Selected row under the pointer: the hover rule excludes selected
 rows (`.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover`),
@@ -183,4 +190,7 @@ read from the CSS; no Area capture shows them.
 - 2026-09-27 · owner: "the large table stroke is way thicker" → the large and interactive gallery tiles wrapped a Table in a second `area-table-wrapper`, drawing the edge twice; the demos now render Table alone (component unchanged) → Pass review in the gallery.
 - 2026-09-30 · audit S7b (owner picked C) → no change; the frame keeps `border-divider` #e2 with no shadow, where Card keeps #ee carried by its halo → navigation.css:126.
 - 2026-09-30 · audit S10, S11b (owner) → the frame's border uses `stroke-width`, so it keeps its edge under the Elevated preset (`navigation.css:127`); no focus change, since rows are not focusable yet (family call F-23 open).
+- 2026-09-30 · audit S17 (API vocabulary, slice 2, H-13) → manifest default `size: "md"` added (manifest.ts:600); the md modifier equals the base rule, no visual change.
+- 2026-10-01 · audit F-23 (owner pick A) → `TableLink`: one stretched link makes a row clickable, with the row's focus ring; `wrapperProps` for the scrolling wrapper → primitives.tsx:1025-1035, navigation.css:186-193.
+- 2026-10-01 · audit F-24 → a sort Button in a header cell overhangs the cell's block padding, keeping the row at its text height with the label on the column's text edge → navigation.css:197-200.
 - 2026-10-01 · compact pass round 6 → cell padding above and below steps down at compact (sm 4 → 2, md 8 → 6, lg 12 → 8); the side padding already followed `gutter-md` (12 → 8). docs/research/compact-pass-2026-10-01.md.

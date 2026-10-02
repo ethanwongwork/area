@@ -46,8 +46,9 @@ Popover float over the page. A panel stays beside its subject.
 | bare-bar | boolean | A bar that names the panel carries no rule | Gallery Layout / bare bar; docs site sidebar |
 | composition | sections, heading, stack, footer | Grouping and a pinned action | Gallery `default`, `sections`, `footer` |
 
-At default density the gutter ramp is 8 / 8 / 12 / 12 (`packages/tokens/src/axes/density.ts:71-76`),
-so xs = sm and md = lg; compact spreads them to 6 / 8 / 10 / 12.
+Panel insets (sm 12, md 16) and gaps (sm 8, md 12) are fixed spacing, not the gutter or gap
+ramps: they do not follow density, so under compact the controls shrink and the insets stay.
+Compact values are set in the density pass (owner, audit F-26 B, 2026-09-30; `panel.css:340-357`).
 
 ## Sources
 
@@ -73,12 +74,13 @@ figma  inspector 240 wide, rows own their insets (padding 0 8 0 16)
   number field    88 × 24, radius 5, #f5, 24px prefix box ("W"), 64px input, 11/16
   size select     88 × 24, radius 5, white, 1px #e6 edge, 11/16 450
 area   div.area-panel flex column, 280 wide; border, radius, surface, shadow-2
-  bar      header 28 + 4 × 2 + 1 rule = 37; padding-inline = inset; title UI 14/20 500
+  bar      row + one field gap above and below + 1 rule (sm 8 + 28 + 8 + 1 = 45, md 12 + 32 + 12 + 1 = 57);
+           padding-inline = inset; title 500, md 16/24, sm 14/20
   body     padding = inset, gap 16, scrolls
-    section   gap 8, 12 below, full-width divider (negative margins, inset returned as padding)
-      heading   min 32 (row), UI 14/20 500, fg-default
+    section   rows 12 apart (sm 8), full-width divider (negative margins, inset returned as padding)
+      heading   a row (sm 28, md 32) with one field gap above; 500, md 14/20, sm 12/16, fg-default
       rows      Field horizontal, label fg-muted; NumberField soft with X / Y / W / H prefixes
-      stack     label above a full-width control, gap 6
+      stack     label above a full-width control, gap 6 (sm 4)
   footer   pinned, padding = inset, top divider
 ```
 
@@ -110,14 +112,14 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | shell · width | **240**, public hook `--area-panel-inline-size` | Owner (2026-09-27: smaller by default); Figma's inspector 240 | Was 280, which made room for the action column; the Figma recipe sets 280 for its 28px rows |
-| rows | `control-md` 32 (`panel.css:20, 132`) | Owner (prior; confirmed in the third pass) | Figma's rows are 32 (`figma--color-row`) with 24px fields inside; Area's controls fill the row |
+| rows | the tier's control, `--_row`: sm 28, md 32 (`panel.css:36, 351-357`) | Owner (prior; confirmed in the third pass) | Figma's rows are 32 (`figma--color-row`) with 24px fields inside; Area's controls fill the row |
 | field style | **soft for every field, Select included** (`apps/docs/src/demos/gallery.tsx:700-719`) | Third pass: one field style per surface | Was outline Selects beside soft NumberFields; Select gained `variant="soft"` ([select.md](select.md)) |
-| shell · radius / edge / fill | `radius-container` 12, `border-decorative` #f3f3f3, `bg-surface` #ffffff (`panel.css:36-38`) | Peers: Alert, Code block, Dialog; container seams stay decorative | Card's edge took `border-divider` in the third pass (it stands alone on the page); a panel's lift carries its seam |
+| shell · radius / edge / fill | `radius-container` 12, `border-decorative` #f3f3f3, `bg-surface` #ffffff (`panel.css:36-38`) | Peers: Alert, Code block, Dialog; container seams stay decorative | Card's edge took `border-divider` in the third pass (it stands alone on the page), now neutral 100 (audit S7); a panel's lift carries its seam |
 | shell · shadow | `shadow-2`, 0 1px 2px −0.5px `shadow-color` 6% (`panel.css:40`) | Shared rule: the floating lift is for overlays | A panel sits in the page flow; Notion's 20px-blur geometry would read as an overlay |
 | flush | no border, radius or shadow; `bg-page` (`panel.css:49-54`) | Figma's docked inspector: no radius, edge or shadow on any row (`figma--section-title`, `figma--color-row`) | — |
-| bar | `control-sm` + 2 × 4 + rule = 37 (`panel.css:26`) | Area's own; fixed across inset tiers | — |
-| title | UI 14/20 500 (`panel.css:105-111`) | Surface title at body size (audit S2, owner 2026-09-30) | — |
-| heading | **UI 14/20 500, `fg-default`** (`panel.css:172-177`; audit S2) | Second pass: the heading outranks muted labels by ink | Was 12/16, smaller than the 14px labels under it. Figma's title is 11/16 550 at the same ink as its field text; kept (third pass): one label weight, so ink sets headings apart |
+| bar | `--_row` + 2 × `--_panel-gap` + rule: sm 45, md 57 (`panel.css:43-45`) | Owner 2026-09-28: the bar's button has one field gap above and below | Was `control-sm` + 2 × 4 + rule = 37 at every size |
+| title | 500; md 16/24, sm 14/20 (`--_panel-title-*`, `panel.css:105-111`) | Surface title (audit S2, owner 2026-09-30); type by size (owner 2026-09-28) | Was UI 14/20 at both sizes |
+| heading | **500, `fg-default`; md 14/20, sm 12/16** (`--_panel-label-*`, `panel.css:162-177`; audit S2) | Second pass: the heading outranks muted labels by ink | Was 12/16, smaller than the 14px labels under it. Figma's title is 11/16 550 at the same ink as its field text; kept (third pass): one label weight, so ink sets headings apart |
 | field labels | **`fg-muted` #666666** (`panel.css:147`) | Second pass | Was the Field default ink |
 | numeric rows | **NumberField soft with letter prefixes** X / Y / W / H (`apps/docs/src/demos/gallery.tsx:680-690`) | Figma's letter-prefixed number fields (`figma--number-field`) | Prefix ink and box differ from Figma; see [number-field.md](number-field.md) |
 | rules (bar, section, footer) | **`border-decorative`**, the panel's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 | Second pass: new divider role for rules; Figma #e6 (`figma--size-select` edge), ChatGPT 10% black; Notion's menu rules are lighter, 7% (#f0, `menu/notion--page-menu--open`); #e2 is the nearest rung to #e5 | Was `border-decorative` #f3f3f3 |
@@ -127,14 +129,16 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | end-of-row buttons (bar, heading actions, row action) | **box on the inset, one field gap after the last field** | Owner (2026-09-28: "use the same gaps between the inputs … and the button"); Figma 8 between H and its action | A glyph-on-inset pull (tried the same day) widened the gap after H |
 | md width in the gallery | the md size tile at 280 | Owner (2026-09-28: "show a slightly larger width of the container for medium") | The component default stays 240 (owner, 2026-09-27) |
 | type and gaps by size | **sm**: bar title 14/20, section titles and labels 12/16, fields and their action 8 apart, rows 8 apart, labels 4 over; **md**: 16/24, 14/20, 12, 12, 6. Controls keep their tier's text (14/20). Published as `--_panel-*` for BoxField and PropertyList inside a panel | Owner (2026-09-28: "shouldn't there be differences in text size and gaps between medium and small?"); the control scale's gaps (4 / 8) and gutters (8 / 12) step the same way | Was one type ramp at both sizes (Card's rule), 8 / 6 gaps |
-| section gap / stack gap | 8 / 6 (`panel.css`) | Stack 6 matches Field's label gap (Untitled 6) | — |
+| section gap / stack gap | md 12 / 6, sm 8 / 4 (`--_panel-row-gap`, `--_panel-label-gap`) | Stack 6 matches Field's label gap (Untitled 6); type and gaps by size (owner 2026-09-28) | Was 8 / 6 at both sizes |
 | section rule placement | **midway: 16 below the last field, the next title's cap 16 below the rule**; a heading after a rule rises by `(row − 1cap) / 2`; a heading-only section's cap sits 16 above the rule below (`panel.css`) | Figma (batch 8, `figma--section-auto-layout`): 16 from the last field to the rule, 16.5 from the rule to the title's cap; heading-only sections 40 tall, text centred | Was 12 below the last field and about 26 from the rule to the cap (the 16 body gap plus half the heading row), so rules read as belonging to the section above |
-| inset tiers | `gutter-xs/sm/md/lg` (`panel.css:174-177`) | Density axis | Figma insets 16 start, 8 end |
+| inset tiers | sm 12, md 16 only (`panel.css:351-357`); the xs and lg tiers were removed | Owner (2026-09-27: two tiers) | Figma insets 16 start, 8 end |
 
 Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)); both kept:
 
 1. Heading row height stays 32 (`panel.css:132`). Figma's section titles are 40px rows
-   (`figma--section-title`, `figma--section-header`); the owner chose medium rows.
+   (`figma--section-title`, `figma--section-header`); the owner chose medium rows. *Superseded
+   2026-09-28: the heading is a row with one field gap above and below (sm 44, md 56), Figma's
+   8 + 24 + 8 construction.*
 2. The heading outranks its rows by weight (500) and ink. Figma sets its title apart by
    weight 550 at the same 90% ink as its field text (`rgba(0, 0, 0, 0.898)` in all three
    rows); the code followed in the type pass, and audit S2 (owner, 2026-09-30) made surface
@@ -156,10 +160,10 @@ outside the scroll so its action never reads as the last row's.
 | Peer | Shared role | Peer value | Panel | Match |
 |---|---|---|---|---|
 | Menu, Popover, Dialog, Toast, pickers | elevation | floating lift, 0 20px 24px + 0 5px 8px | `shadow-2` | intentionally different: region, not overlay |
-| Card | in-flow elevation | `shadow-1` (0 0.5px 1px) | `shadow-2` (0 1px 2px) | intentional: a docked region sits one step above content (DESIGN_SYSTEM.md, Elevation) |
-| Card / Alert / Code block | radius | 12 / 12 / 12 | 12 | match (Card moved to the container radius) |
+| Card | in-flow elevation | `shadow-card` (1px contact + 2px-low 8px blur, 3% black) | `shadow-2` (0 1px 2px) | intentional: a docked region sits one step above content (DESIGN_SYSTEM.md, Elevation) |
+| Alert / Code block | radius | 12 / 12 | 12 | match; Card is 22 / 24 / 28, concentric with its Button (owner 2026-09-28, audit S3) |
 | Field | row height and label | 32, label gap 6 | 32 rows, stack gap 6, labels muted inside a panel | match; the muting is Panel's (`panel.css:147`) |
-| Separator, Code block header, Menu | rule | `border-divider` | `border-divider` | match |
+| Code block header, Menu separator, Toolbar separator | rule | `border-decorative` | `border-decorative` | match (a rule is never darker than its container); Separator stands alone on `border-divider` |
 
 ## Visual pass
 
@@ -232,4 +236,5 @@ Unverified: dark theme and a side-by-side with Figma's inspector at the same zoo
   measured: header button 8 / 8 (sm) and 12 / 12 (md) above and below, 12 / 16 from the right edge;
   field gap = field-to-button gap (8 / 12); last field to rule 12 / 16; no clipped value.
 - 2026-09-28 · owner: approved (batch 8).
+- 2026-09-30 · audit F-26 (owner pick B) → insets 12 / 16 and gaps 8 / 12 stay fixed spacing, not density-following; the code comment and this spec no longer claim the gutter ramp; compact values come with the density pass → panel.css:340-357.
 - 2026-10-01 · compact pass round 6 → the sides read the surface insets (`inset-surface-md/sm`: 16 / 12, compact 12 / 8); gaps 12 / 8 step to 8 / 6. Default unchanged. docs/research/compact-pass-2026-10-01.md.

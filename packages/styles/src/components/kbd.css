@@ -8,7 +8,7 @@
  */
 @layer area.components {
   .area-kbd {
-    --_min: var(--area-mark-md);
+    --_min: var(--area-mark-label-md);
     /* The keycap is the mark height (20 md, 16 sm): a 10px line box, the padding, and the 1px
        transparent border twice. Reading the mark role lets compact shorten it (compact pass). */
     --_height: var(--_min);
@@ -17,7 +17,9 @@
     --_leading: var(--area-size-10);
     /* spec: 6 at every size and in every host (owner 2026-09-28: "keep 6px for everything as a
        rule"; 4 read too sharp, a concentric 2 far too sharp). */
-    --_radius: min(var(--area-radius-control-sm), calc(var(--_height) * var(--area-radius-cap))); /* finite under Pill (audit H-1) */
+    /* Code's corner role, radius-small, capped by its height (audit G-10; was control-sm, 6 either
+       way at Standard). Finite under Pill (audit H-1). */
+    --_radius: min(var(--area-radius-small), calc(var(--_height) * var(--area-radius-cap)));
 
     display: inline-flex;
     align-items: center;
@@ -55,13 +57,13 @@
   }
 
   .area-kbd--md {
-    --_min: var(--area-mark-md);
+    --_min: var(--area-mark-label-md);
     --_font: var(--area-text-xs-size);
     --_leading: var(--area-size-10);
   }
 
   .area-kbd--sm {
-    --_min: var(--area-mark-sm);
+    --_min: var(--area-mark-label-sm);
     --_font: var(--area-size-11);
     --_leading: var(--area-size-10);
   }
@@ -102,8 +104,10 @@
   .area-menu__item--danger .area-kbd { color: inherit; }
 
   /* On a strong fill, the keycap is a translucent plate rather than a nested outlined control. */
+  /* A Tooltip is a strong fill too, so a keycap in one adapts on its own, as in a solid Button
+     or a menu row (audit A-15; it needed on-emphasis passed by hand). */
   .area-kbd--on-color,
-  .area-kbd--on-emphasis {
+  .area-tooltip .area-kbd {
     background-color: color-mix(in srgb, currentColor 14%, transparent);
     border-color: transparent;
     color: inherit;
@@ -141,4 +145,8 @@
     gap: var(--area-space-4);
   }
 
+  /* Inside an interactive host the spoken chord would join the host's name ("Save Command plus
+     S"); the host carries aria-keyshortcuts instead, so the chord leaves the accessibility tree
+     there (audit A-16). Standalone, in text or a table, it is still read. */
+  :is(button, a, [role^="menuitem"], [role="option"], [role="tab"]) .area-kbd > .area-sr-only { display: none; }
 }

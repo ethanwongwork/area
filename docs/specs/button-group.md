@@ -29,7 +29,7 @@ button with its own name and Tab stop. Not Toolbar (roving focus, overflow), not
 | variant | outline | Joined actions with a shared stroke | shadcn outline groups; Untitled button group |
 | size | sm, md, lg | Button's scale | shadcn size examples (28/32/36) |
 | composition | text; icon only; icon and label; toggle | One tile each, in soft and outline where both apply | Figma alignment commands (Toolbar in the product); shadcn icon and text groups |
-| state | one button disabled | Tile "Disabled button" (the others stay usable) | shadcn disabled examples |
+| state | one button disabled; every button disabled | Tile "Disabled button" (the others stay usable). The disabled button gives up its divider and the enabled neighbour before it draws the seam at full strength (audit A-23 A, owner 2026-09-30); with every button disabled the group dims once as a whole, so overlapped edges aren't dimmed twice (audit H-26) (`button-group.css:83-103`) | shadcn disabled examples |
 
 ## Sources
 
@@ -78,3 +78,5 @@ cleanly (sm 28, lg 40 keep the same divider). No change.
 - 2026-09-26 · owner: show more ButtonGroup variants → nine tiles: soft/outline × text, soft/outline × icon only, icon and label, toggle selected, small, large, disabled button.
 - 2026-09-30 · audit S8 (owner) → the soft group's seam counts as a control edge and keeps #e2 (`edge-control`); a written exception to the inner-rule rule. No code change.
 - 2026-09-30 · audit S14, S15b (owner) → children keep Button's own 6 icon gap; the group no longer overrides `--_gap` (button-group.css:26-38; was 4 / 8 / 8). A neutral soft Split button now paints as the soft group (split-button.css:70-77; peer row).
+- 2026-10-01 · audit A-23 (owner pick A) → a disabled button's seam is drawn by the enabled neighbour at full strength (was ~75% under the dimmed button) → button-group.css:83-94.
+- 2026-10-01 · audit H-26 → a group whose buttons are all disabled dims once as a whole (one disabled part still dims alone) → button-group.css:98-102.

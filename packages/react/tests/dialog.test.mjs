@@ -118,7 +118,7 @@ test("A resizable Panel renders a named window-splitter separator with its width
   assert.match(html, new RegExp(`<div role="separator" tabindex="0" class="area-panel__resize" data-edge="start" data-limit="min" aria-orientation="vertical" aria-controls="${id}" aria-label="Resize Design" aria-valuenow="240" aria-valuemin="240" aria-valuemax="360" aria-valuetext="240 pixels \\(minimum\\)"></div>`));
   const fixed = renderToString(h(Panel, { title: "Design" }, "rows"));
   assert.doesNotMatch(fixed, /area-panel__resize|data-resizable|style=|<div id=/);
-  assert.match(fixed, /^<div role="region" aria-labelledby="([^"]+)" class="area-panel[^"]*">.*<span class="area-panel__title" id="\1">Design<\/span>/);
+  assert.match(fixed, /^<div role="region" aria-labelledby="([^"]+)" class="area-panel[^"]*">.*<h2 class="area-panel__title" id="\1">Design<\/h2>/); // a heading, audit F-22
   const level = renderToString(h((await import("../dist/modules/index.js")).PanelSection, { heading: "Layout", headingLevel: 2 }));
   assert.match(level, /<h2 class="area-panel__heading">Layout<\/h2>/);
 });
@@ -157,11 +157,11 @@ test("ContextMenu wraps its area without a box and keeps a closed, named popover
   assert.match(html, /^<div class="area-context-menu"><div>Area<\/div><div role="menu" class="area-menu area-context-menu__menu" popover="auto" aria-label="Page actions" tabindex="-1"><\/div><\/div>$/);
 });
 
-test("HoverCard places a Popover-surface card beside its link and adds nothing to the link's name", async () => {
+test("HoverCard anchors a Popover-surface card to its link and adds nothing to the link's name", async () => {
   const { HoverCard } = await import("../dist/modules/index.js");
   const html = renderToString(h(HoverCard, { trigger: h("a", { href: "#irene" }, "@irene") }, "Irene Yamaguchi"));
-  // No anchor wrapper: the shared engine places the card (audit S16).
-  assert.match(html, /^<a href="#irene">@irene<\/a><div id=/);
+  // Positioned by the shared engine (audit S16): no CSS anchor wrapper around the link.
+  assert.match(html, /^<a href="#irene">@irene<\/a>/);
   assert.match(html, /<div id="[^"]+-hover-card" popover="manual" class="area-popover area-popover--bottom area-hover-card">Irene Yamaguchi<\/div>/);
   assert.doesNotMatch(html, /aria-describedby|role="tooltip"/);
 });
@@ -203,6 +203,7 @@ test("ModelPicker is a ghost menu button over single-choice Menu rows with notes
   const html = renderToString(h(ModelPicker, { defaultValue: "b", models: [{ value: "a", label: "Auto" }, { value: "b", label: "Instant", description: "Answers right away" }] }));
   // Menu's own trigger path (audit G-11): one placement engine and one menu-button contract.
   assert.match(html, /aria-label="Model: Instant" id="([^"]+)-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="\1"/);
-  assert.match(html, /<div role="menu" class="area-menu" aria-label="Model" id="[^"]+" popover="auto" tabindex="-1" aria-labelledby="[^"]+-trigger">/);
+  // The consumer's aria-label names the menu; it no longer loses to the trigger's labelledby (audit D-12).
+  assert.match(html, /<div role="menu" class="area-menu" aria-label="Model" id="[^"]+" popover="auto" tabindex="-1">/);
   assert.match(html, /role="menuitemradio" aria-checked="true"[^>]*><span class="area-menu__lines"><span class="area-menu__text">Instant<\/span><span class="area-menu__description">Answers right away<\/span><\/span>/);
 });

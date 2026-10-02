@@ -26,10 +26,11 @@ test('rows share one hover plate and one selection plate, and selection outranks
   // Each hover selector excludes the selected or current row, so the stronger plate stays
   // under the pointer (a hover rule of higher specificity would otherwise lighten it).
   const hover = [
+    // Pointer hover sits under @media (hover: hover) (audit S21b); keyboard highlight does not.
     '.area-menu__item:hover:not([data-disabled], [data-selected])',
     '.area-menu__item:is([data-highlighted], :focus-visible):not([data-selected])',
     '.area-nav__item:hover:not([data-disabled])',
-    '.area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current="page"])):hover',
+    '.area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current]:not([aria-current="false"]))):hover',
     '.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td',
     '.area-tree-view [role="treeitem"]:hover:not([data-disabled], [aria-current="page"], [aria-selected="true"])',
   ];
@@ -49,7 +50,7 @@ test('every floating surface shares the lift', () => {
   const role = [...css.matchAll(/--area-shadow-float:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.ok(role.includes('0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)'), 'shadow-float lost its recipe');
   assert.ok(role.includes('none'), 'the Flat preset should drop the lift');
-  for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar--surface', '.area-command-palette']) {
+  for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-color-picker, .area-color-picker--surface', '.area-command-palette']) {
     const rule = ruleFor(block);
     assert.ok(rule, `${block} missing`);
     assert.match(rule.body, lift, `${block} does not use the floating lift`);
@@ -67,11 +68,26 @@ test('every floating surface shares the lift', () => {
 });
 
 test('text fields show disabled with field paint, not opacity', () => {
-  for (const selector of ['.area-input[data-disabled]', '.area-textarea:disabled', '.area-select:disabled', '.area-composer[data-disabled]']) {
+  for (const selector of ['.area-input[data-disabled]', '.area-textarea:disabled', '.area-select:disabled', '.area-composer[data-disabled]', '.area-number-field[data-disabled]']) {
     const rule = ruleFor(selector);
     assert.ok(rule, `${selector} missing`);
     assert.doesNotMatch(rule.body, /opacity/, `${selector} dims a field twice`);
   }
+  // InputGroup's disabled paint is field paint too (audit B-32).
+  const group = rules.find(rule => rule.selector.startsWith('.area-input-group:is([aria-disabled="true"]') && /background-color/.test(rule.body));
+  assert.ok(group, 'InputGroup disabled paint missing');
+  assert.doesNotMatch(group.body, /opacity/);
+});
+
+test('fields rest without a shadow, and the Select picker floats with the shared lift (audit B-32)', () => {
+  for (const selector of ['.area-input', '.area-number-field', '.area-select']) {
+    const rule = rules.find(r => r.selector === selector && /box-shadow/.test(r.body));
+    assert.ok(rule, `${selector} resting shadow rule missing`);
+    assert.match(rule.body, /box-shadow:\s*none/, `${selector} rests with a shadow`);
+  }
+  const picker = rules.find(r => r.selector === '.area-select::picker(select)' && /box-shadow/.test(r.body));
+  assert.ok(picker, 'Select picker rule missing');
+  assert.match(picker.body, /var\(--area-shadow-float\)/);
 });
 
 test('selection markers never paint the accent or focus colour directly', () => {

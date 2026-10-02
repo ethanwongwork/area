@@ -19,7 +19,7 @@ Menu. Not a dropdown Menu (opened from a button), not a Popover (content, not ac
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | trigger | pointer (right-click), keyboard (Shift+F10, Menu key) | WAI; every product | Notion, Figma, ChatGPT |
-| rows | Menu's: icon, shortcut, separator, danger, disabled | menu.md | Notion page menu |
+| rows | Menu's: icon, shortcut, separator, danger, disabled, submenu (`MenuSub`) | menu.md | Notion page menu |
 
 ## Sources
 
@@ -43,7 +43,7 @@ Menu. Not a dropdown Menu (opened from a button), not a Popover (content, not ac
 | surface, rows | Menu, unchanged | menu.md (same Notion lift) |
 | layer | native `popover="auto"` (top layer; Escape and click outside close it) | Popover |
 | focus | pointer: the menu takes focus, nothing highlighted; keyboard: the first row | WAI menu |
-| close | choosing a row (not checkable rows), Escape, Tab, click outside; focus returns to where it was | WAI menu |
+| close | choosing an action or a radio choice (a checkbox row or a `MenuSub` row keeps it open, as the anchored Menu; audit D-11, ContextMenu.tsx:93-94), Escape, Tab, click outside; focus returns to where it was | WAI menu |
 
 ## Visual pass
 
@@ -52,7 +52,7 @@ Escape). The menu matches the 2026-09-27 capture exactly: 265 wide, corner 10, w
 at 5% + 0 5 8 at 2.7% + the 7% ring; rows 28 tall, corner 6, 4 from the edge, 1 apart; icon 20 at
 8; label 14/16.8 at 36; shortcuts and footer 12 muted; the section label 12/14.4 500. Area's
 context menu is Menu (approved batch 2): the same lift and 4 inset, 32 rows with an 8 corner, 16
-icons, 14/20 labels, 12/16 section labels, quiet 12 keycaps; the type matches, the rows are one
+icons, 14/20 labels, 12/16 section labels, quiet 12px shortcuts (unboxed, string or Kbd alike; audit S12a); the type matches, the rows are one
 step larger on Area's scale (Notion's 28 rows belong to the compact density). No change.
 
 ## Verification

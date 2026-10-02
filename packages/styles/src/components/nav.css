@@ -32,9 +32,6 @@
    * Horizontal: a row of plates. Scrolls rather than wraps, because a nav that reflows to
    * a second line moves every item below it and changes the height of the page chrome.
    */
-  /* Restates the base: every default value has a class (audit S17 / H-13), so the manifest names
-     it and framework-free markup can say it. */
-  .area-nav--vertical { flex-direction: column; }
   .area-nav--horizontal {
     inline-size: max-content;
     flex-direction: row;
@@ -69,6 +66,17 @@
   }
 
   /*
+   * An expandable item's children (audit D-20): the plate stays full width and the content
+   * steps in by Tree view's level step, one 16px slot plus its 6px gap (docs/specs/tree-view.md),
+   * so a nested run reads as a level, not as the next group. The inset contract applies it
+   * (inset.css).
+   */
+  .area-nav__group--nested {
+    --_nav-indent: calc(var(--area-icon-md) + 6px); /* spec */
+  }
+  .area-nav__group + .area-nav__group--nested { margin-block-start: 0; }
+
+  /*
    * The group heading: ChatGPT's sidebar section title (owner, 2026-09-27: "get the nav titles
    * from ChatGPT"; nav/chatgpt--sidebar-section-label, --sidebar-projects-section): the rows'
    * own 14px size at weight 500 in a quieter ink, a row pitch tall, the text on the rows' start
@@ -89,7 +97,6 @@
   .area-nav__item {
     display: flex;
     align-items: center;
-    gap: var(--area-space-8);
     min-inline-size: 0;
     block-size: var(--area-ui-row);
     padding-inline: var(--area-space-8);
@@ -127,7 +134,11 @@
 
   /* Row plates: the component hover fill, then the active fill for the current page. Menu,
      Tree view, Table and Select use the same pair. */
-  @media (hover: hover) { .area-nav__item:hover:not([data-disabled]) { background-color: var(--area-bg-component-hover); } }
+  @media (hover: hover) {
+    .area-nav__item:hover:not([data-disabled]) {
+      background-color: var(--area-bg-component-hover);
+    }
+  }
 
   /*
    * Current. The foreground goes to full strength and the plate fills. Hover changes
@@ -137,9 +148,6 @@
     background-color: var(--area-bg-component-active);
     color: var(--area-fg-default);
   }
-  /* `plate`, the default selection (audit S17 / H-13: every default value has a class), restates
-     the base: the current row is the selection plate. `marker` replaces it below. */
-  .area-nav--plate .area-nav__item[aria-current]:not([aria-current="false"]) { background-color: var(--area-bg-component-active); }
 
   /* A marker is navigation's quiet current-location treatment. Unlike a menu's action
    * highlight, it persists as the reader moves through an outline or sidebar. */
@@ -236,9 +244,10 @@
     padding-inline-end: calc((var(--area-ui-row) - var(--area-control-sm)) / 2);
     border-radius: min(var(--area-radius-row), calc(var(--area-ui-row) * var(--area-radius-cap)));
   }
-  @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current="page"])):hover { background: var(--area-bg-component-hover); } }
-  .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: var(--area-bg-component-active); }
-  .area-nav--marker .area-nav__row:has(> .area-nav__item[aria-current="page"]) { background: transparent; }
+  @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current]:not([aria-current="false"]))):hover { background: var(--area-bg-component-hover); } }
+  /* Any current value (page, location, step) marks the row, as it marks the item (audit D-29). */
+  .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { background: var(--area-bg-component-active); }
+  .area-nav--marker .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { background: transparent; }
   .area-nav .area-nav__row > .area-nav__item { background: transparent; }
 
   .area-nav__row > .area-nav__item { flex: 1; }
@@ -248,6 +257,8 @@
   /* Nested row controls hover with the translucent wash (audit S11c). */
   .area-nav__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-active); }
   .area-nav__actions [aria-expanded="false"] svg { rotate: -90deg; }
+  /* Collapsed points along the reading direction, so it mirrors in right-to-left text (audit D-13). */
+  .area-nav__actions [aria-expanded="false"]:dir(rtl) svg { rotate: 90deg; }
 
   .area-nav--horizontal .area-nav__separator {
     inline-size: var(--area-border-width);

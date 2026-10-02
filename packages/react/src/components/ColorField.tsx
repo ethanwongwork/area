@@ -21,6 +21,7 @@ export interface ColorFieldProps extends Omit<InputProps, "value" | "defaultValu
   value?: string;
   defaultValue?: string;
   /** Called only when a valid hex value is committed by blur or Enter. */
+  /** The committed hex, and the event that committed it (audit C-7). */
   onValueChange?: (value: string, event?: SyntheticEvent) => void;
   /** Public sizing/treatment reuse Input's matching control tiers. */
   size?: VariantProps<typeof MANIFESTS.colorField>["size"];
@@ -48,7 +49,7 @@ export const ColorField = forwardRef<HTMLInputElement, ColorFieldProps>(function
     return () => form.removeEventListener("reset", reset);
   }, [value, initial, alpha]);
 
-  function commit(event: SyntheticEvent) {
+  function commit(event?: SyntheticEvent) {
     let next = draft === "" && !required ? "" : normalizeHexColor(draft);
     if (alpha && next && next.length === 7 && committed.length === 9) next += committed.slice(7);
     if (next === null) { setDraft(displayHex(committed)); return; }
@@ -73,7 +74,7 @@ export const ColorField = forwardRef<HTMLInputElement, ColorFieldProps>(function
     maxLength={9} spellCheck={false} autoCapitalize="off"
     variant={variant} size={size} fullWidth={fullWidth}
     className={alpha ? undefined : cx(colorFieldVariants({ size, fullWidth }), className)}
-    icon={<ColorSwatch color={committed || "transparent"} size="sm" aria-hidden="true" />}
+    leadingIcon={<ColorSwatch color={committed || "transparent"} size="sm" aria-hidden="true" />}
     invalid={invalid || draftInvalid}
     onChange={(event: ChangeEvent<HTMLInputElement>) => { setDraft(event.target.value); onChange?.(event); }}
     onBlur={event => { onBlur?.(event); commit(event); }} onKeyDown={handleKeyDown} />;

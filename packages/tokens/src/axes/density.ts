@@ -49,7 +49,7 @@ interface DensityRoles {
    *  Field). Layout spacing never reads the icon gaps (audit S14), so these are their own roles. */
   stack: number;
   cluster: number;
-  /** Pill marks: Badge, Count, Kbd and the Indicator count. */
+  /** Text-label marks: Badge, Count and Kbd (`mark-label-*`). Static marks hold (`mark-*`). */
   mark: { sm: number; md: number; lg: number };
   /** 1 when corners take the dense radius ladder (emit/base.ts). */
   dense: 0 | 1;
@@ -93,12 +93,19 @@ export function densityTokens(tiers: Record<Tier, TierSpec>, roles: DensityRoles
   out["ui-dense"] = String(roles.dense);
   out["ui-stack"] = `${roles.stack}px`;
   out["ui-cluster"] = `${roles.cluster}px`;
-  // Marks and surface insets (audit S21a, owner 2026-09-30: option C). The 16 / 20 / 24 ladder
-  // of pill marks (Badge, Count, Kbd, the Indicator count) and the insets of floating surfaces
-  // (Popover, Dialog) are roles so compact density can reach them.
-  out["mark-sm"] = `${roles.mark.sm}px`;
-  out["mark-md"] = `${roles.mark.md}px`;
-  out["mark-lg"] = `${roles.mark.lg}px`;
+  // Marks and surface insets (audit S21a). Audit S21a C (2026-09-30) held every mark under compact
+  // (VS Code badge 17, keycap 18); the owner's proportional compact (2026-10-01, "start with the
+  // smallest components … badges, kbd") steps the text labels down one rung, with 16 as the floor
+  // of a 12/16 label, while glyph marks keep their sizes. docs/research/compact-pass-2026-10-01.md.
+  // Static marks hold their rungs at both densities (main's S21a C): Switch track, Presence,
+  // ColorSwatch, the Indicator count. Text labels (Badge, Count, Kbd) read `mark-label-*`, which
+  // compact steps down one rung (owner 2026-10-01).
+  out["mark-sm"] = "16px";
+  out["mark-md"] = "20px";
+  out["mark-lg"] = "24px";
+  out["mark-label-sm"] = `${roles.mark.sm}px`;
+  out["mark-label-md"] = `${roles.mark.md}px`;
+  out["mark-label-lg"] = `${roles.mark.lg}px`;
   out["inset-surface-sm"] = `${roles.insetSurfaceSm}px`;
   out["inset-surface-md"] = `${roles.insetSurfaceMd}px`;
   out["ui-size"] = `var(--area-size-${medium.size})`;

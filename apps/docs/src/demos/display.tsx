@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Button, Card, CardAction, CardDescription, CardFooter, CardMedia, CardTitle, Checkbox, Chip, ChipGroup, Code, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, PopoverDescription, PopoverHeader, PopoverTitle, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
+import { Alert, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Button, Checkbox, Chip, ChipGroup, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, PopoverDescription, PopoverHeader, PopoverTitle, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
 import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
 export const AvatarDefault = () => <Avatar fallback="I" alt="Irene Yamaguchi" />;
@@ -22,9 +22,9 @@ export const AvatarGrouped = () => (
 
 export const AvatarActive = () => <Avatar active fallback="I" alt="Irene Yamaguchi" />;
 
-export const AvatarAvailability = () => <IndicatorAnchor compact placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="I" role="img" aria-label="Irene Yamaguchi, available" /></IndicatorAnchor>;
+export const AvatarAvailability = () => <IndicatorAnchor inset placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="I" role="img" aria-label="Irene Yamaguchi, available" /></IndicatorAnchor>;
 
-export const AvatarNotification = () => <IndicatorAnchor compact placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi, 2 notifications" /></IndicatorAnchor>;
+export const AvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi, 2 notifications" /></IndicatorAnchor>;
 
 export const AvatarTones = () => <><Avatar fallback="I" alt="Irene Yamaguchi" /><Avatar tone="inverse" fallback="I" alt="Irene Yamaguchi" /></>;
 
@@ -99,23 +99,17 @@ export const SkeletonDefault = () => (
   </div>
 );
 
-export const SpinnerDefault = () => (
-  <>
-    <Spinner size="sm" />
-    <Spinner size="md" />
-    <Spinner size="lg" />
-  </>
-);
+export const SpinnerDefault = () => <Spinner label="Loading" />;
 
 export const ProgressDefault = () => (
   <div style={{ inlineSize: 280 }}>
-    <Progress value={62} aria-label="Label" />
+    <Progress value={62} label="Label" />
   </div>
 );
 
 export const ProgressIndeterminate = () => (
   <div style={{ inlineSize: 280 }}>
-    <Progress aria-label="Label" />
+    <Progress label="Label" />
   </div>
 );
 
@@ -123,29 +117,25 @@ export const TooltipDefault = () => <Tooltip>Description</Tooltip>;
 
 export const MenuDefault = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />} icon={<SearchIcon />}>Item one</MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />} icon={<PlusIcon />}>Item two</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} variant="quiet" />} icon={<SearchIcon />}>Item one</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />} icon={<PlusIcon />}>Item two</MenuItem>
     <div className="area-menu__separator" />
     <MenuItem icon={<TokenIcon />}>Item three</MenuItem>
     <MenuItem shortcut={<ArrowIcon />} icon={<DotsFourIcon />}>Item four</MenuItem>
-    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />} icon={<DismissIcon />}>Item five</MenuItem>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} variant="quiet" />} icon={<DismissIcon />}>Item five</MenuItem>
   </Menu>
 );
 
 export const PopoverDefault = () => (
-  <Popover aria-label="Title" role="dialog">
+  <Popover role="dialog">
     <PopoverHeader><PopoverTitle>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription></PopoverHeader>
   </Popover>
 );
 
-export const ToastDefault = () => (
-  <Toast tone="success" icon={<CheckIcon />}>
-    Body text
-  </Toast>
-);
+export const ToastDefault = () => <Toast>Body text</Toast>;
 
 export const TableDefault = () => (
-  <Table interactive>
+  <Table aria-label="Items">
     <thead>
       <tr>
         <th>Name</th>
@@ -177,7 +167,7 @@ export const TableDefault = () => (
 export const TabsDefault = () => (
   <Tabs
     value="one"
-    tabs={[
+    items={[
       { id: "one", label: "Item one" },
       { id: "two", label: "Item two" },
       { id: "three", label: "Item three" },
@@ -222,7 +212,7 @@ export const KbdButton = () => (
 
 export const KbdOnEmphasis = () => (
   <Tooltip>
-    Description <Kbd variant="on-emphasis" keys={["cmd", "B"]} />
+    Description <Kbd keys={["cmd", "B"]} />
   </Tooltip>
 );
 
@@ -246,32 +236,12 @@ export const KbdKeyMap = () => (
 
 export const MenuWithShortcuts = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} quiet />} icon={<SearchIcon />}>Item one</MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} quiet />} icon={<PlusIcon />}>Item two</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} variant="quiet" />} icon={<SearchIcon />}>Item one</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />} icon={<PlusIcon />}>Item two</MenuItem>
     <div className="area-menu__separator" />
-    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} quiet />} icon={<DismissIcon />}>Item three</MenuItem>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} variant="quiet" />} icon={<DismissIcon />}>Item three</MenuItem>
   </Menu>
 );
-
-export const TokenDefault = () => <Code>--area-space-16</Code>;
-
-export const TokenSwatch = () => (
-  <Code swatch="var(--area-accent-solid)">--area-accent-solid</Code>
-);
-
-export const TokenOnColor = () => (
-  <div style={{ background: "var(--area-accent-solid)", color: "var(--area-fg-on-accent)", padding: "var(--area-space-12)", inlineSize: "fit-content", borderRadius: "var(--area-radius-container)" }}>
-    <Code ground="on-color">--area-fg-on-accent</Code>
-  </div>
-);
-
-export const TokenInProse = () => (
-  <div style={{ inlineSize: 380 }}>
-    Set <Code>--area-radius-control</Code> to change how rounded a control is.
-  </div>
-);
-
-export const TokenSubtle = () => <Code ground="subtle">--area-accent-solid</Code>;
 
 /*
  * Every control the system has, in one panel, at one tier and one field style.
@@ -304,7 +274,7 @@ export const PanelEverything = () => (
           fullWidth
           aria-label="Label"
           value="top"
-          options={[
+          items={[
             { value: "top", icon: <AlignTopIcon />, label: <span className="area-sr-only">Align top</span> },
             { value: "middle", icon: <AlignMiddleIcon />, label: <span className="area-sr-only">Align middle</span> },
             { value: "bottom", icon: <AlignBottomIcon />, label: <span className="area-sr-only">Align bottom</span> },
@@ -316,7 +286,7 @@ export const PanelEverything = () => (
           fullWidth
           aria-label="Label"
           value="one"
-          options={[
+          items={[
             { value: "one", label: "One" },
             { value: "two", label: "Two" },
           ]}
@@ -336,7 +306,7 @@ export const PanelEverything = () => (
       </Field>
       <PanelStack>
         <Label>Label</Label>
-        <ChipGroup>
+        <ChipGroup aria-label="Filters">
           <Chip swatch="var(--area-red-500)">Red</Chip>
           <Chip selected swatch="var(--area-indigo-500)">Indigo</Chip>
           <Chip swatch="var(--area-teal-600)">Teal</Chip>

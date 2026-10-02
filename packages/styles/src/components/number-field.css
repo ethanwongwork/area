@@ -7,7 +7,8 @@
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     /* spec: a stepper is Input's nested action square (icon + 8: 24 at md), 4 in from the edge. */
-    --_step: calc(var(--_icon) + var(--area-space-8));
+    /* Each stepper is the field less a 4px ring, 20 / 24 / 32, concentric (audit B-7 B). */
+    --_step: calc(var(--_height) - var(--area-space-8));
     --_border: var(--area-input-edge);
     --_border-hover: var(--area-input-edge-hover);
     --_border-focus: var(--area-field-focus-color);
@@ -18,8 +19,6 @@
     block-size: var(--_height);
     inline-size: var(--area-input-inline-size);
     max-inline-size: 100%;
-    padding-inline-start: var(--area-gutter-md);
-    padding-inline-end: var(--area-gutter-md);
     border: var(--area-stroke-width) solid var(--_border);
     /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
     border-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap)));
@@ -36,28 +35,23 @@
   .area-number-field--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
   .area-number-field--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-number-field--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
-  .area-number-field--sm { padding-inline-start: var(--area-gutter-sm); padding-inline-end: var(--area-gutter-sm); }
-  .area-number-field--lg { padding-inline-start: var(--area-gutter-lg); padding-inline-end: var(--area-gutter-lg); }
   .area-number-field--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-number-field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); } }
+  @media (hover: hover) { .area-number-field:hover:not([data-disabled], [data-read-only]):not(:focus-within) { border-color: var(--_border-hover); } }
+  /* Tones set slots and the one focus rule reads them, as Input, Textarea and Select (audit B-28). */
   .area-number-field:focus-within {
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
-    outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo, var(--area-field-focus-halo-color));
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline, var(--area-field-focus-color));
     outline-offset: 0;
   }
-  .area-number-field[data-invalid] {
-    --_border: var(--area-input-invalid-color);
-    --_border-hover: var(--area-input-invalid-color);
-    --_border-focus: var(--area-input-invalid-color);
-  }
-  .area-number-field[data-invalid]:focus-within { outline-color: var(--area-input-invalid-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-invalid-halo-color); }
-  .area-number-field[data-success] { --_border: var(--area-input-success-color); --_border-hover: var(--area-input-success-color); --_border-focus: var(--area-input-success-color); }
-  .area-number-field[data-warning] { --_border: var(--area-input-warning-color); --_border-hover: var(--area-input-warning-color); --_border-focus: var(--area-input-warning-color); }
-  .area-number-field[data-success]:focus-within { outline-color: var(--area-input-success-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-success-halo-color); }
-  .area-number-field[data-warning]:focus-within { outline-color: var(--area-input-warning-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-warning-halo-color); }
+  .area-number-field:is([data-invalid], [aria-invalid="true"]) { --_border: var(--area-input-invalid-color); --_border-hover: var(--area-input-invalid-color); --_border-focus: var(--area-input-invalid-color); --_focus-outline: var(--area-input-invalid-color); --_focus-halo: var(--area-input-invalid-halo-color); }
+  .area-number-field[data-success] { --_border: var(--area-input-success-color); --_border-hover: var(--area-input-success-color); --_border-focus: var(--area-input-success-color); --_focus-outline: var(--area-input-success-color); --_focus-halo: var(--area-input-success-halo-color); }
+  .area-number-field[data-warning] { --_border: var(--area-input-warning-color); --_border-hover: var(--area-input-warning-color); --_border-focus: var(--area-input-warning-color); --_focus-outline: var(--area-input-warning-color); --_focus-halo: var(--area-input-warning-halo-color); }
   .area-number-field[data-disabled] { --_bg: var(--area-input-bg-disabled); --_border: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }
-  .area-number-field[data-read-only] { --_bg: var(--area-input-bg-soft); }
+  /* Read-only keeps its variant's rest paint, no hover edge, default cursor (audit B-9); a soft
+     field never gains an edge when disabled. */
+  .area-number-field[data-read-only] { cursor: default; }
+  .area-number-field--soft[data-disabled] { --_border: transparent; }
   .area-number-field[data-scrubbing] { cursor: ew-resize; }
   .area-number-field__control {
     flex: 1;
@@ -105,6 +99,8 @@
   .area-number-field__scrub::after { content: ""; position: absolute; inset: calc((var(--_icon) - var(--_height)) / 2); }
   .area-number-field__scrub svg { inline-size: 100%; block-size: 100%; }
   .area-number-field[data-disabled] .area-number-field__scrub { cursor: not-allowed; }
+  /* The unit, scrub handle and steppers take the disabled ink with the value (audit B-10). */
+  .area-number-field[data-disabled] :is(.area-number-field__unit, .area-number-field__scrub, .area-number-field__step) { color: var(--area-fg-disabled); }
   /*
    * spec (docs/specs/number-field.md, steppers): minus then plus, two nested squares after the
    * value (React Aria and Carbon: decrease, increase; Base UI: - and + around the value). Each
@@ -123,7 +119,7 @@
     block-size: var(--_step);
     padding: 0;
     border: 0;
-    border-radius: min(var(--area-radius-small), calc(var(--_step) / 2));
+    border-radius: max(0px, calc(min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap))) - var(--area-space-4)));
     background: transparent;
     color: var(--area-input-icon);
     cursor: pointer;
@@ -132,6 +128,9 @@
   .area-number-field__step svg { display: block; inline-size: var(--_icon); block-size: var(--_icon); }
   @media (hover: hover) { .area-number-field__step:hover:not(:disabled) { background-color: var(--area-bg-component-hover); } }
   .area-number-field__step:active:not(:disabled) { background-color: var(--area-bg-component-active); }
+  /* On a soft field the plate is the translucent pair (audit B-7 C). */
+  @media (hover: hover) { .area-number-field--soft .area-number-field__step:hover:not(:disabled) { background-color: var(--area-bg-hover); } }
+  .area-number-field--soft .area-number-field__step:active:not(:disabled) { background-color: var(--area-bg-active); }
   .area-number-field__step:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
   .area-number-field__step:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
 }

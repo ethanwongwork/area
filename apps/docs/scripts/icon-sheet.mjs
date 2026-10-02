@@ -33,6 +33,13 @@ const names = args.flatMap(a => a.split(",")).filter(Boolean).flatMap(n => {
   const id = n.match(/^batch-?(\d+)$/)?.[1], batch = id && batches.find(b => b.id === `batch-${id}`);
   return batch ? Object.keys(batch.icons) : [n];
 });
+// Every row says its batch (#8 tag), and a heading opens each batch (owner, 2026-09-30: pass or
+// fail by number).
+const batchOf = Object.fromEntries(batches.flatMap(b => Object.keys(b.icons).map(n => [n, b])));
+const num = n => batchOf[n]?.id.replace("batch-", "");
+const tag = n => num(n) ? `#${num(n)} ${n}` : n;
+const heads = Object.fromEntries(names.map((n, i) => [n, batchOf[n] && (i === 0 || batchOf[names[i - 1]] !== batchOf[n]) ? `#${num(n)} · ${batchOf[n].title.replace(/^Batch \d+ · /, "")}` : ""]));
+const headCount = Object.values(heads).filter(Boolean).length;
 const file = n => [n, join(SRC, n), join(SRC, n + ".svg"), join(SRC, "explore", n + ".svg")].find(p => p.endsWith(".svg") && existsSync(p));
 // Filled-only paths (gap, fill, halo) are not part of the outline, so the sheet leaves them out.
 const svg = n => { const p = file(n); if (!p) throw new Error(`no icon ${n}`); return readFileSync(p, "utf8").replace(/<path data-filled="(gap|fill|halo|stroke)"[^>]*\/>\n?/g, ""); };
@@ -51,6 +58,7 @@ const fluentFor = name => {
 // defines it so filled lines (4/3) render at their real width.
 const css = `body{font:12px system-ui;margin:16px;background:#fff;color:#1a1a1a;--area-weight-icon:1.125px}
 svg{width:var(--s);height:var(--s)} ${["filled", "compare"].includes(mode) ? "" : "svg *{stroke-width:1.125}"}
+.bh{font-size:20px;font-weight:600;padding:18px 0 6px;border-bottom:2px solid #1a1a1a;grid-column:1/-1}
 .row{display:flex;align-items:center;gap:24px;padding:8px 0;border-bottom:1px solid #eee}
 .l{width:260px}.grid{background:repeating-linear-gradient(#f3f3f3 0 1px,transparent 1px 6px),repeating-linear-gradient(90deg,#f3f3f3 0 1px,transparent 1px 6px)}
 .strip{display:flex;gap:calc(var(--s) * .75);align-items:center;padding:8px 0}.blur{filter:blur(2.5px)}
@@ -68,33 +76,34 @@ export const html = (only, extra) => renderToStaticMarkup(h(Fragment, null, ...(
   const mod = await import(`${bundle}?${Date.now()}`);
   return (only, extra) => mod.html(only, extra);
 };
-const filledHtml = async () => (await components(`PILOT_ICONS.filter(i => !only.length || only.includes(i.name)).map(({ name, Icon, Filled }) =>
+const filledHtml = async () => (await components(`PILOT_ICONS.filter(i => !only.length || only.includes(i.name)).flatMap(({ name, Icon, Filled }) => [
+  ...(extra.heads[name] ? [h("div", { className: "bh", key: "h" + name }, extra.heads[name])] : []),
   h("div", { className: "c", key: name }, h("div", null, h(Icon, { size: 16 }), h(Filled, { size: 16 })),
     h("div", { className: "big" }, h(Icon, { size: 32 }), h(Filled, { size: 32 })),
-    ...(${large} ? [h("div", { className: "huge" }, h(Icon, { size: 64 }), h(Filled, { size: 64 }))] : []), h("span", null, name)))`))(names, {});
+    ...(${large} ? [h("div", { className: "huge" }, h(Icon, { size: 64 }), h(Filled, { size: 64 }))] : []), h("span", null, extra.tags[name] ?? name))])`))(names, { heads, tags: Object.fromEntries(names.map(n => [n, tag(n)])) });
 // One row per icon: Area outline and filled at 16 and 48px, then Fluent's regular and filled.
 const compareHtml = async () => {
-  const refs = Object.fromEntries(names.map(n => [n, fluentFor(n)]));
+  const refs = Object.fromEntries(names.map(n => [n, { ...fluentFor(n), head: heads[n], tag: tag(n) }]));
   const missing = names.filter(n => !refs[n].regular);
   if (missing.length) console.warn(`no Fluent reference mapped for: ${missing.join(", ")} (add FluentRef…Icon in gen-icons.mjs, or record the batch with a fluent stem)`);
   const rows = await components(`only.map(name => { const i = PILOT_ICONS.find(p => p.name === name); if (!i) throw new Error("not generated: " + name + " (run npm run icons:pilot)");
   const raw = (svg, big) => h("span", { className: "f" + (big ? " big" : ""), dangerouslySetInnerHTML: { __html: svg } });
   const r = extra[name];
-  return h("div", { className: "row", key: name }, h("span", { className: "l" }, name),
+  return [r.head ? h("div", { className: "bh", key: "h" + name }, r.head) : null, h("div", { className: "row", key: name }, h("span", { className: "l" }, r.tag),
     h("span", { className: "g" }, h(i.Icon, { size: 16 }), h(i.Filled, { size: 16 }), h("span", { className: "big" }, h(i.Icon, { size: 48 })), h("span", { className: "big" }, h(i.Filled, { size: 48 }))),
-    h("span", { className: "g" }, raw(r.regular), raw(r.filled), raw(r.regular, true), raw(r.filled, true))); })`);
+    h("span", { className: "g" }, raw(r.regular), raw(r.filled), raw(r.regular, true), raw(r.filled, true)))]; })`);
   return `<div class="head"><span></span><span style="width:250px">Area · outline, filled</span><span>Fluent · regular, filled</span></div>` + rows(names, refs);
 };
 const html = mode === "filled" ? await filledHtml() : mode === "compare" ? await compareHtml() : mode === "sheet"
-  ? names.map(n => { const s = svg(n); return `<div class="row"><span class="l">${label(n, s)}</span>${[16, 32, 96].map(px => `<span class="${px === 96 ? "grid" : ""}" style="--s:${px}px;display:inline-flex">${s}</span>`).join("")}</div>`; }).join("")
+  ? names.map(n => { const s = svg(n); return `${heads[n] ? `<div class="bh">${heads[n]}</div>` : ""}<div class="row"><span class="l">${num(n) ? `#${num(n)} ` : ""}${label(n, s)}</span>${[16, 32, 96].map(px => `<span class="${px === 96 ? "grid" : ""}" style="--s:${px}px;display:inline-flex">${s}</span>`).join("")}</div>`; }).join("")
   : [16, 32, 16].map((px, i) => `<div class="strip ${i === 2 ? "blur" : ""}" style="--s:${px}px">${names.map(svg).join("")}</div>`).join("");
 const dir = mkdtempSync(join(tmpdir(), "icon-sheet-")), page = join(dir, "sheet.html");
 writeFileSync(page, `<!doctype html><meta charset=utf-8><style>${css}</style>${html}`);
 
 const browsers = ["/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "google-chrome", "chromium"];
 const browser = browsers.find(b => !b.startsWith("/") || existsSync(b));
-const size = mode === "filled" ? `${large ? 1300 : 1100},${40 + (large ? 180 : 105) * Math.ceil((names.length || 150) / 8)}`
-  : mode === "compare" ? `760,${60 + 70 * names.length}`
-  : mode === "sheet" ? `760,${20 + 113 * names.length}` : `${Math.max(400, 40 + names.length * 60)},200`;
+const size = mode === "filled" ? `${large ? 1300 : 1100},${40 + 60 * headCount + (large ? 180 : 105) * (Math.ceil((names.length || 150) / 8) + headCount)}`
+  : mode === "compare" ? `760,${60 + 70 * names.length + 60 * headCount}`
+  : mode === "sheet" ? `760,${20 + 113 * names.length + 60 * headCount}` : `${Math.max(400, 40 + names.length * 60)},200`;
 execFileSync(browser, ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=2", `--window-size=${size}`, `--screenshot=${resolve(out)}`, `file://${page}`], { stdio: "ignore", timeout: 60000 });
 console.log(resolve(out));

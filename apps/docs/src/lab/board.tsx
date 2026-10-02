@@ -42,7 +42,7 @@ export function Board() {
               <Field label="Access" htmlFor="lab-access"><Select id="lab-access" defaultValue="team"><option value="team">Workspace members</option><option value="private">Only invited people</option></Select></Field>
               <Field label="Contact email" error="Enter a valid email address." required htmlFor="lab-error"><Input id="lab-error" invalid defaultValue="area@" /></Field>
             </div></PanelSection>
-            <PanelSection heading="Preferences"><div className="lab-stack"><Segmented id="lab-segmented" fullWidth aria-label="Project view" value={selection} onValueChange={setSelection} options={options}/><Checkbox id="lab-checkbox" label="Send activity updates" defaultChecked/><Field label="Allocation" htmlFor="lab-slider"><Slider id="lab-slider" min={0} max={100} defaultValue={40}/></Field></div></PanelSection>
+            <PanelSection heading="Preferences"><div className="lab-stack"><Segmented id="lab-segmented" fullWidth aria-label="Project view" value={selection} onValueChange={setSelection} items={options}/><Checkbox id="lab-checkbox" label="Send activity updates" defaultChecked/><Field label="Allocation" htmlFor="lab-slider"><Slider id="lab-slider" min={0} max={100} defaultValue={40}/></Field></div></PanelSection>
           </Panel>
           <div className="lab-stack">
             <Popover><div className="lab-stack"><strong>Share this project</strong><span>People with access can review the latest changes.</span><Button variant="outline" size="sm">Copy link</Button></div></Popover>
@@ -65,7 +65,7 @@ export function Board() {
             <div id="light-reset" data-area-theme="light">Light island</div>
           </div>
           <div id="explicit-light" data-area-theme="light">Explicit light</div>
-          <div data-area-motion="none"><Spinner id="motion-probe" aria-label="Motion none probe"/></div>
+          <div data-area-motion="none"><Spinner id="motion-probe" label="Motion none probe"/></div>
           <Tabs id="tabs-first" items={tabs} value="account">Account details</Tabs><Tabs id="tabs-second" items={tabs} value="account">Second account details</Tabs>
         </details>
       </section>

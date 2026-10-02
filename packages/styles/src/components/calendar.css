@@ -17,7 +17,6 @@
     font-size: var(--area-control-md-text);
     line-height: var(--area-control-md-leading);
   }
-  .area-calendar--plain { padding: 0; }
   /* Selection role (DESIGN_SYSTEM.md, "Emphasis roles"). The range band is the matching
      soft fill: a neutral step, or the accent surface when selection is accent. */
   .area-calendar {
@@ -28,19 +27,23 @@
     --_band-hover: var(--area-selection-band-hover);
   }
   /* The surface is the popover's: Notion's calendar sits 8px from its top and 12px from the
-     other edges, border included. */
+     other edges, border included. It is the default (audit F-21 A, owner 2026-09-30), so the
+     bare class draws it and `--surface` restates it for manifest parity. */
+  .area-calendar,
   .area-calendar--surface {
     /* Sides on the sm surface inset (12, compact 8); the top one rung less (8, compact 6). */
     padding: calc(var(--area-inset-surface-sm) - var(--area-border-width));
     padding-block-start: calc(8px /* spec */ - 2px * var(--area-ui-dense) - var(--area-border-width));
-    border: var(--area-border-width) solid var(--area-edge-float);
+    border: var(--area-border-width) solid var(--area-border-float);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
     box-shadow: var(--area-shadow-float);
   }
   /* The 8px top inset seats the month header; a week strip has none, so it takes 12 all round. */
-  .area-calendar--surface.area-calendar--week { padding-block-start: calc(var(--area-inset-surface-sm) - var(--area-border-width)); }
+  .area-calendar--week { padding-block-start: calc(var(--area-inset-surface-sm) - var(--area-border-width)); }
+  /* Plain sits inside a host that already draws the surface (a Popover, a Panel). */
+  .area-calendar--plain { padding: 0; border: 0; border-radius: 0; background-color: transparent; box-shadow: none; }
   .area-calendar__months { display: flex; flex-wrap: wrap; gap: var(--area-inset-surface-md); }
   .area-calendar__month { display: grid; align-content: start; }
   .area-calendar__header {
@@ -75,7 +78,8 @@
     font-variant-numeric: tabular-nums;
     cursor: pointer;
   }
-  .area-calendar__day[data-outside] { color: var(--area-fg-disabled); }
+  /* A neighbouring month's day is quieter but live: muted, not disabled ink (audit F-10). */
+  .area-calendar__day[data-outside] { color: var(--area-fg-muted); }
   @media (hover: hover) { .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-hover); } }
   .area-calendar__day:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); z-index: 1; }
   .area-calendar__day[data-today]:not([data-selected]) { box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_today-edge); }
@@ -115,7 +119,8 @@
   .area-calendar--square {}
   .area-calendar--circle { --_day-radius: var(--area-radius-full); }
   .area-calendar--circle .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-fill: var(--area-bg-component-hover); }
-  /* A circle day already rests on the hover plate, so hover steps to the next opaque rung (the row
+
+ /* A circle day already rests on the hover plate, so hover steps to the next opaque rung (the row
      pair #f3 → #ee); the translucent wash composited to the same #f3 and showed nothing (audit F-11). */
   @media (hover: hover) { .area-calendar--circle .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-outside], [data-selected]) { background: var(--area-bg-component-active); } }
   .area-calendar--tile .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle); }
@@ -137,10 +142,18 @@
   .area-calendar__day[data-selected] > :is(.area-calendar__day-weekday, .area-calendar__day-month) { color: inherit; }
   .area-calendar--week .area-calendar__marker { inset-block-end: auto; inset-block-start: var(--area-space-4); inset-inline-start: auto; inset-inline-end: var(--area-space-4); translate: none; }
   .area-calendar[aria-disabled="true"] { opacity: var(--area-opacity-disabled); }
+  /* The calendar dims as a whole; its nav Buttons don't dim again inside it (audit F-14). */
+  .area-calendar[aria-disabled="true"] .area-button:disabled { opacity: 1; }
   @media (forced-colors: active) {
     .area-calendar__day[data-selected] { forced-color-adjust: none; background-color: Highlight; color: HighlightText; }
     .area-calendar__day[data-today]:not([data-selected]) { outline: 1px solid CanvasText; outline-offset: -2px; }
     .area-calendar__marker { forced-color-adjust: none; background: CanvasText; }
     .area-calendar__cell[data-range]::before { background-color: Highlight; opacity: 0.3; }
   }
+}
+
+@layer area.components {
+  /* Previous and next point along the reading direction: the glyph is rotated in its SVG, so
+     right-to-left mirrors the drawing (audit F-34), as the arrow keys already are. */
+  .area-calendar:dir(rtl) :is(.area-calendar__nav, .area-calendar__header, .area-calendar__week) > .area-button svg { scale: -1 1; }
 }

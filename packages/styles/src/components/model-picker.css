@@ -9,5 +9,7 @@
   .area-model-picker { display: inline-flex; }
   /* spec: the trigger keeps the wash while its menu is open (ChatGPT 5% while open). The menu
      is placed by Menu's trigger path, like every anchored surface (audit G-11). */
-  .area-model-picker__trigger[aria-expanded="true"] { --_bg: var(--_bg-hover); }
+  /* While open the trigger shows the pressed plate every menu trigger takes (button.css; audit
+     G-12; ChatGPT's 5% wash was this trigger's alone). It never shrinks in the composer row. */
+  .area-model-picker__trigger { flex: none; }
 }

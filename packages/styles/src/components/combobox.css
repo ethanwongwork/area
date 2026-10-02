@@ -11,17 +11,16 @@
   .area-combobox--full-width > .area-input { flex: 1; }
 
   /* The list opens in the top layer, so a clipping ancestor (a panel body, a dialog) never cuts it.
-     Placement (4 under the field, flip, shift) is the shared overlay engine's (audit S16). */
+     It is placed by the shared overlay engine (audit S16): left, top, data-side, the anchor's
+     width and the room below it come from the React layer. */
   .area-combobox__listbox[popover] {
     overflow-y: auto; overscroll-behavior: contain;
-    /* spec (audit B-5, owner 2026-09-30): one list rule set with Select -- at least Menu's 224
-       and the field's width; Figma's font list shows 324 of its rows before it scrolls
-       (captures/combobox), capped by the room on the chosen side. On the [popover] rule so it
-       outranks Menu's popover height. */
-    min-inline-size: max(var(--area-overlay-anchor-width, 0px), calc(var(--area-space-96) * 2 + var(--area-space-32)));
+    /* spec: Figma's font list shows 324 of its rows before it scrolls (captures/combobox); never
+       taller than the room beside the field. On the [popover] rule so it outranks Menu's. */
     max-block-size: min(324px, var(--area-overlay-available-height, 50vh)); /* spec */
+    /* At least the field's width, and never narrower than a menu (224). */
+    min-inline-size: max(var(--area-overlay-anchor-width, 0px), calc(var(--area-space-96) * 2 + var(--area-space-32)));
   }
-  .area-combobox__listbox[popover]:not(:popover-open) { display: none; }
 
   /* Options are Menu rows. A value picker shows its value with the active plate and the check,
      as Select does (audit S13 C, owner 2026-09-30; was the check alone). */

@@ -1,5 +1,7 @@
 # Icon review sheets, 2026-09-29
 
+Superseded by `../2026-09-30/` (batch 61, the bot cast). Kept for the record.
+
 Show these to the owner at the start of the next icon session (owner, 2026-09-29), re-rendered
 from the sources if anything changed since. Record: `docs/specs/icons.md`, "Owner round, batches
 44–60" and its passes.
@@ -8,16 +10,28 @@ from the sources if anything changed since. Record: `docs/specs/icons.md`, "Owne
 |---|---|
 | `1-owner-round-icons-a.png` | Redrawn icons beside Fluent: chef hat, chess rook, VR goggles, debug step-over, dumbbell, brain, brain-off, folders, files, gallery, bug-off |
 | `2-owner-round-icons-b.png` | Case icons, wrench, check-check, clapperboard, cookie, vault, infinity, search-off, the two new arrows, bot (with its mouth) |
-| `3-agent-cast.png` | The bot cast with roles (Agent, Builder, Researcher, Scholar, Guard A and B, Lead, Designer, Generator, Automator), then crown, chef-hat and bot for reference |
-| `4-agent-sunglasses.png` | Agent without a mouth, then six sunglasses |
+| `3-agent-cast.png` | The bot cast with roles (Agent, Builder, Researcher, Scholar, Guard, Lead, Designer, Generator, Automator), then crown, chef-hat and bot for reference |
+| `4-agent-sunglasses-finalists.png` | The Agent's two finalists: wrap-around (thinner nose bridge) and round |
 | `5-researcher-goggles.png` | Six goggles on the Researcher, without a mouth |
 | `6-agent-other-options.png` | The earlier agent options still on the Exploration sheet: Fluent's agents hexagon, infinity |
 
+Owner, 2026-09-30: no mouth; sunglasses down to wrap-around (bridge thinned: nose dip to 8, 9.25
+at 45°) and round; Guard B (stripe); the crown's band line removed; the Guard's visor narrowed
+(4–12) and the Designer's bill widened past the head (2–14, blunt stroked ends, raised to a
+detail gap above the eyes) so the two brims differ.
+Then: the Designer's brim arches over the face and curves down at the sides (owner's reference, a
+front-view cap), its crown the first cap's shape (upright sides, r 2.5 corners, flat top) widened so its sides run
+on from the head's (x 2 and 14); the Researcher's goggles taller and lower (8–11.5, detail gaps to the head); the
+Automator's puffs redrawn as circles (`lobes`) instead of the chef-hat icon squashed 0.75 × 0.47.
+
+Scholar: the owner chose the 12-wide board (of 13, 12, 10 and 8) on a skull cap, the head whole as
+the Automator's, the cap sitting on its top. The cap's sides curve in very slightly toward its top.
+
 Open decisions:
 
-- Mouth or no mouth for the Agent and the Researcher.
-- Which sunglasses (4) and which goggles (5).
-- Guard A (star) or B (stripe).
+
+- Wrap-around or round sunglasses (4).
+- Which goggles (5); "round glasses" may have meant the swim goggles.
 - Which characters become real icons; then `agent`, `agent-circle` and `agent-square` are redrawn
   from the chosen Agent and the other explore candidates are removed.
 - Gallery's stack faces up and left (the owner's reference); folders and files face lower right.
@@ -30,8 +44,8 @@ Re-render (from the repository root; zsh):
 D=docs/research/icon-review/2026-09-29; E=apps/docs/assets/area-icons-pilot/explore
 node apps/docs/scripts/icon-sheet.mjs compare $D/1-owner-round-icons-a.png chef-hat,chess-rook,vr-goggles,debug-step-over,dumbbell,brain,brain-off,folders,files,gallery,bug-off
 node apps/docs/scripts/icon-sheet.mjs compare $D/2-owner-round-icons-b.png case-upper,case-sensitive,wrench,check-check,clapperboard,cookie,vault,infinity,search-off,arrow-left-right,arrow-right-left,bot
-node apps/docs/scripts/icon-sheet.mjs sheet $D/3-agent-cast.png $(for k in agent builder researcher scholar guard-star guard-stripe lead designer generator automator; do printf "$E/agent-cast-$k.svg,"; done)crown,chef-hat,bot
-node apps/docs/scripts/icon-sheet.mjs sheet $D/4-agent-sunglasses.png $(for k in agent-nomouth agent-sun-wayfarer agent-sun-aviator agent-sun-round agent-sun-shield agent-sun-slim; do printf "$E/agent-cast-$k.svg,"; done)$E/agent-cast-agent-sun-sport.svg
+node apps/docs/scripts/icon-sheet.mjs sheet $D/3-agent-cast.png $(for k in agent builder researcher scholar guard-stripe lead designer generator automator; do printf "$E/agent-cast-$k.svg,"; done)crown,chef-hat,bot
+node apps/docs/scripts/icon-sheet.mjs sheet $D/4-agent-sunglasses-finalists.png $E/agent-cast-agent.svg,$E/agent-cast-agent-sun-round.svg
 node apps/docs/scripts/icon-sheet.mjs sheet $D/5-researcher-goggles.png $(for k in wide swim strap split dark; do printf "$E/agent-cast-researcher-gog-$k.svg,"; done)$E/agent-cast-researcher-gog-forehead.svg
 node apps/docs/scripts/icon-sheet.mjs sheet $D/6-agent-other-options.png $E/agent-current.svg,$E/agent-infinity.svg
 ```

@@ -1,7 +1,8 @@
 import { forwardRef } from "react";
-import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
+import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode, Ref } from "react";
 import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
+import { Menu } from "./primitives.tsx";
 
 export const Breadcrumb = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(function Breadcrumb(
   { className, "aria-label": ariaLabel = "Breadcrumb", ...rest }, ref,
@@ -40,8 +41,18 @@ export const BreadcrumbSeparator = forwardRef<HTMLLIElement, BreadcrumbSeparator
   return <li ref={ref} className={cx("area-breadcrumb__separator", className)} {...rest} role="presentation" aria-hidden="true">{children ?? <Glyph name="chevron-down" rotate={270} />}</li>;
 });
 
-export const BreadcrumbEllipsis = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(function BreadcrumbEllipsis(
-  { className, "aria-label": ariaLabel = "More pages", ...rest }, ref,
+export interface BreadcrumbEllipsisProps extends HTMLAttributes<HTMLElement> {
+  /**
+   * The ancestors the trail hides. With them, the marker is a button that opens a Menu of those
+   * pages, as Notion's collapsed path (audit D-19); without them it stays a decorative mark.
+   */
+  items?: { label: ReactNode; href: string }[];
+}
+export const BreadcrumbEllipsis = forwardRef<HTMLElement, BreadcrumbEllipsisProps>(function BreadcrumbEllipsis(
+  { className, items, "aria-label": ariaLabel = "More pages", ...rest }, ref,
 ) {
-  return <span ref={ref} role="img" aria-label={ariaLabel} className={cx("area-breadcrumb__ellipsis", className)} {...rest}>…</span>;
+  if (!items?.length) return <span ref={ref as Ref<HTMLSpanElement>} role="img" aria-label={ariaLabel} className={cx("area-breadcrumb__ellipsis", className)} {...rest}>…</span>;
+  const trigger = <button ref={ref as Ref<HTMLButtonElement>} type="button" aria-label={ariaLabel} className={cx("area-breadcrumb__ellipsis", className)} {...rest}>…</button>;
+  // Rows are links, so a page opens like any other crumb (middle-click, a new tab, the router's own anchor).
+  return <Menu trigger={trigger}>{items.map(item => <a key={item.href} role="menuitem" href={item.href} className="area-menu__item"><span className="area-menu__text">{item.label}</span></a>)}</Menu>;
 });

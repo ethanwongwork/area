@@ -1,6 +1,6 @@
 # InputGroup spec
 
-**Status:** in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma)
+**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))
 **Captures:** `docs/research/captures/input-group/`
 **Peers:** Input, NumberField, Select, Button ghost (children), ColorField (hex + opacity),
 ColorPicker (value row), Panel (inspector rows)
@@ -24,7 +24,7 @@ InputGroup draws one field shell around independently named, independently focus
 controls (Input, NumberField, Select, a ghost Button) and passive segments
 (`InputGroupText`: an affix, a letter or an icon). Each child keeps its own ref, name and
 keyboard stop; the group adds `role="group"` only. A single value with an affix is Input's
-prefix/suffix, or NumberField's `prefix`; a label and message are Field.
+prefix/suffix, or NumberField's `scrub` (renamed from `prefix`); a label and message are Field.
 
 ## Variants
 
@@ -98,7 +98,8 @@ The sizes (sm) radius was 8 at capture; since audit S4 it is 6.
 | child gap | children read the group's gap tier, 6 at sm, md and lg (`--_group-gap`, `input-group.css:8, :29-31`; passed on at `:53`, `:77`); compact sm 4 | Peer: Input, Button (audit S14) | Was 4 / 8 / 8 |
 | mode select | 3 × H wide first child (`input-group.css:102`) | Existing Area recipe | — |
 | validation | invalid: danger edge, danger halo on focus; success / warning: tone edge, **held through focus with the tone halo** (`input-group.css:34-35, 41-45`) | Peer: Input and Select hold the tone; second pass item 11; third pass | Success and warning gave way to the focus edge on focus until the third pass |
-| disabled | field paint when a direct child is disabled: fill `input-bg-disabled`, `border-faint`, `fg-disabled`, no hover (`input-group.css:31, 33`) | Audit "Disabled" (text fields); second pass item 11 | Was no group paint |
+| disabled | field paint when the group is `aria-disabled` or a direct child is disabled: fill `input-bg-disabled`, `border-faint`, `fg-disabled` (InputGroupText included), no hover (`input-group.css`) | Audit "Disabled" (text fields); second pass item 11; audit B-10, B-14 | Was no group paint; InputGroupText kept its muted ink |
+| forced colours | `CanvasText` edge on the group, none on its children; one `Highlight` focus ring on the group (children draw none); invalid dashed (`forced-colors.css`) | Audit B-11, as Input | Had no forced-colours rule |
 
 ## States
 
@@ -108,13 +109,17 @@ The sizes (sm) radius was 8 at capture; since audit S4 it is 6.
 | focus-within | border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo; outline in increased contrast (audit S1) | `input-group.css:36-40` |
 | invalid | danger border; danger halo on focus | `input-group.css:44-45` |
 | success / warning | tone border at rest; tone border, outline and halo on focus | `input-group.css:34-35, 42-43` |
-| disabled | field paint on the group; children keep stripped chrome | `input-group.css:33`; no disabled tile |
+| disabled | field paint on the group, InputGroupText in `fg-disabled`; children keep stripped chrome | `input-group.css`; no disabled tile |
 
 ## Behavior and accessibility
 
 `div role="group"`; name it with `aria-label` or `aria-labelledby`. `InputGroupText` is
 passive: include its meaning in the neighbouring control's name. Every child keeps its own
-tab stop and name.
+tab stop and name. The group takes `disabled` and validation (`aria-invalid` or
+`data-validation-status`), as a Field sets them, and passes them to its Input, NumberField and
+Select through `InputGroupContext` (`input-group-context.ts`); a disabled group sets
+`aria-disabled` and disables those controls. `required` is accepted and ignored on the group
+(`InputGroup.tsx:10-28`).
 
 ## Peers and consistency
 
@@ -124,7 +129,7 @@ tab stop and name.
 | Input soft | soft shadow | none (`input.css:53`) | none | match (was an open question) |
 | Input, Select, NumberField | disabled | field paint | field paint on the group | match (was open) |
 | Input, Select | success / warning on focus | tone edge and halo kept | tone edge and halo kept | match (third pass) |
-| NumberField `prefix` | letter before a value | 16px box, 8px inset, `fg-muted` | H-wide box, `fg-muted` | both put the value at 32–33 from the edge |
+| NumberField `scrub` (was `prefix`) | letter or icon before a value | 16px box, 8px inset, `fg-muted` | H-wide box, `fg-muted` | both put the value at 32–33 from the edge |
 | ColorField (alpha) | hex + opacity | this component | `color.css:110-113` | match |
 
 ## Visual pass
@@ -180,3 +185,6 @@ row and value row. Build and test results are in the
 - 2026-09-28 · batch 9 → visual + Select joins like visual + Input (no rule, no start inset).
 - 2026-09-30 · audit S4 (owner) → group radius follows the tier as Button: sm 6, md 8, lg 10 (`--_group-radius` per size, `input-group.css:17`, `:29-31`); was 8 at every size.
 - 2026-09-30 · audit S14 (owner) → the gap tier the group passes to its children is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`input-group.css:8, :29-31`; density.ts:80-82).
+- 2026-10-01 · audit B-10 → InputGroupText takes `fg-disabled` with a disabled group → input-group.css.
+- 2026-10-01 · audit B-11 → forced colours: `CanvasText` edge on the group, `Highlight` focus ring on the group only (children draw none), dashed invalid → forced-colors.css.
+- 2026-10-01 · audit B-14 → InputGroup takes Field's `disabled` and validation and passes them to its Input, NumberField and Select through `InputGroupContext`; the group gets `aria-disabled` → InputGroup.tsx, input-group-context.ts.

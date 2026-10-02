@@ -1,6 +1,6 @@
 # Checkbox spec
 
-**Status:** in review · 2026-09-26 (cohesion audit, second pass)
+**Status:** accepted · 2026-09-28 (batch 14: cards, sm removed; was: in review · 2026-09-26 (cohesion audit, second pass))
 **Captures:** `docs/research/captures/checkbox/` (Area, Notion, Figma)
 **Peers:** Radio (same glyph ladder and paint), Switch (on/off setting), Chip (selectable
 filter), Field and CheckboxGroup (label and validation), Table (row selection)
@@ -11,7 +11,7 @@ filter), Field and CheckboxGroup (label and validation), Table (row selection)
   focus"). The checked face is `neutral-solid` with `fg-on-neutral`; `tone="accent"` opts
   into the accent. Recorded with the Alignment picker's decisions ([alignment-picker.md](alignment-picker.md)):
   "Checkbox, Radio and Chip moved the same way (neutral-solid checked face; neutral tonal
-  chip selection); all four await owner review."
+  chip selection); all four await owner review." (All four approved since.) *Superseded 2026-09-29 (owner, D1): accent is the Selection emphasis role, set by a theme (`data-area-selection="accent"`); the `tone` axis was removed.*
 - 2026-09-26 (second pass, owner: decide every open item): choice glyphs take the control
   hover edge at rest (#d4d4d4), with Notion and Untitled
   ([cohesion audit](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions)).
@@ -26,9 +26,8 @@ token (Chip). CheckboxGroup owns the legend, group description and group validat
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | md (default), lg (manifest `["md", "lg"]`) | Label type follows the control tier; lg is the 20px glyph | Untitled sm 16 / md 20; Notion and Figma one size, 16 |
-| tone | neutral (default), accent | Owner rule, 2026-09-26 | Notion checks in its blue; Figma checks neutral |
-| variant | plain (default; `.area-checkbox--plain` restates the base), card | Card is a contained option: visual, text, control at the end; the chosen card's 1px edge darkens to the checked colour | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
+| size | md (default), lg (sm removed 2026-09-28) | Label type follows the control tier; lg is the 20px glyph | Untitled sm 16 / md 20; Notion and Figma one size, 16 |
+| variant | card | A contained option: visual, text, control at the end; the chosen card's 1px edge darkens to the checked colour | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
 | layout (card) | row (default), tile | Row: one line; tile: a 20px visual above the label, control in the corner, cards in a grid | Owner reference 1 (tile grid); references 2, 3 and shadcn (rows) |
 | state | checked, indeterminate, invalid, disabled | Native states plus `aria-invalid` | Untitled: checked, indeterminate, disabled; no invalid |
 | composition | caption, leading visual, group (vertical, horizontal; invalid, success) | — | Untitled label + hint; Figma label beside the box; gallery Layout / horizontal group |
@@ -56,7 +55,7 @@ figma   div 216×24 grid (16px + 200px columns)
     svg 16×16, stroked check (path 6.5 × 6), stroke rgba(0,0,0,.898)
   label  11/16 450, starts at x 16 (no gap or padding in the captured layers)
 area   label.area-checkbox  inline-flex, align flex-start, min-block 24, gap --_gap   owns hit area
-  control  input.area-checkbox__control  --_size square, 1px edge, radius min(small, size/4), shadow-1
+  control  input.area-checkbox__control  --_size square, 1px edge, radius min(small, size/4) (`shadow-1` at capture; removed since)
     ::after  mask of the check (or dash) at 75% of the box, painted --_mark
   visual   span.area-checkbox__visual  optional 16px decorative icon, fg-muted
   label    span.area-choice-label  cap-trimmed title (+ description 12/16 muted)
@@ -76,7 +75,7 @@ Read from the nodes (Notion and Figma files above; Area `area--size-*`, `area--s
 | control box | 16 / 16 / 20 | 16 | 16 |
 | radius | 4 / 4 / 5 | 3 | 2 |
 | rest edge | 1px #d4d4d4 | 1 device px, 19% warm black (≈ rgb(212, 211, 207)) | 1px 20% black (empty state not captured) |
-| rest fill | #fff, `shadow-1` | none (row ground) | #f5 |
+| rest fill | #fff, `shadow-1` (at capture; now none) | none (row ground) | #f5 |
 | checked fill / edge | rgb(40) / rgb(40) | rgb(39, 131, 222) / none | #f5 / 20% black |
 | checked mark | rgb(250), 1.75 stroke | white filled check, 9.17 × 9.14 | 90% black stroked check, 6.5 × 6 |
 | accent fill / mark | rgb(92, 93, 254) / #fff | — | — |
@@ -93,7 +92,7 @@ The gaps above predate audit S14: the label gap is now 6 at md and lg.
 | control · size | **16 / 20** md / lg (sm removed 2026-09-28; `choice.css`) | Notion and Figma 16; Untitled sm 16, md 20; audit rule "one glyph ladder" | lg takes Untitled's 20 |
 | control · radius | min(`radius-small` 6, size / 4): 4 / 4 / 5 (choice.css:67) | Untitled 4 at 16 | Notion 3 and Figma 2 are squarer; kept (third pass), see below |
 | control · rest edge | **`edge-control-hover` #d4d4d4** (choice.css:48) | Notion 19% warm ≈ #d4, Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2, a field's edge, faint on a 16px box |
-| control · checked | `neutral-solid` #282828, mark `fg-on-neutral` #fafafa | Owner 2026-09-26 | Notion fills its blue; Figma keeps a light face with a dark check. Accent as `tone="accent"` (choice.css:29-35) |
+| control · checked | `selection-solid` (neutral default #282828), mark `fg-on-selection` #fafafa (choice.css:20-22) | Owner 2026-09-26; emphasis roles 2026-09-29 | Notion fills its blue; Figma keeps a light face with a dark check. The accent comes from a theme's Selection role, not a tone |
 | mark · geometry | 1.75 stroke on a 16 viewBox, masked at 75% of the padding box (choice.css:132-140) | — | Derived: Notion's filled glyph is 9.17px, Figma's stroked path 6.5px, Untitled's check 12px |
 | control · shadow | none (computed 2026-09-28) | Outline pass: controls at rest carry no shadow; neither product nor Untitled has one | The audit had `shadow-1`; since removed |
 | gap | 6 at md and lg, `gap-md` / `gap-lg` (choice.css:9, :404, :410); compact md 6 | Control tier; peer Button (audit S14) | Untitled 8 / 12. Was 8 / 8 until audit S14 |
@@ -110,20 +109,21 @@ Area keeps `radius-small`, shared with every small control ([cohesion audit](../
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | hover, unchecked | edge → `border-hover` #b4b4b4 (choice.css:190-193) | not captured |
-| hover, checked | fill → `neutral-solid-hover` #1d1d1d (choice.css:178-183); mark fixed | not captured |
+| hover, checked | fill → `selection-solid-hover` (neutral #1d1d1d) (choice.css:178-183); mark fixed | not captured |
 | focus-visible | 2px `focus-color` outline, 2px offset (choice.css:200-204) | not captured |
-| checked / indeterminate | fill and edge `neutral-solid`, mark scales 0 → 1 (`ease-spring`, 100ms) | `area--selected`, `area--partial` |
+| checked / indeterminate | fill and edge `selection-solid`, mark scales 0 → 1 (`ease-spring`, 100ms) | `area--selected`, `area--partial` |
 | invalid | edge and label `fg-danger-vivid`; checked becomes one danger fill | `area--invalid`, `area--invalid-selected` |
 | disabled | whole label 50% | `area--disabled*` (opacity 0.5) |
 
 ## Behavior and accessibility
 
 Native `input type="checkbox"` inside its `label`; `indeterminate` is set on the DOM node
-and mirrored as `data-indeterminate` (forms.tsx:126-160). A change calls
-`onCheckedChange(checked, event)`; the native `onChange` still fires. Caption is wired through
-`aria-describedby`; `invalid` sets `aria-invalid`. CheckboxGroup is a native `fieldset` with
-`legend` (forms.tsx:188-203). choice.css has no forced-colors rule (the mark is a mask
-painted `--_mark`); forced colours are unverified. The mark transition uses
+and mirrored as `data-indeterminate` (forms.tsx:126-150). Caption is wired through
+`aria-describedby`; `invalid` sets `aria-invalid`. `onCheckedChange(checked, event)` runs
+after native `onChange` unless that calls `preventDefault` (forms.tsx:121). CheckboxGroup is a native `fieldset` with
+`legend` (forms.tsx:188-203). forced-colors.css:47-63 paints the control Canvas with a
+CanvasText edge, checked and indeterminate in Highlight with a HighlightText mark, and an
+invalid control with a dashed Mark edge; not verified in a forced-colours browser. The mark transition uses
 `duration-fast`, which the motion axis zeroes. Notion and Figma also keep a native input
 (opacity 0) over a drawn face.
 
@@ -132,13 +132,14 @@ painted `--_mark`); forced colours are unverified. The mark transition uses
 | Peer | Shared role | Area value in peer | Checkbox | Match / reason |
 |---|---|---|---|---|
 | Radio | glyph ladder, rest edge | 16 / 16 / 20, #d4d4d4 | same | match (shared choice.css) |
-| Radio, Switch, Slider | checked / on paint | `neutral-solid` | same | match (owner rule) |
+| Radio, Switch, Slider | checked / on paint | `selection-solid` | same | match (Selection role) |
 | Switch, Radio, Button | disabled | 50% whole control | same | match (audit rule) |
 | Input | rest edge | `edge-control` #e2e2e2 | #d4d4d4 | differs by design: a 16px glyph needs a firmer edge than a 32px field |
 | Switch | off fill | `edge-control` #e2e2e2, hover #d4 | edge #d4d4d4 | differs by design (audit S5): the off track is the rail grey, a glyph edge is one rung firmer |
 | Slider | thumb edge | `edge-control-hover` #d4 (slider.css:34) | edge #d4d4d4 | match (audit S5) |
 | Switch | row type | 14/20 label, 12/16 description | same | match |
 | Table | selection column | Checkbox md | — | Table composes this component |
+| Card | contained surface | 24 corner, 16 to the text column, `#ee` edge with the card halo (surface.css:33-90) | card variant: `radius-container` 12 corner, 12 to the content, `edge-control` #e2 edge, no shadow (choice.css:99-110) | differs by design (audit C-20 A, owner 2026-09-30): a choice card is a control-tier option in a list or grid, its edge is the field edge that darkens when chosen; Card is a content surface with a lift |
 
 ## Visual pass
 
@@ -195,5 +196,6 @@ above is from `area--size-medium` (edge rgb(212)). Build and test results are in
 - 2026-09-27 · owner flagged the invalid group → a checked option in an invalid group takes the danger fill, as a single invalid Checkbox does (`choice.css`); the group now reads as one error state → headless Chromium.
 - 2026-09-30 · audit S5 (owner) → no Checkbox change; the #d4 glyph edge is now shared with the Slider thumb edge, and Switch's off track is #e2 (the peer row said #d4) → choice.css:48, slider.css:34.
 - 2026-09-30 · audit S14 (owner) → the label gap is 6 at md and lg (was 8), from the density tokens (choice.css:9, :404, :410; density.ts:81-82); Radio and the choice labels follow.
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onCheckedChange(checked, event)` added (native `onChange` still fires); `variant` is `plain` (default, class `.area-checkbox--plain` restating the base) | `card`.
+- 2026-09-30 · audit S17 (API vocabulary, slice 1) → `onCheckedChange(checked, event)` added, as Switch; called after native `onChange` unless it calls `preventDefault` → forms.tsx:121.
+- 2026-09-30 · audit C-20 (owner pick A) → the choice card keeps its own geometry (12 corner, 12 inset, #e2 edge), distinct from Card (24 corner, 16 inset, #ee edge + halo); recorded under Peers, no change → choice.css:99-110, surface.css:33-90.
 - 2026-10-01 · compact pass round 5 → the 24px activation lane stays at compact (WCAG 2.5.8); type steps to 12/16, the 16px glyph stays. docs/research/compact-pass-2026-10-01.md.

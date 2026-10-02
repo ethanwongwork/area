@@ -6,9 +6,8 @@
  * (which attaches to a corner and signals). Its geometry is Badge's inline scale; its
  * number formatting is Indicator's. See docs/specs/count.md.
  *
- * Three axes set private properties that the base rule consumes:
+ * Two axes set private properties that the base rule consumes:
  *   variant  plain (Notion's board counts: no plate) or soft (Primer's CounterLabel);
- *   tone     neutral or accent;
  *   size     sm 16 / md 20, Badge's sm and md heights.
  * The ink stays fixed with the owner's hover and selection, as Nav's trailing slot does.
  * ------------------------------------------------------------------------- */
@@ -16,7 +15,7 @@
   .area-count {
     /* spec: md, the default. 20 tall (Notion's board count, Fluent medium, shadcn's sidebar
        count; Primer 18), 6 at the sides (Notion 6, Primer 6, Fluent medium 6). */
-    --_count-height: var(--area-mark-md);
+    --_count-height: var(--area-mark-label-md);
     /* 6 at 20 and 4 at 16: half of what the 8px of digit room leaves, so a mark the UI scale
        shortens is drawn as the default mark of that height (compact pass). */
     --_count-gutter: calc((var(--_count-height) - var(--area-space-8)) / 2); /* spec */
@@ -52,10 +51,10 @@
   /* Size. */
   .area-count--sm {
     /* spec: 16 tall with 4 at the sides (Fluent small, Area's Indicator count). */
-    --_count-height: var(--area-mark-sm);
+    --_count-height: var(--area-mark-label-sm);
   }
   .area-count--md {
-    --_count-height: var(--area-mark-md);
+    --_count-height: var(--area-mark-label-md);
   }
 
   /* Variant. A plain count is ink only (Notion's board groups: no plate, the heading's muted

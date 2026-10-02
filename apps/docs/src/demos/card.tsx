@@ -60,8 +60,8 @@ export const CardHorizontalEnd = () => (
   </Card>
 );
 
-export const CardCompact = () => (
-  <Card layout="list" style={vertical}>
+export const CardThumbnail = () => (
+  <Card layout="thumbnail" style={vertical}>
     <CardMedia aria-hidden="true" />
     <CardContent>
       <CardTitle>Title</CardTitle>

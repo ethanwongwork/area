@@ -19,7 +19,7 @@ test('a month is a labelled grid of its own weeks with one tab stop', () => {
   assert.match(html, /aria-selected="true"[^>]*><button[^>]*data-date="2026-09-15"/);
   assert.match(html, /aria-current="date"[^>]*data-date="2026-09-26"|data-date="2026-09-26"[^>]*aria-current="date"/);
   assert.match(html, /abbr="Sunday"/);
-  assert.equal(MANIFESTS.calendar.defaults.variant, 'plain');
+  assert.equal(MANIFESTS.calendar.defaults.variant, 'surface'); // audit F-21: the floating plate is the default
   assert.equal(MANIFESTS.calendar.variants.tone, undefined);
   assert.throws(() => calendarVariants({ variant: 'card' }), RangeError);
 });

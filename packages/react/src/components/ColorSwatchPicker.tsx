@@ -2,6 +2,8 @@ import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import type { ChangeEvent, CSSProperties, HTMLAttributes, KeyboardEvent } from "react";
 import { ColorSwatch } from "./ColorSwatch.tsx";
 import { colorSwatchPickerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+/** The empty collection, one reference so effects keyed on it stay still. */
+const NO_ITEMS: never[] = [];
 
 export interface ColorSwatchOption {
   /** Submitted value and CSS color used to paint the swatch. Values must be unique. */
@@ -12,9 +14,12 @@ export interface ColorSwatchOption {
 }
 
 export interface ColorSwatchPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
-  label?: string;
-  options: readonly ColorSwatchOption[];
+  /** Accessible name for the color choice. */
+  label: string;
+  /** The swatches. Collections are `items` everywhere (audit H-14). */
+  items?: readonly ColorSwatchOption[];
+  /** @deprecated Use `items`. */
+  options?: readonly ColorSwatchOption[];
   name?: string;
   value?: string;
   defaultValue?: string;
@@ -29,14 +34,15 @@ export interface ColorSwatchPickerProps extends Omit<HTMLAttributes<HTMLDivEleme
 
 /** A single color choice backed by native radio inputs. */
 export const ColorSwatchPicker = forwardRef<HTMLDivElement, ColorSwatchPickerProps>(function ColorSwatchPicker(
-  { label, options, name, value, defaultValue, onValueChange, size, layout = "grid", columns = 6,
+  { label, items, options: legacyOptions, name, value, defaultValue, onValueChange, size, layout = "grid", columns = 6,
     disabled, required, className, style, onKeyDown, ...rest }, ref,
 ) {
+  const options = items ?? legacyOptions ?? NO_ITEMS;
   const generatedName = useId();
   const root = useRef<HTMLDivElement | null>(null);
   const inputs = useRef<Array<HTMLInputElement | null>>([]);
-  // No choice until one is made or given (audit F-19): `required` can then fail, and "none" is
-  // a state the picker can show. It used to preselect the first enabled swatch.
+  // No preselection: with neither value nor defaultValue nothing is chosen, so `required` can
+  // fail and "no colour" is representable (audit S17, F-19).
   const initial = defaultValue ?? "";
   const [localValue, setLocalValue] = useState(initial);
   const selected = value ?? localValue;

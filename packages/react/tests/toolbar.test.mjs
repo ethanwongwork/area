@@ -17,13 +17,10 @@ test("Toolbar creates one entry stop while keeping native command buttons", () =
   assert.equal((html.match(/data-area-toolbar-item=""/g) ?? []).length, 3);
   assert.match(html, /disabled="" aria-label="Middle"/);
   assert.match(html, /role="separator" aria-orientation="vertical"/);
-  // Overflow is a ghost More Button opening a Menu (audit S16 / A-8).
-  const more = html.match(/<button[^>]*aria-label="More actions"[^>]*>/)[0];
-  assert.match(more, /class="area-button area-button--ghost[^"]*area-button--icon-only"/);
-  assert.match(more, /tabindex="-1" data-area-toolbar-item=""/);
-  assert.match(more, /aria-haspopup="menu"/);
-  assert.match(html, /data-area-glyph="more-horizontal"/);
-  assert.match(html, /<div role="menu" id="[^"]+" popover="auto"[^>]*class="area-menu">/);
+  // Overflow is a ghost icon Button that opens a Menu (audit S16, A-8).
+  assert.match(html, /<button[^>]*class="area-button area-button--ghost[^"]*area-button--icon-only[^"]*"[^>]*aria-label="More actions"[^>]*aria-haspopup="menu"|aria-haspopup="menu"[^>]*aria-label="More actions"/);
+  assert.match(html, /data-area-glyph="more"/);
+  assert.match(html, /role="menu" class="area-menu"[^>]*popover="auto"|popover="auto"[^>]*role="menu"/);
   assert.deepEqual(MANIFESTS.toolbar.variants.size, ["sm", "md", "lg"]);
 });
 

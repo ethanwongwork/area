@@ -29,15 +29,15 @@ Tooltip names or briefly describes a control on hover or focus, optionally with 
 keyboard shortcut. It holds no interactive content (Popover does) and no status (Toast).
 
 The Area component is the visual surface (`role="tooltip"`, sides, arrow). With a `trigger`
-it shows on hover after 500ms and at once on keyboard focus, hides on Escape, press, blur or
-pointer leave, stays while hovered, and anchors and flips (2026-09-27; see
+it shows on hover after 500ms (`delay`) and at once on keyboard focus, hides on Escape, press,
+blur or pointer leave (after `closeDelay`, default 0), stays while hovered, and anchors and flips (2026-09-27; see
 [overlay behavior](overlay.md)).
 
 ## Variants
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| side | top (default), right, bottom, left | Placement around the trigger | All three products place tooltips by available space |
+| side | top, right, bottom, left | Placement around the trigger | All three products place tooltips by available space |
 | arrow | off (default), on | Owner: opt-in | Figma draws an arrow; ChatGPT and Notion do not |
 | composition | label + shortcut | Name a command and its key | ChatGPT (inline chip), Notion (second line) |
 
@@ -68,7 +68,7 @@ notion    div, padding 5/8, radius 6, fill rgb(44, 44, 43), inset 1px white-5% r
   text    12/16.8 400 ink rgb(240, 239, 237)
   kbd     second line, ink rgb(173, 169, 163)
 figma     div, padding 4/8, radius 5, fill rgb(30), 11/16 450, arrow
-area      div.area-tooltip, padding 4/8 (4 at a trailing Kbd), fill bg-inverse, 14/20 400
+area      div.area-tooltip, padding 4/10 (4 at a trailing Kbd), radius 10, fill bg-inverse, 14/20 400
   kbd     .area-kbd on-emphasis, 20px, radius = tooltip radius − 4
 ```
 
@@ -108,19 +108,20 @@ centred by construction ((28 − 20) / 2 = 4).
 
 ## States
 
-With a trigger: closed, delayed open (500ms, `delay`), open, closing (`closeDelay`, default 0).
-See [overlay behavior](overlay.md).
+With a trigger: closed, delayed open (500ms), open, closing. See [overlay behavior](overlay.md).
 
 ## Behavior and accessibility
 
 `role="tooltip"`; the trigger points to it with `aria-describedby`. Not focusable. Forced
-colors and RTL follow the surface rules in `surface.css`.
+colours draw a 1px `CanvasText` edge, since the fill and shadow are dropped (forced-colors.css:72,
+audit E-10); RTL follows the logical properties in `surface.css`.
+Hover intent is shared with Hover card through `useHoverIntent` (overlay.ts:108-145): a mouse or pen opens after the delay, touch never (a tap activates the trigger); keyboard focus (`:focus-visible`) opens at once; blur closes at once; Escape is one handler in the capture phase on `window` that consumes the event, so the Popover or modal Dialog underneath stays open (audit E-18 A, owner 2026-09-30; Tooltip used to open for the mouse only).
 
 ## Peers and consistency
 
 | Peer | Shared role | Peer value | Tooltip | Match |
 |---|---|---|---|---|
-| Kbd on-emphasis | nested chip | 20px | 20px, radius 2 | inset rule |
+| Kbd on-emphasis | nested chip | 20px, radius 6 (`radius-control-sm`, kbd.css) | 20px, 4 block inset at a trailing Kbd | inset rule; the keycap keeps its own 6px corner |
 | Popover | overlay lift | container radius, `--area-shadow-float` (20/24 + 5/8) | radius 10, 0 4px 12px −2px | a tooltip is smaller; its own lift (audit S10 exception) |
 
 ## Visual pass
@@ -141,7 +142,7 @@ new file was saved. Area keeps its documented differences (28 tall, corner 10, 1
 - ChatGPT 2 and Notion 1 captures; 6 Area captures before and 6 after; checksums verified.
 - `build:docs` (docs audit), `typecheck`, `test:badge` (9), `test:contracts` (14),
   `test:preview` (4), `npm test` (tokens and contrast), `git diff --check`: all pass.
-- Unverified: Figma capture file, dark theme, hover/focus behaviour (not implemented).
+- Unverified: Figma capture file, dark theme. Hover/focus behaviour is implemented (2026-09-27, [overlay.md](overlay.md)); its timing has not been owner-reviewed (the batch 17 pass compared static paint).
 
 ## Feedback log
 
@@ -160,5 +161,5 @@ new file was saved. Area keeps its documented differences (28 tall, corner 10, 1
 - 2026-09-27 · third pass → Pass review note replaced: the family is inspected in the grouped
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S10 (owner) → no change; Tooltip keeps its own 0 4px 12px −2px lift as a documented exception to the shared `--area-shadow-float` (surface.css:1225).
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Tooltip gains `closeDelay` (default 0) beside `delay`.
-- 2026-09-30 · audit S21c dark capture pass (owner go-ahead; [dark-pass](../research/dark-pass-2026-09-30.md)) → in dark the tooltip stays dark: #282828 (neutral-800), default ink, a 5% white 1px inset edge, 20% shadow ink; it inverted to a light #f3 plate. ChatGPT #212121, Notion #2c2c2b, Figma #1e1e1e (captures/tooltip/*--dark). Light unchanged; the on-emphasis keycap is a currentColor plate and reads on both.
+- 2026-09-30 · audit S17 (API vocabulary, slice 1) → `closeDelay` added (default 0) beside `delay` (500), Hover card's name → `primitives.tsx:999`.
+- 2026-10-01 · audit E-18 (owner pick A) → Tooltip and Hover card share `useHoverIntent`: mouse and pen open after the delay (was mouse only), touch never, `:focus-visible` at once, blur closes at once, one consuming capture-phase Escape → overlay.ts:108-145, Overlays.tsx:214-234.

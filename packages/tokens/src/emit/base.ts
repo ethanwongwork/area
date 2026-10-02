@@ -60,9 +60,6 @@ export function baseTokens(): Record<string, string> {
   // keyboard glyphs, causing individual characters to fall back at different metrics.
   out["--area-font-keyboard"] = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
   out["--area-keyboard-gap"] = "0.25ch";
-  // A disabled control dims to half (audit S21b: the 0.5 written at 17 sites). Fields and
-  // text use their own disabled paint instead; this is for whole controls.
-  out["--area-opacity-disabled"] = "0.5";
 
   // Pure black and white. Named because they are real answers, not placeholders: every
   // `fg-on-*` token resolves to one of these two after the scale measures which is
@@ -78,6 +75,10 @@ export function baseTokens(): Record<string, string> {
   out[`${PREFIX}radius-full`] = "9999px";
 
   for (const [name, value] of Object.entries(Z_LAYERS)) out[`${PREFIX}z-${name}`] = String(value);
+
+  // The one disabled dimming, for controls that dim rather than repaint (audit S21b; was 0.5
+  // written in 17 rules). Text fields repaint instead (DESIGN_SYSTEM "Shared state paint").
+  out[`${PREFIX}opacity-disabled`] = "0.5";
 
   // Read by AreaProvider in development to detect a missing stylesheet, which otherwise
   // presents as "the components render but look unstyled" with no error anywhere.
@@ -147,19 +148,9 @@ export function derivedTokens(): Record<string, string> {
       "selection-band-hover": ["bg-component-active", "accent-surface-hover"],
       "selection-edge": ["edge-control-hover", "edge-accent"],
     }),
-    // The edge of everything that floats (audit S21c, owner 2026-09-30, dark captures): the
-    // decorative edge in light; in dark Card's standalone edge, neutral-750 (Notion's menus and
-    // dialogs ring #383836 on #252525; ChatGPT and Figma draw a 15-35% white hairline). The
-    // dark decorative edge (#282828 on a #1d1d1d surface) disappeared.
-    [`${PREFIX}edge-float`]: `light-dark(var(${PREFIX}border-decorative), var(${PREFIX}neutral-750))`,
-    // The modal scrim (audit S21b; Dialog and Command palette): 13% black in light, the
-    // overlay role in dark. Derived, so a themed subtree re-derives its dark side.
-    [`${PREFIX}scrim`]: `light-dark(rgb(0 0 0 / 0.133), var(${PREFIX}bg-overlay))`,
-    // Badge brand paint is an opt-in product seam, re-derived at axis boundaries.
-    [`${PREFIX}badge-bg`]: `var(${PREFIX}bg-component)`,
-    [`${PREFIX}badge-fg`]: `var(${PREFIX}fg-default)`,
+    // Badge's public width hook. (badge-bg, badge-fg and badge-tracking-wide were pruned in
+    // audit S21b: Badge paints from its tone slots and never read them.)
     [`${PREFIX}badge-max-width`]: `calc(var(${PREFIX}space-40) * 5)`,
-    [`${PREFIX}badge-tracking-wide`]: "0.04em",
     // Input aliases are public theming seams. They preserve the shared defaults while
     // allowing one product to tune editable fields without repointing every control.
     [`${PREFIX}input-bg`]: `var(${PREFIX}bg-surface)`,
@@ -212,26 +203,31 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}select-warning-halo-color`]: `var(${PREFIX}input-warning-halo-color)`,
     [`${PREFIX}select-inline-size`]: `var(${PREFIX}input-inline-size)`,
     [`${PREFIX}field-error-color`]: `var(${PREFIX}fg-danger-vivid)`,
+    // Syntax roles (audit G-5 B): code colours alias today's vivid rungs under their own names, so
+    // a keyword stops borrowing danger and a string the accent, and syntax can be tuned alone.
+    [`${PREFIX}syntax-keyword`]: `var(${PREFIX}fg-danger-vivid)`,
+    [`${PREFIX}syntax-tag`]: `var(${PREFIX}fg-discovery-vivid)`,
+    [`${PREFIX}syntax-attr`]: `var(${PREFIX}fg-info-vivid)`,
+    [`${PREFIX}syntax-string`]: `var(${PREFIX}fg-accent-vivid)`,
     // Token is a static design-token reference, not a selectable tag or metadata badge.
     // These aliases let a documentation surface tune that reference without changing Code,
     // Badge, or Chip. The on-color values intentionally stay local: they must derive from
     // the surrounding foreground rather than from a global page colour.
     // The 25 rung, as inline Code: the code block's ground became the page (2026-09-28).
     [`${PREFIX}token-bg`]: `var(${PREFIX}bg-stripe)`,
-    [`${PREFIX}token-bg-subtle`]: `var(${PREFIX}bg-subtle)`,
+    // Quieter than the default: no fill, the edge alone, in both themes (audit G-4 A; bg-subtle
+    // was darker than the default in light and equal to it in dark).
+    [`${PREFIX}token-bg-subtle`]: "transparent",
     // Dark `border-decorative` equals the stripe fill, so dark takes the faint edge (audit G-3).
     [`${PREFIX}token-edge`]: `light-dark(var(${PREFIX}border-decorative), var(${PREFIX}border-faint))`,
     [`${PREFIX}token-text`]: `var(${PREFIX}fg-default)`,
-    [`${PREFIX}token-swatch-ring`]: `color-mix(in oklab, var(${PREFIX}token-text) 15%, transparent)`,
+    // ColorSwatch's solid, very light edge (audit F-30 A; was 15% of the token ink).
+    [`${PREFIX}token-swatch-ring`]: `var(${PREFIX}bg-component)`,
+    // (radius-nested was pruned in audit S21b: concentric corners use radius-concentric, S3.)
     // Corners follow the UI scale (compact pass, owner 2026-10-01). The radius axis publishes a
     // default and a dense ladder; the UI scale's `ui-dense` flag (0 or 1) picks one. A live
     // calc, so a `data-area-ui` or `data-area-radius` subtree re-derives its own corners.
     ...radiusDerivations(),
-    // A control nested inside a container keeps concentric corners: the inner radius is the
-    // outer radius less the inset. This is the forward form of the concentric rule; the
-    // inset varies per component, so components apply it themselves against this token.
-    [`${PREFIX}radius-nested`]:
-      `round(nearest, max(0px, calc(var(${PREFIX}radius-container) - var(${PREFIX}space-6))), 1px)`,
 
     // Standard transition for interactive chrome. Only properties that actually change.
     [`${PREFIX}transition`]:

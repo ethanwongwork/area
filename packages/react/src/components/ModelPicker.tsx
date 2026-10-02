@@ -1,9 +1,11 @@
 import { forwardRef, useState } from "react";
-import type { HTMLAttributes, MouseEvent, ReactNode } from "react";
+import type { HTMLAttributes, MouseEvent, ReactNode, Ref } from "react";
 import { modelPickerVariants } from "../variants.ts";
 import { Button, type ButtonProps } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Menu, MenuItem, MenuLabel } from "./primitives.tsx";
+/** The empty collection, one reference so effects keyed on it stay still. */
+const NO_ITEMS: never[] = [];
 
 export interface ModelOption {
   value: string;
@@ -14,22 +16,20 @@ export interface ModelOption {
 }
 
 export interface ModelPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {
-  /** The models to choose from (audit S17 / H-14: a value choice is `options`). */
-  options?: ModelOption[];
-  /** @deprecated Use `options`. */
+  /** The models. Collections are `items` everywhere (audit H-14). */
+  items?: ModelOption[];
+  /** @deprecated Use `items`. */
   models?: ModelOption[];
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string, event: MouseEvent<HTMLButtonElement>) => void;
+  /** Props and ref for the trigger Button; `ref` and the rest land on the wrapper (audit S17, G-24). */
+  triggerProps?: Omit<ButtonProps, "children" | "variant" | "tone" | "size" | "trailingIcon"> & { ref?: Ref<HTMLButtonElement> };
   /** Names the menu and the trigger ("Model"). */
-  "aria-label"?: string;
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
   label?: string;
   /** An optional heading over the rows. */
   heading?: ReactNode;
   size?: "sm" | "md" | "lg";
-  /** Props for the trigger Button (ref and rest go to the wrapper, audit G-24). */
-  triggerProps?: Omit<ButtonProps, "children" | "trailingIcon">;
 }
 
 /**
@@ -39,10 +39,9 @@ export interface ModelPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "
  * Escape and Tab to close, and focus back on the trigger after a choice.
  */
 export const ModelPicker = forwardRef<HTMLDivElement, ModelPickerProps>(function ModelPicker(
-  { options, models: modelsProp, value, defaultValue, onValueChange, "aria-label": ariaLabel, label: labelProp, heading, size = "md", triggerProps, className, ...rest }, ref,
+  { items, models: legacyModels, value, defaultValue, onValueChange, triggerProps, label = "Model", heading, size = "md", className, ...rest }, ref,
 ) {
-  const label = ariaLabel ?? labelProp ?? "Model";
-  const models = options ?? modelsProp ?? [];
+  const models = items ?? legacyModels ?? NO_ITEMS;
   const [own, setOwn] = useState(defaultValue ?? models[0]?.value);
   const current = value ?? own;
   const currentModel = models.find(model => model.value === current);
@@ -53,8 +52,7 @@ export const ModelPicker = forwardRef<HTMLDivElement, ModelPickerProps>(function
   };
   return <div ref={ref} className={modelPickerVariants({}, className)} {...rest}>
     <Menu aria-label={label} align="end"
-      trigger={<Button variant="ghost" tone="neutral" size={size} {...triggerProps}
-        className={["area-model-picker__trigger", triggerProps?.className].filter(Boolean).join(" ")}
+      trigger={<Button {...triggerProps} className={["area-model-picker__trigger", triggerProps?.className].filter(Boolean).join(" ")} variant="ghost" tone="neutral" size={size}
         aria-label={`${label}: ${currentModel?.label ?? ""}`} trailingIcon={<Glyph name="chevron-down" />}>
         {currentModel?.label}
       </Button>}>

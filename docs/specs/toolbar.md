@@ -1,8 +1,8 @@
 # Toolbar spec
 
-**Status:** in review · 2026-09-27 (redesign from Figma's toolbelt, validated side by side in Claude in Chrome; was Complete)
+**Status:** accepted · 2026-09-27 (batches 1-3; was: in review · 2026-09-27 (redesign from Figma's toolbelt, validated side by side in Claude in Chrome; was Complete))
 **Captures:** `docs/research/captures/toolbar/` (Area tiles light and dark; Figma toolbelt: `figma--bottom-toolbar`, `figma--tool--rest`, `figma--tool-group--{selected,hover,chevron-hover}`, `figma--mode-switch--{rest,hover}`)
-**Peers:** Button (the commands), Button group, Segmented (a mode switch inside a toolbar), Menu / Popover / Dialog / Toast (floating lift on the overflow), Separator, Panel (host surface)
+**Peers:** Button (the commands), Button group, Segmented (a mode switch inside a toolbar), Menu (the overflow; floating lift), SplitButton (the same trigger-and-menu model), Separator, Panel (host surface)
 
 ## Owner decisions
 
@@ -28,21 +28,23 @@
   are neutral ghost Buttons; nothing in Toolbar paints accent.
 - 2026-09-26 (second pass): decide every open item with the most calculated option
   consistent with the system. For Toolbar: separators take the new `border-divider` role
-  (audit decision 7); command height stays the control tier (decision 18).
+  (audit decision 7); command height stays the control tier (decision 18). *Separator paint
+  superseded 2026-09-27 (owner): `border-decorative`, the bar's seam role.*
 - 2026-09-27: **redesign from Figma's toolbar**, with three reference shots (a text-formatting
   bar with soft font and size fields, pressed B / I / U and an alignment track, light and dark;
   a composer with a formatting row; a round tool tray). Supersedes the third pass's kept
   values: the surface bar takes Figma's 8 inset and floating shadow, a pressed toggle rises as a
   plate, one-of-several toggles sit in a track, and separators span the commands. Every
   component gets an enlarged Pass review; this is the first pass validated in Claude in Chrome.
+  *The raised plate and the track were superseded the same day (entries above): pressed
+  toggles take Button's selected fill and the track group was removed.*
 
 ## Job and boundaries
 
 Toolbar groups commands into one tab stop with arrow-key movement, optional groups,
-separators and an overflow Menu for secondary commands. It does not choose a value
-(Segmented) or join edges (Button group). Its overflow is a ghost icon "More" Button opening
-a Menu (audit S16 / A-8, owner 2026-09-30), the model SplitButton already used in the same
-bar; it was a `details` disclosure of Buttons.
+separators and an overflow menu for secondary commands. It does not choose a value
+(Segmented) or join edges (Button group). Its overflow is a Menu of MenuItems (audit A-8 / S16,
+owner 2026-09-30); this supersedes the earlier "a disclosure of Buttons, not a Menu" decision.
 
 ## Variants
 
@@ -53,8 +55,8 @@ bar; it was a `details` disclosure of Buttons.
 | orientation | horizontal (default), vertical | Side rails | Gallery `vertical` |
 | booleans | `fullWidth` | Span a panel row | — |
 | composition | groups, separator, overflow | Gallery `default` | Figma: tool row, divider, mode switch; Primer ActionBar overflow |
-| group variant | track | One-of-several toggles in a filled groove, the chosen one raised | Figma's mode switch (`figma--mode-switch--rest`); owner reference (alignment) |
-| state | pressed toggle (`Button selected`) | A toggled command reads as raised, not tinted | Figma's selected mode option; owner references (Bold) |
+| group variant | none (`track` removed 2026-09-27) | One-of-several choices are a Segmented inside the Toolbar | Figma's mode switch (`figma--mode-switch--rest`); owner reference (alignment) |
+| state | pressed toggle (`Button selected`) | A toggled command keeps Button's selected fill (owner 2026-09-27; was a raised plate) | Figma's selected mode option; owner references (Bold) |
 | content | fields (Select soft) | Font and size pickers in a formatting bar | Owner references; Figma's type fields |
 
 ## Sources
@@ -87,17 +89,18 @@ figma      div.toolbelt 512 × 48, radius 13, white, three-layer shadow (below)
   mode     fieldset 122 × 32 at 8px, #f5, radius 5, 2px padding and gap; options 28 × 28,
            radius 3; hover #e6; the chosen option is a separate white plate with a shadow
 area       div.area-toolbar[role=toolbar]  owns: tier, inset (0 plain / 8 surface), radius, fill, shadow, 8 gap
-  group    div.area-toolbar__group[role=group]  gap 8; `--track`: groove, 2 inset and gap
-    item   .area-button (ghost)  height/icon/text/radius from --_toolbar-*; pressed: raised plate
+  group    div.area-toolbar__group[role=group]  gap 8
+    item   .area-button (ghost)  height/icon/text/radius from --_toolbar-*; pressed: Button's selected fill
     field  .area-select (soft)  as wide as its options
-  sep      span.area-toolbar__separator  1px × command height, border-divider
-  overflow button.area-button--ghost.area-button--icon-only  an item; Area `more-horizontal` glyph
-    menu   div.area-menu[popover=auto]  Menu's surface and 32px rows, placed by useAnchoredPosition
+  sep      span.area-toolbar__separator  1px × command height, border-decorative
+  overflow Menu (ToolbarOverflow)
+    trigger .area-button (ghost, icon only)  Area `more` glyph (filled dots); a roving item
+    menu    div.area-menu[popover=auto][role=menu]  MenuItem children; Menu's surface
 ```
 
 Inset equation, surface: outer 48 = 32 command + 2 × 8 inset (Figma 48 = 32 + 2 × 8); radius
-= min(8 + 8, 48 × 0.4) = 16, concentric (Figma 13 = 5 + 8). Track: 32 = 28 option + 2 × 2;
-option radius 8 − 2 = 6 (Figma 5 − 2 = 3).
+= min(8 + 8, 48 × 0.4) = 16, concentric (Figma 13 = 5 + 8). (The removed track group was
+32 = 28 option + 2 × 2, option radius 8 − 2 = 6; Figma 5 − 2 = 3.)
 
 ## Measurements
 
@@ -135,53 +138,51 @@ captures were lost with a frozen tab and are not in the folder. Other tiles:
 | surface radius | concentric: 16 at md | Radius rule, command radius + inset (Figma 13 = 5 + 8) | — |
 | surface paint | `bg-surface`; Figma's shadow `0 0 0.5px 18%, 0 3px 8px 10%, 0 1px 3px 10%`; a 1px decorative inset ring in dark only | Figma toolbelt (light); the halo cannot draw on a dark page | Was a hairline and `shadow-1`. A raised bar is not the overlay lift (Menu, Popover), which stays deeper. Its four-layer recipe is its own (toolbar.css:33), a documented exception to `--area-shadow-float` (audit S10); a literal, so the Flat preset keeps it |
 | spacing | **8** between commands, groups and separators | Figma tool row 8 and 8 either side of its divider | Was 2 in a group, 4 between groups |
-| separator | 1px × **command height**, `border-divider` | Owner references (rule spans the controls) | Figma runs it the full 48 |
+| separator | 1px × **command height**, **`border-decorative`** (toolbar.css:66) | Owner references (rule spans the controls); owner 2026-09-27: lighter stroke, the bar's seam role | Figma runs it the full 48. Was `border-divider` |
 | hover | `bg-component-hover`, ink fixed | Shared rule; Figma #f5 | #f3 vs #f5: the shared plate wins |
-| pressed toggle | **raised plate**: `bg-surface` + `0 0 0.5px 30%, 0 1px 3px 15%`; dark `bg-component-active`; kept under the pointer and while pressed | Figma's selected mode option; owner references (Bold) | Figma paints a selected *tool* in its blue accent; neutral by default (owner) |
-| track group | groove the command height, #f5 (dark `bg-component`), 2 inset and gap, options 28, concentric 8 / 6, option hover `bg-hover`, chosen option raised | Figma mode switch (`figma--mode-switch--*`) | Figma radius 5 / 3 (radius axis) |
+| pressed toggle | **Button's selected fill** `bg-component-active`, kept under the pointer and while pressed (button.css:397-403; toolbar.css:56-62) | Owner 2026-09-27: a shadow-only plate is not a state the system draws anywhere else | Was a raised plate (`bg-surface` + Figma's mode-option shadow). Figma paints a selected *tool* in its blue accent; neutral (owner) |
+| one-of-several | a Segmented inside the Toolbar (the `track` group was removed 2026-09-27) | Owner: "shouldn't that be a segmented control?" | Figma's mode switch is the same object |
 | fields | Select soft at the tier, as wide as its options | Owner references; Figma's type fields | Select's form default is 16rem |
-| overflow trigger | ghost icon-only Button at the toolbar tier, Area `more-horizontal` glyph (three 2px dots, 5 apart) | Audit S16 / A-8 (owner 2026-09-30, option A): "More" is a ghost icon Button everywhere in the gallery | Was a `summary` with its own paint: default ink (#28 vs the ghost #56), no press plate, CSS dots (one survived forced colours, A-9) |
-| overflow menu | Menu (surface, lift, 32px rows, keys) at the bar's end edge, 4 clear of the whole bar (`clearToolbar`, toolbar-context.ts), beside the bar when vertical; flips and shifts | overlay.md menu gap; SplitButton's icon tool menu (Figma's toolbelt: 4 from the bar) | Was an absolutely positioned box of 28px sm Buttons that a clipping ancestor could cut |
+| overflow | ghost icon-only Button (`more` glyph, `aria-label` from `label`, default "More actions") opening a Menu in a native popover; Menu's surface and lift | Audit A-8 / S16 (owner 2026-09-30); SplitButton's model | Was a `details` disclosure of Buttons with its own surface (`toolbar.css`, removed) |
+| overflow placement | horizontal bar: below, end-aligned; vertical: to the right, start-aligned; clears the toolbar box by 4 (shared `clearToolbar`, as SplitButton's tool menus) | Figma's toolbelt: menus 4 from the bar | — |
 
 ## States
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | command hover / pressed / disabled | Button's states (neutral ghost: #f3 / #ee / 50%) | [button.md](button.md) |
-| command selected (toggle) | raised plate (above), kept under the pointer | `area--default--rest--*`; Chrome computed styles |
-| track option hover | `bg-hover` over the groove | Chrome computed style |
-| overflow trigger hover / pressed | ghost Button's (neutral #f3 / #ee); ink fixed | [button.md](button.md) |
-| focus-visible | 2px focus ring on items, trigger and the toolbar root (`toolbar.css:47`) | not captured |
-| overflow open | Menu 4 under the bar, end edges equal (horizontal) or 4 beside it (vertical) | gallery, 2026-09-30: 4 below the bar, menu end = trigger end (249 / 249), rows 32 |
+| command selected (toggle) | Button's selected fill (above), kept under the pointer | `area--default--rest--*`; Chrome computed styles |
+| overflow trigger hover or open | ghost Button's states; ink fixed | [button.md](button.md); not captured |
+| focus-visible | 2px focus ring on items (Button's), the overflow trigger and the toolbar root (`toolbar.css`) | not captured |
+| overflow open | Menu below (horizontal, end-aligned) or to the right (vertical, start-aligned), 4 from the bar | not captured since the change (earlier `area--default` capture shows the disclosure) |
 
 ## Behavior and accessibility
 
 `role="toolbar"`, `aria-orientation`; the root is one tab stop that forwards focus to the
-last-focused or first enabled item (`Toolbar.tsx:43-61`). Arrow keys (RTL-aware), Home and
-End move without activating (`Toolbar.tsx:21-42`). `ToolbarItem` marks focusable children.
-Separators have `role="separator"` with the cross orientation. Overflow is Menu's trigger
-path (`AnchoredMenu`): the More Button carries the name (`ToolbarOverflow` `aria-label`, default
-"More actions"; `label` is a deprecated alias), `aria-haspopup`,
-`aria-expanded` and `aria-controls`, and is one of the toolbar's roving items; Enter, Space
-or ArrowDown open on the first item, ArrowUp on the last; arrows, Home, End and typeahead
-move; choosing an item, Escape or Tab close it and focus returns to More. Children are
-MenuItems. In a vertical toolbar ArrowDown on More opens the menu rather than moving on
-(Menu's trigger keys win; unverified with a screen reader). Figma's mode switch is a
-`fieldset` of radios with a visually hidden legend. Area's `ToolbarGroup variant="track"`
-draws the same groove from toggle Buttons (`aria-pressed`), so its options stay toolbar items
-on one Tab stop; a form value that must submit is a Segmented placed inside the Toolbar.
+last-focused or first enabled item (`Toolbar.tsx:49-65`). Arrow keys (RTL-aware), Home and
+End move without activating (`Toolbar.tsx:25-47`). `ToolbarItem` marks focusable children.
+Separators have `role="separator"` with the cross orientation. Overflow's trigger is a
+roving toolbar item named by `label` ("More actions") that opens a Menu (`aria-haspopup="menu"`,
+native `popover="auto"`); Menu's keys, Escape, light dismiss and focus return apply. Children
+are MenuItems (breaking: they were Buttons). Figma's mode switch is a
+`fieldset` of radios with a visually hidden legend; Area's equivalent is a Segmented placed
+inside the Toolbar (the `ToolbarGroup variant="track"` of toggle Buttons was removed 2026-09-27).
+Composites take the toolbar's tier: `size` reaches SplitButton, Segmented and Select through the
+`ToolbarSize` context (`toolbar-context.ts`) when they set no `size` of their own; direct Buttons
+take it through `toolbar.css`. Forced colours paint the separator `ButtonText`
+(`forced-colors.css`, with the joined-button dividers).
 
 ## Peers and consistency
 
 | Peer | Shared role | Area value in peer | Toolbar | Match / reason |
 |---|---|---|---|---|
-| Menu, Popover, Select picker, Dialog, Toast, Calendar, ColorPicker, Command palette | floating lift | `--area-shadow-float` (0 20 24 / 0 5 8 `shadow-color`) over a 1px decorative border | overflow content same | match (audit rule); the surface bar keeps its own recipe |
+| Menu, Popover, Select picker, Dialog, Toast, Calendar, ColorPicker, Command palette | floating lift | `--area-shadow-float` (0 20 24 / 0 5 8 `shadow-color`) over a 1px decorative border | the overflow is a Menu | match (audit rule); the surface bar keeps its own recipe |
 | Menu / Popover | floating radius | `radius-container` 12 | 12 | match |
 | Panel | docked surface | `shadow-2`, decorative edge | surface toolbar floats on Figma's bar shadow | the bar floats over a canvas; Panel docks |
 | Button (neutral ghost) | transparent command hover | `bg-component-hover` | trigger same | match |
-| Separator, Button group | divider paint | `border-divider` 1px | same | match (second pass) |
-| Segmented | raised choice in a groove | 2px inset and gap, concentric radius, selected `light-dark(bg-surface, bg-component-active)` + hairline + `shadow-1` (segmented.css:94-100) | track: same geometry, raised plate with Figma's shadow; dark `bg-component-active` | dark fill matches since audit S15a; open: align Segmented's shadow |
-| Button | pressed toggle | `bg-component-active` fill, kept on hover | raised plate inside a toolbar | a toolbar toggle rises, as Figma's and the owner's references do |
+| Separator; Panel and Code block rules | divider paint | Separator `border-divider`; Panel and Code block `border-decorative` | `border-decorative` | matches the rules inside containers (owner 2026-09-27); Separator is firmer. Button group's seam is `edge-control` (button-group.css:11), a control seam |
+| Segmented | one-of-several choice | Segmented itself, placed in the Toolbar at its tier (`ToolbarSize`) | same component | match (the track group was removed) |
+| Button | pressed toggle | `bg-component-active` fill, kept on hover | same | match (owner 2026-09-27; was a raised plate) |
 
 ## Visual pass
 
@@ -247,5 +248,7 @@ semantics (toggles are `aria-pressed`; a track is not a radio group).
   per size.
 - 2026-09-30 · audit S10 (owner) → the overflow reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat; toolbar.css:76); the surface bar keeps its own four-layer recipe as a documented exception (toolbar.css:33).
 - 2026-09-30 · audit S14, S15a (owner) → a command's icon-to-label gap is Button's own 6; the toolbar no longer overrides `--_gap` (toolbar.css:47-55; was 4 / 8 / 8). Segmented's selected thumb takes `bg-component-active` in dark, the same fill as the toolbar's pressed plate (peer row).
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `ToolbarOverflow` `aria-label` names the More button (default "More actions"; `label` deprecated alias).
+- 2026-09-30 · audit A-8 / S16 (owner) → ToolbarOverflow is a ghost icon-only Button (`more` glyph) opening a Menu of MenuItems in a native popover, SplitButton's model; horizontal bars open below end-aligned, vertical to the right start-aligned, 4 clear of the bar (`clearToolbar`). The `details` disclosure, its CSS (overflow, overflow-trigger, overflow-dots, overflow-content) and manifest elements are removed.
+- 2026-10-01 · audit A-7 → a Toolbar's `size` reaches SplitButton, Segmented and Select through the `ToolbarSize` context when they have no size of their own → toolbar-context.ts, Toolbar.tsx.
+- 2026-10-01 · audit A-9 → forced colours paint the separator `ButtonText` (it is a painted box) → forced-colors.css.
 - 2026-10-01 · compact pass round 5 → the surface inset and the group gap read `ui-cluster` (8, compact 6); the concentric corner follows (16, compact 12). Default unchanged. docs/research/compact-pass-2026-10-01.md.

@@ -28,7 +28,7 @@
 
 ## Job and boundaries
 
-Button triggers an action, or toggles one (`selected`, or `defaultSelected` uncontrolled). It is not navigation to a place
+Button triggers an action, or toggles one (`selected`). It is not navigation to a place
 (a link, Nav item, Breadcrumb), not a mode choice among siblings (Segmented), and not a
 selectable filter (Chip). ButtonGroup and Toolbar arrange Buttons; they add no Button paint.
 
@@ -40,14 +40,14 @@ selectable filter (Chip). ButtonGroup and Toolbar arrange Buttons; they add no B
 | variant | soft | Tinted fill, secondary action | ChatGPT Settings "Manage", "Archive all" (5% black); "Delete all" (10% red); Figma "New Design file" pills (245 fill) |
 | variant | outline | Bordered, secondary action | Notion "Copy link" (hairline); ChatGPT logged-out "Sign up", suggestions (1px 20% black); Untitled secondary |
 | variant | ghost | Quiet action in toolbars and headers | ChatGPT header Share, message actions, composer tools; Notion topbar Share, Favorite; Figma file browser icons; Untitled tertiary |
-| tone | neutral, accent, info, success, warning, caution, danger, discovery | Semantic paint | ChatGPT danger soft ("Delete all"); Notion accent solid ("Invite"); others from Area's tone axis |
+| tone | neutral, info, success, warning, caution, danger, discovery | Semantic paint | ChatGPT danger soft ("Delete all"); others from Area's tone axis. Notion's accent solid ("Invite") is the Action role in an accent theme: `accent` was removed as a tone 2026-09-29 (owner, D1) |
 | size | sm 28, md 32 (default), lg 40 | Control scale | Notion 28 (topbar), 32 (dialog); ChatGPT 32 (message actions), 36; Figma 24, 32; Untitled 32–48 |
 | composition | leading icon | Icon before the label | ChatGPT Share; Notion Share, Advanced; Untitled icon leading |
 | composition | trailing icon | Icon after the label, usually a disclosure chevron | ChatGPT model picker |
 | composition | icon only | Square | All three products |
 | composition | shortcut (Kbd in label) | Command hint | Area addition (Tooltip/Kbd peers) |
 | shape | pill | Fully round | ChatGPT Settings pills, composer; Figma "New …" pills |
-| layout | full width, `align` start / end (`.area-button--start`, `--end`) | Placement | Area layout helpers |
+| layout | full width, align start/end | Placement | Area layout helpers |
 | state | hover, active, focus-visible, disabled, loading, selected | Runtime | Hover captured in ChatGPT and Notion; focus in ChatGPT and Untitled |
 
 Not built: a 24px and a 36px size. The planned compact density covers dense products
@@ -228,7 +228,7 @@ filtered to the shell, text and icon rows (full tables: run the command on the s
 | height | sm 28, md 32, lg 40 (unchanged) | Notion 28/32; all three show 32 | lg 40 matches Untitled; no product shows 40 (ChatGPT 36). Open question |
 | radius | 6 / 8 / 10 (unchanged, `radius-control-*`) | ChatGPT 8 at 32–36 | Notion 6, Figma 5; follows the radius preset |
 | text inset | equal inset (11 at md) | `inset.css` shared rule | Notion 12, ChatGPT 12 + border; within 1px |
-| ghost hover (neutral) | **`bg-hover`** (rgba(20,20,20,.05)); pressed **`bg-active`** (7%) | ChatGPT 5% black, Notion 5% warm black | Was `bg-component` (247 opaque, about 3%). The shared translucent role matches within 1 level and works on any surface |
+| ghost hover (neutral) | **`bg-component-hover`** #f3; pressed **`bg-component-active`** (button.css:377-380) | ChatGPT 5% black, Notion 5% warm black, Figma 5%: about #f2 on white; the row plate Menu, Nav, Tree view and Table share | Was `bg-component` (247 opaque, about 3%), then the translucent `bg-hover` / `bg-active`. Row hosts (Tree view, Nav) switch nested ghosts back to `bg-hover` (audit S11c) |
 | ghost hover (tones) | tone `surface-hover`; pressed `surface-active` | Consistency with neutral (one rung stronger) | Was `surface` / `surface-hover` |
 | outline hover | `surface-hover` (neutral 243); pressed `surface-active` (238) | ChatGPT logged-out outline 241; ghost washes 242 | Was 247 |
 | soft hover (neutral) | fill 247 + **`bg-hover` wash** (≈235); border **`bg-hover`, translucent** (≈224); pressed wash **`bg-active`** (≈231) | ChatGPT soft 242 → 230; owner: keep the stroke | Was 247 → 243 with border 238. A translucent border tints whatever the wash painted, so the stroke stays one step darker in every state and theme without a new fill rung. Tone softs keep their one-rung step (a grey wash would muddy tinted fills) |
@@ -242,19 +242,20 @@ filtered to the shell, text and icon rows (full tables: run the command on the s
 |---|---|---|
 | hover | ghost: 5% wash (neutral) or tone surface-hover; outline: surface-hover; soft: one rung; solid: solid-hover | ChatGPT ghost 0 → 5%, soft 5% → 10%, danger 10% → 20%; Notion ghost 0 → 5%, solid blue darkens; Untitled secondary fill to lab 98. Area: `area--*--hover`, before in `before/*hover-before*` |
 | focus-visible | 2px ring | ChatGPT 2px blue ring (box-shadow), logged-out 2px outline, offset 2; Untitled 2px outline, offset 2 |
-| disabled, selected | unchanged | not captured |
-| loading | full opacity, `cursor: progress`, no hover or press; the spinner fills the tier's icon box in the label ink (display.css) | Audit S18 (owner 2026-09-30, option A); Input's `loading` already stays editable. Not captured in a product | Was native `disabled` at 50% with a fixed 16px spinner (overflowed a 12px compact sm box) |
+| selected | the selected plate holds under hover and press: no hover or press wash (audit A-13); soft selected's edge is its fill, not the lighter hover hairline; solid selected is `solid-hover` (button.css:400-418) | not captured |
+| menu open | a menu trigger (`aria-haspopup="menu"`, `aria-expanded="true"`) keeps the pressed plate while its menu is open, as Model picker did alone; a selected toggle keeps its own fill (button.css:145-150, audit G-12) | ChatGPT model picker |
+| disabled | unchanged | not captured |
+| loading | Spinner replaces the leading icon and fills the tier's icon box (`--_icon`: 12/16/20); full opacity, `cursor: progress`; `loading` + `disabled` is plainly disabled | Visuals not captured. Behaviour: audit S18 (owner pick 2026-09-30) |
 
 ## Behavior and accessibility
 
-Unchanged: native `button`, `type="button"` by default, `aria-pressed` for `selected`,
-`aria-busy` and a spinner for `loading`, icon-only requires `aria-label`.
-A Button is a toggle when `selected` (controlled) or `defaultSelected` (uncontrolled) is set;
-a press calls `onSelectedChange(selected, event)` (audit S17).
-`loading` is not native `disabled` (audit S18): the button sets `aria-disabled="true"` and
-`data-loading`, keeps focus and its place in the Tab order, and swallows its click
-(`preventDefault`, which also stops a form's implicit submit). `disabled` together with
-`loading` stays natively disabled. Split button inherits this through its action Button.
+Native `button`, `type="button"` by default, `aria-pressed` for `selected`, icon-only
+requires `aria-label`. `loading` (audit S18, 2026-09-30) does not set native `disabled`: it
+sets `aria-disabled="true"`, `aria-busy` and `data-loading`, and drops clicks with
+`preventDefault` (a submit Button doesn't submit). The Button stays focusable and in the Tab
+order, so focus isn't lost on submit. A nested Kbd's spoken chord is hidden inside the Button,
+which carries `aria-keyshortcuts` instead, so the name isn't "Button Command plus Enter"
+(audit A-16, `kbd.css:150-153`).
 
 ## Peers and consistency
 
@@ -320,5 +321,9 @@ chevron, as ChatGPT's model picker).
   actions, Model picker, Scroll to latest, chips) takes it at once.
 - 2026-09-30 · audit S11c, S12c (owner) → a Kbd inside any Button is a `currentColor` 14% plate with inherited ink (was neutral-solid only, with a `bg-inverse` 16% plate on coloured solids; `kbd.css:131-135`); ghost Buttons in Tree view and Nav row actions hover `bg-hover` and press `bg-active` (`tree-view.css:74`, `nav.css:243`).
 - 2026-09-30 · audit S14 (owner) → the icon-to-label gap reads the density tokens (button.css:26, :436, :446, :456), 6 at sm, md and lg (density.ts:80-82; sm was 4). Button group and Toolbar no longer override a child's `--_gap`, so hosted Buttons keep 6.
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `defaultSelected` + `onSelectedChange(selected, event)` give an uncontrolled toggle; `align` values are `start` / `end` with classes `.area-button--start` / `--end` (were `align-start` / `align-end`).
+- 2026-10-01 · audit A-13 (owner pick A) → a selected toggle takes no press wash, and a soft selected Button's edge is its fill (was the lighter #f3 hairline over #ee) → button.css:409-414.
+- 2026-10-01 · audit A-15, A-16 → Kbd's on-emphasis merged into on-color; the chord's sr-only text is hidden inside a Button (see kbd.md) → kbd.css:108-116, :150-153.
+- 2026-10-01 · audit G-12 (owner pick A) → a menu-button trigger keeps the pressed plate while expanded (SplitButton, Menu triggers) → button.css:145-150.
+- 2026-10-01 · audit A-23, H-26 → in a group, a disabled button's seam is drawn by its enabled neighbour at full strength, and a fully disabled ButtonGroup or SplitButton dims once as a whole (see button-group.md, split-button.md).
+- 2026-10-01 · owner (audit H-13): the manifest `align` values are `start | end` (classes `area-button--start` / `--end`; were `align-start` / `align-end`). React `align` is unchanged.
 - 2026-10-01 · compact pass → a trailing Kbd's end inset reads the mark role (was a literal 20), so at compact the Kbd sits 6 from the top and the end (was 6 / 4). docs/research/compact-pass-2026-10-01.md.

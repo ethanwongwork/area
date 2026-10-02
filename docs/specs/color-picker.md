@@ -1,10 +1,10 @@
 # Color picker spec
 
-**Status:** in review · 2026-09-26 (second pass: views, OKLCH, contrast, preview)
+**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (second pass: views, OKLCH, contrast, preview))
 **Captures:** `docs/research/captures/color-picker/`
 **Peers:** Popover (surface, Complete), Slider (thumb focus, Complete), Select (model menu,
-Complete), InputGroup and NumberField (value row, in review), ColorField, ColorSwatch and
-ColorSwatchPicker (in review), Button (eyedropper, Complete)
+Complete), InputGroup and NumberField (value row, Complete), ColorField, ColorSwatch and
+ColorSwatchPicker (Complete), Button (eyedropper, Complete)
 
 ## Owner decisions
 
@@ -37,7 +37,6 @@ are Figma features outside this component (see Excluded).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| variant | surface (default), plain | Standalone floating plate; `plain` (transparent background and border, radius 0, no shadow) for a Popover or Panel that already frames it | Audit S17 (owner 2026-09-30) |
 | composition | `header` | A title, tabs or close action above the editor, divided from it | Figma: every picker has a 40px header (Custom / Libraries tabs, +, close) |
 | composition | `swatches` (+ `onAddSwatch`) | Saved colors under the editor | Figma: "On this page" document colors |
 | composition | `eyedropper` | Sample a color from the screen | Figma: 24px button beside the tracks |
@@ -49,6 +48,7 @@ are Figma features outside this component (see Excluded).
 | composition | `preview` | New color beside the original, which restores it | iOS current color; Photoshop new/current |
 | state | `model`: `oklch` | Perceptual editing; CSS Color 4 | Owner request |
 | state | `disabled` | — | Peers |
+| variant | `surface` (default), `plain` | `surface` is the floating plate; `plain` drops background, edge and lift for a picker inside a Popover or Panel (audit S17) | Calendar and Toolbar use the same `surface` / `plain` pair |
 
 Excluded: Figma's paint-type row (Solid, Gradient, Pattern, Image, Video, Shader) and blend
 mode and contrast buttons. Selecting a non-solid paint would change the owner's file, so
@@ -142,7 +142,7 @@ foreground/background popover (the background is a prop).
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | shell · width | `control-sm × 10` (240 / 280) | Figma 240 = 10 × its 24px rows | The inset contract gives 28px fields an 8.74px text inset; at a fixed 240 three RGB digits clipped. Tying width to the row keeps Figma's proportions at both scales |
-| shell · surface | border-decorative, radius container (12), the floating lift `--area-shadow-float` (0 20px 24px, 0 5px 8px at half strength; `none` under Flat) (color.css:214) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
+| shell · surface | border-decorative, radius container (12), the floating lift `--area-shadow-float` (0 20px 24px, 0 5px 8px at half strength; `none` under Flat) (color.css:208-224); `plain` sets all three to transparent / none (color.css:225) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
 | shell · inset | 16 (border counted) | Figma 16 | — |
 | vertical rhythm | 12 | Figma: area→tracks 12, track gap 12, tracks→values 12 | — |
 | header | min 40, 16 start / 8 end, border-faint rule | Figma 40, divider rgb(230) | Figma's tab text sits at 16 (8 + tab padding); a plain title uses the same column. border-faint (226) is the role nearest rgb(230) |
@@ -162,16 +162,15 @@ foreground/background popover (the background is a prop).
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover (eyedropper) | Button ghost hover (bg-hover, 5%) | `figma--eyedropper--hover--light`: rgba(0,0,0,.05) |
+| hover (eyedropper) | Button ghost hover (`bg-component-hover` #f3) | `figma--eyedropper--hover--light`: rgba(0,0,0,.05) |
 | focus-visible | Area focus ring on the area thumb and track thumbs; field focus on the value group | Figma thumb focus captured |
 | sampling | eyedropper `aria-pressed` while the EyeDropper API is open | — |
 | disabled | whole picker 50%, not-allowed cursor | Peers |
 
 ## Behavior and accessibility
 
-- `role="group"` named by `aria-label` (default "Color"; a consumer's `aria-label` is never
-  overridden; `label` is a deprecated alias). Sub-controls are named after it ("Fill hue",
-  "Fill opacity"). The area is one tab stop: a hidden range input with
+- `role="group"` named by a consumer's `aria-label`, else `label`; the same name prefixes
+  every inner control ("Fill colour hue", "Fill colour hex"). The area is one tab stop: a hidden range input with
   `aria-roledescription="2D slider"` and `aria-valuetext` naming saturation and brightness;
   Left/Right change saturation, Up/Down brightness, Shift ×10, Page Up/Down brightness ±10,
   mirrored in RTL. Pointer drag uses pointer capture.
@@ -179,16 +178,16 @@ foreground/background popover (the background is a prop).
   Enter/blur, bounds, arithmetic); hex and CSS fields keep a draft while typing and commit on
   Enter/blur, Escape restores. CSS accepts hex, `rgb()`/`rgba()` and `hsl()`/`hsla()`.
 - State is HSV, so hue survives gray and black. Values are canonical `#RRGGBB` or
-  `#RRGGBBAA`; a change calls `onValueChange(value, event)`, with no event for the eyedropper
-  and the hex / CSS text fields; `name` submits one hidden value; form reset restores the default.
+  `#RRGGBBAA`; `name` submits one hidden value; form reset restores the default.
 - Forced colors: thumbs draw Canvas/CanvasText rings.
 
 ## Peers and consistency
 
 | Peer | Shared role | Peer value | Picker | Match / reason |
 |---|---|---|---|---|
-| Popover | floating surface | border-decorative, container radius, `--area-shadow-float` | same | match |
+| Popover | floating surface | border-decorative, container radius, `--area-shadow-float` | same (`surface`); none (`plain`, inside a Popover) | match |
 | Slider | thumb focus | focus-width at focus-offset | same | match |
+| Slider | track and thumb | 4px rail, 16 / 16 / 20 thumb with a 1px #d4 edge and a fill dot (slider.css:22-36) | 16px pill tracks with a gradient, 16px thumbs with a 4px white ring and current-colour fill | differs by design (audit F-32 A, owner 2026-09-30): a colour track shows data (hue, opacity, a channel), as Figma's; Slider's rail shows a value |
 | ColorField | hex + opacity | soft InputGroup, decorative divider | soft InputGroup, surface divider | Figma's divider is a surface gap; ColorField keeps its own until it gets a pass |
 | ColorSwatchPicker | saved colors | 4px gap grid | contiguous cells inside the picker | Figma's document colors are contiguous |
 
@@ -249,4 +248,5 @@ setting).
   fields hug their digits, alpha checker 3 rows → every picker tile measured, no clipped value.
 - 2026-09-30 · audit F-6 (owner rule 09-27) → header and swatch rules take `border-decorative` #f3 (was `border-faint` #e2, darker than the container edge) (color.css:222, 359).
 - 2026-09-30 · audit S10 (owner) → the surface reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) (color.css:214).
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the picker (default "Color", no longer overridden; `label` deprecated alias) and its sub-controls are named after it; `onValueChange(value, event)` (event absent for the eyedropper and hex / CSS text fields); new `variant` `surface` (default) | `plain` (transparent background and border, radius 0, no shadow).
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → `variant`: `surface` (default, the floating plate) or `plain` (no background, edge or lift, for a picker inside a Popover or Panel; color.css:217-225), gallery tile "Variant / plain"; a consumer's `aria-label` names the group and every inner control ("Fill colour hue"), `label` is the fallback (ColorPicker.tsx:141; it used to override `aria-label`).
+- 2026-09-30 · audit F-32 (owner pick A) → kept: tracks and thumbs stay Figma's (16px pills, ringed thumbs), deliberately unlike Slider's 4px rail; recorded under Peers.

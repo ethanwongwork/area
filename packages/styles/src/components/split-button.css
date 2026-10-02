@@ -116,4 +116,9 @@
   @media (prefers-reduced-motion: reduce) {
     .area-split-button__trigger > .area-button__icon > svg { transition: none; }
   }
+
+  /* Every part disabled: the joined control dims once as a whole, so the seam and edges where the
+     parts overlap aren't dimmed twice (audit H-26). One disabled part still dims alone. */
+  .area-split-button:has(> .area-button:disabled):not(:has(> .area-button:not(:disabled))) { opacity: var(--area-opacity-disabled); }
+  .area-split-button:has(> .area-button:disabled):not(:has(> .area-button:not(:disabled))) > .area-button:disabled { opacity: 1; }
 }

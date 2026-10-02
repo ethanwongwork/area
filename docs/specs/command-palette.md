@@ -57,11 +57,12 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 | width | 600 | Notion's list column | Notion's preview pane (406) is left out |
 | position | 77 from the top, centred; max 700 tall | Notion | results grow downward from a fixed field |
 | surface | Dialog's: border, opaque surface, floating lift `--area-shadow-float` (command-palette.css:42; `none` under Flat), scrim 13% | dialog.md | Notion's translucent blur is not in Area's surfaces |
-| corner | row radius + list inset = 8 + 4 = 12 (Menu's and the Combobox list's) | list pass: one list model | Notion 20 with 12 rows in a 10 inset |
+| corner | row radius + list inset = 8 + 4 = 12 (Menu's and the Combobox list's) | list pass: one list model; kept by owner (audit D-23 A, 2026-09-30) | Notion 20 with 12 rows in a 10 inset; ChatGPT and Notion draw their palettes larger than their menus (corner 16–20, rows 36–48, audit D-23); Area keeps the list model (12 / 32) |
 | search row | 48 tall, 16/24 text; the glyph on the rows' icon column (13 from the edge), the typed text on their text column (41), `--area-gap-row` after the glyph (command-palette.css:56), rule under it | list pass | Notion puts its field 12 in |
 | rows | Menu rows (32, 8 radius, 5% wash), icon 16, 12 gap (`--area-gap-row`, command-palette.css:28; labels at 36) | menu.md | Notion's 36 rows and 20 icons belong to its larger scale |
 | group headings | Menu's label rows: 32 tall, 12/16 muted, on the icon column; groups 2 apart like rows | list pass: one list model; Menu labels 12/16 (2026-09-27) | Notion 12/14.4 medium; ChatGPT 14/20 regular |
 | description | muted, after the label | Notion (a page's parent) | — |
+| empty state | one quiet row, 32 tall, muted, at the text-only inset (32 − 1cap) / 2 — the Combobox row (command-palette.css:97-105) | audit D-24 A (owner 2026-09-30): one empty-state row everywhere | Was a centred 96 block |
 | shortcut | Kbd small, quiet, at the end; renders like Menu's string shortcut (UI font 12/16 400, muted, unboxed; kbd.css:89-102) | Kbd; Menu | Was the keyboard face at 500 until audit S12a |
 | footer | key hints (↑ ↓ Move, ⏎ Open, Esc Close), each also a button: ↑ and ↓ move the highlight, Open runs it, Close closes; 24 plates (Button xs height and radius) with the keycap on their 4 inset, the `bg-hover` wash, ink fixed; disabled (50%) with no results; out of the tab order and focus kept in the field; `aria-hidden` (the keys are announced by the field); quiet keys (unboxed UI font 12/16, as the row shortcuts), 12/16 muted labels; plates 8 from the rule, the side and the bottom (concentric with the corner: 4 + 8 = 12; 40 tall + the rule), keycaps starting on the icon column, 16 between hints | Notion's hint row; owner: "the controls … still don't do anything" (2026-09-27) | Notion's hints are text only |
 
@@ -75,7 +76,7 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 | field | 16/24, 12 in, text at 50 | 16/24, 24 in; a 65-tall header with a rule and a 36 close | 16/24, 48 row, glyph on the icon column, rule under it |
 | headings | 12/14.4 500 muted | 14/20 400 muted, 24 in | 12/16 400 muted, 32 rows |
 | rows | 36, corner 12, icon 20, 14/16.8 | 48, corner 12, 12 in, icon 20 at 18, 14/20 at 56 | 32, corner 8, 4 in, icon 16, 14/20 |
-| highlight | 5% warm black | (none until hovered) | 5% wash (`bg-hover`) |
+| highlight | 5% warm black | (none until hovered) | `bg-component-hover` #f3, Menu's row plate (surface.css:1025-1026) |
 
 Notion re-measured the same as 2026-09-27. Type matches both products (16/24 field, 14 rows,
 muted headings between Notion's 12 and ChatGPT's 14). Area's rows and corner follow the one list
@@ -90,15 +91,14 @@ The dialog is a native modal `<dialog>` (focus trapped, inert page); the field i
 `role=listbox` of grouped `role=option` rows. Focus stays in the field. ↓/↑ move (wrapping,
 skipping disabled rows), Ctrl+Home/End jump, Enter runs the highlighted row and closes
 (unless `keepOpen`), Escape clears the query and then closes, a click on the scrim closes.
-`hotkey="mod+k"` toggles it (⌘ on Apple platforms, Ctrl elsewhere). `aria-label` names the
-palette and its search field (default "Command palette"; `label` is a deprecated alias).
+`hotkey="mod+k"` toggles it (⌘ on Apple platforms, Ctrl elsewhere).
 
 ## Verification
 
 - Headless Edge, real keys and pointer (`scratchpad/palette.mjs`): ↓↓ from Roadmap reaches
   Research notes; "s" narrows to four and highlights the first; ↑ wraps past disabled Trash
   to Settings; the modal opens from its button with focus in the field, "copy" leaves Copy
-  link; the modal sits 77 from the top, 600 wide, corner 16, rows 8; Escape clears then
+  link; the modal sits 77 from the top, 600 wide, corner 16 (now 12, the list model's row radius + inset; command-palette.css:30), rows 8; Escape clears then
   closes; ⌘K opens with focus in the field; Enter runs and closes.
 - React test: roles, grouping, disabled row, spoken shortcut, empty state.
 - Unverified: dark theme, screen reader output, IME.
@@ -112,9 +112,10 @@ palette and its search field (default "Command palette"; `label` is a deprecated
 
 Owner: "are the controls at the bottom of command palette correctly sized or even usable?
 make sure the gaps and margins for all of these menus and dropdowns and lists are
-intentional and consistent." The footer items are keyboard hints, not controls: nothing in
-them is clickable, and they are hidden from assistive tech (the keys are announced by the
-field). Measured before: list inset 8 (Menu 4), rows at 9 and icons at 17 (Menu 5 / 13),
+intentional and consistent." The footer items were keyboard hints, not controls: nothing in
+them was clickable, and they were hidden from assistive tech (the keys are announced by the
+field). *Superseded: each hint is now also a quiet button (↑ / ↓ move, Open runs, Close closes;
+command-palette.css:125-142; see Decisions, footer).* Measured before: list inset 8 (Menu 4), rows at 9 and icons at 17 (Menu 5 / 13),
 search icon 16, footer 13, group labels 24 tall at 12px. After, one list model for Menu,
 Combobox, Command palette and Context menu: inset 4, rows 32 two apart, row radius 8,
 corner 12, labels as 32 rows on the icon column, icon-to-label 12. Palette columns measured:
@@ -146,5 +147,6 @@ keycap-to-label gap inside the Open plate, taken from the visible plate here.
 ## Feedback log
 
 - 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (command-palette.css:42); rows and the search row take the density token `--area-gap-row` (12, labels at 36; command-palette.css:28, :56); quiet keys render in the UI font 12/16 400, and Escape is written "Esc" (kbd.css:89-102).
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the palette and its search field (default "Command palette"; `label` deprecated alias).
+- 2026-09-30 · audit D-23 (owner pick A) → kept the list model (12 corner, 32 rows) rather than ChatGPT's and Notion's larger palette (corner 16–20, rows 36–48).
+- 2026-10-01 · audit D-24 (owner pick A) → the empty state is the Combobox row: 32 tall, muted, at the text inset (was a centred 96 block); the description stays after the label → command-palette.css:97-105.
 - 2026-10-01 · compact pass round 7 → the search row is 48, compact 40. docs/research/compact-pass-2026-10-01.md.

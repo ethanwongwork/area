@@ -17,7 +17,9 @@
 @layer area.components {
   .area-slider {
     --_height: var(--area-control-md);
-    --_thumb: var(--area-icon-md);
+    /* The thumb is on the fixed mark ladder, as Checkbox's glyph: 16 / 16 / 20, so compact
+       density no longer splits it from the glyphs beside it (audit C-29; was icon-sm/md). */
+    --_thumb: var(--area-space-16);
     --_track: var(--area-space-4);
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
@@ -47,7 +49,7 @@
     position: absolute;
     z-index: 0;
     inset: 50% calc(var(--_thumb) / 2) auto;
-    block-size: calc(var(--_track) + 6px);
+    block-size: calc(var(--_track) + 6px); /* spec: slider.md marks, 3px past the track each side */
     pointer-events: none;
     transform: translateY(-50%);
   }
@@ -60,10 +62,6 @@
     transform: translateX(-50%);
   }
 
-  /* Restates the base: every default value has a class (audit S17 / H-13), so the manifest names
-     it and framework-free markup can say it. */
-  .area-slider--inline { display: flex; }
-  .area-slider--horizontal { block-size: var(--_height); }
   .area-slider--top {
     display: grid;
     grid-template: auto var(--_height) / 1fr auto;
@@ -93,11 +91,14 @@
   .area-slider--vertical .area-slider__control::-webkit-slider-runnable-track { background: linear-gradient(to top, var(--_fill) 0 var(--_pct), var(--_track-fill) var(--_pct) 100%); }
   .area-slider--vertical .area-slider__control::-moz-range-track { background: linear-gradient(to top, var(--_fill) 0 var(--_pct), var(--_track-fill) var(--_pct) 100%); }
 
+  /* SliderRange (audit C-12): two native range inputs on one rail. The fill is the Selection
+     role, so a theme's accent reaches it; the rail's height follows the size tier. */
   .area-slider-range {
     --_range-fill: var(--area-selection-solid);
     --_range-track-fill: var(--area-edge-control); /* spec (audit S5): as the single rail */
+    --_range-height: var(--area-control-md);
     display: grid;
-    grid-template-columns: max-content minmax(80px, 1fr) max-content;
+    grid-template-columns: max-content minmax(var(--area-space-80), 1fr) max-content;
     align-items: center;
     gap: var(--area-ui-cluster);
     inline-size: 100%;
@@ -105,10 +106,15 @@
   .area-slider-range__track {
     position: relative;
     isolation: isolate;
-    block-size: var(--area-control-md);
+    block-size: var(--_range-height);
     cursor: pointer;
     touch-action: none;
   }
+  .area-slider-range--sm { --_range-height: var(--area-control-sm); }
+  .area-slider-range--md { --_range-height: var(--area-control-md); }
+  .area-slider-range--lg { --_range-height: var(--area-control-lg); }
+  .area-slider-range[data-disabled] .area-slider-range__track { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
+  .area-slider-range[data-disabled] .area-slider-range__track .area-slider { opacity: 1; }
   .area-slider-range__track::after {
     content: "";
     position: absolute;
@@ -136,7 +142,7 @@
   .area-slider-range .area-slider__control { position: absolute; inset: 0; inline-size: 100%; pointer-events: none; }
   .area-slider-range .area-slider__control::-webkit-slider-runnable-track { background: transparent; }
   .area-slider-range .area-slider__control::-moz-range-track { background: transparent; }
-  .area-slider-range .area-input {
+  .area-slider-range .area-slider-range__input {
     inline-size: calc(3ch + var(--area-gutter-md) * 2 + var(--area-stroke-width) * 2);
     min-inline-size: 0;
   }
@@ -182,7 +188,7 @@
     block-size: var(--_track);
     border-radius: var(--area-radius-full);
     background: linear-gradient(
-      to right,
+      var(--_fill-dir, to right),
       var(--_fill) 0 var(--_pct),
       var(--_track-fill) var(--_pct) 100%
     );
@@ -192,14 +198,16 @@
     block-size: var(--_track);
     border-radius: var(--area-radius-full);
     background: linear-gradient(
-      to right,
+      var(--_fill-dir, to right),
       var(--_fill) 0 var(--_pct),
       var(--_track-fill) var(--_pct) 100%
     );
   }
 
-  [dir="rtl"] .area-slider__control::-webkit-slider-runnable-track { scale: -1 1; }
-  [dir="rtl"] .area-slider__control::-moz-range-track { scale: -1 1; }
+  /* Right-to-left: the browser already places the thumb from the right, so only the fill turns
+     round. :dir() matches a dir on the input itself or on an ancestor; mirroring the track with
+     scale put Chromium's thumb back on the left (audit C-11, checked live). */
+  .area-slider__control:dir(rtl) { --_fill-dir: to left; }
 
   /*
    * Round by identity, like the switch thumb: a slider handle that is not a circle reads
@@ -217,7 +225,7 @@
     margin-block-start: calc((var(--_track) - var(--_thumb)) / 2);
     border: var(--area-stroke-width) solid var(--_thumb-border);
     border-radius: var(--area-radius-full);
-    background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%);
+    background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%); /* spec: slider.md thumb dot stops */
     box-shadow: var(--area-shadow-1);
     transition: var(--area-transition);
   }
@@ -228,15 +236,30 @@
     block-size: var(--_thumb);
     border: var(--area-stroke-width) solid var(--_thumb-border);
     border-radius: var(--area-radius-full);
-    background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%);
+    background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%); /* spec: slider.md thumb dot stops */
     box-shadow: var(--area-shadow-1);
     transition: var(--area-transition);
   }
-
-  @media (hover: hover) { .area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track { background: linear-gradient(to right, var(--_fill-hover) 0 var(--_pct), var(--_track-fill-hover) var(--_pct) 100%); } }
-  @media (hover: hover) { .area-slider__control:hover:not(:disabled)::-moz-range-track { background: linear-gradient(to right, var(--_fill-hover) 0 var(--_pct), var(--_track-fill-hover) var(--_pct) 100%); } }
-  @media (hover: hover) { .area-slider__control:hover:not(:disabled)::-webkit-slider-thumb { background: radial-gradient(circle, var(--_fill-hover) 0 42%, var(--area-bg-surface) 46% 100%); } }
-  @media (hover: hover) { .area-slider__control:hover:not(:disabled)::-moz-range-thumb { background: radial-gradient(circle, var(--_fill-hover) 0 42%, var(--area-bg-surface) 46% 100%); } }
+  @media (hover: hover) {
+    .area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track {
+      background: linear-gradient(var(--_fill-dir, to right), var(--_fill-hover) 0 var(--_pct), var(--_track-fill-hover) var(--_pct) 100%);
+    }
+  }
+  @media (hover: hover) {
+    .area-slider__control:hover:not(:disabled)::-moz-range-track {
+      background: linear-gradient(var(--_fill-dir, to right), var(--_fill-hover) 0 var(--_pct), var(--_track-fill-hover) var(--_pct) 100%);
+    }
+  }
+  @media (hover: hover) {
+    .area-slider__control:hover:not(:disabled)::-webkit-slider-thumb {
+      background: radial-gradient(circle, var(--_fill-hover) 0 42%, var(--area-bg-surface) 46% 100%); /* spec */
+    }
+  }
+  @media (hover: hover) {
+    .area-slider__control:hover:not(:disabled)::-moz-range-thumb {
+      background: radial-gradient(circle, var(--_fill-hover) 0 42%, var(--area-bg-surface) 46% 100%); /* spec */
+    }
+  }
 
   /* A paired range paints its shared rail on the composition, not on either native input.
      These rules must come after the general hover treatment so it cannot bleed back in. */
@@ -245,17 +268,24 @@
 
   /* Native vertical range controls still match :hover while dragging, so keep their fill
      direction explicit after the horizontal hover treatment above. */
-  @media (hover: hover) { .area-slider--vertical .area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track { background: linear-gradient(to top, var(--_fill-hover) 0 var(--_pct), var(--_track-fill-hover) var(--_pct) 100%); } }
-  @media (hover: hover) { .area-slider--vertical .area-slider__control:hover:not(:disabled)::-moz-range-track { background: linear-gradient(to top, var(--_fill-hover) 0 var(--_pct), var(--_track-fill-hover) var(--_pct) 100%); } }
+  @media (hover: hover) {
+    .area-slider--vertical .area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track {
+      background: linear-gradient(to top, var(--_fill-hover) 0 var(--_pct), var(--_track-fill-hover) var(--_pct) 100%);
+    }
+  }
+  @media (hover: hover) {
+    .area-slider--vertical .area-slider__control:hover:not(:disabled)::-moz-range-track {
+      background: linear-gradient(to top, var(--_fill-hover) 0 var(--_pct), var(--_track-fill-hover) var(--_pct) 100%);
+    }
+  }
 
+  /* The ring alone, as every other control (audit C-13; the thumb edge no longer recolours). */
   .area-slider__control:focus-visible::-webkit-slider-thumb {
-    border-color: var(--area-focus-color);
     box-shadow: var(--area-shadow-1);
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
   .area-slider__control:focus-visible::-moz-range-thumb {
-    border-color: var(--area-focus-color);
     box-shadow: var(--area-shadow-1);
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
@@ -288,7 +318,7 @@
 
   /* --- Sizes -------------------------------------------------------------- */
 
-  .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-icon-sm); --_gutter: var(--area-gutter-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-icon-md); --_gutter: var(--area-gutter-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-space-16); --_gutter: var(--area-gutter-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-space-16); --_gutter: var(--area-gutter-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-slider--lg { --_height: var(--area-control-lg); --_thumb: var(--area-space-20); --_gutter: var(--area-gutter-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

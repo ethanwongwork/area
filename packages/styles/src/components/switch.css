@@ -4,15 +4,16 @@
     /* spec: the thumb travels 12px at every size, as in ChatGPT (32 x 20) and Notion (30 x 18). */
     --_travel: var(--area-space-12);
     --_w: calc(var(--_h) + var(--_travel));
-    --_h: var(--area-space-20);
+    --_h: var(--area-mark-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_inset: var(--area-space-2);
     --_thumb: calc(var(--_h) - var(--_inset) * 2);
     --_thumb-width: var(--_thumb);
     --_gap: var(--area-gap-md);
-    --_on: var(--area-selection-solid);
-    --_on-hover: var(--area-selection-solid-hover);
+    /* One public hook replaces the custom tone (audit H-13): any Switch takes a consumer colour. */
+    --_on: var(--area-switch-color, var(--area-selection-solid));
+    --_on-hover: var(--area-switch-color-hover, var(--area-switch-color, var(--area-selection-solid-hover)));
     /* spec (owner 2026-09-28, "lighten is better"): the off track takes the control edge's rung,
        #e2 (ChatGPT ≈ #e6, Notion ≈ #db; was fill-toggle #d4), and hovers one rung up to #d4.
        Both keep the increased-contrast mix. The edge equals the fill, so none shows, as in
@@ -35,13 +36,12 @@
     cursor: pointer;
   }
 
-  .area-switch--sm { --_h: var(--area-space-16); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_gap: var(--area-gap-sm); }
-  .area-switch--md { --_h: var(--area-space-20); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-switch--lg { --_h: var(--area-space-24); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_gap: var(--area-gap-lg); }
-  .area-switch--short {}
+  .area-switch--sm { --_h: var(--area-mark-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_gap: var(--area-gap-sm); }
+  .area-switch--md { --_h: var(--area-mark-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-switch--lg { --_h: var(--area-mark-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_gap: var(--area-gap-lg); }
+  /* Explicit for manifest parity: short is the base track (the declarations above). */
+  .area-switch--short { --_track: short; }
   .area-switch--long { --_thumb-width: calc(var(--_thumb) + var(--area-space-8)); --_w: calc(var(--_h) * 2 + var(--area-space-4)); }
-  .area-switch--neutral { --_on: var(--area-selection-solid); --_on-hover: var(--area-selection-solid-hover); }
-  .area-switch--custom { --_on: var(--area-switch-color, var(--area-selection-solid)); --_on-hover: var(--area-switch-color-hover, var(--area-switch-color, var(--area-selection-solid-hover))); }
 
   .area-switch__control {
     appearance: none;

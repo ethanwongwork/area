@@ -12,10 +12,12 @@
 export { Button, type ButtonProps } from "./components/Button.tsx";
 export { ButtonGroup, type ButtonGroupProps } from "./components/ButtonGroup.tsx";
 export { SplitButton, type SplitButtonProps } from "./components/SplitButton.tsx";
+export { Toaster, useToaster, type ToasterProps, type ToasterApi, type ToastOptions } from "./components/Toaster.tsx";
+export { SliderRange, type SliderRangeProps, type SliderRangeValue } from "./components/SliderRange.tsx";
 export { Input, InputAction, type InputProps, type InputActionProps } from "./components/Input.tsx";
 export { NumberField, type NumberFieldProps } from "./components/NumberField.tsx";
 export { InputGroup, InputGroupText, type InputGroupProps, type InputGroupTextProps } from "./components/InputGroup.tsx";
-export { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis, type BreadcrumbSeparatorProps } from "./components/Breadcrumb.tsx";
+export { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis, type BreadcrumbEllipsisProps, type BreadcrumbSeparatorProps } from "./components/Breadcrumb.tsx";
 export { Toolbar, ToolbarItem, ToolbarGroup, ToolbarSeparator, ToolbarOverflow, type ToolbarProps, type ToolbarItemProps, type ToolbarGroupProps, type ToolbarOverflowProps } from "./components/Toolbar.tsx";
 export { AlignmentPicker, ALIGNMENT_POSITIONS, type AlignmentPickerProps, type AlignmentPosition } from "./components/AlignmentPicker.tsx";
 export { ColorSwatch, type ColorSwatchProps } from "./components/ColorSwatch.tsx";

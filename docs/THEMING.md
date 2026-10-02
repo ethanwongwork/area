@@ -12,7 +12,7 @@ The registry in `packages/tokens/src/axes/registry.ts` defines nine axes:
 - `accent`: configurable chromatic accent; blue is the default (owner, 2026-09-29; was indigo). The focus ring follows it.
 - `action`: neutral or accent, the colour of committing actions (solid Buttons). Neutral is the default.
 - `selection`: neutral or accent, the colour of state (checked, on, selected, current, filled). Neutral is the default.
-- `ui`: default or compact, combining typography, control sizes, icons, gaps (including `gap-row`, the list-row icon gap) and padding. It also owns the mark ladder `mark-sm/md/lg` (16 / 20 / 24: Badge, Count, Kbd, the Indicator count) and the surface insets `inset-surface-sm/md` (12 / 16: Popover, Dialog), added by audit S21a (owner 2026-09-30). Compact is a proportional step-down (owner, 2026-10-01, checked against vscode.dev): 12/16 UI type, 24px list rows (`ui-row`, glyph edge `ui-row-inset` 6, `gap-row` 8), surface insets 8 / 12, marks 16 / 16 / 20, layout steps `ui-stack` 6 / 4 and `ui-cluster` 8 / 6, and corners one step smaller. Corners are a cross-axis derivation: the radius axis publishes `radius-base-*` and `radius-dense-*`, the UI scale sets `ui-dense`, and `emit/base.ts` derives `radius-control-*`, `radius-container`, `radius-small` and `radius-row` ([compact pass](research/compact-pass-2026-10-01.md)).
+- `ui`: default or compact, combining typography, control sizes, icons, gaps (including `gap-row`, the list-row icon gap) and padding. It also owns the mark ladder `mark-sm/md/lg` (16 / 20 / 24: Badge, Count, Kbd, the Indicator count) and the surface insets `inset-surface-sm/md` (12 / 16: Popover, Dialog), added by audit S21a (owner 2026-09-30). Compact is a proportional step-down (owner, 2026-10-01, checked against vscode.dev): 12/16 UI type, 24px list rows (`ui-row`, glyph edge `ui-row-inset` 6, `gap-row` 8), surface insets 8 / 12, text-label marks `mark-label-*` 16 / 16 / 20 (static marks `mark-*` hold), layout steps `ui-stack` 6 / 4 and `ui-cluster` 8 / 6, and corners one step smaller. Corners are a cross-axis derivation: the radius axis publishes `radius-base-*` and `radius-dense-*`, the UI scale sets `ui-dense`, and `emit/base.ts` derives `radius-control-*`, `radius-container`, `radius-small` and `radius-row` ([compact pass](research/compact-pass-2026-10-01.md)).
 - `radius`: sharp, subtle, soft, standard, round, rotund or pill. Besides the corner roles it
   owns `radius-cap`, `radius-button-cap` and `radius-concentric` (0 at Sharp: how much of a
   shell's distance joins its concentric corner).
@@ -76,6 +76,13 @@ property. `color-scheme` chooses the polarity at that element, including native 
 Do not register those pairs with `@property`, which could resolve and freeze them early.
 A computed custom property can contain `light-dark(...)`; measure painted `color`,
 `background-color`, border or shadow when checking actual color.
+
+Switching `data-area-theme` at runtime: because a pair's text is identical in both themes,
+Chromium can keep a cached painted colour on some descendants after `color-scheme` flips
+(seen 2026-10-01: Nav, Menu and Tabs labels kept the light ink until the next restyle).
+Force one synchronous restyle after the switch, as the docs Customize panel does:
+`root.style.display = "none"; void root.offsetHeight; root.style.display = "";`. Nothing
+paints in between, so there is no flash. Setting the theme before first paint needs nothing.
 
 Geometric derivations are re-emitted on scope-bearing elements. A derived property that
 is resolved only at the root can freeze the wrong density/radius inputs for descendants.

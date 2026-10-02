@@ -23,3 +23,10 @@ test("Breadcrumb labels an omitted section without making it a link", () => {
   assert.match(html, /aria-label="More pages"/);
   assert.doesNotMatch(html, /<a\b/);
 });
+
+test("a collapsed trail with hidden pages is a menu button of links (audit D-19)", () => {
+  const html = renderToString(h(BreadcrumbEllipsis, { items: [{ label: "Item two", href: "/two" }] }));
+  assert.match(html, /<button type="button" aria-label="More pages" class="area-breadcrumb__ellipsis"[^>]*aria-haspopup="menu" aria-expanded="false"/);
+  assert.match(html, /<a role="menuitem" href="\/two" class="area-menu__item">/);
+  assert.match(renderToString(h(BreadcrumbEllipsis)), /^<span role="img" aria-label="More pages" class="area-breadcrumb__ellipsis">…<\/span>$/);
+});

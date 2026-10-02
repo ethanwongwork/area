@@ -190,6 +190,28 @@ and Progress's running animation. The start and end equal-inset sweeps report no
 mismatches at either density (the Command palette footer's key labels sit 12.5 from the top
 including its 1px border against 12 from the start).
 
+## Merge with main (phases 6–7, 2026-10-02)
+
+Main (PR #33) ran in parallel and changed the same axis:
+
+- **Marks.** Main held every mark under compact (audit S21a C, 2026-09-30: VS Code badge 17,
+  keycap 18) and moved Switch, Presence and ColorSwatch onto `mark-*`. This branch's owner
+  direction (2026-10-01) steps text labels down. Reconciled as two roles: `mark-*` stays 16 / 20 /
+  24 at both densities for static marks (Switch track, Presence, ColorSwatch, Indicator count);
+  `mark-label-*` (16 / 20 / 24, compact 16 / 16 / 20) is read by Badge, Count, Kbd and the inset
+  rules that place them.
+- **Surface insets.** Main removed `inset-surface-*` ("waits for the compact pass") and wrote
+  Popover 12 and Dialog 16 as literals; this branch restores the roles (12 / 16, compact 8 / 12).
+- **Kept from main:** titles hold in compact (H-7 A: Card and Dialog titles 16/24 at both
+  densities), Input's action as the field less a 4px ring (B-7 B), `border-float` (was
+  `edge-float`), Select options on the Menu row model (now reading `ui-row`), Tree view rows in
+  body ink (D-3 A), Field label gap 6 (C-27 A, now `ui-stack`), Prompt suggestions' 16 gap (G-16,
+  compact 12 to stay under the placeholder), and the pruned tokens.
+
+Default checked against main's stylesheet across 11,775 gallery elements: differences only in
+this branch's intended fixes (Nav and Count counts, Tree view action, Alert empty tracks, Code
+block header action), plus Progress's animation and the Badge group's overflow popover state.
+
 ## Open
 
 

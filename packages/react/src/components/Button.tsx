@@ -30,13 +30,16 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   align?: "start" | "end";
   /** A toggle that is currently on. Persists, unlike hover. */
   selected?: boolean;
-  /** An uncontrolled toggle's initial state (audit S17: as Chip). */
-  defaultSelected?: boolean;
-  /** Called when a toggle (`selected` or `defaultSelected` set) is pressed. */
-  onSelectedChange?: (selected: boolean, event: MouseEvent<HTMLButtonElement>) => void;
   /**
-   * Pending: a spinner replaces any leading icon and clicks do nothing, but the button keeps
-   * focus, its place in the Tab order and full opacity (`aria-disabled`, audit S18).
+   * Makes the button an uncontrolled toggle that starts on or off, as Chip's `defaultSelected`
+   * (audit A-17; the toggle used to be controlled only). Each press flips it.
+   */
+  defaultSelected?: boolean;
+  /** Called with the next state when a toggle is pressed, controlled or not. */
+  onSelectedChange?: (selected: boolean) => void;
+  /**
+   * Pending: a spinner replaces any leading icon and clicks are ignored, but the button stays
+   * focusable at full ink (`aria-disabled`, not native `disabled`), so focus isn't lost on submit.
    */
   loading?: boolean;
   /** Rendered before the label. */
@@ -76,18 +79,16 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
   },
   ref,
 ) {
-  const [localSelected, setLocalSelected] = useState(Boolean(defaultSelected));
-  const toggle = selectedProp !== undefined || defaultSelected !== undefined;
-  const selected = toggle ? selectedProp ?? localSelected : undefined;
-  const press = (event: MouseEvent<HTMLButtonElement>) => {
+  const [localSelected, setLocalSelected] = useState(defaultSelected);
+  const selected = selectedProp ?? localSelected;
+  // Only a toggle (one with a selected state) flips on press; a plain button never gains aria-pressed.
+  const toggle = selected === undefined ? onClick : (event: MouseEvent<HTMLButtonElement>) => {
     onClick?.(event);
-    if (!toggle || event.defaultPrevented) return;
-    const next = !selected;
-    if (selectedProp === undefined) setLocalSelected(next);
-    onSelectedChange?.(next, event);
+    if (event.defaultPrevented) return;
+    if (selectedProp === undefined) setLocalSelected(!selected);
+    onSelectedChange?.(!selected);
   };
-  // The spinner fills the tier's icon box (button.css), so it never overflows a small one.
-  const leading = loading ? <span className="area-spinner" aria-hidden="true" /> : icon;
+  const leading = loading ? <span className="area-spinner area-spinner--md" aria-hidden="true" /> : icon;
 
   return (
     <button
@@ -98,17 +99,16 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
         className,
       )}
       disabled={disabled}
-      // Loading is not native disabled: that would drop focus to the body and take the button
-      // out of the Tab order mid-submit (audit S18). It is announced as unavailable and busy,
-      // and the click (including a form's implicit submit) is swallowed below.
+      // Loading keeps focus and its place in the Tab order (audit S18): it is announced as
+      // unavailable and busy, and the click (including a form's implicit submit) is dropped.
       aria-disabled={loading && !disabled ? true : undefined}
       aria-busy={loading || undefined}
+      onClick={loading ? event => event.preventDefault() : toggle}
       // A selected toggle needs `aria-pressed`; the class alone tells assistive tech nothing.
       aria-pressed={selected ?? undefined}
       {...(loading ? { "data-loading": "" } : {})}
       {...(selected ? { "data-selected": "" } : {})}
       {...rest}
-      onClick={loading ? event => event.preventDefault() : press}
     >
       {leading ? (
         <span className="area-button__icon" aria-hidden="true">

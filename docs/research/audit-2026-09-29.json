@@ -16,31 +16,31 @@
       "summary": "Eleven clear fixes, E-8 partly; default accent blue"
     },
     {
-      "id": "this branch (phase 1)",
+      "id": "PR 31 (phase 1)",
       "date": "2026-09-30",
       "branch": "claude/cool-kirch-9facec",
       "summary": "Audit moved into the repo; owner picks recorded; S1 field focus, S2 weight rule, S3 concentric corners"
     },
     {
-      "id": "this branch (phase 2)",
+      "id": "PR 31 (phase 2)",
       "date": "2026-09-30",
       "branch": "claude/cool-kirch-9facec",
       "summary": "S5 off-state greys, S6 soft plates and quiet ink, S7 standalone edges"
     },
     {
-      "id": "this branch (phase 3)",
+      "id": "PR 31 (phase 3)",
       "date": "2026-09-30",
       "branch": "claude/cool-kirch-9facec",
       "summary": "S4 radius by tier, S8 joined seams, S9 close and dismiss recipe"
     },
     {
-      "id": "this branch (phase 4)",
+      "id": "PR 31 (phase 4)",
       "date": "2026-09-30",
       "branch": "claude/cool-kirch-9facec",
       "summary": "S10 elevation roles, S11 list rows, S12 shortcuts and keycaps"
     },
     {
-      "id": "this branch (phase 5)",
+      "id": "PR 31 (phase 5)",
       "date": "2026-09-30",
       "branch": "claude/cool-kirch-9facec",
       "summary": "S13 selected rows, S14 icon-to-label gap, S15 Segmented thumb and soft joins"
@@ -48,14 +48,14 @@
     {
       "id": "this branch (phase 6)",
       "date": "2026-09-30",
-      "branch": "claude/component-work-continuation-aef804",
-      "summary": "S18 loading and busy; S16 one floating engine (B-5, E-5, H-10 calls); S17 API vocabulary (H-14 and part of H-13 open)"
+      "branch": "claude/component-work-51c375",
+      "summary": "S16 one floating engine, S18 loading keeps focus, S17 API vocabulary in four slices; S19 tone sets, S20 numeric marks; S21b token roles and hover media"
     },
     {
       "id": "this branch (phase 7)",
-      "date": "2026-09-30",
-      "branch": "claude/component-work-continuation-aef804",
-      "summary": "S19 tone sets, S20 numeric marks, S21a/b density roles, token roles and hover gating (S21c dark pass awaits the owner's go-ahead)"
+      "date": "2026-10-01",
+      "branch": "claude/component-work-51c375",
+      "summary": "Open fixes and picked family calls, family by family"
     }
   ],
   "decisions": [
@@ -140,7 +140,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)"
+      "resolved": "PR 31 (phase 1)"
     },
     {
       "id": "S2",
@@ -195,7 +195,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)"
+      "resolved": "PR 31 (phase 1)"
     },
     {
       "id": "S3",
@@ -253,7 +253,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)"
+      "resolved": "PR 31 (phase 1)"
     },
     {
       "id": "S4",
@@ -291,7 +291,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "S5",
@@ -328,7 +328,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 2)"
+      "resolved": "PR 31 (phase 2)"
     },
     {
       "id": "S6",
@@ -387,7 +387,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 2)"
+      "resolved": "PR 31 (phase 2)"
     },
     {
       "id": "S7",
@@ -446,7 +446,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 2)"
+      "resolved": "PR 31 (phase 2)"
     },
     {
       "id": "S8",
@@ -479,7 +479,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "S9",
@@ -519,7 +519,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "S10",
@@ -555,7 +555,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "S11",
@@ -629,7 +629,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "S12",
@@ -698,7 +698,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "S13",
@@ -735,7 +735,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 5)"
+      "resolved": "PR 31 (phase 5)"
     },
     {
       "id": "S14",
@@ -768,7 +768,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 5)"
+      "resolved": "PR 31 (phase 5)"
     },
     {
       "id": "S15",
@@ -827,7 +827,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 5)"
+      "resolved": "PR 31 (phase 5)"
     },
     {
       "id": "S16",
@@ -906,8 +906,8 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 6)",
-      "note": "Owner took the recommendations on the open names (2026-09-30): options vs items, Input icon, Nav plate, Card list, Presence xs kept as a written exception"
+      "progress": "All four slices done on this branch (phase 6) with deprecated aliases. Left: (value, event) in Combobox, ColorField, ColorPicker, Calendar, NumberField, BoxField and Composer; ContextMenu stays uncontrolled; label vs aria-label split and slot/collection renames (H-14) not made; Button toggle stays controlled-only.",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "S18",
@@ -979,7 +979,7 @@
       ],
       "status": "done",
       "note": "Accent is gone from every tone list (D1); the rest of the rule is open.",
-      "resolved": "this branch (phase 7)"
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "S20",
@@ -1015,8 +1015,7 @@
         }
       ],
       "status": "done",
-      "resolved": "this branch (phase 7)",
-      "note": "99+ kept on small avatars (owner: Claude's call)"
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "S21",
@@ -1090,9 +1089,8 @@
           "pickedOn": "2026-09-30"
         }
       ],
-      "status": "done",
-      "resolved": "this branch (phase 7)",
-      "note": "Dark pass done (docs/research/dark-pass-2026-09-30.md, 19 captures); compact values for the new mark and inset roles are uncalibrated"
+      "status": "decided",
+      "progress": "S21b done on this branch (phase 6/7): --area-opacity-disabled (16 rules), --area-scrim (themed literal: 13.3% light, 65% dark; Dialog and Command palette), 4 dead tokens pruned (badge-bg, badge-fg, badge-tracking-wide, radius-nested), 48 hover rules plus 6 split paint rules under @media (hover: hover); z-* parked (components stack locally, overlays use the top layer); shadow-float was S10. S21a (2026-10-01): mark-sm/md/lg (16/20/24) on the density and ui axes, held in compact, read by Badge, Count, Switch, ColorSwatch, Presence and the Indicator count; evidence from vscode.dev (badge 17, keycap 18, checkbox 18 beside 22-26 controls; captures in docs/research/captures/{badge,kbd,checkbox,input,button,command-palette}/vscode--*) plus the earlier Notion and Figma checkboxes. Surface-inset role left until compact surface captures exist (one IDE quick-input inset of 6 cannot set a role across Popover, Card, Panel and Dialog). S21c first pass (2026-10-01, owner switched themes): ChatGPT dark read live (docs/research/captures/baseline/chatgpt--dark-tokens--2026-10-01.md); dark page moves to neutral 975 (#020202, owner: as close to #000 as possible; ChatGPT's dark base is #000000) and the dark scrim to 50%. Full dark sweep (2026-10-01): every rendered family measured in dark; no text under 4.5:1; floating frames (Popover, Menu, Dialog, Toast, Command palette, surface Calendar and ColorPicker, the floating Toolbar) take the new border-float role (dark neutral 650, ChatGPT's menu hairline) because they vanished over another surface at 1.14:1; the translucent mark plates (10% white) match ChatGPT's soft-alpha. Found and worked around a Chromium stale-colour quirk on runtime theme switches (docs panel and THEMING.md)."
     }
   ],
   "calls": [
@@ -1115,7 +1113,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-15",
@@ -1136,7 +1136,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-16",
@@ -1157,7 +1159,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-23",
@@ -1178,7 +1182,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-3",
@@ -1199,7 +1205,9 @@
       "rec": "B",
       "pick": "B",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-5",
@@ -1220,7 +1228,9 @@
       "rec": "B",
       "pick": "B",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "B-6",
@@ -1241,7 +1251,9 @@
       "rec": "B",
       "pick": "B",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "PR 31 (phase 5)"
     },
     {
       "id": "B-7",
@@ -1270,7 +1282,9 @@
       "rec": "B+C",
       "pick": "B+C",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-9",
@@ -1291,7 +1305,9 @@
       "rec": "B",
       "pick": "B",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-19",
@@ -1312,7 +1328,9 @@
       "rec": "B",
       "pick": "B",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-24",
@@ -1337,7 +1355,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-12",
@@ -1362,7 +1382,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-19",
@@ -1387,7 +1409,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-20",
@@ -1412,7 +1436,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-21",
@@ -1433,7 +1459,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-23",
@@ -1454,7 +1482,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-25",
@@ -1475,7 +1505,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-27",
@@ -1496,7 +1528,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-32",
@@ -1517,7 +1551,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-31",
@@ -1538,7 +1574,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-10",
@@ -1559,7 +1597,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-19",
@@ -1580,7 +1620,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-20",
@@ -1601,7 +1643,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-22",
@@ -1622,7 +1666,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-23",
@@ -1643,7 +1689,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-24",
@@ -1664,7 +1712,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-3",
@@ -1685,7 +1735,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-16",
@@ -1706,7 +1758,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-11",
@@ -1727,7 +1781,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-18",
@@ -1748,7 +1804,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-19",
@@ -1769,7 +1827,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-23",
@@ -1790,7 +1850,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-26",
@@ -1811,7 +1873,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-5",
@@ -1832,7 +1896,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "F-7",
@@ -1857,7 +1923,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-10",
@@ -1882,7 +1950,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-12",
@@ -1903,7 +1973,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "F-18",
@@ -1924,7 +1996,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-20",
@@ -1945,7 +2019,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "F-21",
@@ -1966,7 +2042,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-23",
@@ -1987,7 +2065,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-26",
@@ -2008,7 +2088,9 @@
       "rec": "B",
       "pick": "B",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-28",
@@ -2029,7 +2111,9 @@
       "rec": "B",
       "pick": "B",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-30",
@@ -2050,7 +2134,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-31",
@@ -2071,7 +2157,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-32",
@@ -2092,7 +2180,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-38",
@@ -2113,7 +2203,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-4",
@@ -2138,7 +2230,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-5",
@@ -2159,7 +2253,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-6",
@@ -2180,7 +2276,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-10",
@@ -2201,7 +2299,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-12",
@@ -2222,7 +2322,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-17",
@@ -2243,7 +2345,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-23",
@@ -2264,7 +2368,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-26",
@@ -2285,7 +2391,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-27",
@@ -2310,7 +2418,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-25",
@@ -2331,7 +2441,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-10",
@@ -2352,7 +2464,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "H-26",
@@ -2373,7 +2487,9 @@
       "rec": "A",
       "pick": "A",
       "note": null,
-      "pickedOn": "2026-09-30"
+      "pickedOn": "2026-09-30",
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     }
   ],
   "findings": [
@@ -2416,7 +2532,7 @@
         "S15"
       ],
       "status": "done",
-      "resolved": "this branch (phase 5)"
+      "resolved": "PR 31 (phase 5)"
     },
     {
       "id": "A-4",
@@ -2432,7 +2548,7 @@
       ],
       "status": "done",
       "typeNote": "fix (hosts) + decision (sm and peers)",
-      "resolved": "this branch (phase 5)"
+      "resolved": "PR 31 (phase 5)"
     },
     {
       "id": "A-5",
@@ -2447,7 +2563,7 @@
         "S4"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "A-6",
@@ -2462,7 +2578,7 @@
         "S15"
       ],
       "status": "done",
-      "resolved": "this branch (phase 5)",
+      "resolved": "PR 31 (phase 5)",
       "note": "Owner kept the raised thumb in light beside the #ee Button selection (S15a A); dark no longer reads sunken"
     },
     {
@@ -2475,7 +2591,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Toolbar size reaches only direct Buttons: SplitButtons, Segmented and Selects inside keep their own size.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-8",
@@ -2502,7 +2619,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Forced colours: the toolbar separator has no rule, and the overflow dots are two box-shadow copies that drop out.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-10",
@@ -2517,7 +2635,7 @@
         "S8"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "A-11",
@@ -2557,7 +2675,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Solid selected is solid-hover, identical to hover and press, and that is the gallery's Selected tile. Neutral soft selected keeps a #f3 hairline over an #ee fill, and pressing it adds the wash again.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-14",
@@ -2572,7 +2691,7 @@
         "S12"
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "A-15",
@@ -2584,7 +2703,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Sizes are small/normal where everything else is sm/md; the treatment axis is appearance where Code calls it ground; on-emphasis has the same CSS as on-color; a deprecated quiet prop remains; Kbd adapts in Menu rows and solid Buttons but not in Tooltip.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-16",
@@ -2596,7 +2716,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "The hidden chord text makes a Button's name \"Button Command plus Enter\", and the spec also asks for aria-keyshortcuts, so the shortcut is announced twice.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-17",
@@ -2612,7 +2733,9 @@
         "S17"
       ],
       "status": "done",
-      "resolved": "this branch (phase 6)"
+      "resolved": "this branch (phase 7)",
+      "progress": "Segmented onValueChange, name/form and group disabled done; Button toggle stays controlled-only; accessible-name props (menuLabel, label) not renamed.",
+      "note": "Segmented onValueChange, name, form and disabled (S17); Button defaultSelected / onSelectedChange; --_selected-weight removed; names unified (aria-label for the own element, menuLabel for ToolbarOverflow's trigger as SplitButton). Segmented has no required: it always holds a value"
     },
     {
       "id": "A-18",
@@ -2624,7 +2747,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Neutral ghost hover declared twice; --align-start/end in two files; [data-disabled] dims but still hovers; bare .area-button-group has an edge React's default lacks.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-19",
@@ -2635,7 +2759,8 @@
       "severity": "medium",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-20",
@@ -2650,7 +2775,7 @@
         "S10"
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "A-21",
@@ -2665,7 +2790,7 @@
         "S2"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)",
+      "resolved": "PR 31 (phase 1)",
       "note": "S2: rule rewritten to match the code"
     },
     {
@@ -2677,7 +2802,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "hygiene",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-23",
@@ -2689,7 +2815,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "1 Disabled seam in a group shows at ~75%. 2 Button lg 40 vs ChatGPT 36. 3 Toolbar \"tools\" size with 24px icons. 4 Button and Split button \"re-review or accept as bug fixes\".",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "A-24",
@@ -2701,7 +2828,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "No Button test file; Toolbar and Segmented tests only render on the server, so arrows, Home/End and RTL are unguarded.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-1",
@@ -2716,7 +2844,7 @@
         "S1"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)"
+      "resolved": "PR 31 (phase 1)"
     },
     {
       "id": "B-2",
@@ -2741,7 +2869,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Select draws a #888, 1.5-stroke data-URI chevron (stays #888 when disabled) and the browser's checkmark; Combobox beside it uses Area's 1.125 chevron and check in fg-muted.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-4",
@@ -2753,7 +2882,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Select options leave the list model: text 8 from the row edge (Menu 11), 40px rows inside an lg Select, radius-row (a capsule under Pill), 14/20 group labels.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-5",
@@ -2785,7 +2915,7 @@
         "S13"
       ],
       "status": "done",
-      "resolved": "this branch (phase 5)"
+      "resolved": "PR 31 (phase 5)"
     },
     {
       "id": "B-7",
@@ -2797,7 +2927,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "The action box is 2px from the edge at sm, 4 at md, 8 at lg, radius 6 (not concentric), and its #f3 hover on a #f7 soft field is ~1.03:1.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-8",
@@ -2822,7 +2953,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Outline read-only and disabled draw the same #f7 fill and #e2 edge; soft read-only looks exactly like an editable soft field and still hovers; soft disabled gains an edge the enabled soft field doesn't have.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-10",
@@ -2834,7 +2966,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Disabled fields leave icons, units, scrub handles and InputGroupText in muted ink; the cohesion audit lists this as fixed.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-11",
@@ -2846,7 +2979,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "No forced-colors edge, focus or invalid rules; a focused NumberField shows nothing in High Contrast.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-12",
@@ -2884,7 +3018,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Field's error and disabled land on the group div, which paints only from descendants: the edge stays neutral, children stay editable, <label for> targets a div.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-15",
@@ -2913,7 +3048,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "(see E-16) InputAction hint: no delay, no bridge, no Escape, no fade.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-17",
@@ -2928,7 +3064,7 @@
         "S4"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "B-18",
@@ -2940,7 +3076,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "InputGroupText pads with the gutter (13 at md) while an Input prefix follows the inset contract (11.03); the same \"$\" sits in two places.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-19",
@@ -2952,7 +3089,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "An empty-valued \"Placeholder\" option renders in default ink and reads as a chosen value.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-20",
@@ -2978,8 +3116,9 @@
       "severity": "low",
       "type": "FIX",
       "route": "report",
-      "status": "open",
-      "severityNote": "low (unverified in a browser)"
+      "status": "done",
+      "severityNote": "low (unverified in a browser)",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-22",
@@ -2990,7 +3129,9 @@
       "severity": "low",
       "type": "DECISION",
       "route": "report",
-      "status": "open"
+      "status": "done",
+      "note": "B: a BoxField caption outside a Panel is Field's label (14/20 default ink, 6 above); inside a Panel it keeps the panel tier, muted; group descriptions sit 6 under the legend",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-23",
@@ -3001,7 +3142,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "report",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-24",
@@ -3013,7 +3155,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Same 14/20 text and height behaviour; the owner already delegated this one.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-25",
@@ -3024,7 +3167,9 @@
       "severity": "low",
       "type": "DECISION",
       "route": "report",
-      "status": "open"
+      "status": "done",
+      "note": "A: leading glyphs stay muted in every validation state; only a trailing status icon takes the tone",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-26",
@@ -3035,7 +3180,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-27",
@@ -3047,7 +3193,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Dead CSS that inset.css overrides; three patterns for variant and state rules (B-28).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-28",
@@ -3058,7 +3205,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "report",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-29",
@@ -3069,7 +3217,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "hygiene",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-30",
@@ -3081,7 +3230,8 @@
       "type": "DECISION",
       "route": "fix",
       "summary": "Read-only shows disabled steppers; Enter blocks form submit; Escape doesn't cancel a scrub.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-31",
@@ -3093,7 +3243,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "The list is unnamed when Field labels the input, and \"No results\" isn't announced.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-32",
@@ -3105,7 +3256,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "No tests guard field behaviour, the Select picker lift or field shadows.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "B-33",
@@ -3117,7 +3269,8 @@
       "type": "DECISION",
       "route": "fix",
       "summary": "The file button label is 500 on a transparent control.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-1",
@@ -3132,7 +3285,7 @@
         "S5"
       ],
       "status": "done",
-      "resolved": "this branch (phase 2)"
+      "resolved": "PR 31 (phase 2)"
     },
     {
       "id": "C-2",
@@ -3147,7 +3300,7 @@
         "S6"
       ],
       "status": "done",
-      "resolved": "this branch (phase 2)"
+      "resolved": "PR 31 (phase 2)"
     },
     {
       "id": "C-3",
@@ -3162,7 +3315,7 @@
         "S2"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)",
+      "resolved": "PR 31 (phase 1)",
       "note": "S2: rule rewritten to match the code"
     },
     {
@@ -3178,7 +3331,7 @@
         "S9"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "C-5",
@@ -3190,7 +3343,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Badge dismiss is a 12–16px target with no 24px hit extension; Badge links in the same component have one.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-6",
@@ -3202,7 +3356,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Chip remove defaults to the name \"Remove chip\", has no Backspace/Delete, and drops focus after removal.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-7",
@@ -3217,7 +3372,9 @@
         "S17"
       ],
       "status": "done",
-      "resolved": "this branch (phase 6)"
+      "resolved": "this branch (phase 7)",
+      "progress": "Dismiss names (S9) and Checkbox onCheckedChange done; (value, event) passed by Segmented, Tabs, Slider, Switch, Checkbox, Chip, RadioGroup and the pickers; Combobox, ColorField, ColorPicker, Calendar, NumberField, BoxField, ModelPicker and Composer still pass the value alone.",
+      "note": "Dismiss names (S9), Checkbox onCheckedChange; every value callback now passes (value, event), the event optional where a change has none (Combobox, ColorField, ColorPicker, Calendar, NumberField, BoxField, Composer)"
     },
     {
       "id": "C-8",
@@ -3268,8 +3425,9 @@
       "type": "FIX",
       "route": "fix",
       "summary": "RTL is likely wrong in Chromium: scale:-1 mirrors the thumb with the track, and the rtl rule only matches an ancestor, not <Slider dir=rtl> (verify first).",
-      "status": "open",
-      "typeNote": "fix (verify first)"
+      "status": "done",
+      "typeNote": "fix (verify first)",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-12",
@@ -3281,7 +3439,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": ".area-slider-range ships as CSS with no manifest entry and no React component; its fill is fixed neutral and its size fixed at md.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-13",
@@ -3293,7 +3452,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Chip and the Slider thumb recolour their edge on focus as well as drawing the ring; choice cards draw two rings.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-14",
@@ -3308,7 +3468,7 @@
         "S19"
       ],
       "status": "done",
-      "resolved": "this branch (phase 7)"
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "C-15",
@@ -3323,8 +3483,7 @@
         "S20"
       ],
       "status": "done",
-      "resolved": "this branch (phase 7)",
-      "note": "12/16 checked on a 32px avatar: 24 is 23 wide; 99+ is 29 wide, kept (every reference shows 99+; the ring separates it)"
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "C-16",
@@ -3339,8 +3498,8 @@
         "S19"
       ],
       "status": "done",
-      "resolved": "this branch (phase 7)",
-      "note": "S19 A: inverse everywhere, one feedback set; caution/discovery not added to Alert or Indicator and Switch custom unchanged (outside the pick)"
+      "resolved": "this branch (phase 6)",
+      "progress": "One spelling (inverse) done in S17; the remaining set sizes follow each family's job (accent left every tone set with D1)."
     },
     {
       "id": "C-17",
@@ -3352,7 +3511,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "A bare .area-badge renders default ink; the React default is muted.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-18",
@@ -3364,7 +3524,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "No-op API and CSS: the pill boolean, unread --_dot and --_surface-active, an empty .area-switch--short, a legend weight set twice.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-19",
@@ -3376,7 +3537,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "lg keeps 14/20 text and an 8 gap, the same reasoning that removed sm. Presence exposes xs against the no-xs rule.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-20",
@@ -3388,7 +3550,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Choice card: 12 corner, 12 inset, #e2 edge. Card: 24 corner, 16 inset, #ee edge and halo.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-21",
@@ -3400,7 +3563,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Neutral avatar is a soft plate; accent and inverse are solid. Badge accent is soft.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-22",
@@ -3412,7 +3576,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Avatar renders a <div> inside Chip's <button> and Badge's <span> (invalid nesting).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-23",
@@ -3424,7 +3589,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "ChipGroup is a plain div with no role, label or roving focus; the manifest says it \"selects one value\" and the CSS promises a radio group.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-24",
@@ -3436,7 +3602,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "A removable Chip spreads native props onto the inner action button (or drops them) and moves the ref to the remove button.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-25",
@@ -3448,7 +3615,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "disabled returns null, and \"N notifications\" is a literal with no label prop (Count has one).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-26",
@@ -3459,7 +3627,8 @@
       "severity": "medium",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-27",
@@ -3471,7 +3640,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "ChipGroup gap 4/4 vs BadgeGroup 6/8; legend to options 12 vs Field label to control 6; a disabled fieldset dims options but not the legend.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-28",
@@ -3483,8 +3653,9 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Forced colours (unverified): the Avatar active ring is a box-shadow, the Badge dot is likely a square, a chosen card looks unchosen.",
-      "status": "open",
-      "typeNote": "fix (unverified)"
+      "status": "done",
+      "typeNote": "fix (unverified)",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-29",
@@ -3496,7 +3667,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "6px and 80px unmarked literals; compact density makes the sm thumb 12 while checkbox glyphs stay 16.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-30",
@@ -3507,7 +3679,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "hygiene",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-31",
@@ -3519,7 +3692,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Count text 14 or 12; Badge md 0.7px hang; Slider thumb 16 vs 20, drag response, value tooltip, Shift+arrow; 12px glyphs in Badge and NumberField.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "C-32",
@@ -3531,7 +3705,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "kind is an interaction role, but the tiles present them as visual variants.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-1",
@@ -3546,7 +3721,7 @@
         "S2"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)",
+      "resolved": "PR 31 (phase 1)",
       "note": "S2: rule rewritten to match the code"
     },
     {
@@ -3562,7 +3737,7 @@
         "S11"
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "D-3",
@@ -3574,7 +3749,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Tree rows rest in fg-muted \"as Nav\", but Nav switched to fg-default on 09-27. Tree is now the only muted list.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-4",
@@ -3615,7 +3791,7 @@
         "S11"
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "D-7",
@@ -3630,7 +3806,7 @@
         "S11"
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "D-8",
@@ -3645,7 +3821,7 @@
         "S12"
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "D-9",
@@ -3660,7 +3836,7 @@
         "S13"
       ],
       "status": "done",
-      "resolved": "this branch (phase 5)"
+      "resolved": "PR 31 (phase 5)"
     },
     {
       "id": "D-10",
@@ -3672,7 +3848,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "The tile is two static menus with an arrow in the shortcut slot and a forced highlight; no aria-haspopup, no Right/Left keys, no RTL mirroring.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-11",
@@ -3684,7 +3861,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Three keyboard handlers: typeahead resets at 500, 1000 or 300ms; a checkable row closes an anchored Menu but not a Context menu.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-12",
@@ -3696,7 +3874,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Menu with trigger overwrites the consumer's onKeyDown, onClick, id and aria-labelledby (primitives.tsx:1077).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-13",
@@ -3708,7 +3887,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Chevrons rotate by a fixed angle, so they point the physical way in RTL; Tree's Left/Right keys don't swap.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-14",
@@ -3720,7 +3900,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Forced colours erase Nav current, the Nav marker, Tree selection and Menu data-selected (backgrounds only).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-15",
@@ -3732,7 +3913,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Menu group labels are cap-centred at ~11.7, not on the icon column the Palette spec claims.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-16",
@@ -3744,7 +3926,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Rows in floating surfaces are concentric; standalone rows use radius-row; Select options become capsules under Pill.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-17",
@@ -3756,7 +3939,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Menu minimum width is 256 in one place and 224 in another.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-18",
@@ -3771,7 +3955,9 @@
         "S17"
       ],
       "status": "done",
-      "resolved": "this branch (phase 6)"
+      "resolved": "this branch (phase 7)",
+      "progress": "Segmented onValueChange and MenuItem icon done; label stays visible text in NavGroup but an accessible name in Tabs, ContextMenu, CommandPalette and Segmented (not renamed); data vs children APIs both kept by design.",
+      "note": "A: MenuItem icon and Segmented onValueChange (S17); aria-label names the component's own element (Tabs, Segmented, ChipGroup, Command palette) and menuLabel a sub-part (ContextMenu), label kept as a deprecated alias; data and children APIs both kept"
     },
     {
       "id": "D-19",
@@ -3783,7 +3969,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "The ellipsis is a static span: no keyboard stop, nothing opens.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-20",
@@ -3795,7 +3982,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Nested nav children sit on the parent's column.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-21",
@@ -3807,7 +3995,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Vertical tabs with a track put the indicator and the track on opposite sides.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-22",
@@ -3819,7 +4008,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Combobox and Command palette already own filtered lists with active-descendant.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-23",
@@ -3831,7 +4021,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "ChatGPT and Notion draw the palette larger than their menus (corner 16–20, rows 36–48); Area keeps the list model (12 / 32).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-24",
@@ -3843,7 +4034,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Row descriptions are placed three ways; empty states differ between Combobox, Command palette and Menu search.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-25",
@@ -3855,7 +4047,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Footer hints hover with the translucent wash on a known ground (should be the opaque row pair).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-26",
@@ -3866,7 +4059,8 @@
       "severity": "medium",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-27",
@@ -3877,7 +4071,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "hygiene",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-28",
@@ -3889,7 +4084,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "No test guards Tree view, Nav keyboard, or selection-under-hover.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "D-29",
@@ -3901,7 +4097,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Small CSS and a11y leftovers (see report).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-1",
@@ -3916,7 +4113,7 @@
         "S2"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)",
+      "resolved": "PR 31 (phase 1)",
       "note": "S2: rule rewritten to match the code"
     },
     {
@@ -3932,7 +4129,7 @@
         "S9"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)",
+      "resolved": "PR 31 (phase 3)",
       "note": "Dialog 32 written as the exception (S9)"
     },
     {
@@ -3948,7 +4145,7 @@
         "S9"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "E-4",
@@ -4017,9 +4214,9 @@
       "type": "FIX",
       "route": "fix",
       "summary": "PopoverTitle is never wired to aria-labelledby, there is no PopoverClose, and PopoverTitle is a fixed h2 that Hover card drops into running text.",
-      "status": "partly",
-      "resolved": "PR 29 (batch 1)",
-      "note": "PopoverTitle labels its Popover (batch 1); PopoverClose and the fixed h2 are still open"
+      "status": "done",
+      "resolved": "this branch (phase 7)",
+      "note": "PopoverTitle labels its Popover (batch 1); PopoverClose added and PopoverTitle takes level (false in Hover cards) in phase 7"
     },
     {
       "id": "E-9",
@@ -4044,7 +4241,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "No forced-colors rules: the fill and the masked arc are backgrounds (likely erased), and Tooltip has no border to keep an edge (forced-colors.css).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-11",
@@ -4056,7 +4254,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Each Toast creates its own filled live region (often not announced), a danger Toast is status while a danger Alert is alert, and there's no region, timer, pause or stacking.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-12",
@@ -4071,7 +4270,7 @@
         "S19"
       ],
       "status": "done",
-      "resolved": "this branch (phase 7)"
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "E-13",
@@ -4083,7 +4282,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Title → description gap 4 vs Popover's 5 (the typography rule's baseline-to-cap 15).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-14",
@@ -4098,7 +4298,7 @@
         "S3"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)"
+      "resolved": "PR 31 (phase 1)"
     },
     {
       "id": "E-15",
@@ -4113,7 +4313,7 @@
         "S10"
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "E-16",
@@ -4125,7 +4325,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "InputAction's hint is a CSS :hover tooltip: no delay, shows on click, no Escape (WCAG 1.4.13), not in the top layer, and its fade never runs (input.css:210-226).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "E-17",
@@ -4137,7 +4338,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "A 16px keycap in a tooltip sits 4 from the end but 6 top and bottom; inset.css has kbd--small rules for Button, Input, Menu but not Tooltip.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-18",
@@ -4149,7 +4351,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Tooltip opens for mouse only, Hover card also for pen; focus opens Tooltip at once but Hover card after 700ms; two Escape handlers.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-19",
@@ -4161,7 +4364,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Anchored surfaces fade and scale over 150ms; the modal Dialog and its scrim appear instantly.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-20",
@@ -4173,7 +4377,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Page behind a modal still scrolls; sizes use 100vh; a drag from inside to the scrim closes the dialog.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-21",
@@ -4185,7 +4390,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "A labelled Spinner is an empty status region named only by aria-label (likely silent); Progress has no name without label and announces the raw, unclamped value.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-22",
@@ -4199,9 +4405,9 @@
       "rules": [
         "S5"
       ],
-      "status": "partly",
-      "resolved": "this branch (phase 2)",
-      "note": "Rail settled at #e2 (S5); the Spinner track stays its ink at 25% (about #c9), darker than the rail, which S5 B did not cover"
+      "status": "done",
+      "resolved": "this branch (phase 7)",
+      "note": "A: Progress and Slider rails on edge-control (Switch's off track, S5); the Spinner keeps its 25% track"
     },
     {
       "id": "E-23",
@@ -4213,7 +4419,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "The same link prop renders in two colours depending on layout.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-24",
@@ -4224,7 +4431,8 @@
       "severity": "medium",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-25",
@@ -4235,7 +4443,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "hygiene",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-26",
@@ -4247,7 +4456,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "GalleryReview rows for Dialog, Popover, Toast (and Alert in reviews.tsx) still render; three unused Popover arrow demos.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-27",
@@ -4259,7 +4469,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Skeleton card's aria-label sits on a roleless div; tile titles use three vocabularies; ToastDefault on the docs page is the success tone.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "E-28",
@@ -4271,7 +4482,8 @@
       "type": "DECISION",
       "route": "fix",
       "summary": "Literals on real properties outside --_* slots (row-gap 5px, 65%, 50px, 360px, 1.8s).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-1",
@@ -4285,9 +4497,9 @@
       "rules": [
         "S3"
       ],
-      "status": "partly",
-      "resolved": "this branch (phase 1)",
-      "note": "Sharp and Pill fixed (S3); a small card still derives from the medium control radius"
+      "status": "done",
+      "resolved": "this branch (phase 7)",
+      "note": "Sharp and Pill fixed (S3). A small card keeps the owner's 22 corner (control-md radius + 6 + 8) rather than going to 20 from the small control; recorded as the owner value over strict concentricity with a small header action"
     },
     {
       "id": "F-2",
@@ -4298,7 +4510,8 @@
       "severity": "medium",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-3",
@@ -4313,7 +4526,7 @@
         "S7"
       ],
       "status": "done",
-      "resolved": "this branch (phase 2)"
+      "resolved": "PR 31 (phase 2)"
     },
     {
       "id": "F-4",
@@ -4328,7 +4541,7 @@
         "S10"
       ],
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "id": "F-5",
@@ -4357,7 +4570,7 @@
         "S8"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "F-7",
@@ -4369,7 +4582,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "ColorField divides hex and opacity with a #f3 rule; ColorPicker uses a 1px surface gap like Figma. Open since the ColorPicker pass.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-8",
@@ -4384,7 +4598,7 @@
         "S2"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)",
+      "resolved": "PR 31 (phase 1)",
       "note": "S2: rule rewritten to match the code"
     },
     {
@@ -4410,7 +4624,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Clicking 1 October in September commits a value with no visible change; outside days use fg-disabled, which is reserved for disabled text.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-11",
@@ -4439,7 +4654,7 @@
         "S4"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "F-13",
@@ -4464,7 +4679,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Disabled dims twice (nested Buttons end at 25%, fields get field paint × 50%) and AlignmentPicker's frame stays at 100%.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-15",
@@ -4476,7 +4692,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "The 2D area keeps a focus ring after any mouse drag and shows two rings on keyboard focus.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-16",
@@ -4488,7 +4705,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "In RTL the area's arrow keys flip while its gradient stays physical; native range tracks mirror over physical 90deg gradients, so thumbs leave their colours. AlignmentPicker forces dir=ltr.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-17",
@@ -4500,7 +4718,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "The Sections tile puts an outline Select among soft NumberFields, breaking \"a Panel's rows are all soft\".",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-18",
@@ -4512,7 +4731,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Copies Figma but breaks \"one surface, one field style\" that Panel applied to the same evidence.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-19",
@@ -4556,7 +4776,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Manifest default is plain; every tile except \"Plain\" passes surface.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-22",
@@ -4568,7 +4789,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "CardTitle is a div, Panel's title a span above h3 sections, Calendar months a hard-coded h2 with aria-live on every month.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-23",
@@ -4580,7 +4802,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "The horizontal scroll wrapper can't be focused or named (axe scrollable-region-focusable); ref and props only reach <table>; interactive rows paint a whole-row hover for a first-cell link.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-24",
@@ -4592,7 +4815,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "A ghost sm Button in a padded th makes the sort header ~44 tall (36 elsewhere) and moves the label off the column edge; the arrow is a text character.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-25",
@@ -4603,7 +4827,8 @@
       "severity": "medium",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-26",
@@ -4615,7 +4840,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Insets 12/16 and gaps 8/12 are flat spacing; under compact the controls shrink and insets stay.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-27",
@@ -4627,7 +4853,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "The handle reads the generic private --_inset, which ColorPicker (15) and Popover (11) also define.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-28",
@@ -4639,7 +4866,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Panel audit rule: controls at the panel's tier. Panel has no size context.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-29",
@@ -4651,7 +4879,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "A linked Card only lifts controls in four named slots above its stretched link; a control in a well, carousel or a direct-child Slider becomes unclickable.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-30",
@@ -4663,7 +4892,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "ColorSwatch 20% of side (rounds under Sharp), Chip swatches are circles, Token swatches radius-small − 2, the palette's checked cell switches role. Figma's split chit still open.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-31",
@@ -4675,7 +4905,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Swatch cells 24/28/32, alignment cells 20/24/32; plate+ring vs bars. Figma sizes the alignment grid to the layout (88 × 56).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-32",
@@ -4687,7 +4918,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "16px pill tracks and ringed thumbs vs Slider's 4px rail. Deliberate (Figma).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-33",
@@ -4702,7 +4934,7 @@
         "S3"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)"
+      "resolved": "PR 31 (phase 1)"
     },
     {
       "id": "F-34",
@@ -4713,7 +4945,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "report",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-35",
@@ -4725,7 +4958,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "No Calendar keyboard test (the source of F-9); the cohesion lift guard omits .area-color-picker; nothing tests inner-rule vs container-edge.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-36",
@@ -4737,7 +4971,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Card edge and media, and the swatch edge, read neutral palette rungs where bg-component and bg-stripe already match.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-37",
@@ -4748,7 +4983,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "hygiene",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "F-38",
@@ -4760,7 +4996,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Card overlay fades over 200ms; Panel chevron and PropertyList handle appear instantly.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-1",
@@ -4775,7 +5012,7 @@
         "S6"
       ],
       "status": "done",
-      "resolved": "this branch (phase 2)"
+      "resolved": "PR 31 (phase 2)"
     },
     {
       "id": "G-2",
@@ -4790,7 +5027,7 @@
         "S7"
       ],
       "status": "done",
-      "resolved": "this branch (phase 2)"
+      "resolved": "PR 31 (phase 2)"
     },
     {
       "id": "G-3",
@@ -4815,7 +5052,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "subtle is #f7, darker than the default #fa, and identical to default in dark.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-5",
@@ -4827,7 +5065,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Keywords use danger-vivid (the same red as the diff \"removed\" marker) and strings follow the accent axis.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-6",
@@ -4839,7 +5078,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "1px inset underline vs Tabs' 2px bar, a plate vs pending bar on hover, +2 vs inset focus, no forced-colours rule; the spec calls it a match.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-7",
@@ -4850,7 +5090,8 @@
       "severity": "medium",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-8",
@@ -4861,7 +5102,8 @@
       "severity": "medium",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-9",
@@ -4872,7 +5114,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-10",
@@ -4884,7 +5127,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Kbd becomes a pill under the Pill preset.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-11",
@@ -4912,7 +5156,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "SplitButton, Menu triggers and Select don't show an open state.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-13",
@@ -4939,7 +5184,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Composer disabled doesn't disable its actions, though the docs say \"actions dim\".",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-15",
@@ -4951,7 +5197,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "IME guard reads isComposing only; always internally controlled so form reset won't clear it; ref goes to the textarea but rest to the outer div; no Composer tests.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-16",
@@ -4963,7 +5210,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Suggestion text starts at 48, the composer's text at 56; ChatGPT aligns both at 52 (computed from CSS).",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-17",
@@ -4975,7 +5223,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Suggestion rows use 16 instead of the row role (8, as ChatGPT); composer, bubble and rows stay 8 under Sharp.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-18",
@@ -4991,7 +5240,7 @@
         "S9"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "G-19",
@@ -5003,7 +5252,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "The ResizeObserver watches only the container, so streamed growth is missed; focus drops to body after a click; no visible-state tile.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-20",
@@ -5015,7 +5265,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Separators, the selected language-tab underline, the :target rail and highlight tints are backgrounds or shadows and vanish in forced colours.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-21",
@@ -5027,7 +5278,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Copy is likely announced twice and failure has no visual state; the toggle changes label and aria-expanded; collapsed lines stay focusable; every linked line number is a tab stop; \"Language\" is hard-coded.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-22",
@@ -5039,7 +5291,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "The stacked Composer demo's mode menu has no aria-checked, unlike ModelPicker.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-23",
@@ -5051,7 +5304,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Against DESIGN_SYSTEM's Example copy.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-24",
@@ -5066,7 +5320,8 @@
         "S17"
       ],
       "status": "done",
-      "resolved": "this branch (phase 6)"
+      "resolved": "this branch (phase 6)",
+      "progress": "CodeBlock onValueChange, Composer loading, ModelPicker triggerProps, ScrollToLatest buttonProps, Message default author and the --area-composer-inline-size hook done; field-like Composer keeps ref on its textarea (as Input refs its control); chips stay non-dismissible (documented)."
     },
     {
       "id": "G-25",
@@ -5078,7 +5333,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Small Message spec and DESIGN_SYSTEM mismatches.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-26",
@@ -5090,7 +5346,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "0.875em / 1.35 (renders 14 / 18.9 in body text, 12.25 / 16.5 in small text); diff markers are 500.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-27",
@@ -5102,7 +5359,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "ChatGPT's code block uses a 24 corner and 12/20 code; Area keeps 12 and 14/20.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "G-28",
@@ -5114,7 +5372,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "No decorative option; vertical rules need a flex parent; only the vertical inset has a hook.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-1",
@@ -5145,7 +5404,7 @@
         "S3"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)"
+      "resolved": "PR 31 (phase 1)"
     },
     {
       "id": "H-3",
@@ -5176,9 +5435,8 @@
       "rules": [
         "S21"
       ],
-      "status": "partly",
-      "resolved": "this branch (phase 7)",
-      "note": "mark-* and inset-surface-* roles exist and Badge, Count, Kbd, Indicator, Popover, Dialog read them; compact values await measurement; Card, Panel, Tooltip insets still fixed"
+      "status": "open",
+      "note": "Marks hold in compact by evidence and now read mark-* (S21a); surface insets stay fixed until compact surface captures exist (F-26 B)"
     },
     {
       "id": "H-5",
@@ -5193,7 +5451,7 @@
         "S21"
       ],
       "status": "done",
-      "note": "19 dark captures; edge-float, 20% dark shadow ink, dark tooltip, no Card halo in dark; scrim kept",
+      "note": "Dark pass (S21c): page near-black (975), scrim 50%, border-float for floating frames, all families swept for text and surface separation against ChatGPT dark (docs/research/captures/baseline/chatgpt--dark-tokens--2026-10-01.md); the shadow ink stays one role because shadows barely read on a near-black page, and floating frames now carry the separation",
       "resolved": "this branch (phase 7)"
     },
     {
@@ -5209,7 +5467,7 @@
         "S2"
       ],
       "status": "done",
-      "resolved": "this branch (phase 1)",
+      "resolved": "PR 31 (phase 1)",
       "note": "S2: rule rewritten to match the code"
     },
     {
@@ -5222,7 +5480,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Card's title uses text-md (14/20 in compact) while Dialog's uses fixed 16/24; typography.md gives both the same role.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-8",
@@ -5237,7 +5496,7 @@
         "S14"
       ],
       "status": "done",
-      "resolved": "this branch (phase 5)"
+      "resolved": "PR 31 (phase 5)"
     },
     {
       "id": "H-9",
@@ -5254,7 +5513,8 @@
       ],
       "status": "done",
       "resolved": "this branch (phase 7)",
-      "note": "Shadows became Surface roles (S10); the other value clusters wait for the token phase (S21b)"
+      "note": "Shadows became Surface roles (S10); opacity-disabled and scrim (S21b); the 16/20/24 mark ladder is mark-* (S21a); z-index stays local by design (overlays use the top layer)",
+      "progress": "Phase 6/7: opacity-disabled and scrim tokens added; floating lift was S10; the 16/20/24 mark ladder waits for S21a; z-index stays local by design."
     },
     {
       "id": "H-10",
@@ -5285,7 +5545,7 @@
         "S9"
       ],
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "id": "H-12",
@@ -5300,7 +5560,9 @@
         "S17"
       ],
       "status": "done",
-      "resolved": "this branch (phase 6)"
+      "resolved": "this branch (phase 7)",
+      "progress": "Segmented onValueChange, Checkbox onCheckedChange, controllable Dialog and Hover card, delay/closeDelay done; ContextMenu stays uncontrolled (it opens at the pointer).",
+      "note": "Checked, open and value callbacks unified (S17, C-7); ContextMenu stays uncontrolled by design (it opens at the pointer)"
     },
     {
       "id": "H-13",
@@ -5315,7 +5577,9 @@
         "S17"
       ],
       "status": "done",
-      "resolved": "this branch (phase 7)"
+      "resolved": "this branch (phase 7)",
+      "progress": "Kbd sm/md + variant, Code/Token booleans, Badge inverse, Tabs/Table default md done; single-value axes and forwarding props are written exceptions (DESIGN_SYSTEM); Indicator default and tone sets are S19; Card compact and Presence xs open.",
+      "note": "Kbd, Code/Token, Badge inverse, Tabs/Table md (S17); 2026-10-01 owner go-ahead for the breaking pass: Button align start|end, IndicatorAnchor overlap rectangular|circular and inset (was compact), Card layout thumbnail (was compact), Switch tone axis removed for the --area-switch-color hook"
     },
     {
       "id": "H-14",
@@ -5330,7 +5594,9 @@
         "S17"
       ],
       "status": "done",
-      "resolved": "this branch (phase 7)"
+      "resolved": "this branch (phase 7)",
+      "progress": "MenuItem icon added; leadingIcon/leadingVisual/visual, trailing vs trailingIcon and collection names (tabs, options, items, models, suggestions) not renamed.",
+      "note": "Collections are items (Tabs, Segmented, Combobox, ColorSwatchPicker, ModelPicker, PromptSuggestions; old names aliased); icon / trailingIcon for glyphs, leadingVisual for media; Input's leadingIcon / trailingIcon is the written exception (DESIGN_SYSTEM)"
     },
     {
       "id": "H-15",
@@ -5354,8 +5620,9 @@
       "severity": "medium",
       "type": "FIX",
       "route": "report",
-      "status": "open",
-      "typeNote": "fix (verify in emulation first)"
+      "status": "done",
+      "typeNote": "fix (verify in emulation first)",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-17",
@@ -5372,7 +5639,7 @@
       ],
       "status": "done",
       "typeNote": "decision + fix",
-      "resolved": "this branch (phase 7)"
+      "resolved": "this branch (phase 6)"
     },
     {
       "id": "H-18",
@@ -5397,7 +5664,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Physical position-area span-left; two dead RTL rules in navigation.css that inset.css overrides.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-20",
@@ -5409,7 +5677,10 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Card reveal uses a literal 200ms that ignores motion=none and reduced motion; literal loops don't follow the expressive preset.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)",
+      "progress": "Card reveal transition now derives from duration-base (200 at default, follows the motion axis). Loops (Spinner, Message pulse, Progress, Skeleton) still do not scale with expressive.",
+      "note": "Card reveal on the duration token (earlier); the Spinner, Skeleton, Progress and Message loops are multiples of the duration tokens, so they follow expressive and equal the spec at subtle"
     },
     {
       "id": "H-21",
@@ -5420,7 +5691,8 @@
       "severity": "medium",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-22",
@@ -5431,7 +5703,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-23",
@@ -5442,7 +5715,8 @@
       "severity": "low",
       "type": "FIX",
       "route": "drift",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-24",
@@ -5454,7 +5728,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "15 GalleryReview rows still render (including the rejected Kbd edge proposal and a three-size Chip row); ~40 dead demo exports; practices.mjs uses \"Jane Doe\".",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-25",
@@ -5466,7 +5741,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Presence is a full public component (xs–lg) that Indicator duplicates; the Token manifest says deprecated but the React export isn't marked.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-26",
@@ -5478,7 +5754,8 @@
       "type": "DECISION",
       "route": "call",
       "summary": "Each Button dims separately, so the shared seam and overlapped border show at ~75%.",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "id": "H-27",
@@ -5490,7 +5767,8 @@
       "type": "FIX",
       "route": "fix",
       "summary": "Hard-coded English accessible names: \"Close dialog\", \"Previous/Next month\", \"Language\", \"Model\".",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     }
   ],
   "drift": [
@@ -5499,83 +5777,91 @@
       "says": "Keycaps radius 4, concentric inside Buttons",
       "now": "6px everywhere, not concentric (owner 09-28)",
       "status": "done",
-      "resolved": "this branch (phase 4)"
+      "resolved": "PR 31 (phase 4)"
     },
     {
       "where": "DESIGN_SYSTEM.md:41-43 · typography.md:47,50",
       "says": "Every title and heading is 400",
       "now": "Popover, Dialog, Toast, Alert, Card, Panel, Calendar titles are 500 (see S2)",
       "status": "done",
-      "resolved": "this branch (phase 1)"
+      "resolved": "PR 31 (phase 1)"
     },
     {
       "where": "DESIGN_SYSTEM.md:79,86",
       "says": "Outline fields keep shadow-1",
       "now": "Only Select does (B-2)",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "DESIGN_SYSTEM.md:96-98",
       "says": "Toolbar and menu separators use border-divider",
       "now": "Both use border-decorative (owner 09-27)",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "DESIGN_SYSTEM.md:171-173 · cohesion-audit.md:53,68",
       "says": "Every surface uses the container role; Card is twice the container radius",
       "now": "Card = control-md + inset + step (22/24/28); Dialog 16; Tooltip 10; banner 6",
       "status": "done",
-      "resolved": "this branch (phase 1)"
+      "resolved": "PR 31 (phase 1)"
     },
     {
       "where": "DESIGN_SYSTEM.md:88 vs :100-101",
       "says": "Card edge is neutral 100 and also the divider role",
       "now": "Card #ee (neutral 100), Table #e2 (divider)",
       "status": "done",
-      "resolved": "this branch (phase 2)"
+      "resolved": "PR 31 (phase 2)"
     },
     {
       "where": "DESIGN_SYSTEM.md:52-55,163-164",
       "says": "Checkbox/Radio 16px at sm and md; Badge 20/24/28; four families await owner review",
       "now": "sm removed; Badge ramp changed; all Complete",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "DESIGN_SYSTEM.md:76-77",
       "says": "Nested dismiss is 28px, small-button radius",
       "now": "Dialog 32 (by decision), Chip 20/24/32 circles, Badge 12/16 circles (S9)",
       "status": "done",
-      "resolved": "this branch (phase 3)"
+      "resolved": "PR 31 (phase 3)"
     },
     {
       "where": "DESIGN_SYSTEM.md:44",
       "says": "Placeholder uses the disabled level",
       "now": "Placeholder uses fg-placeholder / muted",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "DESIGN_SYSTEM.md:84",
       "says": "Tone defaults are neutral in every family",
       "now": "Indicator defaults to danger (C-14)",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "DESIGN_SYSTEM.md:149",
       "says": "Compact md type 13/18",
       "now": "Not on the six-size ramp",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "COMPONENTS.md:75-80 · Breadcrumb line",
       "says": "ButtonGroup, Toolbar, SplitButton, NumberField, InputGroup, Breadcrumb \"in review\"",
       "now": "All Complete",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "Specs status lines",
       "says": "toolbar, segmented, table, overlay, color-swatch-picker, color-picker, alignment-picker, input, input-group, select: \"in review\"",
       "now": "Complete",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "toolbar.md · pages.mjs:140",
@@ -5587,49 +5873,57 @@
       "where": "button.md:226,231 · split-button.md:60,142",
       "says": "Ghost hover bg-hover; sm keeps 4 with 12px text; ghost excluded",
       "now": "bg-component-hover; sm is 14/20; ghost exists",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "tooltip.md:71,122-123,143,115",
       "says": "Padding 4/8, radius 6, Kbd radius 2, behaviour not implemented, forced colours covered",
       "now": "4/10, 10, 6, implemented 09-27, no rules",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "spinner.md · skeleton.md · progress.md",
       "says": "2s, conic arc, track #eee, reduced motion stops; 1.4s, rectangle/rounded",
       "now": "1s SVG masks, 25% ink track, slows; 3s, block/text/circle",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "alert.md:65-67,119,158",
       "says": "Padding 8, title 400, Dialog close radius-control-sm",
       "now": "10/12, 500, 8",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "popover.md:104-109 · hover-card.md:40",
       "says": "4px offset, CSS anchor, .area-popover-anchor wrapper",
       "now": "8px, JS computePosition, no wrapper (Hover card still on the old path, E-5)",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "panel.md · calendar.md · table.md · card.md:144,192",
       "says": "Bar 37, titles 400, rules border-divider; cells 28, 14/20; border rgb(243); radius 12·16·24",
       "now": "Current values in code (see F-25)",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "color-swatch.md · color-swatch-picker.md · alignment-picker.md · inspector.md",
       "says": "22% hairline, radius 4, cell 8/9/10, sm 22, xs/lg tiers",
       "now": "Solid edge, 20% corner, 7.2/8/8.8, 20, sm/md",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "code-block.md · code.md · separator.md",
       "says": "border-divider rules, #fafafa ground, 550 syntax, Kbd control-xs",
       "now": "border-decorative, white, 500 rungs, 6px keycap",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "switch.md:141 · slider.md · pages.mjs:714",
@@ -5653,13 +5947,15 @@
       "where": "COMPONENTS.md · specs/README.md",
       "says": "\"In review\" throughout; Existing library omits 13 families; 34 README rows say in review; count.md has no row",
       "now": "All 58 Complete",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     },
     {
       "where": "Per-family specs",
       "says": "Accent tones and tone=\"accent\"",
       "now": "Accent is an emphasis role, not a variant (D1)",
-      "status": "open"
+      "status": "done",
+      "resolved": "this branch (phase 7)"
     }
   ],
   "checks": [

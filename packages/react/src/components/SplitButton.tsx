@@ -4,9 +4,9 @@ import { Button, type ButtonProps, type ButtonTone } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Menu } from "./primitives.tsx";
 import { MANIFESTS, splitButtonVariants, type VariantProps } from "../variants.ts";
-import { InToolbar, clearToolbar, toolbarItemProps } from "./toolbar-context.ts";
+import { InToolbar, ToolbarSize, toolbarItemProps } from "./toolbar-context.ts";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
-import { assignRef, useAnchoredPosition } from "./overlay.ts";
+import { assignRef, clearToolbar, useAnchoredPosition } from "./overlay.ts";
 
 export interface SplitButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, "onClick" | "children"> {
   /** Fill treatment, shared by both parts. `ghost` is Figma's tool with its menu: two plates
@@ -43,11 +43,13 @@ const items = (menu: HTMLElement | null) =>
  * which supplies Escape, light dismissal and focus return. Arrow keys move through the menu.
  */
 export const SplitButton = /* @__PURE__ */ forwardRef<HTMLDivElement, SplitButtonProps>(function SplitButton(
-  { variant = "solid", tone, size, children, icon, iconOnly, selected, onClick, menu, menuLabel = "More options", disabled, actionProps, className, style, ...rest },
+  { variant = "solid", tone, size: sizeProp, children, icon, iconOnly, selected, onClick, menu, menuLabel = "More options", disabled, actionProps, className, style, ...rest },
   ref,
 ) {
   const id = useId();
   const inToolbar = useContext(InToolbar);
+  const toolbarSize = useContext(ToolbarSize);
+  const size = sizeProp ?? toolbarSize;
   const roving = inToolbar ? toolbarItemProps : {};
   const menuId = `${id}-menu`;
   const popup = useRef<HTMLDivElement | null>(null);

@@ -1,9 +1,0 @@
-<svg data-set="area-pilot" data-keyline="square" data-angles="free" data-dot="free" data-counter="sliver" data-group="agent" data-label="Generator (wizard hat, band, bent tip)" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M2.85 6.622A2.5 2.5 0 0 0 2 8.5V11A2.5 2.5 0 0 0 4.5 13.5H11.5A2.5 2.5 0 0 0 14 11V8.5A2.5 2.5 0 0 0 13.15 6.622" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M0 6.86Q8 9.89 16 6.86" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="solid" d="M4 6.871 C5 4.25 6.25 1.5 9.25 1.5C10.5 1.5 11.75 2 12.5 2.75A0.5 0.5 0 0 1 11.85 3.45C11.2 3.05 10.4 3.2 10.65 4.15L12 6.871Q8 7.629 4 6.871Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1.5 6.25Q8 8.25 14.5 6.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="knockout" d="M4.784 5.005Q7.934 5.485 11.083 5.025" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="knockout" d="M5 9V10.5M11 9V10.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="hole" cx="8" cy="11.25" r="0.75" fill="currentColor"/>
-</svg>

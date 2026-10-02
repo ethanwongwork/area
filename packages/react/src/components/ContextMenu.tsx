@@ -6,9 +6,9 @@ import { Menu } from "./primitives.tsx";
 export interface ContextMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
   /** The menu's rows: MenuItem, MenuLabel, MenuSeparator. */
   menu: ReactNode;
-  /** Names the menu ("Page actions"). */
-  "aria-label"?: string;
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
+  /** Names the menu for assistive tech ("Page actions"); the menu is a sub-part, as SplitButton's `menuLabel` (audit D-18). */
+  menuLabel?: string;
+  /** @deprecated Use `menuLabel`. */
   label?: string;
   /** The area that opens the menu when right-clicked. */
   children: ReactNode;
@@ -31,7 +31,7 @@ const itemsOf = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>('[
  * the Menu key). Choosing a row, Escape or a click elsewhere closes it and focus returns.
  */
 export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function ContextMenu(
-  { menu, label, "aria-label": ariaLabel, children, onOpenChange, disabled, className, onContextMenu, onKeyDown, ...rest }, ref,
+  { menu, menuLabel, label: labelProp, children, onOpenChange, disabled, className, onContextMenu, onKeyDown, ...rest }, ref,
 ) {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
@@ -87,12 +87,13 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
 
   return <div ref={ref} className={contextMenuVariants({}, className)} onContextMenu={open} onKeyDown={openFromKeyboard} {...rest}>
     {children}
-    <Menu ref={menuRef} popover="auto" aria-label={ariaLabel ?? label} tabIndex={-1} className="area-context-menu__menu"
+    <Menu ref={menuRef} popover="auto" aria-label={menuLabel ?? labelProp ?? "Context menu"} tabIndex={-1} className="area-context-menu__menu"
       onToggle={event => { if ((event.nativeEvent as ToggleEvent).newState === "closed" && point) close(false); }}
       onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); menuRef.current?.hidePopover(); close(true); } else if (event.key === "Tab") { event.preventDefault(); menuRef.current?.hidePopover(); close(true); } }}
       onClick={event => {
         const item = (event.target as HTMLElement).closest('[role^="menuitem"]');
-        if (!item || item.hasAttribute("disabled") || item.getAttribute("role") !== "menuitem") return;
+        // As an anchored Menu: a checkbox row stays open, an action or a radio choice closes (audit D-11).
+        if (!item || item.hasAttribute("disabled") || item.getAttribute("role") === "menuitemcheckbox" || (item as HTMLElement).dataset.keepOpen !== undefined) return;
         menuRef.current?.hidePopover();
         close(true);
       }}>

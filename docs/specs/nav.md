@@ -1,6 +1,6 @@
 # Nav spec
 
-**Status:** in review · 2026-09-26 (cohesion audit, second pass)
+**Status:** accepted · 2026-09-27 (batches 1-3; was: in review · 2026-09-26 (cohesion audit, second pass))
 **Captures:** `docs/research/captures/nav/`, `docs/research/captures/baseline/`
 **Peers:** Menu (rows, plates, labels), Tree view (navigation rows), Tabs (neutral current
 marker), Breadcrumb (hover plate), Button ghost (row actions)
@@ -27,6 +27,9 @@ marker), Breadcrumb (hover plate), Button ghost (row actions)
   marker option.
 - 2026-09-26: Neutral by default, accent by override ([design system](../DESIGN_SYSTEM.md#color-and-focus)).
   The current plate and the marker rail are neutral; `tone="accent"` carries the accent.
+  *Superseded 2026-09-29 (owner, D1): the marker rail is the Selection role (`fg-selection`,
+  nav.css:167), accent by theme; the current plate stays neutral in every theme; `tone` was
+  removed.*
 - 2026-09-26: Decide every open item with the most calculated option consistent with the
   system ([second pass](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions),
   item 15). The vertical measure is now 240, Figma's file-browser sidebar, replacing 200.
@@ -41,8 +44,7 @@ expansion state (Tree view) or a view switcher inside a page (Tabs).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| orientation | vertical (default; `.area-nav--vertical` restates the base), horizontal | Sidebar; top-level routes | ChatGPT, Notion and Figma sidebars; prior decision |
-| tone | neutral (default), accent | Owner rule | ChatGPT and Notion current rows are neutral 5%; Figma's file-browser current row is a blue tint |
+| orientation | vertical (default), horizontal | Sidebar; top-level routes | ChatGPT, Notion and Figma sidebars; prior decision |
 | selection | plate (default), marker | Quiet current-location rail for outlines | Prior decision |
 | composition | groups, icons, counts, row actions, expandable | Sidebar content | ChatGPT recents (hover actions), Notion sidebar (icon rows, group labels), Figma sidebar (24px trailing action at opacity 0) |
 | state | disabled | Unavailable destination | Untitled 50% |
@@ -75,7 +77,7 @@ figma    sidebar row 224 × 28, padding 0/4, radius 5; 24px icon box, gap 8, tex
          11/16 400; a 24px trailing action at opacity 0 until hover       (sidebar-row--hover node 10)
   page   button 224 × 24, radius 5; text at 8, 11px; current 550, rest 400
 area     nav.area-nav flex column, gap 2, 240 wide
-  item   a.area-nav__item 32px, radius 8, gap 12 (gap-row; horizontal 6), fg-muted; aria-current draws current
+  item   a.area-nav__item 32px, radius 8, gap 12 (gap-row; horizontal 6), fg-default (marker variant fg-muted); aria-current draws current
     icon 16px (.area-nav__icon); text truncates; trailing fg-muted
   row    .area-nav__row: item + .area-nav__actions (28px buttons), one shared plate
   label  .area-nav__label 32px, fg-muted
@@ -120,12 +122,12 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 | hover plate | `bg-component-hover` #f3f3f3 / #333333; ink fixed | Row-plate rule; ChatGPT 5% black; Figma page row #f5 | — |
 | current | `bg-component-active` #eeeeee / #3f3f3f, ink `fg-default` | Selection one step above hover; Notion and ChatGPT current ink is the default ink | Notion, ChatGPT and Figma pages use the hover fill for current |
 | current weight | 400 | One weight per label (second pass) | Figma pages 550 current, 400 rest |
-| marker rail | `fg-default` (accent-solid #5c5dfe with `tone="accent"`) | Owner rule 2026-09-26 | Figma's file browser tints the current row blue; the owner rule outranks it |
-| accent current | `accent-surface-hover` #e1e7fd / #2d297e, `fg-accent` | Owner rule (override) | — |
+| marker rail | `fg-selection` (nav.css:167): `fg-default` by default, the accent when a theme sets selection to accent | Owner rule 2026-09-26; emphasis roles 2026-09-29 | Figma's file browser tints the current row blue; the owner rule outranks it |
 | disabled | whole row 50% | Audit disabled rule; Untitled 50% | — |
 | item gap | 2 | Untitled 2 (38 pitch, 36 rows) | Notion, Figma single-row captures only |
 | separator | 1px `border-divider` #e2e2e2 / #333333 | Second pass divider role | Was `border-decorative` |
 | group label | 32px row, **14/20 500** `fg-muted`, start 8 | Owner (2026-09-27, second message): ChatGPT's section title 14/18 500 rgb(143) (`nav/chatgpt--sidebar-section-label`) | Area's 14 leading is 20; rgb(143) is 3.3:1, so the ink is `fg-muted`. Notion's 12/16 was the first message's choice. Menu keeps 12/16 (Notion's menus) |
+| nested group | `NavGroup nested` (`area-nav__group--nested`): the content steps in by Tree view's level step, a 16px slot + 6 gap = 22 (`--_nav-indent`, `nav.css:74-77`), added to the row's start inset by the inset contract (`inset.css:172-173`); plates stay full width; no group gap above it | Audit D-20 A (owner 2026-09-30); Tree view's 22px level | Children used to sit on the parent's column |
 | group gap | **12** + the 2px item gap | ChatGPT 21 between sections at 35px rows (`nav/chatgpt--sidebar-projects-section`) | Notion 4; was 8 |
 | width | **240** (`--area-nav-inline-size` fallback, `/* spec */`, `nav.css:27`) | Figma file-browser sidebar: 224 rows + 8 inset | Was 200 (prior decision); Notion rows 254. Docs demos render at this width, no longer framed at 260 (`apps/docs/src/demos/nav.tsx:4`, third pass) |
 | row actions | 28px ghost buttons, always shown; hover `bg-hover`, press `bg-active` (`nav.css:243`), so they show on a hovered or current row | Prior decision (independent action slots); audit S11c | ChatGPT (20px pills) and Figma (24px) show actions only on hover |
@@ -133,7 +135,9 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 Third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
 1. Group label: kept. Notion's sidebar label is 12/16 in its tertiary ink rgb(161, 158, 153)
    in a 30px row (`baseline/notion--sidebar-label--rest`); Area's stays the item's 14/20 in
-   `fg-muted` at 32. Menu's label is the same, and the two stay one pattern.
+   `fg-muted` at 32. Menu's label is the same, and the two stay one pattern. *Superseded
+   2026-09-27: Nav's group title is 14/20 at 500 in `fg-muted` (ChatGPT; nav.css:68-84); Menu's
+   label is 12/16 at 400 (surface.css:1102-1111). They are no longer one pattern.*
 
 2. Trailing Badge inset: settled. The item reserves the pill's own height (20, or 16 for a
    small Badge; `inset.css:221-224`), so a count ends 6px from the plate's edge, as it sits
@@ -143,7 +147,7 @@ Third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questi
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
-| rest | transparent, `fg-muted` | `area--default` rows 2–3 |
+| rest | transparent, `fg-default` (marker variant `fg-muted`) | `area--default` rows 2–3 (captured before the 2026-09-27 ink change) |
 | hover | plate `bg-component-hover` (row or `.area-nav__row`); not on the current row | `chatgpt--sidebar-row--hover`, `figma--page-row--hover`; `nav.css:131, 242` |
 | focus-visible | 2px `focus-color` outline, inset (offset −2), as Tabs, so rows 2 apart don't overlap the ring (audit S11b) | `nav.css:168-172` |
 | current (`aria-current`) | plate `bg-component-active`, `fg-default`, kept under the pointer; marker: no plate, rail | `area--default` row 1, `area--marker`; `notion--sidebar-row-current--hover` |
@@ -155,9 +159,11 @@ Third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questi
 which is also the paint selector (Figma's page rows use the same attribute). Disabled items
 drop `href`, set `aria-disabled`, `tabIndex=-1` and cancel clicks (`Nav.tsx:68-96`). Labelled
 groups are `role=group` with `aria-labelledby` (Notion's label is a `role=button` with
-`aria-expanded`). Row actions are sibling buttons, never nested in the link. `NavSeparator` forwards its ref and
-native props (`Nav.tsx:98-100`). Horizontal navs
-scroll rather than wrap. RTL uses logical properties; not verified.
+`aria-expanded`). Row actions are sibling buttons, never nested in the link. Horizontal navs
+scroll rather than wrap. RTL uses logical properties; a collapsed group chevron points along the
+reading direction (`:dir(rtl)` rotates it 90°, `nav.css`, audit D-13). Forced colours paint the
+current row `Highlight` / `HighlightText`, and the marker variant's rail `Highlight`
+(`forced-colors.css`, audit D-14).
 
 ## Peers and consistency
 
@@ -165,10 +171,10 @@ scroll rather than wrap. RTL uses logical properties; not verified.
 |---|---|---|---|---|
 | Menu, Tree view | row height, radius | 32, 8 | 32, 8 | match |
 | Menu, Tree view, Table, Select | hover / selected plates | `bg-component-hover` / `-active` | same | match |
-| Tree view | rest ink, start inset | `fg-muted`, 8 | same | match |
-| Tabs, Tree view | current marker | `fg-default` underline / rail | `fg-default` rail | match (neutral) |
+| Tree view | rest ink, start inset | `fg-default`, 8 (audit D-3) | same | match |
+| Tabs | current marker | `fg-selection` indicator (navigation.css:101) | `fg-selection` rail | match (Selection role); Tree view has no rail (marker removed) |
 | Menu, Button, Tabs | disabled | 50% | 50% | match |
-| Menu | group label, leading icon inset | 32px 14/20 `fg-muted`; 8 | same | match |
+| Menu | group label, leading icon inset | 32px 12/16 400 `fg-muted`; 8 (surface.css:1102-1111) | 32px 14/20 500 `fg-muted`; 8 | inset matches; the label differs since 2026-09-27 (Nav takes ChatGPT's section title, Menu Notion's caption label) |
 | Menu, Command palette, Select | icon-to-label gap | `--area-gap-row` 12, labels at 36 | same (vertical) | match (audit S11a) |
 | Menu | keyboard focus | plate only | inset 2px ring | differs by owner call (audit S11b): Menu keeps plate-only focus |
 
@@ -185,7 +191,7 @@ gallery's Grouped and Icons tiles.
 - Icons: the products draw 20px icons; Area's 16px icon slot reads lighter but keeps the grid.
 - Label ink: Area's `fg-muted` is darker than both products' label inks (143 / 161), kept for
   4.5:1 text contrast.
-- Unverified: dark products, the accent tone beside a product.
+- Unverified: dark products, an accent Selection theme beside a product.
 
 ## Verification
 
@@ -219,6 +225,8 @@ specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
   recipe tile → headless Edge screenshot of the recipe.
 - 2026-09-30 · audit S11 (owner) → vertical items take `--area-gap-row` 12, labels at 36 (was `gap-md` 8, labels at 32; `inset.css:62`); focus ring inset (offset −2, was +2; `nav.css:171`); ghost row actions hover `bg-hover` and press `bg-active` (was `bg-component-hover`, invisible on a hovered row; `nav.css:243`).
 - 2026-09-30 · audit S14 (owner) → horizontal items read `gap-md`, now 6 (was 8; `inset.css:64`); vertical items keep `--area-gap-row` 12.
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → the manifest names `orientation` `vertical` (default, class `.area-nav--vertical` restating the base) | `horizontal`; `NavSeparator` takes a ref and native props.
-- 2026-09-30 · S17 owner calls (owner: "go with your recs") → the default selection is named `plate` (`.area-nav--plate` restates the base current-row plate); `marker` unchanged.
+- 2026-10-01 · audit D-3 (owner pick A) → Tree view rows now rest in `fg-default` as Nav's do; peer row and the stale rest-state row corrected → tree-view.css.
+- 2026-10-01 · audit D-13 → a collapsed group chevron points along the reading direction (`:dir(rtl)` rotate 90) → nav.css.
+- 2026-10-01 · audit D-14 → forced colours: current row `Highlight` / `HighlightText`; the marker rail draws in `Highlight` → forced-colors.css.
+- 2026-10-01 · audit D-20 (owner pick A) → `NavGroup nested` indents an expandable item's children by Tree view's level step (16 + 6 = 22) with full-width plates → Nav.tsx:39, nav.css:74-77, inset.css:172-173.
 - 2026-10-01 · owner: "the counts even on the default component look off from an inset equal padding view" → a plain Count has no plate, so its digits end on the row's glyph edge (8 default, 6 compact), mirroring the label's start; it was placed by its invisible box plus its 6px gutter (digits 17 from the end). A soft Count ends as far from the end as it sits from the top, as a Badge does. Row actions are concentric with the row plate (compact: 6 in a 6 row, was 4). Trailing Kbd and Badge rules read the mark roles, not literal 20/16. docs/research/compact-pass-2026-10-01.md.

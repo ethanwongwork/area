@@ -10,14 +10,13 @@ export const ALIGNMENT_POSITIONS = [
 export type AlignmentPosition = typeof ALIGNMENT_POSITIONS[number];
 
 export interface AlignmentPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
+  /** Accessible name for the complete position choice. */
   label?: string;
   name?: string;
   value?: AlignmentPosition;
   defaultValue?: AlignmentPosition;
   onValueChange?: (value: AlignmentPosition, event: ChangeEvent<HTMLInputElement>) => void;
-  /** `soft` (the soft field fill, default) or `plain`. `"surface"` is a deprecated alias of `soft`
-   * (audit F-20: `surface` is a floating plate everywhere else). */
+  /** `soft` (the field fill, default) or `plain`. `"surface"` is a deprecated alias of `soft` (audit F-20). */
   variant?: VariantProps<typeof MANIFESTS.alignmentPicker>["variant"] | "surface";
   size?: VariantProps<typeof MANIFESTS.alignmentPicker>["size"];
   stretch?: boolean;

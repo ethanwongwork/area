@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { Avatar, Badge, Presence, Indicator, IndicatorAnchor, BadgeGroup, Button, Card, CardContent, CardDescription, CardTitle, Nav, NavItem, Table, Theme } from "@area/react";
+import { Avatar, Badge, Indicator, IndicatorAnchor, BadgeGroup, Button, Table, Theme } from "@area/react";
 import { ArrowIcon, BellIcon, CheckIcon, DismissIcon, InfoIcon, LinkIcon, PlusIcon } from "../icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
@@ -152,7 +152,7 @@ const galleryPlacement = (placement: "top-end" | "top-start" | "bottom-end" | "b
 
 export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromEntries([
   ...(["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"] as const).map(status => [`GalleryBadgePresence${galleryName(status).replaceAll("-", "")}`, () => <Indicator status={status} />]),
-  ...(["xs", "sm", "md", "lg"] as const).map(size => [`GalleryBadgePresenceSize${galleryName(size)}`, () => <Indicator status="available" size={size} />]),
+  ...(["sm", "md", "lg"] as const).map(size => [`GalleryBadgePresenceSize${galleryName(size)}`, () => <Indicator status="available" size={size} />]),
   ...(["available", "away", "busy", "do-not-disturb", "offline"] as const).map(status => [`GalleryBadgePresenceOutside${galleryName(status).replaceAll("-", "")}`, () => <Indicator status={status} outOfOffice />]),
   ...[0, 3, 24, 125].map(count => [`GalleryBadgeCount${count}`, () => <Indicator count={count} />]),
   ["GalleryBadgeActivity", () => <Indicator tone="info" />],
@@ -184,36 +184,7 @@ export const BadgeDismissible = () => {
   return visible ? <Badge variant="color" tone="discovery" dismissLabel="Remove design label" onDismiss={() => setVisible(false)}>Design</Badge> : <Button size="sm" variant="ghost" onClick={() => setVisible(true)}>Restore badge</Button>;
 };
 
-export const BadgePresenceIndicators = () => (
-  <div style={{display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "var(--area-space-16)"}}>
-    {(["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"] as const).map(status => <span key={status} style={{display: "inline-flex", gap: "var(--area-space-8)", alignItems: "center"}}><Presence status={status} aria-hidden="true" />{status.replaceAll("-", " ")}</span>)}
-  </div>
-);
-export const BadgePresenceSizes = () => <div style={{display: "flex", gap: "var(--area-space-16)", alignItems: "center"}}>{(["xs", "sm", "md", "lg"] as const).map(size => <Presence key={size} size={size} aria-label={`Available, ${size}`} />)}</div>;
-export const BadgePresenceOutside = () => <div style={{display: "flex", flexWrap: "wrap", gap: "var(--area-space-16)"}}>{(["available", "away", "busy", "do-not-disturb", "offline"] as const).map(status => <Presence key={status} status={status} outOfOffice />)}</div>;
-export const BadgeCountIndicators = () => (
-  <div style={{display: "flex", gap: "var(--area-space-16)"}}><Indicator count={0} /><Indicator count={3} /><Indicator count={24} /><Indicator count={125} /></div>
-);
-export const BadgeIndicatorActivity = () => <div style={{display: "flex", gap: "var(--area-space-24)", alignItems: "center"}}><Indicator tone="info" /><Indicator tone="info" processing /><Indicator tone="success" withBorder /><Indicator count={8} tone="neutral" /></div>;
 export const BadgeIndicatorZero = () => {
   const [show, setShow] = useState(true);
   return <div style={{display: "flex", gap: "var(--area-space-16)", alignItems: "center"}}><IndicatorAnchor indicator={<Indicator count={0} showZero={show} />}><Button aria-label={show ? "Inbox, 0 notifications" : "Inbox"}>Inbox</Button></IndicatorAnchor><Button size="sm" variant="soft" onClick={() => setShow(!show)}>{show ? "Hide zero" : "Show zero"}</Button></div>;
 };
-
-/*
- * Pass review (2026-09-25, docs/specs/badge.md). Each row isolates one change. "Before"
- * rebuilds the previous values on the current component through its private properties,
- * so both columns render the same code; nothing here is a public API.
- */
-const previous = {
-  sm: { "--_text": "var(--area-control-xs-text)", "--_leading": "var(--area-control-xs-leading)" },
-  lg: { "--_height": "calc(var(--area-space-24) + var(--area-space-4))", "--_gutter": "var(--area-space-12)" },
-  ink: { "--_tone-fg": "var(--area-fg-default)" },
-} as Record<string, CSSProperties>;
-const reviewSentence: CSSProperties = { margin: 0, fontSize: "var(--area-control-md-text)", lineHeight: "var(--area-control-md-leading)", boxShadow: "inset 0 -1px 0 var(--area-border-decorative)" };
-// Pass-1 label: centred by the shell and padded by inset.css, carrying no baseline.
-const previousLabel: CSSProperties = { alignSelf: "auto", paddingBlock: "0.25em" };
-
-/* Badge group pass review (2026-09-25, docs/specs/badge-group.md). */
-const reviewRow: CSSProperties = { display: "flex", alignItems: "center", gap: "var(--area-space-4)", boxShadow: "0 0 0 var(--area-border-width) var(--area-border-decorative)" };
-// An array, not a fragment: BadgeGroup counts its direct children.

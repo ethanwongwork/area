@@ -4,7 +4,7 @@
 the lg thumb; the owner has not re-reviewed it
 **Captures:** `docs/research/captures/slider/`; rail evidence in
 `progress/figma--usage-bar--rest--light`
-**Peers:** Progress (shares the rail), Switch (thumb), Checkbox and Radio (glyph ladder),
+**Peers:** Progress and Switch (share the off-track grey, audit S5), Switch (thumb), Checkbox and Radio (glyph ladder),
 NumberField and Input (range with inputs), ColorPicker channel sliders, Segmented
 
 ## Owner decisions
@@ -17,7 +17,8 @@ NumberField and Input (range with inputs), ColorPicker channel sliders, Segmente
   Its public sizes are the justified small/medium/large family; UI scale owns product-wide
   density. It is owner-confirmed complete.
 - 2026-09-26: **Neutral by default, accent by override** (DESIGN_SYSTEM.md). Slider already
-  followed it.
+  followed it. *Superseded 2026-09-29 (owner, D1): the fill is the Selection role, accent by
+  theme; the `tone` axis was removed.*
 - 2026-09-26 (second pass, owner: decide every open item): the thumb follows the choice
   glyph ladder, 16 / 16 / 20 ([cohesion audit](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions),
   item 8).
@@ -34,10 +35,10 @@ sliders.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | sm, md (default), lg | Row height follows the control tier | Untitled one size |
-| tone | neutral (default), accent | Owner rule | Untitled brand |
 | labelPosition | inline (default), top | Label and readout above the rail | Area composition (owner-confirmed) |
 | orientation | horizontal (default), vertical | Vertical tool panels | Area composition (owner-confirmed) |
-| composition | readout, step marks, range with inputs | Owner-confirmed (above) | Area compositions |
+| composition | readout, step marks | Owner-confirmed (above) | Area compositions |
+| SliderRange | two handles on one rail, optional number fields; sm, md, lg | Audit C-12 A (owner): the range with inputs, promoted to a component | Figma's and Notion's range filters (below) |
 
 ## Sources
 
@@ -89,21 +90,21 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | control · height | `control-sm/md/lg` 28 / 32 / 40 (slider.css:299-301) | Peer rows (Input, Button) | Untitled 24 hit area |
 | rail · thickness | `space-4` 4px (slider.css:21) | Figma's usage bar is 4 | Untitled 8; Figma's 16px channel tracks are a different job |
 | rail · colour | **`edge-control` #e2e2e2** (slider.css:29; range rail slider.css:94) | Audit S5 (owner 2026-09-30): one off-track grey for Switch, Slider and Progress | Figma's rail #e6 and Untitled's #e5; was `fill-toggle` mixed 20% toward `bg-surface` ≈ #dd |
-| fill | `neutral-solid`; accent by tone | Owner | Untitled brand; Figma's usage fill is its blue |
+| fill | **`selection-solid`** (slider.css:25; range slider.css:95): `neutral-solid` by default, the accent when a scope turns the Selection role on | Owner; Selection emphasis role (`emit/base.ts:140-142`) | Untitled brand; Figma's usage fill is its blue |
 | thumb · size | **16 / 16 / 20** (`icon-sm`, `icon-md`, `space-20`; slider.css:299-301) | Second pass: the choice glyph ladder (Checkbox, Radio); Figma 16 | Was the icon ramp, 16 at every tier. Untitled 24 |
 | thumb · construction | surface ring, 1px `edge-control-hover` #d4 (the Checkbox and Radio glyph edge, audit S5; was `border-hover` mixed 35% to surface ≈ #ce), fill dot to 42% of the radius (slider.css:34, 216, 227) | Owner-confirmed; Figma's 4px white ring around the value colour | Untitled: white thumb with a 2px brand ring |
 | thumb · shadow | `shadow-1` | In-flow control; Radix classic and shadcn shadow the thumb | Untitled `shadow-md`; Figma a 3-layer lift |
 | hover | **fill and thumb dot darken; the rail keeps its colour** | Fluent: colour on the thumb and fill only (`useSliderStyles.styles.ts L76-83`); Radix, Base UI: no hover change | Was the rail darkening too. Correction (2026-09-27 survey): antd does darken its rail on hover (`slider/style/index.ts:489-492`); Radix, Fluent and Base UI do not, so the choice stands on the majority |
 | step marks | 1 × 10 ticks behind the rail (3 show above and below) | Kept; Fluent cuts notches into the rail, Material draws 2px dots, Base UI 1 × 8 below | Open: notches would need the marks drawn into the rail itself |
 | readout | 14/20 `fg-muted`, tabular, 4ch | Area value text role | — |
-| label gap | control to readout 6 at sm, md and lg, the density tokens (slider.css:22, :41, :299-301); compact sm 4. The range row keeps 8 (slider.css:98) | Peer: Button (audit S14) | Was 4 / 8 / 8; the range row had read `gap-md` and was pinned to 8 so it did not move |
+| label gap | control to readout 6 at sm, md and lg, the density tokens (slider.css:22, :41, :299-301); compact sm 4. SliderRange's row keeps 8 (slider.css:98) | Peer: Button (audit S14) | Was 4 / 8 / 8; the range row had read `gap-md` and was pinned to 8 so it did not move |
 | disabled | 50% on the label (slider.css:158-160) | Audit rule | Untitled has no disabled style |
 
 ## States
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover | fill and thumb dot `neutral-solid-hover`; the rail keeps `edge-control` (slider.css:32, 233-256); ink fixed | not captured (pseudo-elements) |
+| hover | fill and thumb dot `selection-solid-hover`; the rail keeps `edge-control` (slider.css:32, 233-256); ink fixed | not captured (pseudo-elements) |
 | focus-visible | thumb border and 2px outline in `focus-color` (slider.css:263-274) | not captured |
 | disabled | 50% | `area--disabled` |
 
@@ -111,11 +112,35 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 
 Native `input type="range"`: keyboard, value and announcements are the browser's. The fill is
 `--_pct` set by React from the normalized value, kept in sync on input and form reset
-(primitives.tsx:680-815); a change calls `onValueChange(value, event)`. The readout is
-`aria-hidden` (the input announces the value).
-Vertical uses `writing-mode: vertical-lr; direction: rtl`. The right-to-left mirror and the
-collapsed-range thumb are now one engine's pseudo-element per rule (slider.css:143-146,
-201-202), so each applies in its engine (audit, "Found while writing the specs").
+(primitives.tsx:713); `onValueChange(value, event)` passes the input event. Shift+arrow moves
+ten steps (Carbon, MUI; audit C-31 A, owner 2026-09-30), following the reading direction in
+RTL; the native control takes the value and fires its own input event (primitives.tsx:813-820). The readout is `aria-hidden` (the input announces the value).
+Vertical uses `writing-mode: vertical-lr; direction: rtl`. Right to left: the browser already
+places the thumb from the right, so only the fill turns round, through `:dir(rtl)` on the input
+(`--_fill-dir: to left`, slider.css:208), which matches a `dir` on the input or an ancestor. The
+old `[dir=rtl]` track mirroring (`scale: -1 1`) is removed: it put Chromium's thumb back on the
+left (audit C-11; checked live in Chromium with an ancestor `dir` and the input's own). The
+collapsed-range thumb rules are one engine's pseudo-element per rule, so each applies in its
+engine (audit, "Found while writing the specs").
+
+## SliderRange
+
+`SliderRange` (`SliderRange.tsx`; manifest `area-slider-range`: size sm / md / lg, states
+`overlap` / `disabled`, elements `track` / `input` / `end`) picks a `[start, end]` pair with two
+native range inputs on one rail, so keyboard and form behaviour stay native. It replaces the
+docs-only composition (audit C-12 A, owner).
+
+- Props: `value` / `defaultValue` / `onValueChange([start, end])` (start never above end),
+  `min`, `max`, `step`, `size`, `inputs` (number fields either side, default true), `minLabel` /
+  `maxLabel` (default "Minimum" / "Maximum": the sliders take them, the fields add " value"),
+  `name` / `form` (both inputs submit under `name`, start then end), `disabled`.
+- Rail: the tier height (28 / 32 / 40), 4px `edge-control` rail, fill between the handles in
+  the Selection role (`selection-solid`), so a theme's accent reaches it (slider.css:92-139).
+- Pointer: the rail moves the nearer handle, reading from the right in RTL, and keeps focus on
+  the chosen handle (its mousedown is prevented). Overlapping handles hide the end thumb unless
+  it has keyboard focus (`data-overlap`).
+- Disabled: the rail at the disabled opacity, the fields disabled.
+- Gap between fields and rail 8 (slider.css:98).
 
 ## Peers and consistency
 
@@ -123,7 +148,7 @@ collapsed-range thumb are now one engine's pseudo-element per rule (slider.css:1
 |---|---|---|---|---|
 | Progress, Switch | rail / off track | `edge-control` #e2 (display.css:265, switch.css:20) | slider.css:29 | match (audit S5) |
 | Checkbox, Radio | glyph edge | `edge-control-hover` #d4 (choice.css:48) | thumb edge slider.css:34 | match (audit S5) |
-| Progress, Switch | fill | `neutral-solid` | same | match |
+| Progress, Switch | fill | `selection-solid` (display.css:261, switch.css:14) | same | match |
 | Checkbox, Radio | glyph ladder | 16 / 16 / 20 | thumb 16 / 16 / 20 | match (second pass) |
 | Switch | thumb | surface, `shadow-1`, 16 at md | same | match |
 | Checkbox, Switch | disabled | 50% | same | match |
@@ -133,8 +158,8 @@ collapsed-range thumb are now one engine's pseudo-element per rule (slider.css:1
 
 The gallery groups the tiles (Default, Tones, Sizes, Layout, Content,
 States), with the size tiles added in the second pass. The lg thumb now grows with the
-tier as Checkbox and Radio do. Unverified on screen: the RTL mirror and the collapsed-range
-thumb in Firefox and Safari; dark theme.
+tier as Checkbox and Radio do. Unverified on screen: the RTL fill and the collapsed-range
+thumb in Firefox and Safari (Chromium checked live, audit C-11); dark theme.
 
 2026-09-28 (batch 15, Claude in Chrome): Figma's colour picker reopened (hue and opacity sliders,
 16px pill tracks, the ColorPicker's evidence) and its adjustment slider on file
@@ -168,4 +193,7 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
   value slider yet; Figma's colour-picker tracks are in `color-picker/`.
 - 2026-09-30 · audit S5 (owner) → one off-track grey: rail and range rail `edge-control` #e2 (was ≈ #dd), thumb edge `edge-control-hover` #d4 (was ≈ #ce), shared with Switch, Progress, Checkbox and Radio → slider.css:29, 34, 94.
 - 2026-09-30 · audit S14 (owner) → the control-to-readout gap is 6 at sm, md and lg (was 4 / 8 / 8; slider.css:22, :299-301); the range row is pinned to 8 so it does not move (slider.css:98).
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(value, event)` passes the input event; the manifest defaults `labelPosition` to `inline` and `orientation` to `horizontal`, each with a class restating the base.
+- 2026-09-30 · audit S17 (API vocabulary, slice 1) → `onValueChange(value, event)` passes the input event → `primitives.tsx:679`.
+- 2026-10-01 · audit C-11 → RTL: the fill gradient follows `:dir(rtl)` on the input (`--_fill-dir: to left`); the `[dir=rtl]` track mirroring is removed, it put Chromium's thumb back on the left (checked live in Chromium: ancestor `dir` and the input's own both correct) → slider.css:189-208.
+- 2026-10-01 · audit C-12 (owner pick A) → new `SliderRange` component replaces the docs-only composition: `[start, end]` value API, sm / md / lg, optional number fields, `minLabel` / `maxLabel`, `name` / `form`, `disabled`, RTL-aware pointer mapping, focus kept on the chosen handle; fill is the Selection role → SliderRange.tsx, manifest.ts:277-284, slider.css:92-159.
+- 2026-10-01 · audit C-31 (owner pick A) → Shift+arrow moves ten steps; the thumb stays 16 at md → primitives.tsx:813-820.

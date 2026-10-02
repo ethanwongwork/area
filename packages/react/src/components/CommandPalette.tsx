@@ -36,11 +36,13 @@ export interface CommandPaletteProps extends Omit<HTMLAttributes<HTMLDivElement>
   defaultQuery?: string;
   onQueryChange?: (query: string) => void;
   placeholder?: string;
-  /** Names the palette and its search field ("Command palette"). */
+  /** Names the palette and its search field (default "Command palette"). */
   "aria-label"?: string;
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
+  /** @deprecated Use `aria-label` (audit D-18). */
   label?: string;
   emptyText?: ReactNode;
+  /** What the live region says for a result count while searching (audit D-29). */
+  resultsLabel?: (count: number) => string;
   /** Replaces the key hints below the list; `false` removes them. */
   footer?: ReactNode | false;
   filter?: (item: CommandItem, query: string) => boolean;
@@ -59,9 +61,10 @@ const isApple = () => typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test
  */
 export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(function CommandPalette(
   { items, open: openProp, defaultOpen = false, onOpenChange, inline, hotkey, query: queryProp, defaultQuery = "",
-    onQueryChange, placeholder = "Search or run a command…", "aria-label": ariaLabel, label: labelProp, emptyText = "No results",
+    onQueryChange, placeholder = "Search or run a command…", "aria-label": ariaLabel, label: labelProp, emptyText = "No results", resultsLabel = (count: number) => `${count} ${count === 1 ? "result" : "results"}`,
     footer, filter = matches, className, ...rest }, ref,
 ) {
+  const label = ariaLabel ?? labelProp ?? "Command palette";
   const id = useId();
   const listId = `${id}-list`;
   const [ownOpen, setOwnOpen] = useState(defaultOpen);
@@ -161,7 +164,6 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     if (last && last[0] === item.group) last[1].push(item); else groups.push([item.group, [item]]);
   }
 
-  const label = ariaLabel ?? labelProp ?? "Command palette";
   const surface = <div ref={ref} role={inline ? "search" : undefined} aria-label={inline ? label : undefined}
     className={commandPaletteVariants({ inline }, className)} {...rest}>
     <div className="area-command-palette__search">
@@ -172,6 +174,8 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
         autoComplete="off" spellCheck={false} placeholder={placeholder} value={query}
         onChange={event => setQuery(event.target.value)} onKeyDown={handleKeyDown} />
     </div>
+    {/* The result count, or the empty text, is announced while a query is typed (audit D-29). */}
+    <span className="area-sr-only" role="status">{query ? (rows.length ? resultsLabel(rows.length) : typeof emptyText === "string" ? emptyText : "") : ""}</span>
     <div ref={listRef} id={listId} role="listbox" aria-label={label} className="area-command-palette__list">
       {rows.length === 0 ? <div className="area-command-palette__empty" role="presentation">{emptyText}</div> : null}
       {groups.map(([group, list], g) => group

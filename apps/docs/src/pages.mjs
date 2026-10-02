@@ -28,7 +28,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "indicator", name: "Indicator", manifest: "indicator", imports: "Indicator, IndicatorAnchor",
-    api: [["status / size / outOfOffice", "availability variant; xs10 / sm12 / md16 / lg20; optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "neutral | info | success | warning | danger", "danger"], ["processing / withBorder / disabled", "pulse / surface cutout / hide indicator", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["compact", "inset rectangular count and presence attachments by 4px", "false"]],
+    api: [["status / size / outOfOffice", "availability variant; sm12 / md16 / lg20 (xs dropped, audit C-19); optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "neutral | info | success | warning | danger", "danger"], ["processing / withBorder / disabled", "pulse / surface cutout / hide indicator", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["inset", "inset rectangular count and presence attachments by 4px (was compact)", "false"]],
     examples: [
       {id: "presence", title: "Presence", demo: "GalleryBadgePresenceAvailable", note: "Presence is the status variant of Indicator. Area-drawn glyphs: the ring and mark share the 1.125px icon line weight at every size, following Fluent’s status mapping. Presence remains a compatibility export."},
       {id: "activity", title: "Activity dots", demo: "GalleryBadgeActivity", note: "A 6px dot, matching the Badge dot and Untitled UI; Figma’s unread dot measures 5px. The pulse keeps Mantine’s structure and respects reduced motion."},
@@ -56,7 +56,7 @@ export const COMPONENT_PAGES = [
 
   {
     slug: "color-picker", name: "Color picker", exportName: "ColorPicker", manifest: "colorPicker",
-    api: [["value / defaultValue", "hex color (#RRGGBB or #RRGGBBAA)", '"#8D4DF3"'], ["onValueChange", "(hex, event) => void", "—"], ["variant", '"surface" | "plain" (plain: no frame, inside a Popover or Panel)', '"surface"'], ["alpha", "boolean: opacity track and percentage", "true"], ["model / defaultModel / onModelChange", '"hex" | "rgb" | "css" | "hsl" | "hsb"', '"hex"'], ["eyedropper", "boolean; shown where the EyeDropper API exists", "true"], ["header", "ReactNode row above the editor", "—"], ["swatches / swatchesLabel / onAddSwatch", "ColorSwatchOption[], string, (hex) => void", '[], "Saved colors"'], ["aria-label / name / disabled", "names the group and its controls (\"Fill\" → \"Fill hue\"); form state", '"Color"']],
+    api: [["variant", '"surface" | "plain" (plain drops the floating plate inside a Popover or Panel)', '"surface"'], ["value / defaultValue", "hex color (#RRGGBB or #RRGGBBAA)", '"#8D4DF3"'], ["onValueChange", "(hex) => void", "—"], ["alpha", "boolean: opacity track and percentage", "true"], ["model / defaultModel / onModelChange", '"hex" | "rgb" | "css" | "hsl" | "hsb"', '"hex"'], ["eyedropper", "boolean; shown where the EyeDropper API exists", "true"], ["header", "ReactNode row above the editor", "—"], ["swatches / swatchesLabel / onAddSwatch", "ColorSwatchOption[], string, (hex) => void", '[], "Saved colors"'], ["label / name / disabled", "group name (fallback when no aria-label; an aria-label names the group and every inner control) and form state", '"Color" / — / false']],
     examples: [
       {id: "default", title: "Fill", note: "Figma's fill picker: drag the area or focus it and use the arrows (Left/Right saturation, Up/Down brightness, Shift for 10). Hue, opacity, the value row and saved colors stay synchronized. Swatches use Area family 500 values; user colors do not change with the theme.", demo: "GalleryColorPicker"},
       {id: "header", title: "Header", note: "A header row holds a title, tabs or a close action, divided from the editor as in Figma.", demo: "GalleryColorPickerHeader"},
@@ -64,13 +64,13 @@ export const COMPONENT_PAGES = [
       {id: "model-hsl", title: "HSL", note: "Hue keeps its angle when saturation or lightness reaches zero.", demo: "GalleryColorPickerModelHsl"},
       {id: "model-css", title: "CSS", note: "One text field accepts hex, rgb() and hsl(), with alpha.", demo: "GalleryColorPickerModelCss"},
       {id: "opaque", title: "Opaque", note: "Without alpha the opacity track and percentage are removed and values stay six-digit.", demo: "GalleryColorPickerOpaque"},
-      {id: "disabled", title: "Disabled", demo: "GalleryColorPickerDisabled"},
+      {id: "disabled", title: "Disabled", demo: "GalleryColorPickerDisabled"}, {id: "plain", title: "Plain", note: "No floating plate, for a picker inside a Popover or Panel that already draws one.", demo: "GalleryColorPickerPlain"},
     ],
   },
   {
     slug: "color-swatch-picker", name: "Color swatch picker", exportName: "ColorSwatchPicker", manifest: "colorSwatchPicker",
     imports: "ColorSwatchPicker",
-    api: [["aria-label", "string (names it; `label` is a deprecated alias)", "—"], ["options", "{ value, label, disabled? }[]", "—"], ["value / defaultValue", "CSS color string", "first enabled option"], ["onValueChange", "(color, event) => void", "—"], ["layout", '"grid" | "row" | "palette"', '"grid"'], ["columns", "positive integer (grid)", "6"], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled", "native radio form props", "—"]],
+    api: [["label", "string (accessible group name)", "—"], ["items", "{ value, label, disabled? }[] (options is a deprecated alias)", "—"], ["value / defaultValue", "CSS color string (with neither, nothing is chosen; a form reset returns to defaultValue or nothing)", "—"], ["onValueChange", "(color, event) => void", "—"], ["layout", '"grid" | "row" | "palette"', '"grid"'], ["columns", "positive integer (grid)", "6"], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled", "native radio form props (disabled also sets aria-disabled on the group)", "—"]],
     examples: [
       { id: "default", title: "Palette", note: "A labeled, single-color choice. Left and Right move through colors; Up and Down move by column. Home and End reach the first and last enabled colors.", demo: "GalleryColorSwatchPicker" },
       { id: "row", title: "Transparency", note: "A compact row can include alpha values; the checkerboard stays visible through each swatch.", demo: "GalleryColorSwatchPickerRow" },
@@ -102,7 +102,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "calendar", name: "Calendar", exportName: "Calendar", manifest: "calendar",
-    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value, event) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, false"], ["variant", '"plain" | "surface"', '"plain"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
+    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, false"], ["variant", '"surface" | "plain" (plain inside a Popover or Panel that draws the surface)', '"surface"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
     examples: [
       { id: "default", title: "Date", note: "Arrow keys move by day and week, Home and End to the week's edges, Page Up and Page Down by month (with Shift, by year). Enter or Space selects.", demo: "GalleryCalendar" },
       { id: "range", title: "Range", note: "The first choice anchors the range; hovering or moving focus previews it until the second choice. Escape cancels.", demo: "GalleryCalendarRange" },
@@ -122,7 +122,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "alignment-picker", name: "Alignment picker", exportName: "AlignmentPicker", manifest: "alignmentPicker",
-    api: [["aria-label", "string (names it; `label` is a deprecated alias)", "—"], ["stretch", "fill parent width and height (set parent dimensions)", "false"], ["value / defaultValue", "nine physical positions", '"center"'], ["onValueChange", "(position, event) => void", "—"], ["variant", '"soft" | "plain" ("surface" is a deprecated alias of soft)', '"soft"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled", "native radio form props", "—"]],
+    api: [["label", "string (accessible group name)", "—"], ["stretch", "fill parent width and height (set parent dimensions)", "false"], ["value / defaultValue", "nine physical positions", '"center"'], ["onValueChange", "(position, event) => void", "—"], ["variant", '"soft" | "plain" ("surface" is a deprecated alias of soft)', '"soft"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled", "native radio form props", "—"]],
     examples: [
       { id: "default", title: "Default", note: "Choose one of nine physical points. Arrow keys move within a row or column and wrap at its edge; Home and End reach the first and last point.", demo: "GalleryAlignmentPickerDefault" },
       { id: "landscape", title: "Stretch landscape", demo: "GalleryAlignmentPickerLandscape" },
@@ -137,23 +137,25 @@ export const COMPONENT_PAGES = [
   {
     slug: "toolbar", name: "Toolbar", manifest: "toolbar",
     imports: "Toolbar, ToolbarGroup, ToolbarItem, ToolbarSeparator, ToolbarOverflow, Button, MenuItem",
-    api: [["variant", '"plain" | "surface"', '"plain"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["orientation", '"horizontal" | "vertical"', '"horizontal"'], ["fullWidth", "boolean", "false"], ["ToolbarGroup variant", '"track" (one-of-several toggles in a groove)', "—"], ["ToolbarItem", "one focusable child", "—"], ["ToolbarOverflow", "aria-label, optional icon, MenuItem children (a ghost More button opening a Menu)", '"More actions"'], ["Button selected", "a pressed toggle rises as a plate", "false"]],
+    api: [["variant", '"plain" | "surface"', '"plain"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["orientation", '"horizontal" | "vertical"', '"horizontal"'], ["fullWidth", "boolean", "false"], ["ToolbarItem", "one focusable child", "—"], ["ToolbarOverflow", "menuLabel (label deprecated), optional icon, MenuItem children (a ghost icon Button that opens a Menu)", '"More actions"'], ["Button selected", "a pressed toggle rises as a plate", "false"]],
     examples: [
       { id: "default", title: "Tools", note: "Figma's toolbelt: tools 8 apart on a floating bar, the chosen tool raised, a divider, and the mode switch as a track. Tab enters once; arrow keys and Home/End move among enabled commands without activating them.", demo: "GalleryToolbar" },
       { id: "formatting", title: "Text formatting", note: "Soft fields for font and size, pressed style toggles, and alignment as a track.", demo: "GalleryToolbarFormatting" },
       { id: "plain", title: "Plain", note: "Use a light command row within an existing surface.", demo: "GalleryToolbarPlain" },
       { id: "vertical", title: "Vertical", note: "Up and Down move focus through a vertical group.", demo: "GalleryToolbarVertical" },
-      { id: "sizes", title: "Sizes", note: "Commands keep their control-tier height. Surface toolbars add an 8px inset around them (Figma's 48 around 32); plain toolbars add none.", demo: "GalleryToolbarSizes" },
-      { id: "overflow", title: "Overflow", note: "Secondary commands in a Menu behind a ghost More button, placed like every other menu.", demo: "GalleryToolbarOverflow" },
+      { id: "size-sm", title: "Size / sm", note: "Commands keep their control-tier height. Surface toolbars add an 8px inset around them (Figma's 48 around 32); plain toolbars add none.", demo: "GalleryToolbarSizeSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryToolbarSizeMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryToolbarSizeLg" },
+      { id: "overflow", title: "Overflow", note: "Secondary actions in a Menu behind a ghost More button.", demo: "GalleryToolbarOverflow" },
     ],
   },
   {
     slug: "breadcrumb", name: "Breadcrumb", manifest: "breadcrumb",
     imports: "Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis",
-    api: [["Breadcrumb", "nav props and ref", "aria-label: Breadcrumb"], ["BreadcrumbLink", "native anchor props and ref", "—"], ["BreadcrumbPage", "span props and ref", "aria-current: page"], ["BreadcrumbSeparator", "optional children", "simple chevron"], ["BreadcrumbEllipsis", "aria-label", "More pages"]],
+    api: [["Breadcrumb", "nav props and ref", "aria-label: Breadcrumb"], ["BreadcrumbLink", "native anchor props and ref", "—"], ["BreadcrumbPage", "span props and ref", "aria-current: page"], ["BreadcrumbSeparator", "optional children", "simple chevron"], ["BreadcrumbEllipsis", "items ({ label, href }[]) open a Menu of the hidden pages; without them a decorative mark; aria-label", "More pages"]],
     examples: [
       { id: "default", title: "Default", note: "Use links for ancestors and a non-interactive current page. The chevron is decorative and reverses in RTL.", demo: "GalleryBreadcrumb" },
-      { id: "collapsed", title: "Collapsed path", note: "The ellipsis marks omitted levels; if users need to navigate them, provide a separate menu control in this item.", demo: "GalleryBreadcrumbCollapsed" },
+      { id: "collapsed", title: "Collapsed path", note: "Pass the omitted levels as items and the ellipsis becomes a button that opens a Menu of them; each row is a link. Without items it is a decorative mark.", demo: "GalleryBreadcrumbCollapsed" },
       { id: "icons", title: "With icons", demo: "GalleryBreadcrumbIcons" },
     ],
   },
@@ -164,12 +166,12 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "composer", name: "Composer", manifest: "composer",
-    api: [["layout", '"inline" | "stacked"', '"inline"'], ["value / defaultValue", "string", "—"], ["onValueChange", "(value: string) => void", "—"], ["onSubmit", "(value: string) => void", "—"], ["leadingActions / trailingActions / mode", "ReactNode", "—"], ["submitOnEnter", "boolean", "true"], ["aria-label", "string (names the message field)", '"Message"'], ["placeholder", "string", '"Write a message…"'], ["submitLabel", "string (names the send Button)", '"Send message"'], ["submitPill", "boolean (round send; the corner follows, making a pill composer)", "false"], ["disabled", "boolean (field paint; actions dim)", "false"], ["loading", "boolean (a reply is pending: the field stays editable, Enter doesn't send, send becomes Stop)", "false"], ["onStop / stopLabel", "() => void / string (the Stop action while loading)", '— / "Stop"'], ["busy", "deprecated alias of loading", "—"], ["maxLength", "number", "—"], ["inputProps / onInputKeyDown", "textarea props and key handler", "—"], ["ref", "HTMLTextAreaElement", "—"]],
-    examples: [{ id: "inline", title: "Inline", demo: "GalleryComposerInline" }, { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked" }, { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled" }, { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled" }, { id: "busy", title: "Loading", note: "While a reply streams, the field keeps its caret so the next prompt can be drafted, and send becomes Stop.", demo: "GalleryComposerBusy" }, { id: "pill", title: "Pill send", note: "A round send makes the whole composer a pill, ChatGPT's shape.", demo: "GalleryComposerPill" }],
+    api: [["layout", '"inline" | "stacked"', '"inline"'], ["value / defaultValue", "string", "—"], ["onValueChange", "(value: string) => void", "—"], ["onSubmit", "(value: string) => void", "—"], ["leadingActions / trailingActions / mode", "ReactNode", "—"], ["submitOnEnter", "boolean", "true"], ["label", "string (the field's accessible name)", '"Message"'], ["placeholder", "string", '"Write a message…"'], ["submitLabel", "string (names the send Button)", '"Send message"'], ["submitPill", "boolean (round send; the corner follows, making a pill composer)", "false"], ["disabled", "boolean (field paint; actions dim)", "false"], ["loading", "boolean (a reply is streaming: the field stays editable, Enter doesn't send, send becomes Stop; busy is a deprecated alias)", "false"], ["onStop / stopLabel", "() => void / string (the Stop button while loading)", '— / "Stop"'], ["maxLength", "number", "—"], ["inputProps / onInputKeyDown", "textarea props and key handler", "—"], ["ref", "HTMLTextAreaElement", "—"]],
+    examples: [{ id: "inline", title: "Inline", demo: "GalleryComposerInline" }, { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked" }, { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled" }, { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled" }, { id: "loading", title: "Loading", note: "While a reply streams, the field stays editable and send turns into Stop.", demo: "GalleryComposerLoading" }, { id: "pill", title: "Pill send", note: "A round send makes the whole composer a pill, ChatGPT's shape.", demo: "GalleryComposerPill" }],
   },
   {
     slug: "code", name: "Code", manifest: "code",
-    api: [["children", "ReactNode", "—"], ["swatch", "string", "—"], ["ground", '"subtle" | "on-color" (the subtle / onColor booleans are deprecated)', "—"], ["…props", "HTMLAttributes<HTMLElement>", "—"]],
+    api: [["children", "ReactNode", "—"], ["swatch", "string", "—"], ["subtle", "boolean", "false"], ["onColor", "boolean", "false"], ["…props", "HTMLAttributes<HTMLElement>", "—"]],
     examples: [
       { id: "default", title: "Default", demo: "GalleryCode" },
       { id: "treatments", title: "Surface treatments", demo: "CodeSubtle" },
@@ -188,7 +190,7 @@ export const COMPONENT_PAGES = [
       ["language", "string", "—"],
       ["languages", "string[]", "—"],
       ["languageTabs", "boolean", "false"],
-      ["value / onLanguageChange", "string / (language: string) => void", "uncontrolled, first language"],
+      ["value / onValueChange", "string / (language: string) => void (onLanguageChange is a deprecated alias)", "uncontrolled, first language"],
       ["lineNumbers", "boolean", "true"],
       ["highlightLines", 'number[] | string, e.g. "3, 5-7"', "—"],
       ["marks", 'Record<number, "added" | "removed">', "—"],
@@ -217,9 +219,9 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "segmented", name: "Segmented", manifest: "segmented",
-    api: [["options", "{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }[]", "—"], ["value", "string", "—"], ["aria-label", "string (names it; `label` is a deprecated alias)", "—"], ["onValueChange", "(value: string, event) => void (onSelect is a deprecated alias)", "—"], ["name / form / required / disabled", "submits the value; disables every option", "—"], ["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"], ["iconOnly", "boolean (labels stay accessible)", "false"]],
+    api: [["items", "{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }[] (options is a deprecated alias)", "—"], ["value / defaultValue", "string", "first enabled option"], ["aria-label", "string (names the radio group; label is a deprecated alias)", "—"], ["onValueChange", "(value: string, event) => void (onSelect is a deprecated alias)", "—"], ["name / form", "string (submits the value with a form; a form reset restores the first value)", "—"], ["disabled", "boolean (every option)", "false"], ["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"], ["iconOnly", "boolean (labels stay accessible)", "false"]],
     examples: [
-      { id: "default", title: "Default", note: "A controlled presentation. In an application, update value from onSelect. Arrow keys move and select, as in a radio group.", demo: "GallerySegmented" },
+      { id: "default", title: "Default", note: "A controlled presentation. In an application, update value from onValueChange. Arrow keys move and select, as in a radio group.", demo: "GallerySegmented" },
       { id: "sizes", title: "Sizes", demo: "SegmentedSizes" },
       { id: "full-width", title: "Full width and disabled option", demo: "SegmentedFullWidth" },
     ],
@@ -236,7 +238,8 @@ export const COMPONENT_PAGES = [
       ["trailingIcon", "ReactNode", "—"],
       ["pill", "boolean", "false"],
       ["align", '"start" | "end"', "—"],
-      ["selected / defaultSelected / onSelectedChange", "a toggle: controlled, uncontrolled, (selected, event) => void", "—"],
+      ["selected", "boolean", "false"],
+      ["defaultSelected / onSelectedChange", "boolean / (selected) => void: an uncontrolled toggle, or a change callback for a controlled one", "— / —"],
       ["loading", "boolean", "false"],
       ["iconOnly", "boolean", "false"],
       ["fullWidth", "boolean", "false"],
@@ -290,7 +293,7 @@ export const COMPONENT_PAGES = [
       {
         id: "loading",
         title: "Loading",
-        note: "Set loading to replace the leading icon with a spinner. The button ignores clicks but keeps focus and its place in the Tab order.",
+        note: "Set loading to replace the leading icon with a spinner and disable the button.",
         demo: "ButtonLoading",
       },
       { id: "disabled", title: "Disabled", demo: "ButtonDisabled" },
@@ -370,12 +373,15 @@ export const COMPONENT_PAGES = [
       ["onValueChange / onValueCommit", "(value: number | null) => void", "—"],
       ["min / max / step", "number", "unbounded / 1"],
       ["unit", "string", "—"],
-      ["steppers / scrub / mixed", "boolean", "false"],
+      ["steppers / mixed", "boolean (steppers are hidden when read-only)", "false"],
+      ["scrub", "boolean | ReactNode (true shows a grip; a node, such as a letter or icon, becomes the handle)", "false"],
       ["variant", '"outline" | "soft"', '"outline"'],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["fullWidth", "boolean", "false"],
       ["locale / fractionDigits", "string / number", "system locale / step precision"],
       ["validationStatus", '"error" | "success" | "warning"', "—"],
+      ["invalid", "boolean (error paint and aria-invalid)", "false"],
+      ["className / style", "string / CSSProperties (both on the shell)", "—"],
       ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
     ],
     examples: [
@@ -399,7 +405,7 @@ export const COMPONENT_PAGES = [
     api: [
       ["variant", '"outline" | "soft"', '"outline"'],
       ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["icon", "ReactNode (leading; leadingIcon is a deprecated alias)", "—"],
+      ["leadingIcon", "ReactNode", "—"],
       ["trailingIcon", "ReactNode", "—"],
       ["prefix", "ReactNode", "—"],
       ["suffix", "ReactNode", "—"],
@@ -414,6 +420,7 @@ export const COMPONENT_PAGES = [
       ["disabled", "boolean", "false"],
       ["readOnly", "boolean", "false"],
       ["icon", "ReactNode (deprecated)", "—"],
+      ["className / style", "string / CSSProperties (both on the shell)", "—"],
       ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
     ],
     examples: [
@@ -581,7 +588,7 @@ export const COMPONENT_PAGES = [
     manifest: "textarea",
     api: [
       ["variant", '"outline" | "soft"', '"outline"'],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["size", '"sm" | "md" (lg removed: it differed from md only by inset)', '"md"'],
       ["resize", '"vertical" | "horizontal" | "both" | "none"', '"vertical"'],
       ["fullWidth", "boolean", "false"],
       ["validationStatus", '"error" | "success" | "warning"', "—"],
@@ -625,7 +632,7 @@ export const COMPONENT_PAGES = [
     slug: "select",
     name: "Select",
     manifest: "select",
-    api: [["variant", '"outline" | "soft"', '"outline"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"], ["validationStatus", '"error" | "success" | "warning"', "—"], ["invalid", "boolean", "false"]],
+    api: [["variant", '"outline" | "soft"', '"outline"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"], ["validationStatus", '"error" | "success" | "warning"', "—"], ["invalid", "boolean", "false"], ["disabled", "boolean (also inherited from an InputGroup or Field)", "false"], ["native select props / ref", "SelectHTMLAttributes / HTMLSelectElement", "forwarded"]],
     examples: [
       { id: "default", title: "Default", demo: "SelectDefault" },
       { id: "soft", title: "Soft", note: "The flat filled field shared with Input, Textarea and NumberField. Use it wherever those are soft, such as a Panel.", demo: "SelectSoft" },
@@ -650,9 +657,9 @@ export const COMPONENT_PAGES = [
       ["caption / description", "ReactNode", "—"],
       ["leadingVisual", "ReactNode", "—"],
       ["invalid", "boolean", "false"],
-      ["defaultChecked", "boolean", "false"],
+      ["checked / defaultChecked", "boolean", "— / false"],
+      ["onCheckedChange", "(checked: boolean, event) => void (after native onChange)", "—"],
       ["indeterminate", "boolean", "false"],
-      ["onCheckedChange", "(checked: boolean, event) => void; native onChange still fires", "—"],
       ["CheckboxGroup", "label, description, validation, error, validationStatus, orientation, disabled", "—"],
     ],
     examples: [
@@ -700,10 +707,10 @@ export const COMPONENT_PAGES = [
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["label / description", "ReactNode", "—"],
       ["checked / defaultChecked", "boolean; controlled / initial state", "false"],
-      ["onCheckedChange", "(checked: boolean) => void", "—"],
+      ["onCheckedChange", "(checked: boolean, event) => void", "—"],
       ["loading / readOnly", "boolean", "false"],
       ["labelPosition", '"end" | "start"', '"end"'],
-      ["tone", '"neutral" | "custom"', '"neutral"'],
+      ["--area-switch-color / --area-switch-color-hover", "CSS custom properties for a custom on colour (the custom tone was removed, audit H-13)", "selection solid"],
       ["track", '"short" | "long"', '"short"'],
       ["fullWidth", "boolean", "false"],
       ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
@@ -733,9 +740,13 @@ export const COMPONENT_PAGES = [
       ["step", 'number | "any"', "1"],
       ["value / defaultValue", "number; controlled / initial value", "native midpoint"],
       ["readout", "boolean | ReactNode | (value) => ReactNode", "—"],
-      ["onValueChange", "(value: number) => void", "—"],
+      ["onValueChange", "(value: number, event) => void", "—"],
       ["disabled", "boolean", "false"],
       ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
+      ["SliderRange value / defaultValue / onValueChange", "[number, number] (start never above end)", "[min, max]"],
+      ["SliderRange min / max / step / size", "number / number / number / \"sm\" | \"md\" | \"lg\"", "0 / 100 / 1 / md"],
+      ["SliderRange inputs / minLabel / maxLabel", "boolean / string / string (fields add \"value\" to the name)", "true / Minimum / Maximum"],
+      ["SliderRange name / form / disabled", "both ranges submit under name, start then end", "—"],
     ],
     examples: [
       { id: "default", title: "Default", demo: "SliderDefault" },
@@ -768,7 +779,8 @@ export const COMPONENT_PAGES = [
       ["icon", "ReactNode", "—"],
       ["avatar", "ReactNode", "—"],
       ["image / imageAlt", "string", "— / decorative"],
-      ["onDismiss / dismissIcon / dismissLabel", "() => void / ReactNode / string", "— / dismiss / Remove chip"],
+      ["onDismiss / dismissIcon / dismissLabel", "() => void / ReactNode / string", "— / dismiss / Remove <chip text>"],
+      ["ChipGroup aria-label", "string (names the group of chips; label is a deprecated alias)", "—"],
       ["invalid", "boolean", "false"],
       ["ChipLink", "href / treatment / trailingIcon", 'underline / "underline" | "icon" / —'],
     ],
@@ -796,7 +808,7 @@ export const COMPONENT_PAGES = [
     imports: "Badge",
     api: [
       ["variant", '"soft" | "solid" | "outline" | "color" | "modern"', '"soft"'],
-      ["tone", '"neutral" | "info" | "success" | "warning" | "caution" | "danger" | "discovery" | "inverse" ("inverted" is a deprecated alias)', '"neutral"'],
+      ["tone", '"neutral" | "info" | "success" | "warning" | "caution" | "danger" | "discovery" | "inverse"', '"neutral"'],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["pill (forces pill shape) / dot / dotOnly / iconOnly / truncate / uppercase", "boolean", "false"],
       ["avatar / flag", "decorative ReactNode", "—"],
@@ -865,9 +877,11 @@ export const COMPONENT_PAGES = [
     name: "Model picker",
     manifest: "modelPicker",
     api: [
-      ["options", "{ value, label, description?, disabled? }[] (models is a deprecated alias)", "—"],
-      ["value / defaultValue / onValueChange", "string", "the first model"],
-      ["aria-label", "string (names the trigger and menu)", '"Model"'],
+      ["items", "{ value, label, description?, disabled? }[] (models is a deprecated alias)", "—"],
+      ["value / defaultValue", "string", "the first model"],
+      ["onValueChange", "(value: string, event) => void", "—"],
+      ["triggerProps", "props and ref for the trigger Button (ref and the rest stay on the wrapper)", "—"],
+      ["label", "string (names the trigger and menu)", '"Model"'],
       ["heading", "ReactNode (a Menu label over the rows)", "—"],
       ["size", '"sm" | "md" | "lg"', '"md"'],
     ],
@@ -882,7 +896,8 @@ export const COMPONENT_PAGES = [
     api: [
       ["scrollRef", "RefObject<HTMLElement> (the conversation's scroll container)", "—"],
       ["threshold", "px from the end before it shows", "200"],
-      ["aria-label", "string (names the button)", '"Scroll to latest"'],
+      ["label", "string", '"Scroll to latest"'],
+      ["buttonProps", "props and ref for the Button (its onClick runs first and can preventDefault the scroll)", "—"],
     ],
     examples: [
       { id: "default", title: "In a conversation", note: "Place it inside the composer's relatively positioned wrapper: it rises 24 above the composer, centred. It appears once the reader is 200px from the end and scrolls back smoothly (instantly with reduced motion).", demo: "GalleryScrollToLatest" },
@@ -893,7 +908,7 @@ export const COMPONENT_PAGES = [
     name: "Message",
     manifest: "message",
     api: [
-      ["author", '"user" | "assistant"', "—"],
+      ["author", '"user" | "assistant"', '"assistant"'],
       ["authorName", "string (names the turn: “You said”, “ChatGPT said”)", '"You" / "Assistant"'],
       ["actions", "MessageActions of ghost icon Buttons", "—"],
       ["streaming", "boolean (a dot follows the last word; actions wait)", "false"],
@@ -912,7 +927,7 @@ export const COMPONENT_PAGES = [
       ["items", "{ id, label, icon? }[] (suggestions is a deprecated alias)", "—"],
       ["onSelect", "(suggestion) => void (fill or send; the host decides)", "—"],
       ["onDismiss", "(suggestion) => void (shows a dismiss on each row; list layout only)", "—"],
-      ["aria-label", "string (names the list)", '"Suggestions"'],
+      ["label", "string (names the list)", '"Suggestions"'],
       ["layout", '"list" | "chips" (chips for narrow or inline places)', '"list"'],
     ],
     examples: [
@@ -927,7 +942,9 @@ export const COMPONENT_PAGES = [
       ["trigger", "ReactElement (a link that works without the card)", "—"],
       ["children", "Popover slots: PopoverHeader, PopoverTitle, PopoverDescription, .area-hover-card__meta", "—"],
       ["side", '"top" | "right" | "bottom" | "left"', '"bottom"'],
-      ["delay / closeDelay", "ms (openDelay is a deprecated alias)", "700 / 300"], ["open / defaultOpen / onOpenChange", "controlled or uncontrolled open state", "—"], ["align / offset", '"start" | "center" | "end" / px', '"start" / 8'],
+      ["delay / closeDelay", "ms (openDelay is a deprecated alias)", "700 / 300"],
+      ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void", "— / false / —"],
+      ["align / offset", '"start" | "center" | "end" / px', '"start" / 8'],
     ],
     examples: [
       { id: "person", title: "Person", note: "Rest the pointer on the link for 700ms, or Tab to it. Moving onto the card keeps it open; leaving both closes it after 300ms; Escape closes it. Touch follows the link instead. The card only repeats what the link leads to, so nothing is lost without it.", demo: "GalleryHoverCard" },
@@ -940,7 +957,7 @@ export const COMPONENT_PAGES = [
     manifest: "contextMenu",
     api: [
       ["menu", "ReactNode (MenuItem, MenuLabel, MenuSeparator)", "—"],
-      ["aria-label", "string (names the menu)", "—"],
+      ["menuLabel", "string (names the menu; label is a deprecated alias)", '"Context menu"'],
       ["children", "the area that opens it", "—"],
       ["onOpenChange", "(open) => void", "—"],
       ["disabled", "boolean (the browser's own menu shows instead)", "false"],
@@ -960,7 +977,7 @@ export const COMPONENT_PAGES = [
       ["hotkey", '"mod+k" and similar (⌘ on Apple, Ctrl elsewhere)', "—"],
       ["inline", "boolean (render in place, no modal)", "false"],
       ["query / defaultQuery / onQueryChange", "string", '""'],
-      ["placeholder / label / emptyText", "string / string / ReactNode", '"Search or run a command…" / "Command palette" / "No results"'],
+      ["placeholder / aria-label / emptyText", "string / string (names the palette and its search; label is a deprecated alias) / ReactNode", '"Search or run a command…" / "Command palette" / "No results"'],
       ["footer", "ReactNode | false (key hints by default)", "hints"],
       ["filter", "(item, query) => boolean", "label, description and keywords contain the query"],
     ],
@@ -974,7 +991,7 @@ export const COMPONENT_PAGES = [
     name: "Combobox",
     manifest: "combobox",
     api: [
-      ["options", "{ value, label, description?, icon?, disabled?, group? }[]", "—"],
+      ["items", "{ value, label, description?, icon?, disabled?, group? }[] (options is a deprecated alias)", "—"],
       ["value / defaultValue / onValueChange", "string | null", "null"],
       ["inputValue / defaultInputValue / onInputChange", "string", "the selected label"],
       ["allowsCustomValue", "boolean (keep text that matches no option)", "false"],
@@ -1005,9 +1022,10 @@ export const COMPONENT_PAGES = [
       ["onIndependentChange", "(independent: boolean) => void", "—"],
       ["toggle", "boolean", "true"],
       ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["variant", '"outline" | "soft"', '"outline"'],
+      ["variant", '"outline" | "soft" (forwarded to each NumberField)', '"outline"'],
       ["min / max / step / unit", "as NumberField", "min 0"],
       ["disabled", "boolean", "false"],
+      ["readOnly", "boolean (forwarded to each NumberField; the link toggle is disabled)", "false"],
       ["name", "string (submits a CSS shorthand)", "—"],
     ],
     examples: [
@@ -1022,7 +1040,7 @@ export const COMPONENT_PAGES = [
     name: "Property list",
     manifest: "propertyList",
     api: [
-      ["PropertyList.label", "string", "—"],
+      ["PropertyList.label", "string (an aria-label wins)", "—"],
       ["PropertyList.onReorder", "(from: number, to: number) => void", "— (no handles without it)"],
       ["PropertyListItem.label", "string", "—"],
       ["PropertyListItem.inactive", "boolean", "false"],
@@ -1079,7 +1097,7 @@ export const COMPONENT_PAGES = [
     imports: "Card, CardContent, CardHeader, CardLink, CardMedia, CardOverlay, CardList, CardCarousel, CardTitle, CardDescription, CardValue, CardFooter, Button, Badge",
     api: [
       ["size", '"sm" | "md" | "lg" (corner and inset; type is the same at every size)', '"md"'],
-      ["layout", '"vertical" | "horizontal" | "list" | "immersive" ("compact" is a deprecated alias of list)', '"vertical"'],
+      ["layout", '"vertical" | "horizontal" | "thumbnail" | "immersive"', '"vertical"'],
       ["CardLink", "Anchor attributes. Inside CardTitle it makes the whole card one link", "—"],
       ["CardHeader action", "ReactNode: a Badge or icon Button on the title's first line", "—"],
       ["CardMedia bleed / well", "boolean: flush with the card's edge / a recessed surface for a composition", "false"],
@@ -1093,7 +1111,7 @@ export const COMPONENT_PAGES = [
       { id: "horizontal", title: "Horizontal", demo: "CardHorizontal", note: "Media beside text, 40 / 60. Put CardMedia after CardContent to place it at the end. Below 480px of card the two stack; the card is its own size container, so give it a width." },
       { id: "horizontal-end", title: "Media at the end", demo: "CardHorizontalEnd" },
       { id: "bleed", title: "Bleed media", demo: "CardBleed", note: "CardMedia bleed runs flush with the card's edge on the sides it touches, its corners following the card's. It is the only media that meets the edge; every other card insets its media, immersive included." },
-      { id: "compact", title: "List", demo: "CardCompact", note: "An 84px thumbnail beside top-aligned text, for lists of cards. The text keeps the same inset from the thumbnail as from the edge." },
+      { id: "thumbnail", title: "Thumbnail", demo: "CardThumbnail", note: "An 84px thumbnail beside top-aligned text, for lists of cards. The text keeps the same inset from the thumbnail as from the edge." },
       { id: "immersive", title: "Immersive", demo: "CardImmersive", note: "Media behind the text, inset like any media, with a readability gradient." },
       { id: "linked", title: "Linked", demo: "CardLinked", note: "CardLink in the title makes the whole card one link with one accessible name. Hover steps the edge; keyboard focus outlines the card. Text in a linked card can't be selected by dragging." },
       { id: "reveal", title: "Actions on a linked card", demo: "CardLinkedActions", note: "Buttons stay separate targets above the link. CardOverlay reveal shows them on hover or focus, and always on touch screens. Keep them few: most systems forbid actions in a clickable card." },
@@ -1112,7 +1130,7 @@ export const COMPONENT_PAGES = [
     name: "Alert",
     manifest: "alert",
     api: [
-      ["tone", '"neutral" | "info" | "danger" | "warning" | "success"', '"neutral"'],
+      ["tone", '"neutral" | "info" | "success" | "warning" | "danger"', '"neutral"'],
       ["layout", '"single-line" | "multiline" | "banner"', '"single-line"'],
       ["flush", "boolean: square, no side or top edges (a banner that meets its container's edges)", "false"],
       ["icon", "ReactNode", "—"],
@@ -1157,7 +1175,7 @@ export const COMPONENT_PAGES = [
     manifest: "spinner",
     api: [
       ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["aria-label", "string (names it; `label` is a deprecated alias)", "—"],
+      ["label", "string", "—"],
     ],
     examples: [{ id: "default", title: "Default", demo: "SpinnerDefault" }],
   },
@@ -1168,7 +1186,7 @@ export const COMPONENT_PAGES = [
     api: [
       ["value", "number", "—"],
       ["max", "number", "100"],
-      ["aria-label", "string (names it; `label` is a deprecated alias)", "—"],
+      ["label", "string", "—"],
       ["size", '"sm" | "md" | "lg"', '"md"'],
     ],
     examples: [
@@ -1197,21 +1215,24 @@ export const COMPONENT_PAGES = [
       ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void", "— / false / —"],
       ["side / align / offset", 'OverlaySide / OverlayAlign / number', '"bottom" / "start" / 4'],
       ["MenuItem.tone", '"danger"', "—"],
-      ["MenuItem.icon", "ReactNode (the leading glyph column)", "—"],
+      ["MenuItem.icon", "ReactNode (leading icon box, aria-hidden)", "—"],
       ["MenuItem.shortcut", "ReactNode", "—"],
       ["MenuItem.disabled", "boolean", "false"],
+      ["MenuSub label / icon / disabled / children", "a row that opens a nested menu beside it", "—"],
+      ["id / aria-label / handlers", "a consumer's id and name win; its handlers run before the menu's", "—"],
     ],
     examples: [
       { id: "default", title: "Default", demo: "MenuDefault" },
       { id: "shortcuts", title: "With shortcuts", demo: "MenuWithShortcuts" },
       { id: "icons", title: "Icons, separator and danger", note: "Arrow keys move between items and wrap; Home and End jump to the ends; typing a letter moves to the next item that starts with it.", demo: "GalleryMenuIcons" },
+      { id: "submenu", title: "Submenu", note: "Right, Enter or Space opens the submenu on its first row (Left in right-to-left text); Left or Escape returns to its row; the pointer opens it on hover.", demo: "GalleryMenuSubmenu" },
     ],
   },
   {
     slug: "popover",
     name: "Popover",
     manifest: "popover",
-    api: [["side", '"top" | "right" | "bottom" | "left"', '"bottom"'], ["arrow", "boolean", "false"], ["trigger", "ReactNode: the element that opens it", "—"], ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void", "— / false / —"], ["align", '"start" | "center" | "end"', '"center"'], ["offset", "number (px)", "8, or 25 with the arrow"]],
+    api: [["side", '"top" | "right" | "bottom" | "left"', '"bottom"'], ["arrow", "boolean", "false"], ["trigger", "ReactNode: the element that opens it", "—"], ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void", "— / false / —"], ["align", '"start" | "center" | "end"', '"center"'], ["offset", "number (px)", "8, or 25 with the arrow"], ["PopoverTitle level", "2–6, or false for a plain block (a Hover card in running text); a title names its Popover", "2"], ["PopoverClose", "Button props; closes the popover it sits in and returns focus to the trigger", 'aria-label "Close"']],
     examples: [{ id: "default", title: "Default", demo: "PopoverDefault" }, { id: "anchored", title: "Anchored to a trigger", note: "With a trigger, the popover opens beside it in the top layer, flips when its side lacks room and shifts to stay on screen. Escape and clicks outside close it; focus moves into it on open and back to the trigger on close.", demo: "GalleryPopoverTrigger" }],
   },
   {
@@ -1219,12 +1240,15 @@ export const COMPONENT_PAGES = [
     name: "Toast",
     manifest: "toast",
     api: [
-      ["tone", '"neutral" | "info" | "danger" | "warning" | "success"', '"neutral"'],
+      ["tone", '"neutral" | "info" | "success" | "warning" | "danger"', '"neutral"'],
       ["icon", "ReactNode", "—"],
       ["title / action", "ReactNode", "—"],
       ["onDismiss / dismissLabel", "() => void / string", "— / Dismiss notification"],
+      ["live", "boolean (status, or alert for danger; a Toaster turns it off)", "true"],
+      ["Toaster label / duration / hotkey", "string / ms / key (a toast with an action never times out)", "Notifications / 5000 / F8"],
+      ["useToaster()", "{ show(options) => id, dismiss(id) }; options: message, tone, icon, title, action, duration, announcement", "—"],
     ],
-    examples: [{ id: "default", title: "Default", demo: "ToastDefault" }],
+    examples: [{ id: "default", title: "Default", demo: "ToastDefault" }, { id: "toaster", title: "Toaster", note: "Toasts stack at the end corner, announced through live regions that exist first; hovering or focusing the stack pauses them; F8 moves focus to it.", demo: "GalleryToaster" }],
   },
   {
     slug: "tabs",
@@ -1233,12 +1257,12 @@ export const COMPONENT_PAGES = [
     api: [
       ["items", "{ id, label, icon?, trailing?, disabled?, content? }[] (tabs is a deprecated alias)", "—"],
       ["value", "string", "—"],
-      ["defaultValue / onValueChange", "string / (value: string, event) => void", "first enabled tab / —"],
-      ["aria-label", "string (names the tab list; label is a deprecated alias)", '"Views"'],
+      ["defaultValue / onValueChange", "string / (value: string) => void", "first enabled tab / —"],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["orientation", '"horizontal" | "vertical"', '"horizontal"'],
       ["activationMode", '"automatic" | "manual"', '"automatic"'],
       ["track", "boolean", "false"],
+      ["aria-label", "string (names the tab list; label is a deprecated alias)", '"Views"'],
     ],
     examples: [
       {
@@ -1260,7 +1284,7 @@ export const COMPONENT_PAGES = [
       ["showCloseButton", "boolean", "true"],
       ["onDismiss / dismissLabel", "() => void / string", "— / Close dialog"],
       ["trigger", "ReactElement (opens a native modal)", "—"],
-      ["open / defaultOpen / onOpenChange", "the modal's state, with or without a trigger (a menu item can open a confirmation)", "—"],
+      ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void (opens the modal without a trigger, e.g. from a menu item)", "— / false / —"],
     ],
     examples: [
       {
@@ -1280,21 +1304,21 @@ export const COMPONENT_PAGES = [
     api: [
       ["keys", "string[]", "—"],
       ["size", '"sm" | "md" ("small" / "normal" are deprecated aliases)', '"md"'],
-      ["variant", '"default" | "quiet" | "on-color" | "on-emphasis" (appearance is a deprecated alias)', '"default"'],
+      ["variant", '"default" | "quiet" | "on-color" (appearance and on-emphasis are deprecated aliases)', '"default"'],
       ["quiet", "boolean (deprecated)", "false"],
     ],
     practices: [
       "Pass <code class='area-code'>keys</code> as names, not glyphs. <code class='area-code'>cmd</code>, <code class='area-code'>shift</code>, <code class='area-code'>alt</code>, <code class='area-code'>ctrl</code>, <code class='area-code'>enter</code>/<code class='area-code'>return</code> and the arrows render as native key symbols automatically.",
       "One flat chord contains its keys, matching Primer's KeybindingHint. The visual symbols remain individual semantic key elements, while the component supplies a spoken label for the whole shortcut.",
-      "Use <code class='area-code'>variant=\"quiet\"</code> inside a menu item, where the hint is chrome rather than content. Use <code class='area-code'>variant=\"on-color\"</code> on a coloured action and <code class='area-code'>variant=\"on-emphasis\"</code> in an inverse Tooltip; solid Buttons also apply their contextual treatment automatically.",
-      "md is 20px for standalone hints, prose, tooltips and Buttons. sm is 16px only for tight trailing metadata in dense menus and tables. The outer control reserves the Kbd box itself, so its trailing space equals the space above and below the keycap.",
+      "Use <code class='area-code'>variant=\"quiet\"</code> inside a menu item, where the hint is chrome rather than content. Use <code class='area-code'>variant=\"on-color\"</code> on a coloured surface; a Tooltip, a solid Button and a menu row apply it automatically. Inside a button, link or menu row the spoken chord is hidden: give the host <code class='area-code'>aria-keyshortcuts</code>.",
+      "Normal is 20px for standalone hints, prose, tooltips and Buttons. Small is 16px only for tight trailing metadata in dense menus and tables. The outer control reserves the Kbd box itself, so its trailing space equals the space above and below the keycap.",
       "Kbd is display-only: wire the shortcut separately and expose it on the associated action with <code class='area-code'>aria-keyshortcuts</code>. Never show an unavailable binding.",
       "Keycaps are flat, with a quiet edge and no inset or drop shadow. Native modifier symbols and letters share the keyboard font, size and weight; customize <code class='area-code'>--area-font-keyboard</code> only with a face that includes those symbols.",
     ],
     examples: [
       { id: "default", title: "Default", demo: "KbdDefault" },
       { id: "sizes", title: "Sizes", note: "Normal is 20px with 4px even insets. Area adapts the compact tier to 16px with 2px even insets for legibility in control chrome.", demo: "KbdSizes" },
-      { id: "on-emphasis", title: "On emphasis", note: "Use the translucent, inverse treatment when the hint lives on an emphasized surface such as a tooltip.", demo: "KbdOnEmphasis" },
+      { id: "on-emphasis", title: "In a Tooltip", note: "A keycap on a Tooltip takes the translucent on-color treatment automatically.", demo: "KbdOnEmphasis" },
       { id: "button", title: "In a button", note: "Buttons use the 20px normal Kbd tier, contextual surfaces and exact optical trailing insets.", demo: "KbdButton" },
       { id: "sequence", title: "Sequence", note: "KbdGroup separates chords pressed in sequence; each Kbd remains one simultaneous chord.", demo: "KbdSequence" },
       { id: "key-map", title: "Key map", note: "Modifier names become native text glyphs. Symbols and letters share one UI font and one type size.", demo: "KbdKeyMap" },
@@ -1313,6 +1337,7 @@ export const COMPONENT_PAGES = [
       ["trailing", "ReactNode", "\u2014"],
       ["actions", "ReactNode (independent buttons inside the shared row backplate)", "—"],
       ["disabled", "boolean", "false"],
+      ["NavGroup nested", "boolean (an expandable item's children, one Tree view level in)", "false"],
     ],
     practices: [
       "Mark the current page with <code class='area-code'>current</code>, not with a class. It renders <code class='area-code'>aria-current=\"page\"</code>, which is both what the CSS selects on and what a screen reader announces \u2014 so an item cannot look current without being current.",
@@ -1351,7 +1376,7 @@ export const COMPONENT_PAGES = [
     slug: "table",
     name: "Table",
     manifest: "table",
-    api: [["interactive", "boolean", "false"], ["size", '"sm" | "md" | "lg"', '"md"'], ["striped", "boolean", "false"], ["columnDividers", "boolean", "false"]],
-    examples: [{ id: "default", title: "Default", demo: "TableDefault" }],
+    api: [["interactive", "boolean (rows hover; give each row one TableLink)", "false"], ["size", '"sm" | "md" | "lg"', '"md"'], ["striped", "boolean", "false"], ["columnDividers", "boolean", "false"], ["TableLink", "a stretched link that makes its whole row clickable", "—"], ["wrapperProps", "props for the scroll wrapper; it becomes a focusable region named after the table while it overflows", "—"]],
+    examples: [{ id: "default", title: "Default", demo: "TableDefault" }, { id: "clickable", title: "Clickable rows", note: "One TableLink per row stretches over the row, so the hover plate and the click agree; the row shows the link's focus.", demo: "GalleryTableInteractive" }],
   },
 ].sort((a, b) => a.name.localeCompare(b.name, "en"));

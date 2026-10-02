@@ -22,7 +22,7 @@ the turn.
 
 | Axis | Value | Justification |
 |---|---|---|
-| author | assistant (default), user | ChatGPT; optional, the manifest default too |
+| author | user, assistant (default; optional in React, manifest default `author: "assistant"`: the bare block already is the assistant layout) | ChatGPT |
 | state | streaming (dot after the last word; actions wait) | ChatGPT |
 | actions | assistant: copy, rate, read aloud, regenerate, more; user: copy, edit (hover) | ChatGPT |
 
@@ -72,9 +72,8 @@ the edge). No change.
 
 ## Behavior and accessibility
 
-Each turn is an `article` named "You said" / "ChatGPT said"; actions are a named group of
-labelled buttons (`MessageActions`, named by `aria-label`, default "Message actions"; `label`
-is a deprecated alias).
+Each turn is an `article` named "<name> said": "You said" / "Assistant said" by default, or `authorName` (Message.tsx:20-23); actions are a named group of
+labelled buttons.
 
 ## Verification
 
@@ -88,5 +87,6 @@ is a deprecated alias).
 ## Feedback log
 
 - 2026-09-30 · audit S6b (owner) → actions no longer override Button ink to `fg-muted`; they take the ghost icon Button's quiet ink as every icon action does. Suggestion rows and Code block tabs keep `fg-muted` → message.css:50.
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `author` is optional and defaults to `assistant` (manifest default too); `MessageActions` is named by `aria-label` (default "Message actions"; `label` deprecated alias).
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → `author` is optional, default `"assistant"` (Message.tsx:7, :18); manifest default `author: "assistant"`, since the bare block already equals the assistant layout. No visual change.
+- 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.
 - 2026-10-01 · compact pass round 7 → gap 12 → 8 and bubble 10 × 16 → 6 × 12 at compact; the corner is the Composer's (control radius + `ui-cluster`), 16 / 12 (a literal +8 made it 14 at compact). docs/research/compact-pass-2026-10-01.md.

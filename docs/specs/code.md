@@ -2,7 +2,7 @@
 
 **Status:** accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier; subtle-ground fix since)
 **Captures:** `docs/research/captures/code/`
-**Peers:** Kbd (keycap in the same table cell), Token (deprecated alias with a swatch),
+**Peers:** Kbd (keycap in the same table cell), Token (deprecated: use `<Code swatch>`, audit H-25),
 Code block (block form), Badge (compact label on a fill)
 
 ## Owner decisions
@@ -10,7 +10,8 @@ Code block (block form), Badge (compact label on a fill)
 No Code section existed in [prior decisions](PRIOR_DECISIONS.md). The family was accepted
 (Complete) before the audit; the audit confirmed it without change. The job split is
 recorded in [the design system guide](../DESIGN_SYSTEM.md#icons-and-technical-labels): Code
-marks identifiers and inline source, Token is its swatch compatibility composition.
+marks identifiers and inline source; Token, its swatch composition, is deprecated in favour of
+`<Code swatch>` (audit H-25 A, owner 2026-09-30).
 
 ## Job and boundaries
 
@@ -22,9 +23,9 @@ optionally with a colour swatch. It is not a keyboard shortcut (Kbd), a status l
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| ground (`ground` prop) | default (unset) | Inline reference on a page | Gallery `default`, `prose`, `table` |
-| ground | subtle | Quieter derived reference | Gallery `treatments` (#f7f7f7 since the audit fix) |
-| ground | on-color | On a coloured ground, ink inherited | Gallery `on-color` |
+| — | default | Inline reference on a page | Gallery `default`, `prose`, `table` |
+| subtle | boolean | Quieter derived reference | Gallery `treatments` (#f7f7f7 since the audit fix) |
+| on-color | boolean | On a coloured ground, ink inherited | Gallery `on-color` |
 | swatch | boolean | A token that resolves to a colour | Gallery `swatch` |
 
 One contextual size: 0.875em of the surrounding text, so it is 14px in 16px prose and
@@ -86,8 +87,8 @@ In a 14px table cell: 12.25px/16.54px, 22px tall (`area--table`).
 | shell · block inset | 3 incl. border | Untitled 2 (ring inside padding) | Area's edge is a real border; 1px more, 24.9px tall at 14px |
 | fill | `bg-stripe` #fafafa (dark #282828), the 25 rung; was `bg-code` until the block's ground became the page (2026-09-28) | Untitled neutral-50 #fafafa | — |
 | edge | `border-decorative` #f3f3f3 (`code.css:141`) | Untitled neutral-200 #e5e5e5 | Area's decorative seam role; lighter. Kept (third pass): the token has a fill, so its edge is a seam, not a rule |
-| text · size | 0.875em (`code.css:174`) | Untitled 14 in 16px prose | Relative so one reference reads right in prose and in 14px chrome |
-| text · leading | 1.35 (`code.css:175`) | Area's own | Untitled 20px; a unitless tight leading keeps lines from spreading |
+| text · size | 0.875em (`code.css:132`) | Untitled 14 in 16px prose; kept em-relative by owner (audit G-26 A, 2026-09-30) | Relative so one reference follows the prose it sits in (14 / 18.9 in body text, 12.25 / 16.5 in small text), off the type ramp on purpose |
+| text · leading | 1.35 (`code.css:133`) | Area's own | Untitled 20px; a unitless tight leading keeps lines from spreading |
 | text · weight / face | 400 `font-mono` | Type ramp (400 for text) | Untitled 700 in the body face |
 | shadow | none (`code.css:159`) | Area's own | An inline reference is never elevated |
 | subtle ground | `token-bg-subtle` #f7f7f7 (`token.css:46-50`) | Area's own | Was a no-op until the audit fix (Verification) |
@@ -104,18 +105,16 @@ None. Code is not interactive.
 
 ## Behavior and accessibility
 
-Native `code` element; the swatch is `aria-hidden` (`primitives.tsx`, `Code`). Code and Token
-take `ground="subtle" | "on-color"`, the manifest's axis as a prop; the `subtle` and `onColor`
-booleans are deprecated aliases. Forced colours:
+Native `code` element; the swatch is `aria-hidden` (`primitives.tsx`, `Code`). Forced colours:
 no Code-specific rule; the border keeps the box visible.
 
 ## Peers and consistency
 
 | Peer | Shared role | Peer value | Code | Match |
 |---|---|---|---|---|
-| Kbd | small inline chrome | since the second pass a filled keycap: `bg-component-active` fill, no drawn edge, radius `control-xs`, muted 500 ink (`kbd.css:25-36`), after Notion's shortcut hint | 22px in a table cell, radius 6, edge #f3f3f3, fill #fafafa, 400 default ink | differ by role: a key is a filled label, a reference is outlined running text |
+| Kbd | small inline chrome | since the second pass a filled keycap: `bg-component-active` fill, no drawn edge, radius 6 (`radius-control-sm`, kbd.css:16-18; owner 2026-09-28), muted 500 ink (`kbd.css:25-36`), after Notion's shortcut hint | 22px in a table cell, radius 6, edge #f3f3f3, fill #fafafa, 400 default ink | differ by role: a key is a filled label, a reference is outlined running text |
 | Token | swatch composition | same rule (`token.css`) | same | match |
-| Code block | code ground | `bg-code` | `bg-code` | match |
+| Code block | code ground | `bg-code`, the page white since batch 22 | `bg-stripe` #fafafa (code.css:97) | differs: the block's ground lightened; inline code keeps the 25 rung so it shows in prose |
 | Badge | label on a fill | 500 weight | 400 | Code is running text, not a label |
 
 ## Visual pass
@@ -155,5 +154,7 @@ Unverified: dark theme, forced colours.
   most; only Untitled and antd draw a border. Open: em-based padding so inline code scales in
   headings (Primer, antd, Radix). Claude in Chrome capture of ChatGPT's inline code pending
   (the window was in the background).
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Code and Token take `ground: "subtle" | "on-color"`; the `subtle` / `onColor` booleans are deprecated aliases.
+- 2026-09-30 · audit S17 (API vocabulary, slice 2, H-13) → the manifest's `ground: on-color | subtle` axis is two independent booleans, `subtle` and `on-color`, matching React's `subtle` / `onColor` (manifest.ts:622-630; Token likewise, :654-661). No CSS change.
+- 2026-09-30 · audit G-26 (owner pick A) → inline Code keeps em-relative sizing (0.875em / 1.35) so it follows its prose; no snap to the ramp → code.css:132-133.
+- 2026-10-01 · audit H-25 (owner pick A) → the React `Token` and `TokenProps` are marked `@deprecated` (use `<Code swatch>`, which renders the same element and swatch); Token stays exported so existing markup renders; Presence stays the status mark → primitives.tsx:2152, :2176-2178.
 - 2026-10-01 · compact pass → inline Code is `max(text-xs, 0.875em)`: compact's 12px chrome made it 10.5, under the ramp; unchanged wherever the surrounding text is 14 or larger. docs/research/compact-pass-2026-10-01.md.

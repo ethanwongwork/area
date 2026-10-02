@@ -29,7 +29,7 @@ interactive content).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| tone | neutral (default, muted icon), info, success, warning, danger (icon color); the same set and order as Alert (audit S19) | Outcome | Sonner types (success, info, warning, error); Notion (warning icon) |
+| tone | info, success, warning, danger (icon color) | Outcome | Sonner types (success, info, warning, error); Notion (warning icon) |
 | composition | icon, title + description, action, dismiss | Undo, follow-up | Sonner (title, description, Undo, close); Notion (text action) |
 | layout | single line, multiline | Long messages | Sonner, Notion |
 
@@ -90,8 +90,16 @@ Inset equations: text top = 1 + 9 = 10; icon = 10 + (20 − 16)/2 = 12; last con
 
 ## Behavior and accessibility
 
-Content is a `role="status"` region with `aria-atomic`. Placement, timing, stacking and focus
-return stay with the consumer (prior decision). The dismiss is a ghost small Button
+A standalone Toast's content announces itself: `role="status"` with `aria-atomic`, or
+`role="alert"` for danger, as Alert does; `live={false}` turns this off (primitives.tsx:1411-1427).
+`Toaster` and `useToaster()` host toasts (audit E-11 A, owner 2026-09-30; Toaster.tsx): polite and
+assertive live regions exist before any toast, so the first message is announced (danger goes to the
+assertive one), and its toasts render with `live={false}`; `show(options)` returns an id and
+`dismiss(id)` removes one. Timers (default `duration` 5000) pause while the pointer or focus is in the
+region (WCAG 2.2.1); a toast with an action stays until dismissed. F8 (`hotkey`) focuses the region,
+named "Notifications (F8)". Toasts stack newest last at the viewport's end corner, 16 in, 8 apart
+(`surface.css:1319-1333`; the 16 and 8 are the system's surface inset and row gap, not captured).
+Focus return stays with the consumer. The dismiss is a ghost small Button
 (28, radius 6) with the Area `dismiss` glyph, shown by `onDismiss` and named by `dismissLabel`
 ("Dismiss notification" by default; `primitives.tsx:1187-1188`, `:1204`). It is the close
 recipe for rectangular surfaces, shared with Popover and Alert (audit S9).
@@ -117,7 +125,8 @@ the action and dismiss hover on screen.
 ## Open questions
 
 - Inverse (dark) toast like Notion's, as a variant or a theme choice.
-- A toaster (placement, stacking, timer) is out of scope by the prior decision.
+- ~~A toaster (placement, stacking, timer) is out of scope by the prior decision.~~ Built:
+  `Toaster` / `useToaster` (audit E-11 A, owner 2026-09-30).
 
 ## Feedback log
 
@@ -130,5 +139,6 @@ the action and dismiss hover on screen.
 - 2026-09-27 · batch 3 → Claude in Chrome side by side with Notion's toast recorded (Visual pass); Validated.
 - 2026-09-30 · audit S9 (owner) → Toast's ghost small Button close with the Area glyph is the rectangular-surface close recipe, now shared by Alert; `onDismiss` + `dismissLabel` is the one dismiss API. No code change.
 - 2026-09-30 · audit S10 (owner) → the lift is the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → surface.css:1273.
-- 2026-09-30 · audit S19 (owner) → the manifest lists Alert's set in Badge order (neutral, info, success, warning, danger); no visual change.
+- 2026-09-30 · audit S19 A (owner) → tones listed in Badge's order (neutral, info, success, warning, danger), one feedback set with Alert, whose neutral icon now matches Toast's muted ink. No visual change to Toast.
+- 2026-10-01 · audit E-11 (owner pick A) → `Toaster` / `useToaster` host toasts with pre-existing polite and assertive live regions, pausing timers, an F8 hotkey and end-corner stacking; Toast gains `live` (default true) and a danger Toast is `role="alert"` → Toaster.tsx, primitives.tsx:1411-1427, surface.css:1319-1333.
 - 2026-10-01 · compact pass (owner: "the toast action inset radius pairing looks incorrect" at compact) → the block inset was a literal 10 stepped to 6, which put the 24px action 2 from the top, 4 from the end, its 4px corner off the 8px corner. The block inset is now `inset-surface-sm + (icon − leading) / 2 − border`: default 10 (unchanged), compact 8, so the toast is 32 tall with the action 4 in on every side, concentric (8 − 4). Verified live; docs/research/compact-pass-2026-10-01.md.

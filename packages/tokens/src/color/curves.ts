@@ -70,8 +70,12 @@ export interface Inversion {
 }
 
 export const INVERSION = {
-  /** The page, and panels raised off it. */
-  page: { light: "white", dark: 900 },
+  /**
+   * The page, and panels raised off it. Dark sits on 975 (#020202), as close to black as the
+   * ramp goes (owner 2026-10-01: "a darker dark mode … as close to #000000 as possible"); ChatGPT's
+   * dark theme is built on #000000 (its Appearance setting, 2026-10-01). Was 900 (#121212).
+   */
+  page: { light: "white", dark: 975 },
   surface: { light: "white", dark: 850 },
   subtle: { light: 50, dark: 800 },
   stripe: { light: 25, dark: 800 },
@@ -93,6 +97,13 @@ export const INVERSION = {
    * Never use this token to identify an input, a selected state, or keyboard focus.
    */
   borderDecorative: { light: 75, dark: 800 },
+  /**
+   * The frame of a floating surface (Popover, Menu, Dialog, Toast, Command palette, a surface
+   * Calendar or ColorPicker). Light keeps the decorative rung; dark needs a firmer one, because a
+   * floating surface often sits on another surface where the lift and shadow vanish. 650 is
+   * ChatGPT's dark menu hairline, white 20% over its #212121 menu (audit S21c, 2026-10-01).
+   */
+  borderFloat: { light: 75, dark: 650 },
   border: { light: 250, dark: 650 },
   /**
    * Floating container frames, token badges and segmented tracks. Lighter than

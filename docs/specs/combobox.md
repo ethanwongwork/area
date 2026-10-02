@@ -48,8 +48,8 @@ list itself was measured only from its offscreen measurement nodes (24 rows, 26 
 | list surface | Menu: 12 radius, 4 inset, border, floating lift (`--area-shadow-float`) | menu.md | Figma's lists are dark; Area's menus are light (ChatGPT, Notion) |
 | rows | Menu rows (32, radius 8, 5% wash on hover and highlight); an icon takes Menu's `--area-gap-row` gap (12), so labels sit at 36 | menu.md | Figma 24/28 rows belong to compact density |
 | selected | active plate (`bg-component-active`, via `data-selected` on the chosen option; Combobox.tsx:216, surface.css:1055) plus the trailing check in a reserved column | Select's value rows; Figma's check column | A value picker, so it shows its value as Select does (audit S13 C, family call B-6 settled). Was the check alone. Area puts the check at the end (ChatGPT's model picker) |
-| position | top layer (native popover), 4 below the field starting at its start edge, at least its width (and Menu's 224), flips above when there is more room there, shifts inside the viewport; placed by the shared engine `useAnchoredPosition` (Combobox.tsx) | overlay.md (menus and lists 4); Figma list ≥ field; audit S16 / B-15 | Was CSS anchor positioning only, so a browser without it opened the list at the viewport origin |
-| height | at most 324 (Figma's font list viewport) or the room on the chosen side, then scrolls | Figma; audit B-5 (Select takes the same rules) | Was 324 or half the viewport |
+| position | top layer (native popover), placed by the shared JS engine (`useAnchoredPosition`: side bottom, align start, offset 4 = `MENU_OFFSET`, viewport padding 8), so it works without CSS anchor positioning; flips and shifts; min width max(field width, 224) | overlay.md (menu gap 4, audit S16 owner 2026-09-30); Figma list ≥ field | Was CSS anchor positioning |
+| height | min(324, the room beside the field), then scrolls; 50vh only before the engine reports the room | Figma (324, its font list viewport) | Was min(324, 50vh) |
 | empty | "No results", muted, a row tall, not an option | — | — |
 | create | "Create “text”" row with the add glyph when nothing matches exactly | Notion select | — |
 | groups | Menu labels (muted, row tall) over `role=group` | Figma font picker sections | — |
@@ -62,10 +62,8 @@ without highlighting, Enter picks, Tab picks the highlighted option and moves on
 closes, and Escape on a closed field clears it. Focus stays in the field
 (`aria-activedescendant`). Leaving the field: an exact label match is picked; otherwise the
 text reverts to the selection (or is kept with `allowsCustomValue`). A created option is
-selected once the host adds it. A pick calls `onValueChange(value, event)`; the event is absent
-only for a created option arriving from `onCreate`. The toggle is named by `toggleLabel`
-(default "Show suggestions") and its tooltip hides while the list is open. `className` and
-`style` go to the root (the same box), not the inner input.
+selected once the host adds it. The toggle's tooltip hides while the list is open. Ref and
+native props go to the input; `className` and `style` to the root (`Combobox.tsx:235`).
 
 ## Visual pass
 
@@ -99,4 +97,4 @@ field), matched to Notion's menu when Menu was approved. No change. Unverified: 
 
 - 2026-09-30 · audit S11a (owner) → no Combobox change; options use Menu's rows, so an icon's label sits on the shared 36 column (`--area-gap-row`, surface.css:984).
 - 2026-09-30 · audit S13 (owner) → the chosen option shows the active plate plus the check, as Select does; Combobox sets `data-selected` on it (Combobox.tsx:216; combobox.css:35-37). Settles family call B-6. Was the check alone.
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(value, event)` (event absent only for a created option); `style` goes to the root with `className` (it used to reach the inner input); the toggle keeps `toggleLabel`.
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → `style` lands on the root with `className` (Combobox.tsx:235; was forwarded through Input to the inner input).

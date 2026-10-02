@@ -92,6 +92,7 @@ export const tableVariants = /* @__PURE__ */ createVariants(manifests.table);
 export const tabsVariants = /* @__PURE__ */ createVariants(manifests.tabs);
 export const segmentedVariants = /* @__PURE__ */ createVariants(manifests.segmented);
 export const sliderVariants = /* @__PURE__ */ createVariants(manifests.slider);
+export const sliderRangeVariants = /* @__PURE__ */ createVariants(manifests.sliderRange);
 export const chipVariants = /* @__PURE__ */ createVariants(manifests.chip);
 export const panelVariants = /* @__PURE__ */ createVariants(manifests.panel);
 export const propertyListVariants = /* @__PURE__ */ createVariants(manifests.propertyList);
