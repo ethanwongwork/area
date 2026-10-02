@@ -133,7 +133,7 @@
   }
 
   .area-separator--none { --_separator-gap: 0px; }
-  .area-separator--normal { --_separator-gap: var(--area-space-8); }
+  .area-separator--normal { --_separator-gap: var(--area-ui-cluster); }
 
   /* --- Skeleton ----------------------------------------------------------- */
   /*

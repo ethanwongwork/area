@@ -224,11 +224,27 @@ export function derivedTokens(): Record<string, string> {
     // ColorSwatch's solid, very light edge (audit F-30 A; was 15% of the token ink).
     [`${PREFIX}token-swatch-ring`]: `var(${PREFIX}bg-component)`,
     // (radius-nested was pruned in audit S21b: concentric corners use radius-concentric, S3.)
+    // Corners follow the UI scale (compact pass, owner 2026-10-01). The radius axis publishes a
+    // default and a dense ladder; the UI scale's `ui-dense` flag (0 or 1) picks one. A live
+    // calc, so a `data-area-ui` or `data-area-radius` subtree re-derives its own corners.
+    ...radiusDerivations(),
 
     // Standard transition for interactive chrome. Only properties that actually change.
     [`${PREFIX}transition`]:
       `background-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), border-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), box-shadow var(${PREFIX}duration-fast) var(${PREFIX}ease-out)`,
   };
+}
+
+function radiusDerivations(): Record<string, string> {
+  const pick = (name: string) =>
+    `calc(var(${PREFIX}radius-base-${name}) + (var(${PREFIX}radius-dense-${name}) - var(${PREFIX}radius-base-${name})) * var(${PREFIX}ui-dense))`;
+  const out: Record<string, string> = {};
+  for (const tier of ["xs", "sm", "md", "lg", "xl"]) out[`${PREFIX}radius-control-${tier}`] = pick(`control-${tier}`);
+  out[`${PREFIX}radius-control`] = `var(${PREFIX}radius-control-md)`;
+  out[`${PREFIX}radius-container`] = pick("container");
+  out[`${PREFIX}radius-small`] = pick("small");
+  out[`${PREFIX}radius-row`] = pick("row");
+  return out;
 }
 
 /**
@@ -249,8 +265,9 @@ export function derivedTokens(): Record<string, string> {
  * plausible-looking wrong number. Both are reasons to register sparingly.
  */
 export const REGISTERED_PROPERTIES = [
-  { name: `${PREFIX}radius-container`, syntax: "<length>", initial: "12px" },
-  { name: `${PREFIX}radius-small`, syntax: "<length>", initial: "4px" },
+  // The leaves of the radius derivation; the public radius tokens are derived and unregistered.
+  { name: `${PREFIX}radius-base-container`, syntax: "<length>", initial: "12px" },
+  { name: `${PREFIX}radius-base-small`, syntax: "<length>", initial: "6px" },
   { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}border-width`, syntax: "<length>", initial: "1px" },

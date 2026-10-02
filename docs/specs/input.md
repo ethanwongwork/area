@@ -212,3 +212,4 @@ fields and Figma's search and hex fields. Build and test results are in the
 - 2026-10-01 · audit B-7 (owner pick B+C) → the action is field height − 8 (20 / 24 / 32) with corner field radius − 4, concentric (md: 24 box, 4 ring, radius 4, measured); on soft fields it hovers and presses with translucent `bg-hover` / `bg-active` → input.css:17-19, :200-211.
 - 2026-10-01 · audit B-9 (owner pick B) → read-only keeps its variant's rest paint (was the soft fill), no hover edge, default cursor; a soft field never gains an edge when disabled → input.css:66, :108-112.
 - 2026-10-01 · audit B-10 → icons and the action take `fg-disabled` with the field → input.css:139-141.
+- 2026-10-01 · compact pass → the inline action button is `min(icon + 8, height − 4)`: compact sm (24 with a 16 icon) made it 24, filling the field (0 from the top, 1 from the end); it is now 20, 2 clear on every side. Default unchanged. docs/research/compact-pass-2026-10-01.md.

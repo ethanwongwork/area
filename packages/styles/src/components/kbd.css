@@ -8,9 +8,11 @@
  */
 @layer area.components {
   .area-kbd {
-    --_min: var(--area-space-20);
-    --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-stroke-width) + var(--area-stroke-width));
-    --_padding: var(--area-space-4);
+    --_min: var(--area-mark-label-md);
+    /* The keycap is the mark height (20 md, 16 sm): a 10px line box, the padding, and the 1px
+       transparent border twice. Reading the mark role lets compact shorten it (compact pass). */
+    --_height: var(--_min);
+    --_padding: calc((var(--_height) - var(--area-size-10)) / 2 - var(--area-stroke-width));
     --_font: var(--area-text-xs-size);
     --_leading: var(--area-size-10);
     /* spec: 6 at every size and in every host (owner 2026-09-28: "keep 6px for everything as a
@@ -55,17 +57,13 @@
   }
 
   .area-kbd--md {
-    --_min: var(--area-space-20);
-    --_height: calc(var(--area-size-10) + var(--area-space-8) + var(--area-stroke-width) + var(--area-stroke-width));
-    --_padding: var(--area-space-4);
+    --_min: var(--area-mark-label-md);
     --_font: var(--area-text-xs-size);
     --_leading: var(--area-size-10);
   }
 
   .area-kbd--sm {
-    --_min: var(--area-space-16);
-    --_height: calc(var(--area-size-10) + var(--area-space-4) + var(--area-stroke-width) + var(--area-stroke-width));
-    --_padding: var(--area-space-2);
+    --_min: var(--area-mark-label-sm);
     --_font: var(--area-size-11);
     --_leading: var(--area-size-10);
   }

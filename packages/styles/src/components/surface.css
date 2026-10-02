@@ -37,8 +37,11 @@
        when there is an image or container"; was 4 further in, 12). The corner is concentric
        with a default Button on that column: its radius plus the column's distance from the edge
        (8 + 16 = 24, was 20), and it follows the radius presets through the Button's radius. */
-    --_card-inset: var(--area-space-8);
-    --_card-step: var(--area-space-8);
+    /* Compact steps both down one rung (compact pass, round 6): inset 8 -> 6, step 8 -> 6, so text
+       sits 12 from the edge and the corner is 6 + 6 + 6 = 18. Each value is written as its default
+       less the compact difference times `ui-dense` (0 default, 1 compact). */
+    --_card-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
+    --_card-step: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
     /* The control a header action holds: a default Button, a small one in a small card. */
     --_card-action: var(--area-control-md);
     /* The control radius is capped as Button caps its own, so the Pill preset keeps cards finite (audit H-1);
@@ -97,16 +100,16 @@
   /* Every size keeps the 8 step and the default Button's corner: sm 8 + 6 + 8 = 22,
      md 24, lg 8 + 12 + 8 = 28; text 14 / 16 / 20 from the edge (was 18 / 20 / 24 and 10 / 12 / 16). */
   .area-card--sm {
-    --_card-inset: var(--area-space-6);
+    --_card-inset: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)); /* spec: 6, compact 4 */
     --_card-action: var(--area-control-sm);
     --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + (var(--_card-inset) + var(--_card-step)) * var(--area-radius-concentric));
   }
   .area-card--md {
-    --_card-inset: var(--area-space-8);
+    --_card-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: 8, compact 6 */
     --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + (var(--_card-inset) + var(--_card-step)) * var(--area-radius-concentric));
   }
   .area-card--lg {
-    --_card-inset: var(--area-space-12);
+    --_card-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
     --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + (var(--_card-inset) + var(--_card-step)) * var(--area-radius-concentric));
   }
 
@@ -215,7 +218,7 @@
    * carousel, footer).
    */
   .area-card__content {
-    --_card-block-gap: var(--area-space-12);
+    --_card-block-gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -265,7 +268,7 @@
   .area-card__header {
     display: flex;
     align-items: flex-start;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster); /* 8, compact 6 */
     min-inline-size: 0;
   }
   .area-card__heading {
@@ -379,7 +382,7 @@
   /* A short list of points, each led by a 16px icon on its first line; body size, content ink. */
   .area-card__list {
     display: grid;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster); /* 8, compact 6 */
     margin: 0;
     padding: 0;
     list-style: none;
@@ -457,7 +460,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-start;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster); /* 8, compact 6 */
     margin-block-start: auto;
     padding-block-start: calc(var(--_card-block-gap) - var(--area-space-4));
   }
@@ -533,10 +536,13 @@
     --_fg: var(--area-fg-default);
     --_alert-icon: var(--area-fg-muted);
     --_border: var(--area-border-decorative);
-    --_alert-pad-block: calc(var(--area-space-10) - var(--area-border-width));
-    --_alert-pad-inline: calc(var(--area-space-12) - var(--area-border-width));
+    /* Toast's inset (compact pass, 2026-10-01): the sm surface inset at the sides, and the 16px
+       icon as far from the top as from the side (10 and 12 at default, 8 and 8 compact). */
+    --_alert-pad-block: calc(var(--area-inset-surface-sm) + (var(--area-icon-md) - var(--area-ui-leading)) / 2 - var(--area-border-width));
+    --_alert-pad-inline: calc(var(--area-inset-surface-sm) - var(--area-border-width));
     --_alert-control-block: calc((var(--area-ui-leading) - var(--area-control-sm)) / 2);
-    --_alert-control-end: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2);
+    /* The last control ends as far from the side as it sits from the top: 6 default, 4 compact. */
+    --_alert-control-end: calc(var(--_alert-pad-block) + var(--_alert-control-block) - var(--_alert-pad-inline));
 
     display: grid;
     grid-template-areas: "icon content actions dismiss";
@@ -606,6 +612,12 @@
   /* spec: 28px controls hang over the text line by 4 each side, as Toast's do, so they sit 6
      from the top; the last one sits 6 from the side, concentric with the 12 corner. */
   .area-alert__actions, .area-alert__dismiss { margin-block: var(--_alert-control-block); }
+  /* An empty grid track still takes its column gaps, so an alert without a dismiss (or icon)
+     pushed its action 8 further in (14 from the side, not 6; owner 2026-10-01). The slots carry
+     their own spacing instead, and absent slots leave nothing. The banner is a flex row. */
+  .area-alert:not(.area-alert--banner) { column-gap: 0; }
+  .area-alert:not(.area-alert--banner) > .area-alert__icon { margin-inline-end: var(--area-space-8); }
+  .area-alert:not(.area-alert--banner) > :is(.area-alert__actions, .area-alert__dismiss) { margin-inline-start: var(--area-space-8); }
   .area-alert > :is(.area-alert__actions, .area-alert__dismiss):last-child { margin-inline-end: var(--_alert-control-end); }
 
   .area-alert--single-line { align-items: center; }
@@ -634,12 +646,11 @@
     /* spec: text 12 from the top and 16 from the side (OpenAI Daybreak 12 / 16), so one line is
        44 tall; OpenAI business 10 / 14 on a 28 line (48), Primer 8 + 1 border (55 with 36
        actions). Corner 6: OpenAI 6 on both banners, Primer 6. */
-    --_alert-pad-block: calc(var(--area-space-12) - var(--area-border-width));
-    --_alert-pad-inline: calc(var(--area-space-16) - var(--area-border-width));
+    --_alert-pad-block: calc(var(--area-inset-surface-md) - var(--area-space-4) - var(--area-border-width));
+    --_alert-pad-inline: calc(var(--area-inset-surface-md) - var(--area-border-width));
     --_alert-radius: min(var(--area-radius-control-sm), calc(var(--area-control-sm) * var(--area-radius-cap)));
-    /* 28px controls hang 4 over the line, so they sit 8 from the top; the last one sits 8 from
-       the end too (8 into the 16 inset). */
-    --_alert-control-end: calc(var(--area-space-8) - var(--area-space-16));
+    /* 28px controls hang 4 over the line, so they sit 8 from the top and, by the base rule, 8 from
+       the end (12 / 16 insets; compact 8 / 12, controls 4 in). */
     /* A row, not the grid: absent slots (no icon, no actions) must not leave their gaps, so text
        starts on the 16 inset and a closing link ends on it. */
     display: flex;
@@ -650,6 +661,11 @@
   /* The corner offset is a 28px control's; a Badge or text at the end stays on the inset
      (OpenAI business: the status pill 14 in, on its 14 inset). */
   .area-alert--banner > .area-alert__actions:last-child:not(:has(> :is(button, .area-button):last-child)) { margin-inline-end: 0; }
+  /* A trailing Badge is a plate, not text: it ends as far from the side as it sits from the top
+     (12 and 12 default, 8 and 8 compact; was 12 and 16, owner 2026-10-01). */
+  .area-alert--banner > .area-alert__actions:last-child:has(> .area-badge:last-child) { margin-inline-end: calc(var(--_alert-pad-block) + (var(--area-ui-leading) - var(--area-mark-label-md)) / 2 - var(--_alert-pad-inline)); }
+  .area-alert--banner > .area-alert__actions:last-child:has(> .area-badge--sm:last-child) { margin-inline-end: calc(var(--_alert-pad-block) + (var(--area-ui-leading) - var(--area-mark-label-sm)) / 2 - var(--_alert-pad-inline)); }
+  .area-alert--banner > .area-alert__actions:last-child:has(> .area-badge--lg:last-child) { margin-inline-end: calc(var(--_alert-pad-block) + (var(--area-ui-leading) - var(--area-mark-label-lg)) / 2 - var(--_alert-pad-inline)); }
   /* spec: the link ends the row, 16 from the end when nothing follows it (OpenAI Daybreak's
      "Learn more": 14/20 regular, underlined, 16 from the end). */
   .area-alert--banner > .area-alert__link {
@@ -799,16 +815,17 @@
   /* The page behind a modal doesn't scroll: showModal() leaves it to the page (audit E-20). */
   html:has(.area-dialog__modal:modal) { overflow: hidden; }
   .area-dialog {
-    --_dialog-inset: calc(var(--area-space-16) - var(--area-border-width));
+    --_dialog-inset: calc(var(--area-inset-surface-md) - var(--area-border-width)); /* 16, compact 12: the md surface inset */
     /*
      * spec: concentric with the corner close. The close sits 8 in (inset minus half the
      * control's padding), so the corner is its radius plus 8: 16 at the standard preset
-     * (ChatGPT 16). Capped at twice the system container radius so Sharp stays square.
+     * (ChatGPT 16). Capped at twice the system container radius so Sharp stays square. Reads
+     * the inset role, not a literal 16, so compact's corner steps down with it (was 18).
      */
-    --_dialog-radius: min(calc(var(--area-radius-container) * 2), calc(var(--area-radius-control-md) + var(--area-space-16) - (var(--area-control-md) - var(--area-icon-md)) / 2));
+    --_dialog-radius: min(calc(var(--area-radius-container) * 2), calc(var(--area-radius-control-md) + var(--area-inset-surface-md) - (var(--area-control-md) - var(--area-icon-md)) / 2)); /* compact: 6 + 12 - 6 = 12 */
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-16);
+    gap: var(--area-inset-surface-md);
     text-align: start;
     inline-size: min(calc(100vw - var(--area-space-32)), calc(var(--area-space-96) * 5));
     font-size: var(--area-ui-size);
@@ -832,7 +849,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: var(--area-space-16);
+    gap: var(--area-inset-surface-md);
     padding: 0;
     flex-shrink: 0;
   }
@@ -891,7 +908,7 @@
   .area-dialog__footer {
     display: flex;
     justify-content: flex-end;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     padding: 0;
     flex-wrap: wrap;
     flex-shrink: 0;
@@ -919,13 +936,14 @@
   }
 
   .area-popover {
-    --_inset: calc(var(--area-space-12) - var(--area-border-width));
+    --_inset: calc(var(--area-inset-surface-sm) - var(--area-border-width)); /* 12, compact 8: the sm surface inset */
     position: relative;
     isolation: isolate;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    /* spec: 16 between header, body and footer (Notion 16, shadcn 16). docs/specs/popover.md. */
-    gap: var(--area-space-16);
+    /* spec: 16 between header, body and footer (Notion 16, shadcn 16). docs/specs/popover.md.
+       The md surface inset, so compact steps it down to 12 with the insets. */
+    gap: var(--area-inset-surface-md);
     /* spec: 320 preferred (shadcn 320; ChatGPT's panel 254, Notion's share 456). */
     inline-size: min(var(--area-popover-inline-size, calc(var(--area-space-96) * 3 + var(--area-space-32))), 100%);
     min-inline-size: 0;
@@ -964,7 +982,7 @@
   :is(.area-popover--left:not([data-side]), .area-popover[data-side="left"]) > .area-popover__arrow { left: 100%; top: 50%; transform: translate(-50%, -50%) rotate(-90deg) translateY(50%); }
   :is(.area-popover--right:not([data-side]), .area-popover[data-side="right"]) > .area-popover__arrow { right: 100%; top: 50%; transform: translate(50%, -50%) rotate(90deg) translateY(50%); }
   .area-popover--arrow { overflow: visible; }
-  .area-popover__footer { display: flex; align-items: center; gap: var(--area-space-8); }
+  .area-popover__footer { display: flex; align-items: center; gap: var(--area-ui-cluster); }
   /*
    * spec (pass 2, docs/specs/popover.md): the header is the title group. Title and description
    * share the first column, 6px apart (title baseline to description cap 15, shadcn 15); any
@@ -976,7 +994,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
-    column-gap: var(--area-space-8);
+    column-gap: var(--area-ui-cluster);
     /* spec: title baseline to description cap 15 with the 20px description line; one slot that
        Alert and Toast share (audit E-13, E-28). */
     --_title-gap: 5px; /* spec */
@@ -1006,7 +1024,7 @@
   .area-popover__title { margin: 0; font-size: inherit; line-height: var(--area-ui-leading); font-weight: var(--area-weight-strong); }
   /* spec (type pass): 14/20 like every surface description (was 14/18). */
   .area-popover__description { color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
-  .area-popover__body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); }
+  .area-popover__body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-cluster); }
   .area-popover__footer { justify-content: flex-end; flex-wrap: wrap; }
   .area-popover__footer > :first-child { margin-inline-end: auto; }
   .area-popover__media { inline-size: 100%; aspect-ratio: 5 / 2; overflow: hidden; border-radius: max(0px, calc(var(--area-radius-container) - var(--_inset) - var(--area-border-width))); background: var(--area-bg-component); }
@@ -1035,7 +1053,7 @@
   .area-menu__item {
     display: flex;
     align-items: center;
-    block-size: var(--area-control-md);
+    block-size: var(--area-ui-row);
     padding-inline: var(--area-space-8);
     border: 0;
     /*
@@ -1046,7 +1064,7 @@
      */
     border-radius: min(
       max(0px, calc(var(--area-radius-container) - var(--_inset))),
-      calc(var(--area-control-md) * var(--area-radius-cap))
+      calc(var(--area-ui-row) * var(--area-radius-cap))
     );
     background: transparent;
     color: inherit;
@@ -1099,7 +1117,7 @@
    * spec (model-picker.md): a row with a note under its label (ChatGPT's model list: 14/20 label,
    * 12/14 muted note, 6 above and below, 46 tall). The row grows to fit; the check stays centred.
    */
-  .area-menu__item:has(.area-menu__description) { block-size: auto; min-block-size: var(--area-control-md); padding-block: 6px; /* spec */ }
+  .area-menu__item:has(.area-menu__description) { block-size: auto; min-block-size: var(--area-ui-row); padding-block: 6px; /* spec */ }
   .area-menu__lines { display: flex; flex-direction: column; min-inline-size: 0; }
   /* Two lines stack on full line boxes (20 over 16), so the cap trim of a one-line row is off. */
   .area-menu__lines > .area-menu__text { text-box: none; padding-block: 0; }
@@ -1149,7 +1167,7 @@
   .area-menu__label {
     display: flex;
     align-items: center;
-    block-size: var(--area-control-md);
+    block-size: var(--area-ui-row);
     padding-inline: var(--area-space-8);
     color: var(--area-fg-muted);
     font-size: var(--area-text-xs-size);
@@ -1264,7 +1282,7 @@
     isolation: isolate;
     display: inline-flex;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     padding-block: var(--_tooltip-inset-block);
     padding-inline-start: var(--_tooltip-inset-inline);
     padding-inline-end: var(--_tooltip-inset-inline-end);
@@ -1342,8 +1360,12 @@
   .area-toast {
     display: flex;
     align-items: flex-start;
-    gap: var(--area-space-8);
-    padding: calc(var(--area-space-10) - var(--area-border-width)) calc(var(--area-space-12) - var(--area-border-width));
+    gap: var(--area-ui-cluster);
+    /* The sm surface inset at the sides (12, compact 8). Above and below, the 16px icon sits as
+     * far from the top as from the side, which also puts the last control as far from the top
+     * as from the end, concentric with the corner: default 10 (40 tall, control 6 in, 12 - 6),
+     * compact 8 (32 tall, control 4 in, 8 - 4). A fixed 6 put compact's control 2 from the top. */
+    padding: calc(var(--area-inset-surface-sm) + (var(--area-icon-md) - var(--area-ui-leading)) / 2 - var(--area-border-width)) calc(var(--area-inset-surface-sm) - var(--area-border-width));
     border: var(--area-border-width) solid var(--area-border-float);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);

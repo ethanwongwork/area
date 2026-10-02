@@ -326,3 +326,4 @@ chevron, as ChatGPT's model picker).
 - 2026-10-01 · audit G-12 (owner pick A) → a menu-button trigger keeps the pressed plate while expanded (SplitButton, Menu triggers) → button.css:145-150.
 - 2026-10-01 · audit A-23, H-26 → in a group, a disabled button's seam is drawn by its enabled neighbour at full strength, and a fully disabled ButtonGroup or SplitButton dims once as a whole (see button-group.md, split-button.md).
 - 2026-10-01 · owner (audit H-13): the manifest `align` values are `start | end` (classes `area-button--start` / `--end`; were `align-start` / `align-end`). React `align` is unchanged.
+- 2026-10-01 · compact pass → a trailing Kbd's end inset reads the mark role (was a literal 20), so at compact the Kbd sits 6 from the top and the end (was 6 / 4). docs/research/compact-pass-2026-10-01.md.

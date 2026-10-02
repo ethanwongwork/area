@@ -193,3 +193,4 @@ read from the CSS; no Area capture shows them.
 - 2026-09-30 · audit S17 (API vocabulary, slice 2, H-13) → manifest default `size: "md"` added (manifest.ts:600); the md modifier equals the base rule, no visual change.
 - 2026-10-01 · audit F-23 (owner pick A) → `TableLink`: one stretched link makes a row clickable, with the row's focus ring; `wrapperProps` for the scrolling wrapper → primitives.tsx:1025-1035, navigation.css:186-193.
 - 2026-10-01 · audit F-24 → a sort Button in a header cell overhangs the cell's block padding, keeping the row at its text height with the label on the column's text edge → navigation.css:197-200.
+- 2026-10-01 · compact pass round 6 → cell padding above and below steps down at compact (sm 4 → 2, md 8 → 6, lg 12 → 8); the side padding already followed `gutter-md` (12 → 8). docs/research/compact-pass-2026-10-01.md.

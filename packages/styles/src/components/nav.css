@@ -86,7 +86,7 @@
   .area-nav__label {
     display: flex;
     align-items: center;
-    block-size: var(--area-control-md);
+    block-size: var(--area-ui-row);
     padding-inline: var(--area-space-8);
     color: var(--area-fg-muted);
     font-size: var(--area-ui-size);
@@ -98,13 +98,13 @@
     display: flex;
     align-items: center;
     min-inline-size: 0;
-    block-size: var(--area-control-md);
+    block-size: var(--area-ui-row);
     padding-inline: var(--area-space-8);
     border: 0;
     /* Capped against the row's own height; see button.css. */
     border-radius: min(
       var(--area-radius-row),
-      calc(var(--area-control-md) * var(--area-radius-cap))
+      calc(var(--area-ui-row) * var(--area-radius-cap))
     );
     background: transparent;
     /* spec: ChatGPT's rows are the default ink (rgb 13, chatgpt--sidebar-top-group); the
@@ -241,8 +241,8 @@
     align-items: center;
     min-inline-size: 0;
     gap: var(--area-space-2);
-    padding-inline-end: calc((var(--area-control-md) - var(--area-control-sm)) / 2);
-    border-radius: min(var(--area-radius-row), calc(var(--area-control-md) * var(--area-radius-cap)));
+    padding-inline-end: calc((var(--area-ui-row) - var(--area-control-sm)) / 2);
+    border-radius: min(var(--area-radius-row), calc(var(--area-ui-row) * var(--area-radius-cap)));
   }
   @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current]:not([aria-current="false"]))):hover { background: var(--area-bg-component-hover); } }
   /* Any current value (page, location, step) marks the row, as it marks the item (audit D-29). */
@@ -252,6 +252,8 @@
 
   .area-nav__row > .area-nav__item { flex: 1; }
   .area-nav__actions { display: flex; align-items: center; gap: var(--area-space-2); flex-shrink: 0; }
+  /* Concentric with the row plate: its radius less the actions' inset ((row - action) / 2). */
+  .area-nav__actions > .area-button { --_radius: max(0px, calc(var(--area-radius-row) - (var(--area-ui-row) - var(--area-control-sm)) / 2)); }
   /* Nested row controls hover with the translucent wash (audit S11c). */
   .area-nav__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-active); }
   .area-nav__actions [aria-expanded="false"] svg { rotate: -90deg; }

@@ -198,3 +198,4 @@ above is from `area--size-medium` (edge rgb(212)). Build and test results are in
 - 2026-09-30 · audit S14 (owner) → the label gap is 6 at md and lg (was 8), from the density tokens (choice.css:9, :404, :410; density.ts:81-82); Radio and the choice labels follow.
 - 2026-09-30 · audit S17 (API vocabulary, slice 1) → `onCheckedChange(checked, event)` added, as Switch; called after native `onChange` unless it calls `preventDefault` → forms.tsx:121.
 - 2026-09-30 · audit C-20 (owner pick A) → the choice card keeps its own geometry (12 corner, 12 inset, #e2 edge), distinct from Card (24 corner, 16 inset, #ee edge + halo); recorded under Peers, no change → choice.css:99-110, surface.css:33-90.
+- 2026-10-01 · compact pass round 5 → the 24px activation lane stays at compact (WCAG 2.5.8); type steps to 12/16, the 16px glyph stays. docs/research/compact-pass-2026-10-01.md.

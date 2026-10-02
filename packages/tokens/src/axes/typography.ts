@@ -113,8 +113,27 @@ function ramp(prefix: string, steps: Record<string, Step>, offset: number) {
   return out;
 }
 
+/**
+ * Text steps along the UI ramp itself (12/16, 14/20, 16/24, then 20/28), not the primitive
+ * ramp, so a scaled preset never leaves it (owner, 2026-10-01: compact is 12/16, not 13/18 or
+ * 11/14). Compact clamps at the caption: xs and sm are both 12/16, md is 14/20.
+ */
+const UI_TEXT_RAMP: readonly Step[] = [TEXT.xs!, TEXT.sm!, TEXT.md!, { size: 20, leading: 28, tracking: "0em" }];
+function textRamp(offset: number) {
+  if (offset === 0) return ramp("text", TEXT, 0);
+  const out: Record<string, string> = {};
+  for (const [name, step] of Object.entries(TEXT)) {
+    const index = UI_TEXT_RAMP.indexOf(step);
+    const target = UI_TEXT_RAMP[Math.min(UI_TEXT_RAMP.length - 1, Math.max(0, index + offset))]!;
+    out[`text-${name}-size`] = `var(--area-size-${target.size})`;
+    out[`text-${name}-leading`] = `var(--area-leading-${target.leading})`;
+    out[`text-${name}-tracking`] = target.tracking;
+  }
+  return out;
+}
+
 export const typographyRamps = (offset: number) => ({
-  ...ramp("text", TEXT, offset),
+  ...textRamp(offset),
   // Compact tightens text only; titles keep their size so headings do not shrink toward body.
   ...ramp("title", TITLE, Math.max(0, offset)),
   ...ramp("display", DISPLAY, offset),

@@ -237,3 +237,4 @@ Unverified: dark theme and a side-by-side with Figma's inspector at the same zoo
   field gap = field-to-button gap (8 / 12); last field to rule 12 / 16; no clipped value.
 - 2026-09-28 · owner: approved (batch 8).
 - 2026-09-30 · audit F-26 (owner pick B) → insets 12 / 16 and gaps 8 / 12 stay fixed spacing, not density-following; the code comment and this spec no longer claim the gutter ramp; compact values come with the density pass → panel.css:340-357.
+- 2026-10-01 · compact pass round 6 → the sides read the surface insets (`inset-surface-md/sm`: 16 / 12, compact 12 / 8); gaps 12 / 8 step to 8 / 6. Default unchanged. docs/research/compact-pass-2026-10-01.md.

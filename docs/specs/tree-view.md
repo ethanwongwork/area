@@ -174,3 +174,4 @@ panel does, so nesting reads without hovering. Area's rows are 32 against Notion
 - 2026-10-01 · audit D-11 → typeahead uses the shared 1000ms window (`TYPEAHEAD_RESET`), as hosted and anchored Menu → TreeView.tsx:115, Overlays.tsx:30.
 - 2026-10-01 · audit D-13 → Left / Right swap in RTL; a collapsed chevron points along the reading direction (`:dir(rtl)` rotate 90) → TreeView.tsx:93-94, tree-view.css.
 - 2026-10-01 · audit D-14 → forced colours paint selected and current rows `Highlight` / `HighlightText` → forced-colors.css.
+- 2026-10-01 · owner: "tree view, i think figma has their button all the way at the end" → the last row action ends as far from the row's end as it sits from the top, `(row − action) / 2`: 2 at default (was 4), flush at compact (was 4), as Nav's row actions and Figma's visibility toggle. Actions are concentric with the row (row radius less that inset). docs/research/compact-pass-2026-10-01.md.

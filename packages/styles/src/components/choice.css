@@ -61,7 +61,8 @@
     border-radius: min(var(--area-radius-small), calc(var(--_size) / 4));
   }
 
-  /* The mark is a glyph, but its visible label owns a 24px minimum activation lane.
+  /* The mark is a glyph, but its visible label owns a 24px minimum activation lane. It stays 24
+     at compact: WCAG 2.5.8's minimum target, which the dense scale does not go under.
      Align the glyph to the first line so a wrapped option retains an unambiguous start. */
   .area-checkbox {
     align-items: flex-start;
@@ -298,8 +299,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--area-space-8);
-    margin-block-start: var(--area-space-6); /* Field label to control, 6 (audit C-27 A; was 12) */
+    gap: var(--area-ui-cluster);
+    margin-block-start: var(--area-ui-stack); /* Field label to control, 6 / compact 4 (audit C-27 A; was 12) */
   }
 
   .area-radio-group--vertical .area-radio-group__options { flex-direction: column; }

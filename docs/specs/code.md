@@ -157,3 +157,4 @@ Unverified: dark theme, forced colours.
 - 2026-09-30 · audit S17 (API vocabulary, slice 2, H-13) → the manifest's `ground: on-color | subtle` axis is two independent booleans, `subtle` and `on-color`, matching React's `subtle` / `onColor` (manifest.ts:622-630; Token likewise, :654-661). No CSS change.
 - 2026-09-30 · audit G-26 (owner pick A) → inline Code keeps em-relative sizing (0.875em / 1.35) so it follows its prose; no snap to the ramp → code.css:132-133.
 - 2026-10-01 · audit H-25 (owner pick A) → the React `Token` and `TokenProps` are marked `@deprecated` (use `<Code swatch>`, which renders the same element and swatch); Token stays exported so existing markup renders; Presence stays the status mark → primitives.tsx:2152, :2176-2178.
+- 2026-10-01 · compact pass → inline Code is `max(text-xs, 0.875em)`: compact's 12px chrome made it 10.5, under the ramp; unchanged wherever the surrounding text is 14 or larger. docs/research/compact-pass-2026-10-01.md.

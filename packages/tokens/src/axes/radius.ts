@@ -77,19 +77,27 @@ interface RadiusPreset {
    * not, so shells stayed rounded; 0 here makes them square with everything else.
    */
   concentric: 0 | 1;
+  /**
+   * The same family for the dense UI scale (compact pass, owner 2026-10-01: corners one step
+   * down). Radius follows painted height, and compact paints every tier one rung shorter, so
+   * a compact tier takes the curve's value for the next box down (md 28 reads sm's, sm 24
+   * reads xs's); xs and the shapes step down by about a third (12 -> 8, as VS Code's 8px
+   * surfaces and 4-6px rows). The UI scale selects the ladder; emit/base.ts derives the
+   * public radius tokens from both, so neither axis writes the other's tokens.
+   */
+  dense: { control: ControlRadii; container: number; small: number; row: number };
 }
 
-function radiusTokens({ control, container, small, row, cap, buttonCap, concentric }: RadiusPreset) {
+function radiusTokens({ control, container, small, row, cap, buttonCap, concentric, dense }: RadiusPreset) {
+  const out: Record<string, string> = {};
+  for (const [ladder, values] of [["base", { control, container, small, row }], ["dense", dense]] as const) {
+    for (const tier of ["xs", "sm", "md", "lg", "xl"] as const) out[`radius-${ladder}-control-${tier}`] = `${values.control[tier]}px`;
+    out[`radius-${ladder}-container`] = `${values.container}px`;
+    out[`radius-${ladder}-small`] = `${values.small}px`;
+    out[`radius-${ladder}-row`] = `${values.row}px`;
+  }
   return {
-    "radius-control": `${control.md}px`,
-    "radius-control-xs": `${control.xs}px`,
-    "radius-control-sm": `${control.sm}px`,
-    "radius-control-md": `${control.md}px`,
-    "radius-control-lg": `${control.lg}px`,
-    "radius-control-xl": `${control.xl}px`,
-    "radius-container": `${container}px`,
-    "radius-small": `${small}px`,
-    "radius-row": `${row}px`,
+    ...out,
     // Unitless, because the box it applies to is only known where it is used. Radius owns
     // both caps: UI scale owns box dimensions, never a shape decision.
     "radius-cap": String(cap),
@@ -104,12 +112,12 @@ function radiusTokens({ control, container, small, row, cap, buttonCap, concentr
  * and Pill. Standard is the default family.
  */
 const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
-  { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, buttonCap: 0.4, concentric: 0, note: "Square corners throughout." },
-  { id: "subtle", control: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }, small: 2, row: 4, container: 6, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "A restrained 4px medium-control family." },
-  { id: "soft", control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, small: 4, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "A soft 6px medium-control family." },
-  { id: "standard", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
-  { id: "round", control: { xs: 5, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "A round 10px medium-control family." },
-  { id: "rotund", control: { xs: 6, sm: 10, md: 12, lg: 14, xl: 16 }, small: 10, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, concentric: 1, note: "The roundest finite family: 12px at medium." },
+  { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, buttonCap: 0.4, concentric: 0, dense: { control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, container: 0, small: 0, row: 0 }, note: "Square corners throughout." },
+  { id: "subtle", control: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }, small: 2, row: 4, container: 6, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 2, md: 3, lg: 4, xl: 5 }, container: 4, small: 2, row: 3 }, note: "A restrained 4px medium-control family." },
+  { id: "soft", control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, small: 4, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 3, md: 4, lg: 6, xl: 8 }, container: 6, small: 3, row: 4 }, note: "A soft 6px medium-control family." },
+  { id: "standard", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, container: 8, small: 4, row: 6 }, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
+  { id: "round", control: { xs: 5, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 4, sm: 5, md: 8, lg: 10, xl: 12 }, container: 10, small: 6, row: 8 }, note: "A round 10px medium-control family." },
+  { id: "rotund", control: { xs: 6, sm: 10, md: 12, lg: 14, xl: 16 }, small: 10, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 5, sm: 6, md: 10, lg: 12, xl: 14 }, container: 12, small: 8, row: 10 }, note: "The roundest finite family: 12px at medium." },
   {
     id: "pill",
     control: { xs: 999, sm: 999, md: 999, lg: 999, xl: 999 },
@@ -119,6 +127,7 @@ const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
     cap: 0.4,
     buttonCap: 0.5,
     concentric: 1,
+    dense: { control: { xs: 999, sm: 999, md: 999, lg: 999, xl: 999 }, container: 16, small: 9999, row: 9999 },
     note: "Fully round buttons. Other controls and containers stay finite, since a pill field or card obscures its role.",
   },
 ];
@@ -129,11 +138,8 @@ export const RADIUS_AXIS: AxisDefinition = {
   description: "How rounded controls and containers are, grouped by visual character.",
   defaultPreset: "standard",
   namespaces: [
-    "--area-radius-control",
-    "--area-radius-control-",
-    "--area-radius-container",
-    "--area-radius-small",
-    "--area-radius-row",
+    "--area-radius-base-",
+    "--area-radius-dense-",
     "--area-radius-cap",
     "--area-radius-button-cap",
     "--area-radius-concentric",

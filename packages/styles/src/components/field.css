@@ -9,7 +9,7 @@
   .area-field {
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-6);
+    gap: var(--area-ui-stack); /* 6, compact 4 (compact pass) */
   }
 
   /* Explicit for manifest parity; the base class remains the framework-free default. */
@@ -67,7 +67,7 @@
     display: grid;
     grid-template-columns: var(--_columns);
     align-items: center;
-    gap: var(--area-space-8); /* layout, not an icon gap (audit S14) */
+    gap: var(--area-ui-cluster); /* layout, not an icon gap (audit S14): 8, compact 6 */
     inline-size: max-content;
     max-inline-size: 100%;
   }

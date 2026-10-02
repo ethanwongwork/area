@@ -5,6 +5,47 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Compact pass: tokens, rows and floating surfaces (2026-10-01, branch `claude/family-compact-pass-150bc8`, PR #36; merged with main's phases 6–7)
+
+- Owner: compact is a proportional step-down of the whole set (`data-area-ui="compact"`), UI type
+  12/16, rows 24, corners one step down; checked against vscode.dev until Cursor is measured.
+  Note with tables: `docs/research/compact-pass-2026-10-01.md`; captures in
+  `docs/research/captures/compact/` (14 vscode.dev, 3 Figma, Area compact after).
+- Tokens: `COMPACT_TIERS` md 28/8/16/4 at 12/16, sm icon 16, xs 12/16; new density roles
+  `ui-row` (32/24), `ui-row-inset` (8/6), `ui-dense` (0/1); `gap-row` 12/8; `inset-surface-sm/md`
+  12/16 and 8/12. Text scales along the UI ramp (compact 12/16, 12/16, 14/20).
+- Radius: the radius axis publishes `radius-base-*` and `radius-dense-*` (a compact tier reads the
+  curve's value for its painted height); `emit/base.ts` derives `radius-control*`,
+  `radius-container`, `radius-small`, `radius-row` from them and `ui-dense`. Leaves registered,
+  derived tokens not.
+- Rows read `ui-row` / `ui-row-inset` (inset.css, Menu, Nav, Tree view, Combobox, Command palette,
+  Select picker); Popover gap and Dialog corner read `inset-surface-md`, Toast `inset-surface-sm`.
+  Default density renders exactly as before (verified live).
+- Comparison page: https://claude.ai/artifact/ULwhW84UswgMc9NY1dBLci (republish from the
+  scratchpad builder with `packages/styles/dist/area.css`).
+- Round 3 (smallest-first, owner): compact marks 16/16/20; Badge, Count and Kbd inner values are
+  functions of their height (default identical, compact md drawn as default sm); inline Code
+  floored at 12; Toast block inset derived so the last control is concentric (compact 32 tall).
+- Round 4 (owner: equal insets): trailing plates end as far from the end as from the top, trailing
+  ink ends on the glyph edge; fixed Nav plain counts, Tree view and Nav row actions (concentric),
+  mark-height literals in inset.css, Alert's phantom grid gap (default action 14 -> 6) and insets,
+  the banner Badge, the compact sm field action. A sweep script in the session checks all tiles.
+- Round 5 (controls): inputs and controls already scale via the control ladder; new layout roles
+  `ui-stack` (Field label gap 6/4) and `ui-cluster` (Toolbar inset and gaps, horizontal Field 8/6);
+  choice rows keep the 24px WCAG target. Start and end equal-inset sweeps: zero mismatches.
+- Round 6 (containers): Card inset/step, Panel sides (surface insets) and gaps, Property list and
+  Table cell padding step down one rung; component values written `default − diff × ui-dense`.
+- Round 7 (conversation and tools): Message, Composer, Code block, Command palette search row step
+  down; bubble corner = Composer corner. Calendar compact 32/28 (Notion), default 36/32 kept.
+- Round 8 (sweep): fixed 8 / 16 / 12 / 20 gaps across the gallery read `ui-cluster`,
+  `inset-surface-md` or step one rung; Code block header action 4 / 4. Default verified against
+  HEAD (11,584 elements; 120 intended differences in 14 tiles).
+- Merge with main (phases 6–7): main's S21a C held marks under compact; the owner's later
+  proportional direction steps them down (16/16/20). Main's titles-hold rule (H-7 A), Input's
+  4px action ring (B-7 B), `border-float` and the pruned tokens are kept.
+- Open: dialog inset (12 proportional vs VS Code 24, Notion and Figma 16); tooltip sides 10;
+  whether changed approved families (Menu, Nav, …) return to In review; Cursor itself.
+
 ## Start here (next session)
 
 **Reconciled with `main` (2026-10-01, owner: "take this branch's side for the conflicts").**
@@ -22,7 +63,8 @@ single-value-axis exception, `mark-*` only (no `inset-surface-*` yet; revisit in
 - **State:** the 2026-09-29 audit is implemented: 238 of 239 findings done, every one of the 91
   owner picks applied (JSON statuses; page https://claude.ai/artifact/HPeEX5JVpgzugs4uJMQV7i,
   version 14). Phases 6–7 are in the PR from branch `claude/component-work-51c375`.
-- **Next job (owner, 2026-10-01): compact density for the whole set (H-4).** One switch,
+- **Done in PR #36 (see "Compact pass" above): compact density for the whole set (H-4).** The
+  notes below are the brief it started from. One switch,
   `data-area-ui="compact"`, should tighten every component; never per-instance `size="sm"`.
   Today compact reaches control heights, type and icon gaps; marks hold on purpose (`mark-*`,
   S21a). Still fixed: menu and list rows, floating-surface insets (Popover, Card, Dialog, Panel,

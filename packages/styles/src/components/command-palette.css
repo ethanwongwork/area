@@ -23,10 +23,10 @@
      * corner is row radius + inset = 12, the same as Menu and the Combobox list. */
     --_list-inset: var(--area-space-4);
     /* Every column in the palette is the rows' column: a row's icon sits the row's own icon inset in. */
-    --_column: calc(var(--_list-inset) + (var(--area-control-md) - var(--area-icon-md)) / 2);
+    --_column: calc(var(--_list-inset) + var(--area-ui-row-inset));
     /* Rows keep Menu's icon-to-label gap, so row text starts where the typed text does. */
     --_menu-gap: var(--area-gap-row);
-    --_row-radius: min(max(0px, calc(var(--area-radius-container) - var(--area-space-4))), calc(var(--area-control-md) * var(--area-radius-cap)));
+    --_row-radius: min(max(0px, calc(var(--area-radius-container) - var(--area-space-4))), calc(var(--area-ui-row) * var(--area-radius-cap)));
     --_palette-radius: min(calc(var(--area-radius-container) * 2), calc(var(--_row-radius) + var(--_list-inset)));
     display: flex;
     flex-direction: column;
@@ -50,7 +50,7 @@
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    min-block-size: 48px; /* spec */
+    min-block-size: calc(48px - var(--area-space-8) * var(--area-ui-dense)); /* spec: Notion 48, compact 40 */
     /* The search icon on the rows' icon column, the typed text on their text column (Menu's 12 gap). */
     padding-inline: var(--_column);
     gap: var(--area-gap-row); /* Menu's icon-to-label gap (audit S11a) */

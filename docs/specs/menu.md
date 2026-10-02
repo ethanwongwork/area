@@ -86,8 +86,8 @@ Items:
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| item · height | 32 (`control-md`); 28 in compact | Notion 28, ChatGPT 36, Figma 40 | Default sits between ChatGPT and Notion; compact density gives Notion's 28 |
-| item · icon inset | 8 (shared `inset.css` rule for a 16px icon in 32) | Notion 8 (20px icon) | ChatGPT 10 |
+| item · height | 32 (`ui-row`); 24 in compact | Notion 28, ChatGPT 36, Figma 40; compact: VS Code 24, Figma 24 (owner 2026-10-01) | Default sits between ChatGPT and Notion |
+| item · icon inset | 8 default, 6 compact (`ui-row-inset`; the row reserves `ui-row − 2 × inset`, the 16px icon at default) | Notion 8 (20px icon, 28px row); VS Code compact rows (compact pass) | ChatGPT 10. Compact rows are 24 at 12/16 with labels on a 30 column (docs/research/compact-pass-2026-10-01.md) |
 | item · icon → label | **12**, the density token `--area-gap-row` (label at 36; `--_menu-gap`, surface.css:984) | ChatGPT and Notion both start the label at 36 | Was 8 (label at 32), then a literal 12 until audit S11a. Nav, Command palette and the Select picker share the token, so every icon row's label sits at 36. Icons stay 16 (Area's icon sizes are 12/16/24; the products draw 20) |
 | item · text-only inset | 11 (shared rule) | ChatGPT 10 | Within 1px |
 | item · text | 14/20 400 | ChatGPT 14/20 400; Notion 14 400 | — |

@@ -15,8 +15,10 @@
   .area-count {
     /* spec: md, the default. 20 tall (Notion's board count, Fluent medium, shadcn's sidebar
        count; Primer 18), 6 at the sides (Notion 6, Primer 6, Fluent medium 6). */
-    --_count-height: var(--area-mark-md);
-    --_count-gutter: var(--area-space-6);
+    --_count-height: var(--area-mark-label-md);
+    /* 6 at 20 and 4 at 16: half of what the 8px of digit room leaves, so a mark the UI scale
+       shortens is drawn as the default mark of that height (compact pass). */
+    --_count-gutter: calc((var(--_count-height) - var(--area-space-8)) / 2); /* spec */
     /* spec: 12/16 (Primer 12, shadcn 12, Fluent medium 12; Notion sets its board count in the
        14px heading text). Badge's caption text. */
     --_count-text: var(--area-control-xs-text);
@@ -49,12 +51,10 @@
   /* Size. */
   .area-count--sm {
     /* spec: 16 tall with 4 at the sides (Fluent small, Area's Indicator count). */
-    --_count-height: var(--area-mark-sm);
-    --_count-gutter: var(--area-space-4);
+    --_count-height: var(--area-mark-label-sm);
   }
   .area-count--md {
-    --_count-height: var(--area-mark-md);
-    --_count-gutter: var(--area-space-6);
+    --_count-height: var(--area-mark-label-md);
   }
 
   /* Variant. A plain count is ink only (Notion's board groups: no plate, the heading's muted

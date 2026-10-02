@@ -156,3 +156,4 @@ Build and test results are in the
   `fg-muted` → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → docstring clarified: `validation` without `validationStatus` is an error (`aria-invalid`, `aria-errormessage`); help text belongs in `description` (Field.tsx:31-36; it used to call `validation` "non-error"). Behaviour unchanged.
 - 2026-10-01 · audit B-14 → a Field around an InputGroup disables and invalidates the controls inside it: the group takes `disabled` and validation and passes them on through `InputGroupContext` → InputGroup.tsx, input-group-context.ts.
+- 2026-10-01 · compact pass round 5 → the label-to-control gap reads `ui-stack` (6, compact 4) and a horizontal Field's gap `ui-cluster` (8, compact 6). Default unchanged. docs/research/compact-pass-2026-10-01.md.
