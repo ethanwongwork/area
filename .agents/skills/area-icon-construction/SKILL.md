@@ -40,6 +40,11 @@ option rendered (explore candidates or `icon-sheet.mjs`), not a text list.
    (search terms, ISC) can be fetched into the scratchpad from
    `https://unpkg.com/lucide-static@latest/tags.json` (follow the redirect). Cursor: rules and
    numbers only. Render a reference beside Area with `icon-sheet.mjs sheet out.png <path.svg> <name>`.
+   For a concept across libraries (owner, 2026-10-01), `node apps/docs/scripts/icon-refs.mjs fetch`
+   puts Lucide, Phosphor (six weights, a designed fill) and Hugeicons (free, stroke) in
+   `apps/docs/.cache/refs`; add the concept to `docs/research/icon-references.json` and run
+   `icon-refs.mjs sheet out.png <group>` (Area outline and filled beside Fluent, Lucide, Phosphor and
+   Hugeicons). Look for the telling detail and the filled treatment, never the path.
 3. **Plan** the keyline, family and shared parts, the modifier, the filled roles and, for a
    dense idea, which simplification (Fitting a dense idea at 16px).
 4. **Draw** in `apps/docs/assets/area-icons-pilot/<name>.svg` with the geometry toolkit
@@ -142,7 +147,7 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
 - **Type family (owner, 2026-09-28):** every type icon uses text's T built one way: bar,
   end ticks, stem and a foot about 0.45 of the bar. Sizes: text 11 (ticks 2, foot 5), the
   medium 6 × 6 T (ticks 1, foot 3) in line-height, letter-spacing, superscript and
-  subscript, and text-size's pair (7 with ticks 1.5 and foot 3; 4 with ticks 1 and foot 2).
+  subscript, and text-size's pair (8 × 10 with ticks 1.5 and foot 4; 4 × 5.5 with ticks 1 and foot 2).
 - **Rain** lines are different lengths (owner). qr-code is square like a real code (owner,
   2026-09-28): finders 5 × 5 at r 1 (not the container radius), square 2 × 2 modules (r 0.25)
   for the finders' centres and the four data modules, 3 apart.
@@ -151,7 +156,8 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   an alternative (file-zip: archive, or a labelled file type).
 - **Solids in the outline style** are exceptions, each recorded: quote's marks and bold's B,
   stop-circle's square and record's disc, the boolean operations' result, contrast's half,
-  shadow's band, id-card's person, stroke-weight's bars, paw's toes (⌀2 marks). The solid is
+  shadow's band, id-card's person, stroke-weight's bars, newspaper's picture block. (paw's
+  toes are r 1.25 rings, solid only when filled.) The solid is
   what the icon shows; ordinary details stay lines.
 
 ## The system at 16px
@@ -281,11 +287,12 @@ the lint prints every gap and counter with `--report`.
   volume-off a speaker with a 3.5px × (Fluent's mute). The lint fails any other `-off` icon
   without the shared slash;
 - dots, two sizes by role (the lint allows only these):
-  - ⌀2 for a dot that is the icon or one of its marks: more, list bullets, wi-fi's source,
+  - ⌀2 for a dot that is the icon or one of its marks: more, wi-fi's source,
     gap's dot, cart's wheels; on whole-pixel centres so they fill 2 × 2 pixels at 1×;
   - ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning, the ?)
     and for a detail set inside a shape: keys (calculator, keyboard), lights (server, car),
-    windows (building), eyes (smile), an eyelet (tag), opacity's grid. Place them on the
+    windows (building), eyes (smile), an eyelet (tag), opacity's grid, list bullets (the list
+    family, owner 2026-09-28). Place them on the
     gap scale from their frame and each other (quarter centres are fine for filled dots).
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
   a little more width than a square to look the same size, and 1.56× read too big.
@@ -341,7 +348,12 @@ fills the point solid, so no thin pocket shows. The counter rule still applies.
     head); repeat, shuffle (rails at 4.5 and 11.5; repeat is Fluent's loop, r 3.5 ends); thumbs-up → thumbs-down.
 
 **Filled variants.** Every icon has one, derived from the outline, never drawn
-separately. Filled is about emphasis and layers, not flooding the shape:
+separately. **Filled is more ink, never a negative** (owner, 2026-10-01; research in
+`docs/research/icon-review/2026-10-01/`): fill the mass that names the icon; lines stay lines and
+solids stay solid; white appears only for small marks on a newly filled mass and for real openings
+(a key's bow, a door, a hub). A frame whose features would invert keeps its lines and the subject
+or the accessory fills instead (video_person, incognito; the bots' hats). Judge filled at 16 and
+32px: large renders thin the line by the size curve. Filled is about emphasis and layers, not flooding the shape:
 - **Enclosed shapes fill.** Mark each shape with `data-filled`:
   - `solid` fills it and keeps the outline's outer edge;
   - `knockout` cuts an inner detail out at the icon weight, with round caps (the i, the
@@ -381,8 +393,11 @@ separately. Filled is about emphasis and layers, not flooding the shape:
   - **Details inside a solid** (marks, keys, hands, text lines, a keyhole) are knockouts; a
     mark on a container's corner notches it.
   - **A closed shape holding a mark fills and knocks the mark out** (add-circle, error,
-    clock, zoom-in and zoom-out's lens, as Fluent's zoom). An open line glyph (search,
-    arrows, chevrons) fills by weight.
+    clock, zoom-in and zoom-out's lens, as Fluent's zoom). This is for true marks (+ − × ✓,
+    play, dots) only: a ring or frame whose content is itself a line drawing (target, a
+    reticle, a wireframe, a figure) fills by weight, or keeps the frame a line and fills the
+    subject, never floods the frame and inverts the drawing (audit, 2026-10-01). An open line
+    glyph (search, arrows, chevrons) fills by weight.
   - **Glass stays open** in a vehicle: the car's cabin stays a line (Fluent's car).
   A gap along a layer line stops where that line stops (package's tape at the V).
 - **Every detail over a solid is negative space** (owner, 2026-09-27): marks, arrows, keys,
@@ -557,7 +572,7 @@ they fit?"); name the simplification in the icon's construction line.
 
 1. **Use the whole keyline.** id-card's card is 13 × 10, the horizontal keyline's most.
 2. **Make a small detail solid** (Fluent's trick). A solid needs no counter: id-card's head
-   and shoulders, paw's toes, shadow's band. Record it as a solid exception.
+   and shoulders, shadow's band. Record it as a solid exception.
 3. **Move the secondary part onto the edge or corner** and cut the container open round it
    (the overlap cut). If it runs past the silhouette, fill it with a `halo`: file-code's
    chevrons, cloud-lightning's bolt; the container marks (document-add) sit on the corner the

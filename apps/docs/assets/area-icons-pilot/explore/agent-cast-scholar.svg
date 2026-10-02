@@ -1,9 +1,0 @@
-<svg data-set="area-pilot" data-keyline="square" data-angles="free" data-dot="free" data-counter="sliver" data-group="agent" data-label="Scholar (mortarboard)" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M2.85 6.622A2.5 2.5 0 0 0 2 8.5V11A2.5 2.5 0 0 0 4.5 13.5H11.5A2.5 2.5 0 0 0 14 11V8.5A2.5 2.5 0 0 0 13.15 6.622" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M0 6.86Q8 9.89 16 6.86" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="solid" d="M8.13 1.535L12.707 2.767A0.5 0.5 0 0 1 12.707 3.733L8.13 4.965A0.5 0.5 0 0 1 7.87 4.965L3.293 3.733A0.5 0.5 0 0 1 3.293 2.767L7.87 1.535A0.5 0.5 0 0 1 8.13 1.535Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M4 3.923V6.871M12 3.923V6.871" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M2.85 6.622Q8 7.878 13.15 6.622" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="knockout" d="M5 9V10.5M11 9V10.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="hole" cx="8" cy="11.25" r="0.75" fill="currentColor"/>
-</svg>

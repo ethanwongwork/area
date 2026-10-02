@@ -93,8 +93,13 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
   - text 12/16, 14/20, 16/24; titles 20/28, 24/32, 32/40; titles fixed in compact;
   - small controls 12/16;
   - weight 400 everywhere except labels on fills (500).
-- **Icons (branch `icons-system`, PR 3):** 256 icons in twenty-three batches; rules in the
-  `area-icon-construction` skill, record in `docs/specs/icons.md`.
+- **Icons:** 451 sources (513 with rotations) in 61 batches, 140 approved, the rest in
+  review; rules in the `area-icon-construction` skill, record in `docs/specs/icons.md`. Latest: the
+  whole-set audit (2026-10-01, `docs/research/icon-audit/`: coverage against Fluent, Lucide,
+  Phosphor, Hugeicons and SF Symbols, 50 icons cleaned up and back in review, owner questions by
+  batch) and batch 61, the bot cast (`agent-cast.py` in `docs/research/icon-review/2026-09-29/`).
+  Filled is "more ink, never a negative" (skill). Reference sheets: `icon-refs.mjs` (SF Symbols
+  local only, via `sf-render.swift`).
   - Sources: `apps/docs/assets/area-icons-pilot/` (`npm run icons:pilot`, `npm run lint:icons`,
     `--report`, `--audit`). The lint checks the grid, the diagonal lattice, keylines, the
     gap and counter scale, acute corners, filled gaps, and live area.

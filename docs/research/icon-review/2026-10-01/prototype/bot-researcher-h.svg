@@ -1,0 +1,5 @@
+<svg data-set="area-pilot" data-keyline="circle" data-angles="free" data-dot="free" data-counter="sliver" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.015 8.229A2.5 2.5 0 0 1 4.5 6L11.5 6A2.5 2.5 0 0 1 13.985 8.229M13.985 11.271A2.5 2.5 0 0 1 11.5 13.5L4.5 13.5A2.5 2.5 0 0 1 2.015 11.271" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 6V4.5M6.5 3.25A1.5 1.25 0 1 1 9.5 3.25A1.5 1.25 0 1 1 6.5 3.25Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M2.75 8L13.25 8A1.25 1.25 0 0 1 14.5 9.25L14.5 10.25A1.25 1.25 0 0 1 13.25 11.5L9.457 11.5A0.5 0.5 0 0 1 9.104 11.354L8.53 10.78A0.75 0.75 0 0 0 7.47 10.78L6.896 11.354A0.5 0.5 0 0 1 6.543 11.5L2.75 11.5A1.25 1.25 0 0 1 1.5 10.25L1.5 9.25A1.25 1.25 0 0 1 2.75 8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
