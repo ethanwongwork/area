@@ -1,0 +1,3185 @@
+{
+  "activity": {
+    "fluent": "pulse",
+    "lucide": "activity",
+    "phosphor": "pulse",
+    "huge": "Activity01",
+    "sf": "waveform.path.ecg"
+  },
+  "add": {
+    "fluent": "add",
+    "lucide": "plus",
+    "phosphor": "plus",
+    "huge": "Add01",
+    "sf": "plus"
+  },
+  "add-circle": {
+    "fluent": "add_circle",
+    "lucide": "circle-plus",
+    "phosphor": "plus-circle",
+    "huge": "AddCircle",
+    "sf": "plus.circle"
+  },
+  "agent": {
+    "fluent": "agents"
+  },
+  "agent-circle": {},
+  "agent-square": {},
+  "alarm": {
+    "fluent": "clock_alarm",
+    "lucide": "alarm-clock",
+    "phosphor": "alarm",
+    "huge": "AlarmClock",
+    "sf": "alarm"
+  },
+  "alert-circle": {
+    "fluent": "error_circle",
+    "lucide": "circle-alert",
+    "phosphor": "warning-circle",
+    "huge": "AlertCircle",
+    "sf": "exclamationmark.circle"
+  },
+  "align-bottom": {
+    "fluent": "align_bottom",
+    "lucide": "align-end-horizontal",
+    "phosphor": "align-bottom",
+    "huge": "AlignBottom",
+    "sf": "align.vertical.bottom"
+  },
+  "align-center": {
+    "fluent": "align_center_horizontal",
+    "lucide": "align-center-vertical",
+    "phosphor": "align-center-vertical",
+    "huge": "AlignHorizontalCenter",
+    "sf": "align.horizontal.center"
+  },
+  "align-left": {
+    "fluent": "align_left",
+    "lucide": "align-start-vertical",
+    "phosphor": "align-left",
+    "huge": "AlignLeft",
+    "sf": "align.horizontal.left"
+  },
+  "align-middle": {
+    "fluent": "align_center_vertical",
+    "lucide": "align-center-horizontal",
+    "phosphor": "align-center-horizontal",
+    "huge": "AlignVerticalCenter",
+    "sf": "align.vertical.center"
+  },
+  "align-right": {
+    "fluent": "align_right",
+    "lucide": "align-end-vertical",
+    "phosphor": "align-right",
+    "huge": "AlignRight",
+    "sf": "align.horizontal.right"
+  },
+  "align-top": {
+    "fluent": "align_top",
+    "lucide": "align-start-horizontal",
+    "phosphor": "align-top",
+    "huge": "AlignTop",
+    "sf": "align.vertical.top"
+  },
+  "anchor": {
+    "lucide": "anchor",
+    "phosphor": "anchor",
+    "huge": "Anchor"
+  },
+  "angle": {
+    "lucide": "angle",
+    "phosphor": "angle",
+    "huge": "Angle",
+    "sf": "angle"
+  },
+  "app-window": {
+    "fluent": "window",
+    "lucide": "app-window",
+    "phosphor": "app-window",
+    "huge": "AppWindow",
+    "sf": "macwindow"
+  },
+  "archive": {
+    "fluent": "archive",
+    "lucide": "archive",
+    "phosphor": "archive",
+    "huge": "Archive",
+    "sf": "archivebox"
+  },
+  "arrow-big-down": {
+    "lucide": "arrow-big-down",
+    "phosphor": "arrow-fat-down",
+    "huge": "ArrowDownBig",
+    "sf": "arrowshape.down"
+  },
+  "arrow-big-left": {
+    "lucide": "arrow-big-left",
+    "phosphor": "arrow-fat-left",
+    "huge": "ArrowLeftBig",
+    "sf": "arrowshape.left"
+  },
+  "arrow-big-right": {
+    "lucide": "arrow-big-right",
+    "phosphor": "arrow-fat-right",
+    "huge": "ArrowRightBig",
+    "sf": "arrowshape.right"
+  },
+  "arrow-down": {
+    "fluent": "arrow_down",
+    "lucide": "arrow-down",
+    "phosphor": "arrow-down",
+    "huge": "ArrowDown01",
+    "sf": "arrow.down"
+  },
+  "arrow-down-circle": {
+    "fluent": "arrow_circle_down",
+    "lucide": "circle-arrow-down",
+    "phosphor": "arrow-circle-down",
+    "huge": "CircleArrowDown01",
+    "sf": "arrow.down.circle"
+  },
+  "arrow-down-left": {
+    "fluent": "arrow_down_left",
+    "lucide": "arrow-down-left",
+    "phosphor": "arrow-down-left",
+    "huge": "ArrowDownLeft01",
+    "sf": "arrow.down.left"
+  },
+  "arrow-down-right": {
+    "fluent": "arrow_down_right",
+    "lucide": "arrow-down-right",
+    "phosphor": "arrow-down-right",
+    "huge": "ArrowDownRight01",
+    "sf": "arrow.down.right"
+  },
+  "arrow-down-to-line": {
+    "fluent": "arrow_download",
+    "lucide": "arrow-down-to-line",
+    "phosphor": "arrow-line-down",
+    "huge": "ArrowDownToLine",
+    "sf": "arrow.down.to.line"
+  },
+  "arrow-left": {
+    "fluent": "arrow_left",
+    "lucide": "arrow-left",
+    "phosphor": "arrow-left",
+    "huge": "ArrowLeft01",
+    "sf": "arrow.left"
+  },
+  "arrow-left-circle": {
+    "fluent": "arrow_circle_left",
+    "lucide": "circle-arrow-left",
+    "phosphor": "arrow-circle-left",
+    "huge": "CircleArrowLeft01",
+    "sf": "arrow.left.circle"
+  },
+  "arrow-left-right": {
+    "fluent": "arrow_bidirectional_left_right",
+    "lucide": "move-horizontal",
+    "phosphor": "arrows-horizontal",
+    "huge": "ArrowLeftRight",
+    "sf": "arrow.left.and.right"
+  },
+  "arrow-left-to-line": {
+    "fluent": "arrow_previous",
+    "lucide": "arrow-left-to-line",
+    "phosphor": "arrow-line-left",
+    "huge": "ArrowLeftToLine",
+    "sf": "arrow.left.to.line"
+  },
+  "arrow-right": {
+    "fluent": "arrow_right",
+    "lucide": "arrow-right",
+    "phosphor": "arrow-right",
+    "huge": "ArrowRight01",
+    "sf": "arrow.right"
+  },
+  "arrow-right-circle": {
+    "fluent": "arrow_circle_right",
+    "lucide": "circle-arrow-right",
+    "phosphor": "arrow-circle-right",
+    "huge": "CircleArrowRight01",
+    "sf": "arrow.right.circle"
+  },
+  "arrow-right-left": {
+    "fluent": "arrow_swap",
+    "lucide": "arrow-right-left",
+    "phosphor": "arrows-left-right",
+    "huge": "ArrowDataTransferHorizontal",
+    "sf": "arrow.left.arrow.right"
+  },
+  "arrow-right-to-line": {
+    "fluent": "arrow_export_ltr",
+    "lucide": "arrow-right-to-line",
+    "phosphor": "arrow-line-right",
+    "huge": "ArrowRightToLine",
+    "sf": "arrow.right.to.line"
+  },
+  "arrow-up": {
+    "fluent": "arrow_up",
+    "lucide": "arrow-up",
+    "phosphor": "arrow-up",
+    "huge": "ArrowUp01",
+    "sf": "arrow.up"
+  },
+  "arrow-up-circle": {
+    "fluent": "arrow_circle_up",
+    "lucide": "circle-arrow-up",
+    "phosphor": "arrow-circle-up",
+    "huge": "CircleArrowUp01",
+    "sf": "arrow.up.circle"
+  },
+  "arrow-up-down": {
+    "fluent": "arrow_bidirectional_up_down",
+    "lucide": "move-vertical",
+    "phosphor": "arrows-vertical",
+    "huge": "ArrowUpDown",
+    "sf": "arrow.up.and.down"
+  },
+  "arrow-up-left": {
+    "fluent": "arrow_up_left",
+    "lucide": "arrow-up-left",
+    "phosphor": "arrow-up-left",
+    "huge": "ArrowUpLeft01",
+    "sf": "arrow.up.left"
+  },
+  "arrow-up-right": {
+    "fluent": "arrow_up_right",
+    "lucide": "arrow-up-right",
+    "phosphor": "arrow-up-right",
+    "huge": "ArrowUpRight01",
+    "sf": "arrow.up.right"
+  },
+  "arrow-up-to-line": {
+    "fluent": "arrow_upload",
+    "lucide": "arrow-up-to-line",
+    "phosphor": "arrow-line-up",
+    "huge": "ArrowUpToLine",
+    "sf": "arrow.up.to.line"
+  },
+  "aspect-ratio": {
+    "fluent": "ratio_one_to_one",
+    "lucide": "ratio",
+    "huge": "AspectRatio",
+    "sf": "aspectratio"
+  },
+  "asterisk": {
+    "fluent": "text_asterisk",
+    "lucide": "asterisk",
+    "phosphor": "asterisk",
+    "huge": "Asterisk",
+    "sf": "asterisk"
+  },
+  "at": {
+    "fluent": "mention",
+    "lucide": "at-sign",
+    "phosphor": "at",
+    "huge": "At",
+    "sf": "at"
+  },
+  "atom": {
+    "lucide": "atom",
+    "phosphor": "atom",
+    "huge": "Atom01",
+    "sf": "atom"
+  },
+  "attach": {
+    "fluent": "attach",
+    "lucide": "paperclip",
+    "phosphor": "paperclip",
+    "huge": "Attachment01",
+    "sf": "paperclip"
+  },
+  "auto-layout": {},
+  "award": {
+    "fluent": "ribbon",
+    "lucide": "award",
+    "phosphor": "medal",
+    "huge": "Award01",
+    "sf": "rosette"
+  },
+  "backspace": {
+    "fluent": "backspace",
+    "lucide": "delete",
+    "phosphor": "backspace",
+    "sf": "delete.left"
+  },
+  "badge-check": {
+    "fluent": "checkmark_starburst",
+    "lucide": "badge-check",
+    "phosphor": "seal-check",
+    "huge": "CheckmarkBadge01",
+    "sf": "checkmark.seal"
+  },
+  "bandage": {
+    "lucide": "bandage",
+    "phosphor": "bandaids",
+    "huge": "Bandage",
+    "sf": "bandage"
+  },
+  "bank": {
+    "fluent": "building_bank",
+    "lucide": "landmark",
+    "phosphor": "bank",
+    "huge": "Bank",
+    "sf": "building.columns"
+  },
+  "banknote": {
+    "fluent": "money",
+    "lucide": "banknote",
+    "phosphor": "money",
+    "huge": "Money01",
+    "sf": "banknote"
+  },
+  "bar-chart": {
+    "fluent": "data_bar_vertical",
+    "lucide": "chart-column",
+    "phosphor": "chart-bar",
+    "huge": "ChartColumn",
+    "sf": "chart.bar"
+  },
+  "barcode": {
+    "fluent": "barcode_scanner",
+    "lucide": "barcode",
+    "phosphor": "barcode",
+    "huge": "Barcode",
+    "sf": "barcode"
+  },
+  "basketball": {
+    "fluent": "sport_basketball",
+    "phosphor": "basketball",
+    "huge": "Basketball01",
+    "sf": "basketball"
+  },
+  "battery": {
+    "fluent": "battery_10",
+    "lucide": "battery-full",
+    "phosphor": "battery-full",
+    "huge": "BatteryFull",
+    "sf": "battery.100"
+  },
+  "bell": {
+    "fluent": "alert",
+    "lucide": "bell",
+    "phosphor": "bell",
+    "huge": "Notification01",
+    "sf": "bell"
+  },
+  "bell-dot": {
+    "fluent": "alert_badge",
+    "lucide": "bell-dot",
+    "huge": "NotificationBubble",
+    "sf": "bell.badge"
+  },
+  "bell-off": {
+    "fluent": "alert_off",
+    "lucide": "bell-off",
+    "phosphor": "bell-slash",
+    "huge": "NotificationOff01",
+    "sf": "bell.slash"
+  },
+  "binoculars": {
+    "lucide": "binoculars",
+    "phosphor": "binoculars",
+    "huge": "Binoculars",
+    "sf": "binoculars"
+  },
+  "blocks": {
+    "fluent": "apps_add_in",
+    "lucide": "blocks",
+    "phosphor": "squares-four",
+    "huge": "Blocks",
+    "sf": "square.grid.2x2"
+  },
+  "bluetooth": {
+    "fluent": "bluetooth",
+    "lucide": "bluetooth",
+    "phosphor": "bluetooth",
+    "huge": "Bluetooth"
+  },
+  "blur": {
+    "fluent": "blur",
+    "huge": "Blur"
+  },
+  "bold": {
+    "fluent": "text_bold",
+    "lucide": "bold",
+    "phosphor": "text-b",
+    "huge": "TextBold",
+    "sf": "bold"
+  },
+  "book": {
+    "fluent": "book",
+    "lucide": "book",
+    "phosphor": "book",
+    "huge": "Book01",
+    "sf": "book.closed"
+  },
+  "bookmark": {
+    "fluent": "bookmark",
+    "lucide": "bookmark",
+    "phosphor": "bookmark-simple",
+    "huge": "Bookmark01",
+    "sf": "bookmark"
+  },
+  "bookmark-add": {
+    "fluent": "bookmark_add",
+    "lucide": "bookmark-plus",
+    "huge": "BookmarkAdd01"
+  },
+  "bookmark-remove": {
+    "lucide": "bookmark-minus",
+    "huge": "BookmarkRemove01"
+  },
+  "boolean-exclude": {
+    "fluent": "shape_exclude",
+    "lucide": "squares-exclude",
+    "phosphor": "exclude",
+    "huge": "SquaresExclude"
+  },
+  "boolean-intersect": {
+    "fluent": "shape_intersect",
+    "lucide": "squares-intersect",
+    "phosphor": "intersect",
+    "huge": "SquaresIntersect",
+    "sf": "square.on.square.intersection.dashed"
+  },
+  "boolean-subtract": {
+    "fluent": "shape_subtract",
+    "lucide": "squares-subtract",
+    "phosphor": "subtract",
+    "huge": "SquaresSubtract"
+  },
+  "boolean-union": {
+    "fluent": "shape_union",
+    "lucide": "squares-unite",
+    "phosphor": "unite",
+    "huge": "SquaresUnite"
+  },
+  "bot": {
+    "fluent": "bot",
+    "lucide": "bot",
+    "phosphor": "robot",
+    "huge": "Robot01"
+  },
+  "bot-agent": {},
+  "bot-automator": {},
+  "bot-builder": {},
+  "bot-designer": {},
+  "bot-generator": {},
+  "bot-guard": {},
+  "bot-lead": {},
+  "bot-researcher": {},
+  "bot-scholar": {},
+  "braces": {
+    "fluent": "braces",
+    "lucide": "braces",
+    "phosphor": "brackets-curly",
+    "huge": "Braces",
+    "sf": "curlybraces"
+  },
+  "brackets": {
+    "lucide": "brackets",
+    "phosphor": "brackets-square",
+    "huge": "Brackets"
+  },
+  "brain": {
+    "fluent": "brain",
+    "lucide": "brain",
+    "phosphor": "brain",
+    "huge": "Brain",
+    "sf": "brain"
+  },
+  "brain-off": {},
+  "breakpoint": {},
+  "briefcase": {
+    "fluent": "briefcase",
+    "lucide": "briefcase",
+    "phosphor": "briefcase",
+    "huge": "Briefcase01",
+    "sf": "briefcase"
+  },
+  "bug": {
+    "fluent": "bug",
+    "lucide": "bug",
+    "phosphor": "bug",
+    "huge": "Bug01",
+    "sf": "ladybug"
+  },
+  "bug-off": {
+    "fluent": "bug_prohibited",
+    "lucide": "bug-off",
+    "sf": "ladybug.slash"
+  },
+  "building": {
+    "fluent": "building",
+    "lucide": "building",
+    "phosphor": "building",
+    "huge": "Building01",
+    "sf": "building"
+  },
+  "calculator": {
+    "fluent": "calculator",
+    "lucide": "calculator",
+    "phosphor": "calculator",
+    "huge": "Calculator"
+  },
+  "calendar": {
+    "fluent": "calendar",
+    "lucide": "calendar",
+    "phosphor": "calendar-blank",
+    "huge": "Calendar01",
+    "sf": "calendar"
+  },
+  "calendar-add": {
+    "fluent": "calendar_add",
+    "lucide": "calendar-plus",
+    "phosphor": "calendar-plus",
+    "huge": "CalendarAdd01",
+    "sf": "calendar.badge.plus"
+  },
+  "calendar-check": {
+    "fluent": "calendar_checkmark",
+    "lucide": "calendar-check",
+    "phosphor": "calendar-check",
+    "huge": "CalendarCheck01",
+    "sf": "calendar.badge.checkmark"
+  },
+  "calendar-remove": {
+    "fluent": "calendar_cancel",
+    "lucide": "calendar-minus",
+    "phosphor": "calendar-minus",
+    "huge": "CalendarMinus01",
+    "sf": "calendar.badge.minus"
+  },
+  "call": {
+    "fluent": "call",
+    "lucide": "phone",
+    "phosphor": "phone",
+    "huge": "Call",
+    "sf": "phone"
+  },
+  "call-end": {
+    "fluent": "call_end",
+    "lucide": "phone-off",
+    "phosphor": "phone-disconnect",
+    "huge": "CallEnd01",
+    "sf": "phone.down"
+  },
+  "call-incoming": {
+    "fluent": "call_inbound",
+    "lucide": "phone-incoming",
+    "phosphor": "phone-incoming",
+    "huge": "CallIncoming01",
+    "sf": "phone.arrow.down.left"
+  },
+  "call-outgoing": {
+    "fluent": "call_outbound",
+    "lucide": "phone-outgoing",
+    "phosphor": "phone-outgoing",
+    "huge": "CallOutgoing01",
+    "sf": "phone.arrow.up.right"
+  },
+  "camera": {
+    "fluent": "camera",
+    "lucide": "camera",
+    "phosphor": "camera",
+    "huge": "Camera01",
+    "sf": "camera"
+  },
+  "camera-off": {
+    "fluent": "camera_off",
+    "lucide": "camera-off",
+    "phosphor": "camera-slash",
+    "huge": "CameraOff01"
+  },
+  "caps-lock": {
+    "fluent": "keyboard_shift_uppercase",
+    "lucide": "arrow-big-up-dash",
+    "phosphor": "arrow-fat-line-up",
+    "huge": "ArrowBigUpDash",
+    "sf": "capslock"
+  },
+  "captions": {
+    "fluent": "closed_caption",
+    "lucide": "captions",
+    "phosphor": "closed-captioning",
+    "huge": "Captions",
+    "sf": "captions.bubble"
+  },
+  "car": {
+    "fluent": "vehicle_car",
+    "lucide": "car",
+    "phosphor": "car",
+    "huge": "Car01",
+    "sf": "car"
+  },
+  "cart": {
+    "fluent": "cart",
+    "lucide": "shopping-cart",
+    "phosphor": "shopping-cart",
+    "huge": "ShoppingCart01",
+    "sf": "cart"
+  },
+  "case-sensitive": {
+    "fluent": "text_case_title",
+    "lucide": "case-sensitive",
+    "phosphor": "text-aa",
+    "huge": "CaseSensitive",
+    "sf": "textformat"
+  },
+  "case-upper": {
+    "fluent": "text_case_uppercase",
+    "lucide": "case-upper",
+    "huge": "CaseUpper"
+  },
+  "chart": {
+    "fluent": "data_line",
+    "lucide": "chart-line",
+    "phosphor": "chart-line",
+    "huge": "ChartLineData01",
+    "sf": "chart.xyaxis.line"
+  },
+  "chart-scatter": {
+    "fluent": "data_scatter",
+    "lucide": "chart-scatter",
+    "phosphor": "chart-scatter",
+    "huge": "ChartScatter",
+    "sf": "chart.dots.scatter"
+  },
+  "chat": {
+    "fluent": "chat",
+    "lucide": "message-square",
+    "phosphor": "chat",
+    "huge": "BubbleChat",
+    "sf": "bubble"
+  },
+  "chat-add": {
+    "fluent": "chat_add",
+    "lucide": "message-square-plus",
+    "huge": "BubbleChatAdd",
+    "sf": "plus.bubble"
+  },
+  "chat-code": {
+    "lucide": "message-square-code",
+    "huge": "MessageCircleCode"
+  },
+  "chat-dot": {
+    "lucide": "message-square-dot",
+    "huge": "BubbleChatNotification",
+    "sf": "message.badge"
+  },
+  "chat-more": {
+    "lucide": "message-square-more",
+    "phosphor": "chat-dots",
+    "huge": "MessageCircleMore",
+    "sf": "ellipsis.bubble"
+  },
+  "chat-multiple": {
+    "fluent": "chat_multiple",
+    "lucide": "messages-square",
+    "phosphor": "chats",
+    "huge": "MessageMultiple01",
+    "sf": "bubble.left.and.bubble.right"
+  },
+  "chat-sparkle": {
+    "fluent": "chat_sparkle",
+    "huge": "BubbleChatSpark",
+    "sf": "bubbles.and.sparkles"
+  },
+  "chat-warning": {
+    "fluent": "chat_warning",
+    "lucide": "message-square-warning",
+    "huge": "MessageCircleWarning",
+    "sf": "exclamationmark.bubble"
+  },
+  "check": {
+    "fluent": "checkmark",
+    "lucide": "check",
+    "phosphor": "check",
+    "huge": "Tick02",
+    "sf": "checkmark"
+  },
+  "check-check": {
+    "lucide": "check-check",
+    "phosphor": "checks",
+    "huge": "TickDouble01"
+  },
+  "checkbox": {
+    "fluent": "checkbox_checked",
+    "lucide": "square-check",
+    "phosphor": "check-square",
+    "huge": "CheckmarkSquare01",
+    "sf": "checkmark.square"
+  },
+  "chef-hat": {
+    "lucide": "chef-hat",
+    "phosphor": "chef-hat",
+    "huge": "ChefHat"
+  },
+  "chess-rook": {
+    "fluent": "chess",
+    "lucide": "chess-rook",
+    "phosphor": "castle-turret",
+    "huge": "ChessRook"
+  },
+  "chevron-down": {
+    "fluent": "chevron_down",
+    "lucide": "chevron-down",
+    "phosphor": "caret-down",
+    "huge": "ArrowDown01",
+    "sf": "chevron.down"
+  },
+  "chevron-down-circle": {
+    "fluent": "chevron_circle_down",
+    "lucide": "circle-chevron-down",
+    "phosphor": "caret-circle-down",
+    "huge": "CircleChevronDown",
+    "sf": "chevron.down.circle"
+  },
+  "chevron-left": {
+    "fluent": "chevron_left",
+    "lucide": "chevron-left",
+    "phosphor": "caret-left",
+    "huge": "ArrowLeft01",
+    "sf": "chevron.left"
+  },
+  "chevron-left-circle": {
+    "fluent": "chevron_circle_left",
+    "lucide": "circle-chevron-left",
+    "phosphor": "caret-circle-left",
+    "huge": "CircleChevronLeft",
+    "sf": "chevron.left.circle"
+  },
+  "chevron-right": {
+    "fluent": "chevron_right",
+    "lucide": "chevron-right",
+    "phosphor": "caret-right",
+    "huge": "ArrowRight01",
+    "sf": "chevron.right"
+  },
+  "chevron-right-circle": {
+    "fluent": "chevron_circle_right",
+    "lucide": "circle-chevron-right",
+    "phosphor": "caret-circle-right",
+    "huge": "CircleChevronRight",
+    "sf": "chevron.right.circle"
+  },
+  "chevron-up": {
+    "fluent": "chevron_up",
+    "lucide": "chevron-up",
+    "phosphor": "caret-up",
+    "huge": "ArrowUp01",
+    "sf": "chevron.up"
+  },
+  "chevron-up-circle": {
+    "fluent": "chevron_circle_up",
+    "lucide": "circle-chevron-up",
+    "phosphor": "caret-circle-up",
+    "huge": "CircleChevronUp",
+    "sf": "chevron.up.circle"
+  },
+  "chevrons-down": {
+    "fluent": "chevron_double_down",
+    "lucide": "chevrons-down",
+    "phosphor": "caret-double-down",
+    "huge": "ChevronsDown",
+    "sf": "chevron.down.2"
+  },
+  "chevrons-down-up": {
+    "fluent": "arrow_minimize_vertical",
+    "lucide": "chevrons-down-up",
+    "phosphor": "arrows-in-line-vertical",
+    "huge": "ChevronsDownUp"
+  },
+  "chevrons-left": {
+    "fluent": "chevron_double_left",
+    "lucide": "chevrons-left",
+    "phosphor": "caret-double-left",
+    "huge": "ChevronsLeft",
+    "sf": "chevron.left.2"
+  },
+  "chevrons-left-right": {
+    "lucide": "chevrons-left-right",
+    "huge": "ChevronsLeftRight",
+    "sf": "chevron.left.chevron.right"
+  },
+  "chevrons-right": {
+    "fluent": "chevron_double_right",
+    "lucide": "chevrons-right",
+    "phosphor": "caret-double-right",
+    "huge": "ChevronsRight",
+    "sf": "chevron.right.2"
+  },
+  "chevrons-up": {
+    "fluent": "chevron_double_up",
+    "lucide": "chevrons-up",
+    "phosphor": "caret-double-up",
+    "huge": "ChevronsUp",
+    "sf": "chevron.up.2"
+  },
+  "chevrons-up-down": {
+    "fluent": "chevron_up_down",
+    "lucide": "chevrons-up-down",
+    "phosphor": "caret-up-down",
+    "sf": "chevron.up.chevron.down"
+  },
+  "chip": {
+    "fluent": "developer_board",
+    "lucide": "cpu",
+    "phosphor": "cpu",
+    "huge": "Chip",
+    "sf": "cpu"
+  },
+  "circle-check-dashed": {
+    "fluent": "checkmark_circle_hint",
+    "lucide": "circle-dashed-check",
+    "sf": "checkmark.circle.dotted"
+  },
+  "circle-dashed": {
+    "fluent": "circle_hint",
+    "lucide": "circle-dashed",
+    "phosphor": "circle-dashed",
+    "huge": "CircleDashed",
+    "sf": "circle.dashed"
+  },
+  "circle-dot-dashed": {
+    "lucide": "circle-dot-dashed",
+    "sf": "circle.dotted.circle"
+  },
+  "circuit-board": {
+    "fluent": "board",
+    "lucide": "circuit-board",
+    "phosphor": "circuitry",
+    "huge": "CircuitBoard"
+  },
+  "clapperboard": {
+    "fluent": "movies_and_tv",
+    "lucide": "clapperboard",
+    "phosphor": "film-slate",
+    "huge": "Clapperboard",
+    "sf": "movieclapper"
+  },
+  "clipboard": {
+    "fluent": "clipboard",
+    "lucide": "clipboard",
+    "phosphor": "clipboard",
+    "huge": "Clipboard",
+    "sf": "clipboard"
+  },
+  "clipboard-list": {
+    "fluent": "clipboard_task_list_ltr",
+    "lucide": "clipboard-list",
+    "phosphor": "clipboard-text",
+    "huge": "ClipboardList",
+    "sf": "list.clipboard"
+  },
+  "clock": {
+    "fluent": "clock",
+    "lucide": "clock",
+    "phosphor": "clock",
+    "huge": "Clock01",
+    "sf": "clock"
+  },
+  "cloud": {
+    "fluent": "cloud",
+    "lucide": "cloud",
+    "phosphor": "cloud",
+    "huge": "Cloud",
+    "sf": "cloud"
+  },
+  "cloud-download": {
+    "fluent": "cloud_arrow_down",
+    "lucide": "cloud-download",
+    "phosphor": "cloud-arrow-down",
+    "huge": "CloudDownload",
+    "sf": "icloud.and.arrow.down"
+  },
+  "cloud-lightning": {
+    "fluent": "weather_thunderstorm",
+    "lucide": "cloud-lightning",
+    "phosphor": "cloud-lightning",
+    "huge": "CloudLightning",
+    "sf": "cloud.bolt"
+  },
+  "cloud-off": {
+    "fluent": "cloud_off",
+    "lucide": "cloud-off",
+    "phosphor": "cloud-slash",
+    "huge": "CloudOff",
+    "sf": "icloud.slash"
+  },
+  "cloud-rain": {
+    "fluent": "weather_rain",
+    "lucide": "cloud-rain",
+    "phosphor": "cloud-rain",
+    "huge": "CloudRain",
+    "sf": "cloud.rain"
+  },
+  "cloud-sun": {
+    "fluent": "weather_partly_cloudy_day",
+    "lucide": "cloud-sun",
+    "phosphor": "cloud-sun",
+    "huge": "SunCloud01",
+    "sf": "cloud.sun"
+  },
+  "cloud-upload": {
+    "fluent": "cloud_arrow_up",
+    "lucide": "cloud-upload",
+    "phosphor": "cloud-arrow-up",
+    "huge": "CloudUpload",
+    "sf": "icloud.and.arrow.up"
+  },
+  "code": {
+    "fluent": "code",
+    "lucide": "code",
+    "phosphor": "code",
+    "huge": "SourceCode",
+    "sf": "chevron.left.forwardslash.chevron.right"
+  },
+  "code-block": {
+    "fluent": "code_block",
+    "lucide": "square-code",
+    "phosphor": "code-block",
+    "huge": "CodeSquare",
+    "sf": "curlybraces.square"
+  },
+  "coffee": {
+    "fluent": "drink_coffee",
+    "lucide": "coffee",
+    "phosphor": "coffee",
+    "huge": "Coffee01",
+    "sf": "cup.and.saucer"
+  },
+  "coins": {
+    "fluent": "book_coins",
+    "lucide": "coins",
+    "phosphor": "coins",
+    "huge": "Coins01"
+  },
+  "collapse": {
+    "fluent": "arrow_minimize",
+    "lucide": "minimize-2",
+    "phosphor": "arrows-in",
+    "huge": "ArrowShrink01",
+    "sf": "arrow.down.right.and.arrow.up.left"
+  },
+  "color": {
+    "fluent": "drop",
+    "lucide": "droplet",
+    "phosphor": "drop",
+    "huge": "Droplet",
+    "sf": "drop"
+  },
+  "columns": {
+    "fluent": "column_triple",
+    "lucide": "columns-3",
+    "phosphor": "columns",
+    "huge": "LayoutThreeColumn",
+    "sf": "rectangle.split.3x1"
+  },
+  "command": {
+    "fluent": "key_command",
+    "lucide": "command",
+    "phosphor": "command",
+    "huge": "Command",
+    "sf": "command"
+  },
+  "compass": {
+    "fluent": "compass_northwest",
+    "lucide": "compass",
+    "phosphor": "compass",
+    "huge": "Compass",
+    "sf": "safari"
+  },
+  "compass-dot": {},
+  "compose": {
+    "fluent": "compose",
+    "lucide": "square-pen",
+    "phosphor": "note-pencil",
+    "huge": "Edit02",
+    "sf": "square.and.pencil"
+  },
+  "contrast": {
+    "fluent": "dark_theme",
+    "lucide": "contrast",
+    "phosphor": "circle-half",
+    "huge": "Contrast",
+    "sf": "circle.lefthalf.filled"
+  },
+  "cookie": {
+    "fluent": "cookies",
+    "lucide": "cookie",
+    "phosphor": "cookie",
+    "huge": "Cookie"
+  },
+  "copy": {
+    "fluent": "copy",
+    "lucide": "copy",
+    "phosphor": "copy",
+    "huge": "Copy01",
+    "sf": "doc.on.doc"
+  },
+  "corner": {
+    "lucide": "square-round-corner",
+    "huge": "SquareRoundCorner"
+  },
+  "corner-bottom-left": {
+    "lucide": "square-round-corner",
+    "huge": "SquareRoundCorner"
+  },
+  "corner-bottom-right": {
+    "lucide": "square-round-corner",
+    "huge": "SquareRoundCorner"
+  },
+  "corner-top-right": {
+    "lucide": "square-round-corner",
+    "huge": "SquareRoundCorner"
+  },
+  "corners": {
+    "fluent": "scan",
+    "lucide": "scan",
+    "phosphor": "scan",
+    "huge": "CenterFocus",
+    "sf": "viewfinder"
+  },
+  "corners-sparkle": {
+    "huge": "AiScan"
+  },
+  "credit-card": {
+    "fluent": "payment",
+    "lucide": "credit-card",
+    "phosphor": "credit-card",
+    "huge": "CreditCard",
+    "sf": "creditcard"
+  },
+  "crop": {
+    "fluent": "crop",
+    "lucide": "crop",
+    "phosphor": "crop",
+    "huge": "Crop",
+    "sf": "crop"
+  },
+  "crosshair": {
+    "lucide": "crosshair",
+    "phosphor": "crosshair",
+    "huge": "Crosshair",
+    "sf": "scope"
+  },
+  "crown": {
+    "fluent": "crown",
+    "lucide": "crown",
+    "phosphor": "crown",
+    "huge": "Crown",
+    "sf": "crown"
+  },
+  "crystal-ball": {},
+  "cube": {
+    "fluent": "cube",
+    "lucide": "box",
+    "phosphor": "cube",
+    "huge": "Cube",
+    "sf": "cube"
+  },
+  "cube-wireframe": {
+    "phosphor": "cube-transparent",
+    "huge": "ThreeDView",
+    "sf": "cube.transparent"
+  },
+  "database": {
+    "fluent": "database",
+    "lucide": "database",
+    "phosphor": "database",
+    "huge": "Database",
+    "sf": "cylinder"
+  },
+  "debug-step-over": {
+    "fluent": "arrow_step_over",
+    "huge": "StepOver"
+  },
+  "desktop": {
+    "fluent": "desktop",
+    "lucide": "monitor",
+    "phosphor": "desktop",
+    "huge": "Computer",
+    "sf": "desktopcomputer"
+  },
+  "desktop-check": {
+    "fluent": "desktop_checkmark",
+    "lucide": "monitor-check",
+    "huge": "ComputerCheck"
+  },
+  "desktop-play": {
+    "lucide": "monitor-play",
+    "phosphor": "monitor-play",
+    "huge": "ComputerVideo",
+    "sf": "play.display"
+  },
+  "diamond": {
+    "fluent": "diamond",
+    "lucide": "diamond",
+    "phosphor": "diamond",
+    "huge": "Diamond",
+    "sf": "diamond"
+  },
+  "disc": {
+    "fluent": "cd",
+    "lucide": "disc",
+    "phosphor": "disc",
+    "huge": "Cd",
+    "sf": "opticaldisc"
+  },
+  "dismiss": {
+    "fluent": "dismiss",
+    "lucide": "x",
+    "phosphor": "x",
+    "huge": "Cancel01",
+    "sf": "xmark"
+  },
+  "distribute-horizontal": {
+    "fluent": "align_space_evenly_horizontal",
+    "lucide": "align-horizontal-space-around",
+    "huge": "DistributeHorizontalCenter",
+    "sf": "distribute.horizontal.center"
+  },
+  "distribute-vertical": {
+    "fluent": "align_space_evenly_vertical",
+    "lucide": "align-vertical-space-around",
+    "huge": "DistributeVerticalCenter",
+    "sf": "distribute.vertical.center"
+  },
+  "document": {
+    "fluent": "document",
+    "lucide": "file",
+    "phosphor": "file",
+    "huge": "File01",
+    "sf": "doc"
+  },
+  "document-add": {
+    "fluent": "document_add",
+    "lucide": "file-plus",
+    "phosphor": "file-plus",
+    "huge": "FileAdd",
+    "sf": "doc.badge.plus"
+  },
+  "document-check": {
+    "fluent": "document_checkmark",
+    "lucide": "file-check",
+    "huge": "FileValidation"
+  },
+  "document-remove": {
+    "fluent": "document_dismiss",
+    "lucide": "file-minus",
+    "phosphor": "file-minus",
+    "huge": "FileRemove"
+  },
+  "dollar": {
+    "fluent": "currency_dollar_euro",
+    "lucide": "dollar-sign",
+    "phosphor": "currency-dollar",
+    "huge": "Dollar01",
+    "sf": "dollarsign"
+  },
+  "dots-four": {
+    "fluent": "grid_dots",
+    "sf": "circle.grid.2x2"
+  },
+  "download": {
+    "fluent": "arrow_download",
+    "lucide": "download",
+    "phosphor": "download-simple",
+    "huge": "Download01",
+    "sf": "arrow.down.to.line"
+  },
+  "dumbbell": {
+    "fluent": "dumbbell",
+    "lucide": "dumbbell",
+    "phosphor": "barbell",
+    "huge": "Dumbbell01",
+    "sf": "dumbbell"
+  },
+  "ellipse": {
+    "fluent": "circle",
+    "lucide": "ellipse",
+    "phosphor": "circle",
+    "huge": "Ellipse",
+    "sf": "circle"
+  },
+  "eraser": {
+    "fluent": "eraser",
+    "lucide": "eraser",
+    "phosphor": "eraser",
+    "huge": "Eraser",
+    "sf": "eraser"
+  },
+  "error": {
+    "fluent": "dismiss_circle",
+    "lucide": "circle-x",
+    "phosphor": "x-circle",
+    "huge": "CancelCircle",
+    "sf": "xmark.circle"
+  },
+  "escape": {
+    "sf": "escape"
+  },
+  "expand": {
+    "fluent": "arrow_maximize",
+    "lucide": "maximize-2",
+    "phosphor": "arrows-out",
+    "huge": "ArrowExpand01",
+    "sf": "arrow.up.left.and.arrow.down.right"
+  },
+  "eye": {
+    "fluent": "eye",
+    "lucide": "eye",
+    "phosphor": "eye",
+    "huge": "View",
+    "sf": "eye"
+  },
+  "eye-off": {
+    "fluent": "eye_off",
+    "lucide": "eye-off",
+    "phosphor": "eye-slash",
+    "huge": "ViewOff",
+    "sf": "eye.slash"
+  },
+  "eyedropper": {
+    "fluent": "eyedropper",
+    "lucide": "pipette",
+    "phosphor": "eyedropper",
+    "huge": "ColorPicker",
+    "sf": "eyedropper"
+  },
+  "fast-forward": {
+    "fluent": "fast_forward",
+    "lucide": "fast-forward",
+    "phosphor": "fast-forward",
+    "huge": "FastForward",
+    "sf": "forward"
+  },
+  "file-code": {
+    "fluent": "document_code",
+    "lucide": "file-code",
+    "phosphor": "file-code",
+    "huge": "FileCode"
+  },
+  "file-export": {
+    "fluent": "document_arrow_right",
+    "lucide": "file-output",
+    "phosphor": "file-arrow-up",
+    "huge": "FileExport",
+    "sf": "doc.badge.arrow.up"
+  },
+  "file-image": {
+    "fluent": "document_image",
+    "lucide": "file-image",
+    "phosphor": "file-image",
+    "huge": "FileImage",
+    "sf": "doc.text.image"
+  },
+  "file-lock": {
+    "fluent": "document_lock",
+    "lucide": "file-lock",
+    "phosphor": "file-lock",
+    "huge": "FileLock",
+    "sf": "lock.doc"
+  },
+  "files": {
+    "fluent": "document_multiple",
+    "lucide": "files",
+    "phosphor": "files",
+    "huge": "Files01"
+  },
+  "film": {
+    "fluent": "filmstrip",
+    "lucide": "film",
+    "phosphor": "film-strip",
+    "huge": "Film01",
+    "sf": "film"
+  },
+  "filter": {
+    "fluent": "filter",
+    "lucide": "funnel",
+    "phosphor": "funnel",
+    "huge": "Filter",
+    "sf": "line.3.horizontal.decrease"
+  },
+  "filter-add": {
+    "fluent": "filter_add",
+    "lucide": "funnel-plus",
+    "huge": "FilterAdd"
+  },
+  "filter-dismiss": {
+    "fluent": "filter_dismiss",
+    "lucide": "funnel-x",
+    "phosphor": "funnel-x",
+    "huge": "FilterRemove"
+  },
+  "fingerprint": {
+    "fluent": "fingerprint",
+    "lucide": "fingerprint-pattern",
+    "phosphor": "fingerprint",
+    "huge": "FingerprintPattern",
+    "sf": "touchid"
+  },
+  "flag": {
+    "fluent": "flag",
+    "lucide": "flag",
+    "phosphor": "flag",
+    "huge": "Flag01",
+    "sf": "flag"
+  },
+  "flame": {
+    "fluent": "fire",
+    "lucide": "flame",
+    "phosphor": "flame",
+    "huge": "Fire",
+    "sf": "flame"
+  },
+  "flash": {
+    "fluent": "flash",
+    "lucide": "zap",
+    "phosphor": "lightning",
+    "huge": "Flash",
+    "sf": "bolt"
+  },
+  "flask": {
+    "fluent": "beaker",
+    "lucide": "flask-conical",
+    "phosphor": "flask",
+    "huge": "FlaskConical",
+    "sf": "flask"
+  },
+  "flask-off": {
+    "fluent": "beaker_off",
+    "lucide": "flask-conical-off",
+    "huge": "FlaskConicalOff"
+  },
+  "flip": {
+    "fluent": "flip_horizontal",
+    "lucide": "triangles-centerline-dashed-horizontal",
+    "phosphor": "flip-horizontal",
+    "huge": "FlipHorizontal",
+    "sf": "flip.horizontal"
+  },
+  "flip-vertical": {
+    "fluent": "flip_vertical",
+    "lucide": "triangles-centerline-dashed-vertical",
+    "phosphor": "flip-vertical",
+    "huge": "FlipVertical"
+  },
+  "flow": {},
+  "flow-free": {},
+  "flow-vertical": {},
+  "flow-wrap": {},
+  "folder": {
+    "fluent": "folder",
+    "lucide": "folder",
+    "phosphor": "folder",
+    "huge": "Folder01",
+    "sf": "folder"
+  },
+  "folder-add": {
+    "fluent": "folder_add",
+    "lucide": "folder-plus",
+    "phosphor": "folder-plus",
+    "huge": "FolderAdd",
+    "sf": "folder.badge.plus"
+  },
+  "folder-check": {
+    "lucide": "folder-check",
+    "huge": "FolderCheck"
+  },
+  "folder-open": {
+    "fluent": "folder_open",
+    "lucide": "folder-open",
+    "phosphor": "folder-open",
+    "huge": "FolderOpen"
+  },
+  "folder-remove": {
+    "lucide": "folder-minus",
+    "phosphor": "folder-minus",
+    "huge": "FolderRemove",
+    "sf": "folder.badge.minus"
+  },
+  "folders": {
+    "fluent": "folder_multiple",
+    "lucide": "folders",
+    "phosphor": "folders",
+    "huge": "Folders"
+  },
+  "forward": {
+    "fluent": "arrow_forward",
+    "lucide": "forward",
+    "phosphor": "arrow-bend-up-right",
+    "sf": "arrowshape.turn.up.right"
+  },
+  "frame": {
+    "fluent": "frame",
+    "lucide": "frame",
+    "huge": "Frame"
+  },
+  "frown": {
+    "fluent": "emoji_sad",
+    "lucide": "face-slightly-frowning",
+    "phosphor": "smiley-sad",
+    "huge": "Sad01"
+  },
+  "function": {
+    "fluent": "math_formula",
+    "lucide": "square-function",
+    "phosphor": "function",
+    "huge": "Function",
+    "sf": "function"
+  },
+  "gallery": {
+    "fluent": "panel_top_gallery",
+    "lucide": "gallery-horizontal-end",
+    "huge": "GalleryHorizontalEnd"
+  },
+  "gap": {
+    "lucide": "gap-horizontal",
+    "phosphor": "arrows-out-line-horizontal",
+    "sf": "arrow.left.and.line.vertical.and.arrow.right"
+  },
+  "gap-vertical": {
+    "lucide": "gap-vertical",
+    "phosphor": "arrows-out-line-vertical",
+    "sf": "arrow.up.and.line.horizontal.and.arrow.down"
+  },
+  "gauge": {
+    "fluent": "gauge",
+    "lucide": "gauge",
+    "phosphor": "gauge",
+    "huge": "Gauge",
+    "sf": "gauge.with.dots.needle.33percent"
+  },
+  "gift": {
+    "fluent": "gift",
+    "lucide": "gift",
+    "phosphor": "gift",
+    "huge": "Gift",
+    "sf": "gift"
+  },
+  "git-branch": {
+    "fluent": "branch",
+    "lucide": "git-branch",
+    "phosphor": "git-branch",
+    "huge": "GitBranch",
+    "sf": "arrow.triangle.branch"
+  },
+  "git-commit": {
+    "lucide": "git-commit-horizontal",
+    "phosphor": "git-commit",
+    "huge": "GitCommit"
+  },
+  "git-merge": {
+    "fluent": "merge",
+    "lucide": "git-merge",
+    "phosphor": "git-merge",
+    "huge": "GitMerge",
+    "sf": "arrow.triangle.merge"
+  },
+  "git-pull-request": {
+    "fluent": "branch_request",
+    "lucide": "git-pull-request",
+    "phosphor": "git-pull-request",
+    "huge": "GitPullRequest",
+    "sf": "arrow.triangle.pull"
+  },
+  "git-pull-request-closed": {
+    "fluent": "branch_request_closed",
+    "lucide": "git-pull-request-closed",
+    "huge": "GitPullRequestClosed"
+  },
+  "git-pull-request-draft": {
+    "fluent": "branch_request_draft",
+    "lucide": "git-pull-request-draft",
+    "huge": "GitPullRequestDraft"
+  },
+  "globe": {
+    "fluent": "globe",
+    "lucide": "globe",
+    "phosphor": "globe",
+    "huge": "Globe",
+    "sf": "globe"
+  },
+  "graduation-cap": {
+    "fluent": "hat_graduation",
+    "lucide": "graduation-cap",
+    "phosphor": "graduation-cap",
+    "huge": "Mortarboard01",
+    "sf": "graduationcap"
+  },
+  "grid": {
+    "fluent": "grid",
+    "lucide": "layout-grid",
+    "phosphor": "squares-four",
+    "huge": "GridView",
+    "sf": "square.grid.2x2"
+  },
+  "grid-plus": {
+    "lucide": "grid-2x2-plus",
+    "huge": "Grid2x2Plus"
+  },
+  "grid-sparkle": {},
+  "grip": {
+    "fluent": "re_order",
+    "lucide": "equal",
+    "phosphor": "equals",
+    "huge": "Equal",
+    "sf": "equal"
+  },
+  "grip-horizontal": {
+    "fluent": "re_order_dots_horizontal",
+    "lucide": "grip-horizontal",
+    "phosphor": "dots-six",
+    "huge": "GripHorizontal"
+  },
+  "grip-vertical": {
+    "fluent": "re_order_dots_vertical",
+    "lucide": "grip-vertical",
+    "phosphor": "dots-six-vertical",
+    "huge": "GripVertical"
+  },
+  "hand": {
+    "fluent": "hand_right",
+    "lucide": "hand",
+    "phosphor": "hand",
+    "huge": "Hand",
+    "sf": "hand.raised"
+  },
+  "hard-drive": {
+    "fluent": "hard_drive",
+    "lucide": "hard-drive",
+    "phosphor": "hard-drive",
+    "huge": "HardDrive",
+    "sf": "internaldrive"
+  },
+  "hash": {
+    "fluent": "number_symbol",
+    "lucide": "hash",
+    "phosphor": "hash",
+    "huge": "Hash",
+    "sf": "number"
+  },
+  "heading": {
+    "fluent": "text_header_1",
+    "lucide": "heading",
+    "phosphor": "text-h",
+    "huge": "Heading",
+    "sf": "h.square"
+  },
+  "headphones": {
+    "fluent": "headphones",
+    "lucide": "headphones",
+    "phosphor": "headphones",
+    "huge": "Headphones",
+    "sf": "headphones"
+  },
+  "heart": {
+    "fluent": "heart",
+    "lucide": "heart",
+    "phosphor": "heart",
+    "huge": "Favourite",
+    "sf": "heart"
+  },
+  "help": {
+    "fluent": "question_circle",
+    "lucide": "circle-question-mark",
+    "phosphor": "question",
+    "huge": "HelpCircle",
+    "sf": "questionmark.circle"
+  },
+  "hexagon": {
+    "fluent": "hexagon",
+    "lucide": "hexagon",
+    "phosphor": "hexagon",
+    "huge": "Hexagon",
+    "sf": "hexagon"
+  },
+  "highlighter": {
+    "fluent": "highlight",
+    "lucide": "highlighter",
+    "phosphor": "highlighter",
+    "huge": "Highlighter",
+    "sf": "highlighter"
+  },
+  "history": {
+    "fluent": "history",
+    "lucide": "rotate-ccw-clock",
+    "phosphor": "clock-counter-clockwise",
+    "huge": "History",
+    "sf": "clock.arrow.circlepath"
+  },
+  "home": {
+    "fluent": "home",
+    "lucide": "house",
+    "phosphor": "house",
+    "huge": "Home01",
+    "sf": "house"
+  },
+  "hourglass": {
+    "fluent": "hourglass",
+    "lucide": "hourglass",
+    "phosphor": "hourglass",
+    "huge": "Hourglass",
+    "sf": "hourglass"
+  },
+  "id-card": {
+    "fluent": "contact_card",
+    "lucide": "id-card",
+    "phosphor": "identification-card",
+    "huge": "IdCard",
+    "sf": "person.text.rectangle"
+  },
+  "image": {
+    "fluent": "image",
+    "lucide": "image",
+    "phosphor": "image",
+    "huge": "Image01",
+    "sf": "photo"
+  },
+  "images": {
+    "fluent": "image_multiple",
+    "lucide": "images",
+    "phosphor": "images",
+    "huge": "Album02",
+    "sf": "photo.on.rectangle"
+  },
+  "inbox": {
+    "fluent": "mail_inbox",
+    "lucide": "inbox",
+    "phosphor": "tray",
+    "huge": "Inbox",
+    "sf": "tray"
+  },
+  "indent": {
+    "fluent": "text_indent_increase",
+    "lucide": "list-indent-increase",
+    "phosphor": "text-indent",
+    "huge": "TextIndentMore",
+    "sf": "increase.indent"
+  },
+  "infinity": {
+    "lucide": "infinity",
+    "phosphor": "infinity",
+    "huge": "Infinity01",
+    "sf": "infinity"
+  },
+  "info": {
+    "fluent": "info",
+    "lucide": "info",
+    "phosphor": "info",
+    "huge": "InformationCircle",
+    "sf": "info.circle"
+  },
+  "italic": {
+    "fluent": "text_italic",
+    "lucide": "italic",
+    "phosphor": "text-italic",
+    "huge": "TextItalic",
+    "sf": "italic"
+  },
+  "kanban": {
+    "fluent": "grid_kanban",
+    "lucide": "kanban",
+    "phosphor": "kanban",
+    "huge": "Kanban"
+  },
+  "key": {
+    "fluent": "key",
+    "lucide": "key",
+    "phosphor": "key",
+    "huge": "Key01",
+    "sf": "key"
+  },
+  "keyboard": {
+    "fluent": "keyboard",
+    "lucide": "keyboard",
+    "phosphor": "keyboard",
+    "huge": "Keyboard",
+    "sf": "keyboard"
+  },
+  "laptop": {
+    "fluent": "laptop",
+    "lucide": "laptop",
+    "phosphor": "laptop",
+    "huge": "Laptop",
+    "sf": "laptopcomputer"
+  },
+  "layers": {
+    "fluent": "layer",
+    "lucide": "layers",
+    "phosphor": "stack",
+    "huge": "Layers01",
+    "sf": "square.3.layers.3d"
+  },
+  "layout": {
+    "fluent": "layout_row_two_split_top",
+    "lucide": "layout-panel-top",
+    "phosphor": "layout",
+    "huge": "Layout01",
+    "sf": "uiwindow.split.2x1"
+  },
+  "layout-dashboard": {
+    "fluent": "board",
+    "lucide": "layout-dashboard",
+    "huge": "DashboardSquare01",
+    "sf": "rectangle.3.group"
+  },
+  "leaf": {
+    "fluent": "leaf_one",
+    "lucide": "leaf",
+    "phosphor": "leaf",
+    "huge": "Leaf01",
+    "sf": "leaf"
+  },
+  "letter-spacing": {
+    "huge": "LetterSpacing"
+  },
+  "library": {
+    "fluent": "library",
+    "lucide": "library",
+    "phosphor": "books",
+    "huge": "Library",
+    "sf": "books.vertical"
+  },
+  "lightbulb": {
+    "fluent": "lightbulb",
+    "lucide": "lightbulb",
+    "phosphor": "lightbulb",
+    "huge": "Idea01",
+    "sf": "lightbulb"
+  },
+  "line": {
+    "fluent": "line",
+    "lucide": "slash",
+    "phosphor": "line-segment",
+    "huge": "Line",
+    "sf": "line.diagonal"
+  },
+  "line-height": {
+    "fluent": "text_line_spacing"
+  },
+  "link": {
+    "fluent": "link",
+    "lucide": "link",
+    "phosphor": "link",
+    "huge": "Link01",
+    "sf": "link"
+  },
+  "link-off": {
+    "fluent": "link_dismiss",
+    "lucide": "unlink",
+    "phosphor": "link-break",
+    "huge": "Unlink01"
+  },
+  "list": {
+    "fluent": "text_align_justify",
+    "lucide": "text-align-justify",
+    "phosphor": "text-align-justify",
+    "huge": "TextAlignJustifyLeft",
+    "sf": "text.justify"
+  },
+  "list-bullet": {
+    "fluent": "text_bullet_list_ltr",
+    "lucide": "list",
+    "phosphor": "list-bullets",
+    "huge": "LeftToRightListBullet",
+    "sf": "list.bullet"
+  },
+  "list-checklist": {
+    "fluent": "task_list_ltr",
+    "lucide": "list-checks",
+    "phosphor": "list-checks",
+    "huge": "CheckList",
+    "sf": "checklist"
+  },
+  "list-numbered": {
+    "fluent": "text_number_list_ltr",
+    "lucide": "list-ordered",
+    "phosphor": "list-numbers",
+    "huge": "LeftToRightListNumber",
+    "sf": "list.number"
+  },
+  "loader": {
+    "fluent": "spinner_ios",
+    "lucide": "loader-circle",
+    "phosphor": "spinner-gap",
+    "huge": "Loading03",
+    "sf": "progress.indicator"
+  },
+  "lock": {
+    "fluent": "lock_closed",
+    "lucide": "lock",
+    "phosphor": "lock",
+    "huge": "Lock",
+    "sf": "lock"
+  },
+  "log-in": {
+    "fluent": "arrow_enter",
+    "lucide": "log-in",
+    "phosphor": "sign-in",
+    "huge": "Login01",
+    "sf": "rectangle.portrait.and.arrow.forward"
+  },
+  "log-out": {
+    "fluent": "sign_out",
+    "lucide": "log-out",
+    "phosphor": "sign-out",
+    "huge": "Logout01",
+    "sf": "rectangle.portrait.and.arrow.right"
+  },
+  "magnet": {
+    "lucide": "magnet",
+    "phosphor": "magnet",
+    "huge": "Magnet"
+  },
+  "mail": {
+    "fluent": "mail",
+    "lucide": "mail",
+    "phosphor": "envelope",
+    "huge": "Mail01",
+    "sf": "envelope"
+  },
+  "mail-dot": {
+    "fluent": "mail_unread",
+    "sf": "envelope.badge"
+  },
+  "mail-open": {
+    "fluent": "mail_read",
+    "lucide": "mail-open",
+    "phosphor": "envelope-open",
+    "huge": "MailOpen",
+    "sf": "envelope.open"
+  },
+  "map": {
+    "fluent": "map",
+    "lucide": "map",
+    "phosphor": "map-trifold",
+    "huge": "Maps",
+    "sf": "map"
+  },
+  "markdown": {
+    "fluent": "markdown",
+    "phosphor": "markdown-logo"
+  },
+  "mask": {
+    "huge": "LayerMask01",
+    "sf": "circle.square"
+  },
+  "megaphone": {
+    "fluent": "megaphone",
+    "lucide": "megaphone",
+    "phosphor": "megaphone",
+    "huge": "Megaphone01",
+    "sf": "megaphone"
+  },
+  "menu": {
+    "fluent": "navigation",
+    "lucide": "menu",
+    "phosphor": "list",
+    "huge": "Menu01",
+    "sf": "line.3.horizontal"
+  },
+  "mic": {
+    "fluent": "mic",
+    "lucide": "mic",
+    "phosphor": "microphone",
+    "huge": "Mic01",
+    "sf": "mic"
+  },
+  "mic-off": {
+    "fluent": "mic_off",
+    "lucide": "mic-off",
+    "phosphor": "microphone-slash",
+    "huge": "MicOff01",
+    "sf": "mic.slash"
+  },
+  "minus": {
+    "fluent": "subtract",
+    "lucide": "minus",
+    "phosphor": "minus",
+    "huge": "MinusSign",
+    "sf": "minus"
+  },
+  "moon": {
+    "fluent": "weather_moon",
+    "lucide": "moon",
+    "phosphor": "moon",
+    "huge": "Moon02",
+    "sf": "moon"
+  },
+  "more-horizontal": {
+    "fluent": "more_horizontal",
+    "lucide": "ellipsis",
+    "phosphor": "dots-three",
+    "huge": "MoreHorizontal",
+    "sf": "ellipsis"
+  },
+  "more-vertical": {
+    "fluent": "more_vertical",
+    "lucide": "ellipsis-vertical",
+    "phosphor": "dots-three-vertical",
+    "huge": "MoreVertical"
+  },
+  "mountain": {
+    "fluent": "mountain_trail",
+    "lucide": "mountain",
+    "phosphor": "mountains",
+    "huge": "Mountain",
+    "sf": "mountain.2"
+  },
+  "mouse": {
+    "lucide": "mouse",
+    "phosphor": "mouse",
+    "huge": "Mouse01",
+    "sf": "computermouse"
+  },
+  "move": {
+    "fluent": "arrow_move",
+    "lucide": "move",
+    "phosphor": "arrows-out-cardinal",
+    "huge": "Move",
+    "sf": "arrow.up.and.down.and.arrow.left.and.right"
+  },
+  "music": {
+    "fluent": "music_note_2",
+    "lucide": "music",
+    "phosphor": "music-notes",
+    "huge": "MusicNote01",
+    "sf": "music.note"
+  },
+  "network": {
+    "fluent": "organization",
+    "lucide": "network",
+    "phosphor": "tree-structure",
+    "huge": "Hierarchy",
+    "sf": "network"
+  },
+  "newspaper": {
+    "fluent": "news",
+    "lucide": "newspaper",
+    "phosphor": "newspaper",
+    "huge": "News",
+    "sf": "newspaper"
+  },
+  "opacity": {
+    "fluent": "transparency_square",
+    "phosphor": "checkerboard",
+    "huge": "Transparency",
+    "sf": "checkerboard.rectangle"
+  },
+  "open": {
+    "fluent": "open",
+    "lucide": "external-link",
+    "phosphor": "arrow-square-out",
+    "huge": "LinkSquare02",
+    "sf": "arrow.up.forward.square"
+  },
+  "option": {
+    "lucide": "option",
+    "phosphor": "option",
+    "huge": "Option",
+    "sf": "option"
+  },
+  "options": {
+    "fluent": "options",
+    "lucide": "sliders-horizontal",
+    "phosphor": "sliders-horizontal",
+    "huge": "SlidersHorizontal",
+    "sf": "slider.horizontal.3"
+  },
+  "outdent": {
+    "fluent": "text_indent_decrease",
+    "lucide": "list-indent-decrease",
+    "phosphor": "text-outdent",
+    "huge": "TextIndentLess",
+    "sf": "decrease.indent"
+  },
+  "package": {
+    "fluent": "box",
+    "lucide": "package",
+    "phosphor": "package",
+    "huge": "Package",
+    "sf": "shippingbox"
+  },
+  "padding": {},
+  "padding-axis": {},
+  "padding-ends": {
+    "fluent": "padding_top"
+  },
+  "padding-side": {
+    "fluent": "padding_left"
+  },
+  "padding-sides": {},
+  "paint-bucket": {
+    "fluent": "paint_bucket",
+    "lucide": "paint-bucket",
+    "phosphor": "paint-bucket",
+    "huge": "PaintBucket",
+    "sf": "paintbrush"
+  },
+  "paintbrush": {
+    "fluent": "paint_brush",
+    "lucide": "paintbrush",
+    "phosphor": "paint-brush",
+    "huge": "PaintBrush01",
+    "sf": "paintbrush"
+  },
+  "palette": {
+    "fluent": "color",
+    "lucide": "palette",
+    "phosphor": "palette",
+    "huge": "Palette",
+    "sf": "paintpalette"
+  },
+  "panel-bottom": {
+    "fluent": "panel_bottom",
+    "lucide": "panel-bottom",
+    "huge": "PanelBottom",
+    "sf": "rectangle.bottomthird.inset.filled"
+  },
+  "panel-left": {
+    "fluent": "panel_left",
+    "lucide": "panel-left",
+    "phosphor": "sidebar",
+    "huge": "PanelLeft",
+    "sf": "sidebar.left"
+  },
+  "panel-left-close": {
+    "fluent": "panel_left_contract",
+    "lucide": "panel-left-close",
+    "huge": "PanelLeftClose"
+  },
+  "panel-left-open": {
+    "fluent": "panel_left_expand",
+    "lucide": "panel-left-open",
+    "huge": "PanelLeftOpen"
+  },
+  "panel-right": {
+    "fluent": "panel_right",
+    "lucide": "panel-right",
+    "phosphor": "sidebar-simple",
+    "huge": "PanelRight",
+    "sf": "sidebar.right"
+  },
+  "panel-right-close": {
+    "fluent": "panel_right_contract",
+    "lucide": "panel-right-close",
+    "huge": "PanelRightClose"
+  },
+  "panel-right-open": {
+    "fluent": "panel_right_expand",
+    "lucide": "panel-right-open",
+    "huge": "PanelRightOpen"
+  },
+  "panel-top": {
+    "fluent": "panel_top_expand",
+    "lucide": "panel-top",
+    "huge": "PanelTop",
+    "sf": "rectangle.topthird.inset.filled"
+  },
+  "pause": {
+    "fluent": "pause",
+    "lucide": "pause",
+    "phosphor": "pause",
+    "huge": "Pause",
+    "sf": "pause"
+  },
+  "pause-circle": {
+    "fluent": "pause_circle",
+    "lucide": "circle-pause",
+    "phosphor": "pause-circle",
+    "huge": "PauseCircle",
+    "sf": "pause.circle"
+  },
+  "paw": {
+    "fluent": "animal_paw_print",
+    "lucide": "paw-print",
+    "phosphor": "paw-print",
+    "huge": "PawPrint",
+    "sf": "pawprint"
+  },
+  "pen-tool": {
+    "fluent": "pen",
+    "lucide": "pen-tool",
+    "phosphor": "pen-nib",
+    "huge": "PenTool01",
+    "sf": "pencil.tip"
+  },
+  "pencil": {
+    "fluent": "edit",
+    "lucide": "pencil",
+    "phosphor": "pencil-simple",
+    "huge": "PencilEdit01",
+    "sf": "pencil"
+  },
+  "people": {
+    "fluent": "people",
+    "lucide": "users",
+    "phosphor": "users",
+    "huge": "UserMultiple",
+    "sf": "person.2"
+  },
+  "percent": {
+    "fluent": "text_percent",
+    "lucide": "percent",
+    "phosphor": "percent",
+    "huge": "Percent",
+    "sf": "percent"
+  },
+  "person": {
+    "fluent": "person",
+    "lucide": "user",
+    "phosphor": "user",
+    "huge": "User",
+    "sf": "person"
+  },
+  "person-add": {
+    "fluent": "person_add",
+    "lucide": "user-plus",
+    "phosphor": "user-plus",
+    "huge": "UserAdd01",
+    "sf": "person.badge.plus"
+  },
+  "person-chat": {
+    "fluent": "person_chat",
+    "huge": "ChatUser",
+    "sf": "person.bubble"
+  },
+  "person-check": {
+    "fluent": "person_available",
+    "lucide": "user-check",
+    "phosphor": "user-check",
+    "huge": "UserCheck01",
+    "sf": "person.badge.checkmark"
+  },
+  "person-circle": {
+    "fluent": "person_circle",
+    "lucide": "circle-user",
+    "phosphor": "user-circle",
+    "huge": "UserCircle",
+    "sf": "person.crop.circle"
+  },
+  "person-remove": {
+    "fluent": "person_subtract",
+    "lucide": "user-minus",
+    "phosphor": "user-minus",
+    "huge": "UserRemove01",
+    "sf": "person.badge.minus"
+  },
+  "phone": {
+    "fluent": "phone",
+    "lucide": "smartphone",
+    "phosphor": "device-mobile",
+    "huge": "SmartPhone01",
+    "sf": "iphone"
+  },
+  "piano": {
+    "lucide": "piano",
+    "phosphor": "piano-keys",
+    "sf": "pianokeys"
+  },
+  "picture-in-picture": {
+    "fluent": "picture_in_picture",
+    "lucide": "picture-in-picture-2",
+    "phosphor": "picture-in-picture",
+    "huge": "PictureInPicture",
+    "sf": "pip"
+  },
+  "pie-chart": {
+    "fluent": "data_pie",
+    "lucide": "chart-pie",
+    "phosphor": "chart-pie",
+    "huge": "PieChart",
+    "sf": "chart.pie"
+  },
+  "pin": {
+    "fluent": "location",
+    "lucide": "map-pin",
+    "phosphor": "map-pin",
+    "huge": "Location01",
+    "sf": "mappin"
+  },
+  "plane": {
+    "fluent": "airplane",
+    "lucide": "plane",
+    "phosphor": "airplane",
+    "huge": "Airplane01",
+    "sf": "airplane"
+  },
+  "play": {
+    "fluent": "play",
+    "lucide": "play",
+    "phosphor": "play",
+    "huge": "Play",
+    "sf": "play"
+  },
+  "play-circle": {
+    "fluent": "play_circle",
+    "lucide": "circle-play",
+    "phosphor": "play-circle",
+    "huge": "PlayCircle",
+    "sf": "play.circle"
+  },
+  "plug": {
+    "fluent": "plug_connected",
+    "lucide": "plug",
+    "phosphor": "plug",
+    "huge": "Plug01",
+    "sf": "powerplug"
+  },
+  "plus-minus": {
+    "fluent": "add_subtract_circle",
+    "lucide": "diff",
+    "phosphor": "plus-minus",
+    "huge": "PlusMinus",
+    "sf": "plus.forwardslash.minus"
+  },
+  "pointer": {
+    "fluent": "cursor",
+    "lucide": "mouse-pointer-2",
+    "phosphor": "cursor",
+    "huge": "Cursor01",
+    "sf": "cursorarrow"
+  },
+  "polygon": {
+    "fluent": "triangle",
+    "lucide": "triangle",
+    "phosphor": "polygon",
+    "huge": "Polygon",
+    "sf": "triangle"
+  },
+  "power": {
+    "fluent": "power",
+    "lucide": "power",
+    "phosphor": "power",
+    "huge": "PowerService",
+    "sf": "power"
+  },
+  "presentation": {
+    "fluent": "whiteboard",
+    "lucide": "presentation",
+    "phosphor": "presentation",
+    "huge": "Presentation01",
+    "sf": "videoprojector"
+  },
+  "printer": {
+    "fluent": "print",
+    "lucide": "printer",
+    "phosphor": "printer",
+    "huge": "Printer",
+    "sf": "printer"
+  },
+  "prohibited": {
+    "fluent": "prohibited",
+    "lucide": "ban",
+    "phosphor": "prohibit",
+    "huge": "Ban",
+    "sf": "nosign"
+  },
+  "pushpin": {
+    "fluent": "pin",
+    "lucide": "pin",
+    "phosphor": "push-pin",
+    "huge": "Pin",
+    "sf": "pin"
+  },
+  "puzzle": {
+    "fluent": "puzzle_piece",
+    "lucide": "puzzle",
+    "phosphor": "puzzle-piece",
+    "huge": "Puzzle",
+    "sf": "puzzlepiece"
+  },
+  "qr-code": {
+    "fluent": "qr_code",
+    "lucide": "qr-code",
+    "phosphor": "qr-code",
+    "huge": "QrCode",
+    "sf": "qrcode"
+  },
+  "quote": {
+    "fluent": "text_quote",
+    "lucide": "quote",
+    "phosphor": "quotes",
+    "huge": "QuoteDown",
+    "sf": "quote.opening"
+  },
+  "receipt": {
+    "fluent": "receipt",
+    "lucide": "receipt",
+    "phosphor": "receipt",
+    "huge": "Invoice01",
+    "sf": "receipt"
+  },
+  "record": {
+    "fluent": "record",
+    "lucide": "circle-dot",
+    "phosphor": "record",
+    "huge": "Record",
+    "sf": "record.circle"
+  },
+  "rectangle": {
+    "fluent": "rectangle_landscape",
+    "lucide": "rectangle-horizontal",
+    "phosphor": "rectangle",
+    "huge": "Rectangular",
+    "sf": "rectangle"
+  },
+  "redo": {
+    "fluent": "arrow_redo",
+    "lucide": "redo",
+    "phosphor": "arrow-u-up-right",
+    "huge": "Redo",
+    "sf": "arrow.uturn.forward"
+  },
+  "refresh": {
+    "fluent": "arrow_clockwise",
+    "lucide": "rotate-cw",
+    "phosphor": "arrow-clockwise",
+    "huge": "Refresh",
+    "sf": "arrow.clockwise"
+  },
+  "remove-circle": {
+    "fluent": "subtract_circle",
+    "lucide": "circle-minus",
+    "phosphor": "minus-circle",
+    "huge": "RemoveCircle",
+    "sf": "minus.circle"
+  },
+  "repeat": {
+    "fluent": "arrow_repeat_all",
+    "lucide": "repeat",
+    "phosphor": "repeat",
+    "huge": "Repeat",
+    "sf": "repeat"
+  },
+  "reply": {
+    "fluent": "arrow_reply",
+    "lucide": "reply",
+    "phosphor": "arrow-bend-up-left",
+    "huge": "MailReply01",
+    "sf": "arrowshape.turn.up.left"
+  },
+  "reply-all": {
+    "fluent": "arrow_reply_all",
+    "lucide": "reply-all",
+    "phosphor": "arrow-bend-double-up-left",
+    "huge": "MailReplyAll01",
+    "sf": "arrowshape.turn.up.left.2"
+  },
+  "reset": {
+    "fluent": "arrow_counterclockwise",
+    "lucide": "rotate-ccw",
+    "phosphor": "arrow-counter-clockwise",
+    "huge": "ArrowReloadHorizontal",
+    "sf": "arrow.counterclockwise"
+  },
+  "return": {
+    "fluent": "arrow_enter_left",
+    "lucide": "corner-down-left",
+    "phosphor": "arrow-elbow-down-left",
+    "sf": "return.left"
+  },
+  "rewind": {
+    "fluent": "rewind",
+    "lucide": "rewind",
+    "phosphor": "rewind",
+    "huge": "Rewind",
+    "sf": "backward"
+  },
+  "rocket": {
+    "fluent": "rocket",
+    "lucide": "rocket",
+    "phosphor": "rocket",
+    "huge": "Rocket"
+  },
+  "rotate": {
+    "fluent": "arrow_rotate_clockwise",
+    "lucide": "rotate-cw-square",
+    "phosphor": "arrow-clockwise",
+    "huge": "Rotate01",
+    "sf": "rotate.right"
+  },
+  "route": {
+    "lucide": "route",
+    "phosphor": "path",
+    "huge": "Route01",
+    "sf": "point.topleft.down.to.point.bottomright.curvepath"
+  },
+  "rows": {
+    "fluent": "layout_row_two",
+    "lucide": "rows-3",
+    "phosphor": "rows",
+    "huge": "Rows3",
+    "sf": "rectangle.split.1x2"
+  },
+  "ruler": {
+    "fluent": "ruler",
+    "lucide": "ruler",
+    "phosphor": "ruler",
+    "huge": "Ruler",
+    "sf": "ruler"
+  },
+  "save": {
+    "fluent": "save",
+    "lucide": "save",
+    "phosphor": "floppy-disk",
+    "huge": "FloppyDisk",
+    "sf": "square.and.arrow.down"
+  },
+  "scan-check": {
+    "fluent": "scan_type_checkmark"
+  },
+  "scissors": {
+    "fluent": "cut",
+    "lucide": "scissors",
+    "phosphor": "scissors",
+    "huge": "Scissor01",
+    "sf": "scissors"
+  },
+  "screen-share": {
+    "fluent": "share_screen_start",
+    "lucide": "screen-share",
+    "phosphor": "screencast",
+    "huge": "ComputerScreenShare",
+    "sf": "shareplay"
+  },
+  "search": {
+    "fluent": "search",
+    "lucide": "search",
+    "phosphor": "magnifying-glass",
+    "huge": "Search01",
+    "sf": "magnifyingglass"
+  },
+  "search-off": {
+    "lucide": "search-slash",
+    "huge": "SearchRemove"
+  },
+  "send": {
+    "fluent": "send",
+    "lucide": "send",
+    "phosphor": "paper-plane-tilt",
+    "huge": "Sent",
+    "sf": "paperplane"
+  },
+  "server": {
+    "fluent": "server",
+    "lucide": "server",
+    "phosphor": "hard-drives",
+    "huge": "ServerStack01",
+    "sf": "server.rack"
+  },
+  "settings": {
+    "fluent": "settings",
+    "lucide": "settings",
+    "phosphor": "gear",
+    "huge": "Settings01",
+    "sf": "gearshape"
+  },
+  "shadow": {
+    "fluent": "square_shadow",
+    "sf": "shadow"
+  },
+  "shapes": {
+    "fluent": "shapes",
+    "lucide": "shapes",
+    "phosphor": "shapes",
+    "huge": "Shapes",
+    "sf": "square.on.circle"
+  },
+  "share": {
+    "fluent": "share",
+    "lucide": "share",
+    "phosphor": "share",
+    "huge": "Share01",
+    "sf": "square.and.arrow.up"
+  },
+  "shield": {
+    "fluent": "shield",
+    "lucide": "shield",
+    "phosphor": "shield",
+    "huge": "Shield01",
+    "sf": "shield"
+  },
+  "shield-check": {
+    "fluent": "shield_checkmark",
+    "lucide": "shield-check",
+    "phosphor": "shield-check",
+    "huge": "SecurityCheck",
+    "sf": "checkmark.shield"
+  },
+  "shift": {
+    "fluent": "keyboard_shift",
+    "lucide": "arrow-big-up",
+    "phosphor": "arrow-fat-up",
+    "huge": "ArrowUpBig",
+    "sf": "shift"
+  },
+  "shopping-bag": {
+    "fluent": "shopping_bag",
+    "lucide": "shopping-bag",
+    "phosphor": "shopping-bag",
+    "huge": "ShoppingBag01",
+    "sf": "bag"
+  },
+  "shuffle": {
+    "fluent": "arrow_shuffle",
+    "lucide": "shuffle",
+    "phosphor": "shuffle",
+    "huge": "Shuffle",
+    "sf": "shuffle"
+  },
+  "sides": {},
+  "sigma": {
+    "lucide": "sigma",
+    "phosphor": "sigma",
+    "huge": "Sigma",
+    "sf": "sum"
+  },
+  "skip-back": {
+    "fluent": "previous",
+    "lucide": "skip-back",
+    "phosphor": "skip-back",
+    "huge": "Previous",
+    "sf": "backward.end"
+  },
+  "skip-forward": {
+    "fluent": "next",
+    "lucide": "skip-forward",
+    "phosphor": "skip-forward",
+    "huge": "Next",
+    "sf": "forward.end"
+  },
+  "sliders": {
+    "fluent": "options",
+    "lucide": "sliders-vertical",
+    "phosphor": "sliders",
+    "huge": "SlidersVertical",
+    "sf": "slider.vertical.3"
+  },
+  "smile": {
+    "fluent": "emoji",
+    "lucide": "face-slightly-smiling",
+    "phosphor": "smiley",
+    "huge": "Smile",
+    "sf": "face.smiling"
+  },
+  "smile-plus": {
+    "fluent": "emoji_add",
+    "lucide": "face-slightly-smiling-plus",
+    "huge": "SmilePlus"
+  },
+  "snowflake": {
+    "fluent": "weather_snowflake",
+    "lucide": "snowflake",
+    "phosphor": "snowflake",
+    "huge": "Snowflake",
+    "sf": "snowflake"
+  },
+  "sort": {
+    "fluent": "arrow_sort",
+    "lucide": "arrow-up-down",
+    "phosphor": "arrows-down-up",
+    "huge": "Sorting01",
+    "sf": "arrow.up.arrow.down"
+  },
+  "sort-ascending": {
+    "fluent": "text_sort_ascending",
+    "lucide": "arrow-up-narrow-wide",
+    "phosphor": "sort-ascending",
+    "huge": "SortByUp01"
+  },
+  "sort-descending": {
+    "fluent": "text_sort_descending",
+    "lucide": "arrow-down-wide-narrow",
+    "phosphor": "sort-descending",
+    "huge": "SortByDown01"
+  },
+  "sparkle": {
+    "fluent": "sparkle",
+    "lucide": "sparkle",
+    "phosphor": "sparkle",
+    "huge": "Sparkles",
+    "sf": "sparkle"
+  },
+  "speaker": {
+    "fluent": "speaker_box",
+    "lucide": "speaker",
+    "phosphor": "speaker-hifi",
+    "huge": "Speaker",
+    "sf": "hifispeaker"
+  },
+  "spline": {
+    "lucide": "spline",
+    "phosphor": "bezier-curve",
+    "huge": "Spline"
+  },
+  "split": {
+    "fluent": "arrow_split",
+    "lucide": "split",
+    "phosphor": "arrows-split",
+    "huge": "Split",
+    "sf": "arrow.triangle.branch"
+  },
+  "square-arrow-down": {
+    "fluent": "arrow_square_down",
+    "lucide": "square-arrow-down",
+    "phosphor": "arrow-square-down",
+    "huge": "SquareArrowDown01",
+    "sf": "arrow.down.square"
+  },
+  "square-arrow-down-left": {
+    "lucide": "square-arrow-down-left",
+    "phosphor": "arrow-square-down-left",
+    "huge": "SquareArrowDownLeft",
+    "sf": "arrow.down.left.square"
+  },
+  "square-arrow-down-right": {
+    "lucide": "square-arrow-down-right",
+    "phosphor": "arrow-square-down-right",
+    "huge": "SquareArrowDownRight",
+    "sf": "arrow.down.right.square"
+  },
+  "square-arrow-left": {
+    "lucide": "square-arrow-left",
+    "phosphor": "arrow-square-left",
+    "huge": "SquareArrowLeft01",
+    "sf": "arrow.left.square"
+  },
+  "square-arrow-right": {
+    "lucide": "square-arrow-right",
+    "phosphor": "arrow-square-right",
+    "huge": "SquareArrowRight01",
+    "sf": "arrow.right.square"
+  },
+  "square-arrow-up": {
+    "lucide": "square-arrow-up",
+    "phosphor": "arrow-square-up",
+    "huge": "SquareArrowUp01",
+    "sf": "arrow.up.square"
+  },
+  "square-arrow-up-left": {
+    "lucide": "square-arrow-up-left",
+    "phosphor": "arrow-square-up-left",
+    "huge": "SquareArrowUpLeft",
+    "sf": "arrow.up.left.square"
+  },
+  "square-arrow-up-right": {
+    "fluent": "arrow_square_up_right",
+    "lucide": "square-arrow-up-right",
+    "phosphor": "arrow-square-up-right",
+    "huge": "SquareArrowUpRight",
+    "sf": "arrow.up.right.square"
+  },
+  "square-badge": {
+    "sf": "app.badge"
+  },
+  "square-dashed": {
+    "fluent": "square_hint",
+    "lucide": "square-dashed",
+    "phosphor": "selection",
+    "huge": "SquareDashed",
+    "sf": "square.dashed"
+  },
+  "square-dot": {
+    "lucide": "square-dot",
+    "huge": "SquareDot",
+    "sf": "dot.square"
+  },
+  "square-list": {
+    "fluent": "text_bullet_list_square",
+    "lucide": "square-menu",
+    "sf": "list.bullet.rectangle"
+  },
+  "square-minus": {
+    "fluent": "subtract_square",
+    "lucide": "square-minus",
+    "phosphor": "minus-square",
+    "huge": "SquareMinus",
+    "sf": "minus.square"
+  },
+  "square-plus": {
+    "fluent": "add_square",
+    "lucide": "square-plus",
+    "phosphor": "plus-square",
+    "huge": "AddSquare",
+    "sf": "plus.square"
+  },
+  "square-search": {
+    "fluent": "search_square",
+    "lucide": "scan-search",
+    "huge": "SearchSquare",
+    "sf": "text.magnifyingglass"
+  },
+  "square-slash": {
+    "lucide": "square-slash",
+    "huge": "SquareSlash",
+    "sf": "square.slash"
+  },
+  "square-smile": {},
+  "square-text": {
+    "fluent": "textbox",
+    "lucide": "square-pilcrow",
+    "phosphor": "textbox",
+    "huge": "TextSquare"
+  },
+  "square-text-cursor": {
+    "lucide": "text-cursor-input",
+    "phosphor": "textbox",
+    "huge": "InputText"
+  },
+  "stack-frame": {},
+  "star": {
+    "fluent": "star",
+    "lucide": "star",
+    "phosphor": "star",
+    "huge": "Star",
+    "sf": "star"
+  },
+  "star-off": {
+    "fluent": "star_off",
+    "lucide": "star-off",
+    "huge": "StarOff",
+    "sf": "star.slash"
+  },
+  "status-available": {
+    "fluent": "presence_available",
+    "lucide": "circle-check",
+    "phosphor": "check-circle",
+    "huge": "CheckmarkCircle02",
+    "sf": "checkmark.circle"
+  },
+  "sticky-note": {
+    "fluent": "note",
+    "lucide": "sticky-note",
+    "phosphor": "note",
+    "huge": "StickyNote01",
+    "sf": "note.text"
+  },
+  "stop": {
+    "fluent": "stop",
+    "lucide": "square",
+    "phosphor": "stop",
+    "huge": "Stop",
+    "sf": "stop"
+  },
+  "stop-circle": {
+    "fluent": "record_stop",
+    "lucide": "circle-stop",
+    "phosphor": "stop-circle",
+    "huge": "StopCircle",
+    "sf": "stop.circle"
+  },
+  "store": {
+    "fluent": "building_shop",
+    "lucide": "store",
+    "phosphor": "storefront",
+    "huge": "Store01",
+    "sf": "storefront"
+  },
+  "strikethrough": {
+    "fluent": "text_strikethrough",
+    "lucide": "strikethrough",
+    "phosphor": "text-strikethrough",
+    "huge": "TextStrikethrough",
+    "sf": "strikethrough"
+  },
+  "stroke-weight": {
+    "fluent": "line_thickness",
+    "sf": "lineweight"
+  },
+  "subscript": {
+    "fluent": "text_subscript",
+    "lucide": "subscript",
+    "phosphor": "text-subscript",
+    "huge": "TextSubscript",
+    "sf": "textformat.subscript"
+  },
+  "subtract": {
+    "fluent": "subtract",
+    "lucide": "minus",
+    "phosphor": "minus",
+    "huge": "MinusSign",
+    "sf": "minus"
+  },
+  "sun": {
+    "fluent": "weather_sunny",
+    "lucide": "sun",
+    "phosphor": "sun",
+    "huge": "Sun03",
+    "sf": "sun.max"
+  },
+  "superscript": {
+    "fluent": "text_superscript",
+    "lucide": "superscript",
+    "phosphor": "text-superscript",
+    "huge": "TextSuperscript",
+    "sf": "textformat.superscript"
+  },
+  "sync": {
+    "fluent": "arrow_sync",
+    "lucide": "refresh-cw",
+    "phosphor": "arrows-clockwise",
+    "huge": "ArrowReloadHorizontal",
+    "sf": "arrow.triangle.2.circlepath"
+  },
+  "table": {
+    "fluent": "table",
+    "lucide": "table",
+    "phosphor": "table",
+    "huge": "Table",
+    "sf": "tablecells"
+  },
+  "tablet": {
+    "fluent": "tablet",
+    "lucide": "tablet",
+    "phosphor": "device-tablet",
+    "huge": "Tablet01",
+    "sf": "ipad"
+  },
+  "tag": {
+    "fluent": "tag",
+    "lucide": "tag",
+    "phosphor": "tag",
+    "huge": "Tag01",
+    "sf": "tag"
+  },
+  "target": {
+    "fluent": "target",
+    "lucide": "target",
+    "phosphor": "target",
+    "huge": "Target01",
+    "sf": "target"
+  },
+  "terminal": {
+    "fluent": "window_console",
+    "lucide": "terminal",
+    "phosphor": "terminal",
+    "huge": "ComputerTerminal01",
+    "sf": "apple.terminal"
+  },
+  "text": {
+    "fluent": "text_t",
+    "lucide": "type",
+    "phosphor": "text-t",
+    "huge": "TextFont",
+    "sf": "textformat"
+  },
+  "text-align-center": {
+    "fluent": "text_align_center",
+    "lucide": "text-align-center",
+    "phosphor": "text-align-center",
+    "huge": "TextAlignCenter",
+    "sf": "text.aligncenter"
+  },
+  "text-align-left": {
+    "fluent": "text_align_left",
+    "lucide": "text-align-start",
+    "phosphor": "text-align-left",
+    "huge": "TextAlignLeft",
+    "sf": "text.alignleft"
+  },
+  "text-align-right": {
+    "fluent": "text_align_right",
+    "lucide": "text-align-end",
+    "phosphor": "text-align-right",
+    "huge": "TextAlignRight",
+    "sf": "text.alignright"
+  },
+  "text-cursor": {
+    "lucide": "text-cursor",
+    "phosphor": "cursor-text",
+    "huge": "CursorText",
+    "sf": "character.cursor.ibeam"
+  },
+  "text-size": {
+    "fluent": "text_font_size",
+    "lucide": "a-large-small",
+    "huge": "TextFont",
+    "sf": "textformat.size"
+  },
+  "thermometer": {
+    "fluent": "temperature",
+    "lucide": "thermometer",
+    "phosphor": "thermometer",
+    "huge": "Thermometer",
+    "sf": "thermometer.medium"
+  },
+  "thumbs-down": {
+    "fluent": "thumb_dislike",
+    "lucide": "thumbs-down",
+    "phosphor": "thumbs-down",
+    "huge": "ThumbsDown",
+    "sf": "hand.thumbsdown"
+  },
+  "thumbs-up": {
+    "fluent": "thumb_like",
+    "lucide": "thumbs-up",
+    "phosphor": "thumbs-up",
+    "huge": "ThumbsUp",
+    "sf": "hand.thumbsup"
+  },
+  "ticket": {
+    "fluent": "ticket_diagonal",
+    "lucide": "ticket",
+    "phosphor": "ticket",
+    "huge": "Ticket01",
+    "sf": "ticket"
+  },
+  "timer": {
+    "fluent": "timer",
+    "lucide": "timer",
+    "phosphor": "timer",
+    "huge": "Timer01",
+    "sf": "timer"
+  },
+  "token": {},
+  "toy-brick": {
+    "lucide": "toy-brick",
+    "phosphor": "lego",
+    "huge": "ToyBrick"
+  },
+  "translate": {
+    "fluent": "translate",
+    "lucide": "languages",
+    "phosphor": "translate",
+    "huge": "Translate",
+    "sf": "translate"
+  },
+  "trash": {
+    "fluent": "delete",
+    "lucide": "trash",
+    "phosphor": "trash",
+    "huge": "Delete02",
+    "sf": "trash"
+  },
+  "tree": {
+    "fluent": "tree_deciduous",
+    "lucide": "tree-deciduous",
+    "phosphor": "tree",
+    "huge": "Tree01",
+    "sf": "tree"
+  },
+  "trending-down": {
+    "fluent": "arrow_trending_down",
+    "lucide": "trending-down",
+    "phosphor": "trend-down",
+    "huge": "ChartDown",
+    "sf": "chart.line.downtrend.xyaxis"
+  },
+  "trending-up": {
+    "fluent": "arrow_trending",
+    "lucide": "trending-up",
+    "phosphor": "trend-up",
+    "huge": "ChartUp",
+    "sf": "chart.line.uptrend.xyaxis"
+  },
+  "trophy": {
+    "fluent": "trophy",
+    "lucide": "trophy",
+    "phosphor": "trophy",
+    "huge": "Trophy",
+    "sf": "trophy"
+  },
+  "truck": {
+    "fluent": "vehicle_truck",
+    "lucide": "truck",
+    "phosphor": "truck",
+    "huge": "DeliveryTruck01",
+    "sf": "truck.box"
+  },
+  "tv": {
+    "fluent": "tv",
+    "lucide": "tv",
+    "phosphor": "television",
+    "huge": "Tv01",
+    "sf": "tv"
+  },
+  "umbrella": {
+    "fluent": "umbrella",
+    "lucide": "umbrella",
+    "phosphor": "umbrella",
+    "huge": "Umbrella",
+    "sf": "umbrella"
+  },
+  "underline": {
+    "fluent": "text_underline",
+    "lucide": "underline",
+    "phosphor": "text-underline",
+    "huge": "TextUnderline",
+    "sf": "underline"
+  },
+  "undo": {
+    "fluent": "arrow_undo",
+    "lucide": "undo",
+    "phosphor": "arrow-u-up-left",
+    "huge": "Undo",
+    "sf": "arrow.uturn.backward"
+  },
+  "unlock": {
+    "fluent": "lock_open",
+    "lucide": "lock-open",
+    "phosphor": "lock-open",
+    "huge": "LockOpen",
+    "sf": "lock.open"
+  },
+  "unpin": {
+    "fluent": "pin_off",
+    "lucide": "pin-off",
+    "phosphor": "push-pin-slash",
+    "huge": "PinOff",
+    "sf": "pin.slash"
+  },
+  "upload": {
+    "fluent": "arrow_upload",
+    "lucide": "upload",
+    "phosphor": "upload-simple",
+    "huge": "Upload01",
+    "sf": "arrow.up.to.line"
+  },
+  "utensils": {
+    "fluent": "food",
+    "lucide": "utensils",
+    "phosphor": "fork-knife",
+    "huge": "Restaurant01",
+    "sf": "fork.knife"
+  },
+  "variable": {
+    "fluent": "braces_variable",
+    "lucide": "variable",
+    "huge": "Variable"
+  },
+  "vault": {
+    "fluent": "vault",
+    "lucide": "vault",
+    "phosphor": "vault",
+    "huge": "Vault"
+  },
+  "video": {
+    "fluent": "video",
+    "lucide": "video",
+    "phosphor": "video-camera",
+    "huge": "Video01",
+    "sf": "video"
+  },
+  "video-off": {
+    "fluent": "video_off",
+    "lucide": "video-off",
+    "phosphor": "video-camera-slash",
+    "huge": "VideoOff",
+    "sf": "video.slash"
+  },
+  "volume": {
+    "fluent": "speaker_2",
+    "lucide": "volume-2",
+    "phosphor": "speaker-high",
+    "huge": "VolumeHigh",
+    "sf": "speaker.wave.2"
+  },
+  "volume-off": {
+    "fluent": "speaker_mute",
+    "lucide": "volume-x",
+    "phosphor": "speaker-slash",
+    "huge": "VolumeOff",
+    "sf": "speaker.slash"
+  },
+  "vr-goggles": {
+    "fluent": "headset_vr",
+    "lucide": "rectangle-goggles",
+    "phosphor": "goggles",
+    "huge": "VirtualRealityVr01",
+    "sf": "vision.pro"
+  },
+  "wallet": {
+    "fluent": "wallet",
+    "lucide": "wallet",
+    "phosphor": "wallet",
+    "huge": "Wallet01",
+    "sf": "wallet.bifold"
+  },
+  "wand": {
+    "fluent": "wand",
+    "lucide": "wand-sparkles",
+    "phosphor": "magic-wand",
+    "huge": "MagicWand01",
+    "sf": "wand.and.sparkles"
+  },
+  "warning": {
+    "fluent": "warning",
+    "lucide": "triangle-alert",
+    "phosphor": "warning",
+    "huge": "Alert02",
+    "sf": "exclamationmark.triangle"
+  },
+  "watch": {
+    "fluent": "smartwatch",
+    "lucide": "watch",
+    "phosphor": "watch",
+    "huge": "SmartWatch01",
+    "sf": "applewatch"
+  },
+  "waveform": {
+    "fluent": "sound_wave_circle",
+    "lucide": "audio-waveform",
+    "phosphor": "waveform",
+    "huge": "AudioWaveform",
+    "sf": "waveform"
+  },
+  "waypoints": {
+    "fluent": "flow",
+    "lucide": "waypoints",
+    "phosphor": "graph",
+    "huge": "Waypoints",
+    "sf": "point.3.connected.trianglepath.dotted"
+  },
+  "wifi": {
+    "fluent": "wifi_1",
+    "lucide": "wifi",
+    "phosphor": "wifi-high",
+    "huge": "Wifi01",
+    "sf": "wifi"
+  },
+  "wifi-off": {
+    "fluent": "wifi_off",
+    "lucide": "wifi-off",
+    "phosphor": "wifi-slash",
+    "huge": "WifiOff01",
+    "sf": "wifi.slash"
+  },
+  "wind": {
+    "fluent": "weather_squalls",
+    "lucide": "wind",
+    "phosphor": "wind",
+    "huge": "FastWind",
+    "sf": "wind"
+  },
+  "wrench": {
+    "fluent": "wrench",
+    "lucide": "wrench",
+    "phosphor": "wrench",
+    "huge": "Wrench01",
+    "sf": "wrench.adjustable"
+  },
+  "zoom-fit": {
+    "fluent": "zoom_fit",
+    "sf": "arrow.up.left.and.down.right.magnifyingglass"
+  },
+  "zoom-in": {
+    "fluent": "zoom_in",
+    "lucide": "zoom-in",
+    "phosphor": "magnifying-glass-plus",
+    "huge": "ZoomIn",
+    "sf": "plus.magnifyingglass"
+  },
+  "zoom-out": {
+    "fluent": "zoom_out",
+    "lucide": "zoom-out",
+    "phosphor": "magnifying-glass-minus",
+    "huge": "ZoomOut",
+    "sf": "minus.magnifyingglass"
+  }
+}

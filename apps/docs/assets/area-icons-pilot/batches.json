@@ -8,7 +8,7 @@
       "icons": {
         "add": "approved",
         "arrow-up": "approved",
-        "bell": "review",
+        "bell": "approved",
         "check": "approved",
         "chevron-down": "approved",
         "copy": "approved",
@@ -76,7 +76,7 @@
         "opacity": "approved",
         "padding": "approved",
         "padding-sides": "approved",
-        "token": "approved",
+        "token": "review",
         "rotate": "approved"
       }
     },
@@ -96,7 +96,7 @@
         "filter": "approved",
         "sort": "approved",
         "sparkle": "approved",
-        "pin": "approved"
+        "pin": "review"
       }
     },
     {
@@ -106,7 +106,7 @@
       "icons": {
         "minus": "approved",
         "send": "approved",
-        "home": "approved",
+        "home": "review",
         "mail": "approved",
         "chat": "approved",
         "image": "approved",
@@ -120,7 +120,7 @@
       "title": "Batch 7 · Controls & system",
       "note": "Toward a full set: navigation (menu, grid; more-vertical is more-horizontal turned 90°), media (play, pause), editing (undo; redo is its mirror), theme (sun, moon, desktop), development (code, terminal), status and sharing (error, unlock, share, globe). Rings at r 6. Globe A kept.",
       "icons": {
-        "menu": "approved",
+        "menu": "review",
         "grid": "approved",
         "play": "approved",
         "pause": "approved",
@@ -142,16 +142,16 @@
       "note": "The deferred three (paperclip, tag, people) and zoom, flag, archive, cloud, phone, camera, cart. Round 2: people uses person's parts with the overlap cut; flag has sharp points; archive is landscape. Cloud and paperclip candidates on the Exploration sheet.",
       "icons": {
         "attach": "approved",
-        "tag": "review",
+        "tag": "approved",
         "people": "approved",
-        "zoom-in": "review",
-        "zoom-out": "review",
+        "zoom-in": "approved",
+        "zoom-out": "approved",
         "flag": "approved",
         "archive": "approved",
         "cloud": "approved",
         "phone": "approved",
         "camera": "approved",
-        "cart": "approved"
+        "cart": "review"
       }
     },
     {
@@ -165,7 +165,7 @@
         "quote": "approved",
         "hash": "approved",
         "at": "approved",
-        "key": "approved",
+        "key": "review",
         "shield": "approved",
         "gift": "approved",
         "map": "approved",
@@ -180,7 +180,7 @@
       "icons": {
         "strikethrough": "approved",
         "heading": "approved",
-        "list-bullet": "review",
+        "list-bullet": "approved",
         "wifi": "approved",
         "bluetooth": "approved",
         "battery": "approved",
@@ -198,10 +198,10 @@
       "note": "Thumbs up (thumbs down is its mirror), smile, briefcase, building, compass (a solid needle, sharp by nature), crop, trophy and coffee.",
       "icons": {
         "thumbs-up": "approved",
-        "smile": "review",
+        "smile": "approved",
         "briefcase": "approved",
-        "building": "review",
-        "compass": "approved",
+        "building": "approved",
+        "compass": "review",
         "crop": "approved",
         "trophy": "approved",
         "coffee": "approved"
@@ -213,13 +213,13 @@
       "note": "Database, server, scissors, log in and log out (a bracket and reset's-size arrow), keyboard, pointer, move (four 2px heads on the lattice), hourglass and loader.",
       "icons": {
         "database": "approved",
-        "server": "approved",
+        "server": "review",
         "scissors": "approved",
         "log-in": "approved",
         "log-out": "approved",
-        "keyboard": "review",
+        "keyboard": "approved",
         "pointer": "review",
-        "move": "review",
+        "move": "approved",
         "hourglass": "approved",
         "loader": "approved"
       }
@@ -230,11 +230,11 @@
       "note": "Volume and volume off (one speaker), music, film; credit card, wallet, receipt; lightbulb and megaphone.",
       "icons": {
         "volume": "approved",
-        "volume-off": "approved",
+        "volume-off": "review",
         "music": "approved",
-        "film": "approved",
+        "film": "review",
         "credit-card": "approved",
-        "wallet": "review",
+        "wallet": "approved",
         "receipt": "approved",
         "lightbulb": "approved",
         "megaphone": "approved"
@@ -247,7 +247,7 @@
       "icons": {
         "person-add": "review",
         "history": "approved",
-        "save": "approved",
+        "save": "review",
         "bug": "review",
         "eyedropper": "approved",
         "paintbrush": "review",
@@ -835,6 +835,22 @@
         "debug-step-over": "review",
         "breakpoint": "review",
         "stack-frame": "review"
+      }
+    },
+    {
+      "id": "batch-61",
+      "title": "Batch 61 · Bot cast",
+      "note": "The owner's agent cast: bot's head (12 × 7.5, r 2.5) and face (eyes at 5 and 11, 9–10.5) under a hat for each role, no mouth where the face wears glasses. Hats sit on one hat line, a quadratic from 1.5, 6.25 to 14.5, 6.25 sagging to 7.125, a detail gap above the eyes; where a hat is narrower than the head, the head stays whole and the hat sits on its top (Scholar, Automator, Lead). The hats run wider than the head, so the cast takes the circle keyline. Generated by docs/research/icon-review/2026-09-29/agent-cast.py.",
+      "icons": {
+        "bot-agent": "review",
+        "bot-builder": "review",
+        "bot-researcher": "review",
+        "bot-scholar": "review",
+        "bot-guard": "review",
+        "bot-lead": "review",
+        "bot-designer": "review",
+        "bot-generator": "review",
+        "bot-automator": "review"
       }
     }
   ]
