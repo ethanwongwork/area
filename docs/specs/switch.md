@@ -1,6 +1,6 @@
 # Switch spec
 
-**Status:** in review · 2026-09-26 (cohesion audit, second pass)
+**Status:** accepted · 2026-09-28 (batch 14: lighter off track; was: in review · 2026-09-26 (cohesion audit, second pass))
 **Captures:** `docs/research/captures/switch/` (Area, Notion),
 `docs/research/captures/baseline/chatgpt--switch-on--*`
 **Peers:** Checkbox and Radio (choice paint, disabled), Slider (thumb), Spinner (loading),
@@ -10,7 +10,9 @@ Field, Menu and settings rows
 
 - 2026-09-26: **Neutral by default, accent by override** (DESIGN_SYSTEM.md, "Color and
   focus"). Switch already followed it: on is `neutral-solid`, `tone="accent"` or
-  `tone="custom"` (`--area-switch-color`) opt out.
+  `tone="custom"` (`--area-switch-color`) opt out. *Superseded 2026-09-29 (owner, D1): on is
+  the Selection role (`selection-solid`), accent by theme; `tone="accent"` was removed and
+  `tone` is neutral or custom.*
 - 2026-09-26 (second pass, owner: decide every open item): the thumb travels 12px at every
   size (track = height + 12: 28 / 32 / 36); read-only keeps full paint with a default
   cursor, and only disabled dims
@@ -29,7 +31,7 @@ Checkbox; a choice among named modes is Segmented.
 |---|---|---|---|
 | size | sm, md (default), lg | Tier type and gap | Untitled sm / md; ChatGPT and Notion one size each |
 | track | short (default), long | Long gives a wider pill thumb | Area composition |
-| tone | neutral (default), accent, custom | Owner rule; product colour hook | ChatGPT on is blue |
+| tone | neutral (default), custom | Product colour hook (`--area-switch-color`); the accent comes from the theme's Selection role (D1, 2026-09-29) | ChatGPT on is blue |
 | labelPosition | end (default), start; fullWidth | Settings and menu rows put the switch at the end | ChatGPT settings row; Notion page-menu row |
 | state | checked, disabled, read-only, loading | Native plus busy/read-only | Untitled: checked, disabled |
 
@@ -94,8 +96,8 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 | track · md | **32 × 20**, thumb 16, inset 2 | ChatGPT 32 × 20, 16, 2 | Was 36 × 20 (Untitled sm) |
 | track · sm / lg | **28 × 16 / 36 × 24** (switch.css:34-36) | Same 12px travel | Notion's 30 × 18 sits between sm and md; Untitled md 44 × 24 is longer |
 | track · long | 2 × height + 4 (44 at md), thumb +8 (switch.css:38) | Area composition | — |
-| on fill | `neutral-solid` | Owner 2026-09-26 | ChatGPT and Untitled use brand blue; `tone="accent"` |
-| on hover | `neutral-solid-hover` #1d1d1d | Untitled darkens on hover | ChatGPT does not change |
+| on fill | `selection-solid` (switch.css:14), neutral by default | Owner 2026-09-26; emphasis roles 2026-09-29 | ChatGPT and Untitled use brand blue: a theme's Selection accent |
+| on hover | `selection-solid-hover` (neutral #1d1d1d) | Untitled darkens on hover | ChatGPT does not change |
 | off fill | **`edge-control` #e2e2e2, edge the same** (owner 2026-09-28: lighter); hover `edge-control-hover` #d4 (switch.css:20-22) | Notion's off track ≈ rgb(219, 218, 215); the one off-track grey shared with the Slider and Progress rails (audit S5) | Area is about one step darker than Notion; edge kept (third pass), see below |
 | thumb | `bg-surface`, `shadow-1` | ChatGPT white thumb with an 8% shadow | Notion's thumb has no shadow |
 | disabled | 50% on the whole label (switch.css:97) | Audit shared rule; Untitled 50% | — |
@@ -116,7 +118,7 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover | off `edge-control-hover` #d4, edge the same (switch.css:94); on `neutral-solid-hover`; ink fixed | `area--hover` |
+| hover | off `edge-control-hover` #d4, edge the same (switch.css:94); on `selection-solid-hover`; ink fixed | `area--hover` |
 | pressed | thumb +2px wide | `area--active` |
 | focus-visible | 2px `focus-color` outline, 2px offset, on the track | `area--focus` (outline rgb(65, 45, 208)) |
 | checked | track and edge `--_on`; thumb moves 12px to the end | `area--checked` (thumb x 2 → 14) |
@@ -127,7 +129,7 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 ## Behavior and accessibility
 
 Native checkbox with `role="switch"` covering the label; controlled or uncontrolled with form
-reset (Switch.tsx:44-57); a change calls `onCheckedChange(checked, event)`. Read-only and loading block changes in `onChange`/`onClick`;
+reset (Switch.tsx:44-57); `onCheckedChange(checked, event)` passes the change event (Switch.tsx:12). Read-only and loading block changes in `onChange`/`onClick`;
 read-only sets `aria-readonly`. Thumb travel honours `data-area-motion="none"` and reduced
 motion (switch.css:112-113). Forced colours: Highlight/Canvas paint; only disabled greys (switch.css:115-125).
 Coarse pointers get a 44px minimum target (switch.css:114). Notion also keeps a native
@@ -138,7 +140,7 @@ input (opacity 0) over the drawn track.
 | Peer | Shared role | Area value in peer | Switch | Match / reason |
 |---|---|---|---|---|
 | Checkbox, Radio, Button | disabled | 50% whole control | same | match (audit) |
-| Checkbox, Radio, Slider | on paint | `neutral-solid` | same | match |
+| Checkbox, Radio, Slider | on paint | `selection-solid` | same | match |
 | Slider, Progress | off track / rail | `edge-control` #e2 (slider.css:29, display.css:265) | off fill #e2 | match (audit S5) |
 | Checkbox, Radio | glyph edge | rest edge `edge-control-hover` #d4 | off fill #e2, hover #d4 | differs by design (audit S5): a track is a fill, a 16px glyph needs the firmer edge |
 | Slider | thumb | surface, `shadow-1`, 16 at md | same | match |
@@ -186,4 +188,5 @@ captures. Build and test results are in the
 - 2026-09-27 · owner: brighter green → the `custom` tile uses green 500 (#01aa4e; hover 550), 3.06:1 on white for the track and for the white thumb on it (success solid, #00853c, was 4.75:1) → headless Chromium.
 - 2026-09-30 · audit S5 (owner) → no Switch change; its off track #e2 is now the one off-track grey, shared by the Slider and Progress rails; Checkbox and Radio keep #d4 as the glyph edge → slider.css:29, display.css:265.
 - 2026-09-30 · audit S14 (owner) → the track-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (switch.css:13, :38, :40; density.ts:80-82).
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onCheckedChange(checked, event)` passes the change event.
+- 2026-09-30 · audit S17 (API vocabulary, slice 1) → `onCheckedChange(checked, event)` now passes the change event, as Checkbox → Switch.tsx:12.
+- 2026-10-01 · owner (audit H-13): the `tone` axis is removed; `--area-switch-color` and `--area-switch-color-hover` set a custom on colour on any Switch (the `custom` tile keeps green 500 through the hook). The React `tone` prop is a deprecated no-op.

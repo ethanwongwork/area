@@ -1,5 +1,7 @@
 import { createContext, forwardRef, useContext, useEffect, useId, useRef, useState } from "react";
 import { assignRef } from "./overlay.ts";
+import { ToolbarSize } from "./toolbar-context.ts";
+import { InputGroupContext } from "./input-group-context.ts";
 import type { FieldsetHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ChangeEvent, ReactNode } from "react";
 import { MANIFESTS, selectVariants, textareaVariants, checkboxVariants, checkboxGroupVariants, radioGroupVariants, radioVariants } from "../variants.ts";
 import type { VariantProps } from "../variants.ts";
@@ -24,10 +26,11 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
 export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>(function Select(
   {
     variant,
-    size,
+    size: sizeProp,
     fullWidth,
-    validationStatus,
+    validationStatus: validationStatusProp,
     invalid,
+    disabled: disabledProp,
     className,
     "aria-invalid": ariaInvalid,
     "data-validation-status": fieldValidationStatus,
@@ -35,6 +38,13 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
   },
   ref,
 ) {
+  // In a Toolbar, a Select without its own size takes the bar's tier (audit A-7).
+  const toolbarSize = useContext(ToolbarSize);
+  const size = sizeProp ?? toolbarSize;
+  // Inside an InputGroup, the group's Field state reaches the control (audit B-14).
+  const group = useContext(InputGroupContext);
+  const disabled = disabledProp ?? group.disabled;
+  const validationStatus = validationStatusProp ?? group.validationStatus;
   const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
 
@@ -42,6 +52,7 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
     <select
       ref={ref}
       className={selectVariants({ variant, size, fullWidth }, className)}
+      disabled={disabled}
       aria-invalid={invalidState ? true : ariaInvalid}
       {...(invalidState ? { "data-invalid": "" } : {})}
       {...(resolvedValidationStatus === "success" ? { "data-success": "" } : {})}
@@ -117,12 +128,12 @@ export interface CheckboxProps extends ChoiceProps {
   invalid?: boolean;
   /** Shows the native mixed state; useful for a parent that represents a partial selection. */
   indeterminate?: boolean;
-  /** Called with the new checked state (audit S17: as Switch). Native `onChange` still fires. */
+  /** Called with the new state and the change event, as Switch (audit S17). Native `onChange` still runs first. */
   onCheckedChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { variant, layout, size, label, description, caption, leadingVisual, invalid, indeterminate = false, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, onChange, onCheckedChange, ...rest },
+  { variant, layout, size, label, description, caption, leadingVisual, invalid, indeterminate = false, onCheckedChange, onChange, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
   ref,
 ) {
   const resolvedCaption = caption ?? description;
@@ -155,7 +166,7 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
         {...(invalidState ? { "data-invalid": "" } : {})}
         {...(indeterminate ? { "data-indeterminate": "" } : {})}
         {...rest}
-        onChange={onChange || onCheckedChange ? event => { onChange?.(event); onCheckedChange?.(event.target.checked, event); } : undefined}
+        onChange={onChange || onCheckedChange ? event => { onChange?.(event); if (!event.defaultPrevented) onCheckedChange?.(event.target.checked, event); } : undefined}
       />
       {leadingVisual ? <span className="area-checkbox__visual" aria-hidden="true">{leadingVisual}</span> : null}
       {label || resolvedCaption ? (

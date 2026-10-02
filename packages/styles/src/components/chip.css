@@ -10,7 +10,8 @@
  * onto three lines and kept the track's shared border, which made two rows read as two
  * controls; as chips they read as one set that happens to wrap.
  *
- * A chip is a real <button> with `aria-pressed`, or a radio in a group. Selection is a
+ * A chip is a real <button> with `aria-pressed`: each toggles on its own, in a ChipGroup labelled
+ * as one set (audit C-23; single choice is Segmented's job). Selection is a
  * `data-selected` attribute so the CSS works with plain HTML and with headless primitives
  * unchanged, the same contract every other stateful component here uses.
  * ------------------------------------------------------------------------- */
@@ -64,8 +65,8 @@
     }
   }
 
+  /* Focus is the ring alone, as Button, Segmented, Checkbox and Switch (audit C-13). */
   .area-chip:focus-visible {
-    border-color: var(--area-focus-color);
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
@@ -132,7 +133,9 @@
     inline-size: var(--_visual);
     block-size: var(--_visual);
     border-radius: var(--area-radius-full);
-    box-shadow: inset 0 0 0 var(--area-border-width) color-mix(in oklab, var(--area-fg-default) 20%, transparent);
+    /* ColorSwatch's solid, very light edge, so the colour never bleeds into it; the chip keeps its
+       round shape (audit F-30 A; was a 20% ink ring). */
+    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-bg-component);
   }
 
   .area-chip__icon,
@@ -182,17 +185,11 @@
     text-underline-offset: var(--area-space-2);
   }
 
+  @media (hover: hover) { .area-chip--link-icon:hover .area-chip__label { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: var(--area-space-2); } }
   .area-chip--link-icon:focus-visible .area-chip__label {
     text-decoration: underline;
     text-decoration-thickness: var(--area-stroke-width);
     text-underline-offset: var(--area-space-2);
-  }
-  @media (hover: hover) {
-    .area-chip--link-icon:hover .area-chip__label {
-      text-decoration: underline;
-      text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: var(--area-space-2);
-    }
   }
 
   /* A removable chip is a composition: its primary action and removal action stay peers. */
@@ -246,7 +243,6 @@
     justify-content: center;
   }
 
-  .area-chip--pill { border-radius: var(--area-radius-full); }
 
   /* --- Sizes -------------------------------------------------------------- */
 
@@ -263,6 +259,6 @@
   .area-chip-group {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--area-space-4);
+    gap: var(--area-space-8); /* Material's chip set, 8 / 8 (audit C-27 A; was 4) */
   }
 }

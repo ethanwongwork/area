@@ -17,6 +17,7 @@ export interface BoxFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "def
   hideLabel?: boolean;
   value?: BoxValue;
   defaultValue?: BoxValue;
+  /** The four sides, and the event that changed one (audit C-7). */
   onValueChange?: (value: BoxValue, event?: SyntheticEvent) => void;
   /** One field per side or corner; otherwise linked (a horizontal and vertical pair, or one radius). */
   independent?: boolean;
@@ -25,15 +26,14 @@ export interface BoxFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "def
   /** Show the toggle between linked and independent. Off keeps the current mode fixed. */
   toggle?: boolean;
   size?: VariantProps<typeof MANIFESTS.boxField>["size"];
-  /** The fields' treatment, passed to each NumberField (a composition prop, not a CSS axis of
-   * the group: framework-free markup sets it on each field). */
+  /** Forwarded to each NumberField (a forwarding prop, so not a BoxField manifest axis). */
   variant?: VariantProps<typeof MANIFESTS.numberField>["variant"];
   min?: number;
   max?: number;
   step?: number;
   unit?: string;
   disabled?: boolean;
-  /** Values can be read and copied but not changed; the linked toggle is unavailable (audit B-20). */
+  /** Values can be read and copied but not changed; the link toggle is disabled (audit S17, B-20). */
   readOnly?: boolean;
   /** Submits the four values as one CSS shorthand ("8 16 8 16"). */
   name?: string;

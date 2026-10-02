@@ -1,11 +1,11 @@
 import type { VariantProps } from "../variants.ts";
-import { InToolbar, toolbarItemProps } from "./toolbar-context.ts";
+import { InToolbar, ToolbarSize, toolbarItemProps } from "./toolbar-context.ts";
 import { MANIFESTS } from "../variants.ts";
-import { Button } from "./Button.tsx";
+import { Button, type ButtonProps } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Select } from "./forms.tsx";
-import { AnchoredMenu, AnchoredPopover, AnchoredTooltip } from "./Overlays.tsx";
-import { assignRef, useOpenState } from "./overlay.ts";
+import { AnchoredMenu, AnchoredPopover, AnchoredTooltip, MENU_OFFSET, OVERLAY_PADDING, TYPEAHEAD_RESET } from "./Overlays.tsx";
+import { assignRef, useAnchoredPosition, useNativePopover, useOpenState } from "./overlay.ts";
 import type { OverlayAlign, OverlaySide } from "./overlay.ts";
 /**
  * The presentational components.
@@ -28,7 +28,6 @@ import type {
   ReactNode,
   Ref,
   RefObject,
-  SyntheticEvent,
 } from "react";
 import {
   alertVariants,
@@ -50,11 +49,13 @@ import {
   menuVariants,
   popoverVariants,
 } from "../variants.ts";
+/** The empty collection, one reference so effects keyed on it stay still. */
+const NO_ITEMS: never[] = [];
 
 type Div = HTMLAttributes<HTMLDivElement>;
 /* --- Avatar --------------------------------------------------------------- */
 
-export interface AvatarProps extends Omit<Div, "children"> {
+export interface AvatarProps extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
   size?: VariantProps<typeof MANIFESTS.avatar>["size"];
   shape?: VariantProps<typeof MANIFESTS.avatar>["shape"];
   tone?: VariantProps<typeof MANIFESTS.avatar>["tone"];
@@ -69,7 +70,7 @@ export interface AvatarProps extends Omit<Div, "children"> {
   icon?: ReactNode;
 }
 
-export const Avatar = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarProps>(function Avatar(
+export const Avatar = /* @__PURE__ */ forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
   { size, shape, tone, active, src, alt, fallback, icon, className, role, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
@@ -87,8 +88,9 @@ export const Avatar = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarProps>(fu
   const wrapperLabel = hasImage ? ariaLabel : (ariaLabel ?? alt);
   const wrapperRole = role ?? (wrapperLabel ? "img" : undefined);
 
+  // A span, so an Avatar is phrasing content inside a Chip's button or a Badge (audit C-22).
   return (
-    <div
+    <span
       ref={ref}
       className={avatarVariants({ size, shape, tone, active }, className)}
       role={wrapperRole}
@@ -108,7 +110,7 @@ export const Avatar = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarProps>(fu
       ) : (
         <span aria-hidden="true">{fallback}</span>
       )}
-    </div>
+    </span>
   );
 });
 
@@ -209,15 +211,14 @@ export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(func
 /* --- Card ----------------------------------------------------------------- */
 
 export interface CardProps extends Div {
-  /** `"compact"` is a deprecated alias of `"list"` (audit S17: compact names the dense UI scale). */
-  layout?: VariantProps<typeof MANIFESTS.card>["layout"] | "compact";
-  /** Shape and type: corner, inset and title role. */
+  layout?: VariantProps<typeof MANIFESTS.card>["layout"];
+  /** Shape: the corner and inset (type is the same three roles at every size). */
   size?: VariantProps<typeof MANIFESTS.card>["size"];
 }
 
 const cardVariants = createVariants(MANIFESTS.card);
 export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, size, className, ...rest }, ref) {
-  return <div ref={ref} className={cardVariants({ layout: layout === "compact" ? "list" : layout, size }, className)} {...rest} />;
+  return <div ref={ref} className={cardVariants({ layout, size }, className)} {...rest} />;
 });
 
 export const CardContent = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardContent({ className, ...rest }, ref) {
@@ -239,8 +240,13 @@ export const CardHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, CardHeaderP
   );
 });
 
-export const CardTitle = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardTitle({ className, ...rest }, ref) {
-  return <div ref={ref} className={cx("area-card__title", className)} {...rest} />;
+export interface CardTitleProps extends HTMLAttributes<HTMLHeadingElement> {
+  /** The heading level, so a card title is in the page outline (audit F-22; was a div). */
+  level?: 2 | 3 | 4 | 5 | 6;
+}
+export const CardTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, CardTitleProps>(function CardTitle({ level = 3, className, ...rest }, ref) {
+  const H = `h${level}` as "h3";
+  return <H ref={ref} className={cx("area-card__title", className)} {...rest} />;
 });
 
 export const CardDescription = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardDescription(
@@ -320,17 +326,20 @@ export interface SeparatorProps extends Div {
   spacing?: VariantProps<typeof MANIFESTS.separator>["spacing"];
   /** Aligns the rule endpoints to inset content. */
   inset?: boolean;
+  /** A visual rule only: no separator role (the content around it is not split semantically). */
+  decorative?: boolean;
 }
 
 export const Separator = /* @__PURE__ */ forwardRef<HTMLDivElement, SeparatorProps>(function Separator(
-  { orientation = "horizontal", spacing, inset, className, ...rest },
+  { orientation = "horizontal", spacing, inset, decorative, className, ...rest },
   ref,
 ) {
+  // A purely visual rule is hidden from assistive tech, as Radix's `decorative` (audit G-28).
   return (
     <div
       ref={ref}
-      role="separator"
-      aria-orientation={orientation}
+      role={decorative ? "none" : "separator"}
+      aria-orientation={decorative ? undefined : orientation}
       className={separatorVariants({ orientation, spacing, inset }, className)}
       {...rest}
     />
@@ -382,26 +391,25 @@ export const Skeleton = /* @__PURE__ */ forwardRef<HTMLDivElement, SkeletonProps
 
 export interface SpinnerProps extends HTMLAttributes<HTMLSpanElement> {
   size?: VariantProps<typeof MANIFESTS.spinner>["size"];
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
+  /** Announced to assistive tech. Omit when a nearby element already says it. */
   label?: string;
 }
 
-/** Named with `aria-label`, it is a status that is announced; unnamed, it is decoration (a
- * nearby element already says what is loading). */
 export const Spinner = /* @__PURE__ */ forwardRef<HTMLSpanElement, SpinnerProps>(function Spinner(
-  { size, label: labelProp, "aria-label": ariaLabel, className, ...rest },
+  { size, label, className, ...rest },
   ref,
 ) {
-  const label = ariaLabel ?? labelProp;
   return (
     <span
       ref={ref}
       role={label ? "status" : undefined}
-      aria-label={label}
       aria-hidden={label ? undefined : "true"}
       className={spinnerVariants({ size }, className)}
       {...rest}
-    />
+    >
+      {/* A live region announces its content, not its name: the label is content (audit E-21). */}
+      {label ? <span className="area-sr-only">{label}</span> : null}
+    </span>
   );
 });
 
@@ -409,13 +417,12 @@ export interface ProgressProps extends Omit<Div, "children"> {
   /** 0 to `max`. Omit for an indeterminate bar. */
   value?: number;
   max?: number;
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
   label?: string;
   size?: VariantProps<typeof MANIFESTS.progress>["size"];
 }
 
 export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps>(function Progress(
-  { value, max = 100, label, "aria-label": ariaLabel = label, size, className, ...rest },
+  { value, max = 100, label, size, className, ...rest },
   ref,
 ) {
   const indeterminate = value == null;
@@ -427,8 +434,9 @@ export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps
       role="progressbar"
       aria-valuemin={0}
       aria-valuemax={max}
-      aria-valuenow={indeterminate ? undefined : value}
-      aria-label={ariaLabel}
+      // The announced value is the one drawn, clamped to the range (audit E-21).
+      aria-valuenow={indeterminate ? undefined : Math.min(max, Math.max(0, value))}
+      aria-label={label}
       className={progressVariants({ size }, className)}
       {...(indeterminate ? { "data-indeterminate": "" } : {})}
       {...rest}
@@ -451,6 +459,8 @@ export interface PanelProps extends Omit<Div, "title"> {
   size?: VariantProps<typeof MANIFESTS.panel>["size"];
   /** Shadows the DOM `title` attribute deliberately: a panel's title is content, not a tooltip. */
   title?: ReactNode;
+  /** The title's heading level; PanelSection headings default one below it (audit F-22; was a span). */
+  titleLevel?: 2 | 3 | 4 | 5 | 6;
   /** Sits beside the title, at the end of the bar: a close, a reset, a toggle. */
   action?: ReactNode;
   /** Pinned below the body, outside its scroll. */
@@ -482,10 +492,11 @@ export interface PanelProps extends Omit<Div, "title"> {
 const RESIZE_STEP = 8, RESIZE_STEP_LARGE = 32;
 
 export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(function Panel(
-  { size, title, action, footer, flush, bareBar, actionColumn, resizable, width, defaultWidth, onWidthChange, minWidth = 240, maxWidth = 500,
+  { size, title, titleLevel = 2, action, footer, flush, bareBar, actionColumn, resizable, width, defaultWidth, onWidthChange, minWidth = 240, maxWidth = 500,
     className, children, style, id, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
+  const TitleH = `h${titleLevel}` as "h2";
   const generatedId = useId();
   const panelId = id ?? `${generatedId}-panel`;
   const titleId = `${generatedId}-title`;
@@ -555,7 +566,7 @@ export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(func
       {handle}
       {title || action ? (
         <header className="area-panel__bar">
-          <span className="area-panel__title" id={labelledByTitle ? titleId : undefined}>{title}</span>
+          <TitleH className="area-panel__title" id={labelledByTitle ? titleId : undefined}>{title}</TitleH>
           {action}
         </header>
       ) : null}
@@ -681,7 +692,7 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
    * format that live value. A React node remains supported for fully custom content.
    */
   readout?: boolean | ReactNode | ((value: number) => ReactNode);
-  /** Called with the normalized native value for every input event. */
+  /** Called with the normalized native value and the input event, for every input event. */
   onValueChange?: (value: number, event: FormEvent<HTMLInputElement>) => void;
   disabled?: boolean;
 }
@@ -801,6 +812,20 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
         value={value === undefined ? undefined : current}
         defaultValue={defaultValue}
         disabled={disabled}
+        // Shift+arrow moves ten steps, as Carbon and MUI (audit C-31). The native control takes the
+        // value and fires its own input event, so the change runs through onInput like any other.
+        onKeyDown={event => {
+          rest.onKeyDown?.(event);
+          if (event.defaultPrevented || !event.shiftKey || !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
+          const control = event.currentTarget;
+          const rtl = getComputedStyle(control).direction === "rtl";
+          const up = event.key === "ArrowUp" || event.key === (rtl ? "ArrowLeft" : "ArrowRight");
+          const unit = interval > 0 ? interval : (upper - lower) / 100;
+          const next = Math.min(upper, Math.max(lower, control.valueAsNumber + (up ? 1 : -1) * unit * 10));
+          event.preventDefault();
+          Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(control, String(next));
+          control.dispatchEvent(new Event("input", { bubbles: true }));
+        }}
         onInput={event => {
           onInput?.(event);
           const nextValue = event.currentTarget.valueAsNumber;
@@ -821,6 +846,7 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
   /** Interaction role: assist action, selectable filter, removable input, or suggestion. */
   kind?: VariantProps<typeof MANIFESTS.chip>["kind"];
   size?: VariantProps<typeof MANIFESTS.chip>["size"];
+  /** @deprecated Chips are pill-only; this changes nothing (audit C-18). */
   pill?: boolean;
   /** A colour this chip stands for, shown as a dot before the label. */
   swatch?: string;
@@ -857,14 +883,14 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
 }
 
 export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(function Chip(
-  { kind = "filter", size, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onDismiss: onDismissProp, onRemove, clickable, dismissIcon, removeIcon, dismissLabel, removeLabel, invalid, swatchOnly, className, children, disabled, ...rest },
+  { kind = "filter", size, pill: _pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onDismiss: onDismissProp, onRemove, clickable, dismissIcon, removeIcon, dismissLabel, removeLabel, invalid, swatchOnly, className, children, disabled, ...rest },
   ref,
 ) {
   const [localSelected, setLocalSelected] = useState(defaultSelected);
   const currentSelected = selected ?? localSelected;
   const selectable = kind === "filter";
   const primaryInteractive = selectable || clickable || Boolean(onClick);
-  const classes = chipVariants({ kind, size, pill, swatchOnly }, className);
+  const classes = chipVariants({ kind, size, swatchOnly }, className);
   const state = {
     ...(selectable && currentSelected ? { "data-selected": "" } : {}),
     ...(disabled ? { "data-disabled": "" } : {}),
@@ -889,14 +915,43 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
 
   const onDismiss = onDismissProp ?? onRemove;
   if (onDismiss) {
+    // The removal names what it removes, so a row of chips doesn't read "Remove chip" over and
+    // over (audit C-6). A consumer label wins; a non-text chip falls back to the generic name.
+    const text = typeof children === "string" || typeof children === "number" ? String(children) : null;
+    const name = dismissLabel ?? removeLabel ?? (text ? `Remove ${text}` : "Remove chip");
+    // Removing unmounts the focused control: hand focus to the next chip, or the previous one,
+    // instead of dropping it to the page (Material, Spectrum TagGroup).
+    const dismiss = (from: HTMLElement) => {
+      const chip = from.closest(".area-chip");
+      const next = chip?.nextElementSibling?.querySelector<HTMLElement>("button:not(:disabled), a[href]") ?? (chip?.nextElementSibling?.matches("button:not(:disabled), a[href]") ? chip.nextElementSibling as HTMLElement : null);
+      const prev = chip?.previousElementSibling?.querySelector<HTMLElement>("button:not(:disabled), a[href]") ?? (chip?.previousElementSibling?.matches("button:not(:disabled), a[href]") ? chip.previousElementSibling as HTMLElement : null);
+      onDismiss();
+      requestAnimationFrame(() => {
+        const active = document.activeElement;
+        if (active && active !== document.body && active.isConnected) return;
+        (next ?? prev)?.focus();
+      });
+    };
+    // Backspace or Delete on a focused chip removes it, as on Material and Spectrum chips.
+    const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+      if (disabled || (event.key !== "Backspace" && event.key !== "Delete")) return;
+      event.preventDefault();
+      dismiss(event.currentTarget);
+    };
+    // `ref` and native props land on the chip's primary control (the action, or the removal when
+    // it is the only control); `className` and `style` on the chip itself (audit C-24).
+    const { style, onKeyDown: theirKeyDown, ...control } = rest;
+    const keys = (event: KeyboardEvent<HTMLButtonElement>) => { theirKeyDown?.(event); if (!event.defaultPrevented) onKeyDown(event); };
     return (
-      <span className={classes} {...state}>
+      <span className={classes} style={style} {...state}>
         {primaryInteractive ? (
-          <button ref={ref} type="button" aria-pressed={selectable ? currentSelected : undefined} disabled={disabled} className="area-chip__action" onClick={handleClick} {...rest}>
+          <button ref={ref} type="button" aria-pressed={selectable ? currentSelected : undefined} disabled={disabled} className="area-chip__action" onClick={handleClick} {...control} onKeyDown={keys}>
             {contents}
           </button>
         ) : <span className="area-chip__action">{contents}</span>}
-        <button ref={primaryInteractive ? undefined : ref} type="button" className="area-chip__remove" aria-label={dismissLabel ?? removeLabel ?? "Remove chip"} disabled={disabled} onClick={event => { event.stopPropagation(); onDismiss(); }}>
+        <button {...(primaryInteractive ? {} : control)} ref={primaryInteractive ? undefined : ref} type="button" className="area-chip__remove" aria-label={name} disabled={disabled}
+          onKeyDown={primaryInteractive ? onKeyDown : keys}
+          onClick={event => { event.stopPropagation(); dismiss(event.currentTarget); }}>
           {dismissIcon ?? removeIcon ?? <Glyph name="dismiss" />}
         </button>
       </span>
@@ -921,6 +976,7 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
 
 export interface ChipLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> {
   size?: VariantProps<typeof MANIFESTS.chip>["size"];
+  /** @deprecated Chips are pill-only; this changes nothing (audit C-18). */
   pill?: boolean;
   icon?: ReactNode;
   trailingIcon?: ReactNode;
@@ -934,11 +990,11 @@ export interface ChipLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorEleme
 
 /** A navigational chip. Selection and removal remain the responsibility of `Chip`. */
 export const ChipLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, ChipLinkProps>(function ChipLink(
-  { size, pill, icon, trailingIcon, treatment = "underline", avatar, image, imageAlt, className, children, ...rest },
+  { size, pill: _pill, icon, trailingIcon, treatment = "underline", avatar, image, imageAlt, className, children, ...rest },
   ref,
 ) {
   return (
-    <a ref={ref} className={chipVariants({ kind: "suggestion", size, pill, link: treatment === "underline", linkIcon: treatment === "icon" }, className)} {...rest}>
+    <a ref={ref} className={chipVariants({ kind: "suggestion", size, link: treatment === "underline", linkIcon: treatment === "icon" }, className)} {...rest}>
       {avatar ? <span className="area-chip__avatar" aria-hidden="true">{avatar}</span> : null}
       {image ? <span className="area-chip__image"><img src={image} alt={imageAlt ?? ""} /></span> : null}
       {icon ? <span className="area-chip__icon" aria-hidden="true">{icon}</span> : null}
@@ -948,13 +1004,16 @@ export const ChipLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, ChipLinkPr
   );
 });
 
-export type ChipGroupProps = Div;
+export interface ChipGroupProps extends Div {
+  /** @deprecated Use `aria-label`, which names the group (audit C-23, D-18). */
+  label?: string;
+}
 
 export const ChipGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, ChipGroupProps>(function ChipGroup(
-  { className, ...rest },
+  { label, className, ...rest },
   ref,
 ) {
-  return <div ref={ref} className={cx("area-chip-group", className)} {...rest} />;
+  return <div ref={ref} role="group" aria-label={rest["aria-label"] ?? label} className={cx("area-chip-group", className)} {...rest} />;
 });
 
 /* --- Table ---------------------------------------------------------------- */
@@ -965,14 +1024,42 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   size?: VariantProps<typeof MANIFESTS.table>["size"];
   striped?: boolean;
   columnDividers?: boolean;
+  /** Props for the scrolling wrapper (audit F-23); `ref` and the rest land on the table. */
+  wrapperProps?: HTMLAttributes<HTMLDivElement>;
 }
 
+/**
+ * A row is clickable through one stretched link in it (`.area-table__link`, as CardLink), so
+ * the whole row's hover plate keeps its promise (audit F-23 A).
+ */
+export const TableLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>(function TableLink({ className, ...rest }, ref) {
+  return <a ref={ref} className={cx("area-table__link", className)} {...rest} />;
+});
+
 export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(function Table(
-  { interactive, size, striped, columnDividers, className, ...rest },
+  { interactive, size, striped, columnDividers, wrapperProps, className, ...rest },
   ref,
 ) {
+  // A wide table scrolls; a keyboard can only scroll what it can focus, so the wrapper becomes a
+  // focusable region named after the table while it overflows (axe scrollable-region-focusable).
+  const wrapper = useRef<HTMLDivElement | null>(null);
+  const [overflows, setOverflows] = useState(false);
+  useLayoutEffect(() => {
+    const node = wrapper.current;
+    if (!node) return;
+    const measure = () => setOverflows(node.scrollWidth > node.clientWidth + 1);
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    if (node.firstElementChild) observer.observe(node.firstElementChild);
+    return () => observer.disconnect();
+  }, []);
+  const name = rest["aria-label"];
+  const labelledBy = rest["aria-labelledby"];
   return (
-    <div className="area-table-wrapper">
+    <div {...wrapperProps} ref={wrapper} className={cx("area-table-wrapper", wrapperProps?.className)}
+      {...(overflows ? { tabIndex: 0, role: "region", "aria-label": name, "aria-labelledby": name ? undefined : labelledBy } : {})}>
       <table
         ref={ref}
         className={tableVariants({ interactive, size, striped, columnDividers }, className)}
@@ -1001,7 +1088,7 @@ export interface TooltipProps extends Div {
   offset?: number;
   /** Hover delay before showing, in milliseconds. */
   delay?: number;
-  /** Delay before hiding once the pointer leaves, in milliseconds (0 by default). */
+  /** Delay before hiding after the pointer leaves, in milliseconds (Hover card's name; audit S17). */
   closeDelay?: number;
 }
 
@@ -1052,7 +1139,15 @@ export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(
   return <AnchoredPopover trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} anchor={anchor} arrow={arrow} surface={surface} />;
 });
 export const PopoverHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverHeader({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__header", className)} {...rest} />; });
-export const PopoverTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(function PopoverTitle({ className, id, ...rest }, ref) {
+export interface PopoverTitleProps extends HTMLAttributes<HTMLHeadingElement> {
+  /**
+   * The heading level (default 2), as CardTitle's `level` and Panel's `titleLevel`; `false`
+   * renders a plain block, for a card that opens from running text such as a Hover card, so
+   * every preview doesn't add a heading to the page outline (audit E-8).
+   */
+  level?: 2 | 3 | 4 | 5 | 6 | false;
+}
+export const PopoverTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, PopoverTitleProps>(function PopoverTitle({ level = 2, className, id, ...rest }, ref) {
   const context = useContext(PopoverTitleContext);
   const titleId = id ?? context?.id;
   useLayoutEffect(() => {
@@ -1060,7 +1155,19 @@ export const PopoverTitle = /* @__PURE__ */ forwardRef<HTMLHeadingElement, HTMLA
     context.register(titleId);
     return () => context.register(null);
   }, [context, titleId]);
-  return <h2 ref={ref} id={titleId} className={cx("area-popover__title", className)} {...rest} />;
+  const H = level === false ? "div" : `h${level}` as "h2";
+  return <H ref={ref} id={titleId} className={cx("area-popover__title", className)} {...rest} />;
+});
+/**
+ * The header's close button: Popover's ghost square with the dismiss glyph. It closes the
+ * popover it sits in through the platform (`hidePopover`), so an anchored Popover closes without
+ * the consumer controlling `open`, and focus returns to the trigger (audit E-8).
+ */
+export const PopoverClose = /* @__PURE__ */ forwardRef<HTMLButtonElement, Omit<ButtonProps, "children"> & { "aria-label"?: string }>(function PopoverClose(
+  { "aria-label": ariaLabel = "Close", onClick, ...rest }, ref,
+) {
+  return <Button ref={ref} variant="ghost" tone="neutral" size="sm" iconOnly icon={<Glyph name="dismiss" />} aria-label={ariaLabel} {...rest}
+    onClick={event => { onClick?.(event); if (!event.defaultPrevented) event.currentTarget.closest<HTMLElement>("[popover]")?.hidePopover?.(); }} />;
 });
 export const PopoverDescription = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverDescription({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__description", className)} {...rest} />; });
 export const PopoverBody = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverBody({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__body", className)} {...rest} />; });
@@ -1091,8 +1198,17 @@ export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(functi
   const typeahead = useRef("");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   if (trigger !== undefined) {
-    const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => <div role="menu" className={menuVariants({}, className)} onKeyDown={onKeyDown} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />;
-    return <AnchoredMenu trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} surface={surface} />;
+    // The consumer's handlers run first and can cancel the menu's own; a consumer's name wins
+    // over the trigger's (audit D-12: they used to be overwritten).
+    const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => {
+      const chain = <E extends { defaultPrevented: boolean }>(theirs: ((event: E) => void) | undefined, ours: ((event: E) => void) | undefined) =>
+        theirs && ours ? (event: E) => { theirs(event); if (!event.defaultPrevented) ours(event); } : theirs ?? ours;
+      return <div role="menu" className={menuVariants({}, className)} {...rest} {...extra}
+        aria-labelledby={rest["aria-labelledby"] ?? (rest["aria-label"] ? undefined : extra["aria-labelledby"])}
+        onKeyDown={chain(onKeyDown, extra.onKeyDown)} onClick={chain(rest.onClick, extra.onClick)} onPointerMove={chain(rest.onPointerMove, extra.onPointerMove)}
+        ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />;
+    };
+    return <AnchoredMenu trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} id={rest.id} surface={surface} />;
   }
   /* A hosted menu: Up/Down move between items (wrapping), Home/End jump to the ends and a
      printable key moves to the next item starting with it, as in the WAI menu pattern. */
@@ -1114,7 +1230,8 @@ export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(functi
         if (event.key.length !== 1 || event.ctrlKey || event.metaKey || event.altKey || event.key === " ") return;
         typeahead.current += event.key.toLocaleLowerCase();
         if (timer.current) clearTimeout(timer.current);
-        timer.current = setTimeout(() => { typeahead.current = ""; }, 500);
+        // One typeahead window for every list (audit D-11): 1s, as Radix and React Aria.
+        timer.current = setTimeout(() => { typeahead.current = ""; }, TYPEAHEAD_RESET);
         next = [...items.slice(index + 1), ...items.slice(0, index + 1)]
           .find(item => (item.textContent ?? "").trim().toLocaleLowerCase().startsWith(typeahead.current));
     }
@@ -1135,7 +1252,99 @@ export const MenuSeparator = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(fun
   return <div ref={ref} role="separator" className={cx("area-menu__separator", className)} {...rest} />;
 });
 
+export interface MenuSubProps extends Omit<Div, "children"> {
+  /** The row's label. */
+  label: ReactNode;
+  /** A leading icon in the row's icon box. */
+  icon?: ReactNode;
+  disabled?: boolean;
+  /** The submenu's rows. */
+  children: ReactNode;
+}
+
+/**
+ * A row that opens a nested menu beside it (audit D-10 A, owner 2026-09-30): `aria-haspopup`,
+ * Right (Left in right-to-left), Enter or Space opens it on its first row, Left or Escape closes
+ * it back to the row, and the pointer opens it on hover. It is a nested `popover="auto"`, so
+ * Escape and an outside press close the innermost menu first, and closing the parent closes it.
+ * The trailing chevron points along the reading direction.
+ */
+export const MenuSub = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuSubProps>(function MenuSub(
+  { label, icon, disabled, className, children, ...rest }, ref,
+) {
+  const id = useId();
+  const row = useRef<HTMLButtonElement | null>(null);
+  const surfaceNode = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = useOpenState(undefined, false, undefined);
+  const entry = useRef(false);
+  useNativePopover(surfaceNode, row, open, setOpen);
+  // Beside the parent menu, 4 from its edge as every menu from its trigger, with the first row
+  // level with this one (the submenu's own 4px padding is taken out).
+  useAnchoredPosition(row, surfaceNode, open, {
+    side: "right", align: "start", offset: MENU_OFFSET, padding: OVERLAY_PADDING,
+    anchorRect: node => {
+      const own = node.getBoundingClientRect();
+      const menu = node.closest("[role='menu']")?.getBoundingClientRect() ?? own;
+      const inset = surfaceNode.current ? parseFloat(getComputedStyle(surfaceNode.current).paddingTop) + parseFloat(getComputedStyle(surfaceNode.current).borderTopWidth) : 0;
+      return { x: menu.x, y: own.y - inset, width: menu.width, height: own.height };
+    },
+  });
+  useEffect(() => {
+    if (!open || !entry.current) return;
+    entry.current = false;
+    surfaceNode.current?.querySelector<HTMLElement>("[role^='menuitem']:not(:disabled, [aria-disabled='true'])")?.focus({ preventScroll: true });
+  }, [open]);
+  // Moving to another row of the parent menu closes the submenu (hover intent without a delay).
+  useEffect(() => {
+    if (!open) return;
+    const parent = row.current?.closest("[role='menu']");
+    if (!parent) return;
+    const onFocusIn = (event: Event) => {
+      const target = event.target as HTMLElement;
+      if (target !== row.current && target.closest("[role='menu']") === parent) setOpen(false);
+    };
+    parent.addEventListener("focusin", onFocusIn);
+    return () => parent.removeEventListener("focusin", onFocusIn);
+  }, [open]);
+  const rtl = () => row.current ? getComputedStyle(row.current).direction === "rtl" : false;
+  const openKey = () => (rtl() ? "ArrowLeft" : "ArrowRight");
+  const closeKey = () => (rtl() ? "ArrowRight" : "ArrowLeft");
+  return <>
+    <button ref={row} type="button" role="menuitem" className="area-menu__item area-menu__item--sub" aria-haspopup="menu" aria-expanded={open}
+      aria-controls={id} disabled={disabled} data-keep-open="" {...(disabled ? { "data-disabled": "" } : {})}
+      onClick={() => { entry.current = true; setOpen(true); }}
+      onPointerEnter={event => { if (event.pointerType === "mouse" && !disabled) setOpen(true); }}
+      onKeyDown={event => {
+        if (disabled) return;
+        if (event.key === openKey() || event.key === "Enter" || event.key === " ") {
+          event.preventDefault(); event.stopPropagation(); entry.current = true; setOpen(true);
+          if (open) surfaceNode.current?.querySelector<HTMLElement>("[role^='menuitem']:not(:disabled)")?.focus({ preventScroll: true });
+        }
+      }}>
+      {icon ? <span className="area-menu__icon" aria-hidden="true">{icon}</span> : null}
+      <span className="area-menu__text">{label}</span>
+      <span className="area-menu__sub-chevron" aria-hidden="true"><Glyph name="chevron-down" /></span>
+    </button>
+    <Menu ref={node => { surfaceNode.current = node; assignRef(ref, node); }} id={id} popover="auto" tabIndex={-1} aria-label={typeof label === "string" ? label : undefined}
+      className={className} {...rest}
+      onKeyDown={event => {
+        if (event.key !== "Escape" && event.key !== closeKey()) return;
+        if ((event.target as HTMLElement).closest("[role='menu']") !== event.currentTarget) return;
+        event.preventDefault(); event.stopPropagation();
+        setOpen(false);
+        row.current?.focus({ preventScroll: true });
+      }}>
+      {children}
+    </Menu>
+  </>;
+});
+
 /** A floating search field and its related menu, outside the menu's action-list semantics. */
+/**
+ * @deprecated A searchable list is a Combobox (a field that filters a list) or a Command palette
+ * (a filtered command list); both own active-descendant keys this surface never had (audit D-22).
+ * Kept so existing markup renders.
+ */
 export const MenuSearch = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function MenuSearch({ className, ...rest }, ref) {
   return <div ref={ref} className={cx("area-menu__search-surface", className)} {...rest} />;
 });
@@ -1146,7 +1355,8 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   /**
    * Makes the row a checkable item (`role="menuitemcheckbox"`). The whole row is the control:
-   * toggle `checked` in `onClick`. Hosts keep the menu open for checkable items.
+   * toggle `checked` in `onClick`. Hosts keep the menu open for checkbox rows and close it for
+   * a radio choice, as for an action (audit D-11).
    */
   checked?: boolean;
   /** With `checked`, makes the row one choice of several (`role="menuitemradio"`), as a mode or model menu. */
@@ -1155,8 +1365,7 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
   indicator?: "check" | "switch";
   /** A muted note under the label (a model's summary, a setting's effect). */
   description?: ReactNode;
-  /** A leading glyph in the row's icon column (audit S17: as NavItem, Tabs and palette items;
-   * replaces a hand-written `area-menu__icon` span). */
+  /** A leading icon in the row's icon box, as NavItem, Tabs and CommandItem take (audit S17, D-18). */
   icon?: ReactNode;
 }
 
@@ -1178,7 +1387,7 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
     >
       {icon ? <span className="area-menu__icon" aria-hidden="true">{icon}</span> : null}
       {description ? <span className="area-menu__lines"><span className="area-menu__text">{children}</span><span className="area-menu__description">{description}</span></span>
-        : typeof children === "string" || typeof children === "number" ? <span className="area-menu__text">{children}</span> : children}
+        : icon || typeof children === "string" || typeof children === "number" ? <span className="area-menu__text">{children}</span> : children}
       {shortcut ? <span className="area-menu__shortcut">{shortcut}</span> : null}
       {checkable && indicator === "switch" ? (
         <span className="area-switch area-switch--sm area-menu__toggle" aria-hidden="true">
@@ -1201,10 +1410,13 @@ export interface ToastProps extends Omit<Div, "title"> {
   action?: ReactNode;
   onDismiss?: () => void;
   dismissLabel?: string;
+  /** Announces itself: `status`, or `alert` for danger as Alert does (audit E-11). A Toaster turns
+   * this off and announces through live regions that exist before the toast. */
+  live?: boolean;
 }
 
 export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(function Toast(
-  { tone = "neutral", icon, title, action, onDismiss, dismissLabel = "Dismiss notification", className, children, ...rest },
+  { tone = "neutral", icon, title, action, onDismiss, dismissLabel = "Dismiss notification", live = true, className, children, ...rest },
   ref,
 ) {
   return (
@@ -1214,7 +1426,7 @@ export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(func
           {icon}
         </span>
       ) : null}
-      <div className="area-toast__content" role="status" aria-atomic="true">{title ? <div className="area-toast__title">{title}</div> : null}<div className={title ? "area-toast__description" : undefined}>{children}</div></div>
+      <div className="area-toast__content" role={live ? (tone === "danger" ? "alert" : "status") : undefined} aria-atomic={live || undefined}>{title ? <div className="area-toast__title">{title}</div> : null}<div className={title ? "area-toast__description" : undefined}>{children}</div></div>
       {action ? <div className="area-toast__action">{action}</div> : null}
       {onDismiss ? <span className="area-toast__dismiss"><Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<Glyph name="dismiss" />} aria-label={dismissLabel} onClick={onDismiss} /></span> : null}
     </div>
@@ -1223,20 +1435,18 @@ export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(func
 
 /* --- Tabs ----------------------------------------------------------------- */
 
-export type TabsItem = { id: string; label: ReactNode; icon?: ReactNode; trailing?: ReactNode; disabled?: boolean; content?: ReactNode };
-
 export interface TabsProps extends Omit<Div, "defaultValue"> {
   /** Tab labels, in order. */
-  /** The tabs, in order (audit S17 / H-14: a collection you move through is `items`). */
-  items?: TabsItem[];
+  /** The tabs. Collections are `items` everywhere (audit H-14). */
+  items?: Array<{ id: string; label: ReactNode; icon?: ReactNode; trailing?: ReactNode; disabled?: boolean; content?: ReactNode }>;
   /** @deprecated Use `items`. */
-  tabs?: TabsItem[];
+  tabs?: Array<{ id: string; label: ReactNode; icon?: ReactNode; trailing?: ReactNode; disabled?: boolean; content?: ReactNode }>;
   value?: string;
   defaultValue?: string;
-  onValueChange?: (value: string, event: SyntheticEvent) => void;
-  /** Names the tab list ("Views"); it goes on the tablist, not the wrapper. */
+  onValueChange?: (value: string, event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>) => void;
+  /** Names the tab list (default "Views"). */
   "aria-label"?: string;
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
+  /** @deprecated Use `aria-label`. Accessible names follow one rule (audit D-18, A-17): `aria-label` names the component's own element, `<part>Label` names a sub-part, and `label` is visible text. */
   label?: string;
   size?: VariantProps<typeof MANIFESTS.tabs>["size"];
   orientation?: "horizontal" | "vertical";
@@ -1245,22 +1455,22 @@ export interface TabsProps extends Omit<Div, "defaultValue"> {
 }
 
 export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(function Tabs(
-  { items, tabs: tabsProp, value: controlledValue, defaultValue, onValueChange, label, "aria-label": ariaLabel = label ?? "Views", size = "md", orientation = "horizontal", activationMode = "automatic", track, className, children, ...rest },
+  { items, tabs: legacyTabs, value: controlledValue, defaultValue, onValueChange, "aria-label": ariaLabel, label, size = "md", orientation = "horizontal", activationMode = "automatic", track, className, children, ...rest },
   ref,
 ) {
+  const tabs = items ?? legacyTabs ?? NO_ITEMS;
   const id = useId();
-  const tabs = items ?? tabsProp ?? [];
   const [localValue, setLocalValue] = useState(defaultValue ?? tabs.find(tab => !tab.disabled)?.id);
   const candidate = controlledValue ?? localValue;
   const value = tabs.find(tab => tab.id === candidate && !tab.disabled)?.id ?? tabs.find(tab => !tab.disabled)?.id;
   const buttons = useRef(new Map<string, HTMLButtonElement>());
-  const select = (next: string, event: SyntheticEvent) => {
+  const select = (next: string, event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>) => {
     if (controlledValue === undefined) setLocalValue(next);
     onValueChange?.(next, event);
   };
   return (
     <div ref={ref} className={tabsVariants({ size, track, orientation: orientation === "vertical" ? orientation : undefined }, className)} {...rest}>
-      <div className="area-tabs__list" role="tablist" aria-label={ariaLabel} aria-orientation={orientation}>
+      <div className="area-tabs__list" role="tablist" aria-label={ariaLabel ?? label ?? "Views"} aria-orientation={orientation}>
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -1323,13 +1533,13 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
    */
   trigger?: ReactElement<{ onClick?: (event: MouseEvent<HTMLElement>) => void }>;
   /**
-   * The modal's open state, with or without a `trigger` (audit S17: every overlay takes
-   * open / defaultOpen / onOpenChange). A controlled Dialog with no trigger is how a menu item
-   * or any other action opens a confirmation.
+   * Opens the native modal without a trigger, or controls one that has a trigger: a menu item
+   * that asks for confirmation (audit S17, E-6). Escape, the close control and the backdrop
+   * report `false` through `onOpenChange`.
    */
   open?: boolean;
   defaultOpen?: boolean;
-  /** Called when the modal opens or closes (trigger, close control, Escape, backdrop). */
+  /** Called when the modal opens or closes. */
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -1346,10 +1556,10 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
 ) {
   const id = useId();
   const modal = useRef<HTMLDialogElement | null>(null);
+  const backdropPress = useRef(false);
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const isModal = trigger !== undefined || openProp !== undefined || defaultOpen !== undefined;
-  // The native dialog follows `open`; showModal() supplies the focus trap, Escape and backdrop.
-  useLayoutEffect(() => {
+  useEffect(() => {
     const node = modal.current;
     if (!node || typeof node.showModal !== "function") return;
     if (open && !node.open) node.showModal();
@@ -1366,7 +1576,7 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
   const surface = (
     <div
       ref={ref}
-      {...(trigger ? {} : { role: "dialog", "aria-modal": "true" as const, ...labelled })}
+      {...(isModal ? {} : { role: "dialog", "aria-modal": "true" as const, ...labelled })}
       className={cx("area-dialog", className)}
       {...surfaceRest}
     >
@@ -1378,8 +1588,6 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
           </div>
           {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-dialog__close" aria-label={dismissLabel} icon={<Glyph name="dismiss" />} onClick={event => {
             (onDismiss ?? onClose)?.();
-            // The dialog's own close event reports the change (and a controlled parent's
-            // open={false} is already satisfied by then).
             event.currentTarget.closest("dialog")?.close();
           }} /> : null}
         </div>
@@ -1408,7 +1616,10 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
         {...labelled}
         onClose={() => { if (open) setOpen(false); }}
         // A click whose target is the <dialog> itself landed on the backdrop: the surface fills it.
-        onClick={event => { if (event.target === event.currentTarget) event.currentTarget.close(); }}
+        // A backdrop press closes only when it also began on the backdrop: a drag out of the
+        // surface that ends on the scrim no longer closes the dialog (audit E-20).
+        onPointerDown={event => { backdropPress.current = event.target === event.currentTarget; }}
+        onClick={event => { if (event.target === event.currentTarget && backdropPress.current) event.currentTarget.close(); backdropPress.current = false; }}
       >
         {surface}
       </dialog>
@@ -1424,20 +1635,21 @@ export interface SegmentedProps extends Omit<Div, "onChange" | "onSelect" | "def
   fullWidth?: boolean;
   /** Hide visible option labels while retaining their accessible names. */
   iconOnly?: boolean;
-  options: Array<{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }>;
+  /** The choices. Collections are `items` everywhere (audit H-14). */
+  items?: Array<{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }>;
+  /** @deprecated Use `items`. */
+  options?: Array<{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }>;
   value?: string;
   defaultValue?: string;
-  /** Called with the chosen value (audit S17: every single choice is `value` / `onValueChange`). */
-  onValueChange?: (value: string, event: SyntheticEvent) => void;
+  /** @deprecated Use `aria-label`, which names the radio group. Accessible names follow one rule (audit D-18, A-17): `aria-label` names the component's own element, `<part>Label` names a sub-part, and `label` is visible text. */
+  label?: string;
+  /** Called with the chosen value and the click or key event that chose it (audit S17). */
+  onValueChange?: (value: string, event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>) => void;
   /** @deprecated Use `onValueChange`. */
   onSelect?: (value: string) => void;
-  /** @deprecated Name the group with `aria-label` (audit S17: `label` is visible text elsewhere). */
-  label?: string;
-  /** Submits the chosen value with a form, as AlignmentPicker and ColorSwatchPicker do. */
+  /** Submits the value with a form, as AlignmentPicker and ColorSwatchPicker do. */
   name?: string;
   form?: string;
-  /** Marks the choice required for assistive tech; a Segmented always holds a value. */
-  required?: boolean;
   /** Disables every option. */
   disabled?: boolean;
 }
@@ -1450,43 +1662,43 @@ export interface SegmentedProps extends Omit<Div, "onChange" | "onSelect" | "def
  * convey.
  */
 export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedProps>(function Segmented(
-  { size, fullWidth, iconOnly, options, value: controlledValue, defaultValue, label, onValueChange, onSelect, name, form, required, disabled, "aria-label": ariaLabel, className, ...rest },
+  { size: sizeProp, fullWidth, iconOnly, items, options: legacyOptions, value: controlledValue, defaultValue, label, onValueChange, onSelect, name, form, disabled, className, ...rest },
   ref,
 ) {
-  const initial = defaultValue ?? options.find(option => !option.disabled)?.value;
-  const [localValue, setLocalValue] = useState(initial);
-  const root = useRef<HTMLDivElement | null>(null);
-  // A form reset restores the initial choice, as the other pickers do.
+  const options = items ?? legacyOptions ?? NO_ITEMS;
+  const toolbarSize = useContext(ToolbarSize);
+  const size = sizeProp ?? toolbarSize;
+  const [localValue, setLocalValue] = useState(defaultValue ?? options.find(option => !option.disabled)?.value);
+  const initial = useRef(localValue);
+  const hidden = useRef<HTMLInputElement | null>(null);
+  // A form reset returns an uncontrolled control to its first value, as the pickers do (audit C-9).
   useEffect(() => {
-    if (controlledValue !== undefined) return;
-    const owner = root.current?.closest("form");
-    if (!owner) return;
-    const reset = () => setLocalValue(initial);
+    const owner = hidden.current?.form;
+    if (!owner || controlledValue !== undefined) return;
+    const reset = (event: Event) => queueMicrotask(() => { if (!event.defaultPrevented) setLocalValue(initial.current); });
     owner.addEventListener("reset", reset);
     return () => owner.removeEventListener("reset", reset);
-  }, [controlledValue, initial]);
+  }, [controlledValue]);
   const value = controlledValue ?? localValue;
   const entry = options.find(option => option.value === value && !option.disabled) ?? options.find(option => !option.disabled);
   const buttons = useRef(new Map<string, HTMLButtonElement>());
   // In a toolbar every option is a roving item: the toolbar's arrows move focus across the
   // options and the other commands, Space or Enter chooses (WAI-ARIA toolbar with a radio group).
   const inToolbar = useContext(InToolbar);
-  const select = (next: string, event: SyntheticEvent) => {
+  const select = (next: string, event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>) => {
     if (controlledValue === undefined) setLocalValue(next);
     onValueChange?.(next, event);
     onSelect?.(next);
   };
   return (
     <div
-      ref={node => { root.current = node; assignRef(ref, node); }}
+      ref={ref}
       role="radiogroup"
-      aria-label={ariaLabel ?? label}
-      aria-required={required || undefined}
+      aria-label={rest["aria-label"] ?? label}
       aria-disabled={disabled || undefined}
       className={segmentedVariants({ size, fullWidth, iconOnly }, className)}
       {...rest}
     >
-      {name ? <input type="hidden" name={name} form={form} value={value ?? ""} disabled={disabled} /> : null}
       {options.map((option) => (
         <button
           key={option.value}
@@ -1519,6 +1731,7 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
           <span className={iconOnly ? "area-sr-only" : "area-segmented__label"}>{option.label}</span>
         </button>
       ))}
+      {name ? <input ref={hidden} type="hidden" name={name} form={form} disabled={disabled} value={value ?? ""} /> : null}
     </div>
   );
 });
@@ -1528,20 +1741,16 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
 export interface CodeProps extends HTMLAttributes<HTMLElement> {
   /** A CSS colour the reference resolves to. Adds a decorative swatch. */
   swatch?: string;
-  /** `subtle`: a quieter treatment for a derived reference; `on-color`: the surrounding
-   * foreground on a coloured ground (audit S17: the manifest's axis, as a prop). */
-  ground?: VariantProps<typeof MANIFESTS.code>["ground"];
-  /** @deprecated Use `ground="subtle"`. */
+  /** A quieter treatment for a derived reference. */
   subtle?: boolean;
-  /** @deprecated Use `ground="on-color"`. */
+  /** Uses the surrounding foreground on a coloured ground. */
   onColor?: boolean;
 }
 
 export const Code = /* @__PURE__ */ forwardRef<HTMLElement, CodeProps>(function Code(
-  { children, swatch, ground: groundProp, subtle, onColor, className, ...rest }, ref,
+  { children, swatch, subtle, onColor, className, ...rest }, ref,
 ) {
-  const ground = groundProp ?? (onColor ? "on-color" : subtle ? "subtle" : undefined);
-  return <code ref={ref} className={cx("area-code", swatch && "area-code--swatch", ground && `area-code--${ground}`, className)} {...rest}>
+  return <code ref={ref} className={cx("area-code", swatch && "area-code--swatch", subtle && "area-code--subtle", onColor && "area-code--on-color", className)} {...rest}>
     {swatch ? <span className="area-code__swatch" style={{ background: swatch }} aria-hidden="true" /> : null}
     {swatch ? <span className="area-code__label">{children}</span> : children}
   </code>;
@@ -1606,8 +1815,8 @@ export interface CodeBlockProps extends Omit<Div, "title"> {
   languageTabs?: boolean;
   /** Controlled active language. Omit for an uncontrolled picker. */
   value?: string;
-  /** Called with the chosen language (audit S17: every value is `value` / `onValueChange`). */
-  onValueChange?: (language: string, event: SyntheticEvent) => void;
+  /** Called with the chosen language (audit S17: one change name). */
+  onValueChange?: (language: string) => void;
   /** @deprecated Use `onValueChange`. */
   onLanguageChange?: (language: string) => void;
   /** Line numbers. On by default; turn them off for a short excerpt. */
@@ -1625,6 +1834,8 @@ export interface CodeBlockProps extends Omit<Div, "title"> {
   /** Built-in copy control. On by default. */
   copyable?: boolean;
   copyLabel?: string;
+  /** Names the language switcher (tabs or Select); localise with the rest (audit H-27). */
+  languageLabel?: string;
   /** Extra actions beside the copy control. Adds the header row when there is no title. */
   actions?: ReactNode;
   /** Remove the surrounding border when embedded in another framed surface. */
@@ -1652,6 +1863,7 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
     defaultCollapsed,
     copyable = true,
     copyLabel = "Copy code",
+    languageLabel = "Language",
     actions,
     html,
     code,
@@ -1676,9 +1888,9 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
   const highlighted = parseLineNumbers(highlightLines);
   const lines = (html ?? code ?? "").split("\n");
 
-  const selectLanguage = (next: string, event: SyntheticEvent) => {
+  const selectLanguage = (next: string) => {
     if (value === undefined) setLocalLanguage(next);
-    onValueChange?.(next, event);
+    onValueChange?.(next);
     onLanguageChange?.(next);
   };
 
@@ -1705,7 +1917,10 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
 
   const picker = languages?.length ? (
     languageTabs ? (
-      <div className="area-code-block__languages" role="tablist" aria-label="Language">
+      // The language switcher is Tabs sm (audit G-6 A, owner 2026-09-30): one tab language, its
+      // indicator, hover, inset focus and forced-colours rule; the code body is the tab panel.
+      <div className="area-tabs area-tabs--sm area-code-block__languages">
+        <div className="area-tabs__list" role="tablist" aria-label={languageLabel}>
         {languages.map((item, index) => {
           const selected = item === activeLanguage;
           return (
@@ -1715,7 +1930,8 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
               role="tab"
               /* Language names are the author's text, so the id is the index. */
               id={`${id}-tab-${index}`}
-              className="area-code-block__tab"
+              className="area-tabs__tab"
+              {...(selected ? { "data-selected": "" } : {})}
               ref={node => { if (node) tabButtons.current.set(item, node); else tabButtons.current.delete(item); }}
               aria-selected={selected}
               aria-controls={`${id}-panel`}
@@ -1727,24 +1943,25 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
                 const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
                 const step = (event.key === "ArrowRight" ? 1 : -1) * (rtl ? -1 : 1);
                 const next = languages[event.key === "Home" ? 0 : event.key === "End" ? languages.length - 1 : (index + step + languages.length) % languages.length]!;
-                selectLanguage(next, event);
+                selectLanguage(next);
                 tabButtons.current.get(next)?.focus();
               }}
-              onClick={event => selectLanguage(item, event)}
+              onClick={() => selectLanguage(item)}
             >
-              {item}
+              <span className="area-tabs__label">{item}</span>
             </button>
           );
         })}
+        </div>
       </div>
     ) : (
       <span className="area-code-block__languages">
         <Select
           className="area-code-block__select"
           size="sm"
-          aria-label="Language"
+          aria-label={languageLabel}
           value={activeLanguage}
-          onChange={event => selectLanguage(event.currentTarget.value, event)}
+          onChange={event => selectLanguage(event.currentTarget.value)}
         >
           {languages.map(item => <option key={item} value={item}>{item}</option>)}
         </Select>
@@ -1761,7 +1978,10 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
           tone="neutral"
           size="sm"
           iconOnly
-          aria-label={copyState === "copied" ? "Copied" : copyLabel}
+          // One announcement: the name stays fixed and the live region says what happened
+          // (audit G-21); the glyph shows it, and a failure is a state the CSS can paint.
+          aria-label={copyLabel}
+          data-copy-state={copyState === "idle" ? undefined : copyState}
           icon={copyState === "copied" ? <CopiedGlyph /> : <CopyGlyph />}
           onClick={copy}
         />
@@ -1785,7 +2005,8 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
     <div ref={ref} className={codeBlockVariants({ flush, wrap, unnumbered: !lineNumbers }, className)} {...(collapsed ? { "data-collapsed": "" } : {})} {...rest}>
       {header}
       <div className="area-code-block__body" {...panel}>
-        <pre className="area-code-block__pre">
+        {/* Without the tab panel, the scrolling block itself takes focus so a keyboard can scroll it (audit G-21). */}
+        <pre className="area-code-block__pre" id={`${id}-code`} {...(panel.role ? {} : { tabIndex: 0, "aria-label": typeof title === "string" ? title : "Code" })}>
           <code className="area-code-block__code" ref={source}>
           {lines.map((text, index) => {
             const number = index + 1;
@@ -1806,7 +2027,8 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
                   <span className="area-code-block__gutter">
                     {mark ? <span className="area-code-block__marker">{mark === "added" ? "+" : "-"}</span> : null}
                     {linkLines
-                      ? <a className="area-code-block__linenumber" href={`#${id}-L${number}`} aria-label={`Line ${number}`}>{number}</a>
+                      // Out of the tab order, so a long block isn't a tab stop per line (audit G-21).
+                      ? <a className="area-code-block__linenumber" href={`#${id}-L${number}`} aria-label={`Line ${number}`} tabIndex={-1}>{number}</a>
                       : lineNumbers ? <span className="area-code-block__linenumber" aria-hidden="true">{number}</span> : null}
                   </span>
                 ) : null}
@@ -1822,7 +2044,8 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
           <button
             type="button"
             className="area-code-block__toggle"
-            aria-expanded={!collapsed}
+            // The visible label carries the state; aria-expanded on top of it said it twice (audit G-21).
+            aria-controls={`${id}-code`}
             onClick={() => setCollapsed(current => !current)}
           >
             {collapsed ? "Show code" : "Hide code"}
@@ -1884,15 +2107,15 @@ const KEY_LABELS: Record<string, string> = {
 export interface KbdProps extends HTMLAttributes<HTMLElement> {
   /** Key names, in order. Modifiers, arrows and common special keys become native legends. */
   keys: string[];
-  /** md (20px) suits standalone hints; sm (16px) fits compact control chrome. `"normal"` and
-   * `"small"` are deprecated aliases (audit S17: every size axis is sm / md / lg). */
-  size?: VariantProps<typeof MANIFESTS.kbd>["size"] | "normal" | "small";
-  /** Surface treatment for standalone, compact chrome, coloured, or emphasized backgrounds. */
-  variant?: VariantProps<typeof MANIFESTS.kbd>["variant"];
-  /** @deprecated Use `variant` (audit S17: every treatment axis is `variant`). */
-  appearance?: VariantProps<typeof MANIFESTS.kbd>["variant"];
-  /** @deprecated Use `variant="quiet"`. */
-  quiet?: boolean;
+  /** md (20px) suits standalone hints; sm (16px) fits compact control chrome. `"small"` and
+   * `"normal"` are deprecated aliases (audit S17). */
+  size?: VariantProps<typeof MANIFESTS.kbd>["size"] | "small" | "normal";
+  /** Surface treatment for standalone, compact chrome, or coloured backgrounds. `"on-emphasis"`
+   * is a deprecated alias of `"on-color"` (audit A-15); a Tooltip, a solid Button and a menu row
+   * adapt the keycap on their own. */
+  variant?: VariantProps<typeof MANIFESTS.kbd>["variant"] | "on-emphasis";
+  /** @deprecated Use `variant` (audit S17). */
+  appearance?: VariantProps<typeof MANIFESTS.kbd>["variant"] | "on-emphasis";
 }
 
 /**
@@ -1902,18 +2125,19 @@ export interface KbdProps extends HTMLAttributes<HTMLElement> {
  * spoken label because bare modifier glyphs are not announced usefully.
  */
 export const Kbd = /* @__PURE__ */ forwardRef<HTMLElement, KbdProps>(function Kbd(
-  { keys, size = "md", variant, appearance, quiet, className, ...rest },
+  { keys, size = "md", variant, appearance, className, ...rest },
   ref,
 ) {
+  const tier = size === "small" ? "sm" : size === "normal" ? "md" : size;
   const rendered = keys.map((key) => KEY_GLYPHS[key.toLowerCase()] ?? key.toUpperCase());
   const spoken = rendered.map((glyph) => KEY_LABELS[glyph] ?? glyph).join(" plus ");
-  const resolvedVariant = quiet ? "quiet" : variant ?? appearance ?? "default";
-  const resolvedSize = size === "small" ? "sm" : size === "normal" ? "md" : size;
+  const chosen = variant ?? appearance ?? "default";
+  const resolvedAppearance = chosen === "on-emphasis" ? "on-color" : chosen;
 
   return (
     <span
       ref={ref}
-      className={cx("area-kbd", `area-kbd--${resolvedSize}`, `area-kbd--${resolvedVariant}`, className)}
+      className={cx("area-kbd", `area-kbd--${tier}`, `area-kbd--${resolvedAppearance}`, className)}
       {...rest}
     >
       {/* A span has no role, so an aria-label on it is not reliably announced; the spoken chord
@@ -1938,6 +2162,7 @@ export const KbdGroup = /* @__PURE__ */ forwardRef<HTMLSpanElement, KbdGroupProp
   return <span ref={ref} className={cx("area-kbd-group", className)} {...rest} />;
 });
 
+/** @deprecated Use `CodeProps` with `swatch` (audit H-25). */
 export interface TokenProps extends HTMLAttributes<HTMLElement> {
   /** The token's name, as it would be typed. */
   children: ReactNode;
@@ -1948,12 +2173,9 @@ export interface TokenProps extends HTMLAttributes<HTMLElement> {
    * else does; a hex here would show what the token meant when the page was written.
    */
   swatch?: string;
-  /** `subtle` for a token naming something derived rather than primitive; `on-color` on a
-   * coloured ground, taking the surrounding foreground. */
-  ground?: VariantProps<typeof MANIFESTS.token>["ground"];
-  /** @deprecated Use `ground="subtle"`. */
+  /** For a token naming something derived rather than primitive. */
   subtle?: boolean;
-  /** @deprecated Use `ground="on-color"`. */
+  /** On a coloured ground: takes the surrounding foreground instead of the page's. */
   onColor?: boolean;
 }
 
@@ -1963,16 +2185,23 @@ export interface TokenProps extends HTMLAttributes<HTMLElement> {
  * Token is `Code` with an optional colour swatch. Keeping the same element and base class
  * means any source-like reference reads as one 24px inline treatment; the Token name only
  * preserves the more specific swatch composition.
+ *
+ * @deprecated Use `<Code swatch>`, which renders the same element and swatch (audit H-25 A,
+ * owner 2026-09-30). Token stays exported so existing markup renders.
  */
 export const Token = /* @__PURE__ */ forwardRef<HTMLElement, TokenProps>(function Token(
-  { children, swatch, ground: groundProp, subtle, onColor, className, ...rest },
+  { children, swatch, subtle, onColor, className, ...rest },
   ref,
 ) {
-  const ground = groundProp ?? (onColor ? "on-color" : subtle ? "subtle" : undefined);
   return (
     <Code
       ref={ref}
-      className={cx("area-token", ground && `area-token--${ground}`, className)}
+      className={cx(
+        "area-token",
+        subtle && "area-token--subtle",
+        onColor && "area-token--on-color",
+        className,
+      )}
       {...rest}
     >
       {swatch ? (

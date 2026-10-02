@@ -9,7 +9,7 @@
     --_composer-gap: var(--area-space-8);
     display: flex;
     flex-direction: column;
-    /* A public hook, shared with Prompt suggestions (audit S17 / G-24), as Input's width is. */
+    /* The composer's measure, one public hook shared with Prompt suggestions (audit S17, G-24). */
     inline-size: min(100%, var(--area-composer-inline-size, calc(var(--area-space-96) * 5)));
     min-inline-size: 0;
     padding: calc(var(--_composer-inset) - var(--area-stroke-width));
@@ -33,7 +33,8 @@
   }
   .area-composer--inline { min-block-size: var(--_composer-height); }
   .area-composer--stacked { gap: var(--area-space-8); }
-  /* The Input hover step (audit S7a). */
+
+ /* The Input hover step (audit S7a). */
   @media (hover: hover) { .area-composer:hover:not(:focus-within, [data-disabled]) { border-color: var(--area-input-edge-hover); } }
   .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); }
   /* A text field shows disabled with Textarea's field paint, not opacity (cohesion audit), so the
@@ -41,8 +42,6 @@
   .area-composer[data-disabled] { background: var(--area-textarea-bg-disabled); border-color: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }
   .area-composer[data-disabled] .area-composer__input { cursor: not-allowed; }
   .area-composer[data-disabled] .area-composer__input::placeholder { color: var(--area-fg-disabled); }
-  /* spec (audit S18, owner 2026-09-30): loading keeps the field's paint and caret; ChatGPT keeps
-     typing open while a reply streams. Only send changes (to Stop, in Composer.tsx). */
   .area-composer__entry { display: flex; align-items: flex-end; gap: var(--_composer-gap); min-inline-size: 0; flex: 1; }
   .area-composer--stacked .area-composer__entry { align-items: stretch; }
   .area-composer__input {
@@ -55,7 +54,8 @@
   .area-composer__input { max-block-size: calc(var(--area-control-md) * 5); }
   .area-composer__input::placeholder { color: var(--area-input-placeholder); }
   .area-composer__actions, .area-composer__footer { display: flex; align-items: center; gap: var(--_composer-gap); min-inline-size: 0; }
-  .area-composer__actions { flex-shrink: 0; }
+  /* The action slots are fieldsets, so a disabled composer disables them natively (audit G-14). */
+  .area-composer__actions { flex-shrink: 0; min-inline-size: 0; margin: 0; padding: 0; border: 0; }
   .area-composer__actions--leading { margin-inline-end: 0; }
   .area-composer__actions--trailing { margin-inline-start: auto; }
   .area-composer__extras { display: contents; }

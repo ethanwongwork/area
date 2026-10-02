@@ -9,6 +9,8 @@
 
 - 2026-09-26: **Neutral by default, accent by override** (DESIGN_SYSTEM.md, "Color and
   focus"). Progress already followed it: the fill is `neutral-solid`; `tone="accent"` opts in.
+  *Superseded 2026-09-29 (owner, D1): the fill is the Selection role (`selection-solid`,
+  display.css:261), accent by theme; the `tone` axis was removed.*
 
 No Progress section existed in prior decisions. The second pass (owner: decide every open
 item) changed nothing here.
@@ -24,7 +26,6 @@ a Skeleton. Label and value text are composed around it, not part of the compone
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | sm 4, md 6 (default), lg 8 | Rail thickness by density of the context | Figma usage bar 4; Untitled one size (8) |
-| tone | neutral (default), accent | Owner rule | Figma and Untitled fill in brand blue |
 | state | determinate, indeterminate | Omit `value` for indeterminate | not found in Untitled's progress source (reference table) |
 | composition | label and value above | Gallery `labeled` | Untitled labels beside or below; Figma's usage bar sits under its text |
 
@@ -73,7 +74,7 @@ Read from the nodes of `area--size-small`, `-medium`, `-large`, `area--accent`,
 | rail · colour | **`edge-control` #e2e2e2** (display.css:265) | Audit S5 (owner 2026-09-30): one off-track grey with Switch and Slider (slider.css:29, switch.css:20) | Figma #e6 and Untitled #e5. Was `fill-toggle` mixed 20% toward `bg-surface` ≈ #dd, and before that `bg-component-active` #eee |
 | rail · thickness | 4 / 6 / 8 (display.css:242-244) | Figma 4 = sm; Untitled 8 = lg | Default md sits between |
 | radius | `radius-full` | Figma and Untitled both round a thin bar to a pill | — |
-| fill | `neutral-solid`; accent by tone | Owner | Figma and Untitled use brand blue |
+| fill | `selection-solid` (display.css:261), neutral by default | Owner; emphasis roles (D1) | Figma and Untitled use brand blue: a theme's Selection accent |
 | indeterminate | 35% segment travelling −100% → 340% of its width, 1.8s linear (display.css:252-260); mirrored in RTL (262-266) | Distinguishable from a full bar | — |
 | label composition | 14/20 row, 8px above the bar (gallery `labeled`) | Untitled 8px below / 12px beside, 14/20 500 | Weight 400 (Area label rule); consumer layout, not the component |
 
@@ -104,7 +105,7 @@ No forced-colors rule in display.css (unverified).
 |---|---|---|---|---|
 | Slider, Switch | rail / off track | `edge-control` #e2 | same | match (audit S5) |
 | Slider | rail thickness | 4 | sm 4 | match at sm |
-| Slider, Switch, Spinner | fill | `neutral-solid` | same | match |
+| Slider, Switch, Spinner | fill | `selection-solid` | same | match |
 | Spinner | track | ink at 25% ≈ #c9 | #e2 | differs (audit E-22 open) |
 | Skeleton, Spinner | motion axis | stop under `motion="none"` | same | match (audit) |
 

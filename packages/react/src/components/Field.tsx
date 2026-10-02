@@ -28,8 +28,11 @@ interface FieldControlProps extends AriaAttributes {
 export interface FieldProps extends Div {
   label?: ReactNode;
   description?: ReactNode;
-  /** A validation message. Without `validationStatus` it is neutral (muted, not invalid); set
-   * `validationStatus="error"` or use `error` for an error (audit B-20: it defaulted to error). */
+  /**
+   * A validation message, painted by `validationStatus`. Without a status it is an error (sets
+   * `aria-invalid` and `aria-errormessage`); pass `"success"` or `"warning"` for the others.
+   * Help text that isn't validation belongs in `description`. `error` remains the shorthand.
+   */
   validation?: ReactNode;
   validationStatus?: "error" | "success" | "warning";
   error?: ReactNode;
@@ -89,7 +92,7 @@ export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(func
   const validationId = `${controlId}-validation`;
   const hasDescription = hasContent(description);
   const resolvedValidation = hasContent(error) ? error : validation;
-  const resolvedValidationStatus = hasContent(error) ? "error" : validationStatus;
+  const resolvedValidationStatus = hasContent(error) ? "error" : validationStatus ?? (hasContent(validation) ? "error" : undefined);
   const hasValidation = hasContent(resolvedValidation);
   const hasError = hasValidation && resolvedValidationStatus === "error";
 
@@ -142,7 +145,7 @@ export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(func
         </span>
       ) : null}
       {hasValidation ? (
-        <span id={validationId} className="area-field__validation" data-tone={resolvedValidationStatus ?? "neutral"}>
+        <span id={validationId} className="area-field__validation" data-tone={resolvedValidationStatus ?? "error"}>
           {resolvedValidation}
         </span>
       ) : null}

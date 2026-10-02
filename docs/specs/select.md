@@ -1,6 +1,6 @@
 # Select spec
 
-**Status:** in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma)
+**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))
 **Captures:** `docs/research/captures/select/`
 **Peers:** Input, Textarea, NumberField (field chrome), Menu (picker rows and lift), Popover
 (floating surface), InputGroup (mode picker), ColorPicker (model select)
@@ -9,12 +9,14 @@
 
 - Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)): Select's enhanced
   native picker opens below with a 4px gap and no above-input fallback; unsupported browsers
-  retain their platform-native picker placement. **Superseded 2026-09-30** (audit B-5, option
-  B): the picker follows Combobox's list rules and flips above when there is no room below.
+  retain their platform-native picker placement. *Superseded 2026-09-30 by audit pick B-5 B
+  (owner): the picker follows the Combobox list's rules and flips (see Decisions).*
 - Neutral by default, accent by override (2026-09-26): the checked option is marked with the
   neutral selection fill and a `currentColor` check, not accent.
 - 2026-09-26, second pass ("decide all open items"), item 10: the chevron stays a
   theme-neutral mid grey (#888) in the data URI a native select requires; intentional.
+  *Narrowed 2026-09-30 by audit pick B-3 B (owner): with `appearance: base-select` the chevron
+  and check are Area glyphs in `input-icon` ink; #888 remains only for the native picker.*
   Item 18: control height unchanged (32px md; density is the UI-scale axis).
 
 ## Job and boundaries
@@ -29,7 +31,7 @@ options are out of scope (Menu, a combobox).
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | variant | outline (default), soft | Soft is the flat filled field shared with Input, Textarea and NumberField, so a Panel holds one field style (third pass) | Figma's soft inspector fields; gallery Variant / soft |
-| size | sm, md (default), lg | Control tiers | UUI sm/md/lg; Notion 28, ChatGPT 36, Figma 24 |
+| size | sm, md (default), lg; in a Toolbar with no `size`, the toolbar's (`ToolbarSize` context, `forms.tsx:42`) | Control tiers | UUI sm/md/lg; Notion 28, ChatGPT 36, Figma 24 |
 | state | invalid, success, warning, disabled | Validation and native disabled | UUI (disabled) |
 | composition | option groups | Native `optgroup` headings | Native |
 | boolean | fullWidth | Layout | — |
@@ -65,9 +67,10 @@ Product triggers (node numbers from the captures):
 ```
 chatgpt  button  36px pill, padding 0 12, gap 4, fill rgb(243) (hover 5% black), 1px 10% ring
 notion   div[role=button]  28px, radius 6, no chrome; text span; 14px chevron svg, margin-start 4
-area     select.area-select  owns: height, border, radius, fill, focus (no resting shadow, audit B-2); chevron = background image
+area     select.area-select  owns: height, border, radius, fill, focus (no resting shadow, audit B-2); chevron = ::picker-icon mask (base-select) or #888 background image (native picker)
   picker ::picker(select)   4px below, padding 4, radius 12, bg-surface, decorative border, floating lift (--area-shadow-float)
-  option option             min 32, padding 6 8, radius 8, 2px apart, icon-to-label gap-row 12, ::checkmark at the end
+  option option             32 at every trigger size, inline 11.03 start / 8 end, radius 8, 2px apart, gap-row 12, ::checkmark (Area check mask) at the end
+  group  optgroup           label row 32, 12/16 muted; options inside reset to the row type
 ```
 
 Insets (`inset.css:120-125`): text start (H − 1cap) / 2 − 1 = 10.03 at md; chevron inset
@@ -97,18 +100,18 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| trigger · chrome | Input's: 32 / 28 / 40, radius per tier 8 / 6 / 10 (`navigation.css:231`, `:310-312`), `input-edge`, `bg-surface`, `shadow-1` | Peer: [Input](input.md); Figma's outline selects (1px rgb(230), white) | ChatGPT 36 pill with a fill; Figma 24, radius 5; no product select has a shadow; kept with Input (Settled questions 2) |
+| trigger · chrome | Input's: 32 / 28 / 40, radius per tier 8 / 6 / 10 (`navigation.css:231`, `:310-312`), `input-edge`, `bg-surface`, no shadow (since 2026-09-29, audit B-2) | Peer: [Input](input.md); Figma's outline selects (1px rgb(230), white) | ChatGPT 36 pill with a fill; Figma 24, radius 5; no product select has a shadow (was `shadow-1`, kept with Input until both dropped it) |
 | trigger · soft | **`input-bg-soft` fill, transparent edge, no shadow; hover edge `input-edge`** (`.area-select--soft`, `navigation.css:250-255`); `variant` in the manifest (`manifest.ts:206, 211`) and React (`forms.tsx:12, 43`) | Third pass: the one field without soft, so a Panel mixed two field styles; peer Input soft (`input.css:52-57`) | — |
-| trigger · chevron | 16px, 1.5 stroke, `#888`, 8px from the outer end | Notion rgb(142,139,134) 8px from the end; ChatGPT 16px rgb(143); UUI 16px; second pass item 10 | A literal in a data URI (`navigation.css:237`), not a role; Figma 50–90% black |
+| trigger · chevron | 16px, 8px from the outer end. With `appearance: base-select`: the Area `chevron-down` glyph (1.125 weight) as a `::picker-icon` mask in `input-icon` ink, `fg-disabled` when disabled (`navigation.css:326-338`). Native picker only: the #888 1.5-stroke data URI (`navigation.css:251`) | Notion rgb(142,139,134) 8px from the end; ChatGPT 16px rgb(143); UUI 16px; audit B-3 B (owner) | The #888 literal stays where the browser draws the picker; Figma 50–90% black |
 | trigger · text | 14/20 400 `fg-default`, 11.03 from the edge | Notion 14 400, ChatGPT 14/18 400 | Notion's permission select uses muted ink as an inline trigger; Figma 11/16 450 |
-| picker · offset | 4px below; flips above when out of room (`position-try-fallbacks: flip-block`) | Audit B-5 (owner 2026-09-30): one rule set with Combobox; UUI 4px offset | Was no flip (pre-09-24 decision) |
-| picker · width | at least the field and Menu's 224 (`max(anchor-size(self-inline), 224)`) | Audit B-5: Combobox's list | Was the field's width: a 96px mode Select opened a 96px list |
-| picker · height | at most **324** | Audit B-5: Figma's font list (Combobox) | Was 288 |
+| picker · offset | 4 from the field, below; `position-try-fallbacks: flip-block` with `position-try-order: normal`, so it flips only when below doesn't fit (`navigation.css:347-348`) | Audit B-5 B (owner 2026-09-30): Combobox list rules; UUI 4px offset | Was no flip (pre-2026-09-24 owner decision, superseded). Chrome's UA default (`most-block-size`) opened it on the roomier side |
+| picker · size | min width max(trigger, 224); max height min(324, 100%), then scrolls | Combobox list (Menu's 224; Figma's 324 font list) | Was the trigger's width and at most 288 |
 | picker · surface | padding 4, `radius-container` 12, `border-decorative`, `bg-surface` | Peer: Menu (4px inset) | UUI radius 8 |
 | picker · lift | `--area-shadow-float`: `0 20px 24px` + `0 5px 8px` at half strength, `shadow-color` (`navigation.css:334`); `none` under the Flat preset | Audit "Floating lift" (Notion popover; Menu, Popover) | Was `shadow-2`. A Surface axis role since audit S10 |
-| option · row | min 32, padding 6 8, radius `radius-row` 8, 2px apart; icon-to-label gap `--area-gap-row` 12 (`navigation.css:342`), labels at 36 as Menu's | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6 |
-| option · hover / focus | `bg-component-hover` #f3, no ring | Audit row-plate rule; B-5: one focus paint with Menu and Combobox rows | Keyboard focus drew a 2px inset ring as well |
-| option · checked | `bg-component-active` #eee; check at the end in `currentColor` | Audit: selection one step above hover | Figma's check sits before the label; UUI one fill for both |
+| option · row | Menu's row (audit B-4): 32 at every trigger size; text start on the inset contract (32 − 1cap) / 2 ≈ 11 (11.03 measured live); check edge 8 from the end; gap `--area-gap-row` 12; corner min(max(0, `radius-container` − 4), 32 × cap) = 8 at Standard (measured); 2px apart (`navigation.css:356-378`) | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6. Was min 32, padding 6 8, radius `radius-row` |
+| optgroup · label | 32 row, 12/16 `fg-muted`, regular weight (`navigation.css:403-412`) | Peer: Menu group label | — |
+| option · hover / focus | `bg-component-hover` #f3; keyboard focus is the plate alone, as Menu and Combobox rows | Audit row-plate rule; audit B-5 | Was the plate plus a 2px inset focus ring |
+| option · checked | `bg-component-active` #eee; the Area `check` glyph (1.125 weight) as a `::checkmark` mask at the end in `currentColor` (`navigation.css:391-402`) | Audit: selection one step above hover | Figma's check sits before the label; UUI one fill for both |
 | disabled | field paint only (`navigation.css:281-287`) | Audit "Disabled" rule for text fields | Was field paint and 50% opacity |
 
 ## States
@@ -117,16 +120,17 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 |---|---|---|
 | hover | border → `border-subtle` #d4d4d4; ink fixed | `navigation.css:247` |
 | focus | border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo | `navigation.css:249-254`; audit S1, as [input.md](input.md) |
-| invalid / success / warning | border and halo in the tone colour; `aria-invalid` or `data-*` | `area--error`, `area--success`, `area--warning` |
-| disabled | fill #f7, `border-faint`, ink `fg-disabled` rgb(164); no opacity | `area--disabled` |
+| invalid / success / warning | border and halo in the tone colour; `aria-invalid` or `data-*`; forced colours draw invalid (`aria-invalid` or `data-invalid`) dashed (`forced-colors.css`) | `area--error`, `area--success`, `area--warning` |
+| placeholder | a chosen empty-value option (`option:checked[value=""]`) is a placeholder: the trigger takes `input-placeholder` ink, as Input's (`navigation.css:320-321`; audit B-19 B, owner 2026-09-30) | Was default ink, read as a chosen value |
+| disabled | fill #f7, `border-faint`, ink and chevron `fg-disabled` rgb(164); no opacity | `area--disabled`; `navigation.css:338` |
 | option hover / checked / disabled | #f3 / #eee / `fg-disabled` | `navigation.css:335-338`; `area--default` node 1 |
 
 ## Behavior and accessibility
 
 Native `<select>`, ref forwarded (`forms.tsx:21-48`); validation props mirror Input.
-Keyboard, typeahead and dismissal are the browser's. Option focus is the hover plate, as a
-Menu or Combobox row (audit B-5). The picker is the one anchored surface the shared React
-engine (audit S16) doesn't place: the platform owns it, so its rules mirror Combobox's in CSS. RTL moves the chevron (`navigation.css:243`). Notion's inline trigger is a
+Keyboard, typeahead and dismissal are the browser's. Option focus is the hover plate alone
+(audit B-5; the 2px inset ring was removed). The browser anchors the native picker; it is the
+one anchored surface outside the shared JS engine ([overlay.md](overlay.md)). RTL moves the chevron (`navigation.css:243`). Notion's inline trigger is a
 `div role="button" aria-haspopup="dialog"`, not a select; Area keeps the native element.
 
 ## Peers and consistency
@@ -195,3 +199,9 @@ select and Figma's filter, size, zoom and format selects. Build and test results
 - 2026-09-30 · audit S4 (owner) → trigger radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `navigation.css:231`, `:310-312`); was 8 at every size.
 - 2026-09-30 · audit S10, S11a (owner) → the picker reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat; `navigation.css:334`); option icon-to-label gap is `--area-gap-row` 12 (was 8), labels at 36 as Menu's (`navigation.css:342`).
 - 2026-09-30 · audit S13, S14 (owner) → Select keeps the plate plus the check; Menu rows of commands and choices now show the check only, and Combobox matches Select (peer rows). The density gap moved to 6 at sm/md/lg, but the trigger sets `--_gap` without reading it (navigation.css:216, :311-313), so nothing visible changes.
+- 2026-09-30 · audit B-5 B (owner) → the native picker follows the Combobox list: 4 from the field, `flip-block`, min width max(trigger, 224), max height min(324, 100%); option focus is the plate alone (`navigation.css` `::picker(select)`). Replaces the no-flip decision.
+- 2026-10-01 · audit A-7 → in a Toolbar a Select with no `size` takes the toolbar's through the `ToolbarSize` context → forms.tsx:42, toolbar-context.ts.
+- 2026-10-01 · audit B-3 (owner pick B) → with `appearance: base-select` the `::picker-icon` and option `::checkmark` are the Area chevron-down and check glyphs as masks (1.125 weight) in `input-icon` ink, disabled ink when disabled; the #888 data URI remains for the native picker only. The picker sets `position-try-order: normal`, so it opens below unless it doesn't fit → navigation.css:322-348, :391-402.
+- 2026-10-01 · audit B-4 → options are Menu rows: 32 at every trigger size, text start (32 − 1cap) / 2 (11.03 measured live), check edge 8 from the end, 12 gap, corner min(max(0, radius-container − 4), 32 × cap) (8 at Standard, measured); optgroup labels 12/16 muted → navigation.css:353-412.
+- 2026-10-01 · audit B-11 → forced colours draw an invalid Select (`data-invalid` too) dashed → forced-colors.css.
+- 2026-10-01 · audit B-19 (owner pick B) → a chosen empty-value option renders in placeholder ink → navigation.css:320-321.

@@ -4,7 +4,7 @@
     /* Size scale 16 / 20 / 24 (sm / md / lg), shared with Kbd (16/20) and the Indicator
        count (16). The base rule is md, the default: caption text 12/16, so a label sits a
        step below the text it annotates (owner 2026-09-27). See docs/specs/badge.md. */
-    --_height: var(--area-mark-md); /* spec: 20, the mark ladder role (audit S21a) */
+    --_height: var(--area-mark-md); /* spec */
     --_icon: var(--area-icon-md); --_media: var(--area-space-16); /* spec */
     --_gap: var(--area-space-4); --_gutter: var(--area-space-8); /* spec */
     --_icon-gutter: var(--area-space-6); --_media-gutter: var(--area-space-2); --_media-gap: var(--area-space-4); /* spec */
@@ -15,11 +15,12 @@
        in dark), so a Badge stays visible on a hovered or selected row; hover and press lay the
        bg-hover / bg-active wash over it (1 - 0.94 x 0.95, about 10.7%). Was bg-component #f7. */
     --_surface: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); --_surface-hover: light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226)); /* spec */
-    --_tone-fg: var(--area-fg-default); --_on-solid: var(--area-fg-on-neutral);
+    /* The bare block is the neutral default React renders: muted ink (audit C-17). */
+    --_tone-fg: var(--area-fg-muted); --_on-solid: var(--area-fg-on-neutral);
     --_line: var(--area-edge-control); --_line-hover: var(--area-edge-control-hover);
     --_bg: var(--_surface); --_bg-hover: var(--_surface-hover); --_fg: var(--_tone-fg);
     --_border: transparent; --_border-hover: transparent;
-    --_dot: var(--area-space-6); --_dot-color: var(--_solid);
+    --_dot-color: var(--_solid);
     --_tracking: normal;
     display: inline-flex; align-items: center; justify-content: center;
     box-sizing: border-box; vertical-align: baseline; flex-shrink: 0;
@@ -57,7 +58,6 @@
     --_solid-hover: var(--area-neutral-solid-hover);
     --_surface: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); /* spec (audit S6a) */
     --_surface-hover: light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226)); /* spec */
-    --_surface-active: light-dark(rgb(0 0 0 / 0.123), rgb(255 255 255 / 0.279)); /* spec */
     /*
      * A step lighter than the control border, at rest and on hover alike.
      *
@@ -79,7 +79,6 @@
     --_solid-hover: var(--area-info-solid-hover);
     --_surface: var(--area-info-surface);
     --_surface-hover: var(--area-info-surface-hover);
-    --_surface-active: var(--area-info-surface-active);
     --_line: var(--area-info-border);
     --_line-hover: var(--area-info-border-strong);
     --_tone-fg: var(--area-fg-info);
@@ -91,7 +90,6 @@
     --_solid-hover: var(--area-success-solid-hover);
     --_surface: var(--area-success-surface);
     --_surface-hover: var(--area-success-surface-hover);
-    --_surface-active: var(--area-success-surface-active);
     --_line: var(--area-success-border);
     --_line-hover: var(--area-success-border-strong);
     --_tone-fg: var(--area-fg-success);
@@ -103,7 +101,6 @@
     --_solid-hover: var(--area-warning-solid-hover);
     --_surface: var(--area-warning-surface);
     --_surface-hover: var(--area-warning-surface-hover);
-    --_surface-active: var(--area-warning-surface-active);
     --_line: var(--area-warning-border);
     --_line-hover: var(--area-warning-border-strong);
     --_tone-fg: var(--area-fg-warning);
@@ -115,7 +112,6 @@
     --_solid-hover: var(--area-caution-solid-hover);
     --_surface: var(--area-caution-surface);
     --_surface-hover: var(--area-caution-surface-hover);
-    --_surface-active: var(--area-caution-surface-active);
     --_line: var(--area-caution-border);
     --_line-hover: var(--area-caution-border-strong);
     --_tone-fg: var(--area-fg-caution);
@@ -127,7 +123,6 @@
     --_solid-hover: var(--area-danger-solid-hover);
     --_surface: var(--area-danger-surface);
     --_surface-hover: var(--area-danger-surface-hover);
-    --_surface-active: var(--area-danger-surface-active);
     --_line: var(--area-danger-border);
     --_line-hover: var(--area-danger-border-strong);
     --_tone-fg: var(--area-fg-danger);
@@ -140,7 +135,6 @@
     --_solid-hover: var(--area-discovery-solid-hover);
     --_surface: var(--area-discovery-surface);
     --_surface-hover: var(--area-discovery-surface-hover);
-    --_surface-active: var(--area-discovery-surface-active);
     --_line: var(--area-discovery-border);
     --_line-hover: var(--area-discovery-border-strong);
     --_tone-fg: var(--area-fg-discovery);
@@ -160,7 +154,6 @@
   /* Transparent inverse treatments use inverse ink (the background endpoint). */
   .area-badge--inverse.area-badge--outline { --_tone-fg: var(--area-bg-inverse); }
   .area-badge--dot.area-badge--inverse { --_dot-color: var(--_fg); }
-  .area-badge--pill { border-radius: var(--area-radius-full); }
   .area-badge--icon-only, .area-badge--dot-only { inline-size: var(--_height); padding-inline: 0; }
   .area-badge--dot-only { --_bg: transparent; --_bg-hover: transparent; --_border: transparent; }
   .area-badge--dot-only .area-badge__dot { --_dot-color: var(--_tone-fg); }
@@ -190,7 +183,13 @@
   .area-badge:has(> .area-badge__dismiss) { gap: var(--area-space-2); }
   .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; }
   .area-badge__dismiss > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
-  /* The pill close recipe (audit S9): a concentric circle hovering to 12% of the ink. */
+  /* The visible box stays the badge's media square; an invisible 24px target (44 on coarse
+     pointers) centred on it meets WCAG 2.5.8, as Badge links already do (audit C-5). */
+  .area-badge__dismiss { position: relative; }
+  .area-badge__dismiss::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; inline-size: var(--area-space-24); block-size: var(--area-space-24); }
+  @media (pointer: coarse) { .area-badge__dismiss::after { inline-size: calc(var(--area-space-40) + var(--area-space-4)); block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
+
+ /* The pill close recipe (audit S9): a concentric circle hovering to 12% of the ink. */
   @media (hover: hover) { .area-badge__dismiss:hover { background: color-mix(in srgb, currentColor 12%, transparent); } }
   .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* spec: Notion's multi-select cell, 6 between lines and 8 between tags
@@ -201,13 +200,25 @@
   .area-badge-group__item { display: inline-flex; flex-shrink: 0; }
   .area-badge-group__overflow-trigger[hidden] { display: none; }
   .area-badge-group__overflow-trigger { flex-shrink: 0; }
-  /* One line of hidden badges where they fit: Popover's own 240px width wrapped three. Placed by
-     the shared overlay engine (BadgeGroup.tsx, audit S16); scrolls past the room it has. */
-  .area-popover.area-badge-group__overflow-content { inline-size: max-content; max-inline-size: calc(100vw - var(--area-space-16)); max-block-size: var(--area-overlay-available-height, calc(100vh - var(--area-space-16))); overflow: auto; }
+  /* One line of hidden badges where they fit: Popover's own 240px width wrapped three. */
+  .area-popover.area-badge-group__overflow-content { margin: auto; inline-size: max-content; max-inline-size: calc(100vw - var(--area-space-32)); max-block-size: calc(100% - var(--area-space-32)); overflow: auto; }
   .area-badge-group__overflow-content:popover-open { display: flex; flex-wrap: wrap; gap: var(--area-space-6) var(--area-space-8); /* spec: as the group */ }
+  /* Native top-layer overflow stays attached to its own trigger where anchors exist. */
+  @supports (anchor-name: --area-anchor) {
+    .area-badge-group__overflow-trigger { anchor-name: var(--_overflow-anchor); }
+    .area-badge-group__overflow-content {
+      position-anchor: var(--_overflow-anchor);
+      inset: auto;
+      inset-block-start: calc(anchor(bottom) + var(--area-space-4));
+      inset-inline-start: anchor(start);
+      margin: 0;
+      position-try-fallbacks: flip-block, flip-inline;
+    }
+  }
   @media (forced-colors: active) {
     .area-badge { background: Canvas; color: CanvasText; border-color: CanvasText; }
-    .area-badge__dot { background: CanvasText; }
+    /* The disc is the ::before; painting the slot drew a square (audit C-28). */
+    .area-badge__dot::before { forced-color-adjust: none; background: CanvasText; }
     @media (hover: hover) { :is(a, button).area-badge:hover { background: Canvas; border-color: LinkText; } }
     :is(a, button).area-badge:focus-visible { outline-color: Highlight; }
   }

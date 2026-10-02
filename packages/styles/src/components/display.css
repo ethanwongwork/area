@@ -116,12 +116,15 @@
     inline-size: 1px;
     block-size: auto;
     align-self: stretch;
+    /* Outside a flex row there is nothing to stretch to: keep a line's height (audit G-28). */
+    min-block-size: 1lh;
   }
 
   .area-separator--inset.area-separator--horizontal {
     inline-size: auto;
     align-self: stretch;
-    margin-inline: var(--area-space-16);
+    /* One inset hook for both orientations (audit G-28; horizontal was a fixed 16). */
+    margin-inline: var(--area-separator-inset, var(--area-space-16));
   }
 
   .area-separator--inset.area-separator--vertical {
@@ -158,8 +161,9 @@
     background-image: linear-gradient(90deg, transparent, var(--_skeleton-band), transparent);
     background-size: 200% 100%;
     background-repeat: no-repeat;
-    /* spec: 3s linear, ChatGPT's and Figma's shimmer. */
-    animation: area-shimmer 3s linear infinite; /* spec */
+    /* spec: 3s linear, ChatGPT's and Figma's shimmer: 12 x the slow duration (250ms), so the
+       loop stretches with the expressive preset as Indicator's pulse does (audit H-20). */
+    animation: area-shimmer calc(var(--area-duration-slow) * 12) linear infinite; /* spec */
   }
 
   /* spec: a block fills the width and is 16 tall until the host sizes it (Primer 1rem, Fluent
@@ -193,9 +197,13 @@
    * line is 65% wide, at least 50px (Primer SkeletonText; antd 61%, Polaris and Chakra 80%).
    */
   .area-skeleton__lines { display: flex; flex-direction: column; align-items: stretch; min-inline-size: 0; }
+  .area-skeleton__lines {
+    --_last-line: 65%; /* spec */
+    --_last-line-min: 50px; /* spec */
+  }
   .area-skeleton__lines > .area-skeleton--text:last-child:not(:first-child) {
-    inline-size: 65%; /* spec */
-    min-inline-size: 50px; /* spec */
+    inline-size: var(--_last-line);
+    min-inline-size: var(--_last-line-min);
   }
 
   @keyframes area-shimmer {
@@ -238,15 +246,15 @@
     background: var(--_indicator);
     -webkit-mask: var(--_arc) center / 100% 100% no-repeat;
     mask: var(--_arc) center / 100% 100% no-repeat;
-    /* spec: 1s a turn (Untitled, Primer, shadcn, Spectrum; owner 2026-09-27). */
-    animation: area-spin 1s linear infinite; /* spec */
+    /* spec: 1s a turn (Untitled, Primer, shadcn, Spectrum; owner 2026-09-27): 4 x the slow
+       duration, so it follows the motion preset (audit H-20). */
+    animation: area-spin calc(var(--area-duration-slow) * 4) linear infinite; /* spec */
   }
 
   /* Inside a Button the spinner takes the label's ink, so it shows on any fill: a neutral
-     spinner on a neutral solid button was the fill's own colour and disappeared. */
-  .area-button .area-spinner { --_indicator: currentColor; }
-  /* It fills the Button's icon box at every tier (audit A-11: a fixed 16 overflowed a 12 box). */
-  .area-button__icon > .area-spinner { --_size: 100%; }
+     spinner on a neutral solid button was the fill's own colour and disappeared. It fills the
+     tier's icon box (12/16/20 in compact sm/default/lg) rather than a fixed 16. */
+  .area-button .area-spinner { --_indicator: currentColor; --_size: var(--_icon); }
 
   .area-spinner--sm { --_size: var(--area-space-12); }
   .area-spinner--md { --_size: var(--area-space-16); }
@@ -285,7 +293,7 @@
    */
   .area-progress[data-indeterminate] .area-progress__bar {
     inline-size: 35%;
-    animation: area-progress-indeterminate 1.8s linear infinite;
+    animation: area-progress-indeterminate calc(var(--area-duration-base) * 12) linear infinite; /* spec: 1.8s, 12 x the base duration (audit H-20) */
   }
 
   @keyframes area-progress-indeterminate {
@@ -300,8 +308,8 @@
   }
 
   /* The motion axis stops the loops exactly as the reduced-motion preference does (Switch
-     already follows it); the animations are literal durations, so the axis's zeroed tokens
-     alone would not reach them. */
+     already follows it). The loops scale from the duration tokens, but a zero-length infinite
+     loop is not a stop the stylesheet should rely on, so the axis names them here. */
   [data-area-motion="none"] :is(.area-skeleton, .area-spinner::before, .area-progress[data-indeterminate] .area-progress__bar) { animation: none; }
   [data-area-motion="none"] .area-skeleton { background-image: none; }
   /* A stopped 35% segment reads as 35% done (audit E-9). With motion off, the indeterminate
@@ -321,7 +329,8 @@
     .area-progress[data-indeterminate] .area-progress__bar { animation-duration: 5.4s; } /* spec: 3 x 1.8s */
     /* spec: a still quarter arc reads as a frozen screen, so the spinner slows instead of
        stopping (Fluent 1.8s; Carbon and Primer keep turning). The motion axis still stops it. */
-    .area-spinner::before { animation-duration: 1.8s; } /* spec */
+    .area-spinner { --_reduced-turn: 1.8s; /* spec */ }
+    .area-spinner::before { animation-duration: var(--_reduced-turn); }
     .area-skeleton { background-image: none; }
   }
 }
@@ -344,7 +353,7 @@
     outline: none;
     color: transparent;
     pointer-events: none;
-    animation: area-shimmer 3s linear infinite; /* spec: as the base skeleton */
+    animation: area-shimmer calc(var(--area-duration-slow) * 12) linear infinite; /* spec: as the base skeleton */
   }
   /* What the element holds keeps its space but does not paint. */
   .area-skeleton--wrap > * > *,

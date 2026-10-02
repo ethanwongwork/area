@@ -1,7 +1,7 @@
 # Separator spec
 
-**Status:** accepted (Complete in `component-status.mjs`) · 2026-09-26: the second pass moved
-the rule to `border-divider`; the owner has not re-reviewed it
+**Status:** accepted (Complete in `component-status.mjs`; re-reviewed in batch 22, 2026-09-28) ·
+2026-09-26: the second pass moved the rule to `border-divider`
 **Captures:** `docs/research/captures/separator/`; product rules in
 `menu/notion--page-menu--open--light`, `popover/notion--share-popover--open--light`,
 `card/figma--file-card--rest--light`, `baseline/chatgpt--menu--rest--light`,
@@ -77,8 +77,8 @@ Read from the nodes; composites on white are arithmetic, not captured.
 | thickness | 1px (display.css:115, 120) | Every product and Untitled | — |
 | colour | **`border-divider` #e2e2e2** (display.css:108) | Second pass: rules need a step more than a seam; ChatGPT ≈ #e6, Figma #e6, Untitled #e5 | Was `border-decorative` #f3f3f3, lighter than every reference. #e2 is the nearest rung to #e5–#e6 (#ee is twice as far); kept (third pass) |
 | spacing normal | `space-8` margin (display.css:137) | ChatGPT menu separator: 8 above and below | Notion's page menu uses 4 |
-| horizontal inset | `space-16` each side (display.css:128) | ChatGPT settings card and Notion Share popover agree on 16 | Notion page menu 12, ChatGPT menu 8 (from the item plates) |
-| vertical inset | `--area-separator-inset`, default `space-8` (display.css:133) | Toolbar composition | Horizontal inset has no matching hook |
+| horizontal inset | `--area-separator-inset`, default `space-16` each side (display.css:126-127; audit G-28: one hook for both orientations, was a fixed 16) | ChatGPT settings card and Notion Share popover agree on 16 | Notion page menu 12, ChatGPT menu 8 (from the item plates) |
+| vertical inset | `--area-separator-inset`, default `space-8` (display.css:132) | Toolbar composition | — |
 | spacing default | none | Rule inside a padded container | — |
 
 **Settled in the third pass (value kept; evidence corrected):** Notion's captured rules are
@@ -95,7 +95,10 @@ None; Separator is static.
 
 ## Behavior and accessibility
 
-`role="separator"` with `aria-orientation` (primitives.tsx:245-258). Not focusable. Forced
+`role="separator"` with `aria-orientation`; `decorative` makes it a visual rule only,
+`role="none"` with no orientation, as Radix's `decorative` (primitives.tsx:325-344, audit G-28).
+Not focusable. A vertical rule outside a flex row keeps one line's height (`min-block-size: 1lh`,
+display.css:119-120). Forced
 colours: a background-painted rule may disappear in forced colours (no rule in display.css;
 unverified).
 
@@ -103,12 +106,14 @@ unverified).
 
 | Peer | Shared role | Area value in peer | Separator | Match / reason |
 |---|---|---|---|---|
-| Menu separator | list divider | 1px `border-divider`, 8px block and inline margins (surface.css:586-594) | spacing normal: 8px block | match on paint; Notion's menu uses 4 / 12 |
-| Nav separator | list divider | 1px `border-divider`, 8px block (nav.css:227-231) | same | match |
-| Toolbar separator | vertical rule | 1px `border-divider`, icon-height (toolbar.css:41-42) | vertical inset 8 | same paint; the length rule differs |
-| Table, Panel, Code block, Tabs track, ButtonGroup | content rules | `border-divider` (navigation.css:75, 152, 193; panel.css:68, 121, 163; code.css:39, 200, 443; button-group.css:46) | same | match (second pass) |
+| Menu separator | list divider | 1px `border-decorative` #f3, 2px block and 8px inline margins (surface.css:1112-1121) | spacing normal: 8px block | lighter by design: a rule inside a floating surface takes the seam role (owner 09-27); Notion's menu uses 4 / 12 |
+| Nav separator | list divider | 1px `border-divider`, 8px block (nav.css:222-226) | same | match |
+| Toolbar separator | vertical rule | 1px `border-decorative`, command height (toolbar.css:66) | vertical inset 8 | lighter by design (owner 2026-09-27: "a rule is never heavier than the surface it divides"); the length rule differs |
+| Table rows and shell, Tabs track | content rules | `border-divider` (navigation.css:77-78, 129, 157, 210) | same | match |
+| Panel, Code block rules | content rules | `border-decorative` (panel.css:93, 153, 294; code.css:39, 161, 416) | #e2e2e2 | lighter by design: a rule is never heavier than the container it divides |
+| ButtonGroup | seam | `edge-control` (button-group.css:11) | #e2e2e2 | differs: a control seam, not a rule |
 | Popover, Dialog | container seam | `border-decorative` #f3f3f3 | #e2e2e2 | differs by design: a seam has fill and lift to help it |
-| Card | edge | `border-divider` #e2e2e2 (third pass; Figma's card seam #e6) | #e2e2e2 | match: a card has the page's fill, so its edge stands alone |
+| Card, Composer, Code block shell | edge | `neutral-100` #ee (surface.css:59; code.css:144; was `border-divider` #e2 in the third pass) | #e2e2e2 | differs: Card's lighter edge, carried by its halo (owner; audit S7) |
 
 ## Visual pass
 
@@ -141,3 +146,8 @@ and test results are in the [cohesion audit](../research/cohesion-audit.md#verif
 - 2026-09-27 · third pass → open question settled, value kept: Notion's rules are 7% (#f0),
   not 11%; `border-divider` #e2 stays the nearest rung to #e5–#e6 →
   [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-27/28 · owner → Toolbar, Menu, Panel and Code block rules returned to
+  `border-decorative` ("a rule is never heavier than the surface it divides"); Card's edge moved
+  to neutral 100. Separator, Nav, Table and Tabs keep `border-divider`; peers table updated
+  (audit G-8).
+- 2026-10-01 · audit G-28 → `decorative` prop (`role="none"`); a vertical rule keeps a line's height outside a flex row; `--area-separator-inset` drives both orientations (horizontal was a fixed 16) → primitives.tsx:325-344, display.css:119-133.

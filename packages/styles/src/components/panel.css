@@ -22,6 +22,9 @@
        bar are rows (Figma's header is 40: a 24 button with 8 above and below; VS Code's pane header a
        22 row) whose button has one field gap above and below (8 / 12), the title centred on it. */
     --_inset: var(--area-space-16);
+    /* Published under the panel prefix for nested parts (PropertyList), so a Popover's or a
+       ColorPicker's own --_inset can't leak into them (audit F-27). */
+    --_panel-inset: var(--_inset);
     /* spec (owner, 2026-09-28: "shouldn't there be differences in text size and gaps between medium and
        small?"): the panel's own text and gaps step with the tier; controls keep their tier's text (14/20
        at sm and md, the control scale). Published as --_panel-* so BoxField and PropertyList rows inside
@@ -338,9 +341,10 @@
 
   /*
    * A panel's tier is its inset, not a control height -- the controls inside carry their
-   * own. It steps on the *gutter* ramp, which is the density axis's own inset ramp, so a
-   * panel tightens with the system exactly as the controls in it do. The spacing ramp is
-   * flat under density and would have left a compact panel padded like a default one.
+   * own. The insets (12 / 16) and gaps (8 / 12) are fixed spacing steps: they do not follow
+   * density, so under compact the controls shrink and the insets stay. The compact values
+   * are set in the density pass (audit F-26 B, owner 2026-09-30; this comment used to say
+   * the tiers stepped on the gutter ramp, which the code never did).
    */
   /* spec (inspector): the row (heading height, action column) follows the panel's tier. Two
    * tiers (owner, 2026-09-27): sm, Figma's inspector density, and md, the default. 24px rows
@@ -353,4 +357,11 @@
     --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
   }
   .area-panel--md { --_inset: var(--area-space-16); --_row: var(--area-control-md); }
+}
+
+@layer area.components {
+  /* A collapsed section's chevron points into the reading direction (audit F-34). */
+  .area-panel__chevron:dir(rtl) > svg { scale: -1 1; }
+  /* Reveal-on-hover fades on the one shared timing (audit F-38). */
+  .area-panel__chevron { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
 }

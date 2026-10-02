@@ -38,4 +38,12 @@
   .area-breadcrumb__chevron { display: block; inline-size: var(--area-space-8); block-size: var(--area-space-8); border-block-start: var(--area-stroke-width) solid currentColor; border-inline-end: var(--area-stroke-width) solid currentColor; transform: rotate(45deg); }
   [dir="rtl"] .area-breadcrumb__chevron { transform: rotate(-135deg); }
   .area-breadcrumb__ellipsis { display: inline-grid; place-items: center; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
+  /* With hidden pages to list, the marker is a menu button and takes the link's plate and ring (audit D-19). */
+  button.area-breadcrumb__ellipsis { position: relative; isolation: isolate; padding: 0; border: 0; background: none; font: inherit; cursor: pointer; border-radius: var(--area-radius-small); }
+  button.area-breadcrumb__ellipsis::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-small); background: transparent; transition: var(--area-transition); pointer-events: none; }
+  @media (hover: hover) { button.area-breadcrumb__ellipsis:hover::before { background: var(--area-bg-component-hover); } }
+  button.area-breadcrumb__ellipsis[aria-expanded="true"]::before { background: var(--area-bg-component-hover); }
+  button.area-breadcrumb__ellipsis:focus-visible { outline: none; }
+  button.area-breadcrumb__ellipsis:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  a.area-menu__item { text-decoration: none; }
 }

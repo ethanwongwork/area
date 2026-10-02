@@ -35,15 +35,17 @@ export const Nav = /* @__PURE__ */ forwardRef<HTMLElement, NavProps>(function Na
 export interface NavGroupProps extends HTMLAttributes<HTMLDivElement> {
   /** The heading above the run. Omit for an unlabelled group. */
   label?: ReactNode;
+  /** An expandable item's children: the rows step in one Tree view level (audit D-20). */
+  nested?: boolean;
 }
 
 export const NavGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, NavGroupProps>(function NavGroup(
-  { label, className, children, ...rest },
+  { label, nested, className, children, ...rest },
   ref,
 ) {
   const labelId = useId();
   return (
-    <div ref={ref} className={cx("area-nav__group", className)} role={label ? "group" : undefined} aria-labelledby={label ? labelId : undefined} {...rest}>
+    <div ref={ref} className={cx("area-nav__group", nested && "area-nav__group--nested", className)} role={label ? "group" : undefined} aria-labelledby={label ? labelId : undefined} {...rest}>
       {label ? <div className="area-nav__label" id={labelId}><span>{label}</span></div> : null}
       {children}
     </div>
@@ -76,6 +78,8 @@ export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProp
       aria-current={current ? "page" : undefined}
       data-disabled={disabled ? "" : undefined}
       aria-disabled={disabled || undefined}
+      // Without its href a disabled item keeps the link role, so aria-disabled means something (audit D-29).
+      role={disabled ? "link" : undefined}
       href={disabled ? undefined : href}
       tabIndex={disabled ? -1 : tabIndex}
       onClick={disabled ? (event) => { event.preventDefault(); } : onClick}

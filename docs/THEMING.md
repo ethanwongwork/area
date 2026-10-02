@@ -77,6 +77,13 @@ Do not register those pairs with `@property`, which could resolve and freeze the
 A computed custom property can contain `light-dark(...)`; measure painted `color`,
 `background-color`, border or shadow when checking actual color.
 
+Switching `data-area-theme` at runtime: because a pair's text is identical in both themes,
+Chromium can keep a cached painted colour on some descendants after `color-scheme` flips
+(seen 2026-10-01: Nav, Menu and Tabs labels kept the light ink until the next restyle).
+Force one synchronous restyle after the switch, as the docs Customize panel does:
+`root.style.display = "none"; void root.offsetHeight; root.style.display = "";`. Nothing
+paints in between, so there is no flash. Setting the theme before first paint needs nothing.
+
 Geometric derivations are re-emitted on scope-bearing elements. A derived property that
 is resolved only at the root can freeze the wrong density/radius inputs for descendants.
 A theme scope selects tokens, not layout or component behavior. Custom HTML must consume

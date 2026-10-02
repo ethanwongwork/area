@@ -14,14 +14,16 @@ The single executable status source is
 sidebar read it. Complete labels use green-500; unrefined labels use red-500/red-25 and
 specimen tiles use a red-500 edge while retaining the active themed surface. Explicit
 words accompany the colors in the gallery.
-Compound parts follow their parent family. Token is a compatibility composition of Code,
-not a second completed family. A green build is not a completion signal.
+Compound parts follow their parent family. Token is deprecated in favour of `<Code swatch>`
+(audit H-25 A, owner 2026-09-30; still exported so existing markup renders), not a second
+completed family. A green build is not a completion signal.
 
 The [cohesion audit](research/cohesion-audit.md) (2026-09-26) re-checked every family that
 had been accepted before the evidence process. Each now has a spec. The families it changed
 (Alert, Avatar, Button, Card, Checkbox, Chip, Code block, Input, Menu, Nav, Popover,
-Progress, Radio, Segmented, Select, Skeleton, Spinner, Switch, Table and Indicator) are back in review
-awaiting the owner; the rest kept their status. The gallery shows each family's variants in
+Progress, Radio, Segmented, Select, Skeleton, Spinner, Switch, Table and Indicator) went back
+to review; the owner has since approved every family in batches (2026-09-27 and 2026-09-28),
+so all 58 are Complete and `REVIEW_COMPONENTS` is empty. The gallery shows each family's variants in
 named groups (Default, Variants, Tones, Sizes, Layout, Content, States, Behavior).
 
 ## Existing library
@@ -29,16 +31,19 @@ named groups (Default, Variants, Tones, Sizes, Layout, Content, States, Behavior
 The manifest and React exports are authoritative for supported API; the gallery shows
 actual specimens. Current families include:
 
-- Actions and choices: Button, SplitButton, Checkbox/CheckboxGroup, Radio/RadioGroup, Switch,
-  Slider, Chip/ChipGroup and Segmented.
-- Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, Textarea,
-  Composer, native Select, ColorField, ColorSwatchPicker, ColorPicker and Calendar.
-- Navigation: Nav, Tabs, Menu and TreeView.
-- Breadcrumb shows linked ancestors, a current page and an optional collapsed marker; it is in review.
-- Labels and identity: Badge/BadgeGroup, Count, Indicator/IndicatorAnchor (Presence is its
-  compatibility export), Avatar, Kbd/KbdGroup and Code/Token.
-- Feedback: Alert, Toast, Tooltip, Progress, Spinner and Skeleton.
-- Structure and content: Card, Panel, Dialog, Popover, Separator, Table and CodeBlock.
+- Actions and choices: Button, ButtonGroup, SplitButton, Toolbar, Checkbox/CheckboxGroup,
+  Radio/RadioGroup, Switch, Slider/SliderRange, Chip/ChipGroup, Segmented and AlignmentPicker.
+- Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, BoxField, Textarea,
+  Composer, native Select, Combobox, ColorField, ColorSwatch, ColorSwatchPicker, ColorPicker,
+  Calendar and PropertyList.
+- Navigation and commands: Nav, Tabs, Menu, ContextMenu, CommandPalette, TreeView and
+  Breadcrumb (linked ancestors, a current page and an optional collapsed marker).
+- Labels and identity: Badge/BadgeGroup, Count, Indicator/IndicatorAnchor, Presence (the
+  status mark, audit H-25), Avatar, Kbd/KbdGroup and Code (Token is deprecated: use `<Code swatch>`).
+- Feedback: Alert (with the banner layout), Toast, Tooltip, Progress, Spinner and Skeleton.
+- Structure and content: Card, Panel (with `resizable`), Dialog, Popover, HoverCard,
+  Separator, Table and CodeBlock.
+- Conversation: Message/MessageActions, PromptSuggestions, ModelPicker and ScrollToLatest.
 
 Presentation-only or partially implemented behaviors must be stated in the component's
 page. A menu-shaped surface does not by itself implement keyboard navigation; a visual
@@ -54,12 +59,12 @@ went.
 ## Expansion inventory
 
 Catalogue research refreshed 2026-09-23 against official component catalogues. Items
-marked built are in review; the rest are proposed additions. The owner chooses what is
+marked built are Complete; the rest are proposed additions. The owner chooses what is
 built next; this list is an inventory, not an order of work.
 
 ### Inspector foundation: first priority
 
-1. **NumberField — built, in review.** Decimal and negative values, min/max/step,
+1. **NumberField — built, Complete.** Decimal and negative values, min/max/step,
    keyboard increments, optional steppers, units, locale-aware formatting, scrubbing,
    fine/coarse increments, mixed values, and commit/cancel behavior are implemented.
    Expression entry uses a bounded arithmetic parser. Native Input type=number remains
@@ -67,26 +72,28 @@ built next; this list is an inventory, not an order of work.
    [React Aria NumberField](https://react-aria.adobe.com/NumberField) supplies a strong
    behavioral baseline. [Figma's field documentation](https://help.figma.com/hc/en-us/articles/360039956914-Adjust-alignment-rotation-position-and-dimensions)
    confirms arithmetic entry and dragging a field icon to change its value.
-2. **InputGroup — built, in review.** One shell now composes independently named
+2. **InputGroup — built, Complete.** One shell now composes independently named
    controls, affixes, actions and a native mode picker. Reuse NumberField for X/Y, W/H,
    angle, opacity, gap and padding. A dimension field combines a number with a sizing
    mode such as fixed, hug or fill; these modes belong to an inspector recipe, not
    to every text input. Keep labels and keyboard stops on each independently edited value.
-3. **ButtonGroup and Toolbar — built, in review.** ButtonGroup collects independent
+3. **ButtonGroup and Toolbar — built, Complete.** ButtonGroup collects independent
    actions and toggles in one visual track. Toolbar adds command grouping, roving
    keyboard focus and native overflow disclosure. Alignment/distribution/flip buttons execute commands; flow direction
-   and mutually exclusive modes reuse Segmented. SplitButton (built, in review) joins a
+   and mutually exclusive modes reuse Segmented. SplitButton (built, Complete) joins a
    default action to a menu of related actions; it is standalone, as in Fluent, Material,
    Carbon and Atlassian ([spec](specs/split-button.md)). Button already supports iconOnly: no second
    icon-button implementation is needed. [Fluent's catalogue](https://fluent2.microsoft.design/components/web/react)
    distinguishes Toolbar, SpinButton and TagPicker from ordinary inputs.
-4. **AlignmentPicker — built, in review.** A reusable nine-position choice with spatial arrow-key navigation,
+4. **AlignmentPicker — built, Complete.** A reusable nine-position choice with spatial arrow-key navigation,
    native radio state, form submission, an accessible selected position and a visible focus indicator. Constraints and
    pinning are a separate composition because opposing anchors may be selected together.
    The single-choice contract follows the [WAI radio group pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/)
    and [Base UI radio group](https://base-ui.com/react/components/radio-group); spatial arrows follow the visible grid.
-5. **Color controls — ColorField, ColorSwatch, ColorSwatchPicker and ColorPicker built, in
-   review.** ColorField edits canonical 6/8-digit hex with draft/commit behavior. ColorSwatch
+   Backlog: a layout option that sizes the grid to the inspector layout, as Figma's 88 × 56 grid (one field
+   column by two field rows, non-square cells); the square-cell ladder stays as is (audit F-31 A, owner 2026-09-30).
+5. **Color controls — ColorField, ColorSwatch, ColorSwatchPicker and ColorPicker built,
+   Complete.** ColorField edits canonical 6/8-digit hex with draft/commit behavior. ColorSwatch
    previews solid and transparent values. ColorSwatchPicker offers labeled native radio
    choices in a row or grid. ColorPicker had a Figma pass on 2026-09-26
    ([spec](specs/color-picker.md)): a ten-row-wide surface with a square area, an eyedropper
@@ -94,44 +101,46 @@ built next; this list is an inventory, not an order of work.
    saved swatches; a second pass added spectrum/grid/slider views, the Area palette grid
    (ColorSwatchPicker `palette`), OKLCH, a contrast check with its threshold band, a
    before/after preview and a save button. Still missing against Figma: gradient stops, pattern/image/video paints,
-   blend mode, a contrast check, library colors and a popover trigger (needs overlay
-   behavior). [React Aria ColorPicker](https://react-aria.adobe.com/ColorPicker) remains the
+   blend mode, library colors and a popover trigger (overlay behavior now exists; ColorPicker
+   is not yet wired to it). [React Aria ColorPicker](https://react-aria.adobe.com/ColorPicker) remains the
    behavioral reference; a ColorWheel and per-channel sliders are optional later parts.
 6. **Inspector compositions.** PanelRow (paired fields), BoxField (linked four-value
    padding/corners, [spec](specs/box-field.md)), collapsible sections and PropertyList
    (reorderable property lists) are built and accepted; Panel `resizable`
-   ([spec](specs/resizable-panel.md)) is in review. Fill/stroke/effect rows combine a value editor with visibility, add/remove and
+   ([spec](specs/resizable-panel.md)) is accepted with Panel. Fill/stroke/effect rows combine a value editor with visibility, add/remove and
    reorder actions. Typography, shadow, layout and export editors should be recipes
    assembled from the same primitives, with their own domain validation.
-7. **Overlay behavior.** Built 2026-09-27, in review ([spec](specs/overlay.md)): a `trigger`
+7. **Overlay behavior.** Built 2026-09-27, Complete ([spec](specs/overlay.md)): a `trigger`
    on Popover, Menu or Tooltip adds anchoring with flip and shift, dismissal, focus
-   management and the menu button keyboard. Next: submenus, context menus, Select's listbox. Color and unit pickers depend
+   management and the menu button keyboard. Submenus, ContextMenu, HoverCard and Combobox's
+   listbox are built on it since; Select's custom listbox is not (Select stays native). Color and unit pickers depend
    on these behaviors. [Radix Primitives](https://www.radix-ui.com/primitives/docs/overview/introduction)
    is a useful reference for composable overlays and keyboard behavior.
 
 ### Broader coverage after the inspector foundation
 
-- **Entry and forms:** SearchField, PasswordField, Combobox/Autocomplete, MultiSelect,
+- **Entry and forms:** SearchField, PasswordField, MultiSelect (Combobox is built),
   TagPicker, editable text, OTP input, FileUpload/DropZone, Form validation and error
   summary. Reuse Input/Field for search and password anatomy; promote a wrapper when
   behavior such as reveal, clear, filtering or async suggestions is included.
-- **Date and time:** Calendar is built (in review, [spec](specs/calendar.md)): single,
+- **Date and time:** Calendar is built (Complete, [spec](specs/calendar.md)): single,
   range and multiple selection, one or two months, bounds and unavailable dates, square /
   circle / tile days, event markers and a week strip. Next:
   DateField (segmented entry), DatePicker and DateRangePicker (field + popover, after overlay
   behavior), TimeField and duration input. Keep segmented date editing distinct from a text
   field with a mask.
-- **Navigation and commands:** Link, Breadcrumbs, Pagination, Stepper, Tree,
-  ContextMenu, MenuBar and CommandPalette. Add keyboard behaviors to existing Menu
+- **Navigation and commands:** Link, Pagination, Stepper and MenuBar (Breadcrumb, TreeView,
+  ContextMenu and CommandPalette are built). Add keyboard behaviors to existing Menu
   before multiplying menu-shaped components.
 - **Selection and collections:** ListBox, selectable List, TreeSelect/Cascader,
   TransferList, Rating, ToggleButtonGroup and drag/reorder handles. Choice cards can
   reuse Checkbox/Radio compositions; AvatarGroup and range Slider already exist.
-- **Surfaces and layout:** Accordion/Disclosure, Drawer/Sheet, AlertDialog, HoverCard,
-  Resizable/Splitter, ScrollArea and responsive layout primitives. PageHeader, Sidebar,
+- **Surfaces and layout:** Accordion/Disclosure, Drawer/Sheet, AlertDialog, a two-region
+  Splitter, ScrollArea and responsive layout primitives (HoverCard and Panel `resizable` are
+  built). PageHeader, Sidebar,
   application shell and dockable inspector are compositions.
 - **Data and feedback:** DescriptionList, Stat, Timeline, EmptyState, Result/ErrorState,
-  Banner, Meter, circular Progress, live notification queue, DataGrid and TreeGrid.
+  Meter (Banner is built as an Alert layout), circular Progress, live notification queue, DataGrid and TreeGrid.
   DataGrid needs editing, resizing, selection and virtualization contracts beyond Table.
 - **Content and advanced tools:** image/media preview, Carousel, rich text and code-editor
   integrations, charts, gradient editor, easing/curve editor and shortcut recorder.
@@ -141,18 +150,18 @@ built next; this list is an inventory, not an order of work.
 
 [The audit](research/component-gap-audit.md) compared Area with 13 catalogues (Untitled UI,
 shadcn, React Aria, Radix, Base UI, Fluent 2, Primer, Carbon, Mantine, MUI, Ant Design,
-Chakra/Ark, Spectrum 2) across about 95 component jobs.
+Chakra/Ark, Spectrum 2) across about 95 component jobs. Status as of 2026-09-26; items
+built since are noted in brackets.
 
-- **Missing, shipped by 8 or more systems:** Combobox/Autocomplete (11), Accordion (10),
+- **Missing, shipped by 8 or more systems:** Combobox/Autocomplete (11) [built], Accordion (10),
   the date family (10; Calendar now built), Link (8), Pagination (8), Drawer/Sheet (8).
 - **Partial:** custom Select (all 13 ship a listbox popup; Area's is native), overlay
-  behavior for Popover, Tooltip, Menu and Dialog (surfaces without anchoring, dismissal or
-  menu keyboard), DataGrid, multi-select/tags, Toast queue, range Slider in Slider's API.
+  behavior for Popover, Tooltip, Menu and Dialog [built 2026-09-27], DataGrid, multi-select/tags, Toast queue, range Slider in Slider's API [SliderRange built].
 - **Recommended order** (owner chooses): overlay behavior → custom Select → Combobox with a
   tag mode → Menu keyboard, submenus, ContextMenu and CommandPalette → ColorPicker paints →
   Disclosure/Accordion → DatePicker family → Resizable and ScrollArea → Drawer and
   AlertDialog → chat message primitives → FileUpload → HoverCard and Toggletip.
-### Count and Banner, from the 2026-09-27 survey (built 2026-09-28, in review)
+### Count and Banner, from the 2026-09-27 survey (built 2026-09-28, Complete)
 
 [Survey](research/split-count-banner-survey.md):
 - **Count — built** ([spec](specs/count.md)): counts next to a label (Nav, Tabs, Segmented, filter chips) become their own small
@@ -218,7 +227,9 @@ working behaviors rather than styling aliases when evaluating library coverage.
 Each family exposes the dimensions it actually needs:
 
 - **Treatment:** persistent visual emphasis such as solid, soft, outline, ghost or plain.
-- **Tone:** neutral, accent and semantic meanings; supported values come from its manifest.
+- **Tone:** neutral and semantic meanings; supported values come from its manifest. Accent
+  is not a tone: it reaches components through the action and selection emphasis roles
+  (owner, 2026-09-29; [design system](DESIGN_SYSTEM.md#color-and-focus)).
 - **Size:** named tiers appropriate to the component, not a forced five-size template.
 - **State:** selected, disabled, loading, invalid, expanded and other runtime facts.
 - **Layout:** orientation, wrapping, alignment and explicit full width.

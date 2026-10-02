@@ -6,9 +6,8 @@
  * (which attaches to a corner and signals). Its geometry is Badge's inline scale; its
  * number formatting is Indicator's. See docs/specs/count.md.
  *
- * Three axes set private properties that the base rule consumes:
+ * Two axes set private properties that the base rule consumes:
  *   variant  plain (Notion's board counts: no plate) or soft (Primer's CounterLabel);
- *   tone     neutral or accent;
  *   size     sm 16 / md 20, Badge's sm and md heights.
  * The ink stays fixed with the owner's hover and selection, as Nav's trailing slot does.
  * ------------------------------------------------------------------------- */

@@ -15,22 +15,23 @@ Tree view (row wash), Kbd (shortcuts), Popover (surface family)
 
 A list of actions shown on demand (a popup from a trigger) or inline in a surface. Not
 navigation (Nav), not a single-value choice in a form (Select), not a searchable picker
-(Combobox, not built). Showing, positioning and dismissing the popup belong to the host
-(SplitButton today; a general menu trigger is part of the overlay work).
+(Combobox, built 2026-09-26). Showing, positioning and dismissing the popup belong to the host
+(SplitButton, or Menu's own `trigger` from the overlay work, [overlay.md](overlay.md)).
 
 ## Variants
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | item | text | Plain action | All products |
-| item | icon + text (`MenuItem icon`, the leading glyph column) | Iconic actions | ChatGPT account and chat actions; Notion page actions; Figma "More" |
+| item | icon + text (`icon`) | Iconic actions | ChatGPT account and chat actions; Notion page actions; Figma "More" |
 | item | shortcut | Command hint | Notion page actions (⌘⌥L, ⌘D) |
 | item | danger | Destructive action | ChatGPT "Delete" (red label) |
 | item | selected (`radio checked`) | Current choice among several | ChatGPT model picker (check) |
 | item | disabled | Unavailable action | Area; Radix-based products support it |
 | composition | label, separator | Groups | ChatGPT chat actions (groups); Notion (groups) |
 | item | checkable (switch or check) | Settings that toggle in place | Notion "Small text", "Full width" (switch); ChatGPT model picker (check) |
-| composition | search, submenu | Existing Area compositions | Notion page actions (submenus) |
+| composition | search (**deprecated**) | `MenuSearch` / `.area-menu__search-surface` are deprecated in favour of Combobox (a field that filters a list) and Command palette (audit D-22 A, owner 2026-09-30); still exported so existing markup renders; gallery tile removed | — |
+| composition | submenu (`MenuSub`) | A row that opens a nested menu beside it (audit D-10 A, owner) | Notion page actions (submenus); ChatGPT model submenu |
 
 ## Sources
 
@@ -98,14 +99,34 @@ Items:
 | selected row | **check only**: `radio checked` (one of several) or `checked`; no plate at rest, the plate stays the highlight. The raw `data-selected` plate (`bg-component-active`, surface.css:1055) is the value-picker hook only (Select, Combobox) | ChatGPT model picker (check, no plate) | Audit S13 C. The Selected tile and the Composer mode menu drew the plate plus a Fluent check in the shortcut slot |
 | surface · shadow | **`--area-shadow-float`**: `0 20px 24px` in `shadow-color`, `0 5px 8px` at half strength (surface.css:866, surface.ts:16); `none` under the Flat preset | Notion's two layers; ChatGPT 8/16; Figma 2/5 + 10/16 | Was `shadow-2` (1–2px), a flat card edge. A Surface axis role since audit S10 |
 | surface · radius, inset, border | 12, 4, 1px decorative (unchanged) | Notion 10 and 4; ChatGPT 16 and 10 | Concentric item radius follows |
-| keyboard | Up/Down (wrap), Home/End, typeahead | WAI menu pattern; Radix in ChatGPT; Notion | Was none (SplitButton had its own copy) |
+| keyboard | Up/Down (wrap), Home/End, typeahead in one 1000ms window (`TYPEAHEAD_RESET`, Overlays.tsx:30) shared by hosted and anchored Menu and Tree view | WAI menu pattern; Radix and React Aria 1s; Notion | Was none (SplitButton had its own copy); then a window per list (audit D-11) |
+| submenu row | `MenuSub`: a menuitem row with a trailing chevron (`chevron-down` rotated −90°, +90° in RTL) in `fg-muted`, its edge 8 from the row's end as a check's; an open submenu keeps its row on the hover plate (surface.css:1127-1141) | Audit D-10 A (owner); Notion submenus | — |
+| submenu placement | beside the parent menu, 4 from its edge (`MENU_OFFSET`), its first row level with the trigger row (the submenu's padding and border taken out); flips and shifts as every anchored menu | Audit D-10; verified live | — |
+| forced colours | a `data-selected` row paints `Highlight` / `HighlightText`; focus a `Highlight` ring (`forced-colors.css`) | Audit D-14 | The plate alone vanished |
 
 ## Behavior and accessibility
 
-`role="menu"`, items are native buttons with `role="menuitem"`. `MenuItem icon` renders the
-leading glyph column (`span.area-menu__icon`, `aria-hidden`; primitives.tsx:1158-1178), so
-consumers no longer write the span by hand. Menu handles Up/Down
-(wrapping), Home/End and typeahead for its own items; a nested submenu handles its own keys.
+`role="menu"`, items are native buttons with `role="menuitem"`. `MenuItem icon` renders in
+`.area-menu__icon` (`aria-hidden`) before the label, which is then always wrapped in
+`.area-menu__text` (primitives.tsx:1172-1174); demos no longer hand-write the icon spans. Menu handles Up/Down
+(wrapping), Home/End and typeahead for its own items; a nested submenu handles its own keys,
+and an anchored Menu ignores the keys and rows of nested menus (Overlays.tsx:108-110).
+
+`MenuSub` (`primitives.tsx:1174-1255`) is a `menuitem` row with `aria-haspopup="menu"`,
+`aria-expanded` and `aria-controls`. Right (Left in RTL), Enter or Space opens it on its first
+row; Left (Right in RTL) or Escape closes it back to the row; a mouse hover opens it, and
+moving focus to another row of the parent menu closes it. It is a nested `popover="auto"`, so
+Escape and an outside press close the innermost menu first and closing the parent closes it;
+the menu is named by a string `label`.
+
+Choosing closes by row kind, in the anchored Menu and ContextMenu alike: an action or a radio
+choice closes the menu, a checkbox row toggles and keeps it open, as does a `MenuSub` row
+(`data-keep-open`) (audit D-11).
+
+With a `trigger`, the consumer's `onKeyDown`, `onClick` and `onPointerMove` run first and can
+cancel the menu's own (`preventDefault`); a consumer `id` is the menu's id and the trigger's
+`aria-controls`; a consumer `aria-label` or `aria-labelledby` wins over the trigger's
+`aria-labelledby` (primitives.tsx:1119-1130, audit D-12).
 Items keep their own Tab stops (inline menus in panels rely on this); a popup host closes
 on Tab (SplitButton). Opening, anchoring and dismissal are the host's job (native popover in
 SplitButton). Verified in the gallery: arrows wrap, Home/End, typeahead ("s" → Settings), and
@@ -127,8 +148,9 @@ palette and Context menu.
 - Area after: icon 8, label 36 (was 32), text-only rows 11; shadow as specified; focus wash.
 - `typecheck`, `build:docs`, `test:contracts` (14), `test:preview` (4), React tests (90),
   `npm test` (19,491): all pass.
-- Unverified: dark theme, screen-reader announcement of menu items, submenu keyboard (Right
-  to open, Left to close) — not implemented.
+- `MenuSub` placement verified live: 4 from the parent menu's edge, first row level with the
+  trigger row (audit D-10).
+- Unverified: dark theme, screen-reader announcement of menu items and submenus.
 
 ## Feedback log
 
@@ -144,5 +166,9 @@ palette and Context menu.
   → side by side with Notion's page menu in Claude in Chrome.
 - 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (`none` under Flat; surface.css:866, :1178); the icon-to-label gap is the density token `--area-gap-row` (12), shared with Nav, Command palette and the Select picker (surface.css:984); rows keep plate-only focus; a Kbd in a row renders like a string shortcut, and Escape is written "Esc" (kbd.css:89-104).
 - 2026-09-30 · audit S13 (owner) → a selected row in a menu of commands or choices shows the check only and the plate stays the highlight; `MenuItem radio` with `checked` gives `menuitemradio` (primitives.tsx:1143-1161); the `data-selected` plate is the value-picker hook only (surface.css:1045-1055); the Selected tile now uses `radio checked`.
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `MenuItem` gains `icon`, the leading glyph column (replaces a hand-written `span.area-menu__icon`).
-- 2026-09-30 · audit S21c dark capture pass (owner go-ahead; [dark-pass](../research/dark-pass-2026-09-30.md)) → the edge is `edge-float` (#333 in dark, was #282828) and the dark lift ink is 20% (was 8%, invisible). Notion: ring #383836 + 0 14 28 −6 20%; ChatGPT: 20% white hairline; Figma: 35% shadows (captures/menu/*--dark). Fill and row hover unchanged.
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → `MenuItem` takes `icon` (ReactNode) in `.area-menu__icon` (`aria-hidden`) before the label, the label then always in `.area-menu__text`, as NavItem, Tabs and CommandItem take it (primitives.tsx:1153, :1172-1174); demos pass `icon` instead of hand-writing the spans. No visual change.
+- 2026-10-01 · audit D-10 (owner pick A) → new `MenuSub`: a menuitem row with `aria-haspopup="menu"`, a muted trailing chevron 8 from the end (mirrored in RTL); Right (Left in RTL), Enter or Space opens on the first row, Left (Right in RTL) or Escape closes back to the row, hover opens, focus on another parent row closes; nested `popover="auto"`; placed beside the parent 4 from its edge, first row level with the trigger row (verified live). The parent AnchoredMenu ignores nested menus' keys and rows → primitives.tsx:1174-1255, Overlays.tsx:108-110, surface.css:1127-1141.
+- 2026-10-01 · audit D-11 → one typeahead window (`TYPEAHEAD_RESET`, 1000ms) for hosted Menu, anchored Menu and Tree; checkbox rows keep a menu open, actions and radio choices close it, in the anchored Menu and ContextMenu → Overlays.tsx:30, :157-158, primitives.tsx:1152, ContextMenu.tsx:93-94.
+- 2026-10-01 · audit D-12 → with a trigger, consumer handlers run first and can cancel; consumer `id` is used for `aria-controls`; consumer `aria-label` / `aria-labelledby` wins over the trigger's labelledby → primitives.tsx:1119-1130, Overlays.tsx.
+- 2026-10-01 · audit D-14 → forced colours paint a selected row `Highlight` / `HighlightText` → forced-colors.css.
+- 2026-10-01 · audit D-22 (owner pick A) → `MenuSearch` and `.area-menu__search-surface` deprecated (`@deprecated` JSDoc; use Combobox or Command palette); kept so existing markup renders; its gallery tile is removed → primitives.tsx:1342-1346, surface.css:1217-1219.

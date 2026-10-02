@@ -22,14 +22,18 @@
     min-inline-size: 0;
   }
 
+  /* Outside a Panel the caption is Field's label (14/20 in the default ink, 6 above the control),
+     so a BoxField beside a labelled field shows one caption style; inside a Panel it takes the
+     panel tier and the muted ink, as PanelRow's caption (audit B-22 B). */
   .area-box-field__label {
-    color: var(--area-fg-muted);
-    font-size: var(--_panel-label-text, var(--area-text-xs-size));
-    line-height: var(--_panel-label-leading, var(--area-text-xs-leading));
+    color: var(--area-fg-default);
+    font-size: var(--_panel-label-text, var(--area-ui-size));
+    line-height: var(--_panel-label-leading, var(--area-ui-leading));
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  .area-panel .area-box-field__label { color: var(--area-fg-muted); }
 
   .area-box-field__fields {
     display: grid;

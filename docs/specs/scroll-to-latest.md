@@ -28,11 +28,12 @@ rgb(93); centred on the composer (delta 0), 24 above it; hidden with opacity 0 a
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| button | Button outline neutral, icon-only, pill (32 round, surface fill, border ring), named by `aria-label` (default "Scroll to latest"; `label` is a deprecated alias); `buttonProps` reach the Button, while the ref and other props go to the wrapper | ChatGPT; audit S17 | 16 icon (Area) |
+| button | Button outline neutral, icon-only, pill (32 round, surface fill, border ring) | ChatGPT | 16 icon (Area) |
 | glyph | package arrow, pointing down | — | — |
 | position | 24 above the composer, centred on it | ChatGPT 24, delta 0 | the same 24 as Prompt suggestions |
 | visibility | fades in when the reader is more than 200 from the end; hidden: not focusable, `aria-hidden` | ChatGPT hides it at the end | threshold not measurable in ChatGPT |
 | action | scrolls to the end smoothly; instantly under reduced motion | — | — |
+| props | `buttonProps` (props and ref) go to the Button, whose `onClick` runs first and can `preventDefault` the scroll; `ref` and other props stay on the wrapper (ScrollToLatest.tsx:14, :41-42) | Audit S17 (API vocabulary, 2026-09-30) | — |
 
 ## Visual pass
 
@@ -52,4 +53,4 @@ lightened every neutral ghost and outline Button to #56 (button.md), which now m
 
 ## Feedback log
 
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the button (default "Scroll to latest"; `label` deprecated alias); `buttonProps` added (ref and rest go to the wrapper).
+- 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.

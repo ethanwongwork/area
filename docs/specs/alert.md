@@ -16,7 +16,8 @@ Chip remove (a tinted 12% plate), Card and Panel (container radius)
   the semantic roles.
 
 - 2026-09-26: Neutral by default, accent by override. Alert's default tone is `neutral`;
-  `accent` is an explicit tone.
+  `accent` is an explicit tone. *Superseded 2026-09-29 (owner, D1): `accent` was removed as a
+  tone; Alert carries meaning only (manifest: neutral, info, success, warning, danger).*
 
 No Alert section existed in [prior decisions](PRIOR_DECISIONS.md).
 - 2026-09-27: audit Alert again, with a before-and-after at enlarged scale.
@@ -32,7 +33,7 @@ whether a dismissed alert stays rendered.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| tone | neutral (default), info, success, warning, danger | Meaning, not emphasis; one feedback set with Toast in Badge's order (audit S19); accent left with the emphasis-roles decision | Area's semantic tones; Untitled has no alert |
+| tone | neutral (default), info, success, warning, danger (Badge's order; accent removed 2026-09-29, D1) | Meaning, not emphasis; one family of semantic surfaces | Area's semantic tones; Untitled has no alert |
 | layout | single-line (default), multiline | A one-row message, or a title over wrapping body with actions below | Gallery tiles `default`, `multiline` |
 | layout | banner | A persistent one-line announcement across a page or section, link or status at the end | OpenAI business and Daybreak banners (owner references), Primer Banner, Fluent MessageBar, Polaris Banner, Ant `banner`; see Banner |
 | flush | boolean | A banner that meets its container's edges | Primer `flush`, Fluent `shape="square"`, Ant `banner` |
@@ -62,7 +63,7 @@ Notion's callout block remains unmeasured.
 
 ```
 area   div.area-alert[role=status|alert]  grid "icon content actions dismiss"; owns height,
-       padding 8, 1px tone border, radius-container, tone fill and ink
+       padding 10 / 12 (Toast's inset), 1px tone border, radius-container, tone fill and ink
   icon     span.area-alert__icon 16px, 4px leading margin (surface.css:161-167)
   content  div flex, baseline, gap 4; title (500, tone ink) + description (fg-muted)
   link     span inline after the description, 4px before it, underlined
@@ -177,8 +178,7 @@ Disclosure Policy page, `notion--callout`) beside the gallery's Default and Tone
   tint, the icon carries the colour, the title keeps the tone ink and the body is muted.
 - Unverified: dismiss hover and focus on screen, dark theme.
 
-The gallery shows Alert in grouped tiles: Default, Tones (accent, info, danger, warning,
-success), Layout (multiline), Content (link, dismissible) and Behavior (action).
+The gallery shows Alert in grouped tiles: Default, Tones (info, success, warning, danger), Layout (multiline), Content (link, dismissible) and Behavior (action).
 
 ## Verification
 
@@ -246,4 +246,4 @@ session: ChatGPT reserves an empty root banner slot and a composer banner portal
 - 2026-09-28 · owner: approved (batch 4); Count keeps the pill shape.
 - 2026-09-30 · audit S9 (owner) → the dismiss is a ghost small Button (28, radius 6) with the Area `dismiss` glyph, as Popover and Toast (`primitives.tsx:197-201`); neutral keeps the Button's quiet ink and `bg-component-hover` plate, tinted keeps the tone ink and a 12% ink plate (`surface.css:703-717`). Was a hand-built button: full ink, a Fluent filled glyph, the 12% plate on every tone.
 - 2026-09-30 · audit S14 (owner) → no visible change; the row gap and the actions gap no longer read the density gap tokens and are pinned to 8 and 4 (`inset.css:202`, surface.css:593), since those tokens moved to 6.
-- 2026-09-30 · audit S19 (owner) → one feedback tone set with Toast in Badge order (neutral, info, success, warning, danger); the neutral icon takes muted ink as Toast's (`--_alert-icon: fg-muted`, surface.css), text stays default ink. Was fg-default.
+- 2026-09-30 · audit S19 A (owner) → the neutral icon is `fg-muted` (#666 on #f7, 5.36:1, measured live), as Toast's; was the text's `fg-default`. Tones are listed in Badge's order (neutral, info, success, warning, danger), the same set as Toast (`surface.css` `.area-alert`, `.area-alert--neutral`; manifest).

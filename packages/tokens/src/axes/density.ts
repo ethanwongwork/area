@@ -50,16 +50,14 @@ export function densityTokens(tiers: Record<Tier, TierSpec>) {
   // a 16 icon it puts every icon row's label on one 36 column, where ChatGPT's and Notion's
   // menus and sidebars start theirs. Notion is the compact calibration, so compact keeps it.
   out["gap-row"] = "12px";
-  // Marks and surface insets (audit S21a, owner 2026-09-30: option C). The 16 / 20 / 24 ladder
-  // of pill marks (Badge, Count, Kbd, the Indicator count) and the 12 / 16 insets of floating
-  // surfaces (Popover, Dialog) were fixed primitives that compact density could not reach.
-  // Compact carries the same values until its capture pass measures them; they are roles now,
-  // so that pass changes one table, not every component.
+  // Static marks (Badge, Count, Switch track, ColorSwatch, Presence, the Indicator count) sit on
+  // their own 16 / 20 / 24 ladder and hold under compact (audit S21a C, owner 2026-09-30): in a
+  // dense IDE the controls drop to 22-26 while the marks stay at 17-18 (VS Code badge 17, keycap
+  // 18, checkbox 18; docs/research/captures/{badge,kbd,checkbox}/vscode--*), and Notion's and
+  // Figma's checkboxes hold at 16. So both presets carry the same rungs.
   out["mark-sm"] = "16px";
   out["mark-md"] = "20px";
   out["mark-lg"] = "24px";
-  out["inset-surface-sm"] = "12px";
-  out["inset-surface-md"] = "16px";
   out["ui-size"] = `var(--area-size-${medium.size})`;
   out["ui-leading"] = `var(--area-leading-${medium.leading})`;
   return out;
@@ -115,7 +113,7 @@ export const DENSITY_AXIS: AxisDefinition = {
   label: "Density",
   description: "How tall controls are, and how much room they leave inside themselves. Interface type steps down with the box; content type stays independent.",
   defaultPreset: "default",
-  namespaces: ["--area-control-", "--area-gutter-", "--area-icon-", "--area-gap-", "--area-ui-", "--area-mark-", "--area-inset-surface-"],
+  namespaces: ["--area-control-", "--area-gutter-", "--area-icon-", "--area-gap-", "--area-ui-", "--area-mark-"],
   presets: [
     {
       id: "compact",

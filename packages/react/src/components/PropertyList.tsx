@@ -5,9 +5,7 @@ import { Glyph } from "./Glyph.tsx";
 
 export interface PropertyListProps extends HTMLAttributes<HTMLUListElement> {
   /** Names the list ("Fills"); each item's handle and announcements use it. */
-  "aria-label"?: string;
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
-  label?: string;
+  label: string;
   /** Moves an item. Without it the list is fixed and draws no handles. */
   onReorder?: (from: number, to: number) => void;
 }
@@ -41,9 +39,8 @@ const cx = (...parts: Array<string | false | undefined>) => parts.filter(Boolean
  * announced, and focus stays on the moved item's handle.
  */
 export const PropertyList = forwardRef<HTMLUListElement, PropertyListProps>(function PropertyList(
-  { label: labelProp, "aria-label": ariaLabel, onReorder, className, children, ...rest }, ref,
+  { label, onReorder, className, children, ...rest }, ref,
 ) {
-  const label = ariaLabel ?? labelProp ?? "";
   const items = Children.toArray(children).filter(isValidElement);
   const count = items.length;
   const reorderable = Boolean(onReorder) && count > 1;
@@ -131,7 +128,7 @@ export const PropertyList = forwardRef<HTMLUListElement, PropertyListProps>(func
 
   return <PropertyListContext.Provider value={context}>
     <ul ref={node => { listRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
-      aria-label={label || undefined} aria-describedby={reorderable ? statusId : undefined}
+      aria-label={rest["aria-label"] ?? label} aria-describedby={reorderable ? statusId : undefined}
       className={propertyListVariants({}, className)} data-dragging={dragging !== null ? "" : undefined} {...rest}>
       {items.map((item, index) => <ItemIndex.Provider key={item.key ?? index} value={index}>{item}</ItemIndex.Provider>)}
       {drop ? <li className="area-property-list__indicator" aria-hidden="true" style={{ "--_drop": `${drop.top}px` } as CSSProperties} /> : null}

@@ -28,7 +28,7 @@ RadioGroup; several values in one shell use InputGroup.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | orientation | vertical (default), horizontal | Stacked form; label beside the control in a settings or inspector row | UUI (stacked); Figma inspector rows (label beside) |
-| composition | description, validation (neutral when no status, error, success, warning), required mark, visually hidden label | Guidance, correction, required fact | UUI label + hint |
+| composition | description, validation (error, success, warning), required mark, visually hidden label | Guidance, correction, required fact | UUI label + hint |
 | state | disabled | Keeps guidance readable | UUI |
 
 ## Sources
@@ -85,8 +85,8 @@ rgb(0, 119, 52) (success), rgb(164, 79, 0) (warning) (`area--description-error`,
 |---|---|---|---|
 | gap (label, control, message) | 6 (`space-6`) | UUI 6px between label, control and hint (confirmed in the audit) | — |
 | label · type | 14/20 **400** `fg-default` | Type rule: 500 only for labels on fills (DESIGN_SYSTEM "Color and focus") | UUI 500 neutral-700 |
-| description · type | 12/16 `fg-muted` (`control-sm-text`) | UUI hint 12/18 at sm | UUI 14/20 at md; Area keeps supporting text one step below the control |
-| validation · ink | `fg-danger-vivid` / `fg-success-vivid` / `fg-warning-vivid`; a bare `validation` (no `validationStatus`, no `error`) is neutral: `fg-muted`, `data-tone="neutral"`, no `aria-invalid` (Field.tsx:31-34, :145) | Semantic tone roles | UUI turns only the hint red. A bare message used to default to error |
+| description · type | 12/16 `fg-muted` (`text-xs`, field.css:35-39; was `control-sm-text`, now 14) | UUI hint 12/18 at sm | UUI 14/20 at md; Area keeps supporting text one step below the control |
+| validation · ink | `fg-danger-vivid` / `fg-success-vivid` / `fg-warning-vivid` | Semantic tone roles | UUI turns only the hint red |
 | required mark | `field-error-color`, aria-hidden | UUI mark (brand, red when invalid) | Neutral-by-default does not apply: required is a warning cue, not selection |
 | horizontal · columns | label max-content + control `input-inline-size`, gap 8; in a Panel 1fr / 1.5fr | Contained width rule; Figma inspector rows | — |
 | horizontal · label ink | `fg-muted` | Figma inspector: labels secondary to values (50% unit ink, `figma--color-row` node 15) | — |
@@ -98,7 +98,6 @@ rgb(0, 119, 52) (success), rgb(164, 79, 0) (warning) (`area--description-error`,
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | focus | owned by the child (field focus edge + halo) | [input.md](input.md#states) |
-| neutral message | `validation` without a status: muted ink, `data-tone="neutral"`, child not invalid | not captured |
 | invalid / success / warning | message in tone ink; child gets `data-validation-status` | `area--error`, `area--success`, `area--warning` |
 | disabled | label → `fg-muted`; child uses its own disabled paint | `area--disabled` |
 | in a Panel | label → `fg-muted` at rest | `panel.css:147` |
@@ -106,10 +105,13 @@ rgb(0, 119, 52) (success), rgb(164, 79, 0) (warning) (`area--description-error`,
 ## Behavior and accessibility
 
 One direct control; the label is a native `<label for>` and also `aria-labelledby`.
-Description and validation ids merge into `aria-describedby`; an error (`error`, or
-`validationStatus="error"`) sets `aria-errormessage` and `aria-invalid`; a bare `validation`
-does not. `visuallyHiddenLabel` keeps the name. Multiple React
-roots need an `identifierPrefix` (`Field.tsx:55-59`).
+Description and validation ids merge into `aria-describedby`; an error sets
+`aria-errormessage` and `aria-invalid`. `validation` without `validationStatus` is an error;
+pass `"success"` or `"warning"` for the others. Help text belongs in `description`. `visuallyHiddenLabel` keeps the name. Multiple React
+roots need an `identifierPrefix` (`Field.tsx:55-59`). When the control is an InputGroup, the
+group takes Field's `disabled` and validation and passes them to the Input, NumberField and Select
+inside it ([input-group.md](input-group.md#behavior-and-accessibility)), so a Field can disable or
+invalidate a group.
 
 ## Peers and consistency
 
@@ -152,4 +154,5 @@ Build and test results are in the
   `panel/figma--section-title`, `input-group/figma--color-row`, `popover/notion--share-popover`.
 - 2026-09-27 · third pass → open question settled, value kept: horizontal label 400
   `fg-muted` → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → a bare `validation` with no `validationStatus` is neutral (muted ink, `data-tone="neutral"`, no `aria-invalid`); it used to default to error.
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → docstring clarified: `validation` without `validationStatus` is an error (`aria-invalid`, `aria-errormessage`); help text belongs in `description` (Field.tsx:31-36; it used to call `validation` "non-error"). Behaviour unchanged.
+- 2026-10-01 · audit B-14 → a Field around an InputGroup disables and invalidates the controls inside it: the group takes `disabled` and validation and passes them on through `InputGroupContext` → InputGroup.tsx, input-group-context.ts.

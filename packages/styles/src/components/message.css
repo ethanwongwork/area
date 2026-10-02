@@ -17,8 +17,9 @@
     font-size: var(--area-text-md-size);
     line-height: var(--area-text-md-leading);
   }
-  .area-message--user { align-items: flex-end; }
-  /* The base rule is the default author's layout (audit S17: a bare .area-message is prose). */
+  /* spec (message.md, measured 2026-09-28): the user's actions sit 4 below the bubble, ChatGPT's;
+     the assistant's keep 12 under the prose (audit G-25). */
+  .area-message--user { align-items: flex-end; gap: var(--area-space-4); }
   .area-message--assistant { align-items: stretch; }
   /* Actions wait until the answer is complete (ChatGPT shows them once it stops). */
   .area-message[data-streaming] > .area-message__actions { visibility: hidden; }
@@ -65,7 +66,7 @@
     border-radius: var(--area-radius-full);
     background-color: currentColor;
     vertical-align: middle;
-    animation: area-message-pulse 1s ease-in-out infinite;
+    animation: area-message-pulse calc(var(--area-duration-slow) * 4) ease-in-out infinite; /* spec: 1s at the default preset, 4 x slow (audit H-20) */
   }
   @media (prefers-reduced-motion: reduce) { .area-message__cursor { animation: none; } }
   [data-area-motion="none"] .area-message__cursor { animation: none; }

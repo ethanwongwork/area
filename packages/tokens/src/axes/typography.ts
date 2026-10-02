@@ -53,10 +53,13 @@ const TEXT: Record<string, Step> = {
 };
 
 /**
- * Title: 20/28, 24/32 and 32/40 with negative tracking. A smaller heading uses body
- * (text-md); anything larger than 32px is display type.
+ * Title: 16/24 for a surface title (Card, Dialog), then 20/28, 24/32 and 32/40 with negative
+ * tracking; anything larger than 32px is display type. Titles hold their size in compact
+ * density, so a surface title doesn't split from its peers there (audit H-7 A, owner
+ * 2026-09-30: Card read text-md and shrank to 14/20, Dialog read the 16/24 primitives).
  */
 const TITLE: Record<string, Step> = {
+  xs: { size: 16, leading: 24, tracking: "0em" },
   sm: { size: 20, leading: 28, tracking: "-0.01em" },
   md: { size: 24, leading: 32, tracking: "-0.015em" },
   lg: { size: 32, leading: 40, tracking: "-0.02em" },

@@ -24,9 +24,9 @@
    * The file header. A filename on the leading edge, the language beside it, and the copy
    * action pushed to the trailing edge.
    *
-   * The row is a control tier tall rather than a text tier tall, so the icon button inside
-   * it lands on the same rhythm as a toolbar and the hairline under it sits at a stable
-   * height whether or not the block has a language or actions.
+   * The row is at least a control tier tall (with its 4px block padding it measures 37), so
+   * the icon button inside it lands on the same rhythm as a toolbar and the hairline under it
+   * sits at a stable height whether or not the block has a language or actions.
    */
   .area-code-block__header {
     text-align: start;
@@ -75,49 +75,7 @@
     inline-size: auto;
   }
 
-  /*
-   * The tabbed switcher follows the Tabs language: transparent, a plate under the pointer,
-   * and the selected tab carries a label-width underline in the foreground rather than an
-   * accent fill, so the row does not read as a row of buttons.
-   */
-  .area-code-block__tab {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    block-size: var(--area-control-sm);
-    padding-inline: var(--area-space-6);
-    border: 0;
-    border-radius: var(--area-radius-small);
-    background-color: transparent;
-    color: var(--area-fg-muted);
-    font-family: var(--area-font-mono);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
-    cursor: pointer;
-    transition: var(--area-transition);
-  }
-
-  /* Like Tabs, the label keeps its colour under the pointer; only the plate appears. */
-  @media (hover: hover) { .area-code-block__tab:hover { background-color: var(--area-bg-component-hover); } }
-
-  .area-code-block__tab:focus-visible {
-    outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
-  }
-
-  .area-code-block__tab[aria-selected="true"] {
-    color: var(--area-fg-default);
-  }
-
-  .area-code-block__tab[aria-selected="true"]::after {
-    content: "";
-    position: absolute;
-    inset-inline: var(--area-space-6);
-    inset-block-end: 0;
-    block-size: var(--area-border-width);
-    border-radius: var(--area-radius-small);
-    background-color: currentColor;
-  }
+  /* The language switcher is Tabs sm (audit G-6 A): its own indicator, hover and focus. */
 
   .area-code-block__actions {
     display: flex;
@@ -184,7 +142,9 @@
     flex-direction: column;
     /* spec (audit S7a): Card's edge for a block standing alone; was border-decorative #f3. */
     border: var(--area-border-width) solid light-dark(var(--area-neutral-100), var(--area-neutral-750)); /* spec */
-    border-radius: var(--area-radius-container);
+    /* Card md's corner: the standalone content surfaces share one (24 at Standard, square at Sharp,
+       finite at Pill; audit G-27 B, owner 2026-09-30; ChatGPT 24). Code stays 14/20, on the ramp. */
+    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap))) + (var(--area-space-8) + var(--area-space-8)) * var(--area-radius-concentric));
     background-color: var(--area-bg-code);
     overflow: hidden;
   }
@@ -411,10 +371,10 @@
    * identifiers that would genuinely be confusable -- tag and attribute -- are 0.059 apart
    * in dark rather than 0.024. A fifth blue-violet family would not add information.
    */
-  .area-code-block__pre .area-syntax-keyword { color: var(--area-fg-danger-vivid); }
-  .area-code-block__pre .area-syntax-tag { color: var(--area-fg-discovery-vivid); }
-  .area-code-block__pre .area-syntax-attr { color: var(--area-fg-info-vivid); }
-  .area-code-block__pre .area-syntax-string { color: var(--area-fg-accent-vivid); }
+  .area-code-block__pre .area-syntax-keyword { color: var(--area-syntax-keyword); }
+  .area-code-block__pre .area-syntax-tag { color: var(--area-syntax-tag); }
+  .area-code-block__pre .area-syntax-attr { color: var(--area-syntax-attr); }
+  .area-code-block__pre .area-syntax-string { color: var(--area-syntax-string); }
   .area-code-block__pre .area-syntax-comment { color: var(--area-fg-muted); }
   .area-code-block__pre .area-syntax-punct { color: var(--area-fg-muted); }
 

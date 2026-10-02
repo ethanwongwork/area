@@ -9,7 +9,8 @@
   .area-prompt-suggestions {
     display: flex;
     flex-direction: column;
-    inline-size: min(100%, var(--area-composer-inline-size, calc(var(--area-space-96) * 5))); /* the composer's measure and hook */
+    /* The composer's measure, one public hook shared with Prompt suggestions (audit S17, G-24). */
+    inline-size: min(100%, var(--area-composer-inline-size, calc(var(--area-space-96) * 5)));
     margin: 0;
     padding: 0;
     list-style: none;
@@ -19,8 +20,9 @@
   .area-prompt-suggestions__item {
     display: flex;
     align-items: center;
-    /* spec: text 8 after the icon slot (ChatGPT 52 = 8 + 36 + 8). */
-    gap: var(--area-space-8);
+    /* The prompt starts under the composer's placeholder: 8 shell + 32 action + 8 gap + 8 field
+       inset = 56, so 16 after the 32 icon slot that sits 8 in (audit G-16; was 8, which put it at 48). */
+    gap: var(--area-space-16);
     flex: 1;
     min-inline-size: 0;
     /* spec: the composer's height: 16/24 text and 12 above and below (ChatGPT 52 on 26 leading). */
@@ -29,9 +31,9 @@
     /* spec: 8 in, like ChatGPT; the end leaves room for the dismiss, a small Button 8 in (audit G-18). */
     padding-inline: var(--area-space-8) calc(var(--area-control-sm) + var(--area-space-8));
     border: 0;
-    /* spec (radius pass): the composer's corner (send Button radius + 8 = 16): the rows are the
-     * composer's height and column, so a washed row reads as the composer's shape. */
-    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-button-cap))) + var(--area-space-8) * var(--area-radius-concentric));
+    /* A suggestion is a row: the row corner, as Menu and Nav rows and ChatGPT's suggestion rows (8)
+       (audit G-17 A, owner 2026-09-30; was the composer's 16). */
+    border-radius: var(--area-radius-row);
     background: transparent;
     color: inherit;
     font-family: var(--area-font-sans);
@@ -44,8 +46,8 @@
   .area-prompt-suggestions__row:not(:has(.area-prompt-suggestions__dismiss)) > .area-prompt-suggestions__item { padding-inline-end: var(--area-space-8); }
   /* spec: hover and focus lay Menu's row plate under the prompt; the ink stays fixed, as on
      every hovered control. */
-  .area-prompt-suggestions__item:focus-visible { background-color: var(--area-bg-component-hover); }
   @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item { background-color: var(--area-bg-component-hover); } }
+  .area-prompt-suggestions__item:focus-visible { background-color: var(--area-bg-component-hover); }
   /* Pressed takes the shared pressed plate, one step firmer (audit G-18). */
   .area-prompt-suggestions__item:active { background-color: var(--area-bg-component-active); }
   .area-prompt-suggestions__item:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
@@ -84,4 +86,6 @@
   .area-prompt-suggestions--chips > .area-prompt-suggestions__row { max-inline-size: 100%; }
   .area-prompt-suggestions--chips .area-button { max-inline-size: 100%; }
   .area-prompt-suggestions--chips .area-button__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* Reveal-on-hover fades on the one shared timing (audit F-38). */
+  .area-prompt-suggestions__dismiss { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
 }

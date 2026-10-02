@@ -84,6 +84,7 @@ export const toolbar = {
 export const alignmentPicker = {
   block: "area-alignment-picker",
   description: "Chooses one of nine physical alignment positions.",
+  // `soft` names the field fill it borrows; `surface` means a lifted plate elsewhere (audit F-20).
   variants: { variant: ["soft", "plain"], size: ["sm", "md", "lg"] },
   booleans: ["stretch"],
   elements: ["cell", "dot"],
@@ -102,7 +103,7 @@ export const calendar = {
   description: "Shows a month grid for choosing a date, a range or several dates.",
   variants: { variant: ["plain", "surface"], days: ["square", "circle", "tile"], layout: ["month", "week"] },
   elements: ["months", "month", "header", "title", "nav", "grid", "weekday", "cell", "day", "day-number", "day-weekday", "day-month", "marker", "week"],
-  defaults: { variant: "plain", days: "square", layout: "month" },
+  defaults: { variant: "surface", days: "square", layout: "month" },
 } as const satisfies ComponentManifest;
 
 export const colorSwatch = {
@@ -199,7 +200,7 @@ export const textarea = {
   description: "Accepts multiple lines of text.",
   variants: {
     variant: ["outline", "soft"],
-    size: ["sm", "md", "lg"],
+    size: ["sm", "md"], // lg removed: it differed from md by 4px of inset (audit B-24 A)
     resize: ["vertical", "horizontal", "both", "none"],
   },
   booleans: ["full-width"],
@@ -223,10 +224,10 @@ export const select = {
 export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
-  variants: { variant: ["plain", "card"], layout: ["row", "tile"], size: ["md", "lg"] },
+  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"] },
   states: ["checked", "indeterminate", "disabled", "invalid"],
   elements: ["control", "visual"],
-  defaults: { variant: "plain", size: "md" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const checkboxGroup = {
@@ -241,10 +242,10 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { variant: ["plain", "card"], layout: ["row", "tile"], size: ["md", "lg"] },
+  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"] },
   states: ["disabled"],
   elements: ["control", "visual"],
-  defaults: { variant: "plain", size: "md" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const radioGroup = {
@@ -264,13 +265,21 @@ export const switchControl = {
     size: ["sm", "md", "lg"],
     labelPosition: ["end", "start"],
     track: ["short", "long"],
-    tone: ["neutral", "custom"],
   },
   booleans: ["full-width"],
   states: ["checked", "disabled", "read-only", "loading", "hover", "active", "focus-visible"],
   stateAttributes: { checked: "checked" },
   elements: ["control", "track", "thumb", "text", "label", "description", "loading"],
-  defaults: { size: "md", labelPosition: "end", track: "short", tone: "neutral" },
+  defaults: { size: "md", labelPosition: "end", track: "short" },
+} as const satisfies ComponentManifest;
+
+export const sliderRange = {
+  block: "area-slider-range",
+  description: "Picks a range with two handles on one rail, with optional number fields (audit C-12).",
+  variants: { size: ["sm", "md", "lg"] },
+  states: ["overlap", "disabled"],
+  elements: ["track", "input", "end"],
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const slider = {
@@ -278,19 +287,19 @@ export const slider = {
   description: "Picks a value from an ordered range.",
   variants: {
     size: ["sm", "md", "lg"],
-    labelPosition: ["inline", "top"],
-    orientation: ["horizontal", "vertical"],
+    labelPosition: ["top"],
+    orientation: ["vertical"],
   },
   states: ["disabled", "hover", "focus-visible"],
   elements: ["label", "control", "value", "marks"],
-  defaults: { size: "md", labelPosition: "inline", orientation: "horizontal" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const chip = {
   block: "area-chip",
-  description: "Selects one value from a set too long for a segmented track.",
+  description: "Toggles a filter, or holds an input value, in a set that wraps (each chip toggles on its own).",
   variants: { kind: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"] },
-  booleans: ["pill", "swatch-only", "link", "link-icon"],
+  booleans: ["swatch-only", "link", "link-icon"], // pill dropped: chips are pill-only (audit C-18)
   states: ["selected", "disabled", "invalid"],
   elements: ["swatch", "icon", "trailing-icon", "avatar", "image", "label", "action", "remove"],
   defaults: { kind: "filter", size: "md" },
@@ -305,7 +314,7 @@ export const chipGroup = {
 
 export const choiceLabel = {
   block: "area-choice-label",
-  description: "The title and description beside a checkbox, radio or switch.",
+  description: "The title and description beside a checkbox or radio (Switch draws its own).",
   variants: {},
   elements: ["title", "description"],
   defaults: {},
@@ -319,7 +328,7 @@ export const badge = {
     tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"],
     size: ["sm", "md", "lg"],
   },
-  booleans: ["pill", "dot", "dot-only", "icon-only", "truncate"],
+  booleans: ["dot", "dot-only", "icon-only", "truncate"], // pill dropped: badges are pill-only (audit C-18)
   elements: ["dot", "leading-icon", "label", "trailing-icon", "avatar", "flag", "dismiss"],
   defaults: { variant: "soft", tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
@@ -340,7 +349,7 @@ export const count = {
 
 export const presence = {
   block: "area-presence", description: "Shows availability with Area-drawn status glyphs at the icon line weight.",
-  variants: {status: ["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"], size: ["xs", "sm", "md", "lg"]},
+  variants: {status: ["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"], size: ["sm", "md", "lg"]}, // xs dropped: audit C-19
   states: ["out-of-office"],
   defaults: {status: "available", size: "md"},
 } as const satisfies ComponentManifest;
@@ -350,7 +359,7 @@ export const indicatorAnchor = {
   description: "Attaches a count or presence indicator to an accessibly named object.",
   variants: { placement: ["top-end", "top-start", "bottom-end", "bottom-start"], overlap: ["rectangular", "circular"] },
   states: ["invisible"],
-  booleans: ["compact"],
+  booleans: ["inset"],
   elements: ["indicator"],
   defaults: { placement: "top-end", overlap: "rectangular" },
 } as const satisfies ComponentManifest;
@@ -460,6 +469,7 @@ export const message = {
   variants: { author: ["user", "assistant"] },
   states: ["streaming"],
   elements: ["bubble", "content", "actions", "cursor"],
+  // The bare block is the assistant's layout (audit S17, G-24).
   defaults: { author: "assistant" },
 } as const satisfies ComponentManifest;
 
@@ -519,7 +529,7 @@ export const card = {
   block: "area-card",
   description: "Groups related media, content and actions on one surface.",
   variants: {
-    layout: ["vertical", "horizontal", "list", "immersive"],
+    layout: ["vertical", "horizontal", "thumbnail", "immersive"],
     size: ["sm", "md", "lg"],
   },
   elements: ["title", "description", "value", "content", "header", "heading", "header-action", "footer", "media", "overlay", "list", "link", "action", "carousel"],
@@ -558,8 +568,9 @@ export const menu = {
   description: "Lists actions triggered from a button.",
   variants: {},
   states: ["disabled", "highlighted", "selected"],
-  elements: ["item", "icon", "text", "lines", "description", "label", "separator", "shortcut", "check", "toggle", "search-surface"],
-  elementModifiers: { item: ["danger"] },
+  // `search-surface` is deprecated (audit D-22): a searchable list is a Combobox or Command palette.
+  elements: ["item", "icon", "text", "lines", "description", "label", "separator", "shortcut", "check", "toggle", "search-surface", "sub-chevron"],
+  elementModifiers: { item: ["danger", "sub"] },
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -570,6 +581,14 @@ export const tooltip = {
   booleans: ["arrow"],
   elements: [],
   defaults: { side: "top" },
+} as const satisfies ComponentManifest;
+
+export const toaster = {
+  block: "area-toaster",
+  description: "Hosts toasts: live regions first, pause on hover and focus, a hotkey, stacking (audit E-11).",
+  variants: {},
+  elements: ["list"],
+  defaults: {},
 } as const satisfies ComponentManifest;
 
 export const toast = {
@@ -583,11 +602,11 @@ export const toast = {
 export const tabs = {
   block: "area-tabs",
   description: "Switches between views with transparent tabs and rounded indicators; labels align with panel content.",
-  variants: { size: ["sm", "md", "lg"], orientation: ["horizontal", "vertical"] },
+  variants: { size: ["sm", "md", "lg"], orientation: ["vertical"] },
   booleans: ["track"],
   states: ["selected", "disabled"],
   elements: ["list", "tab", "panel", "label", "icon"],
-  defaults: { size: "md", orientation: "horizontal" },
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const table = {
@@ -595,7 +614,7 @@ export const table = {
   description: "Presents rows of structured data.",
   variants: { size: ["sm", "md", "lg"] },
   booleans: ["interactive", "striped", "column-dividers"],
-  elements: ["cell"],
+  elements: ["cell", "link"],
   elementModifiers: { cell: ["numeric", "fit"] },
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
@@ -622,8 +641,9 @@ export const segmented = {
 export const code = {
   block: "area-code",
   description: "Marks source or a design token inline.",
-  variants: { ground: ["on-color", "subtle"] },
-  booleans: ["swatch"],
+  // Independent options, as React's booleans (audit S17, H-13; was a `ground` axis).
+  variants: {},
+  booleans: ["swatch", "subtle", "on-color"],
   elements: ["swatch", "label"],
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -634,7 +654,7 @@ export const codeBlock = {
   variants: {},
   booleans: ["flush", "wrap", "unnumbered"],
   states: ["collapsed"],
-  elements: ["header", "title", "language", "languages", "select", "tab", "actions", "body", "pre", "code", "line", "gutter", "linenumber", "marker", "text", "toggle"],
+  elements: ["header", "title", "language", "languages", "select", "actions", "body", "pre", "code", "line", "gutter", "linenumber", "marker", "text", "toggle"],
   elementModifiers: { line: ["highlighted", "added", "removed"] },
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -645,15 +665,18 @@ export const nav = {
   // `orientation` is the axis; `selection` chooses a plate or a marker for the current item.
   // A nav with neither modifier is vertical with a plate, which is the sidebar case. The
   // marker's colour is the Selection role, not a variant.
-  variants: { orientation: ["vertical", "horizontal"], selection: ["plate", "marker"] },
+  variants: { orientation: ["horizontal"], selection: ["marker"] },
   elements: ["group", "label", "item", "icon", "text", "trailing", "separator", "row", "actions"],
-  defaults: { orientation: "vertical", selection: "plate" },
+  // A nested group is an expandable item's children, stepped in like a Tree view level (audit D-20).
+  elementModifiers: { group: ["nested"] },
+  defaults: {},
 } as const satisfies ComponentManifest;
 
 export const token = {
   block: "area-token",
   description: "Deprecated compatibility alias for Code with a token swatch.",
-  variants: { ground: ["on-color", "subtle"] },
+  variants: {},
+  booleans: ["subtle", "on-color"],
   elements: ["swatch", "label"],
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -663,7 +686,8 @@ export const kbd = {
   description: "Marks a keyboard shortcut.",
   variants: {
     size: ["sm", "md"],
-    variant: ["default", "quiet", "on-color", "on-emphasis"],
+    // on-emphasis merged into on-color: one rule, one name (audit A-15).
+    variant: ["default", "quiet", "on-color"],
   },
   elements: ["key"],
   defaults: { size: "md", variant: "default" },
@@ -703,6 +727,7 @@ export const MANIFESTS = {
   radioGroup,
   switch: switchControl,
   slider,
+  sliderRange,
   chip,
   chipGroup,
   choiceLabel,
@@ -736,6 +761,7 @@ export const MANIFESTS = {
   menu,
   tooltip,
   toast,
+  toaster,
   tabs,
   table,
   tableWrapper,

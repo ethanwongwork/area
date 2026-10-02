@@ -11,7 +11,9 @@ avatars (initials at 12px), Nav and Tree view markers (neutral selection), Butto
   second Claude in Chrome pass run in parallel with batch 5, and supplied the photo used for
   Irene Yamaguchi (`apps/docs/public/images/irene-yamaguchi.jpg`, replacing `chip-avatar.png`).
 - 2026-09-26: Neutral by default, accent by override. The active ring is `neutral-solid`;
-  an avatar with `tone="accent"` keeps an accent ring.
+  an avatar with `tone="accent"` keeps an accent ring. *Superseded 2026-09-29 (owner, D1): the
+  ring is the Selection role (`selection-solid`, display.css:63-67), accent by theme; `tone`
+  is neutral or inverse.*
 
 No Avatar section existed in [prior decisions](PRIOR_DECISIONS.md). Its "Other references
 reviewed, 2026-09-24" note records that Geist Avatar was reviewed for adjacent sizing and
@@ -30,7 +32,7 @@ remainder as one more Avatar.
 |---|---|---|---|
 | size | sm 28, md 32 (default), lg 40 | Control tiers, so an avatar sits in a row of controls | Untitled 24–64; ChatGPT 20 and 24; Figma 24 |
 | shape | circle (default), square | Square for workspaces and bots | Untitled, ChatGPT and Figma circle |
-| tone | neutral (default), accent, inverse | Fallback ground; neutral by default | Untitled neutral only; Figma a per-user hue |
+| tone | neutral (default), inverse (accent removed 2026-09-29, D1) | Fallback ground; neutral by default | Untitled neutral only; Figma a per-user hue |
 | active | boolean | Current or speaking participant | Area's own; no product capture |
 | content | image, initials, icon | Fallback chain image → icon → initials | Untitled image and initials |
 | composition | group, availability, notification | AvatarGroup; Indicator | Gallery tiles |
@@ -91,13 +93,14 @@ icon content: 20px viewport at md, ink 14 × 16 (`area--content-icon`). Group: i
 | shell · size | `control-sm/md/lg` 28 / 32 / 40 (`display.css:74-80`) | Peer: control tiers | Untitled 24–64; ChatGPT 20 / 24; Figma 24. Area's sm is larger than every product; kept for compact density (third pass) |
 | shell · radius | `radius-full`; square `radius-control` 8 (`display.css:22, 49`) | ChatGPT, Figma and Untitled round | — |
 | fill · neutral | `bg-component-active` #eeeeee (dark #3f3f3f) | Untitled neutral-100 #f5f5f5 | One step darker, so the disc reads on `bg-component` rows. Figma paints a per-user hue, rgb(102, 119, 153); neutral kept (third pass) |
+| tone · treatment | tone also switches treatment: `neutral` is a soft plate (`bg-component-active`, `fg-muted` ink); `inverse` is solid (`bg-inverse`, `fg-on-inverse`) (`display.css:52-61`) | Owner, audit C-21 A (2026-09-30) | Badge's soft accent differs; kept and documented. The hued `accent` tone that was also solid was removed 2026-09-29 (D1) |
 | initials · ink | `fg-muted` #666666 | Untitled neutral-500 #737373 | Area's muted role; Figma white on its hue |
 | initials · size | **12 / 14 / 16 at sm / md / lg** (`--_text`, `display.css`) | Notion 14 on its 32 Share-list avatar (`notion--share-person-avatar`, initials layer 14px/32px); Untitled 12 / 14 / 16 by size; owner (2026-09-28) | Was 12 at sm and md, 14 at lg: two initials read small on the 32 disc (37% of the side against Notion's 44% and Figma's 50%) |
 | initials · weight | 500 | Type ramp (500 for labels on fills, DESIGN_SYSTEM "Color and focus") | Notion 400 (person), 500 (workspace); Figma 400; Untitled 600; one label weight (third pass) |
 | icon · size | 16 / 20 / 24 at sm / md / lg | Native Fluent cuts at their size | — |
 | edge | none | ChatGPT and Figma (none) | Untitled draws a 0.5px black-16% hairline |
-| active ring | **2px `bg-surface` gap + 2px `neutral-solid`** #282828 (dark #f3f3f3) (`display.css:67-71`) | Owner (2026-09-26) | Was `accent-solid` #5c5dfe on every avatar |
-| active ring · accent tone | `accent-solid` via `--_ring` (`display.css:72`) | Owner: accent by override | — |
+| active ring | **2px `bg-surface` gap + 2px `selection-solid`**, neutral by default #282828 (dark #f3f3f3) (`display.css:63-67`) | Owner (2026-09-26) | Was `accent-solid` #5c5dfe on every avatar |
+| active ring · accent theme | the Selection role's accent; `--_ring` overrides it (`display.css:67`) | Emphasis roles (D1); was `tone="accent"` | — |
 | group · overlap / ring | −8px, 1px `bg-surface` (`display.css:94-102`) | Area's own | Not in Untitled's recorded source |
 
 Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)); all kept:
@@ -105,8 +108,8 @@ Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-
 1. Smallest size stays 28. Every product avatar measured is 20–24 (ChatGPT 20 and 24,
    Figma 24); 20–24 belongs to the planned compact density.
 2. Fallback ground stays neutral. Figma gives each person a hue with white initials
-   (`figma--avatar-initial`); Area is neutral by default, and `tone="accent"` is its hued
-   fallback.
+   (`figma--avatar-initial`); Area is neutral by default (a hued `tone="accent"` fallback was
+   removed 2026-09-29, D1).
 3. Initials weight stays 500 (Figma 400, Untitled 600): one label weight.
 
 ## States
@@ -130,8 +133,8 @@ image, the `img` keeps its native `alt` (`avatar.test.mjs:7, 14`). Initials and 
 
 | Peer | Shared role | Peer value | Avatar | Match |
 |---|---|---|---|---|
-| Nav marker, Tree view rail, Code block linked line | current / selection marker | neutral ink | `neutral-solid` ring | match |
-| Chip avatar | initials size | 12px (audit) | 12px at md | match |
+| Nav marker, Tree view rail, Code block linked line | current / selection marker | Selection role | `selection-solid` ring | match |
+| Chip avatar | initials size | 12px in the Chip's 20px avatar (chip.css:169-171) | 14px at md (`text-sm`, display.css:76), 12 at sm | differs by box size: the Chip avatar is smaller than Avatar sm |
 | Focus ring | ring geometry | 2px `focus-color`, 2px offset | 2px ring, 2px gap, `neutral-solid` | same geometry, told apart by colour |
 | Indicator | status on avatar | inside the owner's box (`overlap="circular"`) | anchor, no own slot | match |
 | Badge | label on a fill | 500 | 500 | match |
@@ -202,3 +205,4 @@ avatar-bearing control, a side-by-side with Figma's initials avatar.
 - 2026-09-28 · owner: approved (batch 5).
 - 2026-09-28 · second pass (Notion Share popover) → initials 12 / 14 / 16 by size; owner approved
   and supplied Irene's photo → `notion--share-person-avatar`, `area--size-*` re-captured.
+- 2026-09-30 · audit C-21 (owner pick A) → kept: tone switches treatment as well as colour (neutral a soft plate, inverse solid); recorded under Decisions → display.css:52-61.

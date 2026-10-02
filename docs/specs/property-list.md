@@ -30,13 +30,14 @@ everywhere in Area. Not TreeView (hierarchy), not Menu (commands), not PanelRow 
 
 | Slot | Area value | Basis |
 |---|---|---|
-| row | value, then the row's buttons: value ends 8 before the first button, buttons 4 apart, the last on the content edge | Figma: field to 172, eye 180, remove 208 (8, then 4) |
-| rows | 8 apart | Panel section gap; Figma rows pitch 32 around 24px controls |
+| row | value, then the row's buttons: value ends one field gap before the first button (`--_panel-gap`: 8 in a small panel, 12 at md; 8 outside a panel), buttons 4 apart, the last on the content edge (property-list.css:22, 27) | Figma: field to 172, eye 180, remove 208 (8, then 4) |
+| rows | the panel's row gap (sm 8, md 12; 8 outside a panel; property-list.css:12) | Panel row gap; Figma rows pitch 32 around 24px controls |
 | handle | fills the panel's side inset, glyph (16 slot, new `grip`: two 5px bars) centred; shown on hover, focus or drag; always shown on touch; only when `onReorder` is set and there are two or more items | Figma: reorder handle in the margin, only with more than one item |
 | drag | pointer capture on the handle; the moving row stays in place at 40%; a 2px neutral-ink line (`fg-default`) marks the landing gap (was the focus colour; neutral per the cohesion audit, 2026-09-27); no line beside the row's own position; Escape cancels | Common sortable-list pattern (Figma, Framer layer rows) |
 | keyboard | the handle is a button: ArrowUp/Down move one place, Home/End to the ends; focus stays on the moved row's handle; the move is announced ("00A797 fill moved to position 1 of 3") | WAI live-region announcement; keyboard parity with the pointer |
 | inactive | `inactive` dims the value to 50%; the buttons stay full strength so the row can be turned back on | Figma dims hidden fills |
-| names | the list is named by `aria-label` ("Fills"; `label` on the list is a deprecated alias); each item's `label` names its handle ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move |
+| names | each item's `label` names its handle ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move |
+| list name | a consumer's `aria-label` names the list, else `PropertyList` `label` (PropertyList.tsx:131) | Audit S17: the consumer's attribute wins, as in every Area group |
 
 ## Visual pass
 
@@ -45,6 +46,9 @@ item and Effects tiles take the Figma recipe's 280px panel. At default density (
 panel's value column (146) cannot hold a six-digit hex beside its opacity, nor "Inner shadow" beside
 its icon; the default panel stays 240 (owner, 2026-09-27) and compact density returns inspector
 panels to Figma's 240. With the Color field and Select fixes, every row shows its whole value.
+Since audit F-28 B (owner 2026-09-30) the gallery's panels are `size="sm"`, matching the sm
+controls inside them (the panel audit rule: controls at the panel's tier). A Panel that hands its
+tier to its controls through context is deferred to compact density.
 
 ## Verification
 
@@ -57,9 +61,9 @@ Unverified: touch drag on a device; screen reader output of the live region; dar
 
 ## Open questions
 
-- A small panel's side inset is 8px (gutter-sm), so the handle's ink sits 1.5px from the
-  value. The demos use a medium panel (12px inset). Options: a 12px minimum inset for panels
-  with reorderable lists, or the compact-density inspector adopting Figma's 16.
+- ~~A small panel's side inset is 8px (gutter-sm), so the handle's ink sits 1.5px from the
+  value.~~ Settled 2026-09-28: Panel's inset is 12 at sm and 16 at md ([panel.md](panel.md)),
+  so the handle has the 12px inset this question asked for.
 - Nesting (effects with sub-settings popovers) and multi-select are out of scope.
 
 ## Feedback log
@@ -68,4 +72,5 @@ Unverified: touch drag on a device; screen reader output of the live region; dar
   → no clipped value in the gallery.
 - 2026-09-28 · owner: approved (batch 9).
 - 2026-09-28 · inside a panel, items are a row gap apart and values a field gap from their actions (`--_panel-*`).
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → the list is named by `aria-label` (`label` on the list is a deprecated alias); an item's `label` still names its handle.
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → a consumer's `aria-label` wins over `label` on the list (PropertyList.tsx:131; `label` used to override it).
+- 2026-10-01 · audit F-28 (owner pick B) → gallery panels are sm, matching their sm controls (were md panels around sm controls); Panel tier context deferred to compact density → apps/docs/src/demos/gallery.tsx:801-808.

@@ -6,7 +6,8 @@
     --_group-text: var(--area-control-md-text);
     --_group-leading: var(--area-control-md-leading); --_group-radius: var(--area-radius-control-md);
     --_group-bg: var(--area-bg-component);
-    --_group-edge: var(--area-border-decorative);
+    /* The base rule is the manifest default, soft: no edge (audit A-18; was border-decorative). */
+    --_group-edge: transparent;
     --_group-divider: var(--area-edge-control); /* spec */
     --_group-divider-inset: calc(-1 * var(--area-stroke-width)); /* spec: full height */
     display: inline-flex;
@@ -79,5 +80,24 @@
     pointer-events: none;
   }
   .area-button-group--outline > .area-button + .area-button::before { content: none; }
+  /* A disabled button dims on its own, so the seam beside it is drawn by the enabled neighbour,
+     at full strength (audit A-23 A, owner 2026-09-30): a disabled button gives up its divider
+     and the enabled button before it draws one at its end instead. */
+  .area-button-group:not(.area-button-group--outline) > .area-button:not(:disabled) + .area-button:disabled::before { content: none; }
+  .area-button-group:not(.area-button-group--outline) > .area-button:not(:disabled):has(+ .area-button:disabled) { z-index: 1; }
+  .area-button-group:not(.area-button-group--outline) > .area-button:not(:disabled):has(+ .area-button:disabled)::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 0;
+    inset-block: var(--_group-divider-inset);
+    inline-size: var(--area-stroke-width);
+    background: var(--_group-divider);
+    pointer-events: none;
+  }
   .area-button-group > .area-button:is(:focus-visible, [data-selected]) { z-index: 1; }
+
+  /* Every part disabled: the joined control dims once as a whole, so the seam and edges where the
+     parts overlap aren't dimmed twice (audit H-26). One disabled part still dims alone. */
+  .area-button-group:has(> .area-button:disabled):not(:has(> .area-button:not(:disabled))) { opacity: var(--area-opacity-disabled); }
+  .area-button-group:has(> .area-button:disabled):not(:has(> .area-button:not(:disabled))) > .area-button:disabled { opacity: 1; }
 }

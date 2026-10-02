@@ -86,7 +86,13 @@ area     nav > ol.area-breadcrumb__list flex, gap 4, 14/20
 ## Behavior and accessibility
 
 `nav` with `aria-label="Breadcrumb"`, an ordered list, separators `aria-hidden`, the current
-page `aria-current="page"`, the ellipsis `role="img"` named "More pages".
+page `aria-current="page"`. `BreadcrumbEllipsis` takes `items: { label, href }[]`, the hidden
+ancestors (audit D-19 A, owner 2026-09-30). With items it is a `<button>` named "More pages",
+the trigger of a Menu (`aria-haspopup="menu"`, `aria-expanded`), whose rows are links
+(`<a role="menuitem" class="area-menu__item">`), so a page opens like any other crumb. The
+button takes the link's hover plate and focus ring on `::before` (2 above and below, 6 past
+the glyph, `radius-small`), and keeps the plate while the menu is open (`breadcrumb.css:41-48`).
+Without items it stays a decorative `role="img"` span named "More pages" (Breadcrumb.tsx:44-58).
 
 ## Peers and consistency
 
@@ -133,3 +139,4 @@ muted ancestors and chevron separator are the recorded decisions. No change.
   gallery → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S11b (owner) → the focus ring follows the hover plate: drawn on `::before` at offset 0, the link's own outline removed → `breadcrumb.css:26-27`.
 - 2026-09-30 · audit S14 (owner) → a link or page icon sits 6 from its label (`gap-md`, was 8; `breadcrumb.css:22`, `:29`); the item gap is pinned to 8 (`breadcrumb.css:15`) and the 4 list gap is unchanged.
+- 2026-10-01 · audit D-19 (owner pick A) → `BreadcrumbEllipsis items` makes the marker a menu button that opens a Menu of the hidden ancestors as link rows, with the link's hover plate and focus ring; without items it stays decorative → Breadcrumb.tsx:44-58, breadcrumb.css:41-48.

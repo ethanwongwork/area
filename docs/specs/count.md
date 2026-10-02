@@ -25,7 +25,6 @@ default).
 |---|---|---|---|
 | variant | plain (default) | Ink only | Notion's board group counts (`indicator/notion--board-group-count`, `notion--board-group-tag`); shadcn SidebarMenuBadge |
 | variant | soft | Neutral translucent plate | Primer CounterLabel (`primer--counter-label-secondary`), Untitled tabs, Polaris tabs |
-| tone | neutral (default), accent | Quiet by default; accent for an unread emphasis | Primer primary, Untitled's brand counts |
 | size | sm 16, md 20 (default) | Badge's sm and md heights | Fluent small 16 / medium 20, Notion 20, shadcn 20, Primer 18 |
 | content | overflow (`max+`), zero hidden, screen-reader label | Indicator's formatting; Primer's hidden "(12)" text | Fluent CounterBadge `overflowCount`, Spectrum 99+ |
 
@@ -93,7 +92,6 @@ keeps the same fill and ink on the current tab (`primer--underline-nav-counter--
 | plain ink | `fg-muted` #666 | Notion's neutral count rgb(95, 94, 89) (muted heading ink); Nav trailing ink | — |
 | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))` /* spec */ | Primer 12% of neutral 8 = #f0 on white = 6% black | Translucent so it stays visible on the hover and selected row plates (#f3 / active); dark 10% white, not measured |
 | soft ink | `fg-muted` | Badge neutral soft (muted metadata) | Primer uses default ink |
-| accent | ink `fg-accent`; soft plate `accent-surface` | Accent role | — |
 | owner state | ink fixed on hover and selection | Nav's rule (`nav.css:207`: trailing annotations stay muted on the current row); Primer keeps paint on the current tab | Polaris and Untitled switch tone on the selected tab; not adopted |
 | overflow | `max+`, max 99 | Fluent, Spectrum; shared helper `count-format.ts` with Indicator | — |
 | name | number read in the owner's name; `label` adds hidden words | Primer's visually hidden "(12)"; Atlassian: pair with a label | — |
@@ -129,8 +127,10 @@ tabs compositions), both zoomed:
 - Plain Count is Notion's count in Area's terms: a muted number with no plate, 20 tall, 6 at the
   sides. Notion sets it at its heading's 14px; Area's 12px sits a step below the 14/20 label, as
   Badge does. **Open for the owner:** 14px (Notion) or 12px (Badge, Primer, shadcn, Fluent).
-- Notion tints a group's count with the group colour; Area's `accent` tone covers the one
-  coloured case it needs, without per-hue tones.
+- Notion tints a group's count with the group colour; Area's `accent` tone covered the one
+  coloured case it needed, without per-hue tones. *Superseded 2026-09-29 (owner, D1): accent
+  variants were removed from every component; Count is neutral (manifest: `variant` and
+  `size` only).*
 - Notion shows 108 in full; Area caps at 99+ by default (`max` lifts it), following Fluent,
   Spectrum and Indicator.
 - The soft plate reads as Primer's CounterLabel and stays visible beside the selected tab's

@@ -63,25 +63,29 @@
   }
 
   /* Transparent tabs use a pending indicator instead of a hover backplate. */
-  @media (hover: hover) { .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after, .area-tabs--vertical .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after { background-color: var(--area-border-hover); } }
+  @media (hover: hover) {
+    .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after,
+  .area-tabs--vertical .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after {
+    background-color: var(--area-border-hover);
+    }
+  }
   .area-tabs__tab:active:not([data-disabled]):not([data-selected])::after,
   .area-tabs--vertical .area-tabs__tab:active:not([data-disabled]):not([data-selected])::after {
     background-color: var(--area-fg-muted);
   }
   .area-tabs__label { display: inline-flex; align-items: center; white-space: nowrap; }
   .area-tabs--track .area-tabs__list { border-block-end: var(--area-border-width) solid var(--area-border-divider); }
-  .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-end: var(--area-border-width) solid var(--area-border-divider); }
+  /* The vertical track sits on the indicator's side, the start, as horizontal tabs put both at the
+     bottom (audit D-21; was the end, opposite the rail). */
+  .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-start: var(--area-border-width) solid var(--area-border-divider); }
   .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--_tab-icon); block-size: var(--_tab-icon); }
   .area-tabs__icon > svg { inline-size: 100%; block-size: 100%; }
   .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: var(--area-space-16); --_tab-icon: var(--area-icon-sm); --_tab-item-gap: var(--area-gap-sm); }
   .area-tabs--md { --_tab-height: var(--area-control-md); }
   .area-tabs--lg { --_tab-height: var(--area-control-lg); --_tab-text: var(--area-control-lg-text); --_tab-leading: var(--area-control-lg-leading); --_tab-gap: var(--area-space-24); --_tab-icon: var(--area-icon-lg); --_tab-item-gap: var(--area-gap-lg); }
-  /* Restates the base: every default value has a class (audit S17 / H-13), so the manifest names
-     it and framework-free markup can say it. */
-  .area-tabs--horizontal { flex-direction: column; }
   .area-tabs--vertical { flex-direction: row; gap: var(--area-space-16); }
   .area-tabs--vertical .area-tabs__list { flex-direction: column; gap: var(--area-space-4); flex-shrink: 0; border-block-end: 0; border-inline-end: 0; }
-  .area-tabs--vertical .area-tabs__tab { justify-content: flex-start; padding-inline-start: var(--area-space-10); }
+  .area-tabs--vertical .area-tabs__tab { justify-content: flex-start; padding-inline-start: calc(var(--area-space-2) + var(--area-space-8)); /* the 2 rail plus 8 (audit D-21: was an unmarked 10) */ }
   .area-tabs--vertical .area-tabs__tab::after { inset-block: var(--area-space-4); inset-inline: 0 auto; inline-size: var(--area-space-2); block-size: auto; }
   .area-tabs--vertical .area-tabs__panel { padding-block-start: var(--area-space-6); min-inline-size: 0; }
 
@@ -174,7 +178,26 @@
   }
 
   /* Row plates follow Menu and Nav: hover is the component hover fill, selection the active fill. */
-  @media (hover: hover) { .area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td { background-color: var(--area-bg-component-hover); } }
+  @media (hover: hover) {
+    .area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td {
+      background-color: var(--area-bg-component-hover);
+    }
+  }
+
+  /* A clickable row (audit F-23 A): one stretched link covers the row, as CardLink covers a card;
+     other controls in the row sit above it, and the row shows the link's focus. */
+  .area-table tbody tr:has(.area-table__link) { position: relative; cursor: pointer; }
+  .area-table__link { color: inherit; text-decoration: none; outline: none; }
+  .area-table__link::after { content: ""; position: absolute; inset: 0; }
+  .area-table tbody tr:has(.area-table__link) :is(a, button, input, select, textarea, [tabindex]):not(.area-table__link) { position: relative; z-index: 1; }
+  .area-table tbody tr:has(.area-table__link:focus-visible) { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+  /* The scrolling wrapper takes focus only while it overflows. */
+  .area-table-wrapper:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+
+  /* A Button in a header cell (a sort control) keeps the row at its text height and its label on
+     the column's text edge: it overhangs the cell's block padding (audit F-24), and the demos pull
+     it onto the edge with align. */
+  .area-table th > .area-button { margin-block: calc((var(--area-ui-leading) - var(--_height)) / 2); }
 
   /* Tabular figures so columns of numbers align on the decimal. */
   .area-table .area-table__cell--numeric {
@@ -221,8 +244,6 @@
     inline-size: var(--area-select-inline-size);
     max-inline-size: 100%;
     block-size: var(--_height);
-    padding-inline: var(--_gutter);
-    padding-inline-end: calc(var(--_gutter) + var(--_icon) + var(--area-space-4));
 
     border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
@@ -245,11 +266,10 @@
 
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right var(--_gutter) center;
+    /* Position and padding come from the inset contract (inset.css), which loads later (audit B-27). */
     background-size: var(--_icon);
   }
 
-  [dir="rtl"] .area-select { background-position: left var(--_gutter) center; }
 
   /* Explicit for manifest parity; the base class remains the framework-free default. */
   .area-select--outline { --_bg: var(--area-select-bg); }
@@ -263,7 +283,6 @@
   }
 
   .area-select--full-width { inline-size: 100%; }
-
   @media (hover: hover) { .area-select:hover:not(:disabled):not(:focus) { border-color: var(--_border-hover); } }
 
   .area-select:focus {
@@ -298,6 +317,9 @@
     --_focus-halo: var(--area-select-warning-halo-color);
   }
 
+  /* An empty-value option chosen is a placeholder: placeholder ink, as Input's (audit B-19). */
+  .area-select:has(option:checked[value=""]) { color: var(--area-input-placeholder); }
+
   .area-select:disabled {
     --_border: var(--area-border-faint);
     background-color: var(--area-select-bg-disabled);
@@ -314,23 +336,39 @@
    * Unsupported browsers keep the ordinary native picker above. */
   @supports (appearance: base-select) {
     .area-select, .area-select::picker(select) { appearance: base-select; }
-    .area-select::picker-icon { display: none; }
-    /* The one anchored surface the React engine can't place: the platform owns the native
-       picker. spec (audit B-5, owner 2026-09-30): Combobox's list rules -- 4 from the field (as
-       every list), flips above when there is no room below (was never; revisits the pre-09-24
-       decision), at least Menu's 224 and the field's width (a 96px mode Select opened a 96px
-       list), 324 tall at most (Figma's font list; was 288). */
+    /* The chevron and the check are the Area glyphs (chevron-down, check: the paths in glyphs.ts
+       at the default 1.125 icon weight) in the field's icon ink, as Combobox draws them; the #888
+       data URI above stays only for the native picker (audit B-3 B, owner 2026-09-30). */
+    .area-select { position: relative; background-image: none; }
+    .area-select::picker-icon {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-end: var(--_chevron-inset);
+      inline-size: var(--_icon);
+      block-size: var(--_icon);
+      margin-block: auto;
+      background-color: var(--area-input-icon);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    }
+    .area-select:disabled::picker-icon { background-color: var(--area-fg-disabled); }
+    /* The browser anchors the native picker; it follows the Combobox list's rules (audit B-5,
+       owner 2026-09-30, replacing the 09-24 no-flip call): 4 below the field, flips when the room
+       runs out, at least a menu's width (224), and 324 tall at most (Figma's font list). */
     .area-select::picker(select) {
-      margin: 0;
+      margin-block: var(--area-space-4);
+      margin-inline: 0;
       inset: auto;
       position-area: block-end span-inline-end;
-      margin-block-start: var(--area-space-4);
       position-try-fallbacks: flip-block;
+      /* Below unless it doesn't fit: the UA's most-block-size order opened it on the roomier side. */
+      position-try-order: normal;
       min-inline-size: max(anchor-size(self-inline), calc(var(--area-space-96) * 2 + var(--area-space-32)));
       max-block-size: min(324px, 100%); /* spec */
       overflow: auto;
       padding: var(--area-space-4);
-      border: var(--area-border-width) solid var(--area-edge-float);
+      border: var(--area-border-width) solid var(--area-border-decorative);
       border-radius: var(--area-radius-container);
       background: var(--area-bg-surface);
       color: var(--area-fg-default);
@@ -340,35 +378,53 @@
       font-size: var(--area-ui-size);
       line-height: var(--area-ui-leading);
     }
+    /* Options are Menu rows, the one list model (audit B-4): 32 at every trigger size, text on
+       the inset contract (32 less a cap, halved: 11), the check's edge 8 from the end, 12 between
+       them, and the corner concentric inside the picker's 4px padding. */
     .area-select option {
       display: flex;
       align-items: center;
       gap: var(--area-gap-row); /* the list label column (audit S11a) */
       box-sizing: border-box;
       flex-shrink: 0;
-      min-block-size: max(var(--_height), var(--area-control-md));
-      padding: var(--area-space-6) var(--area-space-8);
+      block-size: var(--area-control-md);
+      padding-block: 0;
+      padding-inline-start: max(0px, calc((var(--area-control-md) - 1cap) / 2));
+      padding-inline-end: max(0px, calc((var(--area-control-md) - var(--area-icon-md)) / 2));
       font-size: var(--area-ui-size);
       line-height: var(--area-ui-leading);
       margin-block: var(--area-space-2) 0;
       border: 0;
-      border-radius: var(--area-radius-row);
+      border-radius: min(max(0px, calc(var(--area-radius-container) - var(--area-space-4))), calc(var(--area-control-md) * var(--area-radius-cap)));
       background: transparent;
       color: var(--area-fg-default);
       cursor: pointer;
     }
     .area-select option:first-child { margin-block-start: 0; }
-    .area-select option:focus-visible { background: var(--area-bg-component-hover); }
     @media (hover: hover) { .area-select option:hover { background: var(--area-bg-component-hover); } }
+    .area-select option:focus-visible { background: var(--area-bg-component-hover); }
     .area-select option:checked { background: var(--area-bg-component-active); }
-    /* Keyboard focus is the plate alone, as Menu and Combobox rows (audit B-5: one focus paint). */
+    /* Keyboard focus is the plate alone, as in Menu and Combobox rows (audit B-5). */
     .area-select option:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
-    .area-select option::checkmark { order: 1; margin-inline-start: auto; color: currentColor; }
+    .area-select option::checkmark {
+      content: "";
+      order: 1;
+      flex: none;
+      inline-size: var(--area-icon-md);
+      block-size: var(--area-icon-md);
+      margin-inline-start: auto;
+      background-color: currentColor;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    }
+    /* A group label is Menu's: 12/16 muted on a 32 row (the options reset their own type). */
     .area-select optgroup {
       display: grid;
       grid-template-rows: var(--area-control-md) auto;
       padding: 0;
       color: var(--area-fg-muted);
+      font-size: var(--area-text-xs-size);
+      line-height: var(--area-text-xs-leading);
       font-weight: var(--area-weight-regular);
     }
     .area-select optgroup option { font-weight: var(--area-weight-regular); }

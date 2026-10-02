@@ -56,10 +56,12 @@ page, so no placeholder was on screen; a product skeleton needs a capture during
 ## Anatomy
 
 ```
-area  div.area-skeleton[aria-hidden]  block; bg-component fill; a travelling
-      bg-component-active highlight (200% × 100% gradient, 1.4s ease-in-out)
-  text       block 1em (the host's font size), radius-small
-  circle     radius-full; rectangle 0; rounded radius-container
+area  div.area-skeleton[aria-hidden]  fill 10% grey (dark bg-component); a travelling band
+      (200% × 100% gradient, area-shimmer 3s linear); corner min(radius-small, 4)
+  block      100% × 16 until the host sizes it (default)
+  text       1em tall, centred in the host's line box
+  circle     radius-full, 1:1
+  (display.css:140-190; was text / circle / rectangle / rounded, 1.4s ease-in-out)
 ```
 
 Width and height come from the consumer (inline style), except text, whose height is `1em`.
@@ -103,7 +105,7 @@ an 80 × 32 rounded block.
 
 | State | Changes | Evidence |
 |---|---|---|
-| animating | `area-shimmer`, 1.4s | all tiles (`animation-name`) |
+| animating | `area-shimmer`, 3s linear (display.css:162) | all tiles (`animation-name`) |
 | motion none / reduced | no animation, no gradient: a flat `bg-component` block | display.css:271-272; not tiled |
 
 ## Behavior and accessibility
@@ -117,7 +119,7 @@ busy or labels it (`area--card`: `aria-label="Loading card"`).
 |---|---|---|---|---|
 | Spinner, Progress | motion axis | stop under `motion="none"` | same | match (audit) |
 | Card | media radius | card radius 12 − padding 7 − border 1 = 4 (surface.css:17, 22, 98; arithmetic) | clipped by the media slot | match. Was 16 when Card was 24px |
-| Card | rounded block | `radius-container` 12 | `rounded` 12 | match (second pass moved Card onto the container role) |
+| Card | media block | Card's own corner | `block` at 4, clipped by the host | the `rounded` shape was removed (owner option A, 2026-09-28) |
 | Avatar | circle | `radius-full` | same | match |
 
 ## Visual pass

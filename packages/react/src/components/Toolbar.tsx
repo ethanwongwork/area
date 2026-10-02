@@ -1,11 +1,10 @@
 import { cloneElement, createContext, forwardRef, useContext, useRef } from "react";
 import type { HTMLAttributes, KeyboardEvent, ReactElement, ReactNode } from "react";
-import { cx, menuVariants, toolbarVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { cx, toolbarVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { InToolbar, ToolbarSize, toolbarItemProps } from "./toolbar-context.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { AnchoredMenu } from "./Overlays.tsx";
-import { assignRef } from "./overlay.ts";
-import { InToolbar, clearToolbar, toolbarItemProps } from "./toolbar-context.ts";
+import { Menu, type MenuProps } from "./primitives.tsx";
 
 export interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
   variant?: VariantProps<typeof MANIFESTS.toolbar>["variant"];
@@ -45,7 +44,7 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
     event.preventDefault();
     items[next]?.focus();
   }
-  return <InToolbar.Provider value={true}><ToolbarOrientation.Provider value={orientation}><div ref={ref} {...rest} role="toolbar" aria-orientation={orientation} tabIndex={0}
+  return <InToolbar.Provider value={true}><ToolbarSize.Provider value={size ?? undefined}><ToolbarOrientation.Provider value={orientation}><div ref={ref} {...rest} role="toolbar" aria-orientation={orientation} tabIndex={0}
     className={toolbarVariants({ variant, size, orientation, fullWidth }, className)}
     onFocusCapture={event => {
       onFocusCapture?.(event);
@@ -64,7 +63,7 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
       onBlurCapture?.(event);
       if (!event.currentTarget.contains(event.relatedTarget as Node | null)) event.currentTarget.tabIndex = 0;
     }}
-    onKeyDown={handleKeyDown} /></ToolbarOrientation.Provider></InToolbar.Provider>;
+    onKeyDown={handleKeyDown} /></ToolbarOrientation.Provider></ToolbarSize.Provider></InToolbar.Provider>;
 });
 
 export interface ToolbarItemProps { children: ReactElement<{ tabIndex?: number; "data-area-toolbar-item"?: string }> }
@@ -90,29 +89,25 @@ export const ToolbarSeparator = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLS
     className={cx("area-toolbar__separator", className)} {...rest} />;
 });
 
-export interface ToolbarOverflowProps extends HTMLAttributes<HTMLDivElement> {
-  /** Names the More button, and so the menu ("More actions"). */
-  "aria-label"?: string;
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
+export interface ToolbarOverflowProps extends Omit<MenuProps, "trigger"> {
+  /** Names the trigger that opens the menu, as SplitButton's `menuLabel` (audit A-17). */
+  menuLabel?: string;
+  /** @deprecated Use `menuLabel`. */
   label?: string;
-  /** Replaces the three dots. */
+  /** Replaces the trigger's dots. */
   icon?: ReactNode;
-  /** The commands that don't fit in the row: MenuItems. */
-  children?: ReactNode;
 }
 /**
- * Commands that don't fit in the primary row: a ghost "More" icon Button, one of the toolbar's
- * roving items, opening a Menu (audit S16 / A-8, owner 2026-09-30). The menu is a native
- * popover placed by the shared overlay engine, clearing the bar by 4 at its end edge, with
- * Menu's keys: Enter, Space or ArrowDown open on the first item, ArrowUp on the last.
+ * Commands that do not fit in the primary row: a ghost icon Button that opens a Menu of
+ * MenuItems, SplitButton's model (audit S16, A-8). The trigger is one of the toolbar's roving
+ * items; the menu opens in the top layer, placed by the shared overlay engine.
  */
 export const ToolbarOverflow = forwardRef<HTMLDivElement, ToolbarOverflowProps>(function ToolbarOverflow(
-  { label, "aria-label": ariaLabel = label ?? "More actions", icon, className, children, ...rest }, ref,
+  { menuLabel, label, icon, side, align, ...rest }, ref,
 ) {
   const orientation = useContext(ToolbarOrientation);
-  return <AnchoredMenu
-    trigger={<Button variant="ghost" iconOnly icon={icon ?? <Glyph name="more-horizontal" />} aria-label={ariaLabel} {...toolbarItemProps} />}
-    side={orientation === "vertical" ? "right" : "bottom"} align="end" anchorRect={clearToolbar}
-    surface={props => <div role="menu" {...rest} {...props} className={menuVariants({}, className)}
-      ref={node => { assignRef(ref, node); assignRef(props.ref as never, node); }}>{children}</div>} />;
+  // A horizontal bar opens below, ending at the trigger (it usually closes the row); a vertical
+  // one opens beside it.
+  return <Menu ref={ref} side={side ?? (orientation === "vertical" ? "right" : "bottom")} align={align ?? (orientation === "vertical" ? "start" : "end")} {...rest}
+    trigger={<Button variant="ghost" iconOnly aria-label={menuLabel ?? label ?? "More actions"} icon={icon ?? <Glyph name="more" />} {...toolbarItemProps} />} />;
 });

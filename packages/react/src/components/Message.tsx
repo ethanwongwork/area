@@ -3,8 +3,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { messageVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 
 export interface MessageProps extends Omit<HTMLAttributes<HTMLElement>, "role"> {
-  /** Who wrote it: the person (a bubble at the end) or the assistant (prose across the column,
-   * the default). */
+  /** Who wrote it: the person (a bubble at the end) or the assistant (prose across the column, default). */
   author?: VariantProps<typeof MANIFESTS.message>["author"];
   /** Names the author for assistive tech ("You", "ChatGPT"). */
   authorName?: string;
@@ -31,13 +30,13 @@ export const Message = forwardRef<HTMLElement, MessageProps>(function Message(
 });
 
 export interface MessageActionsProps extends HTMLAttributes<HTMLDivElement> {
-  /** @deprecated Name it with `aria-label` (audit S17: `label` is visible text; names are `aria-label`). */
+  /** Names the group ("Message actions"). */
   label?: string;
 }
 
 /** Copy, rate, read aloud, regenerate: ghost icon Buttons with no gap, muted. */
 export const MessageActions = forwardRef<HTMLDivElement, MessageActionsProps>(function MessageActions(
-  { label, "aria-label": ariaLabel = label ?? "Message actions", className, ...rest }, ref,
+  { label = "Message actions", className, ...rest }, ref,
 ) {
-  return <div ref={ref} role="group" aria-label={ariaLabel} className={["area-message__actions", className].filter(Boolean).join(" ")} {...rest} />;
+  return <div ref={ref} role="group" aria-label={label} className={["area-message__actions", className].filter(Boolean).join(" ")} {...rest} />;
 });
