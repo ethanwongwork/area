@@ -62,7 +62,7 @@ unchanged. R9–R12 keep what ships.
 | R3 | Tooltip corner | 10 → 8 | VS Code 3, Figma 5; a 24 box reads `radius-control-sm` 4 | **4 at compact** (radius follows height) | High |
 | R4 | Panel md sides | 16 → 12 | Figma inspector 16 | **hold 16** | High |
 | R5 | Color picker body inset | 16 → 12 | Figma color picker 16 | **hold 16** | High |
-| R6 | `control-xl` / `gutter-xl` | 48 / 16 → 36 / 14 | none; off the ladder and the 4px grid | **40 / 12** (one rung: compact xl = default lg) | High |
+| R6 | `control-xl` / `gutter-xl` | 48 / 16 → 36 / 14 | none; off the ladder and the 4px grid | **40 / 12** (one rung: compact xl = default lg). Token ladder only: no component reads the xl height today (Calendar's week numbers read its text, unchanged) | High |
 | R7 | Menu row gap | 2 → 2 | VS Code 0, Figma 0 | **0 at compact**: new role `ui-row-gap` (2 / 0) in Menu, Nav, Tree view, Command palette, Combobox; separator keeps 4 / 1 / 4 | Medium |
 | R8 | Dialog inset · corner | 16 · 16 → 16 · 16 | VS Code save dialog: content 13 / 21, actions 9, corner 8; antd 24 → 16; Material holds 24 | **inset 12, corner 12** (the compact close sits 6 in at radius 6: 12 concentric; VS Code 8) | Medium |
 | R9 | Popover inset | 12 → 8 | VS Code editor hover 8 + 1 sides; antd and Spectrum hold; Figma color picker 16 | **keep 8** (VS Code hover is the closest surface) | Medium |
