@@ -7,40 +7,17 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 
 ## Start here (next session)
 
-**First task: reconcile this branch with `main`.** While this session ran, a parallel session
-merged its own "Audit phases 6 and 7" (ethanwongwork/area PR 32, branch
-`claude/component-work-continuation-aef804`, dated 2026-09-30) into `main`. Both branches start
-from PR 31 and implemented S16–S21 independently; a trial merge of `origin/main` into
-`claude/component-work-51c375` conflicts in 126 files. This branch alone has the phase 7
-family-by-family fixes (about 90 findings), the 2026-10-01 owner decisions (near-black dark,
-H-13 renames with an explicit go-ahead, compact goal) and the vscode.dev compact evidence.
-`main` alone has its 19-capture dark pass (`docs/research/dark-pass-2026-09-30.md`), the
-3px popover-border fix on triggered tooltips, and a gated-hover test.
+**Reconciled with `main` (2026-10-01, owner: "take this branch's side for the conflicts").**
+PR 32 (a parallel phases 6–7 from `claude/component-work-continuation-aef804`) is merged into this
+branch. The 126 conflicted files keep this branch's version; from `main` this branch keeps what
+merged cleanly (its 19 dark captures and `docs/research/dark-pass-2026-09-30.md`, 20% dark
+shadow ink, no Card halo in dark, NavSeparator ref, neutral Field validation, gated reveal rules)
+and ports by hand the dark Tooltip (#282828 + 5% white inset), the tooltip popover-border fix and
+the gated-hover test (the four reveal rules were split to pass it). Kept from this branch where
+the two differed: `border-float` (not `edge-float`), `items` for collections, Input
+`leadingIcon`, Card `layout="thumbnail"`, Presence without `xs`, Code/Token booleans,
+single-value-axis exception, `mark-*` only (no `inset-surface-*` yet; revisit in the compact pass).
 
-Where the two disagree (recommendation: an explicit owner decision dated 2026-10-01 wins;
-otherwise keep the version with captured evidence, and ask the owner where both are
-"go with recs" picks):
-
-| Topic | `main` (PR 32) | this branch | Recommendation |
-|---|---|---|---|
-| Dark page | neutral 900 (#121212) | 975 (#020202) | this branch (owner 2026-10-01: as close to #000 as possible) |
-| Floating frame role | `edge-float`, #333 in dark | `border-float`, 650 (#4b4b4b) in dark | one name; value from the combined captures (ChatGPT menu hairline composites to 650) |
-| Dark shadow ink | 20% | 8% (unchanged) | `main` (captured) |
-| Tooltip in dark | dark #282828 + 5% white inset | inverse light fill | `main` (captured) |
-| Card in dark | no halo | halo kept | `main` (captured) |
-| Dark scrim | unchanged (65%) | 50% (ChatGPT `simple-scrim`) | this branch (captured value) |
-| Collections | `options` for value choices, `items` for collections | `items` everywhere | ask the owner |
-| Input leading slot | `icon` (was `leadingIcon`) | `leadingIcon` kept | ask the owner |
-| Card compact layout | `layout="list"` | `layout="thumbnail"` | ask the owner (both rename `compact`) |
-| Presence xs | kept as a written exception | removed (C-19 A) | the C-19 pick (A: drop xs) unless the owner says otherwise |
-| Density roles | `mark-*` + `inset-surface-sm/md` | `mark-*` only | combine: `mark-*` held in compact (vscode.dev evidence) + `main`'s inset roles |
-| Kbd ground / Code booleans | `ground` axis | `subtle` / `on-color` booleans | ask the owner |
-
-Approach: merge `origin/main` into this branch (the app's `sync_with_base_branch` failed only
-because git has no user.name/email on the host; `git merge origin/main` works in the sandbox),
-resolve family by family, run the full checks, regenerate the audit page, then push.
-
-### After reconciling
 
 - **State:** the 2026-09-29 audit is implemented: 238 of 239 findings done, every one of the 91
   owner picks applied (JSON statuses; page https://claude.ai/artifact/HPeEX5JVpgzugs4uJMQV7i,

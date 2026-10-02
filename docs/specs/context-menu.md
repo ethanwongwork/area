@@ -37,6 +37,8 @@ Menu. Not a dropdown Menu (opened from a button), not a Popover (content, not ac
 
 | Slot · property | Area value | Basis |
 |---|---|---|
+| name | `aria-label` names the menu (`label` is a deprecated alias) | Audit S17 |
+| open state | uncontrolled for opening (no `open` / `defaultOpen`); `onOpenChange` reports it. The position comes from the pointer or the focused element, so it cannot be opened from state: a documented exception to the overlay contract (overlay.md) | Audit S17 |
 | position | the menu's top-left at the pointer; flipped across the pointer when it would leave the viewport (8 margin); keyboard: under the focused element, at its start | Notion; WAI |
 | surface, rows | Menu, unchanged | menu.md (same Notion lift) |
 | layer | native `popover="auto"` (top layer; Escape and click outside close it) | Popover |
@@ -66,3 +68,7 @@ step larger on Area's scale (Notion's 28 rows belong to the compact density). No
 ## Open questions
 
 - Long-press to open on touch.
+
+## Feedback log
+
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the menu (`label` deprecated alias); opening stays uncontrolled, a documented exception (its position comes from the pointer or focused element).

@@ -99,3 +99,9 @@ captures. Promote an agreement into Area only through a spec's decision table.
   Notion); 500 appears on filled buttons (Notion). Hover is a 5% black wash in ChatGPT and
   Notion. Icon-to-label gaps are 4 (ChatGPT) to 6 (Notion). Controls are 24 (Figma), 28/32
   (Notion), 32/36 (ChatGPT). Light theme only.
+- Dark theme (2026-09-30, [dark-pass](dark-pass-2026-09-30.md), 19 captures): every product
+  keeps floating surfaces one step above the page with a visible light edge (Notion ring
+  #383836; ChatGPT and Figma 15–35% white hairlines) and a strong lift (19–35% black). Tooltips
+  stay dark (#1e–#2c) with a 5% white edge rather than inverting. Cards drop their shadow
+  (Notion 5% white fill; Figma 1px #444 edge). Menu row hover is a white wash (ChatGPT 10%,
+  Notion 5.5%) or Figma's accent. Scrims disagree (Notion 80% #0f0f0f; ChatGPT none).

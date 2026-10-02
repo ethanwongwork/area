@@ -56,7 +56,9 @@ function themeFor(t: Theme, accent: string, neutral: string): ResolvedTheme {
  */
 const SHADOW_COLOR: Record<Theme, string> = {
   light: "rgb(0 0 0 / 0.06)",
-  dark: "rgb(0 0 0 / 0.08)",
+  // spec (audit S21c, dark captures 2026-09-30): 20%, Notion's menu lift (ChatGPT's dialog 19%,
+  // Figma 35%). 8% left every floating surface flat on a dark page.
+  dark: "rgb(0 0 0 / 0.2)",
 };
 
 function themePreset(t: Theme): AxisPreset {

@@ -271,6 +271,8 @@ Dark mode is near-black (owner, 2026-10-01): the page is neutral 975 (#020202), 
 Dialog, Toast, Command palette, surface Calendar and ColorPicker, the floating Toolbar) use
 `border-float`, the decorative rung in light and neutral 650 in dark, so a floating surface stays
 distinct over another surface where its shadow no longer reads. Dividers keep `border-decorative`.
+In dark the Tooltip stays a dark annotation (#282828 with a 5% white inset edge), Cards drop
+their halo, and the floating shadow ink is 20% (dark captures 2026-09-30, `docs/research/dark-pass-2026-09-30.md`).
 
 Public component size families default to `md`. Expose `sm` when a component has a real
 compact-composition use case and `lg` when it needs a more prominent or touch-oriented

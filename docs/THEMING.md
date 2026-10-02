@@ -12,7 +12,7 @@ The registry in `packages/tokens/src/axes/registry.ts` defines nine axes:
 - `accent`: configurable chromatic accent; blue is the default (owner, 2026-09-29; was indigo). The focus ring follows it.
 - `action`: neutral or accent, the colour of committing actions (solid Buttons). Neutral is the default.
 - `selection`: neutral or accent, the colour of state (checked, on, selected, current, filled). Neutral is the default.
-- `ui`: default or compact, combining typography, control sizes, icons, gaps (including `gap-row`, the list-row icon gap) and padding.
+- `ui`: default or compact, combining typography, control sizes, icons, gaps (including `gap-row`, the list-row icon gap) and padding. It also owns the mark ladder `mark-sm/md/lg` (16 / 20 / 24: Badge, Count, Kbd, the Indicator count) and the surface insets `inset-surface-sm/md` (12 / 16: Popover, Dialog), added by audit S21a (owner 2026-09-30). Compact carries the default values until its capture pass measures them; the roles are there so that pass changes one table.
 - `radius`: sharp, subtle, soft, standard, round, rotund or pill. Besides the corner roles it
   owns `radius-cap`, `radius-button-cap` and `radius-concentric` (0 at Sharp: how much of a
   shell's distance joins its concentric corner).
@@ -32,6 +32,24 @@ roles, and `action` and `selection` decide whether each role is neutral or the a
 | accent | accent | Everything in the accent |
 | accent | neutral | Accent leads: coloured actions, calm controls |
 | neutral | accent | Neutral leads: neutral actions, coloured state |
+
+System tokens outside the axes (audit S21b, owner 2026-09-30): `opacity-disabled` (0.5, a
+whole disabled control; fields use their own disabled paint) and `scrim` (the modal backdrop:
+13% black light, `bg-overlay` dark; derived, so a themed subtree re-derives it).
+
+Parked tokens (audit S21b): defined but read by no component, kept until the token phase
+decides, because several are public seams or come from `palette.json`. Not a promise of use.
+
+- Alpha ramps `accent-a*`, `cool-a*`, `warm-a*` and their `-contrast`; `accent-border-strong`.
+- Tone extras: `fg-*-strong`, `*-border-subtle`, `fg-caution-vivid`, `fg-action`,
+  `fill-toggle` / `-hover`.
+- Type: `display-sm/lg-*`, `title-sm/md-*`, `text-xs-tracking`.
+- Tiers no component uses: `control-xl`, `gap-`, `gutter-` `xs` / `xl`, `icon-xl`,
+  `radius-control-xl`; `radius-nested` (components compute their concentric radius).
+- Motion and elevation: `duration-instant`, `ease-in`, `-in-out`, `-linear`; `shadow-3`, `shadow-4`.
+- Seams: `badge-bg`, `badge-fg`, `badge-tracking-wide`.
+- The `z-*` layer scale (0–80). Component stacking is local (−2…2 inside a component) and
+  every floating surface is in the top layer, so no component reads it; it stays for apps.
 
 `custom` (Switch) means a per-instance colour outside both roles. Semantic tones (info,
 success, warning, caution, danger, discovery) carry meaning and keep their colour in

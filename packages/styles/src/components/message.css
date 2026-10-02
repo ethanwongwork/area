@@ -53,7 +53,8 @@
   /* The person's actions show on hover or focus (ChatGPT hides them until then); the latest
    * assistant turn keeps its actions shown. */
   .area-message--user > .area-message__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
-  .area-message--user:is(:hover, :focus-within) > .area-message__actions { opacity: 1; }
+  .area-message--user:focus-within > .area-message__actions { opacity: 1; }
+  @media (hover: hover) { .area-message--user:hover > .area-message__actions { opacity: 1; } }
   @media (hover: none) { .area-message--user > .area-message__actions { opacity: 1; } }
 
   /* While the answer streams in, a dot follows the last word. */

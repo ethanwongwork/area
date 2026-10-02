@@ -445,7 +445,8 @@
        literal 200ms here and 100ms on Message actions). */
     transition: opacity var(--area-duration-fast) var(--area-ease-out);
   }
-  .area-card:is(:hover, :focus-within) .area-card__overlay--reveal { opacity: 1; }
+  .area-card:focus-within .area-card__overlay--reveal { opacity: 1; }
+  @media (hover: hover) { .area-card:hover .area-card__overlay--reveal { opacity: 1; } }
   @media (hover: none) { .area-card__overlay--reveal { opacity: 1; } }
 
   /* A row of controls at the bottom. It drops to the bottom of a taller card and sits on the
@@ -1268,13 +1269,17 @@
     padding-inline-start: var(--_tooltip-inset-inline);
     padding-inline-end: var(--_tooltip-inset-inline-end);
     border-radius: var(--_tooltip-shape);
-    background-color: var(--area-bg-inverse);
-    color: var(--area-fg-on-inverse);
+    /* spec (audit S21c, dark captures 2026-09-30, merged from PR 32): inverted in light; in dark
+       it stays a dark annotation one step above the surface, #282828 with a 5% white inset edge,
+       as all three products keep theirs (ChatGPT #212121 + 5% white edge, Notion #2c2c2b + 5%
+       white inset, Figma #1e1e1e). */
+    background-color: light-dark(var(--area-bg-inverse), var(--area-neutral-800)); /* spec */
+    color: light-dark(var(--area-fg-on-inverse), var(--area-fg-default)); /* spec */
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     max-inline-size: calc(var(--area-space-96) * 3);
     /* spec: Notion's geometry (Figma 0 5px 12px, ChatGPT 0 8px 18px); theme-aware colour. */
-    box-shadow: 0 4px 12px -2px var(--area-shadow-color);
+    box-shadow: 0 4px 12px -2px var(--area-shadow-color), inset 0 0 0 var(--area-stroke-width) light-dark(transparent, rgb(255 255 255 / 0.05)); /* spec */
   }
 
   /* The nested keycap keeps its own 6px corner (kbd.css). Its 20px box is vertically centred by
@@ -1415,6 +1420,9 @@
   }
   /* A tooltip only fades, over 100ms (Primer's tooltip); growing from its trigger reads as a jump. */
   .area-tooltip[popover] { --_overlay-scale: 1; --_overlay-duration: var(--area-duration-fast); }
+  /* Tooltip draws no edge: without this the browser's popover border (3px, the ink colour) made
+     every triggered tooltip 34 tall instead of 28 (found in the PR 32 audit S16 pass, 2026-09-30). */
+  .area-tooltip[popover] { border: 0; }
   /* Content on hover stays while the pointer crosses the gap to it (WCAG 1.4.13): an invisible
      bridge over the gap on the trigger's side (4, or 8 with the arrow), like Primer's. */
   .area-tooltip[popover] { --_bridge: var(--area-space-4); }

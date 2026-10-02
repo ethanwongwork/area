@@ -107,7 +107,7 @@ From the capture nodes (the component is node 0 in each):
 ## Behavior and accessibility
 
 The hex input forwards its ref and native props (`ColorField.tsx:67-79`). Accepts 3, 4, 6 or
-8 digits with or without "#". The opacity NumberField is named by `opacityLabel`; with
+8 digits with or without "#". A commit calls `onValueChange(value, event)`. The opacity NumberField is named by `opacityLabel`; with
 `alpha`, `name` submits through a hidden input. Form reset restores `defaultValue`.
 
 ## Peers and consistency
@@ -158,3 +158,4 @@ Compared the Area captures (`color-field/area--*`) with `input-group/figma--colo
   in this batch → opacity sized to its content with "%" at the end; hex ellipsis at rest → every
   gallery Color field measured, no hex clipped; Figma Page row compared live.
 - 2026-09-28 · owner: approved (batch 9).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(value, event)` passes the committing event.

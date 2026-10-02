@@ -72,7 +72,8 @@
     align-items: center;
     opacity: 0;
   }
-  .area-prompt-suggestions__row:is(:hover, :focus-within) > .area-prompt-suggestions__dismiss { opacity: 1; }
+  .area-prompt-suggestions__row:focus-within > .area-prompt-suggestions__dismiss { opacity: 1; }
+  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__dismiss { opacity: 1; } }
   /* The row under it already shows the hover plate, so the dismiss hovers one step firmer. */
   .area-prompt-suggestions__dismiss .area-button { --_bg-hover: var(--area-bg-component-active); }
   @media (hover: none) { .area-prompt-suggestions__dismiss { opacity: 1; } }

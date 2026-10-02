@@ -1,8 +1,10 @@
 "use client";
 import { Children, forwardRef, isValidElement, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
-import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes } from "react";
 import { badgeGroupVariants, badgeVariants, cx } from "../variants.ts";
 import { Popover } from "./primitives.tsx";
+import { OVERLAY_PADDING, POPOVER_OFFSET } from "./Overlays.tsx";
+import { useAnchoredPosition } from "./overlay.ts";
 export interface BadgeGroupProps extends HTMLAttributes<HTMLDivElement> {
   overflow?: "inline" | "overlay";
   /** Omit to wrap every badge. Auto fits one line and reserves the overflow trigger. */
@@ -20,6 +22,17 @@ export const BadgeGroup = forwardRef<HTMLDivElement, BadgeGroupProps>(function B
   const trigger = useRef<HTMLButtonElement>(null);
   const id = useId();
   const [fitted, setFitted] = useState(items.length);
+  const [open, setOpen] = useState(false);
+  // The browser opens it (popovertarget); the shared engine places it (audit S16): 8 under the
+  // "+n" badge as every popover, starting at its start edge, flipping and shifting on screen.
+  useEffect(() => {
+    const panel = popup.current;
+    if (!panel) return;
+    const onToggle = (event: Event) => setOpen((event as ToggleEvent).newState === "open");
+    panel.addEventListener("toggle", onToggle);
+    return () => panel.removeEventListener("toggle", onToggle);
+  }, []);
+  useAnchoredPosition(trigger, popup, open, { side: "bottom", align: "start", offset: POPOVER_OFFSET, padding: OVERLAY_PADDING });
   useImperativeHandle(ref, () => root.current!, []);
   const count = visibleCount === "auto" ? Math.min(fitted, items.length) : visibleCount === undefined ? items.length : Math.max(0, Math.min(items.length, Math.floor(visibleCount)));
   const hidden = items.length - count;
@@ -65,7 +78,7 @@ export const BadgeGroup = forwardRef<HTMLDivElement, BadgeGroupProps>(function B
   useEffect(() => {
     if (!hidden && popup.current?.matches(":popover-open")) popup.current.hidePopover();
   }, [hidden]);
-  return <div {...rest} ref={root} className={badgeGroupVariants({ overflow }, className)} style={{ ...style, "--_overflow-anchor": `--area-badge-${id.replace(/[^a-zA-Z0-9_-]/g, "")}` } as CSSProperties}>
+  return <div {...rest} ref={root} className={badgeGroupVariants({ overflow }, className)} style={style}>
     {items.slice(0, count).map((item, index) => <span className="area-badge-group__item" key={index}>{item}</span>)}
     <button ref={trigger} type="button" className={badgeVariants({ size }, "area-badge-group__overflow-trigger")} popoverTarget={id} hidden={!hidden} aria-label={`${overflowLabel}, ${hidden} more`}><span className="area-badge__label">+{hidden || items.length}</span></button>
     <Popover ref={popup} id={id} popover="auto" role="group" tabIndex={-1} autoFocus className={cx("area-badge-group__overflow-content")} aria-label={overflowLabel}>

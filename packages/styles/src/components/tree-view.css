@@ -90,7 +90,8 @@
   .area-tree-view__trailing + .area-tree-view__actions { margin-inline-start: 0; }
   .area-tree-view__actions > * { opacity: 0; }
   .area-tree-view__actions > [data-pinned],
-  .area-tree-view [role="treeitem"]:is(:hover, :focus-visible, [aria-selected="true"]) .area-tree-view__actions > * { opacity: 1; }
+  .area-tree-view [role="treeitem"]:is(:focus-visible, [aria-selected="true"]) .area-tree-view__actions > * { opacity: 1; }
+  @media (hover: hover) { .area-tree-view [role="treeitem"]:hover .area-tree-view__actions > * { opacity: 1; } }
   /* Without hover (touch) the row actions always show, as Message and Card reveals do (audit H-17). */
   @media (hover: none) { .area-tree-view__actions > * { opacity: 1; } }
   .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: min(var(--area-radius-small), calc(var(--area-icon-md) / 4)); font-size: var(--area-control-sm-text); line-height: 1; }

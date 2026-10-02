@@ -59,3 +59,20 @@ test("manifest values don't repeat their axis or borrow the density's word (audi
   assert.equal(MANIFESTS.switch.variants.tone, undefined);
   assert.match(css, /\.area-switch \{[^}]*--_on: var\(--area-switch-color, var\(--area-selection-solid\)\)/);
 });
+
+test("every hover rule sits under @media (hover: hover) (audit S21b; check merged from PR 32)", () => {
+  const stack = [];
+  let start = 0;
+  const loose = [];
+  for (let i = 0; i < css.length; i++) {
+    const c = css[i];
+    if (c === "{") { stack.push(css.slice(start, i).trim()); start = i + 1; }
+    else if (c === "}") { stack.pop(); start = i + 1; }
+    else if (c === ";") start = i + 1;
+    if (c === "{") {
+      const selector = stack.at(-1);
+      if (/:hover/.test(selector) && !selector.startsWith("@") && !stack.some(s => /@media[^{]*\(hover:\s*hover\)/.test(s))) loose.push(selector);
+    }
+  }
+  assert.deepEqual(loose, []);
+});
