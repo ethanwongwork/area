@@ -305,6 +305,15 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   const text = readFileSync(join(dir, file), "utf8");
   const root = attrs(text.match(/<svg[^>]*>/)[0]);
   if (root.viewBox !== "0 0 16 16") fail(name, `viewBox must be "0 0 16 16"`);
+  // data-alias-of (owner, 2026-10-02): a second name for another icon's drawing, kept because
+  // components or demos use it. The body must stay identical to the base's.
+  const aliasOf = root["data-alias-of"];
+  if (aliasOf) {
+    const body = t => t.replace(/<svg[^>]*>/, "").trim();
+    const base = join(dir, aliasOf + ".svg");
+    if (!existsSync(base)) fail(name, `data-alias-of names ${aliasOf}, which has no source`);
+    else if (body(readFileSync(base, "utf8")) !== body(text)) fail(name, `an alias of ${aliasOf} must keep its drawing exactly`);
+  }
   const radial = ["radial", "free"].includes(root["data-angles"]);  // radial (gear) or free (triangle): angles set by the concept
   const keyline = root["data-keyline"];
   const notes = [];
@@ -468,7 +477,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     if (w > kw + 0.25 || h > kh + 0.25) fail(name, `ink ${r2(w)}×${r2(h)} exceeds the ${keyline} keyline ${kw}×${kh}`);
   }
   sink = errors;
-  icons.push({ name, keyline, elements, ink: ink.map(r2), gaps, counters: counters.map(r2), notes, label: root["data-label"] ?? name, group: root["data-group"] ?? "", rotations: root["data-rotations"] ?? "" });
+  icons.push({ name, keyline, elements, ink: ink.map(r2), gaps, counters: counters.map(r2), notes, label: root["data-label"] ?? name, group: root["data-group"] ?? "", rotations: root["data-rotations"] ?? "", off: root["data-off"] });
 }
 return icons;
 }
@@ -504,6 +513,40 @@ if (process.argv.includes("--audit")) {
   console.log(`optical audit — median apparent size ${r2(mSize)}, median density ${r2(mDensity)}`);
   for (const { icon, size, coverage, density } of rows.sort((a, b) => a.size - b.size))
     console.log(`  ${icon.name.padEnd(17)} ${icon.keyline.padEnd(10)} size ${r2(size).toFixed(2).padStart(5)} (${(size / mSize * 100 - 100).toFixed(0).padStart(3)}%)  ink ${r2(coverage).toFixed(1).padStart(5)}  density ${r2(density).toFixed(2)} (${(density / mDensity * 100 - 100).toFixed(0).padStart(3)}%)`);
+}
+// Parts drift (--parts; owner, 2026-10-02, after Cursor's overview tables): a family member
+// (<base>-<modifier>) should keep its base's drawing and change it only by the modifier. Report
+// the share of the base's outline ink that the member no longer covers (within 0.3px). A corner
+// mark or a slash leaves a small share; a part that moved or was redrawn leaves a large one.
+// Report only: aliases, mirrors and turns are skipped; the review sheet is `sheets.mjs parts`.
+if (process.argv.includes("--parts")) {
+  // A family is an object with a solid (folder, cloud, bell…), not a line glyph sharing a name
+  // prefix (text-align, list-bullet). A member may move its base (the one cloud, moved): the best
+  // shift within 3px counts.
+  const DRIFT = 0.2, TOL = 0.3, K = 4, N = 16 * K;
+  const byName = new Map(icons.filter(i => !i.derivedFrom).map(i => [i.name, i]));
+  const mask = (shapes, tol) => { const m = new Uint8Array(N * N); for (let j = 0; j < N; j++) for (let i = 0; i < N; i++)
+    if (shapes.some(s => inkDistance(s, (i + 0.5) / K, (j + 0.5) / K) <= tol)) m[j * N + i] = 1; return m; };
+  const rows = [];
+  for (const [name, member] of byName) {
+    const base = [...byName.keys()].filter(b => name.startsWith(b + "-")).sort((a, b) => b.length - a.length)[0];
+    if (!base || !byName.get(base).elements.some(el => SOLID_ROLES.includes(el.filled)) || member.off === "own") continue;
+    const b = mask(inkShapes(byName.get(base).elements.filter(el => !el.filledOnly)), 0);
+    const m = mask(inkShapes(member.elements.filter(el => !el.filledOnly)), TOL);
+    const total = b.reduce((s, v) => s + v, 0);
+    let best = 1, shift = [0, 0];
+    for (let dy = -3 * K; dy <= 3 * K; dy++) for (let dx = -3 * K; dx <= 3 * K; dx++) {
+      let lost = 0;
+      for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) if (b[j * N + i]) {
+        const x = i + dx, y = j + dy; if (x < 0 || y < 0 || x >= N || y >= N || !m[y * N + x]) lost++;
+      }
+      if (lost / total < best) { best = lost / total; shift = [dx / K, dy / K]; }
+    }
+    rows.push({ name, base, lost: best, shift });
+  }
+  rows.sort((a, b) => b.lost - a.lost);
+  console.log(`parts drift — share of the base's ink a member no longer covers, at the best shift (⚠ over ${DRIFT * 100}%)`);
+  for (const { name, base, lost, shift } of rows) console.log(`  ${lost > DRIFT ? "⚠" : " "} ${name.padEnd(24)} from ${base.padEnd(16)} ${(lost * 100).toFixed(0).padStart(3)}%${shift[0] || shift[1] ? `  moved ${shift[0]}, ${shift[1]}` : ""}`);
 }
 // A keyline is a size to reach, not only a limit (Streamline, Cursor). The x.5 edge rule
 // leaves most icons 0.88 under on their long side; more than UNDER marks an icon that reads

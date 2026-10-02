@@ -2196,7 +2196,7 @@
     "huge": "PieChart",
     "sf": "chart.pie"
   },
-  "pin": {
+  "location": {
     "fluent": "location",
     "lucide": "map-pin",
     "phosphor": "map-pin",

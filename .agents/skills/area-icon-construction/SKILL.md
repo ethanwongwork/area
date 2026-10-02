@@ -135,7 +135,9 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   agents shape (a hexagon split by a slash), never a cursor or pointer (it read as Cursor's
   brand). search-off's slash is the shared slash mirrored (14, 2 → 2, 14; owner, 2026-09-29),
   since the normal one runs along the handle; the cut is the mirror of the one-sided cut. Follow Fluent closely for objects the owner compares with it (contact card,
-  news, money, captions, exclude's hatching, chat sparkle's corner sparkle).
+  news, money, captions, chat sparkle's corner sparkle). The booleans are two 8 × 8 squares
+  overlapping 5 × 5, every result solid, exclude included (owner, 2026-10-02: the hatching had no
+  room at 5 × 5).
 - **Detail first (owner, 2026-09-28):** more detail is better than the strict minimum. The
   lint's floors are lower: a *detail* gap of 0.875–1.125 (2 between centre-lines), tight
   running on to 1.75, counters from 1.0, straight corners down to 45°, and 0.875 in the
@@ -159,6 +161,20 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   shadow's band, id-card's person, stroke-weight's bars, newspaper's picture block. (paw's
   toes are r 1.25 rings, solid only when filled.) The solid is
   what the icon shows; ordinary details stay lines.
+- **Owner, 2026-10-02:** multiples follow Phosphor's layering (Shared parts); library is
+  Phosphor's books (an upright book and one leaning, bands 3 from each end); the rejected round
+  follows the owner's picks: waypoints Fluent's route (two r 2 rings joined by an S), binoculars
+  Lucide's, person-chat and bandage Hugeicons' (a person in a bubble; a wide band with four
+  dots). Three-line stacks centred on 8 move to x.5 and sit 0.5 high (text-align, indent,
+  outdent; waveform 0.5 right): crisp at 1× outweighs centring. calendar keeps its even grid
+  (`data-gap="aligned"`). The hand fills its palm. Duplicate drawings are aliases
+  (`data-alias-of`, linted identical): subtract of minus, padding-axis of padding-sides,
+  flow-wrap of grid. The map pin is `location`; `pushpin` and `unpin` are the pushpin.
+- **Delegated, 2026-10-02 (owner to confirm):** base icons carry their object's content where
+  every library does and variants drop it (Fluent): calendar's 3 + 2 date grid, chat's two text
+  lines; send has a centre fold and pencil a ferrule band. A reticle (crosshair) fills by weight;
+  people fill both figures, the back one overlap-cut. Record: `docs/specs/icons.md`, "Audit
+  follow-up, 2026-10-02".
 
 ## The system at 16px
 
@@ -229,18 +245,26 @@ the lint prints every gap and counter with `--report`.
   - 1px for bars 3px tall (alignment) and small parts (the trash handle);
 - overlap cut: where one shape passes behind another (shapes' circle), the hidden part
   stops so the gap equals the line (2.25px between centre-lines, 1.125px of space).
-  Owner, round 4: 3px read too far. Every crossing uses it: people's back figure, shapes,
+  Owner, round 4: 3px read too far. **A gap is information, never style** (owner, 2026-10-02,
+  from Cursor's set): the overlap cut separates layers (a stack's back copy, a figure or coin behind
+  another, the sun behind a cloud) and a mark or badge from its host. Shapes on one plane cross
+  whole (shapes, atom, the booleans' outlines), the slash crosses flat in the outline, and no
+  stroke is opened for style (alarm's closed bells, strikethrough's one S, closed caps and cuffs).
+  The crossings that keep the cut: people's back figure, shapes,
   shuffle's rails, a slash, a mark or arrow over a container (calendar-add, cloud-upload).
   Cut round the real geometry (a curve, not its chord: shuffle's 2.7 chord cut left 1.47).
   Two relations that are not crossings:
   - an attached part joins the shape it belongs to: clipboard's clip, calendar's pegs,
     lock's shackle, briefcase's handle, car's mirrors (their inks overlap, a join);
-  - a stack shows only the back copy's L round the front's top left, ending a standard gap
-    from it (copy, Fluent's and Lucide's): the hidden part is never drawn;
-  - multiples of an object (folders, files; owner, 2026-09-29) follow Fluent's: the back copy
-    2.5 lower right, cut round the front by the overlap cut, its right corners concentric and
-    larger so its ends curve in behind the front; gallery follows the owner's reference (one
-    back layer up and left);
+  - multiples and stacks (files, folders, copy, chat-multiple, gallery; owner, 2026-10-02,
+    replacing Fluent's concentric halo) follow Phosphor's layering: the back copy is the same
+    shape at the same radius, offset 3 along the diagonal (up and right; chats' second bubble
+    down and right, mirrored; gallery's back copy down and left), and only its uncovered edges
+    are drawn, stopping one overlap cut short of the front, an open L as Cursor's copy and folders
+    (`icon-geometry behind <back> <front> 2.3`); the hidden part is never drawn. Offset 3 keeps parallel diagonals (a fold, a tab step)
+    open at 3.12; 2.5 left them 2.41. Filled: the front fills, the back stays a line. Source:
+    `docs/research/icon-review/2026-10-02/multiples-phosphor.py`. A stack of flat cards shows the
+    cards behind as two shorter lines above (cards, Phosphor's cards-three);
 - marks (owner, 2026-09-26: every +, −, × and arrowhead is one of a few intentional sizes):
   - +, − standalone 11px (add, minus); beside or inside a shape 4px (person-add, zoom-in);
   - × standalone 10px (dismiss); beside or inside a shape 3.5px (volume-off, backspace), a
@@ -274,25 +298,28 @@ the lint prints every gap and counter with `--report`.
   open); log-in and log-out stop standard (3) from the door's back, the nearest the lattice
   allows;
 - slash ("off" icons): one slash for every icon, identical in length, angle and ends:
-  `M2 2L14 14` (45°, top left to bottom right, 12√2 long), round caps, in front. Cut the
-  shape with `icon-geometry.mjs slash` one-sided (Fluent's and Lucide's pattern): the shape
-  runs up to the slash from below left and stops an overlap cut short above right (2.25
-  between centre-lines; 2.5 for lines that stay lines when filled). Cutting both sides
-  removed twice as much and broke wi-fi and link apart. A shape too narrow for the slash to
-  run into (mic's capsule, where the slash runs down its length) stops short on both sides.
-  Keep the base icon exactly (wifi-off is wifi; a wider one takes the circle keyline).
-  Outline pieces are `line`s; a solid shape is a whole `fill` parted by one `gap` above the
-  bold slash; a line glyph's filled lines are `stroke` pieces cut 2.5. Two off states keep
-  their own recorded form, declared `data-off="own"`: eye-off is a closed eye (owner) and
-  volume-off a speaker with a 3.5px × (Fluent's mute). The lint fails any other `-off` icon
+  `M2 2L14 14` (45°, top left to bottom right, 12√2 long), round caps, in front. **In the
+  outline the slash crosses flat** (owner, 2026-10-02, Cursor's "no shadow effects"): the base
+  icon is drawn whole as outline-only `line`s and the slash lies on top, with no gap. Where the
+  slash leaves a sliver against the shape, `data-counter="sliver"` records it (mic-off, camera-off,
+  flask-off, unpin). Keep the base icon exactly (wifi-off is wifi; a wider one takes the circle
+  keyline: video-off). **The filled variant still parts the slash from the solid**, since a slash
+  on a solid would vanish: a solid shape is a whole `fill` parted by one `gap` above the bold
+  slash, lines that stay lines when filled (legs, stands) are cut one-sided with
+  `icon-geometry.mjs slash` (2.5), and a line glyph's filled lines are `stroke` pieces cut 2.5.
+  `docs/research/icon-review/2026-10-02/flat-slash.py` rebuilds the outlines from the bases. Two
+  off states keep their own recorded form, declared `data-off="own"`: eye-off is a closed eye
+  (owner) and volume-off a speaker with a 3.5px × (Fluent's mute). The lint fails any other
+  `-off` icon
   without the shared slash;
 - dots, two sizes by role (the lint allows only these):
   - ⌀2 for a dot that is the icon or one of its marks: more, wi-fi's source,
-    gap's dot, cart's wheels; on whole-pixel centres so they fill 2 × 2 pixels at 1×;
+    gap's dot, cart's wheels, list-bullet's bullets and a centre point in a frame (crosshair,
+    square-dot, circle-dot-dashed) (Cursor's dot roles; owner, 2026-10-02); on whole-pixel centres so they fill 2 × 2 pixels at 1×;
   - ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning, the ?)
     and for a detail set inside a shape: keys (calculator, keyboard), lights (server, car),
-    windows (building), eyes (smile), an eyelet (tag), opacity's grid, list bullets (the list
-    family, owner 2026-09-28). Place them on the
+    windows (building), eyes (smile), an eyelet (tag), opacity's grid, dots grouped inside a
+    container (chat-more, app-window, square-list). Place them on the
     gap scale from their frame and each other (quarter centres are fine for filled dots).
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
   a little more width than a square to look the same size, and 1.56× read too big.
@@ -542,7 +569,10 @@ The quick path, in detail.
      that jumps out as larger, smaller, darker or denser;
    - *Filled*: outline, derived filled variant and Fluent's filled cut;
    - *Pixel check*: 1× and 2× rasters, beside Fluent's.
-5. **Audit optical size** with `node apps/docs/scripts/gen-pilot-icons.mjs --check --audit`
+5. **Audit parts drift** (Cursor's overview tables) with `gen-pilot-icons.mjs --check --parts`
+   (members that left their base's drawing; triage, not a gate) and look at
+   `node docs/research/icon-review/2026-10-02/sheets.mjs parts out.png` (each base in red under its members).
+6. **Audit optical size** with `node apps/docs/scripts/gen-pilot-icons.mjs --check --audit`
    (the full set: medians need every icon). It rasterises each icon and reports:
    - apparent size (√ of the ink's convex-hull area) and density (ink per hull area),
      each against the set's median;
@@ -551,15 +581,15 @@ The quick path, in detail.
      diagonal shapes (a bolt, a diamond) read small by hull even when they fill their keyline;
    - a solid shape more than about 8% under the median, or a density above about +25%,
      is a candidate to enlarge or lighten. Confirm by eye in the whole-set grid.
-6. **Judge** density as well as size. Count parallel strokes and corners. If an icon reads
+7. **Judge** density as well as size. Count parallel strokes and corners. If an icon reads
    heavier than its neighbours, remove a line or corner, or pull it inside its keyline,
    before thinning any stroke.
-7. **Explore** when there is more than one good answer. Put the candidates in
+8. **Explore** when there is more than one good answer. Put the candidates in
    `apps/docs/assets/area-icons-pilot/explore/`, with `data-group` and `data-label` on each.
    They are linted without failing the build, and the gallery's Exploration section shows
    each one at 16px and 4× with its gaps, counters and rule findings. Delete them once the
    owner chooses.
-8. **Record** with `npm run icons:batch -- batch.json`: the construction line for each icon,
+9. **Record** with `npm run icons:batch -- batch.json`: the construction line for each icon,
    and any exception or dropped idea (`extra`), lands in the batch's section of
    `docs/specs/icons.md`. A decision that applies beyond one icon also goes in Owner
    preferences above.

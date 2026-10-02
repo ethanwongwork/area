@@ -58,6 +58,11 @@ server, #13 film and volume-off, #14 save). Sheets: `1-before-after-a.png` and `
 
 ## For the owner (by batch)
 
+Drawn on the recommendations 2026-10-02 (delegated; `docs/research/icon-review/2026-10-02/`):
+calendar, chat, pencil, send, people, building, indent/outdent, eraser, the filled agent, crosshair
+and camera-off, coins, picture-in-picture and guard. Still open: hand, flow-wrap, the booleans, the
+set-wide stacks, housekeeping, coverage and the rejected round.
+
 Details and conventions the audit raised but did not change:
 
 - **#1 calendar, chat:** empty; most libraries give a dot grid or text lines.
