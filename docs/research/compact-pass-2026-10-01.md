@@ -48,14 +48,15 @@ surfaces (Popover, Menu, Tooltip, Hover card, Toast, Dialog).
 | Tooltip | 28, 14/20, sides 10 | 26 | 25, 12/19, sides 9 | **24**, 12/16, sides 10 |
 | Popover inset · section gap | 12 · 16 | 12 · 16 | hover 9 | **8 · 12** |
 | Toast inset | 10 × 12 | same | — | **6 × 8** (28 tall) |
-| Dialog inset | 16 | 16 | settings dialog 24 | **12** |
+| Dialog inset | 16 | 16 | settings dialog 24 | **16** (held; owner 2026-10-02) |
 | Surface corner | 12 | 12 | 8 | **8** |
 | Row corner · md control corner | 8 · 8 | 8 · 8 | 4–6 · 4 | **6 · 6** (menu rows 4, concentric) |
-| Dialog corner | 16 | 18 | 8 | **12** |
+| Dialog corner | 16 | 18 | 8 | **16** (concentric with the close, 6 + 10) |
 
 VS Code and the proportional model agree on everything except one inset: VS Code's large settings
-dialog keeps a 24 inset. Area's dialog follows the proportional rule (12), and the owner has not
-decided otherwise; flagged below.
+dialog keeps a 24 inset. The owner chose to hold Area's dialog at 16 (2026-10-02, as Notion and
+Figma) rather than the proportional 12; its corner stays concentric with the close (16) and its
+section gap steps to 12.
 
 ## Decisions and implementation
 
@@ -215,7 +216,7 @@ block header action), plus Progress's animation and the Badge group's overflow p
 ## Open
 
 
-- Dialog inset: proportional 12, VS Code 24, Figma and Notion 16.
+- ~~Dialog inset~~: decided 2026-10-02, holds at 16 (owner); `area--compact-dialog` predates it.
 - Tooltip sides stay 10 (owner decision, 2026-09-25); VS Code 9, Figma 8.
 - Other families still read literal spacing (Card, Panel, Alert, field shells); each gets its
   compact step in its own round.

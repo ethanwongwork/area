@@ -43,7 +43,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Merge with main (phases 6–7): main's S21a C held marks under compact; the owner's later
   proportional direction steps them down (16/16/20). Main's titles-hold rule (H-7 A), Input's
   4px action ring (B-7 B), `border-float` and the pruned tokens are kept.
-- Open: dialog inset (12 proportional vs VS Code 24, Notion and Figma 16); tooltip sides 10;
+- Dialog inset decided (owner, 2026-10-02): holds at 16 in compact, corner 16 concentric with the
+  close, section gap 12 (`surface.css` `--_dialog-outer`).
+- Open: tooltip sides 10;
   whether changed approved families (Menu, Nav, …) return to In review; Cursor itself.
 
 ## Start here (next session)

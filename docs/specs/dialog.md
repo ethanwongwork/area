@@ -90,6 +90,7 @@ footer action in the opposite corner by the same rule (12/12).
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
 | surface · inset, gap | 16 (border included), 16 between sections (unchanged) | shadcn 16/16; Primer 16 | ChatGPT 24 |
+| surface · compact | inset and corner **hold at 16**; section gap 12 (`inset-surface-md`); close 10 in at radius 6, icon on the 16 inset | Owner, 2026-10-02: Notion and Figma dialogs 16 (VS Code settings dialog 24); `docs/research/compact-pass-2026-10-01.md` | The proportional rung (12 inset, 12 corner) was rejected for Dialog |
 | surface · width | 480 preferred (unchanged) | Between shadcn 384 and ChatGPT 600 / Primer 640 | — |
 | surface · border | 1px decorative (unchanged) | All use a 1px ring | — |
 | surface · shadow | **`--area-shadow-float`**: `0 20px 24px` in `shadow-color`, `0 5px 8px` at half strength (surface.css:777); `none` under the Flat preset | The lift Popover and Menu use | Was `shadow-2` (1–2px). A Surface axis role since audit S10. References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |

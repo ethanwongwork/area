@@ -815,14 +815,17 @@
   /* The page behind a modal doesn't scroll: showModal() leaves it to the page (audit E-20). */
   html:has(.area-dialog__modal:modal) { overflow: hidden; }
   .area-dialog {
-    --_dialog-inset: calc(var(--area-inset-surface-md) - var(--area-border-width)); /* 16, compact 12: the md surface inset */
+    /* spec: 16 at both densities, border included. Compact keeps it (owner, 2026-10-02: Notion and
+     * Figma dialogs 16, VS Code's settings dialog 24); the proportional rung would be 12. */
+    --_dialog-outer: var(--area-space-16);
+    --_dialog-inset: calc(var(--_dialog-outer) - var(--area-border-width));
     /*
      * spec: concentric with the corner close. The close sits 8 in (inset minus half the
      * control's padding), so the corner is its radius plus 8: 16 at the standard preset
      * (ChatGPT 16). Capped at twice the system container radius so Sharp stays square. Reads
-     * the inset role, not a literal 16, so compact's corner steps down with it (was 18).
+     * the dialog's own inset, so the corner stays concentric when the close's radius changes.
      */
-    --_dialog-radius: min(calc(var(--area-radius-container) * 2), calc(var(--area-radius-control-md) + var(--area-inset-surface-md) - (var(--area-control-md) - var(--area-icon-md)) / 2)); /* compact: 6 + 12 - 6 = 12 */
+    --_dialog-radius: min(calc(var(--area-radius-container) * 2), calc(var(--area-radius-control-md) + var(--_dialog-outer) - (var(--area-control-md) - var(--area-icon-md)) / 2)); /* compact: 6 + 16 - 6 = 16 */
     display: flex;
     flex-direction: column;
     gap: var(--area-inset-surface-md);
