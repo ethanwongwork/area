@@ -298,17 +298,17 @@ JSON (session "this branch (phase 7)"), with `note` on anything left partly done
   - text 12/16, 14/20, 16/24; titles 20/28, 24/32, 32/40; titles fixed in compact;
   - small controls 14/20 at default density (12/16 only under compact, `density.ts`);
   - weight 400 everywhere except labels on fills (500).
-- **Icons:** 486 sources (549 with rotations) in 62 batches, 133 approved, the rest in
+- **Icons:** 528 sources (591 with rotations) in 63 batches, 130 approved, the rest in
   review; rules in the `area-icon-construction` skill, record in `docs/specs/icons.md`. Latest: the
   whole-set audit (2026-10-01, `docs/research/icon-audit/`: coverage against Fluent, Lucide,
   Phosphor, Hugeicons and SF Symbols, 50 icons cleaned up and back in review, owner questions by
   batch) and batch 61, the bot cast (`agent-cast.py` in `docs/research/icon-review/2026-09-29/`).
-  2026-10-02 (branch `claude/icon-work-c10522`, uncommitted): the audit's owner questions drawn,
+  2026-10-02 (branch `claude/icon-work-c10522`, PR 35): the audit's owner questions drawn,
   then the owner's rounds. Rules now in the skill: multiples keep Phosphor's geometry as Cursor's
   open L; "a gap is information, never style" (flat slash in the outline, shapes cross whole, no
   stylistic openings); dots by role (⌀1.5 detail, ⌀2 mark, ⌀3 badge); aliases (`data-alias-of`);
-  `pin` renamed `location`. Batch 62 (coverage round 1, 35 icons) recorded; coverage round 2 (41
-  concepts) drawn by subagents. Tools: `--parts` drift report, `sheets.mjs` explainers. Review
+  `pin` renamed `location`. Batches 62 and 63 (coverage rounds 1 and 2, 35 + 42 icons) recorded;
+  every priority and secondary gap from the audit's coverage list is drawn except file-zip. Tools: `--parts` drift report, `sheets.mjs` explainers. Review
   sheets and open decisions: `docs/research/icon-review/2026-10-02/README.md`; rules write-up
   `cursor-rules.md` there.
   Filled is "more ink, never a negative" (skill). Reference sheets: `icon-refs.mjs` (SF Symbols

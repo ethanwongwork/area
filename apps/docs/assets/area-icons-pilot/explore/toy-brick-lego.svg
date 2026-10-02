@@ -1,0 +1,5 @@
+<svg data-group="toy-brick-redo" data-label="lego brick in the cube’s 2:1 dimetric, studs as bumps on the back edges" data-set="area-pilot" data-keyline="square" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path data-filled="solid" d="M2.553 7.224L3.5 6.75V5.25A1.5 0.75 0 0 1 6.5 5.25L7.5 4.75V3.75A1.5 0.75 0 0 1 10.5 3.75L13.447 5.224A1 1 0 0 1 14 6.118L14 8.882A1 1 0 0 1 13.447 9.776L6.894 13.053A2 2 0 0 1 5.106 13.053L2.553 11.776A1 1 0 0 1 2 10.882L2 8.118A1 1 0 0 1 2.553 7.224Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M2.149 7.592L6 9.5L13.851 5.592M6 9.5V13.264" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M-2 5.5L6 9.5L16 4.5M6 9.5V16.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

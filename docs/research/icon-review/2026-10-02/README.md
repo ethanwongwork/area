@@ -23,6 +23,8 @@ recommendations and delegated: confirm or overturn by icon. Construction lines a
 | `14-fixes.png` | library, hand, bandage and binoculars fixed (outline and filled) |
 | `15-overlap-rule.png` | The overlap rule refined from Cursor's set: stacks as open L's, slashes crossing flat, decoration closed; what keeps its gap |
 | `16-parts-overview.png` | Every family with its base drawn in red under each member (`sheets.mjs parts`) |
+| `18-batch-63-compare.png` | Batch 63, coverage round 2 (42 icons) beside Fluent |
+| `19-blocks-toy-brick-candidates.png` | The rejected blocks and toy-brick beside candidates (`explore/blocks-pyramid*`, `explore/toy-brick-lego`) |
 | `17-overlap-applied.png` | The overlap rule applied: stacks as an open L, flat slashes, closed decoration; and the dots by role |
 
 Drawn: calendar's date grid (with the family's taller body and header at 6.5), chat's text lines,
@@ -46,11 +48,14 @@ Open decisions:
 
 - Done (owner, 2026-10-02): the overlap rule (`cursor-rules.md` §1, sheets 15 and 17).
 - Done (owner, 2026-10-02): dots by role (sheet 13); the parts overview (sheet 16).
+- **Batch 63** (coverage round 2): its exceptions are in its spec section; basket reads a little
+  like a cupcake and webhook reads light. blocks and toy-brick: pick a candidate (sheet 19;
+  recommendation: blocks-pyramid, toy-brick-lego).
 - Batch 62's exceptions (in its spec section): image-plus and cart-add put the + top right;
   shield-alert's longer stem; solid knob, centre and swatch (toggle, radio-button, text-color);
   headset's shorter cups; person-settings' ring-and-teeth gear; navigation's dart.
 - Still to do: the list family's stacks and chip's pins on whole pixels; blocks and toy-brick;
-  file-zip (archive stands in); the 41 secondary coverage gaps in `coverage.md`.
+  file-zip (archive stands in); 
 
 Re-render (from the repository root, zsh): explainers with
 `node docs/research/icon-review/2026-10-02/sheets.mjs multiples|aligned|stacks out.png`; reference
