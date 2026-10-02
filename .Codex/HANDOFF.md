@@ -54,8 +54,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Round 9 (2026-10-02, second both-density sweep): choice groups and cards, Chip/Badge groups,
   Box field, Panel labels, Tabs sm and panel, Command palette hints, Code block gaps now step down;
   default identical (0 gallery differences). Remaining holds are listed in the compact note.
-- Open: whether changed approved families (Menu, Nav, Dialog, Tooltip, …) return to In review;
-  Cursor itself.
+- Closed 2026-10-02 (owner): changed families keep Complete; R9–R12 keep what ships. Next:
+  retry the Figma dialog and sectioned popover in the owner's Chrome; Cursor stays unmeasured
+  (vscode.dev stand-in).
 
 ## Start here (next session)
 

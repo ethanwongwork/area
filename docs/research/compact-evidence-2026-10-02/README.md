@@ -53,7 +53,12 @@ the data disagrees with what ships.
 ## Recommendations
 
 Applied 2026-10-02: R1–R6 (high confidence), then R7 and R8 (owner yes). Default density
-unchanged. R9–R12 keep what ships.
+unchanged.
+
+Closed 2026-10-02 (owner, review page https://claude.ai/artifact/XxfTBsUUgdSWenVR575yFL): every
+changed family keeps Complete; R9–R12 keep what ships (popover 8, separator 4 / 1 / 4, the
+rule-only gaps until Cursor is measured, titles 16/24); vscode.dev stays the Cursor stand-in; retry
+the Figma dialog and sectioned popover in the owner's Chrome next session.
 
 | # | Value | Ships (default → compact) | Evidence | Recommend | Confidence |
 |---|---|---|---|---|---|
