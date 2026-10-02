@@ -52,13 +52,15 @@ overflow (hidden commands).
 | variant | solid (default) | Primary action with alternatives | Notion "New ▾" (solid accent); Fluent, Atlassian primary |
 | variant | soft | Secondary action | shadcn split (secondary fill + separator) |
 | variant | outline | Secondary action on busy surfaces | shadcn "Follow ▾"; Fluent outline |
-| tone | Button's eight tones | Same meaning as Button | Notion accent |
-| size | sm 28, md 32, lg 40 | Button's scale | Notion 28; shadcn 32 |
+| variant | ghost | Icon-only tool with a menu, in a Toolbar | Figma's toolbelt tool groups (owner 2026-09-27) |
+| tone | Button's seven tones | Same meaning as Button | Notion's accent is the Action role in an accent theme (D1) |
+| size | sm 28, md 32, lg 40; in a Toolbar with no `size`, the toolbar's (`ToolbarSize` context) | Button's scale | Notion 28; shadcn 32 |
 | composition | leading icon on the action | Iconic defaults ("+ Add") | Fluent, Atlassian icon slots |
 | state | disabled (both parts), menu open (`aria-expanded`) | Runtime | Notion reports `aria-expanded` on its chevron |
 
 Excluded: ghost (with no fill or edge the two parts do not read as one control; none of the
-references offers it).
+references offers it). *Superseded 2026-09-27 (owner, Figma's tool groups): `variant="ghost"`
+exists, used icon-only in toolbars (manifest `splitButton.variant`; Owner decisions below).*
 
 ## Sources
 
@@ -141,7 +143,7 @@ Notion's menu surface:
 | divider | **1px, full height** | Notion (inset line, full height); shadcn separator (full height) | — |
 | divider paint · solid | label ink at 24% | Fluent draws its on-brand stroke; Area's near-black solid would lose Notion's dark 11% line | Notion is darker than its fill; one rule must serve near-black and coloured fills |
 | divider paint · soft, outline | tone control line (`--_line`, neutral 226) | shadcn separator and outline borders (lab 90.95 ≈ 226) | The seam counts as a control edge, a written exception to "a rule inside a container is never darker than its edge" (audit S8, owner) |
-| action | Button unchanged (label, icon, insets) | Button spec | Notion's 28px part is 8px sides with 14px text; Area's sm is 12px text (Button's scale) |
+| action | Button unchanged (label, icon, insets) | Button spec | Notion's 28px part is 8px sides with 14px text; Area's sm is 14/20 text (Button's scale; was 12px until small controls moved to 14/20) |
 | paint · soft (neutral) | a soft Button group's: `bg-component` fill, the quiet ink (75% mix toward muted), no hairline; hover `bg-component-hover`, press `bg-component-active` (split-button.css:70-77) | Peer: [Button group](button-group.md) soft | Audit S15b (owner). Was two soft Buttons: body ink, a #f3 hairline and a translucent hover wash. The divider stays `edge-control` #e2 (S8) |
 | hover | each part on its own | Notion: hovering one part leaves the other at rest | — |
 | menu position | 4px below, aligned to the group's end edge; flips when it would overflow | Notion 3.99 below, 0.33 from the end | — |
@@ -171,7 +173,8 @@ Area:
   Near a viewport edge the menu flips to the anchor's other edge (start-aligned) before it
   shifts, so it always shares an edge with the button; it used to shift to the viewport padding
   and align with neither.
-- Both use the shared placement (`useAnchoredPosition`, `anchorRect` for the toolbar case).
+- Both use the shared placement (`useAnchoredPosition`; the toolbar case passes the shared
+  `clearToolbar` from `overlay.ts` as `anchorRect`, which ToolbarOverflow's menu also uses).
   Verified in headless Edge with a real pointer: tool menu start 96 = chevron 96, 4 below the
   bar; text menu 4 under the group.
 
@@ -185,7 +188,10 @@ Area:
   ArrowUp opens it on the last. In the menu, ArrowUp/Down wrap, Home/End jump, Tab closes.
   Choosing an item runs it, closes the menu and returns focus to the trigger (verified in the
   gallery 2026-09-26).
-- Disabled disables both parts. Reduced motion stops the chevron's turn.
+- Disabled disables both parts, and the joined control dims once as a whole, so the seam and
+  overlapped edges aren't dimmed twice (audit H-26, `split-button.css:119-123`). The open
+  menu's trigger keeps the pressed plate (audit G-12, `button.css:145-150`). Reduced motion
+  stops the chevron's turn.
 
 ## Visual pass
 
@@ -230,3 +236,6 @@ the iOS 27 kit, read only) and the gallery's Toolbar / Tools tile:
 - 2026-09-27 · owner: horizontal start → end edge under text splits, chevron start for tools; edge flip before shift in `computePosition` (test added). Approved on this choice (owner: "split will be considered approved based on what you choose").
 - 2026-09-30 · audit S8 (owner) → the seam between the halves counts as a control edge and keeps #e2 (`edge-control`); a written exception to the inner-rule rule. No code change.
 - 2026-09-30 · audit S15b (owner) → a neutral soft Split button paints as a soft Button group: `bg-component` fill, the quiet ink, no hairline, hover `bg-component-hover`, press `bg-component-active` (split-button.css:66-77). Was two soft Buttons with body ink, a #f3 hairline and a translucent wash. The divider stays #e2.
+- 2026-10-01 · audit A-7 → in a Toolbar a SplitButton with no `size` takes the toolbar's through the `ToolbarSize` context → SplitButton.tsx:51, toolbar-context.ts.
+- 2026-10-01 · audit H-26 → with both parts disabled the split button dims once as a whole → split-button.css:119-123.
+- 2026-10-01 · audit G-12 (owner pick A) → the chevron trigger keeps the pressed plate while its menu is open → button.css:145-150.

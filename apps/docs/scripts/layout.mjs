@@ -1656,6 +1656,13 @@ export const DOCS_SCRIPT = `
   function apply(axis, value) {
     if (value) root.setAttribute("data-area-" + axis, value);
     else root.removeAttribute("data-area-" + axis);
+    /*
+     * Area's colour tokens are light-dark() pairs whose text is the same in both themes, so
+     * Chromium can reuse a cached colour after color-scheme flips and leave some text on the
+     * old theme (audit S21c, 2026-10-01). One synchronous restyle re-resolves every element;
+     * nothing paints in between, so there is no flash.
+     */
+    if (axis === "theme") { root.style.display = "none"; void root.offsetHeight; root.style.display = ""; }
   }
   Object.keys(saved).forEach(function (axis) { apply(axis, saved[axis]); });
 

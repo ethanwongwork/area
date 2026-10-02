@@ -3,7 +3,7 @@
    weight matches Area's icons and text at every size (docs/specs/icons.md). */
 @layer area.components {
   .area-presence {
-    --_size: var(--area-space-16); --_ink: var(--area-success-solid);
+    --_size: var(--area-mark-sm); --_ink: var(--area-success-solid);
     display: inline-flex; align-items: center; justify-content: center; flex: none;
     inline-size: var(--_size); block-size: var(--_size); box-sizing: border-box;
     border: var(--area-weight-icon) solid var(--_ink); border-radius: var(--area-radius-full);
@@ -14,10 +14,9 @@
   .area-presence[data-solid] { background: var(--_ink); }
   /* Out of office always shows its mark on the surface, including busy (Fluent's mapping). */
   .area-presence[data-out-of-office] { background: var(--area-bg-surface); }
-  .area-presence--xs { --_size: calc(var(--area-space-8) + var(--area-space-2)); }
   .area-presence--sm { --_size: var(--area-space-12); }
-  .area-presence--md { --_size: var(--area-space-16); }
-  .area-presence--lg { --_size: var(--area-space-20); }
+  .area-presence--md { --_size: var(--area-mark-sm); }
+  .area-presence--lg { --_size: var(--area-mark-md); }
   .area-presence--available { --_ink: var(--area-success-solid); }
   .area-presence--away { --_ink: var(--area-warning-solid); }
   .area-presence--busy { --_ink: var(--area-danger-solid); }

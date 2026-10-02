@@ -1,9 +1,32 @@
-# Handoff — 2026-09-27
+# Handoff — 2026-10-01
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
-session). Open `/gallery-icons.html` for icons. No owner completion changed; Indicator stays In review.
+session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Start here (next session)
+
+- **State:** the 2026-09-29 audit is implemented: 238 of 239 findings done, every one of the 91
+  owner picks applied (JSON statuses; page https://claude.ai/artifact/HPeEX5JVpgzugs4uJMQV7i,
+  version 14). Phases 6–7 are in the PR from branch `claude/component-work-51c375`.
+- **Next job (owner, 2026-10-01): compact density for the whole set (H-4).** One switch,
+  `data-area-ui="compact"`, should tighten every component; never per-instance `size="sm"`.
+  Today compact reaches control heights, type and icon gaps; marks hold on purpose (`mark-*`,
+  S21a). Still fixed: menu and list rows, floating-surface insets (Popover, Card, Dialog, Panel,
+  Toast), group spacing, Tabs/Table/Calendar/Composer frames. Work family by family with dense
+  captures: vscode.dev needs no login (built-in browser, paste `area-capture.js`; fingerprint
+  091bb143), Figma and Notion through the owner's Chrome (Claude in Chrome blocks long or
+  query-string-like output, so read values in chunks of ~18). Rows and floating surfaces first.
+- **Owner preferences this session:** dark mode as close to #000 as possible (dark page is
+  neutral 975); go with recommendations unless breaking; breaking changes need an explicit yes.
+- **Runtime theme switching:** Chromium can keep stale `light-dark()` colours after a live
+  `color-scheme` flip; force one restyle (THEMING.md). Measure contrast only after a reload or
+  restyle.
+- **Checks:** `npm run build`, `npm run typecheck`, `npm test` (19,590), `node --test
+  packages/react/tests/*.test.mjs` (205), `npm run test:contracts`, `npm run test:consumer`,
+  `npm run lint:icons`, `npm run build:docs`, `npm run audit:page -- --check`. The dev server
+  (`.claude/launch.json`, port 4391) rewrites `dist`; if a check flakes, rebuild and re-run.
 
 ## Audit moved into the repo (2026-09-29, branch `claude/cool-kirch-9facec`)
 
@@ -75,8 +98,105 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     actions, Kbd chords). Unused `--_group-gap` / `--_toolbar-gap` declarations remain.
   - **S15a** Segmented thumb `light-dark(bg-surface, bg-component-active)` (dark #3f on #28).
     **S15b** neutral soft Split button = soft Button group recipe.
-- Next: phase 6, i.e. S16 one floating engine, S17 API vocabulary, S18 loading and busy. Same loop:
-  implement → docs → JSON status → `npm run audit:page` → republish.
+- Branch `claude/cool-kirch-9facec` merged as PR 31; its JSON sessions are now "PR 31 (phase N)".
+
+## Audit phase 7 (2026-10-01, branch `claude/component-work-51c375`, in PR)
+
+Every remaining open fix and picked family call, family by family; statuses are in the audit
+JSON (session "this branch (phase 7)"), with `note` on anything left partly done.
+- Buttons and Toolbar: ToolbarSize context; soft selected edge; a menu button that's open shows the
+  pressed plate; a disabled seam is drawn by its enabled neighbour; a fully disabled group dims as a
+  whole; Kbd `on-emphasis` merged into `on-color`; Button `defaultSelected`/`onSelectedChange`.
+- Fields: Select picker icon and checkmark drawn as Area glyph masks; options use the Menu row model;
+  field actions are height − 8 with concentric corners; read-only and disabled paint; InputGroup
+  context; Textarea lg removed; NumberField read-only hides steppers, Escape cancels a scrub.
+- Choices and marks: new `SliderRange`; Slider RTL and Shift+arrow ×10; Chip Backspace/Delete;
+  Indicator `hidden`/`label`; ChipGroup role group; Avatar renders a span; Presence xs removed.
+- Navigation: `MenuSub` (nested submenus); one 1s typeahead; Breadcrumb ellipsis with `items`
+  opens a Menu of links (D-19); `NavGroup nested` steps rows in one Tree view level (D-20, applied
+  in inset.css, which owns row padding); MenuSearch deprecated (D-22).
+- Overlays: `Toaster`/`useToaster`; `useHoverIntent` shared by Tooltip and Hover card (mouse and
+  pen, focus opens at once, one Escape handler; E-18); Dialog and scrim fade and scale over 150ms on
+  the motion axis (E-19); `PopoverClose`, PopoverTitle `level` (`false` in Hover cards; E-8); review
+  rows for complete families and dead demos removed (E-26, H-24).
+- Surfaces: Calendar default is `surface` (bare class draws it; `plain` resets; F-21); Property list
+  panels at sm (F-28); CardTitle/Panel/Calendar heading levels; TableLink; sort headers.
+- Conversation: demos use the placeholder vocabulary and author "Assistant" (G-23); Composer action
+  slots are `<fieldset disabled>`; CodeBlock copy state.
+- System: title-xs; Token deprecated in code (H-25); loops scale from the duration tokens (H-20).
+- Owner said go with recommendations unless breaking (2026-10-01): every value callback passes
+  `(value, event)` (event optional where none exists); names follow `aria-label` (own element) /
+  `<part>Label` (sub-part) / `label` (visible text), collections are `items` — old props kept as
+  deprecated aliases (rule in DESIGN_SYSTEM "CSS, manifest and React"); BoxField caption outside a
+  Panel is Field's label; field leading glyphs stay muted when invalid; F-1 keeps the owner's 22.
+- Docs-only calls recorded in the specs (C-20, C-21, C-32, D-16, D-23, F-26, F-31, F-32, G-26).
+- S21a: `mark-sm/md/lg` (16/20/24, held in compact) on the density and ui axes, read by Badge,
+  Count, Switch, ColorSwatch, Presence and the Indicator count; evidence from vscode.dev (no
+  login; captures `docs/research/captures/*/vscode--*`). A surface-inset role waits for compact
+  surface captures. H-9 closed.
+- 2026-10-01, owner go-ahead: H-13 renames (breaking): Button `align` start|end, IndicatorAnchor
+  `overlap` rectangular|circular and `inset` (was `compact`), Card `layout="thumbnail"` (was
+  `compact`), Switch tone axis removed for the `--area-switch-color` hook.
+- S21c first dark pass: ChatGPT dark read live in the owner's Chrome (theme switched, then restored
+  to System; `docs/research/captures/baseline/chatgpt--dark-tokens--2026-10-01.md`). Owner prefers a
+  near-black dark mode: dark `bg-page` is neutral 975 (#020202, was 900), dark scrim 50%.
+- Composer Stop: owner confirmed it is the stop square (screenshot); no capture needed.
+- Dark pass done (H-5): all families swept in dark; new `border-float` role (dark neutral 650) for
+  floating frames; docs theme switch forces one restyle (Chromium kept stale light-dark() colours
+  after a runtime color-scheme flip; THEMING.md documents it for consumers).
+- Next (owner, 2026-10-01): a full compact version of every component, set once with
+  `data-area-ui="compact"` rather than per-instance `sm` (H-4). Needs dense evidence per family:
+  vscode.dev works without login; Figma and Notion through the owner's Chrome.
+
+## Audit phase 6 (2026-09-30, branch `claude/component-work-51c375`, in PR)
+
+- **S18** loading keeps focus: Button `loading` = `aria-disabled` + `aria-busy` + `data-loading`,
+  clicks dropped (no implicit submit), full ink, spinner fills the tier icon box. Composer `loading`
+  (`busy` deprecated): field stays editable, Enter doesn't send, send becomes Stop (`onStop`,
+  `stopLabel`). Stop's filled square is the pilot `stop` icon; ChatGPT's stop state is **not
+  captured** (needs a sent message; ask the owner, e.g. a temporary chat).
+- Component glyphs: `gen-pilot-icons.mjs` exports rects and filled-circle glyphs; `glyphPaint`
+  (`stop` solid, `more` fill) read by Glyph.tsx. Icon sessions: this touched the generator.
+- **S16** one floating engine: Hover card on `useAnchoredPosition` (start, 8); `.area-popover-anchor`
+  and the `popoverAnchor` manifest entry deleted; Combobox list on the engine (4, ≥224, ≤324);
+  Select's native picker flips, ≥224, ≤324, plate-only focus (B-5 B supersedes the 09-24 no-flip
+  call); ToolbarOverflow = ghost icon Button + Menu of MenuItems (breaking); menus from a toolbar
+  command clear the bar by 4 (`clearToolbar`, shared with SplitButton); InputAction hint is an
+  AnchoredTooltip. Verified live (gaps, alignment, flip, focus, paint).
+- **S17** API vocabulary, four slices, renamed props keep deprecated aliases (rule in
+  DESIGN_SYSTEM "CSS, manifest and React"):
+  1. Callbacks and open state: Segmented `onValueChange(value, event)` (+ `name`/`form`, group
+     `disabled`, reset), Checkbox `onCheckedChange`, events on Switch/Slider/Chip/Tabs; Dialog
+     `open`/`defaultOpen` (opens without a trigger); Hover card `open`/`defaultOpen`/`align`/
+     `offset`/`delay`; Tooltip `closeDelay`; Popover manifest side `bottom`; CodeBlock `onValueChange`.
+  2. Manifest axes: Kbd `size: sm|md` + `variant` (CSS `--sm`/`--md`), Code/Token booleans,
+     Badge tone `inverse`, Tabs/Table default `md`; single-value axes and forwarding props are
+     written exceptions.
+  3. Names and slots: MenuItem `icon` (demos converted), pickers let `aria-label` win (ColorPicker's
+     inner controls follow it), group `aria-disabled`, ColorSwatchPicker no preselection,
+     AlignmentPicker `soft` (was `surface`), ColorPicker `variant: surface|plain`.
+  4. Fields and wrappers: `style` on the shell with `className` (Input, NumberField, Combobox),
+     NumberField `invalid`, BoxField `readOnly`, ModelPicker `triggerProps`, ScrollToLatest
+     `buttonProps`, Message default author, `--area-composer-inline-size` hook.
+  Left (in the JSON `progress` notes): `(value, event)` in Combobox, ColorField, ColorPicker,
+  Calendar, NumberField, BoxField, Composer; ContextMenu uncontrolled; label vs aria-label and
+  slot/collection renames (H-14); Button toggle controlled-only.
+- **S19** Alert/Toast one tone set in Badge order, Alert neutral icon muted (#666 on #f7, 5.36:1);
+  Indicator's danger default is a written exception. **S20** Indicator count 12/16/500 ("99" on a
+  32px avatar checked live). **S21b** started: `--area-opacity-disabled` replaces 16 literals.
+- JSON statuses and `audit-2026-09-29.md` regenerated; the artifact page is **not republished** yet
+  (owner said keep working; read the live page first when republishing).
+- **S21b** done (2026-10-01): `--area-opacity-disabled`; `--area-scrim` (a themed literal alias:
+  13.3% light, 65% dark; `literal()` now takes `{ light, dark }`); 4 dead tokens pruned
+  (badge-bg, badge-fg, badge-tracking-wide, radius-nested); 48 hover rules plus 6 split paint rules
+  under `@media (hover: hover)` (focus, `data-hover` and hover-to-reveal stay outside; Tree view row
+  actions got the missing `hover: none` fallback, H-17); z-* parked (components stack locally).
+  Palette ramps and primitive ramps are kept even where unused.
+- **S21a** blocked on evidence: the 16/20/24 marks don't map to one tier ladder, and the only
+  compact evidence (Notion and Figma checkboxes, 16) says marks hold. Needs compact captures of
+  Badge, Switch, ColorSwatch, Count, Kbd, Presence and surface insets before mark-*/inset roles.
+- **S21c** needs the owner to switch product themes for a dark capture pass (overlays, Card first).
+- Composer's Stop glyph still needs a ChatGPT capture (owner declined for now).
 
 ## Audit medium fixes, batch 1 (2026-09-29, branch `claude/component-audit-progress-60ca4b`, uncommitted)
 
@@ -164,7 +284,7 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
   radius, surface, motion. `index.html` and `gallery.html` redirect to the components page.
 - **Type ramp (applied):**
   - text 12/16, 14/20, 16/24; titles 20/28, 24/32, 32/40; titles fixed in compact;
-  - small controls 12/16;
+  - small controls 14/20 at default density (12/16 only under compact, `density.ts`);
   - weight 400 everywhere except labels on fills (500).
 - **Icons (branch `icons-system`, PR 3):** 256 icons in twenty-three batches; rules in the
   `area-icon-construction` skill, record in `docs/specs/icons.md`.
@@ -231,7 +351,7 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
     (native popover top layer, `popovertarget` on button triggers, JS `computePosition` with
     flip and shift, menu button keyboard, tooltip delays and hover bridge, 150ms motion).
     Spec `docs/specs/overlay.md`; tests `packages/react/tests/overlay.test.mjs`; gallery
-    `behavior-*` tiles. Tooltip is still marked Complete; its behavior is new and unreviewed.
+    `behavior-*` tiles. Tooltip is Complete; its behavior was approved in batch 17.
 
 ## Batch 11 Chrome pass and Kbd corner (2026-09-28, branch `claude/kbd-button-refinement-21fa0c`)
 
@@ -401,7 +521,7 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
   ChatGPT's 10% / 16% grey and 3s linear shimmer (Figma agrees); Spinner unchanged (owner's 1s
   over ChatGPT's 2s). Progress: no product bar found again; not validated.
 - Owner feedback: Spinner redrawn as SVG masks with round caps, stroke 1/8 of size (lg 3); a
-  2.5px md option waits in `GalleryReviewSpinner`. Skeleton: rectangle 4px corner, `animated`,
+  2.5px md option waited in `GalleryReviewSpinner` (since removed). Skeleton: rectangle 4px corner, `animated`,
   `lines`, wrap mode (children + `loading`), list tile; `skeleton.test.mjs`.
 - Skeleton rethink (owner chose option A from `research/skeleton-rethink-survey.md`): shapes block
   (default) / text / circle; `rounded` and `rectangle` removed; wrap paints the child (utilities
@@ -464,9 +584,9 @@ session). Open `/gallery-icons.html` for icons. No owner completion changed; Ind
   remove is a concentric circle 4 inside the pill; Slider hover keeps the rail; the large and
   interactive Table tiles lost a doubled wrapper; CommandPalette and Combobox no longer scroll
   the page on mount (the gallery jumped ~35,000px on load). Pass reviews for Card, Table, Chip,
-  Alert and Slider are in `apps/docs/src/demos/reviews.tsx` (remove once the owner has seen them).
+  Alert and Slider were in `apps/docs/src/demos/reviews.tsx` (removed 2026-10-01, audit E-26 / H-24).
 
-## Next
+## Next (historical; superseded by the audit phase sections at the top, and Combobox is Complete)
 
 1. Owner: review the 20 In-review families in the grouped gallery and confirm completion in
    `apps/docs/src/component-status.mjs`. Slider, Separator and Panel (Complete) changed after the
@@ -530,7 +650,7 @@ Open: dark theme, arrow when the popover shifts, Dialog's title gap (8) vs Popov
 returns results in full; Claude in Chrome blocks encoded output, so logged-in captures were
 saved as one JSON download per product (owner-approved) and split with a scratch script.
 
-## Next
+## Next (historical; the icon item still holds, the component items are superseded by the audit phase sections)
 
 0. **Next icon session opens with the review sheets (owner, 2026-09-29):** send the six sheets in
    `docs/research/icon-review/2026-09-29/` (re-render first if sources changed; commands and the open
@@ -571,9 +691,9 @@ saved as one JSON download per product (owner-approved) and split with a scratch
 4. A stroke and type baseline across Cursor, ChatGPT, Notion and Figma (needs the owner's
    go-ahead for product dark themes).
 
-## Verification (2026-09-27)
+## Verification (2026-09-27, historical)
 
-These pass:
+As of 2026-10-01, 204 React tests and the consumer check pass (phase 7 section). On 2026-09-27 these passed:
 - 19,491 token tests (contrast gate unchanged);
 - 114 React tests, including `tone.test.mjs` and the new `cohesion.test.mjs`;
 - typecheck, docs build and audit, manifest parity, token-reference check;

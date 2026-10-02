@@ -71,7 +71,8 @@ test("hidden line numbers, collapsing and copy stay independent", () => {
 
   const collapsed = renderToString(h(CodeBlock, { code: "one", collapsible: true, defaultCollapsed: true }));
   assert.match(collapsed, /data-collapsed=""/);
-  assert.match(collapsed, /aria-expanded="false"/);
+  // The visible label carries the state; aria-controls names the code (audit G-21).
+  assert.match(collapsed, /aria-controls="[^"]+-code">Show code</);
   assert.match(collapsed, /Show code/);
 });
 
@@ -83,7 +84,7 @@ test("independent code block options can be combined", () => {
 
 test("renamed variant axes retain their corresponding component classes", () => {
   assert.match(renderToString(h(Card, { layout: "horizontal" })), /area-card--horizontal/);
-  assert.match(renderToString(h(Card, { layout: "compact" })), /area-card--compact/);
+  assert.match(renderToString(h(Card, { layout: "thumbnail" })), /area-card--thumbnail/);
   assert.match(renderToString(h(Chip, { kind: "assist" }, "Search")), /area-chip--assist/);
   assert.match(renderToString(h(Slider, { labelPosition: "top", "aria-label": "Volume" })), /area-slider--top/);
   assert.match(renderToString(h(Switch, { labelPosition: "start", label: "Sync" })), /area-switch--start/);

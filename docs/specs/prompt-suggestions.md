@@ -39,7 +39,7 @@ dismiss   36 × 36, radius 8, icon 20, ending 4 in from the row
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| width | the composer's (480) | ChatGPT: the composer's width | — |
+| width | the composer's: `--area-composer-inline-size` (default 480 = 96 × 5), the one hook for both (prompt-suggestions.css:13) | ChatGPT: the composer's width | — |
 | offset | 24 below the composer | ChatGPT 24 | — |
 | row | 48 tall (16/24 text, 12 above and below), radius 16 (the composer's corner), 2 apart | ChatGPT 52 on 26 leading, radius 8, no gap | radius pass: the rows are the composer's height and column, so a washed row echoes its corner; 2 apart is Menu's rule so neighbouring hover plates never touch |
 | ink | muted, fixed on hover and focus | ChatGPT 143 muted; foreground fixed on hover (AGENTS.md) | ChatGPT lifts the ink to default (#0d) on hover (`chatgpt--suggestion-row--hover`); Area's rule keeps the foreground fixed, the wash carries the state |
@@ -60,7 +60,8 @@ the one ChatGPT behaviour Area deliberately does not follow.
 ## Behavior and accessibility
 
 A list (`ul`, named "Suggestions") of buttons named by their prompt; each dismiss is its own
-button named "Dismiss “prompt”". Nothing happens on hover alone.
+button named "Dismiss “prompt”". Nothing happens on hover alone. `onDismiss` applies to the list
+layout only; chips have no dismiss (ChatGPT's chips are not dismissible).
 
 ## Verification
 
@@ -85,3 +86,5 @@ can pick?" Both are built as `layout`:
 Measured: A rows 48, gap 2, radius 16; B 24 below, 32 tall, 8 apart, starting at 0.
 - 2026-09-27 · merge check (cohesion test) → hover no longer lifts the ink; the plate is Menu's row plate.
 - 2026-09-30 · audit S9 / G-18 (owner) → the dismiss is a ghost small Button (28; was md 32) and the end padding follows; pressed rows take `bg-component-active` (prompt-suggestions.css).
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → width reads the public hook `--area-composer-inline-size` (default 480), shared with Composer (prompt-suggestions.css:13); `onDismiss` documented as list layout only, chips have no dismiss (no behaviour change).
+- 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.

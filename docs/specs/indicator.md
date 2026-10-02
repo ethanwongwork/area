@@ -11,6 +11,8 @@ Tabs and Nav (attached counts), Button (attached dot/count)
 - 2026-09-24: Presence is part of the Indicator family: `Indicator status="available" size="sm"`.
   `Presence` stays a compatibility export and internal renderer; no separate Presence
   docs or gallery family.
+  *Narrowed 2026-09-30 (owner, audit H-25 A): Presence stays the public status mark; Token,
+  not Presence, is the deprecated export.*
 - 2026-09-24: Filled available/away/DND glyphs looked too heavy; use Fluent Regular cuts.
 - 2026-09-24: Four corner placements only. One variant per gallery tile.
 - 2026-09-24: Keep Indicator separate from Badge, but base its design and structure on
@@ -31,8 +33,8 @@ the meaning. Badge labels content with text; Chip is an interactive choice.
 | kind | activity dot | Unread/new marker with no number | Figma notifications button; Untitled Badge dot (peer) |
 | kind | count | Short number on an owner | Fluent CounterBadge; Untitled avatar count; Notion board group counts (plain-text variant, not adopted) |
 | status | available, away, busy, do-not-disturb, blocked, offline, out-of-office, unknown | Availability on identity | Fluent PresenceBadge (canonical eight); Untitled online/offline |
-| size (status) | xs 10, sm 12, md 16, lg 20 | Native Fluent cuts | Fluent sizes (tiny 6 and extra-large 28 scale another cut, so excluded) |
-| tone | danger (default), accent, neutral, info, success, warning | Semantic paint | Figma danger dot, Untitled error count, Fluent brand count; gallery Tone / warning |
+| size (status) | sm 12, md 16, lg 20 | Native Fluent cuts | Fluent sizes (tiny 6 and extra-large 28 scale another cut, so excluded); xs 10 removed by audit C-19 A (owner): the system has no xs tier |
+| tone | danger (default), neutral, info, success, warning (accent removed 2026-09-29, D1) | Semantic paint | Figma danger dot, Untitled error count, Fluent brand count; gallery Tone / warning |
 | anchor | four corners; rectangular or circular owner | Attachment | Untitled avatar corner; Figma icon button |
 
 Excluded: Untitled's gloss gradients and reflection SVG on the status dot (a skeuomorphic
@@ -213,12 +215,12 @@ Sources:
 | dot · size | 6px | Owner (relate to Badge): Badge dot disc is 6px; Untitled Badge Dot 6px | Figma measures 5px, Notion's status-tag dot 8px. Kept (third pass): 6px matches Badge's dot, and the products split either side; an odd 5px box also has no pixel centre at 1× |
 | dot · paint | danger role (`rgb(232, 9, 69)` light) | Figma danger (`#dc3412`), Untitled error | Hue differs from Figma's orange red; Area keeps its palette and semantic role |
 | count · height / min-width | 16px | Fluent small 16px | Untitled avatar count is 14px; 16px matches ChatGPT's 16px chrome pill and keeps two-digit counts round |
-| count · text | 10px / 14px, weight 500, tabular numerals | Fluent small 10/14, Untitled 10/13 (both 10px) | Weight 500 instead of 600/700: Area text weights are 400/500 and Badge uses 500 |
+| count · text | 12px / 16px (`control-xs`), weight 500, tabular numerals: Count sm's type | Count sm 12/16 500; Chip initials keep a 12px floor (Fluent small 10/14 and Untitled 10/13 were the earlier source) | Audit S20 B (owner 2026-09-30): the three 16px numeric marks share one type. Weight 500: Area text weights are 400/500 |
 | count · padding-inline | 4px | Fluent small | — |
 | attached cutout (ring) | 1px surface | Owner 2026-09-25: match the 1px icon stroke | Untitled uses 1.5px; read as heavier than the rest of the system |
 | circular owner · placement | 2px outside the bounding-box corner | Owner 2026-09-25 (Untitled flush corner, moved 2px from centre) | — |
 | rectangular owner · dot placement | centred on the 16px icon viewport's top-end corner (dot edges 5px from the button edges) | Owner 2026-09-25 (Figma's 9px read too inset) | Figma's value is relative to a 24px icon; Area's icon is 16px, so the position is taken relative to the icon slot |
-| rectangular owner · count placement | centred on the corner, no inset (`compact` now opt-in) | Owner 2026-09-25; Mantine default (offset 0) | Previous 4px inset read too inset |
+| rectangular owner · count placement | centred on the corner, no inset (`inset` opt-in; was `compact`, renamed in audit H-13) | Owner 2026-09-25; Mantine default (offset 0) | Previous 4px inset read too inset |
 | tab owner · count placement | after the tab: anchor reserves 16px + 2px, count top-aligned | Owner 2026-09-25 (count covered the label) | Area tabs align text to their end edge, so any corner placement overlaps the label |
 | status glyphs | Fluent Regular cuts 10/12/16/20 with 1px backing clip | Fluent + owner decision (Regular) | — |
 | processing pulse | unchanged | Prior implementation (Mantine) | No product evidence |
@@ -237,6 +239,9 @@ number); attached indicators are `aria-hidden` and `inert`, so the owner's acces
 must carry the state (the new tile's button is named "Notifications, new activity").
 Forced colors map the indicator to Highlight with a Canvas outline. Logical placement
 follows RTL.
+`hidden` renders nothing (`disabled` is a deprecated alias: it meant hide, audit C-25), and
+`label` sets the accessible name as a string or a function of the count, as Count's; the
+default stays English ("N notifications", "New activity", "Processing") (Indicator.tsx:11-31).
 
 ## Peers and consistency
 
@@ -340,7 +345,7 @@ Sources:
 
 - 22 captures verified by checksum (script fingerprint `091bb143`).
 - Gallery measurements after the change: dot 6×6; icon-button dot edges 9/9 from top/end;
-  avatar presence edges 0/0 from bottom/end; count 16×16, 10px/14px, 500, 4px sides;
+  avatar presence edges 0/0 from bottom/end; count 16×16, 12px/16px (was 10/14 before audit S20), 500, 4px sides;
   ring 1.5px.
 - 87 React tests, typecheck, docs audit, 14 contract tests and manifest parity pass.
 - Unverified: product dark themes; Notion's inbox count and presence (not present);
@@ -375,6 +380,11 @@ Sources:
   change belongs to Badge first → `badge/notion--status-dot--rest--light`.
 - 2026-09-27 · third pass → open question settled, value kept: the dot stays 6px, equal to
   Badge's (Notion 8, Figma 5 sit either side); Tone / warning tile added → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
+- 2026-09-30 · audit S20 B → the count takes Count sm's 12/16 at 500 (was 10/14). Checked live: one
+  digit 16×16; "99" on a 32px avatar is 22.7×16, starting 13 from the avatar's start and 3 above it,
+  clear of the initial → `indicator.css` `.area-indicator--count`.
+- 2026-10-01 · audit C-19 (owner pick A) → Presence `xs` (10) removed; status sizes are sm 12, md 16, lg 20. Checkbox and Radio keep lg → manifest.ts:353, presence.css.
+- 2026-10-01 · audit C-25 (owner pick A) → `hidden` replaces `disabled` (kept as a deprecated alias) for an indicator that renders nothing; new `label` prop, a string or `(count) => string`, as Count's → Indicator.tsx:11-31.
 
 ## Stroke findings (2026-09-25)
 
@@ -498,3 +508,4 @@ Pinned commit: `d27922755bebae866d9ffe86b7da44c27ec801ee`.
 - 2026-09-28 · second pass → Notion's help dot saved as `notion--help-dot--rest--light` (8px, no
   ring, its corner on the 20px icon box's corner). Both products keep the dot inside the icon box;
   Area keeps centring it on the corner (owner, 2026-09-25; owner took the recommendation to keep it).
+- 2026-10-01 · owner (audit H-13): IndicatorAnchor `overlap` values are `rectangular | circular` (classes `--rectangular` / `--circular`; were `overlap-*`), and the `compact` boolean is `inset` (class `--inset`).

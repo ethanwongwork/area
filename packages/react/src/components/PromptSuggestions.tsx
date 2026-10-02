@@ -3,6 +3,8 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { promptSuggestionsVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
+/** The empty collection, one reference so effects keyed on it stay still. */
+const NO_ITEMS: never[] = [];
 
 export interface PromptSuggestion {
   id: string;
@@ -12,10 +14,13 @@ export interface PromptSuggestion {
 }
 
 export interface PromptSuggestionsProps extends Omit<HTMLAttributes<HTMLUListElement>, "onSelect"> {
-  suggestions: PromptSuggestion[];
+  /** The suggestions. Collections are `items` everywhere (audit H-14). */
+  items?: PromptSuggestion[];
+  /** @deprecated Use `items`. */
+  suggestions?: PromptSuggestion[];
   /** Fill the composer with it, or send it; the host decides. */
   onSelect?: (suggestion: PromptSuggestion) => void;
-  /** Shows a dismiss button on each row. */
+  /** Shows a dismiss button on each row of the list layout; chips have none (ChatGPT's chips are not dismissible). */
   onDismiss?: (suggestion: PromptSuggestion) => void;
   /** Names the list ("Suggestions"). */
   label?: string;
@@ -25,8 +30,9 @@ export interface PromptSuggestionsProps extends Omit<HTMLAttributes<HTMLUListEle
 
 /** Starter prompts under an empty composer, one row each (ChatGPT's home). */
 export const PromptSuggestions = forwardRef<HTMLUListElement, PromptSuggestionsProps>(function PromptSuggestions(
-  { suggestions, onSelect, onDismiss, label = "Suggestions", layout = "list", className, ...rest }, ref,
+  { items, suggestions: legacySuggestions, onSelect, onDismiss, label = "Suggestions", layout = "list", className, ...rest }, ref,
 ) {
+  const suggestions = items ?? legacySuggestions ?? NO_ITEMS;
   if (layout === "chips") {
     return <ul ref={ref} aria-label={label} className={promptSuggestionsVariants({ layout }, className)} {...rest}>
       {suggestions.map(suggestion => <li key={suggestion.id} className="area-prompt-suggestions__row">

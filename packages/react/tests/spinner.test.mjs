@@ -13,6 +13,6 @@ test("is decorative without a label and a status region when named", () => {
   assert.match(renderToString(h(Spinner)), /aria-hidden="true"/);
   const named = renderToString(h(Spinner, { label: "Loading" }));
   assert.match(named, /role="status"/);
-  assert.match(named, /aria-label="Loading"/);
+  assert.match(named, /<span class="area-sr-only">Loading<\/span>/); // content, so the live region announces it (audit E-21)
   assert.doesNotMatch(named, /aria-hidden/);
 });

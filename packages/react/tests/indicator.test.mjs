@@ -18,7 +18,7 @@ test('activity and processing have accessible defaults and support caller labels
   assert.match(render(h(Indicator, {processing: true, 'aria-label': 'Sync in progress'})), /aria-label="Sync in progress"/);
 });
 test('presence sizes, Area-drawn marks, out-of-office shapes, and accessible overrides', () => {
-  for (const size of ['xs','sm','md','lg']) {
+  for (const size of ['sm','md','lg']) { // xs dropped (audit C-19)
     const html = render(h(Presence, {size}));
     assert.match(html, new RegExp(`area-presence--${size}`));
     // One 16-unit drawing at every size; strokes keep the icon line weight when scaled.

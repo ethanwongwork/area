@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
-import type { ChangeEvent, KeyboardEvent } from "react";
+import type { ChangeEvent, KeyboardEvent, SyntheticEvent } from "react";
 import { colorFieldVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Input, type InputProps } from "./Input.tsx";
 import { InputGroup } from "./InputGroup.tsx";
@@ -21,7 +21,8 @@ export interface ColorFieldProps extends Omit<InputProps, "value" | "defaultValu
   value?: string;
   defaultValue?: string;
   /** Called only when a valid hex value is committed by blur or Enter. */
-  onValueChange?: (value: string) => void;
+  /** The committed hex, and the event that committed it (audit C-7). */
+  onValueChange?: (value: string, event?: SyntheticEvent) => void;
   /** Public sizing/treatment reuse Input's matching control tiers. */
   size?: VariantProps<typeof MANIFESTS.colorField>["size"];
 }
@@ -48,19 +49,19 @@ export const ColorField = forwardRef<HTMLInputElement, ColorFieldProps>(function
     return () => form.removeEventListener("reset", reset);
   }, [value, initial, alpha]);
 
-  function commit() {
+  function commit(event?: SyntheticEvent) {
     let next = draft === "" && !required ? "" : normalizeHexColor(draft);
     if (alpha && next && next.length === 7 && committed.length === 9) next += committed.slice(7);
     if (next === null) { setDraft(displayHex(committed)); return; }
     if (value === undefined) { setLocalValue(next); setDraft(displayHex(next)); }
     else setDraft(displayHex(committed));
-    if (next !== committed) onValueChange?.(next);
+    if (next !== committed) onValueChange?.(next, event);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     onKeyDown?.(event);
     if (event.defaultPrevented) return;
-    if (event.key === "Enter") { commit(); event.preventDefault(); }
+    if (event.key === "Enter") { commit(event); event.preventDefault(); }
     if (event.key === "Escape") { setDraft(displayHex(committed)); event.preventDefault(); }
   }
 
@@ -76,7 +77,7 @@ export const ColorField = forwardRef<HTMLInputElement, ColorFieldProps>(function
     leadingIcon={<ColorSwatch color={committed || "transparent"} size="sm" aria-hidden="true" />}
     invalid={invalid || draftInvalid}
     onChange={(event: ChangeEvent<HTMLInputElement>) => { setDraft(event.target.value); onChange?.(event); }}
-    onBlur={event => { onBlur?.(event); commit(); }} onKeyDown={handleKeyDown} />;
+    onBlur={event => { onBlur?.(event); commit(event); }} onKeyDown={handleKeyDown} />;
   if (!alpha) return hexInput;
   return <InputGroup size={size} variant={variant} fullWidth={fullWidth}
     className={cx(colorFieldVariants({ size, fullWidth, alpha }), className)}>
@@ -84,11 +85,11 @@ export const ColorField = forwardRef<HTMLInputElement, ColorFieldProps>(function
     <NumberField className="area-color-field__opacity" aria-label={opacityLabel}
       value={Math.round(parseInt(committed.slice(7) || "FF", 16) / 255 * 100)}
       min={0} max={100} step={1} unit="%" size={size} disabled={disabled} readOnly={readOnly}
-      onValueChange={percent => {
+      onValueChange={(percent, event) => {
         if (percent === null) return;
         const next = (committed.slice(0, 7) || "#000000") + Math.round(percent / 100 * 255).toString(16).padStart(2, "0").toUpperCase();
         if (value === undefined) setLocalValue(next);
-        if (next !== committed) onValueChange?.(next);
+        if (next !== committed) onValueChange?.(next, event);
       }} />
     {name && <input type="hidden" name={name} value={committed} disabled={disabled} form={rest.form} />}
   </InputGroup>;

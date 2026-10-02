@@ -1,5 +1,6 @@
-import { forwardRef, useEffect, useId, useRef, useState } from "react";
-import type { InputHTMLAttributes, PointerEvent as ReactPointerEvent, KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
+import { forwardRef, useContext, useEffect, useId, useRef, useState } from "react";
+import { InputGroupContext } from "./input-group-context.ts";
+import type { InputHTMLAttributes, PointerEvent as ReactPointerEvent, KeyboardEvent as ReactKeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { numberFieldVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { calculateNumber, clampNumber, steppedNumber } from "./number-math.ts";
 import { Glyph } from "./Glyph.tsx";
@@ -7,7 +8,8 @@ import { Glyph } from "./Glyph.tsx";
 export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size" | "value" | "defaultValue" | "onChange" | "step" | "min" | "max"> {
   value?: number | null;
   defaultValue?: number | null;
-  onValueChange?: (value: number | null) => void;
+  /** The new value, and the event behind it (a held stepper's repeats have none; audit C-7). */
+  onValueChange?: (value: number | null, event?: SyntheticEvent) => void;
   onValueCommit?: (value: number | null) => void;
   min?: number;
   max?: number;
@@ -35,6 +37,8 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
   /** Number of fraction digits in the resting display. Defaults to the step's precision. */
   fractionDigits?: number;
   validationStatus?: "error" | "success" | "warning";
+  /** Error paint and `aria-invalid`, as Input, Select and Textarea take it (audit S17, B-20). */
+  invalid?: boolean;
   "data-validation-status"?: "error" | "success" | "warning";
 }
 
@@ -42,12 +46,16 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
 export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(function NumberField(
   { value, defaultValue = null, onValueChange, onValueCommit, min, max, step = 1,
     size, variant, fullWidth, unit, steppers, scrub, scrubLabel = "Drag to adjust",
-    mixed, locale, grouping = true, fractionDigits, validationStatus, "data-validation-status": fieldValidationStatus,
-    disabled, readOnly, required, name, id,
-    className, onKeyDown, onBlur, onFocus, onPointerDown, onPointerMove, onPointerUp,
+    mixed, locale, grouping = true, fractionDigits, validationStatus: validationStatusProp, invalid, "data-validation-status": fieldValidationStatus,
+    disabled: disabledProp, readOnly, required, name, id,
+    className, style, onKeyDown, onBlur, onFocus, onPointerDown, onPointerMove, onPointerUp,
     "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy,
     "aria-invalid": ariaInvalid, ...rest }, ref,
 ) {
+  // Inside an InputGroup, the group's Field state reaches the control (audit B-14).
+  const groupState = useContext(InputGroupContext);
+  const disabled = disabledProp ?? groupState.disabled;
+  const validationStatus = validationStatusProp ?? groupState.validationStatus;
   const controlled = value !== undefined;
   const [internal, setInternal] = useState<number | null>(defaultValue);
   const numeric = controlled ? value : internal;
@@ -56,6 +64,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   const [hasScrubbed, setHasScrubbed] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrubOrigin = useRef<{ x: number; value: number; emitted: number } | null>(null);
+  const removeEscape = useRef<(() => void) | null>(null);
   const generatedId = useId();
   const inputId = id ?? `area-number-${generatedId}`;
   useEffect(() => {
@@ -73,27 +82,27 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   const formatter = new Intl.NumberFormat(locale, { numberingSystem: "latn", maximumFractionDigits: digits, minimumFractionDigits: 0, useGrouping: grouping });
   const display = draft ?? (mixed ? "" : numeric == null ? "" : formatter.format(numeric));
   const disabledState = disabled || readOnly;
-  const invalidState = error || validationStatus === "error" || fieldValidationStatus === "error" || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
+  const invalidState = error || invalid || validationStatus === "error" || fieldValidationStatus === "error" || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const resolvedValidation = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
-  const commitValue = (next: number | null) => {
+  const commitValue = (next: number | null, event?: SyntheticEvent) => {
     const bounded = next == null ? null : clampNumber(next, min, max);
     if (!controlled) setInternal(bounded);
-    onValueChange?.(bounded);
+    onValueChange?.(bounded, event);
     onValueCommit?.(bounded);
     setDraft(null);
     setError(false);
   };
-  const commitDraft = () => {
+  const commitDraft = (event?: SyntheticEvent) => {
     if (draft === null) return;
-    if (!draft.trim()) { if (!required) commitValue(null); else setError(true); return; }
+    if (!draft.trim()) { if (!required) commitValue(null, event); else setError(true); return; }
     const parsed = calculateNumber(draft, numeric ?? 0, decimal, group);
     if (parsed === null) { setError(true); return; }
-    commitValue(parsed);
+    commitValue(parsed, event);
   };
-  const stepBy = (delta: number) => {
+  const stepBy = (delta: number, event?: SyntheticEvent) => {
     if (disabledState) return;
     const next = steppedNumber(mixed ? clampNumber(0, min, max) : numeric ?? clampNumber(0, min, max), delta, validStep, min, max);
-    commitValue(next);
+    commitValue(next, event);
   };
   const handleKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
     // Keys while an input method is composing belong to the composition (audit B-13).
@@ -101,13 +110,14 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
       const multiplier = event.shiftKey ? 10 : event.altKey ? 0.1 : 1;
       if (event.key === "ArrowUp" || event.key === "ArrowDown") {
         event.preventDefault();
-        stepBy((event.key === "ArrowUp" ? 1 : -1) * multiplier);
+        stepBy((event.key === "ArrowUp" ? 1 : -1) * multiplier, event);
       } else if (event.key === "Home" && min !== undefined) {
-        event.preventDefault(); commitValue(min);
+        event.preventDefault(); commitValue(min, event);
       } else if (event.key === "End" && max !== undefined) {
-        event.preventDefault(); commitValue(max);
-      } else if (event.key === "Enter") {
-        event.preventDefault(); commitDraft();
+        event.preventDefault(); commitValue(max, event);
+      } else if (event.key === "Enter" && draft !== null) {
+        // Enter commits an edit; with nothing to commit it submits the form, as Input (audit B-30).
+        event.preventDefault(); commitDraft(event);
       } else if (event.key === "Escape" && (draft !== null || error)) {
         // Only an edit in progress claims Escape; otherwise it reaches the popover or dialog.
         event.preventDefault(); setDraft(null); setError(false);
@@ -121,6 +131,15 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     scrubOrigin.current = { x: event.clientX, value: initial, emitted: initial };
     event.currentTarget.setPointerCapture(event.pointerId);
     setHasScrubbed(true);
+    // Escape during a drag restores the starting value, as the spec's "cancel restores" (audit B-30).
+    const onEscape = (key: KeyboardEvent) => {
+      if (key.key !== "Escape" || !scrubOrigin.current) return;
+      key.preventDefault(); key.stopPropagation();
+      cancelScrub();
+    };
+    removeEscape.current?.();
+    addEventListener("keydown", onEscape, true);
+    removeEscape.current = () => removeEventListener("keydown", onEscape, true);
   };
   const moveScrub = (event: ReactPointerEvent<HTMLSpanElement>) => {
     const origin = scrubOrigin.current;
@@ -131,13 +150,14 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     if (next !== origin.emitted) {
       origin.emitted = next;
       if (!controlled) setInternal(next);
-      onValueChange?.(next);
+      onValueChange?.(next, event);
     }
   };
   const endScrub = () => {
     if (scrubOrigin.current) onValueCommit?.(scrubOrigin.current.emitted);
     scrubOrigin.current = null;
     setHasScrubbed(false);
+    removeEscape.current?.(); removeEscape.current = null;
   };
   const cancelScrub = () => {
     const origin = scrubOrigin.current;
@@ -145,7 +165,9 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     if (origin && origin.emitted !== origin.value) onValueChange?.(origin.value);
     scrubOrigin.current = null;
     setHasScrubbed(false);
+    removeEscape.current?.(); removeEscape.current = null;
   };
+  useEffect(() => () => removeEscape.current?.(), []);
   useEffect(() => { if (mixed) setDraft(null); }, [mixed]);
   // Press and hold repeats, as native spinners and React Aria do: one step now, then every
   // 60ms after 400ms. The latest stepBy is read through a ref so repeats see the new value.
@@ -153,17 +175,18 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   stepRef.current = stepBy;
   const repeat = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopRepeat = () => { if (repeat.current) clearTimeout(repeat.current); repeat.current = null; };
-  const startRepeat = (delta: number) => {
+  const startRepeat = (delta: number, event?: SyntheticEvent) => {
     stopRepeat();
     // A bound disables the button mid-press, so it never sees pointerup; the window does.
     window.addEventListener("pointerup", stopRepeat, { once: true });
-    stepRef.current(delta);
+    stepRef.current(delta, event);
     const tick = (wait: number) => { repeat.current = setTimeout(() => { stepRef.current(delta); tick(60); }, wait); };
     tick(400);
   };
   useEffect(() => stopRepeat, []);
 
-  return <span className={numberFieldVariants({ size, variant, fullWidth }, className)}
+  // className and style land on the same box, the shell (audit S17, B-20).
+  return <span className={numberFieldVariants({ size, variant, fullWidth }, className)} style={style}
     data-disabled={disabled ? "" : undefined} data-read-only={readOnly ? "" : undefined}
     data-invalid={invalidState ? "" : undefined}
     data-success={resolvedValidation === "success" ? "" : undefined}
@@ -184,22 +207,23 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
       aria-invalid={invalidState ? true : ariaInvalid} disabled={disabled} readOnly={readOnly} required={required}
       placeholder={mixed ? "Mixed" : rest.placeholder}
       onChange={event => { setDraft(event.target.value); setError(false); }}
-      onKeyDown={handleKeyDown} onBlur={event => { commitDraft(); onBlur?.(event); }} onFocus={onFocus}
+      onKeyDown={handleKeyDown} onBlur={event => { commitDraft(event); onBlur?.(event); }} onFocus={onFocus}
       onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} />
     {error && <span id={`${inputId}-parse-error`} className="area-sr-only">Enter a valid number or calculation</span>}
     {name && <input type="hidden" name={name} value={mixed || numeric == null ? "" : String(numeric)} disabled={disabled} />}
     {/* No unit beside "Mixed" or an empty value: it would read as part of the placeholder. */}
     {unit && display !== "" && <span className="area-number-field__unit" aria-hidden="true">{unit}</span>}
-    {steppers && <span className="area-number-field__steppers">
+    {/* Read-only shows the value, not dead controls: no steppers, as read-only Switch keeps full paint (audit B-30). */}
+    {steppers && !readOnly && <span className="area-number-field__steppers">
       {([["decrease", -1, "subtract", min !== undefined && numeric != null && numeric <= min], ["increase", 1, "add", max !== undefined && numeric != null && numeric >= max]] as const).map(([kind, delta, glyph, atBound]) => {
         const verb = kind === "increase" ? "Increase" : "Decrease";
         return <button key={kind} type="button" className="area-number-field__step" tabIndex={-1}
           aria-label={ariaLabelledBy ? undefined : `${verb} ${ariaLabel ?? "value"}`}
           aria-labelledby={ariaLabelledBy ? `${inputId}-${kind} ${ariaLabelledBy}` : undefined}
           disabled={disabledState || atBound}
-          onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); inputRef.current?.focus(); startRepeat(delta); }}
+          onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); inputRef.current?.focus(); startRepeat(delta, event); }}
           onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat}
-          onClick={event => { if (event.detail === 0) stepBy(delta); }}>
+          onClick={event => { if (event.detail === 0) stepBy(delta, event); }}>
           <span id={`${inputId}-${kind}`} className="area-sr-only">{verb}</span><Glyph name={glyph} />
         </button>;
       })}

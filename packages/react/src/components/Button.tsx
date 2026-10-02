@@ -1,7 +1,7 @@
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
-import { forwardRef } from "react";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { forwardRef, useState } from "react";
+import type { ButtonHTMLAttributes, MouseEvent, ReactNode } from "react";
 import { buttonVariants, cx } from "../variants.ts";
 
 /**
@@ -30,7 +30,17 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   align?: "start" | "end";
   /** A toggle that is currently on. Persists, unlike hover. */
   selected?: boolean;
-  /** Disables the button and shows a spinner in place of any leading icon. */
+  /**
+   * Makes the button an uncontrolled toggle that starts on or off, as Chip's `defaultSelected`
+   * (audit A-17; the toggle used to be controlled only). Each press flips it.
+   */
+  defaultSelected?: boolean;
+  /** Called with the next state when a toggle is pressed, controlled or not. */
+  onSelectedChange?: (selected: boolean) => void;
+  /**
+   * Pending: a spinner replaces any leading icon and clicks are ignored, but the button stays
+   * focusable at full ink (`aria-disabled`, not native `disabled`), so focus isn't lost on submit.
+   */
   loading?: boolean;
   /** Rendered before the label. */
   icon?: ReactNode;
@@ -54,7 +64,9 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
     iconOnly,
     pill,
     align,
-    selected,
+    selected: selectedProp,
+    defaultSelected,
+    onSelectedChange,
     loading,
     icon,
     trailingIcon,
@@ -62,10 +74,20 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
     children,
     disabled,
     type = "button",
+    onClick,
     ...rest
   },
   ref,
 ) {
+  const [localSelected, setLocalSelected] = useState(defaultSelected);
+  const selected = selectedProp ?? localSelected;
+  // Only a toggle (one with a selected state) flips on press; a plain button never gains aria-pressed.
+  const toggle = selected === undefined ? onClick : (event: MouseEvent<HTMLButtonElement>) => {
+    onClick?.(event);
+    if (event.defaultPrevented) return;
+    if (selectedProp === undefined) setLocalSelected(!selected);
+    onSelectedChange?.(!selected);
+  };
   const leading = loading ? <span className="area-spinner area-spinner--md" aria-hidden="true" /> : icon;
 
   return (
@@ -73,12 +95,15 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
       ref={ref}
       type={type}
       className={buttonVariants(
-        { variant, tone, size, fullWidth, iconOnly, pill, align: align && `align-${align}` },
+        { variant, tone, size, fullWidth, iconOnly, pill, align },
         className,
       )}
-      disabled={disabled || loading}
-      // Communicates the pending state to assistive tech, which `disabled` alone does not.
+      disabled={disabled}
+      // Loading keeps focus and its place in the Tab order (audit S18): it is announced as
+      // unavailable and busy, and the click (including a form's implicit submit) is dropped.
+      aria-disabled={loading && !disabled ? true : undefined}
       aria-busy={loading || undefined}
+      onClick={loading ? event => event.preventDefault() : toggle}
       // A selected toggle needs `aria-pressed`; the class alone tells assistive tech nothing.
       aria-pressed={selected ?? undefined}
       {...(loading ? { "data-loading": "" } : {})}

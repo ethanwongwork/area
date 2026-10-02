@@ -85,6 +85,12 @@
     font-weight: var(--area-weight-regular);
     color: var(--area-fg-muted);
   }
+  /* Beside a multiline control the label sits on its first text line, not the middle of the box
+     (audit B-23): top-aligned and dropped by the Textarea's block inset at md (12 less 4). */
+  :is(.area-field--horizontal, .area-field--inline):has(> .area-textarea) { align-items: start; }
+  :is(.area-field--horizontal, .area-field--inline):has(> .area-textarea) > .area-field__label {
+    padding-block-start: max(var(--area-space-2), calc(var(--area-gutter-md) - var(--area-space-4)));
+  }
 
   /* The description and error belong under the control, not under the label. */
   .area-field--horizontal > .area-field__description,

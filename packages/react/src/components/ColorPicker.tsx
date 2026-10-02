@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from "react";
-import type { CSSProperties, HTMLAttributes, KeyboardEvent, PointerEvent, ReactNode } from "react";
+import type { CSSProperties, HTMLAttributes, KeyboardEvent, PointerEvent, ReactNode, SyntheticEvent } from "react";
 import { normalizeHexColor } from "./ColorField.tsx";
 import { ColorSwatchPicker, type ColorSwatchOption } from "./ColorSwatchPicker.tsx";
 import { Button } from "./Button.tsx";
@@ -11,7 +11,7 @@ import { Segmented } from "./primitives.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { AREA_COLOR_GRID } from "./color-grid.ts";
 import { clamp, contrastBand, contrastRatio, hslToHsv, hsvToRgb, oklchToRgb, rgbToHsl, rgbToHsv, rgbToOklch, type Rgb } from "./color-math.ts";
-import { colorPickerVariants } from "../variants.ts";
+import { colorPickerVariants, MANIFESTS, type VariantProps } from "../variants.ts";
 
 const byte = (n: number) => Math.round(clamp(n, 0, 255)).toString(16).padStart(2, "0").toUpperCase();
 const hexToRgb = (hex: string) => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)) as Rgb;
@@ -95,10 +95,13 @@ type EyeDropperConstructor = new () => { open: () => Promise<EyeDropperResult> }
 interface Channel { id: string; name: string; short: string; max: number; value: number; set: (n: number) => void }
 
 export interface ColorPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
+  /** `surface` (a floating plate, default) or `plain` for a picker inside a Popover or Panel (audit F-20). */
+  variant?: VariantProps<typeof MANIFESTS.colorPicker>["variant"];
   label?: string;
   value?: string;
   defaultValue?: string;
-  onValueChange?: (value: string) => void;
+  /** The new hex, and the event behind it when there is one (not for the eyedropper or a typed commit; audit C-7). */
+  onValueChange?: (value: string, event?: SyntheticEvent) => void;
   name?: string;
   disabled?: boolean;
   /** Edit opacity: an opacity track and a percentage beside the color value. */
@@ -130,11 +133,13 @@ export interface ColorPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "
 /** Figma-style color editor with spectrum, grid and slider views, six color models, a
  * contrast check, a before/after preview and saved swatches. */
 export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function ColorPicker(
-  { label = "Color", value, defaultValue = "#8D4DF3", onValueChange, name, disabled, alpha = true,
+  { variant, label = "Color", value, defaultValue = "#8D4DF3", onValueChange, name, disabled, alpha = true,
     model: modelProp, defaultModel = "hex", onModelChange, views = ["spectrum"], view: viewProp, defaultView, onViewChange,
     grid = AREA_COLOR_GRID, contrast, preview, eyedropper = true, header,
     swatches = [], swatchesLabel = "Saved colors", onAddSwatch, className, style, ...rest }, ref,
 ) {
+  // A consumer's aria-label names the group and its parts; `label` is the fallback (audit S17, F-19).
+  const groupName = (rest as { "aria-label"?: string })["aria-label"] ?? label;
   const id = useId();
   const initial = normalizeHexColor(defaultValue) ?? "#8D4DF3";
   const [local, setLocal] = useState(initial);
@@ -165,7 +170,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
     return () => form?.removeEventListener("reset", reset);
   }, [value, initial]);
 
-  function emit(next: Hsva, mapped = false) {
+  function emit(next: Hsva, mapped = false, event?: SyntheticEvent) {
     if (disabled) return;
     const channels: Hsva = [((next[0] % 360) + 360) % 360, clamp(next[1], 0, 100), clamp(next[2], 0, 100), alpha ? clamp(next[3], 0, 100) : 100];
     const hex = hsvToHex(...channels);
@@ -173,13 +178,13 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
     setGamutMapped(mapped);
     if (value === undefined) setLocal(hex);
     lastEmitted.current = hex;
-    if (hex !== color) onValueChange?.(hex);
+    if (hex !== color) onValueChange?.(hex, event);
   }
-  const set = (index: 0 | 1 | 2 | 3, n: number) => { const next = [...hsva] as Hsva; next[index] = n; emit(next); };
+  const set = (index: 0 | 1 | 2 | 3, n: number, event?: SyntheticEvent) => { const next = [...hsva] as Hsva; next[index] = n; emit(next, false, event); };
 
   function point(event: PointerEvent<HTMLDivElement>) {
     const box = event.currentTarget.getBoundingClientRect();
-    emit([h, (event.clientX - box.left) / box.width * 100, 100 - (event.clientY - box.top) / box.height * 100, a]);
+    emit([h, (event.clientX - box.left) / box.width * 100, 100 - (event.clientY - box.top) / box.height * 100, a], false, event);
   }
   // One tab stop moves in two dimensions: Left/Right is saturation, Up/Down brightness.
   function areaKey(event: KeyboardEvent<HTMLInputElement>) {
@@ -188,8 +193,8 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
     const move = delta[event.key];
     if (!move) return;
     event.preventDefault();
-    const rtl = getComputedStyle(event.currentTarget).direction === "rtl" && event.key.startsWith("Arrow") && move[0] ? -1 : 1;
-    emit([h, s + move[0] * rtl, v + move[1], a]);
+    // The area is colour space, not reading order: it stays left-to-right (audit F-16).
+    emit([h, s + move[0], v + move[1], a], false, event);
   }
   async function sample() {
     const Dropper = (window as unknown as { EyeDropper?: EyeDropperConstructor }).EyeDropper;
@@ -267,33 +272,33 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
   })();
 
   const field = (channel: Channel) => (
-    <NumberField key={channel.id} size="sm" variant="soft" aria-label={`${label} ${channel.name}`}
+    <NumberField key={channel.id} size="sm" variant="soft" aria-label={`${groupName} ${channel.name}`}
       min={0} max={channel.max} step={1} fractionDigits={0} value={Math.round(channel.value)} disabled={disabled}
       onValueCommit={n => { if (n !== null) channel.set(n); }} />
   );
   const valueFields = (): ReactNode => {
-    if (model === "css") return <DraftInput className="area-color-picker__text-field" size="sm" variant="soft" aria-label={`${label} CSS color`} disabled={disabled}
+    if (model === "css") return <DraftInput className="area-color-picker__text-field" size="sm" variant="soft" aria-label={`${groupName} CSS color`} disabled={disabled}
       value={formatCss(hsva, alpha)} valid={text => parseCss(text, h) !== null} onCommit={text => { const next = parseCss(text, h)!; emit(alpha ? next : [next[0], next[1], next[2], 100]); }} />;
-    if (model === "hex") return <DraftInput className="area-color-picker__text-field" size="sm" variant="soft" aria-label={`${label} hex`} disabled={disabled} maxLength={7}
+    if (model === "hex") return <DraftInput className="area-color-picker__text-field" size="sm" variant="soft" aria-label={`${groupName} hex`} disabled={disabled} maxLength={7}
       value={opaque.slice(1)} valid={text => normalizeHexColor(text)?.length === 7} onCommit={text => emit([...hexToHsv(normalizeHexColor(text)!).slice(0, 3), a] as Hsva)} />;
     return channels.map(field);
   };
 
-  const alphaTrack = alpha && <input className="area-color-picker__slider area-color-picker__alpha" type="range" aria-label={`${label} opacity`} min={0} max={100} step={1}
-    value={Math.round(a)} disabled={disabled} onChange={event => set(3, +event.target.value)} />;
+  const alphaTrack = alpha && <input className="area-color-picker__slider area-color-picker__alpha" type="range" aria-label={`${groupName} opacity`} min={0} max={100} step={1}
+    value={Math.round(a)} disabled={disabled} onChange={event => set(3, +event.target.value, event)} />;
   const sliderRow = (short: string, input: ReactNode) => <div className="area-color-picker__channel-row" key={short}>
     <span className="area-color-picker__channel-label" aria-hidden="true">{short}</span>{input}</div>;
   const tracks = view === "spectrum"
     ? <>
-      <input className="area-color-picker__slider area-color-picker__hue" type="range" aria-label={`${label} hue`} min={0} max={360} step={1}
-        value={Math.round(h)} disabled={disabled} onChange={event => set(0, +event.target.value)}
+      <input className="area-color-picker__slider area-color-picker__hue" type="range" aria-label={`${groupName} hue`} min={0} max={360} step={1}
+        value={Math.round(h)} disabled={disabled} onChange={event => set(0, +event.target.value, event)}
         style={{ "--_thumb-color": `hsl(${h} 100% 50%)` } as CSSProperties} />
       {alphaTrack}
     </>
     : view === "sliders"
       ? <>
         {channels.map(channel => sliderRow(channel.short, <input className="area-color-picker__slider" data-channel={channel.id} type="range"
-          aria-label={`${label} ${channel.name}`} min={0} max={channel.max} step={channel.max > 100 ? 1 : 0.5} value={+channel.value.toFixed(1)} disabled={disabled}
+          aria-label={`${groupName} ${channel.name}`} min={0} max={channel.max} step={channel.max > 100 ? 1 : 0.5} value={+channel.value.toFixed(1)} disabled={disabled}
           onChange={event => channel.set(+event.target.value)} />))}
         {alphaTrack && sliderRow("A", alphaTrack)}
       </>
@@ -311,11 +316,11 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
   } as CSSProperties;
 
   return <div {...rest} ref={node => { root.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
-    role="group" aria-label={label} aria-disabled={disabled || undefined} className={colorPickerVariants({}, className)} style={rootStyle}>
+    role="group" aria-label={groupName} aria-disabled={disabled || undefined} className={colorPickerVariants({ variant }, className)} style={rootStyle}>
     {header && <div className="area-color-picker__header">{header}</div>}
     <div className="area-color-picker__body">
-      {views.length > 1 && <Segmented className="area-color-picker__views" size="sm" fullWidth label={`${label} view`} value={view}
-        options={views.map(item => ({ value: item, label: VIEWS[item], disabled }))} onSelect={next => chooseView(next as ColorView)} />}
+      {views.length > 1 && <Segmented className="area-color-picker__views" size="sm" fullWidth aria-label={`${groupName} view`} value={view}
+        items={views.map(item => ({ value: item, label: VIEWS[item], disabled }))} onValueChange={next => chooseView(next as ColorView)} />}
       {check && <div className="area-color-picker__contrast" data-pass={check.ratio >= check.threshold || undefined}>
         <span className="area-color-picker__contrast-pair" aria-hidden="true"><span style={{ "--_swatch-color": background } as CSSProperties} /></span>
         <span className="area-color-picker__contrast-ratio" role="status" aria-label={`Contrast ${check.ratio.toFixed(2)} to 1 against ${background}, ${check.ratio >= check.threshold ? "passes" : "fails"} ${contrast?.level ?? "AA"}`}>
@@ -323,7 +328,9 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
         <span className="area-color-picker__contrast-level" aria-hidden="true">
           <Glyph name={check.ratio >= check.threshold ? "check" : "dismiss"} />{contrast?.level ?? "AA"}</span>
       </div>}
-      {view === "spectrum" && <div className="area-color-picker__area"
+      {/* Colour geometry is physical in every script, as AlignmentPicker's grid (audit F-16): the
+          area's white sits left and the tracks' gradients run left to right, so both stay LTR. */}
+      {view === "spectrum" && <div className="area-color-picker__area" dir="ltr"
         onPointerDown={event => { if (disabled || event.button !== 0) return; event.currentTarget.setPointerCapture(event.pointerId); event.currentTarget.querySelector("input")?.focus(); point(event); }}
         onPointerMove={event => { if (!disabled && event.currentTarget.hasPointerCapture(event.pointerId)) point(event); }}>
         {bandPath && <svg className="area-color-picker__band" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
@@ -332,31 +339,31 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
           {bandPath.edges.map(d => <path key={d} className="area-color-picker__band-edge" d={d} />)}
         </svg>}
         <span className="area-color-picker__thumb" aria-hidden="true" />
-        <input className="area-color-picker__channel" type="range" aria-roledescription="2D slider" aria-label={`${label} saturation and brightness`}
+        <input className="area-color-picker__channel" type="range" aria-roledescription="2D slider" aria-label={`${groupName} saturation and brightness`}
           aria-valuetext={`Saturation ${Math.round(s)}%, brightness ${Math.round(v)}%`} min={0} max={100} value={Math.round(s)} disabled={disabled}
-          onKeyDown={areaKey} onChange={event => set(1, +event.target.value)} />
+          onKeyDown={areaKey} onChange={event => set(1, +event.target.value, event)} />
       </div>}
-      {view === "grid" && <ColorSwatchPicker className="area-color-picker__grid" label={`${label} palette`} layout="palette" columns={grid.columns}
-        options={grid.options} value={opaque} disabled={disabled}
-        onValueChange={next => { const picked = normalizeHexColor(next); if (picked) emit([...hexToHsv(picked).slice(0, 3), a] as Hsva); }} />}
+      {view === "grid" && <ColorSwatchPicker className="area-color-picker__grid" label={`${groupName} palette`} layout="palette" columns={grid.columns}
+        items={grid.options} value={opaque} disabled={disabled}
+        onValueChange={(next, event) => { const picked = normalizeHexColor(next); if (picked) emit([...hexToHsv(picked).slice(0, 3), a] as Hsva, false, event); }} />}
       {hasControls && <div className="area-color-picker__controls" data-view={view}>
         {eyedropper && canSample && <Button variant="ghost" size="sm" iconOnly icon={<EyedropperGlyph />}
-          aria-label={`Sample ${label.toLowerCase()} from screen`} selected={sampling} disabled={disabled} onClick={sample} />}
-        {tracks && <div className="area-color-picker__tracks">{tracks}</div>}
+          aria-label={`Sample ${groupName.toLowerCase()} from screen`} selected={sampling} disabled={disabled} onClick={sample} />}
+        {tracks && <div className="area-color-picker__tracks" dir="ltr">{tracks}</div>}
         {preview && <div className="area-color-picker__preview">
           <span className="area-color-picker__preview-new" role="img" aria-label={`New ${color}`} />
           <button type="button" className="area-color-picker__preview-original" style={{ "--_swatch-color": original } as CSSProperties}
-            aria-label={`Restore original ${original}`} disabled={disabled || original === color} onClick={() => emit(hexToHsv(original))} />
+            aria-label={`Restore original ${original}`} disabled={disabled || original === color} onClick={event => emit(hexToHsv(original), false, event)} />
         </div>}
       </div>}
       <div className="area-color-picker__values">
-        <Select className="area-color-picker__model" size="sm" aria-label={`${label} color model`} value={model} disabled={disabled}
+        <Select className="area-color-picker__model" size="sm" variant="soft" aria-label={`${groupName} color model`} value={model} disabled={disabled}
           onChange={event => chooseModel(event.target.value as ColorModel)}>
           {MODELS.map(([item, text]) => <option key={item} value={item}>{text}</option>)}
         </Select>
         <InputGroup className="area-color-picker__fields" variant="soft" size="sm" data-model={model}>
           {valueFields()}
-          {alpha && model !== "css" && <NumberField className="area-color-picker__opacity" size="sm" variant="soft" aria-label={`${label} opacity percent`}
+          {alpha && model !== "css" && <NumberField className="area-color-picker__opacity" size="sm" variant="soft" aria-label={`${groupName} opacity percent`}
             min={0} max={100} step={1} fractionDigits={0} unit="%" value={Math.round(a)} disabled={disabled}
             onValueCommit={n => { if (n !== null) set(3, n); }} />}
         </InputGroup>
@@ -367,8 +374,8 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
       <div className="area-color-picker__heading"><span>{swatchesLabel}</span>
         {onAddSwatch && <Button variant="ghost" size="sm" iconOnly icon={<AddGlyph />} aria-label={`Save ${color} to ${swatchesLabel.toLowerCase()}`}
           disabled={disabled || swatches.some(item => normalizeHexColor(item.value) === color)} onClick={() => onAddSwatch(color)} />}</div>
-      {swatches.length > 0 && <ColorSwatchPicker label={`${label} ${swatchesLabel.toLowerCase()}`} size="sm" columns={9} options={swatches} value={color} disabled={disabled}
-        onValueChange={next => { const picked = normalizeHexColor(next); if (picked) emit(hexToHsv(picked)); }} />}
+      {swatches.length > 0 && <ColorSwatchPicker label={`${groupName} ${swatchesLabel.toLowerCase()}`} size="sm" columns={9} items={swatches} value={color} disabled={disabled}
+        onValueChange={(next, event) => { const picked = normalizeHexColor(next); if (picked) emit(hexToHsv(picked), false, event); }} />}
     </div>}
     {name && <input type="hidden" name={name} value={color} disabled={disabled} />}
   </div>;

@@ -32,7 +32,7 @@ Sheet or Drawer (edge-anchored; backlog).
 | composition | header (title, description, close), body, footer | Standard dialog | shadcn, Primer, ChatGPT shortcuts dialog |
 | composition | without close | Forced choice (confirmation) | shadcn `showCloseButton={false}` |
 | composition | with field, scrollable body | Forms and long content | shadcn (form), Primer (scrolling body) |
-| behaviour | modal with `trigger` | Opens itself as a native modal | shadcn `DialogTrigger`; ChatGPT, Primer |
+| behaviour | modal with `trigger`, or controlled `open` / `defaultOpen` | Opens itself as a native modal; without a trigger, `open` opens it (a menu item asking for confirmation) | shadcn `DialogTrigger`; ChatGPT, Primer |
 
 Excluded: a divided or tinted footer (shadcn's new base footer is a muted strip with a top
 border; Primer divides the header). The prior decision keeps the footer undivided, and
@@ -127,16 +127,26 @@ half the corner.
 
 ## Behavior and accessibility
 
-Without `trigger`, Dialog renders the surface with `role="dialog"`, `aria-modal` and its
+Without `trigger`, `open` or `defaultOpen`, Dialog renders the surface with `role="dialog"`, `aria-modal` and its
 name and description (for documentation, or inside your own `<dialog>`). With `trigger`,
 it renders the trigger (`aria-haspopup="dialog"`, `aria-controls`) and a native
 `<dialog class="area-dialog__modal">` that carries the name and description; the trigger
-calls `showModal()`. The platform supplies the focus trap, Escape and focus return; a click
+calls `showModal()`. `open` / `defaultOpen` control the modal through the shared
+`useOpenState`; without a trigger, `open` alone opens the native modal (a menu item asking for
+confirmation). Escape, the close control and the backdrop report `false` through
+`onOpenChange`. The platform supplies the focus trap, Escape and focus return; a click
 on the scrim closes it. The close button calls `onDismiss`, then closes the enclosing native
 dialog; `dismissLabel` names it (default "Close dialog"). `onClose` remains as a deprecated
 alias (`primitives.tsx:1289-1294`, `:1341-1344`). Verified in the
 gallery with a real pointer: opens modal with the 13% scrim, focus on the close, Escape
 closes and refocuses the trigger, a scrim click closes, a click inside does not.
+
+Enter and exit (audit E-19 A, owner 2026-09-30): the modal fades and scales from 0.97 over
+150ms (`--area-duration-base`, `--area-ease-out`), as the anchored surfaces do, and the scrim
+fades alongside; the entry runs from `@starting-style`, the exit keeps the top layer with
+`overlay` and `display` transitions (`allow-discrete`). The motion axis's "none" preset sets
+the duration to 0, so it is instant, and `prefers-reduced-motion` drops the scale as well
+(`surface.css:767-797`). Was instant.
 
 ## Visual pass
 
@@ -190,3 +200,5 @@ change.
   margin out), so content keeps the 16 inset and focus rings paint whole.
 - 2026-09-30 · audit S9 (owner) → the 32px md ghost close is written as the exception to the rectangular-surface close (ghost sm). `onDismiss` and `dismissLabel` added (default "Close dialog"); `onClose` kept as a deprecated alias → `primitives.tsx:1289-1294`, `:1341-1344`.
 - 2026-09-30 · audit S10 (owner) → the lift is the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → surface.css:777.
+- 2026-09-30 · audit S17 (API vocabulary, slice 1) → `open` / `defaultOpen` added (shared `useOpenState`); without a trigger, `open` opens the native modal (a menu item asking for confirmation); Escape, the close control and the backdrop report `false` through `onOpenChange` → `primitives.tsx:1311-1324`.
+- 2026-10-01 · audit E-19 (owner pick A) → the modal and its scrim fade (and the modal scales from 0.97) over 150ms on open and close via `@starting-style` and `allow-discrete` transitions; instant under the "none" motion preset, no scale under reduced motion → surface.css:767-797.

@@ -1,6 +1,6 @@
 # Resizable panel spec
 
-**Status:** in review · 2026-09-26
+**Status:** accepted · 2026-09-28 (follows Panel, batch 8; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/resizable/`
 **Peers:** Panel (the container; `flush` docking), Slider (value semantics), focus ring
 

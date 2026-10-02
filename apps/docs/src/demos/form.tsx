@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Avatar, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Input, InputAction, NumberField, Panel, PanelSection, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
+import { Avatar, SliderRange, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Input, InputAction, NumberField, Panel, PanelSection, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
 import { CheckIcon, CornerRadiusIcon, DismissIcon, OpacityIcon, OpenIcon, RotateIcon, SearchIcon, TrashIcon } from "../icons.tsx";
-import { SliderRangeComposition } from "./slider-range.tsx";
 
 export const InputDefault = () => <Input aria-label="Label" placeholder="Placeholder" />;
 
@@ -59,15 +58,18 @@ export const InputRtl = () => (
 export const NumberFieldDefault = () => <Field label="Width"><NumberField defaultValue={240} unit="px" /></Field>;
 export const NumberFieldSteppers = () => <Field label="Opacity"><NumberField defaultValue={80} min={0} max={100} step={1} unit="%" steppers /></Field>;
 export const NumberFieldScrub = () => <NumberField aria-label="Rotation" defaultValue={15} min={-360} max={360} unit="°" scrub={<RotateIcon />} />;
-export const NumberFieldDecimal = () => <Field label="Scale"><NumberField defaultValue={1.25} min={0} step={0.05} fractionDigits={2} /></Field>;
-export const NumberFieldExpression = () => <Field label="Position"><NumberField defaultValue={24} unit="px" scrub steppers /></Field>;
+export const NumberFieldDecimal = () => <Field label="Label"><NumberField defaultValue={1.25} min={0} step={0.05} fractionDigits={2} /></Field>;
+export const NumberFieldExpression = () => <Field label="Label"><NumberField defaultValue={24} unit="px" scrub steppers /></Field>;
 export const NumberFieldMixed = () => {
   const [mixed, setMixed] = useState(true);
-  return <Field label="Spacing"><NumberField mixed={mixed} defaultValue={8} onValueChange={() => setMixed(false)} unit="px" steppers /></Field>;
+  return <Field label="Label"><NumberField mixed={mixed} defaultValue={8} onValueChange={() => setMixed(false)} unit="px" steppers /></Field>;
 };
 export const NumberFieldSoft = () => <Field label="Height"><NumberField variant="soft" defaultValue={120} unit="px" /></Field>;
-export const NumberFieldReadOnly = () => <Field label="Locked"><NumberField defaultValue={48} unit="px" readOnly /></Field>;
-export const NumberFieldDisabled = () => <Field label="Unavailable"><NumberField defaultValue={48} unit="px" disabled /></Field>;
+export const NumberFieldReadOnly = () => <Field label="Read-only"><NumberField defaultValue={48} unit="px" readOnly /></Field>;
+export const NumberFieldInvalid = () => <Field label="Label" error="Error message"><NumberField defaultValue={48} unit="px" /></Field>;
+export const NumberFieldSuccess = () => <Field label="Label" validation="Success message" validationStatus="success"><NumberField defaultValue={48} unit="px" /></Field>;
+export const NumberFieldWarning = () => <Field label="Label" validation="Warning message" validationStatus="warning"><NumberField defaultValue={48} unit="px" /></Field>;
+export const NumberFieldDisabled = () => <Field label="Disabled"><NumberField defaultValue={48} unit="px" disabled /></Field>;
 export const NumberFieldSizes = () => <div style={{ display: "grid", gap: "var(--area-space-16)", inlineSize: "var(--area-input-inline-size)" }}><NumberField size="sm" aria-label="Small" defaultValue={8} unit="px" /><NumberField size="md" aria-label="Medium" defaultValue={16} unit="px" /><NumberField size="lg" aria-label="Large" defaultValue={24} unit="px" /></div>;
 export const NumberFieldSizeSm = () => (
   <NumberField size="sm" aria-label="Width" defaultValue={16} unit="px" />
@@ -161,7 +163,6 @@ export const TextareaSizes = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)", inlineSize: "var(--area-textarea-inline-size)" }}>
     <Textarea size="sm" rows={3} aria-label="Label" placeholder="Small" />
     <Textarea size="md" rows={3} aria-label="Label" placeholder="Medium" />
-    <Textarea size="lg" rows={3} aria-label="Label" placeholder="Large" />
   </div>
 );
 
@@ -362,7 +363,7 @@ export const SliderLabelOnly = () => <Slider label="Label" labelPosition="top" d
 
 export const SliderStepMarks = () => <Slider aria-label="Label" min={0} max={5} step={1} defaultValue={1} stepMarks />;
 
-export const SliderRangeWithInputs = () => <SliderRangeComposition />;
+export const SliderRangeWithInputs = () => <SliderRange defaultValue={[42, 75]} />;
 
 export const SliderVertical = () => <Slider aria-label="Label" orientation="vertical" defaultValue={50} style={{ ["--_vertical-length" as string]: "100%" }} />;
 
@@ -371,7 +372,7 @@ export const SliderDisabled = () => <Slider aria-label="Label" defaultValue={60}
 export const SliderBare = () => <Slider aria-label="Label" min={0} max={100} defaultValue={40} />;
 
 export const ChipDefault = () => (
-  <ChipGroup>
+  <ChipGroup aria-label="Filters">
     <Chip defaultSelected>Item one</Chip>
     <Chip>Item two</Chip>
     <Chip>Item three</Chip>
@@ -387,7 +388,7 @@ export const ChipControlled = () => {
 export const ChipDisabled = () => <Chip disabled>Chip</Chip>;
 
 export const ChipSwatches = () => (
-  <ChipGroup>
+  <ChipGroup aria-label="Colors">
     <Chip swatch="var(--area-red-500)">Red</Chip>
     <Chip swatch="var(--area-green-600)">Green</Chip>
     <Chip swatch="var(--area-indigo-500)">Indigo</Chip>
@@ -396,7 +397,7 @@ export const ChipSwatches = () => (
 );
 
 export const ChipSizes = () => (
-  <ChipGroup>
+  <ChipGroup aria-label="Sizes">
     <Chip size="sm">Small</Chip>
     <Chip size="md">Medium</Chip>
     <Chip size="lg">Large</Chip>
@@ -404,7 +405,7 @@ export const ChipSizes = () => (
 );
 
 export const ChipVariants = () => (
-  <ChipGroup>
+  <ChipGroup aria-label="Chip kinds">
     <Chip kind="assist" icon={<SearchIcon />}>Assist</Chip>
     <Chip icon={<CheckIcon />}>Filter</Chip>
     <Chip kind="input">Input</Chip>
@@ -414,7 +415,7 @@ export const ChipVariants = () => (
 
 export const ChipDeletable = () => {
   const [chips, setChips] = useState(["Item one", "Item two", "Item three"]);
-  return <ChipGroup>{chips.map(chip => <Chip key={chip} kind="input" onDismiss={() => setChips(current => current.filter(item => item !== chip))}>{chip}</Chip>)}</ChipGroup>;
+  return <ChipGroup aria-label="Items">{chips.map(chip => <Chip key={chip} kind="input" onDismiss={() => setChips(current => current.filter(item => item !== chip))}>{chip}</Chip>)}</ChipGroup>;
 };
 
 export const ChipClickableDeletable = () => <Chip kind="input" clickable onClick={() => {}} onDismiss={() => {}}>Chip</Chip>;
@@ -426,7 +427,7 @@ export const ChipLinkIcon = () => <ChipLink href="#chip-api" treatment="icon" tr
 export const ChipCustomDelete = () => <Chip kind="input" onDismiss={() => {}} dismissIcon={<TrashIcon />} dismissLabel="Delete">Chip</Chip>;
 
 export const ChipAvatars = () => (
-  <ChipGroup>
+  <ChipGroup aria-label="Suggestions">
     <Chip avatar={<Avatar fallback="IY" alt="" />}>Irene Yamaguchi</Chip>
     <Chip avatar={<Avatar src="/images/irene-yamaguchi.jpg" alt="" />}>Irene Yamaguchi</Chip>
   </ChipGroup>

@@ -35,7 +35,7 @@ no interaction), not Dialog (modal, blocks the page).
 |---|---|---|---|
 | composition | header (title, close), body, footer | Short tasks | Notion Share (tabs, field, list); shadcn (title, description, fields) |
 | composition | media | Teaching step with an image | Area (prior decision) |
-| side | top, right, bottom, left | Placement around the trigger | shadcn and Radix `side`; Notion opens below |
+| side | bottom (default), top, right, left | Placement around the trigger | shadcn and Radix `side`; Notion opens below |
 | arrow | off (default), on | Optional pointer | Area (prior decision); none of the products draws one |
 | behaviour | anchored to a trigger (`trigger`) | Opens, positions and dismisses itself | Notion Share, shadcn Popover, ChatGPT model panel |
 
@@ -101,17 +101,17 @@ sides, then 8px-inset list rows (menu-like). shadcn's content is a grid with 16p
 | header · top inset | with a close: title centred on the close (cap **15**; header top = (icon − title leading) / 2). Without one: title cap **12** from the top | References centre the title on the close (cap 18 and 20 against a 16 inset). Without a close, nothing sets the row, so the cap sits on the inset like the sides | Was 21 (pass 1) and 12 with a close (pass 2). Browsers without `text-box` support keep 17 when there is no close |
 | title · weight | **strong (500)** | shadcn 500, Primer 600; the title is the description's size, so weight is the only cue besides color | Was regular under the typography rule (titles at 400, carried by size or color). See Open questions for peers |
 | spacing ladder | 12 inset · 16 between header, body and footer · 8 between items in a section · 6 inside the title group | shadcn (16 sections, 8 fields); Notion (16) | Pass 1 mixed 16 above a description with 8 below it |
-| anchored · offset | **4** from the trigger; the arrow's height with `arrow` | shadcn 4; Notion's menus 4 | — |
-| anchored · placement | `side` via CSS anchor positioning, flipping when out of room | Radix/shadcn `side` | Browsers without anchor positioning centre it in the viewport |
+| anchored · offset | **8** from the trigger (`POPOVER_OFFSET`), plus the arrow's reach with `arrow`; menus and tooltips sit 4 | Audit S16 (owner 2026-09-30); shadcn 4; Notion's menus 4 | Was 4, the menu gap |
+| anchored · placement | `side` and `align` via the shared JS engine (`useAnchoredPosition`), flipping and shifting inside an 8 viewport padding; writes `data-side` and `transform-origin` | Radix/shadcn `side`; audit S16 | No CSS-only anchored path any more (was CSS anchor positioning, centred in the viewport without support) |
 
 ## Behavior and accessibility
 
-With `trigger`, Popover wraps the trigger in `.area-popover-anchor`, gives it
+With `trigger`, Popover gives the trigger
 `popovertarget`, `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls`, and renders
 the surface as `popover="auto"` with `role="dialog"`. On open, focus moves to the first
 focusable element (or the surface); Escape and clicks outside close it (platform); on close
 from inside, focus returns to the trigger. Verified in the gallery with a real pointer:
-opens 4px below, focus on the first field, Escape closes and refocuses the trigger, outside
+opens below the trigger (4px at the time; 8 since audit S16), focus on the first field, Escape closes and refocuses the trigger, outside
 click closes. Without `trigger`, Popover stays a static surface (BadgeGroup's overflow uses
 it that way).
 
@@ -172,3 +172,4 @@ decision.
 - 2026-09-28 · batch 7 Claude in Chrome (Notion Share popover) → no change.
 - 2026-09-30 · audit S9 (owner) → Popover's ghost small Button close with the Area glyph is the rectangular-surface close recipe, now shared by Toast and Alert; Dialog keeps a 32px md close as the exception. No code change.
 - 2026-09-30 · audit S10 (owner) → the lift is the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat), shared by every floating surface → surface.css:866.
+- 2026-09-30 · audit S17 (API vocabulary, slice 1) → manifest default `side` is `bottom` (was `top`), matching the React trigger default → `manifest.ts:553`.

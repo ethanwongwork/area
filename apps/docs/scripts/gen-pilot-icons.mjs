@@ -20,7 +20,7 @@ const GLYPHS_OUT = join(ROOT, "../../packages/react/src/components/glyphs.ts");
 // Pilot icons that components draw themselves, replacing Fluent family by family
 // (docs/specs/icons.md, "Components"). A glyph is a whole icon, or one element of one
 // (check-inset is the check inside the Available ring, for boxed checks).
-const PACKAGE_GLYPHS = { "add": ["add"], "arrow-up": ["arrow-up"], "check": ["check"], "check-inset": ["status-available", 1], "chevron-down": ["chevron-down"], "dismiss": ["dismiss"], "grip": ["grip"], "subtract": ["subtract"], "corner": ["corner"], "corners": ["corners"], "padding-side": ["padding-side"], "padding-axis": ["padding-axis"], "sides": ["sides"], "search": ["search"] };
+const PACKAGE_GLYPHS = { "add": ["add"], "arrow-up": ["arrow-up"], "check": ["check"], "check-inset": ["status-available", 1], "chevron-down": ["chevron-down"], "dismiss": ["dismiss"], "grip": ["grip"], "subtract": ["subtract"], "corner": ["corner"], "corners": ["corners"], "padding-side": ["padding-side"], "padding-axis": ["padding-axis"], "sides": ["sides"], "search": ["search"], "stop": ["stop", undefined, "solid"], "more": ["more-horizontal"] };
 const LIVE = [1.5, 14.5];      // stroke centrelines stay inside this box (ink 0.94–15.06 at 1.125px)
 const LIVE_FILL = [1, 15];     // filled shapes (dots) stay inside this box
 const WEIGHT = 1.125;          // --area-weight-icon; keylines and gaps are judged at this weight
@@ -652,18 +652,39 @@ ${explore.map(icon => `  { group: ${JSON.stringify(icon.group)}, label: ${JSON.s
 `);
 console.log(`wrote src/pilot-explore.tsx (${explore.length} candidates)`);
 
-// Component glyphs: stroked centre-lines only; components render them with Glyph.tsx.
-const glyphData = Object.fromEntries(Object.entries(PACKAGE_GLYPHS).map(([glyph, [source, index]]) => {
+// Component glyphs: stroked centre-lines (a rect becomes its path); components render them with
+// Glyph.tsx. A "solid" glyph also fills inside its centre-line, as the filled variant's solid role
+// does (the stroke keeps the outline's edge): Composer's Stop. A glyph drawn only in filled
+// circles (more's dots) is "fill": no stroke, so its dots keep their drawn radius at every size.
+const rectD = ({ x, y, width, height, rx = 0 }) => {
+  const [l, t, w, h, r] = [x, y, width, height, rx].map(Number);
+  const [R, B] = [l + w, t + h];
+  if (!r) return `M${l} ${t}H${R}V${B}H${l}Z`;
+  const a = `A${r} ${r} 0 0 1`;
+  return `M${l + r} ${t}H${R - r}${a} ${R} ${t + r}V${B - r}${a} ${R - r} ${B}H${l + r}${a} ${l} ${B - r}V${t + r}${a} ${l + r} ${t}Z`;
+};
+const circleD = ({ cx, cy, r }) => {
+  const [x, y, rr] = [cx, cy, r].map(Number);
+  return `M${x - rr} ${y}A${rr} ${rr} 0 1 0 ${x + rr} ${y}A${rr} ${rr} 0 1 0 ${x - rr} ${y}Z`;
+};
+const glyphPaint = {};
+const glyphData = Object.fromEntries(Object.entries(PACKAGE_GLYPHS).map(([glyph, [source, index, paint]]) => {
   const icon = icons.find(i => i.name === source);
   if (!icon) throw new Error(`glyph ${glyph}: no pilot icon ${source}`);
   const elements = (index === undefined ? icon.elements : [icon.elements[index]]).filter(el => !el.filledOnly);
-  if (elements.some(el => !el.stroked || el.tag !== "path")) throw new Error(`glyph ${glyph}: only stroked paths are supported`);
-  return [glyph, elements.map(el => el.attrs.d)];
+  const dots = elements.every(el => !el.stroked && el.tag === "circle");
+  if (!dots && elements.some(el => !el.stroked || (el.tag !== "path" && el.tag !== "rect"))) throw new Error(`glyph ${glyph}: only stroked paths and rects, or filled circles alone, are supported`);
+  if (dots) glyphPaint[glyph] = "fill";
+  else if (paint === "solid") glyphPaint[glyph] = "solid";
+  return [glyph, elements.map(el => el.tag === "rect" ? rectD(el.attrs) : el.tag === "circle" ? circleD(el.attrs) : el.attrs.d)];
 }));
 writeFileSync(GLYPHS_OUT, `/** Area-drawn component glyphs, generated from apps/docs/assets/area-icons-pilot by
  * apps/docs/scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
  * Each glyph is a list of stroked centre-line paths on the 16px grid. */
 export const glyphs = ${JSON.stringify(glyphData, null, 2)} as const;
 export type GlyphName = keyof typeof glyphs;
+/** Glyphs that are not line drawings: "solid" also fills inside the centre-line (the filled
+ * variant's solid role); "fill" is filled shapes with no stroke (dots). */
+export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill">> = ${JSON.stringify(glyphPaint)};
 `);
 console.log("wrote packages/react/src/components/glyphs.ts");

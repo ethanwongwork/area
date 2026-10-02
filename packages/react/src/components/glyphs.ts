@@ -49,6 +49,17 @@ export const glyphs = {
   "search": [
     "M12 7A5 5 0 1 1 2 7A5 5 0 1 1 12 7Z",
     "M10.5 10.5L14 14"
+  ],
+  "stop": [
+    "M4.5 2.5H11.5A2 2 0 0 1 13.5 4.5V11.5A2 2 0 0 1 11.5 13.5H4.5A2 2 0 0 1 2.5 11.5V4.5A2 2 0 0 1 4.5 2.5Z"
+  ],
+  "more": [
+    "M2 8A1 1 0 1 0 4 8A1 1 0 1 0 2 8Z",
+    "M7 8A1 1 0 1 0 9 8A1 1 0 1 0 7 8Z",
+    "M12 8A1 1 0 1 0 14 8A1 1 0 1 0 12 8Z"
   ]
 } as const;
 export type GlyphName = keyof typeof glyphs;
+/** Glyphs that are not line drawings: "solid" also fills inside the centre-line (the filled
+ * variant's solid role); "fill" is filled shapes with no stroke (dots). */
+export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill">> = {"stop":"solid","more":"fill"};

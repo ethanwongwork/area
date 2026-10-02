@@ -48,7 +48,7 @@ export const PRACTICES = {
     `Leave the tone at ${code("neutral")} for an ordinary action: its solid fill is the Action role, so a theme decides whether actions are neutral or the accent. Emphasis is the variant\u2019s job, not the tone\u2019s: solid, outline and ghost span it on every tone.`,
     `${code("danger")} is for actions that destroy data, not for actions that merely cancel. A cancel button is ${code("ghost")}.`,
     `Give every ${code("iconOnly")} button an ${code("aria-label")}. The glyph is decorative and hidden from assistive tech.`,
-    `Set ${code("loading")} rather than disabling by hand. It disables the button, swaps the leading icon for a spinner, and sets ${code("aria-busy")} — which ${code("disabled")} alone does not communicate.`,
+    `Set ${code("loading")} rather than disabling by hand. It swaps the leading icon for a spinner, ignores clicks and sets ${code("aria-disabled")} and ${code("aria-busy")}, but keeps the button focusable at full ink, so focus doesn't drop to the page when a form submits.`,
     `Use ${code("align")} only on ${code("ghost")} buttons. It pulls the button back by its own padding so the label lines up with the text above it, which is wrong wherever there is a visible edge.`,
   ],
   input: [
@@ -103,7 +103,7 @@ export const PRACTICES = {
   avatar: [
     `Pass ${code("src")} first and fall back to ${code("fallback")} initials when the image is missing.`,
     `Keep initials to one or two characters, uppercase, derived from the entity name. No emoji and no punctuation.`,
-    `Give ${code("alt")} the literal entity name — ${code("Jane Doe")}, not ${code("Avatar of Jane Doe")}. The role is already announced.`,
+    `Give ${code("alt")} the literal entity name — ${code("Irene Yamaguchi")}, not ${code("Avatar of Irene Yamaguchi")}. The role is already announced.`,
     `Pick a size that matches adjacent type: 24px beside ${code("text-sm")}, 32px beside ${code("text-md")}, 48px in a header.`,
   ],
   table: [
@@ -114,7 +114,7 @@ export const PRACTICES = {
   kbd: [
     `Pass ${code("keys")} as names, not glyphs. ${code("cmd")}, ${code("shift")}, ${code("alt")}, ${code("ctrl")}, ${code("enter")} / ${code("return")} and the arrows become symbols automatically.`,
     `One flat chord contains the keys, matching Primer’s KeybindingHint. The visual symbols remain individual semantic key elements, and the chord supplies one useful spoken label.`,
-    `Use ${code("quiet")} and ${code('size="small"')} inside a menu item, where the keycap is dense chrome rather than standalone content.`,
+    `Use ${code("quiet")} and ${code('size="sm"')} inside a menu item, where the keycap is dense chrome rather than standalone content.`,
     `The chord uses a flat outline with no inset or drop shadow. Modifier symbols and letters share ${code("--area-font-keyboard")}, a native UI font, at the same size and weight; Fluent icons are unnecessary.`,
   ],
   dialog: [
@@ -132,7 +132,7 @@ export const PRACTICES = {
     `A Segmented control picks a value. Tabs navigate between views. Keep the underbar for one and the raised fill for the other.`,
     `Use it for two to five options. Past that, a Select holds the list without pushing the layout around.`,
     `It is a ${code("radiogroup")}, not a row of toggle buttons — the choice is exclusive, which ${code("aria-pressed")} does not convey.`,
-    `Connect ${code("onSelect")} to the controlled value. Arrow-key navigation and a single tab stop remain part of the E05 behavior work.`,
+    `Connect ${code("onValueChange")} to the controlled value. Arrow-key navigation and a single tab stop remain part of the E05 behavior work.`,
     `The size tier describes the outer track height, so it aligns with the same tier on Button, Input and Select.`,
   ],
 };

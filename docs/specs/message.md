@@ -22,7 +22,7 @@ the turn.
 
 | Axis | Value | Justification |
 |---|---|---|
-| author | user, assistant | ChatGPT |
+| author | user, assistant (default; optional in React, manifest default `author: "assistant"`: the bare block already is the assistant layout) | ChatGPT |
 | state | streaming (dot after the last word; actions wait) | ChatGPT |
 | actions | assistant: copy, rate, read aloud, regenerate, more; user: copy, edit (hover) | ChatGPT |
 
@@ -72,7 +72,7 @@ the edge). No change.
 
 ## Behavior and accessibility
 
-Each turn is an `article` named "You said" / "ChatGPT said"; actions are a named group of
+Each turn is an `article` named "<name> said": "You said" / "Assistant said" by default, or `authorName` (Message.tsx:20-23); actions are a named group of
 labelled buttons.
 
 ## Verification
@@ -87,3 +87,5 @@ labelled buttons.
 ## Feedback log
 
 - 2026-09-30 · audit S6b (owner) → actions no longer override Button ink to `fg-muted`; they take the ghost icon Button's quiet ink as every icon action does. Suggestion rows and Code block tabs keep `fg-muted` → message.css:50.
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → `author` is optional, default `"assistant"` (Message.tsx:7, :18); manifest default `author: "assistant"`, since the bare block already equals the assistant layout. No visual change.
+- 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.

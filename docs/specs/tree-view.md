@@ -69,7 +69,7 @@ notion   a[treeitem] 30px, radius 6, ink rgb(95, 94, 89)
   row    div, padding 5/8
     slot 22 × 18 (page icon 18–20px; the 12px chevron shares this slot and shows on hover), margin-end 8
     text 14/21 400, starts 38px in
-area     div[treeitem] 32px, radius 8, padding-start 8 + depth × 20
+area     div[treeitem] 32px, radius 8, padding-start 8 + depth × 22 (20 at pass 1)
   chevron  16px slot (Area chevron glyph), 20px hover plate, 24px pointer target outside it
   icon     16px, 6px after the chevron slot
   label    6px after the icon; ellipsis
@@ -84,10 +84,10 @@ chevron on column n, its icon on n + 1 and its label on n + 2.
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | row · height, radius | 32, 8 | Peer: Nav (32, 8) | Notion 30, 6. Tree rows stay the same size as Nav rows |
-| row · ink at rest | **`fg-muted`** | Peer Nav rgb(102); Notion rgb(95) | Was `fg-default` on every row |
-| row · ink selected/current | `fg-default` + `bg-component-hover` | Peer Nav current | — |
+| row · ink at rest | **`fg-default`**, as Nav and every other list; the plate alone marks current or selected (`tree-view.css`) | Audit D-3 A (owner); peer Nav (ChatGPT rgb(13), 2026-09-27) | Notion rgb(95). Was `fg-muted` (pass 1) while Nav moved to default on 2026-09-27 |
+| row · ink selected/current | `fg-default` + `bg-component-active` (navigation kind; checkbox kind `bg-component`) (tree-view.css:26-27, 46-47) | Peer Nav current | Was `bg-component-hover` |
 | row · start padding | **8** | Nav 8; Notion 8 | Was 4 |
-| chevron · slot | **16** (Area chevron glyph), 24px hover plate and target | Area icon slots; Notion's 12px chevron in a 22px slot | Was a 28px box, pushing labels to 56px. Notion shows the chevron only on hover, sharing the icon's slot; Area keeps it visible, since a file or filter tree must show what expands |
+| chevron · slot | **16** (Area chevron glyph), 20px hover plate, 24px target | Area icon slots; Notion's 12px chevron in a 22px slot | Was a 28px box, pushing labels to 56px. Notion shows the chevron only on hover, sharing the icon's slot; Area keeps it visible, since a file or filter tree must show what expands |
 | chevron → icon → label | **6 and 6** (row gap 6, label inset 0) | Owner (pass 3): evenly spaced on shared columns | Was 4 and 8 (pass 1, Notion's 8 to the label). Tree keeps its own grid, not the `--area-gap-row` 12 that puts Menu, Nav, Command palette and Select labels at 36 (audit S11a). Box gaps are equal; visible ink gaps are about 11 and 9, since the chevron's ink sits about 3px inside its box and the folder's about 2px. Not corrected per glyph (inset rules) |
 | indent · per level | **22** (slot 16 + gap 6) | Owner (pass 3): a child's chevron under its parent's icon, its icon under the parent's label | Was 20: a child's icon landed at 48 under a parent label at 52 |
 | label · text | 14/20 400 | Notion 14/21 400 | — |
@@ -105,7 +105,11 @@ are under Verification.
 
 Unchanged: `role="tree"`/`treeitem`, one tab stop, arrow keys, typeahead, `aria-level`,
 `aria-expanded`, `aria-selected` or `aria-checked`. The chevron's 24px pointer target is
-its `::after`; the painted plate (`::before`) is 20px. Keyboard users expand with Left/Right.
+its `::after`; the painted plate (`::before`) is 20px. Keyboard users expand with Left/Right,
+which swap in RTL (`TreeView.tsx:93-94`); a collapsed chevron points along the reading
+direction (`:dir(rtl)` rotates it 90°). Typeahead shares Menu's one window
+(`TYPEAHEAD_RESET`, 1000ms, `Overlays.tsx:30`). Forced colours paint selected and current rows
+`Highlight` / `HighlightText` (`forced-colors.css`, audit D-14).
 Row `actions` are outside the single Tab stop: consumers give each control `tabIndex={-1}`
 and a keyboard equivalent (as Figma's shortcuts for hide and lock). Screen readers still
 reach them in browse mode; interactive content inside `treeitem` is outside the APG
@@ -133,7 +137,8 @@ panel does, so nesting reads without hovering. Area's rows are 32 against Notion
   React tests (87): all pass.
 - Pass 3: columns measured in the gallery for Project files, Checkbox filters and Disabled
   row: every depth-n row has chevron, icon or check, and label at 8 + 22n, 30 + 22n and
-  52 + 22n; no `::before` on current rows. 3× checked on screen. `typecheck`, `build:docs`,
+  52 + 22n; no `::before` on current rows. (Resting ink rgb(102) above is pass 1; rows rest in
+  `fg-default` since audit D-3.) 3× checked on screen. `typecheck`, `build:docs`,
   `test:contracts` (14), `test:preview` (4), React tests (87): all pass.
 - Unverified: dark theme, Notion indent and hover, Figma layers geometry (row height, 11px
   type, icon and control sizes: needs a capture in the editor), screen-reader behaviour of
@@ -164,3 +169,8 @@ panel does, so nesting reads without hovering. Area's rows are 32 against Notion
 - 2026-09-27 · owner again: "i thought we removed indicators from tree view" → confirmed removed in this pass; the checked filter box paints like Checkbox (neutral solid face), from the cohesion audit.
 - 2026-09-27 · batch 2 → Claude in Chrome side by side with Notion's sidebar tree recorded; Validated.
 - 2026-09-30 · audit S11 (owner) → rows draw an inset focus ring (offset −2, was +2; `tree-view.css:50`); the chevron plate and ghost row actions hover `bg-hover` (press `bg-active`), so they show on a hovered or current row (`tree-view.css:73-74`); the 6 and 6 grid stays, apart from the 36 label column.
+- 2026-10-01 · audit H-17 / S21b → row actions show without hover on touch (`@media (hover: none)`, as Message and Card reveals); pointer hover plates sit under `@media (hover: hover)`; disabled rows dim with `--area-opacity-disabled` (0.5).
+- 2026-10-01 · audit D-3 (owner pick A) → rows rest in `fg-default`, as Nav (was `fg-muted`) → tree-view.css.
+- 2026-10-01 · audit D-11 → typeahead uses the shared 1000ms window (`TYPEAHEAD_RESET`), as hosted and anchored Menu → TreeView.tsx:115, Overlays.tsx:30.
+- 2026-10-01 · audit D-13 → Left / Right swap in RTL; a collapsed chevron points along the reading direction (`:dir(rtl)` rotate 90) → TreeView.tsx:93-94, tree-view.css.
+- 2026-10-01 · audit D-14 → forced colours paint selected and current rows `Highlight` / `HighlightText` → forced-colors.css.

@@ -1,6 +1,6 @@
 # Alignment picker spec
 
-**Status:** in review · 2026-09-26 (cohesion audit; second pass the same day, no change)
+**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass the same day, no change))
 **Captures:** `docs/research/captures/alignment-picker/`, `button-group/figma--align-group`, `number-field/figma--number-field`
 **Peers:** Segmented (a choice on its own track), Radio (exclusive choice), Checkbox / Chip (neutral selection), Input (soft field fill), ColorSwatchPicker (grid of cells), NumberField (inspector row neighbour)
 
@@ -23,7 +23,9 @@
   2026-09-26: the selected bars are `fg-default` by default and `fg-accent` with
   `tone="accent"`, following "Neutral by default, accent by override" (DESIGN_SYSTEM.md).
   Checkbox, Radio and Chip moved the same way (neutral-solid checked face; neutral tonal chip
-  selection); all four await owner review.
+  selection); all four await owner review. *All four approved since. Superseded 2026-09-29
+  (owner, D1): the bars are the Selection role, `fg-selection` (alignment-picker.css:23), accent
+  by theme; the `tone` axis was removed.*
 - 2026-09-26: **Neutral by default, accent by override** (owner; DESIGN_SYSTEM.md).
 - 2026-09-26 (second pass): decide every open item with the most calculated option
   consistent with the system. Nothing in that pass changed AlignmentPicker; a `sizes` tile
@@ -39,9 +41,8 @@ one-dimensional choice (Segmented).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| variant | surface (default), plain | Standalone, or inside an existing inspector surface | Figma auto-layout alignment control (guidance above) |
+| variant | soft (default; `.area-alignment-picker--soft`, the field fill it borrows), plain | Standalone, or inside an existing inspector surface. Was `surface`, renamed because `surface` means a lifted plate in Calendar, Toolbar and ColorPicker; `"surface"` stays a deprecated React alias | Figma auto-layout alignment control (guidance above) |
 | size | sm, md (default), lg | Cell sits between its control and icon tiers | Gallery `sizes`; Figma inspector controls are 24 high |
-| tone | neutral (default), accent | Owner rule | Gallery `tone-accent` |
 | boolean | `stretch` | Fill a sized parent (landscape, portrait) | Owner (prior decision) |
 | state | checked, disabled | — | Gallery `disabled` |
 
@@ -106,7 +107,7 @@ cells meet with no gap. md: 4 + 3 × 24 + 4 = 80. Cell radius = container 8 − 
 | container paint | `input-bg-soft` light-dark(#f7f7f7, #282828) + 1px `border-decorative` #f3 (`alignment-picker.css:5-6, 10-13`) | Peer: soft field fill; Figma inspector controls rgb(245), flat | Figma draws no edge; kept (third pass): the edge bounds the grid of cells |
 | radius | `radius-control` 8; cells 4 (`alignment-picker.css:12, 32`) | Nested radius rule | Figma 5 on its controls and cells |
 | unselected mark | 2px dot `fg-muted` rgb(102) | Owner (prior decision) | — |
-| selected mark | three 2px bars in a 16px box, aligned by column; `fg-default` (`alignment-picker.css:22-25`) | Owner (prior decision, 2026-09-26 tone note); Figma's alignment glyphs are black | Was `fg-accent` |
+| selected mark | three 2px bars in a 16px box, aligned by column; `fg-selection` (neutral: `fg-default`; `alignment-picker.css:23`) | Owner (prior decision, 2026-09-26 tone note); Figma's alignment glyphs are black | Was `fg-accent` |
 | selected backplate | none (`alignment-picker.css:52-54`) | Owner (prior decision) | Figma fills the selected cell (rgb 245) |
 | hover | `bg-hover` light-dark(#1414140d, #fcfcfc24) on unselected, enabled cells (`alignment-picker.css:51`) | Audit rule: translucent hover on a component's own track (as Segmented) | Dark value 14% white since the second pass (audit decision 1), so it composites to the opaque hover step |
 
@@ -122,18 +123,19 @@ cells meet with no gap. md: 4 + 3 × 24 + 4 = 80. Cell radius = container 8 − 
 
 ## Behavior and accessibility
 
-`role="radiogroup"` with `label`; nine native radios named "top left" … "bottom right"
+`role="radiogroup"` named by a consumer's `aria-label`, else `label`; nine native radios named "top left" … "bottom right"
 (`AlignmentPicker.tsx:75-83`). The group is forced `dir="ltr"` because the positions are
 physical. Arrow keys wrap within a row or column, Home and End reach the corners, and
 selection follows focus (`AlignmentPicker.tsx:47-67`). `name`, `required` and `disabled` are
-native; an uncontrolled picker restores `defaultValue` on form reset.
+native (group `disabled` also sets `aria-disabled`); an uncontrolled picker restores `defaultValue` on form reset.
 
 ## Peers and consistency
 
 | Peer | Shared role | Area value in peer | AlignmentPicker | Match / reason |
 |---|---|---|---|---|
 | Segmented | hover on its own track | `bg-hover` | `bg-hover` | match |
-| Radio / Checkbox / Chip | selection tone | neutral, accent override | neutral bars, accent override | match |
+| ColorSwatchPicker | picker cell ladder | `control-xs/sm/md` 24 / 28 / 32, plate + ring (`color.css:83-85`) | (control + icon) / 2: 22 (min 20) / 24 / 28, bars (`alignment-picker.css:15-17`) | differs by design (audit F-31 A, owner 2026-09-30): two ladders kept; a swatch cell holds a chit, an alignment cell a mark |
+| Radio / Checkbox / Chip | selection paint | Selection role, neutral by default | `fg-selection` bars | match |
 | Input (soft) | field fill | `input-bg-soft` | same | match |
 | All controls | disabled | 50% | 50% | match |
 
@@ -179,3 +181,5 @@ Unverified: Figma's nine-position control, hover and focus captures.
   stays → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-28 · batch 10 Claude in Chrome side by side (Figma auto-layout Alignment grid) → no change;
   question: size the grid to one field column by two rows, as Figma does?
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → variant `surface` renamed `soft` (the field fill it borrows; `surface` means a lifted plate in Calendar, Toolbar and ColorPicker), `"surface"` kept as a deprecated React alias, CSS `.area-alignment-picker--soft` (alignment-picker.css:18; manifest default `soft`); a consumer's `aria-label` wins over `label`; group `disabled` sets `aria-disabled` (AlignmentPicker.tsx:72). No visual change.
+- 2026-09-30 · audit F-31 (owner pick A) → the two picker ladders stay (swatch cells 24 / 28 / 32, alignment cells 22 / 24 / 28 at default density); Figma's 88 × 56 grid sized to the layout is answered later as a separate layout option (backlog in COMPONENTS.md), not a change to the square cells.

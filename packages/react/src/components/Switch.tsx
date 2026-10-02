@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
-import type { InputHTMLAttributes, ReactNode } from "react";
+import type { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
 import { Spinner } from "./primitives.tsx";
 import { MANIFESTS, switchVariants, type VariantProps } from "../variants.ts";
 
@@ -8,7 +8,11 @@ export type SwitchProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "
   label?: ReactNode;
   description?: ReactNode;
   loading?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
+  /** @deprecated The tone axis is gone (audit H-13): set `--area-switch-color` (and
+   *  `--area-switch-color-hover`) on any Switch for a custom on colour. Ignored. */
+  tone?: "neutral" | "custom";
+  /** Called with the new state and the change event (audit S17: value first, event second). */
+  onCheckedChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;
   "data-hover"?: string;
   "data-active"?: string;
   "data-focus-visible"?: string;
@@ -19,7 +23,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
   size,
   labelPosition,
   track,
-  tone,
+  tone: _tone,
   fullWidth,
   label,
   description,
@@ -58,7 +62,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
 
   return (
     <label
-      className={switchVariants({ size, labelPosition, track, tone, fullWidth }, className)}
+      className={switchVariants({ size, labelPosition, track, fullWidth }, className)}
       style={style}
       dir={rest.dir}
       data-disabled={disabled ? "" : undefined}
@@ -86,7 +90,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
           onChange?.(event);
           if (event.defaultPrevented) return;
           if (checked === undefined) setLocal(event.target.checked);
-          onCheckedChange?.(event.target.checked);
+          onCheckedChange?.(event.target.checked, event);
         }}
         onClick={event => {
           if (blocked) {

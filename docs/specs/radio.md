@@ -1,6 +1,6 @@
 # Radio spec
 
-**Status:** in review · 2026-09-26 (cohesion audit, second pass)
+**Status:** accepted · 2026-09-28 (batch 14: cards, sm removed; was: in review · 2026-09-26 (cohesion audit, second pass))
 **Captures:** `docs/research/captures/radio/`; glyph-edge evidence in
 `checkbox/notion--checkbox--rest--light`, `checkbox/figma--checkbox-checked--rest--light`
 **Peers:** Checkbox (shared stylesheet, glyph ladder and paint), Segmented (short exclusive
@@ -11,7 +11,7 @@ sets), ColorSwatchPicker and AlignmentPicker (radio-semantics pickers), Switch
 - 2026-09-26: **Neutral by default, accent by override** (DESIGN_SYSTEM.md, "Color and
   focus"). The checked face is `neutral-solid` with an `fg-on-neutral` dot; `tone="accent"`
   opts into the accent. Recorded with the Alignment
-  picker's decisions ([alignment-picker.md](alignment-picker.md)) ("Checkbox, Radio and Chip moved the same way … all four await owner review").
+  picker's decisions ([alignment-picker.md](alignment-picker.md)) ("Checkbox, Radio and Chip moved the same way … all four await owner review"; all approved since). *Superseded 2026-09-29 (owner, D1): accent is the Selection emphasis role, set by a theme (`data-area-selection="accent"`); the `tone` axis was removed.*
 - 2026-09-26 (second pass, owner: decide every open item): choice glyphs take the control
   hover edge at rest (#d4d4d4), with Notion and Untitled
   ([cohesion audit](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions)).
@@ -26,8 +26,7 @@ Checkbox.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | sm, md (default), lg | Label type follows the tier | Untitled sm 16 / md 20 |
-| tone | neutral (default), accent | Owner rule, 2026-09-26 | Untitled brand |
+| size | md (default), lg (sm removed 2026-09-28) | Label type follows the tier | Untitled sm 16 / md 20 |
 | state | checked, disabled; group invalid | Native states; RadioGroup `error` | Untitled: checked, disabled |
 | layout (group) | vertical (default), horizontal | Settings stacks vs inline choices | Untitled group gap 16 |
 | composition | description | Option caption | Untitled label + hint |
@@ -83,7 +82,7 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 | control · size | **16 / 16 / 20** (choice.css:315-330) | Untitled 16 / 20; audit rule "one glyph ladder"; the products' glyphs are 16 | Was 12 / 16 / 20 |
 | rest edge | **`edge-control-hover` #d4d4d4** (choice.css:48) | Notion's glyph edge ≈ #d4; Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2 |
 | dot | 30% inset: 5.6 at 16, 7.2 at 20 | Untitled 6 / 8 | Proportional to the box rather than two literals; within 0.8px |
-| checked | `neutral-solid`, dot `fg-on-neutral` | Owner 2026-09-26 | Untitled brand-600 |
+| checked | `selection-solid` (neutral by default), dot `fg-on-selection` (choice.css:20-22) | Owner 2026-09-26; emphasis roles 2026-09-29 | Untitled brand-600 |
 | shadow, focus, hover | as Checkbox | Peer consistency | — |
 | label gap | 6 at md and lg, as Checkbox (choice.css:9, :404, :410) | Peer: Checkbox, Button (audit S14) | Was 8 |
 | group spacing | options `space-12` below the legend, `space-8` between rows, horizontal `space-16` columns (choice.css:243-256) | Untitled horizontal gap 16 | Vertical rows keep Checkbox's 8 |
@@ -94,9 +93,9 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 | State | Changes | Evidence |
 |---|---|---|
 | hover, unchecked | edge → `border-hover` #b4b4b4 (choice.css:190-193) | not captured |
-| hover, checked | fill → `neutral-solid-hover` | not captured |
+| hover, checked | fill → `selection-solid-hover` | not captured |
 | focus-visible | 2px focus outline, 2px offset (choice.css:200-204) | not captured |
-| checked | fill `neutral-solid`, dot scales 0 → 1 | `area--selected` |
+| checked | fill `selection-solid`, dot scales 0 → 1 | `area--selected` |
 | group invalid | unchecked edges `fg-danger-vivid`; the checked option `danger-solid` with `fg-on-danger` dot; message in danger ink | `area--invalid` |
 | disabled | 50% | `area--disabled` |
 
@@ -105,16 +104,16 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 Native `input type="radio"`; RadioGroup shares `name`, controlled/uncontrolled `value` and
 `disabled` through context (forms.tsx:232-266); arrow keys are the browser's. Group
 description and error are wired through `aria-describedby`; `aria-invalid` on the fieldset.
-No forced-colors rule in choice.css (unverified).
+Forced colours: forced-colors.css:47-63 (Canvas control, CanvasText edge, Highlight when checked, HighlightText dot); not verified in a forced-colours browser.
 
 ## Peers and consistency
 
 | Peer | Shared role | Area value in peer | Radio | Match / reason |
 |---|---|---|---|---|
 | Checkbox | glyph ladder, rest edge | 16 / 16 / 20, #d4d4d4 | same | match (shared choice.css) |
-| Checkbox, Switch | checked paint | `neutral-solid` | same | match (owner rule) |
+| Checkbox, Switch | checked paint | `selection-solid` | same | match (Selection role) |
 | Checkbox, Switch, Button | disabled | 50% | same | match |
-| ColorSwatchPicker, AlignmentPicker | selected marker | neutral by default, accent by tone | same | match |
+| ColorSwatchPicker, AlignmentPicker | selected marker | Selection role: neutral by default, accent by theme | same | match |
 
 ## Visual pass
 

@@ -18,7 +18,9 @@ fill, Complete), Breadcrumb (chevron glyph, Complete), Badge/Indicator (today ma
 - 2026-09-26: "Why is purple being used? … I'd prefer if neutral was used all the time and
   accent was an override." Selection is neutral by default; `tone="accent"` is the
   override. The rule is system-wide (`docs/DESIGN_SYSTEM.md`, "Neutral by default, accent
-  by override").
+  by override"). *Superseded 2026-09-29 (owner, D1): selected days and the range band are the
+  Selection role (`selection-solid`, `selection-band`; calendar.css:20-26), accent by theme;
+  the `tone` axis was removed.*
 - 2026-09-26: "The numbers seem too large." With three references (not stored): Google's
   booking calendar (small numbers, available days in soft circles, unavailable struck
   through, a week of time slots), a set with outlined day tiles, a range, a today dot and a
@@ -42,8 +44,7 @@ components; DatePicker waits on overlay behavior (anchoring, dismissal, focus re
 | layout | `month` (default), `week` | A week strip for near-term dates | Owner reference (week strip); Google's day header |
 | display | `weekdayStyle` narrow, short (default), abbreviated | S / Su / Sun | Owner references; React Aria `weekdayStyle` |
 | composition | `markers` (date → tone) | Days with events | Owner reference (event dots, today dot) |
-| tone | `neutral` (default), `accent` | Owner rule: neutral selection, accent on request | shadcn (neutral primary); Notion's blue selection is the accent case |
-| treatment | `plain` (default), `surface` | Embedded in a popover or panel vs standing alone | Notion's calendar sits in a popover; shadcn's Calendar clears its background inside cards and popovers |
+| treatment | `surface` (default), `plain` | Standing alone vs embedded in a host that draws the surface (Popover, Panel); the bare `.area-calendar` draws the plate and `plain` resets it (audit F-21 A, owner 2026-09-30; manifest default `surface`, was `plain`) | Notion's calendar sits in a popover; shadcn's Calendar clears its background inside cards and popovers |
 | constraint | `min`, `max`, `isDateUnavailable` | Bounds and booked days | React Aria, MUI, Mantine, Ant |
 | locale | `firstDayOfWeek`, `locale` | Weeks start on Monday in much of the world | React Aria, Mantine |
 | display | `showOutsideDays`, `fixedWeeks` | Notion shows outside days and always six weeks | Notion (6 rows for a 5-week September); rdp `fixedWeeks` |
@@ -77,7 +78,7 @@ days     outside and disabled ink rgb(161,158,153); hover rgba(35,131,226,.15) w
          today: white text on a 24px rgb(229,100,88) circle; selected / range start rgb(39,131,222), white text;
          range middle: a continuous rgba(35,131,226,.21) band 28px tall, rounded 6 at its ends; range end rgba(35,131,226,.43)
 area
-shell    plain: no box; surface: padding 8 top, 12 elsewhere (border counted), border-decorative, radius container, the floating lift (`--area-shadow-float`, calendar.css:37)
+shell    surface (default; the bare class draws it): padding 8 top, 12 elsewhere (border counted), border-decorative, radius container, the floating lift (`--area-shadow-float`, calendar.css:37); plain: no box
 header   min control-sm (28), padding 4 start / 2 end; title 14/20 500; nav Button ghost sm, Area chevron glyph
 grid     cells 36; weekday 12/16 fg-muted; day 32, radius-control-md (8), 12/16 tabular
 ```
@@ -120,13 +121,13 @@ Day states: `notion--day--hover--light`, `notion--day-today--rest--light`,
 | nav | Button ghost sm (28; 24 compact), Area chevron | Notion 24px, radius 3 | Area's control tier; Breadcrumb's chevron |
 | surface | padding 8 / 12, popover surface | Notion 4 + 4 / 4 + 8; shadcn p-3 (12) | — |
 | months gap | 16 | shadcn `gap-4` | Notion shows one month |
-| hover | bg-hover (neutral) | Peers: Menu, Nav | Notion hovers in its selection blue; hover stays neutral in both tones |
-| selected | neutral-solid, fg-on-neutral; neutral-solid-hover on hover. `tone="accent"`: accent-solid, accent-contrast | Owner (2026-09-26); shadcn `bg-primary` (near-black) | Notion paints its blue; that is the accent override |
-| range middle | bg-component-hover band, continuous, inset 2, rounded at the ends; bg-component-active on hover. Accent: accent-surface | Owner; shadcn `bg-accent` (neutral-100) band; Notion's band geometry | — |
+| hover | bg-hover (neutral; calendar.css:77) | The translucent wash for a ground the day cannot know (surface or plain) | Notion hovers in its selection blue; hover stays neutral in every theme. Menu and Nav rows now hover `bg-component-hover` |
+| selected | `selection-solid`, `fg-on-selection`; `selection-solid-hover` on hover (neutral by default; the accent when a theme sets selection to accent) | Owner (2026-09-26); shadcn `bg-primary` (near-black) | Notion paints its blue; that is the accent override |
+| range middle | `selection-band` (neutral: bg-component-hover), continuous, inset 2, rounded at the ends; `selection-band-hover` (bg-component-active) on hover. Accent theme: accent-surface | Owner; shadcn `bg-accent` (neutral-100) band; Notion's band geometry | — |
 | range end | the selected paint, like the start | shadcn (both ends primary) | Notion paints the end at 43% (an in-progress look); a committed range is symmetric |
 | range preview | band from the anchor to the hovered/focused day, end unpainted | Notion (after the first click) | — |
 | today | 1px stroke-control ring in the day's shape | Owner reference (outlined today tile) | Pass 2's soft circle would disappear among circle-style available days; a ring stays distinct from selection, the band, fills and outlines in every treatment |
-| outside days | fg-disabled ink, clickable, no selection paint | Notion ink rgb(161,158,153) | Two-month ranges repeated the range and end on outside days; only the owning month paints |
+| outside days | **`fg-muted` ink** (calendar.css:78-79), clickable; choosing one selects it and brings its month into view (Calendar.tsx:189-198, :220); no selection paint on the outside copy | Notion ink rgb(161,158,153); audit F-10 A (owner 2026-09-30); react-day-picker, React Aria reveal the month | Was `fg-disabled` (reserved for disabled text) and a choice with no visible change. Two-month ranges repeated the range and end on outside days; only the owning month paints |
 | unavailable | fg-disabled, struck through | React Aria unavailable dates | Bounds (min/max) only dim, like Notion |
 | fixed weeks | **off** (`fixedWeeks` opt-in) | Owner (2026-09-27: busy); shadcn and rdp default | Notion draws six rows |
 
@@ -146,17 +147,18 @@ Third-pass additions:
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover | bg-hover on the day; bg-component-active inside a range; neutral-solid-hover on a selected day | Notion hover captured (different paint, see Decisions) |
+| hover | bg-hover on the day; `selection-band-hover` inside a range; `selection-solid-hover` on a selected day | Notion hover captured (different paint, see Decisions) |
 | focus-visible | Area focus ring on the day | APG grid |
-| selected | neutral-solid (accent-solid with `tone="accent"`) | Notion selected captured; owner rule |
+| selected | `selection-solid` (neutral by default) | Notion selected captured; owner rule |
 | range start / middle / end | band + solid ends | Notion range captured |
 | today | 1px ring in the day's shape | Notion today captured (circle); owner reference (outlined tile) |
 | outside, unavailable, disabled | see Decisions; a disabled calendar dims as a whole at 50% | Notion disabled days captured |
 
 ## Behavior and accessibility
 
-- `role="group"` with a name; each month is a `table role="grid"` labelled by its
-  `aria-live` month heading; weekday headers carry `abbr` with the full name. Days are
+- `role="group"` with a name; each month is a `table role="grid"` labelled by its month
+  heading (`h2` by default, `headingLevel` 2–6, audit F-22; only the first month's is
+  `aria-live`, so two months don't announce twice); weekday headers carry `abbr` with the full name. Days are
   buttons with full-date labels (`Tuesday, September 15, 2026`), `aria-current="date"` for
   today, `aria-selected` on the cell, `aria-multiselectable` for range and multiple.
 - One tab stop (roving tabindex). Arrows move by day and week (mirrored in RTL), Home/End to
@@ -171,7 +173,7 @@ Third-pass additions:
 | Peer | Shared role | Peer value | Calendar | Match / reason |
 |---|---|---|---|---|
 | Popover | surface | border-decorative, container radius, the floating lift `--area-shadow-float` (cohesion audit, 2026-09-26; a Surface axis role since audit S10) | `surface` | match |
-| Menu / Nav | row hover | bg-hover | day hover | match |
+| Menu / Nav | row hover | `bg-component-hover` | day hover `bg-hover` | differs: rows sit on a known surface; a day may sit on the plain page or the surface, so it keeps the translucent wash |
 | Breadcrumb | chevron | Area chevron glyph | nav icons (rotated) | match |
 | Button | small icon action | ghost sm | nav | match |
 
@@ -241,3 +243,6 @@ on outside days, fixed (see Decisions). Dark theme not compared.
 - 2026-09-28 · owner: approved (batch 7).
 - 2026-09-30 · audit S4 (owner) → 32px days take `radius-control-md` 8 (was control-sm 6), matching 32px Buttons; settles family call F-12 → `calendar.css:10`.
 - 2026-09-30 · audit S10 (owner) → the surface reads the Surface axis role `--area-shadow-float` (same recipe; `none` under Flat) → `calendar.css:37`.
+- 2026-10-01 · audit F-10 (owner pick A) → outside days rest in `fg-muted` (was `fg-disabled`); choosing one selects it and reveals its month → calendar.css:78-79, Calendar.tsx:189-198.
+- 2026-10-01 · audit F-21 (owner pick A) → `surface` is the default (manifest default; the bare `.area-calendar` draws the plate); `plain` resets it inside a Popover or Panel → calendar.css:27-43, manifest.ts:104-106.
+- 2026-10-01 · audit F-22 → `headingLevel` (2–6, default 2) sets the month titles' level; only the first title is live → Calendar.tsx:61-62, :248-258.

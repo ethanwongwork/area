@@ -41,12 +41,12 @@ control in a form), not Toolbar (a command strip). The Figma panel is a recipe, 
 
 | Slot | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| row · grid | `minmax(0,1fr) minmax(0,1fr) var(--_row)`, column gap 8 | Figma 88 + 8 + 88 + 8 + 24 | Columns flex to the panel width |
+| row · grid | `minmax(0,1fr) minmax(0,1fr) var(--_row)`, column gap `--_panel-gap` (sm 8, md 12) | Figma 88 + 8 + 88 + 8 + 24 | Columns flex to the panel width |
 | row · trailing column | the panel's row height (`--_row`: 28 in a small panel, 32 at md) | Figma 24 = its control height | Always reserved, so rows without an action still align |
-| row · captions | caption role (12/16 muted), 6 above the controls (Panel's stack gap); one caption spans both columns, two caption one each | Figma 9/14 500 at 50% | Area's caption role; Figma's smaller size belongs to compact density |
+| row · captions | `--_panel-label-*` muted: sm 12/16, 4 above the controls; md 14/20, 6 above (Panel's label gap; owner 2026-09-28); one caption spans both columns, two caption one each | Figma 9/14 500 at 50% | Area's caption role; Figma's smaller size belongs to compact density |
 | section · heading | strong (was regular) | Typography rule (every title strong); Figma 550 | — |
 | section · actions | icon buttons ending on the content edge, 4 apart | Figma 180/208, 4 apart | — |
-| panel tiers | `--_row` follows the tier: xs 24 (control-xs), sm 28, md 32 | Panel's inset already steps by tier | Was control-md for every tier |
+| panel tiers | two tiers (owner 2026-09-27): `--_row` sm 28, md 32 | Panel's inset steps with them (12 / 16) | Was control-md for every tier; the xs (24) and lg (40) tiers were removed, since 24px rows belong to compact density |
 | ButtonGroup · fullWidth | new: fills its column, buttons share it | Figma's 3 × 29 groups | — |
 | NumberField · grouping | new, default on; the recipe turns it off (1202) | Figma shows 1202 | Forms keep locale grouping |
 

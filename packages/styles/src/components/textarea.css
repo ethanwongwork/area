@@ -74,9 +74,10 @@
   .area-textarea::placeholder {
     color: var(--area-textarea-placeholder);
   }
-
-  .area-textarea:hover:not(:disabled):not(:focus) {
-    border-color: var(--_border-hover);
+  @media (hover: hover) {
+    .area-textarea:hover:not(:disabled, :read-only):not(:focus) {
+      border-color: var(--_border-hover);
+    }
   }
 
   .area-textarea:focus {
@@ -111,10 +112,8 @@
     --_focus-halo: var(--area-textarea-warning-halo-color);
   }
 
-  .area-textarea:read-only {
-    --_bg: var(--area-textarea-bg-soft);
-    cursor: default;
-  }
+  /* Read-only keeps its variant's rest paint, no hover edge, default cursor (audit B-9). */
+  .area-textarea:read-only { cursor: default; }
 
   .area-textarea:disabled {
     --_bg: var(--area-textarea-bg-disabled);
@@ -125,10 +124,11 @@
   }
 
   .area-textarea:disabled::placeholder { color: var(--area-fg-disabled); }
+  /* A soft field never gains an edge when disabled (audit B-9). */
+  .area-textarea--soft:disabled { --_border: transparent; }
 
   /* Multiline fields use a tighter block inset than a one-line control: the text's own
      leading already supplies vertical breathing room. The inline inset follows the height. */
   .area-textarea--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
   .area-textarea--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-textarea--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

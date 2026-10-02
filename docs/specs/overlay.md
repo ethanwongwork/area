@@ -1,6 +1,6 @@
 # Overlay behavior spec
 
-**Status:** in review · 2026-09-27
+**Status:** accepted (owner; Popover, Tooltip and Hover card Complete in `component-status.mjs`; was: in review · 2026-09-27)
 **Captures:** `docs/research/captures/overlay/`
 **Peers:** Popover, Menu and Tooltip (the surfaces this behavior drives; their specs own the
 paint), BadgeGroup overflow (the first native popover), Select (native picker), Dialog
@@ -14,8 +14,10 @@ paint), BadgeGroup overflow (the first native popover), Select (native picker), 
 
 Opening a surface from a trigger, placing it beside the trigger, keeping it there, closing it,
 and moving focus correctly. The surfaces keep their own specs; a surface without a `trigger`
-renders inline exactly as before. Not here yet: submenus, context menus, a custom Select
-listbox, modal Dialog wiring (native `<dialog>` already supplies it), hover cards.
+renders inline exactly as before (submenus: `MenuSub`, [menu.md](menu.md)). Built on it since
+2026-09-27: [Context menu](context-menu.md), [Hover card](hover-card.md), the Combobox list and
+Dialog's `trigger` (a native modal `<dialog>` opened with `showModal()`). Not here: a custom
+Select listbox (Select stays native).
 
 ## API
 
@@ -23,7 +25,7 @@ listbox, modal Dialog wiring (native `<dialog>` already supplies it), hover card
 |---|---|---|
 | Popover | `trigger`, `open`, `defaultOpen`, `onOpenChange`, `side` (bottom), `align` (center), `offset` | non-modal dialog, `popover="auto"` |
 | Menu | same; `align` (start) | ARIA menu button, `popover="auto"`, roving focus |
-| Tooltip | same; `side` (top), `delay` | `role="tooltip"`, `aria-describedby`, `popover="manual"` |
+| Tooltip | same; `side` (top), `delay`, `closeDelay` (0) | `role="tooltip"`, `aria-describedby`, `popover="manual"` |
 | `computePosition` | anchor, surface and viewport sizes; side, align, offset, padding | exported pure function |
 
 A button trigger gets `popovertarget`, so the browser toggles the surface, treats the trigger
@@ -74,9 +76,10 @@ Area, headless Chromium (2026-09-27, gallery `behavior-*` tiles):
 | Behavior | Area | Basis | Reason when it differs |
 |---|---|---|---|
 | layer | native popover, top layer | Popover API baseline; BadgeGroup precedent | — |
+| scope | every anchored surface uses this engine (`useAnchoredPosition`): Popover, Hover card, Menu (and SplitButton's and ToolbarOverflow's menus), Tooltip (and InputAction's hint), the Combobox list. No CSS-only anchored path. The one exception is Select's native picker, anchored by the browser with the same rules (4 from the field, flips, padding inside the viewport) | Audit S16 (owner 2026-09-30) | Hover card and the Combobox list used CSS anchor positioning (`.area-popover-anchor`) |
 | positioning | JS `computePosition` + `position: fixed`, re-run on scroll, resize and size changes | Radix, React Aria, Fluent, Base UI all position in JS | CSS anchor positioning cannot report the side it chose, which the arrow and origin need; Primer's CSS path is flag-gated |
-| menu gap | 4 | Radix Themes, Fluent, Primer, shadcn | ChatGPT (Radix default) ~1 |
-| popover gap | 8; + 17 with the arrow | Radix Themes, React Aria, Spectrum 2 (adds arrow size) | — |
+| menu gap | 4 (Menu, the Combobox list, Select's picker); a menu opened from a toolbar command clears the bar by 4 (`clearToolbar`) | Radix Themes, Fluent, Primer, shadcn; Figma's toolbelt 4 from the bar | ChatGPT (Radix default) ~1 |
+| popover gap | 8 (Popover, Hover card); + 17 with the arrow | Radix Themes, React Aria, Spectrum 2 (adds arrow size); audit S16 E-5 A for Hover card | — |
 | tooltip gap | 4; + 4 with the arrow | Radix Themes, Fluent, Primer; Spectrum 2 adds the arrow | shadcn, Base UI 0 |
 | viewport padding | 8 | Ariakit 8; Radix Themes 10; React Aria 12 | — |
 | flip / shift | flip to the opposite side when it has more room; shift along the edge | Radix, Floating UI | — |
@@ -89,6 +92,7 @@ Area, headless Chromium (2026-09-27, gallery `behavior-*` tiles):
 | dismissal | Escape, outside press, choosing an item; focus returns to the trigger | APG; every system | — |
 | tooltip timing | 500ms; instant for 300ms after another closes; close 0 | Ariakit 500 / 300; Radix skip 300 | Radix 700, Base UI 600, React Aria 1500 |
 | tooltip triggers | hover; keyboard focus only (`:focus-visible`); hidden on press, blur, Escape | React Aria, Base UI, Primer, MUI | — |
+| hover intent | Tooltip and Hover card share one shared hook, `useHoverIntent` (overlay.ts:108-145): a mouse or pen opens after the delay, touch never (a tap activates the trigger); keyboard focus (`:focus-visible`) opens at once; blur closes at once; Escape is one handler in the capture phase on `window` that consumes the event, so the Popover or modal Dialog underneath stays open | Audit E-18 A (owner 2026-09-30) | Tooltip opened for the mouse only and Hover card waited 700ms on focus; each had its own Escape handler |
 | tooltip hover | bridge over the gap on the trigger's side | WCAG 1.4.13; Primer's `::after` bridge | Radix uses a grace polygon |
 | motion | 150ms fade + scale from 0.97 at the trigger; tooltip 100ms fade only; none reduced | shadcn 150ms; Radix Themes 0.97; Primer tooltip 100ms | Exit animates only where `overlay` exists (Chromium) |
 
@@ -96,7 +100,7 @@ Area, headless Chromium (2026-09-27, gallery `behavior-*` tiles):
 
 Menu: `aria-haspopup="menu"`, `aria-expanded`, `aria-controls` on the trigger; the menu is
 labelled by the trigger. Tooltip: `aria-describedby` adds the tooltip id to any existing
-description. Popover: `aria-haspopup="dialog"`; give the surface a name. Items with
+description, unless the tooltip's text is already the trigger's name (InputAction). Popover: `aria-haspopup="dialog"`; give the surface a name. Items with
 `data-keep-open` do not close the menu (for toggles inside it).
 
 ## Verification

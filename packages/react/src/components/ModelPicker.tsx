@@ -1,9 +1,11 @@
 import { forwardRef, useState } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, MouseEvent, ReactNode, Ref } from "react";
 import { modelPickerVariants } from "../variants.ts";
-import { Button } from "./Button.tsx";
+import { Button, type ButtonProps } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Menu, MenuItem, MenuLabel } from "./primitives.tsx";
+/** The empty collection, one reference so effects keyed on it stay still. */
+const NO_ITEMS: never[] = [];
 
 export interface ModelOption {
   value: string;
@@ -14,10 +16,15 @@ export interface ModelOption {
 }
 
 export interface ModelPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {
-  models: ModelOption[];
+  /** The models. Collections are `items` everywhere (audit H-14). */
+  items?: ModelOption[];
+  /** @deprecated Use `items`. */
+  models?: ModelOption[];
   value?: string;
   defaultValue?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, event: MouseEvent<HTMLButtonElement>) => void;
+  /** Props and ref for the trigger Button; `ref` and the rest land on the wrapper (audit S17, G-24). */
+  triggerProps?: Omit<ButtonProps, "children" | "variant" | "tone" | "size" | "trailingIcon"> & { ref?: Ref<HTMLButtonElement> };
   /** Names the menu and the trigger ("Model"). */
   label?: string;
   /** An optional heading over the rows. */
@@ -32,25 +39,26 @@ export interface ModelPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "
  * Escape and Tab to close, and focus back on the trigger after a choice.
  */
 export const ModelPicker = forwardRef<HTMLDivElement, ModelPickerProps>(function ModelPicker(
-  { models, value, defaultValue, onValueChange, label = "Model", heading, size = "md", className, ...rest }, ref,
+  { items, models: legacyModels, value, defaultValue, onValueChange, triggerProps, label = "Model", heading, size = "md", className, ...rest }, ref,
 ) {
+  const models = items ?? legacyModels ?? NO_ITEMS;
   const [own, setOwn] = useState(defaultValue ?? models[0]?.value);
   const current = value ?? own;
   const currentModel = models.find(model => model.value === current);
 
-  const choose = (next: string) => {
+  const choose = (next: string, event: MouseEvent<HTMLButtonElement>) => {
     if (value === undefined) setOwn(next);
-    onValueChange?.(next);
+    onValueChange?.(next, event);
   };
   return <div ref={ref} className={modelPickerVariants({}, className)} {...rest}>
     <Menu aria-label={label} align="end"
-      trigger={<Button className="area-model-picker__trigger" variant="ghost" tone="neutral" size={size}
+      trigger={<Button {...triggerProps} className={["area-model-picker__trigger", triggerProps?.className].filter(Boolean).join(" ")} variant="ghost" tone="neutral" size={size}
         aria-label={`${label}: ${currentModel?.label ?? ""}`} trailingIcon={<Glyph name="chevron-down" />}>
         {currentModel?.label}
       </Button>}>
       {heading ? <MenuLabel>{heading}</MenuLabel> : null}
       {models.map(model => <MenuItem key={model.value} radio checked={model.value === current}
-        description={model.description} disabled={model.disabled} onClick={() => choose(model.value)}>{model.label}</MenuItem>)}
+        description={model.description} disabled={model.disabled} onClick={event => choose(model.value, event)}>{model.label}</MenuItem>)}
     </Menu>
   </div>;
 });

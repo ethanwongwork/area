@@ -30,7 +30,7 @@
   .area-toolbar--surface {
     --_toolbar-inset: var(--area-space-8); /* spec */
     --_toolbar-bg: var(--area-bg-surface);
-    --_toolbar-shadow: inset 0 0 0 var(--area-border-width) light-dark(transparent, var(--area-border-decorative)), 0 0 0.5px rgb(0 0 0 / 0.18), 0 3px 8px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.1); /* spec */
+    --_toolbar-shadow: inset 0 0 0 var(--area-border-width) light-dark(transparent, var(--area-border-float)), 0 0 0.5px rgb(0 0 0 / 0.18), 0 3px 8px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.1); /* spec */
   }
   .area-toolbar--sm { --_height: var(--area-control-sm); --_toolbar-icon: var(--area-icon-sm); --_toolbar-text: var(--area-control-sm-text); --_toolbar-leading: var(--area-control-sm-leading); --_toolbar-radius: var(--area-radius-control-sm); }
   .area-toolbar--md { --_height: var(--area-control-md); --_toolbar-icon: var(--area-icon-md); --_toolbar-text: var(--area-control-md-text); --_toolbar-leading: var(--area-control-md-leading); --_toolbar-radius: var(--area-radius-control-md); }
@@ -65,14 +65,5 @@
      inside Panel and Code block (a rule is never heavier than the surface it divides). */
   .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-stroke-width); block-size: var(--_item); background: var(--area-border-decorative); }
   .area-toolbar--vertical .area-toolbar__separator { inline-size: var(--_item); block-size: var(--area-stroke-width); }
-  .area-toolbar__overflow { position: relative; flex: none; }
-  .area-toolbar__overflow-trigger { display: grid; place-items: center; inline-size: var(--_item); block-size: var(--_item); border-radius: min(var(--_toolbar-radius), calc(var(--_item) * var(--area-radius-button-cap))); color: var(--area-fg-default); cursor: pointer; list-style: none; }
-  .area-toolbar__overflow-trigger::-webkit-details-marker { display: none; }
-  .area-toolbar__overflow-trigger:hover, .area-toolbar__overflow[open] > .area-toolbar__overflow-trigger { background: var(--area-bg-component-hover); }
-  .area-toolbar__overflow-trigger:focus-visible, .area-toolbar:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
-  .area-toolbar__overflow-dots { display: flex; align-items: center; justify-content: center; gap: var(--area-space-2); inline-size: var(--_toolbar-icon); block-size: var(--_toolbar-icon); }
-  .area-toolbar__overflow-dots::before { content: ""; inline-size: var(--area-space-2); block-size: var(--area-space-2); border-radius: var(--area-radius-full); background: currentColor; box-shadow: calc(-1 * var(--area-space-4)) 0 currentColor, var(--area-space-4) 0 currentColor; }
-  .area-toolbar__overflow-content { position: absolute; z-index: 10; inset-block-start: calc(100% + var(--area-space-4)); inset-inline-end: 0; display: flex; flex-direction: column; gap: var(--area-space-2); min-inline-size: max-content; padding: var(--area-space-4); border: var(--area-stroke-width) solid var(--area-border-decorative); border-radius: var(--area-radius-container); background: var(--area-bg-surface); /* spec: the floating-surface lift (surface.css) */ box-shadow: var(--area-shadow-float); }
-  .area-toolbar--vertical .area-toolbar__overflow-content { inset-block-start: 0; inset-inline-start: calc(100% + var(--area-space-4)); inset-inline-end: auto; }
-  .area-toolbar__overflow-content > .area-button { justify-content: flex-start; }
+  .area-toolbar:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 }

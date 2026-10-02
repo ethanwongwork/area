@@ -53,7 +53,7 @@ interrupt (Dialog). A widget is a card whose content is live data; its layout is
 |---|---|---|---|
 | layout | vertical (default) | Media above text | Every system; Figma file card, Notion gallery |
 | layout | horizontal | Media beside text, 40 / 60, stacks below 480px; media start or end by order | Polaris MediaCard landscape, Fluent `orientation`, M3 adaptive |
-| layout | compact | 84px thumbnail beside text, for lists | Primer `layout="compact"`, Notion board card |
+| layout | thumbnail (was `compact`, renamed so it no longer borrows the compact density's word; audit H-13, owner 2026-10-01) | 84px thumbnail beside text, for lists | Primer `layout="compact"`, Notion board card |
 | layout | immersive | Media behind text with a readability gradient | M3 (scrim over images), owner references |
 | media | inset (default, every layout including immersive), bleed | Bleed cancels the padding on the sides it touches; it is the only media that meets the edge | Fluent CardPreview, Primer, Radix Inset; ChatGPT, Figma, Notion gallery |
 | size | sm, md (default), lg: corner and inset only | Owner ladder | Fluent 8/12/16, Radix 12–48 step padding with size |

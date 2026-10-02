@@ -47,7 +47,7 @@ test('a circle calendar day shows a hover step (audit F-11)', () => {
 });
 
 test('a disabled tree row dims as a whole (audit D-5)', () => {
-  assert.match(body('.area-tree-view [role="treeitem"][data-disabled]'), /opacity: 0\.5/);
+  assert.match(body('.area-tree-view [role="treeitem"][data-disabled]'), /opacity: var\(--area-opacity-disabled\)/); // 0.5 (audit S21b)
 });
 
 test('an input action has pressed and disabled paint, and a disabled one does not hover (audit B-8)', () => {

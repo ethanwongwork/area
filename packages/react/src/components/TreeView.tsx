@@ -2,6 +2,7 @@ import { forwardRef, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { treeViewVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
+import { TYPEAHEAD_RESET } from "./Overlays.tsx";
 
 export interface TreeViewNode {
   id: string;
@@ -88,7 +89,10 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
     const index = enabled.findIndex(row => row.node.id === eventId);
     const current = visible.find(row => row.node.id === eventId)!;
     let next: string | undefined;
-    switch (event.key) {
+    // In right-to-left text, the arrow that points into the content opens (audit D-13), as Tabs.
+    const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
+    const key = rtl && event.key === "ArrowLeft" ? "ArrowRight" : rtl && event.key === "ArrowRight" ? "ArrowLeft" : event.key;
+    switch (key) {
       case "ArrowDown": next = enabled[Math.min(index + 1, enabled.length - 1)]?.node.id; break;
       case "ArrowUp": next = enabled[Math.max(index - 1, 0)]?.node.id; break;
       case "Home": next = enabled[0]?.node.id; break;
@@ -108,7 +112,7 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
         if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
           typeahead.current += event.key.toLocaleLowerCase();
           if (typeaheadTimer.current) clearTimeout(typeaheadTimer.current);
-          typeaheadTimer.current = setTimeout(() => { typeahead.current = ""; }, 300);
+          typeaheadTimer.current = setTimeout(() => { typeahead.current = ""; }, TYPEAHEAD_RESET); // one window for every list (audit D-11)
           const ordered = [...enabled.slice(index + 1), ...enabled.slice(0, index + 1)];
           next = ordered.find(row => row.node.label.toLocaleLowerCase().startsWith(typeahead.current))?.node.id;
           if (!next && typeahead.current.length > 1) {

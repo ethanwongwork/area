@@ -3,7 +3,7 @@ import { Button, Field, Input, Kbd, Menu, MenuItem, MenuLabel, MenuSeparator, Po
 import { ChevronIcon, SearchIcon, SettingsIcon } from "../icons.tsx";
 
 export const GalleryOverlayPopover = () => (
-  <Popover trigger={<Button variant="outline">Open</Button>} aria-label="Title" role="dialog">
+  <Popover trigger={<Button variant="outline">Open</Button>}>
     <PopoverHeader><PopoverTitle>Title</PopoverTitle></PopoverHeader>
     <PopoverBody>
       <PopoverDescription>Description</PopoverDescription>
@@ -13,7 +13,7 @@ export const GalleryOverlayPopover = () => (
 );
 
 export const GalleryOverlayPopoverArrow = () => (
-  <Popover trigger={<Button variant="outline">Open</Button>} side="top" arrow aria-label="Title" role="dialog">
+  <Popover trigger={<Button variant="outline">Open</Button>} side="top" arrow>
     <PopoverHeader><PopoverTitle>Title</PopoverTitle></PopoverHeader>
     <PopoverBody><PopoverDescription>Description</PopoverDescription></PopoverBody>
   </Popover>
@@ -21,7 +21,7 @@ export const GalleryOverlayPopoverArrow = () => (
 
 export const GalleryOverlayMenu = () => (
   <Menu trigger={<Button variant="outline" trailingIcon={<ChevronIcon />}>Options</Button>}>
-    <MenuItem shortcut={<Kbd keys={["cmd", "D"]} appearance="quiet" />}>Duplicate</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "D"]} variant="quiet" />}>Duplicate</MenuItem>
     <MenuItem>Rename</MenuItem>
     <MenuItem disabled>Move</MenuItem>
     <MenuSeparator />
@@ -45,5 +45,5 @@ export const GalleryOverlayTooltip = () => (
 );
 
 export const GalleryOverlayTooltipShortcut = () => (
-  <Tooltip trigger={<Button variant="outline">Save</Button>} side="bottom">Save <Kbd keys={["cmd", "S"]} appearance="on-emphasis" size="small" /></Tooltip>
+  <Tooltip trigger={<Button variant="outline">Save</Button>} side="bottom">Save <Kbd keys={["cmd", "S"]}  size="sm" /></Tooltip>
 );

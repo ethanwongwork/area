@@ -128,7 +128,7 @@ export const PropertyList = forwardRef<HTMLUListElement, PropertyListProps>(func
 
   return <PropertyListContext.Provider value={context}>
     <ul ref={node => { listRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
-      aria-label={label} aria-describedby={reorderable ? statusId : undefined}
+      aria-label={rest["aria-label"] ?? label} aria-describedby={reorderable ? statusId : undefined}
       className={propertyListVariants({}, className)} data-dragging={dragging !== null ? "" : undefined} {...rest}>
       {items.map((item, index) => <ItemIndex.Provider key={item.key ?? index} value={index}>{item}</ItemIndex.Provider>)}
       {drop ? <li className="area-property-list__indicator" aria-hidden="true" style={{ "--_drop": `${drop.top}px` } as CSSProperties} /> : null}

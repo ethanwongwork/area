@@ -16,7 +16,8 @@ export interface AlignmentPickerProps extends Omit<HTMLAttributes<HTMLDivElement
   value?: AlignmentPosition;
   defaultValue?: AlignmentPosition;
   onValueChange?: (value: AlignmentPosition, event: ChangeEvent<HTMLInputElement>) => void;
-  variant?: VariantProps<typeof MANIFESTS.alignmentPicker>["variant"];
+  /** `soft` (the field fill, default) or `plain`. `"surface"` is a deprecated alias of `soft` (audit F-20). */
+  variant?: VariantProps<typeof MANIFESTS.alignmentPicker>["variant"] | "surface";
   size?: VariantProps<typeof MANIFESTS.alignmentPicker>["size"];
   stretch?: boolean;
   disabled?: boolean;
@@ -68,8 +69,8 @@ export const AlignmentPicker = forwardRef<HTMLDivElement, AlignmentPickerProps>(
     root.current = node;
     if (typeof ref === "function") ref(node);
     else if (ref) ref.current = node;
-  }} {...rest} role="radiogroup" aria-label={label ?? rest["aria-label"]} dir="ltr"
-    className={alignmentPickerVariants({ variant, size, stretch }, className)} onKeyDown={move}>
+  }} {...rest} role="radiogroup" aria-label={rest["aria-label"] ?? label} aria-disabled={disabled || undefined} dir="ltr"
+    className={alignmentPickerVariants({ variant: variant === "surface" ? "soft" : variant, size, stretch }, className)} onKeyDown={move}>
     {ALIGNMENT_POSITIONS.map((position, index) => <label className="area-alignment-picker__cell" key={position}>
       <input ref={node => { inputs.current[index] = node; }} type="radio" name={name ?? generatedName} value={position}
         checked={selected === position} disabled={disabled} required={required} aria-label={position.replace("-", " ")}

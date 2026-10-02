@@ -16,6 +16,9 @@ block language tabs, Badge (counts)
   keyboard navigation. Reference: [WAI-ARIA Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
 - 2026-09-26: Neutral by default, accent by override ([design system](../DESIGN_SYSTEM.md#color-and-focus)).
   Tabs already followed it: the indicator is `fg-default`; there is no accent option.
+  *Since 2026-09-29 (owner, D1) the indicator is the Selection role, `fg-selection`
+  (navigation.css:91-101): `fg-default` by default, the accent when a theme sets selection to
+  accent.*
 - 2026-09-26: Decide every open item with the most calculated option consistent with the
   system ([second pass](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions)).
   Unselected options in a set take the muted ink with one weight (Tabs already did); the
@@ -93,7 +96,7 @@ the rail at 0, 2px wide, inset 4px top and bottom.
 
 Area (node trees): md 32px tall, 20px apart, selected ink rgb(40, 40, 40), rest rgb(102, 102,
 102); indicator 2px rgb(40, 40, 40) radius 9999px, full tab width (`area--default`). sm 28px,
-16px apart, 12/16 text (`area--size-sm`); lg 40px, 24px apart (`area--size-lg`). Track list 33px
+16px apart, 12/16 text at capture (`area--size-sm`; now 14/20, `control-sm-text`); lg 40px, 24px apart (`area--size-lg`). Track list 33px
 (32 + 1px divider). Disabled tab opacity 0.5 (`area--disabled`).
 
 ## Decisions
@@ -103,9 +106,9 @@ Area (node trees): md 32px tall, 20px apart, selected ink rgb(40, 40, 40), rest 
 | tab · height | 28 / 32 / 40 (`control-sm/md/lg`) | Owner (three sizes); control tier | Notion 28 in a 40 row, Figma 24, Untitled 32 / 36 |
 | tab · inline padding | 0, content-aligned | Manifest contract ("labels align with panel content"); `inset.css:65` | Notion pads 8 each side; kept (third pass): padding would carry the underline past the content |
 | tab · gap | 16 / 20 / 24 (`space-*`) | not found (searched PRIOR_DECISIONS.md, navigation.css comments); unsourced, kept in the third pass | Notion 16 label to label (8 + 8, no gap); Untitled 12 |
-| text | 12/16, 14/20, 14/20; 400 in every state | Control tier; one weight per label | Notion 500 in both states; Figma 450 → 550 with the width reserved; Untitled 600. Area keeps 500 for labels on fills |
+| text | 14/20 at every size (`control-sm/md/lg-text`; sm was 12/16 until small controls moved to 14/20); 400 in every state | Control tier; one weight per label | Notion 500 in both states; Figma 450 → 550 with the width reserved; Untitled 600. Area keeps 500 for labels on fills |
 | rest / selected ink | `fg-muted` #666666 / `fg-default` #282828 | Second pass: unselected options muted (Figma 50% black, Notion tertiary) | Untitled selected brand-700 |
-| indicator | 2px, `radius-full`, `fg-default`, whole tab | Owner (rounded underline spanning icon and count); Notion 2px in primary ink | Untitled 2px square-ended brand-600 |
+| indicator | 2px, `radius-full`, `fg-selection` (neutral: `fg-default`), whole tab | Owner (rounded underline spanning icon and count); Notion 2px in primary ink | Untitled 2px square-ended brand-600 |
 | hover | pending indicator `border-hover` #b4b4b4 / #585858; ink fixed | Foreground fixed on hover; Figma panel tab keeps 50% ink on hover | Figma paints a #f5 plate; Untitled hovers to the selected paint |
 | pressed | indicator `fg-muted` | Earlier Area value | — |
 | track | 1px **`border-divider`** #e2e2e2 / #333333 below the list | Second pass divider role; Untitled 1px baseline; Notion's hairline | Was `border-decorative`; Area's indicator sits above the divider |
@@ -129,7 +132,7 @@ Settled in the third pass (kept; [cohesion audit](../research/cohesion-audit.md#
 | hover | indicator `border-hover`; ink fixed | `navigation.css:66-69`; `figma--panel-tab--hover` (ink fixed) |
 | pressed | indicator `fg-muted` | `navigation.css:70-73` |
 | focus-visible | 2px inset outline | `navigation.css:102-107` |
-| selected (`data-selected`, `aria-selected`) | `fg-default`, indicator `fg-default` | `area--default` tab 1; `notion--tabs-underline` node 3 |
+| selected (`data-selected`, `aria-selected`) | `fg-default`, indicator `fg-selection` | `area--default` tab 1; `notion--tabs-underline` node 3 |
 | disabled | opacity 0.5, `not-allowed`; skipped by arrow keys | `area--disabled` |
 
 ## Behavior and accessibility
@@ -137,19 +140,20 @@ Settled in the third pass (kept; [cohesion audit](../research/cohesion-audit.md#
 `role=tablist` with `aria-orientation`; tabs are buttons with `aria-selected` and
 `aria-controls`; panels are `tabpanel`, `aria-labelledby`, `tabIndex=0`. Roving tab stop;
 Left/Right (Up/Down vertically), Home and End, reversed in RTL for horizontal lists;
-automatic or manual activation (`primitives.tsx:847-902`). Notion's tabs are `div[role=tab]`
+automatic or manual activation (`primitives.tsx:1401-1436`); `onValueChange(value, event)` passes
+the click or key event. Notion's tabs are `div[role=tab]`
 with `aria-selected` and every tab at `tabindex=0` (`notion--tabs-underline` nodes 3, 6).
-Forced colours: tab focus is listed in `forced-colors.css:14`; the indicator is not verified.
+Forced colours: tab focus is listed in `forced-colors.css:31`, and the selected indicator paints `Highlight` (`forced-colors.css:88`); not verified in a forced-colours browser.
 
 ## Peers and consistency
 
 | Peer | Shared role | Peer value | Tabs | Match / reason |
 |---|---|---|---|---|
-| Nav marker, Tree view rail | current marker | `fg-default` | `fg-default` | match (neutral) |
+| Nav marker | current marker | `fg-selection` | `fg-selection` | match (Selection role); Tree view's rail was removed |
 | Segmented | option ink, weight | muted / default, 500 on a fill | muted / default, 400, no fill | same ink rule; labels on fills take 500 |
 | Code block tabs | hover | plate, ink fixed | indicator, ink fixed | both keep ink fixed |
 | Button, Menu, Nav | disabled | 50% | 50% | match |
-| Separator, Menu separator | rule | `border-divider` 1px | track 1px | match |
+| Separator | rule | `border-divider` 1px | track 1px | match; Menu separators take `border-decorative` (surface.css:1121), a rule inside a floating surface |
 
 ## Visual pass
 
@@ -177,3 +181,5 @@ in [the audit](../research/cohesion-audit.md#verification).
 - 2026-09-27 · third pass → open question settled, values kept: no tab padding, underline
   the tab's own width; the 20px gap recorded as unsourced → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S14 (owner) → a tab's icon-to-label gap is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`--_tab-item-gap`, navigation.css:16, :79-81; density.ts:80-82). The 16 / 20 / 24 gap between tabs is unchanged.
+- 2026-09-30 · audit S17 (API vocabulary, slice 1) → `onValueChange(value, event)` passes the click or key event → `primitives.tsx:1221`.
+- 2026-09-30 · audit S17 (API vocabulary, slice 2, H-13) → manifest default `size: "md"` added (manifest.ts:590); the md modifier equals the base rule, no visual change.

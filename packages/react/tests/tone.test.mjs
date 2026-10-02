@@ -42,7 +42,7 @@ test('solid Buttons paint Action; checked, on and filled marks paint Selection',
   const body = selector => [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].filter(([, s]) => s.split(',').some(part => part.trim() === selector)).map(([, , b]) => b).join('\n');
   assert.match(body('.area-button'), /--_solid: var\(--area-action-solid\)/);
   assert.match(body('.area-checkbox'), /--_checked: var\(--area-selection-solid\)/);
-  assert.match(body('.area-switch'), /--_on: var\(--area-selection-solid\)/);
+  assert.match(body('.area-switch'), /--_on: var\(--area-switch-color, var\(--area-selection-solid\)\)/); // the public colour hook falls back to Selection (audit H-13)
   assert.match(body('.area-calendar'), /--_selected: var\(--area-selection-solid\)/);
   assert.match(body('.area-chip'), /--_selected-bg: var\(--area-selection-surface\)/);
 });

@@ -9,3 +9,7 @@ export const InToolbar = createContext(false);
 
 /** Props that make a control part one of the toolbar's roving items. */
 export const toolbarItemProps = { tabIndex: -1, "data-area-toolbar-item": "" } as const;
+
+/** The Toolbar's size tier. Composites in a toolbar (SplitButton, Segmented, Select) take it when
+ * they have no `size` of their own, as direct Buttons do through toolbar.css (audit A-7). */
+export const ToolbarSize = createContext<"sm" | "md" | "lg" | undefined>(undefined);

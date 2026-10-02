@@ -130,14 +130,22 @@
   }
 
   /* --- States ------------------------------------------------------------- */
-
-  .area-button:hover:not(:disabled):not([data-loading]) {
-    background-color: var(--_bg-hover);
-    background-image: var(--_wash-hover);
-    border-color: var(--_border-hover);
+  @media (hover: hover) {
+    .area-button:hover:not(:disabled, [data-disabled], [data-loading]) {
+      background-color: var(--_bg-hover);
+      background-image: var(--_wash-hover);
+      border-color: var(--_border-hover);
+    }
   }
 
-  .area-button:active:not(:disabled):not([data-loading]) {
+  .area-button:active:not(:disabled, [data-disabled], [data-loading]) {
+    background-color: var(--_bg-active);
+    background-image: var(--_wash-active);
+  }
+
+  /* A menu trigger keeps the pressed plate while its menu is open, as Model picker did alone
+     (audit G-12). A selected toggle keeps its own fill. */
+  .area-button[aria-haspopup="menu"][aria-expanded="true"]:not([data-selected]) {
     background-color: var(--_bg-active);
     background-image: var(--_wash-active);
   }
@@ -151,9 +159,10 @@
   .area-button:disabled,
   .area-button[data-disabled] {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--area-opacity-disabled);
   }
 
+  /* Loading stays at full ink and keeps focus (audit S18): it is aria-disabled, not :disabled. */
   .area-button[data-loading] {
     cursor: progress;
   }
@@ -384,13 +393,8 @@
     --_shape: var(--area-radius-full);
   }
 
-  /*
-   * Pulls a button back by its own padding so its *label* lines up with the text above
-   * it rather than its box. Only correct on ghost and other unfilled variants, where
-   * there is no visible edge for the padding to belong to.
-   */
-  .area-button--align-start { margin-inline-start: calc(var(--_gutter) * -1); }
-  .area-button--align-end { margin-inline-end: calc(var(--_gutter) * -1); }
+  /* `align` (pull the label onto the text column) lives in inset.css with the inset contract;
+     a second, gutter-based copy here was always overridden (audit A-18). */
 
   /*
    * A toggle that is currently on. Distinct from hover, and it persists: the selected plate
@@ -402,8 +406,12 @@
     --_bg-hover: var(--_surface-active);
     --_bg-active: var(--_surface-active);
     --_wash-hover: none;
+    /* Pressing an on toggle adds no wash either (audit A-13). */
+    --_wash-active: none;
     --_fg: var(--_tone-fg);
   }
+  /* A selected soft button's edge is its fill, not the lighter hover hairline (audit A-13). */
+  .area-button--soft[data-selected] { --_border: var(--_surface-active); --_border-hover: var(--_surface-active); }
 
   .area-button--solid[data-selected] {
     --_bg: var(--_solid-hover);

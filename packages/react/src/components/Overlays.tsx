@@ -5,7 +5,7 @@
  */
 import { cloneElement, isValidElement, useEffect, useId, useRef } from "react";
 import type { FocusEvent as ReactFocusEvent, HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactElement, ReactNode, Ref, RefObject } from "react";
-import { assignRef, useAnchoredPosition, useNativePopover, useOpenState } from "./overlay.ts";
+import { assignRef, clearToolbar, useAnchoredPosition, useHoverIntent, useNativePopover, useOpenState } from "./overlay.ts";
 import type { OverlayAlign, OverlaySide } from "./overlay.ts";
 
 /*
@@ -105,10 +105,12 @@ export function AnchoredPopover({ trigger, open: openProp, defaultOpen, onOpenCh
 /* --- Menu ----------------------------------------------------------------- */
 
 const ITEM = "[role^='menuitem']";
-const enabledItems = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>(ITEM)].filter(item => !item.matches(":disabled, [aria-disabled='true'], [data-disabled]"));
+// A menu's own rows: a nested MenuSub's rows belong to the submenu.
+const enabledItems = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>(ITEM)].filter(item => item.closest("[role='menu']") === menu && !item.matches(":disabled, [aria-disabled='true'], [data-disabled]"));
 
-export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "start", offset = MENU_OFFSET, surface }: AnchoredProps & { surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
-  const id = useId();
+export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "start", offset = MENU_OFFSET, id: idProp, surface }: AnchoredProps & { /** The menu's id when the consumer sets one. */ id?: string; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
   const triggerId = `${id}-trigger`;
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const [triggerNode, triggerRef] = useTriggerRef(trigger);
@@ -117,7 +119,8 @@ export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChang
   const entry = useRef<"surface" | "first" | "last">("surface");
   const typed = useRef({ text: "", at: 0 });
   useNativePopover(surfaceNode, triggerNode, open, setOpen);
-  useAnchoredPosition(triggerNode, surfaceNode, open, { side, align, offset, padding: OVERLAY_PADDING });
+  // A menu from a toolbar command clears the bar (ToolbarOverflow, as SplitButton's tool menus).
+  useAnchoredPosition(triggerNode, surfaceNode, open, { side, align, offset, padding: OVERLAY_PADDING, anchorRect: clearToolbar });
   useEffect(() => {
     if (!open || !surfaceNode.current) return;
     const items = enabledItems(surfaceNode.current);
@@ -136,6 +139,8 @@ export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChang
   };
   const onMenuKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
     const menu = event.currentTarget;
+    // A nested submenu handles its own keys.
+    if (event.defaultPrevented || (event.target as HTMLElement).closest("[role='menu']") !== menu) return;
     if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) { event.preventDefault(); move(menu, event.key); return; }
     if (event.key === "Tab") { setOpen(false); return; }
     if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey && event.key !== " ") {
@@ -149,7 +154,8 @@ export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChang
   };
   const onMenuClick = (event: ReactMouseEvent<HTMLDivElement>) => {
     const item = (event.target as HTMLElement).closest<HTMLElement>(ITEM);
-    if (!item || item.matches(":disabled, [aria-disabled='true'], [data-disabled]") || item.dataset.keepOpen !== undefined) return;
+    // A checkbox row toggles and stays open; an action or a radio choice closes (audit D-11).
+    if (!item || item.matches(":disabled, [aria-disabled='true'], [data-disabled], [role='menuitemcheckbox']") || item.dataset.keepOpen !== undefined) return;
     setOpen(false);
     triggerNode.current?.focus({ preventScroll: true });
   };
@@ -198,46 +204,25 @@ const within = (node: Element | null, target: EventTarget | null) => target inst
 // When a tooltip closed recently, the next one opens without the delay.
 let lastClosed = 0;
 
-export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenChange, side = "top", align = "center", offset, arrow, delay = TOOLTIP_DELAY, surface }: AnchoredProps & { arrow?: boolean; delay?: number; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
+export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenChange, side = "top", align = "center", offset, arrow, delay = TOOLTIP_DELAY, closeDelay = TOOLTIP_CLOSE_DELAY, describes = true, surface }: AnchoredProps & { arrow?: boolean; delay?: number; closeDelay?: number; /** False when the tooltip's text is already the trigger's name, so it isn't announced twice. */ describes?: boolean; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
   const id = useId();
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const [triggerNode, triggerRef] = useTriggerRef(trigger);
   const surfaceNode = useRef<HTMLDivElement | null>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   useNativePopover(surfaceNode, { current: null }, open, setOpen);
   useAnchoredPosition(triggerNode, surfaceNode, open, { side, align, offset: offset ?? TOOLTIP_OFFSET + (arrow ? TOOLTIP_ARROW_REACH : 0), padding: OVERLAY_PADDING });
-  const show = (wait: number) => { clearTimeout(timer.current); if (wait <= 0) setOpen(true); else timer.current = setTimeout(() => setOpen(true), wait); };
-  const hide = (wait = TOOLTIP_CLOSE_DELAY) => {
-    clearTimeout(timer.current);
-    const close = () => { lastClosed = Date.now(); setOpen(false); };
-    if (wait <= 0) close(); else timer.current = setTimeout(close, wait);
-  };
-  useEffect(() => () => clearTimeout(timer.current), []);
-  useEffect(() => {
-    if (!open) return;
-    // Escape dismisses only the tooltip (WCAG 1.4.13). Consuming the event keeps it from also
-    // closing the Popover or modal Dialog the trigger sits in: a cancelled keydown is not a
-    // close request for the native top layer (audit E-4).
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key !== "Escape" || event.defaultPrevented) return;
-      event.preventDefault();
-      event.stopPropagation();
-      hide(0);
-    };
-    addEventListener("keydown", onKey, true);
-    return () => removeEventListener("keydown", onKey, true);
-  }, [open]);
+  const { show, hide, clear, hovers, focused } = useHoverIntent(open, setOpen, { delay, closeDelay, onClose: () => { lastClosed = Date.now(); } });
   const t = trigger as Trigger;
-  const describedBy = [t.props?.["aria-describedby"], id].filter(Boolean).join(" ");
+  const describedBy = [t.props?.["aria-describedby"], describes ? id : undefined].filter(Boolean).join(" ") || undefined;
   return <>
     {isValidElement(trigger) ? cloneElement(t, {
       ref: triggerRef,
       "aria-describedby": describedBy,
-      onPointerEnter: compose(t.props.onPointerEnter, (event: ReactPointerEvent) => { if (event.pointerType === "mouse") show(Date.now() - lastClosed < TOOLTIP_SKIP_DELAY ? 0 : delay); }),
+      onPointerEnter: compose(t.props.onPointerEnter, (event: ReactPointerEvent) => { if (hovers(event)) show(Date.now() - lastClosed < TOOLTIP_SKIP_DELAY ? 0 : delay); }),
       // Moving onto the tooltip (or the bridge over the gap) keeps it open.
       onPointerLeave: compose(t.props.onPointerLeave, (event: ReactPointerEvent) => { if (!within(surfaceNode.current, event.relatedTarget)) hide(); }),
       onPointerDown: compose(t.props.onPointerDown, () => hide(0)),
-      onFocus: compose(t.props.onFocus, (event: ReactFocusEvent<HTMLElement>) => { if (event.currentTarget.matches(":focus-visible")) show(0); }),
+      onFocus: compose(t.props.onFocus, (event: ReactFocusEvent<HTMLElement>) => focused(event)),
       onBlur: compose(t.props.onBlur, () => hide(0)),
     }) : trigger}
     {surface({
@@ -245,7 +230,7 @@ export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenCh
       ref: surfaceNode,
       popover: "manual",
       // Content on hover stays while the pointer is over it (WCAG 1.4.13).
-      onPointerEnter: () => clearTimeout(timer.current),
+      onPointerEnter: () => clear(),
       onPointerLeave: (event: ReactPointerEvent) => { if (!within(triggerNode.current, event.relatedTarget)) hide(); },
     } as Div & { ref: Ref<HTMLDivElement> })}
   </>;

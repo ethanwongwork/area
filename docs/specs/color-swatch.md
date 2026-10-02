@@ -45,11 +45,13 @@ Notion and ChatGPT: no colour preview among their captures (searched every `noti
 ## Anatomy
 
 ```
-area   span.area-color-swatch  owns: size, radius, colour (linear-gradient layer) over the checker, inset hairline
+area   span.area-color-swatch  owns: size, 20% corner, a solid 1px edge (its own fill)
+  ::before  the checker: `fg-default` 16% through a 2 × 2 pixel mask, 5 cells across
+  ::after   the colour, inside the edge on its inner curve
 ```
 
-One element: the colour is a gradient layer over a `repeating-conic-gradient` checker
-(8px tiles, `fg-default` 16% over `bg-surface`), so transparency needs no child
+(color.css:9-71; was one element with a `repeating-conic-gradient` checker of 8px tiles and a
+22% inset hairline.) The colour layer sits over the checker, so transparency needs no child
 (`color.css:9-13`).
 
 ## Measurements
@@ -69,7 +71,7 @@ From the capture nodes (node 0):
 | size | 16 / 20 / 24 (`space-16/20/24`) | Figma 14 and 16 | sm fills Input's 16px icon slot |
 | radius | **20% of the side at every size** (`--_radius: size / 5`; 3.2 / 4 / 4.8 at sm / md / lg); layers inside the edge are concentric, `radius - edge` (`--_inner-radius`) | Owner (2026-09-28: "make it more consistent"); Figma 20% (`figma--swatches`, the edge layer) | Was `min(radius-small, size / 4)`: 25% to 24px, then capped at 6 |
 | edge | **1px border, solid `light-dark(neutral-50, neutral-800)`, fill clipped to the padding box**, one step off the surface in each theme (`color.css`) | Owner (2026-09-28: "make the stroke … a solid color, so the image and colors don't show through … neutral 25 or something very light") | Was `fg-default` at 22%, a translucent ink that darkened each colour and the checkerboard at the edge. Figma draws 2px black 10% (translucent). Trade-off: a white or near-white swatch on a white surface is barely outlined |
-| checker | 8px tiles, `fg-default` 16% over `bg-surface` | Figma checker | Figma 10.67px #fff/#e1e1e1; Area's follows the theme while the colour does not (owner) |
+| checker | **a 2 × 2 pixel tile used as a mask, 5 cells across at every size** (ink cells in all four corners), `fg-default` 16% over `bg-surface` (color.css:3-15) | Owner (2026-09-28: a pixel image that meets the edges exactly and scales) | Figma 10.67px #fff/#e1e1e1; Area's follows the theme while the colour does not (owner). Was 8px conic-gradient tiles |
 | colour | consumer value, unchanged by theme | Owner (above) | — |
 
 ## States
@@ -86,10 +88,10 @@ do). Forced colours remove box-shadows, so the edge is lost there; not checked i
 
 | Peer | Shared role | Area value in peer | This component | Match / reason |
 |---|---|---|---|---|
-| ColorPicker | checker | same gradient (`--_checker`) | same | match |
+| ColorPicker | checker | the same pixel mask (`:where(.area-color-swatch, .area-color-picker)`) | same | match |
 | ColorSwatchPicker | cell content | swatch = cell − 8 | md 20 in a 28 cell | match |
 | ColorField | icon slot | 16px | sm 16 | match |
-| Radius roles | small radius | `radius-small` 6 | capped to size / 4 | derived from a role |
+| Radius roles | concentric scale | `radius-concentric` | 20% of the side × `radius-concentric` (square at Sharp) | derived from a role (was `min(radius-small, size / 4)`) |
 
 ## Visual pass
 
@@ -107,6 +109,8 @@ theme, forced colours.
 1. *Edge: kept at 1px, ink at 22%.* Every Figma chit captured draws a 2px black 10% inner
    edge (`figma--color-row` node 6, `figma--swatches` nodes 15, 22, 29). Area keeps one
    stroke width, and 22% keeps a white swatch visible on white ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)).
+   *Superseded 2026-09-28 (owner): the edge is a solid `light-dark(neutral-50, neutral-800)`, so
+   neither the colour nor the checker shows through it (Decisions, edge).*
 
 ## Verification
 

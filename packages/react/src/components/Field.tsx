@@ -28,7 +28,11 @@ interface FieldControlProps extends AriaAttributes {
 export interface FieldProps extends Div {
   label?: ReactNode;
   description?: ReactNode;
-  /** A non-error validation message. `error` remains the compatibility shorthand for error. */
+  /**
+   * A validation message, painted by `validationStatus`. Without a status it is an error (sets
+   * `aria-invalid` and `aria-errormessage`); pass `"success"` or `"warning"` for the others.
+   * Help text that isn't validation belongs in `description`. `error` remains the shorthand.
+   */
   validation?: ReactNode;
   validationStatus?: "error" | "success" | "warning";
   error?: ReactNode;

@@ -10,26 +10,16 @@
   .area-combobox--full-width { display: flex; inline-size: 100%; }
   .area-combobox--full-width > .area-input { flex: 1; }
 
-  /* The list opens in the top layer, so a clipping ancestor (a panel body, a dialog) never cuts it. */
+  /* The list opens in the top layer, so a clipping ancestor (a panel body, a dialog) never cuts it.
+     It is placed by the shared overlay engine (audit S16): left, top, data-side, the anchor's
+     width and the room below it come from the React layer. */
   .area-combobox__listbox[popover] {
-    margin: 0; overflow-y: auto; overscroll-behavior: contain;
-    /* spec: Figma's font list shows 324 of its rows before it scrolls (captures/combobox).
-       On the [popover] rule so it outranks Menu's popover height, which Combobox never sets. */
-    max-block-size: min(324px, 50vh); /* spec */
-  }
-  .area-combobox__listbox[popover]:not(:popover-open) { display: none; }
-  @supports (anchor-name: --area-anchor) {
-    .area-combobox { anchor-name: var(--_combobox-anchor); }
-    .area-combobox__listbox[popover]:popover-open {
-      position-anchor: var(--_combobox-anchor);
-      inset: auto;
-      /* Logical, so the list starts at the field's start in right-to-left text too. */
-      position-area: self-block-end span-self-inline-end;
-      /* spec: 4 from the field, as every anchored surface (popover.md: shadcn 4, Notion 4). */
-      margin-block-start: 4px; /* spec */
-      min-inline-size: max(anchor-size(width), calc(var(--area-space-96) * 2 + var(--area-space-32)));
-      position-try-fallbacks: flip-block;
-    }
+    overflow-y: auto; overscroll-behavior: contain;
+    /* spec: Figma's font list shows 324 of its rows before it scrolls (captures/combobox); never
+       taller than the room beside the field. On the [popover] rule so it outranks Menu's. */
+    max-block-size: min(324px, var(--area-overlay-available-height, 50vh)); /* spec */
+    /* At least the field's width, and never narrower than a menu (224). */
+    min-inline-size: max(var(--area-overlay-anchor-width, 0px), calc(var(--area-space-96) * 2 + var(--area-space-32)));
   }
 
   /* Options are Menu rows. A value picker shows its value with the active plate and the check,

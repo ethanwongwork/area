@@ -60,8 +60,8 @@ export const CardHorizontalEnd = () => (
   </Card>
 );
 
-export const CardCompact = () => (
-  <Card layout="compact" style={vertical}>
+export const CardThumbnail = () => (
+  <Card layout="thumbnail" style={vertical}>
     <CardMedia aria-hidden="true" />
     <CardContent>
       <CardTitle>Title</CardTitle>
@@ -131,7 +131,7 @@ export const CardHeaderAction = () => (
 export const CardMediaOverlay = () => (
   <Card style={vertical}>
     <CardMedia aria-hidden="true">
-      <CardOverlay><Badge variant="solid" tone="inverted">Label</Badge></CardOverlay>
+      <CardOverlay><Badge variant="solid" tone="inverse">Label</Badge></CardOverlay>
     </CardMedia>
     <CardContent>
       <CardTitle>Title</CardTitle>
@@ -263,7 +263,7 @@ export const CardLinkedActions = () => (
 export const CardTemplateVideo = () => (
   <Card style={vertical}>
     <CardMedia aria-hidden="true">
-      <CardOverlay placement="bottom-end"><Badge variant="solid" tone="inverted">12:04</Badge></CardOverlay>
+      <CardOverlay placement="bottom-end"><Badge variant="solid" tone="inverse">12:04</Badge></CardOverlay>
     </CardMedia>
     <CardContent>
       <CardHeader action={<Button variant="ghost" iconOnly aria-label="More" icon={<MoreIcon />} />}>

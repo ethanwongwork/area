@@ -1,6 +1,6 @@
 # ColorSwatchPicker spec
 
-**Status:** in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma)
+**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))
 **Captures:** `docs/research/captures/color-swatch-picker/`
 **Peers:** ColorSwatch (cell content), ColorPicker (saved colours, grid view, thumb ring),
 Radio (single choice), AlignmentPicker and Segmented (selection marks), Chip swatch
@@ -24,6 +24,8 @@ Radio (single choice), AlignmentPicker and Segmented (selection marks), Chip swa
   swatch picker like iOS, "very robust in how it shows color selection". This added
   `layout="palette"`.
 - Neutral by default, accent by override (2026-09-26): the selection ring is `fg-default`.
+  *Since 2026-09-29 (owner, D1) the ring is the Selection role, `fg-selection` (color.css:113),
+  accent by theme.*
 - 2026-09-26, second pass ("decide all open items"), item 12: the cell is concentric with its
   swatch (swatch radius + inset). The gallery gained a sizes tile.
 
@@ -87,7 +89,7 @@ Cells were 7px (md) before the second pass.
 | cell | `control-xs/sm/md` 24 / 28 / 32 (`color.css:30-32`) | Figma 24 cells | md default follows the control tier |
 | swatch | cell − 8 (16 / 20 / 24) | Figma 16 chit in 24 | — |
 | gap | 4 (grid, row); 0 (palette) | Figma contiguous | The ring needs room between separate cells; palette follows Figma / iOS |
-| cell radius | swatch radius + 4: 8 / 9 / 10 (`color.css:43`) | Nested-radius rule (DESIGN_SYSTEM "Size and shape"); second pass item 12 | Was `min(radius-small + 2, cell / 4)`: 6 / 7 / 8, not concentric |
+| cell radius | swatch radius (20% of the side) + the 4 inset: 7.2 / 8 / 8.8 (`color.css:95-97`) | Nested-radius rule (DESIGN_SYSTEM "Size and shape"); second pass item 12 | Was `min(radius-small + 2, cell / 4)`: 6 / 7 / 8, not concentric |
 | hover | `bg-hover` (translucent) | Audit: translucent hover only on unknown grounds | Swatch cells sit on any surface |
 | checked | `bg-surface` fill + 2px inset `fg-default` ring (`color.css:57-60`) | Owner: neutral by default; React Aria legible ring | Figma's selected chit not captured |
 | palette · checked | thumb ring: inset 2px white, 1px 20% outside, 3px 20% inside, radius `radius-control-xs` 4 (`color.css:92-95`) | [color-picker.md](color-picker.md):129, the area thumb | Cells touch, so the ring is drawn inside the swatch rather than as a cell plate |
@@ -108,18 +110,22 @@ Cells were 7px (md) before the second pass.
 
 Native radios named by each option's `label`; the group is named by `label` or `aria-label`.
 Arrow keys move and select (Up/Down by column in grid and palette, with RTL for Left/Right);
-Home/End reach the first and last enabled option (`ColorSwatchPicker.tsx:52-94`). `name`,
-`required` and form reset are native.
+Home/End reach the first and last enabled option (`ColorSwatchPicker.tsx:52-94`). `name`
+and `required` are native. Nothing is preselected: with neither `value` nor `defaultValue`
+no colour is chosen, so `required` can fail and "no colour" is representable; a form reset
+returns to `defaultValue` or nothing (`ColorSwatchPicker.tsx:40-52`). Group `disabled` sets
+`aria-disabled`.
 
 ## Peers and consistency
 
 | Peer | Shared role | Area value in peer | This component | Match / reason |
 |---|---|---|---|---|
-| Checkbox, Radio, AlignmentPicker | selection mark | neutral ink, accent by `tone` | `fg-default` ring, no `tone` axis | neutral match; no accent override exists |
+| Checkbox, Radio, AlignmentPicker | selection mark | Selection role, neutral by default | `fg-selection` ring | match |
 | Segmented | hover on an unknown ground | `bg-hover` | same | match |
 | Controls | disabled | 50% | same | match |
-| ColorSwatch in the cell | nested radius | concentric = cell radius − 4 | cell 9, swatch 5 at md | match (was 7 / 5) |
+| ColorSwatch in the cell | nested radius | concentric = cell radius − 4 | cell 8, swatch 4 at md | match (was 9 / 5 before the swatch's 20% corner, 7 / 5 before that) |
 | ColorPicker | saved colours | contiguous, 24px cells | uses this component | match |
+| AlignmentPicker | picker cell ladder | (control + icon) / 2: 22 (min 20) / 24 / 28, bars (`alignment-picker.css:15-17`) | `control-xs/sm/md` 24 / 28 / 32, plate + ring (`color.css:83-85`) | differs by design (audit F-31 A, owner 2026-09-30): two ladders kept |
 
 ## Visual pass
 
@@ -151,3 +157,5 @@ Compared the Area captures (`color-swatch-picker/area--*`) with
 - 2026-09-28 · owner: match the pickers to the latest Color swatch → cell corner (hover plate, selected
   ring) concentric with the swatch's 20% corner (`swatch x 0.2 + inset`); was the old `min(radius-small,
   size / 4)` → 4x shots of the grid and Color picker's saved colours.
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → no preselection: with neither `value` nor `defaultValue` nothing is chosen (was the first enabled option), so `required` can fail; a form reset returns to `defaultValue` or nothing (ColorSwatchPicker.tsx:40, :49); group `disabled` sets `aria-disabled`. Gallery demos pass `defaultValue` explicitly; no visual change.
+- 2026-09-30 · audit F-31 (owner pick A) → no change: swatch cells keep the control ladder 24 / 28 / 32, separate from AlignmentPicker's cells (22 / 24 / 28); recorded under Peers.

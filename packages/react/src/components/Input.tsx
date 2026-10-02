@@ -1,9 +1,11 @@
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
-import { forwardRef, useId } from "react";
-import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactElement, ReactNode } from "react";
-import { cx, inputVariants } from "../variants.ts";
+import { forwardRef, useContext } from "react";
+import { InputGroupContext } from "./input-group-context.ts";
+import type { ButtonHTMLAttributes, CSSProperties, InputHTMLAttributes, ReactElement, ReactNode } from "react";
+import { cx, inputVariants, tooltipVariants } from "../variants.ts";
 import { Spinner } from "./primitives.tsx";
+import { AnchoredTooltip } from "./Overlays.tsx";
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   variant?: VariantProps<typeof MANIFESTS.input>["variant"];
@@ -37,11 +39,14 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   invalid?: boolean;
   /** Class applied to the outer shell rather than the input itself. */
   className?: string;
+  /** Style applied to the outer shell, with `className` (width and margin overrides). */
+  style?: CSSProperties;
 }
 
 /**
- * A single icon action at an Input's logical end. It owns a square icon slot and a
- * focusable tooltip; a regular ghost Button is too large to be a reliable inset action.
+ * A single icon action at an Input's logical end. It owns a square icon slot and a Tooltip
+ * (the shared overlay engine, audit S16); a regular ghost Button is too large to be a reliable
+ * inset action.
  */
 export interface InputActionProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "type"> {
   icon: ReactNode;
@@ -53,22 +58,23 @@ export const InputAction = /* @__PURE__ */ forwardRef<HTMLButtonElement, InputAc
   { icon, tooltip, "aria-label": ariaLabel, "aria-describedby": describedBy, className, ...rest },
   ref,
 ) {
-  const tooltipId = `area-input-action-${useId().replace(/:/g, "")}`;
-
+  // Under the action, ending at it, so the hint stays over the field rather than past its end.
   return (
     <span className="area-input__action">
-      <button
-        ref={ref}
-        type="button"
-        className={cx("area-input__action-button", className)}
-        aria-label={ariaLabel ?? tooltip}
+      <AnchoredTooltip side="bottom" align="end"
         // When the hint is also the name, describing the button with it announces it twice.
-        aria-describedby={[describedBy, ariaLabel ? tooltipId : undefined].filter(Boolean).join(" ") || undefined}
-        {...rest}
-      >
-        <span className="area-input__action-icon" aria-hidden="true">{icon}</span>
-      </button>
-      <span id={tooltipId} className="area-tooltip area-input__action-tooltip" role="tooltip">{tooltip}</span>
+        describes={ariaLabel != null}
+        trigger={<button
+          ref={ref}
+          type="button"
+          className={cx("area-input__action-button", className)}
+          aria-label={ariaLabel ?? tooltip}
+          aria-describedby={describedBy}
+          {...rest}
+        >
+          <span className="area-input__action-icon" aria-hidden="true">{icon}</span>
+        </button>}
+        surface={props => <div role="tooltip" className={tooltipVariants({}, "area-input__action-tooltip")} {...props}>{tooltip}</div>} />
     </span>
   );
 });
@@ -94,11 +100,12 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
     loadingText = "Loading",
     loaderPosition = "auto",
     trailingAction,
-    validationStatus,
+    validationStatus: validationStatusProp,
     invalid,
-    disabled,
+    disabled: disabledProp,
     readOnly,
     className,
+    style,
     "aria-invalid": ariaInvalid,
     "aria-busy": ariaBusy,
     "data-validation-status": fieldValidationStatus,
@@ -106,6 +113,10 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
   },
   ref,
 ) {
+  // Inside an InputGroup, the group's Field state reaches the control (audit B-14).
+  const group = useContext(InputGroupContext);
+  const disabled = disabledProp ?? group.disabled;
+  const validationStatus = validationStatusProp ?? group.validationStatus;
   const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
   const startIcon = leadingIcon ?? icon;
@@ -115,6 +126,8 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
   return (
     <div
       className={inputVariants({ variant, size, fullWidth, monospace }, className)}
+      // className and style land on the same box, the shell (audit S17, B-20).
+      style={style}
       {...(invalidState ? { "data-invalid": "" } : {})}
       {...(resolvedValidationStatus === "success" ? { "data-success": "" } : {})}
       {...(resolvedValidationStatus === "warning" ? { "data-warning": "" } : {})}

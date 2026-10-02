@@ -29,7 +29,7 @@ values in one shell; it reuses NumberField).
 | scrub | letter, icon, or grip (`true`) | The field's name as the drag handle | Figma X/Y/W/H letters, rotation and opacity glyphs; Base UI ScrubArea is the label |
 | unit | text after the number | %, °, px | Figma "100%", "0°" |
 | steppers | on/off | Forms without a pointer-drag habit | Base UI (− and +), Area |
-| mixed, read-only, disabled, validation | states | Multi-selection, locking | Figma ("Mixed") |
+| mixed, read-only, disabled, validation (`validationStatus`, `invalid`) | states | Multi-selection, locking | Figma ("Mixed") |
 
 ## Sources
 
@@ -81,6 +81,9 @@ the value string. No steppers.
 | parts gap | 6 at sm, md and lg, the density tokens (`number-field.css:6, :17, :36-38`); the unit cancels it to sit against the number (`:80`); compact sm 4 | Peer: Input, Button (audit S14) | Was 4 / 8 / 8 |
 | height, type | control-md (32, 14/20) at default density | System tiers | Figma's 24 and 11/16 are the compact-density target |
 | radius, border, soft hover | radius per tier as Input and Button: 6 sm, 8 md, 10 lg (`number-field.css:25`, `:36-38`); soft border on hover | Input; Figma adds the border on hover too | Was 8 at every size before audit S4 |
+| read-only | the variant's rest paint (no soft fill), no hover edge, default cursor (`number-field.css:43, :63`) | Audit B-9 B (owner), as Input | Was the soft fill |
+| disabled | field paint; a soft field stays edgeless; value, unit, scrub handle and steppers `fg-disabled` (`number-field.css:60-64, :113`) | Audit B-9, B-10, as Input | The unit, scrub and steppers kept their rest ink |
+| forced colours | `CanvasText` edge (soft too), `Highlight` focus ring, invalid dashed (`forced-colors.css`) | Audit B-11, as Input | Had no forced-colours rule |
 
 ## Pass 2: steppers and the outline shadow
 
@@ -95,8 +98,9 @@ experience"; "for the outline style, do whatever is consistent with the system".
 
 Decisions:
 - **Minus then plus after the value**, as React Aria and Carbon. Each is Input's nested action
-  square: icon + 8 (24 at md), `radius-small` (6), 4 in from the top and side through the
-  inset contract (`--_box-end: var(--_step)`). Targets grow from about 15 to 24 tall, and
+  square: field height − 8 (20 / 24 / 32), corner field radius − 4, concentric (md: 24 box, 4
+  ring, radius 4; audit B-7 B, was icon + 8 with `radius-small` 6), 4 in from the top and side
+  through the inset contract (`--_box-end: var(--_step)`). Targets grow from about 15 to 24 tall, and
   the field keeps one outline (no column border).
 - Glyphs: Area's pilot `add` and a new `subtract` (same 11px bar, square keyline), exported
   as package glyphs.
@@ -107,7 +111,8 @@ Decisions:
 - The buttons are out of the tab order (`tabIndex=-1`): the arrow keys, Home and End step the
   value (WAI spinbutton; React Aria excludes them too). Pressing one moves focus to the input.
 - Disabled: `fg-disabled` instead of 40% opacity. Hover `bg-component-hover`, press
-  `bg-component-active`.
+  `bg-component-active`; on a soft field the translucent `bg-hover` / `bg-active`, which show on
+  its #f7 fill (audit B-7 C; `number-field.css:139-143`).
 - **No resting shadow** on Input, NumberField, InputGroup, Textarea, Checkbox and Radio: controls
   at rest carry none, as Button (its pass removed `shadow-1`; ChatGPT, Notion and Figma
   fields have none). Floating and lifted layers keep theirs (Segmented's selected thumb, menus).
@@ -118,7 +123,9 @@ Unchanged: `role="spinbutton"` text input with `aria-valuenow/min/max` and a val
 includes the unit; ArrowUp/Down step (Shift ×10, Alt ×0.1), Home/End, Enter commits, Escape
 cancels; arithmetic entry; scrub by 8px per step with pointer capture, cancel restores. The
 scrub handle is `aria-hidden`; the letter is not the accessible name, so each inspector
-field needs `aria-label` (the demos give "X position", "Width" and so on).
+field needs `aria-label` (the demos give "X position", "Width" and so on). `invalid` paints the
+error state and sets `aria-invalid`, as Input, Select and Textarea; `className` and `style`
+land on the shell, ref and other props on the input (`NumberField.tsx:169`).
 
 ## Visual pass
 
@@ -158,3 +165,8 @@ tiles and the Panel recipe at 2x.
   `figma--number-field-*`, `figma--gap-field`.
 - 2026-09-30 · audit S4 (owner) → radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `number-field.css:25`, `:36-38`); was 8 at every size. The md captures above are unchanged.
 - 2026-09-30 · audit S14 (owner) → the gap between the field's parts is 6 at sm, md and lg (was 4 / 8 / 8), from the density tokens (`number-field.css:6, :36-38`; density.ts:80-82), as Input.
+- 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → new `invalid` prop: error paint and `aria-invalid`, as Input takes it (NumberField.tsx:78; was passed through as an unknown DOM attribute); `style` lands on the shell with `className` (NumberField.tsx:169; was the inner input).
+- 2026-10-01 · audit B-7 (owner pick B+C) → steppers are field height − 8 (20 / 24 / 32), corner field radius − 4, concentric (md: 24 box, 4 ring, radius 4, measured); on soft fields they hover and press with translucent `bg-hover` / `bg-active` → number-field.css:11, :124-143.
+- 2026-10-01 · audit B-9 (owner pick B) → read-only keeps its variant's rest paint (was the soft fill), no hover edge, default cursor; a soft field never gains an edge when disabled → number-field.css:43, :61-64.
+- 2026-10-01 · audit B-10 → unit, scrub handle and steppers take `fg-disabled` → number-field.css:112-113.
+- 2026-10-01 · audit B-11 → forced colours: `CanvasText` edge, `Highlight` focus ring, dashed invalid → forced-colors.css.

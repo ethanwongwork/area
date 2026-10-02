@@ -105,6 +105,45 @@ export function useOpenState(open: boolean | undefined, defaultOpen: boolean | u
   return [value, set] as const;
 }
 
+/**
+ * Hover intent shared by Tooltip and Hover card (audit E-18): one set of input rules, so the
+ * two hover surfaces answer the same gestures.
+ * - A hovering pointer (mouse or pen) opens after `delay` and closes `closeDelay` after it
+ *   leaves; touch never opens one, since a tap already activates the trigger.
+ * - Keyboard focus (`:focus-visible`) opens at once; blur closes at once.
+ * - Escape closes only this surface, in the capture phase on `window`, and is consumed so the
+ *   Popover or modal Dialog the trigger sits in stays open (WCAG 1.4.13, audit E-4).
+ */
+export function useHoverIntent(open: boolean, setOpen: (open: boolean) => void, { delay, closeDelay, onClose }: { delay: number; closeDelay: number; onClose?: () => void }) {
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const clear = () => clearTimeout(timer.current);
+  const show = (wait = delay) => { clear(); if (wait <= 0) setOpen(true); else timer.current = setTimeout(() => setOpen(true), wait); };
+  const hide = (wait = closeDelay) => {
+    clear();
+    const close = () => { onClose?.(); setOpen(false); };
+    if (wait <= 0) close(); else timer.current = setTimeout(close, wait);
+  };
+  useEffect(() => clear, []);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented) return;
+      event.preventDefault();
+      event.stopPropagation();
+      hide(0);
+    };
+    addEventListener("keydown", onKey, true);
+    return () => removeEventListener("keydown", onKey, true);
+  }, [open]);
+  return {
+    show, hide, clear,
+    /** True for a pointer that can hover; touch is left to the trigger's own activation. */
+    hovers: (event: { pointerType: string }) => event.pointerType === "mouse" || event.pointerType === "pen",
+    /** Keyboard focus shows the surface at once; a pointer's focus does not. */
+    focused: (event: { currentTarget: Element }) => { if (event.currentTarget.matches(":focus-visible")) show(0); },
+  };
+}
+
 const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /**
@@ -174,6 +213,21 @@ export function useAnchoredPosition(trigger: RefObject<HTMLElement | null>, surf
       observer?.disconnect();
     };
   }, [open, side, align, offset, padding]);
+}
+
+/**
+ * The box a menu opened from a toolbar command places against: the command along the bar, the
+ * whole bar across it, so the menu clears a floating bar's padding by its offset (Figma's
+ * toolbelt: 4 from the bar). Outside a toolbar it is the trigger's own box.
+ */
+export function clearToolbar(trigger: HTMLElement): Rect {
+  const own = trigger.getBoundingClientRect();
+  const toolbar = trigger.closest(".area-toolbar");
+  if (!toolbar) return own;
+  const bar = toolbar.getBoundingClientRect();
+  return toolbar.getAttribute("aria-orientation") === "vertical"
+    ? { x: bar.x, y: own.y, width: bar.width, height: own.height }
+    : { x: own.x, y: bar.y, width: own.width, height: bar.height };
 }
 
 /** Merges a forwarded ref with a local one. */

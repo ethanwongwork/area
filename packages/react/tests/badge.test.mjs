@@ -27,15 +27,15 @@ test('unlabelled icon/dot-only badges fail, named forms carry image semantics', 
   assert.match(render(h(Badge,{dotOnly:true,'aria-label':'Available'})),/role="img"/);
 });
 test('anchor overlay is inert and decorative; owner retains its name', () => {
-  const html=render(h(IndicatorAnchor,{compact:true,invisible:true,placement:'bottom-start',overlap:'circular',indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
-  assert.match(html,/aria-hidden="true" inert=""/); assert.match(html,/data-invisible=""/);assert.match(html,/Inbox, 3 unread/);assert.match(html,/overlap-circular/);
-  assert.match(html,/area-indicator-anchor--compact/);
+  const html=render(h(IndicatorAnchor,{inset:true,invisible:true,placement:'bottom-start',overlap:'circular',indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
+  assert.match(html,/aria-hidden="true" inert=""/); assert.match(html,/data-invisible=""/);assert.match(html,/Inbox, 3 unread/);assert.match(html,/area-indicator-anchor--circular/);
+  assert.match(html,/area-indicator-anchor--inset/);
 });
-test('anchor overlays centre on the corner by default; compact is an explicit inset', () => {
+test('anchor overlays centre on the corner by default; inset is explicit (was compact; audit H-13)', () => {
   const html=render(h(IndicatorAnchor,{indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
-  assert.doesNotMatch(html,/area-indicator-anchor--compact/);
-  const inset=render(h(IndicatorAnchor,{compact:true,indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
-  assert.match(inset,/area-indicator-anchor--compact/);
+  assert.doesNotMatch(html,/area-indicator-anchor--inset/);
+  const inset=render(h(IndicatorAnchor,{inset:true,indicator:h(Indicator,{count:3})},h('button',{'aria-label':'Inbox, 3 unread'},'Inbox')));
+  assert.match(inset,/area-indicator-anchor--inset/);
 });
 test('group limits children without losing them and uses native popover relationships', () => {
   const html=render(h(BadgeGroup,{visibleCount:1},['Draft','Reviewed','Ready'].map(label=>h(Badge,{key:label},label))));

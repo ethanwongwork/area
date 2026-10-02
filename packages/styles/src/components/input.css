@@ -14,7 +14,9 @@
     --_height: var(--area-control-md);
     --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
-    --_action: calc(var(--_icon) + var(--area-space-8));
+    /* The action is the field less a 4px ring at every tier: 20 / 24 / 32 (audit B-7 B,
+       owner 2026-09-30; was icon + 8, a fixed 24), its corner concentric inside the field's. */
+    --_action: calc(var(--_height) - var(--area-space-8));
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
@@ -32,7 +34,6 @@
     block-size: var(--_height);
     inline-size: var(--area-input-inline-size);
     max-inline-size: 100%;
-    padding-inline: var(--_gutter);
     border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
     /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
@@ -60,9 +61,10 @@
 
   .area-input--full-width { inline-size: 100%; }
   .area-input--monospace { font-family: var(--area-font-mono); }
-
-  .area-input:hover:not([data-disabled]):not(:focus-within) {
-    border-color: var(--_border-hover);
+  @media (hover: hover) {
+    .area-input:hover:not([data-disabled], [data-read-only]):not(:focus-within) {
+      border-color: var(--_border-hover);
+    }
   }
 
   .area-input:focus-within {
@@ -72,7 +74,7 @@
     outline-offset: 0;
   }
 
-  .area-input[data-invalid] {
+  .area-input:is([data-invalid], [aria-invalid="true"]) {
     --_border: var(--area-input-invalid-color);
     --_border-hover: var(--area-input-invalid-color);
     --_border-focus: var(--area-input-invalid-color);
@@ -103,16 +105,20 @@
     cursor: not-allowed;
   }
 
-  .area-input[data-read-only] {
-    --_bg: var(--area-input-bg-soft);
-    cursor: default;
-  }
+  /* Read-only keeps its variant's rest paint, with no hover edge and a default cursor, as a
+     read-only Switch does; only disabled changes paint (audit B-9, owner 2026-09-30). */
+  .area-input[data-read-only] { cursor: default; }
+  /* A soft field never gains an edge when disabled. */
+  .area-input--soft[data-disabled] { --_border: transparent; }
 
   .area-input[data-loading] { cursor: progress; }
 
-  .area-input[data-invalid] .area-input__icon { color: var(--area-input-invalid-color); }
-  .area-input[data-success] .area-input__icon { color: var(--area-input-success-color); }
-  .area-input[data-warning] .area-input__icon { color: var(--area-input-warning-color); }
+  /* A leading glyph stays muted in every validation state, as NumberField's scrub, Select's
+     chevron and InputGroupText do; the edge and the message carry the tone. A trailing status
+     icon (a success check) is the one glyph that takes it (audit B-25 A). */
+  .area-input[data-invalid] > .area-input__icon:last-child:not(:first-child) { color: var(--area-input-invalid-color); }
+  .area-input[data-success] > .area-input__icon:last-child:not(:first-child) { color: var(--area-input-success-color); }
+  .area-input[data-warning] > .area-input__icon:last-child:not(:first-child) { color: var(--area-input-warning-color); }
 
   /* The control itself carries no chrome; the shell owns all of it. */
   .area-input__control {
@@ -127,12 +133,25 @@
     outline: none;
   }
 
+  /* The shell is the field: the browser's own chrome inside it goes (audit B-21) -- WebKit's
+     search cancel, Edge's password reveal (InputAction draws its own), number spinners, and the
+     autofill box, which painted the inner input instead of the shell. */
+  .area-input__control::-webkit-search-cancel-button,
+  .area-input__control::-webkit-search-decoration { appearance: none; }
+  .area-input__control::-ms-reveal, .area-input__control::-ms-clear { display: none; }
+  .area-input__control[type="number"] { appearance: textfield; }
+  .area-input__control[type="number"]::-webkit-inner-spin-button,
+  .area-input__control[type="number"]::-webkit-outer-spin-button { appearance: none; margin: 0; }
+  .area-input__control:autofill { box-shadow: 0 0 0 100vmax var(--_bg) inset; -webkit-text-fill-color: currentColor; }
+
   .area-input__control::placeholder {
     color: var(--area-input-placeholder);
   }
 
   .area-input[data-disabled] .area-input__control::placeholder,
-  .area-input[data-disabled] .area-input__affix { color: var(--area-fg-disabled); }
+  .area-input[data-disabled] .area-input__affix,
+  /* Every slot takes the disabled ink, icons and the action included (audit B-10). */
+  .area-input[data-disabled] :is(.area-input__icon, .area-input__action-button) { color: var(--area-fg-disabled); }
 
   .area-input__control::file-selector-button {
     margin-inline-end: var(--_gap);
@@ -142,7 +161,8 @@
     /* Neutral by default, like every other action label (DESIGN_SYSTEM.md). */
     color: var(--area-fg-default);
     font: inherit;
-    font-weight: var(--area-weight-strong);
+    /* 400: 500 is for labels on fills, and this one is transparent (audit B-33, as Code block's toggle). */
+    font-weight: var(--area-weight-regular);
     cursor: pointer;
   }
 
@@ -190,15 +210,19 @@
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: min(var(--area-radius-small), calc(var(--_action) / 2));
+    border-radius: max(0px, calc(min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap))) - var(--area-space-4)));
     background: transparent;
     color: var(--area-input-icon);
     cursor: pointer;
   }
 
   /* The row pair: hover #f3, pressed #ee, as the NumberField steppers beside it (audit B-8). */
-  .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-component-hover); }
+  @media (hover: hover) { .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-component-hover); } }
   .area-input__action-button:active:not(:disabled) { background-color: var(--area-bg-component-active); }
+  /* On a soft field (#f7) the opaque #f3 all but vanishes, so the plate is the translucent pair
+     that shows on any ground (audit B-7 C). */
+  @media (hover: hover) { .area-input--soft .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-hover); } }
+  .area-input--soft .area-input__action-button:active:not(:disabled) { background-color: var(--area-bg-active); }
   .area-input__action-button:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
   .area-input__action-button:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
 
@@ -207,26 +231,6 @@
     display: block;
     inline-size: var(--_icon);
     block-size: var(--_icon);
-  }
-
-  /* The hint is a Tooltip (area-tooltip supplies its type, inset, radius and lift); this only
-     places it under the action and reveals it. It used to be a second, smaller tooltip style. */
-  .area-input__action > .area-input__action-tooltip {
-    position: absolute;
-    z-index: 1;
-    inset-block-start: calc(100% + var(--area-space-4));
-    inset-inline-end: 0;
-    inline-size: max-content;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(calc(var(--area-space-2) * -1));
-    transition: var(--area-transition);
-  }
-
-  .area-input__action:hover > .area-input__action-tooltip,
-  .area-input__action:focus-within > .area-input__action-tooltip {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   /* Outer-edge optical insets are shared in inset.css. */

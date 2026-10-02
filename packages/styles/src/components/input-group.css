@@ -30,9 +30,9 @@
   .area-input-group--md { --_group-height: var(--area-control-md); --_group-radius: var(--area-radius-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); --_group-gutter: var(--area-gutter-md); }
   .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-radius: var(--area-radius-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); --_group-gutter: var(--area-gutter-lg); }
   .area-input-group--full-width { inline-size: 100%; }
-  .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])) { border-color: var(--area-input-edge-hover); }
+  @media (hover: hover) { .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])) { border-color: var(--area-input-edge-hover); } }
   /* Disabled uses field paint, like Input: the disabled fill, a faint edge and disabled ink. */
-  .area-input-group:has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled) { background-color: var(--area-input-bg-disabled); border-color: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }
+  .area-input-group:is([aria-disabled="true"], :has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)) { background-color: var(--area-input-bg-disabled); border-color: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }
   .area-input-group:has([data-success]) { border-color: var(--area-input-success-color); }
   .area-input-group:has([data-warning]) { border-color: var(--area-input-warning-color); }
   .area-input-group:focus-within {
@@ -89,10 +89,14 @@
     justify-content: center;
     align-self: stretch;
     flex-shrink: 0;
-    padding-inline: var(--_group-gutter);
+    /* The equal-inset rule, as Input's prefix (inset.css): half of height less a cap, less the
+       group's border, so "$" sits at the same place either way (audit B-18; was the gutter). */
+    padding-inline: max(0px, calc((var(--_group-height) - 1cap) / 2 - var(--area-stroke-width)));
     color: var(--area-fg-muted);
     white-space: nowrap;
   }
+  /* A passive segment takes the disabled ink with its group (audit B-10). */
+  .area-input-group:is([aria-disabled="true"], :has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)) .area-input-group__text { color: var(--area-fg-disabled); }
   .area-input-group__text[data-visual] {
     flex: 0 0 var(--_group-height);
     inline-size: var(--_group-height);

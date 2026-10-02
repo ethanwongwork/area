@@ -19,7 +19,7 @@
      colour), then the colour. Nothing but the edge colour can show between the shapes. The colour
      layer carries the swatch's own inset rings (palette hover and selection). */
   .area-color-swatch {
-    --_size: var(--area-space-20);
+    --_size: var(--area-mark-md);
     position: relative;
     isolation: isolate;
     display: inline-block;
@@ -39,7 +39,7 @@
     /* spec (owner, 2026-09-28): a solid, very light edge, so neither the colour nor the checker shows
        through it; two steps off the surface in each theme (neutral 50 light, 800 dark), visible
        against a white swatch and lost against colour. */
-    --_edge-color: light-dark(var(--area-neutral-50), var(--area-neutral-800)) /* spec */;
+    --_edge-color: var(--area-bg-component); /* the role it equalled exactly (audit F-36) */
     overflow: hidden;
     border-radius: var(--_radius);
     background: var(--_edge-color);
@@ -66,9 +66,9 @@
     background: var(--_swatch-color);
     box-shadow: inherit;
   }
-  .area-color-swatch--sm { --_size: var(--area-space-16); }
-  .area-color-swatch--md { --_size: var(--area-space-20); }
-  .area-color-swatch--lg { --_size: var(--area-space-24); }
+  .area-color-swatch--sm { --_size: var(--area-mark-sm); }
+  .area-color-swatch--md { --_size: var(--area-mark-md); }
+  .area-color-swatch--lg { --_size: var(--area-mark-lg); }
 
   .area-color-swatch-picker {
     --_cell: var(--area-control-sm);
@@ -107,7 +107,7 @@
     cursor: inherit;
   }
   .area-color-swatch-picker__cell > .area-color-swatch { --_size: var(--_swatch-size); pointer-events: none; }
-  .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) { background: var(--area-bg-hover); }
+  @media (hover: hover) { .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) { background: var(--area-bg-hover); } }
   .area-color-swatch-picker__cell:has(input:checked) {
     background: var(--area-bg-surface);
     box-shadow: inset 0 0 0 var(--area-space-2) var(--area-fg-selection);
@@ -117,7 +117,10 @@
     outline-offset: var(--area-focus-offset);
     z-index: 1;
   }
-  .area-color-swatch-picker__cell:has(input:disabled) { opacity: 0.5; cursor: not-allowed; }
+  /* A disabled option dims alone; a disabled picker dims once as a whole (audit F-14). */
+  .area-color-swatch-picker:not([aria-disabled="true"]) .area-color-swatch-picker__cell:has(input:disabled) { opacity: var(--area-opacity-disabled); cursor: not-allowed; }
+  .area-color-swatch-picker[aria-disabled="true"] { opacity: var(--area-opacity-disabled); cursor: not-allowed; }
+  .area-color-picker[aria-disabled="true"] .area-color-swatch-picker { opacity: 1; }
   @media (forced-colors: active) {
     .area-color-swatch-picker__cell:has(input:checked) { outline: var(--area-stroke-width) solid Highlight; }
     .area-color-swatch-picker__cell:has(input:focus-visible) { outline: var(--area-focus-width) solid Highlight; }
@@ -139,8 +142,10 @@
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell > .area-color-swatch {
     inline-size: 100%; block-size: 100%; --_radius: 0px; --_inner-radius: 0px; --_edge: 0px; box-shadow: none;
   }
-  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) > .area-color-swatch {
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6); /* spec */
+  @media (hover: hover) {
+    .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) > .area-color-swatch {
+      box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6); /* spec */
+    }
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 1; background: none; box-shadow: none; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) > .area-color-swatch {
@@ -170,7 +175,9 @@
   .area-input-group.area-color-field > .area-color-field__opacity {
     flex: 0 0 auto;
     inline-size: max-content;
-    border-inline-start: var(--area-border-width) solid var(--area-border-decorative);
+    /* The surface gap ColorPicker's value row draws, Figma's colour row (audit F-7 A; was the
+       decorative rule, nearly invisible on the soft fill). */
+    border-inline-start: var(--area-border-width) solid var(--area-bg-surface);
   }
   .area-input-group.area-color-field > .area-color-field__opacity > .area-number-field__control {
     flex: 0 0 auto;
@@ -208,13 +215,21 @@
     display: grid;
     inline-size: var(--_width); max-inline-size: 100%;
     box-sizing: border-box;
-    background: var(--area-bg-surface); border: var(--area-border-width) solid var(--area-border-decorative);
+    background: var(--_picker-bg); border: var(--area-border-width) solid var(--_picker-edge);
     border-radius: var(--area-radius-container);
-    /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
-    box-shadow: var(--area-shadow-float);
+    box-shadow: var(--_picker-lift);
     color: var(--area-fg-default);
     font-size: var(--area-control-sm-text); line-height: var(--area-control-sm-leading);
   }
+  /* The floating plate is the default (`surface`, as Calendar's); `plain` drops it so a picker
+     inside a Popover or Panel draws no second frame or shadow (audit F-20). */
+  .area-color-picker, .area-color-picker--surface {
+    --_picker-bg: var(--area-bg-surface);
+    --_picker-edge: var(--area-border-float);
+    /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
+    --_picker-lift: var(--area-shadow-float);
+  }
+  .area-color-picker--plain { --_picker-bg: transparent; --_picker-edge: transparent; --_picker-lift: none; }
   .area-color-picker__header {
     display: flex; align-items: center; gap: var(--area-space-4);
     min-block-size: 40px; /* spec */
@@ -364,9 +379,14 @@
     gap: 0; margin-inline: calc(var(--_rhythm) - var(--_inset));
     grid-template-columns: repeat(auto-fill, var(--_cell));
   }
-  .area-color-picker__area:focus-within { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* Keyboard focus is the thumb's ring alone; the area drew a second ring, and kept it after
+     every mouse drag because pointer-down focuses the input (audit F-15). */
   .area-color-picker__heading { display: flex; align-items: center; justify-content: space-between; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
-  .area-color-picker[aria-disabled="true"] { opacity: 0.5; }
+  .area-color-picker[aria-disabled="true"] { opacity: var(--area-opacity-disabled); }
+  /* One dimming (audit F-14): the picker dims as a whole, so its Buttons, Segmented options and
+     swatch cells don't dim again, and its fields keep their ink. */
+  .area-color-picker[aria-disabled="true"] :is(.area-button:disabled, .area-segmented__item:disabled, .area-color-swatch-picker__cell) { opacity: 1; }
+  .area-color-picker[aria-disabled="true"] :is(.area-input[data-disabled], .area-number-field[data-disabled], .area-select:disabled) { color: inherit; }
   .area-color-picker[aria-disabled="true"] :is(.area-color-picker__area, .area-color-picker__slider) { cursor: not-allowed; }
   @media (forced-colors: active) {
     .area-color-picker__thumb { forced-color-adjust: none; border-color: Canvas; box-shadow: 0 0 0 1px CanvasText; }

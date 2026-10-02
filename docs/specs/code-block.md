@@ -55,15 +55,15 @@ editor inspector (Dev Mode, where code is shown, was not opened).
 ## Anatomy
 
 ```
-area   div.area-code-block  1px Card's edge (#ee), radius-container, bg-code, overflow hidden
-  header   min 32, padding 4/12, gap 8, bottom rule (border-divider); 14/20
+area   div.area-code-block  1px Card's edge (#ee), Card md's corner (24), bg-code (white), overflow hidden
+  header   min 32 (37 with the 28 copy Button), padding 4/12, gap 8, bottom rule (border-decorative); 14/20
     title     Geist Mono 400, fg-default;  language  14/20 fg-muted
     tab       28 tall, 6px sides, radius-small, mono 14/20; selected: 1px underline, 6px in
     actions   margin-inline-start auto, gap 4; copy = Button ghost neutral sm 28
   body > pre   padding 12 block, 14/20 mono;  code > line (grid: 32px gutter | text)
     gutter    padding 6 / 12, tabular numbers, fg-muted, user-select none
     text      16px end inset; unnumbered: 12px start inset
-  toggle   32 tall (64 with the fade when collapsed), top rule (border-divider), 400
+  toggle   32 tall (64 with the fade when collapsed), top rule (border-decorative), 400
 ```
 
 Inset equations: header 4 + 28 copy + 4 + 1 rule = 37 (measured 37). Without a header the
@@ -80,11 +80,12 @@ so its midline (23) meets the first line's (13 + 10). Collapsed pre: 8 × 20 + 2
 | **shell** size | 578 × 163 | 578 × 66 | 578 × 163 | 578 × 163 | 578 × 223 |
 | **shell** border | 1 solid rgb(243, 243, 243) | 1 solid rgb(243, 243, 243) | 1 solid rgb(243, 243, 243) | 1 solid rgb(243, 243, 243) | 1 solid rgb(243, 243, 243) |
 | **shell** radius | 12px | 12px | 12px | 12px | 12px |
-| **shell** background | rgb(250, 250, 250) | rgb(250, 250, 250) | rgb(250, 250, 250) | rgb(250, 250, 250) | rgb(250, 250, 250) |
+| **shell** background | rgb(250, 250, 250) | rgb(250, 250, 250) | rgb(250, 250, 250) | rgb(250, 250, 250) | rgb(250, 250, 250) (before batch 22; now white) |
 
 Nodes (`area--default`): header 576 × 37, padding 4 12; `code` inherits Geist Mono from `pre`; copy button 28 × 28, radius 6px;
 line 20px, gutter 32px (padding 0 12 0 6), number ink rgb(102, 102, 102); keyword
-rgb(207, 3, 60), tag rgb(125, 65, 218), string rgb(81, 80, 229). Tabs (`area--language-tabs`):
+rgb(207, 3, 60), tag rgb(125, 65, 218), string rgb(81, 80, 229) (the 550 rungs on the old #fa
+ground; batch 22 moved syntax to the 500 rungs, see Decisions). Tabs (`area--language-tabs`):
 28px, radius 6px, unselected ink rgb(102, 102, 102).
 
 ## Decisions
@@ -95,14 +96,14 @@ rgb(207, 3, 60), tag rgb(125, 65, 218), string rgb(81, 80, 229). Tabs (`area--la
 | block inset | 12 (`code.css:227`) | Owner (prior: Area tokens, not Geist's 16) | — |
 | gutter | 32 (`code.css:226`) | Owner (prior) | — |
 | unnumbered · text inset | **12 start** (`code.css:264-267`) | Third pass: code starts where the header's filename and the numbers do | Was 0: hidden numbers left the code at the block's edge. Diff lines keep their marker column (`code.css:269-273`) |
-| shell radius / edge / ground | `radius-container` 12, Card's edge `light-dark(neutral-100, neutral-750)` #ee (`code.css:188`), `bg-code`: the page white in light (dark: neutral 800) | Peers: Card media, Panel, Alert; owner 2026-09-28 (lighter ground, more vibrant syntax); audit S7a (owner 2026-09-30): a block standing alone takes Card's edge | Ground was #fafafa (neutral 25); edge was `border-decorative` #f3 |
+| shell radius / edge / ground | Card md's corner, 24 at Standard (`code.css:145-147`; audit G-27 B, owner 2026-09-30; was `radius-container` 12), Card's edge `light-dark(neutral-100, neutral-750)` #ee (`code.css:188`), `bg-code`: the page white in light (dark: neutral 800) | Peers: Card media, Panel, Alert; owner 2026-09-28 (lighter ground, more vibrant syntax); audit S7a (owner 2026-09-30): a block standing alone takes Card's edge | Ground was #fafafa (neutral 25); edge was `border-decorative` #f3 |
 | header | min `control-md` 32, padding 4/12 (`code.css:36-38`) | Toolbar rhythm | — |
 | rules (header, flush top, toggle) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 203, 456`); since audit S7a they sit one step lighter than the #ee edge | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
 | code · face | `font-family: inherit` (`code.css:250`) | Owner (prior): one monospace | `<code>` reset to the browser's monospace |
 | tab · hover | **plate `bg-component-hover`, ink fixed** (`code.css:101-103`) | Shared rules: foreground fixed; opaque plate on a known ground | Was muted → default ink on `bg-hover` |
 | line number · hover | **underline, ink fixed** (`code.css:294-298`) | Shared rule; a link marks itself with an underline | Was muted → default ink |
 | toggle · hover | **underline, ink fixed** (`code.css:456-460`) | Shared rule | Was muted → default ink |
-| linked line (`:target`) | `bg-active` + **2px `fg-default` rail on the inline-start edge** (`code.css:368-374`) | Owner (2026-09-26); peers Nav, Tree view | Was `accent-solid`, and a physical left rail in RTL |
+| linked line (`:target`) | `bg-active` + **2px `fg-selection` rail on the inline-start edge** (neutral: `fg-default`; `code.css:341-347`) | Owner (2026-09-26); emphasis roles (D1); peer Nav marker | Was `accent-solid`, and a physical left rail in RTL |
 | highlighted line | `bg-active` #00000011 (`code.css:345-347`) | Translucent over any ground | — |
 | diff lines | success / danger surface, vivid markers (`code.css:349-363`) | Semantic tones | — |
 | diff gutter | 48 when the block has diff lines; marker at the gutter's start, number at its end | Fit: 6 + 8 marker + 4 + two digits + 12 | The 32px gutter could not hold a marker and a number, so the marker overflowed to the block's edge |
@@ -122,23 +123,30 @@ rgb(207, 3, 60), tag rgb(125, 65, 218), string rgb(81, 80, 229). Tabs (`area--la
 
 ## Behavior and accessibility
 
-Language tabs are a `tablist` named "Language" with Arrow, Home and End keys (mirrored in
-RTL); the body is the `tabpanel`. The picker alternative is the shared Select. Line numbers
-are `user-select: none`; with `linkLines` each is a link named "Line n" to its own
-`#<id>-L<n>` fragment. The copy button's name becomes "Copied" after a successful copy; a
-failure is not announced separately. The show / hide toggle is a button with
-`aria-expanded` (`packages/react/src/components/primitives.tsx`, `CodeBlock`).
+Language tabs are a `tablist` named by `languageLabel` ("Language" by default) with Arrow,
+Home and End keys (mirrored in RTL); the body is the `tabpanel`. The picker alternative is the
+shared Select, named by the same `languageLabel`. Without tabs, the scrolling `pre` takes focus
+(named by a string `title`, else "Code") so a keyboard can scroll it. Line numbers are
+`user-select: none`; with `linkLines` each is a link named "Line n" to its own `#<id>-L<n>`
+fragment, out of the tab order (`tabIndex=-1`), so a long block isn't a tab stop per line. The
+copy button keeps one fixed name, `copyLabel` ("Copy code" by default); the result is said once
+through a polite live region ("Copied to clipboard" or "Copy failed") and shown by the glyph,
+with `data-copy-state="copied" | "failed"` as a paint hook (audit G-21; primitives.tsx:1823-1853,
+:1962-1973, :2042-2043). `onValueChange(language)` reports the chosen language
+(`onLanguageChange` is a deprecated alias). The show / hide toggle is a button whose visible
+label ("Show code" / "Hide code") carries the state, with `aria-controls` and no `aria-expanded`
+(audit G-21: the two said it twice).
 
 ## Peers and consistency
 
 | Peer | Shared role | Peer value | Code block | Match |
 |---|---|---|---|---|
-| Nav, Tree view | current marker | neutral ink | `fg-default` rail | match |
+| Nav | current marker | `fg-selection` | `fg-selection` rail | match (Selection role); Tree view has no rail |
 | Tabs | selected indicator, fixed ink | underline, ink fixed | 1px underline, ink fixed | match; Tabs previews its underline on hover, Code block shows a plate |
 | Button sm ghost | copy action | 28, radius 6 | 28, radius 6 | match |
-| Code | ground | `bg-code` | `bg-code` | match |
+| Code | ground | `bg-stripe` #fafafa (code.css:97) | `bg-code`, the page white | differs since batch 22: the block's ground lightened; inline code keeps the 25 rung |
 | Menu, Nav rows | hover plate | opaque `bg-component-hover` | `bg-component-hover` on tabs | match |
-| Separator, Panel, Menu separator | rule | `border-divider` | header, flush and toggle rules | match |
+| Panel, Menu separator, Toolbar separator | rule | `border-decorative` | header, flush and toggle rules | match (a rule is never darker than its container); Separator stands alone on `border-divider` |
 
 ## Visual pass
 
@@ -150,7 +158,7 @@ groups.
 `chatgpt--code-block--rest` 2026-09-27 and `chatgpt--code-block-full--rest`): shell 768 wide,
 corner 24, 5% black fill and edge; a 48 header (#fc, padding 6 / 20) with a 20 language icon and
 a 14/20 label; two 36 round buttons 7 from the top and end, 1 apart; code 12/20 mono from 20 in,
-lines 20 apart. Area: corner 12 (`radius-container`, as Card media and Panel), #fa fill with the
+lines 20 apart. Area (before batch 22 and audit S7a): corner 12 (`radius-container`, as Card media and Panel), #fa fill with the
 #f3 seam, a 32 header (4 / 12) with a 28 copy Button, code 14/20 mono 12 in with a 32 gutter.
 Line pitch (20) matches; the corner, header scale and code size are the recorded owner decisions
 (Area tokens over ChatGPT's pill scale; 14 mono throughout). No change. Unverified: hover and
@@ -189,3 +197,5 @@ Line pitch (20) matches; the corner, header scale and code size are the recorded
   the collapsed fade follows the ground. Inline Code and the `token-bg` alias keep #fafafa via
   `bg-stripe` (the same 25 rung). Dark unchanged. 19,491 token and contrast tests pass.
 - 2026-09-30 · audit S7a (owner) → shell edge is Card's `light-dark(neutral-100, neutral-750)` #ee (was `border-decorative` #f3); header, flush and toggle rules keep `border-decorative`; tabs keep `fg-muted` → code.css:188.
+- 2026-09-30 · audit S17 (API vocabulary, slice 1) → `onValueChange(language)` is the change callback; `onLanguageChange` kept as a deprecated alias → `primitives.tsx:1580-1582`.
+- 2026-10-01 · audit G-21 → copy button keeps one name (`copyLabel`) with the result in a live region and `data-copy-state`; `languageLabel` names the tabs or picker; the `pre` is focusable without tabs; line links leave the tab order; the toggle drops `aria-expanded` → primitives.tsx:1823-2043.

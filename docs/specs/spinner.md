@@ -9,6 +9,8 @@ Button, Input, Badge and Switch (host a Spinner when loading)
 
 - 2026-09-26: **Neutral by default, accent by override** (DESIGN_SYSTEM.md, "Color and
   focus"). Spinner already followed it: the arc is `neutral-solid`; `tone="accent"` opts in.
+  *Superseded 2026-09-29 (owner, D1): the arc is the Selection role (`selection-solid`,
+  display.css:216), accent by theme; the `tone` axis was removed.*
 
 No Spinner section existed in prior decisions. The second pass (owner: decide every open
 item) changed nothing here.
@@ -24,7 +26,6 @@ a placeholder for arriving content is Skeleton.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | sm 12, md 16 (default), lg 24 | Matches the icon slot it replaces | Untitled 32–64 standalone, 20 in buttons |
-| tone | neutral (default), accent | Owner rule | Untitled brand arc |
 | composition | in Button, Badge, Input; standalone with a label | Hosts' loading states | Gallery tiles `button`, `badge`, `input`, `empty` |
 
 ## Sources
@@ -42,9 +43,9 @@ loaded, so no spinner was on screen; a product spinner needs a capture during a 
 ## Anatomy
 
 ```
-area  span.area-spinner  --_size square, radius-full, conic arc (25%) over a --_track,
-                         masked to a --_stroke ring; rotates 360° in 2s linear
-  ::after  2px dots at the arc's two ends (box-shadow copy), so the arc has round caps
+area  span.area-spinner  --_size square; track = the arc's ink at 25%, masked to an SVG ring
+  ::before  the arc: a quarter-turn SVG mask with round caps; rotates 360° in 1s linear
+           (display.css:214-242; was a conic arc with ::after cap dots, 2s)
 ```
 
 ## Measurements
@@ -64,27 +65,29 @@ Read from the nodes of `area--size-small`, `area--default`, `area--size-large`,
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | size | 12 / 16 / 24 (`space-*`, display.css:213-215); md = `icon-md` | Icon slot it stands in for (Button, Input, Badge icon slots are 16) | Untitled's standalone indicator starts at 32; its button spinner is 20 because its button icons are 20 |
-| stroke | **1/8 of the size: 1.5 / 2 / 3** (one 16-unit SVG mask, stroke 2) | Primer 16 / 2, Untitled 4 on 32 | Was 2px at every size, thin at lg. A 2.5px md option is in the Pass review, not applied |
+| stroke | **1/8 of the size: 1.5 / 2 / 3** (one 16-unit SVG mask, stroke 2) | Primer 16 / 2, Untitled 4 on 32 | Was 2px at every size, thin at lg. A 2.5px md option was reviewed and not taken (owner, batch 6) |
 | construction | **SVG masks for ring and arc; round caps** | ChatGPT draws its spinner as SVG | Owner 2026-09-28: the conic gradient and hard-edged radial mask looked pixelated, and 2px cap dots did not read as round |
 | arc | 25% | Untitled ~28% (indicator), ~25% (button) | — |
-| arc ink | `neutral-solid`; accent by tone | Owner | Untitled brand |
+| arc ink | `selection-solid` (display.css:216), neutral by default; `currentColor` inside a Button | Owner; emphasis roles (D1) | Untitled brand |
 | in a Button | **arc `currentColor`, track `currentColor` at 25%** (display.css:211) | The host's label ink, so it shows on any fill (audit spec pass) | Was `neutral-solid` on a `neutral-solid` button: only the light track showed |
+| in a Button · size | the Button tier's icon box (`--_icon`: 12 / 16 / 20), not the Spinner's own size | Audit S18 (owner 2026-09-30): the spinner stands in for the leading icon | Was a fixed 16 at every tier |
 | track | the arc's ink at 25% (≈ #c9 on white; display.css:226-229) | Primer; ChatGPT 30% (2026-09-27 audit) | Darker than the rail (`edge-control` #e2); audit E-22 left open. Was `bg-component-active` #eee |
-| speed | 2s per turn, linear (display.css:194) | — | Untitled 1s |
-| motion | stops under `data-area-motion="none"` and reduced motion (display.css:271, 274-281) | Audit rule "motion setting" | Before the audit only reduced motion stopped it |
+| speed | **1s** per turn, linear (display.css:241-242) | Untitled, Primer, shadcn, Spectrum 1s (owner 2026-09-27) | Was 2s, the slowest of 14 systems; ChatGPT 2s |
+| motion | stops under `data-area-motion="none"` (display.css:304); reduced motion slows it to 1.8s a turn (display.css:321-323) | Audit rule "motion setting"; Fluent 1.8s, Carbon and Primer keep turning | A still quarter arc reads as a frozen screen. Reduced motion stopped it until 2026-09-27 |
 
 ## States
 
 | State | Changes | Evidence |
 |---|---|---|
 | running | rotates | all tiles (`animation-name: area-spin`) |
-| motion none / reduced | `animation: none`; the arc stays visible and still | display.css:271; not tiled |
+| motion none | `animation: none`; the arc stays visible and still | display.css:304; not tiled |
+| reduced motion | 1.8s a turn | display.css:323; not tiled |
 
 ## Behavior and accessibility
 
 With `label`, the Spinner is `role="status"` with `aria-label`; without it, it is
 `aria-hidden` and the host announces (primitives.tsx:282-296): Button sets `aria-busy`
-(Button.tsx:69-84), Input names it with `loadingText` (Input.tsx:125, 144), Switch sets
+and `aria-disabled` (Button.tsx), Input names it with `loadingText` (Input.tsx:125, 144), Switch sets
 `aria-busy` on its input. No forced-colors rule (unverified).
 
 ## Peers and consistency

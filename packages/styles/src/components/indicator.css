@@ -3,10 +3,12 @@
   .area-indicator { --_bg: var(--area-danger-solid); --_fg: var(--area-fg-on-danger); position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; flex: none; box-sizing: border-box; border-radius: var(--area-radius-full); vertical-align: middle; background: var(--_bg); color: var(--_fg); white-space: nowrap; }
   .area-indicator--dot { --_dot: 6px; /* spec: indicator.md dot size */ inline-size: var(--_dot); block-size: var(--_dot); }
   .area-indicator--count {
-    --_height: 16px; /* spec: indicator.md count height (Fluent small) */
+    --_height: var(--area-mark-sm); /* spec: indicator.md count height (Fluent small), the 16 mark rung */
     --_gutter: 4px; /* spec: Fluent small padding-inline */
-    --_text: 10px; /* spec: Fluent small 10px, Untitled avatar count 10px */
-    --_leading: 14px; /* spec: Fluent small line-height */
+    /* Count sm's type, 12/16 at weight 500 (audit S20 B, owner 2026-09-30): the 12px floor Chip
+       initials already keep; was Fluent small's 10/14. */
+    --_text: var(--area-control-xs-text);
+    --_leading: var(--area-control-xs-leading);
     min-inline-size: var(--_height); block-size: var(--_height); padding-inline: var(--_gutter);
     font: var(--area-weight-strong) var(--_text)/var(--_leading) var(--area-font-sans); font-variant-numeric: tabular-nums;
   }
@@ -19,8 +21,8 @@
   .area-indicator--warning { --_bg: var(--area-warning-solid); --_fg: var(--area-fg-on-warning); }
   .area-indicator--danger { --_bg: var(--area-danger-solid); --_fg: var(--area-fg-on-danger); }
   .area-indicator-anchor { position: relative; display: inline-flex; vertical-align: middle; --_overlap: 0%; --_x: 50%; --_y: -50%; --_shift: 1; --_inset: var(--area-indicator-anchor-offset, var(--area-space-0)); }
-  .area-indicator-anchor--overlap-rectangular { --_overlap: 0%; }
-  .area-indicator-anchor--compact { --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + var(--area-space-4)); }
+  .area-indicator-anchor--rectangular { --_overlap: 0%; }
+  .area-indicator-anchor--inset { --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + var(--area-space-4)); }
   /* Contained attachments sit inside the owner's box instead of straddling its corner.
      Circular owners: flush in the bounding-box corner (Untitled avatar status, right 0 / bottom 0).
      Rectangular owners with an activity dot: the dot overlaps the icon's top-end corner, as
@@ -28,14 +30,14 @@
   /* Owner feedback 2026-09-25: circular attachments sit 2px further from the centre than
      flush, and dots are centred on the owner's 16px icon viewport corner (8px icon inset
      minus half the 6px dot). */
-  .area-indicator-anchor--overlap-circular { --_shift: 0; --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) - 2px); /* spec */ }
+  .area-indicator-anchor--circular { --_shift: 0; --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) - 2px); /* spec */ }
   /* Owner feedback 2026-09-27: a count on a circle read as too far in. Its centre now sits on the
      circle's edge at 45°: r(1 − 1/√2) from the corner, less half the 16px count (32px avatar: 1.3
      further out than the 2px rule). Insets in % resolve against the owner's box. */
-  .area-indicator-anchor--overlap-circular:has(> .area-indicator-anchor__indicator > .area-indicator--count) {
+  .area-indicator-anchor--circular:has(> .area-indicator-anchor__indicator > .area-indicator--count) {
     --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + 50% * (1 - 0.7071) - 8px); /* spec */
   }
-  .area-indicator-anchor--overlap-rectangular:has(> .area-indicator-anchor__indicator > .area-indicator--dot) {
+  .area-indicator-anchor--rectangular:has(> .area-indicator-anchor__indicator > .area-indicator--dot) {
     --_shift: 0; --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + 5px); /* spec */
   }
   .area-indicator-anchor__indicator { position: absolute; display: inline-flex; pointer-events: none; border-radius: var(--area-radius-full); transform: translate(calc(var(--_x) * var(--_shift)), calc(var(--_y) * var(--_shift))) scale(1); opacity: 1; transition: transform var(--area-duration-base) var(--area-ease-out), opacity var(--area-duration-base) var(--area-ease-out); }

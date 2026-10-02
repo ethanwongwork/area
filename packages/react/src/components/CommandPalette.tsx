@@ -36,9 +36,13 @@ export interface CommandPaletteProps extends Omit<HTMLAttributes<HTMLDivElement>
   defaultQuery?: string;
   onQueryChange?: (query: string) => void;
   placeholder?: string;
-  /** Names the palette and its search field. */
+  /** Names the palette and its search field (default "Command palette"). */
+  "aria-label"?: string;
+  /** @deprecated Use `aria-label` (audit D-18). */
   label?: string;
   emptyText?: ReactNode;
+  /** What the live region says for a result count while searching (audit D-29). */
+  resultsLabel?: (count: number) => string;
   /** Replaces the key hints below the list; `false` removes them. */
   footer?: ReactNode | false;
   filter?: (item: CommandItem, query: string) => boolean;
@@ -57,9 +61,10 @@ const isApple = () => typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test
  */
 export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(function CommandPalette(
   { items, open: openProp, defaultOpen = false, onOpenChange, inline, hotkey, query: queryProp, defaultQuery = "",
-    onQueryChange, placeholder = "Search or run a command…", label = "Command palette", emptyText = "No results",
+    onQueryChange, placeholder = "Search or run a command…", "aria-label": ariaLabel, label: labelProp, emptyText = "No results", resultsLabel = (count: number) => `${count} ${count === 1 ? "result" : "results"}`,
     footer, filter = matches, className, ...rest }, ref,
 ) {
+  const label = ariaLabel ?? labelProp ?? "Command palette";
   const id = useId();
   const listId = `${id}-list`;
   const [ownOpen, setOwnOpen] = useState(defaultOpen);
@@ -150,7 +155,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
       {item.icon ? <span className="area-menu__icon" aria-hidden="true">{item.icon}</span> : null}
       <span className="area-menu__text area-command-palette__text">{item.label}</span>
       {item.description ? <span className="area-command-palette__description">{item.description}</span> : null}
-      {item.shortcut ? <span className="area-menu__shortcut"><Kbd keys={item.shortcut} size="small" appearance="quiet" /></span> : null}
+      {item.shortcut ? <span className="area-menu__shortcut"><Kbd keys={item.shortcut} size="sm" variant="quiet" /></span> : null}
     </div>;
   };
   const groups: Array<[string | undefined, CommandItem[]]> = [];
@@ -169,6 +174,8 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
         autoComplete="off" spellCheck={false} placeholder={placeholder} value={query}
         onChange={event => setQuery(event.target.value)} onKeyDown={handleKeyDown} />
     </div>
+    {/* The result count, or the empty text, is announced while a query is typed (audit D-29). */}
+    <span className="area-sr-only" role="status">{query ? (rows.length ? resultsLabel(rows.length) : typeof emptyText === "string" ? emptyText : "") : ""}</span>
     <div ref={listRef} id={listId} role="listbox" aria-label={label} className="area-command-palette__list">
       {rows.length === 0 ? <div className="area-command-palette__empty" role="presentation">{emptyText}</div> : null}
       {groups.map(([group, list], g) => group
@@ -184,15 +191,15 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
             field; keyboard users press the keys themselves, so assistive tech skips the row. */}
         <span className="area-command-palette__hint">
           <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
-            onClick={() => setActive(step(current < 0 ? 0 : current, -1))} disabled={current < 0}><Kbd keys={["up"]} size="small" appearance="quiet" /></button>
+            onClick={() => setActive(step(current < 0 ? 0 : current, -1))} disabled={current < 0}><Kbd keys={["up"]} size="sm" variant="quiet" /></button>
           <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
-            onClick={() => setActive(step(current, 1))} disabled={current < 0}><Kbd keys={["down"]} size="small" appearance="quiet" /></button>
+            onClick={() => setActive(step(current, 1))} disabled={current < 0}><Kbd keys={["down"]} size="sm" variant="quiet" /></button>
           Move
         </span>
         <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
-          onClick={() => run(rows[current])} disabled={current < 0}><Kbd keys={["enter"]} size="small" appearance="quiet" />Open</button>
+          onClick={() => run(rows[current])} disabled={current < 0}><Kbd keys={["enter"]} size="sm" variant="quiet" />Open</button>
         {inline ? null : <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
-          onClick={() => setOpen(false)}><Kbd keys={["esc"]} size="small" appearance="quiet" />Close</button>}
+          onClick={() => setOpen(false)}><Kbd keys={["esc"]} size="sm" variant="quiet" />Close</button>}
       </>}
     </div>}
   </div>;

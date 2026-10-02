@@ -1,9 +1,12 @@
 import { forwardRef, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
+import type { KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { comboboxVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
-import { scrollOptionIntoList } from "./overlay.ts";
+import { scrollOptionIntoList, useAnchoredPosition } from "./overlay.ts";
+import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
 import { Input, InputAction, type InputProps } from "./Input.tsx";
+/** The empty collection, one reference so effects keyed on it stay still. */
+const NO_ITEMS: never[] = [];
 
 export interface ComboboxOption {
   value: string;
@@ -18,11 +21,15 @@ export interface ComboboxOption {
 }
 
 export interface ComboboxProps extends Omit<InputProps, "value" | "defaultValue" | "onChange" | "size" | "trailingAction" | "role"> {
-  options: ComboboxOption[];
+  /** The suggestions. Collections are `items` everywhere (audit H-14). */
+  items?: ComboboxOption[];
+  /** @deprecated Use `items`. */
+  options?: ComboboxOption[];
   /** The selected option's value (controlled). */
   value?: string | null;
   defaultValue?: string | null;
-  onValueChange?: (value: string | null) => void;
+  /** The chosen value, and the event that chose it (absent when a created option resolves later; audit C-7). */
+  onValueChange?: (value: string | null, event?: SyntheticEvent) => void;
   /** The text in the field (controlled). */
   inputValue?: string;
   defaultInputValue?: string;
@@ -49,13 +56,13 @@ type Row = { kind: "option"; option: ComboboxOption } | { kind: "create"; text: 
  * Menu's surface and rows.
  */
 export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Combobox(
-  { options, value, defaultValue = null, onValueChange, inputValue, defaultInputValue, onInputChange,
+  { items, options: legacyOptions, value, defaultValue = null, onValueChange, inputValue, defaultInputValue, onInputChange,
     allowsCustomValue, onCreate, filter = contains, emptyText = "No results", size, toggleLabel = "Show suggestions",
-    fullWidth, disabled, readOnly, className, onKeyDown, onBlur, onFocus, placeholder, name, form, ...rest }, ref,
+    fullWidth, disabled, readOnly, className, style, onKeyDown, onBlur, onFocus, placeholder, name, form, ...rest }, ref,
 ) {
+  const options = items ?? legacyOptions ?? NO_ITEMS;
   const id = useId();
   const listId = `${id}-listbox`;
-  const anchor = `--area-combobox-${id.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const [ownValue, setOwnValue] = useState<string | null>(defaultValue);
   const selected = value !== undefined ? value : ownValue;
   const selectedOption = options.find(option => option.value === selected) ?? null;
@@ -67,15 +74,16 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   const [active, setActive] = useState(-1);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const initial = useRef({ value: defaultValue, text: defaultInputValue ?? selectedOption?.label ?? "" });
 
   const setText = (next: string) => {
     if (inputValue === undefined) setOwnText(next);
     onInputChange?.(next);
   };
-  const choose = (next: ComboboxOption | null) => {
+  const choose = (next: ComboboxOption | null, event?: SyntheticEvent) => {
     if (value === undefined) setOwnValue(next?.value ?? null);
-    onValueChange?.(next?.value ?? null);
+    onValueChange?.(next?.value ?? null, event);
     setText(next?.label ?? "");
   };
   // A form reset returns an uncontrolled combobox to its first value and text (audit B-12).
@@ -124,6 +132,9 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     if (open && !shown) list.showPopover();
     if (!open && shown) list.hidePopover();
   }, [open]);
+  // Menu's engine (audit S16, B-15): flips, shifts, and works without CSS anchor positioning.
+  // The list starts at the field's start, 4 below it, as a menu under its trigger.
+  useAnchoredPosition(rootRef, listRef, open, { side: "bottom", align: "start", offset: MENU_OFFSET, padding: OVERLAY_PADDING });
   useEffect(() => {
     if (!open || active < 0) return;
     scrollOptionIntoList(listRef.current, listRef.current?.querySelector<HTMLElement>(`[data-index="${active}"]`));
@@ -150,19 +161,19 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     const created = options.find(option => option.label === label);
     if (created) { pendingCreate.current = null; choose(created); }
   }, [options]); // eslint-disable-line react-hooks/exhaustive-deps
-  const commitRow = (row: Row | undefined) => {
+  const commitRow = (row: Row | undefined, event?: SyntheticEvent) => {
     if (!row) return;
     if (row.kind === "create") { pendingCreate.current = row.text; onCreate?.(row.text); setText(row.text); }
-    else if (!row.option.disabled) choose(row.option);
+    else if (!row.option.disabled) choose(row.option, event);
     close();
   };
   // Leaving the field: keep custom text if allowed, otherwise show the selection again.
-  const settle = () => {
+  const settle = (event?: SyntheticEvent) => {
     close();
     const exact = options.find(option => option.label.toLocaleLowerCase() === text.trim().toLocaleLowerCase());
-    if (exact) { if (exact.value !== selected) choose(exact); else setText(exact.label); return; }
-    if (allowsCustomValue) { if (selected !== null && text.trim() !== selectedOption?.label) { if (value === undefined) setOwnValue(null); onValueChange?.(null); } return; }
-    if (!text.trim()) { if (selected !== null) choose(null); return; }
+    if (exact) { if (exact.value !== selected) choose(exact, event); else setText(exact.label); return; }
+    if (allowsCustomValue) { if (selected !== null && text.trim() !== selectedOption?.label) { if (value === undefined) setOwnValue(null); onValueChange?.(null, event); } return; }
+    if (!text.trim()) { if (selected !== null) choose(null, event); return; }
     setText(selectedOption?.label ?? "");
   };
 
@@ -178,19 +189,21 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
         break;
       case "ArrowUp":
         event.preventDefault();
-        if (!open) openList(false, "last");
+        // Alt+Up closes the list, keeping the highlighted option if there is one (APG; audit B-31).
+        if (open && event.altKey) { if (active >= 0 && rows[active]?.kind === "option") commitRow(rows[active], event); else close(); }
+        else if (!open) openList(false, "last");
         else setActive(current => step(current < 0 ? 0 : current, -1));
         break;
       case "Enter":
-        if (open && active >= 0) { event.preventDefault(); commitRow(rows[active]); }
-        else if (open) { event.preventDefault(); settle(); }
+        if (open && active >= 0) { event.preventDefault(); commitRow(rows[active], event); }
+        else if (open) { event.preventDefault(); settle(event); }
         break;
       case "Escape":
         if (open) { event.preventDefault(); close(); }
-        else if (text) { event.preventDefault(); setText(""); if (selected !== null) choose(null); }
+        else if (text) { event.preventDefault(); setText(""); if (selected !== null) choose(null, event); }
         break;
       case "Tab":
-        if (open && active >= 0 && rows[active]?.kind === "option") commitRow(rows[active]);
+        if (open && active >= 0 && rows[active]?.kind === "option") commitRow(rows[active], event);
         break;
     }
   };
@@ -204,7 +217,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     if (row.kind === "create") {
       return <div key="__create" id={`${id}-option-${current}`} data-index={current} role="option" aria-selected={false}
         className="area-menu__item area-combobox__option" data-highlighted={highlighted ? "" : undefined}
-        onPointerDown={event => event.preventDefault()} onPointerMove={() => setActive(current)} onClick={() => commitRow(row)}>
+        onPointerDown={event => event.preventDefault()} onPointerMove={() => setActive(current)} onClick={event => commitRow(row, event)}>
         <span className="area-menu__icon" aria-hidden="true"><Glyph name="add" /></span>
         <span className="area-menu__text">Create “{row.text}”</span>
       </div>;
@@ -215,7 +228,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
       aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? "" : undefined} className="area-menu__item area-combobox__option"
       data-highlighted={highlighted ? "" : undefined} data-selected={isSelected ? "" : undefined}
       onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!option.disabled) setActive(current); }}
-      onClick={() => { if (!option.disabled) commitRow(row); }}>
+      onClick={event => { if (!option.disabled) commitRow(row, event); }}>
       {option.icon ? <span className="area-menu__icon" aria-hidden="true">{option.icon}</span> : null}
       <span className="area-menu__text">{option.label}</span>
       {option.description ? <span className="area-combobox__description">{option.description}</span> : null}
@@ -228,7 +241,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     groups.set(key, [...(groups.get(key) ?? []), row]);
   }
 
-  return <div className={comboboxVariants({ fullWidth }, className)} style={{ "--_combobox-anchor": anchor } as CSSProperties}
+  return <div ref={rootRef} className={comboboxVariants({ fullWidth }, className)} style={style}
     data-open={open ? "" : undefined}>
     <Input ref={node => { inputRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
       {...rest} form={form} size={size} fullWidth={fullWidth} disabled={disabled} readOnly={readOnly} placeholder={placeholder}
@@ -237,14 +250,18 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
       onChange={event => { setText(event.target.value); setShowAll(false); if (!open) setOpen(true); setActive(event.target.value.trim() ? 0 : -1); }}
       onKeyDown={handleKeyDown}
       onFocus={onFocus}
-      onBlur={event => { onBlur?.(event); settle(); }}
+      onBlur={event => { onBlur?.(event); settle(event); }}
       trailingAction={<InputAction tabIndex={-1} tooltip={toggleLabel} aria-expanded={open} aria-controls={listId} disabled={disabled || readOnly}
         onPointerDown={event => event.preventDefault()}
         onClick={() => { if (open) close(); else { inputRef.current?.focus(); openList(true, "selected"); } }}
         icon={<Glyph name="chevron-down" />} />} />
     {/* The form gets the option's value, not its label; typed text only where custom values are allowed (audit B-12). */}
     {name ? <input type="hidden" name={name} form={form} disabled={disabled} value={selected ?? (allowsCustomValue ? text : "")} /> : null}
+    {/* "No results" is announced through a status outside the listbox, which may hold only
+        options (audit B-31). */}
+    <span className="area-sr-only" role="status">{open && rows.length === 0 ? emptyText : ""}</span>
     <div ref={listRef} id={listId} role="listbox" aria-label={typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined}
+      aria-labelledby={typeof rest["aria-label"] === "string" ? undefined : rest["aria-labelledby"]}
       popover="manual" className="area-menu area-combobox__listbox" tabIndex={-1}>
       {rows.length === 0 ? <div className="area-combobox__empty" role="presentation">{emptyText}</div> : null}
       {[...groups].map(([group, list]) => group

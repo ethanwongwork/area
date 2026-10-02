@@ -29,20 +29,21 @@ Popover (opened by a click, may hold a form).
 |---|---|---|---|
 | github | design-system reference (Primer hovercard) | user hovercard on a public commit list, timed in headless Edge with a real pointer: opens ≈ 750 ms after the pointer arrives (includes loading), closes ≈ 115 ms after it leaves; card 360 wide, radius 6, starts 20 before its link, 12 from it | github.com/nodejs/node/commits/main, 2026-09-26 |
 | radix | design-system source | HoverCard defaults: openDelay 700, closeDelay 300; no focus trap; touch ignored | radix-ui.com/primitives/docs/components/hover-card |
-| area | peer | Popover: 320 wide, 4 from its anchor, slots | popover.md |
+| area | peer | Popover: 320 wide, 8 from its anchor (4 before audit S16), slots | popover.md |
 
 ## Decisions
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| open delay | 700 ms | Radix 700; GitHub ≈ 750 | — |
-| close delay | 300 ms, cancelled while the pointer is on the card | Radix 300 | GitHub's 115 gives too little time to cross onto the card |
-| surface, width, offset | Popover: 320, 4 from the link | popover.md | GitHub 360 and 12 (its caret) |
-| alignment | the card starts at the link's start; flips on both axes | GitHub starts its card at the link | Popover centres, which pinned edge links' cards to the viewport |
+| open delay | 700 ms (`delay`; `openDelay` a deprecated alias) | Radix 700; GitHub ≈ 750 | — |
+| close delay | 300 ms (`closeDelay`), cancelled while the pointer is on the card | Radix 300 | GitHub's 115 gives too little time to cross onto the card |
+| surface, width, offset | Popover: 320, 8 from the link (`offset`, default `POPOVER_OFFSET`) | popover.md; audit S16, E-5 A (owner 2026-09-30) | GitHub 360 and 12 (its caret). Was 4 |
+| alignment | the card starts at the link's start (`align`, default start); flips and shifts, via the shared JS engine (`useAnchoredPosition`), which writes `data-side` and `transform-origin` | GitHub starts its card at the link; audit S16 | Popover centres, which pinned edge links' cards to the viewport. The `.area-popover-anchor` wrapper and its CSS anchor rules are gone |
 | identity row | avatar, then name (Popover title) over a muted handle, 12 apart | people cards (GitHub, Notion) | — |
 | meta | 12/16 muted facts, 12 apart | caption role | — |
-| touch | never opens (`hover: none` hides it) | Radix | the link is followed instead |
-| keyboard | opens on focus-visible after the delay; Escape and blur close | Radix | — |
+| pointer | a mouse or pen opens after the delay; touch never opens (`hover: none` hides it) | Radix; shared `useHoverIntent` (audit E-18 A, owner 2026-09-30) | the link is followed instead on touch |
+| keyboard | opens at once on `:focus-visible`; blur closes at once; Escape closes in one capture-phase handler on `window` that consumes the event, so a Popover or Dialog underneath stays open (overlay.ts:108-145) | Tooltip's rule, audit E-18 A (owner 2026-09-30) | Radix waits the delay; Area did too (700ms) until audit E-18 |
+| state | `open` / `defaultOpen` (shared `useOpenState`); `onOpenChange` fires only on real changes | audit S17 (API vocabulary, slice 1, 2026-09-30) | — |
 | semantics | no role and no `aria-describedby` on the link | Radix: supplemental | a whole card read as a link's description is noise |
 
 **Server rendering.** The card renders next to its link and holds block content (Popover's
@@ -73,3 +74,7 @@ description size across Popover, Card, Dialog and Hover card.
   it; closes 333 ms after the pointer leaves both; Tab to the link opens it; Escape closes.
 - React test: anchor, manual popover, no added semantics.
 - Unverified: dark theme, screen readers (by design the card is not announced).
+
+## Feedback log
+
+- 2026-10-01 · audit E-18 (owner pick A) → hover intent shared with Tooltip (`useHoverIntent`): keyboard focus opens at once (was after 700ms), blur closes at once, one consuming capture-phase Escape; mouse and pen open after the delay, touch never → overlay.ts:108-145, HoverCard.tsx:46-74.

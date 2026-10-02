@@ -430,6 +430,13 @@ glyphs:
 At 12px the scaled line is 0.84px against Fluent's 1px 12px cut. Composer's send arrow
 and the icons that demos pass in (folders, files) are still Fluent.
 
+2026-09-30 (audit S16, S18): PACKAGE_GLYPHS now also exports `stop` (Composer's Stop) and
+`more` (ToolbarOverflow's trigger, the dots of more-horizontal). The generator accepts stroked
+paths and rects, or filled circles alone, and writes a `glyphPaint` map to `glyphs.ts`:
+`solid` glyphs (stop) also fill inside the centre-line, as the filled variant's solid role;
+`fill` glyphs (more) are filled with no stroke, so the dots keep their drawn radius.
+`Glyph.tsx` paints by that map; every other glyph stays a stroked line.
+
 **Sixth pass, same day: status marks and arrow.**
 - The lint now holds status marks to every rule except keylines (grid, lattice, gaps,
   counters).
