@@ -951,6 +951,59 @@
       "icons": {
         "folder-zip": "review"
       }
+    },
+    {
+      "id": "batch-65",
+      "title": "Batch 65 · Build queue",
+      "note": "The build queue items that most icon systems share: binary, goal, radar, broom, chat-question, file-diff, plug-off.",
+      "icons": {
+        "file-diff": "review",
+        "chat-question": "review",
+        "plug-off": "review",
+        "binary": "review",
+        "goal": "review",
+        "radar": "review",
+        "broom": "review"
+      }
+    },
+    {
+      "id": "batch-66",
+      "title": "Batch 66 · Build next",
+      "note": "The audit's build-next list (docs/research/icon-audit/relevance-2026-10-02.md): concepts 4 or 5 of Fluent, Lucide, Phosphor, Hugeicons and SF Symbols share.",
+      "icons": {
+        "pencil-off": "review",
+        "zap-off": "review",
+        "location-off": "review",
+        "chat-off": "review",
+        "screen-share-off": "review",
+        "bookmark-off": "review",
+        "heart-off": "review",
+        "flag-off": "review",
+        "bluetooth-off": "review",
+        "cloud-alert": "review",
+        "clock-alert": "review",
+        "shield-user": "review",
+        "shield-x": "review",
+        "shield-plus": "review",
+        "mail-plus": "review",
+        "person-x": "review",
+        "person-key": "review",
+        "file-cog": "review",
+        "file-download": "review",
+        "password": "review",
+        "volume-low": "review",
+        "merge": "review",
+        "duplicate": "review",
+        "toggle-off": "review",
+        "share-nodes": "review",
+        "git-fork": "review",
+        "git-compare": "review",
+        "bluetooth-connected": "review",
+        "playlist": "review",
+        "chart-bar-horizontal": "review",
+        "equal": "review",
+        "person-square": "review"
+      }
     }
   ]
 }

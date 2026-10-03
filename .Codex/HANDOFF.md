@@ -56,6 +56,20 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Verifying in the hidden browser pane: rAF and ResizeObserver don't run while the pane is
   hidden; take a screenshot to force a frame before reading scales.
 
+## Disclosure (2026-10-02, branch `claude/disclosure`): in review
+
+- New family: `Disclosure` (plain = Notion toggle: leading chevron in a line-height square, title
+  column, chevron hover plate; divided = shadcn accordion: trailing chevron, rule between items,
+  underline hover) and `DisclosureGroup` (single open by default, `multiple`, `value` /
+  `defaultValue` / `onValueChange`, headings at level 3, regions named by triggers). Sizes sm
+  14/20 and md 16/24 (default, Notion). Closed content is `hidden="until-found"`.
+- Evidence: `captures/disclosure/` (Notion toggle, ChatGPT sidebar section, 10 Area tiles), Figma
+  from `captures/panel/`, shadcn source @ 295a1f1. Spec `docs/specs/disclosure.md`; cohesion
+  audit fifth pass. Open for the owner: a filled caret for plain (Notion's) vs Area's outline
+  chevron. Unverified: product dark, rendered shadcn, on-screen dark paint.
+- Capture tip: on localhost pages post captures to a local relay with `fetch`; product pages
+  still need the clipboard button (a full-viewport button catches the click wherever it lands).
+
 ## Compact pass: tokens, rows and floating surfaces (2026-10-01, branch `claude/family-compact-pass-150bc8`, PR #36; merged with main's phases 6–7)
 
 - Owner: compact is a proportional step-down of the whole set (`data-area-ui="compact"`), UI type
@@ -138,6 +152,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   differences. Gallery sweep: only sub-pixel rounding plus the intended Select and Slider changes.
   Composer autosize fixed: native field-sizing, script fallback (refits across density switches). Figma
   pages stall the extension when the Chrome window is hidden: ask the owner to bring it forward.
+- Chat code block (2026-10-02): GitHub Copilot, one throwaway chat (owner OK). Corner 12 matches
+  Area's default; Copilot is 14px default density, so compact still rests on Figma Dev Mode. No change.
+  Still open: a dense chat code block (Cursor needs an agent run) and Cursor's dark tooltip.
 
 ## Start here (next session)
 
@@ -443,7 +460,7 @@ JSON (session "this branch (phase 7)"), with `note` on anything left partly done
   open L; "a gap is information, never style" (flat slash in the outline, shapes cross whole, no
   stylistic openings); dots by role (⌀1.5 detail, ⌀2 mark, ⌀3 badge); aliases (`data-alias-of`);
   `pin` renamed `location`. Batches 62 and 63 (coverage rounds 1 and 2, 35 + 42 icons) recorded;
-  every priority and secondary gap from the audit's coverage list is drawn (folder-zip as batch 64, Fluent's zip, branch `claude/icon-work-867413`; blocks as four equal blocks, image family re-laid (sun dot top right), basket redrawn, chip on x.5, knockouts exit square at edges (generator), slivers removed set-wide (`slivers.mjs`); cleanup round and owner picks in the spec, sheets 20–31; open items: the 2026-10-02 README). Tools: `--parts` drift report, `sheets.mjs` explainers. Review
+  every priority and secondary gap from the audit's coverage list is drawn (folder-zip as batch 64, Fluent's zip, branch `claude/icon-work-867413`, redrawn closer to Fluent on `claude/icon-work-b0302f`; there too: the four open items (file-code, vault, circuit-board, call-end; sheet 33) batch 65 (7 kept of the build queue after the owner cut the niche ones, sheet 34), the cross-library relevance audit (`docs/research/icon-audit/relevance-2026-10-02.md`, all 5 systems; owner: judge by use, keep the niche list) and batch 66, its 32 build-next icons (sheet 38); then the size-curve fix for filled icons (`filledUniform`) and the mark pass over every +, ×, ✓, !, ?, dot, slash and arrow (15 icons fixed, spec "Mark pass", sheets 39a–b); blocks as four equal blocks, image family re-laid (sun dot top right), basket redrawn, chip on x.5, knockouts exit square at edges (generator), slivers removed set-wide (`slivers.mjs`); cleanup round and owner picks in the spec, sheets 20–31; open items: the 2026-10-02 README). Tools: `--parts` drift report, `sheets.mjs` explainers. Review
   sheets and open decisions: `docs/research/icon-review/2026-10-02/README.md`; rules write-up
   `cursor-rules.md` there.
   Filled is "more ink, never a negative" (skill). Reference sheets: `icon-refs.mjs` (SF Symbols
