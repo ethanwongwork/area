@@ -389,17 +389,38 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     if (filled === "cut") {
       // Extend both ends 2px along their first and last straight segments so the gap exits
       // the silhouette instead of ending in a rounded notch inside it.
-      const parsed = tag === "path" ? parsePath(name, a.d) : null;
-      const first = parsed?.segments[0], last = parsed?.segments.at(-1);
-      const [sx, sy] = parsed?.points[0] ?? [], [ex, ey] = parsed?.points.at(-1) ?? [];
-      if (!first || first[0] !== sx || first[1] !== sy || last[2] !== ex || last[3] !== ey) fail(name, "a cut must be a path that starts and ends with straight segments");
-      else {
-        const ext = ([x1, y1, x2, y2], [px, py]) => { const l = Math.hypot(x2 - x1, y2 - y1); return [px + (px === x1 && py === y1 ? -1 : 1) * 2 * (x2 - x1) / l, py + (px === x1 && py === y1 ? -1 : 1) * 2 * (y2 - y1) / l].map(v => Number(v.toFixed(3))); };
+      // Each subpath is its own cut (a book's two bands), so each is extended at both ends.
+      const ext = ([x1, y1, x2, y2], [px, py]) => { const l = Math.hypot(x2 - x1, y2 - y1); return [px + (px === x1 && py === y1 ? -1 : 1) * 2 * (x2 - x1) / l, py + (px === x1 && py === y1 ? -1 : 1) * 2 * (y2 - y1) / l].map(v => Number(v.toFixed(3))); };
+      const subs = tag === "path" ? a.d.split(/(?=M)/).filter(d => d.trim()) : [];
+      const parts = subs.map(d => {
+        const parsed = parsePath(name, d);
+        const first = parsed.segments[0], last = parsed.segments.at(-1);
+        const [sx, sy] = parsed.points[0] ?? [], [ex, ey] = parsed.points.at(-1) ?? [];
+        if (!first || first[0] !== sx || first[1] !== sy || last[2] !== ex || last[3] !== ey) return null;
         const [ax, ay] = ext(first, [sx, sy]), [bx, by] = ext(last, [ex, ey]);
-        cutD = `M${ax} ${ay}L${a.d.replace(/^M/, "")}L${bx} ${by}`;
-      }
+        return `M${ax} ${ay}L${d.trim().replace(/^M/, "")}L${bx} ${by}`;
+      });
+      if (!parts.length || parts.includes(null)) fail(name, "a cut must be a path that starts and ends with straight segments");
+      else cutD = parts.join("");
     }
     elements.push({ tag, attrs: rest, stroked, samples, rings, filled, cutD });
+  }
+  // A knockout that reaches a solid's edge runs out through it, square, as a cut does: its
+  // round cap would leave a rounded notch in the silhouette (owner, 2026-10-02). Free ends
+  // inside the solid keep their round caps, matching the outline's line ends.
+  const solidSamples = elements.filter(el => SOLID_ROLES.includes(el.filled)).flatMap(el => el.samples ?? []);
+  for (const el of elements) {
+    if (el.filled !== "knockout" || el.tag !== "path") continue;
+    const ends = [];
+    for (const sub of el.attrs.d.split(/(?=M)/).filter(s => s.trim())) {
+      const { segments: segs = [], points: pts = [] } = parsePath(name, sub);
+      const first = segs[0], last = segs.at(-1), start = pts[0], end = pts.at(-1);
+      const out = (s, p, back) => { const l = Math.hypot(s[2] - s[0], s[3] - s[1]), k = back ? -1 : 1; return [p[0] + k * (s[2] - s[0]) / l, p[1] + k * (s[3] - s[1]) / l].map(v => Number(v.toFixed(3))); };
+      const onEdge = p => solidSamples.some(([x, y]) => Math.hypot(x - p[0], y - p[1]) < 0.15);
+      if (first && start && first[0] === start[0] && first[1] === start[1] && onEdge(start)) ends.push(`M${start[0]} ${start[1]}L${out(first, start, true).join(" ")}`);
+      if (last && end && last[2] === end[0] && last[3] === end[1] && onEdge(end)) ends.push(`M${end[0]} ${end[1]}L${out(last, end, false).join(" ")}`);
+    }
+    if (ends.length) el.exitD = ends.join("");
   }
   if (!elements.length) fail(name, "no shapes found");
   if (elements.some(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)) && !elements.some(el => SOLID_ROLES.includes(el.filled))) fail(name, "cut-outs need at least one solid shape to cut");
@@ -596,7 +617,8 @@ const filledBody = icon => {
     el.filled === "halo" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_HALO })
     : el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
     : el.filled === "hole" ? jsx(el, { attrs: { fill: "black" }, stroke: false })
-    : jsx(el, { attrs: { fill: "none", ...(el.cutD ? { d: el.cutD } : {}) }, stroke: true, color: "black", strokeStyle: STROKE_CUT }));
+    : jsx(el, { attrs: { fill: "none", ...(el.cutD ? { d: el.cutD } : {}) }, stroke: true, color: "black", strokeStyle: STROKE_CUT }))
+    .concat(icon.elements.filter(el => el.exitD).map(el => jsx({ tag: "path", attrs: { d: el.exitD } }, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_CUT })));
   // Unmarked strokes beside solids stay strokes at the icon weight: the solids carry the
   // emphasis, so the lines keep the outline's exact length and gaps (Fluent's filled cuts).
   const plain = icon.elements.filter(el => !el.filled).map(el => jsx(el));

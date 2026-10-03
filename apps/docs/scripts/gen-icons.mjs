@@ -693,6 +693,8 @@ const MAP = {
   FluentRefNotebookFilledIcon: "notebook_16_filled",
   FluentRefPentagonIcon: "pentagon_20_regular",
   FluentRefPentagonFilledIcon: "pentagon_20_filled",
+  FluentRefFolderZipIcon: "folder_zip_16_regular",
+  FluentRefFolderZipFilledIcon: "folder_zip_16_filled",
   // icon-batch.mjs adds Fluent references for new batches above this line.
   FluentRefDatabaseIcon: "database_16_regular",
   FluentRefDatabaseFilledIcon: "database_16_filled",
