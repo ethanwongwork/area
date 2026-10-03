@@ -87,6 +87,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   differences. Gallery sweep: only sub-pixel rounding plus the intended Select and Slider changes.
   Composer autosize fixed: native field-sizing, script fallback (refits across density switches). Figma
   pages stall the extension when the Chrome window is hidden: ask the owner to bring it forward.
+- Chat code block (2026-10-02): GitHub Copilot, one throwaway chat (owner OK). Corner 12 matches
+  Area's default; Copilot is 14px default density, so compact still rests on Figma Dev Mode. No change.
+  Still open: a dense chat code block (Cursor needs an agent run) and Cursor's dark tooltip.
 
 ## Start here (next session)
 
