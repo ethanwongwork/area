@@ -52,6 +52,9 @@
   }
   .area-composer--stacked .area-composer__input { min-block-size: calc(var(--_composer-leading) * 2 + var(--area-space-12)); }
   .area-composer__input { max-block-size: calc(var(--area-control-md) * 5); }
+  /* Native fit to the text, within the min and max above; follows font and density changes at
+     runtime. Composer.tsx measures only where this is unsupported. */
+  @supports (field-sizing: content) { .area-composer__input { field-sizing: content; } }
   .area-composer__input::placeholder { color: var(--area-input-placeholder); }
   .area-composer__actions, .area-composer__footer { display: flex; align-items: center; gap: var(--_composer-gap); min-inline-size: 0; }
   /* The action slots are fieldsets, so a disabled composer disables them natively (audit G-14). */

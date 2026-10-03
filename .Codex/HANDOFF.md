@@ -85,7 +85,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   derived padding); inset rule rounds to whole pixels (`--_inset-start/end`); Badge joined the
   shared rule (text side reserves a 4px box: h/2 - 2; dot/icon/media use their boxes) with 0 pixel
   differences. Gallery sweep: only sub-pixel rounding plus the intended Select and Slider changes.
-  Known: Composer autosize keeps its default-density height after a runtime density switch. Figma
+  Composer autosize fixed: native field-sizing, script fallback (refits across density switches). Figma
   pages stall the extension when the Chrome window is hidden: ask the owner to bring it forward.
 
 ## Start here (next session)
