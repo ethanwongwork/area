@@ -108,5 +108,11 @@ sits on the IDE side; the Agents window is closer to Area default.
   without fill or border, corner 5, code 8 from the top, line-number gutter 21 (4 each side),
   text column 29, code 11/18 Roboto Mono. Area compact code block: inset 8, corner 8. The 8
   inset agrees; corner follows Area's radius rule. No change; no capture saved (a locked view).
+- **Chat code block (GitHub Copilot, 2026-10-02):** one throwaway chat, created with the owner's
+  permission (Cursor web and Copilot had none). Corner 12, 1px edge, header 41 (16 / 24 sides),
+  code 14/20.3, sides 24, top 12. Copilot is a 14px default-density UI, so this confirms Area's
+  default corner 12 and says nothing new for compact. No change.
+  `captures/code-block/github-copilot--chat-code-block--rest--light`.
 - **Still unmeasured:** a chat code block in a dense product (VS Code's Markdown preview renders
-  in a cross-origin webview the capture script cannot read), the dark tooltip.
+  in a cross-origin webview the capture script cannot read; Cursor's chat needs an agent run),
+  the Cursor dark tooltip.
