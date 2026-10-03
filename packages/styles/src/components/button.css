@@ -21,7 +21,6 @@
   .area-button {
     /* Tier: everything dimensional, resolved from the density axis. */
     --_height: var(--area-control-md);
-    --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
@@ -64,7 +63,6 @@
     gap: var(--_gap);
 
     block-size: var(--_height);
-    padding-inline: var(--_gutter);
     /* A required control edge: stroke width, which the Surface axis never zeroes (audit H-3). */
     border: var(--area-stroke-width) solid var(--_border);
     /*
@@ -430,7 +428,6 @@
   .area-button--sm {
     --_height: var(--area-control-sm);
     --_radius: var(--area-radius-control-sm);
-    --_gutter: var(--area-gutter-sm);
     --_icon: var(--area-icon-sm);
     --_gap: var(--area-gap-sm);
     --_text: var(--area-control-sm-text);
@@ -440,7 +437,6 @@
   .area-button--md {
     --_height: var(--area-control-md);
     --_radius: var(--area-radius-control-md);
-    --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
     --_gap: var(--area-gap-md); /* Notion 6 at 28 and 32; Tree view 6 */
     --_text: var(--area-control-md-text);
@@ -450,7 +446,6 @@
   .area-button--lg {
     --_height: var(--area-control-lg);
     --_radius: var(--area-radius-control-lg);
-    --_gutter: var(--area-gutter-lg);
     --_icon: var(--area-icon-lg);
     --_gap: var(--area-gap-lg); /* Untitled lg 6 */
     --_text: var(--area-control-lg-text);

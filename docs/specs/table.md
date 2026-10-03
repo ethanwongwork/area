@@ -72,7 +72,7 @@ area  div.area-table-wrapper  1px border-divider, radius 12, bg-surface, overflo
     .area-table__cell--fit      shrink-to-fit control column
 ```
 
-Inset: cell = `--_cell-inset` (4 / 8 / 12) block, `gutter-md` 12 inline; the wrapper border
+Inset: cell = `--_cell-inset` (4 / 8 / 12) block, 12 inline (compact 8, a literal since the `gutter-*` tokens were removed 2026-10-02); the wrapper border
 is outside the table, so the first column's text sits 1 + 12 = 13 from the wrapper edge.
 Row height md = 8 + 20 + 8 + 1 divider = 37 (Notion 36 + hairline = 36.55).
 
@@ -116,7 +116,7 @@ table with shared row plates ([cohesion audit](../research/cohesion-audit.md#thi
    apart by its muted ink alone (`notion--header-row--rest`). Area keeps the bordered,
    rounded wrapper with a `bg-subtle` header, as Untitled does.
 2. Inline cell inset. Notion pads cells 8 inline (`notion--body-row--rest` node 9); Area
-   keeps `gutter-md` 12.
+   keeps 12 (compact 8).
 3. Hover. Notion's hovered row gains no fill; it reveals a row checkbox (opacity 0 → 0.7)
    and per-cell "open" chips (`notion--body-row--hover` nodes 4, 11). Area's opt-in
    `interactive` rows keep the shared hover plate.

@@ -11,7 +11,7 @@ const css = readFileSync(new URL("../../styles/dist/area.css", import.meta.url),
 test("a nested Nav group steps its rows in by Tree view's level (audit D-20)", () => {
   assert.match(renderToString(h(NavGroup, { nested: true })), /class="area-nav__group area-nav__group--nested"/);
   assert.match(css, /\.area-nav__group--nested \{\s*--_nav-indent: calc\(var\(--area-icon-md\) \+ 6px\);/);
-  assert.match(css, /\.area-nav__group--nested \.area-nav__item \{ padding-inline-start: calc\(max\(0px, calc\(\(var\(--_box-height\) - var\(--_box-start\)\) \/ 2 - var\(--_box-border\)\)\) \+ var\(--_nav-indent\)\); \}/);
+  assert.match(css, /\.area-nav__group--nested \.area-nav__item \{ padding-inline-start: calc\(var\(--_inset-start\) \+ var\(--_nav-indent\)\); \}/);
 });
 
 test("Calendar draws its floating plate by default; plain drops it (audit F-21)", () => {

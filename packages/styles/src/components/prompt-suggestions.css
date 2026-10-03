@@ -25,8 +25,10 @@
     gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12: compact's placeholder is at 6 + 28 + 6 + 8 = 48 */
     flex: 1;
     min-inline-size: 0;
-    /* spec: the composer's height: 16/24 text and 12 above and below (ChatGPT 52 on 26 leading). */
-    min-block-size: calc(var(--area-text-md-leading) + var(--area-space-12) * 2);
+    /* spec: the composer's height: 16/24 text and 12 above and below (ChatGPT 52 on 26 leading).
+       Compact 14/20 and 10, so the row stays the compact composer's 40 (was 44; Cursor's
+       follow-up composer 42, dense list rows 28-36; cursor-desktop.md, 2026-10-02). */
+    min-block-size: calc(var(--area-text-md-leading) + (var(--area-space-12) - var(--area-space-2) * var(--area-ui-dense)) * 2);
     padding-block: 0;
     /* spec: 8 in, like ChatGPT; the end leaves room for the dismiss, a small Button 8 in (audit G-18). */
     padding-inline: var(--area-space-8) calc(var(--area-control-sm) + var(--area-space-8));

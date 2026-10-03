@@ -1062,7 +1062,7 @@ const starterPrompts = [
 export const GalleryPromptSuggestions = () => {
   const [draft, setDraft] = useState("");
   const [list, setList] = useState(starterPrompts);
-  return <div style={{ display: "grid", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
+  return <div style={{ display: "grid", gap: "calc(var(--area-space-24) - var(--area-space-8) * var(--area-ui-dense))", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
     <Composer value={draft} onValueChange={setDraft} placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />} />
     {draft ? null : <PromptSuggestions items={list} onSelect={item => setDraft(item.label)} onDismiss={item => setList(rows => rows.filter(row => row.id !== item.id))} />}
   </div>;
@@ -1070,7 +1070,7 @@ export const GalleryPromptSuggestions = () => {
 export const GalleryPromptSuggestionsPlain = () => <PromptSuggestions items={starterPrompts.map(({ icon: _icon, ...rest }) => rest)} />;
 export const GalleryPromptSuggestionsChips = () => {
   const [draft, setDraft] = useState("");
-  return <div style={{ display: "grid", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
+  return <div style={{ display: "grid", gap: "calc(var(--area-space-24) - var(--area-space-8) * var(--area-ui-dense))", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
     <Composer value={draft} onValueChange={setDraft} placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />} />
     {draft ? null : <PromptSuggestions layout="chips" items={[
       { id: "one", label: "Item one", icon: <DocumentIcon /> },

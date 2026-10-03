@@ -45,7 +45,7 @@ ${css}
     border: var(--area-border-width) solid var(--area-border);
     background: var(--area-bg-component);
     color: var(--area-fg-default);
-    padding: 0 var(--area-gutter-md);
+    padding: 0 var(--area-space-12);
     display: inline-flex; align-items: center; gap: var(--area-gap-md);
     box-shadow: var(--area-shadow-2);
     transition: var(--area-transition);
@@ -90,7 +90,6 @@ window.areaProbe = function (el) {
     controlMd: v("--area-control-md"),
     radiusControl: v("--area-radius-control"),
     radiusContainer: v("--area-radius-container"),
-    gutterMd: v("--area-gutter-md"),
     textMdSize: v("--area-text-md-size"),
     fontSans: v("--area-font-sans").slice(0, 24),
     bgPage: color("--area-bg-page"),
