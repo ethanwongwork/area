@@ -32,6 +32,26 @@ the data disagrees with what ships.
 | Pick only | 4 | Owner pick with no capture |
 | Measured elsewhere | 1 | Calendar day 28 from Notion (a default-density product) |
 
+### Reclassified after the Cursor and Figma pass (2026-10-02, `cursor-web.md`, `cursor-desktop.md`)
+
+| # | Value | Was | Now | Evidence | Ships |
+|---|---|---|---|---|---|
+| 1, 2 | control-xs height · gutter | Rule | Measured | Cursor Settings buttons 20, sides 6 | 20 · 6 |
+| 31 | radius-control-xs | Rule | Measured, applied | Cursor 20px buttons 4; VS Code 22px 4 | 3 → 4 |
+| 9, 10, 33 | control-md height · gutter · corner | Rule / Measured | Measured | Cursor web buttons and fields 28, 8, 6 | 28 · 8 · 6 |
+| 19, 44 | gap-row · label column | Rule | Measured | Cursor desktop menu label column 32 | 8 · 32 |
+| 42 | Menu separator | Conflict | Measured, applied | VS Code 5, Cursor web 5, Cursor desktop 6, Figma 7 | 6 / 1 / 6, compact 5 / 1 / 5 |
+| 47, 48 | Palette search row · row corner | Rule | Measured | Cursor web 40; rows 4 in an 8 shell | 40 · 4 |
+| 52 | Popover inset | Conflict | Measured, applied | Cursor popover 16; Figma Edit text style 16, color picker 16 | 12 held; corner 12 |
+| 62–64 | Toast sides · block · gap | Rule | Measured | vscode.dev toast: corner 8, icon 9 / 7 | 8 · 8, corner 8 |
+| 65, 66 | Dialog inset · corner | Pick / Conflict | Measured, applied | Figma Share dialog 16 sides, corner 13 | 16 · 16 |
+| 86–88 | Card text column | Rule | Measured | Cursor Settings card 12 | 12 (corner 18 by rule; Cursor 12) |
+| 105 | Code block inset | Rule | Measured | Figma Dev Mode code panel 8 (values read, no capture) | 8 |
+| — | Prompt suggestion row height | Rule (stale) | Rule fixed | compact composer 40 | 44 → 40 |
+
+Still rule-only after this pass: the one-rung gaps (R11, kept), composer insets (Cursor brackets
+them), table cell padding (Cursor 10 sides against 8), titles (R12).
+
 ## What the data says, system-wide
 
 1. **Heights shrink everywhere** (antd 32 → 28, Material and Spectrum 40 → 32; table rows −15 to
@@ -69,9 +89,9 @@ the Figma dialog and sectioned popover in the owner's Chrome next session.
 | R5 | Color picker body inset | 16 → 12 | Figma color picker 16 | **hold 16** | High |
 | R6 | `control-xl` / `gutter-xl` | 48 / 16 → 36 / 14 | none; off the ladder and the 4px grid | **40 / 12** (one rung: compact xl = default lg). Token ladder only: no component reads the xl height today (Calendar's week numbers read its text, unchanged) | High |
 | R7 | Menu row gap | 2 → 2 | VS Code 0, Figma 0 | **0 at compact**: new role `ui-row-gap` (2 / 0) in Menu, Nav, Tree view, Command palette, Combobox; separator keeps 4 / 1 / 4 | Medium |
-| R8 | Dialog inset · corner | 16 · 16 → 16 · 16 | VS Code save dialog: content 13 / 21, actions 9, corner 8; antd 24 → 16; Material holds 24 | **inset 12, corner 12** (the compact close sits 6 in at radius 6: 12 concentric; VS Code 8) | Medium |
-| R9 | Popover inset | 12 → 8 | VS Code editor hover 8 + 1 sides; antd and Spectrum hold; Figma color picker 16 | **keep 8** (VS Code hover is the closest surface) | Medium |
-| R10 | Menu separator | 4 / 1 / 4 | VS Code 5 / 1 / 5, Figma 7 / 1 / 7 | **keep** (both products are larger than Area at default too; a default change, not a compact one) | Low |
+| R8 | Dialog inset · corner (superseded 2026-10-02: 16 · 16, `cursor-desktop.md`) | 16 · 16 → 16 · 16 | VS Code save dialog: content 13 / 21, actions 9, corner 8; antd 24 → 16; Material holds 24 | **inset 12, corner 12** (the compact close sits 6 in at radius 6: 12 concentric; VS Code 8) | Medium |
+| R9 | Popover inset (superseded 2026-10-02: 12 held, `cursor-desktop.md`) | 12 → 8 | VS Code editor hover 8 + 1 sides; antd and Spectrum hold; Figma color picker 16 | **keep 8** (VS Code hover is the closest surface) | Medium |
+| R10 | Menu separator (superseded 2026-10-02: 6 / 1 / 6, compact 5 / 1 / 5, `cursor-desktop.md`) | 4 / 1 / 4 | VS Code 5 / 1 / 5, Figma 7 / 1 / 7 | **keep** (both products are larger than Area at default too; a default change, not a compact one) | Low |
 | R11 | One-rung spacing (≈47 gaps) | e.g. 8 → 6, 16 → 12 | systems split; products bracket 4–8 | **keep**, re-check against a Cursor capture | Low |
 | R12 | Titles hold 16/24 | held | Material holds type; antd shrinks headings | **keep** | Medium |
 
@@ -82,6 +102,6 @@ the capture (header padding only); the top table's Toast "6 × 8, 28 tall" was s
 
 ## Still unmeasured
 
-Cursor itself (desktop app; chat panel, composer, code block, menus), a Figma dialog and a Figma
-popover with sections (the owner's Chrome did not open them from the file browser), a dense card,
-a dense toast with actions.
+Measured since (2026-10-02): Cursor web (`cursor-web.md`), the Cursor desktop Agents and IDE
+windows, the Figma Share dialog and a sectioned Figma popover (`cursor-desktop.md`). Still open:
+a chat code block, a dense toast with actions (Cursor Dark measured: `cursor-desktop.md`).

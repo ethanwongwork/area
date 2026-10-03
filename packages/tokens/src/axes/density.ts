@@ -1,5 +1,6 @@
 /**
- * Density: control heights, their internal gutters, icon sizes, and gaps.
+ * Density: control heights, icon sizes, and gaps. A control's horizontal padding is not a
+ * token: inset.css derives it from the height and what the side holds (text cap or icon box).
  *
  * The default tier is 32px. That is the most common default across every system measured:
  * GitHub Primer's `--control-medium-size`, OpenAI's `--control-size-md`, and Notion's own
@@ -16,8 +17,6 @@ export type Tier = "xs" | "sm" | "md" | "lg" | "xl";
 /** One tier of the control ladder. */
 interface TierSpec {
   height: number;
-  /** Horizontal padding inside the control. */
-  gutter: number;
   /** Inline icon size. */
   icon: number;
   /** Gap between icon and label. */
@@ -73,7 +72,6 @@ export function densityTokens(tiers: Record<Tier, TierSpec>, roles: DensityRoles
   const out: Record<string, string | number> = {};
   for (const [name, tier] of Object.entries(tiers)) {
     out[`control-${name}`] = `${tier.height}px`;
-    out[`gutter-${name}`] = `${tier.gutter}px`;
     out[`icon-${name}`] = `${tier.icon}px`;
     out[`gap-${name}`] = `${tier.gap}px`;
     // Straight to the primitive ramp, not through a composite. The chrome scale needs a
@@ -135,14 +133,14 @@ export function densityTokens(tiers: Record<Tier, TierSpec>, roles: DensityRoles
  * compact sm keep 4. Layout spacing never reads these tokens.
  */
 export const DEFAULT_TIERS: Record<Tier, TierSpec> = {
-  xs: { height: 24, gutter: 8, icon: 12, gap: 4, size: 12, leading: 16 },
+  xs: { height: 24, icon: 12, gap: 4, size: 12, leading: 16 },
   // Small controls keep the UI size, 14/20: Notion's 28px buttons set 14px, and the tiers
   // differ by height, not by shrinking the label. 12px belongs to xs and to compact density
   // (docs/specs/button.md, owner 2026-09-26; supersedes the 2026-09-25 caption pairing).
-  sm: { height: 28, gutter: 8, icon: 16, gap: 6, size: 14, leading: 20 },
-  md: { height: 32, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
-  lg: { height: 40, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
-  xl: { height: 48, gutter: 16, icon: 24, gap: 8, size: 16, leading: 24 },
+  sm: { height: 28, icon: 16, gap: 6, size: 14, leading: 20 },
+  md: { height: 32, icon: 16, gap: 6, size: 14, leading: 20 },
+  lg: { height: 40, icon: 16, gap: 6, size: 14, leading: 20 },
+  xl: { height: 48, icon: 24, gap: 8, size: 16, leading: 24 },
 };
 
 /**
@@ -156,11 +154,11 @@ export const DEFAULT_TIERS: Record<Tier, TierSpec> = {
  * Content type remains on the independent typography axis.
  */
 export const COMPACT_TIERS: Record<Tier, TierSpec> = {
-  xs: { height: 20, gutter: 6, icon: 12, gap: 4, size: 12, leading: 16 },
-  sm: { height: 24, gutter: 8, icon: 16, gap: 4, size: 12, leading: 16 },
-  md: { height: 28, gutter: 8, icon: 16, gap: 4, size: 12, leading: 16 },
-  lg: { height: 32, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 },
-  xl: { height: 40, gutter: 12, icon: 16, gap: 6, size: 14, leading: 20 }, // one rung: compact xl = default lg (evidence audit 2026-10-02; was 36 / 14, off the ladder)
+  xs: { height: 20, icon: 12, gap: 4, size: 12, leading: 16 },
+  sm: { height: 24, icon: 16, gap: 4, size: 12, leading: 16 },
+  md: { height: 28, icon: 16, gap: 4, size: 12, leading: 16 },
+  lg: { height: 32, icon: 16, gap: 6, size: 14, leading: 20 },
+  xl: { height: 40, icon: 16, gap: 6, size: 14, leading: 20 }, // one rung: compact xl = default lg (evidence audit 2026-10-02; was 36 / 14, off the ladder)
 };
 
 export const DENSITY_AXIS: AxisDefinition = {
@@ -168,7 +166,7 @@ export const DENSITY_AXIS: AxisDefinition = {
   label: "Density",
   description: "How tall controls are, and how much room they leave inside themselves. Interface type steps down with the box; content type stays independent.",
   defaultPreset: "default",
-  namespaces: ["--area-control-", "--area-gutter-", "--area-icon-", "--area-gap-", "--area-ui-", "--area-mark-", "--area-inset-surface-"],
+  namespaces: ["--area-control-", "--area-icon-", "--area-gap-", "--area-ui-", "--area-mark-", "--area-inset-surface-"],
   presets: [
     {
       id: "compact",

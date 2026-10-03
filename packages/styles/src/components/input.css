@@ -12,7 +12,6 @@
 @layer area.components {
   .area-input {
     --_height: var(--area-control-md);
-    --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
     /* The action is the field less a 4px ring at every tier: 20 / 24 / 32 (audit B-7 B,
        owner 2026-09-30; was icon + 8, a fixed 24), its corner concentric inside the field's. */
@@ -235,7 +234,7 @@
 
   /* Outer-edge optical insets are shared in inset.css. */
 
-  .area-input--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-input--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-input--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-input--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-input--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-input--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

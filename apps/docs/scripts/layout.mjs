@@ -232,21 +232,20 @@ export const DOCS_CSS = `
      * the customizer dialog's own chrome. --docs-gutter is the page's, one tier up.
      *
      * The two rails do not read either of these. They are area-panel --xs, so their inset
-     * is the panel's own tier on the gutter ramp, which is what a component's padding has
-     * to come from if a compact panel is to tighten like the controls inside it.
+     * is the panel's own, which is what a component's padding has to come from if a compact
+     * panel is to tighten like the controls inside it.
      */
-    --docs-pad: var(--area-gutter-sm);
+    --docs-pad: var(--area-space-8);
     /*
-     * One 4px step above the widest gutter. The page had the density ramp's own top stop,
-     * which is the right inset for a control's interior and slightly tight as the margin
-     * of a document; the step keeps it on the ramp and still moving with density.
+     * 20, compact 16: one 4px step above the 16 / 12 a large interior uses, which is slightly
+     * tight as the margin of a document; it still moves with density.
      */
-    --docs-gutter: calc(var(--area-gutter-xl) + var(--area-space-4));
+    --docs-gutter: calc(var(--area-space-20) - var(--area-space-4) * var(--area-ui-dense));
     /*
      * The customizer dialog's own bar. The rails derive theirs from area-panel instead;
      * this one is a dialog, not a panel, and is the only bar left that is neither.
      */
-    --docs-topbar: calc(var(--area-control-sm) + var(--area-gutter-md) * 2 + var(--area-border-width));
+    --docs-topbar: calc(var(--area-control-sm) + (var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--area-border-width));
     --docs-measure: 720px;
     --docs-max: 1400px;
     --docs-blur: 8px;
@@ -364,12 +363,12 @@ export const DOCS_CSS = `
    */
   .docs-rail-toggle {
     position: fixed;
-    inset-block-start: var(--area-gutter-xs);
+    inset-block-start: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense));
     z-index: var(--area-z-sticky);
   }
 
-  .docs-rail-toggle[data-rail="nav"] { inset-inline-start: var(--area-gutter-xs); }
-  .docs-rail-toggle[data-rail="panel"] { inset-inline-end: var(--area-gutter-xs); }
+  .docs-rail-toggle[data-rail="nav"] { inset-inline-start: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); }
+  .docs-rail-toggle[data-rail="panel"] { inset-inline-end: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); }
 
   .docs-shell[data-nav="closed"] { --docs-col-nav: 0px; }
   /* Closing the panel hands the column to the outline, which is the rail's other occupant. */
@@ -481,7 +480,7 @@ export const DOCS_CSS = `
     align-items: center;
     justify-content: space-between;
     gap: var(--area-space-8);
-    padding: var(--area-gutter-md);
+    padding: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
     padding-block-end: 0;
   }
   .docs-gallery-tile__title {
@@ -496,7 +495,7 @@ export const DOCS_CSS = `
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--area-gutter-md);
+    padding: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
   }
   .docs-gallery-tile__specimen {
     min-inline-size: 0;

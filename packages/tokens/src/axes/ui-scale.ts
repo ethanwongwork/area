@@ -19,7 +19,6 @@ export const UI_SCALE_AXIS: AxisDefinition = {
     "--area-display-",
     "--area-weight-",
     "--area-control-",
-    "--area-gutter-",
     "--area-icon-",
     "--area-gap-",
     "--area-ui-",

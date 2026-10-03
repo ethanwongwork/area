@@ -2,6 +2,8 @@
  * Icons use their square viewport, never their path bounds. Text uses one cap-to-
  * baseline reference for the whole font, never a measurement of an individual word.
  * Component-local inputs are reset on every backplate to prevent nested leakage.
+ * A side's inset is (height - its content box) / 2 less the border, rounded to whole pixels
+ * (owner 2026-10-02), so text starts on the pixel grid. There are no padding tokens.
  */
 @layer area.components {
   .area-button, .area-input, .area-number-field, .area-chip, .area-select,
@@ -9,20 +11,18 @@
   .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-panel__bar {
     --_box-height: var(--_height);
     --_box-border: var(--area-stroke-width);
-    --_box-text: 1lh;
+    /* The text's inline content box is its cap height. The cap unit works without text-box
+     * support, so the horizontal inset never falls back to the line box (1lh gave a 32px Button
+     * 5px sides instead of 10 where text-box is missing). */
+    --_box-text: 1cap;
     --_box-start: var(--_box-text);
     --_box-end: var(--_box-text);
     --_box-icon: var(--_icon);
     padding-block: 0;
-    padding-inline-start: max(0px, calc((var(--_box-height) - var(--_box-start)) / 2 - var(--_box-border)));
-    padding-inline-end: max(0px, calc((var(--_box-height) - var(--_box-end)) / 2 - var(--_box-border)));
-  }
-  @supports (text-box: trim-both cap alphabetic) {
-    .area-button, .area-input, .area-number-field, .area-chip, .area-select,
-    .area-segmented__item, .area-nav__item, .area-nav__label,
-    .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-panel__bar {
-      --_box-text: 1cap;
-    }
+    --_inset-start: max(0px, round(nearest, calc((var(--_box-height) - var(--_box-start)) / 2 - var(--_box-border)), 1px));
+    --_inset-end: max(0px, round(nearest, calc((var(--_box-height) - var(--_box-end)) / 2 - var(--_box-border)), 1px));
+    padding-inline-start: var(--_inset-start);
+    padding-inline-end: var(--_inset-end);
   }
   .area-panel__bar {
     --_box-height: var(--_bar);
@@ -44,9 +44,10 @@
   .area-nav__item, .area-nav__label, .area-menu__item, .area-menu__label {
     --_box-height: var(--area-ui-row);
     --_box-border: 0px;
-    /* A row's glyph edge is the density's row inset (8 default, as Tree view and Notion; 6
-     * compact), not the icon centred in the row. The reserved box is the row less that inset
-     * each side: 16 at default, the icon itself. docs/research/compact-pass-2026-10-01.md. */
+    /* A row's glyph edge is the density's row inset (8 at both densities, as Tree view, Notion,
+     * Figma and Cursor; evidence audit R1), not the icon centred in the row. The reserved box is
+     * the row less that inset each side: 16 at default (the icon itself), 8 in a compact 24 row,
+     * so the 16 icon still starts 8 in. docs/research/compact-evidence-2026-10-02/README.md. */
     --_box-icon: calc(var(--area-ui-row) - var(--area-ui-row-inset) * 2);
   }
   /* A Nav heading names rows that may lead with an icon. Its content edge therefore
@@ -76,19 +77,17 @@
     /* Transparent tabs align to content, rather than a backplate inset. */
     padding-inline: 0;
   }
-  /* Badge explicitly follows Untitled UI's content-specific gutters (owner request).
-   * Text/media/dot use reference gutters; icon sides use equal optical insets.
-   * These are outer insets: subtract the stroke once. No per-glyph offsets. */
-  .area-badge {
-    --_badge-start: var(--_gutter); --_badge-end: var(--_gutter);
-    padding-inline-start: calc(var(--_badge-start) - var(--area-stroke-width));
-    padding-inline-end: calc(var(--_badge-end) - var(--area-stroke-width));
-  }
-  .area-badge:has(> .area-badge__dot:first-child) { --_badge-start: var(--_icon-gutter); }
-  .area-badge:has(> .area-badge__leading-icon:first-child) { --_badge-start: calc((var(--_height) - var(--_icon)) / 2); }
-  .area-badge:has(> .area-badge__trailing-icon:last-child) { --_badge-end: calc((var(--_height) - var(--_icon)) / 2); }
-  .area-badge:has(> :is(.area-badge__avatar, .area-badge__flag):first-child) { --_badge-start: var(--_media-gutter); }
-  .area-badge:has(> .area-badge__dismiss:last-child) { --_badge-end: var(--_media-gutter); }
+  /* Badge uses the shared rule on every side. Its one difference is the shape: a full-round
+   * pill's text must clear the round end, so a text side reserves a 4px box instead of the cap
+   * and the label starts 2 inside the radius (h / 2 - 2: 6 / 8 / 10 at 16 / 20 / 24, Untitled
+   * UI's measured gutters). Square slots use their own box: icon (h - icon) / 2, the 8px dot
+   * slot (h - 8) / 2, avatar, flag and dismiss (h - media) / 2. */
+  .area-badge { --_box-text: calc(var(--area-space-2) * 2); }
+  .area-badge:has(> .area-badge__dot:first-child) { --_box-start: var(--area-space-8); }
+  .area-badge:has(> .area-badge__leading-icon:first-child) { --_box-start: var(--_icon); }
+  .area-badge:has(> .area-badge__trailing-icon:last-child) { --_box-end: var(--_icon); }
+  .area-badge:has(> :is(.area-badge__avatar, .area-badge__flag):first-child) { --_box-start: var(--_media); }
+  .area-badge:has(> .area-badge__dismiss:last-child) { --_box-end: var(--_media); }
   .area-badge--icon-only, .area-badge--dot-only { padding-inline: 0; }
 
   .area-button:has(> .area-button__icon:first-child),
@@ -132,7 +131,7 @@
   /* Native select's background is positioned inside its padding box. */
   .area-select {
     --_box-end: var(--_icon);
-    --_chevron-inset: max(0px, calc((var(--_height) - var(--_icon)) / 2 - var(--area-stroke-width)));
+    --_chevron-inset: max(0px, round(nearest, calc((var(--_height) - var(--_icon)) / 2 - var(--area-stroke-width)), 1px));
     padding-inline-end: calc(var(--_chevron-inset) + var(--_icon) + var(--_gap));
     background-position: right var(--_chevron-inset) center;
   }
@@ -172,7 +171,7 @@
   /* The marker is a separate navigation rail, with room reserved ahead of the label. */
   .area-nav--marker .area-nav__item { padding-inline-start: var(--area-space-16); }
   /* A nested group's rows add one Tree view level to the start inset (audit D-20, nav.css). */
-  .area-nav__group--nested .area-nav__item { padding-inline-start: calc(max(0px, calc((var(--_box-height) - var(--_box-start)) / 2 - var(--_box-border))) + var(--_nav-indent)); }
+  .area-nav__group--nested .area-nav__item { padding-inline-start: calc(var(--_inset-start) + var(--_nav-indent)); }
   .area-nav--marker .area-nav__group--nested .area-nav__item { padding-inline-start: calc(var(--area-space-16) + var(--_nav-indent)); }
 
   /* Trim only text slots, never SVGs or containers holding controls. Symmetric
@@ -238,8 +237,8 @@
       (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--area-border-width)
     );
   }
-  .area-button--start { margin-inline-start: calc((var(--_box-height) - var(--_box-start)) / -2); }
-  .area-button--end { margin-inline-end: calc((var(--_box-height) - var(--_box-end)) / -2); }
+  .area-button--start { margin-inline-start: calc(-1 * (var(--_inset-start) + var(--_box-border))); }
+  .area-button--end { margin-inline-end: calc(-1 * (var(--_inset-end) + var(--_box-border))); }
   /* A trailing pill reserves its own height, so it ends as far from the plate's edge as it
      sits from the top (6 for the 20px Badge), like the Kbd rules below. */
   .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-mark-label-md); }
@@ -248,7 +247,7 @@
   .area-nav__item:has(> .area-nav__trailing > .area-kbd--sm:last-child) { --_box-end: var(--area-mark-label-sm); }
   /* A soft Count is a plate, so it ends as far from the row's end as it sits from the top, as a
      Badge does. A plain Count has no plate: its digits are what the eye reads, so they end on
-     the row's glyph edge, mirroring where the label starts (8 default, 6 compact). It drops
+     the row's glyph edge, mirroring where the label starts (8 at both densities). It drops
      its gutter and minimum width so the box is the ink (owner 2026-10-01: the digits sat 17
      from the end against a label 8 in). */
   .area-nav__item:has(> .area-nav__trailing > .area-count--soft:last-child) { --_box-end: var(--area-mark-label-md); }

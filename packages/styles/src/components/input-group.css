@@ -6,7 +6,6 @@
     --_group-leading: var(--area-control-md-leading);
     --_group-icon: var(--area-icon-md);
     --_group-gap: var(--area-gap-md);
-    --_group-gutter: var(--area-gutter-md);
     display: inline-flex;
     align-items: center;
     inline-size: var(--area-input-inline-size);
@@ -26,9 +25,9 @@
   }
   .area-input-group--outline { background-color: var(--area-input-bg); }
   .area-input-group--soft { background-color: var(--area-input-bg-soft); border-color: transparent; box-shadow: none; }
-  .area-input-group--sm { --_group-height: var(--area-control-sm); --_group-radius: var(--area-radius-control-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-icon: var(--area-icon-sm); --_group-gap: var(--area-gap-sm); --_group-gutter: var(--area-gutter-sm); }
-  .area-input-group--md { --_group-height: var(--area-control-md); --_group-radius: var(--area-radius-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); --_group-gutter: var(--area-gutter-md); }
-  .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-radius: var(--area-radius-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); --_group-gutter: var(--area-gutter-lg); }
+  .area-input-group--sm { --_group-height: var(--area-control-sm); --_group-radius: var(--area-radius-control-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-icon: var(--area-icon-sm); --_group-gap: var(--area-gap-sm); }
+  .area-input-group--md { --_group-height: var(--area-control-md); --_group-radius: var(--area-radius-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); }
+  .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-radius: var(--area-radius-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); }
   .area-input-group--full-width { inline-size: 100%; }
   @media (hover: hover) { .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])) { border-color: var(--area-input-edge-hover); } }
   /* Disabled uses field paint, like Input: the disabled fill, a faint edge and disabled ink. */
@@ -51,7 +50,6 @@
     --_leading: var(--_group-leading);
     --_icon: var(--_group-icon);
     --_gap: var(--_group-gap);
-    --_gutter: var(--_group-gutter);
     flex: 1 1 0;
     inline-size: 0;
     min-inline-size: 0;
@@ -108,8 +106,8 @@
   .area-input-group > .area-select:first-child { flex: 0 0 calc(var(--_group-height) * 3); }
   /* spec (batch 9, figma--number-field-menu: the value box ends on the chevron's 16px box): in a
      group the option text runs up to the chevron's box; the glyph's side-bearing leaves ~4.5 of air.
-     A standalone Select keeps 4 more. */
-  .area-input-group > .area-select { padding-inline-end: calc(var(--_gutter) + var(--_icon)); }
+     The chevron's box sits on the Select's own inset (inset.css); a standalone Select adds its gap. */
+  .area-input-group > .area-select { padding-inline-end: calc(var(--_chevron-inset) + var(--_icon)); }
   .area-input-group > :not(:first-child) { border-inline-start: var(--area-stroke-width) solid var(--area-border-decorative); }
   .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field, .area-select) { border-inline-start: 0; }
   .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field, .area-select) { padding-inline-start: 0; }

@@ -44,11 +44,11 @@ surfaces (Popover, Menu, Tooltip, Hover card, Toast, Dialog).
 | List and menu rows | 32 | 28 | lists 22, menus 24 | **24** (`ui-row`) |
 | Row glyph edge · icon gap | 8 · 12 | 8 · 12 | quick pick text 6 + 1 border + 9 | **8 · 8** (labels at 32; edge held after the 2026-10-02 evidence audit) |
 | Menu inset · row gap | 4 · 2 | 4 · 2 | 4 (+1 border) · 0 | 4 · **0** (`ui-row-gap`, evidence audit R7) |
-| Separator | 4 / 1 / 4 | same | 5 / 1 / 5 | same |
+| Separator | 4 / 1 / 4 | same | 5 / 1 / 5 | **6 / 1 / 6, compact 5 / 1 / 5** (owner 2026-10-02) |
 | Tooltip | 28, 14/20, sides 10 | 26 | 25, 12/19, sides 9 | **24**, 12/16, sides 8, corner 4 (evidence audit 2026-10-02) |
-| Popover inset · section gap | 12 · 16 | 12 · 16 | hover 9 | **8 · 12** |
+| Popover inset · section gap | 12 · 16 | 12 · 16 | hover 9 | **12 · 12** (inset held 2026-10-02: Cursor and Figma 16) |
 | Toast inset | 10 × 12 | same | — | **8 × 8** (32 tall; round 3) |
-| Dialog inset | 16 | 16 | save dialog: content 13, actions 9 | **12** (evidence audit R8; the morning's hold at 16 was reversed) |
+| Dialog inset | 16 | 16 | save dialog: content 13, actions 9 | **16** (held; Figma Share 16, owner 2026-10-02; R8's 12 superseded) |
 | Surface corner | 12 | 12 | 8 | **8** |
 | Row corner · md control corner | 8 · 8 | 8 · 8 | 4–6 · 4 | **6 · 6** (menu rows 4, concentric) |
 | Dialog corner | 16 | 18 | 8 | **12** (concentric with the close, 6 + 6) |
@@ -241,4 +241,8 @@ Superseded in part by the evidence audit: `docs/research/compact-evidence-2026-1
 - Tooltip sides stay 10 (owner decision, 2026-09-25); VS Code 9, Figma 8.
 - Other families still read literal spacing (Card, Panel, Alert, field shells); each gets its
   compact step in its own round.
-- Cursor itself is not measured (desktop app); vscode.dev stands in.
+- Cursor measured 2026-10-02 (web, desktop Agents and IDE windows: `compact-evidence-2026-10-02/
+  cursor-web.md`, `cursor-desktop.md`). Applied from it (owner): Popover compact inset 12
+  (held), Dialog compact 16 / 16, Menu separator 6 / 1 / 6 (compact 5 / 1 / 5), standard dense xs
+  corner 4, Prompt suggestion rows at the compact composer's 40. Still without dense evidence: a
+  toast with actions, a chat code block. Cursor Dark measured too: Area dark in range, no change.

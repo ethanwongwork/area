@@ -1902,7 +1902,6 @@ function densityRows(presetId) {
   return ["xs", "sm", "md", "lg", "xl"].map((tier) => ({
     tier,
     height: preset.tokens[`--area-control-${tier}`],
-    gutter: preset.tokens[`--area-gutter-${tier}`],
     icon: preset.tokens[`--area-icon-${tier}`],
     gap: preset.tokens[`--area-gap-${tier}`],
     text: (preset.tokens[`--area-control-${tier}-text`] ?? "").replace(/var\(--area-size-|\)/g, "") + "px",
@@ -1915,20 +1914,20 @@ function uiScalePage() {
 
   const body = `<div class="docs-prose">
 <p>UI scale is one deliberate product choice, not separate type and density switches. It changes reading type, UI type, control heights, icons, internal padding, and gaps together.</p>
-<p><strong>Default</strong> uses 16px reading text, 14px UI text, and 32px medium controls: the common Primer and Geist baseline. <strong>Compact</strong> uses 14px reading text, 13px UI text, and 28px medium controls, matching dense tool interfaces such as Notion.</p>
+<p><strong>Default</strong> uses 16px reading text, 14px UI text, and 32px medium controls: the common Primer and Geist baseline. <strong>Compact</strong> uses 14px reading text, 12px UI text, and 28px medium controls, checked against dense tools: VS Code, Cursor and Figma.</p>
+<p>A control's side padding is not a token. It follows from the height and what each side holds: a text side sits (height − cap height) ÷ 2 in, an icon side (height − icon) ÷ 2, rounded to whole pixels. So a 32px Button's label starts 11 from its edge and its icon 8 (the 1px border included), and the same rule holds at every tier and in compact.</p>
 <p>There is intentionally no spacious preset. Primer documents a spacious spacing mode, but it is not a different product-scale baseline; browser zoom and text-resize support remain the accessible way to enlarge an interface.</p>
 </div>
 ${tokenSection({
   id: "tiers",
   title: "Control tiers",
-  description: "Every dimension a control needs across the shared internal ramp, in both presets.",
+  description: "Every token a control reads across the shared internal ramp, in both presets. Side padding is derived (see above).",
   rows,
   columns: [
     { header: "Token", cell: (r) => tokenChip(`control/${r.tier}`) },
     { header: "Compact", cell: (r) => `<span class="docs-mono">${compact.find((c) => c.tier === r.tier).height}</span>` },
     { header: "Default", cell: (r) => `<span class="docs-mono">${r.height}</span>` },
     { header: "Type", cell: (r) => `<span class="docs-mono">${compact.find((c) => c.tier === r.tier).text} / ${r.text}</span>` },
-    { header: "Padding", cell: (r) => `<span class="docs-mono">${r.gutter}</span>` },
     { header: "Icon", cell: (r) => `<span class="docs-mono">${r.icon}</span>` },
     { header: "Gap", cell: (r) => `<span class="docs-mono">${r.gap}</span>` },
     {
@@ -1940,7 +1939,7 @@ ${tokenSection({
   card: (r) =>
     tokenCard({
       name: `control/${r.tier}`,
-      meta: [`${r.height} tall · ${r.text} type`, `${r.gutter} padding · ${r.icon} icon · ${r.gap} gap`],
+      meta: [`${r.height} tall · ${r.text} type`, `${r.icon} icon · ${r.gap} gap`],
       figure: `<div class="docs-specimen__box" style="inline-size:100%;block-size:var(--area-control-${r.tier});border-radius:var(--area-radius-control)"></div>`,
     }),
 })}
