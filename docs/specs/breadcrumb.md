@@ -140,3 +140,5 @@ muted ancestors and chevron separator are the recorded decisions. No change.
 - 2026-09-30 · audit S11b (owner) → the focus ring follows the hover plate: drawn on `::before` at offset 0, the link's own outline removed → `breadcrumb.css:26-27`.
 - 2026-09-30 · audit S14 (owner) → a link or page icon sits 6 from its label (`gap-md`, was 8; `breadcrumb.css:22`, `:29`); the item gap is pinned to 8 (`breadcrumb.css:15`) and the 4 list gap is unchanged.
 - 2026-10-01 · audit D-19 (owner pick A) → `BreadcrumbEllipsis items` makes the marker a menu button that opens a Menu of the hidden ancestors as link rows, with the link's hover plate and focus ring; without items it stays decorative → Breadcrumb.tsx:44-58, breadcrumb.css:41-48.
+- 2026-10-03 · radius audit D7 (owner) → the hover plate (24 tall, 20 compact) takes the control curve, `radius-control-xs`: 5, compact 4 (was `radius-small` 6 / 4; Notion measures 6) (`breadcrumb.css`). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-03 · all even (owner) → the 24px plate reads the 24px control corner, now 6 (Notion's 6); compact 20 → 4.

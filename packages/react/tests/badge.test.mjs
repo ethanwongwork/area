@@ -47,7 +47,7 @@ test('group limits children without losing them and uses native popover relation
 test('Badge gallery splits the complete matrix into one specimen per tile', async () => {
   const {COMPONENT_PAGES}=await import('../../../apps/docs/src/pages.mjs');
   const examples=COMPONENT_PAGES.find(page=>page.slug==='badge').examples;
-  const gallery=readFileSync(new URL('../../../apps/docs/dist/gallery-components.html',import.meta.url),'utf8');
+  const gallery=readFileSync(new URL('../../../apps/docs/dist/index.html',import.meta.url),'utf8');
   assert.equal(examples[0].demo,'BadgeDefault');assert.equal(examples[1].demo,'BadgeVariants');assert.equal(examples[2].demo,'BadgeSizes');
   for(const variant of MANIFESTS.badge.variants.variant) for(const tone of MANIFESTS.badge.variants.tone) {
     const id=`gallery-badge-variant-${variant}-tone-${tone}`;

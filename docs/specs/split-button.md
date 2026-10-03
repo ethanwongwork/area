@@ -239,3 +239,5 @@ the iOS 27 kit, read only) and the gallery's Toolbar / Tools tile:
 - 2026-10-01 · audit A-7 → in a Toolbar a SplitButton with no `size` takes the toolbar's through the `ToolbarSize` context → SplitButton.tsx:51, toolbar-context.ts.
 - 2026-10-01 · audit H-26 → with both parts disabled the split button dims once as a whole → split-button.css:119-123.
 - 2026-10-01 · audit G-12 (owner pick A) → the chevron trigger keeps the pressed plate while its menu is open → button.css:145-150.
+- 2026-10-03 · radius audit D6 (owner) → the ghost icon-only trigger's capped corner rounds down to whole pixels: 6, compact 5 (was 6.4 / 5.6; Figma 5) (`split-button.css`). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-03 · all even (owner) → the ghost icon-only trigger's cap rounds down to 2px: 6, compact 4 (`split-button.css`).

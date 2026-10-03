@@ -115,7 +115,7 @@
     border: var(--area-border-width) solid var(--_code-edge);
     border-radius: min(
       var(--area-radius-small),
-      calc((1em + var(--area-space-10)) * var(--area-radius-cap))
+      calc((1em + var(--area-space-10)) * var(--area-radius-cap) + var(--area-radius-shift))
     );
     background-color: var(--_code-bg);
     /* Code is an inline reference, never an elevated badge. Make this invariant explicit

@@ -22,7 +22,7 @@
      * radius (Button md, capped as Button caps it) plus the inset, 8 + 8 = 16. A pill send button
      * makes a pill composer (below), so ChatGPT's shape is one Button option away.
      */
-    --_composer-button-radius: min(var(--area-radius-control-md), calc(var(--_composer-action) * var(--area-radius-button-cap)));
+    --_composer-button-radius: min(var(--area-radius-control-md), calc(var(--_composer-action) * var(--area-radius-button-cap) + var(--area-radius-shift)));
     border-radius: calc(var(--_composer-button-radius) + var(--_composer-inset) * var(--area-radius-concentric));
     background: var(--area-input-bg);
     /* spec (owner 2026-09-26): no shadow at rest, as every control; the border carries the edge. */

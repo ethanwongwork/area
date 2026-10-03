@@ -16,9 +16,15 @@ npm ci
 npm run dev
 ```
 
-Open the [gallery](http://localhost:4321/gallery-components.html): components, type ramp,
-iconography, color, UI scale, radius, surface and motion, each on its own page. The
-documentation site is hidden for now; its entry points redirect to the gallery. The dev server rebuilds
+Open the [component gallery](http://localhost:4321/): every component and variant on one
+canvas, a component list on the left and a theme panel (mode, density) on the right that
+changes only the canvas. It is the source of truth for how components look; its chrome is
+built from Area's own Panel, Nav and Segmented (`apps/docs/src/gallery/`,
+`apps/docs/scripts/component-gallery.mjs`). Tiles are 4:3 and fill the canvas width; a
+specimen that fits its tile shows at 1:1 and larger ones scale to fit (`apps/docs/src/gallery/fit.ts`). The [roundness page](http://localhost:4321/roundness.html) shows each component
+from square to pill in 2px roundness steps, and how inset corners follow their shell.
+Type ramp, iconography, icons, color, UI scale, radius, surface and motion each have a
+`gallery-*.html` page. The documentation site is hidden for now. The dev server rebuilds
 changed sources and keeps the last successful preview if a build fails.
 
 ## Use the library

@@ -159,3 +159,6 @@ Compared the Area captures (`color-swatch-picker/area--*`) with
   size / 4)` → 4x shots of the grid and Color picker's saved colours.
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → no preselection: with neither `value` nor `defaultValue` nothing is chosen (was the first enabled option), so `required` can fail; a form reset returns to `defaultValue` or nothing (ColorSwatchPicker.tsx:40, :49); group `disabled` sets `aria-disabled`. Gallery demos pass `defaultValue` explicitly; no visual change.
 - 2026-09-30 · audit F-31 (owner pick A) → no change: swatch cells keep the control ladder 24 / 28 / 32, separate from AlignmentPicker's cells (22 / 24 / 28); recorded under Peers.
+- 2026-10-03 · radius audit D6 (owner) → the cell corner is the swatch's whole-pixel corner plus the inset: 20 → 6, 24 → 7, 28 → 8, 32 → 9 (was 6.4, 7.2, 8, 8.8) (`color.css`). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-03 · roundness → cells are the swatch's shifted corner plus the inset (`color.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
+- 2026-10-03 · all even (owner) → cells are the even swatch corner plus 4: 6 / 8 / 8 / 8 (`color.css`).

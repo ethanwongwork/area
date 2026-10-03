@@ -5,7 +5,7 @@ for specific roles. Components do not need separate light/dark variants.
 
 ## Shared settings
 
-The registry in `packages/tokens/src/axes/registry.ts` defines nine axes:
+The registry in `packages/tokens/src/axes/registry.ts` defines ten axes:
 
 - `theme`: light or dark color polarity.
 - `neutral`: neutral, cool or warm neutral colors.
@@ -16,6 +16,12 @@ The registry in `packages/tokens/src/axes/registry.ts` defines nine axes:
 - `radius`: sharp, subtle, soft, standard, round, rotund or pill. Besides the corner roles it
   owns `radius-cap`, `radius-button-cap` and `radius-concentric` (0 at Sharp: how much of a
   shell's distance joins its concentric corner).
+- `roundness`: −12 to +12 in 2px steps (default 0). Moves every corner the radius family draws
+  (control tiers, rows, small shapes, surfaces): `clamp(0, min(family, height × radius-cap) +
+  offset, height / 2)`, so every shape can reach square and pill; inset shapes stay concentric
+  and shells follow what they hold. Owns `radius-offset`; `emit/base.ts` applies it and
+  publishes `radius-shift` for corners drawn from a component's own size. Sharp ignores it.
+  See `docs/research/radius-audit-2026-10-03.md` and the gallery's `roundness.html`.
 - `surface`: flat, outlined, raised or elevated. Besides `border-width` and `shadow-1`…`4` it
   owns `shadow-card` (Card's halo) and `shadow-float` (the shared floating lift); Flat sets
   both to `none`.

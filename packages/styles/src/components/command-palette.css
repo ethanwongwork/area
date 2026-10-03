@@ -26,8 +26,12 @@
     --_column: calc(var(--_list-inset) + var(--area-ui-row-inset));
     /* Rows keep Menu's icon-to-label gap, so row text starts where the typed text does. */
     --_menu-gap: var(--area-gap-row);
-    --_row-radius: min(max(0px, calc(var(--area-radius-container) - var(--area-space-4))), calc(var(--area-ui-row) * var(--area-radius-cap)));
-    --_palette-radius: min(calc(var(--area-radius-container) * 2), calc(var(--_row-radius) + var(--_list-inset)));
+    /* The palette's corner less the list inset, 12 - 4 = 8: concentric with the padding, the 1px
+       border left out so the corner stays even (owner, 2026-10-03: all even). */
+    --_row-radius: min(max(0px, calc(var(--area-radius-container) - var(--area-space-4))), round(down, calc(var(--area-ui-row) * var(--area-radius-cap) + var(--area-radius-shift)), 2px)); /* even cap: 24 -> 8 */
+    /* The surface corner, or less where capped rows can't follow it (Pill): concentric either way,
+       and it steps with roundness as every surface does (was rebuilt from the rows: 6, 5, 4). */
+    --_palette-radius: min(var(--area-radius-container), calc(var(--_row-radius) + var(--_list-inset)));
     display: flex;
     flex-direction: column;
     /* spec: Notion's list column is 600 wide. */
@@ -134,7 +138,7 @@
     min-inline-size: var(--area-control-xs);
     padding-inline: var(--_hint-inset);
     border: 0;
-    border-radius: min(var(--area-radius-control-xs), calc(var(--area-control-xs) * var(--area-radius-cap)));
+    border-radius: min(var(--area-radius-control-xs), calc(var(--area-control-xs) * var(--area-radius-cap) + var(--area-radius-shift)));
     background: transparent;
     color: inherit;
     font: inherit;

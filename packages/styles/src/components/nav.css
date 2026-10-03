@@ -104,7 +104,7 @@
     /* Capped against the row's own height; see button.css. */
     border-radius: min(
       var(--area-radius-row),
-      calc(var(--area-ui-row) * var(--area-radius-cap))
+      calc(var(--area-ui-row) * var(--area-radius-cap) + var(--area-radius-shift))
     );
     background: transparent;
     /* spec: ChatGPT's rows are the default ink (rgb 13, chatgpt--sidebar-top-group); the
@@ -242,7 +242,7 @@
     min-inline-size: 0;
     gap: var(--area-space-2);
     padding-inline-end: calc((var(--area-ui-row) - var(--area-control-sm)) / 2);
-    border-radius: min(var(--area-radius-row), calc(var(--area-ui-row) * var(--area-radius-cap)));
+    border-radius: min(var(--area-radius-row), calc(var(--area-ui-row) * var(--area-radius-cap) + var(--area-radius-shift)));
   }
   @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current]:not([aria-current="false"]))):hover { background: var(--area-bg-component-hover); } }
   /* Any current value (page, location, step) marks the row, as it marks the item (audit D-29). */

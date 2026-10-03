@@ -77,12 +77,10 @@ overrides both.
 2. Run the checks in `docs/DEVELOPMENT.md` for the change.
 3. Do the visual pass with the `area-visual-language` skill.
 4. Make sure every manifest value has a gallery tile, named by category (`size-sm`,
-   `tone-accent`, `state-disabled`) so the gallery groups it. Every family's Pass review
-   (built from the spec and captures) shows its audit, visual pass and Claude in Chrome
-   evidence and the default tile at 2×. After a visual pass compared side by side in Claude in
-   Chrome, record it in `apps/docs/src/pass-status.mjs`. Temporary `GalleryReview<Name>` rows
-   (removed once seen) are only for subtle side-by-sides: each change in its own row, before
-   and after, at 1× and 3×.
+   `tone-accent`, `state-disabled`) so the gallery orders and labels it. Tiles size themselves
+   from what the specimen renders; don't set a span. After a visual pass compared side by side
+   in Claude in Chrome, record it in `apps/docs/src/pass-status.mjs`. For a subtle change, send
+   the owner before / after crops at 1x and 3x rather than adding rows to the gallery.
 5. Report to the owner: gallery links, the comparison table, visual-pass observations,
    open questions, and anything unverified. Status stays In review until the owner
    accepts it in `apps/docs/src/component-status.mjs`.

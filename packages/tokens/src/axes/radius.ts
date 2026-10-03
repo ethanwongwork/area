@@ -114,11 +114,17 @@ function radiusTokens({ control, container, small, row, cap, buttonCap, concentr
  */
 const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
   { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, buttonCap: 0.4, concentric: 0, dense: { control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, container: 0, small: 0, row: 0 }, note: "Square corners throughout." },
-  { id: "subtle", control: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }, small: 2, row: 4, container: 6, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 2, md: 3, lg: 4, xl: 5 }, container: 4, small: 2, row: 3 }, note: "A restrained 4px medium-control family." },
-  { id: "soft", control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, small: 4, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 3, md: 4, lg: 6, xl: 8 }, container: 6, small: 3, row: 4 }, note: "A soft 6px medium-control family." },
-  { id: "standard", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 4, sm: 4, md: 6, lg: 8, xl: 10 }, container: 8, small: 4, row: 6 }, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
-  { id: "round", control: { xs: 5, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 4, sm: 5, md: 8, lg: 10, xl: 12 }, container: 10, small: 6, row: 8 }, note: "A round 10px medium-control family." },
-  { id: "rotund", control: { xs: 6, sm: 10, md: 12, lg: 14, xl: 16 }, small: 10, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 5, sm: 6, md: 10, lg: 12, xl: 14 }, container: 12, small: 8, row: 10 }, note: "The roundest finite family: 12px at medium." },
+  { id: "subtle", control: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }, small: 2, row: 4, container: 6, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 2, md: 3, lg: 4, xl: 5 }, container: 6, small: 2, row: 3 }, note: "A restrained 4px medium-control family." },
+  { id: "soft", control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, small: 4, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 3, md: 4, lg: 6, xl: 8 }, container: 8, small: 3, row: 4 }, note: "A soft 6px medium-control family." },
+  // The default curve by painted height, the same at both densities, all even (owner, 2026-10-03):
+  // 20 -> 4, 24 -> 6, 28 -> 6, 32 -> 8, 40 -> 10, 48 -> 12. 24 was 4 (radius audit: Figma 5, 114
+  // elements; Cursor 6; VS Code 4), then 5; 6 is Cursor's and a quarter of the height, as 32, 40
+  // and 48 are. Surfaces are 12
+  // at both densities (audit D1, owner 2026-10-03: Figma 13, Cursor 12-14; compact was 8), and so
+  // is every family's (roundness work, 2026-10-03: surfaces never step down at compact).
+  { id: "standard", control: { xs: 6, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 4, sm: 6, md: 6, lg: 8, xl: 10 }, container: 12, small: 4, row: 6 }, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
+  { id: "round", control: { xs: 5, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 4, sm: 5, md: 8, lg: 10, xl: 12 }, container: 14, small: 6, row: 8 }, note: "A round 10px medium-control family." },
+  { id: "rotund", control: { xs: 6, sm: 10, md: 12, lg: 14, xl: 16 }, small: 10, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 5, sm: 6, md: 10, lg: 12, xl: 14 }, container: 16, small: 8, row: 10 }, note: "The roundest finite family: 12px at medium." },
   {
     id: "pill",
     control: { xs: 999, sm: 999, md: 999, lg: 999, xl: 999 },
@@ -128,7 +134,7 @@ const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
     cap: 0.4,
     buttonCap: 0.5,
     concentric: 1,
-    dense: { control: { xs: 999, sm: 999, md: 999, lg: 999, xl: 999 }, container: 16, small: 9999, row: 9999 },
+    dense: { control: { xs: 999, sm: 999, md: 999, lg: 999, xl: 999 }, container: 24, small: 9999, row: 9999 },
     note: "Fully round buttons. Other controls and containers stay finite, since a pill field or card obscures its role.",
   },
 ];

@@ -236,14 +236,22 @@ export function derivedTokens(): Record<string, string> {
 }
 
 function radiusDerivations(): Record<string, string> {
+  // The family's value for this density, moved by the roundness offset, never below square
+  // (axes/roundness.ts). The offset scales by radius-concentric, so Sharp stays square.
   const pick = (name: string) =>
-    `calc(var(${PREFIX}radius-base-${name}) + (var(${PREFIX}radius-dense-${name}) - var(${PREFIX}radius-base-${name})) * var(${PREFIX}ui-dense))`;
+    `max(0px, calc(var(${PREFIX}radius-base-${name}) + (var(${PREFIX}radius-dense-${name}) - var(${PREFIX}radius-base-${name})) * var(${PREFIX}ui-dense) + var(${PREFIX}radius-offset) * var(${PREFIX}radius-concentric)))`;
   const out: Record<string, string> = {};
   for (const tier of ["xs", "sm", "md", "lg", "xl"]) out[`${PREFIX}radius-control-${tier}`] = pick(`control-${tier}`);
   out[`${PREFIX}radius-control`] = `var(${PREFIX}radius-control-md)`;
   out[`${PREFIX}radius-container`] = pick("container");
   out[`${PREFIX}radius-small`] = pick("small");
   out[`${PREFIX}radius-row`] = pick("row");
+  // The roundness offset as it applies here (0 at Sharp), for the few corners a component draws
+  // from its own size rather than a role: checkbox boxes, swatches, skeletons.
+  out[`${PREFIX}radius-shift`] = `calc(var(${PREFIX}radius-offset) * var(${PREFIX}radius-concentric))`;
+  // The sharpest corner a nested shape takes (an item in a track, an action in a field): 4, moved
+  // by roundness, never past the smallest control's own corner (so Subtle stays 2).
+  out[`${PREFIX}radius-floor`] = `min(var(${PREFIX}radius-control-xs), max(0px, calc(4px * var(${PREFIX}radius-concentric) + var(${PREFIX}radius-shift))))`;
   return out;
 }
 
@@ -268,6 +276,7 @@ export const REGISTERED_PROPERTIES = [
   // The leaves of the radius derivation; the public radius tokens are derived and unregistered.
   { name: `${PREFIX}radius-base-container`, syntax: "<length>", initial: "12px" },
   { name: `${PREFIX}radius-base-small`, syntax: "<length>", initial: "6px" },
+  { name: `${PREFIX}radius-offset`, syntax: "<length>", initial: "0px" },
   { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}border-width`, syntax: "<length>", initial: "1px" },

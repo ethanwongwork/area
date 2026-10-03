@@ -16,11 +16,12 @@
   .area-breadcrumb__item svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex: none; }
   /*
    * spec: Notion's hover plate, 24px tall (2px above and below the 20px line) and 6px
-   * past the text on each side, radius 6. Painted outside the link's box, so the trail
+   * past the text on each side; Notion's radius 6, Area's curve for a 24px plate, 5 (compact
+   * 20 -> 4; radius audit D7, owner 2026-10-03). Painted outside the link's box, so the trail
    * stays flush with the content it labels; ink stays fixed on hover (docs/specs/breadcrumb.md).
    */
-  .area-breadcrumb__link { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: var(--area-gap-md); color: inherit; text-decoration: none; border-radius: var(--area-radius-small); }
-  .area-breadcrumb__link::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-small); background: transparent; transition: var(--area-transition); pointer-events: none; }
+  .area-breadcrumb__link { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: var(--area-gap-md); color: inherit; text-decoration: none; border-radius: var(--area-radius-control-xs); }
+  .area-breadcrumb__link::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-control-xs); background: transparent; transition: var(--area-transition); pointer-events: none; }
   @media (hover: hover) { .area-breadcrumb__link:hover::before { background: var(--area-bg-component-hover); } }
   /* The ring follows the plate, not the text box (audit S11b). */
   .area-breadcrumb__link:focus-visible { outline: none; }
@@ -39,8 +40,8 @@
   [dir="rtl"] .area-breadcrumb__chevron { transform: rotate(-135deg); }
   .area-breadcrumb__ellipsis { display: inline-grid; place-items: center; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
   /* With hidden pages to list, the marker is a menu button and takes the link's plate and ring (audit D-19). */
-  button.area-breadcrumb__ellipsis { position: relative; isolation: isolate; padding: 0; border: 0; background: none; font: inherit; cursor: pointer; border-radius: var(--area-radius-small); }
-  button.area-breadcrumb__ellipsis::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-small); background: transparent; transition: var(--area-transition); pointer-events: none; }
+  button.area-breadcrumb__ellipsis { position: relative; isolation: isolate; padding: 0; border: 0; background: none; font: inherit; cursor: pointer; border-radius: var(--area-radius-control-xs); }
+  button.area-breadcrumb__ellipsis::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-control-xs); background: transparent; transition: var(--area-transition); pointer-events: none; }
   @media (hover: hover) { button.area-breadcrumb__ellipsis:hover::before { background: var(--area-bg-component-hover); } }
   button.area-breadcrumb__ellipsis[aria-expanded="true"]::before { background: var(--area-bg-component-hover); }
   button.area-breadcrumb__ellipsis:focus-visible { outline: none; }
