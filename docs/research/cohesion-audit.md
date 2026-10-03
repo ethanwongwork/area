@@ -319,6 +319,27 @@ manifest parity.
 | Split button / Button group disabled | Each Button dims on its own, so the 1px overlap seam shows at about 75% | Dim the group as a whole |
 | Complete families changed here | Box field and Button (selected hover), Property list, Composer, Split button, Menu, Popover, Dialog, Toast (lift restored to the documented value) | Re-review, or accept as bug fixes |
 
+## Fifth pass: Disclosure (2026-10-02)
+
+Disclosure and DisclosureGroup were built after this audit (`docs/specs/disclosure.md`) and
+read against the shared rules above (CSS, manifest, React, demos, docs, spec), with the checks
+run live in the gallery.
+
+**Confirmed:** fixed foreground on hover (plain paints a plate on the chevron only, divided
+underlines the title); the chevron plate is the shared translucent `bg-hover` / `bg-active`
+wash on `radius-small`, as Tree view's chevron; the neutral muted chevron, `chevron-down`
+rotated as in Tree view and Panel, mirrored in RTL (90° after a restyle; a live `dir` flip
+needs one, as THEMING.md notes for colour); disabled dims the trigger to `opacity-disabled`
+with `not-allowed`, as list rows; one label weight per role (plain 400 like body text, divided
+500 like headings); the divided rule is Separator's `border-divider`; motion follows
+`duration-fast`, which the motion axis zeroes, plus `prefers-reduced-motion`; variants set local
+properties on their own root, so nested disclosures of another variant keep theirs; token
+references and manifest parity pass.
+
+**Fixed while building:** variant rules first used descendant selectors (a divided item's
+trailing chevron leaked into a plain disclosure nested inside it); rewritten as local properties
+read by base rules.
+
 ## Verification
 
 `npm run build` (including the new token-reference check), `npm run build:docs` (dogfood

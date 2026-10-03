@@ -5,6 +5,20 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Disclosure (2026-10-02, branch `claude/disclosure`): in review
+
+- New family: `Disclosure` (plain = Notion toggle: leading chevron in a line-height square, title
+  column, chevron hover plate; divided = shadcn accordion: trailing chevron, rule between items,
+  underline hover) and `DisclosureGroup` (single open by default, `multiple`, `value` /
+  `defaultValue` / `onValueChange`, headings at level 3, regions named by triggers). Sizes sm
+  14/20 and md 16/24 (default, Notion). Closed content is `hidden="until-found"`.
+- Evidence: `captures/disclosure/` (Notion toggle, ChatGPT sidebar section, 10 Area tiles), Figma
+  from `captures/panel/`, shadcn source @ 295a1f1. Spec `docs/specs/disclosure.md`; cohesion
+  audit fifth pass. Open for the owner: a filled caret for plain (Notion's) vs Area's outline
+  chevron. Unverified: product dark, rendered shadcn, on-screen dark paint.
+- Capture tip: on localhost pages post captures to a local relay with `fetch`; product pages
+  still need the clipboard button (a full-viewport button catches the click wherever it lands).
+
 ## Compact pass: tokens, rows and floating surfaces (2026-10-01, branch `claude/family-compact-pass-150bc8`, PR #36; merged with main's phases 6–7)
 
 - Owner: compact is a proportional step-down of the whole set (`data-area-ui="compact"`), UI type

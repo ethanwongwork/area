@@ -347,6 +347,20 @@ export const count = {
   defaults: { variant: "plain", size: "md" },
 } as const satisfies ComponentManifest;
 
+export const disclosure = {
+  block: "area-disclosure", description: "Shows or hides content under a title the reader clicks; a group keeps one open at a time.",
+  variants: { variant: ["plain", "divided"], size: ["sm", "md"] },
+  states: ["open", "disabled"],
+  elements: ["heading", "trigger", "chevron", "label", "content"],
+  defaults: { variant: "plain", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const disclosureGroup = {
+  block: "area-disclosure-group", description: "Stacks disclosures; opening one closes the others unless multiple.",
+  variants: {},
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const presence = {
   block: "area-presence", description: "Shows availability with Area-drawn status glyphs at the icon line weight.",
   variants: {status: ["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"], size: ["sm", "md", "lg"]}, // xs dropped: audit C-19
@@ -736,6 +750,8 @@ export const MANIFESTS = {
   indicatorAnchor,
   indicator,
   count,
+  disclosure,
+  disclosureGroup,
   badgeGroup,
   avatar,
   avatarGroup,

@@ -12,6 +12,10 @@
  * captures are missing. Validation is not owner acceptance (`component-status.mjs`).
  */
 export const VALIDATED_PASSES = {
+  disclosure: {
+    date: "2026-10-02",
+    against: "Notion's toggle block (row, chevron square, title column, hover plate); divided against shadcn's accordion source",
+  },
   toolbar: {
     date: "2026-09-27",
     against: "Figma toolbelt, re-checked after the Segmented and split-tool change (tools, chevrons, divider, mode switch)",
