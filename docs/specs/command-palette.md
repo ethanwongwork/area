@@ -152,3 +152,7 @@ keycap-to-label gap inside the Open plate, taken from the visible plate here.
 - 2026-10-01 · compact pass round 7 → the search row is 48, compact 40. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-02 · compact pass round 9 → footer hints 16 → 12 ink to ink; hint key-to-label gap reads `gap-md` (6 / 4). docs/research/compact-pass-2026-10-01.md (round 9).
 - 2026-10-02 · compact evidence audit → list rows and groups stack flush at compact (`ui-row-gap` 2 / 0; VS Code quick pick rows abut; R7) docs/research/compact-evidence-2026-10-02/README.md.
+- 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-03 · roundness work → rows count the palette's border (12 − 4 − 1 = 7, was 8) and the palette's corner adds it back (12) (`command-palette.css:29-33`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
+- 2026-10-03 · roundness → the palette's corner is the surface corner, capped by its rows plus inset where the rows can't follow (Pill), so it steps by 2 (`command-palette.css`, `--_palette-radius`).
+- 2026-10-03 · all even (owner) → rows 12 − 4 = 8 (border left out); the palette corner is the surface corner.

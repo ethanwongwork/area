@@ -176,3 +176,4 @@ decision.
 - 2026-09-30 · audit S17 (API vocabulary, slice 1) → manifest default `side` is `bottom` (was `top`), matching the React trigger default → `manifest.ts:553`.
 - 2026-10-02 · Cursor and Figma captures (owner) → compact inset 8 → 12, held at the default: dense popovers inset 16 (Cursor, Figma), none 8 → surface.css `.area-popover` `--_inset`; docs/research/compact-evidence-2026-10-02/cursor-desktop.md.
 - 2026-10-02 · compact sweep → compact corner 8 → 12 (`--_popover-radius`): with the 12 inset the close's box sits 8 in at radius 4, so the container corner left it non-concentric. Capped at 2 × container and at `radius-base-container`; default unchanged under every preset (standard 12 → 12, round 14 → 13, rotund 16 → 14, pill 24 → 24).
+- 2026-10-03 · roundness → the compact cap reads the container role instead of the base leaf, so the corner follows the offset (`surface.css`, `--_popover-radius`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".

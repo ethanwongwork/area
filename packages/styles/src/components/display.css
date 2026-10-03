@@ -47,7 +47,7 @@
   .area-avatar__icon > svg { inline-size: 100%; block-size: 100%; }
 
   .area-avatar--circle { border-radius: var(--area-radius-full); }
-  .area-avatar--square { border-radius: min(var(--area-radius-control), calc(var(--_size) * var(--area-radius-cap))); }
+  .area-avatar--square { border-radius: min(var(--area-radius-control), calc(var(--_size) * var(--area-radius-cap) + var(--area-radius-shift))); }
 
   .area-avatar--neutral {
     --_bg: var(--area-bg-component-active);
@@ -154,7 +154,7 @@
     --_skeleton-band: light-dark(rgb(143 143 143 / 0.16), var(--area-bg-component-active)); /* spec */
     /* spec: corners cap at 4 (Primer 3, Radix 3, Fluent 4, MUI 4, Mantine 4, Chakra 4, antd 4,
        Polaris 4, Atlassian 4); the radius axis still squares them at the sharp preset. */
-    --_skeleton-radius: min(var(--area-radius-small), 4px); /* spec */
+    --_skeleton-radius: min(var(--area-radius-small), calc(4px + var(--area-radius-shift))); /* spec: 4, shifted by roundness */
     display: block;
     border-radius: var(--_skeleton-radius);
     background-color: var(--_skeleton-fill);

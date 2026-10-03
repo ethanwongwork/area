@@ -560,70 +560,20 @@ export const DOCS_CSS = `
     align-items: center;
     gap: var(--area-space-2);
   }
-  .docs-audit-label[data-audit="complete"],
-  .docs-visual-gallery__tile[data-audit="complete"] .docs-visual-gallery__tile-title {
+  .docs-audit-label[data-audit="complete"] {
     color: var(--area-green-500);
   }
   .docs-audit-label[data-audit="unrefined"] {
     background: var(--area-red-25);
     color: var(--area-red-500);
   }
-  .docs-visual-gallery__tile[data-audit="unrefined"] {
-    border-color: var(--area-red-50);
-  }
-  .docs-visual-gallery__tile[data-audit="unrefined"] .docs-visual-gallery__tile-title {
-    color: var(--area-red-500);
-  }
-  .docs-audit-label[data-audit="review"],
-  .docs-visual-gallery__tile[data-audit="review"] .docs-visual-gallery__tile-title {
+  .docs-audit-label[data-audit="review"] {
     color: var(--area-fg-caution);
-  }
-  .docs-visual-gallery__tile[data-audit="review"] {
-    border-color: var(--area-caution-border);
   }
   .docs-audit-label {
     display: inline-block;
     padding: var(--area-space-2) var(--area-space-4);
     border-radius: var(--area-radius-small);
-  }
-  .docs-gallery-index {
-    display: grid;
-    gap: var(--area-space-16);
-    margin-block: var(--area-space-24);
-  }
-  .docs-gallery-index__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--area-space-8);
-  }
-  .docs-gallery-index__batches {
-    display: grid;
-    gap: var(--area-space-8);
-    margin: var(--area-space-8) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-  .docs-gallery-index__batch {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--area-space-12);
-  }
-  .docs-gallery-index__batch-name {
-    min-inline-size: calc(var(--area-space-96) * 2.5);
-    color: var(--area-fg-default);
-    text-decoration: none;
-  }
-  .docs-gallery-batch {
-    display: flex;
-    align-items: center;
-    gap: var(--area-space-8);
-    margin: var(--area-space-40) 0 var(--area-space-12);
-    padding-block-start: var(--area-space-16);
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
-    font-weight: var(--area-weight-strong);
   }
   .docs-visual-gallery__header {
     margin-block-end: var(--area-space-8);
@@ -673,16 +623,6 @@ export const DOCS_CSS = `
     line-height: var(--area-ui-leading);
   }
   summary.docs-visual-gallery__section-title { cursor: pointer; padding-block: var(--area-space-8); }
-  /* A family's tiles in named groups (Default, Variants, Tones, Sizes, Layout, Content, States,
-     Behavior), each a heading over its own square-celled grid. */
-  .docs-visual-gallery__groups {
-    display: grid;
-    gap: var(--area-space-24);
-  }
-  .docs-visual-gallery__group {
-    display: grid;
-    gap: var(--area-space-8);
-  }
   .docs-visual-gallery__group-title {
     margin: 0;
     padding-inline: var(--area-space-4);
@@ -690,36 +630,6 @@ export const DOCS_CSS = `
     font-size: var(--area-control-sm-text);
     line-height: var(--area-control-sm-leading);
     font-weight: var(--area-weight-regular);
-  }
-  .docs-visual-gallery__grid {
-    /*
-     * One cell, square, and every specimen a whole number of them: 1x1, 2x1 or 2x2. Every
-     * column is one cell wide and every row is one cell tall, so a row keeps its height
-     * whatever a specimen does inside it. A tile that grew with its own content pushed its
-     * row out of step with the rows beside it, which is what the spanning specimens did
-     * while the rows were sized by what they held rather than by the grid.
-     */
-    --docs-gallery-cell: calc(var(--area-space-64) * 4);
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--docs-gallery-cell)), 1fr));
-    grid-auto-rows: var(--docs-gallery-cell);
-    gap: var(--area-space-8);
-  }
-  /*
-   * Auto-fill counts its columns and then stretches them to fill the width, which leaves
-   * the rows a little shorter than the columns are wide. Counting here instead lets the
-   * row track be exactly one column -- how many cells fit with the gaps, then what is left
-   * over shared between them -- so the cell is square at every width rather than at one.
-   * Only where that count can be computed: a container query unit for the width and a math
-   * function where repeat() wants an integer. The grid above stands everywhere else.
-   */
-  @supports (container-type: inline-size) and (width: 100cqw) and (grid-template-columns: repeat(round(down, 1, 1), minmax(0, 1fr))) {
-    .docs-visual-gallery__content { container-type: inline-size; }
-    .docs-visual-gallery__grid {
-      --docs-gallery-columns: max(1, round(down, calc((100cqw + var(--area-space-8)) / (var(--docs-gallery-cell) + var(--area-space-8))), 1));
-      grid-template-columns: repeat(var(--docs-gallery-columns), minmax(0, 1fr));
-      grid-auto-rows: calc((100cqw - (var(--docs-gallery-columns) - 1) * var(--area-space-8)) / var(--docs-gallery-columns));
-    }
   }
   .docs-visual-gallery__tile {
     min-inline-size: 0;
@@ -730,14 +640,6 @@ export const DOCS_CSS = `
     background: var(--area-bg-surface);
     border-radius: var(--area-radius-container);
   }
-  /* Spans are whole cells. 1x1 is the default tile and needs no rule of its own. */
-  .docs-visual-gallery__tile[data-span="row"] { grid-column: 1 / -1; }
-  .docs-visual-gallery__tile[data-span="4x2"] { grid-column: 1 / -1; grid-row: span 2; }
-  .docs-visual-gallery__tile[data-span="2x1"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); }
-  .docs-visual-gallery__tile[data-span="2x2"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 2; }
-  .docs-visual-gallery__tile[data-span="2x3"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 3; }
-  .docs-visual-gallery__tile[data-span="2x4"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 4; }
-  .docs-visual-gallery__tile[data-span="2x5"] { grid-column: span min(2, var(--docs-gallery-columns, 2)); grid-row: span 5; }
   /* The whole-set tile grows with the set, so it sits above the square-celled grid. */
   .docs-visual-gallery__set { margin-block-end: var(--area-space-8); }
   /* A sheet reads from its top left and scrolls sideways rather than overflowing its tile. */
@@ -846,69 +748,6 @@ export const DOCS_CSS = `
   }
   .docs-visual-gallery__tile-preview > * {
     max-inline-size: 100%;
-  }
-  /* Pass review: the current design pass for a family, above its variant tiles. */
-  .docs-gallery-review {
-    margin-block-end: var(--area-space-8);
-    border: 1px solid var(--area-border-decorative);
-    background: var(--area-bg-surface);
-    border-radius: var(--area-radius-container);
-  }
-  .docs-gallery-review__body {
-    padding: var(--area-space-8) var(--area-space-12) var(--area-space-24);
-    overflow-x: auto;
-  }
-  /* Every family's Pass review: status, the evidence for each step, the default specimen at 2x. */
-  .docs-pass__head {
-    display: flex;
-    align-items: center;
-    gap: var(--area-space-8);
-    padding: var(--area-space-12) var(--area-space-12) 0;
-  }
-  .docs-pass__head > .docs-visual-gallery__tile-title { margin: 0; }
-  .docs-pass__checks {
-    display: grid;
-    gap: var(--area-space-6);
-    margin: 0;
-    padding: var(--area-space-12);
-    list-style: none;
-  }
-  .docs-pass__check {
-    display: flex;
-    align-items: center;
-    gap: var(--area-space-8);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
-  }
-  .docs-pass__status { display: flex; flex: none; min-inline-size: calc(var(--area-space-48) + var(--area-space-16)); }
-  .docs-pass__check-name { flex: none; min-inline-size: calc(var(--area-space-96) + var(--area-space-12)); color: var(--area-fg-default); }
-  .docs-pass__evidence { color: var(--area-fg-muted); }
-  .docs-pass__count { color: var(--area-fg-muted); }
-  .docs-pass__stage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: var(--area-space-40) var(--area-space-24);
-    overflow-x: auto;
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
-  }
-  /* The 2x copy is as wide as a tile's content (224 for one cell, 504 for two), so a specimen that
-     fills its width (a Skeleton block, an Alert) has a width to fill instead of collapsing. */
-  .docs-pass__zoom {
-    zoom: 2;
-    display: flex;
-    justify-content: center;
-    inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
-    max-inline-size: none;
-  }
-  .docs-pass__zoom[data-span^="2"] { inline-size: calc(var(--area-space-96) * 5 + var(--area-space-24)); }
-  .docs-gallery-review.docs-pass > .docs-gallery-review__body { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
-  .docs-audit-label[data-pass="validated"] { color: var(--area-fg-success); }
-  .docs-visual-gallery__tile:has([data-slider-demo="GallerySliderVertical"]) .docs-visual-gallery__tile-preview > [data-slider-demo] {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-self: stretch;
   }
   @media (max-width: 980px) {
     .docs-visual-gallery { display: block; }
@@ -1564,12 +1403,6 @@ export const DOCS_SCRIPT = `
     }
   }
   window.addEventListener("hashchange", revealSection);
-  gallery.querySelectorAll('.docs-gallery-index a').forEach(function (link) {
-    link.addEventListener("click", function () {
-      var target = document.getElementById(link.hash.slice(1));
-      if (target) target.open = true;
-    });
-  });
   revealSection();
   var sectionState = {};
   try { sectionState = JSON.parse(localStorage.getItem("area-gallery-sections") || "{}"); } catch (e) {}

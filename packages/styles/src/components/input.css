@@ -36,7 +36,7 @@
     border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
     /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
-    border-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap)));
+    border-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap) + var(--area-radius-shift)));
 
     background-color: var(--_bg);
     color: var(--area-input-text);
@@ -209,7 +209,8 @@
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: max(0px, calc(min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap))) - var(--area-space-4)));
+    /* Concentric with the field, floored at radius-floor, 4 (radius audit 2026-10-03; all even 2026-10-03). */
+    border-radius: max(min(var(--area-radius-floor), calc(var(--_action) * var(--area-radius-cap) + var(--area-radius-shift))), calc(min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap) + var(--area-radius-shift))) - var(--area-space-4)));
     background: transparent;
     color: var(--area-input-icon);
     cursor: pointer;

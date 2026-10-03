@@ -279,34 +279,25 @@ acceptance stands until a change reopens it. To audit one:
 
 ## 8. Owner review and feedback
 
-Show the result in the gallery. Every variant the manifest exposes has a tile, grouped by
-the gallery (Default, Variants, Tones, Sizes, Layout, Content, States, Behavior; see
-`specimenGroup` in `apps/docs/scripts/specimen-names.mjs`) and named by its category so it
-lands in the right group: `size-sm`, `tone-accent`, `state-disabled`, `layout-vertical`.
-Every family opens with a **Pass review** (owner, 2026-09-27; supersedes the 2026-09-26 request
-to drop them). The gallery build reads the repository and shows three steps with their
-evidence: the audit (a spec covered by the cohesion audit), the visual pass (the spec's Visual
-pass section) and Claude in Chrome (target-product captures in `captures/<slug>/`), then the
-family's default tile enlarged 2× as an inert copy. A family reads **Validated** only when
-`apps/docs/src/pass-status.mjs` records that its visual pass compared Area and the product side
-by side in Claude in Chrome; the build fails if that entry's evidence is missing. Validated is
-not owner acceptance. A change subtle enough to need before / after rows adds a
-`GalleryReview<Name>` export (`ReviewPair` in `apps/docs/src/demos/review.tsx`), which renders
-inside the Pass review; delete those rows once the owner has seen them. Then give the owner:
+Show the result in the component gallery (`index.html`). Every variant the manifest exposes
+has a tile, ordered by the gallery's groups (Default, Variants, Tones, Sizes, Layout, Content,
+States, Behavior; see `specimenGroup` in `apps/docs/scripts/specimen-names.mjs`), labelled
+`Group / value` and named by its category so it lands in the right group: `size-sm`,
+`tone-accent`, `state-disabled`, `layout-vertical`. Tile size is measured, not declared
+(`apps/docs/src/gallery/fit.ts`): a specimen that fits its 4:3 tile shows at 1:1, a larger one
+scales to fit, and one that would fall below half size takes a 2 x 2 tile.
+The gallery's Mode and Density controls change only the canvas. Then give the owner:
 
 - the gallery link for each variant,
 - the spec's comparison table with the Area column,
 - the side-by-side observations,
 - open questions, and anything unverified.
 
-**Approval batches** (owner, 2026-09-27). Families are approved in batches of two or three
-(`APPROVAL_BATCHES` in `apps/docs/src/component-status.mjs`), each after four phases the gallery
-reads from the repository: 1 audit (audited spec), 2 visual pass (the spec's section), 3 Claude
-in Chrome side by side (captures plus an entry in `pass-status.mjs`), 4 owner approval (the slug
-in `COMPLETE_COMPONENTS`). The gallery leads with the first batch that is not officially complete,
-labels each family with its phase, and moves officially complete families to the bottom. Work
-the current batch through phases 1-3 before starting the next; a family changed after approval
-returns to In review.
+The review gallery (`gallery-components.html`, with each family's Pass review and the approval
+batches) was retired on 2026-10-02 (owner); its URL redirects to the component gallery. Evidence
+for a pass stays in the spec: the audit, the Visual pass section and the captures.
+`apps/docs/src/pass-status.mjs` still records side-by-side validation in Claude in Chrome, but no
+page reads it now.
 
 Record feedback in the spec's feedback log (observation → change → evidence) before
 changing code. When a lesson applies beyond one component, add it to this guide or the

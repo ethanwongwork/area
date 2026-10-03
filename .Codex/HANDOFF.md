@@ -5,6 +5,57 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Corner radius audit (2026-10-03, same branch)
+
+- Note: `docs/research/radius-audit-2026-10-03.md` (604 reference captures mined, 2,464 Area
+  corners measured at both densities). Applied: Standard curve 24px 4 -> 5 at both densities
+  (`radius.ts` xs and dense sm); nested shapes concentric with a floor of `radius-control-xs`
+  (Segmented items, Input actions, NumberField steppers, AlignmentPicker cells), so compact
+  Segmented is 24 r5 / items 20 r4 (was r4 / r2). DESIGN_SYSTEM.md's nested rule updated.
+- D1-D7 applied (owner, 2026-10-03; table in the note): surfaces 12 at both densities (compact
+  rows in floating surfaces 24 r8), one-line Alert / banner / Toast 10 (compact 8), Tooltip
+  compact 8, Kbd 6 everywhere, Card concentric with its media (16, compact 12), Breadcrumb
+  plate 5, whole-pixel swatch and split-trigger corners. Families keep their status.
+- Roundness (2026-10-03): `roundness` axis, −12…+12 in 2px steps (owner: no odd steps; show
+  each component from 0 to pill). `clamp(0, min(family, h × cap) + offset, h/2)`: offset in
+  `emit/base.ts`, caps move with it (`radius-shift` in all 44 cap expressions), floor 0.
+  Gallery: Roundness slider; `roundness.html` lays each family out square -> pill with magnified
+  corners and the inset arithmetic. Dialog cap is surface + 4, palette = surface, so both step
+  by 2. All even (owner): 24px -> 6, `radius-floor` 4 for nested shapes, menu rows 8 (border
+  left out), 2px rounding for swatches, checkbox, split trigger and caps.
+- Next (owner decided, not built): two roundness step sizes, 2px for controls / rows / bars /
+  control-holding shells, 4px for surfaces (container role) and what is concentric inside them;
+  Card and Dialog follow the surface (16 = surface + 4). Plan in the note, "Step size for large
+  shapes".
+
+## Component gallery (2026-10-02, branch `claude/component-gallery-theme-99e822`)
+
+- `index.html` is the component gallery: one grid of tiles per family (alphabetical, tiles in
+  specimen-group order, labelled `Group / value`), a left Nav that scroll-spies the canvas, and
+  a right Theme panel (Mode, Density) built from Panel, PanelRow and Segmented. The review
+  gallery (`gallery-components.html`: Pass review, approval batches) is retired (owner) and
+  redirects here; `pass-status.mjs` and `APPROVAL_BATCHES` are kept but no page reads them.
+- Theme isolation: the controls write `data-area-theme` / `data-area-ui` on `#gallery-canvas`
+  only (saved as `area-gallery-theme`, restored before paint). The rails inherit the root
+  defaults. Section and tile labels pin `data-area-ui="default"`; tile frames use
+  `radius-base-container`. When measuring compact here, read the canvas scope, not `<html>`.
+- Layout (owner, 2026-10-03): modelled on Cursor; rails pinned to compact, resizable Panels
+  (nav 200, 160–360; theme 248, the narrowest where "Compact" fits its 1 : 1.5 Field row),
+  widths saved as `area-gallery-rails`. Theme rows are horizontal Fields with Segmented; the
+  bar reads "Theme · Canvas". Canvas ground neutral 25 (dark neutral 975); 8 for canvas margin,
+  row and column gaps.
+- Tiles: 4:3, title top left, columns as many as fit at `--docs-tile-min` 280 (3 at 1440, 5 at
+  1920) stretched to fill. `src/gallery/fit.ts`: 1:1 when the specimen fits its view (within 4px
+  slack; 615 of 706), uniform scale otherwise, 2x2 when it would fall below 0.5 or truncate
+  (35). Shapes decided at default density and the minimum tile, so neither density nor window
+  width reflows the grid; ResizeObserver rescales. Smallest scale 0.54.
+- Alert corners (owner asked 2026-10-03): consistent by role, per alert.md: in-place 12
+  (`radius-container`), banner 6 (`radius-control-sm`, OpenAI and Primer 6), flush 0. Open.
+- Add a control: an entry in `apps/docs/src/gallery/controls.ts`. Add a family: `src/pages.mjs`
+  plus its tiles in `gallerySpecimenTable()` (build.mjs). No approval batch is needed now.
+- Verifying in the hidden browser pane: rAF and ResizeObserver don't run while the pane is
+  hidden; take a screenshot to force a frame before reading scales.
+
 ## Disclosure (2026-10-02, branch `claude/disclosure`): in review
 
 - New family: `Disclosure` (plain = Notion toggle: leading chevron in a line-height square, title
