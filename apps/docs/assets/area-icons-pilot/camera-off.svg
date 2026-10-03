@@ -3,6 +3,6 @@
 <circle data-filled="line" cx="8" cy="8.5" r="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="fill" d="M2 6.5A2 2 0 0 1 4 4.5H5.5L7 3H9L10.5 4.5H12A2 2 0 0 1 14 6.5V11A2 2 0 0 1 12 13H4A2 2 0 0 1 2 11Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="knockout" d="M6 8.5A2 2 0 0 1 6.858 6.858M9.642 9.642A2 2 0 0 1 6 8.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M0.928 -0.928L16.928 15.072" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M0.909 -0.682L16.909 15.318" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path  d="M2 2L14 14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

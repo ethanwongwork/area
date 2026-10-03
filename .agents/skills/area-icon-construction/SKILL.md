@@ -175,6 +175,12 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   lines; send has a centre fold and pencil a ferrule band. A reticle (crosshair) fills by weight;
   people fill both figures, the back one overlap-cut. Record: `docs/specs/icons.md`, "Audit
   follow-up, 2026-10-02".
+- **Owner, later 2026-10-02:** the zip is Fluent's (folder-zip: teeth joined into one strip, an
+  arch pull over the bottom edge). toy-brick keeps its drawing; blocks is four separate blocks of
+  one size, the fourth offset (Lucide). image's sun is a ⌀1.5 dot top right and its mountain is
+  Fluent's pyramid (peak on the diagonal), so image-off's slash covers its right slope; image-plus's + sits on the lower-right corner. A basket is Lucide's (legs that don't meet); a peaked
+  handle on a tall body reads as a cupcake. A shape whose parts must sit on x.5 may sit 0.5 off
+  centre on both axes (chip, delegated).
 
 ## The system at 16px
 
@@ -419,6 +425,13 @@ or the accessory fills instead (video_person, incognito; the bots' hats). Judge 
     cap, bell). A gap centred on the line, or run on through the front part, shaves it.
   - **Details inside a solid** (marks, keys, hands, text lines, a keyhole) are knockouts; a
     mark on a container's corner notches it.
+    A knockout end that reaches the solid's edge runs out square (the generator extends it 1px
+    with a butt end, owner 2026-10-02); only free ends inside the solid are round. A line that
+    runs edge to edge across a solid (a slat, a divider) is a `cut`.
+  - **No slivers** (owner, 2026-10-02): where two cut-outs, or a cut-out and a line drawn over the
+    fill, come within about 1.1 of each other, the fill between them is a sliver; align them so the
+    space meets (a gap flush against the slash, a lens gap meeting a fold) or move the parts apart.
+    Check with `docs/research/icon-review/2026-10-02/slivers.mjs` (`SLIVER_PNG=out.png` marks hits).
   - **A closed shape holding a mark fills and knocks the mark out** (add-circle, error,
     clock, zoom-in and zoom-out's lens, as Fluent's zoom). This is for true marks (+ − × ✓,
     play, dots) only: a ring or frame whose content is itself a line drawing (target, a

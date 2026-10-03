@@ -943,6 +943,14 @@
         "pentagon": "review",
         "octagon": "review"
       }
+    },
+    {
+      "id": "batch-64",
+      "title": "Batch 64 · Zip archive",
+      "note": "folder-zip, Fluent's zip (owner's pick over a file with a tooth column): folder's own drawing with a zipper and a pull.",
+      "icons": {
+        "folder-zip": "review"
+      }
     }
   ]
 }

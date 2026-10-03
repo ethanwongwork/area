@@ -2603,8 +2603,12 @@ never style.
 
 Kept with the overlap cut: people, coins, cloud-sun (layers), every corner mark and badge.
 
-Still open: the list family's three-line stacks (list-bullet, list-checklist, list-numbered at
-5, 8, 11) and chip's pins on whole pixels; blocks and toy-brick from the rejected round.
+Closed (2026-10-02, delegated on the recommendations; sheet 20): the list family's stacks were
+already on x.5 (4.5, 7.5, 10.5) from the owner round. chip moves to x.5: an 8 × 8 body
+(3.5–11.5, r 1, so the pins meet the corner arcs' ends as the 9 × 9 r 1.5 body's did) with three
+pins a side at 4.5, 7.5 and 10.5 (1.5 long), the hub ring at 7.5, 7.5 (tight 1.38); the ink box is
+unchanged (12.1) and sits 0.5 up and left, as the stacks sit 0.5 high. blocks and toy-brick keep
+their drawings (owner preferred them to the pyramid and lego candidates, which are removed).
 
 ## Batch 63: Coverage round 2, 2026-10-02
 
@@ -2654,3 +2658,93 @@ Still open: the list family's three-line stacks (list-bullet, list-checklist, li
 | octagon | octagon-alert's outline alone (path exactly) |
 
 For the owner: spell-check is Area's T with a check (the libraries use an A); pilcrow's bowl fills solid; file-pen's small pencil has no ferrule; webhook reads light; image-off's slash runs close to the mountain's leg and through the sun; battery-charging's bolt sits inside the battery (Fluent's over the edge lost the top under the overlap cut); gamepad's d-pad is 3px; cloud-snow has one row of flakes; hammer's handle is a line; several sit off centre for their marks (exit-door, file-pen, file-search, handshake, party-popper). Candidates for the rejected blocks and toy-brick are on the Exploration sheet (blocks-pyramid, blocks-pyramid-joined, toy-brick-lego).
+
+## Batch 64: Zip archive, 2026-10-02
+
+| Icon | Construction |
+|---|---|
+| folder-zip | Fluent's folder_zip on folder's drawing moved up 1 (2–14 × 2–12, tab and flap unchanged): a zipper of five 1-long teeth alternating either side of x 10.5 at y 4.5–8.5, 1 apart so they join into one strip (the top tooth joins the top edge; detail 1.0 to the flap), and an arch pull (3 wide, r 1.5 top, r 0.5 feet) at 9–12 × 10.5–14 hanging over the bottom edge, the folder cut open round it by the overlap cut (`behind`, 2.25), which takes the lower-right corner as a corner mark does. Square keyline (12.6 tall). Filled: the folder fills (flap a cut), the teeth knock out, the pull is solid with a slot and parted from the fill by a filled-only gap |
+
+Owner, 2026-10-02: Fluent's zip visual over the file-zip drawn the same day (Lucide's file-archive: one tooth column and a ring pull on document's page), which is removed. archive remains the box.
+
+## Cleanup round, 2026-10-02
+
+Owner: blocks and toy-brick stay as drawn, blocks' filled variant needed fixing; then a pass over
+the set for consistency and finish (whole-set grid at 32 and 16px, the `--parts` and `--audit`
+reports, filled sheets of batches 55–63; references in `icon-references.json`, group
+`cleanup-1002`).
+
+| Icon | Change |
+|---|---|
+| basket | Lucide's shopping basket: a 12-wide rim (2–14 at 7.5) on a body tapering to 9 (3.5–12.5 at 13.5, r 1.5 feet), two handle legs at 1 : 2 (4, 7.5 → 6.5, 2.5 and mirrored, tops 3 apart, detail 1.11 from the slats) and two slats. Phosphor's peaked handle on a tall body read as a cupcake; an arched handle read as a shopping bag. Filled: the slats are cuts (square, through the body) |
+
+Looked at and kept: file-spreadsheet (the four cells are Lucide's construction; a ruled grid read as
+a ±), voicemail (the widest the horizontal keyline allows; Fluent reads larger only because it
+frames it), grip (Fluent's re-order lines, distinct from grip-vertical's dots), vault, call-end.
+
+For the owner: image-off's sun sits on the shared slash (image's sun is at 6.5, 6.5 on the
+diagonal), so the slash runs through it; Fluent's sun is top-right and Lucide drops it. handshake
+reads busy beside Fluent's and Hugeicons'; webhook still reads light.
+
+Owner, same day (sheet 23):
+
+| Icon | Change |
+|---|---|
+| blocks | four separate blocks of one size in the outline too: 4 × 4, r 1, at 2–6 × 3–7, 2–6 × 10–14 and 9–13 × 10–14 (standard 1.88 apart) and the fourth offset up and right at 10–14 × 2–6 (Lucide's blocks); whole-pixel edges so the set centres on 8; each solid when filled. r 1.5 on a 4 × 4 block read as a ring |
+| image | Fluent's arrangement, so image-off's slash misses both parts: the sun a ⌀1.5 dot (the family's detail dot, as gallery, images and file-image) at 10.25, 5.75, standard 1.94 from the top and right edges; the mountain is Fluent's pyramid, its corner on the diagonal at 8, 8 rounded r 1 (a sharp corner left the filled peak pointed: the peak there is the inner side of the cut) and both slopes running at 45° into the bottom corners' midpoints (3.09, 12.91 and 12.91, 12.91). A peak left of centre left a 1.0 strip of fill between the slope and the slash when filled (owner) |
+| image-off | image with the shared slash flat on top: only the mountain's left slope is drawn, to the slash's centre (8, 8), where the slash covers its end (Fluent's image_off); filled, it is a gap ending under the slash. No slivers in either variant |
+| image-plus | the + moves to the lower-right corner (the placement rule; the top right now holds the sun): frame and mountain cut round it by the overlap cut, the right slope ending 2.25 short of it |
+| images, gallery | the same mirror inside their pictures (sun right, peak left). file-image keeps its sun at the left, where the page's fold leaves room |
+
+Negative-space ends (owner: "why do the strokes that are negative space have rounded ends?"): a
+knockout that reaches a solid's edge now runs out through it with a square end, as a cut does
+(the generator adds a 1px butt extension at every knockout end that lies on a solid's outline;
+basket, table, film, ruler, piano, the corner marks and 25 others). Free ends inside a solid keep
+round caps, matching the outline's line ends. Sheet 24.
+
+Slivers (owner, same day: "this small piece of the background from behind the stroke is
+unnecessary. just align it with the stroke… fix it everywhere"; sheet 25). A scan,
+`docs/research/icon-review/2026-10-02/slivers.mjs` (`SLIVER_PNG=out.png` marks each hit in red),
+rasterises every icon at 8× and reports hairlines of ink or space under about 0.6px and fill left
+beside a line drawn over it under about 1.1px. Fixed:
+
+| Icons | Fix |
+|---|---|
+| the twelve slashed icons with a filled gap (bell-off, brain-off, bug-off, camera-off, cloud-off, flask-off, image-off, mic-off, shield-off, star-off, unpin, video-off) | the slash's filled gap sat 1.31 from the slash, spaced for a bold slash, but the slash is drawn at the icon weight, so a 0.19 hairline of fill ran along it; the gap now sits flush, 1.125 from the slash's centre (`M0.909 -0.682L16.909 15.318`) |
+| image, image-off | the pyramid mountain above |
+| file-search | the lens moves to 10.5, 10.5 (r 2, on the diagonal lattice; handle to 13.5, 13.5; vertical keyline, centre 8.5): its filled gap (r 3.125, flush with the lens) now reaches the fold's cut on its own; filled-only gaps clear the page's right edge between fold and lens and its bottom edge under the lens, and the outline's right edge ends at the fold (no stub) |
+| file-code | the chevrons move down 1.5 (10.5–14.5) onto the page's bottom edge, the page cut round them; their halo stayed 0.25 from the fold's cut. Vertical keyline (13.6 tall), centre 8.25, 8.25 |
+| flask-off | unchanged beyond the slash's flush gap (owner: the part past the slash should stay); a side gap that cleared the 15° wedge took too much of the neck and shoulder |
+| library | the leaning book moves 0.5 right and the upright narrows to 4.5 (2–6.5): the books part by 1.09 at the top instead of touching, which left a 3px hairline wedge between them. The bands are outline lines with filled-only gaps that end 1 past their own book (a cut's 2px run-out nicked the other book) |
+| utensils | the fork's tines are 2.5 apart (2.5, 5, 7.5) and the knife moves to 10.5–13, so the filled 1.5 lines keep a 1.0 gap (tines 2 apart left 0.5) |
+| person-settings | the gear's filled hub is a gap circle r 0.5625 (a hole 1.125 across); an r 0.375 circle stroked wider than itself drew a ring with a dot in it |
+
+Kept: files' two text lines (0.875 of fill between two cut-outs, the outline's detail gap
+inverted).
+
+Generator, same round: a cut with several subpaths extends each subpath at both ends (only the
+first start and last end ran out, so library's and basket's second bands stopped short of an edge;
+briefcase's band, which stops at the clasp on purpose, is now an outline line and a filled gap);
+a knockout's run-out through an edge is 1px.
+
+Owner picks, same day (sheets 27 and 28; "go with your recs"):
+
+| Icon | Change |
+|---|---|
+| image, image-off, image-plus | the sun is the ⌀2 mark dot (Fluent's sun) at 10, 5.5 in all three: tight 1.44 from the top, standard 1.83 from the mountain, open 2.71 from image-plus's + (at 10, 6 the + was a 2.25 near miss) |
+| bot-lead | the three dots above the crown removed (owner) and the crown's top raised 1.5 into their room, so its inside is 2.9 across instead of a hairline; ink sits 0.24 low |
+| handshake | redrawn after Hugeicons' agreement: one top line across both hands (r 1 bends), the right hand's thumb folding down to an r 0.75 knuckle and back, then down to the right edge, and the left hand's fingers wrapping under to meet it; no cuffs. Line glyph, 45° lattice |
+| webhook | loops r 2.5 on a wider triangle (centres 8, 4.5 · 11.75, 11 · 4.25, 11), same rule (arms from a loop's centre to the next loop's tangent, wrapping 200°); circle keyline |
+
+Owner round 2, same day (sheets 29–31):
+
+| Icon | Change |
+|---|---|
+| gallery | image's pyramid inside the front picture: corner at 9.5, 7.5 rounded r 1, slopes at 45° meeting the picture's bottom corner arcs (6.55, 10.45 and 12.45, 10.45; standard 1.92 to the back copy's bottom line), the ⌀1.5 sun at 11, 5 (tight 1.19 from the top, standard 1.88 from the slope). The back copy, down and left, is the owner's preferred layering |
+| images | an alias of gallery (`data-alias-of`): both were labelled Gallery, and images, built on copy's old layering, had missed the multiples update |
+| file-image | image's pyramid on the page: corner at 8, 10 rounded r 1, slopes into the page's bottom corner arcs; the ⌀1.5 sun stays left (6, 7), where the fold leaves room |
+| bot-lead | the crown's top 0.5 higher again (2 in all), which centres the bot (7.99) |
+
+Kept: voicemail unframed. A frame in Area is either the object itself (image, app-window) or a
+variant of a base glyph (the -circle and square- families); only Fluent frames the tape.
+
