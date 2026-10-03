@@ -116,7 +116,7 @@ A new shared part (owner to settle its size): a solid dot about ⌀3 on the host
 | mail-dot | drawn: batch-46 | mail with the dot | Lucide `mail` · Fluent `mail_unread_16` | unread mail |
 | square-badge | drawn: batch-46 | the square with the dot on its corner | Lucide `app-window` | an app or tab with news |
 | compass-dot | drawn: batch-46 | compass with the dot on its ring | Lucide `compass` | new places to explore |
-| braces-dot | batch 46 | braces with the dot at the bottom right | Lucide `braces` · Fluent `braces_16` | code with changes |
+| braces-dot | dropped (batch 46 and 65: the dot takes the brace's hook) | braces with the dot at the bottom right | Lucide `braces` · Fluent `braces_16` | code with changes |
 
 ### Batch 47 · Corner badges: check, prohibited, play
 
@@ -125,15 +125,15 @@ The corner-mark placement (document-add's) with three more marks: the small chec
 | concept | plan | what it shows | references | uses |
 |---|---|---|---|---|
 | folder-check | drawn: batch-47 | folder with the small check on its corner | Lucide `folder-check` | synced, verified folder |
-| compass-check | batch 47 | compass with the small check | Lucide `compass` | explored, visited |
+| compass-check | removed (owner, 2026-10-02: niche) | compass with the small check | Lucide `compass` | explored, visited |
 | scan-check | drawn: batch-47 | corners with the inside check | Lucide `scan-line` | verified, scan complete |
 | desktop-check | drawn: batch-47 | desktop with the small check | Lucide `monitor-check` · Fluent `desktop_checkmark_16` | deployed, device verified |
 | search-off | drawn: batch-47 | search with a small prohibited ring on its corner (Cursor's second off form) | Lucide `search-slash` | no results, search disabled |
 | flask-off | drawn: batch-47 | flask with the prohibited ring | Lucide `flask-conical-off` · Fluent `beaker_off_20` | beta off, experiments disabled |
 | desktop-play | drawn: batch-47 | desktop with a small play on its corner, the screen cut back | Lucide `monitor-play` | run a preview, present |
-| bug-play | batch 47 | play with a small bug on its corner | Lucide `bug-play` | run and debug |
+| bug-play | removed (owner, 2026-10-02: niche) | play with a small bug on its corner | Lucide `bug-play` | run and debug |
 | bug-off | drawn: batch-57 | bug with the shared slash | Lucide `bug-off` · Fluent `bug_prohibited_20` | code review bot, bugs off |
-| plug-off | batch 47 | plug with the shared slash | Lucide `unplug` · Fluent `plug_disconnected_16` | disconnected, server off |
+| plug-off | drawn (batch 65) | plug with the shared slash | Lucide `unplug` · Fluent `plug_disconnected_16` | disconnected, server off |
 
 ### Batch 48 · Agents and AI
 
@@ -148,7 +148,7 @@ One agent mark reused in containers (the family rule), the brain for reasoning, 
 | agents | drawn: batch-48 | four small darts in a 2 × 2 | Lucide `navigation` · Fluent `agents_16` | multiple agents, parallel runs |
 | brain | drawn: batch-58 | a brain: two lobed halves and a centre line | Lucide `brain` · Fluent `brain_16` | AI, reasoning, memory |
 | brain-off | drawn: batch-58 | brain with the shared slash | Lucide `brain` · Fluent `brain_16` | reasoning off |
-| brain-thinking | batch 48 | brain with a small hourglass | Lucide `brain-cog` · Fluent `brain_16` | thinking, reasoning in progress |
+| brain-thinking | removed (owner, 2026-10-02: niche) | brain with a small hourglass | Lucide `brain-cog` · Fluent `brain_16` | thinking, reasoning in progress |
 | chat-sparkle | drawn: batch-48 | chat with the sparkle inside | Lucide `message-square` · Fluent `chat_sparkle_16` | ask AI, AI chat |
 | grid-sparkle | drawn: batch-48 | grid with the sparkle as its fourth tile | Lucide `layout-grid` | AI apps, generate a component |
 | grid-plus | drawn: batch-48 | grid with the plus as its fourth tile | Lucide `layout-grid` | add an app or widget |
@@ -178,10 +178,10 @@ Document and folder with shared modifiers: the stack, a corner mark, an arrow ou
 |---|---|---|---|---|
 | files | drawn: batch-50 | document with a back copy (copy's stack) | Lucide `files` · Fluent `document_multiple_16` | several files, attachments |
 | file-lock | drawn: batch-57 | document with a small lock on its corner | Lucide `file-lock` · Fluent `document_lock_16` | private, restricted |
-| file-diff | batch 50 | document with a plus over a minus | Lucide `file-diff` | changes, review, diff |
+| file-diff | drawn (batch 65) | document with a plus over a minus | Lucide `file-diff` | changes, review, diff |
 | file-export | drawn: batch-50 | document with an arrow out of its corner | Lucide `file-output` · Fluent `document_arrow_right_16` | export, open file |
 | folders | drawn: batch-57 | folder with a back copy | Lucide `folders` · Fluent `folder_multiple_16` | collections, projects |
-| folder-dashed | batch 50 | folder drawn dashed | Lucide `folder-dot` | placeholder, draft folder |
+| folder-dashed | removed (owner, 2026-10-02: niche) | folder drawn dashed | Lucide `folder-dot` | placeholder, draft folder |
 | clipboard-list | drawn: batch-50 | clipboard with list lines | Lucide `clipboard-list` · Fluent `clipboard_task_list_16` | tasks, notes |
 
 ### Batch 51 · Code, git and shapes 2
@@ -194,7 +194,7 @@ Git's nodes and the type family's line.
 | git-pull-request-draft | drawn: batch-51 | pull request with its hook dashed | Lucide `git-pull-request-draft` · Fluent `branch_request_draft_16` | draft pull request |
 | split | drawn: batch-51 | two arrows forking from one stem | Lucide `split` · Fluent `arrow_split_16` | fork, split a flow |
 | brackets | drawn: batch-51 | square brackets | Lucide `brackets` | arrays, selection |
-| binary | batch 51 | 01 over 10 in the icon line | Lucide `binary` | binary data, bits |
+| binary | drawn (batch 65) | 01 over 10 in the icon line | Lucide `binary` | binary data, bits |
 | asterisk | drawn: batch-51 | a six-armed asterisk | Lucide `asterisk` · Fluent `text_asterisk_16` | required, wildcard, footnote |
 | plus-minus | drawn: batch-51 | ± | Lucide `diff` · Fluent `math_symbols_16` | tolerance, diff |
 | hexagon | drawn: batch-51 | a pointy-top hexagon | Lucide `hexagon` · Fluent `hexagon_16` | shape, node |
@@ -219,7 +219,7 @@ The type family's letters (cap height 2.5–13.5).
 | network | drawn: batch-53 | one node over three (a sitemap) | Lucide `network` · Fluent `organization_16` | hierarchy, sitemap, org chart |
 | waypoints | drawn: batch-58 | three nodes joined at a centre | Lucide `waypoints` | graph, connections |
 | dollar | drawn: batch-53 | $ | Lucide `dollar-sign` · Fluent `currency_dollar_euro_16` | price, billing, cost |
-| cost-tiers | batch 53 | one, two and three $ (cost-low, cost-medium, cost-high) | Lucide `dollar-sign` | model cost tiers |
+| cost-tiers | removed (owner, 2026-10-02: niche) | one, two and three $ (cost-low, cost-medium, cost-high) | Lucide `dollar-sign` | model cost tiers |
 | vault | drawn: batch-56 | a safe with a dial | Lucide `vault` · Fluent `vault_16` | secrets, storage |
 | layout-dashboard | drawn: batch-53 | four panes of two heights | Lucide `layout-dashboard` · Fluent `board_split_16` | dashboard, overview |
 
@@ -229,11 +229,11 @@ Chat and call with shared modifiers.
 
 | concept | plan | what it shows | references | uses |
 |---|---|---|---|---|
-| chat-question | batch 54 | chat with a ? | Lucide `message-circle-question-mark` · Fluent `chat_help_16` | help, FAQ |
+| chat-question | drawn (batch 65) | chat with a ? | Lucide `message-circle-question-mark` · Fluent `chat_help_16` | help, FAQ |
 | chat-code | drawn: batch-54 | chat with code's chevrons | Lucide `message-square-code` | code review comment |
 | chat-more | drawn: batch-54 | chat with more's dots | Lucide `message-square-more` | typing, more replies |
 | chat-warning | drawn: batch-57 | chat with an ! | Lucide `message-square-warning` · Fluent `comment_error_16` | flagged, failed message |
-| chat-dashed | batch 54 | chat drawn dashed | Lucide `message-square-dashed` | draft comment |
+| chat-dashed | removed (owner, 2026-10-02: niche) | chat drawn dashed | Lucide `message-square-dashed` | draft comment |
 | person-chat | drawn: batch-58 | person beside a small chat bubble | Lucide `user-round` · Fluent `person_chat_16` | contact support |
 | check-check | drawn: batch-56 | two checks | Lucide `check-check` | read, all done |
 | call-incoming | drawn: batch-57 | call with an arrow in (call-outgoing: out) | Lucide `phone-incoming` · Fluent `call_inbound_16` | call history |
@@ -246,12 +246,12 @@ Chat and call with shared modifiers.
 | wrench | drawn: batch-57 | an open-ended wrench on the diagonal | Lucide `wrench` · Fluent `wrench_16` | tools, MCP tools, fix |
 | bandage | drawn: batch-57 | a band-aid on the diagonal | Lucide `bandage` | fix, patch |
 | target | drawn: batch-55 | two rings and a centre dot | Lucide `target` · Fluent `target_16` | goal, focus |
-| goal | batch 55 | target with a dart in it | Lucide `goal` · Fluent `target_arrow_16` | goals, objectives |
+| goal | drawn (batch 65) | target with a dart in it | Lucide `goal` · Fluent `target_arrow_16` | goals, objectives |
 | crosshair | drawn: batch-55 | a ring with four ticks and a dot | Lucide `crosshair` | pick an element, locate |
-| radar | batch 55 | open rings with a sweep | Lucide `radar` · Fluent `radar_20` | scan, monitor |
+| radar | drawn (batch 65) | open rings with a sweep | Lucide `radar` · Fluent `radar_20` | scan, monitor |
 | route | drawn: batch-56 | a path from a start ring to an end | Lucide `route` | journey, plan |
 | binoculars | drawn: batch-58 | binoculars | Lucide `binoculars` | explore, watch |
-| broom | batch 55 | a broom | Lucide `brush-cleaning` · Fluent `broom_16` | clean up, clear all |
+| broom | drawn (batch 65) | a broom | Lucide `brush-cleaning` · Fluent `broom_16` | clean up, clear all |
 | presentation | drawn: batch-56 | an easel with a board | Lucide `presentation` · Fluent `whiteboard_16` | slides, present |
 | app-window | drawn: batch-57 | a window with three dots in its bar | Lucide `app-window-mac` · Fluent `window_16` | browser, app preview |
 | blocks | drawn: batch-56 | three tiles and a fourth lifted off | Lucide `blocks` · Fluent `apps_add_in_16` | apps, extensions |
@@ -272,11 +272,11 @@ Chat and call with shared modifiers.
 | basketball | drawn: batch-59 | a ball with seams | Lucide `volleyball` · Fluent `sport_basketball_20` | sports |
 | chess-rook | drawn: batch-60 | a rook (chess-king too) | Lucide `chess-rook` · Fluent `chess_16` | games, strategy |
 | castle | covered: chess-rook | a castle | Lucide `castle` | security, games |
-| deck-chair | later | a deck chair | Lucide `tree-palm` · Fluent `beach_16` | away, vacation |
+| deck-chair | removed (owner, 2026-10-02: niche; beach rejected) | a deck chair | Lucide `tree-palm` · Fluent `beach_16` | away, vacation |
 | piano | drawn: batch-59 | keys | Lucide `piano` | music |
 | vr-goggles | drawn: batch-60 | a headset | Lucide `glasses` · Fluent `headset_vr_20` | VR, immersive |
 | crystal-ball | drawn: batch-59 | a ball on a stand | — | predictions |
-| satellite | later | a satellite | Lucide `satellite` | remote, broadcast |
+| satellite | removed (owner, 2026-10-02: niche) | a satellite | Lucide `satellite` | remote, broadcast |
 | toy-brick | drawn: batch-59 | a brick with studs | Lucide `toy-brick` | components |
 | circuit-board | drawn: batch-60 | a board with traces | Lucide `circuit-board` | hardware |
 | cube-wireframe | drawn: batch-60 | the hexagon with three diameters | Lucide `box` · Fluent `cube_16` | 3D wireframe |

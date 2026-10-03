@@ -634,6 +634,11 @@ const filledBody = icon => {
     ...plain,
   ];
 };
+// A filled icon with solids is a uniform enlargement of its 16px drawing: its gaps and cuts sit
+// where the 16px line puts them, so thinning the strokes by the size curve would open slivers of
+// fill between a line and its gap (the slashed icons at 32px). Line glyphs keep the curve.
+const filledUniform = (icon, lines) => icon.elements.some(el => SOLID_ROLES.includes(el.filled))
+  ? lines.map(line => line.replaceAll("sw(weight, size", "sw(weight, undefined")) : lines;
 const tsx = `/**
  * Area icon pilot, generated from apps/docs/assets/area-icons-pilot by
  * scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
@@ -666,7 +671,7 @@ ${icons.map(icon => `export const ${component(icon)}Icon = ({ weight, size, ...p
 export const ${component(icon)}FilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
   ${filledBody(icon).some(line => line.includes("mask")) ? "const id = useMaskId();\n  " : ""}return (
     <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-      ${turn(icon, filledBody(icon)).join("\n      ")}
+      ${turn(icon, filledUniform(icon, filledBody(icon))).join("\n      ")}
     </svg>
   );
 };` : "")).join("\n\n")}

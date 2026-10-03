@@ -158,7 +158,7 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   an alternative (file-zip: archive, or a labelled file type).
 - **Solids in the outline style** are exceptions, each recorded: quote's marks and bold's B,
   stop-circle's square and record's disc, the boolean operations' result, contrast's half,
-  shadow's band, id-card's person, stroke-weight's bars, newspaper's picture block. (paw's
+  shadow's band, folder-zip's teeth, id-card's person, stroke-weight's bars, newspaper's picture block. (paw's
   toes are r 1.25 rings, solid only when filled.) The solid is
   what the icon shows; ordinary details stay lines.
 - **Owner, 2026-10-02:** multiples follow Phosphor's layering (Shared parts); library is
@@ -175,8 +175,9 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   lines; send has a centre fold and pencil a ferrule band. A reticle (crosshair) fills by weight;
   people fill both figures, the back one overlap-cut. Record: `docs/specs/icons.md`, "Audit
   follow-up, 2026-10-02".
-- **Owner, later 2026-10-02:** the zip is Fluent's (folder-zip: teeth joined into one strip, an
-  arch pull over the bottom edge). toy-brick keeps its drawing; blocks is four separate blocks of
+- **Owner, later 2026-10-02:** the zip is Fluent's, followed closely (folder-zip: four solid 1 × 2
+  teeth alternating about a column and touching at their corners, a hollow tab joined to the last
+  tooth and hanging below an intact folder). toy-brick keeps its drawing; blocks is four separate blocks of
   one size, the fourth offset (Lucide). image's sun is a ⌀1.5 dot top right and its mountain is
   Fluent's pyramid (peak on the diagonal), so image-off's slash covers its right slope; image-plus's + sits on the lower-right corner. A basket is Lucide's (legs that don't meet); a peaked
   handle on a tall body reads as a cupcake. A shape whose parts must sit on x.5 may sit 0.5 off
@@ -303,6 +304,12 @@ the lint prints every gap and counter with `--report`.
   centre-lines, where it points into a tray or out of a box (download, upload, share,
   open); log-in and log-out stop standard (3) from the door's back, the nearest the lattice
   allows;
+- **mark pass rules (owner, 2026-10-02; spec "Mark pass"):** the ! has a ⌀1.5 dot 2.75 below its
+  stem's end in every icon (stem 3.5 large host, 1.75 small or tapering host, 2.75 beside); ring,
+  shield and square containers take the ring's marks; corner arrows sit in the plus's 4 × 4 box 1 in
+  from the edge they point at, 2px heads, so no barb leaves a triangle of fill against the edge;
+  frame-contained chevrons and git heads are 2. Before calling a filled variant done, run
+  `slivers.mjs` (it flags islands of fill too) and look at `sizes.mjs` at 32 and 48;
 - slash ("off" icons): one slash for every icon, identical in length, angle and ends:
   `M2 2L14 14` (45°, top left to bottom right, 12√2 long), round caps, in front. **In the
   outline the slash crosses flat** (owner, 2026-10-02, Cursor's "no shadow effects"): the base
@@ -535,6 +542,13 @@ Uniform scaling made large icons too thick (2.25px at 32) and small ones too lig
 12). Pass `size` to a pilot icon, or `size` to `Glyph` (base.css holds the factors), and
 the line follows the curve. At 12px the tight gap falls to about 0.9px, so a dense icon
 that must read at 12px on 1× screens gets its own 12px cut.
+
+The filled variant of an icon with solids does not follow the curve (owner, 2026-10-02): it is
+the 16px drawing enlarged, because its gaps and cuts sit where the 16px line puts them, and a
+thinner line at 32px opened a strip of fill between each slash and its gap. Line glyphs (no
+solid) keep the curve when filled. Review sheets show icons by themselves at 16 / 24 / 32 / 48
+through the real `size` prop (`docs/research/icon-review/2026-10-02/sizes.mjs`) or beside all
+five libraries (`icon-refs.mjs`), never at one large size beside Fluent alone.
 
 **In components.** A component that draws its own glyph uses `Glyph` from
 `packages/react/src/components/Glyph.tsx`. Add the icon (or one element of it) to

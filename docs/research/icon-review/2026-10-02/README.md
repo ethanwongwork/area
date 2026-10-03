@@ -36,6 +36,13 @@ recommendations and delegated: confirm or overturn by icon. Construction lines a
 | `29-open-items-2.png` | round 2 of open items (`open-items-2.mjs`; candidates in `explore/`) |
 | `30-images-gallery.png` | images and gallery: one icon (alias) or two |
 | `31-round-2-before-after.png` | round 2 applied: gallery's pyramid, images as its alias, file-image's pyramid, bot-lead centred |
+| `32-folder-zip-fluent.png` | folder-zip redrawn on Fluent's construction, beside Fluent, outline and filled |
+| `33-open-four-before-after.png` | file-code, vault, circuit-board and call-end before and after (references: `icon-refs.mjs sheet out.png open-4`) |
+| `34-batch-65-compare.png` | Batch 65, the rest of the build queue (17 icons) beside Fluent |
+| `36-remove-candidates.png` | Existing icons in fewer than 3 systems (owner: keep them all; judge by use) |
+| `37-broom-file-diff.png` | broom (Lucide's) and file-diff (no fold) beside the libraries |
+| `38a-`, `38b-batch-66-sizes.png` | Batch 66 by itself, outline and filled at 16 / 24 / 32 / 48 through the size curve (`sizes.mjs`) |
+| `38c-batch-66-libraries.png` | Batch 66 beside Fluent, Lucide, Phosphor and Hugeicons (`icon-refs.mjs sheet out.png build-next-66`) |
 | `22-refs-cleanup.png` | Cleanup round references: handshake, webhook, image-off, folder-zip, basket |
 | `17-overlap-applied.png` | The overlap rule applied: stacks as an open L, flat slashes, closed decoration; and the dots by role |
 
@@ -65,7 +72,8 @@ Open decisions:
 - Batch 62's exceptions (in its spec section): image-plus and cart-add put the + top right;
   shield-alert's longer stem; solid knob, centre and swatch (toggle, radio-button, text-color);
   headset's shorter cups; person-settings' ring-and-teeth gear; navigation's dart.
-- Owner (later 2026-10-02): Fluent's zip (folder-zip, batch 64; file-zip removed); blocks and
+- Owner (later 2026-10-02): Fluent's zip (folder-zip, batch 64; file-zip removed), redrawn
+  closer to Fluent (larger solid teeth, the tab joined to them; sheet 32); blocks and
   toy-brick keep their drawings, blocks' filled variant fixed (separate rounded blocks). Cleanup
   round (spec "Cleanup round, 2026-10-02"): basket is Lucide's; chip's pins on x.5 (delegated).
 - Owner (same day): blocks are four equal separate blocks; image's sun is a dot top right and the
@@ -74,7 +82,20 @@ Open decisions:
 - Owner (same day): no slivers of fill or space; fixed across the set with `slivers.mjs`.
 - Done (owner: "go with your recs"): ⌀2 sun, bot-lead's dots removed (owner) and crown raised, handshake clasping, webhook r 2.5; flask-off restored past the slash.
 - Done (owner, round 2): images is an alias of gallery (the layered look), the picture family takes image's pyramid, bot-lead centred, voicemail stays unframed.
-- Open, no candidates yet: file-code's outline has no bottom line, vault's dial reads as ¤, circuit-board's traces read as §§, call-end reads small.
+- Batch 65 (sheet 34): the build queue; the owner kept binary, goal, radar, broom, chat-question,
+  file-diff and plug-off and removed the niche ones (compass-check, bug-play, brain-thinking,
+  folder-dashed, chat-dashed, satellite, cost tiers, beach). Rule (owner): judge by real use, not a
+  library count; a tool-specific set with a use (the Figma inspector icons) stays. The
+  cross-library count (`docs/research/icon-audit/relevance-2026-10-02.md`) is evidence, not a cut-off;
+  nothing was removed from the audit's niche list.
+- Filled icons with solids no longer follow the size curve (generator `filledUniform`): the curve
+  thinned the slash at 32px and left a strip of fill beside each slash gap.
+- Batch 66 (sheets 38a–c): the audit's 32 build-next concepts. To confirm: dropped base content in
+  pencil-off (ferrule), chat-off (text lines) and screen-share-off (arrow); clock-alert's ! on the
+  lower left; mail-plus's + top right; shield-plus/-x with the ring's marks; person-square fills the
+  figure, not the frame.
+- Drawn (sheet 33; spec "Open four"): file-code's chevrons inside a whole page, vault with a ring
+  dial, handle and feet, circuit-board as Lucide's two traces to the edge, call-end larger and flatter.
 
 Re-render (from the repository root, zsh): explainers with
 `node docs/research/icon-review/2026-10-02/sheets.mjs multiples|aligned|stacks out.png`; reference
