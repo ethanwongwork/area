@@ -24,6 +24,16 @@ const comps = (m) => { const seen = new Uint8Array(N * N), out = []; for (let i 
     // 1. Hairlines of ink or space under ~0.6px, outline and filled.
     for (const k of ["o", "f"]) { const ink = await raster(ic[k]); const sp = ink.map(v => 1 - v);
       for (const [m, kind] of [[ink, "ink"], [sp, "space"]]) for (const cc of thinParts(m, 2)) if (cc.n >= 40) lines.push([ic.name, k === "o" ? "outline" : "filled", "hairline " + kind, cc.n, cc.x, cc.y].join("\t")); }
+    // 1b. Islands: a small piece of filled ink cut off by knockouts and gaps (file-download's
+    // wedges under the arrow's barbs). Dots are islands too, but round: flag only pieces under
+    // ~3.5 square units (at 8×) that fill less than 60% of their bounding box and are not the
+    // outline's own strokes (rocket's short flame lines are islands in both).
+    { const ink = await raster(ic.f), outl = await raster(ic.o); const seen = new Uint8Array(N * N);
+      for (let i = 0; i < N * N; i++) if (ink[i] && !seen[i]) { let st = [i], n = 0, x0 = N, x1 = 0, y0 = N, y1 = 0; seen[i] = 1;
+        let inOutline = 0; while (st.length) { const j = st.pop(); n++; inOutline += outl[j]; const x = j % N, y = (j / N) | 0; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+          for (const k of [j - 1, j + 1, j - N, j + N]) if (k >= 0 && k < N * N && ink[k] && !seen[k]) { seen[k] = 1; st.push(k); } }
+        const box = (x1 - x0 + 1) * (y1 - y0 + 1);
+        if (n < 224 && n / box < 0.6 && inOutline / n < 0.8) lines.push([ic.name, "filled", "island", n, +((x0 + x1) / 16).toFixed(1), +((y0 + y1) / 16).toFixed(1)].join("\t")); } }
     // 2. Fill left beside a line drawn over it (narrower than ~1.1px): the solid shows as a sliver.
     const f = ic.f, gi = f.indexOf("<g mask"); if (gi < 0) continue; const ge = f.indexOf("</g>", gi) + 4;
     const fillOnly = await raster(f.slice(0, ge) + "</svg>"), plain = await raster(f.slice(0, f.indexOf("<mask")) + f.slice(ge));

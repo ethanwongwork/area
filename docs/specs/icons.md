@@ -597,6 +597,8 @@ scaling gave 1.69 at 24 and 2.25 at 32.
 - **Gallery:** the Sizes sheet now shows the curve, with uniform scaling at 24 for
   comparison.
 
+Filled variants of icons with solids are uniform enlargements (owner, 2026-10-02): the generator draws their strokes, cuts and gaps at the 16px weight at every size (`filledUniform` in gen-pilot-icons.mjs). With the curve, a 32px render thinned the slash to 0.77 units while its one-sided gap stayed placed for 1.125, leaving a 0.18-unit strip of fill between them (every slashed icon, and bell-dot's ring gap). Line glyphs keep the curve.
+
 **Review page:**
 - one-cell tiles (`data-span="1x2"`), three columns in a 1000px pane;
 - 3× plates, and contexts trimmed to Button, icon Button, Badge, Menu item and the current
@@ -2663,9 +2665,11 @@ For the owner: spell-check is Area's T with a check (the libraries use an A); pi
 
 | Icon | Construction |
 |---|---|
-| folder-zip | Fluent's folder_zip on folder's drawing moved up 1 (2–14 × 2–12, tab and flap unchanged): a zipper of five 1-long teeth alternating either side of x 10.5 at y 4.5–8.5, 1 apart so they join into one strip (the top tooth joins the top edge; detail 1.0 to the flap), and an arch pull (3 wide, r 1.5 top, r 0.5 feet) at 9–12 × 10.5–14 hanging over the bottom edge, the folder cut open round it by the overlap cut (`behind`, 2.25), which takes the lower-right corner as a corner mark does. Square keyline (12.6 tall). Filled: the folder fills (flap a cut), the teeth knock out, the pull is solid with a slot and parted from the fill by a filled-only gap |
+| folder-zip | Fluent's folder_zip on folder's drawing exactly (unmoved, so it lines up with folder, folder-add and folder-lock). Four solid teeth as Fluent's: 1 tall and 2 long with r 0.5 outer ends, alternating right, left, right, left about x 10.5 on whole-pixel rows 6–10, touching only at their inner corners so each row reads (crisp at 1×); right first so the left teeth clear the flap's diagonal (1.41); 0.94 from the right edge and the top. A hollow slider tab 3 wide (r 1.5 top, r 0.5 feet) at 9–12 × 10.5–14 joined to the last tooth and to the folder's bottom line, hanging 1 below it as Fluent's (square keyline; ink centre 8, 8.5). Filled: the folder fills (flap a cut), the teeth are holes, the tab solid, parted from the fill by a filled-only gap, so the white teeth run into the white gap as in Fluent's filled. Exceptions: the teeth are solid (a zipper's teeth are solid, like stop's square) at Fluent's 1px rather than the line; the ink sits 0.5 low for the hanging tab |
 
 Owner, 2026-10-02: Fluent's zip visual over the file-zip drawn the same day (Lucide's file-archive: one tooth column and a ring pull on document's page), which is removed. archive remains the box.
+
+Redrawn later the same day (owner: larger teeth, closer to Fluent's, the pull joined to the teeth): the strip of five 1-long line teeth read as one dense column and the pull sat cut loose from a folder missing its corner. The teeth are now Fluent's solid bars and the tab hangs from the last tooth over an intact folder.
 
 ## Cleanup round, 2026-10-02
 
@@ -2748,3 +2752,95 @@ Owner round 2, same day (sheets 29–31):
 Kept: voicemail unframed. A frame in Area is either the object itself (image, app-window) or a
 variant of a base glyph (the -circle and square- families); only Fluent frames the tape.
 
+
+## Open four, 2026-10-02 (owner-flagged, drawn on the references)
+
+| Icon | Construction |
+|---|---|
+| file-code | document whole (Lucide, Phosphor and Hugeicons keep the page closed): two 1.5-leg chevrons inside its lower half, M7 9L5.5 10.5L7 12 and M9 9L10.5 10.5L9 12, on the lattice, detail 0.88 to the edges and each other, tight 1.41 from the fold. Filled: page solid, fold a cut, chevrons knockouts. Replaces the chevrons on the corner, which left the page without a bottom line |
+| vault | Lucide's and Phosphor's dial: a 12 × 7 safe (r 2, 3.5–10.5) on two feet at 3.5 and 12.5, an r 1.5 dial ring at 6.5, 7 with a handle bar to 11 (standard to the wall; open to the feet). Replaces the four-spoke dial, which read as ¤. Filled: body solid, dial and handle knockouts, feet lines |
+| circuit-board | Lucide's circuit-board: stop's square with two r 1.5 pads at 6, 6 and 10, 10, each with a trace that turns an r 1.5 corner out to the board's edge (top and bottom), in rotational symmetry. Replaces two side traces with r 1 pads, which read as §§. Filled: board solid, pads and traces knockouts (the traces run out square at the edge) |
+| call-end | Fluent's hang-up handset made larger (owner: it read small): 12 wide (2–14) and 6 tall (5–11), a shallow top (rise 3.5), earpieces 4.5 wide with r 1 corners and a shallow inner curve. A taller arch read as a horseshoe. Solid when filled |
+
+## Batch 65: Build queue, 2026-10-02
+
+| Icon | Construction |
+|---|---|
+| file-diff | Lucide's file-diff: document's silhouette (the cut corner kept) without the inner fold, a 3px + (M8 6V9 M6.5 7.5H9.5) over a 3px − at 11.5, every gap tight (1.38 between the marks and to the bottom, 1.70 to the cut corner). Filled: page solid, marks knockouts. Exception: no fold line; under the fold the + touched it (−0.125, the lint does not pair knockouts with cuts) and no 3px stack fits with gaps on the scale
+| chat-question | chat's bubble exactly with help's ? at 2/3 (an r 1 hook at 8, 5.5, top 4.5 like chat-warning's !, M7 5.5A1 1 0 1 1 8.5 6.36603Q8 6.655 8 6.875) and the ⌀1.5 dot at 8, 9.25. Every gap detail (0.88–1.06), as the !'s. Filled: bubble solid, ? knocked out, dot a hole. The ? ends 0.5 lower than the ! (an r 0.75 hook closes up) |
+| plug-off | Fluent's plug_disconnected (owner's pick over plug under the slash; `data-off="own"`): the plug pulled apart on the rising diagonal. A cap and a body, each a 4.95 face with r 0.75 corners, 1.41 sides and an r 2.47 dome (the body is the cap turned 180°), faces 4.24 apart on x − y = ±3; two 1.41 prongs from the body's face at 5.5, 8.5 and 7.5, 10.5 (tight 1.7 to the cap); cords from the domes to 13.5, 2.5 and 2.5, 13.5. Filled: cap and body solid, prongs and cords lines
+| binary | 01 over 10 (Lucide binary) in rows 2.5–6.5 and 9.5–13.5 (standard 1.88 apart): 0 a 3 × 4 stadium (r 1.5, counter 1.93), 1 a flag, stem and foot (M9 2.5H10.5V6.5M9 6.5H12); 0s at x 3.5 and 9, 1 stems at 10.5 and 5; 1 to 0 1.65 tight. Fills by weight. Exception: the ink centre is 7.75 (the right column moved 0.5 left from a 2.12 near miss) |
+| goal | target's r 6 and r 3 rings and ⌀2 centre dot with a 45° dart shaft from the dot to 10, 6 and Fluent's two-feather fletching (M10 6V4L11.5 2.5H12V4H13.5V4.5L12 6H10Z, 0.5 flats at the tips, pocket 1.35); both rings cut round dart and fletching by the overlap cut. Filled: the fletching solid; rings, shaft and dot by weight |
+| radar | a 45° sweep from the centre that becomes the r 6 ring (M8 8L12.243 3.757A6 6 0 1 0 14 8) and an r 3 ring from the sweep round to 11, 8, both open over the eighth between the sweep and 3 o'clock (a quarter pushed the ink 0.9 left), with a ⌀2 centre dot (Hugeicons Radar01). Fills by weight |
+| broom | Lucide's broom (owner: more broomlike than Fluent's dome and strip): a 45° handle M8 8L13.5 2.5 into a wedge head that flares from a 2.83 binding to a 7.07 bristle tip (r 0.5 top and r 1 tip corners; data-angles free), a band across it (M4.25 8.25L7.75 11.75) and one bristle line (M6 10L4 12). Filled: head solid, band a cut, bristle a knockout, handle a line. Centre 7.87, 8.14
+
+Removed by the owner the same day as too niche (no real product use, few systems have them, or not liked): compass-check, bug-play, brain-thinking, folder-dashed, chat-dashed, satellite, the three cost tiers and beach. Left out: braces-dot (a dot at the lower right takes the right brace's hook, so it reads as ?; batch 46 dropped it for the same reason), deck-chair (three drafts read as a cross or a generic chair at 16px; beach stands in, as Fluent's), file-pdf (needs a small bold letter set) and head-thinking (open).
+
+## Batch 66: Build next, 2026-10-02
+
+| Icon | Construction |
+|---|---|
+| pencil-off | pencil drawn whole as outline-only lines under the shared slash M2 2L14 14, flat (flat-slash.py); filled: a fill parted by the one-sided slash gap. Exception: the ferrule band is dropped (it runs parallel to the slash 3.54 away, a near miss) |
+| zap-off | flash's sharp bolt (data-acute sharp) drawn whole as outline-only lines under the shared slash M2 2L14 14, flat (flat-slash.py); filled: a fill parted by the one-sided slash gap. Circle keyline (14.1 tall, video-off's move) |
+| location-off | location's pin and r 2 ring drawn whole as outline-only lines under the shared slash M2 2L14 14, flat (flat-slash.py); filled: a fill parted by the one-sided slash gap, the ring kept as a hole (Fluent's). Circle keyline |
+| chat-off | chat's bubble drawn whole as outline-only lines under the shared slash M2 2L14 14, flat (flat-slash.py); filled: a fill parted by the one-sided slash gap. The text lines are dropped (the slash would run through their ends) |
+| screen-share-off | screen-share's monitor and stand drawn whole as outline-only lines under the shared slash M2 2L14 14, flat (flat-slash.py); filled: a fill parted by the one-sided slash gap; the stand a line cut one-sided. The share arrow is dropped (its barb left a 0.18 counter on the slash; Fluent swaps it too) |
+| bookmark-off | bookmark's notched ribbon drawn whole as outline-only lines under the shared slash M2 2L14 14, flat (flat-slash.py); filled: a fill parted by the one-sided slash gap |
+| heart-off | heart (Fluent's) drawn whole as outline-only lines under the shared slash M2 2L14 14, flat (flat-slash.py); filled: a fill parted by the one-sided slash gap. Circle keyline as the base |
+| flag-off | flag's swallowtail and pole drawn whole as outline-only lines under the shared slash M2 2L14 14, flat (flat-slash.py); filled: a fill parted by the one-sided slash gap; the pole a line cut one-sided |
+| bluetooth-off | bluetooth's rune under the shared slash through 8, 8 (where its strokes already meet); a line glyph, filled as wifi-off with stroke pieces cut one-sided at 2.5 |
+| cloud-alert | the one cloud with chat-warning's ! inside on x 8 (stem 5.75–7.75, ⌀1.5 dot at 10); detail 1.02 to the lobe, tight 1.19 to the foot. Filled: cloud solid, stem knockout, dot hole. Lucide's ! crosses the foot; that left a 0.3 sliver filled |
+| clock-alert | clock unchanged with a ! beside on the lower left (Fluent's side; stem x 2.5, 8–10.75, ⌀1.5 dot at 2.5, 13.5), the ring cut open round it by the overlap cut. Filled: the disc follows the cut, hands knockouts, the ! a line. Centre 8.16 |
+| shield-user | shield with person-circle's small figure inside (r 1.5 head at 8, 6; r 2 shoulders 6.5–9.5 at 10 running out to the shield, Lucide's shield-user). Filled: negative silhouette as person-circle |
+| shield-x | shield with error's 5px × centred inside (as shield-check takes the ring's check), tight 1.16. Filled: × knockout. The 3.5px × left a near miss |
+| shield-plus | shield with add-circle's 6px + centred inside, tight 1.38. Filled: + knockout. The 4px + left a near miss |
+| mail-plus | mail's envelope with the 4px + on the top-right corner (12, 5.5; mail-dot's and Fluent's badge corner), the envelope and flap cut open round it. Filled: flap a gap, + knockout carried out through the edges. On the lower right the cut left a 1.8 stub of the flap |
+| person-x | person-add's figure with the 3.5px × beside at head height, centred 12, 5 (on the lattice), standard 1.88 from the head. Filled: figure solid, × a line |
+| person-key | person-add's figure with a small upright key in the + column at x 12 (r 1.5 bow at 12, 4.5; shaft 6–13; key's two teeth), standard 1.88 from head and body (Lucide's user-key). Filled: figure solid, key a line. Exception: the shaft on a whole pixel, as person-add's + |
+| file-cog | document's page and fold with person-settings' gear on the lower-right corner at 10.5, 11.5 (file-search's corner, 1 lower to clear the fold), the page cut round it. Filled: page fill notched r 5, gear solid with a ⌀2.25 hole. data-angles radial. Sliver: the gear's fill-beside-line, shared with person-settings |
+| file-download | file-export's page with its arrow turned down (stem x 10.5, 9.5–13.5, 2px head) on the lower-right corner, the page's bottom cut 2.25 from the barb. Filled: arrow knockout, its tip carried out by a filled-only gap (document-add's). Pairs with file-export |
+| password | a 13 × 9 field (r 2, 1.5–14.5 × 3.5–12.5) with three ⌀1.5 dots at 4.75, 8, 11.25 on y 8 (grouped dots in a container): standard 1.94 to the sides, tight 1.75 between. Filled: field solid, dots holes |
+| volume-low | volume's speaker exactly with only its inner wave (tight 1.38). Filled: speaker solid, wave a line. Sits under its keyline, as the base speaker does |
+| merge | split turned over: two 45° branches from 3, 14 and 13, 14 meet at 8, 9 and run on as one stem to a 3px main-arrow head at 8, 2. Line glyph |
+| duplicate | copy's two pages exactly (front 8 × 8 r 1.5, back Phosphor's open L) with the 4px + centred inside the front at 6.5, 9.5 (Lucide's copy-plus). Filled: front solid, + knockout, back a line. Exception: the + sits a detail 0.88 inside the front |
+| toggle-off | toggle mirrored: the same 12 × 8 track (r 4) with its solid ⌀3 knob at the left (Fluent's toggle_left is solid too). Filled: track solid, knob a hole. data-off own (a state, not a slash) |
+| share-nodes | three r 2 rings at 4.5, 8 · 11.5, 4.5 · 11.5, 11.5 joined by two 1 : 2 lines to the left ring (Fluent, Lucide and Phosphor join them; data-angles free). Filled: rings solid, lines at icon weight |
+| git-fork | git's three r 1.5 nodes (4, 4 · 12, 4 · 8, 12) joined by a U of git-branch's r 3 arcs to a bar at 8.5 and a stem into the lower node (Lucide, Phosphor, Fluent). Filled: nodes solid |
+| git-compare | nodes at 4, 4 and 12, 12, each with a path turning an r 2 corner toward the other node and ending in git-pull-request's head a tight 1.38 from it; the second path is the first turned a half turn (Fluent's branch_compare). Filled: nodes solid |
+| bluetooth-connected | bluetooth's rune with a ⌀1.5 dot each side at 2.5, 8 and 13.5, 8, standard 1.99 from the diagonals (Fluent's dots). Line glyph; circle keyline |
+| playlist | list's four lines (3.5–12.5) shortened to 14, 9.5, 7, 7 with a note at the lower right: music's head at r 1.5 (11, 11.5), a stem at 12.5 up to 6.5 and a 45° flag (Lucide list-music, Phosphor playlist). Filled: head solid. Centre 8.25 |
+| chart-bar-horizontal | bar-chart mirrored across the anti-diagonal: the axis L kept, bars at 4.5, 7.5, 10.5 from x 5 to 12.5, 10 and 7.5 (longest on top). Line glyph |
+| equal | two of minus's 11px bars at 6.5 and 9.5, 3 apart (Lucide equal, SF equal). Line glyph |
+| person-square | stop's r 2 square with person-circle's figure (r 1.5 head at 8, 6; r 2 shoulders 4.5–11.5 from 10 to the bottom edge; Lucide square-user). Filled: the frame stays a line and the figure fills (knocking the figure out of a solid square left slivers at the straight sides) |
+
+Later from the same list: book-plus, the diagonal circle arrows, toolbox, scroll, gavel; and the 3-of-5 product essentials in the report.
+
+## Mark pass, 2026-10-02 (owner: "make sure the icons that have small pluses, arrows, slashes, !, active dots… are designed consistently and correctly")
+
+Inventory: `docs/research/icon-review/2026-10-02/marks.py` (every +, −, ×, ✓, arrowhead and dot by size); scan: `slivers.mjs`, now also flagging islands (small non-round pieces of fill cut off by knockouts and gaps, not the outline's own strokes). Sheets 39a–b (before and after, alone at 16 / 24 / 32 / 48).
+
+| Icon | Change |
+|---|---|
+| file-download | the arrow sits in the plus's 4 × 4 box raised 1 (M10.5 9V12.5, head 8.5,10.5 → 12.5,10.5), the tip inside the page: the tip run out through the bottom edge cut off two triangles of fill under the barbs (the owner's report); only the right barb's end runs out square |
+| file-export | the same box (M9 10.5H12.5, head 10.5,8.5 → 10.5,12.5), the tip out through the right edge; the lower barb's triangle was joined by a 0.5 sliver |
+| folder-check | a filled-only gap carries the check's vertex out through the bottom edge (calendar-check's and clipboard-check's treatment); the fill met it at a point |
+| file-lock | the shackle's gap extended up the right edge (file-search's), removing an island between the fold cut and the shackle |
+| cart-add | the + stays a line beside the basket and the fill is notched round it at the overlap cut (filter-add's); filled, its top half had vanished into a ⊥ |
+| files | one text line (M5 11H8, standard 1.88 from the fold): two lines 2 apart left a 0.875 strip of fill between them |
+| unpin | the filled variant is pushpin's own path (needle at x 8, as the outline), stopping on the neck line where the flare met the slash gap |
+| flask-off | the filled shoulder wedge past the neck line, tapering into the slash gap, is trimmed; the neck stays (owner: "the part past the slash should stay") |
+| search-off | the lens drawn whole under the mirrored slash, flat, like the other off icons; filled as wifi-off (stroke pieces cut one-sided at 2.5) |
+| brain-off | data-counter="sliver" removed (no sliver) |
+| info, help, octagon-alert | the dot moved so the dot sits 2.75 below the stem's end (tight 1.44) with its edges on the 0.5 grid |
+| chat-warning, cloud-alert | warning's ! exactly (a 1.75 stem, the dot 2.75 below it); their stem–dot gap was a detail 0.94 |
+| stop-circle | filled: the ring fills solid and the square is a hole, as play-circle and pause-circle (it filled by weight with a solid square) |
+
+Rules settled:
+- **!:** a ⌀1.5 dot 2.75 below the stem's end (1.44); stem by host: 3.5 in a large host (octagon, info's i), 1.75 in a small or tapering host (warning, chat-warning, cloud-alert), 2.25 in the shield (recorded), 2.75 beside a host (clock-alert). **?:** help's hook, the same 2.75 to its dot; chat-question's 2.375 is recorded (the bubble is too short).
+- **Marks in a container:** ring, shield and stop's square take the ring's marks (6px + and −, 5px ×, 2/4 check); filled, the container is solid and the mark a knockout. badge-check keeps the 1.5/3 check (the seal's inside is r 5.2).
+- **Badge dots:** ⌀3, 1 in from the host's top and right, the host cut 3.1875 from its centre, a filled-only gap ring r 2.0625; already consistent.
+- **Corner arrows** sit in the plus's 4 × 4 box, 1 in from the edge they point at so no barb faces a corner; 2px heads (a 2.5 head is 5 wide and leaves the box). Corner + and checks stay on the edges.
+- **Arrowheads:** standalone 5; an icon's main arrow 3 (corner heads by axis leg); paired or contained 2.5; frame-contained chevrons 2 (panel-left-close, panel-left-open, terminal's prompt); git heads 2 (git-compare, git-pull-request: 2.5 leaves under 1 to the node filled). indent and outdent stay as drawn (owner).
+- **Slash:** lines that stay lines beside a solid are cut one-sided at 2.25 (the fill gap's 1.125 of space); line glyphs' stroke pieces at 2.5.
+
+Known false positives of the scan: person-settings and file-cog's small gear ("fill beside a line" at its tooth roots).
