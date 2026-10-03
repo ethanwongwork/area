@@ -52,11 +52,17 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
   // A consumer's inputProps.id wins over the generated one (audit G-15).
   const inputId = inputProps?.id ?? id;
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
-  // Fit the height to the text. Wrapping depends on width too, so refit when the width
-  // changes (a narrow first layout, a resized panel); height-only changes are ignored.
+  // Fit the height to the text. Where the browser sizes fields natively (field-sizing:
+  // content, composer.css) it also refits on font and density changes, so no script runs.
+  // Elsewhere, measure; wrapping depends on width too, so refit when the width changes (a
+  // narrow first layout, a resized panel); height-only changes are ignored.
   useLayoutEffect(() => {
     const input = inputRef.current;
     if (!input) return;
+    if (typeof CSS !== "undefined" && CSS.supports?.("field-sizing: content")) {
+      input.style.blockSize = "";
+      return;
+    }
     const fit = () => {
       input.style.blockSize = "auto";
       input.style.blockSize = `${input.scrollHeight}px`;

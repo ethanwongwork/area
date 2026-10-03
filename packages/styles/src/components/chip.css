@@ -19,7 +19,6 @@
   .area-chip {
     /* The md tier, the manifest default, so framework-free markup matches the React default. */
     --_height: var(--area-control-md);
-    --_gutter: var(--area-gutter-md);
     --_gap: var(--area-gap-md);
     --_dot: var(--area-icon-md);
     /* spec: the remove target is a circle concentric with the pill's end, 4px inside it
@@ -41,7 +40,6 @@
     flex-shrink: 0;
 
     block-size: var(--_height);
-    padding-inline: var(--_gutter);
     border: var(--area-stroke-width) solid var(--_border);
     /* A pill by identity; it does not follow the radius presets. */
     border-radius: var(--area-radius-full);
@@ -246,9 +244,9 @@
 
   /* --- Sizes -------------------------------------------------------------- */
 
-  .area-chip--sm { --_height: var(--area-control-sm); --_dot: var(--area-icon-sm); --_gutter: var(--area-gutter-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-chip--md { --_height: var(--area-control-md); --_dot: var(--area-icon-md); --_gutter: var(--area-gutter-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-chip--lg { --_height: var(--area-control-lg); --_dot: var(--area-icon-lg); --_gutter: var(--area-gutter-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-chip--sm { --_height: var(--area-control-sm); --_dot: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-chip--md { --_height: var(--area-control-md); --_dot: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-chip--lg { --_height: var(--area-control-lg); --_dot: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 
   /* --- Group -------------------------------------------------------------- */
 

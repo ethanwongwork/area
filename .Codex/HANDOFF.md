@@ -5,6 +5,20 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Disclosure (2026-10-02, branch `claude/disclosure`): in review
+
+- New family: `Disclosure` (plain = Notion toggle: leading chevron in a line-height square, title
+  column, chevron hover plate; divided = shadcn accordion: trailing chevron, rule between items,
+  underline hover) and `DisclosureGroup` (single open by default, `multiple`, `value` /
+  `defaultValue` / `onValueChange`, headings at level 3, regions named by triggers). Sizes sm
+  14/20 and md 16/24 (default, Notion). Closed content is `hidden="until-found"`.
+- Evidence: `captures/disclosure/` (Notion toggle, ChatGPT sidebar section, 10 Area tiles), Figma
+  from `captures/panel/`, shadcn source @ 295a1f1. Spec `docs/specs/disclosure.md`; cohesion
+  audit fifth pass. Open for the owner: a filled caret for plain (Notion's) vs Area's outline
+  chevron. Unverified: product dark, rendered shadcn, on-screen dark paint.
+- Capture tip: on localhost pages post captures to a local relay with `fetch`; product pages
+  still need the clipboard button (a full-viewport button catches the click wherever it lands).
+
 ## Compact pass: tokens, rows and floating surfaces (2026-10-01, branch `claude/family-compact-pass-150bc8`, PR #36; merged with main's phases 6–7)
 
 - Owner: compact is a proportional step-down of the whole set (`data-area-ui="compact"`), UI type
@@ -57,6 +71,39 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Closed 2026-10-02 (owner): changed families keep Complete; R9–R12 keep what ships. Next:
   retry the Figma dialog and sectioned popover in the owner's Chrome; Cursor stays unmeasured
   (vscode.dev stand-in).
+- Cursor web measured (2026-10-02, owner's Chrome): 25 captures `captures/compact/cursor-web--*`,
+  note `compact-evidence-2026-10-02/cursor-web.md`. Matches control-md 28/8/6, label column 30,
+  menu inset 4, palette search 40, badge 16/4; conflicts (owner's call, nothing applied): composer
+  inset 12, separator 5/1/5, 24-control corner 6, row gap 1, icons 14. R11 keep. Chrome hand-off: the
+  local relay was refused this session; the clipboard button works with the window hidden.
+- Cursor desktop + Figma measured (2026-10-02): 55 Cursor captures (`cursor-app--*` Agents window,
+  `cursor-ide--*` IDE, no folder opened) via Cursor relaunched with `--remote-debugging-port=9222`
+  and CDP (owner quits Cursor first); 5 Figma (Share dialog, Edit text style popover) in Chrome.
+  Note `compact-evidence-2026-10-02/cursor-desktop.md`. Confirms xs 20/6, label column 32, flush
+  menu rows; reopens R9 (popover inset: Cursor and Figma 16, Area compact 8) and weakens R8
+  (Figma dialog 16 sides). Owner applied both: Popover compact inset 12 (held), Dialog compact
+  16 / corner 16; plus standard dense xs corner 3 -> 4 (Cursor 20px buttons). Family pass results
+  in cursor-desktop.md. Then (owner) Menu separator 6/1/6, compact 5/1/5; Prompt suggestion rows
+  compact 40 (the compact composer's height, was 44). Dark: 48 Cursor Dark captures (Cursor's
+  theme switched for the session, settings restored from backup); Area's dark sits inside the
+  range, no change. Both-density sweep (54 docs pages): no unlisted holds; fixed Popover's compact
+  corner 8 -> 12 so its close stays concentric (capped at radius-base-container; default unchanged
+  under every preset). Toast with actions measured on vscode.dev (matches compact). Live
+  before/after page: https://claude.ai/artifact/UsB2z9j8wAexzae2ffCYRm (scratchpad builder:
+  specimen.html + before/after CSS). Still unmeasured: chat code block, dark tooltip. Prompt
+  suggestions' offset below the composer now 24 / compact 16 in the demos (owner question).
+  Inset audit (owner): horizontal text inset now reads 1cap everywhere (the 1lh fallback gave 5px
+  sides without text-box; Chrome unchanged, Textarea too). Then (owner): `gutter-*` tokens removed
+  (consumers rewritten: table 12/8 literal, Slider range field and Field label from the inset rule,
+  grouped Select text ends on the chevron box, docs chrome from space tokens; UI-scale page explains
+  derived padding); inset rule rounds to whole pixels (`--_inset-start/end`); Badge joined the
+  shared rule (text side reserves a 4px box: h/2 - 2; dot/icon/media use their boxes) with 0 pixel
+  differences. Gallery sweep: only sub-pixel rounding plus the intended Select and Slider changes.
+  Composer autosize fixed: native field-sizing, script fallback (refits across density switches). Figma
+  pages stall the extension when the Chrome window is hidden: ask the owner to bring it forward.
+- Chat code block (2026-10-02): GitHub Copilot, one throwaway chat (owner OK). Corner 12 matches
+  Area's default; Copilot is 14px default density, so compact still rests on Figma Dev Mode. No change.
+  Still open: a dense chat code block (Cursor needs an agent run) and Cursor's dark tooltip.
 
 ## Start here (next session)
 

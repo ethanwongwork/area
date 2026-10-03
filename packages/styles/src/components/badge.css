@@ -6,15 +6,13 @@
        step below the text it annotates (owner 2026-09-27). See docs/specs/badge.md. */
     --_height: var(--area-mark-label-md); /* spec: 20, the mark ladder role (audit S21a) */
     /* Every inner value is a function of the height (compact pass, 2026-10-01), restating the
-     * measured 16 / 20 / 24 rows exactly: gutter 6 / 8 / 10, icon gutter 4 / 6 / 8, icon and
-     * media 12 / 16 / 16, gap 2 / 4 / 4, media gutter 2 / 2 / 4, media gap 4 / 4 / 6. So a mark
+     * measured 16 / 20 / 24 rows exactly: text sides 6 / 8 / 10 and dot side 4 / 6 / 8 (both by
+     * the inset contract, inset.css), icon and media 12 / 16 / 16, gap 2 / 4 / 4, media side
+     * 2 / 2 / 4, media gap 4 / 4 / 6. So a mark
      * the UI scale shortens (compact md is 16) is drawn as the default mark of that height. */
     --_icon: min(var(--area-icon-md), calc(var(--_height) - var(--area-space-4))); /* spec */
     --_media: var(--_icon); /* spec */
     --_gap: min(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
-    --_gutter: calc(var(--_height) / 2 - var(--area-space-2)); /* spec */
-    --_icon-gutter: calc(var(--_height) / 2 - var(--area-space-4)); /* spec */
-    --_media-gutter: max(var(--area-space-2), calc(var(--_height) / 2 - var(--area-space-8))); /* spec */
     --_media-gap: max(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
     --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); /* spec */
     --_badge-radius: var(--area-radius-full);

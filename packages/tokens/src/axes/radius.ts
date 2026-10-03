@@ -82,7 +82,8 @@ interface RadiusPreset {
    * down). Radius follows painted height, and compact paints every tier one rung shorter, so
    * a compact tier takes the curve's value for the next box down (md 28 reads sm's, sm 24
    * reads xs's); xs and the shapes step down by about a third (12 -> 8, as VS Code's 8px
-   * surfaces and 4-6px rows). The UI scale selects the ladder; emit/base.ts derives the
+   * surfaces and 4-6px rows). Standard's xs holds 4: Cursor's 20px buttons and VS Code's 22px
+   * icon buttons are 4 (cursor-desktop.md, 2026-10-02). The UI scale selects the ladder; emit/base.ts derives the
    * public radius tokens from both, so neither axis writes the other's tokens.
    */
   dense: { control: ControlRadii; container: number; small: number; row: number };
@@ -115,7 +116,7 @@ const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
   { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, buttonCap: 0.4, concentric: 0, dense: { control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, container: 0, small: 0, row: 0 }, note: "Square corners throughout." },
   { id: "subtle", control: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }, small: 2, row: 4, container: 6, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 2, md: 3, lg: 4, xl: 5 }, container: 4, small: 2, row: 3 }, note: "A restrained 4px medium-control family." },
   { id: "soft", control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, small: 4, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 3, md: 4, lg: 6, xl: 8 }, container: 6, small: 3, row: 4 }, note: "A soft 6px medium-control family." },
-  { id: "standard", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, container: 8, small: 4, row: 6 }, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
+  { id: "standard", control: { xs: 4, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 4, sm: 4, md: 6, lg: 8, xl: 10 }, container: 8, small: 4, row: 6 }, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
   { id: "round", control: { xs: 5, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 4, sm: 5, md: 8, lg: 10, xl: 12 }, container: 10, small: 6, row: 8 }, note: "A round 10px medium-control family." },
   { id: "rotund", control: { xs: 6, sm: 10, md: 12, lg: 14, xl: 16 }, small: 10, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 5, sm: 6, md: 10, lg: 12, xl: 14 }, container: 12, small: 8, row: 10 }, note: "The roundest finite family: 12px at medium." },
   {

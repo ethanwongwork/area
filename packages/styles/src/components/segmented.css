@@ -31,7 +31,6 @@
     --_inset: var(--area-space-2);
     --_height: var(--area-control-md);
     --_item: calc(var(--_height) - var(--_inset) * 2);
-    --_gutter: var(--area-gutter-md);
     --_icon: var(--area-icon-md);
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
@@ -60,7 +59,6 @@
     gap: var(--_gap);
 
     block-size: var(--_item);
-    padding-inline: var(--_gutter);
     border: var(--area-stroke-width) solid transparent;
     /* Capped against the item's own height; see button.css. */
     border-radius: max(0px, calc(var(--_track-radius) - var(--_inset)));
@@ -141,7 +139,7 @@
   .area-segmented--full-width { display: flex; }
   .area-segmented--full-width .area-segmented__item { flex: 1; min-inline-size: 0; }
 
-  .area-segmented--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_gutter: var(--area-gutter-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-segmented--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_gutter: var(--area-gutter-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-segmented--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_gutter: var(--area-gutter-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-segmented--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-segmented--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-segmented--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

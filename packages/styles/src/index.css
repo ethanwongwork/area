@@ -43,6 +43,7 @@
 @import "./components/number-field.css";
 @import "./components/input-group.css";
 @import "./components/tree-view.css";
+@import "./components/disclosure.css";
 @import "./components/composer.css";
 @import "./components/textarea.css";
 @import "./components/choice.css";

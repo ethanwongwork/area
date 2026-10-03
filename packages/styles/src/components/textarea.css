@@ -17,8 +17,10 @@
     /* spec (owner 2026-09-28, "do whatever makes the most sense"): the text starts where a
        same-size Input's does, by the shared equal-inset rule (inset.css), so stacked fields
        align and each size is distinct: sm 9, md 11, lg 15. The block inset stays 4 less. */
-    --_box-text: 1lh;
-    --_gutter-inline: calc((var(--_height) - var(--_box-text)) / 2);
+    /* The cap unit works without text-box support; the line box gave sides 6 smaller there. */
+    --_box-text: 1cap;
+    /* Whole pixels, as the inset contract rounds every derived inset. */
+    --_gutter-inline: round(nearest, calc((var(--_height) - var(--_box-text)) / 2), 1px);
     /* Rounded so the box stays a whole number of pixels. */
     --_gutter-block: max(var(--area-space-2), round(nearest, calc(var(--_gutter-inline) - var(--area-space-4)), 1px));
     --_text: var(--area-control-md-text);
@@ -46,9 +48,6 @@
     transition: var(--area-transition);
   }
 
-  @supports (text-box: trim-both cap alphabetic) {
-    .area-textarea { --_box-text: 1cap; }
-  }
 
   .area-textarea:not([rows]) {
     min-block-size: calc(var(--_leading) * 4 + var(--_gutter-block) * 2 + var(--area-stroke-width) * 2);

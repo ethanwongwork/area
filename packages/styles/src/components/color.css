@@ -358,7 +358,7 @@
   /* The opacity part is Color field's (batch 9): as wide as three tabular digits and "%", the number
      at the inset and "%" 8 from the end. A fixed 54 (Figma's, at 11px) squeezed "100" under the "%" at
      Area's 14px. */
-  .area-color-picker__fields.area-input-group > .area-color-picker__opacity { flex: 0 0 auto; inline-size: max-content; padding-inline-end: var(--_gutter, var(--area-space-8)); }
+  .area-color-picker__fields.area-input-group > .area-color-picker__opacity { flex: 0 0 auto; inline-size: max-content; padding-inline-end: var(--area-space-8); /* spec: "%" 8 from the end */ }
   .area-color-picker__fields.area-input-group > .area-color-picker__opacity > .area-number-field__control { flex: 0 0 auto; field-sizing: content; min-inline-size: 3.1ch; /* three tabular digits: they run ~3% wider than ch, so every row is the same width */ }
   .area-color-picker__fields.area-input-group > .area-color-picker__opacity > .area-number-field__unit { margin-inline: 0; }
   .area-color-picker__fields.area-input-group[data-model="hex"] > .area-color-picker__text-field { flex-grow: 2; }

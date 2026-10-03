@@ -143,7 +143,8 @@
   .area-slider-range .area-slider__control::-webkit-slider-runnable-track { background: transparent; }
   .area-slider-range .area-slider__control::-moz-range-track { background: transparent; }
   .area-slider-range .area-slider-range__input {
-    inline-size: calc(3ch + var(--area-gutter-md) * 2 + var(--area-stroke-width) * 2);
+    /* Three digits and the Input's own side insets (inset.css: (height - cap) / 2, whole pixels). */
+    inline-size: calc(3ch + round(nearest, calc((var(--area-control-md) - 1cap) / 2 - var(--area-stroke-width)), 1px) * 2 + var(--area-stroke-width) * 2);
     min-inline-size: 0;
   }
   .area-slider-range .area-input__control { text-align: start; font-variant-numeric: tabular-nums; }
@@ -318,7 +319,7 @@
 
   /* --- Sizes -------------------------------------------------------------- */
 
-  .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-space-16); --_gutter: var(--area-gutter-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-space-16); --_gutter: var(--area-gutter-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-slider--lg { --_height: var(--area-control-lg); --_thumb: var(--area-space-20); --_gutter: var(--area-gutter-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-space-16); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-space-16); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-slider--lg { --_height: var(--area-control-lg); --_thumb: var(--area-space-20); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

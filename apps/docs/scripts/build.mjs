@@ -277,7 +277,7 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "disclosure" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${["badge", "badge-group", "indicator", "presence"].includes(slug) ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 ${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
@@ -835,6 +835,18 @@ function galleryPage({ families = null } = {}) {
       { id: "banner-status", title: "Composition / banner status", demo: "GalleryAlertBannerStatus", span: "2x1" },
       { id: "banner-dismissible", title: "Behavior / banner dismissible", demo: "GalleryAlertBannerDismissible", span: "2x1" },
     ],
+    disclosure: [
+      { id: "default", title: "Default", demo: "GalleryDisclosure" },
+      { id: "state-closed", title: "State / closed", demo: "GalleryDisclosureClosed" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryDisclosureDisabled" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryDisclosureSizeSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryDisclosureSizeMd" },
+      { id: "variant-divided", title: "Variant / divided", demo: "GalleryDisclosureDivided", span: "2x1" },
+      { id: "variant-divided-md", title: "Variant / divided md", demo: "GalleryDisclosureDividedMd", span: "2x1" },
+      { id: "multiple", title: "Behavior / multiple open", demo: "GalleryDisclosureGroupMultiple", span: "2x1" },
+      { id: "nested", title: "Composition / nested", demo: "GalleryDisclosureNested" },
+      { id: "long-title", title: "Content / long title", demo: "GalleryDisclosureLongTitle" },
+    ],
     count: [
       { id: "default", title: "Default", demo: "GalleryCount" },
       { id: "variant-soft", title: "Variant / soft", demo: "GalleryCountSoft" },
@@ -1322,7 +1334,7 @@ function demoMarkup(name, html) {
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
   if (["GalleryTableSelectable", "GalleryTextareaCount", "GalleryInputDate"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction", "GalleryToaster", "GalleryBreadcrumbCollapsed"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction", "GalleryToaster", "GalleryBreadcrumbCollapsed", "GalleryDisclosure", "GalleryDisclosureClosed", "GalleryDisclosureSizeSm", "GalleryDisclosureSizeMd", "GalleryDisclosureDisabled", "GalleryDisclosureNested", "GalleryDisclosureLongTitle", "GalleryDisclosureDivided", "GalleryDisclosureDividedMd", "GalleryDisclosureGroupMultiple"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // The carousel's previous / next Buttons page the row.
   if (name === "GalleryCardCarousel") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryMenu")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
@@ -1902,7 +1914,6 @@ function densityRows(presetId) {
   return ["xs", "sm", "md", "lg", "xl"].map((tier) => ({
     tier,
     height: preset.tokens[`--area-control-${tier}`],
-    gutter: preset.tokens[`--area-gutter-${tier}`],
     icon: preset.tokens[`--area-icon-${tier}`],
     gap: preset.tokens[`--area-gap-${tier}`],
     text: (preset.tokens[`--area-control-${tier}-text`] ?? "").replace(/var\(--area-size-|\)/g, "") + "px",
@@ -1915,20 +1926,20 @@ function uiScalePage() {
 
   const body = `<div class="docs-prose">
 <p>UI scale is one deliberate product choice, not separate type and density switches. It changes reading type, UI type, control heights, icons, internal padding, and gaps together.</p>
-<p><strong>Default</strong> uses 16px reading text, 14px UI text, and 32px medium controls: the common Primer and Geist baseline. <strong>Compact</strong> uses 14px reading text, 13px UI text, and 28px medium controls, matching dense tool interfaces such as Notion.</p>
+<p><strong>Default</strong> uses 16px reading text, 14px UI text, and 32px medium controls: the common Primer and Geist baseline. <strong>Compact</strong> uses 14px reading text, 12px UI text, and 28px medium controls, checked against dense tools: VS Code, Cursor and Figma.</p>
+<p>A control's side padding is not a token. It follows from the height and what each side holds: a text side sits (height − cap height) ÷ 2 in, an icon side (height − icon) ÷ 2, rounded to whole pixels. So a 32px Button's label starts 11 from its edge and its icon 8 (the 1px border included), and the same rule holds at every tier and in compact.</p>
 <p>There is intentionally no spacious preset. Primer documents a spacious spacing mode, but it is not a different product-scale baseline; browser zoom and text-resize support remain the accessible way to enlarge an interface.</p>
 </div>
 ${tokenSection({
   id: "tiers",
   title: "Control tiers",
-  description: "Every dimension a control needs across the shared internal ramp, in both presets.",
+  description: "Every token a control reads across the shared internal ramp, in both presets. Side padding is derived (see above).",
   rows,
   columns: [
     { header: "Token", cell: (r) => tokenChip(`control/${r.tier}`) },
     { header: "Compact", cell: (r) => `<span class="docs-mono">${compact.find((c) => c.tier === r.tier).height}</span>` },
     { header: "Default", cell: (r) => `<span class="docs-mono">${r.height}</span>` },
     { header: "Type", cell: (r) => `<span class="docs-mono">${compact.find((c) => c.tier === r.tier).text} / ${r.text}</span>` },
-    { header: "Padding", cell: (r) => `<span class="docs-mono">${r.gutter}</span>` },
     { header: "Icon", cell: (r) => `<span class="docs-mono">${r.icon}</span>` },
     { header: "Gap", cell: (r) => `<span class="docs-mono">${r.gap}</span>` },
     {
@@ -1940,7 +1951,7 @@ ${tokenSection({
   card: (r) =>
     tokenCard({
       name: `control/${r.tier}`,
-      meta: [`${r.height} tall · ${r.text} type`, `${r.gutter} padding · ${r.icon} icon · ${r.gap} gap`],
+      meta: [`${r.height} tall · ${r.text} type`, `${r.icon} icon · ${r.gap} gap`],
       figure: `<div class="docs-specimen__box" style="inline-size:100%;block-size:var(--area-control-${r.tier});border-radius:var(--area-radius-control)"></div>`,
     }),
 })}
