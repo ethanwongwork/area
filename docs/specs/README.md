@@ -14,6 +14,7 @@ Completion is recorded only in `apps/docs/src/component-status.mjs`; a spec stat
 |---|---|---|
 | [Indicator](indicator.md) (count, activity, presence status) | accepted | Pilot. 24 captures; dot, count, cutout and placement rebuilt from them and owner feedback |
 | [Model picker](model-picker.md) | accepted | Ghost trigger in the composer, Menu of radio rows with notes (48), 4 below, flips above |
+| [Disclosure](disclosure.md) | in review | Plain (Notion toggle: leading chevron, title column) and divided (shadcn accordion); DisclosureGroup single or multiple |
 | [Scroll to latest](scroll-to-latest.md) | accepted | Round outline icon Button, 24 above the composer and centred (ChatGPT), shown 200 from the end |
 | [Message](message.md) | accepted | ChatGPT turns: bubble 10/16 at 70% (composer corner 16), prose 16/24, muted 32 icon actions on the text edge, streaming dot |
 | [Prompt suggestions](prompt-suggestions.md) | accepted | ChatGPT home rows: composer width, 24 below, 48 rows, icons under the composer's "+" |

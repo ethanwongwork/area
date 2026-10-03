@@ -44,7 +44,7 @@ export const COMPLETE_COMPONENTS = new Set([
 ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-export const REVIEW_COMPONENTS = new Set([]);
+export const REVIEW_COMPONENTS = new Set(['disclosure']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -88,8 +88,9 @@ export const APPROVAL_BATCHES = [
   { name: 'Conversation controls', families: ['model-picker', 'scroll-to-latest'] },
   { name: 'Page navigation', families: ['tabs', 'breadcrumb'] },
   { name: 'Code and rules', families: ['code', 'code-block', 'separator'] },
+  { name: 'Disclosure', families: ['disclosure'] },
 ];
 export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.families.includes(slug));
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];
+export const RECENT_COMPONENTS = ['disclosure', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];

@@ -27,6 +27,19 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "disclosure", name: "Disclosure", manifest: "disclosure", imports: "Disclosure, DisclosureGroup",
+    api: [["heading", "the title the reader clicks; names the trigger", "—"], ["open / defaultOpen / onOpenChange", "controlled or uncontrolled open state", "— / false / —"], ["variant", "plain (leading chevron, Notion) | divided (trailing chevron and a rule, shadcn)", "plain"], ["size", "sm (14/20) | md (16/24)", "md"], ["headingLevel", "2–6: wraps the trigger in a heading", "— (3 in a group)"], ["disabled", "boolean", "false"], ["value", "this item's key in a DisclosureGroup", "generated"], ["DisclosureGroup: multiple", "let any number stay open; otherwise opening one closes the others", "false"], ["DisclosureGroup: value / defaultValue / onValueChange", "open items by value", "— / [] / —"], ["DisclosureGroup: variant / size / headingLevel", "passed to every item", "— / — / 3"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryDisclosure", note: "Notion's toggle: a leading chevron the height of the title's line, a hover plate on the chevron, and the content on the title's column. The whole title is the button."},
+      {id: "closed", title: "Closed", demo: "GalleryDisclosureClosed", note: "Closed content is hidden until found: find-in-page reveals it and opens the disclosure."},
+      {id: "sizes", title: "Small", demo: "GalleryDisclosureSizeSm", note: "sm takes the 14/20 text role, md (the default) Notion's 16/24 document text. Both step down with compact."},
+      {id: "divided", title: "Divided", demo: "GalleryDisclosureDivided", note: "An accordion: a trailing chevron, a rule after each item but the last, and the title underlines on hover (shadcn). Opening one closes the others."},
+      {id: "multiple", title: "Multiple open", demo: "GalleryDisclosureGroupMultiple", note: "With multiple, any number stay open."},
+      {id: "nested", title: "Nested", demo: "GalleryDisclosureNested", note: "A disclosure inside another indents by one chevron column, as nested Notion toggles do."},
+      {id: "disabled", title: "Disabled", demo: "GalleryDisclosureDisabled"},
+    ],
+  },
+  {
     slug: "indicator", name: "Indicator", manifest: "indicator", imports: "Indicator, IndicatorAnchor",
     api: [["status / size / outOfOffice", "availability variant; sm12 / md16 / lg20 (xs dropped, audit C-19); optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "neutral | info | success | warning | danger", "danger"], ["processing / withBorder / disabled", "pulse / surface cutout / hide indicator", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["inset", "inset rectangular count and presence attachments by 4px (was compact)", "false"]],
     examples: [
