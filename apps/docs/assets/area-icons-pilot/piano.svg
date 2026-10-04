@@ -1,6 +1,6 @@
 <svg data-set="area-pilot" data-keyline="square" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect data-filled="solid" x="2" y="2.5" width="12" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<rect data-filled="hole" x="5" y="2.5" width="2" height="6.5" fill="currentColor"/>
-<rect data-filled="hole" x="9" y="2.5" width="2" height="6.5" fill="currentColor"/>
-<path data-filled="knockout" d="M6 9V13.5M10 9V13.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="2" y="2" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M4.5 2H7V9A0.5 0.5 0 0 1 6.5 9.5H5A0.5 0.5 0 0 1 4.5 9Z" fill="currentColor"/>
+<path data-filled="solid" d="M9 2H11.5V9A0.5 0.5 0 0 1 11 9.5H9.5A0.5 0.5 0 0 1 9 9Z" fill="currentColor"/>
+<path d="M6 9.5V14M10 9.5V14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

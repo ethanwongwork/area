@@ -1,6 +1,5 @@
 <svg data-set="area-pilot" data-keyline="square" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M5 6L3.132 11.603A1 1 0 0 0 4.397 12.868L10 11A6 6 0 0 0 5 6Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M7.5 4V2.5M10.5 5.5L11.5 4.5M12 8.5H13.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="10" cy="2.5" r="0.75" fill="currentColor"/>
-<circle cx="13.5" cy="6" r="0.75" fill="currentColor"/>
+<path data-filled="solid" d="M2.632 12.103L5.244 4.268A0.5 0.5 0 0 1 6.072 4.072L11.928 9.928A0.5 0.5 0 0 1 11.732 10.756L3.897 13.368A1 1 0 0 1 2.632 12.103Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="cut" d="M4.25 7.25L8.75 11.75M3.25 10.25L5.75 12.75" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8.5 2V3.5M10 5C10 3.75 10.75 3.5 11.5 3.5C12.25 3.5 13 3.25 13 2M11.5 6.5L13 8M12 5.5L13.5 5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

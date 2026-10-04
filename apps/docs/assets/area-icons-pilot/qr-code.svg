@@ -5,8 +5,8 @@
 <rect data-filled="solid" x="3.5" y="3.5" width="2" height="2" rx="0.25" fill="currentColor"/>
 <rect data-filled="solid" x="10.5" y="3.5" width="2" height="2" rx="0.25" fill="currentColor"/>
 <rect data-filled="solid" x="3.5" y="10.5" width="2" height="2" rx="0.25" fill="currentColor"/>
-<rect x="9" y="9" width="2" height="2" rx="0.25" fill="currentColor"/>
-<rect x="12" y="9" width="2" height="2" rx="0.25" fill="currentColor"/>
-<rect x="9" y="12" width="2" height="2" rx="0.25" fill="currentColor"/>
-<rect x="12" y="12" width="2" height="2" rx="0.25" fill="currentColor"/>
+<rect x="8.5" y="8.5" width="2.5" height="2.5" rx="0.25" fill="currentColor"/>
+<rect x="12" y="8.5" width="2.5" height="2.5" rx="0.25" fill="currentColor"/>
+<rect x="8.5" y="12" width="2.5" height="2.5" rx="0.25" fill="currentColor"/>
+<rect x="12" y="12" width="2.5" height="2.5" rx="0.25" fill="currentColor"/>
 </svg>

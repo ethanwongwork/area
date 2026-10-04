@@ -5,6 +5,25 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Icon quality pass (2026-10-03, branch `claude/icon-library-quality-pass-009345`, uncommitted)
+
+- Whole set reviewed in 32 groups; 20 icons fixed (filled slivers, islands, negatives, broken
+  cuts; bluetooth-off's arm along the slash) and back in review. Spec "Quality pass, 2026-10-03";
+  sheets and to-confirm list in `docs/research/icon-review/2026-10-03/README.md`. Generator: a
+  `gap` with `stroke="none"` cuts out whole. Typecheck needs `npm run build` first in a new worktree.
+- Second round: filled knockouts and cuts follow the size curve (slash gap via `slashGap`);
+  newspaper/receipt parted the same way. Owner is reviewing every icon on
+  https://claude.ai/artifact/4sGs7JYAfNQexTPW9TQR9w; read its `reviews` collection
+  (ArtifactData) and act on fix/replace rows next.
+- Owner review round applied (2026-10-03): 186 sources changed in six parallel passes plus
+  integration (spec "Owner review round, 2026-10-03"); all in review. Round 2 on the same page
+  ("Redrawn this round" filter) saves to the `reviews2` collection. Open owner questions are listed
+  in the spec's partition notes (agent icon needed?, bold outline, gallery/images, usb notches).
+- Filled story (2026-10-04, owner-chosen; research `docs/research/icon-review/2026-10-04/`): fill the
+  body only, parts keep their outline drawing, marks inside containers, knockouts sawn at edges.
+  41 more icons changed (spec "The filled story, 2026-10-04"); the review page's "Redrawn this
+  round" filter now covers both rounds (204 icons, `reviews2`).
+
 ## Disclosure (2026-10-02, branch `claude/disclosure`): in review
 
 - New family: `Disclosure` (plain = Notion toggle: leading chevron in a line-height square, title
