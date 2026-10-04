@@ -8,25 +8,25 @@
       "icons": {
         "add": "approved",
         "arrow-up": "approved",
-        "bell": "approved",
+        "bell": "review",
         "check": "approved",
         "chevron-down": "approved",
         "copy": "review",
         "dismiss": "approved",
-        "document": "approved",
-        "eye": "approved",
+        "document": "review",
+        "eye": "review",
         "folder": "approved",
-        "info": "approved",
+        "info": "review",
         "link": "approved",
         "more-horizontal": "approved",
         "open": "approved",
-        "person": "approved",
+        "person": "review",
         "reset": "approved",
-        "search": "approved",
+        "search": "review",
         "settings": "approved",
         "status-available": "approved",
-        "trash": "approved",
-        "warning": "approved"
+        "trash": "review",
+        "warning": "review"
       }
     },
     {
@@ -53,7 +53,7 @@
         "list": "approved",
         "square-dashed": "approved",
         "layers": "approved",
-        "flash": "approved"
+        "flash": "review"
       }
     },
     {
@@ -77,7 +77,7 @@
         "padding": "approved",
         "padding-sides": "approved",
         "token": "review",
-        "rotate": "approved"
+        "rotate": "review"
       }
     },
     {
@@ -93,7 +93,7 @@
         "pencil": "review",
         "download": "approved",
         "upload": "approved",
-        "filter": "approved",
+        "filter": "review",
         "sort": "approved",
         "sparkle": "approved",
         "location": "review"
@@ -110,8 +110,8 @@
         "mail": "approved",
         "chat": "review",
         "image": "approved",
-        "mic": "approved",
-        "help": "approved",
+        "mic": "review",
+        "help": "review",
         "bookmark": "approved"
       }
     },
@@ -126,14 +126,14 @@
         "pause": "approved",
         "undo": "approved",
         "sun": "approved",
-        "moon": "approved",
+        "moon": "review",
         "desktop": "approved",
         "code": "approved",
         "terminal": "approved",
         "error": "approved",
         "unlock": "approved",
         "share": "approved",
-        "globe": "approved"
+        "globe": "review"
       }
     },
     {
@@ -141,16 +141,16 @@
       "title": "Batch 8 · Objects",
       "note": "The deferred three (paperclip, tag, people) and zoom, flag, archive, cloud, phone, camera, cart. Round 2: people uses person's parts with the overlap cut; flag has sharp points; archive is landscape. Cloud and paperclip candidates on the Exploration sheet.",
       "icons": {
-        "attach": "approved",
-        "tag": "approved",
+        "attach": "review",
+        "tag": "review",
         "people": "review",
-        "zoom-in": "approved",
-        "zoom-out": "approved",
+        "zoom-in": "review",
+        "zoom-out": "review",
         "flag": "approved",
         "archive": "approved",
         "cloud": "approved",
         "phone": "approved",
-        "camera": "approved",
+        "camera": "review",
         "cart": "review"
       }
     },
@@ -159,16 +159,16 @@
       "title": "Batch 9 · Text & objects",
       "note": "The rich-text toolbar (bold, italic, underline, quote, hash, at) at text's height, beside link, code and list; and key, shield, gift, map, chart and table. Round 2: bold is a solid B with even 2px walls (Fluent's weight); shield 11 wide; map and bold fill by weight; gift's filled lid separates. Quote A kept.",
       "icons": {
-        "bold": "approved",
+        "bold": "review",
         "italic": "approved",
         "underline": "approved",
-        "quote": "approved",
-        "hash": "approved",
+        "quote": "review",
+        "hash": "review",
         "at": "approved",
         "key": "review",
         "shield": "approved",
         "gift": "approved",
-        "map": "approved",
+        "map": "review",
         "chart": "approved",
         "table": "approved"
       }
@@ -186,7 +186,7 @@
         "battery": "approved",
         "plug": "approved",
         "power": "approved",
-        "printer": "approved",
+        "printer": "review",
         "headphones": "approved",
         "video": "approved",
         "inbox": "approved"
@@ -198,13 +198,13 @@
       "note": "Thumbs up (thumbs down is its mirror), smile, briefcase, building, compass (a solid needle, sharp by nature), crop, trophy and coffee.",
       "icons": {
         "thumbs-up": "approved",
-        "smile": "approved",
+        "smile": "review",
         "briefcase": "approved",
         "building": "review",
         "compass": "review",
         "crop": "approved",
         "trophy": "approved",
-        "coffee": "approved"
+        "coffee": "review"
       }
     },
     {
@@ -212,7 +212,7 @@
       "title": "Batch 12 · System & tools",
       "note": "Database, server, scissors, log in and log out (a bracket and reset's-size arrow), keyboard, pointer, move (four 2px heads on the lattice), hourglass and loader.",
       "icons": {
-        "database": "approved",
+        "database": "review",
         "server": "review",
         "scissors": "approved",
         "log-in": "approved",
@@ -221,7 +221,7 @@
         "pointer": "review",
         "move": "approved",
         "hourglass": "approved",
-        "loader": "approved"
+        "loader": "review"
       }
     },
     {
@@ -231,12 +231,12 @@
       "icons": {
         "volume": "approved",
         "volume-off": "review",
-        "music": "approved",
+        "music": "review",
         "film": "review",
         "credit-card": "approved",
-        "wallet": "approved",
-        "receipt": "approved",
-        "lightbulb": "approved",
+        "wallet": "review",
+        "receipt": "review",
+        "lightbulb": "review",
         "megaphone": "approved"
       }
     },

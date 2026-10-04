@@ -1,5 +1,6 @@
-<svg data-set="area-pilot" data-keyline="square" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M8.207 2.793L8.47 2.53A0.75 0.75 0 0 1 9.53 2.53L9.646 2.646A0.5 0.5 0 0 0 10.354 2.646L10.47 2.53A0.75 0.75 0 0 1 11.53 2.53L13.47 4.47A0.75 0.75 0 0 1 13.47 5.53L13.354 5.646A0.5 0.5 0 0 0 13.354 6.354L13.47 6.47A0.75 0.75 0 0 1 13.47 7.53L13.207 7.793A1 1 0 0 1 11.793 7.793L8.207 4.207A1 1 0 0 1 8.207 2.793Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="solid" d="M7.793 13.207L7.53 13.47A0.75 0.75 0 0 1 6.47 13.47L6.354 13.354A0.5 0.5 0 0 0 5.646 13.354L5.53 13.47A0.75 0.75 0 0 1 4.47 13.47L2.53 11.53A0.75 0.75 0 0 1 2.53 10.47L2.646 10.354A0.5 0.5 0 0 0 2.646 9.646L2.53 9.53A0.75 0.75 0 0 1 2.53 8.47L2.793 8.207A1 1 0 0 1 4.207 8.207L7.793 11.793A1 1 0 0 1 7.793 13.207Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M6 10L10 6M12.5 3.5L13.5 2.5M3.5 12.5L2.5 13.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<svg data-set="area-pilot" data-keyline="horizontal" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect data-filled="solid" x="4.5" y="3.5" width="2" height="9" rx="0.75" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<rect data-filled="solid" x="9.5" y="3.5" width="2" height="9" rx="0.75" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M4.5 5.5H3.25A0.75 0.75 0 0 0 2.5 6.25V9.75A0.75 0.75 0 0 0 3.25 10.5H4.5 M11.5 5.5H12.75A0.75 0.75 0 0 1 13.5 6.25V9.75A0.75 0.75 0 0 1 12.75 10.5H11.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1.5 8H2.5M6.5 8H9.5M13.5 8H14.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
