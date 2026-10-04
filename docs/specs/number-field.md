@@ -170,3 +170,5 @@ tiles and the Panel recipe at 2x.
 - 2026-10-01 · audit B-9 (owner pick B) → read-only keeps its variant's rest paint (was the soft fill), no hover edge, default cursor; a soft field never gains an edge when disabled → number-field.css:43, :61-64.
 - 2026-10-01 · audit B-10 → unit, scrub handle and steppers take `fg-disabled` → number-field.css:112-113.
 - 2026-10-01 · audit B-11 → forced colours: `CanvasText` edge, `Highlight` focus ring, dashed invalid → forced-colors.css.
+- 2026-10-03 · radius audit → steppers are concentric with the field, floored at the smallest control's corner (compact 20 r2 → r4, default 24 r4 → r5; `number-field.css:123`). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-03 · all even (owner) → steppers floor at `radius-floor` 4 (`number-field.css:123`).

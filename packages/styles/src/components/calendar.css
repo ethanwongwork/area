@@ -9,7 +9,7 @@
        calibration; owner 2026-10-01: "do what's right with compact"). The owner's "too compact" call
        (2026-09-27) set default density, where days sit beside 32px Buttons. */
     --_day-inset: calc((var(--_cell) - var(--_day)) / 2);
-    --_day-radius: min(var(--area-radius-control-md), calc(var(--_day) * var(--area-radius-cap))); /* 32px days take the md radius (audit S4, F-12); finite under Pill (H-1) */
+    --_day-radius: min(var(--area-radius-control-md), calc(var(--_day) * var(--area-radius-cap) + var(--area-radius-shift))); /* 32px days take the md radius (audit S4, F-12); finite under Pill (H-1) */
     /* Today is a date marker, not a selection or availability: a 1px ring in the day's shape. */
     --_today-edge: var(--area-stroke-control);
     display: inline-block;

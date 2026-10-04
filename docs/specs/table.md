@@ -194,3 +194,4 @@ read from the CSS; no Area capture shows them.
 - 2026-10-01 · audit F-23 (owner pick A) → `TableLink`: one stretched link makes a row clickable, with the row's focus ring; `wrapperProps` for the scrolling wrapper → primitives.tsx:1025-1035, navigation.css:186-193.
 - 2026-10-01 · audit F-24 → a sort Button in a header cell overhangs the cell's block padding, keeping the row at its text height with the label on the column's text edge → navigation.css:197-200.
 - 2026-10-01 · compact pass round 6 → cell padding above and below steps down at compact (sm 4 → 2, md 8 → 6, lg 12 → 8); the side padding already followed `gutter-md` (12 → 8). docs/research/compact-pass-2026-10-01.md.
+- 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.

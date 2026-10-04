@@ -34,6 +34,9 @@ const ALLOWED = new Map([
   ["--docs-card", "Minimum width of a token card in a grid view."],
   ["--docs-card-sm", "Minimum width of a cell in the icon browser's grid."],
   ["--docs-customizer-panel", "Width of the customizer's axis panel."],
+  ["--docs-tile-min", "Narrowest component gallery tile: how many columns the canvas holds."],
+  ["--docs-roundness-stage", "Height of a specimen window on the roundness page."],
+  ["--docs-roundness-cell", "Narrowest step cell on the roundness page."],
 ]);
 
 /** Structural values that carry no visual identity. */
@@ -79,6 +82,7 @@ const findings = [];
 }
 
 const { DOCS_CSS } = await import("./layout.mjs");
+const { GALLERY_CSS } = await import("./component-gallery.mjs");
 
 /* --- 0b. Inline-code dogfooding ------------------------------------------ */
 
@@ -102,7 +106,7 @@ const { DOCS_CSS } = await import("./layout.mjs");
 
 /* --- 1. Raw values in the docs stylesheet --------------------------------- */
 
-const css = (DOCS_CSS + LAB_CSS)
+const css = (DOCS_CSS + LAB_CSS + GALLERY_CSS)
   // Ignore media-query breakpoints and the allowlisted declarations themselves.
   .replace(/@media[^{]+\{/g, "")
   .replace(/\/\*[\s\S]*?\*\//g, "");

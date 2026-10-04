@@ -205,3 +205,6 @@ select and Figma's filter, size, zoom and format selects. Build and test results
 - 2026-10-01 · audit B-4 → options are Menu rows: 32 at every trigger size, text start (32 − 1cap) / 2 (11.03 measured live), check edge 8 from the end, 12 gap, corner min(max(0, radius-container − 4), 32 × cap) (8 at Standard, measured); optgroup labels 12/16 muted → navigation.css:353-412.
 - 2026-10-01 · audit B-11 → forced colours draw an invalid Select (`data-invalid` too) dashed → forced-colors.css.
 - 2026-10-01 · audit B-19 (owner pick B) → a chosen empty-value option renders in placeholder ink → navigation.css:320-321.
+- 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-03 · roundness work → picker options count the picker's border: 12 → 7 (was 8) (`navigation.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
+- 2026-10-03 · all even (owner) → picker options back to 8 (border left out).

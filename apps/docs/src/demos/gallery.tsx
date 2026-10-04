@@ -1704,7 +1704,7 @@ export const GallerySliderWithLabel = () => <Slider label="Label" labelPosition=
 export const GallerySliderLabelOnly = () => <Slider label="Label" labelPosition="top" defaultValue={50} />;
 export const GallerySliderSteps = () => <Slider aria-label="Label" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
 export const GallerySliderStepMarks = () => <Slider aria-label="Label" min={0} max={5} step={1} defaultValue={1} stepMarks />;
-export const GallerySliderVertical = () => <Slider aria-label="Label" orientation="vertical" defaultValue={50} style={{ ["--_vertical-length" as string]: "100%" }} />;
+export const GallerySliderVertical = () => <Slider aria-label="Label" orientation="vertical" defaultValue={50} />;
 export const GallerySliderControlled = () => {
   const [value, setValue] = useState(40);
   return <Slider label="Label" labelPosition="top" value={value} onValueChange={setValue} readout={value => `${value}%`} />;

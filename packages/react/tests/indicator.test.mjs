@@ -51,7 +51,7 @@ test('Indicator exposes presence status, native size and out-of-office naming', 
 
 test('gallery presents exactly one indicator variant per specimen', async () => {
   const {readFileSync}=await import('node:fs');
-  const gallery=readFileSync(new URL('../../../apps/docs/dist/gallery-components.html',import.meta.url),'utf8');
+  const gallery=readFileSync(new URL('../../../apps/docs/dist/index.html',import.meta.url),'utf8');
   const tiles=[...gallery.matchAll(/<article[^>]*id="gallery-indicator-[^"]+"[^>]*>([\s\S]*?)<\/article>/g)];
   assert.ok(tiles.length > 20);
   for(const [,tile] of tiles) assert.equal((tile.match(/class="area-(?:indicator|presence) /g)||[]).length,1);

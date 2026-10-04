@@ -295,16 +295,24 @@ lg 10 at Standard (audit S4): Button, fields, Select, InputGroup and the Segment
 whose items sit concentric inside it; Calendar's 32px days take md. Choose control, row, small or container roles and respect
 the box cap. A radius that is not a role is derived from one, never written as a spacing
 token, or it ignores the presets. Surface corners (owner, audit S3/S3b, 2026-09-30):
-containers use the container role at any inset (Popover, Menu, Panel). A shell whose corner
+containers use the container role at any inset (Popover, Menu, Panel), 12 at both densities
+(radius audit D1, 2026-10-03; compact was 8). A shell whose corner
 holds a control is concentric with it: the control's capped radius plus its distance from
 the edge, the distance scaled by `radius-concentric` (0 at Sharp, so Sharp shells are square).
-Card md is 8 + 16 = 24 (sm 22, lg 28), Composer, Message and Prompt suggestions 8 + 8 = 16,
-Toolbar and the Segmented track the control plus their inset; Dialog is the corner close plus
-8 (16), capped at twice the container radius; Tooltip 10; the Alert banner the small control.
+Card is concentric with its media: md 8 + 8 = 16 (sm 14, lg 20, compact 12; D5), Composer,
+Message and Prompt suggestions 8 + 8 = 16, Toolbar and the Segmented track the control plus
+their inset; Dialog is the corner close plus 8 (16), capped at twice the container radius.
+A one-line bar (Alert, its banner, Toast) takes the large control corner, 10 (compact 8); a
+multiline Alert or titled Toast is a surface (D2). Tooltip takes the large control corner, 10
+(compact 8; D3). Kbd is 6 at every size and density (D4).
 The control radius is capped by `radius-cap` or `radius-button-cap`, so Pill shells stay
 finite. Identity circles/pills use `radius-full` deliberately; never impose the
-radius axis on every shape. Nested radius is `max(0, outer radius - actual inset)`,
-with the appropriate box cap. Measure painted bounds when browser clamping matters.
+radius axis on every shape. Nested radius is concentric with a floor:
+`max(min(radius-floor, inner height × radius-cap), outer radius - inset)`, so an inner shape
+is never sharper than 4 (`radius-floor`, moved by roundness; radius audit 2026-10-03,
+`docs/research/radius-audit-2026-10-03.md`). Insets are the padding; a surface's 1px border is
+left out so corners stay even. Standard's control curve follows painted height at both
+densities, all even: 20 → 4, 24 → 6, 28 → 6, 32 → 8, 40 → 10, 48 → 12. Measure painted bounds when browser clamping matters.
 Row plates take their radius by context (owner, audit D-16 A, 2026-09-30): rows inside a
 floating surface (Menu, Combobox, Command palette, Select's picker) are concentric with it,
 the surface radius less its inset; standalone rows (Nav, Tree view) use `radius-row`; Select

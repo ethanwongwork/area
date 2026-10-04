@@ -17,7 +17,7 @@
     block-size: calc(var(--_height) + 2 * var(--_toolbar-inset));
     max-inline-size: 100%;
     padding: var(--_toolbar-inset);
-    border-radius: min(calc(var(--_toolbar-radius) + var(--_toolbar-inset) * var(--area-radius-concentric)), calc((var(--_height) + 2 * var(--_toolbar-inset)) * var(--area-radius-cap)));
+    border-radius: min(calc(var(--_toolbar-radius) + var(--_toolbar-inset) * var(--area-radius-concentric)), calc((var(--_height) + 2 * var(--_toolbar-inset)) * var(--area-radius-cap) + var(--area-radius-shift)));
     background: var(--_toolbar-bg);
     box-shadow: var(--_toolbar-shadow);
   }

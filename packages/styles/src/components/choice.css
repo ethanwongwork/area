@@ -57,8 +57,9 @@
   }
 
   .area-checkbox__control {
-    /* Small glyphs must not become circles as the global radius family grows. */
-    border-radius: min(var(--area-radius-small), calc(var(--_size) / 4));
+    /* Small glyphs must not become circles as the global radius family grows: a quarter of the box
+       in even pixels (16 and 20: 4), moved by roundness, never past the small role. */
+    border-radius: min(var(--area-radius-small), calc(round(down, calc(var(--_size) / 4), 2px) + var(--area-radius-shift)));
   }
 
   /* The mark is a glyph, but its visible label owns a 24px minimum activation lane. It stays 24
