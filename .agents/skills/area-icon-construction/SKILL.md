@@ -131,9 +131,9 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   top-right, the host cut round it by the overlap cut (on a ring at 45°); square containers
   are stop's square with the ring's marks unchanged; small shapes inside containers (the
   play, dots) are solid exceptions like stop-circle's square; chevrons-right keeps Fluent's
-  4px spacing; no prohibited ring or small bug as corner marks. The agent mark is Fluent's
-  agents shape (a hexagon split by a slash), never a cursor or pointer (it read as Cursor's
-  brand). search-off's slash is the shared slash mirrored (14, 2 → 2, 14; owner, 2026-09-29),
+  4px spacing; no prohibited ring or small bug as corner marks. The agent icon is bot-agent
+  (owner, 2026-10-05: Fluent's agents hexagon is Microsoft's, not a shared convention), never a
+  cursor or pointer (it read as Cursor's brand). search-off's slash is the shared slash mirrored (14, 2 → 2, 14; owner, 2026-09-29),
   since the normal one runs along the handle; the cut is the mirror of the one-sided cut. Follow Fluent closely for objects the owner compares with it (contact card,
   news, money, captions, chat sparkle's corner sparkle). The booleans are two 8 × 8 squares
   overlapping 5 × 5, every result solid, exclude included (owner, 2026-10-02: the hatching had no
@@ -192,10 +192,21 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
 - **Owner, later 2026-10-02:** the zip is Fluent's, followed closely (folder-zip: four solid 1 × 2
   teeth alternating about a column and touching at their corners, a hollow tab joined to the last
   tooth and hanging below an intact folder). toy-brick keeps its drawing; blocks is four separate blocks of
-  one size, the fourth offset (Lucide). image's sun is a ⌀1.5 dot top right and its mountain is
+  one size, the fourth offset (Lucide). image's sun is the ⌀2 mark dot top right (owner pick, 2026-10-02; images and file-image too) and its mountain is
   Fluent's pyramid (peak on the diagonal), so image-off's slash covers its right slope; image-plus's + sits on the lower-right corner. A basket is Lucide's (legs that don't meet); a peaked
   handle on a tall body reads as a cupcake. A shape whose parts must sit on x.5 may sit 0.5 off
   centre on both axes (chip, delegated).
+- **Audit, 2026-10-05** (spec "Consistency audit, 2026-10-05"): bot hats fill their main mass,
+  and a band bounded by two outline lines stays open when filled (owner, bot-guard: the cap's top
+  and the visor fill, the middle band stays open; bot-automator follows; bot-designer's crown and
+  visor fill as one mass with no notch). Owner-confirmed: every small clock face uses clock's hands
+  (a vertical hand and a 45° hand down-right, never an L to 3 o'clock); a slash that would run along
+  a shape's edge is mirrored, as search-off (call-off); a mark that doesn't fit the family's size in
+  a small front uses the next size down (copy-check's 1 / 2 check, document-dismiss's 3 × 3 ×).
+  Dots follow the size curve with the line (the ! dot read 2.4× the stem at 48px). A mark on a
+  round face's edge is, filled, a badge with the mark cut out (smile-plus, Fluent's emoji_add).
+  maximize and minimize are expand's and collapse's arrows. Spelled letters (spell-check) keep
+  geometric widths and a standard gap between letters; a B's lower bowl is larger than its upper.
 
 ## The system at 16px
 
@@ -351,6 +362,8 @@ the lint prints every gap and counter with `--report`.
     windows (building), eyes (smile), an eyelet (tag), opacity's grid, dots grouped inside a
     container (chat-more, app-window, square-list). Place them on the
     gap scale from their frame and each other (quarter centres are fine for filled dots).
+  Every dot's radius follows the size curve with the line (`r` set from `sw`, owner 2026-10-05),
+  so the ratio to the stem holds at 24–48px.
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
   a little more width than a square to look the same size, and 1.56× read too big.
   `data-dot="free"` records an owner-approved exception: quote's solid marks, rocket's ⌀2.5
@@ -374,7 +387,8 @@ the lint prints every gap and counter with `--report`.
 - writing tool (owner, 2026-10-05): one pencil and one pen, the same body: 2.83 wide (sides on x + y =
   axis ± 2), a sharp 60° tip with r 0.5 shoulders; the pencil ends square with Lucide's band 2.12
   below the end, the pen ends round (r 1.414) with a clip. pencil-off keeps the pencil whole; a pen inside another icon
-  (compose, file-pen, signature) is the pen, slimmer (2.12 wide) and without its clip;
+  (compose, file-pen) is the pen, slimmer (2.12 wide) and without its clip; signature's slim pen
+  keeps the clip at its scale (owner, 2026-10-05);
 - figure: person is the standalone figure (head r 3, 2.5 from the body between centre-lines, a dome body; owner 2026-10-03: bigger head,
   smaller gap). Beside a mark or in a group the figure is the small cut (head r 2.5); in a frame
   (circle, square, shield) the head is r 2, identical in person-add, person-remove and people's front figure (people

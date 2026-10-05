@@ -1,9 +1,24 @@
-# Handoff — 2026-10-01
+# Handoff — 2026-10-05
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Icon consistency audit (2026-10-05, branch `claude/icon-audit-consistency-96540c`)
+
+- bot-guard filled: only the cap's top and the visor fill, the band stays open (owner); bot hats
+  follow. Whole set audited outline and filled; 53 icons fixed and back in review (spec
+  "Consistency audit, 2026-10-05"); batch 68 adds 24 icons and 7 turns from the audit's gaps.
+  Findings, sheets and open owner questions: `docs/research/icon-review/2026-10-05/README.md`
+  The owner answered the open questions the same day (spec "Owner decisions on the open
+  questions"): spell-check redrawn, agent marks with full flats, bot-designer's cap one mass, the
+  delegated picks confirmed, smile-plus filled a badge, maximize/minimize as arrows. Generator:
+  dots follow the size curve (`style r` from `sw`); Glyph.tsx's package glyphs (more) still draw a
+  fixed r. Then: `agent` is an alias of bot-agent (agent-circle/-square removed), smile-plus uses the
+  small face, bot-designer's brim runs past the head, spell-check's B has a larger lower bowl.
+- Tooling: headless Edge `--dump-dom` can hang when given a private `--user-data-dir`; the shared
+  sheet scripts write into `apps/docs/.cache` (create it in a fresh worktree).
 
 ## Icon quality pass (2026-10-03–04, branch `claude/icon-library-quality-pass-009345`)
 
