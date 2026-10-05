@@ -24,6 +24,14 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   41 more icons changed (spec "The filled story, 2026-10-04"); the review page's "Redrawn this
   round" filter now covers both rounds (204 icons, `reviews2`).
 
+- Fills and pens (2026-10-04–05, branch `claude/new-icons-updated-fills-b6d86d`): secondary parts stay
+  lines; the document fold is exact at every size (`data-shift`, `data-part`); filled lines follow the
+  size curve; halos and `data-halo` use the overlap cut; marks on folded pages sit bottom-left; one
+  pen/pencil shape plus a new `pen`; Fluent's eraser. Spec sections from "Secondary parts stay lines"
+  on. Review page rounds `reviews2`–`reviews6` (round 6, bot-guard and signature, not yet reviewed).
+  Open: the 26 replace verdicts and other non-fill notes listed under "Still open from reviews2";
+  whether compose and file-pen's slim pen gets the clip too.
+
 ## Corner radius audit (2026-10-03, same branch)
 
 - Note: `docs/research/radius-audit-2026-10-03.md` (604 reference captures mined, 2,464 Area

@@ -56,7 +56,7 @@ const fluentFor = name => {
 
 // The generated components size their lines from --area-weight-icon (base.css); the sheet
 // defines it so filled lines (4/3) render at their real width.
-const css = `body{font:12px system-ui;margin:16px;background:#fff;color:#1a1a1a;--area-weight-icon:1.125px}
+const css = `body{font:12px system-ui;margin:16px;background:#fff;color:#1a1a1a;--area-weight-icon:1.125px;--_icon-overlap:4.5px}
 svg{width:var(--s);height:var(--s)} ${["filled", "compare"].includes(mode) ? "" : "svg *{stroke-width:1.125}"}
 .bh{font-size:20px;font-weight:600;padding:18px 0 6px;border-bottom:2px solid #1a1a1a;grid-column:1/-1}
 .row{display:flex;align-items:center;gap:24px;padding:8px 0;border-bottom:1px solid #eee}

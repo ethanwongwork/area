@@ -765,6 +765,8 @@ const MAP = {
   FluentRefChartBarHorizontalFilledIcon: "data_bar_horizontal_20_filled",
   FluentRefPersonSquareIcon: "person_square_16_regular",
   FluentRefPersonSquareFilledIcon: "person_square_16_filled",
+  FluentRefPenIcon: "pen_16_regular",
+  FluentRefPenFilledIcon: "pen_16_filled",
   // icon-batch.mjs adds Fluent references for new batches above this line.
   FluentRefDatabaseIcon: "database_16_regular",
   FluentRefDatabaseFilledIcon: "database_16_filled",
