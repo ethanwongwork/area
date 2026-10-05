@@ -21,7 +21,7 @@ export const glyphs = {
     "M3 3L13 13M13 3L3 13"
   ],
   "grip": [
-    "M5.5 6H10.5M5.5 10H10.5"
+    "M5.5 6.5H10.5M5.5 9.5H10.5"
   ],
   "subtract": [
     "M2.5 8H13.5"

@@ -262,6 +262,17 @@ Chat and call with shared modifiers.
 | infinity | drawn: batch-55 | ∞ | Lucide `infinity` | unlimited, loop |
 | clapperboard | drawn: batch-56 | a clapperboard | Lucide `clapperboard` · Fluent `movies_and_tv_16` | video, production |
 
+### Batch 68 · Audit gaps (drawn 2026-10-05)
+
+From the whole-set audit (`docs/research/icon-review/2026-10-05/README.md`): copy-check,
+document-dismiss, calendar-x, folder-search, timer-off, call-off, sparkle-off, person-lock,
+shield-lock, battery-full, battery-medium, maximize, minimize, loader-circle, text-align-justify, list-minus,
+case-lower, regex, replace, heading-1–3, send-to-back, ungroup, arrow-up-from-line (and its turns),
+insert-column, corner-up-right, corner-up-left, rotate-ccw; maximize and minimize are expand's
+and collapse's arrows (owner). corner-down-left is `return`. Raised and not built: file-audio/video, database variants, git-tag, chart-candlestick,
+chart-area, gradient, sunrise, train, bus, wifi/signal levels, tags, cart-remove, bell-plus,
+mail-check, repeat-1, location-add, bot-off.
+
 ### Leisure and games (no product surface asks for them yet)
 
 | concept | plan | what it shows | references | uses |

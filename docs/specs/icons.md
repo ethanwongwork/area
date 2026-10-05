@@ -3810,3 +3810,128 @@ Round 5 notes (`reviews5`):
 |---|---|
 | bot-guard | owner: "maybe just fill the top of the hat?": filled, the crown and visor fill as one cap; the brim's halo (the gap between crown and brim) is gone |
 | signature | owner: "add the clip": the slim pen carries the pen's clip at its scale (`M11.75 4.75L12.47 5.47A0.75 0.75 0 0 1 12.47 6.53L10.75 8.25`, the same 1.77 offset from the body as the pen's) |
+
+## Consistency audit, 2026-10-05
+
+Owner: "the hat in the fill shouldn't be all the way filled, just the top part and the brim … then
+do a detailed audit on all the icons, monoline and filled, … call out any inconsistencies and then
+build any icons that are necessary". The whole set (632 icons, 32 groups) was reviewed outline and
+filled at 16 / 24 / 32 / 48 and 96px against the construction rules, with the parts-drift, optical
+and sliver checks; owner-recorded decisions were left alone. Findings, outcomes and open questions:
+`docs/research/icon-review/2026-10-05/README.md`. 53 icons changed (all back in review); the 24 new
+icons are batch 68.
+
+| Icon | Now |
+|---|---|
+| bot-guard | owner: filled, only the cap's top (above the band line, `M2.244 3.69…Q8 4.56 2.244 3.69Z`, `solid`) and the visor fill; the middle band stays open, its sides and the brim one outline path (`M2.244 3.69L3.5 5.956Q8 6.794 12.5 5.956L13.756 3.69`) |
+| bot-automator | the hat rule from bot-guard: a band bounded by two lines stays open filled, so the puff (closed along y 4) fills and the band is a plain line; the `cut` is gone |
+| bot-scholar | as graduation-cap: the board and the skirt are both solid, parted by a one-weight V gap 1.125 under the board's lower edges (the skirt filled as a 0.5 sliver) |
+| bot-designer | the seam is a knockout from the crown's top into the visor gap (it was outline-only) |
+| agent-circle, agent-square | the inner mark is agent's own path at 6 / 11 about 8, 8 (flats on y 5 and 11, sides parallel to the slash, stubs 0.9 for a 1.03 detail gap to the slash); the old mark dropped the flats and read as `</>` |
+| brain | filled: the `gap M12.5 11H14.5` (a square notch with a tooth under it) removed; the right fold saws out by its own exit |
+| brain-off | brain's fill, midline gap and the one-sided slash gap; the notch gap removed |
+| compass-dot | the needle is a `hole` like compass's (it was a knockout, so it read black) |
+| video-off | the filled body is video's rect exactly (x 1.5; it was 0.5 narrower) |
+| location-off | the hole's chord lies on the slash centre-line (`M6.051 6.051A2 2 0 1 1 8.449 8.449Z`), so no hairline shows at 48px |
+| images, file-image | the sun is the ⌀2 mark dot like image's (images at 11, 5; file-image at 6, 7.5 to clear the peak) |
+| mail-plus, image-plus | filled: the flap / mountain knockout runs flush into the clearance round the + (the round end left tapering points of fill) |
+| call-end | call's Phosphor handset turned 135° and scaled 0.825 (the old free-curve arch was the one handset left from Fluent); ink centre 8.25, 8 |
+| sort-ascending | the arrow is sort's up arrow (13 → 3.5) |
+| star-half | the star outline is an unmarked line and the left half the `solid`, so filled is a half star (it flooded the whole star, identical to star) |
+| chart-scatter | chart's sharp axes `M2.5 2.5V13.5H13.5`, like every chart |
+| app-window | stop's square frame (2.5–13.5, r 2), bar at 7.5, dots at 5, 7.5, 10 (it was 12 wide on whole pixels) |
+| layout, kanban, table | headers at 5.5 (were 6); kanban's columns 6.5 / 9.5 (4 / 3 / 4); table's row 9.5 and its header and row one `cut`, its column a line plus a gap (layout's sidebar) |
+| cards | Phosphor's cards-three on x.5: card 6.5–13.5, back lines 2.5 and 4.5; centre 8 (the 7.75 bias is given up for crisp edges) |
+| presentation | legs `M4.5 13.5L8 10L11.5 13.5`, ink centred |
+| flow | boxes 2.5–6.5 like grid and flow-wrap; the head is a tight 1.38 from them |
+| eyedropper | filled: a one-cut gap on the tube side of the collar, so the tube parts from the bulb and collar |
+| ruler | 9 wide (3.5–12.5, document's box), ticks 4 and 2.5 long |
+| atom | nucleus ⌀2 (the centre-point dot), orbits' minor radius 2.625 for a 1.06 gap |
+| menu | rows 3.5 / 7.5 / 11.5 (three-line stacks on x.5, 0.5 high, like text-align) |
+| grip | rows 6.5 / 9.5, centred (width kept: package glyph) |
+| percent | filled by weight; the O's no longer flood (letters fill by weight) |
+| filter-add, filter-dismiss | filled: the cone ends square at the stem top and a stalk runs to the foot (no concave bite or tail round the mark) |
+| plus-minus | both marks 9 wide, a standard 3 apart |
+| check-check | the first check 3 / 6 (1:2) at vertex 5, 11 |
+| trash | handle r 1 (the radius table's small part) |
+| markdown | frame r 2 like the other horizontal frames (its 1.5 head stays: a 2 head leaves 0.375 to the M) |
+| spell-check | letters 5 tall so B's counters reach 1.27–1.43; the check is the 1.5 / 3 check below right (owner to look) |
+| list-numbered | lines start at 9.5 like list-checklist |
+| list-tree | rows 3.5 / 7.5 / 11.5 |
+| clipboard-check | the 2 / 4 check (`M5 10L7 12L11 8`), like desktop-check |
+| document | text lines at 8.5 / 11.5 (8.5 was 9, a whole pixel) |
+| code-block | 2-leg chevrons like terminal (`M7 6L5 8L7 10M9 6L11 8L9 10`) |
+| cast | the wave source is the ⌀2 dot like wifi, rss, broadcast |
+| watch, history, calendar-clock | clock's hands (a vertical hand and a 45° hand down-right) on every small clock face; the L to 3 o'clock is gone (delegated: the family follows clock) |
+| banknote, ticket | r 2 corners like credit-card (same 12 × 9 footprint) |
+| wallet | r 1.5 on every corner (bottom-left was r 2) |
+| award | medal r 4.5 and the ribbon 0.5 lower: ink 10.12 × 13.28 (it read small beside trophy and crown) |
+| coffee | steam on x.5 tops and whole feet (were quarter coordinates) |
+
+Checked and left: pen's clip (owner set it today; its 0.64 gap is an open question), folder-check
+(centring with folder-add's + leaves a 2.38 near miss to the flap), variable's × (3.5 leaves
+1.125, detail not tight), square-list (no x.5 layout keeps the dots on the scale), remove-formatting
+(text-size's T is the one off x.5), indent / outdent (owner), expand / collapse (their 3 barbs are a
+2.12 diagonal head, 2.67× the shaft), upload (2.5 puts the head off the lattice), smile-plus (the
+filled cut-back collides with the mouth; the + placement is the owner's open question),
+mouse-pointer-click and paint-bucket (already at the recorded scale), hammer and party-popper
+(lattice-safe shifts make the offset worse), dumbbell (r 1 plates read as pills).
+
+Owner decisions on the open questions (sheets `11a`–`11c`), same day:
+
+| Icon | Now |
+|---|---|
+| spell-check | owner: "the widths are wrong and the general design of the letters is off, B looks okay": ABC 4 tall (2.5–6.5) at geometric widths, A 3 (flat top 1 wide, r 0.5 corners, bar at 5.5), B 2 (bowls r 1), C 3 (r 1.5 top and bottom arcs on a short straight, open 30° either side), a standard 2.5 between letters so the filled 1.5 line keeps a detail gap; the 2 / 4 check below at `M4.5 10.5L6.5 12.5L10.5 8.5`. Three caps 5 tall cannot keep these widths and the filled gaps in 13 |
+| replace | kept (owner) |
+| agent-circle, agent-square | owner: "update": agent's own path with its full flats, scaled 0.575 across and 0.545 down about 8, 8 (flats on y 5 and 11, sides 4.55 and 11.45): tight 1.26 to the ring, detail 0.92 to the square |
+| bot-designer | owner: the visor arch lowered 1 (crown and visor tops `Q8 4.75`, visor foot `Q8 6.25`), so the filled cap has a full crown; "make sure the top part of the hat connects with the brim": the filled gap between crown and visor is gone (crown and visor one mass, the visor a `solid` fill), the head's sides start at 6.5 so no notch shows where the crown's corner meets the brim, and the seam is a knockout from the crown's top to the visor (`M8 2.5V5.25`) |
+| clock hands, call-off, copy-check, battery bars, cards | the delegated calls confirmed (owner: "update to the proposed", "I like 6c's check size currently", "I like 6e now", "go with your rec") |
+| smile-plus | owner: "the filled + icon should have the inverse plus on the corner": filled, a ⌀6 badge at the +'s centre (12.5, 12.5) with a 3px + cut out of it (a `gap` shape, round ends), and the face cut back one weight round the badge (Fluent's emoji_add); the mouth runs into the cut. The outline keeps its 4px + beside the ring |
+| ⌀1.5 and ⌀2 dots | owner: "the ! dot seems too big compared to the stem": every dot (r ≤ 1.25, not `data-dot="free"`) now follows the size curve with the line (`style={{ r: sw(weight, size, r / 1.125) }}`, the r attribute kept as the 16px fallback), so a dot stays 1.33× the stem at every size; at 48px it read 2.4×. 16px is unchanged |
+| cloud-check | the 1.5 / 3 check inside the cloud like cloud-alert's mark (`M6 9L7.5 10.5L10.5 7.5`), a knockout when filled; the corner check is gone |
+| calendar-remove | the − at y 10, centred with calendar-add's + and calendar-check's check (`data-gap="aligned"`: 2.38 to the header) |
+| pen | the clip's return run on x + y = 21 (`M12.75 5.25L13.543 6.043A1 1 0 0 1 13.543 7.457L11.25 9.75`), about 1.0 from the body so it no longer merges at 16px (signature's small clip unchanged) |
+| maximize, minimize | owner: "use arrows": aliases of expand and collapse; the corners minimize is gone |
+| folder-check, cart-add | unchanged |
+
+Owner notes on the decisions sheet (`12`, `13`), same day; sheets `14-round2-sizes.png`, `14b-round2-zoom.png`:
+
+| Icon | Now |
+|---|---|
+| smile-plus | owner: "strokes touching/overlapping": the face is the small cut (r 4.5 at 6.5, 6.5; eyes at 5.19 / 7.81, 5.75; the mouth smile's scaled 0.75) so the 4px + at 12.5, 12.5 sits beside it whole, 1.58 clear, with no cut in the ring (person-add's small figure). Filled: the face fills, cut back round the ⌀6 badge, whose 3px + is cut out; the mouth ends 1.4 clear of the cut |
+| cloud-check | owner: the check touched the cloud's notch: the 1 / 2 check (`M6 9L7 10L9 8`), tight 1.32 all round; every 1.5 / 3 placement on the lattice meets the notch or the foot |
+| bot-designer | owner: "the brim can be more obviously a hat brim, maybe it extends out from the sides": the visor runs out to 1 and 15 with round ends (r 0.875), past the head's sides |
+| spell-check | owner: "the B looks wrong, the bottom loop should be bigger than the top loop": letters 4.5 tall (2.5–7); B's top bowl r 1 (to 9) and bottom bowl r 1.25 (to 9.5); A flat-topped 1.5–4.5 with its bar at 6; C 12–14.5 (r 1.25 arcs); the 1.5 / 3 check at `M5.5 11L7 12.5L10 9.5` |
+| agent, agent-circle, agent-square | owner: "where is this agent icon even from? … can [bot-agent] just be used if this agent symbol is not universal?": the mark was Fluent's `agents` (Microsoft's), not a shared convention. `agent` is now an alias of bot-agent; agent-circle, agent-square and the agent explore candidates are removed |
+
+## Batch 68: Audit gaps, 2026-10-05
+
+| Icon | Construction |
+|---|---|
+| copy-check | copy exactly with a 1 / 2 check knocked out of the front sheet's centre (`M5 9.5L6 10.5L8 8.5`), tight 1.38 all round; the 1.5 / 3 and 2 / 4 checks leave a 0.38 gap on one side in the 8 × 8 front (recorded exception). Filled: the front fills, the back L stays a line |
+| document-dismiss | document-add exactly, its + replaced by a 3 × 3 × at the same centre (`M6.5 8.5L9.5 11.5M9.5 8.5L6.5 11.5`), detail 0.88 to the fold and sides; a 3.5 × leaves 0.64 to the fold corner. Filled: plain knockout |
+| calendar-x | calendar-add exactly, its + replaced by document-dismiss's 3 × 3 ×; knockout when filled |
+| folder-search | folder exactly with a small lens inside the body right of the tab (ring r 1.5 at 9.5, 8.5, handle `M10.75 9.75L12 11`), detail gaps to the flap, top, side and foot; the body under the flap holds only a 3-unit mark, so it sits right of centre. Filled: knockouts |
+| timer-off | timer whole under the shared slash, flat; ring and crown one outline-only line. Filled: the ring fills, parted by the shared slash gap; the hand is outline-only (the gap would swallow it) |
+| call-off | call's handset whole under the mirrored slash `M14 2L2 14` (`data-off="own"`, as search-off and Lucide's phone-off): the shared slash would run along the handset's inner edge. Filled: handset fill parted by the mirrored one-sided gap |
+| sparkle-off | sparkle whole under the shared slash; filled, the sparkle fills, parted by the shared gap (heart-off, star-off) |
+| person-lock | person-key's small figure exactly with the shared small lock (file-lock: 4 × 3 body r 0.5, r 1 shackle) beside the head at 10–14, its shackle top level with the head; detail 0.88. Filled: figure and lock body solid, shackle a line |
+| shield-lock | shield exactly with a lock centred inside (body 5 × 3.5 r 1 at 5.5–10.5 × 7.5–11, shackle r 1.5), tight 1.23 / 1.6 to the shield, no keyhole (no room). Filled: as shield-user, the shield stays a line and the lock body fills |
+| battery-full | battery-low exactly with three level bars at 4.5, 7, 9.5 (2.5 apart, tight 1.38; even spacing chosen over crisp x.5 bars, which left 1.88 / 0.88 ends). Knockouts when filled |
+| battery-medium | battery-full's first two bars (4.5, 7). Knockouts when filled |
+| maximize | expand's drawing (`data-alias-of="expand"`): two corner arrows pointing out (owner, 2026-10-05) |
+| minimize | collapse's drawing (`data-alias-of="collapse"`): two corner arrows pointing in (owner, 2026-10-05: arrows for minimize and maximize, not corners) |
+| loader-circle | the r 6 ring as a 270° arc with round ends, open in the top-right quarter (`M14 8A6 6 0 1 1 8 2`, Lucide's loader-circle). Fills by weight |
+| text-align-justify | the text-align family's three lines at 3.5 / 7.5 / 11.5, all 2.5–13.5. Fills by weight |
+| list-minus | list-plus's four lines unchanged with the 4px − (`M10 11H14`) where the + was; standard 1.79. Fills by weight |
+| case-lower | case-sensitive's a beside a b made of the same r 2 bowl and a stem rising to the cap height 4.5, stems a standard 3 apart, ink centred at 8, 8 like case-upper. Fills by weight |
+| regex | asterisk scaled 0.727 (r 4) about 10, 6.5 and a ⌀2 dot at 3, 13; open gap 4.16 (`data-angles="free"` from the asterisk). Fills by weight |
+| replace | search's lens drawn as reset's arc (r 4.92 round 7, 7) with reset's 3px corner head at the upper left, and search's handle `M10.5 10.5L14 14` (Material's find_replace, one arrow). Lucide's boxes-and-arrow could not keep its barbs on the gap scale at 16px (Fitting step 7). Fills by weight |
+| heading-1 | heading's H made smaller (stems 2.5 and 8.5, 3.5–12.5, bar at 8) with a 6-tall numeral on baseline 12.5 at 11.5–14.5, a standard gap from the H; the 1's flag is 26.6° (a 45° flag failed the 60° acute rule). Fills by weight |
+| heading-2 | heading-1's H; the 2 is an r 1.5 bowl, a tangent to the base and the base, its corner r 0.75. Fills by weight |
+| heading-3 | heading-1's H; the 3 is two r 1.5 bowls with a 0.5 middle stub. Fills by weight |
+| send-to-back | bring-to-front's 5 × 5 r 1.5 square twice as the fronts (2.5–7.5 and 8.5–13.5) over a 9 × 9 r 1.5 back square of which only the two uncovered r 1.5 corners show, a standard 3 from the fronts (Lucide's send-to-back). Filled: fronts fill, the back stays a line |
+| ungroup | two of insert-row's 7 × 4 r 1 cards on the diagonal (2.5–9.5 × 2.5–6.5 and 6.5–13.5 × 9.5–13.5), standard 1.88; group's frame dropped (its boxes could not part inside it at a standard gap; Lucide's ungroup). Both fill |
+| arrow-up-from-line | arrow-right-to-line's construction reversed: a 3px head tipped at 8, 3 on a shaft to 10.5, a standard 3 above a 10px bar at 13.5 (3–13); ink centre 8, 8.25 for the lattice. Turns: arrow-right-from-line 90, arrow-down-from-line 180, arrow-left-from-line 270 |
+
+Derived names declared on existing sources (their drawings unchanged): insert-row → insert-column (transpose); corner-down-right → corner-up-right (flipy), corner-up-left (180) — corner-down-left is return itself, so it is not added; rotate → rotate-ccw (flipx). Considered and left out: the owner's niche removals (2026-10-02), file-audio/video, database variants, chart-candlestick, transport (train, bus), weather extras.

@@ -418,6 +418,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     if (el.filled !== "knockout" || el.tag !== "path") continue;
     const ends = [];
     for (const sub of el.attrs.d.split(/(?=M)/).filter(s => s.trim())) {
+      if (/z/i.test(sub)) continue; // a closed knockout (globe's meridian) has no free end to run out
       const { segments: segs = [], points: pts = [] } = parsePath(name, sub);
       const first = segs[0], last = segs.at(-1), start = pts[0], end = pts.at(-1);
       const out = (s, p, back) => { const l = Math.hypot(s[2] - s[0], s[3] - s[1]), k = back ? -1 : 1; return [p[0] + k * (s[2] - s[0]) / l, p[1] + k * (s[3] - s[1]) / l].map(v => Number(v.toFixed(3))); };
@@ -449,6 +450,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   // Dots come in two sizes (docs/specs/icons.md, "Shared parts"): ⌀2 for a dot that is the
   // icon or one of its marks, ⌀1.5 for a dot with a stem or a detail set inside a shape.
   // data-dot="free" records an owner-approved exception (quote's marks, rocket's window).
+  if (root["data-dot"] === "free") for (const el of elements) if (el.tag === "circle") el.freeDot = true;
   if (strict && root["data-dot"] !== "free") for (const el of elements.filter(e => e.tag === "circle" && !e.stroked))
     if (!["1", "0.75"].includes(el.attrs.r)) fail(name, `a dot is r 1 (⌀2) or r 0.75 (⌀1.5), not r ${el.attrs.r}`);
   // Off states share one slash (M2 2L14 14). data-off="own" records an owner-chosen form
@@ -615,6 +617,11 @@ const jsx = (el, paint) => {
     // (a page fold's L against the diagonal: the pocket stays a closed triangle at every size).
     if (shift) { const [dx, dy] = shift.split(/\s+/); style = style.replace(/style=\{\{ strokeWidth: sw\(weight, (size|undefined)\) \}\}/, `{...lineShift(weight, $1, ${dx}, ${dy})}`); }
     props.push(`stroke="${paint?.color ?? "currentColor"}"`, style);
+  } else if (el.tag === "circle" && !el.freeDot && Number(attrs.r) <= 1.25) {
+    // A dot is a line's partner (⌀1.5 = 1.33× the line, ⌀2 a mark), so its radius follows the size
+    // curve with the line; a fixed r read 2.4× the stem at 48px (owner, 2026-10-05: "the ! dot seems
+    // too big compared to the stem"). The r attribute stays as the 16px fallback.
+    props.push(`style={{ r: sw(weight, size, ${(Number(attrs.r) / WEIGHT).toFixed(4)}) }}`);
   }
   return `<${el.tag} ${props.join(" ")} />`;
 };
