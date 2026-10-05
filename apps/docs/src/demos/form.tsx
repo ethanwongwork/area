@@ -428,8 +428,8 @@ export const ChipCustomDelete = () => <Chip kind="input" onDismiss={() => {}} di
 
 export const ChipAvatars = () => (
   <ChipGroup aria-label="Suggestions">
-    <Chip avatar={<Avatar fallback="IY" alt="" />}>Irene Yamaguchi</Chip>
-    <Chip avatar={<Avatar src="/images/irene-yamaguchi.jpg" alt="" />}>Irene Yamaguchi</Chip>
+    <Chip avatar={<Avatar fallback="DT" alt="" />}>David Tee</Chip>
+    <Chip avatar={<Avatar src="/images/david-tee.jpg" alt="" />}>David Tee</Chip>
   </ChipGroup>
 );
 

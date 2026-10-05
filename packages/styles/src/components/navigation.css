@@ -105,7 +105,7 @@
 
   .area-tabs__tab:focus-visible {
     /* Capped against this tier's own height; see button.css. */
-    border-radius: min(var(--area-radius-control), calc(var(--_tab-height) * var(--area-radius-cap) + var(--area-radius-shift)));
+    border-radius: min(var(--area-radius-control), max(var(--area-radius-min), round(down, calc(var(--_tab-height) * var(--area-radius-factor)), 2px)));
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: calc(-1 * var(--area-focus-width));
   }
@@ -249,7 +249,7 @@
     border: var(--area-stroke-width) solid var(--_border);
     /* Capped against this tier's own height; see button.css. */
     /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
-    border-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap) + var(--area-radius-shift)));
+    border-radius: calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
     background-color: var(--_bg);
     color: var(--area-select-text);
     font-size: var(--_text);
@@ -370,7 +370,7 @@
       overflow: auto;
       padding: var(--area-space-4);
       border: var(--area-border-width) solid var(--area-border-decorative);
-      border-radius: var(--area-radius-container);
+      border-radius: var(--area-radius-list); /* concentric with its options */
       background: var(--area-bg-surface);
       color: var(--area-fg-default);
       /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
@@ -397,7 +397,7 @@
       margin-block: var(--area-space-2) 0;
       border: 0;
       /* The picker's corner less its padding, 8: the border left out so the corner stays even (2026-10-03). */
-      border-radius: min(max(0px, calc(var(--area-radius-container) - var(--area-space-4))), round(down, calc(var(--area-control-md) * var(--area-radius-cap) + var(--area-radius-shift)), 2px));
+      border-radius: var(--area-radius-list-row);
       background: transparent;
       color: var(--area-fg-default);
       cursor: pointer;

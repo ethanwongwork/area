@@ -241,3 +241,4 @@ the iOS 27 kit, read only) and the gallery's Toolbar / Tools tile:
 - 2026-10-01 · audit G-12 (owner pick A) → the chevron trigger keeps the pressed plate while its menu is open → button.css:145-150.
 - 2026-10-03 · radius audit D6 (owner) → the ghost icon-only trigger's capped corner rounds down to whole pixels: 6, compact 5 (was 6.4 / 5.6; Figma 5) (`split-button.css`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · all even (owner) → the ghost icon-only trigger's cap rounds down to 2px: 6, compact 4 (`split-button.css`).
+- 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → the icon-only ghost trigger takes the corner of a box three quarters the Button's height: 6, compact 4, as before (`split-button.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".

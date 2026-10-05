@@ -224,9 +224,9 @@ export function derivedTokens(): Record<string, string> {
     // ColorSwatch's solid, very light edge (audit F-30 A; was 15% of the token ink).
     [`${PREFIX}token-swatch-ring`]: `var(${PREFIX}bg-component)`,
     // (radius-nested was pruned in audit S21b: concentric corners use radius-concentric, S3.)
-    // Corners follow the UI scale (compact pass, owner 2026-10-01). The radius axis publishes a
-    // default and a dense ladder; the UI scale's `ui-dense` flag (0 or 1) picks one. A live
-    // calc, so a `data-area-ui` or `data-area-radius` subtree re-derives its own corners.
+    // Corners follow painted height (compact pass, owner 2026-10-01): the radius setting gives a
+    // corner per pixel and the UI scale the heights. A live calc, so a `data-area-ui` or
+    // `data-area-radius` subtree re-derives its own corners.
     ...radiusDerivations(),
 
     // Standard transition for interactive chrome. Only properties that actually change.
@@ -236,22 +236,35 @@ export function derivedTokens(): Record<string, string> {
 }
 
 function radiusDerivations(): Record<string, string> {
-  // The family's value for this density, moved by the roundness offset, never below square
-  // (axes/roundness.ts). The offset scales by radius-concentric, so Sharp stays square.
-  const pick = (name: string) =>
-    `max(0px, calc(var(${PREFIX}radius-base-${name}) + (var(${PREFIX}radius-dense-${name}) - var(${PREFIX}radius-base-${name})) * var(${PREFIX}ui-dense) + var(${PREFIX}radius-offset) * var(${PREFIX}radius-concentric)))`;
+  // One corner setting (axes/radius.ts). A shape on the height ladder takes the setting's corner
+  // per pixel of height, rounded down to even pixels, never under radius-min (2, or 0 at Sharp):
+  // 8 gives 20 -> 4, 24 -> 6, 28 -> 6, 32 -> 8, 40 -> 10, 48 -> 12, and Pill gives half of every
+  // height. Live calc on the control heights, so a `data-area-ui` subtree re-derives its corners.
+  // Components with their own height write the same expression on it (DESIGN_SYSTEM.md, Radius).
+  const corner = (height: string) =>
+    `max(var(${PREFIX}radius-min), round(down, calc(${height} * var(${PREFIX}radius-factor)), 2px))`;
   const out: Record<string, string> = {};
-  for (const tier of ["xs", "sm", "md", "lg", "xl"]) out[`${PREFIX}radius-control-${tier}`] = pick(`control-${tier}`);
+  for (const tier of ["xs", "sm", "md", "lg", "xl"]) out[`${PREFIX}radius-control-${tier}`] = corner(`var(${PREFIX}control-${tier})`);
   out[`${PREFIX}radius-control`] = `var(${PREFIX}radius-control-md)`;
-  out[`${PREFIX}radius-container`] = pick("container");
-  out[`${PREFIX}radius-small`] = pick("small");
-  out[`${PREFIX}radius-row`] = pick("row");
-  // The roundness offset as it applies here (0 at Sharp), for the few corners a component draws
-  // from its own size rather than a role: checkbox boxes, swatches, skeletons.
-  out[`${PREFIX}radius-shift`] = `calc(var(${PREFIX}radius-offset) * var(${PREFIX}radius-concentric))`;
-  // The sharpest corner a nested shape takes (an item in a track, an action in a field): 4, moved
-  // by roundness, never past the smallest control's own corner (so Subtle stays 2).
-  out[`${PREFIX}radius-floor`] = `min(var(${PREFIX}radius-control-xs), max(0px, calc(4px * var(${PREFIX}radius-concentric) + var(${PREFIX}radius-shift))))`;
+  // Surfaces hold at both densities (radius audit D1) on their own 4px ladder.
+  out[`${PREFIX}radius-container`] = `var(${PREFIX}radius-surface)`;
+  // Small nested shapes (code, disclosure plates): the smallest control's corner, 6 (compact 4).
+  out[`${PREFIX}radius-small`] = `var(${PREFIX}radius-control-xs)`;
+  // A full-width row's plate: the row's own height, 8 (compact 6).
+  out[`${PREFIX}radius-row`] = corner(`var(${PREFIX}ui-row)`);
+  // The setting itself, the medium Button's corner at the default height (0 ... 14, Pill 16).
+  out[`${PREFIX}radius-step`] = corner("32px");
+  // The sharpest corner a nested shape takes (an item in a track, a row in a menu): 4, or the
+  // setting where it is smaller (2), so only Sharp is square anywhere.
+  out[`${PREFIX}radius-floor`] = `min(4px, var(${PREFIX}radius-step))`;
+  // Rows in a floating list (Menu, Combobox, Command palette, Select's picker) and the list itself
+  // (owner, 2026-10-04: "menu rows wait for pill"). A row is the surface less its 4px padding (8 at
+  // both densities), floored, no rounder than the medium Button, and 2px short of a pill until
+  // Pill (the min() term is 0 only when the factor is 0.5). The list stops at its rows plus the
+  // padding, so it stays concentric: 12 at the default, 14 / 16 / 18 at 10 / 12 / 14, 20 at Pill.
+  out[`${PREFIX}radius-list-row`] =
+    `min(max(var(${PREFIX}radius-floor), calc(var(${PREFIX}radius-container) - 4px)), var(${PREFIX}radius-step), calc(var(${PREFIX}ui-row) / 2 - min(2px, (0.5 - var(${PREFIX}radius-factor)) * 1000px)))`;
+  out[`${PREFIX}radius-list`] = `min(var(${PREFIX}radius-container), calc(var(${PREFIX}radius-list-row) + 4px))`;
   return out;
 }
 
@@ -274,9 +287,9 @@ function radiusDerivations(): Record<string, string> {
  */
 export const REGISTERED_PROPERTIES = [
   // The leaves of the radius derivation; the public radius tokens are derived and unregistered.
-  { name: `${PREFIX}radius-base-container`, syntax: "<length>", initial: "12px" },
-  { name: `${PREFIX}radius-base-small`, syntax: "<length>", initial: "6px" },
-  { name: `${PREFIX}radius-offset`, syntax: "<length>", initial: "0px" },
+  { name: `${PREFIX}radius-surface`, syntax: "<length>", initial: "12px" },
+  { name: `${PREFIX}radius-min`, syntax: "<length>", initial: "2px" },
+  { name: `${PREFIX}radius-factor`, syntax: "<number>", initial: "0.25" },
   { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}border-width`, syntax: "<length>", initial: "1px" },

@@ -35,7 +35,7 @@
 
     border: var(--area-stroke-width) solid var(--_border);
     /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
-    border-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap) + var(--area-radius-shift)));
+    border-radius: min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px)));
     background-color: var(--_bg);
     color: var(--area-textarea-text);
     font-family: inherit;

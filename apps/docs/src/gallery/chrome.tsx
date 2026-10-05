@@ -1,26 +1,31 @@
 /**
  * The component gallery's chrome: the component list on the left and the theme panel on the
  * right, built from Area's own Panel, Nav, Field and Segmented, modelled on Cursor's sidebars:
- * docked, resizable, compact (component-gallery.mjs pins the rails to the compact UI scale).
+ * docked and resizable, at the default UI scale and radius 10 (owner, 2026-10-04; were compact),
+ * which component-gallery.mjs pins on the rails.
  *
  * Both rails sit outside the canvas's theme scope, so they keep Area's defaults while the
  * controls retheme only the canvas. The build renders them to HTML (component-gallery.mjs)
  * and gallery-client.tsx hydrates them.
  */
 import { useEffect, useRef, useState } from "react";
-import { Field, Nav, NavGroup, NavItem, NavSeparator, Panel, PanelSection, Segmented, Slider } from "@area/react";
+import { Chip, ChipGroup, Field, Nav, NavGroup, NavItem, NavSeparator, Panel, PanelSection, Segmented, Select } from "@area/react";
 import { GALLERY_CANVAS_ID, GALLERY_CONTROLS, GALLERY_STORAGE_KEY } from "./controls.ts";
 
 /*
  * Rail widths (picks, not measured: Cursor's sidebar width is not in the captures). The nav is
- * narrower than Panel's 240 so the canvas gets the room; the theme panel holds 248, the
- * narrowest at which a row's Segmented shows "Compact" untruncated beside its label (the row
- * splits 1 : 1.5; at 240 it clips by 1px). Each rail resizes from its inner edge and keeps the width it was left at.
+ * narrower than Panel's 240 so the canvas gets the room. The theme panel starts at 240 and goes
+ * down to 200 (owner, 2026-10-04: thinner, and able to go smaller); below STACK its rows put the
+ * label above the control, since 296 is the narrowest at which a Segmented shows "Compact"
+ * beside its label at the default UI scale (the row splits 1 : 1.5). Each rail resizes from its
+ * inner edge and keeps the width it was left at.
  */
 const RAILS = {
   nav: { initial: 200, min: 160, max: 360 },
-  controls: { initial: 248, min: 248, max: 400 },
+  controls: { initial: 240, min: 200, max: 400 },
 } as const;
+/** Below this theme-panel width a row stacks its label above its control. */
+const STACK = 296;
 const RAILS_KEY = "area-gallery-rails";
 
 function useRailWidth(rail: keyof typeof RAILS) {
@@ -46,10 +51,11 @@ export interface GallerySection {
   name: string;
 }
 
-/** The gallery's pages: every component, and how roundness shifts each one. */
+/** The gallery's pages: every component, and how the radius setting shapes each one. */
 export const GALLERY_PAGES = [
   { id: "components", href: "./index.html", label: "Components" },
-  { id: "roundness", href: "./roundness.html", label: "Roundness" },
+  { id: "review", href: "./review.html", label: "Review" },
+  { id: "roundness", href: "./roundness.html", label: "Corner radius" },
 ] as const;
 export type GalleryPage = (typeof GALLERY_PAGES)[number]["id"];
 
@@ -147,17 +153,26 @@ export function GalleryControls() {
   };
 
   const rail = useRailWidth("controls");
-  // Label beside control, one row per setting: a horizontal Field inside a Panel.
+  // Label beside control, one row per setting: a horizontal Field inside a Panel; stacked when narrow.
+  const stacked = rail.width < STACK;
   return (
     <Panel size="sm" flush resizable="start" title="Theme" action={<span className="gallery-controls__scope">Canvas</span>} {...rail}>
       <PanelSection>
         {GALLERY_CONTROLS.map(control => (
-          <Field key={control.axis} label={control.label} orientation="horizontal">
-            {control.kind === "slider" ? (
-              <Slider size="sm" min={0} max={control.items.length - 1} step={1} stepMarks
-                value={Math.max(0, control.items.findIndex(item => item.value === selection[control.axis]))}
-                readout={index => control.items[index]?.label ?? ""}
-                onValueChange={index => { const item = control.items[index]; if (item) choose(control.axis, item.value); }} />
+          <Field key={control.axis} label={control.label} orientation={control.kind === "chips" || stacked ? "vertical" : "horizontal"}>
+            {control.kind === "chips" ? (
+              <ChipGroup aria-label={control.label} title={control.hint}>
+                {control.items.map(item => {
+                  const on = selection[control.axis]!.split(" ").includes(item.value);
+                  const next = (selected: boolean) => control.items.map(other => other.value)
+                    .filter(value => value === item.value ? selected : selection[control.axis]!.split(" ").includes(value)).join(" ");
+                  return <Chip key={item.value} size="sm" selected={on} onSelectedChange={selected => choose(control.axis, next(selected))}>{item.label}</Chip>;
+                })}
+              </ChipGroup>
+            ) : control.kind === "select" ? (
+              <Select size="sm" fullWidth title={control.hint} value={selection[control.axis]} onChange={event => choose(control.axis, event.currentTarget.value)}>
+                {control.items.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
+              </Select>
             ) : (
               <Segmented size="sm" fullWidth items={[...control.items]}
                 value={selection[control.axis]} onValueChange={value => choose(control.axis, value)} />

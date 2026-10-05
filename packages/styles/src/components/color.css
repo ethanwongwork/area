@@ -29,12 +29,12 @@
     /* spec (owner, 2026-09-28: "make it more consistent"): one shape at every size, the corner 20% of
        the side (Figma's document swatches and edge layer, `figma--swatches`). Was min(radius-small,
        size / 4): 25% up to 24px, then capped at 6, so larger swatches read squarer. */
-    --_shape: calc(0.2 * var(--area-radius-concentric)); /* square at Sharp (audit S3) */
+    --_shape: 0.2; /* at the default; scales with the setting, square at Sharp */
     /* Required: it keeps a white swatch visible, so it ignores the Surface axis (audit F-5). */
     --_edge: var(--area-stroke-width);
     /* Rounded to even pixels (radius audit D6; all even, owner 2026-10-03): 12 -> 2, 16, 20 and
-       24 -> 4; moved by roundness, never below square. */
-    --_radius: max(0px, calc(round(nearest, calc(var(--_size) * var(--_shape)), 2px) + var(--area-radius-shift)));
+       24 -> 4 at the default; times setting / 8 elsewhere (4 x factor). */
+    --_radius: max(var(--area-radius-min), round(nearest, calc(var(--_size) * var(--_shape) * 4 * var(--area-radius-factor)), 2px));
     /* The layers inside the edge are concentric with it (outer - edge), so the edge is an even 1px all
        round. A 20% inner shape of its own (tried 2026-09-28) made the fill rounder than the edge. */
     --_inner-radius: max(0px, calc(var(--_radius) - var(--_edge)));
@@ -96,7 +96,7 @@
     block-size: var(--_cell);
     /* Concentric with the swatch it frames: the swatch's 20% corner plus the 4px inset (Color swatch,
        2026-09-28). */
-    border-radius: calc(max(0px, calc(round(nearest, calc(var(--_swatch-size) * 0.2), 2px) + var(--area-radius-shift))) + (var(--_cell) - var(--_swatch-size)) / 2);
+    border-radius: calc(max(var(--area-radius-min), round(nearest, calc(var(--_swatch-size) * 0.8 * var(--area-radius-factor)), 2px)) + (var(--_cell) - var(--_swatch-size)) / 2 * var(--area-radius-concentric));
     cursor: pointer;
   }
   .area-color-swatch-picker__cell > input {
@@ -135,7 +135,7 @@
     grid-template-columns: repeat(var(--_columns), minmax(0, 1fr));
     gap: 0;
     inline-size: 100%;
-    border-radius: min(var(--area-radius-control-sm), calc(var(--area-control-sm) * var(--area-radius-cap) + var(--area-radius-shift))); /* finite under Pill (audit H-1) */
+    border-radius: var(--area-radius-control-sm);
     overflow: clip;
     outline: 1px solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
     outline-offset: -1px;
@@ -151,7 +151,7 @@
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 1; background: none; box-shadow: none; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) > .area-color-swatch {
-    --_radius: min(var(--area-radius-control-xs), calc(var(--area-control-xs) * var(--area-radius-cap) + var(--area-radius-shift)));
+    --_radius: var(--area-radius-control-xs);
     --_inner-radius: var(--_radius);
     box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px rgb(0 0 0 / 0.2), inset 0 0 0 3px rgb(0 0 0 / 0.2); /* spec */
   }
@@ -163,7 +163,12 @@
   .area-input.area-color-field {
     inline-size: var(--_color-field-width);
   }
-  .area-color-field .area-input__icon > .area-color-swatch { --_size: var(--_icon); }
+  /* Its own corner, but never rounder than concentric with the field, floored (quality pass, 2026-10-04:
+     a 16 swatch read 6 inside a 16 field 12 in at radius 14). */
+  .area-color-field .area-input__icon > .area-color-swatch {
+    --_size: var(--_icon);
+    --_radius: min(max(var(--area-radius-min), round(nearest, calc(var(--_size) * var(--_shape) * 4 * var(--area-radius-factor)), 2px)), max(var(--area-radius-floor), calc(var(--_field-shape) - (var(--_height) - var(--_size)) / 2)));
+  }
   /* Digits are tabular; a letter-heavy hex wider than a narrow row ends in an ellipsis at rest. */
   .area-color-field input { font-variant-numeric: tabular-nums; text-overflow: ellipsis; }
   .area-color-field--sm { --_color-field-width: calc(var(--area-space-96) + var(--area-space-32)); }
@@ -245,7 +250,7 @@
   .area-color-picker__area {
     position: relative; aspect-ratio: 1; touch-action: none; cursor: crosshair;
     background: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), hsl(var(--_hue) 100% 50%);
-    border-radius: min(var(--area-radius-control-sm), calc(var(--area-control-sm) * var(--area-radius-cap) + var(--area-radius-shift)));
+    border-radius: var(--area-radius-control-sm);
     box-shadow: inset 0 0 0 1px var(--_hairline);
   }
   /* One thumb for the area and both tracks. Vendor pseudo-elements take separate rules:
@@ -334,7 +339,7 @@
   /* Preview: the new color over the original, which restores it (Photoshop's new/current). */
   .area-color-picker__preview {
     display: grid; grid-template-rows: 1fr 1fr; flex: none; align-self: stretch;
-    inline-size: var(--area-control-sm); border-radius: min(var(--area-radius-control-sm), calc(var(--area-control-sm) * var(--area-radius-cap) + var(--area-radius-shift))); overflow: clip;
+    inline-size: var(--area-control-sm); border-radius: var(--area-radius-control-sm); overflow: clip;
     box-shadow: inset 0 0 0 1px var(--_hairline);
   }
   .area-color-picker__preview-new,

@@ -613,7 +613,7 @@ const jsx = (el, paint) => {
     // data-shift="dx dy": the line moves by (dx, dy) × (16px weight − rendered weight), so an edge
     // that must meet another line's inner edge stays on it as the size curve thins the line
     // (a page fold's L against the diagonal: the pocket stays a closed triangle at every size).
-    if (shift) { const [dx, dy] = shift.split(/\s+/); const at = style.includes("sw(weight, size") ? "size" : "undefined"; style = style.replace(/strokeWidth: sw\(weight, (size|undefined)\) \}\}/, `strokeWidth: sw(weight, $1), transform: lineShift(weight, ${at}, ${dx}, ${dy}) }}`); }
+    if (shift) { const [dx, dy] = shift.split(/\s+/); style = style.replace(/style=\{\{ strokeWidth: sw\(weight, (size|undefined)\) \}\}/, `{...lineShift(weight, $1, ${dx}, ${dy})}`); }
     props.push(`stroke="${paint?.color ?? "currentColor"}"`, style);
   }
   return `<${el.tag} ${props.join(" ")} />`;
@@ -685,7 +685,7 @@ const filledBody = icon => {
 // time (\`slashGap\`), so a thinner line at 32px opens no strip of fill beside the slash.
 const SLASH_GAP = "M0.909 -0.682L16.909 15.318";
 const filledUniform = (icon, lines) => lines.map(line => line.includes(`d="${SLASH_GAP}"`)
-  ? line.replace(`d="${SLASH_GAP}"`, `d="M-1 -1L17 17"`).replace("style={{ strokeWidth: sw(weight, size) }}", "style={{ strokeWidth: sw(weight, size), transform: slashGap(weight, size) }}")
+  ? line.replace(`d="${SLASH_GAP}"`, `d="M-1 -1L17 17"`).replace("style={{ strokeWidth: sw(weight, size) }}", "{...slashGap(weight, size)}")
   : line);
 const tsx = `/**
  * Area icon pilot, generated from apps/docs/assets/area-icons-pilot by
@@ -707,23 +707,34 @@ export const sw = (weight: number | undefined, size: number | undefined, ratio =
   if (weight !== undefined) return weight * k;
   return k === 1 ? "var(--area-weight-icon)" : \`calc(var(--area-weight-icon) * \${k.toFixed(4)})\`;
 };
-/** A halo's width: the outline's overlap cut (2.25 between centre-lines) on each side, less the line. */
+/** A halo's width: the outline's overlap cut (2.25 between centre-lines) on each side, less the line.
+ *  The token weight reads the cut from --_icon-overlap (base.css), so no length is written inline. */
 export const haloWidth = (weight: number | undefined, size: number | undefined) => {
   const w = sw(weight, size);
-  return typeof w === "number" ? 4.5 - w : \`calc(4.5px - \${w})\`;
+  return typeof w === "number" ? 4.5 - w : \`calc(var(--_icon-overlap) - \${w})\`;
 };
-/** data-shift: a line moved by (dx, dy) × (the 16px weight − the rendered weight). */
+/** data-shift: a line moved by (dx, dy) × (the 16px weight − the rendered weight). Returns the line's
+ *  stroke props, as slashGap does: a numeric weight shifts by the SVG transform attribute in user
+ *  units, the token weight by a CSS transform computed from the token. */
 export const lineShift = (weight: number | undefined, size: number | undefined, dx: number, dy: number) => {
-  const d = 1 - sizeFactor(size);
-  if (!d) return undefined;
-  const t = (k: number) => weight !== undefined ? \`\${(weight * d * k).toFixed(4)}px\` : \`calc(var(--area-weight-icon) * \${(d * k).toFixed(4)})\`;
-  return \`translate(\${t(dx)}, \${t(dy)})\`;
+  const w = sw(weight, size), d = 1 - sizeFactor(size);
+  if (!d) return { style: { strokeWidth: w } };
+  if (weight !== undefined) return { style: { strokeWidth: w }, transform: \`translate(\${(weight * d * dx).toFixed(4)} \${(weight * d * dy).toFixed(4)})\` };
+  const t = (k: number) => \`calc(var(--area-weight-icon) * \${(d * k).toFixed(4)})\`;
+  return { style: { strokeWidth: w, transform: \`translate(\${t(dx)}, \${t(dy)})\` } };
 };
-/** The slash's filled gap: the slash shifted one line weight across it (centre to centre). */
+/** The slash's filled gap: the slash shifted one line weight across it (centre to centre).
+ *  Returns the slash's stroke props. A numeric weight is drawing units like the path, so the
+ *  shift is the SVG transform attribute in user units; the token weight is a CSS length, so
+ *  its shift is a CSS transform computed from the token. */
 export const slashGap = (weight: number | undefined, size: number | undefined) => {
   const w = sw(weight, size);
-  const t = typeof w === "number" ? \`\${(w * Math.SQRT1_2).toFixed(4)}px\` : \`calc(\${w.startsWith("calc") ? w.slice(5, -1) : w} * 0.7071)\`;
-  return \`translate(\${t}, calc(-1 * \${t}))\`;
+  if (typeof w === "number") {
+    const t = (w * Math.SQRT1_2).toFixed(4);
+    return { style: { strokeWidth: w }, transform: \`translate(\${t} -\${t})\` };
+  }
+  const t = \`calc(\${w.startsWith("calc") ? w.slice(5, -1) : w} * 0.7071)\`;
+  return { style: { strokeWidth: w, transform: \`translate(\${t}, calc(-1 * \${t}))\` } };
 };
 const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none", "aria-hidden": true, focusable: false } as const;
 const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");

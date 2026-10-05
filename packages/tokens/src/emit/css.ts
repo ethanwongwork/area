@@ -9,6 +9,7 @@
  * here is wrapped in an explicit `@layer`, so if a bundler ever strips the order statement
  * the result degrades to declaration order rather than to chaos.
  */
+import { PILL_SHAPES, pillDefaults } from "../axes/pills.ts";
 import { type AxisDefinition, type TokenMap } from "../axes/schema.ts";
 import { AXES, assertAxisIntegrity, attributeFor, defaultPresetOf, assertEmittedTokens } from "../axes/registry.ts";
 import { baseTokens, derivedTokens } from "./base.ts";
@@ -101,7 +102,7 @@ export function emitTokens(): string {
     ),
     "",
     "@layer area.tokens {",
-    rule(":where(:root)", { "color-scheme": "light", ...baseTokens(), ...defaults, ...derivedTokens() }),
+    rule(":where(:root)", { "color-scheme": "light", ...baseTokens(), ...pillDefaults(), ...defaults, ...derivedTokens() }),
     "}",
     "",
   ];
@@ -123,7 +124,7 @@ export function emitAxes(): string {
       "Area — axes",
       "Generated. Do not edit.\n\n" +
         "One block per preset. Selecting an axis is a data attribute on any element:\n" +
-        '  <html data-area-theme="dark" data-area-ui="compact" data-area-radius="sharp">\n\n' +
+        '  <html data-area-theme="dark" data-area-ui="compact" data-area-radius="0">\n\n' +
         "Custom properties inherit, so a subtree can carry its own axis values:\n" +
         '  <aside data-area-ui="compact"> ... </aside>',
     ),
@@ -144,6 +145,13 @@ export function emitAxes(): string {
       }));
     }
   }
+
+  // Pill shapes (axes/pills.ts): a listed component is a pill; a scope with the attribute
+  // clears every flag first, so the list is exactly the pills in that subtree.
+  out.push("");
+  out.push(`${INDENT}/* Pill shapes — data-area-pills="badge switch ...": these draw a pill; the rest follow radius. */`);
+  out.push(rule("[data-area-pills]", Object.fromEntries(PILL_SHAPES.map(shape => [`--area-pill-${shape.id}`, "0"]))));
+  for (const shape of PILL_SHAPES) out.push(rule(`[data-area-pills~="${shape.id}"]`, { [`--area-pill-${shape.id}`]: "1" }));
 
   // OS preference by default; an explicit scoped value can opt in or restore standard.
   out.push(rule('[data-area-contrast="more"]', { "--area-contrast-more": "1" }));

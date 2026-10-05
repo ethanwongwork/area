@@ -289,34 +289,38 @@ size (track = height + 12: 28, 32, 36), as ChatGPT's 32 × 20 and Notion's 30 ×
 its own track geometry. Kbd and Token have separate content roles. These current
 constructions do not confer completion on unrefined families.
 
-Radius uses the named `sharp`, `subtle`, `soft`, `standard`, `round`, `rotund` and `pill`
-presets in `axes/radius.ts`. Every control reads the per-tier control radius, sm 6, md 8,
-lg 10 at Standard (audit S4): Button, fields, Select, InputGroup and the Segmented track,
-whose items sit concentric inside it; Calendar's 32px days take md. Choose control, row, small or container roles and respect
-the box cap. A radius that is not a role is derived from one, never written as a spacing
-token, or it ignores the presets. Surface corners (owner, audit S3/S3b, 2026-09-30):
-containers use the container role at any inset (Popover, Menu, Panel), 12 at both densities
-(radius audit D1, 2026-10-03; compact was 8). A shell whose corner
-holds a control is concentric with it: the control's capped radius plus its distance from
-the edge, the distance scaled by `radius-concentric` (0 at Sharp, so Sharp shells are square).
-Card is concentric with its media: md 8 + 8 = 16 (sm 14, lg 20, compact 12; D5), Composer,
-Message and Prompt suggestions 8 + 8 = 16, Toolbar and the Segmented track the control plus
-their inset; Dialog is the corner close plus 8 (16), capped at twice the container radius.
-A one-line bar (Alert, its banner, Toast) takes the large control corner, 10 (compact 8); a
-multiline Alert or titled Toast is a surface (D2). Tooltip takes the large control corner, 10
-(compact 8; D3). Kbd is 6 at every size and density (D4).
-The control radius is capped by `radius-cap` or `radius-button-cap`, so Pill shells stay
-finite. Identity circles/pills use `radius-full` deliberately; never impose the
-radius axis on every shape. Nested radius is concentric with a floor:
-`max(min(radius-floor, inner height × radius-cap), outer radius - inset)`, so an inner shape
-is never sharper than 4 (`radius-floor`, moved by roundness; radius audit 2026-10-03,
-`docs/research/radius-audit-2026-10-03.md`). Insets are the padding; a surface's 1px border is
-left out so corners stay even. Standard's control curve follows painted height at both
-densities, all even: 20 → 4, 24 → 6, 28 → 6, 32 → 8, 40 → 10, 48 → 12. Measure painted bounds when browser clamping matters.
-Row plates take their radius by context (owner, audit D-16 A, 2026-09-30): rows inside a
-floating surface (Menu, Combobox, Command palette, Select's picker) are concentric with it,
-the surface radius less its inset; standalone rows (Nav, Tree view) use `radius-row`; Select
-options are capped by the row's box cap, so the Pill preset does not turn them into capsules.
+Radius is one setting (owner, 2026-10-03): `0` (Sharp), `2`, `4`, `6`, `8` (default), `10`, `12`,
+`14`, `pill`, one number, the medium Button's corner (`axes/radius.ts`). Every corner follows from
+it, so each preset is one coherent theme. A shape on the height ladder takes
+`max(radius-min, round(down, height × radius-factor, 2px))`: setting × height ÷ 32 in even pixels,
+never under 2, so 8 gives 20 → 4, 24 → 6, 28 → 6, 32 → 8, 40 → 10, 48 → 12 at both densities,
+every height is square at Sharp and a pill at Pill. Controls read `radius-control-*`; a component
+with its own height writes the same expression on it. Surfaces use the container role on their
+own ladder, 0, 2, 4, 8, 12, 16, 20, 24, and 24 at Pill (finite, as Radix Themes' `full`), 12 at
+both densities (radius audit D1). Card is the surface plus its inset less 4 (16; sm 14, lg 20,
+compact 12), Dialog the surface plus 4 (16), each never more than the surface corner, so a square
+surface makes them square. A shell holding a control is concentric with it: the control's corner
+plus its distance from the edge, scaled by `radius-concentric` (0 at Sharp): Composer, Message,
+Prompt suggestions, Toolbar, the Segmented track. A one-line bar (Alert, banner, Toast) and
+Tooltip take the large control corner, 10 (compact 8; D2, D3); multiline ones are surfaces. Kbd is
+a 24px box's corner, 6 at the default at every size (D4).
+Nested radius is concentric with a floor: `max(min(radius-floor, own corner), outer − inset)`;
+`radius-floor` is min(4, setting), so only Sharp is square anywhere. Insets are the padding; a
+surface's 1px border is left out so corners stay even. Rows in a floating list (Menu, Combobox,
+Command palette, Select's picker) use `radius-list-row`: the surface less its inset (8 at both
+densities), no rounder than a medium Button, and a pill only at Pill (owner, 2026-10-04); the list
+uses `radius-list`, its rows plus the inset, so the two stay concentric (12, then 14 / 16 / 18 at
+10 / 12 / 14, 20 at Pill; compact rows hold 10 from 10 to 14 to stay short of a pill). Standalone
+rows (Nav, Tree view) use `radius-row`.
+Pills are a set (`data-area-pills`, `axes/pills.ts`): by default Badge, Chip, Count, Switch and
+Avatar are pills; Button, Fields and Segmented follow the radius. Any of the eight can be switched
+either way for a scope, and per instance with `pill` (Avatar: `shape`; people circle, teams and
+workspaces square). A component adds `--area-pill-<id> × radius-full` to its corner, so concentric
+parts follow (field actions, Segmented items, Switch thumb, Chip remove). Identity shapes always
+use `radius-full`: radios, slider thumbs, Progress, presence and indicator dots. A checkbox and a
+square avatar take their own corner capped at 7/16 of the side, rounded squares at Pill. Textarea
+keeps the one-line field corner.
+Measure painted bounds when browser clamping matters.
 List rows place a description in one of three ways, kept on purpose (owner, audit D-24 A,
 2026-09-30): under the label as a 12/16 muted note (Menu, `area-menu__description`), muted
 after the label (Command palette) or muted at the row's end (Combobox). A list with no

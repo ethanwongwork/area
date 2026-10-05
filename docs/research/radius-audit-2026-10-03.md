@@ -204,7 +204,7 @@ Corrections made while building it:
 Open: step size for large shapes (below); whether the hand-written families (Subtle … Rotund)
 become offsets of Standard.
 
-### Step size for large shapes (decided 2026-10-03, not yet built)
+### Step size for large shapes (decided and built 2026-10-03)
 
 Owner: "maybe the granularity of the larger components doesnt have to be +-2, how should those
 be handled?" A 2px step is 25% of an 8px Button but 17% of a 12 surface and 12% of a 16 Dialog,
@@ -228,4 +228,127 @@ session. Plan: a second derived offset for the surface role (`radius-shift` × 2
 container token and everything concentric inside it (menu, combobox, palette and select rows,
 popover media, card media); Card and Dialog derive from the surface corner (16 = surface + 4)
 instead of the control; the roundness page shows surfaces in 4px steps.
+
+Built (2026-10-03): `radius-container` takes the offset × 2 and `radius-shift-surface` publishes it
+for the caps of rows inside a surface (Menu, Command palette, Select picker). Card is the surface
+corner plus its inset less the default Button's corner (16 / 12, sm 14 / 10, lg 20 / 14), Dialog
+the surface corner plus 4, each never more than the surface corner so a square surface makes them
+square; Popover is the surface corner at both densities. Swept in the gallery (offset −12 … +12,
+both densities): surfaces 0 … 12 … 36 in 4s, Card and Dialog 16 → 20 → 24, rows in 4s, controls
+unchanged; every corner even (compact Composer at −12 read 5.2, a negative cap, now floored).
+
+Gallery control: the stepped Slider is now a Select (owner: "maybe a dropdown is a better
+control"). References: segmented controls cap at 5-7 options (Apple HIG, Primer); sliders are
+for approximate values (Fluent, NN/g, Atlassian); theme builders offer radius as a short named
+list: Radix Themes (radio cards with previews, 5), shadcn create page (a dropdown, 5). Each option
+names the step and the default Button / surface corner it gives ("+2 · 10 / 16").
+
+Open: the ends of the range add little. −8 … −12 differ only on 40 / 48px controls (surfaces and
+32px controls are square from −6 / −8), and +8 … +12 only on surfaces (32px controls are pills
+from +8), reaching 36px surfaces.
+
+## One corner setting (built 2026-10-03)
+
+Owner: "if the controls are square i would want the rest of everything to be square ... 0 corner
+radius should apply everywhere. 2 and up the corner radius should use math for all inset. i just
+want 1 corner radius setting that controls everything ... some components like badge are
+overriden to be pill always, but perhaps there is a override there to change badge to respond to
+corner radius normally. i want sharp and pill kept as end points." Pill: "every control is a
+pill" (picked over "only actions").
+
+The offset model could not do this: an offset subtracts the same pixels from every height, so
+32px Buttons went square while 40 and 48px controls and the surfaces were still round, and Pill
+needed a separate family. Corners now scale with height instead.
+
+- One `radius` axis, presets named by the medium Button's corner: `sharp`, `2`, `4`, `6`, `8`
+  (default), `10`, `12`, `14`, `pill`. The roundness axis and the families Subtle, Soft,
+  Standard, Round and Rotund are gone (Standard + offset already reproduced them within 2px).
+- corner(h) = max(radius-min, round(down, h × setting / 32, 2px)); radius-min is 2 (0 at Sharp).
+  At 8 it equals the audited ladder at both densities (20 → 4 … 48 → 12), so the default is
+  unchanged. Every height is square at Sharp and exactly h / 2 at Pill.
+- Surfaces keep the two-step decision on their own ladder: 0, 2, 4, 8, 12, 16, 20, 24, and 24
+  at Pill. Card = surface + inset − 4 (16 / 12), Dialog = surface + 4.
+- Nested shapes: max(min(floor, own corner), outer − inset), floor = min(4, setting), so nothing
+  is square except at Sharp. Rows in floating surfaces are the surface less its inset up to a
+  pill, and those surfaces stop at pill rows plus the inset, 20 (Menu, Command palette, Select's
+  picker): concentric at every setting.
+- Shapes drawn from their own size scale the same way: checkbox (a quarter of the box at 8),
+  swatches (20% of the side at 8), Kbd (a 24px box's corner: 6), Skeleton (a 16px box's: 4). A
+  checkbox and a square avatar cap at 7/16 of the side, rounded squares at Pill (a round
+  checkbox reads as a radio). Radios, Avatar circles, slider thumbs and dots stay round.
+- Badge, Chip, Count and Switch stay pills by default; `pill={false}` (CSS `--rounded`) makes them
+  follow the setting, the Switch thumb and Chip's swatch and remove button concentric.
+
+Reference: Radix Themes (radix-ui/themes @1faff10, `src/styles/tokens/radius.css`) has one radius
+setting, none / small / medium / large / full, as a factor on one ladder (0, 0.75, 1, 1.5, 1.5);
+at `full` Button, TextField, Select, SegmentedControl, Badge and Avatar take
+`max(radius-n, radius-full)` and become pills while Card stays on the ladder; at `none` every
+shape is square, Badge and Avatar included; components take a `radius` prop to override.
+
+Measured in the gallery at every setting, both densities: Sharp 0 everywhere (badges and
+switches excepted while they are pills); 8 matches the previous values (Button 6 / 8 / 10,
+compact 6 / 6 / 8; surfaces 12, Dialog 16, Card 16 / 12, menu rows 8, Segmented 6 / items 4,
+Composer 16 / 12, Kbd 6); Pill: Buttons, fields, Segmented, Composer, one-line Alert pills,
+menus 20 with pill rows, Card and Dialog 28, checkbox 6, textarea 16. Every corner even.
+
+Small boxes repeat values between neighbouring settings (a 24px box reads 2 at both 2 and 4, and
+6 at both 8 and 10), since half-steps round down to even pixels.
+
+## Pill shapes and list rows (2026-10-04)
+
+Owner: "can i set custom overrides for pill=false individually ... like if i want badges to follow
+corner radius but switch to stay pill", "should avatars always be round too?", "if i want menu rows
+to wait for pill to be pill, can you change that".
+
+- Pills are a set, `data-area-pills` (`axes/pills.ts`): `button`, `field`, `segmented`, `chip`,
+  `badge`, `count`, `switch`, `avatar`. Default pills: chip, badge, count, switch, avatar. A scope
+  carrying the attribute lists exactly its pills. Each component adds `--area-pill-<id> ×
+  radius-full` to its corner, so what is concentric with it follows: a pill field's action button
+  and steppers, Segmented items, the Switch thumb, Chip's remove button, and the Composer around a
+  pill send button. Instance props win (`pill` on Button, Badge, Chip, Count, Switch: unset follows
+  the list; Avatar `shape`). React: `<Theme pills={["chip", "count", "switch", "avatar"]}>`. The
+  gallery's Theme panel has a Pills row (toggle Chips).
+- Avatar keeps the circle by default and its shape is now unset unless given: people are circles
+  in ChatGPT, Notion, Figma, Slack and GitHub; teams, workspaces and organisations are rounded
+  squares (Notion workspaces, Slack workspaces, GitHub organisations). So the override belongs to
+  the context, per instance (`shape="square"` for a team), with the list for a system that wants
+  no circles at all.
+- Menu rows wait for Pill: `radius-list-row` = min(surface − 4 (floored), the medium Button's
+  corner, 2px short of half the row unless Pill); `radius-list` = min(surface, row + 4). Measured
+  (default / compact): 8 → 12 / 8 at both; 10 → 14 / 10; 12 → 16 / 12 (compact 14 / 10); 14 →
+  18 / 14 (compact 14 / 10); Pill → 20 / 16 (compact 16 / 12, a pill). It holds mathematically:
+  rows and list stay concentric at every setting. The cost: from 10 up, list surfaces are rounder
+  than their rows but less round than other surfaces (Menu 16 against Popover 20 at 12), and
+  compact rows plateau at 10 from 10 to 14. Keeping the surface ladder with Button-capped rows
+  would break concentricity (a 20 menu around 12 rows), which reads as uneven corners.
+
+Naming (owner, 2026-10-04): presets are one number, the medium Button's corner, and Sharp's id is
+`0` (`data-area-radius="0"`; was `sharp`, migrated in stored docs preferences). T-shirt names
+(xs, sm, md) were left out: they collide with component sizes (`size="md"`), and a number already
+says what it sets.
+
+## Quality pass (2026-10-04)
+
+Owner: "a quality and consistency pass on all the components after implementing the radius
+everywhere". Method: every painted element in the gallery (1,871) measured at all nine settings
+and both densities, checked for odd corners, rounding at 0, going square at 2-6, getting
+sharper as the setting rises, and nested shapes rounder than concentric math allows (shell − inset,
+floor min(4, setting)); plus every element at the default (8) compared with `main` before the radius
+work (3,690 element-density pairs).
+
+Found and fixed:
+- Toolbar (surface): the rewrite turned its 0.4 × height cap into a 48px control's own corner, 12;
+  restored to concentric 8 + 8 = 16, capped at a pill (`toolbar.css`).
+- Code in a Table: the same cap rewrite read 4 instead of 6; now the small role capped at a pill for
+  its height (`code.css`).
+- Card sm, compact, setting 2: went square (term subtracted past the surface); floored.
+- Composer with a pill send button at 0: lost its 8 inset (16 around a 32 pill); keeps it.
+- Code swatch (6 inside Code's 8, 5 in, at 12) and Color field swatch (6 inside 16, 12 in, at 14):
+  now no rounder than concentric, floored; the Code swatch keeps 4 / 2 at the default.
+- Code-on-color demo plate: a literal 24 that stayed round at 0; now the surface corner.
+
+Left as is: the bleed Card media at 2 reads 3 (the inside of the card's 1px border, as 15 at 16);
+controls placed 12-16 inside a surface (Color picker, Table, Panel footer) are independent shapes,
+not nested ones. Against `main` at the default, the only differences are the demo plate (24 → 12)
+and Popover's image (0 → 4, the floor: only Sharp is square).
 

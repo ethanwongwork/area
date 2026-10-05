@@ -38,7 +38,7 @@
      */
     padding-inline-start: calc(var(--_tree-start) + var(--_tree-depth) * var(--_tree-step));
     padding-inline-end: var(--area-space-8);
-    border-radius: min(var(--area-radius-row), calc(var(--area-ui-row) * var(--area-radius-cap) + var(--area-radius-shift)));
+    border-radius: var(--area-radius-row);
     cursor: default;
     outline: none;
   }
@@ -95,7 +95,7 @@
     display: flex; align-items: center; gap: var(--area-space-2); margin-inline-start: auto;
     margin-inline-end: calc(var(--_action-inset) - var(--area-space-8));
   }
-  .area-tree-view__actions > .area-button { --_radius: max(0px, calc(var(--area-radius-row) - var(--_action-inset))); }
+  .area-tree-view__actions > .area-button { --_radius: max(var(--area-radius-floor), calc(var(--area-radius-row) - var(--_action-inset))); }
   .area-tree-view__trailing + .area-tree-view__actions { margin-inline-start: 0; }
   .area-tree-view__actions > * { opacity: 0; }
   .area-tree-view__actions > [data-pinned],
@@ -103,7 +103,7 @@
   @media (hover: hover) { .area-tree-view [role="treeitem"]:hover .area-tree-view__actions > * { opacity: 1; } }
   /* Without hover (touch) the row actions always show, as Message and Card reveals do (audit H-17). */
   @media (hover: none) { .area-tree-view__actions > * { opacity: 1; } }
-  .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: min(var(--area-radius-small), calc(round(down, calc(var(--area-icon-md) / 4), 2px) + var(--area-radius-shift))); font-size: var(--area-control-sm-text); line-height: 1; }
+  .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: min(max(var(--area-radius-min), round(down, calc(var(--area-icon-md) * var(--area-radius-factor)), 2px)), round(down, calc(var(--area-icon-md) * 7 / 16), 2px)); font-size: var(--area-control-sm-text); line-height: 1; }
   /* Checked paints like Checkbox: the neutral solid face and its mark. It used a tint with a
      focus-colour edge, which read as focus rather than as a checked box. */
   .area-tree-view [aria-checked="true"] .area-tree-view__check { color: var(--_tree-check-mark, var(--area-fg-on-selection)); background: var(--_tree-check, var(--area-selection-solid)); border-color: var(--_tree-check, var(--area-selection-solid)); }

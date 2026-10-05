@@ -102,3 +102,4 @@ field), matched to Notion's menu when Menu was approved. No change. Unverified: 
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · roundness work → list rows are Menu's rows: border counted, 12 → 7 (was 8). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · all even (owner) → list rows back to 8 (border left out).
+- 2026-10-04 · pill shapes and list rows (owner) → list rows follow Menu's `radius-list-row`; the field takes `--area-pill-field`. `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".

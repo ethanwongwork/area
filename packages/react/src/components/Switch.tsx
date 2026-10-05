@@ -3,11 +3,13 @@ import type { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
 import { Spinner } from "./primitives.tsx";
 import { MANIFESTS, switchVariants, type VariantProps } from "../variants.ts";
 
-type Options = VariantProps<typeof MANIFESTS.switch>;
+type Options = Omit<VariantProps<typeof MANIFESTS.switch>, "rounded">;
 export type SwitchProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> & Options & {
   label?: ReactNode;
   description?: ReactNode;
   loading?: boolean;
+  /** Unset: a pill while the theme's `pills` list names this component (the default). `true` forces a pill, `false` the radius setting's corner. */
+  pill?: boolean;
   /** @deprecated The tone axis is gone (audit H-13): set `--area-switch-color` (and
    *  `--area-switch-color-hover`) on any Switch for a custom on colour. Ignored. */
   tone?: "neutral" | "custom";
@@ -25,6 +27,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
   track,
   tone: _tone,
   fullWidth,
+  pill,
   label,
   description,
   checked,
@@ -62,7 +65,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
 
   return (
     <label
-      className={switchVariants({ size, labelPosition, track, fullWidth }, className)}
+      className={switchVariants({ size, labelPosition, track, fullWidth, pill: pill === true, rounded: pill === false }, className)}
       style={style}
       dir={rest.dir}
       data-disabled={disabled ? "" : undefined}

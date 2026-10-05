@@ -46,7 +46,7 @@
      * fields do; the items sit concentric inside it, the track's radius less the inset (audit
      * S4, owner 2026-09-30; was the item's radius plus the inset, 10 around 8 at md).
      */
-    --_track-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap) + var(--area-radius-shift)));
+    --_track-radius: calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-segmented) * var(--area-radius-full)); /* data-area-pills="segmented" */
     border-radius: var(--_track-radius);
     background-color: var(--area-bg-subtle);
     box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-decorative);
@@ -63,7 +63,7 @@
     /* Concentric with the track, but never sharper than radius-floor, 4 (radius audit 2026-10-03:
        a compact sm track left its items 2; Figma's nested segments keep 3-5), capped against the
        item's own height. */
-    border-radius: max(min(var(--area-radius-floor), calc(var(--_item) * var(--area-radius-cap) + var(--area-radius-shift))), calc(var(--_track-radius) - var(--_inset)));
+    border-radius: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_item) * var(--area-radius-factor)), 2px))), calc(var(--_track-radius) - var(--_inset)));
 
     background: transparent;
     /* Unselected options read one step quieter, as ChatGPT (rgb 93) and Figma (50% black) set

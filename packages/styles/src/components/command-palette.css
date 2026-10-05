@@ -28,10 +28,10 @@
     --_menu-gap: var(--area-gap-row);
     /* The palette's corner less the list inset, 12 - 4 = 8: concentric with the padding, the 1px
        border left out so the corner stays even (owner, 2026-10-03: all even). */
-    --_row-radius: min(max(0px, calc(var(--area-radius-container) - var(--area-space-4))), round(down, calc(var(--area-ui-row) * var(--area-radius-cap) + var(--area-radius-shift)), 2px)); /* even cap: 24 -> 8 */
+    --_row-radius: var(--area-radius-list-row); /* 8 at both densities; a pill only at Pill */
     /* The surface corner, or less where capped rows can't follow it (Pill): concentric either way,
-       and it steps with roundness as every surface does (was rebuilt from the rows: 6, 5, 4). */
-    --_palette-radius: min(var(--area-radius-container), calc(var(--_row-radius) + var(--_list-inset)));
+       and it steps with the radius setting as every surface does (was rebuilt from the rows: 6, 5, 4). */
+    --_palette-radius: var(--area-radius-list);
     display: flex;
     flex-direction: column;
     /* spec: Notion's list column is 600 wide. */
@@ -138,7 +138,7 @@
     min-inline-size: var(--area-control-xs);
     padding-inline: var(--_hint-inset);
     border: 0;
-    border-radius: min(var(--area-radius-control-xs), calc(var(--area-control-xs) * var(--area-radius-cap) + var(--area-radius-shift)));
+    border-radius: var(--area-radius-control-xs);
     background: transparent;
     color: inherit;
     font: inherit;

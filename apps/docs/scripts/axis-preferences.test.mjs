@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { restoreAxisPreferences as restore } from './axis-preferences.mjs';
-const presets={accent:['green','red'],theme:['dark','light'],ui:['compact','default'],radius:['sharp','subtle','soft','standard','round','rotund','pill']};
+const presets={accent:['green','red'],theme:['dark','light'],ui:['compact','default'],radius:['0','2','4','6','8','10','12','14','pill']};
 function store(value){return {value, writes:0,getItem(){return this.value},setItem(key,value){assert.equal(key,'area-docs-axes');this.value=value;this.writes++}}}
 test('migrates accent once while retaining other selections',()=>{
  const s=store('{"brand":"green","theme":"dark","density":"compact"}');
@@ -10,9 +10,11 @@ test('migrates accent once while retaining other selections',()=>{
 });
 test('new accent selection wins and stale values are removed',()=>assert.deepEqual(restore(store('{"brand":"green","accent":"red","theme":"invalid","unknown":"x"}'),presets),{accent:'red'}));
 test('maps old compact type to the curated compact package',()=>assert.deepEqual(restore(store('{"type":"geist-compact"}'),presets),{ui:'compact'}));
-test('migrates legacy radius labels and numeric values to named families',()=>{
- assert.deepEqual(restore(store('{"radius":"md"}'),presets),{radius:'standard'});
- assert.deepEqual(restore(store('{"radius":"10"}'),presets),{radius:'round'});
+test('migrates legacy radius families and size labels to the one corner setting',()=>{
+ assert.deepEqual(restore(store('{"radius":"md"}'),presets),{radius:'8'});
+ assert.deepEqual(restore(store('{"radius":"rotund"}'),presets),{radius:'12'});
+ assert.deepEqual(restore(store('{"radius":"10"}'),presets),{radius:'10'});
+ assert.deepEqual(restore(store('{"radius":"sharp"}'),presets),{radius:'0'});
 });
 test('corrupt and blocked storage remain usable',()=>{
  for(const s of ['null','[]','false','not json'])assert.deepEqual(restore(store(s),presets),{});

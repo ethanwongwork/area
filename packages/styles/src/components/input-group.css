@@ -13,7 +13,7 @@
     max-inline-size: 100%;
     border: var(--area-stroke-width) solid var(--area-input-edge);
     /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
-    border-radius: min(var(--_group-radius, var(--area-radius-control-md)), calc(var(--_group-height) * var(--area-radius-cap) + var(--area-radius-shift)));
+    border-radius: calc(min(var(--_group-radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_group-height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
     background-color: var(--area-input-bg);
     /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
     box-shadow: none;

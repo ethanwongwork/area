@@ -113,10 +113,9 @@
     padding: var(--area-space-2) calc(var(--area-space-6) - var(--area-border-width));
     margin-inline: var(--area-space-2);
     border: var(--area-border-width) solid var(--_code-edge);
-    border-radius: min(
-      var(--area-radius-small),
-      calc((1em + var(--area-space-10)) * var(--area-radius-cap) + var(--area-radius-shift))
-    );
+    /* The small role, at most a pill for its height (quality pass 2026-10-04: the radius rewrite had
+       capped it at the corner of its own height, so 12px code in a Table read 4 instead of 6). */
+    border-radius: min(var(--area-radius-small), round(up, calc((1em + var(--area-space-10)) / 2), 1px));
     background-color: var(--_code-bg);
     /* Code is an inline reference, never an elevated badge. Make this invariant explicit
        so it cannot inherit a presentation shadow from a future documentation container. */

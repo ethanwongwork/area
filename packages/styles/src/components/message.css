@@ -30,7 +30,7 @@
     max-inline-size: 70%; /* spec */
     padding: calc(10px - var(--area-space-4) * var(--area-ui-dense)) calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10 × 16, compact 6 × 12 on 14/20 */
     /* The composer's corner: its control radius plus its inset (16, compact 12). */
-    border-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-button-cap) + var(--area-radius-shift))) + var(--area-ui-cluster) * var(--area-radius-concentric));
+    border-radius: calc(var(--area-radius-control-md) + var(--area-ui-cluster) * var(--area-radius-concentric));
     background-color: var(--area-bg-component);
     overflow-wrap: anywhere;
     white-space: pre-wrap;

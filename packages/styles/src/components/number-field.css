@@ -21,7 +21,7 @@
     max-inline-size: 100%;
     border: var(--area-stroke-width) solid var(--_border);
     /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
-    border-radius: min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap) + var(--area-radius-shift)));
+    border-radius: calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
     background-color: var(--_bg);
     color: var(--area-input-text);
     font-size: var(--_text);
@@ -120,7 +120,7 @@
     padding: 0;
     border: 0;
     /* Concentric with the field, floored at radius-floor, 4 (radius audit 2026-10-03; all even 2026-10-03). */
-    border-radius: max(min(var(--area-radius-floor), calc(var(--_step) * var(--area-radius-cap) + var(--area-radius-shift))), calc(min(var(--_radius, var(--area-radius-control-md)), calc(var(--_height) * var(--area-radius-cap) + var(--area-radius-shift))) - var(--area-space-4)));
+    border-radius: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_step) * var(--area-radius-factor)), 2px))), calc(calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full)) - var(--area-space-4)));
     background: transparent;
     color: var(--area-input-icon);
     cursor: pointer;

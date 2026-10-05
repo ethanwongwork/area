@@ -1,20 +1,33 @@
 @layer area.components {
+  /*
+   * Responsive (owner, 2026-10-04: "should it just be assumed that its responsive both width and
+   * height"): the grid fills its parent's width, and its height too when the parent sets one; with
+   * no height to fill it takes the default proportion. Three equal tracks each way, so a cell is a
+   * third of the grid less the padding. Sizes and the landscape / portrait layouts are gone; marks
+   * follow the UI scale.
+   */
   .area-alignment-picker {
-    --_cell: calc((var(--area-control-md) + var(--area-icon-md)) / 2);
     --_dot: var(--area-space-2);
+    /* The glyph's own box, so a cell never clips it: 3 x 16 + 8 = 56, Figma's height. */
+    --_min-cell: var(--area-icon-md);
+    /* spec: Figma's Layout-panel alignment grid is 88 x 56 (figma--auto-layout-alignment--rest). */
+    --_aspect: 88 / 56;
     --_alignment-bg: var(--area-input-bg-soft);
     --_alignment-edge: var(--area-border-decorative);
-    display: inline-grid;
-    grid-template-columns: repeat(3, var(--_cell));
+    display: grid;
+    grid-template: repeat(3, minmax(0, 1fr)) / repeat(3, minmax(0, 1fr));
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 100%;
+    aspect-ratio: var(--_aspect);
+    min-inline-size: calc(3 * var(--_min-cell) + var(--area-space-8));
+    min-block-size: calc(3 * var(--_min-cell) + var(--area-space-8));
     gap: 0;
     padding: calc(var(--area-space-4) - var(--area-stroke-width));
     border: var(--area-stroke-width) solid var(--_alignment-edge);
-    border-radius: min(var(--area-radius-control), calc(var(--area-control-md) * var(--area-radius-cap) + var(--area-radius-shift))); /* finite under Pill (audit H-1) */
+    border-radius: var(--area-radius-control-md);
     background: var(--_alignment-bg);
   }
-  .area-alignment-picker--sm { --_cell: max(var(--area-space-20), calc((var(--area-control-sm) + var(--area-icon-sm)) / 2)); }
-  .area-alignment-picker--md { --_cell: calc((var(--area-control-md) + var(--area-icon-md)) / 2); }
-  .area-alignment-picker--lg { --_cell: calc((var(--area-control-lg) + var(--area-icon-lg)) / 2); }
   .area-alignment-picker--soft {
     --_alignment-bg: var(--area-input-bg-soft);
   }
@@ -25,10 +38,10 @@
     position: relative;
     display: grid;
     place-items: center;
-    inline-size: var(--_cell);
-    block-size: var(--_cell);
+    min-inline-size: 0;
+    min-block-size: 0;
     /* Concentric with the picker, floored at radius-floor, 4 (radius audit 2026-10-03; all even 2026-10-03). */
-    border-radius: max(min(var(--area-radius-floor), calc(var(--_cell) * var(--area-radius-cap) + var(--area-radius-shift))), calc(min(var(--area-radius-control), calc(var(--area-control-md) * var(--area-radius-cap) + var(--area-radius-shift))) - var(--area-space-4)));
+    border-radius: max(var(--area-radius-floor), calc(var(--area-radius-control-md) - var(--area-space-4)));
     cursor: pointer;
   }
   .area-alignment-picker__cell > input {
@@ -47,12 +60,15 @@
     background: var(--area-fg-muted);
     pointer-events: none;
   }
-  @media (hover: hover) { .area-alignment-picker__cell:hover:not(:has(input:checked, input:disabled)) { background: var(--area-bg-hover); } }
   .area-alignment-picker__cell:has(input:checked) {
     background: transparent;
   }
   .area-alignment-picker__dot > i { display: none; }
-  .area-alignment-picker__cell:has(input:checked) .area-alignment-picker__dot {
+  /* The glyph: three 2px bars 2px apart in a 16 box, aligned by column, for the chosen cell and, as a
+     preview, the hovered one. Figma (figma--auto-layout-alignment--rest / --hover): the same 16 box and
+     2px bars; the hovered cell shows the glyph at 50% black and gets no fill of its own. */
+  .area-alignment-picker__cell:has(input:checked) .area-alignment-picker__dot,
+  .area-alignment-picker__cell[data-preview] .area-alignment-picker__dot {
     inline-size: var(--area-icon-md);
     block-size: var(--area-icon-md);
     display: flex;
@@ -61,25 +77,42 @@
     gap: var(--area-space-2);
     background: transparent;
   }
-  .area-alignment-picker__cell:has(input:checked) .area-alignment-picker__dot > i {
+  .area-alignment-picker__cell:has(input:checked) .area-alignment-picker__dot > i,
+  .area-alignment-picker__cell[data-preview] .area-alignment-picker__dot > i {
     display: block;
     block-size: var(--area-space-2);
     inline-size: var(--_line-width, 60%);
     border-radius: var(--area-radius-full);
-    background: var(--_selected-mark);
+    background: var(--_mark, var(--_selected-mark));
+  }
+  /* The preview is the dots' own ink, fg-muted, so it reads as "this would go here" and never as chosen
+     (Figma: dots 30% black, preview 50%, chosen blue; Area's dots are already fg-muted, an owner pick). */
+  .area-alignment-picker__cell[data-preview] { --_mark: var(--area-fg-muted); }
+  @media (hover: hover) {
+    .area-alignment-picker__cell:hover:not(:has(input:checked, input:disabled)) {
+      --_mark: var(--area-fg-muted);
+    }
+    .area-alignment-picker__cell:hover:not(:has(input:checked, input:disabled)) .area-alignment-picker__dot {
+      inline-size: var(--area-icon-md);
+      block-size: var(--area-icon-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--area-space-2);
+      background: transparent;
+    }
+    .area-alignment-picker__cell:hover:not(:has(input:checked, input:disabled)) .area-alignment-picker__dot > i {
+      display: block;
+      block-size: var(--area-space-2);
+      inline-size: var(--_line-width, 60%);
+      border-radius: var(--area-radius-full);
+      background: var(--_mark);
+    }
   }
   .area-alignment-picker__dot > i:nth-child(2) { --_line-width: 100%; }
   .area-alignment-picker__dot > i:nth-child(3) { --_line-width: 40%; }
   .area-alignment-picker__cell:nth-child(3n + 2) .area-alignment-picker__dot { align-items: center; }
   .area-alignment-picker__cell:nth-child(3n) .area-alignment-picker__dot { align-items: flex-end; }
-  .area-alignment-picker--stretch {
-    inline-size: 100%; block-size: 100%;
-    min-inline-size: calc(3 * var(--_cell) + var(--area-space-8));
-    min-block-size: calc(3 * var(--_cell) + var(--area-space-8));
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: repeat(3, minmax(0, 1fr));
-  }
-  .area-alignment-picker--stretch .area-alignment-picker__cell { inline-size: 100%; block-size: 100%; }
   .area-alignment-picker__cell:has(input:focus-visible) {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);

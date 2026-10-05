@@ -159,3 +159,4 @@ Compared the Area captures (`color-field/area--*`) with `input-group/figma--colo
   gallery Color field measured, no hex clipped; Figma Page row compared live.
 - 2026-09-28 · owner: approved (batch 9).
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(value, event)` passes the committing event.
+- 2026-10-04 · quality pass after the one corner setting → the swatch is its own corner but never rounder than concentric with the field, floored (`color.css`; was 6 inside a 16 field 12 in, at 14). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".

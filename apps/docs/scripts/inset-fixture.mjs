@@ -24,7 +24,7 @@ export function buildInsetFixture(out, repo) {
       h(Select,{size,'aria-label':`${size} choice`},h('option',null,'Text')),
       h(Checkbox,{size:size==='sm'?'md':size,label:'Text',description:'Second line'}),h(Radio,{size:size==='sm'?'md':size,label:'Text',description:'Second line'}),h(Switch,{size,label:'Text',description:'Second line'})
     ); });
-    sections.push(h('section', {'data-area-ui':ui,'data-area-contrast':contrast,'data-area-theme':contrast==='more'?'dark':'light','data-area-surface':contrast==='more'?'outlined':'flat','data-area-radius':contrast==='more'?'pill':'standard',dir,key:ui+dir+contrast},
+    sections.push(h('section', {'data-area-ui':ui,'data-area-contrast':contrast,'data-area-theme':contrast==='more'?'dark':'light','data-area-surface':contrast==='more'?'outlined':'flat','data-area-radius':contrast==='more'?'pill':'8',dir,key:ui+dir+contrast},
       h('h2',null,`${ui} · ${dir} · ${contrast}`),...rows,
       h('div',{className:'specimen-row'},
         h(Badge,{dot:true},'Live'),h(Badge,{variant:'outline'},'Text'),

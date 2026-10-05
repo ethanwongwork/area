@@ -215,3 +215,4 @@ fields and Figma's search and hex fields. Build and test results are in the
 - 2026-10-01 · compact pass → the inline action button is `min(icon + 8, height − 4)`: compact sm (24 with a 16 icon) made it 24, filling the field (0 from the top, 1 from the end); it is now 20, 2 clear on every side. Default unchanged. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-03 · radius audit → the action button is concentric with the field, floored at the smallest control's corner (20 r2 → r4 compact, 24 r4 → r5 default; `input.css:213`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · all even (owner) → the action button floors at `radius-floor` 4 (`input.css:213`).
+- 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-field` (data-area-pills="field") makes the field a pill, its action button concentric (`input.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".

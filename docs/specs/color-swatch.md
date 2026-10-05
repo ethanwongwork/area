@@ -169,3 +169,4 @@ Compared the Area captures (`color-swatch/area--*`) with `input-group/figma--col
 - 2026-10-03 · radius audit D6 (owner) → the 20% corner is rounded to whole pixels: 12 → 2, 16 → 3, 20 → 4, 24 → 5 (was 2.4, 3.2, 4, 4.8) (`color.css`, `--_radius`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · roundness → the whole-pixel 20% corner plus the shift, never below square; in 2px steps (`color.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · all even (owner) → the 20% corner rounds to 2px: 12 → 2; 16, 20 and 24 → 4 (`color.css`).
+- 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → 20% of the side at the default (unchanged), times setting ÷ 8 elsewhere, nearest even pixel (`color.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".

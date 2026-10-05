@@ -127,9 +127,9 @@ test('field paint: read-only keeps rest paint, soft disabled gains no edge, acti
 
 test('a removable chip keeps ref and props on one control, style on the chip; ChipGroup is a labelled group (audit C-23, C-24)', async () => {
   const { ChipGroup } = await import('../dist/modules/index.js');
-  const html = renderToString(h(Chip, { kind: 'input', onDismiss: () => {}, id: 'tag', style: { margin: 4 } }, 'Irene Yamaguchi'));
+  const html = renderToString(h(Chip, { kind: 'input', onDismiss: () => {}, id: 'tag', style: { margin: 4 } }, 'David Tee'));
   assert.match(html, /^<span class="area-chip[^"]*" style="margin:4px">/);
-  assert.match(html, /<button id="tag" type="button" class="area-chip__remove" aria-label="Remove Irene Yamaguchi"/);
+  assert.match(html, /<button id="tag" type="button" class="area-chip__remove" aria-label="Remove David Tee"/);
   assert.match(renderToString(h(ChipGroup, { label: 'Filters' })), /role="group" aria-label="Filters"/);
 });
 
