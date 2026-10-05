@@ -1,5 +1,5 @@
-<svg data-set="area-pilot" data-keyline="square" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M11.207 2.207L12.293 3.293A1 1 0 0 1 12.293 4.707L7.146 9.854A0.5 0.5 0 0 1 6.793 10L5.5 10A1 1 0 0 1 4.5 9L4.5 7.707A0.5 0.5 0 0 1 4.646 7.354L9.793 2.207A1 1 0 0 1 11.207 2.207Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="cut" d="M8.5 3.5L11 6" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<svg data-set="area-pilot" data-keyline="square" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path data-filled="solid" d="M10.5 3L5.125 8.375A0.4 0.4 0 0 0 5.021 8.555L4.5 10.5L6.445 9.979A0.4 0.4 0 0 0 6.625 9.875L12 4.5A1.061 1.061 0 0 0 10.5 3Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.75 4.75L12.47 5.47A0.75 0.75 0 0 1 12.47 6.53L10.75 8.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M2.5 12.5C3.5 12.5 4.5 13.5 5.5 13.5S7.5 12 8.5 12 10.5 13.5 11.5 13.5 13 13 13.5 12.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

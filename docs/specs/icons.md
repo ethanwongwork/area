@@ -3576,3 +3576,237 @@ y1"` keeps only the part inside that box. Checked and kept: log-out's 7 shaft (2
 breaks the lattice or the door gap), the corner-head arrows, the curved arrows.
 
 | notebook (owner, 2026-10-04) | filled: the cover fills up to the band and the strip beyond the band stays open (outlined), as the dog-ear and Phosphor's spine; the rings are ink stubs that only stick out past the cover's edge (their part over the cover is dropped). Options on `5-notebook-options.png` and `6-notebook-rings.png` (prototype `proto-nb-2`) |
+
+## Owner notes, 2026-10-04 (notebook, wallet, toy-brick, sticky-note)
+
+Owner: apply the arrows' filled treatment to the notebook's rings; "the monoline icon should just be
+filled"; toy-brick's studs too tall; wallet's front should just fill; sticky-note's fold smaller.
+
+| Icon | Now |
+|---|---|
+| notebook | rings 3.5–6 at 5, 8, 11 in both styles. Filled, as import and cloud-download: the ring is a knockout over the cover and ink outside it, clipped flush at the cover's edge (`data-clip="0 0 3.9375 16"`), so each ring reads whole. Body stays `proto-nb-2` (cover filled to the band, strip beyond it open); the page had still shown the earlier full-cover version with the band cut through |
+| wallet | the front (seam, right step, bottom, left side) is the `solid`; the back flap stays a line, as folder-open's back. The seam knockout is gone; the clasp stays a knockout. Outline unchanged |
+| toy-brick | studs 2.5 tall (3–5.5, were 3), counters 1.43; body 7.5 tall (5.5–13, was 8) so the brick stays centred on 8 and nears a real 1 × 2 brick's proportion. Owner-approved 3-tall studs (round 2026-10-02) reversed |
+| sticky-note | fold 4 (13.5, 9.5 to 9.5, 13.5; was the shared 4.5) with an r 1 inner corner, pocket 1.35 tight. 3 failed the counter rule (0.66); 3.5 is off the diagonal lattice. document keeps the shared 4.5 fold |
+
+## Wider fold, 2026-10-04 (owner: "make the diagonal line placed wider so the triangle inside is bigger", as Fluent's; then "the fold line [should] meet to form a triangle point at the end")
+
+The page fold's diagonal starts further along the top edge and still ends on the fold's foot, so the
+dog-ear is a triangle with a point at the bottom, as Fluent's: the top edge runs 1 past the fold line
+and turns down with an r 1 fillet, and the diagonal runs straight to the fold's corner (`M8 2L9 2`,
+filleted, `L12.5 6.5`; about 52°, so `data-angles="free"`, added to file-pen and file-search). The
+fold L is unchanged; the pocket grows from 1.53 to 1.93 and the silhouette's cut corner shrinks.
+Filled: the dog-ear stays open; the short top piece is drawn in both styles. A first try that also
+moved the diagonal's lower end out (meeting the side 1 above the foot) was blunt at the bottom and
+was replaced. Applied to every icon with the shared fold (document, document-add, -check, -remove,
+file-code, -cog, -download, -export, -image, -lock, -pen, -search, -spreadsheet) and files' front page
+(r 0.5 on the 3.5 fold), its back page's corner following. sticky-note's peel keeps its 45° diagonal
+with points at both ends (4px fold, pocket 1.35): a peel has no top edge to run on.
+Sheet: `docs/research/icon-review/2026-10-04/8-wider-fold-after.png`.
+
+## newspaper, 2026-10-04 (owner: "shouldn't this just be the normal monoline but unfilled?")
+
+The front page is the `solid`; the back page wrapping round the right stays the outline's line in both
+styles, as wallet's flap and folder-open's back. Before, the back page filled too, parted from the
+front by a `gap`. Outline unchanged.
+
+## Secondary parts stay lines, 2026-10-04 (owner review round 2, `reviews2`)
+
+Owner notes: calendar "top part should be just unfilled", folder "just the top tab part unfilled",
+archive "the top part … should be just unfilled", receipt "the fold behind should just be unfilled",
+clipboard "there shouldn't be negative space around the top clip part, apply this change to other
+icons", clipboard-paste "the clipboard itself should be filled and the layer on top should be
+unfilled", map "fill the left and right sides … the middle can be unfilled", basket "thicken the
+strokes rather than fill"; then "make sure the filled icons (new unfilled parts) [are]
+implemented consistently or intentionally".
+
+**Rule.** The body fills. A secondary part (a header, tab, lid or rim, the page or fold behind, a
+page laid on top, an attachment such as a clip or peg) keeps the outline's drawing: its line at the
+outline weight and its inside open. Nothing is cut round it: the line meets the solid directly.
+Source pattern: the outline is drawn in both styles (unmarked) and the body is a `fill` path that
+stops at the secondary part's line.
+
+| Applied | Now |
+|---|---|
+| calendar, calendar-add, -check, -remove, -clock | the header stays open (pegs still lines); the body below the header line fills; dates and marks knock out of the body |
+| folder, folder-add, -check, -remove, -lock, -zip, folders | the tab above the flap line stays open; the body below fills |
+| archive, archive-restore | the lid stays a line; the box fills |
+| shopping-bag | the rim stays open; the bag below fills (the handle a knockout) |
+| gift | the lid stays a line (the ribbon on it a line); the box fills with the ribbon cut through it |
+| app-window | the title bar stays open, its dots ink; the window body fills (same shape as calendar) |
+| receipt | the curl behind stays a line; the slip fills |
+| map | the two side panels fill, the middle panel stays open (owner) |
+| clipboard, -check, -list | no gap round the clip: the clip's ring meets the filled board, its opening stays a hole |
+| clipboard-paste | the board fills; the page on top stays open (its outline drawn, its inside a hole); no gap round the clip |
+| basket, broom | line glyphs, filled by weight (owner: basket; broom's note was cut off, read as the same). basket's handles end 0.5 further out (3.5 and 12.5) so the slats clear them at 1.5px |
+
+Kept, intentionally (equal parts, not a body and a secondary part): book's two pages, columns,
+layout and kanban panes, credit-card's stripe, hard-drive's halves, laptop's screen and deck, mail's
+flap (a detail on the front), chef-hat and crown bands, mouse buttons, pencil and eraser bands, the
+bell's clapper and the graduation cap (a part in front, Fluent's gap). Badges (a lock, clock, gear,
+lens or pen on a file or folder corner) keep their gap: a mark is information, separate from its
+host.
+
+**Document fold, 45°, aligned to the page** (owner, files: "the angle of the triangle should be more
+equal, not as tall, look at lucide"; "see how the fold triangle['s] negative space aligns with the
+[page's] unfilled space"; "the stroke forms a perfect triangle in fluent, but area there's still a
+slight space next to the corners"). Fluent's document_16 pocket is a 45° triangle whose corners sit
+just inside the page's inner top and right edges (0.2 in), so the diagonal closes both corners to a
+point and the pocket lines up with the page's white. Area: the fold L stays the shared 4.5 × 4.5
+(`M8 2V5A1.5 1.5 0 0 0 9.5 6.5H12.5`); the diagonal runs at 45° from 0.5 past the fold on the top
+edge to 0.5 above the foot on the side (`M8 2L8.5 2L12.5 6L12.5 6.5`, r 0.5 fillets). At 16px its
+inner edge passes 0.3 inside both pocket corners, so they are points; the diagonal sits on the half
+lattice (x − y = 6.5), so the fold icons carry `data-angles="free"`. Placed where the inner edges
+would meet exactly (x − y = 6.8, a 1 step left 0.2 flats at both corners; thinner lines at 24–48
+need it inside 6.45 to stay pointed). Pocket 1.88. Page contents keep their places; document-check's
+check moves 0.5 right (owner: "slightly off-centred"). files' front page is the same at its size
+(`M6.5 4.5L7 4.5L10 7.5L10 8`), its back page following. sticky-note (owner: "make the fold bigger,
+to match the document fold"): a square 5 × 5 L (`M13.5 8.5H10A1.5 1.5 0 0 0 8.5 10V13.5`), the
+diagonal 0.5 past it on both edges (`M13.5 8.5L13.5 9L9 13.5L8.5 13.5`, r 0.5), pocket 2.18.
+This replaces the "Wider fold" geometry above.
+
+Still open from `reviews2` (not part of this pass): replace verdicts (26), face centring (smile,
+frown, square-smile, scan-face, smile-plus, meh), call and call-incoming/-outgoing strokes, person
+mark placement, calculator header, chat-question's ?, quote, qr-code, vault, vr-goggles, piggy-bank,
+party-popper, fingerprint, bot hats, crystal-ball, plane windows, signature's pen, newspaper spacing,
+gallery size, compose's pencil, database, umbrella, brain-off, unpin, bug-off ("legs on monoline
+only", unclear), and the questions on file-search's lens and file-cog's gear.
+
+## Fold exact at every size; filled weight follows the curve, 2026-10-04
+
+Owner: "the negative space still doesn't quite align on the top and sides, also why is the filled
+[drawn with] thicker strokes at the largest sizes over the monoline".
+
+**Fold.** The pocket's corners are where the fold's inner edges meet the page's inner edges, and
+those lie on x − y = 6 whatever the weight; a stroked diagonal's inner edge sits half a line inside
+its centre-line, so no one drawing keeps it there as the size curve thins the line (the half-step
+version was 0.3 inside at 16, flush at 48). Now the diagonal is fixed where its inner edge is exact
+at 16 (x − y = 6.795, `M8 2L8.795 2L12.5 5.705L12.5 6.5`, r 0.5) and the fold's L moves with the
+weight (`data-shift="dx dy"`: translate by (dx, dy) × (16px weight − rendered weight), here 0.7071,
+−0.7071), so the pocket is a closed triangle on the page's inner edges at every size. The L's ends
+stop short (`M8 2.4V5A1.5 1.5 0 0 0 9.5 6.5H12.1`) so their caps stay inside the top edge and side
+as it moves (to 64px). `data-part="fold"` makes the lint measure the L and diagonal as one shape.
+Same for every page icon, files' front page (`M6.5 4.9V7A1 1 0 0 0 7.5 8H9.6` against
+`M6.5 4.5L7.295 4.5L10 7.205L10 8`) and sticky-note (`M13.1 8.5H10A1.5 1.5 0 0 0 8.5 10V13.1`,
+shift 0.7071, 0.7071, against `M13.5 8.5L13.5 9.295L9.295 13.5L8.5 13.5`).
+
+**Filled weight.** Until now the filled variant drew its solids' silhouettes and the lines beside
+them at the 16px weight enlarged, so at 32–48px they were heavier than the outline. They now follow
+the size curve like the outline. Gaps between two solids keep the 16px clearance.
+
+**Halos match the outline's overlap cut** (owner: "redraw those seven icons' gaps so they match too";
+round 3 notes on calendar-clock, file-lock, folder-lock, file-search, file-cog: "the cutouts … are
+not very clean edges"). A part in front of a solid is parted from it by the outline's overlap cut,
+2.25 between centre-lines, at every size: a `halo` (round a line) is now `4.5 − line` wide on the
+size curve (was 3 lines at the 16px weight), and a solid in front declares `data-halo` (the
+generator cuts the same band round it, then restores the solid, so its own knockouts still cut it
+and a line halo never cuts it). The hand-drawn gap rings these replace were flush only at 16px.
+
+| Icon | Now |
+|---|---|
+| calendar-clock | the clock `data-halo`; the gap ring removed |
+| file-lock, folder-lock | the lock body `data-halo`, the shackle a `halo`; the gap rings removed; the strips that clear the page's right edge above the lock kept (the outline has no edge there) |
+| file-cog | the gear `data-halo` and one round halo at the teeth's tips (r 2.75), so the page is cut back in one smooth arc (a halo per tooth left a scalloped edge); the page fill is the plain page (its hand-cut arc and strips removed). Owner's note on the fold corner above the gear resolved by the same change |
+| file-search | the lens is a line, open inside (owner: "the search icon should not be filled"): a ring drawn in both styles, its inside a hole, lens and handle a `halo`; the edge strips kept |
+| bot-guard | the brim a `halo` (the hand-drawn band through the crown removed) |
+| printer | the sheet is a line in front, its inside cut to its centre-line, so it stays white with no strip at any size |
+| truck | the wheels' insides cut to their centre-line (were 0.4 short) |
+| chat-sparkle | unchanged source; the sparkle's halo now on the curve |
+| folder-zip | the pull is a line, cut out inside (owner: "zipper part is not cutout"); its gap and fill removed |
+| broom | owner: "filled should not be stroke thicker, it should be the top part of the broom getting darker": the binding (the half-disc between the head's top arc and its band line) fills; the bristles stay lines |
+| file-spreadsheet | owner: "the gaps and margins should be equal": the cells' gaps, margins and row spacing are all 1.375 (`M6 9H6.75M9.25 9H10…`) |
+
+Scanned with `slivers-at.mjs` at 32 and 48 against the scan before the weight change: 22 slivers
+gone at 48, two new and kept: truck's cab and chat-sparkle's bubble keep a thin edge where the
+outline draws a line (the outline's own weight there). file-pen's replacement (owner: Fluent, "the
+pen still doesn't look like a pen") is not part of this pass.
+
+## Fold corner and marks on folded pages, 2026-10-05
+
+Owner (a lump at the fold's lower corner of file-lock/file-search, then a choice): "can you fix this?";
+picked "Bottom-left (Recommended)" on `13-file-lock-placement.png`.
+
+**Fold pieces.** The L that moves with the weight (`data-shift`) is three paths, so each end stays on
+its edge: the vertical moves across only (`M8 2.4V4.6`, shift 0.7071 0), the inner curve both ways
+(`M8 4.6V5A1.5 1.5 0 0 0 9.5 6.5H9.9`, shift 0.7071 −0.7071) and the horizontal down only, ending on
+the page side and turning up it (`M9.9 6.5H12.5V6.2`, shift 0 −0.7071); the diagonal stops at its
+fillet (`…L12.354 5.559A0.5 0.5 0 0 1 12.5 5.912`). Before, the one-piece L ended short of the side
+and the diagonal's tail ran on below it, which showed as a lump wherever the page has no side under
+the fold. Same for files' front page and sticky-note (`data-part="fold"` on all four).
+
+**Marks on folded pages sit bottom-left** (Fluent's document_lock, document_search): the lock, the
+lens and the gear sat 2 to 2.4 below the fold, inside the 2.25 overlap cut, so the filled page was cut
+up under the fold (a white crescent and a point of fill). Bottom-left, the fold and right side stay
+whole. Each mark overhangs the left edge as Fluent's do: lock body x 3–7 (shackle `M4 10.5V9.5A1 1 0
+1 6 9.5V10.5`), lens r 2 at 4.5, 10.5 with the handle `M6 12L7.5 13.5`, gear r 2 at 5, 11.5. The
+page's outline ends, and its filled silhouette is drawn, along the overlap cut (2.25 from the mark's
+centre-line), so both styles end the page on the same curve at every size: file-lock
+`…H9.062A2.75 2.75 0 0 0 9.25 13V11A2.75 2.75 0 0 0 8.178 8.822A3.25 3.25 0 0 0 3.5 6.617`,
+file-search `…H9.694A2.25 2.25 0 0 0 9.091 11.909L8.641 11.459A4.25 4.25 0 0 0 3.5 6.369`, file-cog
+`…H9.33A5 5 0 0 0 3.5 6.73`; folder-lock and calendar-clock (no fold) keep their marks and use the
+same contour (`…14 6V6.423A3.25 …`, `M2.5 6.5H5.438A5.75 5.75 0 0 0 5.438 13.5…`). The filled
+variants need no halo or strips. file-pen keeps its pen until it is redrawn (owner: replace, Fluent).
+
+## Batch 67: Pen, 2026-10-05
+
+| Icon | Construction |
+|---|---|
+| pen | The shared writing tool (Lucide's pen with a sharper 60° tip): a 2.83-wide body on the 45° lattice (sides x + y = 14 and 18) from a tip at 2.5, 13.5 to a round top, a semicircle about 12, 4 (r 1.414) whose apex meets the pencil's square top; shoulders r 0.5. The clip (Fluent's, Phosphor's) leaves the body just under the top, steps out square (`M12.5 5.5L14 7`) and runs back along it, a detail gap from the body (`L12 9`). Filled: the body fills, the clip stays a line. |
+
+pencil is the same drawing with a square top (r 0.5 corners at 12, 2 and 14, 4) and Lucide's band 2.12 below it (`M10.5 3.5L12.5 5.5`, a cut when filled); pencil-off, compose, signature and file-pen reuse it at the same width with a shorter body. Recorded in the spec section 'Pens and pencils, 2026-10-05'.
+
+## Pens and pencils, 2026-10-05
+
+Owner: "make the pen and pencils everywhere more consistent, make them all look like lucide's pen with
+a sharper point and round end. create a pen icon … the pen and pencil the same size and shape overall
+but maybe the pencil can have a square top and the pen can have a rounded top. the pen can also have a
+clip like fluent/phosphor … pen tool, highlighter, and paintbrush stay the same … make the eraser look
+more like fluent's, wider, and the line is closer to the end of the eraser". Sheets:
+`docs/research/icon-review/2026-10-05/` (1–2 before, 3–4 after; group `pens` in icon-references.json).
+
+**One writing tool.** A 2.83-wide body (centre-line) on the 45° lattice, its sides on x + y = axis ± 2,
+a 60° tip (taper edges 30° off the axis, shoulders r 0.5; the tip itself sharp, rounded only by the
+line's join), sharper than Lucide's ~73°. The pencil ends square (r 0.5 corners) with Lucide's band
+2.12 below the end (a `cut` when filled; a `knockout` where it sits over a page, file-pen); the pen ends
+in a semicircle (r 1.414) whose apex is the pencil's end, and carries a clip (Fluent, Phosphor): out
+square from the body under the top and back along it, a detail gap away (`M12.5 5.5L14 7L12 9`).
+Every use keeps the width, tip, band and end; only the body's length changes:
+
+| Icon | Now |
+|---|---|
+| pencil | tip 2.5, 13.5 to the square top at 12, 2 / 14, 4; band `M10.5 3.5L12.5 5.5` |
+| pen (new, batch 67) | the same body with the round top about 12, 4 and the clip |
+| pencil-off | pencil, with the shared slash |
+| compose | the pencil from a tip at 6.5, 9.5 (same top and band) over the open square |
+| signature | the pencil on axis x + y = 15, tip 4.5, 10.5, top 11, 2 / 13, 4, band `M9.5 3.5L11.5 5.5`, over the wave |
+| file-pen | the pencil at the page's bottom-left (marks on folded pages sit bottom-left): tip 2, 14, top 6.5, 7.5 / 8.5, 9.5, band `M5 9L7 11`; the page is cut round it by the overlap cut (`behind`), and filled the pencil is `data-halo` (was a short capsule with a band, which read as a pill) |
+| eraser | Fluent's proportions: a 5.66-wide, 10.6-long body (sides x + y = 12.5 ± 4, ends x − y = 7.5 and −7.5 after centring, corners r 1, r 0.5 where it meets the base), the band 2.83 from the lower end (was ~4), the base line `M6.5 13.5H12.5` |
+
+pen-tool, highlighter and paintbrush are unchanged (owner). Lint: the counter check skips pockets of four
+raster cells or fewer, which its 4-way flood cut off at the point of a 60° wedge (a raster artefact,
+not a visible space).
+
+Pens, round 2 (owner: "file pen should use a pen, not a pencil, make sure the pens used in compose and
+filepen are skinnier like the actual pen icon. can you make the pen clip longer and round, and make it
+not stick out as much from the body of the pen"):
+
+| Icon | Now |
+|---|---|
+| pen | the clip leaves the body under the top, turns down in an r 1 curve and runs back 3.2 along the body, its centre-line 1.77 out (x + y = 20.5; was 2.12 out with a square step and a 2.8 run): `M12.75 5.25L13.293 5.793A1 1 0 0 1 13.293 7.207L11 9.5` |
+| compose, file-pen | a pen (round top, no clip at this size), slimmer to match the pen's proportions in a shorter body: 2.12 wide (sides at axis ± 1.5), the same 60° tip (shoulders r 0.4), a round top r 1.06. compose: tip 5.5, 10.5 to the top about 12.25, 3.75, its band gone; file-pen: tip 2, 14 to the top about 6.75, 9.25 at the page's bottom-left, the page cut round it (`M3.5 7.818…M6.682 14…`) |
+
+The pencil keeps the full width; pencil-off and signature keep the pencil.
+
+Round 4 notes (`reviews4`: 26 approved, 2 fixed):
+
+| Icon | Now |
+|---|---|
+| bot-guard | owner: "hat strokes still stick out a bit from the sides": the brim and the visor end at the crown's lower corners (x 3.5 and 12.5; were 3 and 13), the same curves cut at t 0.05–0.95 (`M3.5 5.956Q8 6.794 12.5 5.956`, visor `…L12.5 6.241Q8 9.509 3.5 6.241Z`), so the visor's ends meet the head's top corners |
+| signature | owner: "the pen icon should be used here, not pencil": the slim pen of compose and file-pen (2.12 wide, round top r 1.06, no clip) on axis x + y = 15, tip 4.5, 10.5 |
+
+Round 5 notes (`reviews5`):
+
+| Icon | Now |
+|---|---|
+| bot-guard | owner: "maybe just fill the top of the hat?": filled, the crown and visor fill as one cap; the brim's halo (the gap between crown and brim) is gone |
+| signature | owner: "add the clip": the slim pen carries the pen's clip at its scale (`M11.75 4.75L12.47 5.47A0.75 0.75 0 0 1 12.47 6.53L10.75 8.25`, the same 1.77 offset from the body as the pen's) |

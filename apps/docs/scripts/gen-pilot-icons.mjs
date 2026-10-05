@@ -268,7 +268,9 @@ function measureCounters(elements) {
   };
   for (let k = 0; k < n; k++) for (const m of [k, (n - 1) * n + k, k * n, k * n + n - 1]) if (!ink[m] && !seen[m]) flood(m, () => {});
   const counters = [];
-  for (let k = 0; k < n * n; k++) if (!ink[k] && !seen[k]) { let widest = 0; flood(k, m => { widest = Math.max(widest, near[m]); }); counters.push(2 * widest + Math.SQRT2 / RASTER); }  // + grid error
+  // A pocket of a few raster cells cut off diagonally at the point of a sharp wedge (a pen's 60°
+  // tip) is a raster artefact of the 4-way flood, not a space anyone sees; it is skipped.
+  for (let k = 0; k < n * n; k++) if (!ink[k] && !seen[k]) { let widest = 0, cells = 0; flood(k, m => { widest = Math.max(widest, near[m]); cells++; }); if (cells > 4) counters.push(2 * widest + Math.SQRT2 / RASTER); }  // + grid error
   return counters;
 }
 
@@ -465,9 +467,14 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   // strokes keep the icon weight (Fluent's filled paint bucket, align left, delete).
   const lineGlyph = !elements.some(el => SOLID_ROLES.includes(el.filled));
   const boldPads = drawn.map(el => el.stroked && lineGlyph ? BOLD / 2 : pads[drawn.indexOf(el)]);
+  // data-part="name": strokes drawn as separate paths but forming one part (a page fold's L, which
+  // moves with the weight, and its fixed diagonal) are measured as one shape.
+  const partOf = el => el.attrs?.["data-part"];
+  const sampleOf = el => partOf(el) ? drawn.filter(o => partOf(o) === partOf(el)).flatMap(o => o.samples) : el.samples;
   for (let p = 0; p < drawn.length; p++) for (let q = p + 1; q < drawn.length; q++) {
+    if (partOf(drawn[p]) && partOf(drawn[p]) === partOf(drawn[q])) continue;
     let d = Infinity;
-    for (const [ax, ay] of drawn[p].samples) for (const [bx, by] of drawn[q].samples) d = Math.min(d, Math.hypot(ax - bx, ay - by));
+    for (const [ax, ay] of sampleOf(drawn[p])) for (const [bx, by] of sampleOf(drawn[q])) d = Math.min(d, Math.hypot(ax - bx, ay - by));
     if (d <= JOIN) continue;
     const g = d - pads[p] - pads[q];
     if (g <= 0) continue;  // the inks overlap: a join, not a gap
@@ -592,16 +599,23 @@ const STROKE_BOLD = `style={{ strokeWidth: sw(weight, size, ${FILLED_WEIGHT_RATI
 const STROKE_CUT = `style={{ strokeWidth: sw(weight, size) }} strokeLinecap="butt" strokeLinejoin="miter"`;
 // A halo cuts the solids back round a line in front of them by one icon weight each side
 // (Fluent's thunderstorm bolt): three weights wide, round, under the line drawn on top.
-const STROKE_HALO = `style={{ strokeWidth: sw(weight, size, 3) }} strokeLinecap="round" strokeLinejoin="round"`;
+const STROKE_HALO = `style={{ strokeWidth: haloWidth(weight, size) }} strokeLinecap="round" strokeLinejoin="round"`;
 // Filled: silhouettes and the gaps that part one solid from another stay the 16px drawing enlarged
 // (their clearances are drawn for the 16px line, so thinning them would open strips of fill at
 // 32px), and so do lines drawn over or beside them. Lines drawn as negative space (knockouts,
 // cuts) follow the size curve, so they match the outline's line at every size.
 const uniform = style => style.replace("sw(weight, size", "sw(weight, undefined");
 const jsx = (el, paint) => {
-  const attrs = { ...el.attrs, ...paint?.attrs };
+  const { "data-shift": shift, "data-part": _part, "data-halo": _halo, ...attrs } = { ...el.attrs, ...paint?.attrs };
   const props = Object.entries(attrs).map(([k, v]) => `${camel(k)}="${v}"`);
-  if (paint?.stroke ?? el.stroked) props.push(`stroke="${paint?.color ?? "currentColor"}"`, paint?.strokeStyle ?? STROKE);
+  if (paint?.stroke ?? el.stroked) {
+    let style = paint?.strokeStyle ?? STROKE;
+    // data-shift="dx dy": the line moves by (dx, dy) × (16px weight − rendered weight), so an edge
+    // that must meet another line's inner edge stays on it as the size curve thins the line
+    // (a page fold's L against the diagonal: the pocket stays a closed triangle at every size).
+    if (shift) { const [dx, dy] = shift.split(/\s+/); const at = style.includes("sw(weight, size") ? "size" : "undefined"; style = style.replace(/strokeWidth: sw\(weight, (size|undefined)\) \}\}/, `strokeWidth: sw(weight, $1), transform: lineShift(weight, ${at}, ${dx}, ${dy}) }}`); }
+    props.push(`stroke="${paint?.color ?? "currentColor"}"`, style);
+  }
   return `<${el.tag} ${props.join(" ")} />`;
 };
 const component = icon => `Pilot${camel("-" + icon.name)}`;
@@ -621,16 +635,29 @@ const filledBody = icon => {
   const bold = el => jsx(el, { strokeStyle: STROKE_BOLD, ...(el.boldD ? { attrs: { d: el.boldD } } : {}) });
   if (lineGlyph) return [...outline.filter(el => el.filled !== "line"), ...icon.elements.filter(el => el.filled === "stroke")]
     .map(el => el.stroked ? bold(el) : jsx(el.tag === "circle" ? boldDot(el) : el));
-  const solid = icon.elements.filter(el => SOLID_ROLES.includes(el.filled)).map(el => jsx(el, { attrs: { fill: "currentColor" }, stroke: el.stroked, strokeStyle: uniform(STROKE) }));
-  const cuts = icon.elements.filter(el => ["knockout", "hole", "cut", "gap", "halo"].includes(el.filled)).map(el =>
-    el.filled === "halo" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: uniform(STROKE_HALO) })
-    : el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
+  // Solids and the lines beside them follow the size curve, as the outline does, so the filled
+  // variant's edges and lines are the outline's weight at every size (owner, 2026-10-04: "why is the
+  // filled [drawn with] thicker strokes at the largest sizes"). Gaps keep the 16px clearance.
+  const solid = icon.elements.filter(el => SOLID_ROLES.includes(el.filled)).map(el => jsx(el, { attrs: { fill: "currentColor" }, stroke: el.stroked, strokeStyle: STROKE }));
+  // Halos part a line (`halo`) or a solid in front (`data-halo`: a clock or gear on a page) from the
+  // solids behind by the outline's overlap cut, 2.25 between centre-lines, so the space stays flush
+  // with the part's edge and matches the outline at every size. In the mask: the black halos, then
+  // the data-halo solids restored in white (so a halo round a gear's teeth never cuts the gear),
+  // then every other cut (a solid's own knockouts still cut it).
+  const fronts = icon.elements.filter(el => SOLID_ROLES.includes(el.filled) && el.attrs["data-halo"] !== undefined);
+  const frontCuts = [
+    ...fronts.map(el => jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_HALO })),
+    ...icon.elements.filter(el => el.filled === "halo").map(el => jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_HALO })),
+    ...fronts.map(el => jsx(el, { attrs: { fill: "white" }, stroke: true, color: "white", strokeStyle: STROKE })),
+  ];
+  const cuts = frontCuts.concat(icon.elements.filter(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)).map(el =>
+    el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
     : el.filled === "hole" || (el.filled === "gap" && !el.stroked) ? jsx(el, { attrs: { fill: "black" }, stroke: false })
     : jsx(el, { attrs: { fill: "none", ...(el.cutD ? { d: el.cutD } : {}) }, stroke: true, color: "black", strokeStyle: el.filled === "gap" && el.attrs.d !== SLASH_GAP ? uniform(STROKE_CUT) : STROKE_CUT }))
-    .concat(icon.elements.filter(el => el.exitD).map(el => jsx({ tag: "path", attrs: { d: el.exitD } }, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_CUT })));
+    .concat(icon.elements.filter(el => el.exitD).map(el => jsx({ tag: "path", attrs: { d: el.exitD } }, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_CUT }))));
   // Unmarked strokes beside solids stay strokes at the icon weight: the solids carry the
   // emphasis, so the lines keep the outline's exact length and gaps (Fluent's filled cuts).
-  const plain = icon.elements.filter(el => !el.filled).map(el => jsx(el, { strokeStyle: uniform(STROKE) }));
+  const plain = icon.elements.filter(el => !el.filled).map(el => jsx(el, { strokeStyle: STROKE }));
   // A filled-only `stroke` in an icon with solids is ink drawn over the solids at the outline's
   // curve weight: the part of an arrow outside a box or cloud, whose inside part is a knockout.
   // stroke-linecap="butt" ends it flush on the solid's edge, where the knockout takes over.
@@ -679,6 +706,18 @@ export const sw = (weight: number | undefined, size: number | undefined, ratio =
   const k = ratio * sizeFactor(size);
   if (weight !== undefined) return weight * k;
   return k === 1 ? "var(--area-weight-icon)" : \`calc(var(--area-weight-icon) * \${k.toFixed(4)})\`;
+};
+/** A halo's width: the outline's overlap cut (2.25 between centre-lines) on each side, less the line. */
+export const haloWidth = (weight: number | undefined, size: number | undefined) => {
+  const w = sw(weight, size);
+  return typeof w === "number" ? 4.5 - w : \`calc(4.5px - \${w})\`;
+};
+/** data-shift: a line moved by (dx, dy) × (the 16px weight − the rendered weight). */
+export const lineShift = (weight: number | undefined, size: number | undefined, dx: number, dy: number) => {
+  const d = 1 - sizeFactor(size);
+  if (!d) return undefined;
+  const t = (k: number) => weight !== undefined ? \`\${(weight * d * k).toFixed(4)}px\` : \`calc(var(--area-weight-icon) * \${(d * k).toFixed(4)})\`;
+  return \`translate(\${t(dx)}, \${t(dy)})\`;
 };
 /** The slash's filled gap: the slash shifted one line weight across it (centre to centre). */
 export const slashGap = (weight: number | undefined, size: number | undefined) => {

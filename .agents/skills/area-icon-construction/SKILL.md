@@ -360,8 +360,21 @@ the lint prints every gap and counter with `--report`.
   and the i share the ⌀1.5 dot and the tight gap to their stem;
 - layering: fold and flap lines are `cut`s in the filled variant, so the layer reads in
   both states;
-- fold: a page's folded corner is 4.5px with an r 1.5 inner corner (document,
-  document-add, sticky-note), a tight 1.53 pocket;
+- fold: a page's fold is a 4.5 L with an r 1.5 inner corner, and a 45° diagonal whose inner edge
+  runs exactly through the pocket's corners on the page's inner top and right edges, as Fluent's
+  (owner, 2026-10-04): the diagonal is fixed at x − y = 6.795 (`M8 2L8.795 2L12.5 5.705L12.5 6.5`,
+  r 0.5) and the L moves with the weight (`data-shift="0.7071 -0.7071"`, ends short of the edges so
+  its caps stay inside them: `M8 2.4V5A1.5 1.5 0 0 0 9.5 6.5H12.1`), so the pocket is a closed
+  triangle at every size; both carry `data-part="fold"` so the lint measures them as one. Pocket
+  2.12. The L is three paths (vertical, curve, horizontal) so each end stays on its edge as it moves
+  (owner, 2026-10-05). sticky-note's peel is the same on a square 5 L;
+- marks on a folded page (lock, lens, gear) sit bottom-left, overhanging the left edge, away from the
+  fold (Fluent; owner, 2026-10-05); the page's outline ends and its filled silhouette is drawn along
+  the overlap cut round the mark, so both styles end the page on one curve;
+- writing tool (owner, 2026-10-05): one pencil and one pen, the same body: 2.83 wide (sides on x + y =
+  axis ± 2), a sharp 60° tip with r 0.5 shoulders; the pencil ends square with Lucide's band 2.12
+  below the end, the pen ends round (r 1.414) with a clip. pencil-off keeps the pencil whole; a pen inside another icon
+  (compose, file-pen, signature) is the pen, slimmer (2.12 wide) and without its clip;
 - figure: person is the standalone figure (head r 3, 2.5 from the body between centre-lines, a dome body; owner 2026-10-03: bigger head,
   smaller gap). Beside a mark or in a group the figure is the small cut (head r 2.5); in a frame
   (circle, square, shield) the head is r 2, identical in person-add, person-remove and people's front figure (people
@@ -417,7 +430,7 @@ or the accessory fills instead (video_person, incognito; the bots' hats). Judge 
   - *Fill the body, nothing else.* The one mass that names the object fills. Every other part keeps
     the outline's drawing at the same size and weight: a page's dog-ear stays open (white, its
     fold line and diagonal drawn), an open folder's back stays a line and only the front fills, a
-    clipboard's clip stays a ring with the board cut back one gap round it, pegs, handles, stands,
+    clipboard's clip stays a ring meeting the filled board, no gap round it (owner, 2026-10-04), pegs, handles, stands,
     needles and straps stay lines. Never shrink or merge a part so it reads smaller filled than
     outlined.
   - *Details are knocked out of the body* at the outline weight (the size curve).
@@ -429,6 +442,12 @@ or the accessory fills instead (video_person, incognito; the bots' hats). Judge 
   - *An arrow that crosses a solid's edge keeps its whole length:* the part over the solid is a
     knockout and the part outside is ink (a filled-only `stroke`), meeting flush on the edge
     (`stroke-linecap="butt"` or `data-clip`): import, cloud-upload, cloud-download, notebook's rings.
+  - *Secondary parts stay lines* (owner, 2026-10-04): the body fills; a header, tab, lid or rim, the
+    page or fold behind, a page on top and an attachment (clip, pegs) keep the outline's drawing with
+    their inside open, and nothing is cut round them (calendar, folder, archive, gift, shopping-bag,
+    app-window, receipt, wallet, newspaper, folder-open, clipboard, clipboard-paste; map fills its
+    side panels). Equal parts (book pages, panes, a card's stripe) keep their cuts; badges keep
+    their gap. Source: the outline unmarked, the body a `fill` stopping at the part's line.
   - *Arrows are one family:* the same arrow turned is the same arrow (file-download is
     file-export turned 90°); a visible shaft is at least about 2.5 × its head.
 - **Enclosed shapes fill.** Mark each shape with `data-filled`:
@@ -583,9 +602,12 @@ that must read at 12px on 1× screens gets its own 12px cut.
 
 In the filled variant (owner, 2026-10-03: "the negative space looks way thicker than the
 monoline strokes"), lines drawn as negative space (knockouts, cuts) follow the curve, so they
-match the outline's line at every size. Silhouettes, the gaps that part one solid from another
-and lines drawn over or beside solids stay the 16px drawing enlarged, because their clearances
-are drawn for the 16px line (curving them left strips and islands at 48px). The shared slash's
+match the outline's line at every size. Silhouettes and lines drawn over or beside solids follow
+the curve too (owner, 2026-10-04), so both styles share one weight at every size; gaps between two
+solids keep the 16px clearance. A part in front of a solid is parted from it by the outline's
+overlap cut at every size: a `halo` round a line, or `data-halo` on a solid in front (a clock, gear
+or lock on a page). A hole inside a line is cut to the line's centre-line (a wheel, a sheet, a clip),
+so it stays flush as the line thins. The shared slash's
 gap moves with the line (`slashGap`: the slash shifted one weight). A gap that must stay flush
 with a cut is drawn to the cut's centre-line (file-cog, file-pen), so a thinner cut opens no
 hairline. Line glyphs (no solid) keep the curve when filled. Review sheets show icons by themselves at 16 / 24 / 32 / 48

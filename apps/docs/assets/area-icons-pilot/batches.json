@@ -15,7 +15,7 @@
         "dismiss": "approved",
         "document": "review",
         "eye": "review",
-        "folder": "approved",
+        "folder": "review",
         "info": "review",
         "link": "approved",
         "more-horizontal": "approved",
@@ -147,7 +147,7 @@
         "zoom-in": "review",
         "zoom-out": "review",
         "flag": "approved",
-        "archive": "approved",
+        "archive": "review",
         "cloud": "approved",
         "phone": "approved",
         "camera": "review",
@@ -167,7 +167,7 @@
         "at": "approved",
         "key": "review",
         "shield": "approved",
-        "gift": "approved",
+        "gift": "review",
         "map": "review",
         "chart": "approved",
         "table": "approved"
@@ -1003,6 +1003,14 @@
         "chart-bar-horizontal": "review",
         "equal": "review",
         "person-square": "review"
+      }
+    },
+    {
+      "id": "batch-67",
+      "title": "Batch 67 · Pen",
+      "note": "The pen, drawn as the pencil's twin (owner, 2026-10-05: pen and pencil the same size and shape; the pen has a round top and a clip).",
+      "icons": {
+        "pen": "review"
       }
     }
   ]

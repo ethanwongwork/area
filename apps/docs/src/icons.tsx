@@ -5117,6 +5117,20 @@ export const FluentRefPersonSquareFilledIcon = () => (
   </svg>
 );
 
+/** Fluent `pen_16_regular`. */
+export const FluentRefPenIcon = () => (
+  <svg {...base}>
+    <path d="M13.44 2.56a1.9 1.9 0 0 0-2.7 0l-7.4 7.4q-.27.27-.4.64l-.91 2.74a.5.5 0 0 0 .63.63l2.74-.91q.36-.12.65-.4L12 6.71l.26.26c.3.3.3.77 0 1.06l-1.11 1.12a.5.5 0 1 0 .7.7l1.12-1.11c.68-.69.68-1.8 0-2.48L12.71 6l.73-.73c.75-.75.75-1.96 0-2.7m-1.78 3.07-.03.03-6.3 6.3a1 1 0 0 1-.25.15l-1.79.6.6-1.8q.04-.14.16-.25l7.39-7.4a.91.91 0 1 1 1.3 1.3z" />
+  </svg>
+);
+
+/** Fluent `pen_16_filled`. */
+export const FluentRefPenFilledIcon = () => (
+  <svg {...base}>
+    <path d="M10.73 2.56a1.91 1.91 0 0 1 2.71 2.7l-.73.74.26.26c.68.69.68 1.8 0 2.48l-1.12 1.11a.5.5 0 0 1-.7-.7l1.11-1.12c.3-.3.3-.77 0-1.06L12 6.71l-5.95 5.95q-.28.28-.65.4l-2.74.91a.5.5 0 0 1-.63-.63l.91-2.74q.13-.36.4-.65z" />
+  </svg>
+);
+
 /** Fluent `database_16_regular`. */
 export const FluentRefDatabaseIcon = () => (
   <svg {...base}>
