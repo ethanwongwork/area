@@ -658,7 +658,7 @@ const filledBody = icon => {
 // time (\`slashGap\`), so a thinner line at 32px opens no strip of fill beside the slash.
 const SLASH_GAP = "M0.909 -0.682L16.909 15.318";
 const filledUniform = (icon, lines) => lines.map(line => line.includes(`d="${SLASH_GAP}"`)
-  ? line.replace(`d="${SLASH_GAP}"`, `d="M-1 -1L17 17"`).replace("style={{ strokeWidth: sw(weight, size) }}", "style={{ strokeWidth: sw(weight, size), transform: slashGap(weight, size) }}")
+  ? line.replace(`d="${SLASH_GAP}"`, `d="M-1 -1L17 17"`).replace("style={{ strokeWidth: sw(weight, size) }}", "{...slashGap(weight, size)}")
   : line);
 const tsx = `/**
  * Area icon pilot, generated from apps/docs/assets/area-icons-pilot by
@@ -680,11 +680,18 @@ export const sw = (weight: number | undefined, size: number | undefined, ratio =
   if (weight !== undefined) return weight * k;
   return k === 1 ? "var(--area-weight-icon)" : \`calc(var(--area-weight-icon) * \${k.toFixed(4)})\`;
 };
-/** The slash's filled gap: the slash shifted one line weight across it (centre to centre). */
+/** The slash's filled gap: the slash shifted one line weight across it (centre to centre).
+ *  Returns the slash's stroke props. A numeric weight is drawing units like the path, so the
+ *  shift is the SVG transform attribute in user units; the token weight is a CSS length, so
+ *  its shift is a CSS transform computed from the token. */
 export const slashGap = (weight: number | undefined, size: number | undefined) => {
   const w = sw(weight, size);
-  const t = typeof w === "number" ? \`\${(w * Math.SQRT1_2).toFixed(4)}px\` : \`calc(\${w.startsWith("calc") ? w.slice(5, -1) : w} * 0.7071)\`;
-  return \`translate(\${t}, calc(-1 * \${t}))\`;
+  if (typeof w === "number") {
+    const t = (w * Math.SQRT1_2).toFixed(4);
+    return { style: { strokeWidth: w }, transform: \`translate(\${t} -\${t})\` };
+  }
+  const t = \`calc(\${w.startsWith("calc") ? w.slice(5, -1) : w} * 0.7071)\`;
+  return { style: { strokeWidth: w, transform: \`translate(\${t}, calc(-1 * \${t}))\` } };
 };
 const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none", "aria-hidden": true, focusable: false } as const;
 const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");
